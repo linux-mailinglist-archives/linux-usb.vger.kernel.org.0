@@ -2,131 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246CB6AD90E
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Mar 2023 09:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A47646AD98A
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Mar 2023 09:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjCGISI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Mar 2023 03:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53532 "EHLO
+        id S230025AbjCGItt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Mar 2023 03:49:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjCGISA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Mar 2023 03:18:00 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D344FF1A;
-        Tue,  7 Mar 2023 00:17:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678177068; x=1709713068;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3rQ2uMWsh8WrWEidiSFRwazqpAR3clxkIu/TXsSQtLE=;
-  b=W4zQXqPmTqES1FRayB6elIONp6ObDQK+vZJLZ6Icls56gMxUO/xHyDdg
-   7hgA5isQFU9xRmEI8/B8OkAgY36Psc0WukVjIAHRz7Vz0X95gxy3KAzhU
-   XDbrwCtnc/e7ZRVe9HDN9EfBCKSv8vrsAz0PpssVtYlqm7r5dT0Uac+KS
-   q1w+90poy/jSe20LC3L3jjEwCi+e7dc5lowUb4EoEubjkagn7PqhgHmg3
-   2PH1RcLaq8YoBSBGbiqu9c2B0PksqPBuU88YdmuVAshiNpp2O08mfuoPQ
-   8sN0igslCz27DtYjzKdZmM0ts5oFYcD2FvZocriT1E5rvqvCvh3FmiCeE
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="338118576"
-X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
-   d="scan'208";a="338118576"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 00:17:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="740635618"
-X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
-   d="scan'208";a="740635618"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Mar 2023 00:17:45 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 81DDC14F; Tue,  7 Mar 2023 10:18:28 +0200 (EET)
-Date:   Tue, 7 Mar 2023 10:18:28 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Mehta, Sanju" <Sanju.Mehta@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 0/3] Fix problems fetching TBT3 DROM from AMD USB4
- routers
-Message-ID: <20230307081828.GI62143@black.fi.intel.com>
-References: <20230223210743.9819-1-mario.limonciello@amd.com>
- <20230306095753.GD62143@black.fi.intel.com>
- <MN0PR12MB6101C93AC579DB2E23952D83E2B69@MN0PR12MB6101.namprd12.prod.outlook.com>
+        with ESMTP id S230061AbjCGIto (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Mar 2023 03:49:44 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A46C27982;
+        Tue,  7 Mar 2023 00:49:39 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pZT0r-0001iT-2m; Tue, 07 Mar 2023 09:49:37 +0100
+Message-ID: <fcd30d9e-f391-fe1d-4c09-4691e50e41a8@leemhuis.info>
+Date:   Tue, 7 Mar 2023 09:49:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <MN0PR12MB6101C93AC579DB2E23952D83E2B69@MN0PR12MB6101.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        Szymon Janc <szymon.janc@gmail.com>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: [regression] Bug 217106 - Null pointer dereference on dock unplug
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1678178980;cbb64792;
+X-HE-SMSGID: 1pZT0r-0001iT-2m
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi, Thorsten here, the Linux kernel's regression tracker.
 
-On Mon, Mar 06, 2023 at 03:14:07PM +0000, Limonciello, Mario wrote:
-> [Public]
-> 
-> 
-> 
-> > -----Original Message-----
-> > From: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Sent: Monday, March 6, 2023 03:58
-> > To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> > Cc: linux-usb@vger.kernel.org; Mehta, Sanju <Sanju.Mehta@amd.com>;
-> > linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH v4 0/3] Fix problems fetching TBT3 DROM from AMD
-> > USB4 routers
-> > 
-> > Hi Mario,
-> > 
-> > On Thu, Feb 23, 2023 at 03:07:40PM -0600, Mario Limonciello wrote:
-> > > TBT3 devices when connected to an AMD USB4 router occasionally fail to
-> > > properly respond to requests for the DROM via bit banging.
-> > >
-> > > Depending upon which part of the request failed will impact the severity.
-> > > A number of workarounds have been put in place to let the driver handle
-> > > the failed requests:
-> > >
-> > > commit e87491a9fd4e3 ("thunderbolt: Retry DROM reads for more failure
-> > scenarios")
-> > > commit a283de3ec646f ("thunderbolt: Do not resume routers if UID is not
-> > set")
-> > > commit 6915812bbd109 ("thunderbolt: Do not make DROM read success
-> > compulsory")
-> > > commit f022ff7bf377 ("thunderbolt: Retry DROM read once if parsing fails")
-> > >
-> > > Still even with these changes the failures do make it through. In comparing
-> > > other CM implementations utilized on AMD systems, they all access the
-> > > DROM directly from the NVM.
-> > >
-> > > To avoid triggering this issue, try to get the DROM directly from the NVM
-> > > in Linux as well when devices have an LC.
-> > >
-> > > v4:
-> > >  * Style fixups
-> > >  * Fixup for wrong path for USB4 devices
-> > >
-> > > Mario Limonciello (3):
-> > >   thunderbolt: Adjust how NVM reading works
-> > >   thunderbolt: use `tb_eeprom_get_drom_offset` to discover DROM offset
-> > >   thunderbolt: Refactor DROM reading
-> > 
-> > I split the device side into a separate function too, renamed root
-> > switch to host router (as that's the correct USB4 term), and fixed a
-> > couple style issues and applied to thunderbolt.git/next, thanks!
-> > 
-> > Please check that I did not mess up anything :)
-> 
-> They look good, thanks!
+I noticed a regression report in bugzilla.kernel.org. As many (most?)
+kernel developer don't keep an eye on it, I decided to forward it by mail.
 
-Thanks for checking!
+To quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217106 :
 
-> Would you consider to take 8d7f459107f74fbbdde3dd5b3874d2e748cb8a21 to
-> the RC though, or would prefer to let it bake in next?
+>  Szymon Janc 2023-03-01 08:16:51 UTC
+> 
+> On Lenovo Thinkpad X1 when unplugging from Lenovo ThinkPad Thunderbolt 4 dock I get NULL pointer dereference in kernel and system freezes. This is 100% reproducible.
+> 
+> I'm using Fedora 37 and I don't recall this happen while on 6.0 kernel.
+> 
+> Attaching photo with kernel log.
 
-I would like to keep it too in next just to make sure nothing breaks
-accidentally.
+See the ticket for more details.
+
+I was a bit unsure whom to forward this to. Heikki, in the end I chose
+you. If I chose poorly, please let me known who might be a better choice.
+
+I as usual checked the net for existing reports. And it seems there are
+a few:
+
+ * also since 6.1:
+https://bbs.archlinux.org/viewtopic.php?id=283562
+https://discussion.fedoraproject.org/t/system-freezes-after-pull-usb-mass-storage/70844
+
+ * since 5.19:
+https://bugs.archlinux.org/task/75666 (since 5.19)
+https://groups.google.com/g/linux.debian.kernel/c/tZSzgRoxZu0?pli=1
+
+ * unknown kernel (I suspect 5.19 from ubuntu):
+https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/6001
+
+Many of them (maybe all?) seem to happen on Thinkpads. For
+searchability, here is a trace from
+https://bbs.archlinux.org/viewtopic.php?id=283562 that looks somewhat
+similar to the one from above bugzilla ticket:
+
+> Feb 14 23:30:35 <hostname> kernel: usb 3-5: USB disconnect, device number 14 
+> Feb 14 23:30:36 <hostname> kernel: BUG: kernel NULL pointer dereference, address: 0000000000000030
+> Feb 14 23:30:36 <hostname> kernel: #PF: supervisor write access in kernel mode
+> Feb 14 23:30:36 <hostname> kernel: #PF: error_code(0x0002) - not-present page
+> Feb 14 23:30:36 <hostname> kernel: PGD 0 P4D 0  
+> Feb 14 23:30:36 <hostname> kernel: Oops: 0002 [#1] PREEMPT SMP NOPTI
+> Feb 14 23:30:36 <hostname> kernel: CPU: 0 PID: 7 Comm: kworker/0:0 Not tainted 6.1.11-arch1-1 #1 a4e1ab564378dba05cc0d5c9f99dce3dc67f88f0
+> Feb 14 23:30:36 <hostname> kernel: Hardware name: LENOVO 21BWS37K00/21BWS37K00, BIOS N3MET11W (1.10 ) 12/07/2022
+> Feb 14 23:30:36 <hostname> kernel: Workqueue: kacpi_notify acpi_os_execute_deferred
+> Feb 14 23:30:36 <hostname> kernel: RIP: 0010:queue_work_on+0x19/0x50
+> Feb 14 23:30:36 <hostname> kernel: Code: ff e9 c5 fe ff ff 66 66 2e 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 0f 1f 44 00 00 53 9c 58 0f 1f 40 00 48 89 c3 fa 0f 1f 44 00 00 <f0> 48 0f ba 2a 00 73 15 31 c9 80 e7 02 74 06 fb 0f 1f >
+> Feb 14 23:30:36 <hostname> kernel: RSP: 0000:ffffbd07400ffe38 EFLAGS: 00010006
+> Feb 14 23:30:36 <hostname> kernel: RAX: 0000000000000206 RBX: 0000000000000206 RCX: 0000000000000000
+> Feb 14 23:30:36 <hostname> kernel: RDX: 0000000000000030 RSI: ffff9f5a80051000 RDI: 0000000000000140
+> Feb 14 23:30:36 <hostname> kernel: RBP: 0000000000000002 R08: 0000000000000000 R09: 0000000080380026
+> Feb 14 23:30:36 <hostname> kernel: R10: 0000000000000000 R11: 0000000000000000 R12: ffff9f61bf43ba00
+> Feb 14 23:30:36 <hostname> kernel: R13: 0000000000000000 R14: ffff9f5a80212b40 R15: ffff9f5a86468c98
+> Feb 14 23:30:36 <hostname> kernel: FS:  0000000000000000(0000) GS:ffff9f61bf400000(0000) knlGS:0000000000000000
+> Feb 14 23:30:36 <hostname> kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> Feb 14 23:30:36 <hostname> kernel: CR2: 0000000000000030 CR3: 00000004d8210001 CR4: 0000000000f70ef0
+> Feb 14 23:30:36 <hostname> kernel: PKRU: 55555554
+> Feb 14 23:30:36 <hostname> kernel: Call Trace:
+> Feb 14 23:30:36 <hostname> kernel:  <TASK>
+> Feb 14 23:30:36 <hostname> kernel:  ucsi_acpi_notify+0xac/0xc0 [ucsi_acpi 9c6a23f21d3ec74e5573e3e6b769395c9b0898ad]
+> Feb 14 23:30:36 <hostname> kernel:  acpi_ev_notify_dispatch+0x4b/0x63
+> Feb 14 23:30:36 <hostname> kernel:  acpi_os_execute_deferred+0x17/0x30
+> Feb 14 23:30:36 <hostname> kernel:  process_one_work+0x1c4/0x380
+> Feb 14 23:30:36 <hostname> kernel:  worker_thread+0x51/0x390
+> Feb 14 23:30:36 <hostname> kernel:  ? rescuer_thread+0x3b0/0x3b0
+> Feb 14 23:30:36 <hostname> kernel:  kthread+0xdb/0x110
+> Feb 14 23:30:36 <hostname> kernel:  ? kthread_complete_and_exit+0x20/0x20
+> Feb 14 23:30:36 <hostname> kernel:  ret_from_fork+0x1f/0x30
+> Feb 14 23:30:36 <hostname> kernel:  </TASK>
+> Feb 14 23:30:36 <hostname> kernel: Modules linked in: tls authenc echainiv esp4 ccm rfcomm snd_seq_dummy snd_hrtimer snd_seq cmac algif_hash algif_skcipher af_alg r8153_ecm cdc_ether usbnet r8152 mii snd_usb_audio snd_usbmi>
+> Feb 14 23:30:36 <hostname> kernel:  snd_soc_core snd_compress ac97_bus iwlmvm intel_tcc_cooling snd_pcm_dmaengine x86_pkg_temp_thermal i915 intel_powerclamp snd_hda_intel snd_intel_dspcfg snd_intel_sdw_acpi hid_multitouch c>
+> Feb 14 23:30:36 <hostname> kernel:  i2c_hid int3400_thermal intel_hid acpi_tad acpi_pad wmi acpi_thermal_rel sparse_keymap mac_hid crypto_user fuse ip_tables x_tables btrfs blake2b_generic libcrc32c crc32c_generic xor raid6>
+> Feb 14 23:30:36 <hostname> kernel: CR2: 0000000000000030
+> Feb 14 23:30:36 <hostname> kernel: ---[ end trace 0000000000000000 ]---
+> Feb 14 23:30:36 <hostname> kernel: RIP: 0010:queue_work_on+0x19/0x50
+> Feb 14 23:30:36 <hostname> kernel: Code: ff e9 c5 fe ff ff 66 66 2e 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 0f 1f 44 00 00 53 9c 58 0f 1f 40 00 48 89 c3 fa 0f 1f 44 00 00 <f0> 48 0f ba 2a 00 73 15 31 c9 80 e7 02 74 06 fb 0f 1f >
+> Feb 14 23:30:36 <hostname> kernel: RSP: 0000:ffffbd07400ffe38 EFLAGS: 00010006
+> Feb 14 23:30:36 <hostname> kernel: RAX: 0000000000000206 RBX: 0000000000000206 RCX: 0000000000000000
+> Feb 14 23:30:36 <hostname> kernel: RDX: 0000000000000030 RSI: ffff9f5a80051000 RDI: 0000000000000140
+> Feb 14 23:30:36 <hostname> kernel: RBP: 0000000000000002 R08: 0000000000000000 R09: 0000000080380026
+> Feb 14 23:30:36 <hostname> kernel: R10: 0000000000000000 R11: 0000000000000000 R12: ffff9f61bf43ba00
+> Feb 14 23:30:36 <hostname> kernel: R13: 0000000000000000 R14: ffff9f5a80212b40 R15: ffff9f5a86468c98
+> Feb 14 23:30:36 <hostname> kernel: FS:  0000000000000000(0000) GS:ffff9f61bf400000(0000) knlGS:0000000000000000
+> Feb 14 23:30:36 <hostname> kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> Feb 14 23:30:36 <hostname> kernel: CR2: 0000000000000030 CR3: 00000004d8210001 CR4: 0000000000f70ef0
+> Feb 14 23:30:36 <hostname> kernel: PKRU: 55555554
+
+
+[TLDR for the rest of this mail: I'm adding this report to the list of
+tracked Linux kernel regressions; the text you find below is based on a
+few templates paragraphs you might have encountered already in similar
+form.]
+
+BTW, let me use this mail to also add the report to the list of tracked
+regressions to ensure it's doesn't fall through the cracks:
+
+#regzbot introduced: v6.0..v6.1
+https://bugzilla.kernel.org/show_bug.cgi?id=217106
+#regzbot title: usb: null pointer dereference on dock unplug
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+this thread sees some discussion). See page linked in footer for details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
