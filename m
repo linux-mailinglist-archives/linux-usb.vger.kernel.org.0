@@ -2,199 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59FF66ADE7A
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Mar 2023 13:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A9A6ADEB1
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Mar 2023 13:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjCGMPJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Mar 2023 07:15:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
+        id S229823AbjCGM2k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Mar 2023 07:28:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbjCGMO0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Mar 2023 07:14:26 -0500
-X-Greylist: delayed 3548 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Mar 2023 04:13:58 PST
-Received: from mx0a-0014ca01.pphosted.com (mx0a-0014ca01.pphosted.com [208.84.65.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EBC574F7;
-        Tue,  7 Mar 2023 04:13:58 -0800 (PST)
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327AuefI014715;
-        Tue, 7 Mar 2023 03:14:39 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=proofpoint;
- bh=fERc8RWwMiP+NDVgv63jR70T8e65VOOHP0arhzoWfSM=;
- b=d4VGDu/Z/4EUK2EBJPWRmFjni6TnjAxKi4aVGIC7p9pYrXyvZCT+Qw2+/+OVoKD2FkX0
- +PyL7J//sclsVjDmLkyX6UZrN5xYd2R+sEGkJ/dx2Tz8WBj3MIjtd3KVTNRdzSP5m+KA
- +urY4UpYls/2CnosJNxze96LXwsUbqAoTnMrymaTMqKN/sJcq1MUoG3QmDuRi/0d3WKs
- mDNl0e1WRVtl6GbC6N0Iv5PAuva6DN9tfhOJ/BYG+6gIrUXdi5QHmsQIPUWRde/usbzJ
- YvGe7ylgBWj6g3RKo/YUL8jBGVQLHq7JrvmZMirsb+sWhqy8McJBdJjPfRInUnLo/b3W /Q== 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2168.outbound.protection.outlook.com [104.47.57.168])
-        by mx0a-0014ca01.pphosted.com (PPS) with ESMTPS id 3p43e1abj2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 03:14:38 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fO5JvgZIcnHXJlCRWoXWpjlOSAefQgG5UiC11DTKAj1emSJdkOVp18eL2uSnGXR5Q3ZXrFtHDtDHe9/D/52VuKTGITlagfTZAhrUx934LGADyzOGhypHotra3HnOqtXSYl0ImdfLqV03r5Z/esZmQtmj+1ijH4bgoDL1wuNYIXfmuhUt2OWpoY6R1XDdcjOx/MrLD7ZtpxshdwbpqhdN6f7bNV+jT3LJfTPb1AuEZSTmBpkKL0DZCWxmCMwT+jJxhN/iZ8aVjnYdZsaZoLD1bZTX26kzkyNSLm5hvzy6XDkz63OCzQsrjhimQn9ipCQZ1iaGOk16v0ed1Tv8g06jQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fERc8RWwMiP+NDVgv63jR70T8e65VOOHP0arhzoWfSM=;
- b=FhRWGt12reaq3/vd0yLXpXKgy42it4YlZVvNH2beb3F+gD3Qd95Uf5v2hryaHUhYuqKJg4/iCUPISK8HF1GAkUToLXV5X80v3hpL9pL6Ib2HEgnSY6Re9hnhyjKBHZp+EW8ScgL157iVt3LBmgPI3FoSc76Y2shHjAeNx8oPFzPj+Tn+rzMgu7ofIMTZgQCidNhaXXZP4qTz00O91etK1rnqLCPVEdv2lMSASNGjNEYQYVxnT5jlePVVONBGejiSKE+hocII+rmd95TmEgIu6kPuQtYwUC3ZvWt07MaHmfZvU3sotfTuzVPGlRZOfQNXt5qEzDY/poZ/SFq9KlP8Qg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 158.140.1.147) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fERc8RWwMiP+NDVgv63jR70T8e65VOOHP0arhzoWfSM=;
- b=rD/z68vJxDe3us7xU+HWcryuxfYZhloLT4lwpXd7Juem8C5jhQqGKuwVBgvRjs/hRk4Yg3SwtFs05gOeQ+ZR15B7N/ndrIHvoYvDhpBstXkpKl1VtKA3293J29StuentFO7rpijjlx8YCqcovFjjLN2MI3FhEy1Fc9RbGGk/etc=
-Received: from BN9PR03CA0915.namprd03.prod.outlook.com (2603:10b6:408:107::20)
- by CH0PR07MB8329.namprd07.prod.outlook.com (2603:10b6:610:c7::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Tue, 7 Mar
- 2023 11:14:35 +0000
-Received: from BN8NAM12FT105.eop-nam12.prod.protection.outlook.com
- (2603:10b6:408:107:cafe::54) by BN9PR03CA0915.outlook.office365.com
- (2603:10b6:408:107::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28 via Frontend
- Transport; Tue, 7 Mar 2023 11:14:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.147)
- smtp.mailfrom=cadence.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=cadence.com;
-Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 158.140.1.147 as permitted sender) receiver=protection.outlook.com;
- client-ip=158.140.1.147; helo=sjmaillnx1.cadence.com; pr=C
-Received: from sjmaillnx1.cadence.com (158.140.1.147) by
- BN8NAM12FT105.mail.protection.outlook.com (10.13.182.158) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.15 via Frontend Transport; Tue, 7 Mar 2023 11:14:34 +0000
-Received: from maileu4.global.cadence.com (eudvw-maileu4.cadence.com [10.160.110.201])
-        by sjmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 327BEV36017915
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Mar 2023 03:14:32 -0800
-Received: from maileu5.global.cadence.com (10.160.110.202) by
- maileu4.global.cadence.com (10.160.110.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Tue, 7 Mar 2023 12:14:30 +0100
-Received: from eu-cn02.cadence.com (10.160.89.185) by
- maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24 via Frontend Transport; Tue, 7 Mar 2023 12:14:30 +0100
-Received: from eu-cn02.cadence.com (localhost.localdomain [127.0.0.1])
-        by eu-cn02.cadence.com (8.14.7/8.14.7) with ESMTP id 327BEUqs376208;
-        Tue, 7 Mar 2023 06:14:30 -0500
-Received: (from pawell@localhost)
-        by eu-cn02.cadence.com (8.14.7/8.14.7/Submit) id 327BETPr376196;
-        Tue, 7 Mar 2023 06:14:29 -0500
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     <peter.chen@kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <pawell@cadence.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH] usb: cdnsp: Fixes issue with redundant Status Stage
-Date:   Tue, 7 Mar 2023 06:14:20 -0500
-Message-ID: <20230307111420.376056-1-pawell@cadence.com>
-X-Mailer: git-send-email 2.30.0
+        with ESMTP id S229477AbjCGM2j (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Mar 2023 07:28:39 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F17ACA29;
+        Tue,  7 Mar 2023 04:28:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678192117; x=1709728117;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Hy4FDvezP+UxVVn2tI7e0ab55r8n6bdnv2FW6RTwvvk=;
+  b=LioVgjvuLMqDP3UPaWc9n3sUgsKtzNvsgtdSBz/h1yUpqgUbnRZel3k3
+   EzmvX1wERZK3vl8LBudhOsR7Ek9X6c3SVLNqjJ8PVs88U13CglaX1s759
+   frpR4WYP93arQXQY3X27BXbbuF+J1SQUPXGXshSiL7vtYObMxthjqAD/4
+   hVNDdAKegJgqqeLcewRFFHWC4F3rQpB0FF/+NwDsl877hdXCShF7W92Y8
+   9W4q9lPWNwjuZFeDbgFC6a2DqP67Bc7qvvxuIR3PzNeLQON4u8ykfTXvC
+   CVxu/TeUuMm8pRASqzO9Fregot6OXiaDhqzQ8QDAn21t5qU0qCwKO+gMm
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="319668446"
+X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
+   d="scan'208";a="319668446"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 04:28:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="819745941"
+X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
+   d="scan'208";a="819745941"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 07 Mar 2023 04:28:31 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 07 Mar 2023 14:28:30 +0200
+Date:   Tue, 7 Mar 2023 14:28:30 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] usb: ucsi: Fix ucsi->connector race
+Message-ID: <ZAct7idZMwWegtX6@kuha.fi.intel.com>
+References: <20230307103421.8686-1-hdegoede@redhat.com>
+ <20230307103421.8686-3-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-CrossPremisesHeadersFilteredBySendConnector: maileu4.global.cadence.com
-X-OrganizationHeadersPreserved: maileu4.global.cadence.com
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM12FT105:EE_|CH0PR07MB8329:EE_
-X-MS-Office365-Filtering-Correlation-Id: 839ae856-5fc0-419f-19da-08db1efd21da
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rDweJ/fW8PXAdmqYqte0RrHU7hGXHZ1VKhMAYpi7bSUBsRETTjXhlfBhhhdRQlVBuZbCtt9/5ni4o0jqaM4bKe8IDxnIFhQ+0c63FFsrqNAhHQlPkF7aNdw9LJD+l9zo79lbDRy50/hG4/IoM/0V6l9X1RMsupB1Wpe5uOoYDpM19yPI8x3Bq7xVvrHij0pJJ10IvoC2U2A/yZ0hGRFfeQkljN/anCdwDwrggwARD/b6QwSuXSp3wvO37eSRMo92XzPYzL13wR+vlV7TQn+9k25PJVq1fGdUavfz3OJGQirbwzmn75jCTw+UMMcrrQY95DDNB/sqmUq4E1HBi0xTO5KhgeuFjyFtu3aScAQbIBgC9tJOTpUc+KEWHqDlp9lCfg2AWgcAC2FmO27NtVPmbuuzwshsHkBFEQItA2sfSLxo+uy0Ew7BbjRBnWzm9VHUyoSEjknfmANngzyNx/2dNjPg2uNouE3WJG2xebizONG5FsgDooJKdB4NYFku6rSRfOTtH8m+pS8QQWeC1i2Jf8zpVs9KDAcGxU0jeuY7Os4B1RePix+t7TLwLLRctyTDsmA1LkFtCFDV6q3Q1sdj3s0XRDjEj1hpV9BeKNr3WT2Xwxhzn+dpEwGrMmGvk25YsmsLTktu6rL4koZWayMiDBeF15u+JA/lAZUfSOLxxAGtB8VSu5QkZgmnhJdC8kvA/XokfrH3qrCwOlZ1ymfkpQ==
-X-Forefront-Antispam-Report: CIP:158.140.1.147;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx1.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(136003)(346002)(39860400002)(36092001)(451199018)(36840700001)(40470700004)(46966006)(41300700001)(70206006)(70586007)(2906002)(8676002)(6916009)(86362001)(4326008)(82310400005)(54906003)(36860700001)(42186006)(356005)(83380400001)(82740400003)(186003)(316002)(8936002)(7636003)(1076003)(26005)(478600001)(2616005)(36756003)(5660300002)(336012)(426003)(47076005)(40480700001)(6666004)(40460700003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 11:14:34.4839
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 839ae856-5fc0-419f-19da-08db1efd21da
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.147];Helo=[sjmaillnx1.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM12FT105.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR07MB8329
-X-Proofpoint-GUID: lUzkVsaeL284cpsnfSqXHwdLzLPAlwnM
-X-Proofpoint-ORIG-GUID: lUzkVsaeL284cpsnfSqXHwdLzLPAlwnM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_05,2023-03-07_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
- lowpriorityscore=0 mlxlogscore=706 priorityscore=1501 malwarescore=0
- phishscore=0 mlxscore=0 bulkscore=0 impostorscore=0 spamscore=0
- adultscore=0 suspectscore=0 clxscore=1011 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303070101
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230307103421.8686-3-hdegoede@redhat.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In some cases, driver trees to send Status Stage twice.
-The first one from upper layer of gadget usb subsystem and
-second time from controller driver.
-This patch fixes this issue and remove tricky handling of
-SET_INTERFACE from controller driver which is no longer
-needed.
+On Tue, Mar 07, 2023 at 11:34:20AM +0100, Hans de Goede wrote:
+> ucsi_init() which runs from a workqueue sets ucsi->connector and
+> on an error will clear it again.
+> 
+> ucsi->connector gets dereferenced by ucsi_resume(), this checks for
+> ucsi->connector being NULL in case ucsi_init() has not finished yet;
+> or in case ucsi_init() has failed.
+> 
+> ucsi_init() setting ucsi->connector and then clearing it again on
+> an error creates a race where the check in ucsi_resume() may pass,
+> only to have ucsi->connector free-ed underneath it when ucsi_init()
+> hits an error.
+> 
+> Fix this race by making ucsi_init() store the connector array in
+> a local variable and only assign it to ucsi->connector on success.
+> 
+> Fixes: bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-cc: <stable@vger.kernel.org>
-Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
----
- drivers/usb/cdns3/cdnsp-ep0.c | 19 +------------------
- 1 file changed, 1 insertion(+), 18 deletions(-)
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-diff --git a/drivers/usb/cdns3/cdnsp-ep0.c b/drivers/usb/cdns3/cdnsp-ep0.c
-index 9b8325f82499..d63d5d92f255 100644
---- a/drivers/usb/cdns3/cdnsp-ep0.c
-+++ b/drivers/usb/cdns3/cdnsp-ep0.c
-@@ -403,20 +403,6 @@ static int cdnsp_ep0_std_request(struct cdnsp_device *pdev,
- 	case USB_REQ_SET_ISOCH_DELAY:
- 		ret = cdnsp_ep0_set_isoch_delay(pdev, ctrl);
- 		break;
--	case USB_REQ_SET_INTERFACE:
--		/*
--		 * Add request into pending list to block sending status stage
--		 * by libcomposite.
--		 */
--		list_add_tail(&pdev->ep0_preq.list,
--			      &pdev->ep0_preq.pep->pending_list);
--
--		ret = cdnsp_ep0_delegate_req(pdev, ctrl);
--		if (ret == -EBUSY)
--			ret = 0;
--
--		list_del(&pdev->ep0_preq.list);
--		break;
- 	default:
- 		ret = cdnsp_ep0_delegate_req(pdev, ctrl);
- 		break;
-@@ -474,9 +460,6 @@ void cdnsp_setup_analyze(struct cdnsp_device *pdev)
- 	else
- 		ret = cdnsp_ep0_delegate_req(pdev, ctrl);
- 
--	if (!len)
--		pdev->ep0_stage = CDNSP_STATUS_STAGE;
--
- 	if (ret == USB_GADGET_DELAYED_STATUS) {
- 		trace_cdnsp_ep0_status_stage("delayed");
- 		return;
-@@ -484,6 +467,6 @@ void cdnsp_setup_analyze(struct cdnsp_device *pdev)
- out:
- 	if (ret < 0)
- 		cdnsp_ep0_stall(pdev);
--	else if (pdev->ep0_stage == CDNSP_STATUS_STAGE)
-+	else if (!len && pdev->ep0_stage != CDNSP_STATUS_STAGE)
- 		cdnsp_status_stage(pdev);
- }
+> ---
+> Changes in v3:
+> - Assign connector[i].index before calling ucsi_register_port() instead of
+>   passing i to ucsi_register_port()
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 22 +++++++++-------------
+>  1 file changed, 9 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 8cbbb002fefe..086b50968983 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1039,9 +1039,8 @@ static struct fwnode_handle *ucsi_find_fwnode(struct ucsi_connector *con)
+>  	return NULL;
+>  }
+>  
+> -static int ucsi_register_port(struct ucsi *ucsi, int index)
+> +static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+>  {
+> -	struct ucsi_connector *con = &ucsi->connector[index];
+>  	struct typec_capability *cap = &con->typec_cap;
+>  	enum typec_accessory *accessory = cap->accessory;
+>  	enum usb_role u_role = USB_ROLE_NONE;
+> @@ -1062,7 +1061,6 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>  	init_completion(&con->complete);
+>  	mutex_init(&con->lock);
+>  	INIT_LIST_HEAD(&con->partner_tasks);
+> -	con->num = index + 1;
+>  	con->ucsi = ucsi;
+>  
+>  	cap->fwnode = ucsi_find_fwnode(con);
+> @@ -1204,7 +1202,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>   */
+>  static int ucsi_init(struct ucsi *ucsi)
+>  {
+> -	struct ucsi_connector *con;
+> +	struct ucsi_connector *con, *connector;
+>  	u64 command, ntfy;
+>  	int ret;
+>  	int i;
+> @@ -1235,16 +1233,16 @@ static int ucsi_init(struct ucsi *ucsi)
+>  	}
+>  
+>  	/* Allocate the connectors. Released in ucsi_unregister() */
+> -	ucsi->connector = kcalloc(ucsi->cap.num_connectors + 1,
+> -				  sizeof(*ucsi->connector), GFP_KERNEL);
+> -	if (!ucsi->connector) {
+> +	connector = kcalloc(ucsi->cap.num_connectors + 1, sizeof(*connector), GFP_KERNEL);
+> +	if (!connector) {
+>  		ret = -ENOMEM;
+>  		goto err_reset;
+>  	}
+>  
+>  	/* Register all connectors */
+>  	for (i = 0; i < ucsi->cap.num_connectors; i++) {
+> -		ret = ucsi_register_port(ucsi, i);
+> +		connector[i].num = i + 1;
+> +		ret = ucsi_register_port(ucsi, &connector[i]);
+>  		if (ret)
+>  			goto err_unregister;
+>  	}
+> @@ -1256,11 +1254,12 @@ static int ucsi_init(struct ucsi *ucsi)
+>  	if (ret < 0)
+>  		goto err_unregister;
+>  
+> +	ucsi->connector = connector;
+>  	ucsi->ntfy = ntfy;
+>  	return 0;
+>  
+>  err_unregister:
+> -	for (con = ucsi->connector; con->port; con++) {
+> +	for (con = connector; con->port; con++) {
+>  		ucsi_unregister_partner(con);
+>  		ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
+>  		ucsi_unregister_port_psy(con);
+> @@ -1269,10 +1268,7 @@ static int ucsi_init(struct ucsi *ucsi)
+>  		typec_unregister_port(con->port);
+>  		con->port = NULL;
+>  	}
+> -
+> -	kfree(ucsi->connector);
+> -	ucsi->connector = NULL;
+> -
+> +	kfree(connector);
+>  err_reset:
+>  	memset(&ucsi->cap, 0, sizeof(ucsi->cap));
+>  	ucsi_reset_ppm(ucsi);
+> -- 
+> 2.39.1
+
 -- 
-2.25.1
-
+heikki
