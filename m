@@ -2,48 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0496AE371
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Mar 2023 15:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D871A6AE36F
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Mar 2023 15:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjCGOz7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Mar 2023 09:55:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60414 "EHLO
+        id S229896AbjCGO4B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Mar 2023 09:56:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjCGOxz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Mar 2023 09:53:55 -0500
+        with ESMTP id S229926AbjCGOx4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Mar 2023 09:53:56 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33D485342;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EA58534D;
         Tue,  7 Mar 2023 06:40:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EC4F60FC8;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B02760F78;
         Tue,  7 Mar 2023 14:40:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8790BC4339B;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 91DB9C433D2;
         Tue,  7 Mar 2023 14:40:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1678200022;
-        bh=6KSSDLxApAGfAGVWW1HnpG2XRbT8ELm/2m8BT5B0iRs=;
+        bh=R5QTVd+c91hp6O3qR/+q2uyI0ss+MPW1LQ8rU2VOp/w=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=e9lFazkxpt2TE/uHnMsjyHn0CfyzLqmqXuAoD7EiG8cgfvlFkYsBduka71EkgE716
-         W0ZDj9IjG9gVWsTsh3JbW4AP2SI3FgxmIW67Dyw1JUs594r/mAjilb9eLuomkEuTPU
-         trBLb1FcuVEcxRdbrgqQevhyfHs/Q+02kNSMyDU5U8OEiw80tjqbqv3P5JxsrDapuO
-         B+J9MYLJGdQxeQwfMhmgkUvhJOeOnVmt1+jRbXobcxhbU98msU9ifE9Xu7VI+9y+x+
-         N08n1qC//XTqEVRj2VJ2UeeS9MtugvsYz3c0iVe3DxvCYH9QNdfQrogWJRlSoaVVZO
-         nJdWddQfmPcfw==
+        b=GrYk0S3nSCxxecS93UI0vn2q8/HcoNe5kvcVk+d/6AVjTJB/AHgfTvQcoxFir8pQ/
+         L9zDBMF8ykymB82H0ZbzVDc6bN02bPW4TllAdrLbKeSUCJuVbJ53oww4KKGGzM5RbF
+         3rlt/H2Azi7y0kmofQ2mmOSTDtF2xteEuvfFacjsOSIKlChiXwhc+7yPaCXu0b8kHe
+         UKgvpN/MJziTfi8La4TNHrzlZo8HUdVJn7ykZank/H55K/LbgocpcpVXfjyycFf0jp
+         5SR0gK52YFPiHo14OCwQ/XTZc7A9SRxmPrYhjRKQRuNd45xvaxCHbfA40h1GGbRzt5
+         UqqotQQoOnhpQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5AD59E61B65;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6DC63E61B63;
         Tue,  7 Mar 2023 14:40:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH NET 1/1] net: usb: cdc_mbim: avoid altsetting toggling for
- Telit FE990
+Subject: Re: [PATCH NET 1/1] net: usb: qmi_wwan: add Telit 0x1080 composition
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167820002235.18846.17456901212057341424.git-patchwork-notify@kernel.org>
+Message-Id: <167820002243.18846.4300496620014346642.git-patchwork-notify@kernel.org>
 Date:   Tue, 07 Mar 2023 14:40:22 +0000
-References: <20230306115933.198259-1-enrico.sau@gmail.com>
-In-Reply-To: <20230306115933.198259-1-enrico.sau@gmail.com>
+References: <20230306120528.198842-1-enrico.sau@gmail.com>
+In-Reply-To: <20230306120528.198842-1-enrico.sau@gmail.com>
 To:     Enrico Sau <enrico.sau@gmail.com>
 Cc:     bjorn@mork.no, davem@davemloft.net, edumazet@google.com,
         kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
@@ -62,20 +61,19 @@ Hello:
 This patch was applied to netdev/net.git (main)
 by Paolo Abeni <pabeni@redhat.com>:
 
-On Mon,  6 Mar 2023 12:59:33 +0100 you wrote:
-> Add quirk CDC_MBIM_FLAG_AVOID_ALTSETTING_TOGGLE for Telit FE990
-> 0x1081 composition in order to avoid bind error.
+On Mon,  6 Mar 2023 13:05:28 +0100 you wrote:
+> Add the following Telit FE990 composition:
+> 
+> 0x1080: tty, adb, rmnet, tty, tty, tty, tty
 > 
 > Signed-off-by: Enrico Sau <enrico.sau@gmail.com>
 > ---
 > 
-> This is the verbose lsusb:
-> 
 > [...]
 
 Here is the summary with links:
-  - [NET,1/1] net: usb: cdc_mbim: avoid altsetting toggling for Telit FE990
-    https://git.kernel.org/netdev/net/c/418383e6ed6b
+  - [NET,1/1] net: usb: qmi_wwan: add Telit 0x1080 composition
+    https://git.kernel.org/netdev/net/c/382e363d5bed
 
 You are awesome, thank you!
 -- 
