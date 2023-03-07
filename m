@@ -2,65 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B27F6AD341
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Mar 2023 01:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 017926AD4E8
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Mar 2023 03:41:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbjCGAYR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Mar 2023 19:24:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56290 "EHLO
+        id S229679AbjCGClp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Mar 2023 21:41:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCGAYQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Mar 2023 19:24:16 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B067133445
-        for <linux-usb@vger.kernel.org>; Mon,  6 Mar 2023 16:24:15 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id ks17so7929243qvb.6
-        for <linux-usb@vger.kernel.org>; Mon, 06 Mar 2023 16:24:15 -0800 (PST)
+        with ESMTP id S229627AbjCGClo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Mar 2023 21:41:44 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A852C66B
+        for <linux-usb@vger.kernel.org>; Mon,  6 Mar 2023 18:41:43 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id u5so12641220plq.7
+        for <linux-usb@vger.kernel.org>; Mon, 06 Mar 2023 18:41:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678148654;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1678156903;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Nd4mttR77YQL1z6+/fOV4N+YFrdkIjWP188E6svLmU8=;
-        b=Y3vVcPu7tXfhUP7e2WRY2o0B9//nOewCiBZdj1jW0yY05ZsTSaGprwAXRNfP/jF+jA
-         M8JbGu6YM4Map0JG+udt18NvflukRZ11H3hva3D234mBKFiKZkBaf/qNu76eDyEjBQj1
-         i8tGTfbFyTbFh6wfFZIXUXbKDbaPFbQJ2d6X8PxVcOXX9DnZeEYQ6TR5GUY7gQQQmKsT
-         T6GoiWVpK3MLSBm514zWiIOQC1vCEYv9cit49GP01TY/I+YZ1lxPlvRdm3YnBPECA0zl
-         aftMPrLL6MLvJtv+B042GBePnO6ovuNQIvdiRxGq+wdSB5sbAIIqOPaLs8nraGkr7o5B
-         Q6Gw==
+        bh=Lut75L1pnWHPvwMaef1gOvjSbOZTZlod+NFGGwIEhgo=;
+        b=mRezdX1TCeDG5NcuvQZKjwinBw27vgyO4qhk2zmPLPULRcIe/5epsi7lj4v3/dw6/H
+         6+qUX9Tjgdg9wgvieQA4uHdxfyUQXxOfdqK/gEnrtHkHF1IZLSxJ/9CHPgmDDJYWhAJh
+         abv25NzUW+Q35+zp/R11GncS2R4Q7GTtTJ+iHqQffCmfT6s0BHn9nC5Zxp9kt0x95d6H
+         BufH3+9xdNDsEfpDiViVYP1CvcvhvwJXTCaIasEpaXGCZfM6UK3TX2k8GzScgk30fni0
+         aHtRg+GWBepxrZTnAERONvyV8Tw8ykOWa+RwzEkP7gXCbFFMgDKM9FtnqUCW+XETjNUt
+         mI9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678148654;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Nd4mttR77YQL1z6+/fOV4N+YFrdkIjWP188E6svLmU8=;
-        b=eQHWRGkcvfkmq3PJZSumVYw1OKWZ36mSMiTJLn4UrS/NhwK1dXMFEB4MkUcjhNjakd
-         hvf016Kc6uhxUgLpj0qRmAbf3c0MaxzyaGZL4A79JMZA94cbc2vXB2k2N5tc9s62sZBe
-         X+SamUHOEAxpNr3TMHy8e+UPZuTNhcU7XHYMrZJZjNWozeWWaFVj+ZGzjiOSi+ehEyq5
-         0mkzsNvNTctybK34Rjv8FH/FFzAA0apuhtPHXZErUIIXBfNClaG50TVILalrMvd1E+t+
-         DOtcUVzG24tEwLSPDFUiqg2B8oNpqDjx0pN067Loh5icWavpiXy056It5WmmlK5BqeZ5
-         zsag==
-X-Gm-Message-State: AO0yUKWNdIMo8n2ulZYAAIvbnzsp7e7Mpery8BVSa/Qdl6U3LTCEFy2o
-        5YbFwO2Gfhd6Wm1RWiD68jsSCfSlr0M=
-X-Google-Smtp-Source: AK7set9tU3AHOeAIKuEhZgSWw3O2ia8r6Zlr/yNTcBKWc2PNF4Jd8sP+TN50FYWjM7KLdk+IxHKNQA==
-X-Received: by 2002:a05:6214:627:b0:537:4b09:670f with SMTP id a7-20020a056214062700b005374b09670fmr21124618qvx.25.1678148654751;
-        Mon, 06 Mar 2023 16:24:14 -0800 (PST)
-Received: from [192.168.1.198] (c-68-42-142-238.hsd1.mi.comcast.net. [68.42.142.238])
-        by smtp.gmail.com with ESMTPSA id u19-20020a05620a121300b007424376ca4bsm8409071qkj.18.2023.03.06.16.24.14
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 16:24:14 -0800 (PST)
-Message-ID: <4772c6be-7918-9ab0-3dd5-983b293cf89f@gmail.com>
-Date:   Mon, 6 Mar 2023 19:24:13 -0500
+        d=1e100.net; s=20210112; t=1678156903;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Lut75L1pnWHPvwMaef1gOvjSbOZTZlod+NFGGwIEhgo=;
+        b=5pppMCQCQUnQ1GEEq2g8K19dEISQDss48TIheCSFa7/kaAYcsIl9FMdRmS9OccOpfb
+         1qxaXh94ZRFF1a3FqyMyysnv5dO5XQjEROpsvx2cchets8JSjJfig11j+zUWt1odgQF0
+         2fJNjcs13hArqdrptYTnVzUjTFBcWgROms8ehR7VpYZ3WJgv5NusdBNqBuDi3VCsrLx7
+         aMqpRA3wT8w6WNElZ5qewxPpf265dMVoeMddEoGTNJt20LuFezBH03B4uOgEf2jdDi8w
+         Mzlo6d08Q7UetI2D/wTzt8WidLEapAci3ADka+gbsaaCOI12PgWEZ/gZOFFrQMnUXAEs
+         Ifnw==
+X-Gm-Message-State: AO0yUKU+IP9X9ZqoH9n/wwhZsCKQdv7OSx9ey+vc5eIhD+vkFbGNnVkr
+        UzAaCJXSZ8jvRjE0RGoYpHrddoZvfaq97y1IaoU=
+X-Google-Smtp-Source: AK7set9GV4CLB98YzI9aemaoPnA37Zqq5FZtqAtefjV+95z/K1hud4lXbUwlVC7CSeRtAv7nReudOOCezTLh/n01FcY=
+X-Received: by 2002:a17:902:64d0:b0:19c:a7a7:7072 with SMTP id
+ y16-20020a17090264d000b0019ca7a77072mr5071565pli.10.1678156902803; Mon, 06
+ Mar 2023 18:41:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To:     linux-usb@vger.kernel.org
-From:   Noah Causin <n0manletter@gmail.com>
-Subject: Question about f_uac1 gadget
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <4772c6be-7918-9ab0-3dd5-983b293cf89f@gmail.com>
+In-Reply-To: <4772c6be-7918-9ab0-3dd5-983b293cf89f@gmail.com>
+From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Date:   Mon, 6 Mar 2023 21:41:31 -0500
+Message-ID: <CAB=otbTdBPwrot9aigxbOH+GFU=gFgEpr+io7cEv-5P10BSK9w@mail.gmail.com>
+Subject: Re: Question about f_uac1 gadget
+To:     Noah Causin <n0manletter@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -71,9 +67,19 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Mon, Mar 6, 2023 at 7:24=E2=80=AFPM Noah Causin <n0manletter@gmail.com> =
+wrote:
+>
+> Hi,
+>
+> I was wondering if the f_uac1 gadget supports more than two channels of
+> audio.
 
-I was wondering if the f_uac1 gadget supports more than two channels of 
-audio.
+Yes it does, see channel mask configfs configuration options for
+capture/playback
+in the documentation for UAC1 function:
+https://www.kernel.org/doc/Documentation/ABI/testing/configfs-usb-gadget-ua=
+c1
 
-Noah
+Regards,
+Ruslan
