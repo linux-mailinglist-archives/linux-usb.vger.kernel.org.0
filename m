@@ -2,80 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF906B0E68
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Mar 2023 17:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A139B6B0F21
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Mar 2023 17:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjCHQSL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Mar 2023 11:18:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
+        id S229497AbjCHQpc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Mar 2023 11:45:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbjCHQRv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Mar 2023 11:17:51 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E21FB952A
-        for <linux-usb@vger.kernel.org>; Wed,  8 Mar 2023 08:17:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678292267; x=1709828267;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kLfHFrQbdMZ5Df/XH37DdO2/imCTJ0yMvtnKV8/8NxU=;
-  b=NO3hEyIMhf1axIop6bWDEsbvEkstA43ubaYNfczbp3siQGh3c9IuuMA7
-   5iDnIct4+A00mY6YMXYF6ursoaqNtS6bfq3s5rdW1HnTN5/bu6JTRL2g4
-   L1YkL3ieOY3/i7C6CUZ2seqtMm8Faup4FIZ3fDyEjLdDzchwewCZYOQfB
-   7m8nraKzWANqFR/ELPEAjOWEAnrfDCeKlHzQ/JfY8xWYtSc0nYCyFtkXP
-   wVtfde/1e9DpjDASSywdHTwPlIJiwN6WErIAMftr4zfMtMQwvFrsx/Oo0
-   WpkYu4OqPTLzzXj6iSMDXccYbCXdFwUyxQOwdXUksOV02eaK9cXpCJRVX
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="422469709"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="422469709"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 08:17:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="820285233"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="820285233"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 08 Mar 2023 08:17:45 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 08 Mar 2023 18:17:44 +0200
-Date:   Wed, 8 Mar 2023 18:17:44 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: introduce read_explicit operation
-Message-ID: <ZAi1KO+WUs+9nNOn@kuha.fi.intel.com>
-References: <20230120233920.752245-1-samuel@cavoj.net>
- <Y8uRnc3Cxb1ADad6@kroah.com>
- <Y8+/Lgp7fWaxFsri@kuha.fi.intel.com>
+        with ESMTP id S229905AbjCHQpW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Mar 2023 11:45:22 -0500
+Received: from mx.fenrir.org.uk (host-92-27-96-141.static.as13285.net [92.27.96.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECA13B678
+        for <linux-usb@vger.kernel.org>; Wed,  8 Mar 2023 08:45:18 -0800 (PST)
+Received: from [10.0.0.3] (helo=deangelis.fenrir.org.uk)
+        (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+        by mx.fenrir.org.uk with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pZwui-0002ke-2D
+        for <linux-usb@vger.kernel.org>;
+        Wed, 08 Mar 2023 16:45:16 +0000
+Date:   Wed, 8 Mar 2023 16:45:16 +0000
+From:   Brian Morrison <bdm@fenrir.org.uk>
+To:     linux-usb@vger.kernel.org
+Subject: Re: USB regression in kernel 6.2.2
+Message-ID: <20230308164516.4a1dac3c@deangelis.fenrir.org.uk>
+In-Reply-To: <db2e0984-6eb5-5987-44e1-a7143141469b@linux.intel.com>
+References: <20230307132120.5897c5af@deangelis.fenrir.org.uk>
+ <db2e0984-6eb5-5987-44e1-a7143141469b@linux.intel.com>
+Organization: The Fool and Bladder Face-Jumping Team
+X-Mailer: Claws Mail 4.1.1git47 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8+/Lgp7fWaxFsri@kuha.fi.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Clacks-Overhead: GNU Terry Pratchett
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Samuel,
+On Wed, 8 Mar 2023 17:16:01 +0200
+Mathias Nyman <mathias.nyman@linux.intel.com> wrote:
 
-> I asked that Samuel to share this here, but perhaps we should consider
-> it still as an RFC. I have tested this with some of my platforms, but
-> I want to test more.
+> Looks like that those devices initially enumerated fine, but suddenly
+> disconnect about 19 seconds after boot.
+> 
+> [   19.155556] usb 2-1.1: USB disconnect, device number 4
+> [   19.155685] cp210x ttyUSB0: cp210x converter now disconnected from
+> ttyUSB0 [   19.159290] usb 2-1.4: USB disconnect, device number 6
+> [   19.242344] usb 2-1.4: 3:0: failed to get current value for ch 0
+> (-22) [   20.100761] usb 2-4.1: USB disconnect, device number 8
+> [   20.100894] cp210x ttyUSB1: cp210x converter now disconnected from
+> ttyUSB1 [   20.100999] cp210x 2-4.1:1.0: device disconnected
+> [   20.107188] usb 2-4.2: USB disconnect, device number 9
+> [   20.107253] cp210x ttyUSB2: cp210x converter now disconnected from
+> ttyUSB2 [   20.107284] cp210x 2-4.2:1.0: device disconnected
+> [   20.111938] usb 2-4.4: USB disconnect, device number 10
+> [   20.181363] usb 2-4.4: 3:0: failed to get current value for ch 0
+> (-22)
+> 
+> Interestingly those are all the devices behind external hubs.
 
-Sorry about the slow progress, but this is causing commands to fail on
-some platforms. I've been trying to figure out how to fix those, but
-nothing has worked so far.
+These are in amateur radio gear, providing sound card modems and radio
+CAT control on USB2 ports, but they have given no trouble since the
+Renesas USB3 PCI card ROM load bug was sorted out a couple of years ago
+I think.
 
-I think we have to handle this with a DMI quick in ucsi_acpi.c. I
-don't have any other ideas. I'll try a few more things, and then
-prepare a patch for that.
+> 
+> Bisecting this to find the offending commit would be best, but a dmesg
+> with xhci and usb core dynamic debug enabled could also show why
+> those devices disconnect.
+> 
+> Adding "usbcore.dyndbg=+p xhci_hcd.dyndbg=+p" to your kernel cmdline
+> should do this.
 
-thanks,
+OK, I have done this and attached the dmesg output (which has expanded
+by a factor of 3 with the extra debug).
+
+A quick grep reveals these which are not expected:
+
+[bdm@deangelis ~]$ grep usb_disable_device dmesg_6.2.2_debug.txt
+[   18.349015] usb 2-1.1: usb_disable_device nuking all URBs
+[   18.587034] usb 2-1.4: usb_disable_device nuking all URBs
+[   18.589675] usb 2-1: usb_disable_device nuking non-ep0 URBs
+[   19.280599] usb 2-2: usb_disable_device nuking non-ep0 URBs
+[   19.288312] usb 2-4.1: usb_disable_device nuking all URBs
+[   19.298113] usb 2-4.2: usb_disable_device nuking all URBs
+[   19.386494] usb 2-4.4: usb_disable_device nuking all URBs
+[   19.390100] usb 2-4: usb_disable_device nuking non-ep0 URBs
+
+which are then followed by:
+
+xhci_drop_endpoint from the xhci_hcd driver which seems expected given
+the usb_disable_device being commanded.
+
+That's about as far as I know how to go, I have not copied this to the
+linux-usb list because of the size of the attachment, I have added that
+to the redhat bug at:
+
+https://bugzilla.redhat.com/show_bug.cgi?id=2175534
+
+I suppose this should get to the list without the attachment.
 
 -- 
-heikki
+
+Brian Morrison
+
