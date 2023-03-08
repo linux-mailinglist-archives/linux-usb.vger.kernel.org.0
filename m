@@ -2,195 +2,430 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DED6AFEA0
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Mar 2023 06:54:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5236B00C7
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Mar 2023 09:21:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjCHFy1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Mar 2023 00:54:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
+        id S230168AbjCHIVT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Mar 2023 03:21:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjCHFy0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Mar 2023 00:54:26 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E3A7DA5
-        for <linux-usb@vger.kernel.org>; Tue,  7 Mar 2023 21:54:25 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3280E1Cq017904;
-        Wed, 8 Mar 2023 05:54:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=p3+DB5qTURKjWSY+/Z/EKD10Ss80pTfuHRdEbPvzROc=;
- b=MJoslHLU/oMIjXjy63u4oNTgVpOUkxwOPYhxy3JyDfkv9uFlUYV62LxiQfXIUSXRBQY+
- eh/hyrigtXUTYuATwnMFtjSIG6NxXiWtZ7aUPXdndPFX4+uynbD8oq18UPobdGNnMVzn
- CZBTmXFkEarTjN8RlBnTv7r431/1tiCfaPRLESCIsuZYaEo6msDrSCE4OMjqrE9QKEPI
- HEf+yuaG0TcmrhU1P4FJ3kfXTnMtK8E0PqKn6Y+wnObeY7k/c289lYHj/C3mh/9zgF7H
- DDnl02MiVmijT2JJOyo9Oejf4WgAczxW0rp2/1barWvn1f7Q4iLr8JMuOjxvoVIQEypS RQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p6fmm0n29-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Mar 2023 05:54:21 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3285sK3j015040
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Mar 2023 05:54:20 GMT
-Received: from [10.239.154.244] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 7 Mar 2023
- 21:54:18 -0800
-Message-ID: <dc7af7b0-1e63-6662-3465-a4ec79cc265d@quicinc.com>
-Date:   Wed, 8 Mar 2023 13:54:15 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH 2/2] usb: core: hub: avoid reset hub during probe
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Mathias Nyman <mathias.nyman@intel.com>,
+        with ESMTP id S229621AbjCHIUt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Mar 2023 03:20:49 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629BEB0BAA;
+        Wed,  8 Mar 2023 00:20:08 -0800 (PST)
+X-UUID: 05efe958bd8a11eda06fc9ecc4dadd91-20230308
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=S9xYd6IewSn037NHiVYBNHeHRAz2qBk0Fs8rI36Iu4o=;
+        b=ptvdF+WUTUZribgNZikI1Bw6Syy8G3yGE5EfI0to0VJhu9soTUxclyZMwSyvcVCt9AcZ80cXaILdv1CV/te9iovLXptHA9/xpagCmVZCD5wuQYkze503+HvzNViNwT/wFBG1pmV/bRFLxLBej92RlPasScZxkiCC2NmDBcTgqEY=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.20,REQID:d68ec08e-4fd2-43a9-9093-eb20ac578242,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.20,REQID:d68ec08e-4fd2-43a9-9093-eb20ac578242,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:25b5999,CLOUDID:0c7495b2-beed-4dfc-bd9c-e1b22fa6ccc4,B
+        ulkID:2303081620025NWMJRDD,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-UUID: 05efe958bd8a11eda06fc9ecc4dadd91-20230308
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        (envelope-from <haozhe.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 615465098; Wed, 08 Mar 2023 16:20:02 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Wed, 8 Mar 2023 16:20:00 +0800
+Received: from mcddlt001.gcn.mediatek.inc (10.19.240.15) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Wed, 8 Mar 2023 16:19:59 +0800
+From:   <haozhe.chang@mediatek.com>
+To:     M Chetan Kumar <m.chetan.kumar@intel.com>,
+        Intel Corporation <linuxwwan@intel.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@linux.intel.com>,
+        Liu Haijun <haijun.liu@mediatek.com>,
+        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "Pratham Pratap" <quic_ppratap@quicinc.com>
-References: <1677835718-7405-1-git-send-email-quic_linyyuan@quicinc.com>
- <1677835718-7405-2-git-send-email-quic_linyyuan@quicinc.com>
- <72b4e199-4e23-487e-a9cd-8d41993d4944@rowland.harvard.edu>
-Content-Language: en-US
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-In-Reply-To: <72b4e199-4e23-487e-a9cd-8d41993d4944@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 99pP32aQYUOJZ3i-m2SB48JMaucB9ktY
-X-Proofpoint-ORIG-GUID: 99pP32aQYUOJZ3i-m2SB48JMaucB9ktY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-08_02,2023-03-07_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 malwarescore=0 phishscore=0 clxscore=1015 adultscore=0
- mlxscore=0 lowpriorityscore=0 impostorscore=0 suspectscore=0
- mlxlogscore=999 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2303080050
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        haozhe chang <haozhe.chang@mediatek.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>,
+        "open list:INTEL WWAN IOSM DRIVER" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR MESSAGING (RPMSG) WWAN CONTROL..." 
+        <linux-remoteproc@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+CC:     <lambert.wang@mediatek.com>, <xiayu.zhang@mediatek.com>,
+        <hua.yang@mediatek.com>
+Subject: [PATCH RESEND net-next v7] wwan: core: Support slicing in port TX flow of WWAN subsystem
+Date:   Wed, 8 Mar 2023 16:19:35 +0800
+Message-ID: <20230308081939.5512-1-haozhe.chang@mediatek.com>
+X-Mailer: git-send-email 2.17.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: haozhe chang <haozhe.chang@mediatek.com>
 
-On 3/4/2023 12:05 AM, Alan Stern wrote:
-> On Fri, Mar 03, 2023 at 05:28:38PM +0800, Linyu Yuan wrote:
->> When start probe hub, during INIT, INTT2, INIT3 stage, when link state
->> change to inactive, currently it will reset the device, maybe it will
->> trigger warning in usb_submit_urb() due to urb->hcpriv is still active.
-> You need to explain this in much greater detail.
->
-> 	What will reset the device?
->
-> 	What is the code path for this reset?
+wwan_port_fops_write inputs the SKB parameter to the TX callback of
+the WWAN device driver. However, the WWAN device (e.g., t7xx) may
+have an MTU less than the size of SKB, causing the TX buffer to be
+sliced and copied once more in the WWAN device driver.
 
-will share more code path.
+This patch implements the slicing in the WWAN subsystem and gives
+the WWAN devices driver the option to slice(by frag_len) or not. By
+doing so, the additional memory copy is reduced.
 
+Meanwhile, this patch gives WWAN devices driver the option to reserve
+headroom in fragments for the device-specific metadata.
 
->
-> 	Why will urb->hcpriv still be active?
+Signed-off-by: haozhe chang <haozhe.chang@mediatek.com>
+Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
 
+---
+Changes in v2
+  -send fragments to device driver by skb frag_list.
 
-still can't explain, that's why add patch#1 to get more urb infol
+Changes in v3
+  -move frag_len and headroom_len setting to wwan_create_port.
 
+Changes in v4
+  -change unreadable parameters to macro definition.
 
->> Add a flag name init_stage to avoid reset the device.
-> Why do you want to avoid resetting the device?
+Changes in v5
+  -optimize comments for WWAN_NO_HEADROOM, WWAN_NO_FRAGMENT.
 
+Changes in v6
+  -add reviewer to patch commit.
 
-at INIT stage, external hub still under enumeration process, i think 
-there is no need to reset.
+Changes in v7
+  -rebase and resend
+---
+ drivers/net/wwan/iosm/iosm_ipc_port.c  |  3 +-
+ drivers/net/wwan/mhi_wwan_ctrl.c       |  3 +-
+ drivers/net/wwan/rpmsg_wwan_ctrl.c     |  3 +-
+ drivers/net/wwan/t7xx/t7xx_port_wwan.c | 34 +++++++--------
+ drivers/net/wwan/wwan_core.c           | 59 ++++++++++++++++++++------
+ drivers/net/wwan/wwan_hwsim.c          |  1 +
+ drivers/usb/class/cdc-wdm.c            |  3 +-
+ include/linux/wwan.h                   | 16 +++++++
+ 8 files changed, 87 insertions(+), 35 deletions(-)
 
+diff --git a/drivers/net/wwan/iosm/iosm_ipc_port.c b/drivers/net/wwan/iosm/iosm_ipc_port.c
+index b6d81c627277..7798348f61d0 100644
+--- a/drivers/net/wwan/iosm/iosm_ipc_port.c
++++ b/drivers/net/wwan/iosm/iosm_ipc_port.c
+@@ -63,7 +63,8 @@ struct iosm_cdev *ipc_port_init(struct iosm_imem *ipc_imem,
+ 	ipc_port->ipc_imem = ipc_imem;
+ 
+ 	ipc_port->iosm_port = wwan_create_port(ipc_port->dev, port_type,
+-					       &ipc_wwan_ctrl_ops, ipc_port);
++					       &ipc_wwan_ctrl_ops, WWAN_NO_FRAGMENT,
++					       WWAN_NO_HEADROOM, ipc_port);
+ 
+ 	return ipc_port;
+ }
+diff --git a/drivers/net/wwan/mhi_wwan_ctrl.c b/drivers/net/wwan/mhi_wwan_ctrl.c
+index f7ca52353f40..c397aa53db5d 100644
+--- a/drivers/net/wwan/mhi_wwan_ctrl.c
++++ b/drivers/net/wwan/mhi_wwan_ctrl.c
+@@ -237,7 +237,8 @@ static int mhi_wwan_ctrl_probe(struct mhi_device *mhi_dev,
+ 
+ 	/* Register as a wwan port, id->driver_data contains wwan port type */
+ 	port = wwan_create_port(&cntrl->mhi_dev->dev, id->driver_data,
+-				&wwan_pops, mhiwwan);
++				&wwan_pops, WWAN_NO_FRAGMENT, WWAN_NO_HEADROOM,
++				mhiwwan);
+ 	if (IS_ERR(port)) {
+ 		kfree(mhiwwan);
+ 		return PTR_ERR(port);
+diff --git a/drivers/net/wwan/rpmsg_wwan_ctrl.c b/drivers/net/wwan/rpmsg_wwan_ctrl.c
+index 31c24420ab2e..fc6c228b7e1c 100644
+--- a/drivers/net/wwan/rpmsg_wwan_ctrl.c
++++ b/drivers/net/wwan/rpmsg_wwan_ctrl.c
+@@ -129,7 +129,8 @@ static int rpmsg_wwan_ctrl_probe(struct rpmsg_device *rpdev)
+ 
+ 	/* Register as a wwan port, id.driver_data contains wwan port type */
+ 	port = wwan_create_port(parent, rpdev->id.driver_data,
+-				&rpmsg_wwan_pops, rpwwan);
++				&rpmsg_wwan_pops, WWAN_NO_FRAGMENT,
++				WWAN_NO_HEADROOM, rpwwan);
+ 	if (IS_ERR(port))
+ 		return PTR_ERR(port);
+ 
+diff --git a/drivers/net/wwan/t7xx/t7xx_port_wwan.c b/drivers/net/wwan/t7xx/t7xx_port_wwan.c
+index 24bd21942403..59926fd0a6bb 100644
+--- a/drivers/net/wwan/t7xx/t7xx_port_wwan.c
++++ b/drivers/net/wwan/t7xx/t7xx_port_wwan.c
+@@ -54,13 +54,13 @@ static void t7xx_port_ctrl_stop(struct wwan_port *port)
+ static int t7xx_port_ctrl_tx(struct wwan_port *port, struct sk_buff *skb)
+ {
+ 	struct t7xx_port *port_private = wwan_port_get_drvdata(port);
+-	size_t len, offset, chunk_len = 0, txq_mtu = CLDMA_MTU;
+ 	const struct t7xx_port_conf *port_conf;
++	struct sk_buff *cur = skb, *cloned;
+ 	struct t7xx_fsm_ctl *ctl;
+ 	enum md_state md_state;
++	int cnt = 0, ret;
+ 
+-	len = skb->len;
+-	if (!len || !port_private->chan_enable)
++	if (!port_private->chan_enable)
+ 		return -EINVAL;
+ 
+ 	port_conf = port_private->port_conf;
+@@ -72,23 +72,21 @@ static int t7xx_port_ctrl_tx(struct wwan_port *port, struct sk_buff *skb)
+ 		return -ENODEV;
+ 	}
+ 
+-	for (offset = 0; offset < len; offset += chunk_len) {
+-		struct sk_buff *skb_ccci;
+-		int ret;
+-
+-		chunk_len = min(len - offset, txq_mtu - sizeof(struct ccci_header));
+-		skb_ccci = t7xx_port_alloc_skb(chunk_len);
+-		if (!skb_ccci)
+-			return -ENOMEM;
+-
+-		skb_put_data(skb_ccci, skb->data + offset, chunk_len);
+-		ret = t7xx_port_send_skb(port_private, skb_ccci, 0, 0);
++	while (cur) {
++		cloned = skb_clone(cur, GFP_KERNEL);
++		cloned->len = skb_headlen(cur);
++		ret = t7xx_port_send_skb(port_private, cloned, 0, 0);
+ 		if (ret) {
+-			dev_kfree_skb_any(skb_ccci);
++			dev_kfree_skb(cloned);
+ 			dev_err(port_private->dev, "Write error on %s port, %d\n",
+ 				port_conf->name, ret);
+-			return ret;
++			return cnt ? cnt + ret : ret;
+ 		}
++		cnt += cur->len;
++		if (cur == skb)
++			cur = skb_shinfo(skb)->frag_list;
++		else
++			cur = cur->next;
+ 	}
+ 
+ 	dev_kfree_skb(skb);
+@@ -154,13 +152,15 @@ static int t7xx_port_wwan_disable_chl(struct t7xx_port *port)
+ static void t7xx_port_wwan_md_state_notify(struct t7xx_port *port, unsigned int state)
+ {
+ 	const struct t7xx_port_conf *port_conf = port->port_conf;
++	unsigned int header_len = sizeof(struct ccci_header);
+ 
+ 	if (state != MD_STATE_READY)
+ 		return;
+ 
+ 	if (!port->wwan.wwan_port) {
+ 		port->wwan.wwan_port = wwan_create_port(port->dev, port_conf->port_type,
+-							&wwan_ops, port);
++						   &wwan_ops, CLDMA_MTU - header_len,
++						   header_len, port);
+ 		if (IS_ERR(port->wwan.wwan_port))
+ 			dev_err(port->dev, "Unable to create WWWAN port %s", port_conf->name);
+ 	}
+diff --git a/drivers/net/wwan/wwan_core.c b/drivers/net/wwan/wwan_core.c
+index 966d0ccd2276..a2c07d07195b 100644
+--- a/drivers/net/wwan/wwan_core.c
++++ b/drivers/net/wwan/wwan_core.c
+@@ -67,6 +67,8 @@ struct wwan_device {
+  * @rxq: Buffer inbound queue
+  * @waitqueue: The waitqueue for port fops (read/write/poll)
+  * @data_lock: Port specific data access serialization
++ * @headroom_len: SKB reserved headroom size
++ * @frag_len: Length to fragment packet
+  * @at_data: AT port specific data
+  */
+ struct wwan_port {
+@@ -79,6 +81,8 @@ struct wwan_port {
+ 	struct sk_buff_head rxq;
+ 	wait_queue_head_t waitqueue;
+ 	struct mutex data_lock;	/* Port specific data access serialization */
++	size_t headroom_len;
++	size_t frag_len;
+ 	union {
+ 		struct {
+ 			struct ktermios termios;
+@@ -426,6 +430,8 @@ static int __wwan_port_dev_assign_name(struct wwan_port *port, const char *fmt)
+ struct wwan_port *wwan_create_port(struct device *parent,
+ 				   enum wwan_port_type type,
+ 				   const struct wwan_port_ops *ops,
++				   size_t frag_len,
++				   unsigned int headroom_len,
+ 				   void *drvdata)
+ {
+ 	struct wwan_device *wwandev;
+@@ -459,6 +465,8 @@ struct wwan_port *wwan_create_port(struct device *parent,
+ 
+ 	port->type = type;
+ 	port->ops = ops;
++	port->frag_len = frag_len ? frag_len : SIZE_MAX;
++	port->headroom_len = headroom_len;
+ 	mutex_init(&port->ops_lock);
+ 	skb_queue_head_init(&port->rxq);
+ 	init_waitqueue_head(&port->waitqueue);
+@@ -702,30 +710,53 @@ static ssize_t wwan_port_fops_read(struct file *filp, char __user *buf,
+ static ssize_t wwan_port_fops_write(struct file *filp, const char __user *buf,
+ 				    size_t count, loff_t *offp)
+ {
++	struct sk_buff *skb, *head = NULL, *tail = NULL;
+ 	struct wwan_port *port = filp->private_data;
+-	struct sk_buff *skb;
++	size_t frag_len, remain = count;
+ 	int ret;
+ 
+ 	ret = wwan_wait_tx(port, !!(filp->f_flags & O_NONBLOCK));
+ 	if (ret)
+ 		return ret;
+ 
+-	skb = alloc_skb(count, GFP_KERNEL);
+-	if (!skb)
+-		return -ENOMEM;
++	do {
++		frag_len = min(remain, port->frag_len);
++		skb = alloc_skb(frag_len + port->headroom_len, GFP_KERNEL);
++		if (!skb) {
++			ret = -ENOMEM;
++			goto freeskb;
++		}
++		skb_reserve(skb, port->headroom_len);
++
++		if (!head) {
++			head = skb;
++		} else if (!tail) {
++			skb_shinfo(head)->frag_list = skb;
++			tail = skb;
++		} else {
++			tail->next = skb;
++			tail = skb;
++		}
+ 
+-	if (copy_from_user(skb_put(skb, count), buf, count)) {
+-		kfree_skb(skb);
+-		return -EFAULT;
+-	}
++		if (copy_from_user(skb_put(skb, frag_len), buf + count - remain, frag_len)) {
++			ret = -EFAULT;
++			goto freeskb;
++		}
+ 
+-	ret = wwan_port_op_tx(port, skb, !!(filp->f_flags & O_NONBLOCK));
+-	if (ret) {
+-		kfree_skb(skb);
+-		return ret;
+-	}
++		if (skb != head) {
++			head->data_len += skb->len;
++			head->len += skb->len;
++			head->truesize += skb->truesize;
++		}
++	} while (remain -= frag_len);
++
++	ret = wwan_port_op_tx(port, head, !!(filp->f_flags & O_NONBLOCK));
++	if (!ret)
++		return count;
+ 
+-	return count;
++freeskb:
++	kfree_skb(head);
++	return ret;
+ }
+ 
+ static __poll_t wwan_port_fops_poll(struct file *filp, poll_table *wait)
+diff --git a/drivers/net/wwan/wwan_hwsim.c b/drivers/net/wwan/wwan_hwsim.c
+index 2397a903d8f5..b4cc51833ed2 100644
+--- a/drivers/net/wwan/wwan_hwsim.c
++++ b/drivers/net/wwan/wwan_hwsim.c
+@@ -205,6 +205,7 @@ static struct wwan_hwsim_port *wwan_hwsim_port_new(struct wwan_hwsim_dev *dev)
+ 
+ 	port->wwan = wwan_create_port(&dev->dev, WWAN_PORT_AT,
+ 				      &wwan_hwsim_port_ops,
++				      WWAN_NO_FRAGMENT, WWAN_NO_HEADROOM,
+ 				      port);
+ 	if (IS_ERR(port->wwan)) {
+ 		err = PTR_ERR(port->wwan);
+diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
+index 1f0951be15ab..e0f0bc878bbd 100644
+--- a/drivers/usb/class/cdc-wdm.c
++++ b/drivers/usb/class/cdc-wdm.c
+@@ -929,7 +929,8 @@ static void wdm_wwan_init(struct wdm_device *desc)
+ 		return;
+ 	}
+ 
+-	port = wwan_create_port(&intf->dev, desc->wwanp_type, &wdm_wwan_port_ops, desc);
++	port = wwan_create_port(&intf->dev, desc->wwanp_type, &wdm_wwan_port_ops,
++				WWAN_NO_FRAGMENT, WWAN_NO_HEADROOM, desc);
+ 	if (IS_ERR(port)) {
+ 		dev_err(&intf->dev, "%s: Unable to create WWAN port\n",
+ 			dev_name(intf->usb_dev));
+diff --git a/include/linux/wwan.h b/include/linux/wwan.h
+index 24d76500b1cc..f5aaa36ea742 100644
+--- a/include/linux/wwan.h
++++ b/include/linux/wwan.h
+@@ -64,11 +64,25 @@ struct wwan_port_ops {
+ 			    poll_table *wait);
+ };
+ 
++/*
++ * Used to indicate that the WWAN core should not fragment control packages.
++ */
++#define WWAN_NO_FRAGMENT	0
++
++/*
++ * Used to indicate that the WWAN core should not reserve headroom in control packages.
++ */
++#define WWAN_NO_HEADROOM	0
++
+ /**
+  * wwan_create_port - Add a new WWAN port
+  * @parent: Device to use as parent and shared by all WWAN ports
+  * @type: WWAN port type
+  * @ops: WWAN port operations
++ * @frag_len: WWAN port TX fragments length, if WWAN_NO_FRAGMENT is set,
++ *            the WWAN core don't fragment control packages.
++ * @headroom_len: WWAN port TX fragments reserved headroom length, if WWAN_NO_HEADROOM
++ *                is set, the WWAN core don't reserve headroom in control packages.
+  * @drvdata: Pointer to caller driver data
+  *
+  * Allocate and register a new WWAN port. The port will be automatically exposed
+@@ -86,6 +100,8 @@ struct wwan_port_ops {
+ struct wwan_port *wwan_create_port(struct device *parent,
+ 				   enum wwan_port_type type,
+ 				   const struct wwan_port_ops *ops,
++				   size_t frag_len,
++				   unsigned int headroom_len,
+ 				   void *drvdata);
+ 
+ /**
+-- 
+2.17.0
 
->
-> Doesn't the reset code already include a check for whether the device is
-> disconnected?
-
-
-the problem is port is inactive state, but device still in software 
-connect state,
-
-there is no disconnect check in reset code.
-
-
->
->> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
->> ---
->>   drivers/usb/core/hub.c | 20 +++++++++++++++++++-
->>   drivers/usb/core/hub.h |  1 +
->>   2 files changed, 20 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
->> index 97a0f8f..3cb1137 100644
->> --- a/drivers/usb/core/hub.c
->> +++ b/drivers/usb/core/hub.c
->> @@ -1290,6 +1290,7 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
->>   	if (type == HUB_INIT2 || type == HUB_INIT3) {
->>   		/* Allow autosuspend if it was suppressed */
->>    disconnected:
->> +		hub->init_stage = 0;
->>   		usb_autopm_put_interface_async(to_usb_interface(hub->intfdev));
->>   		device_unlock(&hdev->dev);
->>   	}
->> @@ -1872,6 +1873,7 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
->>   	kref_init(&hub->kref);
->>   	hub->intfdev = &intf->dev;
->>   	hub->hdev = hdev;
->> +	hub->init_stage = 1;
->>   	INIT_DELAYED_WORK(&hub->leds, led_work);
->>   	INIT_DELAYED_WORK(&hub->init_work, NULL);
->>   	INIT_WORK(&hub->events, hub_event);
->> @@ -5587,6 +5589,21 @@ static void port_over_current_notify(struct usb_port *port_dev)
->>   	kfree(port_dev_path);
->>   }
->>   
->> +static bool port_child_avoid_reset(struct usb_device *udev)
->> +{
->> +	struct usb_hub *hub;
->> +
->> +	if (udev->descriptor.bDeviceClass == USB_CLASS_HUB &&
->> +	    udev->state == USB_STATE_CONFIGURED) {
->> +		hub = usb_get_intfdata(udev->actconfig->interface[0]);
->> +
->> +		if (hub && hub->init_stage)
->> +			return true;
->> +	}
->> +
->> +	return false;
->> +}
->> +
->>   static void port_event(struct usb_hub *hub, int port1)
->>   		__must_hold(&port_dev->status_lock)
->>   {
->> @@ -5699,7 +5716,8 @@ static void port_event(struct usb_hub *hub, int port1)
->>   			dev_dbg(&port_dev->dev, "do warm reset, full device\n");
->>   			usb_unlock_port(port_dev);
->>   			usb_lock_device(udev);
->> -			usb_reset_device(udev);
->> +			if (!port_child_avoid_reset(udev))
->> +				usb_reset_device(udev);
->>   			usb_unlock_device(udev);
-> Doesn't usb_lock_device() already prevent this code from running during
-> the INIT, INIT2, and INIT3 stages of hub preparation?
-
-
-as it use some delay worker to complete the INIT stage, as i know it 
-will not lock device
-
-when worker is not start.
-
-do you have any better suggestion about this point ?
-
-
->
-> Alan Stern
