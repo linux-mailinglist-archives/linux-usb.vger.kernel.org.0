@@ -2,74 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 908776B10C5
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Mar 2023 19:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CEC6B10C8
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Mar 2023 19:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjCHSM5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Mar 2023 13:12:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
+        id S229981AbjCHSNU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Mar 2023 13:13:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjCHSMx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Mar 2023 13:12:53 -0500
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC32CEFB6;
-        Wed,  8 Mar 2023 10:12:38 -0800 (PST)
-Received: by mail-ot1-f50.google.com with SMTP id l15-20020a9d7a8f000000b0069447f0db6fso9453395otn.4;
-        Wed, 08 Mar 2023 10:12:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678299158;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7v3Me2y7t7dCURwLEAGtEDEw0TqjC7V3ocAkq0mf58g=;
-        b=zh6UuwyK+gR/e7fEh5drwQJqfzxjJkpJwy/jvRYhZAlf8WiAf0ICGJe42IMCRVbY8t
-         8AtP9oz7qxhNjXGSVLjsRhikjtIS0OB5fk3egoBFzaD+14B0nrPdx019FUCZQKRXP6Br
-         n5YpqiOvw6IDQ+l0uxz2vP/yyPP8AK3yPWBRETPgVJZ7NYJyFDg8wAYTZEq97es5LgfA
-         CgttVQlEEweST+YmXD8WGZY8pO3tQqJHqMRnEJPgjNKly8nW6XtZpsbTEFOisqcwNZcQ
-         wvEh9DMgviJJqjXz2a4Q6X1Ck4cD75iM1VPEY6NEwWaED9hW85hoHGkJM4j/A5XkM+b8
-         MMUw==
-X-Gm-Message-State: AO0yUKVRvIqLscEZEkHCQFxL5E1bQPDdtjAmw0Rfi3OiENpMxpmLTsbg
-        joKnzqUHVXQp+ySSKlrD7A==
-X-Google-Smtp-Source: AK7set+9aSSHh9EYLXwvCVkULUEr9F1S3fp5AOhM216juwlOAQ55mt9toBGuxByRpZcKPLlBVPwBlQ==
-X-Received: by 2002:a05:6830:920:b0:68b:c60c:de58 with SMTP id v32-20020a056830092000b0068bc60cde58mr11918010ott.7.1678299157654;
-        Wed, 08 Mar 2023 10:12:37 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t20-20020a056830083400b0068bbf5f2e49sm6678351ots.37.2023.03.08.10.12.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 10:12:37 -0800 (PST)
-Received: (nullmailer pid 3527197 invoked by uid 1000);
-        Wed, 08 Mar 2023 18:12:36 -0000
-Date:   Wed, 8 Mar 2023 12:12:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Minda Chen <minda.chen@starfivetech.com>
-Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: phy: Add StarFive JH7110 USB
- dt-binding
-Message-ID: <20230308181236.GA3512870-robh@kernel.org>
-References: <20230308082800.3008-1-minda.chen@starfivetech.com>
- <20230308082800.3008-2-minda.chen@starfivetech.com>
+        with ESMTP id S229456AbjCHSNP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Mar 2023 13:13:15 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2046.outbound.protection.outlook.com [40.107.96.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFB41BD6
+        for <linux-usb@vger.kernel.org>; Wed,  8 Mar 2023 10:12:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QcnDiPKtuJuD0H2Rp/FHtJtx/DlvWXh5HNm+YqCGocPBnMU+5xNRdGT+jXd8cEIxIBuCU83HTEdBLXSPrieAuQgKkMeZGXTbb7f3Vi0nW3KFKfdW+y3xd/wJv5iWMzPa0Lv8EvoFsu+TgPDcy7rBfADntnLlLon+kH83IRWEnVC315E0RuJ9sphZ3Drl+t7tskpaoKHvv6Ut6iIXTUgqgtap9mOgokI2aSJHVZfaNc279j6x4LyH6Cm3+OU4Ljsty7QDhdHbD5bM0IYkUP2lt01J+Gfj6dW7tlPSwv3BSPtyCnF+t1wMVi4eIb+6putrBM7Pm2JXRK+ZC4y3qvihmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Tl4fMvXv4x4E2bKh5w7jjIASxQR9iSCPSVPi3cdCkmo=;
+ b=Scw7h/9mWCSuJ7yUla8xznXQD5HBMNRny+m/jfCwpsjXYEX/SWkmCAK9IyeYKUdoca/BfaSn7p6DiVRc7MJ2it1066KTS+y7VGzIAxIZ3DXZld2WjzJ5TETqmyJowHdyejLWKK/h+wdkUMWmStCAtjQKKwsgklRxB7CufqgPyW4H8LSpvTcNxRr9HeXrD909mmT07ylw05QFo4LYArzZUrFUF+RxrIVGFXO8E966vTTCds8Gn4E5Xzygwj/5hec7Rcw4vMspbZfT9zjB52G6I4mqgw5C5Fcddkku0UisGtCXGAxqDX7r5+YBK9+4Isrl0cdYdgilsBD63Ud73xv//A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=infinera.com; dmarc=pass action=none header.from=infinera.com;
+ dkim=pass header.d=infinera.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Tl4fMvXv4x4E2bKh5w7jjIASxQR9iSCPSVPi3cdCkmo=;
+ b=Y+im2mQF9FSZ67z4L6Lx5mfjnDIEzn5Hksb8zg89FBBKFKjt6pZR5AT0fQ4ZM4maYsStdo+IElF8HjkCuZ834jdx6wjwJa0ITNkaxtgFDtVytIvKgPcgrDxhAGar2k5eIb2Pmiqibzrx4TsjScnyKrMn1aBGE1PqM4rlGrmUWt0/78/t72k7T+uf0sqZ6I9rSqwFC1TzxIE4hwnPCbQYm4QGkGyJ52FIsfUEo/31J2ArcB+f8C7hnRm8RSd5ZuT/kaxQTUYueUbB5l+eg5gkh6ru0x5mUqVk30FGclVTdj+0rnUqwjmRxqENBoSQbHoXN73C0g566tAdWgbTDo9FgA==
+Received: from PH0PR10MB4615.namprd10.prod.outlook.com (2603:10b6:510:36::24)
+ by SJ0PR10MB4768.namprd10.prod.outlook.com (2603:10b6:a03:2d3::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Wed, 8 Mar
+ 2023 18:12:52 +0000
+Received: from PH0PR10MB4615.namprd10.prod.outlook.com
+ ([fe80::fffc:c9c8:7e24:7171]) by PH0PR10MB4615.namprd10.prod.outlook.com
+ ([fe80::fffc:c9c8:7e24:7171%5]) with mapi id 15.20.6178.017; Wed, 8 Mar 2023
+ 18:12:51 +0000
+From:   Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "balbi@kernel.org" <balbi@kernel.org>
+Subject: Re: dwc3 gadget and USB3
+Thread-Topic: dwc3 gadget and USB3
+Thread-Index: AQHZUeDbzC3YzvbOF0edn6Gh7r6tPa7xIiEAgAANS4A=
+Date:   Wed, 8 Mar 2023 18:12:51 +0000
+Message-ID: <d4be672670da6b06456b5a82624e3db0128fdae8.camel@infinera.com>
+References: <c604031d4e3aa215b90f73e9a2dd55e7e116186f.camel@infinera.com>
+         <ZAjE+p4IoXk/kvXu@kroah.com>
+In-Reply-To: <ZAjE+p4IoXk/kvXu@kroah.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.46.4 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=infinera.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR10MB4615:EE_|SJ0PR10MB4768:EE_
+x-ms-office365-filtering-correlation-id: bfc204be-ba7c-41d3-979d-08db2000bb55
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: noa8fC69ipU57KDLiz/BROiJFPYOAkA6FlXLzrxjfhF/cL6GPjPbEW46lOIyf4eaDLKvAzRiYD72yUQqwulVspfx1JmfpoGgmuo5+LlcR0Ofq/z47HHZSz9hqRBg/4hf5Kpvh6mY2TK8ux2Ffk3NeWRHiqXJTVeTM4fGoWK5Hd2hfu5xQhu1X/n+fti5itmrYl4yQ4p1JX8qABZcv4n6M8GRPZE/tYiHQxy8zceh2xQvYaIa/kd9PkYLEQxsEtxfe8z0pjPbR2aJ28E6NvC09aPDbnMC8THh8+225LeZj5W0kfDll3HC0QeTpiJL3Y0WqFfD/zhhCMJeelX223fJ6DXL0H6VmtHQQQSsiUfLtBXZU9tjdGNw+Y8H2y322lRNlvY+vv0Q0EmomWuJ7i4Z0Z7HRw5dUQqgDu+zVIqjCWNnNOyhsdDffmDDeC0wFZX8D0vzUv0qsbdEXiFZIpJ09psnKVSpzc5ciFJ+nJtS5z4lUBZk0Sc4Cw/LAcIx3QIAafomdv+7Y9aB5u27wmaMo9XDCQ9NH0zewIMycOt7w6Z9i3dnwikXxceP5QHVZNWm354jPpEo5/yynWmJLiiukfSU342VPUEJg0Ve3SsuQCaMPjiGCt5/k1THDOruXiJSmPemH9EtNSf3gBMpXikKdJQHgGWHCR9Wphbk0P6w6C/owi9RurWAVzOR85REHDXIWG/krq5Ks5yu2OlhAomKuA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4615.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(346002)(366004)(396003)(376002)(451199018)(36756003)(83380400001)(71200400001)(6512007)(6506007)(186003)(6486002)(2616005)(66946007)(86362001)(66446008)(66476007)(6916009)(66556008)(4326008)(8676002)(2906002)(64756008)(8936002)(76116006)(41300700001)(5660300002)(4744005)(38070700005)(38100700002)(316002)(91956017)(122000001)(54906003)(478600001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TFVmQTZvNXZKOXZvd3ArWHBtL0FUdUh3TWdzVDI2Z3MzQlpoVGVrWnJIM3kx?=
+ =?utf-8?B?T21PZVE4cTRnMyswb2NrRjNxcG5MT2VFUWRRSmV2SExFRUcxVzlpUmc4TUFz?=
+ =?utf-8?B?Q3ROSzhTVXI4T0g2WVRnYUI0dXVwL05KdVExQnpNMFYvUGJQT25ibHJtNzEz?=
+ =?utf-8?B?Q3Y0Q2ZUbzhyZnZJSGJSUHVuWVdzMjVUdEx5SEhxOVpxMng2ZW1DQ21zaXVr?=
+ =?utf-8?B?c1lMckx2Q1ZxZ1hHajQzdERFSndrNXlxU1k5bHl6YStBc3cxTGpWVkJjMWRE?=
+ =?utf-8?B?QVA2QTVjK2VudGg4S0JiR0ZBN3Z0VTlsbEs0dTVOU3dvRk5INHdFT0dBQzNn?=
+ =?utf-8?B?QXNoR2dpZjdEUEc4UEN6dmNodzd3YS9nRVBCYUtxdmsvTmdBb3htYnh6cjVC?=
+ =?utf-8?B?cHI1OE1BYVQyTjJISlVoc2hBUmxlRU0zVGFqQW5uSnVpNHFhWDd0SDN3My9n?=
+ =?utf-8?B?WUdjMkVMWWtwbnRLaTFWbTlmS2xRK2IxYVVVR2I0VzMwT1VHaXJQdUFLc2x3?=
+ =?utf-8?B?a3MwUklPVStlSGNpckgvSFYyWEFXZmJURmtYTVFqZWdCOGltdW1CZW9PYXhC?=
+ =?utf-8?B?NnlFR1NodVY5SXArL3dhSk5ybUdYaXMvMW54elBucVhndm55ajVRMVFLMGlO?=
+ =?utf-8?B?VkJQZDFYd0xlMmRYL2pxaW5tMTNBUVZFejRZK1FEZ0xMdzByYlBZVGE1UDlp?=
+ =?utf-8?B?SklNVmp2VmZGSHZtQzVuUmZwS01ydGZwTHRIRWFKNHBKbDYwUzErb2pGbGRp?=
+ =?utf-8?B?anozVlNLK0RMOHV5Tm44cDFjbHdWZ2tWMXFwajdqZVB0U0E0UzdaRWtqZjJq?=
+ =?utf-8?B?RHd3N3hnTGpHdU1OdGhGU3B3VCs2MlZCVkdUTFkray83T05sYzJUbERNMVJr?=
+ =?utf-8?B?RkVCdzN6QVVoUlBlWitDL2FyTzE0V20wUzZ5QmRLQ2tXakJZOU80d0ZTbUVP?=
+ =?utf-8?B?ZVZ5Um83OHVJcTJVQ1p0bGRqMjhqbkRhZkJlQkVUZ1RVMzZwZjVNbzFZdUxF?=
+ =?utf-8?B?K0QrZmRuSDR5WWw0ak5iTnV3NFRaT29HNmVBWkhRNWttM0x3YVFmSUEyaGho?=
+ =?utf-8?B?aFphRElDUTVEZENEWHVPaE9IelBoVHB0NVdDRnNRQ3Y5TUM3TzlIMXV2T09u?=
+ =?utf-8?B?c25Bc0dwbTVzbTRCVE9OcVV3b2pYdW9GNitXUDlSVGNDSTFSSVRHM3RnRll3?=
+ =?utf-8?B?ZnM1Smk0cEFYQWlwNnpZSHdYTFE1Q0lmcGVsOFB5QmgvdVBSTWs0NkhHT0dG?=
+ =?utf-8?B?Ky9hdi9JYXNHZzlGOWRqUWRkUCtmNzNwbXpFMG43MmtKNnB2bG51USs0aU5K?=
+ =?utf-8?B?aFJaRUtOUCs5KzFML0Urd0JtbmlBWng2Ti9CVmNYNkt6M2t1SS9rdG40djJu?=
+ =?utf-8?B?VHdPazdibGFkZUY1Um9CdVk5dzEvZjdqdE1TMnlLemdRUlRHQnU2VlRUSlpp?=
+ =?utf-8?B?aytyVVlUVFZCQkxVWDRPcWx5QSsvVy9WM2pJb2tMdXJtb3l1M21MdllMeXFW?=
+ =?utf-8?B?aFU2QlJJRG1UckJDYVZaWmgvTVh3VE5tOHBZQS9aUkhrVERsbGNsbzlwUlpr?=
+ =?utf-8?B?aXFJTUlsQS9yMlVnUExMTEpCcFJ5TFBGNVlLbzZZaGwrNUVBWnQxVkc5RkdD?=
+ =?utf-8?B?TGZ1TTZ6YWxqUENRclpxblNPOUxIOFd2UVBldnRPN1pmeC9kSlBnaG0ydnhE?=
+ =?utf-8?B?M3RTTUJTcUUzZlBqeVM4dE9UVWZ6d2c2SW1zYmtIUERMTENUV00vcUpHVXZD?=
+ =?utf-8?B?N1N5THNJdzdkS1JKWitHZGI1dHBxTEptQW1qakFBMkNtK2Q2eDlrT0QvWlc4?=
+ =?utf-8?B?c3lrbnEvbkpPTU5scEFqODEvVEthSUtqU2NmT3BuVEVQVS9NK0VmMlNvbGhL?=
+ =?utf-8?B?bTJITjdrNUo5RXZaYU5aRW0rNTIvOUM5aHNsNXpEODZCVzJhenA1OWFxdUI4?=
+ =?utf-8?B?ZjZhc1l1ODRVRHlZSUFwRytZSTJZbms3L24vei9EcjI5S2dFdVlNNld5UUtD?=
+ =?utf-8?B?RUZwM2NHMEx6Vk5RMzZxQTdRRmRnSEdrYmFtSlRIZDVCblU1c0svNy9BV2FC?=
+ =?utf-8?B?a0JkU2VPOW5tcVNrVkdSaEZ5MlNoK09YSE4vcXNqLytHM2hXdUxlVkprWEF1?=
+ =?utf-8?B?ZXRCWjduTFl5MkVHdFdkTkRMNGVWWllGZUZEVllGSkpiaEhYSS8wZUVPbkpn?=
+ =?utf-8?Q?draSMrwz0cZgE76uNzn7CDxGzh1JRrrrAzpA2BV9OoU9?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7C197B71EB10B84B9DE71157B41A84E3@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230308082800.3008-2-minda.chen@starfivetech.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-OriginatorOrg: infinera.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4615.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bfc204be-ba7c-41d3-979d-08db2000bb55
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Mar 2023 18:12:51.7469
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: i4bHKd+FOXcQ2i1EUAyhiFxqzmZwpJmA+hPx1MEufyx0mLvNpQHicLXpkjWM1Y7Ezm0iniId0ns9QceGcnqtlw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4768
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,212 +128,21 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 04:27:58PM +0800, Minda Chen wrote:
-> Add StarFive JH7110 SoC USB 3.0 phy dt-binding.
-> USB controller is cadence USB 3.0 IP.
-> 
-> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
-> ---
->  .../bindings/phy/starfive,jh7110-usb-phy.yaml | 158 ++++++++++++++++++
->  1 file changed, 158 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml b/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
-> new file mode 100644
-> index 000000000000..daa88d065deb
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
-
-Filename should match the compatible. The filename seems more correct 
-than the compatible...
-
-> @@ -0,0 +1,158 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/starfive,jh7110-usb-phy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: StarFive USB 2.0 and 3.0 PHY
-> +
-> +maintainers:
-> +  - Minda Chen<minda.chen@starfivetech.com>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: starfive,jh7110-usb
-
-What's the USB controller called?
-
-> +
-> +  reg:
-> +    maxItems: 2
-> +
-> +  reg-names:
-> +    items:
-> +      - const: usb3
-> +      - const: usb2
-> +
-> +  clocks:
-> +    items:
-> +      - description: usb 125m clock
-> +      - description: app 125m clock
-> +      - description: lpm clock
-> +      - description: stb clock
-> +      - description: apb clock
-> +      - description: axi clock
-> +      - description: utmi apb clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: usb_125m
-> +      - const: usb0_app_125
-> +      - const: usb0_lpm
-> +      - const: usb0_stb
-> +      - const: usb0_apb
-> +      - const: usb0_axi
-> +      - const: usb0_utmi_apb
-
-usb_ and usb0_ is redundant, drop.
-
-> +
-> +  resets:
-> +    items:
-> +      - description: USB0_PWRUP reset
-> +      - description: USB0_APB reset
-> +      - description: USB0_AXI reset
-> +      - description: USB0_UTMI_APB reset
-> +
-> +  starfive,sys-syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    items:
-> +      items:
-
-Are there multiple entries of phandle+offset because this says there 
-are. You want '- items:' here to limit it to 1 phandle+offset.
-
-> +        - description: phandle to System Register Controller sys_syscon node.
-> +        - description: offset of SYS_SYSCONSAIF__SYSCFG register for USB.
-> +    description:
-> +      The phandle to System Register Controller syscon node and the offset
-> +      of SYS_SYSCONSAIF__SYSCFG register for USB.
-> +
-> +  starfive,stg-syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    items:
-> +      items:
-
-Same here.
-
-> +        - description: phandle to System Register Controller stg_syscon node.
-> +        - description: register0 offset of STG_SYSCONSAIF__SYSCFG register for USB.
-> +        - description: register1 offset of STG_SYSCONSAIF__SYSCFG register for USB.
-> +        - description: register2 offset of STG_SYSCONSAIF__SYSCFG register for USB.
-> +        - description: register3 offset of STG_SYSCONSAIF__SYSCFG register for USB.
-> +    description:
-> +      The phandle to System Register Controller syscon node and the offset
-> +      of STG_SYSCONSAIF__SYSCFG register for USB. Total 4 regsisters offset
-> +      for USB.
-> +
-> +  dr_mode:
-
-Usually this belongs in the controller node.
-
-> +    description: PHY mode.
-> +    enum:
-> +      - host
-> +      - peripheral
-> +      - otg
-> +
-> +  "#address-cells":
-> +    maximum: 2
-> +
-> +  "#size-cells":
-> +    maximum: 2
-> +
-> +  ranges: true
-> +
-> +  starfive,usb2-only:
-> +    type: boolean
-> +    description: Set USB using usb 2.0 phy. Supprt USB 2.0 only
-
-The 'maximum-speed' property in the controller should be enough. Why is 
-this needed.
-
-Being a PHY, you are missing #phy-cells.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +  - starfive,sys-syscon
-> +  - starfive,stg-syscon
-> +  - dr_mode
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +  - ranges
-> +
-> +patternProperties:
-> +  "^usb@[0-9a-f]+$":
-> +    type: object
-> +    description: |
-> +      usbphy node should have '1' usb controller subnode.
-> +      It could be Cadence USB3 DRD controller.
-> +      Cadence USB3 should follow the bindings specified in
-> +      Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-
-Why is the controller a child of the phy?
-
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    usbphy@10200000 {
-> +      compatible = "starfive,jh7110-usb";
-> +      reg = <0x10210000 0x1000>,
-> +            <0x10200000 0x1000>;
-> +      reg-names = "usb3", "usb2";
-> +      clocks = <&syscrg 95>,
-> +               <&stgcrg 6>,
-> +               <&stgcrg 4>,
-> +               <&stgcrg 5>,
-> +               <&stgcrg 1>,
-> +               <&stgcrg 3>,
-> +               <&stgcrg 2>;
-> +      clock-names = "usb_125m", "usb0_app_125", "usb0_lpm",
-> +                    "usb0_stb", "usb0_apb", "usb0_axi", "usb0_utmi_apb";
-> +      resets = <&stgcrg 10>,
-> +               <&stgcrg 8>,
-> +               <&stgcrg 7>,
-> +               <&stgcrg 9>;
-> +      starfive,stg-syscon = <&stg_syscon 0x4 0xc4 0x148 0x1f4>;
-> +      starfive,sys-syscon = <&sys_syscon 0x18>;
-> +      dr_mode = "host";
-> +      #address-cells = <1>;
-> +      #size-cells = <1>;
-> +      ranges;
-> +
-> +      usb@10100000 {
-> +        compatible = "cdns,usb3";
-
-This needs a platform specific compatible.
-
-> +        reg = <0x10100000 0x10000>,
-> +              <0x10110000 0x10000>,
-> +              <0x10120000 0x10000>;
-> +        reg-names = "otg", "xhci", "dev";
-> +        interrupts = <100>, <108>, <110>;
-> +        interrupt-names = "host", "peripheral", "otg";
-> +        phy-names = "cdns3,usb3-phy", "cnds3,usb2-phy";
-> +        maximum-speed = "super-speed";
-> +      };
-> +    };
-> -- 
-> 2.17.1
-> 
+T24gV2VkLCAyMDIzLTAzLTA4IGF0IDE4OjI1ICswMTAwLCBHcmVnIEtIIHdyb3RlOg0KPiBPbiBX
+ZWQsIE1hciAwOCwgMjAyMyBhdCAwNToxMDoxN1BNICswMDAwLCBKb2FraW0gVGplcm5sdW5kIHdy
+b3RlOg0KPiA+IHdlIGFyZSB1c2luZyBmc2wtbHMxMDQzYS1yZGIgYmFzZWQgZGVzaWduIGJ1dCB3
+aXRoIGEgbHMxMDIzYSBTT0MgYW5kDQo+ID4gdXNlIFVTQjAgaW4gZ2FkZ2V0IG1vZGUgcnVubmlu
+ZyBlaXRoZXIgTkNNIG9yIFJORElTIGV0aGVybmV0IG9uIHRvcC4NCj4gPiANCj4gPiBXaGVuIHdl
+IGNvbm5lY3QgdGhlIGdhZGdldCB0byBhIFBDKExpbnV4IG9mIFdpbmRvd3MpIG92ZXIgYW4gVVNC
+MiBodWIsDQo+ID4gbmV0d29ya2luZyhOQ00gb3IgUk5ESVMpIHdvcmtzIHdlbGwuDQo+ID4gDQo+
+ID4gSG93ZXZlciwgd2hlbiB3ZSBjb25uZWN0IHRoZSBnYWRnZXQgZGlyZWN0bHkgdG8gdGhlIFBD
+L2xhcHRvcCB3aGljaCB1c2VzIFVTQjMNCj4gPiB3ZSBzZWUgc29tZXRoaW5nIG9kZDoNCj4gPiAg
+IFBpbmcgZnJvbSBQQyB0byBnYWRnZXQgd29ya3MuDQo+ID4gICBQaW5nIGZyb20gZ2FkZ2V0IHRv
+IGxhcHRvcCBkb2VzIG5vdC4gSG93ZXZlciBpZiB3ZSBhbHNvIHBpbmcgZnJvbSBQQyBhdCB0aGUg
+c2FtZSB0aW1lIHdlDQo+ID4gICBzZWUgZ2FkZ2V0IHRvIFBDIHN0YXJ0IHdvcmtpbmcuDQo+ID4g
+U2VlbXMgbGlrZSBwaW5nIGZyb20gdGhlIFBDIHRpZ2dlcnMgdGhlIGdhZGdldCB0byBzZWUgaW5j
+b21pbmcgcGtncyBzb21laG93Lg0KPiA+IA0KPiA+IEFueSBpZGVhIHdoYXQgbWlnaHQgYmUgd3Jv
+bmcgb3IgaG93IHRvIGRlYnVnIHRoaXM/DQo+ID4gS2VybmVsIDUuMTUuODcNCj4gDQo+IDUuMTUu
+eSBpcyB2ZXJ5IG9sZCwgZG9lcyB0aGlzIGFsc28gaGFwcGVuIG9uIDYuMj8NCj4gDQoNCkkganVz
+dCB0cmllZCA2LjEuMTUgYW5kIHRoZSBwcm9ibGVtIHJlbWFpbnMsIEkgaG9wZSB0aGF0IGlzIGNs
+b3NlIGVub3VnaCA/DQo=
