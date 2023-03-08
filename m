@@ -2,47 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B489D6B0D3A
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Mar 2023 16:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A086B0D3C
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Mar 2023 16:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbjCHPpd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Mar 2023 10:45:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
+        id S232111AbjCHPph (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Mar 2023 10:45:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbjCHPow (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Mar 2023 10:44:52 -0500
+        with ESMTP id S232256AbjCHPo4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Mar 2023 10:44:56 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134E31B33A
-        for <linux-usb@vger.kernel.org>; Wed,  8 Mar 2023 07:43:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A785C23650
+        for <linux-usb@vger.kernel.org>; Wed,  8 Mar 2023 07:43:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678290175;
+        s=mimecast20190719; t=1678290180;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dVYqqZQrB6z9Vck/IoN57iUsP43MOtVQ6StTNLk4CVc=;
-        b=OCl1NEj3g11bC0mHwjYGMtIzhwZsA952HJYpFoauILkkCnP3LchoORJ6Eor45X+kOgUHIC
-        N+EVwr+sUiVrQhFIlg66WzNTh9XmK0RR8sIO3803USxzTySZUzS4n8Q7Czoll0Da/AqTUB
-        kOj0EysodNRaYNMdZp7CkdGkvKxLuWE=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9zPHx6OPcFDQ0fIqlaO4BgplZt9QEHBkAhS4WokOj/A=;
+        b=bj4EjKlQERQiux97JS3vttzFzvTWHrp12mTvERqvL+ijjGWUoqlns+hE4o9BeY/HZb6hA4
+        s5Y/zTT7cODfaoy7K6/dHxLjCr8O8lptQsdHib5j1UkQZklmCXESIRiy+Yh8vBYP0MDPbQ
+        eJXBG9SkPTxGNDaHF1BWEOjz5mvVOp4=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-371-wYQfeZy4PhG6dLYHdMRuxA-1; Wed, 08 Mar 2023 10:42:54 -0500
-X-MC-Unique: wYQfeZy4PhG6dLYHdMRuxA-1
+ us-mta-591-v0-lDeqUOTyRu3RnlBU91Q-1; Wed, 08 Mar 2023 10:42:56 -0500
+X-MC-Unique: v0-lDeqUOTyRu3RnlBU91Q-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 68BF785D070;
-        Wed,  8 Mar 2023 15:42:53 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8576F817078;
+        Wed,  8 Mar 2023 15:42:54 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.195.179])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F922492B07;
-        Wed,  8 Mar 2023 15:42:52 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A4A55492B04;
+        Wed,  8 Mar 2023 15:42:53 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org
-Subject: [PATCH v4 0/3] usb: ucsi: 3 bug fixes
-Date:   Wed,  8 Mar 2023 16:42:41 +0100
-Message-Id: <20230308154244.722337-1-hdegoede@redhat.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH v4 1/3] usb: ucsi: Fix NULL pointer deref in ucsi_connector_change()
+Date:   Wed,  8 Mar 2023 16:42:42 +0100
+Message-Id: <20230308154244.722337-2-hdegoede@redhat.com>
+In-Reply-To: <20230308154244.722337-1-hdegoede@redhat.com>
+References: <20230308154244.722337-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
@@ -56,36 +60,71 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg, Heikki,
+When ucsi_init() fails, ucsi->connector is NULL, yet in case of
+ucsi_acpi we may still get events which cause the ucs_acpi code to call
+ucsi_connector_change(), which then derefs the NULL ucsi->connector
+pointer.
 
-Here is v4 of my ucsi bugfix series.
+Fix this by not setting ucsi->ntfy inside ucsi_init() until ucsi_init()
+has succeeded, so that ucsi_connector_change() ignores the events
+because UCSI_ENABLE_NTFY_CONNECTOR_CHANGE is not set in the ntfy mask.
 
-Changes in v4:
-- Rebase on top of v6.3-rc1
-
-Changes in v3:
-- Assign connector[i].index before calling ucsi_register_port() instead of
-  passing i to ucsi_register_port()
-- Add Link and Reviewed-by tags to commitmsg
-
+Fixes: bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=217106
+Cc: stable@vger.kernel.org
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
 Changes in v2:
 - Delay setting ucsi->ntfy in ucsi_init() instead of adding a NULL pointer
   check to ucsi_connector_change()
 
-Regards,
+Changes in v3:
+- Add Link tag to commitmsg
+---
+ drivers/usb/typec/ucsi/ucsi.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-Hans
-
-
-Hans de Goede (3):
-  usb: ucsi: Fix NULL pointer deref in ucsi_connector_change()
-  usb: ucsi: Fix ucsi->connector race
-  usb: ucsi_acpi: Increase the command completion timeout
-
- drivers/usb/typec/ucsi/ucsi.c      | 33 ++++++++++++++----------------
- drivers/usb/typec/ucsi/ucsi_acpi.c |  2 +-
- 2 files changed, 16 insertions(+), 19 deletions(-)
-
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index f632350f6dcb..0623861c597b 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -1329,7 +1329,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+ static int ucsi_init(struct ucsi *ucsi)
+ {
+ 	struct ucsi_connector *con;
+-	u64 command;
++	u64 command, ntfy;
+ 	int ret;
+ 	int i;
+ 
+@@ -1341,8 +1341,8 @@ static int ucsi_init(struct ucsi *ucsi)
+ 	}
+ 
+ 	/* Enable basic notifications */
+-	ucsi->ntfy = UCSI_ENABLE_NTFY_CMD_COMPLETE | UCSI_ENABLE_NTFY_ERROR;
+-	command = UCSI_SET_NOTIFICATION_ENABLE | ucsi->ntfy;
++	ntfy = UCSI_ENABLE_NTFY_CMD_COMPLETE | UCSI_ENABLE_NTFY_ERROR;
++	command = UCSI_SET_NOTIFICATION_ENABLE | ntfy;
+ 	ret = ucsi_send_command(ucsi, command, NULL, 0);
+ 	if (ret < 0)
+ 		goto err_reset;
+@@ -1374,12 +1374,13 @@ static int ucsi_init(struct ucsi *ucsi)
+ 	}
+ 
+ 	/* Enable all notifications */
+-	ucsi->ntfy = UCSI_ENABLE_NTFY_ALL;
+-	command = UCSI_SET_NOTIFICATION_ENABLE | ucsi->ntfy;
++	ntfy = UCSI_ENABLE_NTFY_ALL;
++	command = UCSI_SET_NOTIFICATION_ENABLE | ntfy;
+ 	ret = ucsi_send_command(ucsi, command, NULL, 0);
+ 	if (ret < 0)
+ 		goto err_unregister;
+ 
++	ucsi->ntfy = ntfy;
+ 	return 0;
+ 
+ err_unregister:
 -- 
 2.39.1
 
