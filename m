@@ -2,57 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 742C96B0D3B
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Mar 2023 16:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 593426B0E20
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Mar 2023 17:05:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbjCHPpe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Mar 2023 10:45:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
+        id S232019AbjCHQFu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Mar 2023 11:05:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232204AbjCHPow (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Mar 2023 10:44:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1FC26586
-        for <linux-usb@vger.kernel.org>; Wed,  8 Mar 2023 07:43:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678290180;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RPVa/J5Cl7M2LIQutNWuK1JrUlzAeTjMVNLtf2BCpTE=;
-        b=ROHeQC0cC04PUQQUb5i+4rBwzugX6qRj5sd3Jw7yJPA5sVwf8bHSuRD2HI48Kqbw/kUals
-        WT8Fokr7hsdEVQ3RKjUKRlX/9nT9e2+M89NnNfsr/kzHIWvy6lGOtNS7/clNovusbqVJZ6
-        8uBUOSZpDl8E6Z9+wpOS2OHs8iSpTc0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-258-_N02oHL4PF2VkJt9L5qcuw-1; Wed, 08 Mar 2023 10:42:57 -0500
-X-MC-Unique: _N02oHL4PF2VkJt9L5qcuw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BD8EB87A381;
-        Wed,  8 Mar 2023 15:42:56 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.39.195.179])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DD479492B04;
-        Wed,  8 Mar 2023 15:42:55 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH v4 3/3] usb: ucsi_acpi: Increase the command completion timeout
-Date:   Wed,  8 Mar 2023 16:42:44 +0100
-Message-Id: <20230308154244.722337-4-hdegoede@redhat.com>
-In-Reply-To: <20230308154244.722337-1-hdegoede@redhat.com>
-References: <20230308154244.722337-1-hdegoede@redhat.com>
+        with ESMTP id S231731AbjCHQFe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Mar 2023 11:05:34 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 88AE4457DB
+        for <linux-usb@vger.kernel.org>; Wed,  8 Mar 2023 08:04:01 -0800 (PST)
+Received: (qmail 494990 invoked by uid 1000); 8 Mar 2023 11:04:00 -0500
+Date:   Wed, 8 Mar 2023 11:04:00 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Jack Pham <quic_jackp@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>
+Subject: Re: [RFC PATCH 2/2] usb: core: hub: avoid reset hub during probe
+Message-ID: <5c2c600b-7406-4944-9f59-bae65306e581@rowland.harvard.edu>
+References: <1677835718-7405-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1677835718-7405-2-git-send-email-quic_linyyuan@quicinc.com>
+ <72b4e199-4e23-487e-a9cd-8d41993d4944@rowland.harvard.edu>
+ <dc7af7b0-1e63-6662-3465-a4ec79cc265d@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dc7af7b0-1e63-6662-3465-a4ec79cc265d@quicinc.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,48 +42,72 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit 130a96d698d7 ("usb: typec: ucsi: acpi: Increase command
-completion timeout value") increased the timeout from 5 seconds
-to 60 seconds due to issues related to alternate mode discovery.
+On Wed, Mar 08, 2023 at 01:54:15PM +0800, Linyu Yuan wrote:
+> 
+> On 3/4/2023 12:05 AM, Alan Stern wrote:
+> > On Fri, Mar 03, 2023 at 05:28:38PM +0800, Linyu Yuan wrote:
+> > > When start probe hub, during INIT, INTT2, INIT3 stage, when link state
+> > > change to inactive, currently it will reset the device, maybe it will
+> > > trigger warning in usb_submit_urb() due to urb->hcpriv is still active.
+> > You need to explain this in much greater detail.
+> > 
+> > 	What will reset the device?
+> > 
+> > 	What is the code path for this reset?
+> 
+> will share more code path.
+> 
+> 
+> > 
+> > 	Why will urb->hcpriv still be active?
+> 
+> 
+> still can't explain, that's why add patch#1 to get more urb infol
+> 
+> 
+> > > Add a flag name init_stage to avoid reset the device.
+> > Why do you want to avoid resetting the device?
+> 
+> 
+> at INIT stage, external hub still under enumeration process, i think there
+> is no need to reset.
+> 
+> 
+> > 
+> > Doesn't the reset code already include a check for whether the device is
+> > disconnected?
+> 
+> 
+> the problem is port is inactive state, but device still in software connect
+> state,
+> 
+> there is no disconnect check in reset code.
+> 
+> 
+> > 
+> > > Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> > > ---
 
-After the alternate mode discovery switch to polled mode
-the timeout was reduced, but instead of being set back to
-5 seconds it was reduced to 1 second.
+> > > @@ -5699,7 +5716,8 @@ static void port_event(struct usb_hub *hub, int port1)
+> > >   			dev_dbg(&port_dev->dev, "do warm reset, full device\n");
+> > >   			usb_unlock_port(port_dev);
+> > >   			usb_lock_device(udev);
+> > > -			usb_reset_device(udev);
+> > > +			if (!port_child_avoid_reset(udev))
+> > > +				usb_reset_device(udev);
+> > >   			usb_unlock_device(udev);
+> > Doesn't usb_lock_device() already prevent this code from running during
+> > the INIT, INIT2, and INIT3 stages of hub preparation?
+> 
+> 
+> as it use some delay worker to complete the INIT stage, as i know it will
+> not lock device
+> 
+> when worker is not start.
+> 
+> do you have any better suggestion about this point ?
 
-This is causing problems when using a Lenovo ThinkPad X1 yoga gen7
-connected over Type-C to a LG 27UL850-W (charging DP over Type-C).
+I can't offer any suggestions because I don't understand the problem you 
+want to fix, or how your patch is meant to work.
 
-When the monitor is already connected at boot the following error
-is logged: "PPM init failed (-110)", /sys/class/typec is empty and
-on unplugging the NULL pointer deref fixed earlier in this series
-happens.
-
-When the monitor is connected after boot the following error
-is logged instead: "GET_CONNECTOR_STATUS failed (-110)".
-
-Setting the timeout back to 5 seconds fixes both cases.
-
-Fixes: e08065069fc7 ("usb: typec: ucsi: acpi: Reduce the command completion timeout")
-Cc: stable@vger.kernel.org
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/usb/typec/ucsi/ucsi_acpi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
-index ce0c8ef80c04..62206a6b8ea7 100644
---- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-+++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-@@ -78,7 +78,7 @@ static int ucsi_acpi_sync_write(struct ucsi *ucsi, unsigned int offset,
- 	if (ret)
- 		goto out_clear_bit;
- 
--	if (!wait_for_completion_timeout(&ua->complete, HZ))
-+	if (!wait_for_completion_timeout(&ua->complete, 5 * HZ))
- 		ret = -ETIMEDOUT;
- 
- out_clear_bit:
--- 
-2.39.1
-
+Alan Stern
