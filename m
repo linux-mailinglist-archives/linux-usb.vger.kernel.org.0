@@ -2,289 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A4F6B222C
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 12:04:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DB16B224F
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 12:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbjCILEF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Mar 2023 06:04:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
+        id S231479AbjCILJY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Mar 2023 06:09:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbjCILDC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 06:03:02 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D382AE9CD2;
-        Thu,  9 Mar 2023 02:59:00 -0800 (PST)
-Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 33771589;
-        Thu,  9 Mar 2023 11:58:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1678359518;
-        bh=UKiK+zI10UGj+RIxeIufRYqUu7FHa/CmqAkga8YAWaM=;
-        h=From:To:Subject:Date:From;
-        b=lC8/u+45YyNh3yRUInIT5iqh0EOU69UzbWLS9oZmynMj7zQPAAOkGCA5faztLtPN7
-         SXko5zToCzEtCyR/A9V9mM3477Y13peAMqz571zHGV5/A/gthMxG0Fpp+BzvRrtuY7
-         66NI21xQKR+IouorDsQ1nGqaCnpDNSgNXwBQeY5k=
-From:   Daniel Scally <dan.scally@ideasonboard.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Daniel Scally <dan.scally@ideasonboard.com>,
-        linux-usb@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v2] usb: gadget: uvc: Make bmControls attr read/write
-Date:   Thu,  9 Mar 2023 10:58:25 +0000
-Message-Id: <20230309105825.216745-1-dan.scally@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S231475AbjCILJG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 06:09:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CDB2B2B6;
+        Thu,  9 Mar 2023 03:03:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F137CB81EE0;
+        Thu,  9 Mar 2023 11:03:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04666C433D2;
+        Thu,  9 Mar 2023 11:03:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678359795;
+        bh=EEI8XC3T4lIY5E4deVjQSw8EXc+PAG8USv+h2O3sz98=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bO9bpO/2rjQwsHgJGAbkVgmw+4LVVYZnk+9J54TZkrmlPqyXGTn056hP3r4uB2sBO
+         JvbQVezljC9eLOh1/k7g3UhAfSNcbIfEi+wcLK1e4q/L5+1Kbad/EJDStwKpAsWZpl
+         fRhrzMIVQQ/vX/K3k+U6+T1KpyJv+7KwHyCo7oBPvpHLQRzssgZ+Myy4+QA5/Qht05
+         rdFdzNn3EKecvAFxX4P/nz7ZKKURPfDYPTC7j87bouJ9zgK2KAeaYM3/gnDoNzKv0k
+         VVFeNO6+i1iYaWikFuORA34f6g187p0+ZjvY8gzYcOsyP/a1+i4y2B8rJYbbqM144u
+         MN+sF01RWnQJg==
+Date:   Thu, 9 Mar 2023 11:03:06 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Ye Xiang <xiang.ye@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
+Subject: Re: [PATCH v4 1/5] mfd: Add support for Intel LJCA device
+Message-ID: <8e3c16a7-1155-419c-9bcb-cc3e3630fe5b@sirena.org.uk>
+References: <20230309071100.2856899-1-xiang.ye@intel.com>
+ <20230309071100.2856899-2-xiang.ye@intel.com>
+ <dcb805e1-2b48-481d-8e72-1b515c9d43e6@app.fastmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pg1YqT2fV9QTsCXN"
+Content-Disposition: inline
+In-Reply-To: <dcb805e1-2b48-481d-8e72-1b515c9d43e6@app.fastmail.com>
+X-Cookie: I will never lie to you.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-For the Processing Unit and Camera Terminal descriptors defined in
-the UVC Gadget we currently hard-code values into their bmControls
-fields, which enumerates which controls the gadget is able to
-support. This isn't appropriate since only the userspace companion
-program to the kernel driver will know which controls are supported.
-Make the configfs attributes that point to those fields read/write
-so userspace can set them to appropriate values.
 
-Document the new behaviour at the same time so the functionality is
-clear.
+--pg1YqT2fV9QTsCXN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
----
+On Thu, Mar 09, 2023 at 08:56:05AM +0100, Arnd Bergmann wrote:
+> On Thu, Mar 9, 2023, at 08:10, Ye Xiang wrote:
 
-This patch is based on usb-next, plus my recent patch "docs: usb: Add
-documentation for the UVC Gadget".
+> >  drivers/usb/misc/Kconfig  |  13 +
+> >  drivers/usb/misc/Makefile |   1 +
+> >  drivers/usb/misc/ljca.c   | 969 ++++++++++++++++++++++++++++++++++++++
+> >  include/linux/mfd/ljca.h  |  95 ++++
 
-Changes in v2:
+> Why is this in driver/usb/misc? It looks like a normal
+> mfd driver to me, and it evenhas the header in include/linux/mfd/
 
-        - Added explanatory documentation
+It was a MFD in the original version, Lee asked for it to be moved to
+USB: https://lore.kernel.org/r/20230305103456.GF2574592@google.com
 
- .../ABI/testing/configfs-usb-gadget-uvc       |   4 +-
- Documentation/usb/gadget_uvc.rst              |  28 ++++
- drivers/usb/gadget/function/uvc_configfs.c    | 121 +++++++++++++++++-
- 3 files changed, 149 insertions(+), 4 deletions(-)
+--pg1YqT2fV9QTsCXN
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-index 80b98a4a4d0f..4feb692c4c1d 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
-+++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-@@ -76,7 +76,7 @@ Date:		Dec 2014
- KernelVersion:	4.0
- Description:	Default camera terminal descriptors
- 
--		All attributes read only:
-+		All attributes read only except bmControls, which is read/write:
- 
- 		========================  ====================================
- 		bmControls		  bitmap specifying which controls are
-@@ -101,7 +101,7 @@ Date:		Dec 2014
- KernelVersion:	4.0
- Description:	Default processing unit descriptors
- 
--		All attributes read only:
-+		All attributes read only except bmControls, which is read/write:
- 
- 		===============	========================================
- 		iProcessing	index of string descriptor
-diff --git a/Documentation/usb/gadget_uvc.rst b/Documentation/usb/gadget_uvc.rst
-index 6d22faceb1a0..62bd81ba3dd1 100644
---- a/Documentation/usb/gadget_uvc.rst
-+++ b/Documentation/usb/gadget_uvc.rst
-@@ -275,6 +275,34 @@ out with 0x00, for example:
- 
- bNrInPins and baSourceID function in the same way.
- 
-+Configuring Supported Controls for Camera Terminal and Processing Unit
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+The Camera Terminal and Processing Units in the UVC chain also have bmControls
-+attributes which function similarly to the same field in an Extension Unit.
-+Unlike XUs however, the meaning of the bitflag for these units is defined in
-+the UVC specification; you should consult the "Camera Terminal Descriptor" and
-+"Processing Unit Descriptor" sections for an enumeration of the flags.
-+
-+.. code-block:: bash
-+
-+        # Set the Processing Unit's bmControls, flagging Brightness, Contrast
-+        # and Hue as available controls:
-+        echo 0x05 > $FUNCTION/control/processing/default/bmControls
-+
-+        # Set the Camera Terminal's bmControls, flagging Focus Absolute and
-+        # Focus Relative as available controls:
-+        echo 0x60 > $FUNCTION/control/terminal/camera/default/bmControls
-+
-+If you do not set these fields then by default the Auto-Exposure Mode control
-+for the Camera Terminal and the Brightness control for the Processing Unit will
-+be flagged as available; if they are not supported you should set the field to
-+0x00.
-+
-+Note that the size of the bmControls field for a Camera Terminal or Processing
-+Unit is fixed by the UVC specification, and so the bControlSize attribute is
-+read-only here.
-+
- Custom Strings Support
- ~~~~~~~~~~~~~~~~~~~~~~
- 
-diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index 62b759bb7613..9bf0e985acfa 100644
---- a/drivers/usb/gadget/function/uvc_configfs.c
-+++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -334,6 +334,64 @@ UVCG_DEFAULT_PROCESSING_ATTR(i_processing, iProcessing, 8);
- 
- #undef UVCG_DEFAULT_PROCESSING_ATTR
- 
-+static ssize_t uvcg_default_processing_bm_controls_store(
-+	struct config_item *item, const char *page, size_t len)
-+{
-+	struct config_group *group = to_config_group(item);
-+	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
-+	struct uvc_processing_unit_descriptor *pd;
-+	struct config_item *opts_item;
-+	struct f_uvc_opts *opts;
-+	u8 *bm_controls, *tmp;
-+	unsigned int i;
-+	int ret, n = 0;
-+
-+	mutex_lock(su_mutex);
-+
-+	opts_item = group->cg_item.ci_parent->ci_parent->ci_parent;
-+	opts = to_f_uvc_opts(opts_item);
-+	pd = &opts->uvc_processing;
-+
-+	mutex_lock(&opts->lock);
-+	if (opts->refcnt) {
-+		ret = -EBUSY;
-+		goto unlock;
-+	}
-+
-+	ret = __uvcg_iter_item_entries(page, len, __uvcg_count_item_entries, &n,
-+				       sizeof(u8));
-+	if (ret)
-+		goto unlock;
-+
-+	if (n > pd->bControlSize) {
-+		ret = -EINVAL;
-+		goto unlock;
-+	}
-+
-+	tmp = bm_controls = kcalloc(n, sizeof(u8), GFP_KERNEL);
-+	if (!bm_controls) {
-+		ret = -ENOMEM;
-+		goto unlock;
-+	}
-+
-+	ret = __uvcg_iter_item_entries(page, len, __uvcg_fill_item_entries, &tmp,
-+				       sizeof(u8));
-+	if (ret)
-+		goto free_mem;
-+
-+	for (i = 0; i < n; i++)
-+		pd->bmControls[i] = bm_controls[i];
-+
-+	ret = len;
-+
-+free_mem:
-+	kfree(bm_controls);
-+unlock:
-+	mutex_unlock(&opts->lock);
-+	mutex_unlock(su_mutex);
-+	return ret;
-+}
-+
- static ssize_t uvcg_default_processing_bm_controls_show(
- 	struct config_item *item, char *page)
- {
-@@ -363,7 +421,7 @@ static ssize_t uvcg_default_processing_bm_controls_show(
- 	return result;
- }
- 
--UVC_ATTR_RO(uvcg_default_processing_, bm_controls, bmControls);
-+UVC_ATTR(uvcg_default_processing_, bm_controls, bmControls);
- 
- static struct configfs_attribute *uvcg_default_processing_attrs[] = {
- 	&uvcg_default_processing_attr_b_unit_id,
-@@ -445,6 +503,65 @@ UVCG_DEFAULT_CAMERA_ATTR(w_ocular_focal_length, wOcularFocalLength,
- 
- #undef UVCG_DEFAULT_CAMERA_ATTR
- 
-+static ssize_t uvcg_default_camera_bm_controls_store(
-+	struct config_item *item, const char *page, size_t len)
-+{
-+	struct config_group *group = to_config_group(item);
-+	struct mutex *su_mutex = &group->cg_subsys->su_mutex;
-+	struct uvc_camera_terminal_descriptor *cd;
-+	struct config_item *opts_item;
-+	struct f_uvc_opts *opts;
-+	u8 *bm_controls, *tmp;
-+	unsigned int i;
-+	int ret, n = 0;
-+
-+	mutex_lock(su_mutex);
-+
-+	opts_item = group->cg_item.ci_parent->ci_parent->ci_parent->
-+			ci_parent;
-+	opts = to_f_uvc_opts(opts_item);
-+	cd = &opts->uvc_camera_terminal;
-+
-+	mutex_lock(&opts->lock);
-+	if (opts->refcnt) {
-+		ret = -EBUSY;
-+		goto unlock;
-+	}
-+
-+	ret = __uvcg_iter_item_entries(page, len, __uvcg_count_item_entries, &n,
-+				       sizeof(u8));
-+	if (ret)
-+		goto unlock;
-+
-+	if (n > cd->bControlSize) {
-+		ret = -EINVAL;
-+		goto unlock;
-+	}
-+
-+	tmp = bm_controls = kcalloc(n, sizeof(u8), GFP_KERNEL);
-+	if (!bm_controls) {
-+		ret = -ENOMEM;
-+		goto unlock;
-+	}
-+
-+	ret = __uvcg_iter_item_entries(page, len, __uvcg_fill_item_entries, &tmp,
-+				       sizeof(u8));
-+	if (ret)
-+		goto free_mem;
-+
-+	for (i = 0; i < n; i++)
-+		cd->bmControls[i] = bm_controls[i];
-+
-+	ret = len;
-+
-+free_mem:
-+	kfree(bm_controls);
-+unlock:
-+	mutex_unlock(&opts->lock);
-+	mutex_unlock(su_mutex);
-+	return ret;
-+}
-+
- static ssize_t uvcg_default_camera_bm_controls_show(
- 	struct config_item *item, char *page)
- {
-@@ -474,7 +591,7 @@ static ssize_t uvcg_default_camera_bm_controls_show(
- 	return result;
- }
- 
--UVC_ATTR_RO(uvcg_default_camera_, bm_controls, bmControls);
-+UVC_ATTR(uvcg_default_camera_, bm_controls, bmControls);
- 
- static struct configfs_attribute *uvcg_default_camera_attrs[] = {
- 	&uvcg_default_camera_attr_b_terminal_id,
--- 
-2.34.1
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQJvOkACgkQJNaLcl1U
+h9DL1wf/a2dDu6Nvh1itaRXIIzM8bHS3I6CUAvjpZvHjkD70ApwQyIYkSYBLppC1
+E9nAPixro9tiOzGC9SAUY/Isq+xNytrdnyTy+Q0MItK4YtaloeUUCJRMKEfnp8zR
+1RK0E8IKRniyi/I2ouwnwirTZKlfdnVmnViLTj1AzYYVQGPs6A666kGafHSJA+zB
+v5U44i11KgCOTEbFK7FGwcPNNY/zVhT+FozdM+1DASvgGRKpCeZUGb/IW1IzHy7f
+VUm2yvO6TVYBD2j+fnKJSK2pyRJ/eI62QIYAnVXr0QHySliSKFXJozpJJaUjfUaH
+2NVjRNnn8ngaAKKz6u+LaEkzgmRi2A==
+=/1FC
+-----END PGP SIGNATURE-----
+
+--pg1YqT2fV9QTsCXN--
