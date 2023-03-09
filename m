@@ -2,107 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3932F6B170E
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 00:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F124A6B17BC
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 01:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbjCHX7O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Mar 2023 18:59:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
+        id S229590AbjCIAPg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Mar 2023 19:15:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjCHX6d (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Mar 2023 18:58:33 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583AA98875;
-        Wed,  8 Mar 2023 15:58:31 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328I8TW9006870;
-        Wed, 8 Mar 2023 23:58:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=BRvk2kLNgan6ojfZTR0CbwIj105zOZeVc8bjIrsnSxQ=;
- b=ESxYmXjIimY90mMz1b9cKqB9G3pG2APNSiDvNC60LSC9OOxNEdcGiiFo4xAQMLnWf8pp
- 8dWymqhCSPFscBy64WpECRKSnWv2MQr4aCyaFqljjsmslZNKh18hLXOHoM2MDdP8z0VV
- NDnCJ4ynMn09lmmOEEoDchUWC+jSJ/phvmTzsPzKagiW9O3kJJ0oQHNkHIlPPo57CK04
- PcPk6KOkUNAjt1nvocZ4d60yuBGXnIUpZF0BXzgb3RiSmS5u2YTSGR3aMTGND6fxqK45
- k7TM9B/2jo0KKdMZCMRl39KxZEPOSqA0K7sExKC1G+LzTVklsqIlNV9VvdAoUB0D8/2W QQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p6ycb8rc9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Mar 2023 23:58:14 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 328NwD26011995
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Mar 2023 23:58:13 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Wed, 8 Mar 2023 15:58:13 -0800
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
-        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <tiwai@suse.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
-        <quic_plai@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v3 28/28] sound: soc: soc-usb: Rediscover USB SND devices on USB port add
-Date:   Wed, 8 Mar 2023 15:57:51 -0800
-Message-ID: <20230308235751.495-29-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230308235751.495-1-quic_wcheng@quicinc.com>
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+        with ESMTP id S229475AbjCIAPe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Mar 2023 19:15:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440941A965;
+        Wed,  8 Mar 2023 16:15:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA031B81E28;
+        Thu,  9 Mar 2023 00:15:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 995EDC433EF;
+        Thu,  9 Mar 2023 00:15:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678320930;
+        bh=hHC0B1GeaM0iKkWhoKBNByKouv+fx7hiMggxFL1Bf88=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eoF1rdNR2OR8vJyryOQTxPz5YQ/SLnsSYNj3+qM0XdSUxLnhkCp9TQ/eFlGuOnCiy
+         nPDxBdFF8maGabhDAxcW+EsEr2VpIv0QGpd82dGSWu16kQhvRIZmQ7dqthnlPZ3qj4
+         hr8rjc73zYt7GVnjqM1R510jcQ2LWMWJ55BieVDaIQXqJ+eV7GhiehdfM+AKMp5ljp
+         OuwFR+f085eUzVrezZ/IdVsJK3zes3iLtz575ZBhurg1eelqMZgFLHsX4Ubrxb9/vz
+         zCUcZKJpq9fTNTGPY6duB0jFSuCWah1AZHOub98Imxq1C5T5KZBbLHsd4QWjS6vmnA
+         HWcgnYpujunmg==
+Date:   Thu, 9 Mar 2023 01:15:25 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Takashi Iwai <tiwai@suse.de>, Hyunwoo Kim <imv4bel@gmail.com>,
+        kernel@tuxforce.de, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, cai.huoqing@linux.dev
+Subject: Re: [PATCH v3 0/4] Fix multiple race condition vulnerabilities in
+ dvb-core and device driver
+Message-ID: <20230309011525.49ac3399@coco.lan>
+In-Reply-To: <20230307103659.GA347928@google.com>
+References: <20221117045925.14297-1-imv4bel@gmail.com>
+        <87lema8ocn.wl-tiwai@suse.de>
+        <Y/YXbNgBhhWhfjwS@google.com>
+        <Y/3mT9uSsuviT+sa@google.com>
+        <20230307103659.GA347928@google.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 6Xt0oWLi-UDbroR0pSOAm-5xvDT8uKZU
-X-Proofpoint-ORIG-GUID: 6Xt0oWLi-UDbroR0pSOAm-5xvDT8uKZU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-08_15,2023-03-08_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 spamscore=0
- clxscore=1015 mlxscore=0 adultscore=0 phishscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303080200
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In case the USB backend device has not been initialized/probed, USB SND
-device connections can still occur.  When the USB backend is eventually
-made available, previous USB SND device connections are not communicated to
-the USB backend.  Call snd_usb_rediscover_devices() to generate the connect
-callbacks for all USB SND devices connected.  This will allow for the USB
-backend to be updated with the current set of devices available.
+Em Tue, 7 Mar 2023 10:36:59 +0000
+Lee Jones <lee@kernel.org> escreveu:
 
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- sound/soc/soc-usb.c | 2 ++
- 1 file changed, 2 insertions(+)
+> On Tue, 28 Feb 2023, Lee Jones wrote:
+>=20
+> > On Wed, 22 Feb 2023, Lee Jones wrote:
+> > =20
+> > > On Tue, 10 Jan 2023, Takashi Iwai wrote:
+> > > =20
+> > > > On Thu, 17 Nov 2022 05:59:21 +0100,
+> > > > Hyunwoo Kim wrote: =20
+> > > > >
+> > > > > Dear,
+> > > > >
+> > > > > This patch set is a security patch for various race condition vul=
+nerabilities that occur
+> > > > > in 'dvb-core' and 'ttusb_dec', a dvb-based device driver.
+> > > > >
+> > > > >
+> > > > > # 1. media: dvb-core: Fix use-after-free due to race condition oc=
+curring in dvb_frontend
+> > > > > This is a security patch for a race condition that occurs in the =
+dvb_frontend system of dvb-core.
+> > > > >
+> > > > > The race condition that occurs here will occur with _any_ device =
+driver using dvb_frontend.
+> > > > >
+> > > > > The race conditions that occur in dvb_frontend are as follows =20
+> > >
+> > > [...]
+> > > =20
+> > > > > # 4. media: ttusb-dec: Fix memory leak in ttusb_dec_exit_dvb()
+> > > > > This is a patch for a memory leak that occurs in the ttusb_dec_ex=
+it_dvb() function.
+> > > > >
+> > > > > Because ttusb_dec_exit_dvb() does not call dvb_frontend_detach(),
+> > > > > several fe related structures are not kfree()d.
+> > > > >
+> > > > > Users can trigger a memory leak just by repeating connecting and =
+disconnecting
+> > > > > the ttusb_dec device.
+> > > > >
+> > > > >
+> > > > > Finally, most of these patches are similar to this one, the secur=
+ity patch for
+> > > > > CVE-2022-41218 that I reported:
+> > > > > https://lore.kernel.org/linux-media/20221031100245.23702-1-tiwai@=
+suse.de/
+> > > > >
+> > > > >
+> > > > > Regards,
+> > > > > Hyunwoo Kim =20
+> > > >
+> > > > Are those issues still seen with the latest 6.2-rc kernel?
+> > > > I'm asking because there have been a few fixes in dvb-core to deal
+> > > > with some UAFs.
+> > > >
+> > > > BTW, Mauro, the issues are tagged with several CVE's:
+> > > > CVE-2022-45884, CVE-2022-45886, CVE-2022-45885, CVE-2022-45887. =20
+> > >
+> > > Was there an answer to this question?
+> > >
+> > > Rightly or wrongly this patch is still being touted as the fix for so=
+me
+> > > reported CVEs [0].
+> > >
+> > > Is this patch still required or has it been superseded?  If the later,
+> > > which patch superseded it?
+> > >
+> > > Thanks.
+> > >
+> > > [0] https://nvd.nist.gov/vuln/detail/CVE-2022-45886 =20
+> >
+> > Have these issues been fixed already?
+> >
+> > If not, is this patch set due to be merged or reviewed? =20
+>=20
+> Still nothing heard from the author or any maintainer.
 
-diff --git a/sound/soc/soc-usb.c b/sound/soc/soc-usb.c
-index 84dc6d0b2eab..a9413e3d18df 100644
---- a/sound/soc/soc-usb.c
-+++ b/sound/soc/soc-usb.c
-@@ -111,6 +111,8 @@ struct snd_soc_usb *snd_soc_usb_add_port(struct device *dev, void *priv,
- 	list_add_tail(&usb->list, &usb_ctx_list);
- 	mutex_unlock(&ctx_mutex);
- 
-+	snd_usb_rediscover_devices();
-+
- 	return usb;
- }
- EXPORT_SYMBOL_GPL(snd_soc_usb_add_port);
+We're currently lacking a sub-maintainer for dvb. Changes at the
+DVB mutexes have been problematic and require tests on some
+devices, specially on those with multiple frontends.=20
+
+I'll try to find some time to review and test those patches.
+>=20
+> I'd take this as a hint if I had any social skills!
+>=20
+> Please could someone provide me with a status report on these patches?
+>=20
+> They appear to have CVEs associated with them.  Have they been fixed?
+>=20
+> --
+> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
+
+
+
+Thanks,
+Mauro
