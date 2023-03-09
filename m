@@ -2,160 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2536B2C34
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 18:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E758C6B2C67
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 18:55:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjCIRmy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Mar 2023 12:42:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
+        id S230300AbjCIRzB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Mar 2023 12:55:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjCIRmw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 12:42:52 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B3DCFAF8D;
-        Thu,  9 Mar 2023 09:42:49 -0800 (PST)
+        with ESMTP id S230007AbjCIRzA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 12:55:00 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3909FAEC8;
+        Thu,  9 Mar 2023 09:54:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678383769; x=1709919769;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=YqSnWlYAftv8yg/erbsaKjE5P6f/WPqjAaqP5XR3wXw=;
-  b=ZoqnZnpFWi3mjdUFWnuJpuqFHQAXAD87kCuUQcI0HvsVzN+1J16btKhk
-   Lh+B0+bcBFTMn2WxLmX5c06YjHdbB5xt+RKeJ3OezCOgCqsGb1lVw0q4q
-   bX1p1KgWwZgKMG1sAoLfP9jzpxRh0FCwaVOauZJ67XOU81ev6l0TpJU+0
-   6Zy8C/we5pM6T9LwrzMlopP4XQ/qDwYBn8x5sj0RLZR+7ke2MRhQo5zqi
-   PZjHXDMEeyg8RUPKKbA9xXCRN9zeIIsy1lAcwR6+ztizRo17GzpvDOWyG
-   XGnKhKTAY1tnNj4tZUpg8i2/7Ej8xknNGWGJ3gn8Eieym/zdekqj3yL5z
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="399106888"
+  t=1678384496; x=1709920496;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6MXUOHdjb8jqVok5oVRdfSDjvQDcZ3pm1AVfycFxb3w=;
+  b=axHqojwoWwU0B8YtqPvJ+tXJZKyha4s0NofedDCKEBMJ0cej1SbeDgOx
+   tDYbzo0MDaGB8rI4d+68iSDtzzMSNLhN12ycHzon74SxUpOHD/ZoyU7r6
+   jrwNuJ0Fc3tgW4jL3Ls0o3jNUtAHTZeXlHEQnq8a0YS5vESjLt3I39+4Z
+   +eD3Mf7xgpp3aNYF8GRJGNs03R/HCjKNW+M34+zT4D7gZLgPtQM/9jCc3
+   8l1KgNevED5VWsH/l/vRFDyUthqJvuZKxGKMZxAeVFLfwArjuo5UyB5Dx
+   aVUTRH4jKWqf7U71UgoLxrV1zeNgStXN/TSCNay1GIFmkwe2JHJ/61/rm
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="316911791"
 X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="399106888"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 09:42:48 -0800
+   d="scan'208";a="316911791"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 09:54:56 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="820692856"
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="851583472"
 X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="820692856"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Mar 2023 09:42:48 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 9 Mar 2023 09:42:47 -0800
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 9 Mar 2023 09:42:47 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 9 Mar 2023 09:42:47 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Thu, 9 Mar 2023 09:42:47 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B9SLViLo8LGfQTJIAdA9h7rRhO67TpR8Nc4wkBxf4lR96pUaEKAh49e8/fCdb1hZbybue2uR/cGwPevKdQgJI4WAuwnJusi01bq1RnArvEJ2o9CmkxNpUgON6a2j+/O2TtazIiNA5RJIrA43vppu4LAXsfMUvoTlA7WZvsjF4RoKmRMdhgo3ohgdi+0yKQudeZ3/npOL4x+GgN6EnEzXE+1eAFkYoAmY3QTWZ77eVR9htD6/iNMzGy+2+kjI576TZDAs5eENNxEvtIbgKSNPQjjGFQ/7t5wwAVOfZ9Un6DuY4/byzDu0h4TvjHU48jQuB9nq7KuyvGsT56MZvLGXtg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=swp2s+amLNIC/2I7MbQMzLvNvcQyfy5xGmKYm8AEItA=;
- b=eoacJlkRZ81t+XypdrYqvlerg7lmzwxA8JoQCO7/NFfoODkjZ567ze/S7VVN6oJWMUKP3Z486SWcnPyC45TFlqfe8drnPTZRd3rPq/o4n0JwFcFl+i4C6PzSkU1sRZU7ZCjebZERw8ITh6nFCxq22XXvikcqQXxox2F8uCsCz1NyK97jipIvk1wWd/+2uD0QcNcukfk+iiaQ7A08/eEKuB4JbuhncW9/wRlEdeqjYELae5t+8fuPmTUNadeH90fItBFpYvcZNlLakKzrKYbD8c+Zpreg1zlXTVmHR6eOb7j5fzqurMCHqK/YEshzhQq9qmtlIBbMTq4xyfXmTz+ULg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM5PR11MB1418.namprd11.prod.outlook.com (2603:10b6:3:8::9) by
- SA3PR11MB7461.namprd11.prod.outlook.com (2603:10b6:806:319::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Thu, 9 Mar
- 2023 17:42:46 +0000
-Received: from DM5PR11MB1418.namprd11.prod.outlook.com
- ([fe80::7ef8:2573:5a1b:c9f1]) by DM5PR11MB1418.namprd11.prod.outlook.com
- ([fe80::7ef8:2573:5a1b:c9f1%6]) with mapi id 15.20.6178.019; Thu, 9 Mar 2023
- 17:42:45 +0000
-Date:   Fri, 10 Mar 2023 01:42:36 +0800
-From:   "Ye, Xiang" <xiang.ye@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Andi Shyti <andi.shyti@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, "Wolfram Sang" <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>, <linux-usb@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <srinivas.pandruvada@intel.com>, <heikki.krogerus@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <sakari.ailus@linux.intel.com>, <zhifeng.wang@intel.com>,
-        <wentong.wu@intel.com>, <lixu.zhang@intel.com>
-Subject: Re: [PATCH v4 1/5] mfd: Add support for Intel LJCA device
-Message-ID: <ZAoajF6iqfLRO1+w@ye-NUC7i7DNHE>
-References: <20230309071100.2856899-1-xiang.ye@intel.com>
- <20230309071100.2856899-2-xiang.ye@intel.com>
- <ZAmQOIh/71rY4Pa4@kroah.com>
- <ZAmngB84ty1flD9K@ye-NUC7i7DNHE>
- <ZAmpse14Evvrfa/f@kroah.com>
- <ZAmvocpy68qurCvt@intel.intel>
- <ZAn/L8Dg/Ehx9bMo@ye-NUC7i7DNHE>
- <ZAoCNR/iAv3IOJ6D@kroah.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZAoCNR/iAv3IOJ6D@kroah.com>
-X-ClientProxiedBy: SG2PR04CA0153.apcprd04.prod.outlook.com (2603:1096:4::15)
- To DM5PR11MB1418.namprd11.prod.outlook.com (2603:10b6:3:8::9)
+   d="scan'208";a="851583472"
+Received: from hamannjo-mobl1.amr.corp.intel.com (HELO [10.255.34.234]) ([10.255.34.234])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 09:54:52 -0800
+Message-ID: <e4a49852-8753-d82e-ee86-866825a26844@linux.intel.com>
+Date:   Thu, 9 Mar 2023 11:54:36 -0600
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR11MB1418:EE_|SA3PR11MB7461:EE_
-X-MS-Office365-Filtering-Correlation-Id: b4c09fc6-fd20-4881-f075-08db20c5b0f4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eydIgf3aQXHuEmFtY6YmWD4uXxv7YhBDbUn6PnjUjOx9qLViW3BtGUtuT5kylWa1PflEefQxWEcellkiJI4oesVevJ2DZmatrgXCHd2WKupmk2v45Ib1d4ezVrawsEDZDp/t4edRBF2H+JrxTNmhzo4wpmlq9+YH1WOvWFvXTsVWguoKLVfw0dnvAP0McFFn4Mv0pujZc+y7qSSdzX6S8/izRJElUQYk3VANGky3FRkD+nuvV5l3Tt3Im8+/vRf2q2eTXzqHdpuQ7Btkc5B1q7HANGMHkO93KH9PuUERWS+jCM+2ACrVHRawG+1BYJGC5GyRJ54heH3f+NBgXSQ2BTO/EwjmNlyydoEeuwdcFjp9XlfqD3n89UwrlZKGP6o/DmQjFM6ElPXMfZPc5SMTLOnqRC3oR4WO/Q2nQ40Omz/YcNIgbdSw2ztgVXTmx/yjv/Hnz1vluBTYG8Ocgazo5KKmKFZfmfPGyps0xsVT0ALc+wOsj6uURsV132iBTqn4tXPpl0T3O2BqHsncRPmuAHi7RcIbOqt9JM+QZjQ7cv//7CIeKxEFq+3zcz22g40F3e0VJy/nsLWiQ1xn9lOEe/Ee840QBEzxzzskeuYgOJIZ4ANSGRw+VQ4OXPJCv7N6jsUC7ARQQF41vcUP3IwOcJdFJEQ7kjudzZCeSOU2thQDZotQuJRb3Xprv3+txSVcF8s+y+2x9DgpwD6JMRO6Tg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1418.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(39860400002)(346002)(376002)(396003)(136003)(366004)(451199018)(54906003)(5660300002)(7416002)(6486002)(478600001)(316002)(2906002)(66556008)(66476007)(66946007)(8936002)(8676002)(6916009)(966005)(4326008)(41300700001)(82960400001)(6512007)(186003)(38100700002)(26005)(6506007)(86362001)(9686003)(6666004)(33716001)(83380400001)(55004002)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aXcOD9++T1/mGdemfdnfYNP8OIi9opL6t/Xy8qtJSdLUcAADC88L+V/So4xi?=
- =?us-ascii?Q?Vz37h/QyOg+HddFb7moGCmArD6FZWse1jPgvdEja4lJC/2apOqbCsgIUHE9m?=
- =?us-ascii?Q?5umBDKoVGcIrXQageWhG8mWgJHqy+feqzM+wEj/ZZcW/GXKSZ9sEfPVzR8Sl?=
- =?us-ascii?Q?keLu4BAUmGaNPESU2G3nM1jXw3KyHE1OjWMp3B7noldtoDMTC3+hZ1gWTZk3?=
- =?us-ascii?Q?rtLWGfQ18KoM2Ve1ttx+zRC1/doYT88l7JmIXev8XCF2QxcRiMzmm6lp65g+?=
- =?us-ascii?Q?qTpB/XW1EPerUwkDiYygb+3ID3tNWk3wft/eI81tI/x9GrExKEBjZG8AlIhJ?=
- =?us-ascii?Q?jIOPeXL0I64xvsPwdkqjw3eqmDTh1GL+jjOsOTADbsVYwHq/YR3i+UzPvayh?=
- =?us-ascii?Q?D7MWYU0fEzY0aOhy3uBszc/9/DJKOBNzVMO1OrMWvDkmUMkVzEAsVHFheMzo?=
- =?us-ascii?Q?AFd3EVe63YB4ULqWfVsL5ZE+l+HT9cSq+JrBw5NTAqpVHVpXiLevIZ85xUV8?=
- =?us-ascii?Q?4titrrkxClKe0YWzPdXbcqThbVKwpS0KKk7LkkL4QjqWBgMIlIrQ84P5oq5E?=
- =?us-ascii?Q?jLpxRAIeC7NyK4jY3GIkG3Od9D5sZpyklfOJTWoTH526esMaFWiaHMdkzvJE?=
- =?us-ascii?Q?xUy6Z8YYZLSCxL4eBfMvsF6A+ayYXCFWAnNgP/fv78O5TLs89KpwPI5dDX+9?=
- =?us-ascii?Q?AbzhEAYI/rOCgBusB6szDz17B79QNZ1IFaMVJaLA9VhAOkWZ8KKCpxcTQiFB?=
- =?us-ascii?Q?x0hRmI1NFPbNnPSK9hEg0Fdr0wIEMNb+yARVZfz7+uYfsfrKzwhMsovTDSqW?=
- =?us-ascii?Q?zJwvCzM9G0uupYvM9zEA1wR54NCo108DI5w3skqB5i8BXMrfNxAOh3MRySiK?=
- =?us-ascii?Q?f9xJWyicTJD1/o/IURLEj1cYgabMYnOyfjMqCVzGm0hnCWoBJGH8zs9scXGE?=
- =?us-ascii?Q?CNWKTO7qt3L575hON9Ky9+iSrka6UFdgJlHAAMUcfNPLzliTlIDbSrFsiuoI?=
- =?us-ascii?Q?wu6qTF4mMHPg5kPxwjHkm3Pk7zeh6PD20LbEIP7uMpYIie9UT4WBVGfN1WGO?=
- =?us-ascii?Q?LHhuj1IMBhlVxots78sFUODX4CZ07Yd17/WtbYTr89WRCmF/zKcEiGGaHni0?=
- =?us-ascii?Q?38VroGfp3m7Sca2TXMQ3bHzf0CutT8Oy6gofZl014IiEJp0zuKqxV4C7MxYx?=
- =?us-ascii?Q?BcaNapmI5vScO/OowYHasv6IfIMcMAPEEd6oQopgrAzdSYqaSchO36orUDQJ?=
- =?us-ascii?Q?YwjjEaZVgtvA8rxS0bV6uS9X3PFnNOjMp46Z/q3mN2Qa2U5tNsp3Pp38HZqU?=
- =?us-ascii?Q?kL6zXyEZHFu0ernw4GyR/yyBjJTRk7g3bmBW8tP0qguVXYNtddKwcLwFjBSO?=
- =?us-ascii?Q?vuRxuhfkvyRTCG1vO8UCy+eGoWdU2PiRzOy2lxGhSVzPMC/TQT8vVy8dKkeL?=
- =?us-ascii?Q?b4eLxBz3XwAFNp1HbZj2lcHiOxrTHTB6ZmiJ98gudMWXcRsO2cvoEPfCQhov?=
- =?us-ascii?Q?Rq9hcDh/reVLIAU7vil8qRCJ5Vea/XsXgoqUza5ffN1ZcT1TfbgVI8jZnX9b?=
- =?us-ascii?Q?fV+6gub3x/y0YPt/7BAjuKC6v+Uv1683M/LwbS+y?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b4c09fc6-fd20-4881-f075-08db20c5b0f4
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1418.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 17:42:45.4889
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KketjV/46VBIJ+7nrIkAeBt3nlDbwV0WYLNxX4XjkGfM2Y0xKgfmzg8RJMiNrwbg91/jtnQuX2fCfUPNn3SgwQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB7461
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH v3 15/28] sound: usb: Introduce QC USB SND offloading
+ support
+Content-Language: en-US
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
+        andersson@kernel.org, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org, tiwai@suse.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <20230308235751.495-16-quic_wcheng@quicinc.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230308235751.495-16-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -163,94 +72,472 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 04:58:45PM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Mar 09, 2023 at 11:45:51PM +0800, Ye, Xiang wrote:
-> > On Thu, Mar 09, 2023 at 11:06:25AM +0100, Andi Shyti wrote:
-> > > On Thu, Mar 09, 2023 at 10:41:05AM +0100, Greg Kroah-Hartman wrote:
-> > > > On Thu, Mar 09, 2023 at 05:31:44PM +0800, Ye, Xiang wrote:
-> > > > > On Thu, Mar 09, 2023 at 08:52:24AM +0100, Greg Kroah-Hartman wrote:
-> > > > > > On Thu, Mar 09, 2023 at 03:10:56PM +0800, Ye Xiang wrote:
-> > > > > > > +static int ljca_mng_get_version(struct ljca_stub *stub, char *buf)
-> > > > > > > +{
-> > > > > > > +	struct fw_version version = {};
-> > > > > > > +	unsigned int len = sizeof(version);
-> > > > > > > +	int ret;
-> > > > > > > +
-> > > > > > > +	ret = ljca_stub_write(stub, LJCA_MNG_GET_VERSION, NULL, 0, &version, &len, true,
-> > > > > > > +			      LJCA_USB_WRITE_ACK_TIMEOUT_MS);
-> > > > > > > +	if (ret)
-> > > > > > > +		return ret;
-> > > > > > > +
-> > > > > > > +	if (len != sizeof(version)) {
-> > > > > > > +		dev_err(&stub->intf->dev, "get version failed, len:%d\n", len);
-> > > > > > > +		return -EINVAL;
-> > > > > > > +	}
-> > > > > > > +
-> > > > > > > +	return sysfs_emit(buf, "%d.%d.%d.%d\n", version.major, version.minor,
-> > > > > > > +			  le16_to_cpu(version.patch), le16_to_cpu(version.build));
-> > > > > > > +}
-> > > > > > 
-> > > > > > You have sysfs files, yet no Documentation/ABI/ entries?  That's not
-> > > > > > allowed, you know this :(
-> > > > > The Documentation/ABI/ entries is added for the sysfs on patch 5 of this series.
-> > > > > https://patchwork.kernel.org/project/linux-usb/patch/20230309071100.2856899-6-xiang.ye@intel.com/
-> > > > 
-> > > > Ah, missed that, sorry.
-> > > > 
-> > > > > > 
-> > > > > > > +static ssize_t cmd_store(struct device *dev, struct device_attribute *attr, const char *buf,
-> > > > > > > +			 size_t count)
-> > > > > > > +{
-> > > > > > > +	struct usb_interface *intf = to_usb_interface(dev);
-> > > > > > > +	struct ljca_dev *ljca_dev = usb_get_intfdata(intf);
-> > > > > > > +	struct ljca_stub *mng_stub = ljca_stub_find(ljca_dev, LJCA_MNG_STUB);
-> > > > > > > +	struct ljca_stub *diag_stub = ljca_stub_find(ljca_dev, LJCA_DIAG_STUB);
-> > > > > > > +
-> > > > > > > +	if (sysfs_streq(buf, "dfu"))
-> > > > > > > +		ljca_mng_set_dfu_mode(mng_stub);
-> > > > > > > +	else if (sysfs_streq(buf, "debug"))
-> > > > > > > +		ljca_diag_set_trace_level(diag_stub, 3);
-> > > > > > 
-> > > > > > Sorry, but no, you can't do this in a sysfs file.
-> > > > > Do you mean that we can't use sysfs to send "debug" command to device?
-> > > > 
-> > > > That is correct, use the kernel-wide debugging facilities that we have
-> > > > for this NEVER create your own custom interface just for one tiny
-> > > > driver, that is not allowed.
-> > > > 
-> > > > > Could you provide some detail or hints?
-> > > > 
-> > > > dev_dbg().
-> > But, this command is sent to SET LJCA Firmware logging level.
-> 
-> What command?
-ljca_diag_set_trace_level send LJCA_DIAG_SET_TRACE_LEVEL command to LJCA
-FW to set FW log level.
-> 
-> This isn't documented at all, sorry, I don't understand what you are
-> trying to do here.
-Sorry for the doc missing. will try to add more details on comments and
-Documentation/ABI/ entries.
 
-> 
-> > > I'm not sure this is the same thing, though, as it's not a drvier
-> > > to user debug message.
-> > > 
-> > > Ye, can you please explain better what this command does? You are
-> > > sending a LJCA_DIAG_SET_TRACE_LEVEL command to the device with a
-> > > parameter "3" which has a meaining only for you :)
-> > Sure, the LJCA_DIAG_SET_TRACE_LEVEL command is used to set LJCA FW
-> > logging level. 3 means debug level for FW. It is used for LJCA FW
-> > debugging: when FW got some issue, we can send debug level to FW
-> > to make FW print degging log for analysis.
-> 
-> And where is that printed?  In the kernel log?  Somewhere else?  What
-> does the firmware have to do with any of this?
-The firmware log was printed through UART port of LJCA device to another
-computer just for debugging purposes. After sending LJCA_DIAG_SET_TRACE_LEVEL
-command to LJCA device, it will print logging according to the log level sent
-before.
+> +config QC_USB_AUDIO_OFFLOAD
+> +	tristate "Qualcomm Audio Offload driver"
 
---
-Thanks
-Ye Xiang
+"Qualcomm USB Audio Offload driver"
+
+> +	select SND_PCM
+
+depends on SND_USB_AUDIO ?
+
+> +	help
+> +	  Say Y here to enable the Qualcomm USB audio offloading feature
+> +
+> +	  This module sets up the required QMI stream enable/disable
+> +	  responses to requests generated by the audio DSP.  It passes the
+> +	  USB transfer resource references, so that the audio DSP can issue
+> +	  USB transfers to the host controller.
+> +
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called qc-audio-offload.
+
+> +#include <linux/ctype.h>
+> +#include <linux/moduleparam.h>
+> +#include <linux/module.h>
+> +#include <linux/usb.h>
+> +#include <linux/init.h>
+
+alphabetical order?
+
+> +#include <linux/usb/hcd.h>
+> +#include <linux/usb/xhci-intr.h>
+> +#include <linux/usb/quirks.h>
+> +#include <linux/usb/audio.h>
+> +#include <linux/usb/audio-v2.h>
+> +#include <linux/usb/audio-v3.h>
+> +#include <linux/soc/qcom/qmi.h>
+> +#include <linux/iommu.h>
+> +#include <linux/dma-mapping.h>
+> +#include <linux/dma-map-ops.h>
+> +#include <sound/q6usboffload.h>
+> +
+> +#include <sound/control.h>
+> +#include <sound/core.h>
+> +#include <sound/info.h>
+> +#include <sound/pcm.h>
+> +#include <sound/pcm_params.h>
+> +#include <sound/initval.h>
+> +
+> +#include <sound/soc.h>
+> +#include <sound/soc-usb.h>
+> +#include "../usbaudio.h"
+> +#include "../card.h"
+> +#include "../midi.h"
+> +#include "../mixer.h"
+> +#include "../proc.h"
+> +#include "../quirks.h"
+> +#include "../endpoint.h"
+> +#include "../helper.h"
+> +#include "../pcm.h"
+> +#include "../format.h"
+> +#include "../power.h"
+> +#include "../stream.h"
+> +#include "../media.h"
+
+this looks weird, are all these needed?
+
+> +
+> +#define SND_PCM_CARD_NUM_MASK 0xffff0000
+> +#define SND_PCM_DEV_NUM_MASK 0xff00
+> +#define SND_PCM_STREAM_DIRECTION 0xff
+
+The prefix looks wrong, or it duplicates SND_PCM stuff?
+
+> +
+> +/* iommu resource parameters and management */
+> +#define PREPEND_SID_TO_IOVA(iova, sid) ((u64)(((u64)(iova)) | \
+> +					(((u64)sid) << 32)))
+> +#define IOVA_BASE 0x1000
+> +#define IOVA_XFER_RING_BASE (IOVA_BASE + PAGE_SIZE * (SNDRV_CARDS + 1))
+> +#define IOVA_XFER_BUF_BASE (IOVA_XFER_RING_BASE + PAGE_SIZE * SNDRV_CARDS * 32)
+> +#define IOVA_XFER_RING_MAX (IOVA_XFER_BUF_BASE - PAGE_SIZE)
+> +#define IOVA_XFER_BUF_MAX (0xfffff000 - PAGE_SIZE)
+> +
+> +#define MAX_XFER_BUFF_LEN (24 * PAGE_SIZE)
+> +
+> +struct iova_info {
+> +	struct list_head list;
+> +	unsigned long start_iova;
+> +	size_t size;
+> +	bool in_use;
+> +};
+> +
+> +struct intf_info {
+> +	unsigned long data_xfer_ring_va;
+> +	size_t data_xfer_ring_size;
+> +	unsigned long sync_xfer_ring_va;
+> +	size_t sync_xfer_ring_size;
+> +	unsigned long xfer_buf_va;
+> +	size_t xfer_buf_size;
+> +	phys_addr_t xfer_buf_pa;
+> +	unsigned int data_ep_pipe;
+> +	unsigned int sync_ep_pipe;
+> +	u8 *xfer_buf;
+> +	u8 intf_num;
+> +	u8 pcm_card_num;
+> +	u8 pcm_dev_num;
+> +	u8 direction;
+> +	bool in_use;
+> +};
+> +
+> +struct uaudio_qmi_dev {
+> +	struct device *dev;
+> +	u32 sid;
+> +	u32 intr_num;
+> +	struct xhci_interrupter *ir;
+> +	struct xhci_ring *sec_ring;
+> +	struct iommu_domain *domain;
+> +
+> +	/* list to keep track of available iova */
+> +	struct list_head xfer_ring_list;
+> +	size_t xfer_ring_iova_size;
+> +	unsigned long curr_xfer_ring_iova;
+> +	struct list_head xfer_buf_list;
+> +	size_t xfer_buf_iova_size;
+> +	unsigned long curr_xfer_buf_iova;
+> +
+> +	/* bit fields representing pcm card enabled */
+> +	unsigned long card_slot;
+> +	/* indicate event ring mapped or not */
+> +	bool er_mapped;
+> +	/* reference count to number of possible consumers */
+> +	atomic_t qdev_in_use;
+> +	/* idx to last udev card number plugged in */
+> +	unsigned int last_card_num;
+> +};
+> +
+> +struct uaudio_dev {
+> +	struct usb_device *udev;
+> +	/* audio control interface */
+> +	struct usb_host_interface *ctrl_intf;
+> +	unsigned int card_num;
+> +	unsigned int usb_core_id;
+> +	atomic_t in_use;
+> +	struct kref kref;
+> +	wait_queue_head_t disconnect_wq;
+> +
+> +	/* interface specific */
+> +	int num_intf;
+> +	struct intf_info *info;
+> +	struct snd_usb_audio *chip;
+> +};
+
+This looks too detailed, isnt' that a duplication of other structures
+that exist in the regular USB audio part?
+
+There's nothing that looks QCOM-specific anyways.
+
+> +
+> +static struct uaudio_dev uadev[SNDRV_CARDS];
+> +static struct uaudio_qmi_dev *uaudio_qdev;
+> +static struct uaudio_qmi_svc *uaudio_svc;
+> +static DEFINE_MUTEX(qdev_mutex);
+> +
+> +struct uaudio_qmi_svc {
+> +	struct qmi_handle *uaudio_svc_hdl;
+> +	struct work_struct qmi_disconnect_work;
+> +	struct workqueue_struct *uaudio_wq;
+> +	struct sockaddr_qrtr client_sq;
+> +	bool client_connected;
+> +};
+> +
+> +enum mem_type {
+> +	MEM_EVENT_RING,
+> +	MEM_XFER_RING,
+> +	MEM_XFER_BUF,
+> +};
+
+prefixes better than 'MEM'?
+
+> +
+> +/* Supported audio formats */
+> +enum usb_qmi_audio_format {
+> +	USB_QMI_PCM_FORMAT_S8 = 0,
+> +	USB_QMI_PCM_FORMAT_U8,
+> +	USB_QMI_PCM_FORMAT_S16_LE,
+> +	USB_QMI_PCM_FORMAT_S16_BE,
+> +	USB_QMI_PCM_FORMAT_U16_LE,
+> +	USB_QMI_PCM_FORMAT_U16_BE,
+> +	USB_QMI_PCM_FORMAT_S24_LE,
+> +	USB_QMI_PCM_FORMAT_S24_BE,
+> +	USB_QMI_PCM_FORMAT_U24_LE,
+> +	USB_QMI_PCM_FORMAT_U24_BE,
+> +	USB_QMI_PCM_FORMAT_S24_3LE,
+> +	USB_QMI_PCM_FORMAT_S24_3BE,
+> +	USB_QMI_PCM_FORMAT_U24_3LE,
+> +	USB_QMI_PCM_FORMAT_U24_3BE,
+> +	USB_QMI_PCM_FORMAT_S32_LE,
+> +	USB_QMI_PCM_FORMAT_S32_BE,
+> +	USB_QMI_PCM_FORMAT_U32_LE,
+> +	USB_QMI_PCM_FORMAT_U32_BE,
+> +};
+> +
+> +static enum usb_audio_device_speed_enum_v01
+> +get_speed_info(enum usb_device_speed udev_speed)
+> +{
+> +	switch (udev_speed) {
+> +	case USB_SPEED_LOW:
+> +		return USB_AUDIO_DEVICE_SPEED_LOW_V01;
+> +	case USB_SPEED_FULL:
+> +		return USB_AUDIO_DEVICE_SPEED_FULL_V01;
+> +	case USB_SPEED_HIGH:
+> +		return USB_AUDIO_DEVICE_SPEED_HIGH_V01;
+> +	case USB_SPEED_SUPER:
+> +		return USB_AUDIO_DEVICE_SPEED_SUPER_V01;
+> +	case USB_SPEED_SUPER_PLUS:
+> +		return USB_AUDIO_DEVICE_SPEED_SUPER_PLUS_V01;
+> +	default:
+> +		return USB_AUDIO_DEVICE_SPEED_INVALID_V01;
+> +	}
+> +}
+
+this doesn't look qcom-specific, why is this here?
+
+> +
+> +static struct snd_usb_substream *find_substream(unsigned int card_num,
+> +	unsigned int pcm_idx, unsigned int direction)
+> +{
+> +	struct snd_usb_stream *as;
+> +	struct snd_usb_substream *subs = NULL;
+> +	struct snd_usb_audio *chip;
+> +
+> +	chip = uadev[card_num].chip;
+> +	if (!chip || atomic_read(&chip->shutdown))
+> +		goto done;
+> +
+> +	if (pcm_idx >= chip->pcm_devs)
+> +		goto done;
+> +
+> +	if (direction > SNDRV_PCM_STREAM_CAPTURE)
+> +		goto done;
+> +
+> +	list_for_each_entry(as, &chip->pcm_list, list) {
+> +		if (as->pcm_index == pcm_idx) {
+> +			subs = &as->substream[direction];
+> +			goto done;
+> +		}
+> +	}
+> +
+> +done:
+> +	return subs;
+> +}
+> +
+> +static int info_idx_from_ifnum(int card_num, int intf_num, bool enable)
+> +{
+> +	int i;
+> +
+> +	/*
+> +	 * default index 0 is used when info is allocated upon
+> +	 * first enable audio stream req for a pcm device
+> +	 */
+> +	if (enable && !uadev[card_num].info)
+> +		return 0;
+> +
+> +	for (i = 0; i < uadev[card_num].num_intf; i++) {
+> +		if (enable && !uadev[card_num].info[i].in_use)
+> +			return i;
+> +		else if (!enable &&
+> +				uadev[card_num].info[i].intf_num == intf_num)
+> +			return i;
+> +	}
+> +
+> +	return -EINVAL;
+> +}
+> +
+> +static int get_data_interval_from_si(struct snd_usb_substream *subs,
+> +	u32 service_interval)
+> +{
+> +	unsigned int bus_intval, bus_intval_mult, binterval;
+> +
+> +	if (subs->dev->speed >= USB_SPEED_HIGH)
+> +		bus_intval = BUS_INTERVAL_HIGHSPEED_AND_ABOVE;
+> +	else
+> +		bus_intval = BUS_INTERVAL_FULL_SPEED;
+> +
+> +	if (service_interval % bus_intval)
+> +		return -EINVAL;
+> +
+> +	bus_intval_mult = service_interval / bus_intval;
+> +	binterval = ffs(bus_intval_mult);
+> +	if (!binterval || binterval > MAX_BINTERVAL_ISOC_EP)
+> +		return -EINVAL;
+> +
+> +	/* check if another bit is set then bail out */
+> +	bus_intval_mult = bus_intval_mult >> binterval;
+> +	if (bus_intval_mult)
+> +		return -EINVAL;
+> +
+> +	return (binterval - 1);
+> +}
+
+this doesn't look qcom-specific either, is this a set of helpers that
+need to be moved somewhere else?
+
+
+> +/**
+> + * disable_audio_stream() - disable usb snd endpoints
+> + * @subs: usb substream
+> + *
+> + * Closes the USB SND endpoints associated with the current audio stream
+> + * used.  This will decrement the USB SND endpoint opened reference count.
+> + *
+> + */
+> +static void disable_audio_stream(struct snd_usb_substream *subs)
+> +{
+> +	struct snd_usb_audio *chip = subs->stream->chip;
+> +
+> +	if (subs->data_endpoint || subs->sync_endpoint) {
+> +		close_endpoints(chip, subs);
+> +
+> +		mutex_lock(&chip->mutex);
+> +		subs->cur_audiofmt = NULL;
+> +		mutex_unlock(&chip->mutex);
+> +	}
+> +
+> +	snd_usb_autosuspend(chip);
+> +}
+
+also not qcom-specific?
+
+> +/* kref release callback when all streams are disabled */
+
+what does "all streams disabled" mean, and when does this happen?
+
+> +static void uaudio_dev_release(struct kref *kref)
+> +{
+> +	struct uaudio_dev *dev = container_of(kref, struct uaudio_dev, kref);
+> +
+> +	uaudio_event_ring_cleanup_free(dev);
+> +	atomic_set(&dev->in_use, 0);
+> +	wake_up(&dev->disconnect_wq);
+> +}
+
+
+> +static int __init qc_usb_audio_offload_init(void)
+> +{
+> +	struct uaudio_qmi_svc *svc;
+> +	int ret;
+> +
+> +	ret = snd_usb_register_platform_ops(&offload_ops);
+> +	if (ret < 0)
+> +		return ret;
+
+so what happens if snd_usb is blacklisted or takes time to probe?
+
+This seems to assume a timing dependency when USB is initialized/probed
+first?
+
+> +
+> +	svc = kzalloc(sizeof(struct uaudio_qmi_svc), GFP_KERNEL);
+> +	if (!svc) {
+> +		ret = -ENOMEM;
+> +		goto unreg_ops;
+> +	}
+> +
+> +	svc->uaudio_wq = create_singlethread_workqueue("uaudio_svc");
+> +	if (!svc->uaudio_wq) {
+> +		ret = -ENOMEM;
+> +		goto free_svc;
+> +	}
+> +
+> +	svc->uaudio_svc_hdl = kzalloc(sizeof(struct qmi_handle), GFP_KERNEL);
+> +	if (!svc->uaudio_svc_hdl) {
+> +		ret = -ENOMEM;
+> +		goto free_wq;
+> +	}
+> +
+> +	ret = qmi_handle_init(svc->uaudio_svc_hdl,
+> +				QMI_UAUDIO_STREAM_REQ_MSG_V01_MAX_MSG_LEN,
+> +				&uaudio_svc_ops_options,
+> +				&uaudio_stream_req_handlers);
+> +	ret = qmi_add_server(svc->uaudio_svc_hdl, UAUDIO_STREAM_SERVICE_ID_V01,
+> +					UAUDIO_STREAM_SERVICE_VERS_V01, 0);
+> +
+> +	INIT_WORK(&svc->qmi_disconnect_work, qmi_disconnect_work);
+> +	uaudio_svc = svc;
+> +
+> +	return 0;
+> +
+> +free_wq:
+> +	destroy_workqueue(svc->uaudio_wq);
+> +free_svc:
+> +	kfree(svc);
+> +unreg_ops:
+> +	snd_usb_unregister_platform_ops();
+> +
+> +	return ret;
+> +}
+> +
+> +static void __exit qc_usb_audio_offload_exit(void)
+> +{
+> +	struct uaudio_qmi_svc *svc = uaudio_svc;
+> +
+> +	qmi_handle_release(svc->uaudio_svc_hdl);
+> +	flush_workqueue(svc->uaudio_wq);
+> +	destroy_workqueue(svc->uaudio_wq);
+> +	kfree(svc);
+> +	uaudio_svc = NULL;
+> +	snd_usb_unregister_platform_ops();
+> +}
+> +
+> +module_init(qc_usb_audio_offload_init);
+> +module_exit(qc_usb_audio_offload_exit);
+
+what causes this module to be loaded?
+
+> +
+> +MODULE_DESCRIPTION("QC USB Audio Offloading");
+> +MODULE_LICENSE("GPL");
+> diff --git a/sound/usb/qcom/usb_audio_qmi_v01.c b/sound/usb/qcom/usb_audio_qmi_v01.c
+> new file mode 100644
+> index 000000000000..1a0f2f579786
+> --- /dev/null
+> +++ b/sound/usb/qcom/usb_audio_qmi_v01.c
+> @@ -0,0 +1,892 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/soc/qcom/qmi.h>
+> +
+> +#include "usb_audio_qmi_v01.h"
+> +
+> +static struct qmi_elem_info mem_info_v01_ei[] = {
+> +	{
+> +		.data_type	= QMI_UNSIGNED_8_BYTE,
+> +		.elem_len	= 1,
+> +		.elem_size	= sizeof(u64),
+> +		.array_type	= NO_ARRAY,
+> +		.tlv_type	= 0,
+> +		.offset		= offsetof(struct mem_info_v01, va),
+> +	},
+
+maybe move these arrays to a different patch that we don't need to
+scroll-through or review...
+
+> +	{
+> +		.data_type	= QMI_UNSIGNED_8_BYTE,
+> +		.elem_len	= 1,
+> +		.elem_size	= sizeof(u64),
+> +		.array_type	= NO_ARRAY,
+> +		.tlv_type	= 0,
+> +		.offset		= offsetof(struct mem_info_v01, pa),
+> +	},
+> +	{
+> +		.data_type	= QMI_UNSIGNED_4_BYTE,
+> +		.elem_len	= 1,
+> +		.elem_size	= sizeof(u32),
+> +		.array_type	= NO_ARRAY,
+> +		.tlv_type	= 0,
+> +		.offset		= offsetof(struct mem_info_v01, size),
+> +	},
+> +	{
+> +		.data_type	= QMI_EOTI,
+> +		.array_type	= NO_ARRAY,
+> +		.tlv_type	= QMI_COMMON_TLV_TYPE,
+> +	},
+> +};
+
