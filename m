@@ -2,200 +2,184 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8491B6B1F3D
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 10:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CB46B1F8D
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 10:11:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbjCIJDn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Mar 2023 04:03:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45372 "EHLO
+        id S231276AbjCIJLz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Mar 2023 04:11:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjCIJDP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 04:03:15 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791C6136E8
-        for <linux-usb@vger.kernel.org>; Thu,  9 Mar 2023 01:01:46 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id e13so1090046wro.10
-        for <linux-usb@vger.kernel.org>; Thu, 09 Mar 2023 01:01:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678352506;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H8CQkC9OKwU3VsIa2nf3U05xE98iUfK4LW1TYxB/3tI=;
-        b=MYj5TE0jJc7l2vPVRyit2vIGEMAyUrDqLnBGepVOW1odiuc+k4ciras8kko/sozUUW
-         vi4R/JU5OQcpp735C9i684ITMDmtOPxqpep+RJ6zLkzywq660S33mm4weKMRRBPp/1yS
-         SMR+DyZ8YVKX0T3kTqhxO9GEQyeSzcaUWqJq2MWpM6wz5Cik8RdpzhTq0pcfxs/ncXVr
-         QszU84uR8jVMI64hbupjTnlVovYh1piAUWiOTUDkBww5PRmVKhnxcHwUuAwZIrfpW5PE
-         tOLzNt2AYSyhkjjwisAPTGC8VbmBsnVP85oQWugT+AxNkJD93mGqHE4webN/P6GoimDk
-         OBSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678352506;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H8CQkC9OKwU3VsIa2nf3U05xE98iUfK4LW1TYxB/3tI=;
-        b=rk5SduBj2bpl6/C7om28YEnpJsjh67p83hvi2azAova/Ok/MPLSLKNdFNGLh9/EBiX
-         h5kFg8/u43chLAFjSsVPDZ13TTP1AmTGlua5hkoJfRaTZCSZ1Y0mvXngUV4Q9P3uZDZi
-         phf7qBRxSl5V2lCi8CZkzZonjCmlktiC2SeeKkrX6nPx0ZiUe3ELdckfCZ/pX+RYNerd
-         NuwGMlTxZBB3ww7lHat22MIKePROEyZAqTtQ3/fcjYKU8jgjTy9u3jLICtOxnEioj6Ht
-         LJUtU8HrNmLQXpIFVdwtkusR+LjnoORVWVpRoOBtueB28OhRMPuDfxMi6YxCmWFjys0A
-         oAdQ==
-X-Gm-Message-State: AO0yUKUkYv9Yw2i2WTRTZXIqNf/D3gNalCmbhgcEvLqbNtHOP3cjDU6v
-        TX4wfp1og6wiwc5mnADk01leMw==
-X-Google-Smtp-Source: AK7set94/uBbxAP9k/mAaOEV4tcPv7xSDqz7no4qrbr0MZqgg4K44iNP8R+95z+Ew4poEF3lN85/Mg==
-X-Received: by 2002:a5d:5706:0:b0:2c7:b8a0:c42a with SMTP id a6-20020a5d5706000000b002c7b8a0c42amr11938511wrv.31.1678352506073;
-        Thu, 09 Mar 2023 01:01:46 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id c2-20020a5d63c2000000b002c8ed82c56csm17689178wrw.116.2023.03.09.01.01.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 01:01:45 -0800 (PST)
-Message-ID: <ae214ad1-3eb0-3a54-d0d2-ac9812aad186@linaro.org>
-Date:   Thu, 9 Mar 2023 09:01:44 +0000
+        with ESMTP id S230304AbjCIJL3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 04:11:29 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E871CBCB;
+        Thu,  9 Mar 2023 01:11:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678353065; x=1709889065;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=uzSwTzYmuirE2t1RVyqqLXco8jZUtWj6cD5l5IatId4=;
+  b=HRUu7iorM50LUK3QxuFcWBKh9lTgw12nak43rbSVAbAEFYYGSahWC7Zh
+   Ga7x50QLkWSw8d/44DUuoNkepCi9utCHQVmuCxv6Ck1YlYz75scQPrGaU
+   4dUNkp1pHSsi3zGkTaJJDCZFu6BKllrPGdnXGQpAZ0iVmenYe7Ll73qly
+   xzVxcW6QqQ8d3IBzt2E2hY3kXA7dDZzHsSbRr5A8aBJHHmmM9BYde6wt6
+   9SvuUjAW4BLNl0FVl+cxF1IMi6u7+xTX0EOjnRSVqWfwVW83wxwdCAlv6
+   AeLPYDRPX+NHAHPZV80tAvcUm7bBtpipo6Rz2Cye/S3C9IY4QnAKk6LyR
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="316055525"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="316055525"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 01:11:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="654687400"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="654687400"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga006.jf.intel.com with ESMTP; 09 Mar 2023 01:11:03 -0800
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 9 Mar 2023 01:11:03 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 9 Mar 2023 01:11:03 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Thu, 9 Mar 2023 01:11:03 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DmyEJKVHFhtklESqwpNQLW/SPkZnMWr6s0m5KTicmyf/NlBRqZeGuLQtbJQwD3U6A42xDe82LlOOhusYbwTbfTTD4Bt1uKowrrGshRaGC02DTgkJilW1Xp/DNo/pPMGGb+NRB2Ul/Co7DLdIyUJu03Ti7FMa9h69cyFboxOOtEfFkWlMIw7AwLuzFP6BqoCS2Xjq3CcYch8heXXkPLVxjTtkvniAsvw5nhUXZqAjlGFpmJYNhhKVZfcVwYtyG1wnzIjFCMRJ+w65SwD6soEaiu8l3VR9qX3fKeuhfkMQqGZr52CzNaA7YzlHWpSNfVBA58EggyWt8uhpnOw3DY52ew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eBSPJxtZ9gMsGhVc80P/1K4G9O/GOIQGpLJDUOHkeG4=;
+ b=LYPY0H0hVNStwtXCU9Tf9XTlBLyts8sL3Ocz0DIbhbyGGeN48pnHPgv6iWJuggE9YOdrf6IClFB9YB5XyE5JU0Cm12taNB1UoCskGyC82TZhqx1P6gwZfQcw3k9X+giBKuGPp6TmA0rLiId8ETK8qMP5Nt9vq2xCYd5HJnOyKDYCK6y9vOZjJClde7zTMA2ynZjkQbFlLEh80OVTX6oJLq3DQTSM+qQnnzmRL9qurOmshfVWj3pKmWOaJZS8zqLRtSsMAv09Aw1QoEP7HmPLHFxf+CQohm4ftVcxcEk63N+gaE3dXD4k+Ky0OHqWcAoJJ65Tf2Dr8MPIp07TfIOirA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM5PR11MB1418.namprd11.prod.outlook.com (2603:10b6:3:8::9) by
+ DM4PR11MB5264.namprd11.prod.outlook.com (2603:10b6:5:38b::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.18; Thu, 9 Mar 2023 09:10:56 +0000
+Received: from DM5PR11MB1418.namprd11.prod.outlook.com
+ ([fe80::7ef8:2573:5a1b:c9f1]) by DM5PR11MB1418.namprd11.prod.outlook.com
+ ([fe80::7ef8:2573:5a1b:c9f1%6]) with mapi id 15.20.6178.017; Thu, 9 Mar 2023
+ 09:10:56 +0000
+Date:   Thu, 9 Mar 2023 17:10:48 +0800
+From:   "Ye, Xiang" <xiang.ye@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Lee Jones" <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        <linux-usb@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <srinivas.pandruvada@intel.com>,
+        <heikki.krogerus@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <sakari.ailus@linux.intel.com>, <zhifeng.wang@intel.com>,
+        <wentong.wu@intel.com>, <lixu.zhang@intel.com>
+Subject: Re: [PATCH v4 1/5] mfd: Add support for Intel LJCA device
+Message-ID: <ZAmimLMY49ktjagX@ye-NUC7i7DNHE>
+References: <20230309071100.2856899-1-xiang.ye@intel.com>
+ <20230309071100.2856899-2-xiang.ye@intel.com>
+ <ZAmPjfH6rA0pbiUa@kroah.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZAmPjfH6rA0pbiUa@kroah.com>
+X-ClientProxiedBy: SG2PR03CA0094.apcprd03.prod.outlook.com
+ (2603:1096:4:7c::22) To DM5PR11MB1418.namprd11.prod.outlook.com
+ (2603:10b6:3:8::9)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 22/28] ASoC: qcom: qdsp6: q6afe: Split USB AFE
- dev_token param into separate API
-Content-Language: en-US
-To:     Wesley Cheng <quic_wcheng@quicinc.com>, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
-        andersson@kernel.org, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org, tiwai@suse.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
- <20230308235751.495-23-quic_wcheng@quicinc.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230308235751.495-23-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR11MB1418:EE_|DM4PR11MB5264:EE_
+X-MS-Office365-Filtering-Correlation-Id: bbdeb555-8485-4769-0916-08db207e30c7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: N4xRrCs46xElKJJN9dMt7t2MW4inRZl6UPMzRdp9DAWCBb+eOeZ9lInD3KYOElu3rsvrHscxqLxT1yIfDRJDQWKPosdkDh/DGzu5Ao8WKWQ4nVC9CZL6XzlEm+kWhBLbwfY3Oj3Wkcpn8DXORq057R9eRsa/DQYMHVVJZ3RWHRs/0alNMRUIH7Cv1cvG/igCbzci2pgDch/JJrKN8Ov6SkMoSaJ5+i5UfbqC3v6q/KAlJRzNAMTgxtOTVo6+8RxmDbnPereYx6dbzA4O02HgO9ZUeITnW1ZgXpVUjz8U/QPRAYbeBP5VHTDRUKhGtpHXZEsDA/kCdHFVdLH30bYlrv0aI1UiN1w1qa+OdcGOkCpIwTwNC/PWuajSl+xMCdsLoTyu9X8KBst8iPukoDQaw01j8aamqAtuyVgNHu0rAnplKPQYUCpYIZX7BSaOwpBzJhKgYui4XEhVdQ1zDJq1lk4LLqMa3SCeRBWdxC+KTa42+c0XogXiqOdaJ9gQYf/84Xrry/B4aHNAJZIo66CGF0VeQ4qUgCv2XPsjEKvgDJ+XLj27x/dyXPCkqJ789MdfGKsMGKBwEC7ZjjouLkBLxsubiZXR9NoRu7F+fK7r8wXzblngL0zlrgUV3r7U3DNW
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1418.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(346002)(136003)(376002)(366004)(39860400002)(396003)(451199018)(8676002)(41300700001)(66556008)(33716001)(66476007)(4326008)(66946007)(82960400001)(6916009)(2906002)(316002)(54906003)(8936002)(38100700002)(5660300002)(186003)(7416002)(9686003)(478600001)(4744005)(966005)(6486002)(6512007)(26005)(6506007)(83380400001)(6666004)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BHiXBC18yZLotk+qwcrA+s1d8NX73zummMhAP31pIgyrFdBdPtrMsth5D6wA?=
+ =?us-ascii?Q?TgmdwGNUNiLoJ3MPNx/irXJ9k/rpx1J5g0d9gNxvi+GRaXuJDzsEiJR2+k7x?=
+ =?us-ascii?Q?kJntakFSOhsYkvMSsYD4k/1A+WQSurJzQn5bOYHblG3EXpkA7gztXJeHu145?=
+ =?us-ascii?Q?RutlI+LZdhE9Zmczr8+iDEbBVJR564VULrE5YUCTW9EXknskQSrGPgswVrls?=
+ =?us-ascii?Q?wYM8rCCVJ1bMh4/SuGh8AXdDjGFK0gxsUgUARmz9l6PWSxdHyQDGgUfTzcPH?=
+ =?us-ascii?Q?dp97RFFYFK6wPtwQcBbdy7TwLFuZD4USrxy1toeQ2xy5PwEe5bqyEuain8UL?=
+ =?us-ascii?Q?ejZwBhqrPmD5ZYzdi+P03Knbe4ghkazmATdzNmaUDLsCeyF8VNuulMLCVO9L?=
+ =?us-ascii?Q?A0xrGvQLclyucDFV1n/3bzg/oIIGsKKvrAcabUzzHh51OlgBPNVewKH6uqAy?=
+ =?us-ascii?Q?OaOWbFM4vfE242ojBTx8Co2WIo9Kf1fxrQas71YEqJPdk5gS+KigO91x86qz?=
+ =?us-ascii?Q?O1gv9fVGOZR7AHhsg+Xjr46MqazTX4sxVlxE98MnH0Vz5zvUXOeMyZDDE/3T?=
+ =?us-ascii?Q?17KwjBsz/PDmcMbYSvNnH5iOz4qA/HSMqFQGh1hTuiEE/mroTqnED7G6RQn9?=
+ =?us-ascii?Q?CgLnEIuX07AVd7N5H27x7NJ+H8SVl5igpCjaMgD7lGKFygikjqbcVF+X/O9I?=
+ =?us-ascii?Q?MiEFMw4Lkiv1zLePaq7OQOvj89fb4XJfMJtWxZ28znXzZF1wIce39t8Azdtw?=
+ =?us-ascii?Q?JNkbGL6zdF+WlByLeibUmdNGXAdkTAug3KeFFewWDW2bcYx8bVcZn9/8g0v9?=
+ =?us-ascii?Q?3KbATDFwkW2F1J+GDHIYHkVDqF4476pz95vCRMZYLoe17rFTTPFdoUmKng32?=
+ =?us-ascii?Q?0Wwmfi2h/BSw3Ui+eTPyw7Fn9iM5EG5vcwtZzKmrx34PEgmei7kUv5GPfMJ9?=
+ =?us-ascii?Q?BFo1b3FRxwNB/gbx8qlwLVqjfCHFsyZzgRrNWQO9VfyIyD/8oM5t9BDst5vS?=
+ =?us-ascii?Q?Zi1FtlWqg0R8Ta/4EfL+kt97gQ7Bk6zHvt8wh1qYoL7HtRpGrmP78mQluPb5?=
+ =?us-ascii?Q?ohEdxdCd/HciS/4xjjBVptecp/+k5g0wT9t/QtjFyrZNbMcndUEs6Ull4a9o?=
+ =?us-ascii?Q?C+HgAoKKdWLReYPecTpM8Brp6mifTAnw4XbstbPt2IrI1atdCkkLqUG28KcQ?=
+ =?us-ascii?Q?Kmjro3nrtvmyXgYqdiFww9GLOoMZu0SlBK3yyhpDUbz0PhuHSajzmEsXY5EK?=
+ =?us-ascii?Q?Jai1yB/KACD/kJp6BMAGa9OaT0BfsOoL8mS7Ed1104YZAtp4MLq+y9kfOgeb?=
+ =?us-ascii?Q?482aHlcposQXVE5FfB0MLqL0rTalYfTqc4uvhBHOyZBoWWO44ZVnLjaxOEUN?=
+ =?us-ascii?Q?Oif3VsG25ZNLZEVPkl/BiGDcOHKwBNuEYcjwh1Gfh8OrwLN3xX+UdiNuF7wU?=
+ =?us-ascii?Q?ge39dW8QpFyVwumnITON+UfufapVa6dqwmQzaPEABHi5RNzs6yKFL/ljX9Fj?=
+ =?us-ascii?Q?mEegxg5plPq8dVhiHFz9thFQk3/WGpVsFRMrDvkpSHVoK0o3Z2jsOFWwrCdQ?=
+ =?us-ascii?Q?RrNE6fwBScLBhOu/3Fq4K2EOzm9Y0znzGWrcgOb9?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: bbdeb555-8485-4769-0916-08db207e30c7
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1418.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 09:10:56.3125
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eiOIrqnKd3p1XvEaG0KBCFt7SCiomyMvZp7iV3L0jX3URGTLC2QLS55qAqhsm/dyRFgfZI4M4dPYYnPi/FJRoA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5264
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Greg,
 
-
-On 08/03/2023 23:57, Wesley Cheng wrote:
-> The Q6USB backend can carry information about the available USB SND cards
-> and PCM devices discovered on the USB bus.  The dev_token field is used by
-> the audio DSP to notify the USB offload driver of which card and PCM index
-> to enable playback on.  Separate this into a dedicated API, so the USB
-> backend can set the dev_token accordingly.  The audio DSP does not utilize
-> this information until the AFE port start command is sent, which is done
-> during the PCM prepare phase.
+Thanks for the review.
+On Thu, Mar 09, 2023 at 08:49:33AM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Mar 09, 2023 at 03:10:56PM +0800, Ye Xiang wrote:
+> > This patch implements the USB part of Intel USB-I2C/GPIO/SPI adapter
+> > device named "La Jolla Cove Adapter" (LJCA).
 > 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> ---
->   sound/soc/qcom/qdsp6/q6afe.c | 49 +++++++++++++++++++++++++-----------
->   sound/soc/qcom/qdsp6/q6afe.h |  1 +
->   2 files changed, 36 insertions(+), 14 deletions(-)
+> Then why is this called "mfd" in the subject line?
+Sorry, it's a mistake. I forget to change mfd to usb in the commit message
+because I just move the ljca.c from driver/mfd to drivers/usb/misc according
+to previous review comments[1]. And I will address this on v5.
+
+[1] https://www.spinics.net/lists/kernel/msg4708451.html
 > 
-Looks like this could be part of [06/28] ASoC: qcom: qdsp6: Introduce 
-USB AFE port to q6dsp
+> >  include/linux/mfd/ljca.h  |  95 ++++
+> 
+> Why is this .h file in the mfd directory?
+It's a mistake as well. Will address it by moving include/linux/mfd/ljca.h
+to include/linux/usb/ljca.h.
+>
+> thanks,
+> 
+> greg k-h
 
-you are modifying the 06/28 patch in this patch.
-
-other than that it looks fine to me.
-
---srini
-
-> diff --git a/sound/soc/qcom/qdsp6/q6afe.c b/sound/soc/qcom/qdsp6/q6afe.c
-> index e9d5fa6b6b0d..505371c96987 100644
-> --- a/sound/soc/qcom/qdsp6/q6afe.c
-> +++ b/sound/soc/qcom/qdsp6/q6afe.c
-> @@ -1394,10 +1394,42 @@ void q6afe_tdm_port_prepare(struct q6afe_port *port,
->   }
->   EXPORT_SYMBOL_GPL(q6afe_tdm_port_prepare);
->   
-> -static int afe_port_send_usb_dev_param(struct q6afe_port *port, struct q6afe_usb_cfg *cfg)
-> +/**
-> + * afe_port_send_usb_dev_param() - Send USB dev token
-> + *
-> + * @port: Instance of afe port
-> + * @cardidx: USB SND card index to reference
-> + * @pcmidx: USB SND PCM device index to reference
-> + *
-> + * The USB dev token carries information about which USB SND card instance and
-> + * PCM device to execute the offload on.  This information is carried through
-> + * to the stream enable QMI request, which is handled by the offload class
-> + * driver.  The information is parsed to determine which USB device to query
-> + * the required resources for.
-> + */
-> +int afe_port_send_usb_dev_param(struct q6afe_port *port, int cardidx, int pcmidx)
->   {
-> -	union afe_port_config *pcfg = &port->port_cfg;
->   	struct afe_param_id_usb_audio_dev_params usb_dev;
-> +	int ret;
-> +
-> +	memset(&usb_dev, 0, sizeof(usb_dev));
-> +
-> +	usb_dev.cfg_minor_version = AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG;
-> +	usb_dev.dev_token = (cardidx << 16) | (pcmidx << 8);
-> +	ret = q6afe_port_set_param_v2(port, &usb_dev,
-> +				AFE_PARAM_ID_USB_AUDIO_DEV_PARAMS,
-> +				AFE_MODULE_AUDIO_DEV_INTERFACE, sizeof(usb_dev));
-> +	if (ret)
-> +		dev_err(port->afe->dev, "%s: AFE device param cmd failed %d\n",
-> +			__func__, ret);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(afe_port_send_usb_dev_param);
-> +
-> +static int afe_port_send_usb_params(struct q6afe_port *port, struct q6afe_usb_cfg *cfg)
-> +{
-> +	union afe_port_config *pcfg = &port->port_cfg;
->   	struct afe_param_id_usb_audio_dev_lpcm_fmt lpcm_fmt;
->   	struct afe_param_id_usb_audio_svc_interval svc_int;
->   	int ret = 0;
-> @@ -1408,20 +1440,9 @@ static int afe_port_send_usb_dev_param(struct q6afe_port *port, struct q6afe_usb
->   		goto exit;
->   	}
->   
-> -	memset(&usb_dev, 0, sizeof(usb_dev));
->   	memset(&lpcm_fmt, 0, sizeof(lpcm_fmt));
->   	memset(&svc_int, 0, sizeof(svc_int));
->   
-> -	usb_dev.cfg_minor_version = AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG;
-> -	q6afe_port_set_param_v2(port, &usb_dev,
-> -				AFE_PARAM_ID_USB_AUDIO_DEV_PARAMS,
-> -				AFE_MODULE_AUDIO_DEV_INTERFACE, sizeof(usb_dev));
-> -	if (ret) {
-> -		dev_err(port->afe->dev, "%s: AFE device param cmd failed %d\n",
-> -			__func__, ret);
-> -		goto exit;
-> -	}
-> -
->   	lpcm_fmt.cfg_minor_version = AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG;
->   	lpcm_fmt.endian = pcfg->usb_cfg.endian;
->   	ret = q6afe_port_set_param_v2(port, &lpcm_fmt,
-> @@ -1465,7 +1486,7 @@ void q6afe_usb_port_prepare(struct q6afe_port *port,
->   	pcfg->usb_cfg.num_channels = cfg->num_channels;
->   	pcfg->usb_cfg.bit_width = cfg->bit_width;
->   
-> -	afe_port_send_usb_dev_param(port, cfg);
-> +	afe_port_send_usb_params(port, cfg);
->   }
->   EXPORT_SYMBOL_GPL(q6afe_usb_port_prepare);
->   
-> diff --git a/sound/soc/qcom/qdsp6/q6afe.h b/sound/soc/qcom/qdsp6/q6afe.h
-> index e098a3e15135..7980416275e9 100644
-> --- a/sound/soc/qcom/qdsp6/q6afe.h
-> +++ b/sound/soc/qcom/qdsp6/q6afe.h
-> @@ -274,6 +274,7 @@ void q6afe_tdm_port_prepare(struct q6afe_port *port, struct q6afe_tdm_cfg *cfg);
->   void q6afe_cdc_dma_port_prepare(struct q6afe_port *port,
->   				struct q6afe_cdc_dma_cfg *cfg);
->   
-> +int afe_port_send_usb_dev_param(struct q6afe_port *port, int cardidx, int pcmidx);
->   int q6afe_port_set_sysclk(struct q6afe_port *port, int clk_id,
->   			  int clk_src, int clk_root,
->   			  unsigned int freq, int dir);
+--
+Thanks
+Ye Xiang
