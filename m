@@ -2,130 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F2C6B2DC3
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 20:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C35ED6B2DBF
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 20:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbjCITci (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Mar 2023 14:32:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
+        id S230250AbjCITc5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Mar 2023 14:32:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231189AbjCITbn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 14:31:43 -0500
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7298F2490;
-        Thu,  9 Mar 2023 11:30:43 -0800 (PST)
-Received: by mail-pj1-f51.google.com with SMTP id nn12so3049379pjb.5;
-        Thu, 09 Mar 2023 11:30:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678390243;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xfmqVM4eCIFK7WXM5T4rNwixxG5P/UyTiF6WzsxcG08=;
-        b=B8vnTBO8gMoMXsWghA9kIJthIJ7VRt0WiQ1L7nPT3ngvrsNfzFO6QrIt3XVaIDjXfk
-         S5YpfC3M0gdM9wjG1/4Vh72UfUXDX4SE6GUxqi9u7pwDr5etNn0N2xFY318BjdqUhxJI
-         hqiEJheTsXhSDn6/4MfwdMaL2EFTkxwnJ/sBoFN+wYnPwjZCtTe566FTWqOLr6wq3ryb
-         xc3v23NcN37UYXbmJqclo7G5hyCI5+E/0ZLLY3Hmz/zegz7FM4uB5BuYZ2nQ51MrUyO5
-         7cdh5IE7tpvlUo/0HTrVdgbO+BTqr5owbMSG2rkfKJEEnIwfvPT8rhEYA3DqVYR4QodO
-         8zzA==
-X-Gm-Message-State: AO0yUKWUCIlphZa2nFJ1zuRI5ZVgZoAqmKEoU5kN4WFLjhADj5p/H9dZ
-        /IgKzAyWE7x8XL8nmlId+rE=
-X-Google-Smtp-Source: AK7set8DTiSNS/I3M7y7cFxIRLb/uyeoVyw4BORClXCz53YnaxZ86rAG0NayiDa3/KphtIvvw3Taog==
-X-Received: by 2002:a05:6a20:6925:b0:bc:e785:5ad3 with SMTP id q37-20020a056a20692500b000bce7855ad3mr18843765pzj.29.1678390243469;
-        Thu, 09 Mar 2023 11:30:43 -0800 (PST)
-Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:bf9f:35c8:4915:cb24])
-        by smtp.gmail.com with ESMTPSA id j24-20020a62b618000000b0058d8f23af26sm11570955pff.157.2023.03.09.11.30.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 11:30:42 -0800 (PST)
-From:   Bart Van Assche <bvanassche@acm.org>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-        Oliver Neukum <oliver@neukum.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v2 81/82] usb: uas: Declare two host templates and host template pointers const
-Date:   Thu,  9 Mar 2023 11:26:13 -0800
-Message-Id: <20230309192614.2240602-82-bvanassche@acm.org>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-In-Reply-To: <20230309192614.2240602-1-bvanassche@acm.org>
-References: <20230309192614.2240602-1-bvanassche@acm.org>
+        with ESMTP id S230130AbjCITcT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 14:32:19 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29464F738E;
+        Thu,  9 Mar 2023 11:31:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=OLj0E
+        EDcClubzWEsb6yI7uXbUc6GnDp13HNII7GwMQE=; b=jBcveBzCfUz30qCgMUmJr
+        VASNr0p2y6zNlGygFHgrRwBsPbKHGEubdlA8PmiTkF+K3gw6utYPZDbZDFFph9Lk
+        QgrlHfR0BsPM0dny8UQHBGEGdnMWugVKXcMhuGR6IpdTyOngM65oTNjiaNYNiGbw
+        vfCtbBIa1DFtxqMjjR9wQ0=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g0-1 (Coremail) with SMTP id _____wAHKnjOMwpkcqj6Cg--.38073S2;
+        Fri, 10 Mar 2023 03:30:22 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     gregkh@linuxfoundation.org
+Cc:     p.zabel@pengutronix.de, biju.das.jz@bp.renesas.com,
+        phil.edworthy@renesas.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH]  usb: gadget: udc: renesas_usb3: Fix use after free bug in renesas_usb3_remove due to race condition
+Date:   Fri, 10 Mar 2023 03:30:20 +0800
+Message-Id: <20230309193020.374950-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-CM-TRANSID: _____wAHKnjOMwpkcqj6Cg--.38073S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tF1DGryfJr47CF4fCF15Arb_yoW8GF4DpF
+        n8GrWrGr48GFy0qwsrGFyDZFyrCFyDKry3ZFWxKa1kuF1rG3y8Xr9Fqa1jkr17JFZ2yr4S
+        q3WUu348tFW7u37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi-eOJUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiQhAtU1aEEmvBkgAAsU
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Improve source code documentation by constifying host templates that are
-not modified.
+In renesas_usb3_probe, &usb3->role_work is bound with
+renesas_usb3_role_work. renesas_usb3_start will be called
+to start the work.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu> (for usb-storage)
-Acked-by: Oliver Neukum <oneukum@suse.com>
-Cc: Oliver Neukum <oneukum@suse.com>
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+If we remove the module which will call renesas_usb3_remove
+  to make cleanup, there may be a unfinished work. The possible
+  sequence is as follows:
+
+Fix it by canceling the work before cleanup in the renesas_usb3_remove
+
+CPU0                  CPUc1
+
+                    |renesas_usb3_role_work
+renesas_usb3_remove      |
+usb_role_switch_unregister  |
+device_unregister   |
+kfree(sw);  	    |
+free usb3->role_sw  |
+                    |   usb_role_switch_set_role
+                    |   //use usb3->role_sw
+Fixes: 39facfa01c9f ("usb: gadget: udc: renesas_usb3: Add register of usb role switch")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
 ---
- drivers/usb/image/microtek.c | 2 +-
- drivers/usb/storage/uas.c    | 2 +-
- drivers/usb/storage/usb.c    | 2 +-
- drivers/usb/storage/usb.h    | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/usb/gadget/udc/renesas_usb3.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/image/microtek.c b/drivers/usb/image/microtek.c
-index 874ea4b54ced..8c8fa71c69c4 100644
---- a/drivers/usb/image/microtek.c
-+++ b/drivers/usb/image/microtek.c
-@@ -620,7 +620,7 @@ static int mts_scsi_queuecommand_lck(struct scsi_cmnd *srb)
- 
- static DEF_SCSI_QCMD(mts_scsi_queuecommand)
- 
--static struct scsi_host_template mts_scsi_host_template = {
-+static const struct scsi_host_template mts_scsi_host_template = {
- 	.module			= THIS_MODULE,
- 	.name			= "microtekX6",
- 	.proc_name		= "microtekX6",
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index de3836412bf3..2583ee9815c5 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -894,7 +894,7 @@ static int uas_slave_configure(struct scsi_device *sdev)
- 	return 0;
- }
- 
--static struct scsi_host_template uas_host_template = {
-+static const struct scsi_host_template uas_host_template = {
- 	.module = THIS_MODULE,
- 	.name = "uas",
- 	.queuecommand = uas_queuecommand,
-diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
-index ed7c6ad96a74..7b36a3334fb3 100644
---- a/drivers/usb/storage/usb.c
-+++ b/drivers/usb/storage/usb.c
-@@ -937,7 +937,7 @@ int usb_stor_probe1(struct us_data **pus,
- 		struct usb_interface *intf,
- 		const struct usb_device_id *id,
- 		const struct us_unusual_dev *unusual_dev,
--		struct scsi_host_template *sht)
-+		const struct scsi_host_template *sht)
+diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
+index bee6bceafc4f..23b5f1706d25 100644
+--- a/drivers/usb/gadget/udc/renesas_usb3.c
++++ b/drivers/usb/gadget/udc/renesas_usb3.c
+@@ -2658,6 +2658,8 @@ static int renesas_usb3_remove(struct platform_device *pdev)
  {
- 	struct Scsi_Host *host;
- 	struct us_data *us;
-diff --git a/drivers/usb/storage/usb.h b/drivers/usb/storage/usb.h
-index 0451fac1adce..fd3f32670873 100644
---- a/drivers/usb/storage/usb.h
-+++ b/drivers/usb/storage/usb.h
-@@ -187,7 +187,7 @@ extern int usb_stor_probe1(struct us_data **pus,
- 		struct usb_interface *intf,
- 		const struct usb_device_id *id,
- 		const struct us_unusual_dev *unusual_dev,
--		struct scsi_host_template *sht);
-+		const struct scsi_host_template *sht);
- extern int usb_stor_probe2(struct us_data *us);
- extern void usb_stor_disconnect(struct usb_interface *intf);
+ 	struct renesas_usb3 *usb3 = platform_get_drvdata(pdev);
  
++	cancel_work_sync(&usb3->extcon_work);
++	cancel_work_sync(&usb3->role_work);
+ 	debugfs_remove_recursive(usb3->dentry);
+ 	device_remove_file(&pdev->dev, &dev_attr_role);
+ 
+-- 
+2.25.1
+
