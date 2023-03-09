@@ -2,53 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD30A6B1C55
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 08:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7332D6B1CED
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 08:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjCIHaa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Mar 2023 02:30:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
+        id S230336AbjCIHwK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Mar 2023 02:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjCIHaY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 02:30:24 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAA662FDE;
-        Wed,  8 Mar 2023 23:30:23 -0800 (PST)
+        with ESMTP id S230193AbjCIHvu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 02:51:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEE62B9DF;
+        Wed,  8 Mar 2023 23:50:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CA2E2CE228E;
-        Thu,  9 Mar 2023 07:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DFAE8C433AA;
-        Thu,  9 Mar 2023 07:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678347019;
-        bh=pLu2EUjm0EUWWJ8Bq7EHf6FFQCmBn3/LFHoWP+HFOaM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TRQuKn87mlc14w2ao4dBhX1cwTkgy+XNoKUXHEVGLpkVkwA961dPU03wWDtoaRCoA
-         KyBg+99tIz4BIEUt4yRJjLm4kakaKOhBW2bABom535uQzWsAYQzIuv2b1wGgbxVv1I
-         h99HVGsJH5XnneOV/MClhLyGOSNsyynn8EROjm+3GxkFpvcDqjJgsJvhOCzKNNWsad
-         T7AURXwMYPT/hjEhGGqeiGj61NUZLPgN9CxIxpcYVno1yA6HaIr2DDe7b/W8+MxBYs
-         sw45PH57JbFR6WTsYZyqATB+g1nHYdBuBvdZyVhillv7JBDYRYVwybV3DK0ya5tBtz
-         fVjbtpLQp/f2A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CB1B0E61B60;
-        Thu,  9 Mar 2023 07:30:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8202A61A5C;
+        Thu,  9 Mar 2023 07:49:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50DB2C433EF;
+        Thu,  9 Mar 2023 07:49:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678348176;
+        bh=j43Kdz7FrZlQoUq7oQqRGTx4xGidoyi/zGWD0kHgqGs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cNvJk8fl6t2PZgjF5XIVmZHSUv9hzmnw5OOHuF3t0HfUpxl5V/FmpEsFPvAlRGxPK
+         pN3oURUnBxecm1yKNdHh9frEw1qDQYYa5CUrrUZVUwtIevd7m4MooWxsxd7kxM2lNm
+         vdTkfHvqyQ7+gC9VCvvoujQh39jPAtEUa0GFc0WU=
+Date:   Thu, 9 Mar 2023 08:49:33 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ye Xiang <xiang.ye@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
+Subject: Re: [PATCH v4 1/5] mfd: Add support for Intel LJCA device
+Message-ID: <ZAmPjfH6rA0pbiUa@kroah.com>
+References: <20230309071100.2856899-1-xiang.ye@intel.com>
+ <20230309071100.2856899-2-xiang.ye@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 00/11] tree-wide: remove support for Renesas R-Car H3 ES1
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167834701982.22182.9521763384207545073.git-patchwork-notify@kernel.org>
-Date:   Thu, 09 Mar 2023 07:30:19 +0000
-References: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309071100.2856899-2-xiang.ye@intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,29 +60,16 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
+On Thu, Mar 09, 2023 at 03:10:56PM +0800, Ye Xiang wrote:
+> This patch implements the USB part of Intel USB-I2C/GPIO/SPI adapter
+> device named "La Jolla Cove Adapter" (LJCA).
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Then why is this called "mfd" in the subject line?
 
-On Tue,  7 Mar 2023 17:30:28 +0100 you wrote:
-> Because H3 ES1 becomes an increasing maintenance burden and was only available
-> to a development group, we decided to remove upstream support for it. Here are
-> the patches to remove driver changes. Review tags have been gathered before
-> during an internal discussion. Only change since the internal version is a
-> plain rebase to v6.3-rc1. A branch with all removals is here:
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/h3es1-removal
-> 
-> [...]
+>  include/linux/mfd/ljca.h  |  95 ++++
 
-Here is the summary with links:
-  - [07/11] ravb: remove R-Car H3 ES1.* handling
-    https://git.kernel.org/netdev/net-next/c/6bf0ad7f2917
+Why is this .h file in the mfd directory?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+thanks,
 
-
+greg k-h
