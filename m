@@ -2,112 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024F56B1A64
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 05:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ABF76B1B77
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 07:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjCIEZP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Mar 2023 23:25:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
+        id S229900AbjCIG3Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Mar 2023 01:29:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbjCIEYy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Mar 2023 23:24:54 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669B28C5BB
-        for <linux-usb@vger.kernel.org>; Wed,  8 Mar 2023 20:24:52 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id cf14so782117qtb.10
-        for <linux-usb@vger.kernel.org>; Wed, 08 Mar 2023 20:24:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678335891;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fXdmGf6FlEg3kDuhpY71Dxp0y5yrw1Cmmla9QTkThOw=;
-        b=lwUKH07cUYKZVvjEez2nxPJYx7nnEp/WFUrU9gKBrc4rkoqgKJkSiwIIZbIO6imnJR
-         vIgXSIzGmhPNT1OQLy8A0TqPnZshQjhb2Tn1SLVHKFRUR/vPzXP6uUjRQkjIFKNyuvLr
-         Ivk3dK4EUAZYYACq3jAOOtKcR+dldW6PW2INAgg9nZpN5RmJuWvFpxfSJIsA+lzuzHpz
-         czQTJVqVUNs3tf/Vy2Zdac1ZT8hv5EsrKNKAiZyRAeH27KVOqM7SctwkJ9HG1PoeTXec
-         BF4EuWS0+7131LJqursJhbY9AYDr/2lgcdFSovxx/rE4Y9e8EzTu2OjfzG4vJmtCyaFT
-         9ShA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678335891;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fXdmGf6FlEg3kDuhpY71Dxp0y5yrw1Cmmla9QTkThOw=;
-        b=vFvkoQYiXZd3zr6aT25nZRZUJmLp8rWpkuoiziedyfp3wX+pL6/il9xMRy+AxnCcfa
-         Xu70EAt91QdOgu5pes8xvrBlMfduryaxfuHO/rJj/uIxeYunNddPTRL50oo/HN13l7pL
-         W78XkcK6XWds4mx9fP0mLTJ6zlTp9wmQ0mib/R0sV74es/31J8ZHP5YDuV5PeoFIV247
-         7NzdgjJ00oYzPXXeu+otkWUf8U7pO/YAvtBWmg3A1Heod5NdPkkBTfMbRQUCRqrunzew
-         LQShQD9d25242vTz7g4WJVy82heqLFQ31W3HYlcXwb3WQnirM/600p1qf9Clmi7wDYpx
-         I82A==
-X-Gm-Message-State: AO0yUKUX8rs+VSmOnZWinVdDWD231zfLPd9nYTMrhkd00ejflE3YyKP3
-        nez8PCQOo+HQOIvTtwydV6bUaYXEf94=
-X-Google-Smtp-Source: AK7set8hCMCqNczV4Od+2l4XgSvxPZpHegE+xHG4wQfbBy2XKWA9Qq1JrdovIHRxVbixlDYRrsgSgw==
-X-Received: by 2002:a05:622a:60c:b0:3bf:c5ab:a0db with SMTP id z12-20020a05622a060c00b003bfc5aba0dbmr38129584qta.41.1678335891496;
-        Wed, 08 Mar 2023 20:24:51 -0800 (PST)
-Received: from [192.168.1.198] (c-68-42-142-238.hsd1.mi.comcast.net. [68.42.142.238])
-        by smtp.gmail.com with ESMTPSA id d25-20020ac84e39000000b003995f6513b9sm12633710qtw.95.2023.03.08.20.24.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 20:24:51 -0800 (PST)
-Message-ID: <62cf5f1a-c5a2-2108-5326-ae2b0c8b2264@gmail.com>
-Date:   Wed, 8 Mar 2023 23:24:50 -0500
+        with ESMTP id S229772AbjCIG3Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 01:29:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A4784F46;
+        Wed,  8 Mar 2023 22:29:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CF7C616B3;
+        Thu,  9 Mar 2023 06:29:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5BA9C433D2;
+        Thu,  9 Mar 2023 06:29:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678343361;
+        bh=Tcpfab2JI0O5gEZfjlyY40W1mTdC6WtNopP6Eni/ckg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=v5FVmknkEuFfLZlBtpznXxjLEvesG63Cy7ilBoLMdtslhz32tEIiZraNRsf5/hJHr
+         eAVk1U3GmJcAeFnQvKZHOQEzjch6XzBIYPgh1TSOyl/10hkKRGnmFCLG3LU5ibyOfq
+         tNracjlV8quqiZc6FuZtWE8k7D+QvTOSksSJWTfU=
+Date:   Thu, 9 Mar 2023 07:29:18 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
+        andersson@kernel.org, robh+dt@kernel.org, tiwai@suse.com,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+Subject: Re: [PATCH v3 10/28] sound: usb: Export USB SND APIs for modules
+Message-ID: <ZAl8vtmoISvQYLJd@kroah.com>
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <20230308235751.495-11-quic_wcheng@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: Question about f_uac1 gadget
-To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-References: <4772c6be-7918-9ab0-3dd5-983b293cf89f@gmail.com>
- <CAB=otbTdBPwrot9aigxbOH+GFU=gFgEpr+io7cEv-5P10BSK9w@mail.gmail.com>
-Content-Language: en-US
-From:   Noah Causin <n0manletter@gmail.com>
-In-Reply-To: <CAB=otbTdBPwrot9aigxbOH+GFU=gFgEpr+io7cEv-5P10BSK9w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308235751.495-11-quic_wcheng@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Ruslan,
+On Wed, Mar 08, 2023 at 03:57:33PM -0800, Wesley Cheng wrote:
+> -static const struct audioformat *
+> +const struct audioformat *
+>  find_format(struct list_head *fmt_list_head, snd_pcm_format_t format,
+>  	    unsigned int rate, unsigned int channels, bool strict_match,
+>  	    struct snd_usb_substream *subs)
+> @@ -147,8 +147,9 @@ find_format(struct list_head *fmt_list_head, snd_pcm_format_t format,
+>  	}
+>  	return found;
+>  }
+> +EXPORT_SYMBOL_GPL(find_format);
 
-I can't seem to get the f_uac1 to work with more than 2 channels. I'm 
-able to setup f_uac2 with 8 channels.
+This is a horrible name for the global symbol namespace, right?
+It needs a "snd_" prefix at the very least, maybe even more.
 
-I've tried a 5.1 and 7.1 setup (c_chmask=63 or 255, c_srate=44100, 
-c_ssize=2) but I get a urb 0 error on the connected Linux laptop and the 
-gnome sound-test freezes when testing a channel, no errors on the gadget 
-device. My usb controller is a DWC3 on a RockPro64 board.
+>  
+> -static const struct audioformat *
+> +const struct audioformat *
+>  find_substream_format(struct snd_usb_substream *subs,
+>  		      const struct snd_pcm_hw_params *params)
+>  {
+> @@ -156,6 +157,7 @@ find_substream_format(struct snd_usb_substream *subs,
+>  			   params_rate(params), params_channels(params),
+>  			   true, subs);
+>  }
+> +EXPORT_SYMBOL_GPL(find_substream_format);
 
-usb 3-2: USB disconnect, device number 9
-usb 3-2: new high-speed USB device number 10 using xhci_hcd
-usb 3-2: New USB device found, idVendor=1d6b, idProduct=0104, bcdDevice= 
-1.00
-usb 3-2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-usb 3-2: Product: audioproduct
-usb 3-2: Manufacturer: audiomanufacturer
-usb 3-2: SerialNumber: audioserial
-usb 3-2: cannot submit urb 0, error -90: internal error
+Same here.
 
-Noah
+>  
+>  bool snd_usb_pcm_has_fixed_rate(struct snd_usb_substream *subs)
+>  {
+> @@ -446,7 +448,7 @@ int snd_usb_pcm_resume(struct snd_usb_stream *as)
+>  	return 0;
+>  }
+>  
+> -static void close_endpoints(struct snd_usb_audio *chip,
+> +void close_endpoints(struct snd_usb_audio *chip,
+>  			    struct snd_usb_substream *subs)
+>  {
+>  	if (subs->data_endpoint) {
+> @@ -460,6 +462,7 @@ static void close_endpoints(struct snd_usb_audio *chip,
+>  		subs->sync_endpoint = NULL;
+>  	}
+>  }
+> +EXPORT_SYMBOL(close_endpoints);
 
-On 3/6/23 21:41, Ruslan Bilovol wrote:
-> On Mon, Mar 6, 2023 at 7:24 PM Noah Causin <n0manletter@gmail.com> wrote:
->>
->> Hi,
->>
->> I was wondering if the f_uac1 gadget supports more than two channels of
->> audio.
-> 
-> Yes it does, see channel mask configfs configuration options for
-> capture/playback
-> in the documentation for UAC1 function:
-> https://www.kernel.org/doc/Documentation/ABI/testing/configfs-usb-gadget-uac1
-> 
-> Regards,
-> Ruslan
+Same here.
+
+thanks,
+
+greg k-h
