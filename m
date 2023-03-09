@@ -2,61 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D82836B255A
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 14:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BB56B2550
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 14:28:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbjCIN2Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Mar 2023 08:28:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
+        id S231363AbjCIN2S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Mar 2023 08:28:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjCIN2J (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 08:28:09 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B21132CEE
-        for <linux-usb@vger.kernel.org>; Thu,  9 Mar 2023 05:28:07 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id o11-20020a05600c4fcb00b003eb33ea29a8so1246067wmq.1
-        for <linux-usb@vger.kernel.org>; Thu, 09 Mar 2023 05:28:07 -0800 (PST)
+        with ESMTP id S230509AbjCIN2M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 08:28:12 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8E91E2B5
+        for <linux-usb@vger.kernel.org>; Thu,  9 Mar 2023 05:28:08 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id l25so1870568wrb.3
+        for <linux-usb@vger.kernel.org>; Thu, 09 Mar 2023 05:28:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678368486;
+        d=linaro.org; s=google; t=1678368487;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1w5YJNTssgBv8u55ypKuEFSDlMhiWHrbRkco6fVeq1c=;
-        b=J8unWiwU9kITAp0QE/pEkkm4DsQtEsvAs0uuH7bN5OggFOQINCj9mFpk3ZIrgEEajN
-         jHX9QjpCN4tDhS7fcq3HYDfBvvbc6YMvNTBAPqO/j10thX1ZV8vwHP6R4RzzbBrDE5Zn
-         4hVfvmT2bZ5eU8xWBjBc6RmMaEm83gZqQHvgziCmviV48NzvjJFBPNbznYKcKsFkgCOo
-         gvTQfaJH1AWYwBA5BnrhGXjEdYI7jloC06OmPfabO5Fg+rLyc65KLMN7pr5igvt3JM/x
-         cYc1kYE+g7+MtAOWYZTIUfOXat8iNT9KPVZ3RbToNSuQDsUkXMd6KQpwdInGKNgLrZR4
-         RXlA==
+        bh=UtWbseXe44RglGnP3KkkWaYT0dETHkwgZdTGBceqS0Q=;
+        b=u5ooiJGBQ002hKpbJDzALR17vuCNcAit0NUuarpyHoDF0Esd1wjQb8Y/crdhPHvJc9
+         ui5E5RcpyopqJoZqZK4dkIeV1qHcvpWNYVsQRHkFYOu/NkQVPeEHRGyClCielLMl4ZVr
+         2LUQDVZNNqxQcG4FwHBC9Og8u5EY/vMAdAwIURU+RSMiSEEwnwWwkqDXHLC7kyiC7BZs
+         CM4BrcnXAKiY1j/2PZae4QXnTtuCxhI+FezHPbE3ogQmFtAQb35nFyz26wuaS+4aojnq
+         YFoXedQjPM4G9zhdQUfV0Zj/FJgqKUhZDR0q5U8cSDBcSGGSB8RRChu+oaWuMojSP4Q+
+         j46w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678368486;
+        d=1e100.net; s=20210112; t=1678368487;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1w5YJNTssgBv8u55ypKuEFSDlMhiWHrbRkco6fVeq1c=;
-        b=YDayjO/ZfOkyXZXYw6uBJ9aYIQSgGjUrxzXnmBRNvU3KxzSr3CITdQvJKKWGXnpMcj
-         oNlVivnRCzjxArp0ANFed4tlj6Pv7aRleE7fk5/LRgWWvpx3wN6Amc1WCkrGIcS2ak5c
-         gR3whNz2LFqNvuiBj/UGMA+qkbBRwccyP2ucexiuRvKjkwTn/yiyY9ticg3+XiGvGIgI
-         cVB+/hUvqdLutWIRkIlNNOhpFjOQRNBd8aka22aassSwTJsTizSug8GI/WdnLChDsuZI
-         MJQxGc0M1RNmQtgUWH6znvzWW5LvY7BeQEPXRn4MWItutSyDs0pw1XXvwZpna2D/4Z/7
-         1zsg==
-X-Gm-Message-State: AO0yUKV1t2FOpsgyYJPdhBpr0TGYO0pTK1pf8McySamsqjAw0lJ2eEbK
-        okfw0B8s+pgUmRR6ofmhr9qF5Q==
-X-Google-Smtp-Source: AK7set9wq9AX2OiBgsz3kXj5TpqB/JZe6piX0HPhLJXd3P/qzogAFILWp5NR8g4DOsuEmlr2FYfxaw==
-X-Received: by 2002:a05:600c:4593:b0:3eb:29fe:70df with SMTP id r19-20020a05600c459300b003eb29fe70dfmr20919481wmo.35.1678368486067;
+        bh=UtWbseXe44RglGnP3KkkWaYT0dETHkwgZdTGBceqS0Q=;
+        b=ueQEHOmvnGDXmq5iLzSmUTNu7MN363aunM0Xxg7O5RyxIjki+EX8XhTqeKCo7/WV2c
+         scwJ+NpKCj7Rxr8oAe5pHc5OyN/Ry4HUTBJZbmyisfUhDEoNNKyBzRAPn4u3snSbGaa0
+         2yv894kgOyumHpwjDMwjMQBZAbvPD6Ea6lbDHgZ1p9RJgtoCCTQjDH/+HSybK2lRwMYX
+         I02i+Wh4XOSmyHqTD8x9Vw1T6YqraQDS/rZ/747nhnZn0/951PO/04qBzfwSzg+/6293
+         a5tmuFKN5JbLho+rthE/RCzbgiBx760ehItvEKyjURGgbiAge5CVeTqgtqmRqiLxnynn
+         2jaQ==
+X-Gm-Message-State: AO0yUKVxtqtx/JJ+0FDgEiTIEs/9vW7OcDIpYl/X1lHGT2TyHCb52gJV
+        bjqy6LJ2On3D904xsmtDJSOUk+Z35H/uX1ne3i4Lmg==
+X-Google-Smtp-Source: AK7set8vlbf36N39axD8nTcEi6Ddpds4Kt160IpewgvE2BhkyctnxL1QuB11kFfnUy2ozawTG3/UDA==
+X-Received: by 2002:adf:ff92:0:b0:2c9:6562:232b with SMTP id j18-20020adfff92000000b002c96562232bmr13268587wrr.2.1678368486979;
         Thu, 09 Mar 2023 05:28:06 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id r7-20020a05600c458700b003eb966d39desm2926714wmo.2.2023.03.09.05.28.05
+        by smtp.gmail.com with ESMTPSA id r7-20020a05600c458700b003eb966d39desm2926714wmo.2.2023.03.09.05.28.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 05:28:05 -0800 (PST)
+        Thu, 09 Mar 2023 05:28:06 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 09 Mar 2023 14:27:56 +0100
-Subject: [PATCH v3 05/12] dt-bindings: usb: snps,dwc3: document HS & SS OF
- graph ports
+Date:   Thu, 09 Mar 2023 14:27:57 +0100
+Subject: [PATCH v3 06/12] arm64: dts: qcom: sm8350: add port subnodes in
+ dwc3 node
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230130-topic-sm8450-upstream-pmic-glink-v3-5-4c860d265d28@linaro.org>
+Message-Id: <20230130-topic-sm8450-upstream-pmic-glink-v3-6-4c860d265d28@linaro.org>
 References: <20230130-topic-sm8450-upstream-pmic-glink-v3-0-4c860d265d28@linaro.org>
 In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v3-0-4c860d265d28@linaro.org>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -83,44 +83,45 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Document the optional ports subnode to describe the High-Speed
-and Super-Speed connections as separate OF graph links.
+Add ports subnodes in dwc3 node to avoid repeating the
+same description in each board DT.
 
-The ports property is an alternative to the already documented
-single port subnode property.
-
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ arch/arm64/boot/dts/qcom/sm8350.dtsi | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index be36956af53b..bd77096f4fb9 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -365,6 +365,22 @@ properties:
-       This port is used with the 'usb-role-switch' property  to connect the
-       dwc3 to type C connector.
+diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+index 1c97e28da6ad..c88ece324641 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+@@ -2260,6 +2260,25 @@ usb_1_dwc3: usb@a600000 {
+ 				snps,dis_enblslpm_quirk;
+ 				phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
+ 				phy-names = "usb2-phy", "usb3-phy";
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++
++						usb_1_dwc3_hs: endpoint {
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++
++						usb_1_dwc3_ss: endpoint {
++						};
++					};
++				};
+ 			};
+ 		};
  
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
-+    description:
-+      Those ports should be used with any connector to the data bus of this
-+      controller using the OF graph bindings specified if the "usb-role-switch"
-+      property is used.
-+
-+    properties:
-+      port@0:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description: High Speed (HS) data bus.
-+
-+      port@1:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description: Super Speed (SS) data bus.
-+
-   wakeup-source:
-     $ref: /schemas/types.yaml#/definitions/flag
-     description:
 
 -- 
 2.34.1
