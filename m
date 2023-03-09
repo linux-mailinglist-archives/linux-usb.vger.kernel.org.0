@@ -2,138 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 709D46B1D38
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 08:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C7E06B1E21
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 09:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbjCIH72 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Mar 2023 02:59:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37914 "EHLO
+        id S230419AbjCIIbo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Mar 2023 03:31:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbjCIH67 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 02:58:59 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744065FC6;
-        Wed,  8 Mar 2023 23:57:51 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 5654932008FB;
-        Thu,  9 Mar 2023 02:56:26 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 09 Mar 2023 02:56:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1678348585; x=1678434985; bh=Vq
-        HIsQcXhmqCYt+w/wEu8RmoQ3k2P8+3OVZu3PbvqhE=; b=ZyKR18tm0jVHMTk0/g
-        fEr4c5is3Y+8DOnmfQ8koV4ykwXfF2K7sni1t0+ukEoym+NrGqUgiWLEu5rPTyJw
-        0YJM5pudrsxt8LzgOGh+hgE0OQ5jS2lY5cyw83Xhmlim0XjkCHM0H9qWimqmYycC
-        jMZr7PhbnKrR6YPo3NULp+hFYo0LXakcP6Us1x7ZZq3P1cuIkQ5MK9g9m5pMMWAY
-        94x0bpxOEonwuiBw+e9KS2EXFhKKOCu0kboq90Rb6LZ3pfmk6HoYl6K+vaxUSeNf
-        nSWyjC3LN8IoYkrpMPY6uqpJCeSqM2nXl/4KiGEn0IfSm3wYg6kix6tCmq0pn6/T
-        qj/w==
+        with ESMTP id S230062AbjCIIbU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 03:31:20 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC8DE1FE9;
+        Thu,  9 Mar 2023 00:29:30 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id C6EB95C011B;
+        Thu,  9 Mar 2023 03:29:24 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 09 Mar 2023 03:29:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1678350564; x=
+        1678436964; bh=Oa/m0zQYb/9cVTdeBVWVrncsae/cjF8bU6ixcrep6N4=; b=e
+        qVYCC9RU0vIhMD5Svk+mwY3qm4EVGZTIab4j6DZukQqwvwu2I1pyhisx49mTBNoB
+        R10G6H51ISsyWkQPpBgIxKblcyiBGNnPVEWUpmRmqpWh7f/fZ91qC4v9LKUrdpVp
+        HBamGmLwZUbyzgputxPsokvu6kgsr7BKCydBeUNwYWhFJmp4Fk+HdS6s6tA+Xy0M
+        Sc/mA0N76oy/iVS+h2dUapqTnwjuz9YHREc8EgvfQggAH6kA68u73jBBtC8OjrE5
+        N6gOeymg+oxGI5sLLdlKzbfgFE1ChBjrINZWwPWsiF/AlVcdgi83FvtshQ1j2XN5
+        HwjMCHhDS/ShYpSi1sXXA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:content-type:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1678348585; x=1678434985; bh=VqHIsQcXhmqCY
-        t+w/wEu8RmoQ3k2P8+3OVZu3PbvqhE=; b=kE2DfbWp52mBUvnYmds56m2l8GWvR
-        6GisiRWu8lAU75Rv5FAF4jJ2hFJ/LC5tGjDStSyTS1iItd7/vS5hVccX0w1KHn7j
-        AMAd1QJ/QpiUtF6G3AnzOa0Ot8irhJtBnd9UwowSATJtI/hGvpeXALZU/QOJ4gz+
-        7/9zyNxa2IRRZzB1RrJ5abxNyi75ZkOHbk4H9I49QuQWX+0iw+hwBUMdW0zq+Xky
-        8D/SGXUNP2rrlgZ2O8EETa7PFO/sGdFWZMdzbS37gl3JBjUb2v+8pFjj4lPa9zaC
-        SgjcXwKL7pnFnXfSvIRlNwygO01bJ6N0erbQFzsxkXIu5so12+ruTqsIA==
-X-ME-Sender: <xms:KZEJZEFzmjgvQ6uO2ftJj_-kxWGpZhRRGB_GkAVGwrxq9A03tly-5Q>
-    <xme:KZEJZNWUMcNTL0GWBNYkqDhVDri41fz3kdz7Wg3srSjJkkSjBHFiguZIcVwzUa8dt
-    nIKVTFu-g7oeAn0zIQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdduhedgudegucetufdoteggodetrfdotf
+        :x-sasl-enc; s=fm1; t=1678350564; x=1678436964; bh=Oa/m0zQYb/9cV
+        TdeBVWVrncsae/cjF8bU6ixcrep6N4=; b=Ioqvy6L3B/96WajH3znnyMdgmvN8d
+        BO7IuUE1hotFCXXb0JVbvD6AZdHPXKk7utAaxjrKtLdbpLYsvDBoYrhFxsjfY+OZ
+        1FE2G5iGup3RImVIQTAE0JJZYhVuo07SpLTYAlXufav8g2NhRa5ygpMXzxJubwcZ
+        A6f+Fu8VdYVqHrX5mZXDcvS4mdkKx4M5cWogSKNP50r/LB5ciPUFpMrZas/JbNEC
+        GRvw1M5l1/9BZT6BmxR50Xpay9B9GO+wMzXH/zDeVgQL4Z4k5KyfG4BAJ3lpuraJ
+        7chNcYChY48yu5h6VflcRX1tuNjJGR7dM8eBE5VD1cRYiq9EehhV8PJsA==
+X-ME-Sender: <xms:45gJZMD909XJ-PoqR9DIkjmKJEXf78pqI7VYcRhUBA2vg6wYbNK6Sw>
+    <xme:45gJZOimMzZGiYfDOaLZvCJiOfRymLFqloMZ9cd7n1hS-l68hqYtGQlvsjk29U_-W
+    gZq9O0Bc_iNOpE9wfE>
+X-ME-Received: <xmr:45gJZPnYMoHP3vjuz8G_oW_SGg_ztjOOiozXDDjd_jwFisTVArN3EH27aXz2MyOfjILb6MO4EOFrDY-45Y6MdRYycg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdduhedgvdduucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:KZEJZOIUkInEUKpGIXLCFnAVXmNNPG5T0akKB765VFpDrnh6IdT_BQ>
-    <xmx:KZEJZGFcV4YYZcEx5-_EJsWCtCjMAvUKr6pMJOHUc0Z-CYkZfsApXQ>
-    <xmx:KZEJZKU_4TOUeTPHHuDUuOUSlhaFpcLokYxbsKbSXFh2Rc3DGU39xg>
-    <xmx:KZEJZBNKmsfCZViwzTGZkeNK4ExQdsAcupMuQIxrtJLk2h7cBf53Qg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 777CBB60086; Thu,  9 Mar 2023 02:56:25 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-206-g57c8fdedf8-fm-20230227.001-g57c8fded
-Mime-Version: 1.0
-Message-Id: <dcb805e1-2b48-481d-8e72-1b515c9d43e6@app.fastmail.com>
-In-Reply-To: <20230309071100.2856899-2-xiang.ye@intel.com>
-References: <20230309071100.2856899-1-xiang.ye@intel.com>
- <20230309071100.2856899-2-xiang.ye@intel.com>
-Date:   Thu, 09 Mar 2023 08:56:05 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Ye Xiang" <xiang.ye@intel.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        "Lee Jones" <lee@kernel.org>, "Wolfram Sang" <wsa@kernel.org>,
-        "Tyrone Ting" <kfting@nuvoton.com>,
-        "Mark Brown" <broonie@kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        "Sakari Ailus" <sakari.ailus@linux.intel.com>,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v4 1/5] mfd: Add support for Intel LJCA device
-Content-Type: text/plain
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfgrkhgr
+    shhhihcuufgrkhgrmhhothhouceoohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhird
+    hjpheqnecuggftrfgrthhtvghrnhephefhhfettefgkedvieeuffevveeufedtlefhjeei
+    ieetvdelfedtgfefuedukeeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
+X-ME-Proxy: <xmx:5JgJZCyEBeozrJeyqOW8CopBZ22mKWSpCRTRDwQaL8YENXfNAM8dGw>
+    <xmx:5JgJZBST7NUjtlUOOiQKRuZYQSjlmkLz-RE_o19_QXi7cuz5QkXeNA>
+    <xmx:5JgJZNYzNRG2m6sgw-WyqE3e_cxozLpCp-Mrq5Wg3NcU0QNkAFLTAw>
+    <xmx:5JgJZDlmIRE7__MNBhjrnyTEgUTxP45cnnIWJKH0QqxKnXfglyZLpQ>
+Feedback-ID: ie8e14432:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 9 Mar 2023 03:29:20 -0500 (EST)
+Date:   Thu, 9 Mar 2023 17:29:18 +0900
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
+        andersson@kernel.org, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org, tiwai@suse.com,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+Subject: Re: [PATCH v3 15/28] sound: usb: Introduce QC USB SND offloading
+ support
+Message-ID: <20230309082918.GA220616@workstation>
+Mail-Followup-To: Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
+        andersson@kernel.org, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org, tiwai@suse.com,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <20230308235751.495-16-quic_wcheng@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308235751.495-16-quic_wcheng@quicinc.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 9, 2023, at 08:10, Ye Xiang wrote:
+Hi,
 
-> The minimum code in ASL that covers this board is
-> Scope (\_SB.PCI0.DWC3.RHUB.HS01)
->     {
->         Device (GPIO)
->         {
->             Name (_ADR, Zero)
->             Name (_STA, 0x0F)
->         }
->
->         Device (I2C)
->         {
->             Name (_ADR, One)
->             Name (_STA, 0x0F)
->         }
->
->         Device (SPI)
->         {
->             Name (_ADR, 0x02)
->             Name (_STA, 0x0F)
->         }
->     }
+On Wed, Mar 08, 2023 at 03:57:38PM -0800, Wesley Cheng wrote:
+> diff --git a/sound/usb/qcom/qc_audio_offload.c b/sound/usb/qcom/qc_audio_offload.c
+> new file mode 100644
+> index 000000000000..2663906644f2
+> --- /dev/null
+> +++ b/sound/usb/qcom/qc_audio_offload.c
+> ...
+> +static int enable_audio_stream(struct snd_usb_substream *subs,
+> +				snd_pcm_format_t pcm_format,
+> +				unsigned int channels, unsigned int cur_rate,
+> +				int datainterval)
+> +{
+> +	struct snd_usb_audio *chip = subs->stream->chip;
+> +	struct snd_pcm_hw_params params;
+> +	const struct audioformat *fmt;
+> +	int ret;
+> +	bool fixed_rate;
+> +
+> +	_snd_pcm_hw_params_any(&params);
+> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_FORMAT,
+> +			(__force int) pcm_format, 0);
+> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_CHANNELS,
+> +			channels, 0);
+> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_RATE,
+> +			cur_rate, 0);
 
-I'm a bit confused by this bit, does that mean this only works
-if the device is integrated on the mainboard and the BIOS is
-aware of it? This won't work if  you plug it into a random
-USB port, or have no ACPI firmware, right?
+I think the above code is equivalent to below code.
 
-> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
-> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  drivers/usb/misc/Kconfig  |  13 +
->  drivers/usb/misc/Makefile |   1 +
->  drivers/usb/misc/ljca.c   | 969 ++++++++++++++++++++++++++++++++++++++
->  include/linux/mfd/ljca.h  |  95 ++++
+```
+// 1. Initialize the hardware parameter so that it expresses
+// the maximum flags of mask parameters and the maximum range of integer
+// parameters.
+_snd_pcm_hw_params_any(&params);
 
-Why is this in driver/usb/misc? It looks like a normal
-mfd driver to me, and it evenhas the header in include/linux/mfd/
+// 2. Then shrink the mask parameters and integer parameters.
+struct snd_mask *mask;
+struct snd_interval *interval;
 
-     Arnd
+mask = hw_param_mask(params, SNDRV_PCM_HW_PARAM_FORMAT);
+snd_mask_leave(mask, pcm_format);
+
+interval = hw_param_interval(params, SNDRV_PCM_HW_PARAM_CHANNELS);
+snd_interval_setinteger(&interval);
+interval.min = interval.max = channels;
+
+interval = hw_param_interval(params, SNDRV_PCM_HW_PARAM_RATE);
+snd_interval_setinteger(&interval);
+interval.min = interval.max = cur_rate;
+```
+
+In '[PATCH v3 10/28] sound: usb: Export USB SND APIs for modules', some
+codes moved from ALSA Open Sound System compatibility layer to ALSA core
+to export some kernel APIs. The '_snd_pcm_hw_param_set()' is one of
+them. If they were needed just for the above operations, it would be
+exaggerating just for the driver.
+
+Of course, we can assume that the similar kernel API would be required
+for the other drivers (OSS PCM, USB gadget, and so on.). However, at
+present, it is preferable to focus just on your driver. 
+
+(I note that typical sound PCM driver has code to shrink hardware
+parameters in PCM rule. It consists of a set of test and refine API.)
+
+
+Regards
+
+Takashi Sakamoto
