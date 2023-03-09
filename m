@@ -2,174 +2,335 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7E06B1E21
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 09:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 621BF6B21CA
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 11:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbjCIIbo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Mar 2023 03:31:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
+        id S230001AbjCIKp7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Mar 2023 05:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjCIIbU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 03:31:20 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC8DE1FE9;
-        Thu,  9 Mar 2023 00:29:30 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id C6EB95C011B;
-        Thu,  9 Mar 2023 03:29:24 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 09 Mar 2023 03:29:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1678350564; x=
-        1678436964; bh=Oa/m0zQYb/9cVTdeBVWVrncsae/cjF8bU6ixcrep6N4=; b=e
-        qVYCC9RU0vIhMD5Svk+mwY3qm4EVGZTIab4j6DZukQqwvwu2I1pyhisx49mTBNoB
-        R10G6H51ISsyWkQPpBgIxKblcyiBGNnPVEWUpmRmqpWh7f/fZ91qC4v9LKUrdpVp
-        HBamGmLwZUbyzgputxPsokvu6kgsr7BKCydBeUNwYWhFJmp4Fk+HdS6s6tA+Xy0M
-        Sc/mA0N76oy/iVS+h2dUapqTnwjuz9YHREc8EgvfQggAH6kA68u73jBBtC8OjrE5
-        N6gOeymg+oxGI5sLLdlKzbfgFE1ChBjrINZWwPWsiF/AlVcdgi83FvtshQ1j2XN5
-        HwjMCHhDS/ShYpSi1sXXA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1678350564; x=1678436964; bh=Oa/m0zQYb/9cV
-        TdeBVWVrncsae/cjF8bU6ixcrep6N4=; b=Ioqvy6L3B/96WajH3znnyMdgmvN8d
-        BO7IuUE1hotFCXXb0JVbvD6AZdHPXKk7utAaxjrKtLdbpLYsvDBoYrhFxsjfY+OZ
-        1FE2G5iGup3RImVIQTAE0JJZYhVuo07SpLTYAlXufav8g2NhRa5ygpMXzxJubwcZ
-        A6f+Fu8VdYVqHrX5mZXDcvS4mdkKx4M5cWogSKNP50r/LB5ciPUFpMrZas/JbNEC
-        GRvw1M5l1/9BZT6BmxR50Xpay9B9GO+wMzXH/zDeVgQL4Z4k5KyfG4BAJ3lpuraJ
-        7chNcYChY48yu5h6VflcRX1tuNjJGR7dM8eBE5VD1cRYiq9EehhV8PJsA==
-X-ME-Sender: <xms:45gJZMD909XJ-PoqR9DIkjmKJEXf78pqI7VYcRhUBA2vg6wYbNK6Sw>
-    <xme:45gJZOimMzZGiYfDOaLZvCJiOfRymLFqloMZ9cd7n1hS-l68hqYtGQlvsjk29U_-W
-    gZq9O0Bc_iNOpE9wfE>
-X-ME-Received: <xmr:45gJZPnYMoHP3vjuz8G_oW_SGg_ztjOOiozXDDjd_jwFisTVArN3EH27aXz2MyOfjILb6MO4EOFrDY-45Y6MdRYycg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdduhedgvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfgrkhgr
-    shhhihcuufgrkhgrmhhothhouceoohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhird
-    hjpheqnecuggftrfgrthhtvghrnhephefhhfettefgkedvieeuffevveeufedtlefhjeei
-    ieetvdelfedtgfefuedukeeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
-X-ME-Proxy: <xmx:5JgJZCyEBeozrJeyqOW8CopBZ22mKWSpCRTRDwQaL8YENXfNAM8dGw>
-    <xmx:5JgJZBST7NUjtlUOOiQKRuZYQSjlmkLz-RE_o19_QXi7cuz5QkXeNA>
-    <xmx:5JgJZNYzNRG2m6sgw-WyqE3e_cxozLpCp-Mrq5Wg3NcU0QNkAFLTAw>
-    <xmx:5JgJZDlmIRE7__MNBhjrnyTEgUTxP45cnnIWJKH0QqxKnXfglyZLpQ>
-Feedback-ID: ie8e14432:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 9 Mar 2023 03:29:20 -0500 (EST)
-Date:   Thu, 9 Mar 2023 17:29:18 +0900
-From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
-        andersson@kernel.org, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org, tiwai@suse.com,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-Subject: Re: [PATCH v3 15/28] sound: usb: Introduce QC USB SND offloading
- support
-Message-ID: <20230309082918.GA220616@workstation>
-Mail-Followup-To: Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
-        andersson@kernel.org, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org, tiwai@suse.com,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
- <20230308235751.495-16-quic_wcheng@quicinc.com>
+        with ESMTP id S229644AbjCIKpd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 05:45:33 -0500
+X-Greylist: delayed 7821 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 09 Mar 2023 02:45:31 PST
+Received: from mx0b-00154904.pphosted.com (mx0b-00154904.pphosted.com [148.163.137.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348BB8A387
+        for <linux-usb@vger.kernel.org>; Thu,  9 Mar 2023 02:45:30 -0800 (PST)
+Received: from pps.filterd (m0170395.ppops.net [127.0.0.1])
+        by mx0b-00154904.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3297e1I6004199
+        for <linux-usb@vger.kernel.org>; Thu, 9 Mar 2023 03:34:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=smtpout1;
+ bh=iVXe6uHn6Q7FWzZXO6SngExNdXQ6SHP3Nu7NCeMzCno=;
+ b=Jbu6+2VLATYh1qp8kZlvf8f6TgS82Bh72lfCyLfH6JskO6zFeYYLly7bjeHtcwQTjgOD
+ 38f4JgqhrNViZWR8wg+/Ni39bBOkuUrJ8kxrhzYSEceU4ld/KxsNs6uLfLwki+MXx3cK
+ xg6tlvruc6A0S9I4QH/2W35U7WUS+h1COed733Gl+ea+OW1NOIzj9KnRx9ufv2kZEadK
+ Kgr3EiDjDa5SeLDCF8Q3I1W0LxR5ZucwnXQm9nZPwxVu6QfS/HbXAvkeSxmFvlaaU4xU
+ kTmWYFxZkKWbOdHeTDgLKcllqG1hsZ3wbjxUYRq1TGjhOyDxcQFFzm3000KfZzFVs/1b yA== 
+Received: from mx0b-00154901.pphosted.com (mx0b-00154901.pphosted.com [67.231.157.37])
+        by mx0b-00154904.pphosted.com (PPS) with ESMTPS id 3p6fgbf2ux-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-usb@vger.kernel.org>; Thu, 09 Mar 2023 03:34:58 -0500
+Received: from pps.filterd (m0144104.ppops.net [127.0.0.1])
+        by mx0b-00154901.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3298L9Wj005366
+        for <linux-usb@vger.kernel.org>; Thu, 9 Mar 2023 03:34:54 -0500
+Received: from esaplrlyps302.us.dell.com ([143.166.145.26])
+        by mx0b-00154901.pphosted.com (PPS) with ESMTPS id 3p7bpb055g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+        for <linux-usb@vger.kernel.org>; Thu, 09 Mar 2023 03:34:53 -0500
+X-PREM-Routing: D-Outbound
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="52077595"
+Received: from unknown (HELO dell-Virtual-Machine.mshome.net) ([10.107.228.2])
+  by esaplrlyps302.us.dell.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 02:34:52 -0600
+From:   Kangzhen Lou <kangzhen.lou@dell.com>
+To:     oliver@neukum.org
+Cc:     linux-usb@vger.kernel.org, Kangzhen Lou <kangzhen.lou@dell.com>
+Subject: [PATCH] net: cdc_ncm: support ACPI MAC address pass through functionality
+Date:   Thu,  9 Mar 2023 16:34:36 +0800
+Message-Id: <20230309083436.6729-1-kangzhen.lou@dell.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230308235751.495-16-quic_wcheng@quicinc.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-09_04,2023-03-08_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 mlxscore=0
+ impostorscore=0 clxscore=1011 mlxlogscore=656 malwarescore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303090067
+X-Proofpoint-GUID: smbbUn0oZrVqqa-yl5MJ-d5CUZBQ0AER
+X-Proofpoint-ORIG-GUID: smbbUn0oZrVqqa-yl5MJ-d5CUZBQ0AER
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
+ mlxlogscore=780 bulkscore=0 adultscore=0 spamscore=0 impostorscore=0
+ mlxscore=0 clxscore=1015 phishscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303090066
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Make cdc_ncm to support ACPI MAC address pass through functionality that
+also exists in the Realtek r8152 driver.
 
-On Wed, Mar 08, 2023 at 03:57:38PM -0800, Wesley Cheng wrote:
-> diff --git a/sound/usb/qcom/qc_audio_offload.c b/sound/usb/qcom/qc_audio_offload.c
-> new file mode 100644
-> index 000000000000..2663906644f2
-> --- /dev/null
-> +++ b/sound/usb/qcom/qc_audio_offload.c
-> ...
-> +static int enable_audio_stream(struct snd_usb_substream *subs,
-> +				snd_pcm_format_t pcm_format,
-> +				unsigned int channels, unsigned int cur_rate,
-> +				int datainterval)
-> +{
-> +	struct snd_usb_audio *chip = subs->stream->chip;
-> +	struct snd_pcm_hw_params params;
-> +	const struct audioformat *fmt;
-> +	int ret;
-> +	bool fixed_rate;
-> +
-> +	_snd_pcm_hw_params_any(&params);
-> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_FORMAT,
-> +			(__force int) pcm_format, 0);
-> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_CHANNELS,
-> +			channels, 0);
-> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_RATE,
-> +			cur_rate, 0);
+RTL8153DD will load cdc_ncm driver by default with mainline 6.2 kernel.
+This is to support Realtek RTL8153DD Ethernet Interface Controller's MAC
+pass through function which used in dock, dongle or monitor.
 
-I think the above code is equivalent to below code.
+Although there is patch “ec51fbd1b8a2bca2948dede99c14ec63dc57ff6b” will
+make RTL8153DD load r8152-cfgselector instead cdc_ncm driver, would also
+submit this patch in case anyone need this feature in cdc_ncm in the
+future.
 
-```
-// 1. Initialize the hardware parameter so that it expresses
-// the maximum flags of mask parameters and the maximum range of integer
-// parameters.
-_snd_pcm_hw_params_any(&params);
+Signed-off-by: Kangzhen Lou <kangzhen.lou@dell.com>
+---
+ drivers/net/usb/cdc_ncm.c | 199 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 197 insertions(+), 2 deletions(-)
 
-// 2. Then shrink the mask parameters and integer parameters.
-struct snd_mask *mask;
-struct snd_interval *interval;
+diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+index 6ce8f4f0c70e..8179516b819c 100644
+--- a/drivers/net/usb/cdc_ncm.c
++++ b/drivers/net/usb/cdc_ncm.c
+@@ -53,6 +53,7 @@
+ #include <linux/usb/usbnet.h>
+ #include <linux/usb/cdc.h>
+ #include <linux/usb/cdc_ncm.h>
++#include <linux/acpi.h>
+ 
+ #if IS_ENABLED(CONFIG_USB_NET_CDC_MBIM)
+ static bool prefer_mbim = true;
+@@ -814,6 +815,177 @@ static const struct net_device_ops cdc_ncm_netdev_ops = {
+ 	.ndo_validate_addr   = eth_validate_addr,
+ };
+ 
++int acpi_mac_passthru_invalid(void)
++{
++	acpi_status status;
++	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
++	union acpi_object *obj;
++	int ret = -EINVAL;
++
++	/* returns _AUXMAC_#AABBCCDDEEFF# */
++	status = acpi_evaluate_object(NULL, "\\_SB.AMAC", NULL, &buffer);
++	obj = (union acpi_object *)buffer.pointer;
++
++	if (!ACPI_SUCCESS(status))
++		return -ENODEV;
++	if (obj->type != ACPI_TYPE_BUFFER || obj->string.length != 0x17) {
++		acpi_info("Invalid buffer for pass-thru MAC addr: (%d, %d)\n",
++			  obj->type, obj->string.length);
++		goto amacout;
++	}
++	if (strncmp(obj->string.pointer, "_AUXMAC_#", 9) != 0 ||
++	    strncmp(obj->string.pointer + 0x15, "#", 1) != 0) {
++		acpi_info("Invalid header when reading pass-thru MAC addr\n");
++		goto amacout;
++	}
++	/* return success, otherwise return non-zero if invalid buffer read or
++	 * MAC pass through is disabled in BIOS
++	 */
++	ret = 0;
++
++amacout:
++	kfree(obj);
++	return ret;
++}
++
++int get_acpi_mac_passthru(char *MACAddress)
++{
++	acpi_status status;
++	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
++	union acpi_object *obj;
++	int ret = -EINVAL;
++	unsigned char buf[6];
++
++	/* returns _AUXMAC_#AABBCCDDEEFF# */
++	status = acpi_evaluate_object(NULL, "\\_SB.AMAC", NULL, &buffer);
++	obj = (union acpi_object *)buffer.pointer;
++
++	if (!ACPI_SUCCESS(status))
++		return -ENODEV;
++
++	ret = hex2bin(buf, obj->string.pointer + 9, 6);
++	if (!(ret == 0 && is_valid_ether_addr(buf))) {
++		acpi_info("Invalid MAC for pass-thru MAC addr: %d, %pM\n",
++			  ret, buf);
++		ret = -EINVAL;
++		goto amacout;
++	}
++	memcpy(MACAddress, buf, 6);
++	acpi_info("Pass-thru MAC addr %pM\n", MACAddress);
++
++amacout:
++	kfree(obj);
++	return ret;
++}
++
++/* Provide method to get MAC address from the USB device's ethernet controller.
++ * If the device supports CDC_GET_ADDRESS, we should receive just six bytes.
++ * Otherwise, use the prior method by asking for the descriptor.
++ */
++static int cdc_ncm_get_ethernet_address(struct usbnet *dev,
++					struct cdc_ncm_ctx *ctx)
++{
++	int ret;
++	u8 iface_no = ctx->control->cur_altsetting->desc.bInterfaceNumber;
++
++	ret = usbnet_read_cmd(dev, USB_CDC_GET_NET_ADDRESS,
++			      USB_DIR_IN | USB_TYPE_CLASS
++			      | USB_RECIP_INTERFACE, 0,
++			      iface_no, dev->net->dev_addr, ETH_ALEN);
++
++	if (ret == ETH_ALEN) {
++		ret = 0;	/* success */
++	} else {
++		ret = usbnet_get_ethernet_addr(dev,
++				ctx->ether_desc->iMACAddress);
++	}
++
++	return ret;
++}
++
++/* Provide method to push MAC address to the USB device's ethernet controller.
++ * If the device does not support CDC_SET_ADDRESS, there is no harm and we
++ * proceed as before.
++ */
++static int cdc_ncm_set_ethernet_address(struct usbnet *dev,
++					struct sockaddr *addr)
++{
++	int ret;
++	struct cdc_ncm_ctx *ctx = (struct cdc_ncm_ctx *)dev->data[0];
++	u8 iface_no_data = ctx->data->cur_altsetting->desc.bInterfaceNumber;
++	u8 iface_no_control = ctx->control->cur_altsetting->desc.bInterfaceNumber;
++	int temp;
++
++	/* The host shall only send SET_NET_ADDRESS command while
++	 * the NCM Data Interface is in alternate setting 0.
++	 */
++	temp = usb_set_interface(dev->udev, iface_no_data, 0);
++	if (temp) {
++		dev_dbg(&dev->udev->dev, "set interface failed\n");
++		return -ENODEV;
++		}
++
++	ret = usbnet_write_cmd(dev, USB_CDC_SET_NET_ADDRESS,
++			       USB_DIR_OUT | USB_TYPE_CLASS
++			       | USB_RECIP_INTERFACE, 0,
++			       iface_no_control, addr->sa_data, ETH_ALEN);
++
++	if (ret == ETH_ALEN)
++		ret = 0;	// success
++	else if (ret < 0)
++		dev_dbg(&dev->udev->dev, "bad MAC address put, %d\n", ret);
++
++	/* restore alternate setting.
++	 * The NCM data altsetting is fixed, so we hard-coded it.
++	 */
++	temp = usb_set_interface(dev->udev, iface_no_data,
++			CDC_NCM_DATA_ALTSETTING_NCM);
++	if (temp) {
++		dev_dbg(&dev->udev->dev, "set interface failed\n");
++		return -ENODEV;
++		}
++
++	return ret;
++}
++
++static int cdc_ncm_determine_ethernet_addr(struct usb_interface *intf)
++{
++	struct sockaddr sa;
++	struct usbnet *dev = usb_get_intfdata(intf);
++	struct cdc_ncm_ctx *ctx;
++	int ret = 0;
++
++	if (!dev)
++		return 0;
++
++	/* MAC pass through function only apply to Realtek RTL8153-DD chip */
++	if (!(dev->udev->descriptor.idVendor == 0x0bda
++		&& dev->udev->descriptor.idProduct == 0x8153
++		&& (dev->udev->descriptor.bcdDevice & 0xff00) == 0x3300))
++		return 0;
++
++	ctx = (struct cdc_ncm_ctx *)dev->data[0];
++	if (!ctx->ether_desc)
++		return 0;
++
++	ret = cdc_ncm_get_ethernet_address(dev, ctx);
++	if (ret) {
++		dev_dbg(&intf->dev, "failed to get mac address\n");
++		return ret;
++	}
++
++	if (!get_acpi_mac_passthru(sa.sa_data)) {
++		if (memcmp(dev->net->dev_addr, sa.sa_data, ETH_ALEN) != 0) {
++			if (!cdc_ncm_set_ethernet_address(dev, &sa))
++				memcpy(dev->net->dev_addr, sa.sa_data, ETH_ALEN);
++		}
++	}
++
++	dev_info(&intf->dev, "MAC-Address: %pM\n", dev->net->dev_addr);
++
++	return 0;
++}
++
+ int cdc_ncm_bind_common(struct usbnet *dev, struct usb_interface *intf, u8 data_altsetting, int drvflags)
+ {
+ 	struct cdc_ncm_ctx *ctx;
+@@ -945,6 +1117,9 @@ int cdc_ncm_bind_common(struct usbnet *dev, struct usb_interface *intf, u8 data_
+ 		}
+ 		dev_info(&intf->dev, "MAC-Address: %pM\n", dev->net->dev_addr);
+ 	}
++	/* Execute MAC pass thru only if enabled in BIOS */
++	if (acpi_mac_passthru_invalid() == 0)
++		cdc_ncm_determine_ethernet_addr(intf);
+ 
+ 	/* finish setting up the device specific data */
+ 	cdc_ncm_setup(dev);
+@@ -1892,6 +2067,25 @@ static void cdc_ncm_status(struct usbnet *dev, struct urb *urb)
+ 	}
+ }
+ 
++static int cdc_ncm_resume(struct usb_interface *intf)
++{
++	int ret;
++
++	ret = usbnet_resume(intf);
++	if (ret == 0)
++		cdc_ncm_determine_ethernet_addr(intf);
++
++	return ret;
++}
++
++static int cdc_ncm_post_reset(struct usb_interface *intf)
++{
++	/* reset the MAC address in case of policy change */
++	cdc_ncm_determine_ethernet_addr(intf);
++
++	return 0;
++}
++
+ static const struct driver_info cdc_ncm_info = {
+ 	.description = "CDC NCM (NO ZLP)",
+ 	.flags = FLAG_POINTTOPOINT | FLAG_NO_SETINT | FLAG_MULTI_PACKET
+@@ -2051,8 +2245,9 @@ static struct usb_driver cdc_ncm_driver = {
+ 	.probe = usbnet_probe,
+ 	.disconnect = usbnet_disconnect,
+ 	.suspend = usbnet_suspend,
+-	.resume = usbnet_resume,
+-	.reset_resume =	usbnet_resume,
++	.resume = cdc_ncm_resume,
++	.reset_resume =	cdc_ncm_resume,
++	.post_reset = cdc_ncm_post_reset,
+ 	.supports_autosuspend = 1,
+ 	.disable_hub_initiated_lpm = 1,
+ };
+-- 
+2.34.1
 
-mask = hw_param_mask(params, SNDRV_PCM_HW_PARAM_FORMAT);
-snd_mask_leave(mask, pcm_format);
-
-interval = hw_param_interval(params, SNDRV_PCM_HW_PARAM_CHANNELS);
-snd_interval_setinteger(&interval);
-interval.min = interval.max = channels;
-
-interval = hw_param_interval(params, SNDRV_PCM_HW_PARAM_RATE);
-snd_interval_setinteger(&interval);
-interval.min = interval.max = cur_rate;
-```
-
-In '[PATCH v3 10/28] sound: usb: Export USB SND APIs for modules', some
-codes moved from ALSA Open Sound System compatibility layer to ALSA core
-to export some kernel APIs. The '_snd_pcm_hw_param_set()' is one of
-them. If they were needed just for the above operations, it would be
-exaggerating just for the driver.
-
-Of course, we can assume that the similar kernel API would be required
-for the other drivers (OSS PCM, USB gadget, and so on.). However, at
-present, it is preferable to focus just on your driver. 
-
-(I note that typical sound PCM driver has code to shrink hardware
-parameters in PCM rule. It consists of a set of test and refine API.)
-
-
-Regards
-
-Takashi Sakamoto
