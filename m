@@ -2,121 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CAFA6B230B
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 12:31:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9346B2315
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 12:33:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjCILbJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Mar 2023 06:31:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47330 "EHLO
+        id S230403AbjCILdB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Mar 2023 06:33:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbjCILbH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 06:31:07 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0AA1E5D9;
-        Thu,  9 Mar 2023 03:31:01 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 855CB32003D3;
-        Thu,  9 Mar 2023 06:30:57 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 09 Mar 2023 06:30:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1678361457; x=1678447857; bh=Fe
-        qfYyDSqOUmEcEBUp15BGtG58cytd7b24Ewa8plTfQ=; b=V84Rh9jj8AZS2IAtNT
-        A0UPcccrvFwJ7zKIXR/qavsrMnXtNHttEi6al7RjA46duXP0zEX1fUpQcojTOT4k
-        ZJqMhSdsmgPgGmCB7pcbyFlHjXyEHevDs8HZw1B0bXBSPm77Z9WTuN4YkJAo+LDI
-        i/8++X5e75bD0j1P81X69m1kE9x9x5B5dC2OZnzueK74qRFiJ30gJyWSMkSvcUWh
-        VUsenzPp+GPPfrDX8NIlHeF3ZAxH/8xAsEEFFRqQIMxRqqPZLS54bvrjQEIVNulp
-        oRQ0aCm7KBUkKCjKMiLTqfFsIIWQem50D44ZnUuo3ceOfzTRv+/vNWJ5BJXisM3e
-        MWNA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1678361457; x=1678447857; bh=FeqfYyDSqOUmE
-        cEBUp15BGtG58cytd7b24Ewa8plTfQ=; b=UHAF1XwCHhQ34oiPzzd/iX/fyoIJr
-        f2qlucdxwv7m47Dg4b3mXieqeGJlKb3OTcKkk6CwEUlYJ4W2sBZMDDp2+nbzGIYO
-        cbprXOvQz9eQUTAVUETXZ70PbrPsGwbJk3JdMxgDNWDMSNOyJyYlUlBhNfflIwNE
-        96ZC08YhUilgccXp94KjN6s8xIMwve1DbRhh9uANRp7vPnaWFvIenz4vIbbrcJFQ
-        Tgd/pMHRwkcufneAtfWQ+3KN4QLHF6vnMWQci3QwNm0lTBHJ1XbOhhoIGPS5Mjl2
-        4+zqc9B9CDXDMOZkG+7aduqiqioOjVdBTUN0mkkmAErYbEaqiUGfFmM2g==
-X-ME-Sender: <xms:cMMJZDXF50ZDDr497pwkXIXhNvJCWzziE-GBP4FhPOeX4_5UXAIH3w>
-    <xme:cMMJZLmxrnbgDZCwu1TwYvCM10TZsWUvTTBZst1kHXCZfWZlwntWpY6kA7le5hFKY
-    GD9lxOeINPvOSY2y4s>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdduiedgvdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:cMMJZPY5-rdhOtpzrfFEPSgbr7I7cMbtdayBOphxI__1HF-wNMYycg>
-    <xmx:cMMJZOUdSS1n3oQ2cJYa_kph0ncl9RBb60vgtc3vMMSsHFoFK7pZoQ>
-    <xmx:cMMJZNk8XVpEfqpmLLav43c2LN8pEjC7ZFsmwHJShU6soK61vA4kEA>
-    <xmx:ccMJZMeOiHiwv7UMXh8pIQrnW2WYgvDXJ9v59zNhUNAp2L15ZvN5AQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3A5A8B60086; Thu,  9 Mar 2023 06:30:56 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-206-g57c8fdedf8-fm-20230227.001-g57c8fded
-Mime-Version: 1.0
-Message-Id: <2fffffcb-4f76-405b-acba-1b2e744d75c4@app.fastmail.com>
-In-Reply-To: <8e3c16a7-1155-419c-9bcb-cc3e3630fe5b@sirena.org.uk>
-References: <20230309071100.2856899-1-xiang.ye@intel.com>
- <20230309071100.2856899-2-xiang.ye@intel.com>
- <dcb805e1-2b48-481d-8e72-1b515c9d43e6@app.fastmail.com>
- <8e3c16a7-1155-419c-9bcb-cc3e3630fe5b@sirena.org.uk>
-Date:   Thu, 09 Mar 2023 12:30:33 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Mark Brown" <broonie@kernel.org>
-Cc:     "Ye Xiang" <xiang.ye@intel.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        "Lee Jones" <lee@kernel.org>, "Wolfram Sang" <wsa@kernel.org>,
-        "Tyrone Ting" <kfting@nuvoton.com>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        "Sakari Ailus" <sakari.ailus@linux.intel.com>,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v4 1/5] mfd: Add support for Intel LJCA device
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229951AbjCILc7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 06:32:59 -0500
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2078.outbound.protection.outlook.com [40.107.8.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC37C5277;
+        Thu,  9 Mar 2023 03:32:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nrATZLpBnqqzapAULjnhtcfHhsFGyrH62Dyn49YR/eP1YwztQniLcn58P8oZmOR0YK0CREEuRG+/WktGV3ZkWUNAU0GW/w7ftQnsj41Lu6GpPY7eTUXB48fxoYqvU3q0rdbzmRh4tYmWqjp8V/Hz8ERHw9VL9Nzrla6mDFliEHuK/gt4CJ2dOsG89ZqiQKkuQbxwbHE8C1lgP6rmE7FIOC2ZrnNKndJo/gcwOeeCEcgd26C/WP3Jwj3TC8AGWKzSbhIAWu1YDoUVriZG7Hfiiw3cwOa/gO5FQk67AXvPrP0EZkZQkGw7Rhn7Yt/BVXBGVmidZ11bnu2l/R5A+sZSUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4wt+irh6E4LNDD72G2FQCU+PsBXMEjcPPzE0oZD5hlk=;
+ b=T97cjVCNiqFhXTXRy7V3WwIy7Zs/e7voHz4OeUqiY0LkQ8srvBHDmvdvqJ1XL0e4V6Y98qYd5+8t6BaT6ZXKJM74loIKUP0bDCFClBkDGCLZ8WKDGV9QzE/CQGreS1oLG9cG4UY1oQlIw3OMjRtSpOPvBQxuCoR0gz1gnGZiLZOmlPehM6z/CI4uPTL32l4L1b7uNLl5ohdknnvL4peU2oBYvXAEx+yTueNLW0kloSD3aq/ObcnCwR6Ut8IL+zpARbndephqfiMkAVBOwuUA0H6qRBSX9jdhSYoR7L5hPgz+1CGMpPkESH3HxYNOi4VmOCckpD8b4ineEFZ/pS3k6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4wt+irh6E4LNDD72G2FQCU+PsBXMEjcPPzE0oZD5hlk=;
+ b=Ti8skcY3wE32Tm36NJsstXhIpD14z16xheW10g3lmULX8r8Q64pdoNs/cgrwEwuY6OprM0PNLSvOOdB6Oprw0A4PeCS3ykKUMrGzpeC8Ca2mii2bz4sqDVkEkIc3TIyY5fYNhHftgQgKArrwJVR009Gh1GAGorL3y7FM0pxhIWWIRO7EvDwawVyUqv3XyHPENloLEyr0E66tkwoQ9m8kz/waJekkyrJjv1Sv4dT5M0Hejj9ouVe+ZIJLcZ6wZtbyqX/67YQLwf+1ttQNXTfHS59qhugytLH5P0YQ4mqZr4xeY1faSZEgdxXy+i8T8SSUEpcvMQsOq2QijWMQcN19Cg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by AS8PR04MB8200.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Thu, 9 Mar
+ 2023 11:32:52 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com ([fe80::2ea:4a86:9ab7])
+ by VI1PR04MB7104.eurprd04.prod.outlook.com ([fe80::2ea:4a86:9ab7%3]) with
+ mapi id 15.20.6178.019; Thu, 9 Mar 2023 11:32:52 +0000
+Message-ID: <9a05953e-fc43-3223-2c96-8e12eac93bf4@suse.com>
+Date:   Thu, 9 Mar 2023 12:32:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 27/28] sound: usb: card: Allow for rediscovery of
+ connected USB SND devices
+Content-Language: en-US
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
+        andersson@kernel.org, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org, tiwai@suse.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <20230308235751.495-28-quic_wcheng@quicinc.com>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20230308235751.495-28-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0189.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a4::12) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|AS8PR04MB8200:EE_
+X-MS-Office365-Filtering-Correlation-Id: ef912e41-d57e-48b0-6460-08db2092048c
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WKixnNsVS2SRwESte1ztiWbxBWS4LyU0P0Bgun0OUHvG3GhdX9JH/et2UT3rwMcrcMvMghB2jN7HZsNAqLf4smPUvLUB6rzbGRSooCN0iUtjMMBNJyXXiU2XS3+PFpgvO7qYP6WU7uAzD4sx6Dlfim8I7vS6+F+3PIoZDqoNsIqodk8jzJHUBVu5YgCNaU8e06Y9NAbrtRE9C5Tx6t5Aotd5k0Sl9SGxTKKZXhIyF/pczUX8UuGpXp+fg2GibQYb3vo/RDoSIyY5yymTrcLRDJo2VEqC4y5zTyX9hl+zhkyVNsdG87k7YqiHtQWSRVK8u22HQKtGyA/tqYF+gviE1uDLxGklqXESggbY3NuVYP8ngIFRmcdzy73qtEC34hJtbdU5n6EVRQ03XxuzAUx1cArd3h5Vg6o6qOE/s9s+6Jq5gjr3fKx7Cf2SaNKp3p/gJuzX2dJEHuclg5AMkrYmu7Yk/tQP2UEPxKOVVzdo6FpbhjK+6u48p88YpNdeZrY5RZJGMt5zKFCY/pU+fTOomofFpVbJwrDst94CXOJ8xmA/h5p/Bti/8FuLIJN7g+ds4Is044Z03uVclBOMwdCKur4J10cv/ukajH0GCwZSJCdCv/MIkv5B96lk6sqRSp3ZLCW0UXTuzuNAuQab9yNh8beb+/mQkKON2kQSaN9ASAXxROC7+AlknKFTAxnEk0U76IVSigadps0Fz3jnpyJ10ebIoEcLlx5Gs8zx4zk+bToKYucKPy0wmwC54wS3sDHV
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(39860400002)(376002)(136003)(346002)(366004)(451199018)(31686004)(4326008)(36756003)(5660300002)(41300700001)(7416002)(8936002)(66476007)(66946007)(4744005)(2906002)(66556008)(8676002)(31696002)(921005)(86362001)(38100700002)(6512007)(6486002)(6636002)(478600001)(316002)(6506007)(6666004)(83380400001)(2616005)(186003)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bEVEcjBGQitjVisxd0ZacHAvWWdVQjJiRkFUSGtXNVZId3RLS1ZLTWd3ZStD?=
+ =?utf-8?B?U3BIVVovMWNRNHk5VTJ3UXhNc216NDhkL1JTZFVUVkRicW4xOHRYRE13ZHQ1?=
+ =?utf-8?B?dkJRVlVGWHFOaCsySGZ4UGVrd3NBM3Y4QkxaRXpCZ2Rwdzg0VkhzeGx4RlFm?=
+ =?utf-8?B?bEF6akJNbkVHR1YrYnRWK2VJb0lRTWtHemNZNlNzam5IZW1HSkt1ZUMybFVT?=
+ =?utf-8?B?akIvOW1GR1d2SWQ4aE5ybUdzbU1vK2l2UDBCMk5EN1RlUDNUY2RWL0ZyZXc1?=
+ =?utf-8?B?L3N3RHNZQlhGMGhZeTdnYjQ1RUs1SmhiMS9ydWN4cGdZWnVvVkIrSi9QaHo0?=
+ =?utf-8?B?dzNkeWRONTllZGFMZ3l1eEplOGVnakRiTzM5ZThUNVplK3pudXBnM3VHMHlV?=
+ =?utf-8?B?QVdhZXZGL3YyMThZLzQ2SDJBSzhEZ0czbTNJZWNwTENzcUU4OFpGNkFJU3lY?=
+ =?utf-8?B?UmthRzZNRFRGamI3bnprdklENDUyaWZOWEkrUmIrcWRJVDFnU0xMYjV6MWhy?=
+ =?utf-8?B?aStDdmMzR2ttWmdaTkREcDIrYzd1UEJDRDNCQXpLZEZ3L1MyNTc0MGFvd0Iv?=
+ =?utf-8?B?VGtKMzFrSDVveDhIQXpOSzNKamxrVnRjTmxKaXc5aGh3T2FwWmVnTmx4R0Jn?=
+ =?utf-8?B?QUV4OTJGNXdrTU1RYm40RFNLYkd1eHhxYTRFUzErYWtacDduRXBnVlNSNTVo?=
+ =?utf-8?B?OG1veFlCUCtpVkw2TGk3SmJKaXlVSm9NQlVqLzJmdVdRTC8rQ1piR2Rkd01a?=
+ =?utf-8?B?RDU1M25jYVVaTEtNakl2UVlYaURsVUZRSjREQml1cEpHRTJKbHduZSsxam5D?=
+ =?utf-8?B?RXd3UUVkQU9oeHYxd09DcUVpc0FBSDNKZWR0b0JMNXAwL3ZaUy9xLzFWd3Zl?=
+ =?utf-8?B?eEo5U2hFcEl1alV5NUFJTXppRmhmK1ZjU1hueGt5TUlFVEJGMXN2dVQxWk9I?=
+ =?utf-8?B?My9oS21CYll3RWM2citmamx3NUljTEdrQzZNNWM1MmRVMzVVTlhBaldabExS?=
+ =?utf-8?B?MnN5cjdhYndwemF3Skl3Y0lmeHNHQkZKRjlwYVQ3ZktvWE50djBDQm5Gc2k2?=
+ =?utf-8?B?dlZZd2NXR2YvMTNZM3lLTU5vMVdOVHBPQS9yT1dreFBVQ3luNEt2ME85K1Ev?=
+ =?utf-8?B?UWtkN3B2cXgwckJJVUdSMUtMTTg1ZytvRDdvdkN4SURYYTFRUzd6RmcyZGZu?=
+ =?utf-8?B?REc1cytQTVpRbGZFOFJLMkRtb2tjOGJxSWh6Szhjd2EvbHE2aGdya1hUb2xR?=
+ =?utf-8?B?d1RsVG9VSWp3Wkh3am1tSGJXZzFmSnhvSEpaUFAyNXFPYU9yZUptcS9kWjht?=
+ =?utf-8?B?N2ZWek43M2w5K0xuMk93VVo5T3YzQmxWMlhFU0pYWDdicnF0VGJwaDNwSll0?=
+ =?utf-8?B?MGY1UXRxOU1MSnozYS9ZVFRLTlE2Qyt5V0ZQL2tVcDN5c1JVVmkxdTBzT1Nz?=
+ =?utf-8?B?ZFdRMlkwRndmaTYyTVFBa0Z1aTFSdkdGeEZ6c1pNcEJLa1NXN3oyMlA1dExo?=
+ =?utf-8?B?NVlwQmFtbjlIQThNWjEzcXlqdGhkNE1vVjhlM0EwVFV4OXRlMnpVcm5taHpK?=
+ =?utf-8?B?eG5NVFZ5M2R1K3lPTjZpTE9JZ1FpU21iQXZFNkp5b2E3Vkdoazc1aW5DT1RT?=
+ =?utf-8?B?Y09iUW94RzJqVnp6akdJQmVQaXllYmxBYWNEMHFKK1Vwa2tKM1JBak9JYTRu?=
+ =?utf-8?B?Q3lMWExPUXlMNEY4eE51Qlk2YWpPbm50WjJvVjA3UE9nYWE3Q0lTKy9kRWpq?=
+ =?utf-8?B?Snpib3pQMllzZ1BYTXB0YzNNcW5ZWmJ0VjNVUFJla1BUdjRkTmxlMnJ3VTA1?=
+ =?utf-8?B?c3h2cWloYXA0QldxQUZkRjBrcEptUFNhOEdoMDdPa0tHRjV6b1BtUWZjZ2N1?=
+ =?utf-8?B?dDNqekhqZEg5ZmlsM1RTWTU5aXRRanIxWXlmTTlyQ1dyYkg3VXdJajlzL2NB?=
+ =?utf-8?B?UE5KdkZhczBQNDBlZHVKOE12UTQwekVyTWZuQmFyRTI5cktTUzZ4cFhTM1Nv?=
+ =?utf-8?B?ZnFaM1JRelRJb21hT21RMUdTbUN1YUxNNThDV2tiNEZPZVk0UVlPOE1vck5P?=
+ =?utf-8?B?ZnVqLzRicXdMMkxPdnBST2lsMWloUmtjblVoSFZxMlNoOFg3dlk3b2NlekRF?=
+ =?utf-8?B?cTg5UEZFMzhrbXBkV3JSaVhxMGhCOWFweThGOS83cEdsZUlqWEJDbXpNWFNX?=
+ =?utf-8?Q?rzGidzUUwFAA/9n+L/TSQu+Mwm7FltOxUxpu+ar82r/V?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef912e41-d57e-48b0-6460-08db2092048c
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 11:32:51.8243
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: y2EKruafpNH6a5roXDjl1SJh7VHSZVZWlIFpg1jJYbo2SyL5FMMqPQw0c39NXw3oRly4CP/lVk0qhmmhzavpHg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8200
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 9, 2023, at 12:03, Mark Brown wrote:
-> On Thu, Mar 09, 2023 at 08:56:05AM +0100, Arnd Bergmann wrote:
->> On Thu, Mar 9, 2023, at 08:10, Ye Xiang wrote:
->
->> >  drivers/usb/misc/Kconfig  |  13 +
->> >  drivers/usb/misc/Makefile |   1 +
->> >  drivers/usb/misc/ljca.c   | 969 ++++++++++++++++++++++++++++++++++++++
->> >  include/linux/mfd/ljca.h  |  95 ++++
->
->> Why is this in driver/usb/misc? It looks like a normal
->> mfd driver to me, and it evenhas the header in include/linux/mfd/
->
-> It was a MFD in the original version, Lee asked for it to be moved to
-> USB: https://lore.kernel.org/r/20230305103456.GF2574592@google.com
+On 09.03.23 00:57, Wesley Cheng wrote:
+  
+> +/*
+> + * in case the platform driver was not ready at the time of USB SND
+> + * device connect, expose an API to discover all connected USB devices
+> + * so it can populate any dependent resources/structures.
+> + */
+> +void snd_usb_rediscover_devices(void)
+> +{
+> +	int i;
+> +
+> +	mutex_lock(&register_mutex);
+> +	for (i = 0; i < SNDRV_CARDS; i++) {
+> +		if (usb_chip[i])
+> +			if (platform_ops && platform_ops->connect_cb)
 
-Ok, I see. That should probably be mentioned in the patch
-description then. I'm still not sure I follow the reasoning
-for the split between "usb functionality" and and mfd part:
-This is just a usb driver as it is attached to a usb bus, and
-drivers usually get put into a directory based on what they
-provide, not how they are attached to a parent bus.
+Really check this every time?
 
-    Arnd
+	Regards
+		Oliver
