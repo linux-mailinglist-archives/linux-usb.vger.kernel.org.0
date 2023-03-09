@@ -2,61 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77F06B2555
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 14:28:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E109B6B254C
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 14:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjCIN2U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Mar 2023 08:28:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
+        id S231342AbjCIN2Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Mar 2023 08:28:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbjCIN2P (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 08:28:15 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE8324132
+        with ESMTP id S229897AbjCIN2N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 08:28:13 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BE0265AA
         for <linux-usb@vger.kernel.org>; Thu,  9 Mar 2023 05:28:09 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id l7-20020a05600c4f0700b003e79fa98ce1so1242156wmq.2
+Received: by mail-wm1-x332.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so3584459wmb.5
         for <linux-usb@vger.kernel.org>; Thu, 09 Mar 2023 05:28:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678368488;
+        d=linaro.org; s=google; t=1678368489;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IIb+jAhfv8fpqr/ySQLDnUq5V6TTEcYb4TdjBUBn+tY=;
-        b=bhCG0oMF3z86mRtaSL7R/GR6Y/x4SbLUy7FxMUboHtbdK/GkudTkcTJD07eFUoPpTy
-         VVKfv4+PCYrbKF3FVbeoMnC+Y7iFtwx13dWSPbmMjs0CZrz56dynRQUYLDuMyrMFY09G
-         hk4RIzkbgyWHH2WWxXwLsTokq6WR+d/hbp6FDboWiQLlUgSf7xUUvtgxAj2uiZ+fJzhS
-         L5yGdaRYqA4jXPJBlnipHI2aFHYazHrzl+Z0akhMFylkGLRyRytGaxDW81W+AxgvbmZI
-         3n0k4FJzb9qJkN/BNkUP5Q4PSm8i0sJM+zddngCP7jAr9PkiXMtmARlz3LTI97M3nVoa
-         QuGw==
+        bh=y7uAEq2TyKPhC0hnHOKkhkUFcLViZrukZ67+qR1wCW4=;
+        b=RcSeibF5jTfFoLcLRn9u1iEpv9nekNW/d3R1mLLs6x4O8xQ794BZC2mBQqq7RZvFO9
+         0h8vt3KZ8jU7nM/50d4/uuqav0zRRI+aPfx+x/rJc1Cf1Bi+OTkRvDt2xWUdJUTwDmYN
+         FixSm82S7ilVgvhx2BnDFFVWZvXzEsrKerm9S4CUIF5cMcXCn6Q05YJ/wIT2G2wh4Sgm
+         upp5zLsG6R4u9fQL8pvfSs+LRUidwswZsuoiYwFIhOypCv4Pk3Whd5xSWfLTym0U8CGC
+         M9YbDR6Z08sRx4JLiRidi6k4loGXTPipYRBq+VTDO2eHcci4W7DYnQ/KBxu376c5VQFI
+         xNHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678368488;
+        d=1e100.net; s=20210112; t=1678368489;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IIb+jAhfv8fpqr/ySQLDnUq5V6TTEcYb4TdjBUBn+tY=;
-        b=GPsOC4J+DneU9Puv2IXKgq87TWzaLjKZrXOqTlP9z3tfUJQZ/C9+Il3onhuXedg758
-         CuB2qn9OuGDRBI1kZc1gyHfLmUlw3DSvNIW74tWbyyen9ymF7jYLgiZD/FOAleq7RA1I
-         4UsMEOn3goHBLQ9DINfyhiLMf/0952hitFMhfdrM+ugpuRR8t+S7UxR5AcETRI5QE2SA
-         HgMCFL7sCbiWYA5B1XBDd1CdnNUIwRRSWso3ExWRxYHBfu0iBpM0Ljz3M4a4WANmFuls
-         Toqgw2kxcb6lwyQhChSNLIExu8FJ8MIXAnayECro+UmFrpabDW2e8SDmla+TT/QaRfPp
-         jU2g==
-X-Gm-Message-State: AO0yUKVSwKWHDNC3vV4o4yhmamS56iHxDxaBCvWsA9KH/BXWyrSE3IDW
-        qMYxYRFj1y1TxatjziWzk5c9Sg==
-X-Google-Smtp-Source: AK7set+HN2OLWNXgd1pKkmJ4+ARit5gbjmGyCJACu2dEzVrBukajWRcNmErYbt87vGh1/lpedn/bpw==
-X-Received: by 2002:a05:600c:34c8:b0:3ea:183b:a525 with SMTP id d8-20020a05600c34c800b003ea183ba525mr19847456wmq.36.1678368487981;
-        Thu, 09 Mar 2023 05:28:07 -0800 (PST)
+        bh=y7uAEq2TyKPhC0hnHOKkhkUFcLViZrukZ67+qR1wCW4=;
+        b=0RgdwHj5Wo+pGh00MjUh8wDUyfrbBajablQXq0MPCNKS+1CVYMID11Iv92Nkmho6r8
+         G/wzwoZ42ZWvdbKV5pxUcHUIp2x2Wx5mzSeEEL6lQ+I4wYWUqaJB4uwgMlH4l1uZLXLn
+         F07ZHyyL574nVFnD1ch4vxX+Znwclo+cueSRGUZeG6eA6DzJrxI4gzkg+2Q9wXnNNNO0
+         +S/Hm8BD5G5g4tYmM/LKWfK7bvFyx4Ct1LcEPpOD0I+bcUiqHY+1YQTbXypcxK7MOWl4
+         1IUuyFTRjlQuuSDpFxnA6DRsOD3cGgExkWab+6+HQ5Cj5RUO/y+WxXXXUpehCtHPh1g7
+         MWxg==
+X-Gm-Message-State: AO0yUKWlFO+pI4bL+gd3kk1B9/pUHwoqaHGnAA6BMZ06mCaUNGGS2FMM
+        PLAwup9iVAObTwzyU0zflQTvDQ==
+X-Google-Smtp-Source: AK7set8agEIuyZHhm3Ae9uVC754ljdQ41hdv0zYBi46QDJcccdlEumNqtKsTRbap11JDAL5fIaEayQ==
+X-Received: by 2002:a7b:ca59:0:b0:3eb:966f:5811 with SMTP id m25-20020a7bca59000000b003eb966f5811mr16513880wml.3.1678368488961;
+        Thu, 09 Mar 2023 05:28:08 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id r7-20020a05600c458700b003eb966d39desm2926714wmo.2.2023.03.09.05.28.07
+        by smtp.gmail.com with ESMTPSA id r7-20020a05600c458700b003eb966d39desm2926714wmo.2.2023.03.09.05.28.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 05:28:07 -0800 (PST)
+        Thu, 09 Mar 2023 05:28:08 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 09 Mar 2023 14:27:58 +0100
-Subject: [PATCH v3 07/12] arm64: dts: qcom: sm8450: add port subnodes in
+Date:   Thu, 09 Mar 2023 14:27:59 +0100
+Subject: [PATCH v3 08/12] arm64: dts: qcom: sm8550: add port subnodes in
  dwc3 node
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230130-topic-sm8450-upstream-pmic-glink-v3-7-4c860d265d28@linaro.org>
+Message-Id: <20230130-topic-sm8450-upstream-pmic-glink-v3-8-4c860d265d28@linaro.org>
 References: <20230130-topic-sm8450-upstream-pmic-glink-v3-0-4c860d265d28@linaro.org>
 In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v3-0-4c860d265d28@linaro.org>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -89,16 +89,16 @@ same description in each board DT.
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 19 +++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8550.dtsi | 19 +++++++++++++++++++
  1 file changed, 19 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 1a744a33bcf4..ccda73426ee2 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -4155,6 +4155,25 @@ usb_1_dwc3: usb@a600000 {
- 				snps,dis_enblslpm_quirk;
- 				phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
+diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+index ff4d342c0725..283163eb01a2 100644
+--- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+@@ -2467,6 +2467,25 @@ usb_1_dwc3: usb@a600000 {
+ 				phys = <&usb_1_hsphy>,
+ 				       <&usb_dp_qmpphy QMP_USB43DP_USB3_PHY>;
  				phy-names = "usb2-phy", "usb3-phy";
 +
 +				ports {
