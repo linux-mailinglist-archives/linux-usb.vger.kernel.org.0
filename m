@@ -2,155 +2,314 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9346B2315
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 12:33:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F596B23E7
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Mar 2023 13:17:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbjCILdB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Mar 2023 06:33:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49520 "EHLO
+        id S230236AbjCIMRl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Mar 2023 07:17:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbjCILc7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 06:32:59 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2078.outbound.protection.outlook.com [40.107.8.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC37C5277;
-        Thu,  9 Mar 2023 03:32:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nrATZLpBnqqzapAULjnhtcfHhsFGyrH62Dyn49YR/eP1YwztQniLcn58P8oZmOR0YK0CREEuRG+/WktGV3ZkWUNAU0GW/w7ftQnsj41Lu6GpPY7eTUXB48fxoYqvU3q0rdbzmRh4tYmWqjp8V/Hz8ERHw9VL9Nzrla6mDFliEHuK/gt4CJ2dOsG89ZqiQKkuQbxwbHE8C1lgP6rmE7FIOC2ZrnNKndJo/gcwOeeCEcgd26C/WP3Jwj3TC8AGWKzSbhIAWu1YDoUVriZG7Hfiiw3cwOa/gO5FQk67AXvPrP0EZkZQkGw7Rhn7Yt/BVXBGVmidZ11bnu2l/R5A+sZSUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4wt+irh6E4LNDD72G2FQCU+PsBXMEjcPPzE0oZD5hlk=;
- b=T97cjVCNiqFhXTXRy7V3WwIy7Zs/e7voHz4OeUqiY0LkQ8srvBHDmvdvqJ1XL0e4V6Y98qYd5+8t6BaT6ZXKJM74loIKUP0bDCFClBkDGCLZ8WKDGV9QzE/CQGreS1oLG9cG4UY1oQlIw3OMjRtSpOPvBQxuCoR0gz1gnGZiLZOmlPehM6z/CI4uPTL32l4L1b7uNLl5ohdknnvL4peU2oBYvXAEx+yTueNLW0kloSD3aq/ObcnCwR6Ut8IL+zpARbndephqfiMkAVBOwuUA0H6qRBSX9jdhSYoR7L5hPgz+1CGMpPkESH3HxYNOi4VmOCckpD8b4ineEFZ/pS3k6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4wt+irh6E4LNDD72G2FQCU+PsBXMEjcPPzE0oZD5hlk=;
- b=Ti8skcY3wE32Tm36NJsstXhIpD14z16xheW10g3lmULX8r8Q64pdoNs/cgrwEwuY6OprM0PNLSvOOdB6Oprw0A4PeCS3ykKUMrGzpeC8Ca2mii2bz4sqDVkEkIc3TIyY5fYNhHftgQgKArrwJVR009Gh1GAGorL3y7FM0pxhIWWIRO7EvDwawVyUqv3XyHPENloLEyr0E66tkwoQ9m8kz/waJekkyrJjv1Sv4dT5M0Hejj9ouVe+ZIJLcZ6wZtbyqX/67YQLwf+1ttQNXTfHS59qhugytLH5P0YQ4mqZr4xeY1faSZEgdxXy+i8T8SSUEpcvMQsOq2QijWMQcN19Cg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by AS8PR04MB8200.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Thu, 9 Mar
- 2023 11:32:52 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com ([fe80::2ea:4a86:9ab7])
- by VI1PR04MB7104.eurprd04.prod.outlook.com ([fe80::2ea:4a86:9ab7%3]) with
- mapi id 15.20.6178.019; Thu, 9 Mar 2023 11:32:52 +0000
-Message-ID: <9a05953e-fc43-3223-2c96-8e12eac93bf4@suse.com>
-Date:   Thu, 9 Mar 2023 12:32:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 27/28] sound: usb: card: Allow for rediscovery of
- connected USB SND devices
-Content-Language: en-US
-To:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
-        andersson@kernel.org, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org, tiwai@suse.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
- <20230308235751.495-28-quic_wcheng@quicinc.com>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20230308235751.495-28-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0189.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a4::12) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+        with ESMTP id S230186AbjCIMRi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Mar 2023 07:17:38 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA13EA021
+        for <linux-usb@vger.kernel.org>; Thu,  9 Mar 2023 04:17:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678364234; x=1709900234;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=L93blkbX4LwQs6CLmh2B+42f/OmudB+IWOABJeM9HcY=;
+  b=V9gzxL4WTpIunNZSuWiQv4t57vAZglZU8u0H3RT9nmJdxAqrXf4gT78V
+   BFzhJqR10sOGHxbn/s3fCZ3BododHVQZc2ikZ5KpnCTGM9M7a/D9n1Xhl
+   RCefdd5i8VSbbcxjlOCTGRcV8aPUBY+B9W6OxZTxd5uYuhbGVth626BRj
+   SXE5E3cN97fzsL9tcN6d+7I32itavEPGRdOCE6mEbuLdo+axWgZ7fszKr
+   hw1kiovcXlc8xE2y5mqLXcIe+/qlaF7DNwW59aopwdUF9hML3d5tKn9TR
+   VTzsU4M01+iyJnNoRYmNp6f8d0l/54bCd0E4NZ51pHxM+58fURUWC13Yg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="316825483"
+X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
+   d="scan'208";a="316825483"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 04:16:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="670701796"
+X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
+   d="scan'208";a="670701796"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 09 Mar 2023 04:16:24 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1paFC3-0002w9-1O;
+        Thu, 09 Mar 2023 12:16:23 +0000
+Date:   Thu, 9 Mar 2023 20:15:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kangzhen Lou <kangzhen.lou@dell.com>, oliver@neukum.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+        Kangzhen Lou <kangzhen.lou@dell.com>
+Subject: Re: [PATCH] net: cdc_ncm: support ACPI MAC address pass through
+ functionality
+Message-ID: <202303092024.QNv44vyX-lkp@intel.com>
+References: <20230309083436.6729-1-kangzhen.lou@dell.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|AS8PR04MB8200:EE_
-X-MS-Office365-Filtering-Correlation-Id: ef912e41-d57e-48b0-6460-08db2092048c
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WKixnNsVS2SRwESte1ztiWbxBWS4LyU0P0Bgun0OUHvG3GhdX9JH/et2UT3rwMcrcMvMghB2jN7HZsNAqLf4smPUvLUB6rzbGRSooCN0iUtjMMBNJyXXiU2XS3+PFpgvO7qYP6WU7uAzD4sx6Dlfim8I7vS6+F+3PIoZDqoNsIqodk8jzJHUBVu5YgCNaU8e06Y9NAbrtRE9C5Tx6t5Aotd5k0Sl9SGxTKKZXhIyF/pczUX8UuGpXp+fg2GibQYb3vo/RDoSIyY5yymTrcLRDJo2VEqC4y5zTyX9hl+zhkyVNsdG87k7YqiHtQWSRVK8u22HQKtGyA/tqYF+gviE1uDLxGklqXESggbY3NuVYP8ngIFRmcdzy73qtEC34hJtbdU5n6EVRQ03XxuzAUx1cArd3h5Vg6o6qOE/s9s+6Jq5gjr3fKx7Cf2SaNKp3p/gJuzX2dJEHuclg5AMkrYmu7Yk/tQP2UEPxKOVVzdo6FpbhjK+6u48p88YpNdeZrY5RZJGMt5zKFCY/pU+fTOomofFpVbJwrDst94CXOJ8xmA/h5p/Bti/8FuLIJN7g+ds4Is044Z03uVclBOMwdCKur4J10cv/ukajH0GCwZSJCdCv/MIkv5B96lk6sqRSp3ZLCW0UXTuzuNAuQab9yNh8beb+/mQkKON2kQSaN9ASAXxROC7+AlknKFTAxnEk0U76IVSigadps0Fz3jnpyJ10ebIoEcLlx5Gs8zx4zk+bToKYucKPy0wmwC54wS3sDHV
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(39860400002)(376002)(136003)(346002)(366004)(451199018)(31686004)(4326008)(36756003)(5660300002)(41300700001)(7416002)(8936002)(66476007)(66946007)(4744005)(2906002)(66556008)(8676002)(31696002)(921005)(86362001)(38100700002)(6512007)(6486002)(6636002)(478600001)(316002)(6506007)(6666004)(83380400001)(2616005)(186003)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bEVEcjBGQitjVisxd0ZacHAvWWdVQjJiRkFUSGtXNVZId3RLS1ZLTWd3ZStD?=
- =?utf-8?B?U3BIVVovMWNRNHk5VTJ3UXhNc216NDhkL1JTZFVUVkRicW4xOHRYRE13ZHQ1?=
- =?utf-8?B?dkJRVlVGWHFOaCsySGZ4UGVrd3NBM3Y4QkxaRXpCZ2Rwdzg0VkhzeGx4RlFm?=
- =?utf-8?B?bEF6akJNbkVHR1YrYnRWK2VJb0lRTWtHemNZNlNzam5IZW1HSkt1ZUMybFVT?=
- =?utf-8?B?akIvOW1GR1d2SWQ4aE5ybUdzbU1vK2l2UDBCMk5EN1RlUDNUY2RWL0ZyZXc1?=
- =?utf-8?B?L3N3RHNZQlhGMGhZeTdnYjQ1RUs1SmhiMS9ydWN4cGdZWnVvVkIrSi9QaHo0?=
- =?utf-8?B?dzNkeWRONTllZGFMZ3l1eEplOGVnakRiTzM5ZThUNVplK3pudXBnM3VHMHlV?=
- =?utf-8?B?QVdhZXZGL3YyMThZLzQ2SDJBSzhEZ0czbTNJZWNwTENzcUU4OFpGNkFJU3lY?=
- =?utf-8?B?UmthRzZNRFRGamI3bnprdklENDUyaWZOWEkrUmIrcWRJVDFnU0xMYjV6MWhy?=
- =?utf-8?B?aStDdmMzR2ttWmdaTkREcDIrYzd1UEJDRDNCQXpLZEZ3L1MyNTc0MGFvd0Iv?=
- =?utf-8?B?VGtKMzFrSDVveDhIQXpOSzNKamxrVnRjTmxKaXc5aGh3T2FwWmVnTmx4R0Jn?=
- =?utf-8?B?QUV4OTJGNXdrTU1RYm40RFNLYkd1eHhxYTRFUzErYWtacDduRXBnVlNSNTVo?=
- =?utf-8?B?OG1veFlCUCtpVkw2TGk3SmJKaXlVSm9NQlVqLzJmdVdRTC8rQ1piR2Rkd01a?=
- =?utf-8?B?RDU1M25jYVVaTEtNakl2UVlYaURsVUZRSjREQml1cEpHRTJKbHduZSsxam5D?=
- =?utf-8?B?RXd3UUVkQU9oeHYxd09DcUVpc0FBSDNKZWR0b0JMNXAwL3ZaUy9xLzFWd3Zl?=
- =?utf-8?B?eEo5U2hFcEl1alV5NUFJTXppRmhmK1ZjU1hueGt5TUlFVEJGMXN2dVQxWk9I?=
- =?utf-8?B?My9oS21CYll3RWM2citmamx3NUljTEdrQzZNNWM1MmRVMzVVTlhBaldabExS?=
- =?utf-8?B?MnN5cjdhYndwemF3Skl3Y0lmeHNHQkZKRjlwYVQ3ZktvWE50djBDQm5Gc2k2?=
- =?utf-8?B?dlZZd2NXR2YvMTNZM3lLTU5vMVdOVHBPQS9yT1dreFBVQ3luNEt2ME85K1Ev?=
- =?utf-8?B?UWtkN3B2cXgwckJJVUdSMUtMTTg1ZytvRDdvdkN4SURYYTFRUzd6RmcyZGZu?=
- =?utf-8?B?REc1cytQTVpRbGZFOFJLMkRtb2tjOGJxSWh6Szhjd2EvbHE2aGdya1hUb2xR?=
- =?utf-8?B?d1RsVG9VSWp3Wkh3am1tSGJXZzFmSnhvSEpaUFAyNXFPYU9yZUptcS9kWjht?=
- =?utf-8?B?N2ZWek43M2w5K0xuMk93VVo5T3YzQmxWMlhFU0pYWDdicnF0VGJwaDNwSll0?=
- =?utf-8?B?MGY1UXRxOU1MSnozYS9ZVFRLTlE2Qyt5V0ZQL2tVcDN5c1JVVmkxdTBzT1Nz?=
- =?utf-8?B?ZFdRMlkwRndmaTYyTVFBa0Z1aTFSdkdGeEZ6c1pNcEJLa1NXN3oyMlA1dExo?=
- =?utf-8?B?NVlwQmFtbjlIQThNWjEzcXlqdGhkNE1vVjhlM0EwVFV4OXRlMnpVcm5taHpK?=
- =?utf-8?B?eG5NVFZ5M2R1K3lPTjZpTE9JZ1FpU21iQXZFNkp5b2E3Vkdoazc1aW5DT1RT?=
- =?utf-8?B?Y09iUW94RzJqVnp6akdJQmVQaXllYmxBYWNEMHFKK1Vwa2tKM1JBak9JYTRu?=
- =?utf-8?B?Q3lMWExPUXlMNEY4eE51Qlk2YWpPbm50WjJvVjA3UE9nYWE3Q0lTKy9kRWpq?=
- =?utf-8?B?Snpib3pQMllzZ1BYTXB0YzNNcW5ZWmJ0VjNVUFJla1BUdjRkTmxlMnJ3VTA1?=
- =?utf-8?B?c3h2cWloYXA0QldxQUZkRjBrcEptUFNhOEdoMDdPa0tHRjV6b1BtUWZjZ2N1?=
- =?utf-8?B?dDNqekhqZEg5ZmlsM1RTWTU5aXRRanIxWXlmTTlyQ1dyYkg3VXdJajlzL2NB?=
- =?utf-8?B?UE5KdkZhczBQNDBlZHVKOE12UTQwekVyTWZuQmFyRTI5cktTUzZ4cFhTM1Nv?=
- =?utf-8?B?ZnFaM1JRelRJb21hT21RMUdTbUN1YUxNNThDV2tiNEZPZVk0UVlPOE1vck5P?=
- =?utf-8?B?ZnVqLzRicXdMMkxPdnBST2lsMWloUmtjblVoSFZxMlNoOFg3dlk3b2NlekRF?=
- =?utf-8?B?cTg5UEZFMzhrbXBkV3JSaVhxMGhCOWFweThGOS83cEdsZUlqWEJDbXpNWFNX?=
- =?utf-8?Q?rzGidzUUwFAA/9n+L/TSQu+Mwm7FltOxUxpu+ar82r/V?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef912e41-d57e-48b0-6460-08db2092048c
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 11:32:51.8243
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: y2EKruafpNH6a5roXDjl1SJh7VHSZVZWlIFpg1jJYbo2SyL5FMMqPQw0c39NXw3oRly4CP/lVk0qhmmhzavpHg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8200
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309083436.6729-1-kangzhen.lou@dell.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 09.03.23 00:57, Wesley Cheng wrote:
-  
-> +/*
-> + * in case the platform driver was not ready at the time of USB SND
-> + * device connect, expose an API to discover all connected USB devices
-> + * so it can populate any dependent resources/structures.
-> + */
-> +void snd_usb_rediscover_devices(void)
-> +{
-> +	int i;
-> +
-> +	mutex_lock(&register_mutex);
-> +	for (i = 0; i < SNDRV_CARDS; i++) {
-> +		if (usb_chip[i])
-> +			if (platform_ops && platform_ops->connect_cb)
+Hi Kangzhen,
 
-Really check this every time?
+Thank you for the patch! Perhaps something to improve:
 
-	Regards
-		Oliver
+[auto build test WARNING on westeri-thunderbolt/next]
+[also build test WARNING on linus/master v6.3-rc1 next-20230309]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kangzhen-Lou/net-cdc_ncm-support-ACPI-MAC-address-pass-through-functionality/20230309-184736
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
+patch link:    https://lore.kernel.org/r/20230309083436.6729-1-kangzhen.lou%40dell.com
+patch subject: [PATCH] net: cdc_ncm: support ACPI MAC address pass through functionality
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230309/202303092024.QNv44vyX-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/97cd8ee9a774c36093af3d26255e415f6082b4a3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kangzhen-Lou/net-cdc_ncm-support-ACPI-MAC-address-pass-through-functionality/20230309-184736
+        git checkout 97cd8ee9a774c36093af3d26255e415f6082b4a3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/net/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303092024.QNv44vyX-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/usb/cdc_ncm.c:818:5: warning: no previous prototype for 'acpi_mac_passthru_invalid' [-Wmissing-prototypes]
+     818 | int acpi_mac_passthru_invalid(void)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/usb/cdc_ncm.c:851:5: warning: no previous prototype for 'get_acpi_mac_passthru' [-Wmissing-prototypes]
+     851 | int get_acpi_mac_passthru(char *MACAddress)
+         |     ^~~~~~~~~~~~~~~~~~~~~
+   drivers/net/usb/cdc_ncm.c: In function 'cdc_ncm_get_ethernet_address':
+>> drivers/net/usb/cdc_ncm.c:894:49: warning: passing argument 6 of 'usbnet_read_cmd' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     894 |                               iface_no, dev->net->dev_addr, ETH_ALEN);
+         |                                         ~~~~~~~~^~~~~~~~~~
+   In file included from drivers/net/usb/cdc_ncm.c:53:
+   include/linux/usb/usbnet.h:181:49: note: expected 'void *' but argument is of type 'const unsigned char *'
+     181 |                     u16 value, u16 index, void *data, u16 size);
+         |                                           ~~~~~~^~~~
+   In file included from include/linux/string.h:20,
+                    from include/linux/bitmap.h:11,
+                    from include/linux/cpumask.h:12,
+                    from include/linux/mm_types_task.h:14,
+                    from include/linux/mm_types.h:5,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from drivers/net/usb/cdc_ncm.c:41:
+   drivers/net/usb/cdc_ncm.c: In function 'cdc_ncm_determine_ethernet_addr':
+>> drivers/net/usb/cdc_ncm.c:980:48: warning: passing argument 1 of '__builtin_memcpy' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     980 |                                 memcpy(dev->net->dev_addr, sa.sa_data, ETH_ALEN);
+         |                                        ~~~~~~~~^~~~~~~~~~
+   arch/m68k/include/asm/string.h:52:42: note: in definition of macro 'memcpy'
+      52 | #define memcpy(d, s, n) __builtin_memcpy(d, s, n)
+         |                                          ^
+   drivers/net/usb/cdc_ncm.c:980:48: note: expected 'void *' but argument is of type 'const unsigned char *'
+     980 |                                 memcpy(dev->net->dev_addr, sa.sa_data, ETH_ALEN);
+         |                                        ~~~~~~~~^~~~~~~~~~
+   arch/m68k/include/asm/string.h:52:42: note: in definition of macro 'memcpy'
+      52 | #define memcpy(d, s, n) __builtin_memcpy(d, s, n)
+         |                                          ^
+
+
+vim +/acpi_mac_passthru_invalid +818 drivers/net/usb/cdc_ncm.c
+
+   817	
+ > 818	int acpi_mac_passthru_invalid(void)
+   819	{
+   820		acpi_status status;
+   821		struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+   822		union acpi_object *obj;
+   823		int ret = -EINVAL;
+   824	
+   825		/* returns _AUXMAC_#AABBCCDDEEFF# */
+   826		status = acpi_evaluate_object(NULL, "\\_SB.AMAC", NULL, &buffer);
+   827		obj = (union acpi_object *)buffer.pointer;
+   828	
+   829		if (!ACPI_SUCCESS(status))
+   830			return -ENODEV;
+   831		if (obj->type != ACPI_TYPE_BUFFER || obj->string.length != 0x17) {
+   832			acpi_info("Invalid buffer for pass-thru MAC addr: (%d, %d)\n",
+   833				  obj->type, obj->string.length);
+   834			goto amacout;
+   835		}
+   836		if (strncmp(obj->string.pointer, "_AUXMAC_#", 9) != 0 ||
+   837		    strncmp(obj->string.pointer + 0x15, "#", 1) != 0) {
+   838			acpi_info("Invalid header when reading pass-thru MAC addr\n");
+   839			goto amacout;
+   840		}
+   841		/* return success, otherwise return non-zero if invalid buffer read or
+   842		 * MAC pass through is disabled in BIOS
+   843		 */
+   844		ret = 0;
+   845	
+   846	amacout:
+   847		kfree(obj);
+   848		return ret;
+   849	}
+   850	
+ > 851	int get_acpi_mac_passthru(char *MACAddress)
+   852	{
+   853		acpi_status status;
+   854		struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+   855		union acpi_object *obj;
+   856		int ret = -EINVAL;
+   857		unsigned char buf[6];
+   858	
+   859		/* returns _AUXMAC_#AABBCCDDEEFF# */
+   860		status = acpi_evaluate_object(NULL, "\\_SB.AMAC", NULL, &buffer);
+   861		obj = (union acpi_object *)buffer.pointer;
+   862	
+   863		if (!ACPI_SUCCESS(status))
+   864			return -ENODEV;
+   865	
+   866		ret = hex2bin(buf, obj->string.pointer + 9, 6);
+   867		if (!(ret == 0 && is_valid_ether_addr(buf))) {
+   868			acpi_info("Invalid MAC for pass-thru MAC addr: %d, %pM\n",
+   869				  ret, buf);
+   870			ret = -EINVAL;
+   871			goto amacout;
+   872		}
+   873		memcpy(MACAddress, buf, 6);
+   874		acpi_info("Pass-thru MAC addr %pM\n", MACAddress);
+   875	
+   876	amacout:
+   877		kfree(obj);
+   878		return ret;
+   879	}
+   880	
+   881	/* Provide method to get MAC address from the USB device's ethernet controller.
+   882	 * If the device supports CDC_GET_ADDRESS, we should receive just six bytes.
+   883	 * Otherwise, use the prior method by asking for the descriptor.
+   884	 */
+   885	static int cdc_ncm_get_ethernet_address(struct usbnet *dev,
+   886						struct cdc_ncm_ctx *ctx)
+   887	{
+   888		int ret;
+   889		u8 iface_no = ctx->control->cur_altsetting->desc.bInterfaceNumber;
+   890	
+   891		ret = usbnet_read_cmd(dev, USB_CDC_GET_NET_ADDRESS,
+   892				      USB_DIR_IN | USB_TYPE_CLASS
+   893				      | USB_RECIP_INTERFACE, 0,
+ > 894				      iface_no, dev->net->dev_addr, ETH_ALEN);
+   895	
+   896		if (ret == ETH_ALEN) {
+   897			ret = 0;	/* success */
+   898		} else {
+   899			ret = usbnet_get_ethernet_addr(dev,
+   900					ctx->ether_desc->iMACAddress);
+   901		}
+   902	
+   903		return ret;
+   904	}
+   905	
+   906	/* Provide method to push MAC address to the USB device's ethernet controller.
+   907	 * If the device does not support CDC_SET_ADDRESS, there is no harm and we
+   908	 * proceed as before.
+   909	 */
+   910	static int cdc_ncm_set_ethernet_address(struct usbnet *dev,
+   911						struct sockaddr *addr)
+   912	{
+   913		int ret;
+   914		struct cdc_ncm_ctx *ctx = (struct cdc_ncm_ctx *)dev->data[0];
+   915		u8 iface_no_data = ctx->data->cur_altsetting->desc.bInterfaceNumber;
+   916		u8 iface_no_control = ctx->control->cur_altsetting->desc.bInterfaceNumber;
+   917		int temp;
+   918	
+   919		/* The host shall only send SET_NET_ADDRESS command while
+   920		 * the NCM Data Interface is in alternate setting 0.
+   921		 */
+   922		temp = usb_set_interface(dev->udev, iface_no_data, 0);
+   923		if (temp) {
+   924			dev_dbg(&dev->udev->dev, "set interface failed\n");
+   925			return -ENODEV;
+   926			}
+   927	
+   928		ret = usbnet_write_cmd(dev, USB_CDC_SET_NET_ADDRESS,
+   929				       USB_DIR_OUT | USB_TYPE_CLASS
+   930				       | USB_RECIP_INTERFACE, 0,
+   931				       iface_no_control, addr->sa_data, ETH_ALEN);
+   932	
+   933		if (ret == ETH_ALEN)
+   934			ret = 0;	// success
+   935		else if (ret < 0)
+   936			dev_dbg(&dev->udev->dev, "bad MAC address put, %d\n", ret);
+   937	
+   938		/* restore alternate setting.
+   939		 * The NCM data altsetting is fixed, so we hard-coded it.
+   940		 */
+   941		temp = usb_set_interface(dev->udev, iface_no_data,
+   942				CDC_NCM_DATA_ALTSETTING_NCM);
+   943		if (temp) {
+   944			dev_dbg(&dev->udev->dev, "set interface failed\n");
+   945			return -ENODEV;
+   946			}
+   947	
+   948		return ret;
+   949	}
+   950	
+   951	static int cdc_ncm_determine_ethernet_addr(struct usb_interface *intf)
+   952	{
+   953		struct sockaddr sa;
+   954		struct usbnet *dev = usb_get_intfdata(intf);
+   955		struct cdc_ncm_ctx *ctx;
+   956		int ret = 0;
+   957	
+   958		if (!dev)
+   959			return 0;
+   960	
+   961		/* MAC pass through function only apply to Realtek RTL8153-DD chip */
+   962		if (!(dev->udev->descriptor.idVendor == 0x0bda
+   963			&& dev->udev->descriptor.idProduct == 0x8153
+   964			&& (dev->udev->descriptor.bcdDevice & 0xff00) == 0x3300))
+   965			return 0;
+   966	
+   967		ctx = (struct cdc_ncm_ctx *)dev->data[0];
+   968		if (!ctx->ether_desc)
+   969			return 0;
+   970	
+   971		ret = cdc_ncm_get_ethernet_address(dev, ctx);
+   972		if (ret) {
+   973			dev_dbg(&intf->dev, "failed to get mac address\n");
+   974			return ret;
+   975		}
+   976	
+   977		if (!get_acpi_mac_passthru(sa.sa_data)) {
+   978			if (memcmp(dev->net->dev_addr, sa.sa_data, ETH_ALEN) != 0) {
+   979				if (!cdc_ncm_set_ethernet_address(dev, &sa))
+ > 980					memcpy(dev->net->dev_addr, sa.sa_data, ETH_ALEN);
+   981			}
+   982		}
+   983	
+   984		dev_info(&intf->dev, "MAC-Address: %pM\n", dev->net->dev_addr);
+   985	
+   986		return 0;
+   987	}
+   988	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
