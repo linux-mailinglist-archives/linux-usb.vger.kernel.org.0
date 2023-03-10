@@ -2,67 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C290E6B37F0
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Mar 2023 09:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC276B382A
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Mar 2023 09:09:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjCJIBy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Mar 2023 03:01:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
+        id S230188AbjCJIJI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Mar 2023 03:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjCJIBw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Mar 2023 03:01:52 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F3CE1C99;
-        Fri, 10 Mar 2023 00:01:48 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 19B0A24E1FE;
-        Fri, 10 Mar 2023 16:01:47 +0800 (CST)
-Received: from EXMBX071.cuchost.com (172.16.6.81) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Mar
- 2023 16:01:47 +0800
-Received: from [192.168.125.108] (183.27.96.115) by EXMBX071.cuchost.com
- (172.16.6.81) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Mar
- 2023 16:01:45 +0800
-Message-ID: <5ebede90-7851-6b3b-adf7-81604f955817@starfivetech.com>
-Date:   Fri, 10 Mar 2023 16:01:45 +0800
+        with ESMTP id S230236AbjCJIIi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Mar 2023 03:08:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65546F7847;
+        Fri, 10 Mar 2023 00:08:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDDB7B821E4;
+        Fri, 10 Mar 2023 08:07:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1627DC433D2;
+        Fri, 10 Mar 2023 08:07:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678435673;
+        bh=20jRrDHXaZ3rBIwvwboTw1gW/cNg6j8dkFSEzJUteqU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dVtOuyRzFz/2WpPdNx6/oKhxHdSfEMPc9wehDshkU8U5JpUty6J5wCo5d3w3be8xR
+         QLRCD3E9wEKDnsn1GqFi0tBxnQbUmuZcUjzUTAOza5KoOWI9zBLCJ0W9I23Jahn6KN
+         C2NTebaWQN087knjgByMYAxdnGFbqWuTFzTXS6B0=
+Date:   Fri, 10 Mar 2023 09:07:50 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Yongqin Liu <yongqin.liu@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v1 0/4] Remove use of fw_devlink_purge_absent_suppliers()
+Message-ID: <ZArlVu4LLtGoIcDU@kroah.com>
+References: <20230301214952.2190757-1-saravanak@google.com>
+ <CAGETcx_DTHW4-WMK4qRhvhxiunUB2f79cpXSfQ1x-hifZQ+tgw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: phy: Add StarFive JH7110 USB
- dt-binding
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        "Kishon Vijay Abraham I" <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Peter Chen" <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        Conor Dooley <conor@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-References: <20230308082800.3008-1-minda.chen@starfivetech.com>
- <20230308082800.3008-2-minda.chen@starfivetech.com>
- <8124eed7-b9ab-046d-4eb2-9b853ce2bcdd@linaro.org>
-From:   Minda Chen <minda.chen@starfivetech.com>
-In-Reply-To: <8124eed7-b9ab-046d-4eb2-9b853ce2bcdd@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.96.115]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX071.cuchost.com
- (172.16.6.81)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGETcx_DTHW4-WMK4qRhvhxiunUB2f79cpXSfQ1x-hifZQ+tgw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,160 +62,16 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, Mar 09, 2023 at 10:04:49AM -0800, Saravana Kannan wrote:
+> Greg,
+> 
+> Don't pull in this series please. It needs more testing from the folks
+> I cc'ed and it's already breaking things for Martin. This needs more
+> revisions.
 
+Ah, missed that, sorry.  I've dropped all 4 of these from my tree now,
+please resend a new version when you all have it worked out.
 
-On 2023/3/9 18:07, Krzysztof Kozlowski wrote:
-> On 08/03/2023 09:27, Minda Chen wrote:
->> Add StarFive JH7110 SoC USB 3.0 phy dt-binding.
->> USB controller is cadence USB 3.0 IP.
-> 
-> Subject: drop second/last, redundant "binding". The "dt-bindings" prefix
-> is already stating that these are bindings.
-> 
->> 
->> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
->> ---
->>  .../bindings/phy/starfive,jh7110-usb-phy.yaml | 158 ++++++++++++++++++
->>  1 file changed, 158 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
->> 
->> diff --git a/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml b/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
->> new file mode 100644
->> index 000000000000..daa88d065deb
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
->> @@ -0,0 +1,158 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/phy/starfive,jh7110-usb-phy.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: StarFive USB 2.0 and 3.0 PHY
->> +
->> +maintainers:
->> +  - Minda Chen<minda.chen@starfivetech.com>
-> 
-> Missing space
-> 
->> +
->> +properties:
->> +  compatible:
->> +    items:
-> 
-> Drop items, it's just one item.
-> 
-> 
->> +      - const: starfive,jh7110-usb
->> +
->> +  reg:
->> +    maxItems: 2
->> +
->> +  reg-names:
->> +    items:
->> +      - const: usb3
->> +      - const: usb2
->> +
->> +  clocks:
->> +    items:
->> +      - description: usb 125m clock
->> +      - description: app 125m clock
->> +      - description: lpm clock
->> +      - description: stb clock
->> +      - description: apb clock
->> +      - description: axi clock
->> +      - description: utmi apb clock
->> +
->> +  clock-names:
->> +    items:
->> +      - const: usb_125m
->> +      - const: usb0_app_125
->> +      - const: usb0_lpm
->> +      - const: usb0_stb
->> +      - const: usb0_apb
->> +      - const: usb0_axi
->> +      - const: usb0_utmi_apb
->> +
->> +  resets:
->> +    items:
->> +      - description: USB0_PWRUP reset
->> +      - description: USB0_APB reset
->> +      - description: USB0_AXI reset
->> +      - description: USB0_UTMI_APB reset
->> +
->> +  starfive,sys-syscon:
->> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->> +    items:
->> +      items:
->> +        - description: phandle to System Register Controller sys_syscon node.
->> +        - description: offset of SYS_SYSCONSAIF__SYSCFG register for USB.
->> +    description:
->> +      The phandle to System Register Controller syscon node and the offset
->> +      of SYS_SYSCONSAIF__SYSCFG register for USB.
->> +
->> +  starfive,stg-syscon:
->> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->> +    items:
->> +      items:
->> +        - description: phandle to System Register Controller stg_syscon node.
->> +        - description: register0 offset of STG_SYSCONSAIF__SYSCFG register for USB.
->> +        - description: register1 offset of STG_SYSCONSAIF__SYSCFG register for USB.
->> +        - description: register2 offset of STG_SYSCONSAIF__SYSCFG register for USB.
->> +        - description: register3 offset of STG_SYSCONSAIF__SYSCFG register for USB.
->> +    description:
->> +      The phandle to System Register Controller syscon node and the offset
->> +      of STG_SYSCONSAIF__SYSCFG register for USB. Total 4 regsisters offset
->> +      for USB.
->> +
->> +  dr_mode:
->> +    description: PHY mode.
->> +    enum:
->> +      - host
->> +      - peripheral
->> +      - otg
->> +
->> +  "#address-cells":
->> +    maximum: 2
->> +
->> +  "#size-cells":
->> +    maximum: 2
->> +
->> +  ranges: true
->> +
->> +  starfive,usb2-only:
->> +    type: boolean
->> +    description: Set USB using usb 2.0 phy. Supprt USB 2.0 only
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - reg-names
->> +  - clocks
->> +  - clock-names
->> +  - resets
->> +  - starfive,sys-syscon
->> +  - starfive,stg-syscon
->> +  - dr_mode
->> +  - "#address-cells"
->> +  - "#size-cells"
->> +  - ranges
->> +
->> +patternProperties:
-> 
-> This goes before required block
-> 
->> +  "^usb@[0-9a-f]+$":
->> +    type: object
->> +    description: |
->> +      usbphy node should have '1' usb controller subnode.
->> +      It could be Cadence USB3 DRD controller.
->> +      Cadence USB3 should follow the bindings specified in
->> +      Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-> 
-> $ref instead of free form text
-> 
-> 
-ok, thanks. Next version I will follow the comments to change.
-> Best regards,
-> Krzysztof
-> 
+thanks,
+
+greg k-h
