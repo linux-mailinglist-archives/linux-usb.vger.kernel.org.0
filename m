@@ -2,95 +2,214 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 699F66B3FE0
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Mar 2023 14:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFD66B408D
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Mar 2023 14:37:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbjCJNDL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Mar 2023 08:03:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S230156AbjCJNhK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Mar 2023 08:37:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjCJNDJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Mar 2023 08:03:09 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4F43423E;
-        Fri, 10 Mar 2023 05:03:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=6TtIQ
-        g09ZmPHNc7fwNMyG9gkvYgQeJ5WuDUEisBpScU=; b=nZ9APEsOjKa0oCV2VufXM
-        iPmsciw9JwNWjzWhqcS3KCkJrgiOmSmpQUev6wg30ffX2OcX3MI0MdjgmPJY4/dz
-        cN4EJ0fetkCfvQHk2wHZsFbP7Wmod9vXzh0g0howXh6gjFWobi+HadxJLt/N9+fj
-        oOyTRGpDRvYHyOMJo4mXlc=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g2-0 (Coremail) with SMTP id _____wDXhZJnKgtkMLlkCw--.5392S2;
-        Fri, 10 Mar 2023 21:02:32 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     gregkh@linuxfoundation.org
-Cc:     p.zabel@pengutronix.de, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH] usb: renesas_usbhs: Fix use after free bug in usbhs_remove due to race condition
-Date:   Fri, 10 Mar 2023 21:02:30 +0800
-Message-Id: <20230310130230.1732896-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230161AbjCJNhH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Mar 2023 08:37:07 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0177910D33B;
+        Fri, 10 Mar 2023 05:36:58 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32AD6cbS022516;
+        Fri, 10 Mar 2023 13:36:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=j+FcDSz+nP6gaAfpugOkP7gnAi4BScdpnJ2A+qJOhck=;
+ b=dd/5tY+35EsaZ68QA8lAwBC9W5P+R7XrmGytEJtbCvePEv/IT8RwwFLCUTWpzFaMDvgX
+ 8yDkuCZPUsWfncTOjAnEp8NiHzIR6tQMJ0KE6qqMyikMNPD+BbV6EWiZQurwxreOHN7W
+ cm4Lc7xEKvjjW+T6qX3BWfICL8P8t2xI2jIXJUC1vlGCs9Wpc4QKk2YFPR+iBDRTTFDg
+ vxe6Fawg8Fcg1ZDbeDLsqGjPda1sFOvcU5YrOvNiKCC0g9mVjyaeIzdsPlnGx3djUcqo
+ Kl2R6corS94uVyu8swOPrVoRqAtJI/1u7G9miUROjCpeMmQoMRDxsphMflKIpm7N58Td yw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p7juttp94-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 13:36:53 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32ADaqVY013514
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 13:36:52 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Fri, 10 Mar 2023 05:36:50 -0800
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [RFC v2] usb: gadget: ncm: Add support to configure wMaxSegmentSize
+Date:   Fri, 10 Mar 2023 19:06:40 +0530
+Message-ID: <20230310133640.11142-1-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wDXhZJnKgtkMLlkCw--.5392S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Ww13Gw1rKw47WF1UAw15CFg_yoW8JF4xpa
-        15JFy8G3yrGrWjgan2qr4UXFyrCayqgr17WrZ7WwsxuwnxAa18Za4FqF4j9r13Xa93Ja1Y
-        v3Wvyr95CaykCFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziFdg_UUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzgAuU2I0Xl15awABs1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: HUc3zxlLxI84X6o8aWsjtd_K_pL_4s8m
+X-Proofpoint-ORIG-GUID: HUc3zxlLxI84X6o8aWsjtd_K_pL_4s8m
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-10_06,2023-03-09_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ lowpriorityscore=0 bulkscore=0 spamscore=0 phishscore=0 suspectscore=0
+ mlxscore=0 malwarescore=0 impostorscore=0 priorityscore=1501 clxscore=1011
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303100108
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In usbhs_probe, &priv->notify_hotplug_work is bound with
-usbhsc_notify_hotplug. It will be started then.
+Currently the NCM driver restricts wMaxSegmentSize that indicates
+the datagram size coming from network layer to 1514. However the
+spec doesn't have any limitation.
 
-If we remove the driver which will call usbhs_remove
-  to make cleanup, there may be a unfinished work.
+Add support to configure this value before configfs symlink is
+created. Also since the NTB Out/In buffer sizes are fixed at 16384
+bytes, limit the segment size to an upper cap of 15014. Set the
+default MTU size for the ncm interface during function bind before
+network interface is registered allowing MTU to be set in parity
+with wMaxSegmentSize.
 
-The possible sequence is as follows:
-
-Fix it by finishing the work before cleanup in the usbhs_remove
-
-CPU0                  CPU1
-
-                    |usbhsc_notify_hotplug
-usbhs_remove         |
-usbhs_mod_remove     |
-usbhs_mod_gadget_remove|
-kfree(gpriv);       |
-                    |usbhsc_hotplug
-                    |usbhs_mod_call start
-                    |usbhsg_start
-                    |usbhsg_try_start
-                    |//use gpriv
-Fixes: bc57381e6347 ("usb: renesas_usbhs: use delayed_work instead of work_struct")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 ---
- drivers/usb/renesas_usbhs/common.c | 1 +
- 1 file changed, 1 insertion(+)
+Link to v1: https://lore.kernel.org/all/20230212175659.4480-1-quic_kriskura@quicinc.com/
 
-diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
-index 96f3939a65e2..17a0987ef4f5 100644
---- a/drivers/usb/renesas_usbhs/common.c
-+++ b/drivers/usb/renesas_usbhs/common.c
-@@ -768,6 +768,7 @@ static int usbhs_remove(struct platform_device *pdev)
+Fixed the Max datagram size as per comments on v1.
+As per the spec, there are no GSO related specifications present mentioned by Maintainer.
+Pushing v2 to fix datagram length specification and take the discussion regarding GSO
+forward.
+
+
+ drivers/usb/gadget/function/f_ncm.c | 54 +++++++++++++++++++++++++++++
+ drivers/usb/gadget/function/u_ncm.h |  1 +
+ 2 files changed, 55 insertions(+)
+
+diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
+index 424bb3b666db..a990f407d6c3 100644
+--- a/drivers/usb/gadget/function/f_ncm.c
++++ b/drivers/usb/gadget/function/f_ncm.c
+@@ -97,6 +97,11 @@ static inline unsigned ncm_bitrate(struct usb_gadget *g)
  
- 	dev_dbg(&pdev->dev, "usb remove\n");
+ /*-------------------------------------------------------------------------*/
  
-+	cancel_delayed_work_sync(&priv->notify_hotplug_work);
- 	/* power off */
- 	if (!usbhs_get_dparam(priv, runtime_pwctrl))
- 		usbhsc_power_ctrl(priv, 0);
++/*
++ * Provide felxibility to change MTU upto 15000 (as the ETH_HLEN is 14 bytes)
++ */
++#define MAX_DATAGRAM_SIZE	15014
++
+ /*
+  * We cannot group frames so use just the minimal size which ok to put
+  * one max-size ethernet frame.
+@@ -1440,6 +1445,7 @@ static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
+ 	 */
+ 	if (!ncm_opts->bound) {
+ 		mutex_lock(&ncm_opts->lock);
++		ncm_opts->net->mtu = (ncm_opts->max_segment_size - ETH_HLEN);
+ 		gether_set_gadget(ncm_opts->net, cdev->gadget);
+ 		status = gether_register_netdev(ncm_opts->net);
+ 		mutex_unlock(&ncm_opts->lock);
+@@ -1484,6 +1490,8 @@ static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
+ 
+ 	status = -ENODEV;
+ 
++	ecm_desc.wMaxSegmentSize = ncm_opts->max_segment_size;
++
+ 	/* allocate instance-specific endpoints */
+ 	ep = usb_ep_autoconfig(cdev->gadget, &fs_ncm_in_desc);
+ 	if (!ep)
+@@ -1586,11 +1594,56 @@ USB_ETHERNET_CONFIGFS_ITEM_ATTR_QMULT(ncm);
+ /* f_ncm_opts_ifname */
+ USB_ETHERNET_CONFIGFS_ITEM_ATTR_IFNAME(ncm);
+ 
++static ssize_t ncm_opts_max_segment_size_show(struct config_item *item,
++						char *page)
++{
++	struct f_ncm_opts *opts = to_f_ncm_opts(item);
++	u32 segment_size;
++
++	mutex_lock(&opts->lock);
++	segment_size = opts->max_segment_size;
++	mutex_unlock(&opts->lock);
++
++	return sprintf(page, "%u\n", segment_size);
++}
++
++static ssize_t ncm_opts_max_segment_size_store(struct config_item *item,
++						const char *page, size_t len)
++{
++	struct f_ncm_opts *opts = to_f_ncm_opts(item);
++	int ret;
++	u32 segment_size;
++
++	mutex_lock(&opts->lock);
++	if (opts->refcnt) {
++		ret = -EBUSY;
++		goto out;
++	}
++
++	ret = kstrtou32(page, 0, &segment_size);
++	if (ret)
++		goto out;
++
++	if (segment_size > MAX_DATAGRAM_SIZE) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	opts->max_segment_size = segment_size;
++	ret = len;
++out:
++	mutex_unlock(&opts->lock);
++	return ret;
++}
++
++CONFIGFS_ATTR(ncm_opts_, max_segment_size);
++
+ static struct configfs_attribute *ncm_attrs[] = {
+ 	&ncm_opts_attr_dev_addr,
+ 	&ncm_opts_attr_host_addr,
+ 	&ncm_opts_attr_qmult,
+ 	&ncm_opts_attr_ifname,
++	&ncm_opts_attr_max_segment_size,
+ 	NULL,
+ };
+ 
+@@ -1633,6 +1686,7 @@ static struct usb_function_instance *ncm_alloc_inst(void)
+ 		kfree(opts);
+ 		return ERR_CAST(net);
+ 	}
++	opts->max_segment_size = cpu_to_le16(ETH_FRAME_LEN);
+ 	INIT_LIST_HEAD(&opts->ncm_os_desc.ext_prop);
+ 
+ 	descs[0] = &opts->ncm_os_desc;
+diff --git a/drivers/usb/gadget/function/u_ncm.h b/drivers/usb/gadget/function/u_ncm.h
+index 5408854d8407..fab99d997476 100644
+--- a/drivers/usb/gadget/function/u_ncm.h
++++ b/drivers/usb/gadget/function/u_ncm.h
+@@ -31,6 +31,7 @@ struct f_ncm_opts {
+ 	 */
+ 	struct mutex			lock;
+ 	int				refcnt;
++	u32				max_segment_size;
+ };
+ 
+ #endif /* U_NCM_H */
 -- 
-2.25.1
+2.39.0
 
