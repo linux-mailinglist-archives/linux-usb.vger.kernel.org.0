@@ -2,169 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 941BA6B4D82
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Mar 2023 17:49:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B146B4DBA
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Mar 2023 17:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbjCJQtI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Mar 2023 11:49:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
+        id S231549AbjCJQ5W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Mar 2023 11:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbjCJQrs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Mar 2023 11:47:48 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1793F135976;
-        Fri, 10 Mar 2023 08:45:33 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id p3-20020a17090ad30300b0023a1cd5065fso5768673pju.0;
-        Fri, 10 Mar 2023 08:45:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678466731;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bTHw5aQbs0BC28iVisLawe94Twp1MTgKRpX8SDWjibI=;
-        b=jC6cbx2edDvdvhoPu7hdCG0CEaTNyFvSnBirIC0hDd3yqpmT+ndhvdQatg7xD9+yUp
-         E+TtPemfINtkxEP54T89NvLwMBGNTV0PYA+Bk71T/9R3vdlKy5EViMyD4BRJiCcOYxMP
-         QefRUe3jqay4+s85aG/e+NBuWoBG9QwWC6ptfj4GYfRRpFf37uy4Lb+cqB+VnXRYPmn/
-         qk9ZIAZ2Qb4QXUXcFXE8K33iCBzDRzNXHGTzxsxW5p6gsA33gi7du91Lt7R6MwuYX5o8
-         mf4ntd2gyF+AkSy8vtz714n4y0J6z/RWNLTXfD8kz+8X/BGN8HOXBtjMpjzfRy/6yrHz
-         q+MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678466731;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bTHw5aQbs0BC28iVisLawe94Twp1MTgKRpX8SDWjibI=;
-        b=nnJ6x1hA7ueEmgTguyVYdebwr/oNLCzs4YU68av272aDsKnwpdwnFRS6AxLtMKx9oi
-         VlgZEia+hgMZ+nIr+R8MHUhlmRTbchEMemp8P/HN9A6HKSzgfi6vn6dwHfdD/MWfc3TQ
-         G/GNpqfNAEtcarlfLGJpHWO8hVt94JBCQVO90TxlBKpaJMWP6CSG14ljBkeQiD+Iq56Q
-         R7LjEY6v051XmnR1gL1262KPh6GEsQD4ly5LW0+GiUE+b8/RBG43q7O/VLPEUaB+ZEwt
-         18nTsDTLH2PG55K2OHPTPvjYQpKs6oLP1xKkN3THjadRMOw+TRJUExxLpV4WM9ha/EZj
-         WaTQ==
-X-Gm-Message-State: AO0yUKXwwWDoUrYd2vc2vpk6+shayn2toiDZQxcF/4JNjPf4PytV+uMC
-        UlySYTwlhsWFujbILVy3f8m3yWJwyjd+60DoBll2aRZmmH5e/+PhB9g=
-X-Google-Smtp-Source: AK7set+rVM1Uy/jR6wwM74wGPvif8E2INIKfLAblPKLZCdQn6KZqC3ouzTFAeawVYzcqA62dt5WdKi7Js2KaPBUp/+Q=
-X-Received: by 2002:a17:90a:4f4c:b0:237:203f:1b76 with SMTP id
- w12-20020a17090a4f4c00b00237203f1b76mr9625695pjl.2.1678466731462; Fri, 10 Mar
- 2023 08:45:31 -0800 (PST)
+        with ESMTP id S230124AbjCJQ46 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Mar 2023 11:56:58 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA98913594D;
+        Fri, 10 Mar 2023 08:54:43 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32ACPYqc032149;
+        Fri, 10 Mar 2023 16:54:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=WywzoVOPk1XQW/04XS0vfAgwyDP6SUtf1p8b26kcZ8U=;
+ b=N1Y4aPyMIts8hVlfdJYzTuhc+apxGXSAEJj3vXDeVtBbIoKEbOa5iDX6vu3bRwK3WSSJ
+ MraTd4bjTWti7hHxqrXwWzz45sGxE476+uSlrEZ7NU5E5FJ6DLDj+FyYqZHMII1KVtvf
+ baFegNWWE5mFp7MqwQETEhd1jAe4Lg+lfctOmwM8fU5nmNe9XeX1/+000UDDXWurz3MJ
+ 7eUBagLlP42OsxpAyPwJkv2s/9XrT1u+mpq3v9yP/0aUJbNoEnIokPcMoSyVdnkr49T5
+ DpMdxVDPueCwruXbR5vqck9fEQfYPpswfK0r9FYdRRj6AztFQRPFTn5058wQgBUFKYeN Tw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p7sj7t4qt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 16:54:29 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32AGsSBb016600
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 16:54:28 GMT
+Received: from [10.216.55.163] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 10 Mar
+ 2023 08:54:21 -0800
+Message-ID: <8aadbea6-29c0-713f-ced3-263307ad0051@quicinc.com>
+Date:   Fri, 10 Mar 2023 22:24:18 +0530
 MIME-Version: 1.0
-References: <20230309193020.374950-1-zyytlz.wz@163.com> <TYBPR01MB53412E8BDBB67C38E0B5E80CD8BA9@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-In-Reply-To: <TYBPR01MB53412E8BDBB67C38E0B5E80CD8BA9@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Sat, 11 Mar 2023 00:45:19 +0800
-Message-ID: <CAJedcCy3fCLxcPP3a5iSXecX-dpKmsePiJ45HYKfJE2CZXq=6A@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: udc: renesas_usb3: Fix use after free bug in
- renesas_usb3_remove due to race condition
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     Zheng Wang <zyytlz.wz@163.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "1395428693sheep@gmail.com" <1395428693sheep@gmail.com>,
-        "alex000young@gmail.com" <alex000young@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/8] dt-bindings: usb: Add bindings for multiport
+ properties on DWC3 controller
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>,
+        <quic_harshq@quicinc.com>, <ahalaney@redhat.com>,
+        <quic_shazhuss@quicinc.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>
+References: <20230310163420.7582-1-quic_kriskura@quicinc.com>
+ <20230310163420.7582-2-quic_kriskura@quicinc.com>
+ <ade5b126-9506-5e0d-3071-d26c97ecfc9a@linaro.org>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <ade5b126-9506-5e0d-3071-d26c97ecfc9a@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Xxycwd_jZulj4EyrcYQy571dZb8zrAok
+X-Proofpoint-ORIG-GUID: Xxycwd_jZulj4EyrcYQy571dZb8zrAok
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-10_08,2023-03-10_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ adultscore=0 impostorscore=0 malwarescore=0 clxscore=1011 spamscore=0
+ suspectscore=0 mlxlogscore=597 priorityscore=1501 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303100133
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com> =E4=BA=8E2023=E5=B9=B4=
-3=E6=9C=8810=E6=97=A5=E5=91=A8=E4=BA=94 12:56=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hi Zheng,
->
-> > From: Zheng Wang, Sent: Friday, March 10, 2023 4:30 AM
-> >
-> > In renesas_usb3_probe, &usb3->role_work is bound with
-> > renesas_usb3_role_work. renesas_usb3_start will be called
-> > to start the work.
-> >
-> > If we remove the module which will call renesas_usb3_remove
-> >   to make cleanup, there may be a unfinished work. The possible
-> >   sequence is as follows:
->
-> Thank you for the patch!
-> I think we should remove double spaces like below. (Also "an" unfinished)=
-:
->
-Thank you for your kind reminder.Will correct in the next version of patch.
 
-> -----
-> If we remove the module which will call renesas_usb3_remove
-> to make cleanup, there may be an unfinished work. The possible
-> sequence is as follows:
-> -----
->
-> > Fix it by canceling the work before cleanup in the renesas_usb3_remove
-> >
-> > CPU0                  CPUc1
->
-> s/CPUc1/CPU1/
->
->
-> >                     |renesas_usb3_role_work
-> > renesas_usb3_remove      |
-> > usb_role_switch_unregister  |
-> > device_unregister   |
-> > kfree(sw);        |
-> > free usb3->role_sw  |
-> >                     |   usb_role_switch_set_role
-> >                     |   //use usb3->role_sw
->
-> Adding a blank line here is better, I think.
 
-Agree with that :)
+On 3/10/2023 10:11 PM, Krzysztof Kozlowski wrote:
+> On 10/03/2023 17:34, Krishna Kurapati wrote:
+>> Add bindings to indicate properties required to support multiport
+>> on Snps Dwc3 controller.
+>>
+>> Suggested-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> 
+> What happened with entire previous changelog? This is not v1 but v5 or
+> more? At least v4 was here:
+> 
+> https://lore.kernel.org/all/20230115114146.12628-2-quic_kriskura@quicinc.com/
+> 
+> Best regards,
+> Krzysztof
+> 
+Hi Krzysztof,
 
->
-> > Fixes: 39facfa01c9f ("usb: gadget: udc: renesas_usb3: Add register of u=
-sb role switch")
-> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> > ---
-> >  drivers/usb/gadget/udc/renesas_usb3.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget=
-/udc/renesas_usb3.c
-> > index bee6bceafc4f..23b5f1706d25 100644
-> > --- a/drivers/usb/gadget/udc/renesas_usb3.c
-> > +++ b/drivers/usb/gadget/udc/renesas_usb3.c
-> > @@ -2658,6 +2658,8 @@ static int renesas_usb3_remove(struct platform_de=
-vice *pdev)
-> >  {
-> >       struct renesas_usb3 *usb3 =3D platform_get_drvdata(pdev);
-> >
-> > +     cancel_work_sync(&usb3->extcon_work);
->
-> IIUC, this work is not related to the issue.
-> But, what do you think?
-> If so, adding this should be a separate patch with the following Fixes ta=
-g:
->
-> Fixes: 3b68e7ca3888 ("usb: gadget: udc: renesas_usb3: add extcon support"=
-)
->
-Yes, I didn't find the uaf part for this work. As I didn't see any
-code to cancel this work,
-I added it then. I think you are right. In the next version of patch,
-we'll only keep the
-cancel of related work.
+   Since I pushed a formal patch series, I mentioned PATCH in header 
+instead of "Patch v5". If the RFC v4 is to be followed by Patch-v5, I 
+can re-push the changes again with a proper header and fix my mistake.
 
-Best regards,
-Zheng
+The previous change log is mentioned in cover letter.
 
->
-> > +     cancel_work_sync(&usb3->role_work);
-> >       debugfs_remove_recursive(usb3->dentry);
-> >       device_remove_file(&pdev->dev, &dev_attr_role);
-> >
-> > --
-> > 2.25.1
->
+https://lore.kernel.org/all/20230310163420.7582-1-quic_kriskura@quicinc.com/
+
+Regards,
+Krishna,
