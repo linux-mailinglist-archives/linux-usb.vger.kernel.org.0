@@ -2,50 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16EA96B3734
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Mar 2023 08:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 348F06B373D
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Mar 2023 08:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjCJHN4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Mar 2023 02:13:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
+        id S230063AbjCJHV2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Mar 2023 02:21:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbjCJHNu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Mar 2023 02:13:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1EC1ABE6;
-        Thu,  9 Mar 2023 23:13:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C02DB821C2;
-        Fri, 10 Mar 2023 07:13:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0378C433EF;
-        Fri, 10 Mar 2023 07:13:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678432424;
-        bh=mWLH7g2+IPJWbdqPe/Id+tdWHHMndQyV+CGtdI+s6Gg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CIO1H9sPyz6X9uMKt9R2DjECOm7UBwRuvHsiTwEG0tKVxlR6dNtLiRIkFeQRkyt75
-         M1NU1WXgO8FL/ssWjmmXFqkBKSU7IVeEcvv+6uEJ5gUR56Zmb8g8ePcRg0uO/UOldt
-         /CpMbchRbb9gdaDwX4qSuBfoRTfIYCtDvvUz9Aq4=
-Date:   Fri, 10 Mar 2023 08:13:41 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-        Oliver Neukum <oliver@neukum.org>
-Subject: Re: [PATCH v2 81/82] usb: uas: Declare two host templates and host
- template pointers const
-Message-ID: <ZArYpc0gktBmlJXz@kroah.com>
-References: <20230309192614.2240602-1-bvanassche@acm.org>
- <20230309192614.2240602-82-bvanassche@acm.org>
+        with ESMTP id S229639AbjCJHV0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Mar 2023 02:21:26 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE070FEF16
+        for <linux-usb@vger.kernel.org>; Thu,  9 Mar 2023 23:21:24 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id j19-20020a05600c191300b003eb3e1eb0caso5290464wmq.1
+        for <linux-usb@vger.kernel.org>; Thu, 09 Mar 2023 23:21:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678432883;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=e1POc04jfkfBTQgAJUSsVDqeK4gvy0mo0kDtY0v/iXs=;
+        b=T96ciuns1KQu/i4XNFef7v7GJvP+4ZOLuUwXzmcmX0KBSmBN/48Xe7PkxiifoYGP7b
+         Nt02kp3/0wwwa2mcZtUov/HZtDx4MForsw4ZxmT68rEXaPGp7ZpNEvP4xesBGO0r0cgr
+         BpTzP2RpOgEvjw8+9H6DJ8CesjclbX9PRy2h6hE+lqI9tzTolMEbyqNpebeqlPTJcMDy
+         Tyau6aVD16MF0bhnbGDDc9Ep93XG1exFkG4QGVwQdhTX94wwfIgkuGQDgGlYpqmXsOdc
+         b1G9HSzsfjxIW1MqljKwaQvLPkrlscFyNSOA/OcwN1FR7B3y59W/zaZ8mwSOsW0Q2jZL
+         9K7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678432883;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e1POc04jfkfBTQgAJUSsVDqeK4gvy0mo0kDtY0v/iXs=;
+        b=Takdhi+K+Wu8naZouEpYCitXK+7mrfMr+4ECp2Fx1iU79aqjmRN4PM73uPoRa3aR47
+         42R8OIpI1GuAwhUHNevqewLKeeTIWHBPKuXLJTZjNsKYjsHqLij9Lx47O85EvomMEKhH
+         +Msm6LIQ30fqA2jKWWpCX3m/Qw1SCT4o7jPbIMvbuxaSO+FQlejq8C6AxC+kW5NTForM
+         D3ZJnglijxrtKlz7MmvQcCv/m9+ej90snWQM5MOU5EbQ7fjr2MLiyFxdoKdVzqAzXE3j
+         3EnUAG/Rbi+PUFne51+w/sk4P9cZlJHWIw9S9/wS/2eOZzeHUfrMxHUda7S1Zc6vQ+98
+         eYVw==
+X-Gm-Message-State: AO0yUKXyllI2dEgtr419mJVetk7DHL/UpvxivtesJgGod7DnafjRZx8J
+        N+y2KmnNDXnqtORyQ2a6LSptTA==
+X-Google-Smtp-Source: AK7set+Ox/4RE8/rAwJ252AX6d2ueTWn8ZTqfXuo6QHL832bzNmFSHqpYa/y56B04XnoYl6AHLk9ug==
+X-Received: by 2002:a05:600c:198f:b0:3ea:f6c4:5f26 with SMTP id t15-20020a05600c198f00b003eaf6c45f26mr1691912wmq.17.1678432883201;
+        Thu, 09 Mar 2023 23:21:23 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id h15-20020a05600c2caf00b003e8f0334db8sm2401999wmc.5.2023.03.09.23.21.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 23:21:22 -0800 (PST)
+Message-ID: <3795f87d-ae1b-bc58-79b7-56c67329de02@linaro.org>
+Date:   Fri, 10 Mar 2023 07:21:20 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309192614.2240602-82-bvanassche@acm.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 08/28] ASoC: qcom: Add USB backend ASoC driver for Q6
+Content-Language: en-US
+To:     Wesley Cheng <quic_wcheng@quicinc.com>, mathias.nyman@intel.com,
+        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
+        andersson@kernel.org, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org, tiwai@suse.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <20230308235751.495-9-quic_wcheng@quicinc.com>
+ <ad7dd26d-0ee6-675f-72a5-a93bb0240121@linaro.org>
+ <64fc529a-3250-e655-e06e-952f25b1ac2b@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <64fc529a-3250-e655-e06e-952f25b1ac2b@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,14 +84,103 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 11:26:13AM -0800, Bart Van Assche wrote:
-> Improve source code documentation by constifying host templates that are
-> not modified.
-> 
-> Acked-by: Alan Stern <stern@rowland.harvard.edu> (for usb-storage)
-> Acked-by: Oliver Neukum <oneukum@suse.com>
-> Cc: Oliver Neukum <oneukum@suse.com>
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+On 09/03/2023 19:38, Wesley Cheng wrote:
+> Hi Srinivas,
+> 
+> On 3/9/2023 1:01 AM, Srinivas Kandagatla wrote:
+>>
+>>
+>> On 08/03/2023 23:57, Wesley Cheng wrote:
+>>> Create a USB BE component that will register a new USB port to the 
+>>> ASoC USB
+>>> framework.  This will handle determination on if the requested audio
+>>> profile is supported by the USB device currently selected.
+>>>
+>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>>
+>> Thanks Wesley for the patch, I have few minor comments.
+>>
+> 
+> Thanks for the review!
+> 
+>>> ---
+>>>   include/sound/q6usboffload.h  |  20 ++++
+>>>   sound/soc/qcom/Kconfig        |   4 +
+>>>   sound/soc/qcom/qdsp6/Makefile |   1 +
+>>>   sound/soc/qcom/qdsp6/q6usb.c  | 208 ++++++++++++++++++++++++++++++++++
+>>>   4 files changed, 233 insertions(+)
+>>>   create mode 100644 include/sound/q6usboffload.h
+>>>   create mode 100644 sound/soc/qcom/qdsp6/q6usb.c
+>>>
+>>> diff --git a/include/sound/q6usboffload.h b/include/sound/q6usboffload.h
+>>> new file mode 100644
+>>> index 000000000000..4fb1912d9f55
+>>> --- /dev/null
+>>> +++ b/include/sound/q6usboffload.h
+>>> @@ -0,0 +1,20 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0
+>>> + *
+>>> + * linux/sound/q6usboffload.h -- QDSP6 USB offload
+>>> + *
+>>> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All 
+>>> rights reserved.
+>>> + */
+>>> +
+>>> +/**
+>>> + * struct q6usb_offload
+>>> + * @dev - dev handle to usb be
+>>> + * @sid - streamID for iommu
+>>> + * @intr_num - usb interrupter number
+>>> + * @domain - allocated iommu domain
+>>> + **/
+>>> +struct q6usb_offload {
+>>> +    struct device *dev;
+>>> +    long long sid;
+>>> +    u32 intr_num;
+>>> +    struct iommu_domain *domain;
+>> Why do we need to store this domain, You can remove this along with 
+>> the one line that gets domain in probe function.
+>>
+> 
+> We'll need a reference to the iommu domain, because the QC USB offload 
+> driver will be the one that is going to map the XHCI interrupter and 
+> transfer ring regions for the audio DSP.  This happens when a USB QMI 
+
+this is okay, AFAIU, as long as uaudio_qdev->dev pointer is used in dma 
+alloc apis like dma_map*, dma_alloc_* you would not need to handle 
+iommu_domain directly like this in drivers.
+
+
+--srini
+
+> enable stream request is received in the USB offload driver.  Please 
+> refer to:
+> 
+> static int prepare_qmi_response(struct snd_usb_substream *subs,
+>          struct qmi_uaudio_stream_req_msg_v01 *req_msg,
+>          struct qmi_uaudio_stream_resp_msg_v01 *resp, int info_idx)
+> {
+> ...
+>      xhci_pa = xhci_get_ir_resource(subs->dev, ir);
+>      if (!xhci_pa) {
+>          dev_err(uaudio_qdev->dev,
+>              "failed to get sec event ring address\n");
+>          ret = -ENODEV;
+>          goto free_sec_ring;
+>      }
+> ...
+>      va = uaudio_iommu_map(MEM_EVENT_RING, dma_coherent, xhci_pa, 
+> PAGE_SIZE,
+>              NULL);
+>      if (!va) {
+>          ret = -ENOMEM;
+>          goto free_sec_ring;
+>      }
+> 
+> This is just an example for mapping the XHCI secondary interrupter.  We 
+> will also do the same for the transfer ring.
+> 
+> Thanks
+> Wesley Cheng
