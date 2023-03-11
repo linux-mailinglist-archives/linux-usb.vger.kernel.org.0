@@ -2,126 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755656B5864
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Mar 2023 06:09:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B26B6B5B1E
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Mar 2023 12:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbjCKFJi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 11 Mar 2023 00:09:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
+        id S230503AbjCKLXN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 11 Mar 2023 06:23:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjCKFJh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Mar 2023 00:09:37 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE5412B030
-        for <linux-usb@vger.kernel.org>; Fri, 10 Mar 2023 21:09:35 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id h19so8091096qtk.7
-        for <linux-usb@vger.kernel.org>; Fri, 10 Mar 2023 21:09:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678511375;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5JFbdd73AQ+d3Qv1qP/L0pzv1gzZmW56o0TeN5MvTN8=;
-        b=RYUTnqEM7SdXHRI7iQY2maXjn9fW0qXKn+XHh7ma5s3Uw0EI19kMehXmOI7MqKelaP
-         Ou6NjbUwdN+iocHfYWomHzWGMhMZ3elmj1pui/T0ad0hZZRwDqeIVDFTJ7LPQatcK0CZ
-         G7Fhv+G2MAtw7M9/NMJJC8p7pVyMQUGgRBGPGN3HpYcsPkkOFQBh2Db7rwR+QnnuytuT
-         P+IslFgVL+U1qnAm15S3MpZT7INPYMux/sfFKHodKP3gkbv4nThjL0iCB4Go+cy8vXFX
-         PYl+JzSfU3SZOXDpQNKLhm5Jd1ztddtbw6/LRg7WXyucoU7ejjnQGo/IK4pn9lMqw3yQ
-         sH7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678511375;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5JFbdd73AQ+d3Qv1qP/L0pzv1gzZmW56o0TeN5MvTN8=;
-        b=TWEdCSsJiwKBrT+eifLBLiXSzOJSaEj6ovHrR41E0DjbK3vr5Y9SryU8wy83JqsGDO
-         F/XuJOGxIBo0NbfDUdkxWAxAegnc6p8hZdaGR0/l1HLryAfFgg03/89X3mB0SYJAFTHw
-         1PmdPiUxDeMzOFrmRd/sxFbdXcvz8/62MRwh9Y+nd7h0p0VtX6MVqUa7NUCDsP4K+rWs
-         p3ZCHTT2U7zoQjkKtrNTOuow4Pw1FyXIEFdOVVz/KDixAsyxwwE+sjmBI4UBLgeLdeKx
-         tgEaEta2Z5nzY2cpyGTTtjJmpjDGq5TmbKI7yOF06FznIQ5gJeGlOW14zNyNB5JFSdVM
-         +fIA==
-X-Gm-Message-State: AO0yUKW3zdptLzTfy2yhLGdGIlMbGTtpbscONLvRaauVRKewhlIQvemq
-        nCKFNGXxF4DYttQyDLyIdXVuWtf8YbM=
-X-Google-Smtp-Source: AK7set/xcbY1Hd40aEvuItfA45BgtkLo/6ox8BvYNVnv+OON4Btky10DdgQBfxnUOWsl9getuMjXtw==
-X-Received: by 2002:a05:622a:508:b0:3bf:bbd3:1f11 with SMTP id l8-20020a05622a050800b003bfbbd31f11mr45134308qtx.21.1678511374846;
-        Fri, 10 Mar 2023 21:09:34 -0800 (PST)
-Received: from [192.168.1.198] (c-68-42-142-238.hsd1.mi.comcast.net. [68.42.142.238])
-        by smtp.gmail.com with ESMTPSA id n17-20020a05620a223100b00706b09b16fasm1198290qkh.11.2023.03.10.21.09.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 21:09:34 -0800 (PST)
-Message-ID: <64ac46a0-bf58-ce87-86f3-bcfe559f6817@gmail.com>
-Date:   Sat, 11 Mar 2023 00:09:33 -0500
+        with ESMTP id S230501AbjCKLWs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Mar 2023 06:22:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405E7112A5F
+        for <linux-usb@vger.kernel.org>; Sat, 11 Mar 2023 03:19:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4597260AB1
+        for <linux-usb@vger.kernel.org>; Sat, 11 Mar 2023 11:18:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A587AC4339B
+        for <linux-usb@vger.kernel.org>; Sat, 11 Mar 2023 11:18:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678533516;
+        bh=P34hM60Dtv7g2IJjabD9y7snKw9MK0K4swW7JCIAgsY=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=YU8mjWMPgwMRBaRvkipijgn7JIyLm8X3SPyGZXgly/8UKgAg2r6SZ28iCpbe/L/2s
+         YIwqOvsVwQWPXeQmBpmQ8A+Po6FaYc4cRCq0YONk3QRNAz2dvxBV+0PcujqKEd1gXU
+         hEoEUPJ5odt7/OrI+gxa7U/CJDbc3zR+LlG/PyeYFTmJwBsDvGb6ycXLllM2dMEES8
+         XTGbarOJXZa9PcXGZuSbmH9LKYe229bj+M2M+hFQsCoswxruWU0VS7R72AvG8E19eD
+         SrWzIMiHG/E4wOgle4m8LmkrM9/Kz3RHmce+WbZBd3FwZzj8NdU8NXJUYBVcXSg4Ed
+         2qJuMlHWp7Lqg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 877DCC43141; Sat, 11 Mar 2023 11:18:36 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217174] Plugging in usb external drive, mount and umount causes
+ kernel Oops
+Date:   Sat, 11 Mar 2023 11:18:36 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: IO/Storage
+X-Bugzilla-Component: Block Layer
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: mike.cloaked@gmail.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: CODE_FIX
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-217174-208809-RJyYYMvMJl@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217174-208809@https.bugzilla.kernel.org/>
+References: <bug-217174-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: Question about f_uac1 gadget
-To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-References: <4772c6be-7918-9ab0-3dd5-983b293cf89f@gmail.com>
- <CAB=otbTdBPwrot9aigxbOH+GFU=gFgEpr+io7cEv-5P10BSK9w@mail.gmail.com>
- <62cf5f1a-c5a2-2108-5326-ae2b0c8b2264@gmail.com>
- <CAB=otbQ+2d4EOg=deUUbwwAF7aJcPuMYyFSLKnfO_7-JurO-fg@mail.gmail.com>
-Content-Language: en-US
-From:   Noah Causin <n0manletter@gmail.com>
-In-Reply-To: <CAB=otbQ+2d4EOg=deUUbwwAF7aJcPuMYyFSLKnfO_7-JurO-fg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The laptop has kernel 6.1.14 (Fedora 37)
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217174
 
-I looked into the error message and found a patch description saying 
-that the error: (cannot submit urb 0, error -90: internal error) can 
-happen when a audio device's channel number does not match its data 
-endpoint, leading to failure at the host driver.
+Mike Cloaked (mike.cloaked@gmail.com) changed:
 
-https://github.com/DerRomtester/android_kernel_oneplus_msm8974/commit/2ef9cf0c9181e9472fa0be7885541e91189ecd5d
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |CODE_FIX
 
-It seems like the f_uac1 gadget might not be syncing the channel number 
-value with the data endpoint.
+--- Comment #4 from Mike Cloaked (mike.cloaked@gmail.com) ---
+6.2.4 works fine with the reverted commits. Will close this bug.
 
-Noah
+--=20
+You may reply to this email to add a comment.
 
-On 3/10/23 01:51, Ruslan Bilovol wrote:
-> On Wed, Mar 8, 2023 at 11:24 PM Noah Causin <n0manletter@gmail.com> wrote:
->>
->> Hi Ruslan,
->>
->> I can't seem to get the f_uac1 to work with more than 2 channels. I'm
->> able to setup f_uac2 with 8 channels.
->>
->> I've tried a 5.1 and 7.1 setup (c_chmask=63 or 255, c_srate=44100,
->> c_ssize=2) but I get a urb 0 error on the connected Linux laptop and the
->> gnome sound-test freezes when testing a channel, no errors on the gadget
->> device. My usb controller is a DWC3 on a RockPro64 board.
->>
->> usb 3-2: USB disconnect, device number 9
->> usb 3-2: new high-speed USB device number 10 using xhci_hcd
->> usb 3-2: New USB device found, idVendor=1d6b, idProduct=0104, bcdDevice=
->> 1.00
->> usb 3-2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
->> usb 3-2: Product: audioproduct
->> usb 3-2: Manufacturer: audiomanufacturer
->> usb 3-2: SerialNumber: audioserial
->> usb 3-2: cannot submit urb 0, error -90: internal error
-> 
-> Hmmm.. I also can reproduce this issue, it seems that's some bug in the
-> host USB audio driver. At least I see that it tries to send packets with size
-> bigger than the endpoint's max packet size.
-> 
-> I reproduced it on my Debian laptop with (kernel v6.1) and can't reproduce
-> on older Ubuntu with kernel v5.4.
-> 
-> BTW Noah what is the kernel version on your laptop where you see
-> this issue?
-> 
-> Thanks,
-> Ruslan
+You are receiving this mail because:
+You are watching the assignee of the bug.=
