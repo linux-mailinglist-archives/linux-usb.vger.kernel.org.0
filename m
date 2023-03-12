@@ -2,110 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C4A6B638F
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Mar 2023 07:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEADD6B63E8
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Mar 2023 10:07:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbjCLGw0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 Mar 2023 01:52:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34228 "EHLO
+        id S229516AbjCLJHx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Mar 2023 05:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCLGwZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Mar 2023 01:52:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D48053D93;
-        Sat, 11 Mar 2023 22:52:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA49560A3B;
-        Sun, 12 Mar 2023 06:52:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4737C4339B;
-        Sun, 12 Mar 2023 06:52:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678603943;
-        bh=k1TxaSwAKQxw+AsnSrIWcYO5UwHIt/wD7Uhbv8/IEBQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X9PGZbINCnq78MvyRU+lzUqOggKKd95Xwxsu6J0k/XffQLe4KloXsZ5WYD/cttZjS
-         T4ED7ahjSFnM6dKzUJ63KtELMs5ptoTdnuLMzlwR7RANhFlyyyxXcm/eMCsl7PGM6u
-         sF6xm1qUueUCVoH+agbEghvjW1uRxvANFEg4Zt4w=
-Date:   Sun, 12 Mar 2023 07:52:20 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Yaroslav Furman <yaro330@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] uas: Add US_FL_NO_REPORT_OPCODES for JMicron
- JMS583Gen 2
-Message-ID: <ZA12pMgwA/8CguYd@kroah.com>
-References: <7f670cac-aa36-4bb9-a2b1-4451e4e85fab@rowland.harvard.edu>
- <20230311171226.20353-1-yaro330@gmail.com>
+        with ESMTP id S229437AbjCLJHw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Mar 2023 05:07:52 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7895A3B223;
+        Sun, 12 Mar 2023 01:07:50 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id h14so8723824wru.4;
+        Sun, 12 Mar 2023 01:07:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678612069;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8LH/M3cso09ywcoLugxoDXWjh29NuaE9CRH1ycId3RM=;
+        b=RQ11GhX4BFnjzENPJ9aXbi6LxYBjB3qKGUT8PW7MHvTI8oYxJnkfUjY/YYiTwDlWDi
+         zrANA0N7m3RpzJMHBb/VZ5fgDF7N1oK430Yp/e3JgKziC3VEjWK4+TmxuNfKaWbP73xd
+         uSRxZkKr6RtzLFgGXd5V9Xk8Ly6Egz7HD3q6Uz26wLKAO2Hg0lFd1O/HP6iuQ5/7tsZU
+         B01tmWJIjd3VngsAbgC2Cn0C20d4IT4pu36jyVo6uj8zV2a0FBCx9YSu7SNh7/WuS6Aw
+         t3fWI+75MYTK4jr4/E93DUqk+hyIcpjyhVjT2V+sKDLJUGQF4W3binAf5glza/MuPBvl
+         idwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678612069;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8LH/M3cso09ywcoLugxoDXWjh29NuaE9CRH1ycId3RM=;
+        b=e6gNqUVZrcfwLVtdYbQ2eRrHEY9ndATI8sxE737O8qae0F25can9kzS+LDIpbcd2WS
+         X+hZCtRQiCM357e/sGC3a8oDZhg67d1Hgrx07stcpXQYRWMkJWFNU+2R0lRldU0YHga+
+         ZREFPVvWEBefA/CmD+PjBJ6g5Xe43nGc5+M+nU6EAlgkqpetYq/o8hRHOqP5aj1+ElX1
+         h+HTZ87N7vaNZKySqEED2AZKGEkTeXYvnR7LNBaQuSdXUXhzPYH896rwhaLPgZ7UwN+Z
+         Hg2GSuddj/re4u+1PpR/AM27Yh1v0yqepx6l2YFDtY59gp8t0KssSt9n1uxYBfpICiro
+         gBtQ==
+X-Gm-Message-State: AO0yUKVNvRiQza1il2Yjah19Rofx16a9BGlUspcAOAbjhJabN13o9nRU
+        Tv2Thwk5bn0FrmVniWXo0bA=
+X-Google-Smtp-Source: AK7set/QMrKLsbwNFgoemgJjvcnvnAUFbAmMc0gFhvCX6bBPLP5mvMyoi9Z45OtnQgBo6qPMgVVbbw==
+X-Received: by 2002:adf:da45:0:b0:2ce:ad08:ca4 with SMTP id r5-20020adfda45000000b002cead080ca4mr538188wrl.35.1678612068824;
+        Sun, 12 Mar 2023 01:07:48 -0800 (PST)
+Received: from localhost.localdomain ([84.32.202.14])
+        by smtp.gmail.com with ESMTPSA id e29-20020a5d595d000000b002c5706f7c6dsm4506372wri.94.2023.03.12.01.07.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 01:07:48 -0800 (PST)
+From:   Yaroslav Furman <yaro330@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     yaro330@gmail.com, Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] uas: Add US_FL_NO_REPORT_OPCODES for JMicron JMS583Gen 2
+Date:   Sun, 12 Mar 2023 11:07:45 +0200
+Message-Id: <20230312090745.47962-1-yaro330@gmail.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <ZA12pMgwA/8CguYd@kroah.com>
+References: <ZA12pMgwA/8CguYd@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230311171226.20353-1-yaro330@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 07:12:26PM +0200, Yaroslav Furman wrote:
-> Just like other JMicron JMS5xx enclosures, it chokes on report-opcodes,
-> let's avoid them.
-> 
-> Signed-off-by: Yaroslav Furman <yaro330@gmail.com>
-> ---
->  drivers/usb/storage/unusual_uas.h | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-> index c7b763d6d102..1f8c9b16a0fb 100644
-> --- a/drivers/usb/storage/unusual_uas.h
-> +++ b/drivers/usb/storage/unusual_uas.h
-> @@ -111,6 +111,13 @@ UNUSUAL_DEV(0x152d, 0x0578, 0x0000, 0x9999,
->  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->  		US_FL_BROKEN_FUA),
->  
-> +/* Reported by: Yaroslav Furman <yaro330@gmail.com> */
-> +UNUSUAL_DEV(0x152d, 0x0583, 0x0000, 0x9999,
-> +		"JMicron",
-> +		"JMS583Gen 2",
-> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> +		US_FL_NO_REPORT_OPCODES),
-> +
->  /* Reported-by: Thinh Nguyen <thinhn@synopsys.com> */
->  UNUSUAL_DEV(0x154b, 0xf00b, 0x0000, 0x9999,
->  		"PNY",
-> -- 
-> 2.39.2
-> 
+Just like other JMicron JMS5xx enclosures, it chokes on report-opcodes,
+let's avoid them.
 
-Hi,
+Signed-off-by: Yaroslav Furman <yaro330@gmail.com>
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+---
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+V3: Moved the code in the appropriate place, after the 0x0578 device,
+as pointed out by Alan Stern
+---
+ drivers/usb/storage/unusual_uas.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
+diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+index c7b763d6d102..1f8c9b16a0fb 100644
+--- a/drivers/usb/storage/unusual_uas.h
++++ b/drivers/usb/storage/unusual_uas.h
+@@ -111,6 +111,13 @@ UNUSUAL_DEV(0x152d, 0x0578, 0x0000, 0x9999,
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_BROKEN_FUA),
+ 
++/* Reported by: Yaroslav Furman <yaro330@gmail.com> */
++UNUSUAL_DEV(0x152d, 0x0583, 0x0000, 0x9999,
++		"JMicron",
++		"JMS583Gen 2",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_NO_REPORT_OPCODES),
++
+ /* Reported-by: Thinh Nguyen <thinhn@synopsys.com> */
+ UNUSUAL_DEV(0x154b, 0xf00b, 0x0000, 0x9999,
+ 		"PNY",
+-- 
+2.39.2
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
