@@ -2,126 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA046B6A82
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Mar 2023 20:05:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F196B6C0E
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Mar 2023 23:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231169AbjCLTFu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 Mar 2023 15:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
+        id S229499AbjCLWsk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Mar 2023 18:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230336AbjCLTFo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Mar 2023 15:05:44 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2F6301B0;
-        Sun, 12 Mar 2023 12:05:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678647919; x=1710183919;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RzvP9oLfBGrZorh7RhxLEqxpEVo3Q5M/0WZA1nvvuD4=;
-  b=bmhuP0zXS1RO7a+QwS/EcOdBiKdl85gU8IyoQu5EjHwVRyA1rdTDl6Kw
-   6RlBzndXlT5UKSqclQlz+7So756v0/f+/GZYQsesLvRL2Mj5fIVg2sH3i
-   lwsP2+r4wbwlo+cIpk9m4gBLh7pE72sILpgLb4N3VxigteUWOV3ZGLBFG
-   iRIBfkC6ZgDAdgCouUoKbCoNV5T70MSVk7zjZptl/KAdgQVUiiyqTzKZQ
-   ckhdlzOTACTVf4aaXEXgggQls69xOcTxtzHcg9q/PdsJKvH0Jwlsrnd+4
-   4Sa6LnWJkuKdLPx0Vu2sOHyDmmgD526irsS+P1wpHH3kCcH3hzUw/2dNv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="338568387"
-X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="338568387"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 12:05:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="655749382"
-X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="655749382"
-Received: from ye-nuc7i7dnhe.sh.intel.com ([10.239.154.52])
-  by orsmga006.jf.intel.com with ESMTP; 12 Mar 2023 12:05:14 -0700
-From:   Ye Xiang <xiang.ye@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org
-Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com,
-        Ye Xiang <xiang.ye@intel.com>
-Subject: [PATCH v5 5/5] Documentation: Add ABI doc for attributes of LJCA device
-Date:   Mon, 13 Mar 2023 03:04:35 +0800
-Message-Id: <20230312190435.3568212-6-xiang.ye@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230312190435.3568212-1-xiang.ye@intel.com>
-References: <20230312190435.3568212-1-xiang.ye@intel.com>
+        with ESMTP id S229450AbjCLWsj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Mar 2023 18:48:39 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FED32E4D;
+        Sun, 12 Mar 2023 15:48:38 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id ne1so7200321qvb.9;
+        Sun, 12 Mar 2023 15:48:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678661317;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xYIG2TIps/UChe2tmlcHWvW9bzPS2sZ9r5iw2+hEA+k=;
+        b=JPVY1ePc1a3gjwTW8x47phBxj6NqlY9yiADR1dVl/xI9bbeO/sG01Cm6cfZu9+o+fB
+         sfiTKThIMGhjo8YjUJWVefvRJQsoMhLu2eznPndD8obBGY8jcAp/A7pmnFrCbLByJUpz
+         rkGaV41VkxnPS9HnqN8EnJryCGRObKC26pKkgoD5PIyjRz66lR8/XLNiNXsntwZawZ6B
+         rBS9+6U45dACma4BCt/S1r5qfXg1L51OALkuAF9H9JyRBUemR+xBBhJvhWJS7pDPkKaa
+         RKXVQEDk3numuPfloGw0jpKh/tAvQM+N3FD0OhCS9TPHpLoFjyHVffxGaOsBwfHmG8lm
+         Sn8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678661317;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xYIG2TIps/UChe2tmlcHWvW9bzPS2sZ9r5iw2+hEA+k=;
+        b=uRPwjzwoG3bu2volrUl4Wt5UjsAbA4TfWu9lmzUNegLsGiMl5NyPr0iJcHoE5566+O
+         sONppnenk9MPGBDlnq8UG7Pe8uT/oDGFRh+zK1Dh8+4yymqar9skQ9L7zvy2vkZ2T4ay
+         OfX6qh3VAuVoYjAzoTiuxFpNEAmUiQrMjJjl5/xbTDbW4llMl2BQCdCkuL8bVQzTgJKg
+         ZuczBQgKV3yq9iHO7wjt4CFXyKd30GUM4neUFFdszjjMnEwHyE3yYHss/ccQm+zlbCwU
+         EAhyUimTCKuXI9QdxaRdkWhieTpgrNWXt0yjWXS+/LKzuGKlFzRmu4t0fMHzr6jJzCOb
+         N1oA==
+X-Gm-Message-State: AO0yUKXCeu/cmFpfuiCptHtynamfSMR8spDf37SFYl2Db+rDn45qgNFl
+        Ok9o7FPX8jwsmReW/eDmSg4=
+X-Google-Smtp-Source: AK7set9AiFeN6g8qYlrBWkb4Li+WIUQsejl/BbRGfYJiZl25n0i3OhEhEBJqL47CeGzMMJ37Kgpcow==
+X-Received: by 2002:a05:6214:238e:b0:572:5a16:51c0 with SMTP id fw14-20020a056214238e00b005725a1651c0mr10317950qvb.16.1678661317054;
+        Sun, 12 Mar 2023 15:48:37 -0700 (PDT)
+Received: from localhost ([72.138.97.66])
+        by smtp.gmail.com with ESMTPSA id m6-20020aed27c6000000b003b62bc6cd1csm4416792qtg.82.2023.03.12.15.48.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 15:48:36 -0700 (PDT)
+From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peter.chen@kernel.org
+Subject: [PATCH v3] usb: gadget: epautoconf: claim smallest endpoints first
+Date:   Sun, 12 Mar 2023 18:48:36 -0400
+Message-Id: <20230312224836.297793-1-ruslan.bilovol@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add sysfs attributes Documentation entries for LJCA device
+UDC hardware may have endpoints with different maxpacket
+size. Current endpoint matching code takes first matching
+endpoint from the list.
 
-Signed-off-by: Ye Xiang <xiang.ye@intel.com>
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+It's always possible that gadget allocates endpoints for
+small transfers (maxpacket size) first, then larger ones.
+That works fine if all matching UDC endpoints have same
+maxpacket size or are big enough to serve that allocation.
+
+However, some UDCs have first endpoints in the list with
+bigger maxpacket size, whereas last endpoints are much
+smaller. In this case endpoint allocation will fail for
+the gadget (which allocates smaller endpoints first) on
+final endpoint allocations.
+
+To make endpoint allocation fair, pick up smallest
+matching endpoints first, leaving bigger ones for
+heavier applications.
+
+Keel old behavior when "wMaxPacketSize == 0" because
+it's a special case. In this case a gadget driver wants
+to use a whole available MaxPacketSize of claimed
+endpoint. Since it doesn't know what MaxPacketSize
+may be in a particular UDC endpoint, it just
+relies on epautoconf core and gets what's available
+
+Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
 ---
- .../ABI/testing/sysfs-bus-usb-devices-ljca    | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca b/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
-new file mode 100644
-index 000000000000..16eecaf870e2
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
-@@ -0,0 +1,36 @@
-+What:		/sys/bus/usb/.../ljca_version
-+Date:		July 2023
-+KernelVersion:	6.4
-+Contact:	Ye Xiang <xiang.ye@intel.com>
-+Description:
-+		Provides the current firmware version of LJCA device.
-+		The format is Major.Minor.Patch.Build, where
-+		Major, Minor, Patch, and Build are decimal numbers.
-+		For example: 1.0.0.256
+v3: updated commit msg, rebased onto latest gregkh/usb-next
+v2: rebased onto latest balbi/next branch
+v1: https://lore.kernel.org/lkml/20200629200551.27040-1-ruslan.bilovol@gmail.com/
+
+ drivers/usb/gadget/epautoconf.c | 23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/gadget/epautoconf.c b/drivers/usb/gadget/epautoconf.c
+index ed5a92c474e5..086bb46e3f5a 100644
+--- a/drivers/usb/gadget/epautoconf.c
++++ b/drivers/usb/gadget/epautoconf.c
+@@ -66,7 +66,7 @@ struct usb_ep *usb_ep_autoconfig_ss(
+ 	struct usb_ss_ep_comp_descriptor *ep_comp
+ )
+ {
+-	struct usb_ep	*ep;
++	struct usb_ep	*ep, *ep_min = NULL;
+ 
+ 	if (gadget->ops->match_ep) {
+ 		ep = gadget->ops->match_ep(gadget, desc, ep_comp);
+@@ -74,14 +74,27 @@ struct usb_ep *usb_ep_autoconfig_ss(
+ 			goto found_ep;
+ 	}
+ 
+-	/* Second, look at endpoints until an unclaimed one looks usable */
++	/*
++	 * Second, look at endpoints until an unclaimed one looks usable.
++	 * Try to find one with smallest maxpacket limit, leaving larger
++	 * endpoints for heavier applications
++	 */
+ 	list_for_each_entry (ep, &gadget->ep_list, ep_list) {
+-		if (usb_gadget_ep_match_desc(gadget, ep, desc, ep_comp))
+-			goto found_ep;
++		if (usb_gadget_ep_match_desc(gadget, ep, desc, ep_comp)) {
++			if (desc->wMaxPacketSize == 0)
++				goto found_ep;
++			else if (!ep_min)
++				ep_min = ep;
++			else if (ep->maxpacket_limit < ep_min->maxpacket_limit)
++				ep_min = ep;
++		}
+ 	}
+ 
+ 	/* Fail */
+-	return NULL;
++	if (!ep_min)
++		return NULL;
 +
-+What:		/sys/bus/usb/.../ljca_enable_dfu
-+Date:		July 2023
-+KernelVersion:	6.4
-+Contact:	Ye Xiang <xiang.ye@intel.com>
-+Description:
-+		Writing 1 to this file to force the LJCA device into DFU
-+		mode so the firmware can be updated. After firmware
-+		updating has been done, the device will back to normal
-+		working mode.
-+
-+What:		/sys/bus/usb/.../ljca_trace_level
-+Date:		July 2023
-+KernelVersion:	6.4
-+Contact:	Ye Xiang <xiang.ye@intel.com>
-+Description:
-+		Writing N to this file to set firmware log level of LJCA
-+		device. The log can be printed to another computer through
-+		UART ports in LJCA device. Valid values:
-+
-+		  ==	==========
-+		   0	LEVEL_ERROR
-+		   1	LEVEL_WARNING
-+		   2	LEVEL_INFO
-+		   3	LEVEL_DEBUG
-+		   4	LEVEL_OFF
-+		  ==	==========
++	ep = ep_min;
+ found_ep:
+ 
+ 	/*
 -- 
-2.34.1
+2.39.2
 
