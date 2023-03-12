@@ -2,115 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591EB6B623F
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Mar 2023 01:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C4A6B638F
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Mar 2023 07:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbjCLADZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 11 Mar 2023 19:03:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43210 "EHLO
+        id S229543AbjCLGw0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Mar 2023 01:52:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjCLADY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Mar 2023 19:03:24 -0500
-Received: from mx.fenrir.org.uk (host-92-27-96-141.static.as13285.net [92.27.96.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AE71CBCC
-        for <linux-usb@vger.kernel.org>; Sat, 11 Mar 2023 16:03:20 -0800 (PST)
-Received: from [10.0.0.3] (helo=deangelis.fenrir.org.uk)
-        (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-        by mx.fenrir.org.uk with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pb9BF-0003zR-0b;
-        Sun, 12 Mar 2023 00:03:17 +0000
-Date:   Sun, 12 Mar 2023 00:03:16 +0000
-From:   Brian Morrison <bdm@fenrir.org.uk>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-Subject: Re: USB regression in kernel 6.2.2
-Message-ID: <20230312000316.2955d55a@deangelis.fenrir.org.uk>
-In-Reply-To: <20230309200415.118777d2@deangelis.fenrir.org.uk>
-References: <20230307132120.5897c5af@deangelis.fenrir.org.uk>
-        <db2e0984-6eb5-5987-44e1-a7143141469b@linux.intel.com>
-        <20230309200415.118777d2@deangelis.fenrir.org.uk>
-Organization: The Fool and Bladder Face-Jumping Team
-X-Mailer: Claws Mail 4.1.1git47 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        with ESMTP id S229437AbjCLGwZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Mar 2023 01:52:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D48053D93;
+        Sat, 11 Mar 2023 22:52:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA49560A3B;
+        Sun, 12 Mar 2023 06:52:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4737C4339B;
+        Sun, 12 Mar 2023 06:52:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678603943;
+        bh=k1TxaSwAKQxw+AsnSrIWcYO5UwHIt/wD7Uhbv8/IEBQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X9PGZbINCnq78MvyRU+lzUqOggKKd95Xwxsu6J0k/XffQLe4KloXsZ5WYD/cttZjS
+         T4ED7ahjSFnM6dKzUJ63KtELMs5ptoTdnuLMzlwR7RANhFlyyyxXcm/eMCsl7PGM6u
+         sF6xm1qUueUCVoH+agbEghvjW1uRxvANFEg4Zt4w=
+Date:   Sun, 12 Mar 2023 07:52:20 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Yaroslav Furman <yaro330@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] uas: Add US_FL_NO_REPORT_OPCODES for JMicron
+ JMS583Gen 2
+Message-ID: <ZA12pMgwA/8CguYd@kroah.com>
+References: <7f670cac-aa36-4bb9-a2b1-4451e4e85fab@rowland.harvard.edu>
+ <20230311171226.20353-1-yaro330@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Clacks-Overhead: GNU Terry Pratchett
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230311171226.20353-1-yaro330@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 9 Mar 2023 20:04:15 +0000
-Brian Morrison <bdm@fenrir.org.uk> wrote:
-
-> On Wed, 8 Mar 2023 17:16:01 +0200
-> Mathias Nyman <mathias.nyman@linux.intel.com> wrote:
+On Sat, Mar 11, 2023 at 07:12:26PM +0200, Yaroslav Furman wrote:
+> Just like other JMicron JMS5xx enclosures, it chokes on report-opcodes,
+> let's avoid them.
+> 
+> Signed-off-by: Yaroslav Furman <yaro330@gmail.com>
+> ---
+>  drivers/usb/storage/unusual_uas.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+> index c7b763d6d102..1f8c9b16a0fb 100644
+> --- a/drivers/usb/storage/unusual_uas.h
+> +++ b/drivers/usb/storage/unusual_uas.h
+> @@ -111,6 +111,13 @@ UNUSUAL_DEV(0x152d, 0x0578, 0x0000, 0x9999,
+>  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>  		US_FL_BROKEN_FUA),
 >  
-> > 
-> > Looks like that those devices initially enumerated fine, but
-> > suddenly disconnect about 19 seconds after boot.
-> > 
-> > [   19.155556] usb 2-1.1: USB disconnect, device number 4
-> > [   19.155685] cp210x ttyUSB0: cp210x converter now disconnected
-> > from ttyUSB0 [   19.159290] usb 2-1.4: USB disconnect, device
-> > number 6 [   19.242344] usb 2-1.4: 3:0: failed to get current value
-> > for ch 0 (-22) [   20.100761] usb 2-4.1: USB disconnect, device
-> > number 8 [   20.100894] cp210x ttyUSB1: cp210x converter now
-> > disconnected from ttyUSB1 [   20.100999] cp210x 2-4.1:1.0: device
-> > disconnected [   20.107188] usb 2-4.2: USB disconnect, device
-> > number 9 [   20.107253] cp210x ttyUSB2: cp210x converter now
-> > disconnected from ttyUSB2 [   20.107284] cp210x 2-4.2:1.0: device
-> > disconnected [   20.111938] usb 2-4.4: USB disconnect, device
-> > number 10 [   20.181363] usb 2-4.4: 3:0: failed to get current
-> > value for ch 0 (-22)
-> > 
-> > Interestingly those are all the devices behind external hubs.
-> > 
-> > Bisecting this to find the offending commit would be best, but a
-> > dmesg with xhci and usb core dynamic debug enabled could also show
-> > why those devices disconnect.
-> > 
-> > Adding "usbcore.dyndbg=+p xhci_hcd.dyndbg=+p" to your kernel cmdline
-> > should do this.  
-> 
-> In addition to the debug output I have been looking at the diff
-> between kernel-6.1 and kernel-6.2 in the /drivers/usb tree, in
-> particular under /drivers/usb/core/hub.h and /drivers/usb/core/hub.c
-> where the vendor for this device with VID 0451 is newly listed
-> although its PID is not:
-> 
-> Bus 003 Device 002: ID 0451:2046 Texas Instruments, Inc. TUSB2046 Hub
-> 
-> this device is missing from lsusb output in kernel 6.2.2 but is
-> present with kernel 6.1.*
-
-I was wrong about this, it's the devices on the far side of the TI and
-SMSC hub devices that are missing, not the hubs themselves.
-
-> 
-> In my inexpert way I think it is all tied in to changes from a few
-> months ago (November 2022) that went into the 6.2rc kernels where the
-> early_stop capability was added to USB enumeration but I am certainly
-> not smart enough to identify exactly why the particular combination of
-> hardware I have is caught up in it. I can see from the extended dmesg
-> output that certain USB interfaces are unregistered for no obvious
-> reason and that once this happens they are invisible to the OS. The
-> altered USB core code would seem to be a prime suspect as the cause of
-> this regression.
+> +/* Reported by: Yaroslav Furman <yaro330@gmail.com> */
+> +UNUSUAL_DEV(0x152d, 0x0583, 0x0000, 0x9999,
+> +		"JMicron",
+> +		"JMS583Gen 2",
+> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> +		US_FL_NO_REPORT_OPCODES),
+> +
+>  /* Reported-by: Thinh Nguyen <thinhn@synopsys.com> */
+>  UNUSUAL_DEV(0x154b, 0xf00b, 0x0000, 0x9999,
+>  		"PNY",
+> -- 
+> 2.39.2
 > 
 
-Further testing with kernels 6.1.18 and 6.2.5 is added to the bug entry
-here:
+Hi,
 
-https://bugzilla.redhat.com/show_bug.cgi?id=2175534#c12
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-I don't know how to bisect this with the available Fedora kernels.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
--- 
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
 
-Brian Morrison
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
+thanks,
+
+greg k-h's patch email bot
