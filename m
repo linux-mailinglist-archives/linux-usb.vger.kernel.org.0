@@ -2,124 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC8F6B7486
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 11:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 509E56B74DE
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 11:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbjCMKrZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Mar 2023 06:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
+        id S229791AbjCMK63 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Mar 2023 06:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjCMKrY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 06:47:24 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68E453D94;
-        Mon, 13 Mar 2023 03:47:22 -0700 (PDT)
-Received: from dungeon.fi (dungeon.fi [81.4.110.129])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kasper)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4PZtdh1jZbz4BKKw;
-        Mon, 13 Mar 2023 12:47:19 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1678704440;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jSbOH91PTg5uCkO4mWLFoGuNxDrNUjmjn2W/WzqjsG4=;
-        b=s7+pqLETYqZKlqiSeUbRPR2Z13viDOkZRoMgVX7IYUif9IAScHhDof3Trx1M2ntqf6jbcB
-        hl+eQ1URyGewhsBj/cOVb5a+oGOE/YFbLJbuvsyiE7aCbE/k6zbjs1RuQp6hvzCpDHUsmA
-        qWOawX+tVkMvhHsmwwYOyajalOGwwsGEw5EQl9wYprxkxexBh1TV0UKd0GlRaVIKCq+iBk
-        7O34szF59M4UHAV77CxTx1LBZ1nm8xNFZM/ypmFwEfx+q2gpqPu96PyGWNA4HYdnDuewuw
-        bIDXRIjIzE7jxKthHNdrt5IeLIb09cUUsNHu0ulLNj8P1ajf/qvL0azaAGdFtQ==
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1678704440; a=rsa-sha256;
-        cv=none;
-        b=ZoXgvzKxkEOS+CJ1t4pgE8FdBw/E0QfpLT3uaWEK/48t720uqqzed8qxh9WNu2uPZyyKf7
-        J90FPD0fBvtkCCL7GxHwqB7ntFAL4vTfntBLpq5kyV5sqe5kJ+5zMONS+zJOgr26kzlKKb
-        9LbKftJwK8SQm7EHxjCWqZLjhLvSVGQooJ23XjmoYL4dUB14MJDHtSbrIZAgg5sHeIE51n
-        Dmg0JUpef+HNXsF/C52qJSmm1zGDkl3HV0BIFa64s71dWSGarE9OJzlqS2CpumsjLpP1L4
-        /ouyqhZoPzUIZ2HgQIJPUd3aJk/TZj9dwtCCgJaNxZA5TUSoeRywMy81NMu8Gw==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=kasper smtp.mailfrom=kasper@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1678704440;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jSbOH91PTg5uCkO4mWLFoGuNxDrNUjmjn2W/WzqjsG4=;
-        b=VIIFLRGvGi/L+TTexCdNMMv+LSD7dwPQ0ZhiP//OlTW3d+pEHfpf1zAWnGzQmASbB+689J
-        wKifsmoWRi2tcY1/m/S0P0P8JoAwQwoYpQF4irmjczavpv053S3GNI87GH1JIKwen/aHk7
-        OhI3dQRJHb+VwPlESkhYDzYsuZdR9cBwvxnhf9mQhRX0cZtXw+mksTdHrIlk4BQ+058fmt
-        +3B6Q4R8scP+KtVb/yKl6lKBO/k8utfwC5jyJButG79o6hHUuzQsNoIWYh1iNSS+hiDVyr
-        INfLcW34HiUD7jYv9xcX2fZ4q034LhtvQ7cD5tlgSMqpPAv7BxeTyF/TkSDOVg==
-Received: from [IPV6:2001:14ba:440a:f000:f999:2447:3c0c:d88e] (dktgsyyj5xfwfrsyp7cjy-3.rev.dnainternet.fi [IPv6:2001:14ba:440a:f000:f999:2447:3c0c:d88e])
-        by dungeon.fi (Postfix) with ESMTPSA id C6AE93F270;
-        Mon, 13 Mar 2023 12:47:18 +0200 (EET)
-Message-ID: <3c53eca1-ce62-e98d-ee52-269a09480658@iki.fi>
-Date:   Mon, 13 Mar 2023 12:47:17 +0200
+        with ESMTP id S229633AbjCMK62 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 06:58:28 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6B430D8
+        for <linux-usb@vger.kernel.org>; Mon, 13 Mar 2023 03:57:56 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id p2so7938081uap.1
+        for <linux-usb@vger.kernel.org>; Mon, 13 Mar 2023 03:57:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678705075;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OYOTx6MKssQVxsptL9eioMeZuDQaG7kJkv5PSGxD65A=;
+        b=hsJU8x3MjeeiyYc2AB0d34ieU6fNVow+Y++fwhMskJ330cusr/f1ARQIgIXkkH9XHc
+         MRBzDOaioaZOVNczYF62ffUDn/fpc8lsZo3ECqWdxjTS9g4U+HSLcDSLdVNT9bWJLrVh
+         jmZOQONS4ZbOKnTdig+9ZJ/WbfbOOT9+AHxQ1LsB7hscKxN4m8jBXLf8udT1Edci+rfz
+         4f8IUPG1TEGR5V/3bz2gGG+L7D2IjMAA1czECF0c+quHfMhstyS5jM2PeX5KsV/NxhVC
+         8k4RK8YyTQ+PzR4a+qpINnKj7tMU2OPYKdKztmooDGMgBqOddSU8ZLpPONFx1idu0xsU
+         Of1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678705075;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OYOTx6MKssQVxsptL9eioMeZuDQaG7kJkv5PSGxD65A=;
+        b=AoHw5OKgfspayZum5mnbonhAtITTektqRPpTFbvqgauYw/gpqqZ92Se5lsx8LkOqG0
+         n2q1h72MCwbOCErIr5pfpcZbt2yFg+vPTB4UPD9omD7fOEp7cPPPS7CC1Gj33kCUKgAt
+         wqofFgX4E6PBLSmor04tJ1klQd7KfHT+Z9OB7I4HnixzPavcCIKz29WXWRYsFxco3b8J
+         vmKKChR2IQ8NXSgZQQc+sPatNpgIR/CvtK+DlDCHkDPDl9z/gi8Y2DBbdKTi3yfALlVw
+         YUh3Y9evuhuSiYvzppL0kOOA5h2262S+QshU21OSom3c1vFW5vIs5TejH3+vGqgPGP9K
+         9rSQ==
+X-Gm-Message-State: AO0yUKW5sgXvdoWhGc0tVF3Abjb9yFNHPRQJQtrAH+AkOIC7GLVBoWIz
+        tnlQfHAGbkY+0OPeNnnuX7Qn6cbPldFqJosXshc=
+X-Google-Smtp-Source: AK7set8Vaw/x+ZV9mi5kd2t8+iYRTojILRtQ3EuxII2xYCTk7P7z7gK+/qsExLI27/NCuxtcQDbAgJ2ULbYPL+FDuAE=
+X-Received: by 2002:a1f:c847:0:b0:411:ff57:d3b9 with SMTP id
+ y68-20020a1fc847000000b00411ff57d3b9mr19057489vkf.2.1678705075313; Mon, 13
+ Mar 2023 03:57:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <ZA7Wh2Z/DdKOsOYr@kroah.com>
- <20230313082734.886890-1-kasper@iki.fi>
- <e426ae4c-4e49-5773-e8da-919fa2e3dc33@suse.com>
-From:   Jarkko Sonninen <kasper@iki.fi>
-In-Reply-To: <e426ae4c-4e49-5773-e8da-919fa2e3dc33@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Sender: naziroubalat120@gmail.com
+Received: by 2002:a59:a8a2:0:b0:3aa:4321:3961 with HTTP; Mon, 13 Mar 2023
+ 03:57:54 -0700 (PDT)
+From:   Miss sherri <sherrigallagher409@gmail.com>
+Date:   Mon, 13 Mar 2023 10:57:54 +0000
+X-Google-Sender-Auth: tydX2gfwmdFsnxxbuZ7x4q1RD4k
+Message-ID: <CAJyv1owd=++Sos3pPoJ0Uw66Qi9FZq=an=rMn-4Sk+=jaqL=Cg@mail.gmail.com>
+Subject: RE: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-     Hello,
+Hell=C3=B3,
 
-It uses only one flag from the struct from user. Would it be better to 
-store only that to state ?
+Megkaptad az el=C5=91z=C5=91 =C3=BCzenetem? M=C3=A1r kor=C3=A1bban felvette=
+m =C3=96nnel a
+kapcsolatot, de az =C3=BCzenet nem siker=C3=BClt visszak=C3=BCldeni, ez=C3=
+=A9rt =C3=BAgy
+d=C3=B6nt=C3=B6ttem, hogy =C3=BAjra =C3=ADrok. K=C3=A9rem, er=C5=91s=C3=ADt=
+se meg, ha megkapja ezt, hogy
+folytathassam.
 
-Do I need locking at all in that case ?
+V=C3=A1rok a v=C3=A1laszodra.
 
-The whole struct is stored just in case, if someone would implement 
-other functionality later.
-
-     - Jarkko
-
-
-Oliver Neukum kirjoitti 13/03/2023 klo 11.54:
->
->
-> On 13.03.23 09:27, Jarkko Sonninen wrote:
->> Add support for RS-485 in Exar USB adapters.
->> RS-485 mode is controlled by TIOCGRS485 and TIOCSRS485 ioctls.
->> Gpio mode register is set to enable RS-485.
->>
->> Signed-off-by: Jarkko Sonninen <kasper@iki.fi>
->
->
-> Hi,
->
-> I am sorry, but locking is really broken here. All these contexts can 
-> sleep.
-> There is no need for a spinlock. As far as you need locking, just use 
-> a mutex.
->
-> Secondly, if xr_set_rs485_config() needs locking, so will 
-> xr_get_rs485_config()
-> or you can get the case that you return half a new and half an old 
-> state to user
-> space.
->
->     Regards
->         Oliver
+=C3=9Cdv=C3=B6zlettel,
+Sherri kisasszony
