@@ -2,218 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4366B80F3
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 19:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 133436B8265
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 21:12:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbjCMSnU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Mar 2023 14:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        id S229909AbjCMUMT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Mar 2023 16:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbjCMSnQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 14:43:16 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C26384F65
-        for <linux-usb@vger.kernel.org>; Mon, 13 Mar 2023 11:42:48 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id e194so12980105ybf.1
-        for <linux-usb@vger.kernel.org>; Mon, 13 Mar 2023 11:42:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678732947;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hc4qD0dBROAsSu6VxDvfykn2MYkacMKgknIXt+XjvfU=;
-        b=saN7elFeQznmtibfBOSiIjhNuxMhg6FimCIcq7r61bXo9mayiTUp8DD1+iJU3EYbku
-         GbAGT2GRb4pp97mkR59CDQm7f0/WR08TKmAQ27JQCQtUrvvsDirBdCLyeNOouJ7YPLvx
-         Fc2bQ+Aym34eOGQeZnPM4vp4Sf6J+XX6cpaYCyH+3SW+b8zMfVRCdBXu/nSSSVoSYrr9
-         eOcnpfaYqgqMFPDFPOJaGwMiZNUD9qT+p3SVy/cxflC2BF1zYKq0XgMD03ITU1yaurZq
-         PWtFPq6B5fAt8O2VK5uha7qGmM6sUWOU43l534/ddSPiElS377MFfIcVGvEnHfDQA2F0
-         qo8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678732948;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hc4qD0dBROAsSu6VxDvfykn2MYkacMKgknIXt+XjvfU=;
-        b=dh+tS1HqlEwP3ANA1f7ToMui4fJAXU8+C9N9iXDmMArFwom1kixQPi37CUSI0RRQ6J
-         K3MZSYmtE4D/DkV6M/T67BGRMxL/XeFIJBfHaviJakzmMax7rmnead5NaHmFIwblbljq
-         UD79cASJfrhTvm13UhwIjwdXWCfMwXoYMhVMq1gZB70sKemRLvKTj/9DFw3J4cvHsvIV
-         3bGn9xp87yNw8z+Y3TXsxV0ouUl12wEnDs1nAwn8Q6ocLVTd1tUmJyVC3ldXGzekEJCz
-         e9cgiFYURA7yM+RBt3eY+SgEe2c7SidLV54yFRVZBxaZaJxjcqBN3MOWbimlBpY6ph7W
-         EjOA==
-X-Gm-Message-State: AO0yUKVCxUgANGcsuTyzgr4JmezA2HDrxIArc1gh+tW2HkXWZr6grlse
-        Fm3luLZGrzn2TU82lkiitRCZrHfORWkxgTAulyto3g==
-X-Google-Smtp-Source: AK7set+75k/6wpJlLHYeLR6WsdbBWu8a19iQ5MMCLCjF+dE6M/z3ppb7dxMGbQzvpWjm9q+hhYVvtEFgNX9klTn9usU=
-X-Received: by 2002:a05:6902:cf:b0:a02:a44e:585c with SMTP id
- i15-20020a05690200cf00b00a02a44e585cmr21945010ybs.1.1678732947713; Mon, 13
- Mar 2023 11:42:27 -0700 (PDT)
+        with ESMTP id S229593AbjCMUMP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 16:12:15 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAAA87A1A;
+        Mon, 13 Mar 2023 13:11:53 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32DGaXwg011798;
+        Mon, 13 Mar 2023 20:08:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=KwnIdWoiVAJBwcmcN8HpxRc9ZCasr2KvHIlvHAI8gXg=;
+ b=ON5fCxDH4yEO3kIK7jweHPgWTQTR2Nc5gH1GXJL9wtM/0mznKSKf7x8/lujxEWqhGgOo
+ YLFIH/3XnpL/0K+GamfQttfKh7f05nSU1hQTYOevJnz88MHfNP/qC6B8dXVDCyDxm2Xu
+ hp6nOBZiS8ld2iAIZXhP0w4T9eMLpim/PLG8SKP/DB2nSQI5fMWP8zkkWsFM2+ydEl4I
+ xqQdowKL/zklP0AhiIqpSYxSlhBEZZd2TNitlQcl1vtsxgcY5q8gVey0Nd4CDewDyo3O
+ vKBbGkxz7+4VR3QT05c2jbwAWvTZst2Rdf6kGgzeVrpFkEdeifpjCvWilFTIUolAPUY1 rQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pa6n30kn0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Mar 2023 20:08:55 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32DK8sO4014513
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Mar 2023 20:08:54 GMT
+Received: from [10.110.94.159] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 13 Mar
+ 2023 13:08:53 -0700
+Message-ID: <6024f762-6085-10cd-e73a-9031722b2334@quicinc.com>
+Date:   Mon, 13 Mar 2023 13:08:47 -0700
 MIME-Version: 1.0
-References: <20230301214952.2190757-1-saravanak@google.com>
- <CAGETcx_DTHW4-WMK4qRhvhxiunUB2f79cpXSfQ1x-hifZQ+tgw@mail.gmail.com>
- <CAMSo37XuNaV4Y3+ExrUjNzPDRD_BNSn1258Ve3We+qtbsO7qEw@mail.gmail.com> <CAGETcx8qKCNuD5p=e-f-T93VstptPWHq2gVzmghkQucNyhwocA@mail.gmail.com>
-In-Reply-To: <CAGETcx8qKCNuD5p=e-f-T93VstptPWHq2gVzmghkQucNyhwocA@mail.gmail.com>
-From:   Yongqin Liu <yongqin.liu@linaro.org>
-Date:   Tue, 14 Mar 2023 02:42:16 +0800
-Message-ID: <CAMSo37UyDWB5dfTo91Y_de3de1gYActdKj4fsu==eW90kuHjyw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] Remove use of fw_devlink_purge_absent_suppliers()
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 01/28] xhci: Add support to allocate several
+ interrupters
+Content-Language: en-US
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
+        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>,
+        <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <tiwai@suse.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
+        <quic_plai@quicinc.com>
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <20230308235751.495-2-quic_wcheng@quicinc.com>
+ <a45ff335-0563-85c7-3b31-d6ca23a54a3f@linux.intel.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <a45ff335-0563-85c7-3b31-d6ca23a54a3f@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 3_oXSt_A1iE145gYnGnDroRcA8q41vMD
+X-Proofpoint-GUID: 3_oXSt_A1iE145gYnGnDroRcA8q41vMD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-13_09,2023-03-13_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
+ bulkscore=0 mlxlogscore=994 impostorscore=0 priorityscore=1501
+ adultscore=0 phishscore=0 spamscore=0 lowpriorityscore=0 clxscore=1015
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303130158
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi, Saravana
+Hi Mathias,
 
-On Fri, 10 Mar 2023 at 08:17, Saravana Kannan <saravanak@google.com> wrote:
->
-> On Thu, Mar 9, 2023 at 10:53=E2=80=AFAM Yongqin Liu <yongqin.liu@linaro.o=
-rg> wrote:
-> >
-> > Hi, Saravana
-> >
-> > Sorry for the lateness, I was just aware of this today.
->
-> No worries.
->
-> > I tested with the ACK android-mainline branch + the 12 commits ending
-> > with fb42378dcc7f
-> > + the 4 commits of this series + hikey960 AOSP Master userspace.
-> > The hikey960 Android build could boot to the home screen, no stuck ther=
-e,
->
-> Thanks for testing! Can you confirm what happens if you drop the "12
-> commits ending with fb42378dcc7f" ? Does it get stuck at boot or have
-> some limited functionality?
+On 3/10/2023 7:07 AM, Mathias Nyman wrote:
+> On 9.3.2023 1.57, Wesley Cheng wrote:
+>> From: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>
+>> Introduce xHCI APIs to allow for clients to allocate and free
+>> interrupters.  This allocates an array of interrupters, which is based on
+>> the max_interrupters parameter.  The primary interrupter is set as the
+>> first entry in the array, and secondary interrupters following after.
+>>
+> 
+> I'm thinking about changing this offloading xHCI API
+> xhci should be aware and keep track of which devices and endpoints that
+> are offloaded to avoid device getting offloaded twice, avoid xhci driver
+> from queuing anything itself for these, and act properly if the offloaded
+> device or entire host is removed.
+> 
+> So first thing audio side would need to do do is register/create an
+> offload entry for the device using the API:
+> 
+> struct xhci_sideband *xhci_sideband_register(struct usb_device *udev)
+> 
+> (xHCI specs calls offload sideband)
+> Then endpoints and interrupters can be added and removed from this
+> offload entry
+> 
+> I have some early thoughts written as non-compiling code in:
+> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git 
+> feature_interrupters
+> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters 
+> 
+> 
+> Let me know what you think about this.
+> 
 
-I tried to only apply the 4 commits of this series, but that would cause bu=
-ild
-error as the commit here:
-https://lore.kernel.org/all/20210205222644.2357303-2-saravanak@google.com/
+The concept/framework you built looks good to me.  Makes sense to have 
+XHCI better maintain the offloading users.  One thing I would request is 
+to move xhci-sideband.h to the include directory since the class driver 
+levels would need to be able to reference the structure and APIs you've 
+exposed.
 
-so I need to apply the first commit of the "12 commits ending with fb42378d=
-cc7f"
-here as well:
-https://lore.kernel.org/all/20230207014207.1678715-2-saravanak@google.com/
+I have yet to try it with our implementation, but I'll work on plugging 
+it in and fix any issues I see along the way.
 
-With the 5 commits applied on the android-mainline branch, the build could =
-boot
-to the home screen, but the adb connection could not be created.
-For details please check here https://termbin.com/wf9hj.
-
-Thanks,
-Yongqin Liu
->
-> It's surprising that for the same type of DT node, in your case
-> fw_devlink is able to handle it
-> correctly, but no so for Martin's case.
->
-> -Saravana
->
-> >
-> > Here is the link of the logat in case you want to check some message he=
-re:
-> > https://gist.github.com/liuyq/6525af08c547cd2e494af5d1c8b181b5
-> >
-> > Thanks,
-> > Yongqin Liu
-> > On Fri, 10 Mar 2023 at 02:05, Saravana Kannan <saravanak@google.com> wr=
-ote:
-> > >
-> > > Greg,
-> > >
-> > > Don't pull in this series please. It needs more testing from the folk=
-s
-> > > I cc'ed and it's already breaking things for Martin. This needs more
-> > > revisions.
-> > >
-> > > -Saravana
-> > >
-> > > On Wed, Mar 1, 2023 at 1:49=E2=80=AFPM Saravana Kannan <saravanak@goo=
-gle.com> wrote:
-> > > >
-> > > > Yongqin, Martin, Amelie,
-> > > >
-> > > > We recent refactor of fw_devlink that ends with commit fb42378dcc7f
-> > > > ("mtd: mtdpart: Don't create platform device that'll never probe"),
-> > > > fw_devlink is smarter and doesn't depend on compatible property. So=
-, I
-> > > > don't think these calls are needed anymore. But I don't have these
-> > > > devices to test on and be sure and the hardware I use to test chang=
-es
-> > > > doesn't have this issue either.
-> > > >
-> > > > Can you please test these changes on the hardware where you hit the
-> > > > issue to make sure things work as expected?
-> > > >
-> > > > Yongqin, If you didn't have the context, this affected hikey960.
-> > > >
-> > > > Greg,
-> > > >
-> > > > Let's wait for some tests before we land these.
-> > > >
-> > > > Thanks,
-> > > > Saravana
-> > > >
-> > > > Cc: Yongqin Liu <yongqin.liu@linaro.org>
-> > > > Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> > > > Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > > > Cc: Amelie Delaunay <amelie.delaunay@foss.st.com>
-> > > >
-> > > > Saravana Kannan (4):
-> > > >   usb: typec: stusb160x: Remove use of
-> > > >     fw_devlink_purge_absent_suppliers()
-> > > >   usb: typec: tipd: Remove use of fw_devlink_purge_absent_suppliers=
-()
-> > > >   usb: typec: tcpm: Remove use of fw_devlink_purge_absent_suppliers=
-()
-> > > >   driver core: Delete fw_devlink_purge_absent_suppliers()
-> > > >
-> > > >  drivers/base/core.c           | 16 ----------------
-> > > >  drivers/usb/typec/stusb160x.c |  9 ---------
-> > > >  drivers/usb/typec/tcpm/tcpm.c |  9 ---------
-> > > >  drivers/usb/typec/tipd/core.c |  9 ---------
-> > > >  include/linux/fwnode.h        |  1 -
-> > > >  5 files changed, 44 deletions(-)
-> > > >
-> > > > --
-> > > > 2.39.2.722.g9855ee24e9-goog
-> > > >
-> >
-> >
-> >
-> > --
-> > Best Regards,
-> > Yongqin Liu
-> > ---------------------------------------------------------------
-> > #mailing list
-> > linaro-android@lists.linaro.org
-> > http://lists.linaro.org/mailman/listinfo/linaro-android
-
-
-
---
-Best Regards,
-Yongqin Liu
----------------------------------------------------------------
-#mailing list
-linaro-android@lists.linaro.org
-http://lists.linaro.org/mailman/listinfo/linaro-android
+Thanks
+Wesley Cheng
