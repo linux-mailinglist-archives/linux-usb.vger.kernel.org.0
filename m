@@ -2,57 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974966B725D
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 10:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3FD6B7263
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 10:20:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjCMJTd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Mar 2023 05:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
+        id S231221AbjCMJUa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Mar 2023 05:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjCMJT2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 05:19:28 -0400
+        with ESMTP id S231164AbjCMJU0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 05:20:26 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9A11EBDA;
-        Mon, 13 Mar 2023 02:19:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB0048E04;
+        Mon, 13 Mar 2023 02:20:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678699167; x=1710235167;
+  t=1678699221; x=1710235221;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=JpuCRu1GG8Ay6QwoKuqG2ToqnJydDbTDsesR+u7/c0o=;
-  b=BRPU9koiFCSU6YgvA+pQhYj6BjYoJfT/1mWfbZsNo+4pScAecVlyMRfF
-   TMVpdFIVYWNd7p7bj0THABVp0oz3J7EW+yWhjawE2j6Ah8IpF13B0ICYY
-   zY7hYvCfVfpZRsceg29lgioC4+Dp6p6EaWTDCVTmB06rk1Odz35hKAn4A
-   fgKEDDSY7JOXje+iXHsHjqd1WNu5wrN94cm9yJJYvQf3RjZ/aKtZRd8cv
-   0DpaNm8f0qlW+J9NLjzYEkYhBKWeKRQKXNESdn2D4WBj8YEcnwhJHDBlq
-   g+hY7jYMUxfLxNQrUnnTWoPPDDgL/pAxL2KbRqNvLitoXDe8SGcUZTxgn
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="338649075"
+  bh=z48Dt41jUPpWFgRiFOFaWk0SesIyGwE2aOV5PIzs1Bg=;
+  b=aoSHmyii2qVulkj8R9/5V8tdnejs8HT2KFQtoB6JkBJtlg7rxRjxnQKb
+   3FkZCcvwmcIgls36t/h0ah2i7Lg/AhSjMfGEBaGz7misCuMPpF9rrCHSi
+   JM0WmqMGmBN4enJKdJ5oeK5972LKAxg1yeaVfhltAeA8qf9TQfyB7E3u5
+   VlieSvCOOQY9KExMbIN/gLuSFQNGUgPLasBJEm1Wj+CYwytcyx1tyrXlg
+   yc/q28rzNs2DQqty2yN2WPbZQcRnXSy0mRumVkbd3Znx94Zq7Y2oMcLFk
+   p7dYnM51xbkuh+Paz47VTi42qkK+Ltm+BZHReOXvHMJXW/uWCwyFuHsDg
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="338649237"
 X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="338649075"
+   d="scan'208";a="338649237"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 02:19:26 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 02:20:20 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="821876852"
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="821877478"
 X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="821876852"
+   d="scan'208";a="821877478"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 13 Mar 2023 02:19:24 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 13 Mar 2023 11:19:23 +0200
-Date:   Mon, 13 Mar 2023 11:19:23 +0200
+  by fmsmga001.fm.intel.com with SMTP; 13 Mar 2023 02:20:17 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 13 Mar 2023 11:20:16 +0200
+Date:   Mon, 13 Mar 2023 11:20:16 +0200
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] usb: typec: hd3ss3220: Drop of_match_ptr for ID table
-Message-ID: <ZA7qmz7DjRiIE9BB@kuha.fi.intel.com>
+Subject: Re: [PATCH 2/2] usb: typec: fusb302: mark OF related data as maybe
+ unused
+Message-ID: <ZA7q0PkvhB5i4CS8@kuha.fi.intel.com>
 References: <20230310222937.315773-1-krzysztof.kozlowski@linaro.org>
+ <20230310222937.315773-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230310222937.315773-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230310222937.315773-2-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
@@ -63,34 +65,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 11:29:36PM +0100, Krzysztof Kozlowski wrote:
-> The driver can match only via the DT table so the table should be always
-> used and the of_match_ptr does not have any sense (this also allows ACPI
-> matching via PRP0001, even though it is not relevant here).
+On Fri, Mar 10, 2023 at 11:29:37PM +0100, Krzysztof Kozlowski wrote:
+> The driver can be compile tested with !CONFIG_OF making certain data
+> unused:
 > 
->   drivers/usb/typec/hd3ss3220.c:284:34: error: ‘dev_ids’ defined but not used [-Werror=unused-const-variable=]
+>   drivers/usb/typec/tcpm/fusb302.c:1816:34: error: ‘fusb302_dt_match’ defined but not used [-Werror=unused-const-variable=]
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Should this be marked as a fix?
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/hd3ss3220.c | 2 +-
+>  drivers/usb/typec/tcpm/fusb302.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-> index 746ef3a75b76..8bbeb9b1e439 100644
-> --- a/drivers/usb/typec/hd3ss3220.c
-> +++ b/drivers/usb/typec/hd3ss3220.c
-> @@ -290,7 +290,7 @@ MODULE_DEVICE_TABLE(of, dev_ids);
->  static struct i2c_driver hd3ss3220_driver = {
->  	.driver = {
->  		.name = "hd3ss3220",
-> -		.of_match_table = of_match_ptr(dev_ids),
-> +		.of_match_table = dev_ids,
->  	},
->  	.probe_new = hd3ss3220_probe,
->  	.remove =  hd3ss3220_remove,
+> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+> index 1ffce00d94b4..592b0aec782f 100644
+> --- a/drivers/usb/typec/tcpm/fusb302.c
+> +++ b/drivers/usb/typec/tcpm/fusb302.c
+> @@ -1813,7 +1813,7 @@ static int fusb302_pm_resume(struct device *dev)
+>  	return 0;
+>  }
+>  
+> -static const struct of_device_id fusb302_dt_match[] = {
+> +static const struct of_device_id fusb302_dt_match[] __maybe_unused = {
+>  	{.compatible = "fcs,fusb302"},
+>  	{},
+>  };
 > -- 
 > 2.34.1
 
