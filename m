@@ -2,84 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A126B6F40
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 06:46:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3DC66B6F7B
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 07:31:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbjCMFqQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Mar 2023 01:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
+        id S229668AbjCMGbv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Mar 2023 02:31:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCMFqP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 01:46:15 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7F02BED8;
-        Sun, 12 Mar 2023 22:46:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678686374; x=1710222374;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xOVX04NMGm21cJ3YIo/0A8ze3aZruPEgVWV5otmS3KA=;
-  b=Bf9UflqRkBgCcggOvM0liOlfrN5pC4rw7YQ3QyrXQZxevN4QwAPAVi38
-   dpT/fKICTDC3h+ORdsGB/WxCE/WwUIwn4iIuq9qL71145uPLsHWBHoa6F
-   sBAvf3jnCX+wgphdIYGslpysEUIQQAT0WHoTMoBOX+tpb2zvwYNriZ4Qu
-   s/x147XjXVq6mDXQkdZfOk1cSXaVhyVcN5ze1resLrGyMvjJo1Btjr8GL
-   aoF4hTnulh+mi6Iaq0cU072NoqHLz5rgl8KpYTdrRpPDLf5IZ04NvgC6L
-   fM6dILNVnDRjDEW6B/yu1HWGOPZiYNfPgqCS54jmir/EiYyNB0hG4EIJy
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="337086643"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="337086643"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 22:46:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="628514255"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="628514255"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 12 Mar 2023 22:46:10 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id A060D143; Mon, 13 Mar 2023 07:46:54 +0200 (EET)
-Date:   Mon, 13 Mar 2023 07:46:54 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Sanjay R Mehta <sanju.mehta@amd.com>, anson.tsao@amd.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] thunderbolt: Disable interrupt auto clear for rings
-Message-ID: <20230313054654.GC62143@black.fi.intel.com>
-References: <20230310172050.1394-1-mario.limonciello@amd.com>
- <20230310172050.1394-3-mario.limonciello@amd.com>
+        with ESMTP id S229514AbjCMGbu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 02:31:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D3F3CE12;
+        Sun, 12 Mar 2023 23:31:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2769B80DBE;
+        Mon, 13 Mar 2023 06:31:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21F39C433EF;
+        Mon, 13 Mar 2023 06:31:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678689106;
+        bh=XYltQqLH/YgnHqNRlpBtYqhy53KcaVe7vPvM9fbFjRo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R8oqGE/BCMV/Ng214H0lYH40oL4csE6jT5MP7QnPEz7ghNYnhBG3hRGMZn9v66+q5
+         WXGFEWh+nkvZKgURNKKh0G9B+la0M6VIATTdsxsDza6MsgA9JhqaLvav4C0yL0cBqX
+         lLE7idxb1o2zIk3Gr5XK6BB1pc5QfoUzC/ChI9Ks=
+Date:   Mon, 13 Mar 2023 07:31:44 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Cixi Geng <cixi.geng@linux.dev>
+Cc:     orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
+        zhang.lyra@gmail.com, arnd@arndb.de, tony@atomide.com,
+        felipe.balbi@linux.intel.com, paul@crapouillou.net,
+        linus.walleij@linaro.org, cixi.geng1@unisoc.com,
+        gengcixi@gmail.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [RFC PATCH v1] usb/phy add sprd ums512 usbphy
+Message-ID: <ZA7DUH+qJyMmWBq5@kroah.com>
+References: <20230312171438.177952-1-cixi.geng@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230310172050.1394-3-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230312171438.177952-1-cixi.geng@linux.dev>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mario,
-
-On Fri, Mar 10, 2023 at 11:20:50AM -0600, Mario Limonciello wrote:
-> When interrupt auto clear is programmed, any read to the interrupt
-> status register will clear all interrupts.  If two interrupts have
-> come in before one can be serviced then this will cause lost interrupts.
+On Mon, Mar 13, 2023 at 01:14:38AM +0800, Cixi Geng wrote:
+> From: Cixi Geng <cixi.geng1@unisoc.com>
 > 
-> On AMD USB4 routers this has manifested in odd problems particularly
-> with long strings of control tranfers such as reading the DROM via bit
-> banging.
+> This driver is support USB2 phy for Spreadtrum UMS512 SOC's,
+> 
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
 
-Nice catch! Does this mean we can drop [1] now?
+Why is this "RFC"?  What is left to do on it to be accepted?
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git/commit/?h=next&id=8d7f459107f74fbbdde3dd5b3874d2e748cb8a21
+> ---
+>  drivers/usb/phy/Kconfig           |  10 +
+>  drivers/usb/phy/Makefile          |   1 +
+>  drivers/usb/phy/phy-sprd-ums512.c | 511 ++++++++++++++++++++++++++++++
+>  drivers/usb/phy/phy-sprd-ums512.h |  39 +++
 
-I would still like to keep the nice refactor you did for the DROM
-parsing, though.
+Why do you need a .h file for a single .c file?  Please just put them
+all together into one file.
+
+thanks,
+
+greg k-h
