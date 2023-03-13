@@ -2,143 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 906736B82CC
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 21:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA026B8465
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 23:01:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjCMUeC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Mar 2023 16:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58760 "EHLO
+        id S230054AbjCMWBt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Mar 2023 18:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbjCMUd6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 16:33:58 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF18B13D61;
-        Mon, 13 Mar 2023 13:33:14 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32DIKwqQ006403;
-        Mon, 13 Mar 2023 20:32:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=JdArQtncnrhXuVCDqX76U7cnvzMjwG0vfZ5UFiZDHus=;
- b=C23u7Xmc+6pnD6oa2qpN5GDDmtdFiO6tfvPM9+Q2vHTybpezQSWFD6mT8auuT4Z1XhtH
- tJt3yyNIuAdzG8rq3acysDgb+UxWiI1BIRBx/EvTVbExOhtfyegOm25O+pLMJLkpZtNm
- a7twem6VJP7zp6z6IOm9rBC3bUWYyZf6vqSI+kcHLaQ5UevqoQhTmmsHrJjlmmTN02vO
- 705Br3rQ+s9mrrEh+7i3pCPFb3uAuKwbDRdxXJsOuI7hlZ6bw9BVOoidls4mT6RvhYFW
- Qhz0SmOQkw+LpSMoA+UIYNNDV6SqN0unSI9psTM1i0jeyaKWo/UWpi9hcFRC2udIDLkv AA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pa7w6re8q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Mar 2023 20:32:29 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32DKWSEV003110
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Mar 2023 20:32:28 GMT
-Received: from [10.110.94.159] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 13 Mar
- 2023 13:32:27 -0700
-Message-ID: <ed0397eb-da17-fbee-647e-f3a2a57577fe@quicinc.com>
-Date:   Mon, 13 Mar 2023 13:32:27 -0700
+        with ESMTP id S230072AbjCMWBn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 18:01:43 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5232928E5F;
+        Mon, 13 Mar 2023 15:01:19 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id r11so2935701edd.5;
+        Mon, 13 Mar 2023 15:01:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678744870;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Snuz7L/SPQOqkHO5iS6yRIqkcA3uKtikSk3qXURmy/s=;
+        b=qARHr0pHEWd/D8VXl1UlK8tvFsJkwGtzIHUs99GzrnZjjURpZH5tyKQyQIG6br+tXf
+         j2SFX8AdCJfZzLv+ep42ZIjRhk0nB6a2P1X8ZAfduJp96g/4JvXLqGxaCa3vy6WNxs+R
+         GsmcugJ6/T0QKmNRALKNDgeFJgkVsPJGu3Tf85Lghcc0ZPmJdre6HQW+MsXoxcqgC6Pl
+         UfkXYLZYTBc4gPJGkHuES8DYMIttgNLa+6pTnGhaO36EBVYbv3WSaXXByv7pqSHss4bS
+         9xTOtGNZO6YrwW8uBefaW1wtjih1wrk2DKqTE4rGX9yH1W2tFhZKa3tLB9YFRDZfMktb
+         d98Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678744870;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Snuz7L/SPQOqkHO5iS6yRIqkcA3uKtikSk3qXURmy/s=;
+        b=uOLjJarifQlk5Lxy/7x9T9EpbJYiWX/8d7ZeDGDmPShGEaLXMjaQXDsBNJ0RK/HMWM
+         u9urN7g0csoLnWUzfam2rrT3om1blRlcqGmzTlzIscGuiGjqjH2+uxRcuGgfQcU4knMH
+         EqoMahTJV7rzkZq93JnXz10d24FrfpfX1msgi6qMPCSN39y6U6wVtUojBFT/Qfb0Nl1T
+         72gSUW0v3wefI30jgB6wxWn76QFLlQQbLNU9l38SdnFNagL6JHm6Dzr4zKO/QoTLavYw
+         Y+BpdSbh23sNWRFf6xwMWS2Q9C6eO/F37F4wSZW2kB/jfW86HhcJG02qHMdm6qCj7B45
+         n2Tw==
+X-Gm-Message-State: AO0yUKWmcsaWdb/FTmIKCVjS0gBskmCySoOVIszBqRf0OqxIJasHV56u
+        RLJ2j4bcHfH/52yAvg2oUDs=
+X-Google-Smtp-Source: AK7set/kwJQ9s/J9GUVwdHgCzRQApL3FIPXVq584ztRTXDylNuT8xyEoIJwSbtHwn05xNr7u06lmog==
+X-Received: by 2002:a17:906:371a:b0:8b1:319c:c29e with SMTP id d26-20020a170906371a00b008b1319cc29emr12360ejc.74.1678744870317;
+        Mon, 13 Mar 2023 15:01:10 -0700 (PDT)
+Received: from localhost.localdomain (077222238142.warszawa.vectranet.pl. [77.222.238.142])
+        by smtp.googlemail.com with ESMTPSA id u17-20020a17090626d100b008c405ebc32esm286392ejc.28.2023.03.13.15.01.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 15:01:09 -0700 (PDT)
+From:   Szymon Heidrich <szymon.heidrich@gmail.com>
+To:     steve.glendinning@shawell.net, davem@davemloft.net,
+        edumazet@google.com
+Cc:     kuba@kernel.org, pabeni@redhat.com, szymon.heidrich@gmail.com,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net: usb: smsc75xx: Limit packet length to skb->len
+Date:   Mon, 13 Mar 2023 23:00:45 +0100
+Message-Id: <20230313220045.52394-1-szymon.heidrich@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 01/28] xhci: Add support to allocate several
- interrupters
-Content-Language: en-US
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
-        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <tiwai@suse.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
-        <quic_plai@quicinc.com>
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
- <20230308235751.495-2-quic_wcheng@quicinc.com>
- <a45ff335-0563-85c7-3b31-d6ca23a54a3f@linux.intel.com>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <a45ff335-0563-85c7-3b31-d6ca23a54a3f@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: MqVEeoOgEXkSl6IwZpf9qmzWimkd3taE
-X-Proofpoint-GUID: MqVEeoOgEXkSl6IwZpf9qmzWimkd3taE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-13_10,2023-03-13_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
- mlxlogscore=913 malwarescore=0 impostorscore=0 phishscore=0 mlxscore=0
- bulkscore=0 priorityscore=1501 clxscore=1015 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303130162
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
+Packet length retrieved from skb data may be larger than
+the actual socket buffer length (up to 9026 bytes). In such
+case the cloned skb passed up the network stack will leak
+kernel memory contents.
 
-On 3/10/2023 7:07 AM, Mathias Nyman wrote:
-> On 9.3.2023 1.57, Wesley Cheng wrote:
->> From: Mathias Nyman <mathias.nyman@linux.intel.com>
->>
->> Introduce xHCI APIs to allow for clients to allocate and free
->> interrupters.  This allocates an array of interrupters, which is based on
->> the max_interrupters parameter.  The primary interrupter is set as the
->> first entry in the array, and secondary interrupters following after.
->>
-> 
-> I'm thinking about changing this offloading xHCI API
-> xhci should be aware and keep track of which devices and endpoints that
-> are offloaded to avoid device getting offloaded twice, avoid xhci driver
-> from queuing anything itself for these, and act properly if the offloaded
-> device or entire host is removed.
-> 
-> So first thing audio side would need to do do is register/create an
-> offload entry for the device using the API:
-> 
-> struct xhci_sideband *xhci_sideband_register(struct usb_device *udev)
-> 
-> (xHCI specs calls offload sideband)
-> Then endpoints and interrupters can be added and removed from this
-> offload entry
-> 
-> I have some early thoughts written as non-compiling code in:
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git 
-> feature_interrupters
-> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters 
-> 
-> 
-> Let me know what you think about this.
-> 
->> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> 
-> My Signed-off-by tag is being misused here.
-> 
-> I wrote a chunk of the code in this patch as PoC that I shared in a 
-> separate topic branch.
-> It was incomplete and not intended for upstream yet. (lacked locking, 
-> several fixme parts, etc..)
-> The rest of the code in this patch is completely new to me.
-> 
+Fixes: d0cad871703b ("smsc75xx: SMSC LAN75xx USB gigabit ethernet adapter driver")
+Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+---
+ drivers/net/usb/smsc75xx.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Sorry about this.  I cherry picked the change directly from your branch, 
-so it carried your signed off tag with it.  Will make to include them 
-properly next time.
+diff --git a/drivers/net/usb/smsc75xx.c b/drivers/net/usb/smsc75xx.c
+index 95de452ff..db34f8d1d 100644
+--- a/drivers/net/usb/smsc75xx.c
++++ b/drivers/net/usb/smsc75xx.c
+@@ -2212,7 +2212,8 @@ static int smsc75xx_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ 				dev->net->stats.rx_frame_errors++;
+ 		} else {
+ 			/* MAX_SINGLE_PACKET_SIZE + 4(CRC) + 2(COE) + 4(Vlan) */
+-			if (unlikely(size > (MAX_SINGLE_PACKET_SIZE + ETH_HLEN + 12))) {
++			if (unlikely(size > (MAX_SINGLE_PACKET_SIZE + ETH_HLEN + 12) ||
++				     size > skb->len)) {
+ 				netif_dbg(dev, rx_err, dev->net,
+ 					  "size err rx_cmd_a=0x%08x\n",
+ 					  rx_cmd_a);
+-- 
+2.39.2
 
-Thanks
-Wesley Cheng
