@@ -2,162 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0DB46B72E7
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 10:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF976B7322
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 10:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjCMJnp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Mar 2023 05:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
+        id S229914AbjCMJtu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Mar 2023 05:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbjCMJnf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 05:43:35 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DF51B33B;
-        Mon, 13 Mar 2023 02:43:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678700612; x=1710236612;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=f2jaxRyW4/AFQnjCX1PeRlWlFVAQ0ExRiYHZWktn/p0=;
-  b=S0Qh0J8S0tX1pkQB9TETuX8Ry3obFVctBY+3UjbxO7YqM32Vqi0csWEZ
-   KLldNionn4wq5MhqmAHFi1/lXd7cWhoAVC7CQIQzmVxFIsku7B9L3XmRT
-   uALwDDI21N389cugbSSoK82hvMX706B7lxpUnAe7U+vNw8jx6J8yBZNT9
-   qVMIasmxwY/xPhbgRRJ32keR36JwMFM6koUz2+ggIFMULfK7IcJnN5b1z
-   hrA3yLsnvpXrsk7MlaZBkZSkkP+6HmImSHcsPKsTS1FU4OWt5IzjGx8gA
-   VVUeIW6PYHdBRtw+Gzmk1Lb4dAb9hrt5miN7YyOYf7C6bQIqPtS/6AoDS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="338654236"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="338654236"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 02:43:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="821884735"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="821884735"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 13 Mar 2023 02:43:26 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 13 Mar 2023 11:43:26 +0200
-Date:   Mon, 13 Mar 2023 11:43:26 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 01/12] usb: typec: ucsi: add PMIC Glink UCSI driver
-Message-ID: <ZA7wPtttsWlQRpAR@kuha.fi.intel.com>
-References: <20230130-topic-sm8450-upstream-pmic-glink-v3-0-4c860d265d28@linaro.org>
- <20230130-topic-sm8450-upstream-pmic-glink-v3-1-4c860d265d28@linaro.org>
+        with ESMTP id S231338AbjCMJtt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 05:49:49 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F417132E2;
+        Mon, 13 Mar 2023 02:49:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=9F7Zw
+        y+tF+g79zFIcf+LAkwXxzpFiwec9imyLWjebwM=; b=gOXwjUK4irrRBdg/qOsq7
+        i3I9fQHuTm3v08vNiRMqwGes/PF9Yzw56TuZu7g9AP+qjNp97Q4aIu2vLRhGAw+L
+        yTSz2UqLKph6sM+lbuRs9L62A4rBdsDTgrJaze3EY7Sxs4OQgvK2F/NN7iuGyJD8
+        t7fGRb4uiqUEKMYydFJUYA=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g2-1 (Coremail) with SMTP id _____wAXpD2F8Q5kCkUlAA--.7153S2;
+        Mon, 13 Mar 2023 17:48:53 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     gregkh@linuxfoundation.org
+Cc:     p.zabel@pengutronix.de, biju.das.jz@bp.renesas.com,
+        phil.edworthy@renesas.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        yoshihiro.shimoda.uh@renesas.com, Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH v3] usb: gadget: udc: renesas_usb3: Fix use after free bug in  renesas_usb3_remove due to race condition
+Date:   Mon, 13 Mar 2023 17:48:52 +0800
+Message-Id: <20230313094852.3344288-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v3-1-4c860d265d28@linaro.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wAXpD2F8Q5kCkUlAA--.7153S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tF1DGryfJr47ArWxZFyDAwb_yoW8Xw1xpF
+        WDGFW5Ar4rGFWjq3y7GFykZF1rCasrKry7ZrW7Kw48uF1rG3y0qryIqa1jkF1xJFZ3Ar4F
+        q3WDW340qa47u37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi-eOJUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzgYxU2I0Xnj2zgAAsi
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+In renesas_usb3_probe, &usb3->role_work is bound with
+renesas_usb3_role_work. renesas_usb3_start will be called
+to start the work.
 
-On Thu, Mar 09, 2023 at 02:27:52PM +0100, Neil Armstrong wrote:
-> +static void pmic_glink_ucsi_register(struct work_struct *work)
-> +{
-> +	struct pmic_glink_ucsi *ucsi = container_of(work, struct pmic_glink_ucsi, register_work);
-> +
-> +	ucsi_register(ucsi->ucsi);
-> +}
-> +
-> +static void pmic_glink_ucsi_callback(const void *data, size_t len, void *priv)
-> +{
-> +	struct pmic_glink_ucsi *ucsi = priv;
-> +	const struct pmic_glink_hdr *hdr = data;
-> +
-> +	switch (hdr->opcode) {
-> +	case UC_UCSI_READ_BUF_REQ:
-> +		pmic_glink_ucsi_read_ack(ucsi, data, len);
-> +		break;
-> +	case UC_UCSI_WRITE_BUF_REQ:
-> +		pmic_glink_ucsi_write_ack(ucsi, data, len);
-> +		break;
-> +	case UC_UCSI_USBC_NOTIFY_IND:
-> +		schedule_work(&ucsi->notify_work);
-> +		break;
-> +	};
-> +}
-> +
-> +static void pmic_glink_ucsi_pdr_notify(void *priv, int state)
-> +{
-> +	struct pmic_glink_ucsi *ucsi = priv;
-> +
-> +	if (state == SERVREG_SERVICE_STATE_UP)
-> +		schedule_work(&ucsi->register_work);
-> +	else if (state == SERVREG_SERVICE_STATE_DOWN)
-> +		ucsi_unregister(ucsi->ucsi);
-> +}
-> +
-> +static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
-> +				 const struct auxiliary_device_id *id)
-> +{
-> +	struct pmic_glink_ucsi *ucsi;
-> +	struct device *dev = &adev->dev;
-> +
-> +	ucsi = devm_kzalloc(dev, sizeof(*ucsi), GFP_KERNEL);
-> +	if (!ucsi)
-> +		return -ENOMEM;
-> +
-> +	ucsi->dev = dev;
-> +	dev_set_drvdata(dev, ucsi);
-> +
-> +	INIT_WORK(&ucsi->notify_work, pmic_glink_ucsi_notify);
-> +	INIT_WORK(&ucsi->register_work, pmic_glink_ucsi_register);
-> +	init_completion(&ucsi->read_ack);
-> +	init_completion(&ucsi->write_ack);
-> +	init_completion(&ucsi->sync_ack);
-> +	mutex_init(&ucsi->lock);
-> +
-> +	ucsi->ucsi = ucsi_create(dev, &pmic_glink_ucsi_ops);
-> +	if (IS_ERR(ucsi->ucsi))
-> +		return PTR_ERR(ucsi->ucsi);
-> +
-> +	ucsi_set_drvdata(ucsi->ucsi, ucsi);
-> +
-> +	ucsi->client = devm_pmic_glink_register_client(dev,
-> +						       PMIC_GLINK_OWNER_USBC,
-> +						       pmic_glink_ucsi_callback,
-> +						       pmic_glink_ucsi_pdr_notify,
-> +						       ucsi);
-> +	return PTR_ERR_OR_ZERO(ucsi->client);
-> +}
-> +
-> +static const struct auxiliary_device_id pmic_glink_ucsi_id_table[] = {
-> +	{ .name = "pmic_glink.ucsi", },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(auxiliary, pmic_glink_ucsi_id_table);
-> +
-> +static struct auxiliary_driver pmic_glink_ucsi_driver = {
-> +	.name = "pmic_glink_ucsi",
-> +	.probe = pmic_glink_ucsi_probe,
-> +	.id_table = pmic_glink_ucsi_id_table,
-> +};
+If we remove the driver which will call usbhs_remove, there may be
+an unfinished work. The possible sequence is as follows:
 
-What happens if you remove the module - I think you need to implement
-the remove callback, no?
+Fix it by canceling the work before cleanup in the renesas_usb3_remove
 
-thanks,
+CPU0                  CPU1
 
+                    |renesas_usb3_role_work
+renesas_usb3_remove |
+usb_role_switch_unregister  |
+device_unregister   |
+kfree(sw)  	     |
+free usb3->role_sw  |
+                    |   usb_role_switch_set_role
+                    |   //use usb3->role_sw
+
+Fixes: 39facfa01c9f ("usb: gadget: udc: renesas_usb3: Add register of usb role switch")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+v3:
+- modify the commit message to make it clearer suggested by Yoshihiro Shimoda
+v2:
+- fix typo, use clearer commit message and only cancel the UAF-related work suggested by Yoshihiro Shimoda
+---
+ drivers/usb/gadget/udc/renesas_usb3.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
+index bee6bceafc4f..a301af66bd91 100644
+--- a/drivers/usb/gadget/udc/renesas_usb3.c
++++ b/drivers/usb/gadget/udc/renesas_usb3.c
+@@ -2661,6 +2661,7 @@ static int renesas_usb3_remove(struct platform_device *pdev)
+ 	debugfs_remove_recursive(usb3->dentry);
+ 	device_remove_file(&pdev->dev, &dev_attr_role);
+ 
++	cancel_work_sync(&usb3->role_work);
+ 	usb_role_switch_unregister(usb3->role_sw);
+ 
+ 	usb_del_gadget_udc(&usb3->gadget);
 -- 
-heikki
+2.25.1
+
