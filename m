@@ -2,107 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506D76B6DCF
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 04:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A126B6F40
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 06:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjCMDGp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 Mar 2023 23:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
+        id S229528AbjCMFqQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Mar 2023 01:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjCMDGg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Mar 2023 23:06:36 -0400
-Received: from mail-m11879.qiye.163.com (mail-m11879.qiye.163.com [115.236.118.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF3C27485;
-        Sun, 12 Mar 2023 20:06:33 -0700 (PDT)
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by mail-m11879.qiye.163.com (Hmail) with ESMTPA id EC7F368054C;
-        Mon, 13 Mar 2023 10:58:47 +0800 (CST)
-From:   Frank Wang <frank.wang@rock-chips.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, heiko@sntech.de
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com,
-        Frank Wang <frank.wang@rock-chips.com>
-Subject: [PATCH 4/4] usb: typec: tcpm: fix source caps may lost after soft reset
-Date:   Mon, 13 Mar 2023 10:58:43 +0800
-Message-Id: <20230313025843.17162-5-frank.wang@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230313025843.17162-1-frank.wang@rock-chips.com>
-References: <20230313025843.17162-1-frank.wang@rock-chips.com>
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGU0fGlYYHhkeTB5ISExPHk5VEwETFh
-        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSkpLSEpMVUpLS1VLWQ
-        Y+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NE06Hyo*GT0JIS9MURw0TzI*
-        TCNPFBdVSlVKTUxDTUxNSElDQ0hJVTMWGhIXVR0JGhUQVQwaFRw7CRQYEFYYExILCFUYFBZFWVdZ
-        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFITk1ONwY+
-X-HM-Tid: 0a86d8e7ff4c2eb5kusnec7f368054c
-X-HM-MType: 1
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S229473AbjCMFqP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 01:46:15 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7F02BED8;
+        Sun, 12 Mar 2023 22:46:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678686374; x=1710222374;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xOVX04NMGm21cJ3YIo/0A8ze3aZruPEgVWV5otmS3KA=;
+  b=Bf9UflqRkBgCcggOvM0liOlfrN5pC4rw7YQ3QyrXQZxevN4QwAPAVi38
+   dpT/fKICTDC3h+ORdsGB/WxCE/WwUIwn4iIuq9qL71145uPLsHWBHoa6F
+   sBAvf3jnCX+wgphdIYGslpysEUIQQAT0WHoTMoBOX+tpb2zvwYNriZ4Qu
+   s/x147XjXVq6mDXQkdZfOk1cSXaVhyVcN5ze1resLrGyMvjJo1Btjr8GL
+   aoF4hTnulh+mi6Iaq0cU072NoqHLz5rgl8KpYTdrRpPDLf5IZ04NvgC6L
+   fM6dILNVnDRjDEW6B/yu1HWGOPZiYNfPgqCS54jmir/EiYyNB0hG4EIJy
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="337086643"
+X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
+   d="scan'208";a="337086643"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 22:46:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="628514255"
+X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
+   d="scan'208";a="628514255"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 12 Mar 2023 22:46:10 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id A060D143; Mon, 13 Mar 2023 07:46:54 +0200 (EET)
+Date:   Mon, 13 Mar 2023 07:46:54 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Sanjay R Mehta <sanju.mehta@amd.com>, anson.tsao@amd.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] thunderbolt: Disable interrupt auto clear for rings
+Message-ID: <20230313054654.GC62143@black.fi.intel.com>
+References: <20230310172050.1394-1-mario.limonciello@amd.com>
+ <20230310172050.1394-3-mario.limonciello@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230310172050.1394-3-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Invoke set_pd_rx() may flush the RX FIFO of PD controller, so do
-set_pd_rx() before sending Soft Reset in case Source caps may be flushed
-at debounce time between SOFT_RESET_SEND and SNK_WAIT_CAPABILITIES state.
+Hi Mario,
 
-Without this patch, in PD charger stress test, the FUSB302 driver may
-occur the following exceptions in power negotiation stage.
+On Fri, Mar 10, 2023 at 11:20:50AM -0600, Mario Limonciello wrote:
+> When interrupt auto clear is programmed, any read to the interrupt
+> status register will clear all interrupts.  If two interrupts have
+> come in before one can be serviced then this will cause lost interrupts.
+> 
+> On AMD USB4 routers this has manifested in odd problems particularly
+> with long strings of control tranfers such as reading the DROM via bit
+> banging.
 
-[ ...]
-[ 4.512252] fusb302_irq_intn
-[ 4.512260] AMS SOFT_RESET_AMS finished
-[ 4.512269] state change SOFT_RESET_SEND ->SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
-[ 4.514511] pd := on
-[ 4.514516] pending state change SNK_WAIT_CAPABILITIES ->HARD_RESET_SEND @ 310 ms [rev3 NONE_AMS]
-[ 4.515428] IRQ: 0x51, a: 0x00, b: 0x01, status0: 0x93
-[ 4.515431] IRQ: BC_LVL, handler pending
-[ 4.515435] IRQ: PD sent good CRC
-[ 4.516434] PD message header: 0
-[ 4.516437] PD message len: 0
-[ 4.516444] PD RX, header: 0x0 [1]
+Nice catch! Does this mean we can drop [1] now?
 
-Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git/commit/?h=next&id=8d7f459107f74fbbdde3dd5b3874d2e748cb8a21
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 9e583060e64fc..ba6bf71838eed 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -4321,10 +4321,12 @@ static void run_state_machine(struct tcpm_port *port)
- 		tcpm_set_state(port, unattached_state(port), 0);
- 		break;
- 	case SNK_WAIT_CAPABILITIES:
--		ret = port->tcpc->set_pd_rx(port->tcpc, true);
--		if (ret < 0) {
--			tcpm_set_state(port, SNK_READY, 0);
--			break;
-+		if (port->prev_state != SOFT_RESET_SEND) {
-+			ret = port->tcpc->set_pd_rx(port->tcpc, true);
-+			if (ret < 0) {
-+				tcpm_set_state(port, SNK_READY, 0);
-+				break;
-+			}
- 		}
- 		/*
- 		 * If VBUS has never been low, and we time out waiting
-@@ -4603,6 +4605,7 @@ static void run_state_machine(struct tcpm_port *port)
- 	case SOFT_RESET_SEND:
- 		port->message_id = 0;
- 		port->rx_msgid = -1;
-+		port->tcpc->set_pd_rx(port->tcpc, true);
- 		if (tcpm_pd_send_control(port, PD_CTRL_SOFT_RESET))
- 			tcpm_set_state_cond(port, hard_reset_state(port), 0);
- 		else
--- 
-2.17.1
-
+I would still like to keep the nice refactor you did for the DROM
+parsing, though.
