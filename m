@@ -2,205 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2AB6B7176
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 09:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EAB56B719A
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 09:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjCMIrL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Mar 2023 04:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
+        id S230458AbjCMIvf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Mar 2023 04:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbjCMIqs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 04:46:48 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07F74ECF7;
-        Mon, 13 Mar 2023 01:45:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BD55ECE0EC8;
-        Mon, 13 Mar 2023 08:45:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60803C433D2;
-        Mon, 13 Mar 2023 08:45:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678697144;
-        bh=VMjyX8k6XHFsXNNjGBjW/9pSpOIbM79TjTGsE28Bw/s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UYGTujPGnhqti7Zk3vjRz5EjsoD1LjRJwSqzpLH+KZH3RYqz9A59VzG28R3rFGJGg
-         fo0CgrIsuriiHp2WiIR97mVZCQxP4qyxWiAbLxaONQrxeD9TWN3zMxb9QHOwHJFZw1
-         6TKOs4IwnSn6yNDTo5UcatJJfbIwek9JOV86EOS8=
-Date:   Mon, 13 Mar 2023 09:45:42 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jarkko Sonninen <kasper@iki.fi>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
-Message-ID: <ZA7itvkEhW11AFfJ@kroah.com>
-References: <ZA7Wh2Z/DdKOsOYr@kroah.com>
- <20230313082734.886890-1-kasper@iki.fi>
+        with ESMTP id S230203AbjCMIu6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 04:50:58 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96904FAB1;
+        Mon, 13 Mar 2023 01:49:08 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id p6so6461660pga.0;
+        Mon, 13 Mar 2023 01:49:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678697348;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UdJZFGWnCqrGrvX1AXmXSN5ym6vA1hPmy0582RXs6Uo=;
+        b=lVhyFjJrYO5YFrPABmayHEJrldR9VVyOKxVDVd6Wo+aHPyUJqBH3i10hXtcEn+aDsb
+         Z56nA82rDW4Pej1y0jajJ+uxJIOeYTX5COvWri7BEEanXSZEJwNTRrVTZVCWvNrIJAp4
+         6w2YPnICOc07ATlGh1Ii2BwRPNwiHtpEOrbnEFhuDgSa1ko3+zQ6aXGHqGq6WPrWzwCH
+         DgXXVcD9yyDvLCbr/pY78x67lGU9Qsei+zKM+/zsrbTJfMf261lQ18IK4pAYEig57aSD
+         1ew6thgxTYVrAU+t5gY563kmk9Khk5IeDJUgx+bjovmPP7/dlVD363A4aftOS+5SAzZJ
+         ZTXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678697348;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UdJZFGWnCqrGrvX1AXmXSN5ym6vA1hPmy0582RXs6Uo=;
+        b=j62LXA53/7sVhnYQsqUV1NCfzW11pmbCa+q+BMbqi9bSfuvltC5SmVEgRnHEi24jMP
+         KJVgDIX9w23sv2ZrgmUJjc+e6PZjDjngEACaLUzhV/14WfjN3IvtVelkmXLIAssct7hz
+         i97qw+snryo8lfY33P78hEJP+qTv+DQiE/MXMIwq9kyY4/EUs94Ey56sr5hNsWGQiYDF
+         CNGSYKWTMxdgaAetHAA7eUeedYC/QlS2SWZrXcb42+dWkguv9ZecPvFtGaoSVV7JwdGt
+         WuIwH+pHVIbOs23MsJfkfgkZ7r/Pt6Qat6Ar9m+47yAFNBXH8A86Ko9WoR1B9sKBVS0L
+         ti1g==
+X-Gm-Message-State: AO0yUKUVhXZH7YOrDpttcBvlE2P24oIc3gkv71gy2dlbm8DVo+hV01Pk
+        OcpP3KA6mMtZ9ZhGDp6OV2Waa1PdX6StHFPeYlA=
+X-Google-Smtp-Source: AK7set93yVCJ7vYMwpAXAJXNnGjB4sTvhmMwrUr4NfDYWkzd7Sv2OBew8QoG0y27UJHpTvhcdUJufud9Op3Yf7SNsFc=
+X-Received: by 2002:a63:6e02:0:b0:50b:188d:3381 with SMTP id
+ j2-20020a636e02000000b0050b188d3381mr615559pgc.4.1678697347846; Mon, 13 Mar
+ 2023 01:49:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313082734.886890-1-kasper@iki.fi>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230311161242.3773432-1-zyytlz.wz@163.com> <TYBPR01MB534196428158C2D79A910E07D8B99@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+In-Reply-To: <TYBPR01MB534196428158C2D79A910E07D8B99@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Mon, 13 Mar 2023 16:48:54 +0800
+Message-ID: <CAJedcCztRHuHVtrqsA3Osn+yp+Swgbu1GEAyfDE3d90CREn25g@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: gadget: udc: renesas_usb3: Fix use after free bug
+ in renesas_usb3_remove due to race condition
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc:     Zheng Wang <zyytlz.wz@163.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "1395428693sheep@gmail.com" <1395428693sheep@gmail.com>,
+        "alex000young@gmail.com" <alex000young@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 10:27:34AM +0200, Jarkko Sonninen wrote:
-> Add support for RS-485 in Exar USB adapters.
-> RS-485 mode is controlled by TIOCGRS485 and TIOCSRS485 ioctls.
-> Gpio mode register is set to enable RS-485.
-> 
-> Signed-off-by: Jarkko Sonninen <kasper@iki.fi>
-> ---
->  drivers/usb/serial/xr_serial.c | 65 +++++++++++++++++++++++++++++++++-
->  1 file changed, 64 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/serial/xr_serial.c b/drivers/usb/serial/xr_serial.c
-> index fdb0aae546c3..480cda0daafc 100644
-> --- a/drivers/usb/serial/xr_serial.c
-> +++ b/drivers/usb/serial/xr_serial.c
-> @@ -93,6 +93,7 @@ struct xr_txrx_clk_mask {
->  #define XR_GPIO_MODE_SEL_DTR_DSR	0x2
->  #define XR_GPIO_MODE_SEL_RS485		0x3
->  #define XR_GPIO_MODE_SEL_RS485_ADDR	0x4
-> +#define XR_GPIO_MODE_RS485_TX_H		0x8
->  #define XR_GPIO_MODE_TX_TOGGLE		0x100
->  #define XR_GPIO_MODE_RX_TOGGLE		0x200
->  
-> @@ -237,6 +238,8 @@ static const struct xr_type xr_types[] = {
->  struct xr_data {
->  	const struct xr_type *type;
->  	u8 channel;			/* zero-based index or interface number */
-> +	struct serial_rs485 rs485;
-> +	spinlock_t lock;
->  };
->  
->  static int xr_set_reg(struct usb_serial_port *port, u8 channel, u16 reg, u16 val)
-> @@ -629,6 +632,7 @@ static void xr_set_flow_mode(struct tty_struct *tty,
->  	struct xr_data *data = usb_get_serial_port_data(port);
->  	const struct xr_type *type = data->type;
->  	u16 flow, gpio_mode;
-> +	unsigned long flags, rs485_flags;
->  	int ret;
->  
->  	ret = xr_get_reg_uart(port, type->gpio_mode, &gpio_mode);
-> @@ -645,9 +649,16 @@ static void xr_set_flow_mode(struct tty_struct *tty,
->  	/* Set GPIO mode for controlling the pins manually by default. */
->  	gpio_mode &= ~XR_GPIO_MODE_SEL_MASK;
->  
-> +	spin_lock_irqsave(&data->lock, flags);
-> +	rs485_flags = data->rs485.flags;
-> +	spin_unlock_irqrestore(&data->lock, flags);
-> +	if (rs485_flags & SER_RS485_ENABLED)
-> +		gpio_mode |= XR_GPIO_MODE_SEL_RS485 | XR_GPIO_MODE_RS485_TX_H;
-> +	else if (C_CRTSCTS(tty) && C_BAUD(tty) != B0)
-> +		gpio_mode |= XR_GPIO_MODE_SEL_RTS_CTS;
-> +
->  	if (C_CRTSCTS(tty) && C_BAUD(tty) != B0) {
->  		dev_dbg(&port->dev, "Enabling hardware flow ctrl\n");
-> -		gpio_mode |= XR_GPIO_MODE_SEL_RTS_CTS;
->  		flow = XR_UART_FLOW_MODE_HW;
->  	} else if (I_IXON(tty)) {
->  		u8 start_char = START_CHAR(tty);
-> @@ -827,6 +838,57 @@ static void xr_set_termios(struct tty_struct *tty,
->  	xr_set_flow_mode(tty, port, old_termios);
->  }
->  
-> +static int xr_get_rs485_config(struct tty_struct *tty,
-> +			 unsigned int __user *argp)
-> +{
-> +	struct usb_serial_port *port = tty->driver_data;
-> +	struct xr_data *data = usb_get_serial_port_data(port);
-> +
-> +	dev_dbg(tty->dev, "Flags %02x\n", data->rs485.flags);
-> +	if (copy_to_user(argp, &data->rs485, sizeof(data->rs485)))
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
-> +static int xr_set_rs485_config(struct tty_struct *tty,
-> +			 unsigned long __user *argp)
-> +{
-> +	struct usb_serial_port *port = tty->driver_data;
-> +	struct xr_data *data = usb_get_serial_port_data(port);
-> +	struct serial_rs485 rs485;
-> +	unsigned long flags;
-> +
-> +	if (copy_from_user(&rs485, argp, sizeof(rs485)))
-> +		return -EFAULT;
-> +
-> +	dev_dbg(tty->dev, "Flags %02x\n", rs485.flags);
-> +	rs485.flags &= SER_RS485_ENABLED;
-> +	spin_lock_irqsave(&data->lock, flags);
-> +	memcpy(&data->rs485, &rs485, sizeof(rs485));
-> +	spin_unlock_irqrestore(&data->lock, flags);
-> +	xr_set_flow_mode(tty, port, 0);
-> +
-> +	if (copy_to_user(argp, &data->rs485, sizeof(data->rs485)))
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
-> +
-> +static int xr_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
-> +{
-> +	void __user *argp = (void __user *)arg;
-> +
-> +	switch (cmd) {
-> +	case TIOCGRS485:
-> +		return xr_get_rs485_config(tty, argp);
-> +	case TIOCSRS485:
-> +		return xr_set_rs485_config(tty, argp);
-> +	}
-> +	return -ENOTTY;
-> +}
-> +
->  static int xr_open(struct tty_struct *tty, struct usb_serial_port *port)
->  {
->  	int ret;
-> @@ -1010,6 +1072,7 @@ static struct usb_serial_driver xr_device = {
->  	.set_termios		= xr_set_termios,
->  	.tiocmget		= xr_tiocmget,
->  	.tiocmset		= xr_tiocmset,
-> +	.ioctl			= xr_ioctl,
->  	.dtr_rts		= xr_dtr_rts
->  };
->  
-> -- 
-> 2.34.1
-> 
+Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com> =E4=BA=8E2023=E5=B9=B4=
+3=E6=9C=8813=E6=97=A5=E5=91=A8=E4=B8=80 16:28=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Hi Zheng,
+>
+> > From: Zheng Wang, Sent: Sunday, March 12, 2023 1:13 AM
+> >
+> > In renesas_usb3_probe, &usb3->role_work is bound with
+> > renesas_usb3_role_work. renesas_usb3_start will be called
+> > to start the work.
+> >
+> > to make cleanup, there may be an unfinished work. The possible
+> > sequence is as follows:
+>
+> Why do you remove the following description on this v2 patch?
+> -----
+> If we remove the driver which will call usbhs_remove
+> -----
+> I think this description is helpful to understand.
+>
 
-Hi,
+Sorry I misunderstood you previous response for my poor English. Will
+append it again in the next version.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Best reagrds,
+Zheng
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+>
+> > Fix it by canceling the work before cleanup in the renesas_usb3_remove
+> >
+> > CPU0                  CPU1
+> >
+> >                     |renesas_usb3_role_work
+> > renesas_usb3_remove |
+> > usb_role_switch_unregister  |
+> > device_unregister   |
+> > kfree(sw)          |
+> > free usb3->role_sw  |
+> >                     |   usb_role_switch_set_role
+> >                     |   //use usb3->role_sw
+> >
+> > Fixes: 39facfa01c9f ("usb: gadget: udc: renesas_usb3: Add register of u=
+sb role switch")
+> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > ---
+> > v2:
+> > - fix typo, use clearer commit message and only cancel the UAF-related =
+work suggested by Yoshihiro Shimoda
+> > ---
+> >  drivers/usb/gadget/udc/renesas_usb3.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget=
+/udc/renesas_usb3.c
+> > index bee6bceafc4f..a301af66bd91 100644
+> > --- a/drivers/usb/gadget/udc/renesas_usb3.c
+> > +++ b/drivers/usb/gadget/udc/renesas_usb3.c
+> > @@ -2661,6 +2661,7 @@ static int renesas_usb3_remove(struct platform_de=
+vice *pdev)
+> >       debugfs_remove_recursive(usb3->dentry);
+> >       device_remove_file(&pdev->dev, &dev_attr_role);
+> >
+> > +     cancel_work_sync(&usb3->role_work);
+> >       usb_role_switch_unregister(usb3->role_sw);
+> >
+> >       usb_del_gadget_udc(&usb3->gadget);
+> > --
+> > 2.25.1
+>
