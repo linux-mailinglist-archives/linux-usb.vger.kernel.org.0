@@ -2,175 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A05F6B7D08
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 17:08:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA50C6B7D54
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 17:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjCMQIq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Mar 2023 12:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
+        id S230522AbjCMQVw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Mar 2023 12:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbjCMQIo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 12:08:44 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49F972005;
-        Mon, 13 Mar 2023 09:08:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678723723; x=1710259723;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KwWw08/eWY4G9C519WQB8MadkSavHLvHsQC/LhwmTtk=;
-  b=caORXnjeqLN1ufIu42HoNR10u2Dkt1E/oT2k9+lRoh5aE8DAszoT2H64
-   66C7lJ9ubvaXEqSO9nmejrZ4I8/hOxKWRO19FOipRDLi5NQwxKFQsgnQU
-   SdCSfPNwBduWqrfoMB+IBnkT/vDyEofKbVx7kF8U7oFBlSYt9lZbHlh3l
-   pnnbLCZwsRC9+DYqeJkIz/yxp96iby/E+EA3HLeZSibcoJJhUgZGkjzdM
-   gz5ILm3C7hs7j3JKIiqg4kcpQpij53NPn67UZzeb5VpVNwY8GsAi0fWvJ
-   0fw4GwROupP3GEJnniovxxX0jS8rbIhghGhYRuI/FBgFFBbOJ1xjNh+9o
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="338736597"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="338736597"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 09:05:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="671949770"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="671949770"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 13 Mar 2023 09:05:29 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pbkfw-0005rQ-1I;
-        Mon, 13 Mar 2023 16:05:28 +0000
-Date:   Tue, 14 Mar 2023 00:04:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Marek Vasut <marex@denx.de>,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] extcon: usbc-tusb320: unregister typec port on driver
- removal
-Message-ID: <202303132335.Qnq7apal-lkp@intel.com>
-References: <20230313130105.4183296-1-alvin@pqrs.dk>
+        with ESMTP id S230117AbjCMQVv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 12:21:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1186F4A9;
+        Mon, 13 Mar 2023 09:21:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22ED76132A;
+        Mon, 13 Mar 2023 16:21:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6FEBC433EF;
+        Mon, 13 Mar 2023 16:21:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678724509;
+        bh=cue9QvwsImcv6UUL81tuuFLV5LdqK4geTRiYyrIUYZo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G06mdbhJwW/k+9rd5EZlDYKJ+sR+2soOIpp+F/8O43q+1jFQsny6IWDnGJa+yBE8e
+         zeAbxwE2Teq3zNu/70veSmcq9+GFd0ScZn+tEmmumE2DNtwRykAvfC30aCbvvXJGs6
+         zvgIDijaxbruoLOxhaqL/aMzWMUfLg/KA1y6Xmx8xTVv+Qsp2yQet8hHQMsfpzWO2/
+         G1SrpDMENEI+jUbczvQ7ED6CabHhn/jeAg8Oyi9zEN+YyR426QShmcjCtU9n5kWC8L
+         ySNegOosVNKO+i/+/X3YosCWkYGjgG/7urHQZyxahevxALZ4/VSHLgP/VlZX8gHYEF
+         LOSUZF6bpaLMw==
+Date:   Mon, 13 Mar 2023 17:21:46 +0100
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Ye Xiang <xiang.ye@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
+Subject: Re: [PATCH v5 1/5] usb: Add support for Intel LJCA device
+Message-ID: <20230313162146.eag5z6micbpczbt2@intel.intel>
+References: <20230312190435.3568212-1-xiang.ye@intel.com>
+ <20230312190435.3568212-2-xiang.ye@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230313130105.4183296-1-alvin@pqrs.dk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230312190435.3568212-2-xiang.ye@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alvin,
+Hi Ye,
 
-I love your patch! Perhaps something to improve:
+On top of what Greg has already said, few things from my side
+through the lines.
 
-[auto build test WARNING on chanwoo-extcon/extcon-next]
-[also build test WARNING on linus/master v6.3-rc2 next-20230310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alvin-ipraga/extcon-usbc-tusb320-unregister-typec-port-on-driver-removal/20230313-210245
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/extcon.git extcon-next
-patch link:    https://lore.kernel.org/r/20230313130105.4183296-1-alvin%40pqrs.dk
-patch subject: [PATCH] extcon: usbc-tusb320: unregister typec port on driver removal
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230313/202303132335.Qnq7apal-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/fe414069d19f6d59c7c34f820459f4114e2de136
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alvin-ipraga/extcon-usbc-tusb320-unregister-typec-port-on-driver-removal/20230313-210245
-        git checkout fe414069d19f6d59c7c34f820459f4114e2de136
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+> +static int ljca_mng_link(struct ljca_dev *dev, struct ljca_stub *stub)
+> +{
+> +	int ret;
+> +
+> +	ret = ljca_mng_reset_handshake(stub);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* try to enum all the stubs */
+> +	ljca_mng_enum_gpio(stub);
+> +	ljca_mng_enum_i2c(stub);
+> +	ljca_mng_enum_spi(stub);
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303132335.Qnq7apal-lkp@intel.com/
+We are ignoring here the return value. So either make the
+whole function call chain to be void or please check the return
+values here.
 
-All warnings (new ones prefixed by >>):
+[...]
 
-   drivers/extcon/extcon-usbc-tusb320.c: In function 'tusb320_typec_probe':
->> drivers/extcon/extcon-usbc-tusb320.c:429:13: warning: statement with no effect [-Wunused-value]
-     429 |         priv->connector_fwnode;
-         |         ~~~~^~~~~~~~~~~~~~~~~~
+> +static ssize_t ljca_enable_dfu_store(struct device *dev, struct device_attribute *attr,
+> +				     const char *buf, size_t count)
+> +{
+> +	struct usb_interface *intf = to_usb_interface(dev);
+> +	struct ljca_dev *ljca_dev = usb_get_intfdata(intf);
+> +	struct ljca_stub *mng_stub = ljca_stub_find(ljca_dev, LJCA_MNG_STUB);
+> +	bool enable;
+> +	int ret;
+> +
+> +	ret = kstrtobool(buf, &enable);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (enable) {
+> +		ret = ljca_mng_set_dfu_mode(mng_stub);
+> +		if (ret)
+> +			return ret;
+> +	}
 
+What is the DFU mode?
+Is it an operational mode?
+Do we enter and exit from it?
+Does the device leave this mode on its own?
+What if I write twice in a raw enable?
+Can I check if I am in DFU mode or not?
 
-vim +429 drivers/extcon/extcon-usbc-tusb320.c
+Would you mind adding some comments here?
 
-   379	
-   380	static int tusb320_typec_probe(struct i2c_client *client,
-   381				       struct tusb320_priv *priv)
-   382	{
-   383		struct fwnode_handle *connector;
-   384		const char *cap_str;
-   385		int ret;
-   386	
-   387		/* The Type-C connector is optional, for backward compatibility. */
-   388		connector = device_get_named_child_node(&client->dev, "connector");
-   389		if (!connector)
-   390			return 0;
-   391	
-   392		/* Type-C connector found. */
-   393		ret = typec_get_fw_cap(&priv->cap, connector);
-   394		if (ret)
-   395			goto err_put;
-   396	
-   397		priv->port_type = priv->cap.type;
-   398	
-   399		/* This goes into register 0x8 field CURRENT_MODE_ADVERTISE */
-   400		ret = fwnode_property_read_string(connector, "typec-power-opmode", &cap_str);
-   401		if (ret)
-   402			goto err_put;
-   403	
-   404		ret = typec_find_pwr_opmode(cap_str);
-   405		if (ret < 0)
-   406			goto err_put;
-   407	
-   408		priv->pwr_opmode = ret;
-   409	
-   410		/* Initialize the hardware with the devicetree settings. */
-   411		ret = tusb320_set_adv_pwr_mode(priv);
-   412		if (ret)
-   413			goto err_put;
-   414	
-   415		priv->cap.revision		= USB_TYPEC_REV_1_1;
-   416		priv->cap.accessory[0]		= TYPEC_ACCESSORY_AUDIO;
-   417		priv->cap.accessory[1]		= TYPEC_ACCESSORY_DEBUG;
-   418		priv->cap.orientation_aware	= true;
-   419		priv->cap.driver_data		= priv;
-   420		priv->cap.ops			= &tusb320_typec_ops;
-   421		priv->cap.fwnode		= connector;
-   422	
-   423		priv->port = typec_register_port(&client->dev, &priv->cap);
-   424		if (IS_ERR(priv->port)) {
-   425			ret = PTR_ERR(priv->port);
-   426			goto err_put;
-   427		}
-   428	
- > 429		priv->connector_fwnode;
-   430	
-   431		return 0;
-   432	
-   433	err_put:
-   434		fwnode_handle_put(connector);
-   435	
-   436		return ret;
-   437	}
-   438	
+> +
+> +	return count;
+> +}
+> +static DEVICE_ATTR_WO(ljca_enable_dfu);
+> +
+> +static ssize_t ljca_trace_level_store(struct device *dev, struct device_attribute *attr,
+> +				      const char *buf, size_t count)
+> +{
+> +	struct usb_interface *intf = to_usb_interface(dev);
+> +	struct ljca_dev *ljca_dev = usb_get_intfdata(intf);
+> +	struct ljca_stub *diag_stub = ljca_stub_find(ljca_dev, LJCA_DIAG_STUB);
+> +	u8 level;
+> +	int ret;
+> +
+> +	if (kstrtou8(buf, 0, &level))
+> +		return -EINVAL;
+> +
+> +	ret = ljca_diag_set_trace_level(diag_stub, level);
+> +	if (ret)
+> +		return ret;
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+do we need any range check for the levels? What happens if I do:
+
+echo "I am too cool" > /sys/.../ljca_trace_level
+
+As there were questions here, would you mind adding some comments
+so that the next reader won't make the same questions?
+
+> +
+> +	return count;
+> +}
+> +static DEVICE_ATTR_WO(ljca_trace_level);
+
+[...]
+
+> +static int ljca_probe(struct usb_interface *intf, const struct usb_device_id *id)
+> +{
+> +	struct ljca_dev *dev;
+> +	struct usb_endpoint_descriptor *bulk_in, *bulk_out;
+> +	int ret;
+> +
+> +	/* allocate memory for our device state and initialize it */
+> +	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
+
+devm_kzalloc()
+
+Thanks,
+Andi
+
+> +	if (!dev)
+> +		return -ENOMEM;
