@@ -2,66 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1C66B846E
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 23:02:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD7186B85D0
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Mar 2023 00:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbjCMWCr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Mar 2023 18:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34116 "EHLO
+        id S229814AbjCMXEQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 13 Mar 2023 19:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjCMWCq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 18:02:46 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055AA8E3CE;
-        Mon, 13 Mar 2023 15:02:09 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id fd5so20685870edb.7;
-        Mon, 13 Mar 2023 15:02:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678744927;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mw1oEi8x/spO3700iwhP/jHnat9etEwB+9anearFVJA=;
-        b=fj6u1aQxH9kGPaKnJutlfly8rY6Tc8nh4BcbFxBESqOMta+tzIkiA5zoCXjdXgjgrh
-         RhjB8Zbz0MIKzFYb3UcWnBzLY9jnAQRfQ/iIIrjXUBw95GbuDE8LUe6vc+aMMb1dwMrT
-         kVgRGTMxzSKVE7KkrImNiO4BoRkxC2o3n+CB1ewOwUyZKGlB3t1S06M4J7zblQD3GG3n
-         +7lweClsM+xNdXyg7+EvaK/bP2EXFYBBXnyKR119TuWkdu3VZQLwbG/xHWj8ZmjNHYXB
-         duSPTTPMu1EWShnpnuKMEqGakpHY+tOHrFZH62nxjYuGwqNTA/2GHrCT+GnWoyzkFb35
-         LwwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678744927;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Mw1oEi8x/spO3700iwhP/jHnat9etEwB+9anearFVJA=;
-        b=rzEpM6OjeCTwvSyUEhn6g5RHNXR4roH8GuQPhgHt8oyet4yMYd/2cXs6ro0kmAQJ8t
-         X2Yz8lfTUbNzlT1I3iDULGcHTjpa3EAPeTCy5WFZ+bHhGFdEpNtX33hxsanWgXPtGkbq
-         dYwV8iSw3CMjCoh6R2K6KwnY1kgY6ilXhwNIdAbvs9uDR1pU2+2Z3EsAXirKMDxv3vW6
-         59oEMr5Lbcc3LD3hWct7qy+TrG80jqsTLO5SI7mHv3A2TtkbqHPruCiSylogN5oq9MEm
-         GbtIaIYtHJ1JsL9o4IV1KZbftTSGRQTdK2tbnksakVfq6pBFWVXYW4uOa/Fq43fOPMI2
-         j7Vw==
-X-Gm-Message-State: AO0yUKXtU3LGx4EDFi/mjr3QvOyzXRfnXyvjkco4/Golcoc6pdN9ttqe
-        J1YPzKlz6BAnU1KBQ3zwgGM=
-X-Google-Smtp-Source: AK7set9x1DX7dDQFEd4i4rUbnBF0FHxshk+8AZoqwn1xBH6Tcg/UJhbAVYe8kIgUcX7lZc5W+uhfcA==
-X-Received: by 2002:a05:6402:188:b0:4a3:43c1:8430 with SMTP id r8-20020a056402018800b004a343c18430mr13073923edv.4.1678744927024;
-        Mon, 13 Mar 2023 15:02:07 -0700 (PDT)
-Received: from localhost.localdomain (077222238142.warszawa.vectranet.pl. [77.222.238.142])
-        by smtp.googlemail.com with ESMTPSA id r9-20020a50c009000000b004c13fe8fabfsm246146edb.84.2023.03.13.15.02.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 15:02:06 -0700 (PDT)
-From:   Szymon Heidrich <szymon.heidrich@gmail.com>
-To:     steve.glendinning@shawell.net, UNGLinuxDriver@microchip.com,
-        davem@davemloft.net, edumazet@google.com
-Cc:     kuba@kernel.org, pabeni@redhat.com, szymon.heidrich@gmail.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] net: usb: smsc95xx: Limit packet length to skb->len
-Date:   Mon, 13 Mar 2023 23:01:24 +0100
-Message-Id: <20230313220124.52437-1-szymon.heidrich@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S229932AbjCMXEM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 19:04:12 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21D99386E
+        for <linux-usb@vger.kernel.org>; Mon, 13 Mar 2023 16:03:29 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-270-dDXYfkCXNfKgBi0MNI-W8g-1; Mon, 13 Mar 2023 23:02:23 +0000
+X-MC-Unique: dDXYfkCXNfKgBi0MNI-W8g-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.47; Mon, 13 Mar
+ 2023 23:02:22 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.047; Mon, 13 Mar 2023 23:02:22 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Jarkko Sonninen' <kasper@iki.fi>
+CC:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
+Thread-Topic: [PATCH v2] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
+Thread-Index: AQHZVYXc9R4nUUIaSE2rrq7+pSxNzK75UfkQ
+Date:   Mon, 13 Mar 2023 23:02:22 +0000
+Message-ID: <f17e5d7c4ccd4db7a5d5001d7dde42da@AcuMS.aculab.com>
+References: <ZA7Wh2Z/DdKOsOYr@kroah.com>
+ <20230313082734.886890-1-kasper@iki.fi>
+In-Reply-To: <20230313082734.886890-1-kasper@iki.fi>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,31 +58,56 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Packet length retrieved from skb data may be larger than
-the actual socket buffer length (up to 1526 bytes). In such
-case the cloned skb passed up the network stack will leak
-kernel memory contents.
+From: Jarkko Sonninen
+> Sent: 13 March 2023 08:28
+> 
+> Add support for RS-485 in Exar USB adapters.
+> RS-485 mode is controlled by TIOCGRS485 and TIOCSRS485 ioctls.
+> Gpio mode register is set to enable RS-485.
 
-Fixes: 2f7ca802bdae ("net: Add SMSC LAN9500 USB2.0 10/100 ethernet adapter driver")
-Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
----
- drivers/net/usb/smsc95xx.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+The locking is entirely dubious.
+Summary:
 
-diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-index 32d2c60d3..ba766bdb2 100644
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -1851,7 +1851,8 @@ static int smsc95xx_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
- 			}
- 		} else {
- 			/* ETH_FRAME_LEN + 4(CRC) + 2(COE) + 4(Vlan) */
--			if (unlikely(size > (ETH_FRAME_LEN + 12))) {
-+			if (unlikely(size > (ETH_FRAME_LEN + 12) ||
-+				     size > skb->len)) {
- 				netif_dbg(dev, rx_err, dev->net,
- 					  "size err header=0x%08x\n", header);
- 				return 0;
--- 
-2.39.2
+Taking the lock to read the flags is pretty pointless.
+You are only looking at one bit and nothing else is tied
+to the lock.
+Even a READ_ONCE() isn't needed.
+> +	spin_lock_irqsave(&data->lock, flags);
+> +	rs485_flags = data->rs485.flags;
+> +	spin_unlock_irqrestore(&data->lock, flags);
+> +	if (rs485_flags & SER_RS485_ENABLED)
+> +		gpio_mode |= XR_GPIO_MODE_SEL_RS485 | XR_GPIO_MODE_RS485_TX_H;
+> +	else if (C_CRTSCTS(tty) && C_BAUD(tty) != B0)
+> +		gpio_mode |= XR_GPIO_MODE_SEL_RTS_CTS;
+> +
+
+The ioctl read code reads the data unlocked.
+> +	if (copy_to_user(argp, &data->rs485, sizeof(data->rs485)))
+> +		return -EFAULT;
+So could return old and new data if the ioctl write code
+runs concurrently (and you get a hardware interrupt or page
+fault mid-buffer).
+
+The ioctl write code acquires the lock across a structure copy.
+(which should be a structure copy, not a memcpy).
+The only way the lock will have any effect is if multiple
+threads are doing updates at the same time.
+Code doing that won't work anyway.
+> +	if (copy_from_user(&rs485, argp, sizeof(rs485)))
+> +		return -EFAULT;
+> +
+> +	dev_dbg(tty->dev, "Flags %02x\n", rs485.flags);
+> +	rs485.flags &= SER_RS485_ENABLED;
+> +	spin_lock_irqsave(&data->lock, flags);
+> +	memcpy(&data->rs485, &rs485, sizeof(rs485));
+> +	spin_unlock_irqrestore(&data->lock, flags);
+
+In any case you one seem to be implementing one bit of
+the flags - so the rest of the data can be ignored.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
