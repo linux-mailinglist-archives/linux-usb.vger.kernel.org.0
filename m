@@ -2,153 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85A86B7E41
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 17:56:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1BE6B7E29
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 17:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbjCMQ4s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Mar 2023 12:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51322 "EHLO
+        id S230230AbjCMQwq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Mar 2023 12:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbjCMQ4r (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 12:56:47 -0400
-X-Greylist: delayed 341 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 13 Mar 2023 09:56:30 PDT
-Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BB47043D;
-        Mon, 13 Mar 2023 09:56:28 -0700 (PDT)
-Received: from francesco-nb.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        by mail11.truemail.it (Postfix) with ESMTPA id 6FDAB21E2B;
-        Mon, 13 Mar 2023 17:50:45 +0100 (CET)
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     linux-usb@vger.kernel.org
-Cc:     Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: [PATCH v1 3/3] usb: misc: usb3503: support usb3803 and bypass mode
-Date:   Mon, 13 Mar 2023 17:50:39 +0100
-Message-Id: <20230313165039.255579-4-francesco@dolcini.it>
+        with ESMTP id S230072AbjCMQwk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 12:52:40 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 725267B9A7;
+        Mon, 13 Mar 2023 09:52:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=2yqG3
+        Kr7Cl9HIQ+InYzhFymxRJDXG2QuIzgYGnQnHiE=; b=Tyzw6sHWWKFwf2WW3wQ/j
+        zOuN/sMru+RtSc6vLr9gnUSgp+DonJU7/4WfRJGi+W3S+bYGT+R+gCD/sy7ydllW
+        FLyE/qOarNnCbQ2+GxhzGc/AdotVvs0HTpuQCBpHyj3vZV25Tq8sUWzj0diXkLvk
+        OWLv7oWjNvxLBIboXdpm0o=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g3-2 (Coremail) with SMTP id _____wAHk4CSVA9kolEUAA--.15536S2;
+        Tue, 14 Mar 2023 00:51:30 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     gregkh@linuxfoundation.org
+Cc:     p.zabel@pengutronix.de, biju.das.jz@bp.renesas.com,
+        phil.edworthy@renesas.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        yoshihiro.shimoda.uh@renesas.com, Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH v3] usb: gadget: udc: renesas_usb3: Fix use after free bug in  renesas_usb3_remove due to race condition
+Date:   Tue, 14 Mar 2023 00:51:28 +0800
+Message-Id: <20230313165128.3763626-1-zyytlz.wz@163.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230313165039.255579-1-francesco@dolcini.it>
-References: <20230313165039.255579-1-francesco@dolcini.it>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NO_DNS_FOR_FROM,
-        SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=no autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: _____wAHk4CSVA9kolEUAA--.15536S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tF1DGryfJr47ArWxZFyDAwb_yoW8WF1fpF
+        WDGFW5Ar4rGFWjq3y7GFykZFyrCF9rKry7ZFW7tw4xuF1rG3y0qryIqa1jkF1xJFZayr4F
+        q3WDu340qa47u37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziID73UUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiGgMxU1aEEjd7pgACsT
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+In renesas_usb3_probe, &usb3->role_work is bound with
+renesas_usb3_role_work. renesas_usb3_start will be called
+to start the work.
 
-Add support for USB3803 and bypass mode, with this change
-is also possible to move the component out of bypass mode.
+If we remove the driver which will call usbhs_remove, there may be
+an unfinished work. The possible sequence is as follows:
 
-In bypass mode the downstream port 3 is connected to the
-upstream port with low switch resistance R_on.
+Fix it by canceling the work before cleanup in the renesas_usb3_remove
 
-Controlling mode of operations:
+CPU0                  CPU1
 
-| RESET_N | BYPASS_N | Mode    |
---------------------------------
-|    0    |    0     | standby |
-|    1    |    0     | bypass  |
-|    1    |    1     | hub     |
+                    |renesas_usb3_role_work
+renesas_usb3_remove |
+usb_role_switch_unregister  |
+device_unregister   |
+kfree(sw)  	     |
+free usb3->role_sw  |
+                    |   usb_role_switch_set_role
+                    |   //use usb3->role_sw
 
-Datasheet: https://ww1.microchip.com/downloads/aemDocuments/documents/UNG/ProductDocuments/DataSheets/00001691D.pdf
-Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
-Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+Fixes: 39facfa01c9f ("usb: gadget: udc: renesas_usb3: Add register of usb role switch")
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
 ---
- drivers/usb/misc/usb3503.c            | 22 +++++++++++++++++++++-
- include/linux/platform_data/usb3503.h |  1 +
- 2 files changed, 22 insertions(+), 1 deletion(-)
+v3:
+- modify the commit message to make it clearer suggested by Yoshihiro Shimoda
+v2:
+- fix typo, use clearer commit message and only cancel the UAF-related work suggested by Yoshihiro Shimoda
+---
+ drivers/usb/gadget/udc/renesas_usb3.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/misc/usb3503.c b/drivers/usb/misc/usb3503.c
-index 3044db9fd8aa..c6cfd1edaf76 100644
---- a/drivers/usb/misc/usb3503.c
-+++ b/drivers/usb/misc/usb3503.c
-@@ -46,6 +46,7 @@ struct usb3503 {
- 	struct device		*dev;
- 	struct clk		*clk;
- 	u8	port_off_mask;
-+	struct gpio_desc	*bypass;
- 	struct gpio_desc	*intn;
- 	struct gpio_desc 	*reset;
- 	struct gpio_desc 	*connect;
-@@ -109,18 +110,25 @@ static int usb3503_connect(struct usb3503 *hub)
- static int usb3503_switch_mode(struct usb3503 *hub, enum usb3503_mode mode)
- {
- 	struct device *dev = hub->dev;
--	int rst, conn;
-+	int rst, bypass, conn;
+diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
+index bee6bceafc4f..a301af66bd91 100644
+--- a/drivers/usb/gadget/udc/renesas_usb3.c
++++ b/drivers/usb/gadget/udc/renesas_usb3.c
+@@ -2661,6 +2661,7 @@ static int renesas_usb3_remove(struct platform_device *pdev)
+ 	debugfs_remove_recursive(usb3->dentry);
+ 	device_remove_file(&pdev->dev, &dev_attr_role);
  
- 	switch (mode) {
- 	case USB3503_MODE_HUB:
- 		conn = 1;
- 		rst = 0;
-+		bypass = 0;
- 		break;
- 	case USB3503_MODE_STANDBY:
- 		conn = 0;
- 		rst = 1;
-+		bypass = 1;
- 		dev_info(dev, "switched to STANDBY mode\n");
- 		break;
-+	case USB3503_MODE_BYPASS:
-+		conn = 0;
-+		rst = 0;
-+		bypass = 1;
-+		break;
- 	default:
- 		dev_err(dev, "unknown mode is requested\n");
- 		return -EINVAL;
-@@ -132,6 +140,9 @@ static int usb3503_switch_mode(struct usb3503 *hub, enum usb3503_mode mode)
- 	if (hub->reset)
- 		gpiod_set_value_cansleep(hub->reset, rst);
++	cancel_work_sync(&usb3->role_work);
+ 	usb_role_switch_unregister(usb3->role_sw);
  
-+	if (hub->bypass)
-+		gpiod_set_value_cansleep(hub->bypass, bypass);
-+
- 	if (conn) {
- 		/* Wait T_HUBINIT == 4ms for hub logic to stabilize */
- 		usleep_range(4000, 10000);
-@@ -247,6 +258,14 @@ static int usb3503_probe(struct usb3503 *hub)
- 	if (hub->connect)
- 		gpiod_set_consumer_name(hub->connect, "usb3503 connect");
- 
-+	hub->bypass = devm_gpiod_get_optional(dev, "bypass", GPIOD_OUT_HIGH);
-+	if (IS_ERR(hub->bypass)) {
-+		err = PTR_ERR(hub->bypass);
-+		goto err_clk;
-+	}
-+	if (hub->bypass)
-+		gpiod_set_consumer_name(hub->bypass, "usb3503 bypass");
-+
- 	hub->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
- 	if (IS_ERR(hub->reset)) {
- 		err = PTR_ERR(hub->reset);
-@@ -382,6 +401,7 @@ MODULE_DEVICE_TABLE(i2c, usb3503_id);
- static const struct of_device_id usb3503_of_match[] = {
- 	{ .compatible = "smsc,usb3503", },
- 	{ .compatible = "smsc,usb3503a", },
-+	{ .compatible = "smsc,usb3803", },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, usb3503_of_match);
-diff --git a/include/linux/platform_data/usb3503.h b/include/linux/platform_data/usb3503.h
-index d01ef97ddf36..f3c942f396f8 100644
---- a/include/linux/platform_data/usb3503.h
-+++ b/include/linux/platform_data/usb3503.h
-@@ -12,6 +12,7 @@ enum usb3503_mode {
- 	USB3503_MODE_UNKNOWN,
- 	USB3503_MODE_HUB,
- 	USB3503_MODE_STANDBY,
-+	USB3503_MODE_BYPASS,
- };
- 
- struct usb3503_platform_data {
+ 	usb_del_gadget_udc(&usb3->gadget);
 -- 
 2.25.1
 
