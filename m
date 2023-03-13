@@ -2,123 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837B66B7822
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 13:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D5E6B784A
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 14:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbjCMM45 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Mar 2023 08:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
+        id S230398AbjCMNBi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Mar 2023 09:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbjCMM4z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 08:56:55 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2137.outbound.protection.outlook.com [40.107.114.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D51664D7;
-        Mon, 13 Mar 2023 05:56:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P2MT45ZCiBOPzK4EaKjEQH3vWVf0E4gg7B7OZOPhjLJeVR2Q6xFWLc1V5u24huOOE5golxh7geqNP0H61ooUMuqUhmAw3nnbAhhCUl8z3K6zUpIS5GuY+8jzLtuTS/NY+5bxhHRTc/I7ViOyej5CsKz1SRm0iElp9rOOAUYLxIMzK7A263hDFHq315NYMEMMSRn9XiG7STd/q3W2quLIqIRchk76vc3pbFReN/LIMWJy1qKpVWFUt6g02g3l5x7yz6TyynUavfm2L3qUQZ5tILymtCchQmH6gLP3YjeiIJCnYqULqss4plborXEG/oXCVlzwk9CHt9CL4G9pC4EgSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DmZzhPpPxnFTzolxSVF7Kk0z8z+VZy0beRCWsdiZNtA=;
- b=WqApZX9moObmtBBF+TJrL/dbEVsN010R1NsPHUI4CbYMG/h6qz1FsspTEX8UadwvKd5d3EB/ADwMIf3I345xEpmhAYJ+Rkz/H21lVRBm6t3LfYSTBB7MEuTF5sGUYwFWuRKi5UiaP4RXjsb2EVI9mnT6ylmCTyYSKjpfsMtpLKtuv6kC1FFcyk29Fs6Ac/wNvEaBTkDtOzG/7oCQvNmzzJaClucTeo8uey11uN1Z6FVsUy7498u60SLVMemL+KdEsQeA/kk5K398U5lZN3AFLXfXsH8LxdkLdA7g/GVtDtIuMtCswJo94y6c1zLaEHacZseqVWPB/bj/OrfyJ9XURA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DmZzhPpPxnFTzolxSVF7Kk0z8z+VZy0beRCWsdiZNtA=;
- b=G6u0yB03W/Li11WU/VFgtOQ5Xn1bXOb6SEGfAXfLyMshzNgnTgQzM/5itq9mHkCV1BPBo1ABBK+kKLNHWmf3hZEwpjgLvIl8vw90U6Vbbo+G6y3VNZho/Nx7AVMJ5KIrxRBD6eRDNN+1HpmMfYSDnongaOicbiQ4wF6FgjCfgrI=
-Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
- (2603:1096:404:8028::13) by TYAPR01MB6250.jpnprd01.prod.outlook.com
- (2603:1096:402:3c::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
- 2023 12:56:48 +0000
-Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
- ([fe80::5f2:5ff1:7301:3ff1]) by TYBPR01MB5341.jpnprd01.prod.outlook.com
- ([fe80::5f2:5ff1:7301:3ff1%4]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
- 12:56:48 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Zheng Wang <zyytlz.wz@163.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hackerzheng666@gmail.com" <hackerzheng666@gmail.com>,
-        "1395428693sheep@gmail.com" <1395428693sheep@gmail.com>,
-        "alex000young@gmail.com" <alex000young@gmail.com>
-Subject: RE: [PATCH v3] usb: gadget: udc: renesas_usb3: Fix use after free bug
- in  renesas_usb3_remove due to race condition
-Thread-Topic: [PATCH v3] usb: gadget: udc: renesas_usb3: Fix use after free
- bug in  renesas_usb3_remove due to race condition
-Thread-Index: AQHZVZEdW+W5M3Z71EqjjJv1gN1jx674qyxw
-Date:   Mon, 13 Mar 2023 12:56:48 +0000
-Message-ID: <TYBPR01MB5341E00031218B3868145C58D8B99@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-References: <20230313094852.3344288-1-zyytlz.wz@163.com>
-In-Reply-To: <20230313094852.3344288-1-zyytlz.wz@163.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYBPR01MB5341:EE_|TYAPR01MB6250:EE_
-x-ms-office365-filtering-correlation-id: 62bb4af5-182a-4aad-eda2-08db23c2689b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +8PRqy67vIhKjXUlgt7cz5+Umfu4toHfYQg2Hp5M4NDMKHGFMP71kGrH/d36/R0+gVEpYdT2j6tAudvgcYpfYBXYya6lcsqYaTeC9/GmQSpeCT6Gv98Xzz2+/sO+1zXIW3FxI9jv/u+leQKi31KnqmWlOHHJf33oy1+njivxH8QSUC3Ptg29iTc0crFUjz4fsgqI+S5LreyfL1s+q43pZ8TUFl8wkUlIRXJXXCNQJ7HwaVVvaegwx+XJVJ2kdOMB1wdBAxVbb0jl/6O+KgEAsBGGzc5oTFjIhLrltTcaZNxb60bKEK3LQiW7f720z3opFL52LPqLk4IOnyTcVFiKuamb9KT7E968EyrbAYCjnE9dVqj/itBlWdfriDWIY0qEwJDGNx0Vj7wO1oyg80YD9HXsQY6zDVuJy0SEd3ABOQfxu6Fq9jNt9WiDdLWCp17mUp2ptiWtiGapWb1EbP6Ki1xcoXGRpZgmh1dN8rshUKpEbKRVZGso+acei6rT1TaqyKUuoCnaGQVyDr03X0emj+0J/dTFgPipfsgHfFOPhldc69rm0C4FvnpIsJVssr9aeh5ry1pnmkkDokYs3PAemcz573K3wGeyjoSOpbflZ45FhBeKetgPYI+ll8UPuhxr29Mwlg9PQS6yPh+Gyp8EZaQm59ofItr/HiF3Gwysb/UskLKvbALqIv+HooAU+d5KJvvEX1hsc0TaR6gSobTSwg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYBPR01MB5341.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(39860400002)(366004)(396003)(376002)(451199018)(186003)(9686003)(6506007)(8936002)(83380400001)(52536014)(38070700005)(38100700002)(5660300002)(64756008)(66446008)(66476007)(66556008)(4326008)(33656002)(8676002)(7696005)(55016003)(71200400001)(2906002)(76116006)(66946007)(41300700001)(122000001)(478600001)(316002)(54906003)(110136005)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?po15MCCub0SGst02TAA8h4/ULha3ifW6zStFTzUMEvmnreMiWB677w1O4hLE?=
- =?us-ascii?Q?h43B6NQAb2DKW0/b7OHlgW5qJhqan7rZ2WuxFFXkmG6BeswWFBmJ3oRcjpgR?=
- =?us-ascii?Q?jqi9Gd830rcny6xFRrSiJt1K/+F8iCgaE8kx/Y+dj4NbC5bLU9s5dwiMSr0v?=
- =?us-ascii?Q?fpeA599mHZqO5Wozy9TDpzM9URmOuDGMWnOwPJ8LxWSewS9XZaYh6+W25/sh?=
- =?us-ascii?Q?MOJKVrwOL7YCbHfzvvcM01mevOpPx8XRlkYgZLb88YJ+ap2BzAiX2DCqmD+P?=
- =?us-ascii?Q?dotkdAC9glc/AIWdaGFbh91qY+4khM8VLNtAkP5L4iLlAFP39YGEvH/zLErz?=
- =?us-ascii?Q?a4dTRwqt8GFJIdfy3D61OTBTgNcOz0lmgbitsFPd1oqIhBkYjICj4wXu0ikg?=
- =?us-ascii?Q?ZNvcXtuN9dwoLFuiszAKTc2gVLZmU6zXPbtgA2EeFnkRoaAX3EjScO/Pn2AL?=
- =?us-ascii?Q?n3jG0UfKKUgtCjFH1sRcXArPy2V4AudtqTvSlbC//Zz6qbv0X3q4Rb8faRhe?=
- =?us-ascii?Q?MqJyuMBTRElD4I+vRd2G9hI4zsMkKA0Uob/lkCoSvmLEULXFGazW39Ojw5n/?=
- =?us-ascii?Q?b92nTSPVSRdpPgSxIRQt/KcFRwD6Llkg6sVI+CfUW6qjYlZQ+zgrFKAx1p6O?=
- =?us-ascii?Q?kJJG1rH4G/CLMoZ1LfNzYOo6/8whcjnwSfFX3quOAMDaopH0uu2EeaFYHlvj?=
- =?us-ascii?Q?YyITxvd3KVBtvHMHIL/cbGRXW6ZhLCHv1JxThrEp9ObEpm/8MG3nA29i3rfX?=
- =?us-ascii?Q?71sK1uH8XUf/GtmJ7rihifNzO9a7OwPtgJG+s5MYa0szsvGmZ2nfxwukZ6/H?=
- =?us-ascii?Q?+kMnmTvZtMJgaecgSV62pNju2m8eai9P49OA3OLrosWDkdi7fSUWk1YfLYq5?=
- =?us-ascii?Q?U7q5Kz5hrrlYUF3KBkth8h4Mxcua4OQaMgJcxAHgTYsHdPqGyxFTyZpBfZPj?=
- =?us-ascii?Q?KPZFtxmwm2iORoPKx4t9oYy36z4twoK1xJWRGh9VtZW7sbNWKnj0UeXo0FFT?=
- =?us-ascii?Q?08VNlfLxy91l+IzJX9uGPSjvpX8QCCYv7QtsTs5TYjEX6zwy+SzeCD5tlL+K?=
- =?us-ascii?Q?oluhgPMMiX007FLj0QrsX5olUP6vyAd8kz3x59T3gnm07law+Uee5w7sJdEv?=
- =?us-ascii?Q?Q3aPII6/ydfp+MTsMm4SqW1IzHLoXyZzAyjhO+PFk6BnSsK7Wt7Cx6PO4ksv?=
- =?us-ascii?Q?ARDcVf/zxfVH4l5kypQN/TcoeYracSBwvRX7PQl6zGBsFZqHu8N+U0AtkZC/?=
- =?us-ascii?Q?3jeOy14p+0WzLQZiVblyzJVoV/aWyliilVCv+MG0CxNLuLdi5hV2hiZF2dnB?=
- =?us-ascii?Q?CGMuq6LTxWHlqcUWumsbLiBDkSzzGnU7XHUSz34ybC7QdqKPIbzB1wfGnLFA?=
- =?us-ascii?Q?KTVDN4DYPUn6pCCR6sdBu6vTY0aA/4S9QgNtyXfTidsGHXFaX+/o/HSCUAl4?=
- =?us-ascii?Q?AAUpaKKvpG1bgLzn2/t+MR1Rg3LmyVOIIsQMvBes2ihpgrtuUy+N5a6SiEz/?=
- =?us-ascii?Q?AEmGViooOJcu9JOsAJxAkR2QtZWrOZIHqxvPRYvnEbEzqVkw6xQ1s1K59+G7?=
- =?us-ascii?Q?Uktb8+TtEAZZQReRrWrsDPIQryAtO5sCfhVTAtTFV7MswYwdEnWTHMFHy7iW?=
- =?us-ascii?Q?2QrjRENQI4mRoJ3rwbG/REicDQe2UI7ouSXzW9c/U5UuBPZdGymAadhNSIR4?=
- =?us-ascii?Q?HN1lOQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S230139AbjCMNBf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 09:01:35 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA5F2448B
+        for <linux-usb@vger.kernel.org>; Mon, 13 Mar 2023 06:01:16 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id j11so48383033edq.4
+        for <linux-usb@vger.kernel.org>; Mon, 13 Mar 2023 06:01:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pqrs.dk; s=google; t=1678712475;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Q/DogsgORqXACnXI/E1XL6lwcLWumClKlVZk2SIujI=;
+        b=Zy7mqeiIhq9wgKd37Y2pJOId901fubrqJ9e/TkoouPGsGgZClMJB1DbeocGQ6U+HeW
+         AQICMW/GoJB6GtAg48EH/iXQkZtNm0CQyZMVBbntOU4Ou/+Ht0Rk8O02/cLB40yC2djV
+         MNVG0IfYFCshwqepZwx9X0eDdKEoq3OdmQ3Bg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678712475;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4Q/DogsgORqXACnXI/E1XL6lwcLWumClKlVZk2SIujI=;
+        b=yi+MzysIXAZ53s1L+dxrnoXHfAcvC+pWoNY5xFUvsBR4cElxkMY6IkzyFfymedszWW
+         fWcd3KuTEoAudLtKe8QaSH08qSDEZ0xCv2w/f95JTARkyBmefGWTh8Zr0Kt/HtXvxzWO
+         Y3Mf8Ff9h678DSyl3dFBOsqh0Z1lXRtlVJZLglEZgGkonjpF9lcsqMv4VmcreCkwFNR9
+         B2iL/43ot+aLojRM61i4/4TpNsHAR0BbCeTxckryn4vTweZW2is20zL2ppFJNWkr+sCl
+         Mp7GSHJ/1Gm3M6WB3I91pQXBp/Vs1+PBIonNnIJlMYnfadC3oYA8s32RHcl+i6eA54zT
+         eDSA==
+X-Gm-Message-State: AO0yUKWsty7o9l0WVAI+7BBUGC+7n83BiWzOC5oQumMujqzDRNB+jnqR
+        YigdurnNfbbMLnMsWpl5vubjCQ==
+X-Google-Smtp-Source: AK7set/91glySBtTl8d3atKkP/ij+i3KLc3CbDn/Gxd1o/lQfMOHiSXXClvluRraMPz5cyD6LdhQsA==
+X-Received: by 2002:a17:907:d090:b0:92b:5c67:c660 with SMTP id vc16-20020a170907d09000b0092b5c67c660mr1648091ejc.69.1678712475078;
+        Mon, 13 Mar 2023 06:01:15 -0700 (PDT)
+Received: from localhost.localdomain ([193.89.194.60])
+        by smtp.gmail.com with ESMTPSA id u25-20020a50a419000000b004fc01b0aa55sm1407535edb.4.2023.03.13.06.01.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 06:01:14 -0700 (PDT)
+From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Marek Vasut <marex@denx.de>,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>
+Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] extcon: usbc-tusb320: unregister typec port on driver removal
+Date:   Mon, 13 Mar 2023 14:01:05 +0100
+Message-Id: <20230313130105.4183296-1-alvin@pqrs.dk>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYBPR01MB5341.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 62bb4af5-182a-4aad-eda2-08db23c2689b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2023 12:56:48.8577
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: RJK46aLYiARK8Ba2LFk12NgV3NdR1GkZ3+LIoCIYq9epTYN4eXfpEt76N2bBrapAQrZnu26QBSnG/4TRUr3SkL1rPgRbWNXXbLcv8FxoE4mL9e6kwoFF/msqlmbf8mDc
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB6250
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -126,66 +69,145 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Zheng,
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-> From: Zheng Wang, Sent: Monday, March 13, 2023 6:49 PM
->=20
-> In renesas_usb3_probe, &usb3->role_work is bound with
-> renesas_usb3_role_work. renesas_usb3_start will be called
-> to start the work.
->=20
-> If we remove the driver which will call usbhs_remove, there may be
-> an unfinished work. The possible sequence is as follows:
->=20
-> Fix it by canceling the work before cleanup in the renesas_usb3_remove
->=20
-> CPU0                  CPU1
->=20
->                     |renesas_usb3_role_work
-> renesas_usb3_remove |
-> usb_role_switch_unregister  |
-> device_unregister   |
-> kfree(sw)  	     |
-> free usb3->role_sw  |
->                     |   usb_role_switch_set_role
->                     |   //use usb3->role_sw
->=20
-> Fixes: 39facfa01c9f ("usb: gadget: udc: renesas_usb3: Add register of usb=
- role switch")
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+The driver can register a typec port if suitable firmware properties are
+present. But if the driver is removed through sysfs unbind, rmmod or
+similar, then it does not clean up after itself and the typec port
+device remains registered. This can be seen in sysfs, where stale typec
+ports get left over in /sys/class/typec.
 
-Thank you for the patch!
+In order to fix this we have to add an i2c_driver remove function and
+call typec_unregister_port(), which is a no-op in the case where no
+typec port is created and the pointer remains NULL.
 
-Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+In the process we should also put the fwnode_handle when the typec port
+isn't registered anymore, including if an error occurs during probe. The
+typec subsystem does not increase or decrease the reference counter for
+us, so we track it in the driver's private data.
 
-Best regards,
-Yoshihiro Shimoda
+Note that the conditional check on TYPEC_PWR_MODE_PD was removed in the
+probe path because a call to tusb320_set_adv_pwr_mode() will perform an
+even more robust validation immediately after, hence there is no
+functional change here.
 
-> ---
-> v3:
-> - modify the commit message to make it clearer suggested by Yoshihiro Shi=
-moda
-> v2:
-> - fix typo, use clearer commit message and only cancel the UAF-related wo=
-rk suggested by Yoshihiro Shimoda
-> ---
->  drivers/usb/gadget/udc/renesas_usb3.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/u=
-dc/renesas_usb3.c
-> index bee6bceafc4f..a301af66bd91 100644
-> --- a/drivers/usb/gadget/udc/renesas_usb3.c
-> +++ b/drivers/usb/gadget/udc/renesas_usb3.c
-> @@ -2661,6 +2661,7 @@ static int renesas_usb3_remove(struct platform_devi=
-ce *pdev)
->  	debugfs_remove_recursive(usb3->dentry);
->  	device_remove_file(&pdev->dev, &dev_attr_role);
->=20
-> +	cancel_work_sync(&usb3->role_work);
->  	usb_role_switch_unregister(usb3->role_sw);
->=20
->  	usb_del_gadget_udc(&usb3->gadget);
-> --
-> 2.25.1
+Fixes: bf7571c00dca ("extcon: usbc-tusb320: Add USB TYPE-C support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+---
+ drivers/extcon/extcon-usbc-tusb320.c | 42 ++++++++++++++++++++++------
+ 1 file changed, 34 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/extcon/extcon-usbc-tusb320.c b/drivers/extcon/extcon-usbc-tusb320.c
+index b408ce989c22..03125c53329d 100644
+--- a/drivers/extcon/extcon-usbc-tusb320.c
++++ b/drivers/extcon/extcon-usbc-tusb320.c
+@@ -78,6 +78,7 @@ struct tusb320_priv {
+ 	struct typec_capability	cap;
+ 	enum typec_port_type port_type;
+ 	enum typec_pwr_opmode pwr_opmode;
++	struct fwnode_handle *connector_fwnode;
+ };
+ 
+ static const char * const tusb_attached_states[] = {
+@@ -391,27 +392,25 @@ static int tusb320_typec_probe(struct i2c_client *client,
+ 	/* Type-C connector found. */
+ 	ret = typec_get_fw_cap(&priv->cap, connector);
+ 	if (ret)
+-		return ret;
++		goto err_put;
+ 
+ 	priv->port_type = priv->cap.type;
+ 
+ 	/* This goes into register 0x8 field CURRENT_MODE_ADVERTISE */
+ 	ret = fwnode_property_read_string(connector, "typec-power-opmode", &cap_str);
+ 	if (ret)
+-		return ret;
++		goto err_put;
+ 
+ 	ret = typec_find_pwr_opmode(cap_str);
+ 	if (ret < 0)
+-		return ret;
+-	if (ret == TYPEC_PWR_MODE_PD)
+-		return -EINVAL;
++		goto err_put;
+ 
+ 	priv->pwr_opmode = ret;
+ 
+ 	/* Initialize the hardware with the devicetree settings. */
+ 	ret = tusb320_set_adv_pwr_mode(priv);
+ 	if (ret)
+-		return ret;
++		goto err_put;
+ 
+ 	priv->cap.revision		= USB_TYPEC_REV_1_1;
+ 	priv->cap.accessory[0]		= TYPEC_ACCESSORY_AUDIO;
+@@ -422,10 +421,25 @@ static int tusb320_typec_probe(struct i2c_client *client,
+ 	priv->cap.fwnode		= connector;
+ 
+ 	priv->port = typec_register_port(&client->dev, &priv->cap);
+-	if (IS_ERR(priv->port))
+-		return PTR_ERR(priv->port);
++	if (IS_ERR(priv->port)) {
++		ret = PTR_ERR(priv->port);
++		goto err_put;
++	}
++
++	priv->connector_fwnode;
+ 
+ 	return 0;
++
++err_put:
++	fwnode_handle_put(connector);
++
++	return ret;
++}
++
++static void tusb320_typec_remove(struct tusb320_priv *priv)
++{
++	typec_unregister_port(priv->port);
++	fwnode_handle_put(priv->connector_fwnode);
+ }
+ 
+ static int tusb320_probe(struct i2c_client *client)
+@@ -438,7 +452,9 @@ static int tusb320_probe(struct i2c_client *client)
+ 	priv = devm_kzalloc(&client->dev, sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+ 		return -ENOMEM;
++
+ 	priv->dev = &client->dev;
++	i2c_set_clientdata(client, priv);
+ 
+ 	priv->regmap = devm_regmap_init_i2c(client, &tusb320_regmap_config);
+ 	if (IS_ERR(priv->regmap))
+@@ -489,10 +505,19 @@ static int tusb320_probe(struct i2c_client *client)
+ 					tusb320_irq_handler,
+ 					IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+ 					client->name, priv);
++	if (ret)
++		tusb320_typec_remove(priv);
+ 
+ 	return ret;
+ }
+ 
++static void tusb320_remove(struct i2c_client *client)
++{
++	struct tusb320_priv *priv = i2c_get_clientdata(client);
++
++	tusb320_typec_remove(priv);
++}
++
+ static const struct of_device_id tusb320_extcon_dt_match[] = {
+ 	{ .compatible = "ti,tusb320", .data = &tusb320_ops, },
+ 	{ .compatible = "ti,tusb320l", .data = &tusb320l_ops, },
+@@ -502,6 +527,7 @@ MODULE_DEVICE_TABLE(of, tusb320_extcon_dt_match);
+ 
+ static struct i2c_driver tusb320_extcon_driver = {
+ 	.probe_new	= tusb320_probe,
++	.remove		= tusb320_remove,
+ 	.driver		= {
+ 		.name	= "extcon-tusb320",
+ 		.of_match_table = tusb320_extcon_dt_match,
+-- 
+2.39.2
 
