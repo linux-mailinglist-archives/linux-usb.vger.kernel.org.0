@@ -2,146 +2,236 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EAB56B719A
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 09:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B8466B7214
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Mar 2023 10:08:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbjCMIvf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Mar 2023 04:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
+        id S231162AbjCMJI3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Mar 2023 05:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjCMIu6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 04:50:58 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96904FAB1;
-        Mon, 13 Mar 2023 01:49:08 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id p6so6461660pga.0;
-        Mon, 13 Mar 2023 01:49:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678697348;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UdJZFGWnCqrGrvX1AXmXSN5ym6vA1hPmy0582RXs6Uo=;
-        b=lVhyFjJrYO5YFrPABmayHEJrldR9VVyOKxVDVd6Wo+aHPyUJqBH3i10hXtcEn+aDsb
-         Z56nA82rDW4Pej1y0jajJ+uxJIOeYTX5COvWri7BEEanXSZEJwNTRrVTZVCWvNrIJAp4
-         6w2YPnICOc07ATlGh1Ii2BwRPNwiHtpEOrbnEFhuDgSa1ko3+zQ6aXGHqGq6WPrWzwCH
-         DgXXVcD9yyDvLCbr/pY78x67lGU9Qsei+zKM+/zsrbTJfMf261lQ18IK4pAYEig57aSD
-         1ew6thgxTYVrAU+t5gY563kmk9Khk5IeDJUgx+bjovmPP7/dlVD363A4aftOS+5SAzZJ
-         ZTXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678697348;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UdJZFGWnCqrGrvX1AXmXSN5ym6vA1hPmy0582RXs6Uo=;
-        b=j62LXA53/7sVhnYQsqUV1NCfzW11pmbCa+q+BMbqi9bSfuvltC5SmVEgRnHEi24jMP
-         KJVgDIX9w23sv2ZrgmUJjc+e6PZjDjngEACaLUzhV/14WfjN3IvtVelkmXLIAssct7hz
-         i97qw+snryo8lfY33P78hEJP+qTv+DQiE/MXMIwq9kyY4/EUs94Ey56sr5hNsWGQiYDF
-         CNGSYKWTMxdgaAetHAA7eUeedYC/QlS2SWZrXcb42+dWkguv9ZecPvFtGaoSVV7JwdGt
-         WuIwH+pHVIbOs23MsJfkfgkZ7r/Pt6Qat6Ar9m+47yAFNBXH8A86Ko9WoR1B9sKBVS0L
-         ti1g==
-X-Gm-Message-State: AO0yUKUVhXZH7YOrDpttcBvlE2P24oIc3gkv71gy2dlbm8DVo+hV01Pk
-        OcpP3KA6mMtZ9ZhGDp6OV2Waa1PdX6StHFPeYlA=
-X-Google-Smtp-Source: AK7set93yVCJ7vYMwpAXAJXNnGjB4sTvhmMwrUr4NfDYWkzd7Sv2OBew8QoG0y27UJHpTvhcdUJufud9Op3Yf7SNsFc=
-X-Received: by 2002:a63:6e02:0:b0:50b:188d:3381 with SMTP id
- j2-20020a636e02000000b0050b188d3381mr615559pgc.4.1678697347846; Mon, 13 Mar
- 2023 01:49:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230311161242.3773432-1-zyytlz.wz@163.com> <TYBPR01MB534196428158C2D79A910E07D8B99@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-In-Reply-To: <TYBPR01MB534196428158C2D79A910E07D8B99@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Mon, 13 Mar 2023 16:48:54 +0800
-Message-ID: <CAJedcCztRHuHVtrqsA3Osn+yp+Swgbu1GEAyfDE3d90CREn25g@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: gadget: udc: renesas_usb3: Fix use after free bug
- in renesas_usb3_remove due to race condition
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     Zheng Wang <zyytlz.wz@163.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "1395428693sheep@gmail.com" <1395428693sheep@gmail.com>,
-        "alex000young@gmail.com" <alex000young@gmail.com>
+        with ESMTP id S230005AbjCMJIC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Mar 2023 05:08:02 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0E010EB;
+        Mon, 13 Mar 2023 02:06:01 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 3B852E0FCB;
+        Mon, 13 Mar 2023 02:06:01 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id KqaR6nthGCF3; Mon, 13 Mar 2023 02:06:00 -0700 (PDT)
+Message-ID: <2f84f3196c426a3957d479d8fe0d1440a82932af.camel@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1678698360; bh=9qC4noDrLpgjlr1iZhfPnQ3ESFPoh887kUgfzjHtjxE=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=HSS91jrM3hyPc+Dl5XjezZ167iBV5U/CnKzyOub10LefaW7CBFRP0A9++3fOmgskh
+         xr0KnhKRm/fzPio0y7XuxPSQaYV+95RKhwYJmUZhZlcqC4/1o+Xj0xmFnRDyOyeKA0
+         Igih7K/LQWX0d3CdCHB1GIib6GpAOsFY6USTrrv/z1Kt9IpFD5eZ7nH/KFbOZCWUEe
+         GnzSEvzxUVf6jMLbsYUE5Xf0tQaQ9qU3rBvtPB2s0TfL9nNcDL2GwfOuXlZGjcYvnT
+         U36GM3BD16QeTKBh9sANnlBA2aaE/nyeTnhMO8+OMdoACv5dn9Q/SUPjIFlIp75K04
+         IldTTgL8gOu3g==
+Subject: Re: [PATCH v1 0/4] Remove use of fw_devlink_purge_absent_suppliers()
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Yongqin Liu <yongqin.liu@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
+Date:   Mon, 13 Mar 2023 10:05:52 +0100
+In-Reply-To: <cd70891320aab38f5c085c67c4651e0f4f6d8ed8.camel@puri.sm>
+References: <20230301214952.2190757-1-saravanak@google.com>
+         <2a8e407f4f18c9350f8629a2b5fa18673355b2ae.camel@puri.sm>
+         <e65e08c13885468675af527ffa2ab882cc9e682d.camel@puri.sm>
+         <CAGETcx93K1VjAosX9NDEyLVLPK2utPSUV6dwzdAT-Dc5BfmhzQ@mail.gmail.com>
+         <4e8d00617de0c25dcf84847c3d3ad3f2d76ee5b9.camel@puri.sm>
+         <CAGETcx_CDBf3eTgTkUCwYoyvXk4L7hJBDKj6rwow6k=EdbZpqA@mail.gmail.com>
+         <cd70891320aab38f5c085c67c4651e0f4f6d8ed8.camel@puri.sm>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.38.3-1+deb11u1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com> =E4=BA=8E2023=E5=B9=B4=
-3=E6=9C=8813=E6=97=A5=E5=91=A8=E4=B8=80 16:28=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hi Zheng,
->
-> > From: Zheng Wang, Sent: Sunday, March 12, 2023 1:13 AM
-> >
-> > In renesas_usb3_probe, &usb3->role_work is bound with
-> > renesas_usb3_role_work. renesas_usb3_start will be called
-> > to start the work.
-> >
-> > to make cleanup, there may be an unfinished work. The possible
-> > sequence is as follows:
->
-> Why do you remove the following description on this v2 patch?
-> -----
-> If we remove the driver which will call usbhs_remove
-> -----
-> I think this description is helpful to understand.
->
+Am Sonntag, dem 12.03.2023 um 15:41 +0100 schrieb Martin Kepplinger:
+> Am Freitag, dem 10.03.2023 um 14:18 -0800 schrieb Saravana Kannan:
+> > On Fri, Mar 10, 2023 at 2:07 AM Martin Kepplinger
+> > <martin.kepplinger@puri.sm> wrote:
+> > > 
+> > > Am Donnerstag, dem 09.03.2023 um 16:24 -0800 schrieb Saravana
+> > > Kannan:
+> > > > On Thu, Mar 2, 2023 at 1:41 AM Martin Kepplinger
+> > > > <martin.kepplinger@puri.sm> wrote:
+> > > > > 
+> > > > > Am Donnerstag, dem 02.03.2023 um 10:12 +0100 schrieb Martin
+> > > > > Kepplinger:
+> > > > > > Am Mittwoch, dem 01.03.2023 um 13:49 -0800 schrieb Saravana
+> > > > > > Kannan:
+> > > > > > > Yongqin, Martin, Amelie,
+> > > > > > > 
+> > > > > > > We recent refactor of fw_devlink that ends with commit
+> > > > > > > fb42378dcc7f
+> > > > > > > ("mtd: mtdpart: Don't create platform device that'll
+> > > > > > > never
+> > > > > > > probe"),
+> > > > > > > fw_devlink is smarter and doesn't depend on compatible
+> > > > > > > property.
+> > > > > > > So,
+> > > > > > > I
+> > > > > > > don't think these calls are needed anymore. But I don't
+> > > > > > > have
+> > > > > > > these
+> > > > > > > devices to test on and be sure and the hardware I use to
+> > > > > > > test
+> > > > > > > changes
+> > > > > > > doesn't have this issue either.
+> > > > > > > 
+> > > > > > > Can you please test these changes on the hardware where
+> > > > > > > you
+> > > > > > > hit
+> > > > > > > the
+> > > > > > > issue to make sure things work as expected?
+> > > > > > > 
+> > > > > > > Yongqin, If you didn't have the context, this affected
+> > > > > > > hikey960.
+> > > > > > > 
+> > > > > > > Greg,
+> > > > > > > 
+> > > > > > > Let's wait for some tests before we land these.
+> > > > > > > 
+> > > > > > > Thanks,
+> > > > > > > Saravana
+> > > > > > 
+> > > > > > hi Sravana,
+> > > > > > 
+> > > > > > I picked the 12 commits leading up to commit fb42378dcc7f
+> > > > > > ("mtd:
+> > > > > > mtdpart: Don't create platform device that'll never probe")
+> > > > > > (
+> > > > > > https://source.puri.sm/martin.kepplinger/linux-next/-/commits/test_fw_devlink
+> > > > > > ) and included the tipd patch below to test it.
+> > > > > > 
+> > > > > > With that, I get the following errors:
+> > > > > > 
+> > > > > > [    0.237931] imx-uart 30890000.serial: Failed to create
+> > > > > > device
+> > > > > > link
+> > > > > > with regulator-gnss
+> > > > > > [    0.334054] nwl-dsi 30a00000.mipi-dsi: Failed to create
+> > > > > > device
+> > > > > > link
+> > > > > > with regulator-lcd-1v8
+> > > > > > [    0.346964] nwl-dsi 30a00000.mipi-dsi: Failed to create
+> > > > > > device
+> > > > > > link
+> > > > > > with backlight-dsi
+> > > > > > 
+> > > > > > but they are independent of this final tipd patch below.
+> > > > > > I'll
+> > > > > > test a
+> > > > > > real linux-next tree soon, for completeness, maybe I missed
+> > > > > > something?
+> > > > > > 
+> > > > > > Anyways, on that tree, your tipd removal patch breaks type-
+> > > > > > c
+> > > > > > still
+> > > > > > for
+> > > > > > me, imx8mq-librem5.dtsi
+> > > > > > 
+> > > > > > just to give a first reply quickly... thanks,
+> > > > > > 
+> > > > > >                              martin
+> > > > > > 
+> > > > > 
+> > > > > just confirming: it's the same as above on next-20230302 +
+> > > > > this
+> > > > > patch (
+> > > > > https://source.puri.sm/martin.kepplinger/linux-next/-/commits/test_fw_devlink_next-20230302
+> > > > > ) with the errors already independent from the patch. I
+> > > > > should
+> > > > > have
+> > > > > tested earlier patches -.-
+> > > > 
+> > > > Thanks a lot for testing Martin!
+> > > > 
+> > > > Your email is a little ambiguous to me. With the 12 refactor
+> > > > commits
+> > > > +
+> > > > the 4 patches in this series, things are breaking for you. But
+> > > > if
+> > > > you
+> > > > drop the 4 patches in this series, things work again. Is that
+> > > > right?
+> > > 
+> > > no. Sorry if I wasn't clear. I can't justify to block these 4
+> > > patches.
+> > > they *themselves* don't break anything.
+> > > 
+> > > Something broke *earlier* than these 4 patches in one of the
+> > > other
+> > > 12.
+> > 
+> > If you find out it's one of the other 12 patches in the refactor
+> > that
+> > broke things for you, can you please reply to the right email in
+> > that
+> > series[1] and let me know which patch broke things for you and
+> > provide
+> > the debug details there? I don't want to mix issues with unrelated
+> > threads -- I want them to be easy to find in the future.
+> > 
+> > [1] -  
+> > https://lore.kernel.org/lkml/20230207014207.1678715-1-saravanak@google.com/
+> > 
+> > For all my questions below, you don't need to reply here. Just
+> > reply
+> > to the right thread.
+> 
+> Thanks. I'll have to reply here though - I'm puzzled how, but I got
+> it
+> wrong - I must have seen the "Failed to create device link" messages
+> without checking broken drivers: The 12 patches you linked above are
+> fine. (In a way that's good as I saw them in a stable kernel
+> already).
+> 
+> commit ("usb: typec: tipd: Remove use of
+> fw_devlink_purge_absent_suppliers()") breaks things for me. That is
+> patch 2 of this series. That's for sure now.
 
-Sorry I misunderstood you previous response for my poor English. Will
-append it again in the next version.
 
-Best reagrds,
-Zheng
+this thing is this: I have downstream patches against tipd, among
+others. And I don't know yet but we might very well do something wrong
+in our downstream tree that is now not compatible anymore with this
+removal...
 
->
-> > Fix it by canceling the work before cleanup in the renesas_usb3_remove
-> >
-> > CPU0                  CPU1
-> >
-> >                     |renesas_usb3_role_work
-> > renesas_usb3_remove |
-> > usb_role_switch_unregister  |
-> > device_unregister   |
-> > kfree(sw)          |
-> > free usb3->role_sw  |
-> >                     |   usb_role_switch_set_role
-> >                     |   //use usb3->role_sw
-> >
-> > Fixes: 39facfa01c9f ("usb: gadget: udc: renesas_usb3: Add register of u=
-sb role switch")
-> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> > ---
-> > v2:
-> > - fix typo, use clearer commit message and only cancel the UAF-related =
-work suggested by Yoshihiro Shimoda
-> > ---
-> >  drivers/usb/gadget/udc/renesas_usb3.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget=
-/udc/renesas_usb3.c
-> > index bee6bceafc4f..a301af66bd91 100644
-> > --- a/drivers/usb/gadget/udc/renesas_usb3.c
-> > +++ b/drivers/usb/gadget/udc/renesas_usb3.c
-> > @@ -2661,6 +2661,7 @@ static int renesas_usb3_remove(struct platform_de=
-vice *pdev)
-> >       debugfs_remove_recursive(usb3->dentry);
-> >       device_remove_file(&pdev->dev, &dev_attr_role);
-> >
-> > +     cancel_work_sync(&usb3->role_work);
-> >       usb_role_switch_unregister(usb3->role_sw);
-> >
-> >       usb_del_gadget_udc(&usb3->gadget);
-> > --
-> > 2.25.1
->
+I switched to a tree without any downstream stuff: For the 12 earlier
+patches, I there see the follwing which is NOT your fault and we need
+to fix upstream (we fix that in our downstream tree):
+
+root@pureos:/home/purism# cat /sys/kernel/debug/devices_deferred 
+3-0036
+
+And then I add patch 2 of this series (removing the call from tipd), it
+becomes:
+
+root@pureos:/home/purism# cat /sys/kernel/debug/devices_deferred 
+0-003f	
+38100000.usb	platform: wait for supplier endpoint
+3-0036	
+
+
