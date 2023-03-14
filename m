@@ -2,57 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21C36B8A72
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Mar 2023 06:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C616B8AF2
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Mar 2023 07:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjCNFgb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Mar 2023 01:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
+        id S229988AbjCNGKe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Mar 2023 02:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjCNFga (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Mar 2023 01:36:30 -0400
+        with ESMTP id S229483AbjCNGKc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Mar 2023 02:10:32 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5789E7C9EA
-        for <linux-usb@vger.kernel.org>; Mon, 13 Mar 2023 22:36:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293C55DCAE;
+        Mon, 13 Mar 2023 23:10:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678772179; x=1710308179;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ZimkEQBWoY2Y1jAxqbc1KYIYEPUAV583M1IbfHQVUg0=;
-  b=VZeUoL8UP2pHFPx4/sfu4FbWnHYOK71Kry+ReHPhzXl5hzglTk05wuLv
-   vIl+NaIkHZEV90MLO9hPdHrW3k/7UXVMr4RyZB29TfJl389svXS2CFFYh
-   oIYLMDX/X2HtIHV7nYhfxIR0wFpMS8JI7+saN2T+8WgDCJgu2Y8A13ym4
-   keVwuyrSAGVGextopn85lgcQ+TG9k1ggsg6xiOnmGurysVeC2ZlERG1YG
-   3fSrniWb4+Vgv+Ge1XWQs4zv24Ae/XfrHua/h6j2RRIdef5+vBR1uvlng
-   /zAJEST2tFhPeMSXJeVsU0UhMBvKIEd9pSa0+iI8gnG9wn+d+6K0n39f4
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="316981995"
+  t=1678774231; x=1710310231;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4mLCEy2H7JEU8KoAKmGcuzQP9O9EsavChPpUcqcifCc=;
+  b=gGGWXK3KKqZsPWxOfP2VNov/ddWuJ73aDmwLkU7OVjsnu2/aAb3Xd3+U
+   OvNpx8PtoVCq90lSNgTtRNEItC83pg/SSOniXH6aaG3VGSJwOmQxcU9Hg
+   43OD/sXX1h344wpsy35AKgCY1fbTrtf7ZD3vju8caq5NYm1FIpGb1Uvhd
+   OCHYIXo3I7TWUQ2XNzUko1D5yya0g0XvFgBuzR0ul+cRQlOqKFO3JAbnQ
+   fOO6IeqZj8TRf5Hf53nb2CN5er+4vl5C5+P5zJ0h+svy8R3XHftcyr3Kt
+   cTC8liWoiesgjRtg+3DT95EPzdA31F+8ezxS4I7M5d4R1koQW9IxXyJcO
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="316986725"
 X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="316981995"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 22:36:19 -0700
+   d="scan'208";a="316986725"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 23:10:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="747871981"
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="802719705"
 X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="747871981"
+   d="scan'208";a="802719705"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Mar 2023 22:36:18 -0700
+  by orsmga004.jf.intel.com with ESMTP; 13 Mar 2023 23:10:20 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pbxKb-0006Zm-0j;
-        Tue, 14 Mar 2023 05:36:17 +0000
-Date:   Tue, 14 Mar 2023 13:36:08 +0800
+        id 1pbxrX-0006aw-1A;
+        Tue, 14 Mar 2023 06:10:19 +0000
+Date:   Tue, 14 Mar 2023 14:09:23 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: [westeri-thunderbolt:fixes] BUILD SUCCESS
- c82510b1d87bdebfe916048857d2ef46f1778aa5
-Message-ID: <641007c8.acTbe8s8fA3DW/MH%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Marek Vasut <marex@denx.de>,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] extcon: usbc-tusb320: unregister typec port on driver
+ removal
+Message-ID: <202303141316.EltVGG8V-lkp@intel.com>
+References: <20230313130105.4183296-1-alvin@pqrs.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20230313130105.4183296-1-alvin@pqrs.dk>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -63,153 +71,108 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git fixes
-branch HEAD: c82510b1d87bdebfe916048857d2ef46f1778aa5  thunderbolt: Use scale field when allocating USB3 bandwidth
+Hi Alvin,
 
-elapsed time: 1042m
+I love your patch! Perhaps something to improve:
 
-configs tested: 135
-configs skipped: 8
+[auto build test WARNING on chanwoo-extcon/extcon-next]
+[also build test WARNING on linus/master v6.3-rc2 next-20230310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+url:    https://github.com/intel-lab-lkp/linux/commits/Alvin-ipraga/extcon-usbc-tusb320-unregister-typec-port-on-driver-removal/20230313-210245
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/extcon.git extcon-next
+patch link:    https://lore.kernel.org/r/20230313130105.4183296-1-alvin%40pqrs.dk
+patch subject: [PATCH] extcon: usbc-tusb320: unregister typec port on driver removal
+config: i386-randconfig-a013-20230313 (https://download.01.org/0day-ci/archive/20230314/202303141316.EltVGG8V-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/fe414069d19f6d59c7c34f820459f4114e2de136
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Alvin-ipraga/extcon-usbc-tusb320-unregister-typec-port-on-driver-removal/20230313-210245
+        git checkout fe414069d19f6d59c7c34f820459f4114e2de136
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/extcon/ drivers/media/common/videobuf2/
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r001-20230313   gcc  
-alpha        buildonly-randconfig-r002-20230313   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r025-20230312   gcc  
-alpha                randconfig-r026-20230313   gcc  
-alpha                randconfig-r032-20230312   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r005-20230313   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r006-20230313   gcc  
-arc                  randconfig-r031-20230312   gcc  
-arc                  randconfig-r033-20230312   gcc  
-arc                  randconfig-r043-20230312   gcc  
-arc                  randconfig-r043-20230313   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm          buildonly-randconfig-r004-20230313   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r003-20230313   clang
-arm                  randconfig-r021-20230312   clang
-arm                  randconfig-r033-20230313   clang
-arm                  randconfig-r046-20230312   clang
-arm                  randconfig-r046-20230313   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r012-20230313   clang
-arm64                randconfig-r013-20230312   gcc  
-arm64                randconfig-r034-20230313   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r002-20230312   gcc  
-csky                 randconfig-r026-20230312   gcc  
-csky                 randconfig-r032-20230313   gcc  
-hexagon      buildonly-randconfig-r002-20230312   clang
-hexagon      buildonly-randconfig-r004-20230312   clang
-hexagon              randconfig-r016-20230313   clang
-hexagon              randconfig-r041-20230312   clang
-hexagon              randconfig-r041-20230313   clang
-hexagon              randconfig-r045-20230312   clang
-hexagon              randconfig-r045-20230313   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230313   gcc  
-i386                 randconfig-a002-20230313   gcc  
-i386                 randconfig-a003-20230313   gcc  
-i386                 randconfig-a004-20230313   gcc  
-i386                 randconfig-a005-20230313   gcc  
-i386                 randconfig-a006-20230313   gcc  
-i386                 randconfig-a011-20230313   clang
-i386                 randconfig-a012-20230313   clang
-i386                 randconfig-a013-20230313   clang
-i386                 randconfig-a014-20230313   clang
-i386                 randconfig-a015-20230313   clang
-i386                 randconfig-a016-20230313   clang
-i386                 randconfig-r004-20230313   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r005-20230312   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r006-20230313   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r025-20230313   gcc  
-m68k                 randconfig-r035-20230313   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r022-20230312   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r005-20230312   gcc  
-nios2                randconfig-r012-20230312   gcc  
-nios2                randconfig-r014-20230312   gcc  
-nios2                randconfig-r023-20230313   gcc  
-openrisc             randconfig-r023-20230312   gcc  
-openrisc             randconfig-r035-20230312   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r005-20230313   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r016-20230312   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r006-20230312   clang
-riscv                randconfig-r011-20230313   clang
-riscv                randconfig-r042-20230312   gcc  
-riscv                randconfig-r042-20230313   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r013-20230313   clang
-s390                 randconfig-r031-20230313   gcc  
-s390                 randconfig-r044-20230312   gcc  
-s390                 randconfig-r044-20230313   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r021-20230313   gcc  
-sh                   randconfig-r036-20230312   gcc  
-sparc        buildonly-randconfig-r003-20230313   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r002-20230313   gcc  
-sparc                randconfig-r014-20230313   gcc  
-sparc                randconfig-r024-20230312   gcc  
-sparc64      buildonly-randconfig-r001-20230312   gcc  
-sparc64      buildonly-randconfig-r003-20230312   gcc  
-sparc64              randconfig-r004-20230312   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230313   gcc  
-x86_64               randconfig-a002-20230313   gcc  
-x86_64               randconfig-a003-20230313   gcc  
-x86_64               randconfig-a004-20230313   gcc  
-x86_64               randconfig-a005-20230313   gcc  
-x86_64               randconfig-a006-20230313   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                        randconfig-k001   clang
-x86_64               randconfig-r022-20230313   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r001-20230312   gcc  
-xtensa               randconfig-r001-20230313   gcc  
-xtensa               randconfig-r003-20230312   gcc  
-xtensa               randconfig-r015-20230312   gcc  
-xtensa               randconfig-r024-20230313   gcc  
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303141316.EltVGG8V-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/extcon/extcon-usbc-tusb320.c:429:8: warning: expression result unused [-Wunused-value]
+           priv->connector_fwnode;
+           ~~~~  ^~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +429 drivers/extcon/extcon-usbc-tusb320.c
+
+   379	
+   380	static int tusb320_typec_probe(struct i2c_client *client,
+   381				       struct tusb320_priv *priv)
+   382	{
+   383		struct fwnode_handle *connector;
+   384		const char *cap_str;
+   385		int ret;
+   386	
+   387		/* The Type-C connector is optional, for backward compatibility. */
+   388		connector = device_get_named_child_node(&client->dev, "connector");
+   389		if (!connector)
+   390			return 0;
+   391	
+   392		/* Type-C connector found. */
+   393		ret = typec_get_fw_cap(&priv->cap, connector);
+   394		if (ret)
+   395			goto err_put;
+   396	
+   397		priv->port_type = priv->cap.type;
+   398	
+   399		/* This goes into register 0x8 field CURRENT_MODE_ADVERTISE */
+   400		ret = fwnode_property_read_string(connector, "typec-power-opmode", &cap_str);
+   401		if (ret)
+   402			goto err_put;
+   403	
+   404		ret = typec_find_pwr_opmode(cap_str);
+   405		if (ret < 0)
+   406			goto err_put;
+   407	
+   408		priv->pwr_opmode = ret;
+   409	
+   410		/* Initialize the hardware with the devicetree settings. */
+   411		ret = tusb320_set_adv_pwr_mode(priv);
+   412		if (ret)
+   413			goto err_put;
+   414	
+   415		priv->cap.revision		= USB_TYPEC_REV_1_1;
+   416		priv->cap.accessory[0]		= TYPEC_ACCESSORY_AUDIO;
+   417		priv->cap.accessory[1]		= TYPEC_ACCESSORY_DEBUG;
+   418		priv->cap.orientation_aware	= true;
+   419		priv->cap.driver_data		= priv;
+   420		priv->cap.ops			= &tusb320_typec_ops;
+   421		priv->cap.fwnode		= connector;
+   422	
+   423		priv->port = typec_register_port(&client->dev, &priv->cap);
+   424		if (IS_ERR(priv->port)) {
+   425			ret = PTR_ERR(priv->port);
+   426			goto err_put;
+   427		}
+   428	
+ > 429		priv->connector_fwnode;
+   430	
+   431		return 0;
+   432	
+   433	err_put:
+   434		fwnode_handle_put(connector);
+   435	
+   436		return ret;
+   437	}
+   438	
 
 -- 
 0-DAY CI Kernel Test Service
