@@ -2,65 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C616B8AF2
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Mar 2023 07:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD53D6B8B24
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Mar 2023 07:20:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjCNGKe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Mar 2023 02:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
+        id S229988AbjCNGUa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Mar 2023 02:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCNGKc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Mar 2023 02:10:32 -0400
+        with ESMTP id S229468AbjCNGU2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Mar 2023 02:20:28 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293C55DCAE;
-        Mon, 13 Mar 2023 23:10:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9253D4D615;
+        Mon, 13 Mar 2023 23:20:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678774231; x=1710310231;
+  t=1678774825; x=1710310825;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=4mLCEy2H7JEU8KoAKmGcuzQP9O9EsavChPpUcqcifCc=;
-  b=gGGWXK3KKqZsPWxOfP2VNov/ddWuJ73aDmwLkU7OVjsnu2/aAb3Xd3+U
-   OvNpx8PtoVCq90lSNgTtRNEItC83pg/SSOniXH6aaG3VGSJwOmQxcU9Hg
-   43OD/sXX1h344wpsy35AKgCY1fbTrtf7ZD3vju8caq5NYm1FIpGb1Uvhd
-   OCHYIXo3I7TWUQ2XNzUko1D5yya0g0XvFgBuzR0ul+cRQlOqKFO3JAbnQ
-   fOO6IeqZj8TRf5Hf53nb2CN5er+4vl5C5+P5zJ0h+svy8R3XHftcyr3Kt
-   cTC8liWoiesgjRtg+3DT95EPzdA31F+8ezxS4I7M5d4R1koQW9IxXyJcO
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="316986725"
+  bh=WI3H3I/gh8xJAjCQSPqochNxEgU32IxdnBdW6pkbJ0s=;
+  b=Km/5pu1vanEc8VUlALAoEEvmkPLWEwh6y4BIfHif24Erkq8cYc+wURi3
+   03ogdFGMhFlMMbY26dxubQNc2zXIEttE+8X4ay6qJvf26P1aX5ZKi+i2d
+   2uOhkCQQfXcEJIFItjFRvJBRY9yxZDSyPxPuXBVxU8E5lfQ/PLGe+ZIz7
+   s1KYBR9lWhgQzrG+MhAuGy+uMGciMR+j4xE5xRGZne2ZPieNh+xoExfUN
+   6SFkLDWpeRE52+GN8h9+HT4YHHgbgC+/R5dQ8BvFKx4+XSbVMNCdB2Wek
+   iRbMJm1lFhx06OIEuUsVIRG5UroX56hgv2UEBBAO+ZYHSSVOyTgTKKy33
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="316988369"
 X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="316986725"
+   d="scan'208";a="316988369"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 23:10:22 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 23:20:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="802719705"
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="802721216"
 X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="802719705"
+   d="scan'208";a="802721216"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 13 Mar 2023 23:10:20 -0700
+  by orsmga004.jf.intel.com with ESMTP; 13 Mar 2023 23:20:20 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pbxrX-0006aw-1A;
-        Tue, 14 Mar 2023 06:10:19 +0000
-Date:   Tue, 14 Mar 2023 14:09:23 +0800
+        id 1pby1D-0006bU-2o;
+        Tue, 14 Mar 2023 06:20:19 +0000
+Date:   Tue, 14 Mar 2023 14:19:34 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Marek Vasut <marex@denx.de>,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] extcon: usbc-tusb320: unregister typec port on driver
- removal
-Message-ID: <202303141316.EltVGG8V-lkp@intel.com>
-References: <20230313130105.4183296-1-alvin@pqrs.dk>
+To:     Jarkko Sonninen <kasper@iki.fi>
+Cc:     oe-kbuild-all@lists.linux.dev, Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
+Message-ID: <202303141402.sfS74rp6-lkp@intel.com>
+References: <20230313082734.886890-1-kasper@iki.fi>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230313130105.4183296-1-alvin@pqrs.dk>
+In-Reply-To: <20230313082734.886890-1-kasper@iki.fi>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -71,108 +65,70 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alvin,
+Hi Jarkko,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on chanwoo-extcon/extcon-next]
-[also build test WARNING on linus/master v6.3-rc2 next-20230310]
+[auto build test WARNING on johan-usb-serial/usb-next]
+[also build test WARNING on johan-usb-serial/usb-linus linus/master v6.3-rc2 next-20230314]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alvin-ipraga/extcon-usbc-tusb320-unregister-typec-port-on-driver-removal/20230313-210245
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/extcon.git extcon-next
-patch link:    https://lore.kernel.org/r/20230313130105.4183296-1-alvin%40pqrs.dk
-patch subject: [PATCH] extcon: usbc-tusb320: unregister typec port on driver removal
-config: i386-randconfig-a013-20230313 (https://download.01.org/0day-ci/archive/20230314/202303141316.EltVGG8V-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
+url:    https://github.com/intel-lab-lkp/linux/commits/Jarkko-Sonninen/USB-serial-xr-Add-TIOCGRS485-and-TIOCSRS485-ioctls/20230313-163032
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git usb-next
+patch link:    https://lore.kernel.org/r/20230313082734.886890-1-kasper%40iki.fi
+patch subject: [PATCH v2] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
+config: sparc64-randconfig-s031-20230312 (https://download.01.org/0day-ci/archive/20230314/202303141402.sfS74rp6-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce:
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/fe414069d19f6d59c7c34f820459f4114e2de136
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/3470fe1d77e0edf25fc417f516491abbd812dc41
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alvin-ipraga/extcon-usbc-tusb320-unregister-typec-port-on-driver-removal/20230313-210245
-        git checkout fe414069d19f6d59c7c34f820459f4114e2de136
+        git fetch --no-tags linux-review Jarkko-Sonninen/USB-serial-xr-Add-TIOCGRS485-and-TIOCSRS485-ioctls/20230313-163032
+        git checkout 3470fe1d77e0edf25fc417f516491abbd812dc41
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/extcon/ drivers/media/common/videobuf2/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc64 SHELL=/bin/bash drivers/usb/serial/ kernel/trace/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303141316.EltVGG8V-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303141402.sfS74rp6-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+sparse warnings: (new ones prefixed by >>)
+>> drivers/usb/serial/xr_serial.c:870:37: sparse: sparse: Using plain integer as NULL pointer
 
->> drivers/extcon/extcon-usbc-tusb320.c:429:8: warning: expression result unused [-Wunused-value]
-           priv->connector_fwnode;
-           ~~~~  ^~~~~~~~~~~~~~~~
-   1 warning generated.
+vim +870 drivers/usb/serial/xr_serial.c
 
-
-vim +429 drivers/extcon/extcon-usbc-tusb320.c
-
-   379	
-   380	static int tusb320_typec_probe(struct i2c_client *client,
-   381				       struct tusb320_priv *priv)
-   382	{
-   383		struct fwnode_handle *connector;
-   384		const char *cap_str;
-   385		int ret;
-   386	
-   387		/* The Type-C connector is optional, for backward compatibility. */
-   388		connector = device_get_named_child_node(&client->dev, "connector");
-   389		if (!connector)
-   390			return 0;
-   391	
-   392		/* Type-C connector found. */
-   393		ret = typec_get_fw_cap(&priv->cap, connector);
-   394		if (ret)
-   395			goto err_put;
-   396	
-   397		priv->port_type = priv->cap.type;
-   398	
-   399		/* This goes into register 0x8 field CURRENT_MODE_ADVERTISE */
-   400		ret = fwnode_property_read_string(connector, "typec-power-opmode", &cap_str);
-   401		if (ret)
-   402			goto err_put;
-   403	
-   404		ret = typec_find_pwr_opmode(cap_str);
-   405		if (ret < 0)
-   406			goto err_put;
-   407	
-   408		priv->pwr_opmode = ret;
-   409	
-   410		/* Initialize the hardware with the devicetree settings. */
-   411		ret = tusb320_set_adv_pwr_mode(priv);
-   412		if (ret)
-   413			goto err_put;
-   414	
-   415		priv->cap.revision		= USB_TYPEC_REV_1_1;
-   416		priv->cap.accessory[0]		= TYPEC_ACCESSORY_AUDIO;
-   417		priv->cap.accessory[1]		= TYPEC_ACCESSORY_DEBUG;
-   418		priv->cap.orientation_aware	= true;
-   419		priv->cap.driver_data		= priv;
-   420		priv->cap.ops			= &tusb320_typec_ops;
-   421		priv->cap.fwnode		= connector;
-   422	
-   423		priv->port = typec_register_port(&client->dev, &priv->cap);
-   424		if (IS_ERR(priv->port)) {
-   425			ret = PTR_ERR(priv->port);
-   426			goto err_put;
-   427		}
-   428	
- > 429		priv->connector_fwnode;
-   430	
-   431		return 0;
-   432	
-   433	err_put:
-   434		fwnode_handle_put(connector);
-   435	
-   436		return ret;
-   437	}
-   438	
+   853	
+   854	static int xr_set_rs485_config(struct tty_struct *tty,
+   855				 unsigned long __user *argp)
+   856	{
+   857		struct usb_serial_port *port = tty->driver_data;
+   858		struct xr_data *data = usb_get_serial_port_data(port);
+   859		struct serial_rs485 rs485;
+   860		unsigned long flags;
+   861	
+   862		if (copy_from_user(&rs485, argp, sizeof(rs485)))
+   863			return -EFAULT;
+   864	
+   865		dev_dbg(tty->dev, "Flags %02x\n", rs485.flags);
+   866		rs485.flags &= SER_RS485_ENABLED;
+   867		spin_lock_irqsave(&data->lock, flags);
+   868		memcpy(&data->rs485, &rs485, sizeof(rs485));
+   869		spin_unlock_irqrestore(&data->lock, flags);
+ > 870		xr_set_flow_mode(tty, port, 0);
+   871	
+   872		if (copy_to_user(argp, &data->rs485, sizeof(data->rs485)))
+   873			return -EFAULT;
+   874	
+   875		return 0;
+   876	}
+   877	
 
 -- 
 0-DAY CI Kernel Test Service
