@@ -2,116 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2AC6B8E83
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Mar 2023 10:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F06F6B8F40
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Mar 2023 11:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbjCNJWV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Mar 2023 05:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
+        id S229815AbjCNKIh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Mar 2023 06:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjCNJWU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Mar 2023 05:22:20 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE3A233FC;
-        Tue, 14 Mar 2023 02:22:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678785738; x=1710321738;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=669AdwOG4a24zmUH38pGEUS6+rjOIvBAa8LuWIw2i1k=;
-  b=P6rPTQuAMaa949xDZJlJSrIb+1qWkkXo6hPg7IQbcYcSfOWXZsFL6UO3
-   NzrC7ny6BrTgL9Ec9+h2SMKy+FwwXJNkDs3Gq3nWabMBkqR5+Tc+R8uh8
-   TWBEL9arpaUi5QcKbpQkN+rsqkXPP3Cc5rizA12GMOS2qH+zGZvttarW8
-   BZoVcaBDWyzGi8YChyPzcO7x+n9nkE/MoBdwERx+u6MVjZ5YOBnwV3yEh
-   3i+Wfy0MyUgumDkiIQHVq8XHk4CMz3/OnPuYZ9mgy9GXj5mjvKZKhQl4x
-   QCHzqr0KtlZH4vtXbRZbNINhEovY3q99gphrGCJEZHDb84Fvaj9Aqt33K
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="338917167"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="338917167"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 02:22:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="822292265"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="822292265"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 14 Mar 2023 02:22:14 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 14 Mar 2023 11:22:13 +0200
-Date:   Tue, 14 Mar 2023 11:22:13 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Frank Wang <frank.wang@rock-chips.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org, heiko@sntech.de,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com
-Subject: Re: [PATCH 2/4] usb: typec: tcpm: fix multiple times discover svids
- error
-Message-ID: <ZBA8xWmNDSDhUys2@kuha.fi.intel.com>
-References: <20230313025843.17162-1-frank.wang@rock-chips.com>
- <20230313025843.17162-3-frank.wang@rock-chips.com>
+        with ESMTP id S229446AbjCNKIg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Mar 2023 06:08:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D5C193EF
+        for <linux-usb@vger.kernel.org>; Tue, 14 Mar 2023 03:08:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49ACBB8188B
+        for <linux-usb@vger.kernel.org>; Tue, 14 Mar 2023 10:08:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F36D7C433D2;
+        Tue, 14 Mar 2023 10:08:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678788509;
+        bh=r1N8FzKanke2XkkLtiXuoKCA41q+LtgOgqFG1NxGDUo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CA3004jSDUnJs5v4jSFHHfHgLJg4qhbnJl2U16rJb0N6SPac6XH9KiC+Ldg7zaz/T
+         09GvCkf/LqBF0N+RrUArTTDijghoRjtAKTVdCVhOBzZKmZWvdRolgfh9Rlz1f+nTOz
+         yHLe9oYG5+Bl9CkU9fKhZvoHyToVRTuYM64ST8ytg3w17Uu/T+bPqzTNGYrf/BYxBE
+         1o9I27vMCj+EWgxh9LjLQhclSBq4iOa1U1BKuHg8Ra0NW+RRF4IlXiL/vOYVb6+5Ur
+         yJ/RCrsyQQQjdYYoLzY+aYkkvRvPLjPykPdknbA6pDgd8PoUADfkw5TpLvOspfc2+W
+         v5bFGe9n581BQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pc1b2-0002ps-Lo; Tue, 14 Mar 2023 11:09:32 +0100
+Date:   Tue, 14 Mar 2023 11:09:32 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Enrico Sau <enrico.sau@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] USB: serial: option: add Telit FE990 compositions
+Message-ID: <ZBBH3GbymqzCr9oj@hovoldconsulting.com>
+References: <20230314090059.77876-1-enrico.sau@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230313025843.17162-3-frank.wang@rock-chips.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230314090059.77876-1-enrico.sau@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 10:58:41AM +0800, Frank Wang wrote:
-> PD3.0 Spec 6.4.4.3.2 say that only Responder supports 12 or more SVIDs,
-> the Discover SVIDs Command Shall be executed multiple times until a
-> Discover SVIDs VDO is returned ending either with a SVID value of
-> 0x0000 in the last part of the last VDO or with a VDO containing two
-> SVIDs with values of 0x0000.
+On Tue, Mar 14, 2023 at 10:00:59AM +0100, Enrico Sau wrote:
+> Add the following Telit FE990 compositions:
 > 
-> In the current implementation, if the last VDO does not find that the
-> Discover SVIDs Command would be executed multiple times even if the
-> Responder SVIDs are less than 12, and we found some odd dockers just
-> meet this case. So fix it.
+> 0x1080: tty, adb, rmnet, tty, tty, tty, tty
+> 0x1081: tty, adb, mbim, tty, tty, tty, tty
+> 0x1082: rndis, tty, adb, tty, tty, tty, tty
+> 0x1083: tty, adb, ecm, tty, tty, tty, tty
 > 
-> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
+> Signed-off-by: Enrico Sau <enrico.sau@gmail.com>
 > ---
->  drivers/usb/typec/tcpm/tcpm.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 66de02a56f512..2962f7c261976 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1515,7 +1515,21 @@ static bool svdm_consume_svids(struct tcpm_port *port, const u32 *p, int cnt)
->  		pmdata->svids[pmdata->nsvids++] = svid;
->  		tcpm_log(port, "SVID %d: 0x%x", pmdata->nsvids, svid);
->  	}
-> -	return true;
-> +
-> +	/*
-> +	 * PD3.0 Spec 6.4.4.3.2: The SVIDs are returned 2 per VDO (see Table
-> +	 * 6-43), and can be returned maximum 6 VDOs per response (see Figure
-> +	 * 6-19). If the Respondersupports 12 or more SVID then the Discover
-> +	 * SVIDs Command Shall be executed multiple times until a Discover
-> +	 * SVIDs VDO is returned ending either with a SVID value of 0x0000 in
-> +	 * the last part of the last VDO or with a VDO containing two SVIDs
-> +	 * with values of 0x0000.
-> +	 *
-> +	 * However, some odd dockers support SVIDs less than 12 but without
-> +	 * 0x0000 in the last VDO, so we need to break the Discover SVIDs
-> +	 * request and return false here.
-> +	 */
-> +	return cnt == 7 ? true : false;
+> Changes since v1:
+> - Fix NCTRL and RSVD interfaces for 0x1083 composition
 
-        return cnt == 7
+Thanks for the update. Now applied.
 
-
-thanks,
-
--- 
-heikki
+Johan
