@@ -2,208 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CABF6B8DBF
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Mar 2023 09:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2EF6B8DE0
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Mar 2023 09:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjCNIsi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Mar 2023 04:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
+        id S230115AbjCNIy0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Mar 2023 04:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbjCNIsg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Mar 2023 04:48:36 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62A23C15;
-        Tue, 14 Mar 2023 01:48:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678783714; x=1710319714;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=60VgM0ZqtvUKEdzCA81b6vxDKOeBgKlL4EKaxFMBkWE=;
-  b=cKfqRGSv0Z9nuTgjlWIQfU6/GLvk31anRL0IkEMjLEX1q4eIVkVd6p6Z
-   9Y2eHhjah5UwNttp1cDFxj2bjzJKYVC3wv+P5RY/dgSgwX0xqSDIQjoTO
-   CgTdPX4yAKRsHz4k9EDmmNwiXmPvDg9Kd+zu7s/sgN1wo8BB/7JPSO/9Q
-   OxUPcwJ1Do5+/Tse6wBlMLSjjyDE4Q+vV9xab4Cpu9smSkmVZnUC75SdL
-   kCCePPRuVxvw0NnTelnQcR4/Bd08o5SEDfdZciMqroQc6WR3hO5U5hrYH
-   YHMw5JdUYT5x9c6zPY98LoFKNWoP1E0dt2yL6nfHM4YQNcC1hy+Op+I0a
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="317754227"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="317754227"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 01:48:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="822285848"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="822285848"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 14 Mar 2023 01:48:31 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 14 Mar 2023 10:48:30 +0200
-Date:   Tue, 14 Mar 2023 10:48:30 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org,
-        Johan Hovold <johan@kernel.org>,
-        Evan Green <evgreen@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 36/36] USB: mark all struct bus_type as const
-Message-ID: <ZBA03vH2B+tPUVAP@kuha.fi.intel.com>
-References: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
- <20230313182918.1312597-36-gregkh@linuxfoundation.org>
+        with ESMTP id S229886AbjCNIyX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Mar 2023 04:54:23 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73FB5D460
+        for <linux-usb@vger.kernel.org>; Tue, 14 Mar 2023 01:54:14 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id j3so9681288wms.2
+        for <linux-usb@vger.kernel.org>; Tue, 14 Mar 2023 01:54:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678784053;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=v75KTMuw3KcdDlrLuoPJiGsmVBznB/RJnpqv1/ly5lI=;
+        b=aNjUjLrcpaXjwu/4dbQzHaY4b3Dn3tv81YXVqdiqApk5IEp9oECS4JWIDTNUVppAym
+         y9L7MeJazA4s4euFcL/Y5gSA7r/P00+tXhJhCnkoEqXRKOp1+JYNMppKKi863Fpetisj
+         W71QhvISwvBCfbprWr3tOQL7TGpENcbYc20v7IGGwBE9LLp1raxERYAojlFUxC0ESJ+q
+         8aE/QNqBrbCaIRrd47RcCnBRnbJV3YsxWJi0kuiPG2mmyhtYmRGOhTf2Q6ewrdsUk7f+
+         WzMIEOpjdjbEGoM79qboDF8TTvNBGiDqLFAXsqARGz+ZSY8jVTCAqE8iUvj+1xh2U+40
+         s3Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678784053;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v75KTMuw3KcdDlrLuoPJiGsmVBznB/RJnpqv1/ly5lI=;
+        b=PcAh6AlPuxr1x3E4P+SmwAVlyDmJact4loFwG5CjBd5TM/mGvVINzT0ARKYlfDjOff
+         mI4Fz8GbNbkZQh/SyYlxNDh5g5R8E2KtaDXJILObU9A6VScLaVT7AU5XZLVX6XOYKeUj
+         I1o53z1578VbI5PU6//ngM0MgG1ljLNrAnHPj79HbzTGmVy2SNfD9RK/7DSy9uu3iEeE
+         UM+OOtt5cFKzpcPOfzPJeKWYnxDfpmHMNp3yNP0FroZwy/dIruO5J2El2qZti7V3Nl2+
+         0n5kpOrOC5zYavTnYHTRUjwvP0pTPzMt1VqGHbTNBQrOjt6wvzWx6x5q9GVrZPrvf+Lz
+         wuvw==
+X-Gm-Message-State: AO0yUKV74vZztyLTQXbNzwXiyp48B8EiaZokhwfE5XjS/2zbDI4xy17A
+        dZ5xoYZ2r7v+9/hKEo9zeXnz+Q==
+X-Google-Smtp-Source: AK7set+WZGtNLvW0dZC4TbyqElBmfwd/9FmjaR6AfzRA4EVNJIBui7DLWbnR0qrXHxzQSr5KwXGxCw==
+X-Received: by 2002:a05:600c:4f08:b0:3e2:20c7:6544 with SMTP id l8-20020a05600c4f0800b003e220c76544mr13392562wmq.19.1678784053087;
+        Tue, 14 Mar 2023 01:54:13 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:11c3:d4e5:ef75:8eb9? ([2a01:e0a:982:cbb0:11c3:d4e5:ef75:8eb9])
+        by smtp.gmail.com with ESMTPSA id u15-20020a05600c440f00b003dfe549da4fsm2142551wmn.18.2023.03.14.01.54.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 01:54:12 -0700 (PDT)
+Message-ID: <d7bd6663-516a-a1f9-506c-5853eaa948e4@linaro.org>
+Date:   Tue, 14 Mar 2023 09:54:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313182918.1312597-36-gregkh@linuxfoundation.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v3 01/12] usb: typec: ucsi: add PMIC Glink UCSI driver
+Content-Language: en-US
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230130-topic-sm8450-upstream-pmic-glink-v3-0-4c860d265d28@linaro.org>
+ <20230130-topic-sm8450-upstream-pmic-glink-v3-1-4c860d265d28@linaro.org>
+ <ZA7wPtttsWlQRpAR@kuha.fi.intel.com>
+Organization: Linaro Developer Services
+In-Reply-To: <ZA7wPtttsWlQRpAR@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 07:29:18PM +0100, Greg Kroah-Hartman wrote:
-> Now that the driver core can properly handle constant struct bus_type,
-> move all of the USB subsystem struct bus_type structures as const,
-> placing them into read-only memory which can not be modified at runtime.
+On 13/03/2023 10:43, Heikki Krogerus wrote:
+> Hi,
 > 
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Johan Hovold <johan@kernel.org>
-> Cc: Evan Green <evgreen@chromium.org>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  drivers/usb/common/ulpi.c     | 2 +-
->  drivers/usb/core/driver.c     | 2 +-
->  drivers/usb/core/usb.h        | 2 +-
->  drivers/usb/gadget/udc/core.c | 4 ++--
->  drivers/usb/serial/bus.c      | 2 +-
->  drivers/usb/typec/bus.c       | 2 +-
->  drivers/usb/typec/bus.h       | 2 +-
->  include/linux/usb/serial.h    | 2 +-
->  8 files changed, 9 insertions(+), 9 deletions(-)
+> On Thu, Mar 09, 2023 at 02:27:52PM +0100, Neil Armstrong wrote:
+>> +static void pmic_glink_ucsi_register(struct work_struct *work)
+>> +{
+>> +	struct pmic_glink_ucsi *ucsi = container_of(work, struct pmic_glink_ucsi, register_work);
+>> +
+>> +	ucsi_register(ucsi->ucsi);
+>> +}
+>> +
+>> +static void pmic_glink_ucsi_callback(const void *data, size_t len, void *priv)
+>> +{
+>> +	struct pmic_glink_ucsi *ucsi = priv;
+>> +	const struct pmic_glink_hdr *hdr = data;
+>> +
+>> +	switch (hdr->opcode) {
+>> +	case UC_UCSI_READ_BUF_REQ:
+>> +		pmic_glink_ucsi_read_ack(ucsi, data, len);
+>> +		break;
+>> +	case UC_UCSI_WRITE_BUF_REQ:
+>> +		pmic_glink_ucsi_write_ack(ucsi, data, len);
+>> +		break;
+>> +	case UC_UCSI_USBC_NOTIFY_IND:
+>> +		schedule_work(&ucsi->notify_work);
+>> +		break;
+>> +	};
+>> +}
+>> +
+>> +static void pmic_glink_ucsi_pdr_notify(void *priv, int state)
+>> +{
+>> +	struct pmic_glink_ucsi *ucsi = priv;
+>> +
+>> +	if (state == SERVREG_SERVICE_STATE_UP)
+>> +		schedule_work(&ucsi->register_work);
+>> +	else if (state == SERVREG_SERVICE_STATE_DOWN)
+>> +		ucsi_unregister(ucsi->ucsi);
+>> +}
+>> +
+>> +static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
+>> +				 const struct auxiliary_device_id *id)
+>> +{
+>> +	struct pmic_glink_ucsi *ucsi;
+>> +	struct device *dev = &adev->dev;
+>> +
+>> +	ucsi = devm_kzalloc(dev, sizeof(*ucsi), GFP_KERNEL);
+>> +	if (!ucsi)
+>> +		return -ENOMEM;
+>> +
+>> +	ucsi->dev = dev;
+>> +	dev_set_drvdata(dev, ucsi);
+>> +
+>> +	INIT_WORK(&ucsi->notify_work, pmic_glink_ucsi_notify);
+>> +	INIT_WORK(&ucsi->register_work, pmic_glink_ucsi_register);
+>> +	init_completion(&ucsi->read_ack);
+>> +	init_completion(&ucsi->write_ack);
+>> +	init_completion(&ucsi->sync_ack);
+>> +	mutex_init(&ucsi->lock);
+>> +
+>> +	ucsi->ucsi = ucsi_create(dev, &pmic_glink_ucsi_ops);
+>> +	if (IS_ERR(ucsi->ucsi))
+>> +		return PTR_ERR(ucsi->ucsi);
+>> +
+>> +	ucsi_set_drvdata(ucsi->ucsi, ucsi);
+>> +
+>> +	ucsi->client = devm_pmic_glink_register_client(dev,
+>> +						       PMIC_GLINK_OWNER_USBC,
+>> +						       pmic_glink_ucsi_callback,
+>> +						       pmic_glink_ucsi_pdr_notify,
+>> +						       ucsi);
+>> +	return PTR_ERR_OR_ZERO(ucsi->client);
+>> +}
+>> +
+>> +static const struct auxiliary_device_id pmic_glink_ucsi_id_table[] = {
+>> +	{ .name = "pmic_glink.ucsi", },
+>> +	{},
+>> +};
+>> +MODULE_DEVICE_TABLE(auxiliary, pmic_glink_ucsi_id_table);
+>> +
+>> +static struct auxiliary_driver pmic_glink_ucsi_driver = {
+>> +	.name = "pmic_glink_ucsi",
+>> +	.probe = pmic_glink_ucsi_probe,
+>> +	.id_table = pmic_glink_ucsi_id_table,
+>> +};
 > 
-> diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
-> index a98b2108376a..8305a5dfb910 100644
-> --- a/drivers/usb/common/ulpi.c
-> +++ b/drivers/usb/common/ulpi.c
-> @@ -90,7 +90,7 @@ static void ulpi_remove(struct device *dev)
->  		drv->remove(to_ulpi_dev(dev));
->  }
->  
-> -static struct bus_type ulpi_bus = {
-> +static const struct bus_type ulpi_bus = {
->  	.name = "ulpi",
->  	.match = ulpi_match,
->  	.uevent = ulpi_uevent,
-> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-> index a0e076c6f3a4..f58a0299fb3b 100644
-> --- a/drivers/usb/core/driver.c
-> +++ b/drivers/usb/core/driver.c
-> @@ -2025,7 +2025,7 @@ int usb_disable_usb2_hardware_lpm(struct usb_device *udev)
->  
->  #endif /* CONFIG_PM */
->  
-> -struct bus_type usb_bus_type = {
-> +const struct bus_type usb_bus_type = {
->  	.name =		"usb",
->  	.match =	usb_device_match,
->  	.uevent =	usb_uevent,
-> diff --git a/drivers/usb/core/usb.h b/drivers/usb/core/usb.h
-> index 0eac7d4285d1..cd434af259c3 100644
-> --- a/drivers/usb/core/usb.h
-> +++ b/drivers/usb/core/usb.h
-> @@ -140,7 +140,7 @@ static inline int usb_disable_usb2_hardware_lpm(struct usb_device *udev)
->  
->  #endif
->  
-> -extern struct bus_type usb_bus_type;
-> +extern const struct bus_type usb_bus_type;
->  extern struct mutex usb_port_peer_mutex;
->  extern struct device_type usb_device_type;
->  extern struct device_type usb_if_device_type;
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index 23b0629a8774..61a9c231deb9 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -26,7 +26,7 @@
->  
->  static DEFINE_IDA(gadget_id_numbers);
->  
-> -static struct bus_type gadget_bus_type;
-> +static const struct bus_type gadget_bus_type;
->  
->  /**
->   * struct usb_udc - describes one usb device controller
-> @@ -1747,7 +1747,7 @@ static int usb_udc_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  	return 0;
->  }
->  
-> -static struct bus_type gadget_bus_type = {
-> +static const struct bus_type gadget_bus_type = {
->  	.name = "gadget",
->  	.probe = gadget_bind_driver,
->  	.remove = gadget_unbind_driver,
-> diff --git a/drivers/usb/serial/bus.c b/drivers/usb/serial/bus.c
-> index 9e38142acd38..3eb8dc3a1a8f 100644
-> --- a/drivers/usb/serial/bus.c
-> +++ b/drivers/usb/serial/bus.c
-> @@ -144,7 +144,7 @@ static void free_dynids(struct usb_serial_driver *drv)
->  	spin_unlock(&drv->dynids.lock);
->  }
->  
-> -struct bus_type usb_serial_bus_type = {
-> +const struct bus_type usb_serial_bus_type = {
->  	.name =		"usb-serial",
->  	.match =	usb_serial_device_match,
->  	.probe =	usb_serial_device_probe,
-> diff --git a/drivers/usb/typec/bus.c b/drivers/usb/typec/bus.c
-> index 098f0efaa58d..fe5b9a2e61f5 100644
-> --- a/drivers/usb/typec/bus.c
-> +++ b/drivers/usb/typec/bus.c
-> @@ -431,7 +431,7 @@ static void typec_remove(struct device *dev)
->  	adev->ops = NULL;
->  }
->  
-> -struct bus_type typec_bus = {
-> +const struct bus_type typec_bus = {
->  	.name = "typec",
->  	.dev_groups = typec_groups,
->  	.match = typec_match,
-> diff --git a/drivers/usb/typec/bus.h b/drivers/usb/typec/bus.h
-> index c89168857417..643b8c81786d 100644
-> --- a/drivers/usb/typec/bus.h
-> +++ b/drivers/usb/typec/bus.h
-> @@ -28,7 +28,7 @@ struct altmode {
->  
->  #define to_altmode(d) container_of(d, struct altmode, adev)
->  
-> -extern struct bus_type typec_bus;
-> +extern const struct bus_type typec_bus;
->  extern const struct device_type typec_altmode_dev_type;
->  
->  #define is_typec_altmode(_dev_) (_dev_->type == &typec_altmode_dev_type)
-> diff --git a/include/linux/usb/serial.h b/include/linux/usb/serial.h
-> index f7bfedb740f5..7eeb5f9c4f0d 100644
-> --- a/include/linux/usb/serial.h
-> +++ b/include/linux/usb/serial.h
-> @@ -378,7 +378,7 @@ void usb_serial_handle_dcd_change(struct usb_serial_port *usb_port,
->  int usb_serial_bus_register(struct usb_serial_driver *device);
->  void usb_serial_bus_deregister(struct usb_serial_driver *device);
->  
-> -extern struct bus_type usb_serial_bus_type;
-> +extern const struct bus_type usb_serial_bus_type;
->  extern struct tty_driver *usb_serial_tty_driver;
->  
->  static inline void usb_serial_debug_data(struct device *dev,
-> -- 
-> 2.39.2
+> What happens if you remove the module - I think you need to implement
+> the remove callback, no?
 
--- 
-heikki
+You're right, I thought devm_pmic_glink_register_client would call
+pmic_glink_ucsi_pdr_notify which would unregister ucsi, but no so will add.
+
+Thanks,
+Neil
+
+> 
+> thanks,
+> 
+
