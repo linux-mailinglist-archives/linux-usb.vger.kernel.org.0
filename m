@@ -2,112 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361C36B9A6B
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Mar 2023 16:53:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A03C06B9D64
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Mar 2023 18:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbjCNPxc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Mar 2023 11:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
+        id S229956AbjCNRtV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Mar 2023 13:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjCNPxb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Mar 2023 11:53:31 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A467B109;
-        Tue, 14 Mar 2023 08:53:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678809183; x=1710345183;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TbG9kxbBuRazw+lkPlts7eEQOkz3o6LrN3ByWSVtvhQ=;
-  b=miw/jxYuxluW7GiX74csc9uOAUk2HoiS4H4JpzBmzivUKraRLgW0DU1l
-   dr7JV0G3b6fxpwZTadc8fh+4+yfbzucbopvl1y3jXZhHLOzjLDldlEqtU
-   pSyKBQ6/zYth7Rhc8/XsZHuiD1myfpBnaGzaybkOaXr36XyLuQR6siLGw
-   MvHnnlEWmk+CCSahkM1lu9JnXQun4fnS3S/ORX0V79QpD226GW8fxix5z
-   RSwT91ZmPDU4L+PVk73vIwhfje1GTFdFiNKWRDbPUAm1zzRCz2sFs2C0+
-   wZJnLFD2hJuQTVwgYe/ePC8Nd9gXyvhOS58wXI6t41+xiCS2vYLV86gYL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="400050736"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="400050736"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 08:53:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="672397601"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="672397601"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 14 Mar 2023 08:52:55 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pc6xJ-003Iei-0i;
-        Tue, 14 Mar 2023 17:52:53 +0200
-Date:   Tue, 14 Mar 2023 17:52:52 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Ye, Xiang" <xiang.ye@intel.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Lee Jones <lee@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v5 1/5] usb: Add support for Intel LJCA device
-Message-ID: <ZBCYVNmoo2EdDY90@smile.fi.intel.com>
-References: <20230312190435.3568212-1-xiang.ye@intel.com>
- <20230312190435.3568212-2-xiang.ye@intel.com>
- <20230313170341.GV9667@google.com>
- <ZBAqTqZEDz/vAwVC@ye-NUC7i7DNHE>
- <ZBAyKQwnQ8fxHRuU@kuha.fi.intel.com>
- <ZBCU5h/A2woJLtvT@ye-NUC7i7DNHE>
+        with ESMTP id S229698AbjCNRtU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Mar 2023 13:49:20 -0400
+X-Greylist: delayed 995 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Mar 2023 10:49:17 PDT
+Received: from fallback1.i.mail.ru (fallback1.i.mail.ru [79.137.243.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9582DA0299;
+        Tue, 14 Mar 2023 10:49:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail4;
+        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=yhfDTxZ4fRjQ2lEhZgTwS9jqNs5/tKIjwB16ZH1hFZI=;
+        t=1678816158;x=1678906158; 
+        b=AXhpvIdd19adeWGrLXim2rhP7OJOYcVjmLT3PZ9gRp62n4/70ZYhyYmzBHP30BVtumly/1qH9h54hgFpe9L+Hgw+wvXf/V+dJFAgBI7GjFFaCLTkwfPk+6q8hvv6PncvrRXdRlm8ssE0IVVWGJqjP3ccQM+u7FBcg3LcFdROK+zsztrpkQB1ywtH25PMTWt97rKTSFN7NSzMg8yOkZwt3EgazeriulUNT7Pn9Tb9JlNfuOZnbkUWXgEzOQOfWXyLZ0dlU+T/HbgVMX5DEj9BhOGCfvx+o+ddmveUbnGJ7RQ1SujwdvUtcY8H9EcEdErTwhGIki65Fl9pTSb/gAv+1Q==;
+Received: from [10.12.4.22] (port=47798 helo=smtp41.i.mail.ru)
+        by fallback1.i.mail.ru with esmtp (envelope-from <listdansp@mail.ru>)
+        id 1pc82H-008xys-7f; Tue, 14 Mar 2023 20:02:05 +0300
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail4;
+        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=yhfDTxZ4fRjQ2lEhZgTwS9jqNs5/tKIjwB16ZH1hFZI=;
+        t=1678813325;x=1678903325; 
+        b=MG1t0RLC4kAajAyj477BlgCtrS2o7Hqt+ABfpIXOYdqLVbAdzfRZGZXxBwCg8KsLDWAovIkXou1vMmglUeaStdVuYayXNBX7YRxTmjRxa3h1nS3OHyToBm/EKj+AvjXJrUqZvRMdiza7FkCe6EvwXHUdjwTEV2e0kRUGe+uyEP/tH3nB5GBUif4wt9eS/JLnf+F4xAFI/Icc5nCHb9dbAahFGEF4UP7Yhwgh5FhE48pT9YxYBGthNQnsC+ugkHgmWgEVq0cIqGw5RQgruGnBULr5YhD0LhsmXDuqTctBBulCmYxb+pcR1DCBrWinY5c5P2rXoUoYirXmmgfo1jkinA==;
+Received: by smtp41.i.mail.ru with esmtpa (envelope-from <listdansp@mail.ru>)
+        id 1pc82B-005Cqp-9c; Tue, 14 Mar 2023 20:01:59 +0300
+From:   Danila Chernetsov <listdansp@mail.ru>
+To:     stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Danila Chernetsov <listdansp@mail.ru>, Bin Liu <b-liu@ti.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: [PATCH 5.10 0/1] usb: musb: core: drop redundant checks
+Date:   Tue, 14 Mar 2023 17:01:12 +0000
+Message-Id: <20230314170113.11968-1-listdansp@mail.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBCU5h/A2woJLtvT@ye-NUC7i7DNHE>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Mailru-Src: smtp
+X-7564579A: B8F34718100C35BD
+X-77F55803: 4F1203BC0FB41BD9BCEC41593EBD83573328AE13154FE908333A02E638E8A8D8182A05F538085040FA0DFA96644829E416ED7F01E7207288C9FEE78E7BE1EBE0B0F2F256699C37DF
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7922E451CE6E839B1EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006371005780D56A98C20EA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38B6F1F7B995052D5CEAE2E846A451F9991C9C32BEAE4F42A5A20879F7C8C5043D14489FFFB0AA5F4BF176DF2183F8FC7C0A29E2F051442AF778941B15DA834481FA18204E546F3947CD6CDBB52967A4FABF6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F7900637687B3714F5A29B87389733CBF5DBD5E9B5C8C57E37DE458BD9DD9810294C998ED8FC6C240DEA76428AA50765F7900637B4C9D997413845C7D81D268191BDAD3DBD4B6F7A4D31EC0BEA7A3FFF5B025636D81D268191BDAD3D78DA827A17800CE7EF7004CDD23AB229EC76A7562686271ED91E3A1F190DE8FD2E808ACE2090B5E14AD6D5ED66289B5259CC434672EE63711DD303D21008E298D5E8D9A59859A8B6B372FE9A2E580EFC725E5C173C3A84C32695002DD8BDA04435872C767BF85DA2F004C90652538430E4A6367B16DE6309
+X-C1DE0DAB: 0D63561A33F958A5A2ED83C866616EDF56EED8FE08986FA31ACC0AAF15C102E04EAF44D9B582CE87C8A4C02DF684249C2E763F503762DF508151CC1E5A7F5336
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D349DAEDEF7DE8FDCFAE7D48C063C30C30CD8314EDCA1D70F150E7FA07E3BB0C6359D38E02995287AC81D7E09C32AA3244CC41D686228C62430A17CA1C42C79FE7AA8CE788DE6831205DCA3B3C10BC03908
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojOXwBDQf4j7NteatRcCEN3w==
+X-Mailru-Sender: 4CE1109FD677D2770147F6A9E21DCA7B69F168FADF6A6FA715ED8F335757C58D2241BB377472528A7E3C9C7AF06D9E7B78274A4A9E9E44FD3C3897ABF9FF211DE8284E426C7B2D9A5FEEDEB644C299C0ED14614B50AE0675
+X-Mras: Ok
+X-7564579A: 646B95376F6C166E
+X-77F55803: 6242723A09DB00B4BD2EB812D5A6E5F7D3C1BE093F4DBF3E1F5D791277A7C5DA049FFFDB7839CE9E316722B9905B3D2230EF1A958FBE15A291EDF5E99D7EE7B44C1AE67808EA0321
+X-7FA49CB5: 0D63561A33F958A57C61C1AE9CDDA8C13DD4CA65F987BC908049221497B9B158CACD7DF95DA8FC8BD5E8D9A59859A8B6A096F61ED9298604
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5xhPKz0ZEsZ5k6NOOPWz5QAiZSCXKGQRq3/7KxbCLSB2ESzQkaOXqCBFZPLWFrEGlV1shfWe2EVcxl5toh0c/aCGOghz/frdRhzMe95NxDFdAc2jUOxWGfzNNUdZ69PPZQ==
+X-Mailru-MI: C000000000000800
+X-Mras: Ok
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 11:38:14PM +0800, Ye, Xiang wrote:
-> On Tue, Mar 14, 2023 at 10:36:57AM +0200, Heikki Krogerus wrote:
-> > On Tue, Mar 14, 2023 at 04:03:26PM +0800, Ye, Xiang wrote:
+hw_ep can't be NULL but compared to NULL in 5.10 stable releases. 
+The problem has been fixed by the following 
+patch which can be cleanly applied to the 5.10 branch. 
 
-...
-
-> > You don't really seem to get any benefit from MFD. Perhaps it would be
-> > more appropriate and clear if you just registered auxiliary devices in
-> > this driver. Check drivers/base/auxiliary.c.
-> Yes, it should be a work. I have a question.
-> MFD provides the ACPI binding for sub-devices through
-> struct mfd_cell_acpi_match. But I didn't see this in drivers/base/auxiliary.c.
-> If using auxiliary bus to implement the LJCA sub-devices, we need to do
-> the sub-devices acpi binding manually in ljca.c.
-> 
-> Something Like:
-> adr = LJCA_ACPI_MATCH_GPIO
-> adev = acpi_find_child_device(parent, adr, false);
-> ACPI_COMPANION_SET(&pdev->dev, adev ?: parent);
-> 
-> Is that acceptable?
-
-Maybe you can implement this on the level of auxiliary bus.
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
