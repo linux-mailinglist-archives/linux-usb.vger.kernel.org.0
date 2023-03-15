@@ -2,214 +2,380 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3146BB5BA
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Mar 2023 15:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B40C96BB5EA
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Mar 2023 15:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232067AbjCOOQp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Mar 2023 10:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50254 "EHLO
+        id S233042AbjCOO0a convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 15 Mar 2023 10:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231971AbjCOOQ3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Mar 2023 10:16:29 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3360E34C16
-        for <linux-usb@vger.kernel.org>; Wed, 15 Mar 2023 07:16:01 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id x3so76075428edb.10
-        for <linux-usb@vger.kernel.org>; Wed, 15 Mar 2023 07:16:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pqrs.dk; s=google; t=1678889759;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oFlsa6HtfdlDO+5W0pHOXKXz4uVBrG6uhwA+mTGh/F4=;
-        b=UGMpDSGL8X5RFbzk+SEfLtR+9GJKEnTWGNIdPmBJGWII5fmtVJp57KaAbMkCgDbJb+
-         +8GCmf9p0z3p6oHvimw007lQGVU/hqtHOT1SAewubK0Ucm6lG0u2Eg+J6aal9KzsMyXv
-         Lw6KTdWkHzGq95NRgsqVjI/+4RQWYPFFYUiWY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678889759;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oFlsa6HtfdlDO+5W0pHOXKXz4uVBrG6uhwA+mTGh/F4=;
-        b=cf4qdZQP9dUgOe+X9M7B9IB3zxP1xgPuMNMOvWGyL5r9L0SEfN+rWZgnYKmvlVLGsO
-         s7pKSTk3yjd13bWjGF7233QxIaKIfN5BiVVAg4HJRb/F4wQPWUVbOgOHWOyIRT5OYBxM
-         fjFAJUoZM5CD8dTQ9vR+eICo8KEGlr1aWJIIx2xeHmZBrl0qaGWXlXgSm/sOG9LAvdw1
-         v3Chbrl1pGE0tKlh/p9vWfgT2zrJoI+MpF6kAdIVi6y089inNPasz81t/73J9Gf6yLSE
-         Y8ZE70m3Wdo6jY9mShP0WBK1IU/s5fFtzzBmvOC6kvRlwuO7R9dsHX5DkT+PLwNXV5Po
-         q2Yw==
-X-Gm-Message-State: AO0yUKVuW1IU6c7vbKNuJLF1imlIbXNZ5tKDpjcONRwrGQZ5lzRW1kcP
-        yywXGcTM1V7J2XUBahIpdTddlA==
-X-Google-Smtp-Source: AK7set8oPIsIHljWEG7Btn7/oqvtoKP54iIoNGcUixTywJ0v44k5S6228+JMg1jI54PO01KBJ+54IA==
-X-Received: by 2002:a17:907:a804:b0:92a:edd4:638 with SMTP id vo4-20020a170907a80400b0092aedd40638mr2911718ejc.22.1678889758698;
-        Wed, 15 Mar 2023 07:15:58 -0700 (PDT)
-Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
-        by smtp.gmail.com with ESMTPSA id m20-20020a509994000000b004aef147add6sm2532280edb.47.2023.03.15.07.15.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 07:15:58 -0700 (PDT)
-From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Marek Vasut <marex@denx.de>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>
-Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] extcon: usbc-tusb320: unregister typec port on driver removal
-Date:   Wed, 15 Mar 2023 15:15:47 +0100
-Message-Id: <20230315141547.825057-1-alvin@pqrs.dk>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S231983AbjCOO03 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Mar 2023 10:26:29 -0400
+Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFA51025B;
+        Wed, 15 Mar 2023 07:26:24 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id 40971186407D;
+        Wed, 15 Mar 2023 17:26:20 +0300 (MSK)
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id ctxPzByjDvU6; Wed, 15 Mar 2023 17:26:19 +0300 (MSK)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id 5BDA3186407C;
+        Wed, 15 Mar 2023 17:26:19 +0300 (MSK)
+X-Virus-Scanned: amavisd-new at astralinux.ru
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 3HNTZHqifFk7; Wed, 15 Mar 2023 17:26:19 +0300 (MSK)
+Received: from [10.177.20.58] (unknown [10.177.20.58])
+        by mail.astralinux.ru (Postfix) with ESMTPSA id D4B4A186407D;
+        Wed, 15 Mar 2023 17:26:18 +0300 (MSK)
+Message-ID: <a390e831-49af-5c8e-7df3-87612269a83f@astralinux.ru>
+Date:   Wed, 15 Mar 2023 17:26:13 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH] goku_udc: Add check for NULL in goku_irq
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     Jakob Koschel <jakobkoschel@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20230203101828.14799-1-abelova@astralinux.ru>
+ <Y9zly1vrj9z4c1qT@kroah.com>
+ <39993564-7310-a2e0-8139-14ccb9a03ba9@astralinux.ru>
+ <Y+zivah57216KcuB@kroah.com>
+ <a5f90434-f3e5-f25e-76e2-b03e79cc16fe@alu.unizg.hr>
+ <ddfab307-d471-ee08-6804-5f903adb1770@astralinux.ru>
+ <2681bc20-28a4-341f-5d01-0db4b356ac8e@alu.unizg.hr>
+Content-Language: en-US
+From:   Anastasia Belova <abelova@astralinux.ru>
+In-Reply-To: <2681bc20-28a4-341f-5d01-0db4b356ac8e@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-The driver can register a typec port if suitable firmware properties are
-present. But if the driver is removed through sysfs unbind, rmmod or
-similar, then it does not clean up after itself and the typec port
-device remains registered. This can be seen in sysfs, where stale typec
-ports get left over in /sys/class/typec.
+13.03.2023 16:49, Mirsad Goran Todorovac пишет:
+> On 13.3.2023. 13:19, Anastasia Belova wrote:
+>>
+>> 11.03.2023 06:29, Mirsad Goran Todorovac пишет:
+>>> On 15. 02. 2023. 14:48, Greg Kroah-Hartman wrote:
+>>>> On Wed, Feb 15, 2023 at 04:39:56PM +0300, Анастасия Белова wrote:
+>>>>> 03.02.2023 13:45, Greg Kroah-Hartman пишет:
+>>>>>> On Fri, Feb 03, 2023 at 01:18:28PM +0300, Anastasia Belova wrote:
+>>>>>>> Before dereferencing dev->driver check it for NULL.
+>>>>>>>
+>>>>>>> If an interrupt handler is called after assigning
+>>>>>>> NULL to dev->driver, but before resetting dev->int_enable,
+>>>>>>> NULL-pointer will be dereferenced.
+>>>>>>>
+>>>>>>> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>>>>>>>
+>>>>>>> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+>>>>>>> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+>>>>>>> ---
+>>>>>>>    drivers/usb/gadget/udc/goku_udc.c | 5 +++--
+>>>>>>>    1 file changed, 3 insertions(+), 2 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/drivers/usb/gadget/udc/goku_udc.c 
+>>>>>>> b/drivers/usb/gadget/udc/goku_udc.c
+>>>>>>> index bdc56b24b5c9..896bba8b47f1 100644
+>>>>>>> --- a/drivers/usb/gadget/udc/goku_udc.c
+>>>>>>> +++ b/drivers/usb/gadget/udc/goku_udc.c
+>>>>>>> @@ -1616,8 +1616,9 @@ static irqreturn_t goku_irq(int irq, void 
+>>>>>>> *_dev)
+>>>>>>>    pm_next:
+>>>>>>>            if (stat & INT_USBRESET) {        /* hub reset done */
+>>>>>>>                ACK(INT_USBRESET);
+>>>>>>> -            INFO(dev, "USB reset done, gadget %s\n",
+>>>>>>> -                dev->driver->driver.name);
+>>>>>>> +            if (dev->driver)
+>>>>>>> +                INFO(dev, "USB reset done, gadget %s\n",
+>>>>>>> +                    dev->driver->driver.name);
+>>>>>> How can this ever happen?  Can you trigger this somehow?  If not, I
+>>>>>> don't think this is going to be possible (also what's up with printk
+>>>>>> from an irq handler???)
+>>>>> Unfortunately, I can't find the way to trigger this at the moment.
+>>>> Then the change should not be made.
+>>>>
+>>>>> What about printk, should trace_printk be used instead?
+>>>> Why?
+>>>>
+>>>>>> Odds are, no one actually has this hardware anymore, right?
+>>>>> Despite of this, such vulnerability should be fixed because
+>>>>> there is a possibility to exploit it.
+>>>> How can this be "exploited" if it can not ever be triggered?
+>>>>
+>>>> Also, this would cause a NULL dereference in an irq handler, how 
+>>>> can you
+>>>> "exploit" that?
+>>>>
+>>>> Please only submit patches that actually do something.  It is getting
+>>>> very hard to want to even review patches from this "project" based on
+>>>> the recent submissions.
+>>>>
+>>>> thanks,
+>>>>
+>>>> greg k-h
+>>> Hi Greg, Anastasia,
+>>
+>> Hi Misrad,
+>>
+>>> Without any pros or cons, or taking sides, there appears to be a 
+>>> similar check
+>>> when using dev->driver->driver.name in
+>>>
+>>> https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/udc/goku_udc.c#L1158 
+>>>
+>>>
+>>>     seq_printf(m,
+>>>            "%s - %s\n"
+>>>            "%s version: %s %s\n"
+>>>            "Gadget driver: %s\n"
+>>>            "Host %s, %s\n"
+>>>            "\n",
+>>>            pci_name(dev->pdev), driver_desc,
+>>>            driver_name, DRIVER_VERSION, dmastr(),
+>>>            dev->driver ? dev->driver->driver.name : "(none)",
+>>>            is_usb_connected
+>>>                ? ((tmp & PW_PULLUP) ? "full speed" : "powered")
+>>>                : "disconnected",
+>>>            udc_ep_state(dev->ep0state));
+>>>
+>>> On the other hand, where could dev->drivre be reset without 
+>>> resetting dev->int_enable?
+>>>
+>>> dev->driver = NULL appears here:
+>>>
+>>> static int goku_udc_stop(struct usb_gadget *g)
+>>> {
+>>>     struct goku_udc    *dev = to_goku_udc(g);
+>>>     unsigned long    flags;
+>>>
+>>>     spin_lock_irqsave(&dev->lock, flags);
+>>>     dev->driver = NULL;
+>>>     stop_activity(dev);
+>>>     spin_unlock_irqrestore(&dev->lock, flags);
+>>>
+>>>     return 0;
+>>> }
+>>>
+>>> it is followed by stop_activity() calling udc_reset():
+>>>
+>>> static void udc_reset(struct goku_udc *dev)
+>>> {
+>>>     struct goku_udc_regs __iomem    *regs = dev->regs;
+>>>
+>>>     writel(0, &regs->power_detect);
+>>>     writel(0, &regs->int_enable);
+>>>     readl(&regs->int_enable);
+>>>     dev->int_enable = 0;
+>>> .
+>>> .
+>>> .
+>>>
+>>> ... but this happens in between spin_lock_irqsave() and 
+>>> spin_unlock_irqsave(),
+>>> which appears like a correct way to do it.
+>>
+>> Are you sure that spin_lock_irqsave makes the code safe? This 
+>> function disables interrupts on
+>> local processor only (Linux Device Drivers, Third Edition). So it 
+>> doesn't seem to be
+>> absolutely safe on multiprocessor systems.
+>
+> Hi, Anastasia,
+>
+> Looking from the Second Edition or the book and the source, I see that
+> spin_lock_irqsave() expands to:
+>
+> static inline unsigned long __raw_spin_lock_irqsave(raw_spinlock_t *lock)
+> {
+>     unsigned long flags;
+>
+>     local_irq_save(flags);
+>     preempt_disable();
+>     spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
+>     LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
+>     return flags;
+> }
+>
+> if the multiple threads on multiple cores/SMTs contend for the same lock,
+> that with preempt_disable() should assure mutual exclusion.
+>
+> Can you please quote from the Third Edition of Linux Device Drivers where
+> it says otherwise?
+>
 
-In order to fix this we have to add an i2c_driver remove function and
-call typec_unregister_port(), which is a no-op in the case where no
-typec port is created and the pointer remains NULL.
+Hi, Mirsad,
 
-In the process we should also put the fwnode_handle when the typec port
-isn't registered anymore, including if an error occurs during probe. The
-typec subsystem does not increase or decrease the reference counter for
-us, so we track it in the driver's private data.
 
-Note that the conditional check on TYPEC_PWR_MODE_PD was removed in the
-probe path because a call to tusb320_set_adv_pwr_mode() will perform an
-even more robust validation immediately after, hence there is no
-functional change here.
+If I get it right, preempt_disable blocks interrupts on all processors,
 
-Fixes: bf7571c00dca ("extcon: usbc-tusb320: Add USB TYPE-C support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
----
-v2: properly assign priv->connector_fwnode = connector;
----
- drivers/extcon/extcon-usbc-tusb320.c | 42 ++++++++++++++++++++++------
- 1 file changed, 34 insertions(+), 8 deletions(-)
+correct? This statement seems to make the code safe, but there is a quote
 
-diff --git a/drivers/extcon/extcon-usbc-tusb320.c b/drivers/extcon/extcon-usbc-tusb320.c
-index b408ce989c22..10dff1c512c4 100644
---- a/drivers/extcon/extcon-usbc-tusb320.c
-+++ b/drivers/extcon/extcon-usbc-tusb320.c
-@@ -78,6 +78,7 @@ struct tusb320_priv {
- 	struct typec_capability	cap;
- 	enum typec_port_type port_type;
- 	enum typec_pwr_opmode pwr_opmode;
-+	struct fwnode_handle *connector_fwnode;
- };
- 
- static const char * const tusb_attached_states[] = {
-@@ -391,27 +392,25 @@ static int tusb320_typec_probe(struct i2c_client *client,
- 	/* Type-C connector found. */
- 	ret = typec_get_fw_cap(&priv->cap, connector);
- 	if (ret)
--		return ret;
-+		goto err_put;
- 
- 	priv->port_type = priv->cap.type;
- 
- 	/* This goes into register 0x8 field CURRENT_MODE_ADVERTISE */
- 	ret = fwnode_property_read_string(connector, "typec-power-opmode", &cap_str);
- 	if (ret)
--		return ret;
-+		goto err_put;
- 
- 	ret = typec_find_pwr_opmode(cap_str);
- 	if (ret < 0)
--		return ret;
--	if (ret == TYPEC_PWR_MODE_PD)
--		return -EINVAL;
-+		goto err_put;
- 
- 	priv->pwr_opmode = ret;
- 
- 	/* Initialize the hardware with the devicetree settings. */
- 	ret = tusb320_set_adv_pwr_mode(priv);
- 	if (ret)
--		return ret;
-+		goto err_put;
- 
- 	priv->cap.revision		= USB_TYPEC_REV_1_1;
- 	priv->cap.accessory[0]		= TYPEC_ACCESSORY_AUDIO;
-@@ -422,10 +421,25 @@ static int tusb320_typec_probe(struct i2c_client *client,
- 	priv->cap.fwnode		= connector;
- 
- 	priv->port = typec_register_port(&client->dev, &priv->cap);
--	if (IS_ERR(priv->port))
--		return PTR_ERR(priv->port);
-+	if (IS_ERR(priv->port)) {
-+		ret = PTR_ERR(priv->port);
-+		goto err_put;
-+	}
-+
-+	priv->connector_fwnode = connector;
- 
- 	return 0;
-+
-+err_put:
-+	fwnode_handle_put(connector);
-+
-+	return ret;
-+}
-+
-+static void tusb320_typec_remove(struct tusb320_priv *priv)
-+{
-+	typec_unregister_port(priv->port);
-+	fwnode_handle_put(priv->connector_fwnode);
- }
- 
- static int tusb320_probe(struct i2c_client *client)
-@@ -438,7 +452,9 @@ static int tusb320_probe(struct i2c_client *client)
- 	priv = devm_kzalloc(&client->dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
-+
- 	priv->dev = &client->dev;
-+	i2c_set_clientdata(client, priv);
- 
- 	priv->regmap = devm_regmap_init_i2c(client, &tusb320_regmap_config);
- 	if (IS_ERR(priv->regmap))
-@@ -489,10 +505,19 @@ static int tusb320_probe(struct i2c_client *client)
- 					tusb320_irq_handler,
- 					IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
- 					client->name, priv);
-+	if (ret)
-+		tusb320_typec_remove(priv);
- 
- 	return ret;
- }
- 
-+static void tusb320_remove(struct i2c_client *client)
-+{
-+	struct tusb320_priv *priv = i2c_get_clientdata(client);
-+
-+	tusb320_typec_remove(priv);
-+}
-+
- static const struct of_device_id tusb320_extcon_dt_match[] = {
- 	{ .compatible = "ti,tusb320", .data = &tusb320_ops, },
- 	{ .compatible = "ti,tusb320l", .data = &tusb320l_ops, },
-@@ -502,6 +527,7 @@ MODULE_DEVICE_TABLE(of, tusb320_extcon_dt_match);
- 
- static struct i2c_driver tusb320_extcon_driver = {
- 	.probe_new	= tusb320_probe,
-+	.remove		= tusb320_remove,
- 	.driver		= {
- 		.name	= "extcon-tusb320",
- 		.of_match_table = tusb320_extcon_dt_match,
--- 
-2.39.2
+from Linux Device Drivers, Third Edition, CHAPTER 5, Concurrency and Race
 
+Conditions: "...spin_lock_irqsave disables interrupts (on the local 
+processor
+
+only) before taking the spinlock...". These thoughts contradict, don't they?
+
+
+> BTW, please also consider reading this article:
+>
+> https://docs.kernel.org/driver-api/io_ordering.html
+>
+> I saw they were using this readl() after writel() for synchronisation, so
+> please see if this clears your doubts. It says "readl() should flush 
+> any pending
+> writes".
+>
+> But I certainly see no harm in your proposal of guarding against NULL 
+> pointer
+> dereference of dev->driver, both in
+>
+> > -            INFO(dev, "USB reset done, gadget %s\n",
+> > -                dev->driver->driver.name);
+> > +            if (dev->driver)
+> > +                INFO(dev, "USB reset done, gadget %s\n",
+> > +                    dev->driver->driver.name);
+>
+> or use the construct as the one in another line of the driver:
+>
+> > -            INFO(dev, "USB reset done, gadget %s\n",
+> > -                dev->driver->driver.name);
+> > +            INFO(dev, "USB reset done, gadget %s\n",
+> > +                dev->driver ? dev->driver->driver.name : "(none)");
+>
+> (This would IMHO enable detecting and logging when dev->driver 
+> unexpectedly becomes NULL
+> in a race condition, rather that just silently skipping and ignoring 
+> the situation.)
+>
+Agree, the second construct looks better.
+> but additionally also in:
+>
+> > -     spin_unlock (&dev->lock);
+> > -     tmp = dev->driver->setup(&dev->gadget, &ctrl);
+> > -     spin_lock (&dev->lock);
+> > +     if (dev->driver && dev->driver->setup) {
+> > +         spin_unlock (&dev->lock);
+> > +         tmp = dev->driver->setup(&dev->gadget, &ctrl);
+> > +         spin_lock (&dev->lock);
+> > +     }
+>
+> for completeness and robustness sake.
+>
+> The author agrees that the race conditions in the device drivers are 
+> very hard
+> to reproduce:
+>
+> https://www.oreilly.com/library/view/linux-device-drivers/0596000081/ch09s08.html 
+>
+>
+> But I am really not able to analyse all possible scenarios ATM.
+> Maybe some ideas come after getting some oxygen.
+>
+> (This is not an authoritative answer on the matter, just an attempt on 
+> analysis.)
+>
+> Regards,
+> Mirsad
+>
+Regards,
+
+Anastasia
+
+>>> But second appearance is here:
+>>>
+>>> https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/udc/goku_udc.c#L1559 
+>>>
+>>>
+>>>     spin_lock(&dev->lock);
+>>>
+>>> rescan:
+>>>     stat = readl(&regs->int_status) & dev->int_enable;
+>>>          if (!stat)
+>>>         goto done;
+>>>     dev->irqs++;
+>>>
+>>>     /* device-wide irqs */
+>>>     if (unlikely(stat & INT_DEVWIDE)) {
+>>>         if (stat & INT_SYSERROR) {
+>>>             ERROR(dev, "system error\n");
+>>>             stop_activity(dev);
+>>>             stat = 0;
+>>>             handled = 1;
+>>>             // FIXME have a neater way to prevent re-enumeration
+>>>             dev->driver = NULL;
+>>>             goto done;
+>>>         }
+>>>
+>>> goto done leads to:
+>>>
+>>> done:
+>>>     (void)readl(&regs->int_enable);
+>>>     spin_unlock(&dev->lock);
+>>>
+>>> This unlocks dev->lock before setting dev->int_enable to zero, or 
+>>> calling writel(0, &regs->int_enable);
+>>> which could be problematic. Unless it called stop_activity(dev) four 
+>>> lines earlier. Which does
+>>> bot of:
+>>>
+>>>     writel(0, &regs->int_enable);
+>>>     dev->int_enable = 0;
+>>>
+>>> So, FWIW, we seem to be safe. Yet, there might be no harm in 
+>>> printing "(null)" rather
+>>> than having an NULL pointer dereference, it seems.
+>>>
+>>> Yet, there is another unprotected dereference of dev->driver:
+>>>
+>>> https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/udc/goku_udc.c#L1513 
+>>>
+>>>
+>>>     spin_unlock (&dev->lock);
+>>>     tmp = dev->driver->setup(&dev->gadget, &ctrl);
+>>>     spin_lock (&dev->lock);
+>>>
+>>> All others (in goku_udc.c, at least) have triple safeguards like:
+>>>
+>>>                 if (dev->gadget.speed != USB_SPEED_UNKNOWN
+>>>                         && dev->driver
+>>>                         && dev->driver->suspend) {
+>>>                     spin_unlock(&dev->lock);
+>>> dev->driver->suspend(&dev->gadget);
+>>>                     spin_lock(&dev->lock);
+>>>                 }
+>>>
+>>> So the above should maybe put to:
+>>>
+>>>     if (dev->driver && dev->driver->setup) {
+>>>         spin_unlock (&dev->lock);
+>>>         tmp = dev->driver->setup(&dev->gadget, &ctrl);
+>>>         spin_lock (&dev->lock);
+>>>     }
+>>>
+>>> instead to be completely certain.
+>>>
+>>> Forgive me for this uninspired rant. Thank you if you've read this far.
+>>> I hope this helps.
+>>>
+>>> My $0.02.
+>>>
+>>> Regards,
+>>> Mirsad
+>>>
+>> Thanks,
+>>
+>> Anastasia
+>
