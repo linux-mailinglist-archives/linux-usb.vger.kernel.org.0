@@ -2,109 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4380D6BB9AD
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Mar 2023 17:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 146316BB9B8
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Mar 2023 17:33:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232056AbjCOQ3r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Mar 2023 12:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
+        id S231649AbjCOQda (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Mar 2023 12:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjCOQ3p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Mar 2023 12:29:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2BD32CFC;
-        Wed, 15 Mar 2023 09:29:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65C4861DFC;
-        Wed, 15 Mar 2023 16:29:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF974C433EF;
-        Wed, 15 Mar 2023 16:29:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678897783;
-        bh=jjn5cdVupJ0A22hzLeqblsWGnn86f9oIpQTR3zJXyMs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SrGZE6Sk04Pizzg1tuzcS8CHPA2fWPGLs4KeZnsayQbgSEQA4cnJK0Pfeq0SJeJBK
-         k3vxt0IAld+aKoIhiC1zd5okC/+vL8oWVyyuI6ZfWamyvj388DwIwIYix0jC3bwxmi
-         DkeIXcnQUWjdJXHT/9ZFLPb9Mobk2cNyIzLuPwIw5rsLql0YKamZVRUoXUYTdyODoV
-         Qvri59v7Ipro4ikDj/8KVduqsAhq0rRHgWmjSR1HC0SJWkOuQY5nxeUuemo7vvLdpn
-         GcuwDkUNsFs3zlki+Ro5SvcGO6afswtXZknOUs/tFssFYs5ilBEfvwFoULnPAv3CIu
-         EL6OIvNSFjCYw==
-Date:   Wed, 15 Mar 2023 16:29:36 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, lgirdwood@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
-        andersson@kernel.org, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org, tiwai@suse.com,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-Subject: Re: [PATCH v3 00/28] Introduce QC USB SND audio offloading support
-Message-ID: <e270cffa-d27b-40e0-aed5-104514e4ba94@sirena.org.uk>
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
- <4f8a66c0-398f-5655-3aa7-a59bc9ba56cc@linux.intel.com>
- <8b2f3ce7-3e0c-bdf0-8d9f-9aeabba09a15@quicinc.com>
- <a211f26d-a045-0729-871f-248d5fce3f3f@linux.intel.com>
- <684daf86-6c3f-7310-eebf-4ebfc3c480ca@quicinc.com>
- <8a37ccd3-f19e-b30d-d736-04e81b49f3a0@linux.intel.com>
- <0810f951-f4a6-a51d-97e3-43691b05f702@quicinc.com>
- <b671e263-5cb8-18e5-dc28-648ab1133c6c@linux.intel.com>
- <14d726a7-6ffc-705c-b012-0c08d7dd7b9b@quicinc.com>
- <6b811766-cd2a-54c0-d090-640812686a45@linux.intel.com>
+        with ESMTP id S231201AbjCOQd2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Mar 2023 12:33:28 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62841499C;
+        Wed, 15 Mar 2023 09:33:26 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32FEwbcE009904;
+        Wed, 15 Mar 2023 17:33:08 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=U/2twFIRyN37bROnR4GXkdaHaknzfdj1TTXP5h5YqfQ=;
+ b=RU3NneOhYTjBMSOozU/hbGYLwFEmaJe/l42AhKQBwXQgAWwvvcqHnLyFbrygHYzi7M7O
+ O8fdZ0h/u/473hnSl9uACzJ03k3Ekrb98sajF5TnGux3bW7T0koinEkSCZ5L58dVWoo+
+ V3Aj5ZIx9HmPueEb9E68KqtvE5sHOZW8mqS4SCsaS90ztYIWxA+l0cwJaYYUZK0IHvNG
+ qJ7iTwbhRazBhjdK0V+AnkBzm5LyKY+M61qmquvwWHhqejKlxPsQHw1H0AOCPuoOZAyY
+ PzUfHgDSNgAs4VPYpI0rz6nnrgnOrRoxcEKHzBw+PGKMAwoZrwc1dDWx700BtRz8DxGJ 6w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pb2aw5wnv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 17:33:08 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 12D2710002A;
+        Wed, 15 Mar 2023 17:33:07 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 02D6521D3C0;
+        Wed, 15 Mar 2023 17:33:07 +0100 (CET)
+Received: from localhost (10.48.1.102) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Wed, 15 Mar
+ 2023 17:33:06 +0100
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+To:     <hminas@synopsys.com>, <gregkh@linuxfoundation.org>,
+        <maz@kernel.org>, <m.szyprowski@samsung.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>,
+        <fabrice.gasnier@foss.st.com>
+Subject: [PATCH] usb: dwc2: fix a devres leak in hw_enable upon suspend resume
+Date:   Wed, 15 Mar 2023 17:32:46 +0100
+Message-ID: <20230315163246.3848102-1-fabrice.gasnier@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Z0fuEYQGMv0a0e38"
-Content-Disposition: inline
-In-Reply-To: <6b811766-cd2a-54c0-d090-640812686a45@linux.intel.com>
-X-Cookie: "Speed is subsittute fo accurancy."
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.48.1.102]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-15_08,2023-03-15_01,2023-02-09_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Each time the platform goes to low power, PM suspend / resume routines
+call: __dwc2_lowlevel_hw_enable -> devm_add_action_or_reset().
+This adds a new devres each time.
+This may also happen at runtime, as dwc2_lowlevel_hw_enable() can be
+called from udc_start().
 
---Z0fuEYQGMv0a0e38
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This can be seen with tracing:
+- echo 1 > /sys/kernel/debug/tracing/events/dev/devres_log/enable
+- go to low power
+- cat /sys/kernel/debug/tracing/trace
 
-On Wed, Mar 15, 2023 at 09:30:58AM -0500, Pierre-Louis Bossart wrote:
+A new "ADD" entry is found upon each low power cycle:
+... devres_log: 49000000.usb-otg ADD 82a13bba devm_action_release (8 bytes)
+... devres_log: 49000000.usb-otg ADD 49889daf devm_action_release (8 bytes)
+...
 
-> That's probably ok then, am I getting this right that the the DSP card
-> would not expose any USB-related kcontrols then, i.e. the ONLY path to
-> change volumes, etc.,  would through the regular USB card kcontrols?
+A second issue is addressed here:
+- regulator_bulk_enable() is called upon each PM cycle (suspend/resume).
+- regulator_bulk_disable() never gets called.
 
-> That would limit the changes in the platform sound card to the addition
-> of a PCM USB device.
+So the reference count for these regulators constantly increase, by one
+upon each low power cycle, due to missing regulator_bulk_disable() call
+in __dwc2_lowlevel_hw_disable().
 
-I'd guess that there might be some volume control in the DSP as part of
-the generic routing to the port (eg, if all ports have some output
-control) but I'm not sure that's an issue, could even be useful for
-normalising the output of DSP algorithms compared to direct PCM
-playback.
+The original fix that introduced the devm_add_action_or_reset() call,
+fixed an issue during probe, that happens due to other errors in
+dwc2_driver_probe() -> dwc2_core_reset(). Then the probe fails without
+disabling regulators, when dr_mode == USB_DR_MODE_PERIPHERAL.
 
---Z0fuEYQGMv0a0e38
-Content-Type: application/pgp-signature; name="signature.asc"
+Rather fix the error path: disable all the low level hardware in the
+error path, by using the "hsotg->ll_hw_enabled" flag. Checking dr_mode
+has been introduced to avoid a dual call to dwc2_lowlevel_hw_disable().
+"ll_hw_enabled" should achieve the same (and is used currently in the
+remove() routine).
 
------BEGIN PGP SIGNATURE-----
+Fixes: 54c196060510 ("usb: dwc2: Always disable regulators on driver teardown")
+Fixes: 33a06f1300a7 ("usb: dwc2: Fix error path in gadget registration")
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: If038db394ae43cbbb40279b2eca4cba021644a6d
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/291408
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/usb/dwc2/platform.c | 16 ++--------------
+ 1 file changed, 2 insertions(+), 14 deletions(-)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQR8m8ACgkQJNaLcl1U
-h9Cp3Af/fp7qmzx3dIqaYfXDA3inZKGAJxlBPLnKX7FXrObh2rhSDh/htyeF/xtx
-6tpnHQ1zB2RqEeffKTwu9lobnS2+x/SYkDG2vw5ONFKl3U7L3L87l76a67mR5Hk8
-d7nCQBAdHetX8yl/6H4iVbQztzwFNbuAfT61GYm+zxd98Psps6JucWS8IXwH8lfd
-XGRC/kENH9CPClFzhOCLGnlc+lMRkIGPDH38CN/IGl1GqHr5GgpWlRf6U5dFxpYC
-gAAATPlnhXUSp3o2+qT0bmqjEDpeWXUbeAQuayhdQ3fS0TzGBgoynfR7OyKEHPyl
-X3poldFU1Joz448CW+mSRjG2W9VTpw==
-=+zSv
------END PGP SIGNATURE-----
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index 262c13b6362a..d1589ba7d322 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -91,13 +91,6 @@ static int dwc2_get_dr_mode(struct dwc2_hsotg *hsotg)
+ 	return 0;
+ }
+ 
+-static void __dwc2_disable_regulators(void *data)
+-{
+-	struct dwc2_hsotg *hsotg = data;
+-
+-	regulator_bulk_disable(ARRAY_SIZE(hsotg->supplies), hsotg->supplies);
+-}
+-
+ static int __dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg)
+ {
+ 	struct platform_device *pdev = to_platform_device(hsotg->dev);
+@@ -108,11 +101,6 @@ static int __dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = devm_add_action_or_reset(&pdev->dev,
+-				       __dwc2_disable_regulators, hsotg);
+-	if (ret)
+-		return ret;
+-
+ 	if (hsotg->clk) {
+ 		ret = clk_prepare_enable(hsotg->clk);
+ 		if (ret)
+@@ -168,7 +156,7 @@ static int __dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg)
+ 	if (hsotg->clk)
+ 		clk_disable_unprepare(hsotg->clk);
+ 
+-	return 0;
++	return regulator_bulk_disable(ARRAY_SIZE(hsotg->supplies), hsotg->supplies);
+ }
+ 
+ /**
+@@ -607,7 +595,7 @@ static int dwc2_driver_probe(struct platform_device *dev)
+ 	if (hsotg->params.activate_stm_id_vb_detection)
+ 		regulator_disable(hsotg->usb33d);
+ error:
+-	if (hsotg->dr_mode != USB_DR_MODE_PERIPHERAL)
++	if (hsotg->ll_hw_enabled)
+ 		dwc2_lowlevel_hw_disable(hsotg);
+ 	return retval;
+ }
+-- 
+2.25.1
 
---Z0fuEYQGMv0a0e38--
