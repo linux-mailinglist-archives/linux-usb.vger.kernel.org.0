@@ -2,149 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C196BAF0A
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Mar 2023 12:19:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E0F6BB0C5
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Mar 2023 13:21:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231860AbjCOLTS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Mar 2023 07:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
+        id S232155AbjCOMVI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Mar 2023 08:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232105AbjCOLSw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Mar 2023 07:18:52 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A741A5DD
-        for <linux-usb@vger.kernel.org>; Wed, 15 Mar 2023 04:18:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678879086; x=1710415086;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=Hu+gue/gvMdsNfCWleFLlSpjMnIki5YQ5h6kokY+5xo=;
-  b=JO+bRB1sKiJPee3LUu9P5SgV6iWjrpA44EIp1lyrPtlOqBJ/yY9JkgXc
-   tuWi1ulsTZEuNyhsdSL4CBsJlo7m0e/kxk3w4xD7bVcNdR1TKXX/U/jE6
-   MEVxL5L6lZTJAkeccDiTUoMRonolOo57zahXGUtsFNPgEFaj3atNxR8QI
-   dJoPqjt5UaYPfmoy9eIfVyXrU5kfAm1GR/SkqiwIhBYmu0zBMRvZAmBjH
-   uO6BltquIU8RjCJFJ0+B+VAJqvUiEeqmaZ5Z6Lt2SO+4QqTIM+j6odx8I
-   bM/wbbohliEs8O4LeU4MqXrRESvBgKyxRf9SyfM5dO7xZN6G+Pq2xc3mK
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="318069060"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="318069060"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 04:18:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="789758626"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="789758626"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga002.fm.intel.com with ESMTP; 15 Mar 2023 04:17:58 -0700
-Message-ID: <c9b12beb-cb12-8839-db74-b18480885053@linux.intel.com>
-Date:   Wed, 15 Mar 2023 13:19:16 +0200
+        with ESMTP id S232164AbjCOMUh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Mar 2023 08:20:37 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198118A38E
+        for <linux-usb@vger.kernel.org>; Wed, 15 Mar 2023 05:20:14 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id x25so8683182vsj.2
+        for <linux-usb@vger.kernel.org>; Wed, 15 Mar 2023 05:20:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678882814;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T7ECRY0Te14ADf7d1i4el7TwH1rvkn6nOgcFPiWQeeE=;
+        b=qfV7NVpQG2DvX+Cj58PBVyZL6NOvhyh3tUT4nWftgX1LcK7MVqiP1AWrrKOEcNa6Sd
+         2mObvmjze4rBW3GbOX7GdaQMcaHGETycNH5CuXEYX0TApmcVW34vXSnJylFSWo79niya
+         oyq7D7qYpmLgkEoMm8zgpW4CuCzA4FKVRHlY54Q5WP480NhFbZJFydD7l3aqwRc8h6e0
+         bFp5knWRl73B+XFEowhf6qCH3nCy8yO9gafgGNc9IYzNxob1jw9Ry5uYghSuJ8kYhP35
+         9ht3aN7i4WBoHFQLZkCGGOW4pSHkGa5Z4YHtGsL4688cPfZXe74oEqJ4oYIZK4hUIfc9
+         gX9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678882814;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T7ECRY0Te14ADf7d1i4el7TwH1rvkn6nOgcFPiWQeeE=;
+        b=DqEf1af+DlYMZM6c8I1K6ajTMX7PcPv/Lt75xstQenHN5AUZSxWCtwX/MKWbOxzgrW
+         vIDtLJROmX6iy1MFzBqP5j71fg0b893sbMv10oiIIn5WZN8eeQmOG490xs27lO34XKrM
+         UUqlE+b915jS4T7gdjoLAe06+Df4QjGXv4NViTCxo9GeIBZ3xt4+guH8DqqbKFYsEp0d
+         HyWdVv2G9BKLFMbdJw680+mpgCmvWY9WADwqZ31C9oorQ4gbLOfULZiUD0deQZxrvq13
+         YVouYhOH2b+hmWX07oH31J9RdP7+oIVCz2yUW+SIZnp2V+q3ajejX4QsgJH8hBwKS7v1
+         E6dA==
+X-Gm-Message-State: AO0yUKXdmXkMTBrC2nB0f15HeljH7GSEaUzxw5WRjSPGAQ7AzCKWWqwC
+        PMPOkC3H51Z0VF1cPseFLjYkBF9jg6Q6X4Tlnb+RKA==
+X-Google-Smtp-Source: AK7set8xf9erliFQjg7b8zKj5RwEcJ2NN9wMH4S6n+20ZmGyEH+og3UG9ei8Qjt+sSDngPD1/GcLB+pn3QA5m4E3CK8=
+X-Received: by 2002:a67:f254:0:b0:425:b61a:9c13 with SMTP id
+ y20-20020a67f254000000b00425b61a9c13mr2414569vsm.0.1678882813726; Wed, 15 Mar
+ 2023 05:20:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-To:     Brian Morrison <bdm@fenrir.org.uk>
-Cc:     linux-usb@vger.kernel.org,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Chen Xingdi <chenxingdi@huawei.com>,
-        Takashi Iwai <tiwai@suse.de>, Moritz Fischer <mdf@kernel.org>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Vinod Koul <vkoul@kernel.org>
-References: <20230307132120.5897c5af@deangelis.fenrir.org.uk>
- <db2e0984-6eb5-5987-44e1-a7143141469b@linux.intel.com>
- <20230309200415.118777d2@deangelis.fenrir.org.uk>
- <20230312000316.2955d55a@deangelis.fenrir.org.uk>
- <d5ff9480-57bd-2c39-8b10-988ad0d14a7e@linux.intel.com>
- <20230314140008.79a90c38@deangelis.fenrir.org.uk>
-Content-Language: en-US
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: USB regression in kernel 6.2.2
-In-Reply-To: <20230314140008.79a90c38@deangelis.fenrir.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230312190435.3568212-1-xiang.ye@intel.com> <20230312190435.3568212-3-xiang.ye@intel.com>
+In-Reply-To: <20230312190435.3568212-3-xiang.ye@intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 15 Mar 2023 13:20:02 +0100
+Message-ID: <CAMRc=Mfynj1STC54v7SBKZxBk2rJ6VTW+XV56hZ896rOCpKd1Q@mail.gmail.com>
+Subject: Re: [PATCH v5 2/5] gpio: Add support for Intel LJCA USB GPIO driver
+To:     Ye Xiang <xiang.ye@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, srinivas.pandruvada@intel.com,
+        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
+        wentong.wu@intel.com, lixu.zhang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 14.3.2023 16.00, Brian Morrison wrote:
-> On Mon, 13 Mar 2023 12:06:59 +0200
-> Mathias Nyman <mathias.nyman@linux.intel.com> wrote:
->>
->>
->> In your v6.2 logs the usb bus numbers are interleaved, in the v6.1
->> they are not. xhci driver registers two usb buses per host, one
->> High-Speed and one SuperSpeed.
->>
->> This change could be due to 6.2 commit:
->>
->> 4c2604a9a689 usb: xhci-pci: Set PROBE_PREFER_ASYNCHRONOUS
->>
->> Not sure why it would cause this regression, but worth testing it.
-> 
-> I have now reverted the above commit, it's only the one line in
-> xhci-pci.c and it took a couple of hours to rebuild my kernel rpms which
-> wasn't too bad.
-> 
-> With this change all of my USB devices are present again and the 3
-> /dev/ttyUSB* nodes are all present and usable.
-> 
+On Sun, Mar 12, 2023 at 8:05=E2=80=AFPM Ye Xiang <xiang.ye@intel.com> wrote=
+:
+>
+> This patch implements the GPIO function of Intel USB-I2C/GPIO/SPI adapter
+> device named "La Jolla Cove Adapter" (LJCA). It communicate with LJCA
+> GPIO module with specific protocol through interfaces exported by LJCA US=
+B
+> driver.
+>
+> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
+> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
 
-Thanks for testing.
-So setting PROBE_PREFER_ASYNCHRONOUS does trigger this issue for Renesas xHCI.
-
-Was it so that with the devices connected to the Intel host everything worked
-on 6.2 kernel?
-
-Just to make sure that this is a vendor specific host issue and not generic xhci
-driver issue.
-
-If we can't quickly figure out the real reason for this then we just have to
-revert that patch.
-
-> I found this in the linux-usb list archives:
-> 
-> https://www.spinics.net/lists/kernel/msg4569289.html
-> 
-> and the first part of this patch series here:
-> 
-> https://www.spinics.net/lists/kernel/msg4569288.html
-> 
-> Should both of these patches be reverted? I assume so but I don't think
-> I have anything that uses an ehci device to test it.
-> 
-
-Probably just the xhci one. I haven't heard of any ehci issues.
-
-Alan (cc) would know better if there are any new odd ehci issues that can
-be traced back to the async probe change.
-
-> I know nothing about how this all works other than finding this:
-> 
-> "Note that the end goal is to switch the kernel to use asynchronous
-> probing by default, so annotating drivers with
-> PROBE_PREFER_ASYNCHRONOUS is a temporary measure that allows us to
-> speed up boot process while we are validating the rest of the drivers."
-> 
-> which is at:
-> 
-> https://www.kernel.org/doc/html/v4.14/driver-api/infrastructure.html
-> 
-> so by the looks of it either this driver needs to initialise
-> synchronously or there is a further problem which causes the bus
-> ordering to be wrong but it also seems to be a work in progress so I
-> don't know how this will eventually play out.
-> 
-  
-Adding several persons who worked on xhci-pci-renesas.c in hope of figuring
-this out.
-
-Thanks
-Mathias
-
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
