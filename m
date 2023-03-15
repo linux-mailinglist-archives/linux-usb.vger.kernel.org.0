@@ -2,58 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B40C96BB5EA
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Mar 2023 15:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3986BB611
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Mar 2023 15:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233042AbjCOO0a convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 15 Mar 2023 10:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
+        id S233178AbjCOObg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Mar 2023 10:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231983AbjCOO03 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Mar 2023 10:26:29 -0400
-Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFA51025B;
-        Wed, 15 Mar 2023 07:26:24 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id 40971186407D;
-        Wed, 15 Mar 2023 17:26:20 +0300 (MSK)
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ctxPzByjDvU6; Wed, 15 Mar 2023 17:26:19 +0300 (MSK)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id 5BDA3186407C;
-        Wed, 15 Mar 2023 17:26:19 +0300 (MSK)
-X-Virus-Scanned: amavisd-new at astralinux.ru
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 3HNTZHqifFk7; Wed, 15 Mar 2023 17:26:19 +0300 (MSK)
-Received: from [10.177.20.58] (unknown [10.177.20.58])
-        by mail.astralinux.ru (Postfix) with ESMTPSA id D4B4A186407D;
-        Wed, 15 Mar 2023 17:26:18 +0300 (MSK)
-Message-ID: <a390e831-49af-5c8e-7df3-87612269a83f@astralinux.ru>
-Date:   Wed, 15 Mar 2023 17:26:13 +0300
+        with ESMTP id S231513AbjCOObb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Mar 2023 10:31:31 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18A11F5EB;
+        Wed, 15 Mar 2023 07:31:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678890672; x=1710426672;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=z2C/BkfaVtAyVUV8tLuReKIAo/iPls0ApsKzq+thVY0=;
+  b=VgdG8qYWeAcG7mZFIZWx/IXWVHZ3c6OzVOxuEOnAgzWjWeFqw63SW4M0
+   iqSVn6HaDRbcgx5n+eUUNY/awnk7BGIcRUcqZQPs2GZcB4Uo4f3CPOO9A
+   /ZMsdCNVR3YFrOyJbn9uMUbaMLeBfV6LBLsHIuqgvNCfr3Oo38DvuLR0J
+   jzKo8FBsJ6pArENgYrbg3SZehwfLZnjjiC7vnTw3MGqgNyT00KWZvsD1A
+   cVlpo1AQAgx1JXeZAO3w5WRs0PwOrnnGtZ+3/UvR+ZTUMn3Y9GAP1XseX
+   yKsPg/9MmSs+g+B5N7UeRCvgJGwvGew6DcdKDuUTK3gbkDzC3WTs/9P8p
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="423987752"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="423987752"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 07:31:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="748450293"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="748450293"
+Received: from rperez12-mobl.amr.corp.intel.com (HELO [10.255.35.81]) ([10.255.35.81])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 07:30:59 -0700
+Message-ID: <6b811766-cd2a-54c0-d090-640812686a45@linux.intel.com>
+Date:   Wed, 15 Mar 2023 09:30:58 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH] goku_udc: Add check for NULL in goku_irq
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     Jakob Koschel <jakobkoschel@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20230203101828.14799-1-abelova@astralinux.ru>
- <Y9zly1vrj9z4c1qT@kroah.com>
- <39993564-7310-a2e0-8139-14ccb9a03ba9@astralinux.ru>
- <Y+zivah57216KcuB@kroah.com>
- <a5f90434-f3e5-f25e-76e2-b03e79cc16fe@alu.unizg.hr>
- <ddfab307-d471-ee08-6804-5f903adb1770@astralinux.ru>
- <2681bc20-28a4-341f-5d01-0db4b356ac8e@alu.unizg.hr>
+ Firefox/102.0 Thunderbird/102.8.0
+Subject: Re: [PATCH v3 00/28] Introduce QC USB SND audio offloading support
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
+        andersson@kernel.org, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org, tiwai@suse.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <4f8a66c0-398f-5655-3aa7-a59bc9ba56cc@linux.intel.com>
+ <8b2f3ce7-3e0c-bdf0-8d9f-9aeabba09a15@quicinc.com>
+ <a211f26d-a045-0729-871f-248d5fce3f3f@linux.intel.com>
+ <684daf86-6c3f-7310-eebf-4ebfc3c480ca@quicinc.com>
+ <8a37ccd3-f19e-b30d-d736-04e81b49f3a0@linux.intel.com>
+ <0810f951-f4a6-a51d-97e3-43691b05f702@quicinc.com>
+ <b671e263-5cb8-18e5-dc28-648ab1133c6c@linux.intel.com>
+ <14d726a7-6ffc-705c-b012-0c08d7dd7b9b@quicinc.com>
 Content-Language: en-US
-From:   Anastasia Belova <abelova@astralinux.ru>
-In-Reply-To: <2681bc20-28a4-341f-5d01-0db4b356ac8e@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <14d726a7-6ffc-705c-b012-0c08d7dd7b9b@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,321 +79,77 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Wesley,
 
-13.03.2023 16:49, Mirsad Goran Todorovac пишет:
-> On 13.3.2023. 13:19, Anastasia Belova wrote:
+> Sorry made a mistake on the diagram.  There is no connection from
+> SOC-USB to the APR/GLINK.  The Q6USB driver will be the one that is
+> going to configure some of the Q6AFE ports along withe the Q6AFE DAI
+> driver.
+> 
+> |            ASoC
+> ----------------------------------
+> |  _________________________
+> | |sm8250 platform card     |
+> | |_________________________|
+> |         |           |
+> |      ___V____   ____V____
+> |     |Q6USB   | |Q6AFE    |  #5
+> |     |"codec" | |"cpu"    |
+> |     |________| |_________|
+> |         ^  ^        ^
+> |      #6 |  |________|
+> |      ___V____     |
+> |     |SOC-USB |    |
+> #7    |        |    |
+> ----->|________|    |
+> ---                 |
+> | |                 |
+> | |    _____________V________
+> | |   |APR/GLINK             |
+> | |   |______________________|
+> | |              ^
+> | | #8           |
+> | |   ___________V___________
+> | |->|audio DSP              |
+> |    |_______________________|
+> |
+> |
+> 
+>>>
+
+Makes sense now, thank you for the clarification.
+
+I'll have to dig more in this 'soc-usb' block, it's clearly a key
+component that will have to maintain a consistent state across two
+different parts of the stack and deal with probe/remove/shutdown.
+
+>> My initial thought was to add a 'DSP offload' PCM to the USB card, you
+>> added a "USB offload" PCM to the DSP card. Nice logical swap!
 >>
->> 11.03.2023 06:29, Mirsad Goran Todorovac пишет:
->>> On 15. 02. 2023. 14:48, Greg Kroah-Hartman wrote:
->>>> On Wed, Feb 15, 2023 at 04:39:56PM +0300, Анастасия Белова wrote:
->>>>> 03.02.2023 13:45, Greg Kroah-Hartman пишет:
->>>>>> On Fri, Feb 03, 2023 at 01:18:28PM +0300, Anastasia Belova wrote:
->>>>>>> Before dereferencing dev->driver check it for NULL.
->>>>>>>
->>>>>>> If an interrupt handler is called after assigning
->>>>>>> NULL to dev->driver, but before resetting dev->int_enable,
->>>>>>> NULL-pointer will be dereferenced.
->>>>>>>
->>>>>>> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->>>>>>>
->>>>>>> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
->>>>>>> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
->>>>>>> ---
->>>>>>>    drivers/usb/gadget/udc/goku_udc.c | 5 +++--
->>>>>>>    1 file changed, 3 insertions(+), 2 deletions(-)
->>>>>>>
->>>>>>> diff --git a/drivers/usb/gadget/udc/goku_udc.c 
->>>>>>> b/drivers/usb/gadget/udc/goku_udc.c
->>>>>>> index bdc56b24b5c9..896bba8b47f1 100644
->>>>>>> --- a/drivers/usb/gadget/udc/goku_udc.c
->>>>>>> +++ b/drivers/usb/gadget/udc/goku_udc.c
->>>>>>> @@ -1616,8 +1616,9 @@ static irqreturn_t goku_irq(int irq, void 
->>>>>>> *_dev)
->>>>>>>    pm_next:
->>>>>>>            if (stat & INT_USBRESET) {        /* hub reset done */
->>>>>>>                ACK(INT_USBRESET);
->>>>>>> -            INFO(dev, "USB reset done, gadget %s\n",
->>>>>>> -                dev->driver->driver.name);
->>>>>>> +            if (dev->driver)
->>>>>>> +                INFO(dev, "USB reset done, gadget %s\n",
->>>>>>> +                    dev->driver->driver.name);
->>>>>> How can this ever happen?  Can you trigger this somehow?  If not, I
->>>>>> don't think this is going to be possible (also what's up with printk
->>>>>> from an irq handler???)
->>>>> Unfortunately, I can't find the way to trigger this at the moment.
->>>> Then the change should not be made.
->>>>
->>>>> What about printk, should trace_printk be used instead?
->>>> Why?
->>>>
->>>>>> Odds are, no one actually has this hardware anymore, right?
->>>>> Despite of this, such vulnerability should be fixed because
->>>>> there is a possibility to exploit it.
->>>> How can this be "exploited" if it can not ever be triggered?
->>>>
->>>> Also, this would cause a NULL dereference in an irq handler, how 
->>>> can you
->>>> "exploit" that?
->>>>
->>>> Please only submit patches that actually do something.  It is getting
->>>> very hard to want to even review patches from this "project" based on
->>>> the recent submissions.
->>>>
->>>> thanks,
->>>>
->>>> greg k-h
->>> Hi Greg, Anastasia,
+>> Your proposal might be easier in practice since there's typically a
+>> vendor-specific configuration file (UCM or custom) file for the DSP,
+>> where USB information can be added.
 >>
->> Hi Misrad,
+>> It's more problematic to change a generic USB card as we know it today
+>> and bolt vendor-specific DSP information on top.
 >>
->>> Without any pros or cons, or taking sides, there appears to be a 
->>> similar check
->>> when using dev->driver->driver.name in
->>>
->>> https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/udc/goku_udc.c#L1158 
->>>
->>>
->>>     seq_printf(m,
->>>            "%s - %s\n"
->>>            "%s version: %s %s\n"
->>>            "Gadget driver: %s\n"
->>>            "Host %s, %s\n"
->>>            "\n",
->>>            pci_name(dev->pdev), driver_desc,
->>>            driver_name, DRIVER_VERSION, dmastr(),
->>>            dev->driver ? dev->driver->driver.name : "(none)",
->>>            is_usb_connected
->>>                ? ((tmp & PW_PULLUP) ? "full speed" : "powered")
->>>                : "disconnected",
->>>            udc_ep_state(dev->ep0state));
->>>
->>> On the other hand, where could dev->drivre be reset without 
->>> resetting dev->int_enable?
->>>
->>> dev->driver = NULL appears here:
->>>
->>> static int goku_udc_stop(struct usb_gadget *g)
->>> {
->>>     struct goku_udc    *dev = to_goku_udc(g);
->>>     unsigned long    flags;
->>>
->>>     spin_lock_irqsave(&dev->lock, flags);
->>>     dev->driver = NULL;
->>>     stop_activity(dev);
->>>     spin_unlock_irqrestore(&dev->lock, flags);
->>>
->>>     return 0;
->>> }
->>>
->>> it is followed by stop_activity() calling udc_reset():
->>>
->>> static void udc_reset(struct goku_udc *dev)
->>> {
->>>     struct goku_udc_regs __iomem    *regs = dev->regs;
->>>
->>>     writel(0, &regs->power_detect);
->>>     writel(0, &regs->int_enable);
->>>     readl(&regs->int_enable);
->>>     dev->int_enable = 0;
->>> .
->>> .
->>> .
->>>
->>> ... but this happens in between spin_lock_irqsave() and 
->>> spin_unlock_irqsave(),
->>> which appears like a correct way to do it.
+>> The only open I have with your option is that there are still two
+>> control paths to e.g. set the volume. It would be so much easier for
+>> userspace if there was a single volume control no matter what path is
+>> used for data, or make sure the kcontrols are 'mirrored' somehow. If we
+>> found a way to address this issue that would be ideal.
 >>
->> Are you sure that spin_lock_irqsave makes the code safe? This 
->> function disables interrupts on
->> local processor only (Linux Device Drivers, Third Edition). So it 
->> doesn't seem to be
->> absolutely safe on multiprocessor systems.
->
-> Hi, Anastasia,
->
-> Looking from the Second Edition or the book and the source, I see that
-> spin_lock_irqsave() expands to:
->
-> static inline unsigned long __raw_spin_lock_irqsave(raw_spinlock_t *lock)
-> {
->     unsigned long flags;
->
->     local_irq_save(flags);
->     preempt_disable();
->     spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
->     LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
->     return flags;
-> }
->
-> if the multiple threads on multiple cores/SMTs contend for the same lock,
-> that with preempt_disable() should assure mutual exclusion.
->
-> Can you please quote from the Third Edition of Linux Device Drivers where
-> it says otherwise?
->
+> 
+> Got it.  Let me look to see if that is something we can address/add.  I
+> think the current implementation is that USB SND will expose some mixer
+> controls based on the UAC descriptor parsing.  Then when they want to
+> change the volume (for example) it will result in a USB SETUP transaction.
+> 
+> So USB SND will eventually be the entity controlling these changes.
 
-Hi, Mirsad,
+That's probably ok then, am I getting this right that the the DSP card
+would not expose any USB-related kcontrols then, i.e. the ONLY path to
+change volumes, etc.,  would through the regular USB card kcontrols?
 
-
-If I get it right, preempt_disable blocks interrupts on all processors,
-
-correct? This statement seems to make the code safe, but there is a quote
-
-from Linux Device Drivers, Third Edition, CHAPTER 5, Concurrency and Race
-
-Conditions: "...spin_lock_irqsave disables interrupts (on the local 
-processor
-
-only) before taking the spinlock...". These thoughts contradict, don't they?
-
-
-> BTW, please also consider reading this article:
->
-> https://docs.kernel.org/driver-api/io_ordering.html
->
-> I saw they were using this readl() after writel() for synchronisation, so
-> please see if this clears your doubts. It says "readl() should flush 
-> any pending
-> writes".
->
-> But I certainly see no harm in your proposal of guarding against NULL 
-> pointer
-> dereference of dev->driver, both in
->
-> > -            INFO(dev, "USB reset done, gadget %s\n",
-> > -                dev->driver->driver.name);
-> > +            if (dev->driver)
-> > +                INFO(dev, "USB reset done, gadget %s\n",
-> > +                    dev->driver->driver.name);
->
-> or use the construct as the one in another line of the driver:
->
-> > -            INFO(dev, "USB reset done, gadget %s\n",
-> > -                dev->driver->driver.name);
-> > +            INFO(dev, "USB reset done, gadget %s\n",
-> > +                dev->driver ? dev->driver->driver.name : "(none)");
->
-> (This would IMHO enable detecting and logging when dev->driver 
-> unexpectedly becomes NULL
-> in a race condition, rather that just silently skipping and ignoring 
-> the situation.)
->
-Agree, the second construct looks better.
-> but additionally also in:
->
-> > -     spin_unlock (&dev->lock);
-> > -     tmp = dev->driver->setup(&dev->gadget, &ctrl);
-> > -     spin_lock (&dev->lock);
-> > +     if (dev->driver && dev->driver->setup) {
-> > +         spin_unlock (&dev->lock);
-> > +         tmp = dev->driver->setup(&dev->gadget, &ctrl);
-> > +         spin_lock (&dev->lock);
-> > +     }
->
-> for completeness and robustness sake.
->
-> The author agrees that the race conditions in the device drivers are 
-> very hard
-> to reproduce:
->
-> https://www.oreilly.com/library/view/linux-device-drivers/0596000081/ch09s08.html 
->
->
-> But I am really not able to analyse all possible scenarios ATM.
-> Maybe some ideas come after getting some oxygen.
->
-> (This is not an authoritative answer on the matter, just an attempt on 
-> analysis.)
->
-> Regards,
-> Mirsad
->
-Regards,
-
-Anastasia
-
->>> But second appearance is here:
->>>
->>> https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/udc/goku_udc.c#L1559 
->>>
->>>
->>>     spin_lock(&dev->lock);
->>>
->>> rescan:
->>>     stat = readl(&regs->int_status) & dev->int_enable;
->>>          if (!stat)
->>>         goto done;
->>>     dev->irqs++;
->>>
->>>     /* device-wide irqs */
->>>     if (unlikely(stat & INT_DEVWIDE)) {
->>>         if (stat & INT_SYSERROR) {
->>>             ERROR(dev, "system error\n");
->>>             stop_activity(dev);
->>>             stat = 0;
->>>             handled = 1;
->>>             // FIXME have a neater way to prevent re-enumeration
->>>             dev->driver = NULL;
->>>             goto done;
->>>         }
->>>
->>> goto done leads to:
->>>
->>> done:
->>>     (void)readl(&regs->int_enable);
->>>     spin_unlock(&dev->lock);
->>>
->>> This unlocks dev->lock before setting dev->int_enable to zero, or 
->>> calling writel(0, &regs->int_enable);
->>> which could be problematic. Unless it called stop_activity(dev) four 
->>> lines earlier. Which does
->>> bot of:
->>>
->>>     writel(0, &regs->int_enable);
->>>     dev->int_enable = 0;
->>>
->>> So, FWIW, we seem to be safe. Yet, there might be no harm in 
->>> printing "(null)" rather
->>> than having an NULL pointer dereference, it seems.
->>>
->>> Yet, there is another unprotected dereference of dev->driver:
->>>
->>> https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/udc/goku_udc.c#L1513 
->>>
->>>
->>>     spin_unlock (&dev->lock);
->>>     tmp = dev->driver->setup(&dev->gadget, &ctrl);
->>>     spin_lock (&dev->lock);
->>>
->>> All others (in goku_udc.c, at least) have triple safeguards like:
->>>
->>>                 if (dev->gadget.speed != USB_SPEED_UNKNOWN
->>>                         && dev->driver
->>>                         && dev->driver->suspend) {
->>>                     spin_unlock(&dev->lock);
->>> dev->driver->suspend(&dev->gadget);
->>>                     spin_lock(&dev->lock);
->>>                 }
->>>
->>> So the above should maybe put to:
->>>
->>>     if (dev->driver && dev->driver->setup) {
->>>         spin_unlock (&dev->lock);
->>>         tmp = dev->driver->setup(&dev->gadget, &ctrl);
->>>         spin_lock (&dev->lock);
->>>     }
->>>
->>> instead to be completely certain.
->>>
->>> Forgive me for this uninspired rant. Thank you if you've read this far.
->>> I hope this helps.
->>>
->>> My $0.02.
->>>
->>> Regards,
->>> Mirsad
->>>
->> Thanks,
->>
->> Anastasia
->
+That would limit the changes in the platform sound card to the addition
+of a PCM USB device.
