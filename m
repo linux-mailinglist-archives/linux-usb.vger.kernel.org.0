@@ -2,278 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7EF6BBA12
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Mar 2023 17:43:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2518F6BBAEE
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Mar 2023 18:32:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232653AbjCOQnd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Mar 2023 12:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
+        id S231983AbjCORcP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Mar 2023 13:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232364AbjCOQnQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Mar 2023 12:43:16 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8E29F23F;
-        Wed, 15 Mar 2023 09:42:07 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32FER3DD013012;
-        Wed, 15 Mar 2023 17:39:51 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=MQWjDBXejnfbBkpJj9p19emeBobj1+hKsaERuT0aCjo=;
- b=g5mzqg/XRUPbwqKMwB8TSETGKtuKZQBAMcLw+nlgp4PMHoC7ZEuJv2vxCFu7FJAMMqFz
- aojvoRBrwFmGKTjMYMa9sLwVsw49wzxTKgfbGB8EB2XJ7/bAg6vPAtGcbgpGEbPUnz7u
- 5wt8POxVG1+h18kmN1zxHyRXhKicu8e+qrrALLKXWAUH/5WNClejhjYLNowqhxGah9bM
- y+jgAV74hI57J+A/fXbFNT+DKKfPISvQyyyyDEVEbXI+VoreOzycwWbS+9pPJMkOR1i0
- k9pOIWxqZI6cU1tQ4+R9JVEmKmZEmR0sGs3Qq/kyx5lqzRFH9+Y2LolMNpIQ90oWdPuv WA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pb2bawy7b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 17:39:51 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4EE5310002A;
-        Wed, 15 Mar 2023 17:39:49 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3171421FE9D;
-        Wed, 15 Mar 2023 17:39:49 +0100 (CET)
-Received: from [10.48.1.102] (10.48.1.102) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Wed, 15 Mar
- 2023 17:39:48 +0100
-Message-ID: <48b8c84c-b2f6-5876-4855-2f9d70ac5e3e@foss.st.com>
-Date:   Wed, 15 Mar 2023 17:39:47 +0100
+        with ESMTP id S231743AbjCORcN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Mar 2023 13:32:13 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2100.outbound.protection.outlook.com [40.107.114.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7606762303;
+        Wed, 15 Mar 2023 10:32:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e6Jzjb+AXNg3hv3tdZ/8wlpxohMVzDy3FMS70F0XyuMW2puNf6JghEDdHDZxTsvCnS+QO2gT6fSVJqCON/vsZ/+wmVb9WAIAtk8FmveJumEajDHJXE2paUHsS7DzEN1embU6EVf9Igf8+m9axBP9KUoqpIP9fHEfOeaUg2a3aR0hmbFDr+d0xvLqQXwf3/vQQikuXQMCHWNrMDzRtvxUJLVlq1YlOV0G0raTwcBoo38PWdEM8EK0mD88Pp8F+qEoUz3VKyhxw2559+kBJAw8mC32d+O0RipM43wE+Bpp5ZOHlvfvZ8QMQvyEHF0wvuTGKMunJ2aLNNrNN9d6hmM7TA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=68JLfB+grcV1BQAcMzWudCnD8ISmO7LXptrqa8aM8i8=;
+ b=QUC3VzMpVvElZJT22xucNfNYOfSNyU1mrIuO4KLcJsHvrm1VjrWUiNDmAxp1AuVKQFIRDzXAQBC9bDuCYfeDDngsdQx7SmKL+35Bowa0brz2x3Svy7DBnl95h8SZahZv/l5ZGNgRwurpPwMYpH4M8j7vdq5It2+vRrSwNv2gXPcoj7K0QLU2WRYlm4CIqDzlLOyJeSOb1trTe2lrD/wCeEjPn3fwUUf5dHh1eaLUksp3t4cVJHHBWv42e+AP7/Bgu0IsbXywlYOdvEFbZwgxe0od33lGbegdYgkWyvpdXOSPgAB0k6tHYcOHnJenMan7qWGSMxZRWasWKqnCGBOoEw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=zenithal.me; dmarc=pass action=none header.from=zenithal.me;
+ dkim=pass header.d=zenithal.me; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zenithal.me;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=68JLfB+grcV1BQAcMzWudCnD8ISmO7LXptrqa8aM8i8=;
+ b=FNfs9uQEz9xe154SOdne2A+f09y0WEwXdfdPtWv6bcPDrUxyBC+w+vyrkJdNZnqYB4YF8h2dYDLZfl+hur7n9FnlVk/MqaAjv9fREi8exffFtuPhw3U9VOTKdHPsr+RLKw01ubnrhFoV1Iuj9iWR4FHyrksu/f3XHJdy6oM0BfA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=zenithal.me;
+Received: from TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:de::5) by
+ OS3P286MB2312.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:19b::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.30; Wed, 15 Mar 2023 17:32:05 +0000
+Received: from TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::e93a:aa12:729d:f2da]) by TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::e93a:aa12:729d:f2da%9]) with mapi id 15.20.6178.026; Wed, 15 Mar 2023
+ 17:32:05 +0000
+Date:   Thu, 16 Mar 2023 01:31:53 +0800
+From:   "Hongren (Zenithal) Zheng" <i@zenithal.me>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: make me a reviewer of USB/IP
+Message-ID: <ZBIBCRiFGSqQcOon@Sun>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Operating-System: Linux Sun 5.15.67
+X-Mailer: Mutt 2.2.7 (2022-08-07)
+X-ClientProxiedBy: BYAPR07CA0013.namprd07.prod.outlook.com
+ (2603:10b6:a02:bc::26) To TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:de::5)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 0/4] Remove use of fw_devlink_purge_absent_suppliers()
-Content-Language: en-US
-To:     Saravana Kannan <saravanak@google.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Yongqin Liu <yongqin.liu@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        <kernel-team@android.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20230301214952.2190757-1-saravanak@google.com>
- <aca28784-c526-566b-dd7c-9cfda17e697a@foss.st.com>
- <CAGETcx8K47t6X4biCYq+m8NcQFrUMyXvHknCRYUkuUbkw1_i6g@mail.gmail.com>
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-In-Reply-To: <CAGETcx8K47t6X4biCYq+m8NcQFrUMyXvHknCRYUkuUbkw1_i6g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.48.1.102]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-15_08,2023-03-15_01,2023-02-09_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYYP286MB1406:EE_|OS3P286MB2312:EE_
+X-MS-Office365-Filtering-Correlation-Id: 85ceed98-7bd7-45d9-b844-08db257b3211
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: w1cb7kVHBNa/KEE0lmLG5qIPHgYrXBstz09HDZaVapxUQRF3AMOWhXAVWzHZUXbf7VoXS8Z3VGKr/AgtJsRR9rox+QhSmTCJN/bJzw7mdaYO1JvQovgirOwHtufFCEyIVnrYpiOmafUysc2yJdb/zftbBKj8Q4+WZc1GPFLg+spd+ANxAoqB85K9F+eVZhSsyFENWbI/tOynLP94nDLYy5uazvwthpjlqmRLPuo+1W4psMZ4dMQAnxK3KXjMlB2zByIj9WgMr9nZTuLSkGsaJSVoh0KIEeY45KBK5GWiKbVRzDY6hp9tRhZFbhy7kv26ocLArsy+oWDxMOFKsUx4UaKPCfwPVysttB044nSRAzFVdhzdBbcpKhvUka1pZ3RtiDppgUBv723Or9j2uzIPT4k2NYq2G4wxUjD83rhVP/Z5BJJYelUIABWKAjjf9Rk5B/NIedhfwv/IAYAoP006ycGyNcH75sdof10W4KzG/fot5VL2VfAtKxMTVSYyu4XfaXDx1rVLDhs4knKnOxyf7euwKWPDpe6H2mogz5+labhYvQJn2gFcugJbOb/vvml+xNA8WJW2r57yeOGglyOvnjeRPCK+TEZf4uUifgC3KxbOcX6ifnRoKoqyNXbFFtDqobCQOhWz9DINPeKyIeM2LNUCQeREYeX2NRE5etviBtvBr/9bpGjzuX5zsRj4ErZF
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(7916004)(366004)(346002)(396003)(376002)(39830400003)(136003)(451199018)(5660300002)(2906002)(186003)(478600001)(33716001)(110136005)(9686003)(6666004)(6486002)(6512007)(6506007)(66476007)(66556008)(66946007)(41300700001)(4326008)(8936002)(86362001)(8676002)(41320700001)(966005)(786003)(38100700002)(316002)(49092004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3guUoE0XceKCXKXmi/xgqzqRoTRLPLiplCPOZraEKelml6Fe0r5t38ogHeHh?=
+ =?us-ascii?Q?E/gxfOl8I8WSGtrZBdpjKTlS0LxFyFvbaqrUK7GP+MTvbAKoZ1j5doBEwtn1?=
+ =?us-ascii?Q?cPw+HMDfOKEzkxXE96LoQ+oDw3U0Dspzb9cLUxw2CYn5U53ok6HEIVAcBQwv?=
+ =?us-ascii?Q?SjYC9+fQlTlchnXbD/Jd6VNvzeSUmFenax+OlXm2wGFD1dN2KM8MqOEQRGU5?=
+ =?us-ascii?Q?GYcYfSxAP/lve9DCNBk/n6AazkMU//PRNc5xJA/r3ANPdaErhMxVWJvGeJCq?=
+ =?us-ascii?Q?6Oj3BcUCqZUV9g18Yx1vopCoeGPaS70G9W6RLR2bNe6I1zFnsAibOWXPG+vF?=
+ =?us-ascii?Q?6XVXA4Ti0WP0tGagLLPfD0vp+YIQ6W6K4TcrXTEH1JDjjY2G+pGG9CijNFq2?=
+ =?us-ascii?Q?KlgCJZoqDKWKQzqTytgsz1y1MP6/D8/fp7heTYxef1Ei6vCNllBoNN4tKvRS?=
+ =?us-ascii?Q?N759cfMTHQ2oJIiPeX9IaWHC9lnjdnK6SlJ/Dhkmj7gqSAV4Y5UBGEEL1Ynb?=
+ =?us-ascii?Q?RAFWZr89xOJivQ8qCUDT6NVqz0Nk2mB6r+VdoZGDRX8JXiSvb9hBBFDwpaQd?=
+ =?us-ascii?Q?DPnN+VGoQNxQRWqNBTXKqXDx4g04CdM8niiDGXIHkREqZN5lRWuPJse1exrH?=
+ =?us-ascii?Q?fAK8YY1BZXkpXuc+n26JP3/dVRohntPEKJ9UytY591VfI7/1o18Wmf/TaY2V?=
+ =?us-ascii?Q?JWgyodGIQcETxxLROVGlx6MFutHMNFZW6G25AjXxp5IRFf99OCorz7IT3lMp?=
+ =?us-ascii?Q?IVySt+TQbndOL6dkzfNO1KA1VInLh4o1lsMQak1lknkN8MYANYD4ok5qS41P?=
+ =?us-ascii?Q?tKM7Jxnbh9q+vyJJNu3hzrYPG769xDtgSpF2NJrtEisTQEJUl6yiEt8uLiTJ?=
+ =?us-ascii?Q?mD6HVYxPCJ0YIkvoXlETbnYc0beXZUfTtpIHXryLmKTIxG5M1GPRWOAPHwtk?=
+ =?us-ascii?Q?oqjVSNVgnyHL33BXl62D6kmnBLe5uA+zIDK1P6/u3ZMWWWsyWqceV5E3AAge?=
+ =?us-ascii?Q?++EaVwd1CjaZw7YZc2nKbQAfjKAlvnCLEN/o6ysdPnH4WYTRUwWCpd03R7+D?=
+ =?us-ascii?Q?s/WA+uMlDUbLzKfA7klxEKfKN8ob4fiXVXF7pYE37RcIxwxtxTwlJBkWMWn0?=
+ =?us-ascii?Q?bUghuUYbo//h+uj8QfEKwHOkDfmCPDnlVR9pqs/nix5lc3f0CidgYF/fNRyf?=
+ =?us-ascii?Q?8TBpY/HSWRj/IX3T4K+drzJ3VoIsfwossy6PNOAbQbWiXmQ3llDH73nplNPc?=
+ =?us-ascii?Q?vaiiLuAfdSHpYCLA7u/20En2wafRhHh1w1QOQRZzRN9LWx4PwSogb5fHMfdf?=
+ =?us-ascii?Q?ddu+9DQ1N4B9pEPQ131aIUzv8VWn3lu/Pwnr4a0LYrhPEne+Ay1F9FCayyNe?=
+ =?us-ascii?Q?P0b8eEmFE6TK5bRJmkcTWomFTiKL7QPOsvC445IPhFnMYC0xmhALeiXBnz9i?=
+ =?us-ascii?Q?qKIYccllJ5F2Z8RnKmgDID8+pjOcqESCT9IIJYxiiZMit/+sXhec/a9F2SB8?=
+ =?us-ascii?Q?Q9uZxThJZypQccKXj//E2etqsyl0e8r0Ms7YsQmRrxs//adCYC8xcjenM8uR?=
+ =?us-ascii?Q?KWJGqND5pT2/bRT4fTLFIF+ZWbM86zwa+KLU2pSI?=
+X-OriginatorOrg: zenithal.me
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85ceed98-7bd7-45d9-b844-08db257b3211
+X-MS-Exchange-CrossTenant-AuthSource: TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2023 17:32:05.8346
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 436d481c-43b1-4418-8d7f-84c1e4887cf0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dsCech+gTxEFRMrcfocPPYZ8Pdl2j6qVSWd2eOeAARVN9CxZgUciyTWLr8y6UGye
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3P286MB2312
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/10/23 18:40, Saravana Kannan wrote:
-> On Fri, Mar 10, 2023 at 9:21 AM Fabrice Gasnier
-> <fabrice.gasnier@foss.st.com> wrote:
->>
->> On 3/1/23 22:49, Saravana Kannan wrote:
->>> Yongqin, Martin, Amelie,
->>>
->>> We recent refactor of fw_devlink that ends with commit fb42378dcc7f
->>> ("mtd: mtdpart: Don't create platform device that'll never probe"),
->>> fw_devlink is smarter and doesn't depend on compatible property. So, I
->>> don't think these calls are needed anymore. But I don't have these
->>> devices to test on and be sure and the hardware I use to test changes
->>> doesn't have this issue either.
->>>
->>> Can you please test these changes on the hardware where you hit the
->>> issue to make sure things work as expected?
->>
->>
->> Hi Saravana,
->>
->> Sorry for the late reply,
-> 
-> Thanks for testing!
-> 
->> On behalf of Amelie, I did some testing on STM32MP15 DK2 board, on top
->> of commit fb42378dcc7f, and also with your series applied.
->> For reference, it's based on: arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
->>
->> I noticed some error messages on this board, since the 12 patch series,
->> around the I2C PMIC device links:
->>
->> [    3.585514] i2c 1-0033: Failed to create device link with 1-0033
->> [    3.590115] i2c 1-0033: Failed to create device link with 1-0033
->> [    3.596278] i2c 1-0033: Failed to create device link with 1-0033
->> [    3.602188] i2c 1-0033: Failed to create device link with 1-0033
->> [    3.608165] i2c 1-0033: Failed to create device link with 1-0033
->> [    3.614278] i2c 1-0033: Failed to create device link with 1-0033
->> [    3.620256] i2c 1-0033: Failed to create device link with 1-0033
->> [    3.626253] i2c 1-0033: Failed to create device link with 1-0033
->> [    3.632252] i2c 1-0033: Failed to create device link with 1-0033
->> [    3.639001] stpmic1 1-0033: PMIC Chip Version: 0x10
->> [    3.645398] platform 5c002000.i2c:stpmic@33:regulators: Fixed
->> dependency cycle(s) with /soc/i2c@5c00200
->> 0/stpmic@33/regulators/boost
->> [    3.655937] platform 5c002000.i2c:stpmic@33:regulators: Fixed
->> dependency cycle(s) with /soc/i2c@5c00200
->> 0/stpmic@33/regulators/buck2
->> [    3.667824] platform 5c002000.i2c:stpmic@33:regulators: Fixed
->> dependency cycle(s) with /soc/i2c@5c00200
->> 0/stpmic@33/regulators/buck4
->> [    3.719751] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
->> Failed to create device link with 1-0033
->> [    3.728099] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
->> Failed to create device link with 1-0033
->> [    3.737576] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
->> Failed to create device link with 1-0033
->> [    3.747216] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
->> Failed to create device link with 1-0033
->> [    3.756750] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
->> Failed to create device link with 1-0033
->> [    3.766382] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
->> Failed to create device link with 1-0033
->> [    3.775914] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
->> Failed to create device link with 1-0033
->> [    3.785545] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
->> Failed to create device link with 1-0033
-> 
-> You can ignore all the "Failed to create device link" errors. They are
-> just error logs for stuff that was being ignored silently before. So
-> that's no functional regression AFAIK. I'll fix them separately if
-> necessary. And I'm sure you'll see these messages even without my
-> fw_devlink refactor series.
+I think I am familiar enough with USB/IP and is adequate as a reviewer.
 
-Hi Saravana,
+Every time there is some patch/bug, I wish I can get pinged
+and I will feedback on that.
 
-Thanks for the information.
+I had some contributions to USBIP and some support for it.
 
-I tested without the 12 patch series, just before commit 3a2dbc510c43
-"driver core: fw_devlink: Don't purge child fwnode's consumer links".
+Contribution:
+Commit 17af79321 ("docs: usbip: Fix major fields and
+    descriptions in protocol")
+Commit b737eecd4 ("usbip: tools: add options and examples
+    in man page related to device mode")
+Commit a58977b2f ("usbip: tools: add usage of device mode in
+    usbip_list.c")
 
-I don't see the messages here. But I can see these on top of fb42378dcc7f.
+Support:
+Commit 8f36b3b4e1 ("usbip: add USBIP_URB_* URB transfer flags")
+Bug report: https://lore.kernel.org/lkml/ZBHxfUX60EyCMw5l@Sun/
 
+I also have implemented a userspace usbip server in
+https://github.com/canokeys/canokey-usbip
+and maintain a list of usbip implementations
+https://github.com/usbip/implementations
 
-> 
->> Strangely some of the regulators seems to have "Fixed dependency", but
->> not all.
-> 
-> Yeah, that's fine too -- that's just fw_devlink being verbose about
-> not enforcing probe ordering between devices in that cycle because it
-> can't tell which one of the dependencies is not a probe requirement.
-> Maybe I'll make it a dbg log if it's confusing people.
-> 
->> Regarding the typec stusb160x I noticed the message below. It seems
->> correct, right ?
->>
->> [   15.962771] typec port0: Fixed dependency cycle(s) with
->> /soc/usb-otg@49000000/port/endpoint
-> 
-> I don't know if there is a cyclic dependency in your DT or not. But
-> this message itself is not an issue.
+Signed-off-by: Hongren (Zenithal) Zheng <i@zenithal.me>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Ack,
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a3b14ec33830..45f4fd92126b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -21645,6 +21645,7 @@ USB OVER IP DRIVER
+ M:	Valentina Manea <valentina.manea.m@gmail.com>
+ M:	Shuah Khan <shuah@kernel.org>
+ M:	Shuah Khan <skhan@linuxfoundation.org>
++R:	Hongren Zheng <i@zenithal.me>
+ L:	linux-usb@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/usb/usbip_protocol.rst
+-- 
+2.37.2
 
-> 
->> But sometimes (lets say 1/5 times) during boot, when I have a cable
->> already plugged in, it looks like there's some race condition. The dwc2
->> driver reports some error logs in a loop, indefinitely, up to the
->> watchdog resets the platform :-(.
-> 
-> Can you try this series (the one you are testing) without my
-> fw_devlink refactor that ends with commit fb42378dcc7f? Trying to make
-> sure we can reproduce the issue Amelie was fixing before I claim my
-> refactor series fixes it.
-
-Strangely, I tested without the series, and removed earlier patch from
-Amelie. I don't reproduce the issue she used to hit.
-
-> 
->> [   16.288458] dwc2 49000000.usb-otg: Mode Mismatch Interrupt: currently
->> in Host mode
->> [   16.288490] dwc2 49000000.usb-otg: Mode Mismatch Interrupt: currently
->> in Host mode
->> [   16.310429] dwc2 49000000.usb-otg: Mode Mismatch Interrupt: currently
->> in Host mode
->>
->> It probably just points some already existing race condition here. Maybe
->> it isn't even linked to this patch. But I have no evidence at this
->> stage. I hope I can investigate further on this one, hopefully I can
->> free up some time for that.
-> 
-> If you never pick up this series, are you not having any of these 1/5
-> times boot issues? I wouldn't expect my changes to add any races, but
-> I'll wait to see what you find here.
-
-Some good news here is, I've identified a recent change [1], that
-creates the issue pointed above. I just sent a separate patch [2] for this.
-So, it's not related to this series. (I managed to reproduce without
-picking it).
-
-[1]
-https://lore.kernel.org/r/20221206-dwc2-gadget-dual-role-v1-2-36515e1092cd@theobroma-systems.com
-[2]
-https://lore.kernel.org/lkml/20230315144433.3095859-1-fabrice.gasnier@foss.st.com/
-
-So for stusb160x: e.g. PATCH 1, feel free to add on my:
-Tested-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-
-Best Regards,
-Fabrice
-
-> 
-> Thanks,
-> Saravana
-> 
->>
->> Best Regards,
->> Fabrice
->>
->>>
->>> Yongqin, If you didn't have the context, this affected hikey960.
->>>
->>> Greg,
->>>
->>> Let's wait for some tests before we land these.
->>>
->>> Thanks,
->>> Saravana
->>>
->>> Cc: Yongqin Liu <yongqin.liu@linaro.org>
->>> Cc: Sumit Semwal <sumit.semwal@linaro.org>
->>> Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
->>> Cc: Amelie Delaunay <amelie.delaunay@foss.st.com>
->>>
->>> Saravana Kannan (4):
->>>   usb: typec: stusb160x: Remove use of
->>>     fw_devlink_purge_absent_suppliers()
->>>   usb: typec: tipd: Remove use of fw_devlink_purge_absent_suppliers()
->>>   usb: typec: tcpm: Remove use of fw_devlink_purge_absent_suppliers()
->>>   driver core: Delete fw_devlink_purge_absent_suppliers()
->>>
->>>  drivers/base/core.c           | 16 ----------------
->>>  drivers/usb/typec/stusb160x.c |  9 ---------
->>>  drivers/usb/typec/tcpm/tcpm.c |  9 ---------
->>>  drivers/usb/typec/tipd/core.c |  9 ---------
->>>  include/linux/fwnode.h        |  1 -
->>>  5 files changed, 44 deletions(-)
->>>
->>
->> --
->> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->>
