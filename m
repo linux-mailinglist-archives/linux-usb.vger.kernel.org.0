@@ -2,84 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B448B6BAB5F
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Mar 2023 10:00:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EFFE6BABC2
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Mar 2023 10:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231917AbjCOJAd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Mar 2023 05:00:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
+        id S232033AbjCOJKt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Mar 2023 05:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231922AbjCOJA1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Mar 2023 05:00:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0129F2ED4C;
-        Wed, 15 Mar 2023 02:00:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D346B81DA8;
-        Wed, 15 Mar 2023 09:00:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DBF3BC433D2;
-        Wed, 15 Mar 2023 09:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678870818;
-        bh=G0QmhIrqWNMWYnwuDWWxUtqhxaLGtT1V9FNUycJGtYk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JlEggPefmq7amPGtcXIOBHdnf62gtOgXRhY6kU2RKlipDRO/RLi57WV9O4QnL9pfQ
-         nhOEHggknDx86n6IddrLB16p8uGNq3gOQ1+T/FjcpWHcArm1Ik31QAP7uMg0GaaOA1
-         +u3ncufibFHgW0H5WBLwZAE9vKY2354TQmKYI0MygK0az7g7qSCwWDEb/Xy+QuEW63
-         798kpORkRUHhF5wGGzB/GCMtz/S2imqzQFmnTCv0zuy0Xw+jrjEosV+c5cXyFSAWm4
-         anelk/W5xQFjprzzy1Tt9hsbc2xI029AXo6Qg361G7bScu11KrhS7EHWyABEBaY9iI
-         moX1INtx35cuw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C2CBCE66CBC;
-        Wed, 15 Mar 2023 09:00:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232144AbjCOJKD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Mar 2023 05:10:03 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2421720552;
+        Wed, 15 Mar 2023 02:10:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678871400; x=1710407400;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/9hlg9yvvgpQ82GIW45TeHtdlD4HR1qF/6Lf3lWQJgw=;
+  b=UenlTkr4nijzWFtp2dEEFevoy+XXLGM1IHQxaq1KodPfW1v6dYPBtrWc
+   iloj+Wd/9+SZFn7zhr67tDaYqoes2cOrITqpGxwQ9++h+H25m3XLhV4tp
+   CVJjIcM2edmAx5V8uFK5U3Sel7KpzuF6aCJMRJUHrtckRSI16S7ONVsYU
+   uQiTkDUsONynEP874ihTs9K20u0Vv6Z7XePFBm6m1ZtUg1bkrn1qaR1R6
+   ZQFbfW8z4MWcX+89lKD1e6+l7YpJrVbvtPFFm6CQMG2ecKf7ENHhUwQld
+   /8KrmHIwv9xQ64ye8LjIhr3lsv9Nzw9cK8pFYHTSpe8l4m6NSAuNPTbd+
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="335137374"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="335137374"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 02:09:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="822702202"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="822702202"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 15 Mar 2023 02:09:54 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 15 Mar 2023 11:09:53 +0200
+Date:   Wed, 15 Mar 2023 11:09:53 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Ye, Xiang" <xiang.ye@intel.com>, Lee Jones <lee@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        srinivas.pandruvada@intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
+Subject: Re: [PATCH v5 1/5] usb: Add support for Intel LJCA device
+Message-ID: <ZBGLYXxpkwokgV4R@kuha.fi.intel.com>
+References: <20230312190435.3568212-1-xiang.ye@intel.com>
+ <20230312190435.3568212-2-xiang.ye@intel.com>
+ <20230313170341.GV9667@google.com>
+ <ZBAqTqZEDz/vAwVC@ye-NUC7i7DNHE>
+ <ZBAyKQwnQ8fxHRuU@kuha.fi.intel.com>
+ <ZBCU5h/A2woJLtvT@ye-NUC7i7DNHE>
+ <ZBCYVNmoo2EdDY90@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: usb: smsc75xx: Limit packet length to skb->len
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167887081879.17591.15568032796714316923.git-patchwork-notify@kernel.org>
-Date:   Wed, 15 Mar 2023 09:00:18 +0000
-References: <20230313220045.52394-1-szymon.heidrich@gmail.com>
-In-Reply-To: <20230313220045.52394-1-szymon.heidrich@gmail.com>
-To:     Szymon Heidrich <szymon.heidrich@gmail.com>
-Cc:     steve.glendinning@shawell.net, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBCYVNmoo2EdDY90@smile.fi.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Mon, 13 Mar 2023 23:00:45 +0100 you wrote:
-> Packet length retrieved from skb data may be larger than
-> the actual socket buffer length (up to 9026 bytes). In such
-> case the cloned skb passed up the network stack will leak
-> kernel memory contents.
+On Tue, Mar 14, 2023 at 05:52:52PM +0200, Andy Shevchenko wrote:
+> On Tue, Mar 14, 2023 at 11:38:14PM +0800, Ye, Xiang wrote:
+> > On Tue, Mar 14, 2023 at 10:36:57AM +0200, Heikki Krogerus wrote:
+> > > On Tue, Mar 14, 2023 at 04:03:26PM +0800, Ye, Xiang wrote:
 > 
-> Fixes: d0cad871703b ("smsc75xx: SMSC LAN75xx USB gigabit ethernet adapter driver")
-> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+> ...
 > 
-> [...]
+> > > You don't really seem to get any benefit from MFD. Perhaps it would be
+> > > more appropriate and clear if you just registered auxiliary devices in
+> > > this driver. Check drivers/base/auxiliary.c.
+> > Yes, it should be a work. I have a question.
+> > MFD provides the ACPI binding for sub-devices through
+> > struct mfd_cell_acpi_match. But I didn't see this in drivers/base/auxiliary.c.
+> > If using auxiliary bus to implement the LJCA sub-devices, we need to do
+> > the sub-devices acpi binding manually in ljca.c.
+> > 
+> > Something Like:
+> > adr = LJCA_ACPI_MATCH_GPIO
+> > adev = acpi_find_child_device(parent, adr, false);
+> > ACPI_COMPANION_SET(&pdev->dev, adev ?: parent);
+> > 
+> > Is that acceptable?
 
-Here is the summary with links:
-  - net: usb: smsc75xx: Limit packet length to skb->len
-    https://git.kernel.org/netdev/net/c/d8b228318935
+Looks ok to me.
 
-You are awesome, thank you!
+> Maybe you can implement this on the level of auxiliary bus.
+
+I would actually prefer that the auxiliary bus itself does not make
+any assumptions regarding the whereabouts of the fwnodes at this
+stage. Maybe later, when(if) there are more users.
+
+thanks,
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+heikki
