@@ -2,49 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767A96BBF8C
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Mar 2023 23:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA9486BBF8D
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Mar 2023 23:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjCOWDg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Mar 2023 18:03:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
+        id S232153AbjCOWDi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Mar 2023 18:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbjCOWDe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Mar 2023 18:03:34 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589DD126E4
-        for <linux-usb@vger.kernel.org>; Wed, 15 Mar 2023 15:03:32 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id x13so305287edd.1
-        for <linux-usb@vger.kernel.org>; Wed, 15 Mar 2023 15:03:32 -0700 (PDT)
+        with ESMTP id S229941AbjCOWDh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Mar 2023 18:03:37 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C9612F09
+        for <linux-usb@vger.kernel.org>; Wed, 15 Mar 2023 15:03:33 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id y4so287097edo.2
+        for <linux-usb@vger.kernel.org>; Wed, 15 Mar 2023 15:03:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pqrs.dk; s=google; t=1678917811;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kfpHWNJNaQ0Ott7UBqanJJgVNeCpvHZ/q3wHWsCd5cY=;
-        b=HmWtBcub0Nnf6OHbQOPbyN/PUFXntVAh0hfEypNB/IO40UxlfiMADbMGNCNTp//1F4
-         OLEVxMlYaPBxCcP9Z5SezaTXB1Q8lqVU31lHK1g7rFmKPLPNjlhmTJa9hEK8ghWiwwPt
-         k+uP/eTIjt/Of1urf5rch1GiqP20ivrbuQThw=
+        d=pqrs.dk; s=google; t=1678917812;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hnIAkjWXLUKxgzUQABaGNBsVC0Xz294v/24zmIaU2fM=;
+        b=DpCdtNKqrJEpglsHttbfk5MuRbcmjFPga1OslUNdmfD/UWOmZsysmL9NCLnHMOWCAC
+         r4wyvPyQe9HU/7ppEmyHGXOpWBy9zuJQ4vM55QnC3eIiLPjqAmFmFVBUSblHdBrMMooN
+         bqgvNadWzhZF7bBiCnO18X32jRfrofakoKD8A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678917811;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kfpHWNJNaQ0Ott7UBqanJJgVNeCpvHZ/q3wHWsCd5cY=;
-        b=rJJh8jAJzBItcijKcH7K/9M9Lnh/TS3IIw0TVj6R5iGSeqWQyrH584Td/gCEe82XRD
-         8NA6EPT8JEsnvvizc4NN1/e1PCE9ZBsXIwYmmkbiyT/B8p1/9W+qaPOWLUkCT33fRBzg
-         WPil/zGyVt/GO1qkLDAYPLkbCToFg/X4bPpxWxTOVjlGiYK5EHiuptliLExiObXi9NFg
-         xgA1pU1pSfGfDuRct1CwUwlOQbQzIwZI6NZDYk/RPOKfsOre4HTsHsUo29PaWYi294jF
-         hG2XTcIaw4X6FiuQsUWoQZdfeSh15Upq7Za6dMjYgxbvS8F25XJVPoNV8wqTVsvprK++
-         7Eww==
-X-Gm-Message-State: AO0yUKWz4Ep7pC59uRNnXHS1Pg6QO087SkP+ZJ2LfhejoDfAKPDrgO3S
-        fh6S6gl4FabVAB6J3wICAHAJ/Q==
-X-Google-Smtp-Source: AK7set/S4ISWkGE7HPN2lSlX5zijgcb6x2kc+jBmdzzZ9KxBHFHZnQFJ39fR/DTW++7PuYz7MMLvZg==
-X-Received: by 2002:a17:907:1690:b0:878:481c:c49b with SMTP id hc16-20020a170907169000b00878481cc49bmr11525591ejc.1.1678917810736;
-        Wed, 15 Mar 2023 15:03:30 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678917812;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hnIAkjWXLUKxgzUQABaGNBsVC0Xz294v/24zmIaU2fM=;
+        b=UlfQ1GF9HptI3LXfsIPSIssHaasNXZoqe6taPFh4BOp+y7VT6yT8ql0YKz8aDPKj5m
+         EKV43vSegzCNtEeBsKka9sCPnIU8Kj9utvOqXtGg7/umWxO3sjV+PPHw1DyEd3XvXEnJ
+         dnyrqQ5vYfCKmqFCrYsJ074FcbkrH9zF26yHgLrW5DQNGC3PeI6Rgwge61sn8sVV8fs0
+         9fNBZHnyq/p2YmIw3vesuPGFy5ujc7U01z8GDzY7xpo0z0w5nCN85bJW//ldnEJ6p6zQ
+         wlqSp01a6Ksz7lf6XwgIJGz6Bs9eUHhvLea1n3A9w62e0W+NbPRVAcGnMnPOeVkNanuQ
+         km9Q==
+X-Gm-Message-State: AO0yUKXNMXnSYdG38e298w/D3rvqNAmGSv2kMAsTjQs/owSRwfMA0aXm
+        UkGP9w3OFabrJ7kuhgCzHqEmyw==
+X-Google-Smtp-Source: AK7set+c6kRURg/XTaPJOw/AwnvlL71fnfHG29iNJ1qv4jZM5mlTgjJV1+4Ocy6RLEjCiTuFHfEUeA==
+X-Received: by 2002:a17:907:a649:b0:8f0:143d:ee34 with SMTP id vu9-20020a170907a64900b008f0143dee34mr9029863ejc.1.1678917811806;
+        Wed, 15 Mar 2023 15:03:31 -0700 (PDT)
 Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
-        by smtp.gmail.com with ESMTPSA id tk13-20020a170907c28d00b0090e0a4e1bacsm2995733ejc.159.2023.03.15.15.03.28
+        by smtp.gmail.com with ESMTPSA id tk13-20020a170907c28d00b0090e0a4e1bacsm2995733ejc.159.2023.03.15.15.03.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 15:03:29 -0700 (PDT)
+        Wed, 15 Mar 2023 15:03:31 -0700 (PDT)
 From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -53,10 +54,12 @@ To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 Cc:     linux-usb@vger.kernel.org,
         =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] extcon: usbc-tusb320: add accessory detection support
-Date:   Wed, 15 Mar 2023 23:02:45 +0100
-Message-Id: <20230315220246.951213-1-alvin@pqrs.dk>
+Subject: [PATCH 2/2] extcon: usbc-tusb320: add usb_role_switch support
+Date:   Wed, 15 Mar 2023 23:02:46 +0100
+Message-Id: <20230315220246.951213-2-alvin@pqrs.dk>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230315220246.951213-1-alvin@pqrs.dk>
+References: <20230315220246.951213-1-alvin@pqrs.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -71,164 +74,131 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-The TUSB320 can detect the following types of accessory:
-
-  - Audio Accessory
-  - Audio Accessory with charge-thru
-  - Debug Accessory (DFP)
-  - Debug Accessory (UFP)
-
-Moreover, the typec subsystem can be informed of this through the
-typec_set_mode() function. The information will be propagated to any
-linked typec muxes. Add the necessary support to the driver.
-
-Note that for the Debug Accessory modes, an educated guess was made that
-for the USB data role, DFP implies HOST and UFP implies DEVICE. But this
-might want to be made configurable at a later date.
+The connector child node of the TUSB320 device might be linked with a
+USB OTG controller with USB role switch capability. Add driver support
+for detecting a usb_role_switch and setting its state in the typec
+interrupt handler. This follows similar practice in other drivers in the
+typec subsystem, which this extcon driver can opt-in to.
 
 Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
 ---
- drivers/extcon/extcon-usbc-tusb320.c | 90 +++++++++++++++++++++-------
- 1 file changed, 68 insertions(+), 22 deletions(-)
+ drivers/extcon/extcon-usbc-tusb320.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
 diff --git a/drivers/extcon/extcon-usbc-tusb320.c b/drivers/extcon/extcon-usbc-tusb320.c
-index 10dff1c512c4..882d1f48495e 100644
+index 882d1f48495e..44b55650b6b4 100644
 --- a/drivers/extcon/extcon-usbc-tusb320.c
 +++ b/drivers/extcon/extcon-usbc-tusb320.c
-@@ -15,6 +15,7 @@
- #include <linux/module.h>
+@@ -16,6 +16,7 @@
  #include <linux/regmap.h>
  #include <linux/usb/typec.h>
-+#include <linux/usb/typec_altmode.h>
+ #include <linux/usb/typec_altmode.h>
++#include <linux/usb/role.h>
  
  #define TUSB320_REG8				0x8
  #define TUSB320_REG8_CURRENT_MODE_ADVERTISE	GENMASK(7, 6)
-@@ -26,16 +27,16 @@
- #define TUSB320_REG8_CURRENT_MODE_DETECT_MED	0x1
- #define TUSB320_REG8_CURRENT_MODE_DETECT_ACC	0x2
- #define TUSB320_REG8_CURRENT_MODE_DETECT_HI	0x3
--#define TUSB320_REG8_ACCESSORY_CONNECTED	GENMASK(3, 2)
-+#define TUSB320_REG8_ACCESSORY_CONNECTED	GENMASK(3, 1)
- #define TUSB320_REG8_ACCESSORY_CONNECTED_NONE	0x0
- #define TUSB320_REG8_ACCESSORY_CONNECTED_AUDIO	0x4
--#define TUSB320_REG8_ACCESSORY_CONNECTED_ACC	0x5
--#define TUSB320_REG8_ACCESSORY_CONNECTED_DEBUG	0x6
-+#define TUSB320_REG8_ACCESSORY_CONNECTED_ACHRG	0x5
-+#define TUSB320_REG8_ACCESSORY_CONNECTED_DBGDFP	0x6
-+#define TUSB320_REG8_ACCESSORY_CONNECTED_DBGUFP	0x7
- #define TUSB320_REG8_ACTIVE_CABLE_DETECTION	BIT(0)
+@@ -80,6 +81,7 @@ struct tusb320_priv {
+ 	enum typec_port_type port_type;
+ 	enum typec_pwr_opmode pwr_opmode;
+ 	struct fwnode_handle *connector_fwnode;
++	struct usb_role_switch *role_sw;
+ };
  
- #define TUSB320_REG9				0x9
--#define TUSB320_REG9_ATTACHED_STATE_SHIFT	6
--#define TUSB320_REG9_ATTACHED_STATE_MASK	0x3
-+#define TUSB320_REG9_ATTACHED_STATE		GENMASK(7, 6)
- #define TUSB320_REG9_CABLE_DIRECTION		BIT(5)
- #define TUSB320_REG9_INTERRUPT_STATUS		BIT(4)
+ static const char * const tusb_attached_states[] = {
+@@ -275,9 +277,11 @@ static void tusb320_extcon_irq_handler(struct tusb320_priv *priv, u8 reg)
  
-@@ -250,8 +251,7 @@ static void tusb320_extcon_irq_handler(struct tusb320_priv *priv, u8 reg)
+ static void tusb320_typec_irq_handler(struct tusb320_priv *priv, u8 reg9)
  {
- 	int state, polarity;
- 
--	state = (reg >> TUSB320_REG9_ATTACHED_STATE_SHIFT) &
--		TUSB320_REG9_ATTACHED_STATE_MASK;
-+	state = FIELD_GET(TUSB320_REG9_ATTACHED_STATE, reg);
- 	polarity = !!(reg & TUSB320_REG9_CABLE_DIRECTION);
- 
- 	dev_dbg(priv->dev, "attached state: %s, polarity: %d\n",
-@@ -277,32 +277,78 @@ static void tusb320_typec_irq_handler(struct tusb320_priv *priv, u8 reg9)
- {
++	struct usb_role_switch *role_sw = priv->role_sw;
  	struct typec_port *port = priv->port;
  	struct device *dev = priv->dev;
--	u8 mode, role, state;
-+	int typec_mode;
-+	enum typec_role pwr_role;
-+	enum typec_data_role data_role;
-+	u8 state, mode, accessory;
- 	int ret, reg8;
- 	bool ori;
+ 	int typec_mode;
++	enum usb_role usb_role;
+ 	enum typec_role pwr_role;
+ 	enum typec_data_role data_role;
+ 	u8 state, mode, accessory;
+@@ -300,11 +304,13 @@ static void tusb320_typec_irq_handler(struct tusb320_priv *priv, u8 reg9)
+ 	switch (state) {
+ 	case TUSB320_ATTACHED_STATE_DFP:
+ 		typec_mode = TYPEC_MODE_USB2;
++		usb_role = USB_ROLE_HOST;
+ 		pwr_role = TYPEC_SOURCE;
+ 		data_role = TYPEC_HOST;
+ 		break;
+ 	case TUSB320_ATTACHED_STATE_UFP:
+ 		typec_mode = TYPEC_MODE_USB2;
++		usb_role = USB_ROLE_DEVICE;
+ 		pwr_role = TYPEC_SINK;
+ 		data_role = TYPEC_DEVICE;
+ 		break;
+@@ -316,6 +322,7 @@ static void tusb320_typec_irq_handler(struct tusb320_priv *priv, u8 reg9)
+ 		if (accessory == TUSB320_REG8_ACCESSORY_CONNECTED_AUDIO ||
+ 		    accessory == TUSB320_REG8_ACCESSORY_CONNECTED_ACHRG) {
+ 			typec_mode = TYPEC_MODE_AUDIO;
++			usb_role = USB_ROLE_NONE;
+ 			pwr_role = TYPEC_SINK;
+ 			data_role = TYPEC_DEVICE;
+ 			break;
+@@ -323,12 +330,14 @@ static void tusb320_typec_irq_handler(struct tusb320_priv *priv, u8 reg9)
+ 			   TUSB320_REG8_ACCESSORY_CONNECTED_DBGDFP) {
+ 			typec_mode = TYPEC_MODE_DEBUG;
+ 			pwr_role = TYPEC_SOURCE;
++			usb_role = USB_ROLE_HOST;
+ 			data_role = TYPEC_HOST;
+ 			break;
+ 		} else if (accessory ==
+ 			   TUSB320_REG8_ACCESSORY_CONNECTED_DBGUFP) {
+ 			typec_mode = TYPEC_MODE_DEBUG;
+ 			pwr_role = TYPEC_SINK;
++			usb_role = USB_ROLE_DEVICE;
+ 			data_role = TYPEC_DEVICE;
+ 			break;
+ 		}
+@@ -339,6 +348,7 @@ static void tusb320_typec_irq_handler(struct tusb320_priv *priv, u8 reg9)
+ 		fallthrough;
+ 	default:
+ 		typec_mode = TYPEC_MODE_USB2;
++		usb_role = USB_ROLE_NONE;
+ 		pwr_role = TYPEC_SINK;
+ 		data_role = TYPEC_DEVICE;
+ 		break;
+@@ -348,6 +358,7 @@ static void tusb320_typec_irq_handler(struct tusb320_priv *priv, u8 reg9)
+ 	typec_set_pwr_role(port, pwr_role);
+ 	typec_set_data_role(port, data_role);
+ 	typec_set_mode(port, typec_mode);
++	usb_role_switch_set_role(priv->role_sw, usb_role);
  
-+	ret = regmap_read(priv->regmap, TUSB320_REG8, &reg8);
-+	if (ret) {
-+		dev_err(dev, "error during reg8 i2c read, ret=%d!\n", ret);
-+		return;
-+	}
-+
- 	ori = reg9 & TUSB320_REG9_CABLE_DIRECTION;
- 	typec_set_orientation(port, ori ? TYPEC_ORIENTATION_REVERSE :
- 					  TYPEC_ORIENTATION_NORMAL);
- 
--	state = (reg9 >> TUSB320_REG9_ATTACHED_STATE_SHIFT) &
--		TUSB320_REG9_ATTACHED_STATE_MASK;
--	if (state == TUSB320_ATTACHED_STATE_DFP)
--		role = TYPEC_SOURCE;
--	else
--		role = TYPEC_SINK;
-+	state = FIELD_GET(TUSB320_REG9_ATTACHED_STATE, reg9);
-+	accessory = FIELD_GET(TUSB320_REG8_ACCESSORY_CONNECTED, reg8);
-+
-+	switch (state) {
-+	case TUSB320_ATTACHED_STATE_DFP:
-+		typec_mode = TYPEC_MODE_USB2;
-+		pwr_role = TYPEC_SOURCE;
-+		data_role = TYPEC_HOST;
-+		break;
-+	case TUSB320_ATTACHED_STATE_UFP:
-+		typec_mode = TYPEC_MODE_USB2;
-+		pwr_role = TYPEC_SINK;
-+		data_role = TYPEC_DEVICE;
-+		break;
-+	case TUSB320_ATTACHED_STATE_ACC:
-+		/*
-+		 * Accessory detected. For debug accessories, just make some
-+		 * qualified guesses as to the role for lack of a better option.
-+		 */
-+		if (accessory == TUSB320_REG8_ACCESSORY_CONNECTED_AUDIO ||
-+		    accessory == TUSB320_REG8_ACCESSORY_CONNECTED_ACHRG) {
-+			typec_mode = TYPEC_MODE_AUDIO;
-+			pwr_role = TYPEC_SINK;
-+			data_role = TYPEC_DEVICE;
-+			break;
-+		} else if (accessory ==
-+			   TUSB320_REG8_ACCESSORY_CONNECTED_DBGDFP) {
-+			typec_mode = TYPEC_MODE_DEBUG;
-+			pwr_role = TYPEC_SOURCE;
-+			data_role = TYPEC_HOST;
-+			break;
-+		} else if (accessory ==
-+			   TUSB320_REG8_ACCESSORY_CONNECTED_DBGUFP) {
-+			typec_mode = TYPEC_MODE_DEBUG;
-+			pwr_role = TYPEC_SINK;
-+			data_role = TYPEC_DEVICE;
-+			break;
-+		}
- 
--	typec_set_vconn_role(port, role);
--	typec_set_pwr_role(port, role);
--	typec_set_data_role(port, role == TYPEC_SOURCE ?
--				  TYPEC_HOST : TYPEC_DEVICE);
-+		dev_warn(priv->dev, "unexpected ACCESSORY_CONNECTED state %d\n",
-+			 accessory);
- 
--	ret = regmap_read(priv->regmap, TUSB320_REG8, &reg8);
--	if (ret) {
--		dev_err(dev, "error during reg8 i2c read, ret=%d!\n", ret);
--		return;
-+		fallthrough;
-+	default:
-+		typec_mode = TYPEC_MODE_USB2;
-+		pwr_role = TYPEC_SINK;
-+		data_role = TYPEC_DEVICE;
-+		break;
- 	}
- 
-+	typec_set_vconn_role(port, pwr_role);
-+	typec_set_pwr_role(port, pwr_role);
-+	typec_set_data_role(port, data_role);
-+	typec_set_mode(port, typec_mode);
-+
  	mode = FIELD_GET(TUSB320_REG8_CURRENT_MODE_DETECT, reg8);
  	if (mode == TUSB320_REG8_CURRENT_MODE_DETECT_DEF)
- 		typec_set_pwr_opmode(port, TYPEC_PWR_MODE_USB);
+@@ -472,10 +483,20 @@ static int tusb320_typec_probe(struct i2c_client *client,
+ 		goto err_put;
+ 	}
+ 
++	/* Find any optional USB role switch that needs reporting to */
++	priv->role_sw = fwnode_usb_role_switch_get(connector);
++	if (IS_ERR(priv->role_sw)) {
++		ret = PTR_ERR(priv->role_sw);
++		goto err_unreg;
++	}
++
+ 	priv->connector_fwnode = connector;
+ 
+ 	return 0;
+ 
++err_unreg:
++	typec_unregister_port(priv->port);
++
+ err_put:
+ 	fwnode_handle_put(connector);
+ 
+@@ -484,6 +505,7 @@ static int tusb320_typec_probe(struct i2c_client *client,
+ 
+ static void tusb320_typec_remove(struct tusb320_priv *priv)
+ {
++	usb_role_switch_put(priv->role_sw);
+ 	typec_unregister_port(priv->port);
+ 	fwnode_handle_put(priv->connector_fwnode);
+ }
 -- 
 2.39.2
 
