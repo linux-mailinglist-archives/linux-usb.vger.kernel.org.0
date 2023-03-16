@@ -2,149 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4496BD07B
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Mar 2023 14:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D96046BD0D1
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Mar 2023 14:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjCPNMv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Mar 2023 09:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
+        id S230305AbjCPN2i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Mar 2023 09:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjCPNMq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Mar 2023 09:12:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9CDC97C6;
-        Thu, 16 Mar 2023 06:12:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56DC2B82160;
-        Thu, 16 Mar 2023 13:12:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2896C4339E;
-        Thu, 16 Mar 2023 13:12:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678972361;
-        bh=1MM/XIDj4+n74RjajngtGaU+RhN1OSYKdhL9n+Ln1Rw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HCGMki6yauCY/bU/C7p+E5QrS3+kX//JJukwCGHCjztJhZjmw6HpXRqWhlvmUBn/z
-         wd2aPr1mcNQ1a+DXlpuMK8/pvFrZRvpU1VaRjXpFcis548zOD+Dn24iuDar51AAN1F
-         JzOxjFQG5xajIvqItvD4D43dU+RMTODLq4nxwNEmfhYjpybIQ4RcoZosvYh8nLhGEP
-         CqWfoREVQlZiSyuoa+MWgnzFVWjt53owt0OESgI2vfLeNb6BpJOTmmir7rC1lQVEBP
-         Zv95fTPZFHYobZWFFPvrIY7HOp/CS/VLaXEJyQY02P46x41KcLBfnq/6ipuMSgEDNw
-         7pxeldRsirz4w==
-From:   Roger Quadros <rogerq@kernel.org>
-To:     Thinh.Nguyen@synopsys.com
-Cc:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        vigneshr@ti.com, srk@ti.com, r-gunasekaran@ti.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roger Quadros <rogerq@kernel.org>
-Subject: [PATCH 3/3] usb: dwc3-am62: Fix up wake-up configuration and spurious wake up
-Date:   Thu, 16 Mar 2023 15:12:26 +0200
-Message-Id: <20230316131226.89540-4-rogerq@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230316131226.89540-1-rogerq@kernel.org>
-References: <20230316131226.89540-1-rogerq@kernel.org>
+        with ESMTP id S229769AbjCPN2h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Mar 2023 09:28:37 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C615A32CEB;
+        Thu, 16 Mar 2023 06:28:31 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id le6so1712976plb.12;
+        Thu, 16 Mar 2023 06:28:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678973311;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ujpNXR2pIagHVWjxanwK9eWKfuJtXusyhgfh4aG4oiw=;
+        b=Z52QNhAQUwhV6Reeil0TjKBKAciMdTVU0FWXb276PgxEEt8K4V3gK9p2fymSgaZ2b7
+         Aa3SWcEw1NoxbooBQKWAFCbz3sqxNiRbgh02wYSicQE2sxTV4YJPyNad8vgtpZtVWdqX
+         DJfInSOcsX9wpM8wuRwFnbfn1YFWZLxdupundFNS9W3oK60wYe15wM3VVmuH59eUpstg
+         hNE1nBNWaxj08glQf38rofzT/kugbP0sMFWwtUS5HIZC+1d7E/0bLXwknoCZm85nMY/g
+         VmlTxeDOJjD0gPVZ7YwwTTdkZr939FPD9fkdQ3sCbd+pPXPh1HkA21rV+/q9KWUJklZu
+         EVXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678973311;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ujpNXR2pIagHVWjxanwK9eWKfuJtXusyhgfh4aG4oiw=;
+        b=dIZQxpBy4OfQb+hEHEytsLpFKft2VPPkNAoltft4UT+YXw4SPWYIoJ5TIU4NieUDGx
+         DvSCJrQtX30zFHy3MqKZ/EURrgN63isJko/d30hIZz1fR0JjwH7NPpnt5YP7zRvXfR+S
+         Y1DETcLjAWKh1tpFGd/a0Amb7tT2/bJumWDSGjlLXMvDanVbk5t/QsKu/2WrD3hVxvIX
+         U8BjrSHEIIie4TWLUroWDEmR+7dPsDUM1/d9MPzDzI4YNzRWfrgLMTE9r/NdNRmq07Kw
+         0a6zSIVWR3FKOaWhM8DnkBsHMSBDNNXBFtLKLJpCTUKMdCJ4J5+cFGxQ4ZvBkc2ow69s
+         lx7Q==
+X-Gm-Message-State: AO0yUKWEOYlJcamMltnRyR4kxkesr665cm7DUwRFmrgOwcwHs28puXPv
+        DjRlSbgJ96eNwBCa1aXH4Nv2M/uwzPrHv7xdFt0B6D3boBIIvahz
+X-Google-Smtp-Source: AK7set+Gwo2iohfylEc1rLBtY3ty1Dsf4/HjSNhiX+H1FGurFlZpcoGc/L97juUXBFPvMsZobdCEti3zjsKmlBuhriI=
+X-Received: by 2002:a17:90b:8d3:b0:23d:360:8771 with SMTP id
+ ds19-20020a17090b08d300b0023d03608771mr1125541pjb.9.1678973311169; Thu, 16
+ Mar 2023 06:28:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230313165128.3763626-1-zyytlz.wz@163.com> <ZBL1jyAQJ2YPsKUe@kroah.com>
+In-Reply-To: <ZBL1jyAQJ2YPsKUe@kroah.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Thu, 16 Mar 2023 21:28:19 +0800
+Message-ID: <CAJedcCxxuRjzaAyUk2qKkT6e-mFsgEhL_fmg+MJ9546rV4TYrQ@mail.gmail.com>
+Subject: Re: [PATCH v3] usb: gadget: udc: renesas_usb3: Fix use after free bug
+ in renesas_usb3_remove due to race condition
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, p.zabel@pengutronix.de,
+        biju.das.jz@bp.renesas.com, phil.edworthy@renesas.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        yoshihiro.shimoda.uh@renesas.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Explicitly set and clear wakeup config so we don't leave anything
-to chance.
+Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B43=E6=9C=8816=E6=
+=97=A5=E5=91=A8=E5=9B=9B 18:55=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Tue, Mar 14, 2023 at 12:51:28AM +0800, Zheng Wang wrote:
+> > In renesas_usb3_probe, &usb3->role_work is bound with
+> > renesas_usb3_role_work. renesas_usb3_start will be called
+> > to start the work.
+> >
+> > If we remove the driver which will call usbhs_remove, there may be
+> > an unfinished work. The possible sequence is as follows:
+> >
+> > Fix it by canceling the work before cleanup in the renesas_usb3_remove
+> >
+> > CPU0                  CPU1
+> >
+> >                     |renesas_usb3_role_work
+> > renesas_usb3_remove |
+> > usb_role_switch_unregister  |
+> > device_unregister   |
+> > kfree(sw)          |
+> > free usb3->role_sw  |
+> >                     |   usb_role_switch_set_role
+> >                     |   //use usb3->role_sw
+> >
+> > Fixes: 39facfa01c9f ("usb: gadget: udc: renesas_usb3: Add register of u=
+sb role switch")
+> > Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > ---
+> > v3:
+> > - modify the commit message to make it clearer suggested by Yoshihiro S=
+himoda
+>
+> I see 2 v3 patches in the mailing list, which is obviously not correct.
+>
+> Please resubmit a v4 properly.
+>
 
-Clear wakeup status on suspend so we know what caused wake up.
+Hi Greg,
 
-The LINESTATE wake up should not be enabled in device mode
-if we are not connected to a USB host else it will cause spurious
-wake up.
+Thanks for your kind reminder. I'll resubmit a v4 patch later.
 
-Signed-off-by: Roger Quadros <rogerq@kernel.org>
----
- drivers/usb/dwc3/dwc3-am62.c | 32 ++++++++++++++++++++++----------
- 1 file changed, 22 insertions(+), 10 deletions(-)
+Best regards,
+Zheng
 
-diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
-index 859b48279658..af0524e2f1e1 100644
---- a/drivers/usb/dwc3/dwc3-am62.c
-+++ b/drivers/usb/dwc3/dwc3-am62.c
-@@ -60,6 +60,13 @@
- #define USBSS_WAKEUP_CFG_SESSVALID_EN	BIT(1)
- #define USBSS_WAKEUP_CFG_VBUSVALID_EN	BIT(0)
- 
-+#define USBSS_WAKEUP_CFG_ALL	(USBSS_WAKEUP_CFG_VBUSVALID_EN | \
-+				 USBSS_WAKEUP_CFG_SESSVALID_EN | \
-+				 USBSS_WAKEUP_CFG_LINESTATE_EN | \
-+				 USBSS_WAKEUP_CFG_OVERCURRENT_EN)
-+
-+#define USBSS_WAKEUP_CFG_NONE	0
-+
- /* WAKEUP STAT register bits */
- #define USBSS_WAKEUP_STAT_OVERCURRENT	BIT(4)
- #define USBSS_WAKEUP_STAT_LINESTATE	BIT(3)
-@@ -103,6 +110,7 @@ struct dwc3_data {
- 	struct regmap *syscon;
- 	unsigned int offset;
- 	unsigned int vbus_divider;
-+	u32 wakeup_stat;
- };
- 
- static const int dwc3_ti_rate_table[] = {	/* in KHZ */
-@@ -294,6 +302,7 @@ static int dwc3_ti_suspend_common(struct device *dev)
- {
- 	struct dwc3_data *data = dev_get_drvdata(dev);
- 	u32 reg, current_prtcap_dir;
-+	u32 vbus_stat;
- 
- 	if (device_may_wakeup(dev)) {
- 		reg = dwc3_ti_readl(data, USBSS_CORE_STAT);
-@@ -302,12 +311,20 @@ static int dwc3_ti_suspend_common(struct device *dev)
- 		/* Set wakeup config enable bits */
- 		reg = dwc3_ti_readl(data, USBSS_WAKEUP_CONFIG);
- 		if (current_prtcap_dir == DWC3_GCTL_PRTCAP_HOST) {
--			reg |= USBSS_WAKEUP_CFG_LINESTATE_EN | USBSS_WAKEUP_CFG_OVERCURRENT_EN;
-+			reg = USBSS_WAKEUP_CFG_LINESTATE_EN | USBSS_WAKEUP_CFG_OVERCURRENT_EN;
- 		} else {
--			reg |= USBSS_WAKEUP_CFG_OVERCURRENT_EN | USBSS_WAKEUP_CFG_LINESTATE_EN |
--			       USBSS_WAKEUP_CFG_VBUSVALID_EN;
-+			reg = USBSS_WAKEUP_CFG_VBUSVALID_EN | USBSS_WAKEUP_CFG_SESSVALID_EN;
-+			/*
-+			 * Enable LINESTATE wake up only if connected to bus else
-+			 * it causes spurious wake-up.
-+			 */
-+			vbus_stat = dwc3_ti_readl(data, USBSS_VBUS_STAT);
-+			if (vbus_stat & (USBSS_VBUS_STAT_SESSVALID | USBSS_VBUS_STAT_VBUSVALID))
-+				reg |= USBSS_WAKEUP_CFG_LINESTATE_EN;
- 		}
- 		dwc3_ti_writel(data, USBSS_WAKEUP_CONFIG, reg);
-+		/* clear wakeup status so we know what caused the wake up */
-+		dwc3_ti_writel(data, USBSS_WAKEUP_STAT, USBSS_WAKEUP_STAT_CLR);
- 	}
- 
- 	clk_disable_unprepare(data->usb2_refclk);
-@@ -324,16 +341,11 @@ static int dwc3_ti_resume_common(struct device *dev)
- 
- 	if (device_may_wakeup(dev)) {
- 		/* Clear wakeup config enable bits */
--		reg = dwc3_ti_readl(data, USBSS_WAKEUP_CONFIG);
--		reg &= ~(USBSS_WAKEUP_CFG_OVERCURRENT_EN | USBSS_WAKEUP_CFG_LINESTATE_EN |
--			 USBSS_WAKEUP_CFG_VBUSVALID_EN);
--		dwc3_ti_writel(data, USBSS_WAKEUP_CONFIG, reg);
-+		dwc3_ti_writel(data, USBSS_WAKEUP_CONFIG, USBSS_WAKEUP_CFG_NONE);
- 	}
- 
- 	reg = dwc3_ti_readl(data, USBSS_WAKEUP_STAT);
--	/* Clear the wakeup status with wakeup clear bit */
--	reg |= USBSS_WAKEUP_STAT_CLR;
--	dwc3_ti_writel(data, USBSS_WAKEUP_STAT, reg);
-+	data->wakeup_stat = reg;
- 
- 	return 0;
- }
--- 
-2.34.1
-
+> thanks,
+>
+> greg k-h
