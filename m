@@ -2,22 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4012B6BD818
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Mar 2023 19:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBDD6BD894
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Mar 2023 20:06:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjCPSWk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Mar 2023 14:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
+        id S229893AbjCPTGC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Mar 2023 15:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjCPSWj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Mar 2023 14:22:39 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id C668F763EA
-        for <linux-usb@vger.kernel.org>; Thu, 16 Mar 2023 11:22:36 -0700 (PDT)
-Received: (qmail 892389 invoked by uid 1000); 16 Mar 2023 14:22:35 -0400
-Date:   Thu, 16 Mar 2023 14:22:35 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        with ESMTP id S229732AbjCPTGA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Mar 2023 15:06:00 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA53BE4C45;
+        Thu, 16 Mar 2023 12:05:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E2DCCCE1E5A;
+        Thu, 16 Mar 2023 19:05:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7403C433EF;
+        Thu, 16 Mar 2023 19:05:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678993541;
+        bh=wjh2dd6lKSLs2YgB0hRb+ax32RoOsNp6xz0wdCimzaI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R9l5hz/gTNcxXqnCo6cPF6w/aZoYgiqhtcmpNn8dz9mf369mLTWQI9s4M9uqonUHU
+         LrpWgMf4y2LLoa7dNVdtYcPyjLJlzu2YBoyPrE/AEvT/MsUHHY9//ua77KOVp8mMUQ
+         3nPOUnKcthpfB4ZJM1LMI9yC4UAR+ilpkfnjedqM=
+Date:   Thu, 16 Mar 2023 20:05:38 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
 Cc:     Valery Zabrovsky <valthebrewer@yandex.ru>,
         Guo Zhengkui <guozhengkui@vivo.com>,
         Aaro Koskinen <aaro.koskinen@iki.fi>,
@@ -27,48 +40,56 @@ Cc:     Valery Zabrovsky <valthebrewer@yandex.ru>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         lvc-project@linuxtesting.org
 Subject: Re: [PATCH] usb: gadget: net2280: fix NULL pointer dereference
-Message-ID: <2be27aee-1a2d-4c5c-bb62-018e1340d2ad@rowland.harvard.edu>
+Message-ID: <ZBNogj/To3j5OiQK@kroah.com>
 References: <20230316155356.13391-1-valthebrewer@yandex.ru>
  <ZBNBlwc9lt+pLFkd@kroah.com>
+ <2be27aee-1a2d-4c5c-bb62-018e1340d2ad@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZBNBlwc9lt+pLFkd@kroah.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <2be27aee-1a2d-4c5c-bb62-018e1340d2ad@rowland.harvard.edu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 05:19:35PM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Mar 16, 2023 at 06:53:55PM +0300, Valery Zabrovsky wrote:
-> > In net2280_free_request():
-> > If _ep is NULL, then ep is NULL and is dereferenced
-> > while trying to produce an error message.
+On Thu, Mar 16, 2023 at 02:22:35PM -0400, Alan Stern wrote:
+> On Thu, Mar 16, 2023 at 05:19:35PM +0100, Greg Kroah-Hartman wrote:
+> > On Thu, Mar 16, 2023 at 06:53:55PM +0300, Valery Zabrovsky wrote:
+> > > In net2280_free_request():
+> > > If _ep is NULL, then ep is NULL and is dereferenced
+> > > while trying to produce an error message.
+> > 
+> > How can that ever happen?  How did you test and hit this?
+> > 
+> > > The patch replaces dev_err() with pr_err() which works fine.
+> > 
+> > That's not a good idea for driver code to use, sorry.
+> > 
+> > > Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> > 
+> > As I have said before, your testing framework needs a lot more work.
+> > 
+> > good luck!
 > 
-> How can that ever happen?  How did you test and hit this?
+> In situations like this, it might be better to remove the check 
+> entirely.  If a driver does pass a NULL pointer, it will lead to an 
+> invalid pointer dereference which will certainly cause an oops and might 
+> very well crash the system.  That would be a lot more noticeable than an 
+> error message hidden in a kernel log!
 > 
-> > The patch replaces dev_err() with pr_err() which works fine.
-> 
-> That's not a good idea for driver code to use, sorry.
-> 
-> > Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> As I have said before, your testing framework needs a lot more work.
-> 
-> good luck!
+> Greg, is there any general policy about the need for sanity checks such 
+> as this one?  Like, don't put them in whenever a failure would lead 
+> to an immediate fault which would be easy to track down?
 
-In situations like this, it might be better to remove the check 
-entirely.  If a driver does pass a NULL pointer, it will lead to an 
-invalid pointer dereference which will certainly cause an oops and might 
-very well crash the system.  That would be a lot more noticeable than an 
-error message hidden in a kernel log!
+That's the policy, no need to check if a caller is abusing the code and
+will find out instantly.  Otherwise we end up checking on every
+function, and that way lies madness.
 
-Greg, is there any general policy about the need for sanity checks such 
-as this one?  Like, don't put them in whenever a failure would lead 
-to an immediate fault which would be easy to track down?
+thanks,
 
-Alan Stern
+greg k-h
