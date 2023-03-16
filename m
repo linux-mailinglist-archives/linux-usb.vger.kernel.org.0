@@ -2,121 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96046BD0D1
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Mar 2023 14:28:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 248626BD4B6
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Mar 2023 17:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjCPN2i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Mar 2023 09:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
+        id S229797AbjCPQJ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Mar 2023 12:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjCPN2h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Mar 2023 09:28:37 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C615A32CEB;
-        Thu, 16 Mar 2023 06:28:31 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id le6so1712976plb.12;
-        Thu, 16 Mar 2023 06:28:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678973311;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ujpNXR2pIagHVWjxanwK9eWKfuJtXusyhgfh4aG4oiw=;
-        b=Z52QNhAQUwhV6Reeil0TjKBKAciMdTVU0FWXb276PgxEEt8K4V3gK9p2fymSgaZ2b7
-         Aa3SWcEw1NoxbooBQKWAFCbz3sqxNiRbgh02wYSicQE2sxTV4YJPyNad8vgtpZtVWdqX
-         DJfInSOcsX9wpM8wuRwFnbfn1YFWZLxdupundFNS9W3oK60wYe15wM3VVmuH59eUpstg
-         hNE1nBNWaxj08glQf38rofzT/kugbP0sMFWwtUS5HIZC+1d7E/0bLXwknoCZm85nMY/g
-         VmlTxeDOJjD0gPVZ7YwwTTdkZr939FPD9fkdQ3sCbd+pPXPh1HkA21rV+/q9KWUJklZu
-         EVXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678973311;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ujpNXR2pIagHVWjxanwK9eWKfuJtXusyhgfh4aG4oiw=;
-        b=dIZQxpBy4OfQb+hEHEytsLpFKft2VPPkNAoltft4UT+YXw4SPWYIoJ5TIU4NieUDGx
-         DvSCJrQtX30zFHy3MqKZ/EURrgN63isJko/d30hIZz1fR0JjwH7NPpnt5YP7zRvXfR+S
-         Y1DETcLjAWKh1tpFGd/a0Amb7tT2/bJumWDSGjlLXMvDanVbk5t/QsKu/2WrD3hVxvIX
-         U8BjrSHEIIie4TWLUroWDEmR+7dPsDUM1/d9MPzDzI4YNzRWfrgLMTE9r/NdNRmq07Kw
-         0a6zSIVWR3FKOaWhM8DnkBsHMSBDNNXBFtLKLJpCTUKMdCJ4J5+cFGxQ4ZvBkc2ow69s
-         lx7Q==
-X-Gm-Message-State: AO0yUKWEOYlJcamMltnRyR4kxkesr665cm7DUwRFmrgOwcwHs28puXPv
-        DjRlSbgJ96eNwBCa1aXH4Nv2M/uwzPrHv7xdFt0B6D3boBIIvahz
-X-Google-Smtp-Source: AK7set+Gwo2iohfylEc1rLBtY3ty1Dsf4/HjSNhiX+H1FGurFlZpcoGc/L97juUXBFPvMsZobdCEti3zjsKmlBuhriI=
-X-Received: by 2002:a17:90b:8d3:b0:23d:360:8771 with SMTP id
- ds19-20020a17090b08d300b0023d03608771mr1125541pjb.9.1678973311169; Thu, 16
- Mar 2023 06:28:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230313165128.3763626-1-zyytlz.wz@163.com> <ZBL1jyAQJ2YPsKUe@kroah.com>
-In-Reply-To: <ZBL1jyAQJ2YPsKUe@kroah.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Thu, 16 Mar 2023 21:28:19 +0800
-Message-ID: <CAJedcCxxuRjzaAyUk2qKkT6e-mFsgEhL_fmg+MJ9546rV4TYrQ@mail.gmail.com>
-Subject: Re: [PATCH v3] usb: gadget: udc: renesas_usb3: Fix use after free bug
- in renesas_usb3_remove due to race condition
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, p.zabel@pengutronix.de,
-        biju.das.jz@bp.renesas.com, phil.edworthy@renesas.com,
+        with ESMTP id S229476AbjCPQJ1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Mar 2023 12:09:27 -0400
+X-Greylist: delayed 449 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Mar 2023 09:09:26 PDT
+Received: from forward103o.mail.yandex.net (forward103o.mail.yandex.net [37.140.190.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CB08A64;
+        Thu, 16 Mar 2023 09:09:26 -0700 (PDT)
+Received: from forward100q.mail.yandex.net (forward100q.mail.yandex.net [IPv6:2a02:6b8:c0e:4b:0:640:4012:bb97])
+        by forward103o.mail.yandex.net (Yandex) with ESMTP id 3BF0310AA90A;
+        Thu, 16 Mar 2023 18:55:46 +0300 (MSK)
+Received: from vla1-2f6a8787997a.qloud-c.yandex.net (vla1-2f6a8787997a.qloud-c.yandex.net [IPv6:2a02:6b8:c0d:35a1:0:640:2f6a:8787])
+        by forward100q.mail.yandex.net (Yandex) with ESMTP id 3762F6F40007;
+        Thu, 16 Mar 2023 18:55:46 +0300 (MSK)
+Received: by vla1-2f6a8787997a.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id 8tmDo6Yck8c1-N43cg4iV;
+        Thu, 16 Mar 2023 18:55:45 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1678982145;
+        bh=BQReFTG2lcPA75b18D8vey98+5FpL4ag8kMta6cDrLc=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=EtPFiL6PpQMV+ji65NctGCy9xESd+yPzBu6Tdgj0JcTt5nT2pLC38luwMnLIpu3kp
+         2N9hKaF2o+tkeK2jFkADZtZIoq4eqoP/QwDSeu4E6lOPwIalzbB0EHSZjsPRiIaU2u
+         RzAuBJfL4zXWqlquxs41W3qMqcCO3sX/pxIynifE=
+Authentication-Results: vla1-2f6a8787997a.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
+From:   Valery Zabrovsky <valthebrewer@yandex.ru>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Valery Zabrovsky <valthebrewer@yandex.ru>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mian Yousaf Kaukab <yousaf.kaukab@intel.com>,
+        Felipe Balbi <balbi@ti.com>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        yoshihiro.shimoda.uh@renesas.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        lvc-project@linuxtesting.org
+Subject: [PATCH] usb: gadget: net2280: fix NULL pointer dereference
+Date:   Thu, 16 Mar 2023 18:53:55 +0300
+Message-Id: <20230316155356.13391-1-valthebrewer@yandex.ru>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B43=E6=9C=8816=E6=
-=97=A5=E5=91=A8=E5=9B=9B 18:55=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Tue, Mar 14, 2023 at 12:51:28AM +0800, Zheng Wang wrote:
-> > In renesas_usb3_probe, &usb3->role_work is bound with
-> > renesas_usb3_role_work. renesas_usb3_start will be called
-> > to start the work.
-> >
-> > If we remove the driver which will call usbhs_remove, there may be
-> > an unfinished work. The possible sequence is as follows:
-> >
-> > Fix it by canceling the work before cleanup in the renesas_usb3_remove
-> >
-> > CPU0                  CPU1
-> >
-> >                     |renesas_usb3_role_work
-> > renesas_usb3_remove |
-> > usb_role_switch_unregister  |
-> > device_unregister   |
-> > kfree(sw)          |
-> > free usb3->role_sw  |
-> >                     |   usb_role_switch_set_role
-> >                     |   //use usb3->role_sw
-> >
-> > Fixes: 39facfa01c9f ("usb: gadget: udc: renesas_usb3: Add register of u=
-sb role switch")
-> > Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> > ---
-> > v3:
-> > - modify the commit message to make it clearer suggested by Yoshihiro S=
-himoda
->
-> I see 2 v3 patches in the mailing list, which is obviously not correct.
->
-> Please resubmit a v4 properly.
->
+In net2280_free_request():
+If _ep is NULL, then ep is NULL and is dereferenced
+while trying to produce an error message.
+The patch replaces dev_err() with pr_err() which works fine.
 
-Hi Greg,
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Thanks for your kind reminder. I'll resubmit a v4 patch later.
+Fixes: 9ceafcc2b3ad ("usb: gadget: net2280: print error in ep_ops error paths")
+Signed-off-by: Valery Zabrovsky <valthebrewer@yandex.ru>
+---
+ drivers/usb/gadget/udc/net2280.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Best regards,
-Zheng
+diff --git a/drivers/usb/gadget/udc/net2280.c b/drivers/usb/gadget/udc/net2280.c
+index 1b929c519cd7..a027d1323993 100644
+--- a/drivers/usb/gadget/udc/net2280.c
++++ b/drivers/usb/gadget/udc/net2280.c
+@@ -584,8 +584,7 @@ static void net2280_free_request(struct usb_ep *_ep, struct usb_request *_req)
+ 
+ 	ep = container_of(_ep, struct net2280_ep, ep);
+ 	if (!_ep || !_req) {
+-		dev_err(&ep->dev->pdev->dev, "%s: Invalid ep=%p or req=%p\n",
+-							__func__, _ep, _req);
++		pr_err("%s: Invalid ep=%p or req=%p\n", __func__, _ep, _req);
+ 		return;
+ 	}
+ 
+-- 
+2.34.1
 
-> thanks,
->
-> greg k-h
