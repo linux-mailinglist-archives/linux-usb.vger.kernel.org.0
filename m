@@ -2,117 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD296BCCF0
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Mar 2023 11:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC13D6BCCF3
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Mar 2023 11:37:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjCPKhB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Mar 2023 06:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
+        id S229853AbjCPKhE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Mar 2023 06:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjCPKhA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Mar 2023 06:37:00 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049CF62FFD;
-        Thu, 16 Mar 2023 03:36:53 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id h11so698500ild.11;
-        Thu, 16 Mar 2023 03:36:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678963012;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+2KwWFmzvZ2djH3TgZVwyQ57NzJvl1Pp4QAiCezPP9s=;
-        b=q7nen8m4MrzYxoSraaaLgFF/LeGnpIMcuEzwCVtItw1YT6TBImobq/JQPtQmmrmibP
-         941k8PkJhfwkMc14EomNcFFX8mnn2JpLBEF5TuHI8STOKnD2FkWgYCkEioqCzRXpNmbN
-         nH9rz+BergZ3rHPNOKtsC71xkboD3N/jb5Sl8wkGZPDDgUEEaEIxhtOtDtFU5pxixwSK
-         crY8NJJk7BrqXrOL/BkzFaepKWNblJYXLPNq8GCJBhiCbFjbk6HcK3UFIQZUwpQAuruy
-         18z6F11MsOUibF+XIR3ThyLq5IDY2cUOKqxIG0ffECgkPrdDOgcH9hJnSl11gozIcFjM
-         k9Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678963012;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+2KwWFmzvZ2djH3TgZVwyQ57NzJvl1Pp4QAiCezPP9s=;
-        b=gWCrAKtRcn3dlDb1Ks4OWOdgwF/oujf/58DoNtG4ay/ki4B90yqgoewW8veYxZWutM
-         67w64OdjY9gO0TrenEvEJi4eDpcj2l+S6ZexkFNrWoxh1Hf92v5SNdEgvWdhtfP1j4DT
-         nRVNlWgI/nIrMFAITD6sVGB3bYTNwrZpZdLPDN+10R1pPV39MlqEj67AJEclcI/yfddu
-         2SBj6XH9IjoQzb4LKH2J/Klz9qfb8757gJGt2iaDljO3142jR1JESqTbYK+JL2n9Gw6R
-         w5oGO+NgT6OGpDlfI0sysnY4scS9rHJjoovUUGAIi3CSnbrWt1BBaa8hlnlveWBkjTpk
-         /3QQ==
-X-Gm-Message-State: AO0yUKVZx4sEHPxUxhIhGvg51XpuV8T7z/WaW7hzOO2CY5zN0Z2QEryH
-        5KQqxkoGD898uq9xTSrTZ3rdFLElQulFkuSDp/8=
-X-Google-Smtp-Source: AK7set+I41DgNxZUiTGjCAooKOqPDj7fDsAESCcsdjclnfa3Zv10wR6onWDT/9rS5Enbie/3JSVTDeSO+jBqV7OmTD0=
-X-Received: by 2002:a92:c14b:0:b0:316:f0d7:8db with SMTP id
- b11-20020a92c14b000000b00316f0d708dbmr4439270ilh.5.1678963012299; Thu, 16 Mar
- 2023 03:36:52 -0700 (PDT)
+        with ESMTP id S229701AbjCPKhC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Mar 2023 06:37:02 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B554ECE0;
+        Thu, 16 Mar 2023 03:37:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678963021; x=1710499021;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KEJY126tKd15SR9i/ZzZ9+b8kulIpPc0L6Pe52dUhZU=;
+  b=ivg8f812dt0srxGHWV4iZUuGrdbX/3HQ8TxKmuzo9dHDE8yihgnHTHlv
+   cT62sWO++vm1+maU/RecDCv0NRH3g6+psXG9yYofs/xueJ30Z6SXvlQyG
+   KvZfM41cUZagkCB52VGgvuBXcTL/g78Hw36P7heEJtFn2KDlEsn/j6/uT
+   9xulQNXWxRW7t4SsY1xkXde3Pq4rzxkeK0sGw4Y/vPJcuWBpAZ6/B+9IY
+   95ZOz7FMFK0cR/ZShoZsYT9iw1IbBmq8BCEk7PKZNQj4H08H5vODLyeis
+   KBH6HOtGXKQXggKrAf11FKmQqEDjPz5Cj9iKoIQElElUjgtoAL+yw6neZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="424223766"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="424223766"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 03:37:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="679850494"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="679850494"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 16 Mar 2023 03:36:59 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 753951CC; Thu, 16 Mar 2023 12:37:44 +0200 (EET)
+Date:   Thu, 16 Mar 2023 12:37:44 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH] thunderbolt: rename shadowed variables bit to
+ interrupt_bit and auto_clear_bit
+Message-ID: <20230316103744.GS62143@black.fi.intel.com>
+References: <20230315220450.1470815-1-trix@redhat.com>
+ <20230316102048.GR62143@black.fi.intel.com>
 MIME-Version: 1.0
-References: <20230313154522.52684-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230313154522.52684-1-andriy.shevchenko@linux.intel.com>
-From:   =?UTF-8?B?SsOzIMOBZ2lsYSBCaXRzY2g=?= <jgilab@gmail.com>
-Date:   Thu, 16 Mar 2023 11:36:41 +0100
-Message-ID: <CAMUOyH1BFnGzODgCZP+Whde=Kbmq_5rPN02GrfSp8z2_PVPpEQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] usb: gadget: Use correct endianness of the wLength
- field for WebUSB
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230316102048.GR62143@black.fi.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 4:44=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> WebUSB code uses wLength directly without proper endianness conversion.
-> Update it to use already prepared temporary variable w_length instead.
+On Thu, Mar 16, 2023 at 12:20:48PM +0200, Mika Westerberg wrote:
+> +Cc Mario
+> 
+> On Wed, Mar 15, 2023 at 06:04:50PM -0400, Tom Rix wrote:
+> > cppcheck reports
+> > drivers/thunderbolt/nhi.c:74:7: style: Local variable 'bit' shadows outer variable [shadowVariable]
+> >   int bit;
+> >       ^
+> > drivers/thunderbolt/nhi.c:66:6: note: Shadowed declaration
+> >  int bit = ring_interrupt_index(ring) & 31;
+> >      ^
+> > drivers/thunderbolt/nhi.c:74:7: note: Shadow variable
+> >   int bit;
+> >       ^
+> > For readablity rename the outer to interrupt_bit and the innner
+> > to auto_clear_bit.
+> 
+> Thanks for the patch! Yeah, this did not show up in any of the kbuild
+> tests perhaps they are missing cppcheck :(
+> 
+> I'm thinking that I'll just move the two commits from "fixes" to "next"
+> and add this one on top (and drop the stable tags) as the code that we
+> should be sending to stable should not need additional fixes IMHO. I
+> know Mario is on vacation so probably cannot answer here so let's deal
+> with this when he is back.
 
-Excellent catch! Thank you very much for finding this. This could have
-been a very hard to find issue in a big endian system.
-
-I tested this on my local setup and it (unsurprisingly) works like a charm.
-
-> Fixes: 93c473948c58 ("usb: gadget: add WebUSB landing page support")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Tested-By: J=C3=B3 =C3=81gila Bitsch <jgilab@gmail.com>
-
-> ---
->  drivers/usb/gadget/composite.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composit=
-e.c
-> index fa7dd6cf014d..5377d873c08e 100644
-> --- a/drivers/usb/gadget/composite.c
-> +++ b/drivers/usb/gadget/composite.c
-> @@ -2079,10 +2079,9 @@ composite_setup(struct usb_gadget *gadget, const s=
-truct usb_ctrlrequest *ctrl)
->                                 sizeof(url_descriptor->URL)
->                                 - WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH + l=
-anding_page_offset);
->
-> -                       if (ctrl->wLength < WEBUSB_URL_DESCRIPTOR_HEADER_=
-LENGTH
-> -                                           + landing_page_length)
-> -                               landing_page_length =3D ctrl->wLength
-> -                                       - WEBUSB_URL_DESCRIPTOR_HEADER_LE=
-NGTH + landing_page_offset;
-> +                       if (w_length < WEBUSB_URL_DESCRIPTOR_HEADER_LENGT=
-H + landing_page_length)
-> +                               landing_page_length =3D w_length
-> +                               - WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH + l=
-anding_page_offset;
->
->                         memcpy(url_descriptor->URL,
->                                 cdev->landing_page + landing_page_offset,
-> --
-> 2.39.2
->
+Applied to thunderbolt.git/next (along with the two commits from Mario).
