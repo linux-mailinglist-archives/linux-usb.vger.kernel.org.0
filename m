@@ -2,130 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0230E6BD6FF
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Mar 2023 18:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D986BD760
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Mar 2023 18:45:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjCPR0m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Mar 2023 13:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
+        id S230133AbjCPRpI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Mar 2023 13:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCPR0k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Mar 2023 13:26:40 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C131457EB;
-        Thu, 16 Mar 2023 10:26:03 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id ja10so2531640plb.5;
-        Thu, 16 Mar 2023 10:26:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678987563;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pIpspfcq433YYpVyc2+2HNwIim7kmYWAvZxpFDodPGA=;
-        b=qrbh179zGwz/tzTHa95r9xJ9wtKxnWpyRvaGAZPyYndo0+/bM6huYFuCX3qov63CZV
-         Gi5j3eshxpud7rimNPKrxe01lXeNzoLkF3mSUJt3pnrTVoNektEsnRIp0wImQHc/0Szl
-         L1z7gkRqJeIByTMk7NjEEuOqfEKJCDGn++anO+jmqB2xIiWJn8uVsFwlNqkJ0+mb9Vjz
-         jB+Oa/FzR7Q1VzYI6XYObocI2NvsaXdRmJA816eFEqhEbA6tFEwYTjIgq6qgVkVNfpkA
-         iVPBLYCyVjxV/1gXwcG0y0/6qgZiPO6U0J0L18VxvcpvKtLlLZPXIdQT/dopXLUsDSPL
-         1rbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678987563;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pIpspfcq433YYpVyc2+2HNwIim7kmYWAvZxpFDodPGA=;
-        b=de1MxWRmkZMPbi5p8p5U+fTTs28w+t3uMbDt9cGKBDUpaVv/ao68yc2SWmdBZII4yJ
-         Nl2xPe2O1BZdcAx4KxddrX7EeXDfE7vwfEuh3st6lGurr9ajY5vEKyZts6B5/hYU+45v
-         nwvWhxIOJg+zT/1bxHPrEOhDhEnOJa110lm/JBAJzQyRVcsAueL81XpLJmYHyIhXJBEM
-         h2wVyPZsH3IHyM9w6fxPNAw8a6dVnqaegt3DQ5mrgqx5thr7JOBfONgBy8qNBYxtjKHC
-         qromBhwTD8U5LvwsEEpx5K1pRW38xy9L/qZH8LmM4Em4K7r+FDqFWR+CBuFsV/tDHY29
-         MQrQ==
-X-Gm-Message-State: AO0yUKVbVQk3WfZSF7RqbhPjZCR1qoIdb+JyQnGYj5vMERWCgcK9N9xT
-        ZXvBhLTUbnbTNFHpw2SHK5XiXKHeIpEBWWuAdt0=
-X-Google-Smtp-Source: AK7set+rzE43RchTLXIMDlJhy9z6qiZh7Nue+oPLlEN4GtLa4y+mD94wPRTtgXR1K0JhmUefOkaxW4VLIaKwvKgyzWA=
-X-Received: by 2002:a17:903:32d1:b0:19f:3cc1:e3be with SMTP id
- i17-20020a17090332d100b0019f3cc1e3bemr1823624plr.12.1678987562995; Thu, 16
- Mar 2023 10:26:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230316155645.1565045-1-zyytlz.wz@163.com> <ZBNCam0XjWehrF3c@kroah.com>
-In-Reply-To: <ZBNCam0XjWehrF3c@kroah.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Fri, 17 Mar 2023 01:25:50 +0800
-Message-ID: <CAJedcCw4DbpdiL8w+xQfGU87eV_yU-SSojX++-=GGrdKqHYxLA@mail.gmail.com>
-Subject: Re: [PATCH v5] usb: gadget: udc: renesas_usb3: Fix use after free bug
- in renesas_usb3_remove due to race condition
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, p.zabel@pengutronix.de,
-        biju.das.jz@bp.renesas.com, phil.edworthy@renesas.com,
+        with ESMTP id S229895AbjCPRot (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Mar 2023 13:44:49 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5AA3749F3;
+        Thu, 16 Mar 2023 10:44:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=nEAMn
+        AlTlhmBc3GQSHDUq/SQ1R/Wav9t7BfHo/zL+ZI=; b=eFIIFAUwP5fDPLIp7KfFk
+        55oJJ5VNga9gWULLyFnBxMJEwVyYIPd0/yM18xNy31DuP0Fmx1oUfVw91R8YHcUQ
+        RFbXqF1bzzDhS3t4jiqB1GQrRgxgmVzToi2m0Vrsc3EFd+B0hcJlbXCOxQ0kYPdW
+        12oS+GZipHGfykDngcnBCA=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g4-0 (Coremail) with SMTP id _____wD3_8eBVRNkg0sdAQ--.31373S2;
+        Fri, 17 Mar 2023 01:44:33 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     valentina.manea.m@gmail.com
+Cc:     shuah@kernel.org, gregkh@linuxfoundation.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        yoshihiro.shimoda.uh@renesas.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
+        alex000young@gmail.com, Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH v3] usbip: vudc: Fix use after free bug in vudc_remove due to race condition
+Date:   Fri, 17 Mar 2023 01:44:32 +0800
+Message-Id: <20230316174432.1592087-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wD3_8eBVRNkg0sdAQ--.31373S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtF1UGFy5Jw45ZF18GrWkXrb_yoWkXwc_ua
+        4ruF4xGF4rCanxKF17XwnxZrWUKFyDXrn3XFs29F4fWa4xGr15Zw17Ars7uF47uF98GFyD
+        Cws8t395Zw47ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRK9NVJUUUUU==
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXQU0U1WBo8O2kQAAss
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B43=E6=9C=8817=E6=
-=97=A5=E5=91=A8=E4=BA=94 00:23=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Thu, Mar 16, 2023 at 11:56:45PM +0800, Zheng Wang wrote:
-> > In renesas_usb3_probe, &usb3->role_work is bound with
-> > renesas_usb3_role_work. renesas_usb3_start will be called
-> > to start the work.
->
-> You have a full 72 columns to write in, please use them :)
->
+In vudc_probe, it calls init_vudc_hw, which bound &udc->timer with v_timer.
 
-Thanks for your kind reminder. I'll fix the format in the next version.
+When it calls usbip_sockfd_store, it will call v_start_timer to start the 
+timer work.
 
-> >
-> > If we remove the driver which will call usbhs_remove, there may be
-> > an unfinished work. The possible sequence is as follows:
-> >
-> > Fix it by canceling the work before cleanup in the renesas_usb3_remove.
-> >
-> > CPU0                  CPU1
-> >
-> >                     |renesas_usb3_role_work
-> > renesas_usb3_remove |
-> > usb_role_switch_unregister  |
-> > device_unregister   |
-> > kfree(sw)          |
-> > free usb3->role_sw  |
-> >                     |   usb_role_switch_set_role
-> >                     |   //use usb3->role_sw
->
-> Why can't this be written so it looks better:
+When we call vudc_remove to remove the driver, theremay be a sequence as 
+follows:
 
-Sorry, I'll beautify the format next time.
+Fix it by shutdown the timer work before cleanup in vudc_remove.
 
->
->  CPU0                         CPU1
->
->                             | renesas_usb3_role_work
->  renesas_usb3_remove        |
->  usb_role_switch_unregister |
->  device_unregister          |
->  kfree(sw)                  |
->  free usb3->role_sw         |
->                             |  usb_role_switch_set_role
->                             |  // use usb3->role_sw
->
-> Note that removing a driver is a root-only operation, and should never
-> happen so please also say that.
->
-Get it.
+Note that removing a driver is a root-only operation, and should never
+happen.
 
-Best regards,
-Zheng
+CPU0                  CPU1
 
-> thanks,
->
-> greg k-h
+                     |v_timer
+vudc_remove          |
+kfree(udc);          |
+//free shost         |
+                     |udc->gadget
+                     |//use
+
+Fixes: b6a0ca111867 ("usbip: vudc: Add UDC specific ops")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+ drivers/usb/usbip/vudc_dev.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/usbip/vudc_dev.c b/drivers/usb/usbip/vudc_dev.c
+index 2bc428f2e261..33d0991755bb 100644
+--- a/drivers/usb/usbip/vudc_dev.c
++++ b/drivers/usb/usbip/vudc_dev.c
+@@ -633,6 +633,7 @@ int vudc_remove(struct platform_device *pdev)
+ {
+ 	struct vudc *udc = platform_get_drvdata(pdev);
+ 
++	timer_shutdown_sync(&udc->timer);
+ 	usb_del_gadget_udc(&udc->gadget);
+ 	cleanup_vudc_hw(udc);
+ 	kfree(udc);
+-- 
+2.25.1
+
