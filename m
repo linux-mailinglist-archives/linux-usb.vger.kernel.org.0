@@ -2,160 +2,227 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D13D96BC646
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Mar 2023 07:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FBCD6BC66C
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Mar 2023 07:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjCPGr0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Mar 2023 02:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
+        id S229912AbjCPG7w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Mar 2023 02:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjCPGrY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Mar 2023 02:47:24 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7CF2DE67;
-        Wed, 15 Mar 2023 23:47:19 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pchOK-0003ay-LW; Thu, 16 Mar 2023 07:47:12 +0100
-Message-ID: <abbcc89b-008b-64ae-ed77-20607f9356a8@leemhuis.info>
-Date:   Thu, 16 Mar 2023 07:47:11 +0100
+        with ESMTP id S229985AbjCPG7u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Mar 2023 02:59:50 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1FFEC64
+        for <linux-usb@vger.kernel.org>; Wed, 15 Mar 2023 23:59:42 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32G52TFd018978;
+        Thu, 16 Mar 2023 06:59:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=jSbNlTEvsp1jFZwwJ527HZeDdYAiqoXCasmI00++FsM=;
+ b=cj8fXJ1WsvHzVLKn4koB6ZOvDHjvCRlqN/S08hdurKHkiFpaEdAG4d0JYHQXAewoA5PH
+ 1zEzC07BouvJXeZGIMW03AOetY0PdITnue8TEo/fKEZMtd/mkHcp5PpLsZX8z2a14/+Q
+ sMRV8eMcRBgThGr0/oZXPB7oY2VTPBi7B1TNg8KaDDozFPFUwFSdB9P0Fly/OF5LVtyU
+ 87A8GvysSBJ4tvGIYwxqoejBd7YWz0lwAbRxFuJGzdG+HsYHehA1g7i1iTdnugxIbGWt
+ Q7TsfqhCjo896xAjrrXNH9vDo0rpTrRbGJivuvldjbFV9VXh+AY6CebkBbw1ZJBQI/bg Ow== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pbpxhs0q4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Mar 2023 06:59:35 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32G6xC24023395
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Mar 2023 06:59:12 GMT
+Received: from hu-ugoswami-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Wed, 15 Mar 2023 23:59:10 -0700
+From:   Udipto Goswami <quic_ugoswami@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        <linux-usb@vger.kernel.org>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>
+Subject: [PATCH v3] usb: dwc3: debugfs: Prevent any register access when devices is runtime suspended
+Date:   Thu, 16 Mar 2023 12:28:58 +0530
+Message-ID: <20230316065858.12687-1-quic_ugoswami@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        petr.bahula@artisys.aero,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: [regression] Bug 217204 - ASIX AX88179 does not work in 6.X kernel
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1678949240;dbba4793;
-X-HE-SMSGID: 1pchOK-0003ay-LW
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: xhWgkst-1I-1WxX4YdDBSW19NzayQfOs
+X-Proofpoint-ORIG-GUID: xhWgkst-1I-1WxX4YdDBSW19NzayQfOs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-16_04,2023-03-15_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ priorityscore=1501 spamscore=0 lowpriorityscore=0 malwarescore=0
+ mlxlogscore=764 clxscore=1015 mlxscore=0 phishscore=0 bulkscore=0
+ impostorscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303150002 definitions=main-2303160058
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi, Thorsten here, the Linux kernel's regression tracker.
+When the dwc3 device is runtime suspended, various required clocks would
+get disabled and it is not guaranteed that access to any registers would
+work. Depending on the SoC glue, a register read could be as benign as
+returning 0 or be fatal enough to hang the system.
 
-I noticed a regression report in bugzilla.kernel.org; Hector, apparently
-it's caused by a commit of yours.
+In order to prevent such scenarios of fatal errors, bail out of debugfs
+function is dwc3 is suspended.
 
-As many (most?) kernel developer don't keep an eye on bugzilla, I
-decided to forward it by mail. Quoting from
-https://bugzilla.kernel.org/show_bug.cgi?id=217204 :
+Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+---
+v3: Replace pr_err to dev_err.
 
->  petr.bahula@artisys.aero 2023-03-15 16:04:49 UTC
-> 
-> After update from kernel 5.15.80 to 6.1.12 the USB ETH card ASIX AX88179 which is in USB-C dock is not accessible as eth1.
-> 
-> **!!! IMPORTANT !!!
-> If the HW is booted with good kernel and then rebooted (without losing power) to bad kernel, it will still work. Only if it is booted with bad kernel from cold state (total no power) then it will not work.**
-> 
-> ```
-> Bisecting: 2 revisions left to test after this (roughly 2 steps)
-> [a41b17ff9dacd22f5f118ee53d82da0f3e52d5e3] dccp: put dccp_qpolicy_full() and dccp_qpolicy_push() in the same lock
-> Bisecting: 0 revisions left to test after this (roughly 1 step)
-> [f56530dcdb0684406661ac9f1accf48319d07600] net: usb: make USB_RTL8153_ECM non user configurable
-> c67cc4315a8e605ec875bd3a1210a549e3562ddc is the first bad commit
-> commit c67cc4315a8e605ec875bd3a1210a549e3562ddc
-> Author: Hector Martin <marcan@marcan.st>
-> Date:   Sun Jul 31 16:22:09 2022 +0900
-> 
->     net: usb: ax88179_178a: Bind only to vendor-specific interface
->     
->     The Anker PowerExpand USB-C to Gigabit Ethernet adapter uses this
->     chipset, but exposes CDC Ethernet configurations as well as the
->     vendor specific one. This driver tries to bind by PID:VID
->     unconditionally and ends up picking up the CDC configuration, which
->     is supposed to be handled by the class driver. To make things even
->     more confusing, it sees both of the CDC class interfaces and tries
->     to bind twice, resulting in two broken Ethernet devices.
->     
->     Change all the ID matches to specifically match the vendor-specific
->     interface. By default the device comes up in CDC mode and is bound by
->     that driver (which works fine); users may switch it to the vendor
->     interface using sysfs to set bConfigurationValue, at which point the
->     device actually goes through a reconnect cycle and comes back as a
->     vendor specific only device, and then this driver binds and works too.
->     
->     The affected device uses VID/PID 0b95:1790, but we might as well change
->     all of them for good measure, since there is no good reason for this
->     driver to bind to standard CDC Ethernet interfaces.
->     
->     v3: Added VID/PID info to commit message
->     
->     Signed-off-by: Hector Martin <marcan@marcan.st>
->     Link: https://lore.kernel.org/r/20220731072209.45504-1-marcan@marcan.st
->     Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-> 
->  drivers/net/usb/ax88179_178a.c | 26 +++++++++++++-------------
->  1 file changed, 13 insertions(+), 13 deletions(-)
-> ```
-> 
-> I've reverted changes made in the c67cc4315a8e605ec875bd3a1210a549e3562ddc commit and gentoo-sources-6.1.12 works correctly now.
-> 
-> Patch which I use for new kernels now:
-> ```
-> pet@petkub ~ $  cat /etc/portage/patches/sys-kernel/gentoo-sources/ASIX_AX88179.patch 
-> --- a/drivers/net/usb/ax88179_178a.c    2022-12-11 23:15:18.000000000 +0100
-> +++ b/drivers/net/usb/ax88179_178a.c    2023-02-23 10:04:47.534060336 +0100
-> @@ -1844,7 +1844,8 @@
->  static const struct usb_device_id products[] = {
->  {
->         /* ASIX AX88179 10/100/1000 */
-> -       USB_DEVICE_AND_INTERFACE_INFO(0x0b95, 0x1790, 0xff, 0xff, 0),
-> +       /*USB_DEVICE_AND_INTERFACE_INFO(0x0b95, 0x1790, 0xff, 0xff, 0),*/
-> +       USB_DEVICE(0x0b95, 0x1790),
->         .driver_info = (unsigned long)&ax88179_info,
->  }, {
->         /* ASIX AX88178A 10/100/1000 */
-> ```
-> 
-> See also: https://bugs.gentoo.org/895720
+ drivers/usb/dwc3/debugfs.c | 60 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-See the ticket for more details.
+diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
+index 850df0e6bcab..4a9d0994f3b4 100644
+--- a/drivers/usb/dwc3/debugfs.c
++++ b/drivers/usb/dwc3/debugfs.c
+@@ -544,6 +544,12 @@ static int dwc3_link_state_show(struct seq_file *s, void *unused)
+ 	u32			reg;
+ 	u8			speed;
+ 
++	if (pm_runtime_suspended(dwc->dev)) {
++		dev_err(dwc->dev,
++			"Invalid operation, DWC3 suspended!");
++		return -EINVAL;
++	}
++
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
+ 	if (DWC3_GSTS_CURMOD(reg) != DWC3_GSTS_CURMOD_DEVICE) {
+@@ -580,6 +586,12 @@ static ssize_t dwc3_link_state_write(struct file *file,
+ 	u32			reg;
+ 	u8			speed;
+ 
++	if (pm_runtime_suspended(dwc->dev)) {
++		dev_err(dwc->dev,
++			"Invalid operation, DWC3 suspended!");
++		return -EINVAL;
++	}
++
+ 	if (copy_from_user(&buf, ubuf, min_t(size_t, sizeof(buf) - 1, count)))
+ 		return -EFAULT;
+ 
+@@ -641,6 +653,12 @@ static int dwc3_tx_fifo_size_show(struct seq_file *s, void *unused)
+ 	u32			mdwidth;
+ 	u32			val;
+ 
++	if (pm_runtime_suspended(dwc->dev)) {
++		dev_err(dwc->dev,
++			"Invalid operation, DWC3 suspended!");
++		return -EINVAL;
++	}
++
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_TXFIFO);
+ 
+@@ -663,6 +681,12 @@ static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
+ 	u32			mdwidth;
+ 	u32			val;
+ 
++	if (pm_runtime_suspended(dwc->dev)) {
++		dev_err(dwc->dev,
++			"Invalid operation, DWC3 suspended!");
++		return -EINVAL;
++	}
++
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_RXFIFO);
+ 
+@@ -684,6 +708,12 @@ static int dwc3_tx_request_queue_show(struct seq_file *s, void *unused)
+ 	unsigned long		flags;
+ 	u32			val;
+ 
++	if (pm_runtime_suspended(dwc->dev)) {
++		dev_err(dwc->dev,
++			"Invalid operation, DWC3 suspended!");
++		return -EINVAL;
++	}
++
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_TXREQQ);
+ 	seq_printf(s, "%u\n", val);
+@@ -699,6 +729,12 @@ static int dwc3_rx_request_queue_show(struct seq_file *s, void *unused)
+ 	unsigned long		flags;
+ 	u32			val;
+ 
++	if (pm_runtime_suspended(dwc->dev)) {
++		dev_err(dwc->dev,
++			"Invalid operation, DWC3 suspended!");
++		return -EINVAL;
++	}
++
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_RXREQQ);
+ 	seq_printf(s, "%u\n", val);
+@@ -714,6 +750,12 @@ static int dwc3_rx_info_queue_show(struct seq_file *s, void *unused)
+ 	unsigned long		flags;
+ 	u32			val;
+ 
++	if (pm_runtime_suspended(dwc->dev)) {
++		dev_err(dwc->dev,
++			"Invalid operation, DWC3 suspended!");
++		return -EINVAL;
++	}
++
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_RXINFOQ);
+ 	seq_printf(s, "%u\n", val);
+@@ -729,6 +771,12 @@ static int dwc3_descriptor_fetch_queue_show(struct seq_file *s, void *unused)
+ 	unsigned long		flags;
+ 	u32			val;
+ 
++	if (pm_runtime_suspended(dwc->dev)) {
++		dev_err(dwc->dev,
++			"Invalid operation, DWC3 suspended!");
++		return -EINVAL;
++	}
++
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_DESCFETCHQ);
+ 	seq_printf(s, "%u\n", val);
+@@ -744,6 +792,12 @@ static int dwc3_event_queue_show(struct seq_file *s, void *unused)
+ 	unsigned long		flags;
+ 	u32			val;
+ 
++	if (pm_runtime_suspended(dwc->dev)) {
++		dev_err(dwc->dev,
++			"Invalid operation, DWC3 suspended!");
++		return -EINVAL;
++	}
++
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_EVENTQ);
+ 	seq_printf(s, "%u\n", val);
+@@ -835,6 +889,12 @@ static int dwc3_ep_info_register_show(struct seq_file *s, void *unused)
+ 	u32			upper_32_bits;
+ 	u32			reg;
+ 
++	if (pm_runtime_suspended(dwc->dev)) {
++		dev_err(dwc->dev,
++			"Invalid operation, DWC3 suspended!");
++		return -EINVAL;
++	}
++
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	reg = DWC3_GDBGLSPMUX_EPSELECT(dep->number);
+ 	dwc3_writel(dwc->regs, DWC3_GDBGLSPMUX, reg);
+-- 
+2.17.1
 
-
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
-
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
-
-#regzbot introduced: c67cc4315a8e6
-https://bugzilla.kernel.org/show_bug.cgi?id=217204
-#regzbot title: net: drivers(usb): ASIX AX88179 stopped working
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
