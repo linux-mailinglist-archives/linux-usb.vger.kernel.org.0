@@ -2,145 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA586BCC6A
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Mar 2023 11:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD296BCCF0
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Mar 2023 11:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbjCPKUJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Mar 2023 06:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
+        id S229688AbjCPKhB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Mar 2023 06:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230470AbjCPKUH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Mar 2023 06:20:07 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7DC17165;
-        Thu, 16 Mar 2023 03:20:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678962005; x=1710498005;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cTWfBk3x3x+gBfiWBEncDsQaVQ9wjMxpSgAt7XwU7gA=;
-  b=SW7eO7H2lNK5t3vyxZC6TC268M28YXUOPpogx4E6lTt72o9dQpBSL/LK
-   ccnfee+mVkNwUWddpOTpVjhRxG8T3TIlNKXdR/kg2zNVmuNZepX4rkLSi
-   uqEv4YXCIUbw2a3RP+flRsvm44Uo05ldRlXDxh3cAm+QSLrk2DoFI0mDV
-   K41x70Mf+Vd1Lc/AXP3YrAmLanPF/j4CTGnLIz2V1GRyJvFgBzc1E/lyl
-   +8C/miHPIcm8iE1lNyI1nO14Wi+JWFsH8jc8566ac4VBYW2uJPmsOVEDP
-   o2NWqMcjPr/8PDctCDf/aeTTVPFXoQTw1PCpwVRYTFuAH9+7yYzOgbKbb
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="337966831"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="337966831"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 03:20:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="1009169621"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="1009169621"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Mar 2023 03:20:03 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 9A06C1CC; Thu, 16 Mar 2023 12:20:48 +0200 (EET)
-Date:   Thu, 16 Mar 2023 12:20:48 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH] thunderbolt: rename shadowed variables bit to
- interrupt_bit and auto_clear_bit
-Message-ID: <20230316102048.GR62143@black.fi.intel.com>
-References: <20230315220450.1470815-1-trix@redhat.com>
+        with ESMTP id S229669AbjCPKhA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Mar 2023 06:37:00 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049CF62FFD;
+        Thu, 16 Mar 2023 03:36:53 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id h11so698500ild.11;
+        Thu, 16 Mar 2023 03:36:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678963012;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+2KwWFmzvZ2djH3TgZVwyQ57NzJvl1Pp4QAiCezPP9s=;
+        b=q7nen8m4MrzYxoSraaaLgFF/LeGnpIMcuEzwCVtItw1YT6TBImobq/JQPtQmmrmibP
+         941k8PkJhfwkMc14EomNcFFX8mnn2JpLBEF5TuHI8STOKnD2FkWgYCkEioqCzRXpNmbN
+         nH9rz+BergZ3rHPNOKtsC71xkboD3N/jb5Sl8wkGZPDDgUEEaEIxhtOtDtFU5pxixwSK
+         crY8NJJk7BrqXrOL/BkzFaepKWNblJYXLPNq8GCJBhiCbFjbk6HcK3UFIQZUwpQAuruy
+         18z6F11MsOUibF+XIR3ThyLq5IDY2cUOKqxIG0ffECgkPrdDOgcH9hJnSl11gozIcFjM
+         k9Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678963012;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+2KwWFmzvZ2djH3TgZVwyQ57NzJvl1Pp4QAiCezPP9s=;
+        b=gWCrAKtRcn3dlDb1Ks4OWOdgwF/oujf/58DoNtG4ay/ki4B90yqgoewW8veYxZWutM
+         67w64OdjY9gO0TrenEvEJi4eDpcj2l+S6ZexkFNrWoxh1Hf92v5SNdEgvWdhtfP1j4DT
+         nRVNlWgI/nIrMFAITD6sVGB3bYTNwrZpZdLPDN+10R1pPV39MlqEj67AJEclcI/yfddu
+         2SBj6XH9IjoQzb4LKH2J/Klz9qfb8757gJGt2iaDljO3142jR1JESqTbYK+JL2n9Gw6R
+         w5oGO+NgT6OGpDlfI0sysnY4scS9rHJjoovUUGAIi3CSnbrWt1BBaa8hlnlveWBkjTpk
+         /3QQ==
+X-Gm-Message-State: AO0yUKVZx4sEHPxUxhIhGvg51XpuV8T7z/WaW7hzOO2CY5zN0Z2QEryH
+        5KQqxkoGD898uq9xTSrTZ3rdFLElQulFkuSDp/8=
+X-Google-Smtp-Source: AK7set+I41DgNxZUiTGjCAooKOqPDj7fDsAESCcsdjclnfa3Zv10wR6onWDT/9rS5Enbie/3JSVTDeSO+jBqV7OmTD0=
+X-Received: by 2002:a92:c14b:0:b0:316:f0d7:8db with SMTP id
+ b11-20020a92c14b000000b00316f0d708dbmr4439270ilh.5.1678963012299; Thu, 16 Mar
+ 2023 03:36:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230315220450.1470815-1-trix@redhat.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230313154522.52684-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230313154522.52684-1-andriy.shevchenko@linux.intel.com>
+From:   =?UTF-8?B?SsOzIMOBZ2lsYSBCaXRzY2g=?= <jgilab@gmail.com>
+Date:   Thu, 16 Mar 2023 11:36:41 +0100
+Message-ID: <CAMUOyH1BFnGzODgCZP+Whde=Kbmq_5rPN02GrfSp8z2_PVPpEQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] usb: gadget: Use correct endianness of the wLength
+ field for WebUSB
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-+Cc Mario
+On Mon, Mar 13, 2023 at 4:44=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> WebUSB code uses wLength directly without proper endianness conversion.
+> Update it to use already prepared temporary variable w_length instead.
 
-On Wed, Mar 15, 2023 at 06:04:50PM -0400, Tom Rix wrote:
-> cppcheck reports
-> drivers/thunderbolt/nhi.c:74:7: style: Local variable 'bit' shadows outer variable [shadowVariable]
->   int bit;
->       ^
-> drivers/thunderbolt/nhi.c:66:6: note: Shadowed declaration
->  int bit = ring_interrupt_index(ring) & 31;
->      ^
-> drivers/thunderbolt/nhi.c:74:7: note: Shadow variable
->   int bit;
->       ^
-> For readablity rename the outer to interrupt_bit and the innner
-> to auto_clear_bit.
+Excellent catch! Thank you very much for finding this. This could have
+been a very hard to find issue in a big endian system.
 
-Thanks for the patch! Yeah, this did not show up in any of the kbuild
-tests perhaps they are missing cppcheck :(
+I tested this on my local setup and it (unsurprisingly) works like a charm.
 
-I'm thinking that I'll just move the two commits from "fixes" to "next"
-and add this one on top (and drop the stable tags) as the code that we
-should be sending to stable should not need additional fixes IMHO. I
-know Mario is on vacation so probably cannot answer here so let's deal
-with this when he is back.
+> Fixes: 93c473948c58 ("usb: gadget: add WebUSB landing page support")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Tested-By: J=C3=B3 =C3=81gila Bitsch <jgilab@gmail.com>
 
-> Signed-off-by: Tom Rix <trix@redhat.com>
 > ---
->  drivers/thunderbolt/nhi.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-> index 318d20bd5b69..d0d26d288be8 100644
-> --- a/drivers/thunderbolt/nhi.c
-> +++ b/drivers/thunderbolt/nhi.c
-> @@ -63,15 +63,15 @@ static void ring_interrupt_active(struct tb_ring *ring, bool active)
->  {
->  	int reg = REG_RING_INTERRUPT_BASE +
->  		  ring_interrupt_index(ring) / 32 * 4;
-> -	int bit = ring_interrupt_index(ring) & 31;
-> -	int mask = 1 << bit;
-> +	int interrupt_bit = ring_interrupt_index(ring) & 31;
-> +	int mask = 1 << interrupt_bit;
->  	u32 old, new;
->  
->  	if (ring->irq > 0) {
->  		u32 step, shift, ivr, misc;
->  		void __iomem *ivr_base;
-> +		int auto_clear_bit;
->  		int index;
-> -		int bit;
->  
->  		if (ring->is_tx)
->  			index = ring->hop;
-> @@ -91,11 +91,11 @@ static void ring_interrupt_active(struct tb_ring *ring, bool active)
->  		 */
->  		misc = ioread32(ring->nhi->iobase + REG_DMA_MISC);
->  		if (ring->nhi->quirks & QUIRK_AUTO_CLEAR_INT)
-> -			bit = REG_DMA_MISC_INT_AUTO_CLEAR;
-> +			auto_clear_bit = REG_DMA_MISC_INT_AUTO_CLEAR;
->  		else
-> -			bit = REG_DMA_MISC_DISABLE_AUTO_CLEAR;
-> -		if (!(misc & bit))
-> -			iowrite32(misc | bit, ring->nhi->iobase + REG_DMA_MISC);
-> +			auto_clear_bit = REG_DMA_MISC_DISABLE_AUTO_CLEAR;
-> +		if (!(misc & auto_clear_bit))
-> +			iowrite32(misc | auto_clear_bit, ring->nhi->iobase + REG_DMA_MISC);
->  
->  		ivr_base = ring->nhi->iobase + REG_INT_VEC_ALLOC_BASE;
->  		step = index / REG_INT_VEC_ALLOC_REGS * REG_INT_VEC_ALLOC_BITS;
-> @@ -115,7 +115,7 @@ static void ring_interrupt_active(struct tb_ring *ring, bool active)
->  
->  	dev_dbg(&ring->nhi->pdev->dev,
->  		"%s interrupt at register %#x bit %d (%#x -> %#x)\n",
-> -		active ? "enabling" : "disabling", reg, bit, old, new);
-> +		active ? "enabling" : "disabling", reg, interrupt_bit, old, new);
->  
->  	if (new == old)
->  		dev_WARN(&ring->nhi->pdev->dev,
-> -- 
-> 2.27.0
+>  drivers/usb/gadget/composite.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composit=
+e.c
+> index fa7dd6cf014d..5377d873c08e 100644
+> --- a/drivers/usb/gadget/composite.c
+> +++ b/drivers/usb/gadget/composite.c
+> @@ -2079,10 +2079,9 @@ composite_setup(struct usb_gadget *gadget, const s=
+truct usb_ctrlrequest *ctrl)
+>                                 sizeof(url_descriptor->URL)
+>                                 - WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH + l=
+anding_page_offset);
+>
+> -                       if (ctrl->wLength < WEBUSB_URL_DESCRIPTOR_HEADER_=
+LENGTH
+> -                                           + landing_page_length)
+> -                               landing_page_length =3D ctrl->wLength
+> -                                       - WEBUSB_URL_DESCRIPTOR_HEADER_LE=
+NGTH + landing_page_offset;
+> +                       if (w_length < WEBUSB_URL_DESCRIPTOR_HEADER_LENGT=
+H + landing_page_length)
+> +                               landing_page_length =3D w_length
+> +                               - WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH + l=
+anding_page_offset;
+>
+>                         memcpy(url_descriptor->URL,
+>                                 cdev->landing_page + landing_page_offset,
+> --
+> 2.39.2
+>
