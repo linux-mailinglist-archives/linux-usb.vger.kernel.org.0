@@ -2,75 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1946BD8CB
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Mar 2023 20:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DAE6BDA6B
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Mar 2023 21:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbjCPTTG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Mar 2023 15:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39492 "EHLO
+        id S230282AbjCPUwr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Mar 2023 16:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbjCPTTC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Mar 2023 15:19:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA19E4863;
-        Thu, 16 Mar 2023 12:18:20 -0700 (PDT)
+        with ESMTP id S229639AbjCPUwp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Mar 2023 16:52:45 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61E16E68B;
+        Thu, 16 Mar 2023 13:52:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 207BC620F7;
-        Thu, 16 Mar 2023 19:18:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1D0DC433D2;
-        Thu, 16 Mar 2023 19:18:17 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E495CCE1EB3;
+        Thu, 16 Mar 2023 20:52:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAD46C433EF;
+        Thu, 16 Mar 2023 20:52:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678994298;
-        bh=U6/3MAM8lEWJuAQad1Q+TVX2oTsNcl0STc3k5xy9Klg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lka3LA3zNxRuOKAFjjixGSIQqsYiL+s0wuBpCboYGUB+hn39p7r+N9ZHBasxkdnyb
-         4JSSvT96btScmpf0WgeEX29S62/0B301LF49slJPT5Z0XJEhHOrzXTm1hOQ03rtDP/
-         XbzEMb5/S1Rx3gdNkhmMaZ+5U/zWhgPN6skkB8J79ghJkpmb1htrW7LAOPrDYW5Ewc
-         uPHZPuIYSC8ya9qx8xt1HMHWoK3sd4uhVWfW0MtgXlmhOG+gwTy1XznsCAwW1V79lk
-         vMJix/0BhIo+9Dkjd2gLc+Kf36QBHmsmh4vWdWXtquzrQJWBE/zF5SdrR0PfkLyFod
-         QvYWz9NCaDZqw==
-Date:   Thu, 16 Mar 2023 20:18:15 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     linux-riscv@lists.infradead.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-clk@vger.kernel.org, Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Daire McNamara <daire.mcnamara@microchip.com>
-Subject: Re: [PATCH v1 2/5] i2c: microchip-core: convert
- SOC_MICROCHIP_POLARFIRE to ARCH_MICROCHIP_POLARFIRE
-Message-ID: <ZBNrd5ww9YD3xQTS@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Conor Dooley <conor@kernel.org>, linux-riscv@lists.infradead.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-clk@vger.kernel.org, Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Daire McNamara <daire.mcnamara@microchip.com>
-References: <20230309204452.969574-1-conor@kernel.org>
- <20230309204452.969574-3-conor@kernel.org>
+        s=k20201202; t=1678999959;
+        bh=RqbnUWeY+HYBi3rHUEQbPvSQ2IN0wd86FyHyKmwfTM0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jHQHY0t842wTFvilHYo/g5r2sWYVsM1iTPo5+znFm1Mxharke9JAcHQ2zLGaCg4c5
+         7LeHdVjNTTOhiAzo4/Lqdlttt6KUBgl34owX4vKVCa4c9Rq47usaHN6/jcAd+df+hs
+         2HEwFnaS5zF0rMdG20On0cUDvPoALqlBF94cBgajJDfh+rBQ8Qqml7hCIi6+q3SIAf
+         4kznm6Ig7SjzG9vDJsafF5DQqUNZr23/KlruFAeRh4W8zPKysEQ9PF/GK3rIq8mlfM
+         N+5e/xPE7Q2B3mIr/wUj6BUEFqyevoPNSuhMt0ly/0ENQ0hMMnYugQKWNrM6LuGk9e
+         JnRNO8Tz63Q5w==
+Date:   Thu, 16 Mar 2023 13:52:37 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Szymon Heidrich <szymon.heidrich@gmail.com>
+Cc:     steve.glendinning@shawell.net, UNGLinuxDriver@microchip.com,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: usb: smsc95xx: Limit packet length to skb->len
+Message-ID: <20230316135237.3052d98c@kernel.org>
+In-Reply-To: <20230316101954.75836-1-szymon.heidrich@gmail.com>
+References: <20230315212425.12cb48ca@kernel.org>
+        <20230316101954.75836-1-szymon.heidrich@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TIODK/DyJw5FNTCf"
-Content-Disposition: inline
-In-Reply-To: <20230309204452.969574-3-conor@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -80,42 +55,12 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, 16 Mar 2023 11:19:54 +0100 Szymon Heidrich wrote:
+> Packet length retrieved from descriptor may be larger than
+> the actual socket buffer length. In such case the cloned
+> skb passed up the network stack will leak kernel memory contents.
+> 
+> Fixes: 2f7ca802bdae ("net: Add SMSC LAN9500 USB2.0 10/100 ethernet adapter driver")
+> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
 
---TIODK/DyJw5FNTCf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Mar 09, 2023 at 08:44:49PM +0000, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
->=20
-> As part of converting RISC-V SOC_FOO symbols to ARCH_FOO to match the
-> use of such symbols on other architectures, convert the Microchip FPGA
-> i2c drivers to use the new symbol.
->=20
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-
-Applied to for-next, thanks!
-
-
---TIODK/DyJw5FNTCf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQTa3YACgkQFA3kzBSg
-KbZWQRAArPUHPGdzaDCWZYxs1RoufYMPW3mLcn2mvcWqFmxkR89/yXReohhpb09D
-99smcOSUtpAXFkzmCoCc4KlsUQDmUqG8Zy8dJ70//YEbx1IZddE8OkDOu2WwMToX
-WY3AQ7Xkfa3Ror25SeitAVTnpP3XnFTR/jPl4d6Vz7ug5vGIcleqJRs5AOShZfdH
-nDRdXQfayeVeWfjA/zSp4XM4ahx5ZaLAyqyOQEUmx2IZDJGcaUZXc4K2SeHoeJ9e
-KYrhY+SHfwTSqNoPB7bUUfrz11Ub6use6WHLLZPMGUYzkuHyhpkFUxAInoZPpVgd
-dhpTUodP5iZHalX4Z2ZFCX1ciYuowOQN5fr5dFZBBM87cxE9OMd/eaGC3dVMe98U
-LqAmJzWg1+E38GswGLZdgRWtuhSwMxvSGm5bRxlZlyoOdBXEFlTjOB1WAKGyduzs
-raLno/7NRrdQvPzV9/DVXNQQ4ERA5hInN6Ax1bhqApMNouaxsTqv8leU+AVFL+Tg
-JVU1OFGedAfBYFHySpAEO3AeNV1hWKBMkccjWZHMwExC86r3dGFfc4KYo8/OEM//
-/yjIwK1DuOLfH7CoM/F/wsK4Ga8XmuIg7z1/34m5Z7iKfsz30zmlDxHHKeMLm5RF
-XoBHu7Mq3A0osybzaKLJWmXXYW9G3/kIIeXGZhQNoCb999t+8+I=
-=WGcd
------END PGP SIGNATURE-----
-
---TIODK/DyJw5FNTCf--
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
