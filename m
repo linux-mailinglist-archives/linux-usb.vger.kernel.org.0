@@ -2,126 +2,214 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 063196BEFC6
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 18:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87886BF047
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 19:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbjCQRgn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Mar 2023 13:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37318 "EHLO
+        id S230071AbjCQSAD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Mar 2023 14:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbjCQRgm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 13:36:42 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B04C1BD9;
-        Fri, 17 Mar 2023 10:36:38 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id o12so23269632edb.9;
-        Fri, 17 Mar 2023 10:36:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679074596;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7EAQShATxzdhJQQb5tocPxykTn/sRjDru15SsB0eMkY=;
-        b=aKxgUx89cU/ougX8mQL6NitjRTPZR0lcg51PxzfxsNhmfXtK/EigFl3GTpEpcBxUl2
-         N0LveujLoWE0DLA2yYwXXs+musBK4q/6asn6MKvNyNvSn5cnbUSGx7XyDjIEuG9ikbyT
-         3DA7kMjb6Udfh9IIK98GYNYpYGnfgx7dYZCPfRSmnLioC1rBaqLrEeGJpvU5T7IW9czl
-         LBLv0fUV3FohPWk32ydtmnxO/SS36n6szQJyZT8UMqegaYkP/2zP6mXgWUFiWwQIpM31
-         EJJ7qe/sVEVRWIaQSgxyGJ8TvgcILTXCPT9AUOsiHdSyAdkxcxZ+4tlYE3t1++sOxP5s
-         KkiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679074596;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7EAQShATxzdhJQQb5tocPxykTn/sRjDru15SsB0eMkY=;
-        b=CRU68dqftD4OVEBJnXy7aS/pv90sw+HWy/FjLZmq4tHdfHhv+WPmZbx6tUF29t1trI
-         OQKyEVSlpWN+AwiUMoyo6ji2yN24aaKk5WN48w1QBfcNK4MLWIMu98mJ36Lzo0iGwcdI
-         YtfrOV9rrJn26mK08F3GgMHNZNd/+BTV0fC/e9wbe5/sboAOfp4qrUJG3FsQmdRbGfnm
-         UVTBFFr7QsLI8MZuSzzades3nofxHeCxtoeykRsLU3nLKHjiHh/hLh9ar9ltzjxHfF00
-         A3NTwO7zR9iGiCqvrjXF3bYNmR+fy28LyjNmBfrdvCWY/hjl56cPzrk6b5tg0ldDPnPb
-         GVHg==
-X-Gm-Message-State: AO0yUKXEzH07jY6gKJ4QAAnJQ6SsfJTbpSyDo7eH42vfI9s+nRqGdM6p
-        2pWkkoRW88WOwyavbzVVxE4=
-X-Google-Smtp-Source: AK7set+BiHUaPH654xcLX2P8WRLz/aiyXQEL0Al2DC5tor/u+f57qSyngurpg/M5qkv4KMKi5+yqGg==
-X-Received: by 2002:a17:906:7fc9:b0:92b:c56a:7efe with SMTP id r9-20020a1709067fc900b0092bc56a7efemr167913ejs.31.1679074596541;
-        Fri, 17 Mar 2023 10:36:36 -0700 (PDT)
-Received: from localhost.localdomain (077222238142.warszawa.vectranet.pl. [77.222.238.142])
-        by smtp.googlemail.com with ESMTPSA id qx20-20020a170906fcd400b008eaf99be56esm1212888ejb.170.2023.03.17.10.36.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 10:36:35 -0700 (PDT)
-From:   Szymon Heidrich <szymon.heidrich@gmail.com>
-To:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        kuba@kernel.org, davem@davemloft.net, edumazet@google.com
-Cc:     pabeni@redhat.com, szymon.heidrich@gmail.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] net: usb: lan78xx: Limit packet length to skb->len
-Date:   Fri, 17 Mar 2023 18:36:06 +0100
-Message-Id: <20230317173606.91426-1-szymon.heidrich@gmail.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <202303180031.EsiDo4qY-lkp@intel.com>
-References: <202303180031.EsiDo4qY-lkp@intel.com>
+        with ESMTP id S230506AbjCQSAA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 14:00:00 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7448F199EF;
+        Fri, 17 Mar 2023 10:59:58 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32H901KY016837;
+        Fri, 17 Mar 2023 17:59:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=YwsLtwX+PmDFrcgxboExawpRnQvnsGpKdOo3vK8Z9uM=;
+ b=ZkCeone9LBqTGTbr4riofRU7A21+qm81MtftZsTnzgMvWzVoW+uyo22lHVDxELDB8JXk
+ +P0Kxn2G2DRM18COB345Cfz01hPqlN8vfDL9+jgMN9h9qkFxXV6xsTTKAy3cSfLjEqGV
+ V6NBx5K5JSinyu9s9UjnB6R0/4x3y0PVMeHomnkcLil5MJKVLKSGXitWVposlSWbZUkt
+ iYq15v1j9U+CKL9eKRSS946QEjys3dqmzcViwGKYgL2L9V2LC0U1JVZKxIPWEaQl+ulI
+ 3I/HNX5WzoRcigeHQYDNrC7PfXb5qNSI/UE0WwNUrHV7HYaEHDrk5jUBhkhu0Cvon60v Fw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pcn6f1tsy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Mar 2023 17:59:55 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32HHxsso004847
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Mar 2023 17:59:54 GMT
+Received: from [10.110.60.126] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 17 Mar
+ 2023 10:59:53 -0700
+Message-ID: <0bf5bddd-515b-76b6-f22f-9da10a140d83@quicinc.com>
+Date:   Fri, 17 Mar 2023 10:59:53 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v12 6/6] usb: gadget: f_ecm: Add suspend/resume and remote
+ wakeup support
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <1679009888-8239-1-git-send-email-quic_eserrao@quicinc.com>
+ <1679009888-8239-7-git-send-email-quic_eserrao@quicinc.com>
+ <20230317001149.nlvcj2y3fuvq32qt@synopsys.com>
+From:   Elson Serrao <quic_eserrao@quicinc.com>
+In-Reply-To: <20230317001149.nlvcj2y3fuvq32qt@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: nxaJ8aXwu97s8UvsoqWFZi4iK2CM_4_p
+X-Proofpoint-ORIG-GUID: nxaJ8aXwu97s8UvsoqWFZi4iK2CM_4_p
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-17_14,2023-03-16_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ priorityscore=1501 spamscore=0 clxscore=1015 suspectscore=0 malwarescore=0
+ mlxlogscore=999 lowpriorityscore=0 impostorscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303170121
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Packet length retrieved from descriptor may be larger than
-the actual socket buffer length. In such case the cloned
-skb passed up the network stack will leak kernel memory contents.
 
-Additionally prevent integer underflow when size is less than
-ETH_FCS_LEN.
 
-Fixes: 55d7de9de6c3 ("Microchip's LAN7800 family USB 2/3 to 10/100/1000 Ethernet device driver")
-Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-Reported-by: kernel test robot <lkp@intel.com>
----
-V1 -> V2: Fix ISO C90 forbids mixed declarations and code
+On 3/16/2023 5:11 PM, Thinh Nguyen wrote:
+> On Thu, Mar 16, 2023, Elson Roy Serrao wrote:
+>> When host sends a suspend notification to the device, handle
+>> the suspend callbacks in the function driver. Enhanced super
+>> speed devices can support function suspend feature to put the
+>> function in suspend state. Handle function suspend callback.
+>>
+>> Depending on the remote wakeup capability the device can either
+>> trigger a remote wakeup or wait for the host initiated resume to
+>> start data transfer again.
+>>
+>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
+>> ---
+>>   drivers/usb/gadget/function/f_ecm.c   | 71 +++++++++++++++++++++++++++++++++++
+>>   drivers/usb/gadget/function/u_ether.c | 63 +++++++++++++++++++++++++++++++
+>>   drivers/usb/gadget/function/u_ether.h |  4 ++
+>>   3 files changed, 138 insertions(+)
+>>
+>> diff --git a/drivers/usb/gadget/function/f_ecm.c b/drivers/usb/gadget/function/f_ecm.c
+>> index a7ab30e..c43cd557 100644
+>> --- a/drivers/usb/gadget/function/f_ecm.c
+>> +++ b/drivers/usb/gadget/function/f_ecm.c
+>> @@ -633,6 +633,8 @@ static void ecm_disable(struct usb_function *f)
+>>   
+>>   	usb_ep_disable(ecm->notify);
+>>   	ecm->notify->desc = NULL;
+>> +	f->func_suspended = false;
+>> +	f->func_wakeup_armed = false;
+>>   }
+>>   
+>>   /*-------------------------------------------------------------------------*/
+>> @@ -885,6 +887,71 @@ static struct usb_function_instance *ecm_alloc_inst(void)
+>>   	return &opts->func_inst;
+>>   }
+>>   
+>> +static void ecm_suspend(struct usb_function *f)
+>> +{
+>> +	struct f_ecm *ecm = func_to_ecm(f);
+>> +	struct usb_composite_dev *cdev = ecm->port.func.config->cdev;
+>> +
+>> +	if (f->func_suspended) {
+>> +		DBG(cdev, "Function already suspended\n");
+>> +		return;
+>> +	}
+>> +
+>> +	DBG(cdev, "ECM Suspend\n");
+>> +
+>> +	gether_suspend(&ecm->port);
+>> +}
+>> +
+>> +static void ecm_resume(struct usb_function *f)
+>> +{
+>> +	struct f_ecm *ecm = func_to_ecm(f);
+>> +	struct usb_composite_dev *cdev = ecm->port.func.config->cdev;
+>> +
+>> +	/*
+>> +	 * If the function is in USB3 Function Suspend state, resume is
+>> +	 * canceled. In this case resume is done by a Function Resume request.
+>> +	 */
+>> +	if (f->func_suspended)
+>> +		return;
+>> +
+>> +	DBG(cdev, "ECM Resume\n");
+>> +
+>> +	gether_resume(&ecm->port);
+>> +}
+>> +
+>> +static int ecm_get_status(struct usb_function *f)
+>> +{
+>> +	struct usb_configuration *c = f->config;
+>> +
+>> +	/* D0 and D1 bit set to 0 if device is not wakeup capable */
+>> +	if (!(USB_CONFIG_ATT_WAKEUP & c->bmAttributes))
+>> +		return 0;
+>> +
+>> +	return (f->func_wakeup_armed ? USB_INTRF_STAT_FUNC_RW : 0) |
+>> +		USB_INTRF_STAT_FUNC_RW_CAP;
+>> +}
+> 
+> Why do we need to implement ecm_get_status if it's already handled in
+> composite.c now?
+> 
 
- drivers/net/usb/lan78xx.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+Yes this can be removed now. Will modify accordingly.
+>> +
+>> +static int ecm_func_suspend(struct usb_function *f, u8 options)
+>> +{
+>> +	struct usb_composite_dev *cdev = f->config->cdev;
+>> +
+>> +	DBG(cdev, "func susp %u cmd\n", options);
+>> +
+>> +	if (options & (USB_INTRF_FUNC_SUSPEND_LP >> 8)) {
+> 
+> This feature selector doesn't indicate whether it's SetFeature or
+> ClearFeature request. ecm_func_suspend is supposed to be for
+> SetFeature(suspend) only. Perhaps we may have to define func_resume()
+> for ClearFeature(suspend)?
+> 
+> Thanks,
+> Thinh
+> 
+Host uses the same feature selector FUNCTION_SUSPEND for function 
+suspend and function resume and func_suspend() callback can be used to
+handle both the cases ? The distinction comes whether it is a 
+SetFeature(FUNCTION_SUSPEND) or ClearFeature(FUNCTION_SUSPEND) which can 
+be easily done in the func_suspend callback itself. We can add another 
+callback func_resume specific to ClearFeature(FUNCTION_SUSPEND) but wont 
+that be redundant and more callback handling on function 
+driver/composite side as well? Please let me know your opinion.
 
-diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-index 068488890..a150711a1 100644
---- a/drivers/net/usb/lan78xx.c
-+++ b/drivers/net/usb/lan78xx.c
-@@ -3579,11 +3579,27 @@ static int lan78xx_rx(struct lan78xx_net *dev, struct sk_buff *skb,
- 		size = (rx_cmd_a & RX_CMD_A_LEN_MASK_);
- 		align_count = (4 - ((size + RXW_PADDING) % 4)) % 4;
- 
-+		if (unlikely(size > skb->len)) {
-+			netif_dbg(dev, rx_err, dev->net,
-+				  "size err rx_cmd_a=0x%08x\n",
-+				  rx_cmd_a);
-+			return 0;
-+		}
-+
- 		if (unlikely(rx_cmd_a & RX_CMD_A_RED_)) {
- 			netif_dbg(dev, rx_err, dev->net,
- 				  "Error rx_cmd_a=0x%08x", rx_cmd_a);
- 		} else {
--			u32 frame_len = size - ETH_FCS_LEN;
-+			u32 frame_len;
-+
-+			if (unlikely(size < ETH_FCS_LEN)) {
-+				netif_dbg(dev, rx_err, dev->net,
-+					  "size err rx_cmd_a=0x%08x\n",
-+					  rx_cmd_a);
-+				return 0;
-+			}
-+
-+			frame_len = size - ETH_FCS_LEN;
- 			struct sk_buff *skb2;
- 
- 			skb2 = napi_alloc_skb(&dev->napi, frame_len);
--- 
-2.40.0
+Thanks
+Elson
 
+>> +		if (!f->func_suspended) {
+>> +			ecm_suspend(f);
+>> +			f->func_suspended = true;
+>> +		}
+>> +	} else {
+>> +		if (f->func_suspended) {
+>> +			f->func_suspended = false;
+>> +			ecm_resume(f);
+>> +		}
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
