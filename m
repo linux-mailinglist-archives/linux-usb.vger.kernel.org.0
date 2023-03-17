@@ -2,153 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA106BE950
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 13:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C3A6BE996
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 13:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjCQMdP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Mar 2023 08:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
+        id S230322AbjCQMrS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Mar 2023 08:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbjCQMdN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 08:33:13 -0400
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2047.outbound.protection.outlook.com [40.107.241.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD1D73AD4;
-        Fri, 17 Mar 2023 05:32:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZspbcUqZoDx5LkxBoHUm1XHWq4W3cUmc/g6cgnUiuxWGP1U6sC8I9MV1cyTKlF0mgIzsHmKjeoZqk9+3XQzuOnrrAtxdOyKLG7xamc8yE8l3It3FM/mP7joVhrTgCeUqjnNq2BYeJB3tZ78xNXEMY80yraNGzmh23UlZhEGX4aMiyXaK4jhk10AGS+zSAug1OAxDgIgYf5xziQqgfHtUOG9oFTUNnJJGoU/Hq+KUCBX6MHHwUNOQ5GpKYjb72f6qm6h0J3qfAfxu2YktYa9ky73NVcVm+8gDmACBXNC+ZbZkKT4Z4RJvgKhWWMxmfBXYBYFJyVRn0bMooXzNbPLFAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ff4ng602SoshLDvQgPEcxyiSzsCtkn3MaccwzpQapdA=;
- b=GbNpivjE7DlY4nSt0ynkBTOU1K04wAfofBo4krkw7+mAsZcDOY0GxxzvNnQUlLPIyLn6V/zIkkP8Es2gaLw8341NnTsT3m869Fcke7XHZzdV9wqzqai0dHE7r2s11uvc6XptK5fnrP3+kI6SY+E4nEEACgNWtTfzdCUq9IMpkLzPXIncMeM3ejmEEY4WOB3S72nqxoRGK/Kbaqbc7bNVyfBzVsayAuJQPuq2sWvi/auQqE5cYoT7BHz5BK/5KAKy2zTabUNv/A7OZpTo2oEwu5QUNx+4f7f5J61IYbpTt8DlT6A5liUgC3GQgD7q/eX2USQJjhkta15JToDfj3KkQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ff4ng602SoshLDvQgPEcxyiSzsCtkn3MaccwzpQapdA=;
- b=akH3fMxTQz8IGOwZP7A7w0cjSzNFQngNpMUDvkPo5l6Z7CInEfnMlBdClcAyyRNMbpiCJ3d1mMeoX3q8i/cpej9VY/3xkZjYgMrbOw6r+/E+E/WIfPP7axbb7ROoGBgkZtapwCJz+WMuBmcZYv3Mmnt/EnbmqQkGxALKosaHPM4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from PA4PR04MB9416.eurprd04.prod.outlook.com (2603:10a6:102:2ab::21)
- by DB8PR04MB6970.eurprd04.prod.outlook.com (2603:10a6:10:fa::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29; Fri, 17 Mar
- 2023 12:32:34 +0000
-Received: from PA4PR04MB9416.eurprd04.prod.outlook.com
- ([fe80::7ebc:3d88:4dd1:ecbf]) by PA4PR04MB9416.eurprd04.prod.outlook.com
- ([fe80::7ebc:3d88:4dd1:ecbf%6]) with mapi id 15.20.6178.026; Fri, 17 Mar 2023
- 12:32:33 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, xu.yang_2@nxp.com
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V4 6/6] arm64: dts: imx8dxl: update usb compatible
-Date:   Fri, 17 Mar 2023 20:37:08 +0800
-Message-Id: <20230317123708.337286-7-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230317123708.337286-1-peng.fan@oss.nxp.com>
-References: <20230317123708.337286-1-peng.fan@oss.nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0050.apcprd02.prod.outlook.com
- (2603:1096:4:1f5::12) To PA4PR04MB9416.eurprd04.prod.outlook.com
- (2603:10a6:102:2ab::21)
+        with ESMTP id S230186AbjCQMrQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 08:47:16 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F26AF2AE;
+        Fri, 17 Mar 2023 05:47:14 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id bp11so2676670ilb.3;
+        Fri, 17 Mar 2023 05:47:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679057234;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uMPENxtm6B3AsAn3c4xfJq8kPIjS9MSNdQwqeoG6GXk=;
+        b=Enor0DrvWQLFMMk1BckAW3zhPQPyM+2hd9Mgj15l08jHxHb8isx1ZlSKkW4WqehgFl
+         ByD0bCq8LbMvaeF+gi/BWpxJTsvv1P+JVC/F2zwyL44cEoBi3Vbo+ZLBs4HUlCogom1b
+         OXMO4Xq7hypLScLfjGbcEzpoJfwxiGdkpp1X1N2sOqggsM3L9SHXkhsEgiwp5tp86co/
+         LgyvfNSSVsHU4gohBSql9Ogto3KrS4BKZZKNe1CpFnPIwALKTBEqyd2r+/U8GMi05v7S
+         2zxy21QC3ZdrBkgo8moPfAUPcYSpuINPIKIg5IkQcJ4zQaKsx+rzbT04y+u/t3ejptHE
+         29yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679057234;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uMPENxtm6B3AsAn3c4xfJq8kPIjS9MSNdQwqeoG6GXk=;
+        b=M8aM2H1gIBRtXxrLLxwiI0mLsmAj74w4NjV/FEK13ZWEMTE2jnbJxJmHN1PWgofe+q
+         gQ7qrvJ9aSkIWMLDCEW/lFVns4KRflhV3YMVx/a+tl/hcolWHhc9i2apFEPBSdFew9HT
+         aDyZTKgOcOb48rx1gNXceDmcYQXQzNdauYIZ1CdDTb0rMgFYlHO4oXpkOOVVA5elsam8
+         +s+IeQjIWIFc/jCjmXrVGJuxEvNqW8kzj5BIxrkoynlRWrF91vZpPAKEcKyljVu5bb3U
+         kXeVaCRGsJ2fUvwhYNpZWpXBYfAbCazIGDNHVPI8IPfvrlutfJI18pS09ajwuyh0X1mv
+         arEw==
+X-Gm-Message-State: AO0yUKUOc9vKCzFOLS8ymkPoaPv0OaVRvjYu+DL9JdA+z8iwNvaZReHE
+        S7XxuFonBkRHfGIF2uTn6QI=
+X-Google-Smtp-Source: AK7set8B4oT+0estBbN7+ctEL+I0r+koof2KJocD38OwW53LVUU3Bra06/AbHcBbtc03N2IRuxwMbg==
+X-Received: by 2002:a92:d6d2:0:b0:317:980d:970 with SMTP id z18-20020a92d6d2000000b00317980d0970mr9038697ilp.7.1679057233818;
+        Fri, 17 Mar 2023 05:47:13 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y4-20020a92d804000000b003231396e317sm556704ilm.88.2023.03.17.05.47.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 05:47:13 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d5d1880b-2852-a168-b155-26f972a96457@roeck-us.net>
+Date:   Fri, 17 Mar 2023 05:47:10 -0700
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR04MB9416:EE_|DB8PR04MB6970:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4651bb16-7bc1-4c01-5c6b-08db26e3aec5
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: g5RCEzOqGGlrexes4NaT0CZGXZoIP70qgRcgcdnf++xRSVs6VJ+wwjUo0LiilXEIRIoTEwMpagC+856oL0bgwqhJ0Uw/LZGfzJw7r+HDT1QYWaMAGSnX/GOgrYlBUrxjFaxqWDF3VrCwyl1HOclTIssp1YntDcXUBSx099LifqNgdZ10HcpLBWb1f2G7B+1+d/2thyi6tbjVKfrE0Tt/jeheqhS6UvX+RJh7pPNpzO0ovTLxRDUMXK6EoDtOTSdHsYCsw5kI0jGui4mAwPP+xfZrzgZLurLcZvfVlE/CJ3FhxOy+N69v63JXSvigtIM68CtiPkUjopBaLZdSblGq8huypVWzDLD1zSkQXhJhiERDffoKz/wKogQe+yiGdOfsQtXEqiUT2k+u54JOEPUrecrnKldeanpJM/+koboqaaX7576bspG8/u3yW70/4IbgadUb0cFzUCVMwLTgLPUyQanVnfhXJ6ec4BR4F99VIOr5jumd6SJ3012RB3MjZi4R7Jt6VW0hr1lCqK7tr2iih164gFuhPSO5YOIPwzPh1D8b0Xhzhk7sW+XRDFsp9DQX5ccm/rp4jF5Ck22tLMh/K0G1La/q7DiNBGz0CbBKLwvvW3n81BoqPMoTUEhZVoSpzUZjttzwGn6lr8n43WemSHX1LxFNFhFgJFeeYNkGELqy1MvzLaWXgOUuJlcpxOE3noadiXSdowdgeg+MSPZDiObIIrGmQSDa3poqFjn60C0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9416.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(346002)(136003)(366004)(396003)(451199018)(2906002)(5660300002)(15650500001)(7416002)(186003)(26005)(2616005)(6666004)(83380400001)(6506007)(52116002)(6486002)(478600001)(6512007)(1076003)(316002)(66946007)(41300700001)(8936002)(86362001)(66476007)(38100700002)(66556008)(8676002)(4326008)(38350700002)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LvBZwgAN0+rZGqcMOKcvHwIj4nMm1tRwRRO3PsuPQBP3nlzDOglGCwU0nKmI?=
- =?us-ascii?Q?3aPxGkIU4T36bJR3tlIwLpVTaznRg3XDZyWlQUw4z3Bz2MIoeF0xbpIcWDLZ?=
- =?us-ascii?Q?uQM77pDhSq5wLc1aubJhoufDUei7YUxxwnHO92crUXcEFAwGL42Lvx0Ll/iD?=
- =?us-ascii?Q?L/RQ6QuRQ5aI+ewGdGcyfoAoWDnIAxvn5mICAR/iVcFHT3doIceh+bOW2fjq?=
- =?us-ascii?Q?n+qR+K9EnBUlJnrtR3/BNtcjvw36aV0CSZAluwm286C4thy4z2362+MEhgYP?=
- =?us-ascii?Q?sbFXc9SDkV2bz6gMCIGQUiBv34w5Y/7Mz0VtK/TB/EnxBBa7GYZg3jrM8rsA?=
- =?us-ascii?Q?IaGfgPvyP0trUfcqanbVMNlw4ebFrv/G5O9BJh5qky8kwkMkJIJ2IusZXRhP?=
- =?us-ascii?Q?tuONju+24AoFuwhOOHrCB5622vaoXQQqTCt3liQUobxDPze2YUHnxeyOjH1z?=
- =?us-ascii?Q?7fvdL9eLzPxrQ16A9vdijdTy0g33281VraPD4WlVVFlH8U13iayMq1Ur53jC?=
- =?us-ascii?Q?FcweaOXqtqZcP81cdHdhETQ/ToIKRJUaRIxCmmm0emGmS6p7/ZGD11cRvawS?=
- =?us-ascii?Q?8shM09zXXKmb/WsdzvKaJS6L1DtkvYyyjzPqO+3U+sUYT3Ts1Gpt+sofKVgM?=
- =?us-ascii?Q?ynOa/Bd9m+y/A0dn/PXbuimDAZt4m4qyZaIDrWW7cKppAfXJ8MEkbyvSH9V2?=
- =?us-ascii?Q?O6Vp5rab3FNLLk7uQtori7Tu/0vp0hlypm62P9+Y1IShl29HF6mfnjzkbLTZ?=
- =?us-ascii?Q?sB0g0LeEow/OyV3j6UnjZ6nLZe59MCbX+21HQ3yc+GMQDOEqhpFy+0ET8H29?=
- =?us-ascii?Q?bj6KX2EwjKoyi8JZRvOr6hN/9YViqqwUFw5DcERpEpt42yLwBxnQfVsqIzSX?=
- =?us-ascii?Q?TiSbFrA4lh2tDLnvA/E7r6N6y1rZL1Wb1p0E1cnreuAnZmJ1I344Jqi5qVAa?=
- =?us-ascii?Q?TkJHoyyHMsE+4WV0l2eY859SZlKwnx4Z6CKlq9S0Dmj18Yvd4qf9FFYMsW4z?=
- =?us-ascii?Q?u5pOO1YKELLSrhzdmDBtC1+WRyMzRtfZwMjTJiTUbIIfnFHnlqIrT5G9ijBd?=
- =?us-ascii?Q?4iJob5PVuOwhi6MlhqrMqLFYodAUclzmyQ0FfdS/pW5pSXuCtYA8GE31CPeS?=
- =?us-ascii?Q?YPkB1pXdmVDXbe7cGyZKPu7qaOwoHaIdg0c2ltvXsrm+y1glldNYF3hS+b44?=
- =?us-ascii?Q?ICwjdO+YuGrq99FpZ0zBIOv+/DjG9ySnNjLIqm0Oe+lC/gXVZVg2Y+UlNaNn?=
- =?us-ascii?Q?k6oN3j6fWTJaMbf7zWTlP16oao8LPfAm6mgSgM/awCqR0AuqYXrspxFVHkDu?=
- =?us-ascii?Q?udlZksh58a2mKubfzZKNFF7f9wzOolMyBZdqDbHHFmjbWXjCKhaC/7KMoWpd?=
- =?us-ascii?Q?fxKVySJNEfhDRFQZe74wjSbYoFrh87XJlnloQkJBCrX6kM5tln8JeGgYbCGh?=
- =?us-ascii?Q?fatXFOzIfkrJvtlIGWqsDrcb7tq8NUCYdNtIpIt+9m81sfjdcsExu3Qu+bkV?=
- =?us-ascii?Q?M3BXSI+vULEzkqPnftZfbqtVxUst3KddstH1gmmc5kyp+mZxqFlgWoASRArG?=
- =?us-ascii?Q?3+iblwMZEnhsmJzjv7El/CxjWbA/+PH6X83qp/Cm?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4651bb16-7bc1-4c01-5c6b-08db26e3aec5
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9416.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 12:32:33.8407
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 76r2BIGGCdKxh/6D8elq6zpngETeKpW1h7ZwPouwAp7yDaBtBONv4hnIfg0wkaVTW9tGUsc6BFeIsClliVytkw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6970
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Frank Wang <frank.wang@rock-chips.com>
+Cc:     gregkh@linuxfoundation.org, heiko@sntech.de,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
+        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
+        yubing.zhang@rock-chips.com, wmc@rock-chips.com
+References: <20230313025843.17162-1-frank.wang@rock-chips.com>
+ <20230313025843.17162-2-frank.wang@rock-chips.com>
+ <ZBA8Y/dbozOk2df7@kuha.fi.intel.com>
+ <f0f0ac72-0a90-da9e-f686-49c21a76866b@rock-chips.com>
+ <ZBRN11OwtkvXk1Hd@kuha.fi.intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/4] usb: typec: tcpm: fix cc role at port reset
+In-Reply-To: <ZBRN11OwtkvXk1Hd@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+On 3/17/23 04:24, Heikki Krogerus wrote:
+> On Wed, Mar 15, 2023 at 10:55:20AM +0800, Frank Wang wrote:
+>> Hi Heikki,
+>>
+>> On 2023/3/14 17:20, Heikki Krogerus wrote:
+>>> On Mon, Mar 13, 2023 at 10:58:40AM +0800, Frank Wang wrote:
+>>>> In the current implementation, the tcpm set CC1/CC2 role to open when
+>>>> it do port reset would cause the VBUS removed by the Type-C partner.
+>>>>
+>>>> The Figure 4-20 in the TCPCI 2.0 specification show that the CC1/CC2
+>>>> role should set to 01b (Rp) or 10b (Rd) at Power On or Reset stage
+>>>> in DRP initialization and connection detection.
+>>>>
+>>>> So set CC1/CC2 to Rd to fix it.
+>>>>
+>>>> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
+>>>> ---
+>>>>    drivers/usb/typec/tcpm/tcpm.c | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+>>>> index a0d943d785800..66de02a56f512 100644
+>>>> --- a/drivers/usb/typec/tcpm/tcpm.c
+>>>> +++ b/drivers/usb/typec/tcpm/tcpm.c
+>>>> @@ -4851,7 +4851,7 @@ static void run_state_machine(struct tcpm_port *port)
+>>>>    		break;
+>>>>    	case PORT_RESET:
+>>>>    		tcpm_reset_port(port);
+>>>> -		tcpm_set_cc(port, TYPEC_CC_OPEN);
+>>>> +		tcpm_set_cc(port, TYPEC_CC_RD);
+>>>>    		tcpm_set_state(port, PORT_RESET_WAIT_OFF,
+>>>>    			       PD_T_ERROR_RECOVERY);
+>>>>    		break;
+>>> Will this work if the port is for example source only?
+>>
+>> Yeah, this only set at port reset stage and CC value will be set again
+>> (Rd for Sink, Rp_* for Source) when start toggling.
+> 
+> Okay. Let's wait for comments from Guenter.
+> 
 
-Update usb compatible per binding doc
+Figure 4-20 is specifically for dual role ports. Also, start toggling would not
+happen if the low level driver doesn't have a start_toggling callback. I think this
+may require some tweaking based on the port type or, rather, tcpm_default_state().
+Something like
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+	tcpm_set_cc(port, tcpm_default_state(port) == SNK_UNATTACHED ? TYPEC_CC_RD : tcpm_rp_cc(port));
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
-index ca195e6d8f37..88913869ae9c 100644
---- a/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
-@@ -34,7 +34,7 @@ eqos: ethernet@5b050000 {
- 	};
- 
- 	usbotg2: usb@5b0e0000 {
--		compatible = "fsl,imx8dxl-usb", "fsl,imx7ulp-usb";
-+		compatible = "fsl,imx8dxl-usb", "fsl,imx7ulp-usb", "fsl,imx6ul-usb";
- 		reg = <0x5b0e0000 0x200>;
- 		interrupt-parent = <&gic>;
- 		interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_HIGH>;
-@@ -63,7 +63,7 @@ clk_dummy: clock-dummy {
- 
- 	usbmisc2: usbmisc@5b0e0200 {
- 		#index-cells = <1>;
--		compatible = "fsl,imx7ulp-usbmisc";
-+		compatible = "fsl,imx7ulp-usbmisc", "fsl,imx7d-usbmisc", "fsl,imx6q-usbmisc";
- 		reg = <0x5b0e0200 0x200>;
- 	};
- 
--- 
-2.37.1
+Thanks,
+Guenter
 
