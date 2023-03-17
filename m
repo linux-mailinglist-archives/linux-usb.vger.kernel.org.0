@@ -2,57 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7078E6BDFE0
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 05:00:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 039F46BDFFF
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 05:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbjCQEAN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Mar 2023 00:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
+        id S229693AbjCQEKO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Mar 2023 00:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjCQEAL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 00:00:11 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F659EC64;
-        Thu, 16 Mar 2023 21:00:10 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id y19so2172637pgk.5;
-        Thu, 16 Mar 2023 21:00:10 -0700 (PDT)
+        with ESMTP id S229840AbjCQEKM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 00:10:12 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640004BE93;
+        Thu, 16 Mar 2023 21:10:10 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id j13so3791292pjd.1;
+        Thu, 16 Mar 2023 21:10:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679025609;
+        d=gmail.com; s=20210112; t=1679026209;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8FtPdv+3fxLwAj0l4lRB0nnuP21Ve7eF9XkO1i7h3oE=;
-        b=GNqr+xVWfB7oh+fKZoesTL/DGTjJXWLCQEASBAmRaPnBC7+NtjlPlgZbfb5kkZUKMK
-         mMMFmYmRIIJ/F6iNovaF/Fk20LRKeXV1PtWXRqfeN4YpRsgGCTcjI7MB1QY3PiGI44Yj
-         pOGBItugCvjqJS8XXB03OTUvKEVvx2O8pGZlImoj3oMlm2CJLxnhVRngDQcMaeWzcKE7
-         HLFIUpDp6Zakj/rtdIb7bABAGUqEyhsmdwlzd+vk6NNrpXRFFjohdpDbNE1iT9KHJJUx
-         L4XMvI5ktCPTQqVOy1NZVAshrWQXDJ5ghwDq7Rwe5ffWZHaa0sBfZpHH5iDaM8pVac2b
-         gWLw==
+        bh=PIKfGOOSg6F9/5n9W9XnRFoZ02qcEmZDdMXjHXsF83Q=;
+        b=gxnJvs+eiyMhefX0NjlZ8BBLBgnP9HIzjr/mYrY/iFPALywGoh4LzL3AgsNr3FCBAh
+         RaYkFNdxgEceroxKWQnOCd3n5W9ahdUHn1G051Fkpsdazqg9JoxSDhJ7PrIgJL46CYLx
+         EDih7ILAIAXAHR2IqWygsMp5YSZTvCeMTukRnyYoaG4/h9DWwrijGn9IRnWZDGFztw5s
+         S3Mx/e3wrlYF6kk7vtWrNm25CoeoLP421+B6mwgL8It7HjDrBC8n+EFs286MX/t+5+DR
+         Bw19KPAIPbEsLEzKRhM9E+18r9/WOYwIjdQ6jLNMc1DjlaRmO9l5uGsNpqqXtEWrWyDE
+         EODQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679025609;
+        d=1e100.net; s=20210112; t=1679026209;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8FtPdv+3fxLwAj0l4lRB0nnuP21Ve7eF9XkO1i7h3oE=;
-        b=VXYAjZuQF4Z10YUoh/I1dVEpxXKs7ToUuPBxEHL8hzFee3xoa/uNL3fC/3z4vZFvwV
-         OCJhbvwUm756W6ZqMuuFLvDbcQXYTF5MnWdn9OHaUKHzzaqcOe33ydEPzrpn5PQqqcuu
-         EPc+i8N3wzE4cWL32yuf+thFXJGoF/RBqD2uCAXUA2PVvIbRHycWzGf69BKjQalzYmka
-         AtvuTC+QRbdhBN9MQzD1hYSzgI1naJmyzWExopqneZwN4F9i1Yn+icNhDg1ATLd2QOwv
-         betMA9rkOf3BWnhybUPw31u6TjZ7fVSbzmg/VLrHMGS2H/7i/sv++WEpGzUql1eFT0te
-         wIxw==
-X-Gm-Message-State: AO0yUKWqiDHfkfoVJKxSXkY1HTb+Oz9aQIVnJOBQ8cPxJjJRZVTomk6Y
-        7mVbjPNxWXPRgEJVQcs4ULJ6HlQzi4DjZwOraIc=
-X-Google-Smtp-Source: AK7set+yvSrXqDyv6XR6FaBOeYq+aSNu+qfPmjxFKuXPtecEW+Is1Zk1HvcrQL/lBjJQcANbMHjyQji9nMPNIU+qq28=
-X-Received: by 2002:a05:6a00:d45:b0:625:66a9:c393 with SMTP id
- n5-20020a056a000d4500b0062566a9c393mr2162919pfv.0.1679025609042; Thu, 16 Mar
- 2023 21:00:09 -0700 (PDT)
+        bh=PIKfGOOSg6F9/5n9W9XnRFoZ02qcEmZDdMXjHXsF83Q=;
+        b=ZjodeR1PcvVxHcVqwq64Qojh90NO5Cq6okELSsN9Xi2pQOId2yPmiowLxOeUNG1BP1
+         A78agGVg5gQNQu7NBKVLNoF7oOhELI+6pDBUWHNUmRqqGdT2dN+XttcMWMgvxNEwAVyw
+         g5QL6PYkgBtAozRtJxbTYYp4L7i4hUk7EB3il9OvByErtwbVjtf0MZMoibSy3hjyEoR6
+         betfPZnmvf02Wrsl4q4NjSHUB9qtIwl+SFueCOF57lmRQiz0OLIT859ICCfVkQ+YmmpL
+         Tp+iJYFdbFtjkE2uHthkzEfYuOdUxyQLZTu/voF0nwN8NecFsgJUlLdfo2l5k6vzcl9j
+         PDwA==
+X-Gm-Message-State: AO0yUKV3eCYKO1VroHoWbpkWpI2xaq3NggqgMO2shpvY4f2cDxqaQOu1
+        v5BbUn/j9DayUKrIyBAd0iiVKh8GPKYLCzprJ54=
+X-Google-Smtp-Source: AK7set8p/Hc+TPkQxZLiZHd2EGyDyr7Noi5cmw/cpSMaPi5hOBD3K+c9yESPVnWgQwk2M5swXAQZo9mFTKdLcz5AXnc=
+X-Received: by 2002:a17:90a:b896:b0:23d:30c2:c5b7 with SMTP id
+ o22-20020a17090ab89600b0023d30c2c5b7mr555688pjr.3.1679026209724; Thu, 16 Mar
+ 2023 21:10:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230316180850.1600867-1-zyytlz.wz@163.com> <ZBNo5gr1ILs5mR5z@kroah.com>
-In-Reply-To: <ZBNo5gr1ILs5mR5z@kroah.com>
+References: <20230316181623.1603914-1-zyytlz.wz@163.com> <ZBNpAJOqeoqc23Y2@kroah.com>
+In-Reply-To: <ZBNpAJOqeoqc23Y2@kroah.com>
 From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Fri, 17 Mar 2023 11:59:57 +0800
-Message-ID: <CAJedcCwkuznS1kSTvJXhzPoavcZDWNhNMshi-Ux0spSVRwU=RA@mail.gmail.com>
-Subject: Re: [PATCH v7] usb: gadget: udc: renesas_usb3: Fix use after free bug
+Date:   Fri, 17 Mar 2023 12:09:58 +0800
+Message-ID: <CAJedcCzCq72UdFyuLJHP-cH-KzmhtA3EERGXSzdXnosOXqWYiA@mail.gmail.com>
+Subject: Re: [PATCH v8] usb: gadget: udc: renesas_usb3: Fix use after free bug
  in renesas_usb3_remove due to race condition
 To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Zheng Wang <zyytlz.wz@163.com>, skhan@linuxfoundation.org,
@@ -75,7 +75,7 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B43=E6=9C=8817=E6=
 =97=A5=E5=91=A8=E4=BA=94 03:07=E5=86=99=E9=81=93=EF=BC=9A
 >
-> On Fri, Mar 17, 2023 at 02:08:50AM +0800, Zheng Wang wrote:
+> On Fri, Mar 17, 2023 at 02:16:23AM +0800, Zheng Wang wrote:
 > > In renesas_usb3_probe, role_work is bound with renesas_usb3_role_work.
 > > renesas_usb3_start will be called to start the work.
 > >
@@ -89,18 +89,21 @@ Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B43=E6=9C=8817=E6=
 > >
 > > CPU0                                          CPU1
 > >
-> >                                       | renesas_usb3_role_work
-> > renesas_usb3_remove                   |
-> > usb_role_switch_unregister|
-> > device_unregister                     |
-> > kfree(sw)                                             |
-> > free usb3->role_sw                    |
-> >                                       | usb_role_switch_set_role
-> >                                       | //use usb3->role_sw
+> >                                        renesas_usb3_role_work
+> > renesas_usb3_remove
+> > usb_role_switch_unregister
+> > device_unregister
+> > kfree(sw)
+> > free usb3->role_sw
+> >                                        usb_role_switch_set_role
+> >                                        //use usb3->role_sw
 >
-> This still isn't working :(
+> No line at all?
 >
-Sorry I haven't read your advice when submiting this version of patch.
 
-Best Regards,
+Sorry, I'll remove the empty line. And I think there are other ways to
+trigger device's remove like directly unpluging the USB device if
+accessible. I think we nee to append this msg in the next version.
+
+Best regards,
 Zheng
