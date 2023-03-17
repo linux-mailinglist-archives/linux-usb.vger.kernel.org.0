@@ -2,113 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24EE36BEBE2
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 15:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 176C46BEC1D
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 16:04:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbjCQOz4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Mar 2023 10:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
+        id S231373AbjCQPEb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Mar 2023 11:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbjCQOzy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 10:55:54 -0400
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE663B64E;
-        Fri, 17 Mar 2023 07:55:24 -0700 (PDT)
-Received: by mail-il1-f173.google.com with SMTP id h11so2858718ild.11;
-        Fri, 17 Mar 2023 07:55:24 -0700 (PDT)
+        with ESMTP id S230071AbjCQPE3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 11:04:29 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7C810DE7E
+        for <linux-usb@vger.kernel.org>; Fri, 17 Mar 2023 08:04:26 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id i9so4727521wrp.3
+        for <linux-usb@vger.kernel.org>; Fri, 17 Mar 2023 08:04:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679065465;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OrNP2U1Bweu+K3EQ1iwfmC2BkNeHceAtfpVaftw7AuE=;
+        b=hvQ9L9xFlFTyzCzkELWRsbNWD+V8o/O/lxqs+ucNSpUnQCUbD4d8r54Yq/mXFbtfVW
+         CVptaCLb5Z6AfEPH/1A9wosw0+a/8kAj/xJtSv2aW310M1fPWI2sRCnzmRKL8nrGmwtL
+         YfBaZ5ssF1eohRIslE/uV7l7pXKDUNpE7QAMPCjCCl+6pvSnSJtQ8+YvND6kXfKv8WFC
+         QxRou1r8QnlE0BezkH1j7GB8Va3IPzCnZl+67tvKgFzyLuPXu5G5osHiuvYSyUTS+DIt
+         CBsX1LalRYayX/7RnNL9fWovxBE0w/k2hyVFEH3YDmAUm2gGRLH0AfRXJrO60YIepm04
+         UoKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679064923;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=OPDHGlW00DcqYFQkzNIJaresadj1hOtwbNVh2L00JvM=;
-        b=KDas3LZ/Ak36KmH+2QiKtJ2mINtkEyX0QBzXYNnpnwEYoUhqU4QIRguqafSLK+bkQ+
-         Qg0BrKwerqJIAGmU30Z/X4qNVTsEdLiCUT9tTR6geXJuytzzY5OOC+ujlOz7GAvywBX2
-         NGE2TubdKHTatvGiONvPc7eY7ZtHvBvqJJ3xVDEbmghbo2dWPUTZ8kxlkDhiIO06H+sP
-         VP0tpvacA7b8LmKvjyao0ja//uA28tTkk8JJcCQw6Kei1txjiK4Og/TkF4z4MZ4o/VgF
-         uNTsHKFjK9meLIUgpoSDVKUOWTj9ghy9cPDP2lGZ3l6CvPREJ393fTn/dniIqFIU03a/
-         jBQw==
-X-Gm-Message-State: AO0yUKUyL64MnP4e/H3Tv12rimSb1R3movn9phWefUbVBEi3uEbmVkyC
-        JKz2wdPrcj6P/UHPFRKIcA==
-X-Google-Smtp-Source: AK7set9W6q0fozm9+PQJIIav+dAysxpwcQm5IOKQQ3iYBxMSE62YmexVpBQ1kW/GnNTcoWWTEu4yjg==
-X-Received: by 2002:a92:cf04:0:b0:31f:9b6e:2f4d with SMTP id c4-20020a92cf04000000b0031f9b6e2f4dmr139249ilo.0.1679064923724;
-        Fri, 17 Mar 2023 07:55:23 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id r15-20020a92c5af000000b00313ca4be5e1sm669187ilt.12.2023.03.17.07.55.22
+        d=1e100.net; s=20210112; t=1679065465;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OrNP2U1Bweu+K3EQ1iwfmC2BkNeHceAtfpVaftw7AuE=;
+        b=jlzFY78OBSWQzqrpwZxP11VMTlarey/YW47Y1zcam0Qyo/tmzIzo7VAvPIxdCn6wkF
+         GyCYcrBZCCCxiH6qzURFt5xQ6QERRzDGI9qCwBJpZlEAbHJ7CtjlCWmuIejFK63+mK76
+         pEnLjEaouP1Ti5VyJJwaIJKPPc339Ey41Xlz03GnphLAPFizLpFBzKbbfqMoxzhNn1lm
+         Y7bvIYY3rQ7q2B4/acuGNxt2HXlXRy1XenwM8HjS50UgGj2wFrjRSnTplUbr3oQUlEcH
+         yLXlrvNB1Oj8G6yn7UcpdpwtldFfJ27OK2pWcwNP9wVy+Uq7ZBiZYyXotlDDxA0ydFiK
+         sRIg==
+X-Gm-Message-State: AO0yUKVeA4muv4sFvhfeijgtDRzO14wMOmk15e0/Vz+qolpBpp6TN1gv
+        7blqsRXAw8JdECs8nfs50nr38g==
+X-Google-Smtp-Source: AK7set/6E/+aRE8WDx7crNSpQvDpdkFOTSvxHwHopJFuVaKrIh1NXS6C77sCNGCYq4JQ/tb1btEUEA==
+X-Received: by 2002:adf:f1d1:0:b0:2cf:e8b2:4f76 with SMTP id z17-20020adff1d1000000b002cfe8b24f76mr7305646wro.66.1679065464789;
+        Fri, 17 Mar 2023 08:04:24 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id q14-20020a05600000ce00b002be505ab59asm2133773wrx.97.2023.03.17.08.04.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 07:55:23 -0700 (PDT)
-Received: (nullmailer pid 2039511 invoked by uid 1000);
-        Fri, 17 Mar 2023 14:55:19 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Fri, 17 Mar 2023 08:04:24 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v4 00/12] soc: qcom: add UCSI function to PMIC GLINK
+Date:   Fri, 17 Mar 2023 16:04:16 +0100
+Message-Id: <20230130-topic-sm8450-upstream-pmic-glink-v4-0-38bf0f5d07bd@linaro.org>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     Peng Fan <peng.fan@nxp.com>, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-imx@nxp.com,
-        gregkh@linuxfoundation.org, festevam@gmail.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        shawnguo@kernel.org, xu.yang_2@nxp.com, robh+dt@kernel.org,
-        jun.li@nxp.com, krzysztof.kozlowski+dt@linaro.org
-In-Reply-To: <20230317123708.337286-3-peng.fan@oss.nxp.com>
-References: <20230317123708.337286-1-peng.fan@oss.nxp.com>
- <20230317123708.337286-3-peng.fan@oss.nxp.com>
-Message-Id: <167906278443.1989626.14584373898685842817.robh@kernel.org>
-Subject: Re: [PATCH V4 2/6] dt-bindings: usb: ci-hdrc-usb2: convert to DT
- schema format
-Date:   Fri, 17 Mar 2023 09:55:19 -0500
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHCBFGQC/5XOS27DMAwE0KsEWocBLckfZNV7FF3oQ9tCbcmQH
+ KNB4LuHyS7oyssZgG/4EIVyoCKup4fItIUSUuSgzyfhRhMHguA5C4lSYaUQ1rQEB2XudI1wW8q
+ aycywzFwOU4i/oKwyaFvrvFKCGWsKgc0mupGheJsmLpdMffh7737/cB5DWVO+v9/Yqld7YHGrA
+ AEtGtcbzzf0xbXJ6ZLyIF76Jo+KksW26snIutGt7v+J6qioWNSua9DLpvay+xD3fX8C4Wn/nIo
+ BAAA=
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh@kernel.org>
+X-Mailer: b4 0.12.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The PMIC GLINK interface offers an UCSI endpoint for newer
+SoCs, the UCSI exchange is necessary to configure the USB-C
+port USB role and altmode on the SM8450 HDK and SM8550 MTP
+boards.
+Since the DT description is the same, support for SM8350 HDK
+is also added.
 
-On Fri, 17 Mar 2023 20:37:04 +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Convert the binding to DT schema format. To fix the dtbs_check
-> error, some properties were also added, such as nvidia,phy, reset-names
-> ulpi; missing compatibles are added.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  .../devicetree/bindings/usb/ci-hdrc-usb2.txt  | 159 -------
->  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml | 412 ++++++++++++++++++
->  2 files changed, 412 insertions(+), 159 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
->  create mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-> 
+This patchset focuses on USB and disables altmode support
+on those 2 SoCs until DP altmode over the combo phy is
+supported.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Depends on PMIC Glink patchset at [1].
 
-yamllint warnings/errors:
+[1] https://lore.kernel.org/all/20230130042003.577063-1-quic_bjorande@quicinc.com/
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml: properties:pinctrl-names:items: {'enum': ['default', 'host', 'device', 'idle', 'active']} is not of type 'array'
-	from schema $id: http://devicetree.org/meta-schemas/string-array.yaml#
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v4:
+- Handle remove for UCSI driver
+- Fixup client mask match data handling
+- Added USB ports bindings review tag
+- Link to v3: https://lore.kernel.org/r/20230130-topic-sm8450-upstream-pmic-glink-v3-0-4c860d265d28@linaro.org
 
-doc reference errors (make refcheckdocs):
+Changes in v3:
+- Fixed patch 1 by moving mask to pmic_glink_of_match
+- Fixed patch 8 by adding back hsphy
+- Add bindings change to dwc3 to support separate HS & SS OF graph links
+- Link to v2: https://lore.kernel.org/r/20230130-topic-sm8450-upstream-pmic-glink-v2-0-71fea256474f@linaro.org
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230317123708.337286-3-peng.fan@oss.nxp.com
+Changes in v2:
+- Moved the dwc3 port subnodes to dtsi
+- Added SM8350 HDK support
+- Added help about ucsi module name
+- Added bindings acks
+- Fixed sm8550 pmic glink compatible
+- Added more description in config update patch
+- Link to v1: https://lore.kernel.org/r/20230130-topic-sm8450-upstream-pmic-glink-v1-0-0b0acfad301e@linaro.org
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+---
+Neil Armstrong (12):
+      usb: typec: ucsi: add PMIC Glink UCSI driver
+      dt-bindings: soc: qcom: qcom,pmic-glink: document SM8450 compatible
+      dt-bindings: soc: qcom: qcom,pmic-glink: document SM8550 compatible
+      soc: qcom: pmic_glink: register ucsi aux device
+      dt-bindings: usb: snps,dwc3: document HS & SS OF graph ports
+      arm64: dts: qcom: sm8350: add port subnodes in dwc3 node
+      arm64: dts: qcom: sm8450: add port subnodes in dwc3 node
+      arm64: dts: qcom: sm8550: add port subnodes in dwc3 node
+      arm64: dts: qcom: sm8350-hdk: add pmic glink node
+      arm64: dts: qcom: sm8450-hdk: add pmic glink node
+      arm64: dts: qcom: sm8550-mtp: add pmic glink node
+      arm64: defconfig: add PMIC GLINK modules
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+ .../bindings/soc/qcom/qcom,pmic-glink.yaml         |   2 +
+ .../devicetree/bindings/usb/snps,dwc3.yaml         |  16 +
+ arch/arm64/boot/dts/qcom/sm8350-hdk.dts            |  67 +++-
+ arch/arm64/boot/dts/qcom/sm8350.dtsi               |  19 ++
+ arch/arm64/boot/dts/qcom/sm8450-hdk.dts            |  45 ++-
+ arch/arm64/boot/dts/qcom/sm8450.dtsi               |  19 ++
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts            |  45 ++-
+ arch/arm64/boot/dts/qcom/sm8550.dtsi               |  19 ++
+ arch/arm64/configs/defconfig                       |   4 +
+ drivers/soc/qcom/pmic_glink.c                      |  65 +++-
+ drivers/usb/typec/ucsi/Kconfig                     |  10 +
+ drivers/usb/typec/ucsi/Makefile                    |   1 +
+ drivers/usb/typec/ucsi/ucsi_glink.c                | 345 +++++++++++++++++++++
+ 13 files changed, 642 insertions(+), 15 deletions(-)
+---
+base-commit: 6f72958a49f68553f2b6ff713e8c8e51a34c1e1e
+change-id: 20230130-topic-sm8450-upstream-pmic-glink-3b3a0b7bcd33
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
 
