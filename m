@@ -2,36 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E39F76BE6BD
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 11:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C2A6BE6C7
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 11:30:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjCQK3O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Mar 2023 06:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
+        id S230260AbjCQKay (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Mar 2023 06:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjCQK3N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 06:29:13 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F8A3253F;
-        Fri, 17 Mar 2023 03:29:10 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        with ESMTP id S229643AbjCQKaw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 06:30:52 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2D0E4D9E;
+        Fri, 17 Mar 2023 03:30:49 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id CE24924E1E4;
-        Fri, 17 Mar 2023 18:29:07 +0800 (CST)
-Received: from EXMBX071.cuchost.com (172.16.6.81) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 17 Mar
- 2023 18:29:07 +0800
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 50F1D24E289;
+        Fri, 17 Mar 2023 18:30:41 +0800 (CST)
+Received: from EXMBX071.cuchost.com (172.16.6.81) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 17 Mar
+ 2023 18:30:41 +0800
 Received: from [192.168.125.108] (113.72.145.194) by EXMBX071.cuchost.com
  (172.16.6.81) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 17 Mar
- 2023 18:29:06 +0800
-Message-ID: <f836d98d-bb3b-64a5-1598-1ef489e62fb6@starfivetech.com>
-Date:   Fri, 17 Mar 2023 18:29:06 +0800
+ 2023 18:30:40 +0800
+Message-ID: <e304283e-c564-527a-b1a3-0a04b80604d0@starfivetech.com>
+Date:   Fri, 17 Mar 2023 18:30:39 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v3 1/5] dt-bindings: phy: Add StarFive JH7110 USB/PCIe
- document
+Subject: Re: [PATCH v3 3/5] dt-binding: Add JH7110 USB wrapper layer doc.
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Emil Renner Berthing <emil.renner.berthing@canonical.com>,
@@ -52,10 +51,10 @@ CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>
 References: <20230315104411.73614-1-minda.chen@starfivetech.com>
- <20230315104411.73614-2-minda.chen@starfivetech.com>
- <f7752f68-11a6-cbf4-2f28-1de4c7ff9da2@linaro.org>
+ <20230315104411.73614-4-minda.chen@starfivetech.com>
+ <451c8112-c7f3-f435-5d90-840f01c60bd5@linaro.org>
 From:   Minda Chen <minda.chen@starfivetech.com>
-In-Reply-To: <f7752f68-11a6-cbf4-2f28-1de4c7ff9da2@linaro.org>
+In-Reply-To: <451c8112-c7f3-f435-5d90-840f01c60bd5@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [113.72.145.194]
@@ -63,8 +62,8 @@ X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX071.cuchost.com
  (172.16.6.81)
 X-YovoleRuleAgent: yovoleflag
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,95 +72,132 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On 2023/3/17 16:39, Krzysztof Kozlowski wrote:
+On 2023/3/17 16:43, Krzysztof Kozlowski wrote:
 > On 15/03/2023 11:44, Minda Chen wrote:
->> Add StarFive JH7110 SoC USB 2.0/3.0 and PCIe 2.0 PHY dt-binding.
->> PCIe 2.0 phy can use as USB 3.0 PHY.
+>> The dt-binding doc of Cadence USBSS-DRD controller wrapper
+>> layer.
+> 
+> Subject: drop full stop. It's not a sentence.
+> 
+> Use subject prefixes matching the subsystem (which you can get for
+> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> your patch is touching).
+> 
+> 
+Thanks. I should check all the commits title and commit messages.
 >> 
 >> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
 >> ---
->>  .../phy/starfive,jh7110-usb-pcie-phy.yaml     | 62 +++++++++++++++++++
->>  1 file changed, 62 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-usb-pcie-phy.yaml
+>>  .../bindings/usb/starfive,jh7110-usb.yaml     | 119 ++++++++++++++++++
+>>  1 file changed, 119 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
 >> 
->> diff --git a/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-pcie-phy.yaml
+>> diff --git a/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml b/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
 >> new file mode 100644
->> index 000000000000..aa1c3fe93100
+>> index 000000000000..b1a8dc6d7b4b
 >> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-pcie-phy.yaml
->> @@ -0,0 +1,62 @@
+>> +++ b/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
+>> @@ -0,0 +1,119 @@
 >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 >> +%YAML 1.2
 >> +---
->> +$id: http://devicetree.org/schemas/phy/starfive,jh7110-usb-pcie-phy.yaml#
+>> +$id: http://devicetree.org/schemas/usb/starfive,jh7110-usb.yaml#
 >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 >> +
->> +title: StarFive USB 2.0 and PCIe 2.0 PHY
+>> +title: StarFive JH7110 wrapper module for the Cadence USBSS-DRD controller
 >> +
 >> +maintainers:
 >> +  - Minda Chen <minda.chen@starfivetech.com>
 >> +
 >> +properties:
 >> +  compatible:
->> +    enum:
->> +      - starfive,jh7110-usb-phy
->> +      - starfive,jh7110-pcie-phy
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  "#phy-cells":
->> +    const: 0
+>> +    const: starfive,jh7110-usb
 >> +
 >> +  clocks:
 >> +    items:
->> +      - description: usb 125m clock
->> +      - description: app 125m clock
+>> +      - description: lpm clock
+>> +      - description: stb clock
+>> +      - description: apb clock
+>> +      - description: axi clock
+>> +      - description: utmi apb clock
 >> +
 >> +  clock-names:
 >> +    items:
->> +      - const: 125m
->> +      - const: app_125
+>> +      - const: lpm
+>> +      - const: stb
+>> +      - const: apb
+>> +      - const: axi
+>> +      - const: utmi_apb
+>> +
+>> +  resets:
+>> +    items:
+>> +      - description: PWRUP reset
+>> +      - description: APB reset
+>> +      - description: AXI reset
+>> +      - description: UTMI_APB reset
+>> +
+>> +  starfive,sys-syscon:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>> +    items:
+>> +      items:
+>> +        - description: phandle to System Register Controller sys_syscon node.
+>> +        - description: offset of SYS_SYSCONSAIF__SYSCFG register for USB.
+>> +    description:
+>> +      The phandle to System Register Controller syscon node and the offset
+>> +      of SYS_SYSCONSAIF__SYSCFG register for USB.
+>> +
+>> +  starfive,stg-syscon:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>> +    items:
+>> +      items:
+>> +        - description: phandle to System Register Controller stg_syscon node.
+>> +        - description: register0 offset of STG_SYSCONSAIF__SYSCFG register for USB.
+>> +        - description: register1 offset of STG_SYSCONSAIF__SYSCFG register for USB.
+>> +        - description: register2 offset of STG_SYSCONSAIF__SYSCFG register for USB.
+>> +        - description: register3 offset of STG_SYSCONSAIF__SYSCFG register for USB.
+>> +    description:
+>> +      The phandle to System Register Controller syscon node and the offset
+>> +      of STG_SYSCONSAIF__SYSCFG register for USB. Total 4 regsisters offset
+>> +      for USB.
+>> +
+>> +  "#address-cells":
+>> +    maximum: 2
+> 
+> enum: [ 1, 2 ]
+> (because 0 should not be valid for you)
+> 
+>> +
+>> +  "#size-cells":
+>> +    maximum: 2
+> 
+> ditto
+> 
+ok
+>> +
+>> +  ranges: true
+>> +
+>> +patternProperties:
+>> +  "^usb@[0-9a-f]+$":
+>> +    type: object
+> 
+> missing $ref and unevaluatedProperties: false
+> 
+ok, thanks
 >> +
 >> +required:
 >> +  - compatible
->> +  - reg
->> +  - "#phy-cells"
+>> +  - clocks
+>> +  - clock-names
+>> +  - resets
+>> +  - starfive,sys-syscon
+>> +  - starfive,stg-syscon
+>> +  - "#address-cells"
+>> +  - "#size-cells"
+>> +  - ranges
 >> +
-> 
-> It seems pci phy does not take these clocks, thus you should have
-> allOf:if:then which will customize it per variant. Otherwise binding is
-> incorrect for the pci.
-> 
-ok
 >> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    phy@10200000 {
->> +      compatible = "starfive,jh7110-usb-phy";
->> +      reg = <0x10200000 0x10000>;
->> +      clocks = <&syscrg 95>,
->> +               <&stgcrg 6>;
->> +      clock-names = "125m", "app_125";
->> +      #phy-cells = <0>;
->> +    };
->> +
->> +    phy@10210000 {
->> +      compatible = "starfive,jh7110-pcie-phy";
->> +      reg = <0x10210000 0x10000>;
->> +      #phy-cells = <0>;
->> +    };
->> +
->> +    phy@10220000 {
->> +      compatible = "starfive,jh7110-pcie-phy";
->> +      reg = <0x10220000 0x10000>;
->> +      #phy-cells = <0>;
->> +    };
 > 
-> Drop duplicated examples. Keep usb and maybe one phy.
 > 
-ok, thanks
 > Best regards,
 > Krzysztof
 > 
