@@ -2,198 +2,250 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 549E26BEEC5
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 17:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D776F6BEF3B
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 18:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjCQQrD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Mar 2023 12:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
+        id S230197AbjCQRJQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Mar 2023 13:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCQQrC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 12:47:02 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0317C975;
-        Fri, 17 Mar 2023 09:46:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679071603; x=1710607603;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mtstCQdXn38bkovo6+1oAkS250S6g+dn6FzQ5TgKIOc=;
-  b=VvJ3FxK8fddK0u0R4zBzYnyprI1A9N2hATImP9iWECmcoQQ8lynb8WFe
-   X2mixxS2xHltwh1y3co2Lg1wq2+e+qcvp+E7I8vcBktMFVTVBujwjlQL0
-   K6a7MHqtPjfnfIDw4Yy4Mkw58ljk8QOYHr8vLHFTfLF32mFQEdbbJerUT
-   DMyRMerzSmbn6AYxGdMcIXaicKDoVOxOTCLCyQGsxnFlv6BkHFwXVH0Ei
-   juHKczSfsKv/VUqRlhyLuIyNbSgU7XTxPPxkEp9s3tjrYgC5+3tFETcsg
-   w1ZQqbJAPvEaKOpH1pTJ4OgOaLfdKp+WElG+mAYrIZTCnXlNT0ME46qvQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="317963335"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="317963335"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 09:46:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="682743908"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="682743908"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 17 Mar 2023 09:46:15 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pdDDa-0009Ug-2P;
-        Fri, 17 Mar 2023 16:46:14 +0000
-Date:   Sat, 18 Mar 2023 00:46:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Szymon Heidrich <szymon.heidrich@gmail.com>,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        kuba@kernel.org, davem@davemloft.net, edumazet@google.com
-Cc:     oe-kbuild-all@lists.linux.dev, pabeni@redhat.com,
-        szymon.heidrich@gmail.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usb: lan78xx: Limit packet length to skb->len
-Message-ID: <202303180031.EsiDo4qY-lkp@intel.com>
-References: <20230317153217.90145-1-szymon.heidrich@gmail.com>
+        with ESMTP id S230329AbjCQRJC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 13:09:02 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2070.outbound.protection.outlook.com [40.107.105.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDA341B75;
+        Fri, 17 Mar 2023 10:08:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YYmpnBWd2KjaNK7uL6dbuJ8TmAbeDIOkPf/w3vlMg7HHDWlPpqHmUDfWclymZllCG16pw9StlHEhEAM5KukhXpfQyOeDWa+Q4Bve6d39Xo2fpTd8AZy/xNysuyQNsFhSSMSPDCFk/BM0opEkxjYuTzgu0flg5JzF47q7nzMhFpjaIF/KigSZYlyHVkuMCitBF9H8tQW/l6AXeHMPr5lxyJ3gCeWyBGCbNDfNre2r4g7tv7mAYjBuzHrLcwIGE/iQeTMQJI3dC+VbrnwF2EQ2Bfhiv3u4UwIr5PK98xXKB0cOPvO7AT71fFKaEDHYGJCvKzEcFS9kXF/l1kHKw5a0FQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4ljdmsn2u22jJsNeYuiA3x4XtcNrNsaqcCJb8EU9pcg=;
+ b=HTOwIKMlrTSv6dFbveAglK4Zw1zgaFZfG8w8GMv2LSbdOVh/j+AGRkI/xPWFjh09ObxWnmBkW3BP+AAdEXBWAm9erRr49v+q1T8kxa3wrxbve09mgTqgC7RZktgpN9bci64KzuBB/nKyBmtHNVGIYouLHqF8f+JekctufZMtd7Y3qzB1VSCczb0JxnbjN0UqU8zIQCQCkzOjhroyKilKWnWTOXRhvr5o2vP+ryz8vJafUaKsEi+aDIobRhM0GBOfdew1p9yGBuifeUY2z09RZipYxnNoZ2JCJPRfVoP6qyg2EucwS4RcNbPgU98bi312bmGkXaLIaViwTO49yQndYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=theobroma-systems.com; dmarc=pass action=none
+ header.from=theobroma-systems.com; dkim=pass header.d=theobroma-systems.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=theobroma-systems.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4ljdmsn2u22jJsNeYuiA3x4XtcNrNsaqcCJb8EU9pcg=;
+ b=kMAB1wAmW3fAzPa7E1fBD5KUvgXARC8nww0ZoJohN6wWYjziGDapbe8zuyoHSwhUNQ1SKoVmz9u5J74ErBPuzOySNu6DcbGK8i85BLdlZryGws+8/9e+7fehMyyncych8hsbQnlE7bMnibYS+LPUmnHVZI+dZEqUtN04qouVwjJuNLw9hTGJsqbPjXE9lWxuSY44UEaGEL2R1exa2zgiw6BNNNdi7KNwPX83rYDO550o5lqP6TKel3IL7LlhjCTJfntPgZUhlOsMf7bRfosNPq1Q6N9eImccc7/pAKmPdNJfx3+/N97HqIeqOSQKKqay8YLa/1EqvUCiKqjhP97AGw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=theobroma-systems.com;
+Received: from DU2PR04MB8536.eurprd04.prod.outlook.com (2603:10a6:10:2d7::10)
+ by DB9PR04MB8122.eurprd04.prod.outlook.com (2603:10a6:10:25d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.35; Fri, 17 Mar
+ 2023 17:08:38 +0000
+Received: from DU2PR04MB8536.eurprd04.prod.outlook.com
+ ([fe80::c2a3:a621:4621:fc62]) by DU2PR04MB8536.eurprd04.prod.outlook.com
+ ([fe80::c2a3:a621:4621:fc62%5]) with mapi id 15.20.6178.033; Fri, 17 Mar 2023
+ 17:08:38 +0000
+Message-ID: <104181cf-0f71-e833-f71a-8fba9fe7fba9@theobroma-systems.com>
+Date:   Fri, 17 Mar 2023 18:08:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] usb: dwc2: fix a race, don't power off/on phy for
+ dual-role mode
+Content-Language: en-US
+To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>, hminas@synopsys.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        amelie.delaunay@foss.st.com, alexandre.torgue@foss.st.com
+References: <20230315144433.3095859-1-fabrice.gasnier@foss.st.com>
+From:   Quentin Schulz <quentin.schulz@theobroma-systems.com>
+In-Reply-To: <20230315144433.3095859-1-fabrice.gasnier@foss.st.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FRYP281CA0018.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10::28)
+ To DU2PR04MB8536.eurprd04.prod.outlook.com (2603:10a6:10:2d7::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230317153217.90145-1-szymon.heidrich@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8536:EE_|DB9PR04MB8122:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9f221a06-8859-444e-2322-08db270a4040
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /lxLuQgJzCoQhO5cVolG5B81pW9zy86/tAg8FRKwEH8c/+f/xn2VGw0NGLwaB4vBCx+ccOW7/wAkoSIACZsqCpTDa2fNrRjRfqy35EakTDEYVFF46M6BYMYpZ5Vr+cg/1v/lN+Pg76IOs9gjdlwUYoFD7TnUA8BL0XpTnlrCpVZBxMCMSunR7BA+63CEdSU2gzDKnMOuINMr6ipM4RlkTeOyNOfMkXMKDyP0aADvvIMp8RzE6UJ5t6Evtt0w7nS2+GG8992hM22QfVlXtVvVVQ/KIkS/8Ba/UqHBEjPndWwZJ7UzP79whKSVNg3CgMimnjzAqnU9SZxU5SASLU8VvVyOWihSwcLUZ/fGS8HFunBB/hX/840FvkHcDtADkZrqx+SgqSRfdfInnsqmNtIuFNf11TmORG55MW9ZYpxMYiLoOrTvEDF/mPi8QKKj0dXQBFTzQuNN9UkZ9woe3YDq7DgB29GL0r8foLyqYpaMR7CqjrOjR4x3XHiuV1fx/ztFjzcLWQygLYvoN5bxXGGxE8DN2HZ8BgMOV69IhvAnRFFGzR1QhTSTp6tbvsbn02hspF0HRPTKy7yZ0uq4scaOUqmLIDTt1PTAnBfaY5iiZmv8FlGlMp81Xa7XCjA8TLKK4EnTbnH/HmRrWELsb2GORJpA1P0JtNPz+owxbyBYUyGIIHis1Unq9Ug67gMlgIRUF9JVQ6JHUqnr+8Vrfydb+OHOWrZGgFjP9G6Q1gljw9g=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8536.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(376002)(346002)(366004)(39850400004)(451199018)(83380400001)(31686004)(2616005)(8936002)(6506007)(5660300002)(53546011)(6512007)(36756003)(2906002)(31696002)(41300700001)(26005)(86362001)(4326008)(8676002)(316002)(66476007)(66946007)(66556008)(478600001)(38100700002)(966005)(6486002)(186003)(44832011)(66899018)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?anJXK3ZMTUlOcjNSeE9sVlE1UDUzZ2ZuNmlHWDNIakprM1JYajlJaWNxRVpF?=
+ =?utf-8?B?bVJWU1kwTWVyY2pkd3pIdDRtSFB5VWpudUh1SFVOL1htdTF4RTB4YU9rMGk1?=
+ =?utf-8?B?YUF1cnhNekxZYmVoMFZIZWR6S3dBZE5vYW1yT1YvY1A2d2VpVlVvdUdGeC82?=
+ =?utf-8?B?VVNmZE1aSXlXaVZteTNVZU9OaE5mWXNkdy9Rend1cURoRHNpb0UrNlRCTEx1?=
+ =?utf-8?B?TnlhUnRBejF4OTYxcG9JR1hGUE9pRVA0Nkh5RnlTWDlhc1c5eWhob1VvbWdp?=
+ =?utf-8?B?bHZoV1VhRDNCUEs0NFFFWnhTa0ZWZ0trZCs5YWI0b2VOSjluZld3di9STTJv?=
+ =?utf-8?B?YTNIN1orOWhGZU1yT2dqWHVRUzZkcGhBcFh3NVprNWZaQkN2dVV4L2tQYnR0?=
+ =?utf-8?B?U1VHVksrMWtEblo4NzZtV1J5eHdOYVYxTnhpcE44VGZpYzRkRXR1K2Y1OTUv?=
+ =?utf-8?B?SGhPTHVxem1JSmc0YldzUTdqcWsvcnV4VmkxeFFMbGVjTlIxV1JyRmZVVWgx?=
+ =?utf-8?B?cFEyU1BDbE5TWmhWQkhSbW5kekNTa3loemo2QUVZeUQ5QzlPTWtoU1FtWXJj?=
+ =?utf-8?B?UlcwenJHcElvUDlDU3pEdDl3bnFEOG1SUFFPSzNQWTVxb2tpL2JpNWFTRzlu?=
+ =?utf-8?B?Y0UxeXJDK0VLTVluTWRwOXV2M1dCMUp6NFAwNVdOZytGQyt6c2pvZnJpQkta?=
+ =?utf-8?B?cFFPSUpmb0dYTGtKSGc1Nkp0QnJLekRRNms4UDE3a2tIN3Y3QUpOYi8zejhD?=
+ =?utf-8?B?Z3N1Y3FvakNucXJ1VGYzQ1JTRjRTL0g1YTlqM3JzT2huaDNZSGQwU3pmalhm?=
+ =?utf-8?B?V1VoRndQTWw2Mnd4S1U4bkR1K2JOTTBuMktNeEdBWFNSMUt4NmpjR05ELzEx?=
+ =?utf-8?B?U0JRUTNoYTh1eWxYZU9RN1hlWjhSZ2FyVGdFUit0aUgwTDM3N2s5eHR6RHBr?=
+ =?utf-8?B?L01ZZlFVUFF4d1FGU0p2WnZMc1hrSHExME42WEtXOGdvdWZhcWtzdXV1anVo?=
+ =?utf-8?B?QmFwdzRqanpjNWdpb1lmekNtdWNFZzhIbDY0Z2VXc3JGSzhMYXJtQjY1TXhD?=
+ =?utf-8?B?S2prdVgzZXZ6Wk14NE9uZTJzSzJrUnRlTG1tZCtoMXYrMnZGNXNZM3VCdTlu?=
+ =?utf-8?B?S0Z2UkpaQStUTWJmbjFPc2piSjAvQjU0TTRrbFJDL05SZlF6Qys3cVdEZEhp?=
+ =?utf-8?B?RDVkSmM1NG03UnBjNDV3M0JRcjE5Z3dESzYwSkVTZ01xRytib3JQNUpjWjBB?=
+ =?utf-8?B?bDVFekdZcGdITm5vSGZ5THFuTU1XSk5Cc3VwNGJUWmFvajZuN2RYN3E2WGZR?=
+ =?utf-8?B?cWtueTR1RXN1a01kc3pjKzZ3eDFpWXJ5L29kOFpaUWNOVHYvd1dRa01ETCt5?=
+ =?utf-8?B?RHh3bkl1WVMzblkzL0tXd1pyZVBXbndOTXZCTlJCZVpxWW81WTdxZUQyNHRO?=
+ =?utf-8?B?VzhRbk0rRm5BemZrak1sRzh6NnNlUUhhTlNFSjczbVVybyt6aUIzb0RrNWk0?=
+ =?utf-8?B?OGltcm9PK2ZmUzk3SGR0TTBkWGk5bUpZaU9hczYxbi9qV1Z3V2FNNDN6Rlly?=
+ =?utf-8?B?dGc3cm9aMlFoaSt4cHVYcmZJekNMZVlJS3lSd25lSFhTSk1XWUFjdHdOdTlK?=
+ =?utf-8?B?OUw5TzZoR3pMb3RMellpNWJBVGdDNWg4bUVaNmw0LytHTFF1cmh1TzZJWkV3?=
+ =?utf-8?B?eWliMEl5dVFHQ3JETVdnK1hvc2ovaDM1WENzQkg4MXlIeXZpaWV4UXN6bTJM?=
+ =?utf-8?B?Qkx6QklhOUZUb0EzamYvc1pKVW4rVTEvaVBzTGFpMlEycEhCV2VEOEwyWDJn?=
+ =?utf-8?B?ejdxeWQ3RHFkV09TeEdXcDRkZEV4OG9ndVowV3MxYThwRjZxenNlaml4bmFj?=
+ =?utf-8?B?QnpiOWorY2FiK3hrcVlwSDNYalRGR2pUb1h3WWtLbXhDc2xVVFNVNXZsMkxL?=
+ =?utf-8?B?bzVJT0JZcUdHbi9GVldIQklMVGc4T1BjUk9tVTc1bFJ6VTdxRDhGdy95VDdD?=
+ =?utf-8?B?N0NrcFE1d3R2akV0UlIwZnlzWnZIb0NuMTNFNFp0N1dCZ3lkeE5nVGYwdEpG?=
+ =?utf-8?B?cUY4S2ZWTU9VSTJXV1VOYjhKVHZDZXlaSGFIRkR2QUQ5RGF3b1R5K0dMM2RM?=
+ =?utf-8?B?M2FpTEV1U3VDQldraEp3cUs2YXlHZzhsQVQrRzdLZmpZNDgyNWNNYXdKTjhQ?=
+ =?utf-8?Q?EEhts/Hz7+dswYoiIdDQx/I=3D?=
+X-OriginatorOrg: theobroma-systems.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f221a06-8859-444e-2322-08db270a4040
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8536.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 17:08:38.7908
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WYvDiLkI0r3yZGR5/fEqdwM+sSfvDDoZOZH5QbqFuEBmX5i8Rjz3c3yquAbUXO8GC/DqRl0t+yKlIwKpnF3P1oeBlheHDsPupAB/0Ud5Iub2QBd47t1v1VTrIMi+i0gZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8122
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Szymon,
+Hi Fabrice,
 
-Thank you for the patch! Perhaps something to improve:
+On 3/15/23 15:44, Fabrice Gasnier wrote:
+> When in dual role mode (dr_mode == USB_DR_MODE_OTG), platform probe
+> successively basically calls:
+> - dwc2_gadget_init()
+> - dwc2_hcd_init()
+> - dwc2_lowlevel_hw_disable() since recent change [1]
+> - usb_add_gadget_udc()
+> 
+> The PHYs (and so the clocks it may provide) shouldn't be disabled for all
+> SoCs, in OTG mode, as the HCD part has been initialized.
+> 
+> On STM32 this creates some weird race condition upon boot, when:
+> - initially attached as a device, to a HOST
+> - and there is a gadget script invoked to setup the device part.
+> Below issue becomes systematic, as long as the gadget script isn't
+> started by userland: the hardware PHYs (and so the clocks provided by the
+> PHYs) remains disabled.
+> It ends up in having an endless interrupt storm, before the watchdog
+> resets the platform.
+> 
+> [   16.924163] dwc2 49000000.usb-otg: EPs: 9, dedicated fifos, 952 entries in SPRAM
+> [   16.962704] dwc2 49000000.usb-otg: DWC OTG Controller
+> [   16.966488] dwc2 49000000.usb-otg: new USB bus registered, assigned bus number 2
+> [   16.974051] dwc2 49000000.usb-otg: irq 77, io mem 0x49000000
+> [   17.032170] hub 2-0:1.0: USB hub found
+> [   17.042299] hub 2-0:1.0: 1 port detected
+> [   17.175408] dwc2 49000000.usb-otg: Mode Mismatch Interrupt: currently in Host mode
+> [   17.181741] dwc2 49000000.usb-otg: Mode Mismatch Interrupt: currently in Host mode
+> [   17.189303] dwc2 49000000.usb-otg: Mode Mismatch Interrupt: currently in Host mode
+> ...
+> 
+> The host part is also not functional, until the gadget part is configured.
+> 
+> The HW may only be disabled for peripheral mode (original init), e.g.
+> dr_mode == USB_DR_MODE_PERIPHERAL, until the gadget driver initializes.
+> 
+> But when in USB_DR_MODE_OTG, the HW should remain enabled, as the HCD part
+> is able to run, while the gadget part isn't necessarily configured.
+> 
+> I don't fully get the of purpose the original change, that claims disabling
+> the hardware is missing. It creates conditions on SOCs using the PHY
+> initialization to be completely non working in OTG mode. Original
+> change [1] should be reworked to be platform specific.
+> 
+> [1] https://urldefense.com/v3/__https://lore.kernel.org/r/20221206-dwc2-gadget-dual-role-v1-2-36515e1092cd@theobroma-systems.com__;!!OOPJP91ZZw!gKDR7WKb_MJfqvHDitpGCxrXjMC0sSgfG7hMxQad2X2atPHRu9ePfzJhI8K1frODjhcFQYPQ7xsEs0GqPq6IDFUB4T1EJqsmRojKJrzOiA$
+> 
 
-[auto build test WARNING on net-next/main]
-[also build test WARNING on net/main linus/master v6.3-rc2 next-20230317]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks for adding me to the recipients.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Szymon-Heidrich/net-usb-lan78xx-Limit-packet-length-to-skb-len/20230317-233602
-patch link:    https://lore.kernel.org/r/20230317153217.90145-1-szymon.heidrich%40gmail.com
-patch subject: [PATCH] net: usb: lan78xx: Limit packet length to skb->len
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230318/202303180031.EsiDo4qY-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0110af02bdfd214f5cd310013aa19163d6558a7d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Szymon-Heidrich/net-usb-lan78xx-Limit-packet-length-to-skb-len/20230317-233602
-        git checkout 0110af02bdfd214f5cd310013aa19163d6558a7d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/net/
+So.. basically Dual Role mode doesn't work on Theobroma Ringneck (based 
+on Rockchip PX30) module, at all, without the three patches listed in 
+the patch series you linked to.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303180031.EsiDo4qY-lkp@intel.com/
+Now, even with the whole patch series applied, I still get stability 
+issues for dual role mode, but at least it **sometimes** works.
 
-All warnings (new ones prefixed by >>):
+I applied your patch and it seems I still have support for forced HOST 
+and DEVICE mode on the OTG port. Considering dual role mode is not 
+stable anyway and that this patch alone doesn't seem to make things 
+better/worse,
 
-   drivers/net/usb/lan78xx.c: In function 'lan78xx_rx':
->> drivers/net/usb/lan78xx.c:3600:25: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-    3600 |                         u32 frame_len = size - ETH_FCS_LEN;
-         |                         ^~~
+Reviewed-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Tested-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
+I wish I had some access to some datasheet/technical manual or something 
+but right now sinking time for Dual Role mode support is not in our top 
+priority list so we'll have to live without it. However, any help is 
+much welcomed.
 
-vim +3600 drivers/net/usb/lan78xx.c
+BTW, I assume you would want to backport this to stable releases too (v6.2).
 
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3552  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3553  static int lan78xx_rx(struct lan78xx_net *dev, struct sk_buff *skb,
-ec4c7e12396b1a John Efstathiades         2021-11-18  3554  		      int budget, int *work_done)
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3555  {
-0dd87266c1337d John Efstathiades         2021-11-18  3556  	if (skb->len < RX_SKB_MIN_LEN)
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3557  		return 0;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3558  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3559  	/* Extract frames from the URB buffer and pass each one to
-ec4c7e12396b1a John Efstathiades         2021-11-18  3560  	 * the stack in a new NAPI SKB.
-ec4c7e12396b1a John Efstathiades         2021-11-18  3561  	 */
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3562  	while (skb->len > 0) {
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3563  		u32 rx_cmd_a, rx_cmd_b, align_count, size;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3564  		u16 rx_cmd_c;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3565  		unsigned char *packet;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3566  
-bb448f8a60ea93 Chuhong Yuan              2019-07-19  3567  		rx_cmd_a = get_unaligned_le32(skb->data);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3568  		skb_pull(skb, sizeof(rx_cmd_a));
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3569  
-bb448f8a60ea93 Chuhong Yuan              2019-07-19  3570  		rx_cmd_b = get_unaligned_le32(skb->data);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3571  		skb_pull(skb, sizeof(rx_cmd_b));
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3572  
-bb448f8a60ea93 Chuhong Yuan              2019-07-19  3573  		rx_cmd_c = get_unaligned_le16(skb->data);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3574  		skb_pull(skb, sizeof(rx_cmd_c));
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3575  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3576  		packet = skb->data;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3577  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3578  		/* get the packet length */
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3579  		size = (rx_cmd_a & RX_CMD_A_LEN_MASK_);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3580  		align_count = (4 - ((size + RXW_PADDING) % 4)) % 4;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3581  
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3582  		if (unlikely(size > skb->len)) {
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3583  			netif_dbg(dev, rx_err, dev->net,
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3584  				  "size err rx_cmd_a=0x%08x\n",
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3585  				  rx_cmd_a);
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3586  			return 0;
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3587  		}
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3588  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3589  		if (unlikely(rx_cmd_a & RX_CMD_A_RED_)) {
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3590  			netif_dbg(dev, rx_err, dev->net,
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3591  				  "Error rx_cmd_a=0x%08x", rx_cmd_a);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3592  		} else {
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3593  			if (unlikely(size < ETH_FCS_LEN)) {
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3594  				netif_dbg(dev, rx_err, dev->net,
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3595  					  "size err rx_cmd_a=0x%08x\n",
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3596  					  rx_cmd_a);
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3597  				return 0;
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3598  			}
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3599  
-ec4c7e12396b1a John Efstathiades         2021-11-18 @3600  			u32 frame_len = size - ETH_FCS_LEN;
-ec4c7e12396b1a John Efstathiades         2021-11-18  3601  			struct sk_buff *skb2;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3602  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3603  			skb2 = napi_alloc_skb(&dev->napi, frame_len);
-ec4c7e12396b1a John Efstathiades         2021-11-18  3604  			if (!skb2)
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3605  				return 0;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3606  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3607  			memcpy(skb2->data, packet, frame_len);
-ec4c7e12396b1a John Efstathiades         2021-11-18  3608  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3609  			skb_put(skb2, frame_len);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3610  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3611  			lan78xx_rx_csum_offload(dev, skb2, rx_cmd_a, rx_cmd_b);
-ec21ecf0aad279 Dave Stevenson            2018-06-25  3612  			lan78xx_rx_vlan_offload(dev, skb2, rx_cmd_a, rx_cmd_b);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3613  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3614  			/* Processing of the URB buffer must complete once
-ec4c7e12396b1a John Efstathiades         2021-11-18  3615  			 * it has started. If the NAPI work budget is exhausted
-ec4c7e12396b1a John Efstathiades         2021-11-18  3616  			 * while frames remain they are added to the overflow
-ec4c7e12396b1a John Efstathiades         2021-11-18  3617  			 * queue for delivery in the next NAPI polling cycle.
-ec4c7e12396b1a John Efstathiades         2021-11-18  3618  			 */
-ec4c7e12396b1a John Efstathiades         2021-11-18  3619  			if (*work_done < budget) {
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3620  				lan78xx_skb_return(dev, skb2);
-ec4c7e12396b1a John Efstathiades         2021-11-18  3621  				++(*work_done);
-ec4c7e12396b1a John Efstathiades         2021-11-18  3622  			} else {
-ec4c7e12396b1a John Efstathiades         2021-11-18  3623  				skb_queue_tail(&dev->rxq_overflow, skb2);
-ec4c7e12396b1a John Efstathiades         2021-11-18  3624  			}
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3625  		}
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3626  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3627  		skb_pull(skb, size);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3628  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3629  		/* skip padding bytes before the next frame starts */
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3630  		if (skb->len)
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3631  			skb_pull(skb, align_count);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3632  	}
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3633  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3634  	return 1;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3635  }
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3636  
+Cheers,
+Quentin
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> Fixes: ade23d7b7ec5 ("usb: dwc2: power on/off phy for peripheral mode in dual-role mode")
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> ---
+>   drivers/usb/dwc2/gadget.c   | 6 ++----
+>   drivers/usb/dwc2/platform.c | 3 +--
+>   2 files changed, 3 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+> index 62fa6378d2d7..8b15742d9e8a 100644
+> --- a/drivers/usb/dwc2/gadget.c
+> +++ b/drivers/usb/dwc2/gadget.c
+> @@ -4549,8 +4549,7 @@ static int dwc2_hsotg_udc_start(struct usb_gadget *gadget,
+>   	hsotg->gadget.dev.of_node = hsotg->dev->of_node;
+>   	hsotg->gadget.speed = USB_SPEED_UNKNOWN;
+>   
+> -	if (hsotg->dr_mode == USB_DR_MODE_PERIPHERAL ||
+> -	    (hsotg->dr_mode == USB_DR_MODE_OTG && dwc2_is_device_mode(hsotg))) {
+> +	if (hsotg->dr_mode == USB_DR_MODE_PERIPHERAL) {
+>   		ret = dwc2_lowlevel_hw_enable(hsotg);
+>   		if (ret)
+>   			goto err;
+> @@ -4612,8 +4611,7 @@ static int dwc2_hsotg_udc_stop(struct usb_gadget *gadget)
+>   	if (!IS_ERR_OR_NULL(hsotg->uphy))
+>   		otg_set_peripheral(hsotg->uphy->otg, NULL);
+>   
+> -	if (hsotg->dr_mode == USB_DR_MODE_PERIPHERAL ||
+> -	    (hsotg->dr_mode == USB_DR_MODE_OTG && dwc2_is_device_mode(hsotg)))
+> +	if (hsotg->dr_mode == USB_DR_MODE_PERIPHERAL)
+>   		dwc2_lowlevel_hw_disable(hsotg);
+>   
+>   	return 0;
+> diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+> index 23ef75996823..262c13b6362a 100644
+> --- a/drivers/usb/dwc2/platform.c
+> +++ b/drivers/usb/dwc2/platform.c
+> @@ -576,8 +576,7 @@ static int dwc2_driver_probe(struct platform_device *dev)
+>   	dwc2_debugfs_init(hsotg);
+>   
+>   	/* Gadget code manages lowlevel hw on its own */
+> -	if (hsotg->dr_mode == USB_DR_MODE_PERIPHERAL ||
+> -	    (hsotg->dr_mode == USB_DR_MODE_OTG && dwc2_is_device_mode(hsotg)))
+> +	if (hsotg->dr_mode == USB_DR_MODE_PERIPHERAL)
+>   		dwc2_lowlevel_hw_disable(hsotg);
+>   
+>   #if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
