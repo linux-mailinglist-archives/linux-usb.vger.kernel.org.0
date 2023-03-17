@@ -2,111 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2E56BF55D
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 23:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83AB26BF58F
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 23:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjCQWxQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Mar 2023 18:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45134 "EHLO
+        id S230495AbjCQW5m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Mar 2023 18:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjCQWxK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 18:53:10 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF98D30BE
-        for <linux-usb@vger.kernel.org>; Fri, 17 Mar 2023 15:53:08 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id j6so3518642ilr.7
-        for <linux-usb@vger.kernel.org>; Fri, 17 Mar 2023 15:53:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1679093588; x=1681685588;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tZQKt8PEtqewJ6G+XTz4rdS+nQPMdiG14rkUN1r/CVQ=;
-        b=gMqOXd0bTw4YEjnZpmHxvcSTK+Jt6ubljQfAnP7h0+tG/Ri2ZPlywPCqXD2x9GdssH
-         iXKDhXh+qiwf2qrcr/syJjphlyrI3nZS/tN2Ox0AKnh5qxrGePPCeRIsTxtiarKHRyVU
-         i5u87187EG/8X4PT832d5VuUfkfgdkUkm0a2A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679093588; x=1681685588;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tZQKt8PEtqewJ6G+XTz4rdS+nQPMdiG14rkUN1r/CVQ=;
-        b=Q+piCyCHS5KnG2Bfp6OpPo9o/6hahdveEBLwE52RpNXutOwWRUHjo6Lj7pQ1Zp3CnX
-         LsROy/0XEMH0qpXHz7qxw9/QBx4jL07CiIW9JdvTzPjDHDAGg35gPlobIFSEFPN7SnM8
-         lpHn52jNviMiNPlTw6G+ylQfzMTmFMoZjMgknuxTCCV3uApzWT5kTY52s7FuofBEX4fw
-         FSOKW7Ugmttw2I/lgCBv+PqIFKSROt2CVIPTj5RqVogrlrGgKDuQfznqgfF7wphWk7+E
-         G9jvo76qtzH7O2kAyuyJl/lAhT8vwZT07HpaeaFUdcr5+OMsfYfvCm/BdgY9t77isMiB
-         cl2A==
-X-Gm-Message-State: AO0yUKVYHNBGO32DE9QKmYGf7+/dyUDtb7Kp1tWjfU9Twc2cyD5/lsro
-        9+3ON2Lgtt1ffAUmumlA2gygKg==
-X-Google-Smtp-Source: AK7set/moJNFKwD/r58i9ms7d34NV3sMr/vetji1mhQmMNaRhRj5dNSSmlbXgRAn/i8tpm7gWmklKw==
-X-Received: by 2002:a05:6e02:1a88:b0:316:67be:1b99 with SMTP id k8-20020a056e021a8800b0031667be1b99mr7475616ilv.0.1679093588264;
-        Fri, 17 Mar 2023 15:53:08 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id o3-20020a056e02114300b003158e48f1e9sm928296ill.60.2023.03.17.15.53.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 15:53:07 -0700 (PDT)
-Message-ID: <d05ae776-ee19-2ce0-c06b-9825e5cbea82@linuxfoundation.org>
-Date:   Fri, 17 Mar 2023 16:53:07 -0600
+        with ESMTP id S230475AbjCQW5Z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 18:57:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FAD33B66D;
+        Fri, 17 Mar 2023 15:57:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6C3A60B38;
+        Fri, 17 Mar 2023 22:57:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13F9DC43446;
+        Fri, 17 Mar 2023 22:57:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679093841;
+        bh=encxLzCe9LxaId/xxN4fKI71fK8XV5gG2gefzr7qlyU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=I0PA8uMitrl7abldOvvBlitUAEbb9b0a25HcyQZmv3C5UJLjh2aMg4eB0QPlOv5M8
+         1S3tFPUDb0CgSiJk2x6TwSWWnyijOX3KrKPbn0JDercjiUXfrEoB24XeV1KXNctbws
+         Dgm2beKP6OOZ1QIDopxsQ129jaHiKPPuLXjVgBb4y10gi+e2NtN+8KaW7UdA6MQl+2
+         iQw+qKgayG+fwtS9CYb+aWR4MocxedCDZY4xYc5d4+urAu2yxMsNfHbM2wh0Vb2Hfp
+         OzAK22MpqeMflSRS5u6V8/Fb+Q9J6r6F7rJQiPqB+QjRW1R0WjhdozxSrhgbSFVelt
+         ysuXoYkKw4FxA==
+Received: by mail-vs1-f50.google.com with SMTP id f13so5822233vsg.6;
+        Fri, 17 Mar 2023 15:57:21 -0700 (PDT)
+X-Gm-Message-State: AO0yUKXyvVO6qT6o9XMaREpfSDo7RL1XiWcLkpoM2Z4yIgWq9C2Kd2to
+        NIr1teXfpCQ4r95oARr6GqridD4JV851fPmpyg==
+X-Google-Smtp-Source: AK7set+pXFOi9tiOFDnzXgTcKzg0ePHREvSRtw7Kqh9xmtljiwQ0myf2wduLF+FooERM0gKVnVi4VVhaBq9SlTXKnVc=
+X-Received: by 2002:a67:d881:0:b0:425:bbea:6605 with SMTP id
+ f1-20020a67d881000000b00425bbea6605mr47517vsj.3.1679093840028; Fri, 17 Mar
+ 2023 15:57:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3] usbip: vudc: Fix use after free bug in vudc_remove due
- to race condition
-Content-Language: en-US
-To:     Zheng Wang <zyytlz.wz@163.com>, valentina.manea.m@gmail.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230317100954.2626573-1-zyytlz.wz@163.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230317100954.2626573-1-zyytlz.wz@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230203014526.1461386-1-peng.fan@oss.nxp.com>
+ <167543212276.4084541.17286318072815310709.robh@kernel.org>
+ <DU0PR04MB9417FD3A56076FC789D2719688D79@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <CAL_JsqL7_v91+c52fDWDTvv657D=JkEGN0kSCTOEZwnkaksRug@mail.gmail.com>
+In-Reply-To: <CAL_JsqL7_v91+c52fDWDTvv657D=JkEGN0kSCTOEZwnkaksRug@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 17 Mar 2023 17:57:08 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+nrqTX5ND3=+kFUmStx-+b=qpE_WsL_Le-YX8c285-5A@mail.gmail.com>
+Message-ID: <CAL_Jsq+nrqTX5ND3=+kFUmStx-+b=qpE_WsL_Le-YX8c285-5A@mail.gmail.com>
+Subject: Re: [PATCH V2] dt-bindings: usb: snps,dwc3: support i.MX8MQ
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Jun Li <jun.li@nxp.com>, "balbi@kernel.org" <balbi@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/17/23 04:09, Zheng Wang wrote:
-> In vudc_probe, it calls init_vudc_hw, which bound &udc->timer with v_timer.
-> 
-> When it calls usbip_sockfd_store, it will call v_start_timer to start the
-> timer work.
-> 
-> When we call vudc_remove to remove the driver, theremay be a sequence as
-> follows:
-> 
-> Fix it by shutdown the timer work before cleanup in vudc_remove.
-> 
-> Note that removing a driver is a root-only operation, and should never
-> happen. But the attacker can directly unplug the usb to trigger the remove
-> function.
-> 
-> CPU0                  CPU1
-> 
->                       |v_timer
-> vudc_remove          |
-> kfree(udc);          |
-> //free shost         |
->                       |udc->gadget
->                       |//use
-> 
-> The udc might be removed before v_timer finished, and UAF happens.
-> 
-> This bug was found by Codeql static analysis and might by false positive.
+On Tue, Mar 14, 2023 at 1:56=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
+:
+>
+> On Fri, Feb 3, 2023 at 5:49=E2=80=AFPM Peng Fan <peng.fan@nxp.com> wrote:
+> >
+> > Hi Rob,
+> >
+> > > Subject: Re: [PATCH V2] dt-bindings: usb: snps,dwc3: support i.MX8MQ
+> > >
+> > >
+> > > On Fri, 03 Feb 2023 09:45:26 +0800, Peng Fan (OSS) wrote:
+> > > > From: Peng Fan <peng.fan@nxp.com>
+> > > >
+> > > > i.MX8MQ use Synopsys DesignWare USB3 Controller IP, so add the
+> > > > compatible.
+> > > >
+> > > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > > > ---
+> > > >
+> > > > V2:
+> > > >  Rebased on linux-next, remove power-domains from v1
+> > > >
+> > > >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 12
+> > > > +++++++-----
+> > > >  1 file changed, 7 insertions(+), 5 deletions(-)
+> > > >
+> > >
+> > > My bot found errors running 'make DT_CHECKER_FLAGS=3D-m
+> > > dt_binding_check'
+> > > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > >
+> > > yamllint warnings/errors:
+> >
+> > The error is not related my patch, I could help add rochchip and LSx su=
+pport later,
+> > this patch is just for i.MX8MQ.
+>
+> It is related. You must pass 'make dt_binding_check' without setting
+> DT_SCHEMA_FILES. Your schema is being applied to the
+> rockchip,dwc3.yaml example. Most likely you need a custom 'select'
+> entry to avoid applying to all 'snps,dwc3' compatibles.
 
-This statement that this could be a false positive makes me hesitate
-taking this patch.
+This is now failing in linux-next. Please send an incremental fix.
 
-What kind of testing have you done with this fix? Were you able to test
-the scenario of unplugging usb?
-
-thanks,
--- Shuah
+Rob
