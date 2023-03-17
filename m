@@ -2,202 +2,235 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C2A6BE6C7
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 11:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCAC6BE70F
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 11:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbjCQKay (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Mar 2023 06:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
+        id S229539AbjCQKm5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Mar 2023 06:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjCQKaw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 06:30:52 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2D0E4D9E;
-        Fri, 17 Mar 2023 03:30:49 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 50F1D24E289;
-        Fri, 17 Mar 2023 18:30:41 +0800 (CST)
-Received: from EXMBX071.cuchost.com (172.16.6.81) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 17 Mar
- 2023 18:30:41 +0800
-Received: from [192.168.125.108] (113.72.145.194) by EXMBX071.cuchost.com
- (172.16.6.81) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 17 Mar
- 2023 18:30:40 +0800
-Message-ID: <e304283e-c564-527a-b1a3-0a04b80604d0@starfivetech.com>
-Date:   Fri, 17 Mar 2023 18:30:39 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 3/5] dt-binding: Add JH7110 USB wrapper layer doc.
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>,
-        "Vinod Koul" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
+        with ESMTP id S230089AbjCQKmv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 06:42:51 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F90BB4217
+        for <linux-usb@vger.kernel.org>; Fri, 17 Mar 2023 03:42:46 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id x13so18656537edd.1
+        for <linux-usb@vger.kernel.org>; Fri, 17 Mar 2023 03:42:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pqrs.dk; s=google; t=1679049765;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4mzN/37UoYXUZaB9D3Kvm+oDNKKugvTJRDf02rBTRys=;
+        b=mbOx0ApqHiRq7wPARubyIPBIX+wNc6krXZwwVEumSxZJMbtTu7p6cgaitvyO6C+SMb
+         E0pjhB6uenC5fFMCQr0d3vw5ml2WQ1A08n2ba0WAF1QJ7h2wlgnVilM0xOBC8a08dFSH
+         83A/pM2xDe/8im3WqN9Cs9UHF4/zFemO9PZ/c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679049765;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4mzN/37UoYXUZaB9D3Kvm+oDNKKugvTJRDf02rBTRys=;
+        b=QJjisV319AekZ1M4oBll+cHx8Ciz/8bEW/bJuE0YiUAo48Ryk0xVgmfOU005hY48qs
+         8nIkn7Wq9TP4yecLbm4wN66bThJQrwFSx9OqqvhcPx/ZrVUIyOmNZliBMPyzn3c+fyur
+         k00zv7kuaQoLXTHJl8b5WsxaIBjt3b13bxPIyK0YwxgZ17R3b7AK44rxHKai9DCGuKKj
+         AiyBtNj+EULwNNibZ3tmVKu9AqW6oqFje0jMjgMOaJmUvQSAYDyUdvbg5Jl9AbKrYfl0
+         49bu9HazHSZNIKyl3omVHeQtv8OfuQQPKIfWKEftCQKxJFmGFZK/Y7/1aOrnWJthZdf6
+         DUBw==
+X-Gm-Message-State: AO0yUKUTXDEU7enwmgTqZfyZLEvj4uQvdBXug56NSW34V/wRunESS5tP
+        h/K2E6JCr2DsLkM6wJr2NXbiyw==
+X-Google-Smtp-Source: AK7set/A3JcjdNLJx52qZo3Imzp237XXegZMjJzgTtom2W6zEiWpF7C0hM0xWzAEz4eM3T79GXx01g==
+X-Received: by 2002:a17:906:4e92:b0:878:72d0:2817 with SMTP id v18-20020a1709064e9200b0087872d02817mr13248540eju.29.1679049764924;
+        Fri, 17 Mar 2023 03:42:44 -0700 (PDT)
+Received: from localhost.localdomain ([193.89.194.60])
+        by smtp.gmail.com with ESMTPSA id e5-20020a170906314500b009236ae669ecsm816144eje.191.2023.03.17.03.42.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 03:42:44 -0700 (PDT)
+From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-References: <20230315104411.73614-1-minda.chen@starfivetech.com>
- <20230315104411.73614-4-minda.chen@starfivetech.com>
- <451c8112-c7f3-f435-5d90-840f01c60bd5@linaro.org>
-From:   Minda Chen <minda.chen@starfivetech.com>
-In-Reply-To: <451c8112-c7f3-f435-5d90-840f01c60bd5@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.194]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX071.cuchost.com
- (172.16.6.81)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     linux-usb@vger.kernel.org,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] extcon: usbc-tusb320: add accessory detection support
+Date:   Fri, 17 Mar 2023 11:42:27 +0100
+Message-Id: <20230317104229.1392742-1-alvin@pqrs.dk>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
+The TUSB320 can detect the following types of accessory:
 
-On 2023/3/17 16:43, Krzysztof Kozlowski wrote:
-> On 15/03/2023 11:44, Minda Chen wrote:
->> The dt-binding doc of Cadence USBSS-DRD controller wrapper
->> layer.
-> 
-> Subject: drop full stop. It's not a sentence.
-> 
-> Use subject prefixes matching the subsystem (which you can get for
-> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-> your patch is touching).
-> 
-> 
-Thanks. I should check all the commits title and commit messages.
->> 
->> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
->> ---
->>  .../bindings/usb/starfive,jh7110-usb.yaml     | 119 ++++++++++++++++++
->>  1 file changed, 119 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
->> 
->> diff --git a/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml b/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
->> new file mode 100644
->> index 000000000000..b1a8dc6d7b4b
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
->> @@ -0,0 +1,119 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/usb/starfive,jh7110-usb.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: StarFive JH7110 wrapper module for the Cadence USBSS-DRD controller
->> +
->> +maintainers:
->> +  - Minda Chen <minda.chen@starfivetech.com>
->> +
->> +properties:
->> +  compatible:
->> +    const: starfive,jh7110-usb
->> +
->> +  clocks:
->> +    items:
->> +      - description: lpm clock
->> +      - description: stb clock
->> +      - description: apb clock
->> +      - description: axi clock
->> +      - description: utmi apb clock
->> +
->> +  clock-names:
->> +    items:
->> +      - const: lpm
->> +      - const: stb
->> +      - const: apb
->> +      - const: axi
->> +      - const: utmi_apb
->> +
->> +  resets:
->> +    items:
->> +      - description: PWRUP reset
->> +      - description: APB reset
->> +      - description: AXI reset
->> +      - description: UTMI_APB reset
->> +
->> +  starfive,sys-syscon:
->> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->> +    items:
->> +      items:
->> +        - description: phandle to System Register Controller sys_syscon node.
->> +        - description: offset of SYS_SYSCONSAIF__SYSCFG register for USB.
->> +    description:
->> +      The phandle to System Register Controller syscon node and the offset
->> +      of SYS_SYSCONSAIF__SYSCFG register for USB.
->> +
->> +  starfive,stg-syscon:
->> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->> +    items:
->> +      items:
->> +        - description: phandle to System Register Controller stg_syscon node.
->> +        - description: register0 offset of STG_SYSCONSAIF__SYSCFG register for USB.
->> +        - description: register1 offset of STG_SYSCONSAIF__SYSCFG register for USB.
->> +        - description: register2 offset of STG_SYSCONSAIF__SYSCFG register for USB.
->> +        - description: register3 offset of STG_SYSCONSAIF__SYSCFG register for USB.
->> +    description:
->> +      The phandle to System Register Controller syscon node and the offset
->> +      of STG_SYSCONSAIF__SYSCFG register for USB. Total 4 regsisters offset
->> +      for USB.
->> +
->> +  "#address-cells":
->> +    maximum: 2
-> 
-> enum: [ 1, 2 ]
-> (because 0 should not be valid for you)
-> 
->> +
->> +  "#size-cells":
->> +    maximum: 2
-> 
-> ditto
-> 
-ok
->> +
->> +  ranges: true
->> +
->> +patternProperties:
->> +  "^usb@[0-9a-f]+$":
->> +    type: object
-> 
-> missing $ref and unevaluatedProperties: false
-> 
-ok, thanks
->> +
->> +required:
->> +  - compatible
->> +  - clocks
->> +  - clock-names
->> +  - resets
->> +  - starfive,sys-syscon
->> +  - starfive,stg-syscon
->> +  - "#address-cells"
->> +  - "#size-cells"
->> +  - ranges
->> +
->> +additionalProperties: false
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+  - Audio Accessory
+  - Audio Accessory with charge-thru
+  - Debug Accessory (DFP)
+  - Debug Accessory (UFP)
+
+Moreover, the typec subsystem can be informed of this through the
+typec_set_mode() function. The information will be propagated to any
+linked typec muxes. Add the necessary support to the driver.
+
+Note that for the Debug Accessory modes, an educated guess was made that
+for the USB data role, DFP implies HOST and UFP implies DEVICE. But this
+might want to be made configurable at a later date.
+
+Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+---
+v2: no change
+---
+ drivers/extcon/extcon-usbc-tusb320.c | 90 +++++++++++++++++++++-------
+ 1 file changed, 68 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/extcon/extcon-usbc-tusb320.c b/drivers/extcon/extcon-usbc-tusb320.c
+index 10dff1c512c4..882d1f48495e 100644
+--- a/drivers/extcon/extcon-usbc-tusb320.c
++++ b/drivers/extcon/extcon-usbc-tusb320.c
+@@ -15,6 +15,7 @@
+ #include <linux/module.h>
+ #include <linux/regmap.h>
+ #include <linux/usb/typec.h>
++#include <linux/usb/typec_altmode.h>
+ 
+ #define TUSB320_REG8				0x8
+ #define TUSB320_REG8_CURRENT_MODE_ADVERTISE	GENMASK(7, 6)
+@@ -26,16 +27,16 @@
+ #define TUSB320_REG8_CURRENT_MODE_DETECT_MED	0x1
+ #define TUSB320_REG8_CURRENT_MODE_DETECT_ACC	0x2
+ #define TUSB320_REG8_CURRENT_MODE_DETECT_HI	0x3
+-#define TUSB320_REG8_ACCESSORY_CONNECTED	GENMASK(3, 2)
++#define TUSB320_REG8_ACCESSORY_CONNECTED	GENMASK(3, 1)
+ #define TUSB320_REG8_ACCESSORY_CONNECTED_NONE	0x0
+ #define TUSB320_REG8_ACCESSORY_CONNECTED_AUDIO	0x4
+-#define TUSB320_REG8_ACCESSORY_CONNECTED_ACC	0x5
+-#define TUSB320_REG8_ACCESSORY_CONNECTED_DEBUG	0x6
++#define TUSB320_REG8_ACCESSORY_CONNECTED_ACHRG	0x5
++#define TUSB320_REG8_ACCESSORY_CONNECTED_DBGDFP	0x6
++#define TUSB320_REG8_ACCESSORY_CONNECTED_DBGUFP	0x7
+ #define TUSB320_REG8_ACTIVE_CABLE_DETECTION	BIT(0)
+ 
+ #define TUSB320_REG9				0x9
+-#define TUSB320_REG9_ATTACHED_STATE_SHIFT	6
+-#define TUSB320_REG9_ATTACHED_STATE_MASK	0x3
++#define TUSB320_REG9_ATTACHED_STATE		GENMASK(7, 6)
+ #define TUSB320_REG9_CABLE_DIRECTION		BIT(5)
+ #define TUSB320_REG9_INTERRUPT_STATUS		BIT(4)
+ 
+@@ -250,8 +251,7 @@ static void tusb320_extcon_irq_handler(struct tusb320_priv *priv, u8 reg)
+ {
+ 	int state, polarity;
+ 
+-	state = (reg >> TUSB320_REG9_ATTACHED_STATE_SHIFT) &
+-		TUSB320_REG9_ATTACHED_STATE_MASK;
++	state = FIELD_GET(TUSB320_REG9_ATTACHED_STATE, reg);
+ 	polarity = !!(reg & TUSB320_REG9_CABLE_DIRECTION);
+ 
+ 	dev_dbg(priv->dev, "attached state: %s, polarity: %d\n",
+@@ -277,32 +277,78 @@ static void tusb320_typec_irq_handler(struct tusb320_priv *priv, u8 reg9)
+ {
+ 	struct typec_port *port = priv->port;
+ 	struct device *dev = priv->dev;
+-	u8 mode, role, state;
++	int typec_mode;
++	enum typec_role pwr_role;
++	enum typec_data_role data_role;
++	u8 state, mode, accessory;
+ 	int ret, reg8;
+ 	bool ori;
+ 
++	ret = regmap_read(priv->regmap, TUSB320_REG8, &reg8);
++	if (ret) {
++		dev_err(dev, "error during reg8 i2c read, ret=%d!\n", ret);
++		return;
++	}
++
+ 	ori = reg9 & TUSB320_REG9_CABLE_DIRECTION;
+ 	typec_set_orientation(port, ori ? TYPEC_ORIENTATION_REVERSE :
+ 					  TYPEC_ORIENTATION_NORMAL);
+ 
+-	state = (reg9 >> TUSB320_REG9_ATTACHED_STATE_SHIFT) &
+-		TUSB320_REG9_ATTACHED_STATE_MASK;
+-	if (state == TUSB320_ATTACHED_STATE_DFP)
+-		role = TYPEC_SOURCE;
+-	else
+-		role = TYPEC_SINK;
++	state = FIELD_GET(TUSB320_REG9_ATTACHED_STATE, reg9);
++	accessory = FIELD_GET(TUSB320_REG8_ACCESSORY_CONNECTED, reg8);
++
++	switch (state) {
++	case TUSB320_ATTACHED_STATE_DFP:
++		typec_mode = TYPEC_MODE_USB2;
++		pwr_role = TYPEC_SOURCE;
++		data_role = TYPEC_HOST;
++		break;
++	case TUSB320_ATTACHED_STATE_UFP:
++		typec_mode = TYPEC_MODE_USB2;
++		pwr_role = TYPEC_SINK;
++		data_role = TYPEC_DEVICE;
++		break;
++	case TUSB320_ATTACHED_STATE_ACC:
++		/*
++		 * Accessory detected. For debug accessories, just make some
++		 * qualified guesses as to the role for lack of a better option.
++		 */
++		if (accessory == TUSB320_REG8_ACCESSORY_CONNECTED_AUDIO ||
++		    accessory == TUSB320_REG8_ACCESSORY_CONNECTED_ACHRG) {
++			typec_mode = TYPEC_MODE_AUDIO;
++			pwr_role = TYPEC_SINK;
++			data_role = TYPEC_DEVICE;
++			break;
++		} else if (accessory ==
++			   TUSB320_REG8_ACCESSORY_CONNECTED_DBGDFP) {
++			typec_mode = TYPEC_MODE_DEBUG;
++			pwr_role = TYPEC_SOURCE;
++			data_role = TYPEC_HOST;
++			break;
++		} else if (accessory ==
++			   TUSB320_REG8_ACCESSORY_CONNECTED_DBGUFP) {
++			typec_mode = TYPEC_MODE_DEBUG;
++			pwr_role = TYPEC_SINK;
++			data_role = TYPEC_DEVICE;
++			break;
++		}
+ 
+-	typec_set_vconn_role(port, role);
+-	typec_set_pwr_role(port, role);
+-	typec_set_data_role(port, role == TYPEC_SOURCE ?
+-				  TYPEC_HOST : TYPEC_DEVICE);
++		dev_warn(priv->dev, "unexpected ACCESSORY_CONNECTED state %d\n",
++			 accessory);
+ 
+-	ret = regmap_read(priv->regmap, TUSB320_REG8, &reg8);
+-	if (ret) {
+-		dev_err(dev, "error during reg8 i2c read, ret=%d!\n", ret);
+-		return;
++		fallthrough;
++	default:
++		typec_mode = TYPEC_MODE_USB2;
++		pwr_role = TYPEC_SINK;
++		data_role = TYPEC_DEVICE;
++		break;
+ 	}
+ 
++	typec_set_vconn_role(port, pwr_role);
++	typec_set_pwr_role(port, pwr_role);
++	typec_set_data_role(port, data_role);
++	typec_set_mode(port, typec_mode);
++
+ 	mode = FIELD_GET(TUSB320_REG8_CURRENT_MODE_DETECT, reg8);
+ 	if (mode == TUSB320_REG8_CURRENT_MODE_DETECT_DEF)
+ 		typec_set_pwr_opmode(port, TYPEC_PWR_MODE_USB);
+-- 
+2.39.2
+
