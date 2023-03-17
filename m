@@ -2,75 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C3A6BE996
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 13:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6116BE9BC
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 13:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjCQMrS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Mar 2023 08:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51588 "EHLO
+        id S230475AbjCQM6L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Mar 2023 08:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbjCQMrQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 08:47:16 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F26AF2AE;
-        Fri, 17 Mar 2023 05:47:14 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id bp11so2676670ilb.3;
-        Fri, 17 Mar 2023 05:47:14 -0700 (PDT)
+        with ESMTP id S230474AbjCQM6K (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 08:58:10 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2351CF5F;
+        Fri, 17 Mar 2023 05:58:09 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id i19so2678846ila.10;
+        Fri, 17 Mar 2023 05:58:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679057234;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uMPENxtm6B3AsAn3c4xfJq8kPIjS9MSNdQwqeoG6GXk=;
-        b=Enor0DrvWQLFMMk1BckAW3zhPQPyM+2hd9Mgj15l08jHxHb8isx1ZlSKkW4WqehgFl
-         ByD0bCq8LbMvaeF+gi/BWpxJTsvv1P+JVC/F2zwyL44cEoBi3Vbo+ZLBs4HUlCogom1b
-         OXMO4Xq7hypLScLfjGbcEzpoJfwxiGdkpp1X1N2sOqggsM3L9SHXkhsEgiwp5tp86co/
-         LgyvfNSSVsHU4gohBSql9Ogto3KrS4BKZZKNe1CpFnPIwALKTBEqyd2r+/U8GMi05v7S
-         2zxy21QC3ZdrBkgo8moPfAUPcYSpuINPIKIg5IkQcJ4zQaKsx+rzbT04y+u/t3ejptHE
-         29yw==
+        d=gmail.com; s=20210112; t=1679057889;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=U8+4cXu3qDjUouNJqRhPXdnyraju2nbEvYbMrucPxSE=;
+        b=YZy43MHhLsBKYE3NR/zoHY7UjvO8FU9R96nyRXlZAZegB/5jclv2il9icUwmi4/pYR
+         bbBhrDEn51XVLiOwVd3RzY8rR8VQItdGtyyDgfkV0l+oJgqQRQvrQbQhOEnr5q8I1hyR
+         r6geo/w9ouL30rFvDVtNLe7nt2AOXzCA6RFjYfJvGoH2o0cwrsdq9ReZJUiSsFqQ7sXv
+         WHj4cDRq8IRnd1X/TwqR07CReq0FSkd5DDQNvHsEYD31F5n84qhCP5D08EEAlgCHyXLS
+         zqYxN22vwAp9UiGJhAbrEx6083QEazixDu/GS3OvikqBRHIG+I0MeBgoyXHGVawUYMGK
+         y1CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679057234;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uMPENxtm6B3AsAn3c4xfJq8kPIjS9MSNdQwqeoG6GXk=;
-        b=M8aM2H1gIBRtXxrLLxwiI0mLsmAj74w4NjV/FEK13ZWEMTE2jnbJxJmHN1PWgofe+q
-         gQ7qrvJ9aSkIWMLDCEW/lFVns4KRflhV3YMVx/a+tl/hcolWHhc9i2apFEPBSdFew9HT
-         aDyZTKgOcOb48rx1gNXceDmcYQXQzNdauYIZ1CdDTb0rMgFYlHO4oXpkOOVVA5elsam8
-         +s+IeQjIWIFc/jCjmXrVGJuxEvNqW8kzj5BIxrkoynlRWrF91vZpPAKEcKyljVu5bb3U
-         kXeVaCRGsJ2fUvwhYNpZWpXBYfAbCazIGDNHVPI8IPfvrlutfJI18pS09ajwuyh0X1mv
-         arEw==
-X-Gm-Message-State: AO0yUKUOc9vKCzFOLS8ymkPoaPv0OaVRvjYu+DL9JdA+z8iwNvaZReHE
-        S7XxuFonBkRHfGIF2uTn6QI=
-X-Google-Smtp-Source: AK7set8B4oT+0estBbN7+ctEL+I0r+koof2KJocD38OwW53LVUU3Bra06/AbHcBbtc03N2IRuxwMbg==
-X-Received: by 2002:a92:d6d2:0:b0:317:980d:970 with SMTP id z18-20020a92d6d2000000b00317980d0970mr9038697ilp.7.1679057233818;
-        Fri, 17 Mar 2023 05:47:13 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679057889;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U8+4cXu3qDjUouNJqRhPXdnyraju2nbEvYbMrucPxSE=;
+        b=cMo6yNp+60sXMRODshCTMqoZXrgqqF9DmrmSMICyxAwLz1GyxzZvDpDfapIlhJTOaM
+         BEQ0WZG53Do4YJ92NuNPUelK0Kq5tthqXtlJKcREWM9aC/UL+NWPYZRWXNDITO3kZ4jO
+         4PkGwuYfFmfToBvMHfHTPEiiYz1FVnEXYRvBUH56phkF9Xk498ngJSmMBF6DLOQ0yKba
+         Lbt1BOACmN8m6Nkd/QZXQywz88HbxfUCmlqyu2DCiB87uGruAFgHb6l00C+zC3vvkhNX
+         N4ewUexWY7k6UNw+EEwUWU4Lc6EqC7ubGGPxM6Q0159DuJROocDQR1kgqpwurl+nB90q
+         mA4w==
+X-Gm-Message-State: AO0yUKXrnr0c2LM8vn+1tdMcbAZCk7gCrg9sFDGWymq5HJ7LlasGu4WI
+        lIgdUl/jjCcJ3ozCmfKEDaA=
+X-Google-Smtp-Source: AK7set9imSwZfpVK/XShg0oQ3fFaFqKk37d66TfcA+zJ0qe4+XvX2no2yd7RUImM07ROYPHTSIg1Vw==
+X-Received: by 2002:a92:dc4d:0:b0:323:1470:a08c with SMTP id x13-20020a92dc4d000000b003231470a08cmr9687213ilq.8.1679057889107;
+        Fri, 17 Mar 2023 05:58:09 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y4-20020a92d804000000b003231396e317sm556704ilm.88.2023.03.17.05.47.11
+        by smtp.gmail.com with ESMTPSA id x7-20020a056e020f0700b00317a2fed5b6sm585329ilj.45.2023.03.17.05.58.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 05:47:13 -0700 (PDT)
+        Fri, 17 Mar 2023 05:58:08 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d5d1880b-2852-a168-b155-26f972a96457@roeck-us.net>
-Date:   Fri, 17 Mar 2023 05:47:10 -0700
+Message-ID: <f5650fa4-db16-b1e4-f5b4-917fbcabb415@roeck-us.net>
+Date:   Fri, 17 Mar 2023 05:58:06 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
+Subject: Re: [PATCH 4/4] usb: typec: tcpm: fix source caps may lost after soft
+ reset
 Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Frank Wang <frank.wang@rock-chips.com>
-Cc:     gregkh@linuxfoundation.org, heiko@sntech.de,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     Frank Wang <frank.wang@rock-chips.com>,
+        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        heiko@sntech.de
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
         william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
         yubing.zhang@rock-chips.com, wmc@rock-chips.com
 References: <20230313025843.17162-1-frank.wang@rock-chips.com>
- <20230313025843.17162-2-frank.wang@rock-chips.com>
- <ZBA8Y/dbozOk2df7@kuha.fi.intel.com>
- <f0f0ac72-0a90-da9e-f686-49c21a76866b@rock-chips.com>
- <ZBRN11OwtkvXk1Hd@kuha.fi.intel.com>
+ <20230313025843.17162-5-frank.wang@rock-chips.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 1/4] usb: typec: tcpm: fix cc role at port reset
-In-Reply-To: <ZBRN11OwtkvXk1Hd@kuha.fi.intel.com>
+In-Reply-To: <20230313025843.17162-5-frank.wang@rock-chips.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,54 +83,65 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/17/23 04:24, Heikki Krogerus wrote:
-> On Wed, Mar 15, 2023 at 10:55:20AM +0800, Frank Wang wrote:
->> Hi Heikki,
->>
->> On 2023/3/14 17:20, Heikki Krogerus wrote:
->>> On Mon, Mar 13, 2023 at 10:58:40AM +0800, Frank Wang wrote:
->>>> In the current implementation, the tcpm set CC1/CC2 role to open when
->>>> it do port reset would cause the VBUS removed by the Type-C partner.
->>>>
->>>> The Figure 4-20 in the TCPCI 2.0 specification show that the CC1/CC2
->>>> role should set to 01b (Rp) or 10b (Rd) at Power On or Reset stage
->>>> in DRP initialization and connection detection.
->>>>
->>>> So set CC1/CC2 to Rd to fix it.
->>>>
->>>> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
->>>> ---
->>>>    drivers/usb/typec/tcpm/tcpm.c | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
->>>> index a0d943d785800..66de02a56f512 100644
->>>> --- a/drivers/usb/typec/tcpm/tcpm.c
->>>> +++ b/drivers/usb/typec/tcpm/tcpm.c
->>>> @@ -4851,7 +4851,7 @@ static void run_state_machine(struct tcpm_port *port)
->>>>    		break;
->>>>    	case PORT_RESET:
->>>>    		tcpm_reset_port(port);
->>>> -		tcpm_set_cc(port, TYPEC_CC_OPEN);
->>>> +		tcpm_set_cc(port, TYPEC_CC_RD);
->>>>    		tcpm_set_state(port, PORT_RESET_WAIT_OFF,
->>>>    			       PD_T_ERROR_RECOVERY);
->>>>    		break;
->>> Will this work if the port is for example source only?
->>
->> Yeah, this only set at port reset stage and CC value will be set again
->> (Rd for Sink, Rp_* for Source) when start toggling.
-> 
-> Okay. Let's wait for comments from Guenter.
+On 3/12/23 19:58, Frank Wang wrote:
+> Invoke set_pd_rx() may flush the RX FIFO of PD controller, so do
+> set_pd_rx() before sending Soft Reset in case Source caps may be flushed
+> at debounce time between SOFT_RESET_SEND and SNK_WAIT_CAPABILITIES state.
 > 
 
-Figure 4-20 is specifically for dual role ports. Also, start toggling would not
-happen if the low level driver doesn't have a start_toggling callback. I think this
-may require some tweaking based on the port type or, rather, tcpm_default_state().
-Something like
+Isn't that a problem of the fusb302 driver that it flushes its buffers
+unconditionally when its set_pd_rx() callback is called ?
 
-	tcpm_set_cc(port, tcpm_default_state(port) == SNK_UNATTACHED ? TYPEC_CC_RD : tcpm_rp_cc(port));
-
-Thanks,
 Guenter
+
+> Without this patch, in PD charger stress test, the FUSB302 driver may
+> occur the following exceptions in power negotiation stage.
+> 
+> [ ...]
+> [ 4.512252] fusb302_irq_intn
+> [ 4.512260] AMS SOFT_RESET_AMS finished
+> [ 4.512269] state change SOFT_RESET_SEND ->SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
+> [ 4.514511] pd := on
+> [ 4.514516] pending state change SNK_WAIT_CAPABILITIES ->HARD_RESET_SEND @ 310 ms [rev3 NONE_AMS]
+> [ 4.515428] IRQ: 0x51, a: 0x00, b: 0x01, status0: 0x93
+> [ 4.515431] IRQ: BC_LVL, handler pending
+> [ 4.515435] IRQ: PD sent good CRC
+> [ 4.516434] PD message header: 0
+> [ 4.516437] PD message len: 0
+> [ 4.516444] PD RX, header: 0x0 [1]
+> 
+> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
+> ---
+>   drivers/usb/typec/tcpm/tcpm.c | 11 +++++++----
+>   1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 9e583060e64fc..ba6bf71838eed 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4321,10 +4321,12 @@ static void run_state_machine(struct tcpm_port *port)
+>   		tcpm_set_state(port, unattached_state(port), 0);
+>   		break;
+>   	case SNK_WAIT_CAPABILITIES:
+> -		ret = port->tcpc->set_pd_rx(port->tcpc, true);
+> -		if (ret < 0) {
+> -			tcpm_set_state(port, SNK_READY, 0);
+> -			break;
+> +		if (port->prev_state != SOFT_RESET_SEND) {
+> +			ret = port->tcpc->set_pd_rx(port->tcpc, true);
+> +			if (ret < 0) {
+> +				tcpm_set_state(port, SNK_READY, 0);
+> +				break;
+> +			}
+>   		}
+>   		/*
+>   		 * If VBUS has never been low, and we time out waiting
+> @@ -4603,6 +4605,7 @@ static void run_state_machine(struct tcpm_port *port)
+>   	case SOFT_RESET_SEND:
+>   		port->message_id = 0;
+>   		port->rx_msgid = -1;
+> +		port->tcpc->set_pd_rx(port->tcpc, true);
+>   		if (tcpm_pd_send_control(port, PD_CTRL_SOFT_RESET))
+>   			tcpm_set_state_cond(port, hard_reset_state(port), 0);
+>   		else
 
