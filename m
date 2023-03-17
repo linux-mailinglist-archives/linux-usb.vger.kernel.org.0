@@ -2,223 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A9D6BE91B
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 13:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 089156BE939
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 13:32:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbjCQMUB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Mar 2023 08:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
+        id S229499AbjCQMcL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Mar 2023 08:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjCQMT7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 08:19:59 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2097.outbound.protection.outlook.com [40.107.113.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B36914220;
-        Fri, 17 Mar 2023 05:19:57 -0700 (PDT)
+        with ESMTP id S229963AbjCQMcJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 08:32:09 -0400
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2066.outbound.protection.outlook.com [40.107.241.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BFE6C8B5;
+        Fri, 17 Mar 2023 05:32:07 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lgCVcmuy6BwckQ4r6TTfTvwLDncLdYCvGHZaRZ5wBTi+Mon84oxViGbdZhJJJTDxMiXlfkO3EOZ2FYzabos5CdXI4Py7viJkubf5hcVP+OA7VDbVjEHV3fhqNX7iKilAamq/xLPIUCsDb8QQODoSwE7sc9ut8wZEaZXaJtxpWabp/di6O3FT/p112b6k1i1jXUvN1aHHds2LKAmrfjSdVUFvNtXbCcptBJd/DC+6cTJ06d8QxNIA45F7+6tcMRF1GYvp/g4cba5ay1yPuoDHwkFBnPgslasFG/pcSWJPvXmXk6ZDhBk7gD788gkmmWZHOsOfQgInqTn6dXTPwx5ISA==
+ b=YJohECUj5Vy43o0iR0KQPOPGoO/WaZ5EEm3iWb39By9uSMKDSE7EEcez6ZU+rx/St2cXt09DIULwXt6LkrFWE7jmMDYP1KQJ9WtMqticsAPoyp2+ziUzJPtALMPbo/LeiBnoMbMXSf4kO8J+V/8xtrScxY9DWIMhjU5ATmI1yfCwXttrxzyMmBQIIOXXWDTqH6Bgmlvm2v3NCNyTXm4sqt/9qlM9ETc8XE5DZsTWaKha5BdrteJnU96YnIR8dwqXT6s/220qt3db32axkZAAerHgwk+KwH7eeR2jcD4LJsR7XIoSbb0hUM3RyJjstu3dJQi5tOA8H4EEgndvsPTt+w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CURcBLnaqfKvvZpp9hKaZY7/xGfwu1NZGJWLu2LjXks=;
- b=FOh+Yc75vwlZ0STWb5ErU5BajolwWXcrepMcMCRrVWYrJ5m1vXVkgg1nKFDj2LMkrVdyrafY+9TcsB5i7cJQum03SbBpv0UdvrNk5i4T7fDdDuL/TwHmNlDS4S8pU3v4lgKxwrUKlvSvD2i+bBBGnpgPoGU9NSyGbgzgUMbp9kQchWoJfDSZ0kjEfUZ15mCQAmJi3+GEhJLv/HD9aJHgTGmXLdeW7/DzpPVrAj6UyxEc2msBVtxltX9qiQiuSJKFf95PzJ58Iuj2AJBxkkBJi8VwqvYnivo9V3p7kx76jU9fxKR/QXUgB69iULodVPzuKgcwWZe5xk8S0sJoV7BHlQ==
+ bh=h5GlWoW0LmToNwGdzmrAbrAN4NezCSBLlqBfA2gUtuQ=;
+ b=OdX+uSUNIiud5HnJzm3owNDNmrv73OE6aP5mmamO7gRmZgaxoAav62bov/rQ8yDW8as5ZghfDTDQg+PIcVqrXFVeCUk8R439pRseRnKwuH/9mADP4voBk5kkGbXX1eUGvBAFDTGJiajAM/BFa+5UNrRYWenC7LNdoBNplGVWnj/dHhzL6E8qG+4Q4cJtNQuiV/kRSMoUY6jCCT/1URN1l+VLQO59B8w0bVvcYkCacNBzO1GFDO0Z0ypNquh1rN/1BQ0vv1RO4nt1QDUzTzmnqmWSqvxYmFnVSqrAWXqOxa/I99YNA3CVpZeyuRjI4JbJHGVlEC5RdLO+/LNnfOswYw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CURcBLnaqfKvvZpp9hKaZY7/xGfwu1NZGJWLu2LjXks=;
- b=H5S7INOC2jMj+24LkZDNhyc299mqikneXVhRJ/f/BkXn7lxAGpMhWXmBJblmIpkFsQe4FH5c2H52vAtmod3dxOYuGe7Prqfl69Ad04br55OZkRfJODRO/VXbdon6c1DvY9+rkyf3pb1SgQi4v/hQoyiMHYlgVJooaM63Af8eIto=
-Received: from OSYPR01MB5334.jpnprd01.prod.outlook.com (2603:1096:604:8a::15)
- by OS7PR01MB11823.jpnprd01.prod.outlook.com (2603:1096:604:23d::10) with
+ bh=h5GlWoW0LmToNwGdzmrAbrAN4NezCSBLlqBfA2gUtuQ=;
+ b=kC5WW8hXUJKLHsGeI83k96csXIA+CukYS4SBiixyFpsJF2f1zv/PpRgK+gnzJFQYrKJNMrN6FHtkL7sdlSRkerbRjqvSHQEyOL3/6fHY8FI+YRkj0JwpUMWhdKPtgeycWQmoGDRRyok1MCkfKa7E8aqKmP/2sl73+nWpGwQk1wI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from PA4PR04MB9416.eurprd04.prod.outlook.com (2603:10a6:102:2ab::21)
+ by AM8PR04MB7361.eurprd04.prod.outlook.com (2603:10a6:20b:1d2::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.33; Fri, 17 Mar
- 2023 12:19:53 +0000
-Received: from OSYPR01MB5334.jpnprd01.prod.outlook.com
- ([fe80::e342:5c46:e5d3:d8f7]) by OSYPR01MB5334.jpnprd01.prod.outlook.com
- ([fe80::e342:5c46:e5d3:d8f7%8]) with mapi id 15.20.6178.035; Fri, 17 Mar 2023
- 12:19:53 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Zheng Wang <zyytlz.wz@163.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hackerzheng666@gmail.com" <hackerzheng666@gmail.com>,
-        "1395428693sheep@gmail.com" <1395428693sheep@gmail.com>,
-        "alex000young@gmail.com" <alex000young@gmail.com>
-Subject: RE: [PATCH v9] usb: gadget: udc: renesas_usb3: Fix use after free bug
- in  renesas_usb3_remove due to race condition
-Thread-Topic: [PATCH v9] usb: gadget: udc: renesas_usb3: Fix use after free
- bug in  renesas_usb3_remove due to race condition
-Thread-Index: AQHZWLaq7vZqB9iNWEOEZaM4fcXiLq7+4vTQ
-Date:   Fri, 17 Mar 2023 12:19:53 +0000
-Message-ID: <OSYPR01MB5334DA88B0881C50E819A19CD8BD9@OSYPR01MB5334.jpnprd01.prod.outlook.com>
-References: <20230317095505.2599838-1-zyytlz.wz@163.com>
-In-Reply-To: <20230317095505.2599838-1-zyytlz.wz@163.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OSYPR01MB5334:EE_|OS7PR01MB11823:EE_
-x-ms-office365-filtering-correlation-id: 837de4fd-db4d-4ba6-1e26-08db26e1e9e0
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ZpEgF7eb9LuH8O5u8wWASLKq8YlQRIOi/uI7gnP0oMrm7QPDJJc4OHL24nB7gS2lb78UtA45mI7TrXAOnM36cLjZHr4npEoUre+zUndFkbGXHoZpd/NevxYCLYr9EJhaqsj2xhrjnxZMG6vy6RJIxvFBP6ukJZWs62Uk93GDTReNdZeGDndYo3JclfjlBMVeVqkL1zaFkpXOakq/VHJlxLdlOwBfE4xCqWed8WPbeq0dhLRV53BEicspNQ0bwQjy6uNgIAuZ6S5zGXnVhc0Hkpa6XMs0B3ajfHJuQ/jOA27hmZyoro3cB6BrdgdyVw/2hb46U70J+zq9mQ/SOTeLfzwWSyv8vLOF5EJJe3KpEq5jHamCcZxJnyf8HZkGpObKuWLfmFyNy2QG+k4Z+DMiXXSgWI5HpFo8oYl50Lk0o8GegaDskRCfDPMuOygoyWrxC1cr3QQOsADQsqYphyj6ieN9jr4gTybBEQXOVLfwglq1GCxxLXeKsPYNWaqNqoCK18hsdXTvm90FPneX9OVAEACUvlcPdJquhyw4CtVdYh/DPkoFEUFm1C8W3okZSAmanGjzwVGSjyxbhwA1RDvlTAFZU/ZOyu/qBFgpFJbuup+BVp7vIh67ujhDzI55zMv3qU/PGe88pC0HfqOIvE5Q/fRbbZeqiksjp4kceAad3U7qBubl9endQrBlZPmdCClq/lhI/Fh4WwJWy26PfXlOkg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSYPR01MB5334.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(366004)(136003)(396003)(39860400002)(451199018)(52536014)(41300700001)(8936002)(5660300002)(2906002)(122000001)(86362001)(33656002)(38100700002)(478600001)(7696005)(55016003)(76116006)(66946007)(71200400001)(8676002)(64756008)(66556008)(66476007)(66446008)(38070700005)(316002)(4326008)(110136005)(54906003)(83380400001)(9686003)(26005)(6506007)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3KGGqXFlNZPHalN3MwItDJKiLgMLP/Tt35kB76VXbBYK3GwhAYW3Hh6vdnhO?=
- =?us-ascii?Q?c68ppn1HZc8GzanBqpWhrHYBwfbA1mVie0jFUs6ObCqO2q4+Pity2E63ysw3?=
- =?us-ascii?Q?wlr/8XTbqBxpZvnPaZbK4PNgPCH2q6EbQNNe0WpyO18za2evUJIf9277Do0V?=
- =?us-ascii?Q?Go3mW1NTzDBmcXlz2+GTD+kKCnjExZUj7I9E/YsK14lBgz6plZG7YXyeEBvW?=
- =?us-ascii?Q?HPv4HovYBUPSfRKHEYz5gnoLM920xn7VNcPkW1SoQ6SZs57tlFrDLter2eCA?=
- =?us-ascii?Q?PEOa1Ell4XzoZSaY9g4bpeWtFkgaTf63RDOw9bKWm3g49Yluqj7phYsCOEI4?=
- =?us-ascii?Q?29z/sYgFJnN4yN7AH6aZGuEXRocR3lgUb6wEmDEjrijqMKMMhWedgDzrGbZA?=
- =?us-ascii?Q?UU2D+bvHNE5NCw/31AI5SggmkTyL8wI7RwCpUH0VyHo4PtuH8VHsdHFbqSH/?=
- =?us-ascii?Q?tm/aqgpLtzUy7Y9BA0GCCxVlH3a55AfOhyGFX1lzICmmDLJQhOhVXDAItiAP?=
- =?us-ascii?Q?cZfwHG/n0BLLqB3gr1nn3xRIZHZDbD867gC6iB+L8vOmB/cP8h0BmLN2SiNq?=
- =?us-ascii?Q?uK8IZhHZQ7VfVcISRzcwd8uKjisRNmYt8LLZK02TSN3uWFRlDgMrueu/rsQ9?=
- =?us-ascii?Q?HW3V9ZtaFyBkhxezKYpFeXgtsJYgqzChX8YTdJgJHkhNXEJoufPUjRL3A6iZ?=
- =?us-ascii?Q?TDhxvSj/qADFOXsO+ffydotO3j9BHAGTF07aPH4X04UGs55Qg8aa6+WHm6oA?=
- =?us-ascii?Q?NKJA350bqpnMKN8PQ6h/GozdRRpE7CKftY9ICSh4T6NDFfgmw4eGemMy01YV?=
- =?us-ascii?Q?uax0SbXbPHgZzG0u+jH8/lUR8tnQcA8RfM6VjghMB9sqjGEPO5i1F9Sji+qh?=
- =?us-ascii?Q?GMVbItctFkxrlfW7p4AOR+pXC7jLnUpEpjvTt2IUWPdTkWSzVgADklZPtK8U?=
- =?us-ascii?Q?P1nYNv+jZ3VeVZGalyKr/m2W5xCVWVZ9SLZev5kJrgAa4FJnO9kVjmMfybGS?=
- =?us-ascii?Q?21OpjsvWGNAVAJwvptFR8/F97CuJhm8gnUsMCrxKakZioX2fRBH9YqXhPOrw?=
- =?us-ascii?Q?kP8dts8xGVdv9XD/w33Xcgr5I+xwKRZZAqg533v9W9UYAra4E5sLJF2f16+o?=
- =?us-ascii?Q?vUj3YMZMQLkNd4YncUepcyRMHbXLxK07WfVMDJ2VZe7emZYNkv4gZNRD9hK7?=
- =?us-ascii?Q?V8vaKlEy4u5D2EzWny/dfo00HLbkyttXfnNivQgKZ6ngCPBVGDwuA0OsnmDE?=
- =?us-ascii?Q?Vgq1Ya4xeyv/WF4GPHhaMRspJkWw5i/gPjxme+u2LmqqQzzNj3QeDZdvjkdl?=
- =?us-ascii?Q?xS/oKnThGituWrWo0uubAFV7Ruhn8xuJJ30oPIStJNCB4Fjj8xy91nzEXo+7?=
- =?us-ascii?Q?ZvjzeALoqaTbi3qxMOwlV1xD0omGPP4qkAdxUWLAq10THznApcrThArVkrZP?=
- =?us-ascii?Q?sYsV87iFZ1DIrb5Sv6f+I4q3OISiwOyKZVM8v44DT+F7AppYHF62Z4A2wzCn?=
- =?us-ascii?Q?RniEg6itULTh9SMiJc3ihGt6a7zdz9aXfye4diRCnxoTVPLf4/E4Vcpwl8ho?=
- =?us-ascii?Q?U0jdRKxJsgyJDQAMAfmLez1GYRd9X7mpImKRkzJE1/fqCitMvQLJC0um6EUb?=
- =?us-ascii?Q?UQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.35; Fri, 17 Mar
+ 2023 12:32:03 +0000
+Received: from PA4PR04MB9416.eurprd04.prod.outlook.com
+ ([fe80::7ebc:3d88:4dd1:ecbf]) by PA4PR04MB9416.eurprd04.prod.outlook.com
+ ([fe80::7ebc:3d88:4dd1:ecbf%6]) with mapi id 15.20.6178.026; Fri, 17 Mar 2023
+ 12:32:03 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, xu.yang_2@nxp.com
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V4 0/6] dt-bindings: usb: covert ci-hdrc-usb2/usbmisc-imx to yaml
+Date:   Fri, 17 Mar 2023 20:37:02 +0800
+Message-Id: <20230317123708.337286-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0050.apcprd02.prod.outlook.com
+ (2603:1096:4:1f5::12) To PA4PR04MB9416.eurprd04.prod.outlook.com
+ (2603:10a6:102:2ab::21)
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR04MB9416:EE_|AM8PR04MB7361:EE_
+X-MS-Office365-Filtering-Correlation-Id: f7949103-4357-469f-2dd2-08db26e39c4f
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: q8BMdfsgKR1tg8hrIDR5l3GFQc5tlw37pkx1WsHUfSl9WKzDY3meTJi6BXdoCKk70UNFFkeL2zDI94sth5mProM+7+pyaMwL3tt1xWdsq975BbxunuM0goBgoEWCkUVHkXivqSv+Z+6n1bsDIFbyZS49jaJ6anuI2JP7GEno02WiETJdVkYIGTQLNph1wfOIwwPX63ntJn5UI0wt8urloN7Awl48mPbmLHcGOBAFLNmrFgFhYSK1CM2+tkTkuUp+L9CZHnuKubpppyoYNJKG0B6pOgQjCQYfHDWjOqFYxsjveQy4jbutNjdTsCIBGYVVZlfrkssiwshb1WCHbrXPD8vt2PEfxStEztMYI5/mvPr8pmCSduG9cT1C28cfSptNPCQMJ+SP+w4SymMtKTPgRzyoXwBHMiXyElzx3SAFVVO3Aa+JM8WJhdOpnsvBtIiOpnDckBgpTPVK96FzQegUAtrV2ZAlssnrd1jB7riif0scQyH0EI3ogCFZ034ovUXXer7wluzaSePNK/UerpL04jJC1x6/IOs8u2wY3Bqpdnwyn13qni4tPU+Xt6Pc47OCwTsQsEzdcPik6P+36qqUEAhg64IxGVG+EecmHu01DXbIwpVIkJf65AaMj6gGA9UIu2+pu0M9C+jBOugp9VZUAz8KOaSS+FmrvcDVuRcmADeGdLS3dL8XQebLkIMLJCW4q9Pj78stpJjg652sCOuW8Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9416.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(39860400002)(366004)(376002)(136003)(451199018)(38350700002)(316002)(38100700002)(2906002)(478600001)(4326008)(8936002)(5660300002)(41300700001)(66556008)(66946007)(66476007)(8676002)(83380400001)(7416002)(86362001)(186003)(52116002)(26005)(6512007)(6506007)(2616005)(1076003)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kc8yGJf2TSA+zwH7xBIzYoV6QDEu3d7Ax/glGaM/evoKtrBAKBIoB7JLgKzf?=
+ =?us-ascii?Q?vTWglS3GEazJhU24nabQkwga1KKd3uGe+7Xw+Tl7eYGpcFCw2DDbhsVXk7UH?=
+ =?us-ascii?Q?2weQ7bYwvAQOlL3Na6ObygzmAWFhBCb/VbGb0WUsIGRiQS7LhKE2n9DrwHTW?=
+ =?us-ascii?Q?rPtux8beuwfCkcRRwTXPo9OgLlmCFB5yftI5yibbYtgK9GQLqrB5ypfLgvT9?=
+ =?us-ascii?Q?llRxBIC3KPmQ95sJBYm4XdCf+fmweyD1JygJzcPivSyR6HSRtAJ3T/sEQ53Y?=
+ =?us-ascii?Q?wrW0snjz8SeB6KYHg/JSpRmWoewxRRIYeOaJmD9reUoUIR6E/KoMRLwCDqkT?=
+ =?us-ascii?Q?p8CPK/5V2UWm/hacnDXOEWSw51k+PQKNR7Jg6H3J/tIbTGPeHdNw1bq/Ic6X?=
+ =?us-ascii?Q?T8RJ6mC3QtXSJt+2IJwALUd/gaWpgibXl9NHxunZT9mz/2DYQDiDPN2yyO2Q?=
+ =?us-ascii?Q?fG3ly8zfT53SzDB2PXtv1RkRSaGXZrJaJXGL9QGIQl9CfYKmjsNdEOy1fK4Z?=
+ =?us-ascii?Q?OsaeWR25pFHrv9O/bU2EPjBZu1Ky7K9y5iMQDzYFphAgAsGRnEppp8ciRvwl?=
+ =?us-ascii?Q?syXH5PR1vUtAPOyra8VOWxicDs+PCgzATMq57fDJnmhIHUGnMSRDy0/mBNPy?=
+ =?us-ascii?Q?s8vTckrw8zBKXWpZbJVarH98k6hSuJEQhBz/rtvhLvYORYLLkBNIm0Bc2V/d?=
+ =?us-ascii?Q?EBB9tb1zIcG5JHU5GDuHTxBWWV/vMa89KY5Gng7EVhQ19CD0nOF4R6Q2j1EU?=
+ =?us-ascii?Q?fsXJ6LyJh0t35xmG7IilSBK/Q2fQ8BrNzVdTbz0sUQMInARJ0cQdIGVmw7nk?=
+ =?us-ascii?Q?GYOip3ECvfsDA5i3QlCp+FUU53CzE2J98XJW9CxbZapQQ9rFhIlJfXhY6+Gy?=
+ =?us-ascii?Q?CXkO4o6GtJCBLx4Cr7+qS6nIwhuM76au2wtcwG252xEKU7ozorLZIbIX5gUQ?=
+ =?us-ascii?Q?07/JwzReyVFJaVFrybx9kU4aTE+8upMdVWV88MoQFdNxR2QTWLBessQxjq3R?=
+ =?us-ascii?Q?GkUOT+Was1dYLh0m+gNlAo5NE10Vgi7zItHVMpB5VYIOLBvV2D13maTDfLcL?=
+ =?us-ascii?Q?9Suw5F1qVVjcb3Le/aUX8Xlo0jlaWhbEfs2G3QnmdgyBbPzbZEcDt6rcYBO5?=
+ =?us-ascii?Q?q4lljTWfulTQDSfuFQOrP8oB+ebAnN/QgVz0mbNLa6OAhr3/k71vZusqBpuE?=
+ =?us-ascii?Q?nxRMi9EG7D6k/ebexgFbtaTWZ6ZP60KSPk0exj728YFfjH6GYNqLpXuuY4nV?=
+ =?us-ascii?Q?sk+jKAcITguZurtnVKbtUOAni7By9vmbT/1HF3AyV957IDLvka6qnrSpxvmT?=
+ =?us-ascii?Q?zgo0CM9EtWy3SVUIZbK9AP5xjisw8IONhesgs8a4fRurjg8qX8o2CV5S/yWU?=
+ =?us-ascii?Q?VB1EZxAKqFLjUFJ4OVYB2tKQ2zPQFD33errsEwzYsDuxszIFXeIVAXuJQxlw?=
+ =?us-ascii?Q?PPkvoThpJh/Om9anJ938sqha6MB5KS+TchObtXiDR/ZGp6btiwlCgfcaglHF?=
+ =?us-ascii?Q?TAZ4dZi0OeKyoiIDZI86ee3r+xwX3zuIgcicESbLPrzJYazleFMOOXhgln0h?=
+ =?us-ascii?Q?rFWu+QjIxd4z/MQVZfP/1enorYhvAzP/sSf5sHDb?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f7949103-4357-469f-2dd2-08db26e39c4f
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9416.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OSYPR01MB5334.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 837de4fd-db4d-4ba6-1e26-08db26e1e9e0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2023 12:19:53.5863
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 12:32:03.2265
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XzVhdCWe3BCtRVZ8ya52Sidc9i5uGOIVNxGQrQehE6voTBhgf7N0erAI28bAKwQrFDa4MjYq3lqN6J28/rmyoB4kqZw2BClj2YdxbEs78w3b4pt9ZccYpXbCq4Q/+cAe
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS7PR01MB11823
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mqRMxeUnryNb13Cc6G2yJxfUCEliPFhUx4Ob96+3IOlOFy72R0bR7OO8vD4jsR8lUaJUBWdzQdHo5Q34Rdu0aw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7361
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Zheng,
+From: Peng Fan <peng.fan@nxp.com>
 
-> From: Zheng Wang <zyytlz.wz@163.com>, Sent: Friday, March 17, 2023 6:55 P=
-M
->=20
-> In renesas_usb3_probe, role_work is bound with renesas_usb3_role_work.
-> renesas_usb3_start will be called to start the work.
->=20
-> If we remove the driver which will call usbhs_remove, there may be
-> an unfinished work. The possible sequence is as follows:
->=20
-> CPU0                  			CPU1
->=20
->                     			 renesas_usb3_role_work
-> renesas_usb3_remove
-> usb_role_switch_unregister
-> device_unregister
-> kfree(sw)
-> //free usb3->role_sw
->                     			 usb_role_switch_set_role
->                     			 //use usb3->role_sw
->=20
-> The usb3->role_sw could be freed under such circumstance and use in usb_r=
-ole_switch_set_role.
+This is target for i.MX8M* System-Ready IR 2.0 Cert.
+V4:
+ Merged V3 patch 1,2,3 into one patch
+ Merged V3 patch 4,5,6 into one patch
+ Added patch 3,4,5,6 for dts update
+ Addressed Rob's comments to v3 patch 1, patch 4 for compatible, deprecated property
 
-The checkpatch.pl said:
----
-./scripts/checkpatch.pl this.patch
-WARNING: Possible unwrapped commit description (prefer a maximum 75 chars p=
-er line)
-#75:
-The usb3->role_sw could be freed under such circumstance and use in usb_rol=
-e_switch_set_role.
+V3:
+ Sorry for this long time delay for V3. I thought this should be V5, but actually
+ I only posted two versions before.
+ Add myself ad maintainer
+ The major changes are in patch 4:
+   Added some properties to address dtbs_check error, for qcom, fsl. But I still leave
+   some properties not introduced, such as phy-select for qcom,
+   nvidia,needs-double-reset operating-points-v2 for nvidia, which I would expect
+   sub-soc maintainers continue on it.
 
-total: 0 errors, 1 warnings, 7 lines checked
----
+ Add A-b from Rob
+ Add a new patch 7
 
-> This bug was found by static analysis. And note that removing a driver is=
- a root-only operation, and should never
-> happen in normal case. But the attacker can directly remove the device wh=
-ich will also triggering remove function.
+v2:
+ patch order changed, usbmisc-imx moved to first
+ Add Xu Yang as maintainer
+ Typo fix
+ Not define properties within if/then/else
+ Set additionalProperties to false
+ Drop duplicated compatibles
+ Fix checkpatch issue
+ For pinctrl-names: I think there is restrictin in allOf, so not list items
+ Add fsl,usbmisc: ref
+ Define items for mux-control-names
+ Rename usbmisc-imx.yaml to fsl,usbmisc.yaml
 
-I think you should fix them about 75 chars per line) too.
+ Hope I not miss any comments
 
-And, I don't know why "attacker" is related to this issue.
-I think "the root user" is better than "attacker".
+ Note: there will still be dtbs_check failure if run with only a single patch,
+ with this patchset applied, there is no related dtbs_check failure.
 
-Best regards,
-Yoshihiro Shimoda
 
-> Fix it by canceling the work before cleanup in the renesas_usb3_remove.
->=20
-> Fixes: 39facfa01c9f ("usb: gadget: udc: renesas_usb3: Add register of usb=
- role switch")
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> ---
-> v9:
-> - append with more information suggested by Greg KH
-> v8:
-> - replace | with spaces to make line up suggested by Greg KH
-> v7:
-> - add more details about how the bug was found suggested by Shuah
-> v6:
-> - beautify the format and add note suggested by Greg KH
-> v5:
-> - fix typo
-> v4:
-> - add Reviewed-by label and resubmit v4 suggested by Greg KH
-> v3:
-> - modify the commit message to make it clearer suggested by Yoshihiro Shi=
-moda
-> v2:
-> - fix typo, use clearer commit message and only cancel the UAF-related wo=
-rk suggested by Yoshihiro Shimoda
-> ---
->  drivers/usb/gadget/udc/renesas_usb3.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/u=
-dc/renesas_usb3.c
-> index bee6bceafc4f..a301af66bd91 100644
-> --- a/drivers/usb/gadget/udc/renesas_usb3.c
-> +++ b/drivers/usb/gadget/udc/renesas_usb3.c
-> @@ -2661,6 +2661,7 @@ static int renesas_usb3_remove(struct platform_devi=
-ce *pdev)
->  	debugfs_remove_recursive(usb3->dentry);
->  	device_remove_file(&pdev->dev, &dev_attr_role);
->=20
-> +	cancel_work_sync(&usb3->role_work);
->  	usb_role_switch_unregister(usb3->role_sw);
->=20
->  	usb_del_gadget_udc(&usb3->gadget);
-> --
-> 2.25.1
+This patchset is to convert ci-hdrc-usb2 and usbmisc-imx to yaml format.
+There are compatible strings not landed in binding doc, but in device tree,
+so run dtbs_check on the single yaml conversion patch will report
+dtbs_check failure. If apply the whole patchset, there will be no failure.
+
+
+
+Peng Fan (6):
+  dt-bindings: usb: usbmisc-imx: convert to DT schema
+  dt-bindings: usb: ci-hdrc-usb2: convert to DT schema format
+  ARM64: dts: imx8mn: update usb compatible
+  arm64: dts: imx8mm: update usb compatible
+  arm64: dts: imx8: update usb compatible
+  arm64: dts: imx8dxl: update usb compatible
+
+ .../devicetree/bindings/usb/ci-hdrc-usb2.txt  | 159 -------
+ .../devicetree/bindings/usb/ci-hdrc-usb2.yaml | 412 ++++++++++++++++++
+ .../devicetree/bindings/usb/fsl,usbmisc.yaml  |  68 +++
+ .../devicetree/bindings/usb/usbmisc-imx.txt   |  19 -
+ .../boot/dts/freescale/imx8-ss-conn.dtsi      |   2 +-
+ .../boot/dts/freescale/imx8dxl-ss-conn.dtsi   |   4 +-
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  10 +-
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi     |   5 +-
+ 8 files changed, 492 insertions(+), 187 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/usb/usbmisc-imx.txt
+
+-- 
+2.37.1
 
