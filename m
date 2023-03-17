@@ -2,87 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0971A6BE42C
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 09:46:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 645D36BE573
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Mar 2023 10:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbjCQIqF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Mar 2023 04:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46558 "EHLO
+        id S229804AbjCQJXR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Mar 2023 05:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231939AbjCQIpP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 04:45:15 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1FB5A93C
-        for <linux-usb@vger.kernel.org>; Fri, 17 Mar 2023 01:44:37 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id fd5so17438495edb.7
-        for <linux-usb@vger.kernel.org>; Fri, 17 Mar 2023 01:44:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679042675;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=juFmrQz7oKZJRVloOKbAwgle6hn0N8TdFSrYHqJtuGs=;
-        b=alyQrUOzldXMFXcXM/xm57EnS7Biz1DBBOCfYjMGS+7LLhegBZpU9leCj5vcMtwmLE
-         HPYbUWzopVK2UWhT9Bx7o8W2KKqzOF217Tx1jZER1jkeAb+WEfIt1utEjhcXplxyfiXr
-         afYezteJUkdwfm/v7IsGnLl+azcWRjGVbhVTLeYnlgJ8dj7jozEzDh1WVtibhJlpbd2s
-         0cwY/4DtVZTvNe11Lusn/tfqI0zA/RUH3kdSWB+qpiluR41RRA6+VJmJXQjVJKw1u5BS
-         n/HdliYLBUZFLH9SseWrmT0axULEsZPJGH3m4b8zBoKFeI24PCS+QeULJ8TPc9wKv1d7
-         ZQYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679042675;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=juFmrQz7oKZJRVloOKbAwgle6hn0N8TdFSrYHqJtuGs=;
-        b=vsIfQBGTcONL62jjpaAMMsGP25I36Pur5vmFxCf/CxhFAwU9xZVwyEM93dEM7ywIUv
-         ctY0Tc8KzEzsCoE/8nHb/q/icrdrGT0PqEfGj+ZIVrFF2mwA2H1vnYYR3NrXYwald0IN
-         5YS2dNOmTkWfcwCRLkAx4UQabGwq+jAlA5F5hrX5fBYnGSwAaUOOKRo/TNVEjDosu9y9
-         BGhtmS5qloftlPy/JZ904GJIyhduC2bG7kyyOtlomgidzUGvrAumfVHhkXJJx5tHBSzV
-         jIQa3H9HKsxcZ2IJoTeZ+F7CooA6xovsIJVu3kHzCZHgDKLidC9hB+U49jp5a1R3SqVi
-         8Mfw==
-X-Gm-Message-State: AO0yUKVi2Qrf3O9yaXKR03MW5V7hbKvAE7N92GU8osHG+nWhwF0hBP9W
-        IFK7hG1f92hr6cPnIua6KnB12Q==
-X-Google-Smtp-Source: AK7set8TDDSh0NPwZz11d/QCnupF+zzxPhz66o7xVZyQ0Nwr55I5QWoofBSxOkS7LU7Suo6Z4CCdEw==
-X-Received: by 2002:a17:906:568a:b0:931:d8db:8a2f with SMTP id am10-20020a170906568a00b00931d8db8a2fmr1374810ejc.58.1679042675695;
-        Fri, 17 Mar 2023 01:44:35 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:848a:1971:93e0:b465? ([2a02:810d:15c0:828:848a:1971:93e0:b465])
-        by smtp.gmail.com with ESMTPSA id lt11-20020a170906fa8b00b008e54ac90de1sm701978ejb.74.2023.03.17.01.44.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 01:44:35 -0700 (PDT)
-Message-ID: <79593668-6ded-7290-f39b-e226d30e6e95@linaro.org>
-Date:   Fri, 17 Mar 2023 09:44:34 +0100
+        with ESMTP id S229534AbjCQJXQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Mar 2023 05:23:16 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2067.outbound.protection.outlook.com [40.107.20.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B07977F
+        for <linux-usb@vger.kernel.org>; Fri, 17 Mar 2023 02:23:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gXvpZ57UINBQwQGX/D4zuZ15vfP7RxGVX5a+95i9T5MYHRro5LyOmkIHO3Mva7StCCSpiooHj1XrHvtvA4ERBL2OE2BJW/M/IYFAEvtDavc33AszgfAEVaH09x3mlh4CJlsoVWwcwfIgVW3q2ZWZxAisdN1SaW282GFxOxiOTkfVtnpCbD5AfKMFvi1NhAYJWwmiZQDrL0KlK1rN7ToHE1WR8ZQwfz3cDWuLp6CIIGvJvhlijBkUHiizKu5hxXf2+ebrfaw932WCbrNBsEzUTuE8XxdioOSIHrD4Z0ChOVgArzqXSJkOFU/9OxXPcZlr6v+BT7TdJHARu7iPrGPDOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/K3eRXLZU95mCwWMdEKsL0yUWFc/9TvZZQLXl+aoeR8=;
+ b=hAllg5c/Do3VEPDMN39eg2bPrPwDhcHhtvSgixS0HX8pLMciSf00ByFd94Huu57gxefuJ5ScrhpBrVzRCDfXRIky83rrCmu88xyxA/D0cFvFjvTjTBQp2CfAziRxGwX3H4wytiqkddKgbtNh7oM9o7pCQWoY8AopvV6Rvi5+T/CXHtfwzxEAE0tbPlwUfhFSDP7LEXPyIg+Uyted7tA3YiuRvOHrEhpUEYy/lJQ5g4E7sGWsL8ftuAWhXd6mjPUnoixYoZeZsIhwtPnaSJ2p29KT5BNblgFr9AeiXNzEEifJdSTfaLlFdL+Kl6G60bw9/6/q+thvvFYPDB3DaWlcXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/K3eRXLZU95mCwWMdEKsL0yUWFc/9TvZZQLXl+aoeR8=;
+ b=TJvSb0qSVsGFRNr/hfPhQql5zzuYzB3kIDNXHlhdrpwCtWDtnfnpWzwDb93dRRxbQ3VWC8PB3b+0lliMiISfBBPU4SghVgiLZRzQFLKX6pgB2gLysXXH2ksXGIfMDHIIHenrnzxANwDZr8kWPZPNDSbFFuNsbWUcUlRDOIdmNwI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PA4PR04MB9640.eurprd04.prod.outlook.com (2603:10a6:102:261::21)
+ by VI1PR04MB7086.eurprd04.prod.outlook.com (2603:10a6:800:121::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.35; Fri, 17 Mar
+ 2023 09:23:12 +0000
+Received: from PA4PR04MB9640.eurprd04.prod.outlook.com
+ ([fe80::5b9d:2097:31d0:c3a]) by PA4PR04MB9640.eurprd04.prod.outlook.com
+ ([fe80::5b9d:2097:31d0:c3a%8]) with mapi id 15.20.6178.031; Fri, 17 Mar 2023
+ 09:23:12 +0000
+From:   Li Jun <jun.li@nxp.com>
+To:     Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, Li Jun <jun.li@nxp.com>
+Subject: [PATCH v2] usb: dwc3: add several registers dump for debugfs
+Date:   Fri, 17 Mar 2023 16:55:28 +0800
+Message-Id: <1679043328-13425-1-git-send-email-jun.li@nxp.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-ClientProxiedBy: SI2P153CA0009.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:4:140::18) To PA4PR04MB9640.eurprd04.prod.outlook.com
+ (2603:10a6:102:261::21)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 5/5] dts: usb: add StarFive JH7110 USB dts
- configuration.
-Content-Language: en-US
-To:     Minda Chen <minda.chen@starfivetech.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-References: <20230315104411.73614-1-minda.chen@starfivetech.com>
- <20230315104411.73614-6-minda.chen@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230315104411.73614-6-minda.chen@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR04MB9640:EE_|VI1PR04MB7086:EE_
+X-MS-Office365-Filtering-Correlation-Id: e5b3bb88-9e60-4e65-221d-08db26c93b06
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: v4HiBB3KCr+Ff557LK9Iu/AVBnx6zNkHLqMZLNynkLK9iH7j98UEb/aW7K+ciOIpZCC8GP0WZ+p0csrYG/gmeZkUkXEfeoCN+XRQp3Zc8Dk/R8scrVV+9N0guTMHDvJ6rWkOVpd846ex11uiMFh1EwIWQBLgN64theoebmj9LaLgXTjCohym3KsZjQeELutIzCgzHKWWEcxO0p/kbDDsA1NcQtAQzkollBsTjCUifOsGhxAIr1fxtAfl9KfHuEPnqGkQZ5wVJblGJbhldl4DTPg+UKAx4H3N1zLdsAx1ChAfKIT0iNmgnPKhQY+KnFR1pmn8QUGhK4sajsMg5kcQswvkuWcWXnc1OFOUTzpGt9wsU44WD3cp21zI2uOeCdJlJLCABLFcLISrrlNqMOekZbQFADJNnXl26S5ZDScWrDe0gwlX26J58xF+Ar00EXV4y9UrbMsq4EdhMCf+WKi9JyGkfR2zOTHOJuj4AkJHaUT6R3p+gQwZkCX5Jq0uil30k/CtI7TysrOVOT9Nr0qGL+LFKzXaVJ2RUrxK9ka5cbOtf4QfoRRhNpHV55ss/pQGORDPaCzt8HdXPzcDXhADou1f2HMc01V5U40K9z24669cHsJauFxSUZOsnMYlUvMlfsgQZV8W9KstP+zTHaP2kzyCAlBBQVEWVuhcb08Xh8dVgqG0UPFGC8jWPLJUavjpBAXhLenhhRp+ocaYb+9yeg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9640.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(396003)(376002)(366004)(136003)(451199018)(478600001)(2616005)(186003)(6486002)(6666004)(316002)(26005)(6512007)(6506007)(66946007)(66556008)(66476007)(41300700001)(8936002)(5660300002)(4744005)(4326008)(8676002)(38350700002)(38100700002)(2906002)(52116002)(36756003)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6E3MvMUtUajdJ4ALx7Lj7EIOdT67Qru+RRuSDVrj6EdS0MZdlTvONN2/fKaV?=
+ =?us-ascii?Q?IGTfOzoNr49J6Nq2aQvPTm7oDaa6OhwiZg22SdWDxJwGLJE59wxfG8SaX02Y?=
+ =?us-ascii?Q?+t1aAzsEEtF6ZNujifUhjBXs7absVjBxttu+tl5sUdn8TKljBKmZL5TjcFyy?=
+ =?us-ascii?Q?6/OZnm4YWfRCyfZK0gxfT/Pj4XFKtYWgiHvo+IR8xARDbszHd3/3FbiKwkFZ?=
+ =?us-ascii?Q?2Ib9SkTWM5h0FZ22w5cVvmBMRqYOFjAbyboMcRpj641i5Tco28JSSi0x6z8z?=
+ =?us-ascii?Q?eh6yy/HcnC3q48WlwfbTvvtKSPj78UbLAHWetI0NcTlmJhwD1QtZleflyCtq?=
+ =?us-ascii?Q?h+aUwsgZVQ3GLvAgZlTv+Cau6F69EyXotP5Wf9vqkMUCFphfOjOdjX8veykN?=
+ =?us-ascii?Q?IBONREp98jCFwRcZB3a9BvNQXQe71FzEMg0NNsPFZnHqWkx+qC8NLWPQcE5d?=
+ =?us-ascii?Q?WHARBCFHrPMYuOcVg+h5H7gFE3d4U8uuXkAC18Pv6LNfRwOD6LgiGubwFDXJ?=
+ =?us-ascii?Q?rKFP3lg8SXfuq0Z64nbhunWw5bFTQ9Pm83dCgFZ/Wo65c/BqhCvyGIGHbgzy?=
+ =?us-ascii?Q?zl0JQER1JH1H3VGO7wIid78n0MfU1MUjl/XkVCZx6iBR17NTuzglGV/PVP4d?=
+ =?us-ascii?Q?HZWm2XOPwFqRczOSdVvf2gBMDRau053xzatUEQiaoRGmnK3kfp9jNjIpNv+c?=
+ =?us-ascii?Q?l1SsvqeocaysZAcSA9ak01UjYxustx3PquiTIPa8kpi5ikqhJfvhAfNJfbfH?=
+ =?us-ascii?Q?KNfCi+wwsAw29RhvbArahZR3wdYM9VmyjgpR3LjAMsI5aBQf67UzzOeXSFOV?=
+ =?us-ascii?Q?3kP4axE4Q06DI1D6nXr8yTHzExefRl5QNRYMb2GdxwL8b7ModhSDSLtRw/qr?=
+ =?us-ascii?Q?KJe7kEdQ8puC6kvgwbT8YA86XcCsoC8aPLb/qD8sgeEj4CAG78JgiVSblO1B?=
+ =?us-ascii?Q?kaHW0bYaF7qQVGyG2SGCzbJsvdKXUAdny9rebtG+WnmNHf6OdnxMMd9oE36j?=
+ =?us-ascii?Q?cmSXPrw4TfRsLIYvfTl7NHw2mpI/ZwhVjM5B6vDH9qKPdJUvdniN2P2Q2drA?=
+ =?us-ascii?Q?ypASj0nKYMsO2TkceNDHWzlfEcu0cyalyNfp2tmtek7TFXZsoWOgi51eNpPR?=
+ =?us-ascii?Q?mk4VBWCOVd3nVuQpReohwxliw4m3HmamFULXRUpU2O9zOwD/RoeFp2duqYaD?=
+ =?us-ascii?Q?JMNBX//+L5poTjGfX0s2d3jcDQ+GKZvxSk4WSf2p+hRz6b23HqW7byrdMFkt?=
+ =?us-ascii?Q?qS1xnOVvrVkf+Mf/D1TxtpfFoso4AX29dvWbsoxe7kDKavT3Okb1l/HOMg0Q?=
+ =?us-ascii?Q?VOO2mNAnQ4r0wlD+HgGN5zPINW8z1WYkmdfxCmfqFMjwZ+aXG970blKIP5EX?=
+ =?us-ascii?Q?Sl5NGriAxU8nGa3v6clKO00y5HNYpb2bIPdcRfirLmkFzBYo6IPKfnVgeDeh?=
+ =?us-ascii?Q?1NMkBwTvI/BWm+YV3izKeDNdRlNXOKkCWHaC7Dl7XacL4UNQWvOc3AbBBJS4?=
+ =?us-ascii?Q?ViNm/44LL30Z2wH8gMH4vSDdzkxZlFblncBN+Gv4gRQB+Eaa8jIiQZgQIyjf?=
+ =?us-ascii?Q?Yw+F8WEbiwc0HH3qsUp87XJfn7RCMLuF/cZ7UmNX?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5b3bb88-9e60-4e65-221d-08db26c93b06
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9640.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 09:23:12.7189
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tbxFWO4RaGDVseqrdSqKj5nvtCvP1d2PFICVTkQxP9YqT91bsMZukEW9NeEsobxr
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7086
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,70 +108,39 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 15/03/2023 11:44, Minda Chen wrote:
-> USB Glue layer and Cadence USB subnode configuration,
-> also includes USB and PCIe phy dts configuration.
-> 
-> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+Add 5 missing register dump for debugfs as they are in use now.
 
-Use subject prefixes matching the subsystem (which you can get for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching).
+Signed-off-by: Li Jun <jun.li@nxp.com>
+---
+Change for v2:
+- Add 3 more registers dump for debugfs: GUCTL2, VER_NUMBER, VER_TYPE.
 
-> ---
->  .../jh7110-starfive-visionfive-2.dtsi         |  7 +++
->  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 54 +++++++++++++++++++
->  2 files changed, 61 insertions(+)
-> 
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> index a132debb9b53..c64476aebc1a 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> @@ -236,3 +236,10 @@
->  	pinctrl-0 = <&uart0_pins>;
->  	status = "okay";
->  };
-> +
-> +&usb0 {
-> +	status = "okay";
-> +	usbdrd_cdns3: usb@0 {
+ drivers/usb/dwc3/debugfs.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-You should rather override by phandle this as well.
-
-> +		dr_mode = "peripheral";
-> +	};
-> +};
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> index f70a4ed47eb4..17722fd1be62 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> @@ -362,6 +362,60 @@
->  			status = "disabled";
->  		};
->  
-> +		usb0: usb@10100000 {
-> +			compatible = "starfive,jh7110-usb";
-> +			clocks = <&stgcrg JH7110_STGCLK_USB0_LPM>,
-> +				 <&stgcrg JH7110_STGCLK_USB0_STB>,
-> +				 <&stgcrg JH7110_STGCLK_USB0_APB>,
-> +				 <&stgcrg JH7110_STGCLK_USB0_AXI>,
-> +				 <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
-> +			clock-names = "lpm", "stb", "apb", "axi", "utmi_apb";
-> +			resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
-> +				 <&stgcrg JH7110_STGRST_USB0_APB>,
-> +				 <&stgcrg JH7110_STGRST_USB0_AXI>,
-> +				 <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
-> +			starfive,stg-syscon = <&stg_syscon 0x4 0xc4 0x148 0x1f4>;
-> +			starfive,sys-syscon = <&sys_syscon 0x18>;
-> +			status = "disabled";
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges = <0x0 0x0 0x10100000 0x100000>;
-
-reg and ranges should be second property. This also applies to your
-binding example.
-
-
-Best regards,
-Krzysztof
+diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
+index 850df0e6bcab..e4a2560b9dc0 100644
+--- a/drivers/usb/dwc3/debugfs.c
++++ b/drivers/usb/dwc3/debugfs.c
+@@ -88,6 +88,9 @@ static const struct debugfs_reg32 dwc3_regs[] = {
+ 	dump_register(GPRTBIMAP_HS1),
+ 	dump_register(GPRTBIMAP_FS0),
+ 	dump_register(GPRTBIMAP_FS1),
++	dump_register(GUCTL2),
++	dump_register(VER_NUMBER),
++	dump_register(VER_TYPE),
+ 
+ 	dump_register(GUSB2PHYCFG(0)),
+ 	dump_register(GUSB2PHYCFG(1)),
+@@ -229,6 +232,8 @@ static const struct debugfs_reg32 dwc3_regs[] = {
+ 	dump_register(GEVNTCOUNT(0)),
+ 
+ 	dump_register(GHWPARAMS8),
++	dump_register(GUCTL3),
++	dump_register(GFLADJ),
+ 	dump_register(DCFG),
+ 	dump_register(DCTL),
+ 	dump_register(DEVTEN),
+-- 
+2.34.1
 
