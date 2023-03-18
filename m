@@ -2,77 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035B06BFA2A
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Mar 2023 14:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D682E6BFA2B
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Mar 2023 14:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbjCRNNp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Mar 2023 09:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
+        id S229560AbjCRNO2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Mar 2023 09:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjCRNNo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Mar 2023 09:13:44 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36707132DD
-        for <linux-usb@vger.kernel.org>; Sat, 18 Mar 2023 06:13:42 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id g18so7743487ljl.3
-        for <linux-usb@vger.kernel.org>; Sat, 18 Mar 2023 06:13:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679145220;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xjmr2nAua78gEqtz1WDKDDPtSDYZ8DpOst2CageaHa0=;
-        b=xp362ba1yyj5PGKIBVIZWfa15y0rAnMlDjjHHP9r6s5+yvKaX1hayfOJGMae1kN5Bk
-         3nM5IkSzwrvcFxXoSdiVYZHVI2nEqgh8URXC32SBPUeRR9N+F2iAezGxDH5JUBa954Lt
-         bsTHnGiBQhhGmwUIDlffd1WbgCV1bRgATzBkSlEE0HX+vlnrPbwjN7JCX21z8qp27G8N
-         OzcBRaoKOLazd1hPpH7hshwh5FZd6Zgm7ijGrcSo0U9kgsnY9r/nq5bLL/Ggkcbr+mCD
-         JPctzoEXe6aBdyo38+qroygvHpUvy+RE3/re4TnSoa+SNXyj8K4Oj49Hw9aYR598jX85
-         x1mw==
+        with ESMTP id S229533AbjCRNO1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Mar 2023 09:14:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B761206A
+        for <linux-usb@vger.kernel.org>; Sat, 18 Mar 2023 06:13:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679145229;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jgoarmppOveCAhzhSS+yukRVNHlYy4ELLTt4seUigM0=;
+        b=LC4DzcQzVQgYtw/VGoaGoMDiwspvJ8I/lK2djyBTwlEMUuw5lK8Rj9Q7KLQv2SGgIhajbv
+        2Xta6AMta4eYWf3MSR6RMYswh1Y8xDxbWjZn5qQSZbIXZ1qdqgb3QcVEcClEgr+Vq54qvd
+        YVoqQtRIi0k8rKJY55w0PscwtpPvGvY=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-318-qCNQO9AsPUafeYaTTgycew-1; Sat, 18 Mar 2023 09:13:48 -0400
+X-MC-Unique: qCNQO9AsPUafeYaTTgycew-1
+Received: by mail-qv1-f72.google.com with SMTP id g14-20020ad457ae000000b005aab630eb8eso4198933qvx.13
+        for <linux-usb@vger.kernel.org>; Sat, 18 Mar 2023 06:13:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679145220;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xjmr2nAua78gEqtz1WDKDDPtSDYZ8DpOst2CageaHa0=;
-        b=Bskz5f2VigyRf63pyTXVk50djp9aroPZtMYeiRd3Qmsixv7EIIqy+vfisvcdtm1dlu
-         P8XPFEdDDDkpEBdM+DcH1VZdYdaiWz4UL5QAcuHRi5FDrvOBiL1Rx0RtkkUe1vfM4ECY
-         NQvR1BmCUZb/W64rFgMdLPY0YMszgXRFzC/S6RmEEK8tr6qK0JPvy5g7phUnJl769/1q
-         4kxWYTD/ULqHuiVWrYwqQsw70tR1KypzGA1rvIN/OECRRPsvd2abV7g9vt6rKUIEUBHw
-         FuVlC+Oz0CNGYQ3JLKybuqRIR9bFXD8S2d0jBAdD03DYOF5ObD1pK6L2R3ulmkqGByDS
-         IPWg==
-X-Gm-Message-State: AO0yUKUg5JtuvTkv5i1hQIbsqhYPJCaVHvcepoSyP15jLZj1wHB1RZvy
-        svCc+40IcFl5FVKrRsqWQzS1UQ==
-X-Google-Smtp-Source: AK7set/mZURMrzSttemnB8LyVCWsJ/nCFWzbuKXCB3kOdk2TmaO2WL3OUnEsV3sHoL4moxqYNPZcAg==
-X-Received: by 2002:a2e:95c7:0:b0:29b:c987:b34a with SMTP id y7-20020a2e95c7000000b0029bc987b34amr452925ljh.19.1679145220132;
-        Sat, 18 Mar 2023 06:13:40 -0700 (PDT)
-Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
-        by smtp.gmail.com with ESMTPSA id j21-20020a2e8015000000b00294649d3dcasm881652ljg.44.2023.03.18.06.13.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Mar 2023 06:13:39 -0700 (PDT)
-Message-ID: <2e197a09-5e66-67f0-bcef-958578a85e75@linaro.org>
-Date:   Sat, 18 Mar 2023 14:13:38 +0100
+        d=1e100.net; s=20210112; t=1679145227;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jgoarmppOveCAhzhSS+yukRVNHlYy4ELLTt4seUigM0=;
+        b=ZIWK015c1Qh65dYt9qwG49cApahDtHBFhGWCg7vQp/pYYxXeJuQ10fK3Wj2u5vuzd2
+         FJornsWrcWTj1iZsqBb7OggCpOuoaerAqr7USUU75siOvo4gph06aqwiJlW5VpuJxFfq
+         /fhoYka96C/xZ/S6fYOM6lknCrQOmCdLWCx9L/HIjmWBtXsHAqoaQDHF23k6RSsV6Ps4
+         tRZfbtOB+ufT4FlZgwPNotwku+LvxEP8D/M59ksHTxDSaV4scm2E+Ijg6JK0NJfOV/Zl
+         kdazbbYAi/G72rvXWt9Lbjas4FN20bBFFps9wl9NNut9OS1scsR39qKmOsqfAQdIuCZi
+         +1NQ==
+X-Gm-Message-State: AO0yUKVkrAofoTLRPZO/Rg7ZS7NoYXlBWgihVmbtG57z9eRBHuXjLKRr
+        vO0tYldJxBHUmTevSYFDpFD6sou5MgyBgdX9QoE0I0eVWtus4lpKDJLgjMEs1vC2HBRDnJa8EAV
+        2vzCOxpZXjbWTyJYAZoCq
+X-Received: by 2002:a05:622a:1116:b0:3d3:6285:a63 with SMTP id e22-20020a05622a111600b003d362850a63mr10899543qty.10.1679145227301;
+        Sat, 18 Mar 2023 06:13:47 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+Sm2ecyLp2qn8isjtzfX8KwHzTIP8qxzV+utPo3ZIhQHxrfPrkzvAXLPrT24ch0L/LOoDWJQ==
+X-Received: by 2002:a05:622a:1116:b0:3d3:6285:a63 with SMTP id e22-20020a05622a111600b003d362850a63mr10899504qty.10.1679145226993;
+        Sat, 18 Mar 2023 06:13:46 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id bl28-20020a05620a1a9c00b007339c5114a9sm3575523qkb.103.2023.03.18.06.13.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Mar 2023 06:13:46 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
+        stern@rowland.harvard.edu, studentxswpy@163.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] usb: plusb: remove unused pl_clear_QuickLink_features function
+Date:   Sat, 18 Mar 2023 09:13:42 -0400
+Message-Id: <20230318131342.1684103-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 14/18] arm64: dts: qcom: pm8150b: Add a TCPM
- description
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     wcheng@codeaurora.org, caleb.connolly@linaro.org,
-        subbaram@quicinc.com, jackp@quicinc.com, robertom@qti.qualcomm.com
-References: <20230318121828.739424-1-bryan.odonoghue@linaro.org>
- <20230318121828.739424-15-bryan.odonoghue@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230318121828.739424-15-bryan.odonoghue@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,118 +78,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+clang with W=1 reports
+drivers/net/usb/plusb.c:65:1: error:
+  unused function 'pl_clear_QuickLink_features' [-Werror,-Wunused-function]
+pl_clear_QuickLink_features(struct usbnet *dev, int val)
+^
+This static function is not used, so remove it.
 
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/usb/plusb.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-On 18.03.2023 13:18, Bryan O'Donoghue wrote:
-> Type-C port management functionality lives inside of the PMIC block on
-> pm8150b.
-> 
-> The Type-C port management logic controls orientation detection, vbus/vconn
-> sense and to send/receive Type-C Power Domain messages.
-> 
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/pm8150b.dtsi | 70 +++++++++++++++++++++++++++
->  1 file changed, 70 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/pm8150b.dtsi b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-> index 66752cc063d60..6db32bdbf5747 100644
-> --- a/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-> @@ -7,6 +7,8 @@
->  #include <dt-bindings/iio/qcom,spmi-vadc.h>
->  #include <dt-bindings/interrupt-controller/irq.h>
->  #include <dt-bindings/spmi/spmi.h>
-> +#include <dt-bindings/usb/typec/qcom,pmic-typec.h>
-> +#include <dt-bindings/usb/typec/qcom,pmic-pdphy.h>
->  
->  / {
->  	thermal-zones {
-> @@ -37,6 +39,14 @@ trip2 {
->  			};
->  		};
->  	};
-> +
-> +	tcpm: pm8150b-tcpm {
-> +		compatible = "qcom,pmic-virt-tcpm";
-> +		qcom,pmic-typec = <&pm8150b_typec>;
-> +		qcom,pmic-pdphy = <&pm8150b_pdphy>;
-> +
-> +		status = "disabled";
-> +	};
->  };
->  
->  &spmi_bus {
-> @@ -59,6 +69,66 @@ pm8150b_vbus: usb-vbus-regulator@1100 {
->  			reg = <0x1100>;
->  		};
->  
-> +		pm8150b_typec: typec@1500 {
-> +			compatible = "qcom,pm8150b-typec";
-> +			reg = <0x1500>;
-> +			interrupts = <0x2 0x15 PMIC_TYPEC_OR_RID_IRQ
-> +				      IRQ_TYPE_EDGE_RISING>,
-> +				     <0x2 0x15 PMIC_TYPEC_VPD_IRQ
-> +				      IRQ_TYPE_EDGE_BOTH>,
-> +				     <0x2 0x15 PMIC_TYPEC_CC_STATE_IRQ
-> +				      IRQ_TYPE_EDGE_RISING>,
-> +				     <0x2 0x15 PMIC_TYPEC_VCONN_OC_IRQ
-> +				      IRQ_TYPE_EDGE_BOTH>,
-> +				     <0x2 0x15 PMIC_TYPEC_VBUS_IRQ
-> +				      IRQ_TYPE_EDGE_RISING>,
-> +				     <0x2 0x15 PMIC_TYPEC_ATTACH_DETACH_IRQ
-> +				      IRQ_TYPE_EDGE_RISING>,
-> +				     <0x2 0x15 PMIC_TYPEC_LEGACY_CABLE_IRQ
-> +				      IRQ_TYPE_EDGE_BOTH>,
-> +				     <0x2 0x15 PMIC_TYPEC_TRY_SNK_SRC_IRQ
-> +				      IRQ_TYPE_EDGE_RISING>;
-> +			interrupt-names = "or-rid-detect-change",
-> +					  "vpd-detect",
-> +					  "cc-state-change",
-> +					  "vconn-oc",
-> +					  "vbus-change",
-> +					  "attach-detach",
-> +					  "legacy-cable-detect",
-> +					  "try-snk-src-detect";
-> +			vdd-vbus-supply = <&pm8150b_vbus>;
-This belongs in the board dt, it references nodes defined there.
-> +		};
-> +
-> +		pm8150b_pdphy: pdphy@1700 {
-> +			compatible = "qcom,pm8150b-pdphy";
-> +			reg = <0x1700>;
-> +			interrupts = <0x2 0x17 PMIC_PDPHY_SIG_TX_IRQ
-> +				      IRQ_TYPE_EDGE_RISING>,
-> +				     <0x2 0x17 PMIC_PDPHY_SIG_RX_IRQ
-> +				      IRQ_TYPE_EDGE_RISING>,
-> +				     <0x2 0x17 PMIC_PDPHY_MSG_TX_IRQ
-> +				      IRQ_TYPE_EDGE_RISING>,
-> +				     <0x2 0x17 PMIC_PDPHY_MSG_RX_IRQ
-> +				      IRQ_TYPE_EDGE_RISING>,
-> +				     <0x2 0x17 PMIC_PDPHY_MSG_TX_FAIL_IRQ
-> +				      IRQ_TYPE_EDGE_RISING>,
-> +				     <0x2 0x17 PMIC_PDPHY_MSG_TX_DISCARD_IRQ
-> +				      IRQ_TYPE_EDGE_RISING>,
-> +				     <0x2 0x17 PMIC_PDPHY_MSG_RX_DISCARD_IRQ
-> +				      IRQ_TYPE_EDGE_RISING>,
-> +				     <0x2 0x17 PMIC_PDPHY_FR_SWAP_IRQ
-> +				      IRQ_TYPE_EDGE_RISING>;
-> +			interrupt-names = "sig-tx",
-> +					  "sig-rx",
-> +					  "msg-tx",
-> +					  "msg-rx",
-> +					  "msg-tx-failed",
-> +					  "msg-tx-discarded",
-> +					  "msg-rx-discarded",
-> +					  "fr-swap";
-> +			vdd-phy-supply = <&vreg_l2a_3p1>;
-This belongs in the board dt, it references nodes defined there.
+diff --git a/drivers/net/usb/plusb.c b/drivers/net/usb/plusb.c
+index 7a2b0094de51..2894114858a2 100644
+--- a/drivers/net/usb/plusb.c
++++ b/drivers/net/usb/plusb.c
+@@ -61,12 +61,6 @@ pl_vendor_req(struct usbnet *dev, u8 req, u8 val, u8 index)
+ 				val, index, NULL, 0);
+ }
+ 
+-static inline int
+-pl_clear_QuickLink_features(struct usbnet *dev, int val)
+-{
+-	return pl_vendor_req(dev, 1, (u8) val, 0);
+-}
+-
+ static inline int
+ pl_set_QuickLink_features(struct usbnet *dev, int val)
+ {
+-- 
+2.27.0
 
-The rest lgtm, I think!
-
-Konrad
-> +		};
-> +
->  		pm8150b_temp: temp-alarm@2400 {
->  			compatible = "qcom,spmi-temp-alarm";
->  			reg = <0x2400>;
