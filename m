@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95386BF9EA
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Mar 2023 13:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2EDC6BF9ED
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Mar 2023 13:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjCRMS7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Mar 2023 08:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
+        id S229842AbjCRMTA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Mar 2023 08:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbjCRMSs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Mar 2023 08:18:48 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5EF222EC
-        for <linux-usb@vger.kernel.org>; Sat, 18 Mar 2023 05:18:43 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id x22so4784286wmj.3
-        for <linux-usb@vger.kernel.org>; Sat, 18 Mar 2023 05:18:42 -0700 (PDT)
+        with ESMTP id S229837AbjCRMSv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Mar 2023 08:18:51 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55962ED56
+        for <linux-usb@vger.kernel.org>; Sat, 18 Mar 2023 05:18:44 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id bh21-20020a05600c3d1500b003ed1ff06fb0so4826682wmb.3
+        for <linux-usb@vger.kernel.org>; Sat, 18 Mar 2023 05:18:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679141922;
+        d=linaro.org; s=google; t=1679141924;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fI4AYapt0RytFxas+YG3RwluUr+LdRhSkfTAHXWWG/w=;
-        b=jBCY2hKOGsHUhOb2ErAnGk8EZiwi9PUud2ytugcFCSI0IxK+uiMAQkUQOl+8aowAed
-         Z0mtJWqfEqEvfXO2x9gTo1ZclSQ6MlCwgN0eEfTQZci3V+VsK0I9AmdiIvuMGB6Zo1Pb
-         NDAl6mq3gGE+k0+EELuRp0o4O9SusZO3Pn9tedbU0fMCu7tOdFV4Y2nPOGPcmuSVMKot
-         QStluQLSKdmK1M2v2R3KN0JRDpqotRX9fILGo2GX71BjKLOdDQU/4Ttr5Q5JQJlJbEZt
-         ndnwNn61Sh6AwCIXL66B4oVIQOCSVnZ0zsz79Pnkh7RenUUeg/pH50tezc+vzjFDPGP9
-         oEPA==
+        bh=kmhAneZaAlmWW9bghs/uPFpD4YYuHAdYFsrvbdKAhWg=;
+        b=fdegTtX0ArzzAVQgtxqPEWd1rY6tz416Sf6+aphRty7zbQdD3CnlxOv3SAR9VmM2F1
+         Xf7++SVP0uSUWOBMm16RQm50yOgHNgrK4YdGl90MLa9m2BWtdAL0ja5ldyMObA+jKLlY
+         YAVusGNkWjwa9bX3LgAAYd/V3+PLSJoVmCdTuvNn6bYQvo+mIFozyMZ5RVCSZPTU5e7K
+         LUXG0LWn5HQyrGezv/pqwKvsbTac4iLulEIKXoOSmhsvTnDqGciS8lXMFbgSNZ2tFunB
+         S9mnkBKA5wcn6sMrBeb34gDrb9FC5VKEXi5Am5e0VFQJb42fdIn0ViQGvhkDBpFX7PYb
+         JtBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679141922;
+        d=1e100.net; s=20210112; t=1679141924;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fI4AYapt0RytFxas+YG3RwluUr+LdRhSkfTAHXWWG/w=;
-        b=nV6rdPLmF79UO3gMuDCtgGZNOC9g01LxHp0xcO3t6iaRa3c6HDALe7kMre5tAwPneO
-         SfxrwX6QjWTl02+bjXYEUDkm3lW6ZfxKJ0ZydDg47QDdzL2k5zDlO7GKau/06oBWKL2z
-         Kxo3ajh5YODrwXUvvju5m1TtAotWHpE0ZMVOKwQQqw0qC7ejig7Dl79dKyvsy6t5OGDl
-         WgKEbFaPjdWhTzKxagXqIT8q+4FBgQMmYeD0ZEsuzV5HGasU2dyzBV0DpnglUxlyPpkk
-         Tgb+cl9E9EQLWBvfH30eWrg2J9a7J5o7rNnaOlpaECi2Do93xwE+MuekjE7VTFzlNed7
-         gfjA==
-X-Gm-Message-State: AO0yUKVHJC1zUHu+/xM85V5lmAoZAlAJxDncqUrRWHDx88vJffAtFXgz
-        qoILRBu0R7ZbjKvV493s6+vMMQ==
-X-Google-Smtp-Source: AK7set8G1BPZ+YZ6GW/7ALfmWyvbWgCOcwIQmmuos4VSdGGxOojMmZ27GMYk/YoyO8q8T41q6kievQ==
-X-Received: by 2002:a7b:c38b:0:b0:3ed:2e02:1bfe with SMTP id s11-20020a7bc38b000000b003ed2e021bfemr4007788wmj.20.1679141922644;
-        Sat, 18 Mar 2023 05:18:42 -0700 (PDT)
+        bh=kmhAneZaAlmWW9bghs/uPFpD4YYuHAdYFsrvbdKAhWg=;
+        b=F1vg8yAhP9Wcd5IJpygab78OfNFOOn6hBujc8bycQEWtCrCUzRALTDBCvr80fSyU9s
+         0fZDdwjenfDdjF53gpF/Kr8/+iPn2WnUzkGZo8y4Tc6xwHyEWmDufdWZJbh8kZkyw7Im
+         kTBQp/+MlTArbHwFU6UG4r9ziRSbfz8hh/Y+ZMixJFrAqStx3Swug5qO0rldpE3rw5fm
+         gnARQQB4B75s+Z8U1gyKHwPI/BMX1K9FClPL7Y4KiBMRvq7expllkvr4PSSQzlwQdBsi
+         /s3gORozqyfntsrXoSQVs9CemnAuS1zTNSWORZeCh9Hexk2ZOr0ekGn63nLMN9XWLKTc
+         M9UA==
+X-Gm-Message-State: AO0yUKXTCL7d6o7GJJ+WSJMedyH+f5mJb+nRQSlDXc9sHOu5Cu8WnC1o
+        OH7dVQx4CEwlrlDFV3pki/vvtQ==
+X-Google-Smtp-Source: AK7set+sTySfoJ57o27rpr0isEzIgS4OofwKP0cnf9gsEujcPk6W68xzuo5zqsFvh17HdFW01BpcPw==
+X-Received: by 2002:a05:600c:35ce:b0:3e2:1368:e3a0 with SMTP id r14-20020a05600c35ce00b003e21368e3a0mr28066551wmq.18.1679141923883;
+        Sat, 18 Mar 2023 05:18:43 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id az40-20020a05600c602800b003e2096da239sm10814997wmb.7.2023.03.18.05.18.41
+        by smtp.gmail.com with ESMTPSA id az40-20020a05600c602800b003e2096da239sm10814997wmb.7.2023.03.18.05.18.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Mar 2023 05:18:42 -0700 (PDT)
+        Sat, 18 Mar 2023 05:18:43 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
         gregkh@linuxfoundation.org, andersson@kernel.org,
@@ -58,9 +58,9 @@ To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
 Cc:     wcheng@codeaurora.org, caleb.connolly@linaro.org,
         bryan.odonoghue@linaro.org, konrad.dybcio@linaro.org,
         subbaram@quicinc.com, jackp@quicinc.com, robertom@qti.qualcomm.com
-Subject: [PATCH v4 08/18] dt-bindings: usb: Add Qualcomm PMIC PDPHY controller YAML schema
-Date:   Sat, 18 Mar 2023 12:18:18 +0000
-Message-Id: <20230318121828.739424-9-bryan.odonoghue@linaro.org>
+Subject: [PATCH v4 09/18] dt-bindings: usb: Add Qualcomm PMIC TCPM YAML schema
+Date:   Sat, 18 Mar 2023 12:18:19 +0000
+Message-Id: <20230318121828.739424-10-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230318121828.739424-1-bryan.odonoghue@linaro.org>
 References: <20230318121828.739424-1-bryan.odonoghue@linaro.org>
@@ -76,112 +76,109 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add a YAML binding for the power-delivery PHY silicon interface inside
-Qualcomm's pm8150b hardware block.
-
-The pdphy driver operates with a type-c driver inside of a high level
-single TCPM device to provide overall TCPM functionality.
+Add a YAML description for the pm8150b-tcpm driver. The pm8150b-tcpm
+encapsulates a type-c block and a pdphy block into one block presented to
+the TCPM Linux API.
 
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- .../bindings/usb/qcom,pmic-pdphy.yaml         | 89 +++++++++++++++++++
- 1 file changed, 89 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-pdphy.yaml
+ .../bindings/usb/qcom,pmic-virt-tcpm.yaml     | 88 +++++++++++++++++++
+ 1 file changed, 88 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-virt-tcpm.yaml
 
-diff --git a/Documentation/devicetree/bindings/usb/qcom,pmic-pdphy.yaml b/Documentation/devicetree/bindings/usb/qcom,pmic-pdphy.yaml
+diff --git a/Documentation/devicetree/bindings/usb/qcom,pmic-virt-tcpm.yaml b/Documentation/devicetree/bindings/usb/qcom,pmic-virt-tcpm.yaml
 new file mode 100644
-index 0000000000000..79318e3da41e6
+index 0000000000000..576842c8b65b4
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/qcom,pmic-pdphy.yaml
-@@ -0,0 +1,89 @@
++++ b/Documentation/devicetree/bindings/usb/qcom,pmic-virt-tcpm.yaml
+@@ -0,0 +1,88 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: "http://devicetree.org/schemas/usb/qcom,pmic-pdphy.yaml#"
++$id: "http://devicetree.org/schemas/usb/qcom,pmic-virt-tcpm.yaml#"
 +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
-+title: Qualcomm PMIC based USB PDPHY driver
++title: Qualcomm PMIC Virtual TCPM Driver
 +
 +maintainers:
 +  - Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 +
 +description: |
-+  Qualcomm PMIC Power Delivery PHY driver
++  Qualcomm PMIC Virtual Type-C Port Manager Driver
++  A virtual device which manages Qualcomm PMIC provided Type-C port and
++  Power Delivery in one place.
 +
 +properties:
 +  compatible:
-+    enum:
-+      - qcom,pm8150b-pdphy
++    const: qcom,pmic-virt-tcpm
 +
-+  reg:
-+    maxItems: 1
-+    description: PDPHY base address
++  connector:
++    type: object
++    $ref: /schemas/connector/usb-connector.yaml#
++    unevaluatedProperties: false
 +
-+  interrupts:
-+    items:
-+      - description: Sig TX - transmitted reset signal
-+      - description: Sig RX - received reset signal
-+      - description: TX completion
-+      - description: RX completion
-+      - description: TX fail
-+      - description: TX discgard
-+      - description: RX discgard
-+      - description: Fast Role Swap event
++  port:
++    $ref: /schemas/graph.yaml#/properties/port
++    description:
++      Contains a port which consumes data-role switching messages.
 +
-+  interrupt-names:
-+    items:
-+      - const: sig-tx
-+      - const: sig-rx
-+      - const: msg-tx
-+      - const: msg-rx
-+      - const: msg-tx-failed
-+      - const: msg-tx-discarded
-+      - const: msg-rx-discarded
-+      - const: fr-swap
++  qcom,pmic-typec:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      A phandle to the typec port hardware driver.
 +
-+  vdd-phy-supply:
-+    description: VDD regulator supply to the PHY.
++  qcom,pmic-pdphy:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      A phandle to the type-c pdphy hardware driver.
 +
 +required:
 +  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-names
-+  - vdd-phy-supply
++  - connector
++  - port
++  - qcom,pmic-typec
++  - qcom,pmic-pdphy
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
 +    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/usb/pd.h>
++    #include <dt-bindings/usb/typec/qcom,pmic-typec.h>
 +    #include <dt-bindings/usb/typec/qcom,pmic-pdphy.h>
 +
-+    pm8150b {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
++    pm8150b_tcpm: pmic-tcpm {
++        compatible = "qcom,pmic-virt-tcpm";
 +
-+        pm8150b_pdphy: pdphy@1700 {
-+            compatible = "qcom,pm8150b-pdphy";
-+            reg = <0x1700>;
-+            interrupts = <0x2 0x17 PMIC_PDPHY_SIG_TX_IRQ IRQ_TYPE_EDGE_RISING>,
-+                         <0x2 0x17 PMIC_PDPHY_SIG_RX_IRQ IRQ_TYPE_EDGE_RISING>,
-+                         <0x2 0x17 PMIC_PDPHY_MSG_TX_IRQ IRQ_TYPE_EDGE_RISING>,
-+                         <0x2 0x17 PMIC_PDPHY_MSG_RX_IRQ IRQ_TYPE_EDGE_RISING>,
-+                         <0x2 0x17 PMIC_PDPHY_MSG_TX_FAIL_IRQ IRQ_TYPE_EDGE_RISING>,
-+                         <0x2 0x17 PMIC_PDPHY_MSG_TX_DISCARD_IRQ IRQ_TYPE_EDGE_RISING>,
-+                         <0x2 0x17 PMIC_PDPHY_MSG_RX_DISCARD_IRQ IRQ_TYPE_EDGE_RISING>,
-+                         <0x2 0x17 PMIC_PDPHY_FR_SWAP_IRQ IRQ_TYPE_EDGE_RISING>;
-+            interrupt-names = "sig-tx",
-+                              "sig-rx",
-+                              "msg-tx",
-+                              "msg-rx",
-+                              "msg-tx-failed",
-+                              "msg-tx-discarded",
-+                              "msg-rx-discarded",
-+                              "fr-swap";
-+            vdd-phy-supply = <&vreg_l2a_3p1>;
++        qcom,pmic-typec = <&pm8150b_typec>;
++        qcom,pmic-pdphy = <&pm8150b_pdphy>;
++
++        port {
++            usb3_role: endpoint {
++                remote-endpoint = <&dwc3_drd_switch>;
++            };
++        };
++
++        connector {
++            compatible = "usb-c-connector";
++
++            power-role = "source";
++
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                port@0 {
++                    reg = <0>;
++                    pmic_tcpm_ss_mux: endpoint {
++                        remote-endpoint = <&qmp_ss_mux>;
++                    };
++                };
++            };
 +        };
 +    };
++
 +...
 -- 
 2.39.2
