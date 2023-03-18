@@ -2,184 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9DC6BF87D
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Mar 2023 08:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 343956BF938
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Mar 2023 10:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjCRHkZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Mar 2023 03:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
+        id S229665AbjCRJ0K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Mar 2023 05:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjCRHkY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Mar 2023 03:40:24 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E6416AD8;
-        Sat, 18 Mar 2023 00:40:22 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id o2so150915plg.4;
-        Sat, 18 Mar 2023 00:40:22 -0700 (PDT)
+        with ESMTP id S229478AbjCRJ0J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Mar 2023 05:26:09 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD496A64;
+        Sat, 18 Mar 2023 02:26:07 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id eg48so28896677edb.13;
+        Sat, 18 Mar 2023 02:26:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679125222;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pBBLMRM/PZKumcexTVfMug0lCqZMyVFJGM72Wbie5Vw=;
-        b=ed3ZmNhauAcltTAVY9zqxLIUYcqcP+w3gHuuSt3V+TfPS38ZxxMBULPTbSjRie53iN
-         q2JsFF7OL3i1cvvLnslkCcd2xhJFJKYEBKDrorzLTiStyyujizLODrb0PcJpw5h7LNk4
-         NEaoanDNIthgQN7JC3WI1Ce5jnQ/801YwmX4+UoPxsS+NEikSRQlXAifLWcJjIo2uLOF
-         u6e41rXu858fCB4G/UVJaQNjYJVAQzLyYRN4paOWsJ5NN/wLe0KKCTcgZjfQqcVyRp6V
-         W1M67ip/yo07GZgdFx5RhutJZ4GtRqsQEdeXmub+Y/kabb+WmI1nmY9gk5DG741fj3yH
-         SkRw==
+        d=gmail.com; s=20210112; t=1679131566;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tdMMiIkP0lyseh6vtywDFhyO8m69k1VlrdTiLhNzm4U=;
+        b=VwDy5bfT7RmUhazDHzWYdV+oe6pMKzPF8C/D9UCvA66JK7CixE20HRw1+eh5KgRsh0
+         ICUei7A5QkE93D+YpqxU38Qkus2iU9DMA+lC2jRjm9ftnzeEXn+ZGtZRCsaJwyfZwlFk
+         AZl5CEl99kMlhv0ozBg87AxlEWhk0oEmAILTX2q+j0WiVuSmfLl48u44YJy/6I65tkFD
+         z272e72TsR7b89WYuTJGB8u1AqLaqF2WWaRA0PWmrxGEb7efy9ummgYl0qerc7BImpwL
+         C6o6uGZRCM+UjEyhk5L+v5/ZX5D/UY52CivT78QoWWWTtixZ/3bvDQVzcuFQA6yX0skK
+         /qbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679125222;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pBBLMRM/PZKumcexTVfMug0lCqZMyVFJGM72Wbie5Vw=;
-        b=wLQF1zpYQ2/NRXDWYRPpfvccoJdUP/6vb6jI+t0BlIFRyPzp50tiGrIGCBaCKbjhGS
-         +SN8Pl46v1vcbZjMVhj6F29j9W4Q5u5KNXOIMZWAco7Q4cnO+VMnW9L9YqiZuwUuxhEM
-         ujO19/umUa1y8sqlaGEnXoJt0zO15umYeoznEoigO4egRWoqMafXc0Q2EiNOtWvAUd8A
-         alW4ocHkTFkfUkLGLweAiRXWTcmxhE9HKV6dk8C+67iGWJxwTN8s4eyyBqIPY1kjExHo
-         XVe+9X3GEvN+rtgdBUTz25O919ALCODVNSVMTsXB5d2VdOTarpfUnr9eOM2nKJ1H4JP5
-         zWeg==
-X-Gm-Message-State: AO0yUKXTAxt5WG1k5UhekHWcwFElPoeqIqjIg4V4G2jkRz7xmaunmzLq
-        HsPnH7u4NeWto6XcYzPjXj0WrWJPAyHr7kGUJAM=
-X-Google-Smtp-Source: AK7set+0cgUnCm6Awt1gdcBMJ7tls+kBw3GmeS7dTLtdp7tCX+CG8Me8WYHWs5whocczji2CSUsgj2wt0TOm8bC+qM0=
-X-Received: by 2002:a17:903:32ce:b0:19f:3cc1:e3c3 with SMTP id
- i14-20020a17090332ce00b0019f3cc1e3c3mr4035463plr.12.1679125222320; Sat, 18
- Mar 2023 00:40:22 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679131566;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tdMMiIkP0lyseh6vtywDFhyO8m69k1VlrdTiLhNzm4U=;
+        b=B+moqCC1yEZl8Hhbkx0tDLSyuup5fnJ5Y8nw+SPTURfqrNE+LYwFCUpk5tzR+KyJvq
+         dOcknyQkMjKFE5ntQ7IPnrYYQAHw8vr036qMsoetT9CcMdRz7A6gQegtfwR4SqIAadMS
+         Oau5cJJrER+WlFVsSaAzywAryn2bSix9MwZKt4IB3IO17hz7Oyy8aWnItDaVbcOIXb0I
+         XTKUjkM1Vpl3ALBfxh2rbLkARBQnO7fYupyR8+ZT1wm1E5q0pj3oKUQfXCFzqoK97IMq
+         BBAF0czZZESLYiOOjNjPf79Fukp0WMjxC3yfRnGqWMkfTYbblft0byqBw7s05pZpJNiF
+         EaTQ==
+X-Gm-Message-State: AO0yUKWwZZiOW8HIgx2xcpM15QgEOt6/B5AvgWgCFfWu1gOXifLYUqWv
+        7NmkGuZ7jg0+9rDPylacteRwcsk0x/pzxA==
+X-Google-Smtp-Source: AK7set+OjN2BAFW2aH/J5J5bydqcNtmjtkMCKLQFry6lNKvTeygQSbzluQYu68Mx6AlMm+W5BE5tvQ==
+X-Received: by 2002:a17:906:4909:b0:925:a734:a012 with SMTP id b9-20020a170906490900b00925a734a012mr2107913ejq.12.1679131566295;
+        Sat, 18 Mar 2023 02:26:06 -0700 (PDT)
+Received: from localhost.localdomain (077222238142.warszawa.vectranet.pl. [77.222.238.142])
+        by smtp.googlemail.com with ESMTPSA id la18-20020a170907781200b00914001c91fcsm1953000ejc.86.2023.03.18.02.26.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Mar 2023 02:26:05 -0700 (PDT)
+From:   Szymon Heidrich <szymon.heidrich@gmail.com>
+To:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        kuba@kernel.org, davem@davemloft.net, edumazet@google.com
+Cc:     pabeni@redhat.com, szymon.heidrich@gmail.com,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] net: usb: lan78xx: Limit packet length to skb->len
+Date:   Sat, 18 Mar 2023 10:25:52 +0100
+Message-Id: <20230318092552.93145-1-szymon.heidrich@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <20230317095505.2599838-1-zyytlz.wz@163.com> <OSYPR01MB5334DA88B0881C50E819A19CD8BD9@OSYPR01MB5334.jpnprd01.prod.outlook.com>
-In-Reply-To: <OSYPR01MB5334DA88B0881C50E819A19CD8BD9@OSYPR01MB5334.jpnprd01.prod.outlook.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Sat, 18 Mar 2023 15:40:10 +0800
-Message-ID: <CAJedcCwG-e9i2-V=+iYYXPU7MtzEQoNESWdQ8wPaKLto2swZ6g@mail.gmail.com>
-Subject: Re: [PATCH v9] usb: gadget: udc: renesas_usb3: Fix use after free bug
- in renesas_usb3_remove due to race condition
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     Zheng Wang <zyytlz.wz@163.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "1395428693sheep@gmail.com" <1395428693sheep@gmail.com>,
-        "alex000young@gmail.com" <alex000young@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com> =E4=BA=8E2023=E5=B9=B4=
-3=E6=9C=8817=E6=97=A5=E5=91=A8=E4=BA=94 20:19=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hi Zheng,
->
-> > From: Zheng Wang <zyytlz.wz@163.com>, Sent: Friday, March 17, 2023 6:55=
- PM
-> >
-> > In renesas_usb3_probe, role_work is bound with renesas_usb3_role_work.
-> > renesas_usb3_start will be called to start the work.
-> >
-> > If we remove the driver which will call usbhs_remove, there may be
-> > an unfinished work. The possible sequence is as follows:
-> >
-> > CPU0                                          CPU1
-> >
-> >                                        renesas_usb3_role_work
-> > renesas_usb3_remove
-> > usb_role_switch_unregister
-> > device_unregister
-> > kfree(sw)
-> > //free usb3->role_sw
-> >                                        usb_role_switch_set_role
-> >                                        //use usb3->role_sw
-> >
-> > The usb3->role_sw could be freed under such circumstance and use in usb=
-_role_switch_set_role.
->
-> The checkpatch.pl said:
-> ---
-> ./scripts/checkpatch.pl this.patch
-> WARNING: Possible unwrapped commit description (prefer a maximum 75 chars=
- per line)
-> #75:
-> The usb3->role_sw could be freed under such circumstance and use in usb_r=
-ole_switch_set_role.
->
-> total: 0 errors, 1 warnings, 7 lines checked
-> ---
->
-> > This bug was found by static analysis. And note that removing a driver =
-is a root-only operation, and should never
-> > happen in normal case. But the attacker can directly remove the device =
-which will also triggering remove function.
->
-> I think you should fix them about 75 chars per line) too.
->
-> And, I don't know why "attacker" is related to this issue.
-> I think "the root user" is better than "attacker".
->
+Packet length retrieved from descriptor may be larger than
+the actual socket buffer length. In such case the cloned
+skb passed up the network stack will leak kernel memory contents.
 
-Thanks for your detailed check and advice. I'll apply it in the next verion=
-.
+Additionally prevent integer underflow when size is less than
+ETH_FCS_LEN.
 
-Best regards,
-Zheng
+Fixes: 55d7de9de6c3 ("Microchip's LAN7800 family USB 2/3 to 10/100/1000 Ethernet device driver")
+Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+---
+V1 -> V2: Fix ISO C90 forbids mixed declarations and code
+V2 -> V3: Removed the Reported-by tag
 
-> Best regards,
-> Yoshihiro Shimoda
->
-> > Fix it by canceling the work before cleanup in the renesas_usb3_remove.
-> >
-> > Fixes: 39facfa01c9f ("usb: gadget: udc: renesas_usb3: Add register of u=
-sb role switch")
-> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> > Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> > ---
-> > v9:
-> > - append with more information suggested by Greg KH
-> > v8:
-> > - replace | with spaces to make line up suggested by Greg KH
-> > v7:
-> > - add more details about how the bug was found suggested by Shuah
-> > v6:
-> > - beautify the format and add note suggested by Greg KH
-> > v5:
-> > - fix typo
-> > v4:
-> > - add Reviewed-by label and resubmit v4 suggested by Greg KH
-> > v3:
-> > - modify the commit message to make it clearer suggested by Yoshihiro S=
-himoda
-> > v2:
-> > - fix typo, use clearer commit message and only cancel the UAF-related =
-work suggested by Yoshihiro Shimoda
-> > ---
-> >  drivers/usb/gadget/udc/renesas_usb3.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget=
-/udc/renesas_usb3.c
-> > index bee6bceafc4f..a301af66bd91 100644
-> > --- a/drivers/usb/gadget/udc/renesas_usb3.c
-> > +++ b/drivers/usb/gadget/udc/renesas_usb3.c
-> > @@ -2661,6 +2661,7 @@ static int renesas_usb3_remove(struct platform_de=
-vice *pdev)
-> >       debugfs_remove_recursive(usb3->dentry);
-> >       device_remove_file(&pdev->dev, &dev_attr_role);
-> >
-> > +     cancel_work_sync(&usb3->role_work);
-> >       usb_role_switch_unregister(usb3->role_sw);
-> >
-> >       usb_del_gadget_udc(&usb3->gadget);
-> > --
-> > 2.25.1
->
+ drivers/net/usb/lan78xx.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+index 068488890..c458c030f 100644
+--- a/drivers/net/usb/lan78xx.c
++++ b/drivers/net/usb/lan78xx.c
+@@ -3579,13 +3579,29 @@ static int lan78xx_rx(struct lan78xx_net *dev, struct sk_buff *skb,
+ 		size = (rx_cmd_a & RX_CMD_A_LEN_MASK_);
+ 		align_count = (4 - ((size + RXW_PADDING) % 4)) % 4;
+ 
++		if (unlikely(size > skb->len)) {
++			netif_dbg(dev, rx_err, dev->net,
++				  "size err rx_cmd_a=0x%08x\n",
++				  rx_cmd_a);
++			return 0;
++		}
++
+ 		if (unlikely(rx_cmd_a & RX_CMD_A_RED_)) {
+ 			netif_dbg(dev, rx_err, dev->net,
+ 				  "Error rx_cmd_a=0x%08x", rx_cmd_a);
+ 		} else {
+-			u32 frame_len = size - ETH_FCS_LEN;
++			u32 frame_len;
+ 			struct sk_buff *skb2;
+ 
++			if (unlikely(size < ETH_FCS_LEN)) {
++				netif_dbg(dev, rx_err, dev->net,
++					  "size err rx_cmd_a=0x%08x\n",
++					  rx_cmd_a);
++				return 0;
++			}
++
++			frame_len = size - ETH_FCS_LEN;
++
+ 			skb2 = napi_alloc_skb(&dev->napi, frame_len);
+ 			if (!skb2)
+ 				return 0;
+-- 
+2.40.0
+
