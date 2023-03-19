@@ -2,97 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FEA6C02E9
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Mar 2023 16:50:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 145A56C02F4
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Mar 2023 17:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbjCSPuS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Mar 2023 11:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
+        id S230377AbjCSQAE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Mar 2023 12:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjCSPuQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Mar 2023 11:50:16 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCDC17CC6
-        for <linux-usb@vger.kernel.org>; Sun, 19 Mar 2023 08:50:15 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso7766538wmb.0
-        for <linux-usb@vger.kernel.org>; Sun, 19 Mar 2023 08:50:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679241013;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X4czx9tA1HUqBAlDkv/jkPT3tRpMiU0R2k2/njPI7W0=;
-        b=ltG9twIe84qt1LrDyZRz60XRnLpY52hVYiqIYG0NxPm750D+cckOV5oWloJa7gYg1k
-         GDkJgLtMBMNGeuRQZfLyBHaXfk2golI5UTeToSMxqbp2btTGZNoqFenOnXryDCln3qMo
-         vTg+fHIFI9uo5MNRttUHbZraATzo5+zcaChY/8cuMCG5EJK6rbE9obiDOwy5qa+zzY7N
-         WcpWutnoToxfmdKwOIj1gzR3QvetJZ/nxoMrT6Z+lLPdF/r8aFhq0ochzxa2+kHzR77N
-         2SxDjzzQO89wcsjF9zT6AEN9Z/tn7edfAmv+ih9l7UgPdOk3n1b6y8y4M0z31y464nGe
-         /VQg==
+        with ESMTP id S230358AbjCSQAC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Mar 2023 12:00:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63C49026
+        for <linux-usb@vger.kernel.org>; Sun, 19 Mar 2023 08:59:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679241555;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=kCgICu0KJAkXhiDRi5y/cM8U5p1k5bVMfl4yuYsdSQw=;
+        b=dWQOYXgaLhFs6Dlbldi67ursN/z1B0yYGUpb5hRGzfYxyGTkrMzcJEnAMfjnV0pe708MJ9
+        WEwQBXohlFTrHLqnuAMu1z9S1frnhjR5fATnSoCs2og++G0Fj5Mbq4rZrj03x7vbJJckNs
+        teLgdq+s/7WrESXB8YLyPy0TAwaNUvY=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-416-fU8yuXWkPsqAdCHQDnZ0gA-1; Sun, 19 Mar 2023 11:59:13 -0400
+X-MC-Unique: fU8yuXWkPsqAdCHQDnZ0gA-1
+Received: by mail-qt1-f197.google.com with SMTP id ga17-20020a05622a591100b003bfdf586476so5475759qtb.7
+        for <linux-usb@vger.kernel.org>; Sun, 19 Mar 2023 08:59:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679241013;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X4czx9tA1HUqBAlDkv/jkPT3tRpMiU0R2k2/njPI7W0=;
-        b=lWSDrsO1Ea2mjlEXQ1QeF1k8yFQkyv8sZV3V0BGa1q3PB7U4NhfHflixSGnbzj/1Ov
-         xld5trUddqZ92nMQG43TZV0hBb8nH/qakvaGa/AN4bopIZHSGDiPJbOJHdmcHkh9fxwG
-         gXAGdytXuynfB4FuUhK5iutu8xPa0GkzpT9UHqErjFllpxp3gaRe2FcWcOtlYyzro2/k
-         FCapnneam7FN4sv9cUNZgnEfaYAM52X1ve1y8PkEBPCtIG/m+RDLjVUcavvRvCOckvvz
-         q/EVk2TpH1nlH1G0jPdOhqukHRfT2BL+rEWRe2dUEV6JWif/1jgWcKAd1O0KYX5r0yOi
-         E2tQ==
-X-Gm-Message-State: AO0yUKXlgXwI88d7hyxOcUVgW3nS65jjnmi+ghDFIrPlp6CP11JhNwbL
-        cFMJsvB9ZwzUtfMuCxmTmev3Lg==
-X-Google-Smtp-Source: AK7set9TKTKEV3DmvG0D6ZMt/puh1YRthWJQDtQYNEiGq1Qd41PTZLtWwokVjNY9kmJisUsEnL6+dQ==
-X-Received: by 2002:a05:600c:46ca:b0:3ed:4818:be62 with SMTP id q10-20020a05600c46ca00b003ed4818be62mr12694036wmo.34.1679241013538;
-        Sun, 19 Mar 2023 08:50:13 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id w16-20020a05600c475000b003edc9a5f98asm3323053wmo.44.2023.03.19.08.50.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Mar 2023 08:50:13 -0700 (PDT)
-Message-ID: <115e84d3-e21e-1c21-2fc1-b3f2eef640eb@linaro.org>
-Date:   Sun, 19 Mar 2023 15:50:12 +0000
+        d=1e100.net; s=20210112; t=1679241553;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kCgICu0KJAkXhiDRi5y/cM8U5p1k5bVMfl4yuYsdSQw=;
+        b=TFa1/Ag9mZEDTm5oJ2FrWwpscEWNF6sc5CeWfNJO8h2khfUO654LjG/3BcS8VNJN7/
+         SMnE30EPW31cf0gxhHSh8sGvoSUoSC9NLOe3JowXY32Ur2X+FO5SO1BDA4WHla7Q1vOx
+         WaLs6BjLb+KqTJ3VFNOqKXpyNyTt2Wl1GhcYld0ZsfBof577HFLr4/7jH2K9L876PnEG
+         RfhYgdKej92/x8cNF13L97Y6WHyPvs+ntOro9OYGbCoEsalBgVohhPhhnS0pEyCqlPd0
+         RupnsTNk2QFWf983HhS/XYtKmUUAZlTlAiqg7tL1tEYYCggJRwS+/NBBdYN3t8oF2y3F
+         29jg==
+X-Gm-Message-State: AO0yUKUmslkUFYOzcwCv6DFumbmkoMU5oMDPeNH9WsaUWCvg6/cmlECm
+        URvpnudTpc6dMwLVevxd2+jv97QkHMnQMAO+moFJyH8kHhZNOQy9QqXRhDl+Sw1RyqdXAoiUKwl
+        S5d+CHR6/HTwCA/Ic7zoh
+X-Received: by 2002:a05:622a:188c:b0:3bf:e2ff:4c2f with SMTP id v12-20020a05622a188c00b003bfe2ff4c2fmr21989742qtc.51.1679241553401;
+        Sun, 19 Mar 2023 08:59:13 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9RY95IxUSoePkpXXO3x85piRzikUJ7diUt5Iu32z8WZrgmDSs16y56U1ABCRU7Dph61q/nLw==
+X-Received: by 2002:a05:622a:188c:b0:3bf:e2ff:4c2f with SMTP id v12-20020a05622a188c00b003bfe2ff4c2fmr21989732qtc.51.1679241553187;
+        Sun, 19 Mar 2023 08:59:13 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 139-20020a370591000000b00745a78b0b3asm1710434qkf.130.2023.03.19.08.59.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 08:59:12 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     herve.codina@bootlin.com, gregkh@linuxfoundation.org,
+        nathan@kernel.org, ndesaulniers@google.com
+Cc:     linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] usb: gadget: udc: remove unused usbf_ep_dma_reg_clrset function
+Date:   Sun, 19 Mar 2023 11:59:10 -0400
+Message-Id: <20230319155910.1706294-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 09/18] dt-bindings: usb: Add Qualcomm PMIC TCPM YAML
- schema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, andersson@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     wcheng@codeaurora.org, caleb.connolly@linaro.org,
-        konrad.dybcio@linaro.org, subbaram@quicinc.com, jackp@quicinc.com,
-        robertom@qti.qualcomm.com
-References: <20230318121828.739424-1-bryan.odonoghue@linaro.org>
- <20230318121828.739424-10-bryan.odonoghue@linaro.org>
- <7cd51a8d-7b23-7895-7c06-07dc98924931@linaro.org>
- <a4da1f8f-333e-9ded-d784-7f86c45c7156@linaro.org>
- <346ecd20-d64f-1d47-4860-861e142f9700@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <346ecd20-d64f-1d47-4860-861e142f9700@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19/03/2023 15:10, Krzysztof Kozlowski wrote:
-> What is tcpm? Linux driver? Then not. You cannot have device nodes for a
-> Linux driver.
+clang with W=1 reports
+drivers/usb/gadget/udc/renesas_usbf.c:548:20: error: unused function
+  'usbf_ep_dma_reg_clrset' [-Werror,-Wunused-function]
+static inline void usbf_ep_dma_reg_clrset(struct usbf_ep *ep, uint offset,
+                   ^
+This function is not used, so remove it.
 
-Hmm. Well, actually I'll just - concatonate these into one node but, it 
-will have to be called something like "typec" and encompass both 
-hardware blocks.
-
-I'll try to make the name of that make sense.
-
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-bod
+ drivers/usb/gadget/udc/renesas_usbf.c | 11 -----------
+ 1 file changed, 11 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/renesas_usbf.c b/drivers/usb/gadget/udc/renesas_usbf.c
+index cb23e62e8a87..84ac9fe4ce7f 100644
+--- a/drivers/usb/gadget/udc/renesas_usbf.c
++++ b/drivers/usb/gadget/udc/renesas_usbf.c
+@@ -545,17 +545,6 @@ static inline void usbf_ep_dma_reg_bitclr(struct usbf_ep *ep, uint offset,
+ 	usbf_ep_dma_reg_writel(ep, offset, tmp);
+ }
+ 
+-static inline void usbf_ep_dma_reg_clrset(struct usbf_ep *ep, uint offset,
+-					  u32 clr, u32 set)
+-{
+-	u32 tmp;
+-
+-	tmp = usbf_ep_dma_reg_readl(ep, offset);
+-	tmp &= ~clr;
+-	tmp |= set;
+-	usbf_ep_dma_reg_writel(ep, offset, tmp);
+-}
+-
+ static void usbf_ep0_send_null(struct usbf_ep *ep0, bool is_data1)
+ {
+ 	u32 set;
+-- 
+2.27.0
+
