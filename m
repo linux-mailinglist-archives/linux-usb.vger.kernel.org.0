@@ -2,113 +2,203 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482B36C0127
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Mar 2023 12:54:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E30976C00FD
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Mar 2023 12:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbjCSLy3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Mar 2023 07:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
+        id S230107AbjCSLuC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Mar 2023 07:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbjCSLyZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Mar 2023 07:54:25 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6872C21A33
-        for <linux-usb@vger.kernel.org>; Sun, 19 Mar 2023 04:53:36 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id r11so36719255edd.5
-        for <linux-usb@vger.kernel.org>; Sun, 19 Mar 2023 04:53:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679226813;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n27ash1ZV3nvhcp1Y7K3jMG+XzPX+dZla6qCaA/tb6A=;
-        b=nWr3ScZrTWn6Zt3UhfbfIO0Pa838QVuzr6IOXrpABY21TR3kXEN/QAepAwRx4ErSLS
-         gLMVPd/I0CwmO44YANGPNFmHLbimlhZBEilQkYEbHVBP7Uw+Zaif6SBds7suxRWQyrC5
-         Lnn6MqpJl2bPLPQzihM2CB5VFR1/JsZwgbb990MUc9LzgX6a6UYOlcie+LYZFvVq4WbK
-         ZacTEafGDQ6Q+TvdPOYNw13SLIB7ulAMFnae6LaHldTCSSnf6Y0lmj6RIb2TtBvKzDf/
-         Ggfsv1ZHjBkkSnvFANHyyUh6TsVTWRzNHq67hSO/sIwDqjkovzzlz3yfawTr20WxlBZQ
-         TZgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679226813;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n27ash1ZV3nvhcp1Y7K3jMG+XzPX+dZla6qCaA/tb6A=;
-        b=0o1N1JEuxVeZuSmSZGhtr5ILOhN9xKjN14B18OV1u9YHahEFUbEPD9Bf9P2+Ar085u
-         1Fydl0agFnvQlofYL/F3H/X2qYxK+lrF5s23MbCaJhWqDV3MiYAtvHvq28EH4A9+pwLy
-         542JQHXT2f2AnJy3iT0u6xvhFlgbnMAZ+CDWfqlwwYcC5wRJJuXY+KDGhnPo/+rAV7oH
-         8j6afQiGrkbWh6Q69pNzyjTEToQn9uCAjOKHR9iVg4ZFlJteOmWj8PbeTM6GTu2s7AXs
-         3f5pO0eG/mbfmuVW4F2wFmg/AGt2M/p7IyZRQajLCXAuTe8T0Rif9CB3ex8Kv3DX7f7v
-         0SMw==
-X-Gm-Message-State: AO0yUKXzMRAppo3RUiaxYXHugtySaCHgimsseUYwezmzTm/onrbzzhZM
-        XwMJuM9nkyvxQgN2ctTCDlHFoA==
-X-Google-Smtp-Source: AK7set8u1FPrRK5Kcxl2IomzkWfEOJbSXoOLMVLalI2wQ4leod0gDrwuBfsUQPXxujAKvQXFXrqxqQ==
-X-Received: by 2002:a17:907:a042:b0:930:310:abed with SMTP id gz2-20020a170907a04200b009300310abedmr4726778ejc.54.1679226813388;
-        Sun, 19 Mar 2023 04:53:33 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5b5f:f22b:a0b:559d? ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
-        by smtp.gmail.com with ESMTPSA id n3-20020a170906088300b009327ed171f2sm2427410eje.129.2023.03.19.04.53.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Mar 2023 04:53:33 -0700 (PDT)
-Message-ID: <7d48a2ca-3f73-073b-0ea8-d9ae4f12d8a9@linaro.org>
-Date:   Sun, 19 Mar 2023 12:53:31 +0100
+        with ESMTP id S229548AbjCSLuA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Mar 2023 07:50:00 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2047.outbound.protection.outlook.com [40.107.7.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF5C1C7EB;
+        Sun, 19 Mar 2023 04:49:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZiM5gOCIxlEPGOGXZwOB4pBMO3UFEccY1p+JNc5sHme13m9nnZ+XIxST5jo4PqYYdxlsYIxnbVHPmRaiHQ5IHoxRp6qui5gQMgpMU6b20RRAPHR7ZML5Dv1aJ7n2Xs8E8XOmMMmbVHbxPuAkBRLeAWhPa6I+MngHolJhJ549ZQ8jNKWuZoPVbXv6V/Qroc2318v5C4MrzlNSj7lMnznX3WIx55NZIMlJwTIu51SLr88FYNljC+DEXuYGKLMeMItFMYTUnbM0jvHVy/j71UffUwj9hEpW13NCUUUYH5VcWL1iJEa7Gq0DEzJVivOpcKe8iFNVC+GtTIlElJ86uVmj5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aWrpeklBnWQNHjvke3oWhBngpO5L3at8wWpI4ANoASA=;
+ b=FfZ94qLfNg+7R5IBowqe4hTWEfLLzHMDzNKd/MW0boZkpkBt/9ZcM8cGr4/TnD4AigpIfLJD97DNH1Pg5oRaGpLJhyP26gT3kSaqC/PzTxkcnQUeugvZDDkTvFBtD53czqyteI3/2u7etBWZtaqcJXkL+xRoOXnUgXMlRt2rRnQ7Nratu3WMz4HId0eqhvbWiKgmqIruIqRdlot2uyRkNVXec26HmNS+Y3ZTcqjG/F3khkW6cXhbghUn39JFm7TyZ+D0ZixSjd8cQnUmNpAJaF3Wr8Y3/Hxf640U6MeI+3Ov3SQr9iG5pGeKtxSgihKsDqNIANl7yBz0jkJIPy2zPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aWrpeklBnWQNHjvke3oWhBngpO5L3at8wWpI4ANoASA=;
+ b=Torb0EkM5vk9LYR/BD7AANSku428PNbb1giJj2EQzdheGbdBu8UpygjX7o5OBvvc0g1GSDmgUv95QOu0o0dcdi6lVzWxT2QU03kpAkhRjPFI3jdGv3fF2cWgaZm4qHpAcS+WiBw9pThsF4Eh6fIheFThC4KVyguoch3VofeQbes=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by VI1PR04MB10075.eurprd04.prod.outlook.com (2603:10a6:800:1d6::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.36; Sun, 19 Mar
+ 2023 11:49:53 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::f55a:cf12:da08:6d2a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::f55a:cf12:da08:6d2a%7]) with mapi id 15.20.6178.037; Sun, 19 Mar 2023
+ 11:49:50 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, xu.yang_2@nxp.com
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V5 0/9] dt-bindings: usb: covert ci-hdrc-usb2/usbmisc-imx to yaml
+Date:   Sun, 19 Mar 2023 19:54:47 +0800
+Message-Id: <20230319115456.716969-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0003.apcprd02.prod.outlook.com
+ (2603:1096:4:1f7::20) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 02/18] dt-bindings: regulator: qcom,usb-vbus-regulator:
- Mark regulator-*-microamp required
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     wcheng@codeaurora.org, caleb.connolly@linaro.org,
-        konrad.dybcio@linaro.org, subbaram@quicinc.com, jackp@quicinc.com,
-        robertom@qti.qualcomm.com
-References: <20230318121828.739424-1-bryan.odonoghue@linaro.org>
- <20230318121828.739424-3-bryan.odonoghue@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230318121828.739424-3-bryan.odonoghue@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|VI1PR04MB10075:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4c53b9d5-0adf-4313-3ba1-08db28700b49
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rgiPtPInMM1sI+WVDPL2H9xWUW7wLU0jx31sxkffudD/GQusndChSzObuW+l7UFoK6l2Sn4xwUT+lK87dmaQgwxXx8F8rImya0xeRzy6DZY9u5/AUwyf70Obbsr+fH3gHEEPbNZVdhRhJnaWmG8jlhrNxlq5cSKU2LgGCWmxAQuKtx4AyzU6E6OKDY5k1mFD/RccZGYmWAxJM1nsTpESq0EknrxanTe3EdwTutIWHk6x7zoQDfT4t//sZmYcpUO6t/OC1PsSLtCTEckfxogJvm+V+2sW8+MiLwCvVmdUBAVj8fGVNnB937l3XI7rUIPUfkhR25k4jOW2h1Km3wXAu3+XnCoKzLQdQugMptOeLTCvUjqZBzNJlqYzj3ySWOYlHnqJbzfLwsP4leN9hAM4jJOEpFAuDG3sj3JGM9V/s6ht5LjqXpxbraFjpsHL6nKTc+E8NZA91kSemQdbxmegwfhs7TmNfuke9YL0f/yLEcgZ/CBcNMHFT1Lg7CHPTUN5yjB+u4Y2i54z3hqwxG6EmnYBRbsERQu6YuHk7DeIIJssqDvlOvgH5rEjWlzFVtw32pNEPVPMulItq/P3t5YPJVJXw1BN305keFwHAAReIi1IwyOHW35NCjYTW0dDIdvy9Er8MaQb2FS9WWp3bjaDTnZBFV37CwozXdqzp5khmbFqAY0Pw6U6fAfeNaIqt9Qoj4sH5IkhPVH+S/Azzgwzqg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(396003)(136003)(39850400004)(366004)(451199018)(86362001)(2616005)(186003)(1076003)(6506007)(6512007)(26005)(6666004)(38100700002)(38350700002)(2906002)(7416002)(8936002)(5660300002)(41300700001)(8676002)(6486002)(4326008)(478600001)(66556008)(66946007)(66476007)(316002)(52116002)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+BNkDiip/e9PqSvx3BSwEJ5arHd17UIrX6y7b48AOQwJIzK7iwjP7frTuZeM?=
+ =?us-ascii?Q?pT3fkWL74MfJexNBTvXY4j4JXLCgrHnQnZlPZCL/FcrWA/kZ5jnG+Qh7d4M5?=
+ =?us-ascii?Q?iSffrTjJe1OPi2DDdAbwU868XjMIAwwHfWFDCtpzYo09olzoILqhDsCAAU+G?=
+ =?us-ascii?Q?RptuZS6KKIrFmzxWCYH5nSNL5gUceSMzpk/4Q8m8RhnOLxGuExw0m897BObk?=
+ =?us-ascii?Q?sY3U0fUS2h+VZ89WfQs7v2NRfQbzep8OTCqP96/OX8NJejP1dQEu+1lVTYf2?=
+ =?us-ascii?Q?j7+Hbdg9ePWJ23hLkILhxsBOl4CQg9jF8DhGIjwnPfZpDz6R/9PbGS35EzOi?=
+ =?us-ascii?Q?hO+iHjLcoTlav4CVkUBgWaVN6r7I8QMFHnd1wKi7OmAjDYUQqrbuBN0HsLUq?=
+ =?us-ascii?Q?5JCjWYsqevU/4/IK5Z1eSHUKullePsYXBTHnSG24UDIj5hhcUTofK+YBxRSe?=
+ =?us-ascii?Q?eVL5Anbf0w/RbnvtvWyGAIt886OqPqxv+n3rVy0h9Cxkw9i93BDdl2RE2zK2?=
+ =?us-ascii?Q?SkIL262/55xRq+n7v0gIvKsnOuBn8RWP+4Mnx3tLuA34B46nF+j7ZnpAwSXC?=
+ =?us-ascii?Q?sY1MEnVIxoY0xYqBGXE+Na4gLGx7m9DNOiLeYP4wswIivPSHFYbvox70pfds?=
+ =?us-ascii?Q?t9XxYdBFMamAajvehtgbxsuihsbGv0n/HWvGZPc9VLH1zjnshQDVCXnbQaSp?=
+ =?us-ascii?Q?mXyPu7EqyyGob172gRtfFJHMG/ZdmjjbM6qCW8USA/kuFMZd3k0MUyw8sY0J?=
+ =?us-ascii?Q?oypN/9asWsoTwj/0sy55eYcjWZ9qw7yL1EdMAB/lHpVwmSgZm4Obhk5moOpF?=
+ =?us-ascii?Q?9p9WQTc8EiGjALbZbnryTUgeWnRjlhd5Y0gSKtbO3LzPj8tl30dtt30pvi7B?=
+ =?us-ascii?Q?hhNhq5UqhnuvGk5EXddEer9Gs0FiHJNVSPuLGm2HJxIA+oDyRX2Owclb+Wa0?=
+ =?us-ascii?Q?SyTYvZxRVcWf4xqhYajH7q5Z7o+VeL8jehJmF+uBiN4O1dFdkO7HiC51iSu8?=
+ =?us-ascii?Q?Kfbc4pljVfRFNSj4TEPAaP1RmrEzkz91dQjJvPDVCSWWx+XH7oruzmeHlA78?=
+ =?us-ascii?Q?nptXtVnLsNrb2RU60DgnFN9DPta5qz+UAwx/foEqks4O4wuEL5fGolsSIb1Z?=
+ =?us-ascii?Q?9Y7OpybZyP0Z120BZmgZHs9Ghx2cI3CNULDq/D6fIpMdeKiHGel5g1VwBjvm?=
+ =?us-ascii?Q?y/EAuE48rbOS//i3cCl0i/Zgna5OoYt+MjYxT0GiqabQ4wAO5VFU7Qic98d7?=
+ =?us-ascii?Q?3SwT2oPTF784vuysidAVHoNlWGpGbXPnaomrLLsB65gfyDMEsIzg8DO0QA46?=
+ =?us-ascii?Q?lCUlRy5cGmMPLy7gqNSfYZozG+MGYJ5rDQ60sY/o0bPbPjnooVmBkFDCkTYk?=
+ =?us-ascii?Q?e9Ae88YNt/hUet6+yCfjCsiJT3bfZeCUSTmr+d9YuFIjzeTmtwyZBCKUmfUC?=
+ =?us-ascii?Q?lS44kLCIujCbErWCRBlnG5stFj1T3WTeFWFkJya4ZhuQifiukhbVDpYYdarm?=
+ =?us-ascii?Q?0/roxTpeeo+zr/KVdeDNgV6R9dPfxgnyedoX179MME2Z7voWQO5vQft/Y+Lz?=
+ =?us-ascii?Q?5V83HxBb+lhdwKggfPLkgKl6hYDzFbmQVvt3DZUp?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c53b9d5-0adf-4313-3ba1-08db28700b49
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Mar 2023 11:49:49.7915
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Shtcejh9+bMEhPdlbBQE6BooNTvsQyNrB7aXHZKVAJ7k9mMf55J+rh03Z6t6M/XgxODIUfagOFAcug2Hbhn1Ag==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB10075
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18/03/2023 13:18, Bryan O'Donoghue wrote:
-> The VBUS driver needs to know the regulator-min-microamp and
-> regulator-max-microamp so they should both be marked as required.
-> 
-> regulator.yaml defines those two dependencies so include regulator.yaml.
-> 
-> We need to change from additionalProperties: false to
-> unevaluatedProperties: false.
-> 
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  .../bindings/regulator/qcom,usb-vbus-regulator.yaml      | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
-> index 7a3b59f836092..f6ecb0f72ad9a 100644
-> --- a/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
-> +++ b/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
-> @@ -14,6 +14,9 @@ description: |
->    regulator will be enabled in situations where the device is required to
->    provide power to the connected peripheral.
->  
-> +allOf:
-> +  - $ref: "regulator.yaml#"
+From: Peng Fan <peng.fan@nxp.com>
 
-Drop quotes.
+This is target for i.MX8M* System-Ready IR 2.0 Cert.
+
+V5:
+ Fix dt warning
+ Add more properties that existed in dts and driver to address dtbs check error
+ Update NXP device tree to follow compatible rule
+ A few dtbs fix to NXP dtbs
+
+V4:
+ Merged V3 patch 1,2,3 into one patch
+ Merged V3 patch 4,5,6 into one patch
+ Added patch 3,4,5,6 for dts update
+ Addressed Rob's comments to v3 patch 1, patch 4 for compatible, deprecated property
+
+V3:
+ Sorry for this long time delay for V3. I thought this should be V5, but actually
+ I only posted two versions before.
+ Add myself ad maintainer
+ The major changes are in patch 4:
+   Added some properties to address dtbs_check error, for qcom, fsl. But I still leave
+   some properties not introduced, such as phy-select for qcom,
+   nvidia,needs-double-reset operating-points-v2 for nvidia, which I would expect
+   sub-soc maintainers continue on it.
+
+ Add A-b from Rob
+ Add a new patch 7
+
+v2:
+ patch order changed, usbmisc-imx moved to first
+ Add Xu Yang as maintainer
+ Typo fix
+ Not define properties within if/then/else
+ Set additionalProperties to false
+ Drop duplicated compatibles
+ Fix checkpatch issue
+ For pinctrl-names: I think there is restrictin in allOf, so not list items
+ Add fsl,usbmisc: ref
+ Define items for mux-control-names
+ Rename usbmisc-imx.yaml to fsl,usbmisc.yaml
+
+ Hope I not miss any comments
+
+ Note: there will still be dtbs_check failure if run with only a single patch,
+ with this patchset applied, there is no related dtbs_check failure.
+
+
+This patchset is to convert ci-hdrc-usb2 and usbmisc-imx to yaml format.
+There are compatible strings not landed in binding doc, but in device tree,
+so run dtbs_check on the single yaml conversion patch will report
+dtbs_check failure. If apply the whole patchset, there will be no failure.
 
 
 
-Best regards,
-Krzysztof
+
+Peng Fan (9):
+  dt-bindings: usb: usbmisc-imx: convert to DT schema
+  dt-bindings: usb: ci-hdrc-usb2: convert to DT schema format
+  arm64: dts: imx8mn: update usb compatible
+  arm64: dts: imx8mm: update usb compatible
+  arm64: dts: imx8: update usb compatible
+  arm64: dts: imx8dxl: update usb compatible
+  arm64: dts: imx8dxl: drop #stream-id-cells for usb node
+  arm64: dts: imx8-apalis-v1.1: drop ci-disable-lpm
+  ARM64: dts: imx7ulp: update usb compatible
+
+ .../devicetree/bindings/usb/ci-hdrc-usb2.txt  | 159 -------
+ .../devicetree/bindings/usb/ci-hdrc-usb2.yaml | 449 ++++++++++++++++++
+ .../devicetree/bindings/usb/fsl,usbmisc.yaml  |  68 +++
+ .../devicetree/bindings/usb/usbmisc-imx.txt   |  19 -
+ arch/arm/boot/dts/imx7ulp.dtsi                |   5 +-
+ .../boot/dts/freescale/imx8-apalis-v1.1.dtsi  |   1 -
+ .../boot/dts/freescale/imx8-ss-conn.dtsi      |   4 +-
+ .../boot/dts/freescale/imx8dxl-ss-conn.dtsi   |   5 +-
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  10 +-
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi     |   5 +-
+ 10 files changed, 533 insertions(+), 192 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/usb/usbmisc-imx.txt
+
+-- 
+2.37.1
 
