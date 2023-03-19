@@ -2,175 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C616C0395
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Mar 2023 18:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 041B56C03C3
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Mar 2023 19:24:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjCSRvE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Mar 2023 13:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
+        id S229813AbjCSSYN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Mar 2023 14:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjCSRvC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Mar 2023 13:51:02 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49EC12F14
-        for <linux-usb@vger.kernel.org>; Sun, 19 Mar 2023 10:50:58 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id t5so1779417edd.7
-        for <linux-usb@vger.kernel.org>; Sun, 19 Mar 2023 10:50:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679248257;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=00maLYThbB2ZrBGgsPig398VSjnMsDm6aNo0Lct8eGo=;
-        b=lJkZ6gmXxRW0A/ZcnO2EucL6IJohFtVAWD2S8QqfMumXHV2q/Ir5daDPjDnpsdcc7z
-         ZXP4RO+UErYLSm6yE4V6f+F7DwhA7uUAeu7VWZpYJdPXbE4YGTrBynTJPOGPGTzp07Uz
-         sicAaC4Qmh8m+dOzQUI9VrEjOiQhSVcKXg8MMZ/ttAFM45/praCmEtyJZ5pyicxfDfvp
-         /YnXAL20qVoLYiJ7uUI8ew8rebTpyLciTDQssGo79Wwl7+QJFZ9Oi7qfy39sWXI6y8jC
-         kn+8aSfhXOWPbamDVD1oXKe0GV8cNNuKuc1kiP4ZeJp2b1XnjfFlYbG8PHWLRP+Npb0f
-         G6VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679248257;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=00maLYThbB2ZrBGgsPig398VSjnMsDm6aNo0Lct8eGo=;
-        b=kKJ0dW/Hf1AX/aO/RAJxEO9yUuK0nWvsvDGpoKii85FaeU6rKxQzKqIWdDsI2cafnD
-         C9z2d/7Iz7JB8AiPNMLS88scw6T3JZVBSoRziG9/NiE+QE2UCjkV6c0LshJcL0agGcEl
-         h048GaptSWQVrHM4uM8I2sq2QzSbGetqqj9yYo7LlRvPY1SJrEkl+EfzNQ6cYD23l/6f
-         B0w+wNTRx0qDPX+WgX9EqMQICAkMdD3O1K1/7zuC7WkmNIloZ5FJhhGy5vjQvEHHCX88
-         rVJPCc+4MLUYW/g0Txhepoh6TZKErvdSveJWBsSZ8vlhx3437ZYXSvctTkT/xOTEHyJa
-         rXiw==
-X-Gm-Message-State: AO0yUKUZ94rRFg+T9LwvT3ZpnoAoNnW9GPEDrKT77aEVL8agO57Q8ecq
-        toUo2gZcXU0UnUVudWjhm+lKfg==
-X-Google-Smtp-Source: AK7set95aPTJOHeKu+bHDcG+A9CTzrJ759cvWgUDbIS/MNtnexz5zTiCWWPjRGB4nZF5d7WJrTSc7w==
-X-Received: by 2002:a17:906:c284:b0:926:7d96:9434 with SMTP id r4-20020a170906c28400b009267d969434mr6244371ejz.51.1679248257162;
-        Sun, 19 Mar 2023 10:50:57 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5b5f:f22b:a0b:559d? ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
-        by smtp.gmail.com with ESMTPSA id v2-20020a17090651c200b008d57e796dcbsm3474576ejk.25.2023.03.19.10.50.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Mar 2023 10:50:56 -0700 (PDT)
-Message-ID: <c5ac0d15-4651-318e-4dd2-37b2f90b2ba0@linaro.org>
-Date:   Sun, 19 Mar 2023 18:50:55 +0100
+        with ESMTP id S229460AbjCSSYM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Mar 2023 14:24:12 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7CA1ADF7;
+        Sun, 19 Mar 2023 11:24:08 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 39C2940002;
+        Sun, 19 Mar 2023 18:24:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1679250247;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UxKJ5DqiHIKx6uJVgysoPzQWoYyFGH7gsA6iqa5x6zM=;
+        b=lnJmxOVr1SeA5dJXwWhxXkKpUi16Mz6Gga2nftt9alNqQztJWa9xF8CpzrHFkHWuL9MwS7
+        0d4lMp3VOfUs/F2UdbXdLu4iXnfy14Ic199tawTfU0adAg/pQFt6UvOy64vy3GdWdjTYL7
+        AVSEo8Y5N37fY+9R2gbO7QU5T9CoyllK1VtyiAUDl7UbzP+6Dpq4cb24SD1TF0MQcsOsxh
+        DfOQZ7T+RMZg9SC2TD9KwSbY7tN2zOLOWKUb1uIPQsQrMr3HWAE5QMOWtK/xgaqESfb94J
+        aiqNeQcgk21/VIrdICiCbQlMlWcqeFuPYKE8FoLb1Kc+K/ej5ivP9hRxNdJviQ==
+Date:   Sun, 19 Mar 2023 19:24:05 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     gregkh@linuxfoundation.org, nathan@kernel.org,
+        ndesaulniers@google.com, linux-renesas-soc@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] usb: gadget: udc: remove unused usbf_ep_dma_reg_clrset
+ function
+Message-ID: <20230319192405.6202ea2b@bootlin.com>
+In-Reply-To: <20230319155910.1706294-1-trix@redhat.com>
+References: <20230319155910.1706294-1-trix@redhat.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 09/18] dt-bindings: usb: Add Qualcomm PMIC TCPM YAML
- schema
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     wcheng@codeaurora.org, caleb.connolly@linaro.org,
-        konrad.dybcio@linaro.org, subbaram@quicinc.com, jackp@quicinc.com,
-        robertom@qti.qualcomm.com
-References: <20230318121828.739424-1-bryan.odonoghue@linaro.org>
- <20230318121828.739424-10-bryan.odonoghue@linaro.org>
- <7cd51a8d-7b23-7895-7c06-07dc98924931@linaro.org>
- <a4da1f8f-333e-9ded-d784-7f86c45c7156@linaro.org>
- <346ecd20-d64f-1d47-4860-861e142f9700@linaro.org>
- <aa5d1492-906f-9e30-8f97-6321db692c73@linaro.org>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <aa5d1492-906f-9e30-8f97-6321db692c73@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19/03/2023 16:44, Bryan O'Donoghue wrote:
-> On 19/03/2023 15:10, Krzysztof Kozlowski wrote:
->> On 19/03/2023 15:59, Bryan O'Donoghue wrote:
->>> On 19/03/2023 11:58, Krzysztof Kozlowski wrote:
->>>>> +
->>>>> +maintainers:
->>>>> +  - Bryan O'Donoghue<bryan.odonoghue@linaro.org>
->>>>> +
->>>>> +description: |
->>>>> +  Qualcomm PMIC Virtual Type-C Port Manager Driver
->>>>> +  A virtual device which manages Qualcomm PMIC provided Type-C port and
->>>>> +  Power Delivery in one place.
->>>> OK, so it looks like bindings for driver, so a no-go. Unless there is
->>>> such device as "manager", this does not look like hardware description.
->>>>
->>>>> +
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    const: qcom,pmic-virt-tcpm
->>>>> +
->>>>> +  connector:
->>>>> +    type: object
->>>>> +    $ref: /schemas/connector/usb-connector.yaml#
->>>>> +    unevaluatedProperties: false
->>>>> +
->>>>> +  port:
->>>>> +    $ref: /schemas/graph.yaml#/properties/port
->>>>> +    description:
->>>>> +      Contains a port which consumes data-role switching messages.
->>>>> +
->>>>> +  qcom,pmic-typec:
->>>>> +    $ref: /schemas/types.yaml#/definitions/phandle
->>>>> +    description:
->>>>> +      A phandle to the typec port hardware driver.
->>>>> +
->>>>> +  qcom,pmic-pdphy:
->>>>> +    $ref: /schemas/types.yaml#/definitions/phandle
->>>> Having typec and phy as phandles - not children - also suggests this is
->>>> some software construct, not hardware description.
->>>
->>> So probably I didn't interpret Rob's comment correctly here.
->>
->> He proposed to merge it with other node:
->> "probably merged with
->> one of the nodes these phandles point to."
->>
->> "Why can't most of this binding be part of"
->>
->> I don't see how you implemented his comments. Actually, nothing improved
->> here in this regard - you still have these phandles.
-> 
-> So this comment from Rob is what I was aiming for
-> 
-> "Your other option is instantiate your own device from the virtual
-> driver's initcall based on presence of the 2 nodes above. "
-> 
-> rather than two mush the pdphy and typec into one device, which they are 
-> not.
+Hi Tom,
 
-Sure, but you did not instantiate anything based on these two or one
-nodes. You added virtual device node.
+On Sun, 19 Mar 2023 11:59:10 -0400
+Tom Rix <trix@redhat.com> wrote:
 
-
-> I guess what I'm trying to understand is how you guys would suggest that 
-> is actually done.
-
-You have there already node for the PMIC USB Type-C, so this should be
-part of it. I really do not understand why this is separate device lying
-around in parallel like:
-
-pmic {
-	usb {
-	};
-};
-
-virtual- pmic-tcpm {
-};
-
-What hardware piece does such description represent?
-
-> 
-> Could I trouble you for an example ?
-> 
+> clang with W=3D1 reports
+> drivers/usb/gadget/udc/renesas_usbf.c:548:20: error: unused function
+>   'usbf_ep_dma_reg_clrset' [-Werror,-Wunused-function]
+> static inline void usbf_ep_dma_reg_clrset(struct usbf_ep *ep, uint offset,
+>                    ^
+> This function is not used, so remove it.
+>=20
+> Signed-off-by: Tom Rix <trix@redhat.com>
 > ---
-> bod
+>  drivers/usb/gadget/udc/renesas_usbf.c | 11 -----------
+>  1 file changed, 11 deletions(-)
+>=20
+> diff --git a/drivers/usb/gadget/udc/renesas_usbf.c b/drivers/usb/gadget/u=
+dc/renesas_usbf.c
+> index cb23e62e8a87..84ac9fe4ce7f 100644
+> --- a/drivers/usb/gadget/udc/renesas_usbf.c
+> +++ b/drivers/usb/gadget/udc/renesas_usbf.c
+> @@ -545,17 +545,6 @@ static inline void usbf_ep_dma_reg_bitclr(struct usb=
+f_ep *ep, uint offset,
+>  	usbf_ep_dma_reg_writel(ep, offset, tmp);
+>  }
+> =20
+> -static inline void usbf_ep_dma_reg_clrset(struct usbf_ep *ep, uint offse=
+t,
+> -					  u32 clr, u32 set)
+> -{
+> -	u32 tmp;
+> -
+> -	tmp =3D usbf_ep_dma_reg_readl(ep, offset);
+> -	tmp &=3D ~clr;
+> -	tmp |=3D set;
+> -	usbf_ep_dma_reg_writel(ep, offset, tmp);
+> -}
+> -
+>  static void usbf_ep0_send_null(struct usbf_ep *ep0, bool is_data1)
+>  {
+>  	u32 set;
 
-Best regards,
-Krzysztof
+Yes, indeed.
 
+Acked-by: Herve Codina <herve.codina@bootlin.com>
+
+Thanks for the patch.
+Regards,
+Herv=C3=A9
+
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
