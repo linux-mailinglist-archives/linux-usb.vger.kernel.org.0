@@ -2,101 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDAD6C10A0
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Mar 2023 12:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8577D6C10FB
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Mar 2023 12:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbjCTLUJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Mar 2023 07:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
+        id S230128AbjCTLjZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Mar 2023 07:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjCTLTV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Mar 2023 07:19:21 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 990A2BDD4
-        for <linux-usb@vger.kernel.org>; Mon, 20 Mar 2023 04:19:16 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id u11-20020a05600c19cb00b003edcc414997so2380093wmq.3
-        for <linux-usb@vger.kernel.org>; Mon, 20 Mar 2023 04:19:16 -0700 (PDT)
+        with ESMTP id S230162AbjCTLjY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Mar 2023 07:39:24 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800CA15545
+        for <linux-usb@vger.kernel.org>; Mon, 20 Mar 2023 04:39:21 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id er8so33710687edb.0
+        for <linux-usb@vger.kernel.org>; Mon, 20 Mar 2023 04:39:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679311155;
+        d=linaro.org; s=google; t=1679312360;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=jBoWwikoG1lYZMCX3FZwSPiYaLshiMfIcbcmJhOvA+s=;
-        b=WEhdIetC8Yrq0C1OZY/x5yGPKslxqUm1NFEJTgK8CgCcA/gU62jy6R68KIG1+SQMRq
-         HNpXWXfG9838k37cl9FB+2mqASOTMjlK6+d7FZlP12d9N1796AYcEg5P8vFBMr/EAU1N
-         59Lb+roHT2ynAU6Mv5Zryd26Hjw0C7XVp2lqOa6i30fd0SblMsxlx/DXU/JEtaKZdHFy
-         evKN8cdYJOOJItO6uI47ezHf3yqW5zGZECZyuDHcZJ2j8bz4v2Kn8gvWnqNyMbAOgmH3
-         5RJ10ROhxiak4hmDt/3NE+qHrFR4O8h8iArWFcp8Zdr7Y+oWIfek1j57sfok1uDQP5YX
-         x42w==
+        bh=ShGrWTqpBYO/SMDmz1FUp9/Cnckjt6bpBWjpINOQBvM=;
+        b=U5Ba8vnx02o1jOVTya5gjvxG5eePkXUJIz4BznDZi7oYV1LDrxHQ26lvfzstsTZT4X
+         EXuW1gu10S78je91uYVaZUzxMxVGfSn94GBy1g2rcGTjchTCsTjkAROrqX5VOE5CVbO6
+         YUPjYluatcvO8hNlU8ymefXUIadav9vsZD64CZAZ9Y7iNidtJyJD+Gw3YAM24e+MUOJp
+         BQOezhqfh93cWmi9ORCcfvQRYEC0OkuFw5FVrPemhN3GBKl+XBen5Zw8eTs1WZov9ON3
+         9zzPSP6hoZJwq/3Dvtf9dswvnGQXd3FtnZuWQHoVGuUPgpa3QUpDkxt2GR1ae5+u7whg
+         Ax7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679311155;
+        d=1e100.net; s=20210112; t=1679312360;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jBoWwikoG1lYZMCX3FZwSPiYaLshiMfIcbcmJhOvA+s=;
-        b=wGuxomqs68JhwpV48biq2xGy5MisCD/nNP0Fg5LpsksDHuW3Pf7lCWXYPbxulosxoN
-         aa26R+Vo3fnKTFoJVi/aFlsdc4Uuk8NUo9+vh8qrvN1Baomx4y9idaMo7E01sHA/RNMA
-         Bkzq4ijjVchjISJCT/kuCenQATe0kduJ22iPAm3sUSxmfumDpiJGOhR6Vqq/4pZxFlNm
-         k31s5z4NQQserJvAXp7lutzAjL7Fu8KnQIkTV5qE0YwoNCFdt1uXPALESargpOs7PFqF
-         uY9ghz4hg3DZ1WSbFvY9Ihd7t7V3/yQmndVGW+fxpRTPQt74nrfnMFlA77gozhbiORyc
-         aXkQ==
-X-Gm-Message-State: AO0yUKXshsJ6kssMcJM5gR0d6jY7mCJl7ckLXarU7SjMgoxaVrmG+DJa
-        ccpel9GvCIQDgnokOEW6kXQ9UA==
-X-Google-Smtp-Source: AK7set+fAcl57SjqUyXQUgKaxCIhVo0WvtYh8WATSMV+PmsGg1BmWwhsXbqQ9xfiMSYqDImCrISerQ==
-X-Received: by 2002:a05:600c:3b99:b0:3ed:234d:b0c0 with SMTP id n25-20020a05600c3b9900b003ed234db0c0mr25029322wms.13.1679311154972;
-        Mon, 20 Mar 2023 04:19:14 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id a3-20020adffb83000000b002c561805a4csm8628416wrr.45.2023.03.20.04.19.13
+        bh=ShGrWTqpBYO/SMDmz1FUp9/Cnckjt6bpBWjpINOQBvM=;
+        b=QgkB1ip6yuY3aqESlfHXAeojTyUONxr9S8izX5LLOUdwhCiI17Q0skpYGZQNaEkPOf
+         5Y+8uMxrvuRL/V36G/s2fG/SLCylm2k7+123aOxDu29jQNvifXVkM3qWP7btHZC/uN23
+         gpjKANDObNo9yH1hUy1/0qjTfrgnFoTAgdGdfaU+TNrh8jJ/dGG3DQX7uF3MKS4o7EQh
+         iPRI0AWQs+LpkXXVYDK3KYvfFJ5RiwT7Mw+yD68fd7EC+5iM951ck/5YnvszFUeJFc7q
+         CeBVSBHP5e0tj80JRZDb/OMX0Q7FkeiagogxIb5bhXHTv9nPokz64R9wssMhHMoWx7Ec
+         bpmg==
+X-Gm-Message-State: AO0yUKXjqIa8I7gy4nHeBShEX0eEf51VdKYPW+QqQOdBln9W2ysbGrwY
+        Eh0pBVKrKBOK63gXj1LHHsOW/w==
+X-Google-Smtp-Source: AK7set9OOcOsno7fRwtj0mHO3kQekqDD2nlgrGFWHIJ62wqI55Bbl2295GpLbftS8sfcz0gn7Gb5dw==
+X-Received: by 2002:a17:907:6295:b0:932:f88c:c2ff with SMTP id nd21-20020a170907629500b00932f88cc2ffmr9752264ejc.34.1679312360028;
+        Mon, 20 Mar 2023 04:39:20 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:458e:64e7:8cf1:78b0? ([2a02:810d:15c0:828:458e:64e7:8cf1:78b0])
+        by smtp.gmail.com with ESMTPSA id ch19-20020a170906c2d300b00933d64cd447sm1645621ejb.121.2023.03.20.04.39.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 04:19:14 -0700 (PDT)
-Message-ID: <d77bc289-2781-6fb1-6ca5-09991a02715b@linaro.org>
-Date:   Mon, 20 Mar 2023 11:19:13 +0000
+        Mon, 20 Mar 2023 04:39:19 -0700 (PDT)
+Message-ID: <355d5dde-cc86-018c-85d5-51cf59bdb36a@linaro.org>
+Date:   Mon, 20 Mar 2023 12:39:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 13/18] phy: qcom-qmp: Register as a typec switch for
- orientation detection
+ Thunderbird/102.9.0
+Subject: Re: [PATCH linux-next] dt-bindings: usb: snps,dwc3: correct i.MX8MQ
+ support
 Content-Language: en-US
-To:     neil.armstrong@linaro.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     wcheng@codeaurora.org, caleb.connolly@linaro.org,
-        konrad.dybcio@linaro.org, subbaram@quicinc.com, jackp@quicinc.com,
-        robertom@qti.qualcomm.com,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-References: <20230318121828.739424-1-bryan.odonoghue@linaro.org>
- <20230318121828.739424-14-bryan.odonoghue@linaro.org>
- <bd873706-4b3f-69dc-e2e3-9757ea405e31@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <bd873706-4b3f-69dc-e2e3-9757ea405e31@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        Xu Yang <xu.yang_2@nxp.com>
+Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, Jun Li <jun.li@nxp.com>
+References: <20230320020714.955800-1-peng.fan@oss.nxp.com>
+ <8efe78d3-ff50-1970-3a90-28bab4992bad@linaro.org>
+ <DU0PR04MB9417D88E67200F4A74C5CF4888809@DU0PR04MB9417.eurprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <DU0PR04MB9417D88E67200F4A74C5CF4888809@DU0PR04MB9417.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20/03/2023 11:15, Neil Armstrong wrote:
->> +    def_bool PHY_QCOM_QMP=y && TYPEC=y || PHY_QCOM_QMP=m && TYPEC
->> +    help
->> +      Register a type C switch from the QMP PHY driver for type C
->> +      orientation support.  This has dependencies with if the type C 
->> kernel
->> +      configuration is enabled or not.  This support will not be 
->> present if
->> +      USB type C is disabled.
+On 20/03/2023 12:02, Peng Fan wrote:
+>> Subject: Re: [PATCH linux-next] dt-bindings: usb: snps,dwc3: correct
+>> i.MX8MQ support
+>>
+>> On 20/03/2023 03:07, Peng Fan (OSS) wrote:
+>>> From: Peng Fan <peng.fan@nxp.com>
+>>>
+>>> The previous i.MX8MQ support breaks rockchip,dwc3 support, so use
+>>> select to restrict i.MX8MQ support and avoid break others.
+>>>
+>>> Fixes: 3754c41c7686 ("dt-bindings: usb: snps,dwc3: support i.MX8MQ")
+>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+>>> ---
+>>>  .../devicetree/bindings/usb/snps,dwc3.yaml    | 21 ++++++++++++-------
+>>>  1 file changed, 14 insertions(+), 7 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>>> b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>>> index 16c7d06c9172..6347a6769ee3 100644
+>>> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>>> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>>> @@ -28,15 +28,22 @@ allOf:
+>>>      else:
+>>>        $ref: usb-xhci.yaml#
+>>>
+>>> +select:
+>>> +  properties:
+>>> +    compatible:
+>>> +      contains:
+>>> +        enum:
+>>> +          - fsl,imx8mq-dwc3
+>>
+>> And what about all snps,dwc3 devices there (without specific compatible)?
+>> Previously they were selected and now they are not... so you just disabled
+>> schema for all of them.
+> [Peng Fan] 
 > 
-> Is there a reason to only enable the TypeC logic with a config ?
+> I am not sure how to address:
+> https://lore.kernel.org/all/CAL_Jsq+nrqTX5ND3=+kFUmStx-+b=qpE_WsL_Le-YX8c285-5A@mail.gmail.com/
 > 
-> If unlinked from DT it won't be used, so no need to add a new config for 
-> that.
+> Rob suggested use select, but I am not sure how to use it here. Use
+> an extra yaml file with select or else.
 > 
-> Neil
+>>
+>>> +  required:
+>>> +    - compatible
+>>> +
+>>>  properties:
+>>>    compatible:
+>>> -    oneOf:
+>>> -      - items:
+>>> -          - const: fsl,imx8mq-dwc3
+>>
+>> I don't understand why you remove your compatible.
+> [Peng Fan] 
+> 
+> My last change drops 'contains' by mistake, and breaks
 
-ack, np
+This I understand.
+
+> rockchip,dwc3, so just bring back the original content
+
+This is not a reason to make your compatible undocumented. You basically
+revert your patch. It does not make any sense to me.
+
+
+Best regards,
+Krzysztof
+
