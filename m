@@ -2,120 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 086A16C0BC7
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Mar 2023 09:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3666C0BCD
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Mar 2023 09:11:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbjCTIKF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Mar 2023 04:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
+        id S230315AbjCTIK6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Mar 2023 04:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjCTIKD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Mar 2023 04:10:03 -0400
+        with ESMTP id S230146AbjCTIK4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Mar 2023 04:10:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26525BB8E;
-        Mon, 20 Mar 2023 01:10:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB1D18AB7;
+        Mon, 20 Mar 2023 01:10:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B514361265;
-        Mon, 20 Mar 2023 08:10:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA8C9C4339C;
-        Mon, 20 Mar 2023 08:09:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679299800;
-        bh=UpyOnbmz84P/0j1392CDgxerKpDK7NnKKNJvKX27NIM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N9d8qt3EgAKEeQxrvjJZHsgkoKw58zCiciKWvivUs4y7houYJJT1O15v2y7LRcSaM
-         o+1nRgmuRJ+lfPuAzlEurX90LGIUME88kIvZVKoclR2lGGOVfL+w2NZWAfC3r1/1o0
-         yqKs3dxQTAAkl5kpRbsL5b2pQcs8bPgc0ote8GGE=
-Date:   Mon, 20 Mar 2023 09:09:52 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Haotien Hsu <haotienh@nvidia.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, JC Kuo <jckuo@nvidia.com>,
-        Wayne Chang <waynec@nvidia.com>
-Subject: Re: [PATCH] usb: xhci: tegra: fix sleep in atomic call
-Message-ID: <ZBgU0GtLAVdaBQQ1@kroah.com>
-References: <20230320074028.186282-1-haotienh@nvidia.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ABEF6125F;
+        Mon, 20 Mar 2023 08:10:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEA4EC433D2;
+        Mon, 20 Mar 2023 08:10:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679299850;
+        bh=Iovv/2fKdurRGZdrav4dWvXPM92bjLaNxYjiFu0MZYQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XKHWgmUIEYf22IHqbvr3/5TsCXc9eRB6ky8Xw5crf4K00ZZnYDpgHLAQDFyGYAK0Q
+         K2HNRvYf2AVV3lhGNywFYWPEazSkZg1FppeiH7nt0WWMHJ61wkghjrZuG6iVdpP3NA
+         mxZp0GzrSAJUYGSUQZ3tR1Yx3a6+Da4xymKCMRUSE24+Olo9+blXFSIVkZoNGOYGIQ
+         17Ra8BrGCRVlqT9MfhLNRT8SCAQVjebwWNGfkjYEF7qc5aGg4Mhvbu7zxpT6qK2c3l
+         ENNrsT46CwAr6a4+nfIF5dEYBh1PWnOsx4a5iwzbz0ZfCTp28T5h1twn9flg72KL9N
+         QF5iUrTw2c9eA==
+Message-ID: <5df22994-1570-35ac-8e1c-5d2d8608d3f3@kernel.org>
+Date:   Mon, 20 Mar 2023 10:10:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320074028.186282-1-haotienh@nvidia.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] usb: cdns3: Fix issue with using incorrect PCI device
+ function
+Content-Language: en-US
+To:     Pawel Laszczak <pawell@cadence.com>, peter.chen@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, a-govindraju@ti.com,
+        felipe.balbi@linux.intel.com, stable@vger.kernel.org
+References: <20230308124427.311245-1-pawell@cadence.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230308124427.311245-1-pawell@cadence.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 03:40:28PM +0800, Haotien Hsu wrote:
-> From: Wayne Chang <waynec@nvidia.com>
-> 
-> When we set the OTG port to Host mode, we observed the following splat:
-> [  167.057718] BUG: sleeping function called from invalid context at
-> include/linux/sched/mm.h:229
-> [  167.057872] Workqueue: events tegra_xusb_usb_phy_work
-> [  167.057954] Call trace:
-> [  167.057962]  dump_backtrace+0x0/0x210
-> [  167.057996]  show_stack+0x30/0x50
-> [  167.058020]  dump_stack_lvl+0x64/0x84
-> [  167.058065]  dump_stack+0x14/0x34
-> [  167.058100]  __might_resched+0x144/0x180
-> [  167.058140]  __might_sleep+0x64/0xd0
-> [  167.058171]  slab_pre_alloc_hook.constprop.0+0xa8/0x110
-> [  167.058202]  __kmalloc_track_caller+0x74/0x2b0
-> [  167.058233]  kvasprintf+0xa4/0x190
-> [  167.058261]  kasprintf+0x58/0x90
-> [  167.058285]  tegra_xusb_find_port_node.isra.0+0x58/0xd0
-> [  167.058334]  tegra_xusb_find_port+0x38/0xa0
-> [  167.058380]  tegra_xusb_padctl_get_usb3_companion+0x38/0xd0
-> [  167.058430]  tegra_xhci_id_notify+0x8c/0x1e0
-> [  167.058473]  notifier_call_chain+0x88/0x100
-> [  167.058506]  atomic_notifier_call_chain+0x44/0x70
-> [  167.058537]  tegra_xusb_usb_phy_work+0x60/0xd0
-> [  167.058581]  process_one_work+0x1dc/0x4c0
-> [  167.058618]  worker_thread+0x54/0x410
-> [  167.058650]  kthread+0x188/0x1b0
-> [  167.058672]  ret_from_fork+0x10/0x20
-> 
-> The function tegra_xusb_padctl_get_usb3_companion eventually calls
-> tegra_xusb_find_port and this in turn calls kasprintf which might sleep
-> and so cannot be called from an atomic context.
-> 
-> Fix this by moving the call to tegra_xusb_padctl_get_usb3_companion to
-> the tegra_xhci_id_work function where it is really needed.
-> 
-> Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
 
-What commit id does this fix?  And does it need to be backported to
-older kernels?
 
-> ---
->  drivers/usb/host/xhci-tegra.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
+On 08/03/2023 14:44, Pawel Laszczak wrote:
+> PCI based platform can have more than two PCI functions.
+> USBSS PCI Glue driver during initialization should
+> consider only DRD/HOST/DEVICE PCI functions and
+> all other should be ignored. This patch adds additional
+> condition which causes that only DRD and HOST/DEVICE
+> function will be accepted.
 > 
-> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-> index 1ff22f675930..af0185bacc70 100644
-> --- a/drivers/usb/host/xhci-tegra.c
-> +++ b/drivers/usb/host/xhci-tegra.c
-> @@ -2,7 +2,7 @@
->  /*
->   * NVIDIA Tegra xHCI host controller driver
->   *
-> - * Copyright (c) 2014-2020, NVIDIA CORPORATION. All rights reserved.
-> + * Copyright (c) 2014-2023, NVIDIA CORPORATION. All rights reserved.
+> cc: <stable@vger.kernel.org>
+> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 
-Please submit copyright updates separately, showing that there really
-was copyright updates during those years as that is independent of this
-fix and does not need to be backported anywhere.
-
-thanks,
-
-greg k-h
+Reviewed-by: Roger Quadros <rogerq@kernel.org>
