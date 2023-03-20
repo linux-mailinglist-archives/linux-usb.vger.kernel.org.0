@@ -2,120 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BFA6C0E07
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Mar 2023 11:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC9C6C0E3E
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Mar 2023 11:08:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjCTKDJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Mar 2023 06:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59958 "EHLO
+        id S230208AbjCTKIr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Mar 2023 06:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjCTKDH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Mar 2023 06:03:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67FDEF87;
-        Mon, 20 Mar 2023 03:02:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E63EB80DB6;
-        Mon, 20 Mar 2023 10:02:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEDB5C4339E;
-        Mon, 20 Mar 2023 10:02:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679306551;
-        bh=m+dT1Fldxa66anQiAD5chZaxSHfu7R3YXUoFLoVhDDc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zf63xN9WAa4njasw9U//z79z4OPMwYhDas2HJ2C+xnMNEwv9SDncJMlRDc4OOdsvK
-         PD9B4qA9rlDO3XdgiBeiQBOTE2ZukuLPNAnKZLaaFokbuomAiMTMMYhPEdLuntktuI
-         ZtU2/TYp1KErZN4931crJCph8+GEUor5mFxQWxnA=
-Date:   Mon, 20 Mar 2023 11:02:28 +0100
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Haotien Hsu <haotienh@nvidia.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Wayne Chang <waynec@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        Jui Chang Kuo <jckuo@nvidia.com>
-Subject: Re: [PATCH] usb: xhci: tegra: fix sleep in atomic call
-Message-ID: <ZBgvNEaRWK56gC3i@kroah.com>
-References: <20230320074028.186282-1-haotienh@nvidia.com>
- <ZBgU0GtLAVdaBQQ1@kroah.com>
- <1ba86b0d74344459188a85c46bdcfbcb8cb3e8f2.camel@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1ba86b0d74344459188a85c46bdcfbcb8cb3e8f2.camel@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229992AbjCTKIY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Mar 2023 06:08:24 -0400
+Received: from mail-m11879.qiye.163.com (mail-m11879.qiye.163.com [115.236.118.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CCD252A3;
+        Mon, 20 Mar 2023 03:07:56 -0700 (PDT)
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by mail-m11879.qiye.163.com (Hmail) with ESMTPA id 19B9D6801EE;
+        Mon, 20 Mar 2023 18:07:13 +0800 (CST)
+From:   Frank Wang <frank.wang@rock-chips.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, heiko@sntech.de
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
+        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
+        yubing.zhang@rock-chips.com, wmc@rock-chips.com,
+        Frank Wang <frank.wang@rock-chips.com>
+Subject: [PATCH v2 0/3] Fix some defects related Type-C TCPM
+Date:   Mon, 20 Mar 2023 18:07:08 +0800
+Message-Id: <20230320100711.3708-1-frank.wang@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQ0MdTVZITkIfGEodGkpCGUpVEwETFh
+        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSkpLSEpMVUpLS1VLWQ
+        Y+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MAw6GQw6Mz0RFxEzIzw3GFEB
+        A1EKCghVSlVKTUxCSEtNQ0hIQ0JNVTMWGhIXVR0JGhUQVQwaFRw7CRQYEFYYExILCFUYFBZFWVdZ
+        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFKQ0lONwY+
+X-HM-Tid: 0a86fe7cbde52eb5kusn19b9d6801ee
+X-HM-MType: 1
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 09:54:28AM +0000, Haotien Hsu wrote:
-> On Mon, 2023-03-20 at 09:09 +0100, Greg Kroah-Hartman wrote:
-> > External email: Use caution opening links or attachments
-> > 
-> > 
-> > On Mon, Mar 20, 2023 at 03:40:28PM +0800, Haotien Hsu wrote:
-> > > From: Wayne Chang <waynec@nvidia.com>
-> > > 
-> > > When we set the OTG port to Host mode, we observed the following
-> > > splat:
-> > > [  167.057718] BUG: sleeping function called from invalid context
-> > > at
-> > > include/linux/sched/mm.h:229
-> > > [  167.057872] Workqueue: events tegra_xusb_usb_phy_work
-> > > [  167.057954] Call trace:
-> > > [  167.057962]  dump_backtrace+0x0/0x210
-> > > [  167.057996]  show_stack+0x30/0x50
-> > > [  167.058020]  dump_stack_lvl+0x64/0x84
-> > > [  167.058065]  dump_stack+0x14/0x34
-> > > [  167.058100]  __might_resched+0x144/0x180
-> > > [  167.058140]  __might_sleep+0x64/0xd0
-> > > [  167.058171]  slab_pre_alloc_hook.constprop.0+0xa8/0x110
-> > > [  167.058202]  __kmalloc_track_caller+0x74/0x2b0
-> > > [  167.058233]  kvasprintf+0xa4/0x190
-> > > [  167.058261]  kasprintf+0x58/0x90
-> > > [  167.058285]  tegra_xusb_find_port_node.isra.0+0x58/0xd0
-> > > [  167.058334]  tegra_xusb_find_port+0x38/0xa0
-> > > [  167.058380]  tegra_xusb_padctl_get_usb3_companion+0x38/0xd0
-> > > [  167.058430]  tegra_xhci_id_notify+0x8c/0x1e0
-> > > [  167.058473]  notifier_call_chain+0x88/0x100
-> > > [  167.058506]  atomic_notifier_call_chain+0x44/0x70
-> > > [  167.058537]  tegra_xusb_usb_phy_work+0x60/0xd0
-> > > [  167.058581]  process_one_work+0x1dc/0x4c0
-> > > [  167.058618]  worker_thread+0x54/0x410
-> > > [  167.058650]  kthread+0x188/0x1b0
-> > > [  167.058672]  ret_from_fork+0x10/0x20
-> > > 
-> > > The function tegra_xusb_padctl_get_usb3_companion eventually calls
-> > > tegra_xusb_find_port and this in turn calls kasprintf which might
-> > > sleep
-> > > and so cannot be called from an atomic context.
-> > > 
-> > > Fix this by moving the call to tegra_xusb_padctl_get_usb3_companion
-> > > to
-> > > the tegra_xhci_id_work function where it is really needed.
-> > > 
-> > > Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> > > Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
-> > 
-> > What commit id does this fix?  And does it need to be backported to
-> > older kernels?
-> > 
-> 
-> Sorry for missing "Fixes:" and "Cc: stable" lines.
+This series fix some defects of TCPM like port reset error, SVIDs
+discover error and etc.
 
-What should be listed for the Fixes line?  Please add it when you
-resubmit it.
+Tested on Rockchip EVB board integrated with FUSB302 or HUSB311 Type-C
+controller.
 
-thanks,
+Changes in v2:
+ - Make some tweaking based on Guenter and Heikki's comments for [PATCH 1/3] and [PATCH 2/3].
+ - Abandon [PATCH 4/4] in v1.
 
-greg k-h
+Frank Wang (3):
+  usb: typec: tcpm: fix cc role at port reset
+  usb: typec: tcpm: fix multiple times discover svids error
+  usb: typec: tcpm: add get max power support
+
+ drivers/usb/typec/tcpm/tcpm.c | 43 +++++++++++++++++++++++++++++++++--
+ 1 file changed, 41 insertions(+), 2 deletions(-)
+
+-- 
+2.17.1
+
