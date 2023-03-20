@@ -2,47 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA38B6C0855
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Mar 2023 02:12:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 883736C0831
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Mar 2023 02:06:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbjCTBMP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Mar 2023 21:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
+        id S231433AbjCTBGH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Mar 2023 21:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbjCTBLt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Mar 2023 21:11:49 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E473234EC;
-        Sun, 19 Mar 2023 18:03:41 -0700 (PDT)
+        with ESMTP id S231297AbjCTBD0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Mar 2023 21:03:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37EAE06B;
+        Sun, 19 Mar 2023 17:57:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B4882CE1020;
-        Mon, 20 Mar 2023 00:57:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0B9BC4339B;
-        Mon, 20 Mar 2023 00:57:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 421616120A;
+        Mon, 20 Mar 2023 00:57:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FF73C433D2;
+        Mon, 20 Mar 2023 00:57:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679273822;
-        bh=D9LIHxXi/O8sYDMR6WuLMz/qSGJTzq0BcnjwBtBH1F8=;
+        s=k20201202; t=1679273845;
+        bh=aT+9RI8B6H+7lryqebuiyR0u4hMFVVvihkuE336Cddw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=atxx6vENvkiqaEU38zH+IczzILRvaCEmHZGlkzNP6YPvz/oribQW6sP+8C0G/KzST
-         0Z1z16MJvR2vcaHdLWs1hCoXDf31w7glIjWG4nEaFDb4sUzsz2S19d/t9/9eWxHbSf
-         5mru3fWULGsuALGGYGfgTMVUlT7nZBSTktajjs2no6NQ9wmHn9hmjETj85CdFJTtJF
-         YBAu/I7HRXRyxYrYQP2PV2kWavnRw4/r4+Us3o1CFMV8Kw4WTjqXs+kZLBPF3TsnK3
-         nwyRqxfz1dLmycZoktv3urYSiSh2o+AP0X4/9dzruJhPPNDQn3pfNqG2VxUKu5s9xt
-         HPYoQjHiJuO3w==
+        b=mAW6fgXNuGLwiUqhkrTDTkCyqx4d7CyRZmwW/EWVlP3KzmJyShWeOX/8rbRtgThlZ
+         cfE/+fsaI8SZ4kxtolNdfYb/qbwHGiNb9uPxsnmWpeVbKZ7xGns9eDG0i150CgIAfG
+         745I3zYoBtn5C7rNnMtckPzzPtpdgPK0lqRpk2i8OfGa0cRseh4vCda+VvCWEJfnqa
+         u+Vaom0pKpXshP4zBCBkvex7wdy+9vw3Vy6TSk1gc+JNs2SWTyXAFFuGJpb+eqAjGG
+         jaxu6LtajxLfr8WLED34NCUzBUhaaw1mCA3Y6gCp5M89sFQivazbg1DqDrMXHpl5uI
+         FKbUZAdvRQxYg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Enrico Sau <enrico.sau@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, bjorn@mork.no,
+        Sasha Levin <sashal@kernel.org>, oliver@neukum.org,
         davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 11/12] net: usb: qmi_wwan: add Telit 0x1080 composition
-Date:   Sun, 19 Mar 2023 20:56:34 -0400
-Message-Id: <20230320005636.1429242-11-sashal@kernel.org>
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 7/9] net: usb: cdc_mbim: avoid altsetting toggling for Telit FE990
+Date:   Sun, 19 Mar 2023 20:57:05 -0400
+Message-Id: <20230320005707.1429405-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230320005636.1429242-1-sashal@kernel.org>
-References: <20230320005636.1429242-1-sashal@kernel.org>
+In-Reply-To: <20230320005707.1429405-1-sashal@kernel.org>
+References: <20230320005707.1429405-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,32 +58,35 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Enrico Sau <enrico.sau@gmail.com>
 
-[ Upstream commit 382e363d5bed0cec5807b35761d14e55955eee63 ]
+[ Upstream commit 418383e6ed6b4624a54ec05c535f13d184fbf33b ]
 
-Add the following Telit FE990 composition:
-
-0x1080: tty, adb, rmnet, tty, tty, tty, tty
+Add quirk CDC_MBIM_FLAG_AVOID_ALTSETTING_TOGGLE for Telit FE990
+0x1081 composition in order to avoid bind error.
 
 Signed-off-by: Enrico Sau <enrico.sau@gmail.com>
-Link: https://lore.kernel.org/r/20230306120528.198842-1-enrico.sau@gmail.com
+Link: https://lore.kernel.org/r/20230306115933.198259-1-enrico.sau@gmail.com
 Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/usb/cdc_mbim.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index c310cdbfd583e..c2307cfaf4009 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1319,6 +1319,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1050, 2)},	/* Telit FN980 */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1060, 2)},	/* Telit LN920 */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1070, 2)},	/* Telit FN990 */
-+	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1080, 2)}, /* Telit FE990 */
- 	{QMI_FIXED_INTF(0x1bc7, 0x1100, 3)},	/* Telit ME910 */
- 	{QMI_FIXED_INTF(0x1bc7, 0x1101, 3)},	/* Telit ME910 dual modem */
- 	{QMI_FIXED_INTF(0x1bc7, 0x1200, 5)},	/* Telit LE920 */
+diff --git a/drivers/net/usb/cdc_mbim.c b/drivers/net/usb/cdc_mbim.c
+index 41bac861ca99d..72a93dc2df868 100644
+--- a/drivers/net/usb/cdc_mbim.c
++++ b/drivers/net/usb/cdc_mbim.c
+@@ -665,6 +665,11 @@ static const struct usb_device_id mbim_devs[] = {
+ 	  .driver_info = (unsigned long)&cdc_mbim_info_avoid_altsetting_toggle,
+ 	},
+ 
++	/* Telit FE990 */
++	{ USB_DEVICE_AND_INTERFACE_INFO(0x1bc7, 0x1081, USB_CLASS_COMM, USB_CDC_SUBCLASS_MBIM, USB_CDC_PROTO_NONE),
++	  .driver_info = (unsigned long)&cdc_mbim_info_avoid_altsetting_toggle,
++	},
++
+ 	/* default entry */
+ 	{ USB_INTERFACE_INFO(USB_CLASS_COMM, USB_CDC_SUBCLASS_MBIM, USB_CDC_PROTO_NONE),
+ 	  .driver_info = (unsigned long)&cdc_mbim_info_zlp,
 -- 
 2.39.2
 
