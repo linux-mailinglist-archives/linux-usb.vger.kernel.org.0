@@ -2,142 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFE96C099B
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Mar 2023 05:22:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8892F6C0A9A
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Mar 2023 07:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjCTEWm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Mar 2023 00:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51670 "EHLO
+        id S229828AbjCTG2f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Mar 2023 02:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjCTEWk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Mar 2023 00:22:40 -0400
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B651F5EB;
-        Sun, 19 Mar 2023 21:22:38 -0700 (PDT)
-Received: by mail-pj1-f51.google.com with SMTP id d13so10909512pjh.0;
-        Sun, 19 Mar 2023 21:22:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679286158;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bLXhUvKnHXgKEr0Ttn0oR6j5Cn4+cPvwzE2+42+f0uk=;
-        b=m89a8PcQWBojMD5M5NayAY/thDhTqrI5mhDMQ/qZJ9at2HakC7UQPG79sshlGjC4Nf
-         LyI9HfW/wuU079hZCVuqTANn102cXlk+v2u6MvXGRpC8rj+x7rJTSy4Y96mJFQVJDOtQ
-         twbkcuuIlBuAwCPWf3oqkNPyR/CnwUegdEAL/tDmvGQYEohyBA/yOl+v3tlOkIv++g1C
-         J6ifPa7GsPOiLHgGP2ZPQbjWzJrT0ZLjNMNi2p2BXZ7c7E6lY6zajAGZsO0JFoa3IJGi
-         /zdo8Q2aE3HF3+b45ed6f5SYSqRU7om2pssuIs8SlYiMCJoBu+KMPxRErmoUl7cb3vLQ
-         eJwg==
-X-Gm-Message-State: AO0yUKV3/VmKcjJGflSAwROgDuF1fxriC7nrj5cTgZz+e+oIOLvVRC0T
-        Umi5ksFkJiWZJMRY5tViVY+hWUAJjxuDkSBI
-X-Google-Smtp-Source: AK7set9Fvk1ODFIfFQLYA9seh+p96kxjQ9q+WLDoH0md+Cb8Gpl0tEztzniSyvfZKPYzbnXNJDTWTw==
-X-Received: by 2002:a17:902:e849:b0:1a0:616d:7618 with SMTP id t9-20020a170902e84900b001a0616d7618mr17458753plg.51.1679286158333;
-        Sun, 19 Mar 2023 21:22:38 -0700 (PDT)
-Received: from localhost ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id 12-20020a170902c24c00b0019e5fc3c7e6sm5505632plg.101.2023.03.19.21.22.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 21:22:38 -0700 (PDT)
-From:   Hongyu Xie <xiehongyu1@kylinos.cn>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hongyu Xie <xiehongyu1@kylinos.cn>, sunke <sunke@kylinos.cn>
-Subject: [PATCH -next] usb: xhci: do not free an empty cmd ring
-Date:   Mon, 20 Mar 2023 12:22:23 +0800
-Message-Id: <20230320042223.676505-1-xiehongyu1@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229582AbjCTG2d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Mar 2023 02:28:33 -0400
+Received: from mail-m11879.qiye.163.com (mail-m11879.qiye.163.com [115.236.118.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468F66197;
+        Sun, 19 Mar 2023 23:28:29 -0700 (PDT)
+Received: from [172.16.12.33] (unknown [58.22.7.114])
+        by mail-m11879.qiye.163.com (Hmail) with ESMTPA id 56DF6680439;
+        Mon, 20 Mar 2023 14:28:17 +0800 (CST)
+Message-ID: <6f188a87-f209-b637-27d6-13dba45906d9@rock-chips.com>
+Date:   Mon, 20 Mar 2023 14:28:17 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 4/4] usb: typec: tcpm: fix source caps may lost after soft
+ reset
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        heiko@sntech.de, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        huangtao@rock-chips.com, william.wu@rock-chips.com,
+        jianwei.zheng@rock-chips.com, yubing.zhang@rock-chips.com,
+        wmc@rock-chips.com
+References: <20230313025843.17162-1-frank.wang@rock-chips.com>
+ <20230313025843.17162-5-frank.wang@rock-chips.com>
+ <f5650fa4-db16-b1e4-f5b4-917fbcabb415@roeck-us.net>
+ <867179bc-a21f-5479-f27f-2e17fc5a9a01@rock-chips.com>
+ <7038030f-1d7a-4c91-a255-bec73847b7c9@roeck-us.net>
+Content-Language: en-US
+From:   Frank Wang <frank.wang@rock-chips.com>
+In-Reply-To: <7038030f-1d7a-4c91-a255-bec73847b7c9@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQk9CSFZCHR9PQ0IdS05KTB1VEwETFh
+        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSkpLSEpMVUpLS1VLWQ
+        Y+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MxA6Nyo4DT0QTBI0TxMKAxcd
+        CA4wCzdVSlVKTUxCSUJITUJDSUhNVTMWGhIXVR0JGhUQVQwaFRw7CRQYEFYYExILCFUYFBZFWVdZ
+        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFNQ0lCNwY+
+X-HM-Tid: 0a86fdb44ebf2eb5kusn56df6680439
+X-HM-MType: 1
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It was first found on HUAWEI Kirin 9006C platform with a builtin xhci
-controller during stress cycle test(stress-ng, glmark2, x11perf, S4...).
+Hi Guenter,
 
-phase one:
-[26788.706878] PM: dpm_run_callback(): platform_pm_thaw+0x0/0x68 returns -12
-[26788.706878] PM: Device xhci-hcd.1.auto failed to thaw async: error -12
-...
-phase two:
-[28650.583496] [2023:01:19 04:43:29]Unable to handle kernel NULL pointer dereference at virtual address 0000000000000028
-...
-[28650.583526] user pgtable: 4k pages, 39-bit VAs, pgdp=000000027862a000
-[28650.583557] [0000000000000028] pgd=0000000000000000
-...
-[28650.583587] pc : xhci_suspend+0x154/0x5b0
-[28650.583618] lr : xhci_suspend+0x148/0x5b0
-[28650.583618] sp : ffffffc01c7ebbd0
-[28650.583618] x29: ffffffc01c7ebbd0 x28: ffffffec834d0000
-[28650.583618] x27: ffffffc0106a3cc8 x26: ffffffb2c540c848
-[28650.583618] x25: 0000000000000000 x24: ffffffec82ee30b0
-[28650.583618] x23: ffffffb43b31c2f8 x22: 0000000000000000
-[28650.583618] x21: 0000000000000000 x20: ffffffb43b31c000
-[28650.583648] x19: ffffffb43b31c2a8 x18: 0000000000000001
-[28650.583648] x17: 0000000000000803 x16: 00000000fffffffe
-[28650.583648] x15: 0000000000001000 x14: ffffffb150b67e00
-[28650.583648] x13: 00000000f0000000 x12: 0000000000000001
-[28650.583648] x11: 0000000000000000 x10: 0000000000000a80
-[28650.583648] x9 : ffffffc01c7eba00 x8 : ffffffb43ad10ae0
-[28650.583648] x7 : ffffffb84cd98dc0 x6 : 0000000cceb6a101
-[28650.583679] x5 : 00ffffffffffffff x4 : 0000000000000001
-[28650.583679] x3 : 0000000000000011 x2 : 0000000000e2cfa8
-[28650.583679] x1 : 00000000823535e1 x0 : 0000000000000000
+On 2023/3/20 11:35, Guenter Roeck wrote:
+> On Mon, Mar 20, 2023 at 10:38:35AM +0800, Frank Wang wrote:
+>> Hi Guenter,
+>>
+>> On 2023/3/17 20:58, Guenter Roeck wrote:
+>>> On 3/12/23 19:58, Frank Wang wrote:
+>>>> Invoke set_pd_rx() may flush the RX FIFO of PD controller, so do
+>>>> set_pd_rx() before sending Soft Reset in case Source caps may be flushed
+>>>> at debounce time between SOFT_RESET_SEND and SNK_WAIT_CAPABILITIES
+>>>> state.
+>>>>
+>>> Isn't that a problem of the fusb302 driver that it flushes its buffers
+>>> unconditionally when its set_pd_rx() callback is called ?
+>>>
+>>> Guenter
+>>>
+>> The story goes like this,  the fusb302 notified SOFT_RESET completion to
+>> TCPM and began to receive the Source Caps automatically,
+>> TCPM got completion from fusb302 and changed state to SNK_WAIT_CAPABILITIES
+>> and invoked set_pd_rx() callback. However, the
+>> fusb302 or TCPM's worker may be not scheduled in time, set_pd_rx() would be
+>> performed after the Source Caps packets had received
+>> into fusb302's FIFO, even after the GoodCRC (Source Caps) had be replied.
+>>
+> Yes, but the fusb302 driver clears its fifo in the set_pd_rx() callback.
+> I see that as a problem in the fusb302 driver( it could clear its fifo when
+> it notifies the TCPM that soft reset is complete, for example), and I am
+> hesitant to work around that problem in the tcpm code.
+>
+> Guenter
 
-gdb:
-(gdb) l *(xhci_suspend+0x154)
-0xffffffc010b6cd44 is in xhci_suspend (/.../drivers/usb/host/xhci.c:854).
-849	{
-850		struct xhci_ring *ring;
-851		struct xhci_segment *seg;
-852
-853		ring = xhci->cmd_ring;
-854		seg = ring->deq_seg;
-(gdb) disassemble 0xffffffc010b6cd44
-...
-0xffffffc010b6cd40 <+336>:	ldr	x22, [x19, #160]
-0xffffffc010b6cd44 <+340>:	ldr	x20, [x22, #40]
-0xffffffc010b6cd48 <+344>:	mov	w1, #0x0                   	// #0
+Okay, I shall abandon this from the series.
 
-During phase one, platform_pm_thaw called xhci_plat_resume which called
-xhci_resume. The rest possible calling routine might be
-xhci_resume->xhci_init->xhci_mem_init, and xhci->cmd_ring was cleaned in
-xhci_mem_cleanup before xhci_mem_init returned -ENOMEM.
+BR.
+Frank
 
-During phase two, systemd was tring to hibernate again and called
-xhci_suspend, then xhci_clear_command_ring dereferenced xhci->cmd_ring
-which was already NULL.
+>> So make forward set_pd_rx() process before PD_CTRL_SOFT_RESET sent at
+>> SOFT_RESET_SEND state can cleanup the context in our side
+>> and ensure the right PD commucation. I am not sure whether it is sensible?
+>>
+>> BR.
+>> Frank
+>>
+>>>> Without this patch, in PD charger stress test, the FUSB302 driver may
+>>>> occur the following exceptions in power negotiation stage.
+>>>>
+>>>> [ ...]
+>>>> [ 4.512252] fusb302_irq_intn
+>>>> [ 4.512260] AMS SOFT_RESET_AMS finished
+>>>> [ 4.512269] state change SOFT_RESET_SEND ->SNK_WAIT_CAPABILITIES
+>>>> [rev3 NONE_AMS]
+>>>> [ 4.514511] pd := on
+>>>> [ 4.514516] pending state change SNK_WAIT_CAPABILITIES
+>>>> ->HARD_RESET_SEND @ 310 ms [rev3 NONE_AMS]
+>>>> [ 4.515428] IRQ: 0x51, a: 0x00, b: 0x01, status0: 0x93
+>>>> [ 4.515431] IRQ: BC_LVL, handler pending
+>>>> [ 4.515435] IRQ: PD sent good CRC
+>>>> [ 4.516434] PD message header: 0
+>>>> [ 4.516437] PD message len: 0
+>>>> [ 4.516444] PD RX, header: 0x0 [1]
+>>>>
+>>>> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
+>>>> ---
+>>>>    drivers/usb/typec/tcpm/tcpm.c | 11 +++++++----
+>>>>    1 file changed, 7 insertions(+), 4 deletions(-)
+>>>>
+>>>> diff --git a/drivers/usb/typec/tcpm/tcpm.c
+>>>> b/drivers/usb/typec/tcpm/tcpm.c
+>>>> index 9e583060e64fc..ba6bf71838eed 100644
+>>>> --- a/drivers/usb/typec/tcpm/tcpm.c
+>>>> +++ b/drivers/usb/typec/tcpm/tcpm.c
+>>>> @@ -4321,10 +4321,12 @@ static void run_state_machine(struct
+>>>> tcpm_port *port)
+>>>>            tcpm_set_state(port, unattached_state(port), 0);
+>>>>            break;
+>>>>        case SNK_WAIT_CAPABILITIES:
+>>>> -        ret = port->tcpc->set_pd_rx(port->tcpc, true);
+>>>> -        if (ret < 0) {
+>>>> -            tcpm_set_state(port, SNK_READY, 0);
+>>>> -            break;
+>>>> +        if (port->prev_state != SOFT_RESET_SEND) {
+>>>> +            ret = port->tcpc->set_pd_rx(port->tcpc, true);
+>>>> +            if (ret < 0) {
+>>>> +                tcpm_set_state(port, SNK_READY, 0);
+>>>> +                break;
+>>>> +            }
+>>>>            }
+>>>>            /*
+>>>>             * If VBUS has never been low, and we time out waiting
+>>>> @@ -4603,6 +4605,7 @@ static void run_state_machine(struct tcpm_port
+>>>> *port)
+>>>>        case SOFT_RESET_SEND:
+>>>>            port->message_id = 0;
+>>>>            port->rx_msgid = -1;
+>>>> +        port->tcpc->set_pd_rx(port->tcpc, true);
+>>>>            if (tcpm_pd_send_control(port, PD_CTRL_SOFT_RESET))
+>>>>                tcpm_set_state_cond(port, hard_reset_state(port), 0);
+>>>>            else
 
-So if xhci->cmd_ring is NULL, xhci_clear_command_ring just return.
-
-Co-developed-by: sunke <sunke@kylinos.cn>
-Signed-off-by: sunke <sunke@kylinos.cn>
-Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
----
- drivers/usb/host/xhci.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 6183ce8574b1..8b79ad2955e5 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -919,6 +919,10 @@ static void xhci_clear_command_ring(struct xhci_hcd *xhci)
- {
- 	struct xhci_ring *ring;
- 	struct xhci_segment *seg;
-+	if (!xhci->cmd_ring) {
-+		xhci_err(xhci, "Empty cmd ring");
-+		return;
-+	}
- 
- 	ring = xhci->cmd_ring;
- 	seg = ring->deq_seg;
 -- 
-2.34.1
+底层平台部 王明成（Frank Wang）
+******************************************
+公司：瑞芯微电子股份有限公司
+地址：福建省福州市铜盘路软件大道89号软件园A区21号楼
+邮编：350003
+Tel：0591-83991906转8960（分机号）
+E-mail：frank.wang@rock-chips.com
+********************************************************************
 
