@@ -2,104 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19FCE6C0E3C
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Mar 2023 11:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C21706C0E9A
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Mar 2023 11:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjCTKIh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Mar 2023 06:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
+        id S230036AbjCTKU1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Mar 2023 06:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjCTKIU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Mar 2023 06:08:20 -0400
-Received: from mail-m11879.qiye.163.com (mail-m11879.qiye.163.com [115.236.118.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7442528C;
-        Mon, 20 Mar 2023 03:07:51 -0700 (PDT)
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by mail-m11879.qiye.163.com (Hmail) with ESMTPA id 858E76802E6;
-        Mon, 20 Mar 2023 18:07:16 +0800 (CST)
-From:   Frank Wang <frank.wang@rock-chips.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, heiko@sntech.de
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com,
-        Frank Wang <frank.wang@rock-chips.com>
-Subject: [PATCH v2 3/3] usb: typec: tcpm: add get max power support
-Date:   Mon, 20 Mar 2023 18:07:11 +0800
-Message-Id: <20230320100711.3708-4-frank.wang@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230320100711.3708-1-frank.wang@rock-chips.com>
-References: <20230320100711.3708-1-frank.wang@rock-chips.com>
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQx1KGlYYH0hOTRofGktPGkNVEwETFh
-        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSkpLSEpMVUpLS1VLWQ
-        Y+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NDo6SQw5Qj0OCxFLSj0LHzUW
-        HSpPCTZVSlVKTUxCSEtNQ0hMTUtDVTMWGhIXVR0JGhUQVQwaFRw7CRQYEFYYExILCFUYFBZFWVdZ
-        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFIS05NNwY+
-X-HM-Tid: 0a86fe7ccb902eb5kusn858e76802e6
-X-HM-MType: 1
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S230095AbjCTKUX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Mar 2023 06:20:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850FD12CC1;
+        Mon, 20 Mar 2023 03:20:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1ED2BB80DE3;
+        Mon, 20 Mar 2023 10:20:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C91C7C4339C;
+        Mon, 20 Mar 2023 10:20:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679307617;
+        bh=CJDEBGjmfCXyMHYKOQOzjrh6ZWjbwqVYaba0I0x1wsM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=uLWCXkp4mKcylIHW+vbHFgezgHl8IYC6k03gowknPjRyocDqTpRhH48EbPAJeAaE9
+         mkhA5cL10l2RZ2dKrtWUBhVmhTgJTRzuVJz8uPL54lCwSiO9kN0CLWT9vhOu5e+exr
+         U7WmnKSqKc11bGMK2ksQg4+URkAIIEH2hwri/GFi4I5xZvZR4foDM9a26bOT23FNMT
+         HuZdQib75/AoLRZFfPkLuvcXUtLBR+G1ix+TJfKroecbdaLyNJaZhBB4niV3x85OuI
+         ozBAtD9Ut/sZz7jZzw8sZCGfO1QX4iBBIvHunVNgcw5c1QPoy+K1FWDR20M88V87LJ
+         uQVLTjh7lbHlg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A9EACE2A047;
+        Mon, 20 Mar 2023 10:20:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] usb: plusb: remove unused pl_clear_QuickLink_features
+ function
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167930761769.15318.7226219185357457772.git-patchwork-notify@kernel.org>
+Date:   Mon, 20 Mar 2023 10:20:17 +0000
+References: <20230318131342.1684103-1-trix@redhat.com>
+In-Reply-To: <20230318131342.1684103-1-trix@redhat.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
+        stern@rowland.harvard.edu, studentxswpy@163.com,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Traverse fixed pdos to calculate the maximum power that the charger
-can provide, and it can be get by POWER_SUPPLY_PROP_INPUT_POWER_LIMIT
-property.
+Hello:
 
-Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 13830b5e2d09f..d6ad3cdf9e4af 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -6320,6 +6320,27 @@ static int tcpm_psy_get_current_now(struct tcpm_port *port,
- 	return 0;
- }
- 
-+static int tcpm_psy_get_input_power_limit(struct tcpm_port *port,
-+					  union power_supply_propval *val)
-+{
-+	unsigned int src_mv, src_ma, max_src_mw = 0;
-+	unsigned int i, tmp;
-+
-+	for (i = 0; i < port->nr_source_caps; i++) {
-+		u32 pdo = port->source_caps[i];
-+
-+		if (pdo_type(pdo) == PDO_TYPE_FIXED) {
-+			src_mv = pdo_fixed_voltage(pdo);
-+			src_ma = pdo_max_current(pdo);
-+			tmp = src_mv * src_ma / 1000;
-+			max_src_mw = tmp > max_src_mw ? tmp : max_src_mw;
-+		}
-+	}
-+
-+	val->intval = max_src_mw;
-+	return 0;
-+}
-+
- static int tcpm_psy_get_prop(struct power_supply *psy,
- 			     enum power_supply_property psp,
- 			     union power_supply_propval *val)
-@@ -6349,6 +6370,9 @@ static int tcpm_psy_get_prop(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_CURRENT_NOW:
- 		ret = tcpm_psy_get_current_now(port, val);
- 		break;
-+	case POWER_SUPPLY_PROP_INPUT_POWER_LIMIT:
-+		tcpm_psy_get_input_power_limit(port, val);
-+		break;
- 	default:
- 		ret = -EINVAL;
- 		break;
+On Sat, 18 Mar 2023 09:13:42 -0400 you wrote:
+> clang with W=1 reports
+> drivers/net/usb/plusb.c:65:1: error:
+>   unused function 'pl_clear_QuickLink_features' [-Werror,-Wunused-function]
+> pl_clear_QuickLink_features(struct usbnet *dev, int val)
+> ^
+> This static function is not used, so remove it.
+> 
+> [...]
+
+Here is the summary with links:
+  - usb: plusb: remove unused pl_clear_QuickLink_features function
+    https://git.kernel.org/netdev/net/c/7d722c9802d4
+
+You are awesome, thank you!
 -- 
-2.17.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
