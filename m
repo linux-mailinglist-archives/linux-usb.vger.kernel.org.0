@@ -2,151 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1BC6C1D90
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Mar 2023 18:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 696C16C1E6A
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Mar 2023 18:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232298AbjCTRR3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Mar 2023 13:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38348 "EHLO
+        id S229980AbjCTRqP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Mar 2023 13:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232637AbjCTRRH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Mar 2023 13:17:07 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBD7125AD
-        for <linux-usb@vger.kernel.org>; Mon, 20 Mar 2023 10:13:03 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id y14so11100649wrq.4
-        for <linux-usb@vger.kernel.org>; Mon, 20 Mar 2023 10:13:03 -0700 (PDT)
+        with ESMTP id S229901AbjCTRpo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Mar 2023 13:45:44 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7C920068
+        for <linux-usb@vger.kernel.org>; Mon, 20 Mar 2023 10:42:01 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id b20so17007456edd.1
+        for <linux-usb@vger.kernel.org>; Mon, 20 Mar 2023 10:42:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679332288;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=706WFCInGYoTO+FPwORemuFUi5ASSP3+w8lBv2dgJY0=;
-        b=Gcri07HXDQZnMlez6E78X9YlaJbZ+LAdcQDJ42m6tVl0NQD7xi3zN7UTqa34epNHM7
-         edK2CREx8HTMuySsavDwZdjg3+RWKxsvPOCYhKiTI+i6MSbMr4wXRc5oc4Mr0O44T1lM
-         fFLWgDs4tMdeWmSkOgm97LKz7LO9KpgMedGeCUixNt68PzLSz39coD1Q5jxGw7XcWzoI
-         hLaJ5JyTuweTRkQuklSe8TV4c96OKYWn8SdXb/EphxgvuX+pbCWVMCnREkXaeHi8AaMQ
-         sOC30YgviU2O64ydvqLDHAcA6gVR6NF3VWv416H1UQhI+Y6fdxsdZFI/8XHnoR1GtDW4
-         8iqQ==
+        d=gmail.com; s=20210112; t=1679334111;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xu/5VY+GMl20szyPzaR/pEliU5nUFtwkgRgRzvdeeks=;
+        b=n6VkiZSl5lvoMYFFvNH/ib80yHEvDoMOtObZq+B/l5LX1hnPp4dtnxmeMHOXPyorBX
+         +dTpvF0/ehMgDqRAU+opPsgI91o1ssjUgBEZX7PJo81C1x4a7+CUgT/rsF1D/1jFFbfi
+         0uuNc2UJWfVUrxxzSavkcX0f41jbT0Pdn4yL4ZgILogefjGMX4/1vXM/reuA/Xc6aLu/
+         dCowmIbfAHO2DD4c04wGmGvIA0JX0Nj7CWvozw3FYzrJYS5cCj7y61dxPQfilU4G1SmR
+         /V8EgOekrAOBIrLxi7CPCydVez+KdoL5ITJXiO+m3i4J8e566MPqJTbDQ8ySUu+HDG9m
+         Ytqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679332288;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1679334111;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=706WFCInGYoTO+FPwORemuFUi5ASSP3+w8lBv2dgJY0=;
-        b=bvSSK5I2/UJWg6CRPPcGSe2SYwIJVUwTF4QORhIgJuheggx4LRRuv1Xumxr38D+VgB
-         kFQ5AAa+v7QVAfdOZ3b9g9uz9wmtW35AVIK5xHcXhP3Gs40yf8k6I1xeVNfCF5Neqs+D
-         0bMrRxtgqvBjha8Vhek6BbQiyfreLifAcmwksMskRe5AQsi7FfZrkdioaNCEalqOdCkz
-         7G3Rejz6rjvM81oWF0OsUwHdIHhXuDdg9ZkLJFO/Ozp3I1LtEqTmv3/hOQ+uwvr60khe
-         XFW0wcnucscYkc1lnAlNp3D6GAPaN3Ag1BiMnI9wIoJ8Ee5ATa2gbnwhbxzf3GuHTuMS
-         zIfg==
-X-Gm-Message-State: AO0yUKUZuvA1hC/M9ZSAvllZiF/vuhNKiOknfFT9bZQLR0NeNimMm0p4
-        ep9BmZaV4SgSFu7+J77yM43rwQ==
-X-Google-Smtp-Source: AK7set+qBbsK8y3erVftw+UbVluDwKIM+MnwxIS2tnzu7s1GG+PMcB/ALTg8wu5jShtIOlAB4oRLlQ==
-X-Received: by 2002:a5d:538b:0:b0:2cf:ea5f:6de with SMTP id d11-20020a5d538b000000b002cfea5f06demr83356wrv.14.1679332288535;
-        Mon, 20 Mar 2023 10:11:28 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:4f6f:868d:9c7b:5ab1? ([2a01:e0a:982:cbb0:4f6f:868d:9c7b:5ab1])
-        by smtp.gmail.com with ESMTPSA id f11-20020a5d4dcb000000b002cfe3f842c8sm9281174wru.56.2023.03.20.10.11.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 10:11:28 -0700 (PDT)
-Message-ID: <0f878db9-a0da-f5f9-fe78-37551b85b268@linaro.org>
-Date:   Mon, 20 Mar 2023 18:11:26 +0100
+        bh=xu/5VY+GMl20szyPzaR/pEliU5nUFtwkgRgRzvdeeks=;
+        b=GkKtg5LekjgQa7F8OXzkRT5r4luMGqPUHc3GdpyVucdORfsJ9gW9/P/AOm+MgnBxI5
+         YFIMf8CelTiJ6u2URYt0pZM05JLBqGx1cjw3oD7YetjsvQg13M7XyClY15rYAhPi1kyj
+         KXp37g4EXWJEPVoy7bRB8NtGa3pRaVEXfiMqvkaQJB8raNKCZ3D2QoGbLGdW8+JiCuvA
+         jisn77WqwSPOpWIeeo0qE/nXpdhVHA/LKEBLsJ7k65HGeaWI6W11Pj560Q0PAUEILZIo
+         HkdvP4bRNZonOKrP37KGXxjctFSLqDGqxuQTxzoM3aigR1U0ZAnSf1Iu2tvp6ynQEp/I
+         9N5w==
+X-Gm-Message-State: AO0yUKW6KgacOWocCf1eW3smNGXIGcEb6GDmvW4gl3kz0Pa4PutsPC0N
+        JoABR5N3LFqgObeC1oxH9n9cZVh2W7EuF449ndiDUzEE5as=
+X-Google-Smtp-Source: AK7set/H7/FA8A98kKzqAKeOIzUQ8DZ1ln0zEsFiQyo8FTPJj8wI65xievrq2ZzUDVbO9fSsU2SkVQzISNEbKAXfj0o=
+X-Received: by 2002:a17:907:119a:b0:931:6a82:ff26 with SMTP id
+ uz26-20020a170907119a00b009316a82ff26mr4604981ejb.7.1679334111154; Mon, 20
+ Mar 2023 10:41:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v4 09/12] arm64: dts: qcom: sm8350-hdk: add pmic glink
- node
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230130-topic-sm8450-upstream-pmic-glink-v4-0-38bf0f5d07bd@linaro.org>
- <20230130-topic-sm8450-upstream-pmic-glink-v4-9-38bf0f5d07bd@linaro.org>
- <af8cd242-2a78-cac3-d307-ce6ab0810308@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <af8cd242-2a78-cac3-d307-ce6ab0810308@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From:   =?UTF-8?Q?G=C3=A1bor_Stefanik?= <netrolller.3d@gmail.com>
+Date:   Mon, 20 Mar 2023 18:41:37 +0100
+Message-ID: <CA+XFjiqbAXy4cODwmHyLQwmpG_ECVzS6m6c_LYe6=m7hHt7c7Q@mail.gmail.com>
+Subject: RFC/Proposal: USB-PD state handoff via DT or ACPI, primarily for
+ batteryless systems
+To:     linux@roeck-us.net
+Cc:     USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18/03/2023 15:00, Konrad Dybcio wrote:
-> 
-> 
-> On 17.03.2023 16:04, Neil Armstrong wrote:
->> Add the pmic glink node linked with the DWC3 USB controller
->> switched to OTG mode and tagged with usb-role-switch.
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
-> 
-> [...]
-> 
->>   &usb_1_dwc3 {
->> -	/* TODO: Define USB-C connector properly */
->> -	dr_mode = "peripheral";
->> +	dr_mode = "otg";
->> +	usb-role-switch;
->> +
->> +	ports {
-> You created these in patch [6/12]!
+As of today, there are several SBCs on the market powered exclusively
+via a full-featured USB-C port, using USB-PD. The Radxa ROCK 5B is
+perhaps the best known example. These boards typically use a "thin"
+USB-C controller and PD PHY chip such as the Fairchild/Onsemi
+FUSB302B, requiring the USB-PD state machine to be implemented in
+software.
 
-Damn!
+Bringing up the USB-C port on such boards presents unique challenges:
+- For full USB, PD & alternate mode functionality, the state machine
+needs to be implemented in the HLOS (typically the Linux kernel).
+However, the USB-PD specification allows power sources to have a
+timeout (typically 5 seconds) within which a newly attached sink must
+initiate PD communications - depending on the boot process, this may
+be difficult to meet reliably. Power supplies tend to respond to
+"late" PD communication in rather problematic ways (not responding at
+all, forcing a hard reset, just straight up cutting power, or even
+cycling power 3 times in the case of one of my power supplies), so the
+5 second timeout is not safe to just ignore.
+- To ensure timely PD communication start on boot, it's tempting to
+implement a PD driver & state machine in the bootloader or firmware.
+This, however, requires either implementing some kind of runtime
+firmware<->OS interface (so the firmware can control the PD PHY, while
+the OS can control the PD state machine & policy engine in the
+firmware), or abandoning full functionality of the port, and
+downgrading it to a power-only USB-C port.
+- In theory, one can get the best of both worlds by implementing a
+simpler PD driver in the firmware, and then handing off to a more
+fully functional driver in the operating system, once it boots fully.
+This is analogous to how display outputs are typically managed.
+Unfortunately, this only results in further problems, as the OS-side
+driver needs to discover the state of the USB-C connection and the
+existing PD contract without resetting the port (as a reset could
+involve a VBUS cut, and thus cause a boot loop, because the VBUS is
+the board's sole source of power). The USB-PD standard seems to cater
+to this situation using the "soft reset" feature - unfortunately, in
+my testing, few (if any) PD power supplies implement the soft reset
+mechanism correctly. Most supplies will accept and ACK a soft reset,
+only to then issue a hard reset of their own in response. Others send
+a garbled PD packet in response, and then cut power.
 
-Thx!
+The alternative to a soft reset would be just retrying communication
+with different parameters (e.g. sequence number), until a valid reply
+is received. This works with some power supplies, which correctly
+ignore out-of-sequence PD communications, but in others, it causes a
+hard reset or VBUS cut, just like a proper soft reset packet would.
 
-Neil
+This leaves no reliable way to have the OS driver take over without
+assistance from the firmware driver. To facilitate such assisted
+handovers, a standardized way is needed for the firmware driver to
+inform the OS driver of the state of each PD-capable USB-C port on the
+system.
 
-> 
-> Konrad
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +
->> +		port@0 {
->> +			reg = <0>;
->> +
->> +			usb_1_dwc3_hs: endpoint {
->> +				remote-endpoint = <&pmic_glink_hs_in>;
->> +			};
->> +		};
->> +
->> +		port@1 {
->> +			reg = <1>;
->> +
->> +			usb_1_dwc3_ss: endpoint {
->> +				remote-endpoint = <&pmic_glink_ss_in>;
->> +			};
->> +		};
->> +	};
->> +};
->> +
->> +&usb_1_dwc3_hs {
->> +	remote-endpoint = <&pmic_glink_hs_in>;
->> +};
->> +
->> +&usb_1_dwc3_ss {
->> +	remote-endpoint = <&pmic_glink_ss_in>;
->>   };
->>   
->>   &usb_1_hsphy {
->>
+For a successful handoff, at lest 8 bits of data needs to be passed up
+to the OS:
+- Sequence number: 3 bits
+- Spec version: 2 bits
+- Current port data role: 1 bit
+- Current port power role: 1 bit (may be omitted if the only goal is
+to support batteryless systems with USB-PD as the sole power source,
+as in this case, this will always be "sink", but systems with a
+battery may want to do a handoff for faster boot as well, and they
+would want to indicate "source" here if that's what was negotiated)
+* Port orientation: 1 bit (not needed for FUSB302-based systems as one
+can probe port orientation passively without the port partner
+detecting a reset, but other PD chips may not offer this option)
 
+Additionally, passing the active PDO to the OS as part of the handoff
+data could also be useful.
+
+Considering the market for SBCs with the 3 most popular architectures
+(x86, ARM64 and RISC-V), they all seem to fall into 3 categories as
+far as their boot process goes (u-boot or vendor bootloader + DT, UEFI
++ DT, UEFI + ACPI). Each of these boot processes potentially require a
+different solution to the PD handoff problem.
+
+I propose the following handoff mechanisms:
+- For Device Tree systems with non-UEFI bootloaders (e.g. u-boot
+without bootefi support), a new DT parameter could be defined on the
+USB-C port device. e.g. of the form "pd-state =3D 0x8b;" which the
+bootloader/firmware would update before passing control to the OS
+kernel. This requires the bootloader to parse and modify the FDT blob,
+but has no other dependencies, e.g. no need for runtime variable
+support.
+- For bootloaders implementing UEFI but not ACPI, FDT blob
+modification can be avoided by passing the handoff data in a UEFI
+variable. The device tree can then reference this variable by name
+(e.g. pd-handoff-variable =3D "Pd0001" - different for each port on a
+system with multiple PD-capable Type C ports), so when the operating
+system boots, the kernel driver can retrieve this variable and
+continue PD communications seamlessly.
+- Finally, for bootloaders implementing ACPI, the DSDT entry for the
+Type C port could include a new ACPI control method, e.g.
+"Method(PDST, 0, NotSerialized)". This method, when called by the
+operating system, returns the USB-PD state of the port at handoff, so
+the kernel driver can pick up PD communication where the firmware has
+left off. Unlike in the DT case, there is no need for separate UEFI vs
+non-UEFI mechanisms here, because the ACPI Source Language is
+versatile enough to enable firmware vendors to implement this control
+method in a variety of ways (e.g. by reading a firmware variable,
+reading a fixed memory location, calling a runtime service, or even
+just by having the firmware patch the value returned by the method in
+the DSDT AML itself).
+
+Additionally, it would be useful for the OS-side driver to know if a
+PD-enabled Type-C port is critical for the power supply of the system,
+so it can e.g. avoid triggering hard resets on that port. For Device
+Tree systems, the easy solution may be a boolean property, however I
+wonder if it would be more descriptive to actually have the Type-C
+port declare a regulator it produces (representing VBUS), and then
+have the rest of the system's power regulators depend on it. The ACPI
+equivalent to this would be having the port produce a power resource,
+and have the rest of the system consume it.
+
+Ideas, comments, etc. welcome.
+
+Sincerely,
+G=C3=A1bor Stefanik
