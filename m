@@ -2,73 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D78D6C2C08
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Mar 2023 09:12:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2643F6C2CE0
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Mar 2023 09:48:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbjCUIMa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Mar 2023 04:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
+        id S230367AbjCUIsZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Mar 2023 04:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbjCUIMW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Mar 2023 04:12:22 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F101298FF;
-        Tue, 21 Mar 2023 01:12:06 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id az3-20020a05600c600300b003ed2920d585so10563801wmb.2;
-        Tue, 21 Mar 2023 01:12:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679386324;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=8aDzrMXQdV9J471YpQnPMGExzHql6OoocK9G5mNgnzM=;
-        b=dzVn+Ae2Zyo9CxmjF9Rm2FdEWEZ75+p+aInqZaR+yZIsoicphru4jHUx8LPnFR9drp
-         4DjXdDadwCuBXRKku7l4v9WydOUdJBC8Hrh1v+Uj49ouTf48SGjwuGILJgAv9F8EwdOo
-         y4djaqYExOYPD1ZrHBxeDVj7U1IQNX3KmhGepumakSxybmTV9UhsYZ1FZQT30u2XEJUy
-         7duXlwC5tDDm3cpavvBDI0Myl4BrKDgr7ZmVz/zCuHjUcIgkpQkj6ScLWLQ/hWw1vBBe
-         ihRw6zvGa3OHkGUK73dytOfYqxWB462WubLEE+YA4jLjNUVQb7ArEnd0rgK7y0qzjkjy
-         ttaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679386324;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8aDzrMXQdV9J471YpQnPMGExzHql6OoocK9G5mNgnzM=;
-        b=1V0qSsg74cCgWdA6XmdGTdkL6stXDl/las/NKaJ7t5t4aGJTHHx2RUP7KQkV/ByJac
-         ndtTVNo6fMKpJsvqxIhuKBZcOBXpWL0vsziyCdAQy7xBNlY0+CxicvIprjJEm7Z9Z4Gs
-         FVDRCowttUl/+T8ELtiaRP0yzCyDwybj6L3PadqdwFxx2+DHVFTQ+DHzevcdFMC87vZW
-         bUqmXTmsF7tbCP7AezBX8LjjodOZEwGk0I8bjMETq9dmHJM28jhAwunAzntLGrHGTySe
-         U9lNMY8mVW2cNHljPF5B6HxGvlT4zwBxjx5TPR3bi2iie4IpQcTX9iLebOR2QBSFS/BD
-         vvYg==
-X-Gm-Message-State: AO0yUKUbAQu3prnMWo94nUGYJk/2EFgeI5UywMiTZBc5RdrkABSPafEy
-        3n3TZEf5pga4X0mBphK2erf9dHhqcLXPEg==
-X-Google-Smtp-Source: AK7set+KN4Us/vSp94x/rHx+6HRRhEssUtYVF57P0e+mtEzkVI95x4Q1Qm1GKwvXRB3LuekEMz4JcQ==
-X-Received: by 2002:a1c:f603:0:b0:3eb:39e7:35fe with SMTP id w3-20020a1cf603000000b003eb39e735femr1512860wmc.30.1679386324310;
-        Tue, 21 Mar 2023 01:12:04 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id s20-20020a7bc394000000b003ee3e075d1csm538583wmj.22.2023.03.21.01.12.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 01:12:03 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 11:12:00 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>,
-        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>
-Subject: Re: [PATCH v12 6/6] usb: gadget: f_ecm: Add suspend/resume and
- remote wakeup support
-Message-ID: <c38b6275-e137-4f32-9232-697b1f188494@kili.mountain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        with ESMTP id S229924AbjCUIr6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Mar 2023 04:47:58 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2086.outbound.protection.outlook.com [40.107.20.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04879497D8;
+        Tue, 21 Mar 2023 01:47:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JGeVHlkrZl0IlnBKA8gOOWgecXUxNu3K0/kNpbMLd2JLPTwbnFL1XnyrAWXq6ty/fiQLq+N0MTNKqQg8+eg8eW86TkXB5Z+QrFqxjbVgxF8DkH8sYCK1vJZKLRCnDOU5aYw4bhYxGgvGcxpJaK2vBTjiZLz5ivrukXLropdT8DF7haNyisTANaKyYE9XbBKzBxK3U7Y2Qf552TqTLTfZIEPLRl3Sik+tM0NfNgKO7CyRbxXcanfAMeeOV1xAMKL7nXNFh12zpQgga/B6fcKG7JN4KDYRrQxzjr6VHjKeCx8loY//GAP7kkrC9FqMOGKBimW45pykVhf5MJXH5wUTGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=D7qRzmrqVGtNdwFdjUzGULAXUH0p1QxsxHmlky9vDwo=;
+ b=h1fShB7BjHVnc+blMthdW76yqdLYxy13m5/2CGgf/pxYb+qB28B+j+9nrcJny4xccL5y0G9WEyr7gs44XPrkmoc8jI0KOxHCIg8lfwCUxifnL7mS5fiHiEYocy5wYRWOLFoZZFKaedluVt6Omb+8uPgKKNT8Sy1KAl4ATafLFOZtGX25ZpRXdd4l+/1OW9MwRrYbLuqfPTaGh7UhMjEfPtuxfH4CDpCGzKslwp2p3/o+TgOI3fPGNKzRda5c9nCyXP7855vgpkIEyY2R8o8WLRx3osszOhQ7el3F+IhdWPnu68LoGqjXdDgu0AC24HAFNCYkP17Ai+eOADomG3RIGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=D7qRzmrqVGtNdwFdjUzGULAXUH0p1QxsxHmlky9vDwo=;
+ b=Ez/YlTC0VS1BhV2MGOCfuYxP0d+T13LhILi5nKX9tIa7bz+Bf08sghreYJNPLZEr1KKRTSdA/0kwQQw4PiDSS/e/bxqt7uRaRjhI7jXGIzaywHg1P+HDtsAAs1Kkk3Graa1rmvOZ/N3V2TuLD3AvvCYmwxJUO8e+wQ1kseCdX3w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DBBPR04MB7849.eurprd04.prod.outlook.com (2603:10a6:10:1eb::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
+ 2023 08:47:10 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::f55a:cf12:da08:6d2a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::f55a:cf12:da08:6d2a%7]) with mapi id 15.20.6178.037; Tue, 21 Mar 2023
+ 08:47:10 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, xu.yang_2@nxp.com
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V6 00/10] dt-bindings: usb: covert ci-hdrc-usb2/usbmisc-imx to yaml
+Date:   Tue, 21 Mar 2023 16:52:03 +0800
+Message-Id: <20230321085213.1624216-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1679009888-8239-7-git-send-email-quic_eserrao@quicinc.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+Content-Type: text/plain
+X-ClientProxiedBy: SG2P153CA0040.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::9)
+ To DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|DBBPR04MB7849:EE_
+X-MS-Office365-Filtering-Correlation-Id: 292d2f90-7b5b-44a5-b005-08db29e8dba8
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: v2YDkgXslTykc4LwuLDLsEw1ap2wWAaHzfmLLiRwWFd4LGVEYInCe2ylGfM7WaJtd7PDwZFjcpuKKvm6qaFKvnmF4ydHjODrEFN/OCE3Ax9T4byikf+4Iw4PpyhsUZFuzPsaZ25lLthdqWQV1Q8kHaOLMwdYRIMe5je5a4HQeHzQvhNC7WqCFMPuFWq+7nctvTlX4MJP8XPT9LysMLJIBVvufOxFsMKYwJO9QAq4+g/4eGnYc3g50j1iealuFnKuGX1LYCPJY+uKKDbLL0l5YQqKyigM8dG4FBkOPmDNLCl9sXp/SSANdJpWaEceFLR0MC8IE6drJfaR0qq6TukkoqQSR+6zt7z5JmpVBcVNkO+CRfYyswZIkBY4h5bdbfhwbO7zgkoeGEYu4iy1sCYG8QWl24Bto6WK/6EMyoylHG3JT5Mb7QjAuZAPhAJX+x9ysSaiZQeTx2qzjVvOaY5lpr0TLHVPejT+XMtjF/v83QUqBIhlFV8BWzxV3J7ncw7HW/2kLBjKdHjEyILfmFmQGSHaud/0L9LyxdcGgwK1pUuSpiEG3rYL5cpq1d2c+ehSOKVEJjgJ7OUT+Wyxij5MvruHbpVDYt5lAN+A7Lg/DMHEJIgujtRy8/Ru0gmBIwETqStVSx602f4dsRMjTNkl1qU5xgxvVHE+Xg/VB59/c5BhpwlgQcLbIeLKa6+rsLJSGaIEa+gMFzpfEWyN1YiqtA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(396003)(366004)(376002)(39860400002)(451199018)(2616005)(6666004)(6486002)(6512007)(186003)(26005)(6506007)(1076003)(52116002)(38350700002)(38100700002)(478600001)(2906002)(83380400001)(86362001)(66946007)(316002)(7416002)(8676002)(4326008)(5660300002)(8936002)(41300700001)(66476007)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gBnVLYem/PuQ1q9FYqOKiQqqcWB+4rnZq+nTLWi+A9500xi8/Cao2W8fOt29?=
+ =?us-ascii?Q?WpODnDyGMZxKRQM6phAO6HTzb+FwAGvYT/Lt8RkGtdZfIjg8IxO/EVVx7l+n?=
+ =?us-ascii?Q?sHxVdFqERCkJGCOsWS3qkVyYKz1cYnRiaCiVmGGw+83Fns7qwDclJ7F8+5eF?=
+ =?us-ascii?Q?DaM9Ywvygy/aDlwaROmaaa65vy0vF2OExjsP9sJL7OURtajBuIX14XYEJFFy?=
+ =?us-ascii?Q?AAyyjRUndEMxfbrr1PnH3uPOeFHCiA4dbWfKlB0pquhDBvpZSBPctl9Ug+Vt?=
+ =?us-ascii?Q?3E6nGStfgqyEHPE8o1KWNufh8myj7vaxYRaWtqJDm8xyTKPfR5II2CPBdh2o?=
+ =?us-ascii?Q?kOeMVTp3Y1i50XkxaX/FZ1sYwGNuKJkXL5+T/dZZOWLhf03HBaRNCxCnhBSq?=
+ =?us-ascii?Q?pxaHSHHpMzquM3LfT3doxJEwpgiP/Xx7wK/fC4T0VZEhHVf8w4+jya5GC0nd?=
+ =?us-ascii?Q?N6euP14tEGVz7av4Y1+DdfltmpG81L+lUh6zOfY+/9pHPc0yw7UrJ7ZcmpVV?=
+ =?us-ascii?Q?acm0h6lQ7w8qFqbEhUxgITuT87K0jae763hNN1w2yzhAwa0Jklc0nWzQpSai?=
+ =?us-ascii?Q?41vhX3ooV9C0uaGoXyllLNIakqmjqFXbBsZ+nMWHHwpcxWctb3N9l5cbTodI?=
+ =?us-ascii?Q?KuKegQrVa3xxthxsrHMESS01qJOGUHfrTdAFiwto/fI9Jg4urBA9xVcXfrA2?=
+ =?us-ascii?Q?0nOKnuKbktKnCDsSLh32CSLroGQxHEsDjYEv4vFoHEW/i/1QhAlF9/TahuIc?=
+ =?us-ascii?Q?0kJucQjKTmjSZjYLKI04D/sPNsAfQCAXYXew0lzqc3sgji3nvZKjf8sGHDYp?=
+ =?us-ascii?Q?RvC9j0qFEBTpaoZjOV3XLx3V4NK1LTlHV5/6qmHtldxjAmg0yrKAZgajgX4K?=
+ =?us-ascii?Q?7lok4OiLjVK/A12mJGLWirZi//HF/TFIFx+CUXe+I9thkrUTQ6R2dPeiaClO?=
+ =?us-ascii?Q?TjcldlokMaZvdoz+NJ/bmc3SLtCUJanSiwulrNURxujD4Rg/i4CEG6+dSY4v?=
+ =?us-ascii?Q?YoEBpZc/P6JGBAW14AstDjAcCBsGoqpg7a0vQwXRuMKx35fdLK1nTpeNbC//?=
+ =?us-ascii?Q?h1FgjH6bf2n7IZa0EOhQaWFN8EL3m9Gpq7C6WEpajMyfqz/WcznxpRre/Xya?=
+ =?us-ascii?Q?KWXHWv6aYxGGZQLtY99PkCUXpLhNY+D8nIftVnU90qoC8mhhBlpLPgeIryex?=
+ =?us-ascii?Q?VuVhfcMJqtk7yRuAoA0Uv2xCeYaMNRpDpiMlgarNZUd2yYHXl2MEpy8mRvc/?=
+ =?us-ascii?Q?azggV+RCfexvNSkrmLaCeJpHFWpZkBftp41Ak/YX3QJiJh/RZl8TkTgbFWGf?=
+ =?us-ascii?Q?KI2lN6yfpfWUXYdXbwtpP9aLpHv7T3IhIFBs3LaZIqEveoccjIwJzD6orSJV?=
+ =?us-ascii?Q?mxqlP8GphRTF9Y8qBe2FWxIWZPCGlm9Mak1P/8zF9GzIN04V0zBbEMqJxLNk?=
+ =?us-ascii?Q?GtZfAv/I3SkUN6VgGyhdGHh1m7fdo+fEIMogpBZyCZAv42G2EOwKCpQU8P1P?=
+ =?us-ascii?Q?Po3uVVVQqNmlWt+ZRF+A/+94kK+DbYJUByI9HVb0XzqIrCGrk+Yt16gCVTQJ?=
+ =?us-ascii?Q?eh/xCuuKkOPqCzKwXEIicQ79OzCfvpTk1BMHkDht?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 292d2f90-7b5b-44a5-b005-08db29e8dba8
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 08:47:10.2004
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DFM2bmQVNpp0JV2tFExQiifBwimESDIpp+nHEMonOQpU8721ovP5sTO3U9j0U05DiZ99aiIEAM2ffTsXhM/rlw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7849
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,184 +115,93 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Elson,
+From: Peng Fan <peng.fan@nxp.com>
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This is target for i.MX8M* System-Ready IR 2.0 Cert.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Elson-Roy-Serrao/usb-gadget-Properly-configure-the-device-for-remote-wakeup/20230317-074030
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/1679009888-8239-7-git-send-email-quic_eserrao%40quicinc.com
-patch subject: [PATCH v12 6/6] usb: gadget: f_ecm: Add suspend/resume and remote wakeup support
-config: riscv-randconfig-m031-20230319 (https://download.01.org/0day-ci/archive/20230321/202303211515.XaO8YKCz-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 12.1.0
+V6:
+ Add R-b from Krzysztof for patch 1 V4
+ Add back patch 3 which got A-b from Rob in V3
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202303211515.XaO8YKCz-lkp@intel.com/
+V5:
+ Fix dt warning
+ Add more properties that existed in dts and driver to address dtbs check error
+ Update NXP device tree to follow compatible rule
+ A few dtbs fix to NXP dtbs
 
-New smatch warnings:
-drivers/usb/gadget/function/u_ether.c:474 eth_start_xmit() error: we previously assumed 'dev->port_usb' could be null (see line 466)
-drivers/usb/gadget/function/u_ether.c:539 eth_start_xmit() warn: variable dereferenced before check 'dev->port_usb' (see line 474)
+V4:
+ Merged V3 patch 1,2,3 into one patch
+ Merged V3 patch 4,5,6 into one patch
+ Added patch 3,4,5,6 for dts update
+ Addressed Rob's comments to v3 patch 1, patch 4 for compatible, deprecated property
 
-Old smatch warnings:
-drivers/usb/gadget/function/u_ether.c:553 eth_start_xmit() error: we previously assumed 'skb' could be null (see line 491)
+V3:
+ Sorry for this long time delay for V3. I thought this should be V5, but actually
+ I only posted two versions before.
+ Add myself ad maintainer
+ The major changes are in patch 4:
+   Added some properties to address dtbs_check error, for qcom, fsl. But I still leave
+   some properties not introduced, such as phy-select for qcom,
+   nvidia,needs-double-reset operating-points-v2 for nvidia, which I would expect
+   sub-soc maintainers continue on it.
 
-vim +474 drivers/usb/gadget/function/u_ether.c
+ Add A-b from Rob
+ Add a new patch 7
 
-25a79c41ce0ce8 drivers/usb/gadget/u_ether.c          Stephen Hemminger   2009-08-31  454  static netdev_tx_t eth_start_xmit(struct sk_buff *skb,
-25a79c41ce0ce8 drivers/usb/gadget/u_ether.c          Stephen Hemminger   2009-08-31  455  					struct net_device *net)
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  456  {
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  457  	struct eth_dev		*dev = netdev_priv(net);
-6d3865f9d41f15 drivers/usb/gadget/u_ether.c          Jim Baxter          2014-07-07  458  	int			length = 0;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  459  	int			retval;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  460  	struct usb_request	*req = NULL;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  461  	unsigned long		flags;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  462  	struct usb_ep		*in;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  463  	u16			cdc_filter;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  464  
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  465  	spin_lock_irqsave(&dev->lock, flags);
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19 @466  	if (dev->port_usb) {
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  467  		in = dev->port_usb->in_ep;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  468  		cdc_filter = dev->port_usb->cdc_filter;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  469  	} else {
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  470  		in = NULL;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  471  		cdc_filter = 0;
+v2:
+ patch order changed, usbmisc-imx moved to first
+ Add Xu Yang as maintainer
+ Typo fix
+ Not define properties within if/then/else
+ Set additionalProperties to false
+ Drop duplicated compatibles
+ Fix checkpatch issue
+ For pinctrl-names: I think there is restrictin in allOf, so not list items
+ Add fsl,usbmisc: ref
+ Define items for mux-control-names
+ Rename usbmisc-imx.yaml to fsl,usbmisc.yaml
 
-NULL on this path.
+ Hope I not miss any comments
 
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  472  	}
-11f254fc796c87 drivers/usb/gadget/function/u_ether.c Elson Roy Serrao    2023-03-16  473  
-11f254fc796c87 drivers/usb/gadget/function/u_ether.c Elson Roy Serrao    2023-03-16 @474  	if (dev->port_usb->is_suspend) {
-                                                                                                    ^^^^^^^^^^^^^^^
-Dead.  (Both ->port_usb warnings are caused by this dereference).
+ Note: there will still be dtbs_check failure if run with only a single patch,
+ with this patchset applied, there is no related dtbs_check failure.
 
-11f254fc796c87 drivers/usb/gadget/function/u_ether.c Elson Roy Serrao    2023-03-16  475  		DBG(dev, "Port suspended. Triggering wakeup\n");
-11f254fc796c87 drivers/usb/gadget/function/u_ether.c Elson Roy Serrao    2023-03-16  476  		netif_stop_queue(net);
-11f254fc796c87 drivers/usb/gadget/function/u_ether.c Elson Roy Serrao    2023-03-16  477  		spin_unlock_irqrestore(&dev->lock, flags);
-11f254fc796c87 drivers/usb/gadget/function/u_ether.c Elson Roy Serrao    2023-03-16  478  		ether_wakeup_host(dev->port_usb);
-11f254fc796c87 drivers/usb/gadget/function/u_ether.c Elson Roy Serrao    2023-03-16  479  		return NETDEV_TX_BUSY;
-11f254fc796c87 drivers/usb/gadget/function/u_ether.c Elson Roy Serrao    2023-03-16  480  	}
-11f254fc796c87 drivers/usb/gadget/function/u_ether.c Elson Roy Serrao    2023-03-16  481  
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  482  	spin_unlock_irqrestore(&dev->lock, flags);
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  483  
-8ae01239609b29 drivers/usb/gadget/function/u_ether.c Maciej Żenczykowski 2021-07-01  484  	if (!in) {
-8ae01239609b29 drivers/usb/gadget/function/u_ether.c Maciej Żenczykowski 2021-07-01  485  		if (skb)
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  486  			dev_kfree_skb_any(skb);
-6ed106549d1747 drivers/usb/gadget/u_ether.c          Patrick McHardy     2009-06-23  487  		return NETDEV_TX_OK;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  488  	}
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  489  
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  490  	/* apply outgoing CDC or RNDIS filters */
-6d3865f9d41f15 drivers/usb/gadget/u_ether.c          Jim Baxter          2014-07-07  491  	if (skb && !is_promisc(cdc_filter)) {
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  492  		u8		*dest = skb->data;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  493  
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  494  		if (is_multicast_ether_addr(dest)) {
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  495  			u16	type;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  496  
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  497  			/* ignores USB_CDC_PACKET_TYPE_MULTICAST and host
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  498  			 * SET_ETHERNET_MULTICAST_FILTERS requests
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  499  			 */
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  500  			if (is_broadcast_ether_addr(dest))
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  501  				type = USB_CDC_PACKET_TYPE_BROADCAST;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  502  			else
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  503  				type = USB_CDC_PACKET_TYPE_ALL_MULTICAST;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  504  			if (!(cdc_filter & type)) {
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  505  				dev_kfree_skb_any(skb);
-6ed106549d1747 drivers/usb/gadget/u_ether.c          Patrick McHardy     2009-06-23  506  				return NETDEV_TX_OK;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  507  			}
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  508  		}
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  509  		/* ignores USB_CDC_PACKET_TYPE_DIRECTED */
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  510  	}
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  511  
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  512  	spin_lock_irqsave(&dev->req_lock, flags);
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  513  	/*
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  514  	 * this freelist can be empty if an interrupt triggered disconnect()
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  515  	 * and reconfigured the gadget (shutting down this queue) after the
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  516  	 * network stack decided to xmit but before we got the spinlock.
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  517  	 */
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  518  	if (list_empty(&dev->tx_reqs)) {
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  519  		spin_unlock_irqrestore(&dev->req_lock, flags);
-5b548140225c6b drivers/usb/gadget/u_ether.c          Patrick McHardy     2009-06-12  520  		return NETDEV_TX_BUSY;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  521  	}
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  522  
-fea14e68ff5e11 drivers/usb/gadget/function/u_ether.c Felipe Balbi        2017-03-22  523  	req = list_first_entry(&dev->tx_reqs, struct usb_request, list);
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  524  	list_del(&req->list);
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  525  
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  526  	/* temporarily stop TX queue when the freelist empties */
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  527  	if (list_empty(&dev->tx_reqs))
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  528  		netif_stop_queue(net);
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  529  	spin_unlock_irqrestore(&dev->req_lock, flags);
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  530  
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  531  	/* no buffer copies needed, unless the network stack did it
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  532  	 * or the hardware can't use skb buffers.
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  533  	 * or there's not enough space for extra headers we need
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  534  	 */
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  535  	if (dev->wrap) {
-9b39e9ddedeef4 drivers/usb/gadget/u_ether.c          Brian Niebuhr       2009-08-14  536  		unsigned long	flags;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  537  
-9b39e9ddedeef4 drivers/usb/gadget/u_ether.c          Brian Niebuhr       2009-08-14  538  		spin_lock_irqsave(&dev->lock, flags);
-9b39e9ddedeef4 drivers/usb/gadget/u_ether.c          Brian Niebuhr       2009-08-14 @539  		if (dev->port_usb)
-9b39e9ddedeef4 drivers/usb/gadget/u_ether.c          Brian Niebuhr       2009-08-14  540  			skb = dev->wrap(dev->port_usb, skb);
-3a383cc0b8cc33 drivers/usb/gadget/function/u_ether.c Greg Kroah-Hartman  2016-09-19  541  		spin_unlock_irqrestore(&dev->lock, flags);
-6d3865f9d41f15 drivers/usb/gadget/u_ether.c          Jim Baxter          2014-07-07  542  		if (!skb) {
-6d3865f9d41f15 drivers/usb/gadget/u_ether.c          Jim Baxter          2014-07-07  543  			/* Multi frame CDC protocols may store the frame for
-6d3865f9d41f15 drivers/usb/gadget/u_ether.c          Jim Baxter          2014-07-07  544  			 * later which is not a dropped frame.
-6d3865f9d41f15 drivers/usb/gadget/u_ether.c          Jim Baxter          2014-07-07  545  			 */
-88c09eacf560c3 drivers/usb/gadget/function/u_ether.c Peter Chen          2016-07-01  546  			if (dev->port_usb &&
-3a383cc0b8cc33 drivers/usb/gadget/function/u_ether.c Greg Kroah-Hartman  2016-09-19  547  					dev->port_usb->supports_multi_frame)
-6d3865f9d41f15 drivers/usb/gadget/u_ether.c          Jim Baxter          2014-07-07  548  				goto multiframe;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  549  			goto drop;
-6d3865f9d41f15 drivers/usb/gadget/u_ether.c          Jim Baxter          2014-07-07  550  		}
-6d3865f9d41f15 drivers/usb/gadget/u_ether.c          Jim Baxter          2014-07-07  551  	}
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  552  
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  553  	length = skb->len;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  554  	req->buf = skb->data;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  555  	req->context = skb;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  556  	req->complete = tx_complete;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  557  
-5c1168dbc50828 drivers/usb/gadget/u_ether.c          Yauheni Kaliuta     2010-12-08  558  	/* NCM requires no zlp if transfer is dwNtbInMaxSize */
-79775f44183840 drivers/usb/gadget/function/u_ether.c Harish Jenny K N    2016-09-09  559  	if (dev->port_usb &&
-79775f44183840 drivers/usb/gadget/function/u_ether.c Harish Jenny K N    2016-09-09  560  	    dev->port_usb->is_fixed &&
-5c1168dbc50828 drivers/usb/gadget/u_ether.c          Yauheni Kaliuta     2010-12-08  561  	    length == dev->port_usb->fixed_in_len &&
-5c1168dbc50828 drivers/usb/gadget/u_ether.c          Yauheni Kaliuta     2010-12-08  562  	    (length % in->maxpacket) == 0)
-5c1168dbc50828 drivers/usb/gadget/u_ether.c          Yauheni Kaliuta     2010-12-08  563  		req->zero = 0;
-5c1168dbc50828 drivers/usb/gadget/u_ether.c          Yauheni Kaliuta     2010-12-08  564  	else
-5c1168dbc50828 drivers/usb/gadget/u_ether.c          Yauheni Kaliuta     2010-12-08  565  		req->zero = 1;
-5c1168dbc50828 drivers/usb/gadget/u_ether.c          Yauheni Kaliuta     2010-12-08  566  
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  567  	/* use zlp framing on tx for strict CDC-Ether conformance,
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  568  	 * though any robust network rx path ignores extra padding.
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  569  	 * and some hardware doesn't like to write zlps.
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  570  	 */
-5c1168dbc50828 drivers/usb/gadget/u_ether.c          Yauheni Kaliuta     2010-12-08  571  	if (req->zero && !dev->zlp && (length % in->maxpacket) == 0)
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  572  		length++;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  573  
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  574  	req->length = length;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  575  
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  576  	retval = usb_ep_queue(in, req, GFP_ATOMIC);
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  577  	switch (retval) {
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  578  	default:
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  579  		DBG(dev, "tx queue err %d\n", retval);
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  580  		break;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  581  	case 0:
-860e9538a9482b drivers/usb/gadget/function/u_ether.c Florian Westphal    2016-05-03  582  		netif_trans_update(net);
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  583  		atomic_inc(&dev->tx_qlen);
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  584  	}
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  585  
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  586  	if (retval) {
-9b39e9ddedeef4 drivers/usb/gadget/u_ether.c          Brian Niebuhr       2009-08-14  587  		dev_kfree_skb_any(skb);
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  588  drop:
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  589  		dev->net->stats.tx_dropped++;
-6d3865f9d41f15 drivers/usb/gadget/u_ether.c          Jim Baxter          2014-07-07  590  multiframe:
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  591  		spin_lock_irqsave(&dev->req_lock, flags);
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  592  		if (list_empty(&dev->tx_reqs))
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  593  			netif_start_queue(net);
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  594  		list_add(&req->list, &dev->tx_reqs);
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  595  		spin_unlock_irqrestore(&dev->req_lock, flags);
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  596  	}
-6ed106549d1747 drivers/usb/gadget/u_ether.c          Patrick McHardy     2009-06-23  597  	return NETDEV_TX_OK;
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell      2008-06-19  598  }
+
+This patchset is to convert ci-hdrc-usb2 and usbmisc-imx to yaml format.
+There are compatible strings not landed in binding doc, but in device tree,
+so run dtbs_check on the single yaml conversion patch will report
+dtbs_check failure. If apply the whole patchset, there will be no failure.
+
+
+Peng Fan (10):
+  dt-bindings: usb: usbmisc-imx: convert to DT schema
+  dt-bindings: usb: ci-hdrc-usb2: convert to DT schema format
+  dt-bindings: usb: usb-nop-xceiv: add power-domains property
+  arm64: dts: imx8mn: update usb compatible
+  arm64: dts: imx8mm: update usb compatible
+  arm64: dts: imx8: update usb compatible
+  arm64: dts: imx8dxl: update usb compatible
+  arm64: dts: imx8dxl: drop #stream-id-cells for usb node
+  arm64: dts: imx8-apalis-v1.1: drop ci-disable-lpm
+  ARM64: dts: imx7ulp: update usb compatible
+
+ .../devicetree/bindings/usb/ci-hdrc-usb2.txt  | 159 -------
+ .../devicetree/bindings/usb/ci-hdrc-usb2.yaml | 449 ++++++++++++++++++
+ .../devicetree/bindings/usb/fsl,usbmisc.yaml  |  68 +++
+ .../bindings/usb/usb-nop-xceiv.yaml           |   3 +
+ .../devicetree/bindings/usb/usbmisc-imx.txt   |  19 -
+ arch/arm/boot/dts/imx7ulp.dtsi                |   5 +-
+ .../boot/dts/freescale/imx8-apalis-v1.1.dtsi  |   1 -
+ .../boot/dts/freescale/imx8-ss-conn.dtsi      |   4 +-
+ .../boot/dts/freescale/imx8dxl-ss-conn.dtsi   |   5 +-
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  10 +-
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi     |   5 +-
+ 11 files changed, 536 insertions(+), 192 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/usb/usbmisc-imx.txt
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.37.1
 
