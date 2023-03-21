@@ -2,83 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B586E6C2D5B
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Mar 2023 09:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 633FD6C2E28
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Mar 2023 10:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbjCUI66 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Mar 2023 04:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
+        id S229892AbjCUJo6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Mar 2023 05:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231462AbjCUI6c (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Mar 2023 04:58:32 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D08110EF
-        for <linux-usb@vger.kernel.org>; Tue, 21 Mar 2023 01:56:50 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id a11so4218708lji.6
-        for <linux-usb@vger.kernel.org>; Tue, 21 Mar 2023 01:56:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679389007;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jzC+G7JXGUMEMTg+296rqY8TNpbshezIFmO/f2WmN2c=;
-        b=USS2aqx/KXhOKB/SmdM7OTdpiwLVYoU33PaCkCP+BRnGkE3CXO1ZSblXZrPOsxR7lv
-         T1Mx/wCPRApTXFQPggoJor66V8biZry2+M5GMslhCyxNCgs4dciZ+nnT+79ZRrnYskeK
-         Du2LWDZCCaDD5MRrM4haV+hByT9Z4ec7ZrUf98XVCwbYjHNQsDyeN8ODoT75JsZdXR1q
-         PHYBFjlHT0XiIy1FYDzgTdgBP3KNPvnJQYY5aCOw77ovSrQRzJexBPb7znvefBU70vBH
-         FVAZymUTo6zOMkieTg1yrPkmCXNd4clloqHTOu5DZbcitXS8I4aQBiHftSV+1t8H4/rB
-         mOSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679389007;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jzC+G7JXGUMEMTg+296rqY8TNpbshezIFmO/f2WmN2c=;
-        b=u2Vq69fhXx6W/11Hx3QL82C1P35uCXm8HdnH4oKfwcA2mfcYFyS29ODJeLUP3obUgA
-         L9YqFnGV5m0bgL4cT4Zuo3Z4hVD0/KCOE0mJs9INxbWz6W/pBWzr8sfVVYITsK2FyVDj
-         JE3HurNuKt5m+Q0HyGhfSYvWVHzkBE6whhD/QXR1GX+9RZpNpT8Uv29CnZe6ZtEZEAL3
-         sID24FbNifZ4AsYFt0n5AuCgcAlinvcCg5PZ1VYDmEstJzLl6o/rdhII8+I0whlVnS2O
-         ToOns15zjA33ln/HNhYmUsEoMucc1r8kw/1p7jQjHXNIOmSi4it+f7Z9ivwQOWNOh+Pn
-         ja+A==
-X-Gm-Message-State: AO0yUKX5E0b0aG2j+Z3WI+GM0OUBNKGN3VXRtgMCUhIcgX70lN67aUVy
-        hcKIKqcfPUsI893R0CyfE5uEsUHHtSrCsV8L6To=
-X-Google-Smtp-Source: AK7set8NnfpMUhhmF9INQbo28EMQwbG+57ESDHIeO6EcgygpW5vgT2MuqIbgxTA2Q77WTsZ2zYLVtZXwc0OTweLwOPY=
-X-Received: by 2002:a2e:9802:0:b0:293:2f6e:91bf with SMTP id
- a2-20020a2e9802000000b002932f6e91bfmr597817ljj.7.1679389007244; Tue, 21 Mar
- 2023 01:56:47 -0700 (PDT)
+        with ESMTP id S229619AbjCUJov (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Mar 2023 05:44:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19FC39296;
+        Tue, 21 Mar 2023 02:44:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB01961AAD;
+        Tue, 21 Mar 2023 09:44:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E331EC433D2;
+        Tue, 21 Mar 2023 09:44:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679391881;
+        bh=4y+jXrbZ1bwtYeyd/jWXn/dcnAO7cq768MGFDANWHkc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=L6HCpffsLA9OJA1sfIuIL7YvwpZ91R8vkJr4iPuvRfYbUFjlCO+r3fp4TQ1qHtnu6
+         9eE2cOWxhtweB7phbEkyScFa69OavRx3HHRhP3vbYPYbmxPBxkOZQR67snvduKArMX
+         p30idcwiMDOfSPE2+DDYCaJEi5vYpQxH4WxGWUZIKLOnedd6e0X2LpIxr06vJIPq7D
+         EEpo7f1J3MAbxUzBAZVgwBvO8D3Y93r14BpX1sRmGhCBfhb8XIiRE5BD0Sz7ZgQOmI
+         bxJIoi4yIzDBFdRq6WoUHy35RWE+yg2cTEghwngWIYHCm505V/3bSLLX6CURfSNkLC
+         tdqqTpE2jnJcQ==
+Message-ID: <0f0382f0-26d0-c217-93d2-c436c5209a2b@kernel.org>
+Date:   Tue, 21 Mar 2023 11:44:36 +0200
 MIME-Version: 1.0
-Reply-To: salkavar2@gmail.com
-Sender: mrahmedhannan0@gmail.com
-Received: by 2002:ab3:7104:0:b0:223:fd48:978b with HTTP; Tue, 21 Mar 2023
- 01:56:46 -0700 (PDT)
-From:   "Mr.Sal kavar" <salkavar2@gmail.com>
-Date:   Tue, 21 Mar 2023 01:56:46 -0700
-X-Google-Sender-Auth: kOTWPztbhbolSepV6_OG8edN8Dk
-Message-ID: <CAPtuYjBED=G2Vu96vJiqerSJLtiOHquMA_q4tur15BU1fbgTSg@mail.gmail.com>
-Subject: Yours Faithful,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=4.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,
-        MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH 1/2] dt-bindings: usb: snps,dwc3: Add
+ 'snps,gadget-keep-connect-sys-sleep'
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Thinh.Nguyen@synopsys.com, stern@rowland.harvard.edu,
+        gregkh@linuxfoundation.org, vigneshr@ti.com, srk@ti.com,
+        r-gunasekaran@ti.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230320093447.32105-1-rogerq@kernel.org>
+ <20230320093447.32105-2-rogerq@kernel.org>
+ <20230320132252.GA1440894-robh@kernel.org>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230320132252.GA1440894-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-ScKgYXNzdW1lwqB5b3XCoGFuZMKgeW91csKgZmFtaWx5wqBhcmXCoGluwqBnb29kwqBoZWFsdGgu
-DQoNClN1bcKgb2bCoCQxNS41bSzCoChGaWZ0ZWVuwqBNaWxsaW9uwqBGaXZlwqBIdW5kcmVkwqBU
-aG91c2FuZMKgRG9sbGFyc8KgT25seSkNCndoZW7CoHRoZcKgYWNjb3VudMKgaG9sZGVywqBzdWRk
-ZW5secKgcGFzc2VkwqBvbizCoGhlwqBsZWZ0wqBub8KgYmVuZWZpY2lhcnnCoHdobw0Kd291bGTC
-oGJlwqBlbnRpdGxlZMKgdG/CoHRoZcKgcmVjZWlwdMKgb2bCoHRoaXPCoGZ1bmQuwqBGb3LCoHRo
-aXPCoHJlYXNvbizCoEnCoGhhdmUNCmZvdW5kwqBpdMKgZXhwZWRpZW50wqB0b8KgdHJhbnNmZXLC
-oHRoaXPCoGZ1bmTCoHRvwqBhwqB0cnVzdHdvcnRoecKgaW5kaXZpZHVhbA0Kd2l0aMKgY2FwYWNp
-dHnCoHRvwqBhY3TCoGFzwqBmb3JlaWduwqBidXNpbmVzc8KgcGFydG5lci4NCg0KWW91wqB3aWxs
-wqB0YWtlwqA0NSXCoDEwJcKgd2lsbMKgYmXCoHNoYXJlZMKgdG/CoENoYXJpdHnCoGluwqBib3Ro
-wqBjb3VudHJpZXPCoGFuZA0KNDUlwqB3aWxswqBiZcKgZm9ywqBtZS4NCg0KDQpNci5TYWzCoEth
-dmFyLg0K
+
+
+On 20/03/2023 15:22, Rob Herring wrote:
+> On Mon, Mar 20, 2023 at 11:34:46AM +0200, Roger Quadros wrote:
+>> The current USB gadget driver behaviour is to stop the controller
+>> and disconnect from the bus during System sleep.
+> 
+> What's USB gadget? ;)
+
+:)
+
+> 
+>> The 'snps,gadget-keep-connect-sys-sleep' property can be used to
+>> change this behaviour and keep the controller active and connected
+>> to the bus during System sleep. This is useful for applications
+>> that want to enter a low power state when USB is suspended but
+>> remain connected so they can resume activity on USB resume.
+>>
+>> This feature introduces a new constraint if Gadget driver is connected
+>> to USB host: i.e.  the gadget must be in USB suspend state to allow
+>> a System sleep as we cannot process any USB transactions
+>> when in System sleep.
+>>
+>> The system hardware is responsible to detect the end of USB suspend
+>> and wake up the system so we can begin processing the USB transactions
+>> as soon as possible.
+> 
+> Sounds like something the user/OS would want to choose rather than fixed 
+> by your board's firmware.
+
+Yes.
+
+> 
+> Is this somehow DWC3 specific? If not, why a DWC3 specific property?
+
+This is not DWC3 specific. 
+
+Should we make this a UDC class device's sysfs attribute instead?
+Only concern is that in dual-role case, if a role switch from
+device mode to host mode and back to device mode happens, we loose
+the UDC device's attributes as we re-init the UDC device.
+
+Or should we make it a udc_core module parameter? This should be
+persistent between role switches.
+
+> 
+>>
+>> Cc: devicetree@vger.kernel.org
+>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+>> ---
+>>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
+>>  1 file changed, 5 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>> index be36956af53b..1ce8008e7fef 100644
+>> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>> @@ -262,6 +262,11 @@ properties:
+>>        asserts utmi_sleep_n.
+>>      type: boolean
+>>  
+>> +  snps,gadget-keep-connect-sys-sleep:
+>> +    description:
+>> +      If True then gadget driver will not disconnect during system sleep.
+>> +      System sleep will not be allowed if gadget is not already in USB suspend.
+> 
+> 'gadget' is a Linuxism.
+
+Got it. Will avoid using it ;)
+
+> 
+>> +
+>>    snps,hird-threshold:
+>>      description: HIRD threshold
+>>      $ref: /schemas/types.yaml#/definitions/uint8
+>> -- 
+>> 2.34.1
+>>
+
+cheers,
+-roger
