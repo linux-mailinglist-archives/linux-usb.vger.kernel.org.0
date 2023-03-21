@@ -2,104 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA6C6C2A67
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Mar 2023 07:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD296C2A8D
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Mar 2023 07:39:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjCUGad (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Mar 2023 02:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
+        id S229810AbjCUGjP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Mar 2023 02:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjCUGa3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Mar 2023 02:30:29 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C5DF95E
-        for <linux-usb@vger.kernel.org>; Mon, 20 Mar 2023 23:30:21 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id cn12so9956967edb.4
-        for <linux-usb@vger.kernel.org>; Mon, 20 Mar 2023 23:30:21 -0700 (PDT)
+        with ESMTP id S229927AbjCUGjL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Mar 2023 02:39:11 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32DA93D4
+        for <linux-usb@vger.kernel.org>; Mon, 20 Mar 2023 23:39:01 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id u11-20020a05600c19cb00b003edcc414997so3932304wmq.3
+        for <linux-usb@vger.kernel.org>; Mon, 20 Mar 2023 23:39:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679380220;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112; t=1679380740;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=n1ju9SHjn0EjnX+WJqAHc/qHXQe1M1fQAhQ9irmoRLI=;
-        b=mr0vXSG40cowcVbTWCszpsULDay3AkUTvIQNoxE/6Cjdl1xcl62ZeQlMkGQvvXsDrk
-         s4fxDaxslwg5/yMeL9Ig8LjT0F7SmaOuNm65fwSM2bZe5ypr3cel0Ym+RHZioMD/nru5
-         mMy6+NbhCnExJz0K0P+hxhwIn0NkAa4h4MZxQgBzN6hTWdEbIq57nKVhxXhzIB42Oay3
-         Gx67k8oY5N18LvZkJWFuaADFe/nYmF39zpxfXmBPtyLWan8sSBohpvoxtAOGBJVJH9CZ
-         2v+cmkV/91ZdgOLSTGAfnMkrBAWuXHXaYvxR640AZPv1BnGpo6zztRbBxugYNMnk9t0j
-         FvzA==
+        bh=aTI/3y6/4vOBgW+moLDlryPREyYZxhi4fK46WajlhGg=;
+        b=mF0kT700tsbgh0fk38JkizGVjGSSm19x2CBzRZ8GJLcwuqR4Pn4Ran39/rRxeqtYPo
+         saR0PBqeCFXvwmqmnJ4gBB2UvVNCPFecZ7HmWPeRV4JeRn/NrJ9YtmqYCHKpF2rRztCE
+         Qy1fdyOZRotCUILfKT1MGWze0Z/vDpZ7QhBNIJ+diWo0Guf6te6eeBoX6GWZZPKWGcK/
+         ENIbkASyg4EXymLvlf9Sy4VV7uWbKdK6bnd5fgKD7snCbN0rl6eT2fw9QZqM8BjkG1ry
+         EONFNOuEw6CE5LttntCTLBy2Iu/vquci09qFkxlp5lrU9G/umFNSjKmaPXorki0anQLa
+         I6Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679380220;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1679380740;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n1ju9SHjn0EjnX+WJqAHc/qHXQe1M1fQAhQ9irmoRLI=;
-        b=zjm0V8EMSiWh9ugTKd0OalTeK0Uefvak0rzq6LHcWKUAumyND/+VnNzLLnX+5Uz790
-         AE1Y272LFOjMDmHTQ5qaXthlflXVb1O/3fcoK+AXG4fDNcXvSMopnl4GWrVB6hZz16oE
-         zxZDN/YEzsTNv05idZ5s4+SDbfkq40D8ei3P+99v+toeRjHeThlBcZnCXepL69ZSbqga
-         yTkaKXZzSh54aLt46fh18044Ney6051ml2RhTLKu+unKrTcBqehpbZzcVaGrPD8QMz7f
-         1G1Pjxy/pFkMJ7Wwx6Ec5jaBl6wPwb9YeWKCFxyXCGOlhd5x/Zjnrdx1ZkjATsZFx+Wd
-         jP2A==
-X-Gm-Message-State: AO0yUKUsvsOgo4lHQ4WrXA79JYAynTUPL7Y0GO798hCl/jaAFEuepf6z
-        ycjfpi/lw+orWZ+0Xse5CZyv0w==
-X-Google-Smtp-Source: AK7set/mnHhzkLfQ6NWBr4tgSxgW7U8c3Ph5LCp/K+YZdlpgbxJUDmtb0MS2Ksnkrt0SN/5/D3IQvQ==
-X-Received: by 2002:a17:906:391b:b0:92b:eca6:43fc with SMTP id f27-20020a170906391b00b0092beca643fcmr1611701eje.64.1679380220208;
-        Mon, 20 Mar 2023 23:30:20 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
-        by smtp.gmail.com with ESMTPSA id hy14-20020a1709068a6e00b009351546fb54sm1717874ejc.28.2023.03.20.23.30.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 23:30:19 -0700 (PDT)
-Message-ID: <35359dee-5803-0cbb-b3d2-89aa6461f6a5@linaro.org>
-Date:   Tue, 21 Mar 2023 07:30:17 +0100
+        bh=aTI/3y6/4vOBgW+moLDlryPREyYZxhi4fK46WajlhGg=;
+        b=EwEU7uSdWkisRqy+ZnhkHrkyBr2RqNkfoqRD8rRWcr/Dhvx+Zy1ndljF6xKwKiAOJu
+         DYi/aL4+7SytdeqRDZm2ZHXG0R78DVG8v93E5pEVUQ9DivjVT89Y4ytS2L02N0YWcOKP
+         sGtDBvIqvnDW09PcbfwiduOzhO3By1zmrA96tS5JnMhNfGj6s9J96V3NgcJjM1sN913U
+         LFZrq0a59hoQMCxM2mZGeYqBs0u9p7xfrxvjLOJWdCqMuiQXiWfxAG/03KUrfRWkcuNB
+         Vk0u6ytzdBoPbtN9R59nPDFXtWAWUMoKvmMFD0980ODs+ysXO23jn/aHnLbkk+6KJf9Y
+         mNEw==
+X-Gm-Message-State: AO0yUKWEoBucxE3FDzF/5VVViedXKgCMomPlv+ys3tiNCW1CGI9SSlxG
+        s7cuAnJ/QYdC4sVBmJWk3qWoTWl7SmQ=
+X-Google-Smtp-Source: AK7set/GNItA6RAf9Js9B3cV2yO7BSmbTEJBJlBA+QaWhoIhz1dreICllkSRdFv9p+v74gG4/R+XSw==
+X-Received: by 2002:a1c:c901:0:b0:3e2:201a:5bcc with SMTP id f1-20020a1cc901000000b003e2201a5bccmr1492723wmb.33.1679380740105;
+        Mon, 20 Mar 2023 23:39:00 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id bg5-20020a05600c3c8500b003e7f1086660sm18757705wmb.15.2023.03.20.23.38.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 23:38:59 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 09:38:52 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     pawell@cadence.com
+Cc:     linux-usb@vger.kernel.org
+Subject: [bug report] usb: cdnsp: Fixes issue with redundant Status Stage
+Message-ID: <23244476-3591-474f-a76a-5eb6e87dabf4@kili.mountain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] dt-bindings: phy: Drop unneeded quotes
-To:     Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yu Chen <chenyu56@huawei.com>,
-        Binghui Wang <wangbinghui@hisilicon.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Vincent Shih <vincent.sunplus@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-usb@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-can@vger.kernel.org
-References: <20230320233955.2921179-1-robh@kernel.org>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230320233955.2921179-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,14 +66,81 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21/03/2023 00:39, Rob Herring wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Hello Pawel Laszczak,
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The patch 5bc38d33a5a1: "usb: cdnsp: Fixes issue with redundant
+Status Stage" from Mar 7, 2023, leads to the following Smatch static
+checker warning:
 
-Best regards,
-Krzysztof
+	drivers/usb/cdns3/cdnsp-ep0.c:470 cdnsp_setup_analyze()
+	error: uninitialized symbol 'len'.
 
+drivers/usb/cdns3/cdnsp-ep0.c
+    414 void cdnsp_setup_analyze(struct cdnsp_device *pdev)
+    415 {
+    416         struct usb_ctrlrequest *ctrl = &pdev->setup;
+    417         int ret = 0;
+    418         u16 len;
+    419 
+    420         trace_cdnsp_ctrl_req(ctrl);
+    421 
+    422         if (!pdev->gadget_driver)
+    423                 goto out;
+
+ret is zero.  len is uninitialized.
+
+    424 
+    425         if (pdev->gadget.state == USB_STATE_NOTATTACHED) {
+    426                 dev_err(pdev->dev, "ERR: Setup detected in unattached state\n");
+    427                 ret = -EINVAL;
+    428                 goto out;
+    429         }
+    430 
+    431         /* Restore the ep0 to Stopped/Running state. */
+    432         if (pdev->eps[0].ep_state & EP_HALTED) {
+    433                 trace_cdnsp_ep0_halted("Restore to normal state");
+    434                 cdnsp_halt_endpoint(pdev, &pdev->eps[0], 0);
+    435         }
+    436 
+    437         /*
+    438          * Finishing previous SETUP transfer by removing request from
+    439          * list and informing upper layer
+    440          */
+    441         if (!list_empty(&pdev->eps[0].pending_list)) {
+    442                 struct cdnsp_request        *req;
+    443 
+    444                 trace_cdnsp_ep0_request("Remove previous");
+    445                 req = next_request(&pdev->eps[0].pending_list);
+    446                 cdnsp_ep_dequeue(&pdev->eps[0], req);
+    447         }
+    448 
+    449         len = le16_to_cpu(ctrl->wLength);
+    450         if (!len) {
+    451                 pdev->three_stage_setup = false;
+    452                 pdev->ep0_expect_in = false;
+    453         } else {
+    454                 pdev->three_stage_setup = true;
+    455                 pdev->ep0_expect_in = !!(ctrl->bRequestType & USB_DIR_IN);
+    456         }
+    457 
+    458         if ((ctrl->bRequestType & USB_TYPE_MASK) == USB_TYPE_STANDARD)
+    459                 ret = cdnsp_ep0_std_request(pdev, ctrl);
+    460         else
+    461                 ret = cdnsp_ep0_delegate_req(pdev, ctrl);
+    462 
+    463         if (ret == USB_GADGET_DELAYED_STATUS) {
+    464                 trace_cdnsp_ep0_status_stage("delayed");
+    465                 return;
+    466         }
+    467 out:
+    468         if (ret < 0)
+    469                 cdnsp_ep0_stall(pdev);
+--> 470         else if (!len && pdev->ep0_stage != CDNSP_STATUS_STAGE)
+                         ^^^^
+Uninitialized.
+
+    471                 cdnsp_status_stage(pdev);
+    472 }
+
+regards,
+dan carpenter
