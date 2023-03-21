@@ -2,150 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E93C16C2974
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Mar 2023 06:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A376C2A08
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Mar 2023 06:50:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjCUFBU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Mar 2023 01:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
+        id S229854AbjCUFuH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Mar 2023 01:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjCUFBJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Mar 2023 01:01:09 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5661E22DC5;
-        Mon, 20 Mar 2023 22:00:53 -0700 (PDT)
-Received: from mercury (dyndsl-091-248-215-171.ewe-ip-backbone.de [91.248.215.171])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CCEC9660304E;
-        Tue, 21 Mar 2023 05:00:50 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679374850;
-        bh=BnvyoteHKI9wY48ZjZ0iqWIQKPL57OZHpv/A2dQoasg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QyPhBokC0aPOnFnEZN3nuB9BOQziiQ4D6TZ016KmwguKWy5u+/AZKmnYQYoK91pKy
-         Lvb9VZwmxQVGO+WHI6xT7P89g7uhGuF5YIR0xwacZ7XaIztXwVinByXdsa4Hrod8Pr
-         6vciMxJln75EQt1feWGmN7o0C/yLRCbDZQkY/IKMyqEryMcYi9IjzeIQhVbayYC4h9
-         mdN/RlP8RiWI+fEXeG1xgHD8Pv4dBA9goRrqCIoQsX1LMlCdAhXwhuTzSPCyzTnGLb
-         KzWIL512wG9aYCrBK/QMdys6DQlBE/3UlL0sdZgD/0zIsILHr3G4VOJgn8oOQgRL4U
-         LQVXHior7eheg==
-Received: by mercury (Postfix, from userid 1000)
-        id 3E2EC1060FAB; Tue, 21 Mar 2023 06:00:48 +0100 (CET)
-Date:   Tue, 21 Mar 2023 06:00:48 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Frank Wang <frank.wang@rock-chips.com>
-Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, heiko@sntech.de,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com
-Subject: Re: [PATCH v2 3/3] usb: typec: tcpm: add get max power support
-Message-ID: <20230321050048.3p7xtyikf2lkqwrg@mercury.elektranox.org>
-References: <20230320100711.3708-1-frank.wang@rock-chips.com>
- <20230320100711.3708-4-frank.wang@rock-chips.com>
- <20230320203139.quld3gmoo6esu56i@mercury.elektranox.org>
- <19b39d82-8510-2717-cf3b-71cb955373d0@rock-chips.com>
+        with ESMTP id S229524AbjCUFuF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Mar 2023 01:50:05 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7718A5C;
+        Mon, 20 Mar 2023 22:50:02 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id f19-20020a9d5f13000000b00693ce5a2f3eso7948362oti.8;
+        Mon, 20 Mar 2023 22:50:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679377801;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PQRYTyJUcXjGIlb32K69CN7N/CfuacDHmOLvuVVkIeU=;
+        b=F5so8U9eSPDfKwLwdhjWe1tE8PfeVDHKjkiyKaVpWQqKRuyuavEeTzXd4hk6L3z6zp
+         VHPO8QjxcIT4MYzTcNnHQK4kCkDGjZgPowyHLuCLV9GljdqpK9u99uNfqkBMK5RA93gv
+         FGjbjWg9KVC+SGloN3ekhh+2k6L7EF7wthr0pjQIqJLNck01caZneaWdLgqxokr/RLrO
+         1sgViMnoTTZxc9T5zi936whRCWGOMENT2d8QDQSNUknsMhStPJdQFhKuw7YCDQdWuHuY
+         XA7Htk2YAl4jH1GHMq/ggeJA09GTqzjWLySHNgMO09vanozHHeos4pEKMn6CfOVlZGDt
+         TxtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679377801;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PQRYTyJUcXjGIlb32K69CN7N/CfuacDHmOLvuVVkIeU=;
+        b=F+s8zjzIrEGYsx6hUIpY4AypQRSgaI1J7euQkQ42p6TNiWR74+Ud4W3WVMAditLJQr
+         CaowjZJsj4VOVBiY73DILXuj3n8dIFKKlDOzRQycXhzqak3mJzisw0X7W0rwfuLLvRVa
+         z9eC4RuXcuND7FSIotBqml8LvChmRxDlfbzak3IIEgZykkxXvnR98fmKAE/gY0B6iJWI
+         3K6BFRwIxhGk/uEJd1rgoZrcWFqAWmntoK5dVXJ3X9PqM0Xo6MUHeEVOY7DngFtGfSQB
+         ukGxegKWRtQPXMBRWWZRJ6bN8VxyHS5OmJ16tKzw9wIOZilgG8lIG8cJCCN7Gokc3AHu
+         v7Sg==
+X-Gm-Message-State: AO0yUKWmHcErfDaWY4rFJTxA2dExzj9FWKjUTnOPCZDHm/k8X/cLEk4a
+        PK3HM0Z9jYhzC7DHIEy1kM5zp9CPH1PMihlxGU0=
+X-Google-Smtp-Source: AK7set9hGdm8jb3Zms52xIkHW02ezlDplA4s1W/5C+8w1fxRVUiCGMOX1ghjWbWe1rulG24xEDF5Rs78eQG2Vsd6oW8=
+X-Received: by 2002:a05:6830:13d3:b0:69e:24a7:e042 with SMTP id
+ e19-20020a05683013d300b0069e24a7e042mr409968otq.3.1679377801763; Mon, 20 Mar
+ 2023 22:50:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="w2wopulsblcnnvo7"
-Content-Disposition: inline
-In-Reply-To: <19b39d82-8510-2717-cf3b-71cb955373d0@rock-chips.com>
+References: <20230320233955.2921179-1-robh@kernel.org>
+In-Reply-To: <20230320233955.2921179-1-robh@kernel.org>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Tue, 21 Mar 2023 06:49:49 +0100
+Message-ID: <CAMhs-H829e-QSwMXAVN6b4pYTB+_d-PLJxbEqdhd9oOrYnY-aQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: phy: Drop unneeded quotes
+To:     Rob Herring <robh@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Yu Chen <chenyu56@huawei.com>,
+        Binghui Wang <wangbinghui@hisilicon.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Vincent Shih <vincent.sunplus@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-usb@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Mar 21, 2023 at 12:40=E2=80=AFAM Rob Herring <robh@kernel.org> wrot=
+e:
+>
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
---w2wopulsblcnnvo7
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>  .../devicetree/bindings/phy/mediatek,mt7621-pci-phy.yaml    | 4 ++--
 
-Hi,
-
-On Tue, Mar 21, 2023 at 09:32:53AM +0800, Frank Wang wrote:
-> On 2023/3/21 4:31, Sebastian Reichel wrote:
-> > On Mon, Mar 20, 2023 at 06:07:11PM +0800, Frank Wang wrote:
-> > > Traverse fixed pdos to calculate the maximum power that the charger
-> > > can provide, and it can be get by POWER_SUPPLY_PROP_INPUT_POWER_LIMIT
-> > > property.
-> > >=20
-> > > Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
-> > > ---
-> > >   drivers/usb/typec/tcpm/tcpm.c | 24 ++++++++++++++++++++++++
-> > >   1 file changed, 24 insertions(+)
-> > >=20
-> > > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/t=
-cpm.c
-> > > index 13830b5e2d09f..d6ad3cdf9e4af 100644
-> > > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > > @@ -6320,6 +6320,27 @@ static int tcpm_psy_get_current_now(struct tcp=
-m_port *port,
-> > >   	return 0;
-> > >   }
-> > > +static int tcpm_psy_get_input_power_limit(struct tcpm_port *port,
-> > > +					  union power_supply_propval *val)
-> > > +{
-> > > +	unsigned int src_mv, src_ma, max_src_mw =3D 0;
-> > > +	unsigned int i, tmp;
-> > > +
-> > > +	for (i =3D 0; i < port->nr_source_caps; i++) {
-> > > +		u32 pdo =3D port->source_caps[i];
-> > > +
-> > > +		if (pdo_type(pdo) =3D=3D PDO_TYPE_FIXED) {
-> > > +			src_mv =3D pdo_fixed_voltage(pdo);
-> > > +			src_ma =3D pdo_max_current(pdo);
-> > > +			tmp =3D src_mv * src_ma / 1000;
-> > > +			max_src_mw =3D tmp > max_src_mw ? tmp : max_src_mw;
-> > > +		}
-> > > +	}
-> > > +
-> > > +	val->intval =3D max_src_mw;
-> > The power-supply subsystem expects Microwatts and not Milliwatts.
->=20
-> Yes, but I see the 'power_supply_propval' member 'intval' is an integer
-> type, I worry about it may be overflowed that uses Microwatts.
-
-Data being encoded in Microwatts is part of the ABI. The data
-you are supplying will be interpreted in =B5W. If you submit your
-data in mW it is basically always wrong even without an overflow.
-
-Now regarding the overflow: A signed int can store 2^31 bit, so
-2,147,483,648 =B5W =3D 2147 W. Looking at your code you effectively
-calculate Microwatts in an unsigned int and then divide by 1000.
-Since the intermediate value (before dividing by 1000) needs to be
-stored you gain only one bit. That raises the question: Why do you
-expect data to be between 2147 W and 4294 W when the latest released
-USB PD spec allows 5A@48V =3D 240W?
-
--- Sebastian
-
---w2wopulsblcnnvo7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQZOfsACgkQ2O7X88g7
-+pojhBAAhgzwQSDfENO6eGtWR2yQMwgG0jOd4CTCv9Cp3UuxB60XUdp9lDcRosz3
-T5InXJ/FMWUhEiHoo/pq/95CsrKW7ybUylCTbhWaiWmipBsKURaJGiJWUopdYN01
-M2zhd78L0nGghRkF/vJcBxl4TPoQtp2YUr+oEmKGcar4+cNaVAYOuzChOKx61H+/
-J7U06yL3GcrGu00upnbY49prr5lJIWHV7zinHFpx79y9joYYh9Nh6766y2EQCo7g
-iMj5LxYyxLtPMJLTl0eS1U0hQb3l9AvJLUoDaAU92x9+CEbpTczk2XBrpBJfHJQc
-/x0PtQ+xlaxdABsN62RdwPiUCQOs1FqPMbLNr2oqwbmiY4caj8uogJl0nnhMYz34
-HMUtHgZL/O+Hlrd/bVliGabySpgUQjZKfvk03E7nNRyNygscUSpNGSPMCqhFLfkW
-FY8quL01XZIEyCfgHoxKAv6geKAtmZ5TfJdGw68V/8z3FJJHZ3/Gun6sqewc+RCe
-J0lM3M2htBeV8lsMua+PhRDnHDr/6FMxAM4eMmRqVXgIsfFkwjnwQJyjQUEpD8na
-wJCEufjleDMfkBLwet9C4SclnGgGOTWw+dsF6CYfnY9kZM7r/zed1znyWrsXm58i
-fTqzppOzwPzLtoUXO9Si4fCxZeoZrdav0JqoKyI026D9y+v6e0k=
-=do4N
------END PGP SIGNATURE-----
-
---w2wopulsblcnnvo7--
+Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
