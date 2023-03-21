@@ -2,134 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 414C06C2D59
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Mar 2023 09:58:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B586E6C2D5B
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Mar 2023 09:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbjCUI6p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Mar 2023 04:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38774 "EHLO
+        id S231464AbjCUI66 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Mar 2023 04:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231336AbjCUI6N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Mar 2023 04:58:13 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876B18A4F;
-        Tue, 21 Mar 2023 01:56:43 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32L6GYJc026631;
-        Tue, 21 Mar 2023 08:55:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=8GfmwM+Ld4SniaKlRdRLeMoHyqiSWdMDLgeYkQditrE=;
- b=DNbGTGJHk1KhQYJX4HZgWRuGlYqrqVs8G8VAttTxO485nMz0ctKG+SakPEy5QFuFp0hJ
- LfUwQeZC6Lss67TC6MzgYHsmWpuEE8HLrCgb8+xifO4rFjZPd8PBu2+fBanc8qMsmY7F
- k/WNoc5cNNAKRTYhPylcg5ixLtAK7JboMqeZEJcQCpDlvmaAXvBjKC6lfw9A8/oiQTWI
- 927PqHSJ05silBHS/2f4m8USUTDTYwLMhnu4HwDZYkkJSjqfxz8MLSn5pkNc9oi3q1qX
- 9YrOQSd/9Gf+hPTfRuD/Oc7tg3NdQfEVbudyVZII8tPF0zxGTmwNMwSpcjSenoxzD9tZ cw== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3perc3agr7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 08:55:57 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32L8tuI7002715
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 08:55:56 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Tue, 21 Mar 2023 01:55:51 -0700
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v2 8/8] arm64: dts: qcom: ipq9574: Enable USB
-Date:   Tue, 21 Mar 2023 14:24:26 +0530
-Message-ID: <3ba630fdf4c3e8d66910cb2c3990725795be66a6.1679388632.git.quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1679388632.git.quic_varada@quicinc.com>
-References: <cover.1677749625.git.quic_varada@quicinc.com> <cover.1679388632.git.quic_varada@quicinc.com>
+        with ESMTP id S231462AbjCUI6c (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Mar 2023 04:58:32 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D08110EF
+        for <linux-usb@vger.kernel.org>; Tue, 21 Mar 2023 01:56:50 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id a11so4218708lji.6
+        for <linux-usb@vger.kernel.org>; Tue, 21 Mar 2023 01:56:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679389007;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jzC+G7JXGUMEMTg+296rqY8TNpbshezIFmO/f2WmN2c=;
+        b=USS2aqx/KXhOKB/SmdM7OTdpiwLVYoU33PaCkCP+BRnGkE3CXO1ZSblXZrPOsxR7lv
+         T1Mx/wCPRApTXFQPggoJor66V8biZry2+M5GMslhCyxNCgs4dciZ+nnT+79ZRrnYskeK
+         Du2LWDZCCaDD5MRrM4haV+hByT9Z4ec7ZrUf98XVCwbYjHNQsDyeN8ODoT75JsZdXR1q
+         PHYBFjlHT0XiIy1FYDzgTdgBP3KNPvnJQYY5aCOw77ovSrQRzJexBPb7znvefBU70vBH
+         FVAZymUTo6zOMkieTg1yrPkmCXNd4clloqHTOu5DZbcitXS8I4aQBiHftSV+1t8H4/rB
+         mOSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679389007;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jzC+G7JXGUMEMTg+296rqY8TNpbshezIFmO/f2WmN2c=;
+        b=u2Vq69fhXx6W/11Hx3QL82C1P35uCXm8HdnH4oKfwcA2mfcYFyS29ODJeLUP3obUgA
+         L9YqFnGV5m0bgL4cT4Zuo3Z4hVD0/KCOE0mJs9INxbWz6W/pBWzr8sfVVYITsK2FyVDj
+         JE3HurNuKt5m+Q0HyGhfSYvWVHzkBE6whhD/QXR1GX+9RZpNpT8Uv29CnZe6ZtEZEAL3
+         sID24FbNifZ4AsYFt0n5AuCgcAlinvcCg5PZ1VYDmEstJzLl6o/rdhII8+I0whlVnS2O
+         ToOns15zjA33ln/HNhYmUsEoMucc1r8kw/1p7jQjHXNIOmSi4it+f7Z9ivwQOWNOh+Pn
+         ja+A==
+X-Gm-Message-State: AO0yUKX5E0b0aG2j+Z3WI+GM0OUBNKGN3VXRtgMCUhIcgX70lN67aUVy
+        hcKIKqcfPUsI893R0CyfE5uEsUHHtSrCsV8L6To=
+X-Google-Smtp-Source: AK7set8NnfpMUhhmF9INQbo28EMQwbG+57ESDHIeO6EcgygpW5vgT2MuqIbgxTA2Q77WTsZ2zYLVtZXwc0OTweLwOPY=
+X-Received: by 2002:a2e:9802:0:b0:293:2f6e:91bf with SMTP id
+ a2-20020a2e9802000000b002932f6e91bfmr597817ljj.7.1679389007244; Tue, 21 Mar
+ 2023 01:56:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: L9Xl1lj-siaETbqoCrwLG-m81T6oL3pN
-X-Proofpoint-ORIG-GUID: L9Xl1lj-siaETbqoCrwLG-m81T6oL3pN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-21_06,2023-03-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- adultscore=0 priorityscore=1501 bulkscore=0 clxscore=1015 mlxlogscore=953
- phishscore=0 suspectscore=0 lowpriorityscore=0 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303210068
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: salkavar2@gmail.com
+Sender: mrahmedhannan0@gmail.com
+Received: by 2002:ab3:7104:0:b0:223:fd48:978b with HTTP; Tue, 21 Mar 2023
+ 01:56:46 -0700 (PDT)
+From:   "Mr.Sal kavar" <salkavar2@gmail.com>
+Date:   Tue, 21 Mar 2023 01:56:46 -0700
+X-Google-Sender-Auth: kOTWPztbhbolSepV6_OG8edN8Dk
+Message-ID: <CAPtuYjBED=G2Vu96vJiqerSJLtiOHquMA_q4tur15BU1fbgTSg@mail.gmail.com>
+Subject: Yours Faithful,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=4.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,
+        MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Turn on USB related nodes
-
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-
----
- Changes in v2:
-	- Fix node placement and coding style
-	- "ok" -> "okay"
----
- arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
-index 8a6caae..d0d18e5 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
-@@ -57,6 +57,10 @@
- 	status = "okay";
- };
- 
-+&qusb_phy_0 {
-+	status = "okay";
-+};
-+
- &rpm_requests {
- 	regulators {
- 		compatible = "qcom,rpm-mp5496-regulators";
-@@ -84,6 +88,10 @@
- 	clock-frequency = <32000>;
- };
- 
-+&ssphy_0 {
-+	status = "okay";
-+};
-+
- &tlmm {
- 	sdc_default_state: sdc-default-state {
- 		clk-pins {
-@@ -118,6 +126,10 @@
- 	};
- };
- 
-+&usb3 {
-+	status = "okay";
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <24000000>;
- };
--- 
-2.7.4
-
+ScKgYXNzdW1lwqB5b3XCoGFuZMKgeW91csKgZmFtaWx5wqBhcmXCoGluwqBnb29kwqBoZWFsdGgu
+DQoNClN1bcKgb2bCoCQxNS41bSzCoChGaWZ0ZWVuwqBNaWxsaW9uwqBGaXZlwqBIdW5kcmVkwqBU
+aG91c2FuZMKgRG9sbGFyc8KgT25seSkNCndoZW7CoHRoZcKgYWNjb3VudMKgaG9sZGVywqBzdWRk
+ZW5secKgcGFzc2VkwqBvbizCoGhlwqBsZWZ0wqBub8KgYmVuZWZpY2lhcnnCoHdobw0Kd291bGTC
+oGJlwqBlbnRpdGxlZMKgdG/CoHRoZcKgcmVjZWlwdMKgb2bCoHRoaXPCoGZ1bmQuwqBGb3LCoHRo
+aXPCoHJlYXNvbizCoEnCoGhhdmUNCmZvdW5kwqBpdMKgZXhwZWRpZW50wqB0b8KgdHJhbnNmZXLC
+oHRoaXPCoGZ1bmTCoHRvwqBhwqB0cnVzdHdvcnRoecKgaW5kaXZpZHVhbA0Kd2l0aMKgY2FwYWNp
+dHnCoHRvwqBhY3TCoGFzwqBmb3JlaWduwqBidXNpbmVzc8KgcGFydG5lci4NCg0KWW91wqB3aWxs
+wqB0YWtlwqA0NSXCoDEwJcKgd2lsbMKgYmXCoHNoYXJlZMKgdG/CoENoYXJpdHnCoGluwqBib3Ro
+wqBjb3VudHJpZXPCoGFuZA0KNDUlwqB3aWxswqBiZcKgZm9ywqBtZS4NCg0KDQpNci5TYWzCoEth
+dmFyLg0K
