@@ -2,48 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F89C6C2F61
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Mar 2023 11:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C70C6C3013
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Mar 2023 12:17:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjCUKrW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Mar 2023 06:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
+        id S230200AbjCULRZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Mar 2023 07:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjCUKrU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Mar 2023 06:47:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D367291
-        for <linux-usb@vger.kernel.org>; Tue, 21 Mar 2023 03:47:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83D92B80D5C
-        for <linux-usb@vger.kernel.org>; Tue, 21 Mar 2023 10:47:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8FF8C433D2;
-        Tue, 21 Mar 2023 10:47:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679395636;
-        bh=0KkAEIVFWPD9uoMtAWbTtUx6Qy2mnlSEqQHYD+Z93cM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f1QYYTdZatgHcwjg41+c4VH4FPcVRcl/wA9ezdRX6ovkXIqoB7dKfjkef8jx5Spmn
-         t3mOULwPO+VnZ69s8eDkyPKEr07vuwRpij4FcEZNrcZCYRmZr7Vrh1R7drLqgXHqP/
-         mh52VZW4viS8jaktiXwgkGepjGowT8joos1//Dh4=
-Date:   Tue, 21 Mar 2023 11:47:13 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-usb@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH] usb: host: u132-hcd: Delete driver
-Message-ID: <ZBmLMXBuO8bdwos9@kroah.com>
-References: <20230321103638.343886-1-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S230046AbjCULRY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Mar 2023 07:17:24 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F7EEC6C
+        for <linux-usb@vger.kernel.org>; Tue, 21 Mar 2023 04:17:20 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id q16so7780556lfe.10
+        for <linux-usb@vger.kernel.org>; Tue, 21 Mar 2023 04:17:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679397438;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NtKEJBNyunYjPawzF3HMbeki6+rSmdWQGFTeKC93lS8=;
+        b=xP7wVRu4n2NvCx9w5tgDPIrBrnDazF2rn1Ugs5zcZrJrmnsJDdrMMbTNPhVetL+qYt
+         VnXYrx/tiqxOrPDiXirqr9fFdv4Z3uYyekA5rBvoqzitMRmO4hULouTlzjUabHJYwH4h
+         05/kTRXg8apF86NYLPjVOxxS+mrOW61WidTtm9dGtJt8llPweUPdw4h9iCxFC7OOh1gq
+         f5S7HVqNGewrBO3/ocncSILrZDipu3g8Yv/XB6L9g8NEpRPWCuvOUCrN1omtuXyMrOgC
+         DTAShJuPqtuZ+TR+/MK7bc7UrldvM8h4BQsXMtGuvAtPQCZV159V5J05KzHOF4F4JJZD
+         4vgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679397438;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:to:from:date:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=NtKEJBNyunYjPawzF3HMbeki6+rSmdWQGFTeKC93lS8=;
+        b=P79+TmZ7H2c5uh4azS7UbLF6P0cv7LTZJaUpq8ga7n3Jbc7tCVSJ3+6lmrbbYPyz12
+         Ne9nk0U2rOG7S6iD6tgmyDi1gLDcqhjptBQ9+yjd2aoEqGjzPr4fVluqh/QcZ3Ds0HLe
+         FpUPtn2x01MVBMtAyOeIgHJl/OzHYQ9vx5i97gmsRh2t8fkI7Xh4swta7QuzRaeJArM0
+         CxnQXtJQgkxHAs68WYHKxAIMKfZWL7sGoWcQmsUD1Q/QCqzuocfzzkhcEIiKlDUaFMTZ
+         1Q3uZ2axXSy5Qf9UmYCILgQA58v7iInLdRwxS2IirW9wUnDkHqP0hlQQaOO57hx4c70f
+         CRPA==
+X-Gm-Message-State: AO0yUKVC4hoA5KbeJ+UPsZdF+7oMmeRfr/pym3hVMDbGDIskhEb++V5Y
+        ngZQkewt+st15bU0hnFYEYHGlA==
+X-Google-Smtp-Source: AK7set/Cu17olUriB8ZQQHQ5Aoy/b9zxovXnsVmvUhfJhKT+otuqfADxe0j3tJFlQHz6V7oAyzVd3Q==
+X-Received: by 2002:a05:6512:3a8b:b0:4db:3846:f908 with SMTP id q11-20020a0565123a8b00b004db3846f908mr963454lfu.10.1679397438291;
+        Tue, 21 Mar 2023 04:17:18 -0700 (PDT)
+Received: from [127.0.0.1] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id m2-20020a2e9342000000b00295965f7495sm2174305ljh.0.2023.03.21.04.17.17
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 21 Mar 2023 04:17:17 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 14:17:13 +0300
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_1/8=5D_dt-bindings=3A_phy=3A_q?= =?US-ASCII?Q?com=2Cqusb2=3A_Document_IPQ9574_compatible?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <ef5af2e581203e2101773863aa7e1667b4d1b705.1679388632.git.quic_varada@quicinc.com>
+References: <cover.1677749625.git.quic_varada@quicinc.com> <cover.1679388632.git.quic_varada@quicinc.com> <ef5af2e581203e2101773863aa7e1667b4d1b705.1679388632.git.quic_varada@quicinc.com>
+Message-ID: <69120CDC-19C5-4087-BF71-0ECAB87D018B@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230321103638.343886-1-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,83 +78,47 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 11:36:38AM +0100, Uwe Kleine-König wrote:
-> This driver got its last actual change in 2006 and is probably unused as
-> nowbody should use a cardbus to USB adapter any more.
-> 
-> If it were still used, the driver was in urgent need for maintainer
-> love. (Explicit kref handling, underdocumented locking, .remove() can
-> return errors ...)
-> 
-> Also the link in the (now removed) help text doesn't look actively
-> maintained. According to archive.org it forwarded to
-> http://www.copenhagen-hotel.net/ already back in 2018.
-> 
-> So don't waste more time on this driver and just delete it.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  arch/mips/configs/mtx1_defconfig      |    1 -
->  arch/powerpc/configs/ppc6xx_defconfig |    1 -
->  drivers/usb/Makefile                  |    1 -
->  drivers/usb/host/Kconfig              |   27 -
->  drivers/usb/host/Makefile             |    1 -
->  drivers/usb/host/u132-hcd.c           | 3239 -------------------------
->  drivers/usb/misc/Kconfig              |    2 -
->  7 files changed, 3272 deletions(-)
->  delete mode 100644 drivers/usb/host/u132-hcd.c
-> 
-> diff --git a/arch/mips/configs/mtx1_defconfig b/arch/mips/configs/mtx1_defconfig
-> index 89a1511d2ee4..7b6a2a9daa10 100644
-> --- a/arch/mips/configs/mtx1_defconfig
-> +++ b/arch/mips/configs/mtx1_defconfig
-> @@ -497,7 +497,6 @@ CONFIG_USB_EHCI_ROOT_HUB_TT=y
->  CONFIG_USB_OHCI_HCD=m
->  CONFIG_USB_OHCI_HCD_PLATFORM=m
->  CONFIG_USB_UHCI_HCD=m
-> -CONFIG_USB_U132_HCD=m
->  CONFIG_USB_SL811_HCD=m
->  CONFIG_USB_SL811_CS=m
->  CONFIG_USB_ACM=m
-> diff --git a/arch/powerpc/configs/ppc6xx_defconfig b/arch/powerpc/configs/ppc6xx_defconfig
-> index 110258277959..fd5cc93c4a99 100644
-> --- a/arch/powerpc/configs/ppc6xx_defconfig
-> +++ b/arch/powerpc/configs/ppc6xx_defconfig
-> @@ -845,7 +845,6 @@ CONFIG_USB_OHCI_HCD=m
->  CONFIG_USB_OHCI_HCD_PPC_OF_BE=y
->  CONFIG_USB_OHCI_HCD_PPC_OF_LE=y
->  CONFIG_USB_UHCI_HCD=m
-> -CONFIG_USB_U132_HCD=m
->  CONFIG_USB_SL811_HCD=m
->  CONFIG_USB_ACM=m
->  CONFIG_USB_PRINTER=m
-> diff --git a/drivers/usb/Makefile b/drivers/usb/Makefile
-> index a81e6ef293af..3a9a0dd4be70 100644
-> --- a/drivers/usb/Makefile
-> +++ b/drivers/usb/Makefile
-> @@ -31,7 +31,6 @@ obj-$(CONFIG_USB_FHCI_HCD)	+= host/
->  obj-$(CONFIG_USB_XHCI_HCD)	+= host/
->  obj-$(CONFIG_USB_SL811_HCD)	+= host/
->  obj-$(CONFIG_USB_ISP1362_HCD)	+= host/
-> -obj-$(CONFIG_USB_U132_HCD)	+= host/
->  obj-$(CONFIG_USB_R8A66597_HCD)	+= host/
->  obj-$(CONFIG_USB_FSL_USB2)	+= host/
->  obj-$(CONFIG_USB_FOTG210_HCD)	+= host/
-> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-> index eacb603ad1b2..c170672f847e 100644
-> --- a/drivers/usb/host/Kconfig
-> +++ b/drivers/usb/host/Kconfig
-> @@ -622,33 +622,6 @@ config FHCI_DEBUG
->  	  Say "y" to see some FHCI debug information and statistics
->  	  through debugfs.
->  
-> -config USB_U132_HCD
-> -	tristate "Elan U132 Adapter Host Controller"
-> -	depends on USB_FTDI_ELAN
 
-I think you can also delete this driver (drivers/usb/misc/ftdi-elan.c)
-as well as it is the same expired domain and came in at the same time.
 
-thanks,
+On 21 March 2023 11:54:19 GMT+03:00, Varadarajan Narayanan <quic_varada@qu=
+icinc=2Ecom> wrote:
+>Document the compatible string used for the qusb2 phy in IPQ9574=2E
+>
+>Acked-by: Krzysztof Kozlowski <krzysztof=2Ekozlowski@linaro=2Eorg>
+>Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc=2Ecom>
+>
+>---
+> Changes in v2:
+>	- Moved ipq6018 to the proper place and placed ipq9574
+>	  next to it as suggested by Dmitry
+>---
+> Documentation/devicetree/bindings/phy/qcom,qusb2-phy=2Eyaml | 3 ++-
+> 1 file changed, 2 insertions(+), 1 deletion(-)
+>
+>diff --git a/Documentation/devicetree/bindings/phy/qcom,qusb2-phy=2Eyaml =
+b/Documentation/devicetree/bindings/phy/qcom,qusb2-phy=2Eyaml
+>index 7f403e7=2E=2Eeaecf9b 100644
+>--- a/Documentation/devicetree/bindings/phy/qcom,qusb2-phy=2Eyaml
+>+++ b/Documentation/devicetree/bindings/phy/qcom,qusb2-phy=2Eyaml
+>@@ -19,12 +19,13 @@ properties:
+>       - items:
+>           - enum:
+>               - qcom,ipq8074-qusb2-phy
+>+              - qcom,ipq6018-qusb2-phy
+>+              - qcom,ipq9574-qusb2-phy
 
-greg k-h
+This still isn't sorted
+
+>               - qcom,msm8953-qusb2-phy
+>               - qcom,msm8996-qusb2-phy
+>               - qcom,msm8998-qusb2-phy
+>               - qcom,qcm2290-qusb2-phy
+>               - qcom,sdm660-qusb2-phy
+>-              - qcom,ipq6018-qusb2-phy
+>               - qcom,sm4250-qusb2-phy
+>               - qcom,sm6115-qusb2-phy
+>       - items:
+
+--=20
+With best wishes
+Dmitry
