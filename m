@@ -2,236 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A332C6C27E4
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Mar 2023 03:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 794ED6C2845
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Mar 2023 03:37:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjCUCLa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Mar 2023 22:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
+        id S229717AbjCUChI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Mar 2023 22:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCUCL3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Mar 2023 22:11:29 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 36AB036089
-        for <linux-usb@vger.kernel.org>; Mon, 20 Mar 2023 19:11:27 -0700 (PDT)
-Received: (qmail 1049935 invoked by uid 1000); 20 Mar 2023 22:11:26 -0400
-Date:   Mon, 20 Mar 2023 22:11:26 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Tao Ren <rentao.bupt@gmail.com>
-Subject: Re: Host CPU busy-looping with aspeed-vhub on C621A
-Message-ID: <0d9a1253-2146-477d-a58c-62394edcd5ae@rowland.harvard.edu>
-References: <3e7273ac-7125-4e62-903a-ce9bdbdd565f@hatter.bewilderbeest.net>
+        with ESMTP id S229527AbjCUChH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Mar 2023 22:37:07 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2066.outbound.protection.outlook.com [40.107.102.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CE67DB8;
+        Mon, 20 Mar 2023 19:37:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nOVDDrQzXy5lx+QNVGzLm7WYdKvoJL/nl+DqHDDBnoZa2rNkajUDVouuZVLqlQuwflItEpsIcv9VshxR6zIXK16qWhOifSgCnIiQ0SmAwwfzSG8L4Nd3wTJFxUK1FI/4FUlku5CwKrEhekHVPbh2tE8WfLJoJRvMq+2UuBPavum9L+uYYBeY9J9DEM6rWuHhhC4mAlZVz55fXMGvUygrmlDjRUtk1EMJaCZwrs5cEtrTEGR4auMus4zI/7RLD71ZmAzPx/Fa7/mQ+mi2cZdzf68j+bR9ovZ/Xtm3LIXtfQZd8IylHxJOKZivUSkw77js+1SAMCFJoJn/RtqdapaGZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XsJjOccahbojjway2MR9K2kcF97x8b8KTIPgmJ74SY0=;
+ b=H0Vo6KTRmuq2JRkt0FqDIeSw98NnaKnv7bnFg1s4MytUQun7xF0gfcbzmptAU9Uoe5kqPvuqwOMVjSAjdHxFWTTEvrtdjO7bB6FJvBYtdAD6FPi+beoYNimxEZS3YKjUfxZfeiyHMoHcM+J3WTqY21OUlpDmgYH42qQv3PKUTbqXKwurTvFcqekO+Jh91iaQVN67d6/ZGDxdZYJo/U400kXr87SmJWNhYpC+yvRZ+Z4JdqT0KZUEKVQVm6c1hRq8D48crW4yrj2h13U0MwIlkBeBB6ILY947/unRKgvZLVJZ7XKVt3aKQ0icG5xRI5DyuuKU+tt0HReXkmWccvbr/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XsJjOccahbojjway2MR9K2kcF97x8b8KTIPgmJ74SY0=;
+ b=daINecRZGg3H8YvvbGRuMl1VJvrm+U6SwqhS7zBdPrETHaBJGNoZz2ihZ06j8hUxrhVphxBiAmh9nzbokRl9Moxf3gxOn96vqqlq2Cx8XKwl+9r1kaULuUOjoAPmeKQgsC7cQGcrSHLaliscumnkn+0KMrr9pSlYpQjkyvxMoIlvNUzMC7RHvb6kZrtoVP2uiDNmM+1c7JqSuQOb2jV48kvxZqVhDOq+UeN4elG7d0od3XRIhLNTfrvDeDzySNt41+9g4kCc0+9B8/tVNxlC7ZlN+MKCfI8ItrSmMR5QVqp6vLnutOfMWEk5dqdXKl2PSUSSycCOLGruwRXNevUicg==
+Received: from DM6PR08CA0044.namprd08.prod.outlook.com (2603:10b6:5:1e0::18)
+ by SJ2PR12MB8926.namprd12.prod.outlook.com (2603:10b6:a03:53b::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
+ 2023 02:37:02 +0000
+Received: from DM6NAM11FT104.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:1e0:cafe::1f) by DM6PR08CA0044.outlook.office365.com
+ (2603:10b6:5:1e0::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
+ Transport; Tue, 21 Mar 2023 02:37:01 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DM6NAM11FT104.mail.protection.outlook.com (10.13.173.232) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6222.16 via Frontend Transport; Tue, 21 Mar 2023 02:37:01 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 20 Mar 2023
+ 19:36:49 -0700
+Received: from 0e64808-lcelt.nvidia.com (10.126.231.37) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Mon, 20 Mar 2023 19:36:47 -0700
+From:   Haotien Hsu <haotienh@nvidia.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <linux-usb@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     JC Kuo <jckuo@nvidia.com>, Wayne Chang <waynec@nvidia.com>,
+        Haotien Hsu <haotienh@nvidia.com>
+Subject: [PATCH v2] usb: xhci: tegra: fix sleep in atomic call
+Date:   Tue, 21 Mar 2023 10:36:36 +0800
+Message-ID: <20230321023636.771729-1-haotienh@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3e7273ac-7125-4e62-903a-ce9bdbdd565f@hatter.bewilderbeest.net>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT104:EE_|SJ2PR12MB8926:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8d453d9d-a454-4bfa-5255-08db29b526c3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: scpH3ar7zrcG9x2vEQ+aZ59OCWTPnts1zTZ5h4A1ME4tc9levQdnyd00i/aVdO8asMqnzhTMSIA7Brc8ai249PLApsWgZmmtw74/hhRNyeZQuBc7qQ1nsTU0gastWbsS9aDSTLK8ywtoGSiQ/wj1vQ0ebNfNqevW2SZ2k/hvd0FhBqdygTSYTE51IeZxR9K7i6RZG1P2kHi1jE8Hyw6RUWKghf3b5bw6bbQPVsRBroOT9RD6byoWfQm2CVG3FlG5F+1EQtyjcC2bhCuizbDRit7L9KQQ4grOXGEqIPyA8L6azLDqdjege8mPaq55LoKPRAf+Dr3Vsu3NLgopZl0IXbhiqFUMy2Ncn8F2AtRNFxy09fJJXW14Ho1virQCAhc7WXpjavo/dUG+Nn+E4t+rn+L3HlP6/PiDNybso5Hu8R10q7xISU2kfaE2GKS6jROIFVc6Nzx0AzYQmXaCHAiLkiyBNoPZYWETxi+fa6F8TrGotsuBWAHmeBTXlJBgRIkmM6oJF5m1Ax0zPpe0uhDijDMcnvJsgTjCeWXEuoewgFeptxAGQyYe5GNBV+0/kBjajAbwzyfffYXoojtglaDhk++I9/YgHu38zAAVZG97ChcK8GVXRsX28dc9tSG61xdbQ7hQe0tDMRus2BkhGfPLIXK9UIlFD47rCrpFB0zIcMb7ucqi25sOXmeQMLGnNtplnaQvu3PBTJxMcWeXqk5RkhFL95bBBqwgoihIklXhuELRI91THJ0IUhqJ4ARReKzl
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(39860400002)(396003)(136003)(451199018)(40470700004)(46966006)(36840700001)(86362001)(356005)(7636003)(36860700001)(82740400003)(36756003)(40480700001)(5660300002)(41300700001)(40460700003)(4326008)(2906002)(8676002)(82310400005)(8936002)(2616005)(336012)(1076003)(186003)(16526019)(83380400001)(110136005)(26005)(47076005)(426003)(70206006)(70586007)(316002)(6666004)(7696005)(107886003)(478600001)(54906003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 02:37:01.7805
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d453d9d-a454-4bfa-5255-08db29b526c3
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT104.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8926
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 04:59:26PM -0700, Zev Weiss wrote:
-> Hello all,
-> 
-> I'm seeing an odd USB (mis)behavior on an in-progress OpenBMC port I'm
-> working on.  The platform is the ASRock Rack SPC621D8HM3, which has an Intel
-> C621A chipset and an AST2500 BMC.
-> 
-> The USB devices present on the system are as follows:
-> 
->     # lsusb -t
->     /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 5000M
->     /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/16p, 480M
->         |__ Port 8: Dev 2, If 0, Class=Hub, Driver=hub/5p, 480M
-> 
-> (The 5-port hub in the final line is the AST2500's aspeed-vhub device.)
-> 
-> With the system otherwise idle, the host sits there with an entire CPU core
-> tied up busy-looping in what appears to be some USB power-management code,
-> with 'top' showing about 75% in a kworker thread and the remaining 25% in
-> ksoftirqd.
-> 
-> Inspecting some workqueue events via ftrace, if I'm interpreting this right
-> it appears that hub_event() and pm_runtime_work() are recursively triggering
-> each other via queue_work():
-> 
->     kworker/18:1-453     [018] .....  6520.912866: workqueue_execute_start: work struct 00000000de5443e3: function hub_event [usbcore]
->     kworker/18:1-453     [018] d..2.  6520.912873: workqueue_queue_work: work struct=0000000077eccca1 function=pm_runtime_work workqueue=pm req_cpu=256 cpu=18
->     kworker/18:1-453     [018] d..2.  6520.912873: workqueue_activate_work: work struct 0000000077eccca1
->     kworker/18:1-453     [018] .....  6520.912873: workqueue_execute_end: work struct 00000000de5443e3: function hub_event [usbcore]
->     kworker/18:1-453     [018] .....  6520.912873: workqueue_execute_start: work struct 0000000077eccca1: function pm_runtime_work
->     kworker/18:1-453     [018] d..1.  6520.912910: workqueue_queue_work: work struct=00000000de5443e3 function=hub_event [usbcore] workqueue=usb_hub_wq req_cpu=256 cpu=18
->     kworker/18:1-453     [018] d..1.  6520.912910: workqueue_activate_work: work struct 00000000de5443e3
->     kworker/18:1-453     [018] .....  6520.912910: workqueue_execute_end: work struct 0000000077eccca1: function pm_runtime_work
->     kworker/18:1-453     [018] .....  6520.912910: workqueue_execute_start: work struct 00000000de5443e3: function hub_event [usbcore]
->     kworker/18:1-453     [018] d..2.  6520.912917: workqueue_queue_work: work struct=0000000077eccca1 function=pm_runtime_work workqueue=pm req_cpu=256 cpu=18
->     kworker/18:1-453     [018] d..2.  6520.912917: workqueue_activate_work: work struct 0000000077eccca1
->     kworker/18:1-453     [018] .....  6520.912918: workqueue_execute_end: work struct 00000000de5443e3: function hub_event [usbcore]
->     kworker/18:1-453     [018] .....  6520.912918: workqueue_execute_start: work struct 0000000077eccca1: function pm_runtime_work
->     kworker/18:1-453     [018] d..1.  6520.912954: workqueue_queue_work: work struct=00000000de5443e3 function=hub_event [usbcore] workqueue=usb_hub_wq req_cpu=256 cpu=18
->     kworker/18:1-453     [018] d..1.  6520.912954: workqueue_activate_work: work struct 00000000de5443e3
->     kworker/18:1-453     [018] .....  6520.912954: workqueue_execute_end: work struct 0000000077eccca1: function pm_runtime_work
->     kworker/18:1-453     [018] .....  6520.912954: workqueue_execute_start: work struct 00000000de5443e3: function hub_event [usbcore]
->     kworker/18:1-453     [018] d..2.  6520.912961: workqueue_queue_work: work struct=0000000077eccca1 function=pm_runtime_work workqueue=pm req_cpu=256 cpu=18
->     kworker/18:1-453     [018] d..2.  6520.912962: workqueue_activate_work: work struct 0000000077eccca1
->     kworker/18:1-453     [018] .....  6520.912962: workqueue_execute_end: work struct 00000000de5443e3: function hub_event [usbcore]
-> 
-> Adding in xhci-hcd events, the event stream pattern becomes:
-> 
->     kworker/18:1-453     [018] .....  7086.376157: workqueue_execute_start: work struct 00000000de5443e3: function hub_event [usbcore]
->     kworker/18:1-453     [018] d..1.  7086.376158: xhci_get_port_status:
-> port-8: Powered-off Not-connected Disabled Link:Disabled PortSpeed:0
-> OverCurrent Change: Wake:     kworker/18:1-453     [018] d..1.  7086.376165:
-> xhci_get_port_status: port-10: Powered-off Not-connected Disabled
-> Link:Disabled PortSpeed:0 OverCurrent Change: Wake:     kworker/18:1-453
-> [018] d..1.  7086.376168: xhci_get_port_status: port-12: Powered-off
-> Not-connected Disabled Link:Disabled PortSpeed:0 OverCurrent Change: Wake:
-> kworker/18:1-453     [018] d..2.  7086.376171: workqueue_queue_work: work
-> struct=0000000077eccca1 function=pm_runtime_work workqueue=pm req_cpu=256
-> cpu=18
->     kworker/18:1-453     [018] d..2.  7086.376171: workqueue_activate_work: work struct 0000000077eccca1
->     kworker/18:1-453     [018] .....  7086.376172: workqueue_execute_end: work struct 00000000de5443e3: function hub_event [usbcore]
->     kworker/18:1-453     [018] .....  7086.376172: workqueue_execute_start: work struct 0000000077eccca1: function pm_runtime_work
->     kworker/18:1-453     [018] d..1.  7086.376178: xhci_get_port_status:
-> port-0: Powered Not-connected Disabled Link:RxDetect PortSpeed:0 Change:
-> Wake:     kworker/18:1-453     [018] d..1.  7086.376181:
-> xhci_get_port_status: port-1: Powered Not-connected Disabled Link:RxDetect
-> PortSpeed:0 Change: Wake:     kworker/18:1-453     [018] d..1.  7086.376184:
-> xhci_get_port_status: port-2: Powered Not-connected Disabled Link:RxDetect
-> PortSpeed:0 Change: Wake:     kworker/18:1-453     [018] d..1.  7086.376185:
-> xhci_get_port_status: port-3: Powered Not-connected Disabled Link:RxDetect
-> PortSpeed:0 Change: Wake:     kworker/18:1-453     [018] d..1.  7086.376189:
-> xhci_get_port_status: port-4: Powered Not-connected Disabled Link:RxDetect
-> PortSpeed:0 Change: Wake:     kworker/18:1-453     [018] d..1.  7086.376193:
-> xhci_get_port_status: port-5: Powered Not-connected Disabled Link:RxDetect
-> PortSpeed:0 Change: Wake:     kworker/18:1-453     [018] d..1.  7086.376195:
-> xhci_get_port_status: port-6: Powered Not-connected Disabled Link:RxDetect
-> PortSpeed:0 Change: Wake:     kworker/18:1-453     [018] d..1.  7086.376197:
-> xhci_get_port_status: port-7: Powered Connected Enabled Link:U3 PortSpeed:3
-> Change: Wake:     kworker/18:1-453     [018] d..1.  7086.376199:
-> xhci_get_port_status: port-8: Powered-off Not-connected Disabled
-> Link:Disabled PortSpeed:0 OverCurrent Change: Wake:     kworker/18:1-453
-> [018] d..1.  7086.376202: xhci_get_port_status: port-9: Powered
-> Not-connected Disabled Link:RxDetect PortSpeed:0 Change: Wake:
-> kworker/18:1-453     [018] d..1.  7086.376204: xhci_get_port_status:
-> port-10: Powered-off Not-connected Disabled Link:Disabled PortSpeed:0
-> OverCurrent Change: Wake:     kworker/18:1-453     [018] d..1.  7086.376209:
-> xhci_get_port_status: port-11: Powered Not-connected Disabled Link:RxDetect
-> PortSpeed:0 Change: Wake:     kworker/18:1-453     [018] d..1.  7086.376212:
-> xhci_get_port_status: port-12: Powered-off Not-connected Disabled
-> Link:Disabled PortSpeed:0 OverCurrent Change: Wake:     kworker/18:1-453
-> [018] d..1.  7086.376214: xhci_get_port_status: port-13: Powered
-> Not-connected Disabled Link:RxDetect PortSpeed:0 Change: Wake:
-> kworker/18:1-453     [018] d..1.  7086.376216: xhci_get_port_status:
-> port-14: Powered Not-connected Disabled Link:RxDetect PortSpeed:0 Change:
-> Wake:     kworker/18:1-453     [018] d..1.  7086.376219:
-> xhci_get_port_status: port-15: Powered Not-connected Disabled Link:RxDetect
-> PortSpeed:0 Change: Wake:     kworker/18:1-453     [018] d..1.  7086.376221:
-> workqueue_queue_work: work struct=00000000de5443e3 function=hub_event
-> [usbcore] workqueue=usb_hub_wq req_cpu=256 cpu=18
->     kworker/18:1-453     [018] d..1.  7086.376221: workqueue_activate_work: work struct 00000000de5443e3
->     kworker/18:1-453     [018] .....  7086.376221: workqueue_execute_end: work struct 0000000077eccca1: function pm_runtime_work
-> 
-> (Port 8 has the vhub on it, but I'm not sure what's "special" about ports 10
-> and 12 that leads to hub_event apparently checking them but not all the
-> others.)
+From: Wayne Chang <waynec@nvidia.com>
 
-The xhci traces can be a little hard to understand.
+When we set the OTG port to Host mode, we observed the following splat:
+[  167.057718] BUG: sleeping function called from invalid context at
+include/linux/sched/mm.h:229
+[  167.057872] Workqueue: events tegra_xusb_usb_phy_work
+[  167.057954] Call trace:
+[  167.057962]  dump_backtrace+0x0/0x210
+[  167.057996]  show_stack+0x30/0x50
+[  167.058020]  dump_stack_lvl+0x64/0x84
+[  167.058065]  dump_stack+0x14/0x34
+[  167.058100]  __might_resched+0x144/0x180
+[  167.058140]  __might_sleep+0x64/0xd0
+[  167.058171]  slab_pre_alloc_hook.constprop.0+0xa8/0x110
+[  167.058202]  __kmalloc_track_caller+0x74/0x2b0
+[  167.058233]  kvasprintf+0xa4/0x190
+[  167.058261]  kasprintf+0x58/0x90
+[  167.058285]  tegra_xusb_find_port_node.isra.0+0x58/0xd0
+[  167.058334]  tegra_xusb_find_port+0x38/0xa0
+[  167.058380]  tegra_xusb_padctl_get_usb3_companion+0x38/0xd0
+[  167.058430]  tegra_xhci_id_notify+0x8c/0x1e0
+[  167.058473]  notifier_call_chain+0x88/0x100
+[  167.058506]  atomic_notifier_call_chain+0x44/0x70
+[  167.058537]  tegra_xusb_usb_phy_work+0x60/0xd0
+[  167.058581]  process_one_work+0x1dc/0x4c0
+[  167.058618]  worker_thread+0x54/0x410
+[  167.058650]  kthread+0x188/0x1b0
+[  167.058672]  ret_from_fork+0x10/0x20
 
-> Looking at usbmon's '0u' debugfs file I see a stream of events coming from
-> the top-level root_hub that the aspeed-vhub is attached to, which I presume
-> are the result of the xhci_get_port_status() calls above:
-> 
->     ffff9bb242a2d200 2648339575 S Ci:1:001:0 s a3 00 0000 0001 0004 4 <
->     ffff9bb242a2d200 2648339576 C Ci:1:001:0 0 4 = 00010000
->     ffff9bb242a2d200 2648339577 S Ci:1:001:0 s a3 00 0000 0002 0004 4 <
->     ffff9bb242a2d200 2648339578 C Ci:1:001:0 0 4 = 00010000
->     ffff9bb242a2d200 2648339579 S Ci:1:001:0 s a3 00 0000 0003 0004 4 <
->     ffff9bb242a2d200 2648339581 C Ci:1:001:0 0 4 = 00010000
->     ffff9bb242a2d200 2648339581 S Ci:1:001:0 s a3 00 0000 0004 0004 4 <
->     ffff9bb242a2d200 2648339583 C Ci:1:001:0 0 4 = 00010000
->     ffff9bb242a2d200 2648339583 S Ci:1:001:0 s a3 00 0000 0005 0004 4 <
->     ffff9bb242a2d200 2648339585 C Ci:1:001:0 0 4 = 00010000
->     ffff9bb242a2d200 2648339586 S Ci:1:001:0 s a3 00 0000 0006 0004 4 <
->     ffff9bb242a2d200 2648339587 C Ci:1:001:0 0 4 = 00010000
->     ffff9bb242a2d200 2648339588 S Ci:1:001:0 s a3 00 0000 0007 0004 4 <
->     ffff9bb242a2d200 2648339589 C Ci:1:001:0 0 4 = 00010000
->     ffff9bb242a2d200 2648339590 S Ci:1:001:0 s a3 00 0000 0008 0004 4 <
->     ffff9bb242a2d200 2648339592 C Ci:1:001:0 0 4 = 07050000
->     ffff9bb242a2d200 2648339592 S Ci:1:001:0 s a3 00 0000 0009 0004 4 <
->     ffff9bb242a2d200 2648339594 C Ci:1:001:0 0 4 = 08000000
->     ffff9bb242a2d200 2648339595 S Ci:1:001:0 s a3 00 0000 000a 0004 4 <
->     ffff9bb242a2d200 2648339597 C Ci:1:001:0 0 4 = 00010000
->     ffff9bb242a2d200 2648339597 S Ci:1:001:0 s a3 00 0000 000b 0004 4 <
->     ffff9bb242a2d200 2648339599 C Ci:1:001:0 0 4 = 08000000
->     ffff9bb242a2d200 2648339600 S Ci:1:001:0 s a3 00 0000 000c 0004 4 <
->     ffff9bb242a2d200 2648339602 C Ci:1:001:0 0 4 = 00010000
->     ffff9bb242a2d200 2648339603 S Ci:1:001:0 s a3 00 0000 000d 0004 4 <
->     ffff9bb242a2d200 2648339604 C Ci:1:001:0 0 4 = 08000000
->     ffff9bb242a2d200 2648339606 S Ci:1:001:0 s a3 00 0000 000e 0004 4 <
->     ffff9bb242a2d200 2648339607 C Ci:1:001:0 0 4 = 00010000
->     ffff9bb242a2d200 2648339608 S Ci:1:001:0 s a3 00 0000 000f 0004 4 <
->     ffff9bb242a2d200 2648339610 C Ci:1:001:0 0 4 = 00010000
->     ffff9bb242a2d200 2648339611 S Ci:1:001:0 s a3 00 0000 0010 0004 4 <
->     ffff9bb242a2d200 2648339613 C Ci:1:001:0 0 4 = 00010000
->     ffff9bb240225200 2648339614 S Ii:1:001:1 -115:2048 4 <
->     ffff9bb242a2d200 2648339615 S Ci:1:001:0 s a3 00 0000 0009 0004 4 <
->     ffff9bb242a2d200 2648339616 C Ci:1:001:0 0 4 = 08000000
->     ffff9bb242a2d200 2648339618 S Ci:1:001:0 s a3 00 0000 000b 0004 4 <
->     ffff9bb242a2d200 2648339620 C Ci:1:001:0 0 4 = 08000000
->     ffff9bb242a2d200 2648339622 S Ci:1:001:0 s a3 00 0000 000d 0004 4 <
->     ffff9bb242a2d200 2648339624 C Ci:1:001:0 0 4 = 08000000
->     ffff9bb240225200 2648339626 C Ii:1:001:1 -2:2048 0
-> 
-> However, I do *not* see any activity (increasing numbers) in the xhci_hcd
-> line in /proc/interrupts, for what that's worth.
+The function tegra_xusb_padctl_get_usb3_companion eventually calls
+tegra_xusb_find_port and this in turn calls kasprintf which might sleep
+and so cannot be called from an atomic context.
 
-Maybe those events are triggered by a timer, not by an interrupt.
+Fix this by moving the call to tegra_xusb_padctl_get_usb3_companion to
+the tegra_xhci_id_work function where it is really needed.
 
-It's worth pointing out the essential information in the usbmon trace.
-It says that ports 1-7, 10, 12, and 14-16 are not connected.  Port 8 is 
-connected (no surprise).  The remaining three ports (9, 11, and 13) are 
-showing an overcurrent (!) condition.
+Fixes: f836e7843036 ("usb: xhci-tegra: Add OTG support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Wayne Chang <waynec@nvidia.com>
+Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
+---
+ drivers/usb/host/xhci-tegra.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-> From everything I can see there's no software activity going on on the BMC
-> during this (no aspeed-vhub interrupts or code execution).
-> 
-> Interestingly, the busy-looping stops and the host CPU goes appropriately
-> idle as soon as I add another USB device under the top-level hub, whether
-> directly (a thumb drive plugged into a front-panel port) or indirectly under
-> the vhub (the OpenBMC iKVM's virtual keyboard/mouse).  However, once any
-> other devices are removed and the topology returns to that shown above (just
-> the vhub under the top-level hub) the busy-looping resumes.
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index 1ff22f675930..8dbce2cdb7e4 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -2,7 +2,7 @@
+ /*
+  * NVIDIA Tegra xHCI host controller driver
+  *
+- * Copyright (c) 2014-2020, NVIDIA CORPORATION. All rights reserved.
++ * Copyright (c) 2014-2020,2023, NVIDIA CORPORATION. All rights reserved.
+  * Copyright (C) 2014 Google, Inc.
+  */
+ 
+@@ -1360,6 +1360,10 @@ static void tegra_xhci_id_work(struct work_struct *work)
+ 
+ 	mutex_unlock(&tegra->lock);
+ 
++	tegra->otg_usb3_port = tegra_xusb_padctl_get_usb3_companion(
++							tegra->padctl,
++							tegra->otg_usb2_port);
++
+ 	if (tegra->host_mode) {
+ 		/* switch to host mode */
+ 		if (tegra->otg_usb3_port >= 0) {
+@@ -1474,9 +1478,6 @@ static int tegra_xhci_id_notify(struct notifier_block *nb,
+ 	}
+ 
+ 	tegra->otg_usb2_port = tegra_xusb_get_usb2_port(tegra, usbphy);
+-	tegra->otg_usb3_port = tegra_xusb_padctl_get_usb3_companion(
+-							tegra->padctl,
+-							tegra->otg_usb2_port);
+ 
+ 	tegra->host_mode = (usbphy->last_event == USB_EVENT_ID) ? true : false;
+ 
+-- 
+2.25.1
 
-Adding another device prevents the root hub from going into runtime 
-suspend.  Removing all non-hub devices allows runtime suspend.  Clearly 
-this must be related to the problem.
-
-> On another system with a similar topology but with a C246 chipset (ASRock
-> Rack E3C246D4I) I don't see this happen.
-> 
-> It also doesn't happen with the factory (AMI) BMC firmware, so it seems like
-> it must be a result of something OpenBMC is doing differently with the vhub.
-> 
-> I'm not terribly familiar with either the kernel USB stack or the
-> aspeed-vhub hardware/driver, so any assistance with where to look next on
-> this would be much appreciated!
-
-Perhaps the busy-looping shouldn't be a surprise either.  Overcurrent 
-conditions don't get tested very much, since they hardly ever happen.  
-When they do, the system tries to clear the condition but there's not 
-much it can do to remove the underlying cause.
-
-Hopefully this clue will help point you in the right direction.
-
-Alan Stern
