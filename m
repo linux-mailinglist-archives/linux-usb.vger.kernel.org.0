@@ -2,96 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6F56C31F6
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Mar 2023 13:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2EA6C3280
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Mar 2023 14:22:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbjCUMnc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Mar 2023 08:43:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
+        id S230215AbjCUNWE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Mar 2023 09:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbjCUMn2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Mar 2023 08:43:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CA64D42E;
-        Tue, 21 Mar 2023 05:42:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2D7361B80;
-        Tue, 21 Mar 2023 12:42:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 123B6C433AC;
-        Tue, 21 Mar 2023 12:42:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679402557;
-        bh=J20LlY5TbVnPM0z5FlTNCPp5ZAh4UVG6euTTWc5LkUw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FdVixEWY/0QvALciIzaXMuyjtTuctDu5uQnZAkKUVwbR8UBXJtwUnyxQtT/p/30ic
-         zpl55Nm+hUpZq5XJiO53LWzTvqQltae2LMbqInH9aGehkHNAgTJ164pX4YQxll3KMy
-         TD2ug+AYx3+44yAUcXSFocaJgG/jig0Jy18j4H5xsbdoMjB9gU+8MwEJ0DkP5ks6eT
-         KCLNhOoO34XSRvOPyEnyvii8NdivuEDpea1bCdkez29ZJqdilkcKgnBSN/Qfu6vbBe
-         soG30ERWWcrojAZnMfrIwsqxFHO8VOzwjVm6uKlK0AbKWOD4M/k7pMnLwbWFhV/Dwd
-         V04BWarn/LWkw==
-Received: by mail-yb1-f176.google.com with SMTP id z83so16892638ybb.2;
-        Tue, 21 Mar 2023 05:42:37 -0700 (PDT)
-X-Gm-Message-State: AAQBX9eJgFzaDRWA/HkJoeYF2lRLHj0ex4B7hgaaPRfdZAOYUyvoqJes
-        kVYWAKeEJJrMj9fRTSB3udSDF1XTBsnP2A9ybw==
-X-Google-Smtp-Source: AKy350ZhCPEnnrwloI2VYkVonvOVRbKLguR0+fCqDHc7mDqtOx67pDwKgadHRUXyovXV1023X8BMqxVSAgSWqc8/Yn8=
-X-Received: by 2002:a05:6902:150c:b0:b6c:f26c:e5b0 with SMTP id
- q12-20020a056902150c00b00b6cf26ce5b0mr1453538ybu.1.1679402556021; Tue, 21 Mar
- 2023 05:42:36 -0700 (PDT)
+        with ESMTP id S229754AbjCUNWD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Mar 2023 09:22:03 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDFC27D7F
+        for <linux-usb@vger.kernel.org>; Tue, 21 Mar 2023 06:21:44 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id i5-20020a05600c354500b003edd24054e0so4315813wmq.4
+        for <linux-usb@vger.kernel.org>; Tue, 21 Mar 2023 06:21:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679404903;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=x7qEp4ijrbwAJaZu+DVD/1qkBYaBwVY033kbAkhbKBY=;
+        b=tSs6jwFUXQM60idPU7SVCBTnfUOzac3Lbf3ozVkv1AW/hhL3UZn6BJTea0xIjACEtg
+         zJQByD8nwd6l9n/sM5wjU1/DQStMgEXVuxmn+Jq8m4te/j4kHdd7b/VGSP5Hkuidj+Vi
+         T44rZOW3BK3qQWR0D/ujPWsIdnPakB9zNkHOQq3BUNROi7NNoWuhad7B+4fnSYQ8WjQB
+         kt/EsDJaJJ+lsT4ht23wpMMfjo/2aksNl9LVww/dRZ1992Uz6QQqiIZfTDzZajggqmDz
+         LJhl2UXVoYwpH7lFjG0qOBejNlYtRlvV8cZ1bKxEirGZM/00pxx6Oft7zuYOtmsufU6z
+         wOxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679404903;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x7qEp4ijrbwAJaZu+DVD/1qkBYaBwVY033kbAkhbKBY=;
+        b=c4thRnrtmY4BPnSGAL85C3wdFbxynCLY0jL7ys1CMXyUJY5GDCqmtZ7+7ilN/wmLEX
+         j7BKbXxGjsufnL5s2vEC7MDPSsNpyiOkNM3WzHg/gJud9m8lZJ4dEUlTONAJ+w8cYo/6
+         nCsyUn8y5vZwQFiBXIURBuQRQhfeJ8vp8GRmEDN2s/LJuQOIzwk1hNKgBqZc+3WVsfzj
+         lGOUowHrNju8KGXSJ5QDhlDLDwTb2aJI7tZo5iKSnYKutZ4kBKrkwbFKu8JqGR/nhNiZ
+         TFTXBOub72APV5x/ZmXG6A9ZYgwF0mj13ivyzcag+rzM89Mydbqf5Kv4ZO6XHVavIzVH
+         zCjQ==
+X-Gm-Message-State: AO0yUKUHT1YbPP7y9F7l0giBrC0CK7fG7vzgmSMWvUQ06ZOAbRPlvoN8
+        WC5e149SHLaKKxVmL5Wpmjq7lg==
+X-Google-Smtp-Source: AK7set+I4hdq2gUlIjlYISBAK6GqiK/l8EYqTCGWNLDEDwKzOgN3Z6OGVolWCzPurJlfw1ZgjS+q8Q==
+X-Received: by 2002:a7b:c841:0:b0:3ee:392:3a00 with SMTP id c1-20020a7bc841000000b003ee03923a00mr2584535wml.16.1679404902803;
+        Tue, 21 Mar 2023 06:21:42 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id v26-20020a05600c215a00b003eafc47eb09sm13393016wml.43.2023.03.21.06.21.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 06:21:42 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v5 00/12] soc: qcom: add UCSI function to PMIC GLINK
+Date:   Tue, 21 Mar 2023 14:21:40 +0100
+Message-Id: <20230130-topic-sm8450-upstream-pmic-glink-v5-0-552f3b721f9e@linaro.org>
 MIME-Version: 1.0
-References: <20230320233904.2920197-1-robh@kernel.org> <ZBlTJbdAmh5H3PD0@kroah.com>
-In-Reply-To: <ZBlTJbdAmh5H3PD0@kroah.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 21 Mar 2023 07:42:24 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqL9LYOpk88RCBJcsX5DnroOUdvXXtpwDPoabt3A1S7SVQ@mail.gmail.com>
-Message-ID: <CAL_JsqL9LYOpk88RCBJcsX5DnroOUdvXXtpwDPoabt3A1S7SVQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: usb: Drop unneeded quotes
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGSvGWQC/5XOS46DMBAE0KtEXk9HjT+AZpV7RFn4C1bARjZBM
+ 4q4+3SyG2XFskrqV/1k1ZfoK/s+PVnxW6wxJwrq68TsqNPgITrKjCMX2AiENS/RQp17qRAeS12
+ L1zMsM5XDFNMdhBEaTWesE4IRY3T1YIpOdiQoPaaJyqX4EH/eu9cb5THWNZff9xtb82oPLG4NI
+ KBBbYN2dOMvVOuSz7kM7KVv/KjISeya4DVXrexk+BDFUVGQKG3fouOtcrz/EOVRUZIoehMwKIe
+ dcf/Efd//AEsP6pzcAQAA
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh@kernel.org>
+X-Mailer: b4 0.12.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 1:48=E2=80=AFAM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Mar 20, 2023 at 06:39:02PM -0500, Rob Herring wrote:
-> > Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> > checking for this can be enabled in yamllint.
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
->
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->
-> Or do you want me to take this through the USB tree?  if so, just let me
-> know.
+The PMIC GLINK interface offers an UCSI endpoint for newer
+SoCs, the UCSI exchange is necessary to configure the USB-C
+port USB role and altmode on the SM8450 HDK and SM8550 MTP
+boards.
+Since the DT description is the same, support for SM8350 HDK
+is also added.
 
-You can take it.
+This patchset focuses on USB and disables altmode support
+on those 2 SoCs until DP altmode over the combo phy is
+supported.
 
-Rob
+Depends on PMIC Glink patchset at [1].
+
+[1] https://lore.kernel.org/all/20230130042003.577063-1-quic_bjorande@quicinc.com/
+
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v5:
+- added review tag on patch 1
+- fixed patch 9, remove useless port nodes added in patch 6
+- Link to v4: https://lore.kernel.org/r/20230130-topic-sm8450-upstream-pmic-glink-v4-0-38bf0f5d07bd@linaro.org
+
+Changes in v4:
+- Handle remove for UCSI driver
+- Fixup client mask match data handling
+- Added USB ports bindings review tag
+- Link to v3: https://lore.kernel.org/r/20230130-topic-sm8450-upstream-pmic-glink-v3-0-4c860d265d28@linaro.org
+
+Changes in v3:
+- Fixed patch 1 by moving mask to pmic_glink_of_match
+- Fixed patch 8 by adding back hsphy
+- Add bindings change to dwc3 to support separate HS & SS OF graph links
+- Link to v2: https://lore.kernel.org/r/20230130-topic-sm8450-upstream-pmic-glink-v2-0-71fea256474f@linaro.org
+
+Changes in v2:
+- Moved the dwc3 port subnodes to dtsi
+- Added SM8350 HDK support
+- Added help about ucsi module name
+- Added bindings acks
+- Fixed sm8550 pmic glink compatible
+- Added more description in config update patch
+- Link to v1: https://lore.kernel.org/r/20230130-topic-sm8450-upstream-pmic-glink-v1-0-0b0acfad301e@linaro.org
+
+---
+Neil Armstrong (12):
+      usb: typec: ucsi: add PMIC Glink UCSI driver
+      dt-bindings: soc: qcom: qcom,pmic-glink: document SM8450 compatible
+      dt-bindings: soc: qcom: qcom,pmic-glink: document SM8550 compatible
+      soc: qcom: pmic_glink: register ucsi aux device
+      dt-bindings: usb: snps,dwc3: document HS & SS OF graph ports
+      arm64: dts: qcom: sm8350: add port subnodes in dwc3 node
+      arm64: dts: qcom: sm8450: add port subnodes in dwc3 node
+      arm64: dts: qcom: sm8550: add port subnodes in dwc3 node
+      arm64: dts: qcom: sm8350-hdk: add pmic glink node
+      arm64: dts: qcom: sm8450-hdk: add pmic glink node
+      arm64: dts: qcom: sm8550-mtp: add pmic glink node
+      arm64: defconfig: add PMIC GLINK modules
+
+ .../bindings/soc/qcom/qcom,pmic-glink.yaml         |   2 +
+ .../devicetree/bindings/usb/snps,dwc3.yaml         |  16 +
+ arch/arm64/boot/dts/qcom/sm8350-hdk.dts            |  46 ++-
+ arch/arm64/boot/dts/qcom/sm8350.dtsi               |  19 ++
+ arch/arm64/boot/dts/qcom/sm8450-hdk.dts            |  45 ++-
+ arch/arm64/boot/dts/qcom/sm8450.dtsi               |  19 ++
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts            |  45 ++-
+ arch/arm64/boot/dts/qcom/sm8550.dtsi               |  19 ++
+ arch/arm64/configs/defconfig                       |   4 +
+ drivers/soc/qcom/pmic_glink.c                      |  65 +++-
+ drivers/usb/typec/ucsi/Kconfig                     |  10 +
+ drivers/usb/typec/ucsi/Makefile                    |   1 +
+ drivers/usb/typec/ucsi/ucsi_glink.c                | 345 +++++++++++++++++++++
+ 13 files changed, 621 insertions(+), 15 deletions(-)
+---
+base-commit: 6f72958a49f68553f2b6ff713e8c8e51a34c1e1e
+change-id: 20230130-topic-sm8450-upstream-pmic-glink-3b3a0b7bcd33
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
+
