@@ -2,114 +2,245 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AA26C4B18
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Mar 2023 13:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D6B6C4B1A
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Mar 2023 13:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjCVMvD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Mar 2023 08:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41464 "EHLO
+        id S230401AbjCVMvU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Mar 2023 08:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbjCVMvC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Mar 2023 08:51:02 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5554B27D6F
-        for <linux-usb@vger.kernel.org>; Wed, 22 Mar 2023 05:51:01 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id a11so8297630lji.6
-        for <linux-usb@vger.kernel.org>; Wed, 22 Mar 2023 05:51:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679489459;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=V4zsMeuzQNao0PgvbJ2DoVpAgLA+pjhic9zBtR0ghbg=;
-        b=K+En3YWzioTu28qNMKCmHvOrj+TtTKASs+/cP8W+1KAouHthoD1C/wVbsytxZIZdC8
-         HP893b9870dPf7uieqqEy0OGYRNxm7m2WOqiE5QLez2MsBhXeGkUL+EEHQmQcljC+5hi
-         COoLi+iZxdYTtrrdtyRYKZO47TRLaMB7H6+wPT/oZdx/UJ0BOgh1M8SXr7RR5S9V2RE/
-         mLOKayV2TNCsm4hRf8xCxA12QobsN4nVTnkLXRVrrOK+FBNu0bGSuIW/1RBPfhkFqP2d
-         PwQwRywq+N0yXsiuUayZjN0FfyDxIn3TnXQqUGgBnK+R3y8msMkDBMgt/ejR4DOjU8Ng
-         zIfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679489459;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V4zsMeuzQNao0PgvbJ2DoVpAgLA+pjhic9zBtR0ghbg=;
-        b=L86KNfdR8q/v8rFzUHuALo+KoehdeDSfB+9xn3ldK2rbXeAbemcswK3/KZxRLsHBei
-         iIhA9V2i1R0UQ2ED194jbQsBmnQIMVwZ0dx04jqBXA73QH8m0uky7iPU1LuTGVWh9DdS
-         b6Tj4/tBPf4D/XNC4jK72KbQ9xknWiXpliZ+FbPabZnPTN6JjRfHY/+bdSvqc0MwRtHN
-         lz9rNxThFwepPp/TEa2jBMYa2O1Y4W3u9I1qUp5WEY5NIO2jsZk6ElDOuy/Q4W+qCZ3T
-         o2pCog8m4Zo8KL8lfZnDE5Vy1ELUMX4mcuzkdZaD/b97IEWXDerVueYFCz4McxMDxQMT
-         RYsw==
-X-Gm-Message-State: AO0yUKUd5d6jOQU4UOxEO36k/+opYnxa/2//Yyb1DgwBRo8CMlgvPAZZ
-        52Fuvg9TFO527kDncp8IlWNI7HFR6bV8aBsOgCo=
-X-Google-Smtp-Source: AK7set8Whu3dapfsJeMibRwUZe8uVImwX6Wiqnf10g9fBCqQcCeMficL5Rl8hH5yI4TxEE/8U+yT4aTOm8H/uHmH/RA=
-X-Received: by 2002:a2e:95d5:0:b0:299:ac68:4801 with SMTP id
- y21-20020a2e95d5000000b00299ac684801mr2047273ljh.0.1679489459442; Wed, 22 Mar
- 2023 05:50:59 -0700 (PDT)
+        with ESMTP id S230081AbjCVMvS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Mar 2023 08:51:18 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2048.outbound.protection.outlook.com [40.107.20.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E1811EBB;
+        Wed, 22 Mar 2023 05:51:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N4RkyQgMBeh2kj+hHrxCcty1iRz6lCAfW30Q2WQjQIoJLdfPkDFwyy8kFYpdz93uoACbsdQyrUfKMAu6QhzE5JgbXfiEzdPc4uDpQSBKcfNcYztq/kB+FNg1l5LRfDB8X7R7DFBYssg4oKDSvskBfWnRS/0MUPvu3l8lakgByc1ks5O9RH4VnQt80vSnCZ43vkLVteiQhuc2Om1NXGbEHCKsbLdUB0hJFExa2fcx8kG54HPedrYsgJsnYbHeLXVWX+XqvpE4pjXA0fsaT0RKEtXP4ZpE+fxBWW1gBbQs4YagiImKy8VpZniddGgm0ws6YPS8/2t5J7KOP8VSTyeNiQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yE+SF97Nr9xmxw2bxHnZ1+fzvQeNqUA1CQdOXXeesDM=;
+ b=fijcRX4vdIXzNhBSuM3++HWMOzKIHHXHH1vcU4nzmS7YIpVFrHnKAoh2m+YKNbhGs+KV1F5V2RtJztsjBOUEISUnSaCjo33YrJjit3IvHQjhCz7abk2/mcv6aqIenbq8Io1j+fs7cqcZtTGjUfqCap41DHp8yPc+apoOTz4pAtyHWdQKfd5L9KqAMEqLZDKVOGLB7gM+U3kPxv6W5hYNoUsXfxz8cpcCLwym5TbUFW22szPcDw0yLLY0SbZHivVrjrx/hXr56/Yp+MANkz1qVi5SlZt2DN4IF1IX4VXH8pEK1XgDbL9IAzgu+APmY6UVXwsb2SRoHmdkX0AkJrll7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yE+SF97Nr9xmxw2bxHnZ1+fzvQeNqUA1CQdOXXeesDM=;
+ b=BPri4+22Y+GvuumeejvXU+p3ScyaVm6WAbMdMWzQRag21Q61zZbUKWWcRl3xz2LR98EyXkaLkSeNrrfDxry26DrRGaVwhEoifwdFVu4qzyWKsgSDIQAf3L1s9UXZ0T1FT7z8ZqFlkorSrcgu0SRKuo4FIvXT/kxW43qoi4dSYB4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AS5PR04MB9756.eurprd04.prod.outlook.com (2603:10a6:20b:677::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
+ 2023 12:51:13 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::f55a:cf12:da08:6d2a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::f55a:cf12:da08:6d2a%7]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
+ 12:51:13 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, xu.yang_2@nxp.com
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH linux-next V2] dt-bindings: usb: snps,dwc3: correct i.MX8MQ support
+Date:   Wed, 22 Mar 2023 20:56:18 +0800
+Message-Id: <20230322125618.3402577-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0010.apcprd02.prod.outlook.com
+ (2603:1096:4:194::15) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 MIME-Version: 1.0
-Received: by 2002:a2e:9bc7:0:b0:29c:c2bb:30bf with HTTP; Wed, 22 Mar 2023
- 05:50:59 -0700 (PDT)
-Reply-To: jessicapayne814@gmail.com
-From:   Jessica Payne <georgemosesinfo@gmail.com>
-Date:   Wed, 22 Mar 2023 05:50:59 -0700
-Message-ID: <CABniHm67+b6h83kAZEKd8Gih7L-tzvZymUp1Q8YHxnMAeh-qLg@mail.gmail.com>
-Subject: =?UTF-8?B?5oiR6ZyA6KaB5L2g55qE5biu5Yqp?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=4.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AS5PR04MB9756:EE_
+X-MS-Office365-Filtering-Correlation-Id: aab6a2a0-bb18-46c8-668b-08db2ad41e28
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 83afpwXshU6CCoVx2X37b+78ny5EfJVkxwrvipwYftxFqVH7zM/r+2YAfIuUzu+lii66h14NvlfprNQYwNQGtgOczT2/B0bcd5dmNV43ZDi7cd8bVbiooQq6PIWj9rclf9gk7shhRaSWV74GV2zUij1/lN1uri1WdGtvAVhYcThOfPKqCTc2M6bgsHlSXMnCQq6ktdc5rqGasZQu+twJRxsiNyYw99DQtDzYHCSMEnl2LTiptF24bYmGwVanLWPHAh5LA4R+yqBYt3LIkcdVYOMEz/J/ISJggXcVLQ2hwPM7rZlfD5ZUzUeUrbZKVxjN1NXHgsak2ufGzEhGxIN/V6VGlj9vnq6dMccBOVmDiYLfZa0K6q6J6DyCEVma1E/xroQPmbTeCLbigZneLr5W6eiei4vdWVVJ2bw6UnvqTGU8J8eGLy4vzGYKRY7G61ubAw7aAx30hdbulugMqlFdks5+ZIoRqA3IS/yyX2wiWMiGV/6f4LjfYFdf2Mre9D+pV5dPUMOaHzO83pNo2HAcmWmJENnnG70/1gR315RBlkc5jBPwnhSsqwxMM+DBSUmwPcdqZiwgp6rjThsD9TmC2hhgdFS4fDsbsF/eFjWS/YL1sdB3ITlGebTDYoSu33H3mfENvSdKJ7CSOXh4mN9s/COVmZxp3hoAXWR1TXFwcZ298RMNB0vj3smOpia3NvMaUwZsg/KYYE/+WLqmdZq0cEx6h6B97MqHCvxEGdtXUK8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(136003)(366004)(396003)(346002)(451199018)(2616005)(83380400001)(478600001)(6486002)(26005)(6512007)(52116002)(6506007)(186003)(5660300002)(1076003)(7416002)(316002)(966005)(38100700002)(86362001)(8936002)(66946007)(66556008)(8676002)(2906002)(4326008)(41300700001)(38350700002)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uySpZ5VGdvmGF4dueO8sHkT8BrJsqn2F+HWFN+DJwG/x57v6X6OqNySgJwVE?=
+ =?us-ascii?Q?rBn0nOm6oxo1k4kAUaO40hpdRSfkl/bHoUVc+R+tLcpYKbhIRWNoZrDrSdTn?=
+ =?us-ascii?Q?jzHolKB7eOMwIO1ZqW9/RQA/GZ6mLFDILn9mWS5E0UY2F/XkA4c7x7NGrkjs?=
+ =?us-ascii?Q?dmcyvOMGuNj1Nn0LU5yu5WbeQYwxwLpp/RbaKQz1WU8oEgWHkqLPuhYSE57+?=
+ =?us-ascii?Q?xmOViT3j48wMVButPmg4rb6gWlMO4YBgFFp9jLQJxtyXGFjLG79b+DCiCsCz?=
+ =?us-ascii?Q?59YFpK3ErRYJBMpYJGA+/Y4Xn0/ufna/B2hmerYO83BAmdETMxP5ILsqTOly?=
+ =?us-ascii?Q?HNoAP+cyDbWczIH9QzGloE/cPq0ytbMEjQTNzN9KUmZVrE+9PwNdunBPqqDk?=
+ =?us-ascii?Q?e9s6KbfjnJN8xlbxG4hgCPC4rebLAktHb/Uybi+JqdBoe21RG3GAv6AZW5ik?=
+ =?us-ascii?Q?yKTbt0fryCPx+bzBiBQxUl91FnGxybx3qRK9VIoFq/kd/lCL/P87RxgDXGX2?=
+ =?us-ascii?Q?nzmaY4DQBQCQup175+zruKF0Dq0ym97ULRFGv9lsfoHhU1pXS8RzXzxrO/1V?=
+ =?us-ascii?Q?/daC4frG16TtTLJhMH5oHsnpGnK4DxZwMOvVIuigck7ooYWyXqptzppSnNxa?=
+ =?us-ascii?Q?mdA8RVFyRx0BO2OEhq7Y397N8djoz1QhQxTe3blQzhCOT/0L2aAlno+5n9cC?=
+ =?us-ascii?Q?ZVBhph50emlGOiQzOmYDtMTKXHjxD9xAsCS7LERt6x9Er5HhUuTXcKMCcuVt?=
+ =?us-ascii?Q?WbLHRP8ofSHGWjOey5ZVBkv/CSf6WtqTtNOuuuofZC6IhD0QxFCmzFg1uxX6?=
+ =?us-ascii?Q?Xbk2p9mTbd5p0i5PJMv9LAjUHy8EmN8A+AMo2I46ZztGc42enASUgZhKNurp?=
+ =?us-ascii?Q?sU9/66GZXK4oiJC3zJxpI2ku1qGhZ8zBsahYS7f8nsuU37kRWkLLksdzO0Vk?=
+ =?us-ascii?Q?jfXElGQ5ERa9b2cEn7hZjNaCL8DQoBDGvNWoaRmC15tGO4/ixm7UxDz6Hx5g?=
+ =?us-ascii?Q?b0hel74Pz60BSJzdtNSmSjO1hruDnmFVA7KDO5T9kkNvYAPcFpOd82ZWvhSs?=
+ =?us-ascii?Q?KPxuKTRzG44h12wSRienFKKWQH//iS0RiOCOUiPQ/sbBJwAOwf/D30Jq3mVM?=
+ =?us-ascii?Q?O0+JetyYU3dh46LnjYXZ21+YvlMLjB0aBWTHQ7xSsjggOJBTHJZvcziN1Xi8?=
+ =?us-ascii?Q?9UMHofGF3S2XPTGvjEEn1PSa28qNSeA/w7+5aZNxpmrAwWeRY8y3HbVHPrNP?=
+ =?us-ascii?Q?vseYYKJhuEzTolG+NlCx3KuuA4Cs0oaVs+G7T0B41TnqeRag49+ucOyGk4sQ?=
+ =?us-ascii?Q?nhRLyGeClozOsAJDdsvwEK25tJRkEUZAMXBXWilCALgMN585rkaLGE66t339?=
+ =?us-ascii?Q?/62aYONEzazoBNyDgUzhHxxC5qESpOd187dttWN0r1z07S0DCsmMtqGdffFt?=
+ =?us-ascii?Q?01ix/d1ttmqJ7RacI/QBY6LJloKUrbmLeWFbX3BOucNVXxhOAQ4lHLcEph3Z?=
+ =?us-ascii?Q?+8N+qwFpQwZmSju4QU7wIlcqnfngB7yN+eOHGJ+sprTPKrtTsArtslbv//1S?=
+ =?us-ascii?Q?nNZ9At3W/5z9UZBiGyxILcpR4IL/pYWLP7SRkX++?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aab6a2a0-bb18-46c8-668b-08db2ad41e28
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 12:51:13.3110
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AFEsE4OEf5T0fCnXVzVj10/WTjIPo5RYXByxI6EBZL3i44hkkfBW7daw4ExJBp9ZRfWX/yfKACkXJcvhD6QhFg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS5PR04MB9756
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-5oiR5piv5p2w6KW/5Y2hwrfkvanmgankuK3lo6vlpKvkurrjgIINCuWcqOe+juWbvemZhuWGm+ea
-hOWGm+S6i+mDqOmXqOOAgiDnvo7lm73vvIzkuIDlkI3kuK3lo6vvvIwzMiDlsoHvvIzljZXouqvv
-vIzmnaXoh6rnvo7lm73kv4TkuqXkv4Tlt57lhYvliKnlpKvlhbDluILvvIznm67liY3kuI7lkIzk
-uovkuIDotbflnKjliKnmr5Tkuprnj63liqDopb/miafooYzkuIDpobnnibnmrorku7vliqHjgIIN
-Cg0K5oiR5piv5LiA5Liq5pyJ54ix5b+D44CB6K+a5a6e5ZKM5rex5oOF55qE5Lq677yM5pyJ5b6I
-5aW955qE5bm96buY5oSf77yM5oiR5Zac5qyi57uT6K+G5paw5pyL5Y+L5bm25LqG6Kej5LuW5Lus
-55qE55Sf5rS75pa55byP77yM5oiR5Zac5qyi55yL5aSn5rW355qE5rOi5rWq5ZKM576k5bGx55qE
-576O5pmv5Lul5Y+K5aSn6Ieq54S255qE5LiA5YiHIOaPkOS+m+OAgg0K5b6I6auY5YW06IO95pu0
-5aSa5Zyw5LqG6Kej5L2g77yM5oiR6K6k5Li65oiR5Lus5Y+v5Lul5bu656uL6Imv5aW955qE5ZWG
-5Lia5Y+L6LCK44CCDQoNCuaIkeS4gOebtOW+iOS4jeW8gOW/g++8jOWboOS4uuWkmuW5tOadpeeU
-n+a0u+WvueaIkeS4jeWFrOW5s++8myDmiJHlnKggMjEg5bKB6YKj5bm05aSx5Y675LqG54i25q+N
-44CCIOaIkeeItuS6sueahOWQjeWtl+aYr+W4leeJuemHjOWFi+S9qeaBqeWSjOaIkeeahOavjeS6
-sueOm+S4veS9qeaBqeOAgg0K5rKh5pyJ5Lq65biu5Yqp5oiR77yM5L2G5oiR5b6I6auY5YW05oiR
-57uI5LqO5Zyo576O5Yab5Lit5om+5Yiw5LqG6Ieq5bex44CCDQoNCuaIkee7k+S6huWpmu+8jOac
-ieS6huWtqeWtkO+8jOS9huS7luWOu+S4luS6hu+8jOS4jeS5heWQjuaIkeS4iOWkq+W8gOWni+WH
-uui9qO+8jOaJgOS7peaIkeS4jeW+l+S4jeaUvuW8g+WpmuWnu+OAgg0KDQrlnKjmiJHnmoTlm73l
-rrbnvo7lm73lkozliKnmr5Tkuprnj63liqDopb/ov5nph4zvvIzmiJHkuZ/lvojlubjov5DvvIzm
-i6XmnInnlJ/mtLvmiYDpnIDnmoTkuIDliIfvvIzkvYbmsqHmnInkurrnu5nmiJHlu7rorq7jgIIg
-5oiR6ZyA6KaB5LiA5Liq6K+a5a6e55qE5Lq65p2l5L+h5Lu75LuW77yM5LuW5Lmf5Lya57uZ5oiR
-5bu66K6u5aaC5L2V5oqV6LWE44CCDQrlm6DkuLrmiJHmmK/miJHniLbmr43nlJ/liY3llK/kuIDn
-lJ/kuIvnmoTlpbPlranjgIINCg0K5oiR5LiN6K6k6K+G5L2g5pys5Lq677yM5L2G5oiR6K6k5Li6
-5pyJ5LiA5Liq5YC85b6X5L+h6LWW55qE5aW95Lq677yM5LuW5Y+v5Lul5bu656uL55yf5q2j55qE
-5L+h5Lu75ZKM6Imv5aW955qE5ZWG5Lia5Y+L6LCK77yM5aaC5p6c5L2g55yf55qE5pyJ6K+a5a6e
-5ZKM6K+a5a6e55qE5ZCN5aOw77yM5oiR5Lmf5pyJ5LiA5Lqb5Lic6KW/6KaB5ZKM5L2g5YiG5Lqr
-DQrnm7jkv6HjgIIg5Zyo5L2g6Lqr5LiK77yM5Zug5Li65oiR6ZyA6KaB5L2g55qE5biu5Yqp44CC
-IOaIkeaLpeacieaIkeWcqOaRqea0m+WTpeaJp+ihjOS7u+WKoeaXtuWcqOaRqea0m+WTpei1muWI
-sOeahOaAu+WSjO+8iDU3MA0K5LiH576O5YWD77yJ77yM5oiR5Lya5Zyo5LiL5LiA5bCB55S15a2Q
-6YKu5Lu25Lit5ZGK6K+J5L2g5oiR5piv5aaC5L2V5YGa5Yiw55qE77yM5LiN6KaB5oOK5oWM77yM
-5a6D5Lus5rKh5pyJ6aOO6Zmp6ICM5LiU5oiRDQrlnKjkuIDkvY3kuI7nuqLljYHlrZfkvJrmnIno
-gZTns7vnmoTkurrpgZPkuLvkuYnljLvnlJ/nmoTluK7liqnkuIvvvIzlpbnov5jlnKjmkanmtJvl
-k6XnmoTkuIDlrrbpk7booYzlrZjkuobpkrHjgIINCuaIkeW4jOacm+S9oOS9nOS4uuaIkeeahOWP
-l+ebiuS6uuadpeaOpeaUtuWfuumHke+8jOW5tuWcqOaIkeWujOaIkOi/memHjOeahOW3peS9nOWQ
-juWmpeWWhOS/neeuoeWug++8jOW5tuiOt+W+l+aIkeeahOWGm+S6i+mAmuihjOivge+8jOS7peS+
-v+WcqOS9oOeahOWbveWutuS4juS9oOS8mumdou+8mw0K5LiN6KaB5ouF5b+D6ZO26KGM5Lya6YCa
-6L+H6ZO26KGM5Yiw6ZO26KGM6L2s6LSm55qE5pa55byP5bCG6LWE6YeR6L2s57uZ5oKo77yM6L+Z
-5a+55oiR5Lus5p2l6K+05pei5a6J5YWo5Y+I5b+r5o2344CCDQoNCueslOiusDsg5oiR546w5Zyo
-5Zyo5Yip5q+U5Lqa77yM5oiR5LiN55+l6YGT5oiR5Lus6KaB5Zyo6L+Z6YeM5b6F5aSa5LmF77yM
-5oiR5Zyo6L+Z6YeM5Lik5qyh54K45by56KKt5Ye75Lit5bm45a2Y5LiL5p2l77yM6L+Z6K6p5oiR
-5oOz5om+5LiA5Liq5YC85b6X5L+h6LWW55qE5Lq65p2l5biu5Yqp5oiR5o6l5pS25ZKM5oqV6LWE
-6K+l5Z+66YeR77yM5Zug5Li6DQrmiJHlsIbmnaXliLDkvaDnmoTnpZblm73mipXotYTlubblvIDl
-p4vmlrDnmoTnlJ/mtLvvvIzkuI3lho3mmK/kuIDlkI3lhpvkurrjgIINCg0K5aaC5p6c5oKo5oS/
-5oSP6LCo5oWO5aSE55CG77yM6K+35Zue5aSN5oiR44CCIOaIkeS8muWRiuivieS9oOaOpeS4i+ad
-peeahOa1geeoi++8jOW5tuWQkeS9oOWPkemAgeabtOWkmuacieWFs+WtmOWFpei1hOmHkeeahOmT
-tuihjOeahOS/oeaBr+OAgg0K5Lul5Y+K6ZO26KGM5bCG5aaC5L2V5biu5Yqp5oiR5Lus6YCa6L+H
-6ZO26KGM5Yiw6ZO26KGM6L2s5biQ5bCG6LWE6YeR6L2s56e75Yiw5oKo5omA5Zyo55qE5Zu95a62
-L+WcsOWMuuOAgiDlpoLmnpzkvaDmnInlhbTotqPvvIzor7fkuI7miJHogZTns7vjgIINCg==
+From: Peng Fan <peng.fan@nxp.com>
+
+The previous i.MX8MQ support breaks rockchip,dwc3 support,
+so use select to restrict i.MX8MQ support and avoid break others.
+
+Fixes: 3754c41c7686 ("dt-bindings: usb: snps,dwc3: support i.MX8MQ")
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+---
+
+V2:
+ Add a new yaml file for i.MX8MQ DWC3. I am not sure whether this is right,
+ still meet dtbs error:
+ arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dtb: usb@38100000:
+ Unevaluated properties are not allowed ('phys', 'phy-names', 'maximum-speed'
+ were unexpected)
+ But there is already ref to snps,dwc3.yaml and dwc3 yaml ref to usb-x.yaml
+
+ .../bindings/usb/fsl,imx8mq-dwc3.yaml         | 74 +++++++++++++++++++
+ .../devicetree/bindings/usb/snps,dwc3.yaml    | 12 ++-
+ 2 files changed, 79 insertions(+), 7 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/fsl,imx8mq-dwc3.yaml
+
+diff --git a/Documentation/devicetree/bindings/usb/fsl,imx8mq-dwc3.yaml b/Documentation/devicetree/bindings/usb/fsl,imx8mq-dwc3.yaml
+new file mode 100644
+index 000000000000..055ffb122db7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/fsl,imx8mq-dwc3.yaml
+@@ -0,0 +1,74 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/fsl,imx8mq-dwc3.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP iMX8MQ Soc USB Controller
++
++maintainers:
++  - Li Jun <jun.li@nxp.com>
++  - Peng Fan <peng.fan@nxp.com>
++
++select:
++  properties:
++    compatible:
++      contains:
++        enum:
++          - fsl,imx8mq-dwc3
++  required:
++    - compatible
++
++properties:
++  compatible:
++    items:
++      - const: fsl,imx8mq-dwc3
++      - const: snps,dwc3
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Controller root clock
++      - description: Controller core reference clock
++      - description: clock that used for wakeup
++
++  clock-names:
++    items:
++      - const: bus_early
++      - const: ref
++      - const: suspend
++
++  power-domains:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++allOf:
++  - $ref: snps,dwc3.yaml#
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/imx8mq-clock.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    usb_dwc3_1: usb@38200000 {
++        compatible = "fsl,imx8mq-dwc3", "snps,dwc3";
++        reg = <0x38200000 0x10000>;
++        clocks = <&clk IMX8MQ_CLK_USB2_CTRL_ROOT>,
++                 <&clk IMX8MQ_CLK_USB_CORE_REF>,
++                 <&clk IMX8MQ_CLK_32K>;
++        clock-names = "bus_early", "ref", "suspend";
++        interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
++        phys = <&usb3_phy1>, <&usb3_phy1>;
++        phy-names = "usb2-phy", "usb3-phy";
++    };
+diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+index 16c7d06c9172..c167fd577cae 100644
+--- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+@@ -30,13 +30,11 @@ allOf:
+ 
+ properties:
+   compatible:
+-    oneOf:
+-      - items:
+-          - const: fsl,imx8mq-dwc3
+-          - const: snps,dwc3
+-      - const: snps,dwc3
+-      - const: synopsys,dwc3
+-        deprecated: true
++    contains:
++      oneOf:
++        - const: snps,dwc3
++        - const: synopsys,dwc3
++          deprecated: true
+ 
+   reg:
+     maxItems: 1
+-- 
+2.37.1
+
