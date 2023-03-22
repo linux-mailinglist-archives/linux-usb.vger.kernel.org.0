@@ -2,133 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666056C4803
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Mar 2023 11:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1A16C47FF
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Mar 2023 11:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230430AbjCVKqU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Mar 2023 06:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
+        id S230418AbjCVKqS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Mar 2023 06:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbjCVKqM (ORCPT
+        with ESMTP id S230072AbjCVKqM (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Mar 2023 06:46:12 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52C561532;
-        Wed, 22 Mar 2023 03:45:50 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32M6fKKw018927;
-        Wed, 22 Mar 2023 10:45:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=JoR4ofFBD5SydjryKLgZQztpIpJNYifQktMYUmFlUZM=;
- b=NjqVYkx0NUMn4FKhHY1A8PRwtAKktXNOOSdq6qkG2rgvbvOlo94tVhv16MBvJsL0l6dC
- uop6yzo6cj0dlAcbgSTSfiPWyCECvUirnLalIWcvg0EY+T6UrGraAYs1/MOMy2uHvCv8
- H4QHOscIEVw8UjPahnbXRqzPM69RO4zc0qY223VtmR+S6Fwkkf6gbbar0cJqVEatOTxF
- guC6zVuQg95NnxYwhUNZ9xQIbu9kcrQq/DutveE0SKtrjv+Z8f1HwwjlA2fAMqDrOYt9
- UwAcONEMA+VOo3cQq1tMusUy0F5pCXeGEW2M64MtrrwUES9I9KKgQ9bq65IGLRkcGPa5 tg== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pfhnthweg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 10:45:39 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32MAjdQL012454
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 10:45:39 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Wed, 22 Mar 2023 03:45:33 -0700
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v3 8/8] arm64: dts: qcom: ipq9574: Enable USB
-Date:   Wed, 22 Mar 2023 16:14:12 +0530
-Message-ID: <fa56426067bf5c3677c0359abf1fd7492d7bb985.1679479634.git.quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1679479634.git.quic_varada@quicinc.com>
-References: <cover.1679479634.git.quic_varada@quicinc.com>
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25265BD81
+        for <linux-usb@vger.kernel.org>; Wed, 22 Mar 2023 03:45:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679481949; x=1711017949;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5+YoWlbmCnIN7uwmvuGmrYyryHU4pj0Tvkjj+hJ4v/I=;
+  b=fGA4UEut3OdFNnxpVdaoiZR5thZ3BmJVpY2Bf9M4lbACSloo+zcHRoYe
+   RR2P0TsII4YD/LklfWpZEmY6WHkIYCd12OB8lIzHQnJRecxPpRWz58JV2
+   oMC8v75puGrSj0eu+9W1XlhL8IseGroIDabZminXrY9YvnyDIsa18xF1p
+   6sksS1rypfMRIC3Y9pZ2uFWScdS8d/XrIsPXZ2n2oXFGjYkTa1iGatwdW
+   kN2I6BPy+q8zErQJn/E8syP69tFS2GbxXUgv3/aLccrF0ZGyoMb39br+n
+   fNjz/78OV2CXtkOTd0pC2IKOxUTSU6cxefh0FY4neNBBNkuVkA6xccHAM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="340718266"
+X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
+   d="scan'208";a="340718266"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 03:45:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="1011318439"
+X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
+   d="scan'208";a="1011318439"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 22 Mar 2023 03:45:40 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id A21A21CC; Wed, 22 Mar 2023 12:46:26 +0200 (EET)
+Date:   Wed, 22 Mar 2023 12:46:26 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Subject: [GIT PULL] Thunderbolt/USB4 fixes for v6.3-rc4
+Message-ID: <20230322104626.GD62143@black.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YiVRwbdMuhUQ0wDFsAot5xLKxjbXmeq3
-X-Proofpoint-ORIG-GUID: YiVRwbdMuhUQ0wDFsAot5xLKxjbXmeq3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-22_08,2023-03-22_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- suspectscore=0 phishscore=0 mlxlogscore=952 bulkscore=0 mlxscore=0
- lowpriorityscore=0 spamscore=0 adultscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303220077
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Turn on USB related nodes
+Hi Greg,
 
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
- Changes in v2:
-	- Fix node placement and coding style
-	- "ok" -> "okay"
----
- arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
-index 8a6caae..d0d18e5 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
-@@ -57,6 +57,10 @@
- 	status = "okay";
- };
- 
-+&qusb_phy_0 {
-+	status = "okay";
-+};
-+
- &rpm_requests {
- 	regulators {
- 		compatible = "qcom,rpm-mp5496-regulators";
-@@ -84,6 +88,10 @@
- 	clock-frequency = <32000>;
- };
- 
-+&ssphy_0 {
-+	status = "okay";
-+};
-+
- &tlmm {
- 	sdc_default_state: sdc-default-state {
- 		clk-pins {
-@@ -118,6 +126,10 @@
- 	};
- };
- 
-+&usb3 {
-+	status = "okay";
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <24000000>;
- };
--- 
-2.7.4
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.3-rc4
+
+for you to fetch changes up to 58cdfe6f58b35f17f56386f5fcf937168a423ad1:
+
+  thunderbolt: Rename shadowed variables bit to interrupt_bit and auto_clear_bit (2023-03-20 19:00:58 +0200)
+
+----------------------------------------------------------------
+thunderbolt: Fixes for v6.3-rc4
+
+This includes following fixes and quirks for v6.3-rc:
+
+  - Quirk to disable CL-states on AMD USB4 host routers
+  - Fix memory leak in lane margining
+  - Correct the retimer access flows
+  - Quirk to limit USB3 bandwidth on certain Intel USB4 host routers
+  - Fix usage of scale field when allocting USB3 bandwidth
+  - Fix interrupt "auto clear" on non-Intel USB4 host routers.
+
+There are also two commits that are not fixes themselves but are needed
+for the USB3 bandwidth quirk and for the interrupt auto clear fix to
+work.
+
+All these have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Gil Fine (2):
+      thunderbolt: Add missing UNSET_INBOUND_SBTX for retimer access
+      thunderbolt: Limit USB3 bandwidth of certain Intel USB4 host routers
+
+Mario Limonciello (2):
+      thunderbolt: Use const qualifier for `ring_interrupt_index`
+      thunderbolt: Disable interrupt auto clear for rings
+
+Mika Westerberg (3):
+      thunderbolt: Fix memory leak in margining
+      thunderbolt: Call tb_check_quirks() after initializing adapters
+      thunderbolt: Use scale field when allocating USB3 bandwidth
+
+Sanjay R Mehta (1):
+      thunderbolt: Add quirk to disable CLx
+
+Tom Rix (1):
+      thunderbolt: Rename shadowed variables bit to interrupt_bit and auto_clear_bit
+
+ drivers/thunderbolt/debugfs.c  | 12 +++++-----
+ drivers/thunderbolt/nhi.c      | 49 +++++++++++++++++++++++---------------
+ drivers/thunderbolt/nhi_regs.h |  6 +++--
+ drivers/thunderbolt/quirks.c   | 44 +++++++++++++++++++++++++++++++++++
+ drivers/thunderbolt/retimer.c  | 23 ++++++++++++++++--
+ drivers/thunderbolt/sb_regs.h  |  1 +
+ drivers/thunderbolt/switch.c   |  4 ++--
+ drivers/thunderbolt/tb.h       | 15 +++++++++---
+ drivers/thunderbolt/usb4.c     | 53 ++++++++++++++++++++++++++++++++++++------
+ 9 files changed, 166 insertions(+), 41 deletions(-)
