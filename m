@@ -2,105 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E08A6C593F
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Mar 2023 23:04:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 440CC6C5AB9
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Mar 2023 00:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjCVWE0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Mar 2023 18:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
+        id S230194AbjCVXne (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Mar 2023 19:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjCVWEZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Mar 2023 18:04:25 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808ECF77E
-        for <linux-usb@vger.kernel.org>; Wed, 22 Mar 2023 15:04:23 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id i5so31985523eda.0
-        for <linux-usb@vger.kernel.org>; Wed, 22 Mar 2023 15:04:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679522662;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rrRk+gaJjYLT5/E0PnsUAhp4KDn0wBS9o7C6buEtHBc=;
-        b=yvTFowc16cu1PU/l7kVOfvBxkEFcpqrpWd+oVqsU6zzN3acJq+3HrI4Aufymz5620e
-         SrWDJHzWPth67Ae8o4r4so7Xs65xetVeeWFN8DPafaaFWzcoB7PvkJN+9g8uDmyg6JcB
-         /88lg18inP6h8lYc3aGFbBkTxYaGms403ZWz5T0W4a/BdWS0fiQk5dHW5o4GJ7oT//uZ
-         oOmRNLX2e3fDdG5cnWAcmA/VkoGln4I8gwgAQAFQjih5mwjpLTtKSXeke1/kexURJEak
-         st5m00Yz2ZmADh+4Gb/WOhDHwfpMc7zwB86lG96vccQj27+svMS2+87Q+9YYSvAodCFB
-         OrLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679522662;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rrRk+gaJjYLT5/E0PnsUAhp4KDn0wBS9o7C6buEtHBc=;
-        b=eTYZFgSQogFEPWUYddk4TFmf7D+KEoS+62Qf2CGO8driH3ZcaBNQy5xB9xv+1rpFXn
-         sN3ribw5b+PwZOvbHiCcyIAg/Y1STXuaz0xIPip80edXg+uFheNW5PgGXoq6NonDEifN
-         5j8vYIqdrOZF+zIGlOUnzYeQ6DXv9ZAuPMzYcmPMlmrRQ4BxpGgHr9ZUCJJAbYE7ujje
-         CKOVAFYvG9mPjP/kT0kLBIbkxzJ+ya3hmpe/Ochir4MioaX6YXpyMgE1/owmfD6VVjNi
-         M7tgjdn0S6Pbfmomb2xxfP+JxDNeiJHoLhpqNOhVf6pdgPk1YSiKLsvNf0OkZyRq9pEl
-         PfAg==
-X-Gm-Message-State: AO0yUKXZ6/vRtsLhsViRHcyR0V/yy8qLX4pb0BUJ0zFbjziYGihMc8Eh
-        H3aKXpOJ/xCX20r2U4k9o32d8g==
-X-Google-Smtp-Source: AK7set9DmUAygXVMqWsEQS/8hyYS5W4WJtg8t7pcvflJhNmmgfo0zg1SyiSdx3q14rcGziO/AWr3wQ==
-X-Received: by 2002:a17:907:33c5:b0:878:66bc:2280 with SMTP id zk5-20020a17090733c500b0087866bc2280mr8959235ejb.12.1679522661994;
-        Wed, 22 Mar 2023 15:04:21 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:626d:5729:6e71:4c22? ([2a02:810d:15c0:828:626d:5729:6e71:4c22])
-        by smtp.gmail.com with ESMTPSA id g17-20020a170906c19100b00921c608b737sm7721409ejz.126.2023.03.22.15.04.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 15:04:21 -0700 (PDT)
-Message-ID: <12e898d4-e83a-3f08-53bd-f4990af97104@linaro.org>
-Date:   Wed, 22 Mar 2023 23:04:20 +0100
+        with ESMTP id S230307AbjCVXnW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Mar 2023 19:43:22 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2825D31BD8;
+        Wed, 22 Mar 2023 16:42:55 -0700 (PDT)
+Received: from p508fd58e.dip0.t-ipconnect.de ([80.143.213.142] helo=phil.fritz.box)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pf84R-0005ZV-Td; Thu, 23 Mar 2023 00:40:43 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, dri-devel@lists.freedesktop.org,
+        Robert Foss <rfoss@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, jonas@kwiboo.se,
+        neil.armstrong@linaro.org, alim.akhtar@samsung.com,
+        gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
+        sw0312.kim@samsung.com, philippe.cornu@foss.st.com,
+        linux-rockchip@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org, kyungmin.park@samsung.com,
+        hjc@rock-chips.com, jernej.skrabec@gmail.com,
+        linus.walleij@linaro.org, inki.dae@samsung.com, robh+dt@kernel.org,
+        Laurent.pinchart@ideasonboard.com, daniel@ffwll.ch,
+        linux-usb@vger.kernel.org, airlied@gmail.com,
+        andrzej.hajda@intel.com
+Subject: Re: (subset) [PATCH v6 01/17] dt-bindings: display: rockchip: convert rockchip-lvds.txt to YAML
+Date:   Thu, 23 Mar 2023 00:40:40 +0100
+Message-Id: <167952842636.1588125.15379043637737791314.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
+References: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH linux-next V2] dt-bindings: usb: snps,dwc3: correct
- i.MX8MQ support
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, xu.yang_2@nxp.com
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
-References: <20230322125618.3402577-1-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230322125618.3402577-1-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 22/03/2023 13:56, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On Thu, 22 Dec 2022 15:22:14 +0100, Johan Jonker wrote:
+> Convert rockchip-lvds.txt to YAML.
 > 
-> The previous i.MX8MQ support breaks rockchip,dwc3 support,
-> so use select to restrict i.MX8MQ support and avoid break others.
+> Changed:
+>   Add power-domains property.
+>   Requirements between PX30 and RK3288
 > 
-> Fixes: 3754c41c7686 ("dt-bindings: usb: snps,dwc3: support i.MX8MQ")
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
 > 
-> V2:
->  Add a new yaml file for i.MX8MQ DWC3. I am not sure whether this is right,
->  still meet dtbs error:
->  arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dtb: usb@38100000:
->  Unevaluated properties are not allowed ('phys', 'phy-names', 'maximum-speed'
->  were unexpected)
->  But there is already ref to snps,dwc3.yaml and dwc3 yaml ref to usb-x.yaml
+> [...]
 
-Because your DTS has invalid properties, like usb3-resume-missing-cas
-and others. Drop all properties which are not allowed by snps,dwc3.yaml.
+Applied, thanks!
+
+[09/17] ARM: dts: rockchip: rk3288: fix dsi node
+        commit: ea2d16f90629e3158307d0183cad5c40aa55c995
+[10/17] ARM: dts: rockchip: rk3288: fix lvds node
+        commit: 8a19e4c74d17ed8d1e6bc06b32c5b7b7c3b9fcfb
+[11/17] ARM: dts: rockchip: rk3288: fix dp node
+        commit: 95e2ac6ae9f2330557a6aef70bf15173e1dd9714
+[12/17] arm64: dts: rockchip: px30: fix lvds node
+        commit: 0d5e24918976edffffee006e07730434a36d264a
+[13/17] arm64: dts: rockchip: px30: fix dsi node
+        commit: 30322f812d4e0e75e2488c1d45aba94e51dd19bb
+[14/17] arm64: dts: rockchip: rk3399: fix dsi node
+        commit: f82fe7ad31530b38d2f61aa6ae68bd35c33f4ad0
+[15/17] arm64: dts: rockchip: rk3399: fix dp node
+        commit: d94024bd6342c6f3e88c5fac785a685c1974d48e
+[16/17] arm64: dts: rockchip: rename vbus-supply to phy-supply in rk3566-box-demo.dts
+        commit: fc440ea1732abb714150bb8f3d90672ccc679e2d
+[17/17] arm64: dts: rockchip: rk356x: remove hclk from dsi node
+        commit: cadda005961cd6a202ae6f8ff99f2bba35a31dc8
 
 Best regards,
-Krzysztof
-
+-- 
+Heiko Stuebner <heiko@sntech.de>
