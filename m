@@ -2,126 +2,216 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1A16C47FF
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Mar 2023 11:46:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1B16C483A
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Mar 2023 11:51:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjCVKqS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Mar 2023 06:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
+        id S230213AbjCVKvo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 22 Mar 2023 06:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjCVKqM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Mar 2023 06:46:12 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25265BD81
-        for <linux-usb@vger.kernel.org>; Wed, 22 Mar 2023 03:45:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679481949; x=1711017949;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5+YoWlbmCnIN7uwmvuGmrYyryHU4pj0Tvkjj+hJ4v/I=;
-  b=fGA4UEut3OdFNnxpVdaoiZR5thZ3BmJVpY2Bf9M4lbACSloo+zcHRoYe
-   RR2P0TsII4YD/LklfWpZEmY6WHkIYCd12OB8lIzHQnJRecxPpRWz58JV2
-   oMC8v75puGrSj0eu+9W1XlhL8IseGroIDabZminXrY9YvnyDIsa18xF1p
-   6sksS1rypfMRIC3Y9pZ2uFWScdS8d/XrIsPXZ2n2oXFGjYkTa1iGatwdW
-   kN2I6BPy+q8zErQJn/E8syP69tFS2GbxXUgv3/aLccrF0ZGyoMb39br+n
-   fNjz/78OV2CXtkOTd0pC2IKOxUTSU6cxefh0FY4neNBBNkuVkA6xccHAM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="340718266"
-X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
-   d="scan'208";a="340718266"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 03:45:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="1011318439"
-X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
-   d="scan'208";a="1011318439"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 22 Mar 2023 03:45:40 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id A21A21CC; Wed, 22 Mar 2023 12:46:26 +0200 (EET)
-Date:   Wed, 22 Mar 2023 12:46:26 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Subject: [GIT PULL] Thunderbolt/USB4 fixes for v6.3-rc4
-Message-ID: <20230322104626.GD62143@black.fi.intel.com>
+        with ESMTP id S229807AbjCVKvf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Mar 2023 06:51:35 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBBD5FA71;
+        Wed, 22 Mar 2023 03:51:15 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id ADB2F24E1FE;
+        Wed, 22 Mar 2023 18:50:39 +0800 (CST)
+Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 22 Mar
+ 2023 18:50:39 +0800
+Received: from [192.168.125.108] (183.27.97.64) by EXMBX171.cuchost.com
+ (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 22 Mar
+ 2023 18:50:38 +0800
+Message-ID: <6a223f1c-8c8b-8d07-1cf5-9a83949d0fd3@starfivetech.com>
+Date:   Wed, 22 Mar 2023 18:50:38 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 5/5] dts: usb: add StarFive JH7110 USB dts
+ configuration.
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>, Rob Herring <robh@kernel.org>,
+        "Pawel Laszczak" <pawell@cadence.com>
+CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+References: <20230315104411.73614-1-minda.chen@starfivetech.com>
+ <20230315104411.73614-6-minda.chen@starfivetech.com>
+ <20230320153419.GB1713196-robh@kernel.org>
+ <2311a888-8861-ade6-d46f-caff4fc3ec73@starfivetech.com>
+ <c3d32c0c-43e0-ee62-d372-27cb09feb82e@kernel.org>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <c3d32c0c-43e0-ee62-d372-27cb09feb82e@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [183.27.97.64]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX171.cuchost.com
+ (172.16.6.91)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.3-rc4
-
-for you to fetch changes up to 58cdfe6f58b35f17f56386f5fcf937168a423ad1:
-
-  thunderbolt: Rename shadowed variables bit to interrupt_bit and auto_clear_bit (2023-03-20 19:00:58 +0200)
-
-----------------------------------------------------------------
-thunderbolt: Fixes for v6.3-rc4
-
-This includes following fixes and quirks for v6.3-rc:
-
-  - Quirk to disable CL-states on AMD USB4 host routers
-  - Fix memory leak in lane margining
-  - Correct the retimer access flows
-  - Quirk to limit USB3 bandwidth on certain Intel USB4 host routers
-  - Fix usage of scale field when allocting USB3 bandwidth
-  - Fix interrupt "auto clear" on non-Intel USB4 host routers.
-
-There are also two commits that are not fixes themselves but are needed
-for the USB3 bandwidth quirk and for the interrupt auto clear fix to
-work.
-
-All these have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Gil Fine (2):
-      thunderbolt: Add missing UNSET_INBOUND_SBTX for retimer access
-      thunderbolt: Limit USB3 bandwidth of certain Intel USB4 host routers
-
-Mario Limonciello (2):
-      thunderbolt: Use const qualifier for `ring_interrupt_index`
-      thunderbolt: Disable interrupt auto clear for rings
-
-Mika Westerberg (3):
-      thunderbolt: Fix memory leak in margining
-      thunderbolt: Call tb_check_quirks() after initializing adapters
-      thunderbolt: Use scale field when allocating USB3 bandwidth
-
-Sanjay R Mehta (1):
-      thunderbolt: Add quirk to disable CLx
-
-Tom Rix (1):
-      thunderbolt: Rename shadowed variables bit to interrupt_bit and auto_clear_bit
-
- drivers/thunderbolt/debugfs.c  | 12 +++++-----
- drivers/thunderbolt/nhi.c      | 49 +++++++++++++++++++++++---------------
- drivers/thunderbolt/nhi_regs.h |  6 +++--
- drivers/thunderbolt/quirks.c   | 44 +++++++++++++++++++++++++++++++++++
- drivers/thunderbolt/retimer.c  | 23 ++++++++++++++++--
- drivers/thunderbolt/sb_regs.h  |  1 +
- drivers/thunderbolt/switch.c   |  4 ++--
- drivers/thunderbolt/tb.h       | 15 +++++++++---
- drivers/thunderbolt/usb4.c     | 53 ++++++++++++++++++++++++++++++++++++------
- 9 files changed, 166 insertions(+), 41 deletions(-)
+On 2023/3/22 16:00, Roger Quadros wrote:
+> Hi Minda,
+> 
+> On 21/03/2023 14:35, Minda Chen wrote:
+>> 
+>> 
+>> On 2023/3/20 23:34, Rob Herring wrote:
+>>> On Wed, Mar 15, 2023 at 06:44:11PM +0800, Minda Chen wrote:
+>>>> USB Glue layer and Cadence USB subnode configuration,
+>>>> also includes USB and PCIe phy dts configuration.
+>>>>
+>>>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+>>>> ---
+>>>>  .../jh7110-starfive-visionfive-2.dtsi         |  7 +++
+>>>>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 54 +++++++++++++++++++
+>>>>  2 files changed, 61 insertions(+)
+>>>>
+>>>> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>>>> index a132debb9b53..c64476aebc1a 100644
+>>>> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>>>> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>>>> @@ -236,3 +236,10 @@
+>>>>  	pinctrl-0 = <&uart0_pins>;
+>>>>  	status = "okay";
+>>>>  };
+>>>> +
+>>>> +&usb0 {
+>>>> +	status = "okay";
+>>>> +	usbdrd_cdns3: usb@0 {
+>>>> +		dr_mode = "peripheral";
+>>>> +	};
+>>>> +};
+>>>> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>>>> index f70a4ed47eb4..17722fd1be62 100644
+>>>> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>>>> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>>>> @@ -362,6 +362,60 @@
+>>>>  			status = "disabled";
+>>>>  		};
+>>>>  
+>>>> +		usb0: usb@10100000 {
+>>>> +			compatible = "starfive,jh7110-usb";
+>>>> +			clocks = <&stgcrg JH7110_STGCLK_USB0_LPM>,
+>>>> +				 <&stgcrg JH7110_STGCLK_USB0_STB>,
+>>>> +				 <&stgcrg JH7110_STGCLK_USB0_APB>,
+>>>> +				 <&stgcrg JH7110_STGCLK_USB0_AXI>,
+>>>> +				 <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
+>>>> +			clock-names = "lpm", "stb", "apb", "axi", "utmi_apb";
+>>>> +			resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
+>>>> +				 <&stgcrg JH7110_STGRST_USB0_APB>,
+>>>> +				 <&stgcrg JH7110_STGRST_USB0_AXI>,
+>>>> +				 <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
+>>>> +			starfive,stg-syscon = <&stg_syscon 0x4 0xc4 0x148 0x1f4>;
+>>>> +			starfive,sys-syscon = <&sys_syscon 0x18>;
+>>>> +			status = "disabled";
+>>>> +			#address-cells = <1>;
+>>>> +			#size-cells = <1>;
+>>>> +			ranges = <0x0 0x0 0x10100000 0x100000>;
+>>>> +
+>>>> +			usbdrd_cdns3: usb@0 {
+>>>> +				compatible = "cdns,usb3";
+>>>
+>>> This pattern of USB wrapper and then a "generic" IP node is discouraged 
+>>> if it is just clocks, resets, power-domains, etc. IOW, unless there's an 
+>>> actual wrapper h/w block with its own registers, then don't do this 
+>>> split. Merge it all into a single node.
+>>>
+>> I am afraid it is difficult to merge in one single node. 
+>> 
+>> 1.If cadence3 usb device is still the sub device. All the dts setting are in
+>> StarFive node. This can not work.
+>> StarFive driver code Using platform_device_add generate cadenc3 usb platform device. 
+>> Even IO memory space setting can be passed to cadence3 USB, PHY setting can not be passed.
+>> For the PHY driver using dts now. But in this case, Cadence3 USB no dts configure.
+>> 
+>> 2. Just one USB Cadence platform device.
+>> Maybe this can work. But Cadence USB driver code cdns3-plat.c required to changed.
+>> 
+>> Hi Peter Pawel and Roger
+>>    There is a "platform_suspend" function pointer in "struct cdns3_platform_data"，
+>>    Add "platform_init" and "platform_exit" for our JH7110 platform. Maybe it can work.
+>>    Is it OK?   
+> 
+> Once you move all the syscon register modifications from your wrapper driver
+> to your PHY driver, only clock and reset control are left in your wrapper driver.
+> This is generic enough to be done in the cdns3,usb driver itself so you don't need a
+> wrapper node.
+> 
+> Pawel, do you agree?
+>  
+move all the syscon codes to PHY driver is ok. I found dwc3/dwc3-of-simple.c is public codes
+and contain just clock and reset control codes. I can change the residual codes to public codes.
+But I found rockchip 3399 usb dts which is one of dwc3 simple platform still contain two nodes.
+See Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml
+>>>> +				reg = <0x0 0x10000>,
+>>>> +				      <0x10000 0x10000>,
+>>>> +				      <0x20000 0x10000>;
+>>>> +				reg-names = "otg", "xhci", "dev";
+>>>> +				interrupts = <100>, <108>, <110>;
+>>>> +				interrupt-names = "host", "peripheral", "otg";
+>>>> +				phys = <&usbphy0>;
+>>>> +				phy-names = "cdns3,usb2-phy";
+>>>
+>>> No need for *-names when there is only 1 entry. Names are local to the 
+>>> device and only to distinguish entries, so 'usb2' would be sufficient 
+>>> here.
+>>>
+>> The PHY name 'cdns3,usb2-phy'  is defined in cadence3 usb driver code.
+>> Cadence USB3 driver code using this name to get PHY instance.
+>> And all the PHY ops used in Cadence3 USB sub device. 
+>>>> +				maximum-speed = "super-speed";
+>>>> +			};
+>>>> +		};
+>>>> +
+>>>> +		usbphy0: phy@10200000 {
+>>>> +			compatible = "starfive,jh7110-usb-phy";
+>>>> +			reg = <0x0 0x10200000 0x0 0x10000>;
+>>>> +			clocks = <&syscrg JH7110_SYSCLK_USB_125M>,
+>>>> +				 <&stgcrg JH7110_STGCLK_USB0_APP_125>;
+>>>> +			clock-names = "125m", "app_125";
+>>>> +			#phy-cells = <0>;
+>>>> +		};
+>>>> +
+>>>> +		pciephy0: phy@10210000 {
+>>>> +			compatible = "starfive,jh7110-pcie-phy";
+>>>> +			reg = <0x0 0x10210000 0x0 0x10000>;
+>>>> +			#phy-cells = <0>;
+>>>> +		};
+>>>> +
+>>>> +		pciephy1: phy@10220000 {
+>>>> +			compatible = "starfive,jh7110-pcie-phy";
+>>>> +			reg = <0x0 0x10220000 0x0 0x10000>;
+>>>> +			#phy-cells = <0>;
+>>>> +		};
+>>>> +
+>>>>  		stgcrg: clock-controller@10230000 {
+>>>>  			compatible = "starfive,jh7110-stgcrg";
+>>>>  			reg = <0x0 0x10230000 0x0 0x10000>;
+>>>> -- 
+>>>> 2.17.1
+>>>>
+> 
+> cheers,
+> -roger
