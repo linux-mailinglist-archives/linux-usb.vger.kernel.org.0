@@ -2,112 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794846C4E14
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Mar 2023 15:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADBE46C4E42
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Mar 2023 15:44:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbjCVOmr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Mar 2023 10:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
+        id S231877AbjCVOoG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Mar 2023 10:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231592AbjCVOmd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Mar 2023 10:42:33 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id B3EBA664D5
-        for <linux-usb@vger.kernel.org>; Wed, 22 Mar 2023 07:42:02 -0700 (PDT)
-Received: (qmail 1103683 invoked by uid 1000); 22 Mar 2023 10:41:46 -0400
-Date:   Wed, 22 Mar 2023 10:41:46 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        with ESMTP id S231755AbjCVOnV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Mar 2023 10:43:21 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B6D64B27;
+        Wed, 22 Mar 2023 07:42:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A4466CE1DC9;
+        Wed, 22 Mar 2023 14:42:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 148AAC4339B;
+        Wed, 22 Mar 2023 14:42:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679496148;
+        bh=xEyKZaa1+RXFhK2lv1wKEyVPh8wrA5Ghs6WICLxgLV0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OY3q2++VOzzMH6fqxfOsljPG6l24QjRnR+9K8/S82zW08s/JAhM3aPbJFXU6uV2hf
+         huK2Nk6a0PSFE4cj9j4GWXhti50cSa7zHrpesi3mr1vgsRo14y7lo1VPWhv2WfIisS
+         I55nklUs0bqiWu2aaPCzQqV51sOKJbPeAeMlmx0a78N9dr/e0yxaUomftRNFMeQUq6
+         +RJrPlS1bgd58ehFfVCuJP1YchvK01AylBSENvV+g2D70hg1yvUYj6g42lvCtEZ5JK
+         WuLtpI+tFKABHJGB338MHO4ELGsRP6sFZfC+Xukep/2qxMm1mUb+ecWVV2NCC6PP3s
+         5t7r362NXxv+g==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sebastian Reichel <sre@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Jiantao Zhang <water.zhangjiantao@huawei.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com, quic_ugoswami@quicinc.com
-Subject: Re: [RFC 2/2] usb: gadget: udc: Handle gadget_connect failure during
- bind operation
-Message-ID: <a5b57150-81e1-4eba-89e5-005cc78e243a@rowland.harvard.edu>
-References: <20230322092740.28491-1-quic_kriskura@quicinc.com>
- <20230322092740.28491-3-quic_kriskura@quicinc.com>
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: (subset) [PATCH v5 00/12] soc: qcom: add UCSI function to PMIC GLINK
+Date:   Wed, 22 Mar 2023 07:45:20 -0700
+Message-Id: <167949631651.1081726.4846765935793443746.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v5-0-552f3b721f9e@linaro.org>
+References: <20230130-topic-sm8450-upstream-pmic-glink-v5-0-552f3b721f9e@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322092740.28491-3-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 02:57:40PM +0530, Krishna Kurapati wrote:
-> In the event, gadget_connect call (which invokes pullup) fails,
-> propagate the error to udc bind operation which inturn sends the
-> error to configfs. The userspace can then retry enumeartion if
-> it chooses to.
+On Tue, 21 Mar 2023 14:21:40 +0100, Neil Armstrong wrote:
+> The PMIC GLINK interface offers an UCSI endpoint for newer
+> SoCs, the UCSI exchange is necessary to configure the USB-C
+> port USB role and altmode on the SM8450 HDK and SM8550 MTP
+> boards.
+> Since the DT description is the same, support for SM8350 HDK
+> is also added.
 > 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
->  drivers/usb/gadget/udc/core.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index 23b0629a8774..26bfed5c3a45 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -1051,12 +1051,16 @@ EXPORT_SYMBOL_GPL(usb_gadget_set_state);
->  
->  /* ------------------------------------------------------------------------- */
->  
-> -static void usb_udc_connect_control(struct usb_udc *udc)
-> +static int usb_udc_connect_control(struct usb_udc *udc)
->  {
-> +	int ret;
-> +
->  	if (udc->vbus)
-> -		usb_gadget_connect(udc->gadget);
-> +		ret = usb_gadget_connect(udc->gadget);
->  	else
-> -		usb_gadget_disconnect(udc->gadget);
-> +		ret = usb_gadget_disconnect(udc->gadget);
-> +
-> +	return ret;
->  }
->  
->  /**
-> @@ -1500,11 +1504,16 @@ static int gadget_bind_driver(struct device *dev)
->  	if (ret)
->  		goto err_start;
->  	usb_gadget_enable_async_callbacks(udc);
-> -	usb_udc_connect_control(udc);
-> +	ret = usb_udc_connect_control(udc);
-> +	if (ret)
-> +		goto err_connect_control;
->  
->  	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
->  	return 0;
->  
-> + err_connect_control:
+> [...]
 
-At this point you need to copy the code in gadget_unbind_driver().  In 
-particular, this should have:
+Applied, thanks!
 
-+	usb_gadget_disable_async_callbacks(udc);
-+	if (gadget->irq)
-+		synchronize_irq(gadget->irq);
+[12/12] arm64: defconfig: add PMIC GLINK modules
+        commit: 4ffd0b0019560a52b46b9ebd8127be3fdc157f16
 
-Alan Stern
-
-> +	usb_gadget_udc_stop(udc);
-> +
->   err_start:
->  	driver->unbind(udc->gadget);
->  
-> -- 
-> 2.40.0
-> 
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
