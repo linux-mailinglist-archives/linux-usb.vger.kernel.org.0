@@ -2,79 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E376C712E
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Mar 2023 20:40:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C956C7135
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Mar 2023 20:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbjCWTke (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Mar 2023 15:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44022 "EHLO
+        id S231183AbjCWTmG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Mar 2023 15:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbjCWTk2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Mar 2023 15:40:28 -0400
-Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F0A2057F
-        for <linux-usb@vger.kernel.org>; Thu, 23 Mar 2023 12:40:27 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id fQnPptlrMzvWyfQnPpVPOc; Thu, 23 Mar 2023 20:40:25 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 23 Mar 2023 20:40:25 +0100
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v2] usb: pci-quirks: Reduce the length of a spinlock section in usb_amd_find_chipset_info()
-Date:   Thu, 23 Mar 2023 20:40:22 +0100
-Message-Id: <08ee42fced6af6bd56892cd14f2464380ab071fa.1679600396.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S231143AbjCWTl7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Mar 2023 15:41:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88499231D5;
+        Thu, 23 Mar 2023 12:41:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E2FCB81E21;
+        Thu, 23 Mar 2023 19:41:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32CC6C433D2;
+        Thu, 23 Mar 2023 19:41:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679600515;
+        bh=djB6B2FUW5fWxaz9xAfKFvMjnYpuz6+k/lQjPAai61Y=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=A/++NmQTcmtVcwYNwIdAKmwsyemvTD4qqkWCPH8fkSeF7YdQg/xcFMP8EV2ljjra3
+         0qBYiMW0w0/T++WOLHyecB6F36sKxX/CXDzD0BFs7R5VpEOEwNvVcehXkk1V5PIhQV
+         yARYO2iMfav4gRDW/Pw5UkaY2S4thQHtrxcqMkXkGuEPT8DDjH5AhQV/lTBG4AJB0f
+         z8c1yhqRKLJEMn5WXbb/qR6jFRJ3Jez0nYFTsdheELTIXNLucf2EaERE8PY/H0TbeZ
+         duL3TBncDF+Qe4U2iGuMr/fSmXTh2kwB1B9pMN4tTUyB6ubSn1AO1i+grJC7IPUNgy
+         eZhzepJG8EhEQ==
+Message-ID: <71fe024d-92c8-a480-a307-6543d2a5ae7c@kernel.org>
+Date:   Thu, 23 Mar 2023 21:41:50 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 3/3] usb: dwc3-am62: Fix up wake-up configuration and
+ spurious wake up
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Thinh.Nguyen@synopsys.com, stern@rowland.harvard.edu,
+        vigneshr@ti.com, srk@ti.com, r-gunasekaran@ti.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230316131226.89540-1-rogerq@kernel.org>
+ <20230316131226.89540-4-rogerq@kernel.org>
+ <64adaa25-9179-3805-8d71-38418dc1bd54@kernel.org>
+ <ZByX8sliiPnrqXqN@kroah.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <ZByX8sliiPnrqXqN@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-'info' is local to the function. There is no need to zeroing it within
-a spin_lock section. Moreover, there is no need to explicitly initialize
-the .need_pll_quirk field.
+Hi Greg,
 
-Initialize the structure when defined and remove the now useless memset().
+On 23/03/2023 20:18, Greg KH wrote:
+> On Mon, Mar 20, 2023 at 10:24:17AM +0200, Roger Quadros wrote:
+>> Hi,
+>>
+>> On 16/03/2023 15:12, Roger Quadros wrote:
+>>> Explicitly set and clear wakeup config so we don't leave anything
+>>> to chance.
+>>>
+>>> Clear wakeup status on suspend so we know what caused wake up.
+>>>
+>>> The LINESTATE wake up should not be enabled in device mode
+>>> if we are not connected to a USB host else it will cause spurious
+>>> wake up.
+>>>
+>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+>>> ---
+>>>  drivers/usb/dwc3/dwc3-am62.c | 32 ++++++++++++++++++++++----------
+>>>  1 file changed, 22 insertions(+), 10 deletions(-)
+>>>
+>>> diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
+>>> index 859b48279658..af0524e2f1e1 100644
+>>> --- a/drivers/usb/dwc3/dwc3-am62.c
+>>> +++ b/drivers/usb/dwc3/dwc3-am62.c
+>>> @@ -60,6 +60,13 @@
+>>>  #define USBSS_WAKEUP_CFG_SESSVALID_EN	BIT(1)
+>>>  #define USBSS_WAKEUP_CFG_VBUSVALID_EN	BIT(0)
+>>>  
+>>> +#define USBSS_WAKEUP_CFG_ALL	(USBSS_WAKEUP_CFG_VBUSVALID_EN | \
+>>> +				 USBSS_WAKEUP_CFG_SESSVALID_EN | \
+>>> +				 USBSS_WAKEUP_CFG_LINESTATE_EN | \
+>>> +				 USBSS_WAKEUP_CFG_OVERCURRENT_EN)
+>>> +
+>>> +#define USBSS_WAKEUP_CFG_NONE	0
+>>> +
+>>>  /* WAKEUP STAT register bits */
+>>>  #define USBSS_WAKEUP_STAT_OVERCURRENT	BIT(4)
+>>>  #define USBSS_WAKEUP_STAT_LINESTATE	BIT(3)
+>>> @@ -103,6 +110,7 @@ struct dwc3_data {
+>>>  	struct regmap *syscon;
+>>>  	unsigned int offset;
+>>>  	unsigned int vbus_divider;
+>>> +	u32 wakeup_stat;
+>>>  };
+>>>  
+>>>  static const int dwc3_ti_rate_table[] = {	/* in KHZ */
+>>> @@ -294,6 +302,7 @@ static int dwc3_ti_suspend_common(struct device *dev)
+>>>  {
+>>>  	struct dwc3_data *data = dev_get_drvdata(dev);
+>>>  	u32 reg, current_prtcap_dir;
+>>> +	u32 vbus_stat;
+>>>  
+>>>  	if (device_may_wakeup(dev)) {
+>>>  		reg = dwc3_ti_readl(data, USBSS_CORE_STAT);
+>>> @@ -302,12 +311,20 @@ static int dwc3_ti_suspend_common(struct device *dev)
+>>>  		/* Set wakeup config enable bits */
+>>>  		reg = dwc3_ti_readl(data, USBSS_WAKEUP_CONFIG);
+>>>  		if (current_prtcap_dir == DWC3_GCTL_PRTCAP_HOST) {
+>>> -			reg |= USBSS_WAKEUP_CFG_LINESTATE_EN | USBSS_WAKEUP_CFG_OVERCURRENT_EN;
+>>> +			reg = USBSS_WAKEUP_CFG_LINESTATE_EN | USBSS_WAKEUP_CFG_OVERCURRENT_EN;
+>>>  		} else {
+>>> -			reg |= USBSS_WAKEUP_CFG_OVERCURRENT_EN | USBSS_WAKEUP_CFG_LINESTATE_EN |
+>>> -			       USBSS_WAKEUP_CFG_VBUSVALID_EN;
+>>> +			reg = USBSS_WAKEUP_CFG_VBUSVALID_EN | USBSS_WAKEUP_CFG_SESSVALID_EN;
+>>> +			/*
+>>> +			 * Enable LINESTATE wake up only if connected to bus else
+>>> +			 * it causes spurious wake-up.
+>>> +			 */
+>>> +			vbus_stat = dwc3_ti_readl(data, USBSS_VBUS_STAT);
+>>> +			if (vbus_stat & (USBSS_VBUS_STAT_SESSVALID | USBSS_VBUS_STAT_VBUSVALID))
+>>> +				reg |= USBSS_WAKEUP_CFG_LINESTATE_EN;
+>>
+>> There is one corner case where a spurious wake-up still happens.
+>> i.e. If we are not in USB_SUSPEND state while entering SoC sleep.
+>>
+>> So looks like we need to check if we are in USB SUSPEND before enabling
+>> LINESTATE wakeup enable.
+> 
+> Ok, I'll not apply this one, only the first 2 now.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/usb/host/pci-quirks.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Without this patch it is much worse as LINESTATE wake up is unconditionally
+enabled. This will cause SoC to always wake up when in device mode.
 
-diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
-index ef08d68b9714..2665832f9add 100644
---- a/drivers/usb/host/pci-quirks.c
-+++ b/drivers/usb/host/pci-quirks.c
-@@ -207,8 +207,7 @@ EXPORT_SYMBOL_GPL(sb800_prefetch);
- static void usb_amd_find_chipset_info(void)
- {
- 	unsigned long flags;
--	struct amd_chipset_info info;
--	info.need_pll_quirk = false;
-+	struct amd_chipset_info info = { };
- 
- 	spin_lock_irqsave(&amd_lock, flags);
- 
-@@ -218,7 +217,6 @@ static void usb_amd_find_chipset_info(void)
- 		spin_unlock_irqrestore(&amd_lock, flags);
- 		return;
- 	}
--	memset(&info, 0, sizeof(info));
- 	spin_unlock_irqrestore(&amd_lock, flags);
- 
- 	if (!amd_chipset_sb_type_init(&info)) {
--- 
-2.34.1
+I'll send a v2 patch for this one without LINESTATE wake up so at least
+we are sure there is no spurious wake up. LINESTATE wakeup can be
+enabled later when we have addressed all corner cases.
 
+cheers,
+-roger
