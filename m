@@ -2,145 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B8B6C6A6C
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Mar 2023 15:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD14B6C6A83
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Mar 2023 15:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbjCWOHh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Mar 2023 10:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
+        id S231236AbjCWOON (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Mar 2023 10:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbjCWOHg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Mar 2023 10:07:36 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A8222793;
-        Thu, 23 Mar 2023 07:06:23 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso1277887wms.1;
-        Thu, 23 Mar 2023 07:06:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679580378;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z4BMiXjAP1ZDCS80RIcwxql2HNxRwPUInw3Q2X6diKU=;
-        b=GPQuBpzB70pNVCwyNA98ZNN6PaiMrOOhDlHsXGsvfQ7Rk0AKwWgWIQR09P3q7tyxrW
-         3zel+WM6jx5cSkf0wf7H4HZQC+RNr/ewq6fxF/RGDaZICvsTYKUCRWD50VT7z2N2j/cB
-         EYYvpNwajjWjyYQAXdwiYuTxMeWChWl5THqn3vgb6PvSX2nizF1aVufdlUJ0IQrUyxUJ
-         1z7GLmeDN5EseQPF5m9w0DddAqosd/9X26frWdbsH/nblx7vC1bAlv4uQ0IBEzuji011
-         GuNpDqzgjcE9zPpkRS/s91mEJiubyJQCdqiEGUDg9rFbnOJmE24FMnOWzHxUZXD8tDJm
-         TMVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679580378;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z4BMiXjAP1ZDCS80RIcwxql2HNxRwPUInw3Q2X6diKU=;
-        b=MQvpw7sC05LBfNEK63EzII0Ga5X8hZmgW56khA6J2gKU+hYynWg4xFEW1755fA5y2u
-         SNjxtEmzPKaysXaBVoPKU5ahOxEynrfKKiaxQ0umULV/o5JDhDmauGtQ935C3dgqKOOq
-         SiSRGZF3f926t9Wg25SiYy+/2fHpF1fawlejT/jOOpB0sbIQXa82qq86BAOK++egyd2E
-         n6wzrzDlookojo/pzj0rgWkJCbsYQuk4FHfo8U0CAPGgpDTiRjOCCe8XF0JxOcDdwov6
-         A/0x23PDD4HvfB+3WE5sennVbleqECDU6RdmrRDlgrtIYjWVQUFRSi6AWlHfnq6dAP4e
-         Lksw==
-X-Gm-Message-State: AO0yUKXtbmALT5+vBGz0PTWiXx7KKOVLSSwShXXhCsCTVvZzqe8X+YAn
-        tUeU2TvCvelF9aYuf7KwdTX94YCHJRQ=
-X-Google-Smtp-Source: AK7set97LqRWSWhWWcYp/0nGzUtkX3dT5/Jw8lv/CcNhZdDP0IpK9zCEg5Uz7F/2N0vC8/CgOHMGXQ==
-X-Received: by 2002:a05:600c:3795:b0:3ed:93de:49ff with SMTP id o21-20020a05600c379500b003ed93de49ffmr2390666wmr.0.1679580378202;
-        Thu, 23 Mar 2023 07:06:18 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id i11-20020a05600c290b00b003ee20b4b2dasm1912223wmd.46.2023.03.23.07.06.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 07:06:17 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 17:06:14 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Mingxuan Xiang <mx_xiang@hust.edu.cn>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        hust-os-kernel-patches@googlegroups.com,
-        Dongliang Mu <dzm91@hust.edu.cn>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: dwc3: host: remove dead code in
- dwc3_host_get_irq()
-Message-ID: <6677e2c6-b621-4c7e-9dd6-631a02ce5996@kili.mountain>
-References: <20230323095311.1266655-1-mx_xiang@hust.edu.cn>
- <129aec21-4997-6b8d-5bd2-8e013f575208@gmail.com>
- <73fd29ce-3072-dfce-ebf0-3e197230fa94@suse.com>
- <201fba22-f537-4d1f-bfc4-e4dc931707bc@kili.mountain>
- <181feb34-c46d-cadb-ad20-46074a53b4c9@suse.com>
+        with ESMTP id S229682AbjCWOOM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Mar 2023 10:14:12 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AB0233CC
+        for <linux-usb@vger.kernel.org>; Thu, 23 Mar 2023 07:14:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679580851; x=1711116851;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=Xn+rLOn+HsKhcuT7nI2iKY4L3uGJgS8mgnqXmJXx/88=;
+  b=gaPap2CY8ImWyWrmc7vEeqBYj+F4DI2LTB3NyAK9E6+RSt12vZWYElfC
+   EdrHDrV8aFuh+IjR4vxZMvGe/r8jSqGnCSDR9wv2BKI/MqyscKEhcmzHR
+   MHKgXw5ZT08oBxgqrlRW3Tn1v+OqM+Z4/7iQ3WTKflJ2Bry5FHjKY5cMC
+   A2jRGUs6xRroaa9b1VCUOcE6UiEWDkN++h0VaCddTXjbMqiP3ILs0i0ZA
+   /F9+DzNf3YL8BYGd1KKp4NfZ4GGKITEIk5bEzvJCEh9AV5hyMqQhojjZg
+   2XUufrU5njuEOrWx9Aofca5mZx7oTp/OxO4EtMC4JxexMzD+mMmVKAQfc
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="341874851"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="341874851"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 07:14:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="659638386"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="659638386"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga006.jf.intel.com with ESMTP; 23 Mar 2023 07:14:09 -0700
+Message-ID: <6edd8939-062a-9548-893b-8f02598c2fec@linux.intel.com>
+Date:   Thu, 23 Mar 2023 16:15:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <181feb34-c46d-cadb-ad20-46074a53b4c9@suse.com>
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Content-Language: en-US
+To:     Udipto Goswami <quic_ugoswami@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>, linux-usb@vger.kernel.org
+References: <20230323131315.21764-1-quic_ugoswami@quicinc.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH] usb: xhci: Remove unused udev from xhci_log_ctx trace
+ event
+In-Reply-To: <20230323131315.21764-1-quic_ugoswami@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 02:48:56PM +0100, Oliver Neukum wrote:
-> On 23.03.23 12:13, Dan Carpenter wrote:
+On 23.3.2023 15.13, Udipto Goswami wrote:
+> xhci_log_ctx event is not utilizing the extracted udev to
+> print out anything, hence removing it.
 > 
-> > > > > v1->v2: remove redundant goto
-> > > > >    drivers/usb/dwc3/host.c | 4 ----
-> > > > >    1 file changed, 4 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> > > > > index f6f13e7f1ba1..ca1e8294e835 100644
-> > > > > --- a/drivers/usb/dwc3/host.c
-> > > > > +++ b/drivers/usb/dwc3/host.c
-> > > > > @@ -54,12 +54,8 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
-> > > > >    	irq = platform_get_irq(dwc3_pdev, 0);
-> > > > >    	if (irq > 0) {
-> > > > >    		dwc3_host_fill_xhci_irq_res(dwc, irq, NULL);
-> > > > > -		goto out;
-> > > > >    	}
-> > > > 
-> > > >      Now drop {} please. :-)
-> > > 
-> > > Well, no, please drop the whole patch.
-> > > If platform_get_irq() returns -EPROBE_DEFER you now give that
-> > > as a return value.
-> > > 
-> > > This tiny bit of optimization is not worth changing semantics.
-> > 
-> > The v2 patch doesn't change the semantics.  Mine did though...
+> Fixes: 1d27fabec068 ("xhci: add xhci_address_ctx trace event")
+> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+> ---
+>   drivers/usb/host/xhci-trace.h | 4 ----
+>   1 file changed, 4 deletions(-)
 > 
-> Now I may be dense, but let's look at the current code:
-> 
->         irq = platform_get_irq(dwc3_pdev, 0);
-> 
-> assuming irq = -EPROBE_DEFER
-> 
->         if (irq > 0) {
-> 
-> not taken
->                 dwc3_host_fill_xhci_irq_res(dwc, irq, NULL);
->                 goto out;
->         }
-> 
->         if (!irq)
-> 
-> irq != 0
+> diff --git a/drivers/usb/host/xhci-trace.h b/drivers/usb/host/xhci-trace.h
+> index 4286dba5b157..7555c4ea7c4b 100644
+> --- a/drivers/usb/host/xhci-trace.h
+> +++ b/drivers/usb/host/xhci-trace.h
+> @@ -80,20 +80,16 @@ DECLARE_EVENT_CLASS(xhci_log_ctx,
+>   		__field(dma_addr_t, ctx_dma)
+>   		__field(u8 *, ctx_va)
+>   		__field(unsigned, ctx_ep_num)
+> -		__field(int, slot_id)
+>   		__dynamic_array(u32, ctx_data,
+>   			((HCC_64BYTE_CONTEXT(xhci->hcc_params) + 1) * 8) *
+>   			((ctx->type == XHCI_CTX_TYPE_INPUT) + ep_num + 1))
+>   	),
+>   	TP_fast_assign(
+> -		struct usb_device *udev;
+>   
+> -		udev = to_usb_device(xhci_to_hcd(xhci)->self.controller);
 
-You've reversed this if statement in your head.  It says that if
-platform_get_irq() returns zero, then return -EINVAL.
+Looks like this was flawed from the beginning, forcing a device struct for a host controller into
+a struct usb_device
 
-The problem that Mingxuan is trying to address is that checking for zero
-is dead code and sometimes represents a bug when people check for zero
-instead of negatives.
+Adding to queue
 
->                 irq = -EINVAL;
-> 
-> out:
->         return irq;
-> 
-> returning -EINVAL
-
-We do *want* it to return -EPROBE_DEFER as the current code does.
-
-regards,
-dan carpenter
-
+Thanks
+Mathias
