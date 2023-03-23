@@ -2,48 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1006C6DA8
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Mar 2023 17:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E236C6DB9
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Mar 2023 17:35:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232076AbjCWQdy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Mar 2023 12:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
+        id S232317AbjCWQft (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Mar 2023 12:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjCWQd1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Mar 2023 12:33:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA6529413;
-        Thu, 23 Mar 2023 09:32:17 -0700 (PDT)
+        with ESMTP id S230039AbjCWQfc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Mar 2023 12:35:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5921C2BECE;
+        Thu, 23 Mar 2023 09:34:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7D96627F5;
-        Thu, 23 Mar 2023 16:32:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C58E9C433D2;
-        Thu, 23 Mar 2023 16:32:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD6B7627F4;
+        Thu, 23 Mar 2023 16:33:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEEC4C433B4;
+        Thu, 23 Mar 2023 16:33:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679589136;
-        bh=Z+hK39DxAGT9ENxUSdUl1KEjAOL/mypmkO9p8VKVPHo=;
+        s=korg; t=1679589238;
+        bh=BClF/ebjW5Hky5VLt08yA80pi2zvmy7CU8/qtkRTawM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u2VL2lrMrkls9/9RsRHNlNP49f+/699035XtgRiplt6uuNdu4tw1d52CbgUZhJ54q
-         i9e0YVemSSNf2pxi9svB5tt8pK5oGgCBVbdRWBOlde27jYMaWpz8FdVUsWDGesnh55
-         QGv5AF0zuCRrM28Dam56m0hrLmWVtp1gtz82BnAA=
-Date:   Thu, 23 Mar 2023 17:32:13 +0100
+        b=v+7gQI9XqOjD1ty8RChnHb3vuki9n2rsw1SCKVVCTxODmC6qtWxzWM6al8FN9ebsO
+         CwP0DNFtmVYZGzBFt4AkKR5ojHfKQl8PjTECtJLffxAhXO4tLiQ01x9ALliIxz/Hih
+         gJn2Pd/q2X/26t4Uze+thGn0oBCslbmazPKkbGtU=
+Date:   Thu, 23 Mar 2023 17:33:55 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: pci-quirks: Remove a useless initialization
-Message-ID: <ZBx/DeY4rwX+4zg8@kroah.com>
-References: <3850d93ff40ed12f4724621a540fb5993c0a0fa9.1679434951.git.christophe.jaillet@wanadoo.fr>
- <a3c703152d89a2c6b34b31f0158f84ba504e24d8.1679434951.git.christophe.jaillet@wanadoo.fr>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 01/12] usb: typec: ucsi: add PMIC Glink UCSI driver
+Message-ID: <ZBx/c4efiJ+6Kv9o@kroah.com>
+References: <20230130-topic-sm8450-upstream-pmic-glink-v5-0-552f3b721f9e@linaro.org>
+ <20230130-topic-sm8450-upstream-pmic-glink-v5-1-552f3b721f9e@linaro.org>
+ <20230322023102.nai4cru27tba56kx@ripper>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a3c703152d89a2c6b34b31f0158f84ba504e24d8.1679434951.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+In-Reply-To: <20230322023102.nai4cru27tba56kx@ripper>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,30 +59,25 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 10:43:10PM +0100, Christophe JAILLET wrote:
-> 'info' is memset()'ed a few lines below and is not use in the between.
+On Tue, Mar 21, 2023 at 07:31:02PM -0700, Bjorn Andersson wrote:
+> On Tue, Mar 21, 2023 at 02:21:41PM +0100, Neil Armstrong wrote:
+> > Introduce the UCSI PMIC Glink aux driver that communicates
+> > with the aDSP firmware with the UCSI protocol which handles
+> > the USB-C Port(s) Power Delivery.
+> > 
+> > The UCSI messaging is necessary on newer Qualcomm SoCs to
+> > provide USB role switch and altmode notifications.
+> > 
+> > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > 
-> There is no need to initialize one of its field to false here.
+> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/usb/host/pci-quirks.c | 1 -
->  1 file changed, 1 deletion(-)
 > 
-> diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
-> index 6b741327d2c4..46f2412dcb40 100644
-> --- a/drivers/usb/host/pci-quirks.c
-> +++ b/drivers/usb/host/pci-quirks.c
-> @@ -208,7 +208,6 @@ static void usb_amd_find_chipset_info(void)
->  {
->  	unsigned long flags;
->  	struct amd_chipset_info info;
-> -	info.need_pll_quirk = false;
+> Greg, this has no build time dependencies to the remainder of the
+> series, so can you pick this patch 1 and patch 5 (dt-bindings: usb:
+> snps,dwc3: document HS & SS OF graph ports) through your tree?
 
-Why not just change the line above it to:
-	struct amd_chipset_info info = { };
-and drop the call to memset entirely?
-
-thanks,
+Yes, will do so, thanks!
 
 greg k-h
