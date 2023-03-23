@@ -2,140 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A46096C65F5
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Mar 2023 12:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EDF86C6641
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Mar 2023 12:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbjCWLAI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Mar 2023 07:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
+        id S231420AbjCWLNa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Mar 2023 07:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjCWLAH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Mar 2023 07:00:07 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A2CEFBA;
-        Thu, 23 Mar 2023 04:00:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679569205; x=1711105205;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=IQ23RDY+VmSw1MtL0h2xoC5wvME5adjMReUDOyPb5ko=;
-  b=JSLoh4aLpdg14y1j4wtjRPnrzns2nBFuWINSaZrXSVCvSA3HpqHuwRU2
-   k/lU4JVmFv5JEd6InTF49YLg2sr6zxKrs2GTKjU1QyiDT8m0nFRugdm7F
-   2zhSVW3hzyX68awyhdk/0e+8GL15+aErq/PALnHlNZFrn8eb6rbQGxsdv
-   T96jCicsvwqEj1muKjk29LBiEP6uzhc5ouzBsGPMjNugKfmoTUuvl4nZv
-   LR1VCTs8H+zCAhUivsOi7tfHoYjMTcgyxnSLiDQu5NmXTcfwc09GBGEzz
-   T0CXcX07rV2f40/Ig6tSteFKbzGQ6zE21DF6caITH5Es9Mcm+ABMERFGz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="367193667"
-X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="367193667"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 04:00:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="712616605"
-X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="712616605"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga008.jf.intel.com with ESMTP; 23 Mar 2023 03:59:59 -0700
-Message-ID: <b3d53ea7-b78f-3415-b0ed-7ddf292ec7fc@linux.intel.com>
-Date:   Thu, 23 Mar 2023 13:01:19 +0200
+        with ESMTP id S231489AbjCWLN1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Mar 2023 07:13:27 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD25A2FCD8;
+        Thu, 23 Mar 2023 04:12:56 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id s13so955196wmr.4;
+        Thu, 23 Mar 2023 04:12:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679569975;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4qpfZTPJJNZ6YWWxO7OeWZ3NH5KTgBIS9+5dacP3FWg=;
+        b=YrP/SwSi1KDyu4anm2RIzRXwB/PJOt1ZRI432CCJndwyn8ttO58mfXFdZ/kQxA13tF
+         wuOgauK0t5tpBvCpPWsNXDaKxeF72posCIgjx25c9t13wrCfkx4H8nLaB01RMKIKTcnc
+         6I/9DS0LqJMmTzQ0T3xoV1FVLZKmSvA1eJhi+cmSFIdqMj+pEgV3CPYlCE3WuE7wkhtU
+         9vsehtUPYVe8bKrmzTF0Vf6ao8VLurI9sfe5uIUOzd93rEFMzgUWfphhfxrNaiuqdYg3
+         0Aab60ij1EOpyXvtxuadneFWPTg4mAIH9+Tpw5hlZzssiA/Gp7njFORKtF6X0FRhog8X
+         a/6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679569975;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4qpfZTPJJNZ6YWWxO7OeWZ3NH5KTgBIS9+5dacP3FWg=;
+        b=NFU+6Nq5nvw+KSaYN5/8a321XEignNQtBLhcNDOIm6jeCNse29425q8QouK/efphJf
+         T1OXEHSW/Z7vtZSVX9R77e/XxO/DQVwPPANcyDXvfcY4mA6J/nkYYEnEbrT4dJf2ACDg
+         bJW9pvxBZWFJUHIwmmtq4jKipDgjwM8acininZpwryUsYGfGm+4OGayKynvTHfU7YVcs
+         B6KEa8nGWhehn7TmhB28mXajCdiLmK4mWzdqJxJIq8VFFqe7iCD/k22qils7DFsDYQtu
+         AgJLrwpSYzgsUSGdBgmnLQsncLH/o3s7ZMd/P4YFpV8HJwD74fcsZeslFW7gTcHniSDb
+         rK1A==
+X-Gm-Message-State: AO0yUKXinIPAmekW8Zd9SAoR7OyklH19MEJu5Nct1uIl/yTMcmPYz0B/
+        Xss4NdYrQAuDEMvalUrPP3A=
+X-Google-Smtp-Source: AK7set9ymCWKGYagcYxXc0qjDuuAzVL/YXlz6Q3Wo2xGJPyRfMMNzoWGb6UOFWPwupDfm0FMQVkonQ==
+X-Received: by 2002:a7b:c853:0:b0:3dc:4042:5c21 with SMTP id c19-20020a7bc853000000b003dc40425c21mr1990952wml.6.1679569974878;
+        Thu, 23 Mar 2023 04:12:54 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id i21-20020a05600c355500b003ede6540190sm1693390wmq.0.2023.03.23.04.12.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 04:12:54 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 14:12:49 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Mingxuan Xiang <mx_xiang@hust.edu.cn>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        hust-os-kernel-patches@googlegroups.com,
+        Dongliang Mu <dzm91@hust.edu.cn>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: dwc3: host: remove dead code in
+ dwc3_host_get_irq()
+Message-ID: <42a2ef2e-b522-40c9-ada2-0e804f7df5d5@kili.mountain>
+References: <20230323095311.1266655-1-mx_xiang@hust.edu.cn>
+ <eedbfdca-0eb1-4b01-976b-4ddba516cfad@kili.mountain>
+ <e2067012-af9a-4cc7-ba12-3c055d54d915@kili.mountain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Content-Language: en-US
-To:     Hongyu Xie <xiehongyu1@kylinos.cn>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sunke <sunke@kylinos.cn>
-References: <20230320042223.676505-1-xiehongyu1@kylinos.cn>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH -next] usb: xhci: do not free an empty cmd ring
-In-Reply-To: <20230320042223.676505-1-xiehongyu1@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e2067012-af9a-4cc7-ba12-3c055d54d915@kili.mountain>
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20.3.2023 6.22, Hongyu Xie wrote:
-> It was first found on HUAWEI Kirin 9006C platform with a builtin xhci
-> controller during stress cycle test(stress-ng, glmark2, x11perf, S4...).
-> 
-> phase one:
-> [26788.706878] PM: dpm_run_callback(): platform_pm_thaw+0x0/0x68 returns -12
-> [26788.706878] PM: Device xhci-hcd.1.auto failed to thaw async: error -12
-> ...
-> phase two:
-> [28650.583496] [2023:01:19 04:43:29]Unable to handle kernel NULL pointer dereference at virtual address 0000000000000028
-> ...
-> [28650.583526] user pgtable: 4k pages, 39-bit VAs, pgdp=000000027862a000
-> [28650.583557] [0000000000000028] pgd=0000000000000000
-> ...
-> [28650.583587] pc : xhci_suspend+0x154/0x5b0
-> [28650.583618] lr : xhci_suspend+0x148/0x5b0
-> [28650.583618] sp : ffffffc01c7ebbd0
-> [28650.583618] x29: ffffffc01c7ebbd0 x28: ffffffec834d0000
-> [28650.583618] x27: ffffffc0106a3cc8 x26: ffffffb2c540c848
-> [28650.583618] x25: 0000000000000000 x24: ffffffec82ee30b0
-> [28650.583618] x23: ffffffb43b31c2f8 x22: 0000000000000000
-> [28650.583618] x21: 0000000000000000 x20: ffffffb43b31c000
-> [28650.583648] x19: ffffffb43b31c2a8 x18: 0000000000000001
-> [28650.583648] x17: 0000000000000803 x16: 00000000fffffffe
-> [28650.583648] x15: 0000000000001000 x14: ffffffb150b67e00
-> [28650.583648] x13: 00000000f0000000 x12: 0000000000000001
-> [28650.583648] x11: 0000000000000000 x10: 0000000000000a80
-> [28650.583648] x9 : ffffffc01c7eba00 x8 : ffffffb43ad10ae0
-> [28650.583648] x7 : ffffffb84cd98dc0 x6 : 0000000cceb6a101
-> [28650.583679] x5 : 00ffffffffffffff x4 : 0000000000000001
-> [28650.583679] x3 : 0000000000000011 x2 : 0000000000e2cfa8
-> [28650.583679] x1 : 00000000823535e1 x0 : 0000000000000000
-> 
-> gdb:
-> (gdb) l *(xhci_suspend+0x154)
-> 0xffffffc010b6cd44 is in xhci_suspend (/.../drivers/usb/host/xhci.c:854).
-> 849	{
-> 850		struct xhci_ring *ring;
-> 851		struct xhci_segment *seg;
-> 852
-> 853		ring = xhci->cmd_ring;
-> 854		seg = ring->deq_seg;
-> (gdb) disassemble 0xffffffc010b6cd44
-> ...
-> 0xffffffc010b6cd40 <+336>:	ldr	x22, [x19, #160]
-> 0xffffffc010b6cd44 <+340>:	ldr	x20, [x22, #40]
-> 0xffffffc010b6cd48 <+344>:	mov	w1, #0x0                   	// #0
-> 
-> During phase one, platform_pm_thaw called xhci_plat_resume which called
-> xhci_resume. The rest possible calling routine might be
-> xhci_resume->xhci_init->xhci_mem_init, and xhci->cmd_ring was cleaned in
-> xhci_mem_cleanup before xhci_mem_init returned -ENOMEM.
-> 
+On Thu, Mar 23, 2023 at 02:00:35PM +0300, Dan Carpenter wrote:
+>  	irq = platform_get_irq(dwc3_pdev, 0);
+>  	if (irq > 0) {
+>  		dwc3_host_fill_xhci_irq_res(dwc, irq, NULL);
+> -		goto out;
+> +		return irq;
+>  	}
+>  
+> -	if (!irq)
+> -		irq = -EINVAL;
+> -
+> -out:
+> -	return irq;
+> +	return -ENODEV;
 
-Thanks for reporting this.
+Oh wait.  We actually need to propagate the error code here because of
+-EPROBE_DEFER so my patch introduces a bug.
 
-xhci_mem_init() failing with -ENOMEM doesn't sound good.
-
-Are we really running out of memory? does kmemleak say anything?
-
-Any chance you could look into where exactly xhci_mem_init() fails as
-xhci_mem_init() always returns -ENOMEM on failure?
-
-> During phase two, systemd was tring to hibernate again and called
-> xhci_suspend, then xhci_clear_command_ring dereferenced xhci->cmd_ring
-> which was already NULL.
-> 
-> So if xhci->cmd_ring is NULL, xhci_clear_command_ring just return.
-
-If xhci_mem_init() failed then xhci driver is completely unusable.
-it shouldn't be used at all after this.
-
-Thanks
-Mathias
+regards,
+dan carpenter
 
