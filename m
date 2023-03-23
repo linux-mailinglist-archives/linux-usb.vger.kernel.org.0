@@ -2,45 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C521F6C70E8
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Mar 2023 20:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E376C712E
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Mar 2023 20:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbjCWTRI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Mar 2023 15:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
+        id S231819AbjCWTke (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Mar 2023 15:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbjCWTRH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Mar 2023 15:17:07 -0400
-Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832E949F7
-        for <linux-usb@vger.kernel.org>; Thu, 23 Mar 2023 12:17:05 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
+        with ESMTP id S230259AbjCWTk2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Mar 2023 15:40:28 -0400
+Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F0A2057F
+        for <linux-usb@vger.kernel.org>; Thu, 23 Mar 2023 12:40:27 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
         by smtp.orange.fr with ESMTPA
-        id fQQnplsmuTpvffQQnp31ME; Thu, 23 Mar 2023 20:17:03 +0100
-X-ME-Helo: [192.168.1.18]
+        id fQnPptlrMzvWyfQnPpVPOc; Thu, 23 Mar 2023 20:40:25 +0100
+X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 23 Mar 2023 20:17:03 +0100
+X-ME-Date: Thu, 23 Mar 2023 20:40:25 +0100
 X-ME-IP: 86.243.2.178
-Message-ID: <84b81ceb-1c7f-0dac-1988-0a9c0af2757c@wanadoo.fr>
-Date:   Thu, 23 Mar 2023 20:17:01 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] usb: pci-quirks: Remove a useless initialization
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <3850d93ff40ed12f4724621a540fb5993c0a0fa9.1679434951.git.christophe.jaillet@wanadoo.fr>
- <a3c703152d89a2c6b34b31f0158f84ba504e24d8.1679434951.git.christophe.jaillet@wanadoo.fr>
- <ZBx/DeY4rwX+4zg8@kroah.com>
-Content-Language: fr, en-US
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <ZBx/DeY4rwX+4zg8@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v2] usb: pci-quirks: Reduce the length of a spinlock section in usb_amd_find_chipset_info()
+Date:   Thu, 23 Mar 2023 20:40:22 +0100
+Message-Id: <08ee42fced6af6bd56892cd14f2464380ab071fa.1679600396.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,39 +42,39 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+'info' is local to the function. There is no need to zeroing it within
+a spin_lock section. Moreover, there is no need to explicitly initialize
+the .need_pll_quirk field.
 
-Le 23/03/2023 à 17:32, Greg Kroah-Hartman a écrit :
-> On Tue, Mar 21, 2023 at 10:43:10PM +0100, Christophe JAILLET wrote:
->> 'info' is memset()'ed a few lines below and is not use in the between.
->>
->> There is no need to initialize one of its field to false here.
->>
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->>   drivers/usb/host/pci-quirks.c | 1 -
->>   1 file changed, 1 deletion(-)
->>
->> diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
->> index 6b741327d2c4..46f2412dcb40 100644
->> --- a/drivers/usb/host/pci-quirks.c
->> +++ b/drivers/usb/host/pci-quirks.c
->> @@ -208,7 +208,6 @@ static void usb_amd_find_chipset_info(void)
->>   {
->>   	unsigned long flags;
->>   	struct amd_chipset_info info;
->> -	info.need_pll_quirk = false;
-> Why not just change the line above it to:
-> 	struct amd_chipset_info info = { };
-> and drop the call to memset entirely?
+Initialize the structure when defined and remove the now useless memset().
 
-I find an explicit memset() more readable, but it's mostly a matter of 
-taste.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/usb/host/pci-quirks.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-I'll send a v2.
+diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
+index ef08d68b9714..2665832f9add 100644
+--- a/drivers/usb/host/pci-quirks.c
++++ b/drivers/usb/host/pci-quirks.c
+@@ -207,8 +207,7 @@ EXPORT_SYMBOL_GPL(sb800_prefetch);
+ static void usb_amd_find_chipset_info(void)
+ {
+ 	unsigned long flags;
+-	struct amd_chipset_info info;
+-	info.need_pll_quirk = false;
++	struct amd_chipset_info info = { };
+ 
+ 	spin_lock_irqsave(&amd_lock, flags);
+ 
+@@ -218,7 +217,6 @@ static void usb_amd_find_chipset_info(void)
+ 		spin_unlock_irqrestore(&amd_lock, flags);
+ 		return;
+ 	}
+-	memset(&info, 0, sizeof(info));
+ 	spin_unlock_irqrestore(&amd_lock, flags);
+ 
+ 	if (!amd_chipset_sb_type_init(&info)) {
+-- 
+2.34.1
 
-CJ
-
-
-> thanks,
->
-> greg k-h
