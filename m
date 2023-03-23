@@ -2,99 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BDAC6C7200
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Mar 2023 21:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F516C725D
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Mar 2023 22:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbjCWU60 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Mar 2023 16:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
+        id S229954AbjCWVcc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 23 Mar 2023 17:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCWU6X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Mar 2023 16:58:23 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93262311A;
-        Thu, 23 Mar 2023 13:57:59 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 20so16757462lju.0;
-        Thu, 23 Mar 2023 13:57:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679605075;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QllIjtDRCuTkdGt8RZ/w1lWCVqloNvO62icgDypzWxg=;
-        b=qyriCx0PBBRPf1+fQOkg8s+pbF04J3uTUMSIsu9eLbfXqhrSN4/HCghGBOot4Rjt2K
-         asmRbQrmCCHtOfx8bgXD21aw2hcRT/n3mKJs9w2lztiAVO94wsuHscWD+zvq9aJcm0wq
-         mY+n3kWv8peCQeAUQp0msLFKs/yM6KPOmeZ+/N9zuEBKf8+HxvuOPzdw7Z93QEspMCkn
-         yE7gt41jBsZI4ZMUiWUVGMteqFp8+DvWI8A6WeFyjlRB0mAw/iWTeCLShCDJA7LHv4Sy
-         ZnLq+T/MqFz2vSXo/VLqyhORuWIeAPHtXVhh4E9GHpCbIyHQJEhRct9s0yV4ibeR5/YC
-         WGHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679605075;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QllIjtDRCuTkdGt8RZ/w1lWCVqloNvO62icgDypzWxg=;
-        b=ojyuDK+MDpPuaYuKTaZ145oHCX1hgJgbDlafGdKTmwS2AGfOzsLHw9UW0znox2i88A
-         eyxpamblv287Eeesoo/ib7QFf4d87ZFZoQ8Jii4/dFU9A/uDZHEkuFH2fjVM0Id+vn/A
-         2BfwsCOgQTMCh3SKSixlfZPdVhpCPSOniMluCMN0pWFEoO27GK+L5VVl+rYK8tZkZgfL
-         B5FKIrGudDvfZsSHjSQTvsHlf1LZAYsKfRc9i6wCrn6NW98oLN9GbXEXf+9fjfg1MUGk
-         OfgnYYDn5VkxXosleoYdMd18S7oENNQhqGeSL75Tcxciyi7ffje9N8ohZhM7u0NVS0Os
-         6kjQ==
-X-Gm-Message-State: AAQBX9fD6KvnRhxFxbadGtc00aZbanZuoF8lLIvPWWtbaP83q3xd/E2P
-        Cu7sVMa0JfcqM573jPb1I38=
-X-Google-Smtp-Source: AKy350Z7haypN7p3yGB0EsrKpQnNdZdrOKH7hLWK6nxyC8dEQVyQ9Ab8bedfHPJYX5QnZIGQ5Eg1YQ==
-X-Received: by 2002:a2e:88c9:0:b0:29b:d5a6:579c with SMTP id a9-20020a2e88c9000000b0029bd5a6579cmr158791ljk.27.1679605074437;
-        Thu, 23 Mar 2023 13:57:54 -0700 (PDT)
-Received: from [192.168.50.20] (077222238142.warszawa.vectranet.pl. [77.222.238.142])
-        by smtp.gmail.com with ESMTPSA id l2-20020a2e3e02000000b0029e5448e752sm1638273lja.131.2023.03.23.13.57.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 13:57:53 -0700 (PDT)
-Message-ID: <6813a7ce-93f1-3a63-0641-f6a77aa7c343@gmail.com>
-Date:   Thu, 23 Mar 2023 21:57:51 +0100
+        with ESMTP id S229877AbjCWVcb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Mar 2023 17:32:31 -0400
+Received: from voltaic.bi-co.net (voltaic.bi-co.net [134.119.3.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979C4BDC9
+        for <linux-usb@vger.kernel.org>; Thu, 23 Mar 2023 14:32:29 -0700 (PDT)
+Received: from [192.168.0.36] (ip-037-201-145-251.um10.pools.vodafone-ip.de [37.201.145.251])
+        by voltaic.bi-co.net (Postfix) with ESMTPSA id A5BF320F70;
+        Thu, 23 Mar 2023 22:32:27 +0100 (CET)
+Message-ID: <c93512db198b14ff8892102cfecec3bea8688aaf.camel@bi-co.net>
+Subject: Re: Cypress CDC ACM serial port not working correctly with
+ autosuspend
+From:   Michael =?ISO-8859-1?Q?La=DF?= <bevan@bi-co.net>
+To:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
+Date:   Thu, 23 Mar 2023 22:32:25 +0100
+In-Reply-To: <46e50745-63e4-7e97-739c-338f9a6445d2@suse.com>
+References: <8be9b56c6becd0981d1cd9c13742df6ba2975b56.camel@bi-co.net>
+         <0db2a0a4-6ed4-fe06-217a-cb564f1d4a8c@suse.com>
+         <bde43a1913cf55e580e77ac0e059fff3c26dc093.camel@bi-co.net>
+         <2f98290f-995b-89ff-8ba2-1463fcf78297@suse.com>
+         <9a1381abe0e2b605786bc9c3b2daa3f7bdc3b64c.camel@bi-co.net>
+         <e977c0e1-4604-47cc-9c53-619bc897d418@suse.com>
+         <646eb1bb5218b9ce5df21e89081b09b84dbd46fd.camel@bi-co.net>
+         <46e50745-63e4-7e97-739c-338f9a6445d2@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH v2] net: usb: lan78xx: Limit packet length to skb->len
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-References: <202303180031.EsiDo4qY-lkp@intel.com>
- <20230317173606.91426-1-szymon.heidrich@gmail.com>
- <ZBx+eGTSjRM8fvsf@kroah.com>
-Content-Language: en-US
-From:   Szymon Heidrich <szymon.heidrich@gmail.com>
-In-Reply-To: <ZBx+eGTSjRM8fvsf@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23/03/2023 17:29, Greg KH wrote:
-> On Fri, Mar 17, 2023 at 06:36:06PM +0100, Szymon Heidrich wrote:
->> Packet length retrieved from descriptor may be larger than
->> the actual socket buffer length. In such case the cloned
->> skb passed up the network stack will leak kernel memory contents.
->>
->> Additionally prevent integer underflow when size is less than
->> ETH_FCS_LEN.
->>
->> Fixes: 55d7de9de6c3 ("Microchip's LAN7800 family USB 2/3 to 10/100/1000 Ethernet device driver")
->> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
->> Reported-by: kernel test robot <lkp@intel.com>
+Am Donnerstag, dem 23.03.2023 um 14:53 +0100 schrieb Oliver Neukum:
 > 
-> the test robot did not report the fact that the packet length needed to
-> be limited :(
+> On 23.03.23 13:52, Michael Laß wrote:
+> > 
+> > Yes, the remote device is programmed to print "Hello World" every
+> > three
+> > seconds. Nothing should have stopped it from doing that.
 > 
+> I am asking because the device says that it is bus powered.
+> That is, are we putting the device into some sleep state?
 
-Yes, I removed the Reported-by tag in V3 as suggested by Jakub.
+This got me thinking. I am observing the behavior on a ZedBoard, a
+development board that contains a Xilinx Zynq SoC and the Cypress UART
+chip connected to that SoC. I now looked into the schematic of that
+board.
 
+The chip is a CY7C64225-28PVXC and the datasheet has a section on USB
+suspend and resume: When suspended, a separate WAKE input pin has to be
+set high to issue a remote wake-up. The designers of the ZedBoard have
+tied this pin to ground...
+
+So the chip behaves as documented. If any, this is an issue with the
+board design. Nothing the kernel could work around. Sorry, I hope I
+haven't stolen too much of your time.
+
+Kind regards,
+Michael
