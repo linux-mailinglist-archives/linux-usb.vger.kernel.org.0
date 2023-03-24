@@ -2,169 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5316C7E9C
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 14:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CFF6C7EAF
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 14:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231871AbjCXNTE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Mar 2023 09:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
+        id S231862AbjCXNZT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Mar 2023 09:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCXNTE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 09:19:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEA712860;
-        Fri, 24 Mar 2023 06:19:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3B9EB82303;
-        Fri, 24 Mar 2023 13:19:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F985C4339C;
-        Fri, 24 Mar 2023 13:18:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679663940;
-        bh=n5azJT38PvOIS9z98MuhiQgqA+N6UCY/FD9OPf2roSQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=iqx7xVtMtD8mPE+WbN/St84YFBtuaTHqFUyMKVBUCd3aEwUgX8JIecbiann+8L4Ty
-         O5rD1RaBK0WBfya9CwIB4fJBWNjSS+yqHw+gTG+pcip1s4b8PQG7J7v036NxdG3EUN
-         k+CFjUFkcFVunTIMlsnjfa2Cgi4lvEj19lCvTqNBkhu1hSj4at5htyhxDpYGqAOlnT
-         3A/OArQMOHSZ4zpy9RP/+Kk8I3+bPbVQiQsFA8SYOunc65q8Owlo/u/evCG9H7Mxap
-         /n+g66NqWo6ltnaKMet5xsom/9V/4ET3Tmb+2tIxIy24z6NjNmV/BlcOTyhgSYC1GY
-         g07MvLDjUCYiA==
-From:   Roger Quadros <rogerq@kernel.org>
-To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc:     vigneshr@ti.com, srk@ti.com, r-gunasekaran@ti.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Roger Quadros <rogerq@kernel.org>
-Subject: [PATCH] usb: typec: tps6598x: Add support for polling interrupts status
-Date:   Fri, 24 Mar 2023 15:18:53 +0200
-Message-Id: <20230324131853.41102-1-rogerq@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S231761AbjCXNZS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 09:25:18 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D26010261
+        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 06:25:17 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id i9so1807015wrp.3
+        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 06:25:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679664316;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q/vpnoYYXwQldMjtKP/K9nn+5xpo0clbcm7Xi85Za5Q=;
+        b=MwV/tT1w/89XxrGbyhJepCUgN+8UHN4wuO0E1mjgs954wzYtgqXwnCmlxTJF7t+DBT
+         G8XQq/qfYrjbJ2GdHZ119/GQRELa1ao2S7wbI8kzdiDgk/iy/UmFoHNTPB7ORpNP3dJS
+         AwV75+lOdSW7pMnnalw3EgnDGLBuSj1l16Rt7c0abxleP05MX+7Z9L1jO+qLs7FwvrTP
+         fXLWmLzP3xBZqFn7RE2qIPVbaPKJ+DLIjbGL89PWC2ZV2RX8Za/rRbSA2L7Nat4h/6Hj
+         RheFDGMsS/Zky/6/sZWoc0pMuSKJSgyPupaz4y4eEX7qxHkmCiTplbKg6uHsLZyXu3ez
+         BDpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679664316;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q/vpnoYYXwQldMjtKP/K9nn+5xpo0clbcm7Xi85Za5Q=;
+        b=16Mw20+XsymgWfh/TqqxcJjzESng3FHb7FtS4++/WHehUPx9f+6prT1kVVRN3BnTyQ
+         wfgU89PAJ07NtKIX9xuOFDsxRb7vxkIXpNDIHgFXAH4egaFGxCm27ZUKjTTsnU86QgP+
+         F6hmxyPuKSJNy53a12wiSKTkI92Bf4Y7DuQrRQ2MLiu4xFLRlOIiD4XzoQlkY6EpYdwv
+         K78GuaNPv7SPcb56UhcFn/D+2uk+lRYaH65VSX5TIVDbl1cTBz6JG8ZpBzjVtQiepcbS
+         Scycd6lb+zht0dm+tBZjEL0q6LShZX9bL0gF6FaXc8o8SAxOwSNDKFvmgeuP//SnUKiR
+         YydQ==
+X-Gm-Message-State: AAQBX9dTSvp66HbaRrw581aBjfKWwgswleht2AYto+2Fmd/iHIHJhxW6
+        hl4JSOFS2qrxAgMuWezBQsaQrA==
+X-Google-Smtp-Source: AKy350adc+qfpzwd1OS0FFZpxLLnNuQRsBkSQTXYQiBJiqpEzz6wvdacBweqtInNDFl/c/qX8toVMA==
+X-Received: by 2002:a5d:4b42:0:b0:2c7:454:cee8 with SMTP id w2-20020a5d4b42000000b002c70454cee8mr2394735wrs.1.1679664315887;
+        Fri, 24 Mar 2023 06:25:15 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id p17-20020adfcc91000000b002c71dd1109fsm18517921wrj.47.2023.03.24.06.25.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 06:25:15 -0700 (PDT)
+Message-ID: <6bd08120-115e-5429-63da-32f8df52bc7f@linaro.org>
+Date:   Fri, 24 Mar 2023 13:25:14 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 12/18] usb: typec: qcom: Add Qualcomm PMIC TCPM support
+Content-Language: en-US
+To:     Jianhua Lu <lujianhua000@gmail.com>
+Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, andersson@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, wcheng@codeaurora.org,
+        caleb.connolly@linaro.org, konrad.dybcio@linaro.org,
+        subbaram@quicinc.com, jackp@quicinc.com, robertom@qti.qualcomm.com
+References: <20230318121828.739424-1-bryan.odonoghue@linaro.org>
+ <20230318121828.739424-13-bryan.odonoghue@linaro.org>
+ <ZBxkB04KqY8WbeA1@Gentoo> <89bca327-a860-672c-b4ae-766698d38639@linaro.org>
+ <ZBzyK0ILtUDr986r@Gentoo> <37d14447-0f10-be88-9cd9-8ebd30f1d006@linaro.org>
+ <ZBz5OvauxQ2PWcHu@Gentoo> <40503ba8-7a38-0d1d-1d59-82101a0ce92e@linaro.org>
+ <ZB14jJNUhHGBl7Az@Gentoo>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <ZB14jJNUhHGBl7Az@Gentoo>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Aswath Govindraju <a-govindraju@ti.com>
+On 24/03/2023 10:16, Jianhua Lu wrote:
 
-Some development boards don't have the interrupt line connected.
+With charger
+> [ 1495.824667] qcom,pmic-typec c440000.spmi:pmic@2:typec@1500:
+> qcom_pmic_typec_set_vbus misc 0x000000c9
 
-In such cases we can resort to polling the interrupt status.
+0xC9 == (TYPEC_SM_USBIN_LT_LV | TYPEC_SM_VBUS_VSAFE0V)
 
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> [ 1495.824685] qcom,pmic-typec c440000.spmi:pmic@2:typec@1500:
+> qcom_pmic_typec_set_vbus sm_status 0x000000b9
+
+0xC9 == (TYPEC_SM_USBIN_LT_LV | TYPEC_SM_VBUS_VSAFE5V)
+
+so that is correct and expected i.e. VSAFE5V it shouldn't matter to the 
+type-c port controller *where* VBUS comes from only that it is within range.
+
+Could you run again with an unpowered device and post the printout?
+
 ---
- drivers/usb/typec/tipd/core.c | 41 ++++++++++++++++++++++++++++++-----
- 1 file changed, 36 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index 485b90c13078..d28ffa10a122 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -16,6 +16,7 @@
- #include <linux/usb/typec.h>
- #include <linux/usb/typec_altmode.h>
- #include <linux/usb/role.h>
-+#include <linux/workqueue.h>
- 
- #include "tps6598x.h"
- #include "trace.h"
-@@ -97,6 +98,8 @@ struct tps6598x {
- 
- 	int wakeup;
- 	u16 pwr_status;
-+	struct delayed_work	wq_poll;
-+	irq_handler_t irq_handler;
- };
- 
- static enum power_supply_property tps6598x_psy_props[] = {
-@@ -568,6 +571,18 @@ static irqreturn_t tps6598x_interrupt(int irq, void *data)
- 	return IRQ_NONE;
- }
- 
-+/* Time interval for Polling */
-+#define POLL_INTERVAL	500 /* msecs */
-+static void tps6598x_poll_work(struct work_struct *work)
-+{
-+	struct tps6598x *tps = container_of(to_delayed_work(work),
-+					    struct tps6598x, wq_poll);
-+
-+	tps->irq_handler(0, tps);
-+	queue_delayed_work(system_power_efficient_wq,
-+			   &tps->wq_poll, msecs_to_jiffies(POLL_INTERVAL));
-+}
-+
- static int tps6598x_check_mode(struct tps6598x *tps)
- {
- 	char mode[5] = { };
-@@ -746,6 +761,7 @@ static int tps6598x_probe(struct i2c_client *client)
- 			TPS_REG_INT_PLUG_EVENT;
- 	}
- 
-+	tps->irq_handler = irq_handler;
- 	/* Make sure the controller has application firmware running */
- 	ret = tps6598x_check_mode(tps);
- 	if (ret)
-@@ -837,10 +853,18 @@ static int tps6598x_probe(struct i2c_client *client)
- 			dev_err(&client->dev, "failed to register partner\n");
- 	}
- 
--	ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
--					irq_handler,
--					IRQF_SHARED | IRQF_ONESHOT,
--					dev_name(&client->dev), tps);
-+	if (client->irq) {
-+		ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
-+						irq_handler,
-+						IRQF_SHARED | IRQF_ONESHOT,
-+						dev_name(&client->dev), tps);
-+	} else {
-+		dev_warn(tps->dev, "Unable to find the interrupt, switching to polling\n");
-+		INIT_DELAYED_WORK(&tps->wq_poll, tps6598x_poll_work);
-+		queue_delayed_work(system_power_efficient_wq, &tps->wq_poll,
-+				   msecs_to_jiffies(POLL_INTERVAL));
-+	}
-+
- 	if (ret)
- 		goto err_disconnect;
- 
-@@ -848,7 +872,7 @@ static int tps6598x_probe(struct i2c_client *client)
- 	fwnode_handle_put(fwnode);
- 
- 	tps->wakeup = device_property_read_bool(tps->dev, "wakeup-source");
--	if (tps->wakeup) {
-+	if (tps->wakeup && client->irq) {
- 		device_init_wakeup(&client->dev, true);
- 		enable_irq_wake(client->irq);
- 	}
-@@ -887,6 +911,9 @@ static int __maybe_unused tps6598x_suspend(struct device *dev)
- 		enable_irq_wake(client->irq);
- 	}
- 
-+	if (!client->irq)
-+		cancel_delayed_work_sync(&tps->wq_poll);
-+
- 	return 0;
- }
- 
-@@ -900,6 +927,10 @@ static int __maybe_unused tps6598x_resume(struct device *dev)
- 		enable_irq(client->irq);
- 	}
- 
-+	if (client->irq)
-+		queue_delayed_work(system_power_efficient_wq, &tps->wq_poll,
-+				   msecs_to_jiffies(POLL_INTERVAL));
-+
- 	return 0;
- }
- 
--- 
-2.34.1
-
+bod
