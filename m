@@ -2,144 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB74A6C7D6B
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 12:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 868856C7E49
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 13:50:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231735AbjCXLon (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Mar 2023 07:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
+        id S231740AbjCXMun (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Mar 2023 08:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231725AbjCXLol (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 07:44:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E991EBC6;
-        Fri, 24 Mar 2023 04:44:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74C0462950;
-        Fri, 24 Mar 2023 11:44:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 929D5C433EF;
-        Fri, 24 Mar 2023 11:44:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679658276;
-        bh=wPAS6ORWpk0/rqv+0+dRl7/A22wDG+peNCJdYRP8hWc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qLGS6aP9edU73NVzzfQw1p+BBQYZtIZrEhN+bgghP87PXz75z5REx14kHpFBaE5Wc
-         xfCzjKQ1OCEbUsyTEVQYFV8P7R0NilYFKws4BmjgkvXszIWBWfjHWULWv4Sl6yjWO3
-         7JWO7za31Li0YyNhqRZOnrYurX9koO/xV59Es+1wl3bBTzPMqRaHMIZH8TS8o9zOpv
-         xW2EyNZw75OIUorfAJNZg+8vOTkaiMAL2l+x+xjmTbWQACi+bCuz1MQmKoCY/+c4BY
-         jahOycZ8SYcWFOkgcZFq4sikK3jAvixw3RaKni8yySjsvYF71Z8l2BQLdDb9uCbkyV
-         0tUuqZlgnbiKw==
-From:   Roger Quadros <rogerq@kernel.org>
-To:     Thinh.Nguyen@synopsys.com, stern@rowland.harvard.edu
-Cc:     gregkh@linuxfoundation.org, vigneshr@ti.com, srk@ti.com,
-        r-gunasekaran@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Roger Quadros <rogerq@kernel.org>
-Subject: [PATCH v2] usb: dwc3-am62: Fix up wake-up configuration and spurious wake up
-Date:   Fri, 24 Mar 2023 13:44:29 +0200
-Message-Id: <20230324114429.21838-1-rogerq@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230316131226.89540-4-rogerq@kernel.org>
-References: <20230316131226.89540-4-rogerq@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S230366AbjCXMul (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 08:50:41 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6337C3;
+        Fri, 24 Mar 2023 05:50:40 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 3BB943200A08;
+        Fri, 24 Mar 2023 08:50:40 -0400 (EDT)
+Received: from imap52 ([10.202.2.102])
+  by compute5.internal (MEProxy); Fri, 24 Mar 2023 08:50:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1679662239; x=1679748639; bh=0i
+        PYyvYnm1AEnXuoGimRYpODjqiX75LCp0xlyX7nFAE=; b=WWNYrMotO9neL7JvKt
+        pqkQSLtU2bDgE0Pqw+/uoCIWZqH40RjwlU36+KbNs9EUarOTd+etVk3xlPVtMIJa
+        dy53rRiPrDrI90GAjCG6O0jc8xeyl1EBx/nkHEL13Zl43eVUdFsrOoQMEQKaamro
+        zyYcnb/PPmC2XqmD08PU1Rpx2eYO79o1hVuz02H2O0TIJ9gZMyVKO7vViBA9kht9
+        awhtyIoAY3vnim01+9Eq/dpoZ59DIDfGwRTJa/6ELZi+DgzP0XcCezj4E3pC1RJY
+        TRXq2mx3+oTcxw/k2gP9EwNTyaXFtYP3dKpRZl8cER6neTAhy8DgAisXn8V0Lyic
+        XvCQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679662239; x=1679748639; bh=0iPYyvYnm1AEn
+        XuoGimRYpODjqiX75LCp0xlyX7nFAE=; b=Rxo0Q/2dEJs4isNP1RMPXnWioHheE
+        SSWR/wdHyh1MvnKUuVFaPZ9uwmdch3ezrgTytitS63V6ddLIirDeaYWAd+RL+siy
+        4zaYwOe4VN4YwXTRoSuNibhf+xb21Hg86rbnN0G3Nkjbmyaiau6aWgnnyR4V7qR+
+        Fn7IML/hYZazcTtvCWDHFAhzddaQza90QfP9/xucE74O4gjIk5XJKOvZpIJ92zVT
+        qeF3baI7uWE4xcna4IgNFmk+sBHbuMf5k6zXHtCNqIoSUPlSGzB6NJWOiSfsmO44
+        8ZGOEu3JiePhwTbZ0129mTMjowrYTY22Hgym6q2EsnAfXi5tubPr1Vlsw==
+X-ME-Sender: <xms:n5wdZJx7hANKXck7D2UkvyV5UsGeyAZy9EdB7Dn79vUVQJQeR3jN2w>
+    <xme:n5wdZJTlPAodL8CTPuQ8hyAEDhmBca--r1ZdGsS7Iipz9lWDEYWQ6HKMXLNiywx-d
+    oTIfkEuILZ3q_WXLYc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegiedggeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfofgr
+    rhhkucfrvggrrhhsohhnfdcuoehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssg
+    drtggrqeenucggtffrrghtthgvrhhnpeeiueefjeeiveetuddvkeetfeeltdevffevudeh
+    ffefjedufedvieejgedugeekhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggr
+X-ME-Proxy: <xmx:n5wdZDUQAQb7-vKidLHSbaOlx1WzDxRfX6kXmDZ20AaEZ6dGzjcrbw>
+    <xmx:n5wdZLjwwq4_m_50IMRHoqROaHru0Nym6RpzH7sc-_o5lQq9bxYjYQ>
+    <xmx:n5wdZLCSKUNfNO-sgpT6SfUpGuC4YA8jzqX-JxwnlQw1V6xUy6htoA>
+    <xmx:n5wdZA5bksg3ktQ7J035GemBpUHNQoEFQEGyGkEzwjAY2IMc8gkhUw>
+Feedback-ID: ibe194615:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 6568BC60091; Fri, 24 Mar 2023 08:50:39 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-236-g06c0f70e43-fm-20230313.001-g06c0f70e
+Mime-Version: 1.0
+Message-Id: <16c47819-dbcc-4a9d-9124-7d440cfbf1d6@app.fastmail.com>
+In-Reply-To: <ZBwikZ0wyQ1LGYBc@kuha.fi.intel.com>
+References: <mpearson-lenovo@squebb.ca>
+ <20230321190136.449485-1-mpearson-lenovo@squebb.ca>
+ <ZBwikZ0wyQ1LGYBc@kuha.fi.intel.com>
+Date:   Fri, 24 Mar 2023 08:50:19 -0400
+From:   "Mark Pearson" <mpearson-lenovo@squebb.ca>
+To:     "Heikki Krogerus" <heikki.krogerus@linux.intel.com>
+Cc:     "Greg KH" <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ucsi: acpi: Remove notifier before destroying handler
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Explicitly set and clear wakeup config so we don't leave anything
-to chance.
+Hi Heikki,
 
-Clear wakeup status on suspend so we know what caused wake up.
+On Thu, Mar 23, 2023, at 5:57 AM, Heikki Krogerus wrote:
+> On Tue, Mar 21, 2023 at 03:01:36PM -0400, Mark Pearson wrote:
+>> Was debugging another issue (since fixed) and noticed that the acpi
+>> notify_handler should be removed before the ucsi object is destroyed.
+>> 
+>> This isn't fixing any issues that I'm aware of - but I assume could
+>> potentially lead to a race condition if you were really unlucky?
+>> 
+>> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+>> ---
+>>  drivers/usb/typec/ucsi/ucsi_acpi.c | 6 +++---
+>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>> 
+>> diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+>> index ce0c8ef80c04..be3bf4f996d3 100644
+>> --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
+>> +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+>> @@ -176,12 +176,12 @@ static int ucsi_acpi_remove(struct platform_device *pdev)
+>>  {
+>>  	struct ucsi_acpi *ua = platform_get_drvdata(pdev);
+>>  
+>> -	ucsi_unregister(ua->ucsi);
+>> -	ucsi_destroy(ua->ucsi);
+>> -
+>>  	acpi_remove_notify_handler(ACPI_HANDLE(&pdev->dev), ACPI_DEVICE_NOTIFY,
+>>  				   ucsi_acpi_notify);
+>>  
+>> +	ucsi_unregister(ua->ucsi);
+>> +	ucsi_destroy(ua->ucsi);
+>> +
+>>  	return 0;
+>>  }
+>
+> Calling ucsi_desctroy() after removing the notifier makes sense to me,
+> but do you also need to unregister the instance after that?
+>
+> You may still be in the middle of init or resume, so I think we need
+> to accept notifications until we are sure those have finished, i.e.
+> ucsi_unregister() has finished.
+>
 
-The LINESTATE wake up should not be enabled in device mode
-if we are not connected to a USB host and in USB suspend (U2/L3)
-else it will cause spurious wake up.
+That makes sense - I hadn't considered that.
+I'll post an updated patch with the acpi_remove_notify_handler between the two calls.
 
-For now, don't enable LINESTATE. This means wake up from
-USB resume will not work but at least we won't have any spurious
-wake ups.
-
-Signed-off-by: Roger Quadros <rogerq@kernel.org>
----
-Changelog:
-v2: don't enable LINESTATE wake-up at all in device mode.
-
- drivers/usb/dwc3/dwc3-am62.c | 28 ++++++++++++++++++----------
- 1 file changed, 18 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
-index 859b48279658..b22fb78bc8e7 100644
---- a/drivers/usb/dwc3/dwc3-am62.c
-+++ b/drivers/usb/dwc3/dwc3-am62.c
-@@ -60,6 +60,13 @@
- #define USBSS_WAKEUP_CFG_SESSVALID_EN	BIT(1)
- #define USBSS_WAKEUP_CFG_VBUSVALID_EN	BIT(0)
- 
-+#define USBSS_WAKEUP_CFG_ALL	(USBSS_WAKEUP_CFG_VBUSVALID_EN | \
-+				 USBSS_WAKEUP_CFG_SESSVALID_EN | \
-+				 USBSS_WAKEUP_CFG_LINESTATE_EN | \
-+				 USBSS_WAKEUP_CFG_OVERCURRENT_EN)
-+
-+#define USBSS_WAKEUP_CFG_NONE	0
-+
- /* WAKEUP STAT register bits */
- #define USBSS_WAKEUP_STAT_OVERCURRENT	BIT(4)
- #define USBSS_WAKEUP_STAT_LINESTATE	BIT(3)
-@@ -103,6 +110,7 @@ struct dwc3_data {
- 	struct regmap *syscon;
- 	unsigned int offset;
- 	unsigned int vbus_divider;
-+	u32 wakeup_stat;
- };
- 
- static const int dwc3_ti_rate_table[] = {	/* in KHZ */
-@@ -302,12 +310,17 @@ static int dwc3_ti_suspend_common(struct device *dev)
- 		/* Set wakeup config enable bits */
- 		reg = dwc3_ti_readl(data, USBSS_WAKEUP_CONFIG);
- 		if (current_prtcap_dir == DWC3_GCTL_PRTCAP_HOST) {
--			reg |= USBSS_WAKEUP_CFG_LINESTATE_EN | USBSS_WAKEUP_CFG_OVERCURRENT_EN;
-+			reg = USBSS_WAKEUP_CFG_LINESTATE_EN | USBSS_WAKEUP_CFG_OVERCURRENT_EN;
- 		} else {
--			reg |= USBSS_WAKEUP_CFG_OVERCURRENT_EN | USBSS_WAKEUP_CFG_LINESTATE_EN |
--			       USBSS_WAKEUP_CFG_VBUSVALID_EN;
-+			reg = USBSS_WAKEUP_CFG_VBUSVALID_EN | USBSS_WAKEUP_CFG_SESSVALID_EN;
-+			/*
-+			 * Enable LINESTATE wake up only if connected to bus
-+			 * and in U2/L3 state else it causes spurious wake-up.
-+			 */
- 		}
- 		dwc3_ti_writel(data, USBSS_WAKEUP_CONFIG, reg);
-+		/* clear wakeup status so we know what caused the wake up */
-+		dwc3_ti_writel(data, USBSS_WAKEUP_STAT, USBSS_WAKEUP_STAT_CLR);
- 	}
- 
- 	clk_disable_unprepare(data->usb2_refclk);
-@@ -324,16 +337,11 @@ static int dwc3_ti_resume_common(struct device *dev)
- 
- 	if (device_may_wakeup(dev)) {
- 		/* Clear wakeup config enable bits */
--		reg = dwc3_ti_readl(data, USBSS_WAKEUP_CONFIG);
--		reg &= ~(USBSS_WAKEUP_CFG_OVERCURRENT_EN | USBSS_WAKEUP_CFG_LINESTATE_EN |
--			 USBSS_WAKEUP_CFG_VBUSVALID_EN);
--		dwc3_ti_writel(data, USBSS_WAKEUP_CONFIG, reg);
-+		dwc3_ti_writel(data, USBSS_WAKEUP_CONFIG, USBSS_WAKEUP_CFG_NONE);
- 	}
- 
- 	reg = dwc3_ti_readl(data, USBSS_WAKEUP_STAT);
--	/* Clear the wakeup status with wakeup clear bit */
--	reg |= USBSS_WAKEUP_STAT_CLR;
--	dwc3_ti_writel(data, USBSS_WAKEUP_STAT, reg);
-+	data->wakeup_stat = reg;
- 
- 	return 0;
- }
--- 
-2.34.1
-
+Thanks for the review
+Mark
