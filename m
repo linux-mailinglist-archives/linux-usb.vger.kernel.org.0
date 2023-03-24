@@ -2,111 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F23FC6C877D
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 22:30:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 439396C87B2
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 22:48:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbjCXVaS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Mar 2023 17:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
+        id S232118AbjCXVsR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Mar 2023 17:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231841AbjCXVaQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 17:30:16 -0400
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2123.outbound.protection.outlook.com [40.107.247.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCFC19C52
-        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 14:30:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DtIUbwBMb5Pxn2UkUQtbxcLrcA5tG1KfTImTi99omM+0b9FYVBUix+/ICJnpzndt8vHdgll+yrU+le09MA9hqfmvVll8wgGFO//V6PpQSYcaB7zhSuw3IiMwSONt1zLKsQiWwmgd40O8hAdHz/LbDH3DAMQCyR39ktjrdjIFeoj7kf9XIWe+msqiKDFd/019a0/EVOq1dmMbd5g/kt346unqPItmwFR16whETGxfUBYOM30bwur4fCr0VdrFLIBYi2qmJ/dtnUG9OMpvjmANuZzAJARixVYs3Uoqkq0OSn8TMN1MbMPiQNphGqrKYMORuiS7kgXQMh75cFd5Ji+ppQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xV3QjRS2qH6qEoro8Ju43We8uXubJHz6BBnmeJ2X9ok=;
- b=LC0PSKQJrzcdk0B0Sj8nsuGnSg9GrQpqoVQ28fACvHoifqo+uD8p8pPdjHdo+Bn5/fYKbwErZmsZlJMuJ8yNDaCwMmoaZSbH4B8cAQycc36G/boTDk/uqByBTndUnup8ctOgC93emEJjdyVmwY2TYxyWE3uhCaGV1GA7PsaiJwQfMWftZVSTccDdLKC0zOfStEQsIs05QEzlJyLefRHQE9YsO5AO3yH5y7zAFA7kU2CwGJ5oLfcx7k3WdtNQgcYlS1QXmKFi3/h2LhIYfz6ogEvh4YoY7W9pWFqZcQtpkf6TgaRVDcbu5WJzoszqj0rRehP9EyQWgR3zZtQQ60+7Zg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kramerav.com; dmarc=pass action=none header.from=kramerav.com;
- dkim=pass header.d=kramerav.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kramerav.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xV3QjRS2qH6qEoro8Ju43We8uXubJHz6BBnmeJ2X9ok=;
- b=Yzbrn6/bSKFwoX3Kk4pSxaYyFBCG7urVx2EDxHFWvXHI+g4QnM+CoOL6GLh0ISWqv5/HQfSKabSb51JO8VEkzAEcD3kScdS1e93ZQzhtLQqtU8SEk4Ji18Juw/k9rL2d8o5yYYCwZMlgl8TiCmKvckQfoZQx9hefdBWNKYe2NmE=
-Received: from PA4PR05MB9282.eurprd05.prod.outlook.com (2603:10a6:102:2ad::22)
- by DB8PR05MB6665.eurprd05.prod.outlook.com (2603:10a6:10:142::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Fri, 24 Mar
- 2023 21:30:12 +0000
-Received: from PA4PR05MB9282.eurprd05.prod.outlook.com
- ([fe80::4b50:48ee:75ac:6d3e]) by PA4PR05MB9282.eurprd05.prod.outlook.com
- ([fe80::4b50:48ee:75ac:6d3e%8]) with mapi id 15.20.6178.038; Fri, 24 Mar 2023
- 21:30:12 +0000
-From:   Lidor Elkais <lelkais@kramerav.com>
-To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-CC:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Daniel Scally <dan.scally@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: UVC-GADGET ISSUE
-Thread-Topic: UVC-GADGET ISSUE
-Thread-Index: Adlel2kbFg87L5PDTyOuCcCPrul24A==
-Date:   Fri, 24 Mar 2023 21:30:11 +0000
-Message-ID: <PA4PR05MB9282681AE7CF4F8ADD039FEFD5849@PA4PR05MB9282.eurprd05.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kramerav.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PA4PR05MB9282:EE_|DB8PR05MB6665:EE_
-x-ms-office365-filtering-correlation-id: 8b98ce41-654f-4d54-ccef-08db2caef331
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +8macaa6G24b87qpYIP9qCvuN7Rv5IY3WWDsmcCGZ9E4iZxt08AYeJuED/EhlgoQFJLFpxlzxyPONb5DtwH9n9NFk+FVLhQHT5882PAEZCAczv2EQgr+cUULl0sqAT7Mm8IQ14Oz6iQQh4M67PH52CpwSHliIn3BPolV23LZKeCP1VcSZHg805+MjemEJTZNmWQmlMV3B44W8q5Sph4HSeOAXbSThRyyk3/D8VnkbVo94UF1qtDZia/nuPQt285a5l0fz57zoxeS4r4CT7ZAxgAqR35jxxln2oMPMRcYYtHkEkytkYjzilB8kFW0Fg4U4MYfPamTp/KPR7k7Iq6Fn3oMwySCGOGJpJnIcXGUFP814MNnTcB5QSv+QSg+YeIGWSt3niOjSZ+5qEXxJK1ptMuw/HWi6ucOuKKgWgceap5pa8HC1SzlrgU4kNFLbwGPISawhqcq6n/MlB5JQsC8XZvF3z5TmAysGn3Se6OZ+TXtCVJfVhj4uVZYNb57ZtjntIXT8/cRZGaTgaCc8L/vGawNxuTDFiYfjL5zXvKzEE5ABJiW32474r7ysFYtw7gCRukmt44AQDbr1/U8RcbczeURwy8diZ8LD6ge6DEVgwOdFEV6nUw0IqYf5F6frWC+2J9sNnvWx6vjlgRx8w0iEW7jYP19SjajS+vxst+gPEgghq86E4r1awkLPSOoEu3sySFp5rjxBYugh3pbGGotwg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR05MB9282.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(396003)(39850400004)(366004)(451199021)(186003)(6506007)(41300700001)(4744005)(66446008)(99936003)(8936002)(38100700002)(7696005)(9686003)(2906002)(71200400001)(26005)(316002)(54906003)(478600001)(6916009)(66946007)(33656002)(4326008)(8676002)(83380400001)(66476007)(66556008)(64756008)(86362001)(122000001)(5660300002)(55016003)(76116006)(52536014)(38070700005)(3480700007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?OBmjqkGLtnVn6wcegM//yWpNjzD9d4rU60IE67LJpwyusE+oDlKg9jb0Rt5U?=
- =?us-ascii?Q?RHZkHsLEOd0grJSgAhoqD5mv0xNwIhJhPCFEAFY0MFG+dhJ++SgeGXNf8zNp?=
- =?us-ascii?Q?RGxNxlLOMZh9HalmIngsU1phGyEQh4CIHG4A/GLcJC3iFm/jD6FSVgIzc9O6?=
- =?us-ascii?Q?Aler9Sn29QdxBbexsSy95/sf/zKfMHCvDalLZQJPVkAbu0yRuU9A7qUky+P6?=
- =?us-ascii?Q?pejXz3+hqAC2a4k+4mWi5UYD8NAd8bPi/h093Ba9PVXBKnG1pzxE6ZcCzHFb?=
- =?us-ascii?Q?YGmGH0Vad1nLOqz2ySgviJvRGzP013n8hI7rOzk8oTrhq0o5BLjN8OdZpWAt?=
- =?us-ascii?Q?gxG+mHuWjZ5oNqxhNakDtPSmY0eNSdeyDU+Cn0XCoovAdkkyn2cy+IhNYB5l?=
- =?us-ascii?Q?Rp+RWKTVX6YtBf9/kZTGLHPqffqOM5z+ShV1PG0HqjxRr9EpjJxu7edo1PlT?=
- =?us-ascii?Q?bOQne+HC6IU/62Iez3ECKLjCL98IIL2ukZX6kqPWu9OacROV+nRZu7XMHRRV?=
- =?us-ascii?Q?Z0dFuUTHQIrPKwMCTf0S8+d3BICfnVljudKNWcz8bSbEFwW+wok+Thvb6PXc?=
- =?us-ascii?Q?x8lJSFYp43B8jquSA71l2rLZMFdrODTe7brb5mIg0pCvFbRGFSo/c5dCt/iu?=
- =?us-ascii?Q?ChuEbnI3VK0SzkKhadQujZubDr3Dr/NfshP+L2Z2ryaNxAzdG7g6qndSQjUF?=
- =?us-ascii?Q?OzHUxfV6TI0HjQ4RGzg2foxf5WFg3jM4Wbn+RMV0glT2PTakdvM+ehjbhZuv?=
- =?us-ascii?Q?8wC2I6hoU+oPZ9ubzc97IufwgU4d6BXnhjgDSHfyXzAYvrGCP7JZ2rG0Tu4r?=
- =?us-ascii?Q?N6dmEw3QzVeuQYh4GGYDgWj/LcA90nwi4VTlvFkIqDkDhtlpzefhLAMwqAP+?=
- =?us-ascii?Q?ZCGBFLqCCLxbjvKR1KNfZFwswIsn6+QhqXlCkqPL5GfDU+8HyvojdZKEx63n?=
- =?us-ascii?Q?i42GIGVCf09PA+nX44tymrSXIcNPvvqrC5+DmvsDkQsv5H0sTxY7Z+lOFFew?=
- =?us-ascii?Q?nPyg9ZTacJw9k5TqYwFXXzLYoDL+c1o1n0jurbvsrYkvRZ6hdF0pmJV/nFMq?=
- =?us-ascii?Q?Na3sr6DzBYqwNluLe27Dc9FZCeC+LN2zCRZ/nRFtv3CUDYdVlByFE0tfCrgK?=
- =?us-ascii?Q?3uc98/ENXlGM/W/uxBc6NZ/OyT0BvJ6/PtrgmIyZ69/bv7IZ6aDCO0zr07xg?=
- =?us-ascii?Q?0SqJmQbgf7ykh+edsvU2BxXHBeka1IkaJObWMq7yKp16R0L5yGmdNH3IV2HJ?=
- =?us-ascii?Q?8ZtmgJ2q2nOSwdbR0STPZR4KcLrPWxuSsgjnJ2EXZwFobG1IKTqjKpW1VDVb?=
- =?us-ascii?Q?2N3GrRGDOOuOyZ2Qai7a3j1gIK3PhI7IXK/VTqluLGSuhIFd2GmwpY0oi16z?=
- =?us-ascii?Q?3MQ3y/tC0ICcdHowDScMhkc+OgvhMmw0hGJTAkBuXYDMoUCrQrUdbewfrd9Q?=
- =?us-ascii?Q?Y2nguPn/MdPyeme+3siidvo/JB1BXTq8ZjPrvWft0IY5HIN6iaz86S7LgCeM?=
- =?us-ascii?Q?wE4ZTlbz08n8FJbo3sD3zgoHyJBLp5k/yi/upAzitPcHc/JocTxrxYNc+GpV?=
- =?us-ascii?Q?xnyuHDfQspqab80rOcFWV9WnKWehibXCB9zroOIM?=
-Content-Type: multipart/mixed;
-        boundary="_002_PA4PR05MB9282681AE7CF4F8ADD039FEFD5849PA4PR05MB9282eurp_"
-MIME-Version: 1.0
-X-OriginatorOrg: kramerav.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR05MB9282.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8b98ce41-654f-4d54-ccef-08db2caef331
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Mar 2023 21:30:11.8647
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3db4ad3c-2be0-4d8b-9101-e2e8b5f234a8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dcIKXi70crPLVWEX8zH2fvC1RNLJuf+YErxQSh+yb+CAW1VSvN4PUaTFDyYRYxOHF2AaYEJhUBpBJABKsFin2A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR05MB6665
-X-Spam-Status: No, score=0.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,SUBJ_ALL_CAPS autolearn=no autolearn_force=no
+        with ESMTP id S232021AbjCXVsL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 17:48:11 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA026587;
+        Fri, 24 Mar 2023 14:48:07 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32OAt1gD004926;
+        Fri, 24 Mar 2023 21:48:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=GxFN1Mz02uScJLXQDqm29cATi91Hixspz+FPWGqEbGc=;
+ b=KG3HQmQdLobbKfvcVkdAD/fXU7ZHvJRvtBaNXTBXu3pNPii24UhG9Lr5nFN2usMMe+cE
+ QgDksW4BriMOOYAqWD9PSLH/fFwHlVurwkw4yXBOwyRqy41N5l4RiKNNVrQ6V3wKUFmW
+ eyLqoO0Mrv9l8u0vXfL5R2/E056B9f9rm6wtcpns27X74cn4pOK4AB6fafDmO0wX/Q0O
+ hyfioZJFTk45HmJZyFd9SHRHYybYeI7gQWCnwdC1FC6n95yPTIFtFG+fQTCEGIUqtRbC
+ au9Zd/C/G2GMD6vuC2+L6tEHCsn0BIXkul51bba8UVBCJy5G8YHDq3mWQcWwaqw2YN0r SA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pgyeeb5a3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Mar 2023 21:48:05 +0000
+Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 32OLm4e7003626;
+        Fri, 24 Mar 2023 21:48:04 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTP id 3phhr8rp9n-1;
+        Fri, 24 Mar 2023 21:48:04 +0000
+Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32OLm4eV003620;
+        Fri, 24 Mar 2023 21:48:04 GMT
+Received: from hu-devc-lv-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.164])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTP id 32OLm4mS003616;
+        Fri, 24 Mar 2023 21:48:04 +0000
+Received: by hu-devc-lv-c.qualcomm.com (Postfix, from userid 464172)
+        id 181F320DAB; Fri, 24 Mar 2023 14:48:04 -0700 (PDT)
+From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
+To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>
+Subject: [PATCH v13 0/6] Add function suspend/resume and remote wakeup support
+Date:   Fri, 24 Mar 2023 14:47:56 -0700
+Message-Id: <1679694482-16430-1-git-send-email-quic_eserrao@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 0d_7N7vc5AWcuUDhqHSs50_bkhk0IJjY
+X-Proofpoint-ORIG-GUID: 0d_7N7vc5AWcuUDhqHSs50_bkhk0IJjY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ lowpriorityscore=0 suspectscore=0 clxscore=1015 mlxlogscore=746
+ malwarescore=0 phishscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2303240166
+X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,75 +76,130 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---_002_PA4PR05MB9282681AE7CF4F8ADD039FEFD5849PA4PR05MB9282eurp_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Changes in v13
+ - Added function suspend feature selector handling and related functionalities
+   in composite layer and removed them from f_ecm. This will also lay a generic
+   framework for other functions to use.
+   
+Changes in v12
+ - Added a new patch to arm the function for triggering remote wakeup based on the
+   function suspend packet sent by the host. Also handle get_status in composite
+   layer as default.
+ - Removed set/reset of func_wakeup_armed flag in f_ecm and let composite layer
+   handle it
+ 
+Changes in v11
+ - When ecm function suspend is called return negative error only if host is trying
+   to arm for function wakeup and device is not wakeup capable.
+   
+Changes in v10
+ - Modified the return value to 0 in ecm_get_status() so that device responds
+   with both remote wakeup armed and remote wakeup capable bit reset to 0.
+ - Return negative errno if wakeup is not supported when func suspend feature
+   selector is sent by the host.
 
-Hi,=20
+Changes in v9
+ - Added bmAtrributes wakeup bit check for arming the function for function
+   remote wakeup and also in get_status api
 
-i am using your uvc-gadget application(from your git-hub).
-i have an issue, if you can help it will be great.
+Changes in v8
+ - Added else case to return error value while setting remote wakeup feature
+   selector so that device will respond with a protocl stall
 
-i did shell script in order to configure the gadget(attached), when i am ru=
-nning your uvc app, the computer(windows - I connected via USB-Host) says "=
-usb not recognized(set address failed)"
+Changes in v7
+ - Added a check to set device remote wakeup feature selector in ep0.c based on whether
+   the device is configured for remote wakeup.
+ - Commit message and usb_func_wakeup documentation changes.
 
+Changes in v6
+ - Combined usb_gadget_func_wakeup API with usb_func_wakeup API in composite layer
+   so that there is only 1 API for triggering function remote wakeup for better error
+   handling. Since function suspend is something specific to usb functions, better to
+   keep the related APIs in composite layer and above. Also documented the usage and
+   applicability of the usb_func_wakeup API.
 
+Changes in v5
+ - Add wakeup_armed check in patch2 in the link status change event handler
+   so that resume gets triggeed only in the remote wakeup context.
+ - Costmetic changes in patch3 and patch4
 
-the option for your app are below:=20
-./uvc.elf -d -i P720.jpg -u /dev/video1 -r 0 -f 1 -o 1
+Changes in v4
+ - Moved the wakeup bit check to bind function for warning the user at an early
+   stage itself.
+ - Added the remote wakeup configured check to gadget_wakeup() and func_wakeup()
+   routines so that wakeup can be triggered only if user has configured it.
+ - Cosmetic changes with respect to renaming the variables to reflect the operation
+   better.
 
-Uvc.elf - is your uvc-gadget application, I just compiled the files with my=
- environment(Vitis)
+Changes in v3
+ - Modified rw_capable flag to reflect the gadgets capability for wakeup
+   signalling.
+ - Added a check to configure wakeup bit in bmAttributes only if gadget
+   is capable of triggering wakeup.
+ - Implemented a gadget op for composite layer to inform UDC whether device
+   is configured for remote wakeup.
+ - Added a check in __usb_gadget_wakeup() API to trigger wakeup only if the
+   device is configured for it.
+ - Cosmetic changes in dwc3_gadget_func_wakeup() API.
 
+Changes in v2
+ - Added a flag to indicate whether the device is remote wakeup capable.
+ - Added an async parameter to _dwc3_gadget_wakeup() API and few cosmetic
+   changes.
+ - Added flags to reflect the state of  function suspend and function remote
+   wakeup to usb_function struct rather than function specific struct (f_ecm).
+ - Changed the dwc3_gadget_func__wakeup() API to run synchronously by first
+   checking the link state and then sending the device notification. Also
+   added debug log for DEVICE_NOTIFICATION generic cmd.
+ - Added changes to arm the device for remotewakeup/function remotewakeup
+   only if device is capable.
 
-please help me,
+An usb device can initate a remote wakeup and bring the link out of
+suspend as dictated by the DEVICE_REMOTE_WAKEUP feature selector.
+To achieve this an interface can invoke gadget_wakeup op and wait for the
+device to come out of LPM. But the current polling based implementation
+fails if the host takes a long time to drive the resume signaling specially
+in high speed capable devices. Switching to an interrupt based approach is
+more robust and efficient. This can be leveraged by enabling link status
+change events and triggering a gadget resume when the link comes to active
+state.
 
-thanks,
-Lidor
+If the device is enhanced super-speed capable, individual interfaces can
+also be put into suspend state. An interface can be in function suspend
+state even when the device is not in suspend state. Function suspend state
+is retained throughout the device suspend entry and exit process.
+A function can be put to function suspend through FUNCTION_SUSPEND feature
+selector sent by the host. This setup packet also decides whether that
+function is capable of initiating a function remote wakeup. When the
+function sends a wakeup notification to the host the link must be first
+brought to a non-U0 state and then this notification is sent.
 
-Lidor Elkais
-R&D Group, V&V Engineer
+This change adds the infrastructure needed to support the above
+functionalities.
 
-2 Negev St., Airport City=20
-9546303, Israel=20
-Mobile: +972.52.547.4211
-lelkais@kramerav.com
+Elson Roy Serrao (6):
+  usb: gadget: Properly configure the device for remote wakeup
+  usb: dwc3: Add remote wakeup handling
+  usb: gadget: Add function wakeup support
+  usb: dwc3: Add function suspend and function wakeup support
+  usb: gadget: Handle function suspend feature selector
+  usb: gadget: f_ecm: Add suspend/resume and remote wakeup support
 
+ drivers/usb/dwc3/core.h               |   5 ++
+ drivers/usb/dwc3/debug.h              |   2 +
+ drivers/usb/dwc3/ep0.c                |  19 +++---
+ drivers/usb/dwc3/gadget.c             | 118 ++++++++++++++++++++++++++++++--
+ drivers/usb/gadget/composite.c        | 123 ++++++++++++++++++++++++++++++++--
+ drivers/usb/gadget/configfs.c         |   3 +
+ drivers/usb/gadget/function/f_ecm.c   |  22 ++++++
+ drivers/usb/gadget/function/u_ether.c |  63 +++++++++++++++++
+ drivers/usb/gadget/function/u_ether.h |   4 ++
+ drivers/usb/gadget/udc/core.c         |  27 ++++++++
+ drivers/usb/gadget/udc/trace.h        |   5 ++
+ include/linux/usb/composite.h         |   8 +++
+ include/linux/usb/gadget.h            |   9 +++
+ 13 files changed, 389 insertions(+), 19 deletions(-)
 
+-- 
+2.7.4
 
-
---_002_PA4PR05MB9282681AE7CF4F8ADD039FEFD5849PA4PR05MB9282eurp_
-Content-Type: application/octet-stream; name="uvc_v2.sh"
-Content-Description: uvc_v2.sh
-Content-Disposition: attachment; filename="uvc_v2.sh"; size=1358;
-	creation-date="Fri, 24 Mar 2023 21:30:08 GMT";
-	modification-date="Fri, 24 Mar 2023 21:30:11 GMT"
-Content-Transfer-Encoding: base64
-
-IyEvdXNyL2Jpbi9lbnYgYmFzaAoKbW9kcHJvYmUgbGliY29tcG9zaXRlCiNtb2Rwcm9iZSB1c2Jf
-Zl9mcwojbW9kcHJvYmUgZy13ZWJjYW0gc3RyZWFtaW5nX21heGJ1cnN0PTE1CgpVREM9ZmUzMDAw
-MDAuZHdjMwpVRENfUk9MRT0vc3lzL2RldmljZXMvcGxhdGZvcm0vc29jLzc4ZDkwMDAudXNiL2Np
-X2hkcmMuMC9yb2xlCkNPTkZJR0ZTPSIvc3lzL2tlcm5lbC9jb25maWciCkdBREdFVD0iJENPTkZJ
-R0ZTL3VzYl9nYWRnZXQiClZJRD0iMHgwNTI1IgpQSUQ9IjB4MDEwMiIKU0VSSUFMPSIwMTIzNDU2
-Nzg5IgpNQU5VRj0kKGhvc3RuYW1lKQpQUk9EVUNUPSJVVkMgR2FkZ2V0IgoKbWtkaXIgLXAgJEdB
-REdFVC9nMQpjZCAkR0FER0VUL2cxCmVjaG8gJFZJRCA+IGlkVmVuZG9yCmVjaG8gJFBJRCA+IGlk
-UHJvZHVjdAoKbWtkaXIgLXAgc3RyaW5ncy8weDQwOQoKZWNobyAkU0VSSUFMID4gc3RyaW5ncy8w
-eDQwOS9zZXJpYWxudW1iZXIKZWNobyAkTUFOVUYgPiBzdHJpbmdzLzB4NDA5L21hbnVmYWN0dXJl
-cgplY2hvICRQUk9EVUNUID4gc3RyaW5ncy8weDQwOS9wcm9kdWN0CmVjaG8gIjB4MDIwMCIgPiBi
-Y2RVU0IKCm1rZGlyIGNvbmZpZ3MvYy4xCm1rZGlyIGNvbmZpZ3MvYy4xL3N0cmluZ3MvMHg0MDkK
-CkNPTkZJRz0iY29uZmlncy9jLjEiCkZVTkNUSU9OPSJ1dmMuMCIKbWtkaXIgZnVuY3Rpb25zLyRG
-VU5DVElPTgoKbWtkaXIgLXAgZnVuY3Rpb25zLyRGVU5DVElPTi9zdHJlYW1pbmcvdW5jb21wcmVz
-c2VkL3UvMzYwcAoKY2F0IDw8RU9GID4gZnVuY3Rpb25zLyRGVU5DVElPTi9zdHJlYW1pbmcvdW5j
-b21wcmVzc2VkL3UvMzYwcC9kd0ZyYW1lSW50ZXJ2YWwKNjY2NjY2CjEwMDAwMDAKNTAwMDAwMApF
-T0YKCm1rZGlyIGZ1bmN0aW9ucy8kRlVOQ1RJT04vc3RyZWFtaW5nL2hlYWRlci9oCmNkIGZ1bmN0
-aW9ucy8kRlVOQ1RJT04vc3RyZWFtaW5nL2hlYWRlci9oCmxuIC1zIC4uLy4uL3VuY29tcHJlc3Nl
-ZC91CmNkIC4uLy4uL2NsYXNzL2ZzCmxuIC1zIC4uLy4uL2hlYWRlci9oCmNkIC4uLy4uL2NsYXNz
-L2hzCmxuIC1zIC4uLy4uL2hlYWRlci9oCmNkIC4uLy4uL2NsYXNzL3NzCmxuIC1zIC4uLy4uL2hl
-YWRlci9oCmNkIC4uLy4uLy4uL2NvbnRyb2wKbWtkaXIgLXAgaGVhZGVyL2gKbG4gLXMgaGVhZGVy
-L2ggY2xhc3MvZnMKbG4gLXMgaGVhZGVyL2ggY2xhc3Mvc3MKY2QgLi4vLi4vLi4vCgplY2hvIDIw
-NDggPiBmdW5jdGlvbnMvJEZVTkNUSU9OL3N0cmVhbWluZ19tYXhwYWNrZXQKCmxuIC1zIGZ1bmN0
-aW9ucy8kRlVOQ1RJT04gY29uZmlncy9jLjEKCmVjaG8gJFVEQyA+IC9zeXMva2VybmVsL2NvbmZp
-Zy91c2JfZ2FkZ2V0L2cxL1VEQwoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgo=
-
---_002_PA4PR05MB9282681AE7CF4F8ADD039FEFD5849PA4PR05MB9282eurp_--
