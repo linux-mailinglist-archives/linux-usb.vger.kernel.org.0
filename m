@@ -2,134 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3CFA6C8152
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 16:35:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF80A6C8212
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 17:03:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232435AbjCXPfd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Mar 2023 11:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        id S229441AbjCXQDU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Mar 2023 12:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232432AbjCXPfc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 11:35:32 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB98A1ADF6;
-        Fri, 24 Mar 2023 08:35:12 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so1962919pjz.1;
-        Fri, 24 Mar 2023 08:35:12 -0700 (PDT)
+        with ESMTP id S231602AbjCXQDT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 12:03:19 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2166E46B3
+        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 09:03:18 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id l27so2344218wrb.2
+        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 09:03:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679672112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4uioeUW0b5QfjzsCcQLCYz9oQ5uQ4Sn5bsToPRxmO2s=;
-        b=D6KxP1oArJBJV2Y65xV8DroR8s9jDS60ScwNt9HIijqtklBCb1N+fbYuWUn/nKvwXS
-         rBW8xktv8HDDH/KrSyQrPgFMJru8YCUAlCigoy4HRYHrJOhJ5MRbbCQSD5gX7GN6EaXz
-         xWRG4T0sc0Wy3QFRnFZW9u6IGx+IjSMVPf5ASwg2CcXTdkhj2DFN8/oCu+COido8mqUR
-         uK/Hn+xut7BCvLN1Bu9UWMW2sGKuGn1JnGup+BbMF+/VylMR51pue2Blokpi2wuoKRoI
-         AC/PiLnRKpA2JnymMy7bQeurM8oZkkPuyhm1I4kBuD8aj0sZ4ZrDpuxmGJexAGal8GP3
-         pJsw==
+        d=linaro.org; s=google; t=1679673796;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JejaCk6CyWSfdiQWhxpThu9OY9rNIrf2KzDX35z5Uyc=;
+        b=CnpTk8DJ0VZi6Qona+U0/XQDLXLLxcDigVDczGvL4PJf7hV1VMJoVaBs+wEdJLLWbv
+         rdS+AbWELW/LnNtzxHpq7PVSAU1YGmdGkkK3CvT+WdZ4xHmvGa8i7HWKGTAnMiS04uxO
+         kZb06EhuXvvKWDQeOFM2jrfdhA7IIWJmzyE4xhy21X3KklzgKxDbI9faeGyKfHWniXyd
+         oUAAlwZtFuQvDZV2WjHhkNFm28QfJLJlT4HmB7CEJGBcz1oEzUF6f/gcthitguW5NF+3
+         ZkviJKqi3YfsGCcwff3RoLKpYJneojzLxE7YfJCwmvK7nRThDl8NIWNvNR+fD33fPSuY
+         msmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679672112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4uioeUW0b5QfjzsCcQLCYz9oQ5uQ4Sn5bsToPRxmO2s=;
-        b=cOwmu+ntUdKf1sd7bSEhj9PfAdgt8eXPrau5JjLWITePqR3tp1Id1WggtSI4fYAv+q
-         Hr007tPQor3sAmEmnHYrEDC3dS5Z62YYe6TJwhcBH/09FR3ahGAGzx4bSIb1c3Bhinbc
-         kl9HdWeclFqRzmwO1P4DdTUFZFGXk/7vHe6YtQ08wh0FwxRQv62XFJR+XLK+p4lo7XgR
-         JSqE806Qv5BjNhLOhzknKS65unAGkdK+CiWTaeIX68O7SC3XLl+3WVY2YqdeMJyzg+Q7
-         PIfa9SzTEf9D1GWDRy6HkyLOAnRK36KcMEZgkel5+5EnrnBwa6P6v4G5eIFZrpIk4smd
-         xcPw==
-X-Gm-Message-State: AAQBX9cVyKGAYdr6p9zgrGw+E9eQ7pzeVqR82wbbGgZX7XHTXhNWWMxK
-        ZOx1NBf/0g4tldgo4neBX4lV9FlOqKfyiBJtSzgfcNfnmnkQ0CU6
-X-Google-Smtp-Source: AKy350Y1MR+BaIB7nk22Q/ip4wTWcomWFt/7dkSX8lPQbvnLmG6x9trv2/5KZXGzHqJKzbl9G3EpL5MjX7mkZ3N4eHY=
-X-Received: by 2002:a17:902:ecd2:b0:1a2:278d:1824 with SMTP id
- a18-20020a170902ecd200b001a2278d1824mr123343plh.12.1679672112173; Fri, 24 Mar
- 2023 08:35:12 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679673796;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JejaCk6CyWSfdiQWhxpThu9OY9rNIrf2KzDX35z5Uyc=;
+        b=1G6Yv5JGZg88DH50U80Mq27hP4CHnt0z3o7WPhS22aeyaQQXL3xTR3XnuQlA1vdoPZ
+         IjSARjmAm+aoOmwwRim0yThvQchfXrhV2+sFMgwspaSnqQRIybag8CvuMSRJ44PRTm5W
+         2w1cdibtJABiLC1/nPLREhc8U2+I4RkkYKryfxgEDcAUAyO9HDPFP8gP5majuhEsXTq1
+         W/Gvj9yY3E7mL121hiO3higlOaPWOxBX/o5OJmRNdPBWC69ir4lvwKaaOQzQJrw7l3Pt
+         ddBFogOZJUfvho/la3oI3scjLWAaoTEUgnrGJlYIcfG7BmlvPPDzIBnZnE/+NXwdLZlB
+         kSCg==
+X-Gm-Message-State: AAQBX9cBRZvWozZbn2WI9l6HIVuRuDEtyx3xJSrER9Bdh11QQ1d3aws+
+        fCxEOjw1Lk/mKR67LEKYU3aFAg==
+X-Google-Smtp-Source: AKy350YKmDxrUkZCYDWW3/RcuEzrMmBDH1zTRoX2kHjwHiAHKi9ulZM5d4yb8N1LUp7EwADLpgbt2w==
+X-Received: by 2002:adf:dbc5:0:b0:2d7:998c:5ad9 with SMTP id e5-20020adfdbc5000000b002d7998c5ad9mr2530229wrj.8.1679673796641;
+        Fri, 24 Mar 2023 09:03:16 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id m9-20020adffa09000000b002c70d97af78sm18781475wrr.85.2023.03.24.09.03.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 09:03:16 -0700 (PDT)
+Message-ID: <51c38884-fbbf-ae5e-781d-e32605f7ef5b@linaro.org>
+Date:   Fri, 24 Mar 2023 16:03:15 +0000
 MIME-Version: 1.0
-References: <20230310070039.1288927-1-zyytlz.wz@163.com> <ZBx8S0tSz/Ot+xw7@kroah.com>
-In-Reply-To: <ZBx8S0tSz/Ot+xw7@kroah.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Fri, 24 Mar 2023 23:34:59 +0800
-Message-ID: <CAJedcCznj8Ve7GOJxopG6X9eDXfi8MMKr+BtTZK7D1xDf0PaBQ@mail.gmail.com>
-Subject: Re: [PATCH] USB: gadget: udc: Fix use after free bug in
- udc_plat_remove due to race condition
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
-        alex000young@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 12/18] usb: typec: qcom: Add Qualcomm PMIC TCPM support
+Content-Language: en-US
+To:     Jianhua Lu <lujianhua000@gmail.com>
+Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, andersson@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, wcheng@codeaurora.org,
+        caleb.connolly@linaro.org, konrad.dybcio@linaro.org,
+        subbaram@quicinc.com, jackp@quicinc.com, robertom@qti.qualcomm.com
+References: <20230318121828.739424-1-bryan.odonoghue@linaro.org>
+ <20230318121828.739424-13-bryan.odonoghue@linaro.org>
+ <ZBxkB04KqY8WbeA1@Gentoo> <89bca327-a860-672c-b4ae-766698d38639@linaro.org>
+ <ZBzyK0ILtUDr986r@Gentoo> <37d14447-0f10-be88-9cd9-8ebd30f1d006@linaro.org>
+ <ZBz5OvauxQ2PWcHu@Gentoo> <40503ba8-7a38-0d1d-1d59-82101a0ce92e@linaro.org>
+ <ZB14jJNUhHGBl7Az@Gentoo> <6bd08120-115e-5429-63da-32f8df52bc7f@linaro.org>
+ <ZB29J/7LI4PREmn6@Gentoo>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <ZB29J/7LI4PREmn6@Gentoo>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B43=E6=9C=8824=E6=
-=97=A5=E5=91=A8=E4=BA=94 00:20=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Fri, Mar 10, 2023 at 03:00:39PM +0800, Zheng Wang wrote:
-> > In udc_plat_probe, &udc->drd_work is bound with
-> > udc_drd_work. udc_drd_work may be called by
-> > usbd_connect_notify to start the work.
-> >
-> > Besides, there is a invoking chain:
-> > udc_plat_probe
-> > ->udc_probe
-> > ->usb_add_gadget_udc_release
-> > ->usb_add_gadget
-> >
-> > It will add a new gadget to the udc class driver
-> >  list. In usb_add_gadget, it uses usb_udc_release
-> >  as its release function, which will kfree(udc)
-> >  to when destroying the gadget.
-> >
-> > If we remove the module which will call udc_plat_remove
-> >   to make cleanup, there may be a unfinished work.
-> > The possible sequence is as follows:
-> >
-> > Fix it by finishing the work before cleanup in the udc_plat_remove
-> >
-> > Fixes: 1b9f35adb0ff ("usb: gadget: udc: Add Synopsys UDC Platform drive=
-r")
-> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> > ---
-> >  drivers/usb/gadget/udc/snps_udc_plat.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/usb/gadget/udc/snps_udc_plat.c b/drivers/usb/gadge=
-t/udc/snps_udc_plat.c
-> > index 8bbb89c80348..6228e178cc0a 100644
-> > --- a/drivers/usb/gadget/udc/snps_udc_plat.c
-> > +++ b/drivers/usb/gadget/udc/snps_udc_plat.c
-> > @@ -230,6 +230,7 @@ static int udc_plat_remove(struct platform_device *=
-pdev)
-> >       struct udc *dev;
-> >
-> >       dev =3D platform_get_drvdata(pdev);
-> > +     cancel_delayed_work_sync(&dev->drd_work);
-> >
-> >       usb_del_gadget_udc(&dev->gadget);
-> >       /* gadget driver must not be registered */
-> > --
-> > 2.25.1
-> >
->
-> Please test this to verify that it actually works.
->
+On 24/03/2023 15:09, Jianhua Lu wrote:
+> I get schematics of same vendor's similar device, it shows usb vbus is
+> connected to charger pump. It can be the main reason that can't detect vbus, but
+> I don't know why type-c can work normally.
 
-Hi,
+oki doki that all makes sense - the "charger pump" is supplying vbus 
+most likely - you can confirm or invalidate this theory by connecting a 
+1.0/2.0 device to your external hub - making sure it is unpowered.
 
-Sorry for my late reply. I will try to simulate a device in qemu to test.
+vbus *should* flow through the Type-C port into your external hub and 
+into the 1.0/2.0 device, irrespective of vcon
 
-Best regards,
-Zheng
+Either way that's a 2x input on the VSafe5 - I'll downgrade this to a 
+dev_warn() or perhaps even a dev_dbg()
 
-> thanks,
->
-> greg k-h
+thx
+
+---
+bod
