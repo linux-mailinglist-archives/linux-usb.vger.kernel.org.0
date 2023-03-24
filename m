@@ -2,195 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D284E6C80C1
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 16:10:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7B46C8132
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 16:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbjCXPKl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Mar 2023 11:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
+        id S229540AbjCXP2l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Mar 2023 11:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231959AbjCXPKl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 11:10:41 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72900E055
-        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 08:10:37 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id h8so9152060ede.8
-        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 08:10:37 -0700 (PDT)
+        with ESMTP id S231688AbjCXP2j (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 11:28:39 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D081DB90
+        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 08:28:35 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id l12so2194403wrm.10
+        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 08:28:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1679670636;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GtH3EySMDIrw+lZaElaWD6H77SmUICjB03o3KHw7964=;
-        b=4KBk5by17CO5KmKepXBL60mhAyiD0mY6LsmCidHOWe4QrkZTthadwgyShcBCsOHEoS
-         uQfOxPiUbuK5espG5oLIC7DvREqJXwfSinDauBZshXoF1nRZQieEmeq9ZfmlAWNMX/NJ
-         oUBzPum8EQpnc30fxewPdHJULyQdqwa1YZcF1dYuv4tV5kdxV8be471wG+/NhkXjGYmT
-         hPPsmYeB93E7T/jgBPiPzlRXOS9RvRwjJq65YSGUROIyn7SLB3iHf6NC1gbNXQbzLzzu
-         NltwrHquLkBZmRygFO+Zh5EH59I3BirP00lBfyS+y2Y/db77OItGdk5OAG+EzCG2MNjy
-         vLwg==
+        d=linaro.org; s=google; t=1679671713;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z5srmsqlcg8umGs3LaBjmV1e0O8IUDxrHiOdqEkIUYo=;
+        b=nMIleCic/HqZvdIypobaa4t1WzWsIZbJLdfTm3ah+ecMDjnVLrBn7Q8cjjN2fS7bJO
+         ciYaGkVKQmE0BWacHDM0FoCGCjPUxoLahumNWgIA4marRdfNfykDTsma+m/3pmUBe2YC
+         RCBEziGrtnyrBbFSl/e6ZTrKS7MuJpLcWUvbS7q4HG+T8tjWljktWAj1PSKbvZm8f403
+         G1Xdal3l2fAkA48WHQxG9JFHW5xgk6EjnvKcRFHL9VrnvoYpG2Ut93xrbKN9kecf8jL3
+         7mmg8cT1J67uKWLj3niaZNrkYonLVewzhAnJzHg4koA5ivLk0dXXby+6DiMRi2TbGw4q
+         cYPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679670636;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GtH3EySMDIrw+lZaElaWD6H77SmUICjB03o3KHw7964=;
-        b=gxUFd4prEyUUA6rF0N+HPpE1zPjH3PnJ7M3UJ0nXtVgMC7u5IjY1dQhhZ3wz7M4wgc
-         kHgHG9VG7aZb3dn11tuUCca6fA+LLpH4C7LYkNzFHT0gVjf7AOH0s6VGzdo96830EoIg
-         SGZMDJbWGDQQoGgRsPINtXyDhLUBND1+pAz0K6XQKWYG8CvfO+VThCvqTqFJyjUysXtu
-         i+W2V6D/UCRYhK1VhN6Pj1XrGIEn7ovZhQKEdtRmCvK4ciks9baURPaBWzx6QQSieyel
-         9QEHcSXq45bacfoe6M94XJCsCCjWXUB9U5nBuoQVR1c6j3uiFbQSF9tkrAJZdjhoDrx8
-         tJCA==
-X-Gm-Message-State: AAQBX9cXP8h4V30LcrQQNp7Vt6IF2Eqg4kPVD2EbRH1sATVs/yqwJd3Q
-        ajxh2lrZUus0M/f+bUD4//k6Ig==
-X-Google-Smtp-Source: AKy350bgvYQzINUfdVFIAXWRNiS65HRBsyBFtPJc247rP/+q7Cu1ksH9gUnC6Bp8pFlwB0krvX0pQg==
-X-Received: by 2002:a17:907:a0b:b0:93e:739f:b0b3 with SMTP id bb11-20020a1709070a0b00b0093e739fb0b3mr2203088ejc.50.1679670635938;
-        Fri, 24 Mar 2023 08:10:35 -0700 (PDT)
-Received: from localhost (84-115-214-73.cable.dynamic.surfer.at. [84.115.214.73])
-        by smtp.gmail.com with ESMTPSA id hb6-20020a170906b88600b0093120a11a5dsm10475739ejb.92.2023.03.24.08.10.35
+        d=1e100.net; s=20210112; t=1679671713;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z5srmsqlcg8umGs3LaBjmV1e0O8IUDxrHiOdqEkIUYo=;
+        b=sl+Su3d5oOklxk13nNr5EZlSLyZ76Kvz0GCaJTEVn8K7kvgzBs1lstr8MZ/f1Jw1cN
+         i/0FD/926ksUenpn9A3RZK8FHNPpht0YlvKUTVGtAO5r1y/uMjc529xcjTyFCmLGiY/5
+         JOD4T3VaID7zFS880qKVsP5dkbM0qMw3avujGkJe8KXu1faKgmUBjH10lDZLnY8c8jV3
+         oK5fXpgy9AShRigjyWAp+Tk+ZSN7+ITycMULj7MBNGRNFwPNyBWwmlAedI/gGCbfUx1k
+         AGRKYBEZxsOMW0O370UeBDReTN+5wUw/w+vsEsUSglN8l1ADvzI5uZcKD3Dy7JJLRpCu
+         ZbYA==
+X-Gm-Message-State: AAQBX9fUWehXHRaENeH66F/ZCCG/IvjY80uaI+kGdX6ip334x4dnAQ/3
+        g0mud/k2NuCf+D60YBt6olqCog==
+X-Google-Smtp-Source: AKy350byfti3VnOwNReDw3ErCqUryyx858RfEMp/sZR16Or3efO3Wii8+6MRE3pOPQQQHgfRJz8aXQ==
+X-Received: by 2002:adf:f6c9:0:b0:2c7:161e:702f with SMTP id y9-20020adff6c9000000b002c7161e702fmr2637724wrp.47.1679671713572;
+        Fri, 24 Mar 2023 08:28:33 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id f24-20020a7bc8d8000000b003eb596cbc54sm5263343wml.0.2023.03.24.08.28.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 08:10:35 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 24 Mar 2023 16:10:34 +0100
-Message-Id: <CREPJP5KTX2D.VCM8IIZIP1ZT@otso>
-To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        <linux@roeck-us.net>, <heikki.krogerus@linux.intel.com>,
-        <gregkh@linuxfoundation.org>, <andersson@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Cc:     <wcheng@codeaurora.org>, <caleb.connolly@linaro.org>,
-        <konrad.dybcio@linaro.org>, <subbaram@quicinc.com>,
-        <jackp@quicinc.com>, <robertom@qti.qualcomm.com>,
-        <lujianhua000@gmail.com>
+        Fri, 24 Mar 2023 08:28:33 -0700 (PDT)
+Message-ID: <9c541f81-8501-a142-1df8-6e71509c0d88@linaro.org>
+Date:   Fri, 24 Mar 2023 15:28:32 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
 Subject: Re: [PATCH v4 00/18] Add Qualcomm PMIC TPCM support
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-X-Mailer: aerc 0.14.0
+Content-Language: en-US
+To:     Luca Weiss <luca.weiss@fairphone.com>, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     wcheng@codeaurora.org, caleb.connolly@linaro.org,
+        konrad.dybcio@linaro.org, subbaram@quicinc.com, jackp@quicinc.com,
+        robertom@qti.qualcomm.com, lujianhua000@gmail.com
 References: <20230318121828.739424-1-bryan.odonoghue@linaro.org>
-In-Reply-To: <20230318121828.739424-1-bryan.odonoghue@linaro.org>
+ <CREPJP5KTX2D.VCM8IIZIP1ZT@otso>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <CREPJP5KTX2D.VCM8IIZIP1ZT@otso>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Bryan,
+On 24/03/2023 15:10, Luca Weiss wrote:
+> When plugging in the device with TCPM on into my PC (peripheral mode)
+> then the USB device registers and unregisters every couple of seconds,
+> never stays stable on. No messages in dmesg when this happens. This only
+> happens with the USB-C plug in one direction, in the other it
+> works reliable.
 
-On Sat Mar 18, 2023 at 1:18 PM CET, Bryan O'Donoghue wrote:
-> Bryan O'Donoghue (17):
->   dt-bindings: regulator: qcom,usb-vbus-regulator: Mark reg as required
->   dt-bindings: regulator: qcom,usb-vbus-regulator: Mark
->     regulator-*-microamp required
->   dt-bindings: phy: qcom,sc7180-qmp-usb3-dp-phy: Add orientation-switch
->     as optional
->   dt-bindings: phy: qcom,sc7180-qmp-usb3-dp-phy: Add port as an optional
->   dt-bindings: usb: Add qcom,pmic-typec dt-binding header
->   dt-bindings: usb: Add Qualcomm PMIC Type-C controller YAML schema
->   dt-bindings: usb: Add qcom,pmic-pdphy dt-binding header
->   dt-bindings: usb: Add Qualcomm PMIC PDPHY controller YAML schema
->   dt-bindings: usb: Add Qualcomm PMIC TCPM YAML schema
->   dt-bindings: mfd: qcom,spmi-pmic: Add pdphy to SPMI device types
->   dt-bindings: mfd: qcom,spmi-pmic: Add typec to SPMI device types
->   usb: typec: qcom: Add Qualcomm PMIC TCPM support
->   arm64: dts: qcom: pm8150b: Add a TCPM description
->   arm64: dts: qcom: qrb5165-rb5: Switch on Type-C VBUS boost
->   arm64: dts: qcom: qrb5165-rb5: Switch on basic TCPM
->   arm64: dts: qcom: qrb5165-rb5: Switch on TCPM usb-role-switching for
->     usb_1
->   arm64: dts: qcom: qrb5165-rb5: Switch on TCPM orientation-switch for
->     usb_1_qmpphy
->
-> Dmitry Baryshkov (1):
->   phy: qcom-qmp: Register as a typec switch for orientation detection
+Sounds like we need to do some SoC specific debug on orientation 
+switching in the PHY.
 
-I've just given this a spin on sm7225-fairphone-fp4 with pm7250b as the
-PMIC (instead of pm8150b).
+I wonder how many lanes dp_opts->lanes says for your part ?
 
-Overall it seems to work, which is awesome! I think I sent you emails in
-the past where I had troubles getting earlier revisions to work.
+Also potentially not having "orientation-switch" in &usb_1_qmpphy{} but, 
+I think we discussed that before.
 
-Still there's some rough edges:
+So either
 
-As Jianhua Lu has already reported, I'm also hitting the vbus vsafe5v
-message quite often. Returning 0 in that function on error seems to work
-around it and everything appears to be fine regardless.
+- PHY orientation turn-around isn't working or
+- DTS orientation-switch isn't happening
 
-  [  243.939593] qcom,pmic-typec c440000.spmi:pmic@2:typec@1500: vbus vsafe=
-5v fail
-  [  243.939600] qcom,pmic-tcpm pm7250b-tcpm: set_vbus set: 1 result -110
+for you
 
-If you want to take a peek at the schematics for this device, they're
-available here:
-https://www.fairphone.com/wp-content/uploads/2022/09/FP4_Information-for-re=
-pairers-and-recyclers.pdf
-USB things you can find on page 57, the pm7250b is on page 49.
-
-When plugging in the device with TCPM on into my PC (peripheral mode)
-then the USB device registers and unregisters every couple of seconds,
-never stays stable on. No messages in dmesg when this happens. This only
-happens with the USB-C plug in one direction, in the other it
-works reliable.
-
-Also I've had it that at some point the usb connection seemed to be kind
-of stuck on host mode, plugging the device into my PC didn't appear to
-do anything.
-
-For host mode I tried using both a USB stick and a USB-C to headphone
-jack dongle, both work fine in both directions.
-
-In any case, I look very much forward to this landing, it will be
-awesome to have this feature working OOTB! And let me know if you need
-anything tested on this hardware.
-
-Regards
-Luca
-
->
->  .../bindings/mfd/qcom,spmi-pmic.yaml          |   8 +
->  .../phy/qcom,sc7180-qmp-usb3-dp-phy.yaml      |  10 +
->  .../regulator/qcom,usb-vbus-regulator.yaml    |  10 +-
->  .../bindings/usb/qcom,pmic-pdphy.yaml         |  89 +++
->  .../bindings/usb/qcom,pmic-typec.yaml         |  88 +++
->  .../bindings/usb/qcom,pmic-virt-tcpm.yaml     |  88 +++
->  MAINTAINERS                                   |  10 +
->  arch/arm64/boot/dts/qcom/pm8150b.dtsi         |  70 ++
->  arch/arm64/boot/dts/qcom/qrb5165-rb5.dts      |  63 +-
->  drivers/phy/qualcomm/Kconfig                  |   8 +
->  drivers/phy/qualcomm/phy-qcom-qmp-combo.c     |  80 ++-
->  drivers/usb/typec/Kconfig                     |  13 -
->  drivers/usb/typec/Makefile                    |   1 -
->  drivers/usb/typec/qcom-pmic-typec.c           | 261 -------
->  drivers/usb/typec/tcpm/Kconfig                |  11 +
->  drivers/usb/typec/tcpm/Makefile               |   1 +
->  drivers/usb/typec/tcpm/qcom/Makefile          |   6 +
->  drivers/usb/typec/tcpm/qcom/qcom_pmic_pdphy.c | 605 +++++++++++++++++
->  drivers/usb/typec/tcpm/qcom/qcom_pmic_pdphy.h |  85 +++
->  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 637 ++++++++++++++++++
->  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.h | 163 +++++
->  .../usb/typec/tcpm/qcom/qcom_pmic_virt_tcpm.c | 326 +++++++++
->  .../dt-bindings/usb/typec/qcom,pmic-pdphy.h   |  18 +
->  .../dt-bindings/usb/typec/qcom,pmic-typec.h   |  18 +
->  24 files changed, 2388 insertions(+), 281 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-pdphy=
-.yaml
->  create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-typec=
-.yaml
->  create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-virt-=
-tcpm.yaml
->  delete mode 100644 drivers/usb/typec/qcom-pmic-typec.c
->  create mode 100644 drivers/usb/typec/tcpm/qcom/Makefile
->  create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_pdphy.c
->  create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_pdphy.h
->  create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
->  create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.h
->  create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_virt_tcpm.c
->  create mode 100644 include/dt-bindings/usb/typec/qcom,pmic-pdphy.h
->  create mode 100644 include/dt-bindings/usb/typec/qcom,pmic-typec.h
->
-> --=20
-> 2.39.2
-
+---
+bod
