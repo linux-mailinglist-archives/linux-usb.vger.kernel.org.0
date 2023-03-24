@@ -2,105 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66CFF6C7EAF
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 14:25:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1DBD6C7ED0
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 14:32:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbjCXNZT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Mar 2023 09:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
+        id S231686AbjCXNcO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Mar 2023 09:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbjCXNZS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 09:25:18 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D26010261
-        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 06:25:17 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id i9so1807015wrp.3
-        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 06:25:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679664316;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q/vpnoYYXwQldMjtKP/K9nn+5xpo0clbcm7Xi85Za5Q=;
-        b=MwV/tT1w/89XxrGbyhJepCUgN+8UHN4wuO0E1mjgs954wzYtgqXwnCmlxTJF7t+DBT
-         G8XQq/qfYrjbJ2GdHZ119/GQRELa1ao2S7wbI8kzdiDgk/iy/UmFoHNTPB7ORpNP3dJS
-         AwV75+lOdSW7pMnnalw3EgnDGLBuSj1l16Rt7c0abxleP05MX+7Z9L1jO+qLs7FwvrTP
-         fXLWmLzP3xBZqFn7RE2qIPVbaPKJ+DLIjbGL89PWC2ZV2RX8Za/rRbSA2L7Nat4h/6Hj
-         RheFDGMsS/Zky/6/sZWoc0pMuSKJSgyPupaz4y4eEX7qxHkmCiTplbKg6uHsLZyXu3ez
-         BDpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679664316;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q/vpnoYYXwQldMjtKP/K9nn+5xpo0clbcm7Xi85Za5Q=;
-        b=16Mw20+XsymgWfh/TqqxcJjzESng3FHb7FtS4++/WHehUPx9f+6prT1kVVRN3BnTyQ
-         wfgU89PAJ07NtKIX9xuOFDsxRb7vxkIXpNDIHgFXAH4egaFGxCm27ZUKjTTsnU86QgP+
-         F6hmxyPuKSJNy53a12wiSKTkI92Bf4Y7DuQrRQ2MLiu4xFLRlOIiD4XzoQlkY6EpYdwv
-         K78GuaNPv7SPcb56UhcFn/D+2uk+lRYaH65VSX5TIVDbl1cTBz6JG8ZpBzjVtQiepcbS
-         Scycd6lb+zht0dm+tBZjEL0q6LShZX9bL0gF6FaXc8o8SAxOwSNDKFvmgeuP//SnUKiR
-         YydQ==
-X-Gm-Message-State: AAQBX9dTSvp66HbaRrw581aBjfKWwgswleht2AYto+2Fmd/iHIHJhxW6
-        hl4JSOFS2qrxAgMuWezBQsaQrA==
-X-Google-Smtp-Source: AKy350adc+qfpzwd1OS0FFZpxLLnNuQRsBkSQTXYQiBJiqpEzz6wvdacBweqtInNDFl/c/qX8toVMA==
-X-Received: by 2002:a5d:4b42:0:b0:2c7:454:cee8 with SMTP id w2-20020a5d4b42000000b002c70454cee8mr2394735wrs.1.1679664315887;
-        Fri, 24 Mar 2023 06:25:15 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id p17-20020adfcc91000000b002c71dd1109fsm18517921wrj.47.2023.03.24.06.25.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 06:25:15 -0700 (PDT)
-Message-ID: <6bd08120-115e-5429-63da-32f8df52bc7f@linaro.org>
-Date:   Fri, 24 Mar 2023 13:25:14 +0000
+        with ESMTP id S229753AbjCXNcM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 09:32:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D03168BF;
+        Fri, 24 Mar 2023 06:31:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52E05B82433;
+        Fri, 24 Mar 2023 13:31:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B532FC433EF;
+        Fri, 24 Mar 2023 13:31:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679664715;
+        bh=95kYkVDx7ZQFLluye1hn4V3c1u/gdhLYfeTG4puFTrE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mIa9ooLsuCH4SBwC+/wEe9e3W5ORy1LmwpUame0lKHNTPWBql1KzTeeWcurtPfBrn
+         sv/2ONMCWlHHvZwMfUmENcXTud88/R55s8C0rLF3fMUnjwD7Q8S9cc2CRrTFcHn/PA
+         ujaDUx8UqUCe9YiMxXCNSngTjgj0wTr0gMJDWvJHz9nZA8ukHO8joCunlnppdATuXk
+         xCdqy9przQNUyOxF6Bh4nNetXpxMxwGtW0rqgBIDQI8mRxZnFlFLHnQ3yk88zeuCAY
+         qAJ6quCb2wLOT016iVVkpHyXLqBX0gm2NAQc8Y9+Z/yK8Btp6qwFbfUKYdriBLR2IE
+         tjUFeBqzNUqnw==
+From:   Roger Quadros <rogerq@kernel.org>
+To:     nm@ti.com, vigneshr@ti.com
+Cc:     kristo@kernel.org, srk@ti.com, r-gunasekaran@ti.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Roger Quadros <rogerq@kernel.org>
+Subject: [PATCH 0/2] arm64: dts: ti: k3-am625-sk: Enable Type-C dual-role
+Date:   Fri, 24 Mar 2023 15:31:48 +0200
+Message-Id: <20230324133150.43224-1-rogerq@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 12/18] usb: typec: qcom: Add Qualcomm PMIC TCPM support
-Content-Language: en-US
-To:     Jianhua Lu <lujianhua000@gmail.com>
-Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, andersson@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, wcheng@codeaurora.org,
-        caleb.connolly@linaro.org, konrad.dybcio@linaro.org,
-        subbaram@quicinc.com, jackp@quicinc.com, robertom@qti.qualcomm.com
-References: <20230318121828.739424-1-bryan.odonoghue@linaro.org>
- <20230318121828.739424-13-bryan.odonoghue@linaro.org>
- <ZBxkB04KqY8WbeA1@Gentoo> <89bca327-a860-672c-b4ae-766698d38639@linaro.org>
- <ZBzyK0ILtUDr986r@Gentoo> <37d14447-0f10-be88-9cd9-8ebd30f1d006@linaro.org>
- <ZBz5OvauxQ2PWcHu@Gentoo> <40503ba8-7a38-0d1d-1d59-82101a0ce92e@linaro.org>
- <ZB14jJNUhHGBl7Az@Gentoo>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <ZB14jJNUhHGBl7Az@Gentoo>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24/03/2023 10:16, Jianhua Lu wrote:
+Hi,
 
-With charger
-> [ 1495.824667] qcom,pmic-typec c440000.spmi:pmic@2:typec@1500:
-> qcom_pmic_typec_set_vbus misc 0x000000c9
+This series enables Type-C port on USB0.
 
-0xC9 == (TYPEC_SM_USBIN_LT_LV | TYPEC_SM_VBUS_VSAFE0V)
+cheers,
+-roger
 
-> [ 1495.824685] qcom,pmic-typec c440000.spmi:pmic@2:typec@1500:
-> qcom_pmic_typec_set_vbus sm_status 0x000000b9
+Dhruva Gole (1):
+  arm64: dts: ti: k3-am625-sk: Add ti,vbus-divider property to usbss1
 
-0xC9 == (TYPEC_SM_USBIN_LT_LV | TYPEC_SM_VBUS_VSAFE5V)
+Roger Quadros (1):
+  arm64: dts: ti: k3-am625-sk: Enable Type-C port for USB0
 
-so that is correct and expected i.e. VSAFE5V it shouldn't matter to the 
-type-c port controller *where* VBUS comes from only that it is within range.
+ arch/arm64/boot/dts/ti/k3-am625-sk.dts | 41 ++++++++++++++++++++++++--
+ 1 file changed, 39 insertions(+), 2 deletions(-)
 
-Could you run again with an unpowered device and post the printout?
+-- 
+2.34.1
 
----
-bod
