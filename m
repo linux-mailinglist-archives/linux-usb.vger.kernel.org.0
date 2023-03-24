@@ -2,54 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 049356C8218
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 17:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C67F6C8219
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 17:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbjCXQFc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Mar 2023 12:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
+        id S231274AbjCXQFe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Mar 2023 12:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjCXQFa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 12:05:30 -0400
+        with ESMTP id S229864AbjCXQFc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 12:05:32 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C475222EF
-        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 09:05:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E4D2278A
+        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 09:05:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679673929; x=1711209929;
+  t=1679673930; x=1711209930;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ExEIxUn30/ufZckYKK4YkU9A2Z1FWgANV8TlZM6vwSo=;
-  b=VmzDEQd7dSpr50wa0Qus7eTLe9aND+HOVAmgHd0zllw8oGCnePSZvoP+
-   LUDXTVUoqG7luHi8SDKfKOdqTBX4he7+Ky56UXvdq+LsufPTqWCabexEx
-   PDam0kzuBOEe6FokRK6XidImSym+b8tGEFZtHvDmwAAkYnFiTK+D1BBEy
-   c8vPyvvYt+TsLNsKBkNLYy5/qiCWbG7arQVOwSAL6MkZKFpIjiBpUCqY7
-   UWgC9EVwc3wNS5CGR/AGH5uK+GBYqtDrACnBNUOOunwvedIMPBruLheTi
-   JnhjgmBndy+wLZz4MnoRGTHH9DyinFf4tfRoWTRaJZeSaNlHLw/nwSe5v
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="320210776"
+  bh=HttfvnyXCQqOkJU+j57yoRgMer8aan6GWP0q37AlsUI=;
+  b=ishV4PthezRnGbbUhwz74jk1Y9Boo37xH6k48BNiVDgg8HwAPyLFlGJF
+   pNQRcH4Em73M91WaRtl6TJvdPzsKgc9hxPgTvlZdKRxhYxynpjQhTgxTL
+   IWo6bS28LweHy9D8d8VtP6x/Uyq2y907bGbuTD7AXZPNmppR9BqQFhvlg
+   SSPE7Tlh11ekPPmUJOTWaBWOzAl0idENfkqOmGYndMrmXuAssjulmwWLs
+   YbC3dymgZws/5HlRnYkZ+qOeIlTAAS9DAeHmX+rxb2tohPM3K+nBTY7nc
+   yukZMtKNV0Hx/E5cOlttPWTtahAg4hMF1A5DqNMm9NVJQgHVGd7RVmmWQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="320210781"
 X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="320210776"
+   d="scan'208";a="320210781"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
   by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 09:04:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="751943446"
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="751943445"
 X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="751943446"
+   d="scan'208";a="751943445"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
   by fmsmga004.fm.intel.com with ESMTP; 24 Mar 2023 09:04:22 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pfjtt-000FRU-0c;
+        id 1pfjtt-000FRQ-0L;
         Fri, 24 Mar 2023 16:04:21 +0000
-Date:   Sat, 25 Mar 2023 00:03:47 +0800
+Date:   Sat, 25 Mar 2023 00:03:48 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Linyu Yuan <quic_linyyuan@quicinc.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
         linux-usb@vger.kernel.org, Linyu Yuan <quic_linyyuan@quicinc.com>
 Subject: Re: [PATCH v2 1/3] usb: gadget: f_fs: remove ENTER() macro
-Message-ID: <202303242346.LgEJTJJR-lkp@intel.com>
+Message-ID: <202303242317.aIQQrrX1-lkp@intel.com>
 References: <1679638227-20496-1-git-send-email-quic_linyyuan@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -78,7 +78,7 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Linyu-Yuan/usb-gadget-f_f
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
 patch link:    https://lore.kernel.org/r/1679638227-20496-1-git-send-email-quic_linyyuan%40quicinc.com
 patch subject: [PATCH v2 1/3] usb: gadget: f_fs: remove ENTER() macro
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20230324/202303242346.LgEJTJJR-lkp@intel.com/config)
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230324/202303242317.aIQQrrX1-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -89,12 +89,12 @@ reproduce (this is a W=1 build):
         git checkout f4623ea5e9a18bfb3e96bc6566afe46ebdefff33
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/usb/gadget/legacy/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/gadget/legacy/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303242346.LgEJTJJR-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303242317.aIQQrrX1-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
