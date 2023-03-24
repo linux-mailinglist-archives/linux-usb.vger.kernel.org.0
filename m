@@ -2,88 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A985E6C7FCA
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 15:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F556C8096
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 16:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbjCXOW7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Mar 2023 10:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S232230AbjCXPAg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Mar 2023 11:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjCXOW6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 10:22:58 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91151ACC8
-        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 07:22:56 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id u1so1225245wmn.5
-        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 07:22:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679667775;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Eb1ftSmj+xdrfhPd1oOZD6u0EwjOsCwL6TaXlh1MWGs=;
-        b=GaLfV6E/57+XYqc2gIai8+bFqPle3FZi2vK/rvt+oGuYxPtU+mP5ZEHBHMrUHZPiet
-         YYxYg/JPyjHbTbe3rdTpgYROpmnQY4zrboESPcMmuSuWAJTHy7PYsZIuqBwjJOE0coYT
-         fMSM1ZENj3C/qBnASAQOPsf3f8Ge+yG/d3wKNbTXbjUcWzhlTKKJfA1MBajJ9MVoyyF1
-         pUO9xYySWEtN4wk8MqvdoXwCZPQiUn7LfXlg7dS/q0eUdQuP3zxiAdlCs+uZrA5Pn7ts
-         UwT2D55Rf4Z3sVG3nMHc09G/hES5n/YvMMBkN4Izxicigqf2UbhyJZKQn7kgoDVzEBlw
-         5iYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679667775;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Eb1ftSmj+xdrfhPd1oOZD6u0EwjOsCwL6TaXlh1MWGs=;
-        b=RM7tYYdZRhoE2Z6n+nhmk5IxwNxJj9rl0qE33ulQRHdSAMZTozVg2RpyNGm3T63QFJ
-         7ZrIl4qMHmr5z7wyclrDoIs8ieUpApPTn/FjOYED6VfoJxYqjvp71J9uHoaxYWqwlpru
-         SVpF0CuNmaa+n7/EicA7PyNcKS+qw/CUQx9vQ9Z7eOcm+sXxIRze0KOwgFqaBZ9IdRks
-         uXroMSpJpGoi/gQyxbdhFunM7hO7kBTwUNDlbxHIbQXU/yh36oKtoGUxr8KdY0trfnzU
-         EoVMVGqIT34bYH4ytuiCimwZSo1j+FGwHedyPjO3fmcg4B9T+HYsP6a835AmHzZUVtiD
-         mMww==
-X-Gm-Message-State: AO0yUKVsAtVkP4fR8avMYYYvu6h9bOO2tbGj+ncsVBpB3K+tue+QqvlJ
-        hN1nHOBphczfgMFdRHcsHwXr/A==
-X-Google-Smtp-Source: AK7set+lapN5yF8rSNUrMo+59+lIZHrLvNBHJQuTxcvZW8FzVktbSmUQ/84BBsYq3IEw40yC3F8j5Q==
-X-Received: by 2002:a05:600c:25a:b0:3ed:358e:c1c2 with SMTP id 26-20020a05600c025a00b003ed358ec1c2mr2526361wmj.18.1679667775323;
-        Fri, 24 Mar 2023 07:22:55 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id fm15-20020a05600c0c0f00b003ede3f5c81fsm5016744wmb.41.2023.03.24.07.22.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 07:22:54 -0700 (PDT)
-Message-ID: <153826ae-aee2-8da9-ecb7-1c8eb0d9b873@linaro.org>
-Date:   Fri, 24 Mar 2023 14:22:53 +0000
+        with ESMTP id S230015AbjCXPAf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 11:00:35 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFEA199E3
+        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 08:00:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 95463CE263F
+        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 15:00:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C8FC8C433D2
+        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 15:00:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679670030;
+        bh=+OdAtJkCemdnuEk/mIup+GRfvqY0QyiTWwt4cRykBzk=;
+        h=From:To:Subject:Date:From;
+        b=KcDAspe8Rz/MiRPaxtdLzA88I4ntSbEVf/2zOCYoYxP+QtB5nwNh58aBfpqmg7tDD
+         s6PiaxwDZx8H2a5wdfEaCOtYHluya/1ilRvkmlHnmxsThzUvtqiwLebR9tTspiyBoH
+         AwowGMZC0RuizHToNUzU3k0X5Ec0DXHKp+XzzsrfDoaghER7t1Zjme/MfzXckm7IMS
+         5Okg9svINGAPL3MaxPXbrv5EWLZYKR79JsrltKlJ7SV/XtldQwyesSN0Vmw4bHTmuL
+         i9eT1HbOgX0XbtH2opZiTKw7XOIevBm/BHYCAv+S9083Z5iJ28YekJqzd3gMOmbbVf
+         LVzDJJXsVx+CA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id ADF23C43142; Fri, 24 Mar 2023 15:00:30 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217242] New: CPU hard lockup related to xhci/dma
+Date:   Fri, 24 Mar 2023 15:00:30 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: miller.hunterc@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression attachments.created
+Message-ID: <bug-217242-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 12/18] usb: typec: qcom: Add Qualcomm PMIC TCPM support
-Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        wcheng@codeaurora.org, caleb.connolly@linaro.org,
-        konrad.dybcio@linaro.org, subbaram@quicinc.com, jackp@quicinc.com,
-        robertom@qti.qualcomm.com
-References: <20230318121828.739424-1-bryan.odonoghue@linaro.org>
- <20230318121828.739424-13-bryan.odonoghue@linaro.org>
- <ZB2tBkUY85yhzm67@kuha.fi.intel.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <ZB2tBkUY85yhzm67@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24/03/2023 14:00, Heikki Krogerus wrote:
-> I'm sorry I never asked this before, but is that virtual device really
-> necessary? Couldn't you just merge that qcom_omic_virt_tcpm.c into
-> qcom_pmic_typec.c?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217242
 
-You did ask it I think but, yeah that's what I'm doing/have done now.
+            Bug ID: 217242
+           Summary: CPU hard lockup related to xhci/dma
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 6.1.14-1-lts
+          Hardware: Intel
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: miller.hunterc@gmail.com
+        Regression: No
+
+Created attachment 304018
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D304018&action=3Dedit
+cpu hard lockup
+
+Utilizing Intel NUC11ATKC4 computers, there is an issue of CPU hard lockups
+that occurs seemingly randomly. Typically the issue arises every 1-5 days,
+though sometimes the issue does not arise for a week plus.=20
+
+Of note: These computers are constantly communicating via serial communicat=
+ion
+(request-reply pattern) to an embedded device via USB to UART cable. Unsure=
+ if
+that may contribute - will start test next week to see if issue still arises
+when serial communication does not occur.
+
+This issue has been seen as far back as linux-lts 5.15.62 (not saying that's
+when the issue started, just that is the earliest release that these comput=
+ers
+have ran).
+
+This is on Arch Linux.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
