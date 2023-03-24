@@ -2,124 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9F36C76F8
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 06:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7ED6C77A6
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 07:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjCXFWf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Mar 2023 01:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60116 "EHLO
+        id S231616AbjCXGLM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Mar 2023 02:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjCXFWe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 01:22:34 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAD91A48D;
-        Thu, 23 Mar 2023 22:22:33 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id le6so844910plb.12;
-        Thu, 23 Mar 2023 22:22:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679635353;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aBa50m/i08i2+AVQzWe3vhh1DYK9aNeOUnlAXKEeiMk=;
-        b=ow+/YWYP8cw471S8dIhMoQRLi5YE/7c3wMi6ulFl1RFEkfrzG9K8vuY3iIPnT9CbvL
-         2yBNWQNXPY3vPOc+Z9VZrs5qU7xVxtsOKtAGV/K4YhkyMx7MnBp9RwcDLHUDsCoOHzKS
-         nIs3WJ/adxlGblLzRE2ZWWVfdtbDY90uzLvrKZAY4Nx1t5SF0L3YbZ3H1+G/B3SfezKC
-         /7MeVuGmQvYUUYpT7Be9FbzVGdqIpZWyxuSjcPuXVpAc3g994oaRHMci8T5aAnMHUX8G
-         EvVng4ztjh4ryz2rwaWRkgu82DzLrlHlZjQ9+TvdvbU9oc+hKpPTkhj2zngDNJstnjsv
-         TwtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679635353;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aBa50m/i08i2+AVQzWe3vhh1DYK9aNeOUnlAXKEeiMk=;
-        b=69ajj1uchF8RIW0EZXCMA0NaPQ+jk1OlcZJbSDAzosD62B9zmc4OlYl32ojAQEEgqG
-         ylCkiYjncBw2/SPoROLqeOHE3NDhz9I5CYOCWR3cHZo6yQ/UgDr/mRW4IanewtumLaXZ
-         9iuAJQVqwEXzRV5RaHL2aSlTtLjIPeHNRFMUVitT6wow6ihXvjA9e+KWH/cyxV+pLXf+
-         n3InzuDkHYiELbWgjBTsFI68fTCBr3h3XxIcc2JrrkgVxDfuQqndsW/X0Rz8+vT1X6Vu
-         8++HVux5rDmECXY2dAZXwrCcHQ82w4pmUn1Ajm4TKAqGLR6wNRUY+wfes1ohF5QtNebQ
-         xtDQ==
-X-Gm-Message-State: AAQBX9f9luWzbrlxKkSdrRs8j20WDMt/qq7uPPRN++XvJ2Hmr8H0nIh/
-        fOg3Ryuuv2BRoW3NatHUIizdJ+KGol4r1KkCnn8=
-X-Google-Smtp-Source: AKy350YX1SkealeekR91Rmq68XEMrMxNDCiz4zvq58D9Otfq1guD+BQW0T8pWpKdTVCSjDoEarZR35T3NFIumKOXKS8=
-X-Received: by 2002:a17:902:7c81:b0:1a1:f44c:8b98 with SMTP id
- y1-20020a1709027c8100b001a1f44c8b98mr397249pll.12.1679635352986; Thu, 23 Mar
- 2023 22:22:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230323095311.1266655-1-mx_xiang@hust.edu.cn>
- <ZBxy9LYz+JyNW6GY@kroah.com> <8271c37c-4995-445c-89b7-90848f7ef3cc@hust.edu.cn>
- <adcd6c67-cedf-4831-9a9d-53c3ee2ebb88@kili.mountain>
-In-Reply-To: <adcd6c67-cedf-4831-9a9d-53c3ee2ebb88@kili.mountain>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Fri, 24 Mar 2023 13:19:29 +0800
-Message-ID: <CAD-N9QX+MvO2e+36Eip37mxtiPjSJs2zfBhP+mjwk43SSYXsJw@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: dwc3: host: remove dead code in dwc3_host_get_irq()
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S231357AbjCXGLL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 02:11:11 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8534028D0F;
+        Thu, 23 Mar 2023 23:11:08 -0700 (PDT)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=mx_xiang@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 32O69qcD019681-32O69qcE019681
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 24 Mar 2023 14:10:05 +0800
+From:   Mingxuan Xiang <mx_xiang@hust.edu.cn>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Dongliang Mu <dzm91@hust.edu.cn>,
         Mingxuan Xiang <mx_xiang@hust.edu.cn>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        hust-os-kernel-patches@googlegroups.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] usb: dwc3: host: remove dead code in dwc3_host_get_irq()
+Date:   Fri, 24 Mar 2023 14:09:34 +0800
+Message-Id: <20230324060934.1686859-1-mx_xiang@hust.edu.cn>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: mx_xiang@hust.edu.cn
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 1:17=E2=80=AFPM Dan Carpenter <error27@gmail.com> w=
-rote:
->
-> On Fri, Mar 24, 2023 at 09:46:40AM +0800, Dongliang Mu wrote:
-> >
-> > On 2023/3/23 23:40, Greg Kroah-Hartman wrote:
-> > > On Thu, Mar 23, 2023 at 05:53:10PM +0800, Mingxuan Xiang wrote:
-> > > > platform_get_irq() no longer returns 0, so there is no
-> > > > need to check whether the return value is 0.
-> > > How did you find this issue?
-> > >
-> > > How was it tested?
-> >
-> > Hi Greg,
-> >
-> > We found this issue by Smatch. Our team is trying fix some true bugs fo=
-und
-> > by Smatch, with the help of Dan.
->
-> LOL.  What did I do to get thrown under the bus like this?
+According to the description of platform_get_irq()
+ * Return: non-zero IRQ number on success, 
+ 			negative error number on failure.
+and the code, platform_get_irq() will return -EINVAL
+instead of IRQ0.
 
-Oh, my apologies :). We are a team. We together would like to fix
-kernel bugs and do some contribution.
+So platform_get_irq() no longer returns 0, there is no
+need to check whether the return value is 0.
 
->
-> >
-> > Since this is a dead code removal, we only do compilation testing.
-> >
->
-> Just v3 and mention in the commit message that the issue was found by
-> Smatch and the warning message that Smatch prints.  Put under the ---
-> cut off line that it has only been compile tested.
->
-> Also we needed to send a v3 anyway to remove the {} curly braces.
+Found by Smatch:
+drivers/usb/dwc3/host.c:60 dwc3_host_get_irq() 
+	warn: platform_get_irq() does not return zero
 
-Yes, I have asked Mingxuan to craft this v3 patch.
+Signed-off-by: Mingxuan Xiang <mx_xiang@hust.edu.cn>
+---
+v2->v3: remove curly braces
+v1->v2: remove redundant goto
+Only compile tested.
+---
+ drivers/usb/dwc3/host.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
->
-> regards,
-> dan carpenter
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "HUST OS Kernel Contribution" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to hust-os-kernel-patches+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/hust-os-kernel-patches/adcd6c67-cedf-4831-9a9d-53c3ee2ebb88%40kili.mounta=
-in.
+diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+index f6f13e7f1ba1..61f57fe5bb78 100644
+--- a/drivers/usb/dwc3/host.c
++++ b/drivers/usb/dwc3/host.c
+@@ -52,13 +52,8 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
+ 		goto out;
+ 
+ 	irq = platform_get_irq(dwc3_pdev, 0);
+-	if (irq > 0) {
++	if (irq > 0)
+ 		dwc3_host_fill_xhci_irq_res(dwc, irq, NULL);
+-		goto out;
+-	}
+-
+-	if (!irq)
+-		irq = -EINVAL;
+ 
+ out:
+ 	return irq;
+-- 
+2.39.2
+
