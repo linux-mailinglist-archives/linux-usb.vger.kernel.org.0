@@ -2,105 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF80A6C8212
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 17:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 049356C8218
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 17:05:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229441AbjCXQDU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Mar 2023 12:03:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
+        id S230382AbjCXQFc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Mar 2023 12:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbjCXQDT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 12:03:19 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2166E46B3
-        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 09:03:18 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id l27so2344218wrb.2
-        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 09:03:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679673796;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JejaCk6CyWSfdiQWhxpThu9OY9rNIrf2KzDX35z5Uyc=;
-        b=CnpTk8DJ0VZi6Qona+U0/XQDLXLLxcDigVDczGvL4PJf7hV1VMJoVaBs+wEdJLLWbv
-         rdS+AbWELW/LnNtzxHpq7PVSAU1YGmdGkkK3CvT+WdZ4xHmvGa8i7HWKGTAnMiS04uxO
-         kZb06EhuXvvKWDQeOFM2jrfdhA7IIWJmzyE4xhy21X3KklzgKxDbI9faeGyKfHWniXyd
-         oUAAlwZtFuQvDZV2WjHhkNFm28QfJLJlT4HmB7CEJGBcz1oEzUF6f/gcthitguW5NF+3
-         ZkviJKqi3YfsGCcwff3RoLKpYJneojzLxE7YfJCwmvK7nRThDl8NIWNvNR+fD33fPSuY
-         msmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679673796;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JejaCk6CyWSfdiQWhxpThu9OY9rNIrf2KzDX35z5Uyc=;
-        b=1G6Yv5JGZg88DH50U80Mq27hP4CHnt0z3o7WPhS22aeyaQQXL3xTR3XnuQlA1vdoPZ
-         IjSARjmAm+aoOmwwRim0yThvQchfXrhV2+sFMgwspaSnqQRIybag8CvuMSRJ44PRTm5W
-         2w1cdibtJABiLC1/nPLREhc8U2+I4RkkYKryfxgEDcAUAyO9HDPFP8gP5majuhEsXTq1
-         W/Gvj9yY3E7mL121hiO3higlOaPWOxBX/o5OJmRNdPBWC69ir4lvwKaaOQzQJrw7l3Pt
-         ddBFogOZJUfvho/la3oI3scjLWAaoTEUgnrGJlYIcfG7BmlvPPDzIBnZnE/+NXwdLZlB
-         kSCg==
-X-Gm-Message-State: AAQBX9cBRZvWozZbn2WI9l6HIVuRuDEtyx3xJSrER9Bdh11QQ1d3aws+
-        fCxEOjw1Lk/mKR67LEKYU3aFAg==
-X-Google-Smtp-Source: AKy350YKmDxrUkZCYDWW3/RcuEzrMmBDH1zTRoX2kHjwHiAHKi9ulZM5d4yb8N1LUp7EwADLpgbt2w==
-X-Received: by 2002:adf:dbc5:0:b0:2d7:998c:5ad9 with SMTP id e5-20020adfdbc5000000b002d7998c5ad9mr2530229wrj.8.1679673796641;
-        Fri, 24 Mar 2023 09:03:16 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id m9-20020adffa09000000b002c70d97af78sm18781475wrr.85.2023.03.24.09.03.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 09:03:16 -0700 (PDT)
-Message-ID: <51c38884-fbbf-ae5e-781d-e32605f7ef5b@linaro.org>
-Date:   Fri, 24 Mar 2023 16:03:15 +0000
+        with ESMTP id S229864AbjCXQFa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 12:05:30 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C475222EF
+        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 09:05:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679673929; x=1711209929;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ExEIxUn30/ufZckYKK4YkU9A2Z1FWgANV8TlZM6vwSo=;
+  b=VmzDEQd7dSpr50wa0Qus7eTLe9aND+HOVAmgHd0zllw8oGCnePSZvoP+
+   LUDXTVUoqG7luHi8SDKfKOdqTBX4he7+Ky56UXvdq+LsufPTqWCabexEx
+   PDam0kzuBOEe6FokRK6XidImSym+b8tGEFZtHvDmwAAkYnFiTK+D1BBEy
+   c8vPyvvYt+TsLNsKBkNLYy5/qiCWbG7arQVOwSAL6MkZKFpIjiBpUCqY7
+   UWgC9EVwc3wNS5CGR/AGH5uK+GBYqtDrACnBNUOOunwvedIMPBruLheTi
+   JnhjgmBndy+wLZz4MnoRGTHH9DyinFf4tfRoWTRaJZeSaNlHLw/nwSe5v
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="320210776"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="320210776"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 09:04:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="751943446"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="751943446"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 24 Mar 2023 09:04:22 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfjtt-000FRU-0c;
+        Fri, 24 Mar 2023 16:04:21 +0000
+Date:   Sat, 25 Mar 2023 00:03:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-usb@vger.kernel.org, Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: Re: [PATCH v2 1/3] usb: gadget: f_fs: remove ENTER() macro
+Message-ID: <202303242346.LgEJTJJR-lkp@intel.com>
+References: <1679638227-20496-1-git-send-email-quic_linyyuan@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 12/18] usb: typec: qcom: Add Qualcomm PMIC TCPM support
-Content-Language: en-US
-To:     Jianhua Lu <lujianhua000@gmail.com>
-Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, andersson@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, wcheng@codeaurora.org,
-        caleb.connolly@linaro.org, konrad.dybcio@linaro.org,
-        subbaram@quicinc.com, jackp@quicinc.com, robertom@qti.qualcomm.com
-References: <20230318121828.739424-1-bryan.odonoghue@linaro.org>
- <20230318121828.739424-13-bryan.odonoghue@linaro.org>
- <ZBxkB04KqY8WbeA1@Gentoo> <89bca327-a860-672c-b4ae-766698d38639@linaro.org>
- <ZBzyK0ILtUDr986r@Gentoo> <37d14447-0f10-be88-9cd9-8ebd30f1d006@linaro.org>
- <ZBz5OvauxQ2PWcHu@Gentoo> <40503ba8-7a38-0d1d-1d59-82101a0ce92e@linaro.org>
- <ZB14jJNUhHGBl7Az@Gentoo> <6bd08120-115e-5429-63da-32f8df52bc7f@linaro.org>
- <ZB29J/7LI4PREmn6@Gentoo>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <ZB29J/7LI4PREmn6@Gentoo>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1679638227-20496-1-git-send-email-quic_linyyuan@quicinc.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24/03/2023 15:09, Jianhua Lu wrote:
-> I get schematics of same vendor's similar device, it shows usb vbus is
-> connected to charger pump. It can be the main reason that can't detect vbus, but
-> I don't know why type-c can work normally.
+Hi Linyu,
 
-oki doki that all makes sense - the "charger pump" is supplying vbus 
-most likely - you can confirm or invalidate this theory by connecting a 
-1.0/2.0 device to your external hub - making sure it is unpowered.
+Thank you for the patch! Yet something to improve:
 
-vbus *should* flow through the Type-C port into your external hub and 
-into the 1.0/2.0 device, irrespective of vcon
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus westeri-thunderbolt/next linus/master v6.3-rc3 next-20230324]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Either way that's a 2x input on the VSafe5 - I'll downgrade this to a 
-dev_warn() or perhaps even a dev_dbg()
+url:    https://github.com/intel-lab-lkp/linux/commits/Linyu-Yuan/usb-gadget-f_fs-add-more-function-with-struct-ffs_data-ffs-parameter/20230324-141223
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/1679638227-20496-1-git-send-email-quic_linyyuan%40quicinc.com
+patch subject: [PATCH v2 1/3] usb: gadget: f_fs: remove ENTER() macro
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20230324/202303242346.LgEJTJJR-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/f4623ea5e9a18bfb3e96bc6566afe46ebdefff33
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Linyu-Yuan/usb-gadget-f_fs-add-more-function-with-struct-ffs_data-ffs-parameter/20230324-141223
+        git checkout f4623ea5e9a18bfb3e96bc6566afe46ebdefff33
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/usb/gadget/legacy/
 
-thx
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303242346.LgEJTJJR-lkp@intel.com/
 
----
-bod
+All errors (new ones prefixed by >>):
+
+>> drivers/usb/gadget/legacy/g_ffs.c:183:2: error: implicit declaration of function 'ENTER' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           ENTER();
+           ^
+   drivers/usb/gadget/legacy/g_ffs.c:245:2: error: implicit declaration of function 'ENTER' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           ENTER();
+           ^
+   drivers/usb/gadget/legacy/g_ffs.c:319:2: error: implicit declaration of function 'ENTER' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           ENTER();
+           ^
+   drivers/usb/gadget/legacy/g_ffs.c:448:2: error: implicit declaration of function 'ENTER' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           ENTER();
+           ^
+   4 errors generated.
+
+
+vim +/ENTER +183 drivers/usb/gadget/legacy/g_ffs.c
+
+c6c560085172c1 drivers/usb/gadget/g_ffs.c Michal Nazarewicz     2010-05-05  176  
+8545e6031a7196 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2012-03-12  177  static int __init gfs_init(void)
+c6c560085172c1 drivers/usb/gadget/g_ffs.c Michal Nazarewicz     2010-05-05  178  {
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  179  	struct f_fs_opts *opts;
+581791f5c7a480 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2012-05-14  180  	int i;
+4b187fceec3c73 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  181  	int ret = 0;
+581791f5c7a480 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2012-05-14  182  
+c6c560085172c1 drivers/usb/gadget/g_ffs.c Michal Nazarewicz     2010-05-05 @183  	ENTER();
+c6c560085172c1 drivers/usb/gadget/g_ffs.c Michal Nazarewicz     2010-05-05  184  
+4b187fceec3c73 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  185  	if (func_num < 2) {
+581791f5c7a480 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2012-05-14  186  		gfs_single_func = true;
+581791f5c7a480 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2012-05-14  187  		func_num = 1;
+581791f5c7a480 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2012-05-14  188  	}
+581791f5c7a480 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2012-05-14  189  
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  190  	/*
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  191  	 * Allocate in one chunk for easier maintenance
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  192  	 */
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  193  	f_ffs[0] = kcalloc(func_num * N_CONF, sizeof(*f_ffs), GFP_KERNEL);
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  194  	if (!f_ffs[0]) {
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  195  		ret = -ENOMEM;
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  196  		goto no_func;
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  197  	}
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  198  	for (i = 1; i < N_CONF; ++i)
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  199  		f_ffs[i] = f_ffs[0] + i * func_num;
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  200  
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  201  	fi_ffs = kcalloc(func_num, sizeof(*fi_ffs), GFP_KERNEL);
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  202  	if (!fi_ffs) {
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  203  		ret = -ENOMEM;
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  204  		goto no_func;
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  205  	}
+581791f5c7a480 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2012-05-14  206  
+4b187fceec3c73 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  207  	for (i = 0; i < func_num; i++) {
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  208  		fi_ffs[i] = usb_get_function_instance("ffs");
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  209  		if (IS_ERR(fi_ffs[i])) {
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  210  			ret = PTR_ERR(fi_ffs[i]);
+4b187fceec3c73 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  211  			--i;
+4b187fceec3c73 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  212  			goto no_dev;
+4b187fceec3c73 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  213  		}
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  214  		opts = to_f_fs_opts(fi_ffs[i]);
+4b187fceec3c73 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  215  		if (gfs_single_func)
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  216  			ret = ffs_single_dev(opts->dev);
+4b187fceec3c73 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  217  		else
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  218  			ret = ffs_name_dev(opts->dev, func_names[i]);
+4b187fceec3c73 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  219  		if (ret)
+4b187fceec3c73 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  220  			goto no_dev;
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  221  		opts->dev->ffs_ready_callback = functionfs_ready_callback;
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  222  		opts->dev->ffs_closed_callback = functionfs_closed_callback;
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  223  		opts->dev->ffs_acquire_dev_callback = functionfs_acquire_dev;
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  224  		opts->dev->ffs_release_dev_callback = functionfs_release_dev;
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  225  		opts->no_configfs = true;
+4b187fceec3c73 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  226  	}
+581791f5c7a480 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2012-05-14  227  
+581791f5c7a480 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2012-05-14  228  	missing_funcs = func_num;
+581791f5c7a480 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2012-05-14  229  
+4b187fceec3c73 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  230  	return 0;
+4b187fceec3c73 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  231  no_dev:
+4b187fceec3c73 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  232  	while (i >= 0)
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  233  		usb_put_function_instance(fi_ffs[i--]);
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  234  	kfree(fi_ffs);
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  235  no_func:
+6f823cd5305c78 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  236  	kfree(f_ffs[0]);
+4b187fceec3c73 drivers/usb/gadget/g_ffs.c Andrzej Pietrasiewicz 2013-12-03  237  	return ret;
+c6c560085172c1 drivers/usb/gadget/g_ffs.c Michal Nazarewicz     2010-05-05  238  }
+c6c560085172c1 drivers/usb/gadget/g_ffs.c Michal Nazarewicz     2010-05-05  239  module_init(gfs_init);
+c6c560085172c1 drivers/usb/gadget/g_ffs.c Michal Nazarewicz     2010-05-05  240  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
