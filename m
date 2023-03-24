@@ -2,122 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4576C79EC
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 09:36:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22ACE6C7B0F
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 10:20:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjCXIgK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Mar 2023 04:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
+        id S231975AbjCXJU0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Mar 2023 05:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCXIgJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 04:36:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CCAE3A3
-        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 01:36:08 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pfcu5-0003BF-6n; Fri, 24 Mar 2023 09:36:05 +0100
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pfcu3-0004LI-Op; Fri, 24 Mar 2023 09:36:03 +0100
-Date:   Fri, 24 Mar 2023 09:36:03 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: Re: [PATCH] usb: dwc3: gadget: lower informal user notifaction
- dequeue operation
-Message-ID: <20230324083603.vkbnyygx645fcfxl@pengutronix.de>
-References: <20230323171931.4085496-1-m.felsch@pengutronix.de>
- <20230323234103.mx7f3pzvbrrguzqe@synopsys.com>
+        with ESMTP id S231898AbjCXJUX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 05:20:23 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F782331A;
+        Fri, 24 Mar 2023 02:20:17 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0747FA49;
+        Fri, 24 Mar 2023 10:20:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1679649615;
+        bh=pki/0go3xFs807tIx8JCF2lB90/pCB8Q2/9mcXVfvBI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cHp5w5LiLYc5Ee/9bsGHwwM9tie1udHt0QGc7i7JUVjmCVTnlVR8LA81TOCpNDHZs
+         KchHblIkwkN1NKquWMYE4i1r6mCbvHIW0WTqQimb0UgyAWUS5g4seyRGIO0SOo3kZN
+         JDoRdHRKboQb8bRQtUr2xByhZqXRENbqfpVnvZyo=
+Date:   Fri, 24 Mar 2023 11:20:21 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Michael Tretter <m.tretter@pengutronix.de>
+Cc:     Daniel Scally <dan.scally@ideasonboard.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        kernel@pengutronix.de, Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: [PATCH 3/8] usb: gadget: uvc: implement s/g_output ioctl
+Message-ID: <20230324092021.GC18895@pendragon.ideasonboard.com>
+References: <20230323-uvc-gadget-cleanup-v1-0-e41f0c5d9d8e@pengutronix.de>
+ <20230323-uvc-gadget-cleanup-v1-3-e41f0c5d9d8e@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230323234103.mx7f3pzvbrrguzqe@synopsys.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230323-uvc-gadget-cleanup-v1-3-e41f0c5d9d8e@pengutronix.de>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi Michael,
 
-On 23-03-23, Thinh Nguyen wrote:
-> Hi,
+(CC'ing Hans)
+
+Thank you for the patch.
+
+On Thu, Mar 23, 2023 at 12:41:11PM +0100, Michael Tretter wrote:
+> V4L2 OUTPUT devices should implement ENUM_OUTPUT, G_OUTPUT, and
+> S_OUTPUT. The UVC gadget provides only a single output. Therefore, allow
+> only a single output 0.
 > 
-> On Thu, Mar 23, 2023, Marco Felsch wrote:
-> > Printing an error message during usb_ep_dequeue() is more confusing than
-> > helpful since the usb_ep_dequeue() could be call during unbind() just
-> > in case that everything is canceld before unbinding the driver. Lower
-> > the dev_err() message to dev_dbg() to keep the message for developers.
-> > 
-> > Fixes: fcd2def66392 ("usb: dwc3: gadget: Refactor dwc3_gadget_ep_dequeue")
-> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > ---
-> >  drivers/usb/dwc3/gadget.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index 89dcfac01235f..6699db26cc7b5 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -2106,7 +2106,7 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
-> >  		}
-> >  	}
-> >  
-> > -	dev_err(dwc->dev, "request %pK was not queued to %s\n",
-> > +	dev_dbg(dwc->dev, "request %pK was not queued to %s\n",
-> >  		request, ep->name);
-> >  	ret = -EINVAL;
-> >  out:
-> > -- 
-> > 2.30.2
-> > 
+> According to the documentation, "_TYPE_ANALOG" is historical and should
+> be read as "_TYPE_VIDEO".
+
+I think v4l2-compliance should be fixed to not require those ioctls. As
+this patch clearly shows, they're useless :-)
+
+> Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+> ---
+>  drivers/usb/gadget/function/uvc_v4l2.c | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
 > 
-> How were you able to reproduce this error message?
+> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+> index 13c7ba06f994..4b8bf94e06fc 100644
+> --- a/drivers/usb/gadget/function/uvc_v4l2.c
+> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
+> @@ -377,6 +377,31 @@ uvc_v4l2_enum_format(struct file *file, void *fh, struct v4l2_fmtdesc *f)
+>  	return 0;
+>  }
+>  
+> +static int
+> +uvc_v4l2_enum_output(struct file *file, void *priv_fh, struct v4l2_output *out)
+> +{
+> +	if (out->index != 0)
+> +		return -EINVAL;
+> +
+> +	out->type = V4L2_OUTPUT_TYPE_ANALOG;
+> +	snprintf(out->name, sizeof(out->name), "UVC");
+> +
+> +	return 0;
+> +}
+> +
+> +static int
+> +uvc_v4l2_g_output(struct file *file, void *priv_fh, unsigned int *i)
+> +{
+> +	*i = 0;
+> +	return 0;
+> +}
+> +
+> +static int
+> +uvc_v4l2_s_output(struct file *file, void *priv_fh, unsigned int i)
+> +{
+> +	return i ? -EINVAL : 0;
+> +}
+> +
+>  static int
+>  uvc_v4l2_reqbufs(struct file *file, void *fh, struct v4l2_requestbuffers *b)
+>  {
+> @@ -547,6 +572,9 @@ const struct v4l2_ioctl_ops uvc_v4l2_ioctl_ops = {
+>  	.vidioc_enum_frameintervals = uvc_v4l2_enum_frameintervals,
+>  	.vidioc_enum_framesizes = uvc_v4l2_enum_framesizes,
+>  	.vidioc_enum_fmt_vid_out = uvc_v4l2_enum_format,
+> +	.vidioc_enum_output = uvc_v4l2_enum_output,
+> +	.vidioc_g_output = uvc_v4l2_g_output,
+> +	.vidioc_s_output = uvc_v4l2_s_output,
+>  	.vidioc_reqbufs = uvc_v4l2_reqbufs,
+>  	.vidioc_querybuf = uvc_v4l2_querybuf,
+>  	.vidioc_qbuf = uvc_v4l2_qbuf,
 
-We use the driver within barebox where we do have support for fastboot.
-During the driver unbind usb_ep_dequeue() is called which throw this
-error.
-
-> During unbind(), the function driver would typically call to
-> usb_ep_disable(). Before the call usb_ep_disable() completes, all queued
-> and incompleted requests are expected to be returned with -ESHUTDOWN.
-
-So the unbind() function driver should use usb_ep_disable() instead of
-usb_ep_dequeue()?
-
-> For you to see this error, this means that the function driver issued
-> usb_ep_dequeue() to an already disabled endpoint, and the request was
-> probably already given back.
-
-The unbind() just calls usb_ep_dequeue() which isn't forbidden according
-the API doc. We just want to ensure that the request is cancled if any.
-
-> Even though this error message is not critical and shouldn't affect the
-> driver's behavior, it's better to fix the function driver to handle this
-> race.
-
-As you have pointed out: 'it is not criticial' and therefore we shouldn't
-use dev_err() for non crictical information since this can cause
-user-space confusion.
-
+-- 
 Regards,
-  Marco
 
-> 
-> Thanks,
-> Thinh
+Laurent Pinchart
