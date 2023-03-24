@@ -2,133 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868856C7E49
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 13:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5316C7E9C
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 14:19:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbjCXMun (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Mar 2023 08:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
+        id S231871AbjCXNTE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Mar 2023 09:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbjCXMul (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 08:50:41 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6337C3;
-        Fri, 24 Mar 2023 05:50:40 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 3BB943200A08;
-        Fri, 24 Mar 2023 08:50:40 -0400 (EDT)
-Received: from imap52 ([10.202.2.102])
-  by compute5.internal (MEProxy); Fri, 24 Mar 2023 08:50:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1679662239; x=1679748639; bh=0i
-        PYyvYnm1AEnXuoGimRYpODjqiX75LCp0xlyX7nFAE=; b=WWNYrMotO9neL7JvKt
-        pqkQSLtU2bDgE0Pqw+/uoCIWZqH40RjwlU36+KbNs9EUarOTd+etVk3xlPVtMIJa
-        dy53rRiPrDrI90GAjCG6O0jc8xeyl1EBx/nkHEL13Zl43eVUdFsrOoQMEQKaamro
-        zyYcnb/PPmC2XqmD08PU1Rpx2eYO79o1hVuz02H2O0TIJ9gZMyVKO7vViBA9kht9
-        awhtyIoAY3vnim01+9Eq/dpoZ59DIDfGwRTJa/6ELZi+DgzP0XcCezj4E3pC1RJY
-        TRXq2mx3+oTcxw/k2gP9EwNTyaXFtYP3dKpRZl8cER6neTAhy8DgAisXn8V0Lyic
-        XvCQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679662239; x=1679748639; bh=0iPYyvYnm1AEn
-        XuoGimRYpODjqiX75LCp0xlyX7nFAE=; b=Rxo0Q/2dEJs4isNP1RMPXnWioHheE
-        SSWR/wdHyh1MvnKUuVFaPZ9uwmdch3ezrgTytitS63V6ddLIirDeaYWAd+RL+siy
-        4zaYwOe4VN4YwXTRoSuNibhf+xb21Hg86rbnN0G3Nkjbmyaiau6aWgnnyR4V7qR+
-        Fn7IML/hYZazcTtvCWDHFAhzddaQza90QfP9/xucE74O4gjIk5XJKOvZpIJ92zVT
-        qeF3baI7uWE4xcna4IgNFmk+sBHbuMf5k6zXHtCNqIoSUPlSGzB6NJWOiSfsmO44
-        8ZGOEu3JiePhwTbZ0129mTMjowrYTY22Hgym6q2EsnAfXi5tubPr1Vlsw==
-X-ME-Sender: <xms:n5wdZJx7hANKXck7D2UkvyV5UsGeyAZy9EdB7Dn79vUVQJQeR3jN2w>
-    <xme:n5wdZJTlPAodL8CTPuQ8hyAEDhmBca--r1ZdGsS7Iipz9lWDEYWQ6HKMXLNiywx-d
-    oTIfkEuILZ3q_WXLYc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegiedggeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfofgr
-    rhhkucfrvggrrhhsohhnfdcuoehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssg
-    drtggrqeenucggtffrrghtthgvrhhnpeeiueefjeeiveetuddvkeetfeeltdevffevudeh
-    ffefjedufedvieejgedugeekhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggr
-X-ME-Proxy: <xmx:n5wdZDUQAQb7-vKidLHSbaOlx1WzDxRfX6kXmDZ20AaEZ6dGzjcrbw>
-    <xmx:n5wdZLjwwq4_m_50IMRHoqROaHru0Nym6RpzH7sc-_o5lQq9bxYjYQ>
-    <xmx:n5wdZLCSKUNfNO-sgpT6SfUpGuC4YA8jzqX-JxwnlQw1V6xUy6htoA>
-    <xmx:n5wdZA5bksg3ktQ7J035GemBpUHNQoEFQEGyGkEzwjAY2IMc8gkhUw>
-Feedback-ID: ibe194615:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 6568BC60091; Fri, 24 Mar 2023 08:50:39 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-236-g06c0f70e43-fm-20230313.001-g06c0f70e
-Mime-Version: 1.0
-Message-Id: <16c47819-dbcc-4a9d-9124-7d440cfbf1d6@app.fastmail.com>
-In-Reply-To: <ZBwikZ0wyQ1LGYBc@kuha.fi.intel.com>
-References: <mpearson-lenovo@squebb.ca>
- <20230321190136.449485-1-mpearson-lenovo@squebb.ca>
- <ZBwikZ0wyQ1LGYBc@kuha.fi.intel.com>
-Date:   Fri, 24 Mar 2023 08:50:19 -0400
-From:   "Mark Pearson" <mpearson-lenovo@squebb.ca>
-To:     "Heikki Krogerus" <heikki.krogerus@linux.intel.com>
-Cc:     "Greg KH" <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: acpi: Remove notifier before destroying handler
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S229508AbjCXNTE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 09:19:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEA712860;
+        Fri, 24 Mar 2023 06:19:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3B9EB82303;
+        Fri, 24 Mar 2023 13:19:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F985C4339C;
+        Fri, 24 Mar 2023 13:18:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679663940;
+        bh=n5azJT38PvOIS9z98MuhiQgqA+N6UCY/FD9OPf2roSQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iqx7xVtMtD8mPE+WbN/St84YFBtuaTHqFUyMKVBUCd3aEwUgX8JIecbiann+8L4Ty
+         O5rD1RaBK0WBfya9CwIB4fJBWNjSS+yqHw+gTG+pcip1s4b8PQG7J7v036NxdG3EUN
+         k+CFjUFkcFVunTIMlsnjfa2Cgi4lvEj19lCvTqNBkhu1hSj4at5htyhxDpYGqAOlnT
+         3A/OArQMOHSZ4zpy9RP/+Kk8I3+bPbVQiQsFA8SYOunc65q8Owlo/u/evCG9H7Mxap
+         /n+g66NqWo6ltnaKMet5xsom/9V/4ET3Tmb+2tIxIy24z6NjNmV/BlcOTyhgSYC1GY
+         g07MvLDjUCYiA==
+From:   Roger Quadros <rogerq@kernel.org>
+To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc:     vigneshr@ti.com, srk@ti.com, r-gunasekaran@ti.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Roger Quadros <rogerq@kernel.org>
+Subject: [PATCH] usb: typec: tps6598x: Add support for polling interrupts status
+Date:   Fri, 24 Mar 2023 15:18:53 +0200
+Message-Id: <20230324131853.41102-1-rogerq@kernel.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+From: Aswath Govindraju <a-govindraju@ti.com>
 
-On Thu, Mar 23, 2023, at 5:57 AM, Heikki Krogerus wrote:
-> On Tue, Mar 21, 2023 at 03:01:36PM -0400, Mark Pearson wrote:
->> Was debugging another issue (since fixed) and noticed that the acpi
->> notify_handler should be removed before the ucsi object is destroyed.
->> 
->> This isn't fixing any issues that I'm aware of - but I assume could
->> potentially lead to a race condition if you were really unlucky?
->> 
->> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
->> ---
->>  drivers/usb/typec/ucsi/ucsi_acpi.c | 6 +++---
->>  1 file changed, 3 insertions(+), 3 deletions(-)
->> 
->> diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
->> index ce0c8ef80c04..be3bf4f996d3 100644
->> --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
->> +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
->> @@ -176,12 +176,12 @@ static int ucsi_acpi_remove(struct platform_device *pdev)
->>  {
->>  	struct ucsi_acpi *ua = platform_get_drvdata(pdev);
->>  
->> -	ucsi_unregister(ua->ucsi);
->> -	ucsi_destroy(ua->ucsi);
->> -
->>  	acpi_remove_notify_handler(ACPI_HANDLE(&pdev->dev), ACPI_DEVICE_NOTIFY,
->>  				   ucsi_acpi_notify);
->>  
->> +	ucsi_unregister(ua->ucsi);
->> +	ucsi_destroy(ua->ucsi);
->> +
->>  	return 0;
->>  }
->
-> Calling ucsi_desctroy() after removing the notifier makes sense to me,
-> but do you also need to unregister the instance after that?
->
-> You may still be in the middle of init or resume, so I think we need
-> to accept notifications until we are sure those have finished, i.e.
-> ucsi_unregister() has finished.
->
+Some development boards don't have the interrupt line connected.
 
-That makes sense - I hadn't considered that.
-I'll post an updated patch with the acpi_remove_notify_handler between the two calls.
+In such cases we can resort to polling the interrupt status.
 
-Thanks for the review
-Mark
+Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+Signed-off-by: Roger Quadros <rogerq@kernel.org>
+---
+ drivers/usb/typec/tipd/core.c | 41 ++++++++++++++++++++++++++++++-----
+ 1 file changed, 36 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+index 485b90c13078..d28ffa10a122 100644
+--- a/drivers/usb/typec/tipd/core.c
++++ b/drivers/usb/typec/tipd/core.c
+@@ -16,6 +16,7 @@
+ #include <linux/usb/typec.h>
+ #include <linux/usb/typec_altmode.h>
+ #include <linux/usb/role.h>
++#include <linux/workqueue.h>
+ 
+ #include "tps6598x.h"
+ #include "trace.h"
+@@ -97,6 +98,8 @@ struct tps6598x {
+ 
+ 	int wakeup;
+ 	u16 pwr_status;
++	struct delayed_work	wq_poll;
++	irq_handler_t irq_handler;
+ };
+ 
+ static enum power_supply_property tps6598x_psy_props[] = {
+@@ -568,6 +571,18 @@ static irqreturn_t tps6598x_interrupt(int irq, void *data)
+ 	return IRQ_NONE;
+ }
+ 
++/* Time interval for Polling */
++#define POLL_INTERVAL	500 /* msecs */
++static void tps6598x_poll_work(struct work_struct *work)
++{
++	struct tps6598x *tps = container_of(to_delayed_work(work),
++					    struct tps6598x, wq_poll);
++
++	tps->irq_handler(0, tps);
++	queue_delayed_work(system_power_efficient_wq,
++			   &tps->wq_poll, msecs_to_jiffies(POLL_INTERVAL));
++}
++
+ static int tps6598x_check_mode(struct tps6598x *tps)
+ {
+ 	char mode[5] = { };
+@@ -746,6 +761,7 @@ static int tps6598x_probe(struct i2c_client *client)
+ 			TPS_REG_INT_PLUG_EVENT;
+ 	}
+ 
++	tps->irq_handler = irq_handler;
+ 	/* Make sure the controller has application firmware running */
+ 	ret = tps6598x_check_mode(tps);
+ 	if (ret)
+@@ -837,10 +853,18 @@ static int tps6598x_probe(struct i2c_client *client)
+ 			dev_err(&client->dev, "failed to register partner\n");
+ 	}
+ 
+-	ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
+-					irq_handler,
+-					IRQF_SHARED | IRQF_ONESHOT,
+-					dev_name(&client->dev), tps);
++	if (client->irq) {
++		ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
++						irq_handler,
++						IRQF_SHARED | IRQF_ONESHOT,
++						dev_name(&client->dev), tps);
++	} else {
++		dev_warn(tps->dev, "Unable to find the interrupt, switching to polling\n");
++		INIT_DELAYED_WORK(&tps->wq_poll, tps6598x_poll_work);
++		queue_delayed_work(system_power_efficient_wq, &tps->wq_poll,
++				   msecs_to_jiffies(POLL_INTERVAL));
++	}
++
+ 	if (ret)
+ 		goto err_disconnect;
+ 
+@@ -848,7 +872,7 @@ static int tps6598x_probe(struct i2c_client *client)
+ 	fwnode_handle_put(fwnode);
+ 
+ 	tps->wakeup = device_property_read_bool(tps->dev, "wakeup-source");
+-	if (tps->wakeup) {
++	if (tps->wakeup && client->irq) {
+ 		device_init_wakeup(&client->dev, true);
+ 		enable_irq_wake(client->irq);
+ 	}
+@@ -887,6 +911,9 @@ static int __maybe_unused tps6598x_suspend(struct device *dev)
+ 		enable_irq_wake(client->irq);
+ 	}
+ 
++	if (!client->irq)
++		cancel_delayed_work_sync(&tps->wq_poll);
++
+ 	return 0;
+ }
+ 
+@@ -900,6 +927,10 @@ static int __maybe_unused tps6598x_resume(struct device *dev)
+ 		enable_irq(client->irq);
+ 	}
+ 
++	if (client->irq)
++		queue_delayed_work(system_power_efficient_wq, &tps->wq_poll,
++				   msecs_to_jiffies(POLL_INTERVAL));
++
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
+
