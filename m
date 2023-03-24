@@ -2,42 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5467A6C7BA1
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 10:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C406C7B42
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Mar 2023 10:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232114AbjCXJix (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Mar 2023 05:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46580 "EHLO
+        id S231940AbjCXJZz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Mar 2023 05:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231889AbjCXJi2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 05:38:28 -0400
-X-Greylist: delayed 491 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 24 Mar 2023 02:37:48 PDT
-Received: from mail.camargito.pl (mail.camargito.pl [217.61.23.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B1412852
-        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 02:37:48 -0700 (PDT)
-Received: by mail.camargito.pl (Postfix, from userid 1002)
-        id B585C855A0; Fri, 24 Mar 2023 10:26:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=camargito.pl; s=mail;
-        t=1679650035; bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
-        h=Date:From:To:Subject:From;
-        b=Keq7VDKvI8GGvJBtcjFW4tCxk5iUyuKHSRJ0+uGhdorqpKEUoyQY/CW5ZiIlQLSP4
-         OKOhZSvRKAXR4SjOvPc1/Ilz3AVA12AzIBq+sYSTE9hMWAjyBOuiY5ZZGdzCXexV2h
-         hL/XNjtvu/HJK+SRutHVy8JyQq2gFfW/ndm3QBVtSWZuX1kVXG20acVEeUw56d3OJw
-         utNHOkX1twheQPd8V3WBN8nMZBjBa8hCVosw3KvaeD5zO7SNxAXhoYBssozY1MFwWh
-         1qi/1scePKDKP1sA95uxRjKB+KpUKC7diW6P9mLJuBwV+A25Ua78vS7dLENfy1PtM/
-         DFvzW1WV5Bjiw==
-Received: by mail.camargito.pl for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 09:25:44 GMT
-Message-ID: <20230324084501-0.1.12.1g8a.0.a0n9cfo20c@camargito.pl>
-Date:   Fri, 24 Mar 2023 09:25:44 GMT
-From:   "Krystian Wieczorek" <krystian.wieczorek@camargito.pl>
-To:     <linux-usb@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.camargito.pl
+        with ESMTP id S230125AbjCXJZx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Mar 2023 05:25:53 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C3044B8;
+        Fri, 24 Mar 2023 02:25:53 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4E0CB33F;
+        Fri, 24 Mar 2023 10:25:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1679649951;
+        bh=eU82NbdMywntiUO0S5zzJ9ITYk4hQrysmXeJYuI1k7I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z8o6x3eGJvE6zocUli+aHqFxbXQDPg5wQxkGdH0ujkTTHiFQnOlO02+VNPZux+jwN
+         iEeQYGk1kXjIuPfEaxaCdNiFwBir/erwh+lLpbR12ygYSmG8okdwQRIwZ1S++grV2Q
+         G34Bo6c9fFUI4VvepFVgDran5rxAef/OLwP8TJtA=
+Date:   Fri, 24 Mar 2023 11:25:57 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Dan Scally <dan.scally@ideasonboard.com>
+Cc:     Michael Tretter <m.tretter@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 2/8] usb: gadget: uvc: fix return code of REQBUFS
+Message-ID: <20230324092557.GE18895@pendragon.ideasonboard.com>
+References: <20230323-uvc-gadget-cleanup-v1-0-e41f0c5d9d8e@pengutronix.de>
+ <20230323-uvc-gadget-cleanup-v1-2-e41f0c5d9d8e@pengutronix.de>
+ <ea3247b5-3e5b-8fea-bbfb-329065900774@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ea3247b5-3e5b-8fea-bbfb-329065900774@ideasonboard.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,23 +50,50 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Fri, Mar 24, 2023 at 07:50:11AM +0000, Dan Scally wrote:
+> Hi Michael
+> 
+> On 23/03/2023 11:41, Michael Tretter wrote:
+> > On success, VIDIOC_REQBUFS should return 0, not the number of allocated
+> > buffers. As uvcg_alloc_buffers() is directly called by regbufs, it has
+> > to return the correct error codes.
+> 
+> s/regbufs/reqbufs
+> 
+> >
+> > Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+> > ---
+> 
+> This probably wants a Fixes: tag?
 
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
+Good idea. With that,
 
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
+> Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+> 
+> >   drivers/usb/gadget/function/uvc_queue.c | 6 +-----
+> >   1 file changed, 1 insertion(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
+> > index 0aa3d7e1f3cc..f14f75b93aaa 100644
+> > --- a/drivers/usb/gadget/function/uvc_queue.c
+> > +++ b/drivers/usb/gadget/function/uvc_queue.c
+> > @@ -179,11 +179,7 @@ void uvcg_free_buffers(struct uvc_video_queue *queue)
+> >   int uvcg_alloc_buffers(struct uvc_video_queue *queue,
+> >   			      struct v4l2_requestbuffers *rb)
+> >   {
+> > -	int ret;
+> > -
+> > -	ret = vb2_reqbufs(&queue->queue, rb);
+> > -
+> > -	return ret ? ret : rb->count;
+> > +	return vb2_reqbufs(&queue->queue, rb);
+> >   }
+> >   
+> >   int uvcg_query_buffer(struct uvc_video_queue *queue, struct v4l2_buffer *buf)
 
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
+-- 
+Regards,
 
-
-Pozdrawiam
-Krystian Wieczorek
+Laurent Pinchart
