@@ -2,57 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8AB6C8E55
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Mar 2023 14:03:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8A86C8E58
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Mar 2023 14:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbjCYNDR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Mar 2023 09:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
+        id S231561AbjCYND5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Mar 2023 09:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjCYNDQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Mar 2023 09:03:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518C340DE;
-        Sat, 25 Mar 2023 06:03:14 -0700 (PDT)
+        with ESMTP id S229446AbjCYND4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Mar 2023 09:03:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18294231;
+        Sat, 25 Mar 2023 06:03:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0DB48B8075C;
-        Sat, 25 Mar 2023 13:03:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F6EC433EF;
-        Sat, 25 Mar 2023 13:03:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CB8860C4F;
+        Sat, 25 Mar 2023 13:03:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 021D7C433EF;
+        Sat, 25 Mar 2023 13:03:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679749391;
-        bh=RzQArc2DTEQ6mlQA7QJSmpoVuSxWh581ekX4emLqCXM=;
+        s=k20201202; t=1679749433;
+        bh=SdU9kHEoxW2j7sZXsy+1t2VVON6O+/GheN3KRNLgs1E=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WSDwwZQ8F1QY49fvJD1R4IRm6YWs2lPAxe15jtzXq3XWQLXJKEb8jkg2Sfsu8e1K4
-         n9oRmUlU0mzK8WUAOVpkri6TguT7u0B7pDUBG0sePnScp5RdmWhNiBabz4LqCfEvJU
-         y2P8vBwC5rAdrkdjik3t6zauGQ9Wvuvp0eMxuuLp4DeNXTjlRrJRjZCZHrY0uanGh1
-         S44GqjyA+/mzl1VRN34TLuKPCDH9HTs0+13YYmQLYEGQNKNiD7BJ9fxXzboLzcYQyo
-         JCtuTBFPzEWjbQ1P8YtCSSaFihHotl7MmNpqFIQVHUFakLkMwQSFX24n7nwD7/A6tM
-         6q5FRb6bBq4eg==
-Message-ID: <42bbac46-782b-e2ac-67f3-37489e3a2047@kernel.org>
-Date:   Sat, 25 Mar 2023 15:03:06 +0200
+        b=lODoXwMzbTBrWzv4nDvHf9nn7KL/E7kjb22atsRTMAfthkBVqZOoHTNKCNBxvZGkY
+         fNjc8eP5VZ8JDHfLEyYaReVfSYoJx9a4Spl4Ndw5K19r7uyZ0g+/njV0/T4vpymnL+
+         Oq1uKEdQwEJi6UHPKTj58iCdB5sn9RiUNiUWSZlxFsf0JXIZJEWrAovXN95Hv7EZnd
+         BzEyvLugFp6TihFwMV4fYlQbv1/npZYKtaDhVN6a3JdWLejC+9fKplxXl2IWXEFo1U
+         Dtzy8gxUgrcqikmDA9Xq16aTjbXRAG25sJ+xU3hnDmJY/zwkv5GC5e2wjgUv7Hapzr
+         n3A/hHaCfTSlQ==
+Message-ID: <88c7d438-28ad-cc17-6abe-d8e1853260e9@kernel.org>
+Date:   Sat, 25 Mar 2023 15:03:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] arm64: dts: ti: k3-am625-sk: Add ti,vbus-divider
- property to usbss1
+Subject: Re: [PATCH 2/2] arm64: dts: ti: k3-am625-sk: Enable Type-C port for
+ USB0
+Content-Language: en-US
 To:     Nishanth Menon <nm@ti.com>
 Cc:     vigneshr@ti.com, kristo@kernel.org, srk@ti.com,
         r-gunasekaran@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Dhruva Gole <d-gole@ti.com>
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 References: <20230324133150.43224-1-rogerq@kernel.org>
- <20230324133150.43224-2-rogerq@kernel.org>
- <20230324181435.i2n2q6cvh6x4kabw@repeal>
-Content-Language: en-US
+ <20230324133150.43224-3-rogerq@kernel.org>
+ <20230324181542.luvmpvjx2uclic52@reemerge>
 From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230324181435.i2n2q6cvh6x4kabw@repeal>
+In-Reply-To: <20230324181542.luvmpvjx2uclic52@reemerge>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,42 +62,90 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On 24/03/2023 20:14, Nishanth Menon wrote:
+On 24/03/2023 20:15, Nishanth Menon wrote:
 > On 15:31-20230324, Roger Quadros wrote:
->> From: Dhruva Gole <d-gole@ti.com>
+>> USB0 is a Type-C port with dual data role and power sink.
 >>
->> The property "ti,vbus-divider" is needed for both usbss0 and usbss1 as
->> both USB0 and USB1 have the same external voltage divider circuit.
->>
->> Signed-off-by: Dhruva Gole <d-gole@ti.com>
 >> Signed-off-by: Roger Quadros <rogerq@kernel.org>
 >> ---
->>  arch/arm64/boot/dts/ti/k3-am625-sk.dts | 1 +
->>  1 file changed, 1 insertion(+)
+>>  arch/arm64/boot/dts/ti/k3-am625-sk.dts | 40 ++++++++++++++++++++++++--
+>>  1 file changed, 38 insertions(+), 2 deletions(-)
 >>
 >> diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
->> index 67dc26fc23e4..be027fad5f61 100644
+>> index be027fad5f61..c80b12943881 100644
 >> --- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
 >> +++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
->> @@ -482,6 +482,7 @@ &usbss0 {
->>  
->>  &usbss1 {
->>  	status = "okay";
->> +	ti,vbus-divider;
+>> @@ -315,6 +315,33 @@ &main_i2c0 {
+>>  	pinctrl-names = "default";
+>>  	pinctrl-0 = <&main_i2c0_pins_default>;
+>>  	clock-frequency = <400000>;
+>> +
+>> +	tps6598x@3f {
+>> +		compatible = "ti,tps6598x";
+>> +		reg = <0x3f>;
+>> +		interrupt-parent = <&exp1>;
+>> +		interrupts = <17 IRQ_TYPE_EDGE_FALLING>;
+>> +		interrupt-names = "irq";
+>> +
+>> +		connector {
+>> +			compatible = "usb-c-connector";
+>> +			label = "USB-C";
+>> +			self-powered;
+>> +			data-role = "dual";
+>> +			power-role = "sink";
+>> +			ports {
+>> +				#address-cells = <1>;
+>> +				#size-cells = <0>;
+>> +
+>> +				port@0 {
+>> +					reg = <0>;
+>> +					usb_con_hs: endpoint {
+>> +						remote-endpoint = <&usb0_hs_ep>;
+>> +					};
+>> +				};
+>> +			};
+>> +		};
+>> +	};
 >>  };
 >>  
-> 
-> 1. Does'nt this need a fixes tag?
-> 2. lakml is missing in CC
-
-Will fix both issues.
-
-> 
+>>  &main_i2c1 {
+>> @@ -336,7 +363,7 @@ exp1: gpio@22 {
+>>  				   "UART1_FET_BUF_EN", "WL_LT_EN",
+>>  				   "GPIO_HDMI_RSTn", "CSI_GPIO1",
+>>  				   "CSI_GPIO2", "PRU_3V3_EN",
+>> -				   "HDMI_INTn", "TEST_GPIO2",
+>> +				   "HDMI_INTn", "PD_I2C_IRQ",
+>>  				   "MCASP1_FET_EN", "MCASP1_BUF_BT_EN",
+>>  				   "MCASP1_FET_SEL", "UART1_FET_SEL",
+>>  				   "TSINT#", "IO_EXP_TEST_LED";
+>> @@ -486,7 +513,16 @@ &usbss1 {
+>>  };
+>>  
 >>  &usb0 {
+>> -	dr_mode = "peripheral";
+>> +	#address-cells = <1>;
+>> +	#size-cells = <0>;
+>> +	usb-role-switch;
+>> +
+>> +	port@0 {
+>> +		reg = <0>;
+>> +		usb0_hs_ep: endpoint {
+>> +			remote-endpoint = <&usb_con_hs>;
+>> +		};
+>> +	};
+>>  };
+>>  
+>>  &usb1 {
 >> -- 
 >> 2.34.1
 >>
 > 
+> Please see thread: 
+> https://lore.kernel.org/all/20230321-am62-lp-sk-v2-0-0a56e1694804@ti.com/
+> you might need to rebase off that.
+> 
+
+OK.
 
 cheers,
 -roger
