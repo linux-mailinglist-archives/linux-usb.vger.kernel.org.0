@@ -2,47 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2E16C8BD4
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Mar 2023 07:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA176C8BD5
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Mar 2023 07:41:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjCYGkt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sat, 25 Mar 2023 02:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
+        id S231211AbjCYGlx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Mar 2023 02:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbjCYGks (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Mar 2023 02:40:48 -0400
-X-Greylist: delayed 21959 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 24 Mar 2023 23:40:46 PDT
-Received: from StarGate.ianaverse.com (stargate.ianaverse.com [65.210.24.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C322011153
-        for <linux-usb@vger.kernel.org>; Fri, 24 Mar 2023 23:40:46 -0700 (PDT)
-Received: from [172.245.123.107] (unknown [172.245.123.107])
-        by StarGate.ianaverse.com (Postfix) with ESMTP id 3DD0E89067C;
-        Thu, 23 Mar 2023 13:52:46 -0400 (EDT)
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S230271AbjCYGlw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Mar 2023 02:41:52 -0400
+X-Greylist: delayed 123 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 24 Mar 2023 23:41:49 PDT
+Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF8911EA9;
+        Fri, 24 Mar 2023 23:41:49 -0700 (PDT)
+Received: from unicom145.biz-email.net
+        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id UZL00134;
+        Sat, 25 Mar 2023 14:38:34 +0800
+Received: from localhost.localdomain (10.200.104.82) by
+ jtjnmail201612.home.langchao.com (10.100.2.12) with Microsoft SMTP Server id
+ 15.1.2507.21; Sat, 25 Mar 2023 14:38:33 +0800
+From:   Deming Wang <wangdeming@inspur.com>
+To:     <hminas@synopsys.com>, <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Deming Wang <wangdeming@inspur.com>
+Subject: [PATCH] usb: dwc2: Fix spelling mistake "schduler" -> "scheduler"
+Date:   Sat, 25 Mar 2023 02:38:32 -0400
+Message-ID: <20230325063832.1642-1-wangdeming@inspur.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Work from Home, COMPANY REP NEEDED !
-To:     Recipients <times@stargate.ianaverse.com>
-From:   "Bleiholder Novak" <times@stargate.ianaverse.com>
-Date:   Thu, 23 Mar 2023 10:52:45 -0700
-Reply-To: hmark644@gmail.com
-Message-Id: <20230323175247.3DD0E89067C@StarGate.ianaverse.com>
-X-Spam-Status: No, score=4.0 required=5.0 tests=FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.200.104.82]
+tUid:   2023325143834c47787e859f6e014a14e90ef5b18be89
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+There is a spelling mistakes in dev_warn messages. Fix them.
 
-I am reaching out to provide awareness for a part-time career. We are currently sourcing for representatives in Europe to work from home to act as our company's regional business representative in that region. It will by no means interfere with your current job or business.
+Signed-off-by: Deming Wang <wangdeming@inspur.com>
+---
+ drivers/usb/dwc2/hcd_queue.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Kindly email me for detailed information.
+diff --git a/drivers/usb/dwc2/hcd_queue.c b/drivers/usb/dwc2/hcd_queue.c
+index 0a1145592fc7..0d4495c6b9f7 100644
+--- a/drivers/usb/dwc2/hcd_queue.c
++++ b/drivers/usb/dwc2/hcd_queue.c
+@@ -1078,7 +1078,7 @@ static void dwc2_pick_first_frame(struct dwc2_hsotg *hsotg, struct dwc2_qh *qh)
+ 	earliest_frame = dwc2_frame_num_inc(frame_number, 1);
+ 	next_active_frame = earliest_frame;
+ 
+-	/* Get the "no microframe schduler" out of the way... */
++	/* Get the "no microframe scheduler" out of the way... */
+ 	if (!hsotg->params.uframe_sched) {
+ 		if (qh->do_split)
+ 			/* Splits are active at microframe 0 minus 1 */
+-- 
+2.27.0
 
-Regards,
-Bleiholder Novak
