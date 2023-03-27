@@ -2,113 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5034B6C9FF7
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Mar 2023 11:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A976CA075
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Mar 2023 11:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232513AbjC0JkS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Mar 2023 05:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
+        id S233267AbjC0Jt5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Mar 2023 05:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232411AbjC0JkR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Mar 2023 05:40:17 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0CB469E;
-        Mon, 27 Mar 2023 02:40:16 -0700 (PDT)
+        with ESMTP id S233010AbjC0Jtg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Mar 2023 05:49:36 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C6D5276;
+        Mon, 27 Mar 2023 02:49:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679910016; x=1711446016;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=IW3zsAq16i6wCn3thgfU7ml+pZV5tKxghHNUo4jwRwY=;
-  b=FDGyH6pqgr3wqJqZRpqfUFCwVne2Ith+F7VJLYJGtkYy7H6VcHZ1twlh
-   nShmxVqHwWmUb3TCeynTm4/9Hq4ACJqCvtMdlfZszh+wXcz3qh56mbA5S
-   QHxiNhG8xX6BYlXMEPJjF7zS0Pe6+4A00ioadMDkGDggH7RPE3HufB0fl
-   MKTFWJ94tvKzf0HC3nJSpHkbfMVqBROKEPS9zjAstWFcouECoMJLKITQh
-   16QVwRQTono1u9rhzXl2UJ+Y0EcfY8Ru5nh6cnYYBE4YOoTBWnO0cq20j
-   vZm6fhqFOCRNyXzL2OpPlft3nLQ9A3ztyYNCTws/wXYwvycghTTYgVV7u
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="402818920"
+  t=1679910574; x=1711446574;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=xBeLqlQQ2ZjA9fI2W7QipMFz4tnsQ/MApd2Q6uLzh6w=;
+  b=NWfeLEs/db/OnAuPLB6R/j58XUSxPLR2V39uZso4boMr86cwYpsg6LQL
+   euCskZK0E1b8ZaHmp04WM6GVoKfa8K+D4++6V3YnJp9xuFBvWI/LhpJrF
+   UHh6XMwkG8p8HJY/gpBy4yVLeQcBoGqu8srjHiLhrrALa2JoFh4io7bqe
+   hHc0FwJmYVajyru4aEfOp1jB/A2gyqZuzRgWxJRJwi5RlJzaDJFM2oF4V
+   dUCbHzipOmW8DNqFvNOzLJ9CauowbtcB7wa9oj6sU2bfDxzx4F8fzVzvw
+   yVy29Lu4VhL4vm6umYWrU9lOGzoObFxnJKHI/BJVdGlVaC4rBncO2P6XB
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="367968164"
 X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="402818920"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 02:40:15 -0700
+   d="scan'208";a="367968164"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 02:49:31 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="857596828"
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="716017172"
 X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="857596828"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga005.jf.intel.com with ESMTP; 27 Mar 2023 02:40:13 -0700
-Message-ID: <b86fcdbd-f1c6-846f-838f-b7679ec4e2b4@linux.intel.com>
-Date:   Mon, 27 Mar 2023 12:41:34 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Arnd Bergmann <arnd@arndb.de>
-References: <24263902-c9b3-ce29-237b-1c3d6918f4fe@alu.unizg.hr>
- <651c0500-2b84-d938-fdc2-45e92b322b38@alu.unizg.hr>
-Content-Language: en-US
+   d="scan'208";a="716017172"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by orsmga001.jf.intel.com with ESMTP; 27 Mar 2023 02:49:28 -0700
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: BUG: drivers/usb/host/xhci: memleak in alloc from
- xhci_disable_usb3_lpm_timeout()
-In-Reply-To: <651c0500-2b84-d938-fdc2-45e92b322b38@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     mirsad.todorovac@alu.unizg.hr, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, ubuntu-devel-discuss@lists.ubuntu.com,
+        stern@rowland.harvard.edu, arnd@arndb.de,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Stable@vger.kernel.org
+Subject: [PATCH] xhci: Free the command allocated for setting LPM if we return early
+Date:   Mon, 27 Mar 2023 12:50:19 +0300
+Message-Id: <20230327095019.1017159-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <b86fcdbd-f1c6-846f-838f-b7679ec4e2b4@linux.intel.com>
+References: <b86fcdbd-f1c6-846f-838f-b7679ec4e2b4@linux.intel.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 25.3.2023 13.33, Mirsad Goran Todorovac wrote:
-> On 25. 03. 2023. 12:27, Mirsad Goran Todorovac wrote:
->> Hi all!
->>
->> Here are again the good news and the bad news:
->>
->> BAD:  another kernel memory leak detected (one more to hunt down and fix)
->> GOOD: another kernel memory leak detected (one less unaccounted for)
->>
->> I tried to make some fun, but maintainers are busy folks, so let's get down
->> to business:
->>
->> ---
->> Nine (9) new systemd-udevd kernel memory leaks occurred (unable to reproduce).
->>
->> The platform is Ubuntu 22.10 with (relatively recent) systemd 251.4-1ubuntu7.1
->> on LENOVO_MT_82H8_BU_idea_FM_IdeaPad 3 15ITL6 with BIOS GGCN51WW from 11/16/2022.
->>
->> The symptom (/sys/kernel/debug/kmemleak output):
->>
->> unreferenced object 0xffff909698ff9280 (size 64):
->>    comm "systemd-udevd", pid 436, jiffies 4294893239 (age 6287.088s)
->>    hex dump (first 32 bytes):
->>      e0 51 bb 99 96 90 ff ff 00 00 00 00 00 00 00 00  .Q..............
->>      40 5b bb 99 96 90 ff ff 00 00 00 00 00 00 00 00  @[..............
->>    backtrace:
->>      [<ffffffffb29de94c>] slab_post_alloc_hook+0x8c/0x320
->>      [<ffffffffb29e5107>] __kmem_cache_alloc_node+0x1c7/0x2b0
->>      [<ffffffffb2962f3b>] kmalloc_node_trace+0x2b/0xa0
->>      [<ffffffffb31af2ec>] xhci_alloc_command+0x7c/0x1b0
->>      [<ffffffffb31af451>] xhci_alloc_command_with_ctx+0x21/0x70
->>      [<ffffffffb31a8a3e>] xhci_change_max_exit_latency+0x2e/0x1c0>>      [<ffffffffb31a8c5b>] xhci_disable_usb3_lpm_timeout+0x7b/0xb0
->>      [<ffffffffb31457a7>] usb_disable_link_state+0x57/0xe0
+The command allocated to set exit latency LPM values need to be freed in
+case the command is never queued. This would be the case if there is no
+change in exit latency values, or device is missing.
 
-Thanks for the report.
+Fixes: 5c2a380a5aa8 ("xhci: Allocate separate command structures for each LPM command")
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
+ drivers/usb/host/xhci.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I think I found the leak, and wrote a patch for it.
-Any chance you could test it with the same setup?
-
-https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=for-usb-linus&id=8bacee588602ed74cc22aaf4c56b796300e5a943
-
-Thanks
--Mathias
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index bdb6dd819a3b..6307bae9cddf 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -4442,6 +4442,7 @@ static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
+ 
+ 	if (!virt_dev || max_exit_latency == virt_dev->current_mel) {
+ 		spin_unlock_irqrestore(&xhci->lock, flags);
++		xhci_free_command(xhci, command);
+ 		return 0;
+ 	}
+ 
+-- 
+2.25.1
 
