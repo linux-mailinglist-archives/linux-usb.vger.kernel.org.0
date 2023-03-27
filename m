@@ -2,116 +2,242 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE846C9ED0
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Mar 2023 11:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 677806C9EFB
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Mar 2023 11:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233088AbjC0JEN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Mar 2023 05:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
+        id S232587AbjC0JIt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Mar 2023 05:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232450AbjC0JDb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Mar 2023 05:03:31 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F31D4234
-        for <linux-usb@vger.kernel.org>; Mon, 27 Mar 2023 02:01:38 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id q16so10351821lfe.10
-        for <linux-usb@vger.kernel.org>; Mon, 27 Mar 2023 02:01:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679907697;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2ZF8lnTdgBo76J61R0eU74GHsCNaFYFA/VikNNvRUeY=;
-        b=kcheOvDYJ2HR8hXD96KUoD/iP+Qa6Fg8vuUImjl2l5D40VcSqI7YHjJ7CCKGk82PLX
-         kRpYtpzgpkPT2wOMj7pUT8SRG59I8bsU/zT5rhHlfI3fUNN9S//kPV6VjSM+DtPhEGB4
-         3BgxnvVO0+Pqdj3RyKeizj3VIQs74HDJRNN4qTiRQRv8dYYn4QYXNvEKe2qekRQ0DySE
-         H9fLFb2cL+ukXrl4LYM6Pou5EPYEdPkO3SKdQfFKeDMQpN/Sj5Pd3U7qbyW5hPCAWYWE
-         P/F/hhfD3Tz0T12SleC9CW6//ofl/HOsrWS2qfPZb+JTcX0I53cKhrz8UMtiOhxUq8LL
-         sKrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679907697;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2ZF8lnTdgBo76J61R0eU74GHsCNaFYFA/VikNNvRUeY=;
-        b=Jr0l8gc5B3L9F7mfs9l6lK9IjyuDc0Wt/Uk7FwtT2/C18m+4YPdIlu41XmfvGew+yk
-         Qhq1olpPoWXNbpEy5osKTaYBynyzAqRH2okKLudosx/Klc7MmebL/Nz6+XNG/u7HPYSr
-         I1x8/zitpVO3XqBbWiBGVu294F0tG/IZ7OhEzyzH8O1TpC/z2NGm09FzvL1FA8sZdlOv
-         oBkRNoHA1KzGfMvDuc3VxkmjEBVHXmEfjGxECgbmorcs8u5DJvQO4zPSAl7y40CYRuVi
-         mtXbpoNYP3xXp32BPnWqW6aOkvuTfN26BoHgLRuoevt1NUqQM+yO+jJK9IYKth4SYkq6
-         vKSA==
-X-Gm-Message-State: AAQBX9fj/aUgMuTP24txbw7f1iLMyF0pPnw1ScVPCFSqEq+uEe5ziBsY
-        DYuHlqDvjGjQ9ZWOVdORXb5+kA==
-X-Google-Smtp-Source: AKy350ZTclvQkj8ph6vELe+Md+QnJjIPl1t0NzSuNYltD7cNUWB4kNAbBhoPsYJsNDCYhZ1FEjA8YQ==
-X-Received: by 2002:ac2:5ec6:0:b0:4eb:20e:6aec with SMTP id d6-20020ac25ec6000000b004eb020e6aecmr3096588lfq.40.1679907696899;
-        Mon, 27 Mar 2023 02:01:36 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id j12-20020a19f50c000000b004b40c1f1c70sm4594985lfb.212.2023.03.27.02.01.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 02:01:36 -0700 (PDT)
-Message-ID: <cc7392c1-0ea1-29b3-fab6-19c843413724@linaro.org>
-Date:   Mon, 27 Mar 2023 11:01:35 +0200
+        with ESMTP id S233165AbjC0JIk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Mar 2023 05:08:40 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2BB171B;
+        Mon, 27 Mar 2023 02:08:39 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32R5Y8fS026908;
+        Mon, 27 Mar 2023 09:08:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=Mz5+ydCBLSGUFijUagdzN/aLYS95wkYCIdcaJQNrA24=;
+ b=PDwPrdHPhKtO4bMQ6VDYaBYrT1w+NXMb0WlaWbJxzokuit1p+tr9ARQqvK6CmSnLXRfX
+ Ynu4GeiaKdnU8U+zEOi8VThdSl+VS6IcQOLXS89XKINia+93WnzVU1cTsz+jcN1E2XkH
+ 4XzXYvFOgJ60F8aRMWDQJjSYF1KLYlZJYK39YqspYxrBwVThtIQJHelDZ4BF01/DUbPm
+ micKUIm5O7o3W/nfqeXLRKI6jelhe6OyaU+huitrFKTyD3AtFLS+ko6eJ+0iquNcBG8r
+ yZi92xBt9sh59wg3y2ogPvAmU9y37NCb5g+j9fd0/4AQUUqHpXKhSk/jF/YqoDdzWkYz rg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pk53ygf8j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 09:08:29 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32R98SOx004751
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 09:08:28 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Mon, 27 Mar 2023 02:08:22 -0700
+Date:   Mon, 27 Mar 2023 14:38:19 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v3 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
+Message-ID: <20230327090818.GA28717@varda-linux.qualcomm.com>
+References: <cover.1679479634.git.quic_varada@quicinc.com>
+ <5b7213a4c402ee334ff48f2efe2b920858637ac5.1679479634.git.quic_varada@quicinc.com>
+ <CAA8EJppXuaGx4VhZ9fOBUkD8fECngzJ8pubNC4bm_0M9+64ZqQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 0/5] usb: dwc3: qcom: Allow runtime PM
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, Thinh.Nguyen@synopsys.com,
-        gregkh@linuxfoundation.org, mathias.nyman@intel.com
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAA8EJppXuaGx4VhZ9fOBUkD8fECngzJ8pubNC4bm_0M9+64ZqQ@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: rX0kHCsWRrtF1mwp9NhQt_OYbZYQ4CTO
+X-Proofpoint-ORIG-GUID: rX0kHCsWRrtF1mwp9NhQt_OYbZYQ4CTO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ spamscore=0 clxscore=1015 impostorscore=0 phishscore=0 malwarescore=0
+ adultscore=0 bulkscore=0 suspectscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303270074
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, Mar 22, 2023 at 04:41:01PM +0200, Dmitry Baryshkov wrote:
+> On Wed, 22 Mar 2023 at 12:46, Varadarajan Narayanan
+> <quic_varada@quicinc.com> wrote:
+> >
+> > Add USB phy and controller related nodes
+> >
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> >  Changes in v3:
+> >         - Insert the nodes at proper location
+> >
+> >  Changes in v2:
+> >         - Fixed issues flagged by Krzysztof
+> >         - Fix issues reported by make dtbs_check
+> >         - Remove NOC related clocks (to be added with proper
+> >           interconnect support)
+> > ---
+> >  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 86 +++++++++++++++++++++++++++++++++++
+> >  1 file changed, 86 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > index 2bb4053..0943901 100644
+> > --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > @@ -215,6 +215,48 @@
+> >                 #size-cells = <1>;
+> >                 ranges = <0 0 0 0xffffffff>;
+> >
+> > +               qusb_phy_0: phy@7b000 {
+> > +                       compatible = "qcom,ipq9574-qusb2-phy";
+> > +                       reg = <0x07b000 0x180>;
+>
+> Please pad addresses to 8 hex digits.
+>
+>
+> > +                       #phy-cells = <0>;
+> > +
+> > +                       clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> > +                               <&xo_board_clk>;
+> > +                       clock-names = "cfg_ahb", "ref";
+> > +
+> > +                       resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> > +                       status = "disabled";
+> > +               };
+> > +
+> > +               ssphy_0: phy@7d000 {
+> > +                       compatible = "qcom,ipq9574-qmp-usb3-phy";
+> > +                       reg = <0x7d000 0x1c4>;
+> > +                       #clock-cells = <1>;
+> > +                       #address-cells = <1>;
+> > +                       #size-cells = <1>;
+> > +                       ranges;
+> > +
+> > +                       clocks = <&gcc GCC_USB0_AUX_CLK>,
+> > +                                <&gcc GCC_USB0_PHY_CFG_AHB_CLK>;
+>
+> Could you please check the indentation here? Vertical lists should be aligned
+>
+> > +                       clock-names = "aux", "cfg_ahb";
+>
+> One item per line
+>
+> > +
+> > +                       resets =  <&gcc GCC_USB0_PHY_BCR>,
+> > +                                <&gcc GCC_USB3PHY_0_PHY_BCR>;
+> > +                       reset-names = "phy","common";
+> > +                       status = "disabled";
+> > +
+> > +                       usb0_ssphy: phy@7d200 {
+>
+> Newer bindings please, without subnodes.
+>
+> > +                               reg = <0x0007d200 0x130>,       /* tx */
+> > +                                     <0x0007d400 0x200>,       /* rx */
+> > +                                     <0x0007d800 0x1f8>,       /* pcs  */
+> > +                                     <0x0007d600 0x044>;       /* pcs misc */
+> > +                               #phy-cells = <0>;
+> > +                               clocks = <&gcc GCC_USB0_PIPE_CLK>;
+> > +                               clock-names = "pipe0";
+> > +                               clock-output-names = "usb0_pipe_clk";
+> > +                       };
+> > +               };
+> > +
+> >                 pcie0_phy: phy@84000 {
+> >                         compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
+> >                         reg = <0x00084000 0x1bc>; /* Serdes PLL */
+> > @@ -436,6 +478,50 @@
+> >                         status = "disabled";
+> >                 };
+> >
+> > +               usb3: usb3@8a00000 {
+> > +                       compatible = "qcom,ipq9574-dwc3", "qcom,dwc3";
+> > +                       reg = <0x8af8800 0x400>;
+> > +                       #address-cells = <1>;
+> > +                       #size-cells = <1>;
+> > +                       ranges;
+> > +
+> > +                       clocks = <&gcc GCC_SNOC_USB_CLK>,
+> > +                                <&gcc GCC_ANOC_USB_AXI_CLK>,
+> > +                                <&gcc GCC_USB0_MASTER_CLK>,
+> > +                                <&gcc GCC_USB0_SLEEP_CLK>,
+> > +                                <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> > +
+> > +                       clock-names = "sys_noc_axi",
+> > +                                     "anoc_axi",
+> > +                                     "master",
+> > +                                     "sleep",
+> > +                                     "mock_utmi";
+> > +
+> > +                       assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
+> > +                                         <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> > +                       assigned-clock-rates = <200000000>,
+> > +                                              <24000000>;
+>
+> Indentation?
 
+Will address the above and post.
 
-On 25.03.2023 17:52, Manivannan Sadhasivam wrote:
-> Hi,
-> 
-> This series allows the dwc3-qcom driver to do runtime PM itself without
-> userspace intervention. Still, userspace is required to enable runtime PM
-> for dwc3 glue and xhci drivers as we cannot enable runtime PM for them.
-> But this series avoids one more additional step.
-What sort of 'userspace intervention' are we talking about?
-echo mem > /sys/power/state?
+> > +
+> > +                       resets = <&gcc GCC_USB_BCR>;
+> > +                       status = "disabled";
+> > +
+> > +                       dwc_0: usb@8a00000 {
+> > +                               compatible = "snps,dwc3";
+> > +                               reg = <0x8a00000 0xcd00>;
+> > +                               clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> > +                               clock-names = "ref";
+> > +                               interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+> > +                               phys = <&qusb_phy_0>, <&usb0_ssphy>;
+> > +                               phy-names = "usb2-phy", "usb3-phy";
+> > +                               tx-fifo-resize;
+> > +                               snps,is-utmi-l1-suspend;
+> > +                               snps,hird-threshold = /bits/ 8 <0x0>;
+> > +                               snps,dis_u2_susphy_quirk;
+> > +                               snps,dis_u3_susphy_quirk;
+> > +                               dr_mode = "host";
+>
+> Is dr_mode a property of the host or of the board?
 
-Konrad
-> 
-> While enabling runtime PM, I noticed that the xhci driver suspends before
-> catching the xhci interrupts during resume. This ended up deferring the
-> device enumeration for some time. So I included a patch adding autosuspend
-> delay of 200ms to the xhci driver. With this delay, usb enumeration happens
-> properly.
-> 
-> This series has been tested on SC8280XP-CRD and RB5 devices.
-> 
-> Thanks,
-> Mani
-> 
-> Manivannan Sadhasivam (5):
->   arm64: dts: qcom: sc8280xp: Add missing dwc3 quirks
->   xhci: host: Use 200ms autosuspend delay for runtime suspend
->   usb: dwc3: qcom: Fix null ptr access during runtime_suspend()
->   usb: dwc3: qcom: Clear pending interrupt before enabling wake
->     interrupt
->   usb: dwc3: qcom: Allow runtime PM
-> 
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
->  drivers/usb/dwc3/dwc3-qcom.c           | 13 +++++++++----
->  drivers/usb/host/xhci-plat.c           |  2 ++
->  3 files changed, 25 insertions(+), 4 deletions(-)
-> 
+Board.
+
+Thanks
+Varada
+
+> > +                       };
+> > +               };
+> > +
+> >                 intc: interrupt-controller@b000000 {
+> >                         compatible = "qcom,msm-qgic2";
+> >                         reg = <0x0b000000 0x1000>,  /* GICD */
+> > --
+> > 2.7.4
+> >
+>
+>
+> --
+> With best wishes
+> Dmitry
