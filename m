@@ -2,79 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B3A6CA183
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Mar 2023 12:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4C06CA203
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Mar 2023 13:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233203AbjC0KdW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Mar 2023 06:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49112 "EHLO
+        id S230107AbjC0LEW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Mar 2023 07:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233338AbjC0KdV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Mar 2023 06:33:21 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3301B10F3
-        for <linux-usb@vger.kernel.org>; Mon, 27 Mar 2023 03:33:18 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id j11so10707207lfg.13
-        for <linux-usb@vger.kernel.org>; Mon, 27 Mar 2023 03:33:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679913196;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qbQRg8u+pefLM8JZR403sDG9iYkK36WkdcXFbk78A44=;
-        b=tOveTQqMtkW7Qxdkg7RL3/C83D+R944ZQgmzFReUHxnL2W9AiowpYDXv2W5TwMCSzc
-         yaxvEOl/hVUMurI5WDMExYDr+CdKHKmvMoJ9agQjExgwBrV3+d09ihM7UU3Isk9uAkou
-         C/vmObrH4Q2RwLAoLc+nJX4kMyyIs0bHF/64Y9GPu/hZ6fqx6V7oIUkwP20GD4PjBNiD
-         GkiJRXzNHJHZfQoQKwLWKPHk3VSRG/hUfqg0H5k6h2c51KMqGReylL9kFJGXCQL+fYXW
-         zp0hnp4Q6DNA2DQjfYoGHnD6HzKAbDfXk5Yu2WtwKXD9LUG9pzqvSTVLzZjy6U5y9HRU
-         Qwzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679913196;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qbQRg8u+pefLM8JZR403sDG9iYkK36WkdcXFbk78A44=;
-        b=rOcEB97qEPZhYItDo9Qfj8ubvrzJpinbnn33YwxkUzyv+t9Pdm4f5TU59pJePfHS1b
-         dADfZdchaFk/9ZoWC/N0FA90bSVIW8dp/Uu9CoD4QAOw6d8iQjOpp+vXQfSGDo5h43XO
-         OSbKGoaz875UAcCjjXtgwzCSVzX/BbB26RWrSfg9GdRC6pWb92L0x+z4w8HVFvXxUO6k
-         QVKUf+4RhOcgrBdgCYb2b2+YFptUhFZdjbnin/1XOXDj00K4NA5Mld29J2hVOUeN9zkG
-         u/fi+lg65lYU4USf/FtB3NRVCbeEAaj4A7atu8ZXWH2S3QGAe8MSOuSVy4Ry6EUsee4R
-         zkKg==
-X-Gm-Message-State: AAQBX9dgHgfcvh4uCP+BKzrgDgr/66j6pVm1GLjHv6SjZGfIMw8mQ7YQ
-        twxTcu29l7qBxYc/K4x8KABQCQ==
-X-Google-Smtp-Source: AKy350Y/GS8kFAA51xnV0A3DHRS1Ph6Ep510Hy/Za24zSl7pvyabIzMLrcIdTbcTjntcwLbnFW9bsA==
-X-Received: by 2002:ac2:51b3:0:b0:4eb:e7f:945 with SMTP id f19-20020ac251b3000000b004eb0e7f0945mr1154627lfk.41.1679913196409;
-        Mon, 27 Mar 2023 03:33:16 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id v2-20020ac25922000000b004eb09081d77sm1134519lfi.91.2023.03.27.03.33.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 03:33:16 -0700 (PDT)
-Message-ID: <21732296-107a-c9a8-9a32-723b864712d4@linaro.org>
-Date:   Mon, 27 Mar 2023 12:33:14 +0200
+        with ESMTP id S232231AbjC0LEU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Mar 2023 07:04:20 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE574483;
+        Mon, 27 Mar 2023 04:04:11 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 606B524E114;
+        Mon, 27 Mar 2023 19:04:04 +0800 (CST)
+Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Mar
+ 2023 19:04:04 +0800
+Received: from [192.168.125.108] (113.72.145.117) by EXMBX171.cuchost.com
+ (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Mar
+ 2023 19:04:03 +0800
+Message-ID: <20774e11-b7d4-e895-13f1-ea6dad130e4e@starfivetech.com>
+Date:   Mon, 27 Mar 2023 19:04:02 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 0/5] usb: dwc3: qcom: Allow runtime PM
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 4/5] usb: cdns3: add StarFive JH7110 USB driver.
 Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
-        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
- <cc7392c1-0ea1-29b3-fab6-19c843413724@linaro.org>
- <20230327091733.GA14584@thinkpad>
- <506a7e48-2576-0fa6-d5e9-0157539bcebf@linaro.org>
- <20230327101055.GA16424@thinkpad>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230327101055.GA16424@thinkpad>
-Content-Type: text/plain; charset=UTF-8
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>,
+        "Vinod Koul" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+References: <20230315104411.73614-1-minda.chen@starfivetech.com>
+ <20230315104411.73614-5-minda.chen@starfivetech.com>
+ <2c99725a0bf259203a5b00f4c752eeb1b6596f59.camel@pengutronix.de>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <2c99725a0bf259203a5b00f4c752eeb1b6596f59.camel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [113.72.145.117]
+X-ClientProxiedBy: EXCAS063.cuchost.com (172.16.6.23) To EXMBX171.cuchost.com
+ (172.16.6.91)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,94 +71,63 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On 27.03.2023 12:10, Manivannan Sadhasivam wrote:
-> On Mon, Mar 27, 2023 at 11:24:58AM +0200, Konrad Dybcio wrote:
->>
->>
->> On 27.03.2023 11:17, Manivannan Sadhasivam wrote:
->>> On Mon, Mar 27, 2023 at 11:01:35AM +0200, Konrad Dybcio wrote:
->>>>
->>>>
->>>> On 25.03.2023 17:52, Manivannan Sadhasivam wrote:
->>>>> Hi,
->>>>>
->>>>> This series allows the dwc3-qcom driver to do runtime PM itself without
->>>>> userspace intervention. Still, userspace is required to enable runtime PM
->>>>> for dwc3 glue and xhci drivers as we cannot enable runtime PM for them.
->>>>> But this series avoids one more additional step.
->>>> What sort of 'userspace intervention' are we talking about?
->>>> echo mem > /sys/power/state?
->>>>
->>>
->>> I forgot to add that bit:
->>>
->>> echo auto > /sys/devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/power/control
->>> echo auto > /sys/devices/platform/soc@0/a8f8800.usb/a800000.usb/power/control
->>>
->>> You need to set "auto" for the runtime control for both xhci and dwc drivers.
->>>
->>> Then if you don't connect a usb device, all 3 drivers (dwc3-qcom, dwc3, and
->>> xhci) will become runtime suspended after a delay of 5s (default delay).
->>>
->>> This can be confirmed by:
->>>
->>> cat /sys/devices/platform/soc@0/a8f8800.usb/power/runtime_status
->>>
->>> After connecting a usb device, they will all become "active".
->> Thanks! And if I'm following correctly, we can't enable runtime PM
->> for the DWC3 glue and XHCI drivers, as that would cause havoc on
->> other, non-qc platforms. Is that correct?
->>
+On 2023/3/23 17:29, Philipp Zabel wrote:
+> On Mi, 2023-03-15 at 18:44 +0800, Minda Chen wrote:
+>> There is a Cadence USB3 core for JH7110 SoCs, the cdns
+>> core is the child of this USB wrapper module device.
+>> 
+>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+>> ---
+> [...]
+>> diff --git a/drivers/usb/cdns3/cdns3-starfive.c b/drivers/usb/cdns3/cdns3-starfive.c
+>> new file mode 100644
+>> index 000000000000..a99f98f85235
+>> --- /dev/null
+>> +++ b/drivers/usb/cdns3/cdns3-starfive.c
+>> @@ -0,0 +1,305 @@
+> [...]
+>> +static int cdns_clk_rst_init(struct cdns_starfive *data)
+>> +{
+>> +	int ret;
+>> +
+>> +	data->num_clks = devm_clk_bulk_get_all(data->dev, &data->clks);
+>> +	if (data->num_clks < 0)
+>> +		return dev_err_probe(data->dev, -ENODEV,
+>> +			"Failed to get clocks\n");
+>> +
+>> +	ret = clk_bulk_prepare_enable(data->num_clks, data->clks);
+>> +	if (ret)
+>> +		return dev_err_probe(data->dev, ret,
+>> +			"failed to enable clocks\n");
 > 
-> Kind of. Actually dwc3 glue is our qcom driver, other one is just dwc3 driver.
+> In general, it's better to acquire all resources first and only then
+> start interacting with them, and to order all devm_ calls before non-
+> devm calls to make sure cleanup is done in reverse order.
 > 
-> The havoc would apply to xhci driver because, once it is suspended, one of its
-> parent drivers has to resume it. And that requires runtime PM support for all
-> the parent drivers which is currently not available.
-Makes sense, thanks for the explanation!
-
+> In this case you can switch clk_bulk_prepare_enable() with
+> devm_reset_control_array_get_exclusive() and simplify the error path.
 > 
-> But for dwc3 driver, I'm not sure about the consequence though. Maybe I should
-> send it as a separate patch later on and see what other platforms folks think
-> of it.
-May be worth a shot!
-
-Konrad
-
+OK, thanks
+>> +	data->resets = devm_reset_control_array_get_exclusive(data->dev);
+>> +	if (IS_ERR(data->resets)) {
+>> +		ret = dev_err_probe(data->dev, PTR_ERR(data->resets),
+>> +			"Failed to get resets");
+>> +		goto err_clk_init;
+>> +	}
+>> +
+>> +	ret = reset_control_deassert(data->resets);
+>> +	if (ret) {
+>> +		ret = dev_err_probe(data->dev, ret,
+>> +			"failed to reset clocks\n");
+>> +		goto err_clk_init;
+>> +	}
+>> +
+>> +	return ret;
+>> +
+>> +err_clk_init:
+>> +	clk_bulk_disable_unprepare(data->num_clks, data->clks);
+>> +	return ret;
+>> +}
 > 
-> Thanks,
-> Mani
-> 
->> Konrad
->>>
->>> Thanks,
->>> Mani
->>>
->>>> Konrad
->>>>>
->>>>> While enabling runtime PM, I noticed that the xhci driver suspends before
->>>>> catching the xhci interrupts during resume. This ended up deferring the
->>>>> device enumeration for some time. So I included a patch adding autosuspend
->>>>> delay of 200ms to the xhci driver. With this delay, usb enumeration happens
->>>>> properly.
->>>>>
->>>>> This series has been tested on SC8280XP-CRD and RB5 devices.
->>>>>
->>>>> Thanks,
->>>>> Mani
->>>>>
->>>>> Manivannan Sadhasivam (5):
->>>>>   arm64: dts: qcom: sc8280xp: Add missing dwc3 quirks
->>>>>   xhci: host: Use 200ms autosuspend delay for runtime suspend
->>>>>   usb: dwc3: qcom: Fix null ptr access during runtime_suspend()
->>>>>   usb: dwc3: qcom: Clear pending interrupt before enabling wake
->>>>>     interrupt
->>>>>   usb: dwc3: qcom: Allow runtime PM
->>>>>
->>>>>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
->>>>>  drivers/usb/dwc3/dwc3-qcom.c           | 13 +++++++++----
->>>>>  drivers/usb/host/xhci-plat.c           |  2 ++
->>>>>  3 files changed, 25 insertions(+), 4 deletions(-)
->>>>>
->>>
-> 
+> regards
+> Philipp
