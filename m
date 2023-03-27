@@ -2,111 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020166CA689
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Mar 2023 15:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A76E6CA6D2
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Mar 2023 16:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbjC0Nym (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Mar 2023 09:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
+        id S232209AbjC0OKC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Mar 2023 10:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232440AbjC0Nyk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Mar 2023 09:54:40 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEE840CB;
-        Mon, 27 Mar 2023 06:54:39 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso7443221wms.1;
-        Mon, 27 Mar 2023 06:54:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679925278;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0+PBefwwA/8SDowfJGLvUl2uQWAWydxb8mElV9hUD3w=;
-        b=bq2SoY9RGw78zJV4Vk+d+s7AF12STxfknIf73mFQb1ftDrifYYIPvgVe9EQrQaADZf
-         uOfV8lmRpSTbYhe8QYdMZkrgIZdw8ghjxobiMvQrojzOLsnMtUPh5z2y1ssDGlzg1JoD
-         dyq5p6v9KE6PKlX2aBHblirxLIvTZpzzkrQqqmjQ8UszV6+W0M1FmzsWBPjdhTrY89Z8
-         Nl0DUt2hurBv7/Wmb16t1TSxihKivXD7mMsflCfjLdMzssPdCFAj7PyVHIrRBEF+KE2p
-         1sPx6Lx2ovAfPprq1YAsNQDd1DnBRmb8IpL69BTsw1Cg3TCW7KDv6oDTdJ6Eksl1oz/F
-         37Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679925278;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0+PBefwwA/8SDowfJGLvUl2uQWAWydxb8mElV9hUD3w=;
-        b=PHMUgk0pEUVKcJpgjWwjOouBXnWga524tH1nJBBxdBVeFxwh0QkXURYHAL6f6rPpLY
-         +Kvq9VcZR0p61OaXYYNl/LW7cebmaKLQpvVq98zyvTUlKszX27WExi26FcrHYNf+HslB
-         uxSBst/exAREqB0JN8Y9KVpfl8fdnOWH9vlMXbMaAkjJSlpyyDJGWzn18O71T4X50uAM
-         CLbnx0w6+UWjE7OrqcTVQgfWKyJXfbeakxFyz0YK3kQ5syNh9Fh+SG8kYhMKrWFkRSyo
-         bia/LL8TfMR9XcNoHkLwIsKe9Rd5w99A5s+roCri1pCtUEmaXWeZt9Y8jxitTXlf7Wrc
-         HdMg==
-X-Gm-Message-State: AO0yUKXR3AClCxVJXgDjbDKjOg4NK6WFV3DamaAp2r1h7WMEzJJl/D9I
-        pTJCiOntqoowU9fktQGs8gI=
-X-Google-Smtp-Source: AK7set82w54kCKwi0rbXLRUzsG0cZqQY02Pr84jjvrie+fMfGLGh0OIDdv8NdWLsu+1A+3Lez41o5Q==
-X-Received: by 2002:a05:600c:378d:b0:3ea:f6c4:5f3d with SMTP id o13-20020a05600c378d00b003eaf6c45f3dmr9670402wmr.2.1679925277821;
-        Mon, 27 Mar 2023 06:54:37 -0700 (PDT)
-Received: from localhost.localdomain (212-59-15-122.static.zebra.lt. [212.59.15.122])
-        by smtp.gmail.com with ESMTPSA id u11-20020a05600c00cb00b003ef64affec7sm7371244wmm.22.2023.03.27.06.54.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 06:54:37 -0700 (PDT)
-From:   Yaroslav Furman <yaro330@gmail.com>
-X-Google-Original-From: Yaroslav Furman <Yaroslav.Furman@verifone.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     yaro330@gmail.com, Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] uas: Add US_FL_NO_REPORT_OPCODES for JMicron JMS583Gen 2
-Date:   Mon, 27 Mar 2023 16:54:23 +0300
-Message-Id: <20230327135423.607033-2-Yaroslav.Furman@verifone.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230327135423.607033-1-Yaroslav.Furman@verifone.com>
-References: <ZA12pMgwA/8CguYd@kroah.com>
- <20230327135423.607033-1-Yaroslav.Furman@verifone.com>
+        with ESMTP id S229852AbjC0OKA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Mar 2023 10:10:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9487BD3;
+        Mon, 27 Mar 2023 07:09:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59A90B80BEC;
+        Mon, 27 Mar 2023 14:09:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CE99C433EF;
+        Mon, 27 Mar 2023 14:09:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679926196;
+        bh=qhleqvSXG55LxvL+uEa9mQ1uZqawiIM0nEiCIToDFzE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gyz3rDhZiVPqbbQYupLmUGWcI1BIvh3RYJcqWZuuFKl3ygJh3GXR3R1M9hWXUv9qY
+         rdl/JEvArv34V2ryq0xWC7VFi2Z3tvIwOrl6AErokW4MQfmapOtZ3hQ6AM+GvSZx0z
+         G/PEzJtXUyXAZJa8Fblso8ugrxIukM4NSndWNi7gCmlzGLqTnz3BUppmnsu5GvbMvJ
+         WGA6Re0e5drIsKBQnbX5Ve737LcMqu3SjUOakQ9F402KcbNBT5mTXTPk49dBbziPOJ
+         wuqFaaOUl+6yvAjkgskdkzv/Q8MhoD1XQ5NXjOpio67D6supKhRshqwW9nMMBUEtlg
+         EjtXMFKw+HRjQ==
+Date:   Mon, 27 Mar 2023 07:12:59 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-phy@lists.infradead.org,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-scsi@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH v2 00/12] Introduce the SC8180x devices
+Message-ID: <20230327141259.bjdtyvhilxuxts62@ripper>
+References: <20230325122444.249507-1-vkoul@kernel.org>
+ <6f6be544-48da-0c22-ea54-e07e35131ec9@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6f6be544-48da-0c22-ea54-e07e35131ec9@linaro.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Yaroslav Furman <yaro330@gmail.com>
+On Mon, Mar 27, 2023 at 09:46:31AM +0200, Krzysztof Kozlowski wrote:
+> On 25/03/2023 13:24, Vinod Koul wrote:
+> > This introduces Qualcomm SC8180x SoC which features in Lenovo Flex 5G
+> > laptop. This also adds support for Primus platform as well as Lenovo Flex 5G
+> > laptop.
+> > 
+> > I would be great if submaintainers can ack the binding patch so that
+> > everything can go thru qcom tree
+> 
+> I think Bjorn recently was rejecting taking bindings patches, so what
+> changed?
+> 
 
-Just like other JMicron JMS5xx enclosures, it chokes on report-opcodes,
-let's avoid them.
+Nothing changed. In the interest of reducing the risk for merge
+conflicts I still think it's best if bindings goes via respective
+maintainer trees; so patch 1 is for me...
 
-Signed-off-by: Yaroslav Furman <yaro330@gmail.com>
-
----
-
-V3: Moved the code in the appropriate place, after the 0x0578 device,
-as pointed out by Alan Stern
----
- drivers/usb/storage/unusual_uas.h | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index c7b763d6d102..1f8c9b16a0fb 100644
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -111,6 +111,13 @@ UNUSUAL_DEV(0x152d, 0x0578, 0x0000, 0x9999,
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_BROKEN_FUA),
- 
-+/* Reported by: Yaroslav Furman <yaro330@gmail.com> */
-+UNUSUAL_DEV(0x152d, 0x0583, 0x0000, 0x9999,
-+		"JMicron",
-+		"JMS583Gen 2",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_NO_REPORT_OPCODES),
-+
- /* Reported-by: Thinh Nguyen <thinhn@synopsys.com> */
- UNUSUAL_DEV(0x154b, 0xf00b, 0x0000, 0x9999,
- 		"PNY",
--- 
-2.39.2
-
+Regards,
+Bjorn
