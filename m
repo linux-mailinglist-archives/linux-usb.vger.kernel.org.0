@@ -2,153 +2,215 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0B56CBCB7
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Mar 2023 12:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1C46CBCBD
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Mar 2023 12:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbjC1KmR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Mar 2023 06:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
+        id S231840AbjC1KnO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Mar 2023 06:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231820AbjC1KmP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Mar 2023 06:42:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8F57A9F
-        for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 03:42:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B766616C4
-        for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 10:42:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48AD7C433D2;
-        Tue, 28 Mar 2023 10:42:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680000132;
-        bh=lYenctFbmynjU3acu8B3MCDMUrfaEMrtqmakXRTrb5I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xoHJXHOhIS+ZkVOpon2sLHFvnE5wJmumJ7iEMgQAqVcPELD0ha6GzNNYe1BcctGMa
-         CtDrwVFeDr0hV0YiNJP0572ZI/QmD6TB9OqTl5OcHGQ0OgTVdw3PuqLc+UJdTsRA2F
-         yRUgWLlGpYfb7NGiuzgHZKEtf8iLrDlqWcBujK1o=
-Date:   Tue, 28 Mar 2023 12:42:09 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "YoungJun.Park" <her0gyugyu@gmail.com>
-Cc:     linux-usb@vger.kernel.org, youngjun.park@ahnlab.com,
-        her0gyu@naver.com
-Subject: Re: Question of possible concurrent xhci debugfs file
-Message-ID: <ZCLEgXfzbsEb75lN@kroah.com>
-References: <20230328063020.GA1824187@ubuntu>
+        with ESMTP id S229912AbjC1KnN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Mar 2023 06:43:13 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7078D1BC0
+        for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 03:43:11 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id t10so47584330edd.12
+        for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 03:43:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680000190;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zgOiq+AtOeciCdmH4CfKTQkHujujZJqW/oCAjnkxQJQ=;
+        b=z2fbJCUs40UgcqDVbQGQh4kmhI6WeRhHxPmP8pKs0i8yh52/eine8xe/tM/6QfvHbP
+         QJ84tlX3SNKaesXQdNLzBBkJHTcBgYG7l2PiH0gk90E2Chf5Q8oxKOxEQZzjceExb8vV
+         IFVjPu6VDsTPVaDViZGIefeYhR1c4k5DYYYwxvCTyMrdGYlVYsbct9l4o4yRFTLvE6pt
+         vlLybW/hJd+JVIsi5Xs53rx0D2PkCx0duxyHUGoPHLLWQol/hyhwBr1dgVwtULDJqQw7
+         732Bg4O/RimTRXeC9m48hFh3Q2utdgpE4jfJ1dLpIrMKbGJz/F2vu4hnYh454T3cAXpQ
+         ckeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680000190;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zgOiq+AtOeciCdmH4CfKTQkHujujZJqW/oCAjnkxQJQ=;
+        b=qEFgpyjpHegfc5nQv0J0Dx5IRdntBH58+o3psbFnr8Hm6C/6dCThka+HkEx6kMebDx
+         8uF6alaC4ziIDXmzz7aWL/H5uNv1jRoey4od1DoQ4ZHAIyORcePGHumkrXCH7QQBTsDO
+         UbzCcVl75GEqI8vRvILTG+8n1Gz2SzER0FGZMhqFb54V7ZztOmAoUyeGgYqaoESk0UYX
+         gtJC9YJJKjNJ9L7pcD0YyV3O7g077Q1jpz7idHehQZSgwE5r1rRogOgbj81lImLB19RD
+         By1VZn6CXrakgt7WGQoTvrRoLFNJhFHPG1vDuXtN8ZLNRNozMuWYd8cV1v710ClaL15v
+         VulA==
+X-Gm-Message-State: AAQBX9dnCwrwqFWE3PTB2miy4WO0JNeFjANHjD/RrFLW6cXdVewfPuAu
+        x4gACiHYaEzS2wJ5yW0uesuunQ==
+X-Google-Smtp-Source: AKy350Zfnrc8ZewffEwh0R/rtujIhidB2cKU4fpAUyOT7kpfXTOeG5IhvfNxPAEsI9UYX+OUDcVZNQ==
+X-Received: by 2002:a17:906:3f8e:b0:939:ad91:adf5 with SMTP id b14-20020a1709063f8e00b00939ad91adf5mr17014758ejj.25.1680000189965;
+        Tue, 28 Mar 2023 03:43:09 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
+        by smtp.gmail.com with ESMTPSA id lj24-20020a170906f9d800b00932ba722482sm14366953ejb.149.2023.03.28.03.43.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 03:43:09 -0700 (PDT)
+Message-ID: <aec9e01b-c358-0982-3090-ef980d4a5623@linaro.org>
+Date:   Tue, 28 Mar 2023 12:43:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328063020.GA1824187@ubuntu>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] dt-bindings: usb: typec-tcpci: convert to DT schema
+ format
+Content-Language: en-US
+To:     Jun Li <jun.li@nxp.com>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Peng Fan <peng.fan@nxp.com>
+References: <20230323065824.3857573-1-peng.fan@oss.nxp.com>
+ <5675373c-af4f-906f-9906-7853a85f8ed6@linaro.org>
+ <PA4PR04MB96405A3B0B5158561D9E068F89889@PA4PR04MB9640.eurprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <PA4PR04MB96405A3B0B5158561D9E068F89889@PA4PR04MB9640.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 11:30:20PM -0700, YoungJun.Park wrote:
-> I got a panic dump which happend on kernel(
-> I check the both of CentOS and mainline kernel
-> And I assume it could be happend on mainline kernel.
-> (like I said assume)
-
-Note, CentOS uses a very old and obsolete kernel, nothing we can do
-about that mess, please get support for that from the company that
-provided it.
-
-> I think xhci-debugfs file creation check the creation of
-> NULL parent dentry. Is it right? (drivers/usb/host/xhci-debugfs.c)
-
-Why is that needed?
-
-> The contents below is the what I analyze.
+On 28/03/2023 11:24, Jun Li wrote:
+> Hi Krzysztof,
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Sent: Monday, March 27, 2023 3:41 PM
+>> To: Peng Fan (OSS) <peng.fan@oss.nxp.com>; robh+dt@kernel.org;
+>> krzysztof.kozlowski+dt@linaro.org; gregkh@linuxfoundation.org; Jun Li
+>> <jun.li@nxp.com>
+>> Cc: linux-usb@vger.kernel.org; devicetree@vger.kernel.org;
+>> linux-kernel@vger.kernel.org; Peng Fan <peng.fan@nxp.com>
+>> Subject: Re: [PATCH] dt-bindings: usb: typec-tcpci: convert to DT schema
+>> format
+>>
+>> On 23/03/2023 07:58, Peng Fan (OSS) wrote:
+>>> From: Peng Fan <peng.fan@nxp.com>
+>>>
+>>> Convert the binding to DT schema format. The default speed is HS, so
+>>> add a dummy port@0 in the example.
+>>>
+>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+>>> ---
+>>>
+>>> V1:
+>>>  The default speed is HS, so port@0 is not added for some device tree,
+>>> however the usb-c-connector requires port@0. Not sure we should drop
+>>> the required port@0 from usb-c-connector schema or add a dummy port@0
+>>> for tcpci as what this patch does.
+>>
+>> imx8mq-librem5-devkit has full port@0 so just use similar approach.
+>>
+>>>
+>>>  .../devicetree/bindings/usb/typec-tcpci.txt   | 49 ------------
+>>>  .../devicetree/bindings/usb/typec-tcpci.yaml  | 80
+>>> +++++++++++++++++++
+>>>  2 files changed, 80 insertions(+), 49 deletions(-)  delete mode
+>>> 100644 Documentation/devicetree/bindings/usb/typec-tcpci.txt
+>>>  create mode 100644
+>>> Documentation/devicetree/bindings/usb/typec-tcpci.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/typec-tcpci.txt
+>>> b/Documentation/devicetree/bindings/usb/typec-tcpci.txt
+>>> deleted file mode 100644
+>>> index 2082522b1c32..000000000000
+>>> --- a/Documentation/devicetree/bindings/usb/typec-tcpci.txt
+>>> +++ /dev/null
+>>> @@ -1,49 +0,0 @@
+>>> -TCPCI(Typec port cotroller interface) binding
+>>> ----------------------------------------------
+>>> -
+>>> -Required properties:
+>>> -- compatible:       should be set one of following:
+>>> -		    - "nxp,ptn5110" for NXP USB PD TCPC PHY IC ptn5110.
+>>> -
+>>> -- reg:              the i2c slave address of typec port controller device.
+>>> -- interrupt-parent: the phandle to the interrupt controller which provides
+>>> -                    the interrupt.
+>>> -- interrupts:       interrupt specification for tcpci alert.
+>>> -
+>>> -Required sub-node:
+>>> -- connector: The "usb-c-connector" attached to the tcpci chip, the
+>>> bindings
+>>> -  of connector node are specified in
+>>> -  Documentation/devicetree/bindings/connector/usb-connector.yaml
+>>> -
+>>> -Example:
+>>> -
+>>> -ptn5110@50 {
+>>> -	compatible = "nxp,ptn5110";
+>>> -	reg = <0x50>;
+>>> -	interrupt-parent = <&gpio3>;
+>>> -	interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+>>> -
+>>> -	usb_con: connector {
+>>> -		compatible = "usb-c-connector";
+>>> -		label = "USB-C";
+>>> -		data-role = "dual";
+>>> -		power-role = "dual";
+>>> -		try-power-role = "sink";
+>>> -		source-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_USB_COMM)>;
+>>> -		sink-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_USB_COMM)
+>>> -			     PDO_VAR(5000, 12000, 2000)>;
+>>> -		op-sink-microwatt = <10000000>;
+>>> -
+>>> -		ports {
+>>> -			#address-cells = <1>;
+>>> -			#size-cells = <0>;
+>>> -
+>>> -			port@1 {
+>>> -				reg = <1>;
+>>> -				usb_con_ss: endpoint {
+>>> -					remote-endpoint = <&usb3_data_ss>;
+>>> -				};
+>>> -			};
+>>> -		};
+>>> -	};
+>>> -};
+>>> diff --git a/Documentation/devicetree/bindings/usb/typec-tcpci.yaml
+>>> b/Documentation/devicetree/bindings/usb/typec-tcpci.yaml
+>>> new file mode 100644
+>>> index 000000000000..067d3b032e3d
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/usb/typec-tcpci.yaml
+>>
+>> Is this a binding for PTN5110 or for generic tcpci? Looks like the first,
+>> thus name should be rather device specific, so nxp,ptn5110.
+>> Specially that there are other tcpci chips in separate bindings.
 > 
-> 1. A lot of usb error
-> ...
-> [1994159.974407] usb 1-2: device descriptor read/64, error -71
-> [1994160.187902] usb 1-2: new low-speed USB device number 36 using xhci_hcd
-> [1994160.302634] usb 1-2: device descriptor read/64, error -71
-> [1994160.562027] usb 1-2: device descriptor read/64, error -71
-> [1994160.663789] usb usb1-port2: unable to enumerate USB device
-> [1994162.256029] usb 1-2: new low-speed USB device number 37 using xhci_hcd
-> [1994162.370764] usb 1-2: device descriptor read/64, error -71
-> [1994162.585258] usb 1-2: device descriptor read/64, error -71
-> [1994162.797751] usb 1-2: new low-speed USB device number 38 using xhci_hcd
-> [1994162.912484] usb 1-2: device descriptor read/64, error -71
-> [1994163.141944] usb 1-2: device descriptor read/64, error -71
-> [1994163.243712] usb usb1-port2: attempt power cycle.
-> ...
+> This binding doc is target for generic tcpci, ptn5110 is the one
 
-That has nothing to do with debugfs.
 
-> 2. After that panic happend and I got a dump.
-> The cause of panic reading "/sys/kernel/debug/trbs" which is abnormal.
-> (which have bad xhci_ring private data)
-> the file must be on the "/sys/kernel/debug/usb/~~~".
-> 
-> sh> bt
-> PID: 91416  TASK: ffff8d68fcc54200  CPU: 1   COMMAND: "fbmons"
->  #0 [ffff8d679a6cbad0] machine_kexec at ffffffff9e2662c4
->  #1 [ffff8d679a6cbb30] __crash_kexec at ffffffff9e322a32
->  #2 [ffff8d679a6cbc00] crash_kexec at ffffffff9e322b20
->  #3 [ffff8d679a6cbc18] oops_end at ffffffff9e98d798
->  #4 [ffff8d679a6cbc40] no_context at ffffffff9e275d14
->  #5 [ffff8d679a6cbc90] __bad_area_nosemaphore at ffffffff9e275fe2
->  #6 [ffff8d679a6cbce0] bad_area_nosemaphore at ffffffff9e276104
->  #7 [ffff8d679a6cbcf0] __do_page_fault at ffffffff9e990750
->  #8 [ffff8d679a6cbd60] do_page_fault at ffffffff9e990975
->  #9 [ffff8d679a6cbd90] page_fault at ffffffff9e98c778
->     [exception RIP: xhci_ring_trb_show+29]
->     RIP: ffffffff9e76005d  RSP: ffff8d679a6cbe40  RFLAGS: 00010246
->     RAX: ffff8d497b0fe018  RBX: 0000000000000000  RCX: 0000001309207f9b
->     RDX: fffffffffffffff4  RSI: 0000000000000001  RDI: ffff8d6939b8fd40
->     RBP: ffff8d679a6cbe60   R8: ffff8d49ffa5f1a0   R9: ffff8d3b3fc07300
->     R10: ffff8d3b3fc07300  R11: ffffffff9e3de9fd  R12: 0000000000000000
->     R13: 0000000000000000  R14: ffff8d6939b8fd40  R15: ffff8d6939b8fd40
->     ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
-> #10 [ffff8d679a6cbe68] seq_read at ffffffff9e476d10
-> #11 [ffff8d679a6cbed8] vfs_read at ffffffff9e44e3ff
-> #12 [ffff8d679a6cbf08] sys_read at ffffffff9e44f27f
-> #13 [ffff8d679a6cbf50] system_call_fastpath at ffffffff9e995f92
->     RIP: 00007f5f9749f6fd  RSP: 00007f5f84c73700  RFLAGS: 00000293
->     RAX: 0000000000000000  RBX: 00007f5f7066a390  RCX: ffffffffffffffff
->     RDX: 0000000000000400  RSI: 00007f5f706d2270  RDI: 0000000000000016
->     RBP: 00007f5f706d2270   R8: 00007f5f953e73a0   R9: 00007f5f953e7388
->     R10: 0000000000000040  R11: 0000000000000293  R12: 0000000000000400
->     R13: 00007f5f84c7354c  R14: 0000000022100004  R15: 00007f5f866c5368
->     ORIG_RAX: 0000000000000000  CS: 0033  SS: 002b
+Does this mean that TCPCI requires every device to have exactly one
+interrupt (no 0, no 2, exactly 1), no supplies and no additional GPIOs
+(like reset GPIO)?
 
-So the xhci driver is crashing here?
+Because this is what this binding is saying.
 
-> 3. I found a another abnormal xhci debugfs file ep_context in dump. 
-> Check xhci_slot_priv is alive and find the root is NULL.
-> 
-> crash> files -d 0xffff8d68fe8f0000
->      DENTRY           INODE           SUPERBLK     TYPE PATH
-> ffff8d68fe8f0000 ffff8d489e979e10 ffff8d3b19169800 REG  /sys/kernel/debug/ep-context
-> 
-> crash > struct xchi_slot_priv 0xffff8d4812492c0
-> struct xhci_slot_priv {
-> ...
->   root = 0x0, 
-> ...
->   dev = 0xffff8d497b0fe000
-> }
-> 
-> 4. Looking into the mainline kernel code, I finally concluded that
-> /sys/fs/debug/"interface file" could be made.
-> 
-> drivers/usb/host/xhci-debugfs.c
-> xhci_debugfs_create_slot function
-> ...
-> priv->root = debugfs_create_dir(priv->name, xhci->debugfs_slots); // root can be NULL
+> fully compliance with tcpci spec, if change it to be only specific
+> to nxp,ptn5110, my understanding is then other chips need duplicate
+> a binding doc even common tcpci binding and driver is enough for them.
 
-How is root NULL here?  What caused that to happen?  Shouldn't you fix
-that issue here, that's not a general debugfs problem.
+Depends. Usually we have common schema used by actual device schemas. If
+TCPCI-compliant device cannot have additional properties, then this one
+here looks fine.
 
-thanks,
+One more thing - typec-tcpci is a bit redundant "tc" means typec, so
+basicaly you said "typec-typec-pci". This shouold be then just typec-pci
+or tcpci.
 
-greg k-h
+Best regards,
+Krzysztof
+
