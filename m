@@ -2,142 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A86A46CC783
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Mar 2023 18:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D28E6CC8E6
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Mar 2023 19:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232761AbjC1QIi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Mar 2023 12:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
+        id S229733AbjC1RNM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Mar 2023 13:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232220AbjC1QIf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Mar 2023 12:08:35 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E665E05A;
-        Tue, 28 Mar 2023 09:08:34 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32SE32N6022919;
-        Tue, 28 Mar 2023 16:08:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=L8rw2Her4iceF3lBbGr1llneXswMjuHwG5KiVK2xQwQ=;
- b=fdWmeCxIlztEFATRJBmUvL29MT22FxDZzuBox0bmoHZKvtQHoLGdY4FgIcVDJ9QGFeSJ
- CTTdC54VkCvjOEPIMGE50aIzD42Q/sT9JhTD16HAH3S22GkvDZrvZJQHQlxTalpGERZi
- FmPS1Uixo9y1gJbdW/XHtYA7b3BR5Qmigmycq5Ai8FQM2yCwhO9m6obCbxWfYpVQKK7R
- bACLXHgqfVHuQH2s8x6NZowo90eMMAVwW0fsYdlRg8RKQcUsc6XYyJgW3YMSiqDIFWkX
- NlDITY0U7T2vWbJU3+GhUR59lz1vu4LAdnF/61nJOYvpGaCBR8qcWhbBDeeSVOoC4zUK zQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pky700vud-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Mar 2023 16:08:20 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32SG8JdO028236
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Mar 2023 16:08:19 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Tue, 28 Mar 2023 09:08:15 -0700
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Jiantao Zhang <water.zhangjiantao@huawei.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH v2 2/2] usb: gadget: udc: Handle gadget_connect failure during bind operation
-Date:   Tue, 28 Mar 2023 21:37:56 +0530
-Message-ID: <20230328160756.30520-3-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230328160756.30520-1-quic_kriskura@quicinc.com>
-References: <20230328160756.30520-1-quic_kriskura@quicinc.com>
+        with ESMTP id S229539AbjC1RNK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Mar 2023 13:13:10 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4998E
+        for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 10:12:59 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id r11so12972977wrr.12
+        for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 10:12:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680023578;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QVZiv5jycZEvQGqqHDvQbF/JFYTQ3FOT6YJ9tE/AK78=;
+        b=TsJE6tA+xfouGdneoyPCqo4zs8rYlVFfuW0RnWwASUgESXXloS4EDB64/fYgjJNSji
+         hwdb1CSXwqia6y/x7UVYHwxP9l0TS26qbHzrvBwVLLrP9ie/wqveRKU96CMeWmig/Ejv
+         45FppuwgRQys5RM/S+BMqEgk+Q/bKule89MBYL7wnZl1GTk28sbgJivxARo9yLk4Qtr6
+         nz0HUZ4QxIWxY4ANFvJK7uITY6asKx8OA6/3G+yegmt75BjJkxpQb2XvD8zdfWFSZus9
+         IUkvzdb26HQRoJ8O4i+4qnIDRQcsI7CvEK5uYzvkeS1/icHrNtQPRxin0o+rpnigPZSZ
+         QQgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680023578;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QVZiv5jycZEvQGqqHDvQbF/JFYTQ3FOT6YJ9tE/AK78=;
+        b=ANLh8FZJB+VPRu0ccV4oLBpeYB+72ZHS+D0ZmxqahbgCJqFQWeERkP3mrDux6hvZ20
+         dMaY8z4O6y/wihS91Se49tRdwhqb9PUsxpBL5mYFv2GNehqZWYXXD9ARWTXLJ3zq9+lB
+         GcF++bm19+zvqi1/8hU1LEZsylQx7SKgVPiUKlXkZtcKwah2TsSW0ix5/jgCNHZsEjxE
+         4fZKzS1DnZwYbfr283/ml61N7Lv19OVxkGzAXj/udjH9QplB2KbhyJvDPSaYAFGPNVeX
+         J0fwIp+KnbfDQf+hWQzqJ9stdi+ifVM6Nfb49O+JLRRtOsExVWwgLKg3QP8Qr0H3jbOt
+         f69A==
+X-Gm-Message-State: AAQBX9ccK/Np/W97AXqOw8PZovhl0FCaAg1cjl1w9//Djph/tPiBjQ3L
+        EdHekgfvxF1LdQ5l1QXM6PgE9w==
+X-Google-Smtp-Source: AKy350aPdNxL0GbCuGHKVW9Sb9laN0Fvp4DG8QwyuvpBwZoDSS7RAOEpF1f4THMUr+Y+20cKTfy7zw==
+X-Received: by 2002:adf:e3cd:0:b0:2c6:e827:21c1 with SMTP id k13-20020adfe3cd000000b002c6e82721c1mr12052394wrm.50.1680023577932;
+        Tue, 28 Mar 2023 10:12:57 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id p5-20020adfce05000000b002d64fcb362dsm22839959wrn.111.2023.03.28.10.12.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 10:12:57 -0700 (PDT)
+Message-ID: <c6a2001d-ebc5-79c9-edbd-83a17b1c9f47@linaro.org>
+Date:   Tue, 28 Mar 2023 18:12:56 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 3_5wJH3HUWn8oAmejhv48f51nUn3TQPP
-X-Proofpoint-GUID: 3_5wJH3HUWn8oAmejhv48f51nUn3TQPP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-28_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- suspectscore=0 mlxscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0
- phishscore=0 impostorscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2303280126
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] usb: typec: tcpm: try to get role switch from tcpc fwnode
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Li Jun <jun.li@nxp.com>
+Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, xu.yang_2@nxp.com
+References: <1679991784-25500-1-git-send-email-jun.li@nxp.com>
+ <ZCL1pULmTtMOpaKB@kuha.fi.intel.com>
+Content-Language: en-US
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <ZCL1pULmTtMOpaKB@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In the event, gadget_connect call (which invokes pullup) fails,
-propagate the error to udc bind operation which inturn sends the
-error to configfs. The userspace can then retry enumeartion if
-it chooses to.
+On 28/03/2023 15:11, Heikki Krogerus wrote:
+> +Bryan
+> 
+> On Tue, Mar 28, 2023 at 04:23:04PM +0800, Li Jun wrote:
+>> Try to get usb role switch from tcpc fwnode if failed to
+>> get role switch from port dev, this is for case the port
+>> for role switch endpoint is located in connector node,
+>> as per connector binding doc, port@0 for HS is required.
+>>
+>> ptn5110: tcpc@50 {
+>> 	compatible = "nxp,ptn5110";
+>> 	...
+>> 	status = "okay";
+>>
+>> 	connector {
+>> 		compatible = "usb-c-connector";
+>> 		label = "USB-C";
+>> 		...
+>>
+>> 		ports {
+>> 			#address-cells = <1>;
+>> 			#size-cells = <0>;
+>>
+>> 			port@0 {
+>> 				reg = <0>;
+>>
+>> 				typec_conn: endpoint {
+>> 					remote-endpoint = <&usb2_controller>;
+>> 				};
+>> 			};
+>> 		};
+>> 	};
+>> };
+>>
+>> Signed-off-by: Li Jun <jun.li@nxp.com>
+>> ---
+>>   drivers/usb/typec/tcpm/tcpm.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+>> index a0d943d78580..f0534bdb4462 100644
+>> --- a/drivers/usb/typec/tcpm/tcpm.c
+>> +++ b/drivers/usb/typec/tcpm/tcpm.c
+>> @@ -6557,6 +6557,8 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+>>   	port->port_type = port->typec_caps.type;
+>>   
+>>   	port->role_sw = usb_role_switch_get(port->dev);
+>> +	if (!port->role_sw)
+>> +		port->role_sw = fwnode_usb_role_switch_get(tcpc->fwnode);
+>>   	if (IS_ERR(port->role_sw)) {
+>>   		err = PTR_ERR(port->role_sw);
+>>   		goto out_destroy_wq;
+> 
+> This looks like exactly the same as the RFC from Bryan that I just
+> commented. I have not objections if this looks okay to you Brian. I
+> think we should still wait for comments also from Guenter.
+> 
+> thanks,
+> 
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+It does look exactly the same. I don't mind letting Li have the commit.
+
 ---
- drivers/usb/gadget/udc/core.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 23b0629a8774..975205a1853f 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1051,12 +1051,16 @@ EXPORT_SYMBOL_GPL(usb_gadget_set_state);
- 
- /* ------------------------------------------------------------------------- */
- 
--static void usb_udc_connect_control(struct usb_udc *udc)
-+static int usb_udc_connect_control(struct usb_udc *udc)
- {
-+	int ret;
-+
- 	if (udc->vbus)
--		usb_gadget_connect(udc->gadget);
-+		ret = usb_gadget_connect(udc->gadget);
- 	else
--		usb_gadget_disconnect(udc->gadget);
-+		ret = usb_gadget_disconnect(udc->gadget);
-+
-+	return ret;
- }
- 
- /**
-@@ -1500,11 +1504,19 @@ static int gadget_bind_driver(struct device *dev)
- 	if (ret)
- 		goto err_start;
- 	usb_gadget_enable_async_callbacks(udc);
--	usb_udc_connect_control(udc);
-+	ret = usb_udc_connect_control(udc);
-+	if (ret)
-+		goto err_connect_control;
- 
- 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
- 	return 0;
- 
-+ err_connect_control:
-+	usb_gadget_disable_async_callbacks(udc);
-+	if (gadget->irq)
-+		synchronize_irq(gadget->irq);
-+	usb_gadget_udc_stop(udc);
-+
-  err_start:
- 	driver->unbind(udc->gadget);
- 
--- 
-2.40.0
-
+bod
