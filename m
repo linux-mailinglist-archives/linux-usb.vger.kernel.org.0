@@ -2,141 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA7D6CC3A8
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Mar 2023 16:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 338486CC77F
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Mar 2023 18:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233558AbjC1O4I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Mar 2023 10:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
+        id S230368AbjC1QI3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Mar 2023 12:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233557AbjC1O4H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Mar 2023 10:56:07 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218CCD520
-        for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 07:56:06 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5419d4c340aso234450307b3.11
-        for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 07:56:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680015365;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DQcDqYvcmv564x3yanLM9u/Rj6EqvyETRJ8BJOl4/XY=;
-        b=CImWm3EHMLY9MfIyNwah+/pjs8TLbOEWUC03xr7NyvdqmqRUJdy3C9RpT5n2jGj7b2
-         ZenTt79XlFeaOR/4IuGlhn30oasKuP66rag/+lrd5y0cc4D0xn1f5BzbOyvdL3KgsV81
-         svv3a1H6n52G4LnD6qxjm80TjWCQw8fYMKrDoFSIj5sFYo18C+R/1h9bsmmswiMj8HsU
-         PI5MwiCWiCHbGSSn3WJEx5fKRGFM2640RpKr9d9wSLA+RgLgOyd49b75lSKUnUABKaPY
-         cu1Zy0rrEkPEPYsYfLxV+oXpFeZBT1mNmJe99qjd3LVlloJU9QLZxs6bmET4A/bA5nVM
-         P/bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680015365;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DQcDqYvcmv564x3yanLM9u/Rj6EqvyETRJ8BJOl4/XY=;
-        b=3dG+gI2WH6hDnOJ+OpptWcEz6F5sK0rpYfwY07pg7KlXv5gjerLd8ZpkqKLZloEi4I
-         Uq5y4hynSNqeXoG0LlLzcnhESVNTleOI64MKqTrnnRBK1yiG4nMVAPnETqjoIrixnziR
-         YNLpBJnDyZkdYTTMTA9ItRH0YE13V3UUOhRyhtG8RpTiLaDzbtwmq6LDLKt/LkkkixOz
-         zH9uH6oMZZnowXYmb2hJvn7rUjIqHTRT1oOmxyxCiNEDfrO3SMtcO6MTifSUYUSHIULx
-         A9T9hgrMtE57TtDoRLxYA2/t4lj1aTYKMwHvzC8EY3+oxCcRY7yCW1QuxN+QyFq40z2j
-         V4PA==
-X-Gm-Message-State: AAQBX9eE9yYYs2kvPv1QDQ6Q/3Gzd2YxsIK6u/kxnf9ygyYIhga7CBiP
-        LE9PnTLRoRTfuUU98h2x+as=
-X-Google-Smtp-Source: AKy350buKpecnJ3MuWh/2VZjjLZTD1LVajAzGPaLqfnpgXIwVLMlAMJDJNLOLsHlvftIR0hhoKnMCQ==
-X-Received: by 2002:a0d:fc02:0:b0:541:95ef:1700 with SMTP id m2-20020a0dfc02000000b0054195ef1700mr17437237ywf.39.1680015364886;
-        Tue, 28 Mar 2023 07:56:04 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z67-20020a0dd746000000b00545a08184d2sm2464524ywd.98.2023.03.28.07.56.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 07:56:04 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 28 Mar 2023 07:56:03 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Li Jun <jun.li@nxp.com>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, xu.yang_2@nxp.com,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: Re: [PATCH] usb: typec: tcpm: try to get role switch from tcpc fwnode
-Message-ID: <dbd87836-4125-4887-95af-e42b8c0ada9a@roeck-us.net>
-References: <1679991784-25500-1-git-send-email-jun.li@nxp.com>
- <ZCL1pULmTtMOpaKB@kuha.fi.intel.com>
+        with ESMTP id S232220AbjC1QI1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Mar 2023 12:08:27 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C35CA22;
+        Tue, 28 Mar 2023 09:08:26 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32SBGbDR006581;
+        Tue, 28 Mar 2023 16:08:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=4Cd7FiiJO37CbrdHVr5t20E/qKeGVKmXVyF6KG0EpX8=;
+ b=NXm2unGfOI8lYKgaLuM3OqSq2oPs791IHCeYvyRj4xgXfaXa+ZN/0wr0Zoqhxoi8EST3
+ RvXAsE4ED+Iio+eRfuzr4Tbw6ZAVB9zZ6dsEWlfsZAJ/4sGf1XPlWmvUnK0lnpKHgIQi
+ sHeBS9FKTZxOq9JszNhcbTMzlC1sIs/1vBS3vUbXfouTdi5rNMohAZo5p2TYVw2/sAF2
+ kPtMZMrfwXO66b1/8wir9uQbiBD/qR6vbwfUVTkJijIIpz8LzStVNBxROqstJW6Z/ikM
+ NIEW8U3EKAB64TW/2peJe0+7PbKG3rKQFSCYW89KBWEqO6s1x8R6R1/jvIU0vQxTP1wJ 3w== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pky700vtr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 16:08:11 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32SG8AqH030273
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 16:08:10 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Tue, 28 Mar 2023 09:08:05 -0700
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Jiantao Zhang <water.zhangjiantao@huawei.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [PATCH v2 0/2] Handle core soft reset failure in pullup
+Date:   Tue, 28 Mar 2023 21:37:54 +0530
+Message-ID: <20230328160756.30520-1-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCL1pULmTtMOpaKB@kuha.fi.intel.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: KYZHOfRS-zCUyEVqMpXipDBdacuBbk6u
+X-Proofpoint-GUID: KYZHOfRS-zCUyEVqMpXipDBdacuBbk6u
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-28_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ suspectscore=0 mlxscore=0 mlxlogscore=858 priorityscore=1501 spamscore=0
+ phishscore=0 impostorscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2303280126
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 05:11:49PM +0300, Heikki Krogerus wrote:
-> +Bryan
-> 
-> On Tue, Mar 28, 2023 at 04:23:04PM +0800, Li Jun wrote:
-> > Try to get usb role switch from tcpc fwnode if failed to
-> > get role switch from port dev, this is for case the port
-> > for role switch endpoint is located in connector node,
-> > as per connector binding doc, port@0 for HS is required.
-> > 
-> > ptn5110: tcpc@50 {
-> > 	compatible = "nxp,ptn5110";
-> > 	...
-> > 	status = "okay";
-> > 
-> > 	connector {
-> > 		compatible = "usb-c-connector";
-> > 		label = "USB-C";
-> > 		...
-> > 
-> > 		ports {
-> > 			#address-cells = <1>;
-> > 			#size-cells = <0>;
-> > 
-> > 			port@0 {
-> > 				reg = <0>;
-> > 
-> > 				typec_conn: endpoint {
-> > 					remote-endpoint = <&usb2_controller>;
-> > 				};
-> > 			};
-> > 		};
-> > 	};
-> > };
-> > 
-> > Signed-off-by: Li Jun <jun.li@nxp.com>
-> > ---
-> >  drivers/usb/typec/tcpm/tcpm.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> > index a0d943d78580..f0534bdb4462 100644
-> > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > @@ -6557,6 +6557,8 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
-> >  	port->port_type = port->typec_caps.type;
-> >  
-> >  	port->role_sw = usb_role_switch_get(port->dev);
-> > +	if (!port->role_sw)
-> > +		port->role_sw = fwnode_usb_role_switch_get(tcpc->fwnode);
-> >  	if (IS_ERR(port->role_sw)) {
-> >  		err = PTR_ERR(port->role_sw);
-> >  		goto out_destroy_wq;
-> 
-> This looks like exactly the same as the RFC from Bryan that I just
-> commented. I have not objections if this looks okay to you Brian. I
-> think we should still wait for comments also from Guenter.
-> 
+When core soft reset timeout happens, pullup doesn't check for the
+return value and proceeds setting up of event buffers and starts the
+controller.
 
-Ok with me.
+In this scneario, it is observed sometimes that the GEVTADDR LO/HI
+registers read zero while we are setting the run stop bit and we end
+up accessing address 0x00 leading to a crash. This series tries to
+address this issue by handling the timeout and return back appropriate
+error code to configfs for it to retry enumeration if it chooses to.
 
-Guenter
+Link to v1: https://lore.kernel.org/all/20230322092740.28491-1-quic_kriskura@quicinc.com/
 
-> thanks,
-> 
-> -- 
-> heikki
+changes in v2:
+Fixed comments addressing incomplete error handling in udc core
+
+Krishna Kurapati (2):
+  usb: dwc3: gadget: Bail out in pullup if soft reset timeout happens
+  usb: gadget: udc: Handle gadget_connect failure during bind operation
+
+ drivers/usb/dwc3/gadget.c     |  5 ++++-
+ drivers/usb/gadget/udc/core.c | 20 ++++++++++++++++----
+ 2 files changed, 20 insertions(+), 5 deletions(-)
+
+-- 
+2.40.0
+
