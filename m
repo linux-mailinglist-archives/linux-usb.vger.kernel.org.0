@@ -2,140 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1430E6CB7B8
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Mar 2023 09:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2BA6CB869
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Mar 2023 09:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbjC1HLn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Mar 2023 03:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52332 "EHLO
+        id S231840AbjC1HnF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Mar 2023 03:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjC1HLm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Mar 2023 03:11:42 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C331BE4
-        for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 00:11:41 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id ew6so45539151edb.7
-        for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 00:11:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679987499;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a5fyW1eX1RAR+NBmwPpWJ9Jn0eMpcCTBleyehK3tanw=;
-        b=yUYRLQb9IVWEbo20PLorrGnjtm3zZiFX+UHX46vIe6ye583NOm04sdjQJF0ruYxHRO
-         0wltvHNA3PsMmTaKV7r/wcnE5B0u/pExzwBFBABJtuSlm4nhbXQ58ZrrFMLU5E5KkfT4
-         +De9QmNLjfzZ8c85rGnVqsW1mIiSXDoGYpRRDJt7tKagLlUPQ8jV9F33CCKtfUAx1p4T
-         JFTUt/iPM5pVFebaNmS7U/DXABCDUyyN8GRG82xvSFPxE/LG7HfnK5YuoEkl5nqEscps
-         j+7QIwwHdnLT5AF8F2VJRA2i9nJ34uekIaizThFaUCrtjrRvuZFZL7AlfnSVcaBCQnhF
-         m79A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679987499;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a5fyW1eX1RAR+NBmwPpWJ9Jn0eMpcCTBleyehK3tanw=;
-        b=RVGWGMO21TpUJz7ZZIJcVub5e5+PyGWZczE14RVXwha+sb1mHYnVGIXbXq9uQ++4Sf
-         cdZIoJJ8giYZokN5Wy+IqjEj9da3pOK3don4SrY1BvHmwkamGeAr7xRIcvcBmE8eAX6J
-         lzMJrZk9uw5dzjcF0dv8bpekHGDX1xsf31qszveHk3XbmDsqzyyXpsLYkil0Qhk74VrO
-         39lfCVq95kxgUqa5GVVMMxOzLK0hiXD4UimgmdPE3s9XYDorTNRTs5OE33rnNPqkiVOV
-         fQ/c6rlUQ9rToQ04D4X8d8KD5wNpSx19ZqL0GvbxNO3q1PKL/tWmZ81AHa2DETG3ZqgK
-         2q8Q==
-X-Gm-Message-State: AAQBX9eN0dWLwJgJ2hpmNLOgMMtFeadw9xrtZl+2Ddvn0n4Pe6y4ieg6
-        /j0RHcoEALdSNVGOoBu7/QXrJQ==
-X-Google-Smtp-Source: AKy350bYJuSxq8c07X8GOgM+6HypZc8my/E583ZMsjqpdiOYZOwxDATAJ8NU9HcdX0ogeGKLpjFyIA==
-X-Received: by 2002:a17:907:c248:b0:931:ce20:db8e with SMTP id tj8-20020a170907c24800b00931ce20db8emr15303083ejc.51.1679987499545;
-        Tue, 28 Mar 2023 00:11:39 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
-        by smtp.gmail.com with ESMTPSA id o23-20020a170906289700b00922547486f9sm15222236ejd.146.2023.03.28.00.11.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 00:11:39 -0700 (PDT)
-Message-ID: <a68c7693-9d43-0aa9-c77b-26183e5a0a06@linaro.org>
-Date:   Tue, 28 Mar 2023 09:11:38 +0200
+        with ESMTP id S231932AbjC1HnD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Mar 2023 03:43:03 -0400
+Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D740421C
+        for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 00:42:59 -0700 (PDT)
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id 6EAC28425D; Tue, 28 Mar 2023 08:42:02 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1679989377; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=NtI+kqdZdh7ILBgp60ygEFCemXCMTUYa9ZPS5QPFJqfKRaBWw5fsUXAZFKCsn9PpQ
+         CmpVZw4TwLSQHYgI+BvYYLnquqwRaB/9z6phXVjOKqqlaCB/DjqV8oeFN0Ks4FalzU
+         FWDv15ezcvQi+TXYHfrmUcJUvjfr+79EMLHggGrkDOgVX/5r93uUcIYvLar4WDg+wb
+         +v8st3VgoI5FG50MgPxohr+W8r44gF0Dei5XsMsZI9gmLD4z+gBOJl3BsC/dnvCcKz
+         isEOD8RQbKonx6Pg0sB4OKMm8QUaY3HbC8GvBiDJABoVnCM/nvphmYvnBc4LJ6b4F8
+         iqKEGpqz6IkSA==
+Received: by mail.lokoho.com for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 07:40:50 GMT
+Message-ID: <20230328074501-0.1.4x.1mzyc.0.6k9najchn4@lokoho.com>
+Date:   Tue, 28 Mar 2023 07:40:50 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-usb@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 3/8] dt-bindings: usb: dwc3: Add IPQ9574 compatible
-Content-Language: en-US
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
-        kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
-References: <cover.1679909245.git.quic_varada@quicinc.com>
- <526f822a4d2397284f70ba632d92feaa3db0143e.1679909245.git.quic_varada@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <526f822a4d2397284f70ba632d92feaa3db0143e.1679909245.git.quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 27/03/2023 11:30, Varadarajan Narayanan wrote:
-> Document the IPQ9574 dwc3 compatible.
-> 
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
->  Changes in v4:
-> 	- Update other relevant sections
-> 	- Remove constraints not applicable to IPQ9574
+Dzie=C5=84 dobry,
 
-No, that's not way to go. These are required.
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-> ---
->  .../devicetree/bindings/usb/qcom,dwc3.yaml         | 22 +++++++++++++++++++---
->  1 file changed, 19 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> index a2aabda..3fc8c3c 100644
-> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> @@ -17,6 +17,7 @@ properties:
->            - qcom,ipq6018-dwc3
->            - qcom,ipq8064-dwc3
->            - qcom,ipq8074-dwc3
-> +          - qcom,ipq9574-dwc3
->            - qcom,msm8953-dwc3
->            - qcom,msm8994-dwc3
->            - qcom,msm8996-dwc3
-> @@ -132,11 +133,8 @@ required:
->    - "#address-cells"
->    - "#size-cells"
->    - ranges
-> -  - power-domains
->    - clocks
->    - clock-names
-> -  - interrupts
-> -  - interrupt-names
->  
->  allOf:
->    - if:
-> @@ -242,6 +240,24 @@ allOf:
->          compatible:
->            contains:
->              enum:
-> +              - qcom,ipq9574-dwc3
-> +    then:
-> +      properties:
-> +        clocks:
-> +          maxItems: 5
-> +        clock-names:
-> +          items:
-> +            - const: sys_noc_axi
-> +            - const: anoc_axi
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-Heh, do we really need entirely different clock names for each new variant?
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
 
-Best regards,
-Krzysztof
-
+Pozdrawiam
+Adam Charachuta
