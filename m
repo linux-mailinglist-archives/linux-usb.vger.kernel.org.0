@@ -2,186 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92BB16CC15F
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Mar 2023 15:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F186CC1BB
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Mar 2023 16:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbjC1NvJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Mar 2023 09:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
+        id S232766AbjC1OKm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Mar 2023 10:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjC1NvI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Mar 2023 09:51:08 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5921A5;
-        Tue, 28 Mar 2023 06:51:07 -0700 (PDT)
+        with ESMTP id S230507AbjC1OKi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Mar 2023 10:10:38 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACE6D307;
+        Tue, 28 Mar 2023 07:09:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680011467; x=1711547467;
+  t=1680012568; x=1711548568;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=4f34PnpSuMKxCqB8q6OdwG/bM/9+5JldPB2xfHWuiwM=;
-  b=YeO+3fZIqNCQ8+ZWRZ6Dh72ua7v6rzaInbIaIGhLBqchopCOiQXDeSln
-   zrxg+GCvVGYSgsG65hBCnwODanAyAGjgbM2P0zTFC5CWjuAq9B9aG5SrP
-   Do2KD47z7UWdxr77MClTOh/SkakMmGNFlOnRdOePJdbsvintNSma7i7s1
-   AnzUzlkUlBhChd4yt8+8MKRHIHBGYDDqkQCRB7D9nGaQyZJHw2LGa5CNx
-   LBiy9g4Hnoax/BFjczDO6AxyixaLtzKz9QdqBIqcvJMBaBx84R6s4utyR
-   kZURL8LUFE+h0wdKRwk/Zs1LIW6OumUZKGui7yq4Y5ldb+UR3JjGOCPpu
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="320967280"
+  bh=p+jhuM41Z8A7O30nRgxLD83meAEpxjYd5HkJJ3O8Yq0=;
+  b=PPqi/5lfUs954+tjLjkUQaxge/WoJMmRr3Jj+m6Co8gEz8bH6is7yVMZ
+   wG+/IYSzIVy/icNnXUf868tlDlQ6voEOGYkE3WyJS0+rIuMSfmEIi5vyo
+   hwmJu0mxw8tedlMFUfpEOvju3sxQSP1CHJkimxxdMPYXCTfb22/no4SpU
+   F55I/gaxs6/afsP+DGszMQUcJo4OYD52fFv38YERU3wAbHTpauQZcq8+Z
+   s/WeMHvhvtu4iKbV1DRA+woMS5Cxj/KqVtbLljAt1nY/sxnQhGGzLOwOv
+   UDkZLbQp/ebeZC2w6RNSsLOfF1ejMOAA8CfCtgyll0Q/7yz1HCKCa60LR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="342161339"
 X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="320967280"
+   d="scan'208";a="342161339"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 06:51:07 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 07:09:00 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="827483837"
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="827491097"
 X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="827483837"
+   d="scan'208";a="827491097"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 28 Mar 2023 06:51:04 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 28 Mar 2023 16:51:03 +0300
-Date:   Tue, 28 Mar 2023 16:51:03 +0300
+  by fmsmga001.fm.intel.com with SMTP; 28 Mar 2023 07:08:57 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 28 Mar 2023 17:08:56 +0300
+Date:   Tue, 28 Mar 2023 17:08:56 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     gregkh@linuxfoundation.org, vigneshr@ti.com, srk@ti.com,
-        r-gunasekaran@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Aswath Govindraju <a-govindraju@ti.com>
-Subject: Re: [PATCH] usb: typec: tps6598x: Add support for polling interrupts
- status
-Message-ID: <ZCLwx8hU8V+nkzcS@kuha.fi.intel.com>
-References: <20230324131853.41102-1-rogerq@kernel.org>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     linux@roeck-us.net, andersson@kernel.org, robh@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/1] usb: typec: tcpm: Support role-switch remote
+ endpoint in connector
+Message-ID: <ZCL0+COeAkinuaBL@kuha.fi.intel.com>
+References: <20230325011552.2241155-1-bryan.odonoghue@linaro.org>
+ <20230325011552.2241155-2-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230324131853.41102-1-rogerq@kernel.org>
+In-Reply-To: <20230325011552.2241155-2-bryan.odonoghue@linaro.org>
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 03:18:53PM +0200, Roger Quadros wrote:
-> From: Aswath Govindraju <a-govindraju@ti.com>
+On Sat, Mar 25, 2023 at 01:15:52AM +0000, Bryan O'Donoghue wrote:
+> Right now in TCPM when we want to send a role-switch message the
+> remote-endpoint must appear inside of the TCPM bound node, not in the
+> connector associated with TCPM.
 > 
-> Some development boards don't have the interrupt line connected.
+> &typec {
+> 	status = "okay";
 > 
-> In such cases we can resort to polling the interrupt status.
+> 	port {
+> 		typec_role_switch: endpoint {
+> 			remote-endpoint = <&dwc3_role_switch>;
+> 		};
+> 	};
 > 
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> Signed-off-by: Roger Quadros <rogerq@kernel.org>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+> 	connector {
+> 		compatible = "usb-c-connector";
+> 
+> 		power-role = "source";
+> 		data-role = "dual";
+> 		self-powered;
+> 
+> 		ports {
+> 			#address-cells = <1>;
+> 			#size-cells = <0>;
+> 
+> 			port@0 {
+> 				reg = <0>;
+> 				typec_mux: endpoint {
+> 					remote-endpoint = <&phy_typec_mux>;
+> 				};
+> 			};
+> 		};
+> 	};
+> };
+> 
+> This change makes it possible to declare the remote-endpoint inside of the
+> connector of the TCPM e.g.
+> 
+> &typec {
+> 	status = "okay";
+> 
+> 	connector {
+> 		compatible = "usb-c-connector";
+> 
+> 		power-role = "source";
+> 		data-role = "dual";
+> 		self-powered;
+> 
+> 		ports {
+> 			#address-cells = <1>;
+> 			#size-cells = <0>;
+> 
+> 			port@0 {
+> 				reg = <0>;
+> 				typec_role_switch: endpoint {
+> 					remote-endpoint = <&dwc3_role_switch>;
+> 				};
+> 			};
+> 			port@1 {
+> 				reg = <1>;
+> 				typec_mux: endpoint {
+> 					remote-endpoint = <&phy_typec_mux>;
+> 				};
+> 			};
+> 		};
+> 	};
+> };
+> 
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > ---
->  drivers/usb/typec/tipd/core.c | 41 ++++++++++++++++++++++++++++++-----
->  1 file changed, 36 insertions(+), 5 deletions(-)
+>  drivers/usb/typec/tcpm/tcpm.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index 485b90c13078..d28ffa10a122 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -16,6 +16,7 @@
->  #include <linux/usb/typec.h>
->  #include <linux/usb/typec_altmode.h>
->  #include <linux/usb/role.h>
-> +#include <linux/workqueue.h>
->  
->  #include "tps6598x.h"
->  #include "trace.h"
-> @@ -97,6 +98,8 @@ struct tps6598x {
->  
->  	int wakeup;
->  	u16 pwr_status;
-> +	struct delayed_work	wq_poll;
-> +	irq_handler_t irq_handler;
->  };
->  
->  static enum power_supply_property tps6598x_psy_props[] = {
-> @@ -568,6 +571,18 @@ static irqreturn_t tps6598x_interrupt(int irq, void *data)
->  	return IRQ_NONE;
->  }
->  
-> +/* Time interval for Polling */
-> +#define POLL_INTERVAL	500 /* msecs */
-> +static void tps6598x_poll_work(struct work_struct *work)
-> +{
-> +	struct tps6598x *tps = container_of(to_delayed_work(work),
-> +					    struct tps6598x, wq_poll);
-> +
-> +	tps->irq_handler(0, tps);
-> +	queue_delayed_work(system_power_efficient_wq,
-> +			   &tps->wq_poll, msecs_to_jiffies(POLL_INTERVAL));
-> +}
-> +
->  static int tps6598x_check_mode(struct tps6598x *tps)
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 1ee774c263f08..a62fecf3bb44c 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -6515,6 +6515,7 @@ static enum hrtimer_restart send_discover_timer_handler(struct hrtimer *timer)
+>  struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
 >  {
->  	char mode[5] = { };
-> @@ -746,6 +761,7 @@ static int tps6598x_probe(struct i2c_client *client)
->  			TPS_REG_INT_PLUG_EVENT;
+>  	struct tcpm_port *port;
+> +	struct fwnode_handle *fwnode;
+>  	int err;
+>  
+>  	if (!dev || !tcpc ||
+> @@ -6582,6 +6583,14 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+>  		goto out_destroy_wq;
 >  	}
 >  
-> +	tps->irq_handler = irq_handler;
->  	/* Make sure the controller has application firmware running */
->  	ret = tps6598x_check_mode(tps);
->  	if (ret)
-> @@ -837,10 +853,18 @@ static int tps6598x_probe(struct i2c_client *client)
->  			dev_err(&client->dev, "failed to register partner\n");
->  	}
->  
-> -	ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
-> -					irq_handler,
-> -					IRQF_SHARED | IRQF_ONESHOT,
-> -					dev_name(&client->dev), tps);
-> +	if (client->irq) {
-> +		ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
-> +						irq_handler,
-> +						IRQF_SHARED | IRQF_ONESHOT,
-> +						dev_name(&client->dev), tps);
-> +	} else {
-> +		dev_warn(tps->dev, "Unable to find the interrupt, switching to polling\n");
-> +		INIT_DELAYED_WORK(&tps->wq_poll, tps6598x_poll_work);
-> +		queue_delayed_work(system_power_efficient_wq, &tps->wq_poll,
-> +				   msecs_to_jiffies(POLL_INTERVAL));
+> +	if (!port->role_sw) {
+> +		fwnode = device_get_named_child_node(port->dev, "connector");
+
+You already have that assigned to tcpc->fwnode, no?
+
+At least drivers/usb/typec/tcpm/tcpci.c assignes it there, and I think
+so do the other port controller drivers.
+
+> +		if (fwnode) {
+> +			port->role_sw = fwnode_usb_role_switch_get(fwnode);
+> +			fwnode_handle_put(fwnode);
+> +		}
 > +	}
-> +
->  	if (ret)
->  		goto err_disconnect;
->  
-> @@ -848,7 +872,7 @@ static int tps6598x_probe(struct i2c_client *client)
->  	fwnode_handle_put(fwnode);
->  
->  	tps->wakeup = device_property_read_bool(tps->dev, "wakeup-source");
-> -	if (tps->wakeup) {
-> +	if (tps->wakeup && client->irq) {
->  		device_init_wakeup(&client->dev, true);
->  		enable_irq_wake(client->irq);
->  	}
-> @@ -887,6 +911,9 @@ static int __maybe_unused tps6598x_suspend(struct device *dev)
->  		enable_irq_wake(client->irq);
->  	}
->  
-> +	if (!client->irq)
-> +		cancel_delayed_work_sync(&tps->wq_poll);
-> +
->  	return 0;
->  }
->  
-> @@ -900,6 +927,10 @@ static int __maybe_unused tps6598x_resume(struct device *dev)
->  		enable_irq(client->irq);
->  	}
->  
-> +	if (client->irq)
-> +		queue_delayed_work(system_power_efficient_wq, &tps->wq_poll,
-> +				   msecs_to_jiffies(POLL_INTERVAL));
-> +
->  	return 0;
->  }
->  
-> -- 
-> 2.34.1
+
+If that is the case, then I think this is enough:
+
+        if (!port->role_sw)
+		port->role_sw = fwnode_usb_role_switch_get(tcpc->fwnode);
+
+Or maybe I missed something. If I did then sorry for the noise :-)
+
+thanks,
 
 -- 
 heikki
