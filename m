@@ -2,124 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2056CBBFB
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Mar 2023 12:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0B56CBCB7
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Mar 2023 12:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbjC1KJv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Mar 2023 06:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
+        id S232355AbjC1KmR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Mar 2023 06:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232278AbjC1KJc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Mar 2023 06:09:32 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3EC65B9
-        for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 03:09:08 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so11965279pjz.1
-        for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 03:09:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679998146;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qdiH4uJXKiZibZCOKNAKbnqmd2m39BxVhETzc5/WQ9k=;
-        b=M0fzpt0TkMZYNK5mqRmm7+EGijPad9P8Oa7qaj5Q7xAm2KL/3ArMz0rnM3BOAsA4SJ
-         ApCyo1+kSKfiNY8WcPwI1/szaD0OzZQiIyuD7vrsXEmT0TYyidAdCA8PzQOuyeP9M4/e
-         yJtww08/a8T+qx5AY0svAmDH+NJus0kgUcoZnB8GoYOfkQFh0eAPgse4mOT5yV7/ul5C
-         jiHYUqA/3n2Rd5yO9HL/7+nI6xZhrtswS27roeq76cETFj9pfFN1ML7WPzML50vD9BKp
-         Efo+M07O5xCR+ryfevfD5T94Od0ChwezUPeITrZJHwjIBUEZDrPA1oDYex8oOR/GUGvy
-         6+KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679998146;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qdiH4uJXKiZibZCOKNAKbnqmd2m39BxVhETzc5/WQ9k=;
-        b=11lJyF1OUWNmyyJHXTOEehguhvH88O+brvN6EkKbVGp+Nmp/gw2jI4HtI31qwtu2ek
-         xrEeRjxS1BljG5lYzg3EaYV10OZ1zrB+KqyD9HH5Kc6c0P7lTsPg48pJxnLMSZL93xpm
-         gVLN1IhaQVhUfnOxUReDoXtV6LwS7kgc5FwoEZgaIExPZ7hH12XevIfT3YveDDWKFiND
-         PTZxHCJU6GYOcTgZ7sg1wovNvrTCK4NDAatlffyLlg1jsxPha+BDecLz5iW6Zlv9JCFh
-         KE6LjGnVA/la98SRowDgYUX2EANiHij/b36Cor0WRrHZIvrBBN8uAeMU6DOmvNo5JAC8
-         x6vw==
-X-Gm-Message-State: AAQBX9fsfFoBVEVtskCwxPBIzLlTbAbd5BYfGv7jfhAmt6WjxpcLHw/E
-        RkmsvFlXUiiBzdrIdACgC/Nj
-X-Google-Smtp-Source: AKy350aNqLtCBzV719N/JZW8YHQv0B4xdDr6OfWFAgMMsJtArmxwm5sWe37Z05tdLAtoereKrKsmDQ==
-X-Received: by 2002:a17:902:d503:b0:19e:3922:b7d8 with SMTP id b3-20020a170902d50300b0019e3922b7d8mr16817637plg.12.1679998145907;
-        Tue, 28 Mar 2023 03:09:05 -0700 (PDT)
-Received: from thinkpad ([117.202.191.80])
-        by smtp.gmail.com with ESMTPSA id jh17-20020a170903329100b0019a96a6543esm20755454plb.184.2023.03.28.03.09.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 03:09:05 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 15:38:59 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
-        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 3/5] usb: dwc3: qcom: Fix null ptr access during
- runtime_suspend()
-Message-ID: <20230328100859.GE5695@thinkpad>
-References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
- <20230325165217.31069-4-manivannan.sadhasivam@linaro.org>
- <ZCKyFEc087xoypdo@hovoldconsulting.com>
- <20230328094718.GB5695@thinkpad>
- <ZCK4uZCrbVZ/HfRq@hovoldconsulting.com>
+        with ESMTP id S231820AbjC1KmP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Mar 2023 06:42:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8F57A9F
+        for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 03:42:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B766616C4
+        for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 10:42:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48AD7C433D2;
+        Tue, 28 Mar 2023 10:42:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680000132;
+        bh=lYenctFbmynjU3acu8B3MCDMUrfaEMrtqmakXRTrb5I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xoHJXHOhIS+ZkVOpon2sLHFvnE5wJmumJ7iEMgQAqVcPELD0ha6GzNNYe1BcctGMa
+         CtDrwVFeDr0hV0YiNJP0572ZI/QmD6TB9OqTl5OcHGQ0OgTVdw3PuqLc+UJdTsRA2F
+         yRUgWLlGpYfb7NGiuzgHZKEtf8iLrDlqWcBujK1o=
+Date:   Tue, 28 Mar 2023 12:42:09 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "YoungJun.Park" <her0gyugyu@gmail.com>
+Cc:     linux-usb@vger.kernel.org, youngjun.park@ahnlab.com,
+        her0gyu@naver.com
+Subject: Re: Question of possible concurrent xhci debugfs file
+Message-ID: <ZCLEgXfzbsEb75lN@kroah.com>
+References: <20230328063020.GA1824187@ubuntu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZCK4uZCrbVZ/HfRq@hovoldconsulting.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230328063020.GA1824187@ubuntu>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 11:51:53AM +0200, Johan Hovold wrote:
-> On Tue, Mar 28, 2023 at 03:17:18PM +0530, Manivannan Sadhasivam wrote:
-> > On Tue, Mar 28, 2023 at 11:23:32AM +0200, Johan Hovold wrote:
-> > > On Sat, Mar 25, 2023 at 10:22:15PM +0530, Manivannan Sadhasivam wrote:
+On Mon, Mar 27, 2023 at 11:30:20PM -0700, YoungJun.Park wrote:
+> I got a panic dump which happend on kernel(
+> I check the both of CentOS and mainline kernel
+> And I assume it could be happend on mainline kernel.
+> (like I said assume)
+
+Note, CentOS uses a very old and obsolete kernel, nothing we can do
+about that mess, please get support for that from the company that
+provided it.
+
+> I think xhci-debugfs file creation check the creation of
+> NULL parent dentry. Is it right? (drivers/usb/host/xhci-debugfs.c)
+
+Why is that needed?
+
+> The contents below is the what I analyze.
 > 
-> > > >  static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
-> > > >  {
-> > > > +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-> > > >  	u32 val;
-> > > >  	int i, ret;
-> > > >  
-> > > > -	if (qcom->is_suspended)
-> > > > +	if (qcom->is_suspended || !dwc)
-> > > >  		return 0;
-> > > 
-> > > I think we should try to keep the layering violations confined to the
-> > > helper functions. So how about amending dwc3_qcom_is_host() and check
-> > > for NULL before dereferencing the xhci pointer?
-> > > 
-> > > If the dwc3 driver hasn't probed yet, we're clearly not in host mode
-> > > either...
-> > 
-> > Well, that's what I initially did but then I reverted to this approach as
-> > returning true/false from dwc3_qcom_is_host() based on the pointer availability
-> > doesn't sound right.
-> > 
-> > For example, if we return true then it implies that the driver is in host mode
-> > which is logically wrong (before dwc3 probe) even though there is no impact.
+> 1. A lot of usb error
+> ...
+> [1994159.974407] usb 1-2: device descriptor read/64, error -71
+> [1994160.187902] usb 1-2: new low-speed USB device number 36 using xhci_hcd
+> [1994160.302634] usb 1-2: device descriptor read/64, error -71
+> [1994160.562027] usb 1-2: device descriptor read/64, error -71
+> [1994160.663789] usb usb1-port2: unable to enumerate USB device
+> [1994162.256029] usb 1-2: new low-speed USB device number 37 using xhci_hcd
+> [1994162.370764] usb 1-2: device descriptor read/64, error -71
+> [1994162.585258] usb 1-2: device descriptor read/64, error -71
+> [1994162.797751] usb 1-2: new low-speed USB device number 38 using xhci_hcd
+> [1994162.912484] usb 1-2: device descriptor read/64, error -71
+> [1994163.141944] usb 1-2: device descriptor read/64, error -71
+> [1994163.243712] usb usb1-port2: attempt power cycle.
+> ...
+
+That has nothing to do with debugfs.
+
+> 2. After that panic happend and I got a dump.
+> The cause of panic reading "/sys/kernel/debug/trbs" which is abnormal.
+> (which have bad xhci_ring private data)
+> the file must be on the "/sys/kernel/debug/usb/~~~".
 > 
-> No, you should return false of course as we are *not* in host mode as I
-> mentioned above.
+> sh> bt
+> PID: 91416  TASK: ffff8d68fcc54200  CPU: 1   COMMAND: "fbmons"
+>  #0 [ffff8d679a6cbad0] machine_kexec at ffffffff9e2662c4
+>  #1 [ffff8d679a6cbb30] __crash_kexec at ffffffff9e322a32
+>  #2 [ffff8d679a6cbc00] crash_kexec at ffffffff9e322b20
+>  #3 [ffff8d679a6cbc18] oops_end at ffffffff9e98d798
+>  #4 [ffff8d679a6cbc40] no_context at ffffffff9e275d14
+>  #5 [ffff8d679a6cbc90] __bad_area_nosemaphore at ffffffff9e275fe2
+>  #6 [ffff8d679a6cbce0] bad_area_nosemaphore at ffffffff9e276104
+>  #7 [ffff8d679a6cbcf0] __do_page_fault at ffffffff9e990750
+>  #8 [ffff8d679a6cbd60] do_page_fault at ffffffff9e990975
+>  #9 [ffff8d679a6cbd90] page_fault at ffffffff9e98c778
+>     [exception RIP: xhci_ring_trb_show+29]
+>     RIP: ffffffff9e76005d  RSP: ffff8d679a6cbe40  RFLAGS: 00010246
+>     RAX: ffff8d497b0fe018  RBX: 0000000000000000  RCX: 0000001309207f9b
+>     RDX: fffffffffffffff4  RSI: 0000000000000001  RDI: ffff8d6939b8fd40
+>     RBP: ffff8d679a6cbe60   R8: ffff8d49ffa5f1a0   R9: ffff8d3b3fc07300
+>     R10: ffff8d3b3fc07300  R11: ffffffff9e3de9fd  R12: 0000000000000000
+>     R13: 0000000000000000  R14: ffff8d6939b8fd40  R15: ffff8d6939b8fd40
+>     ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+> #10 [ffff8d679a6cbe68] seq_read at ffffffff9e476d10
+> #11 [ffff8d679a6cbed8] vfs_read at ffffffff9e44e3ff
+> #12 [ffff8d679a6cbf08] sys_read at ffffffff9e44f27f
+> #13 [ffff8d679a6cbf50] system_call_fastpath at ffffffff9e995f92
+>     RIP: 00007f5f9749f6fd  RSP: 00007f5f84c73700  RFLAGS: 00000293
+>     RAX: 0000000000000000  RBX: 00007f5f7066a390  RCX: ffffffffffffffff
+>     RDX: 0000000000000400  RSI: 00007f5f706d2270  RDI: 0000000000000016
+>     RBP: 00007f5f706d2270   R8: 00007f5f953e73a0   R9: 00007f5f953e7388
+>     R10: 0000000000000040  R11: 0000000000000293  R12: 0000000000000400
+>     R13: 00007f5f84c7354c  R14: 0000000022100004  R15: 00007f5f866c5368
+>     ORIG_RAX: 0000000000000000  CS: 0033  SS: 002b
+
+So the xhci driver is crashing here?
+
+> 3. I found a another abnormal xhci debugfs file ep_context in dump. 
+> Check xhci_slot_priv is alive and find the root is NULL.
 > 
+> crash> files -d 0xffff8d68fe8f0000
+>      DENTRY           INODE           SUPERBLK     TYPE PATH
+> ffff8d68fe8f0000 ffff8d489e979e10 ffff8d3b19169800 REG  /sys/kernel/debug/ep-context
+> 
+> crash > struct xchi_slot_priv 0xffff8d4812492c0
+> struct xhci_slot_priv {
+> ...
+>   root = 0x0, 
+> ...
+>   dev = 0xffff8d497b0fe000
+> }
+> 
+> 4. Looking into the mainline kernel code, I finally concluded that
+> /sys/fs/debug/"interface file" could be made.
+> 
+> drivers/usb/host/xhci-debugfs.c
+> xhci_debugfs_create_slot function
+> ...
+> priv->root = debugfs_create_dir(priv->name, xhci->debugfs_slots); // root can be NULL
 
-Yes, but I interpreted it as "we are in device mode" in that case. But looking
-at it again, I think it just conveys that the controller is not in host mode
-only.
+How is root NULL here?  What caused that to happen?  Shouldn't you fix
+that issue here, that's not a general debugfs problem.
 
-- Mani
+thanks,
 
-> Johan
-
--- 
-மணிவண்ணன் சதாசிவம்
+greg k-h
