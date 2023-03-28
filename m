@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 977E66CB9EA
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Mar 2023 10:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 640526CBA67
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Mar 2023 11:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232392AbjC1Iy6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Mar 2023 04:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
+        id S232060AbjC1JXa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Mar 2023 05:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbjC1Iyq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Mar 2023 04:54:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B253719A1;
-        Tue, 28 Mar 2023 01:54:45 -0700 (PDT)
+        with ESMTP id S230425AbjC1JX3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Mar 2023 05:23:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DA6423A;
+        Tue, 28 Mar 2023 02:23:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6230DB81BBF;
-        Tue, 28 Mar 2023 08:54:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD22FC433EF;
-        Tue, 28 Mar 2023 08:54:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A39AB81BD0;
+        Tue, 28 Mar 2023 09:23:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D266AC433EF;
+        Tue, 28 Mar 2023 09:23:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679993683;
-        bh=FlhEhP6prp2j0gTaGdnVSIx+i5NWL7KCri11ZYnsy3I=;
+        s=k20201202; t=1679995401;
+        bh=V73OwOijyghiIZHH02OXNarVU22urwxS1fjmBBDAzFE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SJRGXCjhZkx/iOapcmyPGdXscZHKSIdLVHHLMURh1Rf6qwEnc3Xlad0Qvwr7KT+qF
-         1MENXlQqeB6wAxszDpo0TlZmxkBw9FBjElNI3lmZEwodbevs5J0gzufBZbX0mRJdhf
-         vC8+Ux1CbqncIrFCgHueOAiBJ+SC1rsOFyCvtvF8jIFY1Og2EUQ7iCdVEy7jrzzCGJ
-         YQsXyp4K2PTCsfootJyrObN8PSegqIaDFVCs650s/Kz/BEbhs4gmnYGP3HVngdZrES
-         FvDmZClERmEwCYz3P6muXFqsF2d3ARRaq5wJPoyotbW36VpAoQYf/hmQcGjpBck2D5
-         QfcbOfLgQZHBw==
+        b=SUDWsY3a4lZHcPsvDQsE/TxGVASbGPvYzkKAsr/+sqDuFyRmeOy9oN5x62QhrmVup
+         j3sh23QeLFmkHZvtqRyTTk+b5y944fMtpouwaf9ryPMMotEksqj3idhl0G3HkyQWgf
+         oJ9xi/0mI8+2Sc5JlE96UHcVTgiE/R6TMxWlunz0WAIzbBTZcE9wLNCpuAvC8/fNme
+         Dt04rlnezRXM2vQRhWPnn3GdIC5lKoqXgGBHXrq7uFfOwhk7jPTUfKSSZgxitwOras
+         R2c72tfrKbU03/cVvQp0bzeeaDDVgURY9jG+KXfDXY0JF+b/ZxQSrGqKxS0s95f+vQ
+         jkb2E8GpWCF1w==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1ph56U-0003mE-05; Tue, 28 Mar 2023 10:54:54 +0200
-Date:   Tue, 28 Mar 2023 10:54:53 +0200
+        id 1ph5YC-0004C0-V1; Tue, 28 Mar 2023 11:23:33 +0200
+Date:   Tue, 28 Mar 2023 11:23:32 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
@@ -42,17 +42,18 @@ Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
         konrad.dybcio@linaro.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/5] arm64: dts: qcom: sc8280xp: Add missing dwc3 quirks
-Message-ID: <ZCKrXZn7Eu/jvdpG@hovoldconsulting.com>
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 3/5] usb: dwc3: qcom: Fix null ptr access during
+ runtime_suspend()
+Message-ID: <ZCKyFEc087xoypdo@hovoldconsulting.com>
 References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
- <20230325165217.31069-2-manivannan.sadhasivam@linaro.org>
+ <20230325165217.31069-4-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230325165217.31069-2-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20230325165217.31069-4-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,59 +61,63 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 10:22:13PM +0530, Manivannan Sadhasivam wrote:
-> Add missing quirks for the USB DWC3 IP.
+On Sat, Mar 25, 2023 at 10:22:15PM +0530, Manivannan Sadhasivam wrote:
+> When runtime PM is enabled during probe, the PM core suspends this driver
+> before probing the dwc3 driver. Due to this, the dwc3_qcom_is_host()
+> function dereferences the driver data of the dwc platform device which
+> will only be set if the dwc driver has been probed. This causes null
+> pointer dereference during boot time.
 
-This is not an acceptable commit message generally and certainly not for
-something that you have tagged for stable.
+So this does not really appear to be an issue before your later patch
+which enables runtime PM at probe.
 
-At a minimum, you need to describe why these are needed and what the
-impact is.
+But the layering violations we have in this driver are indeed fragile
+and should be fixed properly at some point.
 
-Also, why are you sending as part of a series purporting to enable
-runtime PM when it appears to be all about optimising specific gadget
-applications?
+> So let's add a check for dwc drvdata in the callers of dwc3_qcom_is_host()
+> such as dwc3_qcom_suspend() and dwc3_qcom_resume() functions. There is no
+> need to add the same check in another caller dwc3_qcom_resume_irq() as the
+> wakeup IRQs will only be enabled at the end of dwc3_qcom_suspend().
+> 
+> Note that the check should not be added to dwc3_qcom_is_host() function
+> itself, as there is no provision to pass the context to callers.
+> 
+> Fixes: a872ab303d5d ("usb: dwc3: qcom: fix use-after-free on runtime-PM wakeup")
 
-Did you confirm that the below makes any sense or has this just been
-copied verbatim from the vendor devicetree (it looks like that)?
+This is not the right fixes tag in any case as this layering violation
+was first added by:
 
-The fact that almost none of the qcom SoCs sets these also indicates
-that something is not right here.
+6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
 
-> Cc: stable@vger.kernel.org # 5.20
-> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
+which started accessing the dwc3 platform data and xhci host data from
+the glue driver (and broke gadget mode).
+
 > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+>  drivers/usb/dwc3/dwc3-qcom.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 0d02599d8867..266a94c712aa 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -3040,6 +3040,13 @@ usb_0_dwc3: usb@a600000 {
->  				iommus = <&apps_smmu 0x820 0x0>;
->  				phys = <&usb_0_hsphy>, <&usb_0_qmpphy QMP_USB43DP_USB3_PHY>;
->  				phy-names = "usb2-phy", "usb3-phy";
-> +				snps,hird-threshold = /bits/ 8 <0x0>;
-> +				snps,usb2-gadget-lpm-disable;
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 959fc925ca7c..bbf67f705d0d 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -411,10 +411,11 @@ static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
+>  
+>  static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
+>  {
+> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+>  	u32 val;
+>  	int i, ret;
+>  
+> -	if (qcom->is_suspended)
+> +	if (qcom->is_suspended || !dwc)
+>  		return 0;
 
-Here you are disabling LPM for gadget mode, which makes most of the
-other properties entirely pointless.
+I think we should try to keep the layering violations confined to the
+helper functions. So how about amending dwc3_qcom_is_host() and check
+for NULL before dereferencing the xhci pointer?
 
-> +				snps,is-utmi-l1-suspend;
-> +				snps,dis-u1-entry-quirk;
-> +				snps,dis-u2-entry-quirk;
-
-These appear to be used to optimise certain gadget application and
-likely not something that should be set in a dtsi.
-
-> +				snps,has-lpm-erratum;
-> +				tx-fifo-resize;
-
-Same here.
-
->  				port {
->  					usb_0_role_switch: endpoint {
+If the dwc3 driver hasn't probed yet, we're clearly not in host mode
+either...
 
 Johan
