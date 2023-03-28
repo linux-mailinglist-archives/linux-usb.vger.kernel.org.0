@@ -2,215 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1C46CBCBD
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Mar 2023 12:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B34CE6CBEE1
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Mar 2023 14:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbjC1KnO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Mar 2023 06:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
+        id S231424AbjC1MSO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Mar 2023 08:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjC1KnN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Mar 2023 06:43:13 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7078D1BC0
-        for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 03:43:11 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id t10so47584330edd.12
-        for <linux-usb@vger.kernel.org>; Tue, 28 Mar 2023 03:43:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680000190;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zgOiq+AtOeciCdmH4CfKTQkHujujZJqW/oCAjnkxQJQ=;
-        b=z2fbJCUs40UgcqDVbQGQh4kmhI6WeRhHxPmP8pKs0i8yh52/eine8xe/tM/6QfvHbP
-         QJ84tlX3SNKaesXQdNLzBBkJHTcBgYG7l2PiH0gk90E2Chf5Q8oxKOxEQZzjceExb8vV
-         IFVjPu6VDsTPVaDViZGIefeYhR1c4k5DYYYwxvCTyMrdGYlVYsbct9l4o4yRFTLvE6pt
-         vlLybW/hJd+JVIsi5Xs53rx0D2PkCx0duxyHUGoPHLLWQol/hyhwBr1dgVwtULDJqQw7
-         732Bg4O/RimTRXeC9m48hFh3Q2utdgpE4jfJ1dLpIrMKbGJz/F2vu4hnYh454T3cAXpQ
-         ckeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680000190;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zgOiq+AtOeciCdmH4CfKTQkHujujZJqW/oCAjnkxQJQ=;
-        b=qEFgpyjpHegfc5nQv0J0Dx5IRdntBH58+o3psbFnr8Hm6C/6dCThka+HkEx6kMebDx
-         8uF6alaC4ziIDXmzz7aWL/H5uNv1jRoey4od1DoQ4ZHAIyORcePGHumkrXCH7QQBTsDO
-         UbzCcVl75GEqI8vRvILTG+8n1Gz2SzER0FGZMhqFb54V7ZztOmAoUyeGgYqaoESk0UYX
-         gtJC9YJJKjNJ9L7pcD0YyV3O7g077Q1jpz7idHehQZSgwE5r1rRogOgbj81lImLB19RD
-         By1VZn6CXrakgt7WGQoTvrRoLFNJhFHPG1vDuXtN8ZLNRNozMuWYd8cV1v710ClaL15v
-         VulA==
-X-Gm-Message-State: AAQBX9dnCwrwqFWE3PTB2miy4WO0JNeFjANHjD/RrFLW6cXdVewfPuAu
-        x4gACiHYaEzS2wJ5yW0uesuunQ==
-X-Google-Smtp-Source: AKy350Zfnrc8ZewffEwh0R/rtujIhidB2cKU4fpAUyOT7kpfXTOeG5IhvfNxPAEsI9UYX+OUDcVZNQ==
-X-Received: by 2002:a17:906:3f8e:b0:939:ad91:adf5 with SMTP id b14-20020a1709063f8e00b00939ad91adf5mr17014758ejj.25.1680000189965;
-        Tue, 28 Mar 2023 03:43:09 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
-        by smtp.gmail.com with ESMTPSA id lj24-20020a170906f9d800b00932ba722482sm14366953ejb.149.2023.03.28.03.43.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 03:43:09 -0700 (PDT)
-Message-ID: <aec9e01b-c358-0982-3090-ef980d4a5623@linaro.org>
-Date:   Tue, 28 Mar 2023 12:43:08 +0200
+        with ESMTP id S230413AbjC1MSN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Mar 2023 08:18:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9709760;
+        Tue, 28 Mar 2023 05:18:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 351F161724;
+        Tue, 28 Mar 2023 12:18:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 986D5C433D2;
+        Tue, 28 Mar 2023 12:18:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680005884;
+        bh=JFb4CJYh/zHMZB7uquVZ8w/JgqwAaE+MeIk8cINQV2o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D/DN9DlCvX5QzsP4e4iSCRS5rwNZeLmgd+TZW63OaNPnFYghVNzeRUwgdz6XZl2sE
+         PG0dE/YPddpac4qhU9Q3os9qO/SQ7EAMKfLCDFRsTWfdouLQVXRMyEe2Kx4TfG/OYq
+         1qACH/wXiLugETcEOcaeMMVWR+xQ3CgRbeJf0mYww/ib2b4tNKsqJ+zHm/JvNKdXyV
+         VT5ypklw0eT1e1DGXvpZ8bH9P06o+89jnpkMkWVofbFSO+zI3q6KRgwbZlS1SCIgRo
+         hU5cuPeEhY/b4D4LcvJWLNRxotH8uXqDHjMTeY8mFoyuyWjy9o10n5ljtSgc5dXVm/
+         GpPh7xqmngLtA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ph8HI-0006bl-Tu; Tue, 28 Mar 2023 14:18:16 +0200
+Date:   Tue, 28 Mar 2023 14:18:16 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
+        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 5/5] usb: dwc3: qcom: Allow runtime PM
+Message-ID: <ZCLbCJi80AKyVgnq@hovoldconsulting.com>
+References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
+ <20230325165217.31069-6-manivannan.sadhasivam@linaro.org>
+ <ZCK3fGkgowvAd6Dw@hovoldconsulting.com>
+ <20230328100501.GD5695@thinkpad>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] dt-bindings: usb: typec-tcpci: convert to DT schema
- format
-Content-Language: en-US
-To:     Jun Li <jun.li@nxp.com>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Peng Fan <peng.fan@nxp.com>
-References: <20230323065824.3857573-1-peng.fan@oss.nxp.com>
- <5675373c-af4f-906f-9906-7853a85f8ed6@linaro.org>
- <PA4PR04MB96405A3B0B5158561D9E068F89889@PA4PR04MB9640.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <PA4PR04MB96405A3B0B5158561D9E068F89889@PA4PR04MB9640.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230328100501.GD5695@thinkpad>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 28/03/2023 11:24, Jun Li wrote:
-> Hi Krzysztof,
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Monday, March 27, 2023 3:41 PM
->> To: Peng Fan (OSS) <peng.fan@oss.nxp.com>; robh+dt@kernel.org;
->> krzysztof.kozlowski+dt@linaro.org; gregkh@linuxfoundation.org; Jun Li
->> <jun.li@nxp.com>
->> Cc: linux-usb@vger.kernel.org; devicetree@vger.kernel.org;
->> linux-kernel@vger.kernel.org; Peng Fan <peng.fan@nxp.com>
->> Subject: Re: [PATCH] dt-bindings: usb: typec-tcpci: convert to DT schema
->> format
->>
->> On 23/03/2023 07:58, Peng Fan (OSS) wrote:
->>> From: Peng Fan <peng.fan@nxp.com>
->>>
->>> Convert the binding to DT schema format. The default speed is HS, so
->>> add a dummy port@0 in the example.
->>>
->>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
->>> ---
->>>
->>> V1:
->>>  The default speed is HS, so port@0 is not added for some device tree,
->>> however the usb-c-connector requires port@0. Not sure we should drop
->>> the required port@0 from usb-c-connector schema or add a dummy port@0
->>> for tcpci as what this patch does.
->>
->> imx8mq-librem5-devkit has full port@0 so just use similar approach.
->>
->>>
->>>  .../devicetree/bindings/usb/typec-tcpci.txt   | 49 ------------
->>>  .../devicetree/bindings/usb/typec-tcpci.yaml  | 80
->>> +++++++++++++++++++
->>>  2 files changed, 80 insertions(+), 49 deletions(-)  delete mode
->>> 100644 Documentation/devicetree/bindings/usb/typec-tcpci.txt
->>>  create mode 100644
->>> Documentation/devicetree/bindings/usb/typec-tcpci.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/typec-tcpci.txt
->>> b/Documentation/devicetree/bindings/usb/typec-tcpci.txt
->>> deleted file mode 100644
->>> index 2082522b1c32..000000000000
->>> --- a/Documentation/devicetree/bindings/usb/typec-tcpci.txt
->>> +++ /dev/null
->>> @@ -1,49 +0,0 @@
->>> -TCPCI(Typec port cotroller interface) binding
->>> ----------------------------------------------
->>> -
->>> -Required properties:
->>> -- compatible:       should be set one of following:
->>> -		    - "nxp,ptn5110" for NXP USB PD TCPC PHY IC ptn5110.
->>> -
->>> -- reg:              the i2c slave address of typec port controller device.
->>> -- interrupt-parent: the phandle to the interrupt controller which provides
->>> -                    the interrupt.
->>> -- interrupts:       interrupt specification for tcpci alert.
->>> -
->>> -Required sub-node:
->>> -- connector: The "usb-c-connector" attached to the tcpci chip, the
->>> bindings
->>> -  of connector node are specified in
->>> -  Documentation/devicetree/bindings/connector/usb-connector.yaml
->>> -
->>> -Example:
->>> -
->>> -ptn5110@50 {
->>> -	compatible = "nxp,ptn5110";
->>> -	reg = <0x50>;
->>> -	interrupt-parent = <&gpio3>;
->>> -	interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
->>> -
->>> -	usb_con: connector {
->>> -		compatible = "usb-c-connector";
->>> -		label = "USB-C";
->>> -		data-role = "dual";
->>> -		power-role = "dual";
->>> -		try-power-role = "sink";
->>> -		source-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_USB_COMM)>;
->>> -		sink-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_USB_COMM)
->>> -			     PDO_VAR(5000, 12000, 2000)>;
->>> -		op-sink-microwatt = <10000000>;
->>> -
->>> -		ports {
->>> -			#address-cells = <1>;
->>> -			#size-cells = <0>;
->>> -
->>> -			port@1 {
->>> -				reg = <1>;
->>> -				usb_con_ss: endpoint {
->>> -					remote-endpoint = <&usb3_data_ss>;
->>> -				};
->>> -			};
->>> -		};
->>> -	};
->>> -};
->>> diff --git a/Documentation/devicetree/bindings/usb/typec-tcpci.yaml
->>> b/Documentation/devicetree/bindings/usb/typec-tcpci.yaml
->>> new file mode 100644
->>> index 000000000000..067d3b032e3d
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/usb/typec-tcpci.yaml
->>
->> Is this a binding for PTN5110 or for generic tcpci? Looks like the first,
->> thus name should be rather device specific, so nxp,ptn5110.
->> Specially that there are other tcpci chips in separate bindings.
+On Tue, Mar 28, 2023 at 03:35:01PM +0530, Manivannan Sadhasivam wrote:
+> On Tue, Mar 28, 2023 at 11:46:36AM +0200, Johan Hovold wrote:
+> > On Sat, Mar 25, 2023 at 10:22:17PM +0530, Manivannan Sadhasivam wrote:
+> > > dwc3-qcom driver is capable of doing runtime PM on its own, but currently
+> > > it requires userspace intervention to enable it. But there is no harm in
+> > > letting the driver to enable runtime PM on its own. So let's get rid of the
+> > > "pm_runtime_forbid()" and make sure that the dependency is maintained with
+> > > child devices using "pm_suspend_ignore_children(dev, false)".
+> > 
+> > Well, the potential harm is that these paths have hardly been tested so
+> > enabling it by default is a risk (e.g. as you noticed when trying to
+> > enable this by default). And especially if we don't address the layering
+> > violations first.
+> > 
 > 
-> This binding doc is target for generic tcpci, ptn5110 is the one
+> I certainly tested this on a couple of boards with host and gadget mode and
+> noticed no issue (except one issue noticed by Steev on a docking station with
+> display but that should be related to orientation switch).
+> 
+> Even if we allow runtime PM on this driver, still userspace needs to enable it
+> for dwc3 and xhci drivers. So this essentially reduces one step in that process
+> if someone tries to enable runtime PM for usb intentionally. So I don't forsee a
+> potential harm here.
 
+Well this whole driver is a mess so I don't have any problem imagining
+ways in which things can break. ;)
 
-Does this mean that TCPCI requires every device to have exactly one
-interrupt (no 0, no 2, exactly 1), no supplies and no additional GPIOs
-(like reset GPIO)?
+> > > Also during remove(), the device needs to be waken up first if it was
+> > > runtime suspended. Finally, pm_runtime_allow() can be removed.
+> > > 
+> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > ---
+> > >  drivers/usb/dwc3/dwc3-qcom.c | 5 +++--
+> > >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> > > index f1059dfcb0e8..5f26bb66274f 100644
+> > > --- a/drivers/usb/dwc3/dwc3-qcom.c
+> > > +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> > > @@ -920,7 +920,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+> > >  	qcom->is_suspended = false;
+> > >  	pm_runtime_set_active(dev);
+> > >  	pm_runtime_enable(dev);
+> > > -	pm_runtime_forbid(dev);
+> > > +	pm_suspend_ignore_children(dev, false);
+> > 
+> > There's no need to explicitly disable ignore-children as that is the
+> > default.
+> > 
+> 
+> Other dwc drivers were doing it, so I thought someone (maintainer) wanted to
+> explicitly disable ignore_children. But if that's not the case, I can remove it.
 
-Because this is what this binding is saying.
+Yeah, please remove it. I doubt these runtime pm implementations have
+gotten much review.
 
-> fully compliance with tcpci spec, if change it to be only specific
-> to nxp,ptn5110, my understanding is then other chips need duplicate
-> a binding doc even common tcpci binding and driver is enough for them.
+Note how several dwc3 glue drivers just do an unconditional get in
+probe(), which means that these paths are probably never exercised at
+all and effectively amounts to that pm_runtime_forbid() you are removing
+here.
 
-Depends. Usually we have common schema used by actual device schemas. If
-TCPCI-compliant device cannot have additional properties, then this one
-here looks fine.
+Probably there to tick off "runtime pm" on some internal project
+manager's list of "features".
 
-One more thing - typec-tcpci is a bit redundant "tc" means typec, so
-basicaly you said "typec-typec-pci". This shouold be then just typec-pci
-or tcpci.
+> > >  	return 0;
+> > >  
+> > > @@ -948,6 +948,8 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
+> > >  	struct device *dev = &pdev->dev;
+> > >  	int i;
+> > >  
+> > > +	pm_runtime_get_sync(dev);
+> > 
+> > This call needs to be balanced. But this is a fix for a bug in the
+> > current implementation that should go in a separate patch.
+> > 
+> 
+> Ok. For balancing I could add pm_runtime_put_noidle() before pm_runtime_disable.
 
-Best regards,
-Krzysztof
+You should do it after disabling runtime pm.
 
+> > > +
+> > >  	device_remove_software_node(&qcom->dwc3->dev);
+> > >  	of_platform_depopulate(dev);
+> > >  
+> > > @@ -960,7 +962,6 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
+> > >  	dwc3_qcom_interconnect_exit(qcom);
+> > >  	reset_control_assert(qcom->resets);
+> > >  
+> > > -	pm_runtime_allow(dev);
+> > >  	pm_runtime_disable(dev);
+> > >  
+> > >  	return 0;
+
+Johan
