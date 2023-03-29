@@ -2,87 +2,223 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B4B6CD93A
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Mar 2023 14:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A346CDAA8
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Mar 2023 15:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbjC2MPn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Mar 2023 08:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58088 "EHLO
+        id S230315AbjC2NYE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Mar 2023 09:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbjC2MPm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Mar 2023 08:15:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7321BC5;
-        Wed, 29 Mar 2023 05:15:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83517B822EF;
-        Wed, 29 Mar 2023 12:15:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AF4DC433EF;
-        Wed, 29 Mar 2023 12:15:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680092139;
-        bh=ooI6Bfj0R2M+5cI2Mb1ScsbOJK9bXNmKBtl2mMblFqU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IltNfQiEhDRH4AoF+ZsHwKkNN89JrD1BldNiWv/KDIs1wfp6E+sR04uHWgeFIsTCE
-         FeX66IdBZI6dMTgI8j0W+gFgUaMR8eFHaWUgqx4Oo9tX5StdUSpgp/KOG39kYefDfK
-         bd8KB9QuV2SFv5HsNR3C6hsLOxL2gKL3BXLU1yLsMCrSbB/I3XpnBSbjgDaqnurGbY
-         RlmI22iXA35WrKfWVDtCu0svv3vpfkTkEOaTMgVwWB+uUdTe9SbrHSoo3mzZfceTyh
-         jgnC3onF+T92VPudm0MNKFkFlZU/+CrDrdmyWwLN8yE9iQXvlBv/KapVNhXhacmR1X
-         E7VfZqsxnVRow==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1phUiY-0006ZQ-Jh; Wed, 29 Mar 2023 14:15:54 +0200
-Date:   Wed, 29 Mar 2023 14:15:54 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, Thinh.Nguyen@synopsys.com,
+        with ESMTP id S230320AbjC2NXz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Mar 2023 09:23:55 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DAD65252
+        for <linux-usb@vger.kernel.org>; Wed, 29 Mar 2023 06:23:51 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id kq3so14860707plb.13
+        for <linux-usb@vger.kernel.org>; Wed, 29 Mar 2023 06:23:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680096231;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=FCUGbgE2LvNcR7hLPqcrIx6jkWOTrrbsJMaWnGrYcZ4=;
+        b=KOcZAsDTxZl7koKyj6wYIlCsU6ulFQUfwnmbNVoN9FKVwVCSKoe3HauI0NUqCmMrIL
+         NFiVp/FgPcd3DpbvHxDD6Ka9Rvw+t4iQGO/foZVud5a9L1mBMOYDCO6fV832Rp6aR1Po
+         2W0mIUYKldNX0sdCy7nuawQ5Ke/Lt0DcFnCh9+wZD2CCM7ZpAc4WKkZB93ZqcudJLK9Z
+         YaAoEjRhcjcA/uUpXnTfJaqpHANKcQoZUbrWpfO1MV7C16ZBktngQNLB3hqSiYM0MYOI
+         lRiQB3uTaYWtMcX25ZgK2+fD7n0GR6TAtchS6oZFtVD75ICQ/aFME3UuBwP3lENXxJXU
+         3k+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680096231;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FCUGbgE2LvNcR7hLPqcrIx6jkWOTrrbsJMaWnGrYcZ4=;
+        b=OhgqlzofgKL9Cv2+bYNnJ+8Zm09az/hh3kq3Ii6qWRf/s1+81KLbhLGRdaM1t4R5wo
+         iDldvq4s+/YLuvhhlxoDHaudaFqXOVIecqAmBn8IgdW7bTHvUMcmkOniaHgcJAa26vsl
+         Mv4RZzBSPAQpaWkTtt+VWlPEWtYfJaSN12SLZ+k8yiGAg82D29sMcliK6eNTupZ88Wwc
+         VHiji1ByjDkhyWn+Kj4skIiic9yTKgwN2QBYhfAb4N11eqwS++u+JKnNmBGifPvfd7rl
+         Jh/WA53zkn7O54hu+FJhspDBK6XQAdNXuWb4RZTtJZSI8h2I7q+5QUJ3g+zEeaT79bOw
+         Rm9Q==
+X-Gm-Message-State: AO0yUKW3p/9TCAaBmr3rxM+rJiFi/1+JuQwo+JBpMq3UOHl78E4bhvHj
+        Dk9SHMA8odJ7VlswkuJgP4uS
+X-Google-Smtp-Source: AK7set9i8PpqmejhrZD8QpXUtYVJK4X7NibCw11JissA18lCRfqRt0POdmynhT5zRtEgfPgNAtN61g==
+X-Received: by 2002:a05:6a20:b288:b0:dd:9848:a1a8 with SMTP id ei8-20020a056a20b28800b000dd9848a1a8mr16627275pzb.16.1680096230581;
+        Wed, 29 Mar 2023 06:23:50 -0700 (PDT)
+Received: from thinkpad ([117.216.120.213])
+        by smtp.gmail.com with ESMTPSA id g7-20020aa78187000000b0062d8107b3c8sm6140226pfi.42.2023.03.29.06.23.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 06:23:50 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 18:53:43 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
         gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        stable@vger.kernel.org
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, stable@vger.kernel.org
 Subject: Re: [PATCH 1/5] arm64: dts: qcom: sc8280xp: Add missing dwc3 quirks
-Message-ID: <ZCQr+hGr/9RQUBK1@hovoldconsulting.com>
+Message-ID: <20230329132343.GD5575@thinkpad>
 References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
  <20230325165217.31069-2-manivannan.sadhasivam@linaro.org>
  <ZCKrXZn7Eu/jvdpG@hovoldconsulting.com>
  <20230328093853.GA5695@thinkpad>
  <20230329052600.GA5575@thinkpad>
  <ZCP4MHe+9M24S4nJ@hovoldconsulting.com>
- <a35bd0e2-b54e-ffa7-e54b-468a3cf77703@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <a35bd0e2-b54e-ffa7-e54b-468a3cf77703@linaro.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZCP4MHe+9M24S4nJ@hovoldconsulting.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 01:24:27PM +0200, Konrad Dybcio wrote:
-> On 29.03.2023 10:34, Johan Hovold wrote:
+On Wed, Mar 29, 2023 at 10:34:56AM +0200, Johan Hovold wrote:
+> On Wed, Mar 29, 2023 at 10:56:00AM +0530, Manivannan Sadhasivam wrote:
+> > On Tue, Mar 28, 2023 at 03:09:03PM +0530, Manivannan Sadhasivam wrote:
+> > > On Tue, Mar 28, 2023 at 10:54:53AM +0200, Johan Hovold wrote:
+> > > > On Sat, Mar 25, 2023 at 10:22:13PM +0530, Manivannan Sadhasivam wrote:
+> > > > > Add missing quirks for the USB DWC3 IP.
+> > > > 
+> > > > This is not an acceptable commit message generally and certainly not for
+> > > > something that you have tagged for stable.
+> > > > 
+> > > > At a minimum, you need to describe why these are needed and what the
+> > > > impact is.
+> > > > 
+> > > 
+> > > I can certainly improve the commit message. But usually the quirks are copied
+> > > from the downstream devicetree where qualcomm engineers would've added them
+> > > based on the platform requirements.
+> > > 
+> > > > Also, why are you sending as part of a series purporting to enable
+> > > > runtime PM when it appears to be all about optimising specific gadget
+> > > > applications?
+> > > > 
+> > > 
+> > > It's not related to this series I agree but just wanted to group it with a
+> > > series touching usb so that it won't get lost.
+> > > 
+> > > I could respin it separately though in v2.
+> 
+> That's also generally best for USB patches as Greg expects series to be
+> merged through a single tree.
+> 
 
-> > Perhaps keeping all of these in in the dtsi is correct, but that's going
-> > to need some more motivation than simply that some vendor does so (as
-> > they often do all sorts of things they should not).
+Ok, good to know.
 
-> I'm looking at the DWC3 code and admittedly I don't understand much,
-> but is there any harm to keeping them? What if somebody decides to
-> plug in a laptop as a gadget device?
+> > > > Did you confirm that the below makes any sense or has this just been
+> > > > copied verbatim from the vendor devicetree (it looks like that)?
+> > > > 
+> > > 
+> > > As you've mentioned, most of the quirks are for gadget mode which is not
+> > > supported by the upstream supported boards. So I haven't really tested them but
+> > > for I assumed that Qcom engineers did.
+> > > 
+> > > > The fact that almost none of the qcom SoCs sets these also indicates
+> > > > that something is not right here.
+> > > > 
+> > > > > Cc: stable@vger.kernel.org # 5.20
+> > > > > Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
+> > > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > > > ---
+> > > > >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
+> > > > >  1 file changed, 14 insertions(+)
+> > > > > 
+> > > > > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > > > > index 0d02599d8867..266a94c712aa 100644
+> > > > > --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > > > > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > > > > @@ -3040,6 +3040,13 @@ usb_0_dwc3: usb@a600000 {
+> > > > >  				iommus = <&apps_smmu 0x820 0x0>;
+> > > > >  				phys = <&usb_0_hsphy>, <&usb_0_qmpphy QMP_USB43DP_USB3_PHY>;
+> > > > >  				phy-names = "usb2-phy", "usb3-phy";
+> > > > > +				snps,hird-threshold = /bits/ 8 <0x0>;
+> > > > > +				snps,usb2-gadget-lpm-disable;
+> > > > 
+> > > > Here you are disabling LPM for gadget mode, which makes most of the
+> > > > other properties entirely pointless.
+> > 
+> > Checked with Qcom on these quirks. So this one is just disabling lpm for USB2
+> > and rest of the quirks below are for SS/SSP modes.
+> 
+> No, snps,hird-threshold is for USB2 LPM and so is
+> snps,is-utmi-l1-suspend and snps,has-lpm-erratum as you'll see if you
+> look at the implementation.
+> 
 
-We should the add the bits that are really needed with a proper
-descriptions of what they do (like all commit messages should).
+Correct me if I'm wrong. When I look into the code, "snps,is-utmi-l1-suspend"
+and "snps,hird-threshold" are used independently of the LPM mode atleast in one
+place:
 
-Besides the commit message, the problem here is that these have just
-been copied from some vendor kernel and some properties are conflicting
-(e.g. both disabling LPM and configuring LPM settings) while others
-appear to be application specific.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/dwc3/gadget.c#n2867
 
-Johan
+But I could be completely wrong here as my understanding of the usb stack is not
+that great.
+
+> > > > > +				snps,is-utmi-l1-suspend;
+> > > > > +				snps,dis-u1-entry-quirk;
+> > > > > +				snps,dis-u2-entry-quirk;
+> > > > 
+> > > > These appear to be used to optimise certain gadget application and
+> > > > likely not something that should be set in a dtsi.
+> > > > 
+> > > 
+> > > I will cross check these with Qcom and respin accordingly.
+> > > 
+> > 
+> > These quirks are needed as per the DWC IP integration with this SoC it seems.
+> > But I got the point that these don't add any values for host only
+> > configurations. At the same time, these quirks still hold true for the SoC even
+> > if not exercised.
+> > 
+> > So I think we should keep these in the dtsi itself.
+> 
+> Please take a closer look at the quirks you're enabling first. Commit
+> 729dcffd1ed3 ("usb: dwc3: gadget: Add support for disabling U1 and U2
+> entries") which added 
+> 
+> > > > > +				snps,dis-u1-entry-quirk;
+> > > > > +				snps,dis-u2-entry-quirk;
+> 
+> explicitly mentions
+> 
+> 	Gadget applications may have a requirement to disable the U1 and U2
+> 	entry based on the usecase.
+> 
+> which sounds like something that needs to be done in a per board dts at
+> least.
+> 
+
+Going by this commit message it sounds like it. But...
+
+> Perhaps keeping all of these in in the dtsi is correct, but that's going
+> to need some more motivation than simply that some vendor does so (as
+> they often do all sorts of things they should not).
+> 
+
+If you read my last reply one more time, I didn't reason it based on the vendor
+code.
+
+But I hear a contradict reply from Qcom saying that these properties are
+required as a part of the DWC3 IP integration with the SoC. I need to recheck
+with them again tomorrow.
+
+Also, if these properties are application specific then they shouldn't be in
+devicetree atleast :/
+
+- Mani
+
+- Mani
+
+> Johan
+
+-- 
+மணிவண்ணன் சதாசிவம்
