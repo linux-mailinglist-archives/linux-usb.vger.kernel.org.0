@@ -2,169 +2,198 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04906CD38E
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Mar 2023 09:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82666CD3B4
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Mar 2023 09:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbjC2HrA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Mar 2023 03:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33356 "EHLO
+        id S230256AbjC2HwB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Mar 2023 03:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbjC2Hq4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Mar 2023 03:46:56 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558C52723
-        for <linux-usb@vger.kernel.org>; Wed, 29 Mar 2023 00:46:51 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32T2hEJT004145;
-        Wed, 29 Mar 2023 07:46:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=9ieE5wDpAonw35NgLK6N6SBCIDMLu08NINCYlNI2T6g=;
- b=EVUWwW8GX/pgAbIUcyF7Oyw1ps2B0O21Wsl6xr5uBMYI2HJNN8vBrtYiCSq8ygtKm/Ih
- mol/GPswfbLRtWVOPXWPYlCyEbN+EHABVTx7yH/75x0A63tkWcXKXHHo+UEHpeXBXu8E
- r8NHbVl+GibfpUNI+OsxXaSkePK8SBm1ZgppaJYmr3HwfObNAPL7Xg2McV3I/s8t/enH
- rQI+h8ajT4rYC6spc4xalSWNBO4s44ysOp45S7DBU0TAJLoUTKLqxA9dOQeebscj1XEE
- vCOfKuNdrHVJsuvpH77uVEv2JFMSVw1LsWoCgJgnQ8BRJPh8sTnKXiV4wlcDr0nyqXsb Cg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pmbs88naj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Mar 2023 07:46:50 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32T7knG4012370
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Mar 2023 07:46:49 GMT
-Received: from [10.239.154.244] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 29 Mar
- 2023 00:46:48 -0700
-Message-ID: <f43f684c-8872-51c3-d72d-2d41b4a4e3e2@quicinc.com>
-Date:   Wed, 29 Mar 2023 15:46:45 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 4/6] usb: gadget: f_fs: add a device reference of
- usb_gadget->dev
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>
-References: <1679911940-4727-1-git-send-email-quic_linyyuan@quicinc.com>
- <1679911940-4727-4-git-send-email-quic_linyyuan@quicinc.com>
- <ZCPgbqSLG4s9lSxv@kroah.com>
- <d82172a1-7f09-bb0f-fa04-d6151eb72f4f@quicinc.com>
- <ZCPpbtcpo8TE23L5@kroah.com>
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-In-Reply-To: <ZCPpbtcpo8TE23L5@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 6ZdJ58jdIxFiMm_msro8Q71IV761hnvr
-X-Proofpoint-GUID: 6ZdJ58jdIxFiMm_msro8Q71IV761hnvr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-29_02,2023-03-28_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- spamscore=0 bulkscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
- mlxlogscore=844 clxscore=1015 priorityscore=1501 mlxscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2303290063
+        with ESMTP id S230036AbjC2Hvi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Mar 2023 03:51:38 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1B830EB;
+        Wed, 29 Mar 2023 00:51:29 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id er13so18688305edb.9;
+        Wed, 29 Mar 2023 00:51:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680076288;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z6w306TzGpctk6hvXcFo39ZzdVVVQM4aAQXrijEamw0=;
+        b=P3wJ1cENYx2/rNhpfP8C+yusiRCZw0A6v+miJQUC2iLXbFwpURJUJ/lusWfHAJ3obZ
+         EbZrCT1O3XeIKBCn3qOdNexSkMVVrO+1XiqTiPoTJHV2IbcEUnAvqrM/6tsNtpkwcKtU
+         BMIptleEVQAbED2+rL5uQwYIg9fJrOfO6jimulthw6eGkqJTPeBXo/KylSpLTn0PO6Y4
+         XyBS+fGRrfoXvUQkxAMg356wMFwHZ9Hvo+nFUAjDfcZ1KxKqETXrREZhwHa/jRF5UOhL
+         5ZIWHWYkiDUsuwxB2QXsjpPCkjW2pCBUGXb0aBpvdSObVSpqZs58SIOBPpLgGJY1pneG
+         YLVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680076288;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z6w306TzGpctk6hvXcFo39ZzdVVVQM4aAQXrijEamw0=;
+        b=BGkNn88Wvq7G0RsVHiCvaAoEvGy5KRn/89xuv5ZYDwmEsE8C5RLxj1F7Nyg8PxExT7
+         4LBpy+t0EbeyIPVVob+bExExXfB4unuDBF7yDElhP6b4oyttgT6v51tRPJVoBuGZS194
+         MRuKYtoyHUGuKyP/sv/ffVnQygTL4vc4++DwbClyHcjabDD4WE7933TrfoWAekGT2/Gf
+         ATKHSYPym2CVNJeMPo6w5mpaoqMCAsdferqswduiwoBrCkp228+HL0fAHT1l5ZxDf6OY
+         MpOa3aXPtvJ/o7PSvYGp0P5s0Vbzebgjjw3K0UemBCl/JbcTgnT83C+/a1dKakwk1W7G
+         Vh+g==
+X-Gm-Message-State: AAQBX9edOwhvuxmcfXWxv9/YYhywxUgxyjD3im9ECtALrPrROuwOi5nH
+        wl8KB7+/Qh+2uxG0632rgwqCV1FkXEg2Mg==
+X-Google-Smtp-Source: AKy350bq0KYRLc1JaTwBnlAqByxMA1wzhgtqwfdhA+4P/ecYeMLrYhPkQ1MqoMiaN6i2r4ksIT37Vg==
+X-Received: by 2002:a17:906:d1d5:b0:93f:5170:c3d7 with SMTP id bs21-20020a170906d1d500b0093f5170c3d7mr15531446ejb.47.1680076288200;
+        Wed, 29 Mar 2023 00:51:28 -0700 (PDT)
+Received: from felia.fritz.box ([2a02:810d:2a40:1104:d1ab:705f:18f7:3e0a])
+        by smtp.gmail.com with ESMTPSA id w17-20020a170906b19100b0093fa8c2e877sm5016402ejy.80.2023.03.29.00.51.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 00:51:28 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] usb: move config USB_USS720 to usb's misc Kconfig
+Date:   Wed, 29 Mar 2023 09:51:25 +0200
+Message-Id: <20230329075125.32352-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The USS720 parport driver source code is in drivers/usb/misc/, the
+corresponding config is defined in drivers/usb/Kconfig. Some digging in the
+kernel's history revealed no good reason why it needs to be defined in
+USB's top-level Kconfig file, and why the config for the USS720 parport
+driver should be the first in the list of USB port drivers, while all other
+configs for drivers in drivers/usb/misc are in the USB Miscellaneous driver
+configuration file.
 
-On 3/29/2023 3:31 PM, Greg Kroah-Hartman wrote:
-> On Wed, Mar 29, 2023 at 03:00:54PM +0800, Linyu Yuan wrote:
->> On 3/29/2023 2:53 PM, Greg Kroah-Hartman wrote:
->>> On Mon, Mar 27, 2023 at 06:12:18PM +0800, Linyu Yuan wrote:
->>>> It is known that dev_vdbg() macro can accept NULL or non-NULL dev pointer.
->>>>
->>>> Add a struct device *dev member in struct ffs_data, set it to NULL before
->>>> binding or after unbinding to a usb_gadget, set it reference of usb_gadget
->>>> ->dev when bind success.
->>>>
->>>> Then it can help replace private pr_vdebug() to dev_vdbg() consistently.
->>>>
->>>> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
->>>> ---
->>>> v3: new patch in this version
->>>>
->>>>    drivers/usb/gadget/function/f_fs.c | 3 +++
->>>>    drivers/usb/gadget/function/u_fs.h | 1 +
->>>>    2 files changed, 4 insertions(+)
->>>>
->>>> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
->>>> index a4051c8..25461f1 100644
->>>> --- a/drivers/usb/gadget/function/f_fs.c
->>>> +++ b/drivers/usb/gadget/function/f_fs.c
->>>> @@ -1722,6 +1722,7 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
->>>>    		return NULL;
->>>>    	}
->>>> +	ffs->dev = NULL;
->>>>    	refcount_set(&ffs->ref, 1);
->>>>    	atomic_set(&ffs->opened, 0);
->>>>    	ffs->state = FFS_READ_DESCRIPTORS;
->>>> @@ -1831,6 +1832,7 @@ static int functionfs_bind(struct ffs_data *ffs, struct usb_composite_dev *cdev)
->>>>    	}
->>>>    	ffs->gadget = cdev->gadget;
->>>> +	ffs->dev = &cdev->gadget->dev;
->>>>    	ffs_data_get(ffs);
->>>>    	return 0;
->>>>    }
->>>> @@ -1843,6 +1845,7 @@ static void functionfs_unbind(struct ffs_data *ffs)
->>>>    		mutex_lock(&ffs->mutex);
->>>>    		usb_ep_free_request(ffs->gadget->ep0, ffs->ep0req);
->>>>    		ffs->ep0req = NULL;
->>>> +		ffs->dev = NULL;
->>>>    		ffs->gadget = NULL;
->>>>    		clear_bit(FFS_FL_BOUND, &ffs->flags);
->>>>    		mutex_unlock(&ffs->mutex);
->>>> diff --git a/drivers/usb/gadget/function/u_fs.h b/drivers/usb/gadget/function/u_fs.h
->>>> index 4b3365f..c5f6167 100644
->>>> --- a/drivers/usb/gadget/function/u_fs.h
->>>> +++ b/drivers/usb/gadget/function/u_fs.h
->>>> @@ -146,6 +146,7 @@ enum ffs_setup_state {
->>>>    struct ffs_data {
->>>>    	struct usb_gadget		*gadget;
->>>> +	struct device			*dev;
->>> No, sorry, this is not correct.
->>>
->>> You already have a struct device right there in the struct usb_gadget.
->>> Use that one instead, as you are just setting this pointer to the same
->>> value (see above where you set it.)
->>
->> just want to use consistent dev_(v)dbg() related macro, to avoid reference
->> usb_gadget->dev
->>
->> when usb_gadget is NULL.
-> When will usb_gadget be NULL when you want to print out logging
-> messages?  You shouldn't be printing out anything during that time
-> anyway, right?
+Most probably, it was simply considered a bit more special when the USB
+Miscellaneous driver configuration file (drivers/usb/misc/Config.in back
+then) was initially created, and this config simply survived to remain at
+the top-level USB Kconfig file with all further code/Kconfig
+transformations and additions later on. Users rarely notice this config
+being at this position, as CONFIG_PARPORT (Parallel port support) needs to
+be enabled and only few users enable that. Nowadays, this USB_USS720 driver
+is probably not that special that it needs to be listed as first item of
+the USB port drivers.
+
+Move the configuration of the USS720 parport driver to the top of the USB
+Miscellaneous drivers section, as the configurations does not have a lot of
+specific ordering USB Miscellaneous drivers. This way, the USS720 parport
+driver is moved to the comment "USB Miscellaneous drivers", fitting to the
+driver's source code location, but still is at the top of the list for
+those few acquainted users of Kconfig UIs that might be looking for the
+config that was once at the top of the list of the USB port drivers.
+
+Put this config definition to a more local place. No semantic change.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+
+Details to the historic digging:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit?id=fa67c3c55d814169652a26b625096a48c2d3701c
+moved all other configs of misc drivers into misc/Config.in.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/drivers/usb/Config.in?id=7a2deb32924142696b8174cdf9b38cd72a11fc96
+shows the USS720 parport driver to exist already at the beginning of the
+kernel history.git.
+
+All of this is more than two decades ago, and the rationales from those
+historic times are probably outdated at this point in time anyway.
 
 
-when usb_gadget is NULL, there could be debug message because user space 
-application
+ drivers/usb/Kconfig      | 29 -----------------------------
+ drivers/usb/misc/Kconfig | 29 +++++++++++++++++++++++++++++
+ 2 files changed, 29 insertions(+), 29 deletions(-)
 
-can start configure the ffs instance (like adb ...) for USB 
-interface/endpoint/string descriptor.
+diff --git a/drivers/usb/Kconfig b/drivers/usb/Kconfig
+index a871a988829d..7f33bcc315f2 100644
+--- a/drivers/usb/Kconfig
++++ b/drivers/usb/Kconfig
+@@ -133,35 +133,6 @@ comment "USB port drivers"
+ 
+ if USB
+ 
+-config USB_USS720
+-	tristate "USS720 parport driver"
+-	depends on PARPORT
+-	select PARPORT_NOT_PC
+-	help
+-	  This driver is for USB parallel port adapters that use the Lucent
+-	  Technologies USS-720 chip. These cables are plugged into your USB
+-	  port and provide USB compatibility to peripherals designed with
+-	  parallel port interfaces.
+-
+-	  The chip has two modes: automatic mode and manual mode. In automatic
+-	  mode, it looks to the computer like a standard USB printer. Only
+-	  printers may be connected to the USS-720 in this mode. The generic
+-	  USB printer driver ("USB Printer support", above) may be used in
+-	  that mode, and you can say N here if you want to use the chip only
+-	  in this mode.
+-
+-	  Manual mode is not limited to printers, any parallel port
+-	  device should work. This driver utilizes manual mode.
+-	  Note however that some operations are three orders of magnitude
+-	  slower than on a PCI/ISA Parallel Port, so timing critical
+-	  applications might not work.
+-
+-	  Say Y here if you own an USS-720 USB->Parport cable and intend to
+-	  connect anything other than a printer to it.
+-
+-	  To compile this driver as a module, choose M here: the
+-	  module will be called uss720.
+-
+ source "drivers/usb/serial/Kconfig"
+ 
+ source "drivers/usb/misc/Kconfig"
+diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+index a5f7652db7da..801c87e0dd29 100644
+--- a/drivers/usb/misc/Kconfig
++++ b/drivers/usb/misc/Kconfig
+@@ -4,6 +4,35 @@
+ #
+ comment "USB Miscellaneous drivers"
+ 
++config USB_USS720
++	tristate "USS720 parport driver"
++	depends on PARPORT
++	select PARPORT_NOT_PC
++	help
++	  This driver is for USB parallel port adapters that use the Lucent
++	  Technologies USS-720 chip. These cables are plugged into your USB
++	  port and provide USB compatibility to peripherals designed with
++	  parallel port interfaces.
++
++	  The chip has two modes: automatic mode and manual mode. In automatic
++	  mode, it looks to the computer like a standard USB printer. Only
++	  printers may be connected to the USS-720 in this mode. The generic
++	  USB printer driver ("USB Printer support", above) may be used in
++	  that mode, and you can say N here if you want to use the chip only
++	  in this mode.
++
++	  Manual mode is not limited to printers, any parallel port
++	  device should work. This driver utilizes manual mode.
++	  Note however that some operations are three orders of magnitude
++	  slower than on a PCI/ISA Parallel Port, so timing critical
++	  applications might not work.
++
++	  Say Y here if you own an USS-720 USB->Parport cable and intend to
++	  connect anything other than a printer to it.
++
++	  To compile this driver as a module, choose M here: the
++	  module will be called uss720.
++
+ config USB_EMI62
+ 	tristate "EMI 6|2m USB Audio interface support"
+ 	help
+-- 
+2.17.1
 
-
-as dev_dbg related macro is safe to accept NULL, there is no need find 
-out when will
-
-usb_gadget is NULL and when will it a valid pointer.
-
-
->
-> thanks,
->
-> greg k-h
