@@ -2,62 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8AD86CD2CB
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Mar 2023 09:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D99616CD2F4
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Mar 2023 09:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbjC2HRj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Mar 2023 03:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
+        id S229874AbjC2HY4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Mar 2023 03:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjC2HRh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Mar 2023 03:17:37 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C0D2698;
-        Wed, 29 Mar 2023 00:17:29 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id h8so59378873ede.8;
-        Wed, 29 Mar 2023 00:17:29 -0700 (PDT)
+        with ESMTP id S230006AbjC2HYp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Mar 2023 03:24:45 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63DC40DA
+        for <linux-usb@vger.kernel.org>; Wed, 29 Mar 2023 00:24:41 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id y15so18930562lfa.7
+        for <linux-usb@vger.kernel.org>; Wed, 29 Mar 2023 00:24:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680074247;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z6w306TzGpctk6hvXcFo39ZzdVVVQM4aAQXrijEamw0=;
-        b=oxANxCOrfYNq0f+pxsecoWRxXAT22T4S5kZ+KhrxvKUxz66yIZiDSxPu/kpbAl/ip8
-         nDCpQGvoahygcFKMiyTKIhtP8pZMzeYm9CGzY/oyb9FC82zYPf7Dx9kGh05DvxoBE/ef
-         BvJPD2YIAIdAg0KMCbcjZ4wDlbFM7GLiAro6ZjXjJtrBBQVqKNUy0hd7BvNc76edxArq
-         E1E56yfO4PfhWYwUuiS3l57xISMGLifELbb/RUlM+d3JQaDPIU4odvz5+ib4sauYYIjK
-         oV2gZdH0OoOl5Aj/jNHI0rjjHN0HtgN6uOtA93G+rz5t53jrlOrENwjUeNBbDE2h8p8r
-         FuMw==
+        d=linaro.org; s=google; t=1680074680;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TGS6b5YXn10NcJ5QUB50Aod9B0bqHGHbyiKTOZ3Udps=;
+        b=X3DWfUaGLZ+qgDV7Ty2iJJ2VSoKD4XrKrqluyWJzr4xuawtqqDJMFcoCuyTx9Q19YY
+         n2FkaaO4kjFdjdZCGDhZbE2kueqbR4c7UQnQsyZYajhIfwPTCIhyBTxv5vcPMPqxydU0
+         rcVTlDKqFK2YR4OOQf4f1zft7AtS625bU0l8NCogV5GHeHH9VZ5ju31ttXnSyEMs5fcl
+         Tm2q92dnKc9ZdF95KALp7db/8SYHbPAP9/tp67bCzmMZHj5HN4B1Mvr+BpeqZ8nMGJ3S
+         y3ThvnD+STqrtDhlsybPmMkmXqmK5qkeYCGZRMu4Y+/ku6nRRWsa+vqmM4pkIyKLU8FV
+         Gv+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680074247;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z6w306TzGpctk6hvXcFo39ZzdVVVQM4aAQXrijEamw0=;
-        b=eF5Hs1lONezoTLLbTA3bm3GGb7Te3LGXtIz9SIYJZ5Gny1pwp9+l3elkL2pagEdKIB
-         aLJgGohMn2B407rRDzl/Zc27dWRNX2WDr9hnIh3uDP9X8fxnf436TyjirhL/kI8PZw4k
-         H6pofXmXYAPWVtAB9ZEYLmexFgETcanZT9sqbGTm1N/5NiejO8GvAz45O8x8+KL+21yQ
-         5rqC5RtppGYSqCWJ/kCD761P8/EFnvo+ws6sJlH5cTV6Vw6YxnFn8jS85xkAphAvwNaN
-         wLOX4LUl57MAlmZi2h2xdn1TBl0bpKQxZMJkCpAe6oE2cAQqoaMUxIkNQITVYclSGASZ
-         AvXg==
-X-Gm-Message-State: AAQBX9di8xCS1BtcuN6LTKg+f8IqGZ/ihmETesKZ4TRpyh0D7sn5fvz/
-        EW7atl3ifacU8d3BAb1zTG8=
-X-Google-Smtp-Source: AKy350YiIPa0oLJjIORcV/riwkXuF9fsTDSbMAHX+11Cpugi5xNTQAICKyBUuIcT92rGfYpJ5NlwrA==
-X-Received: by 2002:a17:907:7b9e:b0:8b1:fc:b06d with SMTP id ne30-20020a1709077b9e00b008b100fcb06dmr21532742ejc.77.1680074247296;
-        Wed, 29 Mar 2023 00:17:27 -0700 (PDT)
-Received: from felia.fritz.box ([2a02:810d:2a40:1104:d1ab:705f:18f7:3e0a])
-        by smtp.gmail.com with ESMTPSA id s15-20020a170906c30f00b00922a79e79c2sm16093178ejz.217.2023.03.29.00.17.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 00:17:26 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [RFC PATCH] usb: move config USB_USS720 to usb's misc Kconfig
-Date:   Wed, 29 Mar 2023 09:17:24 +0200
-Message-Id: <20230329071724.11082-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        d=1e100.net; s=20210112; t=1680074680;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TGS6b5YXn10NcJ5QUB50Aod9B0bqHGHbyiKTOZ3Udps=;
+        b=ij+NcGutd9DLKUZTyh0gUCWAVdkE6Bg6NmUipkOUdmfsS+iSwm9EcL15vyMFKizWg4
+         bkjnoCRXd9opbgOdXmP8JRIZlmlr1B0sH+CExxV3NBr5qGFt7qjkClkTY147svUX1ZZz
+         21buxj0/BN0WCGOggxsexpmrLj3QO86LOM4DSvtGSN7dFqeu3cbuKNUf68DpvL0GOrv7
+         FGPUtu5BckXYBe6vv/lTdTF9AI8Xs+ud72v775vtBBYBTA9sQC4QAc1sHF1DFGjZfIR0
+         iaOThp0w5WCLvnBc3Bis2G4KI/dlU5zBYKy5t09an9C2B8/1tzP2b3m3VbRgQL8O3NPU
+         ghvA==
+X-Gm-Message-State: AAQBX9c86XnVDUGTBtg07u8Zmic+xH/O+lEQ4h+LE/CGRhWPnwsdRR7e
+        BZ3WLJ0gn2pRFafJDGIIloKsqA==
+X-Google-Smtp-Source: AKy350aF6HDKGWSyijeHG5aujpZZx7FNjGf8c7Gy0NPPvWJoyS5Xi1axkQ9kLVhlUUNEBU4qvhm6nA==
+X-Received: by 2002:ac2:5591:0:b0:4ea:e2f8:5edf with SMTP id v17-20020ac25591000000b004eae2f85edfmr5222614lfg.33.1680074679959;
+        Wed, 29 Mar 2023 00:24:39 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id s12-20020ac25fec000000b004dda80cabf0sm5371135lfg.172.2023.03.29.00.24.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 00:24:39 -0700 (PDT)
+Message-ID: <7eebc72a-a657-ca67-2c59-60f8e633b878@linaro.org>
+Date:   Wed, 29 Mar 2023 09:24:38 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] dt-bindings: usb: typec-tcpci: convert to DT schema
+ format
+Content-Language: en-US
+To:     Jun Li <jun.li@nxp.com>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Peng Fan <peng.fan@nxp.com>
+References: <20230323065824.3857573-1-peng.fan@oss.nxp.com>
+ <5675373c-af4f-906f-9906-7853a85f8ed6@linaro.org>
+ <PA4PR04MB96405A3B0B5158561D9E068F89889@PA4PR04MB9640.eurprd04.prod.outlook.com>
+ <aec9e01b-c358-0982-3090-ef980d4a5623@linaro.org>
+ <PA4PR04MB9640866667BFFF292F06388589899@PA4PR04MB9640.eurprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <PA4PR04MB9640866667BFFF292F06388589899@PA4PR04MB9640.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,134 +85,37 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The USS720 parport driver source code is in drivers/usb/misc/, the
-corresponding config is defined in drivers/usb/Kconfig. Some digging in the
-kernel's history revealed no good reason why it needs to be defined in
-USB's top-level Kconfig file, and why the config for the USS720 parport
-driver should be the first in the list of USB port drivers, while all other
-configs for drivers in drivers/usb/misc are in the USB Miscellaneous driver
-configuration file.
+On 29/03/2023 09:16, Jun Li wrote:
+> 
+> Per spec below, TCPCI does need interrupt for alert, but no limit on the number.
+> 
+> "The TCPC uses I2C to communicate with the TCPM. The TCPC is an I2C slave
+> with Alert# signal for requesting attention."
+> 
+>> no supplies and no additional GPIOs (like reset
+>> GPIO)?
+> 
+> Those are out of scope of spec, I think it can be added as optional.
+> 
+>>
+>> Because this is what this binding is saying.
+>>
+>>> fully compliance with tcpci spec, if change it to be only specific to
+>>> nxp,ptn5110, my understanding is then other chips need duplicate a
+>>> binding doc even common tcpci binding and driver is enough for them.
+>>
+>> Depends. Usually we have common schema used by actual device schemas. If
+>> TCPCI-compliant device cannot have additional properties,
+> 
+> My understanding was TCPCI-compliant device can have additional optional
+> properties.
 
-Most probably, it was simply considered a bit more special when the USB
-Miscellaneous driver configuration file (drivers/usb/misc/Config.in back
-then) was initially created, and this config simply survived to remain at
-the top-level USB Kconfig file with all further code/Kconfig
-transformations and additions later on. Users rarely notice this config
-being at this position, as CONFIG_PARPORT (Parallel port support) needs to
-be enabled and only few users enable that. Nowadays, this USB_USS720 driver
-is probably not that special that it needs to be listed as first item of
-the USB port drivers.
+Then I propose to rename it to device-matching name (nxp,ptn5110.yaml).
+Except interrupt and connector, there is nothing here which describes
+actual standard or common class. These can easily be moved to shared
+binding later. I can easily imagine TCPCI devices with a bit different
+interface and different properties.
 
-Move the configuration of the USS720 parport driver to the top of the USB
-Miscellaneous drivers section, as the configurations does not have a lot of
-specific ordering USB Miscellaneous drivers. This way, the USS720 parport
-driver is moved to the comment "USB Miscellaneous drivers", fitting to the
-driver's source code location, but still is at the top of the list for
-those few acquainted users of Kconfig UIs that might be looking for the
-config that was once at the top of the list of the USB port drivers.
-
-Put this config definition to a more local place. No semantic change.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-
-Details to the historic digging:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit?id=fa67c3c55d814169652a26b625096a48c2d3701c
-moved all other configs of misc drivers into misc/Config.in.
-
-https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/drivers/usb/Config.in?id=7a2deb32924142696b8174cdf9b38cd72a11fc96
-shows the USS720 parport driver to exist already at the beginning of the
-kernel history.git.
-
-All of this is more than two decades ago, and the rationales from those
-historic times are probably outdated at this point in time anyway.
-
-
- drivers/usb/Kconfig      | 29 -----------------------------
- drivers/usb/misc/Kconfig | 29 +++++++++++++++++++++++++++++
- 2 files changed, 29 insertions(+), 29 deletions(-)
-
-diff --git a/drivers/usb/Kconfig b/drivers/usb/Kconfig
-index a871a988829d..7f33bcc315f2 100644
---- a/drivers/usb/Kconfig
-+++ b/drivers/usb/Kconfig
-@@ -133,35 +133,6 @@ comment "USB port drivers"
- 
- if USB
- 
--config USB_USS720
--	tristate "USS720 parport driver"
--	depends on PARPORT
--	select PARPORT_NOT_PC
--	help
--	  This driver is for USB parallel port adapters that use the Lucent
--	  Technologies USS-720 chip. These cables are plugged into your USB
--	  port and provide USB compatibility to peripherals designed with
--	  parallel port interfaces.
--
--	  The chip has two modes: automatic mode and manual mode. In automatic
--	  mode, it looks to the computer like a standard USB printer. Only
--	  printers may be connected to the USS-720 in this mode. The generic
--	  USB printer driver ("USB Printer support", above) may be used in
--	  that mode, and you can say N here if you want to use the chip only
--	  in this mode.
--
--	  Manual mode is not limited to printers, any parallel port
--	  device should work. This driver utilizes manual mode.
--	  Note however that some operations are three orders of magnitude
--	  slower than on a PCI/ISA Parallel Port, so timing critical
--	  applications might not work.
--
--	  Say Y here if you own an USS-720 USB->Parport cable and intend to
--	  connect anything other than a printer to it.
--
--	  To compile this driver as a module, choose M here: the
--	  module will be called uss720.
--
- source "drivers/usb/serial/Kconfig"
- 
- source "drivers/usb/misc/Kconfig"
-diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-index a5f7652db7da..801c87e0dd29 100644
---- a/drivers/usb/misc/Kconfig
-+++ b/drivers/usb/misc/Kconfig
-@@ -4,6 +4,35 @@
- #
- comment "USB Miscellaneous drivers"
- 
-+config USB_USS720
-+	tristate "USS720 parport driver"
-+	depends on PARPORT
-+	select PARPORT_NOT_PC
-+	help
-+	  This driver is for USB parallel port adapters that use the Lucent
-+	  Technologies USS-720 chip. These cables are plugged into your USB
-+	  port and provide USB compatibility to peripherals designed with
-+	  parallel port interfaces.
-+
-+	  The chip has two modes: automatic mode and manual mode. In automatic
-+	  mode, it looks to the computer like a standard USB printer. Only
-+	  printers may be connected to the USS-720 in this mode. The generic
-+	  USB printer driver ("USB Printer support", above) may be used in
-+	  that mode, and you can say N here if you want to use the chip only
-+	  in this mode.
-+
-+	  Manual mode is not limited to printers, any parallel port
-+	  device should work. This driver utilizes manual mode.
-+	  Note however that some operations are three orders of magnitude
-+	  slower than on a PCI/ISA Parallel Port, so timing critical
-+	  applications might not work.
-+
-+	  Say Y here if you own an USS-720 USB->Parport cable and intend to
-+	  connect anything other than a printer to it.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called uss720.
-+
- config USB_EMI62
- 	tristate "EMI 6|2m USB Audio interface support"
- 	help
--- 
-2.17.1
+Best regards,
+Krzysztof
 
