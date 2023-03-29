@@ -2,183 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B0E6CD4C9
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Mar 2023 10:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B44E6CD4D3
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Mar 2023 10:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbjC2Iha (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Mar 2023 04:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
+        id S230061AbjC2IiS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Mar 2023 04:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjC2Ih3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Mar 2023 04:37:29 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C93540E8
-        for <linux-usb@vger.kernel.org>; Wed, 29 Mar 2023 01:37:17 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-544787916d9so279669157b3.13
-        for <linux-usb@vger.kernel.org>; Wed, 29 Mar 2023 01:37:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680079036;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fEEjt5KTOiMxdxcRezWpGMm6v+AEsQGVPozQ3NTxWGQ=;
-        b=RyxRU52zrMaY1+rCiw2RsrCGt9/viM3/l3sfw4JQCjh/8bpNfF7lm5FztCSqWhgmdf
-         ssDYQ6iDt8NQablYueMCScBaQNhiokwb0JUI/pUrlXqHvMXCupxNmWWheju/N6FIvc/P
-         HTbInlTEaEK9sK04pzgm1v5UnAqcTGRl7sAr45kkgbFRRvwvsqEnzSyb0A6K9b3q6dKr
-         R/EjzL7WFDTFJv47uBKGwjutYgjEQptSHSmDXIeuDeoqdQXPsE1L5NVsYJX1vvf0/qBm
-         hq8CvAowe7oUE6hVym2BqUo35uDTr+VJ99EVE8AoaIE2TYRC/aNHoX/W6jcj/M0Uqm0Y
-         wQlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680079036;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fEEjt5KTOiMxdxcRezWpGMm6v+AEsQGVPozQ3NTxWGQ=;
-        b=0jM9ihdliBVraB36yAZl0hf3t4+lzfPjU3V0de9GoLXesaL3oZR3JRma+pRhptwupQ
-         dIXiWSV6BbL7Ak3jfDF48QBEMZAN3A9yxZnXQjJwRBC0Qyb1sF5QzZP3XAb1nEtjthI7
-         ZoRMXBxMttftZZT1NCGP1odZlFrQka8xVaFVTRphVCj5lXBvNtyrvq7/xLn3pBSxQYUY
-         nGerFTN4OrDbsdh36Sot7FELsKYAYYstQ4+Dl3U+na4Nz2gfNILivAPtSgd4vxPQf5Yv
-         QTKyKB0uyO8ZXP3Rj7USr8uWRn8Gnya2b7sRe85EZOOooj2Merq3Jvw4KG4b8qEp2+8M
-         4EFQ==
-X-Gm-Message-State: AAQBX9eJd7A22pU1YndsHoY6bJj19MnBhPoTakGrbWCVRI4WnPXmTvyo
-        +K0ZtrD1zsJQ0b62ydvirxDooJykMMl9aAKiJ6w7Pw==
-X-Google-Smtp-Source: AKy350bwKhACZ5LjWDNs8HRhrB7fLtOYZiPiILPtu5+aF4SvdFnw0KrxlhqAmKxWV8fUa8xzRfUKXoUyKG2s33koCf8=
-X-Received: by 2002:a81:eb02:0:b0:545:883a:544d with SMTP id
- n2-20020a81eb02000000b00545883a544dmr9195077ywm.9.1680079036640; Wed, 29 Mar
- 2023 01:37:16 -0700 (PDT)
+        with ESMTP id S229787AbjC2IiR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Mar 2023 04:38:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1D71FE7;
+        Wed, 29 Mar 2023 01:37:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14CDB61B84;
+        Wed, 29 Mar 2023 08:37:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9465C433D2;
+        Wed, 29 Mar 2023 08:37:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680079074;
+        bh=9ifbxrOQWPIeIXQUfOAAtE87FHbtT0f+fZkTonCJ/Us=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xxft1PeaaYNLisckSI8Z/hoioHg82A5kC7yJu2lWb4T9zohW1rdetadLv5/uVFXyn
+         pqwA8YnR5QTfQHI+C67SG25cxxS9fFovQ4g/CEVRTgUTJfvQUeiMRHKJ0QIcfAoAw0
+         3riuWImoqblZDWEA0wo8uKQoavlyRxAbAvFJSuqE=
+Date:   Wed, 29 Mar 2023 10:37:51 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     peter.chen@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: cdnsp: Fixes issue with redundant Status Stage
+Message-ID: <ZCP435eCZhIIxesr@kroah.com>
+References: <20230321124053.200483-1-pawell@cadence.com>
 MIME-Version: 1.0
-References: <20230325154711.2419569-1-xiang.ye@intel.com> <20230325154711.2419569-5-xiang.ye@intel.com>
-In-Reply-To: <20230325154711.2419569-5-xiang.ye@intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 29 Mar 2023 10:37:05 +0200
-Message-ID: <CACRpkdbDmPpKFVxmn1ntKJWr5_mraKuafuTgJtgBU+39PxEYgg@mail.gmail.com>
-Subject: Re: [PATCH v7 4/6] gpio: Add support for Intel LJCA USB GPIO driver
-To:     Ye Xiang <xiang.ye@intel.com>, Marc Zyngier <maz@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321124053.200483-1-pawell@cadence.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Ye,
+On Tue, Mar 21, 2023 at 08:40:53AM -0400, Pawel Laszczak wrote:
+> In some cases, driver trees to send Status Stage twice.
+> The first one from upper layer of gadget usb subsystem and
+> second time from controller driver.
+> This patch fixes this issue and remove tricky handling of
+> SET_INTERFACE from controller driver which is no longer
+> needed.
+> 
+> cc: <stable@vger.kernel.org>
+> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> 
+> ---
+> Changelog:
+> v2:
+> - removed Smatch static checker warning
 
-thanks for your patch!
+This is already in 6.3-rc4, right?
 
-On Sat, Mar 25, 2023 at 4:48=E2=80=AFPM Ye Xiang <xiang.ye@intel.com> wrote=
-:
+thanks,
 
-> This patch implements the GPIO function of Intel USB-I2C/GPIO/SPI adapter
-> device named "La Jolla Cove Adapter" (LJCA). It communicate with LJCA
-> GPIO module with specific protocol through interfaces exported by LJCA US=
-B
-> driver.
->
-> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
-
-Lots of improvements! here are some comments:
-
-> @@ -1253,6 +1253,18 @@ config GPIO_KEMPLD
->           This driver can also be built as a module. If so, the module wi=
-ll be
->           called gpio-kempld.
->
-> +config GPIO_LJCA
-> +       tristate "INTEL La Jolla Cove Adapter GPIO support"
-> +       depends on USB_LJCA
-> +       select GPIOLIB_IRQCHIP
-> +       default USB_LJCA
-> +       help
-> +         Select this option to enable GPIO driver for the INTEL
-> +         La Jolla Cove Adapter (LJCA) board.
-> +
-> +         This driver can also be built as a module. If so, the module
-> +         will be called gpio-ljca.
-
-The GPIO Kconfig has a separate submenu for USB expanders, so
-put this Kconfig in that submenu. This makes the choice come in
-a more logical spot and not appear on configs that don't even
-have USB.
-
-(...)
-> +       DECLARE_BITMAP(unmasked_irqs, LJCA_MAX_GPIO_NUM);
-> +       DECLARE_BITMAP(enabled_irqs, LJCA_MAX_GPIO_NUM);
-> +       DECLARE_BITMAP(reenable_irqs, LJCA_MAX_GPIO_NUM);
-> +       u8 *connect_mode;
-> +       /* mutex to protect irq bus */
-> +       struct mutex irq_lock;
-(...)
-
-With IRQ code like this from a USB callback:
-
-> +static void ljca_gpio_event_cb(void *context, u8 cmd, const void *evt_da=
-ta, int len)
-> +{
-> +       const struct gpio_packet *packet =3D evt_data;
-> +       struct ljca_gpio_dev *ljca_gpio =3D context;
-> +       int i;
-> +       int irq;
-> +
-> +       if (cmd !=3D LJCA_GPIO_INT_EVENT)
-> +               return;
-> +
-> +       for (i =3D 0; i < packet->num; i++) {
-> +               irq =3D irq_find_mapping(ljca_gpio->gc.irq.domain, packet=
-->item[i].index);
-> +               if (!irq) {
-> +                       dev_err(ljca_gpio->gc.parent, "gpio_id %u does no=
-t mapped to IRQ yet\n",
-> +                               packet->item[i].index);
-> +                       return;
-> +               }
-> +
-> +               generic_handle_domain_irq(ljca_gpio->gc.irq.domain, irq);
-> +               set_bit(packet->item[i].index, ljca_gpio->reenable_irqs);
-> +       }
-> +
-> +       schedule_work(&ljca_gpio->work);
-> +}
-
-I don't feel comfortable merging this unless Marc Zyngier has looked at the
-code first, so please CC him on this patch next time.
-
-> +static const struct irq_chip ljca_gpio_irqchip =3D {
-> +       .name =3D "ljca-irq",
-> +       .irq_mask =3D ljca_irq_mask,
-> +       .irq_unmask =3D ljca_irq_unmask,
-> +       .irq_set_type =3D ljca_irq_set_type,
-> +       .irq_bus_lock =3D ljca_irq_bus_lock,
-> +       .irq_bus_sync_unlock =3D ljca_irq_bus_unlock,
-> +       .flags =3D IRQCHIP_IMMUTABLE,
-> +       GPIOCHIP_IRQ_RESOURCE_HELPERS,
-> +};
-
-Thanks for fixing the immutable irq chip!
-
-> +       ljca_gpio->auxdev =3D auxdev;
-> +       ljca_gpio->gc.direction_input =3D ljca_gpio_direction_input;
-> +       ljca_gpio->gc.direction_output =3D ljca_gpio_direction_output;
-
-Can you implement .get_direction()?
-
-It's scanned on probe to determine the initial state of each
-line so it is very nice to have.
-
-Yours,
-Linus Walleij
+greg k-h
