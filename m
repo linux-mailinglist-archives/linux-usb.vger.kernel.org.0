@@ -2,163 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 191E26CD135
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Mar 2023 06:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F676CD15D
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Mar 2023 06:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbjC2EfN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Mar 2023 00:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
+        id S229704AbjC2E7o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Mar 2023 00:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjC2EfM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Mar 2023 00:35:12 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5B526A5;
-        Tue, 28 Mar 2023 21:35:11 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32T4AfJs006679;
-        Wed, 29 Mar 2023 04:34:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=SdAgyLL2K/zVFRXxGuvJBSI7rL3Xfw9E2+HAaXX2SEI=;
- b=PDP9FC1Ug2Lz6FYYIX+MFB0MGC3HBfiAIAdSOOoRj9m2wkH3CBnNLHo14Pp8z+uCIr04
- fht9eKhxJvT893IYt8wNb4NqwiWeHa/+5H06VarMg68yelQHJ7AH8WDdY6l6+V6KRpz3
- BnoB+c10V6aP2L/h5mw4sEY7ODJe5om3cGPAKALuKOg0Eevf2ylLuNY+hOFWB4NJM40M
- JhSPSK+fL04gJ/u8y3EPng7L5iKVeKzy2bTXd9C1/T79hU6OApj4Cf0VbU1gPlg2xHGq
- KFtHQCviKRL5+P9VArI8mV+W/bP3LXr0+oW6hhpNTufIIs+GI6MqIrjo+n4U8XeG8DKG BA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pmawsgd0q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Mar 2023 04:34:55 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32T4Ytwh001195
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Mar 2023 04:34:55 GMT
-Received: from [10.216.46.217] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 28 Mar
- 2023 21:34:50 -0700
-Message-ID: <0aa1caae-ab09-2ef9-0ec8-3dd01a3f3af0@quicinc.com>
-Date:   Wed, 29 Mar 2023 10:04:47 +0530
+        with ESMTP id S229666AbjC2E7n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Mar 2023 00:59:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5040273E;
+        Tue, 28 Mar 2023 21:59:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4DA3EB81BD2;
+        Wed, 29 Mar 2023 04:59:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AD21C433EF;
+        Wed, 29 Mar 2023 04:59:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680065978;
+        bh=VyIflVYAjyIL5MoWA1Yn7cwvosZyO5A3cGssRTvK1ls=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PMO3JRjuntfa6092bvweVA6gESQcQKflaFhlMhABpqD1bYr+ZI4jXbr3Sz8eFEK6v
+         X5GK2F9v1w1yXrnK+p4cEihTOs6UrOFi23O7lYMr+AZ25M1cfhRUzsTEeuFFKoJ+aH
+         0MaYepierb85W9WH2+p2bmLG8+dKSCjBwfSwZDvo=
+Date:   Wed, 29 Mar 2023 06:59:36 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Joseph Lutz <joseph.lutz@novatechautomation.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: drivers/usb/class/usbtmc.c
+Message-ID: <ZCPFuJnQ6BbF4n6o@kroah.com>
+References: <DS7PR07MB775169F24942174F54B4246494889@DS7PR07MB7751.namprd07.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 1/2] usb: dwc3: gadget: Bail out in pullup if soft
- reset timeout happens
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Jiantao Zhang <water.zhangjiantao@huawei.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_ugoswami@quicinc.com" <quic_ugoswami@quicinc.com>
-References: <20230328160756.30520-1-quic_kriskura@quicinc.com>
- <20230328160756.30520-2-quic_kriskura@quicinc.com>
- <20230328212048.rpm4ly265etahwm3@synopsys.com>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20230328212048.rpm4ly265etahwm3@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: iMI-9u49VPE8CEf-dirm4WoYakeiNfB9
-X-Proofpoint-ORIG-GUID: iMI-9u49VPE8CEf-dirm4WoYakeiNfB9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-28_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- priorityscore=1501 suspectscore=0 phishscore=0 lowpriorityscore=0
- spamscore=0 adultscore=0 mlxlogscore=999 malwarescore=0 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303290036
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DS7PR07MB775169F24942174F54B4246494889@DS7PR07MB7751.namprd07.prod.outlook.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Mar 28, 2023 at 06:23:31PM +0000, Joseph Lutz wrote:
+> I am having some issues with the kernel driver "drivers/usb/class/usbtmc.c". I am trying to figure out who I can contact that would have information about how this driver is working.
 
+Hi,
 
-On 3/29/2023 2:50 AM, Thinh Nguyen wrote:
-> Hi,
+First off, please do not send html email, the mailing lists reject it
+(as you found out), and it will not get to anyone.
+
+> The script ./scripts/get_maintainer.pl drivers/usb/class/usbtmc.c​ gives me the following addresses which is why I am writing to you.
 > 
-> On Tue, Mar 28, 2023, Krishna Kurapati wrote:
->> If the core soft reset timeout happens, avoid setting up event
->> buffers and starting gadget as the writes to these registers
->> may not reflect when in reset and setting the run stop bit
->> can lead the controller to access wrong event buffer address
->> resulting in a crash.
->>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->>   drivers/usb/dwc3/gadget.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 3c63fa97a680..f0472801d9a5 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -2620,13 +2620,16 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>   		 * device-initiated disconnect requires a core soft reset
->>   		 * (DCTL.CSftRst) before enabling the run/stop bit.
->>   		 */
->> -		dwc3_core_soft_reset(dwc);
->> +		ret = dwc3_core_soft_reset(dwc);
->> +		if (ret)
->> +			goto done;
->>   
->>   		dwc3_event_buffers_setup(dwc);
->>   		__dwc3_gadget_start(dwc);
->>   		ret = dwc3_gadget_run_stop(dwc, true, false);
->>   	}
->>   
->> +done:
->>   	pm_runtime_put(dwc->dev);
->>   
->>   	return ret;
->> -- 
->> 2.40.0
->>
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM)
+> linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
+> linux-kernel@vger.kernel.org (open list)
 > 
-> I think there's one more place that may needs this check. Can you also
-> add this check in __dwc3_set_mode()?
+> I am not certain whether I should be communicating with these email addresses or if I should be communicating with the individuals on the github sight. https://github.com/dpenkler/linux-usbtmc
 
-Hi Thinh,
+If you look at the git history for the driver in the kernel, you will
+see Dave Penkler <dpenkler@gmail.com> as a probably good contact.
 
-   Sure. Will do it.
-Will the below be good enough ? Or would it be good to add an error/warn 
-log there>
+So try resending your message, with the information you had before about
+the problem you are seeing, to the lists and to Dave and in non-html
+format and we can go from there.
 
-kriskura@hu-kriskura-hyd:/local/mnt/workspace/krishna/skales2/skales/kernel$ 
-git diff drivers/usb/
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 476b63618511..8d1d213d1dcd 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -210,7 +210,9 @@ static void __dwc3_set_mode(struct work_struct *work)
-                 }
-                 break;
-         case DWC3_GCTL_PRTCAP_DEVICE:
--               dwc3_core_soft_reset(dwc);
-+               ret = dwc3_core_soft_reset(dwc);
-+               if (ret)
-+                       goto out;
+thanks,
 
-                 dwc3_event_buffers_setup(dwc);
-
-Regards,
-Krishna,
+greg k-h
