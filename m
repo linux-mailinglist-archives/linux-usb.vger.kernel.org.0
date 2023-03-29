@@ -2,171 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843BD6CD4B5
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Mar 2023 10:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B0E6CD4C9
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Mar 2023 10:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjC2Ies (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Mar 2023 04:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45730 "EHLO
+        id S231182AbjC2Iha (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Mar 2023 04:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjC2Ier (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Mar 2023 04:34:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2A910E5;
-        Wed, 29 Mar 2023 01:34:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5502A61B7F;
-        Wed, 29 Mar 2023 08:34:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA8E4C433EF;
-        Wed, 29 Mar 2023 08:34:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680078881;
-        bh=+anbd3/A6zrR8paeDyAzGqJwmuQ3rhLDHCRUEX9PUJM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jA+/s/Wwl0pw6hugM7xg3sS1u/tw8fGDVbP6qPa2+FyXJHSNAhFWz8CVJifaBNwcg
-         KDoDt5KE9bBcLFTNEf7E2oBgIpSCq99mu5Vlm5mZcLMfxjcR4nS735KITFRXagFgEO
-         ATVShgyWiSvMv94AOA/0U0X5llkcw72dppBwW9Y/ZrHMbMhIhmQM2X5bXcs9kiypto
-         bJVGk00UAMID0FDQOADfRoVkw/ESSMcQUNtjtzBbm2BSfrxNRnTE9bh5EmtER34pt1
-         UUHgR8L2mdBrNFOrtWZm5OgHKmAAwArWutc0AK2q1BrH65czlHWvRgsr5D3ax5I//M
-         Rgy8yK5lxyI9A==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1phRGi-00065x-NH; Wed, 29 Mar 2023 10:34:56 +0200
-Date:   Wed, 29 Mar 2023 10:34:56 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
-        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/5] arm64: dts: qcom: sc8280xp: Add missing dwc3 quirks
-Message-ID: <ZCP4MHe+9M24S4nJ@hovoldconsulting.com>
-References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
- <20230325165217.31069-2-manivannan.sadhasivam@linaro.org>
- <ZCKrXZn7Eu/jvdpG@hovoldconsulting.com>
- <20230328093853.GA5695@thinkpad>
- <20230329052600.GA5575@thinkpad>
+        with ESMTP id S230219AbjC2Ih3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Mar 2023 04:37:29 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C93540E8
+        for <linux-usb@vger.kernel.org>; Wed, 29 Mar 2023 01:37:17 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-544787916d9so279669157b3.13
+        for <linux-usb@vger.kernel.org>; Wed, 29 Mar 2023 01:37:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680079036;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fEEjt5KTOiMxdxcRezWpGMm6v+AEsQGVPozQ3NTxWGQ=;
+        b=RyxRU52zrMaY1+rCiw2RsrCGt9/viM3/l3sfw4JQCjh/8bpNfF7lm5FztCSqWhgmdf
+         ssDYQ6iDt8NQablYueMCScBaQNhiokwb0JUI/pUrlXqHvMXCupxNmWWheju/N6FIvc/P
+         HTbInlTEaEK9sK04pzgm1v5UnAqcTGRl7sAr45kkgbFRRvwvsqEnzSyb0A6K9b3q6dKr
+         R/EjzL7WFDTFJv47uBKGwjutYgjEQptSHSmDXIeuDeoqdQXPsE1L5NVsYJX1vvf0/qBm
+         hq8CvAowe7oUE6hVym2BqUo35uDTr+VJ99EVE8AoaIE2TYRC/aNHoX/W6jcj/M0Uqm0Y
+         wQlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680079036;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fEEjt5KTOiMxdxcRezWpGMm6v+AEsQGVPozQ3NTxWGQ=;
+        b=0jM9ihdliBVraB36yAZl0hf3t4+lzfPjU3V0de9GoLXesaL3oZR3JRma+pRhptwupQ
+         dIXiWSV6BbL7Ak3jfDF48QBEMZAN3A9yxZnXQjJwRBC0Qyb1sF5QzZP3XAb1nEtjthI7
+         ZoRMXBxMttftZZT1NCGP1odZlFrQka8xVaFVTRphVCj5lXBvNtyrvq7/xLn3pBSxQYUY
+         nGerFTN4OrDbsdh36Sot7FELsKYAYYstQ4+Dl3U+na4Nz2gfNILivAPtSgd4vxPQf5Yv
+         QTKyKB0uyO8ZXP3Rj7USr8uWRn8Gnya2b7sRe85EZOOooj2Merq3Jvw4KG4b8qEp2+8M
+         4EFQ==
+X-Gm-Message-State: AAQBX9eJd7A22pU1YndsHoY6bJj19MnBhPoTakGrbWCVRI4WnPXmTvyo
+        +K0ZtrD1zsJQ0b62ydvirxDooJykMMl9aAKiJ6w7Pw==
+X-Google-Smtp-Source: AKy350bwKhACZ5LjWDNs8HRhrB7fLtOYZiPiILPtu5+aF4SvdFnw0KrxlhqAmKxWV8fUa8xzRfUKXoUyKG2s33koCf8=
+X-Received: by 2002:a81:eb02:0:b0:545:883a:544d with SMTP id
+ n2-20020a81eb02000000b00545883a544dmr9195077ywm.9.1680079036640; Wed, 29 Mar
+ 2023 01:37:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329052600.GA5575@thinkpad>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230325154711.2419569-1-xiang.ye@intel.com> <20230325154711.2419569-5-xiang.ye@intel.com>
+In-Reply-To: <20230325154711.2419569-5-xiang.ye@intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 29 Mar 2023 10:37:05 +0200
+Message-ID: <CACRpkdbDmPpKFVxmn1ntKJWr5_mraKuafuTgJtgBU+39PxEYgg@mail.gmail.com>
+Subject: Re: [PATCH v7 4/6] gpio: Add support for Intel LJCA USB GPIO driver
+To:     Ye Xiang <xiang.ye@intel.com>, Marc Zyngier <maz@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 10:56:00AM +0530, Manivannan Sadhasivam wrote:
-> On Tue, Mar 28, 2023 at 03:09:03PM +0530, Manivannan Sadhasivam wrote:
-> > On Tue, Mar 28, 2023 at 10:54:53AM +0200, Johan Hovold wrote:
-> > > On Sat, Mar 25, 2023 at 10:22:13PM +0530, Manivannan Sadhasivam wrote:
-> > > > Add missing quirks for the USB DWC3 IP.
-> > > 
-> > > This is not an acceptable commit message generally and certainly not for
-> > > something that you have tagged for stable.
-> > > 
-> > > At a minimum, you need to describe why these are needed and what the
-> > > impact is.
-> > > 
-> > 
-> > I can certainly improve the commit message. But usually the quirks are copied
-> > from the downstream devicetree where qualcomm engineers would've added them
-> > based on the platform requirements.
-> > 
-> > > Also, why are you sending as part of a series purporting to enable
-> > > runtime PM when it appears to be all about optimising specific gadget
-> > > applications?
-> > > 
-> > 
-> > It's not related to this series I agree but just wanted to group it with a
-> > series touching usb so that it won't get lost.
-> > 
-> > I could respin it separately though in v2.
+Hi Ye,
 
-That's also generally best for USB patches as Greg expects series to be
-merged through a single tree.
+thanks for your patch!
 
-> > > Did you confirm that the below makes any sense or has this just been
-> > > copied verbatim from the vendor devicetree (it looks like that)?
-> > > 
-> > 
-> > As you've mentioned, most of the quirks are for gadget mode which is not
-> > supported by the upstream supported boards. So I haven't really tested them but
-> > for I assumed that Qcom engineers did.
-> > 
-> > > The fact that almost none of the qcom SoCs sets these also indicates
-> > > that something is not right here.
-> > > 
-> > > > Cc: stable@vger.kernel.org # 5.20
-> > > > Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-> > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > > ---
-> > > >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
-> > > >  1 file changed, 14 insertions(+)
-> > > > 
-> > > > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > > > index 0d02599d8867..266a94c712aa 100644
-> > > > --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > > > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > > > @@ -3040,6 +3040,13 @@ usb_0_dwc3: usb@a600000 {
-> > > >  				iommus = <&apps_smmu 0x820 0x0>;
-> > > >  				phys = <&usb_0_hsphy>, <&usb_0_qmpphy QMP_USB43DP_USB3_PHY>;
-> > > >  				phy-names = "usb2-phy", "usb3-phy";
-> > > > +				snps,hird-threshold = /bits/ 8 <0x0>;
-> > > > +				snps,usb2-gadget-lpm-disable;
-> > > 
-> > > Here you are disabling LPM for gadget mode, which makes most of the
-> > > other properties entirely pointless.
-> 
-> Checked with Qcom on these quirks. So this one is just disabling lpm for USB2
-> and rest of the quirks below are for SS/SSP modes.
+On Sat, Mar 25, 2023 at 4:48=E2=80=AFPM Ye Xiang <xiang.ye@intel.com> wrote=
+:
 
-No, snps,hird-threshold is for USB2 LPM and so is
-snps,is-utmi-l1-suspend and snps,has-lpm-erratum as you'll see if you
-look at the implementation.
+> This patch implements the GPIO function of Intel USB-I2C/GPIO/SPI adapter
+> device named "La Jolla Cove Adapter" (LJCA). It communicate with LJCA
+> GPIO module with specific protocol through interfaces exported by LJCA US=
+B
+> driver.
+>
+> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
 
-> > > > +				snps,is-utmi-l1-suspend;
-> > > > +				snps,dis-u1-entry-quirk;
-> > > > +				snps,dis-u2-entry-quirk;
-> > > 
-> > > These appear to be used to optimise certain gadget application and
-> > > likely not something that should be set in a dtsi.
-> > > 
-> > 
-> > I will cross check these with Qcom and respin accordingly.
-> > 
-> 
-> These quirks are needed as per the DWC IP integration with this SoC it seems.
-> But I got the point that these don't add any values for host only
-> configurations. At the same time, these quirks still hold true for the SoC even
-> if not exercised.
-> 
-> So I think we should keep these in the dtsi itself.
+Lots of improvements! here are some comments:
 
-Please take a closer look at the quirks you're enabling first. Commit
-729dcffd1ed3 ("usb: dwc3: gadget: Add support for disabling U1 and U2
-entries") which added 
+> @@ -1253,6 +1253,18 @@ config GPIO_KEMPLD
+>           This driver can also be built as a module. If so, the module wi=
+ll be
+>           called gpio-kempld.
+>
+> +config GPIO_LJCA
+> +       tristate "INTEL La Jolla Cove Adapter GPIO support"
+> +       depends on USB_LJCA
+> +       select GPIOLIB_IRQCHIP
+> +       default USB_LJCA
+> +       help
+> +         Select this option to enable GPIO driver for the INTEL
+> +         La Jolla Cove Adapter (LJCA) board.
+> +
+> +         This driver can also be built as a module. If so, the module
+> +         will be called gpio-ljca.
 
-> > > > +				snps,dis-u1-entry-quirk;
-> > > > +				snps,dis-u2-entry-quirk;
+The GPIO Kconfig has a separate submenu for USB expanders, so
+put this Kconfig in that submenu. This makes the choice come in
+a more logical spot and not appear on configs that don't even
+have USB.
 
-explicitly mentions
+(...)
+> +       DECLARE_BITMAP(unmasked_irqs, LJCA_MAX_GPIO_NUM);
+> +       DECLARE_BITMAP(enabled_irqs, LJCA_MAX_GPIO_NUM);
+> +       DECLARE_BITMAP(reenable_irqs, LJCA_MAX_GPIO_NUM);
+> +       u8 *connect_mode;
+> +       /* mutex to protect irq bus */
+> +       struct mutex irq_lock;
+(...)
 
-	Gadget applications may have a requirement to disable the U1 and U2
-	entry based on the usecase.
+With IRQ code like this from a USB callback:
 
-which sounds like something that needs to be done in a per board dts at
-least.
+> +static void ljca_gpio_event_cb(void *context, u8 cmd, const void *evt_da=
+ta, int len)
+> +{
+> +       const struct gpio_packet *packet =3D evt_data;
+> +       struct ljca_gpio_dev *ljca_gpio =3D context;
+> +       int i;
+> +       int irq;
+> +
+> +       if (cmd !=3D LJCA_GPIO_INT_EVENT)
+> +               return;
+> +
+> +       for (i =3D 0; i < packet->num; i++) {
+> +               irq =3D irq_find_mapping(ljca_gpio->gc.irq.domain, packet=
+->item[i].index);
+> +               if (!irq) {
+> +                       dev_err(ljca_gpio->gc.parent, "gpio_id %u does no=
+t mapped to IRQ yet\n",
+> +                               packet->item[i].index);
+> +                       return;
+> +               }
+> +
+> +               generic_handle_domain_irq(ljca_gpio->gc.irq.domain, irq);
+> +               set_bit(packet->item[i].index, ljca_gpio->reenable_irqs);
+> +       }
+> +
+> +       schedule_work(&ljca_gpio->work);
+> +}
 
-Perhaps keeping all of these in in the dtsi is correct, but that's going
-to need some more motivation than simply that some vendor does so (as
-they often do all sorts of things they should not).
+I don't feel comfortable merging this unless Marc Zyngier has looked at the
+code first, so please CC him on this patch next time.
 
-Johan
+> +static const struct irq_chip ljca_gpio_irqchip =3D {
+> +       .name =3D "ljca-irq",
+> +       .irq_mask =3D ljca_irq_mask,
+> +       .irq_unmask =3D ljca_irq_unmask,
+> +       .irq_set_type =3D ljca_irq_set_type,
+> +       .irq_bus_lock =3D ljca_irq_bus_lock,
+> +       .irq_bus_sync_unlock =3D ljca_irq_bus_unlock,
+> +       .flags =3D IRQCHIP_IMMUTABLE,
+> +       GPIOCHIP_IRQ_RESOURCE_HELPERS,
+> +};
+
+Thanks for fixing the immutable irq chip!
+
+> +       ljca_gpio->auxdev =3D auxdev;
+> +       ljca_gpio->gc.direction_input =3D ljca_gpio_direction_input;
+> +       ljca_gpio->gc.direction_output =3D ljca_gpio_direction_output;
+
+Can you implement .get_direction()?
+
+It's scanned on probe to determine the initial state of each
+line so it is very nice to have.
+
+Yours,
+Linus Walleij
