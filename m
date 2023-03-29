@@ -2,77 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A346CDAA8
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Mar 2023 15:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2036CF4E7
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Mar 2023 22:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjC2NYE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Mar 2023 09:24:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51886 "EHLO
+        id S230038AbjC2U6T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Mar 2023 16:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbjC2NXz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Mar 2023 09:23:55 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DAD65252
-        for <linux-usb@vger.kernel.org>; Wed, 29 Mar 2023 06:23:51 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id kq3so14860707plb.13
-        for <linux-usb@vger.kernel.org>; Wed, 29 Mar 2023 06:23:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680096231;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FCUGbgE2LvNcR7hLPqcrIx6jkWOTrrbsJMaWnGrYcZ4=;
-        b=KOcZAsDTxZl7koKyj6wYIlCsU6ulFQUfwnmbNVoN9FKVwVCSKoe3HauI0NUqCmMrIL
-         NFiVp/FgPcd3DpbvHxDD6Ka9Rvw+t4iQGO/foZVud5a9L1mBMOYDCO6fV832Rp6aR1Po
-         2W0mIUYKldNX0sdCy7nuawQ5Ke/Lt0DcFnCh9+wZD2CCM7ZpAc4WKkZB93ZqcudJLK9Z
-         YaAoEjRhcjcA/uUpXnTfJaqpHANKcQoZUbrWpfO1MV7C16ZBktngQNLB3hqSiYM0MYOI
-         lRiQB3uTaYWtMcX25ZgK2+fD7n0GR6TAtchS6oZFtVD75ICQ/aFME3UuBwP3lENXxJXU
-         3k+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680096231;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FCUGbgE2LvNcR7hLPqcrIx6jkWOTrrbsJMaWnGrYcZ4=;
-        b=OhgqlzofgKL9Cv2+bYNnJ+8Zm09az/hh3kq3Ii6qWRf/s1+81KLbhLGRdaM1t4R5wo
-         iDldvq4s+/YLuvhhlxoDHaudaFqXOVIecqAmBn8IgdW7bTHvUMcmkOniaHgcJAa26vsl
-         Mv4RZzBSPAQpaWkTtt+VWlPEWtYfJaSN12SLZ+k8yiGAg82D29sMcliK6eNTupZ88Wwc
-         VHiji1ByjDkhyWn+Kj4skIiic9yTKgwN2QBYhfAb4N11eqwS++u+JKnNmBGifPvfd7rl
-         Jh/WA53zkn7O54hu+FJhspDBK6XQAdNXuWb4RZTtJZSI8h2I7q+5QUJ3g+zEeaT79bOw
-         Rm9Q==
-X-Gm-Message-State: AO0yUKW3p/9TCAaBmr3rxM+rJiFi/1+JuQwo+JBpMq3UOHl78E4bhvHj
-        Dk9SHMA8odJ7VlswkuJgP4uS
-X-Google-Smtp-Source: AK7set9i8PpqmejhrZD8QpXUtYVJK4X7NibCw11JissA18lCRfqRt0POdmynhT5zRtEgfPgNAtN61g==
-X-Received: by 2002:a05:6a20:b288:b0:dd:9848:a1a8 with SMTP id ei8-20020a056a20b28800b000dd9848a1a8mr16627275pzb.16.1680096230581;
-        Wed, 29 Mar 2023 06:23:50 -0700 (PDT)
-Received: from thinkpad ([117.216.120.213])
-        by smtp.gmail.com with ESMTPSA id g7-20020aa78187000000b0062d8107b3c8sm6140226pfi.42.2023.03.29.06.23.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 06:23:50 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 18:53:43 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
-        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/5] arm64: dts: qcom: sc8280xp: Add missing dwc3 quirks
-Message-ID: <20230329132343.GD5575@thinkpad>
-References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
- <20230325165217.31069-2-manivannan.sadhasivam@linaro.org>
- <ZCKrXZn7Eu/jvdpG@hovoldconsulting.com>
- <20230328093853.GA5695@thinkpad>
- <20230329052600.GA5575@thinkpad>
- <ZCP4MHe+9M24S4nJ@hovoldconsulting.com>
+        with ESMTP id S230002AbjC2U6Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Mar 2023 16:58:16 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0A25258
+        for <linux-usb@vger.kernel.org>; Wed, 29 Mar 2023 13:58:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680123495; x=1711659495;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iqNLmvbaauMsibBLibKfY6UTbIzSLSs0jObEduVainA=;
+  b=Yhi2HNGZw9jnpHLMoMWLzQM9YsyW5TJm7Jk8tF6oXAkPlcY5TM7+kgVr
+   v/GqOKmBcJqIB1Zl3UmxXYJ1gXeE/xKN33/RsP4yTcYUqH9HYqp9xh+Kw
+   N2Mmv3oiSlT5Mg3FP2khlJu16qTH9CeZLFz9CAnNfyybiy+Kgw4xDbDnA
+   XR/tKJBaAf3DJrbjs0jQizhj+szXG0rW0uspCIkrucmCkIHawkGOcJrOK
+   LWR8fIjgSKy2VjsdLsoIkRNeItt3dIy5DnYU+M380uY2Vkw6j0NWIHeLa
+   YKC1PT6JKrgLPbEFWJgRyEK75zcjClTq5nPfNHfm+d2zfetAj1erqHsu+
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="324917168"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="324917168"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 13:58:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="828034234"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="828034234"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 29 Mar 2023 13:58:13 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1phcs0-000Jws-21;
+        Wed, 29 Mar 2023 20:58:12 +0000
+Date:   Thu, 30 Mar 2023 04:57:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 4c7f9d2e413dc06a157c4e5dccde84aaf4655eb3
+Message-ID: <6424a64e.HZ2dH7BYcJ7/Kjow%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZCP4MHe+9M24S4nJ@hovoldconsulting.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,145 +62,240 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 10:34:56AM +0200, Johan Hovold wrote:
-> On Wed, Mar 29, 2023 at 10:56:00AM +0530, Manivannan Sadhasivam wrote:
-> > On Tue, Mar 28, 2023 at 03:09:03PM +0530, Manivannan Sadhasivam wrote:
-> > > On Tue, Mar 28, 2023 at 10:54:53AM +0200, Johan Hovold wrote:
-> > > > On Sat, Mar 25, 2023 at 10:22:13PM +0530, Manivannan Sadhasivam wrote:
-> > > > > Add missing quirks for the USB DWC3 IP.
-> > > > 
-> > > > This is not an acceptable commit message generally and certainly not for
-> > > > something that you have tagged for stable.
-> > > > 
-> > > > At a minimum, you need to describe why these are needed and what the
-> > > > impact is.
-> > > > 
-> > > 
-> > > I can certainly improve the commit message. But usually the quirks are copied
-> > > from the downstream devicetree where qualcomm engineers would've added them
-> > > based on the platform requirements.
-> > > 
-> > > > Also, why are you sending as part of a series purporting to enable
-> > > > runtime PM when it appears to be all about optimising specific gadget
-> > > > applications?
-> > > > 
-> > > 
-> > > It's not related to this series I agree but just wanted to group it with a
-> > > series touching usb so that it won't get lost.
-> > > 
-> > > I could respin it separately though in v2.
-> 
-> That's also generally best for USB patches as Greg expects series to be
-> merged through a single tree.
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 4c7f9d2e413dc06a157c4e5dccde84aaf4655eb3  usb: xhci: tegra: fix sleep in atomic call
 
-Ok, good to know.
+elapsed time: 730m
 
-> > > > Did you confirm that the below makes any sense or has this just been
-> > > > copied verbatim from the vendor devicetree (it looks like that)?
-> > > > 
-> > > 
-> > > As you've mentioned, most of the quirks are for gadget mode which is not
-> > > supported by the upstream supported boards. So I haven't really tested them but
-> > > for I assumed that Qcom engineers did.
-> > > 
-> > > > The fact that almost none of the qcom SoCs sets these also indicates
-> > > > that something is not right here.
-> > > > 
-> > > > > Cc: stable@vger.kernel.org # 5.20
-> > > > > Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-> > > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > > > ---
-> > > > >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
-> > > > >  1 file changed, 14 insertions(+)
-> > > > > 
-> > > > > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > > > > index 0d02599d8867..266a94c712aa 100644
-> > > > > --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > > > > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > > > > @@ -3040,6 +3040,13 @@ usb_0_dwc3: usb@a600000 {
-> > > > >  				iommus = <&apps_smmu 0x820 0x0>;
-> > > > >  				phys = <&usb_0_hsphy>, <&usb_0_qmpphy QMP_USB43DP_USB3_PHY>;
-> > > > >  				phy-names = "usb2-phy", "usb3-phy";
-> > > > > +				snps,hird-threshold = /bits/ 8 <0x0>;
-> > > > > +				snps,usb2-gadget-lpm-disable;
-> > > > 
-> > > > Here you are disabling LPM for gadget mode, which makes most of the
-> > > > other properties entirely pointless.
-> > 
-> > Checked with Qcom on these quirks. So this one is just disabling lpm for USB2
-> > and rest of the quirks below are for SS/SSP modes.
-> 
-> No, snps,hird-threshold is for USB2 LPM and so is
-> snps,is-utmi-l1-suspend and snps,has-lpm-erratum as you'll see if you
-> look at the implementation.
-> 
+configs tested: 221
+configs skipped: 29
 
-Correct me if I'm wrong. When I look into the code, "snps,is-utmi-l1-suspend"
-and "snps,hird-threshold" are used independently of the LPM mode atleast in one
-place:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/dwc3/gadget.c#n2867
-
-But I could be completely wrong here as my understanding of the usb stack is not
-that great.
-
-> > > > > +				snps,is-utmi-l1-suspend;
-> > > > > +				snps,dis-u1-entry-quirk;
-> > > > > +				snps,dis-u2-entry-quirk;
-> > > > 
-> > > > These appear to be used to optimise certain gadget application and
-> > > > likely not something that should be set in a dtsi.
-> > > > 
-> > > 
-> > > I will cross check these with Qcom and respin accordingly.
-> > > 
-> > 
-> > These quirks are needed as per the DWC IP integration with this SoC it seems.
-> > But I got the point that these don't add any values for host only
-> > configurations. At the same time, these quirks still hold true for the SoC even
-> > if not exercised.
-> > 
-> > So I think we should keep these in the dtsi itself.
-> 
-> Please take a closer look at the quirks you're enabling first. Commit
-> 729dcffd1ed3 ("usb: dwc3: gadget: Add support for disabling U1 and U2
-> entries") which added 
-> 
-> > > > > +				snps,dis-u1-entry-quirk;
-> > > > > +				snps,dis-u2-entry-quirk;
-> 
-> explicitly mentions
-> 
-> 	Gadget applications may have a requirement to disable the U1 and U2
-> 	entry based on the usecase.
-> 
-> which sounds like something that needs to be done in a per board dts at
-> least.
-> 
-
-Going by this commit message it sounds like it. But...
-
-> Perhaps keeping all of these in in the dtsi is correct, but that's going
-> to need some more motivation than simply that some vendor does so (as
-> they often do all sorts of things they should not).
-> 
-
-If you read my last reply one more time, I didn't reason it based on the vendor
-code.
-
-But I hear a contradict reply from Qcom saying that these properties are
-required as a part of the DWC3 IP integration with the SoC. I need to recheck
-with them again tomorrow.
-
-Also, if these properties are application specific then they shouldn't be in
-devicetree atleast :/
-
-- Mani
-
-- Mani
-
-> Johan
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r002-20230329   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r003-20230329   gcc  
+alpha                randconfig-r005-20230329   gcc  
+alpha                randconfig-r015-20230329   gcc  
+alpha                randconfig-r022-20230329   gcc  
+alpha                randconfig-r023-20230329   gcc  
+alpha                randconfig-r024-20230329   gcc  
+alpha                randconfig-r031-20230329   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r002-20230329   gcc  
+arc          buildonly-randconfig-r003-20230329   gcc  
+arc          buildonly-randconfig-r005-20230329   gcc  
+arc                                 defconfig   gcc  
+arc                        nsimosci_defconfig   gcc  
+arc                  randconfig-r013-20230329   gcc  
+arc                  randconfig-r016-20230329   gcc  
+arc                  randconfig-r033-20230329   gcc  
+arc                  randconfig-r034-20230329   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm          buildonly-randconfig-r006-20230329   gcc  
+arm                                 defconfig   gcc  
+arm                            dove_defconfig   clang
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r001-20230329   gcc  
+arm64        buildonly-randconfig-r002-20230329   gcc  
+arm64        buildonly-randconfig-r005-20230329   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r006-20230329   gcc  
+arm64                randconfig-r013-20230329   clang
+arm64                randconfig-r025-20230329   clang
+arm64                randconfig-r026-20230329   clang
+arm64                randconfig-r032-20230329   gcc  
+arm64                randconfig-r036-20230329   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r003-20230329   gcc  
+csky                 randconfig-r004-20230329   gcc  
+csky                 randconfig-r011-20230329   gcc  
+csky                 randconfig-r021-20230329   gcc  
+hexagon              randconfig-r015-20230329   clang
+hexagon              randconfig-r016-20230329   clang
+hexagon              randconfig-r023-20230329   clang
+hexagon              randconfig-r041-20230329   clang
+hexagon              randconfig-r045-20230329   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64         buildonly-randconfig-r003-20230329   gcc  
+ia64         buildonly-randconfig-r005-20230329   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r004-20230329   gcc  
+ia64                 randconfig-r005-20230329   gcc  
+ia64                 randconfig-r036-20230329   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch    buildonly-randconfig-r003-20230329   gcc  
+loongarch    buildonly-randconfig-r006-20230329   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r002-20230329   gcc  
+loongarch            randconfig-r013-20230329   gcc  
+loongarch            randconfig-r015-20230329   gcc  
+loongarch            randconfig-r023-20230329   gcc  
+loongarch            randconfig-r025-20230329   gcc  
+loongarch            randconfig-r026-20230329   gcc  
+m68k                             alldefconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k         buildonly-randconfig-r002-20230329   gcc  
+m68k         buildonly-randconfig-r004-20230329   gcc  
+m68k         buildonly-randconfig-r006-20230329   gcc  
+m68k                                defconfig   gcc  
+m68k                          hp300_defconfig   gcc  
+m68k                        m5407c3_defconfig   gcc  
+m68k                        mvme16x_defconfig   gcc  
+m68k                 randconfig-r002-20230329   gcc  
+m68k                 randconfig-r014-20230329   gcc  
+m68k                 randconfig-r015-20230329   gcc  
+m68k                 randconfig-r031-20230329   gcc  
+m68k                 randconfig-r033-20230329   gcc  
+m68k                 randconfig-r035-20230329   gcc  
+m68k                           virt_defconfig   gcc  
+microblaze   buildonly-randconfig-r004-20230329   gcc  
+microblaze           randconfig-r005-20230329   gcc  
+microblaze           randconfig-r016-20230329   gcc  
+microblaze           randconfig-r024-20230329   gcc  
+microblaze           randconfig-r032-20230329   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                         db1xxx_defconfig   gcc  
+mips                           gcw0_defconfig   gcc  
+mips                 randconfig-r001-20230329   clang
+mips                 randconfig-r005-20230329   clang
+mips                 randconfig-r012-20230329   gcc  
+mips                 randconfig-r015-20230329   gcc  
+mips                 randconfig-r023-20230329   gcc  
+mips                 randconfig-r025-20230329   gcc  
+nios2        buildonly-randconfig-r003-20230329   gcc  
+nios2        buildonly-randconfig-r004-20230329   gcc  
+nios2        buildonly-randconfig-r005-20230329   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r005-20230329   gcc  
+nios2                randconfig-r011-20230329   gcc  
+nios2                randconfig-r012-20230329   gcc  
+nios2                randconfig-r016-20230329   gcc  
+nios2                randconfig-r026-20230329   gcc  
+nios2                randconfig-r031-20230329   gcc  
+nios2                randconfig-r033-20230329   gcc  
+nios2                randconfig-r035-20230329   gcc  
+openrisc     buildonly-randconfig-r003-20230329   gcc  
+openrisc     buildonly-randconfig-r006-20230329   gcc  
+openrisc                  or1klitex_defconfig   gcc  
+openrisc                    or1ksim_defconfig   gcc  
+openrisc             randconfig-r004-20230329   gcc  
+openrisc             randconfig-r006-20230329   gcc  
+openrisc             randconfig-r021-20230329   gcc  
+openrisc             randconfig-r025-20230329   gcc  
+openrisc             randconfig-r026-20230329   gcc  
+openrisc             randconfig-r032-20230329   gcc  
+openrisc             randconfig-r034-20230329   gcc  
+openrisc             randconfig-r036-20230329   gcc  
+parisc       buildonly-randconfig-r005-20230329   gcc  
+parisc       buildonly-randconfig-r006-20230329   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                      arches_defconfig   gcc  
+powerpc                   bluestone_defconfig   clang
+powerpc                 mpc834x_itx_defconfig   gcc  
+powerpc                 mpc837x_rdb_defconfig   gcc  
+powerpc                     rainier_defconfig   gcc  
+powerpc              randconfig-r011-20230329   clang
+powerpc              randconfig-r024-20230329   clang
+powerpc              randconfig-r032-20230329   gcc  
+powerpc              randconfig-r034-20230329   gcc  
+powerpc                    socrates_defconfig   clang
+powerpc                     tqm8555_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv             nommu_k210_sdcard_defconfig   gcc  
+riscv                    nommu_virt_defconfig   clang
+riscv                randconfig-r022-20230329   clang
+riscv                randconfig-r032-20230329   gcc  
+riscv                randconfig-r035-20230329   gcc  
+riscv                randconfig-r042-20230329   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r001-20230329   gcc  
+s390                 randconfig-r003-20230329   gcc  
+s390                 randconfig-r014-20230329   clang
+s390                 randconfig-r015-20230329   clang
+s390                 randconfig-r016-20230329   clang
+s390                 randconfig-r022-20230329   clang
+s390                 randconfig-r023-20230329   clang
+s390                 randconfig-r035-20230329   gcc  
+s390                 randconfig-r044-20230329   clang
+sh                               allmodconfig   gcc  
+sh                        dreamcast_defconfig   gcc  
+sh                         microdev_defconfig   gcc  
+sh                            migor_defconfig   gcc  
+sh                   randconfig-r006-20230329   gcc  
+sh                   randconfig-r022-20230329   gcc  
+sh                           se7206_defconfig   gcc  
+sh                           se7343_defconfig   gcc  
+sh                           sh2007_defconfig   gcc  
+sparc        buildonly-randconfig-r003-20230329   gcc  
+sparc        buildonly-randconfig-r006-20230329   gcc  
+sparc                               defconfig   gcc  
+sparc64      buildonly-randconfig-r003-20230329   gcc  
+sparc64      buildonly-randconfig-r005-20230329   gcc  
+sparc64      buildonly-randconfig-r006-20230329   gcc  
+sparc64              randconfig-r013-20230329   gcc  
+sparc64              randconfig-r031-20230329   gcc  
+um                               alldefconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                        randconfig-k001   clang
+x86_64                               rhel-8.3   gcc  
+xtensa       buildonly-randconfig-r004-20230329   gcc  
+xtensa                              defconfig   gcc  
+xtensa               randconfig-r003-20230329   gcc  
+xtensa               randconfig-r012-20230329   gcc  
+xtensa               randconfig-r021-20230329   gcc  
+xtensa               randconfig-r024-20230329   gcc  
+xtensa               randconfig-r031-20230329   gcc  
+xtensa               randconfig-r033-20230329   gcc  
 
 -- 
-மணிவண்ணன் சதாசிவம்
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
