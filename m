@@ -2,193 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 549536D0FBB
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 22:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5CD06D1019
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 22:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjC3ULD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Mar 2023 16:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
+        id S229832AbjC3UjX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Mar 2023 16:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjC3ULB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 16:11:01 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 56781AF20
-        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 13:11:00 -0700 (PDT)
-Received: (qmail 212186 invoked by uid 1000); 30 Mar 2023 16:10:59 -0400
-Date:   Thu, 30 Mar 2023 16:10:59 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+4b3f8190f6e13b3efd74@syzkaller.appspotmail.com>,
-        syzbot <syzbot+1cb937c125adb93fad2d@syzkaller.appspotmail.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in shark_write_reg/usb_submit_urb, WARNING in
- shark_write_val/usb_submit_urb
-Message-ID: <e382763c-cf33-4871-a761-1ac85ae36f27@rowland.harvard.edu>
-References: <00000000000096e4f905f81b2702@google.com>
+        with ESMTP id S229563AbjC3UjW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 16:39:22 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27ADCDBE8
+        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 13:39:21 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id o8-20020a056e0214c800b00325f0a48812so10604891ilk.13
+        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 13:39:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680208760; x=1682800760;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sFbffXJR0JL9PDHMNwY5NVqIQ/uvZ93Gi0qNlmzxWos=;
+        b=TmEK4508yIR3hKlJQliUz01FF2ZI1vwnumRHEJWOshIx5br0vxIHSHhxR5tj5oa0V2
+         0E8q+wI4ZyZKpS9Y8AHvtwEIog2M0/21F1vUmQOpfESv41u+KVBKcljiynHw54PqXWAh
+         WEwdofJm+N5GBxkIgh4v3gJKlbeK0bnj5RciKzJwQroxTHEeYcxqEwz19VzY+xJFi23f
+         CbaYSmHsjsna9OhDR7xoS/Y9SZJvjHwKefraO/k99C7PyjR7Sed77qBzJdvvT3SmH3Sp
+         SN+5f4cgDkw+TY4h8cYZdcQtMEEh/TWHqMzmlNf3AOPBoDXZ2S5iB6v6VU62nSk2s3XZ
+         T1kQ==
+X-Gm-Message-State: AO0yUKVdAZp236J+fRU0JBx1UHRgB1mbDJOTeA58/2CRK0UUzALXrXHo
+        m2ji8PQFyCEMvInoxHa1nGNE+u68pVyNZAnZOwu4iBVcNGFF
+X-Google-Smtp-Source: AK7set+0oavY+0jKy0ek5WpcstbGWarENmcFKtA+8z1+E0AQn/vJmAFoPbgf7h8KMvihhKAX1KqGlfyWGrrCnL+4C0k9lCPKQeHW
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000096e4f905f81b2702@google.com>
-X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:93c8:0:b0:753:34e:2ee7 with SMTP id
+ j8-20020a5d93c8000000b00753034e2ee7mr9264465ioo.0.1680208760480; Thu, 30 Mar
+ 2023 13:39:20 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 13:39:20 -0700
+In-Reply-To: <e382763c-cf33-4871-a761-1ac85ae36f27@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000051298605f82416f5@google.com>
+Subject: Re: [syzbot] [usb?] WARNING in shark_write_reg/usb_submit_urb
+From:   syzbot <syzbot+4b3f8190f6e13b3efd74@syzkaller.appspotmail.com>
+To:     hdegoede@redhat.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Reference: https://syzkaller.appspot.com/bug?extid=4b3f8190f6e13b3efd74
-Reference: https://syzkaller.appspot.com/bug?extid=1cb937c125adb93fad2d
+Hello,
 
-The radio-shark driver just assumes that the endpoints it uses will be
-present, without checking.  This adds an appropriate check.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Alan Stern
+Reported-and-tested-by: syzbot+4b3f8190f6e13b3efd74@syzkaller.appspotmail.com
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.2
+Tested on:
 
- drivers/usb/core/usb.c |   70 +++++++++++++++++++++++++++++++++++++++++++++++++
- include/linux/usb.h    |    7 ++++
- 2 files changed, 77 insertions(+)
+commit:         c9c3395d Linux 6.2
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.2
+console output: https://syzkaller.appspot.com/x/log.txt?x=16d9f695c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fea01b13d861cd1e
+dashboard link: https://syzkaller.appspot.com/bug?extid=4b3f8190f6e13b3efd74
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1134ea95c80000
 
-Index: usb-devel/drivers/usb/core/usb.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/usb.c
-+++ usb-devel/drivers/usb/core/usb.c
-@@ -207,6 +207,76 @@ int usb_find_common_endpoints_reverse(st
- EXPORT_SYMBOL_GPL(usb_find_common_endpoints_reverse);
- 
- /**
-+ * usb_find_endpoint() - Given an endpoint address, search for the endpoint's
-+ * usb_host_endpoint structure in an interface's current altsetting.
-+ * @intf: the interface whose current altsetting should be searched
-+ * @ep_addr: the endpoint address (number and direction) to find
-+ *
-+ * Search the altsetting's list of endpoints for one with the specified address.
-+ *
-+ * Return: Pointer to the usb_host_endpoint if found, %NULL otherwise.
-+ */
-+struct usb_host_endpoint __must_check *usb_find_endpoint(
-+		const struct usb_interface *intf, unsigned int ep_addr)
-+{
-+	int n;
-+	struct usb_host_endpoint *ep;
-+
-+	n = intf->cur_altsetting->desc.bNumEndpoints;
-+	ep = intf->cur_altsetting->endpoint;
-+	for (; n > 0; (--n, ++ep)) {
-+		if (ep->desc.bEndpointAddress == ep_addr)
-+			return ep;
-+	}
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(usb_find_endpoint);
-+
-+/**
-+ * usb_check_bulk_endpoint - Check whether an interface's current altsetting
-+ * contains a bulk endpoint with the given address.
-+ * @intf: the interface whose current altsetting should be searched
-+ * @ep_addr: the endpoint address (number and direction) to look for
-+ *
-+ * Search for an endpoint with the specified address and check its type.
-+ *
-+ * Return: %true if the endpoint is found and is bulk, %false otherwise.
-+ */
-+bool usb_check_bulk_endpoint(
-+		const struct usb_interface *intf, unsigned int ep_addr)
-+{
-+	const struct usb_host_endpoint *ep;
-+
-+	ep = usb_find_endpoint(intf, ep_addr);
-+	if (!ep)
-+		return false;
-+	return usb_endpoint_xfer_bulk(&ep->desc);
-+}
-+EXPORT_SYMBOL_GPL(usb_check_bulk_endpoint);
-+
-+/**
-+ * usb_check_int_endpoint - Check whether an interface's current altsetting
-+ * contains an interrupt endpoint with the given address.
-+ * @intf: the interface whose current altsetting should be searched
-+ * @ep_addr: the endpoint address (number and direction) to look for
-+ *
-+ * Search for an endpoint with the specified address and check its type.
-+ *
-+ * Return: %true if the endpoint is found and is interrupt, %false otherwise.
-+ */
-+bool usb_check_int_endpoint(
-+		const struct usb_interface *intf, unsigned int ep_addr)
-+{
-+	const struct usb_host_endpoint *ep;
-+
-+	ep = usb_find_endpoint(intf, ep_addr);
-+	if (!ep)
-+		return false;
-+	return usb_endpoint_xfer_int(&ep->desc);
-+}
-+EXPORT_SYMBOL_GPL(usb_check_int_endpoint);
-+
-+/**
-  * usb_find_alt_setting() - Given a configuration, find the alternate setting
-  * for the given interface.
-  * @config: the configuration to search (not necessarily the current config).
-Index: usb-devel/include/linux/usb.h
-===================================================================
---- usb-devel.orig/include/linux/usb.h
-+++ usb-devel/include/linux/usb.h
-@@ -292,6 +292,13 @@ void usb_put_intf(struct usb_interface *
- #define USB_MAXINTERFACES	32
- #define USB_MAXIADS		(USB_MAXINTERFACES/2)
- 
-+struct usb_host_endpoint __must_check *usb_find_endpoint(
-+		const struct usb_interface *intf, unsigned int ep_addr);
-+bool usb_check_bulk_endpoint(
-+		const struct usb_interface *intf, unsigned int ep_addr);
-+bool usb_check_int_endpoint(
-+		const struct usb_interface *intf, unsigned int ep_addr);
-+
- /*
-  * USB Resume Timer: Every Host controller driver should drive the resume
-  * signalling on the bus for the amount of time defined by this macro.
-
- drivers/media/radio/radio-shark.c  |    7 +++++++
- drivers/media/radio/radio-shark2.c |    7 +++++++
- 2 files changed, 14 insertions(+)
-
-Index: usb-devel/drivers/media/radio/radio-shark.c
-===================================================================
---- usb-devel.orig/drivers/media/radio/radio-shark.c
-+++ usb-devel/drivers/media/radio/radio-shark.c
-@@ -317,6 +317,13 @@ static int usb_shark_probe(struct usb_in
- 	struct shark_device *shark;
- 	int retval = -ENOMEM;
- 
-+	/* Are the expected endpoints present? */
-+	if (!usb_check_int_endpoint(intf, SHARK_IN_EP | USB_DIR_IN) ||
-+	    !usb_check_int_endpoint(intf, SHARK_OUT_EP | USB_DIR_OUT)) {
-+		dev_err(&intf->dev, "Invalid radioSHARK device\n");
-+		return -EINVAL;
-+	}
-+
- 	shark = kzalloc(sizeof(struct shark_device), GFP_KERNEL);
- 	if (!shark)
- 		return retval;
-Index: usb-devel/drivers/media/radio/radio-shark2.c
-===================================================================
---- usb-devel.orig/drivers/media/radio/radio-shark2.c
-+++ usb-devel/drivers/media/radio/radio-shark2.c
-@@ -283,6 +283,13 @@ static int usb_shark_probe(struct usb_in
- 	struct shark_device *shark;
- 	int retval = -ENOMEM;
- 
-+	/* Are the expected endpoints present? */
-+	if (!usb_check_int_endpoint(intf, SHARK_IN_EP | USB_DIR_IN) ||
-+	    !usb_check_int_endpoint(intf, SHARK_OUT_EP | USB_DIR_OUT)) {
-+		dev_err(&intf->dev, "Invalid radioSHARK2 device\n");
-+		return -EINVAL;
-+	}
-+
- 	shark = kzalloc(sizeof(struct shark_device), GFP_KERNEL);
- 	if (!shark)
- 		return retval;
+Note: testing is done by a robot and is best-effort only.
