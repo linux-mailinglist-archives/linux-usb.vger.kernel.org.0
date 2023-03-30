@@ -2,92 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5246D0915
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 17:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2D46D099D
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 17:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232747AbjC3PHV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Mar 2023 11:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53752 "EHLO
+        id S233070AbjC3Pbi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Mar 2023 11:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232741AbjC3PHU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 11:07:20 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E28C647;
-        Thu, 30 Mar 2023 08:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680188825; x=1711724825;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=WjP6GPfoFS3QmD/u0mitD4XX36nF1GpzMNe7tOCMUBs=;
-  b=F0JBK5fQ1OJ3TNTHP3TJnoCcqwbFfqv8nbyaqtuGp9bgoic+bOlIV6US
-   lHutJ5ykN71ZK3N7x9IfAbQzcU2v+hlTIlHX3xW2fbenvMXoaFtCLocvx
-   0Q1nX4L61cCO2FRq8ghXXoWvMaJ3TZcBDDqdbikDq/FlXfk6Kd4G7+Z8J
-   eE93rwztji5lVTFL+0Ewd2vD0KBnPSsXOumXCcThC11KJZ0U0pZqnURbM
-   hAyDrhr+UxHvu/SwQ29/sisXn62skKYTpzwrh5vs06irdSrZsa5yJEyPb
-   HWnrVxXOBDbwPf33op4GKa52JamHjZn7XKwIBXcJ2OiyZragq5vTOdCNV
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="320844925"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="320844925"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 08:05:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="828370365"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="828370365"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Mar 2023 08:05:57 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH] usb: dwc3: pci: add support for the Intel Meteor Lake-S
-Date:   Thu, 30 Mar 2023 18:02:24 +0300
-Message-Id: <20230330150224.89316-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S233085AbjC3Pbe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 11:31:34 -0400
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDF0CA0C;
+        Thu, 30 Mar 2023 08:31:18 -0700 (PDT)
+Received: by mail-oo1-f41.google.com with SMTP id l7-20020a4abe07000000b0053e1205c84bso2658268oop.9;
+        Thu, 30 Mar 2023 08:31:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680190278;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fnDjYGmEqOEcX6BV3D3Xoo9yGR2TRiur28JejHxdE3w=;
+        b=pTD4y+W8fF1+NtRJ6Sl80ayFjxvhl97qVLcgqNTvNEpWizlvCdAat9w7UOjnnQgVE6
+         FyNK04O6vyKVGG4gQ0T/X55WooCsqgCTQOQzuOOpdwgR6F0/NXmslBMSVskhyw8e+ilu
+         Hj3nhhnJK8tWHT0xph19tVok6dCW9ytsDC7goRxCPKsZphE4rHValCe6K6uCR7WXLGpI
+         g78jXZoHdEFxHKmoFK0ReN8O8r9AUCssQVzVSO6tcQeGfSX+BOKj/BFVCIsPSd9W1OOw
+         20+k1JVkP3SGrVEYcMIp/IzBuRDEuW9vLDaH3xOxzq7YlsDzKX7BxyywcUhQXAH4dvFs
+         n7og==
+X-Gm-Message-State: AAQBX9do2ssw9/d8katdmfthWgDBLc9h/zbphiVVLWGTpPr45xsrdpyF
+        n9QjG6LF04TUOvRRY9Ew1Q==
+X-Google-Smtp-Source: AKy350abjVDUmX8OWlEBXnmhH2hwWTbeugExUUvnY6Mez9tAhkValHyWVltMFvpiHlfSl2td0DikgQ==
+X-Received: by 2002:a4a:bd8c:0:b0:53c:5f89:eb85 with SMTP id k12-20020a4abd8c000000b0053c5f89eb85mr3363326oop.2.1680190277775;
+        Thu, 30 Mar 2023 08:31:17 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id o79-20020a4a2c52000000b0053b8ae294f3sm9069976ooo.11.2023.03.30.08.31.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 08:31:17 -0700 (PDT)
+Received: (nullmailer pid 2213086 invoked by uid 1000);
+        Thu, 30 Mar 2023 15:31:16 -0000
+Date:   Thu, 30 Mar 2023 10:31:16 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: usb: gpio-sbu-mux: Add OnSemi
+ NB7VPQ904M mux
+Message-ID: <20230330153116.GA2181381-robh@kernel.org>
+References: <20230321-topic-sagami_dp-v1-0-340c8bce4276@linaro.org>
+ <20230321-topic-sagami_dp-v1-1-340c8bce4276@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321-topic-sagami_dp-v1-1-340c8bce4276@linaro.org>
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds the necessary PCI ID for Intel Meteor Lake-S
-devices.
+On Tue, Mar 21, 2023 at 11:12:28PM +0100, Konrad Dybcio wrote:
+> The OnSemi NB7VPQ904M Type-C DP altmode redriver provides SBU signals
+> that can be used in with the gpio-sbu-mux driver. Document it.
+> 
+> Note that the -mux suffix is there to indicate that the gpio-sbu-mux
+> driver interacts with the mux part of this otherwise quite sophisticated
+> chip, leaving the "onnn,nb7vpq904m" compatible free for when a proper
+> driver taking care of all of the chip's capabilities is introduced.
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: stable@vger.kernel.org
----
- drivers/usb/dwc3/dwc3-pci.c | 4 ++++
- 1 file changed, 4 insertions(+)
+You should define a proper and complete binding. If you want to bind the 
+gpio-sbu-mux driver to it now until you have a proper driver then that's 
+fine. When you have such a driver, then you drop the compatible from the 
+gpio-sbu-mux driver.
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index a23ddbb819795..560793545362a 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -49,6 +49,7 @@
- #define PCI_DEVICE_ID_INTEL_RPLS		0x7a61
- #define PCI_DEVICE_ID_INTEL_MTLM		0x7eb1
- #define PCI_DEVICE_ID_INTEL_MTLP		0x7ec1
-+#define PCI_DEVICE_ID_INTEL_MTLS		0x7f6f
- #define PCI_DEVICE_ID_INTEL_MTL			0x7e7e
- #define PCI_DEVICE_ID_INTEL_TGL			0x9a15
- #define PCI_DEVICE_ID_AMD_MR			0x163a
-@@ -474,6 +475,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_MTLP),
- 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_MTLS),
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
-+
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_MTL),
- 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
--- 
-2.39.2
+Note that having the fallback "gpio-sbu-mux" is somewhat problematic 
+because the kernel has no mechanism to ensure you bind the most specific 
+driver. For that to happen, it would have to support (automatically) 
+unbinding one driver and binding to the more specific driver since one 
+driver could be built-in and the other a module.
 
+Rob
