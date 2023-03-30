@@ -2,132 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6DC56D0759
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 15:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 300496D0816
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 16:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232164AbjC3Nyj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Mar 2023 09:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
+        id S232464AbjC3OWS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Mar 2023 10:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbjC3Nyi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 09:54:38 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F094EFF
-        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 06:54:36 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id g19so11504015lfr.9
-        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 06:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680184475;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3bDS+NZkCHNjcglyIFTFfiCpIuz6atTUwaUlX4EZFO0=;
-        b=ErhbzUuJagPIYLAc87qPWesX4OphTqSHbJlUJVBxYSuQj1F7by1TnBjfmXPMkVWe/a
-         Iu3m3k0LswZfbS3vZSMywRkPsQYArihDnUmFaAlH9Mb5bDzCTXzj65gkKQEv8OjR0RaW
-         tk2xX9+JDRLkNBdGasPWY23zteZ+ErxBVxkMgmShPfqCN4VTvlxDrfVRhfkIxXHpvln6
-         H9nocYvLcFCWlp5ljTC3t37lWhVXndOUFUgZlKgZtImqwfm4Lyh6vXhHz85Xpc9D8Mp2
-         HMrch5hd8A5/8XdkknaU0barZxVPKTAysNeuqgUcUpAqqj0ns4VD7Y0p7AhEIYB9G8Or
-         uJHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680184475;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3bDS+NZkCHNjcglyIFTFfiCpIuz6atTUwaUlX4EZFO0=;
-        b=U5qm7FTBnA18Z1jY10HYgZ9L8oLoizUzTdeC3A3OI5Sbye00no27PgWTX+FCUHaK5B
-         Z32Ddt6BGx3xpEkJYT3/QfViTerN0gaCGxIjPbQ2UoO6TSSKfwegoxzndPsYzSRajsa2
-         ElNfHpqBL+Y8KHoHYGneCRnxGY5xfaghl66kqulcKJdziQDHJF/Al1QsRIXQoBcTRImN
-         4QjH/LSZ1VEoT3OD9Vvhe0n+40LrKVJ0AdjOa3NA226xs4+ir/o2T5oZPo5dcMYmByP2
-         lCMqHwUto3sLFEga/fj9byXKxP671zSNQcDZJk2CkPuSVUm1vKZQhB1OEuhXA4cg9J+A
-         mBQg==
-X-Gm-Message-State: AAQBX9cWo/CM8HEZsCenlOf/C59RAn7pvp0h3qT3C7dcJj7ALz5Td6pl
-        VouT1iMb+/Vcie9KwPklL33feg==
-X-Google-Smtp-Source: AKy350bscyofmdfis+7MYVvAX6/F+FXHo4829Gg5E4cWInBN+17SyFn1NzTYtImeQD2Xg1dAOF4b9w==
-X-Received: by 2002:a05:6512:985:b0:4e9:605e:b470 with SMTP id w5-20020a056512098500b004e9605eb470mr1821024lft.26.1680184474901;
-        Thu, 30 Mar 2023 06:54:34 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id q28-20020ac2529c000000b004eaf8613bc3sm3525907lfm.284.2023.03.30.06.54.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 06:54:34 -0700 (PDT)
-Message-ID: <7c4af740-1cf5-6b20-4642-8657ef31c9d8@linaro.org>
-Date:   Thu, 30 Mar 2023 15:54:33 +0200
+        with ESMTP id S232513AbjC3OWH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 10:22:07 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783B2CDD0
+        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 07:21:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680186101; x=1711722101;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=tm1vz7rf+zY9FCoTIhxGwiCnOArAsYM42z5m2qp8fU8=;
+  b=MWMzDeBGp4sar0W9MBrGqPoLwLfV06i5Cl3gAtEySJvUFRZN+Kj6slGv
+   jFu8ogZyfWDgEdQgAyqPy2/rzOkDTaYrUkqYzf9B8jHtzgUJLO5TkiVdw
+   KN3EaZ3GgZty3wI9YEk+gcAEdW0roQoFYpBrAjHMVllvTdNwrzX81iYov
+   HtxRSMYdqMGwM7KroytowxqXwvIgZ9SZX0M7EM5VQWnQeWYXgQscC4TkK
+   IyHIyo4YqDrtrMJTyby1YyIbUW/MX2+ja3//N3XyhUzv1UI17grjUxgiq
+   5TgrOIokhghOYJt2mL7eiSrKPVzzLZ2VPnN89kgtkKAGWZ5TtAZkCrLPo
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="343656600"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="343656600"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 07:06:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="828351991"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="828351991"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 30 Mar 2023 07:06:32 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 30 Mar 2023 17:06:31 +0300
+Date:   Thu, 30 Mar 2023 17:06:31 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ucsi: introduce read_explicit operation
+Message-ID: <ZCWXZ1KwzYeSdJhv@kuha.fi.intel.com>
+References: <20230120233920.752245-1-samuel@cavoj.net>
+ <Y8uRnc3Cxb1ADad6@kroah.com>
+ <Y8+/Lgp7fWaxFsri@kuha.fi.intel.com>
+ <ZAi1KO+WUs+9nNOn@kuha.fi.intel.com>
+ <ZBMUsweZjfqxZJdc@kuha.fi.intel.com>
+ <c5223adc99dd9bf849071e8fdfed4bb1@cavoj.net>
+ <3ae633095973c747baea1a23f3b7f6f4@cavoj.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 2/8] dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3
- PHY
-Content-Language: en-US
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
-References: <cover.1679909245.git.quic_varada@quicinc.com>
- <4a21defe3320eb11d0e43bc7f02b3168ecefd458.1679909245.git.quic_varada@quicinc.com>
- <3d49b4b0-587c-f7e5-4122-65b3e9f11583@linaro.org>
- <20230330071016.GB13508@varda-linux.qualcomm.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230330071016.GB13508@varda-linux.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3ae633095973c747baea1a23f3b7f6f4@cavoj.net>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 30/03/2023 09:10, Varadarajan Narayanan wrote:
-> On Mon, Mar 27, 2023 at 01:02:52PM +0300, Dmitry Baryshkov wrote:
->> On 27/03/2023 12:30, Varadarajan Narayanan wrote:
->>> Add dt-bindings for USB3 PHY found on Qualcomm IPQ9574
->>>
->>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->>> ---
->>>  Changes in v4:
->>> 	- Remove constraints not applicable to IPQ9574
->>>  Changes in v3:
->>> 	- Update other mandatory fields to accomodate IPQ9574
->>>  Changes in v2:
->>> 	- Updated sections missed in previous patch
->>> ---
->>>  .../bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml    | 25 ++++++++++++++++++++--
->>>  1 file changed, 23 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
->>> index e81a382..aa5b58c 100644
->>> --- a/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
->>> +++ b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
->>> @@ -21,6 +21,7 @@ properties:
->>>      enum:
->>>        - qcom,ipq6018-qmp-usb3-phy
->>>        - qcom,ipq8074-qmp-usb3-phy
->>> +      - qcom,ipq9574-qmp-usb3-phy
->>>        - qcom,msm8996-qmp-usb3-phy
->>>        - qcom,msm8998-qmp-usb3-phy
->>>        - qcom,qcm2290-qmp-usb3-phy
->>> @@ -122,8 +123,6 @@ required:
->>>    - clock-names
->>>    - resets
->>>    - reset-names
->>> -  - vdda-phy-supply
->>> -  - vdda-pll-supply
->>
->> Same questions as for the qusb2 PHY. How is the PHY powered?
+Hi Sam,
+
+On Thu, Mar 30, 2023 at 01:48:18AM +0200, Samuel Čavoj wrote:
+> Hi Heikki,
 > 
-> It is powered by always on regulators. Will create fixed
-> regulators and assign them to these.
+> On 2023-03-18 03:04, Samuel Čavoj wrote:
+> ...
+> > > Unfortunately nothing seems to work... I'm attaching the DMI quirk
+> > > patch here. Can you test it?
+> > 
+> > I'll definitely try it out, I hope sometime next week!
+> > 
+> > > I'm not sure if the DMI_PRODUCT_NAME is just "ZenBook" so you may
+> > > need to fix that in the patch!!
+> > > 
+> > > You can get the correct value by running dmidecode. This should work:
+> > > 
+> > >         % dmidecode -s system-product-name
+> 
+> This returns "ZenBook UX325UA_UM325UA", so the DMI_MATCH would work.
+> However my DMI_SYS_VENDOR is "ASUSTeK COMPUTER INC.", uppercase.
+> 
+> All in all, the patch works after some modifications which I'm
+> attaching below. In summary:
+> 
+>  - The DMI_MATCH SYS_VENDOR was changed to uppercase
+>  - The DMI_MATCH PRODUCT_NAME was changed to be more specific, although
+>    I'm not sure what the best value is here.
+>  - The conditional in ucsi_zenbook_read was fixed.
+>  - ua->cmd cannot be reset to 0 after read because the reset
+>    procedure repeatedly calls read without performing
+>    any other commands. I don't think this should cause any problems
+>  - ucsi_acpi_notify needs to call the quirked variant
+>    as well, so I put an indirect call there.
+> 
+> Otherwise maybe ucsi_acpi_async_write should only set cmd if the offset
+> is UCSI_CONTROL.
 
-always-on where? in DTS? Then it is not really related to this patch...
-or you meant always-on power domains? Yet still device has power supplies.
+Thanks!
 
-Best regards,
-Krzysztof
+> I'm occasionally getting some other errors later on, but I think
+> those might be specific to a certain cheap USB-C hub I have. They
+> don't occur with it unplugged.
 
+Okay... Did you see those errors with your original patch?
+
+Br,
+
+-- 
+heikki
