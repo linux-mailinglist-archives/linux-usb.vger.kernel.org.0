@@ -2,92 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D61F6D0858
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 16:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD46C6D087D
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 16:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbjC3OaD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Mar 2023 10:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
+        id S231322AbjC3Ok6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Mar 2023 10:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232345AbjC3OaB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 10:30:01 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8037B3;
-        Thu, 30 Mar 2023 07:30:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680186600; x=1711722600;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hTiUmnEecxYNtA9xQHIkvXv5NkPp0vGZ3pfAXPcUgus=;
-  b=HFYilgzsqPUMFc4LkPAdAGNqlH/afgyPIL4baBDpFcNE1v93eFeh95g4
-   T294+63ha4hUIxUzUvP9LoZ3SfazabDpu1FWnrh3IH1UEYcodyvFurBHN
-   XS+fwIDC1+BCqpLqppsqRyuTqVBEU3G7YImIVs59flWme1DQKOp8nV/eG
-   P03g9PQK6+sV2OeVWyT/PpanSPCjWymYNBOhXtWE11shUsPVxUbeTGz9t
-   06VSXt1MQeVVpyTYVqI9nKcej/HFyFFwvklOs8KTM+ktSyuNzTIrJxXKG
-   RDsl+gntx6EYOZutWoc1jvvagKTnum8VuNa6fGKMtwXzqSznee0NBrejS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="406172544"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="406172544"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 07:29:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="774021097"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="774021097"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by FMSMGA003.fm.intel.com with ESMTP; 30 Mar 2023 07:29:50 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Stable@vger.kernel.org
-Subject: [PATCH 3/3] xhci: Free the command allocated for setting LPM if we return early
-Date:   Thu, 30 Mar 2023 17:30:56 +0300
-Message-Id: <20230330143056.1390020-4-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230330143056.1390020-1-mathias.nyman@linux.intel.com>
+        with ESMTP id S231151AbjC3Okz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 10:40:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E1F8A5A
+        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 07:40:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BF7C620A3
+        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 14:40:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AE7BC433D2;
+        Thu, 30 Mar 2023 14:40:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680187245;
+        bh=cI/FdwncyAEYdO0eTemr+1uAmXSoAKetudERYrk/YVQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2ivAW4+nGoRh9oP1u9MCv3oQFom4KMn24hYgYtKK2TssQlSycUXFlZVIJ2XHzXnUV
+         WUtHcbK4u1tjlzkbJuJ9waNjfT8R60xCuKjVzY4FbW6GoXACuyZmWSk2EJ/aVXURzx
+         G11uRMENw1+XR4SWeCXX73X//YGl/gwR0JMkOzEg=
+Date:   Thu, 30 Mar 2023 16:40:43 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/3] Revert "usb: xhci-pci: Set PROBE_PREFER_ASYNCHRONOUS"
+Message-ID: <ZCWfa9Hqs_mF8GKh@kroah.com>
 References: <20230330143056.1390020-1-mathias.nyman@linux.intel.com>
+ <20230330143056.1390020-3-mathias.nyman@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330143056.1390020-3-mathias.nyman@linux.intel.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The command allocated to set exit latency LPM values need to be freed in
-case the command is never queued. This would be the case if there is no
-change in exit latency values, or device is missing.
+On Thu, Mar 30, 2023 at 05:30:55PM +0300, Mathias Nyman wrote:
+> This reverts commit 4c2604a9a6899bab195edbee35fc8d64ce1444aa.
+> 
+> Asynch probe caused regression in a setup with both Renesas and Intel xHC
+> controllers. Devices connected to the Renesas disconnected shortly after
+> boot. With Asynch probe the busnumbers got interleaved.
+> 
+> xhci_hcd 0000:00:14.0: new USB bus registered, assigned bus number 1
+> xhci_hcd 0000:04:00.0: new USB bus registered, assigned bus number 2
+> xhci_hcd 0000:00:14.0: new USB bus registered, assigned bus number 3
+> xhci_hcd 0000:04:00.0: new USB bus registered, assigned bus number 4
+> 
+> Reason why this commit causes regression is still unknown, but revert it
+> while debugging the issue.
+> 
+> Link: https://lore.kernel.org/linux-usb/20230307132120.5897c5af@deangelis.fenrir.org.uk
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Link: https://lore.kernel.org/linux-usb/24263902-c9b3-ce29-237b-1c3d6918f4fe@alu.unizg.hr
-Tested-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Fixes: 5c2a380a5aa8 ("xhci: Allocate separate command structures for each LPM command")
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci.c | 1 +
- 1 file changed, 1 insertion(+)
+I'll add a Fixes: and cc: stable on this, ok?
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index bdb6dd819a3b..6307bae9cddf 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -4442,6 +4442,7 @@ static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
- 
- 	if (!virt_dev || max_exit_latency == virt_dev->current_mel) {
- 		spin_unlock_irqrestore(&xhci->lock, flags);
-+		xhci_free_command(xhci, command);
- 		return 0;
- 	}
- 
--- 
-2.25.1
+thanks,
 
+greg k-h
