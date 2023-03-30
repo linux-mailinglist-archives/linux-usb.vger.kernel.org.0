@@ -2,117 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 300496D0816
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 16:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C75556D081C
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 16:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232464AbjC3OWS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Mar 2023 10:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
+        id S232408AbjC3OXr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Mar 2023 10:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232513AbjC3OWH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 10:22:07 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783B2CDD0
-        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 07:21:41 -0700 (PDT)
+        with ESMTP id S232396AbjC3OXq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 10:23:46 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA23AC15E;
+        Thu, 30 Mar 2023 07:23:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680186101; x=1711722101;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=tm1vz7rf+zY9FCoTIhxGwiCnOArAsYM42z5m2qp8fU8=;
-  b=MWMzDeBGp4sar0W9MBrGqPoLwLfV06i5Cl3gAtEySJvUFRZN+Kj6slGv
-   jFu8ogZyfWDgEdQgAyqPy2/rzOkDTaYrUkqYzf9B8jHtzgUJLO5TkiVdw
-   KN3EaZ3GgZty3wI9YEk+gcAEdW0roQoFYpBrAjHMVllvTdNwrzX81iYov
-   HtxRSMYdqMGwM7KroytowxqXwvIgZ9SZX0M7EM5VQWnQeWYXgQscC4TkK
-   IyHIyo4YqDrtrMJTyby1YyIbUW/MX2+ja3//N3XyhUzv1UI17grjUxgiq
-   5TgrOIokhghOYJt2mL7eiSrKPVzzLZ2VPnN89kgtkKAGWZ5TtAZkCrLPo
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="343656600"
+  t=1680186204; x=1711722204;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FY8IX9SAO9iBATQiPxyU6DgWIpMVyTKKJh0RUHkpsWM=;
+  b=WhgQCXRYLbTUJZDSqUg9snjCL6hHVMUVy2hk0Tj6nZrjWYCAbAwBlNjq
+   2qEVJpuRmRbHe2qoRrALgm78RNQNtFq5EjjBuNyBz3kublCsfAsOOyW1t
+   KXRq2c5UvPIl8jgQ2AM/3oER3n6iZQdqIWrrPNzAUhZ4XzRMTx/ddZ+X5
+   NgHusZS4qlE2fVXEBrpReApcebwc/6ScIYK3Vr+9n2JjvPhkH3ppU2fc3
+   W6Jmjq5qTwRR/kBN/Tqgi+SJtEvlHy+plO3Pc1Qw5zkPx5r1V8f4f9LrD
+   9WTiHVLD2khO4SXUEVFZoHGgaONXrwWO38Q3PYSjk70wzxAnL8HJvJZiL
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="406169619"
 X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="343656600"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 07:06:34 -0700
+   d="scan'208";a="406169619"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 07:19:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="828351991"
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="634927548"
 X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="828351991"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 30 Mar 2023 07:06:32 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 30 Mar 2023 17:06:31 +0300
-Date:   Thu, 30 Mar 2023 17:06:31 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: introduce read_explicit operation
-Message-ID: <ZCWXZ1KwzYeSdJhv@kuha.fi.intel.com>
-References: <20230120233920.752245-1-samuel@cavoj.net>
- <Y8uRnc3Cxb1ADad6@kroah.com>
- <Y8+/Lgp7fWaxFsri@kuha.fi.intel.com>
- <ZAi1KO+WUs+9nNOn@kuha.fi.intel.com>
- <ZBMUsweZjfqxZJdc@kuha.fi.intel.com>
- <c5223adc99dd9bf849071e8fdfed4bb1@cavoj.net>
- <3ae633095973c747baea1a23f3b7f6f4@cavoj.net>
+   d="scan'208";a="634927548"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 30 Mar 2023 07:19:13 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 8C97213A; Thu, 30 Mar 2023 17:15:37 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Olliver Schinagl <oliver@schinagl.nl>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+Subject: [PATCH v1 1/2] iopoll: Introduce ioreadXX_poll_timeout() macros
+Date:   Thu, 30 Mar 2023 17:14:12 +0300
+Message-Id: <20230330141413.25569-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3ae633095973c747baea1a23f3b7f6f4@cavoj.net>
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Sam,
+From: Olliver Schinagl <oliver@schinagl.nl>
 
-On Thu, Mar 30, 2023 at 01:48:18AM +0200, Samuel Čavoj wrote:
-> Hi Heikki,
-> 
-> On 2023-03-18 03:04, Samuel Čavoj wrote:
-> ...
-> > > Unfortunately nothing seems to work... I'm attaching the DMI quirk
-> > > patch here. Can you test it?
-> > 
-> > I'll definitely try it out, I hope sometime next week!
-> > 
-> > > I'm not sure if the DMI_PRODUCT_NAME is just "ZenBook" so you may
-> > > need to fix that in the patch!!
-> > > 
-> > > You can get the correct value by running dmidecode. This should work:
-> > > 
-> > >         % dmidecode -s system-product-name
-> 
-> This returns "ZenBook UX325UA_UM325UA", so the DMI_MATCH would work.
-> However my DMI_SYS_VENDOR is "ASUSTeK COMPUTER INC.", uppercase.
-> 
-> All in all, the patch works after some modifications which I'm
-> attaching below. In summary:
-> 
->  - The DMI_MATCH SYS_VENDOR was changed to uppercase
->  - The DMI_MATCH PRODUCT_NAME was changed to be more specific, although
->    I'm not sure what the best value is here.
->  - The conditional in ucsi_zenbook_read was fixed.
->  - ua->cmd cannot be reset to 0 after read because the reset
->    procedure repeatedly calls read without performing
->    any other commands. I don't think this should cause any problems
->  - ucsi_acpi_notify needs to call the quirked variant
->    as well, so I put an indirect call there.
-> 
-> Otherwise maybe ucsi_acpi_async_write should only set cmd if the offset
-> is UCSI_CONTROL.
+There are users in the Linux kernel that would benefit from using
+ioreadXX_poll_timeout() macros, such as ioread32_poll_timeout().
+Introduce those macros.
 
-Thanks!
+Signed-off-by: Olliver Schinagl <oliver@schinagl.nl>
+Co-developed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ include/linux/iopoll.h | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-> I'm occasionally getting some other errors later on, but I think
-> those might be specific to a certain cheap USB-C hub I have. They
-> don't occur with it unplugged.
-
-Okay... Did you see those errors with your original patch?
-
-Br,
-
+diff --git a/include/linux/iopoll.h b/include/linux/iopoll.h
+index 2c8860e406bd..30ba609175a7 100644
+--- a/include/linux/iopoll.h
++++ b/include/linux/iopoll.h
+@@ -140,6 +140,7 @@
+ #define readx_poll_timeout_atomic(op, addr, val, cond, delay_us, timeout_us) \
+ 	read_poll_timeout_atomic(op, val, cond, delay_us, timeout_us, false, addr)
+ 
++/* readX() */
+ #define readb_poll_timeout(addr, val, cond, delay_us, timeout_us) \
+ 	readx_poll_timeout(readb, addr, val, cond, delay_us, timeout_us)
+ 
+@@ -164,6 +165,7 @@
+ #define readq_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
+ 	readx_poll_timeout_atomic(readq, addr, val, cond, delay_us, timeout_us)
+ 
++/* readX_relaxed() */
+ #define readb_relaxed_poll_timeout(addr, val, cond, delay_us, timeout_us) \
+ 	readx_poll_timeout(readb_relaxed, addr, val, cond, delay_us, timeout_us)
+ 
+@@ -188,4 +190,29 @@
+ #define readq_relaxed_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
+ 	readx_poll_timeout_atomic(readq_relaxed, addr, val, cond, delay_us, timeout_us)
+ 
++/* ioreadXX() */
++#define ioread8_poll_timeout(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout(ioread8, addr, val, cond, delay_us, timeout_us)
++
++#define ioread8_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout_atomic(ioread8, addr, val, cond, delay_us, timeout_us)
++
++#define ioread16_poll_timeout(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout(ioread16, addr, val, cond, delay_us, timeout_us)
++
++#define ioread16_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout_atomic(ioread16, addr, val, cond, delay_us, timeout_us)
++
++#define ioread32_poll_timeout(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout(ioread32, addr, val, cond, delay_us, timeout_us)
++
++#define ioread32_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout_atomic(ioread32, addr, val, cond, delay_us, timeout_us)
++
++#define ioread64_poll_timeout(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout(ioread64, addr, val, cond, delay_us, timeout_us)
++
++#define ioread64_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout_atomic(ioread64, addr, val, cond, delay_us, timeout_us)
++
+ #endif /* _LINUX_IOPOLL_H */
 -- 
-heikki
+2.40.0.1.gaa8946217a0b
+
