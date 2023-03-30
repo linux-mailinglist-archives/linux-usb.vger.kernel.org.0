@@ -2,162 +2,387 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA256D04C8
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 14:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4023D6D0531
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 14:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbjC3MeB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Mar 2023 08:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
+        id S231524AbjC3Mrj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Mar 2023 08:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjC3MeA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 08:34:00 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1F6273C
-        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 05:33:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680179637; x=1711715637;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=V2C49A3mCAhVGRVr/gphq8gtPSLz2hOqosuvz2Np22w=;
-  b=JwGE8I2xMDGDwaikZfunyYqnvr0pFARpFR5GUEgicAUjQ3MMh3fouaG1
-   YSPZgVoa5SYXSt0gPef3ROL01KAmbbInf8VX7PqI736JzoIbZqg4DGYV1
-   t5RT50dtEgHblpG6aeA7YawEOJI7nhu4I+VozMdOw9rOzdZBw33YLLXf/
-   mD3R6xd86cJS0f883lebTpHAVd+/d7TmyMWintpKtd5N+MDVyEaGMUWdT
-   67HU1n/KW/HzYNHkQlhvhS83UzF8IuMpRH9n80E+l/ULCqhTDFRqwLoK+
-   TXya2NLszFerkweIIKCeZhL3z/Vhzm0WFHdrw1QphDkFm+ooJ6IgGmnIg
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="338652542"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="338652542"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 05:33:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="1014407401"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="1014407401"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga005.fm.intel.com with ESMTP; 30 Mar 2023 05:33:37 -0700
-Message-ID: <b5241e6c-dde1-ae14-3eb3-9157283a4eda@linux.intel.com>
-Date:   Thu, 30 Mar 2023 15:34:59 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Content-Language: en-US
-To:     "YoungJun.Park" <her0gyugyu@gmail.com>, linux-usb@vger.kernel.org
-Cc:     youngjun.park@ahnlab.com, her0gyu@naver.com,
-        Greg KH <gregkh@linuxfoundation.org>
-References: <20230328063020.GA1824187@ubuntu>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: Question of possible concurrent xhci debugfs file
-In-Reply-To: <20230328063020.GA1824187@ubuntu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        with ESMTP id S231477AbjC3Mri (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 08:47:38 -0400
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0AD91;
+        Thu, 30 Mar 2023 05:47:36 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-17fcc07d6c4so5508090fac.8;
+        Thu, 30 Mar 2023 05:47:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680180455;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=L9da3RztuEaK2R1chEVmMMY8g07HXvBf7GOsgks3EJU=;
+        b=yffchRJdKbFaj9+VYWwsp2nxL8ydMpghLxJEXsYmCpQLMNGWyYGVo5qsZEllRx/Xtn
+         jekAdmrU+QXI2cIbslWOUTAXlq5FlztxN847mowYQw6cpxjRMJaFxFhUKPWyklm0vHcS
+         RhzcxI70kI5w3g6sS0G8ZJGcXzdL3qPMEeKEEAG1FWclbIjats5q1Qu8LrPZJh4LUTyq
+         FEe93OQRr0nsPFlInV3F5qvCF6pCzhfIykGSFcvOjlpaBHerw/NwwZ2/9+y1puXTFEOW
+         VB5prqwLmCyMe7L7t2pluErbTxpnYlp8YFqPeNG8A+58s/DDKV5TcdjLpEioBf6TJwlq
+         HklQ==
+X-Gm-Message-State: AAQBX9egDi3xd8TVQHhG7e2L1qaodqU023GNYyDLgmuBwg/IkCmGZWIN
+        0C7EItQkdhGMt0+JwNhiNA==
+X-Google-Smtp-Source: AKy350YghLak0zz/2mTljRWGf4IHaCIVgJjlCbZOiK6HdF0cXWTyybVCcWMwszMvSZpi09ldbg47XA==
+X-Received: by 2002:a05:6870:14d6:b0:17e:6eaa:9452 with SMTP id l22-20020a05687014d600b0017e6eaa9452mr3189662oab.13.1680180455484;
+        Thu, 30 Mar 2023 05:47:35 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id zd40-20020a05687127a800b0017eccc3fed9sm4915077oab.47.2023.03.30.05.47.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 05:47:35 -0700 (PDT)
+Received: (nullmailer pid 1824010 invoked by uid 1000);
+        Thu, 30 Mar 2023 12:47:33 -0000
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     konrad.dybcio@linaro.org, linux-phy@lists.infradead.org,
+        andersson@kernel.org, gregkh@linuxfoundation.org,
+        agross@kernel.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        sboyd@kernel.org, vkoul@kernel.org, linux-kernel@vger.kernel.org,
+        mturquette@baylibre.com, linux-usb@vger.kernel.org,
+        kishon@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        quic_wcheng@quicinc.com, devicetree@vger.kernel.org
+In-Reply-To: <cb8f2ba0ff39951aeada479ed3895d19c9f72617.1680162377.git.quic_varada@quicinc.com>
+References: <cover.1680162377.git.quic_varada@quicinc.com>
+ <cb8f2ba0ff39951aeada479ed3895d19c9f72617.1680162377.git.quic_varada@quicinc.com>
+Message-Id: <168017973612.1809972.2258406921826317163.robh@kernel.org>
+Subject: Re: [PATCH v5 3/8] dt-bindings: usb: dwc3: Add IPQ9574 compatible
+Date:   Thu, 30 Mar 2023 07:47:33 -0500
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 28.3.2023 9.30, YoungJun.Park wrote:
-> I got a panic dump which happend on kernel(
-> I check the both of CentOS and mainline kernel
-> And I assume it could be happend on mainline kernel.
-> (like I said assume)
-> 
-> I think xhci-debugfs file creation check the creation of
-> NULL parent dentry. Is it right? (drivers/usb/host/xhci-debugfs.c)
-> 
-> The contents below is the what I analyze.
-> 
-> 1. A lot of usb error
-> ...
-> [1994159.974407] usb 1-2: device descriptor read/64, error -71
-> [1994160.187902] usb 1-2: new low-speed USB device number 36 using xhci_hcd
-> [1994160.302634] usb 1-2: device descriptor read/64, error -71
-> [1994160.562027] usb 1-2: device descriptor read/64, error -71
-> [1994160.663789] usb usb1-port2: unable to enumerate USB device
-> [1994162.256029] usb 1-2: new low-speed USB device number 37 using xhci_hcd
-> [1994162.370764] usb 1-2: device descriptor read/64, error -71
-> [1994162.585258] usb 1-2: device descriptor read/64, error -71
-> [1994162.797751] usb 1-2: new low-speed USB device number 38 using xhci_hcd
-> [1994162.912484] usb 1-2: device descriptor read/64, error -71
-> [1994163.141944] usb 1-2: device descriptor read/64, error -71
-> [1994163.243712] usb usb1-port2: attempt power cycle.
-> ...
-> 
-> 2. After that panic happend and I got a dump.
-> The cause of panic reading "/sys/kernel/debug/trbs" which is abnormal.
-> (which have bad xhci_ring private data)
-> the file must be on the "/sys/kernel/debug/usb/~~~".
-> 
-> sh> bt
-> PID: 91416  TASK: ffff8d68fcc54200  CPU: 1   COMMAND: "fbmons"
->   #0 [ffff8d679a6cbad0] machine_kexec at ffffffff9e2662c4
->   #1 [ffff8d679a6cbb30] __crash_kexec at ffffffff9e322a32
->   #2 [ffff8d679a6cbc00] crash_kexec at ffffffff9e322b20
->   #3 [ffff8d679a6cbc18] oops_end at ffffffff9e98d798
->   #4 [ffff8d679a6cbc40] no_context at ffffffff9e275d14
->   #5 [ffff8d679a6cbc90] __bad_area_nosemaphore at ffffffff9e275fe2
->   #6 [ffff8d679a6cbce0] bad_area_nosemaphore at ffffffff9e276104
->   #7 [ffff8d679a6cbcf0] __do_page_fault at ffffffff9e990750
->   #8 [ffff8d679a6cbd60] do_page_fault at ffffffff9e990975
->   #9 [ffff8d679a6cbd90] page_fault at ffffffff9e98c778
->      [exception RIP: xhci_ring_trb_show+29]
->      RIP: ffffffff9e76005d  RSP: ffff8d679a6cbe40  RFLAGS: 00010246
->      RAX: ffff8d497b0fe018  RBX: 0000000000000000  RCX: 0000001309207f9b
->      RDX: fffffffffffffff4  RSI: 0000000000000001  RDI: ffff8d6939b8fd40
->      RBP: ffff8d679a6cbe60   R8: ffff8d49ffa5f1a0   R9: ffff8d3b3fc07300
->      R10: ffff8d3b3fc07300  R11: ffffffff9e3de9fd  R12: 0000000000000000
->      R13: 0000000000000000  R14: ffff8d6939b8fd40  R15: ffff8d6939b8fd40
->      ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
-> #10 [ffff8d679a6cbe68] seq_read at ffffffff9e476d10
-> #11 [ffff8d679a6cbed8] vfs_read at ffffffff9e44e3ff
-> #12 [ffff8d679a6cbf08] sys_read at ffffffff9e44f27f
-> #13 [ffff8d679a6cbf50] system_call_fastpath at ffffffff9e995f92
->      RIP: 00007f5f9749f6fd  RSP: 00007f5f84c73700  RFLAGS: 00000293
->      RAX: 0000000000000000  RBX: 00007f5f7066a390  RCX: ffffffffffffffff
->      RDX: 0000000000000400  RSI: 00007f5f706d2270  RDI: 0000000000000016
->      RBP: 00007f5f706d2270   R8: 00007f5f953e73a0   R9: 00007f5f953e7388
->      R10: 0000000000000040  R11: 0000000000000293  R12: 0000000000000400
->      R13: 00007f5f84c7354c  R14: 0000000022100004  R15: 00007f5f866c5368
->      ORIG_RAX: 0000000000000000  CS: 0033  SS: 002b
-> 
-> 3. I found a another abnormal xhci debugfs file ep_context in dump.
-> Check xhci_slot_priv is alive and find the root is NULL.
-> 
-> crash> files -d 0xffff8d68fe8f0000
->       DENTRY           INODE           SUPERBLK     TYPE PATH
-> ffff8d68fe8f0000 ffff8d489e979e10 ffff8d3b19169800 REG  /sys/kernel/debug/ep-context
-> 
-> crash > struct xchi_slot_priv 0xffff8d4812492c0
-> struct xhci_slot_priv {
-> ...
->    root = 0x0,
-> ...
->    dev = 0xffff8d497b0fe000
-> }
-> 
-> 4. Looking into the mainline kernel code, I finally concluded that
-> /sys/fs/debug/"interface file" could be made.
-> 
-> drivers/usb/host/xhci-debugfs.c
-> xhci_debugfs_create_slot function
-> ...
-> priv->root = debugfs_create_dir(priv->name, xhci->debugfs_slots); // root can be NULL
 
-If you can reproduce this could you check if debugfs_create_dir() actually returned
-NULL here, or if there was some race zeroing priv->root a bit later.
+On Thu, 30 Mar 2023 14:10:45 +0530, Varadarajan Narayanan wrote:
+> Document the IPQ9574 dwc3 compatible.
+> 
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+>  Changes in v5:
+> 	- Restore removed constraints
+> 
+>  Changes in v4:
+> 	- Update other relevant sections
+> 	- Remove constraints not applicable to IPQ9574
+> ---
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
 
-I tried to reproduce this myself by intentionally failing the device descriptor read
-during enumeration. This gave similar "device descriptor read/64, error -71" and
-"attempt power cycle" log entries, but didn't trigger the issue.
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-For me the slot related debugfs files were successfully created after usb_alloc_dev() was called,
-and removed after hub_free_dev().
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-Thanks
-Mathias
+Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/cb8f2ba0ff39951aeada479ed3895d19c9f72617.1680162377.git.quic_varada@quicinc.com
+
+
+usb2@60f8800: clock-names:0: 'core' was expected
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtb
+	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c3.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c2.dtb
+
+usb2@60f8800: 'dwc3@6000000' does not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtb
+	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c3.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c2.dtb
+
+usb2@60f8800: 'interrupt-names' is a required property
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtb
+	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dtb
+
+usb2@60f8800: 'oneOf' conditional failed, one must be fixed:
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtb
+	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dtb
+
+usb2@60f8800: 'power-domains' is a required property
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtb
+	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dtb
+
+usb3@100f8800: 'dwc3@10000000', 'reset-names' do not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
+	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
+
+usb3@110f8800: 'dwc3@11000000', 'reset-names' do not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
+	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
+
+usb3@110f8800: 'interrupt-names' is a required property
+	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
+
+usb3@110f8800: 'oneOf' conditional failed, one must be fixed:
+	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
+
+usb3@110f8800: 'power-domains' is a required property
+	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
+
+usb3@8af8800: 'dwc3@8a00000' does not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtb
+	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c3.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c2.dtb
+
+usb3@8af8800: 'interrupt-names' is a required property
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtb
+	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dtb
+
+usb3@8af8800: 'oneOf' conditional failed, one must be fixed:
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtb
+	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dtb
+
+usb3@8af8800: 'power-domains' is a required property
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtb
+	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dtb
+
+usb@4ef8800: 'interrupt-names' is a required property
+	arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dtb
+
+usb@4ef8800: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dtb
+
+usb@4ef8800: usb@4e00000: Unevaluated properties are not allowed ('extcon' was unexpected)
+	arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dtb
+
+usb@6af8800: 'extcon' does not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-natrium.dtb
+	arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-scorpio.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+
+usb@6af8800: usb@6a00000: Unevaluated properties are not allowed ('extcon' was unexpected)
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-natrium.dtb
+	arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-scorpio.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+
+usb@70f8800: 'interrupt-names' is a required property
+	arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dtb
+
+usb@70f8800: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dtb
+
+usb@70f8800: 'power-domains' is a required property
+	arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dtb
+
+usb@70f8800: usb@7000000: Unevaluated properties are not allowed ('phy_mode' was unexpected)
+	arch/arm64/boot/dts/qcom/msm8953-motorola-potter.dtb
+	arch/arm64/boot/dts/qcom/msm8953-xiaomi-daisy.dtb
+	arch/arm64/boot/dts/qcom/msm8953-xiaomi-mido.dtb
+	arch/arm64/boot/dts/qcom/msm8953-xiaomi-tissot.dtb
+	arch/arm64/boot/dts/qcom/msm8953-xiaomi-vince.dtb
+	arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dtb
+	arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dtb
+	arch/arm64/boot/dts/qcom/sdm632-motorola-ocean.dtb
+
+usb@7678800: 'interrupt-names' is a required property
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+
+usb@7678800: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+
+usb@7678800: 'power-domains' is a required property
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+
+usb@76f8800: 'extcon' does not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+
+usb@76f8800: 'interrupt-names' is a required property
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+
+usb@76f8800: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+
+usb@76f8800: usb@7600000: Unevaluated properties are not allowed ('extcon' was unexpected)
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+
+usb@79b8800: 'interrupt-names' is a required property
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+
+usb@79b8800: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+
+usb@79b8800: 'power-domains' is a required property
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+
+usb@8af8800: assigned-clock-rates: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c2.dtb
+
+usb@8af8800: assigned-clocks: [[4, 124], [4, 125], [4, 126]] is too long
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c2.dtb
+
+usb@8af8800: assigned-clocks: [[9, 186], [9, 158], [9, 159]] is too long
+	arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dtb
+
+usb@8af8800: 'interrupt-names' is a required property
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+
+usb@8af8800: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+
+usb@8cf8800: assigned-clock-rates: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c2.dtb
+
+usb@8cf8800: assigned-clocks: [[4, 131], [4, 132], [4, 133]] is too long
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c2.dtb
+
+usb@8cf8800: 'interrupt-names' is a required property
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+
+usb@8cf8800: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+
+usb@a6f8800: 'dr_mode' does not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
+	arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dtb
+
+usb@a6f8800: 'dwc3@a600000' does not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/qcom-sdx55-mtp.dtb
+	arch/arm/boot/dts/qcom-sdx55-t55.dtb
+	arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dtb
+
+usb@a6f8800: usb@a600000: Unevaluated properties are not allowed ('maximum-spped' was unexpected)
+	arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dtb
+
+usb@a8f8800: assigned-clock-rates: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/qcom/sda660-inforce-ifc6560.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+usb@a8f8800: assigned-clocks: [[34, 92], [34, 91], [35, 64]] is too long
+	arch/arm64/boot/dts/qcom/sda660-inforce-ifc6560.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+usb@a8f8800: usb@a800000: Unevaluated properties are not allowed ('extcon' was unexpected)
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sda660-inforce-ifc6560.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+usb@c2f8800: clock-names:2: 'iface' was expected
+	arch/arm64/boot/dts/qcom/sda660-inforce-ifc6560.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+usb@c2f8800: clock-names: ['cfg_noc', 'core', 'mock_utmi', 'sleep'] is too short
+	arch/arm64/boot/dts/qcom/sda660-inforce-ifc6560.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+usb@c2f8800: clocks: [[34, 48], [34, 88], [34, 89], [34, 90]] is too short
+	arch/arm64/boot/dts/qcom/sda660-inforce-ifc6560.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+usb@c2f8800: 'power-domains' is a required property
+	arch/arm64/boot/dts/qcom/sda660-inforce-ifc6560.dtb
+
+usb@f92f8800: 'interrupt-names' is a required property
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+usb@f92f8800: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
