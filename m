@@ -2,187 +2,193 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B836B6D0C10
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 18:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 549536D0FBB
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 22:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231674AbjC3Q71 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Mar 2023 12:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S229634AbjC3ULD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Mar 2023 16:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbjC3Q7Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 12:59:24 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FB1EFA1;
-        Thu, 30 Mar 2023 09:58:59 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32UAo6SP021758;
-        Thu, 30 Mar 2023 16:58:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Sv17uhHYgvFpNCoZ7tkCqhGfKmpC9s74Md7rd5hn+0E=;
- b=C9i31WyXgRKJJlnkO/41tBGtf7c1jSiOqx5+LXzju9xHtl+OT9WhHnYBhP2aU5Q+yAbr
- h4KUfTMo24a9gbkIACMC8satoGCPLY9FifJZA6DrpTHc6EyoSnEy1G9NzdqweJm1vU/m
- YrZKo/gbenSg/O5uzRNAJe5YbDXtl41slXscnUd8BFTWk+qKopswaQnE3Smtauj3OR8s
- TdlaHI7Ffo2sV+Jzi/oRcZ18eAreDiHFNZ2yNYprl/dmad6jjMW3foOp8BPx7X5f9YEe
- i5JyqfH2AP8krWe7rqhDh1Tyy0CbEcQktb3r2L5s/xpsmezUzMUcG5hy1UuS5fnX1nbx DQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pn7by99k9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Mar 2023 16:58:43 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32UGwfUK021382
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Mar 2023 16:58:42 GMT
-Received: from [10.216.63.251] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 30 Mar
- 2023 09:58:36 -0700
-Message-ID: <4f473d08-156a-622f-2ef2-ad11caa7ccda@quicinc.com>
-Date:   Thu, 30 Mar 2023 22:28:32 +0530
+        with ESMTP id S229624AbjC3ULB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 16:11:01 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 56781AF20
+        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 13:11:00 -0700 (PDT)
+Received: (qmail 212186 invoked by uid 1000); 30 Mar 2023 16:10:59 -0400
+Date:   Thu, 30 Mar 2023 16:10:59 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+4b3f8190f6e13b3efd74@syzkaller.appspotmail.com>,
+        syzbot <syzbot+1cb937c125adb93fad2d@syzkaller.appspotmail.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in shark_write_reg/usb_submit_urb, WARNING in
+ shark_write_val/usb_submit_urb
+Message-ID: <e382763c-cf33-4871-a761-1ac85ae36f27@rowland.harvard.edu>
+References: <00000000000096e4f905f81b2702@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 1/2] usb: dwc3: gadget: Bail out in pullup if soft
- reset timeout happens
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Jiantao Zhang <water.zhangjiantao@huawei.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_ugoswami@quicinc.com" <quic_ugoswami@quicinc.com>
-References: <20230328160756.30520-1-quic_kriskura@quicinc.com>
- <20230328160756.30520-2-quic_kriskura@quicinc.com>
- <20230328212048.rpm4ly265etahwm3@synopsys.com>
- <0aa1caae-ab09-2ef9-0ec8-3dd01a3f3af0@quicinc.com>
- <20230330001003.rwzo4n2hl6i22vh3@synopsys.com>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20230330001003.rwzo4n2hl6i22vh3@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: pGAFvm1o4iLy6w29EILGHB3tZgKo8aQj
-X-Proofpoint-GUID: pGAFvm1o4iLy6w29EILGHB3tZgKo8aQj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-30_10,2023-03-30_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 bulkscore=0 priorityscore=1501 spamscore=0 clxscore=1015
- adultscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0 suspectscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303300134
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00000000000096e4f905f81b2702@google.com>
+X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Reference: https://syzkaller.appspot.com/bug?extid=4b3f8190f6e13b3efd74
+Reference: https://syzkaller.appspot.com/bug?extid=1cb937c125adb93fad2d
 
+The radio-shark driver just assumes that the endpoints it uses will be
+present, without checking.  This adds an appropriate check.
 
-On 3/30/2023 5:40 AM, Thinh Nguyen wrote:
-> On Wed, Mar 29, 2023, Krishna Kurapati PSSNV wrote:
->>
->>
->> On 3/29/2023 2:50 AM, Thinh Nguyen wrote:
->>> Hi,
->>>
->>> On Tue, Mar 28, 2023, Krishna Kurapati wrote:
->>>> If the core soft reset timeout happens, avoid setting up event
->>>> buffers and starting gadget as the writes to these registers
->>>> may not reflect when in reset and setting the run stop bit
->>>> can lead the controller to access wrong event buffer address
->>>> resulting in a crash.
->>>>
->>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->>>> ---
->>>>    drivers/usb/dwc3/gadget.c | 5 ++++-
->>>>    1 file changed, 4 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>>> index 3c63fa97a680..f0472801d9a5 100644
->>>> --- a/drivers/usb/dwc3/gadget.c
->>>> +++ b/drivers/usb/dwc3/gadget.c
->>>> @@ -2620,13 +2620,16 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>>>    		 * device-initiated disconnect requires a core soft reset
->>>>    		 * (DCTL.CSftRst) before enabling the run/stop bit.
->>>>    		 */
->>>> -		dwc3_core_soft_reset(dwc);
->>>> +		ret = dwc3_core_soft_reset(dwc);
->>>> +		if (ret)
->>>> +			goto done;
->>>>    		dwc3_event_buffers_setup(dwc);
->>>>    		__dwc3_gadget_start(dwc);
->>>>    		ret = dwc3_gadget_run_stop(dwc, true, false);
->>>>    	}
->>>> +done:
->>>>    	pm_runtime_put(dwc->dev);
->>>>    	return ret;
->>>> -- 
->>>> 2.40.0
->>>>
->>>
->>> I think there's one more place that may needs this check. Can you also
->>> add this check in __dwc3_set_mode()?
->>
->> Hi Thinh,
->>
->>    Sure. Will do it.
->> Will the below be good enough ? Or would it be good to add an error/warn log
->> there>
-> 
-> There's already a warning message in dwc3_core_soft_reset() if it fails.
-> 
->>
->> kriskura@hu-kriskura-hyd:/local/mnt/workspace/krishna/skales2/skales/kernel$
->> git diff drivers/usb/
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index 476b63618511..8d1d213d1dcd 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -210,7 +210,9 @@ static void __dwc3_set_mode(struct work_struct *work)
->>                  }
->>                  break;
->>          case DWC3_GCTL_PRTCAP_DEVICE:
->> -               dwc3_core_soft_reset(dwc);
->> +               ret = dwc3_core_soft_reset(dwc);
->> +               if (ret)
->> +                       goto out;
->>
->>                  dwc3_event_buffers_setup(dwc);
->>
-> 
-> If soft-reset failed, the controller is in a bad state. We should not
-> perform any further operation until the next hard reset. We should flag
-> the controller as dead. I don't think we have the equivalent of the
-> host's HCD_FLAG_DEAD. It may require some work in the UDC core. Perhaps
-> we can flag within dwc3 for now and prevent any further operation for a
-> simpler fix.
-> 
-Hi Thinh,
+Alan Stern
 
-  Are you referring that if __dwc3_set_mode failed with core soft reset 
-timing out, the caller i.e., dwc3_set_mode who queues the work need to 
-know that the operation actually failed. So we can add a flag to 
-indicate that gadget is dead and the caller of dwc3_set_mode can check 
-the flag to see if the operation is successful or not.
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.2
 
-Or am I misunderstanding your comment ?
+ drivers/usb/core/usb.c |   70 +++++++++++++++++++++++++++++++++++++++++++++++++
+ include/linux/usb.h    |    7 ++++
+ 2 files changed, 77 insertions(+)
 
-Regards,
-Krishna,
+Index: usb-devel/drivers/usb/core/usb.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/usb.c
++++ usb-devel/drivers/usb/core/usb.c
+@@ -207,6 +207,76 @@ int usb_find_common_endpoints_reverse(st
+ EXPORT_SYMBOL_GPL(usb_find_common_endpoints_reverse);
+ 
+ /**
++ * usb_find_endpoint() - Given an endpoint address, search for the endpoint's
++ * usb_host_endpoint structure in an interface's current altsetting.
++ * @intf: the interface whose current altsetting should be searched
++ * @ep_addr: the endpoint address (number and direction) to find
++ *
++ * Search the altsetting's list of endpoints for one with the specified address.
++ *
++ * Return: Pointer to the usb_host_endpoint if found, %NULL otherwise.
++ */
++struct usb_host_endpoint __must_check *usb_find_endpoint(
++		const struct usb_interface *intf, unsigned int ep_addr)
++{
++	int n;
++	struct usb_host_endpoint *ep;
++
++	n = intf->cur_altsetting->desc.bNumEndpoints;
++	ep = intf->cur_altsetting->endpoint;
++	for (; n > 0; (--n, ++ep)) {
++		if (ep->desc.bEndpointAddress == ep_addr)
++			return ep;
++	}
++	return NULL;
++}
++EXPORT_SYMBOL_GPL(usb_find_endpoint);
++
++/**
++ * usb_check_bulk_endpoint - Check whether an interface's current altsetting
++ * contains a bulk endpoint with the given address.
++ * @intf: the interface whose current altsetting should be searched
++ * @ep_addr: the endpoint address (number and direction) to look for
++ *
++ * Search for an endpoint with the specified address and check its type.
++ *
++ * Return: %true if the endpoint is found and is bulk, %false otherwise.
++ */
++bool usb_check_bulk_endpoint(
++		const struct usb_interface *intf, unsigned int ep_addr)
++{
++	const struct usb_host_endpoint *ep;
++
++	ep = usb_find_endpoint(intf, ep_addr);
++	if (!ep)
++		return false;
++	return usb_endpoint_xfer_bulk(&ep->desc);
++}
++EXPORT_SYMBOL_GPL(usb_check_bulk_endpoint);
++
++/**
++ * usb_check_int_endpoint - Check whether an interface's current altsetting
++ * contains an interrupt endpoint with the given address.
++ * @intf: the interface whose current altsetting should be searched
++ * @ep_addr: the endpoint address (number and direction) to look for
++ *
++ * Search for an endpoint with the specified address and check its type.
++ *
++ * Return: %true if the endpoint is found and is interrupt, %false otherwise.
++ */
++bool usb_check_int_endpoint(
++		const struct usb_interface *intf, unsigned int ep_addr)
++{
++	const struct usb_host_endpoint *ep;
++
++	ep = usb_find_endpoint(intf, ep_addr);
++	if (!ep)
++		return false;
++	return usb_endpoint_xfer_int(&ep->desc);
++}
++EXPORT_SYMBOL_GPL(usb_check_int_endpoint);
++
++/**
+  * usb_find_alt_setting() - Given a configuration, find the alternate setting
+  * for the given interface.
+  * @config: the configuration to search (not necessarily the current config).
+Index: usb-devel/include/linux/usb.h
+===================================================================
+--- usb-devel.orig/include/linux/usb.h
++++ usb-devel/include/linux/usb.h
+@@ -292,6 +292,13 @@ void usb_put_intf(struct usb_interface *
+ #define USB_MAXINTERFACES	32
+ #define USB_MAXIADS		(USB_MAXINTERFACES/2)
+ 
++struct usb_host_endpoint __must_check *usb_find_endpoint(
++		const struct usb_interface *intf, unsigned int ep_addr);
++bool usb_check_bulk_endpoint(
++		const struct usb_interface *intf, unsigned int ep_addr);
++bool usb_check_int_endpoint(
++		const struct usb_interface *intf, unsigned int ep_addr);
++
+ /*
+  * USB Resume Timer: Every Host controller driver should drive the resume
+  * signalling on the bus for the amount of time defined by this macro.
+
+ drivers/media/radio/radio-shark.c  |    7 +++++++
+ drivers/media/radio/radio-shark2.c |    7 +++++++
+ 2 files changed, 14 insertions(+)
+
+Index: usb-devel/drivers/media/radio/radio-shark.c
+===================================================================
+--- usb-devel.orig/drivers/media/radio/radio-shark.c
++++ usb-devel/drivers/media/radio/radio-shark.c
+@@ -317,6 +317,13 @@ static int usb_shark_probe(struct usb_in
+ 	struct shark_device *shark;
+ 	int retval = -ENOMEM;
+ 
++	/* Are the expected endpoints present? */
++	if (!usb_check_int_endpoint(intf, SHARK_IN_EP | USB_DIR_IN) ||
++	    !usb_check_int_endpoint(intf, SHARK_OUT_EP | USB_DIR_OUT)) {
++		dev_err(&intf->dev, "Invalid radioSHARK device\n");
++		return -EINVAL;
++	}
++
+ 	shark = kzalloc(sizeof(struct shark_device), GFP_KERNEL);
+ 	if (!shark)
+ 		return retval;
+Index: usb-devel/drivers/media/radio/radio-shark2.c
+===================================================================
+--- usb-devel.orig/drivers/media/radio/radio-shark2.c
++++ usb-devel/drivers/media/radio/radio-shark2.c
+@@ -283,6 +283,13 @@ static int usb_shark_probe(struct usb_in
+ 	struct shark_device *shark;
+ 	int retval = -ENOMEM;
+ 
++	/* Are the expected endpoints present? */
++	if (!usb_check_int_endpoint(intf, SHARK_IN_EP | USB_DIR_IN) ||
++	    !usb_check_int_endpoint(intf, SHARK_OUT_EP | USB_DIR_OUT)) {
++		dev_err(&intf->dev, "Invalid radioSHARK2 device\n");
++		return -EINVAL;
++	}
++
+ 	shark = kzalloc(sizeof(struct shark_device), GFP_KERNEL);
+ 	if (!shark)
+ 		return retval;
