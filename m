@@ -2,72 +2,226 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044C06D0A90
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 18:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02806D0B51
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 18:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233518AbjC3QAi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Mar 2023 12:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
+        id S231163AbjC3QcS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Mar 2023 12:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233504AbjC3QAf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 12:00:35 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE66D317
-        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 09:00:30 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id s3-20020a056602240300b007589413aea0so11661476ioa.5
-        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 09:00:30 -0700 (PDT)
+        with ESMTP id S231817AbjC3QcL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 12:32:11 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEE9CDD5
+        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 09:32:09 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id d17so19688781wrb.11
+        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 09:32:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680193927;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J5iqRDNOsfYjFAg7++f2WTswDCTx1cvQAgPwdrnyaM0=;
+        b=pptlaseNEQzrBWz16Lz87z6I6YeTtAadmZrZvMD2RsPgoAU4pcITcbjV7LXcQmKKH7
+         2a+sajzdUSMDJFBtDY3hkTb4nOUvTSINYca55xI5ECRv9AbLHEP6HIMQlo2vvPKXpfp5
+         e589BpuiC1gHnyLQohuywxLiGzscwRAZGv4WpQItE2K6GQh7GBK4VC9Pwv+E0ls4Z1gA
+         ESD0IX9+Pjrd23yjPeWAWgyNhcv5Q2z7JauQmQbnnlxbvgnYeu+e1WS/yTN7CvfW1ieq
+         q+GgA2YFavr+WZ64VDwd23/40PjY4RcrgF+0KPB0SgJj3FC1ZIQzpjTQA9eoBt1qrSBH
+         FFeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680192030; x=1682784030;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        d=1e100.net; s=20210112; t=1680193927;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AFd4Vv+1QlOQI+H4u8kgcpRfOkpOstzxf4ODCKTbTXE=;
-        b=3TYr+PQsHNQlwm9bVl86xJ8b9dQO5ntp7Ljub8aOjEPbSWDN7Unab6OOqJQ6VJXJE2
-         1vfszXvDqxhlo7X8/JPbWLWFOHB/s9y9ZrBRsJyklu4OowG59t3ofIKB/8WBi2sMgM7Q
-         pcjwPSDtxX5o0CmVkuFgIIia3mzNQ9/sBLCESyt1IakrWRp55ZSG3uafwbUTqiMYjWXq
-         8mOagemfeqQP+m9dW/PLITD9DRyH7VIGQ0nrjUZjhMe/RMl7+dct94M+znhmLrCwyUPo
-         fF8SoE9qkwjaz+N3xhFRmhPXiCQ4D89ZYL4avw1cViYBalpv43n3dNYMo5q7K/7ZfUoL
-         goJA==
-X-Gm-Message-State: AO0yUKVs5vmgnk/tcGhw/3T/oaXDUdhox/gJ/Z+9qFhUzUsm/QSl+ft0
-        dv068eJ+s/7U4bgQwb++uBtJeaZIg5YJvnzNI8a+18AFZ8LU
-X-Google-Smtp-Source: AK7set9zMzME+5Sql6iouCqcaECY6f0i9FUvslzaxRbKCppicvh8rUlxD9aczW/rP3CUtus4FG9SA2BzVGZ9p0ffb/ym+1BylAkN
+        bh=J5iqRDNOsfYjFAg7++f2WTswDCTx1cvQAgPwdrnyaM0=;
+        b=P+0nSuODmXfjdPwByd2JIQq4HTWFacwX3pmIBrPsNRQjn5Wo7WsUH+uKUin9zNYZOC
+         FcpeuFCeAVgRdQFDmm3UkOpqyqVUVnzZ/uwI+zlVmt4yYgy1CKcXUCfMB+smEaA08dLi
+         0dHf3uuclI2Fw9axdygC/dUpZb7auSIj/O84FSQtVNDOwLwXzwjzJEvg1zZ2eCWytk2P
+         0LDuzZySDPPRt43TaRxzhS9EAtlEtWGjSdl2DLjdtjZW82gf5YNDp53gpwVOoyJeOTJU
+         snO4idz+y2sxESMIM3SNxiJMiNKrnhhKEvuN6OcmPRQTFWAJqT7btRKaZeeh2jFHINgm
+         jXgw==
+X-Gm-Message-State: AAQBX9enIoRyASO8XfOI3aTBHDfHFjLqJhS4RU2m5UbbBN7uUSfGc4rc
+        EXRwSBs+RcqnuvZfmAt5C98BuXjng8Y7RE7ZU1U=
+X-Google-Smtp-Source: AKy350Z17UR+1JsQDt8ClL02GrGiOOfkHe+agCOzAElOLfdYL360rlfU3YMntQH5eQJlI5N/ETaI+w==
+X-Received: by 2002:adf:f74d:0:b0:2c7:1e00:d514 with SMTP id z13-20020adff74d000000b002c71e00d514mr16994490wrp.38.1680193927453;
+        Thu, 30 Mar 2023 09:32:07 -0700 (PDT)
+Received: from [172.20.10.2] ([37.166.66.243])
+        by smtp.gmail.com with ESMTPSA id r10-20020adfce8a000000b002cefcac0c62sm33595242wrn.9.2023.03.30.09.32.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 09:32:07 -0700 (PDT)
+Message-ID: <be2c7c24-de19-d14a-639c-657a1ed32573@linaro.org>
+Date:   Thu, 30 Mar 2023 18:32:04 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9446:0:b0:753:2ab8:aff7 with SMTP id
- x6-20020a5d9446000000b007532ab8aff7mr8414673ior.1.1680192030243; Thu, 30 Mar
- 2023 09:00:30 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 09:00:30 -0700
-In-Reply-To: <b799fc68-8840-43e7-85f5-27e1e6457a44@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001e03d605f8203164@google.com>
-Subject: Re: [syzbot] [usb?] WARNING in sisusb_send_bulk_msg/usb_submit_urb
-From:   syzbot <syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
-        thomas@winischhofer.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8350-nagara: Unify status
+ property placement
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20230321-topic-sagami_dp-v1-0-340c8bce4276@linaro.org>
+ <20230321-topic-sagami_dp-v1-4-340c8bce4276@linaro.org>
+Content-Language: en-GB
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+In-Reply-To: <20230321-topic-sagami_dp-v1-4-340c8bce4276@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Le 21/03/2023 à 23:12, Konrad Dybcio a écrit :
+> As we're heading towards getting the status property last everywhere,
+> take care of it for SM8350 SONY Sagami.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   .../boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 30 ++++++++++------------
+>   1 file changed, 14 insertions(+), 16 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+> index b2baa81baf5e..95b1ba4ce470 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+> @@ -189,8 +189,8 @@ vph_pwr: vph-pwr-regulator {
+>   };
+>   
+>   &adsp {
+> -	status = "okay";
+>   	firmware-name = "qcom/sm8350/Sony/sagami/adsp.mbn";
+> +	status = "okay";
+>   };
+>   
+>   &apps_rsc {
+> @@ -542,27 +542,27 @@ pmr735a_l7: ldo7 {
+>   };
+>   
+>   &cdsp {
+> -	status = "okay";
+>   	firmware-name = "qcom/sm8350/Sony/sagami/cdsp.mbn";
+> +	status = "okay";
+>   };
+>   
+>   &i2c1 {
+> -	status = "okay";
+>   	clock-frequency = <1000000>;
+> +	status = "okay";
+>   
+>   	/* Some subset of SONY IMX663 camera sensor @ 38 */
+>   };
+>   
+>   &i2c4 {
+> -	status = "okay";
+>   	clock-frequency = <400000>;
+> +	status = "okay";
+>   
+>   	/* Samsung Touchscreen (needs I2C GPI DMA) @ 48 */
+>   };
+>   
+>   &i2c11 {
+> -	status = "okay";
+>   	clock-frequency = <1000000>;
+> +	status = "okay";
+>   
+>   	cs35l41_l: speaker-amp@40 {
+>   		compatible = "cirrus,cs35l41";
+> @@ -596,31 +596,31 @@ cs35l41_r: speaker-amp@41 {
+>   };
+>   
+>   &i2c12 {
+> -	status = "okay";
+>   	/* Clock frequency was not specified downstream, let's park it to 100 KHz */
+>   	clock-frequency = <100000>;
+> +	status = "okay";
+>   
+>   	/* AMS TCS3490 RGB+IR color sensor @ 72 */
+>   };
+>   
+>   &i2c13 {
+> -	status = "okay";
+>   	/* Clock frequency was not specified downstream, let's park it to 100 KHz */
+>   	clock-frequency = <100000>;
+> +	status = "okay";
+>   
+>   	/* Qualcomm PM8008i/PM8008j (?) @ 8, 9, c, d */
+>   };
+>   
+>   &i2c15 {
+> -	status = "okay";
+>   	clock-frequency = <400000>;
+> +	status = "okay";
+>   
+>   	/* NXP SN1X0 NFC @ 28 */
+>   };
+>   
+>   &i2c17 {
+> -	status = "okay";
+>   	clock-frequency = <1000000>;
+> +	status = "okay";
+>   
+>   	/* Cirrus Logic CS40L25A boosted haptics driver @ 40 */
+>   };
+> @@ -652,8 +652,8 @@ mdss_dp_altmode: endpoint {
+>   };
+>   
+>   &mpss {
+> -	status = "okay";
+>   	firmware-name = "qcom/sm8350/Sony/sagami/modem.mbn";
+> +	status = "okay";
+>   };
+>   
+>   &pm8350_gpios {
+> @@ -719,8 +719,8 @@ &pon_pwrkey {
+>   };
+>   
+>   &pon_resin {
+> -	status = "okay";
+>   	linux,code = <KEY_VOLUMEUP>;
+> +	status = "okay";
+>   };
+>   
+>   &qupv3_id_0 {
+> @@ -748,8 +748,8 @@ &sdhc_2 {
+>   };
+>   
+>   &slpi {
+> -	status = "okay";
+>   	firmware-name = "qcom/sm8350/Sony/sagami/slpi.mbn";
+> +	status = "okay";
+>   };
+>   
+>   &spi14 {
+> @@ -1038,16 +1038,14 @@ usb_1_dwc3_ss: endpoint {
+>   };
+>   
+>   &usb_1_hsphy {
+> -	status = "okay";
+> -
+>   	vdda-pll-supply = <&pm8350_l5>;
+>   	vdda18-supply = <&pm8350c_l1>;
+>   	vdda33-supply = <&pm8350_l2>;
+> +	status = "okay";
+>   };
+>   
+>   &usb_1_qmpphy {
+> -	status = "okay";
+> -
+>   	vdda-phy-supply = <&pm8350_l6>;
+>   	vdda-pll-supply = <&pm8350_l1>;
+> +	status = "okay";
+>   };
+> 
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-
-Reported-and-tested-by: syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         c9c3395d Linux 6.2
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.2
-console output: https://syzkaller.appspot.com/x/log.txt?x=16fe503ec80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8b64e70ff2a55d53
-dashboard link: https://syzkaller.appspot.com/bug?extid=23be03b56c5259385d79
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=10b3a60dc80000
-
-Note: testing is done by a robot and is best-effort only.
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
