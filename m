@@ -2,155 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C85F26D011D
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 12:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96CEC6D021E
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 12:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjC3K1r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Mar 2023 06:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44310 "EHLO
+        id S230181AbjC3KuN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Mar 2023 06:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjC3K1o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 06:27:44 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718CE72A7;
-        Thu, 30 Mar 2023 03:27:43 -0700 (PDT)
+        with ESMTP id S230423AbjC3Ktx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 06:49:53 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB8D93C0;
+        Thu, 30 Mar 2023 03:49:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680172063; x=1711708063;
+  t=1680173356; x=1711709356;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=vsso8X59jkwfS8FUc+qT+mBVmfIXBVin+KTPPha6LF8=;
-  b=h0yHz4lMGE6+yemI1twXONAwf5J+Ls+iqorfH4gisWaVW9fULVhuWBcg
-   dzqtzzoFongDoWSVQEANyJNkTVeByc6NisOnM/cRGgRotuhSru7/61Hgg
-   4pNUu/BGbF5OILtF1oKVT6DDFmLW7TqV2El/c1LZd3n8BrRO0LM7WeHqS
-   wnMZs1i8lP4MGBwNZ5NbdGVE3pJpEKAU4soowpld8QMeqcz4OUmtrYz+1
-   qTPk+v/3GgPx8nCRfm4XmPJpqv/WXj37exUgqcVjN3g0xe2VHxHuxjBTh
-   1nwyuidinAWrqTa0H9K324UpD19x3zXApT28tEhMZ2p4s6C4qVN/tUILn
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="368909798"
+  bh=Pg3OR5f2IuuZ6wVtG+jyKyGmKCMM/ZwdMBOOfAhqvnU=;
+  b=jExnIkiNm1JhEinKnS9Fece3xk+R+DV6vHfNF6mt8g2/YLtaxv6+lBv5
+   BUHxRRDDreHJ1jdHNgAyhp08MM6DGJA3RLeEI72ucXfuhYLa34u9A+88+
+   dnagWW1nyiyqGv4UH/opxWV7LQl3u8dqP8UFvhyUDs29I88EiaPfObv6W
+   8pKwdBybenMtpb99/dXaDm9+MrIqx4X/IUyrgelPLRaqIi+26V63FouML
+   sfAZwEi6h/HHOUJmUAxZax8J5XVfblw83TVpeccqgIBf7rMScP0DXGtAI
+   C6valaRQ1fhpbzCCG/OuRGe+jeCkoU4xGNQOWipqO6ZNhIiY5t3CmWS2g
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="406097336"
 X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="368909798"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:27:41 -0700
+   d="scan'208";a="406097336"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:49:16 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="634831399"
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="1014391203"
 X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="634831399"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 30 Mar 2023 03:27:39 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 6AF2D80A; Thu, 30 Mar 2023 13:23:49 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] thunderbolt: Introduce usb4_port_sb_opcode_err_to_errno() helper
-Date:   Thu, 30 Mar 2023 13:23:42 +0300
-Message-Id: <20230330102342.44090-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+   d="scan'208";a="1014391203"
+Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:49:13 -0700
+From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Subject: [PATCH] usb: typec: intel_pmc_mux: Expose IOM port status to debugfs
+Date:   Thu, 30 Mar 2023 16:18:21 +0530
+Message-Id: <20230330104821.773053-1-rajat.khandelwal@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The usb4_port_sb_opcode_err_to_errno() converts from USB4 error codes
-to the Linux errno space. In particular, this makes the intention
-of the repeating usb4_port_retimer_read() call in the
-usb4_port_retimer_nvm_authenticate_status() clearer.
+IOM status has a crucial role during debugging to check the
+current state of the type-C port.
+There are ways to fetch the status, but all those require the
+IOM port status offset, which could change with platform.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Make a debugfs directory for intel_pmc_mux and expose the status
+under it per port basis.
+
+Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- drivers/thunderbolt/usb4.c | 41 +++++++++++++++++++-------------------
- 1 file changed, 20 insertions(+), 21 deletions(-)
+ drivers/usb/typec/mux/intel_pmc_mux.c | 44 +++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-index 12355929e586..485b6e430686 100644
---- a/drivers/thunderbolt/usb4.c
-+++ b/drivers/thunderbolt/usb4.c
-@@ -1303,6 +1303,20 @@ static int usb4_port_sb_write(struct tb_port *port, enum usb4_sb_target target,
+diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+index 34e4188a40ff..c99d20888f5d 100644
+--- a/drivers/usb/typec/mux/intel_pmc_mux.c
++++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+@@ -15,6 +15,7 @@
+ #include <linux/usb/typec_mux.h>
+ #include <linux/usb/typec_dp.h>
+ #include <linux/usb/typec_tbt.h>
++#include <linux/debugfs.h>
+ 
+ #include <asm/intel_scu_ipc.h>
+ 
+@@ -145,6 +146,8 @@ struct pmc_usb {
+ 	u32 iom_port_status_offset;
+ };
+ 
++static struct dentry *pmc_mux_debugfs_root;
++
+ static void update_port_status(struct pmc_usb_port *port)
+ {
+ 	u8 port_num;
+@@ -639,6 +642,39 @@ static int pmc_usb_probe_iom(struct pmc_usb *pmc)
  	return 0;
  }
  
-+static int usb4_port_sb_opcode_err_to_errno(u32 val)
++static int port_iom_status_show(struct seq_file *s, void *unused)
 +{
-+	switch (val) {
-+	case 0:
-+		return 0;
-+	case USB4_SB_OPCODE_ERR:
-+		return -EAGAIN;
-+	case USB4_SB_OPCODE_ONS:
-+		return -EOPNOTSUPP;
-+	default:
-+		return -EIO;
-+	}
++	struct pmc_usb_port *port = s->private;
++
++	update_port_status(port);
++	seq_printf(s, "0x%08x\n", port->iom_status);
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(port_iom_status);
++
++static void pmc_mux_port_debugfs_init(struct pmc_usb_port *port)
++{
++	struct dentry *debugfs_dir;
++	char name[6];
++
++	snprintf(name, sizeof(name), "port%d", port->usb3_port - 1);
++
++	debugfs_dir = debugfs_create_dir(name, pmc_mux_debugfs_root);
++	debugfs_create_file("iom_status", 0400, debugfs_dir, port,
++			    &port_iom_status_fops);
 +}
 +
- static int usb4_port_sb_op(struct tb_port *port, enum usb4_sb_target target,
- 			   u8 index, enum usb4_sb_opcode opcode, int timeout_msec)
++static void pmc_mux_debugfs_init(void)
++{
++	pmc_mux_debugfs_root = debugfs_create_dir("intel_pmc_mux", NULL);
++}
++
++static void pmc_mux_debugfs_exit(void)
++{
++	debugfs_remove_recursive(pmc_mux_debugfs_root);
++}
++
+ static int pmc_usb_probe(struct platform_device *pdev)
  {
-@@ -1325,21 +1339,8 @@ static int usb4_port_sb_op(struct tb_port *port, enum usb4_sb_target target,
- 		if (ret)
- 			return ret;
- 
--		switch (val) {
--		case 0:
--			return 0;
--
--		case USB4_SB_OPCODE_ERR:
--			return -EAGAIN;
--
--		case USB4_SB_OPCODE_ONS:
--			return -EOPNOTSUPP;
--
--		default:
--			if (val != opcode)
--				return -EIO;
--			break;
--		}
-+		if (val != opcode)
-+			return usb4_port_sb_opcode_err_to_errno(val);
- 	} while (ktime_before(ktime_get(), timeout));
- 
- 	return -ETIMEDOUT;
-@@ -1814,12 +1815,13 @@ int usb4_port_retimer_nvm_authenticate_status(struct tb_port *port, u8 index,
+ 	struct fwnode_handle *fwnode = NULL;
+@@ -674,6 +710,8 @@ static int pmc_usb_probe(struct platform_device *pdev)
  	if (ret)
  		return ret;
  
--	switch (val) {
-+	ret = usb4_port_sb_opcode_err_to_errno(val);
-+	switch (ret) {
- 	case 0:
- 		*status = 0;
- 		return 0;
- 
--	case USB4_SB_OPCODE_ERR:
-+	case -EAGAIN:
- 		ret = usb4_port_retimer_read(port, index, USB4_SB_METADATA,
- 					     &metadata, sizeof(metadata));
- 		if (ret)
-@@ -1828,11 +1830,8 @@ int usb4_port_retimer_nvm_authenticate_status(struct tb_port *port, u8 index,
- 		*status = metadata & USB4_SB_METADATA_NVM_AUTH_WRITE_MASK;
- 		return 0;
- 
--	case USB4_SB_OPCODE_ONS:
--		return -EOPNOTSUPP;
--
- 	default:
--		return -EIO;
-+		return ret;
++	pmc_mux_debugfs_init();
++
+ 	/*
+ 	 * For every physical USB connector (USB2 and USB3 combo) there is a
+ 	 * child ACPI device node under the PMC mux ACPI device object.
+@@ -688,6 +726,8 @@ static int pmc_usb_probe(struct platform_device *pdev)
+ 			fwnode_handle_put(fwnode);
+ 			goto err_remove_ports;
+ 		}
++
++		pmc_mux_port_debugfs_init(&pmc->port[i]);
  	}
+ 
+ 	platform_set_drvdata(pdev, pmc);
+@@ -703,6 +743,8 @@ static int pmc_usb_probe(struct platform_device *pdev)
+ 
+ 	acpi_dev_put(pmc->iom_adev);
+ 
++	pmc_mux_debugfs_exit();
++
+ 	return ret;
+ }
+ 
+@@ -719,6 +761,8 @@ static int pmc_usb_remove(struct platform_device *pdev)
+ 
+ 	acpi_dev_put(pmc->iom_adev);
+ 
++	pmc_mux_debugfs_exit();
++
+ 	return 0;
  }
  
 -- 
-2.40.0.1.gaa8946217a0b
+2.34.1
 
