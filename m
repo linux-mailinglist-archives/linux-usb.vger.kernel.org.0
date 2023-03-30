@@ -2,72 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3701B6D074B
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 15:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DC56D0759
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 15:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232090AbjC3NvI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Mar 2023 09:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
+        id S232164AbjC3Nyj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Mar 2023 09:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231693AbjC3NvH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 09:51:07 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABB35597
-        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 06:51:01 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id c29so24629529lfv.3
-        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 06:51:01 -0700 (PDT)
+        with ESMTP id S231708AbjC3Nyi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 09:54:38 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F094EFF
+        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 06:54:36 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id g19so11504015lfr.9
+        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 06:54:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680184260;
+        d=linaro.org; s=google; t=1680184475;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=bFioh8KEjXK9vkYc+hdZvmSiagi9AnGPNz7oxJLFgPg=;
-        b=aqaLZ2C0OW74EnyCVtd7s2XzYVvuqTZHzdqXHT5I26oPOfFJFY0ab9JYTGzVprk2iZ
-         QQkjWXN4Z8NrQc2WI73+dWNCXlMnVw7NawqEy64kYsYWS55rvtQq1ZvQ2Tqr7mpHmKTN
-         qMs4Ca2DqTPUe1rGJgL1TdGfKNj6qb3Hw2Df6Hgnrnl5TwquFwZleL2k1ETqJvs7b4uC
-         Kz9h1KGGy6TQNNT09bSN9YieX113fGt1Zlpe4O5a8fc+cDFHU8sV8cuKsXKhcAYJPJxs
-         Pq2b8Pl6XqjPJTypif6/QvAv6SURe0Kn5l91UtaQ78tbJp5cXZrf5655PlewX4pAlY0k
-         9/tA==
+        bh=3bDS+NZkCHNjcglyIFTFfiCpIuz6atTUwaUlX4EZFO0=;
+        b=ErhbzUuJagPIYLAc87qPWesX4OphTqSHbJlUJVBxYSuQj1F7by1TnBjfmXPMkVWe/a
+         Iu3m3k0LswZfbS3vZSMywRkPsQYArihDnUmFaAlH9Mb5bDzCTXzj65gkKQEv8OjR0RaW
+         tk2xX9+JDRLkNBdGasPWY23zteZ+ErxBVxkMgmShPfqCN4VTvlxDrfVRhfkIxXHpvln6
+         H9nocYvLcFCWlp5ljTC3t37lWhVXndOUFUgZlKgZtImqwfm4Lyh6vXhHz85Xpc9D8Mp2
+         HMrch5hd8A5/8XdkknaU0barZxVPKTAysNeuqgUcUpAqqj0ns4VD7Y0p7AhEIYB9G8Or
+         uJHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680184260;
+        d=1e100.net; s=20210112; t=1680184475;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bFioh8KEjXK9vkYc+hdZvmSiagi9AnGPNz7oxJLFgPg=;
-        b=DVmnOofywe6FSTlS8gBzFrB6bCDjs9bKLxGSkkA4wDBPbVxtaKnbqNovwp6opWlTAx
-         AScBpPm1mK06+jVXHEylkyGzhm6m2eKXh1Qeqxif573wKl0iqPTQlas9rSBI0nDre3QL
-         5AO5/TGG7vAfO7cPwAXMYaOBPDtLPoa5Igcqo2zbK/jH5lCAKq+4uqols3cchV8I5BS/
-         VynThxYzM5CD6RQ6pI8q1BO+kTTdCdAtDxm0/Rpu/OSIb7rlStIL3hNHCrke2BOBApAN
-         COrLJisub+VNnoWuxkpS+xW7iylv/xHV42ggbFz/6mQ79rf9n89xPLk7ivd5fQtpnpLs
-         jFgw==
-X-Gm-Message-State: AAQBX9dfaEiLSD0rT4x4yb5+hWUfgodta6HpdRxJ1SqaLIfbhAjQPBzA
-        KrHdRCLgmxMPZiq/YvAyPgLSuw==
-X-Google-Smtp-Source: AKy350YBGOQY3S+mf01A6pGyFA/FOJmRXnmaoj9y0eOpGoWFYDZR5RoMaGKb6fDvtOfrGDbYZg+z6w==
-X-Received: by 2002:a05:6512:3881:b0:4de:d6a1:fd71 with SMTP id n1-20020a056512388100b004ded6a1fd71mr6284092lft.50.1680184260036;
-        Thu, 30 Mar 2023 06:51:00 -0700 (PDT)
+        bh=3bDS+NZkCHNjcglyIFTFfiCpIuz6atTUwaUlX4EZFO0=;
+        b=U5qm7FTBnA18Z1jY10HYgZ9L8oLoizUzTdeC3A3OI5Sbye00no27PgWTX+FCUHaK5B
+         Z32Ddt6BGx3xpEkJYT3/QfViTerN0gaCGxIjPbQ2UoO6TSSKfwegoxzndPsYzSRajsa2
+         ElNfHpqBL+Y8KHoHYGneCRnxGY5xfaghl66kqulcKJdziQDHJF/Al1QsRIXQoBcTRImN
+         4QjH/LSZ1VEoT3OD9Vvhe0n+40LrKVJ0AdjOa3NA226xs4+ir/o2T5oZPo5dcMYmByP2
+         lCMqHwUto3sLFEga/fj9byXKxP671zSNQcDZJk2CkPuSVUm1vKZQhB1OEuhXA4cg9J+A
+         mBQg==
+X-Gm-Message-State: AAQBX9cWo/CM8HEZsCenlOf/C59RAn7pvp0h3qT3C7dcJj7ALz5Td6pl
+        VouT1iMb+/Vcie9KwPklL33feg==
+X-Google-Smtp-Source: AKy350bscyofmdfis+7MYVvAX6/F+FXHo4829Gg5E4cWInBN+17SyFn1NzTYtImeQD2Xg1dAOF4b9w==
+X-Received: by 2002:a05:6512:985:b0:4e9:605e:b470 with SMTP id w5-20020a056512098500b004e9605eb470mr1821024lft.26.1680184474901;
+        Thu, 30 Mar 2023 06:54:34 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id y28-20020ac2447c000000b004eafa141a12sm3343289lfl.9.2023.03.30.06.50.58
+        by smtp.gmail.com with ESMTPSA id q28-20020ac2529c000000b004eaf8613bc3sm3525907lfm.284.2023.03.30.06.54.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 06:50:59 -0700 (PDT)
-Message-ID: <500872d5-78e9-0928-17db-81bf20f6306b@linaro.org>
-Date:   Thu, 30 Mar 2023 15:50:58 +0200
+        Thu, 30 Mar 2023 06:54:34 -0700 (PDT)
+Message-ID: <7c4af740-1cf5-6b20-4642-8657ef31c9d8@linaro.org>
+Date:   Thu, 30 Mar 2023 15:54:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH V2] dt-bindings: usb: typec-tcpci: convert to DT schema
- format
+Subject: Re: [PATCH v4 2/8] dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3
+ PHY
 Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
-References: <20230330091736.1873121-1-peng.fan@oss.nxp.com>
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+References: <cover.1679909245.git.quic_varada@quicinc.com>
+ <4a21defe3320eb11d0e43bc7f02b3168ecefd458.1679909245.git.quic_varada@quicinc.com>
+ <3d49b4b0-587c-f7e5-4122-65b3e9f11583@linaro.org>
+ <20230330071016.GB13508@varda-linux.qualcomm.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230330091736.1873121-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20230330071016.GB13508@varda-linux.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -80,21 +84,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 30/03/2023 11:17, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On 30/03/2023 09:10, Varadarajan Narayanan wrote:
+> On Mon, Mar 27, 2023 at 01:02:52PM +0300, Dmitry Baryshkov wrote:
+>> On 27/03/2023 12:30, Varadarajan Narayanan wrote:
+>>> Add dt-bindings for USB3 PHY found on Qualcomm IPQ9574
+>>>
+>>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>>> ---
+>>>  Changes in v4:
+>>> 	- Remove constraints not applicable to IPQ9574
+>>>  Changes in v3:
+>>> 	- Update other mandatory fields to accomodate IPQ9574
+>>>  Changes in v2:
+>>> 	- Updated sections missed in previous patch
+>>> ---
+>>>  .../bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml    | 25 ++++++++++++++++++++--
+>>>  1 file changed, 23 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
+>>> index e81a382..aa5b58c 100644
+>>> --- a/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
+>>> +++ b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
+>>> @@ -21,6 +21,7 @@ properties:
+>>>      enum:
+>>>        - qcom,ipq6018-qmp-usb3-phy
+>>>        - qcom,ipq8074-qmp-usb3-phy
+>>> +      - qcom,ipq9574-qmp-usb3-phy
+>>>        - qcom,msm8996-qmp-usb3-phy
+>>>        - qcom,msm8998-qmp-usb3-phy
+>>>        - qcom,qcm2290-qmp-usb3-phy
+>>> @@ -122,8 +123,6 @@ required:
+>>>    - clock-names
+>>>    - resets
+>>>    - reset-names
+>>> -  - vdda-phy-supply
+>>> -  - vdda-pll-supply
+>>
+>> Same questions as for the qusb2 PHY. How is the PHY powered?
 > 
-> Convert the binding to DT schema format, and rename it to
-> nxp,ptn5110.yaml
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
-> 
-> V2:
->  Rename to nxp,ptn5110.yaml
->  Drop port property
+> It is powered by always on regulators. Will create fixed
+> regulators and assign them to these.
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+always-on where? in DTS? Then it is not really related to this patch...
+or you meant always-on power domains? Yet still device has power supplies.
 
 Best regards,
 Krzysztof
