@@ -2,368 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116376CF93C
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 04:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5D66CF95E
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 04:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjC3Cn3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Mar 2023 22:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33296 "EHLO
+        id S229649AbjC3C7v convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 29 Mar 2023 22:59:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjC3Cn2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Mar 2023 22:43:28 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E8D4EEA
-        for <linux-usb@vger.kernel.org>; Wed, 29 Mar 2023 19:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680144206; x=1711680206;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Lr0RYYhq92sO3NyEFZ1DGWI2k6JjbMIYBqLfSpvMz4A=;
-  b=hGBJVWEXS8uxuPdNVW6DyktKa5LG3+rNlkqwM1zTjuz8GNl9MIz9steb
-   0Uv4p7sBYS22sUkGPVzhOutX1CvFcFxKA0DW2vQzmN3fc3uR87m+yvOGV
-   ezcTbiqfm0sbwsowi6v/08bp9vAXGM1xp0QBZoiXxrn0hQIMCBQ87tStY
-   ebk42VEzo9ygz1C2yeJyamz+X+kZczsJM3pqvJB31AGy6o4aVGPh7GiRC
-   M2jPETLftdT4pGpgu2hTdnUFZocC+nxwa/GdHr6bnRkzuJ0VJx+M9tD93
-   yVs0crgjppCnmZWOlGWp0ovsNTOZbENfRv5NvcNYz/5f9su39vTv//INl
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="324974017"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="324974017"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 19:43:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="858732877"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="858732877"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 29 Mar 2023 19:43:24 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1phiG3-000KDQ-1C;
-        Thu, 30 Mar 2023 02:43:23 +0000
-Date:   Thu, 30 Mar 2023 10:43:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- d629c0e221cd99198b843d8351a0a9bfec6c0423
-Message-ID: <6424f739.MBS2lx19pXjcTLCv%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229449AbjC3C7u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Mar 2023 22:59:50 -0400
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903A92111;
+        Wed, 29 Mar 2023 19:59:49 -0700 (PDT)
+Received: by mail-pj1-f54.google.com with SMTP id j13so15994286pjd.1;
+        Wed, 29 Mar 2023 19:59:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680145189;
+        h=content-transfer-encoding:fcc:content-language:user-agent
+         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MyiOuYElhRICJI3D0PJA148VTpJc2bGE9WKOTKleOq8=;
+        b=OVqtWI41LKNKz5FSVNstBD0IxoM8cwcpLYVlO7Bhz68z8pcEMnPDcw7GliVSMQLuEl
+         fCx5DHrJ60wVpW0G9OBMsxfCqugg36JbRwy79SUwN+3wDh8WGWRruUF/eYAS+wS4IP/B
+         L3T+yvDuxn8HtAbP10u5UUzWPl5oUNE/F9UNxV5pjHxJ0/qGBQjLv2ay+yLkNpP6ARxc
+         fBk8DWS2eP1X92+2bxpQJTolo752L9N7yNEM74Y4XXY/U17LG00W/VKwvVPVzgMjNvOY
+         2DmskcVMepXyrNSzd9V1kNGS9RM7AMRbHUvfpLZmDXQIkzH6nokIv5vm++8yLMg1x91u
+         GARg==
+X-Gm-Message-State: AAQBX9fygfhJdCquhYFZ6RFB2iPk3IoopDpzJCF9k31vOCnlkTfbNQ65
+        xoF7gmSk4unCXoMl+XRmFgw3MMv+0oVGjg==
+X-Google-Smtp-Source: AKy350boGkhs/gbvGNKtpPaSEc4HaVUwU+oVgIsS+OdhxK/JAla3ArdI9wUsFz4DT4mMXrbnRKTqyg==
+X-Received: by 2002:a17:90a:190f:b0:237:50b6:9838 with SMTP id 15-20020a17090a190f00b0023750b69838mr25440663pjg.45.1680145188929;
+        Wed, 29 Mar 2023 19:59:48 -0700 (PDT)
+Received: from localhost ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id g4-20020a655804000000b0050bd71ed66fsm2014953pgr.92.2023.03.29.19.59.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 19:59:48 -0700 (PDT)
+From:   Hongyu Xie <xiehongyu1@kylinos.cn>
+To:     mathias.nyman@linux.intel.com, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, sunke <sunke@kylinos.cn>,
+        Hongyu Xie <xiehongyu1@kylinos.cn>
+Subject: Re: [PATCH -next v2] usb: xhci: do not free an empty cmd ring
+Date:   Thu, 30 Mar 2023 10:58:57 +0800
+Message-Id: <eff504ed-d5b0-171a-8eb8-f073f2ee9271@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <086a7af9-0a33-1a37-2bf3-1338adf96b12@linux.intel.com>
+References: <20230327011117.33953-1-xiehongyu1@kylinos.cn> <086a7af9-0a33-1a37-2bf3-1338adf96b12@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Thunderbird/102.8.0
+Content-Language: en-US
+X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0; attachmentreminder=0; deliveryformat=1
+X-Identity-Key: id1
+Fcc:    imap://xiehongyu1%40kylinos.cn@imap.kylinos.cn/Sent
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: d629c0e221cd99198b843d8351a0a9bfec6c0423  usb: move config USB_USS720 to usb's misc Kconfig
+Hi,
 
-elapsed time: 1075m
+在 2023/3/27 22:58, Mathias Nyman 写道:
+> On 27.3.2023 4.11, Hongyu Xie wrote:
+>> It was first found on HUAWEI Kirin 9006C platform with a builtin xhci
+>> controller during stress cycle test(stress-ng, glmark2, x11perf, S4...).
+>>
+>> phase one:
+>> [26788.706878] PM: dpm_run_callback(): platform_pm_thaw+0x0/0x68 returns -12
+>> [26788.706878] PM: Device xhci-hcd.1.auto failed to thaw async: error -12
+>> ...
+>> phase two:
+>> [28650.583496] [2023:01:19 04:43:29]Unable to handle kernel NULL pointer dereference at virtual address 0000000000000028
+>> ...
+>> [28650.583526] user pgtable: 4k pages, 39-bit VAs, pgdp=000000027862a000
+>> [28650.583557] [0000000000000028] pgd=0000000000000000
+>> ...
+>> [28650.583587] pc : xhci_suspend+0x154/0x5b0
+>> [28650.583618] lr : xhci_suspend+0x148/0x5b0
+>> [28650.583618] sp : ffffffc01c7ebbd0
+>> [28650.583618] x29: ffffffc01c7ebbd0 x28: ffffffec834d0000
+>> [28650.583618] x27: ffffffc0106a3cc8 x26: ffffffb2c540c848
+>> [28650.583618] x25: 0000000000000000 x24: ffffffec82ee30b0
+>> [28650.583618] x23: ffffffb43b31c2f8 x22: 0000000000000000
+>> [28650.583618] x21: 0000000000000000 x20: ffffffb43b31c000
+>> [28650.583648] x19: ffffffb43b31c2a8 x18: 0000000000000001
+>> [28650.583648] x17: 0000000000000803 x16: 00000000fffffffe
+>> [28650.583648] x15: 0000000000001000 x14: ffffffb150b67e00
+>> [28650.583648] x13: 00000000f0000000 x12: 0000000000000001
+>> [28650.583648] x11: 0000000000000000 x10: 0000000000000a80
+>> [28650.583648] x9 : ffffffc01c7eba00 x8 : ffffffb43ad10ae0
+>> [28650.583648] x7 : ffffffb84cd98dc0 x6 : 0000000cceb6a101
+>> [28650.583679] x5 : 00ffffffffffffff x4 : 0000000000000001
+>> [28650.583679] x3 : 0000000000000011 x2 : 0000000000e2cfa8
+>> [28650.583679] x1 : 00000000823535e1 x0 : 0000000000000000
+>>
+>> gdb:
+>> (gdb) l *(xhci_suspend+0x154)
+>> 0xffffffc010b6cd44 is in xhci_suspend (/.../drivers/usb/host/xhci.c:854).
+>> 849	{
+>> 850		struct xhci_ring *ring;
+>> 851		struct xhci_segment *seg;
+>> 852
+>> 853		ring = xhci->cmd_ring;
+>> 854		seg = ring->deq_seg;
+>> (gdb) disassemble 0xffffffc010b6cd44
+>> ...
+>> 0xffffffc010b6cd40 <+336>:	ldr	x22, [x19, #160]
+>> 0xffffffc010b6cd44 <+340>:	ldr	x20, [x22, #40]
+>> 0xffffffc010b6cd48 <+344>:	mov	w1, #0x0                   	// #0
+>>
+>> During phase one, platform_pm_thaw called xhci_plat_resume which called
+>> xhci_resume. The rest possible calling routine might be
+>> xhci_resume->xhci_init->xhci_mem_init, and xhci->cmd_ring was cleaned in
+>> xhci_mem_cleanup before xhci_mem_init returned -ENOMEM.
+>>
+>> During phase two, systemd was tring to hibernate again and called
+>> xhci_suspend, then xhci_clear_command_ring dereferenced xhci->cmd_ring
+>> which was already NULL.
+>>
+> 
+> Any comments on the questions I had on the first version of the patch?
+Sorry, didn't notice your reply in the first version.
+> 
+> xhci_mem_init() failing with -ENOMEM looks like the real problem here.
+> 
+> Are we really running out of memory? does kmemleak say anything?
+It looks like running out of memory, since it was running a stress test. 
+But can't go any further without more details. Didn't run with kmemleak 
+open.
+> Any chance you could look into where exactly xhci_mem_init() fails as
+> xhci_mem_init() always returns -ENOMEM on failure?
+Can't reproduce the problem for a very long time. Still don't know where 
+did it fail in xhci_mem_init. But I think you can't blame xhci driver 
+for memory shortage, and you can't fix that.
+> 
+>> So if xhci->cmd_ring is NULL, xhci_clear_command_ring just return.
+> 
+> This hides the problem more than solves it. Root cause is still unknown
+You were saying "If xhci_mem_init() failed then...it shouldn't be...", 
+and I agree with it. Further more, I think functions that calling 
+xhci_mem_init needs to check xhci_mem_init's return value, but it needs 
+another patch to do this. This patch is saying that 
+xhci_clear_command_ring should check a pointer before using it, because 
+somewhere else might clear cmd_ring, that's all.
+> 
+> Thanks
+> Mathias
+> 
+> 
+Thanks
 
-configs tested: 289
-configs skipped: 34
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r002-20230329   gcc  
-alpha        buildonly-randconfig-r004-20230330   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r003-20230329   gcc  
-alpha                randconfig-r004-20230329   gcc  
-alpha                randconfig-r005-20230329   gcc  
-alpha                randconfig-r012-20230329   gcc  
-alpha                randconfig-r015-20230329   gcc  
-alpha                randconfig-r023-20230329   gcc  
-alpha                randconfig-r026-20230329   gcc  
-alpha                randconfig-r031-20230329   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r002-20230329   gcc  
-arc          buildonly-randconfig-r003-20230329   gcc  
-arc          buildonly-randconfig-r005-20230329   gcc  
-arc                                 defconfig   gcc  
-arc                        nsimosci_defconfig   gcc  
-arc                 nsimosci_hs_smp_defconfig   gcc  
-arc                  randconfig-r005-20230329   gcc  
-arc                  randconfig-r013-20230329   gcc  
-arc                  randconfig-r016-20230329   gcc  
-arc                  randconfig-r025-20230329   gcc  
-arc                  randconfig-r033-20230329   gcc  
-arc                  randconfig-r034-20230329   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                         axm55xx_defconfig   gcc  
-arm          buildonly-randconfig-r003-20230329   gcc  
-arm          buildonly-randconfig-r006-20230329   gcc  
-arm                                 defconfig   gcc  
-arm                            dove_defconfig   clang
-arm                            hisi_defconfig   gcc  
-arm                         lpc18xx_defconfig   gcc  
-arm                             pxa_defconfig   gcc  
-arm                  randconfig-r013-20230329   gcc  
-arm                  randconfig-r021-20230329   gcc  
-arm                  randconfig-r025-20230329   gcc  
-arm                        realview_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r001-20230329   gcc  
-arm64        buildonly-randconfig-r002-20230329   gcc  
-arm64        buildonly-randconfig-r005-20230329   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r006-20230329   gcc  
-arm64                randconfig-r013-20230329   clang
-arm64                randconfig-r025-20230329   clang
-arm64                randconfig-r026-20230329   clang
-arm64                randconfig-r032-20230329   gcc  
-arm64                randconfig-r035-20230329   gcc  
-arm64                randconfig-r036-20230329   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r003-20230329   gcc  
-csky                 randconfig-r004-20230329   gcc  
-csky                 randconfig-r011-20230329   gcc  
-csky                 randconfig-r026-20230329   gcc  
-hexagon              randconfig-r015-20230329   clang
-hexagon              randconfig-r016-20230329   clang
-hexagon              randconfig-r033-20230329   clang
-hexagon              randconfig-r041-20230329   clang
-hexagon              randconfig-r045-20230329   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a004   clang
-i386                          randconfig-a006   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a016   gcc  
-i386                          randconfig-c001   gcc  
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r003-20230329   gcc  
-ia64         buildonly-randconfig-r005-20230329   gcc  
-ia64         buildonly-randconfig-r005-20230330   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r004-20230329   gcc  
-ia64                 randconfig-r005-20230329   gcc  
-ia64                 randconfig-r006-20230329   gcc  
-ia64                 randconfig-r011-20230329   gcc  
-ia64                 randconfig-r015-20230329   gcc  
-ia64                 randconfig-r036-20230329   gcc  
-ia64                            zx1_defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r003-20230329   gcc  
-loongarch    buildonly-randconfig-r006-20230329   gcc  
-loongarch                           defconfig   gcc  
-loongarch                 loongson3_defconfig   gcc  
-loongarch            randconfig-r002-20230329   gcc  
-loongarch            randconfig-r004-20230329   gcc  
-loongarch            randconfig-r006-20230329   gcc  
-loongarch            randconfig-r013-20230329   gcc  
-loongarch            randconfig-r015-20230329   gcc  
-loongarch            randconfig-r022-20230329   gcc  
-loongarch            randconfig-r023-20230329   gcc  
-loongarch            randconfig-r025-20230329   gcc  
-loongarch            randconfig-r026-20230329   gcc  
-m68k                             alldefconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                          amiga_defconfig   gcc  
-m68k         buildonly-randconfig-r002-20230329   gcc  
-m68k         buildonly-randconfig-r002-20230330   gcc  
-m68k         buildonly-randconfig-r004-20230329   gcc  
-m68k         buildonly-randconfig-r006-20230329   gcc  
-m68k                                defconfig   gcc  
-m68k                          hp300_defconfig   gcc  
-m68k                        m5407c3_defconfig   gcc  
-m68k                        mvme16x_defconfig   gcc  
-m68k                 randconfig-r002-20230329   gcc  
-m68k                 randconfig-r004-20230329   gcc  
-m68k                 randconfig-r012-20230329   gcc  
-m68k                 randconfig-r014-20230329   gcc  
-m68k                 randconfig-r015-20230329   gcc  
-m68k                 randconfig-r016-20230329   gcc  
-m68k                 randconfig-r025-20230329   gcc  
-m68k                 randconfig-r031-20230329   gcc  
-m68k                 randconfig-r033-20230329   gcc  
-m68k                 randconfig-r035-20230329   gcc  
-m68k                           virt_defconfig   gcc  
-microblaze   buildonly-randconfig-r002-20230329   gcc  
-microblaze   buildonly-randconfig-r004-20230329   gcc  
-microblaze   buildonly-randconfig-r005-20230329   gcc  
-microblaze   buildonly-randconfig-r006-20230329   gcc  
-microblaze           randconfig-r001-20230329   gcc  
-microblaze           randconfig-r005-20230329   gcc  
-microblaze           randconfig-r015-20230329   gcc  
-microblaze           randconfig-r016-20230329   gcc  
-microblaze           randconfig-r021-20230329   gcc  
-microblaze           randconfig-r024-20230329   gcc  
-microblaze           randconfig-r032-20230329   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                      bmips_stb_defconfig   clang
-mips                         db1xxx_defconfig   gcc  
-mips                           gcw0_defconfig   gcc  
-mips                           ip32_defconfig   gcc  
-mips                      loongson3_defconfig   gcc  
-mips                    maltaup_xpa_defconfig   gcc  
-mips                 randconfig-r001-20230329   clang
-mips                 randconfig-r012-20230329   gcc  
-mips                 randconfig-r013-20230329   gcc  
-mips                 randconfig-r015-20230329   gcc  
-mips                 randconfig-r021-20230329   gcc  
-mips                 randconfig-r023-20230329   gcc  
-mips                 randconfig-r025-20230329   gcc  
-nios2        buildonly-randconfig-r003-20230329   gcc  
-nios2        buildonly-randconfig-r004-20230329   gcc  
-nios2        buildonly-randconfig-r005-20230329   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r005-20230329   gcc  
-nios2                randconfig-r006-20230329   gcc  
-nios2                randconfig-r011-20230329   gcc  
-nios2                randconfig-r012-20230329   gcc  
-nios2                randconfig-r016-20230329   gcc  
-nios2                randconfig-r024-20230329   gcc  
-nios2                randconfig-r031-20230329   gcc  
-nios2                randconfig-r033-20230329   gcc  
-nios2                randconfig-r035-20230329   gcc  
-openrisc     buildonly-randconfig-r003-20230329   gcc  
-openrisc     buildonly-randconfig-r006-20230329   gcc  
-openrisc                  or1klitex_defconfig   gcc  
-openrisc                    or1ksim_defconfig   gcc  
-openrisc             randconfig-r004-20230329   gcc  
-openrisc             randconfig-r006-20230329   gcc  
-openrisc             randconfig-r021-20230329   gcc  
-openrisc             randconfig-r026-20230329   gcc  
-openrisc             randconfig-r032-20230329   gcc  
-openrisc             randconfig-r034-20230329   gcc  
-openrisc             randconfig-r036-20230329   gcc  
-parisc       buildonly-randconfig-r005-20230329   gcc  
-parisc       buildonly-randconfig-r006-20230329   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r006-20230329   gcc  
-parisc               randconfig-r022-20230329   gcc  
-parisc               randconfig-r024-20230329   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                      arches_defconfig   gcc  
-powerpc                   bluestone_defconfig   clang
-powerpc                      chrp32_defconfig   gcc  
-powerpc                       ebony_defconfig   clang
-powerpc                       holly_defconfig   gcc  
-powerpc                 mpc834x_itx_defconfig   gcc  
-powerpc                 mpc837x_rdb_defconfig   gcc  
-powerpc                      pcm030_defconfig   gcc  
-powerpc                      ppc64e_defconfig   clang
-powerpc                     rainier_defconfig   gcc  
-powerpc              randconfig-r003-20230329   gcc  
-powerpc              randconfig-r011-20230329   clang
-powerpc              randconfig-r024-20230329   clang
-powerpc              randconfig-r032-20230329   gcc  
-powerpc              randconfig-r034-20230329   gcc  
-powerpc                    socrates_defconfig   clang
-powerpc                     tqm8555_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv             nommu_k210_sdcard_defconfig   gcc  
-riscv                    nommu_virt_defconfig   clang
-riscv                randconfig-r022-20230329   clang
-riscv                randconfig-r031-20230329   gcc  
-riscv                randconfig-r032-20230329   gcc  
-riscv                randconfig-r035-20230329   gcc  
-riscv                randconfig-r042-20230329   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                          debug_defconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r001-20230329   gcc  
-s390                 randconfig-r003-20230329   gcc  
-s390                 randconfig-r005-20230329   gcc  
-s390                 randconfig-r014-20230329   clang
-s390                 randconfig-r015-20230329   clang
-s390                 randconfig-r016-20230329   clang
-s390                 randconfig-r022-20230329   clang
-s390                 randconfig-r023-20230329   clang
-s390                 randconfig-r035-20230329   gcc  
-s390                 randconfig-r044-20230329   clang
-sh                               allmodconfig   gcc  
-sh                        dreamcast_defconfig   gcc  
-sh                         microdev_defconfig   gcc  
-sh                            migor_defconfig   gcc  
-sh                   randconfig-r006-20230329   gcc  
-sh                   randconfig-r022-20230329   gcc  
-sh                   randconfig-r023-20230329   gcc  
-sh                          rsk7264_defconfig   gcc  
-sh                           se7206_defconfig   gcc  
-sh                           se7343_defconfig   gcc  
-sh                           sh2007_defconfig   gcc  
-sparc                            alldefconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc        buildonly-randconfig-r001-20230329   gcc  
-sparc        buildonly-randconfig-r003-20230329   gcc  
-sparc        buildonly-randconfig-r006-20230329   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r006-20230329   gcc  
-sparc                randconfig-r022-20230329   gcc  
-sparc                randconfig-r024-20230329   gcc  
-sparc64      buildonly-randconfig-r003-20230329   gcc  
-sparc64      buildonly-randconfig-r005-20230329   gcc  
-sparc64      buildonly-randconfig-r006-20230329   gcc  
-sparc64              randconfig-r003-20230329   gcc  
-sparc64              randconfig-r013-20230329   gcc  
-sparc64              randconfig-r024-20230329   gcc  
-sparc64              randconfig-r031-20230329   gcc  
-sparc64              randconfig-r033-20230329   gcc  
-um                               alldefconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                        randconfig-k001   clang
-x86_64                          rhel-8.3-func   gcc  
-x86_64                    rhel-8.3-kselftests   gcc  
-x86_64                           rhel-8.3-ltp   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r001-20230329   gcc  
-xtensa       buildonly-randconfig-r003-20230329   gcc  
-xtensa       buildonly-randconfig-r003-20230330   gcc  
-xtensa       buildonly-randconfig-r004-20230329   gcc  
-xtensa       buildonly-randconfig-r006-20230330   gcc  
-xtensa                              defconfig   gcc  
-xtensa               randconfig-r002-20230329   gcc  
-xtensa               randconfig-r003-20230329   gcc  
-xtensa               randconfig-r012-20230329   gcc  
-xtensa               randconfig-r021-20230329   gcc  
-xtensa               randconfig-r024-20230329   gcc  
-xtensa               randconfig-r031-20230329   gcc  
-xtensa               randconfig-r033-20230329   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Hongyu Xie
