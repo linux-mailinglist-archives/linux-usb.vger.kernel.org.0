@@ -2,90 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2D46D099D
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 17:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C90E6D09C9
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Mar 2023 17:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233070AbjC3Pbi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Mar 2023 11:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
+        id S233171AbjC3Pfl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Mar 2023 11:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233085AbjC3Pbe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 11:31:34 -0400
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDF0CA0C;
-        Thu, 30 Mar 2023 08:31:18 -0700 (PDT)
-Received: by mail-oo1-f41.google.com with SMTP id l7-20020a4abe07000000b0053e1205c84bso2658268oop.9;
-        Thu, 30 Mar 2023 08:31:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680190278;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fnDjYGmEqOEcX6BV3D3Xoo9yGR2TRiur28JejHxdE3w=;
-        b=pTD4y+W8fF1+NtRJ6Sl80ayFjxvhl97qVLcgqNTvNEpWizlvCdAat9w7UOjnnQgVE6
-         FyNK04O6vyKVGG4gQ0T/X55WooCsqgCTQOQzuOOpdwgR6F0/NXmslBMSVskhyw8e+ilu
-         Hj3nhhnJK8tWHT0xph19tVok6dCW9ytsDC7goRxCPKsZphE4rHValCe6K6uCR7WXLGpI
-         g78jXZoHdEFxHKmoFK0ReN8O8r9AUCssQVzVSO6tcQeGfSX+BOKj/BFVCIsPSd9W1OOw
-         20+k1JVkP3SGrVEYcMIp/IzBuRDEuW9vLDaH3xOxzq7YlsDzKX7BxyywcUhQXAH4dvFs
-         n7og==
-X-Gm-Message-State: AAQBX9do2ssw9/d8katdmfthWgDBLc9h/zbphiVVLWGTpPr45xsrdpyF
-        n9QjG6LF04TUOvRRY9Ew1Q==
-X-Google-Smtp-Source: AKy350abjVDUmX8OWlEBXnmhH2hwWTbeugExUUvnY6Mez9tAhkValHyWVltMFvpiHlfSl2td0DikgQ==
-X-Received: by 2002:a4a:bd8c:0:b0:53c:5f89:eb85 with SMTP id k12-20020a4abd8c000000b0053c5f89eb85mr3363326oop.2.1680190277775;
-        Thu, 30 Mar 2023 08:31:17 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o79-20020a4a2c52000000b0053b8ae294f3sm9069976ooo.11.2023.03.30.08.31.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 08:31:17 -0700 (PDT)
-Received: (nullmailer pid 2213086 invoked by uid 1000);
-        Thu, 30 Mar 2023 15:31:16 -0000
-Date:   Thu, 30 Mar 2023 10:31:16 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: usb: gpio-sbu-mux: Add OnSemi
- NB7VPQ904M mux
-Message-ID: <20230330153116.GA2181381-robh@kernel.org>
-References: <20230321-topic-sagami_dp-v1-0-340c8bce4276@linaro.org>
- <20230321-topic-sagami_dp-v1-1-340c8bce4276@linaro.org>
+        with ESMTP id S233128AbjC3Pfg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Mar 2023 11:35:36 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id D0006D519
+        for <linux-usb@vger.kernel.org>; Thu, 30 Mar 2023 08:35:18 -0700 (PDT)
+Received: (qmail 200941 invoked by uid 1000); 30 Mar 2023 11:34:46 -0400
+Date:   Thu, 30 Mar 2023 11:34:46 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com>,
+        Thomas Winischhofer <thomas@winischhofer.net>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in sisusb_send_bulk_msg/usb_submit_urb
+Message-ID: <b799fc68-8840-43e7-85f5-27e1e6457a44@rowland.harvard.edu>
+References: <00000000000096e4f905f81b2702@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230321-topic-sagami_dp-v1-1-340c8bce4276@linaro.org>
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <00000000000096e4f905f81b2702@google.com>
+X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 11:12:28PM +0100, Konrad Dybcio wrote:
-> The OnSemi NB7VPQ904M Type-C DP altmode redriver provides SBU signals
-> that can be used in with the gpio-sbu-mux driver. Document it.
-> 
-> Note that the -mux suffix is there to indicate that the gpio-sbu-mux
-> driver interacts with the mux part of this otherwise quite sophisticated
-> chip, leaving the "onnn,nb7vpq904m" compatible free for when a proper
-> driver taking care of all of the chip's capabilities is introduced.
+Reference: https://syzkaller.appspot.com/bug?extid=23be03b56c5259385d79
 
-You should define a proper and complete binding. If you want to bind the 
-gpio-sbu-mux driver to it now until you have a proper driver then that's 
-fine. When you have such a driver, then you drop the compatible from the 
-gpio-sbu-mux driver.
+The sisusbvga driver just assumes that the endpoints it uses will be 
+present, without checking.  I don't know anything about this driver, so 
+the fix below may not be entirely correct.
 
-Note that having the fallback "gpio-sbu-mux" is somewhat problematic 
-because the kernel has no mechanism to ensure you bind the most specific 
-driver. For that to happen, it would have to support (automatically) 
-unbinding one driver and binding to the more specific driver since one 
-driver could be built-in and the other a module.
+Alan Stern
 
-Rob
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.2
+
+--- usb-devel.orig/drivers/usb/misc/sisusbvga/sisusbvga.c
++++ usb-devel/drivers/usb/misc/sisusbvga/sisusbvga.c
+@@ -2772,6 +2772,24 @@ static struct usb_class_driver usb_sisus
+ 	.minor_base =	SISUSB_MINOR
+ };
+ 
++/*
++ * Check whether the current altsetting for intf contains a bulk endpoint
++ * with the specified address (number and direction).
++ */
++static int check_bulk_ep(struct usb_interface *intf, unsigned int ep_addr)
++{
++	int n, i;
++	const struct usb_endpoint_descriptor *epd;
++
++	n = intf->cur_altsetting->desc.bNumEndpoints;
++	for (i = 0; i < n; ++i) {
++		epd = &intf->cur_altsetting->endpoint[i].desc;
++		if (epd->bEndpointAddress == ep_addr)
++			return usb_endpoint_xfer_bulk(epd);
++	}
++	return 0;
++}
++
+ static int sisusb_probe(struct usb_interface *intf,
+ 		const struct usb_device_id *id)
+ {
+@@ -2779,6 +2797,17 @@ static int sisusb_probe(struct usb_inter
+ 	struct sisusb_usb_data *sisusb;
+ 	int retval = 0, i;
+ 
++	/* Are the expected endpoints present? */
++	if (!check_bulk_ep(intf, SISUSB_EP_GFX_IN | USB_DIR_IN) ||
++	    !check_bulk_ep(intf, SISUSB_EP_GFX_OUT | USB_DIR_OUT) ||
++	    !check_bulk_ep(intf, SISUSB_EP_GFX_BULK_OUT | USB_DIR_OUT) ||
++	    !check_bulk_ep(intf, SISUSB_EP_GFX_LBULK_OUT | USB_DIR_OUT) ||
++	    !check_bulk_ep(intf, SISUSB_EP_BRIDGE_IN | USB_DIR_IN) ||
++	    !check_bulk_ep(intf, SISUSB_EP_BRIDGE_OUT | USB_DIR_OUT)) {
++		dev_err(&dev->dev, "Invalid USB2VGA device\n");
++		return -EINVAL;
++	}
++
+ 	dev_info(&dev->dev, "USB2VGA dongle found at address %d\n",
+ 			dev->devnum);
+ 
+
