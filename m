@@ -2,198 +2,271 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B446D29FC
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Mar 2023 23:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4964B6D2BA6
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Apr 2023 01:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232670AbjCaVaE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Mar 2023 17:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
+        id S233178AbjCaXVA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Mar 2023 19:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232157AbjCaVaB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Mar 2023 17:30:01 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB8F21AB8
-        for <linux-usb@vger.kernel.org>; Fri, 31 Mar 2023 14:29:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680298200; x=1711834200;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=LKs6tcBS/RvhYrtCMqRJZ6fsy67gmETTx2a2tQMvikA=;
-  b=nGxVIi71/l3ZKzkduJ7ug87WwCCEcmy+7jpJo9QDeOHsHXK+rCOokSr+
-   LjFXztmoDFJ9Bszc9bl6marZkUEiwFgH+glcGK/dio1YnTx/K5lQqXKz6
-   7O9FLEzxoAeTIuizGmNSvWvYbuwlyJzdtKb/ec9aeymL5PZZ+17IGdM/e
-   npueGRttRFioaG1h0dIXh/wMElrBU/4nwTVh12ZcSXy7DsjOEhrXWQSuB
-   d0i1WYNIhJDge0R4S2bi6Bvp8CeIofUSqLmbilSa7kvgp4p/E3rTblkeP
-   IWyAD5tdi4CVX/LRmOmntjRcIS8407B7v6eNVLXxoMHUtLxtAdFhDbAHp
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="340290883"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="340290883"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 14:29:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="796248229"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="796248229"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 31 Mar 2023 14:29:58 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1piMJp-000MBa-22;
-        Fri, 31 Mar 2023 21:29:57 +0000
-Date:   Sat, 01 Apr 2023 05:29:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 5d1a70f77dcf7b93f955d40691ac729fc7b3d151
-Message-ID: <642750b0.yrvBNBIiPnHTTQ1D%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229998AbjCaXU7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Mar 2023 19:20:59 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0293DBC2;
+        Fri, 31 Mar 2023 16:20:55 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32VLU82a030062;
+        Fri, 31 Mar 2023 23:20:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=PCAuH9OAqwdOcYOInvw9fK+1IYFNWNLPDZuYFIuHi7g=;
+ b=i3zeVZ+YOnCs6xHGz7i0GF7+sJi6+P04DD22xCI8Ppgh0oA9vaB19jDyScQgD1RH9WzQ
+ ReA/gS+w874l6TuRu8TS/QLQXHxFXEXDvYTTp/p2X4GALf7MCPIvvGm+hB+HmQbMCERw
+ hOUimCjpw5LkT/sUsRTU4kCfr3xKL8Sr89d6eHmh9YY3mVt3/rspCDbnFjt5QdALAGsW
+ s1Q4VsGnNmVyztKdMP24xNu73xYc6l3Ma63fccieGQoJIxmuazyqEZPzAxT7pxnCtAWF
+ gXagIso+60WqL1oX7sgXogj5GyfrpRQKK0DFg4adB1ewCzYqJLi7rBJSfe9/ih5LlXk+ 6w== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pntxfasw0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Mar 2023 23:20:52 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32VNKpS3001358
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Mar 2023 23:20:51 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 31 Mar 2023 16:20:51 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH] usb: dwc3: gadget: Stall and restart EP0 if host is unresponsive
+Date:   Fri, 31 Mar 2023 16:20:39 -0700
+Message-ID: <20230331232039.1407-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 0OY0jjizzaxumBpt9xaoi_QIxWd3pynt
+X-Proofpoint-ORIG-GUID: 0OY0jjizzaxumBpt9xaoi_QIxWd3pynt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-31_07,2023-03-31_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ bulkscore=0 phishscore=0 priorityscore=1501 lowpriorityscore=0 mlxscore=0
+ mlxlogscore=999 adultscore=0 clxscore=1011 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2303310191
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 5d1a70f77dcf7b93f955d40691ac729fc7b3d151  Merge tag 'usb-serial-6.3-rc5' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+It was observed that there are hosts that may complete pending SETUP
+transactions before the stop active transfers and controller halt occurs,
+leading to lingering endxfer commands on DEPs on subsequent pullup/gadget
+start iterations.
 
-elapsed time: 823m
+dwc3_gadget_ep_disable   name=ep8in flags=0x3009  direction=1
+dwc3_gadget_ep_disable   name=ep4in flags=1  direction=1
+dwc3_gadget_ep_disable   name=ep3out flags=1  direction=0
+usb_gadget_disconnect   deactivated=0  connected=0  ret=0
 
-configs tested: 119
-configs skipped: 8
+The sequence shows that the USB gadget disconnect (dwc3_gadget_pullup(0))
+routine completed successfully, allowing for the USB gadget to proceed with
+a USB gadget connect.  However, if this occurs the system runs into an
+issue where:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+BUG: spinlock already unlocked on CPU
+ spin_bug+0x0
+ dwc3_remove_requests+0x278
+ dwc3_ep0_out_start+0xb0
+ __dwc3_gadget_start+0x25c
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r002-20230329   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r004-20230329   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r004-20230329   gcc  
-arc                  randconfig-r025-20230329   gcc  
-arc                  randconfig-r043-20230329   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r046-20230329   gcc  
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r005-20230329   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r036-20230329   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r003-20230329   gcc  
-csky                 randconfig-r013-20230331   gcc  
-csky                 randconfig-r015-20230329   gcc  
-csky                 randconfig-r033-20230329   gcc  
-hexagon              randconfig-r002-20230329   clang
-hexagon              randconfig-r041-20230329   clang
-hexagon              randconfig-r045-20230329   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r003-20230329   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r001-20230329   gcc  
-loongarch            randconfig-r023-20230329   gcc  
-loongarch            randconfig-r025-20230329   gcc  
-loongarch            randconfig-r026-20230329   gcc  
-loongarch            randconfig-r036-20230329   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r004-20230329   gcc  
-m68k         buildonly-randconfig-r006-20230329   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r031-20230329   gcc  
-microblaze           randconfig-r024-20230329   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r003-20230329   clang
-mips                 randconfig-r021-20230329   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r006-20230329   gcc  
-nios2                randconfig-r014-20230331   gcc  
-nios2                randconfig-r033-20230329   gcc  
-nios2                randconfig-r035-20230329   gcc  
-openrisc             randconfig-r034-20230329   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r022-20230329   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r001-20230329   clang
-powerpc              randconfig-r032-20230329   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r011-20230329   clang
-riscv                randconfig-r016-20230331   gcc  
-riscv                randconfig-r021-20230329   clang
-riscv                randconfig-r042-20230329   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r005-20230329   gcc  
-s390                 randconfig-r012-20230329   clang
-s390                 randconfig-r015-20230331   gcc  
-s390                 randconfig-r034-20230329   gcc  
-s390                 randconfig-r044-20230329   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r011-20230331   gcc  
-sh                   randconfig-r023-20230329   gcc  
-sh                   randconfig-r031-20230329   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r016-20230329   gcc  
-sparc64              randconfig-r024-20230329   gcc  
-sparc64              randconfig-r032-20230329   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r002-20230329   gcc  
-xtensa               randconfig-r014-20230329   gcc  
+This is due to the pending endxfers, leading to gadget start (w/o lock
+held) to execute the remove requests, which will unlock the dwc3 spinlock
+as part of giveback.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+To mitigate this, resolve the pending endxfers on the pullup disable path
+by:
+ 1. Re-locating the SETUP phase check after stop active transfers, since
+ that is where the DWC3_EP_DELAY_STOP is potentially set.  This also allows
+ for handling of a host that may be unresponsive by using the completion
+ timeout to trigger the stall and restart for EP0.
+
+ 2. Do not call gadget stop until the poll for controller halt is
+ completed.  DEVTEN is cleared as part of gadget stop, so the intention to
+ allow ep0 events to continue while waiting for controller halt is not
+ happening.
+
+Fixes: c96683798e27 ("usb: dwc3: ep0: Don't prepare beyond Setup stage")
+Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+---
+ drivers/usb/dwc3/gadget.c | 101 ++++++++++++++++++++++----------------
+ 1 file changed, 58 insertions(+), 43 deletions(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 3c63fa97a680..9715de8e99bc 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -139,6 +139,24 @@ int dwc3_gadget_set_link_state(struct dwc3 *dwc, enum dwc3_link_state state)
+ 	return -ETIMEDOUT;
+ }
+ 
++static void dwc3_ep0_reset_state(struct dwc3 *dwc)
++{
++	unsigned int	dir;
++
++	if (dwc->ep0state != EP0_SETUP_PHASE) {
++		dir = !!dwc->ep0_expect_in;
++		if (dwc->ep0state == EP0_DATA_PHASE)
++			dwc3_ep0_end_control_data(dwc, dwc->eps[dir]);
++		else
++			dwc3_ep0_end_control_data(dwc, dwc->eps[!dir]);
++
++		dwc->eps[0]->trb_enqueue = 0;
++		dwc->eps[1]->trb_enqueue = 0;
++
++		dwc3_ep0_stall_and_restart(dwc);
++	}
++}
++
+ /**
+  * dwc3_ep_inc_trb - increment a trb index.
+  * @index: Pointer to the TRB index to increment.
+@@ -2528,29 +2546,17 @@ static int __dwc3_gadget_start(struct dwc3 *dwc);
+ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
+ {
+ 	unsigned long flags;
++	int ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	dwc->connected = false;
+ 
+ 	/*
+-	 * Per databook, when we want to stop the gadget, if a control transfer
+-	 * is still in process, complete it and get the core into setup phase.
++	 * Attempt to end pending SETUP status phase, and not wait for the
++	 * function to do so.
+ 	 */
+-	if (dwc->ep0state != EP0_SETUP_PHASE) {
+-		int ret;
+-
+-		if (dwc->delayed_status)
+-			dwc3_ep0_send_delayed_status(dwc);
+-
+-		reinit_completion(&dwc->ep0_in_setup);
+-
+-		spin_unlock_irqrestore(&dwc->lock, flags);
+-		ret = wait_for_completion_timeout(&dwc->ep0_in_setup,
+-				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
+-		spin_lock_irqsave(&dwc->lock, flags);
+-		if (ret == 0)
+-			dev_warn(dwc->dev, "timed out waiting for SETUP phase\n");
+-	}
++	if (dwc->delayed_status)
++		dwc3_ep0_send_delayed_status(dwc);
+ 
+ 	/*
+ 	 * In the Synopsys DesignWare Cores USB3 Databook Rev. 3.30a
+@@ -2560,9 +2566,28 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
+ 	 * bit.
+ 	 */
+ 	dwc3_stop_active_transfers(dwc);
+-	__dwc3_gadget_stop(dwc);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	/*
++	 * Per databook, when we want to stop the gadget, if a control transfer
++	 * is still in process, complete it and get the core into setup phase.
++	 * In case the host is unresponsive to a SETUP transaction, forcefully
++	 * stall the transfer, and move back to the SETUP phase, so that any
++	 * pending endxfers can be executed.
++	 */
++	if (dwc->ep0state != EP0_SETUP_PHASE) {
++		reinit_completion(&dwc->ep0_in_setup);
++
++		ret = wait_for_completion_timeout(&dwc->ep0_in_setup,
++				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
++		if (ret == 0) {
++			dev_warn(dwc->dev, "wait for SETUP phase timed out\n");
++			spin_lock_irqsave(&dwc->lock, flags);
++			dwc3_ep0_reset_state(dwc);
++			spin_unlock_irqrestore(&dwc->lock, flags);
++		}
++	}
++
+ 	/*
+ 	 * Note: if the GEVNTCOUNT indicates events in the event buffer, the
+ 	 * driver needs to acknowledge them before the controller can halt.
+@@ -2570,7 +2595,19 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
+ 	 * remaining event generated by the controller while polling for
+ 	 * DSTS.DEVCTLHLT.
+ 	 */
+-	return dwc3_gadget_run_stop(dwc, false, false);
++	ret = dwc3_gadget_run_stop(dwc, false, false);
++
++	/*
++	 * Stop the gadget after controller is halted, so that if needed, the
++	 * events to update EP0 state can still occur while the run/stop
++	 * routine polls for the halted state.  DEVTEN is cleared as part of
++	 * gadget stop.
++	 */
++	spin_lock_irqsave(&dwc->lock, flags);
++	__dwc3_gadget_stop(dwc);
++	spin_unlock_irqrestore(&dwc->lock, flags);
++
++	return ret;
+ }
+ 
+ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+@@ -3821,16 +3858,7 @@ static void dwc3_gadget_disconnect_interrupt(struct dwc3 *dwc)
+ 	dwc->setup_packet_pending = false;
+ 	usb_gadget_set_state(dwc->gadget, USB_STATE_NOTATTACHED);
+ 
+-	if (dwc->ep0state != EP0_SETUP_PHASE) {
+-		unsigned int    dir;
+-
+-		dir = !!dwc->ep0_expect_in;
+-		if (dwc->ep0state == EP0_DATA_PHASE)
+-			dwc3_ep0_end_control_data(dwc, dwc->eps[dir]);
+-		else
+-			dwc3_ep0_end_control_data(dwc, dwc->eps[!dir]);
+-		dwc3_ep0_stall_and_restart(dwc);
+-	}
++	dwc3_ep0_reset_state(dwc);
+ }
+ 
+ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
+@@ -3884,20 +3912,7 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
+ 	 * phase. So ensure that EP0 is in setup phase by issuing a stall
+ 	 * and restart if EP0 is not in setup phase.
+ 	 */
+-	if (dwc->ep0state != EP0_SETUP_PHASE) {
+-		unsigned int	dir;
+-
+-		dir = !!dwc->ep0_expect_in;
+-		if (dwc->ep0state == EP0_DATA_PHASE)
+-			dwc3_ep0_end_control_data(dwc, dwc->eps[dir]);
+-		else
+-			dwc3_ep0_end_control_data(dwc, dwc->eps[!dir]);
+-
+-		dwc->eps[0]->trb_enqueue = 0;
+-		dwc->eps[1]->trb_enqueue = 0;
+-
+-		dwc3_ep0_stall_and_restart(dwc);
+-	}
++	dwc3_ep0_reset_state(dwc);
+ 
+ 	/*
+ 	 * In the Synopsis DesignWare Cores USB3 Databook Rev. 3.30a
