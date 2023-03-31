@@ -2,133 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302C06D1B52
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Mar 2023 11:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 978A06D1C54
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Mar 2023 11:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbjCaJHI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Mar 2023 05:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55436 "EHLO
+        id S232257AbjCaJ3c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Mar 2023 05:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbjCaJGq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Mar 2023 05:06:46 -0400
-Received: from mx0a-0014ca01.pphosted.com (mx0a-0014ca01.pphosted.com [208.84.65.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEC21FD1A;
-        Fri, 31 Mar 2023 02:06:24 -0700 (PDT)
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32V6qi78000864;
-        Fri, 31 Mar 2023 02:06:13 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=proofpoint;
- bh=vIp9Ev0lMVFELrGOwjeJWNdUx58OkSR+I0uEURRZWmU=;
- b=pRDIaaY2P6drnBS6e1agtQch5ShkDK7529+Jy27EKBoCnaE3p32gih3g1+tBJmZyHg5Y
- ZfkJaI71de8inG4Jn5oe9gNYrwabYVQ6PvvitmdHQClPeiqBtXgpsjvMMgouEYgoMooN
- G1PG5F+7CqPEf6pgx3y/ffvaCWJsBd7kQgyiqLdF0WSXFxdrMLtHWJjPvYaYYCyDZuK0
- whDa663NoeZln2wloKWKSA+xRTCyCxtzGs80NMWH1KKUepkEEvzuBmExWE7AJIo8LU8R
- A1lzO/v7W7g/1SPwGNb4Btf30M2OjHDHn4xTUy8istyQoIBKMnCOnRg4x6TdvLV+s3Uc xA== 
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2174.outbound.protection.outlook.com [104.47.59.174])
-        by mx0a-0014ca01.pphosted.com (PPS) with ESMTPS id 3pngsgkd6m-1
+        with ESMTP id S232131AbjCaJ3R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Mar 2023 05:29:17 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D2320329;
+        Fri, 31 Mar 2023 02:28:43 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32V71VCR028951;
+        Fri, 31 Mar 2023 09:27:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=wADGV9ohsLxooovRp55AnlQ0R+8//pVBhx4ZNqV6Sxw=;
+ b=WtMU2VU708ob4UmXcQsgJmPRL9Ql7Up19UClcN6kPqvPI6AL//H7hoOUJoP5ZayMqXVJ
+ pOicoa6L8aa2w1Rk6w2jy8dquYE3tYKQjc2UZyf0SrCg7d3tMmNSbMQ6RoLghQ6NQmq6
+ v+dOA7Eq5IsClaQ5JOlUyrwTJaOIzSfJ9m3zht67CWCNhIDaNzm+tACbq9ijuuVrqOfg
+ 3lRkH/SmySEOkSGoJ1Exx7EU1tjo76ICMowEAPieTdApqaMVV2D9B/EpxTyLaak67YJj
+ UwVSJdRF4hZGROs5qZ1cqxk1rHKvl58YAyEIuXJGLcJmNkqbWUH+57bHoifTAS3hPKzN cw== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pn8wnk8w5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 31 Mar 2023 02:06:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HiAonXxcRXF9g+5LduP81ZwS64IxAHw4OXyU1HN9Q0njL0hUKFKTgsDSOyCofZV3rPHok0TAcY05p3i2vsp1F9Wh8T3h1XRHKztQMgR87zpJMnepYkTN9hXjGf/QrqO0M1DaBZuEMv5duSrg0wCCbGUsjsFjSDk5PMm3o5+hA/q+5eRJfBMq6Opyx0JvVE1IXVkDM62dYkqOxa+YDcjOuDNy9OC86DWj0jjUD5Kwl7s9kuwu0hqUAEjebql2ryToUjY5IzQeND1ONlgIWiaAxxwaTKA54z060WX4m2np8uXwuHKdXrrRVvun1Xy3LsChdmt4OKNYjM2DpprYRboYrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vIp9Ev0lMVFELrGOwjeJWNdUx58OkSR+I0uEURRZWmU=;
- b=J2YS/Zuz4eTd7IwzJU91Lympn3cHEbKQ0dGlh+erqoJGkNMHmEtRHM5NN63wnMqRyYHELgZ3RpSAgouqqvmagm1IWaPIMoKI9BVp2wCUJ0HrZ7sMX9qVK56c4+/Oe+N3sVeay5HZc1UDnHO8EHyE6ouWaVWR5yVCzgIiSDGPZBhljEyd3wJxk3IsMf288LcCb5ooakj4gRZu338dvaWb43ihEzHsDUMvnm8v4IfgH8AyJQQSVYyqAmqOLnN8db1DD9eJDI9nyTs8xaGdNWBbEjtvKsJ1/uWnohjmIhWvg/OSx/BHQkZxyVIlsK6Mko/D3zYrij8Y4PB35PW6FJL8FQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 158.140.1.147) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vIp9Ev0lMVFELrGOwjeJWNdUx58OkSR+I0uEURRZWmU=;
- b=fLo7xPAN3Tvs0QXjnwwFLXTq5MEEkCc+nZt8092BFgCrgIJwo7uq/vnsQu0QMYG4oFdoP+fjDR9P59q+2VQ6l93M9XVjgn5rmaSnXPekZNoSsxZjJht1rmyr27tm50VDpTOzw9dD083jc47UlZvlw6lOEhLG3L6TsFN08lJx9KQ=
-Received: from MW4PR04CA0048.namprd04.prod.outlook.com (2603:10b6:303:6a::23)
- by SJ0PR07MB9186.namprd07.prod.outlook.com (2603:10b6:a03:3e6::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.22; Fri, 31 Mar
- 2023 09:06:10 +0000
-Received: from MW2NAM12FT071.eop-nam12.prod.protection.outlook.com
- (2603:10b6:303:6a:cafe::77) by MW4PR04CA0048.outlook.office365.com
- (2603:10b6:303:6a::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.22 via Frontend
- Transport; Fri, 31 Mar 2023 09:06:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.147)
- smtp.mailfrom=cadence.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=cadence.com;
-Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 158.140.1.147 as permitted sender) receiver=protection.outlook.com;
- client-ip=158.140.1.147; helo=sjmaillnx1.cadence.com; pr=C
-Received: from sjmaillnx1.cadence.com (158.140.1.147) by
- MW2NAM12FT071.mail.protection.outlook.com (10.13.181.224) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6277.14 via Frontend Transport; Fri, 31 Mar 2023 09:06:10 +0000
-Received: from maileu4.global.cadence.com (eudvw-maileu4.cadence.com [10.160.110.201])
-        by sjmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 32V96603000543
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 31 Mar 2023 02:06:07 -0700
-Received: from maileu5.global.cadence.com (10.160.110.202) by
- maileu4.global.cadence.com (10.160.110.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 31 Mar 2023 11:06:05 +0200
-Received: from eu-cn02.cadence.com (10.160.89.185) by
- maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24 via Frontend Transport; Fri, 31 Mar 2023 11:06:05 +0200
-Received: from eu-cn02.cadence.com (localhost.localdomain [127.0.0.1])
-        by eu-cn02.cadence.com (8.14.7/8.14.7) with ESMTP id 32V9656b454847;
-        Fri, 31 Mar 2023 05:06:05 -0400
-Received: (from pawell@localhost)
-        by eu-cn02.cadence.com (8.14.7/8.14.7/Submit) id 32V964C5454835;
-        Fri, 31 Mar 2023 05:06:04 -0400
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     <peter.chen@kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>, <stable@vger.kernel.org>
-Subject: [PATCH] usb: cdnsp: Fixes error: uninitialized symbol 'len'
-Date:   Fri, 31 Mar 2023 05:06:00 -0400
-Message-ID: <20230331090600.454674-1-pawell@cadence.com>
-X-Mailer: git-send-email 2.30.0
+        Fri, 31 Mar 2023 09:27:22 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32V9RLr8030853
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Mar 2023 09:27:21 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 31 Mar 2023 02:27:15 -0700
+Date:   Fri, 31 Mar 2023 14:57:11 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v5 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
+Message-ID: <20230331092710.GB19162@varda-linux.qualcomm.com>
+References: <cover.1680162377.git.quic_varada@quicinc.com>
+ <c46b542b112b59002ab965be1d3fcae8c372d545.1680162377.git.quic_varada@quicinc.com>
+ <CAA8EJpo_ckJtYV4aU613X5L6+wj-1i9vZkud5p72PLdCSnj5ng@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-CrossPremisesHeadersFilteredBySendConnector: maileu4.global.cadence.com
-X-OrganizationHeadersPreserved: maileu4.global.cadence.com
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW2NAM12FT071:EE_|SJ0PR07MB9186:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7fb4175a-e019-439b-22a6-08db31c72ba5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2Q9xWhQ7k5YymV+HpPOggANiWG6AsYhSaXhVNpj4zpbHaLSL31aIpN+0B9NQxwQb4WKDkmMEFkEiejzQ0rezmbkhfJLqAE9+ke65pHB21wgn1JGHOfQdqMiyDZC38rILLAXIzPXjHKm2krWtI4W4BxoriDdZi2liqDrc/DW85oFXUSzvdUqrHr1ABBBpNtZQFMCQzIoqJ+vezOM+BHLZcT+jNzPmlYMvTH2dJx8o8iUUhQNCDvEMZR19HRbT2m9o6qucd1u1W8TOao2LtnWHTyIIfpLHVjf5+DLjI+nHupVfYKekcRaA8jY8HNjCRCFG7sOJ94fvNYYH2l3vqfUPzkIeytNJWeTX0s55+CvnvDqHdZV87Ij6IRc/IxgEwQaP9G3SeMWRe08WOu5t7pOWrjuHK8VXX4QuzabIcMgmNg4s8wvUNd7ta/5KoZO/VhbYuQ6ASV5CIXoZltI4WAs4SZRVBzfH4eOqScJ2OAzVU3UlcsSN9/JXOltH+vpHSEasMDSUNlr10w7V76QxtkqGah4OZMp2NBiamxFCHuiReQ4GGV8PDcyaV+wjm0TT8M64bIE3EU5Ovppi6RIUKeIV52UZpt2qUfq5p9dRR/ZXTA7IxlebyuvWkjIiUSp8Bm+StHPHrs8aBAi6yoNNS2kAdgM3v9Uji00x0N5+Fb38QOfAy9CY51TtvqFo2cL1dabYz+C3Cn7OjLlbjImN+7t+Iw==
-X-Forefront-Antispam-Report: CIP:158.140.1.147;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx1.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(376002)(346002)(136003)(36092001)(451199021)(46966006)(40470700004)(36840700001)(47076005)(2616005)(336012)(1076003)(186003)(83380400001)(36860700001)(426003)(26005)(316002)(478600001)(42186006)(54906003)(6666004)(2906002)(82310400005)(356005)(40460700003)(8936002)(7636003)(8676002)(70586007)(40480700001)(36756003)(82740400003)(70206006)(41300700001)(4326008)(5660300002)(86362001)(6916009);DIR:OUT;SFP:1101;
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 09:06:10.3083
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7fb4175a-e019-439b-22a6-08db31c72ba5
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.147];Helo=[sjmaillnx1.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: MW2NAM12FT071.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR07MB9186
-X-Proofpoint-GUID: rXkctWpvP4ay04SKWU_0FQmR30mQ2A7k
-X-Proofpoint-ORIG-GUID: rXkctWpvP4ay04SKWU_0FQmR30mQ2A7k
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpo_ckJtYV4aU613X5L6+wj-1i9vZkud5p72PLdCSnj5ng@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: SOXOlmDUi2gqVqtZVG6RxCC6qzePn-wd
+X-Proofpoint-GUID: SOXOlmDUi2gqVqtZVG6RxCC6qzePn-wd
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-31_04,2023-03-30_04,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 clxscore=1015
- mlxlogscore=746 malwarescore=0 priorityscore=1501 impostorscore=0
- mlxscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0
- phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2303310075
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ mlxlogscore=999 phishscore=0 spamscore=0 impostorscore=0 suspectscore=0
+ bulkscore=0 priorityscore=1501 clxscore=1015 malwarescore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2303310078
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -136,40 +83,203 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The patch 5bc38d33a5a1: "usb: cdnsp: Fixes issue with redundant
-Status Stage" leads to the following Smatch static checker warning:
+On Thu, Mar 30, 2023 at 12:44:40PM +0300, Dmitry Baryshkov wrote:
+> On Thu, 30 Mar 2023 at 11:42, Varadarajan Narayanan
+> <quic_varada@quicinc.com> wrote:
+> >
+> > Add USB phy and controller related nodes
+> >
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> >  Changes in v5:
+> >         - Fix additional comments
+> >         - Edit nodes to match with qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> >         - 'make dtbs_check' giving the following messages since
+> >           ipq9574 doesn't have power domains. Hope this is ok
+> >
+> >                 /local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
+> >                 From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> >                 /local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
+> >                 From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>
+> No, I think it is not.
 
-  drivers/usb/cdns3/cdnsp-ep0.c:470 cdnsp_setup_analyze()
-  error: uninitialized symbol 'len'.
+There are no GDSCs in IPQ9574. Can you suggest how to proceed.
 
-cc: <stable@vger.kernel.org>
-Fixes: 5bc38d33a5a1 ("usb: cdnsp: Fixes issue with redundant Status Stage")
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
----
- drivers/usb/cdns3/cdnsp-ep0.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Thanks
+Varada
 
-diff --git a/drivers/usb/cdns3/cdnsp-ep0.c b/drivers/usb/cdns3/cdnsp-ep0.c
-index d63d5d92f255..f317d3c84781 100644
---- a/drivers/usb/cdns3/cdnsp-ep0.c
-+++ b/drivers/usb/cdns3/cdnsp-ep0.c
-@@ -414,7 +414,7 @@ static int cdnsp_ep0_std_request(struct cdnsp_device *pdev,
- void cdnsp_setup_analyze(struct cdnsp_device *pdev)
- {
- 	struct usb_ctrlrequest *ctrl = &pdev->setup;
--	int ret = 0;
-+	int ret = -EINVAL;
- 	u16 len;
- 
- 	trace_cdnsp_ctrl_req(ctrl);
-@@ -424,7 +424,6 @@ void cdnsp_setup_analyze(struct cdnsp_device *pdev)
- 
- 	if (pdev->gadget.state == USB_STATE_NOTATTACHED) {
- 		dev_err(pdev->dev, "ERR: Setup detected in unattached state\n");
--		ret = -EINVAL;
- 		goto out;
- 	}
- 
--- 
-2.34.1
-
+> >  Changes in v4:
+> >         - Use newer bindings without subnodes
+> >         - Fix coding style issues
+> >
+> >  Changes in v3:
+> >         - Insert the nodes at proper location
+> >
+> >  Changes in v2:
+> >         - Fixed issues flagged by Krzysztof
+> >         - Fix issues reported by make dtbs_check
+> >         - Remove NOC related clocks (to be added with proper
+> >           interconnect support)
+> >
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> >  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 120 ++++++++++++++++++++++++++++++++++
+> >  1 file changed, 120 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > index 2bb4053..8fa9e1a 100644
+> > --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > @@ -186,6 +186,33 @@
+> >                 method = "smc";
+> >         };
+> >
+> > +       reg_usb_3p3: s3300 {
+> > +               compatible = "regulator-fixed";
+> > +               regulator-min-microvolt = <3300000>;
+> > +               regulator-max-microvolt = <3300000>;
+> > +               regulator-boot-on;
+> > +               regulator-always-on;
+> > +               regulator-name = "usb-phy-vdd-dummy";
+> > +       };
+> > +
+> > +       reg_usb_1p8: s1800 {
+> > +               compatible = "regulator-fixed";
+> > +               regulator-min-microvolt = <1800000>;
+> > +               regulator-max-microvolt = <1800000>;
+> > +               regulator-boot-on;
+> > +               regulator-always-on;
+> > +               regulator-name = "usb-phy-pll-dummy";
+> > +       };
+> > +
+> > +       reg_usb_0p925: s0925 {
+> > +               compatible = "regulator-fixed";
+> > +               regulator-min-microvolt = <925000>;
+> > +               regulator-max-microvolt = <925000>;
+> > +               regulator-boot-on;
+> > +               regulator-always-on;
+> > +               regulator-name = "usb-phy-dummy";
+> > +       };
+> > +
+> >         reserved-memory {
+> >                 #address-cells = <2>;
+> >                 #size-cells = <2>;
+> > @@ -215,6 +242,52 @@
+> >                 #size-cells = <1>;
+> >                 ranges = <0 0 0 0xffffffff>;
+> >
+> > +               qusb_phy_0: phy@7b000 {
+> > +                       compatible = "qcom,ipq9574-qusb2-phy";
+> > +                       reg = <0x0007b000 0x180>;
+> > +                       #phy-cells = <0>;
+> > +
+> > +                       clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> > +                                <&xo_board_clk>;
+> > +                       clock-names = "cfg_ahb",
+> > +                                     "ref";
+> > +
+> > +                       vdd-supply = <&reg_usb_0p925>;
+> > +                       vdda-pll-supply = <&reg_usb_1p8>;
+> > +                       vdda-phy-dpdm-supply = <&reg_usb_3p3>;
+> > +
+> > +                       resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> > +                       status = "disabled";
+> > +               };
+> > +
+> > +               ssphy_0: phy@7d000 {
+>
+> Nit: usually the label usb_0_qmpphy
+>
+> > +                       compatible = "qcom,ipq9574-qmp-usb3-phy";
+> > +                       reg = <0x0007d000 0xa00>;
+> > +                       #phy-cells = <0>;
+> > +
+> > +                       clocks = <&gcc GCC_USB0_AUX_CLK>,
+> > +                                <&xo_board_clk>,
+> > +                                <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> > +                                <&gcc GCC_USB0_PIPE_CLK>;
+> > +                       clock-names = "aux",
+> > +                                     "ref",
+> > +                                     "com_aux",
+> > +                                     "pipe";
+> > +
+> > +                       resets = <&gcc GCC_USB0_PHY_BCR>,
+> > +                                <&gcc GCC_USB3PHY_0_PHY_BCR>;
+> > +                       reset-names = "phy",
+> > +                                     "phy_phy";
+> > +
+> > +                       vdda-pll-supply = <&reg_usb_1p8>;
+> > +                       vdda-phy-supply = <&reg_usb_0p925>;
+> > +
+> > +                       status = "disabled";
+> > +
+> > +                       #clock-cells = <0>;
+> > +                       clock-output-names = "usb0_pipe_clk";
+> > +               };
+> > +
+> >                 pcie0_phy: phy@84000 {
+> >                         compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
+> >                         reg = <0x00084000 0x1bc>; /* Serdes PLL */
+> > @@ -436,6 +509,53 @@
+> >                         status = "disabled";
+> >                 };
+> >
+> > +               usb3: usb@8a00000 {
+> > +                       compatible = "qcom,ipq9574-dwc3", "qcom,dwc3";
+> > +                       reg = <0x08af8800 0x400>;
+> > +                       #address-cells = <1>;
+> > +                       #size-cells = <1>;
+> > +                       ranges;
+> > +
+> > +                       clocks = <&gcc GCC_SNOC_USB_CLK>,
+> > +                                <&gcc GCC_ANOC_USB_AXI_CLK>,
+> > +                                <&gcc GCC_USB0_MASTER_CLK>,
+> > +                                <&gcc GCC_USB0_SLEEP_CLK>,
+> > +                                <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> > +
+> > +                       clock-names = "sys_noc_axi",
+> > +                                     "anoc_axi",
+> > +                                     "master",
+> > +                                     "sleep",
+> > +                                     "mock_utmi";
+> > +
+> > +                       assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
+> > +                                         <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> > +                       assigned-clock-rates = <200000000>,
+> > +                                              <24000000>;
+> > +
+> > +                       interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
+> > +                       interrupt-names = "pwr_event";
+> > +
+> > +                       resets = <&gcc GCC_USB_BCR>;
+> > +                       status = "disabled";
+> > +
+> > +                       dwc_0: usb@8a00000 {
+> > +                               compatible = "snps,dwc3";
+> > +                               reg = <0x8a00000 0xcd00>;
+> > +                               clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> > +                               clock-names = "ref";
+> > +                               interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+> > +                               phys = <&qusb_phy_0>, <&ssphy_0>;
+> > +                               phy-names = "usb2-phy", "usb3-phy";
+> > +                               tx-fifo-resize;
+> > +                               snps,is-utmi-l1-suspend;
+> > +                               snps,hird-threshold = /bits/ 8 <0x0>;
+> > +                               snps,dis_u2_susphy_quirk;
+> > +                               snps,dis_u3_susphy_quirk;
+> > +                               dr_mode = "host";
+> > +                       };
+> > +               };
+> > +
+> >                 intc: interrupt-controller@b000000 {
+> >                         compatible = "qcom,msm-qgic2";
+> >                         reg = <0x0b000000 0x1000>,  /* GICD */
+> > --
+> > 2.7.4
+> >
+>
+>
+> --
+> With best wishes
+> Dmitry
