@@ -2,726 +2,322 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960BA6D1761
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Mar 2023 08:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC8C6D17C2
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Mar 2023 08:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjCaG1M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Mar 2023 02:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39144 "EHLO
+        id S230262AbjCaGrw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Mar 2023 02:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjCaG1K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Mar 2023 02:27:10 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE148DBC6;
-        Thu, 30 Mar 2023 23:26:46 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id d17so21267209wrb.11;
-        Thu, 30 Mar 2023 23:26:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680244003;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9NP6pUuZ/OlZC1OCVgEcS1WK3w/GckN6kRJCtOVKYXA=;
-        b=KzPN8Ixc5cgiFbdV7+cZZP8DAIcN2j1bik1k9Zrr6dWnuO6NoaQJxdVyH6866XwgNL
-         tLA6Oj3KoRU1qx5M8r5smGSw+MGLeg7c1XxM1B3zrBgcW6JyTVy0qqV4bPZSeSo5BZJt
-         w8/3Q/r/DG2pbtcdJ+mmX87TwZ73yNdWQZzLsHfALAvhHHJsfPJ+2h9xA6+x3ZH0Or7J
-         eT6PkSxE4s0Cde94zGUOmUD5rHtCRb55FFrFULIGGRSGz9Ri+BpPY2pG9NW5Z2k8RuvC
-         D4CeTl6l6SmnPFYqxW1a7OfOo1VnM0mM1+TI8d+7gPFBywggIDLwmICe3G8SB5VMidhZ
-         NuYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680244003;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9NP6pUuZ/OlZC1OCVgEcS1WK3w/GckN6kRJCtOVKYXA=;
-        b=v28pxyQ9N3/eTZV+LR855a2Z66wvNSoqgRMLsfIJ/drt6I0b6ZXO1cBRHw039fCunx
-         dXAw8gGYiAlFqrVfiNiUlJEIFYIYNBhN8LF9M4s2yh4Ty6NcmtDqWCAvV5w8nYyi4qc1
-         /lkEDl+bmHE+ksg7Dl8vJ2ekhEYsK+9omO5SZ9xKPwm2Yb37vGMXTvHZHdjshamTkghu
-         wgPHvg9+tWzhLF5GqMkBjC0bTrV9keSU/pVjFv+QBU6N1aN1Z7mcQTlD6weNzXU43dMy
-         LtKBoeRa4HH6+R4nRPTnw4uPoT1JPyNotfMIcVcV9+jtUTGPMpt3sRSKe4vv71DXunSD
-         wYcQ==
-X-Gm-Message-State: AAQBX9ddeBHQxUuIbUJK2NL8rAWCfR7TaidbzApp04EEY323xeLp+mCU
-        PN8OYHix8VXId4ueyblPxqpDH1pZuM5CkF9i
-X-Google-Smtp-Source: AKy350Z38Yf7G/69TmQAnHy7RTa7++QkuapuCOJiYIsE+GgExk4g4axsG1ZuTtXa0PqGKwmbfSDrFg==
-X-Received: by 2002:adf:fec9:0:b0:2e5:6de5:fe9 with SMTP id q9-20020adffec9000000b002e56de50fe9mr1529106wrs.66.1680244003180;
-        Thu, 30 Mar 2023 23:26:43 -0700 (PDT)
-Received: from arinc9-PC.lan ([149.91.1.15])
-        by smtp.gmail.com with ESMTPSA id o15-20020a5d474f000000b002d7a75a2c20sm1252464wrs.80.2023.03.30.23.26.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 23:26:42 -0700 (PDT)
-From:   arinc9.unal@gmail.com
-X-Google-Original-From: arinc.unal@arinc9.com
-To:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        me@1conan.com, erkin.bozoglu@xeront.com
-Subject: [RFC PATCH] USB: serial: option: add UNISOC vendor and TOZED LT70C product
-Date:   Fri, 31 Mar 2023 09:26:39 +0300
-Message-Id: <20230331062639.11725-1-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.37.2
+        with ESMTP id S230124AbjCaGrv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Mar 2023 02:47:51 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1B0103;
+        Thu, 30 Mar 2023 23:47:49 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32V4Ofni016735;
+        Fri, 31 Mar 2023 06:47:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=EC+v/2olfRac9xNHQjMCulTSUV0NecCCgzAQO2RMC7M=;
+ b=ZcdkjSe4+f0Xe+k+OxdfzK3aBe8Hjxh4FERqBZxc7asfizjeaD26BuT6x0/rnHUMN4eD
+ npCOAuvYkCK4o4Ttbx/XIJXNC8D8n3ZGfHh7pjcpAmNL9lIc56eIqO8eY2JJX+u6qfXY
+ ohHqS0ZtCZQJQjBVrrpoa1it9MoNNlL3KKU2nzEAihpCmbMlgJ0EfIW4uKDDJJrFkhPj
+ XSAqJqBSYP5ruwNnJ4WHZlDeDWYETp+R09oegDqkJG29yCx1HrAJYfKDnseSa5f7nwk6
+ K1wgmK36FSo4RhnfdfjkFmZYlUjxDUs1ZB9ChwVQHxwe3vfuPRZHoF5MzVtjRCvvMG7r NA== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pncx0svwx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Mar 2023 06:47:39 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32V6lcQ3003557
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Mar 2023 06:47:38 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 30 Mar 2023 23:47:29 -0700
+Date:   Fri, 31 Mar 2023 12:17:24 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>,
+        Praveenkumar I <quic_ipkumar@quicinc.com>
+Subject: Re: [PATCH v5 6/8] phy: qcom: qmp: Update IPQ9574 USB Phy
+ initialization Sequence
+Message-ID: <20230331064723.GA19162@varda-linux.qualcomm.com>
+References: <cover.1680162377.git.quic_varada@quicinc.com>
+ <60954818576384e36136cb706aa554788ec4bb22.1680162377.git.quic_varada@quicinc.com>
+ <CAA8EJpoyw6mspNUffU3KKvRPdB2XQE0A6FF7YUUzwpBVQO=Ykw@mail.gmail.com>
+ <20230330125749.GA19941@varda-linux.qualcomm.com>
+ <CAA8EJpoWKCPtWcxS6UpdxXDQsO+PgdX1heOLmrfKq6T16-foEg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpoWKCPtWcxS6UpdxXDQsO+PgdX1heOLmrfKq6T16-foEg@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: NY_peXYU5JfWPaK_GlprEK4qB16F40j9
+X-Proofpoint-GUID: NY_peXYU5JfWPaK_GlprEK4qB16F40j9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-31_02,2023-03-30_04,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ malwarescore=0 priorityscore=1501 bulkscore=0 adultscore=0 clxscore=1015
+ suspectscore=0 phishscore=0 mlxlogscore=999 spamscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2303310055
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On Thu, Mar 30, 2023 at 04:09:41PM +0300, Dmitry Baryshkov wrote:
+> On Thu, 30 Mar 2023 at 15:58, Varadarajan Narayanan
+> <quic_varada@quicinc.com> wrote:
+> >
+> > On Thu, Mar 30, 2023 at 12:41:08PM +0300, Dmitry Baryshkov wrote:
+> > > On Thu, 30 Mar 2023 at 11:42, Varadarajan Narayanan
+> > > <quic_varada@quicinc.com> wrote:
+> > > >
+> > > > Updated USB QMP PHY Init sequence based on HPG for IPQ9574.
+> > > > Reused clock and reset list from existing targets.
+> > > >
+> > > > Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> > > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > > > ---
+> > > >  Changes in v5:
+> > > >         - Fix additional review comments
+> > > >         - Use V3 register offsets
+> > > >  Changes in v4:
+> > > >         - Use qmp_usb_offsets for register space access
+> > > >  Changes in v3:
+> > > >         - Fix hex captitalization
+> > > >  Changes in v2:
+> > > >         - Removed unused phy register offsets
+> > > >         - Moved the clock entries to the correct place
+> > > >         - Maintain sorted order
+> > > > ---
+> > > >  drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 115 ++++++++++++++++++++++++++++++++
+> > > >  1 file changed, 115 insertions(+)
+> > > >
+> > > > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+> > > > index a49711c..77041dd 100644
+> > > > --- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+> > > > +++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+> > > > @@ -139,6 +139,88 @@ static const unsigned int qmp_v5_usb3phy_regs_layout[QPHY_LAYOUT_SIZE] = {
+> > > >         [QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR] = QPHY_V5_PCS_USB3_LFPS_RXTERM_IRQ_CLEAR,
+> > > >  };
+> > > >
+> > > > +static const struct qmp_phy_init_tbl ipq9574_usb3_serdes_tbl[] = {
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_SYSCLK_EN_SEL, 0x1a),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_BIAS_EN_CLKBUFLR_EN, 0x08),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_CLK_SELECT, 0x30),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_BG_TRIM, 0x0f),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_RX_UCDR_FASTLOCK_FO_GAIN, 0x0b),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_SVS_MODE_CLK_SEL, 0x01),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_HSCLK_SEL, 0x00),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_CMN_CONFIG, 0x06),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_PLL_IVCO, 0x0f),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_SYS_CLK_CTRL, 0x06),
+> > > > +       /* PLL and Loop filter settings */
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_DEC_START_MODE0, 0x68),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_DIV_FRAC_START1_MODE0, 0xab),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_DIV_FRAC_START2_MODE0, 0xaa),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_DIV_FRAC_START3_MODE0, 0x02),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_CP_CTRL_MODE0, 0x09),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_PLL_RCTRL_MODE0, 0x16),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_PLL_CCTRL_MODE0, 0x28),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_INTEGLOOP_GAIN0_MODE0, 0xa0),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_LOCK_CMP1_MODE0, 0xaa),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_LOCK_CMP2_MODE0, 0x29),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_LOCK_CMP3_MODE0, 0x00),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_CORE_CLK_EN, 0x00),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_LOCK_CMP_CFG, 0x00),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_VCO_TUNE_MAP, 0x00),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_BG_TIMER, 0x0a),
+> > > > +       /* SSC settings */
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_SSC_EN_CENTER, 0x01),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_SSC_PER1, 0x7d),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_SSC_PER2, 0x01),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_SSC_ADJ_PER1, 0x00),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_SSC_ADJ_PER2, 0x00),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_SSC_STEP_SIZE1, 0x0a),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_COM_SSC_STEP_SIZE2, 0x05),
+> > > > +};
+> > > > +
+> > > > +static const struct qmp_phy_init_tbl ipq9574_usb3_tx_tbl[] = {
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_TX_HIGHZ_TRANSCEIVEREN_BIAS_DRVR_EN, 0x45),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_TX_RCV_DETECT_LVL_2, 0x12),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_TX_LANE_MODE, 0x06),
+> > > > +};
+> > > > +
+> > > > +static const struct qmp_phy_init_tbl ipq9574_usb3_rx_tbl[] = {
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_RX_UCDR_SO_GAIN, 0x06),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_RX_RX_EQU_ADAPTOR_CNTRL2, 0x02),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_RX_RX_EQU_ADAPTOR_CNTRL3, 0x6c),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_RX_RX_EQU_ADAPTOR_CNTRL3, 0x4c),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_RX_RX_EQU_ADAPTOR_CNTRL4, 0xb8),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_RX_RX_EQ_OFFSET_ADAPTOR_CNTRL1, 0x77),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_RX_RX_OFFSET_ADAPTOR_CNTRL2, 0x80),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_RX_SIGDET_CNTRL, 0x03),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_RX_SIGDET_DEGLITCH_CNTRL, 0x16),
+> > > > +       QMP_PHY_INIT_CFG(QSERDES_RX_SIGDET_ENABLES, 0x0c),
+> > > > +};
+> > > > +
+> > > > +static const struct qmp_phy_init_tbl ipq9574_usb3_pcs_tbl[] = {
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_TXDEEMPH_M6DB_V0, 0x15),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_TXDEEMPH_M3P5DB_V0, 0x0e),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_FLL_CNTRL2, 0x83),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_FLL_CNTRL1, 0x02),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_FLL_CNT_VAL_L, 0x09),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_FLL_CNT_VAL_H_TOL, 0xa2),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_FLL_MAN_CODE, 0x85),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_LOCK_DETECT_CONFIG1, 0xd1),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_LOCK_DETECT_CONFIG2, 0x1f),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_LOCK_DETECT_CONFIG3, 0x47),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_POWER_STATE_CONFIG2, 0x1b),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_RXEQTRAINING_WAIT_TIME, 0x75),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_RXEQTRAINING_RUN_TIME, 0x13),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_LFPS_TX_ECSTART_EQTLOCK, 0x86),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_PWRUP_RESET_DLY_TIME_AUXCLK, 0x04),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_TSYNC_RSYNC_TIME, 0x44),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_RCVR_DTCT_DLY_P1U2_L, 0xe7),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_RCVR_DTCT_DLY_P1U2_H, 0x03),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_RCVR_DTCT_DLY_U3_L, 0x40),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_RCVR_DTCT_DLY_U3_H, 0x00),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_RX_SIGDET_LVL, 0x88),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_TXDEEMPH_M6DB_V0, 0x17),
+> > > > +       QMP_PHY_INIT_CFG(QPHY_V3_PCS_TXDEEMPH_M3P5DB_V0, 0x0f),
+> > > > +};
+> > > > +
+> > > >  static const struct qmp_phy_init_tbl ipq8074_usb3_serdes_tbl[] = {
+> > > >         QMP_PHY_INIT_CFG(QSERDES_COM_SYSCLK_EN_SEL, 0x1a),
+> > > >         QMP_PHY_INIT_CFG(QSERDES_COM_BIAS_EN_CLKBUFLR_EN, 0x08),
+> > > > @@ -1558,6 +1640,14 @@ static const char * const qmp_phy_vreg_l[] = {
+> > > >         "vdda-phy", "vdda-pll",
+> > > >  };
+> > > >
+> > > > +static const struct qmp_usb_offsets qmp_usb_offsets_ipq9574 = {
+> > > > +       .serdes         = 0,
+> > > > +       .pcs            = 0x800,
+> > > > +       .pcs_usb        = 0,
+> > >
+> > > No, pcs_usb is not 0.
+> >
+> > Not sure I understand this comment.
+> >
+> > Since IPQ9574 uses new style DT entries, pcs_usb_offset = 0 and
+> > that will not be used.
+> >
+> > qmp->pcs_usb is used in qmp_usb_enable_autonomous_mode and
+> > qmp_usb_disable_autonomous_mode. If "qmp->pcs_usb == 0", those
+> > functions use the value of qmp->pcs (0x7d800) for pcs_usb.
+>
+> So, you mixed qmp->pcs_usb and offsets->pcs_usb here. They are not equal.
 
-Add UNISOC vendor ID and TOZED LT70-C modem which is based from UNISOC
-SL8563. The modem supports the NCM mode.
+Got it. Thanks.
+Will set pcs_usb to 0x800, that way the register offsets will get
+calculated properly.
 
-T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  6 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=1782 ProdID=4055 Rev=04.04
-S:  Manufacturer=Unisoc Phone
-S:  Product=Unisoc Phone
-S:  SerialNumber=<redacted>
-C:  #Ifs=14 Cfg#= 1 Atr=c0 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
-E:  Ad=82(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#=10 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#=11 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=8c(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#=12 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=option
-E:  Ad=09(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=8d(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#=13 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=0a(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 2 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
-E:  Ad=84(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-I:  If#= 3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 4 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
-E:  Ad=86(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-I:  If#= 5 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 6 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
-E:  Ad=88(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-I:  If#= 7 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=8a(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+Thanks
+Varada
 
-Bus 001 Device 002: ID 1782:4055 Unisoc Phone Unisoc Phone
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass            0
-  bDeviceSubClass         0
-  bDeviceProtocol         0
-  bMaxPacketSize0        64
-  idVendor           0x1782
-  idProduct          0x4055
-  bcdDevice            4.04
-  iManufacturer           1 Unisoc Phone
-  iProduct                2 Unisoc Phone
-  iSerial                 3 <redacted>
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x01e7
-    bNumInterfaces         14
-    bConfigurationValue     1
-    iConfiguration          4 4ncm
-    bmAttributes         0xc0
-      Self Powered
-    MaxPower              500mA
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         0
-      bInterfaceCount         2
-      bFunctionClass          2
-      bFunctionSubClass      13
-      bFunctionProtocol       0
-      iFunction               8 CDC NCM
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2
-      bInterfaceSubClass     13
-      bInterfaceProtocol      0
-      iInterface              5 CDC Network Control Model (NCM)
-      CDC Header:
-        bcdCDC               1.10
-      CDC Union:
-        bMasterInterface        0
-        bSlaveInterface         1
-      CDC Ethernet:
-        iMacAddress                      6 <redacted>
-        bmEthernetStatistics    0x00000000
-        wMaxSegmentSize               1514
-        wNumberMCFilters            0x0000
-        bNumberPowerFilters              0
-      CDC NCM:
-        bcdNcmVersion        1.00
-        bmNetworkCapabilities 0x11
-          crc mode
-          packet filter
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0010  1x 16 bytes
-        bInterval               9
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           0
-      bInterfaceClass        10
-      bInterfaceSubClass      0
-      bInterfaceProtocol      1
-      iInterface              7 CDC Network Data
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       1
-      bNumEndpoints           2
-      bInterfaceClass        10
-      bInterfaceSubClass      0
-      bInterfaceProtocol      1
-      iInterface              7 CDC Network Data
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         2
-      bInterfaceCount         2
-      bFunctionClass          2
-      bFunctionSubClass      13
-      bFunctionProtocol       0
-      iFunction              13 CDC NCM
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        2
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2
-      bInterfaceSubClass     13
-      bInterfaceProtocol      0
-      iInterface             10 CDC Network Control Model (NCM)
-      CDC Header:
-        bcdCDC               1.10
-      CDC Union:
-        bMasterInterface        2
-        bSlaveInterface         3
-      CDC Ethernet:
-        iMacAddress                     11 <redacted>
-        bmEthernetStatistics    0x00000000
-        wMaxSegmentSize               1514
-        wNumberMCFilters            0x0000
-        bNumberPowerFilters              0
-      CDC NCM:
-        bcdNcmVersion        1.00
-        bmNetworkCapabilities 0x11
-          crc mode
-          packet filter
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x84  EP 4 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0010  1x 16 bytes
-        bInterval               9
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        3
-      bAlternateSetting       0
-      bNumEndpoints           0
-      bInterfaceClass        10
-      bInterfaceSubClass      0
-      bInterfaceProtocol      1
-      iInterface             12 CDC Network Data
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        3
-      bAlternateSetting       1
-      bNumEndpoints           2
-      bInterfaceClass        10
-      bInterfaceSubClass      0
-      bInterfaceProtocol      1
-      iInterface             12 CDC Network Data
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         4
-      bInterfaceCount         2
-      bFunctionClass          2
-      bFunctionSubClass      13
-      bFunctionProtocol       0
-      iFunction              18 CDC NCM
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        4
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2
-      bInterfaceSubClass     13
-      bInterfaceProtocol      0
-      iInterface             15 CDC Network Control Model (NCM)
-      CDC Header:
-        bcdCDC               1.10
-      CDC Union:
-        bMasterInterface        4
-        bSlaveInterface         5
-      CDC Ethernet:
-        iMacAddress                     16 <redacted>
-        bmEthernetStatistics    0x00000000
-        wMaxSegmentSize               1514
-        wNumberMCFilters            0x0000
-        bNumberPowerFilters              0
-      CDC NCM:
-        bcdNcmVersion        1.00
-        bmNetworkCapabilities 0x11
-          crc mode
-          packet filter
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x86  EP 6 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0010  1x 16 bytes
-        bInterval               9
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        5
-      bAlternateSetting       0
-      bNumEndpoints           0
-      bInterfaceClass        10
-      bInterfaceSubClass      0
-      bInterfaceProtocol      1
-      iInterface             17 CDC Network Data
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        5
-      bAlternateSetting       1
-      bNumEndpoints           2
-      bInterfaceClass        10
-      bInterfaceSubClass      0
-      bInterfaceProtocol      1
-      iInterface             17 CDC Network Data
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x85  EP 5 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x03  EP 3 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         6
-      bInterfaceCount         2
-      bFunctionClass          2
-      bFunctionSubClass      13
-      bFunctionProtocol       0
-      iFunction              23 CDC NCM
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        6
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2
-      bInterfaceSubClass     13
-      bInterfaceProtocol      0
-      iInterface             20 CDC Network Control Model (NCM)
-      CDC Header:
-        bcdCDC               1.10
-      CDC Union:
-        bMasterInterface        6
-        bSlaveInterface         7
-      CDC Ethernet:
-        iMacAddress                     21 <redacted>
-        bmEthernetStatistics    0x00000000
-        wMaxSegmentSize               1514
-        wNumberMCFilters            0x0000
-        bNumberPowerFilters              0
-      CDC NCM:
-        bcdNcmVersion        1.00
-        bmNetworkCapabilities 0x11
-          crc mode
-          packet filter
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x88  EP 8 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0010  1x 16 bytes
-        bInterval               9
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        7
-      bAlternateSetting       0
-      bNumEndpoints           0
-      bInterfaceClass        10
-      bInterfaceSubClass      0
-      bInterfaceProtocol      1
-      iInterface             22 CDC Network Data
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        7
-      bAlternateSetting       1
-      bNumEndpoints           2
-      bInterfaceClass        10
-      bInterfaceSubClass      0
-      bInterfaceProtocol      1
-      iInterface             22 CDC Network Data
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x87  EP 7 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x04  EP 4 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        8
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x89  EP 9 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x05  EP 5 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        9
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x8a  EP 10 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x06  EP 6 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber       10
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x8b  EP 11 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x07  EP 7 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber       11
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x8c  EP 12 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x08  EP 8 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber       12
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255
-      bInterfaceSubClass     66
-      bInterfaceProtocol      1
-      iInterface             26 ADB Interface
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x09  EP 9 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x8d  EP 13 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber       13
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x8e  EP 14 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x0a  EP 10 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-Device Qualifier (for other device speed):
-  bLength                10
-  bDescriptorType         6
-  bcdUSB               2.00
-  bDeviceClass            0
-  bDeviceSubClass         0
-  bDeviceProtocol         0
-  bMaxPacketSize0        64
-  bNumConfigurations      1
-Device Status:     0x0000
-  (Bus Powered)
-
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
----
-
-I'm completely new to this so if there's anything obvious that should be
-done with the help of the output from lsusb and usb-devices, like using
-USB_DEVICE_AND_INTERFACE_INFO instead of USB_DEVICE, please let me know.
-
-According to Conan, the TOZED modem actually has the UNISOC SL8563 chip but
-the label on the module is TL70-C, which is the TOZED module name.
-
-Arınç
-
----
- drivers/usb/serial/option.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index f31cc3c76329..6db79d34c991 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -595,6 +595,11 @@ static void option_instat_callback(struct urb *urb);
- #define SIERRA_VENDOR_ID			0x1199
- #define SIERRA_PRODUCT_EM9191			0x90d3
- 
-+/* UNISOC (Spreadtrum) products */
-+#define UNISOC_VENDOR_ID			0x1782
-+/* TOZED TL70-C based on UNISOC SL8563 uses UNISOC's vendor ID */
-+#define TOZED_PRODUCT_LT70C			0x4055
-+
- /* Device flags */
- 
- /* Highest interface number which can be used with NCTRL() and RSVD() */
-@@ -2225,6 +2230,7 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(OPPO_VENDOR_ID, OPPO_PRODUCT_R11, 0xff, 0xff, 0x30) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0xff, 0x30) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0, 0) },
-+	{ USB_DEVICE(UNISOC_VENDOR_ID, UNISOC_PRODUCT_LT70C) },
- 	{ } /* Terminating entry */
- };
- MODULE_DEVICE_TABLE(usb, option_ids);
--- 
-2.37.2
-
+> > The registers used in these functions are
+> > QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR & QPHY_PCS_AUTONOMOUS_MODE_CTRL
+> >
+> > The offsets for the above registers as specified in
+> > qmp_v3_usb3phy_regs_layout is
+> >
+> >         #define QPHY_V3_PCS_AUTONOMOUS_MODE_CTRL        0x0d8
+> >         #define QPHY_V3_PCS_LFPS_RXTERM_IRQ_CLEAR       0x0dc
+> >
+> > qphy_{set|clr}bits called from qmp_usb_enable_autonomous_mode and
+> > qmp_usb_disable_autonomous_mode will use the offset 0x7d8d8 and
+> > 0x78d8c. This offset matches with the register offset document of
+> > the IPQ9574. So, felt setting pcs_usb to zero should be ok. Can
+> > you please clarify.
+>
+> And this tells you what pcs_usb offset is.
+>
+> >
+> > Thanks
+> > Varada
+> >
+> >
+> > >
+> > > > +       .tx             = 0x200,
+> > > > +       .rx             = 0x400,
+> > > > +};
+> > > > +
+> > > >  static const struct qmp_usb_offsets qmp_usb_offsets_v5 = {
+> > > >         .serdes         = 0,
+> > > >         .pcs            = 0x0200,
+> > > > @@ -1586,6 +1676,28 @@ static const struct qmp_phy_cfg ipq8074_usb3phy_cfg = {
+> > > >         .regs                   = qmp_v3_usb3phy_regs_layout,
+> > > >  };
+> > > >
+> > > > +static const struct qmp_phy_cfg ipq9574_usb3phy_cfg = {
+> > > > +       .lanes                  = 1,
+> > > > +
+> > > > +       .offsets                = &qmp_usb_offsets_ipq9574,
+> > > > +
+> > > > +       .serdes_tbl             = ipq9574_usb3_serdes_tbl,
+> > > > +       .serdes_tbl_num         = ARRAY_SIZE(ipq9574_usb3_serdes_tbl),
+> > > > +       .tx_tbl                 = ipq9574_usb3_tx_tbl,
+> > > > +       .tx_tbl_num             = ARRAY_SIZE(ipq9574_usb3_tx_tbl),
+> > > > +       .rx_tbl                 = ipq9574_usb3_rx_tbl,
+> > > > +       .rx_tbl_num             = ARRAY_SIZE(ipq9574_usb3_rx_tbl),
+> > > > +       .pcs_tbl                = ipq9574_usb3_pcs_tbl,
+> > > > +       .pcs_tbl_num            = ARRAY_SIZE(ipq9574_usb3_pcs_tbl),
+> > > > +       .clk_list               = qmp_v4_phy_clk_l,
+> > > > +       .num_clks               = ARRAY_SIZE(qmp_v4_phy_clk_l),
+> > > > +       .reset_list             = qcm2290_usb3phy_reset_l,
+> > > > +       .num_resets             = ARRAY_SIZE(qcm2290_usb3phy_reset_l),
+> > > > +       .vreg_list              = qmp_phy_vreg_l,
+> > > > +       .num_vregs              = ARRAY_SIZE(qmp_phy_vreg_l),
+> > > > +       .regs                   = qmp_v3_usb3phy_regs_layout,
+> > > > +};
+> > > > +
+> > > >  static const struct qmp_phy_cfg msm8996_usb3phy_cfg = {
+> > > >         .lanes                  = 1,
+> > > >
+> > > > @@ -2589,6 +2701,9 @@ static const struct of_device_id qmp_usb_of_match_table[] = {
+> > > >                 .compatible = "qcom,ipq8074-qmp-usb3-phy",
+> > > >                 .data = &ipq8074_usb3phy_cfg,
+> > > >         }, {
+> > > > +               .compatible = "qcom,ipq9574-qmp-usb3-phy",
+> > > > +               .data = &ipq9574_usb3phy_cfg,
+> > > > +       }, {
+> > > >                 .compatible = "qcom,msm8996-qmp-usb3-phy",
+> > > >                 .data = &msm8996_usb3phy_cfg,
+> > > >         }, {
+> > > > --
+> > > > 2.7.4
+> > > >
+> > >
+> > >
+> > > --
+> > > With best wishes
+> > > Dmitry
+>
+>
+>
+> --
+> With best wishes
+> Dmitry
