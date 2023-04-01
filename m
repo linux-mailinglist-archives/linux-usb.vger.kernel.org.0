@@ -2,143 +2,263 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC586D2E87
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Apr 2023 08:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A8756D2FB3
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Apr 2023 12:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232718AbjDAGPo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Apr 2023 02:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41652 "EHLO
+        id S229611AbjDAKs7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Apr 2023 06:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjDAGPn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Apr 2023 02:15:43 -0400
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5204DEFA4
-        for <linux-usb@vger.kernel.org>; Fri, 31 Mar 2023 23:15:41 -0700 (PDT)
-Received: by mail-il1-f208.google.com with SMTP id q17-20020a056e020c3100b003245df8be9fso15722589ilg.14
-        for <linux-usb@vger.kernel.org>; Fri, 31 Mar 2023 23:15:41 -0700 (PDT)
+        with ESMTP id S229379AbjDAKs6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Apr 2023 06:48:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B014902B
+        for <linux-usb@vger.kernel.org>; Sat,  1 Apr 2023 03:48:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680346092;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zUv7dZXh9mIvQJQIA/OX5UG+LOgfqbX9QQwiu1BwMBc=;
+        b=ePjVPgO/JQoSkphTjRvl0YxUt2NBeJxCn7Xi8AeT1OsfWCCtfr1af9kZNNQkO/bYkJts5d
+        RH07ceIr5UNJ0tnBIoVDjS8w77W5QssZRW+h9d1wxIACpTHxLVS7bLVBzonOrKL2hA45JR
+        hUe5xLJkVU6bIv9GySiaIT/5oA93iUo=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-36-NygsLpDFPzKE2uXce_hzDQ-1; Sat, 01 Apr 2023 06:48:11 -0400
+X-MC-Unique: NygsLpDFPzKE2uXce_hzDQ-1
+Received: by mail-ed1-f69.google.com with SMTP id es16-20020a056402381000b004fa3e04c882so35014328edb.10
+        for <linux-usb@vger.kernel.org>; Sat, 01 Apr 2023 03:48:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680329740; x=1682921740;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        d=1e100.net; s=20210112; t=1680346089;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XqNN61HFN9AplPUAzlgJ4Lk0uE9RFppc2dGoBPDTz44=;
-        b=ye/NigCBgRzxNmqlGnz0F0lCLVEFh649OKVu61QyFDa+0t32AJQbB4bIGhRAqiXp4b
-         2BvbM5xw80n37WyuSst36sEZwvR3J5lXkxWvrqH/FkG7BSQSBeCdtYI8rCFhhlYs4dqJ
-         OTZG5zywWsaWc7k/DmdMq6qR+aUwwrtqf/G2kW2WrhEji/gp8kFDRTYPFGeGSEJUEIms
-         qwA0EdjyEqrS/71q9n/yGcsTnazDsyj5uEEyasne07zBgJrD5Uc2z3sfMuZuDiEKWNC2
-         v6VAfIAg3rX60lt2ry9Oi9rgV1xcXuEIYMkKDx0OKpgAWQdt4MnTo2fjYyGM1BZnTphA
-         r3Nw==
-X-Gm-Message-State: AAQBX9e4AUwVqIrOh3hAJddMBqdBbpD/nEn+SR+a9hQX79q58C7TIwpB
-        ezi3jPxUPKA7LAL9lJ+Dy+lE/vBt0zqBC3Plw01aNoZAOeAA
-X-Google-Smtp-Source: AKy350bZqtamB1Vq06uzF8HFZMKc15oFP+0u6nylgPGgQGTrdDe4+5VgG+vfYgjUKXjWeBz52pgJbgMD7B/ffkBweaPpCTXc8b10
+        bh=zUv7dZXh9mIvQJQIA/OX5UG+LOgfqbX9QQwiu1BwMBc=;
+        b=yCY6b54BOXS0Bl+XRMn6xHe3upcFMJ3RCdDbZHcspXNwS9N7AiLzQrRpmy3snNR7qC
+         nYUeSGL8SfWQJ3equBvEHx7rt84tdlNbtXc4STG/udbi9BlXDkWHBcnszGAOQUsuqOJ3
+         NUR8cU5QqDB0EfyQQnHHtBwRx/1yxkFofv9oPyrfPNNXAclg1MDYtonOZHmlxEa8qS5g
+         Z2FneHSF/cjTuUUwbgW3lXkeNckTwiiZU+Ryil4kAuwjvAMWPeA/8KL/ly6/iXDDjeJ7
+         +tGKIAi1fAz17RPKnf/CEpNB1yyTm/1EZnUbxCNAb+iq7RyoWmXRDk7gOpc1CuxnGryR
+         iGMw==
+X-Gm-Message-State: AAQBX9csUzRhR2RWg88SKKL0CcISg7lv600lRNem6iVuml+VXIu0Awid
+        fTLxyzD4vvG6aLFspMalxvSlMaQZY6VVNefCheXSBr88Wc2WK1znPF3+9F4bRPSTonN9fvqISzD
+        coJaaiRU1MiiGK0y/MBhhOLVLyWvO
+X-Received: by 2002:aa7:c2d9:0:b0:4fa:315a:cb59 with SMTP id m25-20020aa7c2d9000000b004fa315acb59mr31407425edp.12.1680346089447;
+        Sat, 01 Apr 2023 03:48:09 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZZbGHNN8OowjNxT/X/gh6jNWFFxqjeLWPYMCZnd1egShrs8VtALiZc5Ot07YHfOGjPjrrmYw==
+X-Received: by 2002:aa7:c2d9:0:b0:4fa:315a:cb59 with SMTP id m25-20020aa7c2d9000000b004fa315acb59mr31407416edp.12.1680346089165;
+        Sat, 01 Apr 2023 03:48:09 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id v4-20020a50a444000000b00501c0eaf10csm1962832edb.40.2023.04.01.03.48.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Apr 2023 03:48:08 -0700 (PDT)
+Message-ID: <8896f261-9602-4663-aa87-1feb9bf3ec0f@redhat.com>
+Date:   Sat, 1 Apr 2023 12:48:07 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a6b:7b49:0:b0:75d:2e78:ee76 with SMTP id
- m9-20020a6b7b49000000b0075d2e78ee76mr1347408iop.4.1680329740600; Fri, 31 Mar
- 2023 23:15:40 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 23:15:40 -0700
-In-Reply-To: <00000000000078275b05b798f7df@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004b4e4805f84041e0@google.com>
-Subject: Re: [syzbot] [usb?] INFO: task hung in usbdev_open (2)
-From:   syzbot <syzbot+b73659f5bb96fac34820@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, jeremy.linton@arm.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [syzbot] WARNING in shark_write_reg/usb_submit_urb, WARNING in
+ shark_write_val/usb_submit_urb
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        syzbot <syzbot+4b3f8190f6e13b3efd74@syzkaller.appspotmail.com>,
+        syzbot <syzbot+1cb937c125adb93fad2d@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+References: <00000000000096e4f905f81b2702@google.com>
+ <e382763c-cf33-4871-a761-1ac85ae36f27@rowland.harvard.edu>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <e382763c-cf33-4871-a761-1ac85ae36f27@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hi Alan,
 
-HEAD commit:    59caa87f9dfb Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=16dd438ec80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e918bdf4f2f853c4
-dashboard link: https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15cb0c69c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=160d1e21c80000
+On 3/30/23 22:10, Alan Stern wrote:
+> Reference: https://syzkaller.appspot.com/bug?extid=4b3f8190f6e13b3efd74
+> Reference: https://syzkaller.appspot.com/bug?extid=1cb937c125adb93fad2d
+> 
+> The radio-shark driver just assumes that the endpoints it uses will be
+> present, without checking.  This adds an appropriate check.
+> 
+> Alan Stern
+> 
+> #syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.2
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4d91c587af1a/disk-59caa87f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c2a88c8fab99/vmlinux-59caa87f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0f56d2d1cbfc/Image-59caa87f.gz.xz
+Thank you for working on this!
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b73659f5bb96fac34820@syzkaller.appspotmail.com
+Both the core changes and the 2 radio-shark driver changes look good to me.
 
-INFO: task syz-executor388:6000 blocked for more than 143 seconds.
-      Not tainted 6.3.0-rc4-syzkaller-g59caa87f9dfb #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor388 state:D stack:0     pid:6000  ppid:5984   flags:0x00000001
-Call trace:
- __switch_to+0x320/0x754 arch/arm64/kernel/process.c:556
- context_switch kernel/sched/core.c:5307 [inline]
- __schedule+0x1048/0x1e38 kernel/sched/core.c:6625
- schedule+0xc4/0x170 kernel/sched/core.c:6701
- schedule_preempt_disabled+0x18/0x2c kernel/sched/core.c:6760
- __mutex_lock_common+0xbd8/0x21a0 kernel/locking/mutex.c:679
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
- device_lock include/linux/device.h:832 [inline]
- usbdev_open+0x13c/0x6c0 drivers/usb/core/devio.c:1041
- chrdev_open+0x3e8/0x4fc fs/char_dev.c:414
- do_dentry_open+0x724/0xf90 fs/open.c:920
- vfs_open+0x7c/0x90 fs/open.c:1051
- do_open fs/namei.c:3560 [inline]
- path_openat+0x1f2c/0x27f8 fs/namei.c:3715
- do_filp_open+0x1bc/0x3cc fs/namei.c:3742
- do_sys_openat2+0x128/0x3d8 fs/open.c:1348
- do_sys_open fs/open.c:1364 [inline]
- __do_sys_openat fs/open.c:1380 [inline]
- __se_sys_openat fs/open.c:1375 [inline]
- __arm64_sys_openat+0x1f0/0x240 fs/open.c:1375
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+Please add my:
 
-Showing all locks held in the system:
-1 lock held by rcu_tasks_kthre/12:
- #0: ffff800015d36810 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x44/0xcf4 kernel/rcu/tasks.h:510
-1 lock held by rcu_tasks_trace/13:
- #0: ffff800015d37010 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x44/0xcf4 kernel/rcu/tasks.h:510
-1 lock held by khungtaskd/28:
- #0: ffff800015d36640 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0xc/0x44 include/linux/rcupdate.h:326
-5 locks held by kworker/0:2/1522:
- #0: ffff0000c13f7d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x664/0x12d4 kernel/workqueue.c:2363
- #1: ffff8000225b7c20 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x6a8/0x12d4 kernel/workqueue.c:2365
- #2: ffff0000ceaa4190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
- #2: ffff0000ceaa4190 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c8/0x474c drivers/usb/core/hub.c:5739
- #3: ffff0000d2dd1190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
- #3: ffff0000d2dd1190 (&dev->mutex){....}-{3:3}, at: __device_attach+0x90/0x434 drivers/base/dd.c:973
- #4: ffff0000cc332118 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
- #4: ffff0000cc332118 (&dev->mutex){....}-{3:3}, at: __device_attach+0x90/0x434 drivers/base/dd.c:973
-2 locks held by getty/5625:
- #0: ffff0000d354c098 (&tty->ldisc_sem){++++}-{0:0}, at: ldsem_down_read+0x3c/0x4c drivers/tty/tty_ldsem.c:340
- #1: ffff80001a8602f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x414/0x1210 drivers/tty/n_tty.c:2177
-4 locks held by udevd/5996:
- #0: ffff0000d0fe41c8 (&p->lock){+.+.}-{3:3}, at: seq_read_iter+0xac/0xc44 fs/seq_file.c:182
- #1: ffff0000cf47a088 (&of->mutex){+.+.}-{3:3}, at: kernfs_seq_start+0x58/0x384 fs/kernfs/file.c:154
- #2: ffff0000d37d0660 (kn->active#14){.+.+}-{0:0}, at: kernfs_seq_start+0x74/0x384 fs/kernfs/file.c:155
- #3: ffff0000d2dd1190 (&dev->mutex){....}-{3:3}, at: device_lock_interruptible include/linux/device.h:837 [inline]
- #3: ffff0000d2dd1190 (&dev->mutex){....}-{3:3}, at: manufacturer_show+0x30/0xac drivers/usb/core/sysfs.c:142
-1 lock held by syz-executor388/6000:
- #0: ffff0000ceaa4190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
- #0: ffff0000ceaa4190 (&dev->mutex){....}-{3:3}, at: usbdev_open+0x13c/0x6c0 drivers/usb/core/devio.c:1041
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-=============================================
+When submitting these upstream.
 
+Regards,
+
+Hans
+
+
+
+
+
+> 
+>  drivers/usb/core/usb.c |   70 +++++++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/usb.h    |    7 ++++
+>  2 files changed, 77 insertions(+)
+> 
+> Index: usb-devel/drivers/usb/core/usb.c
+> ===================================================================
+> --- usb-devel.orig/drivers/usb/core/usb.c
+> +++ usb-devel/drivers/usb/core/usb.c
+> @@ -207,6 +207,76 @@ int usb_find_common_endpoints_reverse(st
+>  EXPORT_SYMBOL_GPL(usb_find_common_endpoints_reverse);
+>  
+>  /**
+> + * usb_find_endpoint() - Given an endpoint address, search for the endpoint's
+> + * usb_host_endpoint structure in an interface's current altsetting.
+> + * @intf: the interface whose current altsetting should be searched
+> + * @ep_addr: the endpoint address (number and direction) to find
+> + *
+> + * Search the altsetting's list of endpoints for one with the specified address.
+> + *
+> + * Return: Pointer to the usb_host_endpoint if found, %NULL otherwise.
+> + */
+> +struct usb_host_endpoint __must_check *usb_find_endpoint(
+> +		const struct usb_interface *intf, unsigned int ep_addr)
+> +{
+> +	int n;
+> +	struct usb_host_endpoint *ep;
+> +
+> +	n = intf->cur_altsetting->desc.bNumEndpoints;
+> +	ep = intf->cur_altsetting->endpoint;
+> +	for (; n > 0; (--n, ++ep)) {
+> +		if (ep->desc.bEndpointAddress == ep_addr)
+> +			return ep;
+> +	}
+> +	return NULL;
+> +}
+> +EXPORT_SYMBOL_GPL(usb_find_endpoint);
+> +
+> +/**
+> + * usb_check_bulk_endpoint - Check whether an interface's current altsetting
+> + * contains a bulk endpoint with the given address.
+> + * @intf: the interface whose current altsetting should be searched
+> + * @ep_addr: the endpoint address (number and direction) to look for
+> + *
+> + * Search for an endpoint with the specified address and check its type.
+> + *
+> + * Return: %true if the endpoint is found and is bulk, %false otherwise.
+> + */
+> +bool usb_check_bulk_endpoint(
+> +		const struct usb_interface *intf, unsigned int ep_addr)
+> +{
+> +	const struct usb_host_endpoint *ep;
+> +
+> +	ep = usb_find_endpoint(intf, ep_addr);
+> +	if (!ep)
+> +		return false;
+> +	return usb_endpoint_xfer_bulk(&ep->desc);
+> +}
+> +EXPORT_SYMBOL_GPL(usb_check_bulk_endpoint);
+> +
+> +/**
+> + * usb_check_int_endpoint - Check whether an interface's current altsetting
+> + * contains an interrupt endpoint with the given address.
+> + * @intf: the interface whose current altsetting should be searched
+> + * @ep_addr: the endpoint address (number and direction) to look for
+> + *
+> + * Search for an endpoint with the specified address and check its type.
+> + *
+> + * Return: %true if the endpoint is found and is interrupt, %false otherwise.
+> + */
+> +bool usb_check_int_endpoint(
+> +		const struct usb_interface *intf, unsigned int ep_addr)
+> +{
+> +	const struct usb_host_endpoint *ep;
+> +
+> +	ep = usb_find_endpoint(intf, ep_addr);
+> +	if (!ep)
+> +		return false;
+> +	return usb_endpoint_xfer_int(&ep->desc);
+> +}
+> +EXPORT_SYMBOL_GPL(usb_check_int_endpoint);
+> +
+> +/**
+>   * usb_find_alt_setting() - Given a configuration, find the alternate setting
+>   * for the given interface.
+>   * @config: the configuration to search (not necessarily the current config).
+> Index: usb-devel/include/linux/usb.h
+> ===================================================================
+> --- usb-devel.orig/include/linux/usb.h
+> +++ usb-devel/include/linux/usb.h
+> @@ -292,6 +292,13 @@ void usb_put_intf(struct usb_interface *
+>  #define USB_MAXINTERFACES	32
+>  #define USB_MAXIADS		(USB_MAXINTERFACES/2)
+>  
+> +struct usb_host_endpoint __must_check *usb_find_endpoint(
+> +		const struct usb_interface *intf, unsigned int ep_addr);
+> +bool usb_check_bulk_endpoint(
+> +		const struct usb_interface *intf, unsigned int ep_addr);
+> +bool usb_check_int_endpoint(
+> +		const struct usb_interface *intf, unsigned int ep_addr);
+> +
+>  /*
+>   * USB Resume Timer: Every Host controller driver should drive the resume
+>   * signalling on the bus for the amount of time defined by this macro.
+> 
+>  drivers/media/radio/radio-shark.c  |    7 +++++++
+>  drivers/media/radio/radio-shark2.c |    7 +++++++
+>  2 files changed, 14 insertions(+)
+> 
+> Index: usb-devel/drivers/media/radio/radio-shark.c
+> ===================================================================
+> --- usb-devel.orig/drivers/media/radio/radio-shark.c
+> +++ usb-devel/drivers/media/radio/radio-shark.c
+> @@ -317,6 +317,13 @@ static int usb_shark_probe(struct usb_in
+>  	struct shark_device *shark;
+>  	int retval = -ENOMEM;
+>  
+> +	/* Are the expected endpoints present? */
+> +	if (!usb_check_int_endpoint(intf, SHARK_IN_EP | USB_DIR_IN) ||
+> +	    !usb_check_int_endpoint(intf, SHARK_OUT_EP | USB_DIR_OUT)) {
+> +		dev_err(&intf->dev, "Invalid radioSHARK device\n");
+> +		return -EINVAL;
+> +	}
+> +
+>  	shark = kzalloc(sizeof(struct shark_device), GFP_KERNEL);
+>  	if (!shark)
+>  		return retval;
+> Index: usb-devel/drivers/media/radio/radio-shark2.c
+> ===================================================================
+> --- usb-devel.orig/drivers/media/radio/radio-shark2.c
+> +++ usb-devel/drivers/media/radio/radio-shark2.c
+> @@ -283,6 +283,13 @@ static int usb_shark_probe(struct usb_in
+>  	struct shark_device *shark;
+>  	int retval = -ENOMEM;
+>  
+> +	/* Are the expected endpoints present? */
+> +	if (!usb_check_int_endpoint(intf, SHARK_IN_EP | USB_DIR_IN) ||
+> +	    !usb_check_int_endpoint(intf, SHARK_OUT_EP | USB_DIR_OUT)) {
+> +		dev_err(&intf->dev, "Invalid radioSHARK2 device\n");
+> +		return -EINVAL;
+> +	}
+> +
+>  	shark = kzalloc(sizeof(struct shark_device), GFP_KERNEL);
+>  	if (!shark)
+>  		return retval;
+> 
 
