@@ -2,216 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E40726D31A4
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Apr 2023 16:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 774076D3284
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Apr 2023 18:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjDAOx1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Apr 2023 10:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
+        id S229945AbjDAQJA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Apr 2023 12:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjDAOx0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Apr 2023 10:53:26 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031FC18838;
-        Sat,  1 Apr 2023 07:53:23 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id C607E5C0095;
-        Sat,  1 Apr 2023 10:53:20 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sat, 01 Apr 2023 10:53:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1680360800; x=1680447200; bh=os
-        h0QUHcMMAqD5b2lxUL3ZPOtpTu3lTXFN7owj4dApo=; b=N7N93ljthaL7TEmJCL
-        zSyiAprYP5Wf96tmmrVOOiIzj+L6fIzW7EjAD9TD79CSn35KBjC64aryxWPFRFTm
-        JDm7bt7YIY7J1jVwlXDAE18WKWc8pdRePUWyFO9ArN6/8XVNE3mnwwTIsD1HupBl
-        GoEpFYE+0LI8WR/V3rahm0kbNTk9imouMFM9+HcihArKxDR02Ww3Nyj+Hn6hhTJv
-        ce5emFQlvWOYRyiKx4i3gi+b9cHgeCqYBaRNdCwTYnz1EfMh0JWvy3wgsE8kSRyC
-        Z/iNWzJTde+J+iJqzDK2j2xmAcVlIG+28hkse4AW7HyENbj0z1SEuv1/8f4G4Rsq
-        lEfw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680360800; x=1680447200; bh=osh0QUHcMMAqD
-        5b2lxUL3ZPOtpTu3lTXFN7owj4dApo=; b=c+sqZSFmV3d7NAYxSa2FS1s4bTf3o
-        7z853q71A3qTFHYCHK6tyo4mtOWksh581+uAfjjzB2CZVsaieCZGuwmm9Am59zwy
-        TJnNrzdFnD2WR3oTCS6O7lee8NepMc1KlF+Z8jHODY5PI6ouX9vAlvGWqthffkmc
-        hTT4bYcqSDUAeW5kCGUASM5CiZBb7eAXNB2y7YNRswu1CdcLzSC0V3D9BbYl68tQ
-        K07M8vuNwat+vlabMkp6VQKy2xF6YNuIUiy5gijq1wkj03VPDeiW+Xu+GLaiRL2B
-        TVzWb9ssSZHTKyha9RiOsVKBXpijgJU8YIzoAqisip8pbzUE8xGpsbPVA==
-X-ME-Sender: <xms:YEUoZEGWlSsS9ub5Fniv2zhXyzmIMd65JGnHMY2nzVMfMuW2zi3sOA>
-    <xme:YEUoZNV7kR1UOLW_AEBBAK-mud4TAYwQYJNI5BPs2hijhUDC1Ce-dz8MY5Pzr1GoN
-    ZSLMOvG5hovIA>
-X-ME-Received: <xmr:YEUoZOJv7yHEQOV9JxacecS4zlQKYuHvnco64J9nDEgWUOH0IyZs0FoO5MMOH5zodQdbToTt00kThuHJmuEyV0Za6kdMuVexkIIlRA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeifedgkedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepleevve
-    dtvdfhheefuddvffdthedutddvfeektdekvedvueegudfffefhieetfeevnecuffhomhgr
-    ihhnpehshiiikhgrlhhlvghrrdgrphhpshhpohhtrdgtohhmpdhkvghrnhgvlhdrohhrgh
-    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgv
-    gheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:YEUoZGEbs_ZamwMJ0NVGqwfzKVf0cW_jt9UDrZM-4y6AyyBOdBb34Q>
-    <xmx:YEUoZKWSi4wt5XyGoJPPPM_11TdwpzGFgBemi8p4eMlImahAQbeAKQ>
-    <xmx:YEUoZJNKMASDrC_c2ZubyKtTHgOyrMX6LUaD50w_Vwb9rlXBocTlrw>
-    <xmx:YEUoZLulogowGSzxJpQ48eG-IreIbi5Cufvv9bbYQZ-es9bm18oaHg>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 1 Apr 2023 10:53:20 -0400 (EDT)
-Date:   Sat, 1 Apr 2023 16:53:17 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        syzbot <syzbot+4b3f8190f6e13b3efd74@syzkaller.appspotmail.com>,
-        syzbot <syzbot+1cb937c125adb93fad2d@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in shark_write_reg/usb_submit_urb, WARNING in
- shark_write_val/usb_submit_urb
-Message-ID: <2023040148-aground-cornbread-84e2@gregkh>
-References: <00000000000096e4f905f81b2702@google.com>
- <e382763c-cf33-4871-a761-1ac85ae36f27@rowland.harvard.edu>
- <8896f261-9602-4663-aa87-1feb9bf3ec0f@redhat.com>
+        with ESMTP id S229941AbjDAQI7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Apr 2023 12:08:59 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924891CB87
+        for <linux-usb@vger.kernel.org>; Sat,  1 Apr 2023 09:08:56 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso26517920pjb.3
+        for <linux-usb@vger.kernel.org>; Sat, 01 Apr 2023 09:08:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1680365336;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5uy0AySR44SMpzMw4hbs5IlA7/AcPPsiW/cVS76XHpQ=;
+        b=CBF+xYe+7B2ke/96B6q02HXLhLLY4fGKBoXzY2wPIEKnNyjgoMc/nJ8n3DId+6bWsO
+         kkOr3fuzBFvDvjTXQjrJVXESQiQ4fSgsIjqaRtVRphh/NF0wjas3Bro7u6m+bny3kEzu
+         dykn1+hM/q884OhKeXRC7/g7Prl20NRhmaafuk7w5AHgUKTO8GsGgdJBjT/Qw9h486ws
+         mCHPY3Lrc916TCjYx837ovC4QnKyfyrHwVbauyyDk6EAhn8MEdld0TjgT1Rd1gdDwN/R
+         SgNqxcIqGYlv72P7nC4I9q+GtX5SoXeKGTN1FJ+ND2JNq9dh0yVACUo7SpmYSrgXi6Nr
+         byuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680365336;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5uy0AySR44SMpzMw4hbs5IlA7/AcPPsiW/cVS76XHpQ=;
+        b=Kfddcef+vIYUtbHt8ek3BS0RIfy82WtCv3lhaTBGbCERu8S544/zx+IQ/Akv2xoSF5
+         JwKpSRkRhxFMO88geaJEu9lVFW7HZl8z2BeuHFkbOD5nxkQ42R4HRc/0Rfopfe/2V7q4
+         GfZHcQ3jY/Mt5O/lXBFflFkfxkOLDxEvoL83nrsmfA4kvxrpVTUxV7fpMVFkJ2MmTUyZ
+         5ZmIZl12GPI5in/SrLJGdPonGc/2qOHe0prkJ/9ORpTTkKnm2OlXk6mTz3y3RA1ymGqm
+         BFHQ4Pqqvm+OyCsQN30bChrOvWyZuqITiD90xXWN8QrB5xuwe/ptiTxKMAlXu7M0qwOi
+         WOLA==
+X-Gm-Message-State: AAQBX9egG6I733UdDMs5aqSTxnRnzKXOFfT3mQYlLTSl3dIkll3q+go9
+        +simO2kNO+17qG4t1fokkh6Fqw==
+X-Google-Smtp-Source: AKy350ZNOUsFV9j/xzSnf1+xpXcvIkZsgRIu3isxDNKEOxSw5DeINlj7T+t8EgjWhBsGUhSswe79DA==
+X-Received: by 2002:a17:902:e54c:b0:1a2:1a52:14b3 with SMTP id n12-20020a170902e54c00b001a21a5214b3mr10247483plf.4.1680365335992;
+        Sat, 01 Apr 2023 09:08:55 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id v129-20020a632f87000000b00476d1385265sm3280801pgv.25.2023.04.01.09.08.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Apr 2023 09:08:55 -0700 (PDT)
+Message-ID: <1a55abad-bf4c-606a-2217-22447bfd343b@kernel.dk>
+Date:   Sat, 1 Apr 2023 10:08:54 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8896f261-9602-4663-aa87-1feb9bf3ec0f@redhat.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 0/2] USB: Fixes for handling ITER_UBUF
+To:     Sandeep Dhavale <dhavale@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Keith Busch <kbusch@kernel.org>
+Cc:     kernel-team@android.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230401060509.3608259-1-dhavale@google.com>
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230401060509.3608259-1-dhavale@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=3.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Apr 01, 2023 at 12:48:07PM +0200, Hans de Goede wrote:
-> Hi Alan,
+On 4/1/23 12:05?AM, Sandeep Dhavale wrote:
+> Since the commit 1e23db450cff ("io_uring: use iter_ubuf for single range
+> imports") .read_iter() can be called with iov type ITER_UBUF.
+> In such case dup_iter() will correctly dup but it will not allocate
+> any memory. But callers ffs_epfile_read_iter and ep_read_iter treat
+> this as a failure.
 > 
-> On 3/30/23 22:10, Alan Stern wrote:
-> > Reference: https://syzkaller.appspot.com/bug?extid=4b3f8190f6e13b3efd74
-> > Reference: https://syzkaller.appspot.com/bug?extid=1cb937c125adb93fad2d
-> > 
-> > The radio-shark driver just assumes that the endpoints it uses will be
-> > present, without checking.  This adds an appropriate check.
-> > 
-> > Alan Stern
-> > 
-> > #syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.2
-> 
-> Thank you for working on this!
-> 
-> Both the core changes and the 2 radio-shark driver changes look good to me.
-> 
-> Please add my:
-> 
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> 
-> When submitting these upstream.
-> 
-> Regards,
-> 
-> Hans
-> 
-> 
-> 
-> 
-> 
-> > 
-> >  drivers/usb/core/usb.c |   70 +++++++++++++++++++++++++++++++++++++++++++++++++
-> >  include/linux/usb.h    |    7 ++++
-> >  2 files changed, 77 insertions(+)
-> > 
-> > Index: usb-devel/drivers/usb/core/usb.c
-> > ===================================================================
-> > --- usb-devel.orig/drivers/usb/core/usb.c
-> > +++ usb-devel/drivers/usb/core/usb.c
-> > @@ -207,6 +207,76 @@ int usb_find_common_endpoints_reverse(st
-> >  EXPORT_SYMBOL_GPL(usb_find_common_endpoints_reverse);
-> >  
-> >  /**
-> > + * usb_find_endpoint() - Given an endpoint address, search for the endpoint's
-> > + * usb_host_endpoint structure in an interface's current altsetting.
-> > + * @intf: the interface whose current altsetting should be searched
-> > + * @ep_addr: the endpoint address (number and direction) to find
-> > + *
-> > + * Search the altsetting's list of endpoints for one with the specified address.
-> > + *
-> > + * Return: Pointer to the usb_host_endpoint if found, %NULL otherwise.
-> > + */
-> > +struct usb_host_endpoint __must_check *usb_find_endpoint(
-> > +		const struct usb_interface *intf, unsigned int ep_addr)
-> > +{
-> > +	int n;
-> > +	struct usb_host_endpoint *ep;
-> > +
-> > +	n = intf->cur_altsetting->desc.bNumEndpoints;
-> > +	ep = intf->cur_altsetting->endpoint;
-> > +	for (; n > 0; (--n, ++ep)) {
-> > +		if (ep->desc.bEndpointAddress == ep_addr)
-> > +			return ep;
-> > +	}
-> > +	return NULL;
-> > +}
-> > +EXPORT_SYMBOL_GPL(usb_find_endpoint);
-> > +
-> > +/**
-> > + * usb_check_bulk_endpoint - Check whether an interface's current altsetting
-> > + * contains a bulk endpoint with the given address.
-> > + * @intf: the interface whose current altsetting should be searched
-> > + * @ep_addr: the endpoint address (number and direction) to look for
-> > + *
-> > + * Search for an endpoint with the specified address and check its type.
-> > + *
-> > + * Return: %true if the endpoint is found and is bulk, %false otherwise.
-> > + */
-> > +bool usb_check_bulk_endpoint(
-> > +		const struct usb_interface *intf, unsigned int ep_addr)
-> > +{
-> > +	const struct usb_host_endpoint *ep;
-> > +
-> > +	ep = usb_find_endpoint(intf, ep_addr);
-> > +	if (!ep)
-> > +		return false;
-> > +	return usb_endpoint_xfer_bulk(&ep->desc);
-> > +}
-> > +EXPORT_SYMBOL_GPL(usb_check_bulk_endpoint);
-> > +
-> > +/**
-> > + * usb_check_int_endpoint - Check whether an interface's current altsetting
-> > + * contains an interrupt endpoint with the given address.
-> > + * @intf: the interface whose current altsetting should be searched
-> > + * @ep_addr: the endpoint address (number and direction) to look for
-> > + *
-> > + * Search for an endpoint with the specified address and check its type.
-> > + *
-> > + * Return: %true if the endpoint is found and is interrupt, %false otherwise.
-> > + */
-> > +bool usb_check_int_endpoint(
-> > +		const struct usb_interface *intf, unsigned int ep_addr)
-> > +{
-> > +	const struct usb_host_endpoint *ep;
-> > +
-> > +	ep = usb_find_endpoint(intf, ep_addr);
-> > +	if (!ep)
-> > +		return false;
-> > +	return usb_endpoint_xfer_int(&ep->desc);
-> > +}
-> > +EXPORT_SYMBOL_GPL(usb_check_int_endpoint);
+> Following patches address this by checking if iter_is_ubuf().
+> Without the fix, async IOs from io_uring will be returned with -ENOMEM.
 
-Shouldn't you use the usb_find_bulk_in_endpoint() and friends functions
-instead of these?  Many drivers hard-coded their "I know this endpoint
-is this type" which breaks in fuzzing as you know (and see here), which
-is why those functions were created to be used.
+Looks fine to me. The dup_iter() interface is somewhat unfortunate, as
+it doesn't return an error pointer. Hence NULL can be failed or success,
+depending on the type. Looks like cifs is the only other user of
+dup_iter(), and that checks the type first. You could do something like
+that too in the gadget code. Or we could fix the API... And it is kind
+of silly calling into dup_iter() when you don't need it. But for now,
+this will probably suffice:
 
-I think just using them in the probe function would fix this issue
-instead of these functions which would only be used by that one driver.
+Acked-by: Jens Axboe <axboe@kernel.dk>
 
-thanks,
+-- 
+Jens Axboe
 
-greg k-h
