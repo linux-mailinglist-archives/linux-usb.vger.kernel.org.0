@@ -2,96 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 697686D2E7C
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Apr 2023 08:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC586D2E87
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Apr 2023 08:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232682AbjDAGFo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Apr 2023 02:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38630 "EHLO
+        id S232718AbjDAGPo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Apr 2023 02:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231923AbjDAGFn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Apr 2023 02:05:43 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167AC1DF8A
-        for <linux-usb@vger.kernel.org>; Fri, 31 Mar 2023 23:05:43 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-545e529206eso180549677b3.9
-        for <linux-usb@vger.kernel.org>; Fri, 31 Mar 2023 23:05:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680329142;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YJIKAiLrcYph4SDFvXf83ay8bL8jHgmMLaG1jX6sOx0=;
-        b=frACg17a8pI0bbcxxKJzpQQeLf47wzT6rc2ZVp3Aaq8MfX03AmW3eP1GF68xZeBM6N
-         n9ewuLIh9l54jBHPvslv9mMx1A/Ej8zTYEh/t6IAGO6qfydAw0wPzS48ERRVRQJSE00C
-         YesQl6RTmnVvR4uE70swykMBPexUt58a13kSleN4aYjOgzJg9bAqlXStAUP/pLTTlLY6
-         4vLvdo1IxAU5ZmTqbKWUp98FeELLIX1M1z8fnAJiv83m/uqcpVvtuN77UEo/zE7k5X2M
-         tFprKTQztNiF5Ws5gTFoju5yCH1bR1XRzna97+ZwHgJPldsiyWqYzQ9pKkKhKZ3GZ9nd
-         30Lw==
+        with ESMTP id S229537AbjDAGPn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Apr 2023 02:15:43 -0400
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5204DEFA4
+        for <linux-usb@vger.kernel.org>; Fri, 31 Mar 2023 23:15:41 -0700 (PDT)
+Received: by mail-il1-f208.google.com with SMTP id q17-20020a056e020c3100b003245df8be9fso15722589ilg.14
+        for <linux-usb@vger.kernel.org>; Fri, 31 Mar 2023 23:15:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680329142;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YJIKAiLrcYph4SDFvXf83ay8bL8jHgmMLaG1jX6sOx0=;
-        b=A506VrWyajczh1DEspt3a/0QFvcWeMMSjhNEBsuUjWWjpHp9xP5UgLZQFD3SUboD1M
-         Mjea8gw0FZgsV5YSmQMII+YYh+Iw71JOfsHXHavETd0E0EtyZCjUt7/JgrSCoBrjCsRG
-         MkeMwsIHkI0LhS65fs4QQcC5AROmQpe3kxRVtefEUSAv3P1rSxbKxIWJULkxQvaW98ps
-         LDDAmLkVpGzwhEFFn/EIPTI2PXCVi6c9mE0IINKMoJ0/GWYkDuSQskxVQysR+KOuyMJt
-         K+k2mKlBl66h8zgPBDMSSM36K9xt9wcou+bicjFkegrxb1OIlo4VA5XoMdW0HW/3/pII
-         UksQ==
-X-Gm-Message-State: AAQBX9fgbja4wslqSbhrGmjxUIjo6fdSjZFFuFpsp4wIewJ4iZHael0Y
-        PCTPjB2atD4PcXqJ5sZnAipCcnuA/eAl
-X-Google-Smtp-Source: AKy350ZEkYkx/cnN4LKrWExUKxfzEZ+Fbw1UrV+ww+lENePsSHSFei3i2z2m6GsTrCtyz5NuzrjcBN12YoyN
-X-Received: from dhavale-ctop.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:5e39])
- (user=dhavale job=sendgmr) by 2002:a81:ae60:0:b0:546:5f4d:c002 with SMTP id
- g32-20020a81ae60000000b005465f4dc002mr1322669ywk.10.1680329142383; Fri, 31
- Mar 2023 23:05:42 -0700 (PDT)
-Date:   Sat,  1 Apr 2023 06:05:09 +0000
-In-Reply-To: <20230401060509.3608259-1-dhavale@google.com>
-Mime-Version: 1.0
-References: <20230401060509.3608259-1-dhavale@google.com>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230401060509.3608259-3-dhavale@google.com>
-Subject: [PATCH v1 2/2] usb: gadgetfs: Fix ep_read_iter to handle ITER_UBUF
-From:   Sandeep Dhavale <dhavale@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>
-Cc:     Sandeep Dhavale <dhavale@google.com>, kernel-team@android.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+        d=1e100.net; s=20210112; t=1680329740; x=1682921740;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XqNN61HFN9AplPUAzlgJ4Lk0uE9RFppc2dGoBPDTz44=;
+        b=ye/NigCBgRzxNmqlGnz0F0lCLVEFh649OKVu61QyFDa+0t32AJQbB4bIGhRAqiXp4b
+         2BvbM5xw80n37WyuSst36sEZwvR3J5lXkxWvrqH/FkG7BSQSBeCdtYI8rCFhhlYs4dqJ
+         OTZG5zywWsaWc7k/DmdMq6qR+aUwwrtqf/G2kW2WrhEji/gp8kFDRTYPFGeGSEJUEIms
+         qwA0EdjyEqrS/71q9n/yGcsTnazDsyj5uEEyasne07zBgJrD5Uc2z3sfMuZuDiEKWNC2
+         v6VAfIAg3rX60lt2ry9Oi9rgV1xcXuEIYMkKDx0OKpgAWQdt4MnTo2fjYyGM1BZnTphA
+         r3Nw==
+X-Gm-Message-State: AAQBX9e4AUwVqIrOh3hAJddMBqdBbpD/nEn+SR+a9hQX79q58C7TIwpB
+        ezi3jPxUPKA7LAL9lJ+Dy+lE/vBt0zqBC3Plw01aNoZAOeAA
+X-Google-Smtp-Source: AKy350bZqtamB1Vq06uzF8HFZMKc15oFP+0u6nylgPGgQGTrdDe4+5VgG+vfYgjUKXjWeBz52pgJbgMD7B/ffkBweaPpCTXc8b10
+MIME-Version: 1.0
+X-Received: by 2002:a6b:7b49:0:b0:75d:2e78:ee76 with SMTP id
+ m9-20020a6b7b49000000b0075d2e78ee76mr1347408iop.4.1680329740600; Fri, 31 Mar
+ 2023 23:15:40 -0700 (PDT)
+Date:   Fri, 31 Mar 2023 23:15:40 -0700
+In-Reply-To: <00000000000078275b05b798f7df@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004b4e4805f84041e0@google.com>
+Subject: Re: [syzbot] [usb?] INFO: task hung in usbdev_open (2)
+From:   syzbot <syzbot+b73659f5bb96fac34820@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, jeremy.linton@arm.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-iov_iter for ep_read_iter can be ITER_UBUF with io_uring.
-In that case dup_iter() does not have to allocate iov and it can
-return NULL. Fix the assumption by checking for iter_is_ubuf()
-other wise ep_read_iter can treat this as failure and return -ENOMEM.
+syzbot has found a reproducer for the following issue on:
 
-Fixes: 1e23db450cff ("io_uring: use iter_ubuf for single range imports")
-Signed-off-by: Sandeep Dhavale <dhavale@google.com>
----
- drivers/usb/gadget/legacy/inode.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+HEAD commit:    59caa87f9dfb Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=16dd438ec80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e918bdf4f2f853c4
+dashboard link: https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15cb0c69c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=160d1e21c80000
 
-diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-index d605bc2e7e8f..28249d0bf062 100644
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -614,7 +614,7 @@ ep_read_iter(struct kiocb *iocb, struct iov_iter *to)
- 		if (!priv)
- 			goto fail;
- 		priv->to_free = dup_iter(&priv->to, to, GFP_KERNEL);
--		if (!priv->to_free) {
-+		if (!iter_is_ubuf(&priv->to) && !priv->to_free) {
- 			kfree(priv);
- 			goto fail;
- 		}
--- 
-2.40.0.348.gf938b09366-goog
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4d91c587af1a/disk-59caa87f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c2a88c8fab99/vmlinux-59caa87f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/0f56d2d1cbfc/Image-59caa87f.gz.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b73659f5bb96fac34820@syzkaller.appspotmail.com
+
+INFO: task syz-executor388:6000 blocked for more than 143 seconds.
+      Not tainted 6.3.0-rc4-syzkaller-g59caa87f9dfb #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor388 state:D stack:0     pid:6000  ppid:5984   flags:0x00000001
+Call trace:
+ __switch_to+0x320/0x754 arch/arm64/kernel/process.c:556
+ context_switch kernel/sched/core.c:5307 [inline]
+ __schedule+0x1048/0x1e38 kernel/sched/core.c:6625
+ schedule+0xc4/0x170 kernel/sched/core.c:6701
+ schedule_preempt_disabled+0x18/0x2c kernel/sched/core.c:6760
+ __mutex_lock_common+0xbd8/0x21a0 kernel/locking/mutex.c:679
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ device_lock include/linux/device.h:832 [inline]
+ usbdev_open+0x13c/0x6c0 drivers/usb/core/devio.c:1041
+ chrdev_open+0x3e8/0x4fc fs/char_dev.c:414
+ do_dentry_open+0x724/0xf90 fs/open.c:920
+ vfs_open+0x7c/0x90 fs/open.c:1051
+ do_open fs/namei.c:3560 [inline]
+ path_openat+0x1f2c/0x27f8 fs/namei.c:3715
+ do_filp_open+0x1bc/0x3cc fs/namei.c:3742
+ do_sys_openat2+0x128/0x3d8 fs/open.c:1348
+ do_sys_open fs/open.c:1364 [inline]
+ __do_sys_openat fs/open.c:1380 [inline]
+ __se_sys_openat fs/open.c:1375 [inline]
+ __arm64_sys_openat+0x1f0/0x240 fs/open.c:1375
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+
+Showing all locks held in the system:
+1 lock held by rcu_tasks_kthre/12:
+ #0: ffff800015d36810 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x44/0xcf4 kernel/rcu/tasks.h:510
+1 lock held by rcu_tasks_trace/13:
+ #0: ffff800015d37010 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x44/0xcf4 kernel/rcu/tasks.h:510
+1 lock held by khungtaskd/28:
+ #0: ffff800015d36640 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0xc/0x44 include/linux/rcupdate.h:326
+5 locks held by kworker/0:2/1522:
+ #0: ffff0000c13f7d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x664/0x12d4 kernel/workqueue.c:2363
+ #1: ffff8000225b7c20 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x6a8/0x12d4 kernel/workqueue.c:2365
+ #2: ffff0000ceaa4190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
+ #2: ffff0000ceaa4190 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c8/0x474c drivers/usb/core/hub.c:5739
+ #3: ffff0000d2dd1190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
+ #3: ffff0000d2dd1190 (&dev->mutex){....}-{3:3}, at: __device_attach+0x90/0x434 drivers/base/dd.c:973
+ #4: ffff0000cc332118 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
+ #4: ffff0000cc332118 (&dev->mutex){....}-{3:3}, at: __device_attach+0x90/0x434 drivers/base/dd.c:973
+2 locks held by getty/5625:
+ #0: ffff0000d354c098 (&tty->ldisc_sem){++++}-{0:0}, at: ldsem_down_read+0x3c/0x4c drivers/tty/tty_ldsem.c:340
+ #1: ffff80001a8602f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x414/0x1210 drivers/tty/n_tty.c:2177
+4 locks held by udevd/5996:
+ #0: ffff0000d0fe41c8 (&p->lock){+.+.}-{3:3}, at: seq_read_iter+0xac/0xc44 fs/seq_file.c:182
+ #1: ffff0000cf47a088 (&of->mutex){+.+.}-{3:3}, at: kernfs_seq_start+0x58/0x384 fs/kernfs/file.c:154
+ #2: ffff0000d37d0660 (kn->active#14){.+.+}-{0:0}, at: kernfs_seq_start+0x74/0x384 fs/kernfs/file.c:155
+ #3: ffff0000d2dd1190 (&dev->mutex){....}-{3:3}, at: device_lock_interruptible include/linux/device.h:837 [inline]
+ #3: ffff0000d2dd1190 (&dev->mutex){....}-{3:3}, at: manufacturer_show+0x30/0xac drivers/usb/core/sysfs.c:142
+1 lock held by syz-executor388/6000:
+ #0: ffff0000ceaa4190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
+ #0: ffff0000ceaa4190 (&dev->mutex){....}-{3:3}, at: usbdev_open+0x13c/0x6c0 drivers/usb/core/devio.c:1041
+
+=============================================
+
 
