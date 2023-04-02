@@ -2,145 +2,200 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5E56D354B
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Apr 2023 04:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A238D6D38C6
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Apr 2023 17:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjDBCtN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Apr 2023 22:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55076 "EHLO
+        id S231286AbjDBPYe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 2 Apr 2023 11:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDBCtM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Apr 2023 22:49:12 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3683191F6
-        for <linux-usb@vger.kernel.org>; Sat,  1 Apr 2023 19:49:10 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id y184so19497242oiy.8
-        for <linux-usb@vger.kernel.org>; Sat, 01 Apr 2023 19:49:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680403750;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gxUwmbnGO9PwsjorDOT/rnk595ecVVzsXlTp7Yvu6mg=;
-        b=m9Aip/qGKCe/LlRmsDg9Xz2b3/lvgW6WeIxCsm/xDDlQ/px8y8qCXdk3y6lNqtKK11
-         Um7o0H9gvEoaY+EwjfCCSPod03IIe5PlHdqZNGkgZ7CCb5DU3a4cK9C7sxqec+OxcZ9/
-         eTzsVN5Qr75lR65lQNdAIUHt65kOr4QM/IUbklce2/mvnxcRaE29QIiDmyoGXJHo+MNV
-         wEz+BhaQTal6plmv12zbzWBzNAFJvg8HfO8Xo51pSpqYJNM/lxgwMMQj4FQw5vGDihly
-         Tz6nh/ncwyifOoFe4KX369vKYQL1YvaOERdf5QprfzhKZ5IwiJwDAVlwEcKtUlF99uWo
-         +COg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680403750;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gxUwmbnGO9PwsjorDOT/rnk595ecVVzsXlTp7Yvu6mg=;
-        b=Yn9nE03fiyV9nuRQLv1jr6WLPBERLqlh+8kcM+fC6fqA1xg42UKGvGA2OQuz3aKzkK
-         bY70ZWfAG6aNh1ChZtm+Qj5xRSYuvLL5Asnd+D2LZSJy1i27S5dImFcceajt1GBncmOR
-         xmvDXM5X8ziLz24gIPDIv5k5MHy7y3sewUTfG4hyu2g16+37TP7ze0PCTORP1Fs9ly+v
-         68HMkhbBIFAodK5xl2RamsaYKbyJbvMm7IgOtXFgDcPb58CrN5U1uItZwFamjkeZ8xaS
-         QrS2P04zCXt7yEETYnMsS8JreMDB9E8WwGk9eKkLZMiLsEL62B8uU7y4HbUegNqpg1bP
-         KWMg==
-X-Gm-Message-State: AAQBX9crQ6oYN2XwzTZRhPFr2/XFPr4dNqcYrWT24qri60EeF77PZtlr
-        f+H/RbK6qhAqDhF3FPhggajJl89GKWSfWMAbPOY=
-X-Google-Smtp-Source: AKy350YF5QEVsnNQbgwxAOj3o/Cr/Q/JfLJW6qbIEQZhUy9Q0gnhRWPcLk+qaFD4DoIEAHV8IvI5HFCmvvO8eU4dPWs=
-X-Received: by 2002:a05:6808:1390:b0:389:7ffd:b280 with SMTP id
- c16-20020a056808139000b003897ffdb280mr4602735oiw.5.1680403749629; Sat, 01 Apr
- 2023 19:49:09 -0700 (PDT)
+        with ESMTP id S231249AbjDBPYd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Apr 2023 11:24:33 -0400
+X-Greylist: delayed 310 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 02 Apr 2023 08:24:32 PDT
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [5.144.164.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3BEEC45
+        for <linux-usb@vger.kernel.org>; Sun,  2 Apr 2023 08:24:32 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id C9BA41F4D9;
+        Sun,  2 Apr 2023 17:19:17 +0200 (CEST)
+Date:   Sun, 2 Apr 2023 17:19:15 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8350-nagara: Unify status
+ property placement
+Message-ID: <i5tsdvn45peivo7tegmg3q4mhsz2ly2kfs64kezeykn2bbosd5@ugfqrjqumljd>
+References: <20230321-topic-sagami_dp-v1-0-340c8bce4276@linaro.org>
+ <20230321-topic-sagami_dp-v1-4-340c8bce4276@linaro.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6358:7188:b0:10a:cc3d:725e with HTTP; Sat, 1 Apr 2023
- 19:49:08 -0700 (PDT)
-Reply-To: infor.bankofamerica.net11@gmail.com
-From:   Kristalina Georgieva <ubabanku35@gmail.com>
-Date:   Sun, 2 Apr 2023 02:49:08 +0000
-Message-ID: <CAJut6M6e9FtuU_NF6O2AvJfWY9HqmXeOAMQ-qHo1GD9BWyk=AQ@mail.gmail.com>
-Subject: AUFMERKSAMKEIT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,LOTTO_DEPT,
-        MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:244 listed in]
-        [list.dnswl.org]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [ubabanku35[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ubabanku35[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [infor.bankofamerica.net11[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  1.1 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.0 LOTTO_DEPT Claims Department
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321-topic-sagami_dp-v1-4-340c8bce4276@linaro.org>
+X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Sehr geehrter Kunde,
+On 2023-03-21 23:12:31, Konrad Dybcio wrote:
 
+When you get to resending this, change sm8350-nagara in the title to
+sm8350-sagami :)
 
-Sie wurden dar=C3=BCber informiert, dass die United Bank for Africa Plc
-nach Erhalt Ihrer Zahlungsgenehmigung und des Wechsels vom
-Internationalen W=C3=A4hrungsfonds Ihre ausstehende Zahlung begleichen
-wird, wobei zu ber=C3=BCcksichtigen ist, wie Wechsel aus Togo und Afrika im
-Allgemeinen in Europa, Asien, dem Nahen Osten und America in
-=C3=9Cbereinstimmung mit den International Monetary
-Transactions-Richtlinien unserer Bank entschieden, ein
-US-Dollar-U-Direct-Konto f=C3=BCr Nichtans=C3=A4ssige in Ihrem Namen bei de=
-r
-Bank Of America USA einzurichten. Ihr vollst=C3=A4ndiger zu =C3=BCberweisen=
-der
-Betrag 1,5 Millionen USD, die nach und nach =C3=BCberwiesen werden. Dieses
-Konto erm=C3=B6glicht es Ihnen, Ihre Gelder schrittweise und bedingungslos
-selbst =C3=BCber die Bank Of America Inter Switch Transfers-Plattform
-jederzeit elektronisch zum Nulltarif auf jedes Bankkonto Ihrer Wahl zu
-=C3=BCberweisen.
+- Marijn
 
-Ihre sofortige Einhaltung der von der Bank Of America USA festgelegten
-Richtlinie, die mit der Standardrichtlinie f=C3=BCr internationale
-Banktransaktionen =C3=BCbereinstimmt, erm=C3=B6glicht die
-Aktivierung/Validierung dieses Kontos und Sie haben Zugriff auf alle
-Transaktionen und =C3=9Cberweisungen auf Ihr angegebenes Bankkonto.
-
-F=C3=BCr weitere Anfragen, Antr=C3=A4ge, Beschwerden wenden Sie sich bitte =
-an
-die Auslands=C3=BCberweisungsabteilung
-Regie: Frau Pamela Cox.
-E-Mail: info.bankofamerica.net11@gmail.com
-WhatsApp: +1 (829) 747-6879
-
-
-Beachten Sie, dass Ihnen der (IWF) aufgrund von Betr=C3=BCgern hiermit
-unseren Verhaltenskodex (DTC0414) herausgegeben hat, sodass Sie diesen
-Code angeben m=C3=BCssen, wenn Sie Frau Pamela Cox Foreign Remittance
-Department Bank Of America kontaktieren, indem Sie ihn als Betreff
-verwenden. Bitte benachrichtigen Sie (Bank Of America) unverz=C3=BCglich,
-um den Erhalt dieser Nachricht von der UBA Bank plc zu best=C3=A4tigen.
-
-Vielen Dank f=C3=BCr Ihr Verst=C3=A4ndnis, wir freuen uns darauf, von Ihnen=
- zu h=C3=B6ren,
-
-Zeichen
-Management
+> As we're heading towards getting the status property last everywhere,
+> take care of it for SM8350 SONY Sagami.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 30 ++++++++++------------
+>  1 file changed, 14 insertions(+), 16 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+> index b2baa81baf5e..95b1ba4ce470 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+> @@ -189,8 +189,8 @@ vph_pwr: vph-pwr-regulator {
+>  };
+>  
+>  &adsp {
+> -	status = "okay";
+>  	firmware-name = "qcom/sm8350/Sony/sagami/adsp.mbn";
+> +	status = "okay";
+>  };
+>  
+>  &apps_rsc {
+> @@ -542,27 +542,27 @@ pmr735a_l7: ldo7 {
+>  };
+>  
+>  &cdsp {
+> -	status = "okay";
+>  	firmware-name = "qcom/sm8350/Sony/sagami/cdsp.mbn";
+> +	status = "okay";
+>  };
+>  
+>  &i2c1 {
+> -	status = "okay";
+>  	clock-frequency = <1000000>;
+> +	status = "okay";
+>  
+>  	/* Some subset of SONY IMX663 camera sensor @ 38 */
+>  };
+>  
+>  &i2c4 {
+> -	status = "okay";
+>  	clock-frequency = <400000>;
+> +	status = "okay";
+>  
+>  	/* Samsung Touchscreen (needs I2C GPI DMA) @ 48 */
+>  };
+>  
+>  &i2c11 {
+> -	status = "okay";
+>  	clock-frequency = <1000000>;
+> +	status = "okay";
+>  
+>  	cs35l41_l: speaker-amp@40 {
+>  		compatible = "cirrus,cs35l41";
+> @@ -596,31 +596,31 @@ cs35l41_r: speaker-amp@41 {
+>  };
+>  
+>  &i2c12 {
+> -	status = "okay";
+>  	/* Clock frequency was not specified downstream, let's park it to 100 KHz */
+>  	clock-frequency = <100000>;
+> +	status = "okay";
+>  
+>  	/* AMS TCS3490 RGB+IR color sensor @ 72 */
+>  };
+>  
+>  &i2c13 {
+> -	status = "okay";
+>  	/* Clock frequency was not specified downstream, let's park it to 100 KHz */
+>  	clock-frequency = <100000>;
+> +	status = "okay";
+>  
+>  	/* Qualcomm PM8008i/PM8008j (?) @ 8, 9, c, d */
+>  };
+>  
+>  &i2c15 {
+> -	status = "okay";
+>  	clock-frequency = <400000>;
+> +	status = "okay";
+>  
+>  	/* NXP SN1X0 NFC @ 28 */
+>  };
+>  
+>  &i2c17 {
+> -	status = "okay";
+>  	clock-frequency = <1000000>;
+> +	status = "okay";
+>  
+>  	/* Cirrus Logic CS40L25A boosted haptics driver @ 40 */
+>  };
+> @@ -652,8 +652,8 @@ mdss_dp_altmode: endpoint {
+>  };
+>  
+>  &mpss {
+> -	status = "okay";
+>  	firmware-name = "qcom/sm8350/Sony/sagami/modem.mbn";
+> +	status = "okay";
+>  };
+>  
+>  &pm8350_gpios {
+> @@ -719,8 +719,8 @@ &pon_pwrkey {
+>  };
+>  
+>  &pon_resin {
+> -	status = "okay";
+>  	linux,code = <KEY_VOLUMEUP>;
+> +	status = "okay";
+>  };
+>  
+>  &qupv3_id_0 {
+> @@ -748,8 +748,8 @@ &sdhc_2 {
+>  };
+>  
+>  &slpi {
+> -	status = "okay";
+>  	firmware-name = "qcom/sm8350/Sony/sagami/slpi.mbn";
+> +	status = "okay";
+>  };
+>  
+>  &spi14 {
+> @@ -1038,16 +1038,14 @@ usb_1_dwc3_ss: endpoint {
+>  };
+>  
+>  &usb_1_hsphy {
+> -	status = "okay";
+> -
+>  	vdda-pll-supply = <&pm8350_l5>;
+>  	vdda18-supply = <&pm8350c_l1>;
+>  	vdda33-supply = <&pm8350_l2>;
+> +	status = "okay";
+>  };
+>  
+>  &usb_1_qmpphy {
+> -	status = "okay";
+> -
+>  	vdda-phy-supply = <&pm8350_l6>;
+>  	vdda-pll-supply = <&pm8350_l1>;
+> +	status = "okay";
+>  };
+> 
+> -- 
+> 2.40.0
+> 
