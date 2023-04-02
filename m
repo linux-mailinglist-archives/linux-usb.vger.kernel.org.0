@@ -2,200 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A238D6D38C6
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Apr 2023 17:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7927B6D38EA
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Apr 2023 18:00:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbjDBPYe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 2 Apr 2023 11:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
+        id S230379AbjDBQAq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 2 Apr 2023 12:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbjDBPYd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Apr 2023 11:24:33 -0400
-X-Greylist: delayed 310 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 02 Apr 2023 08:24:32 PDT
-Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [5.144.164.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3BEEC45
-        for <linux-usb@vger.kernel.org>; Sun,  2 Apr 2023 08:24:32 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S230330AbjDBQAo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Apr 2023 12:00:44 -0400
+X-Greylist: delayed 383 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 02 Apr 2023 09:00:42 PDT
+Received: from mail.turbocat.net (turbocat.net [88.99.82.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD50EC165
+        for <linux-usb@vger.kernel.org>; Sun,  2 Apr 2023 09:00:42 -0700 (PDT)
+Received: from [10.36.2.154] (unknown [46.212.121.255])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id C9BA41F4D9;
-        Sun,  2 Apr 2023 17:19:17 +0200 (CEST)
-Date:   Sun, 2 Apr 2023 17:19:15 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8350-nagara: Unify status
- property placement
-Message-ID: <i5tsdvn45peivo7tegmg3q4mhsz2ly2kfs64kezeykn2bbosd5@ugfqrjqumljd>
-References: <20230321-topic-sagami_dp-v1-0-340c8bce4276@linaro.org>
- <20230321-topic-sagami_dp-v1-4-340c8bce4276@linaro.org>
+        by mail.turbocat.net (Postfix) with ESMTPSA id 78113260C0B;
+        Sun,  2 Apr 2023 17:54:18 +0200 (CEST)
+Message-ID: <7dc47823-01a1-ac19-73d4-4bf7eb07f98d@selasky.org>
+Date:   Sun, 2 Apr 2023 17:54:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321-topic-sagami_dp-v1-4-340c8bce4276@linaro.org>
-X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; FreeBSD amd64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [Bug 217242] CPU hard lockup related to xhci/dma
+Content-Language: en-US
+To:     bugzilla-daemon@kernel.org, linux-usb@vger.kernel.org
+References: <bug-217242-208809@https.bugzilla.kernel.org/>
+ <bug-217242-208809-LGiVP9fz4d@https.bugzilla.kernel.org/>
+From:   Hans Petter Selasky <hps@selasky.org>
+In-Reply-To: <bug-217242-208809-LGiVP9fz4d@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2023-03-21 23:12:31, Konrad Dybcio wrote:
+On 4/2/23 00:17, bugzilla-daemon@kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=217242
+> 
+> --- Comment #6 from Austin Domino (austin.domino@hotmail.com) ---
+> (In reply to Austin Domino from comment #4)
+>> The setup that created the output in the previous two attached log files is
+>> described in more detail in related posts on:
+>>
+>> Ubuntu Forums -> https://ubuntuforums.org/showthread.php … st14136903
+>> and
+>> Ubuntu's Launchpad Bug Page -> https://bugs.launchpad.net/ubuntu/+sour …
+>> ug/2013390
+> Try 3 (I wish I could edit posts, but I should not have pressed "Save Changes"
+> so quickly. Sorry about this comment and my incompetence):
+> 
+> Here are the actual links:
+> 
+> Ubuntu Forums ->
+> https://ubuntuforums.org/showthread.php?t=2485480&p=14136903#post14136903
+> and
+> Ubuntu's Launchpad Bug Page ->
+> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/2013390
+> 
 
-When you get to resending this, change sm8350-nagara in the title to
-sm8350-sagami :)
+Hi,
 
-- Marijn
+I don't have access to the bugzilla, but this looks like a out of memory 
+situation, and does not really point towards the USB XHCI. URB's are 
+typically submitted using
+GFP_KERNEL, which allow memory allocators to sleep while waiting for 
+more memory. GFP_ATOMIC does not allow sleeping.
 
-> As we're heading towards getting the status property last everywhere,
-> take care of it for SM8350 SONY Sagami.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 30 ++++++++++------------
->  1 file changed, 14 insertions(+), 16 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-> index b2baa81baf5e..95b1ba4ce470 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-> @@ -189,8 +189,8 @@ vph_pwr: vph-pwr-regulator {
->  };
->  
->  &adsp {
-> -	status = "okay";
->  	firmware-name = "qcom/sm8350/Sony/sagami/adsp.mbn";
-> +	status = "okay";
->  };
->  
->  &apps_rsc {
-> @@ -542,27 +542,27 @@ pmr735a_l7: ldo7 {
->  };
->  
->  &cdsp {
-> -	status = "okay";
->  	firmware-name = "qcom/sm8350/Sony/sagami/cdsp.mbn";
-> +	status = "okay";
->  };
->  
->  &i2c1 {
-> -	status = "okay";
->  	clock-frequency = <1000000>;
-> +	status = "okay";
->  
->  	/* Some subset of SONY IMX663 camera sensor @ 38 */
->  };
->  
->  &i2c4 {
-> -	status = "okay";
->  	clock-frequency = <400000>;
-> +	status = "okay";
->  
->  	/* Samsung Touchscreen (needs I2C GPI DMA) @ 48 */
->  };
->  
->  &i2c11 {
-> -	status = "okay";
->  	clock-frequency = <1000000>;
-> +	status = "okay";
->  
->  	cs35l41_l: speaker-amp@40 {
->  		compatible = "cirrus,cs35l41";
-> @@ -596,31 +596,31 @@ cs35l41_r: speaker-amp@41 {
->  };
->  
->  &i2c12 {
-> -	status = "okay";
->  	/* Clock frequency was not specified downstream, let's park it to 100 KHz */
->  	clock-frequency = <100000>;
-> +	status = "okay";
->  
->  	/* AMS TCS3490 RGB+IR color sensor @ 72 */
->  };
->  
->  &i2c13 {
-> -	status = "okay";
->  	/* Clock frequency was not specified downstream, let's park it to 100 KHz */
->  	clock-frequency = <100000>;
-> +	status = "okay";
->  
->  	/* Qualcomm PM8008i/PM8008j (?) @ 8, 9, c, d */
->  };
->  
->  &i2c15 {
-> -	status = "okay";
->  	clock-frequency = <400000>;
-> +	status = "okay";
->  
->  	/* NXP SN1X0 NFC @ 28 */
->  };
->  
->  &i2c17 {
-> -	status = "okay";
->  	clock-frequency = <1000000>;
-> +	status = "okay";
->  
->  	/* Cirrus Logic CS40L25A boosted haptics driver @ 40 */
->  };
-> @@ -652,8 +652,8 @@ mdss_dp_altmode: endpoint {
->  };
->  
->  &mpss {
-> -	status = "okay";
->  	firmware-name = "qcom/sm8350/Sony/sagami/modem.mbn";
-> +	status = "okay";
->  };
->  
->  &pm8350_gpios {
-> @@ -719,8 +719,8 @@ &pon_pwrkey {
->  };
->  
->  &pon_resin {
-> -	status = "okay";
->  	linux,code = <KEY_VOLUMEUP>;
-> +	status = "okay";
->  };
->  
->  &qupv3_id_0 {
-> @@ -748,8 +748,8 @@ &sdhc_2 {
->  };
->  
->  &slpi {
-> -	status = "okay";
->  	firmware-name = "qcom/sm8350/Sony/sagami/slpi.mbn";
-> +	status = "okay";
->  };
->  
->  &spi14 {
-> @@ -1038,16 +1038,14 @@ usb_1_dwc3_ss: endpoint {
->  };
->  
->  &usb_1_hsphy {
-> -	status = "okay";
-> -
->  	vdda-pll-supply = <&pm8350_l5>;
->  	vdda18-supply = <&pm8350c_l1>;
->  	vdda33-supply = <&pm8350_l2>;
-> +	status = "okay";
->  };
->  
->  &usb_1_qmpphy {
-> -	status = "okay";
-> -
->  	vdda-phy-supply = <&pm8350_l6>;
->  	vdda-pll-supply = <&pm8350_l1>;
-> +	status = "okay";
->  };
-> 
-> -- 
-> 2.40.0
-> 
+usb_submit_urb(xxx, GFP_KERNEL);
+
+While that being said, I wish the Linux USB core would take the example 
+of the FreeBSD USB core, and pre-allocate all memory needed for USB 
+transfers, also called URB's, during device attach. Frequently going 
+through allocate and free cycles during operation, is not just 
+inefficient, but also greatly degrades the ability to debug the system. 
+USB is still quite essential when doing remote server access. Yeah, the 
+serial port is great too, but one day inb() and outb() will die :-)
+
+--HPS
