@@ -2,92 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E006D39EE
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Apr 2023 20:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DEFA6D3A1D
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Apr 2023 22:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbjDBS5c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 2 Apr 2023 14:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
+        id S230174AbjDBUBe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 2 Apr 2023 16:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbjDBS5c (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Apr 2023 14:57:32 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id AC2189018
-        for <linux-usb@vger.kernel.org>; Sun,  2 Apr 2023 11:57:29 -0700 (PDT)
-Received: (qmail 301824 invoked by uid 1000); 2 Apr 2023 14:57:28 -0400
-Date:   Sun, 2 Apr 2023 14:57:28 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Hans Petter Selasky <hps@selasky.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [Bug 217242] CPU hard lockup related to xhci/dma
-Message-ID: <c8cbd221-1cd6-4c9d-bc8e-2013558e5e1d@rowland.harvard.edu>
-References: <bug-217242-208809@https.bugzilla.kernel.org/>
- <bug-217242-208809-LGiVP9fz4d@https.bugzilla.kernel.org/>
- <7dc47823-01a1-ac19-73d4-4bf7eb07f98d@selasky.org>
- <2023040210-armband-spiffy-b5a5@gregkh>
+        with ESMTP id S230053AbjDBUBd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Apr 2023 16:01:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4945BBC
+        for <linux-usb@vger.kernel.org>; Sun,  2 Apr 2023 13:01:31 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1pj3tJ-0001eL-OY; Sun, 02 Apr 2023 22:01:29 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1pj3tI-008WMI-5w; Sun, 02 Apr 2023 22:01:28 +0200
+Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1pj3tH-00CFR0-HZ; Sun, 02 Apr 2023 22:01:27 +0200
+From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+To:     laurent.pinchart@ideasonboard.com
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        balbi@kernel.org, paul.elder@ideasonboard.com,
+        kernel@pengutronix.de, nicolas@ndufresne.ca,
+        kieran.bingham@ideasonboard.com
+Subject: [RFC] usb: gadget: uvc: sane shutdown on soft streamoff
+Date:   Sun,  2 Apr 2023 22:01:22 +0200
+Message-Id: <20230402200122.2919202-1-m.grzeschik@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023040210-armband-spiffy-b5a5@gregkh>
-X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[Bugzilla removed from the CC: list, since this isn't relevant to the bug 
-report]
+Pending requests in the gadget hardware get dequeued and returned with
+ECONNRESET when the available endpoint is not available anymore. This
+can be caused by an unplugged cable or the decision to shutdown the
+stream, e.g. by switching the alt setting.
 
-On Sun, Apr 02, 2023 at 07:25:27PM +0200, Greg KH wrote:
-> On Sun, Apr 02, 2023 at 05:54:18PM +0200, Hans Petter Selasky wrote:
-> > While that being said, I wish the Linux USB core would take the example of
-> > the FreeBSD USB core, and pre-allocate all memory needed for USB transfers,
-> > also called URB's, during device attach.
-> 
-> Many drivers do that today already, which specific ones do you think
-> need to have this added that are not doing so?
+In both cases the returned completion handler is marking the gadget
+with UVC_QUEUE_DISCONNECTED by calling uvcg_queue_cancel.
 
-Hans is undoubtedly referring to the host controller drivers.
+Since in userspace applications there might be two threads, one for the
+bufferqueueing and one to handle the uvc events. It is likely that the
+bufferqueueing thread did not receive the UVC_EVENT_STREAMOFF coming
+from the alt_setting change early enough and still tries to queue a
+buffer into the already disconnected marked device.
 
-usb_alloc_urb() allocates memory for the URB itself.  But the routine does 
-not know which device or host controller the URB will eventually be used 
-with, so it doesn't know which HCD to tell to set aside adequate memory 
-for handling the URB once it is submitted.  And since HCDs tend to process 
-URB submissions while holding a private spinlock, when their memory 
-allocation does get done it cannot use GFP_KERNEL.
+This leads buf_prepare to return ENODEV, which usually makes the
+userspace application quit.
 
-I think it's fair to call this a weak point in Linux's USB stack.  
-Balancing this, it should be pointed out that we can't always know in 
-advance how large an URB's transfer buffer will be, and the amount of 
-memory that the HCD will need can depend on this size.
+To fix the soft-shutdown case this patch is marking the alt setting
+change before disabling the endpoint. This way the still completing
+requests on the disabled endpoint can call uvcg_queue_cancel without
+marking the device disconnected.
 
-> > Frequently going through allocate
-> > and free cycles during operation, is not just inefficient, but also greatly
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+---
+Hi Laurent!
 
-In fact, the original Slab memory allocator (in Solaris 2.4) was designed 
-to make frequent allocate-and-free cycles extremely efficient.  So much so 
-that people would just naturally do things that way instead of 
-pre-allocating memory which would then just sit around unused a large 
-fraction of the time.
+We are running into this issue in gstreamer when the host is stopping
+the stream. In fact I am unsure if this is not also an issue when the
+real unplug will appear.
 
-I suspect the allocators in the Linux kernel don't end up being quite as 
-efficient as the original Slab, however.
+Since the v4l2 device is available all the time, and the streamoff
+callback is cleaning up all the pending buffers in uvc_video_enable(0),
+also the ones that got queued in this short time window of:
 
-Alan Stern
+ alt_setting(0) -> userspace event handling -> streamoff ioctl
 
-> > degrades the ability to debug the system.
-> 
-> Based on the slow USB speeds, "inefficient" isn't anything that I've
-> been able to measure specifically, have you?
-> 
-> > USB is still quite essential when doing remote server access. Yeah,
-> > the serial port is great too, but one day inb() and outb() will die
-> 
-> That's what a USB debugging cable is for :)
-> 
-> thanks,
-> 
-> greg k-h
+Would it not be also possible to just drop the whole
+UVC_QUEUE_DISCONNECTED mechanism?
+
+Thanks,
+Michael
+
+ drivers/usb/gadget/function/f_uvc.c     | 3 ++-
+ drivers/usb/gadget/function/uvc_video.c | 5 +++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 5e919fb6583301..01ab8c07d85be9 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -337,6 +337,8 @@ uvc_function_set_alt(struct usb_function *f, unsigned interface, unsigned alt)
+ 		if (uvc->state != UVC_STATE_STREAMING)
+ 			return 0;
+ 
++		uvc->state = UVC_STATE_CONNECTED;
++
+ 		if (uvc->video.ep)
+ 			usb_ep_disable(uvc->video.ep);
+ 
+@@ -344,7 +346,6 @@ uvc_function_set_alt(struct usb_function *f, unsigned interface, unsigned alt)
+ 		v4l2_event.type = UVC_EVENT_STREAMOFF;
+ 		v4l2_event_queue(&uvc->vdev, &v4l2_event);
+ 
+-		uvc->state = UVC_STATE_CONNECTED;
+ 		return 0;
+ 
+ 	case 1:
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index dd1c6b2ca7c6f3..2f36fef3824f8e 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -265,9 +265,10 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+ 		queue->flags |= UVC_QUEUE_DROP_INCOMPLETE;
+ 		break;
+ 
+-	case -ESHUTDOWN:	/* disconnect from host. */
++	case -ESHUTDOWN:	/* disconnect from host or streamoff pending */
+ 		uvcg_dbg(&video->uvc->func, "VS request cancelled.\n");
+-		uvcg_queue_cancel(queue, 1);
++		uvcg_queue_cancel(queue,
++				  uvc->state != UVC_STATE_STREAMING ? 0 : 1);
+ 		break;
+ 
+ 	default:
+-- 
+2.39.2
+
