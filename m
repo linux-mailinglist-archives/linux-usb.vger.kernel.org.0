@@ -2,135 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0FA6D5136
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Apr 2023 21:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 959856D540A
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Apr 2023 23:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233445AbjDCTUN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Apr 2023 15:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
+        id S233688AbjDCVzi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Apr 2023 17:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233239AbjDCTUJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Apr 2023 15:20:09 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9E72737
-        for <linux-usb@vger.kernel.org>; Mon,  3 Apr 2023 12:19:44 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id b20so121558701edd.1
-        for <linux-usb@vger.kernel.org>; Mon, 03 Apr 2023 12:19:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680549583;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rO01+3k4fzVS/CqC5YjvddkQFJufKZJtp6FmS8S3Vzg=;
-        b=Yi7A7zkfu+IHMbck2/TitvdJ6L4cw+Vm0TPV9ZEdJNaXE2NYh5wdbS816CRXVg1CxL
-         o5p0DvQniMBWegtUeBvP+ZarG3PhT4+CAPAcgwSsl69C+lJqOuCiahmTb9xJ4WAjR7T3
-         BWJz6rzqv40oWo/QS0xLlgDHKMUE0ozRFQQorBjzztoMXAVWRojOe1homea76gTy/GA6
-         Vxd/XrKS4xy2JybNYgoqpiM2XMbBxbYzFClQ1AdvWbdRZgEYbSGI7SlMede0+eaOSIud
-         lxNFqCwLwfj8hj81cTDnFqUvaUjD4sCMZOgFUTRWabMMu25FVvYPyOjf+AToCzO0oPQc
-         aFeQ==
+        with ESMTP id S233594AbjDCVzh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Apr 2023 17:55:37 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7B2FF;
+        Mon,  3 Apr 2023 14:55:36 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id f14so9333847oiw.10;
+        Mon, 03 Apr 2023 14:55:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680549583;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rO01+3k4fzVS/CqC5YjvddkQFJufKZJtp6FmS8S3Vzg=;
-        b=5sgLFijrNwQ4En08exO3/wao2C90sbLNdAEU2opqDSi4OCEXViJkRZp0Hq+e2u12lc
-         ldA964bLTdLMB4vEJABqkbpZsxeOYy2p4sFTOsm7BofL+nW0QJvGfjfwc29+ymzWuJHr
-         /cHXGlT0jIVlhQaEsms/7qS76Me42CQeWiYC/QpQZJJcjS+pgO4u6Qch+mp2cYb+14Qi
-         zc5SMCc5pKPm1ZmX4l03BPSwH4ltMnfxkufN8WajsaSGBWOb9O2tvLakw0ioK1PyOijX
-         vRTO/3QiY33Ppl1Bd0s00fpSxMYwyVU2mgfcbmrpDL2qyxAQN4vHg1dSXlrNrdlNxNKB
-         q68g==
-X-Gm-Message-State: AAQBX9cyX2qOQQfETbmgIJxN8LzL6eyvnnwYQi3+7kXxgtWadV3jTyUr
-        En04K6sdtZTKhoXpdPr5RBlTBg==
-X-Google-Smtp-Source: AKy350bqVpOgQVbWoSPL7MpqchC8QTkyqwgB6DRPSqU1gag0Z4fSDQBJAF/ATSBK3zN8Uba0NWmgGQ==
-X-Received: by 2002:a17:907:25cb:b0:946:f79b:e785 with SMTP id ae11-20020a17090725cb00b00946f79be785mr22215288ejc.2.1680549582892;
-        Mon, 03 Apr 2023 12:19:42 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ae90:d80:1069:4805? ([2a02:810d:15c0:828:ae90:d80:1069:4805])
-        by smtp.gmail.com with ESMTPSA id h23-20020a170906261700b008e0bb004976sm4882835ejc.134.2023.04.03.12.19.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 12:19:41 -0700 (PDT)
-Message-ID: <d8f3432a-b364-e939-c1f2-b4d55b1586e9@linaro.org>
-Date:   Mon, 3 Apr 2023 21:19:40 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: usb: mtk-xhci: add an optional frame
- count clock
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        d=1e100.net; s=20210112; t=1680558935;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qjq0KqO+ZCTucOoyX+5QFTzN2oQuHf/UKMiz/wqweFU=;
+        b=cPQf1ejk1t0uIUttyKCvHbbkoFto2YATC2JCSbt99rXBJ1EwdEWwI1KTTo4kiZ82wW
+         992FNJ8pbLEaNIzUSwOln1Fz2AS63hD6LYFbmM2C98Zg3tL0IlsXkSvpvCCZ7Du8ByAp
+         SfdvownnaCZ/R6DB31e9g1EqD6tFZlZWSlj5l8pEEngUcqCM6TDTAVQiB2TRlJQoM9Go
+         jHyvWgt+kVa2e3TL4dQCuAveQbLPxaPg8+uOk06zOoBE0Yc/j18Cn1O/4bM+kp1nFamm
+         kThzjmUqxkXQ7vuy2yCx8kbFm6nYCwHwwqSE1T/cWNwxiLto5XmCizNWTYJsYh45HN6E
+         iNdw==
+X-Gm-Message-State: AAQBX9eCTaZLD+Qg9U4ACO5LjaylI/oUsOjgmVOlJpDbLULq7S4B5NBl
+        SyKxJ9r68IExf8TPqk0bIw==
+X-Google-Smtp-Source: AKy350Z6oL4IFhGhzxX75BQl6RphNE8W4vpP8gNjQhZyac0ZEhG5/XlfipS5XUEhJa/yh2SASWnk9A==
+X-Received: by 2002:a05:6808:4247:b0:387:3a60:be06 with SMTP id dp7-20020a056808424700b003873a60be06mr346449oib.21.1680558935526;
+        Mon, 03 Apr 2023 14:55:35 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id o14-20020a54478e000000b0037832f60518sm4327025oic.14.2023.04.03.14.55.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 14:55:35 -0700 (PDT)
+Received: (nullmailer pid 1942293 invoked by uid 1000);
+        Mon, 03 Apr 2023 21:55:34 -0000
+Date:   Mon, 3 Apr 2023 16:55:34 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tianping Fang <tianping.fang@mediatek.com>
-References: <20230403060232.25699-1-chunfeng.yun@mediatek.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230403060232.25699-1-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCHv1 1/2] dt-bindings: usb: generic-ohci: increase allowed
+ clocks
+Message-ID: <20230403215534.GA1935153-robh@kernel.org>
+References: <20230331163148.5863-1-sebastian.reichel@collabora.com>
+ <20230331163148.5863-2-sebastian.reichel@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331163148.5863-2-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 03/04/2023 08:02, Chunfeng Yun wrote:
-> Add optional clock 'frmcnt_ck' used on 4nm or advanced process SoC
+On Fri, Mar 31, 2023 at 06:31:47PM +0200, Sebastian Reichel wrote:
+> Increase number of allowed clocks to 4, which is the number
+> required on Rockchip RK3588.
+
+It was 3 because that's what crept in until we made a schema. Additions 
+should really have a specific compatible and a conditional schema 
+limiting that 4 clocks to that compatible.
+
 > 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 > ---
->  .../devicetree/bindings/usb/mediatek,mtk-xhci.yaml          | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  Documentation/devicetree/bindings/usb/generic-ohci.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-> index c119caa9ad16..ee8167fbc541 100644
-> --- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-> +++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-> @@ -77,6 +77,7 @@ properties:
->        - description: Mcu bus clock for register access
->        - description: DMA bus clock for data transfer
->        - description: controller clock
-> +      - description: frame count clock
+> diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> index a9ba7257b884..c0880d0664f1 100644
+> --- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> @@ -69,7 +69,7 @@ properties:
 >  
->    clock-names:
+>    clocks:
 >      minItems: 1
-> @@ -86,14 +87,15 @@ properties:
->        - const: mcu_ck
->        - const: dma_ck
->        - const: xhci_ck
-> +      - const: frmcnt_ck
-
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
->  
->    assigned-clocks:
->      minItems: 1
-> -    maxItems: 5
-> +    maxItems: 6
-
-But these should be dropped:
-https://lore.kernel.org/linux-devicetree/20230403191850.374839-1-krzysztof.kozlowski@linaro.org/T/#t
-
->  
->    assigned-clock-parents:
->      minItems: 1
-> -    maxItems: 5
-> +    maxItems: 6
->  
->    phys:
->      description:
-
-Best regards,
-Krzysztof
-
+> -    maxItems: 3
+> +    maxItems: 4
+>      description: |
+>        In case the Renesas R-Car Gen3 SoCs:
+>          - if a host only channel: first clock should be host.
+> -- 
+> 2.39.2
+> 
