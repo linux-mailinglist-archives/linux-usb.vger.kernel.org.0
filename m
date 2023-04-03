@@ -2,239 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E886D41B7
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Apr 2023 12:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F4A6D41CD
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Apr 2023 12:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232119AbjDCKRq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Apr 2023 06:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
+        id S232277AbjDCKTi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Apr 2023 06:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231898AbjDCKRp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Apr 2023 06:17:45 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B26728D
-        for <linux-usb@vger.kernel.org>; Mon,  3 Apr 2023 03:17:41 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id c29so37390241lfv.3
-        for <linux-usb@vger.kernel.org>; Mon, 03 Apr 2023 03:17:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680517060;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CYWunT6ljLivd4wOmJltu2pTDnUfXFoW1kvmT3KC1QE=;
-        b=CJvXvyFr0yjtxSqivXbkpCcvc0H/CT5Eonky3l6Mk2azf7riTYbT0oGepNmOI5QSO2
-         tvM80d2CMcceuNCXKmGgPLz8IRukbwQe1e31W0LUXMvs6giQbKJvWRqO5BtHwA+Np/uq
-         grWXum+E2Enovwah7JyDoAn5cKkG6x5kMNLSXezWYvF8p2fewdS1idyv1c9h8ssYOo5e
-         hysZIAcY33b8LZMGAmwNsEOz81sxCq0IRvoKX3XcgA9/4uIv8l85EeX7Xrk07v3qY2Fg
-         t4kM9anM315HOmrHtSAifarscYiTw2qNpyLUzZ+GNMLLB7q/QyFrJYyfAFL3D2kxWlts
-         kx3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680517060;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CYWunT6ljLivd4wOmJltu2pTDnUfXFoW1kvmT3KC1QE=;
-        b=ODRjFnkW2XyadX7oa+J9DFAHQV/xPJzyR7/wsMlM2uK1KFoxVFwSOkZ98gyuB+Rh2K
-         Rx6AJ7SBd0LC7kRbxv3dUQF9QF6R7BNxvmpmuVhukK+sWvgZqTEw1cy9r4VyfFwwGthF
-         G5eAfz51Cl/8C3Qts2IDxNebol5hhx3mytdLI64fcIQcmsZYbh3lTrd+L+263rIuuvGk
-         8BqVElUzotC4r46doAuJfSX9Iw1MLnhkblB5gXWK2yoQpdu81lP0Ivu9NXjrKwZB0Ajn
-         AkZ3NqZP6t4SsA79lMi/PWQDFvCFoD2EU5b6x7vpekHYPa5OAfHBRiaAHi0pZ3rZEweI
-         iaKw==
-X-Gm-Message-State: AAQBX9edbaotqTRHm3LYcaDPsd6uc5rnvGa5T6gq3FvQ0oIp2Ti6Of09
-        gFEVQ0wkkaLv8ak1uzqauyo09Q==
-X-Google-Smtp-Source: AKy350YJmY7LxwUOQLiwMFFgX8lclMVAm4rfogfN3uFeeeJtrG3sPerJemo+C2+/Lq4iTju333wZBw==
-X-Received: by 2002:a05:6512:4dd:b0:4eb:c24:2066 with SMTP id w29-20020a05651204dd00b004eb0c242066mr7869572lfq.68.1680517060196;
-        Mon, 03 Apr 2023 03:17:40 -0700 (PDT)
-Received: from [192.168.1.101] (abxj135.neoplus.adsl.tpnet.pl. [83.9.3.135])
-        by smtp.gmail.com with ESMTPSA id u26-20020ac2519a000000b004e8483bff82sm1709319lfi.271.2023.04.03.03.17.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 03:17:39 -0700 (PDT)
-Message-ID: <97316d33-29b9-700f-8766-df538b133f35@linaro.org>
-Date:   Mon, 3 Apr 2023 12:17:38 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8350-nagara: Unify status
- property placement
+        with ESMTP id S232278AbjDCKTO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Apr 2023 06:19:14 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0899E12BE2;
+        Mon,  3 Apr 2023 03:19:04 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 333AIxRv066487;
+        Mon, 3 Apr 2023 05:18:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680517139;
+        bh=lz60oJMNNApxne8XKp/602Q9lIfj7nEOb+EHhaiTYjs=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=ut/O3TJrZ7cYB2UFtQbBxbcm4N+UKk8glOPyb4oXyWveZeXmoqxUgCuSEQjiNPYpm
+         DCATvGnpEYcOwS90pUs4+RPCrYmtPeKUCxGYELON/Oz2vmiNCvU5/MyQq8+lDEIMi9
+         H9JTQoKGXHhj7rSM3SOxESkIN8HBTmvBwcHObg9w=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 333AIxUh006403
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 3 Apr 2023 05:18:59 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 3
+ Apr 2023 05:18:58 -0500
+Received: from DLEE114.ent.ti.com ([fe80::bdc7:eccc:cd13:af84]) by
+ DLEE114.ent.ti.com ([fe80::bdc7:eccc:cd13:af84%17]) with mapi id
+ 15.01.2507.016; Mon, 3 Apr 2023 05:18:58 -0500
+From:   "Purohit, Kaushal" <kaushal.purohit@ti.com>
+To:     Oliver Neukum <oneukum@suse.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+CC:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [EXTERNAL] Re: issues with cdc ncm host class driver
+Thread-Topic: [EXTERNAL] Re: issues with cdc ncm host class driver
+Thread-Index: Adll85tYAc+Cq2MlRoaUYHp7CXh/XQASqSKAAAo4+VA=
+Date:   Mon, 3 Apr 2023 10:18:58 +0000
+Message-ID: <6a8da52391f349ffbdaf2ab6d81e5cff@ti.com>
+References: <da37bb0d43de465185c10aad9924f265@ti.com>
+ <28ec4e65-647f-2567-fb7d-f656940d4e43@suse.com>
+In-Reply-To: <28ec4e65-647f-2567-fb7d-f656940d4e43@suse.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230321-topic-sagami_dp-v1-0-340c8bce4276@linaro.org>
- <20230321-topic-sagami_dp-v1-4-340c8bce4276@linaro.org>
- <i5tsdvn45peivo7tegmg3q4mhsz2ly2kfs64kezeykn2bbosd5@ugfqrjqumljd>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <i5tsdvn45peivo7tegmg3q4mhsz2ly2kfs64kezeykn2bbosd5@ugfqrjqumljd>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.249.138.33]
+x-exclaimer-md-config: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 2.04.2023 17:19, Marijn Suijten wrote:
-> On 2023-03-21 23:12:31, Konrad Dybcio wrote:
-> 
-> When you get to resending this, change sm8350-nagara in the title to
-> sm8350-sagami :)
-Even I confuse them, they just look too alike! ;)
-
-Konrad
-> 
-> - Marijn
-> 
->> As we're heading towards getting the status property last everywhere,
->> take care of it for SM8350 SONY Sagami.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  .../boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 30 ++++++++++------------
->>  1 file changed, 14 insertions(+), 16 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
->> index b2baa81baf5e..95b1ba4ce470 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
->> @@ -189,8 +189,8 @@ vph_pwr: vph-pwr-regulator {
->>  };
->>  
->>  &adsp {
->> -	status = "okay";
->>  	firmware-name = "qcom/sm8350/Sony/sagami/adsp.mbn";
->> +	status = "okay";
->>  };
->>  
->>  &apps_rsc {
->> @@ -542,27 +542,27 @@ pmr735a_l7: ldo7 {
->>  };
->>  
->>  &cdsp {
->> -	status = "okay";
->>  	firmware-name = "qcom/sm8350/Sony/sagami/cdsp.mbn";
->> +	status = "okay";
->>  };
->>  
->>  &i2c1 {
->> -	status = "okay";
->>  	clock-frequency = <1000000>;
->> +	status = "okay";
->>  
->>  	/* Some subset of SONY IMX663 camera sensor @ 38 */
->>  };
->>  
->>  &i2c4 {
->> -	status = "okay";
->>  	clock-frequency = <400000>;
->> +	status = "okay";
->>  
->>  	/* Samsung Touchscreen (needs I2C GPI DMA) @ 48 */
->>  };
->>  
->>  &i2c11 {
->> -	status = "okay";
->>  	clock-frequency = <1000000>;
->> +	status = "okay";
->>  
->>  	cs35l41_l: speaker-amp@40 {
->>  		compatible = "cirrus,cs35l41";
->> @@ -596,31 +596,31 @@ cs35l41_r: speaker-amp@41 {
->>  };
->>  
->>  &i2c12 {
->> -	status = "okay";
->>  	/* Clock frequency was not specified downstream, let's park it to 100 KHz */
->>  	clock-frequency = <100000>;
->> +	status = "okay";
->>  
->>  	/* AMS TCS3490 RGB+IR color sensor @ 72 */
->>  };
->>  
->>  &i2c13 {
->> -	status = "okay";
->>  	/* Clock frequency was not specified downstream, let's park it to 100 KHz */
->>  	clock-frequency = <100000>;
->> +	status = "okay";
->>  
->>  	/* Qualcomm PM8008i/PM8008j (?) @ 8, 9, c, d */
->>  };
->>  
->>  &i2c15 {
->> -	status = "okay";
->>  	clock-frequency = <400000>;
->> +	status = "okay";
->>  
->>  	/* NXP SN1X0 NFC @ 28 */
->>  };
->>  
->>  &i2c17 {
->> -	status = "okay";
->>  	clock-frequency = <1000000>;
->> +	status = "okay";
->>  
->>  	/* Cirrus Logic CS40L25A boosted haptics driver @ 40 */
->>  };
->> @@ -652,8 +652,8 @@ mdss_dp_altmode: endpoint {
->>  };
->>  
->>  &mpss {
->> -	status = "okay";
->>  	firmware-name = "qcom/sm8350/Sony/sagami/modem.mbn";
->> +	status = "okay";
->>  };
->>  
->>  &pm8350_gpios {
->> @@ -719,8 +719,8 @@ &pon_pwrkey {
->>  };
->>  
->>  &pon_resin {
->> -	status = "okay";
->>  	linux,code = <KEY_VOLUMEUP>;
->> +	status = "okay";
->>  };
->>  
->>  &qupv3_id_0 {
->> @@ -748,8 +748,8 @@ &sdhc_2 {
->>  };
->>  
->>  &slpi {
->> -	status = "okay";
->>  	firmware-name = "qcom/sm8350/Sony/sagami/slpi.mbn";
->> +	status = "okay";
->>  };
->>  
->>  &spi14 {
->> @@ -1038,16 +1038,14 @@ usb_1_dwc3_ss: endpoint {
->>  };
->>  
->>  &usb_1_hsphy {
->> -	status = "okay";
->> -
->>  	vdda-pll-supply = <&pm8350_l5>;
->>  	vdda18-supply = <&pm8350c_l1>;
->>  	vdda33-supply = <&pm8350_l2>;
->> +	status = "okay";
->>  };
->>  
->>  &usb_1_qmpphy {
->> -	status = "okay";
->> -
->>  	vdda-phy-supply = <&pm8350_l6>;
->>  	vdda-pll-supply = <&pm8350_l1>;
->> +	status = "okay";
->>  };
->>
->> -- 
->> 2.40.0
->>
+T2xpdmVyLCBUaGFua3MgZm9yIHRoZSBxdWljayBjb25maXJtYXRpb24uIFRyYWNrZWQgaW4ga2Vy
+bmVsIEJ1Z3ppbGxhIGJ5ICJCdWcgMjE3MjkwIi4NCg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0t
+LS0NCkZyb206IE9saXZlciBOZXVrdW0gPG9uZXVrdW1Ac3VzZS5jb20+IA0KU2VudDogTW9uZGF5
+LCBBcHJpbCAzLCAyMDIzIDM6MzkgUE0NClRvOiBQdXJvaGl0LCBLYXVzaGFsIDxrYXVzaGFsLnB1
+cm9oaXRAdGkuY29tPjsgc3RhYmxlQHZnZXIua2VybmVsLm9yZw0KQ2M6IHJlZ3Jlc3Npb25zQGxp
+c3RzLmxpbnV4LmRldjsgbGludXgtdXNiQHZnZXIua2VybmVsLm9yZw0KU3ViamVjdDogW0VYVEVS
+TkFMXSBSZTogaXNzdWVzIHdpdGggY2RjIG5jbSBob3N0IGNsYXNzIGRyaXZlcg0KDQpPbiAwMy4w
+NC4yMyAwODoxNCwgUHVyb2hpdCwgS2F1c2hhbCB3cm90ZToNCj4gSGksDQo+IA0KDQpIaSwNCg0K
+PiBSZWZlcnJpbmcgdG8gcGF0Y2ggd2l0aCBjb21taXQgSUQgKCplMTBkY2IxYjZiYTcxNDI0M2Fk
+NWEzNWExMWI5MWNjMTQxMDNhOWE5KikuDQo+IA0KPiBUaGlzIGlzIGEgc3BlYyB2aW9sYXRpb24g
+Zm9ywqBDREMgTkNNIGNsYXNzIGRyaXZlci4gRHJpdmVyIGNsZWFybHkgc2F5cyANCj4gdGhlIHNp
+Z25pZmljYW5jZSBvZiBuZXR3b3JrIGNhcGFiaWxpdGllcy4gKHNuYXBzaG90IGJlbG93KQ0KPiAN
+Cj4gSG93ZXZlciwgd2l0aCB0aGUgbWVudGlvbmVkIHBhdGNoIHRoZXNlIHZhbHVlcyBhcmUgZGlz
+cmVzcGVjdGVkIGFuZCBjb21tYW5kcyBzcGVjaWZpYyB0byB0aGVzZSBjYXBhYmlsaXRpZXMgYXJl
+IHNlbnQgZnJvbSB0aGUgaG9zdCByZWdhcmRsZXNzIG9mIGRldmljZScgY2FwYWJpbGl0aWVzIHRv
+IGhhbmRsZSB0aGVtLg0KDQpSaWdodC4gU28gZm9yIHlvdXIgZGV2aWNlLCB0aGUgY29ycmVjdCBi
+ZWhhdmlvciB3b3VsZCBiZSB0byBkbyBub3RoaW5nLCB3b3VsZG4ndCBpdD8gVGhlIHBhY2tldHMg
+d291bGQgYmUgZGVsaXZlcmVkIGFuZCB0aGUgaG9zdCBuZWVkcyB0byBmaWx0ZXIgYW5kIGRpc2Nh
+cmQgdW5yZXF1ZXN0ZWQgcGFja2V0cy4NCg0KPiBDdXJyZW50bHkgd2UgYXJlIHNldHRpbmcgdGhl
+c2UgYml0cyB0byAwIGluZGljYXRpbmcgbm8gY2FwYWJpbGl0aWVzIG9uIG91ciBkZXZpY2UgYW5k
+IHN0aWxsIHdlIG9ic2VydmUgdGhhdCBIb3N0IChMaW51eCBrZXJuZWwgaG9zdCBjZGMgZHJpdmVy
+KSBoYXMgYmVlbiBzZW5kaW5nIHJlcXVlc3RzIHNwZWNpZmljIHRvIHRoZXNlIGNhcGFiaWxpdGll
+cy4NCj4gDQo+IFBsZWFzZSBsZXQgbWUga25vdyBpZiB0aGVyZSBpcyBhIGJldHRlciB3YXkgdG8g
+aW5kaWNhdGUgaG9zdCB0aGF0IGRldmljZSBkb2VzIG5vdCBoYXZlIHRoZXNlIGNhcGFiaWxpdGll
+cy4NCg0Kbm8geW91IGFyZSBkb2luZyB0aGluZ3MgYXMgdGhleSBhcmUgc3VwcG9zZWQgdG8gYmUg
+ZG9uZSBhbmQgdGhlIGhvc3QgaXMgYXQgZmF1bHQuIFRoaXMga2VybmVsIGJ1ZyBuZWVkcyB0byBi
+ZSBmaXhlZC4NCg0KCVJlZ2FyZHMNCgkJT2xpdmVyDQoNCg==
