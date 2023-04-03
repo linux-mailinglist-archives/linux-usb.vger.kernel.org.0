@@ -2,129 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E2A6D4B91
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Apr 2023 17:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A71AF6D4FDD
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Apr 2023 20:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232543AbjDCPQ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Apr 2023 11:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
+        id S233171AbjDCSCK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Apr 2023 14:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232501AbjDCPQ1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Apr 2023 11:16:27 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4F2F8124
-        for <linux-usb@vger.kernel.org>; Mon,  3 Apr 2023 08:16:26 -0700 (PDT)
-Received: (qmail 328630 invoked by uid 1000); 3 Apr 2023 11:16:25 -0400
-Date:   Mon, 3 Apr 2023 11:16:25 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     syzbot <syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com>,
-        Thomas Winischhofer <thomas@winischhofer.net>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in sisusb_send_bulk_msg/usb_submit_urb
-Message-ID: <e59c73d3-248a-46cb-b5d8-6c78c67c55ad@rowland.harvard.edu>
-References: <00000000000096e4f905f81b2702@google.com>
- <b799fc68-8840-43e7-85f5-27e1e6457a44@rowland.harvard.edu>
- <7b1f757b-b626-5d49-354e-343e040b8762@suse.com>
- <f396acba-2241-4f62-98ff-ba97ea1a7139@rowland.harvard.edu>
- <97ea1633-3c9e-5042-4edc-8c52f668cc9e@suse.com>
+        with ESMTP id S232926AbjDCSBs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Apr 2023 14:01:48 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CE840C0
+        for <linux-usb@vger.kernel.org>; Mon,  3 Apr 2023 11:01:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680544896; x=1712080896;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ThTNY4NzyJgEDsjASruhsZXLEZfOd4Pd3qZR5eIxzP8=;
+  b=HUU2HBMTmGciDYM1aKKv+UTr1XX6RbJnRLRRQgTrhO/VKwdYHt6x4TSn
+   dGdEGNJDb2n4qhN1isyqVnRMy57h821vOISr5LGI6tB8VgxXHA+sK+JVV
+   rGU6717iR6wKm7cdb0Ma9SCbHVnS/HsKwAkxK99Q95cZmX0p0MIEnJFZe
+   PtCzM0xPuNUg+o6bwWssaA+I5ZZ59B5rh51vJ2jAjZ/y4jVUfjsEZ1lrZ
+   ZROS3L55igU0J/FFFDInK8d7SPqRIBOJqTyImfTilxeD3Gm507QMILP81
+   bhh51f3xydLsFihFn9Z/9jhKgLT3TGMDg7VcNF+e2cCeZLabUIW+NFsHg
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="369784644"
+X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
+   d="scan'208";a="369784644"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 11:01:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="860305790"
+X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
+   d="scan'208";a="860305790"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 03 Apr 2023 11:01:31 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pjOUk-000Ocm-1n;
+        Mon, 03 Apr 2023 18:01:30 +0000
+Date:   Tue, 04 Apr 2023 02:01:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: [westeri-thunderbolt:next] BUILD SUCCESS
+ 1f15af76784cc902a1fe85e864c7ddf3d74b4130
+Message-ID: <642b1460.PZe+B39uHgrPZ5Dq%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <97ea1633-3c9e-5042-4edc-8c52f668cc9e@suse.com>
-X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 04:51:26PM +0200, Oliver Neukum wrote:
-> 
-> 
-> On 03.04.23 16:33, Alan Stern wrote:
-> > On Mon, Apr 03, 2023 at 10:54:05AM +0200, Oliver Neukum wrote:
-> > > 
-> > > 
-> > > On 30.03.23 17:34, Alan Stern wrote:
-> 
-> > >   If so, why do we have a generic matching code, although
-> > > it is always insufficient?
-> > 
-> > (I assume you're referring to usb_match_device() and related routines.)
-> > 
-> > Not sufficient, perhaps, but necessary.  That is, in addition to
-> > checking the available endpoints, we also have to make sure the device
-> > has the right vendor ID, product ID, and so on to match the driver.
-> 
-> The thing is that if we also need to check in each driver, the criteria
-> for matching devices are not sophisticated and strict enough
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
+branch HEAD: 1f15af76784cc902a1fe85e864c7ddf3d74b4130  thunderbolt: Introduce usb4_port_sb_opcode_err_to_errno() helper
 
-Why not?  Part of the check takes place in the core and part in the 
-driver.  The fact that the checking is done in two parts doesn't mean it 
-is unsophisticated or not strict enough.
+elapsed time: 723m
 
-In addition, one can argue that only the checking done in the core 
-should be called "matching".  If the match succeeds then it is 
-appropriate to try binding the device to the matching driver.  If the 
-driver then refuses to accept the binding because (for example) the 
-endpoints are wrong, it doesn't mean the match should have failed.  It 
-means that the device is broken in some way and is therefore unusable.
+configs tested: 94
+configs skipped: 3
 
-> > > What is the purpose of a generic binding interface in sysfs if every probe()
-> > > method blocks it? Allowing a generic probe looks like a misdesign under these
-> > > circumstances. You'd really want to add IDs to drivers.
-> > 
-> > I really don't understand what you're asking.  If you're talking about
-> > the "bind" and "unbind" files in /sys/bus/*/drivers/*/, they are there
-> 
-> Yes
-> 
-> > to allow manual binding and unbinding of devices.  Even though only one
-> > driver is likely to bind to any particular device.  (Furthermore, all
-> 
-> They, however, allow binding drivers to arbitrary devices.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-No.  The binding uses the normal matching and probing mechanism.  Here's 
-the comment at the start of bind_store() in drivers/base/bus.c:
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230402   gcc  
+arc                  randconfig-r043-20230403   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                       omap2plus_defconfig   gcc  
+arm                  randconfig-r046-20230402   gcc  
+arm                  randconfig-r046-20230403   clang
+arm                           tegra_defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r016-20230402   clang
+hexagon              randconfig-r016-20230403   clang
+hexagon              randconfig-r041-20230402   clang
+hexagon              randconfig-r041-20230403   clang
+hexagon              randconfig-r045-20230402   clang
+hexagon              randconfig-r045-20230403   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230403   clang
+i386                 randconfig-a002-20230403   clang
+i386                 randconfig-a003-20230403   clang
+i386                 randconfig-a004-20230403   clang
+i386                 randconfig-a005-20230403   clang
+i386                 randconfig-a006-20230403   clang
+i386                 randconfig-a011-20230403   gcc  
+i386                 randconfig-a012-20230403   gcc  
+i386                 randconfig-a013-20230403   gcc  
+i386                 randconfig-a014-20230403   gcc  
+i386                 randconfig-a015-20230403   gcc  
+i386                 randconfig-a016-20230403   gcc  
+i386                          randconfig-c001   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r012-20230403   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r014-20230403   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                       m5475evb_defconfig   gcc  
+m68k                 randconfig-r013-20230403   gcc  
+m68k                 randconfig-r015-20230402   gcc  
+m68k                 randconfig-r015-20230403   gcc  
+microblaze           randconfig-r012-20230402   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 decstation_r4k_defconfig   gcc  
+mips                 randconfig-r014-20230402   gcc  
+nios2                               defconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r011-20230403   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                       maple_defconfig   gcc  
+powerpc                      mgcoge_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r011-20230402   clang
+riscv                randconfig-r042-20230402   clang
+riscv                randconfig-r042-20230403   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230402   clang
+s390                 randconfig-r044-20230403   gcc  
+sh                               allmodconfig   gcc  
+sh                           se7206_defconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64              randconfig-r013-20230402   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a011-20230403   gcc  
+x86_64               randconfig-a012-20230403   gcc  
+x86_64               randconfig-a013-20230403   gcc  
+x86_64               randconfig-a014-20230403   gcc  
+x86_64               randconfig-a015-20230403   gcc  
+x86_64               randconfig-a016-20230403   gcc  
+x86_64                        randconfig-k001   clang
+x86_64                               rhel-8.3   gcc  
 
-/*
- * Manually attach a device to a driver.
- * Note: the driver must want to bind to the device,
- * it is not possible to override the driver's id table.
- */
-
-> Now, you can argue that this will not work. Then I'd say that the correct interface
-> would be per device, not per driver as it is now and would retrigger
-> a binding, as if the device were new.
-> Or you say that if the administrator wants that, well, shoot
-> yourself into the foot, the driver shall not check.
-
-In view of the misunderstanding above, these comments are moot.
-
-> > this was true even before we started being careful about checking
-> > endpoints numbers and types.)
-> > 
-> > And we _do_ have IDs in drivers; that's what the .id_table member of
-> > struct usb_driver is for.
-> 
-> Which is not exported through sysfs.
-
-True, the built-in table is not exported (I guess we could add some sort 
-of read-only view of it).  There is, however an additional dynamic ID 
-table which _is_ managed through sysfs.
-
-> So we export an interface that is not fully usable, not the one people
-> really want. You almost never want to say that a device at a specific
-> port is to be bound to a driver at one specific time.
-> You want to either assign all devices with a new ID to a driver
-> or unbind and reprobe a device.
-
-The first can be done by adding a dynamic ID entry (or on a permanent 
-basis by updating the driver's built-in table and rebuilding the 
-driver's module), and the second can be done using the "unbind" and 
-"bind" files.
-
-Alan Stern
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
