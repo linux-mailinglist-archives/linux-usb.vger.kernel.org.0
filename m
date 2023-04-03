@@ -2,240 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7BC6D3F1C
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Apr 2023 10:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EB56D3F7A
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Apr 2023 10:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231492AbjDCIhJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Apr 2023 04:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56794 "EHLO
+        id S231426AbjDCIyM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Apr 2023 04:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjDCIhH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Apr 2023 04:37:07 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D9540F7;
-        Mon,  3 Apr 2023 01:37:05 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 8C697604FA;
-        Mon,  3 Apr 2023 10:37:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680511024; bh=7MHe15JFE76nTe4R/YunuiE84h0GvSrxQfC2NhO4J/o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=sdQm+sVX1HpvFNbQYCiC2kvde4En+3oud8kgPfUC3pvUMx9cbUHzWEbZoUPwysOHs
-         3Ai6UiUyf16HtRAAY7BokZd76dwQavzOIQA40/zQJZnQpTn//Ah59wJa49OSR/v+mS
-         tAp0bOowPpBQblvxkQyZUES3GCsvGjdtz9Wz3Jy948YjrZEBZvosuLJqqN9xHWjjc/
-         BTsiAtNLbHM3W/tVUI2n4sKWL0cbXqGxGusbD0lJf8aHh9ZZUul4UK29Pp8Os5xRAi
-         mmqPdiZDSssPva1gMhWOJwBqf7D4jKyNZNo6yUD5ma9BqJ9Rp412AJvLDtWdmSEnoP
-         IL75rS33Canbg==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id GMzZx7BrYm4t; Mon,  3 Apr 2023 10:37:00 +0200 (CEST)
-Received: from [10.0.1.57] (grf-nat.grf.hr [161.53.83.23])
-        by domac.alu.hr (Postfix) with ESMTPSA id D9CD1604F7;
-        Mon,  3 Apr 2023 10:36:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680511020; bh=7MHe15JFE76nTe4R/YunuiE84h0GvSrxQfC2NhO4J/o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=2npd7P3oIHLAgFtqi88xgNdCTES+c81JiWzmB0Ax/PBhbH8E4kC8EBR+VNQa31uVI
-         e1cZcjCZOwbVM78nAlfrkiiG8mUIDK7YlmpajGfS5ZtwsAYH3TnVnysswp5HZqAtpY
-         LCB9aoGoJ3/y0Croay4xXyYfbSmwvz9fCCM+D+x7qImCS/OSLIcHZkfrBk6P/Ju8f4
-         54VfQ/YmeZyWXtX7vAI0Hh8Qh1iZKe8dxU6RtsA/ZpF1O5CXXrJU/CEntDOeNntJr/
-         D0xbODr0ZZgVvf0w9JaatmGkwWNq+AeuC5qwN/i2ywgWihes1pxzXfrNVLWz5RvmE/
-         gU92rnoAwg06A==
-Message-ID: <da837f2e-dc47-f254-7132-3c3a5c2869c6@alu.unizg.hr>
-Date:   Mon, 3 Apr 2023 10:36:59 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 3/3] xhci: Free the command allocated for setting LPM if
- we return early
-Content-Language: en-US, hr
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        linux-usb@vger.kernel.org, Stable@vger.kernel.org
-References: <20230330143056.1390020-1-mathias.nyman@linux.intel.com>
- <20230330143056.1390020-4-mathias.nyman@linux.intel.com>
- <2219a894-eb79-70a4-2b92-2b7ee7e1e966@alu.unizg.hr>
- <2023040352-case-barterer-ccd1@gregkh>
- <eb08643a-eae1-dd59-ba89-bf593405c09f@alu.unizg.hr>
- <711ff3f6-d449-c835-7c0b-4f7a1527a2f7@alu.unizg.hr>
- <2023040339-eastbound-boggle-02ca@gregkh>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <2023040339-eastbound-boggle-02ca@gregkh>
+        with ESMTP id S229659AbjDCIyL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Apr 2023 04:54:11 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2045.outbound.protection.outlook.com [40.107.105.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC80172B;
+        Mon,  3 Apr 2023 01:54:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GfdYP7UHmcGxfWOnz7j8O8PL4ey2zI1VffD44qGTi3DogN3P2qA+q5Dym9WLkEEBH7hMOA7YvmaLES10Ic5q/lE97RGHRdLx8ODBUGi4iALEBgsTMKvkTfqYvzsRRpYQV2Ht+MtwMY9GUuWDCBBlX2OvIeQKmGxqjA8trMs2IZter6slWFIk027vHrxebsmteKU/TzT14N0oMtgOpb2NziD8vhB8DyJpM0mQgYFHPQ/vGdqgnxw+QMa6qC/7r/HDDzj2xC5L5Gif0zygMcb2m0g4aug3yvTbsqA3nJl7/hXr+AHxwGp9ifY8AwPmMAlG3S1dkKyYexVjJabwdl5pBw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rYaY2Wdk3FyM/fCEIyKj2Dxn3JHCEK5g2BJaNs+5dqs=;
+ b=LIQqMsQswHaimk5WhTnkYM5wjY0Ahn8ykJYZXNHQzzxr2vZBak1s1YlFV0FrkAyRyZmj0JIFs9V1dhg0n73UdKKHO+tJarx51U71m+YsPUD8MiRHJ4O2sFZeCduDPZlKihaySLQ8reyAixExSNYy5TPGHt0v/Fs9fh3L/GR6SNN7J9gDWERqDy4SJuLdKCl2bw2AjWZ4zlGqr5MgsV3TwVwZ7QH12A7Xvvnq2/myxCuYezBHc82cZXUDkJyUzzlXmMxsOTGKI4uFQFwufTxA8pSc6h4eD/ZKNckYsf511m0/VpHCT7M5GaHd1rVxOXct2pJRM/gtX/Jlla5R+AeHTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rYaY2Wdk3FyM/fCEIyKj2Dxn3JHCEK5g2BJaNs+5dqs=;
+ b=tcAaruTogeedVrWv5vqqK/pOpPBhcKGZSflz+zQC8XvUDL5tiJ7hzVzdxZWZS3/CW9R82kpjj13aHgCmBQ4wCydP9jFW9SybPFvXG5KcTMjka8ixsQERnEmo/wN4IKVL+86CFToTET03xWaI7EUICb7Jjjz/znng8bvWy8PvG+E0anhaS1t8tWttLm7hPotJiIEirReCji9w16ciYu4mmNVrDuaNDmHnSr/HVmRuQam9R0+CDf4cXH73uT0HnaYzBXSvJtKkGei9+oWqQy8t/KP2noEI6I+2x377tnzpGtBQ5eLhWjibitXSCBOX6xgJQ5Y8NPK258vc8dzoHmhzAA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by AS4PR04MB9484.eurprd04.prod.outlook.com (2603:10a6:20b:4ed::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Mon, 3 Apr
+ 2023 08:54:08 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::74bd:991c:527d:aa61]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::74bd:991c:527d:aa61%9]) with mapi id 15.20.6254.033; Mon, 3 Apr 2023
+ 08:54:08 +0000
+Message-ID: <7b1f757b-b626-5d49-354e-343e040b8762@suse.com>
+Date:   Mon, 3 Apr 2023 10:54:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [syzbot] WARNING in sisusb_send_bulk_msg/usb_submit_urb
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        syzbot <syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com>,
+        Thomas Winischhofer <thomas@winischhofer.net>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+References: <00000000000096e4f905f81b2702@google.com>
+ <b799fc68-8840-43e7-85f5-27e1e6457a44@rowland.harvard.edu>
+Content-Language: en-US
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <b799fc68-8840-43e7-85f5-27e1e6457a44@rowland.harvard.edu>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0159.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a2::19) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|AS4PR04MB9484:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7d55ab84-473e-4248-b99f-08db3420fbff
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0a2WqvK8ofAxr6/rrATyuFa1PTbteMz0xj+EAqh+cCEkXvqQ5efNt0WUx6a+0Xfqt6yjGHZ6k7h9AH7U7Hy6Zcsqre4kVjnAZHQA2QjeJGutfx/7MJx9yY+MP65d59mA7RWbUzhOmAoy0Xs7VNCWWQ7dWZWHvAz7sNFuRJRS9qe6aMxX6BAEwIx2iaQlmy0Wjoos9xgNtOr8laYarv5Q91UVjIjBk/NeH4OxpvAj3pKWi9+lv8uiylRC2DEgVWCAq4hAtf03PTcKpRU05rRgw5TAenKrL9heRzQ46VBOeVbwKY5amGQBFiJHWuW8Y1vsn+8EH14VE1nvKv/wtG5K8ztofQC7VBFvIuWNPjQZN4Sugah6/9Oid6DSFDVvZ3UHFykTE0oAlBtReJ+KusBEKv1tmkfUql7h+ubNhHFZGwQKpbfZX94TLeQVCKcmvmeqNhCNFQfkbRUG7iFGU3IYRcIbX6LVvYffuGsykvhyumEw7c67XhFeVybRuRWGSgR0pJiArB1B64FTff2/ckpxQKVPGJ+JUMixVBOPkqSL/GzOVZdRFHSsBiO1NwYKIQFjwZ8aOHEgO79Q9PETwuLl5p6UbQPfI5dxE1SUyb9jy8D1iVHBKQ98EZBGfbtjW2ATdEjPmfFJGtGDkf6Edy2rUDqRmol2yVScQs5o4MEldN0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(346002)(136003)(396003)(376002)(39860400002)(451199021)(31696002)(86362001)(36756003)(2906002)(31686004)(2616005)(966005)(53546011)(83380400001)(186003)(6512007)(6506007)(6486002)(6666004)(4326008)(8676002)(66946007)(66556008)(66476007)(41300700001)(5660300002)(38100700002)(110136005)(316002)(478600001)(4744005)(8936002)(99710200001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K3liUlFsVTFlVWNncXd1YVFCSlVNVjBWSlVXaW14d2V5d0Q3cmV5NHJWTy9B?=
+ =?utf-8?B?QWoyVCtRUjhXVXBka21Pd2RPd2E4SUp4Y3hqR0JFT1VKWFpaMU5td29mL0VP?=
+ =?utf-8?B?R2tjZnpBZGZmMGJGRklKVXp3Wjl1ZXp0ZEE1NXArU2dCd0pNSm05U3RpVEMx?=
+ =?utf-8?B?U09xT0RzZGt4V0IvY1kvQUFvWVN0TEl3T3BLZ0o2ZkxCaVNMYWJON2hGU3dQ?=
+ =?utf-8?B?WHQ2UzhlNytGclMrcGcrR05BOFBlMmhxTmdQdVRaM3FUbkNWQnluTUFMWmlM?=
+ =?utf-8?B?Q29OODIxQzdhb21jKy9lUGxjRFphNVlEUUtiRHUwSWRLT0grc1loNm5XSDAr?=
+ =?utf-8?B?cGIxR2Jqc0RGNUhrOWxubEV4K0pnZEVkdFdiZEpUbDFLVTRkeTJoV1UyUlBX?=
+ =?utf-8?B?NFg4Y2NXaDBlNmlzaDJKbDJXOUUwNTNBM2dZeHBYSzhldytNWFZPUTRocldL?=
+ =?utf-8?B?c0NWdFFQZmREcVVGUSt2bXJwV3BLL1N1WjZ3YzJHQVhrZXhaVzNaODZ6NHFp?=
+ =?utf-8?B?dDdsUm5QTFNHNW10Z1BCUEg5U0YxQVVaY1hkaWVkNFJUT3liZDZEVGJkVDJN?=
+ =?utf-8?B?cWdVY0JUb2Ntc1pnMkNNTXFnVjJYdk1nWlN2VnRJVkNGbld2cjVUWnZBL29D?=
+ =?utf-8?B?VHA0WXFDdlk4MEN3YzEvWCs0Qk81S0F2ZnpuQnZpWUp1K1BmR2cxdWM3WTVr?=
+ =?utf-8?B?TW8rdFVQem1SeVF1YTVuR3pGQmVkcU96RXNsdGNSTlNYQk80TWp0N1kvRFFW?=
+ =?utf-8?B?NGtpM3lPZ3hSMmdWbGgvZW5kM3daWm44NGhZMlJmVVRqeTJVMloyUG9KeFly?=
+ =?utf-8?B?S0JHZlRBN2p0ZFFXdytuZHd5b0NKeU9iRXV2K1VISVNVcE1MVHcvRkR0Qjdh?=
+ =?utf-8?B?UlZ4Tk1YbUlFandwTVU4OFlzZzJpNVFQeFFvN1FYMHczbTdYa2RzTjlWS29p?=
+ =?utf-8?B?OUlKckZWQlRiV3BOZWhpMlFtZTNYME5HUWlFOGlFajk0ckFZa1J0OVNwUEg1?=
+ =?utf-8?B?YjZPSnB5S1NuZmh3Tk9aZHlzd1hNKzQzYm1NT2NCT0U4SjVZL3A4RnN1YWFS?=
+ =?utf-8?B?c0hoMXpHeXRtSWR1RldZU0M2ekVsNG1xRG8zcW9SQ01XaUZWcUNKK3RSRnVj?=
+ =?utf-8?B?aXNhbmpRRVE2a0s0MXpSazhja2o4REVSWWc0ckkyNTdjQ2ZySnczdHE3TE5v?=
+ =?utf-8?B?WFJLOTVNZVZBVTl6OU4xcW4xMUdkak1TUlpuUGZIdjBBVDk2TmN2MGl0LzR0?=
+ =?utf-8?B?RkNQQ1RiMnIzMGVqSDNVOFg2cHI1L21XYWFld3RCMFRjWHRxL2lzSDEyR01E?=
+ =?utf-8?B?N3RTSU9CN3lxRXN0TUFHS3B0M01uS0pNblJDWjl6amRBT01EODNleXY1TnBy?=
+ =?utf-8?B?RVl4VnNvTElMd1U1ZWpsV1gyOGorbUhlVndRdnF0eTZYT01mN0Jsc3NRQ0pQ?=
+ =?utf-8?B?RkdtTFBRZ0wwZmpDUE1iTkdubVZPT2c0azRDbmFXV21uRmFjcG9KOHNXSFdQ?=
+ =?utf-8?B?UUNmMkIwZVNkdGRUN3o1UTdLYWhmS0ZGb2RlQ1I1MFNYVm1BLzZtSkk4TUht?=
+ =?utf-8?B?SFBBSXJtSnNIdmJZdSthUmpKaDhGZFQvT0c1UkF3aTVERGNtZ2pwejFMcUZz?=
+ =?utf-8?B?Q1lTcGtuRkRDcEp6NkhqWVl3aHU4eDJKL0ZXNFpET201ZU5kZmN1OWIzRk5v?=
+ =?utf-8?B?bXNoNlBTbjREOE1rVVc2bHdEdzlXV1JaRTVmWWxsN1JCWWJvRzdIZ0lIU29X?=
+ =?utf-8?B?c2NsUldaczhYa2hUSm9aSGtRVzFxeU9iRVlPdTdJT3dRZkF3RzNzYXpwOExN?=
+ =?utf-8?B?RkFlNGlDcEo3WEF6NlF6cUlmaDBNOFkvc3FWdnAyL0xPZ1pkUDZ2dm9vd29V?=
+ =?utf-8?B?NUU4dGZCT0wrZzBTcHlQVGlJancwSjFnWG9ZcWxWWEczMENIdnZzM3FKTzZ2?=
+ =?utf-8?B?VFJBb3ZTVHg4TzE3emowU2hXYlgvV2VOM2JIcVUzMGlqc3UzR0Ntc3ZHVzJn?=
+ =?utf-8?B?TGdaVGptOC9QNXc5LzRiOEs2bUxVNTdja2cweGdCNzJrMXdYWG9zdVh3Uncr?=
+ =?utf-8?B?b1pzeEwrQW9kNmd5NVlIZUo2Vkl2NFErdURNMXdsWlJUcmozMXhicVdZR1lJ?=
+ =?utf-8?B?YXB2N1o4RTFyZ3l2ZjNBdUtTK0x1dWFRWHFZam1CMW1ldFd1K2dpSGRCd29Z?=
+ =?utf-8?Q?suS7ivD+pZpqdl9LuYfWT0YcuNgyGq4ZTywGXZF2d9T2?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d55ab84-473e-4248-b99f-08db3420fbff
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 08:54:08.1775
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: v/6Nte38lX2+NTjt/13mO2xQlxw0zLAjV1NzIkvjFDhsxmnClbBPOHNCzKQYy0lazCBhHUHHx4LDK9u+cMZcmQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR04MB9484
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3.4.2023. 10:28, Greg KH wrote:
-> On Mon, Apr 03, 2023 at 10:01:22AM +0200, Mirsad Goran Todorovac wrote:
->> On 3.4.2023. 9:57, Mirsad Goran Todorovac wrote:
->>> On 3.4.2023. 9:24, Greg KH wrote:
->>>> On Mon, Apr 03, 2023 at 09:17:21AM +0200, Mirsad Goran Todorovac wrote:
->>>>> Hi, Mathias!
->>>>>
->>>>> On 30.3.2023. 16:30, Mathias Nyman wrote:
->>>>>> The command allocated to set exit latency LPM values need to be freed in
->>>>>> case the command is never queued. This would be the case if there is no
->>>>>> change in exit latency values, or device is missing.
->>>>>>
->>>>>> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
->>>>>> Link: https://lore.kernel.org/linux-usb/24263902-c9b3-ce29-237b-1c3d6918f4fe@alu.unizg.hr
->>>>>> Tested-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
->>>>>> Fixes: 5c2a380a5aa8 ("xhci: Allocate separate command structures for each LPM command")
->>>>>> Cc: <Stable@vger.kernel.org>
->>>>>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->>>>>> ---
->>>>>>     drivers/usb/host/xhci.c | 1 +
->>>>>>     1 file changed, 1 insertion(+)
->>>>>>
->>>>>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
->>>>>> index bdb6dd819a3b..6307bae9cddf 100644
->>>>>> --- a/drivers/usb/host/xhci.c
->>>>>> +++ b/drivers/usb/host/xhci.c
->>>>>> @@ -4442,6 +4442,7 @@ static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
->>>>>>         if (!virt_dev || max_exit_latency == virt_dev->current_mel) {
->>>>>>             spin_unlock_irqrestore(&xhci->lock, flags);
->>>>>> +        xhci_free_command(xhci, command);
->>>>>>             return 0;
->>>>>>         }
->>>>>
->>>>> There seems to be a problem with applying this patch with "git am", as it
->>>>> gives the following:
->>>>>
->>>>> commit ff9de97baa02cb9362b7cb81e95bc9be424cab89
->>>>> Author: @ <@>
->>>>> Date:   Mon Apr 3 08:42:33 2023 +0200
->>>>>
->>>>>       The command allocated to set exit latency LPM values need to be freed in
->>>>>       case the command is never queued. This would be the case if there is no
->>>>>       change in exit latency values, or device is missing.
->>>>>
->>>>>       Fixes: 5c2a380a5aa8 ("xhci: Allocate separate command structures for each LPM command")
->>>>>       Cc: <Stable@vger.kernel.org>
->>>>>       Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->>>>
->>>> This is already commit f6caea485555 ("xhci: Free the command allocated
->>>> for setting LPM if we return early") in Linus's tree, do you not see it
->>>> there?
->>>>
->>>> And how exactly did you save the message to apply it with 'git am'?  It
->>>> worked for me.
->>>>
->>>> thanks,
->>>>
->>>> greg k-h
->>>
->>> git am ../mathias-xhci.mail
->>>
->>> mtodorov@domac:~/linux/kernel/linux_torvalds$ cat ../mathias-xhci.mail
->>> From: Mathias Nyman @ 2023-03-27  9:50 UTC (permalink / raw)
->>>     To: mirsad.todorovac, linux-usb, linux-kernel
->>>     Cc: gregkh, ubuntu-devel-discuss, stern, arnd, Mathias Nyman, Stable
->>>
->>> The command allocated to set exit latency LPM values need to be freed in
->>> case the command is never queued. This would be the case if there is no
->>> change in exit latency values, or device is missing.
->>>
->>> Fixes: 5c2a380a5aa8 ("xhci: Allocate separate command structures for each LPM command")
->>> Cc: <Stable@vger.kernel.org>
->>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+
+
+On 30.03.23 17:34, Alan Stern wrote:
+> Reference: https://syzkaller.appspot.com/bug?extid=23be03b56c5259385d79
 > 
-> That is very odd, your mail program is not getting the full mbox
-> information here at all.  Try downloading it from lore.kernel.org as a
-> raw message:
-> 	https://lore.kernel.org/all/20230330143056.1390020-4-mathias.nyman@linux.intel.com/raw
-> and applying that?
-> 
->>> ---
->>>    drivers/usb/host/xhci.c | 1 +
->>>    1 file changed, 1 insertion(+)
->>>
->>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
->>> index bdb6dd819a3b..6307bae9cddf 100644
->>> --- a/drivers/usb/host/xhci.c
->>> +++ b/drivers/usb/host/xhci.c
->>> @@ -4442,6 +4442,7 @@ static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
->>>
->>>           if (!virt_dev || max_exit_latency == virt_dev->current_mel) {
->>>                   spin_unlock_irqrestore(&xhci->lock, flags);
->>> +               xhci_free_command(xhci, command);
->>>                   return 0;
->>>           }
->>>
->>> -- 
->>> 2.25.1
->>>
->>> Sorry, no commit f6caea485555 in the "git pull":
->>>
->>> mtodorov@domac:~/linux/kernel/linux_torvalds$ git log --oneline | grep f6caea485555
->>> mtodorov@domac:~/linux/kernel/linux_torvalds$ git log --oneline | head -10
->>> 10de4cefccf7 memstick: fix memory leak if card device is never registered
->>> feeedf59897c platform/x86: think-lmi: Clean up display of current_value on Thinkstation
->>> 86cebdbfb8d2 platform/x86: think-lmi: Fix memory leaks when parsing ThinkStation WMI strings
->>> ff9de97baa02 The command allocated to set exit latency LPM values need
->>> to be freed in case the command is never queued. This would be the case
->>> if there is no change in exit latency values, or device is missing.
->>> 2ac6d07f1a81 platform/x86: think-lmi: Fix memory leak when showing current settings
->>> 7e364e56293b Linux 6.3-rc5
->>> 6ab608fe852b Merge tag 'for-6.3-rc4-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux
->>> f95b8ea79c47 Revert "venus: firmware: Correct non-pix start and end addresses"
->>> a10ca0950afe Merge tag 'driver-core-6.3-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core
->>> 95d0b9d89d78 Merge tag 'powerpc-6.3-4' of git://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux
->>> You have mail in /var/mail/mtodorov
->>> mtodorov@domac:~/linux/kernel/linux_torvalds$
->>>
->>> I don't see it here either. But it is not critical (no security issue).
->>>
->>> Have a nice day!
->>
->> P.S.
->>
->> Correction.
->>
->> Yes, I found it here:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f6caea4855553a8b99ba3ec23ecdb5ed8262f26c
->>
->> "Notice: this object is not reachable from any branch."
->>
->> I see Murphy's law in action :-)
-> 
-> Ah, sorry, no, my fault, it's in my usb.git tree and hasn't been sent to
-> Linus yet, that will happen later this week.  It is also in the
-> linux-next tree if you want to look there.
+> The sisusbvga driver just assumes that the endpoints it uses will be
+> present, without checking.  I don't know anything about this driver, so
+> the fix below may not be entirely correct.
 
-No problem.
+Hi,
 
-I have applied the patch manually, downloaded from here:
-https://lore.kernel.org/lkml/20230327095019.1017159-1-mathias.nyman@linux.intel.com/
+this patch by itself looks good to me.
 
-It's no big deal, I have somehow made it work.
+But the need for it is problematic. Do we have any vendor specific driver
+that could get away without an equivalent to this patch without showing
+an equivalent bug? If so, why do we have a generic matching code, although
+it is always insufficient?
 
-Eventually it will propagate to the vanilla build Torvalds tree.
+What is the purpose of a generic binding interface in sysfs if every probe()
+method blocks it? Allowing a generic probe looks like a misdesign under these
+circumstances. You'd really want to add IDs to drivers.
 
-It's good that it's closed, I waited five months to fix this, so a day or week is
-no big difference ... Great experience assisting your team.
-
-Now I have to make something for my day job.
-
-Regards,
-Mirsad
-
--- 
-Mirsad Todorovac
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb
-Republic of Croatia, the European Union
-
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
+	Regards
+		Oliver
 
