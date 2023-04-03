@@ -2,152 +2,239 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A316D4193
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Apr 2023 12:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E886D41B7
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Apr 2023 12:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbjDCKJ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Apr 2023 06:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
+        id S232119AbjDCKRq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Apr 2023 06:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbjDCKJY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Apr 2023 06:09:24 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2083.outbound.protection.outlook.com [40.107.105.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FC7213A;
-        Mon,  3 Apr 2023 03:09:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dcnQd8c/QbWvLVVASTThZlhTM3A17IXfF6U4I3jRE2Y9HOb9ZrFvyVnkz/rgeyRZvcBqBf+RHySZfAp/Mx4e1O8ttD3JgmMBKM3SxuD0KuDD41I5hNHEPzdT1dBF41SOm7YD6wVOlrVPK2S9YTnwxygfQcY207yC9bDpe57eQhNu8N6dPzz73LhNDOlJm5tf/2fBnxNI+Qu/rRWnkJF+fJvwFJV3HBgcDG6bC3UFcdKHis7WLzTzGx8A12MdeekUbbfschpTHBdMzw8GXVZowDmNxmIryVtbVf/BqElArBLl64HGjBmlOX3zq7tZiORm64FjPpDkO49jEBjji2/FAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cqBYy8+9RVsf+te3aMsiLo6/GEMh97TxhPMb0ywJ42Y=;
- b=g8LGMel4JRjtYALMP2awasyUSNXSjJ9af0nbqJ6ODxCre5IQpaTqzM2Rpg64BnuEiN7bXqd/6sBM/yZ0804qQDAsatnEwVC864vq8g++nZ4XvOJyjkm6lX5AIi2OfmroS+DfD7R73x56IFtZ/FusPuQTuUWT99KvH6o2UBTIgg+H/y0ToRF1itbXszeoRFFnZI8x6FLpGWrNJrGcD/RqPPY9pslSRBoWyQaFxDXG6j4EP9tHe1x6gK8qIcBnE8txLkatVRtjeokmbWYryFvneNrvt1wWETMHRlUPwAjy9ya8fZjosKRcEOOtAnwf1VkpSdGaW6dOjUYAQ4XTdBRWHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cqBYy8+9RVsf+te3aMsiLo6/GEMh97TxhPMb0ywJ42Y=;
- b=YA8dbKOHTJtDNyQ+2qoCAhi6wV1yMMAZgJdYliKbggVjZyGF4NYMYr+BNBMpiT5HaO6t9nyAW/adKPt0R7v1AigIgkB/bY5fz/qOcTPVzsEJW903nzFXVWQvt20JBGMrZZUiDRAUUMzbl7kIFShA072aOjuW8MRYibsxyMGLY5HNnUHy1SfgIDmySekWgz3m37g+T5GzxoYOLjUETbeSmNrL3AEYVSw3/W9UXFgGoRwCbSe+Sh5qJGLqkvpiBmFFXRhFG5R7NqTNro16xFHrWIRTbMj5JUh4j1zlHiDcSoag/BXt12ZL7BvKkBNcHcznhXPOsgFAfm8KG/8f1psiBg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by GVXPR04MB10071.eurprd04.prod.outlook.com (2603:10a6:150:11a::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.30; Mon, 3 Apr
- 2023 10:09:20 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::74bd:991c:527d:aa61]) by VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::74bd:991c:527d:aa61%9]) with mapi id 15.20.6254.033; Mon, 3 Apr 2023
- 10:09:20 +0000
-Message-ID: <28ec4e65-647f-2567-fb7d-f656940d4e43@suse.com>
-Date:   Mon, 3 Apr 2023 12:09:13 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: issues with cdc ncm host class driver
-Content-Language: en-US
-To:     "Purohit, Kaushal" <kaushal.purohit@ti.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <da37bb0d43de465185c10aad9924f265@ti.com>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <da37bb0d43de465185c10aad9924f265@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0136.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:96::10) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+        with ESMTP id S231898AbjDCKRp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Apr 2023 06:17:45 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B26728D
+        for <linux-usb@vger.kernel.org>; Mon,  3 Apr 2023 03:17:41 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id c29so37390241lfv.3
+        for <linux-usb@vger.kernel.org>; Mon, 03 Apr 2023 03:17:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680517060;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CYWunT6ljLivd4wOmJltu2pTDnUfXFoW1kvmT3KC1QE=;
+        b=CJvXvyFr0yjtxSqivXbkpCcvc0H/CT5Eonky3l6Mk2azf7riTYbT0oGepNmOI5QSO2
+         tvM80d2CMcceuNCXKmGgPLz8IRukbwQe1e31W0LUXMvs6giQbKJvWRqO5BtHwA+Np/uq
+         grWXum+E2Enovwah7JyDoAn5cKkG6x5kMNLSXezWYvF8p2fewdS1idyv1c9h8ssYOo5e
+         hysZIAcY33b8LZMGAmwNsEOz81sxCq0IRvoKX3XcgA9/4uIv8l85EeX7Xrk07v3qY2Fg
+         t4kM9anM315HOmrHtSAifarscYiTw2qNpyLUzZ+GNMLLB7q/QyFrJYyfAFL3D2kxWlts
+         kx3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680517060;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CYWunT6ljLivd4wOmJltu2pTDnUfXFoW1kvmT3KC1QE=;
+        b=ODRjFnkW2XyadX7oa+J9DFAHQV/xPJzyR7/wsMlM2uK1KFoxVFwSOkZ98gyuB+Rh2K
+         Rx6AJ7SBd0LC7kRbxv3dUQF9QF6R7BNxvmpmuVhukK+sWvgZqTEw1cy9r4VyfFwwGthF
+         G5eAfz51Cl/8C3Qts2IDxNebol5hhx3mytdLI64fcIQcmsZYbh3lTrd+L+263rIuuvGk
+         8BqVElUzotC4r46doAuJfSX9Iw1MLnhkblB5gXWK2yoQpdu81lP0Ivu9NXjrKwZB0Ajn
+         AkZ3NqZP6t4SsA79lMi/PWQDFvCFoD2EU5b6x7vpekHYPa5OAfHBRiaAHi0pZ3rZEweI
+         iaKw==
+X-Gm-Message-State: AAQBX9edbaotqTRHm3LYcaDPsd6uc5rnvGa5T6gq3FvQ0oIp2Ti6Of09
+        gFEVQ0wkkaLv8ak1uzqauyo09Q==
+X-Google-Smtp-Source: AKy350YJmY7LxwUOQLiwMFFgX8lclMVAm4rfogfN3uFeeeJtrG3sPerJemo+C2+/Lq4iTju333wZBw==
+X-Received: by 2002:a05:6512:4dd:b0:4eb:c24:2066 with SMTP id w29-20020a05651204dd00b004eb0c242066mr7869572lfq.68.1680517060196;
+        Mon, 03 Apr 2023 03:17:40 -0700 (PDT)
+Received: from [192.168.1.101] (abxj135.neoplus.adsl.tpnet.pl. [83.9.3.135])
+        by smtp.gmail.com with ESMTPSA id u26-20020ac2519a000000b004e8483bff82sm1709319lfi.271.2023.04.03.03.17.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 03:17:39 -0700 (PDT)
+Message-ID: <97316d33-29b9-700f-8766-df538b133f35@linaro.org>
+Date:   Mon, 3 Apr 2023 12:17:38 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|GVXPR04MB10071:EE_
-X-MS-Office365-Filtering-Correlation-Id: a650da2d-b676-4874-bbe5-08db342b7c87
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uXccuJqktl/ZkbxKr5ykxslqeUzcQNwIes9RNoqxpIQzyJ9G2iT5glB69HlWGf7H64cXOZXkLlhiTf1MYh/3IwAe8tjFGfPTJD0zsyZxkEsZXvmss9I4Fj92k+JjFbWOmC/S1N0RmW+HDSP4/Vv+b/ulxEMbRoY7hg6Y1IodqRZjj3bdXj6gTM4fCK6XnfNms8Av5HqQFEej2ksJ6JkoNHA1vA3yVwFgRaAOQr2z4GQUvJ7E/F0FlmG3FNhNtH6kOg1iU0xLzLPRauyhqnJ/Ggt94L7YMoLfVTE0p/S251T+rw6R2MyU3UnDcJU3s2/1Q/iwDgTb2kOZ8vPFPttLPdVlCsMA4ZhAo0asHsD5V5r6YGjUcJe3Zv+8kXAro0dvR/fLGj1y6DBNqDfyNom2MhqPGy86wAMXnI9pwULLNejgiLWzfdDOdy/IgFYr4acBELFAUxGI+sNCQW0U/8+C1O98UQ0l1ApRAyQhP4PXURBSGvs6FDPoI1qsd5clbqd/aB70ZGe/GTr4eJd6ubjo71IreGZ4sVkNw4/LgTErDegclepnIBolgB3ng2s7iZdRUmcpMi6S+oe/gYp7SWXHyCCvpIXtHHMdD0x/173NAUCq7rAKR9C+u3s4DjNwq89Q+K9sInIXGgSOuG0V4b5Rpw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39860400002)(136003)(346002)(366004)(376002)(451199021)(31696002)(86362001)(36756003)(2906002)(31686004)(2616005)(53546011)(83380400001)(186003)(6506007)(6486002)(6666004)(6512007)(4326008)(8676002)(66476007)(478600001)(66556008)(66946007)(41300700001)(38100700002)(5660300002)(54906003)(110136005)(316002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cFNTWkxNWVhXTm1tTW9raUE4djhEODBmRGJyYTlEeFpHaWd6cTRWZjdaOGxM?=
- =?utf-8?B?NEFaM0VSSnBVTXJJVUdwViszZysyNTA1THhscjNjbjAyS21wQm9UazMzV2JE?=
- =?utf-8?B?cTh6eklJQ1lpUytjSFhBUjlpdWptYWFucGpYZVFYTUdzM2hiU3d3eUdVeTVP?=
- =?utf-8?B?aVd5MjdsbHp1c3dCUXh3aTZPWWgrRHpkakVEUDVkeFBQbWJpQVRiYWtnWW1S?=
- =?utf-8?B?MmZFbE5ybWdnSkJSOGI2OUNhRExPU1BMdEozLzMyVTU3Sjd1MFJTekp5UlRM?=
- =?utf-8?B?M0E0cjJYV1VEdVBra1pzdXZvWFd4cThINjhjSUlSd3l1cnJHUXpnUEdWMG9S?=
- =?utf-8?B?V0F6WmZlZ0tYUThwaUljaGZFaXZFMHFHUHNGK0RQc09VRWViWkRodGlFOERQ?=
- =?utf-8?B?UEJRODNkVE05TjZqMFJmSkFQZ0tXVm1ITnRRTE1WWitXcEVVYVlJWDZqUXhX?=
- =?utf-8?B?b0ZoRmNNV2c0UjUzYXBwZ3AwYTlITU9qLzdNOUVNVi9ZTjRzKzZDZ3lFSU8r?=
- =?utf-8?B?cWlwb0dCclZVZjMvQ29YRHNRSmV5TDJvTitDOXZsczVrTkh1ZzRMbG1HWW95?=
- =?utf-8?B?TXN1RFNkSmw0TWRvL3ZHMW1MQkFQd0MxeHVOQzZWbkh1Q2FRcmJsSnloMFox?=
- =?utf-8?B?bGEvNWJjU0lJN3pXTVFKTTJTUVpHL21tU2VKVVNJVWtFd09KRWkrT092T0th?=
- =?utf-8?B?dndwRUpDMkpsUDFVenltVjNOWnY5ZFFiYjlIdVZYMldONTBiMGREVWY5WW1m?=
- =?utf-8?B?REpDZGpyU25GNWNRZCtSSGoxdWdYb2RZNE5obFlxaDBGKzBHWm1XNk9SYkhL?=
- =?utf-8?B?VitCdzJpVUtLaE01aU5pY0lvWnNZaVA1OGdnU3BOdkpTSEdZWXNRQ1lNOHFK?=
- =?utf-8?B?UlZTNitZcGRKd0ErYnNWQXBIdG9mVG1UclI4MFdickh5OUpGbTQwcTJ6UnhT?=
- =?utf-8?B?MlpIWE9mdWt0R3d1OHYrRklRZ0NDT3lQQkhMMXUwSis3RTJ5Z2VoekFBSDFh?=
- =?utf-8?B?NFlmUC9oaHdzaFM0UmYzWjgyQjZWZzRqWFZmQUM0L0NpbmZYNmhDNFdUbHg5?=
- =?utf-8?B?a25pamR2dmZ6WmV1d04zSm5QcW1iT0t2QmhaOWxsMHZlMFl5SnArVGovYjls?=
- =?utf-8?B?YWlFNy9lVGVIM1FqM1NJMXhsRTk3ZFJjdkRySjZ2alU2bkRvckQ4T3ZQQ29X?=
- =?utf-8?B?dHcrWE5zcytLNmliUVppVVk3c1lQdVdXY0wrdkE4Q3J1VUVoVjZxSVd2VzBn?=
- =?utf-8?B?aHZkZjVqbDh5Vm9HTWJUT1hrNGd3WUd5bkdvUE4wR1ErY0ptaGVQTWlRSitL?=
- =?utf-8?B?aXFpbUF2MDlnZW9pVkJaOHg3NXFRMlUxbXRJZFVybzFwcTRuTWU4eS8xek9Z?=
- =?utf-8?B?bzN6c1pjLzNuMTRyTjRJQW5TMjJld3U1Q0crcHNxQnlPdUVqUXhDSUpmeEd2?=
- =?utf-8?B?WkkxTTF0MFJGNStuK2g4cXBlMDlzdEVZUzl3c29qT2RzQ3dzc0w5b2dSZmFr?=
- =?utf-8?B?aFMzL3BWUmQzcHpNV3FWcExNQjVPcnl2UllPQ0toU1ZUM29uRjBuUTg2RVFZ?=
- =?utf-8?B?SThKT1BJRC9oZWJRVlBaMzFjaHc1Q2VFSFZuM2tPc0xkdmYxNEc5ZVEwTHVu?=
- =?utf-8?B?Z1ZoUzVyRmZtMWxham54WjVTeTMxVGFYcjNmdG4yUEZkZ1ROeWticzNmU01l?=
- =?utf-8?B?d3U5M0ZPNjJBbXJBdHB4TUl4VjNtVzdWL3dRRG44OS9mOXluWStrZzUrTXRt?=
- =?utf-8?B?dVFiRXJ1UnAvRGJTWUNUVDk5WVYvdWpSOE1NaWJKL3BMcW9CdmxQc0I4K0Yz?=
- =?utf-8?B?a0R0WnhROE5wam9NbXVPZ1VrZUZxdVIxbGlFd1lzRDIxb1JlWjVSRktXck92?=
- =?utf-8?B?UGc5ckFoTk5MK0dkRlcybWJqdzlpaHNLeXg2Z3R4elM1S2JLRXRucDJrTUJ6?=
- =?utf-8?B?SHN3Q0prcUx4Witkc2xaMVo1bEhpbDU4Tk9YajJPa29RbWk2VU9EQjArcG5P?=
- =?utf-8?B?N1pjSWRaWlFYcWE4aC9VQTJ5Z3NPMkxnVC9tcThkZkh5SWJuVXhQSW9DS1ov?=
- =?utf-8?B?cTNjbVMzT2JENU9GemhrR0xvN2hIMkZndE5XTm5Wc1JqMnNzODAzQXVMb3A0?=
- =?utf-8?B?eDZ0TG1ISlZVL2x6TjhmdE96WnJaa0tsZDJrdndqS052ei8rZkp4S042OXNx?=
- =?utf-8?Q?JN7qamF6owfn74RozfVtGdfhrXramhwylK0UgKNQYplB?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a650da2d-b676-4874-bbe5-08db342b7c87
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 10:09:20.4607
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BPGPZy+ZxXlfbGXq6SXJKwsf4cqiAcSkgWxDqIxKvnqIZGqRqWFYUPUk8s0l57pdMSLCJdMMg2y1snMDklZ5Jg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB10071
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8350-nagara: Unify status
+ property placement
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20230321-topic-sagami_dp-v1-0-340c8bce4276@linaro.org>
+ <20230321-topic-sagami_dp-v1-4-340c8bce4276@linaro.org>
+ <i5tsdvn45peivo7tegmg3q4mhsz2ly2kfs64kezeykn2bbosd5@ugfqrjqumljd>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <i5tsdvn45peivo7tegmg3q4mhsz2ly2kfs64kezeykn2bbosd5@ugfqrjqumljd>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 03.04.23 08:14, Purohit, Kaushal wrote:
-> Hi,
+
+
+On 2.04.2023 17:19, Marijn Suijten wrote:
+> On 2023-03-21 23:12:31, Konrad Dybcio wrote:
 > 
+> When you get to resending this, change sm8350-nagara in the title to
+> sm8350-sagami :)
+Even I confuse them, they just look too alike! ;)
 
-Hi,
-
-> Referring to patch with commit ID (*e10dcb1b6ba714243ad5a35a11b91cc14103a9a9*).
+Konrad
 > 
-> This is a spec violation for CDC NCM class driver. Driver clearly says the significance of network capabilities. (snapshot below)
+> - Marijn
 > 
-> However, with the mentioned patch these values are disrespected and commands specific to these capabilities are sent from the host regardless of device' capabilities to handle them.
-
-Right. So for your device, the correct behavior would be to do
-nothing, wouldn't it? The packets would be delivered and the host
-needs to filter and discard unrequested packets.
-
-> Currently we are setting these bits to 0 indicating no capabilities on our device and still we observe that Host (Linux kernel host cdc driver) has been sending requests specific to these capabilities.
-> 
-> Please let me know if there is a better way to indicate host that device does not have these capabilities.
-
-no you are doing things as they are supposed to be done and
-the host is at fault. This kernel bug needs to be fixed.
-
-	Regards
-		Oliver
-
+>> As we're heading towards getting the status property last everywhere,
+>> take care of it for SM8350 SONY Sagami.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  .../boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 30 ++++++++++------------
+>>  1 file changed, 14 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+>> index b2baa81baf5e..95b1ba4ce470 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+>> @@ -189,8 +189,8 @@ vph_pwr: vph-pwr-regulator {
+>>  };
+>>  
+>>  &adsp {
+>> -	status = "okay";
+>>  	firmware-name = "qcom/sm8350/Sony/sagami/adsp.mbn";
+>> +	status = "okay";
+>>  };
+>>  
+>>  &apps_rsc {
+>> @@ -542,27 +542,27 @@ pmr735a_l7: ldo7 {
+>>  };
+>>  
+>>  &cdsp {
+>> -	status = "okay";
+>>  	firmware-name = "qcom/sm8350/Sony/sagami/cdsp.mbn";
+>> +	status = "okay";
+>>  };
+>>  
+>>  &i2c1 {
+>> -	status = "okay";
+>>  	clock-frequency = <1000000>;
+>> +	status = "okay";
+>>  
+>>  	/* Some subset of SONY IMX663 camera sensor @ 38 */
+>>  };
+>>  
+>>  &i2c4 {
+>> -	status = "okay";
+>>  	clock-frequency = <400000>;
+>> +	status = "okay";
+>>  
+>>  	/* Samsung Touchscreen (needs I2C GPI DMA) @ 48 */
+>>  };
+>>  
+>>  &i2c11 {
+>> -	status = "okay";
+>>  	clock-frequency = <1000000>;
+>> +	status = "okay";
+>>  
+>>  	cs35l41_l: speaker-amp@40 {
+>>  		compatible = "cirrus,cs35l41";
+>> @@ -596,31 +596,31 @@ cs35l41_r: speaker-amp@41 {
+>>  };
+>>  
+>>  &i2c12 {
+>> -	status = "okay";
+>>  	/* Clock frequency was not specified downstream, let's park it to 100 KHz */
+>>  	clock-frequency = <100000>;
+>> +	status = "okay";
+>>  
+>>  	/* AMS TCS3490 RGB+IR color sensor @ 72 */
+>>  };
+>>  
+>>  &i2c13 {
+>> -	status = "okay";
+>>  	/* Clock frequency was not specified downstream, let's park it to 100 KHz */
+>>  	clock-frequency = <100000>;
+>> +	status = "okay";
+>>  
+>>  	/* Qualcomm PM8008i/PM8008j (?) @ 8, 9, c, d */
+>>  };
+>>  
+>>  &i2c15 {
+>> -	status = "okay";
+>>  	clock-frequency = <400000>;
+>> +	status = "okay";
+>>  
+>>  	/* NXP SN1X0 NFC @ 28 */
+>>  };
+>>  
+>>  &i2c17 {
+>> -	status = "okay";
+>>  	clock-frequency = <1000000>;
+>> +	status = "okay";
+>>  
+>>  	/* Cirrus Logic CS40L25A boosted haptics driver @ 40 */
+>>  };
+>> @@ -652,8 +652,8 @@ mdss_dp_altmode: endpoint {
+>>  };
+>>  
+>>  &mpss {
+>> -	status = "okay";
+>>  	firmware-name = "qcom/sm8350/Sony/sagami/modem.mbn";
+>> +	status = "okay";
+>>  };
+>>  
+>>  &pm8350_gpios {
+>> @@ -719,8 +719,8 @@ &pon_pwrkey {
+>>  };
+>>  
+>>  &pon_resin {
+>> -	status = "okay";
+>>  	linux,code = <KEY_VOLUMEUP>;
+>> +	status = "okay";
+>>  };
+>>  
+>>  &qupv3_id_0 {
+>> @@ -748,8 +748,8 @@ &sdhc_2 {
+>>  };
+>>  
+>>  &slpi {
+>> -	status = "okay";
+>>  	firmware-name = "qcom/sm8350/Sony/sagami/slpi.mbn";
+>> +	status = "okay";
+>>  };
+>>  
+>>  &spi14 {
+>> @@ -1038,16 +1038,14 @@ usb_1_dwc3_ss: endpoint {
+>>  };
+>>  
+>>  &usb_1_hsphy {
+>> -	status = "okay";
+>> -
+>>  	vdda-pll-supply = <&pm8350_l5>;
+>>  	vdda18-supply = <&pm8350c_l1>;
+>>  	vdda33-supply = <&pm8350_l2>;
+>> +	status = "okay";
+>>  };
+>>  
+>>  &usb_1_qmpphy {
+>> -	status = "okay";
+>> -
+>>  	vdda-phy-supply = <&pm8350_l6>;
+>>  	vdda-pll-supply = <&pm8350_l1>;
+>> +	status = "okay";
+>>  };
+>>
+>> -- 
+>> 2.40.0
+>>
