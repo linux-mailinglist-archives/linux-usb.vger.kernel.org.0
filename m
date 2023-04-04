@@ -2,104 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 147476D61CB
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Apr 2023 15:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7614A6D6397
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Apr 2023 15:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234786AbjDDNCc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Apr 2023 09:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
+        id S234453AbjDDNny (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Apr 2023 09:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234694AbjDDNCY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Apr 2023 09:02:24 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A648635AC
-        for <linux-usb@vger.kernel.org>; Tue,  4 Apr 2023 06:02:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680613343; x=1712149343;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=jl26p0uLy5pGyQg+PBiK7/Htqnr8oujJZAhkydb1DXw=;
-  b=JBBOZJ6S0YEjFeJvCKOVX0eXto3dVa2eUe3EUE6o4L01nSRcN7BL6i6c
-   ZWecVEZO8bYHPiKRY09iQw+ykLyh0lH7bFKOzKe+dgImZ8qPHSFZ8TDth
-   glgIQXtfEY1dfn1jZ2D/FxCSb9zVL/KgFLRadScUfP8S1vyj7k8mBXiQn
-   4+0du4Tp8WTfH1WuOvFueHpaJ5h0YrNqf3ezti3QjC6eHw7c7zrOvi7Gy
-   FmVemrzWxRo5dpuH83ZPBNKX+PQnZ2SA+FxkQj2x6rL4tw5jq5/Y1jS8R
-   rCa9RjvtaH9bla0JxCEvWeuNRnKAXSbbHgAkhOMlsY5bT6tIbLmvWjNrM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="339660955"
-X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="339660955"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 06:02:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="829969606"
-X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="829969606"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 04 Apr 2023 06:02:19 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 04 Apr 2023 16:02:18 +0300
-Date:   Tue, 4 Apr 2023 16:02:18 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: introduce read_explicit operation
-Message-ID: <ZCwf2rvsoFjH5D91@kuha.fi.intel.com>
-References: <20230120233920.752245-1-samuel@cavoj.net>
- <Y8uRnc3Cxb1ADad6@kroah.com>
- <Y8+/Lgp7fWaxFsri@kuha.fi.intel.com>
- <ZAi1KO+WUs+9nNOn@kuha.fi.intel.com>
- <ZBMUsweZjfqxZJdc@kuha.fi.intel.com>
- <c5223adc99dd9bf849071e8fdfed4bb1@cavoj.net>
- <3ae633095973c747baea1a23f3b7f6f4@cavoj.net>
- <ZCWXZ1KwzYeSdJhv@kuha.fi.intel.com>
- <3525bf85c78a5805c4b4bff42dd49c39@cavoj.net>
+        with ESMTP id S235253AbjDDNnw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Apr 2023 09:43:52 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D324224;
+        Tue,  4 Apr 2023 06:43:52 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-17ab3a48158so34596069fac.1;
+        Tue, 04 Apr 2023 06:43:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680615831;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tODEIpAwPnvNGUawqsylxasQ6Mk6tuNFhtn3yBSRNT0=;
+        b=pqzukMi/DzJW7M6VufoRZvtIoUijH8qdL2E8I97eSAzjFtQUhqDlc+pM8NVvhu/jWB
+         CTgrG5yl+oIZFin3EJyjbKp2bJSvWS5NxIxrFy7H/7jwThIBHu/tMCjD8bOSRxeHmR7z
+         iuzVbsqD+M51rjPdzSKbDFEbHOOaAbtqYNS7myEda2Pe+ijWqUULWMQ39V9lQ9lLxDQD
+         gJcHNafqnRZnjWOedKMtJ6a48RwQuzzWKlT6Ft3LCeMoVK5P47QOids6STJvBBIx/9+2
+         Ujkqya1VYstE5IenS4zxdZ/y09seDhiz1mi0sjIaNuCSQTz92iVB3KW9XbXK/6umw2Lt
+         Lx4A==
+X-Gm-Message-State: AAQBX9cx23k95nldPn1vvfFpnBjzZkcD0X2w5ptcMkdbHkT6yTHlbPPk
+        JaSsDnyyA18mm+EQEoqpdA==
+X-Google-Smtp-Source: AKy350bsxMNesEfeufKU5Vad6zN3YBIROdhHPyyDXnruiII2TswWfiDxkGwWW7TE7zwGEZ5lANV1XQ==
+X-Received: by 2002:a05:6870:f223:b0:177:80ce:497f with SMTP id t35-20020a056870f22300b0017780ce497fmr1909308oao.7.1680615831247;
+        Tue, 04 Apr 2023 06:43:51 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id yg21-20020a05687c009500b0016a37572d17sm4853705oab.2.2023.04.04.06.43.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 06:43:50 -0700 (PDT)
+Received: (nullmailer pid 3785276 invoked by uid 1000);
+        Tue, 04 Apr 2023 13:43:50 -0000
+Date:   Tue, 4 Apr 2023 08:43:50 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Eddie Hung <eddie.hung@mediatek.com>,
+        Tianping Fang <tianping.fang@mediatek.com>
+Subject: Re: [PATCH 6/7] dt-bindings: usb: mtu3: add two optional clocks
+Message-ID: <20230404134350.GA3782583-robh@kernel.org>
+References: <20230403025230.25035-1-chunfeng.yun@mediatek.com>
+ <20230403025230.25035-6-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3525bf85c78a5805c4b4bff42dd49c39@cavoj.net>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230403025230.25035-6-chunfeng.yun@mediatek.com>
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Sam,
-
-On Sat, Apr 01, 2023 at 08:06:57PM +0200, Samuel Čavoj wrote:
-> > 
-> > Okay... Did you see those errors with your original patch?
+On Mon, Apr 03, 2023 at 10:52:29AM +0800, Chunfeng Yun wrote:
+> Add optional clock 'xhci_ck' and 'frmcnt_ck';
+> Add optional property "assigned-clock" and "assigned-clock-parents";
 > 
-> I'm pretty sure that it's the same, yeah. The specific error is
-> one (or a seemingly random sequence) of the following:
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+>  .../devicetree/bindings/usb/mediatek,mtu3.yaml       | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
-> - con2: failed to register partner alt modes (-22)
-> - con2: failed to register partner alt modes (-5)
-> - GET_CURRENT_CAM command failed (also caused by a -22 from exec_command)
-> 
-> Doesn't occur with nothing or only a charger plugged in. Once I plug
-> a USB-C to DP adapter or a cheap USB-C hub (with an internal DP->HDMI
-> converter, USB3 hub and GbE in one of the hub ports), the errors
-> randomly show up when reloading the module or when plugging in once
-> already loaded. Not consistent at all.
-> 
-> So seems to be alt-mode related. Will probably need some more
-> investigation on my part, unless you've got any ideas off the
-> bat.
+> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+> index d2655173e108..50c15f2ce14d 100644
+> --- a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+> @@ -66,6 +66,8 @@ properties:
+>        - description: Reference clock used by low power mode etc
+>        - description: Mcu bus clock for register access
+>        - description: DMA bus clock for data transfer
+> +      - description: DRD controller clock
+> +      - description: Frame count clock
+>  
+>    clock-names:
+>      minItems: 1
+> @@ -74,6 +76,16 @@ properties:
+>        - const: ref_ck
+>        - const: mcu_ck
+>        - const: dma_ck
+> +      - const: xhci_ck
+> +      - const: frmcnt_ck
+> +
+> +  assigned-clocks:
+> +    minItems: 1
+> +    maxItems: 6
+> +
+> +  assigned-clock-parents:
+> +    minItems: 1
+> +    maxItems: 6
 
-The alt mode stuff is very annoying with UCSI. I think Windows is only
-interested in the connector alt modes. With the partner alt modes the
-responses differ on almost every system, and several platforms
-actually never return anything when you request the partner alt modes
-with GET_ALTERNATE_MODES.
+You don't need to include assigned-clocks properties. They are 
+implicitly allowed (when clocks is present).
 
-But I think we can move forward with this fix. I'll send it tomorrow.
-
-Br,
-
--- 
-heikki
+Rob
