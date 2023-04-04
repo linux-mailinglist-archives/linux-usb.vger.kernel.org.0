@@ -2,441 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559B46D5C8F
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Apr 2023 12:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1D96D5D72
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Apr 2023 12:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233920AbjDDKBy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Apr 2023 06:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
+        id S233954AbjDDK1p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Apr 2023 06:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233319AbjDDKBx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Apr 2023 06:01:53 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C74B1BD6
-        for <linux-usb@vger.kernel.org>; Tue,  4 Apr 2023 03:01:51 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3349fuYj016187;
-        Tue, 4 Apr 2023 10:01:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=TEc5c6bXeAkKavsDqE7vQweXHC0/b1D8m/G4DJ/fmKc=;
- b=bf1G21Ccre8OS8wnrZ3QTEThi/DedXMv+UxxpFTB1iy/jITMHCqZ0lqRQezo4tWEpDTc
- 8Av0gMd8ufLODG+oFw6vVUh5+BtSW9SSAanRJbvepZpNi/J95wvdCvu6Y6Sxh7xETY2l
- Nls7CRy5jtLCUDmIEd8WAUbpUQGbByJeehbf3VEQbImGbLeiVyuAB+nsSb9ygUxsZqaw
- x2IlehkYjDuPcw6AwO2fjlBZwbgUsRK3vm72O5XjlpOASq484dUoakAyrUEQy0UeYNOC
- EF5T+aBSS2enUOVvHaZ+fROUFMJZ67cU32B8KbDH126EQzCLruYvZg2gEJhlBRroYubM gw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3prg9bg6ct-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Apr 2023 10:01:28 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 334A1AeL000326
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 4 Apr 2023 10:01:10 GMT
-Received: from hu-ugoswami-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 4 Apr 2023 03:01:07 -0700
-From:   Udipto Goswami <quic_ugoswami@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S233184AbjDDK1o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Apr 2023 06:27:44 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2041.outbound.protection.outlook.com [40.107.21.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C238F
+        for <linux-usb@vger.kernel.org>; Tue,  4 Apr 2023 03:27:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ai1YXQORCq6zYtEV42zLl/ohpovQjaG7e38MjzxDbuJAoStkY4Kzq3A/1/PBkdr3nZ6GE/RY0OeoenbuaFMOkB/62hjCIgbJSTvbZZ635EZ9AbuTilNN98fS59PGPhkCnFJxPGKVdcAec11mL/p8jkw4ARXOOYxANCADqVpB5rkdlGpv6wKwlu5ck2MdG2l8WsIcCp+soC26OcsWdXmB9Pplt94EbWpQAzQjvndObMpx5h7BLExSoEgEinsoIB9yUTF9Q0myfM2umCls8k9gaqlihI7w1SeWNHYvqmNtiI6PXlAf8EHH5PsqiZPCA86wdB/2sH51IbsSHNLUHONGCw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=csO66lN4Df5v9swmF6Q8v1v+tQjai6flzyoXJ5rtndw=;
+ b=TQnW2wpAIWC7v9WXyR2TGhpfAQdjexyw1Q7Fg8NOS9dQgCFAY+pV7t1qi8huunsGZ/3RDqte9OMOXHvytIbsgbOqh9yxSmZX2DjPUhlxxrWfOri4bQIQSrY9qe92/8xJy2KT+bRpra2Df5uOB/+sGdVKgga28AWckgtBQyNV6SDp6soL9EeJUVxCqyNQrQR6Tz7Lz67rwny+G8N/V5mjQlhMSrS3Rj+/oULFMhUZoEhd/cY/a4547A900w9LcHX1hNhvLXTeJilyuqlApgQ7Lfxgsoh3h+KJjYG87GlZMZl4aUz3+KFX30OxAwdU82vuAaGxIiLgolTV6ijkKMkFsA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=csO66lN4Df5v9swmF6Q8v1v+tQjai6flzyoXJ5rtndw=;
+ b=e6B3oWcfm8ItL9V+Lwp6k5EOj1reAniAyk8wK4RJDWPaiheMi7MKo5MARLlbiYnNeswdeQvgvxIStU32Yf+fwYfOBuA0sQwnZn/+OlXuYrL2agHd5gxpUj+K+NMPV9E8LNLIXcYaaygjUIUkxm7boL/HACxjDJVfNP4sv9Uq2gUpy90qco09ebOO/FHDgxZ0wErtRDE4arZgcVDiPuTbaJYe+zWoQMTuPlqzLonqkK2vTmitV0SIvr2wUKThVAeTbjc/AW9I9sVJzq8qZ1rh5BEE6DE9rRde1dnyo5InGVngCHEyb4ZfCNeVIIil40KpR7oLIleopOFkoesw2tHsOA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by AM9PR04MB8905.eurprd04.prod.outlook.com (2603:10a6:20b:408::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Tue, 4 Apr
+ 2023 10:27:39 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::74bd:991c:527d:aa61]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::74bd:991c:527d:aa61%9]) with mapi id 15.20.6254.035; Tue, 4 Apr 2023
+ 10:27:38 +0000
+Message-ID: <25479ae0-e3d0-3add-d25d-d32da46f807e@suse.com>
+Date:   Tue, 4 Apr 2023 12:27:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4] usb: dwc3: debugfs: Prevent any register access when
+ devices
+Content-Language: en-US
+To:     Udipto Goswami <quic_ugoswami@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mathias Nyman <mathias.nyman@intel.com>
-CC:     Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        <linux-usb@vger.kernel.org>, Oliver Neukum <oneukum@suse.com>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>
-Subject: [PATCH v4] usb: dwc3: debugfs: Prevent any register access when devices
-Date:   Tue, 4 Apr 2023 15:30:55 +0530
-Message-ID: <20230404100055.28100-1-quic_ugoswami@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+Cc:     Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>, linux-usb@vger.kernel.org,
+        Oliver Neukum <oneukum@suse.com>
+References: <20230404100055.28100-1-quic_ugoswami@quicinc.com>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20230404100055.28100-1-quic_ugoswami@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0186.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9f::20) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: pbaS-e7g_UWh6KiG321x04NVt-4508O2
-X-Proofpoint-ORIG-GUID: pbaS-e7g_UWh6KiG321x04NVt-4508O2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-04_03,2023-04-03_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- lowpriorityscore=0 mlxlogscore=848 priorityscore=1501 impostorscore=0
- bulkscore=0 mlxscore=0 malwarescore=0 spamscore=0 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304040092
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|AM9PR04MB8905:EE_
+X-MS-Office365-Filtering-Correlation-Id: c909abdc-f1e1-479c-34e2-08db34f736e2
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8pn0Pnhno9nbfVEXg6XPKqvlpKPpspiTQv0nqNCdCxybyMcb2IJ/1qVS4oETMl9P3U+K6Zl2ltWNsud7grFZ6SZJDm4Q7hYbuhMwPtCFI6RthzjnU8jvo4KsmxmPNmp+fAEyD/JVG/0bkEFBL+labD4BMA2HYjeYVlKCCnWomAxda/BKZ1tVq9wm+OLKvE1SS2j+xIa7mwVGqzTcJbUIrDMkE+9FuPGX3b6PeeDpWEq+FtD4L+43cLMHgi2YPK6MJFQ8KnmEmyK200lFY591mFk0nd77P0ByPwJNKpOmjKXrvffkenmtoPXycKPsd/QUtu7iXxXKNlOyFXzUFYYHZR8BRat8IO62QqYy4Q7OpvhEWdezq33o9gvMwXb3Bm6OsxIxzZ4K7E76acy8tb4SUYi6Uje5rILHDsG+nNeqqE4Co9GdMgpKzZKK4ffCzH9WbCXlDKZNN90lullOyXuNDlPe77rQ3h0ZIxTqAmtAnVNY+CzECqlhmuebYoQt7H/Jhx6Ch2irFVvx2aK+cfKlglwuZCOa8TX75FXod0JC6gHCXsoHH+uDrResIYJkM0rpO58md7R57/DhAyVUC6nyqDmupJQoN/8VcE0NNFIO0hnhmw8WyXOAIEyOYeUJew2h9WdgPqsYxpdQMMx29nMyTQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(39860400002)(376002)(396003)(366004)(346002)(451199021)(66946007)(6486002)(6506007)(6512007)(6666004)(53546011)(107886003)(83380400001)(2616005)(66556008)(66476007)(38100700002)(41300700001)(31686004)(186003)(54906003)(110136005)(316002)(478600001)(2906002)(31696002)(86362001)(4744005)(4326008)(8676002)(5660300002)(36756003)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YmFEcmtXbFVxUEFVYkRUVktINDF5K24zbUMxaERaN05KZ0ZHeStSakplbFR5?=
+ =?utf-8?B?NXRpQzlFMTJkYUpTcDk3c2lkNTBxKzZ2d2x3bXppZFpYRi8vOEJ5VkVVNlZE?=
+ =?utf-8?B?V2ZwUGtKWHFqQUNwY1ovd0ZCaEZNLy9saVVZS0JVSFNFTlRxRUVLNHVvWTdM?=
+ =?utf-8?B?YjVRcUpZcndKVnJGeTBhb0QzZWZMc25JVEhzc0UxdkNJQVlMOVY1RCtVRUhh?=
+ =?utf-8?B?UWM2UE55WHVUSXdFSm1adXhDTnVKQXQzRmliWXRDN2llL0hZdXdRdGZsV0Q0?=
+ =?utf-8?B?VzJQV2ZFVktBSFBvSGxEaDYvc1dUS2UyM0FXLzI0eFNhdE14a2lqZHBZMWZS?=
+ =?utf-8?B?YWxMWW9WZW1PZWxBcmg1UkpSMWVuT0dDUXZDNkxaeHVkSG5OOE1iNUFxZVpY?=
+ =?utf-8?B?bWZzUGJBVi9nV29zbGQ1ZGpIQnpRU3NnNDdDVjdNV1EyaGtkM1hvODl6cHFl?=
+ =?utf-8?B?aVNneXR6MnhOL3JKaElBclFXbFkxQWtzMWdWWkVLcFgxTkZiSWdRcnZlNnZG?=
+ =?utf-8?B?Mi9RWUFMVC9XZitqTGh3MTd3eHFYa3N4US9UelBtRHBScXRZaGROeWVnc3JU?=
+ =?utf-8?B?cXB5WERNeEQ5TVFacmhMbTdoMmxmdmRFRmRwZGZQeEpNd1NpMjFjUUZia0Z5?=
+ =?utf-8?B?bjlmOEZndU1tMVBRZUh6cGVJc3poUG5Mb3pSZCtsQmtHWWN1UmZCMzRSV2d6?=
+ =?utf-8?B?Tis3K1A4Rk4xZjBWWEJUbXE2ckZGcExZa2YyWlRPQXhTSUZVeTU0cFFkVzFN?=
+ =?utf-8?B?SmV4a2htNWRWTUkvMFRVSG1ubXJsMEZJclFndmJyV250elFzWi9WckNqaXhO?=
+ =?utf-8?B?bEVVck1ibUxBMXJLcTV4Y29OQ0UwYk95d2x3cXVxSjczbEhWY0FKZWd1R3ZT?=
+ =?utf-8?B?WDZRcVp6bXVkOGptUkU5Y3d3Mi8wcmdDMk5jNFJlcSs4YjF2Tm5USDRWSnd5?=
+ =?utf-8?B?NXJCL0d1QmVrL09GZnc2Qks5STJaM29PZS9EVmJhMFh4eTA3MUUyV2JSbGll?=
+ =?utf-8?B?bXlKb0lyZ2FlOHR5ZWNYaUpIVUFadjk1dDNnZWlOYVdQWE0yblVwTDNNUTBx?=
+ =?utf-8?B?NHZRZ09IeThJY0o1STZrR2x4SE9VRzBsaDlSWTBTWkFmbE9KL04zUU55TjVs?=
+ =?utf-8?B?MjhJTHloVkU2RkJqNkZXYktpK3hleUQ3S1NVc3Q3Y2J4RE5LcTQxdE53N2s4?=
+ =?utf-8?B?WFE4WEU4NUdGTjhHZzRpSlBFdXJBdXY5MmZHOEViY3FVN3lQS2h3cE92cXZq?=
+ =?utf-8?B?WGc0dC9mVkZSeTZpMWxleHdlT1ZiRUxHZmJMTU16cmhwN3U3RXlxWWZaR0Fs?=
+ =?utf-8?B?OXNvc2dLSmJmTVdLZkd5OElSOUI2RmZ5R3duanhpYVlJZVd3cW91cUJla0pO?=
+ =?utf-8?B?YTA4emxJV1RWdFlkSk5VVVhEY1RNTW8xYWV4eGFxY08xa2gzS3Y3Y0hkSnNm?=
+ =?utf-8?B?OFdPa201dFFqdEVya3VHdjBOekE0dnVncktvN2lFaHZ2NG0yb1ZJOEREUzh1?=
+ =?utf-8?B?MzdrYUlYdDA0d1NOQW8xRjQvL3g3TWpSQjBGTGRlcDVQVFJ0ZDN2WGtlOVBE?=
+ =?utf-8?B?ejVqZlgvM3FzS0paQ0Nsa1IyY3p1WVVXOHVmNDRkLzliZFo5MnlaMGYxVXZp?=
+ =?utf-8?B?VWdCVVBHMzd4NlJZWFFYVERPQUt1Q1lKcmhGR1FzQ0pQdWNHOFArK2JNRGRI?=
+ =?utf-8?B?K2NWK1dKemhuWUlyOEFod0Rsazd5Q0E0azI2K2J1alVXZm9MVWdBYVlSS04x?=
+ =?utf-8?B?S0dQaXZpUEVsQnJkQ2ljVEdwQ1ViRVBmc1kyOHJyQVJWQlZzb1p3bkdIQ2ZX?=
+ =?utf-8?B?YlVJT2taa1pTcDZSQ3NFb1VnRkcxdVNjcFh5YzJZNlp3aEI4Rm9rYzJqaDdr?=
+ =?utf-8?B?MFZBSEVWMXgrVnIyMWdnZGNyTG1GYS94aGltbm1UVVVjZkFXZ2toelpucHU4?=
+ =?utf-8?B?STdZaUYyWnFXNTh4UUd3SjdKMnVsUlZZeVZXVStDSUlRQ0t4Zk8wU2NFUWdB?=
+ =?utf-8?B?WkdpN2hjSTE0bktvWGt5NDZzbS90SGM2WCsvbklKOFJSblZKT2tUa3UrUlRs?=
+ =?utf-8?B?djNrcTJtRmRnV3N5MTFmbjBBUTlvbEx4UHVtcW9jZHJraEVpVElUUjlRbUk0?=
+ =?utf-8?B?L3J2VDh0eTUvSUdZMDhLTzNTemJaQTJZZG9NUGRZL2t6U0lRdEplbXBIY2F3?=
+ =?utf-8?Q?2Ft1rUnepQbro41NSgiQc7vdm1EVPLN8+ykyVtYtXELa?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c909abdc-f1e1-479c-34e2-08db34f736e2
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2023 10:27:38.7296
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sMQwl6RFtiaGi+sYqmqFDp/G1iTzPozfthcwk6VOX2kqEUDLM1YEOCgdju3Lhoz4+cYm+y9jpLfiC2V+CDF9yw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8905
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When the dwc3 device is runtime suspended, various required clocks would
-get disabled and it is not guaranteed that access to any registers would
-work. Depending on the SoC glue, a register read could be as benign as
-returning 0 or be fatal enough to hang the system.
+On 04.04.23 12:00, Udipto Goswami wrote:
+> When the dwc3 device is runtime suspended, various required clocks would
+> get disabled and it is not guaranteed that access to any registers would
+> work. Depending on the SoC glue, a register read could be as benign as
+> returning 0 or be fatal enough to hang the system.
+> 
+> In order to prevent such scenarios of fatal errors, bail out of debugfs
+> function is dwc3 is suspended.
+> 
 
-In order to prevent such scenarios of fatal errors, bail out of debugfs
-function is dwc3 is suspended.
+Hi,
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
----
-v4: Introduced pm_runtime_get_if_in_use in order to make sure dwc3 isn't
-suspended while accessing the registers.
+those look nice, except that they are doing a lot of seq_printf() under
+a spinlock that is not needed.
 
- drivers/usb/dwc3/debugfs.c | 191 ++++++++++++++++++++++++++++++++-----
- 1 file changed, 169 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
-index 850df0e6bcab..e57cafb7da4b 100644
---- a/drivers/usb/dwc3/debugfs.c
-+++ b/drivers/usb/dwc3/debugfs.c
-@@ -543,13 +543,25 @@ static int dwc3_link_state_show(struct seq_file *s, void *unused)
- 	enum dwc3_link_state	state;
- 	u32			reg;
- 	u8			speed;
-+	int			ret = 0;
-+
-+	ret = pm_runtime_get_if_in_use(dwc->dev);
-+	/* check if pm runtime get fails, bail out early */
-+	if (ret < 0)
-+		goto err_nolock;
-+
-+	if (!ret) {
-+		ret = -EINVAL;
-+		dev_err(dwc->dev,
-+				"Invalid operation, DWC3 suspended!");
-+		goto err_nolock;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
- 	if (DWC3_GSTS_CURMOD(reg) != DWC3_GSTS_CURMOD_DEVICE) {
- 		seq_puts(s, "Not available\n");
--		spin_unlock_irqrestore(&dwc->lock, flags);
--		return 0;
-+		goto err;
- 	}
- 
- 	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
-@@ -559,9 +571,11 @@ static int dwc3_link_state_show(struct seq_file *s, void *unused)
- 	seq_printf(s, "%s\n", (speed >= DWC3_DSTS_SUPERSPEED) ?
- 		   dwc3_gadget_link_string(state) :
- 		   dwc3_gadget_hs_link_string(state));
-+err:
- 	spin_unlock_irqrestore(&dwc->lock, flags);
--
--	return 0;
-+	pm_runtime_put(dwc->dev);
-+err_nolock:
-+	return ret;
- }
- 
- static int dwc3_link_state_open(struct inode *inode, struct file *file)
-@@ -579,6 +593,20 @@ static ssize_t dwc3_link_state_write(struct file *file,
- 	char			buf[32];
- 	u32			reg;
- 	u8			speed;
-+	int			ret = 0;
-+
-+	ret = pm_runtime_get_if_in_use(dwc->dev);
-+	/* check if pm runtime get fails, bail out early */
-+	if (ret < 0)
-+		goto err_nolock;
-+
-+	if (!ret) {
-+		ret = -EINVAL;
-+		dev_err(dwc->dev,
-+				"Invalid operation, DWC3 suspended!");
-+		goto err_nolock;
-+	}
-+
- 
- 	if (copy_from_user(&buf, ubuf, min_t(size_t, sizeof(buf) - 1, count)))
- 		return -EFAULT;
-@@ -601,8 +629,8 @@ static ssize_t dwc3_link_state_write(struct file *file,
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
- 	if (DWC3_GSTS_CURMOD(reg) != DWC3_GSTS_CURMOD_DEVICE) {
--		spin_unlock_irqrestore(&dwc->lock, flags);
--		return -EINVAL;
-+		count = -EINVAL;
-+		goto err;
- 	}
- 
- 	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
-@@ -610,13 +638,15 @@ static ssize_t dwc3_link_state_write(struct file *file,
- 
- 	if (speed < DWC3_DSTS_SUPERSPEED &&
- 	    state != DWC3_LINK_STATE_RECOV) {
--		spin_unlock_irqrestore(&dwc->lock, flags);
--		return -EINVAL;
-+		count = -EINVAL;
-+		goto err;
- 	}
- 
- 	dwc3_gadget_set_link_state(dwc, state);
-+err:
- 	spin_unlock_irqrestore(&dwc->lock, flags);
--
-+	pm_runtime_put(dwc->dev);
-+err_nolock:
- 	return count;
- }
- 
-@@ -640,6 +670,19 @@ static int dwc3_tx_fifo_size_show(struct seq_file *s, void *unused)
- 	unsigned long		flags;
- 	u32			mdwidth;
- 	u32			val;
-+	int			ret = 0;
-+
-+	ret = pm_runtime_get_if_in_use(dwc->dev);
-+	/* check if pm runtime get fails, bail out early */
-+	if (ret < 0)
-+		goto err_nolock;
-+
-+	if (!ret) {
-+		ret = -EINVAL;
-+		dev_err(dwc->dev,
-+				"Invalid operation, DWC3 suspended!");
-+		goto err_nolock;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_TXFIFO);
-@@ -650,9 +693,11 @@ static int dwc3_tx_fifo_size_show(struct seq_file *s, void *unused)
- 	val *= mdwidth;
- 	val >>= 3;
- 	seq_printf(s, "%u\n", val);
--	spin_unlock_irqrestore(&dwc->lock, flags);
- 
--	return 0;
-+	spin_unlock_irqrestore(&dwc->lock, flags);
-+	pm_runtime_put(dwc->dev);
-+err_nolock:
-+	return ret;
- }
- 
- static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
-@@ -662,6 +707,19 @@ static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
- 	unsigned long		flags;
- 	u32			mdwidth;
- 	u32			val;
-+	int			ret = 0;
-+
-+	ret = pm_runtime_get_if_in_use(dwc->dev);
-+	/* check if pm runtime get fails, bail out early */
-+	if (ret < 0)
-+		goto err_nolock;
-+
-+	if (!ret) {
-+		ret = -EINVAL;
-+		dev_err(dwc->dev,
-+				"Invalid operation, DWC3 suspended!");
-+		goto err_nolock;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_RXFIFO);
-@@ -673,8 +731,9 @@ static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
- 	val >>= 3;
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
--
--	return 0;
-+	pm_runtime_put(dwc->dev);
-+err_nolock:
-+	return ret;
- }
- 
- static int dwc3_tx_request_queue_show(struct seq_file *s, void *unused)
-@@ -683,13 +742,27 @@ static int dwc3_tx_request_queue_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
- 	u32			val;
-+	int			ret = 0;
-+
-+	ret = pm_runtime_get_if_in_use(dwc->dev);
-+	/* check if pm runtime get fails, bail out early */
-+	if (ret < 0)
-+		goto err_nolock;
-+
-+	if (!ret) {
-+		ret = -EINVAL;
-+		dev_err(dwc->dev,
-+				"Invalid operation, DWC3 suspended!");
-+		goto err_nolock;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_TXREQQ);
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
--
--	return 0;
-+	pm_runtime_put(dwc->dev);
-+err_nolock:
-+	return ret;
- }
- 
- static int dwc3_rx_request_queue_show(struct seq_file *s, void *unused)
-@@ -698,13 +771,27 @@ static int dwc3_rx_request_queue_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
- 	u32			val;
-+	int			ret = 0;
-+
-+	ret = pm_runtime_get_if_in_use(dwc->dev);
-+	/* check if pm runtime get fails, bail out early */
-+	if (ret < 0)
-+		goto err_nolock;
-+
-+	if (!ret) {
-+		ret = -EINVAL;
-+		dev_err(dwc->dev,
-+				"Invalid operation, DWC3 suspended!");
-+		goto err_nolock;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_RXREQQ);
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
--
--	return 0;
-+	pm_runtime_put(dwc->dev);
-+err_nolock:
-+	return ret;
- }
- 
- static int dwc3_rx_info_queue_show(struct seq_file *s, void *unused)
-@@ -713,13 +800,28 @@ static int dwc3_rx_info_queue_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
- 	u32			val;
-+	int			ret = 0;
-+
-+	ret = pm_runtime_get_if_in_use(dwc->dev);
-+	/* check if pm runtime get fails, bail out early */
-+	if (ret < 0)
-+		goto err_nolock;
-+
-+	if (!ret) {
-+		ret = -EINVAL;
-+		dev_err(dwc->dev,
-+				"Invalid operation, DWC3 suspended!");
-+		goto err_nolock;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_RXINFOQ);
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
-+	pm_runtime_put(dwc->dev);
-+err_nolock:
-+	return ret;
- 
--	return 0;
- }
- 
- static int dwc3_descriptor_fetch_queue_show(struct seq_file *s, void *unused)
-@@ -728,13 +830,29 @@ static int dwc3_descriptor_fetch_queue_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
- 	u32			val;
-+	int			ret = 0;
-+
-+	ret = pm_runtime_get_if_in_use(dwc->dev);
-+	/* check if pm runtime get fails, bail out early */
-+	if (ret < 0)
-+		goto err_nolock;
-+
-+	if (!ret) {
-+		ret = -EINVAL;
-+		dev_err(dwc->dev,
-+				"Invalid operation, DWC3 suspended!");
-+		goto err_nolock;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_DESCFETCHQ);
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
-+	pm_runtime_put(dwc->dev);
-+err_nolock:
-+	return ret;
-+
- 
--	return 0;
- }
- 
- static int dwc3_event_queue_show(struct seq_file *s, void *unused)
-@@ -743,13 +861,28 @@ static int dwc3_event_queue_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
- 	u32			val;
-+	int			ret = 0;
-+
-+	ret = pm_runtime_get_if_in_use(dwc->dev);
-+	/* check if pm runtime get fails, bail out early */
-+	if (ret < 0)
-+		goto err_nolock;
-+
-+	if (!ret) {
-+		ret = -EINVAL;
-+		dev_err(dwc->dev,
-+				"Invalid operation, DWC3 suspended!");
-+		goto err_nolock;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_EVENTQ);
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
-+	pm_runtime_put(dwc->dev);
-+err_nolock:
-+	return ret;
- 
--	return 0;
- }
- 
- static int dwc3_transfer_type_show(struct seq_file *s, void *unused)
-@@ -834,6 +967,19 @@ static int dwc3_ep_info_register_show(struct seq_file *s, void *unused)
- 	u32			lower_32_bits;
- 	u32			upper_32_bits;
- 	u32			reg;
-+	int			ret = 0;
-+
-+	ret = pm_runtime_get_if_in_use(dwc->dev);
-+	/* check if pm runtime get fails, bail out early */
-+	if (ret < 0)
-+		goto err_nolock;
-+
-+	if (!ret) {
-+		ret = -EINVAL;
-+		dev_err(dwc->dev,
-+				"Invalid operation, DWC3 suspended!");
-+		goto err_nolock;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	reg = DWC3_GDBGLSPMUX_EPSELECT(dep->number);
-@@ -845,8 +991,9 @@ static int dwc3_ep_info_register_show(struct seq_file *s, void *unused)
- 	ep_info = ((u64)upper_32_bits << 32) | lower_32_bits;
- 	seq_printf(s, "0x%016llx\n", ep_info);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
--
--	return 0;
-+	pm_runtime_put(dwc->dev);
-+err_nolock:
-+	return ret;
- }
- 
- DEFINE_SHOW_ATTRIBUTE(dwc3_tx_fifo_size);
--- 
-2.17.1
-
+	Regards
+		Oliver
