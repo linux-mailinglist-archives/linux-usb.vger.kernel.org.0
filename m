@@ -2,87 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1496D6545
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Apr 2023 16:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 472946D6554
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Apr 2023 16:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235215AbjDDO0L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Apr 2023 10:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
+        id S235076AbjDDO3e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Apr 2023 10:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235278AbjDDO0I (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Apr 2023 10:26:08 -0400
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A004C13;
-        Tue,  4 Apr 2023 07:25:47 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id o25-20020a9d4119000000b006a11eb19f8eso16222906ote.5;
-        Tue, 04 Apr 2023 07:25:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680618347;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B55O9gA7vaYXICMr9SJHzaOtnTvtSD1xBb+aJX6NQzQ=;
-        b=Q6piR2VZRn2RBJ2eC14ysjuKjdQow3Icqg3O/8TuVNLqKJq2nuw5C70JD4ZIGUjOVw
-         Ysk4ZW4UmDDbw8TwPPUzVDEJ0+VQJw50LBDcTS/LszCSKrxdNF6oDDbr1HLMqXCQd1T7
-         jvHmTTMxog0vxKwGvxe88uiFa3fIS+0MTylPtOEjtWiiKTVFICTRaG3loYhL90HXTU+t
-         h5Rx1k+fTbMxDVMXZt1DGk5m6lufsHQ6kpbxW5e/fVRnGHV9KITiP2tv5ZJuZqRTPRlt
-         fEPZ4zAGB0Un6MYuX7GmyNQxvb7WmRjTFiOl+ms2NUeWnIoeU367DhI31ShmvGz+sQa+
-         7m3w==
-X-Gm-Message-State: AAQBX9fwRb/9DddO90Kf392O+p/r8vbqvwBzqY0rJKcvGTkoaKq7UBVI
-        j6/B65hK56rqRLmxN6rJyw==
-X-Google-Smtp-Source: AKy350aZivBXjglElKTyJb4uxCvPHgWk/4MGuiIWmBx3WlxovCOJEP8w5cZ+FIpZE/XjbsfiLya7GQ==
-X-Received: by 2002:a9d:6b94:0:b0:69f:ac87:f872 with SMTP id b20-20020a9d6b94000000b0069fac87f872mr1509169otq.13.1680618346680;
-        Tue, 04 Apr 2023 07:25:46 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e14-20020a9d6e0e000000b0069f951899e1sm5610888otr.24.2023.04.04.07.25.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 07:25:46 -0700 (PDT)
-Received: (nullmailer pid 3834119 invoked by uid 1000);
-        Tue, 04 Apr 2023 14:25:45 -0000
-Date:   Tue, 4 Apr 2023 09:25:45 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org,
+        with ESMTP id S233968AbjDDO3d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Apr 2023 10:29:33 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1EC68E75
+        for <linux-usb@vger.kernel.org>; Tue,  4 Apr 2023 07:29:32 -0700 (PDT)
+Received: (qmail 364615 invoked by uid 1000); 4 Apr 2023 10:29:31 -0400
+Date:   Tue, 4 Apr 2023 10:29:31 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Roger Quadros <rogerq@kernel.org>,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH 3/3] dt-bindings: usb: ti,keystone-dwc3: drop
- assigned-clocks
-Message-ID: <168061834511.3834080.16768361106806766398.robh@kernel.org>
-References: <20230403191850.374839-1-krzysztof.kozlowski@linaro.org>
- <20230403191850.374839-3-krzysztof.kozlowski@linaro.org>
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4] usb: dwc3: debugfs: Prevent any register access when
+ devices
+Message-ID: <f11fc9b8-db9b-495b-9b95-b9ae67e288d5@rowland.harvard.edu>
+References: <20230404100055.28100-1-quic_ugoswami@quicinc.com>
+ <ZCwEeFzSFVRmB/yI@hovoldconsulting.com>
+ <9f8277ce-7888-46b7-fe82-90fe4b775762@suse.com>
+ <ZCwNYU3kR1Lb2kt5@hovoldconsulting.com>
+ <58eaa062-4857-4704-5d5d-ff6ea069e899@suse.com>
+ <ZCwYYb/GkE8x6snr@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230403191850.374839-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <ZCwYYb/GkE8x6snr@hovoldconsulting.com>
+X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-On Mon, 03 Apr 2023 21:18:50 +0200, Krzysztof Kozlowski wrote:
-> The meta schema from DT schema already defines assigned-clocks, so there
-> is no need for device schema to mention it at all.  There are also no
-> benefits of having it here.
+On Tue, Apr 04, 2023 at 02:30:25PM +0200, Johan Hovold wrote:
+> On Tue, Apr 04, 2023 at 02:07:22PM +0200, Oliver Neukum wrote:
+> > 
+> > 
+> > On 04.04.23 13:43, Johan Hovold wrote:
+> > 
+> > > The device is being used; by the driver and ultimately by a user telling
+> > 
+> > I am afraid that is just an assumption we cannot make. The user may just as
+> > well be reading a device state before a device is being used as that may matter.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/usb/ti,keystone-dwc3.yaml         | 8 --------
->  1 file changed, 8 deletions(-)
+> It's a perfectly valid assumption to make, and it is was all drivers do
+> for debugfs (as well as sysfs). You are the one arguing for making an
+> exception, which I don't think is warranted.
 > 
+> > > the driver to do something on their behalf. The fact that the user is
+> > > initiating an action through an interface which intended for debugging
+> > > should not matter (and the user always has the option to check the
+> > > runtime pm state before initiating the action if that matters at all).
+> > 
+> > 1. That is a race condition.
+> 
+> Sure, but you can't have it both ways. Your proposed inverted logic is
+> racy as you may or may not get any data.
+> 
+> > 2. Quite a lot of bugs we are looking at involve power transitions.
+> > You just cannot assume that a device will react the same way if it was
+> > waken up between events.
+> 
+> Then just don't use the interface if you for whatever reason don't want
+> to wake the device up.
 
-Acked-by: Rob Herring <robh@kernel.org>
+For what it's worth, the ehci-hcd driver tests (under its private 
+spinlock) whether the hardware is accessible -- i.e., not suspended -- 
+before trying to carry out any debugfs operations that would use the 
+device registers.  If not, all you get is something like:
 
+	bus <buspath>, device <devname>
+	<description>
+	SUSPENDED (no register access)
+
+Alan Stern
