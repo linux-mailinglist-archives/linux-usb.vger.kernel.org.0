@@ -2,125 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E50CA6D6C06
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Apr 2023 20:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FED96D6C98
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Apr 2023 20:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235705AbjDDS3b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Apr 2023 14:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
+        id S235781AbjDDStd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Apr 2023 14:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236432AbjDDS3J (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Apr 2023 14:29:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD418A66;
-        Tue,  4 Apr 2023 11:26:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CD5363551;
-        Tue,  4 Apr 2023 18:26:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D7DBC433D2;
-        Tue,  4 Apr 2023 18:25:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680632759;
-        bh=AERzV+I0kHCiQYU5gW6WzqRfRD82762Wm/mkt70YhEw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aYaeXoSUft0lZ4hauu2QMhqSKx7/WztqSy8guwEuqUUUwDn9rISfpGHcsZCmco5TH
-         e0pI6kB196vhPfK1NtukpQdxaAklgn9Dlcji9DTFm+b4d2Qb1C5vEKRmz3rOJ2NkUa
-         xqogHb/OY7XDN1bLA6buoVAoKfbFDS87fnnfcplg=
-Date:   Tue, 4 Apr 2023 20:25:57 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: intel_pmc_mux: Expose IOM port status to
- debugfs
-Message-ID: <2023040455-varmint-pagan-95d4@gregkh>
-References: <20230330104821.773053-1-rajat.khandelwal@linux.intel.com>
- <ZCVsH2KkfcMA86hJ@kroah.com>
- <c82c6577-a363-241b-ffd6-f5c4c9ed838d@linux.intel.com>
+        with ESMTP id S234717AbjDDStb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Apr 2023 14:49:31 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB31A359D;
+        Tue,  4 Apr 2023 11:49:30 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 334I74Ef018221;
+        Tue, 4 Apr 2023 18:49:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=/XEDtOxVDRf5jeupSmh/Dj9ishhaD7Qwu9S6yl+YpXE=;
+ b=TdynBAUnLvslTdEep9ujjKBu3/giTVqoaqEpPoxy4H6n0aGZJdz7SeFJfa0FaP9vNtt/
+ yJufqD+hVelV0kHGgdzBIb3kSvwvL7TKiUxqdJl0tSOPSrk/ub0n/Tx8WzGwVfxI0BOx
+ HjohNYmuf+/oOwMtwGsiW8/hSdZzwS214lCGFn4OwYAzbJB3ia4/w0P4S9SSQloRnYUG
+ ukxWAO+CgJfguspkGjJqentlFRDnmaNT7y0KS07iYc5rdaA0QDNBbWXBMaCm3hZK9mQn
+ qaK1BmOsP6cQkkGJUmj7xbaKlEvgMG5GRDpHoSdWMT95JytZEL9ciqkJYnYJSTNIK+eL /g== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3prnbt0teq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Apr 2023 18:49:28 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 334InP8o023902
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 4 Apr 2023 18:49:25 GMT
+Received: from [10.110.23.136] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 4 Apr 2023
+ 11:49:24 -0700
+Message-ID: <c8181845-0f6a-9c6b-69bc-4ce9dabdf041@quicinc.com>
+Date:   Tue, 4 Apr 2023 11:49:19 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c82c6577-a363-241b-ffd6-f5c4c9ed838d@linux.intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: dwc3: gadget: Stall and restart EP0 if host is
+ unresponsive
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
+        "quic_ugoswami@quicinc.com" <quic_ugoswami@quicinc.com>
+References: <20230331232039.1407-1-quic_wcheng@quicinc.com>
+ <20230404011108.727htmnllj7ojwqm@synopsys.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <20230404011108.727htmnllj7ojwqm@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: HNH3y1xG_oBRPqkqBpwRhu3DFX7cKEFb
+X-Proofpoint-GUID: HNH3y1xG_oBRPqkqBpwRhu3DFX7cKEFb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-04_10,2023-04-04_05,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 lowpriorityscore=0 mlxlogscore=999
+ bulkscore=0 impostorscore=0 spamscore=0 clxscore=1015 adultscore=0
+ mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304040171
+X-Spam-Status: No, score=-2.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 10:48:38PM +0530, Rajat Khandelwal wrote:
-> Hi,
+Hi Thinh,
+
+On 4/3/2023 6:11 PM, Thinh Nguyen wrote:
+> On Fri, Mar 31, 2023, Wesley Cheng wrote:
+>> It was observed that there are hosts that may complete pending SETUP
+>> transactions before the stop active transfers and controller halt occurs,
+>> leading to lingering endxfer commands on DEPs on subsequent pullup/gadget
+>> start iterations.
 > 
-> On 3/30/2023 4:31 PM, Greg KH wrote:
-> > On Thu, Mar 30, 2023 at 04:18:21PM +0530, Rajat Khandelwal wrote:
-> > > IOM status has a crucial role during debugging to check the
-> > > current state of the type-C port.
-> > > There are ways to fetch the status, but all those require the
-> > > IOM port status offset, which could change with platform.
-> > > 
-> > > Make a debugfs directory for intel_pmc_mux and expose the status
-> > > under it per port basis.
-> > > 
-> > > Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-> > > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > ---
-> > >   drivers/usb/typec/mux/intel_pmc_mux.c | 44 +++++++++++++++++++++++++++
-> > >   1 file changed, 44 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-> > > index 34e4188a40ff..c99d20888f5d 100644
-> > > --- a/drivers/usb/typec/mux/intel_pmc_mux.c
-> > > +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-> > > @@ -15,6 +15,7 @@
-> > >   #include <linux/usb/typec_mux.h>
-> > >   #include <linux/usb/typec_dp.h>
-> > >   #include <linux/usb/typec_tbt.h>
-> > > +#include <linux/debugfs.h>
-> > >   #include <asm/intel_scu_ipc.h>
-> > > @@ -145,6 +146,8 @@ struct pmc_usb {
-> > >   	u32 iom_port_status_offset;
-> > >   };
-> > > +static struct dentry *pmc_mux_debugfs_root;
-> > Why not just look up the dentry and delete it when you want it with a
-> > call to debugfs_lookup_and_remove() instead?  That way you don't have to
-> > keep it around (hint, pass it back from your call to
-> > pmc_mux_debugfs_init() or better yet, don't even have a
-> > pmc_mux_debugfs_init() function as it only contains one line and is
-> > only called in one place.
-> > 
-> > This will save you the storage space of this variable if debugfs is not
-> > enabled in your kernel.  A small amount, yes, but it's nicer, right?
+> Can you clarify this a bit further? Even though the controller is
+> halted, you still observed activity?
 > 
-> I see. Yes, though a small amount, you're anyways right.
+
+Yes...I didn't understand how that was possible either, but traces 
+clearly showed that the controller halt was successful even though there 
+were no endxfers issued on some EPs.  Although, I can't say for certain 
+if those EPs were actively being used at that time.
+
+>>
+>> dwc3_gadget_ep_disable   name=ep8in flags=0x3009  direction=1
+>> dwc3_gadget_ep_disable   name=ep4in flags=1  direction=1
+>> dwc3_gadget_ep_disable   name=ep3out flags=1  direction=0
+>> usb_gadget_disconnect   deactivated=0  connected=0  ret=0
+>>
+>> The sequence shows that the USB gadget disconnect (dwc3_gadget_pullup(0))
+>> routine completed successfully, allowing for the USB gadget to proceed with
+>> a USB gadget connect.  However, if this occurs the system runs into an
+>> issue where:
+>>
+>> BUG: spinlock already unlocked on CPU
+>>   spin_bug+0x0
+>>   dwc3_remove_requests+0x278
+>>   dwc3_ep0_out_start+0xb0
+>>   __dwc3_gadget_start+0x25c
+>>
+>> This is due to the pending endxfers, leading to gadget start (w/o lock
+>> held) to execute the remove requests, which will unlock the dwc3 spinlock
+>> as part of giveback.
+>>
+>> To mitigate this, resolve the pending endxfers on the pullup disable path
+>> by:
+>>   1. Re-locating the SETUP phase check after stop active transfers, since
+>>   that is where the DWC3_EP_DELAY_STOP is potentially set.  This also allows
+>>   for handling of a host that may be unresponsive by using the completion
+>>   timeout to trigger the stall and restart for EP0.
+>>
+>>   2. Do not call gadget stop until the poll for controller halt is
+>>   completed.  DEVTEN is cleared as part of gadget stop, so the intention to
+>>   allow ep0 events to continue while waiting for controller halt is not
+>>   happening.
+>>
+>> Fixes: c96683798e27 ("usb: dwc3: ep0: Don't prepare beyond Setup stage")
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/gadget.c | 101 ++++++++++++++++++++++----------------
+>>   1 file changed, 58 insertions(+), 43 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 3c63fa97a680..9715de8e99bc 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -139,6 +139,24 @@ int dwc3_gadget_set_link_state(struct dwc3 *dwc, enum dwc3_link_state state)
+>>   	return -ETIMEDOUT;
+>>   }
+>>   
+>> +static void dwc3_ep0_reset_state(struct dwc3 *dwc)
+>> +{
+>> +	unsigned int	dir;
+>> +
+>> +	if (dwc->ep0state != EP0_SETUP_PHASE) {
+>> +		dir = !!dwc->ep0_expect_in;
+>> +		if (dwc->ep0state == EP0_DATA_PHASE)
+>> +			dwc3_ep0_end_control_data(dwc, dwc->eps[dir]);
+>> +		else
+>> +			dwc3_ep0_end_control_data(dwc, dwc->eps[!dir]);
+>> +
+>> +		dwc->eps[0]->trb_enqueue = 0;
+>> +		dwc->eps[1]->trb_enqueue = 0;
+>> +
+>> +		dwc3_ep0_stall_and_restart(dwc);
+>> +	}
+>> +}
+>> +
 > 
-> 1. Though a single-line function, I explicitly defined it to make it more readable.
-> ATM, maintaining a small different framework within the file for another function
-> (debugfs) somehow presents a more 'organized' code to me, if that makes sense? :)
+> Can we separate refactoring changes other functional changes? It's
+> difficult to review with too many things to keep track of.
+> 
 
-You are wrapping an abstraction in an abstraction, i.e. piling on layers
-where they are not needed at all.  That's not normal for kernel code.
+Sure I can split this into another patch.
 
-If I am reading the code, and see that function call, I then have to go
-and find it and then see that it is making a debugfs call.  When
-instead, if you just had the debugfs call, when reading the code, you
-would instantly know what is happening and can keep on going in your
-reading.
-
-> 2. About the suggestion of not keeping the debugfs_root static throughout the
-> execution, I can change it as per your suggestion, but I'd like to keep it this
-> way, if that's ok? This way, it would fit nice in the future if more variables
-> are to be added.
-
-We write code for what we have today.  If it needs to change in the
-future, great, we will change it then.  So no need to worry about that.
-
-Anyway, your call, but I think you can make the code overall smaller
-and simpler with my suggestions, but hey, try it out and prove me wrong!
-
-thanks,
-
-greg k-h
+Thanks
+Wesley Cheng
