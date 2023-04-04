@@ -2,84 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E6D6D65D6
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Apr 2023 16:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0AD6D66A8
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Apr 2023 17:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232681AbjDDOyB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Apr 2023 10:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55552 "EHLO
+        id S234083AbjDDPBy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Apr 2023 11:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232112AbjDDOx5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Apr 2023 10:53:57 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992341710;
-        Tue,  4 Apr 2023 07:53:55 -0700 (PDT)
-Received: from jupiter.universe (dyndsl-091-248-190-097.ewe-ip-backbone.de [91.248.190.97])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S231661AbjDDPBk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Apr 2023 11:01:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7ED49C9
+        for <linux-usb@vger.kernel.org>; Tue,  4 Apr 2023 08:01:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C0804660316D;
-        Tue,  4 Apr 2023 15:53:53 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680620033;
-        bh=1HX2q50s8U1vNgOF8gk5ASQbFDGRk4cCN9NGA82a0vU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jUI9qaeywsIZnLmWnKxEkPApXZYxim+uOeQ6WpzG00aWD+Awu4SEF2I85svbnviTD
-         LQFSAhJsbp84b9+Ra6e8FuzSGQOvxjCQpDog4paBhKFX/H03FOlnrclFdd6xa7Cx7l
-         ZWZdNVSc+OhPGNnQE9S64TWNypQ3ksWRSSWKCOejNP8supQd3mjSE0CPOWppXlaJ70
-         U36v7n8UF9YDtUUWh4tqt1nQ3VBQjbpsbyHrM29BNNMvv7/jX8Goufm406zDBDdXe6
-         MSXQIzyt9m9hH8PkLJb7MIIBvH5k3B5wRI+1iz9Mbdn4jviU8cT/ZeRhad/gJzv4bR
-         bMdFHiEFBUGcA==
-Received: by jupiter.universe (Postfix, from userid 1000)
-        id BE9464807EF; Tue,  4 Apr 2023 16:53:51 +0200 (CEST)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCHv1 3/3] usb: host: ohci-platform: increase max clock number to 4
-Date:   Tue,  4 Apr 2023 16:53:50 +0200
-Message-Id: <20230404145350.45388-4-sebastian.reichel@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230404145350.45388-1-sebastian.reichel@collabora.com>
-References: <20230404145350.45388-1-sebastian.reichel@collabora.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75E7F635A0
+        for <linux-usb@vger.kernel.org>; Tue,  4 Apr 2023 15:00:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D06BCC433D2;
+        Tue,  4 Apr 2023 15:00:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680620442;
+        bh=UUzm1zfHKa4YG9s4Iv8D2pUxtmacVnmfdrM6lljr+XQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=asU3SPMFcR5i0sITjUIe1c5FYxrsnAjC2KBcNnExQzylnu1lSD/+jguOYIGKtLaPm
+         bxMw0h4l9js8VQUdqncSa9xojJM1yvBVYJuUwuCC5vSV8TFOG7KqplZAniwuwTaD+E
+         dGs+N8dYjzUCE43AjvaOq+5ja0AFCMWb1lGQtajBLVRd/YBpeZ7ZZ8azXtJJmrHxc2
+         t/o9qSv+82CRqjCCPCnaQ7FF4qX8CXIgsVHlxqIv8RAm/IkLIsP/Q9wuWLmTdSxD9M
+         O+MSWeWMwH/JiqHVW+qfFqIyl6z2EZoycZptwO6VsFkFMlnXxhkAsdCtAopJ4ulTfA
+         U5y47/wcldWbA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pji9m-0001FS-MV; Tue, 04 Apr 2023 17:01:10 +0200
+Date:   Tue, 4 Apr 2023 17:01:10 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4] usb: dwc3: debugfs: Prevent any register access when
+ devices
+Message-ID: <ZCw7tgI+1rxqnEeY@hovoldconsulting.com>
+References: <20230404100055.28100-1-quic_ugoswami@quicinc.com>
+ <ZCwEeFzSFVRmB/yI@hovoldconsulting.com>
+ <9f8277ce-7888-46b7-fe82-90fe4b775762@suse.com>
+ <ZCwNYU3kR1Lb2kt5@hovoldconsulting.com>
+ <58eaa062-4857-4704-5d5d-ff6ea069e899@suse.com>
+ <ZCwYYb/GkE8x6snr@hovoldconsulting.com>
+ <f11fc9b8-db9b-495b-9b95-b9ae67e288d5@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f11fc9b8-db9b-495b-9b95-b9ae67e288d5@rowland.harvard.edu>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Rockchip RK3588 OHCI requires 4 clocks to be enabled.
+On Tue, Apr 04, 2023 at 10:29:31AM -0400, Alan Stern wrote:
+> On Tue, Apr 04, 2023 at 02:30:25PM +0200, Johan Hovold wrote:
+> > On Tue, Apr 04, 2023 at 02:07:22PM +0200, Oliver Neukum wrote:
+> > > On 04.04.23 13:43, Johan Hovold wrote:
+> > > 
+> > > > The device is being used; by the driver and ultimately by a user telling
+> > > 
+> > > I am afraid that is just an assumption we cannot make. The user may just as
+> > > well be reading a device state before a device is being used as that may matter.
+> > 
+> > It's a perfectly valid assumption to make, and it is was all drivers do
+> > for debugfs (as well as sysfs). You are the one arguing for making an
+> > exception, which I don't think is warranted.
+> > 
+> > > > the driver to do something on their behalf. The fact that the user is
+> > > > initiating an action through an interface which intended for debugging
+> > > > should not matter (and the user always has the option to check the
+> > > > runtime pm state before initiating the action if that matters at all).
+> > > 
+> > > 1. That is a race condition.
+> > 
+> > Sure, but you can't have it both ways. Your proposed inverted logic is
+> > racy as you may or may not get any data.
+> > 
+> > > 2. Quite a lot of bugs we are looking at involve power transitions.
+> > > You just cannot assume that a device will react the same way if it was
+> > > waken up between events.
+> > 
+> > Then just don't use the interface if you for whatever reason don't want
+> > to wake the device up.
+> 
+> For what it's worth, the ehci-hcd driver tests (under its private 
+> spinlock) whether the hardware is accessible -- i.e., not suspended -- 
+> before trying to carry out any debugfs operations that would use the 
+> device registers.  If not, all you get is something like:
+> 
+> 	bus <buspath>, device <devname>
+> 	<description>
+> 	SUSPENDED (no register access)
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
- drivers/usb/host/ohci-platform.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks, I only grepped the tree for drivers using runtime pm directly in
+their debugfs callbacks so I missed this. Apparently, ohci and uhci do
+the same. And when resources are not managed using runtime PM, I guess
+there is no other good alternative.
 
-diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
-index a84305091c43..dec38a845cff 100644
---- a/drivers/usb/host/ohci-platform.c
-+++ b/drivers/usb/host/ohci-platform.c
-@@ -33,7 +33,7 @@
- #include "ohci.h"
- 
- #define DRIVER_DESC "OHCI generic platform driver"
--#define OHCI_MAX_CLKS 3
-+#define OHCI_MAX_CLKS 4
- #define hcd_to_ohci_priv(h) ((struct ohci_platform_priv *)hcd_to_ohci(h)->priv)
- 
- struct ohci_platform_priv {
--- 
-2.39.2
+The xhci driver on the other hand, do appear to call
+pm_runtime_get_sync() before accessing registers through debugfs (e.g.
+see debugfs_regset32_show).
 
+Johan
