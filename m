@@ -2,85 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2CC6D7E98
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 16:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE91B6D7ED0
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 16:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238361AbjDEOFS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Apr 2023 10:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        id S238493AbjDEOLb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Apr 2023 10:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238447AbjDEOE1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 10:04:27 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1646B768F
-        for <linux-usb@vger.kernel.org>; Wed,  5 Apr 2023 07:02:01 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id eh3so141303823edb.11
-        for <linux-usb@vger.kernel.org>; Wed, 05 Apr 2023 07:02:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680703319;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u6YcgOwTkOYEHTfHh+36jDI0bPjFfgqXenK5KF9BN1M=;
-        b=woR8DJocTeoGjM0ctksEiVKlmKWuFzKBD6nfTHY9BV3mRzezalDDkRf2u/8fDEp3SA
-         UKDqWfarz5kfAzX9AmXvkpS8cFJwENbxtvlP8Z9mcE3BVdaW+cnnOzlqUUUzh8IKcUIe
-         SVGTG1tzJIfi2ftcqyhyBXjlOXEBeZh0CW+aOL18HrU7FxeOlgutMCbL/BC7qzQhVzAK
-         iUCMQ9kW+u0qnMg5GSbLw3PbMBjl300VrldjddgI4mgFppNYlGD7KyFkyEjnUq2issnM
-         Lo1HGJTMCfcIwuDFIAlDz55owkx1UmEtcSlBn3N/0odTyKa0XB53gLXYSbHrdoMUV77P
-         x+eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680703319;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u6YcgOwTkOYEHTfHh+36jDI0bPjFfgqXenK5KF9BN1M=;
-        b=WHTZDV9urN2PNE7YmLH4p+A3hk4Nn+0aTHxUJRUb1DNccaa3uieIost/qq6B3AuvnS
-         r8fPw5rhGW+Q4ujJ2i3fCufEZGRboQgXaJWeb6MhU8RzZQoEHIPZCUG2/vsXJq5NmpT7
-         MffDR+XViaih6yBNRrk2pPmfHSVKszNxU22gt+gNQHnINxB1012ONbArc5S1Ig0CGtVo
-         pPM646SEFTfBJWPN7054+U2cs/tn5Phgd3rnfeU8GkbII2ODMAeS5Pq9HDOMEpV1LATp
-         RXJp2+GUFWDugS0spABWD6LO6NDHJd4v897RARAAXsQn4muALYsDlMWyPTQLRNQxysnW
-         0Knw==
-X-Gm-Message-State: AAQBX9eI7sp64fidXg0GLKJSgDycMmn6VRIMJuWOfxszaSI5Q8gRGF7U
-        IDf753DL607ipK3OjilxQt2lxw==
-X-Google-Smtp-Source: AKy350Z9vKsl9+aosw4V6+XeX7OHHsd0XKQdC3YrbCaIX3n+HmSKQuxFRqpPIkqhUfYyY+dMeRLrFg==
-X-Received: by 2002:a17:906:2e82:b0:925:1d1d:6825 with SMTP id o2-20020a1709062e8200b009251d1d6825mr2720161eji.42.1680703319728;
-        Wed, 05 Apr 2023 07:01:59 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:3f:6b2:54cd:498e? ([2a02:810d:15c0:828:3f:6b2:54cd:498e])
-        by smtp.gmail.com with ESMTPSA id q23-20020a170906389700b00926b944676esm7321357ejd.131.2023.04.05.07.01.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Apr 2023 07:01:59 -0700 (PDT)
-Message-ID: <63bfaa1e-c627-bfe1-0bef-d001dae41014@linaro.org>
-Date:   Wed, 5 Apr 2023 16:01:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v6 1/8] dt-bindings: usb: Add bindings for multiport
- properties on DWC3 controller
-Content-Language: en-US
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        with ESMTP id S238494AbjDEOLH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 10:11:07 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073AC59D6
+        for <linux-usb@vger.kernel.org>; Wed,  5 Apr 2023 07:10:38 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pk3q6-0003FA-5Y; Wed, 05 Apr 2023 16:10:18 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pk3q3-009AbX-JG; Wed, 05 Apr 2023 16:10:15 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pk3q2-00AmTj-If; Wed, 05 Apr 2023 16:10:14 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Bin Liu <b-liu@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
-        quic_harshq@quicinc.com, ahalaney@redhat.com,
-        quic_shazhuss@quicinc.com,
-        Bjorn Andersson <quic_bjorande@quicinc.com>
-References: <20230405125759.4201-1-quic_kriskura@quicinc.com>
- <20230405125759.4201-2-quic_kriskura@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230405125759.4201-2-quic_kriskura@quicinc.com>
+        Paul Cercueil <paul@crapouillou.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     linux-usb@vger.kernel.org, kernel@pengutronix.de,
+        linux-mips@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: [PATCH 00/10] usb: musb: Convert to platform remove callback returning void
+Date:   Wed,  5 Apr 2023 16:09:59 +0200
+Message-Id: <20230405141009.3400693-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2106; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=y5P77BkcrdOtb/jU7g30i0OmKFgbBK/VXLhzJ7hsVXY=; b=owGbwMvMwMXY3/A7olbonx/jabUkhhTdRn1L4VMMF7t5Ctkm2O4pe/vUrsfKRt9EMbCBXYvpZ 3b/7a2djMYsDIxcDLJiiiz2jWsyrarkIjvX/rsMM4iVCWQKAxenAEyE5Sz7/4qp33SjuSouaNRP UuliYeFZvCvTrLZIsOyg1qGT1+VuVcu6/zGWndV/ItrbIkzW8kntxSLvdQ4rrtiHqfY+89CcNKP 3xZpz8ytrS51+ia9bJ7LA4XLlH1bX3RMPztzuE8NXXt+xYWLk5eApPwQCHr1J/P59mWGe7bagWQ /M1BeFeX/1UFgUNcNly6lNAvNvF70MKrOz1d7jZak0rYqpZnfe+1Ma5+V9xPrOGs6pk1g4Z23Ai VMWB40F0ji2JL169jc2W+mTZ8dy5cCuB8UOZqGnJAU0/b/1JXscqeyx8OZ3TIm9cKHjt9essnt8 2TN2TpXoVNgZ3pkTddNQ90LqdzaJevknxjFcu5LKPCoA
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,20 +67,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 05/04/2023 14:57, Krishna Kurapati wrote:
-> Add bindings to indicate properties required to support multiport
-> on Snps Dwc3 controller.
-> 
-> Suggested-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
-> Link to v5: https://lore.kernel.org/all/20230310163420.7582-2-quic_kriskura@quicinc.com/
+Hello,
 
-You did not test it at v4 and you got report for this. Your changelog in
-commit msg does not mention fixing it.
+this patch series adapts the platform drivers below drivers/usb/musb
+to use the .remove_new() callback. Compared to the traditional .remove()
+callback .remove_new() returns no value. This is a good thing because
+the driver core doesn't (and cannot) cope for errors during remove. The
+only effect of a non-zero return value in .remove() is that the driver
+core emits a warning. The device is removed anyhow and an early return
+from .remove() usually yields a resource leak.
 
-It looks like you did not test it for the second time (or sixth time).
+By changing the remove callback to return void driver authors cannot
+reasonably assume any more that there is some kind of cleanup later.
 
-Best regards,
-Krzysztof
+All drivers touched here returned zero unconditionally in their remove
+callback, so they could all be converted trivially to .remove_new().
 
+Best regards
+Uwe
+
+Uwe Kleine-König (10):
+  usb: musb: da8xx: Convert to platform remove callback returning void
+  usb: musb: jz4740: Convert to platform remove callback returning void
+  usb: musb: mediatek: Convert to platform remove callback returning void
+  usb: musb: mpfs: Convert to platform remove callback returning void
+  usb: musb: musb_core: Convert to platform remove callback returning void
+  usb: musb: musb_dsps: Convert to platform remove callback returning void
+  usb: musb: omap2430: Convert to platform remove callback returning void
+  usb: musb: sunxi: Convert to platform remove callback returning void
+  usb: musb: tusb6010: Convert to platform remove callback returning void
+  usb: musb: ux500: Convert to platform remove callback returning void
+
+ drivers/usb/musb/da8xx.c     | 6 ++----
+ drivers/usb/musb/jz4740.c    | 6 ++----
+ drivers/usb/musb/mediatek.c  | 6 ++----
+ drivers/usb/musb/mpfs.c      | 6 ++----
+ drivers/usb/musb/musb_core.c | 5 ++---
+ drivers/usb/musb/musb_dsps.c | 6 ++----
+ drivers/usb/musb/omap2430.c  | 6 ++----
+ drivers/usb/musb/sunxi.c     | 6 ++----
+ drivers/usb/musb/tusb6010.c  | 6 ++----
+ drivers/usb/musb/ux500.c     | 6 ++----
+ 10 files changed, 20 insertions(+), 39 deletions(-)
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+-- 
+2.39.2
