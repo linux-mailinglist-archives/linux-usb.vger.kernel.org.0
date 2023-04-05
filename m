@@ -2,120 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA48D6D85C4
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 20:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B00C6D85D7
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 20:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjDESPa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Apr 2023 14:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45116 "EHLO
+        id S233692AbjDESTZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Apr 2023 14:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjDESP3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 14:15:29 -0400
-Received: from mail.turbocat.net (turbocat.net [88.99.82.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7008811B
-        for <linux-usb@vger.kernel.org>; Wed,  5 Apr 2023 11:15:27 -0700 (PDT)
-Received: from [10.36.2.154] (unknown [46.212.121.255])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.turbocat.net (Postfix) with ESMTPSA id 49236262D22;
-        Wed,  5 Apr 2023 20:15:25 +0200 (CEST)
-Message-ID: <1ffc488a-5bce-133a-6a7d-cafed6a6dab2@selasky.org>
-Date:   Wed, 5 Apr 2023 20:15:25 +0200
+        with ESMTP id S229507AbjDESTX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 14:19:23 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2050.outbound.protection.outlook.com [40.107.237.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9EC6A5B;
+        Wed,  5 Apr 2023 11:19:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mVWL4wSnX/bJ8Tk7EpLw/fxSPC3YHvMGqp0II5nToZEaZvFFp7iGI1nWRRkOByIQWWuoiJYKCLxe/na2mYW3hNP/0GtsozcbheLa4QyIc6OCnpesTWeK9qBLhbZl/zB3uYeU7kzQrjUhVKUMIUh4do3GyPzUEffxzxKA5htGRLr+wrs2KyufZbYQFDjPWf+s4+KbAOulE75cjBitfC1uvFlmMv4V6PuwPnpGgGGaVeTWgE7pVT/MAv0A26Qiy/kjDRfbYwcJi/3KPvbIqY/sjFyo+JsnR13LLdsvIC/mePsUjihFxT4m61nJDGHPImrIT0MSpulFgv8xFjV4dNshnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NUHIqL9GG/MqckcICY8cpcEz4mrhQ1ioutInGCeqUlI=;
+ b=JNBXK7/XG1JVSrbuZwy0l6jByR8aANpN4/+0ALozbogZ56sV8t87NXwOva4WQfLEE/LutsbG9mkzd0HbfML0XLFNzhzRGvEoniAbnTh7215PJlTVwXhCxHV9ybEJ/5L4bwgxS56owdoH49OUijjtuG82ngc0JUnPSiklKXVMGT2kEiOYMdcRvtIZqG6t+n+Exy78tbazY85LGuB7sFWqVkHDklR9rwvhdk5pijfH2JdfYcwdzYVJ5qY500DiSuscQXv5Z61yBhKXX6+9qnJOYkevDegb2ycVBCJd9T26sRivZVDJ4efzx9hanrfbEI5oLmKbcx3HMjcjL+E9ZF85cQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NUHIqL9GG/MqckcICY8cpcEz4mrhQ1ioutInGCeqUlI=;
+ b=Mt3p53sKVL63Y7GN/db/+4uCpMQVYfD9PeN3AkzfLWsWtMqZCdkdHrKtlaftzqvMbQ0CBXOal2wgXOtLJj2GhclQf+saEhDTWri7qvOCv9WOevObsWB1cV/+v0EOL9Ngk1RLwSch7mbPOFiwBldBs5F4lIoO1MmYP2aN8MbmcUfBUCh/kmgnwTRFAO+NX7lQenKGtBRhrVpjPe6azt00fQ1MmHEWx950mU4HEkN4S7TZlzQBKfW84eUlu0OHsWdSbpBoR1+xfjddvPYE8W7ltoSCI+HzN1IvjSjsbF8yTrC0JTUEeei/lHMOK42xbAJR3AvZFkL9lEMvEj1vsvf9pQ==
+Received: from BN9PR03CA0638.namprd03.prod.outlook.com (2603:10b6:408:13b::13)
+ by CY5PR12MB6624.namprd12.prod.outlook.com (2603:10b6:930:40::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.30; Wed, 5 Apr
+ 2023 18:19:16 +0000
+Received: from BL02EPF000145B9.namprd05.prod.outlook.com
+ (2603:10b6:408:13b:cafe::71) by BN9PR03CA0638.outlook.office365.com
+ (2603:10b6:408:13b::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.22 via Frontend
+ Transport; Wed, 5 Apr 2023 18:19:16 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ BL02EPF000145B9.mail.protection.outlook.com (10.167.241.209) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6222.35 via Frontend Transport; Wed, 5 Apr 2023 18:19:15 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 5 Apr 2023
+ 11:19:06 -0700
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Wed, 5 Apr 2023 11:19:05 -0700
+Received: from moonraker.nvidia.com (10.127.8.13) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Wed, 5 Apr 2023 11:19:04 -0700
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Nagarjuna Kristam <nkristam@nvidia.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>
+Subject: [PATCH 1/2] usb: gadget: tegra-xudc: Fix crash in vbus_draw
+Date:   Wed, 5 Apr 2023 19:18:53 +0100
+Message-ID: <20230405181854.42355-1-jonathanh@nvidia.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; FreeBSD amd64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [Bug 217242] CPU hard lockup related to xhci/dma
-Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-References: <bug-217242-208809@https.bugzilla.kernel.org/>
- <bug-217242-208809-LGiVP9fz4d@https.bugzilla.kernel.org/>
- <7dc47823-01a1-ac19-73d4-4bf7eb07f98d@selasky.org>
- <2023040210-armband-spiffy-b5a5@gregkh>
- <c8cbd221-1cd6-4c9d-bc8e-2013558e5e1d@rowland.harvard.edu>
-From:   Hans Petter Selasky <hps@selasky.org>
-In-Reply-To: <c8cbd221-1cd6-4c9d-bc8e-2013558e5e1d@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF000145B9:EE_|CY5PR12MB6624:EE_
+X-MS-Office365-Filtering-Correlation-Id: f5b4c462-5b88-4dd3-3acd-08db360243fd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sBQJxGXCQ9ACw28xtH16W0UYpsOwDdAITVq/zg0eRkn77bX1uExuFlkRqai9wvkL+7NozdGHhBvxU3d8U9/mGCHRq+RZqEU3B42xY1H2FrES3UeOKWDe+VkLwzoNyhFefQrVuQYjHoVXuyWo088qSxU/vv/T2k+zYT6IdLMr7S5ZQZu70yIiQ67T72jzBh+XrfGZi1Jq8Z2dqKlbhcuh2xXKf1NOrEaTzOwb7SzEpuMqrrUIxQh2y0rsqZ0oJCzd/PZjNpaSudOY0LmC/AcH35t1rIEZczC5qxeNKlLX68IR0diqYKCnGegr+e7IKeg3CbnaqXsvVgJpYuswRtbt0BeEnOoKUKCsi5bRt2J2m47Fe/HeuE8NVVFWdOo+osl5zN0Nfx/FPNpc1OM5GJ90U5uzW35uO+K71WvmCr5qMFEc08HEDTGbxzaaBWcBSKCR9mxN61j03MGk5hTW05nA1WwLfOGJ0Od+ZigNykmXxUKfvMqQl2NeruSE5IrJdtKgytW4bWXWukhSSRwazk6qKos4aMceRI2MVdA0QRgT8m6B8ehrQGtk5jPUgKrintcGYuTPgYNUqAbTKqpWxcgAAzXlWTS9KvNYFHS3WIcDGq8Qyfrd8zA5sUV3tZy/ji6Jd/GFh1VkJV8bLDTuQxOGWK45IG3l7V1UzJxo5SHsftFvVBhO9xVc9yZ1skmCOXt/GZ67KZNQzmwyde5G1H9C/Thu4angtyhZR/RKQz0UHddT98uEZNOiXUNfes13T+vb
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(376002)(346002)(39860400002)(451199021)(40470700004)(46966006)(36840700001)(5660300002)(41300700001)(8936002)(2906002)(8676002)(4326008)(316002)(110136005)(478600001)(7696005)(1076003)(26005)(2616005)(6666004)(107886003)(70586007)(70206006)(426003)(336012)(186003)(83380400001)(47076005)(356005)(7636003)(54906003)(82740400003)(6636002)(40460700003)(82310400005)(36756003)(36860700001)(40480700001)(86362001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2023 18:19:15.9529
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f5b4c462-5b88-4dd3-3acd-08db360243fd
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000145B9.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6624
+X-Spam-Status: No, score=0.8 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 4/2/23 20:57, Alan Stern wrote:
-> [Bugzilla removed from the CC: list, since this isn't relevant to the bug
-> report]
-> 
-> On Sun, Apr 02, 2023 at 07:25:27PM +0200, Greg KH wrote:
->> On Sun, Apr 02, 2023 at 05:54:18PM +0200, Hans Petter Selasky wrote:
->>> While that being said, I wish the Linux USB core would take the example of
->>> the FreeBSD USB core, and pre-allocate all memory needed for USB transfers,
->>> also called URB's, during device attach.
->>
->> Many drivers do that today already, which specific ones do you think
->> need to have this added that are not doing so?
-> 
-> Hans is undoubtedly referring to the host controller drivers.
+Commit ac82b56bda5f ("usb: gadget: tegra-xudc: Add vbus_draw support")
+populated the vbus_draw callback for the Tegra XUDC driver. The function
+tegra_xudc_gadget_vbus_draw(), that was added by this commit, assumes
+that the pointer 'curr_usbphy' has been initialised, which is not always
+the case because this is only initialised when the USB role is updated.
+Fix this crash, by checking that the 'curr_usbphy' is valid before
+dereferencing.
 
-Hi Alan,
+Fixes: ac82b56bda5f ("usb: gadget: tegra-xudc: Add vbus_draw support")
+Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+---
+ drivers/usb/gadget/udc/tegra-xudc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, I'm on the USB host side this time.
+diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
+index 2b71b33725f1..5bccd64847ff 100644
+--- a/drivers/usb/gadget/udc/tegra-xudc.c
++++ b/drivers/usb/gadget/udc/tegra-xudc.c
+@@ -2167,7 +2167,7 @@ static int tegra_xudc_gadget_vbus_draw(struct usb_gadget *gadget,
+ 
+ 	dev_dbg(xudc->dev, "%s: %u mA\n", __func__, m_a);
+ 
+-	if (xudc->curr_usbphy->chg_type == SDP_TYPE)
++	if (xudc->curr_usbphy && xudc->curr_usbphy->chg_type == SDP_TYPE)
+ 		ret = usb_phy_set_power(xudc->curr_usbphy, m_a);
+ 
+ 	return ret;
+-- 
+2.34.1
 
-> usb_alloc_urb() allocates memory for the URB itself.  But the routine does
-> not know which device or host controller the URB will eventually be used
-> with, so it doesn't know which HCD to tell to set aside adequate memory
-> for handling the URB once it is submitted.  And since HCDs tend to process
-> URB submissions while holding a private spinlock, when their memory
-> allocation does get done it cannot use GFP_KERNEL.
-
-I remember a long time ago when memory allocation was very slow in 
-FreeBSD, testing the USB control endpoint was difficult, without at the 
-same time using 100% CPU. The reason was user-space applications used 
-IOCTL's to do USB control endpoint requests synchronously, and that 
-leaded to the request data being alloc'ed and free'd regularly. That was 
-before jemalloc and per-CPU slabs. It was not the amount of data causing 
-problems, but the request rate, 1000 - 8000 requests per second 
-typically. Finding free holes in memory bitmaps due to fragmentation is 
-_very_ expensive!
-
-> 
-> I think it's fair to call this a weak point in Linux's USB stack.
-> Balancing this, it should be pointed out that we can't always know in
-> advance how large an URB's transfer buffer will be, and the amount of
-> memory that the HCD will need can depend on this size.
- >
-
-In FreeBSD you have to specify a maximum length in bytes per "urb" or 
-FreeBSD USB transfer, and various other static properties. Then you 
-don't allocate and free those URB's so to speak, but just keep on 
-re-using them, after first time allocation. All XHCI DMA structures are 
-then just pre-allocated, because we know the PAGE_SIZE and how stuff is 
-laid out into memory, it's easy to compute exactly the worst and best 
-case for the number for hardware structures you need.
-
-This is also very useful for boot-loaders, that FreeBSD USB can either 
-run all single threaded with few fixed size memory pools, or multi 
-threaded as part of a bigger OS.
-
->>> Frequently going through allocate
->>> and free cycles during operation, is not just inefficient, but also greatly
-> 
-> In fact, the original Slab memory allocator (in Solaris 2.4) was designed
-> to make frequent allocate-and-free cycles extremely efficient.  So much so
-> that people would just naturally do things that way instead of
-> pre-allocating memory which would then just sit around unused a large
-> fraction of the time.
-> 
-> I suspect the allocators in the Linux kernel don't end up being quite as
-> efficient as the original Slab, however.
-> 
-
-FreeBSD USB is a completely different design compared to Linux. Anyway, 
-back to the topic and thanks for the chat :-)
-
---HPS
