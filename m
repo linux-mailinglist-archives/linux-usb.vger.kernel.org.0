@@ -2,49 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8771A6D7EC8
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 16:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A719F6D7ECD
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 16:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238542AbjDEOLU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Apr 2023 10:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
+        id S238483AbjDEOL3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Apr 2023 10:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238216AbjDEOKx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 10:10:53 -0400
+        with ESMTP id S238481AbjDEOLC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 10:11:02 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55A66199
-        for <linux-usb@vger.kernel.org>; Wed,  5 Apr 2023 07:10:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B00461B8
+        for <linux-usb@vger.kernel.org>; Wed,  5 Apr 2023 07:10:33 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pk3q5-0003FL-CT; Wed, 05 Apr 2023 16:10:17 +0200
+        id 1pk3q5-0003FN-2p; Wed, 05 Apr 2023 16:10:17 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pk3q4-009Abi-22; Wed, 05 Apr 2023 16:10:16 +0200
+        id 1pk3q4-009Abm-57; Wed, 05 Apr 2023 16:10:16 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pk3q3-00AmTs-6L; Wed, 05 Apr 2023 16:10:15 +0200
+        id 1pk3q3-00AmTv-DA; Wed, 05 Apr 2023 16:10:15 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-usb@vger.kernel.org, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH 03/10] usb: musb: mediatek: Convert to platform remove callback returning void
-Date:   Wed,  5 Apr 2023 16:10:02 +0200
-Message-Id: <20230405141009.3400693-4-u.kleine-koenig@pengutronix.de>
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-riscv@lists.infradead.org, linux-usb@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH 04/10] usb: musb: mpfs: Convert to platform remove callback returning void
+Date:   Wed,  5 Apr 2023 16:10:03 +0200
+Message-Id: <20230405141009.3400693-5-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230405141009.3400693-1-u.kleine-koenig@pengutronix.de>
 References: <20230405141009.3400693-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1695; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=RpBOv6m49AgJI769GPZjDwdUzESQIC9qonvn+da5A/s=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkLYEzpMOGbs9KBOBr5kn2pH+FguaJosWzOto9s jr3Tlrrw82JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZC2BMwAKCRCPgPtYfRL+ Tq41B/9KraWDsU5Ja74j/Vj8MPqnoaFBhUlN41PKb5uH5F7L1YWuy5Mqk+NkwkVuZpmDfgUpM1N QwCjdvjsLK/FI9L2ogBFtKOTz0XplT5UswbDjI4Z4L/MMtlaA2/OOc2VsmesPLEpaXw6upuATqw wM2wuoXT5rTYBYd+5Jw59ybXkRTfiSv7mOP3Ny6417pva1zb9haYU1Z6Br6PxKOHxfBQb2trssk QPLG3oG4OpAkq6x67Hz/FiYdfE/Hg3vNAAKQQ0W6r9BeAr7Gz2t3xBbVWu5z6FaFdEFD5iRRRGs xFs+bQ1QK/MDmBbdDy0nJA0svEtSdmpy39p9HtjdxtuKXv7B
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1622; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=33gaBA4Y6a4NaItjwqP6ZDVvbHUivrlSDU1JTOlXqYo=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkLYE0cAo6wW2W/ZfnRAyWEZgKaGnL27Sw/5V1a LwcHR5o0XWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZC2BNAAKCRCPgPtYfRL+ TloSCACUkxuwkt7CPpgYZVAcJzKsyqRMZO+aTxnp616JRovzeEwiFsPb+C4pFnc+NSBISz3IIx/ yMr193y0Oji9VxGuiPzrJTR0iyHHgkfmt6E2drYrn2rKhIpGNE2/luuWcqUDuLX4nIPiOSKBl0G SzrIa9PXzc4KsIND0i6xATDxPHjB4ZRnodvJj254eyO+xUlDf2gO+RFlY3nsz9RYMPlNAXwQVz+ ClFoETrLnGGduLle/ZMzGhbJozjo2MbjoJPwiy5Ujv2q0gUT2aKhICo4wkPxO5pM6as8+G2w2WP QJkmGjMYlTIqpI6FYMxQacYLEYS9XRTldpPcHq6+H7L2kiTJ
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -73,39 +71,39 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/usb/musb/mediatek.c | 6 ++----
+ drivers/usb/musb/mpfs.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/musb/mediatek.c b/drivers/usb/musb/mediatek.c
-index 27b9bd258340..598ee5c0bf34 100644
---- a/drivers/usb/musb/mediatek.c
-+++ b/drivers/usb/musb/mediatek.c
-@@ -508,15 +508,13 @@ static int mtk_musb_probe(struct platform_device *pdev)
+diff --git a/drivers/usb/musb/mpfs.c b/drivers/usb/musb/mpfs.c
+index cea2e8108867..24b98716f7fc 100644
+--- a/drivers/usb/musb/mpfs.c
++++ b/drivers/usb/musb/mpfs.c
+@@ -235,15 +235,13 @@ static int mpfs_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int mtk_musb_remove(struct platform_device *pdev)
-+static void mtk_musb_remove(struct platform_device *pdev)
+-static int mpfs_remove(struct platform_device *pdev)
++static void mpfs_remove(struct platform_device *pdev)
  {
- 	struct mtk_glue *glue = platform_get_drvdata(pdev);
- 	struct platform_device *usb_phy = glue->usb_phy;
+ 	struct mpfs_glue *glue = platform_get_drvdata(pdev);
  
- 	platform_device_unregister(glue->musb_pdev);
- 	usb_phy_generic_unregister(usb_phy);
+ 	clk_disable_unprepare(glue->clk);
+ 	platform_device_unregister(glue->musb);
+ 	usb_phy_generic_unregister(pdev);
 -
 -	return 0;
  }
  
  #ifdef CONFIG_OF
-@@ -529,7 +527,7 @@ MODULE_DEVICE_TABLE(of, mtk_musb_match);
+@@ -256,7 +254,7 @@ MODULE_DEVICE_TABLE(of, mpfs_id_table);
  
- static struct platform_driver mtk_musb_driver = {
- 	.probe = mtk_musb_probe,
--	.remove = mtk_musb_remove,
-+	.remove_new = mtk_musb_remove,
+ static struct platform_driver mpfs_musb_driver = {
+ 	.probe = mpfs_probe,
+-	.remove = mpfs_remove,
++	.remove_new = mpfs_remove,
  	.driver = {
- 		   .name = "musb-mtk",
- 		   .of_match_table = of_match_ptr(mtk_musb_match),
+ 		.name = "mpfs-musb",
+ 		.of_match_table = of_match_ptr(mpfs_id_table)
 -- 
 2.39.2
 
