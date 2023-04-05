@@ -2,54 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF8A6D77AF
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 11:03:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6226D77D0
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 11:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237505AbjDEJDe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Apr 2023 05:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
+        id S237082AbjDEJKe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Apr 2023 05:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237156AbjDEJDd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 05:03:33 -0400
+        with ESMTP id S231742AbjDEJKd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 05:10:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21130E72;
-        Wed,  5 Apr 2023 02:03:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27D890;
+        Wed,  5 Apr 2023 02:10:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A86956232B;
-        Wed,  5 Apr 2023 09:03:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C66D2C433D2;
-        Wed,  5 Apr 2023 09:03:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47E2062304;
+        Wed,  5 Apr 2023 09:10:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76596C4339B;
+        Wed,  5 Apr 2023 09:10:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680685411;
-        bh=AreqL9r3Yew0sS4T15gu7pKjtnVtIobuhUST+Klm1yw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HoiMD4ktg4vcT8DaHpg95N0uDYOIuwAtTu2tfk+coIc2mMWV6gChq++iSqy5GykFX
-         HsPr8Dfx6UHNDwBRT5AOUI1VEZr549y6Ej+TP7escZ2cXIw8oILL7x+eaOybITT5rl
-         xD50WscOk53x55uLD1MX3jI0CW6KoWP4hm/rbhn5pr52oA7Ar7lIAh0ME6Q9OIQRR2
-         2bWp4TYd8i3s17V7Mv4qpDVmINkt4yHhGLXaszEz6Z9HrWUZFqneAmiYmAkXVuvT/V
-         kJDAVELtV17iGrnfjzO+EvHHJsvDzmL+oMHSyBoXILjYpc88XGh7hqUoB6aPruoF7A
-         jC6d0+RFBprLg==
+        s=k20201202; t=1680685831;
+        bh=l5sX60iJEeJFjkbQM2H90cOtD2sNI6yhbFlyNek5as0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c5fuoR7XGt0dvomYiWEBhKEeQHabvQDQU0uohPQ8wFj7RAAMz7Kf7zfxFZenfhOPg
+         EvqSHrYHA6arxtZ4LB0UbDNC3NHqX4MmWaRk47c2VlMzpMHxViHsg2Lux+BbOxI7hf
+         vXiwPAhdUq9Nu0lgAJNUaONcN/t+t/YniXbMiMv8w9Ee1tvvYO19gj5C+3wNjOZxoA
+         T4m3hJzzhS62QMTtk0PhovTRE4jMirivKLYnq1EmGo/k1S5NGp0KGxDy3jyxj4mEru
+         JPtxyV6LbCtmHNZqIETkgY4f0gLlHexjY+VYIpsURrsZHBUk6cPu5hAKtKO1gKYGA4
+         wEqcBKzXbXaPA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pjz3h-0001uw-Vn; Wed, 05 Apr 2023 11:04:02 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Mathias Nyman <mathias.nyman@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] xhci: fix debugfs register accesses while suspended
-Date:   Wed,  5 Apr 2023 11:03:42 +0200
-Message-Id: <20230405090342.7363-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        (envelope-from <johan@kernel.org>)
+        id 1pjzAT-0001xl-G8; Wed, 05 Apr 2023 11:11:01 +0200
+Date:   Wed, 5 Apr 2023 11:11:01 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v5 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
+Message-ID: <ZC07JU/F46L9Z9y2@hovoldconsulting.com>
+References: <cover.1680162377.git.quic_varada@quicinc.com>
+ <c46b542b112b59002ab965be1d3fcae8c372d545.1680162377.git.quic_varada@quicinc.com>
+ <CAA8EJpo_ckJtYV4aU613X5L6+wj-1i9vZkud5p72PLdCSnj5ng@mail.gmail.com>
+ <20230331092710.GB19162@varda-linux.qualcomm.com>
+ <ZCaznloORtzgioOP@hovoldconsulting.com>
+ <20230405085831.GA26156@varda-linux.qualcomm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405085831.GA26156@varda-linux.qualcomm.com>
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -59,30 +66,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Wire up the debugfs regset device pointer so that the controller is
-resumed before accessing registers to avoid crashing or locking up if it
-happens to be runtime suspended.
+On Wed, Apr 05, 2023 at 02:28:32PM +0530, Varadarajan Narayanan wrote:
+> On Fri, Mar 31, 2023 at 12:19:10PM +0200, Johan Hovold wrote:
 
-Fixes: 02b6fdc2a153 ("usb: xhci: Add debugfs interface for xHCI driver")
-Cc: stable@vger.kernel.org # 4.15: 30332eeefec8: debugfs: regset32: Add Runtime PM support
-Cc: stable@vger.kernel.org # 4.15
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/usb/host/xhci-debugfs.c | 1 +
- 1 file changed, 1 insertion(+)
+> > > > > +               ssphy_0: phy@7d000 {
+> > > >
+> > > > Nit: usually the label usb_0_qmpphy
+> > > >
+> > > > > +                       compatible = "qcom,ipq9574-qmp-usb3-phy";
+> > > > > +                       reg = <0x0007d000 0xa00>;
+> > > > > +                       #phy-cells = <0>;
+> > > > > +
+> > > > > +                       clocks = <&gcc GCC_USB0_AUX_CLK>,
+> > > > > +                                <&xo_board_clk>,
+> > > > > +                                <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> > > > > +                                <&gcc GCC_USB0_PIPE_CLK>;
+> > > > > +                       clock-names = "aux",
+> > > > > +                                     "ref",
+> > > > > +                                     "com_aux",
+> >
+> > This is not the right name for this clock so you need to update the
+> > binding first.
+> >
+> > Please be more careful.
+> 
+> Thanks for your feedback. Have posted v6 with the above corrections.
 
-diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debugfs.c
-index 0bc7fe11f749..99baa60ef50f 100644
---- a/drivers/usb/host/xhci-debugfs.c
-+++ b/drivers/usb/host/xhci-debugfs.c
-@@ -133,6 +133,7 @@ static void xhci_debugfs_regset(struct xhci_hcd *xhci, u32 base,
- 	regset->regs = regs;
- 	regset->nregs = nregs;
- 	regset->base = hcd->regs + base;
-+	regset->dev = hcd->self.controller;
- 
- 	debugfs_create_regset32((const char *)rgs->name, 0444, parent, regset);
- }
--- 
-2.39.2
+Thanks for the heads up. But for future submission, please try to
+remember to add people that have provided feedback on CC when posting
+new revisions.
 
+Johan
