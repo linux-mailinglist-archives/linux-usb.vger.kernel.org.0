@@ -2,71 +2,192 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B056D7D5C
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 15:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97AA36D7DF8
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 15:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238192AbjDENHC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Apr 2023 09:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        id S237766AbjDENpE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Apr 2023 09:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238176AbjDENHA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 09:07:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DE7E55;
-        Wed,  5 Apr 2023 06:06:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40DF26282F;
-        Wed,  5 Apr 2023 13:06:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 914F0C433D2;
-        Wed,  5 Apr 2023 13:06:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680700018;
-        bh=PqbrZHDrw5aAy0zgaBM5C8inqRe6LHE86al3loKoR2w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BkXF+cVqsWjAio3Lnye5G2Ql1UmqzujvEeHrn0IZVOWb+Us9vpXCbLikfoVlkVqMo
-         rbNYDCvBvgUga15M/BJKgWPk4YylpoHlquVNI57XOjrjGn5fEoKG0BnMb8zm0RweOD
-         ApOU9KRDM0KQXEhrQtXz02wJohus0HtcB585/UqbeiybeAuJhUG/vxzM1Gz9WpX9e6
-         U8Tc63qE8N+Slamukk9Pv3uZQ1juTMER65Mn3Wc097ODmnGzxtk8BqIRzT7lwxSxL2
-         A6HZPrTw38jT8QT/VDAUeTuLpqKrdIW4YEXMhmuEclfP4m7BCsVFvKgjSmLt6fqxJ6
-         gboL71FJqpwAw==
-Date:   Wed, 5 Apr 2023 21:06:49 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, s.hauer@pengutronix.de,
-        xu.yang_2@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, jun.li@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V7 10/10] ARM64: dts: imx7ulp: update usb compatible
-Message-ID: <20230405130649.GA11367@dragon>
-References: <20230322052504.2629429-1-peng.fan@oss.nxp.com>
- <20230322052504.2629429-11-peng.fan@oss.nxp.com>
+        with ESMTP id S237507AbjDENo4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 09:44:56 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709D55B9D
+        for <linux-usb@vger.kernel.org>; Wed,  5 Apr 2023 06:44:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680702295; x=1712238295;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GXCV12trQehxUcs4IUml0M8hLi49IKzH7o/s92iGUbs=;
+  b=Z+tMfcRg5XPak4S0gQhLlhhZBOeZBBBU6c0iNt0jZwwRb89cqypLpJPj
+   gkeyQU8k2enfiA7lLAMHUnHtJgWZn8ajn+zhc6sTrC7Rl2XqCegOKoHly
+   BZ1Cr9PMmjG/WP/JUSJPrHna48L15wzYD+BK1GHGNKZ/j2t8gUOJv3PLA
+   gy9y5WnCxQtMu+9nVZJ73gjnjr+RGGlT0Qkh4fjeTKcUBDGf5IInGfR1n
+   ottwne1cBOX6nV8Zh8Ns42L0dLsc/9dW0sFNFxEuhIz2mQjQ5NdrJTqCE
+   ZAcjJPvlKoKNBdMCdNVn7CTIT+fYpnNpvrLPmj4dXz2McdPDG3fgSvn73
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="405232564"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="405232564"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 06:44:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="830369122"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="830369122"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 05 Apr 2023 06:44:53 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        =?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>
+Subject: [PATCH v2] usb: typec: ucsi: acpi: add quirk for ASUS Zenbook UM325
+Date:   Wed,  5 Apr 2023 16:44:56 +0300
+Message-Id: <20230405134456.49607-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322052504.2629429-11-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 01:25:04PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Per binding doc, update the compatible
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+From: Samuel Čavoj <samuel@cavoj.net>
 
-ARM: dts: imx7ulp: ...
+On some ACPI platforms (namely the ASUS Zenbook UM325) the _DSM method must
+not be called after a notification is received but instead the mailbox
+should be read immediately from RAM. This is because the ACPI interrupt
+handler destroys the CCI in ERAM after copying to system memory, and when
+_DSM is later called to perform a second copy, it retrieves a garbage
+value.
 
-Fixed it up and applied all DTS patches.
+Instead, the _DSM(read) method should only be called when necessary, i.e.
+for polling the state after reset and for retrieving the version. Other
+reads should not call _DSM and only peek into the RAM region.
 
-Shawn
+This adds a separate read operation for the Zenbook that syncs the
+ACPI mailbox only with polled commands.
+
+Link: https://lore.kernel.org/linux-usb/20210823180626.tb6m7h5tp6adhvt2@fastboi.localdomain/
+Signed-off-by: Samuel Čavoj <samuel@cavoj.net>
+[ heikki : handling everything in ucsi_acpi.c with DMI quirk ]
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+
+Changed since v1 [1]:
+
+- ucsi.c is not modified anymore. The separate read_explicit
+  callback is replaced with a dedicated read operation for
+  the Zenbooks only.
+
+[1] https://lore.kernel.org/linux-usb/20230120233920.752245-1-samuel@cavoj.net/
+
+---
+ drivers/usb/typec/ucsi/ucsi_acpi.c | 44 ++++++++++++++++++++++++++++--
+ 1 file changed, 42 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+index 62206a6b8ea75..217355f1f9b94 100644
+--- a/drivers/usb/typec/ucsi/ucsi_acpi.c
++++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+@@ -9,6 +9,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/module.h>
+ #include <linux/acpi.h>
++#include <linux/dmi.h>
+ 
+ #include "ucsi.h"
+ 
+@@ -23,6 +24,7 @@ struct ucsi_acpi {
+ 	struct completion complete;
+ 	unsigned long flags;
+ 	guid_t guid;
++	u64 cmd;
+ };
+ 
+ static int ucsi_acpi_dsm(struct ucsi_acpi *ua, int func)
+@@ -62,6 +64,7 @@ static int ucsi_acpi_async_write(struct ucsi *ucsi, unsigned int offset,
+ 	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
+ 
+ 	memcpy(ua->base + offset, val, val_len);
++	ua->cmd = *(u64 *)val;
+ 
+ 	return ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_WRITE);
+ }
+@@ -93,13 +96,46 @@ static const struct ucsi_operations ucsi_acpi_ops = {
+ 	.async_write = ucsi_acpi_async_write
+ };
+ 
++static int
++ucsi_zenbook_read(struct ucsi *ucsi, unsigned int offset, void *val, size_t val_len)
++{
++	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
++	int ret;
++
++	if (offset == UCSI_VERSION || UCSI_COMMAND(ua->cmd) == UCSI_PPM_RESET) {
++		ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
++		if (ret)
++			return ret;
++	}
++
++	memcpy(val, ua->base + offset, val_len);
++
++	return 0;
++}
++
++static const struct ucsi_operations ucsi_zenbook_ops = {
++	.read = ucsi_zenbook_read,
++	.sync_write = ucsi_acpi_sync_write,
++	.async_write = ucsi_acpi_async_write
++};
++
++static const struct dmi_system_id zenbook_dmi_id[] = {
++	{
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
++		},
++	},
++	{ }
++};
++
+ static void ucsi_acpi_notify(acpi_handle handle, u32 event, void *data)
+ {
+ 	struct ucsi_acpi *ua = data;
+ 	u32 cci;
+ 	int ret;
+ 
+-	ret = ucsi_acpi_read(ua->ucsi, UCSI_CCI, &cci, sizeof(cci));
++	ret = ua->ucsi->ops->read(ua->ucsi, UCSI_CCI, &cci, sizeof(cci));
+ 	if (ret)
+ 		return;
+ 
+@@ -114,6 +150,7 @@ static void ucsi_acpi_notify(acpi_handle handle, u32 event, void *data)
+ static int ucsi_acpi_probe(struct platform_device *pdev)
+ {
+ 	struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
++	const struct ucsi_operations *ops = &ucsi_acpi_ops;
+ 	struct ucsi_acpi *ua;
+ 	struct resource *res;
+ 	acpi_status status;
+@@ -143,7 +180,10 @@ static int ucsi_acpi_probe(struct platform_device *pdev)
+ 	init_completion(&ua->complete);
+ 	ua->dev = &pdev->dev;
+ 
+-	ua->ucsi = ucsi_create(&pdev->dev, &ucsi_acpi_ops);
++	if (dmi_check_system(zenbook_dmi_id))
++		ops = &ucsi_zenbook_ops;
++
++	ua->ucsi = ucsi_create(&pdev->dev, ops);
+ 	if (IS_ERR(ua->ucsi))
+ 		return PTR_ERR(ua->ucsi);
+ 
+-- 
+2.39.2
+
