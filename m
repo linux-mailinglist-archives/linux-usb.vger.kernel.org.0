@@ -2,49 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEF446D84A1
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 19:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5BD36D84B7
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 19:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbjDERNU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Apr 2023 13:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        id S233445AbjDERPt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Apr 2023 13:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDERNT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 13:13:19 -0400
+        with ESMTP id S233354AbjDERPg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 13:15:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276A518E;
-        Wed,  5 Apr 2023 10:13:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F50729F;
+        Wed,  5 Apr 2023 10:15:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B160C62922;
-        Wed,  5 Apr 2023 17:13:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C005AC433D2;
-        Wed,  5 Apr 2023 17:13:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F249625DB;
+        Wed,  5 Apr 2023 17:15:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2297CC433D2;
+        Wed,  5 Apr 2023 17:15:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680714796;
-        bh=dR9SWdpKW00rWV/VhdSHnHKFemxp6AH7JYR6NVeQXt0=;
+        s=korg; t=1680714920;
+        bh=P2xekpx7trrXdthOyb3oSuUkeDbCS/EOeNTqftfy1vI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LIaZ2yzutmGQx0xjggoYeYp3TJlZJRhYxOskHAXPJLzy+A1UFYfew9LRxG3lJBmzT
-         r7rW20EyG+hhZP0lNbGVV2cZfpvKD8YO7dYvsJpvzzw/KulLbJ2myhmaPkz9xr3DxD
-         B2BGv+q5X3HLCU8Ux69tDbqKQCNF6M1NneYhFki0=
-Date:   Wed, 5 Apr 2023 19:13:13 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Filipe =?iso-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH v2] USB: core: Fix docs warning caused by wireless_status
- feature
-Message-ID: <2023040554-obscurity-latter-b12b@gregkh>
-References: <20230405092754.36579-1-hadess@hadess.net>
+        b=H+qVsfIr9j6xG1UGiwbaRsEZsV0Z6WrAOdcaIsSV3vSfHjT13mvccgk4etDBuSsFH
+         jJgHPyKPiCzgjXGM1P8eLII8sG2KAAfG6dH/cSRYoh45Sld9hbcxeWTmVzMUAMcwqa
+         NI8ansTcv+O7uqtSpxpDH35DHRzmvbl+V7lHrLtI=
+Date:   Wed, 5 Apr 2023 19:15:17 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     stern@rowland.harvard.edu, colin.i.king@gmail.com,
+        xuetao09@huawei.com, quic_eserrao@quicinc.com,
+        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
+        balbi@ti.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] usb: gadget: udc: core: Invoke usb_gadget_connect
+ only when started
+Message-ID: <2023040541-gladly-refold-38a6@gregkh>
+References: <20230405093133.1858140-1-badhri@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230405092754.36579-1-hadess@hadess.net>
+In-Reply-To: <20230405093133.1858140-1-badhri@google.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -54,22 +53,121 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 11:27:54AM +0200, Bastien Nocera wrote:
-> Fix wrongly named 'dev' parameter in doc block, should have been iface:
-> drivers/usb/core/message.c:1939: warning: Function parameter or member 'iface' not described in 'usb_set_wireless_status'
-> drivers/usb/core/message.c:1939: warning: Excess function parameter 'dev' description in 'usb_set_wireless_status'
+On Wed, Apr 05, 2023 at 09:31:32AM +0000, Badhri Jagan Sridharan wrote:
+> usb_udc_connect_control does not check to see if the udc
+> has already been started. This causes gadget->ops->pullup
+> to be called through usb_gadget_connect when invoked
+> from usb_udc_vbus_handler even before usb_gadget_udc_start
+> is called. Guard this by checking for udc->started in
+> usb_udc_connect_control before invoking usb_gadget_connect.
 > 
-> And fix missing struct member doc in kernel API, and reorder to
-> match struct:
-> include/linux/usb.h:270: warning: Function parameter or member 'wireless_status_work' not described in 'usb_interface'
+> Guarding udc_connect_control, udc->started and udc->vbus
+> with its own mutex as usb_udc_connect_control_locked
+> can be simulataneously invoked from different code paths.
+
+You have a full 72 columns, please use them all :)
+
 > 
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Link: https://lore.kernel.org/linux-next/20230405114807.5a57bf46@canb.auug.org.au/T/#t
-> Fixes: 0a4db185f078 ("USB: core: Add API to change the wireless_status")
+> Cc: stable@vger.kernel.org
+> 
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> Fixes: 628ef0d273a6 ("usb: udc: add usb_udc_vbus_handler")
 
-I do not see that git commit id anywhere, where is it from?  What tree?
+No blank line after cc: stable, and put the fixes above your
+signed-off-by line please.
 
-Ah, input tree, not much I can do there...
+> ---
+>  drivers/usb/gadget/udc/core.c | 20 ++++++++++++++++----
+>  1 file changed, 16 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+> index 3dcbba739db6..890f92cb6344 100644
+> --- a/drivers/usb/gadget/udc/core.c
+> +++ b/drivers/usb/gadget/udc/core.c
+> @@ -56,6 +56,8 @@ static LIST_HEAD(udc_list);
+>  /* Protects udc_list, udc->driver, driver->is_bound, and related calls */
+>  static DEFINE_MUTEX(udc_lock);
+>  
+> +/* Protects udc->vbus, udc-started and udc_connect_control_locked */
+> +static DEFINE_MUTEX(udc_connect_control_lock);
+
+Why a global lock?  Shouldn't this be a per-device lock?
+
+
+>  /* ------------------------------------------------------------------------- */
+>  
+>  /**
+> @@ -1078,9 +1080,10 @@ EXPORT_SYMBOL_GPL(usb_gadget_set_state);
+>  
+>  /* ------------------------------------------------------------------------- */
+>  
+> -static void usb_udc_connect_control(struct usb_udc *udc)
+> +/* Acquire udc_connect_control_lock before calling this function. */
+> +static void usb_udc_connect_control_locked(struct usb_udc *udc)
+>  {
+> -	if (udc->vbus)
+> +	if (udc->vbus && udc->started)
+>  		usb_gadget_connect(udc->gadget);
+>  	else
+>  		usb_gadget_disconnect(udc->gadget);
+> @@ -1099,10 +1102,12 @@ void usb_udc_vbus_handler(struct usb_gadget *gadget, bool status)
+>  {
+>  	struct usb_udc *udc = gadget->udc;
+>  
+> +	mutex_lock(&udc_connect_control_lock);
+>  	if (udc) {
+>  		udc->vbus = status;
+> -		usb_udc_connect_control(udc);
+> +		usb_udc_connect_control_locked(udc);
+>  	}
+> +	mutex_unlock(&udc_connect_control_lock);
+>  }
+>  EXPORT_SYMBOL_GPL(usb_udc_vbus_handler);
+>  
+> @@ -1140,14 +1145,18 @@ static inline int usb_gadget_udc_start(struct usb_udc *udc)
+>  {
+>  	int ret;
+>  
+> +	mutex_lock(&udc_connect_control_lock);
+>  	if (udc->started) {
+>  		dev_err(&udc->dev, "UDC had already started\n");
+> +		mutex_unlock(&udc_connect_control_lock);
+>  		return -EBUSY;
+>  	}
+>  
+>  	ret = udc->gadget->ops->udc_start(udc->gadget, udc->driver);
+>  	if (!ret)
+>  		udc->started = true;
+> +	usb_udc_connect_control_locked(udc);
+> +	mutex_unlock(&udc_connect_control_lock);
+>  
+>  	return ret;
+>  }
+> @@ -1165,13 +1174,17 @@ static inline int usb_gadget_udc_start(struct usb_udc *udc)
+>   */
+>  static inline void usb_gadget_udc_stop(struct usb_udc *udc)
+>  {
+> +	mutex_lock(&udc_connect_control_lock);
+>  	if (!udc->started) {
+>  		dev_err(&udc->dev, "UDC had already stopped\n");
+> +		mutex_unlock(&udc_connect_control_lock);
+>  		return;
+>  	}
+>  
+>  	udc->gadget->ops->udc_stop(udc->gadget);
+>  	udc->started = false;
+> +	usb_udc_connect_control_locked(udc);
+> +	mutex_unlock(&udc_connect_control_lock);
+>  }
+>  
+>  /**
+> @@ -1527,7 +1540,6 @@ static int gadget_bind_driver(struct device *dev)
+>  	if (ret)
+>  		goto err_start;
+>  	usb_gadget_enable_async_callbacks(udc);
+> -	usb_udc_connect_control(udc);
+
+Why drop this call here?
 
 thanks,
 
