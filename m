@@ -2,120 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515BA6D8144
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 17:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E58946D8243
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 17:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238841AbjDEPNG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Apr 2023 11:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
+        id S238992AbjDEPmi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Apr 2023 11:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238815AbjDEPMp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 11:12:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FE0CA;
-        Wed,  5 Apr 2023 08:10:53 -0700 (PDT)
-Received: from mercury (dyndsl-091-248-212-122.ewe-ip-backbone.de [91.248.212.122])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 77EFE6603193;
-        Wed,  5 Apr 2023 16:10:51 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680707451;
-        bh=jRgDSO3v+VKl5PXcXNslYAslMAv3VPkQGjzS7XPnMAc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=osaLU4v0nFMMIg4IDSyBdT3qBWT4X2O8k3ZrjGFMI34Qldf+cjvbHjMxFoTgz7Bvk
-         w97swc1hCobTNouVTULuzJzMgyztKpUTHLucjF3uiHjTaf5KoEZjeiX0LQT9FZB49R
-         OyB0xMBsbOxjKCqG6Pi11HTbRtuyCkZXbXT7mv7CeKgZ7tQ/hT4DGy1i8GeKbB5HEG
-         v8rZxZVwV06Tb9DTN7CXXJUIx5Yxw3NKo1YsIyHILsO754gI91j1Q8e2ckF7XNzUki
-         iILfoWhnlG04i2rRfuAPTXxlwdCtsK2URf+5j34B88VED3fByRqlgvFUnNh3WQ2oIf
-         jHbnHWu6mceKw==
-Received: by mercury (Postfix, from userid 1000)
-        id 203631065C70; Wed,  5 Apr 2023 17:10:49 +0200 (CEST)
-Date:   Wed, 5 Apr 2023 17:10:49 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCHv1 0/3] generic-ohci/ehci: add RK3588 support
-Message-ID: <20230405151049.qksjk6e3za7fwuz6@mercury.elektranox.org>
-References: <20230404145350.45388-1-sebastian.reichel@collabora.com>
- <2023040524-hazelnut-landfall-7d26@gregkh>
+        with ESMTP id S238902AbjDEPmh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 11:42:37 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B7C7688
+        for <linux-usb@vger.kernel.org>; Wed,  5 Apr 2023 08:42:17 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id h8so142180556ede.8
+        for <linux-usb@vger.kernel.org>; Wed, 05 Apr 2023 08:42:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680709332;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W3rEjEBIzvTLM76lijFumhUVHcnIxOg2kiFST3j5p5o=;
+        b=j0YrqLl8ikrtYvR4+5TGcOG3lc77ztC3YxP5gQBq9siJtXfCwggpjAkRS8aLC9F43d
+         rSQfXBM1OZU6sTEseTUVbDj2JJWn1aDs5mYge6bdEXoiCRc/QojFSLK61m2/8oXnJCb+
+         5DndmQfMph/b67yqiB8Gkg1xL7KC1E7QGiRdfdHUDugptIJ4RQl1CEfTdGxQGJRMMVqK
+         o1e+C/Xv7HkySyEQ8sAu77H2vQwP5ohM8X+SK6xcd9UG+Yc6rbpafDhPmt1hwirNcwth
+         kPNsZesw4mHFJDVHDXqCI+o6yg+QmvENnkeFbHVJLwQ/UN4/gp6nsRu07bPJBhhc2/8G
+         N4/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680709332;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W3rEjEBIzvTLM76lijFumhUVHcnIxOg2kiFST3j5p5o=;
+        b=GnZh9x2XDGxUfDLDqWFgVMF8DupuQyDJ6cIVzPZLgsrdl+UBdd4lq0isxE0B2wM30V
+         +kL1DlTHAw2VtuPA0ukBvzZ1cWK9W803tl3rVhBC80kCY6ZCuxMi2EY3vML0Nd6kaB4Q
+         vBZMBgOudnNN0v+HBQH+ckwJsgxJQ8hMyCBajKM4a67Eg+A3yMN6UhLqyTYSWx+9UNLN
+         ErQCQTlYtfzw5WVB1j0qOE1ultM1iOZSPOykTxjvlTnfJNhotfTdXnQcT+ydgzS3WNKY
+         5880BEFn5LARAz12FdpeIsyTRUCa1ZyzCLiMe99ZS2lD60TbhLTMOLcnaWM39yxrCfrK
+         KwUA==
+X-Gm-Message-State: AAQBX9earJ6CAImpDqY2K/x9xRI+zy/VJAI1ZW8qVaPR/dDuXw6Llc/T
+        j+eJi4nw9NVQAQvbO3nZqmo=
+X-Google-Smtp-Source: AKy350aN36e109j2V5e1/9ZUfUjDj2DnafFLoEuOLo0Bk2QvbJEJs80YfcFS2jjLPSNjlEG5VfvZDQ==
+X-Received: by 2002:a17:906:278e:b0:932:e43f:7367 with SMTP id j14-20020a170906278e00b00932e43f7367mr3619210ejc.35.1680709331933;
+        Wed, 05 Apr 2023 08:42:11 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id jx10-20020a170906ca4a00b009495cfe446esm1174994ejb.223.2023.04.05.08.42.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 08:42:11 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, kernel@pengutronix.de
+Subject: Re: [PATCH 08/10] usb: musb: sunxi: Convert to platform remove callback
+ returning void
+Date:   Wed, 05 Apr 2023 17:42:10 +0200
+Message-ID: <2673762.mvXUDI8C0e@jernej-laptop>
+In-Reply-To: <20230405141009.3400693-9-u.kleine-koenig@pengutronix.de>
+References: <20230405141009.3400693-1-u.kleine-koenig@pengutronix.de>
+ <20230405141009.3400693-9-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rspdxdya3ht4irto"
-Content-Disposition: inline
-In-Reply-To: <2023040524-hazelnut-landfall-7d26@gregkh>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---rspdxdya3ht4irto
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Greg,
-
-On Wed, Apr 05, 2023 at 04:49:37PM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Apr 04, 2023 at 04:53:47PM +0200, Sebastian Reichel wrote:
-> > Hi,
-> >=20
-> > This increases the max. allowed clocks for generic-ohci from 3 to 4.
-> > On RK3588 a total of 4 clocks is required to access the OHCI registers.
-> > EHCI already supports 4 clocks.
-> >=20
-> > Changes since PATCHv1:
-> >  * https://lore.kernel.org/all/20230331163148.5863-1-sebastian.reichel@=
-collabora.com/
-> >  * Add Alan's Acked-by to the driver patch increasing the clock count
-> >  * Update bindings, adding rockchip,rk3588-ohci and rockchip,rk3588-ehc=
-i compatibles
+Dne sreda, 05. april 2023 ob 16:10:07 CEST je Uwe Kleine-K=F6nig napisal(a):
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is (mostly) ignored
+> and this typically results in resource leaks. To improve here there is a
+> quest to make the remove callback return void. In the first step of this
+> quest all drivers are converted to .remove_new() which already returns
+> void.
 >=20
-> This is "v1" according to the subject line, right?
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+>=20
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-Well the previous version was also about adding RK3588 support.
-I did not see anything RK3588 specific and thus used "increase
-allowed clocks" as subject for the cover letter. Rob's review
-effectively asked for RK3588 specific compatibles to be added,
-so this is a v2 of the series with that change included.
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Since increasing the maximum number of clocks is no longer the
-dominant content of the series I changed the cover letter's
-subject. Sorry that this confused you.
+Best regards,
+Jernej
 
-Greetings,
 
--- Sebastian
-
---rspdxdya3ht4irto
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQtj3UACgkQ2O7X88g7
-+pqcFA//anAG2suOvroCaC8qsNmoHOqpuRSWuMaS+dC1mr39LGBBpnUMqUl0Kx4T
-UvthCvr6jtqBwAuianN+qU0rMTbGdCTvYgmVWXDyO8BkxmI8S3VxmhWbYEuJ3KCF
-BxIaeUde9b08ED00pibR1VeAGqvCoSJZIL7OBfX6ZeRT75P5P+PdWn4hGi622MGX
-zh/Wa3ukrzktinNn8TfjabKqDDrDxwvaKL8eMgLsZ2BqBsEnBc7Y8hN2Wp5JBOTL
-w4ySz+Co/oUSZJurNfflVFZxdw/EPTC8mHKph4ilr6VgyLJEpv/9aqqegIqtUWet
-Y+xZSHaxhBG21VECJ+HcEXCu0sWDNQ3lGdiYR3UCXck3tw8gg5Ego9YerFddHlt+
-TuvA28IsfIIMCE9SHyeRZr6upIyI+pMUYCjkvrB+n0GnMYylL44myeOz5lhqSRDc
-1IBU3aC6W6ukZra8MgO0lqeqU1CUd78Row+SSxCXkSrLwymEQC1ar3BokAFw36K4
-EnjGXq3HqY1ZHrRo2x/j6oekOyQu+9aB/CCyAacplJhtadPF41ETk0u+/SvrICGr
-nzCqkNiSedsV0YL6w4UpWW8WoJrKGgoSRM1EI8JoS3X0FEywdKu2BLyyq8oPz0mS
-lGKOAh9Wivyfct38wMcODDxIOLZrTB7RvJpiUoCO3xuDtHksBmM=
-=i930
------END PGP SIGNATURE-----
-
---rspdxdya3ht4irto--
