@@ -2,108 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD2B6D7601
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 09:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4946D76B6
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 10:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237240AbjDEH5P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Apr 2023 03:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37566 "EHLO
+        id S237381AbjDEIUV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Apr 2023 04:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237239AbjDEH5J (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 03:57:09 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD69F4EEE
-        for <linux-usb@vger.kernel.org>; Wed,  5 Apr 2023 00:57:04 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5027d3f4cd7so237959a12.0
-        for <linux-usb@vger.kernel.org>; Wed, 05 Apr 2023 00:57:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680681423;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q2eIUIgQam+Znm92t75ub3SSql/5kD/CSnGjaZOIeRE=;
-        b=ZFAmFQTn20XXB58Hm1LdXdWSQ5ZKxD4voHxxAhS1cKrInxf7DLRcTSbw0glAYuheNd
-         QsgC19PfAnkNACoih4X9yWq8Ua2f3Z5aqpAwmyG7K5XHuwPNdYpOLvr+4dizYlmkwqvh
-         8ippA6GSg6vwbKsguRd+gNlt6Q3d6qdPQH52wPe4yUNm7drYy8w79XnI6OkaMCxGYxXe
-         MDkio/NlgHAyk3tGfHbZ8+FvtwIbKJyHeY9Hl3c4m/UBMxdY642/4m0lMYD1+lZcL9DU
-         GTGlzj7aK8t/dfhFV0ZGCnZD6XTAnjOEHb+Mkw5/16dwcMVpicpYd4/+ImRJVe79/Ozv
-         w6jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680681423;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q2eIUIgQam+Znm92t75ub3SSql/5kD/CSnGjaZOIeRE=;
-        b=gzhOkkq8LZCp9bBYemBlLxk2XNB1Rkhb+0Zo2s4/S03myVwUFCXffFzrgLYb2SYtHi
-         86MaahR7ZF0b1u6qjHP6Wt/sG8gEZ3sm9hSisECscCwOZGbwwedkwdcM6IG/ven390Zn
-         NSU9h4tM4aAjv619mS3RO7bgMoKv7xsSy6Pa5zd6I61VZYairfS9JFC0FAZtO8XMVz4I
-         8kqim0tpXA5Fu3fUq+B4sBJ3b5FuJbaupMN/A8AfYoc7mdmcjSRTEXDZ0B1AemAmK1Pe
-         bmWVyGALxhUV/tG1bBEffoVXW+9ARGwRJ12/EXr2StU9VtuXKlG4maG64oLzzSp/7b87
-         oOmw==
-X-Gm-Message-State: AAQBX9dw9oNy0og7CGjZdrAfvBJunaq3cmxsGsSxEV+WDoeiPODmPW/m
-        Y8E/ZNfGgP0jkSgQOSXCmUPX/FtIXN6pJVPb2Zk=
-X-Google-Smtp-Source: AKy350b+6mlAYsE5jCYer29QJ01MP1yshNVCPV/yu1iTNStkeOVxzQSr9n/dP8VlK7PnohYB4ysIDujVG47xryzVK58=
-X-Received: by 2002:a50:d781:0:b0:500:547b:4e1b with SMTP id
- w1-20020a50d781000000b00500547b4e1bmr691870edi.6.1680681423244; Wed, 05 Apr
- 2023 00:57:03 -0700 (PDT)
+        with ESMTP id S237470AbjDEIUS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 04:20:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3DE40E6
+        for <linux-usb@vger.kernel.org>; Wed,  5 Apr 2023 01:20:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAF1B62EB9
+        for <linux-usb@vger.kernel.org>; Wed,  5 Apr 2023 08:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CD1EC433D2;
+        Wed,  5 Apr 2023 08:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680682816;
+        bh=ZwAvcWGUPuoymQ6pgsZ8uwulFuinOZuUZL+zKrIuG2A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hGHK3P6NMrWNeOlxQP1ULzhfk3P2DuPzBRJcjESsAGs+kwqjo2tAQoOt5khk94ag1
+         Y8jKmOMzwuFCQCYyds2bpNWUbSGBTdIWsxR5sFdEfDHBteAKP1clzJtv/4rfzwlsMA
+         ntWUITjC0+PwP43UnR2jL3V5dFmE4I4NHJBCj0kMhP7hFD6/Rzd5PBnAXvkxvL2PCf
+         aYcaXF2vGYbWveXi3DSXPtKByTm3Lg8OA4GjP0K0q4PjAGpwHeYHXSFXO4nDAJogM4
+         ngzVHKS3kj91efTBMFOBl3075Wyqrv3eTYNEcMj5CGd/fxLajd50ECTxTkOvj7JLmW
+         GVJ8oFjAaDeNA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pjyNp-0008UH-Fi; Wed, 05 Apr 2023 10:20:46 +0200
+Date:   Wed, 5 Apr 2023 10:20:45 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Udipto Goswami <quic_ugoswami@quicinc.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v4] usb: dwc3: debugfs: Prevent any register access when
+ devices
+Message-ID: <ZC0vXcn+tTZHepIN@hovoldconsulting.com>
+References: <20230404100055.28100-1-quic_ugoswami@quicinc.com>
+ <ZCwEeFzSFVRmB/yI@hovoldconsulting.com>
+ <9f8277ce-7888-46b7-fe82-90fe4b775762@suse.com>
+ <ZCwNYU3kR1Lb2kt5@hovoldconsulting.com>
+ <8a209f5f-8aa1-35b1-20ed-2f0b95f960a7@quicinc.com>
+ <ZCw33woJ3C6roK93@hovoldconsulting.com>
+ <20230404213625.zta3tdkqdrthufbl@synopsys.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7208:2202:b0:65:e547:3943 with HTTP; Wed, 5 Apr 2023
- 00:57:02 -0700 (PDT)
-Reply-To: tamimbinhamadalthani00@gmail.com
-From:   Tamim Mohammed Taher <cisskhadidiatou890@gmail.com>
-Date:   Wed, 5 Apr 2023 00:57:02 -0700
-Message-ID: <CAAYY=dZe5ZjJ2b2KEkYbGOEnyScbFaaGqjvb6EmPHE7Lypp0cg@mail.gmail.com>
-Subject: RE:Saudi Arabia-Inquiry about your products.!!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.9 required=5.0 tests=DEAR_SOMETHING,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:52a listed in]
-        [list.dnswl.org]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [tamimbinhamadalthani00[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [cisskhadidiatou890[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [cisskhadidiatou890[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  1.7 DEAR_SOMETHING BODY: Contains 'Dear (something)'
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404213625.zta3tdkqdrthufbl@synopsys.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Sir/Madam,
+On Tue, Apr 04, 2023 at 09:36:28PM +0000, Thinh Nguyen wrote:
+> On Tue, Apr 04, 2023, Johan Hovold wrote:
+> > On Tue, Apr 04, 2023 at 05:46:13PM +0530, Udipto Goswami wrote:
 
+> > > for instance, lets say user is trying to dump the value of link_state 
+> > > register through dwc3_link_state_show, wouldn't a pm_runtime_get would 
+> > > change the link_state? or I'm assuming it wrong?
+> > 
+> > There may be some specific debugfs interfaces (e.g. related to PM) where
+> > taking the runtime pm state into account makes sense, but then I don't
+> > think you should return an error if the device happens to be suspended.
+> 
+> Agree here.
+> 
+> > 
+> > Looking at the dwc3 'link_state', it currently just returns "Not
+> > available\n" when not in peripheral mode, for example. Perhaps you can
+> > do something similar if you can neither infer or retrieve the actual
+> > link state.
+> > 
+> > But after skimming the backstory for this patch, you yourself said that
+> > the motivation for this patch is simply to avoid crashing when accessing
+> > these interfaces if the device happens to be runtime suspended.
+> > 
+> > For that you should just resume the device unconditionally before the
+> > register accesses as all other drivers do (and such a patch should
+> > be backported to stable).
+> > 
+> > There's no need to take hypothetical PM debugging issues into account to
+> > address this.
+> > 
+> 
+> I disagree here. We should not unconditionally resume the device.
+> Checking these states should not interfere with the device current
+> operation. These debugfs attributes are meant to provide the user with
+> debug info. Whether the controller is currently in suspend or not,
+> that's a data point.
 
+But this is not what other drivers do, which means that you will end up
+with different behaviour with regards to runtime PM (possibly even for
+the very same piece of hardware, see below) depending, on which file in
+debugfs you access.
 
-Can you supply your products to  the government of (Saudi Arabia). We
-buy in larger quantity if your company can supply please reply with
-your products detail for more information.
+See for example commit 30332eeefec8 ("debugfs: regset32: Add Runtime PM
+support") which made this behaviour part of the generic debugfs helpers,
+and grepping for drivers that bail out from their debugsfs callbacks
+does not seem to show any other instances.
 
-Looking forward to hearing from you.
+Alan did point out though, that the ehci driver returns a string like
+"suspended" when trying to access registers for a suspended device.
 
-Thanks and Regards
+That behaviour dates back to before the git era though and long before
+we had runtime PM. In fact, ehci still does not seem to implement
+runtime PM so this check would essentially only kick when the HCD is
+dead IIUC.
 
- Mr.Tamim Mohammed Taher
+Notably both the chipidea and musb drivers runtime resume the controller
+when accessing registers through debugfs.
 
-Email:tamimbinhamadalthani00@gmail.com
+I just tried the xhci debugfs interface and it apparently crashes just
+like the dwc3 debugfs do if the device is suspended. Turns out no one
+has yet wired up the device pointer which would be used by the generic
+debugfs helpers to resume the device before register accesses.
+
+I'll send a patch to fix that up.
+
+Johan
