@@ -2,54 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55BF16D85A9
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 20:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA48D6D85C4
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 20:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbjDESHa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Apr 2023 14:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
+        id S229630AbjDESPa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Apr 2023 14:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjDESH2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 14:07:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3D67D95;
-        Wed,  5 Apr 2023 11:07:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229479AbjDESP3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 14:15:29 -0400
+Received: from mail.turbocat.net (turbocat.net [88.99.82.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7008811B
+        for <linux-usb@vger.kernel.org>; Wed,  5 Apr 2023 11:15:27 -0700 (PDT)
+Received: from [10.36.2.154] (unknown [46.212.121.255])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 908CC627FF;
-        Wed,  5 Apr 2023 18:06:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E652C433D2;
-        Wed,  5 Apr 2023 18:06:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680718011;
-        bh=d1Pk2ZSYTsDyUcVK0NMJYETf7DI5PZ43iawuHurWjGI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R9lwLOprtJ5WlxJMGh1fasd6QZKtIMsz8vJnGVx5k76eWHAL0wXRRa/ns3IYbbci1
-         J63ShGUSB0vDMEF1+uhtKfslzWc2j7hmES3KH+Tl0ZbNvUrjwL59nq2VwFqsdQEsod
-         i0qwv2jVZOVpaYsuFMLijGfS6cyD2npQvI6YWwSY=
-Date:   Wed, 5 Apr 2023 20:06:48 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Filipe =?iso-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH v2] USB: core: Fix docs warning caused by wireless_status
- feature
-Message-ID: <2023040541-decipher-chowtime-42a3@gregkh>
-References: <20230405092754.36579-1-hadess@hadess.net>
- <2023040554-obscurity-latter-b12b@gregkh>
- <8ee84f3383fb074f031b88c4f030757667635d96.camel@hadess.net>
+        by mail.turbocat.net (Postfix) with ESMTPSA id 49236262D22;
+        Wed,  5 Apr 2023 20:15:25 +0200 (CEST)
+Message-ID: <1ffc488a-5bce-133a-6a7d-cafed6a6dab2@selasky.org>
+Date:   Wed, 5 Apr 2023 20:15:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8ee84f3383fb074f031b88c4f030757667635d96.camel@hadess.net>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; FreeBSD amd64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [Bug 217242] CPU hard lockup related to xhci/dma
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+References: <bug-217242-208809@https.bugzilla.kernel.org/>
+ <bug-217242-208809-LGiVP9fz4d@https.bugzilla.kernel.org/>
+ <7dc47823-01a1-ac19-73d4-4bf7eb07f98d@selasky.org>
+ <2023040210-armband-spiffy-b5a5@gregkh>
+ <c8cbd221-1cd6-4c9d-bc8e-2013558e5e1d@rowland.harvard.edu>
+From:   Hans Petter Selasky <hps@selasky.org>
+In-Reply-To: <c8cbd221-1cd6-4c9d-bc8e-2013558e5e1d@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,41 +47,75 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 08:03:16PM +0200, Bastien Nocera wrote:
-> On Wed, 2023-04-05 at 19:13 +0200, Greg Kroah-Hartman wrote:
-> > On Wed, Apr 05, 2023 at 11:27:54AM +0200, Bastien Nocera wrote:
-> > > Fix wrongly named 'dev' parameter in doc block, should have been
-> > > iface:
-> > > drivers/usb/core/message.c:1939: warning: Function parameter or
-> > > member 'iface' not described in 'usb_set_wireless_status'
-> > > drivers/usb/core/message.c:1939: warning: Excess function parameter
-> > > 'dev' description in 'usb_set_wireless_status'
-> > > 
-> > > And fix missing struct member doc in kernel API, and reorder to
-> > > match struct:
-> > > include/linux/usb.h:270: warning: Function parameter or member
-> > > 'wireless_status_work' not described in 'usb_interface'
-> > > 
-> > > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > Link:
-> > > https://lore.kernel.org/linux-next/20230405114807.5a57bf46@canb.auug.org.au/T/#t
-> > > Fixes: 0a4db185f078 ("USB: core: Add API to change the
-> > > wireless_status")
-> > 
-> > I do not see that git commit id anywhere, where is it from?  What
-> > tree?
-> > 
-> > Ah, input tree, not much I can do there...
+On 4/2/23 20:57, Alan Stern wrote:
+> [Bugzilla removed from the CC: list, since this isn't relevant to the bug
+> report]
 > 
-> Yes, it's from the hid tree.
+> On Sun, Apr 02, 2023 at 07:25:27PM +0200, Greg KH wrote:
+>> On Sun, Apr 02, 2023 at 05:54:18PM +0200, Hans Petter Selasky wrote:
+>>> While that being said, I wish the Linux USB core would take the example of
+>>> the FreeBSD USB core, and pre-allocate all memory needed for USB transfers,
+>>> also called URB's, during device attach.
+>>
+>> Many drivers do that today already, which specific ones do you think
+>> need to have this added that are not doing so?
 > 
-> Benjamin is waiting on either Alan or yourself ack'ing the changes
-> before pushing it through the hid tree, to avoid stepping on somebody
-> else's toes.
-> 
-> The patch seems to fix the warnings in my local tests, let me know if
-> you have any comments about the wording.
+> Hans is undoubtedly referring to the host controller drivers.
 
-Nope:
+Hi Alan,
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Yes, I'm on the USB host side this time.
+
+> usb_alloc_urb() allocates memory for the URB itself.  But the routine does
+> not know which device or host controller the URB will eventually be used
+> with, so it doesn't know which HCD to tell to set aside adequate memory
+> for handling the URB once it is submitted.  And since HCDs tend to process
+> URB submissions while holding a private spinlock, when their memory
+> allocation does get done it cannot use GFP_KERNEL.
+
+I remember a long time ago when memory allocation was very slow in 
+FreeBSD, testing the USB control endpoint was difficult, without at the 
+same time using 100% CPU. The reason was user-space applications used 
+IOCTL's to do USB control endpoint requests synchronously, and that 
+leaded to the request data being alloc'ed and free'd regularly. That was 
+before jemalloc and per-CPU slabs. It was not the amount of data causing 
+problems, but the request rate, 1000 - 8000 requests per second 
+typically. Finding free holes in memory bitmaps due to fragmentation is 
+_very_ expensive!
+
+> 
+> I think it's fair to call this a weak point in Linux's USB stack.
+> Balancing this, it should be pointed out that we can't always know in
+> advance how large an URB's transfer buffer will be, and the amount of
+> memory that the HCD will need can depend on this size.
+ >
+
+In FreeBSD you have to specify a maximum length in bytes per "urb" or 
+FreeBSD USB transfer, and various other static properties. Then you 
+don't allocate and free those URB's so to speak, but just keep on 
+re-using them, after first time allocation. All XHCI DMA structures are 
+then just pre-allocated, because we know the PAGE_SIZE and how stuff is 
+laid out into memory, it's easy to compute exactly the worst and best 
+case for the number for hardware structures you need.
+
+This is also very useful for boot-loaders, that FreeBSD USB can either 
+run all single threaded with few fixed size memory pools, or multi 
+threaded as part of a bigger OS.
+
+>>> Frequently going through allocate
+>>> and free cycles during operation, is not just inefficient, but also greatly
+> 
+> In fact, the original Slab memory allocator (in Solaris 2.4) was designed
+> to make frequent allocate-and-free cycles extremely efficient.  So much so
+> that people would just naturally do things that way instead of
+> pre-allocating memory which would then just sit around unused a large
+> fraction of the time.
+> 
+> I suspect the allocators in the Linux kernel don't end up being quite as
+> efficient as the original Slab, however.
+> 
+
+FreeBSD USB is a completely different design compared to Linux. Anyway, 
+back to the topic and thanks for the chat :-)
+
+--HPS
