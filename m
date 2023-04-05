@@ -2,114 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947F06D840D
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 18:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB7C6D849A
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 19:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233523AbjDEQtB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Apr 2023 12:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55678 "EHLO
+        id S231245AbjDERLn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Apr 2023 13:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233485AbjDEQs7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 12:48:59 -0400
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2804D3AAB;
-        Wed,  5 Apr 2023 09:48:59 -0700 (PDT)
-Received: by mail-oo1-f41.google.com with SMTP id h1-20020a4adcc1000000b0053e9796cc7dso2931235oou.4;
-        Wed, 05 Apr 2023 09:48:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680713338;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7txYggN2JwlOgtYe4eHEvjrkY9LG17YWZv5dce4ogFI=;
-        b=GXEJvW3djiNayPMTxsGpFxIlM0lWiVIKINTpF/VTSa4fNP0eRS113FsTd5XNrTmaRG
-         sU0ATEllhVd5fPES/4wnoKzRZCKgEGAQVYDAiiZ/IA5ruFm0hQBJdchAg0+tw34ELM6g
-         roVM63bxiKfs9BLBpG2+m1895ruCP55+ay5Y5ZVBQKaCcV0mkCLdYlPe7m6u3stbMmw2
-         rvtRSiNdH880V7anY0ZypcC+VGqs8IQyqBDRh4ZNhxRj2B6X6jzS2O6vCHx7VoXxTpgP
-         6RY2ZgfI2cw4QJ3pYPDvwOqtqZIMkuxxFLjnevmd5YFaBLQtQowNGvjnNXVag5w8rWmo
-         CCgQ==
-X-Gm-Message-State: AAQBX9fY/XAbRIC1i8xV40nUkbxDEBJtBU5QWVRjoCJdROtt8uYtgG54
-        aqxDEQwxgZNeQwv8F97aey6Zyjn35Q==
-X-Google-Smtp-Source: AKy350ZOWsoXuIh71UIF2+sLLrwOl+BpqIIgKkgejqQBZ32ulm5gvnnvuwY3zC6rOomi+M4QLEKW3A==
-X-Received: by 2002:a4a:418e:0:b0:538:242e:803a with SMTP id x136-20020a4a418e000000b00538242e803amr3420413ooa.0.1680713338369;
-        Wed, 05 Apr 2023 09:48:58 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id c5-20020a4aacc5000000b00524f381f681sm6880102oon.27.2023.04.05.09.48.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 09:48:58 -0700 (PDT)
-Received: (nullmailer pid 2821002 invoked by uid 1000);
-        Wed, 05 Apr 2023 16:48:57 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S232116AbjDERLl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 13:11:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A756E268B;
+        Wed,  5 Apr 2023 10:11:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 40D3A63B8D;
+        Wed,  5 Apr 2023 17:11:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 553A9C433EF;
+        Wed,  5 Apr 2023 17:11:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680714687;
+        bh=+zyZst7SV5qhrY992xxhoKrB2yqIXXTFRpPQnZoUrAs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uiUpSCl7jEpioiVY3TxwZEfWs3AQKErIPE/OmjBZZnXAflH29ZFy9XRSlWEn7PSEP
+         ep50L97az00XXqWzNNv54Ik0VBZB4q4SfA/NFUc+W3ush5peZc9Z/J5aUxdoC28ih3
+         iTG86g65GHWSiJj0AjF4CAr2m8ZEpYVOKSzVfDHE=
+Date:   Wed, 5 Apr 2023 19:11:25 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bastien Nocera <hadess@hadess.net>
+Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Filipe =?iso-8859-1?Q?La=EDns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH] USB: core: Fix docs warning caused by wireless_status
+ feature
+Message-ID: <2023040507-revenge-universal-3247@gregkh>
+References: <20230405091157.35056-1-hadess@hadess.net>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>, ahalaney@redhat.com,
-        linux-kernel@vger.kernel.org, quic_harshq@quicinc.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, quic_pkondeti@quicinc.com,
-        Andy Gross <agross@kernel.org>, quic_shazhuss@quicinc.com,
-        devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        quic_wcheng@quicinc.com, Bjorn Andersson <andersson@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>, quic_jackp@quicinc.com,
-        quic_ppratap@quicinc.com
-In-Reply-To: <20230405125759.4201-2-quic_kriskura@quicinc.com>
-References: <20230405125759.4201-1-quic_kriskura@quicinc.com>
- <20230405125759.4201-2-quic_kriskura@quicinc.com>
-Message-Id: <168071287318.2812205.17997019926296843813.robh@kernel.org>
-Subject: Re: [PATCH v6 1/8] dt-bindings: usb: Add bindings for multiport
- properties on DWC3 controller
-Date:   Wed, 05 Apr 2023 11:48:57 -0500
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405091157.35056-1-hadess@hadess.net>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-On Wed, 05 Apr 2023 18:27:52 +0530, Krishna Kurapati wrote:
-> Add bindings to indicate properties required to support multiport
-> on Snps Dwc3 controller.
+On Wed, Apr 05, 2023 at 11:11:57AM +0200, Bastien Nocera wrote:
+> Fix wrongly named 'dev' parameter in doc block, should have been iface:
+> drivers/usb/core/message.c:1939: warning: Function parameter or member 'iface' not described in 'usb_set_wireless_status'
+> drivers/usb/core/message.c:1939: warning: Excess function parameter 'dev' description in 'usb_set_wireless_status'
 > 
-> Suggested-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> And fix missing struct member doc in kernel API, and reorder to
+> match struct:
+> include/linux/usb.h:270: warning: Function parameter or member 'wireless_status_work' not described in 'usb_interface'
+> 
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Fixes: 0a4db185f078 ("USB: core: Add API to change the wireless_status")
 > ---
-> Link to v5: https://lore.kernel.org/all/20230310163420.7582-2-quic_kriskura@quicinc.com/
+>  drivers/usb/core/message.c | 2 +-
+>  include/linux/usb.h        | 6 ++++--
+>  2 files changed, 5 insertions(+), 3 deletions(-)
 > 
->  .../devicetree/bindings/usb/snps,dwc3.yaml          | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
-> 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Hi,
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:90:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-dtschema/dtc warnings/errors:
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-doc reference errors (make refcheckdocs):
+- Your patch does not have a Signed-off-by: line.  Please read the
+  kernel file, Documentation/process/submitting-patches.rst and resend
+  it after adding that line.  Note, the line needs to be in the body of
+  the email, before the patch, not at the bottom of the patch or in the
+  email signature.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230405125759.4201-2-quic_kriskura@quicinc.com
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+thanks,
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+greg k-h's patch email bot
