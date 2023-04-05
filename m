@@ -2,99 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E58946D8243
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 17:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 947F06D840D
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 18:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238992AbjDEPmi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Apr 2023 11:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49420 "EHLO
+        id S233523AbjDEQtB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Apr 2023 12:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238902AbjDEPmh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 11:42:37 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B7C7688
-        for <linux-usb@vger.kernel.org>; Wed,  5 Apr 2023 08:42:17 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id h8so142180556ede.8
-        for <linux-usb@vger.kernel.org>; Wed, 05 Apr 2023 08:42:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680709332;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W3rEjEBIzvTLM76lijFumhUVHcnIxOg2kiFST3j5p5o=;
-        b=j0YrqLl8ikrtYvR4+5TGcOG3lc77ztC3YxP5gQBq9siJtXfCwggpjAkRS8aLC9F43d
-         rSQfXBM1OZU6sTEseTUVbDj2JJWn1aDs5mYge6bdEXoiCRc/QojFSLK61m2/8oXnJCb+
-         5DndmQfMph/b67yqiB8Gkg1xL7KC1E7QGiRdfdHUDugptIJ4RQl1CEfTdGxQGJRMMVqK
-         o1e+C/Xv7HkySyEQ8sAu77H2vQwP5ohM8X+SK6xcd9UG+Yc6rbpafDhPmt1hwirNcwth
-         kPNsZesw4mHFJDVHDXqCI+o6yg+QmvENnkeFbHVJLwQ/UN4/gp6nsRu07bPJBhhc2/8G
-         N4/A==
+        with ESMTP id S233485AbjDEQs7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 12:48:59 -0400
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2804D3AAB;
+        Wed,  5 Apr 2023 09:48:59 -0700 (PDT)
+Received: by mail-oo1-f41.google.com with SMTP id h1-20020a4adcc1000000b0053e9796cc7dso2931235oou.4;
+        Wed, 05 Apr 2023 09:48:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680709332;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=W3rEjEBIzvTLM76lijFumhUVHcnIxOg2kiFST3j5p5o=;
-        b=GnZh9x2XDGxUfDLDqWFgVMF8DupuQyDJ6cIVzPZLgsrdl+UBdd4lq0isxE0B2wM30V
-         +kL1DlTHAw2VtuPA0ukBvzZ1cWK9W803tl3rVhBC80kCY6ZCuxMi2EY3vML0Nd6kaB4Q
-         vBZMBgOudnNN0v+HBQH+ckwJsgxJQ8hMyCBajKM4a67Eg+A3yMN6UhLqyTYSWx+9UNLN
-         ErQCQTlYtfzw5WVB1j0qOE1ultM1iOZSPOykTxjvlTnfJNhotfTdXnQcT+ydgzS3WNKY
-         5880BEFn5LARAz12FdpeIsyTRUCa1ZyzCLiMe99ZS2lD60TbhLTMOLcnaWM39yxrCfrK
-         KwUA==
-X-Gm-Message-State: AAQBX9earJ6CAImpDqY2K/x9xRI+zy/VJAI1ZW8qVaPR/dDuXw6Llc/T
-        j+eJi4nw9NVQAQvbO3nZqmo=
-X-Google-Smtp-Source: AKy350aN36e109j2V5e1/9ZUfUjDj2DnafFLoEuOLo0Bk2QvbJEJs80YfcFS2jjLPSNjlEG5VfvZDQ==
-X-Received: by 2002:a17:906:278e:b0:932:e43f:7367 with SMTP id j14-20020a170906278e00b00932e43f7367mr3619210ejc.35.1680709331933;
-        Wed, 05 Apr 2023 08:42:11 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id jx10-20020a170906ca4a00b009495cfe446esm1174994ejb.223.2023.04.05.08.42.11
+        d=1e100.net; s=20210112; t=1680713338;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=7txYggN2JwlOgtYe4eHEvjrkY9LG17YWZv5dce4ogFI=;
+        b=GXEJvW3djiNayPMTxsGpFxIlM0lWiVIKINTpF/VTSa4fNP0eRS113FsTd5XNrTmaRG
+         sU0ATEllhVd5fPES/4wnoKzRZCKgEGAQVYDAiiZ/IA5ruFm0hQBJdchAg0+tw34ELM6g
+         roVM63bxiKfs9BLBpG2+m1895ruCP55+ay5Y5ZVBQKaCcV0mkCLdYlPe7m6u3stbMmw2
+         rvtRSiNdH880V7anY0ZypcC+VGqs8IQyqBDRh4ZNhxRj2B6X6jzS2O6vCHx7VoXxTpgP
+         6RY2ZgfI2cw4QJ3pYPDvwOqtqZIMkuxxFLjnevmd5YFaBLQtQowNGvjnNXVag5w8rWmo
+         CCgQ==
+X-Gm-Message-State: AAQBX9fY/XAbRIC1i8xV40nUkbxDEBJtBU5QWVRjoCJdROtt8uYtgG54
+        aqxDEQwxgZNeQwv8F97aey6Zyjn35Q==
+X-Google-Smtp-Source: AKy350ZOWsoXuIh71UIF2+sLLrwOl+BpqIIgKkgejqQBZ32ulm5gvnnvuwY3zC6rOomi+M4QLEKW3A==
+X-Received: by 2002:a4a:418e:0:b0:538:242e:803a with SMTP id x136-20020a4a418e000000b00538242e803amr3420413ooa.0.1680713338369;
+        Wed, 05 Apr 2023 09:48:58 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c5-20020a4aacc5000000b00524f381f681sm6880102oon.27.2023.04.05.09.48.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 08:42:11 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, kernel@pengutronix.de
-Subject: Re: [PATCH 08/10] usb: musb: sunxi: Convert to platform remove callback
- returning void
-Date:   Wed, 05 Apr 2023 17:42:10 +0200
-Message-ID: <2673762.mvXUDI8C0e@jernej-laptop>
-In-Reply-To: <20230405141009.3400693-9-u.kleine-koenig@pengutronix.de>
-References: <20230405141009.3400693-1-u.kleine-koenig@pengutronix.de>
- <20230405141009.3400693-9-u.kleine-koenig@pengutronix.de>
+        Wed, 05 Apr 2023 09:48:58 -0700 (PDT)
+Received: (nullmailer pid 2821002 invoked by uid 1000);
+        Wed, 05 Apr 2023 16:48:57 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>, ahalaney@redhat.com,
+        linux-kernel@vger.kernel.org, quic_harshq@quicinc.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, quic_pkondeti@quicinc.com,
+        Andy Gross <agross@kernel.org>, quic_shazhuss@quicinc.com,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        quic_wcheng@quicinc.com, Bjorn Andersson <andersson@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>, quic_jackp@quicinc.com,
+        quic_ppratap@quicinc.com
+In-Reply-To: <20230405125759.4201-2-quic_kriskura@quicinc.com>
+References: <20230405125759.4201-1-quic_kriskura@quicinc.com>
+ <20230405125759.4201-2-quic_kriskura@quicinc.com>
+Message-Id: <168071287318.2812205.17997019926296843813.robh@kernel.org>
+Subject: Re: [PATCH v6 1/8] dt-bindings: usb: Add bindings for multiport
+ properties on DWC3 controller
+Date:   Wed, 05 Apr 2023 11:48:57 -0500
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dne sreda, 05. april 2023 ob 16:10:07 CEST je Uwe Kleine-K=F6nig napisal(a):
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
->=20
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+On Wed, 05 Apr 2023 18:27:52 +0530, Krishna Kurapati wrote:
+> Add bindings to indicate properties required to support multiport
+> on Snps Dwc3 controller.
+> 
+> Suggested-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+> Link to v5: https://lore.kernel.org/all/20230310163420.7582-2-quic_kriskura@quicinc.com/
+> 
+>  .../devicetree/bindings/usb/snps,dwc3.yaml          | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
+> 
 
-Best regards,
-Jernej
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:90:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
+
+dtschema/dtc warnings/errors:
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230405125759.4201-2-quic_kriskura@quicinc.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
