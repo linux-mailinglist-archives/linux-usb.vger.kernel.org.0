@@ -2,192 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97AA36D7DF8
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 15:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 294956D7E13
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Apr 2023 15:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237766AbjDENpE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Apr 2023 09:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
+        id S238005AbjDENv3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Apr 2023 09:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237507AbjDENo4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 09:44:56 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709D55B9D
-        for <linux-usb@vger.kernel.org>; Wed,  5 Apr 2023 06:44:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680702295; x=1712238295;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GXCV12trQehxUcs4IUml0M8hLi49IKzH7o/s92iGUbs=;
-  b=Z+tMfcRg5XPak4S0gQhLlhhZBOeZBBBU6c0iNt0jZwwRb89cqypLpJPj
-   gkeyQU8k2enfiA7lLAMHUnHtJgWZn8ajn+zhc6sTrC7Rl2XqCegOKoHly
-   BZ1Cr9PMmjG/WP/JUSJPrHna48L15wzYD+BK1GHGNKZ/j2t8gUOJv3PLA
-   gy9y5WnCxQtMu+9nVZJ73gjnjr+RGGlT0Qkh4fjeTKcUBDGf5IInGfR1n
-   ottwne1cBOX6nV8Zh8Ns42L0dLsc/9dW0sFNFxEuhIz2mQjQ5NdrJTqCE
-   ZAcjJPvlKoKNBdMCdNVn7CTIT+fYpnNpvrLPmj4dXz2McdPDG3fgSvn73
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="405232564"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="405232564"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 06:44:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="830369122"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="830369122"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Apr 2023 06:44:53 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        =?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>
-Subject: [PATCH v2] usb: typec: ucsi: acpi: add quirk for ASUS Zenbook UM325
-Date:   Wed,  5 Apr 2023 16:44:56 +0300
-Message-Id: <20230405134456.49607-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S237879AbjDENv1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Apr 2023 09:51:27 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665FCE5
+        for <linux-usb@vger.kernel.org>; Wed,  5 Apr 2023 06:51:25 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id cn12so141295217edb.4
+        for <linux-usb@vger.kernel.org>; Wed, 05 Apr 2023 06:51:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680702684;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uPqH7o+0wiRlBmcx0MUrrIJplx2idVv42J11sE3f/KY=;
+        b=HSDwUFhV0XqGiVO+Xtk10tawmjOw1BmkD0h5DCHj7+7lDSU9h0va60K2EuqPQAJ0wJ
+         vh17eJDGLMXGwvFJc2Lh7N8y2Qzx+9BDw+B1XDfjJkbEGmma5uQ7p4GXrdqzdGPkhiJK
+         /cuLGMpm0w1aC1SsAKpQI1+Wp2q6E0EWUe1eTmgk6R2V1/Wa7KAm8RYjB7TgXo1DUSOr
+         mxGdz4W4ZfehzI6DY7FqsJiQCXFTMYPWhm1VbcuJhNHqhLFTR8YS2kVzAdhBTHcepKIY
+         3m4qwI+zq8LlvwesdwMxCViebZRXhiKtGuCHxVd8zkGSu7+cOz906fFSNDrtV+ez+Yyq
+         pM6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680702684;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uPqH7o+0wiRlBmcx0MUrrIJplx2idVv42J11sE3f/KY=;
+        b=4UWXaHdEZC21zcvuv4AV8HJ957XjP9GhoCQ6oTBqjxqMAX+zpq0RQnmj2ycPoxZqMT
+         QhA8VaKuzmXzH17yBFvsr9oGXvDy/5q9XEaOU1KUJXwwEbZ77W8Afv4yP49++aeWZ7+E
+         GbIBIZrUsAjTH+HqpYfK2RHUAov+fDnEw9N0zul3yzI0XFkGGBYdOrQvUe+SlLqV4tAe
+         b3xxGGMHdb2ZEvcqU2dGx+nz2k/ZJKafTlFETcoylr/jVcG91mDLs+SigAh551EGJx+h
+         t8r8nW1apSFXlTLv2KWkhy0ThYFVvlsPDcSn59Ka4iwEMJeSyaXdJ2BkeYawDLZ88EJH
+         zRCw==
+X-Gm-Message-State: AAQBX9feHiIfuGcxHboc0/Iaz9CDZJIBM/KMx3Lg1RX2p27nR3NnSUci
+        rXaM+C+onK0Dfy+ZDH4CRx78wQ==
+X-Google-Smtp-Source: AKy350aCSBtfQNEG9ivhJDXRScDkDl7K9FxzN5uKgWKy9JhdSLbTTf3hT9NuDFad11cE5iNMfsxaLw==
+X-Received: by 2002:a17:907:8b95:b0:932:c1e2:9984 with SMTP id tb21-20020a1709078b9500b00932c1e29984mr3530013ejc.58.1680702683903;
+        Wed, 05 Apr 2023 06:51:23 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:3f:6b2:54cd:498e? ([2a02:810d:15c0:828:3f:6b2:54cd:498e])
+        by smtp.gmail.com with ESMTPSA id m23-20020a509317000000b004fbd365fb33sm7391465eda.38.2023.04.05.06.51.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 06:51:23 -0700 (PDT)
+Message-ID: <5bbf9452-43b4-4b7a-8879-003efa26b0f5@linaro.org>
+Date:   Wed, 5 Apr 2023 15:51:22 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v8 0/8] Enable IPQ9754 USB
+Content-Language: en-US
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+References: <cover.1680693149.git.quic_varada@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <cover.1680693149.git.quic_varada@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Samuel Čavoj <samuel@cavoj.net>
+On 05/04/2023 13:41, Varadarajan Narayanan wrote:
+> This patch series adds the relevant phy and controller
+> configurations for enabling USB on IPQ9754
+> 
+> Depends on:
+> https://lore.kernel.org/all/20230217142030.16012-1-quic_devipriy@quicinc.com/
+> 
+> [v8]:
+> 	- Update bindings for the clock name change
+> [v7]:
+> 	- com_aux -> cfg_ahb in patch 7
+> 
+> [v6]:
+>         - Incorporated review comments
+> 	- Resolve make dtbs_check messages
+> 	- Fixed pcs_usb offset
+> 	- Board dts file name changed
+> 
 
-On some ACPI platforms (namely the ASUS Zenbook UM325) the _DSM method must
-not be called after a notification is received but instead the mailbox
-should be read immediately from RAM. This is because the ACPI interrupt
-handler destroys the CCI in ERAM after copying to system memory, and when
-_DSM is later called to perform a second copy, it retrieves a garbage
-value.
-
-Instead, the _DSM(read) method should only be called when necessary, i.e.
-for polling the state after reset and for retrieving the version. Other
-reads should not call _DSM and only peek into the RAM region.
-
-This adds a separate read operation for the Zenbook that syncs the
-ACPI mailbox only with polled commands.
-
-Link: https://lore.kernel.org/linux-usb/20210823180626.tb6m7h5tp6adhvt2@fastboi.localdomain/
-Signed-off-by: Samuel Čavoj <samuel@cavoj.net>
-[ heikki : handling everything in ucsi_acpi.c with DMI quirk ]
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
-
-Changed since v1 [1]:
-
-- ucsi.c is not modified anymore. The separate read_explicit
-  callback is replaced with a dedicated read operation for
-  the Zenbooks only.
-
-[1] https://lore.kernel.org/linux-usb/20230120233920.752245-1-samuel@cavoj.net/
-
----
- drivers/usb/typec/ucsi/ucsi_acpi.c | 44 ++++++++++++++++++++++++++++--
- 1 file changed, 42 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
-index 62206a6b8ea75..217355f1f9b94 100644
---- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-+++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-@@ -9,6 +9,7 @@
- #include <linux/platform_device.h>
- #include <linux/module.h>
- #include <linux/acpi.h>
-+#include <linux/dmi.h>
- 
- #include "ucsi.h"
- 
-@@ -23,6 +24,7 @@ struct ucsi_acpi {
- 	struct completion complete;
- 	unsigned long flags;
- 	guid_t guid;
-+	u64 cmd;
- };
- 
- static int ucsi_acpi_dsm(struct ucsi_acpi *ua, int func)
-@@ -62,6 +64,7 @@ static int ucsi_acpi_async_write(struct ucsi *ucsi, unsigned int offset,
- 	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
- 
- 	memcpy(ua->base + offset, val, val_len);
-+	ua->cmd = *(u64 *)val;
- 
- 	return ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_WRITE);
- }
-@@ -93,13 +96,46 @@ static const struct ucsi_operations ucsi_acpi_ops = {
- 	.async_write = ucsi_acpi_async_write
- };
- 
-+static int
-+ucsi_zenbook_read(struct ucsi *ucsi, unsigned int offset, void *val, size_t val_len)
-+{
-+	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
-+	int ret;
-+
-+	if (offset == UCSI_VERSION || UCSI_COMMAND(ua->cmd) == UCSI_PPM_RESET) {
-+		ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	memcpy(val, ua->base + offset, val_len);
-+
-+	return 0;
-+}
-+
-+static const struct ucsi_operations ucsi_zenbook_ops = {
-+	.read = ucsi_zenbook_read,
-+	.sync_write = ucsi_acpi_sync_write,
-+	.async_write = ucsi_acpi_async_write
-+};
-+
-+static const struct dmi_system_id zenbook_dmi_id[] = {
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
-+		},
-+	},
-+	{ }
-+};
-+
- static void ucsi_acpi_notify(acpi_handle handle, u32 event, void *data)
- {
- 	struct ucsi_acpi *ua = data;
- 	u32 cci;
- 	int ret;
- 
--	ret = ucsi_acpi_read(ua->ucsi, UCSI_CCI, &cci, sizeof(cci));
-+	ret = ua->ucsi->ops->read(ua->ucsi, UCSI_CCI, &cci, sizeof(cci));
- 	if (ret)
- 		return;
- 
-@@ -114,6 +150,7 @@ static void ucsi_acpi_notify(acpi_handle handle, u32 event, void *data)
- static int ucsi_acpi_probe(struct platform_device *pdev)
- {
- 	struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
-+	const struct ucsi_operations *ops = &ucsi_acpi_ops;
- 	struct ucsi_acpi *ua;
- 	struct resource *res;
- 	acpi_status status;
-@@ -143,7 +180,10 @@ static int ucsi_acpi_probe(struct platform_device *pdev)
- 	init_completion(&ua->complete);
- 	ua->dev = &pdev->dev;
- 
--	ua->ucsi = ucsi_create(&pdev->dev, &ucsi_acpi_ops);
-+	if (dmi_check_system(zenbook_dmi_id))
-+		ops = &ucsi_zenbook_ops;
-+
-+	ua->ucsi = ucsi_create(&pdev->dev, ops);
- 	if (IS_ERR(ua->ucsi))
- 		return PTR_ERR(ua->ucsi);
- 
--- 
-2.39.2
+Thanks for the patches. Three submissions within few hours it is a bit
+too many. Please slow down a bit, give reviewers chance to respond and
+wait with new versions at least one day.
+Best regards,
+Krzysztof
 
