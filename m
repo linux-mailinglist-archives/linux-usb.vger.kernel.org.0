@@ -2,129 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 903B16D9476
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Apr 2023 12:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2036D949B
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Apr 2023 13:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236745AbjDFKvf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Apr 2023 06:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
+        id S236782AbjDFLCu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Apr 2023 07:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233619AbjDFKve (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 06:51:34 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AC74C05;
-        Thu,  6 Apr 2023 03:51:33 -0700 (PDT)
-Received: from mercury (dyndsl-091-248-189-216.ewe-ip-backbone.de [91.248.189.216])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1638566031C0;
-        Thu,  6 Apr 2023 11:51:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680778292;
-        bh=x3aRxla+DsZNmlA36XqdRv0nclCoMSIM66m0rWdCOno=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bl6uvRbRN9rcLi0VaAIkIHx9E+RvBNULGoeukOhgfwG4FLRmoshhPEGXJehxT0mxb
-         u2672Aw61Cc/Lyv59X/PhSMgd5N1nmlFpegoVRnUCacQQSCFiMlK/siFXt8HVRC9EU
-         6/PLHJjhjaVxg8WrzrAsjWFWX0G3fQbYCTcI1giPMTynA5r/rkLCKyfVFdX8/3h6GK
-         KFYEz8Fkk+FRQHzpW2gJXUx4M3KjQFSvaBxjdQo/90juFFNscFnhYAR7p6D0X4pgO7
-         JLX75iK4Ix6YH6+fhMO39MqPQPH0GNBoPRHlFdAsPHdjxTDTvv1NIO/a2LGoS8yxlj
-         G8+eWSe2aOKhA==
-Received: by mercury (Postfix, from userid 1000)
-        id 89011106273A; Thu,  6 Apr 2023 12:51:29 +0200 (CEST)
-Date:   Thu, 6 Apr 2023 12:51:29 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        with ESMTP id S229820AbjDFLCt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 07:02:49 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46A57A8F
+        for <linux-usb@vger.kernel.org>; Thu,  6 Apr 2023 04:02:47 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id n21so392033ejz.4
+        for <linux-usb@vger.kernel.org>; Thu, 06 Apr 2023 04:02:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680778966;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eN0OWf//Z3RaQ4PbapSW+hfWfT9/2ODhlOs9zD/jp+4=;
+        b=bN1Djfwr4R5Ksf/VBsNRueEse4FjoXdaZZ/Z4rgj2s11YX9dfsQEjL7PkriW+4Lx6w
+         g5xTbzmxhpT6nn8M9XcvYdu7QB0oftJ+knVLAxJ5+dp4aTaur37dui5Ys5dhmLkokb/g
+         dvRhOgQgL/M9To6tvkbvBytcGHVFGnVqF0VJC9lL0bR3HyfRrJQypVWnkGTLIMrzA7iW
+         R6Kpv+yGBjl56gI1s3v26aurz6k7xuEWZ1+HDr3kjZra1jaMkORkFh7idyj796Owv/NO
+         0T8vUXNtIishxwmEAALqpsWdJL6+C5luW48nvsyoSjiL1L/ZinISl4RrAEQvsnRLCEN8
+         r3tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680778966;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eN0OWf//Z3RaQ4PbapSW+hfWfT9/2ODhlOs9zD/jp+4=;
+        b=RBhHqnObBJ//BJ+rsuZ8+onN0+lXQ8FULeTGsuAuKeb9/Z2LS9eRYC5TGghCFl5WxP
+         fWOIwcJYnOvI1oqI5lG09ILVpXm82oDuSDS1E6pLuqBdVHhxeOl8ThpDrJB+er/xhrOK
+         0IjkBWbf9ureAJIMDndcoTQUmqkrpA3QTYHmmC1xanHv5o4pYLwblzQ6QeqtvdsPncxi
+         bje9sbglYovCN5obKODNMBB6ndDnyAaAcsQFlU6b2knq3b2qVr6QE813ncX+O9iDfA90
+         Ufh6BzfKEE6RC/TcNpPTSm1xVEVB/1gSUKB90ZJvuAgIPyMWW5CZxs8S9nuib5OPZzoq
+         FdCA==
+X-Gm-Message-State: AAQBX9eBByvT5kFY19b914X1msYcIBlOW5jgmh1SViBPRC+AzRe9h2rw
+        dc23tSZes2PmG6ccT1LhFekyAg==
+X-Google-Smtp-Source: AKy350YQPdIYKnjdyZIJQaSFGHLBoDkWVJChEHBifaKzvwtbGI6HtMQaw1reHUZmC3yS8DuswmXt5A==
+X-Received: by 2002:a17:906:95c1:b0:8f6:dc49:337f with SMTP id n1-20020a17090695c100b008f6dc49337fmr5525355ejy.43.1680778966362;
+        Thu, 06 Apr 2023 04:02:46 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
+        by smtp.gmail.com with ESMTPSA id hx23-20020a170906847700b0094928b18886sm673428ejc.52.2023.04.06.04.02.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 04:02:46 -0700 (PDT)
+Message-ID: <0f671b8a-fbc4-a7c0-1469-a9e3f180e776@linaro.org>
+Date:   Thu, 6 Apr 2023 13:02:44 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCHv1 1/3] dt-bindings: usb: Add RK3588 OHCI
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
 Cc:     Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCHv1 1/3] dt-bindings: usb: Add RK3588 OHCI
-Message-ID: <20230406105129.nuv3jcmwl7ugql3q@mercury.elektranox.org>
 References: <20230404145350.45388-1-sebastian.reichel@collabora.com>
  <20230404145350.45388-2-sebastian.reichel@collabora.com>
  <15dcd1fa-9adb-6bc2-9f01-454273368002@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gkot42bc7hmuouit"
-Content-Disposition: inline
-In-Reply-To: <15dcd1fa-9adb-6bc2-9f01-454273368002@linaro.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+ <20230406105129.nuv3jcmwl7ugql3q@mercury.elektranox.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230406105129.nuv3jcmwl7ugql3q@mercury.elektranox.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 06/04/2023 12:51, Sebastian Reichel wrote:
+> Hi Krzysztof,
+> 
+> On Thu, Apr 06, 2023 at 09:45:11AM +0200, Krzysztof Kozlowski wrote:
+>> On 04/04/2023 16:53, Sebastian Reichel wrote:
+>>> Add compatible for RK3588 OHCI. As far as I know it's fully
+>>> compatible with generic-ohci.
+>>>
+>>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+>>> ---
+>>>  .../devicetree/bindings/usb/generic-ohci.yaml  | 18 ++++++++++++++++--
+>>>  1 file changed, 16 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+>>> index a9ba7257b884..d84732a100ba 100644
+>>> --- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+>>> +++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+>>> @@ -44,6 +44,7 @@ properties:
+>>>                - hpe,gxp-ohci
+>>>                - ibm,476gtr-ohci
+>>>                - ingenic,jz4740-ohci
+>>> +              - rockchip,rk3588-ohci
+>>>                - snps,hsdk-v1.0-ohci
+>>>            - const: generic-ohci
+>>>        - enum:
+>>> @@ -68,8 +69,6 @@ properties:
+>>>      maxItems: 2
+>>>  
+>>>    clocks:
+>>> -    minItems: 1
+>>> -    maxItems: 3
+>>
+>> The constraints here should stay.
+> 
+> dtbs_check complained about the 4 RK3588 clock entries if this
+> stays. That's why I moved them to the condition down below into
+> the else branch.
 
---gkot42bc7hmuouit
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Which is not what we want. We want the constraints here (the widest).
 
-Hi Krzysztof,
+Best regards,
+Krzysztof
 
-On Thu, Apr 06, 2023 at 09:45:11AM +0200, Krzysztof Kozlowski wrote:
-> On 04/04/2023 16:53, Sebastian Reichel wrote:
-> > Add compatible for RK3588 OHCI. As far as I know it's fully
-> > compatible with generic-ohci.
-> >=20
-> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > ---
-> >  .../devicetree/bindings/usb/generic-ohci.yaml  | 18 ++++++++++++++++--
-> >  1 file changed, 16 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/=
-Documentation/devicetree/bindings/usb/generic-ohci.yaml
-> > index a9ba7257b884..d84732a100ba 100644
-> > --- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-> > @@ -44,6 +44,7 @@ properties:
-> >                - hpe,gxp-ohci
-> >                - ibm,476gtr-ohci
-> >                - ingenic,jz4740-ohci
-> > +              - rockchip,rk3588-ohci
-> >                - snps,hsdk-v1.0-ohci
-> >            - const: generic-ohci
-> >        - enum:
-> > @@ -68,8 +69,6 @@ properties:
-> >      maxItems: 2
-> > =20
-> >    clocks:
-> > -    minItems: 1
-> > -    maxItems: 3
->=20
-> The constraints here should stay.
-
-dtbs_check complained about the 4 RK3588 clock entries if this
-stays. That's why I moved them to the condition down below into
-the else branch.
-
--- Sebastian
-
---gkot42bc7hmuouit
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQupCsACgkQ2O7X88g7
-+prC3xAAh3TAmObHfSQgOxu06NxPtt+duhRILfQCjMBuvM+PEgF5VacsK6ki3wi9
-/1wNZ/bDxPi8t41BJfdOJF6CQ69By5PkwmgpJwJRQpmSU3UKhh46ITHQYdXPQDGV
-FhOhvBDiQmGYsQT4J46qPssYTgcfNv2SQecZj4CFVQ+fUqjASD9jsI5kj9czvg4k
-O4v6kNT3PoPZ0k7KlD9QOAD0XO1wfwgwgnPuXEOMYoOhm5et+ITKYlo2argQw5gO
-vXlamu6+AjA/BWbqVFKrcqxtnAjhdY3uXGJebCmJx5rNSbIRAcuYKo0m7pqiDHyq
-Sds7ovnnfV7TnMsds+g6I/f0NlfKVO5IiRwWCrBvfOpE12nYLvqIT0zyqhxUXcbf
-u/P8Lj1NPvZ5N0XLwCo4NRZBRlUFJ3x/99eRwsf0+x9SuRNsSQWrWohOPMDAfCki
-G5Lj0A2826oG5uM92IjJ3CYfStLIO59o4Y2gM1/RTgnSE1w2wLW+Lf9WXxKkdqiZ
-POhqOdPj3m7b76/F45xA1wVCksAGFXSNM63IPZLyTek4tIGHkAvIaoYgpYTpw48Y
-c4/HM5SHSiZlhlqlon4wKRjQ4klrfJjA8tDkBjgPWeeaHujp+fnONWuRX6FbCkEH
-HWF1DxCe38g3RJZa5Njy0N4/qnF9hJ0wW0G7msUDWdRdB2PjTks=
-=OhJQ
------END PGP SIGNATURE-----
-
---gkot42bc7hmuouit--
