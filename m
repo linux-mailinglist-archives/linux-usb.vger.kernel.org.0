@@ -2,80 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19DE46DA014
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Apr 2023 20:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF98A6DA079
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Apr 2023 21:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239306AbjDFSmS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Apr 2023 14:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
+        id S240338AbjDFTBD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Apr 2023 15:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjDFSmR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 14:42:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF096A47;
-        Thu,  6 Apr 2023 11:42:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A083464B01;
-        Thu,  6 Apr 2023 18:42:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D14C4C433EF;
-        Thu,  6 Apr 2023 18:42:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680806536;
-        bh=TYg6LIY1PZ5kQT6OISGeT6SEjX/2L5Unzfeoc5UztMQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HWeRrnzu3MAhOJg1LJp9tu1KcIN5zs5XUHT3O81/od3FX16fu7AAE3miXeUYufjiP
-         nEtirGd+fwAVe/uYE1sMg+izdpuQQbl2FvJK5324yyjzWvHl6Ji30/blxzchY5745J
-         O9X7DO1a84rIXgakz8tUcd5T4CCzgqSgrh1APZnKZPAMAYAaxpQeQFKgRtRUkfsKoQ
-         x8cWD7Sxf17iT+5mg6ofT3cor+xBso0RgCe0fnpdbQOrwbyTXDSOyQiGtN+4E4Z4OO
-         X5g3XBooU/PoWaA8p3g3n/w1b7m3XyieyQ9LiEuhiAUK1dB5KBVOmawppIT+iYKYEP
-         7EjuyD0oTMR4g==
-Date:   Thu, 6 Apr 2023 11:45:06 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     agross@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
-        kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v2 4/8] clk: qcom: gcc-ipq9574: Add USB related clocks
-Message-ID: <20230406184506.65d2gjycuvrley6f@ripper>
-References: <cover.1677749625.git.quic_varada@quicinc.com>
- <cover.1679388632.git.quic_varada@quicinc.com>
- <24293be77ccdcf5e9b1fa0fd219de6152f234616.1679388632.git.quic_varada@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24293be77ccdcf5e9b1fa0fd219de6152f234616.1679388632.git.quic_varada@quicinc.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S229916AbjDFTBB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 15:01:01 -0400
+Received: from mail-io1-xd49.google.com (mail-io1-xd49.google.com [IPv6:2607:f8b0:4864:20::d49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA174217
+        for <linux-usb@vger.kernel.org>; Thu,  6 Apr 2023 12:00:58 -0700 (PDT)
+Received: by mail-io1-xd49.google.com with SMTP id 187-20020a6b15c4000000b007590817bcfbso25285885iov.12
+        for <linux-usb@vger.kernel.org>; Thu, 06 Apr 2023 12:00:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680807658;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zSA3/1CdFh9tu9Hpp9PWm4akde9aLttLgSqXrwXokdk=;
+        b=OSvpGYy4yGiVdwycb5ysh+iFXTvtWtx8upWKkoCrsKl/cdHIYt20pDqU/zNjC6An+l
+         CutaPev7Hwl3wN3xcmqzvXTmi3UYlf0cvnRY5/EBf8A3LqIKPMUpoNzbV4M6L5U3guvS
+         1dB94T/2NzLtwPLmBAixZvjGzAFBYreZztlTzruBw8lwDtQpVRJg9HDjhIe+N5yEbtim
+         m6Cvz69tp7Z2qYNDnHuGJhq6ww//pIddpTBqj+HemVBibg4JBNDOto3Ro7EdxA4eWcis
+         or6oiARvXQGC6NseMfIS/HYevuZRzPTI0yEpybtjQ1osoGo7M/oTxdXHM6e8IMg2Uz9P
+         LH8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680807658;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zSA3/1CdFh9tu9Hpp9PWm4akde9aLttLgSqXrwXokdk=;
+        b=0lJ9yTiVUEjNSRO1pl9NzeQNxWcnFhqrMMFZy4/rFcb2xEgx/vmYddzkUgJ6M0468F
+         +MsjPSA6lDEKscOphlZygimtzhGaNlWs263el+EmkIbowrWeXROwxZV21uPwYYKLSv0w
+         bQVkgsDS6iegBeZbTRpdQmqd8f8BB2FxmzF5xicv+iyKJp7EOPYFZ2MeYs0h2bs/vFHH
+         A0AKu6FHgpL8oMXGemaW537JtcqVyOYhq6qa5r+g06RKb1MpRt0wwTRa6ac6Q1VlrIU0
+         eUGAn9GCL3IlBi9vKsl7DhlSTTyOX9qc0i2vchXek/CgnUBEY8VdWqYfe+fl28dDkgGM
+         Qx7Q==
+X-Gm-Message-State: AAQBX9cuG+NxW2e5W+mUFuynRIf3bBOfDUQrgDfZUDxATYnCut3j+aPP
+        YwZuG0GqOQIkfMEXpQxwZqplzsF654t6h7s=
+X-Google-Smtp-Source: AKy350Zb3KiU0VTyZNkzMslxks92DdL9kS/QwpXsNpZZe8AvnVVrfQ9VwU8xYCdMiKywM1hpLUQ3ziWRcqOhTd8=
+X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
+ (user=allenwebb job=sendgmr) by 2002:a05:6e02:12ea:b0:310:9d77:6063 with SMTP
+ id l10-20020a056e0212ea00b003109d776063mr6868825iln.5.1680807658032; Thu, 06
+ Apr 2023 12:00:58 -0700 (PDT)
+Date:   Thu,  6 Apr 2023 14:00:19 -0500
+In-Reply-To: <20221219204619.2205248-1-allenwebb@google.com>
+Mime-Version: 1.0
+References: <20221219204619.2205248-1-allenwebb@google.com>
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+Message-ID: <20230406190030.968972-1-allenwebb@google.com>
+Subject: [PATCH v10 00/11] Generate modules.builtin.alias from match ids
+From:   Allen Webb <allenwebb@google.com>
+To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     gregkh@linuxfoundation.org, mcgrof@kernel.org,
+        christophe.leroy@csgroup.eu, nick.alcock@oracle.com,
+        Allen Webb <allenwebb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 02:24:22PM +0530, Varadarajan Narayanan wrote:
-> diff --git a/drivers/clk/qcom/gcc-ipq9574.c b/drivers/clk/qcom/gcc-ipq9574.c
-[..]
-> diff --git a/include/dt-bindings/clock/qcom,ipq9574-gcc.h b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
-> index c89e96d..96b7c0b 100644
-> --- a/include/dt-bindings/clock/qcom,ipq9574-gcc.h
-> +++ b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
-> @@ -214,4 +214,6 @@
->  #define GCC_SNOC_PCIE1_1LANE_S_CLK			205
->  #define GCC_SNOC_PCIE2_2LANE_S_CLK			206
->  #define GCC_SNOC_PCIE3_2LANE_S_CLK			207
-> +#define GCC_USB0_PIPE_CLK				208
-> +#define GCC_USB0_SLEEP_CLK				209
+Generate modules.builtin.alias from match ids
 
-Please split out the dt binding/include change in a separate patch, to
-better facilitate picking both the clock and dts patch for the same
-kernel version.
+This patch series (v10) generates `modules.builtin.alias` during modpost.
+The goal is for tools like USBGuard to leverage not only modules.aliases
+but also `modules.builtin.aliases` to associate devices with the modules
+that may be bound before deciding to authorize a device or not. This is
+particularly useful in cases when new devices of a particular type
+shouldn't be allowed part of the time like for lock screens.
 
-Thanks,
-Bjorn
+Also included in this series are added documentation, style fixes and
+fixes for build breakages for built-in modules that relied on
+MODULE_DEVICE_TABLE being a no-op. Some of these were typos in
+device table name that do not need aliases and one ifdef-ed out the
+device table.
+
+---
+
+Generate modules.builtin.alias from match ids
+=============================================
+
+This series (v10) removes the `cc:stable` commit tags since the fixes
+only are needed going forward. It also includes documentation updates
+and unifies the MODULE_DEVICE_TABLE macro for both the builtin and
+module case.
+
+Additionally, rather than fixing the typo-ed device table names the
+commits were updated to drop the broken MODULE_DEVICE_TABLE
+invocations, since they belong to device types that would not benefit
+from the intended purpose of `modules.builtin.alias`.
+
+Note, cover letters were first added in v5.
+
+  RFC (broken patch): https://lore.kernel.org/lkml/CAJzde042-M4UbpNYKw0eDVg4JqYmwmPYSsmgK+kCMTqsi+-2Yw@mail.gmail.com/
+  v1 (missing v1 label): https://lore.kernel.org/lkml/20221111152852.2837363-1-allenwebb@google.com/
+  v2 (missing v2 label): https://lore.kernel.org/lkml/20221128201332.3482092-1-allenwebb@google.com/
+  v3: https://lore.kernel.org/lkml/20221129224313.455862-1-allenwebb@google.com/
+  v4: https://lore.kernel.org/lkml/20221130221447.1202206-1-allenwebb@google.com/
+  v5: https://lore.kernel.org/lkml/20221201211630.101541-1-allenwebb@google.com/
+  v6: https://lore.kernel.org/lkml/20221202224540.1446952-1-allenwebb@google.com/
+  v7: https://lore.kernel.org/lkml/20221216221703.294683-1-allenwebb@google.com/
+  v8: https://lore.kernel.org/lkml/20221219191855.2010466-1-allenwebb@google.com/
+  v9: https://lore.kernel.org/lkml/20221219204619.2205248-1-allenwebb@google.com/
+  v10: This version
+
+Patch series status
+-------------------
+
+This series should be close to ready.
+
+Acknowledgements
+----------------
+
+Thanks to Greg Kroah-Hartman, Christophe Leroy, Luis Chamberlain and the
+other Linux maintainers for being patient with me as I have worked
+through learning the kernel workflow to get this series into a more
+presentable state.
+
+Thanks to Luis Chamberlain for raising the alternative of using kmod to
+address the primary motivation of the patch series.
+
+Thanks to Dmitry Torokhov and Benson Leung for feedback on the
+USB authorization documentation for the driver API.
+
+Also, thanks to Intel's kernel test robot <lkp@intel.com> for catching
+issues that showed up with different kernel configurations.
+
+Allen Webb (11):
+  rockchip-mailbox: Remove unneeded MODULE_DEVICE_TABLE
+  scsi/BusLogic: Always include device id table
+  stmpe-spi: Fix MODULE_DEVICE_TABLE entries
+  module.h: MODULE_DEVICE_TABLE for built-in modules
+  modpost: Track module name for built-in modules
+  modpost: Add -b option for emitting built-in aliases
+  file2alias.c: Implement builtin.alias generation
+  build: Add modules.builtin.alias
+  Documentation: Include modules.builtin.alias
+  Documentation: Update writing_usb_driver for built-in modules
+  Documentation: add USB authorization document to driver-api
+
+ .gitignore                                    |  1 +
+ .../driver-api/usb/authorization.rst          | 71 ++++++++++++++
+ Documentation/driver-api/usb/index.rst        |  1 +
+ .../driver-api/usb/writing_usb_driver.rst     |  3 +
+ Documentation/kbuild/kbuild.rst               |  7 ++
+ Makefile                                      |  1 +
+ drivers/mailbox/rockchip-mailbox.c            |  1 -
+ drivers/mfd/stmpe-spi.c                       |  1 -
+ drivers/scsi/BusLogic.c                       |  2 -
+ include/linux/module.h                        | 36 ++++++--
+ scripts/Makefile.modpost                      | 15 +++
+ scripts/mod/file2alias.c                      | 92 ++++++++++++++-----
+ scripts/mod/modpost.c                         | 30 +++++-
+ scripts/mod/modpost.h                         |  2 +
+ 14 files changed, 229 insertions(+), 34 deletions(-)
+ create mode 100644 Documentation/driver-api/usb/authorization.rst
+
+-- 
+2.39.2
+
