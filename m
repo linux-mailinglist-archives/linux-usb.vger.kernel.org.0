@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75576D90AA
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Apr 2023 09:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 475B66D90B2
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Apr 2023 09:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236160AbjDFHmq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Apr 2023 03:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
+        id S236045AbjDFHnZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Apr 2023 03:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235946AbjDFHmV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 03:42:21 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E578A51
-        for <linux-usb@vger.kernel.org>; Thu,  6 Apr 2023 00:41:52 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id i5so147361288eda.0
-        for <linux-usb@vger.kernel.org>; Thu, 06 Apr 2023 00:41:52 -0700 (PDT)
+        with ESMTP id S233391AbjDFHm7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 03:42:59 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F36086B4
+        for <linux-usb@vger.kernel.org>; Thu,  6 Apr 2023 00:42:35 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-93db98f7b33so82772666b.2
+        for <linux-usb@vger.kernel.org>; Thu, 06 Apr 2023 00:42:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680766911;
+        d=linaro.org; s=google; t=1680766953;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=hpp+0JOz+FKGY7fsBLSsdfNUNXwCqAnXR6glr6qNRMw=;
-        b=U9/EmzMV+No/XF5Nq4LYvmSGD7hlHQqob5/GLw7OH9v6PeKs+BIbVHC4yEqvo3zLIM
-         ewwpZeEJXgJJICeVEqDaWdKohsl5KIMAZuYGR7CgDPjCq1y3vV8etQO+WiSNRj+qmNEW
-         Rjf/rCSk22jFq/DmvYb2cnlASTRzytXbuTVClOVDAhm1CxAMtuLT6RgUnkxcSvKQj2Cn
-         eV03fmlQsJ8QyuN+/0Ul+K5dZvyTx2+dhtU2prTABH4Bf/7VsuzHIEXHeW9mVABRH3fJ
-         QK9U5oMPUAguypNu/vx3B8jF5ZlHBPKr9evFQieqkQKvQ0lHM3kaZNvm6ywNXt4uhuy5
-         o3aw==
+        bh=2CeMX83G7CI+LCtzmkNB4MbhW1kr0GUu8L33N5bnhLc=;
+        b=F0nX+SvXYvsdr0a233FjCqVMoLV5+3k7r+csjEw4U9Ah6AIbz8Pd6Cs3cA/k3VbRps
+         /lUyakfE9cdeYjue/v2Fs2HO2Vfyxg41+4rqsWY53zr47IjPMeXxkD63v86CQOME/v8U
+         dzFP5+Ae18a0SaaHm4Hw0nAhTCZBiNO7vXHf23+0RdHyV1OmKqs5IbQlWKduJIHZicAo
+         mjnhXmW4PJMzIlxYdU7BrSR/MeDPIst+5pY2zuXdrhOqMvQlXbhX6bZpia4Az6B5kXzG
+         eCoUl6V80id62O0F5VlqP774Hv4zuuWO9Uh4kio+vP3PdNOZUkbKiuMso6r1TJ6TjHWo
+         CQCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680766911;
+        d=1e100.net; s=20210112; t=1680766953;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hpp+0JOz+FKGY7fsBLSsdfNUNXwCqAnXR6glr6qNRMw=;
-        b=chTowjZXB/m5ggAnDr2f7ha8ndXa8vl+TpK1FmzXUy8r4v1ps/F0aybGpQFkhsdFnI
-         hT2dqFsXz3acp4IocnIrwvuAD9hJNgLFN/brEMDMU1JceQMS6iprrAD3p5SI87R4Kzk5
-         JvWTxf5zPwVjhaIcKRySAIitXwt9dEfxdL4osct09wxQbXZ5uCDIFs56822EtMMsM4+h
-         E2e0x+8XpAkkXzkASpYV3YYlpJIduM5DUjnPdY3C/UUXEEaAd70iy/SRFGYhO4HFge7g
-         xebRwAtdD+mInpfTFxffkYhbya6eFMUDFa5gGbwq/MkUDC6BnR4Tl79ld/9CNgRLmS/i
-         IGEw==
-X-Gm-Message-State: AAQBX9fPCPtWwFKoQM2yN7Pkn1ggPLMfzg0VYoGDjbFpz4P3+PYY++A7
-        D/gcJs5TGKrsyCoyMuHdILYUTA==
-X-Google-Smtp-Source: AKy350bkNdf5O2eZ4KmOp+DCXA33pjr3OARoKNaTAwi7CozBGDwR42LmdRmdeTHeYyrr7Aa+Kp1SBA==
-X-Received: by 2002:a17:906:c014:b0:947:c8d5:bfab with SMTP id e20-20020a170906c01400b00947c8d5bfabmr5034771ejz.35.1680766910962;
-        Thu, 06 Apr 2023 00:41:50 -0700 (PDT)
+        bh=2CeMX83G7CI+LCtzmkNB4MbhW1kr0GUu8L33N5bnhLc=;
+        b=k+l03ZNXgU87zzLYCNXOVbhc3ssvDrOmyOMZt4/lLfSbVoZu4T63Je3ixvEtanz71x
+         Kc0xFSXFEFeXW7jseT33nCzC5NqStMOvrePndKRguK3yz2Xj3vHquuzB4QdIX+/Xqm22
+         Rtpvykhr071qykZsbOgyE2Av2LfaDc/tGwt8TG2OM+ZeEvUr+ia078dbxRW+9oZRlnGD
+         +weWG5O7RdwZBydG1Hczlg7z0RhihAt2RLJlU1e8i8dzeOB3YsNoXD0/mZ0dsxh0ZpwD
+         XhUjijU66HVvKOYAAcT+R9TUZPMjJwPkt8sLhCJXW8GOdoTEEj6QJK6McZ53tJOWGla/
+         eraw==
+X-Gm-Message-State: AAQBX9dsaWdH14WEezK9gDH6ZAQSDAGL4SjfuUgTytVEDbFXp5H3FQnf
+        dqibC2yzRsOsIhLs3OgDxzaeZg==
+X-Google-Smtp-Source: AKy350atbynXL3zs3eE1PYHo+8dQrh+MY7FEjoP+cVC0eI0NqgnAQYJsPpawDRy1Ph70Zky/dGiDrQ==
+X-Received: by 2002:aa7:df99:0:b0:502:2f3:abd3 with SMTP id b25-20020aa7df99000000b0050202f3abd3mr4200119edy.35.1680766953612;
+        Thu, 06 Apr 2023 00:42:33 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id y11-20020a17090629cb00b00949173c1dcfsm455419eje.18.2023.04.06.00.41.49
+        by smtp.gmail.com with ESMTPSA id l22-20020a50d6d6000000b004bf7905559asm362400edj.44.2023.04.06.00.42.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 00:41:50 -0700 (PDT)
-Message-ID: <0a66e291-a86d-1ff9-e674-839b8cc8f1da@linaro.org>
-Date:   Thu, 6 Apr 2023 09:41:49 +0200
+        Thu, 06 Apr 2023 00:42:33 -0700 (PDT)
+Message-ID: <b9763bee-c0c8-86be-14de-2ed077b1f1d5@linaro.org>
+Date:   Thu, 6 Apr 2023 09:42:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
@@ -129,67 +129,9 @@ On 05/04/2023 13:41, Varadarajan Narayanan wrote:
 >    - clocks
 >    - clock-names
 > -  - power-domains
->    - resets
->    - reset-names
->    - vdda-phy-supply
-> @@ -71,6 +67,41 @@ required:
->  
->  additionalProperties: false
->  
-> +allOf:
 
-As you can see in example-schema, allOf goes before
-additionalProperties: false.
-
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,ipq9574-qmp-usb3-phy
-> +    then:
-> +      properties:
-> +        clocks:
-> +          maxItems: 4
-
-Don't need clocks here.
-
-> +        clock-names:
-> +          items:
-> +            - const: aux
-> +            - const: ref
-> +            - const: cfg_ahb
-> +            - const: pipe
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sc8280xp-qmp-usb3-uni-phy
-> +    then:
-> +      properties:
-> +        clocks:
-> +          maxItems: 4
-
-Neither here.
-
-> +        clock-names:
-> +          items:
-> +            - const: aux
-> +            - const: ref
-> +            - const: com_aux
-
-Can anyone explain me why do we name these (here and other Qualcomm
-bindings) based on clock name, not input? Just because different clock
-is fed to the block, does not necessarily mean the input should be named
-differently.
-
-> +            - const: pipe
-> +
->  examples:
->    - |
->      #include <dt-bindings/clock/qcom,gcc-sc8280xp.h>
+Power domains are required. Commit msg does not explain why this should
+be now optional.
 
 Best regards,
 Krzysztof
