@@ -2,64 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DA46DA081
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Apr 2023 21:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE246DA083
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Apr 2023 21:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240333AbjDFTBK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Apr 2023 15:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55256 "EHLO
+        id S238941AbjDFTBM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Apr 2023 15:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239846AbjDFTBF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 15:01:05 -0400
-Received: from mail-il1-x14a.google.com (mail-il1-x14a.google.com [IPv6:2607:f8b0:4864:20::14a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774FD93CD
-        for <linux-usb@vger.kernel.org>; Thu,  6 Apr 2023 12:01:01 -0700 (PDT)
-Received: by mail-il1-x14a.google.com with SMTP id s6-20020a056e02216600b003264c778ef1so13306515ilv.23
-        for <linux-usb@vger.kernel.org>; Thu, 06 Apr 2023 12:01:01 -0700 (PDT)
+        with ESMTP id S240362AbjDFTBH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 15:01:07 -0400
+Received: from mail-il1-x149.google.com (mail-il1-x149.google.com [IPv6:2607:f8b0:4864:20::149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A465FE8
+        for <linux-usb@vger.kernel.org>; Thu,  6 Apr 2023 12:01:02 -0700 (PDT)
+Received: by mail-il1-x149.google.com with SMTP id n17-20020a056e02141100b003259a56715bso25954246ilo.15
+        for <linux-usb@vger.kernel.org>; Thu, 06 Apr 2023 12:01:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680807661;
+        d=google.com; s=20210112; t=1680807662;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CIaNzDoEfkQUCUs5a1+ah5UqZ1hq5cACYGIKF90PLWA=;
-        b=G+FTw3D1oOQIjnAKB1cpn9CiPMPKCCFM4zdri/XtQJGkhM8ftL306NfOcRuhgBJwAT
-         +mqD0LOE5YJzkUY6ePsFoGVjZiuuVZ9E2USexjk/EUU97k0/6RzsAAanDkVOThd1NSb/
-         UHy8zFuNtffS3eWlDckeeAT9oCY7xDJSH2ttDYfw5Ys4YqfON7UCSPfniEHkJXIicK5X
-         pym1+Tk0FtNI+3SFj6R7I0VHLqY1yU3s7SCpVrnruhY/CbD+oW8s5P5fV208J/K1wmOr
-         VQqc6oZ6PtBD6O5hhHqZblnYB84HAIivUECRQzO7E8yY+rSsgFhBq+ttRv64b/8RpqGV
-         7E3w==
+        bh=lY1ByN87FMvQLmIB6FmZa+RzwBjVh5nyLSYhKEEms/o=;
+        b=TXJhoFceFs9wdYTRZd708YmwDXv6ZmJEZM5qsCVnFNFux6VSIy2sN485OdoLj6gH/u
+         AQsSA/pqWjyYGM48tvaIncpfU2OLAUpCMQfGEUljMQY32VJVtir3KfI0/oLx5XXuijgt
+         IdQDFo/dXt9qgNaakCRBJpEPF2lgHkdbMkFeyywUgZbfu/OiLuvJ3B+dRHj3/Osu3wFs
+         Igv3FoQJ+xdCyHBUlOkjbozloyiEts0oRkMIvsUAEiq5xM+8ae/xA8FEMfg2w3bV7nHX
+         XXgsLfahva+s2fFRR2U9HW32kdVcssWxj7eIV8JYkxojb7lCllY002RCrgMUSAo+vdRi
+         BYJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680807661;
+        d=1e100.net; s=20210112; t=1680807662;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CIaNzDoEfkQUCUs5a1+ah5UqZ1hq5cACYGIKF90PLWA=;
-        b=DIWCPqIplZsfirKbw6e2zpf4a7iIU6/4twf1+wHH/tfKXbeiJ4LqDQez3KqIXKpSOM
-         H2UaoO9yekNWHZwh64ECL/ws1ZAj65gdK44YXSYVFIL0hHQNEl+Oylm5Gc1a70bH+mq1
-         qeXYWkLb0Z82nBHaS2lSFaN+r6lmqnXE8sAuKuWRWMgnUCteSsFreS289G93wThpTcqR
-         VKq2f/LXPrYaJ0BUV2eGZNYGJ2UpMOwASeMGXBrxScTgw5orjhCW1pdm8V5RTRlP1BxT
-         0UFCfR/J1TB45B4vGo01tS3SRUdCbRNowAdWSWRKUPMXAydFS2ip9mGagzoT0BFPZiLK
-         lw7A==
-X-Gm-Message-State: AAQBX9dC1OqHmwR7eCPuKZPJTesUn25FePnYSpRTE1Q/UJS8EBmez9TZ
-        8lL1qM/xYXSf6qNtNG+Re7Jg0rO22lqvMAA=
-X-Google-Smtp-Source: AKy350Z+5g/pbGkfqFeQV7zALWCzNXPo9m7bN766vJbNtaAOGFM9jzMpqoRBx0ByEqTie31Zw2uJvsgSxEzqmLQ=
+        bh=lY1ByN87FMvQLmIB6FmZa+RzwBjVh5nyLSYhKEEms/o=;
+        b=JCDMqdKTt8Kw7QuOaZoXU93scKd8UHlxcz6j/FmJQxsW/csPnjIX0cBQhpT+qmEdT8
+         STDU1RO6MY13DkbPWZSaGbFSf9wNTr2xluprbbPz0Gu42VPIq2Zm3MPQZdTCzwXK+ywT
+         a7JIAPq5xVt8WyxkxONnS4K/Ve1J8WygwX/cNYIUwQOInep4S1VfCBOvlIFRlCNFlp4l
+         8BHi1nBx6SupOONHj4ONahwUA4Lm3PiDONhvz0WYEWZXkGKtCgVztKZgp4gTGIUTXLEw
+         f8BOI1wgaUH9ZplAwaodTz8XFXx6abmqmINUysgAvyuT9H23V/+RI9xBsGmxYj4fajqB
+         2WZQ==
+X-Gm-Message-State: AAQBX9eTQor2Bv/r1yHOY97meLN4pXmIH3qOUt8n6M/B/dBoMCALvmQq
+        Znl3eM0QSesFb+Vm6h4KgBalCXKmXyimYSI=
+X-Google-Smtp-Source: AKy350Y53lWgT3pwwk/QGvquIa8pju0CYYGVAfASYtJqDKWDb552KXeL4N024JqlQO8Qz0mCpt8UDRDqw6NUjSI=
 X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
- (user=allenwebb job=sendgmr) by 2002:a02:a10c:0:b0:405:8be:eaaa with SMTP id
- f12-20020a02a10c000000b0040508beeaaamr6056313jag.5.1680807660861; Thu, 06 Apr
- 2023 12:01:00 -0700 (PDT)
-Date:   Thu,  6 Apr 2023 14:00:22 -0500
+ (user=allenwebb job=sendgmr) by 2002:a02:8503:0:b0:3a9:75c9:da25 with SMTP id
+ g3-20020a028503000000b003a975c9da25mr5548851jai.1.1680807662053; Thu, 06 Apr
+ 2023 12:01:02 -0700 (PDT)
+Date:   Thu,  6 Apr 2023 14:00:23 -0500
 In-Reply-To: <20230406190030.968972-1-allenwebb@google.com>
 Mime-Version: 1.0
 References: <20221219204619.2205248-1-allenwebb@google.com> <20230406190030.968972-1-allenwebb@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <20230406190030.968972-4-allenwebb@google.com>
-Subject: [PATCH v10 03/11] stmpe-spi: Fix MODULE_DEVICE_TABLE entries
+Message-ID: <20230406190030.968972-5-allenwebb@google.com>
+Subject: [PATCH v10 04/11] module.h: MODULE_DEVICE_TABLE for built-in modules
 From:   Allen Webb <allenwebb@google.com>
 To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Cc:     gregkh@linuxfoundation.org, mcgrof@kernel.org,
         christophe.leroy@csgroup.eu, nick.alcock@oracle.com,
-        Allen Webb <allenwebb@google.com>,
-        kernel test robot <lkp@intel.com>
+        Allen Webb <allenwebb@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -71,34 +70,62 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A one character difference in the name supplied to MODULE_DEVICE_TABLE
-breaks compilation for STMPE_SPI after built-in modules can generate
-match-id based module aliases. Since this wasn't being used before and
-builtin aliases aren't needed in this case, remove it.
+Implement MODULE_DEVICE_TABLE for build-in modules to make it possible
+to generate a builtin.alias file to complement modules.alias.
 
-This was not caught earlier because STMPE_SPI can not be built as a
-module and MODULE_DEVICE_TABLE is a no-op for built-in modules.
-
-Fixes: e789995d5c61 ("mfd: Add support for STMPE SPI interface")
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/lkml/202212171140.NB93eVvI-lkp@intel.com/
 Signed-off-by: Allen Webb <allenwebb@google.com>
 ---
- drivers/mfd/stmpe-spi.c | 1 -
- 1 file changed, 1 deletion(-)
+ include/linux/module.h | 36 +++++++++++++++++++++++++++++-------
+ 1 file changed, 29 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/mfd/stmpe-spi.c b/drivers/mfd/stmpe-spi.c
-index e9cbf33502b3..e9cb6a635472 100644
---- a/drivers/mfd/stmpe-spi.c
-+++ b/drivers/mfd/stmpe-spi.c
-@@ -129,7 +129,6 @@ static const struct spi_device_id stmpe_spi_id[] = {
- 	{ "stmpe2403", STMPE2403 },
- 	{ }
- };
--MODULE_DEVICE_TABLE(spi, stmpe_id);
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 4435ad9439ab..b1cb12e06996 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -237,14 +237,36 @@ extern void cleanup_module(void);
+ /* What your module does. */
+ #define MODULE_DESCRIPTION(_description) MODULE_INFO(description, _description)
  
- static struct spi_driver stmpe_spi_driver = {
- 	.driver = {
+-#ifdef MODULE
+-/* Creates an alias so file2alias.c can find device table. */
++/*
++ * Creates an alias so file2alias.c can find device table.
++ *
++ * Use this in cases where a device table is used to match devices because it
++ * surfaces match-id based module aliases to userspace for:
++ *   - Automatic module loading through modules.alias.
++ *   - Tools like USBGuard which block devices based on policy such as which
++ *     modules match a device.
++ *
++ * The only use-case for built-in drivers today is to enable userspace to
++ * prevent / allow probe for devices on certain subsystems even if the driver is
++ * already loaded. An example is the USB subsystem with its authorized_default
++ * sysfs attribute. For more details refer to the kernel's Documentation for USB
++ * about authorized_default.
++ *
++ * The module name is included in the alias for two reasons:
++ *   - It avoids creating two aliases with the same name for built-in modules.
++ *     Historically MODULE_DEVICE_TABLE was a no-op for built-in modules, so
++ *     there was nothing to stop different modules from having the same device
++ *     table name and consequently the same alias when building as a module.
++ *   - The module name is needed by files2alias.c to associate a particular
++ *     device table with its associated module for built-in modules since
++ *     files2alias would otherwise see the module name as `vmlinuz.o`.
++ */
+ #define MODULE_DEVICE_TABLE(type, name)					\
+-extern typeof(name) __mod_##type##__##name##_device_table		\
+-  __attribute__ ((unused, alias(__stringify(name))))
+-#else  /* !MODULE */
+-#define MODULE_DEVICE_TABLE(type, name)
+-#endif
++extern void *CONCATENATE(						\
++	CONCATENATE(__mod_##type##__##name##__,				\
++		__KBUILD_MODNAME),					\
++	_device_table)							\
++	__attribute__ ((unused, alias(__stringify(name))))
+ 
+ /* Version of form [<epoch>:]<version>[-<extra-version>].
+  * Or for CVS/RCS ID version, everything but the number is stripped.
 -- 
 2.39.2
 
