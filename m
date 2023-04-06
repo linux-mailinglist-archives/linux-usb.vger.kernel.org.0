@@ -2,63 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF98A6DA079
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Apr 2023 21:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD1B6DA07B
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Apr 2023 21:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240338AbjDFTBD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Apr 2023 15:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55256 "EHLO
+        id S240354AbjDFTBF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Apr 2023 15:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjDFTBB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 15:01:01 -0400
+        with ESMTP id S240337AbjDFTBC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 15:01:02 -0400
 Received: from mail-io1-xd49.google.com (mail-io1-xd49.google.com [IPv6:2607:f8b0:4864:20::d49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA174217
-        for <linux-usb@vger.kernel.org>; Thu,  6 Apr 2023 12:00:58 -0700 (PDT)
-Received: by mail-io1-xd49.google.com with SMTP id 187-20020a6b15c4000000b007590817bcfbso25285885iov.12
-        for <linux-usb@vger.kernel.org>; Thu, 06 Apr 2023 12:00:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F4359F2
+        for <linux-usb@vger.kernel.org>; Thu,  6 Apr 2023 12:00:59 -0700 (PDT)
+Received: by mail-io1-xd49.google.com with SMTP id l7-20020a0566022dc700b0074cc9aba965so24575551iow.11
+        for <linux-usb@vger.kernel.org>; Thu, 06 Apr 2023 12:00:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680807658;
+        d=google.com; s=20210112; t=1680807659;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zSA3/1CdFh9tu9Hpp9PWm4akde9aLttLgSqXrwXokdk=;
-        b=OSvpGYy4yGiVdwycb5ysh+iFXTvtWtx8upWKkoCrsKl/cdHIYt20pDqU/zNjC6An+l
-         CutaPev7Hwl3wN3xcmqzvXTmi3UYlf0cvnRY5/EBf8A3LqIKPMUpoNzbV4M6L5U3guvS
-         1dB94T/2NzLtwPLmBAixZvjGzAFBYreZztlTzruBw8lwDtQpVRJg9HDjhIe+N5yEbtim
-         m6Cvz69tp7Z2qYNDnHuGJhq6ww//pIddpTBqj+HemVBibg4JBNDOto3Ro7EdxA4eWcis
-         or6oiARvXQGC6NseMfIS/HYevuZRzPTI0yEpybtjQ1osoGo7M/oTxdXHM6e8IMg2Uz9P
-         LH8w==
+        bh=eGQLnr57manA7/d3sSj7CWvU90h1ejgPAAwZbA4W80Y=;
+        b=E1XOP1CaY8koFy3ME6her9rJ9Nke8XHAoAVsqLpY3lPsNoEYGcrpUF5PF5gHdN47bK
+         NGSiShp2xcYg0DXa0KIabY1O37FSpfutYwWTjtRVrU9oHpeB9FGTYAd99a4F1/6Y8FZn
+         AbnD5SAV+TZ0GjZP3RdKVI6rqFp6OB//JibKTs1ZBw4TBgjK4lD7u+6bQxjHMtj/gsBd
+         BKNR9Uz/lHv1iRy4b6qhPk1HwfMVdk/ucdXhOaul/MyfX6WSdjJGRwtYds3NlIxOeBAy
+         hYI94iBkFDpAsYZMS2B43djCX50lmE22kkHDNV9FYiOmAE1uw+MDpJDDPPsBmoU8NICk
+         6/qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680807658;
+        d=1e100.net; s=20210112; t=1680807659;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zSA3/1CdFh9tu9Hpp9PWm4akde9aLttLgSqXrwXokdk=;
-        b=0lJ9yTiVUEjNSRO1pl9NzeQNxWcnFhqrMMFZy4/rFcb2xEgx/vmYddzkUgJ6M0468F
-         +MsjPSA6lDEKscOphlZygimtzhGaNlWs263el+EmkIbowrWeXROwxZV21uPwYYKLSv0w
-         bQVkgsDS6iegBeZbTRpdQmqd8f8BB2FxmzF5xicv+iyKJp7EOPYFZ2MeYs0h2bs/vFHH
-         A0AKu6FHgpL8oMXGemaW537JtcqVyOYhq6qa5r+g06RKb1MpRt0wwTRa6ac6Q1VlrIU0
-         eUGAn9GCL3IlBi9vKsl7DhlSTTyOX9qc0i2vchXek/CgnUBEY8VdWqYfe+fl28dDkgGM
-         Qx7Q==
-X-Gm-Message-State: AAQBX9cuG+NxW2e5W+mUFuynRIf3bBOfDUQrgDfZUDxATYnCut3j+aPP
-        YwZuG0GqOQIkfMEXpQxwZqplzsF654t6h7s=
-X-Google-Smtp-Source: AKy350Zb3KiU0VTyZNkzMslxks92DdL9kS/QwpXsNpZZe8AvnVVrfQ9VwU8xYCdMiKywM1hpLUQ3ziWRcqOhTd8=
+        bh=eGQLnr57manA7/d3sSj7CWvU90h1ejgPAAwZbA4W80Y=;
+        b=tB9/KGeA+z9eF9wHvdDOvDRA4oBjPNXiiYItyo6kfVwOl306z//e3CfyWpoCMMA0Ai
+         ioHdnT8Qn8uhj8n8Qe6BiuSYv6a7lRM49pRsa7NFrxlTPwGMDUYaU50NKDvKPX0w6Ax1
+         9w3PDLVIKH5jYK4qxWwUmnISpYhTEm8qxA7D14IXuL8Gb2QCs1D+OMPEWSn/ZtuBDBaP
+         qZTpKJoMuHNTPOmT/uuipzj2Um8yO/1OTjapTgsy21QgBMJ1OjX3/7a7lqz27KkTRmuW
+         CRuT4R3NnwKTu3Huv5BgqBy9vtdzqq1y3wNw1iuA/pcneFvnd7inQhaK9UWd2gsy19NG
+         XyAQ==
+X-Gm-Message-State: AAQBX9cZ8dqZ1gowMSfRItfIfZzFBosGSs7UasFkQ9ETfeORWhovlWs4
+        cQACVmjXlcpRv0qh0q7eR2FeSwpv+o320lQ=
+X-Google-Smtp-Source: AKy350bXUyOdQnwpKnTh5pwn2Z58BJIiX3qb6NKTnyLlDlV/PWR/2NVrpWvh92/1KkRXzxoRshzXEZc+XwdEVcY=
 X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
- (user=allenwebb job=sendgmr) by 2002:a05:6e02:12ea:b0:310:9d77:6063 with SMTP
- id l10-20020a056e0212ea00b003109d776063mr6868825iln.5.1680807658032; Thu, 06
- Apr 2023 12:00:58 -0700 (PDT)
-Date:   Thu,  6 Apr 2023 14:00:19 -0500
-In-Reply-To: <20221219204619.2205248-1-allenwebb@google.com>
+ (user=allenwebb job=sendgmr) by 2002:a92:1a49:0:b0:315:8f6c:50a6 with SMTP id
+ z9-20020a921a49000000b003158f6c50a6mr6481064ill.1.1680807658940; Thu, 06 Apr
+ 2023 12:00:58 -0700 (PDT)
+Date:   Thu,  6 Apr 2023 14:00:20 -0500
+In-Reply-To: <20230406190030.968972-1-allenwebb@google.com>
 Mime-Version: 1.0
-References: <20221219204619.2205248-1-allenwebb@google.com>
+References: <20221219204619.2205248-1-allenwebb@google.com> <20230406190030.968972-1-allenwebb@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <20230406190030.968972-1-allenwebb@google.com>
-Subject: [PATCH v10 00/11] Generate modules.builtin.alias from match ids
+Message-ID: <20230406190030.968972-2-allenwebb@google.com>
+Subject: [PATCH v10 01/11] rockchip-mailbox: Remove unneeded MODULE_DEVICE_TABLE
 From:   Allen Webb <allenwebb@google.com>
 To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Cc:     gregkh@linuxfoundation.org, mcgrof@kernel.org,
         christophe.leroy@csgroup.eu, nick.alcock@oracle.com,
-        Allen Webb <allenwebb@google.com>
+        Allen Webb <allenwebb@google.com>,
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -70,102 +71,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Generate modules.builtin.alias from match ids
+A one character difference in the name supplied to MODULE_DEVICE_TABLE
+breaks compilation for ROCKCHIP_MBOX after built-in modules can
+generate match-id based module aliases. Since this wasn't being used
+before and builtin aliases aren't needed in this case, remove it.
 
-This patch series (v10) generates `modules.builtin.alias` during modpost.
-The goal is for tools like USBGuard to leverage not only modules.aliases
-but also `modules.builtin.aliases` to associate devices with the modules
-that may be bound before deciding to authorize a device or not. This is
-particularly useful in cases when new devices of a particular type
-shouldn't be allowed part of the time like for lock screens.
+This was not caught earlier because ROCKCHIP_MBOX can not be built as a
+module and MODULE_DEVICE_TABLE is a no-op for built-in modules.
 
-Also included in this series are added documentation, style fixes and
-fixes for build breakages for built-in modules that relied on
-MODULE_DEVICE_TABLE being a no-op. Some of these were typos in
-device table name that do not need aliases and one ifdef-ed out the
-device table.
-
+Fixes: f70ed3b5dc8b ("mailbox: rockchip: Add Rockchip mailbox driver")
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/lkml/202212171140.NB93eVvI-lkp@intel.com/
+Signed-off-by: Allen Webb <allenwebb@google.com>
 ---
+ drivers/mailbox/rockchip-mailbox.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Generate modules.builtin.alias from match ids
-=============================================
-
-This series (v10) removes the `cc:stable` commit tags since the fixes
-only are needed going forward. It also includes documentation updates
-and unifies the MODULE_DEVICE_TABLE macro for both the builtin and
-module case.
-
-Additionally, rather than fixing the typo-ed device table names the
-commits were updated to drop the broken MODULE_DEVICE_TABLE
-invocations, since they belong to device types that would not benefit
-from the intended purpose of `modules.builtin.alias`.
-
-Note, cover letters were first added in v5.
-
-  RFC (broken patch): https://lore.kernel.org/lkml/CAJzde042-M4UbpNYKw0eDVg4JqYmwmPYSsmgK+kCMTqsi+-2Yw@mail.gmail.com/
-  v1 (missing v1 label): https://lore.kernel.org/lkml/20221111152852.2837363-1-allenwebb@google.com/
-  v2 (missing v2 label): https://lore.kernel.org/lkml/20221128201332.3482092-1-allenwebb@google.com/
-  v3: https://lore.kernel.org/lkml/20221129224313.455862-1-allenwebb@google.com/
-  v4: https://lore.kernel.org/lkml/20221130221447.1202206-1-allenwebb@google.com/
-  v5: https://lore.kernel.org/lkml/20221201211630.101541-1-allenwebb@google.com/
-  v6: https://lore.kernel.org/lkml/20221202224540.1446952-1-allenwebb@google.com/
-  v7: https://lore.kernel.org/lkml/20221216221703.294683-1-allenwebb@google.com/
-  v8: https://lore.kernel.org/lkml/20221219191855.2010466-1-allenwebb@google.com/
-  v9: https://lore.kernel.org/lkml/20221219204619.2205248-1-allenwebb@google.com/
-  v10: This version
-
-Patch series status
--------------------
-
-This series should be close to ready.
-
-Acknowledgements
-----------------
-
-Thanks to Greg Kroah-Hartman, Christophe Leroy, Luis Chamberlain and the
-other Linux maintainers for being patient with me as I have worked
-through learning the kernel workflow to get this series into a more
-presentable state.
-
-Thanks to Luis Chamberlain for raising the alternative of using kmod to
-address the primary motivation of the patch series.
-
-Thanks to Dmitry Torokhov and Benson Leung for feedback on the
-USB authorization documentation for the driver API.
-
-Also, thanks to Intel's kernel test robot <lkp@intel.com> for catching
-issues that showed up with different kernel configurations.
-
-Allen Webb (11):
-  rockchip-mailbox: Remove unneeded MODULE_DEVICE_TABLE
-  scsi/BusLogic: Always include device id table
-  stmpe-spi: Fix MODULE_DEVICE_TABLE entries
-  module.h: MODULE_DEVICE_TABLE for built-in modules
-  modpost: Track module name for built-in modules
-  modpost: Add -b option for emitting built-in aliases
-  file2alias.c: Implement builtin.alias generation
-  build: Add modules.builtin.alias
-  Documentation: Include modules.builtin.alias
-  Documentation: Update writing_usb_driver for built-in modules
-  Documentation: add USB authorization document to driver-api
-
- .gitignore                                    |  1 +
- .../driver-api/usb/authorization.rst          | 71 ++++++++++++++
- Documentation/driver-api/usb/index.rst        |  1 +
- .../driver-api/usb/writing_usb_driver.rst     |  3 +
- Documentation/kbuild/kbuild.rst               |  7 ++
- Makefile                                      |  1 +
- drivers/mailbox/rockchip-mailbox.c            |  1 -
- drivers/mfd/stmpe-spi.c                       |  1 -
- drivers/scsi/BusLogic.c                       |  2 -
- include/linux/module.h                        | 36 ++++++--
- scripts/Makefile.modpost                      | 15 +++
- scripts/mod/file2alias.c                      | 92 ++++++++++++++-----
- scripts/mod/modpost.c                         | 30 +++++-
- scripts/mod/modpost.h                         |  2 +
- 14 files changed, 229 insertions(+), 34 deletions(-)
- create mode 100644 Documentation/driver-api/usb/authorization.rst
-
+diff --git a/drivers/mailbox/rockchip-mailbox.c b/drivers/mailbox/rockchip-mailbox.c
+index e02d3c9e3693..1f0adc283d1b 100644
+--- a/drivers/mailbox/rockchip-mailbox.c
++++ b/drivers/mailbox/rockchip-mailbox.c
+@@ -159,7 +159,6 @@ static const struct of_device_id rockchip_mbox_of_match[] = {
+ 	{ .compatible = "rockchip,rk3368-mailbox", .data = &rk3368_drv_data},
+ 	{ },
+ };
+-MODULE_DEVICE_TABLE(of, rockchp_mbox_of_match);
+ 
+ static int rockchip_mbox_probe(struct platform_device *pdev)
+ {
 -- 
 2.39.2
 
