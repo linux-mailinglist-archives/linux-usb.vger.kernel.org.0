@@ -2,98 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9226D96D8
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Apr 2023 14:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B74E36D970D
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Apr 2023 14:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237261AbjDFMNE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Apr 2023 08:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52028 "EHLO
+        id S237833AbjDFMd3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Apr 2023 08:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237081AbjDFMND (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 08:13:03 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CDB213E
-        for <linux-usb@vger.kernel.org>; Thu,  6 Apr 2023 05:12:58 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id r11so39283341wrr.12
-        for <linux-usb@vger.kernel.org>; Thu, 06 Apr 2023 05:12:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680783177;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aM8G9VB4LucfLng4CJyPcuDiKrMR8vPWj1cFc+E8RgY=;
-        b=v1TKWAKJZucyK4QdlSO4zYPjB2CfNqXBHt5I7AtHbgE05cSbfPlrePjTIjYtiLicWI
-         Fyr0XFR8RH7+oH7j84H6T+imZbp6QpRC3Cw+pyJOxVCyUbiHWL4pCKNZ+h6Yimn4bFW2
-         xuC/2nkAthmwKOhqwwEsHJQ9V8++H93GSeC0cii59dn72HPSpFwY/wdz4auDmqnX1jJs
-         XmmXkriOrljPZjtvaX3ao1hGJG9vYbIEnQDmifEF9MSGEAj2zwfneFutAUNV1WnKWWU8
-         Ti8bpxA5oYT6YgOdnmomDbeFyqEIakFrwHpRMbSeczIrDiHgcehHX8fFSOZxZCHRPhLc
-         pR1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680783177;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aM8G9VB4LucfLng4CJyPcuDiKrMR8vPWj1cFc+E8RgY=;
-        b=Ey/bFc/Khrz7NU95lfmXi2gRHfc6oo5rJSE1i/avJJ+TF7hDXhUopPjTC/1ud4lZ0z
-         8GO4fouUfmnUro/Gpaq0JEWGyGFGkg3f2CryBNaiAOS//RX7gy1a7zyIoegrARooRpjX
-         g2D21F+hJ+t74PtVAwSbUAuhYa0pe416MVGrriNb15j07aChDY4MVdTinNDcbaAUMV/y
-         Y5cuByCW4xZK0OMR64vWyA7wk3Dy4Nun1RcsxN126g7r7GdSuimHwLf8zWc5H3X4DbQM
-         ORdtVZjiOFFYTUSDp23/pH+NokQ9H1oqh273xqR2koHenT1iLeNvGTa1QqdI0Nf5TDbu
-         SuJw==
-X-Gm-Message-State: AAQBX9e1llbBfZbEvGmNpd1FCJLNltTSjgOjyr5GXVI0sGkzYoyyCqfc
-        gN5LNM3Z4pxLgrmRIt1RO4T81a4kYZ4YuZf/ZIV+FQ==
-X-Google-Smtp-Source: AKy350bMEYpscVlI1UQLsVqK1n5pidCohJ7Qucdg37vEy6isg2HxwwkzqO9X9Ir5Yrek4Ki9Qzt0vw==
-X-Received: by 2002:a5d:4cce:0:b0:2ce:fd37:938c with SMTP id c14-20020a5d4cce000000b002cefd37938cmr6338470wrt.50.1680783177207;
-        Thu, 06 Apr 2023 05:12:57 -0700 (PDT)
-Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id k9-20020a5d4289000000b002d21379bcabsm1590683wrq.110.2023.04.06.05.12.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 05:12:56 -0700 (PDT)
-Message-ID: <7990502b-67d5-eaa2-a93b-bccc270ac597@linaro.org>
-Date:   Thu, 6 Apr 2023 14:12:55 +0200
+        with ESMTP id S235234AbjDFMd2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 08:33:28 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC452697;
+        Thu,  6 Apr 2023 05:33:26 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-189-216.ewe-ip-backbone.de [91.248.189.216])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3317766031C4;
+        Thu,  6 Apr 2023 13:33:24 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680784404;
+        bh=/0LDjXRCwHEymatIRCAZ3ulYIdFCSC40zOqX6BI+96c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HxlFYhs3UcETCWycpd60jL1Fs//b9O6aBZWsuQz0ra7skWQlL9kA7JZktJYrnpc4T
+         uHeRhV0XfxERK8yWcFaqtR5YduWn2sXQ5K3SliVzm2etolqIbqpC3uDUl5Eh3HO+Cc
+         lYkLevP5fHPrkvJMW04sqXTjp7Y2SctlCB4QfpvWpT2GpOBBWpXS8OSMmR4zGGrjQ5
+         XcLj8PAp3O9tI982K0FaUUlo5Sus1xNtgLyCi3lnJEp11HQpGvB5XYIUnXSbfTOZ/u
+         txAa0BpwWp2bwo0tgzNeDefjJGpNWvGPKcjqQOn71CuXWHi/n8CSqmyx5QgbaIrkme
+         GhpzRW3PS1oxg==
+Received: by mercury (Postfix, from userid 1000)
+        id CD85A1062B1F; Thu,  6 Apr 2023 14:33:21 +0200 (CEST)
+Date:   Thu, 6 Apr 2023 14:33:21 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCHv1 1/3] dt-bindings: usb: Add RK3588 OHCI
+Message-ID: <20230406123321.vs64ff2i7xplovoo@mercury.elektranox.org>
+References: <20230404145350.45388-1-sebastian.reichel@collabora.com>
+ <20230404145350.45388-2-sebastian.reichel@collabora.com>
+ <15dcd1fa-9adb-6bc2-9f01-454273368002@linaro.org>
+ <20230406105129.nuv3jcmwl7ugql3q@mercury.elektranox.org>
+ <0f671b8a-fbc4-a7c0-1469-a9e3f180e776@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH 02/10] usb: musb: jz4740: Convert to platform remove
- callback returning void
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Paul Cercueil <paul@crapouillou.net>, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-mips@vger.kernel.org, linux-usb@vger.kernel.org,
-        kernel@pengutronix.de
-References: <20230405141009.3400693-1-u.kleine-koenig@pengutronix.de>
- <20230405141009.3400693-3-u.kleine-koenig@pengutronix.de>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230405141009.3400693-3-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xawuiqwpi7td5n6n"
+Content-Disposition: inline
+In-Reply-To: <0f671b8a-fbc4-a7c0-1469-a9e3f180e776@linaro.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/4/23 16:10, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
-> 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->   drivers/usb/musb/jz4740.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+--xawuiqwpi7td5n6n
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hi,
+
+On Thu, Apr 06, 2023 at 01:02:44PM +0200, Krzysztof Kozlowski wrote:
+> On 06/04/2023 12:51, Sebastian Reichel wrote:
+> >>>    clocks:
+> >>> -    minItems: 1
+> >>> -    maxItems: 3
+> >>
+> >> The constraints here should stay.
+> >=20
+> > dtbs_check complained about the 4 RK3588 clock entries if this
+> > stays. That's why I moved them to the condition down below into
+> > the else branch.
+>=20
+> Which is not what we want. We want the constraints here (the widest).
+
+So it should look like this?
+
+clocks:
+    minItems: 1
+    maxItems: 4
+
+=2E..
+
+if rk3588:
+    clocks:
+        minItems: 4
+        maxItems: 4
+else:
+    clocks:
+        minItems: 1
+        maxItems: 3
+
+-- Sebastian
+
+--xawuiqwpi7td5n6n
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQuvAYACgkQ2O7X88g7
++popzhAAjrro7g4U+NWfFSwlIqXng7QEYRqHPBrtNrmNs+zVozWgVv0/GF29ffIO
+38ZvHrvHrAyRf1RlOWgP7vI0DyKHw8KUL/TKZnkmf5Bu0cxZvjUMavlk85zjmkiH
+OFhLG1LB//gyk5SRU8Cq26Nc4ojhIRJ0wKWb1wO0KfAn50gK5ejErSU/1wktJbUX
+jhNu6V5AX/lIvSm77urfG+m/9a03W7gSw8e5w3rL17thI4lqnDTGBVWnoFACbgQg
+iRskI1NzETp1JfzXHr5MHZRlMkSTFlKcQQEAQeLIhZTGPcCqdu6hhYAN7z9dxQ7Z
++YmQtCcNSl8qEEcNzKI6wOUJCdBCpGffy9GXTHYITS3f5Z+I6TKYdwMqchO3Lxfy
+Odsf0tmochdULgQU8tZ8kZ7bNv9BDvvAzDr1+YKW1k+x+aQLRWqVWVAsiPE3Wwkk
+EfVmPyqvdWWZBUnlEZrHHjKjWelcrkm6BxRDzWrR7IJh2SiNJ1HZvdRRliRp7S05
+P7p4E0W0hyB7f8INKk5hQFBqzVZ+I1O3DB0BdzIxHcCCL9tqjhEdgHVEOs26sQ7h
+Dpguak+wBIK+HTL4ofrfXX3yeFlmax9SBF9kAoofazpKmQXm4dE+B82rWEI3AVSi
+9ay36m5oqS5nfxOqaOHPL3ji4dSqk7KLgqRypt5XyZ7S8RcpGks=
+=51KG
+-----END PGP SIGNATURE-----
+
+--xawuiqwpi7td5n6n--
