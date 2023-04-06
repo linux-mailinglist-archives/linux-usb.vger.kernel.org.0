@@ -2,57 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CAAE6D91E0
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Apr 2023 10:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F84E6D92AC
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Apr 2023 11:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236084AbjDFImy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Apr 2023 04:42:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
+        id S236314AbjDFJ15 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Apr 2023 05:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233176AbjDFImx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 04:42:53 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496A77ED8
-        for <linux-usb@vger.kernel.org>; Thu,  6 Apr 2023 01:42:48 -0700 (PDT)
+        with ESMTP id S236180AbjDFJ14 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 05:27:56 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FF76E9D;
+        Thu,  6 Apr 2023 02:27:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680770568; x=1712306568;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=HB87BtEeNdQaLOxI9BHHXidwQyWKoB2Dvx+t+tqqvB0=;
-  b=O6jmc13judY/mDe1Pe7cGAS7f02LI0/I5949emWWL/RSzdWjJ4OgVgzk
-   MjJuHzBlMriLCZo4bm4TwKSJrf5UvsMUueYX8v8YJj6rhiOnFdONEj2aB
-   CfFHmxtQmpiIL0c33zmKqhtPrRTiYU0u1Vgbtb7ag6cfWHojJHFB6OpoD
-   WTooAUINyzALZXly9rZz2L4IuKiCFvHrhBxHKYXdEgu/HKnjRgQOWwSR7
-   wz/Hf8dGzyjAQhIzPDZ+Nd0DBGjv3AUyvGioNDE4yA023z8+x6YZn/dQj
-   qtaPPu7Ey9aGQEccrrbkVVKWjnzXnNQJNGJDvlTlnayMmiOsfglEZAUNU
+  t=1680773270; x=1712309270;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=InPNIBceKrNnxNxhCo8TDxqyXGZESVT0F+BzGH5I//k=;
+  b=TNpzp+bOMyh8T1FXO5QFZvfJd0Ndcn8MMb+f44sIuetfuVnHglVqhxjc
+   o4TGFiJmvRA0pTTRXWJK3Qz3Vr460JWfFP3+gGdbXDaoffCFlAifoo86a
+   xWPQxfoxB2LFOkjiomh7uPjiGG+sWhdHWvqOV2uH0C438m+zyIpyAQOLZ
+   0ANm+e1btBUMzKfM4aB3vO5KJV4kTzUsxxyWfgmyGV+IDJPv62Ly534uT
+   VgDAMtDfTzVVjMecNwJR6D1sceTfkffP3RSsZ48oT18wHOWEKqNs7aAS1
+   SOr3uYsDtNqaDPx3g2yOyLu6rY6T/uw3vRVbxGuc5Sjj7SjBI7SQuRbDW
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="323062506"
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="345288857"
 X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="323062506"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 01:42:47 -0700
+   d="scan'208";a="345288857"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 02:27:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="933117981"
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="1016809916"
 X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="933117981"
+   d="scan'208";a="1016809916"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 06 Apr 2023 01:42:45 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 06 Apr 2023 02:27:46 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pkLCe-000REc-2B;
-        Thu, 06 Apr 2023 08:42:44 +0000
-Date:   Thu, 06 Apr 2023 16:42:32 +0800
+        id 1pkLuE-000RGg-0I;
+        Thu, 06 Apr 2023 09:27:46 +0000
+Date:   Thu, 6 Apr 2023 17:26:48 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 1edf48991a783d00a3a18dc0d27c88139e4030a2
-Message-ID: <642e85f8.or8VRAi7I33NJx18%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+To:     Badhri Jagan Sridharan <badhri@google.com>,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        colin.i.king@gmail.com, xuetao09@huawei.com,
+        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
+        peter.chen@freescale.com, balbi@ti.com
+Cc:     oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
+Subject: Re: [PATCH v2 1/2] usb: gadget: udc: core: Invoke usb_gadget_connect
+ only when started
+Message-ID: <202304061758.Tz5RJDZU-lkp@intel.com>
+References: <20230406062549.2461917-1-badhri@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20230406062549.2461917-1-badhri@google.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
@@ -62,171 +69,139 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 1edf48991a783d00a3a18dc0d27c88139e4030a2  usb: cdnsp: Fixes error: uninitialized symbol 'len'
+Hi Badhri,
 
-elapsed time: 855m
+kernel test robot noticed the following build warnings:
 
-configs tested: 153
-configs skipped: 10
+[auto build test WARNING on d629c0e221cd99198b843d8351a0a9bfec6c0423]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+url:    https://github.com/intel-lab-lkp/linux/commits/Badhri-Jagan-Sridharan/usb-gadget-udc-core-Prevent-redundant-calls-to-pullup/20230406-142708
+base:   d629c0e221cd99198b843d8351a0a9bfec6c0423
+patch link:    https://lore.kernel.org/r/20230406062549.2461917-1-badhri%40google.com
+patch subject: [PATCH v2 1/2] usb: gadget: udc: core: Invoke usb_gadget_connect only when started
+config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20230406/202304061758.Tz5RJDZU-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2f12e8b0c9bf3d25df88c73b614c3e8d84bd7338
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Badhri-Jagan-Sridharan/usb-gadget-udc-core-Prevent-redundant-calls-to-pullup/20230406-142708
+        git checkout 2f12e8b0c9bf3d25df88c73b614c3e8d84bd7338
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/usb/gadget/udc/
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r005-20230403   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r005-20230403   gcc  
-alpha                randconfig-r016-20230403   gcc  
-alpha                randconfig-r023-20230403   gcc  
-alpha                randconfig-r034-20230403   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r004-20230403   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r004-20230403   gcc  
-arc                  randconfig-r022-20230403   gcc  
-arc                  randconfig-r034-20230403   gcc  
-arc                  randconfig-r043-20230403   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm          buildonly-randconfig-r001-20230403   clang
-arm                                 defconfig   gcc  
-arm                  randconfig-r021-20230403   clang
-arm                  randconfig-r025-20230403   clang
-arm                  randconfig-r031-20230403   gcc  
-arm                  randconfig-r035-20230403   gcc  
-arm                  randconfig-r046-20230403   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r004-20230403   clang
-arm64                randconfig-r012-20230403   gcc  
-arm64                randconfig-r021-20230403   gcc  
-arm64                randconfig-r035-20230403   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r012-20230403   gcc  
-csky                 randconfig-r035-20230403   gcc  
-hexagon              randconfig-r041-20230403   clang
-hexagon              randconfig-r041-20230406   clang
-hexagon              randconfig-r045-20230403   clang
-hexagon              randconfig-r045-20230406   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230403   clang
-i386                 randconfig-a002-20230403   clang
-i386                 randconfig-a003-20230403   clang
-i386                 randconfig-a004-20230403   clang
-i386                 randconfig-a005-20230403   clang
-i386                 randconfig-a006-20230403   clang
-i386                 randconfig-a011-20230403   gcc  
-i386                 randconfig-a012-20230403   gcc  
-i386                 randconfig-a013-20230403   gcc  
-i386                 randconfig-a014-20230403   gcc  
-i386                 randconfig-a015-20230403   gcc  
-i386                 randconfig-a016-20230403   gcc  
-i386                 randconfig-r015-20230403   gcc  
-i386                 randconfig-r016-20230403   gcc  
-i386                 randconfig-r021-20230403   gcc  
-i386                 randconfig-r022-20230403   gcc  
-i386                 randconfig-r023-20230403   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r002-20230403   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r013-20230403   gcc  
-loongarch            randconfig-r031-20230403   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r002-20230403   gcc  
-m68k         buildonly-randconfig-r006-20230403   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r012-20230403   gcc  
-m68k                 randconfig-r024-20230403   gcc  
-microblaze   buildonly-randconfig-r005-20230403   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r001-20230403   gcc  
-mips                 randconfig-r005-20230403   gcc  
-mips                 randconfig-r024-20230403   clang
-mips                 randconfig-r026-20230403   clang
-nios2        buildonly-randconfig-r003-20230403   gcc  
-nios2        buildonly-randconfig-r004-20230403   gcc  
-nios2        buildonly-randconfig-r006-20230403   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r032-20230403   gcc  
-openrisc             randconfig-r011-20230403   gcc  
-openrisc             randconfig-r026-20230403   gcc  
-openrisc             randconfig-r034-20230403   gcc  
-parisc       buildonly-randconfig-r003-20230403   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r001-20230403   gcc  
-parisc               randconfig-r011-20230403   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                      chrp32_defconfig   gcc  
-powerpc                   currituck_defconfig   gcc  
-powerpc                      pasemi_defconfig   gcc  
-powerpc              randconfig-r014-20230403   gcc  
-powerpc              randconfig-r025-20230403   gcc  
-powerpc              randconfig-r036-20230403   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r002-20230403   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r014-20230403   gcc  
-riscv                randconfig-r042-20230403   gcc  
-riscv                randconfig-r042-20230406   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r004-20230403   clang
-s390                 randconfig-r044-20230403   gcc  
-s390                 randconfig-r044-20230406   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r001-20230403   gcc  
-sh                   randconfig-r003-20230403   gcc  
-sh                   randconfig-r034-20230403   gcc  
-sh                   randconfig-r036-20230403   gcc  
-sh                   sh7724_generic_defconfig   gcc  
-sparc        buildonly-randconfig-r004-20230403   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r016-20230403   gcc  
-sparc64      buildonly-randconfig-r002-20230403   gcc  
-sparc64      buildonly-randconfig-r006-20230403   gcc  
-sparc64              randconfig-r003-20230403   gcc  
-sparc64              randconfig-r014-20230403   gcc  
-sparc64              randconfig-r031-20230403   gcc  
-sparc64              randconfig-r033-20230403   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230403   clang
-x86_64               randconfig-a002-20230403   clang
-x86_64               randconfig-a003-20230403   clang
-x86_64               randconfig-a004-20230403   clang
-x86_64               randconfig-a005-20230403   clang
-x86_64               randconfig-a006-20230403   clang
-x86_64               randconfig-a011-20230403   gcc  
-x86_64               randconfig-a012-20230403   gcc  
-x86_64               randconfig-a013-20230403   gcc  
-x86_64               randconfig-a014-20230403   gcc  
-x86_64               randconfig-a015-20230403   gcc  
-x86_64               randconfig-a016-20230403   gcc  
-x86_64               randconfig-k001-20230403   gcc  
-x86_64               randconfig-r001-20230403   clang
-x86_64               randconfig-r012-20230403   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r003-20230403   gcc  
-xtensa               randconfig-r006-20230403   gcc  
-xtensa               randconfig-r026-20230403   gcc  
-xtensa               randconfig-r033-20230403   gcc  
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304061758.Tz5RJDZU-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/gadget/udc/core.c:696:5: warning: no previous prototype for 'usb_gadget_connect_locked' [-Wmissing-prototypes]
+     696 | int usb_gadget_connect_locked(struct usb_gadget *gadget)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/usb/gadget/udc/core.c:749:5: warning: no previous prototype for 'usb_gadget_disconnect_locked' [-Wmissing-prototypes]
+     749 | int usb_gadget_disconnect_locked(struct usb_gadget *gadget)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/usb_gadget_connect_locked +696 drivers/usb/gadget/udc/core.c
+
+   694	
+   695	/* Internal version of usb_gadget_connect needs to be called with udc_connect_control_lock held. */
+ > 696	int usb_gadget_connect_locked(struct usb_gadget *gadget)
+   697	{
+   698		int ret = 0;
+   699	
+   700		if (!gadget->ops->pullup) {
+   701			ret = -EOPNOTSUPP;
+   702			goto out;
+   703		}
+   704	
+   705		if (gadget->deactivated || !gadget->udc->started) {
+   706			/*
+   707			 * If gadget is deactivated we only save new state.
+   708			 * Gadget will be connected automatically after activation.
+   709			 *
+   710			 * udc first needs to be started before gadget can be pulled up.
+   711			 */
+   712			gadget->connected = true;
+   713			goto out;
+   714		}
+   715	
+   716		ret = gadget->ops->pullup(gadget, 1);
+   717		if (!ret)
+   718			gadget->connected = 1;
+   719	
+   720	out:
+   721		trace_usb_gadget_connect(gadget, ret);
+   722	
+   723		return ret;
+   724	}
+   725	
+   726	/**
+   727	 * usb_gadget_connect - software-controlled connect to USB host
+   728	 * @gadget:the peripheral being connected
+   729	 *
+   730	 * Enables the D+ (or potentially D-) pullup.  The host will start
+   731	 * enumerating this gadget when the pullup is active and a VBUS session
+   732	 * is active (the link is powered).
+   733	 *
+   734	 * Returns zero on success, else negative errno.
+   735	 */
+   736	int usb_gadget_connect(struct usb_gadget *gadget)
+   737	{
+   738		int ret;
+   739	
+   740		mutex_lock(&gadget->udc->connect_lock);
+   741		ret = usb_gadget_connect_locked(gadget);
+   742		mutex_unlock(&gadget->udc->connect_lock);
+   743	
+   744		return ret;
+   745	}
+   746	EXPORT_SYMBOL_GPL(usb_gadget_connect);
+   747	
+   748	/* Internal version of usb_gadget_disconnect needs to be called with udc->connect_lock held. */
+ > 749	int usb_gadget_disconnect_locked(struct usb_gadget *gadget)
+   750	{
+   751		int ret = 0;
+   752	
+   753		if (!gadget->ops->pullup) {
+   754			ret = -EOPNOTSUPP;
+   755			goto out;
+   756		}
+   757	
+   758		if (!gadget->connected)
+   759			goto out;
+   760	
+   761		if (gadget->deactivated || !gadget->udc->started) {
+   762			/*
+   763			 * If gadget is deactivated we only save new state.
+   764			 * Gadget will stay disconnected after activation.
+   765			 *
+   766			 * udc should have been started before gadget being pulled down.
+   767			 */
+   768			gadget->connected = false;
+   769			goto out;
+   770		}
+   771	
+   772		ret = gadget->ops->pullup(gadget, 0);
+   773		if (!ret)
+   774			gadget->connected = 0;
+   775	
+   776		mutex_lock(&udc_lock);
+   777		if (gadget->udc->driver)
+   778			gadget->udc->driver->disconnect(gadget);
+   779		mutex_unlock(&udc_lock);
+   780	
+   781	out:
+   782		trace_usb_gadget_disconnect(gadget, ret);
+   783	
+   784		return ret;
+   785	}
+   786	
 
 -- 
 0-DAY CI Kernel Test Service
