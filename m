@@ -2,75 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2406D90C1
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Apr 2023 09:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 374ED6D9123
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Apr 2023 10:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235745AbjDFHps (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Apr 2023 03:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56976 "EHLO
+        id S235584AbjDFIFq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Apr 2023 04:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235549AbjDFHpk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 03:45:40 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDAAF9
-        for <linux-usb@vger.kernel.org>; Thu,  6 Apr 2023 00:45:38 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id h8so147216513ede.8
-        for <linux-usb@vger.kernel.org>; Thu, 06 Apr 2023 00:45:38 -0700 (PDT)
+        with ESMTP id S234102AbjDFIFp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 04:05:45 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E65E10CA;
+        Thu,  6 Apr 2023 01:05:44 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id i5so147491383eda.0;
+        Thu, 06 Apr 2023 01:05:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680767137;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mkA8NcH0yiC9K84t4avBqXl1FjdsfnSd3BtgRcFnTrs=;
-        b=ziG89A3rDQaZXswOaP4hWhTxXFly0pmyIzKF2vksEmqr0MWMe+6MbSXr6bQY0yYa4k
-         KjkhBTdWL2fYAv4NvEJy++n/911V504hlnXFwwQH4HjElZ6aJyr5QtKHPmrcir+VovGc
-         3mt+oAZZTuZRAxn2Tg7uRm6EUYGYNbfQ1bTWxqi21rFqWtdpz9B7b87WO2E3jEHCJT8P
-         ndt2uwygAYXaGxdbpPOkyuepzNUjbJdnDkTyyFJW+/EF56zIwgjeLGKVd+hS1oukfAwH
-         UpNSOove33umDHG6nGyCiaVfVSzJjVOE1D7TSLNyKz8y7naZ/WlovnbbsKwVSplVOMKc
-         oTcg==
+        d=gmail.com; s=20210112; t=1680768342;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EsfVKEkgqZWkBGzWEFFFXWYH9yWAs1SfPsiyNzq6bhM=;
+        b=k2PiMSgbceDdD+y+kiuR61uGk6eWkEiDCPPK2g27718apL0jvGfqGxSMJRqtMstxVA
+         2p8qPugLsQeuGKJIaBunm7wlj9Crh5Um29AN7Xo4tCvxLJ8ueubnxdJdfmLdpgpYiHxz
+         dnHTkoKwvB74ODcjrshav9vn6O59kzD4DknwmUDzu2losa9QfU5BoBB3x/doGSi8Xq6r
+         ZbzBUuwgQDuO2s1gWvMJ7TvVGysO5hJ53YVL717X/Ldzn1y3rFEKm2xEZFbCxsvlflVf
+         5QkHTp4UyTiZrdE/Sggcwy8gYCYB6OAYbT5KopbT6u/Vue1lnQdY1DVKVHD8Hc52/28/
+         FoqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680767137;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mkA8NcH0yiC9K84t4avBqXl1FjdsfnSd3BtgRcFnTrs=;
-        b=YmWwhrZcgsnXHSL2YXxONuFbFGSBGr8XGw8+nZ0R6xj7rqw+O8tvf8NGK0itBlgs3b
-         HQP9kKaqEJIt/vUlkGpp1frRVquOWRlN4QsM3u8l682oBWE6yCgYjYbD5WzAF659O5NH
-         wqWBy4JawS5DO+6DZA0kVX3sA1ou6gYxD8HtwAXsEZVQtrI30bV5slQ097+VF+LYZOpU
-         fpPQVRffE6YHFO2xSKCjkCFXG2dEpejNQ4UcX7TItydeyt4gq6Q72kKNsihYRBmqEbox
-         vtbYufaPW1UTJ2fvz/7eTIyPSjOwPHR20eKuGSeR5SDrylbVbK99iZjtvl+eKDAGAEe+
-         22/A==
-X-Gm-Message-State: AAQBX9fFv1gPIBQePOXFiam3hxnDeo5OiTTDVWj/V+CBrUKY/FuRO/5r
-        2bUQXybsyEwFl8IrJUhVh7D/oA==
-X-Google-Smtp-Source: AKy350bl2ZoCvf4gEMhQBHvUwtoIS6rokXUd2hOW2BuOzuwmoYPSAzQieF3CRJLp/CVMFFkASiJalQ==
-X-Received: by 2002:a17:906:b88a:b0:92e:b1dd:cff2 with SMTP id hb10-20020a170906b88a00b0092eb1ddcff2mr4891706ejb.28.1680767137095;
-        Thu, 06 Apr 2023 00:45:37 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id r23-20020a50c017000000b004bd1fe2cc02sm368098edb.16.2023.04.06.00.45.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 00:45:36 -0700 (PDT)
-Message-ID: <d7d1e10f-7af9-4cfc-a298-fab096093fb8@linaro.org>
-Date:   Thu, 6 Apr 2023 09:45:35 +0200
+        d=1e100.net; s=20210112; t=1680768342;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EsfVKEkgqZWkBGzWEFFFXWYH9yWAs1SfPsiyNzq6bhM=;
+        b=jlmpcRJtb5M9ysLyo1M1eiGn4c1iT7fR6/JyaJepoijks1VEslLkvu1IpFaSTBtms1
+         uwSLTrzVywj/XNMKGFhU7ks1ETH0+OgVOFoprsZjpMe1kt4yoScw+sIHgp9SjVNKxAES
+         u7M8+3Ilv/aqRWoIYJASst1wXRpvOtEpehvYy/Imh/QISNMBHspRPYwyIQMc23fx75M9
+         CmpnDwmeVl4bA98xFOpWYr7fBO/fKIj7cLlkHjdAHclfOmKzzM5OKRcKUu6npuTx4qyz
+         2UF/ZiPibX3tLwzUtv6UnpnsGwetOxyFA1WCPpKUF23RSAipyzM6oYpCr2X8BbKVsQmO
+         Im1Q==
+X-Gm-Message-State: AAQBX9cmly8z8X6rw8fggA/YnBMqY98lbfDtEKFBcorZy6u+jkWhjq+U
+        nNdfwqH3ws2l7h5JK9fgtDL+eNNlcac=
+X-Google-Smtp-Source: AKy350bAhXMCq3AWI39fx5ijaTRGgI1LLS5SzvG1ji6W4xsNfe24FLxJ2SrlazEhh8EnzRfVI25qqw==
+X-Received: by 2002:a17:907:104b:b0:8a6:5720:9101 with SMTP id oy11-20020a170907104b00b008a657209101mr5525881ejb.4.1680768342274;
+        Thu, 06 Apr 2023 01:05:42 -0700 (PDT)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id u2-20020a50c2c2000000b00501c96564b5sm376139edf.93.2023.04.06.01.05.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 01:05:41 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 10:05:40 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nagarjuna Kristam <nkristam@nvidia.com>,
+        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 1/2] usb: gadget: tegra-xudc: Fix crash in vbus_draw
+Message-ID: <ZC59VDIEYzbR1YKF@orome>
+References: <20230405181854.42355-1-jonathanh@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCHv1 2/3] dt-bindings: usb: Add RK3588 EHCI
-Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-References: <20230404145350.45388-1-sebastian.reichel@collabora.com>
- <20230404145350.45388-3-sebastian.reichel@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230404145350.45388-3-sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="9DLtn6Vqa9g+9/RT"
+Content-Disposition: inline
+In-Reply-To: <20230405181854.42355-1-jonathanh@nvidia.com>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,15 +74,70 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 04/04/2023 16:53, Sebastian Reichel wrote:
-> Add compatible for RK3588 EHCI. As far as I know it's fully
-> compatible with generic-ehci.
-> 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
+--9DLtn6Vqa9g+9/RT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Wed, Apr 05, 2023 at 07:18:53PM +0100, Jon Hunter wrote:
+> Commit ac82b56bda5f ("usb: gadget: tegra-xudc: Add vbus_draw support")
+> populated the vbus_draw callback for the Tegra XUDC driver. The function
+> tegra_xudc_gadget_vbus_draw(), that was added by this commit, assumes
+> that the pointer 'curr_usbphy' has been initialised, which is not always
+> the case because this is only initialised when the USB role is updated.
+> Fix this crash, by checking that the 'curr_usbphy' is valid before
+> dereferencing.
+>=20
+> Fixes: ac82b56bda5f ("usb: gadget: tegra-xudc: Add vbus_draw support")
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+> ---
+>  drivers/usb/gadget/udc/tegra-xudc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc=
+/tegra-xudc.c
+> index 2b71b33725f1..5bccd64847ff 100644
+> --- a/drivers/usb/gadget/udc/tegra-xudc.c
+> +++ b/drivers/usb/gadget/udc/tegra-xudc.c
+> @@ -2167,7 +2167,7 @@ static int tegra_xudc_gadget_vbus_draw(struct usb_g=
+adget *gadget,
+> =20
+>  	dev_dbg(xudc->dev, "%s: %u mA\n", __func__, m_a);
+> =20
+> -	if (xudc->curr_usbphy->chg_type =3D=3D SDP_TYPE)
+> +	if (xudc->curr_usbphy && xudc->curr_usbphy->chg_type =3D=3D SDP_TYPE)
+>  		ret =3D usb_phy_set_power(xudc->curr_usbphy, m_a);
+> =20
+>  	return ret;
 
-Best regards,
-Krzysztof
+Looking at tegra_xudc_probe(), that calls tegra_xudc_update_data_role()
+for all PHYs, so shouldn't that be enough to get curr_usbphy set? Or is
+there perhaps a race between ->vbus_draw() and the data role update? Is
+->vbus_draw() perhaps called as part of usb_add_gadget_udc()? Should we
+reorder those to make sure the role is properly updated before the
+gadget is registered?
 
+Thierry
+
+--9DLtn6Vqa9g+9/RT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQufVQACgkQ3SOs138+
+s6EMvA/9ETTPiV5HCEADpnc/+zxaxcjJZ1JxOY85RCUfh3aTUiE57D3oFzeJWDIv
+JSurVp00DbydJyV2puCOEE6p8NQpjURBOBdoeWJZuFCKYndvsGgZ4Y5EwQBO9VLp
+aLA9SLeajOvQVKp4IBQL4kSJLGqi0uXx0QWr/WI28vdEn1bguEgHdaW2woMZ4T8V
+azNVKLw7IqKNQikML4exBKSI8l2aDCBDvii5XtBziUBrnovFLbD8b5dMdTW3Jlgk
++bG+NJLYcuDFcfGvqme9uK+PDB2S42eoOARe7iMM1pTaVjN8U57X3xIRN7sYpfCx
+shfjE4PPnKSqtxHn02DUu80Fab+QjRsqRM2yAGaOwTHpbh82Hdt3QaqvCG16h9DT
+5nn73iaMWbRrmOwd3AosxNioVHJ0PpjDqS8YKATRnphjFxqpePlYcRVy/MQrpr6t
+9Ok6copiJrWzfmmtTlDCyk0IWNRegTRVR0bPjcX062g8FsOkYg9ye9ktLYpQ7tJF
+t4iU5RX74r2EYPuKtJZYPERd/0CQmK7njaSuRCY86WRQ1eagMxggvEZqomSSrvhI
+k0SE5iMgMv2Jlg+rkZSbGhh+deU64RBs7BkGvkY8XhbJ94mgZcFY4J3C2IwsOEI4
+7+pdx6bOxTWfsR7Ai/zIJj0oirKfH4I3gUdL3UjVfAZpdUFeH14=
+=bcOa
+-----END PGP SIGNATURE-----
+
+--9DLtn6Vqa9g+9/RT--
