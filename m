@@ -2,59 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632306DAA98
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Apr 2023 11:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C8F6DAAA6
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Apr 2023 11:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240492AbjDGJGA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Apr 2023 05:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
+        id S239769AbjDGJIt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Apr 2023 05:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232606AbjDGJF5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Apr 2023 05:05:57 -0400
+        with ESMTP id S232884AbjDGJIs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Apr 2023 05:08:48 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656046A40;
-        Fri,  7 Apr 2023 02:05:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6BD10E5;
+        Fri,  7 Apr 2023 02:08:47 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CCA7666031CF;
-        Fri,  7 Apr 2023 10:05:52 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7A51566031A4;
+        Fri,  7 Apr 2023 10:08:45 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680858353;
-        bh=laCsmRgchMhCg4Gn7heh1gDxcLUQM5vkkYCEL4cE2rY=;
+        s=mail; t=1680858526;
+        bh=U1+DDX+dU1UQ6EiNs+o75B5KM0xLmP6jEneF+ome3Es=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ABIEL/tKYEU2m+l4zbFSd1n9OYNlKBMdE0FOGDMbxRL8xlNqqDpCNIuAFcFNbZGWH
-         E0VWwR3JX5Z4L3oCQGLyIR0jO66vQmvnR3km0sagMukXaP1Bd4Vz5IHSvhlHi5L9iV
-         hR2k7gviX75gtxbVUNbyYkUA6MZVU1aJ8AEKzFk6NjBtYGiG6O3UXnured/F5VIwoJ
-         qAfvBvsMXgqaWhgrgC22SA96/a8TzaM8s40+pJMfaXElOb/l4Eom9w3mZ+WQRJknCz
-         +yzyooP97k30It4qotA3VhGtJf6gj9RapGXE97ZD/MdYVaGgpsBTxqlf7TGP3HS6pY
-         27Ak9I7lkmZYg==
-Message-ID: <15befa07-7f17-23b0-9141-a7ae8ee70c71@collabora.com>
-Date:   Fri, 7 Apr 2023 11:05:49 +0200
+        b=n81grpCBm+3ZpgR/kR+EEDuOAoXfVthUK/CXHhTiYphnIlXQZ/zbL4jlLROIMoQvH
+         cpktvJHTLT8wMJ1su/G7ZWHcJDUHB/LT04F3+qgc65dGhU0zyJrNGuwkKPEoqZmIyy
+         V18PJBQhX0h5xLOb+THujMP4XtFAqDgSCiD6FIRQbhEaac1M30KFzXZpItmqdo7Oou
+         xU0mZYEBpcnFJhaP9JmIvDDwB2JEFfksQZ/2HW5u3AsINqCjqAT3VHQLHiK9X79Pdv
+         i46RnWYKyGHr7WkDwism4VALjRTxFGZ8HA2u4eQLZT8B03Vds2V4KX6dV3pgAzUfqO
+         1jmLo7mJSK2XA==
+Message-ID: <3f2ba861-10f1-cc5c-caec-6f798486d9cb@collabora.com>
+Date:   Fri, 7 Apr 2023 11:08:43 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: mtk-xhci: add an optional frame
- count clock
+Subject: Re: [PATCH 3/7] usb: mtu3: fix KE at qmu transfer done irq handler
 Content-Language: en-US
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tianping Fang <tianping.fang@mediatek.com>
-References: <20230407062406.12575-1-chunfeng.yun@mediatek.com>
+To:     =?UTF-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= 
+        <Chunfeng.Yun@mediatek.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Cc:     "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?UTF-8?B?RWRkaWUgSHVuZyAo5rSq5q2j6ZGrKQ==?= 
+        <Eddie.Hung@mediatek.com>,
+        =?UTF-8?B?VGlhbnBpbmcgRmFuZyAo5pa55aSp5bmzKQ==?= 
+        <Tianping.Fang@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
+References: <20230403025230.25035-1-chunfeng.yun@mediatek.com>
+ <20230403025230.25035-3-chunfeng.yun@mediatek.com>
+ <1cfde490-40a4-c83b-3bd5-c9baeba5187d@collabora.com>
+ <40ed6eb5c664b624e85576f957625a61d9615530.camel@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230407062406.12575-1-chunfeng.yun@mediatek.com>
+In-Reply-To: <40ed6eb5c664b624e85576f957625a61d9615530.camel@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -64,10 +74,58 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Il 07/04/23 08:24, Chunfeng Yun ha scritto:
-> Add optional clock 'frmcnt_ck' used on 4nm or advanced process SoC
+Il 07/04/23 09:59, Chunfeng Yun (云春峰) ha scritto:
+> On Mon, 2023-04-03 at 14:31 +0200, AngeloGioacchino Del Regno wrote:
+>> External email : Please do not click links or open attachments until
+>> you have verified the sender or the content.
+>>
+>>
+>> Il 03/04/23 04:52, Chunfeng Yun ha scritto:
+>>> When handle qmu transfer irq, it will unlock @mtu->lock before give
+>>> back
+>>> request, if another thread hanlde disconnect event at the same
+>>> time, and
+>>> try to disable ep, it may lock @mtu->lock and free qmu ring, then
+>>> qmu
+>>> irq hanlder may get a NULL gpd, avoid the KE by checking gpd's
+>>> value before
+>>
+>> KE == Kernel Error? I think you wanted to say KP == Kernel Panic
+>> instead.
+>>
+>> Also, s/hanlder/handler/g.
+> Ok, will modify it
+>>
+>>> handling it.
+>>>
+>>> e.g.
+>>> qmu done irq on cpu0                 thread running on cpu1
+>>>
+>>> qmu_done_tx()
+>>>     handle gpd [0]
+>>>       mtu3_requ_complete()        mtu3_gadget_ep_disable()
+>>>         unlock @mtu->lock
+>>>           give back request         lock @mtu->lock
+>>>                                       mtu3_ep_disable()
+>>>                                         mtu3_gpd_ring_free()
+>>>                                      unlock @mtu->lock
+>>>         lock @mtu->lock
+>>>       get next gpd [1]
+>>>
+>>> [1]: goto [0] to handle next gpd, and next gpd may be NULL.
+>>
+>>   >
+>>   > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+>>
+>> This is a fix and needs a Fixes tag.
+> I usually add Fixes tag when the issue introduced by a patch except the
+> original one when the driver applied.
 > 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+If this patch is a fix for the "original driver", you shall still add a
+Fixes tag which advertises that this fixes the first commit, so the driver
+was broken from the very beginning.
+
+Thanks,
+Angelo.
 
