@@ -2,61 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C16D26DAAA9
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Apr 2023 11:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA866DAD75
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Apr 2023 15:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240305AbjDGJJQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Apr 2023 05:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
+        id S240796AbjDGN2i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Apr 2023 09:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240352AbjDGJJO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Apr 2023 05:09:14 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE411B9;
-        Fri,  7 Apr 2023 02:09:09 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 01E4C66031A4;
-        Fri,  7 Apr 2023 10:09:07 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680858548;
-        bh=OmRy3BTQJvyb7zaP08nHY6cTSKkLTpfgKTbifvNowaA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jWw5BRxZILBXoMZf7owsL+geF1AUYnERBWyPL16Egb/i+Fio0DceOh4s50wEo5NMi
-         61Pm2tpXsy3V5i4rbsoN67yrlhjliUiaYqj+0rfhH8FNM0WWApeg4WK3s6QYrAVNk6
-         l07me0YDQuPhZ10eePPk7p61G9Avm0Rn2w4t23VpJV794uLsAml8DMuRFP/rzJF3QV
-         whw2GNMrlr48TfA7jhlbL6lJHTt1JdwXDEI98rNAML6NOMMcZt+lZb2/RWcMMJXev9
-         pVd6HNdDIYazyCvsvBnRYV9M/GX1pyzz7Ap2ZhWrrwqVKKxT4yYU+XzWCP28NDt8VR
-         XPfHYsqdE9vtQ==
-Message-ID: <0d4162ea-e161-5afd-8b27-92f8e53b52aa@collabora.com>
-Date:   Fri, 7 Apr 2023 11:09:06 +0200
+        with ESMTP id S233201AbjDGN2g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Apr 2023 09:28:36 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426308A42
+        for <linux-usb@vger.kernel.org>; Fri,  7 Apr 2023 06:28:34 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id x20so43531664ljq.9
+        for <linux-usb@vger.kernel.org>; Fri, 07 Apr 2023 06:28:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680874112;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TQBrT693IMyw8NXc3/LuFzvk7FqmU/zQ20PRIEg0JBA=;
+        b=BhAuGFkm7Z0Dk0sWW58yFSVdvbmwo3bezMeeCVSDvB0MGnNQGYS21BcCvQU/+hL6Jq
+         UhRW2wiMHrBww3yim/pjJiTmifunGLJiVl1MiOyA8s61wX0kKSXPgu/aTAFxIOOYk+Pf
+         8XOXQa5+kOGs7uCUa2cCaM8s9HhqAhc6OcgA3AC9zYxcvxaPT2c6GatMO6xDZWKs8kQY
+         nSDPvIRheNugYDQLwUbt2OANwgRus7KTt7wmpGjeguHXp92/6+CGHOjz4dUp0+0RBOUq
+         QNkzwnlHNWpJF38KTmQbaYJUE1fASrBuNjeEdGfcAFCZZQNr7JbdDG/KFOCszRAea92H
+         jupQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680874112;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TQBrT693IMyw8NXc3/LuFzvk7FqmU/zQ20PRIEg0JBA=;
+        b=d/iVRl0asNEgCIEmmyH4shUvZqBROMc/PJRDHir+jK9/6Wo63nymUOh29kiJ77vKKV
+         w5V+sG3lqtqi/AAd44BMJfxIEn+6CcN2O0ydiLaDnH6CNgKJ6cMYnntyiSNoLYlmBT8W
+         +epVAp5S5GJQgh0SXKsmFgBhO88Ir6y+bZ5mvJ/zaUvzK8bP8RzGv+Gzy13PIe3ZBb/C
+         onavfFL/0BMYZGT+dcOEpofpWzE5jACwS1zbeaAPIlfNniEKSRFtcY7L3OEWS6foP1/0
+         Uc4NfgsfPPM6KhIk0jDKA/uF3ud4magg8hlohtaZufxidmvMnrZP+aXNEJ3YZS77kwsv
+         fATg==
+X-Gm-Message-State: AAQBX9eXIPzKtW1ns3dCbGTkpktFNlY6yrSpFs22/+XtbknpYVOrQ0dN
+        31UkyHh73KJ1xXVWqYZ5eCQY0tR73R1FnJPCzzs=
+X-Google-Smtp-Source: AKy350YmuhzUBxWUp60ovcUDsPlJFsBLyczP0oGDo4ISjPF+jYKyyt5nWKv+Dmxe0wdKjdJvsar7dg==
+X-Received: by 2002:a2e:8001:0:b0:2a6:2444:9892 with SMTP id j1-20020a2e8001000000b002a624449892mr668944ljg.25.1680874112332;
+        Fri, 07 Apr 2023 06:28:32 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id h2-20020a2e3a02000000b002a618eb72b1sm811031lja.98.2023.04.07.06.28.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 06:28:31 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/6] Couple of bindings / dt fixes
+Date:   Fri, 07 Apr 2023 15:28:30 +0200
+Message-Id: <20230407-topic-msm_dtb-v1-0-6efb4196f51f@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 3/7] usb: mtu3: fix kernel panic at qmu transfer done
- irq handler
-Content-Language: en-US
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tianping Fang <tianping.fang@mediatek.com>
-References: <20230407082937.14558-1-chunfeng.yun@mediatek.com>
- <20230407082937.14558-3-chunfeng.yun@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230407082937.14558-3-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+X-B4-Tracking: v=1; b=H4sIAH4aMGQC/x2NWwqDQAwAryL5biBNX7ZXkVKya1oDuspGpSDev
+ Us/Z2CYDVyzqcOj2iDram5jKnA8VBA7SR9FawsDE5/oTDecx8kiDj682jkg1cy1XFkud4LSBHH
+ FkCXFrlRp6fsip6xv+/4nzXPff6id8El0AAAA
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-media@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680874110; l=1182;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=9ZXqfxOQy7I2vZ6V/C5/H9u0lqdYqI+mn97VyDj4Pf4=;
+ b=7g+tFK1DIvw8PBgY5f/XwdyP6/5uKgfC6fcEf6XcQ1SDfP+/cDy/PnluuI/fa3zPlWlcXL0B0zR9
+ qZFl+EXLBc9Ov11e6TfAyDILL6AbIDlGhUQUuw0SVi1rAGfVLGdT
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,33 +92,30 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Il 07/04/23 10:29, Chunfeng Yun ha scritto:
-> When handle qmu transfer irq, it will unlock @mtu->lock before give back
-> request, if another thread handle disconnect event at the same time, and
-> try to disable ep, it may lock @mtu->lock and free qmu ring, then qmu
-> irq hanlder may get a NULL gpd, avoid the KE by checking gpd's value before
-> handling it.
-> 
-> e.g.
-> qmu done irq on cpu0                 thread running on cpu1
-> 
-> qmu_done_tx()
->    handle gpd [0]
->      mtu3_requ_complete()        mtu3_gadget_ep_disable()
->        unlock @mtu->lock
->          give back request         lock @mtu->lock
->                                      mtu3_ep_disable()
->                                        mtu3_gpd_ring_free()
->                                     unlock @mtu->lock
->        lock @mtu->lock
->      get next gpd [1]
-> 
-> [1]: goto [0] to handle next gpd, and next gpd may be NULL.
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Couple of trivial fixes to make dtbs_check happy (happier).
 
-NACK. You still miss the Fixes tag.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (6):
+      dt-bindings: media: qcom,sdm845-venus-v2: Allow interconnect properties
+      dt-bindings: remoteproc: qcom: adsp: Allow firmware-name
+      dt-bindings: usb: dwc3: Allow dma-ranges
+      arm64: dts: qcom: sc7280: Fix up the gic node
+      arm64: dts: qcom: pm8916: Fix pm8941-misc node name
+      arm64: dts: qcom: sdm845-oneplus: Fix speaker GPIO node
 
-Regards,
-Angelo
+ .../devicetree/bindings/media/qcom,sdm845-venus-v2.yaml    |  8 ++++++++
+ .../devicetree/bindings/remoteproc/qcom,adsp.yaml          |  4 ++++
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml       |  2 ++
+ arch/arm64/boot/dts/qcom/pm8916.dtsi                       |  2 +-
+ arch/arm64/boot/dts/qcom/sc7280.dtsi                       | 14 +++++++-------
+ arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi        | 12 +++++-------
+ 6 files changed, 27 insertions(+), 15 deletions(-)
+---
+base-commit: e134c93f788fb93fd6a3ec3af9af850a2048c7e6
+change-id: 20230407-topic-msm_dtb-08228a62a590
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
