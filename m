@@ -2,22 +2,22 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73DD26DA8B5
+	by mail.lfdr.de (Postfix) with ESMTP id 27D676DA8B4
 	for <lists+linux-usb@lfdr.de>; Fri,  7 Apr 2023 08:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233068AbjDGGHB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Apr 2023 02:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40318 "EHLO
+        id S233056AbjDGGHA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Apr 2023 02:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232966AbjDGGG7 (ORCPT
+        with ESMTP id S232953AbjDGGG7 (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Apr 2023 02:06:59 -0400
 Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10B059C7
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139C661BE
         for <linux-usb@vger.kernel.org>; Thu,  6 Apr 2023 23:06:56 -0700 (PDT)
 Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33766ULN0023018, This message is accepted by code: ctloc85258
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33766ULP0023018, This message is accepted by code: ctloc85258
 Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33766ULN0023018
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33766ULP0023018
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
         Fri, 7 Apr 2023 14:06:30 +0800
 Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
@@ -34,10 +34,12 @@ Received: from localhost.localdomain (172.21.252.101) by
 From:   Stanley Chang <stanley_chang@realtek.com>
 To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 CC:     <linux-usb@vger.kernel.org>
-Subject: [PATCH v1 1/2] usb: dwc3: core: add support for disabling High-speed park mode
-Date:   Fri, 7 Apr 2023 14:06:48 +0800
-Message-ID: <20230407060649.19126-1-stanley_chang@realtek.com>
+Subject: [PATCH v1 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,parkmode-disable-hs-quirk' quirk
+Date:   Fri, 7 Apr 2023 14:06:49 +0800
+Message-ID: <20230407060649.19126-2-stanley_chang@realtek.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230407060649.19126-1-stanley_chang@realtek.com>
+References: <20230407060649.19126-1-stanley_chang@realtek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -53,79 +55,30 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Setting the PARKMODE_DISABLE_HS bit in the DWC3_USB3_GUCTL1.
-When this bit is set to '1' all HS bus instances in park mode are disabled
-
-For some USB wifi devices, if enable this feature it will reduce the
-performance. Therefore, add an option for disabling HS park mode by device-tree.
-
-In Synopsys's dwc3 data book:
-In a few high speed devices when an IN request is sent within 900ns of the ACK
-of the previous packet, these devices send a NAK. When connected to these
-devices, if required, the software can disable the park mode if you see
-performance drop in your system. When park mode is disabled, pipelining of
-multiple packet is disabled and instead one packet at a time is requested by
-the scheduler. This allows up to 12 NAKs in a micro-frame and improves
-performance of these slow devices.
+Add a new 'snps,parkmode-disable-hs-quirk' DT quirk to dwc3 core for disable
+the high-speed parkmode.
 
 Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
 ---
- drivers/usb/dwc3/core.c | 5 +++++
- drivers/usb/dwc3/core.h | 4 ++++
- 2 files changed, 9 insertions(+)
+ Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 476b63618511..8fbc92a5f2cb 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1233,6 +1233,9 @@ static int dwc3_core_init(struct dwc3 *dwc)
- 		if (dwc->parkmode_disable_ss_quirk)
- 			reg |= DWC3_GUCTL1_PARKMODE_DISABLE_SS;
+diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+index be36956af53b..45ca967b8d14 100644
+--- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+@@ -232,6 +232,11 @@ properties:
+       When set, all SuperSpeed bus instances in park mode are disabled.
+     type: boolean
  
-+		if (dwc->parkmode_disable_hs_quirk)
-+			reg |= DWC3_GUCTL1_PARKMODE_DISABLE_HS;
++  snps,parkmode-disable-hs-quirk:
++    description:
++      When set, all HighSpeed bus instances in park mode are disabled.
++    type: boolean
 +
- 		if (DWC3_VER_IS_WITHIN(DWC3, 290A, ANY) &&
- 		    (dwc->maximum_speed == USB_SPEED_HIGH ||
- 		     dwc->maximum_speed == USB_SPEED_FULL))
-@@ -1555,6 +1558,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
- 				"snps,resume-hs-terminations");
- 	dwc->parkmode_disable_ss_quirk = device_property_read_bool(dev,
- 				"snps,parkmode-disable-ss-quirk");
-+	dwc->parkmode_disable_hs_quirk = device_property_read_bool(dev,
-+				"snps,parkmode-disable-hs-quirk");
- 	dwc->gfladj_refclk_lpm_sel = device_property_read_bool(dev,
- 				"snps,gfladj-refclk-lpm-sel-quirk");
- 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 4743e918dcaf..30907ffcb3ec 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -263,6 +263,7 @@
- #define DWC3_GUCTL1_DEV_FORCE_20_CLK_FOR_30_CLK	BIT(26)
- #define DWC3_GUCTL1_DEV_L1_EXIT_BY_HW		BIT(24)
- #define DWC3_GUCTL1_PARKMODE_DISABLE_SS		BIT(17)
-+#define DWC3_GUCTL1_PARKMODE_DISABLE_HS		BIT(16)
- #define DWC3_GUCTL1_RESUME_OPMODE_HS_HOST	BIT(10)
- 
- /* Global Status Register */
-@@ -1102,6 +1103,8 @@ struct dwc3_scratchpad_array {
-  *			generation after resume from suspend.
-  * @parkmode_disable_ss_quirk: set if we need to disable all SuperSpeed
-  *			instances in park mode.
-+ * @parkmode_disable_hs_quirk: set if we need to disable all HishSpeed
-+ *			instances in park mode.
-  * @tx_de_emphasis_quirk: set if we enable Tx de-emphasis quirk
-  * @tx_de_emphasis: Tx de-emphasis value
-  *	0	- -6dB de-emphasis
-@@ -1318,6 +1321,7 @@ struct dwc3 {
- 	unsigned		dis_tx_ipgap_linecheck_quirk:1;
- 	unsigned		resume_hs_terminations:1;
- 	unsigned		parkmode_disable_ss_quirk:1;
-+	unsigned		parkmode_disable_hs_quirk:1;
- 	unsigned		gfladj_refclk_lpm_sel:1;
- 
- 	unsigned		tx_de_emphasis_quirk:1;
+   snps,dis_metastability_quirk:
+     description:
+       When set, disable metastability workaround. CAUTION! Use only if you are
 -- 
 2.34.1
 
