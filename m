@@ -2,86 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB676DA26B
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Apr 2023 22:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB2A6DA67A
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Apr 2023 02:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237835AbjDFUQP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Apr 2023 16:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
+        id S238433AbjDGAO6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Apr 2023 20:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237338AbjDFUQO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 16:16:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0B1659A
-        for <linux-usb@vger.kernel.org>; Thu,  6 Apr 2023 13:16:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CE9664B50
-        for <linux-usb@vger.kernel.org>; Thu,  6 Apr 2023 20:16:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E6182C433EF
-        for <linux-usb@vger.kernel.org>; Thu,  6 Apr 2023 20:16:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680812172;
-        bh=jjCx9RaNjqPQ3TajLNRZh1uMAB7/yzyQdMdh4xYeHpE=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=QDDIXcBjc104MtChUoAIZDEHHUk4Il5BnbBSzFukQBLIZZ3Kayg9Q3eYwH7Jt1vjC
-         4mgHHo4lmPwaHmQgtrrpo7QMwgkCBY8oL+anHXJuPrgE5xhundTdKRGdYID+4v3cFB
-         5v4cSUh13aRVyH3lnNxlvLCiznJ2uFL8bCoX4x94YfvI5qrWsiyyeQ1wjRggdD3UdN
-         ZXIAFzY3JJMErcj/M6abStrQI6uPOSrvxzGWJDboX9d6rrlQltSFLSa+nmPL51dcO3
-         WCik4cAnUOKAx73SdIe5mnqCgdEFTI1teScLmTbNLcXO082sb40p9emD8YrEp4u9G5
-         WKAQS/bfwlTCQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id D4852C43143; Thu,  6 Apr 2023 20:16:12 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217242] CPU hard lockup related to xhci/dma
-Date:   Thu, 06 Apr 2023 20:16:12 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: miller.hunterc@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-217242-208809-EvZaMC9ga7@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217242-208809@https.bugzilla.kernel.org/>
-References: <bug-217242-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S236825AbjDGAOs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Apr 2023 20:14:48 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555E79EC8
+        for <linux-usb@vger.kernel.org>; Thu,  6 Apr 2023 17:14:47 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id v9so2594991pjk.0
+        for <linux-usb@vger.kernel.org>; Thu, 06 Apr 2023 17:14:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1680826487; x=1683418487;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CUpe4fyEON5BGY/Krg7UBwYk33mDfZbzhByBXKF1Op4=;
+        b=m74H6gd95HlYt1gDFCvGLe/zXtZdmzdmmd0nLY+aZlBOnxkhnNMpUjH5Pp0l2xhk3e
+         b67rp9yxFSMajvi/6fKrDU8mTpsWv0vkDELuKk1qmz/657hdT6n8oByT6zyswNB30tM7
+         5eGJdfoqs9EoSrNZjD3GV/lIEdlwUdKm8IcpE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680826487; x=1683418487;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CUpe4fyEON5BGY/Krg7UBwYk33mDfZbzhByBXKF1Op4=;
+        b=Q+SJi+9cgI8ir7HY2ufDtKU3S49Mj/qQP/S5LG5CsGP9pJAgLRX+83qYeujxaOv+NK
+         nWT98l46Peq+swyCCwdzmABwjiZ80zbSVd+jHgFXfPEOymWqC+haANKtrvBmo0L5+eEW
+         bKTaT2Gb0/jelgm4gvPIP8wgdGOKInKcUnTjLIOxjRIuMBRi7bv2DTE8M7sP4JyMSI8j
+         1hEqWLYvie+GWJkWOmn5uOsHILAhF+hJurerczBJpvvmPV8NmqUehp3Arw/IKq8v+i56
+         u21cbyxpb0ax3asZr/pBAsvQcc9Hwo/RBZmplnxTt3RczJxskf+OkQ7LFigDgAe/qCSh
+         ACPA==
+X-Gm-Message-State: AAQBX9dejjDeYDigjnXPVeyEQpar/61k6SkL0nfl4vW3c7wedfUuqyln
+        XT7omjXT9SWF++Y9eHWKAjpnbQ==
+X-Google-Smtp-Source: AKy350ab+eYRqbZGGh2TuIO/xigh1TQ8o6ezz/1TWY1fsvV+Ukb/Gh4eTgZgIhkf4WaYuHS6fu0lnA==
+X-Received: by 2002:a05:6a20:dc9f:b0:d9:7424:3430 with SMTP id ky31-20020a056a20dc9f00b000d974243430mr1007563pzb.15.1680826486769;
+        Thu, 06 Apr 2023 17:14:46 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:2f1a:b18a:6c4:e53e])
+        by smtp.gmail.com with ESMTPSA id d2-20020a655ac2000000b00513c549e98asm1612495pgt.68.2023.04.06.17.14.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 17:14:45 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        =?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        David Ober <dober6023@gmail.com>,
+        Hayes Wang <hayeswang@realtek.com>,
+        Jean-Francois Le Fillatre <jflf_kernel@gmx.com>,
+        Sven van Ashbrook <svenva@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH] r8152: Add __GFP_NOWARN to big allocations
+Date:   Thu,  6 Apr 2023 17:14:26 -0700
+Message-Id: <20230406171411.1.I84dbef45786af440fd269b71e9436a96a8e7a152@changeid>
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217242
+When memory is a little tight on my system, it's pretty easy to see
+warnings that look like this.
 
---- Comment #11 from Hunter M (miller.hunterc@gmail.com) ---
-Created attachment 304095
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D304095&action=3Dedit
-computer 2 dmesg CPU lockup
+  ksoftirqd/0: page allocation failure: order:3, mode:0x40a20(GFP_ATOMIC|__GFP_COMP), nodemask=(null),cpuset=/,mems_allowed=0
+  ...
+  Call trace:
+   dump_backtrace+0x0/0x1e8
+   show_stack+0x20/0x2c
+   dump_stack_lvl+0x60/0x78
+   dump_stack+0x18/0x38
+   warn_alloc+0x104/0x174
+   __alloc_pages+0x588/0x67c
+   alloc_rx_agg+0xa0/0x190 [r8152 ...]
+   r8152_poll+0x270/0x760 [r8152 ...]
+   __napi_poll+0x44/0x1ec
+   net_rx_action+0x100/0x300
+   __do_softirq+0xec/0x38c
+   run_ksoftirqd+0x38/0xec
+   smpboot_thread_fn+0xb8/0x248
+   kthread+0x134/0x154
+   ret_from_fork+0x10/0x20
 
-Update: DMA API debugging did not result in any warnings/errors from DMA. 2=
-/6
-computers have had CPU lockup occur.
+On a fragmented system it's normal that order 3 allocations will
+sometimes fail, especially atomic ones. The driver handles these
+failures fine and the WARN just creates spam in the logs for this
+case. The __GFP_NOWARN flag is exactly for this situation, so add it
+to the allocation.
 
---=20
-You may reply to this email to add a comment.
+NOTE: my testing is on a 5.15 system, but there should be no reason
+that this would be fundamentally different on a mainline kernel.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+
+ drivers/net/usb/r8152.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index decb5ba56a25..0fc4b959edc1 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -1943,7 +1943,7 @@ static struct rx_agg *alloc_rx_agg(struct r8152 *tp, gfp_t mflags)
+ 	if (!rx_agg)
+ 		return NULL;
+ 
+-	rx_agg->page = alloc_pages(mflags | __GFP_COMP, order);
++	rx_agg->page = alloc_pages(mflags | __GFP_COMP | __GFP_NOWARN, order);
+ 	if (!rx_agg->page)
+ 		goto free_rx;
+ 
+-- 
+2.40.0.577.gac1e443424-goog
+
