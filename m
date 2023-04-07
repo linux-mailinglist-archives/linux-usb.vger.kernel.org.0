@@ -2,64 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4762C6DAD98
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Apr 2023 15:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2148A6DAE63
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Apr 2023 15:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240888AbjDGN3F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Apr 2023 09:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36840 "EHLO
+        id S240303AbjDGNyh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Apr 2023 09:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240852AbjDGN2u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Apr 2023 09:28:50 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA034AF0F
-        for <linux-usb@vger.kernel.org>; Fri,  7 Apr 2023 06:28:42 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id e9so28276211ljq.4
-        for <linux-usb@vger.kernel.org>; Fri, 07 Apr 2023 06:28:42 -0700 (PDT)
+        with ESMTP id S231389AbjDGNyY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Apr 2023 09:54:24 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823ADCC23
+        for <linux-usb@vger.kernel.org>; Fri,  7 Apr 2023 06:52:22 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id n21so8559200ejz.4
+        for <linux-usb@vger.kernel.org>; Fri, 07 Apr 2023 06:52:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680874122;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=71AC0ikf0Km0x4plkaVuEck1Cfenbrjm5IUQHvGO24k=;
-        b=XkNeRFkyD1Vke1fwILYZ5wCBxBjB8TgpmdJeOin1U9seR/kEM0T6tjuTMuVAyA9+d5
-         4MtSRVT0fUyVDZVkKOkdyzhehxSKNDrHjiAf/jiHyXUBDy+BD+MgtqBCzPWTXOohE+o8
-         k7s/Gppk3oXJhP9IMVl+qSkmTICuzRQc+UFcmcbODiWjydzuqUd8srR17IABThPYR7dV
-         3UEKA7G+AMR/EZQktWMYSubrrxlZFsxVmR4FsYAokMjqed5RvZ+GoVZBe4Kj7Es8arNk
-         /AvxIxOyaijm2FtBii86oS6m6fZlsicQaJNHAhxufA6aUwddQP/n78Jb2fSr9chMgOos
-         9FHQ==
+        d=linaro.org; s=google; t=1680875485;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A/NA2TmYwSaD4RFz90MGIkIrg7vRhmuwHGBdbiR2Km8=;
+        b=W/Y6pxU0uv1ioKEIlw+qLaGLHKVF46JSMJrX6/6FmT5AqtBp8orsjie+YEBMyyiY0e
+         hM0h/Wlwpg2UFjdjJd9pFWsW56JsZ6EBdX3JWGndga+IDbDHpeHQa+MZkGk6cCfBjZxR
+         WmoWl01WB2reDwoLwUIRGNuWZtoj0mPHEGDCDBbf1qrtegOAEXadvNOwSDOx0ReUbNzx
+         9A+frwkIQNzZG4rBMR4vWeSXoUtfiS9FK0Y6+edWOnoB7Ddq1CjCHoUDpvMK0Uhh/545
+         N+F2qV+fWyuX08eTL6DXH15GfyzHGhZzNXETTirYFYOMRNYZTCDFLUH2oWwR9N6zO7vv
+         mSmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680874122;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=71AC0ikf0Km0x4plkaVuEck1Cfenbrjm5IUQHvGO24k=;
-        b=Mpg446D86SaPVWEP2e0cZGDeugyV859ZlQVWPFRrmUlRSiAN0xbYMrvm5FHyab98mM
-         XT8kUW2QfQg/OQiczCg6kUlbethXJnbVIY6lyBAPGL9zTxSV8mREFUdgXZh5TxLWu0uo
-         JNl3+oPXhXta7TG2kL6yJZFUfgbW2FxT/Y0qcXouBTGqjccS6ReyWdYK4SLn9Zom1BOV
-         DcilxoJAWoxfNmLfZoVCmGHLTfJ0DoHvrsNIVohp8vcRPK45r1frOMaOe8vMqTwPYVLR
-         AHTZQGfyS9mSK82KnGvJTcEkHskPF/93C//IBvB2KOoZcKSCdYRVf5dJHtKmRR6dtZOG
-         DzYw==
-X-Gm-Message-State: AAQBX9fR4Gucmp/z3knFl77/80BmvD67b3xOPp/x3JdQM2xNsCV0VBRZ
-        j6mWQDpkKm2TAHI2kK9vdftcPRvEC93NYefpzMg=
-X-Google-Smtp-Source: AKy350ZSruER/WhZaHc54QHBOZ51rAbF7UrQ9i5YxFqdcrNz6ioeFKKdY2ttc1T424CJeSRGUvUDvQ==
-X-Received: by 2002:a2e:90d2:0:b0:298:8782:e5f with SMTP id o18-20020a2e90d2000000b0029887820e5fmr562218ljg.43.1680874122036;
-        Fri, 07 Apr 2023 06:28:42 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id h2-20020a2e3a02000000b002a618eb72b1sm811031lja.98.2023.04.07.06.28.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 06:28:41 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 07 Apr 2023 15:28:36 +0200
-Subject: [PATCH 6/6] arm64: dts: qcom: sdm845-oneplus: Fix speaker GPIO
- node
+        d=1e100.net; s=20210112; t=1680875485;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A/NA2TmYwSaD4RFz90MGIkIrg7vRhmuwHGBdbiR2Km8=;
+        b=lZmQgOMIhRVK8jv5xfDOihcI1FjplehsC0kzWmkFSFyVXlYmsQggpTS9MOgEj0ABEz
+         qKBf/k8o2qvDDD5raFQAYc0JUZyOvrlHmbTjJi9beDnlTz+nPQ5FpI1BEZaFTra10zX5
+         yjGzQArRc9dKunRimgHttXPwepgFUCbEcaCC9kocMhAlshlvUdTDJoVBffCbqmSSbTWO
+         RY3boWRIEMYIND/haOCLrghU8SoL9Ne4bfFQIaoZvbI18h5RJGfH0aelYKgWkaUOVwk1
+         9QT0eeuq0QQU8eQT/QuqB4lGZXr7e1jQAXAkzfn9/ZxF4hhUYA6iztz4VWaxcx5noltw
+         maBw==
+X-Gm-Message-State: AAQBX9dQGu2E9aF7k2TUtsbt+mYYRVF3PE4ZJ51gtct2aoSYkpocGTn4
+        lSb3hBWfuMELJV5PRnfttOB7dw==
+X-Google-Smtp-Source: AKy350bZRLV0736GB98/OOVVgMdWA8rdaRMPLf7OyYeRzhL2CW5/UPv8yUWeQBjfU/MAsa0lXvLmgw==
+X-Received: by 2002:a17:906:53cf:b0:931:8221:e168 with SMTP id p15-20020a17090653cf00b009318221e168mr2043154ejo.57.1680875485544;
+        Fri, 07 Apr 2023 06:51:25 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:b20f:8824:c926:8299? ([2a02:810d:15c0:828:b20f:8824:c926:8299])
+        by smtp.gmail.com with ESMTPSA id z4-20020a170906814400b0093018c7c07dsm2075718ejw.82.2023.04.07.06.51.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Apr 2023 06:51:25 -0700 (PDT)
+Message-ID: <1bf350ed-0a05-097a-57f9-4ea04fdc29f2@linaro.org>
+Date:   Fri, 7 Apr 2023 15:51:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230407-topic-msm_dtb-v1-6-6efb4196f51f@linaro.org>
-References: <20230407-topic-msm_dtb-v1-0-6efb4196f51f@linaro.org>
-In-Reply-To: <20230407-topic-msm_dtb-v1-0-6efb4196f51f@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/6] dt-bindings: remoteproc: qcom: adsp: Allow
+ firmware-name
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -74,56 +73,35 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680874110; l=899;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=2ZlzTx4qZrv5fI0EvpNhiuB/bNP3eTRF8tP8rrGDU64=;
- b=rMGpDmfTtl9My3tCK5KMbjhv6W+DPUi8hya37IvJUg93v3X1hJhA3hhTChLw4Ae5xjo4R9YcfAXP
- LP3v6XHBBcPwajD4MBHv6PdXz7VPM48G/a5f3Yf/53uBOgINd6BK
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        linux-media@vger.kernel.org, linux-remoteproc@vger.kernel.org
+References: <20230407-topic-msm_dtb-v1-0-6efb4196f51f@linaro.org>
+ <20230407-topic-msm_dtb-v1-2-6efb4196f51f@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230407-topic-msm_dtb-v1-2-6efb4196f51f@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Drop the unnecessary mux{} level to make dtbs check happy.
+On 07/04/2023 15:28, Konrad Dybcio wrote:
+> firmware-name has been with us for a long long time. Allow it to fix
+> warnings like this:
+> 
+> qcom/sdm845-oneplus-enchilada.dtb: remoteproc-cdsp: Unevaluated properties
+> are not allowed ('firmware-name' was unexpected)
+> 
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+https://lore.kernel.org/all/5fa6d988-b51a-7c18-b605-ab99ecec8bea@linaro.org/
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-index 0c268c560d37..8c2b9382337c 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-@@ -814,13 +814,11 @@ panel_esd_pin: panel-esd-state {
- 	};
- 
- 	speaker_default: speaker-default-state {
--		mux {
--			pins = "gpio69";
--			function = "gpio";
--			drive-strength = <16>;
--			bias-pull-up;
--			output-high;
--		};
-+		pins = "gpio69";
-+		function = "gpio";
-+		drive-strength = <16>;
-+		bias-pull-up;
-+		output-high;
- 	};
- };
- 
+Just rebase on my pending work if you want to avoid duplicates...
 
--- 
-2.40.0
+Best regards,
+Krzysztof
 
