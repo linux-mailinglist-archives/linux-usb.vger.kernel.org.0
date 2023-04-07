@@ -2,60 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2148A6DAE63
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Apr 2023 15:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2F26DAE6B
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Apr 2023 15:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240303AbjDGNyh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Apr 2023 09:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
+        id S239778AbjDGNzZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Apr 2023 09:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbjDGNyY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Apr 2023 09:54:24 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823ADCC23
-        for <linux-usb@vger.kernel.org>; Fri,  7 Apr 2023 06:52:22 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id n21so8559200ejz.4
-        for <linux-usb@vger.kernel.org>; Fri, 07 Apr 2023 06:52:22 -0700 (PDT)
+        with ESMTP id S240711AbjDGNzF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Apr 2023 09:55:05 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A816B765
+        for <linux-usb@vger.kernel.org>; Fri,  7 Apr 2023 06:53:19 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id n21so8570205ejz.4
+        for <linux-usb@vger.kernel.org>; Fri, 07 Apr 2023 06:53:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680875485;
+        d=linaro.org; s=google; t=1680875589;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=A/NA2TmYwSaD4RFz90MGIkIrg7vRhmuwHGBdbiR2Km8=;
-        b=W/Y6pxU0uv1ioKEIlw+qLaGLHKVF46JSMJrX6/6FmT5AqtBp8orsjie+YEBMyyiY0e
-         hM0h/Wlwpg2UFjdjJd9pFWsW56JsZ6EBdX3JWGndga+IDbDHpeHQa+MZkGk6cCfBjZxR
-         WmoWl01WB2reDwoLwUIRGNuWZtoj0mPHEGDCDBbf1qrtegOAEXadvNOwSDOx0ReUbNzx
-         9A+frwkIQNzZG4rBMR4vWeSXoUtfiS9FK0Y6+edWOnoB7Ddq1CjCHoUDpvMK0Uhh/545
-         N+F2qV+fWyuX08eTL6DXH15GfyzHGhZzNXETTirYFYOMRNYZTCDFLUH2oWwR9N6zO7vv
-         mSmw==
+        bh=1zzdPXrbK3r5iDo1cwu4EdwqJS32y505PzVqOYCGBbc=;
+        b=UbiNnjwZwxnedFj6AMxEnsLewBIyusqJ+pRg2zUfgAUP+9+IbJgjCusXno8RBWcLbf
+         +n3jfGpNxiX9Iqxq9iEO57kbXH7Vt+5ijSQNaDRLVb51EWC59yDUoriIA7QgUXGVw+xe
+         MRKWiIRyMhcP7s54bF3znrbHuNlInbn95jaWsBt5SyuuLNnlajnPyAyah9oQ09AsskcR
+         KKy8pEVrKwZ+aStSBKJXBAbcgKbD7Bpf5kU4Ypq09GvQIsXh9xi64lFWef9pg408DQpt
+         ODHoR4moK36yLtNZwbLH+oMydv5czXUK7vZHMMQnH0Ugj6amn7+jdIEJ4but/68mmYbK
+         73og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680875485;
+        d=1e100.net; s=20210112; t=1680875589;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A/NA2TmYwSaD4RFz90MGIkIrg7vRhmuwHGBdbiR2Km8=;
-        b=lZmQgOMIhRVK8jv5xfDOihcI1FjplehsC0kzWmkFSFyVXlYmsQggpTS9MOgEj0ABEz
-         qKBf/k8o2qvDDD5raFQAYc0JUZyOvrlHmbTjJi9beDnlTz+nPQ5FpI1BEZaFTra10zX5
-         yjGzQArRc9dKunRimgHttXPwepgFUCbEcaCC9kocMhAlshlvUdTDJoVBffCbqmSSbTWO
-         RY3boWRIEMYIND/haOCLrghU8SoL9Ne4bfFQIaoZvbI18h5RJGfH0aelYKgWkaUOVwk1
-         9QT0eeuq0QQU8eQT/QuqB4lGZXr7e1jQAXAkzfn9/ZxF4hhUYA6iztz4VWaxcx5noltw
-         maBw==
-X-Gm-Message-State: AAQBX9dQGu2E9aF7k2TUtsbt+mYYRVF3PE4ZJ51gtct2aoSYkpocGTn4
-        lSb3hBWfuMELJV5PRnfttOB7dw==
-X-Google-Smtp-Source: AKy350bZRLV0736GB98/OOVVgMdWA8rdaRMPLf7OyYeRzhL2CW5/UPv8yUWeQBjfU/MAsa0lXvLmgw==
-X-Received: by 2002:a17:906:53cf:b0:931:8221:e168 with SMTP id p15-20020a17090653cf00b009318221e168mr2043154ejo.57.1680875485544;
-        Fri, 07 Apr 2023 06:51:25 -0700 (PDT)
+        bh=1zzdPXrbK3r5iDo1cwu4EdwqJS32y505PzVqOYCGBbc=;
+        b=AD6zjm8XSpQLpaZXndyrKWazjjfO/jE9aSf77spUHFrBrTzutptvWj0hmzeFD9aBUZ
+         /fuPsJkS2U3YUmBggh4D1111iHGGn+E5SsA22dfRXsnEeRJU2UZJSaHiV5XUi4QveJY0
+         QpWvDRvwhV/5ZDj8sYdHj651RRtpeizeBzOMEny0nnT3XoF2TpBksv8c38YkwaCNyjwN
+         x8xebBGBjfNg00ySUrLb0uj2gJOykds700dh3IZJyt6Zbrmd8OLv3OneQvvopGrUAA8F
+         NW+bujQnahtH+e55H2qb8U/wm4oRjWCKXIYpcf/TelvQuHb62Wr5UMbpkSGhvk3bMjqL
+         YXiw==
+X-Gm-Message-State: AAQBX9cqWGxPh/cIUd4uSBpQu97lfY7zYbzwp2zXrb1Bw1ks5WSrOPxk
+        4ysWI80e3rWOFHaPYViPl7n9cA==
+X-Google-Smtp-Source: AKy350bgxm5X7doDqO5jZ4QBplTmI32AzFdYcvps4r4ECqjPKsPGQmcXk//k49UgIs1zxSsywQVKfg==
+X-Received: by 2002:a17:906:b81a:b0:930:d17b:959b with SMTP id dv26-20020a170906b81a00b00930d17b959bmr3059761ejb.22.1680875589321;
+        Fri, 07 Apr 2023 06:53:09 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:b20f:8824:c926:8299? ([2a02:810d:15c0:828:b20f:8824:c926:8299])
-        by smtp.gmail.com with ESMTPSA id z4-20020a170906814400b0093018c7c07dsm2075718ejw.82.2023.04.07.06.51.24
+        by smtp.gmail.com with ESMTPSA id hb18-20020a170907161200b0093344ef3764sm2074829ejc.57.2023.04.07.06.53.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 06:51:25 -0700 (PDT)
-Message-ID: <1bf350ed-0a05-097a-57f9-4ea04fdc29f2@linaro.org>
-Date:   Fri, 7 Apr 2023 15:51:23 +0200
+        Fri, 07 Apr 2023 06:53:08 -0700 (PDT)
+Message-ID: <19f5a3c6-b699-868e-65cd-fb66732d3c4b@linaro.org>
+Date:   Fri, 7 Apr 2023 15:53:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 2/6] dt-bindings: remoteproc: qcom: adsp: Allow
- firmware-name
+Subject: Re: [PATCH 3/6] dt-bindings: usb: dwc3: Allow dma-ranges
 Content-Language: en-US
 To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -75,9 +74,9 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         linux-media@vger.kernel.org, linux-remoteproc@vger.kernel.org
 References: <20230407-topic-msm_dtb-v1-0-6efb4196f51f@linaro.org>
- <20230407-topic-msm_dtb-v1-2-6efb4196f51f@linaro.org>
+ <20230407-topic-msm_dtb-v1-3-6efb4196f51f@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230407-topic-msm_dtb-v1-2-6efb4196f51f@linaro.org>
+In-Reply-To: <20230407-topic-msm_dtb-v1-3-6efb4196f51f@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -91,16 +90,16 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On 07/04/2023 15:28, Konrad Dybcio wrote:
-> firmware-name has been with us for a long long time. Allow it to fix
-> warnings like this:
+> Allow the common dma-ranges property to silence warning like this:
 > 
-> qcom/sdm845-oneplus-enchilada.dtb: remoteproc-cdsp: Unevaluated properties
-> are not allowed ('firmware-name' was unexpected)
+> qcom/sc7280-herobrine-evoker.dtb: usb@a6f8800: 'dma-ranges' does not
+> match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
 > 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-https://lore.kernel.org/all/5fa6d988-b51a-7c18-b605-ab99ecec8bea@linaro.org/
-
-Just rebase on my pending work if you want to avoid duplicates...
+It would be nice to see here explanation why dma-ranges should be added.
+If DTS has it incorrectly, it might not be valid reason to add to the
+binding.
 
 Best regards,
 Krzysztof
