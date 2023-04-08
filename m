@@ -2,99 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95DD26DB88D
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Apr 2023 05:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0496B6DBA70
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Apr 2023 13:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjDHDUV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Apr 2023 23:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
+        id S230200AbjDHLga (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 8 Apr 2023 07:36:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjDHDUT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Apr 2023 23:20:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E0D1BEA;
-        Fri,  7 Apr 2023 20:20:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D83064D4B;
-        Sat,  8 Apr 2023 03:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 90B9FC433D2;
-        Sat,  8 Apr 2023 03:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680924017;
-        bh=s6+/BzltS4eg674aI8cdbmK7B09+uVXtkxWgUQ7ZBtM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=YF6+I70trLdvxzvom3TPyCSs86ZMZ0JBbdm74+c14OXiQT6cKmq6vA/+HOKgwH6n1
-         K6xPH7XoLIv7yRjaktHTwlvJDCQON/+UawNFmeKiOWchdFUoKxtuQWELj92LIb/4Wl
-         iu+q2fNIHQL8OC2/xtVULLg7UiJxdwbjE6sBK0aUE6/9/LULbNMnb3ozxfPNYCwKfa
-         3XzGhlMLgfZOzxMqAe0D4KpQh2Lf0MMnu3+o/gQqni7d5J2TOpGJlOdRkkUF/Ro2xs
-         3u4ul6kV1ZbBxAPaTZIhObldjpesZ2pNBhwycP0b3STf18J7FnTkhq4hWOvcTCvypf
-         aRVB4hh+Wmigw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7203DE21EF2;
-        Sat,  8 Apr 2023 03:20:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229614AbjDHLg3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Apr 2023 07:36:29 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CF8BDF3
+        for <linux-usb@vger.kernel.org>; Sat,  8 Apr 2023 04:36:28 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id sh8so2239926ejc.10
+        for <linux-usb@vger.kernel.org>; Sat, 08 Apr 2023 04:36:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680953787;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6KMCVN4L9ldklrxsAVU+YsdQxCGvFHVbNDAEiVGPna8=;
+        b=bM8PxqxodCpdHWxRqzqVx0Cgn3TYN3yuyV7ntN6AyozvP5C6fZxPV//yW/PQZGufix
+         3bQ3dAkqukP444e1E1NvWps5tw8nZM35cW0mZCcRnT/eTOamXjchwMWIxbJdUVd1TSzp
+         WCHojVUaIZd5Moav5opWP6rDgbROlmEKDPRByOEk9joJFq2m/NMzyL4xsSrMqbIi3KNS
+         rVJ+qLuZJL+Xh5lIRsF0yhYpQG3OGvtjTQpeUPkBvOIgLl5KWsFwrBfrCn3Fnb24sw24
+         r7zdvV87LMmkpOq1XpW/CpoFHoylIONBitJbZFY1CCjOF5wD3eNTXtUP0UMAGZ2/Bniw
+         PqDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680953787;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6KMCVN4L9ldklrxsAVU+YsdQxCGvFHVbNDAEiVGPna8=;
+        b=S9IyBiStVF3tO8pFVwghM3RafPuhgVOAbEfAM/8sW6dO693F9z4UDrtczez3SAha97
+         xPl642spM88OOJS5vsUJ/ZhROZ/IV+bGpvkjBOUcAsPGLGE8LTsQIYNbB2Ziiv80J8iL
+         cOQsUeCrfRPO2UiYjpKlCd0l6dHIuYFPHsgcPBVbsWa6n0V9AeWaoALLJJIC/yt5TaQI
+         0W2lkzRVErTFxxqdsgRHapZnbtf4W+V1UkfQNBWvr/yqgl4NHnWSmu6W/zSh6N1Z3wbP
+         DsYZnT2M10eM/XuwbCqUHRGlvfKMpAKR0qcebUUWE799BFzI6VE5f8pEbUI/xN0ny3+q
+         j4tw==
+X-Gm-Message-State: AAQBX9e2CRs8xyn9CJu51xcoklZWlYTN+p3oo686hauu7y9K/UWH8A+L
+        vVTMDDqiVFBAl64o2hLtUtonag==
+X-Google-Smtp-Source: AKy350ZjUl26qCzn/b2R5qoeTLSeScfNvPyM4mr4GcK4curXt7xM05OURsWwQqKojqOFAxaux0orWw==
+X-Received: by 2002:a17:907:2157:b0:914:4277:f3e1 with SMTP id rk23-20020a170907215700b009144277f3e1mr2016161ejb.53.1680953786790;
+        Sat, 08 Apr 2023 04:36:26 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:4c06:aac9:100f:9d7f? ([2a02:810d:15c0:828:4c06:aac9:100f:9d7f])
+        by smtp.gmail.com with ESMTPSA id y11-20020a17090629cb00b00949173c1dcfsm3090237eje.18.2023.04.08.04.36.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Apr 2023 04:36:26 -0700 (PDT)
+Message-ID: <70dd6449-06d2-7182-9922-ddc3476ba472@linaro.org>
+Date:   Sat, 8 Apr 2023 13:36:25 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] r8152: Add __GFP_NOWARN to big allocations
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168092401746.26294.3498569400410508226.git-patchwork-notify@kernel.org>
-Date:   Sat, 08 Apr 2023 03:20:17 +0000
-References: <20230406171411.1.I84dbef45786af440fd269b71e9436a96a8e7a152@changeid>
-In-Reply-To: <20230406171411.1.I84dbef45786af440fd269b71e9436a96a8e7a152@changeid>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, git@apitzsch.eu, bjorn@mork.no,
-        dober6023@gmail.com, hayeswang@realtek.com, jflf_kernel@gmx.com,
-        svenva@chromium.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v6 0/8] Add multiport support for DWC3 controllers
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
+        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
+        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>,
+        "ahalaney@redhat.com" <ahalaney@redhat.com>,
+        "quic_shazhuss@quicinc.com" <quic_shazhuss@quicinc.com>
+References: <20230405125759.4201-1-quic_kriskura@quicinc.com>
+ <20230408014251.6cyjwuvsgu7dmz53@synopsys.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230408014251.6cyjwuvsgu7dmz53@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu,  6 Apr 2023 17:14:26 -0700 you wrote:
-> When memory is a little tight on my system, it's pretty easy to see
-> warnings that look like this.
+On 08/04/2023 03:42, Thinh Nguyen wrote:
+>> Krishna Kurapati (8):
+>>   dt-bindings: usb: Add bindings for multiport properties on DWC3
+>>     controller
+>>   usb: dwc3: core: Access XHCI address space temporarily to read port
+>>     info
+>>   usb: dwc3: core: Skip setting event buffers for host only controllers
+>>   usb: dwc3: core: Refactor PHY logic to support Multiport Controller
+>>   usb: dwc3: qcom: Add multiport controller support for qcom wrapper
+>>   arm64: dts: qcom: sc8280xp: Add multiport controller node for SC8280
+>>   arm64: dts: qcom: sa8295p: Enable tertiary controller and its 4 USB
+>>     ports
+>>   arm64: dts: qcom: sa8540-ride: Enable first port of tertiary usb
+>>     controller
+>>
+>>  .../devicetree/bindings/usb/snps,dwc3.yaml    |  13 +-
+>>  arch/arm64/boot/dts/qcom/sa8295p-adp.dts      |  47 +++
+>>  arch/arm64/boot/dts/qcom/sa8540p-ride.dts     |  22 ++
+>>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  58 +++
+>>  drivers/usb/dwc3/core.c                       | 373 ++++++++++++++----
+>>  drivers/usb/dwc3/core.h                       |  71 +++-
+>>  drivers/usb/dwc3/drd.c                        |  13 +-
+>>  drivers/usb/dwc3/dwc3-qcom.c                  |  28 +-
+>>  8 files changed, 523 insertions(+), 102 deletions(-)
+>>
+>> -- 
+>> 2.40.0
+>>
 > 
->   ksoftirqd/0: page allocation failure: order:3, mode:0x40a20(GFP_ATOMIC|__GFP_COMP), nodemask=(null),cpuset=/,mems_allowed=0
->   ...
->   Call trace:
->    dump_backtrace+0x0/0x1e8
->    show_stack+0x20/0x2c
->    dump_stack_lvl+0x60/0x78
->    dump_stack+0x18/0x38
->    warn_alloc+0x104/0x174
->    __alloc_pages+0x588/0x67c
->    alloc_rx_agg+0xa0/0x190 [r8152 ...]
->    r8152_poll+0x270/0x760 [r8152 ...]
->    __napi_poll+0x44/0x1ec
->    net_rx_action+0x100/0x300
->    __do_softirq+0xec/0x38c
->    run_ksoftirqd+0x38/0xec
->    smpboot_thread_fn+0xb8/0x248
->    kthread+0x134/0x154
->    ret_from_fork+0x10/0x20
-> 
-> [...]
+> Please check if your patches and mailing client. Looks like they are
+> corrupted.
 
-Here is the summary with links:
-  - r8152: Add __GFP_NOWARN to big allocations
-    https://git.kernel.org/netdev/net/c/5cc33f139e11
+All patches look from patch-syntax and apply fine. What is exactly
+corrupted?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Best regards,
+Krzysztof
 
