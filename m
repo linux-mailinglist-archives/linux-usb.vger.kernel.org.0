@@ -2,86 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 593066DC86C
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Apr 2023 17:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48D596DC887
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Apr 2023 17:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbjDJPYg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Apr 2023 11:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
+        id S229941AbjDJPbN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Apr 2023 11:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjDJPYf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Apr 2023 11:24:35 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CD45B99
-        for <linux-usb@vger.kernel.org>; Mon, 10 Apr 2023 08:24:25 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id q23so3797630ejz.3
-        for <linux-usb@vger.kernel.org>; Mon, 10 Apr 2023 08:24:25 -0700 (PDT)
+        with ESMTP id S229645AbjDJPbL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Apr 2023 11:31:11 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32455580
+        for <linux-usb@vger.kernel.org>; Mon, 10 Apr 2023 08:31:07 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id ga37so13650178ejc.0
+        for <linux-usb@vger.kernel.org>; Mon, 10 Apr 2023 08:31:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681140264;
+        d=linaro.org; s=google; t=1681140666;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jj5+3ZBXZlAI89ruKQzbvuNr2OLoK3zQC3mxyhHDlXY=;
-        b=sACzFZmix2ExkW3aGoI4YImeHplLF968Y0NFC03Af5ZIZxJCuZvSYnq3ua9uh17i2J
-         +K6YBNgkXYjnVRVJf2BudYOjxzD3HdBJdKR3fux3CLludVyPoGlkQHRTmxph88LAkcD1
-         skNgJd7PCeYz40rflkiXp2MYP4dYzSn0cl4rLxS9FdjkDjPuTG2HFjfn698u0CaUjFv8
-         rb9EuWbktPfq6H6is0zUHXvFObbQ06QtoTE8XNUy5ciOjKV78hviZbDDt6T4PUioryeB
-         X+X6ibVjMbZaN6I37/PatPdvAQL4Av+G5Op5XqunfWI/sYj+ZexeGWkdJlDRsFPi7b38
-         HClg==
+        bh=IBdfhAiuCEqD7RtTx8Ci52s2HURcnZu6d3ip+Anq2OE=;
+        b=P0GdGNeiMWHlHtdDH9sRbF6cNkJ2IzbEXTzFv5b2eukJiSBZjwCwyQgrTq8JYy+zaz
+         znD8Vl8cn3JY/F+scx1nzPxlm7RJU7ekeKesAD3i2b2JzVAFX2EnirPq/84SZ9gppmHd
+         SiC0OZQyrjilj32CPrINCHCIA7DhcmQu7uPD9Yi9N79gaBmWSydNmwyXfs+590vnZVOR
+         ftSTylYI0NNSG+CdT5BViFTJ1tLvhypAH6T1tXivxJq6D4nlFXlDRQL2v1BnmFXLDdR6
+         f2GG1uT5pT9RODLOblIitxoM+5m57LULhegr31dfxYf9QHBMEc1xMEQiwd9HsKyfvo+2
+         b/Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681140264;
+        d=1e100.net; s=20210112; t=1681140666;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jj5+3ZBXZlAI89ruKQzbvuNr2OLoK3zQC3mxyhHDlXY=;
-        b=br5PjEuIomkUPkAU0nJSHmckDTNdeyvNNeXHMoUCUQRfq80vvQtKDhtQwRe9Z1qmCg
-         GaqQ8VoyaOA0OIAR8ebS7shLN1TuFZIWV8vawZvLxi1ttTlRU8h4J0DEU/3QzElGPSTw
-         ytwbuqYqK5GPKYb4hV/PMocvoBsYis+zEfnxMpzjDZ24TQXjTLYmsXDfOAYafa6Ecr0S
-         01YJliNL6jBMkq8ZEbHja/GpXtCxFEly0f/xi7CS7dnZw4G+3Ax87Wby8QqMHCGL/BKi
-         klqhxzV/7Mq+cfn0zl1fQS3KIV8wGD1KRI6HRpTWRRl0snC3fX8SigXprPZEL7K2sAHE
-         cTNA==
-X-Gm-Message-State: AAQBX9d0YYRVUf/JCzB9JR779Cvo/Cn7EEQiFCY1msJQhtiXnpyoyKsp
-        VbK8wUp1GRvftf1BcvBLtMbpjw==
-X-Google-Smtp-Source: AKy350aYATRkzhtIB8/RV4T6cU+DWN8vNaHakdLW8PQEjTEys7IG9UNpdyTPEtAV6D8gWGnYnwkrCA==
-X-Received: by 2002:a17:907:2097:b0:94a:7196:ab7c with SMTP id pv23-20020a170907209700b0094a7196ab7cmr4188488ejb.46.1681140264362;
-        Mon, 10 Apr 2023 08:24:24 -0700 (PDT)
+        bh=IBdfhAiuCEqD7RtTx8Ci52s2HURcnZu6d3ip+Anq2OE=;
+        b=BN4tNRUZ/EOvGkiT0FPa6+GN4S4jSnrcdfXIdbjbh6lMdE6KjetoJvdgMWyhKRcZBm
+         h8AHw2pjjaBwyQfvocyLUPlG/+cKTcJHwjSMAdUseQTJu9p2ybBzQS9HHljVYE4ld9RL
+         PSZsvN7KwDBLN56fj2Zi3B9HVhC+msVVAtceayPytn4ur2wqORIBqEIca1C1E2+tRIGW
+         ZcaU2OLdj8OdP1ji6UCn//X5dOv/EAiL3yuii60PCkr1Gb4e2+NrOX89exbvUlB3EtxA
+         r+w2TvUq68VMQXSHnyaNJ7MsCWUEdrY2vucs/Lgs9hrw69PjKJzjOTqswCxTMa+s8ZlY
+         XD+g==
+X-Gm-Message-State: AAQBX9eHh8YG0JmHKh8ZhqLU4oVCuRH50ZySyhIbYT6wQgzFBQj3P94u
+        7v5eJ96DXU622dTaV0bZ16GIPA==
+X-Google-Smtp-Source: AKy350YzJjMIz0pn/8a10YREbTWl5he8HuqP0ckjnl5NSVi0xhbBIimcqLpyUlXGQva5k5cG3pl/Iw==
+X-Received: by 2002:a17:906:2a48:b0:93b:1c78:5796 with SMTP id k8-20020a1709062a4800b0093b1c785796mr6165570eje.43.1681140666219;
+        Mon, 10 Apr 2023 08:31:06 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:eacd:ffa4:1df7:3870? ([2a02:810d:15c0:828:eacd:ffa4:1df7:3870])
-        by smtp.gmail.com with ESMTPSA id f13-20020a170906c08d00b0092f289b6fdbsm5193104ejz.181.2023.04.10.08.24.22
+        by smtp.gmail.com with ESMTPSA id rk18-20020a170907215200b0094a77168584sm1474667ejb.125.2023.04.10.08.31.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 08:24:23 -0700 (PDT)
-Message-ID: <4558c8c0-34a3-aa78-31ac-1de5059be190@linaro.org>
-Date:   Mon, 10 Apr 2023 17:24:21 +0200
+        Mon, 10 Apr 2023 08:31:05 -0700 (PDT)
+Message-ID: <874277fe-92a6-2bed-eccf-15fc90d8574a@linaro.org>
+Date:   Mon, 10 Apr 2023 17:31:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v6 0/8] Add multiport support for DWC3 controllers
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: mtk-xhci: add an optional frame
+ count clock
 Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>,
-        "ahalaney@redhat.com" <ahalaney@redhat.com>,
-        "quic_shazhuss@quicinc.com" <quic_shazhuss@quicinc.com>
-References: <20230405125759.4201-1-quic_kriskura@quicinc.com>
- <20230408014251.6cyjwuvsgu7dmz53@synopsys.com>
- <70dd6449-06d2-7182-9922-ddc3476ba472@linaro.org>
- <20230408230901.es3b2hetqs53gvqd@synopsys.com>
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Tianping Fang <tianping.fang@mediatek.com>
+References: <20230407062406.12575-1-chunfeng.yun@mediatek.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230408230901.es3b2hetqs53gvqd@synopsys.com>
+In-Reply-To: <20230407062406.12575-1-chunfeng.yun@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -94,87 +84,17 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 09/04/2023 01:09, Thinh Nguyen wrote:
-> On Sat, Apr 08, 2023, Krzysztof Kozlowski wrote:
->> On 08/04/2023 03:42, Thinh Nguyen wrote:
->>>> Krishna Kurapati (8):
->>>>   dt-bindings: usb: Add bindings for multiport properties on DWC3
->>>>     controller
->>>>   usb: dwc3: core: Access XHCI address space temporarily to read port
->>>>     info
->>>>   usb: dwc3: core: Skip setting event buffers for host only controllers
->>>>   usb: dwc3: core: Refactor PHY logic to support Multiport Controller
->>>>   usb: dwc3: qcom: Add multiport controller support for qcom wrapper
->>>>   arm64: dts: qcom: sc8280xp: Add multiport controller node for SC8280
->>>>   arm64: dts: qcom: sa8295p: Enable tertiary controller and its 4 USB
->>>>     ports
->>>>   arm64: dts: qcom: sa8540-ride: Enable first port of tertiary usb
->>>>     controller
->>>>
->>>>  .../devicetree/bindings/usb/snps,dwc3.yaml    |  13 +-
->>>>  arch/arm64/boot/dts/qcom/sa8295p-adp.dts      |  47 +++
->>>>  arch/arm64/boot/dts/qcom/sa8540p-ride.dts     |  22 ++
->>>>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  58 +++
->>>>  drivers/usb/dwc3/core.c                       | 373 ++++++++++++++----
->>>>  drivers/usb/dwc3/core.h                       |  71 +++-
->>>>  drivers/usb/dwc3/drd.c                        |  13 +-
->>>>  drivers/usb/dwc3/dwc3-qcom.c                  |  28 +-
->>>>  8 files changed, 523 insertions(+), 102 deletions(-)
->>>>
->>>> -- 
->>>> 2.40.0
->>>>
->>>
->>> Please check if your patches and mailing client. Looks like they are
->>> corrupted.
->>
->> All patches look from patch-syntax and apply fine. What is exactly
->> corrupted?
->>
+On 07/04/2023 08:24, Chunfeng Yun wrote:
+> Add optional clock 'frmcnt_ck' used on 4nm or advanced process SoC
 > 
-> Hm... perhaps it's an encoding issue from my mail client then. I get
-> this from my automated checks:
-> 
-> <snip>
-> 
-> ERROR: spaces required around that '=' (ctx:WxV)
-> #429: FILE: drivers/usb/dwc3/core.h:1697:
-> +		if (offset !=3D start && (id =3D=3D 0 || XHCI_EXT_CAPS_ID(val) =3D=3D id=
->  		                                                               ^
-> 
-> ERROR: spaces required around that '=' (ctx:VxV)
-> #429: FILE: drivers/usb/dwc3/core.h:1697:
-> +		if (offset !=3D start && (id =3D=3D 0 || XHCI_EXT_CAPS_ID(val) =3D=3D id=
->  		                                                                  ^
-> 
-> ERROR: spaces required around that '=' (ctx:VxE)
-> #429: FILE: drivers/usb/dwc3/core.h:1697:
-> +		if (offset !=3D start && (id =3D=3D 0 || XHCI_EXT_CAPS_ID(val) =3D=3D id=
->  		                                                                        ^
-> 
-> ERROR: do not use assignment in if condition
-> #429: FILE: drivers/usb/dwc3/core.h:1697:
-> +		if (offset !=3D start && (id =3D=3D 0 || XHCI_EXT_CAPS_ID(val) =3D=3D id=
-> 
-> ERROR: spaces required around that '=' (ctx:WxV)
-> #433: FILE: drivers/usb/dwc3/core.h:1700:
-> +		next =3D XHCI_EXT_CAPS_NEXT(val);
->  		     ^
-> 
-> ERROR: spaces required around that '+=' (ctx:WxV)
-> #434: FILE: drivers/usb/dwc3/core.h:1701:
-> +		offset +=3D next << 2;
-> 
-> </snip>
-> 
-> 
-> The "=" gets encoded to =3D, which is strange. It never happened before.
-> I need to check my mail client. Sorry for the noise.
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v2: based the patch:
+>     https://patchwork.kernel.org/project/linux-mediatek/patch/20230403191850.374839-1-krzysztof.kozlowski@linaro.org/
+> ---
 
-I don't see it, but I did not check each patch thoroughly. I also do not
-know to which patch do you refer to. It is the easiest to reply inline
-under the block which is corrupted. If you suspect you email client is
-the cause, just check on lore.
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
