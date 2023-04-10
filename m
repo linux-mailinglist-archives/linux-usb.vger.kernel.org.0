@@ -2,282 +2,241 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD7B6DCC64
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Apr 2023 22:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8F76DCC66
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Apr 2023 22:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjDJU5F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Apr 2023 16:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
+        id S229891AbjDJU6K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Apr 2023 16:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjDJU4v (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Apr 2023 16:56:51 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C35226A6
-        for <linux-usb@vger.kernel.org>; Mon, 10 Apr 2023 13:56:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681160209; x=1712696209;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/5BG36p6H0iHiGt3ulIEwxXb97tDQtyWTI6tOtgsQYw=;
-  b=AHQTH/JOv8SzvkH0MWODHIZOWZwyq1uvTchfn3bfMdiaqYxkGFE0TdN1
-   8Zf3R0JGtmvnVnhEflM/TssnAJFuFJ2LWGbF5nGGsUDWfML85A9hLEZHT
-   mLbltTIbXDz924hNSo39kG40Ij8wko1e4tiqum7FYHVx5ZcSiskliUGLI
-   Ukg0lAc/u9ox/vyYG2AvhOmlmoiFjaxjtKLjUTJAD7YCYkF/CA3gFlEJV
-   OyAipB3tMMrmi8bbj77ih2+UxCEhEgdy5fuKtcbf345qafkmrsY+3PTvF
-   SepGKj5jxkT2NKeoybteYz+QpY1UnBQChivdfa4ZBwBFRvNPKEq0tX52s
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="408591730"
-X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
-   d="scan'208";a="408591730"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 13:55:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="665723671"
-X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
-   d="scan'208";a="665723671"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 10 Apr 2023 13:55:39 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1plyY6-000VfL-2I;
-        Mon, 10 Apr 2023 20:55:38 +0000
-Date:   Tue, 11 Apr 2023 04:54:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 8e86652e3e7152bba80c3b4d03814e40ede1abc7
-Message-ID: <64347798.TkWYZ4QsLHXVIkq9%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229626AbjDJU6J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Apr 2023 16:58:09 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58965E51
+        for <linux-usb@vger.kernel.org>; Mon, 10 Apr 2023 13:58:08 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id kh6so4166679plb.0
+        for <linux-usb@vger.kernel.org>; Mon, 10 Apr 2023 13:58:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1681160288;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tpsswGb8pfO0+/JLJkf4UecoZuOb7ysrMIZCPuKNFWI=;
+        b=qRRBUwaCPmV0mCWpqrzen2I6ZZ0j7ySPlX5bf3dUPxMcragOguwvbUoI68+HIQ0SX6
+         a6KOGjsh/mrtXntWfpAcfb/9RzCJnNBK4Gb+aOdQ3HXUn4U6mkD0fARcs4WtBE2ypFi7
+         C5V/TgvKdfNjO2eW1SoYubhiaanKxhsmuYf2gvUYOO/fq8PsJ4LpxfXfbw42dJBo58SD
+         GM6lyZbglQnFbblLFmiLn7GjE56mQEPgdMT9IFCPXS4lQH5A/HTsQBUPBilEVexZmk3b
+         R84YjVoBkknGRr04VILgGebLZejRdzz5x1p+5q8h81elKejdsT6JI7spOEMp4JPtVmU+
+         pjJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681160288;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tpsswGb8pfO0+/JLJkf4UecoZuOb7ysrMIZCPuKNFWI=;
+        b=KB8ofJsvmvFciAF1oEMVlg1ida9dPWfEE0l+XgvgOoTj1VLO42gdMGT/J4jVznd7pp
+         /w9Ug70yUXn2r/QEtdCW22pA7QTy83p9/aX6B5h2ImJIwi+tEwy0LDkeELMVoFtwk2Mo
+         RwoD+13txMQqDr13rlAzkIfh4hVfE66VFC0rmz00//cHtCcq0EyqcplOk4du5/RRQ0HM
+         D85SPiN8X6e2qlQ/35ZERhM3/6O51XSeelQiw37Pw5xM280HlSzRKlWToUf6Zs4HPRNK
+         HXHjOCvjuG2it1t+Lu8AMX2xmzm1k3RLBFEWj5W7oQ9bu9T48HO7vwJZ0gqN/lokRps2
+         fuPg==
+X-Gm-Message-State: AAQBX9cz20NtLRylyPlsoXmOYvKR8+nLU26pJkfIx/qBJ6gVGs98NidS
+        SQ06Om8KBJMYV0/o2pKf2dXMaA8UBdLGAQERw0DY0Q==
+X-Google-Smtp-Source: AKy350ZJ+jGeTIYJCaU7jbTGcIwBPwmqPr07cxlYPqWehgNdk6BAuXOGvv0E1dlohdZcUcyNH1wp/RM7DSfDDdEUyug=
+X-Received: by 2002:a17:902:da8a:b0:1a2:8fa0:fbd7 with SMTP id
+ j10-20020a170902da8a00b001a28fa0fbd7mr7245776plx.2.1681160287598; Mon, 10 Apr
+ 2023 13:58:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230410073134.488762-1-badhri@google.com> <2023041028-irritate-starless-a42f@gregkh>
+ <CAPTae5KZ0zkaCWrtPYzyX8oTyvDhBhc-hvxyHn9VHZ32UOqJ3g@mail.gmail.com>
+ <2023041004-antarctic-hardiness-524e@gregkh> <CAPTae5JFC8WUzjrMeiyw7tYfWpsZUQThrrvG_etx7Fb2KP6y6A@mail.gmail.com>
+ <b1ac0ab9-e6f3-4301-a231-519752e4a735@roeck-us.net>
+In-Reply-To: <b1ac0ab9-e6f3-4301-a231-519752e4a735@roeck-us.net>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Mon, 10 Apr 2023 13:57:30 -0700
+Message-ID: <CAPTae5LbWVc4Bdiwe69cwwxEGfSYvRv=419dUGR1u8n-WUkYAA@mail.gmail.com>
+Subject: Re: [PATCH v1] usb: typec: tcpm: Add kernel config to wrap around
+ tcpm logs
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 8e86652e3e7152bba80c3b4d03814e40ede1abc7  Merge 6.3-rc6 into usb-next
+On Mon, Apr 10, 2023 at 10:00=E2=80=AFAM Guenter Roeck <linux@roeck-us.net>=
+ wrote:
+>
+> On Mon, Apr 10, 2023 at 02:00:08AM -0700, Badhri Jagan Sridharan wrote:
+> > On Mon, Apr 10, 2023 at 1:27=E2=80=AFAM Greg KH <gregkh@linuxfoundation=
+.org> wrote:
+> > >
+> > > On Mon, Apr 10, 2023 at 01:08:55AM -0700, Badhri Jagan Sridharan wrot=
+e:
+> > > > On Mon, Apr 10, 2023 at 12:45=E2=80=AFAM Greg KH <gregkh@linuxfound=
+ation.org> wrote:
+> > > > >
+> > > > > On Mon, Apr 10, 2023 at 07:31:34AM +0000, Badhri Jagan Sridharan =
+wrote:
+> > > > > > This change adds CONFIG_TCPM_LOG_WRAPAROUND which when set allo=
+ws the
+> > > > > > logs to be wrapped around. Additionally, when set, does not cle=
+ar
+> > > > > > the TCPM logs when dumped.
+> > > > > >
+> > > > > > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> > > > > > ---
+> > > > > >  drivers/usb/typec/tcpm/Kconfig | 6 ++++++
+> > > > > >  drivers/usb/typec/tcpm/tcpm.c  | 9 +++++++--
+> > > > > >  2 files changed, 13 insertions(+), 2 deletions(-)
+> > > > > >
+> > > > > > diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec=
+/tcpm/Kconfig
+> > > > > > index e6b88ca4a4b9..4dd2b594dfc9 100644
+> > > > > > --- a/drivers/usb/typec/tcpm/Kconfig
+> > > > > > +++ b/drivers/usb/typec/tcpm/Kconfig
+> > > > > > @@ -18,6 +18,12 @@ config TYPEC_TCPCI
+> > > > > >       help
+> > > > > >         Type-C Port Controller driver for TCPCI-compliant contr=
+oller.
+> > > > > >
+> > > > > > +config TCPM_LOG_WRAPAROUND
+> > > > > > +     bool "Enable TCPM log wraparound"
+> > > > > > +     help
+> > > > > > +       When set, wraps around TCPM logs and does not clear the=
+ logs when dumped. TCPM logs by
+> > > > > > +       default gets cleared when dumped and does not wraparoun=
+d when full.
+> > > > >
+> > > > > Kconfig help text needs to be wrapped at the properly width.
+> > > >
+> > > > I assumed that the width is 100 characters, but it looks like it is
+> > > > 80. Will fix it in the next version.
+> > > > >
+> > > > > And you do not provide any hint here as to why this is not the de=
+fault
+> > > > > option, or why someone would want this.
+> > > >
+> > > > "TCPM logs by default gets cleared when dumped and does not wraparo=
+und
+> > > > when full." was intended
+> > > > to convey why someone would want to set this. Perhaps it's not effe=
+ctive.
+> > > >
+> > > > Does the below look better:
+> > > > "TCPM logs by default gets cleared when dumped and does not wraparo=
+und
+> > > > when full. This can be overridden by setting this config.
+> > > > When the config is set, TCPM wraps around logs and does not clear t=
+he
+> > > > logs when dumped."
+> > > >
+> > > > Also, I could make this default if that's OK with Guenter.
+> > > >
+> > > > >
+> > > > > So, why is this not just the default operation anyway?  Why would=
+ you
+> > > > > ever want the logs cleared?
+> > > >
+> > > > I remember Guenter mentioning that he was finding it useful to not
+> > > > wrap around the logs to fix problems
+> > > > during tcpm_register_port (init sequence). IMHO wrapping around the
+> > > > logs helps to triage interoperability
+> > > > issues uncovered during testing. So both approaches have their own =
+advantages.
+> > >
+> > > But as this is a build-time option, what would cause someone to choos=
+e
+> > > one over the other, and then when the system is running, they can't
+> > > change them?
+> >
+> > During initial phases of bringup, it makes sense to not wrap around
+> > the logs, but, once bringup is done its most effective to wraparound
+> > so that interop issues reported by the end users can be triaged where
+> > TCPM logs are very effective.
+>
+> Not really, because the problem tends to be the remote device
+> (or at least it used to be), not a driver under development.
 
-elapsed time: 826m
+Thanks for clarifying Guenter !
+Right now if we DONT wrap around, once an issue is observed with a
+remote device, the logs have to be cleared(if already full) and then
+the issue has to be reproduced to collect the TCPM logbuffer
+logsagain.
 
-configs tested: 202
-configs skipped: 20
+Having a log available _all_ the time, not just when explicitly
+enabled is still very useful to catch hard to reproduce intertop
+issues.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Given this would you be OK if I change the logic to wrap around always ?
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r005-20230409   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r003-20230410   gcc  
-alpha                randconfig-r034-20230409   gcc  
-alpha                randconfig-r036-20230409   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r001-20230409   gcc  
-arc          buildonly-randconfig-r002-20230410   gcc  
-arc          buildonly-randconfig-r005-20230410   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r005-20230409   gcc  
-arc                  randconfig-r013-20230410   gcc  
-arc                  randconfig-r015-20230409   gcc  
-arc                  randconfig-r035-20230409   gcc  
-arc                  randconfig-r043-20230409   gcc  
-arc                  randconfig-r043-20230410   gcc  
-arc                           tb10x_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                          ep93xx_defconfig   clang
-arm                  randconfig-r016-20230409   clang
-arm                  randconfig-r033-20230410   gcc  
-arm                  randconfig-r046-20230409   clang
-arm                  randconfig-r046-20230410   clang
-arm                         s3c6400_defconfig   gcc  
-arm                           sunxi_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r002-20230409   clang
-arm64                               defconfig   gcc  
-arm64                randconfig-r023-20230410   gcc  
-arm64                randconfig-r026-20230409   gcc  
-csky         buildonly-randconfig-r003-20230410   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r002-20230410   gcc  
-csky                 randconfig-r003-20230409   gcc  
-csky                 randconfig-r021-20230409   gcc  
-csky                 randconfig-r021-20230410   gcc  
-csky                 randconfig-r024-20230410   gcc  
-csky                 randconfig-r031-20230410   gcc  
-csky                 randconfig-r033-20230409   gcc  
-hexagon      buildonly-randconfig-r006-20230410   clang
-hexagon              randconfig-r006-20230409   clang
-hexagon              randconfig-r011-20230410   clang
-hexagon              randconfig-r026-20230409   clang
-hexagon              randconfig-r041-20230409   clang
-hexagon              randconfig-r041-20230410   clang
-hexagon              randconfig-r045-20230409   clang
-hexagon              randconfig-r045-20230410   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r006-20230410   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230410   clang
-i386                 randconfig-a002-20230410   clang
-i386                 randconfig-a003-20230410   clang
-i386                 randconfig-a004-20230410   clang
-i386                 randconfig-a005-20230410   clang
-i386                 randconfig-a006-20230410   clang
-i386                 randconfig-a011-20230410   gcc  
-i386                 randconfig-a012-20230410   gcc  
-i386                 randconfig-a013-20230410   gcc  
-i386                 randconfig-a014-20230410   gcc  
-i386                 randconfig-a015-20230410   gcc  
-i386                 randconfig-a016-20230410   gcc  
-i386                 randconfig-r002-20230410   clang
-i386                 randconfig-r036-20230410   clang
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r003-20230410   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r001-20230410   gcc  
-ia64                 randconfig-r004-20230409   gcc  
-ia64                 randconfig-r015-20230410   gcc  
-ia64                 randconfig-r024-20230410   gcc  
-ia64                 randconfig-r031-20230410   gcc  
-ia64                 randconfig-r033-20230410   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r003-20230409   gcc  
-loongarch    buildonly-randconfig-r006-20230409   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r001-20230409   gcc  
-loongarch            randconfig-r002-20230409   gcc  
-loongarch            randconfig-r004-20230409   gcc  
-loongarch            randconfig-r016-20230410   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r002-20230409   gcc  
-m68k                 randconfig-r006-20230409   gcc  
-m68k                 randconfig-r031-20230409   gcc  
-m68k                 randconfig-r032-20230409   gcc  
-m68k                 randconfig-r032-20230410   gcc  
-m68k                 randconfig-r036-20230409   gcc  
-microblaze           randconfig-r005-20230410   gcc  
-microblaze           randconfig-r025-20230409   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                           ip27_defconfig   clang
-mips                 randconfig-r001-20230410   gcc  
-mips                 randconfig-r006-20230410   gcc  
-mips                 randconfig-r012-20230409   clang
-mips                           rs90_defconfig   clang
-nios2        buildonly-randconfig-r004-20230410   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r004-20230410   gcc  
-nios2                randconfig-r011-20230409   gcc  
-nios2                randconfig-r024-20230409   gcc  
-nios2                randconfig-r035-20230410   gcc  
-openrisc     buildonly-randconfig-r006-20230409   gcc  
-openrisc             randconfig-r003-20230409   gcc  
-openrisc             randconfig-r006-20230410   gcc  
-openrisc             randconfig-r014-20230409   gcc  
-openrisc             randconfig-r033-20230409   gcc  
-openrisc             randconfig-r035-20230410   gcc  
-parisc       buildonly-randconfig-r002-20230410   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r001-20230410   gcc  
-parisc               randconfig-r012-20230409   gcc  
-parisc               randconfig-r024-20230409   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r004-20230409   gcc  
-powerpc                       eiger_defconfig   gcc  
-powerpc                 mpc836x_mds_defconfig   clang
-powerpc                      pasemi_defconfig   gcc  
-powerpc              randconfig-r014-20230410   gcc  
-powerpc              randconfig-r021-20230410   gcc  
-powerpc              randconfig-r025-20230409   gcc  
-powerpc                     skiroot_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r002-20230409   clang
-riscv                randconfig-r012-20230410   gcc  
-riscv                randconfig-r014-20230410   gcc  
-riscv                randconfig-r022-20230409   gcc  
-riscv                randconfig-r025-20230410   gcc  
-riscv                randconfig-r026-20230410   gcc  
-riscv                randconfig-r042-20230409   gcc  
-riscv                randconfig-r042-20230410   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390         buildonly-randconfig-r005-20230410   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r011-20230410   gcc  
-s390                 randconfig-r015-20230410   gcc  
-s390                 randconfig-r025-20230410   gcc  
-s390                 randconfig-r031-20230409   clang
-s390                 randconfig-r044-20230409   gcc  
-s390                 randconfig-r044-20230410   gcc  
-sh                               allmodconfig   gcc  
-sh                         ap325rxa_defconfig   gcc  
-sh           buildonly-randconfig-r001-20230410   gcc  
-sh           buildonly-randconfig-r004-20230410   gcc  
-sh                   randconfig-r004-20230409   gcc  
-sh                   randconfig-r005-20230409   gcc  
-sh                   randconfig-r012-20230410   gcc  
-sh                   randconfig-r014-20230409   gcc  
-sh                   randconfig-r015-20230409   gcc  
-sh                   randconfig-r021-20230409   gcc  
-sh                   randconfig-r022-20230409   gcc  
-sh                   randconfig-r023-20230409   gcc  
-sh                   randconfig-r032-20230409   gcc  
-sh                   randconfig-r034-20230410   gcc  
-sh                          rsk7264_defconfig   gcc  
-sh                           se7750_defconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64      buildonly-randconfig-r001-20230409   gcc  
-sparc64      buildonly-randconfig-r003-20230409   gcc  
-sparc64              randconfig-r001-20230409   gcc  
-sparc64              randconfig-r004-20230410   gcc  
-sparc64              randconfig-r005-20230410   gcc  
-sparc64              randconfig-r006-20230409   gcc  
-sparc64              randconfig-r011-20230409   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230410   clang
-x86_64               randconfig-a002-20230410   clang
-x86_64               randconfig-a003-20230410   clang
-x86_64               randconfig-a004-20230410   clang
-x86_64               randconfig-a005-20230410   clang
-x86_64               randconfig-a006-20230410   clang
-x86_64               randconfig-a011-20230410   gcc  
-x86_64               randconfig-a012-20230410   gcc  
-x86_64               randconfig-a013-20230410   gcc  
-x86_64               randconfig-a014-20230410   gcc  
-x86_64               randconfig-a015-20230410   gcc  
-x86_64               randconfig-a016-20230410   gcc  
-x86_64                        randconfig-k001   clang
-x86_64               randconfig-r006-20230410   clang
-x86_64               randconfig-r022-20230410   gcc  
-x86_64               randconfig-r034-20230410   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r005-20230410   gcc  
-xtensa               randconfig-r023-20230410   gcc  
+IMHO based on what I have seen in the last couple of years, this would
+also cover the boot with accessory connected as if the link gets into
+a reset loop, the sequence after the reset reveals what had gone
+wrong.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>
+> > Also, without wrapping around, the logbuffer logs are completely stale
+> > after the user goes through a few USB connect and disconnect cycles
+> > till the system is rebooted.
+>
+> Unless they are cleared.
+
+Ah yes. I forgot about that. Wrapping around would still make TCPM
+logbuffer logs  more effective to debug issues with remote device.
+
+Thanks,
+Badhri
+
+
+
+
+
+>
+> Again, the premise is wrong here. The idea was to ensure that the
+> beginning of a problem is caught and available in the log, not its tail.
+> This includes "beginning" as the behavior immediately after boot regardin=
+g
+> an already connected device, and the behavior observed when inserting
+> a device into the running system. Again, in both cases it was most
+> important to catch the beginning of a problem, not its tail.
+>
+> > If we don't want to pursue the Kconfig option, we should atleast make
+> > TCPM default to wrapping the logs around when full so we could
+> > maximise the use of the logbuffer contents.
+> >
+>
+> I don't really agree, but then I am not in a position to argue either.
+> Maybe the premise and reasons have changed since I wrote the driver.
+>
+> Guenter
+>
+> > >
+> > > That does not seem good at all.
+> > >
+> > > Why not just use tracing instead of this odd custom log buffer?  That=
+'s
+> > > a better solution overall, right?
+> >
+> > Tracing is not enabled by default in most systems. End users don't
+> > want to retry and reproduce the failure to collect traces even if they
+> > could reproduce it consistently.
+> > So tracing was not proving handy here.
+> >
+> > Thanks,
+> > Badhri
+> >
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
