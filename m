@@ -2,107 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A4D6DDB48
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Apr 2023 14:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 684296DDBCE
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Apr 2023 15:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjDKMyM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Apr 2023 08:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
+        id S230323AbjDKNMr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Apr 2023 09:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbjDKMyD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Apr 2023 08:54:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CC540C1
-        for <linux-usb@vger.kernel.org>; Tue, 11 Apr 2023 05:54:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D70061E50
-        for <linux-usb@vger.kernel.org>; Tue, 11 Apr 2023 12:54:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AE479C433EF
-        for <linux-usb@vger.kernel.org>; Tue, 11 Apr 2023 12:54:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681217641;
-        bh=oRXOae3KhdRmOFQHUQdxIfwPEWJewHceQG3xVgYkJLo=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=N6dw71en9ySCRNE9aSu3WGY9IZJ0SxXS980TiPxKVtlSeBJxbUJ7EoZ/gjLY1s1OT
-         eD7W1Bt6NyOEVT4kH0fMXTft8i0wfoDF4JcCJkBVIPzdoXJpBLzd18oJiI3/TF+cCF
-         1V4P1+vD11WNE4UWE2Qr8M+ZpaF2m4/5EqO31QxJaJRW7hQCa//txf4a1zh+ZoEc5s
-         emxz4bV0mjDAucgNFKp3o9kkMjYuvsChqcIwvBQgUs8SsUuR3r20FduilHD/10LCY5
-         y9f3+aXZurfN1jImLzXtGFHIfiybt6VadUu6jFOvGzMqGy3M4MpFb9CmqJWhbysAcR
-         wNI+4uGI2fegw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 9441FC43143; Tue, 11 Apr 2023 12:54:01 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217242] CPU hard lockup related to xhci/dma
-Date:   Tue, 11 Apr 2023 12:54:01 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mathias.nyman@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-217242-208809-Pp0NbxSx1J@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217242-208809@https.bugzilla.kernel.org/>
-References: <bug-217242-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S230321AbjDKNMp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Apr 2023 09:12:45 -0400
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F10040C5;
+        Tue, 11 Apr 2023 06:12:39 -0700 (PDT)
+Received: by mail-ot1-f48.google.com with SMTP id c2-20020a056830348200b006a3ab0ba8a2so8187651otu.1;
+        Tue, 11 Apr 2023 06:12:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681218758; x=1683810758;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2GW02L6nIApJNIdMW8NqTVwVWjewpMvs4/3n/QOH2X4=;
+        b=ZB+gNtTGLti9h/NJNIbitXOwbvqJS00FAQET94oPNO1eNlSS5KZyG/wrqB7N0LtHwn
+         tU//O4EDIennlVyYQULRsiOjcJ9OF2rw1CEOZhn/aUcL/JfhSK2rUQ7JSpx1bw7R+kdx
+         R/MeiZD7QvM6akxTk6kmhQMwiYDOe6zVIW5fakwUJQwqWgMOWNrLttEz2T0b7/jOIfxs
+         M6HE7gElx1IZZrTFa7xh6pnTJws7gwFe5H0osfxlUP4dHjIj4tyvJmsTLura7DzdVFhw
+         YoXZSuif3eaEbOf9mv2xFPnMxg2mgtRX+bXsKStkfemdnprhmq22FUt6dt1jDDlfSll6
+         bc6A==
+X-Gm-Message-State: AAQBX9ebOZyOIyzB3t20Crs9hOiz9NcSLtFFHibbz1EARCEnqkoOuhDt
+        c6o+LWrT9KZzWv617v+j4A==
+X-Google-Smtp-Source: AKy350YaRPQKn8t2rWkmO5BUPXazyXS/ThqJAn+M4vfd2ePh48L8+Fz+BWDh+3gbBbfgfTZluNGWlw==
+X-Received: by 2002:a05:6830:2016:b0:69b:cdd9:5216 with SMTP id e22-20020a056830201600b0069bcdd95216mr1267515otp.21.1681218758432;
+        Tue, 11 Apr 2023 06:12:38 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b14-20020a056830104e00b0069457b86060sm5479564otp.47.2023.04.11.06.12.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 06:12:37 -0700 (PDT)
+Received: (nullmailer pid 2908359 invoked by uid 1000);
+        Tue, 11 Apr 2023 13:12:37 -0000
+Date:   Tue, 11 Apr 2023 08:12:37 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCHv1 1/3] dt-bindings: usb: Add RK3588 OHCI
+Message-ID: <20230411131237.GA2837061-robh@kernel.org>
+References: <20230406135552.23980-1-sebastian.reichel@collabora.com>
+ <20230406135552.23980-2-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406135552.23980-2-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217242
+On Thu, Apr 06, 2023 at 03:55:50PM +0200, Sebastian Reichel wrote:
+> Add compatible for RK3588 OHCI. As far as I know it's fully
+> compatible with generic-ohci.
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  .../devicetree/bindings/usb/generic-ohci.yaml  | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> index a9ba7257b884..e116ed90471e 100644
+> --- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> @@ -44,6 +44,7 @@ properties:
+>                - hpe,gxp-ohci
+>                - ibm,476gtr-ohci
+>                - ingenic,jz4740-ohci
+> +              - rockchip,rk3588-ohci
+>                - snps,hsdk-v1.0-ohci
+>            - const: generic-ohci
+>        - enum:
+> @@ -69,7 +70,7 @@ properties:
+>  
+>    clocks:
+>      minItems: 1
+> -    maxItems: 3
+> +    maxItems: 4
+>      description: |
+>        In case the Renesas R-Car Gen3 SoCs:
+>          - if a host only channel: first clock should be host.
+> @@ -147,6 +148,21 @@ allOf:
+>      then:
+>        properties:
+>          transceiver: false
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: rockchip,rk3588-ohci
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 4
+> +          maxItems: 4
 
-Mathias Nyman (mathias.nyman@linux.intel.com) changed:
+Only need minItems here.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |mathias.nyman@linux.intel.c
-                   |                            |om
+> +    else:
+> +      properties:
+> +        clocks:
+> +          minItems: 1
+> +          maxItems: 3
 
---- Comment #14 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-Looks like it gets stuck during xhci ring expansion.
+Only need maxItems here.
 
-During ring expansion the xhci driver allocates memory with spinlock held u=
-sing
-dma_pool_zalloc(.., GFP_ATOMIC, ...)
+With that,
 
-This apparently never completes, so spinlock isn't released.
-Any URBs queued for xhci after this will spin forever trying to take the lo=
-ck,
-lockin up that CPU.
-
-The xhci ring expansion code looks broken, the calculation of new ring segm=
-ents
-needed is incorrect, may be huge.
-
-Also I don't think we should need to expand the ring buffer in this case. T=
-here
-might be some bug in how driver keeps track on free trbs.
-
-I'll write a debugging patch that that tracks free trbs and expansion value=
-s.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Reviewed-by: Rob Herring <robh@kernel.org>
