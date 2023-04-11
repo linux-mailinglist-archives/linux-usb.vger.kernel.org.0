@@ -2,139 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 670626DD599
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Apr 2023 10:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6CAB6DD6E9
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Apr 2023 11:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbjDKIb4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Apr 2023 04:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
+        id S230130AbjDKJer (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Apr 2023 05:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjDKIbz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Apr 2023 04:31:55 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFF2E71
-        for <linux-usb@vger.kernel.org>; Tue, 11 Apr 2023 01:31:52 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id j2-20020a170902da8200b001a055243657so4650881plx.19
-        for <linux-usb@vger.kernel.org>; Tue, 11 Apr 2023 01:31:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681201912;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zVZa8iiDBE0PpkMkB5PA8G0RGtm/FlyaCAntJJ2YIOQ=;
-        b=cDpsj3H+xWOEtctnZ6Qbjh9+3xxi7Ck1yT3sgXeq8OXdv/LYwSoAF2ok7JHEU9MGIE
-         QWPiMEMss8w3WDdI/U3+SmaHMoUenmyYDfrJhFI7BvhXb6nmGIt5INhJfCJQBK5JWLI2
-         2SVkTGP5l3NjUDvy30lev7X7xFCPjx4vzGhOs7u/2qrvkBNx3qqXtAi3F20e763mm4Kb
-         u+PhrsGlqa3AyrNyssOc82S+K1GcVg6WT6ZQACqSt3v9hemy7JRcV5Tiv1EEFl8Ye20S
-         Ct0r0bVSVHaRxwVzMdKT2jslsdPTWeIn9P2idjb9QoanGUpvR7p75eHaZAwHY1+6LR+Q
-         no+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681201912;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zVZa8iiDBE0PpkMkB5PA8G0RGtm/FlyaCAntJJ2YIOQ=;
-        b=Jhs6hgwHvDxLjSaTXoucdjqymY95iYHZrO7xJhuH590wiOik/HZc4uEGeH7B+vr0eJ
-         cHrFqE0WfhYR0Fy14FLBKw864fGjPfCTITMY4fHk/1y5MOhaqgc5qfhLvU/Xo6D4frVG
-         GPBG4Lxjl8Du6zX24Hmqj2qNHEPgsoCBb08mwbVMPCIUKnERhwT+fhlsJX6Ouorc+0Df
-         OEbmXxX8qlfHa0WqtvIHurUaIUVpeJkioL4EXYgOq/E/RMAikCO9f3m726kl6NEmEVOR
-         RpPzDgt9MUlpU+X6iuAMqGZhbMH7l3TG4cQzAqXCCUeKn8ae/ZHG1r5sdPLuvqekPrZr
-         B6Gg==
-X-Gm-Message-State: AAQBX9fz/tlbZDR6Jku4CBRBccUzAFhGTSfudLPxk4Mz9O0iipyHPDxI
-        KTIMnpaA+SOEiKPzVXZJcUt1GyLQEpU=
-X-Google-Smtp-Source: AKy350YoK4eeP0dsaY0OoM4tiioUCEUoT13Uio+p9zFhn+FUM6wEIAYHdArmQZkKcIomtQfA9KVyWVQGRLk=
-X-Received: from hhhuuu.c.googlers.com ([fda3:e722:ac3:cc00:3:22c1:c0a8:c80])
- (user=hhhuuu job=sendgmr) by 2002:a17:90a:72c2:b0:244:9ef4:9a25 with SMTP id
- l2-20020a17090a72c200b002449ef49a25mr3054772pjk.4.1681201911814; Tue, 11 Apr
- 2023 01:31:51 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 08:31:45 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <20230411083145.2214105-1-hhhuuu@google.com>
-Subject: [PATCH] usb: core: hub: Disable autosuspend for VIA VL813 USB3.0 hub
-From:   Jimmy Hu <hhhuuu@google.com>
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
+        with ESMTP id S230153AbjDKJeQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Apr 2023 05:34:16 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2045.outbound.protection.outlook.com [40.107.6.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19163C2A;
+        Tue, 11 Apr 2023 02:33:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZGVWt8iu20xA4Iv3Bxo9RPGPcFO1wSd4Jp35fbKkT5GSx/2A2AHr3Tiw2vCrqvp+sYbeCpoBDD2tAhI01wrLMGblFQ5zGmY0bgirG2Kx+CnQapoQSTmeBk2U21bQplEy8au5w53TAfRv4lRIj1ox5shrqylPXOMBLHSPW3sNvCCo2Y+SiFNDjP9rpVYyXSxVSfHVSf/8uf02EJq0w9lHASKQAErjkHzbSkXBNGksTo8X4xU4u5oDwh0zFtI4qYFXQMfLoFKouXhzRLLpS6pLYQT5dRt1cn0bTXyQD6rRJ6rZf7tnH/soa4pShjxVpQUxX4PbIXkBJlDMYjqSaMdj+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LIgOMlBQZu6tXSklCJJDZW++dQYKkPInGELXZBALRxU=;
+ b=JHm+01GyppuCZgMPiyXC/TrPnG6toBSj/+FDO5vBhwUplqqp4PnCz2LsVLm33ZhaKslb6BB7sE4uyKfT3CFy0ZXNcMsSFFaxuceGXjoJAa1V7zUdU6dmDadbQbvZ2b3nU7H12i5NNYYatUI3ggrly+gov4ImTgJ1+04K8dJVYB4YZXV6c4NU5GwFd5gBPy+8WWRa4xjSH99BDYuiqHvTrgTcouZpmYY+EcYCG7R7SU0ZutSfRORhZT/oevrfrm0gMTsocvHE5Qey/0mZsifz+N/A1H65hGbxEfC6ZvJGW+RNyXFGgmOTAs8OFUgntg5hPAxwqU9H8yxIR6V65wN1jw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LIgOMlBQZu6tXSklCJJDZW++dQYKkPInGELXZBALRxU=;
+ b=Pkox4WJCZCoQE8tps0h26mCYCGHYCguwxhiY9+xzyi0Te9O6TUzALHx57nB4mLfGETdlHZ1+AHFHsvATHz7BGXWc+oOcCtFBIQWEwLguUQDz/QlA6IPLgWF79ZyLK1bkxDwk79RpttWdFP7WafLDI3hYZqMEmyFe2kheyZ2zncjX8QS5tQIe5vQjqPdmivGxG6GeF51giikUcXNwOv1FqiP9PngDXV9InWnPdtn1bMivEf+pUBFa0kyKukOh37K7NSpbpQREX4SvBskRKSf0WMwk+MPbe1iWlmjDy5fwcBdz0rlaFokfIHh8zo1DPwn1g/FBzcl/82IrWZveLoMJSQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by DBAPR04MB7238.eurprd04.prod.outlook.com (2603:10a6:10:1aa::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Tue, 11 Apr
+ 2023 09:33:55 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::74bd:991c:527d:aa61]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::74bd:991c:527d:aa61%9]) with mapi id 15.20.6277.038; Tue, 11 Apr 2023
+ 09:33:55 +0000
+Message-ID: <cbb850f7-86db-3ddd-cece-c4e0d413c298@suse.com>
+Date:   Tue, 11 Apr 2023 11:33:51 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] usb: core: hub: Disable autosuspend for VIA VL813 USB3.0
+ hub
+Content-Language: en-US
+To:     Jimmy Hu <hhhuuu@google.com>, stern@rowland.harvard.edu,
+        gregkh@linuxfoundation.org
 Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jimmy Hu <hhhuuu@google.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20230411083145.2214105-1-hhhuuu@google.com>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20230411083145.2214105-1-hhhuuu@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0096.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9b::19) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|DBAPR04MB7238:EE_
+X-MS-Office365-Filtering-Correlation-Id: c9e7ba23-048c-4f7a-d140-08db3a6fde3f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: b02vshFX6wUbAG2kx1lm1OqfrhzTGHjuCrhFUbS48dn7elJX2ZuarYGZo5bJt2LB11bVf7ToaqyyDlrtNKFBSSw4r7zAq59+SzO1kpqekleHSninMrp+fTZqJVrOQYX8kgC1lC/XkS/qm5yzLUz1KGj0Q7NMfdQI5gRNjsDTjTLoM3VLN5MKwlBEkQcr/tInHhOnBVI30YwpTDpifKwErre1Y2wg+VfvINke44L0A95Fj0HVwX1PDdRzkjFBkCVNj/0WuCfo05reS4irLvwTvPEmBU4n1PEmJscdy+l+Iw1g9C7g7n4cVggp5t2ub3MSyzBGhjn8ez5EbIlccv8Ut+y/EKmYNNJ78qoO05a8EUmG+t7iHSBgDv8Dg7wj2h2vlLQiwV4WMBNPGeVJnYYrmJ4+orWoJ2OtP0+8VvAtLp/HdLvacgQ2lbVFhE5Q7KOJ8glFrkyKINXw37LTzERkpDByi01UrKNd8WfvUJC5iBSjQKW8WFmz+LJBOQGAKAbPEQHrBW5MAeFBd1a9P66CBTTFwMdSvDU7tqf0wNVPhOrCCcQ6tFcmJX4Yrg7STZVXeHZV0jUhd3nEvkZv36nbvDNlxpuc1IhEAom7uhjKBK3d64misfANLIWzfxIb9fFMO3PFpWvd9Bbqw+l0VE9F+w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(39850400004)(396003)(346002)(366004)(136003)(451199021)(36756003)(86362001)(31696002)(6486002)(41300700001)(316002)(66556008)(478600001)(4326008)(8676002)(66946007)(66476007)(5660300002)(2906002)(8936002)(4744005)(38100700002)(186003)(53546011)(6666004)(6506007)(6512007)(2616005)(83380400001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bmtRcFI5TG5TZHlsODJYRGRwb0lFZkJPKzdrcWhoYmsyR0lpeDVtcjlJa2ty?=
+ =?utf-8?B?elNtaXczMjQwK3B2VkYyNmhiNXAzaVdkYXB5citQcGJmaytrZWNLYk9OcWFJ?=
+ =?utf-8?B?ZTFOV3lCN0txenZOOVF0eGdWMmJlRU5lNTBrNUd1K1cxVHpEQk9qYlNRZ0FX?=
+ =?utf-8?B?Qmc5cUgxcUcyaHB3UjJOeUFkQTdwMzBidjFLWjlQVHhNTHZSdTEycXJEc1NW?=
+ =?utf-8?B?QURJYzFEVENTRVZIWUxsd3dRdE53aTloajFtZHIyTFMzamFtNGRHWnpwWHQr?=
+ =?utf-8?B?Wi9mcEVVYzNZNFBQSnNKVldyUWxObWZVY1dsNjcvZHVHTnA3ckxEUVArcXRy?=
+ =?utf-8?B?eERVYVZHeXNRU2x3bVdXanNEZlRKVHZlWjNmdk4rb0Mra09oZ3U1NzB2Z2Zy?=
+ =?utf-8?B?RlN4UmVWbUVHZUtRUXNOd3ZCdUkzY3VmV3dkdklQSnpubkgxeWpsblpOZEZH?=
+ =?utf-8?B?L1RuZG16aUkrMUE0TTBMaGJGd3p6L3NpeEg2WE5ZLzdzQzlyN1JMeFRydndC?=
+ =?utf-8?B?cFVDMHE4ZWN4V0h4VG9wMXhIdVc4Z21ickVuUERkMGhOVDV0aVJFTDhKYlFt?=
+ =?utf-8?B?d1dzdDgvQjVUbVJucWorVG5ZZVp3cUdqYzRxSGd3dkVrWkZQWWpRVUxHejBU?=
+ =?utf-8?B?bHk1NGZiZjFWNDhQTGVlNlhya2R0Q1dDMjBMZk5PazAzSFU5Zm15ZGErVWNE?=
+ =?utf-8?B?TmpGNHBqMUFFVDhBMEs1Y2lwZ2E2OXFQcTExN2s1WFpkc2RYZmV1emR5VFFF?=
+ =?utf-8?B?b3RtV0FCUzhQQVhSL0Vpa1d0dUJHRi9OYk9KampTREJPeXhyWDBYR3MzQ0V6?=
+ =?utf-8?B?cy8vSG5zZTRpZnVsbTRkNFpYblFlaWdqOFJEcm5Vang3M1dmeUhwdzgrNE4r?=
+ =?utf-8?B?TEVzWEJya2dxckpnQU1TYmpzTG1LR2lJWjYxSGY3OTVjcWRZNjBJcGlJanBI?=
+ =?utf-8?B?VWR1cFBCS2NyUlpFbUp4bUFvT0tic1VrUVNUZE5QNWRqdjJrSnRHWnJvN0tI?=
+ =?utf-8?B?RDRtd1REcUJPRmtKdTBtRE4xYmQyQWs0VFU2ZDZoUGlXM1pxUUJjRUxZZXlU?=
+ =?utf-8?B?NzRTQzloTmZ6WDU5QStXMkpnMmV5ZXJGanpBVXQ4RVkxanpuVXhzY0oyNjV5?=
+ =?utf-8?B?ZnlvUS9KWmRldTRtVDg1Tks0RmRNOFI3MGJCdmxydEJMOG80Wnp2aXJQTnly?=
+ =?utf-8?B?SWRyMHhJL3pYOGJxeGpLdlpuTzllN0ZBSHhMdXd3MTFyN3FZY1R4bFoxdkJa?=
+ =?utf-8?B?WkExRjhVUWtMYnozZ2xKUTkvTEZNTXk0anlsREFtb1I1MEpNQjBqMVJ0QWFZ?=
+ =?utf-8?B?Qmh1RFNYcUZoWEhkSUFuUW11WGNxODZ2ZFpramZ2UE1tOUVCbms1SHpUczZS?=
+ =?utf-8?B?T3kwdWUzQW8yN2NOMHpMU2tqbUZXZVRCSER0L3MzL0xncXNSckVlQ2NnOFI2?=
+ =?utf-8?B?dmt6OXlSSzNrbGdQblo5aEZIQ0dlQmwrNGFtVGRubDE3cmNtSTZjVXdndnZ2?=
+ =?utf-8?B?MjhCckZzKzZxM25QMUU1RFVnenpoMm1XNGQ0ZThXTTNHaHAybGM3ZlArV2dV?=
+ =?utf-8?B?TE00UjV3TXc1TEJxTTJpRFdKT1ZJczZMUGNKSTRhVjAvZnh0aXZSWCthMGZF?=
+ =?utf-8?B?VUtYU0MvZ1dMZ2ZMMk96R1hWLzlXZXRXRlM3bTlwdVNLcGQyUFJObEdTeXBX?=
+ =?utf-8?B?M1pnMHJ3SG16TnZKTXdDazhsWlF6NWFBY1Z5TnZHSVhoMSs2WGcyek5CQ012?=
+ =?utf-8?B?RWxqQmwxbS9NeHFtcDF2TUhWZWt0bVd0VkVCMmNuREZJRjJ1OFJNajlHSkJC?=
+ =?utf-8?B?KzJkWVJJdldmN2ovZjFpQUp6R3dEMmxscTIzdTBwVnBPcVpLT29xbWdFcU5a?=
+ =?utf-8?B?Q092SjNKTzdYSVU0OFFsQ2grYkc0QlJEVWVyYkJrWnMyaks4TlUwSDBEV0Fj?=
+ =?utf-8?B?WnlreW91L1V1OHRqd3BkL1hEMjVzSkZsVmpYSXBXR3NSdXBnVXVUdit6Tlpk?=
+ =?utf-8?B?QTJha2lnS0RsbC90QzhJZ3B3SEpuemtyd3FicjZrZHM5R2hZVGdRUk9kaGVh?=
+ =?utf-8?B?MlRlNlJrU0pldVdFZzJxcG5vcFdnd0NSTGliOFFOQ0RxZFZtakhwZWM4VHhC?=
+ =?utf-8?B?SWtiS05GMkR2T244dUdodWM3VzdsSVYxcVV4VnBqQ0RTTldmYzB2YXVVczlj?=
+ =?utf-8?Q?hv7qmZXdGY7QEg7GvUqkyzAGwic1tq9tAHLW/VHrY6cv?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c9e7ba23-048c-4f7a-d140-08db3a6fde3f
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2023 09:33:55.2274
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: W32wTPiDXPTiaCw7e2PE0Zk2G4pUM35VHvnxxWWbL+OEUtuHObTqcJ/HJs3zGD+/UYOACHk4HzPiqev3Ms53Hw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7238
+X-Spam-Status: No, score=-1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The VIA VL813 USB3.0 hub appears to have an issue with autosuspend and
-detecting USB3 devices. This can be reproduced by connecting a USB3
-device to the hub after the hub enters autosuspend mode.
 
-//connect the hub
-[  106.854204] usb 2-1: new SuperSpeed Gen 1 USB device number 2 using xhci-hcd
-[  107.084993] usb 2-1: New USB device found, idVendor=2109, idProduct=0813, bcdDevice=90.15
-[  107.094520] usb 2-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-[  107.111836] usb 2-1: Product: USB3.0 Hub
-[  107.116835] usb 2-1: Manufacturer: VIA Labs, Inc.
-[  107.314230] hub 2-1:1.0: USB hub found
-[  107.321356] hub 2-1:1.0: 4 ports detected
 
-//the hub enters autosuspend mode
-[  107.738873] hub 2-1:1.0: hub_suspend
-[  107.922097] usb 2-1: usb auto-suspend, wakeup 1
+On 11.04.23 10:31, Jimmy Hu wrote:
+> The VIA VL813 USB3.0 hub appears to have an issue with autosuspend and
+> detecting USB3 devices. This can be reproduced by connecting a USB3
+> device to the hub after the hub enters autosuspend mode.
 
-//connect a USB3 device
-[  133.120060] usb 2-1: usb wakeup-resume
-[  133.160033] usb 2-1: Waited 0ms for CONNECT
-[  133.165423] usb 2-1: finish resume
-[  133.176919] hub 2-1:1.0: hub_resume
-[  133.188026] usb 2-1-port3: status 0263 change 0041
-[  133.323585] hub 2-1:1.0: state 7 ports 4 chg 0008 evt 0008
-[  133.342423] usb 2-1-port3: link state change
-[  133.358154] usb 2-1-port3: status 0263, change 0040, 5.0 Gb/s
-[  133.875150] usb 2-1-port3: not reset yet, waiting 10ms
-[  133.895502] usb 2-1-port3: not reset yet, waiting 10ms
-[  133.918239] usb 2-1-port3: not reset yet, waiting 200ms
-[  134.139529] usb 2-1-port3: not reset yet, waiting 200ms
-[  134.365296] usb 2-1-port3: not reset yet, waiting 200ms
-[  134.590185] usb 2-1-port3: not reset yet, waiting 200ms
-[  134.641330] hub 2-1:1.0: state 7 ports 4 chg 0000 evt 0008
-[  134.658880] hub 2-1:1.0: hub_suspend
-[  134.792908] usb 2-1: usb auto-suspend, wakeup 1
+Hi,
 
-Disabling autosuspend for this hub resolves the issue.
+out of interest, could you test whether this also applies to disconnections?
+That is, does the hub reliably wake up if you unplug a device?
 
-Signed-off-by: Jimmy Hu <hhhuuu@google.com>
-Cc: stable@vger.kernel.org
----
- drivers/usb/core/hub.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+	Regards
+		Oliver
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 97a0f8faea6e..5c6455224d9d 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -47,6 +47,8 @@
- #define USB_VENDOR_TEXAS_INSTRUMENTS		0x0451
- #define USB_PRODUCT_TUSB8041_USB3		0x8140
- #define USB_PRODUCT_TUSB8041_USB2		0x8142
-+#define USB_VENDOR_VIA				0x2109
-+#define USB_PRODUCT_VL813_USB3			0x0813
- #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
- #define HUB_QUIRK_DISABLE_AUTOSUSPEND		0x02
- 
-@@ -5866,6 +5868,11 @@ static const struct usb_device_id hub_id_table[] = {
-       .idVendor = USB_VENDOR_TEXAS_INSTRUMENTS,
-       .idProduct = USB_PRODUCT_TUSB8041_USB3,
-       .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
-+    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
-+			| USB_DEVICE_ID_MATCH_PRODUCT,
-+      .idVendor = USB_VENDOR_VIA,
-+      .idProduct = USB_PRODUCT_VL813_USB3,
-+      .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
-     { .match_flags = USB_DEVICE_ID_MATCH_DEV_CLASS,
-       .bDeviceClass = USB_CLASS_HUB},
-     { .match_flags = USB_DEVICE_ID_MATCH_INT_CLASS,
--- 
-2.40.0.577.gac1e443424-goog
 
