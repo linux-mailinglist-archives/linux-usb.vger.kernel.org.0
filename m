@@ -2,59 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50EDF6DF9A8
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Apr 2023 17:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0036DFB19
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Apr 2023 18:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbjDLPTN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Apr 2023 11:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
+        id S229786AbjDLQSe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Apr 2023 12:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbjDLPTF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Apr 2023 11:19:05 -0400
+        with ESMTP id S229744AbjDLQSd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Apr 2023 12:18:33 -0400
 Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCDA8691;
-        Wed, 12 Apr 2023 08:19:02 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CCb4GR001837;
-        Wed, 12 Apr 2023 17:18:50 +0200
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0D66E98;
+        Wed, 12 Apr 2023 09:18:14 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CCK5sT012362;
+        Wed, 12 Apr 2023 18:17:45 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=xDGfgH0IVACI86pTdLBxzPG3hW0K++wCSS+2PKwBPTo=;
- b=h6u8spqVjmwGay8hebt7FLtZsDSk2xF0HVV0tTZxVYrrAEhbGZc4tq7mZgOL//ke5/xc
- GzGRzL5dAp8UC0c7AUXWll0doR+97Ipb/X0+EMHvke8LKawuBJUvA4Gar0hwg+QP3+JT
- DK6JrEY35hMQLt1CjdmzzRS6UN2xLr9gkM7sD2zIqmkQdQuDEkSHcjRvU6NZftGUXFVv
- aZWjORsCn5Irj2wB1yKP65tDJqIZqE53aV4fleoAuxkPJaSqyTi90txPAolorPenDqOM
- 1S6TftQgTTmGeeS5tm3/ldYtNPsotQOq+Dgo7yLlFBrODs4NKQVP7gBNqrzl8BqUyug6 sg== 
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=qoweobMCw9OjMJIGG9Oluh4CWDKdRBeAll2gFaHrPyY=;
+ b=VZ1F0Bi1Q+9bJySmGN3Dizmwbi7b+vmqMIMIDGFTcW+Ryki2GUbGCgF+/l0pewNECfwk
+ UZBtMP3dREJsSC2G5oUSXHBTZ9+QIdKFqmusw++eQSzQ4GbIiCHrzEC6F6bzKJewZycT
+ MT28TZvLIShZKuHfSLgalbH+LICMtPUH0QKRaxgXbEJ+JBdY7zk5BZjymlW/+Zqk1qIE
+ kcGrig0NOiLUC0SOs9FvM48AgvCnOJ94GWUIEyRqmIvZ9wmNE8mNNFc3MEXcNUN5Q1RD
+ RNKcT1+OJmwyY8ktBOh7fgpp4KmjyvG7CWnDYCw2SXXtKOjqQfavZcC8H67FWwBwv9kr dQ== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pw8b0qya5-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pw7wp0exg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 17:18:50 +0200
+        Wed, 12 Apr 2023 18:17:45 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0F46410003A;
-        Wed, 12 Apr 2023 17:18:43 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 804B410002A;
+        Wed, 12 Apr 2023 18:17:44 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 08335218611;
-        Wed, 12 Apr 2023 17:18:43 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5414021A221;
+        Wed, 12 Apr 2023 18:17:44 +0200 (CEST)
 Received: from localhost (10.48.1.102) by SHFDAG1NODE2.st.com (10.75.129.70)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 12 Apr
- 2023 17:18:42 +0200
+ 2023 18:17:43 +0200
 From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To:     <hminas@synopsys.com>, <gregkh@linuxfoundation.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <alexandre.torgue@foss.st.com>
+To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
 CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <amelie.delaunay@foss.st.com>, <fabrice.gasnier@foss.st.com>
-Subject: [PATCH 4/4] ARM: dts: stm32: add USB OTG UTMI clock on stm32mp151
-Date:   Wed, 12 Apr 2023 17:18:31 +0200
-Message-ID: <20230412151831.3069211-5-fabrice.gasnier@foss.st.com>
+        <fabrice.gasnier@foss.st.com>
+Subject: [PATCH] usb: typec: ucsi: don't print PPM init deferred errors
+Date:   Wed, 12 Apr 2023 18:17:34 +0200
+Message-ID: <20230412161734.3425090-1-fabrice.gasnier@foss.st.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230412151831.3069211-1-fabrice.gasnier@foss.st.com>
-References: <20230412151831.3069211-1-fabrice.gasnier@foss.st.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -63,7 +57,7 @@ X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
  (10.75.129.70)
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-12_06,2023-04-12_01,2023-02-09_01
+ definitions=2023-04-12_08,2023-04-12_01,2023-02-09_01
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -73,48 +67,46 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It's needed on STM32MP15, when using the integrated full-speed PHY. This
-clock is an output of USBPHYC, and the HS USBPHYC is not attached as PHY
-in this case (managed directly by dwc2 ggpio glue):
+ucsi_init() may be deferred as usb_role_sw may be deferred in
+ucsi_register_port(). This results in several PPM init failed (-517)
+messages maybe printed several times upon boot, like on stm32mp135f-dk
+board, until the role_switch driver gets probed.
 
-    &usbotg_hs {
-    	compatible = "st,stm32mp15-fsotg", "snps,dwc2";
-    	pinctrl-names = "default";
-    	pinctrl-0 = <&usbotg_hs_pins_a &usbotg_fs_dp_dm_pins_a>;
-    	vbus-supply = <&vbus_otg>;
-    	status = "okay";
-    };
+[   19.880945] dwc2 49000000.usb: supply vusb_d not found, using dummy regulator
+[   19.887136] dwc2 49000000.usb: supply vusb_a not found, using dummy regulator
+[   19.975432] ucsi-stm32g0-i2c 0-0053: PPM init failed (-517)
+[   20.155746] dwc2 49000000.usb: EPs: 9, dedicated fifos, 952 entries in SPRAM
+[   20.175429] ucsi-stm32g0-i2c 0-0053: PPM init failed (-517)
+[   20.184242] dwc2 49000000.usb: DWC OTG Controller
 
-USBPHYC clock output must be used, so it can be properly enabled as a
-clock provider.
-
-Without this, currently, when the dualport High-Speed USBPHYC isn't
-requested by either USBH or OTG, it remains uninitialized when probing
-OTG: OTG configured with full-speed PHY isn't properly clocked, resulting
-in error log like:
-[    2.383138] dwc2 49000000.usb-otg: dwc2_core_reset: HANG! Soft Reset
-timeout GRSTCTL_CSFTRST.
+Adopt dev_err_probe() instead of dev_err(), to only print other errors.
+Also print an error in case the wait count has expired.
 
 Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 ---
- arch/arm/boot/dts/stm32mp151.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/typec/ucsi/ucsi.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
-index 4e437d3f2ed6..b71767125bf9 100644
---- a/arch/arm/boot/dts/stm32mp151.dtsi
-+++ b/arch/arm/boot/dts/stm32mp151.dtsi
-@@ -1130,8 +1130,8 @@ sdmmc3: mmc@48004000 {
- 		usbotg_hs: usb-otg@49000000 {
- 			compatible = "st,stm32mp15-hsotg", "snps,dwc2";
- 			reg = <0x49000000 0x10000>;
--			clocks = <&rcc USBO_K>;
--			clock-names = "otg";
-+			clocks = <&rcc USBO_K>, <&usbphyc>;
-+			clock-names = "otg", "utmi_clk";
- 			resets = <&rcc USBO_R>;
- 			reset-names = "dwc2";
- 			interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index f632350f6dcb..4d809e0d7761 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -1447,11 +1447,13 @@ static void ucsi_init_work(struct work_struct *work)
+ 
+ 	ret = ucsi_init(ucsi);
+ 	if (ret)
+-		dev_err(ucsi->dev, "PPM init failed (%d)\n", ret);
++		dev_err_probe(ucsi->dev, ret, "PPM init failed\n");
+ 
+ 	if (ret == -EPROBE_DEFER) {
+-		if (ucsi->work_count++ > UCSI_ROLE_SWITCH_WAIT_COUNT)
++		if (ucsi->work_count++ > UCSI_ROLE_SWITCH_WAIT_COUNT) {
++			dev_err(ucsi->dev, "PPM init failed, stop trying\n");
+ 			return;
++		}
+ 
+ 		queue_delayed_work(system_long_wq, &ucsi->work,
+ 				   UCSI_ROLE_SWITCH_INTERVAL);
 -- 
 2.25.1
 
