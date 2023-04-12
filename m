@@ -2,42 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4BDF6E01B7
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 00:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC7E6E0253
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 01:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbjDLWPV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Apr 2023 18:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
+        id S229870AbjDLXLb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Apr 2023 19:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjDLWPU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Apr 2023 18:15:20 -0400
-X-Greylist: delayed 525 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Apr 2023 15:15:19 PDT
-Received: from mail-200160.simplelogin.co (mail-200160.simplelogin.co [176.119.200.160])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0EA6589
-        for <linux-usb@vger.kernel.org>; Wed, 12 Apr 2023 15:15:19 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 22:06:16 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=8shield.net; s=dkim;
-        t=1681337192;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=3QIKZYyDwVYZ16tbgagaCvjpy0LQkwhUHoy8ARF4pbc=;
-        b=SO/2vKiGPHE61Wg8VhD/2C7T3YZq24l0MHkfS6JHN8ARWcBPc49jXBGPHy3CMghSJmO7LE
-        wfqwyVRahBiOL8abGQEkyX3Wk1MHhnRE8WhkHNn0VH6jNxx80n2JRXJHoTUP1UCM664h+C
-        tDZkU5ZFynPdcRP0AOq9O5vAtoDOCkw=
-Subject: btusb driver need to be unloaded and reloaded after boot & lag issue
+        with ESMTP id S229498AbjDLXLa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Apr 2023 19:11:30 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2199A10CE;
+        Wed, 12 Apr 2023 16:11:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=Nxv7nWXdf7av7cxyh9xS1LvUe4PBtCtEiU6h+boNPdY=; b=bOZTS1tYJKP+HpSO1b8EOjH2lk
+        EUxPl6IxufomX1XkdO7/s1fCgWR55A6/E7eg8tC2XiBkiWfgZCSz/EXOwfZ8oC3TH4SEcoA1uK3K5
+        OqgkYfDxTTMKGLlajk3aH2qK6MvDvVllvqokJa908ckga+tS8PK9qM2kM1Hv7JmQWEBvtbk1UR32u
+        CW6LmFHfPUf9s+5KwYicSyXyYp8dWMXQMtfsYRhMQD4BI3HnE37d0u8J6/HkYCwPX5AgdvaihE1as
+        RUnQ44l8Zwh3IaxkBJvf4AZwCHGBk/QQqYc4ovpCzIo/mVW3MDyEC6cE6Sh8sN7XF6lDS8xKfH2hn
+        03sKu/Gw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pmjcc-004bcN-18;
+        Wed, 12 Apr 2023 23:11:26 +0000
+Message-ID: <c718a490-028d-2682-9ad7-8256d16504bf@infradead.org>
+Date:   Wed, 12 Apr 2023 16:11:25 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   help.7ocym@8shield.net
-To:     linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org
-Message-ID: <168133719213.7.14774994518515251513.119182329@8shield.net>
-X-SimpleLogin-Type: Reply
-X-SimpleLogin-EmailLog-ID: 119182329
-X-SimpleLogin-Want-Signing: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] usb: gadget: add doc to struct usb_composite_dev
+Content-Language: en-US
+To:     =?UTF-8?B?SsOzIMOBZ2lsYSBCaXRzY2g=?= <jgilab@gmail.com>,
+        Greg KH <greg@kroah.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+References: <Y95MRZZz3yC5lETB@jo-einhundert>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <Y95MRZZz3yC5lETB@jo-einhundert>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -45,55 +57,47 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,
-sorry to address both list, but this issue seems related, without knowing w=
-here lies the issue
-my hardware : https://wiki.gentoo.org/wiki/Lenovo_Yoga_900
-I use the pre-built gentoo linux kernel,=20
-6.2.8-gentoo-dist #1 SMP PREEMPT_DYNAMIC Wed Mar 22 17:15:39 -00 2023 x86_6=
-4 Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz GenuineIntel GNU/Linux
 
-since a few update (sadly I didn't noted the latest kernel version that did=
-n't had the issue), after a boot, the bluetooth isn't working, nothing bad =
-in dmesg, I just have to unload btusb module and modprobe it again to have =
-bluetooth working again...
+On 2/4/23 04:15, Jó Ágila Bitsch wrote:
+> Added documentation to new struct members for WebUSB:
+> * bcd_webusb_version
+> * b_webusb_vendor_code
+> * landing_page
+> * use_webusb
+> to avoid warnings in the build of htmldocs
+> 
+> Fixes: 93c473948c58 ("usb: gadget: add WebUSB landing page support")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
+> ---
+> V0 -> V1: added Reported-By and Fixes Tags
+> V1 -> V2: fixed Reported-by tag (capitalization of "-by" was wrong)
+>           also post to linux-usb
+> 
+>  include/linux/usb/composite.h | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
+> index 91d22c3ed458..7ef8cea67f50 100644
+> --- a/include/linux/usb/composite.h
+> +++ b/include/linux/usb/composite.h
+> @@ -432,6 +432,10 @@ static inline struct usb_composite_driver *to_cdriver(
+>   * @qw_sign: qwSignature part of the OS string
+>   * @b_vendor_code: bMS_VendorCode part of the OS string
+>   * @use_os_string: false by default, interested gadgets set it
+> + * @bcd_webusb_version: 0x0100 by default, WebUSB specification version
+> + * @b_webusb_vendor_code: 0x0 by default, vendor code for WebUSB
+> + * @landing_page: empty by default, landing page to announce in WebUSB
+> + * @use_webusb:: false by default, interested gadgets set it
 
-after a suspend to ram, I have to power off-power on the bluetooth to have =
-it work again (bluetoothctl power off; bluetoothctl power on)
+Please drop one ':' above so that kernel-doc does not complain:
 
-bluetooth mouse can also be extremely laggy sometimes,but without error mes=
-sage in dmesg, most of the time `bluetoothctl power` off-on cycling do solv=
-e the issue....
+include/linux/usb/composite.h:523: warning: Function parameter or member 'use_webusb' not described in 'usb_composite_dev'
 
-I also included the usb mailing list because it might be related to some be=
-havior I noticed :
+>   * @os_desc_config: the configuration to be used with OS descriptors
+>   * @setup_pending: true when setup request is queued but not completed
+>   * @os_desc_pending: true when os_desc request is queued but not completed
 
-I have usb3.0 micro sd card reader (SanDisk MobileMate UHS-I microSD Reader=
-/Writer USB 3.0 Reader, Kingston MobileLite Plus (MLPM) microSD Card Reader=
- USB 3.1 microSDHC/SDXC UHS-II, for example) and some extra fast micro sd c=
-ards (like sandisk extrem 512G), when transfering data the read rate can be=
- as high as 110Mo/s and write 70Mo/s sustained, nothing impressive but when=
- such rate is achieved for a long time (big file transfer) either reading o=
-nly access, writing only access or read write, the usb bus become unusable,=
- I can't even use a usb mouse connected to it by wire... even if cpu usage =
-is really low (less than 10%)=20
-I don't have the issue if I connect a M2 usb3 flash drive, with comparable =
-transfert speed... so not related to some bus over usage... =20
-
-so I suspect that there is an issue with the usb driver, and that maybe the=
- bluetooth issue can be related to the usb issue, since the bluetooth contr=
-oller is on the usb bus on the laptop
-
-the transfer issue of usb is much more older than the bluetooth issue, it's=
- approximative, but :
- - the btusb boot issue is about 3 month old,=20
- - the suspend/resume issue of bluetooth is more than a year old
- - the usb transfer issue as more than a year...
-
-I'll gladly provide any useful information, can also do patch tries...=20
-
-thanks and regards
-JLM
-
-
-Sent with Proton Mail secure email.
-
+Thanks.
+-- 
+~Randy
