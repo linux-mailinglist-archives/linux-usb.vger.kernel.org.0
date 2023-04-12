@@ -2,131 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBF16DE92D
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Apr 2023 03:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2FF96DE9E4
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Apr 2023 05:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjDLBzR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Apr 2023 21:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
+        id S229527AbjDLDaX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Apr 2023 23:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjDLBzQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Apr 2023 21:55:16 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2549526A6
-        for <linux-usb@vger.kernel.org>; Tue, 11 Apr 2023 18:55:15 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-94a34a0b9e2so188765566b.1
-        for <linux-usb@vger.kernel.org>; Tue, 11 Apr 2023 18:55:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681264513; x=1683856513;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DCRgCd8nApy7TzIvIs1yvnfBLl2jT7+YOoX4vupYous=;
-        b=dVeRnczi9X1vCcRP5rlKjAm6s3NxyK5XM0FhCqATZrFj7i015vBdufb3N+NhNbcop2
-         tTmFO92+rhWLisaBsqrOkvdsJ42RRjltikomO2YcRHg5tcP0Y7X+XEvUjqDEYXlGLCqm
-         doRRq74umLPEjgn8ismz4+x89kq0x7x1hWkk6qTaUwLFNxytYdBX4qb9drX5f+XToaea
-         2K1dZ3IPkahWJx/eWeuMDl3EA6vMw7pMnnpRbSWxa7umoZdfJPvRbEoHThAvil9Rooe2
-         74OMZr9wIalpa2/XtASWuOpbvc3K+9div3AnWfZA2eS/hI2Gno5vqc0CvN5AX/SICILQ
-         kghg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681264513; x=1683856513;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DCRgCd8nApy7TzIvIs1yvnfBLl2jT7+YOoX4vupYous=;
-        b=x5e6WVndQ5+lwzf+aLqnhtw1fpkkKb6G6ZOQqqJI7y51UPPYNYIdUwKsi+CD6f4skF
-         Ojjjud885w0VBGTNFTqvFsJdS2r09kna4RroR058e/ZwhrMP5taGI5GAvc8SoQWlVH39
-         7z9q9VfA5zHELBWH0WiRa8eDRuky0a/EslKV2Tmko/MTgXIgP/a9xrjvklGxHL1aiINY
-         jtcWhl8eh/h/qM3ppus/aeU3W9ACagkkMSzNveOytRN+lJYOYv9xjvQyYCSVa5GMVyzb
-         NmZaaSLfvkSA8PYPyq0zpk/Yan071UyOtpAdrwJO2Djo6gVCBjOX9VAtcK3P+SCUb/29
-         QxLg==
-X-Gm-Message-State: AAQBX9coy3p51kfj6PGjT51aYEeKOGAUhpgVsBoxBhY0oEGU7eNBc98p
-        3/M87ijf/An8mNCpjYwh0wxmVVY3qpGAu0C6Q4OQ8g==
-X-Google-Smtp-Source: AKy350Y+g8z3Uq9R+kjToSGpsQndXFivtJt7Bqh25e/wo6CwcBvv8j7ucbZS4t8fMZpD38C9jYGUEvuKKUDVRRcWJE0=
-X-Received: by 2002:a50:baec:0:b0:504:9390:180f with SMTP id
- x99-20020a50baec000000b005049390180fmr5065023ede.2.1681264513494; Tue, 11 Apr
- 2023 18:55:13 -0700 (PDT)
+        with ESMTP id S229503AbjDLDaW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Apr 2023 23:30:22 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A620430CA
+        for <linux-usb@vger.kernel.org>; Tue, 11 Apr 2023 20:30:20 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33C3TjLU2001685, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33C3TjLU2001685
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Wed, 12 Apr 2023 11:29:45 +0800
+Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Wed, 12 Apr 2023 11:30:06 +0800
+Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
+ RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 12 Apr 2023 11:30:06 +0800
+Received: from localhost.localdomain (172.21.252.101) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
+ 15.1.2375.32 via Frontend Transport; Wed, 12 Apr 2023 11:30:06 +0800
+From:   Stanley Chang <stanley_chang@realtek.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     <linux-usb@vger.kernel.org>,
+        Stanley Chang <stanley_chang@realtek.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH v2 1/2] usb: dwc3: core: add support for remapping global register start address
+Date:   Wed, 12 Apr 2023 11:30:05 +0800
+Message-ID: <20230412033006.10859-1-stanley_chang@realtek.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <20230411083145.2214105-1-hhhuuu@google.com> <ce727a7b-6954-4e4d-85c7-f91011b87108@rowland.harvard.edu>
-In-Reply-To: <ce727a7b-6954-4e4d-85c7-f91011b87108@rowland.harvard.edu>
-From:   Jimmy Hu <hhhuuu@google.com>
-Date:   Wed, 12 Apr 2023 09:55:02 +0800
-Message-ID: <CAJh=zj+sVjmLAnY8pXWKbuhVsYStv3Ei5C6KqyugwURd8B-0wA@mail.gmail.com>
-Subject: Re: [PATCH] usb: core: hub: Disable autosuspend for VIA VL813 USB3.0 hub
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     gregkh@linuxfoundation.org, badhri@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-KSE-ServerInfo: RTEXMBS06.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 9:55=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Tue, Apr 11, 2023 at 08:31:45AM +0000, Jimmy Hu wrote:
-> > The VIA VL813 USB3.0 hub appears to have an issue with autosuspend and
-> > detecting USB3 devices. This can be reproduced by connecting a USB3
-> > device to the hub after the hub enters autosuspend mode.
-> >
-> > //connect the hub
-> > [  106.854204] usb 2-1: new SuperSpeed Gen 1 USB device number 2 using =
-xhci-hcd
-> > [  107.084993] usb 2-1: New USB device found, idVendor=3D2109, idProduc=
-t=3D0813, bcdDevice=3D90.15
-> > [  107.094520] usb 2-1: New USB device strings: Mfr=3D1, Product=3D2, S=
-erialNumber=3D0
-> > [  107.111836] usb 2-1: Product: USB3.0 Hub
-> > [  107.116835] usb 2-1: Manufacturer: VIA Labs, Inc.
-> > [  107.314230] hub 2-1:1.0: USB hub found
-> > [  107.321356] hub 2-1:1.0: 4 ports detected
-> >
-> > //the hub enters autosuspend mode
-> > [  107.738873] hub 2-1:1.0: hub_suspend
-> > [  107.922097] usb 2-1: usb auto-suspend, wakeup 1
-> >
-> > //connect a USB3 device
-> > [  133.120060] usb 2-1: usb wakeup-resume
-> > [  133.160033] usb 2-1: Waited 0ms for CONNECT
-> > [  133.165423] usb 2-1: finish resume
-> > [  133.176919] hub 2-1:1.0: hub_resume
-> > [  133.188026] usb 2-1-port3: status 0263 change 0041
-> > [  133.323585] hub 2-1:1.0: state 7 ports 4 chg 0008 evt 0008
-> > [  133.342423] usb 2-1-port3: link state change
-> > [  133.358154] usb 2-1-port3: status 0263, change 0040, 5.0 Gb/s
->
-> This status value indicates that the port is in the U3 suspend state.
-> Maybe the port needs to be put back into U0 before it can be reset.
->
-> > [  133.875150] usb 2-1-port3: not reset yet, waiting 10ms
-> > [  133.895502] usb 2-1-port3: not reset yet, waiting 10ms
-> > [  133.918239] usb 2-1-port3: not reset yet, waiting 200ms
-> > [  134.139529] usb 2-1-port3: not reset yet, waiting 200ms
-> > [  134.365296] usb 2-1-port3: not reset yet, waiting 200ms
-> > [  134.590185] usb 2-1-port3: not reset yet, waiting 200ms
-> > [  134.641330] hub 2-1:1.0: state 7 ports 4 chg 0000 evt 0008
-> > [  134.658880] hub 2-1:1.0: hub_suspend
-> > [  134.792908] usb 2-1: usb auto-suspend, wakeup 1
-> >
-> > Disabling autosuspend for this hub resolves the issue.
->
-> It may be possible to fix the problem.  You should try that before
-> giving up.
->
-> Alan Stern
+The RTK DHC SoCs were designed the global register address offset at
+0x8100. The default address is at DWC3_GLOBALS_REGS_START (0xc100).
+Therefore, add the property of device-tree to adjust this start address.
 
-[  133.120060] usb 2-1: usb wakeup-resume
-[  133.160033] usb 2-1: Waited 0ms for CONNECT
-[  133.165423] usb 2-1: finish resume
-[  133.176919] hub 2-1:1.0: hub_resume
-When a USB3 device is connected to the hub,  it did finish the resume
-and should be put back into U0, but it seems to have failed.
+Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+---
+ drivers/usb/dwc3/core.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 476b63618511..96d3e634ebbf 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1785,6 +1785,24 @@ static int dwc3_probe(struct platform_device *pdev)
+ 	dwc_res = *res;
+ 	dwc_res.start += DWC3_GLOBALS_REGS_START;
+ 
++	/*
++	 * For some dwc3 controller, the dwc3 global register start address is
++	 * not at DWC3_GLOBALS_REGS_START (0xc100).
++	 */
++	if (dev->of_node) {
++		int global_regs_starting_offset = 0;
++
++		device_property_read_u32(dev, "snps,global-regs-starting-offset",
++				 &global_regs_starting_offset);
++		if (global_regs_starting_offset) {
++			dwc_res.start -= DWC3_GLOBALS_REGS_START;
++			dwc_res.start += global_regs_starting_offset;
++			dev_info(dev,
++			    "dwc3 global register start address from 0x%x to end 0x%x\n",
++			    (int)dwc_res.start, (int)dwc_res.end);
++		}
++	}
++
+ 	regs = devm_ioremap_resource(dev, &dwc_res);
+ 	if (IS_ERR(regs))
+ 		return PTR_ERR(regs);
+-- 
+2.34.1
+
