@@ -2,82 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE4D6DF95E
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Apr 2023 17:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D7D6DF9B0
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Apr 2023 17:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjDLPIt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Apr 2023 11:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
+        id S230367AbjDLPTT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Apr 2023 11:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjDLPIs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Apr 2023 11:08:48 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 904691BB
-        for <linux-usb@vger.kernel.org>; Wed, 12 Apr 2023 08:08:47 -0700 (PDT)
-Received: (qmail 215973 invoked by uid 1000); 12 Apr 2023 11:08:46 -0400
-Date:   Wed, 12 Apr 2023 11:08:46 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Greg KH <greg@kroah.com>, Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/3] USB: core: Add routines for endpoint checks in old
- drivers
-Message-ID: <847a4775-f900-44e7-871e-eddb850b0aab@rowland.harvard.edu>
-References: <00000000000096e4f905f81b2702@google.com>
- <e382763c-cf33-4871-a761-1ac85ae36f27@rowland.harvard.edu>
- <8896f261-9602-4663-aa87-1feb9bf3ec0f@redhat.com>
- <2023040148-aground-cornbread-84e2@gregkh>
- <f764a19d-858e-408c-a5f5-d6fe7306c4cb@rowland.harvard.edu>
- <2023040544-cuddly-glancing-f577@gregkh>
- <dd2c8e8c-2c87-44ea-ba17-c64b97e201c9@rowland.harvard.edu>
- <f45ab17e-d66a-f64b-5dfa-ec292d311f52@suse.com>
+        with ESMTP id S230495AbjDLPTL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Apr 2023 11:19:11 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3492C4202;
+        Wed, 12 Apr 2023 08:19:06 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CCPPG2006667;
+        Wed, 12 Apr 2023 17:18:40 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=PX57JNcwvp07eFhn2E9eab0nHyYZ1zoB73DVeo39Wco=;
+ b=6kI8daGNHE5u1uhKBja5dnhTUWFUkF+zO94YG4KZaPqIZNFTJq1hKHlF+ZHb3nwqfzge
+ n9wZ9LGbwMwx9K9fegjfhL2IeeVrGEeITlPaoZ+z0lY9FhqyfDassAx4YZGzCDgck9tz
+ 7MK4NWIbT66CAmS3kUHHUYKun42IjUKLaZ1C+fW9EffbA5yGsGHVQkJoUJACC+XJM19I
+ qBu724jm4MPst/c7/nxt08eZMQZbcAt9hLBeWL2F8Xt47uhKFSdD6lqG/8LjL7/ZGE3l
+ qIddrLOALxSPp2VQQE5DNzdwJYnKgymRQ+gcTRf57dr/jUFs9+CIVJfhfWgdksD6Qegb 7w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pwsgpak2t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 17:18:40 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B8F03100034;
+        Wed, 12 Apr 2023 17:18:38 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B1662218612;
+        Wed, 12 Apr 2023 17:18:37 +0200 (CEST)
+Received: from localhost (10.48.1.102) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 12 Apr
+ 2023 17:18:37 +0200
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+To:     <hminas@synopsys.com>, <gregkh@linuxfoundation.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <alexandre.torgue@foss.st.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <amelie.delaunay@foss.st.com>, <fabrice.gasnier@foss.st.com>
+Subject: [PATCH 0/4] usb: dwc2: add optional clock used on stm32mp15
+Date:   Wed, 12 Apr 2023 17:18:27 +0200
+Message-ID: <20230412151831.3069211-1-fabrice.gasnier@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f45ab17e-d66a-f64b-5dfa-ec292d311f52@suse.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.48.1.102]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-12_07,2023-04-12_01,2023-02-09_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 01:54:12PM +0200, Oliver Neukum wrote:
-> On 10.04.23 21:37, Alan Stern wrote:
-> 
-> Hi,
-> > To make this checking as simple as possible, we now add a couple of
-> > utility routines to the USB core.  usb_check_bulk_endpoints() and
-> > usb_check_int_endpoints() take an interface pointer together with a
-> > list of endpoint addresses (numbers and directions).  They check that
-> > the interface's current alternate setting includes endpoints with
-> > those addresses and that each of these endpoints has the right type:
-> > bulk or interrupt, respectively.
-> > 
-> > Although we already have usb_find_common_endpoints() and related
-> > routines meant for a similar purpose, they are not well suited for
-> > this kind of checking.  Those routines find endpoints of various
-> > kinds, but only one (either the first or the last) of each kind, and
-> > they don't verify that the endpoints' addresses agree with what the
-> > caller expects.
-> 
-> these will do the job. Yet this strikes me as unelegant. That is
-> if you define a data structure to match against, why not
-> add a pointer to it to struct usb_device_id and use that?
+This series introduces an optional utmi clock that is used on stm32mp15,
+in particular when using integrated full-speed PHY, managed by GGPIO
+register.
+A pre-cursor change improves error handling in the platform code.
 
-Struct usb_device_id doesn't seem like the right place.  Struct 
-usb_driver would be more appropriate.  The drivers that need this have 
-only one entry in their match table, which means that drivers with large 
-match tables (which would require a lot of extra space for the new 
-pointers) don't need it.
+Fabrice Gasnier (4):
+  usb: dwc2: improve error handling in __dwc2_lowlevel_hw_enable
+  dt-bindings: usb: dwc2: add utmi optional clock
+  usb: dwc2: platform: add support for utmi optional clock
+  ARM: dts: stm32: add USB OTG UTMI clock on stm32mp151
 
-> Basically the table of endpoints you are creating is a description of
-> a device. Why add code for checking it to each probe() method
-> that needs it?
+ .../devicetree/bindings/usb/dwc2.yaml         |  5 ++-
+ arch/arm/boot/dts/stm32mp151.dtsi             |  4 +-
+ drivers/usb/dwc2/core.h                       |  2 +
+ drivers/usb/dwc2/platform.c                   | 37 ++++++++++++++++++-
+ 4 files changed, 43 insertions(+), 5 deletions(-)
 
-True, the checks could be centralized in usb_probe_interface().  What do 
-you think about doing it that way?
+-- 
+2.25.1
 
-Alan Stern
