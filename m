@@ -2,348 +2,217 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BB96DECD9
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Apr 2023 09:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7976DED8A
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Apr 2023 10:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbjDLHqe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Apr 2023 03:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S229772AbjDLI0d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Apr 2023 04:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjDLHq1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Apr 2023 03:46:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1571FD2;
-        Wed, 12 Apr 2023 00:46:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8A8562878;
-        Wed, 12 Apr 2023 07:46:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 357CEC433A0;
-        Wed, 12 Apr 2023 07:46:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681285582;
-        bh=yvtsIzxMGsj1lsvTLrAwTUeoabpS54XkyVq+u6tMaSI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YHdVKOJiMlgpk9RRj6YKnqmAeMfwJaxP5GP6EPmXss4hqOdaoywyix2VYMXnRGfXa
-         /HiM2Nfc8ZWGmHF8uCNVcEYwK+Lw5QaBa1GBt32OwCQs7bmxJtL0ZlDFxu/Qjh8u8V
-         eLGXKkkSYkEgjzwXldne4msBLQzyF0f3KVZ7nmO//4goBVBkvcU9OBh/lIWhxeXn27
-         1kQ+cb5M8J/r5gXVQbO1ER1qshG6mQ1fYTipFaIs7CoqrYCQ99mw7uqkOuJiblQxkS
-         ENSOV1ivCbYztGNui1jJNybCbpHcSniBZpVmYBm+JaR206ph8nWDGVBqXihAs6eL4i
-         wbq8A29OSORNw==
-Message-ID: <a5993f55-36ea-a2b0-c715-652cdf6feef1@kernel.org>
-Date:   Wed, 12 Apr 2023 10:46:17 +0300
+        with ESMTP id S229733AbjDLI0b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Apr 2023 04:26:31 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985115BB8
+        for <linux-usb@vger.kernel.org>; Wed, 12 Apr 2023 01:26:25 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id sg7so38175464ejc.9
+        for <linux-usb@vger.kernel.org>; Wed, 12 Apr 2023 01:26:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681287984;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j2PxCMT017KlB0q2xlNRaCGejb/YR8xF1pSERbKtDdk=;
+        b=ut5iKziJbkhCRP2QUkIsIJ3zForqv1B4G84k9L8PMEQPpjP9OOKF3K5C+Ph++Q6KNC
+         HKnux+4fYx2cgFWxsBYbCa8pRkXzb+3re1ycRPZer16yI6pB/myfNsYVEoOHY9qS4xcN
+         ivX/NPbZT2tWzX2DL7oVASp3eXzF6Rs4ptJP7t9ePPcco5og9bqwREp8AaXY+6HIidNR
+         FMWhXmKXYP7+Lu5YmOy9F719/t5D2W9A2sE3OOUShJpXiNxbrfnne3gYPRzCGp2dy2e2
+         IPrMycolgbQqm65pcwD2pmRKxybkm+Uiv2HgJUT/Vr9YZk4S2wnyDUAxyFIraFwdjEhC
+         0vFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681287984;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j2PxCMT017KlB0q2xlNRaCGejb/YR8xF1pSERbKtDdk=;
+        b=CfKc0vUDrxBB5gWhUcQoI4AJTCxjtzpsmRMzUeonvSpreyk5rm3YYeim8+WzTYAAk4
+         m131Rbyd7h4OQ+QTNaQv0Q3Ujpiei0zJ+igUfnGhjR43+7lqArz9CgMnKsQ86oR36g72
+         g98JvyUFRMOOjDUGP3NEatBTmNBAa9l0TQL01D00k9J0/VDc7Rcx41gT/O6PAdd9kF+N
+         5UhuIIH2h/8YiB5vs99JD1yt9awqci9GzzlqI8Ob+OqchHip4l5qh8XNsC6RWBn7d5pp
+         yaqilah3+64ZaqYdSMJnU74fL5fR660CDH9GIdPEg9x/2If+dCMHUQUmNEhoLPO1aUw/
+         1gzg==
+X-Gm-Message-State: AAQBX9cUuhUskCM6pQTBl9Ta4PoXPgTLZrqMh8pd9xYZmY/KgwtgN7y/
+        d04NWJUCs+l8o+8bKk/RaTuRL9BBkln/sXndNZ8=
+X-Google-Smtp-Source: AKy350Zr+e/Sw+RDS0dZq1qjB9lNG0/WPzuMdlGLrj16g35xPrnosRO3RyM+ukd++hO58/GtPz1KnQ==
+X-Received: by 2002:a17:906:bcf0:b0:87b:e105:5d9a with SMTP id op16-20020a170906bcf000b0087be1055d9amr10810505ejb.67.1681287984101;
+        Wed, 12 Apr 2023 01:26:24 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:8fa0:9989:3f72:b14f? ([2a02:810d:15c0:828:8fa0:9989:3f72:b14f])
+        by smtp.gmail.com with ESMTPSA id tx6-20020a1709078e8600b0094a70a89bffsm3327733ejc.205.2023.04.12.01.26.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 01:26:23 -0700 (PDT)
+Message-ID: <517670ca-ba2e-811e-3eb2-7f38011c9690@linaro.org>
+Date:   Wed, 12 Apr 2023 10:26:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH 2/2] usb: dwc3: Support
- 'snps,gadget-keep-connect-sys-sleep' feature
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v4 0/7] Add JH7110 USB and USB PHY driver support
 Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "vigneshr@ti.com" <vigneshr@ti.com>, "srk@ti.com" <srk@ti.com>,
-        "r-gunasekaran@ti.com" <r-gunasekaran@ti.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <7db7eb59-68fc-b7b2-5a29-00b698f68cbb@kernel.org>
- <20230322173150.nscqyzwcrecxjuaa@synopsys.com>
- <20230323021737.pv2nrb2md54a5pdg@synopsys.com>
- <624243b4-3fb5-6e60-e324-8df6b853205f@kernel.org>
- <20230323205139.4on6vx555ohdec7y@synopsys.com>
- <4d2f628e-6adc-5190-61b3-cc9d61f34a84@kernel.org>
- <20230403233652.2exkx2ikifuo4m6h@synopsys.com>
- <75db038b-ec7b-80e5-2652-8c5d2a9e317a@kernel.org>
- <20230404215317.44j2cl3uhzdk3aty@synopsys.com>
- <8884129b-8c73-df1e-e342-01defce0d407@kernel.org>
- <20230406013803.x2fp6c3wpvqtbues@synopsys.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230406013803.x2fp6c3wpvqtbues@synopsys.com>
+To:     Minda Chen <minda.chen@starfivetech.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Mason Huo <mason.huo@starfivetech.com>
+References: <20230406015216.27034-1-minda.chen@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230406015216.27034-1-minda.chen@starfivetech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 06/04/2023 04:38, Thinh Nguyen wrote:
-> On Wed, Apr 05, 2023, Roger Quadros wrote:
->>
->>
->> On 05/04/2023 00:53, Thinh Nguyen wrote:
->>> On Tue, Apr 04, 2023, Roger Quadros wrote:
->>>>
->>>>
->>>> On 04/04/2023 02:37, Thinh Nguyen wrote:
->>>>> On Fri, Mar 31, 2023, Roger Quadros wrote:
->>>>>> Hi,
->>>>>>
->>>>>> On 23/03/2023 22:51, Thinh Nguyen wrote:
->>>>>>> On Thu, Mar 23, 2023, Roger Quadros wrote:
->>>>>>>>
->>>>>>>>
->>>>>>>> On 23/03/2023 04:17, Thinh Nguyen wrote:
->>>>>>>>> On Wed, Mar 22, 2023, Thinh Nguyen wrote:
->>>>>>>>>> On Wed, Mar 22, 2023, Roger Quadros wrote:
->>>>>>>>>>> On 21/03/2023 21:05, Thinh Nguyen wrote:
->>>>>>>>>>>> On Tue, Mar 21, 2023, Thinh Nguyen wrote:
->>>>>>>>>>>>> On Tue, Mar 21, 2023, Roger Quadros wrote:
->>>>>>>>>>>>>> Hi Thinh,
->>>>>>>>>>>>>>
->>>>>>>>>>>>>> On 20/03/2023 20:52, Thinh Nguyen wrote:
->>>>>>>>>>>>>>> Hi,
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>> On Mon, Mar 20, 2023, Roger Quadros wrote:
->>>>>>>>>>>>>>>> Implement 'snps,gadget-keep-connect-sys-sleep' property.
->>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>> Do not stop the gadget controller and disconnect if this
->>>>>>>>>>>>>>>> property is present and we are connected to a USB Host.
->>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>> Prevent System sleep if Gadget is not in USB suspend.
->>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->>>>>>>>>>>>>>>> ---
->>>>>>>>>>>>>>>>  drivers/usb/dwc3/core.c   | 25 +++++++++++++++++++------
->>>>>>>>>>>>>>>>  drivers/usb/dwc3/core.h   |  2 ++
->>>>>>>>>>>>>>>>  drivers/usb/dwc3/gadget.c | 25 +++++++++++++++++++++++--
->>>>>>>>>>>>>>>>  3 files changed, 44 insertions(+), 8 deletions(-)
->>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->>>>>>>>>>>>>>>> index 476b63618511..a47bbaa27302 100644
->>>>>>>>>>>>>>>> --- a/drivers/usb/dwc3/core.c
->>>>>>>>>>>>>>>> +++ b/drivers/usb/dwc3/core.c
->>>>>>>>>>>>>>>> @@ -1575,6 +1575,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->>>>>>>>>>>>>>>>  	dwc->dis_split_quirk = device_property_read_bool(dev,
->>>>>>>>>>>>>>>>  				"snps,dis-split-quirk");
->>>>>>>>>>>>>>>>  
->>>>>>>>>>>>>>>> +	dwc->gadget_keep_connect_sys_sleep = device_property_read_bool(dev,
->>>>>>>>>>>>>>>> +				"snps,gadget-keep-connect-sys-sleep");
->>>>>>>>>>>>>>>> +
->>>>>>>>>>>>>>>>  	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
->>>>>>>>>>>>>>>>  	dwc->tx_de_emphasis = tx_de_emphasis;
->>>>>>>>>>>>>>>>  
->>>>>>>>>>>>>>>> @@ -2027,14 +2030,20 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->>>>>>>>>>>>>>>>  {
->>>>>>>>>>>>>>>>  	unsigned long	flags;
->>>>>>>>>>>>>>>>  	u32 reg;
->>>>>>>>>>>>>>>> +	int ret;
->>>>>>>>>>>>>>>>  
->>>>>>>>>>>>>>>>  	switch (dwc->current_dr_role) {
->>>>>>>>>>>>>>>>  	case DWC3_GCTL_PRTCAP_DEVICE:
->>>>>>>>>>>>>>>>  		if (pm_runtime_suspended(dwc->dev))
->>>>>>>>>>>>>>>>  			break;
->>>>>>>>>>>>>>>> -		dwc3_gadget_suspend(dwc);
->>>>>>>>>>>>>>>> +		ret = dwc3_gadget_suspend(dwc);
->>>>>>>>>>>>>>>> +		if (ret) {
->>>>>>>>>>>>>>>> +			dev_err(dwc->dev, "gadget not suspended: %d\n", ret);
->>>>>>>>>>>>>>>> +			return ret;
->>>>>>>>>>>>>>>> +		}
->>>>>>>>>>>>>>>>  		synchronize_irq(dwc->irq_gadget);
->>>>>>>>>>>>>>>> -		dwc3_core_exit(dwc);
->>>>>>>>>>>>>>>> +		if(!dwc->gadget_keep_connect_sys_sleep)
->>>>>>>>>>>>>>>> +			dwc3_core_exit(dwc);
->>>>>>>>>>>>>>>>  		break;
->>>>>>>>>>>>>>>>  	case DWC3_GCTL_PRTCAP_HOST:
->>>>>>>>>>>>>>>>  		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
->>>>>>>>>>>>>>>> @@ -2088,11 +2097,15 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
->>>>>>>>>>>>>>>>  
->>>>>>>>>>>>>>>>  	switch (dwc->current_dr_role) {
->>>>>>>>>>>>>>>>  	case DWC3_GCTL_PRTCAP_DEVICE:
->>>>>>>>>>>>>>>> -		ret = dwc3_core_init_for_resume(dwc);
->>>>>>>>>>>>>>>> -		if (ret)
->>>>>>>>>>>>>>>> -			return ret;
->>>>>>>>>>>>>>>> +		if (!dwc->gadget_keep_connect_sys_sleep)
->>>>>>>>>>>>>>>> +		{
->>>>>>>>>>>>>>>> +			ret = dwc3_core_init_for_resume(dwc);
->>>>>>>>>>>>>>>> +			if (ret)
->>>>>>>>>>>>>>>> +				return ret;
->>>>>>>>>>>>>>>> +
->>>>>>>>>>>>>>>> +			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
->>>>>>>>>>>>>>>> +		}
->>>>>>>>>>>>>>>>  
->>>>>>>>>>>>>>>> -		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
->>>>>>>>>>>>>>>>  		dwc3_gadget_resume(dwc);
->>>>>>>>>>>>>>>>  		break;
->>>>>>>>>>>>>>>>  	case DWC3_GCTL_PRTCAP_HOST:
->>>>>>>>>>>>>>>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
->>>>>>>>>>>>>>>> index 582ebd9cf9c2..f84bac815bed 100644
->>>>>>>>>>>>>>>> --- a/drivers/usb/dwc3/core.h
->>>>>>>>>>>>>>>> +++ b/drivers/usb/dwc3/core.h
->>>>>>>>>>>>>>>> @@ -1328,6 +1328,8 @@ struct dwc3 {
->>>>>>>>>>>>>>>>  	unsigned		dis_split_quirk:1;
->>>>>>>>>>>>>>>>  	unsigned		async_callbacks:1;
->>>>>>>>>>>>>>>>  
->>>>>>>>>>>>>>>> +	unsigned		gadget_keep_connect_sys_sleep:1;
->>>>>>>>>>>>>>>> +
->>>>>>>>>>>>>>>>  	u16			imod_interval;
->>>>>>>>>>>>>>>>  
->>>>>>>>>>>>>>>>  	int			max_cfg_eps;
->>>>>>>>>>>>>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>>>>>>>>>>>>>>> index 3c63fa97a680..8062e44f63f6 100644
->>>>>>>>>>>>>>>> --- a/drivers/usb/dwc3/gadget.c
->>>>>>>>>>>>>>>> +++ b/drivers/usb/dwc3/gadget.c
->>>>>>>>>>>>>>>> @@ -4572,12 +4572,23 @@ void dwc3_gadget_exit(struct dwc3 *dwc)
->>>>>>>>>>>>>>>>  int dwc3_gadget_suspend(struct dwc3 *dwc)
->>>>>>>>>>>>>>>>  {
->>>>>>>>>>>>>>>>  	unsigned long flags;
->>>>>>>>>>>>>>>> +	int link_state;
->>>>>>>>>>>>>>>>  
->>>>>>>>>>>>>>>>  	if (!dwc->gadget_driver)
->>>>>>>>>>>>>>>>  		return 0;
->>>>>>>>>>>>>>>>  
->>>>>>>>>>>>>>>> -	dwc3_gadget_run_stop(dwc, false, false);
->>>>>>>>>>>>>>>> +	if (dwc->gadget_keep_connect_sys_sleep && dwc->connected) {
->>>>>>>>>>>>>>>> +		link_state = dwc3_gadget_get_link_state(dwc);
->>>>>>>>>>>>>>>> +		/* Prevent PM Sleep if not in U3/L2 */
->>>>>>>>>>>>>>>> +		if (link_state != DWC3_LINK_STATE_U3)
->>>>>>>>>>>>>>>> +			return -EBUSY;
->>>>>>>>>>>>>>>> +
->>>>>>>>>>>>>>>> +		/* don't stop/disconnect */
->>>>>>>>>>>>>>>> +		dwc3_gadget_disable_irq(dwc);
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>> We shouldn't disable event interrupt here. What will happen if the
->>>>>>>>>>>>>>
->>>>>>>>>>>>>> Due to some reason, if I don't disable the event interrupts here then
->>>>>>>>>>>>>> after USB resume the USB controller is malfunctioning.
->>>>>>>>>>>>>> It no longer responds to any requests from Host.
->>>>>>>>>>>>>
->>>>>>>>>>>>> You should look into this. These events are important as they can tell
->>>>>>>>>>>>> whether the host initiates resume.
->>>>>>>>>>>>>
->>>>>>>>>>>>>>
->>>>>>>>>>>>>>> device is disconnected and reconnect to the host while the device is
->>>>>>>>>>>>>>> still in system suspend? The host would not be able to communicate with
->>>>>>>>>>>>>>> the device then.
->>>>>>>>>>>>>>
->>>>>>>>>>>>>> In the TI platform, The system is woken up on any VBUS/linestate change
->>>>>>>>>>>>>> and in dwc3_gadget_resume we enable the events again and check for pending
->>>>>>>>>>>>>> events. Is it pointless to check for pending events there?
->>>>>>>>>>>>>>
->>>>>>>>>>>>>
->>>>>>>>>>>>> It seems fragile for the implementation to be dependent on platform
->>>>>>>>>>>>> specific feature right?
->>>>>>>>>>>>>
->>>>>>>>>>>>> Also, what will happen in a typical case when the host puts the device
->>>>>>>>>>>>> in suspend and initiates resume while the device is in system suspend
->>>>>>>>>>>>> (and stay in suspend over a period of time)? There is no VBUS change.
->>>>>>>>>>>>> There will be problem if host detects no response from device in time.
->>>>>>>>>>>>>
->>>>>>>>>>>>> Don't we need these events to wakeup the device?
->>>>>>>>>>>
->>>>>>>>>>> That's why the TI implementation has line-state change detection to
->>>>>>>>>>> detect a USB resume. We are doing a out-of-band wake-up. The wake up
->>>>>>>>>>> events are configured in the wrapper driver (dwc3-am62.c).
->>>>>>>>>>>
->>>>>>>>>>> Do you know of any dwc3 implementation that uses in-band mechanism
->>>>>>>>>>> to wake up the System. i.e. it relies on events enabled in DEVTEN register?
->>>>>>>>>>>
->>>>>>>>>>
->>>>>>>>>> We rely on PME. The PME is generated from the PMU of the usb controller
->>>>>>>>>> when it detects a resume. If your platform supports hibernation and if
->>>>>>>>>> the resume signal is connected to the lower layer power manager of your
->>>>>>>>>> device, then you can wakeup the system one level at a time. For example,
->>>>>>>>>> if your device is a pci device, that wakeup signal would tie to the pci
->>>>>>>>>> power manager, waking up the pci layer before waking up the core of the
->>>>>>>>>> usb controller. That's how the host wakes up the host system (e.g. from
->>>>>>>>>> remote wakeup). For this to work, we expect something similar on the
->>>>>>>>>> device side.
->>>>>>>>>>
->>>>>>>>>>>>>
->>>>>>>>>>>>
->>>>>>>>>>>> We may not be able to suspend everything in system suspend for this
->>>>>>>>>>>> case. I'm thinking of treating these events as if they are PME to wakeup
->>>>>>>>>>>> the device, but they are not the same. It may not be simple to handle
->>>>>>>>>>>> this. The lower layers may need to stay awake for the dwc3 to handle
->>>>>>>>>>>> these events. Hm... it gets a bit complicated.
->>>>>>>>>>>
->>>>>>>>>>> As we are going into suspend, we are not really in a position to handle any
->>>>>>>>>>> (DEVTEN) events till we have fully resumed.
->>>>>>>>>>> So yes, we need to rely on platform specific implementation to wake
->>>>>>>>>>> the System on any USB event.
->>>>>>>>>>>
->>>>>>>>>>
->>>>>>>>>> You may be able to detect vbus change through the connector controller.
->>>>>>>>>> However, the usb controller is the one that detects host resume. What
->>>>>>>>>> platform specific implementation do you have outside of the usb
->>>>>>>>>> controller do you have to get around that?
->>>>>>>>>>
->>>>>>>>>> I'm not sure if your platform supports hibernation or if the PME signal
->>>>>>>>>> on your platform can wakeup the system, but currently dwc3 driver
->>>>>>>>>> doesn't handle hibernation (device side). If there's no hibernation,
->>>>>>>>>> there's no PME.
->>>>>>>>
->>>>>>>> No, in this TI SoC, hibernation feature is not supported in the dwc3 core.
->>>>>>>>
->>>>>>>>>>
->>>>>>>>>
->>>>>>>>> Actually, I think the dwc3 core is still on during system suspend for
->>>>>>>>> you right? Then I think we can use the wakeup event to wakeup system
->>>>>>>>> suspend on host resume? You can ignore about PME in this case. You may
->>>>>>>>> need to look into what needs stay awake to allow for handling of the
->>>>>>>>> dwc3 event.
->>>>>>>>
->>>>>>>> But in SoC deep-sleep state, all clocks to the dwc3 core are stopped.
->>>>>>>> So I'm not sure if dwc3 events will work.
->>>>>>>>
->>>>>>>
->>>>>>> Right, you need to keep those clocks running to detect host resume.
->>>>>>> There's still some power saving through the dwc3 controller's handling
->>>>>>> in suspend. You may have some limited power saving from other suspended
->>>>>>> devices on your setup. However, I don't think we can expect the platform
->>>>>>> to go into deep-sleep and also handle host resume.
->>>>>>
->>>>>> Why not? if the PHY can detect the host resume and wake up the SoC it will
->>>>>> work right?
->>>>>>
->>>>>
->>>>> Hm... I supposed it may be possible. But it may need some unconventional
->>>>> design? The dwc3 controller is currently registered to the phy. For that
->>>>> to work, your phy needs to be able to talk to both the dwc3 controller
->>>>> and some other controller (equivalent to dwc3 PMU) that manages
->>>>> power/interrupt. The dwc3 controller would need to relinquish control to
->>>>> this other phy controller on suspend. The phy driver would then be able
->>>>> to assert interrupt waking up the system on resume sigal detection,
->>>>> which in turn relinquish control to the dwc3 controller. All of this has
->>>>> to work while the phy signaling remains synchronized with the dwc3
->>>>> controller.
->>>>
->>>> My understanding is that all this is taken care by PHY integration design with
->>>> DWC3 core on the TI SoC.
->>>>
->>>>>
->>>>> From the patches you sent, I don't see the changes necesssary for this
->>>>> to work. If there is something that I'm missing, please also note it or
->>>>> add it here to the series.
->>>>
->>>> There is nothing more as the details are taken care by PHY logic and
->>>> necessary integration with DWC3.
->>>>
->>>> For the PHY wake-up programming details you have already checked this series [1].
->>>>
->>>> [1] - https://urldefense.com/v3/__https://lore.kernel.org/all/20230316131226.89540-1-rogerq@kernel.org/__;!!A4F2R9G_pg!ayqpaWwnWIO7SKktk4kI2EJLwDTIv2nYYCgBGHUlt56KTzeYkDEdq2Q5ZvZFsuCWIlcXGET230YY5J3y_sHV$ 
->>>>
->>>
->>> I may have misunderstood your platform implementation. My understanding
->>> is that it can only detect VBUS and that it can only resume on VBUS
->>> valid.
->>>
->>> Does the "LINESTATE" here gets asserted if say there's a LFPS detection?
->>
->> Yes. The wake up logic on the SoC is snooping the UTMI lines from the PHY and on any
->> change it can detect and wake up the SoC.
->>
+On 06/04/2023 03:52, Minda Chen wrote:
+> This patchset adds USB driver and USB PHY for the StarFive JH7110 SoC.
+> USB work mode is peripheral and using USB 2.0 PHY in VisionFive 2 board.
+> The patch has been tested on the VisionFive 2 board.
 > 
-> Are you referring to the utmi_linestate signal? Isn't that for usb2
-> speed only? Does your platform support usb3 speed?
+> This patchset should be applied after the patchset [1], [2] and[3]:
+> [1] https://patchwork.kernel.org/project/linux-riscv/cover/20230314124404.117592-1-xingyu.wu@starfivetech.com/
+> [2] https://lore.kernel.org/all/20230315055813.94740-1-william.qiu@starfivetech.com/
+> [3] https://patchwork.kernel.org/project/linux-phy/cover/20230315100421.133428-1-changhuang.liang@starfivetech.com/
+> 
+> This patchset is base on v6.3-rc4
+> 
+> patch 1 is usb phy dt-binding document.
+> patch 2 is Pcie PHY dt-binding document.
+> patch 3 is USB 2.0 PHY driver.
+> patch 4 is PCIe PHY driver.
+> patch 5 is usb dt-binding document.
+> patch 6 is the wrapper module driver of Cadence USB3. USB controller IP is Cadence USB3.
+> patch 7 is USB device tree configuration.
+> 
+> previous version
+> ---
+> v1: https://patchwork.kernel.org/project/linux-usb/cover/20230306095212.25840-1-minda.chen@starfivetech.com/
+> v2: https://patchwork.kernel.org/project/linux-usb/cover/20230308082800.3008-1-minda.chen@starfivetech.com/
 
-The wake-up on deepSleep feature is only supported for USB2 on this particular SoC.
+This is v2.
 
-cheers,
--roger
+> v3: https://patchwork.kernel.org/project/linux-usb/cover/20230315104411.73614-1-minda.chen@starfivetech.com/
+> 
+> changes
+> v4:
+>   1. (patch 1) split PCIe PHY dt-binding doc to patch 2.
+>   2. (patch 2) PCIe PHY add stg and sys con configuration to dt-binding doc.
+>   3. (patch 3)
+>      - split PCIe PHY driver to patch 4.
+>      - replace dr_mode to phy mode in jh7110_usb2_phy.
+>   4. (patch 4) 
+>      - Makefile and Kconfig sorted by alphabet sequence.
+>      - Add PCIe PHY stg and syscon PHY connection configuration
+>        for USB 3.0.
+>   5. (patch 5)
+>      - commit message changed.
+>      - merge wrapper dts node and cdns3 node in example.
+>      - Add interrupts, reg, phy and dr_mode in property.
+>      - Add reset-name in property example.
+>   6. (patch 6)
+>      - For dts node is merged, Using platform_device_alloc and
+>        platform_device_add to generate cadence sub device.
+>      - IOMEM and IRQ resource are passed to Cadence sub device.
+>      - Add PHY ops process for PHY dts setting can not be passed to
+>        Cadence USB driver.
+>      - remove the stg and sys USB 3.0 PHY configuration.
+>      - Change the suspend clock reset and clock enable sequence.
+>      - Get all reset and clock resources before enable them in 
+>        cdns_clk_rst_init.
+>      - commit message changed.
+>   7. (patch 7)
+>      - merge wrapper dts node and cdns3 node in usb dts.
+>      - move the stg and sys USB 3.0 PHY confiuration to
+>        PCIe PHY dts node.
+>      - commit message changed.
+>      - Add reset-names dts.
+> 
+> v3:
+>   1. Add patch 1 - 4. Add USB PHY driver and dt-binding doc. 
+>      USB PHY codes are moved to patch 3 and patch 4.
+>   2. (patch 5)
+>      - USB wrapper module dts document is moved to usb directory.
+>      - Remove the 'dr_mode' and 'starfive,usb2-only' setting.
+>      - Some dts format changes. dts binding check pass.
+>   3. (patch 6)
+>      - Remove the PHY codes. 
+>      - Search 'dr_mode' and phy setting from Cadence subnode.
+>   4. (patch 7)
+>      - Add USB PHY dts configurion. 
+>      - 'dr_mode' is moved to Cadence controller submode.
+> 
+> v2:
+>   1. (patch 5) dt-binding changes. The document example is the same as dts config.
+>   2. (patch 6) using dev_err_probe and syscon_regmap_lookup_by_phandle_args function. Some formats changes
+>   3. (patch 7) dts nodes sorted by the address after @
+> 
+> 
+> Minda Chen (7):
+>   dt-bindings: phy: Add StarFive JH7110 USB document
+>   dt-bindings: phy: Add StarFive JH7110 PCIe document
+>   phy: starfive: add JH7110 USB 2.0 PHY driver.
+>   phy: starfive: add JH7110 PCIE 2.0 PHY driver.
+>   dt-bindings: usb: Add StarFive JH7110 USB Bindings YAML schemas
+>   usb: cdns3: add StarFive JH7110 USB driver.
+>   riscv: dts: starfive: add USB dts configuration for JH7110
+> 
+>  .../phy/starfive,jh7110-pcie-phy.yaml         |  58 +++
+>  .../bindings/phy/starfive,jh7110-usb-phy.yaml |  50 +++
+>  .../bindings/usb/starfive,jh7110-usb.yaml     | 136 +++++++
+>  MAINTAINERS                                   |  16 +
+>  .../jh7110-starfive-visionfive-2.dtsi         |   7 +
+>  arch/riscv/boot/dts/starfive/jh7110.dtsi      |  44 ++
+>  drivers/phy/starfive/Kconfig                  |  22 +
+>  drivers/phy/starfive/Makefile                 |   2 +
+>  drivers/phy/starfive/phy-jh7110-pcie.c        | 197 +++++++++
+>  drivers/phy/starfive/phy-jh7110-usb.c         | 161 ++++++++
+>  drivers/usb/cdns3/Kconfig                     |  11 +
+>  drivers/usb/cdns3/Makefile                    |   1 +
+>  drivers/usb/cdns3/cdns3-starfive.c            | 378 ++++++++++++++++++
+>  drivers/usb/cdns3/core.h                      |   3 +
+>  14 files changed, 1086 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-pcie-phy.yaml
+>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
+>  create mode 100644 Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
+>  create mode 100644 drivers/phy/starfive/phy-jh7110-pcie.c
+>  create mode 100644 drivers/phy/starfive/phy-jh7110-usb.c
+>  create mode 100644 drivers/usb/cdns3/cdns3-starfive.c
+> 
+> 
+> base-commit: 0ec57cfa721fbd36b4c4c0d9ccc5d78a78f7fa35
+> prerequisite-patch-id: 24a6e3442ed1f5454ffb4a514cfd768436a87090
+> prerequisite-patch-id: 55390537360f25c8b9cbfdc30b73ade004f436f7
+
+fatal: bad object 55390537360f25c8b9cbfdc30b73ade004f436f7
+
+What commits do you reference? How are they helpful?
+
+
+Best regards,
+Krzysztof
+
