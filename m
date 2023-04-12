@@ -2,95 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2938D6DE9E5
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Apr 2023 05:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E73E66DEB7A
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Apr 2023 08:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjDLDaY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Apr 2023 23:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
+        id S229521AbjDLGBc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Apr 2023 02:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjDLDaX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Apr 2023 23:30:23 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD05930E0
-        for <linux-usb@vger.kernel.org>; Tue, 11 Apr 2023 20:30:20 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33C3Tjz76001695, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33C3Tjz76001695
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Wed, 12 Apr 2023 11:29:45 +0800
-Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Wed, 12 Apr 2023 11:30:07 +0800
-Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
- RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Wed, 12 Apr 2023 11:30:06 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
- 15.1.2375.32 via Frontend Transport; Wed, 12 Apr 2023 11:30:06 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     <linux-usb@vger.kernel.org>,
-        Stanley Chang <stanley_chang@realtek.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,global-regs-starting-offset' quirk
-Date:   Wed, 12 Apr 2023 11:30:06 +0800
-Message-ID: <20230412033006.10859-2-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230412033006.10859-1-stanley_chang@realtek.com>
-References: <20230412033006.10859-1-stanley_chang@realtek.com>
+        with ESMTP id S229451AbjDLGBb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Apr 2023 02:01:31 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E14C3A82;
+        Tue, 11 Apr 2023 23:01:29 -0700 (PDT)
+Received: from uu22.. ([10.12.190.56])
+        (user=dddddd@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33C60Yam004032-33C60Yan004032
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 12 Apr 2023 14:00:34 +0800
+From:   Yinhao Hu <dddddd@hust.edu.cn>
+To:     Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Yinhao Hu <dddddd@hust.edu.cn>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Peter Chen <peter.chen@freescale.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: chipidea: fix missing goto in `ci_hdrc_probe`
+Date:   Wed, 12 Apr 2023 13:58:52 +0800
+Message-Id: <20230412055852.971991-1-dddddd@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXDAG02.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: dddddd@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add a new 'snps,global-regs-starting-offset' DT to dwc3 core to remap
-the global register start address
+From the comment of ci_usb_phy_init, it returns an error code if
+usb_phy_init has failed, and it should do some clean up, not just
+return directly.
 
-The RTK DHC SoCs were designed the global register address offset at
-0x8100. The default address is at DWC3_GLOBALS_REGS_START (0xc100).
-Therefore, add the property of device-tree to adjust this start address.
+Fix this by goto the error handling.
 
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+Fixes: 74475ede784d ("usb: chipidea: move PHY operation to core")
+Signed-off-by: Yinhao Hu <dddddd@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
 ---
- Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/usb/chipidea/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index be36956af53b..5cbf3b7ded04 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -359,6 +359,13 @@ properties:
-     items:
-       enum: [1, 4, 8, 16, 32, 64, 128, 256]
+diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+index 281fc51720ce..25084ce7c297 100644
+--- a/drivers/usb/chipidea/core.c
++++ b/drivers/usb/chipidea/core.c
+@@ -1108,7 +1108,7 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+ 	ret = ci_usb_phy_init(ci);
+ 	if (ret) {
+ 		dev_err(dev, "unable to init phy: %d\n", ret);
+-		return ret;
++		goto ulpi_exit;
+ 	}
  
-+  snps,global-regs-starting-offset:
-+    description:
-+      value for remapping global register start address. For some dwc3
-+      controller, the dwc3 global register start address is not at
-+      default DWC3_GLOBALS_REGS_START (0xc100). This property is added to
-+      adjust the address.
-+
-   port:
-     $ref: /schemas/graph.yaml#/properties/port
-     description:
+ 	ci->hw_bank.phys = res->start;
 -- 
 2.34.1
 
