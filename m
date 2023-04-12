@@ -2,71 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0839B6DF2F0
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Apr 2023 13:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C09BC6DF41E
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Apr 2023 13:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjDLLQ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Apr 2023 07:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
+        id S229767AbjDLLq6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Apr 2023 07:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbjDLLQ5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Apr 2023 07:16:57 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283727293;
-        Wed, 12 Apr 2023 04:16:31 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33CBFD580015043, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33CBFD580015043
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Wed, 12 Apr 2023 19:15:13 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Wed, 12 Apr 2023 19:15:35 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Wed, 12 Apr 2023 19:15:35 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Wed, 12 Apr 2023 19:15:35 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-Subject: RE: [PATCH v2 1/2] usb: dwc3: core: add support for disabling High-speed park mode
-Thread-Topic: [PATCH v2 1/2] usb: dwc3: core: add support for disabling
- High-speed park mode
-Thread-Index: AQHZbDd6mjqPmjMt8EayK+GV5r/KUq8mG4+AgAFsAjA=
-Date:   Wed, 12 Apr 2023 11:15:35 +0000
-Message-ID: <e9964b3cd1a34b05990c1061af9d1951@realtek.com>
-References: <20230411053550.16360-1-stanley_chang@realtek.com>
- <20230411213158.r7i6thg67okbovjp@synopsys.com>
-In-Reply-To: <20230411213158.r7i6thg67okbovjp@synopsys.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S230222AbjDLLq4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Apr 2023 07:46:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201035599
+        for <linux-usb@vger.kernel.org>; Wed, 12 Apr 2023 04:46:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B00B462AAF
+        for <linux-usb@vger.kernel.org>; Wed, 12 Apr 2023 11:46:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 147D6C4339B
+        for <linux-usb@vger.kernel.org>; Wed, 12 Apr 2023 11:46:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681300002;
+        bh=WN2eTyv1n+BLE5vfejTOhwbMiTnoAkbwM3mWH2k8Erw=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=fWp3cOT0PcAkhpZurURD/b2KLYcpbT99KageJlggmhnyLsulXOPR8NRdxQBoB1JGi
+         huUIH72stib67J6+vi6/RGmMRRZY527bOuW/NcE2KtBvLGpD6nYM67QUOt1CfYczUV
+         pDOjBsvSAjfDNKAvfE3DK7zU5Xk00i7ezNZ9xPrAUi6ui5/OLOhyGhslwYwbMo3Kgw
+         NG9s7Yy8jsResvwBQ2KqOAR6MAo00XjBeWXQLX8fFNJ+re8SObDM9iHwWx9N/li1pc
+         YnrvmKMbqlS5+X3U86NuGd0wLnBSoEQglhmtIwwhsAB6pqp0CKARBs2FnwmYWx9EPZ
+         mRufVl+8tdeQA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id F1A6EC43142; Wed, 12 Apr 2023 11:46:41 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217314] Mackie Profx12v3 not working, showing unable to find
+ clock source
+Date:   Wed, 12 Apr 2023 11:46:41 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: regressions@leemhuis.info
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-217314-208809-0dRf8Yvbod@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217314-208809@https.bugzilla.kernel.org/>
+References: <bug-217314-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQpDQyBtb3JlIG1haW50YWluZXJzIGJ5IHVzaW5nIHNjcmlwdHMvZ2V0X21haW50YWluZXJzLnBs
-DQoNCg==
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217314
+
+The Linux kernel's regression tracker (Thorsten Leemhuis) (regressions@leem=
+huis.info) changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |regressions@leemhuis.info
+
+--- Comment #2 from The Linux kernel's regression tracker (Thorsten Leemhui=
+s) (regressions@leemhuis.info) ---
+did this work correctly on earlier kernel versions? if so: which was the la=
+test
+where things worked?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
