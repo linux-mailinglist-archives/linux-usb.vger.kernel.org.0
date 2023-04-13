@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1633C6E0CB9
+	by mail.lfdr.de (Postfix) with ESMTP id AB3D76E0CBB
 	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 13:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbjDMLfg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Apr 2023 07:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
+        id S231236AbjDMLfh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Apr 2023 07:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbjDMLfb (ORCPT
+        with ESMTP id S231223AbjDMLfb (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 07:35:31 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0959ECF
-        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 04:35:14 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id q6so2436028wrc.3
-        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 04:35:14 -0700 (PDT)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A820D9EDE
+        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 04:35:15 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id e16so622540wra.6
+        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 04:35:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681385695; x=1683977695;
+        d=linaro.org; s=google; t=1681385696; x=1683977696;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WBNeeJB4Ye5R7jbvMhzaPQ3c9ocEPIWp3JugDo5ICqU=;
-        b=dCbuPC3Rz+m58vYAV7E6a0OOgsn8Ynnkv/pkS+CgiTwC+VtLbjT17oEKWbj8+B20oq
-         8J+9u4jbv3aad7u2WiAFA7dGkoJJoyB0IcO/+9uNO0rUkd3vIxUZgWfN+2EhF0ptkKa+
-         npoNNCVbUuczRlppRFzIVdLBkGLfCyRvZXf6+kOqUd5CeUihKeAsGAtKobhohMbb/hJ9
-         X7jekljiFE7HzmQ5kTpmBJNg2sSQkylBy3lgr21+8HYqbP3G4FvRk8XFjh12AydpQmZE
-         uPIZTzXSN4bY2zKwFDlPc/VSouvga7MwVBSk2W3fnmkc1aARh++UfhBjqOzY0QnP4iOh
-         jKfQ==
+        bh=zcMNU2pXY7at0soUmicgwVM/bFPgaN3uZsi3VUVpjYA=;
+        b=fta7Yb+O1bsTNZqK70ZbYc0/Lj6QF5t6o7ldRAG8TEFsbUjd8otC26p5V1/0r8eKLI
+         hjPvY++1QkY/55HuhKrkkoeFMTOSDBu9cayHxybQ6vaMI8B+E4DcEa8iVrqxP3yrbXjL
+         lgnmuwtwabmkUnYFkOUN4ffq4ZAHY+f4sqtU36+Apdp7VE7ojyux2ub9b/WKG+UaKWmB
+         ZZd2h9pzMfV5P3lxxVS+KukX1dY75g7YJWYS9QV3ekBcQNwoU5C+wMbZJCVzb0D2nFDL
+         FHanbqlKuuVpOVd2qR5pUF88TXC2nxXuOeitTT20LK/A2egO7hunOrXqFymmi5/A36wu
+         CNWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681385695; x=1683977695;
+        d=1e100.net; s=20221208; t=1681385696; x=1683977696;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WBNeeJB4Ye5R7jbvMhzaPQ3c9ocEPIWp3JugDo5ICqU=;
-        b=ATgyzOTfhrQ1fyR/kg0wcEWbG/2O3FXeyRtbVxoljsx3C+s5kW5xaYzDArFjOLohqJ
-         tmYk8/HlRG9B6tm41Ah72/rUl5MmCuw1VKHix6fdb2PQINKOQ0T3QBzPGWdgEcHqf106
-         I+krMgcVcELtXE+qGH4XcRgZzGJEU7fwWAjUuKFEPTg23rxYhf5IkMD3k+/k37oQOD5G
-         nsLehV/khbz8+2vGguMeQoxML6tafHtknvWFX/lENyaibSFaF2bqH8qC9S18mgZEF5sP
-         hLpoiUYZ9nswesWE5tDRwNghQCVq3NBm6vds92PDgtFpc6sNLhLM7nnGG6CNwLKnWJmO
-         nONA==
-X-Gm-Message-State: AAQBX9fQ8ivvE1AQ5SZuy8bzTv93Ra+Mixo1ImEVwsnuIwjUtw1f7e8d
-        O+Tb/SMmxHupzKbqSL8UqEj98A==
-X-Google-Smtp-Source: AKy350agq/aaNDRKRCP6mvp8di1174nuEVgVuVSjyrmbaBgiwVHG4Frl5eTk9WB5GNHfAZfeKUmtPw==
-X-Received: by 2002:adf:e352:0:b0:2ef:b1bd:786 with SMTP id n18-20020adfe352000000b002efb1bd0786mr1095880wrj.13.1681385695414;
-        Thu, 13 Apr 2023 04:34:55 -0700 (PDT)
+        bh=zcMNU2pXY7at0soUmicgwVM/bFPgaN3uZsi3VUVpjYA=;
+        b=Q/6if5+Bzlzoj6eO3Y9b0J6VrkfzJ4lN4mN8wQ4bHuEmtbB4atc7h4wRpgeOtP5+KT
+         HeScrlM2A/7M8HaGw8Jd6csj3BL2GNisNFktoEkeJSSX+g15Z53C+KZOcAxHTuElnBy7
+         H9dJ8QL2pjh8wq2Da98d6NLLdUs4+v5V2GnLMuHep4K2GvlW0trTkTVsgH2YVO7QQzOb
+         gOCvu5VrU/WHfz7A7LJJtrlIlnVXx2Lf4/CJibIAyWEpaBZaMn+tsND+ko7mdYzdqpy6
+         8jU6moHbUbnUZZVDoKTn1HIpcS1stZNrgHzoWNpBYRNYanOWzWZ8rCUpFjwcT1R04bZl
+         WzkA==
+X-Gm-Message-State: AAQBX9eHSG+S2RLNfpQkqEGyqvbjx5oNdAoZPpoaoJnV1IeBjmUqHdfY
+        XQhhj/2PhB06793ey+l9OXDJhw==
+X-Google-Smtp-Source: AKy350ZAgbyOnh3nikW0nzPoUS50snyXA9Uy7VQ6IYZyCGF2ED7DeWPCIG04/AeDff6pBIxjTVna4g==
+X-Received: by 2002:a5d:574f:0:b0:2f2:585f:5369 with SMTP id q15-20020a5d574f000000b002f2585f5369mr1273676wrw.62.1681385696517;
+        Thu, 13 Apr 2023 04:34:56 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id e16-20020a5d4e90000000b002f2782978d8sm1108877wru.20.2023.04.13.04.34.54
+        by smtp.gmail.com with ESMTPSA id e16-20020a5d4e90000000b002f2782978d8sm1108877wru.20.2023.04.13.04.34.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 04:34:54 -0700 (PDT)
+        Thu, 13 Apr 2023 04:34:56 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
         gregkh@linuxfoundation.org, andersson@kernel.org,
@@ -58,9 +58,9 @@ To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
 Cc:     caleb.connolly@linaro.org, bryan.odonoghue@linaro.org,
         konrad.dybcio@linaro.org, subbaram@quicinc.com, jackp@quicinc.com,
         robertom@qti.qualcomm.com
-Subject: [PATCH v5 11/14] arm64: dts: qcom: qrb5165-rb5: Switch on TCPM usb-role-switching for usb_1
-Date:   Thu, 13 Apr 2023 12:34:35 +0100
-Message-Id: <20230413113438.1577658-12-bryan.odonoghue@linaro.org>
+Subject: [PATCH v5 12/14] arm64: dts: qcom: qrb5165-rb5: Switch on TCPM orientation-switch for usb_1_qmpphy
+Date:   Thu, 13 Apr 2023 12:34:36 +0100
+Message-Id: <20230413113438.1577658-13-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230413113438.1577658-1-bryan.odonoghue@linaro.org>
 References: <20230413113438.1577658-1-bryan.odonoghue@linaro.org>
@@ -76,49 +76,45 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Switch on usb-role-switching for usb_1 via TCPM. We need to declare
-usb-role-switch in &usb_1 and associate with the remote-endpoint in TCPM
-which provides the necessary signal.
+Switch on USB orientation-switching for usb_1_qmp via TCPM. Detecting the
+orientation switch is required to get the PHY to reset and bring-up the PHY
+with the CC lines set to the appropriate lane.
 
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-index 1e0b6fd59abc9..b5cc45358a474 100644
+index b5cc45358a474..8935a8e327904 100644
 --- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
 +++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-@@ -1273,7 +1273,13 @@ &usb_1 {
- };
+@@ -1295,6 +1295,14 @@ &usb_1_qmpphy {
  
- &usb_1_dwc3 {
--	dr_mode = "peripheral";
-+	dr_mode = "otg";
-+	usb-role-switch;
-+	port {
-+		dwc3_role_switch_in: endpoint {
-+			remote-endpoint = <&pm8150b_role_switch_out>;
+ 	vdda-phy-supply = <&vreg_l9a_1p2>;
+ 	vdda-pll-supply = <&vreg_l18a_0p92>;
++	orientation-switch;
++	ports {
++		port@1 {
++			qmpphy_typec_mux_in: endpoint {
++				remote-endpoint = <&pm8150b_typec_mux_out>;
++			};
 +		};
 +	};
  };
  
- &usb_1_hsphy {
-@@ -1359,5 +1365,16 @@ connector {
- 					 PDO_FIXED_DUAL_ROLE |
- 					 PDO_FIXED_USB_COMM |
- 					 PDO_FIXED_DATA_SWAP)>;
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				reg = <0>;
-+				pm8150b_role_switch_out: endpoint {
-+					remote-endpoint = <&dwc3_role_switch_in>;
+ &usb_2 {
+@@ -1375,6 +1383,12 @@ pm8150b_role_switch_out: endpoint {
+ 					remote-endpoint = <&dwc3_role_switch_in>;
+ 				};
+ 			};
++			port@1 {
++				reg = <1>;
++				pm8150b_typec_mux_out: endpoint {
++					remote-endpoint = <&qmpphy_typec_mux_in>;
 +				};
 +			};
-+		};
+ 		};
  	};
  };
 -- 
