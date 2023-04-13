@@ -2,117 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A9B6E0678
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 07:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AEFC6E06D6
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 08:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjDMFj2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Apr 2023 01:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50198 "EHLO
+        id S229893AbjDMGWW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Apr 2023 02:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjDMFj1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 01:39:27 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD584200;
-        Wed, 12 Apr 2023 22:39:24 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5aebdb.dynamic.kabel-deutschland.de [95.90.235.219])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 6215E60027FE8;
-        Thu, 13 Apr 2023 07:39:21 +0200 (CEST)
-Message-ID: <dbbf4556-2719-5827-efbd-da9e87c0de40@molgen.mpg.de>
-Date:   Thu, 13 Apr 2023 07:39:20 +0200
+        with ESMTP id S229836AbjDMGWV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 02:22:21 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D66B61A1;
+        Wed, 12 Apr 2023 23:22:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681366940; x=1712902940;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cZESwgIlk1I8vfBOGAvQXzooT82QEWSameprF1BTFBU=;
+  b=MhmFIszDQD0M34YSpH8O82a+wpBihnwM9u/GyoirSDpnh+N/ItlzGJTj
+   r0VOAntdGEElDj39/nrRmTbLPOtURU54ZrQwgMEYvpMxBuLq9dTzhJFdJ
+   r1XN4EwYYmGRmFPj7OaWqEV21jYNJUxqktMCcOrEBdZSkjuTOgS/oOWXj
+   TCiYHL1SUtfBAhI/1TDRttOaMO4fzeSgoZiM9tOrkPS67sa7YZbLIGRw8
+   H9VKqvv17IcVT7Y9GKgya2b2S70fT+bvuKfqe6lGtKfhgqpz7G89wM5D4
+   IQ6kDaf6FMfq+nkMnAX/NefXxClG+OitVfSJ25iECR3kWGKHPbFjFesW3
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="406936203"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="406936203"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 23:22:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="832996332"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="832996332"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 12 Apr 2023 23:22:16 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 13 Apr 2023 09:22:15 +0300
+Date:   Thu, 13 Apr 2023 09:22:15 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] usb: typec: ucsi: don't print PPM init deferred errors
+Message-ID: <ZDeflxzawVNxhsL7@kuha.fi.intel.com>
+References: <20230412161734.3425090-1-fabrice.gasnier@foss.st.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: btusb driver need to be unloaded and reloaded after boot & lag
- issue
-To:     help.7ocym@8shield.net
-References: <168133719213.7.14774994518515251513.119182329@8shield.net>
-Content-Language: en-US
-Cc:     linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        regressions@lists.linux.dev
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <168133719213.7.14774994518515251513.119182329@8shield.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230412161734.3425090-1-fabrice.gasnier@foss.st.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[Cc: +regressions@lists.linux.dev]
-
-Dear JLM,
-
-
-Am 13.04.23 um 00:06 schrieb help.7ocym@8shield.net:
-
-> sorry to address both list, but this issue seems related, without
-> knowing where lies the issue > my hardware : https://wiki.gentoo.org/wiki/Lenovo_Yoga_900
-> I use the pre-built gentoo linux kernel,
-> 6.2.8-gentoo-dist #1 SMP PREEMPT_DYNAMIC Wed Mar 22 17:15:39 -00 2023 x86_64 Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz GenuineIntel GNU/Linux
+On Wed, Apr 12, 2023 at 06:17:34PM +0200, Fabrice Gasnier wrote:
+> ucsi_init() may be deferred as usb_role_sw may be deferred in
+> ucsi_register_port(). This results in several PPM init failed (-517)
+> messages maybe printed several times upon boot, like on stm32mp135f-dk
+> board, until the role_switch driver gets probed.
 > 
-> since a few update (sadly I didn't noted the latest kernel version
-> that didn't had the issue), after a boot, the bluetooth isn't
-> working, nothing bad in dmesg, I just have to unload btusb module and
-> modprobe it again to have bluetooth working again...
+> [   19.880945] dwc2 49000000.usb: supply vusb_d not found, using dummy regulator
+> [   19.887136] dwc2 49000000.usb: supply vusb_a not found, using dummy regulator
+> [   19.975432] ucsi-stm32g0-i2c 0-0053: PPM init failed (-517)
+> [   20.155746] dwc2 49000000.usb: EPs: 9, dedicated fifos, 952 entries in SPRAM
+> [   20.175429] ucsi-stm32g0-i2c 0-0053: PPM init failed (-517)
+> [   20.184242] dwc2 49000000.usb: DWC OTG Controller
 > 
-> after a suspend to ram, I have to power off-power on the bluetooth to
-> have it work again (bluetoothctl power off; bluetoothctl power on)
+> Adopt dev_err_probe() instead of dev_err(), to only print other errors.
+> Also print an error in case the wait count has expired.
 > 
-> bluetooth mouse can also be extremely laggy sometimes,but without
-> error message in dmesg, most of the time `bluetoothctl power` off-on
-> cycling do solve the issue....
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> I also included the usb mailing list because it might be related to
-> some behavior I noticed :
-> 
-> I have usb3.0 micro sd card reader (SanDisk MobileMate UHS-I microSD
-> Reader/Writer USB 3.0 Reader, Kingston MobileLite Plus (MLPM) microSD
-> Card Reader USB 3.1 microSDHC/SDXC UHS-II, for example) and some
-> extra fast micro sd cards (like sandisk extrem 512G), when
-> transferring data the read rate can be as high as 110Mo/s and write
-> 70Mo/s sustained, nothing impressive but when such rate is achieved
-> for a long time (big file transfer) either reading only access,
-> writing only access or read write, the usb bus become unusable, I
-> can't even use a usb mouse connected to it by wire... even if cpu
-> usage is really low (less than 10%) I don't have the issue if I
-> connect a M2 usb3 flash drive, with comparable transfert speed... so
-> not related to some bus over usage...
-> 
-> so I suspect that there is an issue with the usb driver, and that
-> maybe the bluetooth issue can be related to the usb issue, since the
-> bluetooth controller is on the usb bus on the laptop >
-> the transfer issue of usb is much more older than the bluetooth
-> issue, it's approximative, but : >   - the btusb boot issue is about 3 month old,
->   - the suspend/resume issue of bluetooth is more than a year old
->   - the usb transfer issue as more than a year...
-> 
-> I'll gladly provide any useful information, can also do patch tries...
-As you use Gentoo and are able to build your own Linux kernel, the 
-fastest way to get these issues addressed is to bisect them. To shorten 
-the test cycles, I recommend to try, if you can reproduce the issues in 
-QEMU and passing through the problematic devices to the VM [1][2].
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index f632350f6dcb..4d809e0d7761 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1447,11 +1447,13 @@ static void ucsi_init_work(struct work_struct *work)
+>  
+>  	ret = ucsi_init(ucsi);
+>  	if (ret)
+> -		dev_err(ucsi->dev, "PPM init failed (%d)\n", ret);
+> +		dev_err_probe(ucsi->dev, ret, "PPM init failed\n");
+>  
+>  	if (ret == -EPROBE_DEFER) {
+> -		if (ucsi->work_count++ > UCSI_ROLE_SWITCH_WAIT_COUNT)
+> +		if (ucsi->work_count++ > UCSI_ROLE_SWITCH_WAIT_COUNT) {
+> +			dev_err(ucsi->dev, "PPM init failed, stop trying\n");
+>  			return;
+> +		}
+>  
+>  		queue_delayed_work(system_long_wq, &ucsi->work,
+>  				   UCSI_ROLE_SWITCH_INTERVAL);
+> -- 
+> 2.25.1
 
-I also recommend to start a separate thread for each issue and, as these 
-seem to be regressions, also keep the regression folks in the loop [3].
-
-
-Kind regards,
-
-Paul
-
-
-[1]: 
-https://lore.kernel.org/all/5891f0d5-8d51-9da5-7663-718f301490b1@molgen.mpg.de/
-      (The commands were working for after all, and the device didn’t 
-show up due to a (second) Linux kernel regression.)
-[2]: https://station.eciton.net/qemu-usb-host-device-pass-through.html
-[3]: 
-https://www.kernel.org/doc/html/latest/admin-guide/reporting-regressions.html
+-- 
+heikki
