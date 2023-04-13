@@ -2,128 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612666E0975
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 10:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50256E0989
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 11:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbjDMI4H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Apr 2023 04:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
+        id S230128AbjDMJAB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Apr 2023 05:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjDMIzf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 04:55:35 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129C09750;
-        Thu, 13 Apr 2023 01:54:32 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33D8rThtD028776, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33D8rThtD028776
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 13 Apr 2023 16:53:29 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 13 Apr 2023 16:53:51 +0800
-Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 13 Apr 2023 16:53:51 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
- 15.1.2507.17 via Frontend Transport; Thu, 13 Apr 2023 16:53:51 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Stanley Chang <stanley_chang@realtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,parkmode-disable-hs-quirk' quirk
-Date:   Thu, 13 Apr 2023 16:53:50 +0800
-Message-ID: <20230413085351.26808-1-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.40.0
+        with ESMTP id S230193AbjDMI7g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 04:59:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08BF93EA;
+        Thu, 13 Apr 2023 01:57:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CD4D60F51;
+        Thu, 13 Apr 2023 08:57:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E76DEC433EF;
+        Thu, 13 Apr 2023 08:57:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681376265;
+        bh=ESKq4Yc4rw95zXlQHJsWDTT7htc0nkptP1B5meprI2s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=myX/JUKqLGrxp5j+ucexvpLLZGyzPqOh7io0Nv6yqjdZAm6RvgYjLRqzgDbS1QPxS
+         5XC0MkXbcv8lj1f4bkkKxrMm+z0HL2Nky4nY4NcBS0I+poEi+gowJR8Bc/Vfncerda
+         SDxfYsnh4Xaj4yk1c3nkR67mczHNiX+6R1QRDjLro23lrKwIdBSURferIoFenHPV0e
+         kmXxNFt+U9rNDHu5Ka9frhGkehtQX1srGgQGj0dqlP6MOFHS/yhsr/lqnaNKWhRvJt
+         uoUg7DyAIV+EeM6kA9WDeMV9G69jhHMUoJlJKB4kQhxi5a0ImyQDZCrhTPcexbflmO
+         E3//COcDggBMQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pmsm4-000092-Qe; Thu, 13 Apr 2023 10:57:48 +0200
+Date:   Thu, 13 Apr 2023 10:57:48 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jarkko Sonninen <kasper@iki.fi>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
+Message-ID: <ZDfEDOihHTIDlbx+@hovoldconsulting.com>
+References: <20230313010416.845252-1-kasper@iki.fi>
+ <20230314070002.1008959-1-kasper@iki.fi>
+ <ZBAkOr0epPPICLNP@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXMBS03.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 04/13/2023 08:33:39
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 176677 [Apr 13 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: stanley_chang@realtek.com
-X-KSE-AntiSpam-Info: LuaCore: 509 509 b12bcaa7ba85624b485f2b6b92324b70964a1c65
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;realtek.com:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 04/13/2023 08:36:00
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIzLzQvMTMgpFekyCAwNjozODowMA==?=
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBAkOr0epPPICLNP@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add a new 'snps,parkmode-disable-hs-quirk' DT quirk to dwc3 core for
-disable the high-speed parkmode.
-
-For some USB wifi devices, if enable this feature it will reduce the
-performance. Therefore, add an option for disabling HS park mode by
-device-tree.
-
-In Synopsys's dwc3 data book:
-In a few high speed devices when an IN request is sent within 900ns of the
-ACK of the previous packet, these devices send a NAK. When connected to
-these devices, if required, the software can disable the park mode if you
-see performance drop in your system. When park mode is disabled,
-pipelining of multiple packet is disabled and instead one packet at a time
-is requested by the scheduler. This allows up to 12 NAKs in a micro-frame
-and improves performance of these slow devices.
-
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
----
-v2 to v3 change:
-1. Add the comment message.
-2. cc the right maintainers.
----
- Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index be36956af53b..45ca967b8d14 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -232,6 +232,11 @@ properties:
-       When set, all SuperSpeed bus instances in park mode are disabled.
-     type: boolean
+On Tue, Mar 14, 2023 at 08:37:30AM +0100, Greg Kroah-Hartman wrote:
+> On Tue, Mar 14, 2023 at 09:00:01AM +0200, Jarkko Sonninen wrote:
+> > Add support for RS-485 in Exar USB adapters.
+> > RS-485 mode is controlled by TIOCGRS485 and TIOCSRS485 ioctls.
+> > Gpio mode register is set to enable RS-485.
+> > 
+> > Signed-off-by: Jarkko Sonninen <kasper@iki.fi>
+> > ---
  
-+  snps,parkmode-disable-hs-quirk:
-+    description:
-+      When set, all HighSpeed bus instances in park mode are disabled.
-+    type: boolean
-+
-   snps,dis_metastability_quirk:
-     description:
-       When set, disable metastability workaround. CAUTION! Use only if you are
--- 
-2.34.1
+> > @@ -237,6 +238,7 @@ static const struct xr_type xr_types[] = {
+> >  struct xr_data {
+> >  	const struct xr_type *type;
+> >  	u8 channel;			/* zero-based index or interface number */
+> > +	u32 rs485_flags;
+> 
+> Nit, you might want to move this up above channel as you now have a hole
+> in this structure.  Not like it's that big of a deal so if you don't
+> have to respin this no need to change.
 
+Generally, it's better to keep related fields together than worry about
+holes so the above is just fine.
+
+Johan
