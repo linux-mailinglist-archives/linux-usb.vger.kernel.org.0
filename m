@@ -2,121 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E155D6E0D5E
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 14:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4206E0DE6
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 15:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjDMMUS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Apr 2023 08:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
+        id S230147AbjDMNAo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Apr 2023 09:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjDMMTs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 08:19:48 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2123.outbound.protection.outlook.com [40.107.113.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B65F59ED;
-        Thu, 13 Apr 2023 05:19:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=baL34Ycg+ruWpFgre4B+Wtq7xkUhyBeIurBkZvP7/1RvXBtE9qX8BpxjY/pp2C0gtizR2GQ2g2MoYxjEz3+0PX5itlmE137icVWayaAMHPBplrk6b282bObxS6CdQbLtz2y2DWrsswB6WZt2Iwmf6o2wi0TU9lpgOEHPQtUSYTdC7ZKnrwjSNImaUYfMSyYM+xE/zmWM6Jeq4ZddoIaDK2dlBTlChIfNg1akDAFxdDtB0QPyXJJ++rroBL9jvuhVha9eEzyUKfF9q730d7i5fos2D3OwFj6zxhLJpD4dLAMC0Atl80rNLVHF/OY4ZrBs/U9QeehopQNuG1WWiTQ4Ow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sTp6zH9eSlPzu+4y7fHNMQsNRk8XCzcWq4wog8jb0Xw=;
- b=Mk3qjAJZofzv6m0VopbCLEgowKjco4SkMDbmz6EOOdcC98rFRs7LAKRPl4d7qVQd7Yp2t727rJ/ZtB+Augo8CAc2tWXxY9zjmYa1UDuJncFx7nq7cAEcMZtG8bR/zeWL9oVnnOLycCDaJvjqD9QpO7KtnT5EujLH2PsdBdcMQVI3Xu46dNj2mNu/gCSjpch2zb8ANtcWL0RgVClPRJ9zF/UI4USGcvHX1jKTb5+a+lT3EBLYMv2TmSgRPB8TsF4n712lIqxRGmTqK8GHJoxozPHKmaqHMyd64zM9JByUSVhS6CGNR92cbiYT9CIMVLwpEIb3rnG4+S+gCMy8/demhA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sTp6zH9eSlPzu+4y7fHNMQsNRk8XCzcWq4wog8jb0Xw=;
- b=biDPU28WklldxuG20E0DvcVR9LwWZyuCplrq7cPHRjHeQQPFQaIfhhy9e4C/HH/I1Nq3I+L5kjuoLo5mSFAU+nRtXMzmJUtZgw7bYasDPUiGq9qn8BZ0J6QjLD/coztCLIeLAcBeFMesgIvie71znNdMA66jdNRQhjELD+bq+Z0=
-Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
- (2603:1096:404:8028::13) by TY3PR01MB11689.jpnprd01.prod.outlook.com
- (2603:1096:400:372::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Thu, 13 Apr
- 2023 12:19:44 +0000
-Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
- ([fe80::5198:fdcf:d9b1:6003]) by TYBPR01MB5341.jpnprd01.prod.outlook.com
- ([fe80::5198:fdcf:d9b1:6003%5]) with mapi id 15.20.6298.030; Thu, 13 Apr 2023
- 12:19:44 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Zheng Wang <zyytlz.wz@163.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hackerzheng666@gmail.com" <hackerzheng666@gmail.com>,
-        "1395428693sheep@gmail.com" <1395428693sheep@gmail.com>,
-        "alex000young@gmail.com" <alex000young@gmail.com>
-Subject: RE: [RESEND PATCH] usb: renesas_usbhs: Fix use after free bug in
- usbhs_remove due to race condition
-Thread-Topic: [RESEND PATCH] usb: renesas_usbhs: Fix use after free bug in
- usbhs_remove due to race condition
-Thread-Index: AQHZbdydGLUAyDfN4E2IecDn5BDiuq8pJMhQ
-Date:   Thu, 13 Apr 2023 12:19:44 +0000
-Message-ID: <TYBPR01MB5341FED435E5533E4B60B10CD8989@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-References: <20230413074926.239605-1-zyytlz.wz@163.com>
-In-Reply-To: <20230413074926.239605-1-zyytlz.wz@163.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYBPR01MB5341:EE_|TY3PR01MB11689:EE_
-x-ms-office365-filtering-correlation-id: cd199afc-2e97-4b39-86c6-08db3c195dc0
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TpuvtZZY3XAG/vtjPXqGim5LmJRx9VzyRrZbDkdxb3UF5J0FdqMUSH+47QxHu562Z88Xw9PD+GeK3gFtGeicTA0ZkfgCNYEets6gGHwmIZkF0BlStc4nZUmdxF/DzFld8TN5sCmKKJKpjofYAOXk7b9u0PfsoxoAwA2YZ5AsxmaT91wfWAv84DlxD5rJfCcG41MPx2oQaS39OgIG0EnCkb80KdtKD4mUwYuY/KVlV5u6rLjoPN9OBfdGP9ixwyp6PZqZwc/Dk5ZUzSFNrzDPtl4zhMqAZUJpgA90VKXUMcVyACeepABC6GMu8UWAKED4Iuk1Wg9yqCaNxxZhWeAU+DFh0/3JItvJiE47SMwzo0W5nQNalKa+kwjvrt9k93x/hwcsgbWTWiguWxq7KlQadF4rFYUO80dpc1CQQBAsQScthkZabl6epIWT0T8HoT2klM6szK3J7DPRP81Z6+JjoO5OD0DpglUZuuSBU8h8DIM5AOyTiisCkaAAv2nJNS7XPOn3kTDstLdV28BJGfhKBraaYm+4DgbjyY+l0Pge1cwwdQ8DiPwFsXENwm0s2J9uINuriGITQV9cJuXRHKjniLBeMJBMMtbk/QfBCqXyyI4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYBPR01MB5341.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(396003)(376002)(39860400002)(346002)(451199021)(316002)(38100700002)(4326008)(64756008)(66446008)(66556008)(66946007)(76116006)(66476007)(5660300002)(41300700001)(52536014)(7696005)(71200400001)(966005)(86362001)(54906003)(6506007)(186003)(9686003)(38070700005)(2906002)(8676002)(8936002)(55016003)(478600001)(33656002)(122000001)(110136005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?L7sQtPepsaxS+jn8O8etH2oX4ZOS9JIKvjclNJZY+R+mS78wH1YmuDJamIvK?=
- =?us-ascii?Q?RcBmNxq3pun7XIPFSat6EljlEh31IihrTn76MVQsBg2PylAxgJi0oAAVFQOZ?=
- =?us-ascii?Q?DbhO2GWKsQhXvaCBpXOCno2MSmGlTXqnZ2NFhpxc0pAVUYkQasJ5U97lRf4M?=
- =?us-ascii?Q?FcEKr1waumCk53YLJvU/a3gABRVT+v8t3QMA6UnfcrkTWKHgfTu0Zpam/BGt?=
- =?us-ascii?Q?YJFfiWWx1S6EDlnJQPXQ0//q0uuIjBz+DEYfkEBCt/XrrgO5jPgTQXDPILNk?=
- =?us-ascii?Q?A3eRP05OyzjIIdHjAAEBLmtuks/TWSgK5HEOZDhuOmgWMX2YUlSe+iFamXQh?=
- =?us-ascii?Q?4IYASs6mgxeryqtPyK/B5RJssOISPOqtB/komem5qBfj2SYRL5ZV0rIRCqsd?=
- =?us-ascii?Q?OouMFmAiXdLNn5M6meId29N/jYbhI9rZI+JWOJZ0Ihm7TBtXMxGp6eONjJ7h?=
- =?us-ascii?Q?BEbb+dY4EfikL14kwPZxUAfYRCv86bJcYRkConjvhKGfBi82uqXdLl0Rg7RT?=
- =?us-ascii?Q?mQyEjA9HWxAfhmEx0hHG3osJqiHPN2fOkugvlcQOzVFWyrLJpeSyEJIEc9Jd?=
- =?us-ascii?Q?WqseCqr0VKUXP5s8RYB5+xvsTxP+v7WJ1UT+/x2IW0sqpelg4GE7gDwF7r4p?=
- =?us-ascii?Q?64AZD1ysit6SPNByPffvViry0Tw46smIEyJAnVRIHuHvC3Up38YCzpP7IG1S?=
- =?us-ascii?Q?3OtvCkaS84/64cFf+Zb11qmS53jspb4ZG4Xdw/LUxanlkDfNu8iHTep0PuX0?=
- =?us-ascii?Q?sX6+wWOP5zxCpS34w1TROWPXm2J2zCSo23R5WJBCAcRmtiTjrSjzUKAcpAkF?=
- =?us-ascii?Q?TG6yUFnmT0k+UZrgfjfzLCxc4metG9UR5SSSKP3DS4wzw9VBERHGqjZ37ScF?=
- =?us-ascii?Q?7vD/wUT82NiWn+d7ndrWpN3rr0qHld2vixoieUc12UNh4L8VcOHCjzWgDSG1?=
- =?us-ascii?Q?zcY0ozb16oBOff9etXGg98g2nuiHL+Mnof38cUkxQsPk8bX7g674qZBPQlGE?=
- =?us-ascii?Q?ORZNjpeP4m/+2eYGr5B6bGJBgGVU1uuIdcQM+hAb+JwAq92z2RuLYhZoZRh3?=
- =?us-ascii?Q?vAlqQ17a77weSaZemAvw67nQmp1yidewDnGqjbCkeC8PObuFtNn6vhInozrz?=
- =?us-ascii?Q?JfXZkkdINApphfip/ej3hiFXo5Ia3N+KK173U4Mn/1sc/EhGrwb4d6X4g3k1?=
- =?us-ascii?Q?ulnDk553scm1JmNXubLEUKpx5OPBmO4MmhliNJ9x0Hrlq3RylSjTVlOv6viS?=
- =?us-ascii?Q?9QVg7ZrYtJdGt44JOBJ2K0AczvWbujCfmxPo8q5auufKKy5JQeQ57bPmx88I?=
- =?us-ascii?Q?N47NbPjxyjjSzePyvM9jfvmQiH01ZEIYy+1gYlJ/Hg9ifbfbOBRV2y7I5xRX?=
- =?us-ascii?Q?zP6cHFh6t9HhuObOSu7DDJjqomOs+n9oUKlY2SbPG0BvK/QqGr8QyZBgCu/n?=
- =?us-ascii?Q?8uoZO+LQi8KAQ7QXTNBhidrBKrlcIZ03wsk5KijX0LVRX+2OSiLJUNhH/74J?=
- =?us-ascii?Q?7kFPYTPkPGp+PogDAjz4ZYgLYQJrIisVvnjsgsLvwwaRR7L6YuIS7qIynqps?=
- =?us-ascii?Q?R9LA0RyFgvENt9RtP5CAE8P3Jnf8RQmI/93wLsDinpCwbcqjjcS2iJygr249?=
- =?us-ascii?Q?qeeCugBrnJAPY2vww58g1N4gd41L9W5xxu4NYdzvJtpQW9LT4w9aY7qlRsZ3?=
- =?us-ascii?Q?a7sAtQ=3D=3D?=
+        with ESMTP id S230137AbjDMNAn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 09:00:43 -0400
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBDC93D9;
+        Thu, 13 Apr 2023 06:00:41 -0700 (PDT)
+Received: by mail-oo1-f48.google.com with SMTP id bp9-20020a056820198900b005414beaa075so4505532oob.8;
+        Thu, 13 Apr 2023 06:00:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681390841; x=1683982841;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8wfgGByHfdJ08Wr+lWIbZNkFievhpJuq8NSnds9ngVg=;
+        b=koPrR3WSvIR9bX+SawhHtGG1aeApwQ1KP3KPtGc7z4xzTVsWLJF+Fg/faJ8IdjExUM
+         +5d22uOif7IK0L+RHvJ0expYQAxrj5QSP9lSUaW1GuSXVzXsJYlYzpGQs7SW0PTHRv6w
+         bXNKgUmkZHhwzWA16DDHNuVkvp0zdCHmd6VX8tnmXShk+G6HaRcPFe7tFlnBFa/obi1K
+         CoNEi3mXfQ1geD3sq/jmoXKdFUuuYBFo2XFdRckkTydurxROF+/431nXZoTQVhJgviGT
+         d7uuxWjihtkPrAFG4pspEB5zWX/6eSFHmwAn8F402O2gmJP9UEfoxMdldhw7BgPwZ4nQ
+         H4uQ==
+X-Gm-Message-State: AAQBX9dmUCr8nNuC9f/Bzfi4cD+oRmOETyid4rrDKezZ/ibT6qJp1W+2
+        CNpFPWHTGd8Pw9dMqYxTwQ==
+X-Google-Smtp-Source: AKy350YowH7B9fmcOXSowhNDvvT1rZtphj7sGFoP3nHOx9sYmmIDSimY2y2wdMEqgAujrFACUFt14w==
+X-Received: by 2002:a4a:4589:0:b0:53e:133e:28cf with SMTP id y131-20020a4a4589000000b0053e133e28cfmr890571ooa.1.1681390840836;
+        Thu, 13 Apr 2023 06:00:40 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h42-20020a056870172a00b001762ce27f9asm674447oae.23.2023.04.13.06.00.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 06:00:40 -0700 (PDT)
+Received: (nullmailer pid 681755 invoked by uid 1000);
+        Thu, 13 Apr 2023 13:00:39 -0000
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYBPR01MB5341.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd199afc-2e97-4b39-86c6-08db3c195dc0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Apr 2023 12:19:44.7279
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: T5SnbuoF8Kwm/WKWK/AUJaG17THowktMVQuUrvqMhJXLCCWE1xC8iJTg11QYPXefrd09x6MRqIE29+GHbwOehT0Gq7ZRlpAy3ubL9CPJntPmtwxNboiunt7dwQsNZi0K
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB11689
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+From:   Rob Herring <robh@kernel.org>
+To:     Stanley Chang <stanley_chang@realtek.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230413042503.4047-1-stanley_chang@realtek.com>
+References: <20230412033006.10859-2-stanley_chang@realtek.com>
+ <20230413042503.4047-1-stanley_chang@realtek.com>
+Message-Id: <168139061467.672124.12193026400229130255.robh@kernel.org>
+Subject: Re: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add
+ 'snps,global-regs-starting-offset' quirk
+Date:   Thu, 13 Apr 2023 08:00:39 -0500
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -124,78 +68,60 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
 
-> From: Zheng Wang, Sent: Thursday, April 13, 2023 4:49 PM
->=20
-> In usbhs_probe, &priv->notify_hotplug_work is bound with
-> usbhsc_notify_hotplug. It will be started then.
->=20
-> If we remove the driver which will call usbhs_remove
->   to make cleanup, there may be a unfinished work.
->=20
-> The possible sequence is as follows:
->=20
-> Fix it by finishing the work before cleanup in the usbhs_remove
->=20
-> CPU0                  CPU1
->=20
->                     |usbhsc_notify_hotplug
-> usbhs_remove         |
-> usbhs_mod_remove     |
-> usbhs_mod_gadget_remove|
-> kfree(gpriv);       |
->                     |usbhsc_hotplug
->                     |usbhs_mod_call start
->                     |usbhsg_start
->                     |usbhsg_try_start
->                     |//use gpriv
-
-Thank you for the patch!
-
-You should adjust the figure like followings because Greg mentioned it on o=
-ther patch [1].
------
-CPU0                      CPU1
-
-                        | usbhsc_notify_hotplug
-usbhs_remove            |
-usbhs_mod_remove        |
-usbhs_mod_gadget_remove |
-kfree(gpriv);           |
-                        | usbhsc_hotplug
-                        | usbhs_mod_call start
-                        | usbhsg_start
-                        | usbhsg_try_start
-                        | //use gpriv
------
-
-[1]
-https://lore.kernel.org/lkml/ZBNCam0XjWehrF3c@kroah.com/
-
-Best regards,
-Yoshihiro Shimoda
-
-> Fixes: bc57381e6347 ("usb: renesas_usbhs: use delayed_work instead of wor=
-k_struct")
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+On Thu, 13 Apr 2023 12:25:03 +0800, Stanley Chang wrote:
+> Add a new 'snps,global-regs-starting-offset' DT to dwc3 core to remap
+> the global register start address
+> 
+> The RTK DHC SoCs were designed the global register address offset at
+> 0x8100. The default address is at DWC3_GLOBALS_REGS_START (0xc100).
+> Therefore, add the property of device-tree to adjust this start address.
+> 
+> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
 > ---
->  drivers/usb/renesas_usbhs/common.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usb=
-hs/common.c
-> index 96f3939a65e2..17a0987ef4f5 100644
-> --- a/drivers/usb/renesas_usbhs/common.c
-> +++ b/drivers/usb/renesas_usbhs/common.c
-> @@ -768,6 +768,7 @@ static int usbhs_remove(struct platform_device *pdev)
->=20
->  	dev_dbg(&pdev->dev, "usb remove\n");
->=20
-> +	cancel_delayed_work_sync(&priv->notify_hotplug_work);
->  	/* power off */
->  	if (!usbhs_get_dparam(priv, runtime_pwctrl))
->  		usbhsc_power_ctrl(priv, 0);
-> --
-> 2.25.1
+>  v1 to v2 change:
+> 1. Change the name of the property "snps,global-regs-starting-offset".
+> ---
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml: properties:snps,global-regs-starting-offset: 'oneOf' conditional failed, one must be fixed:
+	'type' is a required property
+		hint: A vendor boolean property can use "type: boolean"
+	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml: properties:snps,global-regs-starting-offset: 'oneOf' conditional failed, one must be fixed:
+		'enum' is a required property
+		'const' is a required property
+		hint: A vendor string property with exact values has an implicit type
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml: properties:snps,global-regs-starting-offset: 'oneOf' conditional failed, one must be fixed:
+		'$ref' is a required property
+		'allOf' is a required property
+		hint: A vendor property needs a $ref to types.yaml
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
+	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230413042503.4047-1-stanley_chang@realtek.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
