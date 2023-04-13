@@ -2,354 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62276E0FD2
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 16:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E176E1081
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 16:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjDMOUA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Apr 2023 10:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
+        id S231396AbjDMO6X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Apr 2023 10:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbjDMOTv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 10:19:51 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8BC7DAA
-        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 07:19:48 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id j17so28193896ejs.5
-        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 07:19:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1681395587; x=1683987587;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pb/QYBj5DO4S8x7hRJ0EcLzAuGXstOMjS8bk47CPw2E=;
-        b=dyDQtEKltsETKHLJU2vVgS3MK1Rcnh25wvcXpQgWUSByyqk25whjbf5oto0PDg67/T
-         OsqN0Uc9VPtMaBArVcebe3sui5BpkY75PCO/8jZ9QvbYWKvHTgOi/rwFafeiYyK4ZV+d
-         f7z0v768dhv2YXfeA4baaWlHeK0Mp5Wave202UTpfyIhrLNewApYU5S1SY8Y06PKM5sx
-         qVHqy3AGNlag9CZ+/FaRWumtxKn55hBYS8ugWOo/rc07TnZJbo1md3L4fuBF45sg5+7J
-         UQbMD8vkNdbCvR8KPLJcIdAb7Alg3YyIRxXhgSJFv/QtpJLFSTqZ5KKSICQehKSlcvrj
-         56dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681395587; x=1683987587;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Pb/QYBj5DO4S8x7hRJ0EcLzAuGXstOMjS8bk47CPw2E=;
-        b=Bhvma8uL85N6CMSY09OqPv2z/8sHTfT/2IcE3fMTb6aj3peuJcL/nFu/msGZXDx1vx
-         8G2DU9fogEHOgUkRHZLYofUMKwyXf8+gNdjsVNpy8L718qYeItcNyEEnQkTwIRswrpnf
-         6NpkwrRHq9AFj9rGLBUERI/g8EfD8Amv19d+TzvhTvw2GfKi+8wuT8CdJmEowd4nRb0N
-         u0NOktPnnel17DmF5mHoDui9i+M+i0zaUIdqmjKwxvTALSkZMp6XWL+ZUhrk+/S6fxC9
-         5qV4/h7pforT74gujBuPlPi9KfvSrCMvrQGMAa9c3xk97YSR8pqZ8TUDuMkK5FMNqloi
-         L3Kw==
-X-Gm-Message-State: AAQBX9dbO1bALPTSIi8zxlrRs0vjcZViMR0g8XYX8SesJbBMQ/NSev9j
-        kUdRYdLLymZ4SQ2gpdiiknPBVPwbzcL7H8TQaA+c3g==
-X-Google-Smtp-Source: AKy350ZG6s81Qaa8AkdJTOa6y49nPcMfc4Fhj7jq65G3njv0qEv5S7F0xk1OJWGovvDhtWWO1Dn1Gw==
-X-Received: by 2002:a17:906:6dc3:b0:94e:7bde:3108 with SMTP id j3-20020a1709066dc300b0094e7bde3108mr3684423ejt.27.1681395586705;
-        Thu, 13 Apr 2023 07:19:46 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id ov5-20020a170906fc0500b00931baabe36csm1048007ejb.63.2023.04.13.07.19.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 07:19:46 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 13 Apr 2023 16:19:45 +0200
-Message-Id: <CRVOZOPMKBX4.2T7FOCWF0RKBJ@otso>
-Subject: Re: [PATCH v5 00/14] Add Qualcomm PMIC TPCM support
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        <linux@roeck-us.net>, <heikki.krogerus@linux.intel.com>,
-        <gregkh@linuxfoundation.org>, <andersson@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Cc:     <caleb.connolly@linaro.org>, <konrad.dybcio@linaro.org>,
-        <subbaram@quicinc.com>, <jackp@quicinc.com>,
-        <robertom@qti.qualcomm.com>
-X-Mailer: aerc 0.14.0
-References: <20230413113438.1577658-1-bryan.odonoghue@linaro.org>
-In-Reply-To: <20230413113438.1577658-1-bryan.odonoghue@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        with ESMTP id S230315AbjDMO6W (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 10:58:22 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546AEA260;
+        Thu, 13 Apr 2023 07:58:17 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33DEvePkB015836, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33DEvePkB015836
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 13 Apr 2023 22:57:40 +0800
+Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Thu, 13 Apr 2023 22:58:02 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 13 Apr 2023 22:58:02 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
+ RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
+ 15.01.2375.007; Thu, 13 Apr 2023 22:58:02 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: RE: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,global-regs-starting-offset' quirk
+Thread-Topic: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add
+ 'snps,global-regs-starting-offset' quirk
+Thread-Index: AQHZbO8UV6MphwFb1U6iZXdc0JZwLK8oH9uAgAA0XICAAQIqgA==
+Date:   Thu, 13 Apr 2023 14:58:01 +0000
+Message-ID: <9f6abbe7a6fd479c98e2fd6c1080ad8a@realtek.com>
+References: <20230412033006.10859-2-stanley_chang@realtek.com>
+ <20230413042503.4047-1-stanley_chang@realtek.com>
+ <167e4a8c-3ebd-92b7-1481-947f08901f97@kernel.org>
+In-Reply-To: <167e4a8c-3ebd-92b7-1481-947f08901f97@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Bryan,
-
-On Thu Apr 13, 2023 at 1:34 PM CEST, Bryan O'Donoghue wrote:
-> V5:
-> - Amagamates into once device, Heikki, Rob
->
-> - Takes feedback on usage form Luka and Jianhua on VSafeV state transitio=
-n detection
->   dev_err() -> dev_warn()
->
-> - Orientation graph example and general expected bindings
->   I discussed offline with Bjorn the conclusions of the glink/sbu model.
->   The expected orientation-switch path is
->     connector/port@0 <-> phy/port@X <-> dp/port@0
->   This can then be expanded to
->     connector/port@0 <-> redriver/port@0 <-> phy/port@X <->  dp/port@0
->
->   - Rob, Bjorn, Krzysztof
->
-> - Data role
->   The data-role path is
->     connector/port@0 <-> dwc3/port@Y=20
-
-I believe I have adjusted my dts correctly for v5 compared to v4 but now
-the usb doesn't seem to work anymore in most cases.
-
-Only when having the phone already plugged in during boot in one
-orientation does USB come up, but also disappears once you replug the
-cable. I still see the same (or at least visually similar) messages when
-plugging in the USB cable or the USB stick but nothing more than that
-happens.
-
-Not that v4 worked perfectly on pm7250b+sm7225(/sm6350) but at least it
-worked in most cases as described in the emails there. Since the driver
-structure changed quite a bit, git diff isn't helpful here
-unfortunately.
-
-Don't think it matters but worth mentioning that sm6350 uses the new
-qmpphy bindings as described in qcom,sc8280xp-qmp-usb43dp-phy.yaml (this
-was also the case when testing v4 of this).
-
-Any idea?
-
-Regards
-Luca
-
->
-> Previous set:
-> https://lore.kernel.org/linux-arm-msm/20230318121828.739424-1-bryan.odono=
-ghue@linaro.org/
->
-> Bootable:
-> https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/linux-next-23-04=
--12-pm8150b-tcpm-qcom-wrapper-typec-mux
->   =20
-> V4:
-> - Per Rob's input the pdphy and type-c appear as stadalone blocks
->   inside of the PMIC declaration which is a 1:1 mapping of PMIC hardware.
->   The TCPM virtual device is declared at the top-level.
->   https://lore.kernel.org/all/YY7p7jviA3ZG05gL@robh.at.kernel.org/
->
-> - Squashes the removal of the old driver with the addition of the new. - =
-Heikki, Gunter
->   https://lore.kernel.org/all/YYVHcHC1Gm92VxEM@kuha.fi.intel.com/
->
-> - Reworked Dmitry's old patch for the QMP to account for file renames and
->   very minimal code-drift in the interregnum.
->
-> - New yaml checks drive update of PMIC VBUS yaml
->
-> - Some housekeeping on the sc7180 yaml side. sc7180 is not supported yet.
->
-> - Expands and fixes the examples being added in the PMIC tcpm examples.
->
-> Previous set:
-> https://lore.kernel.org/all/20211105033558.1573552-1-bryan.odonoghue@lina=
-ro.org/
->
-> Bootable:
-> https://git.codelinaro.org/bryan.odonoghue/kernel/-/commits/linux-next-23=
--03-18-pm8150b-tcpm-qcom-wrapper-typec-mux
->
-> V3:
-> Rob Herrings review
->
-> - Drops use of remote-endpoint and ports to bind
->   tcpm to pdphy and typec replacing with phandle
->
-> - Drops pmic-pdphy-* and pmic-typec-* from interrupt names
->   as suggested
->
-> - Passes make dt_binding_check DT_CHECKER_FLAGS=3D-m
->
-> BOD
-> - Noticed qcom_pmic_tcpm_pdphy_enable() was missing a
->   regulator_disable in case of an error, added.
->
-> - qcom_pmic_tcpm_pdphy_probe()
->   devm_regulator_get() should come before regmap_get()
->   as is the case in qcom_pmic_tcpm_typec_probe()
->
-> - Fixes compatible name in qcom,pmic-typec.yaml should
->   have read qcom,pm8150b-typec not qcom,pm8150b-usb-typec
->
-> - Makes sure compat for core is "qcom,pm8150b-tcpm" in
->   docs and driver
->
-> - Drops redundant return in void qcom_pmic_tcpm_pdphy_reset_off()
->
-> Kernel Robot
-> - Drops unused variable debounced in qcom_pmic_tcpm_typec_get_cc()
->
-> - Drops unsused variable orientation in qcom_pmic_tcpm_typec_set_cc()
->
-> Latest bootable series can be found here:
-> Link: https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=3Du=
-sb-next-04-11-21-pm8150b-tcpm-v3
->
-> git diff usb-next-27-10-21-pm8150b-tcpm-v2 -- drivers/usb/typec/tcpm/qcom=
-/
-> git diff usb-next-27-10-21-pm8150b-tcpm-v2 -- Documentation/devicetree/bi=
-ndings/usb/qcom,pmic*
->
-> Previous set:
-> Link: https://lore.kernel.org/linux-usb/20211028164941.831918-1-bryan.odo=
-noghue@linaro.org/T/#t
->
-> V2 resend:
-> - Adding omitted devicetree mailing list
->
-> V2:
->
-> Guenter Roeck's review
-> - Converts suggested qcom_pmic_tcpm_core.c into one-liners
->
-> - Adds comment on how polarity is set in set_polarity()
->
-> - Removes optional set_current_limit()
->
-> - regmap_read/regmap_write
->   Reviwing other pm8150b/spmi drivers I then added in checks for all
->   reamap_read()/regmap_write() calls.
->
-> - Fixes (type =3D=3D TCPC_TX_CABLE_RESET || TCPC_TX_HARD_RESET)
->   thanks I definitely had the blinkers on there and didn't see that at al=
-l
->
-> - qcom_pmic_tcpm_pdphy_pd_transmit_payload()
->   Treats regmap_read and read value as separate error paths
->
-> - qcom_pmic_tcpm_pdphy_set_pd_rx()
->   Replaces boolean if/else with !on as suggested
->
-> - Returns -ENODEV not -EINVAL on dev_get_regmap() error
->
-> - qcom_pmic_tcpm_pdphy_pd_receive()
->   Guenter asks: "No error return ?"
->   bod: No we are inside an ISR here if we read data we pass that off to T=
-CPM
->        if somehow we don't read the data - it is "junk" there's no value =
-IMO
->        in pushing an error upwards back to the handler.
->
-> Heikki Krogerus' review
-> - Includes Makefile I missed adding to my git index
->
-> - Removes old Kconfig entry for remove driver
->
-> Randy Dunlap's review=20
-> - Rewords drivers/usb/typec/tcpm/Kconfig
->
-> - Drops tautology "aggregates togther"
->
-> - Corrects spelling typos
->
-> BOD's own review
-> - Drops redundant include of regmap.h in qcom_pmic_tcpm_core.c
->
-> - Propogates qcom_pmic_tcpm_pdphy_disable() error upwards
->
-> - Propogates pmic_pdphy_reset() error upwards
->
-> - Drops error prints in qcom_pmic_tcpm_pdphy_pd_transmit_payload()
->   I had these in-place during development and don't recall them being
->   triggered even once, they are redundant, remove.
-> =20
-> Differences between the two can be seen by
-> git diff usb-next-27-10-21-pm8150b-tcpm-v2..usb-next-25-10-21-pm8150b-tcp=
-m -- drivers/usb/typec/tcpm
->
-> Latest bootable series can be found here:
-> Link: https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=3Du=
-sb-next-27-10-21-pm8150b-tcpm-v2
->
-> Previous set:
-> Link: https://lore.kernel.org/all/20211025150906.176686-1-bryan.odonoghue=
-@linaro.org/T/#t
->
-> V1:
-> This series adds a set of yaml and a driver to bind together the type-c a=
-nd
-> pdphy silicon in qcom's pm8150b block as a Linux type-c port manager.
->
-> As part of that we retire the existing qcom-pmic-typec driver and fully
-> replicate its functionality inside of the new block with the additional
-> pdphy stuff along with it.
->
-> An additional series will follow this one for the SoC and RB5 dtsi and dt=
-s
-> respectively.
->
-> A bootable series can be found here
->
-> Link: https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=3Du=
-sb-next-25-10-21-pm8150b-tcpm
->
-> Bryan O'Donoghue (13):
->   dt-bindings: regulator: qcom,usb-vbus-regulator: Mark reg as required
->   dt-bindings: regulator: qcom,usb-vbus-regulator: Mark
->     regulator-*-microamp required
->   dt-bindings: phy: qcom,sc7180-qmp-usb3-dp-phy: Add orientation-switch
->     as optional
->   dt-bindings: phy: qcom,sc7180-qmp-usb3-dp-phy: Add ports as an
->     optional
->   dt-bindings: usb: Add Qualcomm PMIC Type-C YAML schema
->   dt-bindings: mfd: qcom,spmi-pmic: Add typec to SPMI device types
->   arm64: dts: qcom: sm8250: Define ports for qmpphy
->     orientation-switching
->   arm64: dts: qcom: pm8150b: Add a TCPM description
->   arm64: dts: qcom: qrb5165-rb5: Switch on Type-C VBUS boost
->   arm64: dts: qcom: qrb5165-rb5: Switch on basic TCPM
->   arm64: dts: qcom: qrb5165-rb5: Switch on TCPM usb-role-switching for
->     usb_1
->   arm64: dts: qcom: qrb5165-rb5: Switch on TCPM orientation-switch for
->     usb_1_qmpphy
->   usb: typec: qcom: Add Qualcomm PMIC TCPM support
->
-> Dmitry Baryshkov (1):
->   phy: qcom-qmp: Register as a typec switch for orientation detection
->
->  .../bindings/mfd/qcom,spmi-pmic.yaml          |   4 +
->  .../phy/qcom,sc7180-qmp-usb3-dp-phy.yaml      |  40 ++
->  .../regulator/qcom,usb-vbus-regulator.yaml    |  10 +-
->  .../bindings/usb/qcom,pmic-typec.yaml         | 169 ++++++
->  MAINTAINERS                                   |  10 +
->  arch/arm64/boot/dts/qcom/pm8150b.dtsi         |  40 ++
->  arch/arm64/boot/dts/qcom/qrb5165-rb5.dts      |  57 +-
->  arch/arm64/boot/dts/qcom/sm8250.dtsi          |  13 +
->  drivers/phy/qualcomm/Kconfig                  |   8 +
->  drivers/phy/qualcomm/phy-qcom-qmp-combo.c     |  80 ++-
->  drivers/usb/typec/Kconfig                     |  13 -
->  drivers/usb/typec/Makefile                    |   1 -
->  drivers/usb/typec/qcom-pmic-typec.c           | 261 --------
->  drivers/usb/typec/tcpm/Kconfig                |  11 +
->  drivers/usb/typec/tcpm/Makefile               |   1 +
->  drivers/usb/typec/tcpm/qcom/Makefile          |   6 +
->  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 362 +++++++++++
->  .../typec/tcpm/qcom/qcom_pmic_typec_pdphy.c   | 528 +++++++++++++++++
->  .../typec/tcpm/qcom/qcom_pmic_typec_pdphy.h   | 115 ++++
->  .../typec/tcpm/qcom/qcom_pmic_typec_port.c    | 560 ++++++++++++++++++
->  .../typec/tcpm/qcom/qcom_pmic_typec_port.h    | 194 ++++++
->  21 files changed, 2202 insertions(+), 281 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-typec=
-.yaml
->  delete mode 100644 drivers/usb/typec/qcom-pmic-typec.c
->  create mode 100644 drivers/usb/typec/tcpm/qcom/Makefile
->  create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
->  create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
->  create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.h
->  create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
->  create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.h
->
-> --=20
-> 2.39.2
-
+PiBPbiAxMy8wNC8yMDIzIDA2OjI1LCBTdGFubGV5IENoYW5nIHdyb3RlOg0KPiA+IEFkZCBhIG5l
+dyAnc25wcyxnbG9iYWwtcmVncy1zdGFydGluZy1vZmZzZXQnIERUIHRvIGR3YzMgY29yZSB0byBy
+ZW1hcA0KPiA+IHRoZSBnbG9iYWwgcmVnaXN0ZXIgc3RhcnQgYWRkcmVzcw0KPiA+DQo+ID4gVGhl
+IFJUSyBESEMgU29DcyB3ZXJlIGRlc2lnbmVkIHRoZSBnbG9iYWwgcmVnaXN0ZXIgYWRkcmVzcyBv
+ZmZzZXQgYXQNCj4gPiAweDgxMDAuIFRoZSBkZWZhdWx0IGFkZHJlc3MgaXMgYXQgRFdDM19HTE9C
+QUxTX1JFR1NfU1RBUlQgKDB4YzEwMCkuDQo+ID4gVGhlcmVmb3JlLCBhZGQgdGhlIHByb3BlcnR5
+IG9mIGRldmljZS10cmVlIHRvIGFkanVzdCB0aGlzIHN0YXJ0IGFkZHJlc3MuDQo+ID4NCj4gPiBT
+aWduZWQtb2ZmLWJ5OiBTdGFubGV5IENoYW5nIDxzdGFubGV5X2NoYW5nQHJlYWx0ZWsuY29tPg0K
+PiA+IC0tLQ0KPiA+ICB2MSB0byB2MiBjaGFuZ2U6DQo+ID4gMS4gQ2hhbmdlIHRoZSBuYW1lIG9m
+IHRoZSBwcm9wZXJ0eSAic25wcyxnbG9iYWwtcmVncy1zdGFydGluZy1vZmZzZXQiLg0KPiA+IC0t
+LQ0KPiANCj4gRGlkbid0IHlvdSBnb3QgYWxyZWFkeSBjb21tZW50IGZvciB0aGlzIHBhdGNoPyBI
+b3cgZGlkIHlvdSBpbXBsZW1lbnQgaXQ/DQo+IA0KPiBBbHNvLCBJIGFza2VkIHlvdSBtdWx0aXBs
+ZSB0aW1lczoNCj4gDQo+IFBsZWFzZSB1c2Ugc2NyaXB0cy9nZXRfbWFpbnRhaW5lcnMucGwgdG8g
+Z2V0IGEgbGlzdCBvZiBuZWNlc3NhcnkgcGVvcGxlIGFuZCBsaXN0cw0KPiB0byBDQy4gIEl0IG1p
+Z2h0IGhhcHBlbiwgdGhhdCBjb21tYW5kIHdoZW4gcnVuIG9uIGFuIG9sZGVyIGtlcm5lbCwgZ2l2
+ZXMNCj4geW91IG91dGRhdGVkIGVudHJpZXMuICBUaGVyZWZvcmUgcGxlYXNlIGJlIHN1cmUgeW91
+IGJhc2UgeW91ciBwYXRjaGVzIG9uDQo+IHJlY2VudCBMaW51eCBrZXJuZWwuDQo+IA0KPiBJIGRv
+bid0IHVuZGVyc3RhbmQgd2h5IHlvdSBpZ25vcmUgdGhpcy4NCj4gDQo+IE5BSywgcGF0Y2ggaXMg
+bm90IGNvcnJlY3QuDQo+IA0KPiBCZXN0IHJlZ2FyZHMsDQo+IEtyenlzenRvZg0KPiANCg0KVGhh
+bmsgeW91IGZvciB5b3VyIHBhdGllbnQgZ3VpZGFuY2UuDQpCZWNhdXNlIEknbSBub3QgZmFtaWxp
+YXIgd2l0aCB0aGUgcmV2aWV3IHByb2Nlc3MgYW5kIGRpZG4ndCB1c2Ugc2NyaXB0cy9nZXRfbWFp
+bnRhaW5lcnMucGwgcHJvcGVybHkgaW4gdGhlIGluaXRpYWwgZW1haWwgdGhyZWFkLg0KVGhlcmVm
+b3JlLCB0aGlzIHNlcmllcyBvZiBlcnJvcnMgd2FzIGNhdXNlZC4gU29ycnkgZm9yIHRoZSBjb25m
+dXNpb24uDQpOb3cgSSBrbm93IGhvdyB0byB1c2UgdGhlIHNjcmlwdCBwcm9wZXJseS4NCkFmdGVy
+IGNvcnJlY3RpbmcgdGhlIG1haW50YWluZXIncyBzdWdnZXN0aW9uLCBJJ2xsIHJlc3RhcnQgYSBu
+ZXcgZW1haWwgdGhyZWFkIGFuZCByZXZpZXcgYWdhaW4uDQoNCg==
