@@ -2,124 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 109B26E15C3
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 22:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2045F6E1730
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Apr 2023 00:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjDMUXn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Apr 2023 16:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58592 "EHLO
+        id S229601AbjDMWKn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Apr 2023 18:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjDMUXm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 16:23:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A9476B9
-        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 13:23:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DF7964166
-        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 20:23:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EE0FBC433D2
-        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 20:23:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681417419;
-        bh=l7WZ/osyiuWjA0bgHSyeYhqoCOX/Pw6774SLybIILqo=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=MF/lAUWErk8ypd8gI4Sqt8igK3yf2fjg1gzL3xtlMK0CY/Oo1c6wsZ0jyu9ivg5Pg
-         Fy6+MVHYXWYcv2EVD0FL359oCg0FcWG16OiJNhDUkLDTb0aUBVK34qr/h+WnnQPoRY
-         9Qbf8UokqqTeR6HPOvdRg1/k9xE9mF/ZveICZiwo8P9fxbr2i1ojetuTSKt90+6wVe
-         ucubYu+TXEhIuEbAlQa7IM3TntFQd2uy2zJrzSd/RRJXlu4MZP/QlWipxsdK+7I1/X
-         Di9e7AyM7WyCd5dTbZOXs2XJ//d+R8CfyPOmDUM1IIuKb+rTnEVKSW3JL588bWmBa+
-         RIjlh8cAXFTnQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id D0E23C43141; Thu, 13 Apr 2023 20:23:38 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217242] CPU hard lockup related to xhci/dma
-Date:   Thu, 13 Apr 2023 20:23:38 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: austin.domino@hotmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217242-208809-Fuc50DVHof@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217242-208809@https.bugzilla.kernel.org/>
-References: <bug-217242-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229493AbjDMWKn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 18:10:43 -0400
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463CF5B94;
+        Thu, 13 Apr 2023 15:10:42 -0700 (PDT)
+Received: by mail-ot1-f41.google.com with SMTP id w19-20020a9d6393000000b006a43ff0f57cso284011otk.5;
+        Thu, 13 Apr 2023 15:10:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681423841; x=1684015841;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lRp3R38DBKAcqbpi94w/GTvCXxHuUsnausWd76BTI1U=;
+        b=UN6UwvZkjOjrA88j7L0yPc3yRYGUHmAiRWiNeXftrJtSYPICGXvNl5guYblv4gTTMB
+         N62xLqfm4rJTdiy8YLQwM2SUNY7b1UOzRgAZ6Gk4xu5nQcSRuSh2UaSNwIqP8sN6WK1q
+         D/jcTjjdQy6fA1hIz0h8/9LtDC1eFCVc8+FVlkowxrxj7WD/SajtFI/bo2m+a/g1CES0
+         25dWDPfbN7tUYOsh+4L7vSjmhHhQyKitbAaDb1cxroEvhpEEfAS30Tp/jHtPJSBXvRVm
+         eu5+YyubrFPocPqD6zHwxyvmoOCmw4fwcLwCgdXLCckWNCJDdYrEoCZsrRfpypxP3LTx
+         nrkw==
+X-Gm-Message-State: AAQBX9elzzQ9i/LFtnyI/lvcUlL+bwq5dwY1Hys4rjALv62nRxKvv43x
+        cNss5jBnnW4Ep8Pb7wrUYg==
+X-Google-Smtp-Source: AKy350ZAzbcV4/iy+uq4icNQ2bGCh482u4+kBTuRDzDJQecVOG+iosYX31G661fQh9U/8yN2fS8p1w==
+X-Received: by 2002:a05:6830:2093:b0:6a1:7b61:1fd0 with SMTP id y19-20020a056830209300b006a17b611fd0mr2107949otq.3.1681423841458;
+        Thu, 13 Apr 2023 15:10:41 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r13-20020a9d7ccd000000b006a13dd5c8a2sm1142743otn.5.2023.04.13.15.10.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 15:10:40 -0700 (PDT)
+Received: (nullmailer pid 1934874 invoked by uid 1000);
+        Thu, 13 Apr 2023 22:10:40 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org
+In-Reply-To: <20230413173150.71387-2-sebastian.reichel@collabora.com>
+References: <20230413173150.71387-1-sebastian.reichel@collabora.com>
+ <20230413173150.71387-2-sebastian.reichel@collabora.com>
+Message-Id: <168142378979.1933846.311921453118296427.robh@kernel.org>
+Subject: Re: [PATCHv4 1/3] dt-bindings: usb: Add RK3588 OHCI
+Date:   Thu, 13 Apr 2023 17:10:40 -0500
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217242
 
---- Comment #18 from Austin Domino (austin.domino@hotmail.com) ---
-I've narrowed down when this bug first appears to the 5.12 kernel release; I
-ran a couple computers for a week on kernel version 5.11 and ran into 0
-problems while running a program like the one above, but before doing this,=
- I
-had 1 of those computers on kernel version 5.12 while running that same pro=
-gram
-with the same devices and it ran into this bug within 24 hours.
+On Thu, 13 Apr 2023 19:31:48 +0200, Sebastian Reichel wrote:
+> Add compatible for RK3588 OHCI. As far as I know it's fully
+> compatible with generic-ohci.
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  .../devicetree/bindings/usb/generic-ohci.yaml    | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
+> 
 
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-I looked at the number of TRBs for the computers that ran kernel version 5.=
-11
-for over a week with that program, and they were all at 512, so it's extrem=
-ely
-unlikely that the ring expansion problems are present in version 5.11.
+yamllint warnings/errors:
 
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/generic-ohci.example.dtb: usb@1c14400: clocks: [[4294967295, 6], [4294967295, 2]] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/generic-ohci.yaml
 
-This morning, out of curiosity, I took a computer running Ubuntu 18.04, wen=
-t to
-Ubuntu's kernel build page, https://kernel.ubuntu.com/~kernel-ppa/mainline/,
-and tried a number of kernels to narrow down when the ring expansion proble=
-ms
-first appeared.  It seems that this problem is present in all the 5.12-rc
-releases, and I know that it's present on 5.15; that was what this computer=
- was
-running before all of this, so I'm assuming that it's present from 5.12 onw=
-ard.
- Right now I have this computer running kernel "v5.12-rc1" from Ubuntu's ke=
-rnel
-page, the ring expansion problems are present; the maximum number of TRBs f=
-or a
-device the last time I checked was 8388608 after ~2.5 hours, and I'm curiou=
-s if
-this computer will run into a hard lockup.  I'm nearly certain that it will,
-but we'll just have to wait and see to be certain.
+doc reference errors (make refcheckdocs):
 
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230413173150.71387-2-sebastian.reichel@collabora.com
 
-Lastly, I went and looked at the changes that were done between v5.11 and
-v5.12-rc2 within the "drivers/usb/host" directory and it appears that a
-moderate amount of change took place (more than enough to make my head spin=
-).=20
-I haven't dealt with kernel source like this before and it'd take a while to
-parse through everything to understand what's going on, so I don't know how
-much further I will get involved. Anyhow, I hope that this information might
-help.
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
---=20
-You may reply to this email to add a comment.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
