@@ -2,74 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D79876E13D4
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 20:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE076E14A5
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 20:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjDMSBr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Apr 2023 14:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
+        id S230085AbjDMSzc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Apr 2023 14:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjDMSBq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 14:01:46 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCC17687
-        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 11:01:45 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-760c1762f7dso760839f.0
-        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 11:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1681408905; x=1684000905;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ij6zwJrpntmJePBZisrDXJzAEzTHSMkMI1ovFIrxG50=;
-        b=XaB/gmdvlYhqzZIYnL3QtCa/98iuJIobHANgi10fzRIvdz96A8kWnp3mbrIk62NCvy
-         0wZpZyH50iP2qhrZfsVkkUXc043lozBp0zU2M2YfMxCy8CUBeN5vJN67SrKxDjgERmli
-         W5MhCSpXoOG8s9fs3mOTfqfPhRMpqQal5HVGI=
+        with ESMTP id S229604AbjDMSzb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 14:55:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC04C270D
+        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 11:54:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681412088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bj+U/10GLqXj2YH6vIakik5vgTZzUMJtlbeaT9V0zCc=;
+        b=ALWcmvPLcm53sqSL8Ci7cGMcaCaFc1Ox8A6L2IAOBqD3vd/sx4d4ILdUvvbqfpb76DKv5Q
+        NrT/xsCAYu7J4UrQo6e/SltfscPkS9qgqk5pXE6g2eUEQvTv0UegDom5zplRuQCUPMlCBh
+        GJtq01367psjxQ3KpP/EvY9dfFpLxXo=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-296-3bHKigfxMEGTHtKmi6931Q-1; Thu, 13 Apr 2023 14:54:47 -0400
+X-MC-Unique: 3bHKigfxMEGTHtKmi6931Q-1
+Received: by mail-qt1-f198.google.com with SMTP id y5-20020a05622a004500b003e3979be6abso11415043qtw.12
+        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 11:54:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681408905; x=1684000905;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ij6zwJrpntmJePBZisrDXJzAEzTHSMkMI1ovFIrxG50=;
-        b=SByQay4ARIXFWuWRm1shnCKcuLTuwj/27G7P8fWuW3Ep8MDv0eWFCpZrtuN5iB3mJF
-         uK3o3LwKDS1SxT5uG8qr/NTRK0+9Hkp1+THpki26VQagNrwkIKn6S5QUnwa+AIp0dqBv
-         0/Yi12qc10/+aY4CYqwSCMfTsBp131nrDfgUMfiksEn663GrAJapkGMkLbYEuw1LIXR3
-         oCQPDlDrCvkd2sApDcbcBqKN5xO/qRmr3zliVNmE87m6Tyr62si0WyCWkVlvjuhuJome
-         1YNAsyIA94ARx8TsAttS8bC586oBFjjxNW6FAvm3VbgxcmYSXWcvWYfBJwWzuw+ZKX1H
-         UTKw==
-X-Gm-Message-State: AAQBX9cmmMvD1KtfRvkfae5Vx/bRVxMAFmn4AWi0MghzA+RI8K3TVkR7
-        Qv5UlUouaUhpmVylYNKw5jVE2g==
-X-Google-Smtp-Source: AKy350ZXXA+4Kh6yy6AVWpLezmKVkL6jTAUotvMC2E6nPRx6IBUULK+YtAbwkzgUahy7lOxYr0ypJQ==
-X-Received: by 2002:a05:6602:2c50:b0:758:9dcb:5d1a with SMTP id x16-20020a0566022c5000b007589dcb5d1amr1808246iov.2.1681408905130;
-        Thu, 13 Apr 2023 11:01:45 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id v11-20020a02cbab000000b0040f019ae7a6sm626917jap.95.2023.04.13.11.01.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 11:01:44 -0700 (PDT)
-Message-ID: <8219a54a-f83d-f31e-bd10-74660d829a06@linuxfoundation.org>
-Date:   Thu, 13 Apr 2023 12:01:43 -0600
+        d=1e100.net; s=20221208; t=1681412087; x=1684004087;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bj+U/10GLqXj2YH6vIakik5vgTZzUMJtlbeaT9V0zCc=;
+        b=GCn5YAL6Up6mIYeiVejOV9qvELVg1juBYk9Utvv7eYHUJ4hVE4P5KlS4e4jy4tWFo/
+         k729VK/nvWYJbEv9byPinOH3aa1ETD+h2wvsc2rnneCOIJFS13/oh3rbxqb5miJsjzpT
+         xjQkzxDvBUuqPT2Xs71YOeisyeliA549rJD67UeO/RLZsKgyXlQG86WVQmHK3FMQjV/M
+         tLR9m22eW+YUe/Z4LpnSyc7f7HMRoevY8d31kgS6Ua6BqKPoBAUBU2UAsmYoKE6NFm2M
+         lUcKDD3MGh/+sFyrP6kx2eiQIsCmhYg3QUxmMoGx/yMhpPZHYjBwEf61LHJ/Z1stdZAO
+         URIw==
+X-Gm-Message-State: AAQBX9drG9BY6621sM86VhLtyPE90ZODHpA1RvDZ3xQRFv5Q7qgu3e+R
+        SKrO51sCaJe/AjXK+YgB7ow+qYyxRTgb9MM0Ak3MFE7N1ITljB++dxBmsaXTvIrLf8P4WoOaq6v
+        Ech3JQBu2vfUYIzFfIQ1t
+X-Received: by 2002:a05:6214:2348:b0:5cb:ab2e:b15c with SMTP id hu8-20020a056214234800b005cbab2eb15cmr4079218qvb.30.1681412087050;
+        Thu, 13 Apr 2023 11:54:47 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZoYb+WLMQeaI11rL07yAbqKKGrVN73uJb36S0wBT3D4r4/v0v0UUT2Z63JUk2EU/J+iCeW0A==
+X-Received: by 2002:a05:6214:2348:b0:5cb:ab2e:b15c with SMTP id hu8-20020a056214234800b005cbab2eb15cmr4079184qvb.30.1681412086810;
+        Thu, 13 Apr 2023 11:54:46 -0700 (PDT)
+Received: from fedora (modemcable181.5-202-24.mc.videotron.ca. [24.202.5.181])
+        by smtp.gmail.com with ESMTPSA id t13-20020a0cf98d000000b005dd8b9345bdsm613948qvn.85.2023.04.13.11.54.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 11:54:46 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 14:54:43 -0400
+From:   Adrien Thierry <athierry@redhat.com>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        quic_harshq@quicinc.com, ahalaney@redhat.com,
+        quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v6 0/8] Add multiport support for DWC3 controllers
+Message-ID: <ZDhP823LUMCDuD9q@fedora>
+References: <20230405125759.4201-1-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3] usbip: vudc: Fix use after free bug in vudc_remove due
- to race condition
-Content-Language: en-US
-To:     Zheng Hacker <hackerzheng666@gmail.com>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, valentina.manea.m@gmail.com,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
-        alex000young@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20230317100954.2626573-1-zyytlz.wz@163.com>
- <d05ae776-ee19-2ce0-c06b-9825e5cbea82@linuxfoundation.org>
- <CAJedcCwK8Z_nuBM4NnM1PwbTqTnfX2n6UEy9dd5LKf_GScq=xA@mail.gmail.com>
- <CAJedcCxT0ggGbVSQnqpcYcN=5gahUOEwGWZrP4P1Lz29A8Smqg@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CAJedcCxT0ggGbVSQnqpcYcN=5gahUOEwGWZrP4P1Lz29A8Smqg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405125759.4201-1-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,59 +88,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 4/13/23 02:09, Zheng Hacker wrote:
-> Friendly ping about the issue.
-> Sorry that I couldn't make test about the driver.
-> 
-> Thanks,
-> Zheng
-> 
-> Zheng Hacker <hackerzheng666@gmail.com> 于2023年3月18日周六 15:39写道：
->>
->> Shuah Khan <skhan@linuxfoundation.org> 于2023年3月18日周六 06:53写道：
->>>
->>> On 3/17/23 04:09, Zheng Wang wrote:
->>>> In vudc_probe, it calls init_vudc_hw, which bound &udc->timer with v_timer.
->>>>
->>>> When it calls usbip_sockfd_store, it will call v_start_timer to start the
->>>> timer work.
->>>>
->>>> When we call vudc_remove to remove the driver, theremay be a sequence as
->>>> follows:
->>>>
->>>> Fix it by shutdown the timer work before cleanup in vudc_remove.
->>>>
->>>> Note that removing a driver is a root-only operation, and should never
->>>> happen. But the attacker can directly unplug the usb to trigger the remove
->>>> function.
->>>>
->>>> CPU0                  CPU1
->>>>
->>>>                        |v_timer
->>>> vudc_remove          |
->>>> kfree(udc);          |
->>>> //free shost         |
->>>>                        |udc->gadget
->>>>                        |//use
->>>>
->>>> The udc might be removed before v_timer finished, and UAF happens.
->>>>
->>>> This bug was found by Codeql static analysis and might by false positive.
->>>
->>> This statement that this could be a false positive makes me hesitate
->>> taking this patch.
->>>
->>> What kind of testing have you done with this fix? Were you able to test
->>> the scenario of unplugging usb?
->>>
->>
->> Sorry I did't make a full test for I did't have the device. The
->> attacking scenario if based on other cases.
->>
+Hi,
 
-Sorry. I really need for you test this and provide information on how
-it was tested.
+> Krishna Kurapati (8):
+>   dt-bindings: usb: Add bindings for multiport properties on DWC3
+>     controller
+>   usb: dwc3: core: Access XHCI address space temporarily to read port
+>     info
+>   usb: dwc3: core: Skip setting event buffers for host only controllers
+>   usb: dwc3: core: Refactor PHY logic to support Multiport Controller
+>   usb: dwc3: qcom: Add multiport controller support for qcom wrapper
+>   arm64: dts: qcom: sc8280xp: Add multiport controller node for SC8280
+>   arm64: dts: qcom: sa8295p: Enable tertiary controller and its 4 USB
+>     ports
+>   arm64: dts: qcom: sa8540-ride: Enable first port of tertiary usb
+>     controller
+>
+>  .../devicetree/bindings/usb/snps,dwc3.yaml    |  13 +-
+>  arch/arm64/boot/dts/qcom/sa8295p-adp.dts	 |  47 +++
+>  arch/arm64/boot/dts/qcom/sa8540p-ride.dts     |  22 ++
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  58 +++
+>  drivers/usb/dwc3/core.c                       | 373 ++++++++++++++----
+>  drivers/usb/dwc3/core.h                       |  71 +++-
+>  drivers/usb/dwc3/drd.c                        |  13 +-
+>  drivers/usb/dwc3/dwc3-qcom.c                  |  28 +-
+>  8 files changed, 523 insertions(+), 102 deletions(-)
 
-thanks,
--- Shuah
+I tested this series on the sa8540p-ride, with a USB Ethernet adapter
+plugged into the board. The device shows up as expected:
+
+# lsusb -tv
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/2p, 10000M
+    ID 1d6b:0003 Linux Foundation 3.0 root hub
+    |__ Port 1: Dev 2, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
+        ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/4p, 480M
+    ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+Tested-by: Adrien Thierry <athierry@redhat.com> # sa8540p-ride
 
