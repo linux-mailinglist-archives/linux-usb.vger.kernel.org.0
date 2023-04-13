@@ -2,113 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4606E126D
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 18:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9491F6E1386
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 19:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjDMQgq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Apr 2023 12:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
+        id S229797AbjDMRcB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Apr 2023 13:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbjDMQgp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 12:36:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A709753;
-        Thu, 13 Apr 2023 09:36:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229582AbjDMRcB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 13:32:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39AB893CC;
+        Thu, 13 Apr 2023 10:31:56 -0700 (PDT)
+Received: from jupiter.universe (dyndsl-091-248-212-251.ewe-ip-backbone.de [91.248.212.251])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A775663FE5;
-        Thu, 13 Apr 2023 16:36:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33D79C4339E;
-        Thu, 13 Apr 2023 16:36:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681403801;
-        bh=zpXOE8O6tskJByG5O5xUZJa+iFGZLEGodc5DA9SzF90=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=pTBQfrdmKxrEodLYWrlZETofTOnwil+BcO8ESlnogLiYI3w7Zy6/7iKTKGxO4CD5v
-         W+8Mw27ujy/nsj3gWOV0eBZzrR3a9pnsuJyyp3lbfeMSlPJ1cL0DZF+JJooheUwCwN
-         6Zi4a/++kltwjfPk4I6jUu/YnCH5ABzzZgbS8p6gTF7BfjkkrkliVZVMsmQX34iBC/
-         pbKdJb3CK1/Mdqe04S0SxQoOZWqSfYec7mBl+cH/ItR4tprgiqmDLZIKRWdSq18ONH
-         mpOhh0dMw8XnzluvCIQYwJEZosS/lTqaSQHVXJf31pjNg65AJpBTYhwJpvtdMhe5vP
-         ILyEZDQKswo4g==
-Message-ID: <19946f94-db48-fe0d-722c-cbb45b8bd0ba@kernel.org>
-Date:   Thu, 13 Apr 2023 18:36:37 +0200
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 950C9660321F;
+        Thu, 13 Apr 2023 18:31:54 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1681407114;
+        bh=T/AFydAD8qKAiQUoV47FnZRg+3UFBMFE5c7vx47gtvk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jSoLX55V6n5zsWcxs6agqohSKQ28135GG+7jIAA20kzw122zub/pb80Tmdit621L6
+         SPKqB+L5T1d08tI+YT24JIr6C/gx1zGrThAxuas8uTLTBd20AagDCsYJr8d5HC4TyL
+         BfDygqZZhAh4Vlws2Mqt+abMFapGR5DKUuN+MZmetFP+zpJOC+aO9nqeeuMIILa+l2
+         TriXAo76I0N7xzl8zH9Eywqordbk+PNpHkevhvVORJcuRtwHOi/vT8anX1VHl3zQrZ
+         yAdwjHsxanYerpybLV0ovmGX7ddtb3W4zysW+/4W4bGXBaZzIzvS9HT8AAZ3d4+J3r
+         VGkz+OyNDL+Jw==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id C8D484807E2; Thu, 13 Apr 2023 19:31:51 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCHv4 0/3] generic-ohci/ehci: add RK3588 support
+Date:   Thu, 13 Apr 2023 19:31:47 +0200
+Message-Id: <20230413173150.71387-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add
- 'snps,global-regs-starting-offset' quirk
-Content-Language: en-US
-To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>
-References: <20230412033006.10859-2-stanley_chang@realtek.com>
- <20230413042503.4047-1-stanley_chang@realtek.com>
- <167e4a8c-3ebd-92b7-1481-947f08901f97@kernel.org>
- <9f6abbe7a6fd479c98e2fd6c1080ad8a@realtek.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <9f6abbe7a6fd479c98e2fd6c1080ad8a@realtek.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 13/04/2023 16:58, Stanley Chang[昌育德] wrote:
->> On 13/04/2023 06:25, Stanley Chang wrote:
->>> Add a new 'snps,global-regs-starting-offset' DT to dwc3 core to remap
->>> the global register start address
->>>
->>> The RTK DHC SoCs were designed the global register address offset at
->>> 0x8100. The default address is at DWC3_GLOBALS_REGS_START (0xc100).
->>> Therefore, add the property of device-tree to adjust this start address.
->>>
->>> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
->>> ---
->>>  v1 to v2 change:
->>> 1. Change the name of the property "snps,global-regs-starting-offset".
->>> ---
->>
->> Didn't you got already comment for this patch? How did you implement it?
->>
->> Also, I asked you multiple times:
->>
->> Please use scripts/get_maintainers.pl to get a list of necessary people and lists
->> to CC.  It might happen, that command when run on an older kernel, gives
->> you outdated entries.  Therefore please be sure you base your patches on
->> recent Linux kernel.
->>
->> I don't understand why you ignore this.
->>
->> NAK, patch is not correct.
->>
->> Best regards,
->> Krzysztof
->>
-> 
-> Thank you for your patient guidance.
-> Because I'm not familiar with the review process and didn't use scripts/get_maintainers.pl properly in the initial email thread.
-> Therefore, this series of errors was caused. Sorry for the confusion.
-> Now I know how to use the script properly.
-> After correcting the maintainer's suggestion, I'll restart a new email thread and review again.
+Hi,
 
-Did you respond to feedback you got about the property? Did reviewer
-agreed on your view after your feedback?
+This increases the max. allowed clocks for generic-ohci from 3 to 4.
+On RK3588 a total of 4 clocks is required to access the OHCI registers.
+EHCI already supports 4 clocks.
 
-If not, then why resending this patch?
+Changes since PATCHv3:
+ * https://lore.kernel.org/all/20230406135552.23980-1-sebastian.reichel@collabora.com/
+ * Fix the PATCH version in the patchset subjects :)
+ * Collect Rob Herrings's Reviewed-by
+ * Drop maxItems = 4 from rockchip,rk3588-ohci = true branch (4 is the default value)
+ * Drop minItems = 1 from rockchip,rk3588-ohci = false branch (1 is the default value)
 
-Best regards,
-Krzysztof
+Changes since PATCHv2:
+ * https://lore.kernel.org/all/20230404145350.45388-1-sebastian.reichel@collabora.com/
+ * Added Krzysztof's Ack to the EHCI binding update
+ * Changed OHCI binding update according to Krzysztof's feedback
+
+Changes since PATCHv1:
+ * https://lore.kernel.org/all/20230331163148.5863-1-sebastian.reichel@collabora.com/
+ * changed cover-letter subject
+ * Add Alan's Acked-by to the driver patch increasing the clock count
+ * Update bindings, adding rockchip,rk3588-ohci and rockchip,rk3588-ehci compatibles
+
+-- Sebastian
+
+Sebastian Reichel (3):
+  dt-bindings: usb: Add RK3588 OHCI
+  dt-bindings: usb: Add RK3588 EHCI
+  usb: host: ohci-platform: increase max clock number to 4
+
+ .../devicetree/bindings/usb/generic-ehci.yaml    |  1 +
+ .../devicetree/bindings/usb/generic-ohci.yaml    | 16 +++++++++++++++-
+ drivers/usb/host/ohci-platform.c                 |  2 +-
+ 3 files changed, 17 insertions(+), 2 deletions(-)
+
+-- 
+2.39.2
 
