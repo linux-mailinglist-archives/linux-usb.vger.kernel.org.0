@@ -2,184 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E47E6E10C5
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 17:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 090B46E114A
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 17:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbjDMPPH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Apr 2023 11:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
+        id S231400AbjDMPix (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Apr 2023 11:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbjDMPPF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 11:15:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38A1B752;
-        Thu, 13 Apr 2023 08:14:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30F3663F83;
-        Thu, 13 Apr 2023 15:14:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 952DEC433D2;
-        Thu, 13 Apr 2023 15:14:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681398888;
-        bh=p2EzDGmg/AcSHNxl1kEdsuBAxx5NhTDeYv8wVb1k7uA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H6RcOHZ7pOBPIF2i0Rfg0SGnH4+xpSgeYzGgITNEkgVUIqttW6V6p7f66pAt0+tR3
-         Gjz8MsfxaalcuHIEUcH561epYQovzYHGITipJbp8j8Al4Ao5sT/g9oebINoWhxLW9o
-         M/J9HHOzgLzf30AEYLnMTd7ZskBawJo/Ou+tbQP4haqXHdp9xinFniZP/tkdxyePVK
-         MVwOH2h0WBLGmsacEqAcGdHVva5QWnWnbuu7ZRSKBo4P5l6h823Tf2Z81JLo7+j/cI
-         Le3SgKf9tT397kWhs4tca1kOCqTB/2WVIbPFdEv95cnJ9VbwQuGQdWDXbP6Pv/mtBR
-         qYY62WUcFCPGA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pmyex-0001xE-WD; Thu, 13 Apr 2023 17:14:52 +0200
-Date:   Thu, 13 Apr 2023 17:14:51 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     arinc9.unal@gmail.com
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>, me@1conan.com,
-        erkin.bozoglu@xeront.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add UNISOC vendor and TOZED LT70C
- product
-Message-ID: <ZDgca7wgfGlK/9cZ@hovoldconsulting.com>
-References: <20230406055004.8216-1-arinc.unal@arinc9.com>
+        with ESMTP id S229784AbjDMPiw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 11:38:52 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6259E1712;
+        Thu, 13 Apr 2023 08:38:51 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id az2so741059pgb.11;
+        Thu, 13 Apr 2023 08:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681400330; x=1683992330;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=59frgasnmq9NimzS/UOjzhA/IREWt1W+yRUKs3C2aWc=;
+        b=h3E71BUTuttYr47xowM1MYGFL3EvRvKlLYCgsDg/GVORmslcypP6EuDapgqBvh5Dra
+         wtU9vzigSVySkUoGGtPGEAqzc03LGloX34k4oxrt3bSgsEbVci4TOAfpSGS+2FT5+zEq
+         XEZORjtUIB1IsMGkKwmxyQYW2j7lelkFM7w0rgdt43DQOr+LXxcNsyKqbejMWkkc1My7
+         AoIY025i96B15wwi3Haw8KxlUgSuC8nPPyoTjjOUSCvDnR7Bc4gvC+VpdCnea9vupiDg
+         6pUadE78/RiROHJBbCt7gBmiwNdx7lOtdsIXIt6Pl6i2rMzi6BeVgkNT/nt4LU3LE6zt
+         WHhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681400330; x=1683992330;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=59frgasnmq9NimzS/UOjzhA/IREWt1W+yRUKs3C2aWc=;
+        b=ZEUv8ePBQf9RRo7VWaH0vXxBWFXUhCAR9+fvmDkOQldeSwca++y2p+n5WAKhfgtOqB
+         h0MiI+hwt/Rcz3HC8IlYC3JpwQC0GJ2JXowbGRiLBz/oUsGF1f6Y244sgxdvvSnrA71r
+         q9okGnR4kyG2I+5hG7nhwnbWV9O2rML2j8OZOwxG7ULmrzzSX+pb1mlrs5iln7tZuo5S
+         ktf8Hk0JSIF1i8oBMTyVavg6PVRbpXxPaJdZM3tvNWNL4oVw6ll61bp0LAqbsu7Wdgjx
+         Hi+O7qNPvFIhjemNvVWevBKEOmh/cBBnXxZyHBVDlV5wRG9N1LPjTreNgUYOw+RNy4Q5
+         ppvQ==
+X-Gm-Message-State: AAQBX9fqMcwEjNjdHDgVaRgaCJAKTJ4XAZV9sFe5qrHCDPzHypequBhM
+        xJXYwELdVsuGMCTqBUyt6E/k3LOj19I4C4WPOpI=
+X-Google-Smtp-Source: AKy350aq2r5zlbCRGOUUKIcCY9+IVKIrDAWdtWKrsRfbLuGY94W9mNfCBDbZpDEeY+BwPhBDsWdtDla28akqyUGsvTA=
+X-Received: by 2002:a65:67d9:0:b0:51b:4755:ba69 with SMTP id
+ b25-20020a6567d9000000b0051b4755ba69mr652169pgs.9.1681400330400; Thu, 13 Apr
+ 2023 08:38:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230406055004.8216-1-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230413074926.239605-1-zyytlz.wz@163.com> <TYBPR01MB5341FED435E5533E4B60B10CD8989@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+In-Reply-To: <TYBPR01MB5341FED435E5533E4B60B10CD8989@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Thu, 13 Apr 2023 23:38:38 +0800
+Message-ID: <CAJedcCzGe7AwP4te_dO2_42SSkmPCxGraowtD=YED4Pd5BTaNA@mail.gmail.com>
+Subject: Re: [RESEND PATCH] usb: renesas_usbhs: Fix use after free bug in
+ usbhs_remove due to race condition
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc:     Zheng Wang <zyytlz.wz@163.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "1395428693sheep@gmail.com" <1395428693sheep@gmail.com>,
+        "alex000young@gmail.com" <alex000young@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 08:50:04AM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> Add UNISOC vendor ID and TOZED LT70-C modem which is based from UNISOC
-> SL8563. The modem supports the NCM mode.
+Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com> =E4=BA=8E2023=E5=B9=B4=
+4=E6=9C=8813=E6=97=A5=E5=91=A8=E5=9B=9B 20:19=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Hi,
+>
+> > From: Zheng Wang, Sent: Thursday, April 13, 2023 4:49 PM
+> >
+> > In usbhs_probe, &priv->notify_hotplug_work is bound with
+> > usbhsc_notify_hotplug. It will be started then.
+> >
+> > If we remove the driver which will call usbhs_remove
+> >   to make cleanup, there may be a unfinished work.
+> >
+> > The possible sequence is as follows:
+> >
+> > Fix it by finishing the work before cleanup in the usbhs_remove
+> >
+> > CPU0                  CPU1
+> >
+> >                     |usbhsc_notify_hotplug
+> > usbhs_remove         |
+> > usbhs_mod_remove     |
+> > usbhs_mod_gadget_remove|
+> > kfree(gpriv);       |
+> >                     |usbhsc_hotplug
+> >                     |usbhs_mod_call start
+> >                     |usbhsg_start
+> >                     |usbhsg_try_start
+> >                     |//use gpriv
+>
+> Thank you for the patch!
+>
+> You should adjust the figure like followings because Greg mentioned it on=
+ other patch [1].
 
-Thanks for the patch. Looks mostly good, but see my comments below.
+Thanks for your advice. Will apply in the next.
 
-> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  6 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1782 ProdID=4055 Rev=04.04
-> S:  Manufacturer=Unisoc Phone
-> S:  Product=Unisoc Phone
-> S:  SerialNumber=<redacted>
-> C:  #Ifs=14 Cfg#= 1 Atr=c0 MxPwr=500mA
-> I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
-> E:  Ad=82(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#=10 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#=11 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=8c(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#=12 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=option
-> E:  Ad=09(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=8d(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+Best regards,
+Zheng
 
-This looks like an ADB interface which should be blacklisted (reserved)
-so that the driver does not bind to it.
-
-> I:  If#=13 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=0a(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#= 2 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> I:  If#= 3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#= 4 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> I:  If#= 5 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#= 6 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
-> E:  Ad=88(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> I:  If#= 7 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=8a(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> Bus 001 Device 002: ID 1782:4055 Unisoc Phone Unisoc Phone
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               2.00
->   bDeviceClass            0
->   bDeviceSubClass         0
->   bDeviceProtocol         0
->   bMaxPacketSize0        64
->   idVendor           0x1782
->   idProduct          0x4055
->   bcdDevice            4.04
->   iManufacturer           1 Unisoc Phone
->   iProduct                2 Unisoc Phone
->   iSerial                 3 <redacted>
->   bNumConfigurations      1
-
-When resending you can put the verbose lsusb output below the cut-off
-line (---) so that we have it in the mail archives if ever needed.
-
-Could you also add something what the various serial interfaces are used
-for?
-
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
-> 
-> I did not receive any comments on RFC so I'm sending this as is.
-> 
-> Arınç
-> 
-> ---
->  drivers/usb/serial/option.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index f31cc3c76329..65a050a9ca39 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -595,6 +595,11 @@ static void option_instat_callback(struct urb *urb);
->  #define SIERRA_VENDOR_ID			0x1199
->  #define SIERRA_PRODUCT_EM9191			0x90d3
->  
-> +/* UNISOC (Spreadtrum) products */
-> +#define UNISOC_VENDOR_ID			0x1782
-> +/* TOZED TL70-C based on UNISOC SL8563 uses UNISOC's vendor ID */
-> +#define TOZED_PRODUCT_LT70C			0x4055
-> +
->  /* Device flags */
->  
->  /* Highest interface number which can be used with NCTRL() and RSVD() */
-> @@ -2225,6 +2230,7 @@ static const struct usb_device_id option_ids[] = {
->  	{ USB_DEVICE_AND_INTERFACE_INFO(OPPO_VENDOR_ID, OPPO_PRODUCT_R11, 0xff, 0xff, 0x30) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0xff, 0x30) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0, 0) },
-> +	{ USB_DEVICE(UNISOC_VENDOR_ID, TOZED_PRODUCT_LT70C) },
-
-You should match also on the interface class so that you don't try to
-bind to the cdc interfaces. See USB_DEVICE_INTERFACE_CLASS() (and
-RSVD() for the ADB interface).
-
->  	{ } /* Terminating entry */
->  };
->  MODULE_DEVICE_TABLE(usb, option_ids);
-
-Johan
+> -----
+> CPU0                      CPU1
+>
+>                         | usbhsc_notify_hotplug
+> usbhs_remove            |
+> usbhs_mod_remove        |
+> usbhs_mod_gadget_remove |
+> kfree(gpriv);           |
+>                         | usbhsc_hotplug
+>                         | usbhs_mod_call start
+>                         | usbhsg_start
+>                         | usbhsg_try_start
+>                         | //use gpriv
+> -----
+>
+> [1]
+> https://lore.kernel.org/lkml/ZBNCam0XjWehrF3c@kroah.com/
+>
+> Best regards,
+> Yoshihiro Shimoda
+>
+> > Fixes: bc57381e6347 ("usb: renesas_usbhs: use delayed_work instead of w=
+ork_struct")
+> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > ---
+> >  drivers/usb/renesas_usbhs/common.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_u=
+sbhs/common.c
+> > index 96f3939a65e2..17a0987ef4f5 100644
+> > --- a/drivers/usb/renesas_usbhs/common.c
+> > +++ b/drivers/usb/renesas_usbhs/common.c
+> > @@ -768,6 +768,7 @@ static int usbhs_remove(struct platform_device *pde=
+v)
+> >
+> >       dev_dbg(&pdev->dev, "usb remove\n");
+> >
+> > +     cancel_delayed_work_sync(&priv->notify_hotplug_work);
+> >       /* power off */
+> >       if (!usbhs_get_dparam(priv, runtime_pwctrl))
+> >               usbhsc_power_ctrl(priv, 0);
+> > --
+> > 2.25.1
+>
