@@ -2,75 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 603BD6E0CBD
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 13:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E155D6E0D5E
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 14:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbjDMLfi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Apr 2023 07:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
+        id S229864AbjDMMUS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Apr 2023 08:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbjDMLfd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 07:35:33 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3270DA244
-        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 04:35:17 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id o29so2821607wro.0
-        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 04:35:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681385699; x=1683977699;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gBrRnJy3OveOdQzWzUMXg8AtzsE0ZcvrQQU1bmsmaXo=;
-        b=jXY00Mr8MInZu5bJOHcYeJEl9wN8hyVkFACDLKQ95WmjfD0WPHH/q685vSO9RcWG2A
-         YkSsdbKyOpluBi5fSQawUfPXqMf2zLOjDh2I8CZvatV/SeGagdaWg8n6yyZHu4g9lhXK
-         yMv0lnfoojomIneC47286HrQENocXrmMkg1VqFrTC6ehR0mwC6WXYZZ5aT8zJcEBeZPQ
-         BMG6ssU0Qqok3tfWSrTogv34va21P4V9GDQ8gfhp0r09zrheda4ul3gIuWy9gqJcoHtq
-         9Z95CRYM3X72wQPIr2oLYYn/jsFAJIGyv/yVludjvTzvx9cePovdfM5XVGU4XXNt8uww
-         1p8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681385699; x=1683977699;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gBrRnJy3OveOdQzWzUMXg8AtzsE0ZcvrQQU1bmsmaXo=;
-        b=Oty1r0fylZHhrdJ2+h+igaUO09lpvQGpLZ9Fn1Mf/OjIaO7X2/xC0wcvukzhls3imo
-         I9/nTl2+n2LEpv2Royo6qSDRl4fD/vnIlhzskQfKfwUa2CtiFZsT8DQrZmvMK2i/2z9d
-         CCy3cyMi/Fqql5Y6DN1Al/iFnDTm//XOWU8y7FfnqKtAnAMUsG00k9tIw2d2OpdvRBsv
-         JMOovAjNtfflYO3IXcm8zlYZHwoQ/lslmkx94rx7eVwFUsC7h/HafbIstJHDQVdp5mFg
-         266G2uMIOOPkPUtqgHR72ixh6sthycqhkk4mNVMV6/QwFp3UHXiBOvSfxxIq04Xk0g63
-         LJmw==
-X-Gm-Message-State: AAQBX9cuu4H9N5QHyjYb1cYc69LXB501GSJH8W5eO8rdqvcQrPm5umuO
-        DS32Yb+oobaS1UwfM+7pcbfT+A==
-X-Google-Smtp-Source: AKy350Zyqd5dEuCoe9u5RzEEEuR09j0tqJKSI69/NUwtHlAi5urEYHkgb4SrnY2TZeYYuSn6OJPdWA==
-X-Received: by 2002:a05:6000:1b8c:b0:2f4:d4a3:c252 with SMTP id r12-20020a0560001b8c00b002f4d4a3c252mr1347085wru.3.1681385699368;
-        Thu, 13 Apr 2023 04:34:59 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id e16-20020a5d4e90000000b002f2782978d8sm1108877wru.20.2023.04.13.04.34.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 04:34:58 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, andersson@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     caleb.connolly@linaro.org, bryan.odonoghue@linaro.org,
-        konrad.dybcio@linaro.org, subbaram@quicinc.com, jackp@quicinc.com,
-        robertom@qti.qualcomm.com,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH v5 14/14] phy: qcom-qmp: Register as a typec switch for orientation detection
-Date:   Thu, 13 Apr 2023 12:34:38 +0100
-Message-Id: <20230413113438.1577658-15-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230413113438.1577658-1-bryan.odonoghue@linaro.org>
-References: <20230413113438.1577658-1-bryan.odonoghue@linaro.org>
+        with ESMTP id S229708AbjDMMTs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 08:19:48 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2123.outbound.protection.outlook.com [40.107.113.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B65F59ED;
+        Thu, 13 Apr 2023 05:19:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=baL34Ycg+ruWpFgre4B+Wtq7xkUhyBeIurBkZvP7/1RvXBtE9qX8BpxjY/pp2C0gtizR2GQ2g2MoYxjEz3+0PX5itlmE137icVWayaAMHPBplrk6b282bObxS6CdQbLtz2y2DWrsswB6WZt2Iwmf6o2wi0TU9lpgOEHPQtUSYTdC7ZKnrwjSNImaUYfMSyYM+xE/zmWM6Jeq4ZddoIaDK2dlBTlChIfNg1akDAFxdDtB0QPyXJJ++rroBL9jvuhVha9eEzyUKfF9q730d7i5fos2D3OwFj6zxhLJpD4dLAMC0Atl80rNLVHF/OY4ZrBs/U9QeehopQNuG1WWiTQ4Ow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sTp6zH9eSlPzu+4y7fHNMQsNRk8XCzcWq4wog8jb0Xw=;
+ b=Mk3qjAJZofzv6m0VopbCLEgowKjco4SkMDbmz6EOOdcC98rFRs7LAKRPl4d7qVQd7Yp2t727rJ/ZtB+Augo8CAc2tWXxY9zjmYa1UDuJncFx7nq7cAEcMZtG8bR/zeWL9oVnnOLycCDaJvjqD9QpO7KtnT5EujLH2PsdBdcMQVI3Xu46dNj2mNu/gCSjpch2zb8ANtcWL0RgVClPRJ9zF/UI4USGcvHX1jKTb5+a+lT3EBLYMv2TmSgRPB8TsF4n712lIqxRGmTqK8GHJoxozPHKmaqHMyd64zM9JByUSVhS6CGNR92cbiYT9CIMVLwpEIb3rnG4+S+gCMy8/demhA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sTp6zH9eSlPzu+4y7fHNMQsNRk8XCzcWq4wog8jb0Xw=;
+ b=biDPU28WklldxuG20E0DvcVR9LwWZyuCplrq7cPHRjHeQQPFQaIfhhy9e4C/HH/I1Nq3I+L5kjuoLo5mSFAU+nRtXMzmJUtZgw7bYasDPUiGq9qn8BZ0J6QjLD/coztCLIeLAcBeFMesgIvie71znNdMA66jdNRQhjELD+bq+Z0=
+Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
+ (2603:1096:404:8028::13) by TY3PR01MB11689.jpnprd01.prod.outlook.com
+ (2603:1096:400:372::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Thu, 13 Apr
+ 2023 12:19:44 +0000
+Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
+ ([fe80::5198:fdcf:d9b1:6003]) by TYBPR01MB5341.jpnprd01.prod.outlook.com
+ ([fe80::5198:fdcf:d9b1:6003%5]) with mapi id 15.20.6298.030; Thu, 13 Apr 2023
+ 12:19:44 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Zheng Wang <zyytlz.wz@163.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hackerzheng666@gmail.com" <hackerzheng666@gmail.com>,
+        "1395428693sheep@gmail.com" <1395428693sheep@gmail.com>,
+        "alex000young@gmail.com" <alex000young@gmail.com>
+Subject: RE: [RESEND PATCH] usb: renesas_usbhs: Fix use after free bug in
+ usbhs_remove due to race condition
+Thread-Topic: [RESEND PATCH] usb: renesas_usbhs: Fix use after free bug in
+ usbhs_remove due to race condition
+Thread-Index: AQHZbdydGLUAyDfN4E2IecDn5BDiuq8pJMhQ
+Date:   Thu, 13 Apr 2023 12:19:44 +0000
+Message-ID: <TYBPR01MB5341FED435E5533E4B60B10CD8989@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+References: <20230413074926.239605-1-zyytlz.wz@163.com>
+In-Reply-To: <20230413074926.239605-1-zyytlz.wz@163.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYBPR01MB5341:EE_|TY3PR01MB11689:EE_
+x-ms-office365-filtering-correlation-id: cd199afc-2e97-4b39-86c6-08db3c195dc0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: TpuvtZZY3XAG/vtjPXqGim5LmJRx9VzyRrZbDkdxb3UF5J0FdqMUSH+47QxHu562Z88Xw9PD+GeK3gFtGeicTA0ZkfgCNYEets6gGHwmIZkF0BlStc4nZUmdxF/DzFld8TN5sCmKKJKpjofYAOXk7b9u0PfsoxoAwA2YZ5AsxmaT91wfWAv84DlxD5rJfCcG41MPx2oQaS39OgIG0EnCkb80KdtKD4mUwYuY/KVlV5u6rLjoPN9OBfdGP9ixwyp6PZqZwc/Dk5ZUzSFNrzDPtl4zhMqAZUJpgA90VKXUMcVyACeepABC6GMu8UWAKED4Iuk1Wg9yqCaNxxZhWeAU+DFh0/3JItvJiE47SMwzo0W5nQNalKa+kwjvrt9k93x/hwcsgbWTWiguWxq7KlQadF4rFYUO80dpc1CQQBAsQScthkZabl6epIWT0T8HoT2klM6szK3J7DPRP81Z6+JjoO5OD0DpglUZuuSBU8h8DIM5AOyTiisCkaAAv2nJNS7XPOn3kTDstLdV28BJGfhKBraaYm+4DgbjyY+l0Pge1cwwdQ8DiPwFsXENwm0s2J9uINuriGITQV9cJuXRHKjniLBeMJBMMtbk/QfBCqXyyI4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYBPR01MB5341.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(396003)(376002)(39860400002)(346002)(451199021)(316002)(38100700002)(4326008)(64756008)(66446008)(66556008)(66946007)(76116006)(66476007)(5660300002)(41300700001)(52536014)(7696005)(71200400001)(966005)(86362001)(54906003)(6506007)(186003)(9686003)(38070700005)(2906002)(8676002)(8936002)(55016003)(478600001)(33656002)(122000001)(110136005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?L7sQtPepsaxS+jn8O8etH2oX4ZOS9JIKvjclNJZY+R+mS78wH1YmuDJamIvK?=
+ =?us-ascii?Q?RcBmNxq3pun7XIPFSat6EljlEh31IihrTn76MVQsBg2PylAxgJi0oAAVFQOZ?=
+ =?us-ascii?Q?DbhO2GWKsQhXvaCBpXOCno2MSmGlTXqnZ2NFhpxc0pAVUYkQasJ5U97lRf4M?=
+ =?us-ascii?Q?FcEKr1waumCk53YLJvU/a3gABRVT+v8t3QMA6UnfcrkTWKHgfTu0Zpam/BGt?=
+ =?us-ascii?Q?YJFfiWWx1S6EDlnJQPXQ0//q0uuIjBz+DEYfkEBCt/XrrgO5jPgTQXDPILNk?=
+ =?us-ascii?Q?A3eRP05OyzjIIdHjAAEBLmtuks/TWSgK5HEOZDhuOmgWMX2YUlSe+iFamXQh?=
+ =?us-ascii?Q?4IYASs6mgxeryqtPyK/B5RJssOISPOqtB/komem5qBfj2SYRL5ZV0rIRCqsd?=
+ =?us-ascii?Q?OouMFmAiXdLNn5M6meId29N/jYbhI9rZI+JWOJZ0Ihm7TBtXMxGp6eONjJ7h?=
+ =?us-ascii?Q?BEbb+dY4EfikL14kwPZxUAfYRCv86bJcYRkConjvhKGfBi82uqXdLl0Rg7RT?=
+ =?us-ascii?Q?mQyEjA9HWxAfhmEx0hHG3osJqiHPN2fOkugvlcQOzVFWyrLJpeSyEJIEc9Jd?=
+ =?us-ascii?Q?WqseCqr0VKUXP5s8RYB5+xvsTxP+v7WJ1UT+/x2IW0sqpelg4GE7gDwF7r4p?=
+ =?us-ascii?Q?64AZD1ysit6SPNByPffvViry0Tw46smIEyJAnVRIHuHvC3Up38YCzpP7IG1S?=
+ =?us-ascii?Q?3OtvCkaS84/64cFf+Zb11qmS53jspb4ZG4Xdw/LUxanlkDfNu8iHTep0PuX0?=
+ =?us-ascii?Q?sX6+wWOP5zxCpS34w1TROWPXm2J2zCSo23R5WJBCAcRmtiTjrSjzUKAcpAkF?=
+ =?us-ascii?Q?TG6yUFnmT0k+UZrgfjfzLCxc4metG9UR5SSSKP3DS4wzw9VBERHGqjZ37ScF?=
+ =?us-ascii?Q?7vD/wUT82NiWn+d7ndrWpN3rr0qHld2vixoieUc12UNh4L8VcOHCjzWgDSG1?=
+ =?us-ascii?Q?zcY0ozb16oBOff9etXGg98g2nuiHL+Mnof38cUkxQsPk8bX7g674qZBPQlGE?=
+ =?us-ascii?Q?ORZNjpeP4m/+2eYGr5B6bGJBgGVU1uuIdcQM+hAb+JwAq92z2RuLYhZoZRh3?=
+ =?us-ascii?Q?vAlqQ17a77weSaZemAvw67nQmp1yidewDnGqjbCkeC8PObuFtNn6vhInozrz?=
+ =?us-ascii?Q?JfXZkkdINApphfip/ej3hiFXo5Ia3N+KK173U4Mn/1sc/EhGrwb4d6X4g3k1?=
+ =?us-ascii?Q?ulnDk553scm1JmNXubLEUKpx5OPBmO4MmhliNJ9x0Hrlq3RylSjTVlOv6viS?=
+ =?us-ascii?Q?9QVg7ZrYtJdGt44JOBJ2K0AczvWbujCfmxPo8q5auufKKy5JQeQ57bPmx88I?=
+ =?us-ascii?Q?N47NbPjxyjjSzePyvM9jfvmQiH01ZEIYy+1gYlJ/Hg9ifbfbOBRV2y7I5xRX?=
+ =?us-ascii?Q?zP6cHFh6t9HhuObOSu7DDJjqomOs+n9oUKlY2SbPG0BvK/QqGr8QyZBgCu/n?=
+ =?us-ascii?Q?8uoZO+LQi8KAQ7QXTNBhidrBKrlcIZ03wsk5KijX0LVRX+2OSiLJUNhH/74J?=
+ =?us-ascii?Q?7kFPYTPkPGp+PogDAjz4ZYgLYQJrIisVvnjsgsLvwwaRR7L6YuIS7qIynqps?=
+ =?us-ascii?Q?R9LA0RyFgvENt9RtP5CAE8P3Jnf8RQmI/93wLsDinpCwbcqjjcS2iJygr249?=
+ =?us-ascii?Q?qeeCugBrnJAPY2vww58g1N4gd41L9W5xxu4NYdzvJtpQW9LT4w9aY7qlRsZ3?=
+ =?us-ascii?Q?a7sAtQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYBPR01MB5341.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cd199afc-2e97-4b39-86c6-08db3c195dc0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Apr 2023 12:19:44.7279
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: T5SnbuoF8Kwm/WKWK/AUJaG17THowktMVQuUrvqMhJXLCCWE1xC8iJTg11QYPXefrd09x6MRqIE29+GHbwOehT0Gq7ZRlpAy3ubL9CPJntPmtwxNboiunt7dwQsNZi0K
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB11689
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,199 +124,78 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Hi,
 
-The lane select switch for USB typec orientation is within the USB QMP PHY.
-the current device.  It could be connected through an endpoint, to an
-independent device handling the typec detection, ie the QCOM SPMI typec
-driver.
+> From: Zheng Wang, Sent: Thursday, April 13, 2023 4:49 PM
+>=20
+> In usbhs_probe, &priv->notify_hotplug_work is bound with
+> usbhsc_notify_hotplug. It will be started then.
+>=20
+> If we remove the driver which will call usbhs_remove
+>   to make cleanup, there may be a unfinished work.
+>=20
+> The possible sequence is as follows:
+>=20
+> Fix it by finishing the work before cleanup in the usbhs_remove
+>=20
+> CPU0                  CPU1
+>=20
+>                     |usbhsc_notify_hotplug
+> usbhs_remove         |
+> usbhs_mod_remove     |
+> usbhs_mod_gadget_remove|
+> kfree(gpriv);       |
+>                     |usbhsc_hotplug
+>                     |usbhs_mod_call start
+>                     |usbhsg_start
+>                     |usbhsg_try_start
+>                     |//use gpriv
 
-bod: Fixed the logic qcom_qmp_phy_typec_switch_set() to disable phy
- on disconnect if and only if we have initialized the PHY.
- Retained CC orientation logic in qcom_qmp_phy_com_init() to simplify
- patch.
+Thank you for the patch!
 
-bod: Ported from earlier version of driver to phy-qcom-qmp-combo.c
+You should adjust the figure like followings because Greg mentioned it on o=
+ther patch [1].
+-----
+CPU0                      CPU1
 
-Co-developed-by: Wesley Cheng <wcheng@codeaurora.org>
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-Co-developed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/phy/qualcomm/Kconfig              |  8 +++
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 80 +++++++++++++++++++++--
- 2 files changed, 84 insertions(+), 4 deletions(-)
+                        | usbhsc_notify_hotplug
+usbhs_remove            |
+usbhs_mod_remove        |
+usbhs_mod_gadget_remove |
+kfree(gpriv);           |
+                        | usbhsc_hotplug
+                        | usbhs_mod_call start
+                        | usbhsg_start
+                        | usbhsg_try_start
+                        | //use gpriv
+-----
 
-diff --git a/drivers/phy/qualcomm/Kconfig b/drivers/phy/qualcomm/Kconfig
-index 4850d48f31fa1..8240fffdbed4e 100644
---- a/drivers/phy/qualcomm/Kconfig
-+++ b/drivers/phy/qualcomm/Kconfig
-@@ -101,6 +101,14 @@ config PHY_QCOM_QMP_USB
- 
- endif # PHY_QCOM_QMP
- 
-+config PHY_QCOM_QMP_TYPEC
-+	def_bool PHY_QCOM_QMP=y && TYPEC=y || PHY_QCOM_QMP=m && TYPEC
-+	help
-+	  Register a type C switch from the QMP PHY driver for type C
-+	  orientation support.  This has dependencies with if the type C kernel
-+	  configuration is enabled or not.  This support will not be present if
-+	  USB type C is disabled.
-+
- config PHY_QCOM_QUSB2
- 	tristate "Qualcomm QUSB2 PHY Driver"
- 	depends on OF && (ARCH_QCOM || COMPILE_TEST)
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-index 6850e04c329b8..b9a30c087423d 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-@@ -19,6 +19,7 @@
- #include <linux/regulator/consumer.h>
- #include <linux/reset.h>
- #include <linux/slab.h>
-+#include <linux/usb/typec_mux.h>
- 
- #include <dt-bindings/phy/phy-qcom-qmp.h>
- 
-@@ -63,6 +64,10 @@
- /* QPHY_V3_PCS_MISC_CLAMP_ENABLE register bits */
- #define CLAMP_EN				BIT(0) /* enables i/o clamp_n */
- 
-+/* QPHY_V3_DP_COM_TYPEC_CTRL register bits */
-+#define SW_PORTSELECT_VAL			BIT(0)
-+#define SW_PORTSELECT_MUX			BIT(1)
-+
- #define PHY_INIT_COMPLETE_TIMEOUT		10000
- 
- struct qmp_phy_init_tbl {
-@@ -1323,6 +1328,9 @@ struct qmp_combo {
- 	struct clk_fixed_rate pipe_clk_fixed;
- 	struct clk_hw dp_link_hw;
- 	struct clk_hw dp_pixel_hw;
-+
-+	struct typec_switch_dev *sw;
-+	enum typec_orientation orientation;
- };
- 
- static void qmp_v3_dp_aux_init(struct qmp_combo *qmp);
-@@ -1955,7 +1963,8 @@ static void qmp_v3_configure_dp_tx(struct qmp_combo *qmp)
- static bool qmp_combo_configure_dp_mode(struct qmp_combo *qmp)
- {
- 	u32 val;
--	bool reverse = false;
-+	bool reverse = qmp->orientation == TYPEC_ORIENTATION_REVERSE;
-+	const struct phy_configure_opts_dp *dp_opts = &qmp->dp_opts;
- 
- 	val = DP_PHY_PD_CTL_PWRDN | DP_PHY_PD_CTL_AUX_PWRDN |
- 	      DP_PHY_PD_CTL_PLL_PWRDN | DP_PHY_PD_CTL_DP_CLAMP_EN;
-@@ -1974,10 +1983,18 @@ static bool qmp_combo_configure_dp_mode(struct qmp_combo *qmp)
- 	 * if (orientation == ORIENTATION_CC2)
- 	 *	writel(0x4c, qmp->dp_dp_phy + QSERDES_V3_DP_PHY_MODE);
- 	 */
-+	if (dp_opts->lanes == 4 || reverse)
-+		val |= DP_PHY_PD_CTL_LANE_0_1_PWRDN;
-+	if (dp_opts->lanes == 4 || !reverse)
-+		val |= DP_PHY_PD_CTL_LANE_2_3_PWRDN;
-+
- 	val |= DP_PHY_PD_CTL_LANE_2_3_PWRDN;
- 	writel(val, qmp->dp_dp_phy + QSERDES_DP_PHY_PD_CTL);
- 
--	writel(0x5c, qmp->dp_dp_phy + QSERDES_DP_PHY_MODE);
-+	if (reverse)
-+		writel(0x4c, qmp->pcs + QSERDES_DP_PHY_MODE);
-+	else
-+		writel(0x5c, qmp->pcs + QSERDES_DP_PHY_MODE);
- 
- 	return reverse;
- }
-@@ -2461,6 +2478,7 @@ static int qmp_combo_com_init(struct qmp_combo *qmp)
- {
- 	const struct qmp_phy_cfg *cfg = qmp->cfg;
- 	void __iomem *com = qmp->com;
-+	u32 val;
- 	int ret;
- 
- 	mutex_lock(&qmp->phy_mutex);
-@@ -2498,8 +2516,11 @@ static int qmp_combo_com_init(struct qmp_combo *qmp)
- 			SW_DPPHY_RESET_MUX | SW_DPPHY_RESET |
- 			SW_USB3PHY_RESET_MUX | SW_USB3PHY_RESET);
- 
--	/* Default type-c orientation, i.e CC1 */
--	qphy_setbits(com, QPHY_V3_DP_COM_TYPEC_CTRL, 0x02);
-+	/* Latch CC orientation based on reported state by TCPM */
-+	val = SW_PORTSELECT_MUX;
-+	if (qmp->orientation == TYPEC_ORIENTATION_REVERSE)
-+		val |= SW_PORTSELECT_VAL;
-+	qphy_setbits(com, QPHY_V3_DP_COM_TYPEC_CTRL, val);
- 
- 	qphy_setbits(com, QPHY_V3_DP_COM_PHY_MODE_CTRL, USB3_MODE | DP_MODE);
- 
-@@ -3338,6 +3359,53 @@ static struct phy *qmp_combo_phy_xlate(struct device *dev, struct of_phandle_arg
- 	return ERR_PTR(-EINVAL);
- }
- 
-+#if IS_ENABLED(CONFIG_PHY_QCOM_QMP_TYPEC)
-+static int qmp_combo_typec_switch_set(struct typec_switch_dev *sw,
-+				      enum typec_orientation orientation)
-+{
-+	struct qmp_combo *qmp = typec_switch_get_drvdata(sw);
-+	struct phy *dp_phy = qmp->dp_phy;
-+	int ret = 0;
-+
-+	dev_dbg(qmp->dev, "Toggling orientation current %d requested %d\n",
-+		qmp->orientation, orientation);
-+
-+	qmp->orientation = orientation;
-+
-+	if (orientation == TYPEC_ORIENTATION_NONE) {
-+		if (qmp->init_count)
-+			ret = qmp_combo_dp_power_off(dp_phy);
-+	} else {
-+		if (!qmp->init_count)
-+			ret = qmp_combo_dp_power_on(dp_phy);
-+	}
-+
-+	return 0;
-+}
-+
-+static int qmp_combo_typec_switch_register(struct qmp_combo *qmp)
-+{
-+	struct typec_switch_desc sw_desc;
-+	struct device *dev = qmp->dev;
-+
-+	sw_desc.drvdata = qmp;
-+	sw_desc.fwnode = dev->fwnode;
-+	sw_desc.set = qmp_combo_typec_switch_set;
-+	qmp->sw = typec_switch_register(dev, &sw_desc);
-+	if (IS_ERR(qmp->sw)) {
-+		dev_err(dev, "Error registering typec switch: %ld\n",
-+			PTR_ERR(qmp->sw));
-+	}
-+
-+	return 0;
-+}
-+#else
-+static int qmp_combo_typec_switch_register(struct qmp_combo *qmp)
-+{
-+	return 0;
-+}
-+#endif
-+
- static int qmp_combo_probe(struct platform_device *pdev)
- {
- 	struct qmp_combo *qmp;
-@@ -3428,6 +3496,10 @@ static int qmp_combo_probe(struct platform_device *pdev)
- 	else
- 		phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
- 
-+	ret = qmp_combo_typec_switch_register(qmp);
-+	if (ret)
-+		goto err_node_put;
-+
- 	of_node_put(usb_np);
- 	of_node_put(dp_np);
- 
--- 
-2.39.2
+[1]
+https://lore.kernel.org/lkml/ZBNCam0XjWehrF3c@kroah.com/
+
+Best regards,
+Yoshihiro Shimoda
+
+> Fixes: bc57381e6347 ("usb: renesas_usbhs: use delayed_work instead of wor=
+k_struct")
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> ---
+>  drivers/usb/renesas_usbhs/common.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usb=
+hs/common.c
+> index 96f3939a65e2..17a0987ef4f5 100644
+> --- a/drivers/usb/renesas_usbhs/common.c
+> +++ b/drivers/usb/renesas_usbhs/common.c
+> @@ -768,6 +768,7 @@ static int usbhs_remove(struct platform_device *pdev)
+>=20
+>  	dev_dbg(&pdev->dev, "usb remove\n");
+>=20
+> +	cancel_delayed_work_sync(&priv->notify_hotplug_work);
+>  	/* power off */
+>  	if (!usbhs_get_dparam(priv, runtime_pwctrl))
+>  		usbhsc_power_ctrl(priv, 0);
+> --
+> 2.25.1
 
