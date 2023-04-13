@@ -2,98 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33CEB6E115D
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 17:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E4606E126D
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 18:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbjDMPoS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Apr 2023 11:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
+        id S229959AbjDMQgq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Apr 2023 12:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjDMPoR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 11:44:17 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3913310EF;
-        Thu, 13 Apr 2023 08:44:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=sXqNs
-        6lg+IIJ+O1PdH2eS9ZXTmGxoGzuMU3zSlyWTwU=; b=To8EJTqEiLT2b/MoWMK5Q
-        Rtj93+txGBKWM+MorhT/fsGWGdWpxxYBEdiQNVDRHMM9r7GFEtuzNSsOfXkufbx4
-        OXQDyiypLYdRuTbV9b4xPzksnRBPm+rE1YeRH1EprvIk2KCRMvfGTX8niJAbc+5W
-        U75tr5rnADbHUZVMyfx5Ig=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g4-4 (Coremail) with SMTP id _____wBXhWY5IzhkpE9VBQ--.3426S2;
-        Thu, 13 Apr 2023 23:43:53 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     gregkh@linuxfoundation.org
-Cc:     yoshihiro.shimoda.uh@renesas.com, p.zabel@pengutronix.de,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
-        alex000young@gmail.com, Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH v2] usb: renesas_usbhs: Fix use after free bug in usbhs_remove due to race condition
-Date:   Thu, 13 Apr 2023 23:43:51 +0800
-Message-Id: <20230413154351.619730-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229962AbjDMQgp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 12:36:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A709753;
+        Thu, 13 Apr 2023 09:36:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A775663FE5;
+        Thu, 13 Apr 2023 16:36:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33D79C4339E;
+        Thu, 13 Apr 2023 16:36:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681403801;
+        bh=zpXOE8O6tskJByG5O5xUZJa+iFGZLEGodc5DA9SzF90=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=pTBQfrdmKxrEodLYWrlZETofTOnwil+BcO8ESlnogLiYI3w7Zy6/7iKTKGxO4CD5v
+         W+8Mw27ujy/nsj3gWOV0eBZzrR3a9pnsuJyyp3lbfeMSlPJ1cL0DZF+JJooheUwCwN
+         6Zi4a/++kltwjfPk4I6jUu/YnCH5ABzzZgbS8p6gTF7BfjkkrkliVZVMsmQX34iBC/
+         pbKdJb3CK1/Mdqe04S0SxQoOZWqSfYec7mBl+cH/ItR4tprgiqmDLZIKRWdSq18ONH
+         mpOhh0dMw8XnzluvCIQYwJEZosS/lTqaSQHVXJf31pjNg65AJpBTYhwJpvtdMhe5vP
+         ILyEZDQKswo4g==
+Message-ID: <19946f94-db48-fe0d-722c-cbb45b8bd0ba@kernel.org>
+Date:   Thu, 13 Apr 2023 18:36:37 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add
+ 'snps,global-regs-starting-offset' quirk
+Content-Language: en-US
+To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>
+References: <20230412033006.10859-2-stanley_chang@realtek.com>
+ <20230413042503.4047-1-stanley_chang@realtek.com>
+ <167e4a8c-3ebd-92b7-1481-947f08901f97@kernel.org>
+ <9f6abbe7a6fd479c98e2fd6c1080ad8a@realtek.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <9f6abbe7a6fd479c98e2fd6c1080ad8a@realtek.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBXhWY5IzhkpE9VBQ--.3426S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Ww13Gw1rKw47WF1UurWDCFg_yoW8Gr13pa
-        15JFyUG3yrGrWjga1vqr4UXryrCayqgry7WrZrWwsxuwnxAa18Za40qF4Uur13Xa93JF4j
-        vw1vyr95ZaykCFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0z_9N3DUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiQhpQU1aEE+iaiQAAsh
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In usbhs_probe, &priv->notify_hotplug_work is bound with
-usbhsc_notify_hotplug. It will be started then.
+On 13/04/2023 16:58, Stanley Chang[昌育德] wrote:
+>> On 13/04/2023 06:25, Stanley Chang wrote:
+>>> Add a new 'snps,global-regs-starting-offset' DT to dwc3 core to remap
+>>> the global register start address
+>>>
+>>> The RTK DHC SoCs were designed the global register address offset at
+>>> 0x8100. The default address is at DWC3_GLOBALS_REGS_START (0xc100).
+>>> Therefore, add the property of device-tree to adjust this start address.
+>>>
+>>> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+>>> ---
+>>>  v1 to v2 change:
+>>> 1. Change the name of the property "snps,global-regs-starting-offset".
+>>> ---
+>>
+>> Didn't you got already comment for this patch? How did you implement it?
+>>
+>> Also, I asked you multiple times:
+>>
+>> Please use scripts/get_maintainers.pl to get a list of necessary people and lists
+>> to CC.  It might happen, that command when run on an older kernel, gives
+>> you outdated entries.  Therefore please be sure you base your patches on
+>> recent Linux kernel.
+>>
+>> I don't understand why you ignore this.
+>>
+>> NAK, patch is not correct.
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> 
+> Thank you for your patient guidance.
+> Because I'm not familiar with the review process and didn't use scripts/get_maintainers.pl properly in the initial email thread.
+> Therefore, this series of errors was caused. Sorry for the confusion.
+> Now I know how to use the script properly.
+> After correcting the maintainer's suggestion, I'll restart a new email thread and review again.
 
-If we remove the driver which will call usbhs_remove
-  to make cleanup, there may be a unfinished work.
+Did you respond to feedback you got about the property? Did reviewer
+agreed on your view after your feedback?
 
-The possible sequence is as follows:
+If not, then why resending this patch?
 
-Fix it by finishing the work before cleanup in the usbhs_remove
-
-CPU0                      CPU1
-                        | usbhsc_notify_hotplug
-usbhs_remove            |
-usbhs_mod_remove        |
-usbhs_mod_gadget_remove |
-kfree(gpriv);           |
-                        | usbhsc_hotplug
-                        | usbhs_mod_call start
-                        | usbhsg_start
-                        | usbhsg_try_start
-                        | //use gpriv
-
-Fixes: bc57381e6347 ("usb: renesas_usbhs: use delayed_work instead of work_struct")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
-v2:
-- beautify the format as Yoshihiro Shimoda suggested
----
- drivers/usb/renesas_usbhs/common.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
-index 96f3939a65e2..17a0987ef4f5 100644
---- a/drivers/usb/renesas_usbhs/common.c
-+++ b/drivers/usb/renesas_usbhs/common.c
-@@ -768,6 +768,7 @@ static int usbhs_remove(struct platform_device *pdev)
- 
- 	dev_dbg(&pdev->dev, "usb remove\n");
- 
-+	cancel_delayed_work_sync(&priv->notify_hotplug_work);
- 	/* power off */
- 	if (!usbhs_get_dparam(priv, runtime_pwctrl))
- 		usbhsc_power_ctrl(priv, 0);
--- 
-2.25.1
+Best regards,
+Krzysztof
 
