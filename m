@@ -2,67 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1C26E0BA1
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 12:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 859796E0C7E
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 13:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjDMKoi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Apr 2023 06:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54686 "EHLO
+        id S230260AbjDMLb6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Apr 2023 07:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjDMKoh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 06:44:37 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A05C186;
-        Thu, 13 Apr 2023 03:44:35 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id CC2F024E2AC;
-        Thu, 13 Apr 2023 18:44:32 +0800 (CST)
-Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 13 Apr
- 2023 18:44:32 +0800
-Received: from [192.168.125.108] (183.27.97.249) by EXMBX171.cuchost.com
- (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 13 Apr
- 2023 18:44:31 +0800
-Message-ID: <985d0a57-1fc8-5725-4d3a-33dcc5d49d67@starfivetech.com>
-Date:   Thu, 13 Apr 2023 18:44:31 +0800
+        with ESMTP id S230310AbjDMLbz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 07:31:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39329EDE;
+        Thu, 13 Apr 2023 04:31:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EF1561515;
+        Thu, 13 Apr 2023 11:31:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE5E7C433EF;
+        Thu, 13 Apr 2023 11:31:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681385509;
+        bh=+kCqBuYlf/Kptktf9xAiEnZMG+m6PiC7fBrkkvhaGSM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HXR+6A3rfOYJkwGceEP1yXhHSj3XVyl1uF/VCXUx6zNVxLCrVHiyN3ReS6WnxuzCQ
+         7gR4DLzfi1WQP+6mBZ7kPMhGNnEJJKnq7VjZqGwQw1y0UhGzobTdftvkpIpHlkUPEF
+         qbGdurLMOMXRMY93PiEZh2/ZFLpnIfcfE00oulrtezl+Oez63ZE2RA5yQTYy3/PZBU
+         LR7NUyiAXUI1erxChS/+XBeMG8JryJvYQC9m7yAqmlT+IWZx7rhQFXg+5pCoOFdg9D
+         K6whkTI8in70R9C7GCCluFJdYMcHNb3LH76VCLGyhFpjWHp5+y9H0h8GBz4eImJDdG
+         mZEkjOggpdUJQ==
+Message-ID: <fdfe707e-7689-373a-3aa4-e81cfeac1562@kernel.org>
+Date:   Thu, 13 Apr 2023 14:31:45 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v4 0/7] Add JH7110 USB and USB PHY driver support
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH 2/2] usb: dwc3: Support
+ 'snps,gadget-keep-connect-sys-sleep' feature
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "vigneshr@ti.com" <vigneshr@ti.com>, "srk@ti.com" <srk@ti.com>,
+        "r-gunasekaran@ti.com" <r-gunasekaran@ti.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230323021737.pv2nrb2md54a5pdg@synopsys.com>
+ <624243b4-3fb5-6e60-e324-8df6b853205f@kernel.org>
+ <20230323205139.4on6vx555ohdec7y@synopsys.com>
+ <4d2f628e-6adc-5190-61b3-cc9d61f34a84@kernel.org>
+ <20230403233652.2exkx2ikifuo4m6h@synopsys.com>
+ <75db038b-ec7b-80e5-2652-8c5d2a9e317a@kernel.org>
+ <20230404215317.44j2cl3uhzdk3aty@synopsys.com>
+ <8884129b-8c73-df1e-e342-01defce0d407@kernel.org>
+ <20230406013803.x2fp6c3wpvqtbues@synopsys.com>
+ <a5993f55-36ea-a2b0-c715-652cdf6feef1@kernel.org>
+ <20230412205927.win6wgv6yc4nqrzt@synopsys.com>
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>,
-        "Vinod Koul" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Mason Huo" <mason.huo@starfivetech.com>
-References: <20230406015216.27034-1-minda.chen@starfivetech.com>
- <517670ca-ba2e-811e-3eb2-7f38011c9690@linaro.org>
-From:   Minda Chen <minda.chen@starfivetech.com>
-In-Reply-To: <517670ca-ba2e-811e-3eb2-7f38011c9690@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230412205927.win6wgv6yc4nqrzt@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.249]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX171.cuchost.com
- (172.16.6.91)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,133 +73,43 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On 2023/4/12 16:26, Krzysztof Kozlowski wrote:
-> On 06/04/2023 03:52, Minda Chen wrote:
->> This patchset adds USB driver and USB PHY for the StarFive JH7110 SoC.
->> USB work mode is peripheral and using USB 2.0 PHY in VisionFive 2 board.
->> The patch has been tested on the VisionFive 2 board.
->> 
->> This patchset should be applied after the patchset [1], [2] and[3]:
->> [1] https://patchwork.kernel.org/project/linux-riscv/cover/20230314124404.117592-1-xingyu.wu@starfivetech.com/
->> [2] https://lore.kernel.org/all/20230315055813.94740-1-william.qiu@starfivetech.com/
->> [3] https://patchwork.kernel.org/project/linux-phy/cover/20230315100421.133428-1-changhuang.liang@starfivetech.com/
->> 
->> This patchset is base on v6.3-rc4
->> 
->> patch 1 is usb phy dt-binding document.
->> patch 2 is Pcie PHY dt-binding document.
->> patch 3 is USB 2.0 PHY driver.
->> patch 4 is PCIe PHY driver.
->> patch 5 is usb dt-binding document.
->> patch 6 is the wrapper module driver of Cadence USB3. USB controller IP is Cadence USB3.
->> patch 7 is USB device tree configuration.
->> 
->> previous version
->> ---
->> v1: https://patchwork.kernel.org/project/linux-usb/cover/20230306095212.25840-1-minda.chen@starfivetech.com/
->> v2: https://patchwork.kernel.org/project/linux-usb/cover/20230308082800.3008-1-minda.chen@starfivetech.com/
+On 12/04/2023 23:59, Thinh Nguyen wrote:
+> On Wed, Apr 12, 2023, Roger Quadros wrote:
+>>
+>>
+>> On 06/04/2023 04:38, Thinh Nguyen wrote:
+>>> On Wed, Apr 05, 2023, Roger Quadros wrote:
+>>>>
+>>>>
+>>>> On 05/04/2023 00:53, Thinh Nguyen wrote:
+>>>>>
+>>>>> I may have misunderstood your platform implementation. My understanding
+>>>>> is that it can only detect VBUS and that it can only resume on VBUS
+>>>>> valid.
+>>>>>
+>>>>> Does the "LINESTATE" here gets asserted if say there's a LFPS detection?
+>>>>
+>>>> Yes. The wake up logic on the SoC is snooping the UTMI lines from the PHY and on any
+>>>> change it can detect and wake up the SoC.
+>>>>
+>>>
+>>> Are you referring to the utmi_linestate signal? Isn't that for usb2
+>>> speed only? Does your platform support usb3 speed?
+>>
+>> The wake-up on deepSleep feature is only supported for USB2 on this particular SoC.
+>>
 > 
-> This is v2.
+> I mean can your platform operate in usb3 speed. If that's the case, then
+> how do you plan to handle it here.
+
+No, this SoC can only support up to USB2 speed.
+
 > 
->> v3: https://patchwork.kernel.org/project/linux-usb/cover/20230315104411.73614-1-minda.chen@starfivetech.com/
->> 
->> changes
->> v4:
->>   1. (patch 1) split PCIe PHY dt-binding doc to patch 2.
->>   2. (patch 2) PCIe PHY add stg and sys con configuration to dt-binding doc.
->>   3. (patch 3)
->>      - split PCIe PHY driver to patch 4.
->>      - replace dr_mode to phy mode in jh7110_usb2_phy.
->>   4. (patch 4) 
->>      - Makefile and Kconfig sorted by alphabet sequence.
->>      - Add PCIe PHY stg and syscon PHY connection configuration
->>        for USB 3.0.
->>   5. (patch 5)
->>      - commit message changed.
->>      - merge wrapper dts node and cdns3 node in example.
->>      - Add interrupts, reg, phy and dr_mode in property.
->>      - Add reset-name in property example.
->>   6. (patch 6)
->>      - For dts node is merged, Using platform_device_alloc and
->>        platform_device_add to generate cadence sub device.
->>      - IOMEM and IRQ resource are passed to Cadence sub device.
->>      - Add PHY ops process for PHY dts setting can not be passed to
->>        Cadence USB driver.
->>      - remove the stg and sys USB 3.0 PHY configuration.
->>      - Change the suspend clock reset and clock enable sequence.
->>      - Get all reset and clock resources before enable them in 
->>        cdns_clk_rst_init.
->>      - commit message changed.
->>   7. (patch 7)
->>      - merge wrapper dts node and cdns3 node in usb dts.
->>      - move the stg and sys USB 3.0 PHY confiuration to
->>        PCIe PHY dts node.
->>      - commit message changed.
->>      - Add reset-names dts.
->> 
->> v3:
->>   1. Add patch 1 - 4. Add USB PHY driver and dt-binding doc. 
->>      USB PHY codes are moved to patch 3 and patch 4.
->>   2. (patch 5)
->>      - USB wrapper module dts document is moved to usb directory.
->>      - Remove the 'dr_mode' and 'starfive,usb2-only' setting.
->>      - Some dts format changes. dts binding check pass.
->>   3. (patch 6)
->>      - Remove the PHY codes. 
->>      - Search 'dr_mode' and phy setting from Cadence subnode.
->>   4. (patch 7)
->>      - Add USB PHY dts configurion. 
->>      - 'dr_mode' is moved to Cadence controller submode.
->> 
->> v2:
->>   1. (patch 5) dt-binding changes. The document example is the same as dts config.
->>   2. (patch 6) using dev_err_probe and syscon_regmap_lookup_by_phandle_args function. Some formats changes
->>   3. (patch 7) dts nodes sorted by the address after @
->> 
->> 
->> Minda Chen (7):
->>   dt-bindings: phy: Add StarFive JH7110 USB document
->>   dt-bindings: phy: Add StarFive JH7110 PCIe document
->>   phy: starfive: add JH7110 USB 2.0 PHY driver.
->>   phy: starfive: add JH7110 PCIE 2.0 PHY driver.
->>   dt-bindings: usb: Add StarFive JH7110 USB Bindings YAML schemas
->>   usb: cdns3: add StarFive JH7110 USB driver.
->>   riscv: dts: starfive: add USB dts configuration for JH7110
->> 
->>  .../phy/starfive,jh7110-pcie-phy.yaml         |  58 +++
->>  .../bindings/phy/starfive,jh7110-usb-phy.yaml |  50 +++
->>  .../bindings/usb/starfive,jh7110-usb.yaml     | 136 +++++++
->>  MAINTAINERS                                   |  16 +
->>  .../jh7110-starfive-visionfive-2.dtsi         |   7 +
->>  arch/riscv/boot/dts/starfive/jh7110.dtsi      |  44 ++
->>  drivers/phy/starfive/Kconfig                  |  22 +
->>  drivers/phy/starfive/Makefile                 |   2 +
->>  drivers/phy/starfive/phy-jh7110-pcie.c        | 197 +++++++++
->>  drivers/phy/starfive/phy-jh7110-usb.c         | 161 ++++++++
->>  drivers/usb/cdns3/Kconfig                     |  11 +
->>  drivers/usb/cdns3/Makefile                    |   1 +
->>  drivers/usb/cdns3/cdns3-starfive.c            | 378 ++++++++++++++++++
->>  drivers/usb/cdns3/core.h                      |   3 +
->>  14 files changed, 1086 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-pcie-phy.yaml
->>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
->>  create mode 100644 Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
->>  create mode 100644 drivers/phy/starfive/phy-jh7110-pcie.c
->>  create mode 100644 drivers/phy/starfive/phy-jh7110-usb.c
->>  create mode 100644 drivers/usb/cdns3/cdns3-starfive.c
->> 
->> 
->> base-commit: 0ec57cfa721fbd36b4c4c0d9ccc5d78a78f7fa35
->> prerequisite-patch-id: 24a6e3442ed1f5454ffb4a514cfd768436a87090
->> prerequisite-patch-id: 55390537360f25c8b9cbfdc30b73ade004f436f7
-> 
-> fatal: bad object 55390537360f25c8b9cbfdc30b73ade004f436f7
-> 
-> What commits do you reference? How are they helpful?
-> 
-I use "git format-patch --base=(commit) to generate patchset.
-Maybe I set the wrong base commit.
-> 
-> Best regards,
-> Krzysztof
-> 
+> Also, when you tested this in highspeed, did you observe successful
+> resume? Or did the host have to perform a port reset?
+
+I definitely didn't see a disconnect. Not sure about port reset.
+I will check and get back.
+
+cheers,
+-roger
