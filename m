@@ -2,95 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E126E0837
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 09:50:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3C06E0882
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Apr 2023 10:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjDMHuV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Apr 2023 03:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
+        id S229579AbjDMIAT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Apr 2023 04:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjDMHuT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 03:50:19 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1238B9EC9;
-        Thu, 13 Apr 2023 00:49:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=6TtIQ
-        g09ZmPHNc7fwNMyG9gkvYgQeJ5WuDUEisBpScU=; b=RxNbs3Gjyl9cXI5OkfVXy
-        i7frEY3tkxOjz4VRLt/2cmcaWumZfqF4VnegiLRG3Cih6M4EiasHMBn2cyYnzYwu
-        NM8sXTsNYFv5foRQDP0rXxlHRUFLcnop0tbmwGHiENR/H4NRow+pxscTn5Wdycc9
-        NZmQ8yp4VGmPzdrlbuJy9w=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g4-1 (Coremail) with SMTP id _____wDXGOwItDdkTX8uBQ--.1680S2;
-        Thu, 13 Apr 2023 15:49:28 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     gregkh@linuxfoundation.org
-Cc:     p.zabel@pengutronix.de, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [RESEND PATCH] usb: renesas_usbhs: Fix use after free bug in usbhs_remove due to race condition
-Date:   Thu, 13 Apr 2023 15:49:26 +0800
-Message-Id: <20230413074926.239605-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229732AbjDMIAS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 04:00:18 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D05B5FD4;
+        Thu, 13 Apr 2023 01:00:17 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33D7xm103025841, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33D7xm103025841
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 13 Apr 2023 15:59:48 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Thu, 13 Apr 2023 16:00:10 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 13 Apr 2023 16:00:09 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
+ RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
+ 15.01.2375.007; Thu, 13 Apr 2023 16:00:09 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 1/2] usb: dwc3: core: add support for disabling High-speed park mode
+Thread-Topic: [PATCH v2 1/2] usb: dwc3: core: add support for disabling
+ High-speed park mode
+Thread-Index: AQHZbDd6mjqPmjMt8EayK+GV5r/KUq8mG4+AgAFsAjCAANC0AIAAiV6g
+Date:   Thu, 13 Apr 2023 08:00:09 +0000
+Message-ID: <95791748e8284bf188386bba91688988@realtek.com>
+References: <20230411053550.16360-1-stanley_chang@realtek.com>
+ <20230411213158.r7i6thg67okbovjp@synopsys.com>
+ <e9964b3cd1a34b05990c1061af9d1951@realtek.com>
+ <2023041355-parole-enviable-b002@gregkh>
+In-Reply-To: <2023041355-parole-enviable-b002@gregkh>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wDXGOwItDdkTX8uBQ--.1680S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Ww13Gw1rKw47WF1UAw15CFg_yoW8JF4xpa
-        15JFy8G3yrGrWjgan2qr4UXFyrCayqgr17WrZ7WwsxuwnxAa18Za4FqF4j9r13Xa93Ja1Y
-        v3Wvyr95CaykCFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi0tC3UUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzglQU2I0YqBUwwAAsH
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In usbhs_probe, &priv->notify_hotplug_work is bound with
-usbhsc_notify_hotplug. It will be started then.
-
-If we remove the driver which will call usbhs_remove
-  to make cleanup, there may be a unfinished work.
-
-The possible sequence is as follows:
-
-Fix it by finishing the work before cleanup in the usbhs_remove
-
-CPU0                  CPU1
-
-                    |usbhsc_notify_hotplug
-usbhs_remove         |
-usbhs_mod_remove     |
-usbhs_mod_gadget_remove|
-kfree(gpriv);       |
-                    |usbhsc_hotplug
-                    |usbhs_mod_call start
-                    |usbhsg_start
-                    |usbhsg_try_start
-                    |//use gpriv
-Fixes: bc57381e6347 ("usb: renesas_usbhs: use delayed_work instead of work_struct")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
- drivers/usb/renesas_usbhs/common.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
-index 96f3939a65e2..17a0987ef4f5 100644
---- a/drivers/usb/renesas_usbhs/common.c
-+++ b/drivers/usb/renesas_usbhs/common.c
-@@ -768,6 +768,7 @@ static int usbhs_remove(struct platform_device *pdev)
- 
- 	dev_dbg(&pdev->dev, "usb remove\n");
- 
-+	cancel_delayed_work_sync(&priv->notify_hotplug_work);
- 	/* power off */
- 	if (!usbhs_get_dparam(priv, runtime_pwctrl))
- 		usbhsc_power_ctrl(priv, 0);
--- 
-2.25.1
-
+PiANCj4gT24gV2VkLCBBcHIgMTIsIDIwMjMgYXQgMTE6MTU6MzVBTSArMDAwMCwgU3RhbmxleSBD
+aGFuZ1vmmIzogrLlvrddIHdyb3RlOg0KPiA+DQo+ID4gQ0MgbW9yZSBtYWludGFpbmVycyBieSB1
+c2luZyBzY3JpcHRzL2dldF9tYWludGFpbmVycy5wbA0KPiA+DQo+IA0KPiBJIGRvIG5vdCBzZWUg
+YW55IG1lc3NhZ2UgaGVyZSwgc28gSSBhbSB0b3RhbGx5IGNvbmZ1c2VkLg0KPiANCj4gWW91IGhh
+dmUgdG8gdXNlIHRoZSBzY3JpcHQgd2hlbiBkZXRlcm1pbmluZyB3aG8gdG8gc2VuZCB0aGUgcGF0
+Y2ggdG8sIHlvdQ0KPiBjYW4ndCBkbyBpdCBhZnRlciB0aGUgZmFjdCBsaWtlIHRoaXMgYXMgaXQg
+d2lsbCBub3Qgd29yayBhdCBhbGwuDQo+IA0KPiBncmVnIGstaA0KPiANCg0KU29ycnkgZm9yIHRo
+ZSBjb25mdXNpb24uDQpJbiB0aGUgYmVnaW5uaW5nIEkgZGlkbid0IGhhdmUgY2MgYWxsIG1haW50
+YWluZXJzLg0KSSdsbCByZXN1Ym1pdCBhIG5ldyByZXZpZXcgdGhyZWFkLg0KUGxlYXNlIGlnbm9y
+ZSB0aGlzIGVtYWlsLg0KDQoNCg==
