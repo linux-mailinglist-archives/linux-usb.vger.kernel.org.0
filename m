@@ -2,259 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B7F6E1D1F
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Apr 2023 09:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D58D46E1D47
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Apr 2023 09:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjDNH1g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Apr 2023 03:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
+        id S229881AbjDNHfG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Apr 2023 03:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjDNH1f (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Apr 2023 03:27:35 -0400
-X-Greylist: delayed 212 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 14 Apr 2023 00:27:33 PDT
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FE64C39
-        for <linux-usb@vger.kernel.org>; Fri, 14 Apr 2023 00:27:33 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 2BB73204C0;
-        Fri, 14 Apr 2023 09:27:31 +0200 (CEST)
-Date:   Fri, 14 Apr 2023 09:27:29 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, andersson@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, caleb.connolly@linaro.org,
-        konrad.dybcio@linaro.org, subbaram@quicinc.com, jackp@quicinc.com,
-        robertom@qti.qualcomm.com, Wesley Cheng <wcheng@codeaurora.org>
-Subject: Re: [PATCH v5 05/14] dt-bindings: usb: Add Qualcomm PMIC Type-C YAML
- schema
-Message-ID: <um7eohfp32snyyjwex2kasuvwu42z4nisly2beqbfn5opw6fnp@hzuuerl3pcsg>
-References: <20230413113438.1577658-1-bryan.odonoghue@linaro.org>
- <20230413113438.1577658-6-bryan.odonoghue@linaro.org>
+        with ESMTP id S229747AbjDNHfF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Apr 2023 03:35:05 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCC46E9F
+        for <linux-usb@vger.kernel.org>; Fri, 14 Apr 2023 00:34:44 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id xi5so43419542ejb.13
+        for <linux-usb@vger.kernel.org>; Fri, 14 Apr 2023 00:34:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681457676; x=1684049676;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R+rh3tDvh6WkK7g8h9KApr2CJ8l25rqXWTlNAb5p0pY=;
+        b=p3fXroZpOQkazJL/kjoMSRniuPA4fAGPsUR3lrGrgN306Q6HTfNnzTmfz3zOofY2Eq
+         0izO5J5X/Fy94Y2sCAERvKKyInONDCnHlJ+7gvHjOl946qu2TicB4L0AQRRJMONqRHDJ
+         dGzVGJcdmD39i6WI1+KNGYGJZIQfGBrnDVZkeWESjfDyluYYrzCICF+er2Jg/RwsWtW2
+         mg+LWjrBnPFL9jN2fPgt2LRTDKRuYb6PheaZOe7lWsU3VO9AAwdW/c5oIbpj9NQmJBtr
+         pslTev0VbDyx7JkbEm5g7yN5L3Sf288U6MypPefNgbzOIBBxioUqzv+j4gKzZ3vXQIMr
+         /jTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681457676; x=1684049676;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R+rh3tDvh6WkK7g8h9KApr2CJ8l25rqXWTlNAb5p0pY=;
+        b=PN8SJvBwRmLDGVUldszie+ar6+Jo9nf8KG2OI+6yyjcT7wXEl0e1vOOLI4svhh7jlG
+         NOJBJ+QYiwqpZRYLpHWocEVM4BsydeY3oFJYErsvFe+lVWQ32Ij3qiv6G7j/99pk5au0
+         9dX5JYRD4qj/OMV5xZEl3Jkv9HaxfL+uUXv/67d+GQLGgSHRrdY8Umw+J93zMVH+Jboq
+         +I7PQ6/AjuDYO2M40Hyjn5EOxO0oCh0YnvMRahXx2T68jD8szqf8afnhE2Rym5FEA1zr
+         RTZTTfMc6a18sVikhIUpG9pH5fXNxYMTstrYzBKCu05Z/GJVxqhTqH/0+uV3cEbtnI9M
+         1taQ==
+X-Gm-Message-State: AAQBX9fQxFY529oimTYzPMvB/9SQIXtJoqhMQdhjBsZAntVotK+pC92a
+        i2rsCHs3+34rus/f2d4+ESwHIg==
+X-Google-Smtp-Source: AKy350arUjQBSNqUUBjSuVfoDP8zc1vyW/pMS/UxUoiUXdFN6JUn2vgJa2VEVtjwqNN1gsEkfBgebg==
+X-Received: by 2002:a17:906:a4b:b0:94e:4700:7a66 with SMTP id x11-20020a1709060a4b00b0094e47007a66mr9163112ejf.6.1681457675818;
+        Fri, 14 Apr 2023 00:34:35 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:8a60:6b0f:105a:eefb? ([2a02:810d:15c0:828:8a60:6b0f:105a:eefb])
+        by smtp.gmail.com with ESMTPSA id d16-20020a17090648d000b0094bcf409ec9sm2050595ejt.49.2023.04.14.00.34.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 00:34:35 -0700 (PDT)
+Message-ID: <9ceba633-cf36-efd3-6889-1bbe6755b398@linaro.org>
+Date:   Fri, 14 Apr 2023 09:34:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230413113438.1577658-6-bryan.odonoghue@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCHv4 1/3] dt-bindings: usb: Add RK3588 OHCI
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Rob Herring <robh@kernel.org>
+References: <20230413173150.71387-1-sebastian.reichel@collabora.com>
+ <20230413173150.71387-2-sebastian.reichel@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230413173150.71387-2-sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2023-04-13 12:34:29, Bryan O'Donoghue wrote:
-> Add a YAML binding for the Type-C silicon interface inside Qualcomm's
-> pm8150b hardware block.
+On 13/04/2023 19:31, Sebastian Reichel wrote:
+> Add compatible for RK3588 OHCI. As far as I know it's fully
+> compatible with generic-ohci.
 > 
-> The Type-C driver operates with a pdphy driver inside of a high level
-> single TCPM device.
-> 
-> Based on original work by Wesley.
-> 
-> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+Sebastian,
+
+Can you fix PATCH subject part in all your submissions? There should be
+a space between PATCH and v. Just like `git format-patch` creates. If
+you use other tools for this, fix them so they don't create other format.
+
+You also need to rebase your patches - this is something old and cannot
+be applied.
+
 > ---
->  .../bindings/usb/qcom,pmic-typec.yaml         | 169 ++++++++++++++++++
->  1 file changed, 169 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
+>  .../devicetree/bindings/usb/generic-ohci.yaml    | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml b/Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
-> new file mode 100644
-> index 0000000000000..6d0f5d00305cf
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
-> @@ -0,0 +1,169 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/usb/qcom,pmic-typec.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Qualcomm PMIC based USB Type-C block
-> +
-> +maintainers:
-> +  - Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> +
-> +description: |
-> +  Qualcomm PMIC Type-C block
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,pm8150b-typec
-> +
-> +  connector:
-> +    type: object
-> +    $ref: /schemas/connector/usb-connector.yaml#
-> +    unevaluatedProperties: false
-> +
-> +  reg:
-> +    description: Type-C port and pdphy SPMI register base offsets
-> +    minItems: 2
-> +    maxItems: 2
-> +
-> +  interrupts:
-> +    items:
-> +      - description: Bitmask of CC attach, VBUS error, tCCDebounce done and more
-> +      - description: VCONN Powered Detection
-> +      - description: CC state change
-> +      - description: VCONN over-current condition
-> +      - description: VBUS state change
-> +      - description: Attach Deteach notification
+> diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> index a9ba7257b884..4feb993af53b 100644
+> --- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> @@ -44,6 +44,7 @@ properties:
+>                - hpe,gxp-ohci
+>                - ibm,476gtr-ohci
+>                - ingenic,jz4740-ohci
+> +              - rockchip,rk3588-ohci
+>                - snps,hsdk-v1.0-ohci
+>            - const: generic-ohci
+>        - enum:
+> @@ -69,7 +70,7 @@ properties:
+>  
+>    clocks:
+>      minItems: 1
+> -    maxItems: 3
+> +    maxItems: 4
+>      description: |
+>        In case the Renesas R-Car Gen3 SoCs:
+>          - if a host only channel: first clock should be host.
+> @@ -147,6 +148,19 @@ allOf:
+>      then:
+>        properties:
+>          transceiver: false
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: rockchip,rk3588-ohci
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 4
+> +    else:
+> +      properties:
+> +        clocks:
 
-Deteach -> Detach
+Please test the patches before sending. If you tested, you would see
+warnings here.
 
-> +      - description: Legacy cable detect
-> +      - description: Try.Src Try.Snk state change
-> +      - description: Sig TX - transmitted reset signal
-> +      - description: Sig RX - received reset signal
-> +      - description: TX completion
-> +      - description: RX completion
-> +      - description: TX fail
-> +      - description: TX discgard
-> +      - description: RX discgard
+You need minItems: 1.
 
-discgard (2x) -> discard
+> +          maxItems: 3
+>  
+>  additionalProperties: false
+>  
 
-> +      - description: Fast Role Swap event
+Best regards,
+Krzysztof
 
-None of these descriptions follow a similar pattern and are very hard to
-read and understand.  Can you rewrite them?  For starters, think about
-using the same wording and capitalization.
-
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: or-rid-detect-change
-> +      - const: vpd-detect
-> +      - const: cc-state-change
-> +      - const: vconn-oc
-> +      - const: vbus-change
-> +      - const: attach-detach
-> +      - const: legacy-cable-detect
-> +      - const: try-snk-src-detect
-> +      - const: sig-tx
-> +      - const: sig-rx
-> +      - const: msg-tx
-> +      - const: msg-rx
-> +      - const: msg-tx-failed
-> +      - const: msg-tx-discarded
-> +      - const: msg-rx-discarded
-> +      - const: fr-swap
-> +
-> +  vdd-vbus-supply:
-> +    description: VBUS power supply.
-> +
-> +  vdd-pdphy-supply:
-> +    description: VDD regulator supply to the PDPHY.
-> +
-> +  port:
-> +    $ref: /schemas/graph.yaml#/properties/port
-> +    description:
-> +      Contains a port which produces data-role switching messages.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-names
-> +  - vdd-vbus-supply
-> +  - vdd-pdphy-supply
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/usb/pd.h>
-> +
-> +    pm8150b {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        pm8150b_typec: typec@1500 {
-> +            compatible = "qcom,pm8150b-typec";
-> +            reg = <0x1500>,
-> +                  <0x1700>;
-> +
-> +            interrupts = <0x2 0x15 0x00 IRQ_TYPE_EDGE_RISING>,
-> +                         <0x2 0x15 0x01 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x15 0x02 IRQ_TYPE_EDGE_RISING>,
-> +                         <0x2 0x15 0x03 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x15 0x04 IRQ_TYPE_EDGE_RISING>,
-> +                         <0x2 0x15 0x05 IRQ_TYPE_EDGE_RISING>,
-> +                         <0x2 0x15 0x06 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x15 0x07 IRQ_TYPE_EDGE_RISING>,
-> +                         <0x2 0x17 0x00 IRQ_TYPE_EDGE_RISING>,
-> +                         <0x2 0x17 0x01 IRQ_TYPE_EDGE_RISING>,
-> +                         <0x2 0x17 0x02 IRQ_TYPE_EDGE_RISING>,
-> +                         <0x2 0x17 0x03 IRQ_TYPE_EDGE_RISING>,
-> +                         <0x2 0x17 0x04 IRQ_TYPE_EDGE_RISING>,
-> +                         <0x2 0x17 0x05 IRQ_TYPE_EDGE_RISING>,
-> +                         <0x2 0x17 0x06 IRQ_TYPE_EDGE_RISING>,
-> +                         <0x2 0x17 0x07 IRQ_TYPE_EDGE_RISING>;
-> +
-> +            interrupt-names = "or-rid-detect-change",
-> +                              "vpd-detect",
-> +                              "cc-state-change",
-> +                              "vconn-oc",
-> +                              "vbus-change",
-> +                              "attach-detach",
-> +                              "legacy-cable-detect",
-> +                              "try-snk-src-detect",
-> +                              "sig-tx",
-> +                              "sig-rx",
-> +                              "msg-tx",
-> +                              "msg-rx",
-> +                              "msg-tx-failed",
-> +                              "msg-tx-discarded",
-> +                              "msg-rx-discarded",
-> +                              "fr-swap";
-> +
-> +            vdd-vbus-supply = <&pm8150b_vbus>;
-> +            vdd-pdphy-supply = <&vreg_l2a_3p1>;
-> +            connector {
-> +                compatible = "usb-c-connector";
-> +
-> +                power-role = "source";
-> +                data-role = "dual";
-> +                self-powered;
-> +
-> +                source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_DUAL_ROLE |
-> +                               PDO_FIXED_USB_COMM | PDO_FIXED_DATA_SWAP)>;
-> +
-> +                ports {
-> +                    #address-cells = <1>;
-> +                    #size-cells = <0>;
-> +
-> +                    port@0 {
-> +                        reg = <0>;
-> +                        pm8150b_typec_mux_out: endpoint {
-> +                            remote-endpoint = <&qmpphy_typec_mux_in>;
-> +                        };
-> +                    };
-
-Also a newline?
-
-- Marijn
-
-> +                    port@1 {
-> +                        reg = <1>;
-> +                        pm8150b_typec_role_switch_out: endpoint {
-> +                            remote-endpoint = <&dwc3_role_switch_in>;
-> +                        };
-> +                    };
-> +                };
-> +            };
-> +        };
-> +    };
-> +...
-> -- 
-> 2.39.2
-> 
