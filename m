@@ -2,106 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2045F6E1730
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Apr 2023 00:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE7F6E1A0B
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Apr 2023 04:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbjDMWKn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Apr 2023 18:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38612 "EHLO
+        id S229685AbjDNCM0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Apr 2023 22:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjDMWKn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 18:10:43 -0400
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463CF5B94;
-        Thu, 13 Apr 2023 15:10:42 -0700 (PDT)
-Received: by mail-ot1-f41.google.com with SMTP id w19-20020a9d6393000000b006a43ff0f57cso284011otk.5;
-        Thu, 13 Apr 2023 15:10:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681423841; x=1684015841;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lRp3R38DBKAcqbpi94w/GTvCXxHuUsnausWd76BTI1U=;
-        b=UN6UwvZkjOjrA88j7L0yPc3yRYGUHmAiRWiNeXftrJtSYPICGXvNl5guYblv4gTTMB
-         N62xLqfm4rJTdiy8YLQwM2SUNY7b1UOzRgAZ6Gk4xu5nQcSRuSh2UaSNwIqP8sN6WK1q
-         D/jcTjjdQy6fA1hIz0h8/9LtDC1eFCVc8+FVlkowxrxj7WD/SajtFI/bo2m+a/g1CES0
-         25dWDPfbN7tUYOsh+4L7vSjmhHhQyKitbAaDb1cxroEvhpEEfAS30Tp/jHtPJSBXvRVm
-         eu5+YyubrFPocPqD6zHwxyvmoOCmw4fwcLwCgdXLCckWNCJDdYrEoCZsrRfpypxP3LTx
-         nrkw==
-X-Gm-Message-State: AAQBX9elzzQ9i/LFtnyI/lvcUlL+bwq5dwY1Hys4rjALv62nRxKvv43x
-        cNss5jBnnW4Ep8Pb7wrUYg==
-X-Google-Smtp-Source: AKy350ZAzbcV4/iy+uq4icNQ2bGCh482u4+kBTuRDzDJQecVOG+iosYX31G661fQh9U/8yN2fS8p1w==
-X-Received: by 2002:a05:6830:2093:b0:6a1:7b61:1fd0 with SMTP id y19-20020a056830209300b006a17b611fd0mr2107949otq.3.1681423841458;
-        Thu, 13 Apr 2023 15:10:41 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r13-20020a9d7ccd000000b006a13dd5c8a2sm1142743otn.5.2023.04.13.15.10.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 15:10:40 -0700 (PDT)
-Received: (nullmailer pid 1934874 invoked by uid 1000);
-        Thu, 13 Apr 2023 22:10:40 -0000
+        with ESMTP id S229530AbjDNCMZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 22:12:25 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B381F2D4A;
+        Thu, 13 Apr 2023 19:12:24 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33E2BnsnE014072, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33E2BnsnE014072
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Fri, 14 Apr 2023 10:11:49 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Fri, 14 Apr 2023 10:12:11 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 14 Apr 2023 10:12:11 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
+ RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
+ 15.01.2375.007; Fri, 14 Apr 2023 10:12:11 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: RE: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,global-regs-starting-offset' quirk
+Thread-Topic: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add
+ 'snps,global-regs-starting-offset' quirk
+Thread-Index: AQHZbO8UV6MphwFb1U6iZXdc0JZwLK8oH9uAgAA0XICAAQIqgP//ld+AgAEmdrA=
+Date:   Fri, 14 Apr 2023 02:12:11 +0000
+Message-ID: <313863df3a3b492aa7590e1354d22d8b@realtek.com>
+References: <20230412033006.10859-2-stanley_chang@realtek.com>
+ <20230413042503.4047-1-stanley_chang@realtek.com>
+ <167e4a8c-3ebd-92b7-1481-947f08901f97@kernel.org>
+ <9f6abbe7a6fd479c98e2fd6c1080ad8a@realtek.com>
+ <19946f94-db48-fe0d-722c-cbb45b8bd0ba@kernel.org>
+In-Reply-To: <19946f94-db48-fe0d-722c-cbb45b8bd0ba@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org
-In-Reply-To: <20230413173150.71387-2-sebastian.reichel@collabora.com>
-References: <20230413173150.71387-1-sebastian.reichel@collabora.com>
- <20230413173150.71387-2-sebastian.reichel@collabora.com>
-Message-Id: <168142378979.1933846.311921453118296427.robh@kernel.org>
-Subject: Re: [PATCHv4 1/3] dt-bindings: usb: Add RK3588 OHCI
-Date:   Thu, 13 Apr 2023 17:10:40 -0500
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-On Thu, 13 Apr 2023 19:31:48 +0200, Sebastian Reichel wrote:
-> Add compatible for RK3588 OHCI. As far as I know it's fully
-> compatible with generic-ohci.
-> 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  .../devicetree/bindings/usb/generic-ohci.yaml    | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/generic-ohci.example.dtb: usb@1c14400: clocks: [[4294967295, 6], [4294967295, 2]] is too short
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230413173150.71387-2-sebastian.reichel@collabora.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+DQo+ID4+IERpZG4ndCB5b3UgZ290IGFscmVhZHkgY29tbWVudCBmb3IgdGhpcyBwYXRjaD8gSG93
+IGRpZCB5b3UgaW1wbGVtZW50IGl0Pw0KPiA+Pg0KPiA+PiBBbHNvLCBJIGFza2VkIHlvdSBtdWx0
+aXBsZSB0aW1lczoNCj4gPj4NCj4gPj4gUGxlYXNlIHVzZSBzY3JpcHRzL2dldF9tYWludGFpbmVy
+cy5wbCB0byBnZXQgYSBsaXN0IG9mIG5lY2Vzc2FyeQ0KPiA+PiBwZW9wbGUgYW5kIGxpc3RzIHRv
+IENDLiAgSXQgbWlnaHQgaGFwcGVuLCB0aGF0IGNvbW1hbmQgd2hlbiBydW4gb24gYW4NCj4gPj4g
+b2xkZXIga2VybmVsLCBnaXZlcyB5b3Ugb3V0ZGF0ZWQgZW50cmllcy4gIFRoZXJlZm9yZSBwbGVh
+c2UgYmUgc3VyZQ0KPiA+PiB5b3UgYmFzZSB5b3VyIHBhdGNoZXMgb24gcmVjZW50IExpbnV4IGtl
+cm5lbC4NCj4gPj4NCj4gPj4gSSBkb24ndCB1bmRlcnN0YW5kIHdoeSB5b3UgaWdub3JlIHRoaXMu
+DQo+ID4+DQo+ID4+IE5BSywgcGF0Y2ggaXMgbm90IGNvcnJlY3QuDQo+ID4+DQo+ID4+IEJlc3Qg
+cmVnYXJkcywNCj4gPj4gS3J6eXN6dG9mDQo+ID4+DQo+ID4NCj4gPiBUaGFuayB5b3UgZm9yIHlv
+dXIgcGF0aWVudCBndWlkYW5jZS4NCj4gPiBCZWNhdXNlIEknbSBub3QgZmFtaWxpYXIgd2l0aCB0
+aGUgcmV2aWV3IHByb2Nlc3MgYW5kIGRpZG4ndCB1c2UNCj4gc2NyaXB0cy9nZXRfbWFpbnRhaW5l
+cnMucGwgcHJvcGVybHkgaW4gdGhlIGluaXRpYWwgZW1haWwgdGhyZWFkLg0KPiA+IFRoZXJlZm9y
+ZSwgdGhpcyBzZXJpZXMgb2YgZXJyb3JzIHdhcyBjYXVzZWQuIFNvcnJ5IGZvciB0aGUgY29uZnVz
+aW9uLg0KPiA+IE5vdyBJIGtub3cgaG93IHRvIHVzZSB0aGUgc2NyaXB0IHByb3Blcmx5Lg0KPiA+
+IEFmdGVyIGNvcnJlY3RpbmcgdGhlIG1haW50YWluZXIncyBzdWdnZXN0aW9uLCBJJ2xsIHJlc3Rh
+cnQgYSBuZXcgZW1haWwgdGhyZWFkDQo+IGFuZCByZXZpZXcgYWdhaW4uDQo+IA0KPiBEaWQgeW91
+IHJlc3BvbmQgdG8gZmVlZGJhY2sgeW91IGdvdCBhYm91dCB0aGUgcHJvcGVydHk/IERpZCByZXZp
+ZXdlciBhZ3JlZWQNCj4gb24geW91ciB2aWV3IGFmdGVyIHlvdXIgZmVlZGJhY2s/DQo+IA0KPiBJ
+ZiBub3QsIHRoZW4gd2h5IHJlc2VuZGluZyB0aGlzIHBhdGNoPw0KPiANCg0KMS4gQmVjYXVzZSB5
+b3Ugc2FpZCwgIlRoaXMgcGF0Y2ggaXMgaW5jb3JyZWN0Ii4gQW5kIEkgd29uJ3QgYmUgY2MnaW5n
+IHRoZSBwcm9wZXIgbWFpbnRhaW5lci4NCkkgdGhpbmsgSSBuZWVkIHRvIHJlc3RhcnQgYSBuZXcg
+cmV2aWV3IHByb2Nlc3MuDQoyLiBNb2RpZnkgdGhlIHByZXZpb3VzIHJldmlld2VyJ3MgY29tbWVu
+dHMgYW5kIGZpeCB0aGUgZHRzY2hlbWEgdmFsaWRhdGlvbiBlcnJvci4NCg0KQW0gSSBtaXN1bmRl
+cnN0YW5kaW5nIHdoYXQgeW91IG1lYW4/DQpDYW4gSSBrZWVwIHJldmlld2luZyB0aGlzIHBhdGNo
+IG9uIHRoaXMgZW1haWwgdGhyZWFkIHVudGlsIGNvbnNlbnN1cyBpcyByZWFjaGVkIHdpdGggdGhl
+IHJldmlld2Vycz8NCg0KVGhhbmtzLA0KU3RhbmxleQ0K
