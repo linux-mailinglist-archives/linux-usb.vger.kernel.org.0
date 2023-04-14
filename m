@@ -2,148 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2EB6E1A5D
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Apr 2023 04:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB266E1B28
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Apr 2023 06:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjDNCdv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Apr 2023 22:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
+        id S229625AbjDNEli (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Apr 2023 00:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDNCdu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 22:33:50 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3754E3AAE;
-        Thu, 13 Apr 2023 19:33:49 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id s72so17539230pgs.9;
-        Thu, 13 Apr 2023 19:33:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681439628; x=1684031628;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iPvYNz8siUVtinxrnX/aB2GWosarSU2usvrXoKI9CcQ=;
-        b=FRDTh8E1zL3Li72pg0jFgweEiwXg1JBlQbUEojjRDAq+iH9rv1w2HDqrNFP/IikKB8
-         2YmtYYaaxqQyyEGYD0Ewq24hDBieZLfPE7MmPck3j22NB2gfjbEtDy3SFTR+XthPm0ic
-         p4YrUN4CCGV4ssK6c3DeWwWcl74tpzN+VzQXn8t7n9w9MkQCRmS6IjVKZB2BaHs4MS15
-         jYdNr/+tVVZ5Y8w92IzpwhQbAV/C0iK9mMCNjw0rEGmj69rofn4f44fugkSOnImaI99W
-         J4ZmfOxvp7Ko++4NEZlqf24acvBN0vizMkZbRuBMK9mZjyrDfPWNVgQxOh+aJzrhnVIS
-         h2Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681439628; x=1684031628;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iPvYNz8siUVtinxrnX/aB2GWosarSU2usvrXoKI9CcQ=;
-        b=JYmMuUVS7bFL5yOPuImx5tdI1kmkMC/HDlYAtshW83MJ3AEWpQHHBZDLjRUjcH+pnL
-         P17bW9yDQMq8SCPnUZwns2ln4OwEev6e22eu3/3DVVZTRQ2DKYN1SVgjUEnRuQT9CiUp
-         NhtxLzgf5zdn6Rpnqoe01rtm+o7B+kUXc6tDoWy56yLXOzUG1wlOCm45cvean13cbi4j
-         IcWnBvdYYHQxE3LitI4nV/bIoseBgkIIUkVscx2gj76YkGfg53Jg/Jdzekebkiz9q6zc
-         bBsSeyv7hocxU8bZQAvuqQRVqzFTnuWMSOXVO0oRJlp07yP+vzst4uLQe8wImyvUNJUq
-         XjQw==
-X-Gm-Message-State: AAQBX9fQw0lZCBo1dQwgD0YA2ZmGSt7Nssp8RGoaniJ49YIbzQpumGyH
-        exH8ZZIiDIU5kPmYwgdVdhl0dFiLTDWwhmyn9Qo=
-X-Google-Smtp-Source: AKy350ZrdkiwCtRVpyc+PO3lwBgZ/K/EfAGLuzTcsL5LYA9kUsoxJngWFZrehRVcUmiJdFijOO+LR8n1vhxTlDtNwKU=
-X-Received: by 2002:a63:c001:0:b0:503:a7:d244 with SMTP id h1-20020a63c001000000b0050300a7d244mr298115pgg.9.1681439628623;
- Thu, 13 Apr 2023 19:33:48 -0700 (PDT)
+        with ESMTP id S229479AbjDNElh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Apr 2023 00:41:37 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5904B4683;
+        Thu, 13 Apr 2023 21:41:36 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33E32Qsk025843;
+        Fri, 14 Apr 2023 04:41:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=hJRpPmNCPtJVBcrq0CaP8SRzwZ3nh+MkoQO9ClK7m2w=;
+ b=TZ8CNwYTYVquAWr+pDhAWJnwBilNFXHe+JDLUYctmzwvhDvWhpm4eU4UXxc68MPHkNbS
+ 3Mz3q5ifBOM5zo07z15B9R6rNE/tG4IJnyYppP4klN1j5P+E7IhniGL1ntZnXjsTl6eY
+ EgKFAmIsEVjDWkBXf+dchkDqUrRD6iijIMJ/N6n1n+zdom/srQHoYHSTfJ4SwRzZoPsU
+ Zyr/ExPRDecQ2jpnu2Hz87gwXhQnNiRPBN/t7plZogSJKY9DVFrGycQyyomrzvP9X4ky
+ xFPPe8lUv2FAH0xzPiIA1Jqz+Ef4zUXYCaqzOtlh0lKgQUZRLk99aqpM45LHnDZzpw3i AA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3px6cnk1c7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 04:41:17 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33E4fGbV008380
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 04:41:16 GMT
+Received: from [10.216.8.24] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 13 Apr
+ 2023 21:41:10 -0700
+Message-ID: <f55fb40e-50d7-c4f2-efee-8de24a6a31f2@quicinc.com>
+Date:   Fri, 14 Apr 2023 10:11:06 +0530
 MIME-Version: 1.0
-References: <20230317100954.2626573-1-zyytlz.wz@163.com> <d05ae776-ee19-2ce0-c06b-9825e5cbea82@linuxfoundation.org>
- <CAJedcCwK8Z_nuBM4NnM1PwbTqTnfX2n6UEy9dd5LKf_GScq=xA@mail.gmail.com>
- <CAJedcCxT0ggGbVSQnqpcYcN=5gahUOEwGWZrP4P1Lz29A8Smqg@mail.gmail.com> <8219a54a-f83d-f31e-bd10-74660d829a06@linuxfoundation.org>
-In-Reply-To: <8219a54a-f83d-f31e-bd10-74660d829a06@linuxfoundation.org>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Fri, 14 Apr 2023 10:33:35 +0800
-Message-ID: <CAJedcCxCK-J1zfKNU9q1VCxNJS-0kbeMc5XqVy2z6hatoEQBcA@mail.gmail.com>
-Subject: Re: [PATCH v3] usbip: vudc: Fix use after free bug in vudc_remove due
- to race condition
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, valentina.manea.m@gmail.com,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
-        alex000young@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v6 0/8] Add multiport support for DWC3 controllers
+To:     Adrien Thierry <athierry@redhat.com>
+CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>,
+        <quic_harshq@quicinc.com>, <ahalaney@redhat.com>,
+        <quic_shazhuss@quicinc.com>
+References: <20230405125759.4201-1-quic_kriskura@quicinc.com>
+ <ZDhP823LUMCDuD9q@fedora>
+Content-Language: en-US
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <ZDhP823LUMCDuD9q@fedora>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: uQYKuBL01LX8LffcCvm-kYUC8gttuV27
+X-Proofpoint-GUID: uQYKuBL01LX8LffcCvm-kYUC8gttuV27
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_01,2023-04-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 adultscore=0 mlxscore=0 malwarescore=0 suspectscore=0
+ phishscore=0 impostorscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304140041
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Shuah,
 
-I got it. I'll try it.
 
-Best regards,
-Zheng
+On 4/14/2023 12:24 AM, Adrien Thierry wrote:
+> Hi,
+> 
+>> Krishna Kurapati (8):
+>>    dt-bindings: usb: Add bindings for multiport properties on DWC3
+>>      controller
+>>    usb: dwc3: core: Access XHCI address space temporarily to read port
+>>      info
+>>    usb: dwc3: core: Skip setting event buffers for host only controllers
+>>    usb: dwc3: core: Refactor PHY logic to support Multiport Controller
+>>    usb: dwc3: qcom: Add multiport controller support for qcom wrapper
+>>    arm64: dts: qcom: sc8280xp: Add multiport controller node for SC8280
+>>    arm64: dts: qcom: sa8295p: Enable tertiary controller and its 4 USB
+>>      ports
+>>    arm64: dts: qcom: sa8540-ride: Enable first port of tertiary usb
+>>      controller
+>>
+>>   .../devicetree/bindings/usb/snps,dwc3.yaml    |  13 +-
+>>   arch/arm64/boot/dts/qcom/sa8295p-adp.dts	 |  47 +++
+>>   arch/arm64/boot/dts/qcom/sa8540p-ride.dts     |  22 ++
+>>   arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  58 +++
+>>   drivers/usb/dwc3/core.c                       | 373 ++++++++++++++----
+>>   drivers/usb/dwc3/core.h                       |  71 +++-
+>>   drivers/usb/dwc3/drd.c                        |  13 +-
+>>   drivers/usb/dwc3/dwc3-qcom.c                  |  28 +-
+>>   8 files changed, 523 insertions(+), 102 deletions(-)
+> 
+> I tested this series on the sa8540p-ride, with a USB Ethernet adapter
+> plugged into the board. The device shows up as expected:
+> 
+> # lsusb -tv
+> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/2p, 10000M
+>      ID 1d6b:0003 Linux Foundation 3.0 root hub
+>      |__ Port 1: Dev 2, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
+>          ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
+> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/4p, 480M
+>      ID 1d6b:0002 Linux Foundation 2.0 root hub
+> 
+> Tested-by: Adrien Thierry <athierry@redhat.com> # sa8540p-ride
+> 
 
-Shuah Khan <skhan@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B44=E6=9C=8814=
-=E6=97=A5=E5=91=A8=E4=BA=94 02:01=E5=86=99=E9=81=93=EF=BC=9A
->
-> On 4/13/23 02:09, Zheng Hacker wrote:
-> > Friendly ping about the issue.
-> > Sorry that I couldn't make test about the driver.
-> >
-> > Thanks,
-> > Zheng
-> >
-> > Zheng Hacker <hackerzheng666@gmail.com> =E4=BA=8E2023=E5=B9=B43=E6=9C=
-=8818=E6=97=A5=E5=91=A8=E5=85=AD 15:39=E5=86=99=E9=81=93=EF=BC=9A
-> >>
-> >> Shuah Khan <skhan@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B43=E6=9C=
-=8818=E6=97=A5=E5=91=A8=E5=85=AD 06:53=E5=86=99=E9=81=93=EF=BC=9A
-> >>>
-> >>> On 3/17/23 04:09, Zheng Wang wrote:
-> >>>> In vudc_probe, it calls init_vudc_hw, which bound &udc->timer with v=
-_timer.
-> >>>>
-> >>>> When it calls usbip_sockfd_store, it will call v_start_timer to star=
-t the
-> >>>> timer work.
-> >>>>
-> >>>> When we call vudc_remove to remove the driver, theremay be a sequenc=
-e as
-> >>>> follows:
-> >>>>
-> >>>> Fix it by shutdown the timer work before cleanup in vudc_remove.
-> >>>>
-> >>>> Note that removing a driver is a root-only operation, and should nev=
-er
-> >>>> happen. But the attacker can directly unplug the usb to trigger the =
-remove
-> >>>> function.
-> >>>>
-> >>>> CPU0                  CPU1
-> >>>>
-> >>>>                        |v_timer
-> >>>> vudc_remove          |
-> >>>> kfree(udc);          |
-> >>>> //free shost         |
-> >>>>                        |udc->gadget
-> >>>>                        |//use
-> >>>>
-> >>>> The udc might be removed before v_timer finished, and UAF happens.
-> >>>>
-> >>>> This bug was found by Codeql static analysis and might by false posi=
-tive.
-> >>>
-> >>> This statement that this could be a false positive makes me hesitate
-> >>> taking this patch.
-> >>>
-> >>> What kind of testing have you done with this fix? Were you able to te=
-st
-> >>> the scenario of unplugging usb?
-> >>>
-> >>
-> >> Sorry I did't make a full test for I did't have the device. The
-> >> attacking scenario if based on other cases.
-> >>
->
-> Sorry. I really need for you test this and provide information on how
-> it was tested.
->
-> thanks,
-> -- Shuah
->
+Hi Adrien,
+
+  Thanks for testing out the patches.
+
+Regards,
+Krishna,
