@@ -2,87 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB266E1B28
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Apr 2023 06:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05DAF6E1BF2
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Apr 2023 07:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjDNEli (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Apr 2023 00:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
+        id S229528AbjDNFxb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Apr 2023 01:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjDNElh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Apr 2023 00:41:37 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5904B4683;
-        Thu, 13 Apr 2023 21:41:36 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33E32Qsk025843;
-        Fri, 14 Apr 2023 04:41:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=hJRpPmNCPtJVBcrq0CaP8SRzwZ3nh+MkoQO9ClK7m2w=;
- b=TZ8CNwYTYVquAWr+pDhAWJnwBilNFXHe+JDLUYctmzwvhDvWhpm4eU4UXxc68MPHkNbS
- 3Mz3q5ifBOM5zo07z15B9R6rNE/tG4IJnyYppP4klN1j5P+E7IhniGL1ntZnXjsTl6eY
- EgKFAmIsEVjDWkBXf+dchkDqUrRD6iijIMJ/N6n1n+zdom/srQHoYHSTfJ4SwRzZoPsU
- Zyr/ExPRDecQ2jpnu2Hz87gwXhQnNiRPBN/t7plZogSJKY9DVFrGycQyyomrzvP9X4ky
- xFPPe8lUv2FAH0xzPiIA1Jqz+Ef4zUXYCaqzOtlh0lKgQUZRLk99aqpM45LHnDZzpw3i AA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3px6cnk1c7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Apr 2023 04:41:17 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33E4fGbV008380
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Apr 2023 04:41:16 GMT
-Received: from [10.216.8.24] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 13 Apr
- 2023 21:41:10 -0700
-Message-ID: <f55fb40e-50d7-c4f2-efee-8de24a6a31f2@quicinc.com>
-Date:   Fri, 14 Apr 2023 10:11:06 +0530
+        with ESMTP id S229476AbjDNFxb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Apr 2023 01:53:31 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 742734200
+        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 22:53:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=nMS4G
+        4/8zAGi99JlLgUBt1+Fk4PUbERNJWnjO3hEuSo=; b=QOK/HIk7o+LLrW1+3DPEO
+        5Kgto+ngqoWmG7UHppCrE0QnLRQo79QhNMnqqIjdneQTQMqIWVIhNPBOOvTp0OGi
+        NP5VbWKqWMl6jvt1GK0QQxolFxtkfWIMpUgHXiOMdYzSrFXsht2KsBp26+QCv3eN
+        EtFFwyhstu5WPLizs4vK0w=
+Received: from DESKTOP-B1R4FVG.localdomain (unknown [218.201.129.19])
+        by zwqz-smtp-mta-g4-3 (Coremail) with SMTP id _____wCXHfZE6jhkh12KBQ--.53470S2;
+        Fri, 14 Apr 2023 13:53:08 +0800 (CST)
+From:   qianfanguijin@163.com
+To:     linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>, Bin Liu <b-liu@ti.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        qianfan Zhao <qianfanguijin@163.com>
+Subject: [PATCH v1] drivers: usb: wwan: treat any error as a fatal error
+Date:   Fri, 14 Apr 2023 13:53:06 +0800
+Message-Id: <20230414055306.8805-1-qianfanguijin@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v6 0/8] Add multiport support for DWC3 controllers
-To:     Adrien Thierry <athierry@redhat.com>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>,
-        <quic_harshq@quicinc.com>, <ahalaney@redhat.com>,
-        <quic_shazhuss@quicinc.com>
-References: <20230405125759.4201-1-quic_kriskura@quicinc.com>
- <ZDhP823LUMCDuD9q@fedora>
-Content-Language: en-US
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <ZDhP823LUMCDuD9q@fedora>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: uQYKuBL01LX8LffcCvm-kYUC8gttuV27
-X-Proofpoint-GUID: uQYKuBL01LX8LffcCvm-kYUC8gttuV27
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-14_01,2023-04-13_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 adultscore=0 mlxscore=0 malwarescore=0 suspectscore=0
- phishscore=0 impostorscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304140041
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wCXHfZE6jhkh12KBQ--.53470S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWruw17uFWUur4UKr1DXF1kZrb_yoWkJFcE9w
+        17WF4xWw1xCF13AFyUJrWSvrWYk34kXFnruF1SgFW3AFyYyFZ5Ww4vg395Xwn8tr1UKr9r
+        Gw1jgr18tr4vqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRN7KsJUUUUU==
+X-Originating-IP: [218.201.129.19]
+X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/1tbiGh9R7VaEE5TfBwAAs0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,52 +51,37 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: qianfan Zhao <qianfanguijin@163.com>
 
+Kernel print such flood message when the modem dead (the device is not
+disconnected but it doesn't response anything):
 
-On 4/14/2023 12:24 AM, Adrien Thierry wrote:
-> Hi,
-> 
->> Krishna Kurapati (8):
->>    dt-bindings: usb: Add bindings for multiport properties on DWC3
->>      controller
->>    usb: dwc3: core: Access XHCI address space temporarily to read port
->>      info
->>    usb: dwc3: core: Skip setting event buffers for host only controllers
->>    usb: dwc3: core: Refactor PHY logic to support Multiport Controller
->>    usb: dwc3: qcom: Add multiport controller support for qcom wrapper
->>    arm64: dts: qcom: sc8280xp: Add multiport controller node for SC8280
->>    arm64: dts: qcom: sa8295p: Enable tertiary controller and its 4 USB
->>      ports
->>    arm64: dts: qcom: sa8540-ride: Enable first port of tertiary usb
->>      controller
->>
->>   .../devicetree/bindings/usb/snps,dwc3.yaml    |  13 +-
->>   arch/arm64/boot/dts/qcom/sa8295p-adp.dts	 |  47 +++
->>   arch/arm64/boot/dts/qcom/sa8540p-ride.dts     |  22 ++
->>   arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  58 +++
->>   drivers/usb/dwc3/core.c                       | 373 ++++++++++++++----
->>   drivers/usb/dwc3/core.h                       |  71 +++-
->>   drivers/usb/dwc3/drd.c                        |  13 +-
->>   drivers/usb/dwc3/dwc3-qcom.c                  |  28 +-
->>   8 files changed, 523 insertions(+), 102 deletions(-)
-> 
-> I tested this series on the sa8540p-ride, with a USB Ethernet adapter
-> plugged into the board. The device shows up as expected:
-> 
-> # lsusb -tv
-> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/2p, 10000M
->      ID 1d6b:0003 Linux Foundation 3.0 root hub
->      |__ Port 1: Dev 2, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
->          ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
-> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/4p, 480M
->      ID 1d6b:0002 Linux Foundation 2.0 root hub
-> 
-> Tested-by: Adrien Thierry <athierry@redhat.com> # sa8540p-ride
-> 
+option1 ttyUSB1: usb_wwan_indat_callback: nonzero status: -71 on endpoint 05.
+option1 ttyUSB1: usb_wwan_indat_callback: nonzero status: -71 on endpoint 05.
+...
 
-Hi Adrien,
+So treat any error that doesn't recognized as a fatal error and do not
+resubmit again.
 
-  Thanks for testing out the patches.
+Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
+---
+ drivers/usb/serial/usb_wwan.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Regards,
-Krishna,
+diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
+index cb01283d4d15..daa3e2beff0f 100644
+--- a/drivers/usb/serial/usb_wwan.c
++++ b/drivers/usb/serial/usb_wwan.c
+@@ -227,8 +227,7 @@ static void usb_wwan_indat_callback(struct urb *urb)
+ 			__func__, status, endpoint);
+ 
+ 		/* don't resubmit on fatal errors */
+-		if (status == -ESHUTDOWN || status == -ENOENT)
+-			return;
++		return;
+ 	} else {
+ 		if (urb->actual_length) {
+ 			tty_insert_flip_string(&port->port, data,
+-- 
+2.25.1
+
