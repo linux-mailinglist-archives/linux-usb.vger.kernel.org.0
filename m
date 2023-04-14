@@ -2,101 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE7F6E1A0B
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Apr 2023 04:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC8A6E1A56
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Apr 2023 04:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjDNCM0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Apr 2023 22:12:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
+        id S229774AbjDNC2a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Apr 2023 22:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjDNCMZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 22:12:25 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B381F2D4A;
-        Thu, 13 Apr 2023 19:12:24 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33E2BnsnE014072, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33E2BnsnE014072
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Fri, 14 Apr 2023 10:11:49 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Fri, 14 Apr 2023 10:12:11 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 14 Apr 2023 10:12:11 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Fri, 14 Apr 2023 10:12:11 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>
-Subject: RE: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,global-regs-starting-offset' quirk
-Thread-Topic: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add
- 'snps,global-regs-starting-offset' quirk
-Thread-Index: AQHZbO8UV6MphwFb1U6iZXdc0JZwLK8oH9uAgAA0XICAAQIqgP//ld+AgAEmdrA=
-Date:   Fri, 14 Apr 2023 02:12:11 +0000
-Message-ID: <313863df3a3b492aa7590e1354d22d8b@realtek.com>
-References: <20230412033006.10859-2-stanley_chang@realtek.com>
- <20230413042503.4047-1-stanley_chang@realtek.com>
- <167e4a8c-3ebd-92b7-1481-947f08901f97@kernel.org>
- <9f6abbe7a6fd479c98e2fd6c1080ad8a@realtek.com>
- <19946f94-db48-fe0d-722c-cbb45b8bd0ba@kernel.org>
-In-Reply-To: <19946f94-db48-fe0d-722c-cbb45b8bd0ba@kernel.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S229936AbjDNC2Z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Apr 2023 22:28:25 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4361D3C15
+        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 19:28:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Message-ID:Date:MIME-Version:Subject:From:
+        Content-Type; bh=j8YhHfJP509KCyUugJQTri2AlVuDLAYO3B/+QqwpGDM=;
+        b=ZOaDQK/HVn2UmbOmeIcK2IsSJan3lBtyhLGEdBR5GIyVqzy7mK01W5gQZGF4Wt
+        T9TX9Z5+NiYKF1XPC9PvOh4ZeyY6iJLIjmy5z1P0xvfwBiYo6KbCkCUX9chvGyMF
+        NW+9lzTg9hJvVXY2pyCCCUdoka8gU6muKa22H9j4pHR6I=
+Received: from [172.21.25.67] (unknown [218.201.129.19])
+        by zwqz-smtp-mta-g4-2 (Coremail) with SMTP id _____wCnXrofujhkKWt+BQ--.14870S2;
+        Fri, 14 Apr 2023 10:27:43 +0800 (CST)
+Message-ID: <47160c97-dbc4-2061-f890-df3e57281df0@163.com>
+Date:   Fri, 14 Apr 2023 10:27:42 +0800
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: BUG: linux 5.15.0 hang on usb_wwan_indat_callback
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Bin Liu <b-liu@ti.com>
+References: <580d8541-1eca-e7b1-ccf5-66eda3e88761@163.com>
+ <2023041257-campfire-squeamish-75a4@gregkh>
+ <de92552a-3148-03c0-5b4b-94040d8d7969@163.com>
+ <9a64f19c-c8c6-4e42-b226-717b1983693b@rowland.harvard.edu>
+Content-Language: en-US
+From:   qianfan <qianfanguijin@163.com>
+In-Reply-To: <9a64f19c-c8c6-4e42-b226-717b1983693b@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wCnXrofujhkKWt+BQ--.14870S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrurW5Jr1fCry5Xr1fCFy5XFb_yoWxZrcEv3
+        yqkw1kGw42yrnrZ3ZxJrWvqFW5JF95Wa1UCFnIg3Z8Z3Wjq3yUJw10qFZ5tF93ZF15tF9r
+        ur4jvr92vrs7ZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUj7PEDUUUUU==
+X-Originating-IP: [218.201.129.19]
+X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/1tbiXQNR7VWBpO-GTwAAs0
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQo+ID4+IERpZG4ndCB5b3UgZ290IGFscmVhZHkgY29tbWVudCBmb3IgdGhpcyBwYXRjaD8gSG93
-IGRpZCB5b3UgaW1wbGVtZW50IGl0Pw0KPiA+Pg0KPiA+PiBBbHNvLCBJIGFza2VkIHlvdSBtdWx0
-aXBsZSB0aW1lczoNCj4gPj4NCj4gPj4gUGxlYXNlIHVzZSBzY3JpcHRzL2dldF9tYWludGFpbmVy
-cy5wbCB0byBnZXQgYSBsaXN0IG9mIG5lY2Vzc2FyeQ0KPiA+PiBwZW9wbGUgYW5kIGxpc3RzIHRv
-IENDLiAgSXQgbWlnaHQgaGFwcGVuLCB0aGF0IGNvbW1hbmQgd2hlbiBydW4gb24gYW4NCj4gPj4g
-b2xkZXIga2VybmVsLCBnaXZlcyB5b3Ugb3V0ZGF0ZWQgZW50cmllcy4gIFRoZXJlZm9yZSBwbGVh
-c2UgYmUgc3VyZQ0KPiA+PiB5b3UgYmFzZSB5b3VyIHBhdGNoZXMgb24gcmVjZW50IExpbnV4IGtl
-cm5lbC4NCj4gPj4NCj4gPj4gSSBkb24ndCB1bmRlcnN0YW5kIHdoeSB5b3UgaWdub3JlIHRoaXMu
-DQo+ID4+DQo+ID4+IE5BSywgcGF0Y2ggaXMgbm90IGNvcnJlY3QuDQo+ID4+DQo+ID4+IEJlc3Qg
-cmVnYXJkcywNCj4gPj4gS3J6eXN6dG9mDQo+ID4+DQo+ID4NCj4gPiBUaGFuayB5b3UgZm9yIHlv
-dXIgcGF0aWVudCBndWlkYW5jZS4NCj4gPiBCZWNhdXNlIEknbSBub3QgZmFtaWxpYXIgd2l0aCB0
-aGUgcmV2aWV3IHByb2Nlc3MgYW5kIGRpZG4ndCB1c2UNCj4gc2NyaXB0cy9nZXRfbWFpbnRhaW5l
-cnMucGwgcHJvcGVybHkgaW4gdGhlIGluaXRpYWwgZW1haWwgdGhyZWFkLg0KPiA+IFRoZXJlZm9y
-ZSwgdGhpcyBzZXJpZXMgb2YgZXJyb3JzIHdhcyBjYXVzZWQuIFNvcnJ5IGZvciB0aGUgY29uZnVz
-aW9uLg0KPiA+IE5vdyBJIGtub3cgaG93IHRvIHVzZSB0aGUgc2NyaXB0IHByb3Blcmx5Lg0KPiA+
-IEFmdGVyIGNvcnJlY3RpbmcgdGhlIG1haW50YWluZXIncyBzdWdnZXN0aW9uLCBJJ2xsIHJlc3Rh
-cnQgYSBuZXcgZW1haWwgdGhyZWFkDQo+IGFuZCByZXZpZXcgYWdhaW4uDQo+IA0KPiBEaWQgeW91
-IHJlc3BvbmQgdG8gZmVlZGJhY2sgeW91IGdvdCBhYm91dCB0aGUgcHJvcGVydHk/IERpZCByZXZp
-ZXdlciBhZ3JlZWQNCj4gb24geW91ciB2aWV3IGFmdGVyIHlvdXIgZmVlZGJhY2s/DQo+IA0KPiBJ
-ZiBub3QsIHRoZW4gd2h5IHJlc2VuZGluZyB0aGlzIHBhdGNoPw0KPiANCg0KMS4gQmVjYXVzZSB5
-b3Ugc2FpZCwgIlRoaXMgcGF0Y2ggaXMgaW5jb3JyZWN0Ii4gQW5kIEkgd29uJ3QgYmUgY2MnaW5n
-IHRoZSBwcm9wZXIgbWFpbnRhaW5lci4NCkkgdGhpbmsgSSBuZWVkIHRvIHJlc3RhcnQgYSBuZXcg
-cmV2aWV3IHByb2Nlc3MuDQoyLiBNb2RpZnkgdGhlIHByZXZpb3VzIHJldmlld2VyJ3MgY29tbWVu
-dHMgYW5kIGZpeCB0aGUgZHRzY2hlbWEgdmFsaWRhdGlvbiBlcnJvci4NCg0KQW0gSSBtaXN1bmRl
-cnN0YW5kaW5nIHdoYXQgeW91IG1lYW4/DQpDYW4gSSBrZWVwIHJldmlld2luZyB0aGlzIHBhdGNo
-IG9uIHRoaXMgZW1haWwgdGhyZWFkIHVudGlsIGNvbnNlbnN1cyBpcyByZWFjaGVkIHdpdGggdGhl
-IHJldmlld2Vycz8NCg0KVGhhbmtzLA0KU3RhbmxleQ0K
+
+
+在 2023/4/13 21:46, Alan Stern 写道:
+> On Thu, Apr 13, 2023 at 12:50:12PM +0800, qianfan wrote:
+>> The resubmit logic in usb_wwan_indat_callback semms need improve:
+>>
+>> if (status) {
+>>      dev_dbg(dev, "%s: nonzero status: %d on endpoint %02x.\n",
+>>          __func__, status, endpoint);
+>>
+>>      /* don't resubmit on fatal errors */
+>>      if (status == -ESHUTDOWN || status == -ENOENT)
+>>          return;
+>> }
+>>
+>> maybe this patch is better?
+>>
+>> switch (status) {
+>> case -ESHOTDOWN:
+>> case -ENOENT:
+>> case -ECONNRESET:
+>> case -EOVERFLOW:
+>> case -EPROTO:
+>>      reutrn;
+>> }
+> In fact, it would be better to treat any error you don't recognize as a
+> fatal error.
+I think it is a good idea.
+>
+> Alan Stern
+
