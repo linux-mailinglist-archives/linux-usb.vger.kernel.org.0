@@ -2,76 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4194A6E1CD4
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Apr 2023 08:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D506E1CE0
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Apr 2023 09:01:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjDNGvM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Apr 2023 02:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
+        id S229479AbjDNHBk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Apr 2023 03:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjDNGvL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Apr 2023 02:51:11 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F72EB
-        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 23:51:06 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id qb20so42787260ejc.6
-        for <linux-usb@vger.kernel.org>; Thu, 13 Apr 2023 23:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1681455065; x=1684047065;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K+WN6T+Knm9we3h7NoryAk78kn2YJjd6ujXcjaUDzw0=;
-        b=jsUU0UDsPlabryanLeKGvQftkQ6FvmoVprW1ZfF7bTrH0iq44Z0Nd3vmNlBuSZ3w7r
-         orRE96ryBrOl1ezXihnOva23zCSYV7F9j0gKhB/zBJlxoHbH4D1rD4B6oUiZ6dqHOtA0
-         030uk+9atlZ7Kti1uSzfJE+vxI5VwSmXxjm/wGMy/YRfKzD90G/pKAqXMynVxG+KHk3G
-         MePXADzCjt3UdtdITQGgNzc+uP0gw+r4zqu/EKQNgMhlJLXTK+4gLwgCASNqgfn6r2Hu
-         pOaZfMGtuMP7dSisH0mlAvFiqNJsCvrN6WMBib1ITKxd3cqaNB0nqBaoyrfhE+sJegY/
-         QGxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681455065; x=1684047065;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=K+WN6T+Knm9we3h7NoryAk78kn2YJjd6ujXcjaUDzw0=;
-        b=Dy+wBcG0UNjtVwA1KnQM/Fs0dW6Shtfs3d7HLkZYpzqGELHTAexWjMKKeBUTEzZwWn
-         fGIRi+PjSR1vFIxMBWKaqBaFNUAimU3SeqSUensxo+/XGWG0/jdbmZl6+DHDHVXuwSGC
-         safaHB1gIBcum0JWrUSueLOo61WHT5yDllIg4pW8a1BKtmwgibiF2jv3bCHSYZlUk2tE
-         IKqUbFMb5vHBdI78eaM5hLnUqqihNRmCjTsrL8Cw4Kti2zq7f8Tb4D+ldQRS/cNQDK05
-         bm9UPAMeZ73TIyWWK8vR3skoDZvBoXwR5bRRuttc9Ows91L+M8SPEFSPKdOrGThDWqtk
-         3Olg==
-X-Gm-Message-State: AAQBX9fg945+jB46L8PSgUSpcjQpm4ZNFx4yPVUxszRpOQNH5ihTS9G2
-        U1sICoT/xQlEPvarGZdovSdTPg==
-X-Google-Smtp-Source: AKy350agxzMApL1j52BabZywTTq67yJeqEy9cBCgbsi9iCU+RuSdiaPSo6d4BN//1w6aAifK8lRY5Q==
-X-Received: by 2002:a17:906:1b01:b0:94e:edf3:dccd with SMTP id o1-20020a1709061b0100b0094eedf3dccdmr434902ejg.0.1681455064867;
-        Thu, 13 Apr 2023 23:51:04 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id s5-20020a170906168500b0094d69608f5fsm1991552ejd.97.2023.04.13.23.51.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 23:51:04 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 14 Apr 2023 08:51:04 +0200
-Message-Id: <CRWA2OP2T6KT.RCWAVWF5Q2T2@otso>
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        <linux@roeck-us.net>, <heikki.krogerus@linux.intel.com>,
-        <gregkh@linuxfoundation.org>, <andersson@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Cc:     <caleb.connolly@linaro.org>, <konrad.dybcio@linaro.org>,
-        <subbaram@quicinc.com>, <jackp@quicinc.com>,
-        <robertom@qti.qualcomm.com>
-Subject: Re: [PATCH v5 00/14] Add Qualcomm PMIC TPCM support
-X-Mailer: aerc 0.14.0
-References: <20230413113438.1577658-1-bryan.odonoghue@linaro.org>
- <CRVOZOPMKBX4.2T7FOCWF0RKBJ@otso>
- <10551f5e-4516-c0cc-0b04-73aa38f80a2c@linaro.org>
-In-Reply-To: <10551f5e-4516-c0cc-0b04-73aa38f80a2c@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        with ESMTP id S229446AbjDNHBj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Apr 2023 03:01:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361A9268B
+        for <linux-usb@vger.kernel.org>; Fri, 14 Apr 2023 00:01:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDDD961591
+        for <linux-usb@vger.kernel.org>; Fri, 14 Apr 2023 07:01:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF1D9C433EF;
+        Fri, 14 Apr 2023 07:01:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681455697;
+        bh=q5vhTXi3u0lF4+bYdb5jw3bfZdrNKgeLstG8XUwZnb8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L3YTd2MDf5cxZia9JeHFS1Za2liFQfoafcGBIrwExa2FHRH8B6L9V+a452nC32J4h
+         EYMftf1uftfGms8DrutVvDZeb6hrMBiySM22tnZfeLgVNhtgDGyNCG7Pdtu8BB81rl
+         oAmcCf72PNVR5n9FtHzw5HWB3OT6karjfrrnty7UsvMuVQuNb7tFXzj0nXXfG/BGU9
+         YKIAGH8nHdv5+8ANfm+S2nQgMgVuoaRZ62PKsGQuhS8jILbMpjkqiGjaMC7dx3+zcp
+         YJ7vif+Fc6+TleKtGlJsxyHPFKeJwQNZ1zwDEpRZ8xR9f4IdiThLv0WfgCl6SvCBi/
+         9Wsl8T0QDLmug==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pnDRG-00068Y-4p; Fri, 14 Apr 2023 09:01:42 +0200
+Date:   Fri, 14 Apr 2023 09:01:42 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     qianfanguijin@163.com
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bin Liu <b-liu@ti.com>, Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH v1] drivers: usb: wwan: treat any error as a fatal error
+Message-ID: <ZDj6Vhv6XHUADSFQ@hovoldconsulting.com>
+References: <20230414055306.8805-1-qianfanguijin@163.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230414055306.8805-1-qianfanguijin@163.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,74 +56,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu Apr 13, 2023 at 5:08 PM CEST, Bryan O'Donoghue wrote:
-> On 13/04/2023 15:19, Luca Weiss wrote:
-> > Hi Bryan,
-> >=20
-> > On Thu Apr 13, 2023 at 1:34 PM CEST, Bryan O'Donoghue wrote:
-> >> V5:
-> >> - Amagamates into once device, Heikki, Rob
-> >>
-> >> - Takes feedback on usage form Luka and Jianhua on VSafeV state transi=
-tion detection
-> >>    dev_err() -> dev_warn()
-> >>
-> >> - Orientation graph example and general expected bindings
-> >>    I discussed offline with Bjorn the conclusions of the glink/sbu mod=
-el.
-> >>    The expected orientation-switch path is
-> >>      connector/port@0 <-> phy/port@X <-> dp/port@0
-> >>    This can then be expanded to
-> >>      connector/port@0 <-> redriver/port@0 <-> phy/port@X <->  dp/port@=
-0
-> >>
-> >>    - Rob, Bjorn, Krzysztof
-> >>
-> >> - Data role
-> >>    The data-role path is
-> >>      connector/port@0 <-> dwc3/port@Y
-> >=20
-> > I believe I have adjusted my dts correctly for v5 compared to v4 but no=
-w
-> > the usb doesn't seem to work anymore in most cases.
-> >=20
-> > Only when having the phone already plugged in during boot in one
-> > orientation does USB come up, but also disappears once you replug the
-> > cable. I still see the same (or at least visually similar) messages whe=
-n
-> > plugging in the USB cable or the USB stick but nothing more than that
-> > happens.
-> >=20
-> > Not that v4 worked perfectly on pm7250b+sm7225(/sm6350) but at least it
-> > worked in most cases as described in the emails there. Since the driver
-> > structure changed quite a bit, git diff isn't helpful here
-> > unfortunately.
-> >=20
-> > Don't think it matters but worth mentioning that sm6350 uses the new
-> > qmpphy bindings as described in qcom,sc8280xp-qmp-usb43dp-phy.yaml (thi=
-s
-> > was also the case when testing v4 of this).
-> >=20
-> > Any idea?
->
-> Can you confirm the output of /sys/class/typec/port0/orientation in host=
-=20
-> mode with the USB key / peripheral in both orientations ?
+On Fri, Apr 14, 2023 at 01:53:06PM +0800, qianfanguijin@163.com wrote:
+> From: qianfan Zhao <qianfanguijin@163.com>
+> 
+> Kernel print such flood message when the modem dead (the device is not
+> disconnected but it doesn't response anything):
+> 
+> option1 ttyUSB1: usb_wwan_indat_callback: nonzero status: -71 on endpoint 05.
+> option1 ttyUSB1: usb_wwan_indat_callback: nonzero status: -71 on endpoint 05.
+> ...
+> 
+> So treat any error that doesn't recognized as a fatal error and do not
+> resubmit again.
 
-I see "reverse" and "normal" depending on the direction the USB stick is
-plugged in. When unplugged but also when plugged into my PC it stays at
-"unknown".
+This could potentially break setups that are currently able to recover
+from intermittent errors. 
 
->
-> If that's still OK, then perhaps we can figure out the gap in the PHY=20
-> code for v3
->
-> @caleb is working on this code for sdm845 which is a v3 PHY
+Try adding the missing known fatal ones as you suggested in your other
+thread first.
 
-Regards
-Luca
+There could still be an issue with -EPROTO (-71) error that would
+require some kind of back-off or limit, but that would need to be
+implemented in a more central place rather than in each and every usb
+driver (as has been discussed in the past).
 
->
+> Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
 > ---
-> bod
+>  drivers/usb/serial/usb_wwan.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
+> index cb01283d4d15..daa3e2beff0f 100644
+> --- a/drivers/usb/serial/usb_wwan.c
+> +++ b/drivers/usb/serial/usb_wwan.c
+> @@ -227,8 +227,7 @@ static void usb_wwan_indat_callback(struct urb *urb)
+>  			__func__, status, endpoint);
+>  
+>  		/* don't resubmit on fatal errors */
+> -		if (status == -ESHUTDOWN || status == -ENOENT)
+> -			return;
+> +		return;
+>  	} else {
+>  		if (urb->actual_length) {
+>  			tty_insert_flip_string(&port->port, data,
 
+Johan
