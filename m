@@ -2,43 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8F26E3D81
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Apr 2023 04:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 058226E3D96
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Apr 2023 04:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjDQCmZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 16 Apr 2023 22:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51000 "EHLO
+        id S229945AbjDQCwT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 16 Apr 2023 22:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjDQCmY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 Apr 2023 22:42:24 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3330826A8;
-        Sun, 16 Apr 2023 19:42:18 -0700 (PDT)
-X-UUID: 77130b2adcc911eda9a90f0bb45854f4-20230417
+        with ESMTP id S229674AbjDQCwR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 Apr 2023 22:52:17 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3681726;
+        Sun, 16 Apr 2023 19:52:14 -0700 (PDT)
+X-UUID: d74b9ed4dcca11edb6b9f13eb10bd0fe-20230417
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=2vEushRIBDMZrtHhe0+2KbcgDPOccbzbirf4EsVaVMQ=;
-        b=hLO2qsxOSjYSAzpar8nPdrXEmyIl+Xb3dbRxggjDYphOlZcb3DWMpe06mMcuoknKr/2M5xIJaQxNXUkQB13PSCey+qGXga02Trua8ShfdIOiJpevwjCfydpLNNPnubgq8NfYMOYGBZ7vj4R8mWKTgOUWVa6MxMLnQNHg+RfKw/Q=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=ejR+XuzhyQVgZP+TJeLCfwXAB17U9qlUN9dfvgvCkck=;
+        b=CiWs7+3iWV4KsaTwoGgxYf+BSUTOO6lryBUFYloulVcG5QbkmggCTPA0Wzzos+nivP2Bl0twgbn3A1NZWUbzQvF8WraIrZI6KxrtrMjYGNNv1WVz3sq52E0pYORXDAXvdn4orBNLMq2Rgf7XUduG4fEKw5tubKCUx81J5pFONgk=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:6dc29f3b-821f-4190-b557-729f348b1a2b,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:120426c,CLOUDID:02fa85a1-8fcb-430b-954a-ba3f00fa94a5,B
+X-CID-O-INFO: VERSION:1.1.22,REQID:1ee975f6-1929-4c2c-9898-dbf6b65dc5c8,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:120426c,CLOUDID:191628eb-db6f-41fe-8b83-13fe7ed1ef52,B
         ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
         RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
-X-UUID: 77130b2adcc911eda9a90f0bb45854f4-20230417
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+X-UUID: d74b9ed4dcca11edb6b9f13eb10bd0fe-20230417
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
         (envelope-from <chunfeng.yun@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1807268167; Mon, 17 Apr 2023 10:42:16 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+        with ESMTP id 1739159041; Mon, 17 Apr 2023 10:52:07 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Mon, 17 Apr 2023 10:42:16 +0800
+ 15.2.1118.25; Mon, 17 Apr 2023 10:52:05 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Mon, 17 Apr 2023 10:42:15 +0800
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Mon, 17 Apr 2023 10:52:05 +0800
 From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>
@@ -47,25 +47,22 @@ CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
         <linux-usb@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Tianping Fang <tianping.fang@mediatek.com>
-Subject: [PATCH v3 2/2] usb: xhci-mtk: add optional frame count clock
-Date:   Mon, 17 Apr 2023 10:42:13 +0800
-Message-ID: <20230417024213.17973-2-chunfeng.yun@mediatek.com>
+Subject: [PATCH v3 1/7] usb: mtu3: give back request when rx error happens
+Date:   Mon, 17 Apr 2023 10:51:57 +0800
+Message-ID: <20230417025203.18097-1-chunfeng.yun@mediatek.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230417024213.17973-1-chunfeng.yun@mediatek.com>
-References: <20230417024213.17973-1-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,44 +70,80 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add optional clock frmcnt_ck used on 4nm or advanced process SoC
+When the Rx enconnter errors, currently, only print error logs, that
+may cause class driver's RX halt, shall give back the request with
+error status meanwhile.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
-v3: add reviewed-by AngeloGioacchino
-
-v2: no changes
+v3: no changes
+v2: remove @req suggested by AngeloGioacchino
 ---
- drivers/usb/host/xhci-mtk.c | 1 +
- drivers/usb/host/xhci-mtk.h | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/usb/mtu3/mtu3_qmu.c | 37 ++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 36 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-index f7cbb08fc506..90cf40d6d0c3 100644
---- a/drivers/usb/host/xhci-mtk.c
-+++ b/drivers/usb/host/xhci-mtk.c
-@@ -398,6 +398,7 @@ static int xhci_mtk_clks_get(struct xhci_hcd_mtk *mtk)
- 	clks[2].id = "ref_ck";
- 	clks[3].id = "mcu_ck";
- 	clks[4].id = "dma_ck";
-+	clks[5].id = "frmcnt_ck";
- 
- 	return devm_clk_bulk_get_optional(mtk->dev, BULK_CLKS_NUM, clks);
+diff --git a/drivers/usb/mtu3/mtu3_qmu.c b/drivers/usb/mtu3/mtu3_qmu.c
+index a2fdab8b63b2..a4da1af0b2c0 100644
+--- a/drivers/usb/mtu3/mtu3_qmu.c
++++ b/drivers/usb/mtu3/mtu3_qmu.c
+@@ -466,6 +466,37 @@ static void qmu_tx_zlp_error_handler(struct mtu3 *mtu, u8 epnum)
+ 	mtu3_qmu_resume(mep);
  }
-diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
-index 1174a510dd38..faaaf05e36ce 100644
---- a/drivers/usb/host/xhci-mtk.h
-+++ b/drivers/usb/host/xhci-mtk.h
-@@ -15,7 +15,7 @@
  
- #include "xhci.h"
++/*
++ * when rx error happens (except zlperr), QMU will stop, and RQCPR saves
++ * the GPD encountered error, Done irq will arise after resuming QMU again.
++ */
++static void qmu_error_rx(struct mtu3 *mtu, u8 epnum)
++{
++	struct mtu3_ep *mep = mtu->out_eps + epnum;
++	struct mtu3_gpd_ring *ring = &mep->gpd_ring;
++	struct qmu_gpd *gpd_current = NULL;
++	struct mtu3_request *mreq;
++	dma_addr_t cur_gpd_dma;
++
++	cur_gpd_dma = read_rxq_cur_addr(mtu->mac_base, epnum);
++	gpd_current = gpd_dma_to_virt(ring, cur_gpd_dma);
++
++	mreq = next_request(mep);
++	if (!mreq || mreq->gpd != gpd_current) {
++		dev_err(mtu->dev, "no correct RX req is found\n");
++		return;
++	}
++
++	mreq->request.status = -EAGAIN;
++
++	/* by pass the current GDP */
++	gpd_current->dw0_info |= cpu_to_le32(GPD_FLAGS_BPS | GPD_FLAGS_HWO);
++	mtu3_qmu_resume(mep);
++
++	dev_dbg(mtu->dev, "%s EP%d, current=%p, req=%p\n",
++		__func__, epnum, gpd_current, mreq);
++}
++
+ /*
+  * NOTE: request list maybe is already empty as following case:
+  * queue_tx --> qmu_interrupt(clear interrupt pending, schedule tasklet)-->
+@@ -571,14 +602,18 @@ static void qmu_exception_isr(struct mtu3 *mtu, u32 qmu_status)
  
--#define BULK_CLKS_NUM	5
-+#define BULK_CLKS_NUM	6
- #define BULK_VREGS_NUM	2
+ 	if ((qmu_status & RXQ_CSERR_INT) || (qmu_status & RXQ_LENERR_INT)) {
+ 		errval = mtu3_readl(mbase, U3D_RQERRIR0);
++		mtu3_writel(mbase, U3D_RQERRIR0, errval);
++
+ 		for (i = 1; i < mtu->num_eps; i++) {
+ 			if (errval & QMU_RX_CS_ERR(i))
+ 				dev_err(mtu->dev, "Rx %d CS error!\n", i);
  
- /* support at most 64 ep, use 32 size hash table */
+ 			if (errval & QMU_RX_LEN_ERR(i))
+ 				dev_err(mtu->dev, "RX %d Length error\n", i);
++
++			if (errval & (QMU_RX_CS_ERR(i) | QMU_RX_LEN_ERR(i)))
++				qmu_error_rx(mtu, i);
+ 		}
+-		mtu3_writel(mbase, U3D_RQERRIR0, errval);
+ 	}
+ 
+ 	if (qmu_status & RXQ_ZLPERR_INT) {
 -- 
 2.18.0
 
