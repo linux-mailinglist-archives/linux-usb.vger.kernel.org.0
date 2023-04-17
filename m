@@ -2,78 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0116E3F87
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Apr 2023 08:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8F06E4138
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Apr 2023 09:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjDQGQe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Apr 2023 02:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
+        id S229838AbjDQHhV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Apr 2023 03:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjDQGQd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Apr 2023 02:16:33 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F6A30D3
-        for <linux-usb@vger.kernel.org>; Sun, 16 Apr 2023 23:16:31 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id dx24so17169317ejb.11
-        for <linux-usb@vger.kernel.org>; Sun, 16 Apr 2023 23:16:31 -0700 (PDT)
+        with ESMTP id S229602AbjDQHhH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Apr 2023 03:37:07 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7954203
+        for <linux-usb@vger.kernel.org>; Mon, 17 Apr 2023 00:35:54 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id kt6so23465192ejb.0
+        for <linux-usb@vger.kernel.org>; Mon, 17 Apr 2023 00:35:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681712190; x=1684304190;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n81Qz44HINu6zkbOJGniDIX8pJTKOROh6OkTUSCmQLw=;
-        b=SdiVtGFq9ksUJgATxqVUuVBiUXuiFc7KG/a6C3AOViBMqjIBUFht+CfPOJkxSTz5/I
-         40pjus69CRagrd9KkeLMhMWntlUhn/fjhUiP6OSXA18vqm9zIX1iCgomVKd/vgZWZtyw
-         gHbwmZwQ33uvyF+lB8C5bSnjCaReH5tkL8hkaPh73nqJNrXWVu5hav+sSpQ8DF2rRY6n
-         1rEkWOq1phIhQBYky1acfTzjK7Z++zjA1uZJqeua2T+ATmA0qgndUJvmYj9emYJHtPUC
-         qOcd1bzwp4aqoc5979K6QqK+IZBNWn/ahrUpPKa2C1ba9F9YEXxxXsk4kPhQnxzBPe2u
-         E6kQ==
+        d=fairphone.com; s=fair; t=1681716953; x=1684308953;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5XFC/9mvzx/O4+6lgw0WJn0uaQEYjzkPhtZfQPhydig=;
+        b=HUNbhNW99JActqnQxEFBW8XSlaWGg0MbaAp51GqNl/iqZW/orFbEQDWGJd7LnYcD2G
+         enTyvjpxSqOlLy+rHMoYWBYvMAyfQX7p0p3U2O2YlCrXy6u7plHWmfQMqziDmMLpOM7H
+         PhewcKOa9xsP5vLUXqrKWw1hiVSVQSSG6f4okIbN7Frmr+drvDGi4L45g+XTK/wS46Zr
+         k4z1P9XZhwDM8jNRuriP6wqOXNdPVCiKrysYQQ3vvZRCak+E7z5BkJmAwlIfNY+H9Dds
+         h6gS7t735ef1m5k9e47nDQWr/8PjxutS/LcGnBVYGrdXYQiRuYw0OI8Z3zKwuCNx6fq8
+         HwAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681712190; x=1684304190;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n81Qz44HINu6zkbOJGniDIX8pJTKOROh6OkTUSCmQLw=;
-        b=XtNg8cwzjscMGKr6t+s2fGYUwYx6YZC0fusm/3mHASaCum7sIMLXI1AWqlR1yftQJo
-         XH9NYhzIul2tvqpUB5zwqW1OW0y4jOucykJTMsFKOjOSBYL1qhp1D5ulRwlNsG8MwdG2
-         FaiD8tiOFl1nt9MjBrN9fyr1kPHaKmU8bsNbKokaPBBmCildJjk+aHYBK4oR575+K84d
-         f25uTYjGxPMAjdzkfUbxQfQZTZ8jY85nsYNhb8XNVHVs2g87dzYRoa918Q0nXL1iMymZ
-         czrlArTpSgYvsrhBEas2NBvP0BJxAGMrtTUitMSZQCZp5xyjTWvQGyMtKoLwUaduD6kd
-         08KQ==
-X-Gm-Message-State: AAQBX9fFxEz+ceRM4Qlbkm1w0Esgr8vria7IYNwEH0pL1eek1bTPp7C+
-        M6VHebM87vgyzy6vo0wHQd2rMA==
-X-Google-Smtp-Source: AKy350aDciXQyPkyplcrfR6WzMIzPP+ITc3iNHmWjBw331UbBWUSDcre5N0y7jnRZYNuAuTP8JrKvA==
-X-Received: by 2002:a17:907:3f24:b0:94f:19b5:bafd with SMTP id hq36-20020a1709073f2400b0094f19b5bafdmr7379577ejc.42.1681712189764;
-        Sun, 16 Apr 2023 23:16:29 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:b0ac:4d3b:966c:b33d? ([2a02:810d:15c0:828:b0ac:4d3b:966c:b33d])
-        by smtp.gmail.com with ESMTPSA id ds12-20020a170907724c00b0094f556a941dsm1781153ejc.49.2023.04.16.23.16.10
+        d=1e100.net; s=20221208; t=1681716953; x=1684308953;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5XFC/9mvzx/O4+6lgw0WJn0uaQEYjzkPhtZfQPhydig=;
+        b=erbwTjkWPPKtnQq6hDWP3cSGUXX9VT/3hwSjPFMXflE9CcYn+oA9YTbduGsNGU8MKW
+         2GaPvGc0ZwamSgbUTEor6ogDoch2b2u775y/DVThKVaXPMNXcCwunSy3AK4yROCvr/a9
+         8ZaoyNEgJ9JEi8FwHfqABRZ5iW55UJf1hT7MrPCk0X5BHDFLpC6piOMYEMidtJcCnKx9
+         YYdShScPuGHrzFhnb/QOaUll5uXKDbo9QXSTO1EIckMXGTcOZs8hoRYN3IKmVB+8tvVN
+         xLMDKMMh9ABaF9FBrcmWcmwQA76QHczrwJILgMqWNtmXY/xQkBIkesgrGPT+nyXmH4YH
+         jnEQ==
+X-Gm-Message-State: AAQBX9ca/SLTj5QVk04n191Qe1+ljTvz3ZJSMDT02SnXaL7aTa2xRFGr
+        X20YysXhj4SfX3N7StZZd1l6kg==
+X-Google-Smtp-Source: AKy350aiszsdDZQNPNMwuj0S2OGQCXnyOKHKInK77illrwKv5Zv4EoM9X2+pYLi40BANUGtxEvocIQ==
+X-Received: by 2002:a17:906:70d1:b0:94e:e859:8721 with SMTP id g17-20020a17090670d100b0094ee8598721mr7788806ejk.22.1681716953131;
+        Mon, 17 Apr 2023 00:35:53 -0700 (PDT)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id be5-20020a1709070a4500b0094f282fc29asm2973857ejc.207.2023.04.17.00.35.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 23:16:29 -0700 (PDT)
-Message-ID: <5ae4013e-399c-64c8-8bd8-d769f0ea7fca@linaro.org>
-Date:   Mon, 17 Apr 2023 08:16:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5 04/14] dt-bindings: phy: qcom,sc7180-qmp-usb3-dp-phy:
- Add ports as an optional
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     caleb.connolly@linaro.org, konrad.dybcio@linaro.org,
-        subbaram@quicinc.com, jackp@quicinc.com, robertom@qti.qualcomm.com
-References: <20230413113438.1577658-1-bryan.odonoghue@linaro.org>
- <20230413113438.1577658-5-bryan.odonoghue@linaro.org>
- <6ec55a3d-8b9a-2a44-6a0c-0dfc0100e88a@linaro.org>
- <b2388450-28a9-3dd9-8557-3649518c6619@linaro.org>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <b2388450-28a9-3dd9-8557-3649518c6619@linaro.org>
+        Mon, 17 Apr 2023 00:35:52 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Date:   Mon, 17 Apr 2023 09:35:52 +0200
+Message-Id: <CRYUWMIJDSB2.BJWEPJEA3Y1D@otso>
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        <linux@roeck-us.net>, <heikki.krogerus@linux.intel.com>,
+        <gregkh@linuxfoundation.org>, <andersson@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Cc:     <caleb.connolly@linaro.org>, <konrad.dybcio@linaro.org>,
+        <subbaram@quicinc.com>, <jackp@quicinc.com>,
+        <robertom@qti.qualcomm.com>
+Subject: Re: [PATCH v5 00/14] Add Qualcomm PMIC TPCM support
+X-Mailer: aerc 0.14.0
+References: <20230413113438.1577658-1-bryan.odonoghue@linaro.org>
+ <CRVOZOPMKBX4.2T7FOCWF0RKBJ@otso>
+ <10551f5e-4516-c0cc-0b04-73aa38f80a2c@linaro.org>
+ <CRWA2OP2T6KT.RCWAVWF5Q2T2@otso>
+ <ccc9fa4c-ca52-d8f3-a8b3-45031bea673f@linaro.org>
+In-Reply-To: <ccc9fa4c-ca52-d8f3-a8b3-45031bea673f@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,20 +82,61 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 17/04/2023 02:09, Bryan O'Donoghue wrote:
-> On 16/04/2023 18:47, Krzysztof Kozlowski wrote:
->> I assume both ports are required? Could it work without input or output?
-> 
-> It can work without an output because we might not have DP switched on 
-> -> bog-standard USB orientation-switching in host-only, device-only or 
-> dual-role modes.
-> 
+On Mon Apr 17, 2023 at 2:30 AM CEST, Bryan O'Donoghue wrote:
+> On 14/04/2023 07:51, Luca Weiss wrote:
+> > I see "reverse" and "normal" depending on the direction the USB stick i=
+s
+> > plugged in. When unplugged but also when plugged into my PC it stays at
+> > "unknown".
+>
+> Right so, this is down to bad behavior on the PHY patch, which is=20
+> resolved for me on sm8250 with the below.
+>
+> Basically when you unplug a device you would transition back to=20
+> "TYPEC_ORIENTATION_NONE" but that would turn off the PHY, which is obs=20
+> not very useful if you want to subsequently be a gadget.
+>
+> Anyway thanks for testing this - I'd missed the=20
+> host->device->host->device ping-pong breakage.
 
-Then I guess:
-required:
- - port@0
-(or whichever was input)
+Hm, unfortunately no improvement with this on my side.. No USB
+connection pops up on the host, or USB messages regarding the USB stick
+on the device.
 
-Best regards,
-Krzysztof
+Do you have an idea in which part of the code to start debugging this?
+Since orientation detection is working is it maybe in the phy code and
+not in the tcpm driver? Or does that also touch crucial stuff for USB
+apart from telling phy which direction to use?
+
+Regards
+Luca
+
+>
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c=20
+> b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> index b9a30c087423d..edb788a71edeb 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> @@ -3372,12 +3372,13 @@ static int qmp_combo_typec_switch_set(struct=20
+> typec_switch_dev *sw,
+>
+>          qmp->orientation =3D orientation;
+>
+> -       if (orientation =3D=3D TYPEC_ORIENTATION_NONE) {
+> -               if (qmp->init_count)
+> -                       ret =3D qmp_combo_dp_power_off(dp_phy);
+> -       } else {
+> -               if (!qmp->init_count)
+> -                       ret =3D qmp_combo_dp_power_on(dp_phy);
+> +       if (orientation !=3D TYPEC_ORIENTATION_NONE) {
+> +               ret =3D qmp_combo_dp_power_off(dp_phy);
+> +               if (ret)
+> +                       return ret;
+> +               ret =3D qmp_combo_dp_power_on(dp_phy);
+> +               if (ret)
+> +                       return ret;
+>          }
+>
+> ---
+> bod
 
