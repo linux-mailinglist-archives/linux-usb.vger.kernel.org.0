@@ -2,48 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0EAD6E4A53
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Apr 2023 15:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1F16E4B47
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Apr 2023 16:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjDQNtj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Apr 2023 09:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45128 "EHLO
+        id S229929AbjDQOTf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Apr 2023 10:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbjDQNti (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Apr 2023 09:49:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C451BEA
-        for <linux-usb@vger.kernel.org>; Mon, 17 Apr 2023 06:49:37 -0700 (PDT)
+        with ESMTP id S230085AbjDQOTe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Apr 2023 10:19:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03B597;
+        Mon, 17 Apr 2023 07:19:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ACEA461DD6
-        for <linux-usb@vger.kernel.org>; Mon, 17 Apr 2023 13:49:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C313DC433EF;
-        Mon, 17 Apr 2023 13:49:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681739376;
-        bh=Xhf5zVYxodNI8xKdvqKKDwo027Ylnm0m988ehiUfuy4=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 313546259D;
+        Mon, 17 Apr 2023 14:19:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 941E6C433D2;
+        Mon, 17 Apr 2023 14:19:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681741170;
+        bh=k3XisG/NRrAolwKyWo0Rf+luTpXJi357kD2xsaYr5I0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sgzJPjGlPl6PFRRMZgb1kuYOJvsdqWEKRFIDVB+mkylfCaOHOIJqC8cH2gUgin2gT
-         6vfONPD0eMOWo+n0qAeJQpLnB6FGNcClc9EKgTSExwDC6EUl89ntFa7OUJMMhCvp9r
-         Jlpr+2Kg1sbNlDgrqaq7c1YyzI5DYqrulk9mrV4w=
-Date:   Mon, 17 Apr 2023 15:49:33 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Avichal Rakesh <arakesh@google.com>
-Cc:     laurent.pinchart@ideasonboard.com, dan.scally@ideasonboard.com,
-        Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
-        Jayant Chowdhary <jchowdhary@google.com>,
-        "Eino-Ville Talvala (Eddy)" <etalvala@google.com>
-Subject: Re: UVC Gadget Driver shows glitched frames with a Linux host
-Message-ID: <ZD1ObUuy8deAvupf@kroah.com>
-References: <CAMHf4WKbi6KBPQztj9FA4kPvESc1fVKrC8G73-cs6tTeQby9=w@mail.gmail.com>
+        b=TmeLEFMzdEF+fN/JkBt63uYniJClN464xVCeJ7od5tLX/EyOn287IfreJBRK4vDKV
+         TnL7gx9e4gcW1BtaTgLsov6idYrd+mmlRlDRY60KdCWlYaxkZ50+vvlxrU+Rv+2uur
+         CKt/7j2LWsZ+DuqWpxwONv6fFN9+WfKQyxW2Rwk6Mww9lPuVx3O2Tml7Hnk8JuqfLd
+         Z+T9PZtrRbTuc4tv3rYC/Pj4M3SDbRdhhRnEOgs5WwsR5QBSoE404NCMV+IZehvCMw
+         q8IVCgrQq9TfJBjaXwGqBJjjGlJOTgP/OYKqXVlwEGfu/mQ8IPCbJbUpdxDprChh1O
+         HWCKSoudNLf1w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1poPhi-0007NG-8n; Mon, 17 Apr 2023 16:19:39 +0200
+Date:   Mon, 17 Apr 2023 16:19:38 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>, me@1conan.com,
+        erkin.bozoglu@xeront.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: add UNISOC vendor and TOZED LT70C
+ product
+Message-ID: <ZD1VeoJtd5FaDt5J@hovoldconsulting.com>
+References: <20230406055004.8216-1-arinc.unal@arinc9.com>
+ <ZDgca7wgfGlK/9cZ@hovoldconsulting.com>
+ <a6474ebf-67be-cdd9-8213-6251f27da2bd@arinc9.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMHf4WKbi6KBPQztj9FA4kPvESc1fVKrC8G73-cs6tTeQby9=w@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a6474ebf-67be-cdd9-8213-6251f27da2bd@arinc9.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,113 +62,109 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 02:03:02PM -0700, Avichal Rakesh wrote:
-> Hey all,
+On Mon, Apr 17, 2023 at 01:42:05PM +0300, Arınç ÜNAL wrote:
+> On 13.04.2023 18:14, Johan Hovold wrote:
+> > On Thu, Apr 06, 2023 at 08:50:04AM +0300, arinc9.unal@gmail.com wrote:
+> >> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> >>
+> >> Add UNISOC vendor ID and TOZED LT70-C modem which is based from UNISOC
+> >> SL8563. The modem supports the NCM mode.
+> > 
+> > Thanks for the patch. Looks mostly good, but see my comments below.
 > 
-> First off, I am very new to the kernel space, so apologies for any
-> newb mistakes. Please feel free to point them out!
+> Thanks a lot for looking at this Johan!
 > 
-> I've been trying to get the UVC gadget driver to work on an Android
-> device and have been seeing partial/glitched frames when streaming to
-> a Linux (or Windows) host fairly frequently (once every 2-4s). The UVC
-> gadget driver shows no error/exception logs, and neither does the
-> host's UVC driver.
+> > 
+> >> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  6 Spd=480  MxCh= 0
+> >> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> >> P:  Vendor=1782 ProdID=4055 Rev=04.04
+> >> S:  Manufacturer=Unisoc Phone
+> >> S:  Product=Unisoc Phone
+> >> S:  SerialNumber=<redacted>
+> >> C:  #Ifs=14 Cfg#= 1 Atr=c0 MxPwr=500mA
+> >> I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
+> >> E:  Ad=82(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+> >> I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
+> >> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> I:  If#=10 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> >> E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> E:  Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> I:  If#=11 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> >> E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> E:  Ad=8c(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> I:  If#=12 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=option
+> >> E:  Ad=09(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> E:  Ad=8d(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > 
+> > This looks like an ADB interface which should be blacklisted (reserved)
+> > so that the driver does not bind to it.
 > 
-> Enabling tracing for the UVC gadget driver and the host's UVC driver
-> shows that the gadget sees a missed ISOC transfer, and the host sees a
-> frame with suspiciously low packet count at the same time as the
-> glitched frame.
+> Will do.
 > 
-> ```
-> [691171.704583] usb 1-4: frame 9274 stats: 0/8/8 packets, 0/0/0 pts
-> (!early !initial), 7/8 scr, last pts/stc/sof 0/259279856/14353
-> [691171.704602] usb 1-4: Frame complete (EOF found)
-> [691171.732584] usb 1-4: frame 9275 stats: 0/4/4 packets, 0/0/0 pts
-> (!early !initial), 3/4 scr, last pts/stc/sof 0/261131744/14661
-> [691171.732621] usb 1-4: Frame complete (EOF found)
-> [691171.768578] usb 1-4: frame 9276 stats: 0/8/8 packets, 0/0/0 pts
-> (!early !initial), 7/8 scr, last pts/stc/sof 0/262525136/14894
-> [691171.768616] usb 1-4: Frame complete (EOF found)
-> ```
-> 
-> For reference, I am streaming 640x480 MJPEG frames of a (mostly)
-> static scene, and every frame takes 7-8 packets (~22kB). So 4 packets
-> for a frame is definitely not normal. From the logs, it looks like the
-> host sees an EOF header for the video frame that had the ISOC failure
-> and tries to display the frame with a partial buffer resulting in the
-> glitched frame.
+> > 
+> >> I:  If#=13 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> >> E:  Ad=0a(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> I:  If#= 2 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
+> >> E:  Ad=84(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+> >> I:  If#= 3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
+> >> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> I:  If#= 4 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
+> >> E:  Ad=86(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+> >> I:  If#= 5 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
+> >> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> I:  If#= 6 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
+> >> E:  Ad=88(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+> >> I:  If#= 7 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
+> >> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> I:  If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> >> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> I:  If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> >> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> >> E:  Ad=8a(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-But with isoc packets, it's ok to drop them, that's what the protocol is
-for.  If you require loss-less data transfer, you can NOT use isoc
-endpoints.
-
-So this sounds like it is working correctly, but you need to figure out
-why your device can't keep up on the data stream properly.
-
-> This can happen because the UVC gadget driver waits for the encode
-> loop to drop the video frame
-> (https://lore.kernel.org/all/20221018215044.765044-4-w36195@motorola.com/).
-> However, because video frames are encoded (to usb_requests)
-> asynchronously, it is possible that the video frame is completely
-> encoded before the ISOC transfer failure is reported. In this case,
-> the next frame would be dropped, but the frame with missed ISOC will
-> remain in queue.
-
-So you need a faster processor?  :)
-
-> This problem may be further exaggerated by the DWC3 controller driver
-> (which is what my device has) not setting the IMI flag when
-> no_interrupt flag is set
-> (https://lore.kernel.org/all/ced336c84434571340c07994e3667a0ee284fefe.1666735451.git.Thinh.Nguyen@synopsys.com/)?
-> UVC Gadget Driver sets the no_interrupt flag for ~3/4 of its queued
-> usb_request, so an ISOC failure may not immediately interrupt the UVC
-> gadget driver, leaving more time for the frame to finish encoding.
+> >> ---
+> >>   drivers/usb/serial/option.c | 6 ++++++
+> >>   1 file changed, 6 insertions(+)
+> >>
+> >> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> >> index f31cc3c76329..65a050a9ca39 100644
+> >> --- a/drivers/usb/serial/option.c
+> >> +++ b/drivers/usb/serial/option.c
+> >> @@ -595,6 +595,11 @@ static void option_instat_callback(struct urb *urb);
+> >>   #define SIERRA_VENDOR_ID			0x1199
+> >>   #define SIERRA_PRODUCT_EM9191			0x90d3
+> >>   
+> >> +/* UNISOC (Spreadtrum) products */
+> >> +#define UNISOC_VENDOR_ID			0x1782
+> >> +/* TOZED TL70-C based on UNISOC SL8563 uses UNISOC's vendor ID */
+> >> +#define TOZED_PRODUCT_LT70C			0x4055
+> >> +
+> >>   /* Device flags */
+> >>   
+> >>   /* Highest interface number which can be used with NCTRL() and RSVD() */
+> >> @@ -2225,6 +2230,7 @@ static const struct usb_device_id option_ids[] = {
+> >>   	{ USB_DEVICE_AND_INTERFACE_INFO(OPPO_VENDOR_ID, OPPO_PRODUCT_R11, 0xff, 0xff, 0x30) },
+> >>   	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0xff, 0x30) },
+> >>   	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0, 0) },
+> >> +	{ USB_DEVICE(UNISOC_VENDOR_ID, TOZED_PRODUCT_LT70C) },
+> > 
+> > You should match also on the interface class so that you don't try to
+> > bind to the cdc interfaces. See USB_DEVICE_INTERFACE_CLASS() (and
+> > RSVD() for the ADB interface).
 > 
-> I couldn't find any concrete error handling rules in the UVC specs, so
-> I am not sure what the proper solution here is. To try out, I created
-> a patch (attached below) that dequeues all queued usb_requests from
-> the endpoint in case of an ISOC failure and clears the uvc buffer
-> queue. This eliminated the partial frames with no perceivable frame
-> drops.
+> Thanks, the final result should look like this:
 > 
-> So my questions here are:
-> 1. Is this a known issue, and if so are there workarounds for it?
-> 2. If the answer to above is "No", does the explanation and mitigation
-> seem reasonable?
-> 
-> Patch follows (mostly for illustration, I can formalize it if
-> needed!). It adds a new 'req_inflight' list to track queued
-> usb_requests that have not been given back to the gadget driver and
-> drops all the queued requests in case of an ISOC failure. The other
-> changes are for the extra bookkeeping required to handle dropping all
-> frames. I haven't been able to confirm it, but as far as I can tell
-> the issue exists at ToT as well.
-> 
-> ---
-> drivers/usb/gadget/function/uvc.h | 6 ++-
-> drivers/usb/gadget/function/uvc_queue.c | 16 ++++--
-> drivers/usb/gadget/function/uvc_queue.h | 2 +-
-> drivers/usb/gadget/function/uvc_video.c | 71 +++++++++++++++++++------
-> 4 files changed, 72 insertions(+), 23 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/uvc.h
-> b/drivers/usb/gadget/function/uvc.h
-> index 100475b1363e..d2c837011546 100644
-> --- a/drivers/usb/gadget/function/uvc.h
-> +++ b/drivers/usb/gadget/function/uvc.h
-> @@ -80,7 +80,8 @@ struct uvc_request {
-> struct uvc_video *video;
-> struct sg_table sgt;
-> u8 header[UVCG_REQUEST_HEADER_LEN];
-> - struct uvc_buffer *last_buf;
-> + struct uvc_buffer *uvc_buf;
-> + bool is_last;
-> };
+> { USB_DEVICE_INTERFACE_CLASS(UNISOC_VENDOR_ID, TOZED_PRODUCT_LT70C, 0xff),
+>    .driver_info = RSVD(12) },
 
-The patch is corrupted and can't be applied by anyone, sorry :(
+Alternatively, it looks like you could use
+USB_DEVICE_AND_INTERFACE_INFO() and match on ff/0/0. That's generally
+preferred as it works also if the interface numbers can change.
 
-Please fix up your email client and submit it as a real patch?
-
-thanks,
-
-greg k-h
+Johan
