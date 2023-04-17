@@ -2,170 +2,221 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1B16E4477
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Apr 2023 11:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1BC6E44D2
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Apr 2023 12:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjDQJzx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Apr 2023 05:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57380 "EHLO
+        id S231214AbjDQKHq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Apr 2023 06:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjDQJzu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Apr 2023 05:55:50 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2061f.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e1b::61f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2356F10C6
-        for <linux-usb@vger.kernel.org>; Mon, 17 Apr 2023 02:55:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aL3tpk68SIebEjE567OAyJLXYSOk9DReiZ3bFa+jSStz/xM+AQs39mCTSNLmCNenQNIbeHlY1AA3BVgRlq3SckcceIVuAGiclVz7c8adfpz8cS/OT7o69Y7nkqr5UoBU2z9G/GSPYKxcDj+DUSN++hMbnpFf2KFQuWIMTllmiFZqTJDsnlmaKqkY0AAxYXsCgE/TfQ3OyvW2LQdrRecIzRMka0WlDzS6YDncRmIQ+2DcjaZeB/8QpgnlPFp1Zk6gh88t8YqH9wCXBHslO5lkavvOwHx+n4GtrVKRKpQF9K/VE+UlvuqPLQ3mQkIh92BrpxzVVL8/TBJMDNLYrZJgHg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oBwTbsS/MFDfb/r5n4rNEczHYa5XQB3nNUQqx9SpwGE=;
- b=n/KlhzvNc0DDRhguwfY2sxk1HXaaba79HXDT1CTQE52Bs6LJwsxj529fDYUpjBcwq7FnCgCZw7qnYIQiDx/ruIEP5cb7xu3aRGguAs6q5yGJmG5q/9c8r71+DOO0jIg0Mbcv9lOiv2qnpSuJl8NITwTMtsxO3S7ACDoV+RMUlzos+zixHqPfIiXUqxqcmmtt0nrGVCPbzethdhLDlU/5JHmVKup+x7ow7Q1HVaCkv02ROfAlZC8u0HPnbqcdXOhtZ/Vocn+Jp3RsVh8pIG9yIJGIi15CN+YzOI191I/7sDV+Jie+3+b1oCaYIMzQzdffRd78wVThIEhwxtju3Y7lCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oBwTbsS/MFDfb/r5n4rNEczHYa5XQB3nNUQqx9SpwGE=;
- b=YfME9ybgG6VzGvK6J4+tbflQ70fXnptSqzCVxkDjTaYP2XvXdSPPUZc+NYk/7hRfn6XjOjc4DTW6mF0CMduV0qhwvcgAwGBph/d34sMJKqP82mEjT7EVY8yJts1VWhFeT5/ifpMWPLWAUaDL2bPhkazkGlbTGfPYyWHXw1RSe5+snasx2Ng7CRYuxWp0rboj5krCl5SOsdQlPdXYorRaVtRcoMsIS+jW/nPNNjQ6IK/n9138yiCrTWttkzldHEwJhk2Y3F9zmklMPcWm+B6d8JxiMrhv9zS1flnYo1hMD9fIv7zRk8RheteGmVDlzO6FITto9IM0B60+B+4SVHeN4g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by DB8PR04MB7131.eurprd04.prod.outlook.com (2603:10a6:10:fd::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Mon, 17 Apr
- 2023 09:50:42 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::74bd:991c:527d:aa61]) by VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::74bd:991c:527d:aa61%8]) with mapi id 15.20.6298.045; Mon, 17 Apr 2023
- 09:50:36 +0000
-Message-ID: <a0226d7b-c03a-5e45-4ecb-2748c25126a2@suse.com>
-Date:   Mon, 17 Apr 2023 11:50:34 +0200
+        with ESMTP id S230024AbjDQKHe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Apr 2023 06:07:34 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D86728F
+        for <linux-usb@vger.kernel.org>; Mon, 17 Apr 2023 03:07:00 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f16b99b936so7124215e9.3
+        for <linux-usb@vger.kernel.org>; Mon, 17 Apr 2023 03:07:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681725884; x=1684317884;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EZUY4/57kqmqVHMhmuIoQO3azKh51Iz8m2kCJDmMY0A=;
+        b=qIBJraDIQIA5v+rbd4LhBeAHTbxfPcUNOzM49wsoxm2/Tj8p4mgrpOCDpRTdfCOTHP
+         667nXkDdg2EDkzr1k6EA30HyEQZVM5BFAc2JI39U0gvmXMYhxgZFD191FjDUNgtKF8Xc
+         NuMg0m5fqMm9G7B+lGHbUdUU5IeSGh+bbbdZo4IvgXx1mcwP2PYec+gPWQl2FqNbH67/
+         ELuEH+Vt+vt1u4uz3aiH/GCnCnwm70cM54xbwMjnNqtPtOfGWmlPs+WGvbbQK8F+mFEp
+         1aPgjTPTmEOMqkbJACj0E/jdyr9eTxgRufqka8FU5eXy4EI1ngzAt6BR6tN4RMn3efpp
+         qfqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681725884; x=1684317884;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EZUY4/57kqmqVHMhmuIoQO3azKh51Iz8m2kCJDmMY0A=;
+        b=PAm1emnKfC3AKExy6OuK5HS3a3C9spPl/tr2pBRzRSW9LWooHdx5SWMpSlFXP8q/zc
+         c9IiRe5HuASruKPhb0oxQikscbzCXPIZm9Hk50ZsvzZTA7i035vQToBFTakK9X+3HST2
+         F3x4pkSsq8T8g2ZJeDrI/MFDaxxAEU4lzIcXmWPEZkEocfXdGndDUzUCOikkOWubMuf8
+         byYXhor/Kejcyb2jq63D2JeJ7v9n/qQo5zfAqP1V6PB6Yl/AnWUk5Bn9d6EoPn082iHb
+         7Jhjg1n0k3IUqVkaPtiamNjM+IOsw4WKd7fIn4jkZ1gLJata2U3972F1u5Vg8S8iPPhb
+         VGhg==
+X-Gm-Message-State: AAQBX9cglBi7sK6KFURdYk/ohDwJIeETDOTvYoc8Og+wB5d57Yf2mnMh
+        Bpi01uORaZoKkPFg3Ley9eI6NA==
+X-Google-Smtp-Source: AKy350YOGGEXz8m/tFxIzICQ9PcToXq3MDFLmmm7h1rjdTEkDBJsnzkN6fcjfCprXUvhpBW8L7VVKQ==
+X-Received: by 2002:a5d:5104:0:b0:2f8:cd53:d882 with SMTP id s4-20020a5d5104000000b002f8cd53d882mr4621802wrt.56.1681725884198;
+        Mon, 17 Apr 2023 03:04:44 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id i4-20020a5d55c4000000b002f74578f494sm7745975wrw.41.2023.04.17.03.04.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 03:04:43 -0700 (PDT)
+Message-ID: <75d00efb-ff3c-b1f8-a141-3fa78a39557a@linaro.org>
+Date:   Mon, 17 Apr 2023 11:04:42 +0100
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v1] drivers: usb: wwan: treat any error as a fatal error
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v5 00/14] Add Qualcomm PMIC TPCM support
 Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>, qianfanguijin@163.com
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bin Liu <b-liu@ti.com>, Alan Stern <stern@rowland.harvard.edu>
-References: <20230414055306.8805-1-qianfanguijin@163.com>
- <ZDj6Vhv6XHUADSFQ@hovoldconsulting.com>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <ZDj6Vhv6XHUADSFQ@hovoldconsulting.com>
+To:     Luca Weiss <luca.weiss@fairphone.com>, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     caleb.connolly@linaro.org, konrad.dybcio@linaro.org,
+        subbaram@quicinc.com, jackp@quicinc.com, robertom@qti.qualcomm.com
+References: <20230413113438.1577658-1-bryan.odonoghue@linaro.org>
+ <CRVOZOPMKBX4.2T7FOCWF0RKBJ@otso>
+ <10551f5e-4516-c0cc-0b04-73aa38f80a2c@linaro.org>
+ <CRWA2OP2T6KT.RCWAVWF5Q2T2@otso>
+ <ccc9fa4c-ca52-d8f3-a8b3-45031bea673f@linaro.org>
+ <CRYUWMIJDSB2.BJWEPJEA3Y1D@otso>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <CRYUWMIJDSB2.BJWEPJEA3Y1D@otso>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0135.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:97::7) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|DB8PR04MB7131:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1b904943-6470-493c-8979-08db3f2931b1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LDgKNauLNQ7IsKWjwJ9tHAz6agqdgY1gtBITekPaaIA5RSEzZD/OzNpekn62/Owz07+B0839QkIij5cL20ZRcNN/GBSEQT1wso34pEeEH1U9XeW6z5WC7eraB37/k6ij+ZTQVwHVHRZ+CxLwbZZ4wygDzXgrGpcyPzTmFF3Ef6w5LTYfzSSUTMAdegUoBEHVs3FZ8R3pjAT9K2VbMqia/bFtE4bYO6zJjI5F3sC5gUDHNkkJAyH/+deo5yZrHBLwvFcbt0icllLrK7B+JzY0z80Ig/dV/FMt/VGgS8WSetDZcazYzT1xXNF9RbIfeGkKj70dW58CyEZib0+IT0syarYEuC4oSfoSM8qkxtUyvL25nMjewulMLIT+B6ekJslpEmsdoN9xn3dt8O95idgVFyXSx83sAYIXklxU2ZqcNu9BK2gktfmGhx4yKJmNHeekvHcOmXhiVI4z/aBU3YBoYVAYT5A9oABgBS3kJKg1xO3eEcUshvd09gB3wMwsDnHAB3kntCZ6iglb7I76mDdJFLN/37+3XIq6qdutv8kukTaVyNxOjZ34D8YMnv7tZi+jVZvWjULgwQIOOLvoXWToCVYsJ/3Av/GpjdZQi+7VvBP6QSObs27lYhmm+cFLKFE2NptbHT5S64BWZaKJZfZy6A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(396003)(136003)(39860400002)(366004)(346002)(451199021)(6486002)(86362001)(478600001)(31696002)(2616005)(36756003)(83380400001)(6506007)(186003)(53546011)(6512007)(38100700002)(66946007)(66476007)(66556008)(316002)(2906002)(4326008)(8936002)(8676002)(5660300002)(31686004)(41300700001)(54906003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MnM0M1JwR3l0Wjl4SFBxY1RsN1YxdXg1UlE5MHk0cXB1N3JkeVp1VkV2N3F2?=
- =?utf-8?B?RmRvYW9yYStGSmR4V0lQV1RIZnROVUxvN2h2cWpVV3dZOHVES0lrTFFZdzF3?=
- =?utf-8?B?ZnNWYTVyMitWWmVxME5EK3RwSnBBT3RkblhzNXBJRXgvQXlXMDlqVW1mNzZr?=
- =?utf-8?B?Q2xrcEtMVzdiMHc3Ukt1aCtRcjQvb0paRk4ycHZsYzgxYXJYMXNTUW1wbTc0?=
- =?utf-8?B?WXBERVFsbmxteU5Id1dibHZ1Y0E3TlNKUnJzMytYbXdYMlJ5V1hSWXNMRnRU?=
- =?utf-8?B?VHJzeDRtWDhvVWRDandvTWVKekg3RmxpdTlPT0Z3bHY3ZEhMd1VVeTR1NjhC?=
- =?utf-8?B?K1dQNnJXWVMyeGtLakgrWWc2aWVONVZ4MkE0VFI0WlFUQ3VsZmFpZ3Q2QStH?=
- =?utf-8?B?ak81ZWNrWW1JR1hkRjBtbDNSSEhzNnhvSGRvT0ZWUDVzeWJLSkd4dndDM3ov?=
- =?utf-8?B?aENFekVtN2hmQlljQnFaNDVBMVMxUFJ5OXFsbG9GZThEcHlYQXUwYm5jcytj?=
- =?utf-8?B?QXY1VVBJNk4zcU1GS2g1ZUtDTTFBWFVsWTkrejU4cFRxaUxQaURCRWpqb3VR?=
- =?utf-8?B?Q2Z1eldLVDI2YzFaZkF1aXVMb1Q2aDh5M2ZCMng4R2pjNHQzZVFRZjROdUdS?=
- =?utf-8?B?dU8xYU81aUZVVW0xVk9HZStqcUNsZlJwalcyTERONk9vcXk5WmIvamV6QUN0?=
- =?utf-8?B?V0g4QVpVNTc1NllUM3lmRUVJVW1rNnBpUEhLaFRLM28vd3M2OXlhT2x3NXdm?=
- =?utf-8?B?OTl3UFBBeHc0Y1J6ZDBIK1gxSTVENjhqK2EwSk9ydG5YUmtBNG02clNwWEU0?=
- =?utf-8?B?OWc2ek0wK2VrTi9IaWlsUmdXZWpRUmk5MHkvbXVXWHBsT1pXNmN1WDVvYkJl?=
- =?utf-8?B?V1RESTdQMk9XeUVnam5Db3ljRG1iSFQ2Slh4V0xmeHZKMitrVXFPdzR2WXJr?=
- =?utf-8?B?TVRiSVlZd2VJbkRvNGZwajBIYmNsaGpPNEdhZE5nSGJ5Y29BVVJSR1JlVnBn?=
- =?utf-8?B?SXZRdDdUMzFYT0Z3S1pOeWF1MVdDSmVmRVFlRjRCbDZtQXo5aHVtZjVRRXNp?=
- =?utf-8?B?ZGRGNGZHSE1USWJDdEU5YWwza0hvUUF4cXRPZVVPb3p4enJOUkN5UitLL0ZY?=
- =?utf-8?B?SVF2SFhEZWVMeUg0dCsyL2ZlckhiNmdRVlROU1daWVJ3TXRXaGg5enpXWU03?=
- =?utf-8?B?SEV0QnVWcjFOcGJvelJhWW9JbEg0Y1VUSEl6bjFPZEZxZk1sSGlFblEvOU5s?=
- =?utf-8?B?MnM1MnJYVlptYXcvc1RlTitsWnhqc3lycHlReVBLLzFoZm5GMFFpR29PVjR5?=
- =?utf-8?B?VHJ0N3pnT3NySFYyczBvcjJlY0FER01DL3RXUTQrNURiL2JCZzNjUm12YUp4?=
- =?utf-8?B?ODlMa09XSTVEbndLc0I3Q0dRL0RZSzFaMW5KZ1BtaUlWcjlYVkpIcmIzOTJT?=
- =?utf-8?B?Uk9ENGlmbFdJb0szTXBCSG4xTnREYnlXbnBKdnA1MWlFMU8vTGVidXVJTEs5?=
- =?utf-8?B?YnJsWHlEeml5YkU0dWRkRnJFRkhqSHVaZ1FaMVNONElJWWRmaE82ckJHNHQ0?=
- =?utf-8?B?MDFYOTlQemYvaVBEbFh2QW41dUlPcUh5bVI1Y1AyRzJrRzFTWWt4dWtWVjVn?=
- =?utf-8?B?a0xqQzNGbFlWQVR2NjVVVGh6bzliOFI5OVU5WENJWnRuOFV2UDBQcGdVZ0hR?=
- =?utf-8?B?N0hSaEhmQjlrMG1UN2VoWkRReGg3MlFDa3FFTTRHcFJoN21QU2lkYUYxYXA3?=
- =?utf-8?B?SDk0UlVpRE84UlVwcVhLaEVuSG9YeGVySmFRY2RvS2FKRlVkTWtPZnQzSEVV?=
- =?utf-8?B?akZWNEUrZmR0dzlTYmhSWGRzVlFwZk9JbFh4Qmx1bEVYWno3cFMyc2N5L2pu?=
- =?utf-8?B?U1VWU1dQTUoxcVlZM3FYZ3VjaDF6ZTJXYlVSSThPdzFKR2EvSjh1RGo5VDVw?=
- =?utf-8?B?dlEwM1UvS0xLUTNaelN2Z1M4cjFpOVF3RTIxSTg2V2d4cHFRaXBGMDkwOTkv?=
- =?utf-8?B?bEU5aXdEMVFndEg2YWJOclBxS2ZsMXZpS0hrT2RuamFhMk9UZDJhclJpV213?=
- =?utf-8?B?N3A5MGVQTk1LMFYyaFJXMW9xY1YvN0RxN2NUbVFOdEdEdG40WTlFYXROdlBQ?=
- =?utf-8?B?KzRYV2I4OG5mNXkzMkNkeHZONjQ0UVJMZFdqaEZVa0lWd1BGejEyVHVGbGZn?=
- =?utf-8?Q?naFMkZIe1ha/cOGxtm8IJ4aQnZ41IXMcn+P5tQvTpzNY?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b904943-6470-493c-8979-08db3f2931b1
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 09:50:36.4605
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pifj9dgBoSPoVEbXpnUfzecKakROirKZ2SJW8eHHX0LwAn71IZ3zWnwzka2o17yItQJYw+nf37Va3zJz0fTwXQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7131
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 17/04/2023 08:35, Luca Weiss wrote:
+> Do you have an idea in which part of the code to start debugging this?
+> Since orientation detection is working is it maybe in the phy code and
+> not in the tcpm driver? Or does that also touch crucial stuff for USB
+> apart from telling phy which direction to use?
 
+PHY - I'd almost just do the following
 
-On 14.04.23 09:01, Johan Hovold wrote:
-> On Fri, Apr 14, 2023 at 01:53:06PM +0800, qianfanguijin@163.com wrote:
->> From: qianfan Zhao <qianfanguijin@163.com>
->>
->> Kernel print such flood message when the modem dead (the device is not
->> disconnected but it doesn't response anything):
->>
->> option1 ttyUSB1: usb_wwan_indat_callback: nonzero status: -71 on endpoint 05.
->> option1 ttyUSB1: usb_wwan_indat_callback: nonzero status: -71 on endpoint 05.
->> ...
->>
->> So treat any error that doesn't recognized as a fatal error and do not
->> resubmit again.
-> 
-> This could potentially break setups that are currently able to recover
-> from intermittent errors.
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c 
+b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+index edb788a71edeb..bbac82bd093f8 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+@@ -3369,7 +3369,7 @@ static int qmp_combo_typec_switch_set(struct 
+typec_switch_dev *sw,
 
-Yes. The basic issue is that a physically disconnected device
-produces the same errors as an intermittent failure for a short
-time before the disconnection is detected.
+         dev_dbg(qmp->dev, "Toggling orientation current %d requested %d\n",
+                 qmp->orientation, orientation);
+-
++return 0;
 
-Hence the correct way to handle this would be like usbhid does
-with hid_io_error(), that is a delay before resubmitting
-and eventually a device reset.
+In that case the PHY should "just work" for host or device in one 
+orientation.
 
-> Try adding the missing known fatal ones as you suggested in your other
-> thread first.
-> 
-> There could still be an issue with -EPROTO (-71) error that would
-> require some kind of back-off or limit, but that would need to be
-> implemented in a more central place rather than in each and every usb
-> driver (as has been discussed in the past).
+The other possibility is that the data role message is not hitting dwc3 
+drd on your platform.
 
-Exactly. How would that look like conceptually?
-A centralized work with a pool of URBs to be retried after a delay
-and eventually a device reset?
+If you take the last commit on this branch - plus the updated PHY commit
 
-Handling unbinding a driver would be tough, though.
+Commit: 171d7f507511 ("usb: dwc3: drd: Enable user-space triggered 
+role-switching")
 
-	Regards
-		Oliver
+Commit: eb0daa19f3ad ("phy: qcom-qmp: Register as a typec switch for 
+orientation detection")
+
+https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/linux-next-23-04-17-pm8150b-tcpm-qcom-wrapper-typec-mux
+
+cat /sys/class/usb_role/a600000.usb-role-switch/role
+
+On SM8250 it looks like this
+
+- Attach TypeC accessory with USB key plugged in [1]
+   Mount USB key, read/write some data
+   Unmount USB key
+
+   cat /sys/class/usb_role/a600000.usb-role-switch/role
+   host
+
+- Attach TypeC accessory in opposite orientation
+   Run same test
+
+- Connect to PC via TypeC cable
+   Run usb-ecm-up.sh [2]
+
+   cat /sys/class/usb_role/a600000.usb-role-switch/role
+   device
+
+   PC     : ifconfig enp49s0f3u2u4 192.168.8.1
+   SM8250 : ifconfig usb0 192.168.8.2
+   Then
+     PC     : iperf -s
+     SM8250 : iperf -c 192.168.8.1 -t 10
+     [  1] 0.0000-10.0706 sec   307 MBytes   256 Mbits/sec
+
+- Unplug from PC - replug TypeC accessory
+   Rerun test in both orientations
+
+- Replug target to PC
+   In this case we only have to reset the IP address
+
+   PC     : ifconfig enp49s0f3u2u4 192.168.8.1
+   SM8250 : ifconfig usb0 192.168.8.2
+
+Yep its worth checking out that the data-role switch is working, we 
+might be looking at the wrong thing for you on the PHY.
+
+[1] 
+https://www.amazon.com/CableCreation-Multiport-Adapter-Gigabit-Ethernet/dp/B08FWMWGTD
+
+[2] usb-ecm-up.sh
+root@linaro-gnome:~# cat usb-ecm-up.sh
+#!/usr/bin/env bash
+
+# load libcomposite module
+modprobe libcomposite
+
+# ensure function is loaded
+modprobe usb_f_ecm
+modprobe usb_f_ncm
+
+mount -t configfs none /sys/kernel/config/
+
+# create a gadget
+mkdir /sys/kernel/config/usb_gadget/g0
+
+# cd to its configfs node
+cd /sys/kernel/config/usb_gadget/g0
+
+# configure it (vid/pid can be anything if USB Class is used for driver 
+compat)
+echo 0x0525 > idVendor
+echo 0xa4a4 > idProduct
+
+# configure its serial/mfg/product
+mkdir strings/0x409
+
+echo 0xCAFEBABE > strings/0x409/serialnumber
+echo Linaro > strings/0x409/manufacturer
+echo qrb5165-rb5 > strings/0x409/product
+
+# create configs
+mkdir configs/c.1
+mkdir configs/c.1/strings/0x409
+
+# create the function (name must match a usb_f_<name> module such as 'acm')
+mkdir functions/ncm.0
+
+echo "CDC ECM" > configs/c.1/strings/0x409/configuration
+
+# associate function with config
+ln -s functions/ncm.0 configs/c.1
+
+# Set USB version 3.1
+echo 0x0310 > bcdUSB
+
+echo "super-speed-plus" > max_speed
+
+# enable gadget by binding it to a UDC from /sys/class/udc
+#echo a600000.dwc3 > UDC
+echo a600000.usb > UDC
+# to unbind it: echo "" > UDC; sleep 1; rm -rf 
+/sys/kernel/config/usb_gadget/g0
+
+sleep 1
+
+ifconfig usb0 192.168.8.2
+
