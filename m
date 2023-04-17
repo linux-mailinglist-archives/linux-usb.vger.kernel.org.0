@@ -2,55 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30ADA6E4BE3
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Apr 2023 16:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6EE6E4C66
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Apr 2023 17:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbjDQOur (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Apr 2023 10:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
+        id S230498AbjDQPJK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Apr 2023 11:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjDQOuq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Apr 2023 10:50:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDD465A0;
-        Mon, 17 Apr 2023 07:50:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6C9E61FE9;
-        Mon, 17 Apr 2023 14:50:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AC26C433EF;
-        Mon, 17 Apr 2023 14:50:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681743044;
-        bh=mC950doGDx3IoJ92opWN6Hi8dgm/VDBovZO1UKmkJ60=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KOxq3Fh1BwfMbh+Y4fEZgf8mdaVPB+Zm7LKaHJOGGlTwakeYn9ZKI4DIVGP5rhMm+
-         Q+uGGEGRklvKqo+3o0Os7nTDvtB/ma/m9kRfQWsxwQCfuVdKIdGqnfifOJOO9ArtRK
-         e5NRrmFZuh+XHRVFMUSwWLgjIiUBAlUdwxG8cou18h31aWKUUIMYu/bv3MVoFEBUFr
-         Pxf5Vde3JWFIq4W37fz0Q+TkYnfgEYraSBlZ4U/YNz4+ZY5Q99kCe19EPQrWZfHsyJ
-         bStdDm5AUovO9wx0hXwOkILwcDsDtdF24KCfVCmVyUAObPKycJUOzNxUEx/wctFHk4
-         O1JFk8tvh/Ciw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1poQBw-0007cd-00; Mon, 17 Apr 2023 16:50:52 +0200
-Date:   Mon, 17 Apr 2023 16:50:51 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Jarkko Sonninen <kasper@iki.fi>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
-Message-ID: <ZD1cy6omacYMRCLs@hovoldconsulting.com>
-References: <20230313010416.845252-1-kasper@iki.fi>
- <20230314070002.1008959-1-kasper@iki.fi>
- <ZDfC9xkDMAJn60jc@hovoldconsulting.com>
- <57fef05a-e885-f83b-1536-7a9f9e8a4adf@iki.fi>
+        with ESMTP id S230270AbjDQPJJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Apr 2023 11:09:09 -0400
+X-Greylist: delayed 15688 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 08:09:05 PDT
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28246A240;
+        Mon, 17 Apr 2023 08:09:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1681744136; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=iyfGYLw59aNAdVJNqZF6Ocs8uPg34ZQrFTLNzVBc1Kc2k0s05PV2m7TB5E94iEhMpGLzOiAWqXO6VbvTRpSjQMMw3ueTQptFHBTmtlTray/KFKtAkO8Xs0FKEDrjry8csjscHYuo88vqo7wKQMvTFVeojWScoEBfsNgYf4Q8twk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1681744136; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=hD23he8/NvWp3mSckDAig6IJhCBzSuHzGFxZ+hV+vm8=; 
+        b=Ry9PNWjaGsOCJE3fT26Ds5G1UfGm5FPuUr2HCp5prlmH86kensZgclL0coTjqf4lc6tDwPD1B3yTt+AUYlWHcjUucuQUGC3YemJPFMI9yLAIbPlzs9o1AUwXgSh1kkz+DYd/c8/qzpYrNHqkQZPiGJdgYTiNRXOwKuHIzKAljHM=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1681744136;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=hD23he8/NvWp3mSckDAig6IJhCBzSuHzGFxZ+hV+vm8=;
+        b=RAoUobvU2EkG6SuPD5VgWhuTwcGholRbzxoaOQ1aW/+jB99nz2vtPI0q0xvgs9p2
+        oQ5fLZhFmTvfcVvoRTu1xkOWUrOUaA+qTY+uFeDK/N6bSZB5jkTsrjlErpZFus49hCh
+        c7nwLPdsDwtQSMlwYPv4ndneehBD596K/MPQQmTk=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 168174413416427.811981668877024; Mon, 17 Apr 2023 08:08:54 -0700 (PDT)
+Message-ID: <9d51c222-8200-8943-aeef-a19b0e1739fe@arinc9.com>
+Date:   Mon, 17 Apr 2023 18:08:45 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <57fef05a-e885-f83b-1536-7a9f9e8a4adf@iki.fi>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] USB: serial: option: add UNISOC vendor and TOZED LT70C
+ product
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Bj=c3=b8rn_Mork?= <bjorn@mork.no>, me@1conan.com,
+        erkin.bozoglu@xeront.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230406055004.8216-1-arinc.unal@arinc9.com>
+ <ZDgca7wgfGlK/9cZ@hovoldconsulting.com>
+ <a6474ebf-67be-cdd9-8213-6251f27da2bd@arinc9.com>
+ <ZD1VeoJtd5FaDt5J@hovoldconsulting.com>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <ZD1VeoJtd5FaDt5J@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,202 +67,115 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 11:40:00AM +0300, Jarkko Sonninen wrote:
-> On 4/13/23 11:53, Johan Hovold wrote:
-> > On Tue, Mar 14, 2023 at 09:00:01AM +0200, Jarkko Sonninen wrote:
-> >> Add support for RS-485 in Exar USB adapters.
-> >> RS-485 mode is controlled by TIOCGRS485 and TIOCSRS485 ioctls.
-> >> Gpio mode register is set to enable RS-485.
-> > Which register you use is an implementation details which is not really
-> > needed in the commit message.
-> >
-> > Please say something about how the hardware works and try to describe
-> > what you are implementing here and perhaps something about what is left
-> > unsupported (e.g. the fixed rts polarity).
+On 17.04.2023 17:19, Johan Hovold wrote:
+> On Mon, Apr 17, 2023 at 01:42:05PM +0300, Arınç ÜNAL wrote:
+>> On 13.04.2023 18:14, Johan Hovold wrote:
+>>> On Thu, Apr 06, 2023 at 08:50:04AM +0300, arinc9.unal@gmail.com wrote:
+>>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>>
+>>>> Add UNISOC vendor ID and TOZED LT70-C modem which is based from UNISOC
+>>>> SL8563. The modem supports the NCM mode.
+>>>
+>>> Thanks for the patch. Looks mostly good, but see my comments below.
+>>
+>> Thanks a lot for looking at this Johan!
+>>
+>>>
+>>>> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  6 Spd=480  MxCh= 0
+>>>> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+>>>> P:  Vendor=1782 ProdID=4055 Rev=04.04
+>>>> S:  Manufacturer=Unisoc Phone
+>>>> S:  Product=Unisoc Phone
+>>>> S:  SerialNumber=<redacted>
+>>>> C:  #Ifs=14 Cfg#= 1 Atr=c0 MxPwr=500mA
+>>>> I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
+>>>> E:  Ad=82(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+>>>> I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
+>>>> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> I:  If#=10 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+>>>> E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> E:  Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> I:  If#=11 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+>>>> E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> E:  Ad=8c(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> I:  If#=12 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=option
+>>>> E:  Ad=09(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> E:  Ad=8d(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>
+>>> This looks like an ADB interface which should be blacklisted (reserved)
+>>> so that the driver does not bind to it.
+>>
+>> Will do.
+>>
+>>>
+>>>> I:  If#=13 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+>>>> E:  Ad=0a(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> I:  If#= 2 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
+>>>> E:  Ad=84(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+>>>> I:  If#= 3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
+>>>> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> I:  If#= 4 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
+>>>> E:  Ad=86(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+>>>> I:  If#= 5 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
+>>>> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> I:  If#= 6 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
+>>>> E:  Ad=88(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+>>>> I:  If#= 7 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
+>>>> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> I:  If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+>>>> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> I:  If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+>>>> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>> E:  Ad=8a(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 > 
-> Add support for RS-485 in Exar USB adapters.
-> RS-485 mode is controlled by TIOCGRS485 and TIOCSRS485 ioctls.
-> SER_RS485_ENABLED and SER_RS485_RTS_ON_SEND flags are implemented.
-> There is only one polarity control in Exar for both RTS_ON_SEND and 
-> RTS_AFTER_SEND.
-> RS-485 delays and addressing modes are not implemented.
+>>>> ---
+>>>>    drivers/usb/serial/option.c | 6 ++++++
+>>>>    1 file changed, 6 insertions(+)
+>>>>
+>>>> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+>>>> index f31cc3c76329..65a050a9ca39 100644
+>>>> --- a/drivers/usb/serial/option.c
+>>>> +++ b/drivers/usb/serial/option.c
+>>>> @@ -595,6 +595,11 @@ static void option_instat_callback(struct urb *urb);
+>>>>    #define SIERRA_VENDOR_ID			0x1199
+>>>>    #define SIERRA_PRODUCT_EM9191			0x90d3
+>>>>    
+>>>> +/* UNISOC (Spreadtrum) products */
+>>>> +#define UNISOC_VENDOR_ID			0x1782
+>>>> +/* TOZED TL70-C based on UNISOC SL8563 uses UNISOC's vendor ID */
+>>>> +#define TOZED_PRODUCT_LT70C			0x4055
+>>>> +
+>>>>    /* Device flags */
+>>>>    
+>>>>    /* Highest interface number which can be used with NCTRL() and RSVD() */
+>>>> @@ -2225,6 +2230,7 @@ static const struct usb_device_id option_ids[] = {
+>>>>    	{ USB_DEVICE_AND_INTERFACE_INFO(OPPO_VENDOR_ID, OPPO_PRODUCT_R11, 0xff, 0xff, 0x30) },
+>>>>    	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0xff, 0x30) },
+>>>>    	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0, 0) },
+>>>> +	{ USB_DEVICE(UNISOC_VENDOR_ID, TOZED_PRODUCT_LT70C) },
+>>>
+>>> You should match also on the interface class so that you don't try to
+>>> bind to the cdc interfaces. See USB_DEVICE_INTERFACE_CLASS() (and
+>>> RSVD() for the ADB interface).
+>>
+>> Thanks, the final result should look like this:
+>>
+>> { USB_DEVICE_INTERFACE_CLASS(UNISOC_VENDOR_ID, TOZED_PRODUCT_LT70C, 0xff),
+>>     .driver_info = RSVD(12) },
 > 
-> ok ?
+> Alternatively, it looks like you could use
+> USB_DEVICE_AND_INTERFACE_INFO() and match on ff/0/0. That's generally
+> preferred as it works also if the interface numbers can change.
 
-Sure, something like that, but perhaps you can amend the bit about
-RTS_AFTER_SEND (see below).
+Sounds good. I also don't need to use RSVD() since this won't match the 
+ADB interface if I understand correctly.
 
-It would be even better if you could try to rephrase this so that it
-reads a little easier. Something along the lines of
+I'll send v2 in a short moment.
 
-	Exar devices like <model> can control an RS485 tranceiver by
-	automatically asserting the RTS#/RS485 pin before sending data
-	and deasserting it when the last stop bit has been transmitted.
-	The polarity of the RST#/RS485 signal is configurable and the
-	hardware also supports features <XYZ>...
-
-	Add support for enabling and disabling RS-485 mode and
-	configuring the signal polarity using the TIOCGRS485 and
-	TIOCSRS485 ioctls. Support for <XYZ> is left unimplemented for
-	now.
-
-> >> Signed-off-by: Jarkko Sonninen <kasper@iki.fi>
-> >> ---
-> >>
-> >> In this version only rs485.flags are stored to state.
-> >> There is no locking as only one bit of the flags is used.
-> >> ioctl returns -ENOIOCTLCMD as the actual error handling is in tty code.
-> >>
-> >>   drivers/usb/serial/xr_serial.c | 62 +++++++++++++++++++++++++++++++++-
-> >>   1 file changed, 61 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/usb/serial/xr_serial.c b/drivers/usb/serial/xr_serial.c
-> >> index fdb0aae546c3..7b542ccb6596 100644
-> >> --- a/drivers/usb/serial/xr_serial.c
-> >> +++ b/drivers/usb/serial/xr_serial.c
-> >> @@ -93,6 +93,7 @@ struct xr_txrx_clk_mask {
-> >>   #define XR_GPIO_MODE_SEL_DTR_DSR	0x2
-> >>   #define XR_GPIO_MODE_SEL_RS485		0x3
-> >>   #define XR_GPIO_MODE_SEL_RS485_ADDR	0x4
-> >> +#define XR_GPIO_MODE_RS485_TX_H		0x8
-> >>   #define XR_GPIO_MODE_TX_TOGGLE		0x100
-> >>   #define XR_GPIO_MODE_RX_TOGGLE		0x200
-> >>   
-> >> @@ -237,6 +238,7 @@ static const struct xr_type xr_types[] = {
-> >>   struct xr_data {
-> >>   	const struct xr_type *type;
-> >>   	u8 channel;			/* zero-based index or interface number */
-> >> +	u32 rs485_flags;
-> >>   };
-> >>   
-> >>   static int xr_set_reg(struct usb_serial_port *port, u8 channel, u16 reg, u16 val)
-> >> @@ -645,9 +647,13 @@ static void xr_set_flow_mode(struct tty_struct *tty,
-> >>   	/* Set GPIO mode for controlling the pins manually by default. */
-> >>   	gpio_mode &= ~XR_GPIO_MODE_SEL_MASK;
-> >>   
-> >> +	if (data->rs485_flags & SER_RS485_ENABLED)
-> >> +		gpio_mode |= XR_GPIO_MODE_SEL_RS485 | XR_GPIO_MODE_RS485_TX_H;
-> >> +	else if (C_CRTSCTS(tty) && C_BAUD(tty) != B0)
-> >> +		gpio_mode |= XR_GPIO_MODE_SEL_RTS_CTS;
-> >> +
-> >>   	if (C_CRTSCTS(tty) && C_BAUD(tty) != B0) {
-> >>   		dev_dbg(&port->dev, "Enabling hardware flow ctrl\n");
-> >> -		gpio_mode |= XR_GPIO_MODE_SEL_RTS_CTS;
-> >>   		flow = XR_UART_FLOW_MODE_HW;
-> > The logic here is unnecessarily convoluted here and you also should not
-> > set hardware flow control mode if rs485 mode is enabled.
-> >
-> > Perhaps you can add a local boolean flag to hold the rs485 state and
-> > test it before the current if-else construct. Then you only enable
-> > hw-flow when rs485 mode is disabled while stile allowing sw-flow to be
-> > set (hopefully that's a legal combination, please do try to verify
-> > that).
-> 
-> I'll implement SER_RS485_RTS_ON_SEND and set XR_GPIO_MODE_RS485_TX_H 
-> according to it.
-> 
-> I tested sw flow and it works.
-
-Thanks for checking.
-
-> > It also looks like you have inverted the RS485 polarity by using
-> > XR_GPIO_MODE_RS485_TX_H (more on that below).
-> >
-> >>   	} else if (I_IXON(tty)) {
-> >>   		u8 start_char = START_CHAR(tty);
-
-> >> +static int xr_set_rs485_config(struct tty_struct *tty,
-> >> +			 unsigned long __user *argp)
-> > Use a pointer to the struct here too.
-> >
-> >> +{
-> >> +	struct usb_serial_port *port = tty->driver_data;
-> >> +	struct xr_data *data = usb_get_serial_port_data(port);
-> >> +	struct serial_rs485 rs485;
-> >> +
-> >> +	if (copy_from_user(&rs485, argp, sizeof(rs485)))
-> >> +		return -EFAULT;
-> >> +
-> >> +	dev_dbg(tty->dev, "Flags %02x\n", rs485.flags);
-> > Please update the format string as mentioned above.
-> >
-> > Add a newline here.
-> 
-> I'll remove this debug.
-> 
-> >> +	data->rs485_flags = rs485.flags & SER_RS485_ENABLED;
-> >> +	xr_set_flow_mode(tty, port, (const struct ktermios *)0);
-> > This function accesses tty->termios so you can not call it here without
-> > any locking as it can change underneath you and nothing currently
-> > prevents set_termios() from calling the same function in parallel.
-> >
-> > If you take a write lock on the termios rw sempahore you can use it also
-> > to protect the rs485 data instead of relying on implicit atomicity
-> > rules.
-> >
-> > And perhaps you should just copy the entire rs485 struct from the start
-> > as these devices supports further features which someone may want to
-> > implement support for later (e.g. delay after send and 9th bit
-> > addressing).
-> >
-> > You should just use NULL for the third (old_termios) argument.
-> >
-> >> +
-> >> +	// Only the enable flag is implemented
-> > No c99 comments, please.
-> >
-> >> +	memset(&rs485, 0, sizeof(rs485));
-> >> +	rs485.flags = data->rs485_flags;
-> > This does not look correct given that you set the RS485 TX polarity so
-> > that RTS is high (logic disable) during TX above.
-> >
-> > You need to at least make sure that both the SER_RS485_RTS_ON_SEND and
-> > SER_RS485_RTS_AFTER_SEND bits match the polarity setting. But perhaps
-> > you could consider implementing support for configuring the polarity
-> > from the start.
-> 
-> What should happen if user sets SER_RS485_RTS_ON_SEND=1 and 
-> SER_RS485_RTS_AFTER_SEND=0 or vice versa ?
-> 
-> There is only one bit for polarity control in the Exar register.
-> 
-> I am thinking of using only SER_RS485_RTS_ON_SEND to control the 
-> polarity and setting _RTS_AFTER_SEND to the same value.
-
-Yeah, this is perhaps not the best designed interface we have...
-
-The way I interpret those flag, they should generally be each others
-negation as presumably most hardware controlled rs485 implementations
-works as the Exar devices do (i.e. they have one polarity flag).
-
-Settings both to the same value doesn't seem to make much sense so not
-sure why it was designed this way.
-
-But here you should just set SER_RS485_RTS_AFTER_SEND to
-!SER_RS485_RTS_ON_SEND.
-
-> >> +	if (copy_to_user(argp, &rs485, sizeof(rs485)))
-> >> +		return -EFAULT;
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +
-
-You can drop the second newline here (and elsewhere if you added more of
-these).
-
-> >> +static int xr_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
-> >> +{
-> >> +	void __user *argp = (void __user *)arg;
-> >> +
-> >> +	switch (cmd) {
-> >> +	case TIOCGRS485:
-> >> +		return xr_get_rs485_config(tty, argp);
-> >> +	case TIOCSRS485:
-> >> +		return xr_set_rs485_config(tty, argp);
-> >> +	}
-> >> +	return -ENOIOCTLCMD;
-> >> +}
-
-Johan
+Arınç
