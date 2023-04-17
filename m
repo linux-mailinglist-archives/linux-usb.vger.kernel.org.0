@@ -2,35 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8F86E46C7
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Apr 2023 13:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF006E474D
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Apr 2023 14:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbjDQLuP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Apr 2023 07:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39536 "EHLO
+        id S230452AbjDQMNU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Apr 2023 08:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbjDQLuO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Apr 2023 07:50:14 -0400
+        with ESMTP id S230434AbjDQMNS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Apr 2023 08:13:18 -0400
 Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8B365AF;
-        Mon, 17 Apr 2023 04:49:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C4F4499;
+        Mon, 17 Apr 2023 05:12:44 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 18A545FD28;
-        Mon, 17 Apr 2023 14:47:41 +0300 (MSK)
+        by mx.sberdevices.ru (Postfix) with ESMTP id 70C3B5FD28;
+        Mon, 17 Apr 2023 14:57:08 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1681732061;
-        bh=UFOQ7zl15XBdCKDP1PBa7gWSCuhGytq2kMbaG0PLdoc=;
+        s=mail; t=1681732628;
+        bh=iw1ARucM/xufZ3PIY5MlxUVdgnsDiUvAkRlREVNWQsw=;
         h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=l3oCzl5MJATaLtjposS07ZcWREmdW4Z4JqkdE5ALl7zbPpEgBtFlhtj8kWx6ooy7O
-         IasWd1VK1kgPIueM2Od6VLJWmA7IvsvEaZ/z/AA8uMBCcJKV4ZpmYKXKmgdrXcSZaD
-         /dLFxE4K784BXu0cOxqOU/CKULHj7FC48gpyuaYalocdi/HCjehD36QZ6qpYwzav+I
-         WB9I9KJuZaNn4hYCCSR3gdqmg5vf4gEnCo0/muMQJo/mOupgs6RqQIXVYh7fPBfgjw
-         b001/EpgNTtDPcUvqqppiw2o+bQLDrWf45kA7DyN3Wn39hy0cpO5EQ0Ijdf5DI9RPz
-         4w+nL9GaUb/Cw==
+        b=bsIliiOemS+7Us65TsC1UYc2EnsgwRkpA1vS5+MdbvaNpSsOdTZ+uwjQVnrH6WrFX
+         gwdAzfZJBsFlXxbAW3xS3EuUh5HSqrPu9GqrQtubQ16fqCkgYrJxn1qtX5d+jgbskl
+         jHKdMkpJTHa9rqCEb7eMmxUbkrg2wdw6+V0so9+rndyj0okTIy6FzNVBEvQAhzdFTU
+         DguPVJtO3RSNDltSr/K+qEYjmtMZKeCdyxL8QoZZkPGAKUaKHxpp0HUV/aeHqEOJbf
+         1y/cE+PEYfYctE9X+zywjYa4eHYv+c65/swsh+NcMW6VzSi0ljchvhDzNqQgEdC5AB
+         epGeyRW58N/LQ==
 Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
         by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 17 Apr 2023 14:47:39 +0300 (MSK)
-Date:   Mon, 17 Apr 2023 14:47:39 +0300
+        Mon, 17 Apr 2023 14:57:07 +0300 (MSK)
+Date:   Mon, 17 Apr 2023 14:57:07 +0300
 From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
 To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
@@ -45,19 +45,20 @@ CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-amlogic@lists.infradead.org>,
         <linux-phy@lists.infradead.org>
-Subject: Re: [PATCH v1 4/5] usb: dwc3-meson-g12a: support OTG switch
-Message-ID: <20230417114739.r7aoiodqybalbn4o@CAB-WSD-L081021>
+Subject: Re: [PATCH v1 1/5] phy: amlogic: during USB PHY clkin obtaining,
+ enable it
+Message-ID: <20230417115707.p5btzzg4rlyzf7ni@CAB-WSD-L081021>
 References: <20230414152423.19842-1-ddrokosov@sberdevices.ru>
- <20230414152423.19842-5-ddrokosov@sberdevices.ru>
- <CAFBinCDyUBWd-V0mDy_edzH=3JM5SAuX=vtT4MG9Fb62Rcv=mA@mail.gmail.com>
+ <20230414152423.19842-2-ddrokosov@sberdevices.ru>
+ <CAFBinCCEhobbyKHuKDWzTYCQWgNT1-e8=7hMhq1mvT6CuEOjGw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFBinCDyUBWd-V0mDy_edzH=3JM5SAuX=vtT4MG9Fb62Rcv=mA@mail.gmail.com>
+In-Reply-To: <CAFBinCCEhobbyKHuKDWzTYCQWgNT1-e8=7hMhq1mvT6CuEOjGw@mail.gmail.com>
 User-Agent: NeoMutt/20220415
 X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
  S-MS-EXCH01.sberdevices.ru (172.16.1.4)
 X-KSMG-Rule-ID: 4
 X-KSMG-Message-Action: clean
@@ -75,24 +76,28 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Martin,
-
-Thank you for quick review, appreciate it!
-Please find my comments below and in the other replies.
-
-On Sun, Apr 16, 2023 at 10:56:36PM +0200, Martin Blumenstingl wrote:
+On Sun, Apr 16, 2023 at 10:54:17PM +0200, Martin Blumenstingl wrote:
+> Hi Dmitry,
+> 
 > On Fri, Apr 14, 2023 at 5:24 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
 > [...]
-> >  static const struct dwc3_meson_g12a_drvdata a1_drvdata = {
-> > -       .otg_switch_supported = false,
-> > +       .otg_switch_supported = true,
-> it would be great if you could also follow up with a patch that
-> removes otg_switch_supported.
-> A1 was the only variant that needed it and after this patch it's just dead code.
+> > -       priv->clk = devm_clk_get(dev, "xtal");
+> > +       priv->clk = devm_clk_get_enabled(dev, "xtal");
+> Generally this works fine but I wouldn't recommend this approach if:
+> - there's some required wait time after the clock has been enabled
+> (see phy_meson_g12a_usb2_init - there's already some required wait
+> time after triggering the reset)
+> - clock gating (for power saving) is needed when the dwc3 driver is
+> unloaded by the PHY driver is not
+> 
+> In this case: just manually manage the clock in phy_meson_g12a_usb2_{init,exit}
 
-It makes sense. I thought about it before sending the first version, but
-I found a counter-argument: future SoCs may use this parameter.
-But if you ask, I will remove 'otg_switch_supported' in the next version
+I'm sorry, but I'm not fully understanding your point. Currently, no
+sleeps are required for this clock and we don't have any logic for
+power saving (g12a phy_ops doesn't have power_on()/power_off()
+implementation).
+However, I believe all of your arguments make sense for the future
+development of the phy_meson_g12a_usb2 driver. Is that correct?
 
 -- 
 Thank you,
