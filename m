@@ -2,74 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969A16E5902
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Apr 2023 08:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E74FF6E5932
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Apr 2023 08:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbjDRF7u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Apr 2023 01:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43746 "EHLO
+        id S230249AbjDRGQ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Apr 2023 02:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbjDRF7i (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Apr 2023 01:59:38 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D7630C6
-        for <linux-usb@vger.kernel.org>; Mon, 17 Apr 2023 22:59:33 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id xd13so36322025ejb.4
-        for <linux-usb@vger.kernel.org>; Mon, 17 Apr 2023 22:59:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681797571; x=1684389571;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=h2u+IvYIbnFxxtQG/ZtOJXOGODtmHZE6DE2kphmV5deUhBtI5SSl5ZpPS81I4DoyvM
-         cL/QsMoq/nZ79QoTUVBpjigDCpbkhNV4ihdOYSWAZCOke9dA/QR1VB/koOlQ9LVEDYMX
-         XtbtlwSc8k7WA+c3R6xpugIUkMv4IcvxiBX5jugHOkE6bIQRd6XIP4bPoYTYUOtLJ8cY
-         jqOSy7VahCSY+50nHqKMLAvtMY0jgSKZG9RLZ0VM4rlX3dlYAIwPmpAZEs5sdE1jKPzt
-         sUSa+Yt3rvdogEL685HX9OzzgKvbxUuLxSFiR0ubii95w3DTWRmDDneYGKBqJn2l6obd
-         7Bag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681797571; x=1684389571;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=JEAJ4dyyRPGWdeoQWJJzCghA0aZ/gBo0VWILfEuNiLCJnsEKqSHYlu108oi873gxqL
-         80TDrO8+iYEbYsMv4f5xx/C/asvqfU5GvVKe7wKLoJNRi16zjkxE9PsIyHTdwaGWzG0R
-         u//UjMWnCyekNhqneqwwPTEV1+Hb+7z12ctOEPx56kuAleNe4QjgMmF6lDTC3HmV0X+9
-         3gby8NSDeo/Tnm6+cew+ZIoJHY3kfZOm6GSM1wOkcX6sSXTvokwWKajvT+nTmI6wjxhr
-         WDpd6EAPzBjFejiJasR/Gwvk8LA0neUDBrm05/sPfexp6RD+IpGltnBpBfgbdIx8iXmH
-         5aUQ==
-X-Gm-Message-State: AAQBX9cH+UALpZbhYV73KG8SsjxDPTNoRR+I557Lx6L4VkIPjzw4R0MQ
-        0l70rDX+GAGJXomTB78mf02cu1v0bgp99yBi/Ja1qPMpioXH3/f7
-X-Google-Smtp-Source: AKy350YRsUSKQ0+i58Lzun7WtY7IrRwSkm+DWIi2JdfS71rVYYWUT2OQ/a/Q5PRWIBazn3AQLm2dWBYGVxBajLvvRoE=
-X-Received: by 2002:a05:6512:96b:b0:4e8:4b7a:6b73 with SMTP id
- v11-20020a056512096b00b004e84b7a6b73mr2935594lft.4.1681797550844; Mon, 17 Apr
- 2023 22:59:10 -0700 (PDT)
+        with ESMTP id S229619AbjDRGQZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Apr 2023 02:16:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6596F468E;
+        Mon, 17 Apr 2023 23:16:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E6B2162CFF;
+        Tue, 18 Apr 2023 06:16:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D91A2C433D2;
+        Tue, 18 Apr 2023 06:16:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1681798583;
+        bh=jhLgevMsu3orYKO8vXOQraEaEey0j/z79iJrpMSNtIg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cBWc+iUpVGUGQD/aR4PEGnf83S8CFqvFgivV5AVttJOkhmWpqpFO+1pBrFf+kh2sT
+         f3cFO9ha6aVk1uMbvp7SDR/vnBuJR6xUcTcQpoEyMPFkW2Oof4PmA4BHiedl9n2Uct
+         wbFRNzPrH9DRQ05og/8hRasp1Ka5lYjnsACnXV+Q=
+Date:   Tue, 18 Apr 2023 08:16:20 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Maxim Korotkov <korotkov.maxim.s@gmail.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH] usb: typec: fix potential NULL dereference
+Message-ID: <ZD41tLi3sMB71Xf2@kroah.com>
+References: <20230417195003.19504-1-korotkov.maxim.s@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:ab2:2681:0:b0:1b6:840f:9075 with HTTP; Mon, 17 Apr 2023
- 22:59:10 -0700 (PDT)
-Reply-To: mariamkouame.info@myself.com
-From:   Mariam Kouame <mariamkouame1992@gmail.com>
-Date:   Mon, 17 Apr 2023 22:59:10 -0700
-Message-ID: <CADUz=agNY633M0qMXMnAP3Ms7-3rKuWtAZGCOQZKeYpCdBxT_w@mail.gmail.com>
-Subject: from mariam kouame
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230417195003.19504-1-korotkov.maxim.s@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear,
+On Mon, Apr 17, 2023 at 10:50:03PM +0300, Maxim Korotkov wrote:
+> The pointer 'adev' was being dereferenced before being checked for NULL
+> in the 'type_alt mode_enter()' and 'type_alt mode_exit()' functions.
+> Although this is a hypothetical issue, it's better to move the pointer
+> assignment after the NULL check to avoid any potential problems.
+> 
+> Found by Linux Verification Center with Svace static analyzer.
+> 
+> Fixes: 8a37d87d72f0 ("usb: typec: Bus type for alternate modes")
+> Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
+> ---
+>  drivers/usb/typec/bus.c | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/bus.c b/drivers/usb/typec/bus.c
+> index 098f0efaa58d..ae0aca8f33db 100644
+> --- a/drivers/usb/typec/bus.c
+> +++ b/drivers/usb/typec/bus.c
+> @@ -125,13 +125,16 @@ EXPORT_SYMBOL_GPL(typec_altmode_notify);
+>   */
+>  int typec_altmode_enter(struct typec_altmode *adev, u32 *vdo)
+>  {
+> -	struct altmode *partner = to_altmode(adev)->partner;
+> -	struct typec_altmode *pdev = &partner->adev;
+> +	struct altmode *partner;
+> +	struct typec_altmode *pdev;
+>  	int ret;
+>  
+>  	if (!adev || adev->active)
+>  		return 0;
+>  
+> +	partner = to_altmode(adev)->partner;
+> +	pdev = &partner->adev;
 
-Please grant me permission to share a very crucial discussion with
-you. I am looking forward to hearing from you at your earliest
-convenience.
+As you point out, the original code is still fine here, we check before
+we actually use these values.
 
-Mrs. Mariam Kouame
+Also, can adev every actually be NULL?  In looking at the code paths, I
+can't see how that could happen.
+
+thanks,
+
+greg k-h
