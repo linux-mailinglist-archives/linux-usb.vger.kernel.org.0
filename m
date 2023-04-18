@@ -2,163 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989196E5F0D
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Apr 2023 12:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBEBB6E5F24
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Apr 2023 12:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbjDRKkr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Apr 2023 06:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
+        id S231136AbjDRKtc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Apr 2023 06:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbjDRKkq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Apr 2023 06:40:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A22D449D;
-        Tue, 18 Apr 2023 03:40:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0417C62FEF;
-        Tue, 18 Apr 2023 10:40:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4B0C433EF;
-        Tue, 18 Apr 2023 10:40:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681814444;
-        bh=xDMKA9FoRNcqFbWL1PKwxfPqy4WBygGisOwZl5zE7Is=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jFdJtxow6kjLoGtpMzRNsQEcRYeZtKDxpr+YN8SCY3LpbqqWV24pgtFCBg0XwYXQP
-         ZcDZ1ETAbE1K7I8zDBOF2Bnqrbgf//0tIzEBfMd/p6kQSbw9bq77PwV2+IKYpuKFYu
-         M4m8HG7NuGM9fvUqpwGxgwCi/nXj5MIsJr30AmIM=
-Date:   Tue, 18 Apr 2023 12:40:41 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: typec: intel_pmc_mux: Expose IOM port status to
- debugfs
-Message-ID: <2023041845-eastcoast-precinct-3b8c@gregkh>
-References: <20230414081910.1336405-1-rajat.khandelwal@linux.intel.com>
- <ZDo2mzmjZpWIKbxk@kroah.com>
- <2c960f0c-5cbb-4c2d-07cb-dafd94d22414@linux.intel.com>
- <ZDzjVG7QZP1z9gNX@kroah.com>
- <20cc057d-6b2b-5fc1-524f-c2c579c96a6b@linux.intel.com>
- <2023041859-humpback-thespian-e28c@gregkh>
- <19c137ac-ac95-e6da-27d8-27d9cc8e9e40@linux.intel.com>
+        with ESMTP id S230350AbjDRKta (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Apr 2023 06:49:30 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46258E49;
+        Tue, 18 Apr 2023 03:49:28 -0700 (PDT)
+Received: from u202112136$hust.edu.cn ( [10.11.70.171] ) by
+ ajax-webmail-app1 (Coremail) ; Tue, 18 Apr 2023 18:48:29 +0800 (GMT+08:00)
+X-Originating-IP: [10.11.70.171]
+Date:   Tue, 18 Apr 2023 18:48:29 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5p2O6Ziz?= <u202112136@hust.edu.cn>
+To:     "greg kroah-hartman" <gregkh@linuxfoundation.org>
+Cc:     "felipe balbi" <balbi@kernel.org>,
+        "sergey shtylyov" <s.shtylyov@omp.ru>,
+        "dongliang mu" <dzm91@hust.edu.cn>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        hust-os-kernel-patches@googlegroups.com
+Subject: Re: Re: [PATCH] usb: phy: phy-tahvo: fix memory leak in
+ tahvo_usb_probe()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
+ Copyright (c) 2002-2023 www.mailtech.cn hust
+In-Reply-To: <2023041832-parakeet-claim-b458@gregkh>
+References: <20230418090758.18756-1-lidaxian@hust.edu.cn>
+ <2023041832-parakeet-claim-b458@gregkh>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <19c137ac-ac95-e6da-27d8-27d9cc8e9e40@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <7aadd2ae.3f01f.18793faf0c3.Coremail.u202112136@hust.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID: FgEQrACnuAl9dT5kFb34Ag--.41571W
+X-CM-SenderInfo: rxsqjiirsrjlo6kx23oohg3hdfq/1tbiAQsFE17Em5GfHwAAsM
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 03:53:46PM +0530, Rajat Khandelwal wrote:
-> Hi,
-> 
-> On 4/18/2023 3:48 PM, Greg KH wrote:
-> > On Tue, Apr 18, 2023 at 03:10:47PM +0530, Rajat Khandelwal wrote:
-> > > Hi,
-> > > 
-> > > On 4/17/2023 11:42 AM, Greg KH wrote:
-> > > > On Mon, Apr 17, 2023 at 11:28:18AM +0530, Rajat Khandelwal wrote:
-> > > > > Hi,
-> > > > > 
-> > > > > On 4/15/2023 11:01 AM, Greg KH wrote:
-> > > > > > On Fri, Apr 14, 2023 at 01:49:10PM +0530, Rajat Khandelwal wrote:
-> > > > > > > IOM status has a crucial role during debugging to check the
-> > > > > > > current state of the type-C port.
-> > > > > > > There are ways to fetch the status, but all those require the
-> > > > > > > IOM port status offset, which could change with platform.
-> > > > > > > 
-> > > > > > > Make a debugfs directory for intel_pmc_mux and expose the status
-> > > > > > > under it per port basis.
-> > > > > > > 
-> > > > > > > Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-> > > > > > > ---
-> > > > > > > 
-> > > > > > > v2:
-> > > > > > > 1. Remove static declaration of the debugfs root for 'intel_pmc_mux'
-> > > > > > > 2. Remove explicitly defined one-liner functions
-> > > > > > > 
-> > > > > > >     drivers/usb/typec/mux/intel_pmc_mux.c | 34 +++++++++++++++++++++++++++
-> > > > > > >     1 file changed, 34 insertions(+)
-> > > > > > > 
-> > > > > > > diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-> > > > > > > index 34e4188a40ff..1d43b111781e 100644
-> > > > > > > --- a/drivers/usb/typec/mux/intel_pmc_mux.c
-> > > > > > > +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-> > > > > > > @@ -15,6 +15,7 @@
-> > > > > > >     #include <linux/usb/typec_mux.h>
-> > > > > > >     #include <linux/usb/typec_dp.h>
-> > > > > > >     #include <linux/usb/typec_tbt.h>
-> > > > > > > +#include <linux/debugfs.h>
-> > > > > > >     #include <asm/intel_scu_ipc.h>
-> > > > > > > @@ -639,9 +640,34 @@ static int pmc_usb_probe_iom(struct pmc_usb *pmc)
-> > > > > > >     	return 0;
-> > > > > > >     }
-> > > > > > > +static int port_iom_status_show(struct seq_file *s, void *unused)
-> > > > > > > +{
-> > > > > > > +	struct pmc_usb_port *port = s->private;
-> > > > > > > +
-> > > > > > > +	update_port_status(port);
-> > > > > > > +	seq_printf(s, "0x%08x\n", port->iom_status);
-> > > > > > > +
-> > > > > > > +	return 0;
-> > > > > > > +}
-> > > > > > > +DEFINE_SHOW_ATTRIBUTE(port_iom_status);
-> > > > > > > +
-> > > > > > > +static void pmc_mux_port_debugfs_init(struct pmc_usb_port *port,
-> > > > > > > +				      struct dentry *pmc_mux_debugfs_root)
-> > > > > > > +{
-> > > > > > > +	struct dentry *debugfs_dir;
-> > > > > > > +	char name[6];
-> > > > > > > +
-> > > > > > > +	snprintf(name, sizeof(name), "port%d", port->usb3_port - 1);
-> > > > > > > +
-> > > > > > > +	debugfs_dir = debugfs_create_dir(name, pmc_mux_debugfs_root);
-> > > > > > > +	debugfs_create_file("iom_status", 0400, debugfs_dir, port,
-> > > > > > > +			    &port_iom_status_fops);
-> > > > > > > +}
-> > > > > > > +
-> > > > > > >     static int pmc_usb_probe(struct platform_device *pdev)
-> > > > > > >     {
-> > > > > > >     	struct fwnode_handle *fwnode = NULL;
-> > > > > > > +	struct dentry *pmc_mux_debugfs_root;
-> > > > > > >     	struct pmc_usb *pmc;
-> > > > > > >     	int i = 0;
-> > > > > > >     	int ret;
-> > > > > > > @@ -674,6 +700,8 @@ static int pmc_usb_probe(struct platform_device *pdev)
-> > > > > > >     	if (ret)
-> > > > > > >     		return ret;
-> > > > > > > +	pmc_mux_debugfs_root = debugfs_create_dir("intel_pmc_mux", NULL);
-> > > > > > What happens when you have more than one device in the system at the
-> > > > > > same time?
-> > > > > I'm sorry I didn't understand the question. We would have separate directories
-> > > > > for all the ports which would contain the 'iom_status' file, thus representing
-> > > > > status for all the ports individually.
-> > > > > Can you rephrase the question since I guess you had something else in mind?
-> > > > Can you please show the output of the directory
-> > > > /sys/kernel/debug/intel_pmc_mux/ with multiple pmc devices in the system
-> > > > at the same time?
-> > > Sorry, I don't own a system with multiple PMCs. Anyways, do we even have
-> > > a system with such design?
-> > You might tomorrow.  So please don't create problems like this when you
-> > do not have to.
-> 
-> We still didn't arrive on a culminating note. :)
-> What do you suggest I could do for now? This would be a useful debug tool
-> for us since we deal with it quite often.
-
-Then do it properly please.  Look at the /sys/kernel/debug/usb/
-directory for examples, specifically /sys/kernel/debug/xhci/.
-
-> If we don't have anything constraining this for now, can we keep it like
-> this?
-
-No.
-
+CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiR3JlZyBLcm9haC1IYXJ0
+bWFuIiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc+Cj4gU2VudCBUaW1lOiAyMDIzLTA0LTE4
+IDE3OjE5OjEyIChUdWVzZGF5KQo+IFRvOiAiTGkgWWFuZyIgPGxpZGF4aWFuQGh1c3QuZWR1LmNu
+Pgo+IENjOiAiRmVsaXBlIEJhbGJpIiA8YmFsYmlAa2VybmVsLm9yZz4sICJTZXJnZXkgU2h0eWx5
+b3YiIDxzLnNodHlseW92QG9tcC5ydT4sICJEb25nbGlhbmcgTXUiIDxkem05MUBodXN0LmVkdS5j
+bj4sIGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmcsIGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5v
+cmcKPiBTdWJqZWN0OiBSZTogW1BBVENIXSB1c2I6IHBoeTogcGh5LXRhaHZvOiBmaXggbWVtb3J5
+IGxlYWsgaW4gdGFodm9fdXNiX3Byb2JlKCkKPiAKPiBPbiBUdWUsIEFwciAxOCwgMjAyMyBhdCAw
+NTowNzo1N1BNICswODAwLCBMaSBZYW5nIHdyb3RlOgo+ID4gU21hdGNoIHJlcG9ydHM6Cj4gPiBk
+cml2ZXJzL3VzYi9waHkvcGh5LXRhaHZvLmM6IHRhaHZvX3VzYl9wcm9iZSgpCj4gPiB3YXJuOiBt
+aXNzaW5nIHVud2luZCBnb3RvPwo+ID4gCj4gPiBBZnRlciBnZXRpbmcgaXJxLCBpZiByZXQgPCAw
+LCBpdCB3aWxsIHJldHVybiB3aXRob3V0IGVycm9yIGhhbmRsaW5nIHRvCj4gPiBmcmVlIG1lbW9y
+eS4KPiA+IEp1c3QgYWRkIGVycm9yIGhhbmRsaW5nIHRvIGZpeCB0aGlzIHByb2JsZW0uCj4gPiAK
+PiA+IEZpeGVzOiAwZDQ1YTEzNzNlNjYgKCJ1c2I6IHBoeTogdGFodm86IGFkZCBJUlEgY2hlY2si
+KQo+ID4gU2lnbmVkLW9mZi1ieTogTGkgWWFuZyA8bGlkYXhpYW5AaHVzdC5lZHUuY24+Cj4gPiBS
+ZXZpZXdlZC1ieTogRG9uZ2xpYW5nIE11IDxkem05MUBodXN0LmVkdS5jbj4KPiA+IC0tLQo+ID4g
+VGhlIGlzc3VlIGlzIGZvdW5kIGJ5IHN0YXRpYyBhbmFseXNpcywgYW5kIHRoZSBwYXRjaCByZW1h
+aW5zIHVudGVzdC4KPiA+IC0tLQo+ID4gIGRyaXZlcnMvdXNiL3BoeS9waHktdGFodm8uYyB8IDcg
+KysrKystLQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25z
+KC0pCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9waHkvcGh5LXRhaHZvLmMgYi9k
+cml2ZXJzL3VzYi9waHkvcGh5LXRhaHZvLmMKPiA+IGluZGV4IGYyZDJjYzU4NmM1Yi4uMTg0YTVm
+M2Q3NDczIDEwMDY0NAo+ID4gLS0tIGEvZHJpdmVycy91c2IvcGh5L3BoeS10YWh2by5jCj4gPiAr
+KysgYi9kcml2ZXJzL3VzYi9waHkvcGh5LXRhaHZvLmMKPiA+IEBAIC0zOTAsOCArMzkwLDExIEBA
+IHN0YXRpYyBpbnQgdGFodm9fdXNiX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYp
+Cj4gPiAgCWRldl9zZXRfZHJ2ZGF0YSgmcGRldi0+ZGV2LCB0dSk7Cj4gPiAgCj4gPiAgCXR1LT5p
+cnEgPSByZXQgPSBwbGF0Zm9ybV9nZXRfaXJxKHBkZXYsIDApOwo+ID4gLQlpZiAocmV0IDwgMCkK
+PiA+IC0JCXJldHVybiByZXQ7Cj4gPiArCWlmIChyZXQgPCAwKSB7Cj4gPiArCQlkZXZfZXJyKCZw
+ZGV2LT5kZXYsICJjb3VsZCBub3QgZ2V0IGlycTogJWRcbiIsCj4gPiArCQkJCXJldCk7Cj4gCj4g
+V2h5IHByaW50IHRoaXMgb3V0PyAgQW5kIHdoeSB0aGUgb2RkIGxpbmUtd3JhcHBpbmc/Cj4gCj4g
+dGhhbmtzLAo+IAo+IGdyZWcgay1oCkZvciB0aGUgZmlyc3QgcXVlc3Rpb24sIEkgYW0ganVzdCBl
+bXVsYXRpbmcgdGhlIGNvZGluZyBzdHlsZSBvZiB0aGUgb3JpZ2luYWwgYXV0aG9yIHdobyBvdXRw
+dXRzIGNvcnJlc3BvbmRpbmcgaW5mb3JtYXRpb24gYWZ0ZXIgZWFjaCBlcnJvci4gSWYgdGhlcmUg
+aXMgYW55dGhpbmcgdW5yZWFzb25hYmxlIGFib3V0IGRvaW5nIHNvLCBwbGVhc2UgbGV0IG1lIGtu
+b3cuIEFzIGZvciB0aGUgc2Vjb25kIHF1ZXN0aW9uLCBpdCdzIG15IG1pc3Rha2UgYW5kIEkgd2ls
+bCBjb3JyZWN0IGl0IGltbWVkaWF0ZWx5LgoKcmVncmFkcywKTGkgWWFuZw==
