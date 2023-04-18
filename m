@@ -2,456 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8BDA6E610B
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Apr 2023 14:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9F36E6121
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Apr 2023 14:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbjDRMTF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Apr 2023 08:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
+        id S230434AbjDRMWn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Apr 2023 08:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbjDRMTE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Apr 2023 08:19:04 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4722C19B3
-        for <linux-usb@vger.kernel.org>; Tue, 18 Apr 2023 05:19:00 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33IBhUBK020353;
-        Tue, 18 Apr 2023 12:18:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=34AbDC+py2dbLw3+lBQbPgGYlcmhWwuiAex3lFFv7Ys=;
- b=JkRbuKnRO4JuGaz4flEgDea2LsrrG+kEzz9OTDesiiNFNZEDdFq8uZ3RDLJWwmm/1jh2
- b8bl/HjLkzgOBc9EkFgYjSeNVvQx57BKdk+VyB8fZhrMU8ePOHHBpxVHREUaznY3Iw6E
- fbImaW5XktoL5IQpWHKDcg3xQ/pZ15tozSg1CEa1iuOKnfcUMJu5xaT0qItH+cC5xBlb
- LnDW5A0chObQRfDcvzhmXRKPBGEBTjA2ZkzRTCQxSpjbwq08zdqcNO5OsE58t5dF9SOq
- NQ9HJlLbbvnA4ChhTm8ghczNdpK8tf7lTf3PoT5CG1eGtZNruQaXJaKDIJg2iksZjXnC fw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q1nr5grp7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 12:18:51 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33ICIoCX006227
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 12:18:50 GMT
-Received: from hu-ugoswami-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 18 Apr 2023 05:18:47 -0700
-From:   Udipto Goswami <quic_ugoswami@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        <linux-usb@vger.kernel.org>, Oliver Neukum <oneukum@suse.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>
-Subject: [PATCH v5] usb: dwc3: debugfs: Prevent any register access when devices
-Date:   Tue, 18 Apr 2023 17:48:35 +0530
-Message-ID: <20230418121835.17550-1-quic_ugoswami@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S229515AbjDRMWl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Apr 2023 08:22:41 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA4A30F4
+        for <linux-usb@vger.kernel.org>; Tue, 18 Apr 2023 05:22:39 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id c9so33816382ejz.1
+        for <linux-usb@vger.kernel.org>; Tue, 18 Apr 2023 05:22:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681820558; x=1684412558;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9NCi64XGNvnIcRoPfYbsVQEhFpTLdIc0VlKvzW5v7qU=;
+        b=maFFAOMtTbJViPc8gHoncMZVt1U2Au3ypnEeegMeWLUYOz6jdNkKS7yJLBivFHX7J+
+         jeU/saqkWGkaad+b3a/AkjcMbAsLUZNS+KdH5D6U92eyJMJ/oeHuW9kyfBN4dYvlR6dg
+         tyJ0Xsiax7fTOTj2z5GhwpsK/PY8T5SvFWA0JIaKYVoVrj+hE2izgsjeVWS4sope6xdO
+         Vl9l3xhodT7SzE+rpu4QOMchQwMFpLLw+ZTXH8vUdwS5eMjzBTHwvmkTqKGMJR4hSYAF
+         /HCx5yMn6FXudnjiaHZz4m4/Kd4oEFC8yPXzZSW9tQgp6iBj79h0aGxj2ERsNK8TepBO
+         iy4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681820558; x=1684412558;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9NCi64XGNvnIcRoPfYbsVQEhFpTLdIc0VlKvzW5v7qU=;
+        b=iRNPXkm2yve6zwS4oBEfsf8AMEASQp6vVn6H4DjWQO//I5+15DqDXa4ueLFQxqX2dH
+         yiTgUM/BrifchaBPrb8i29B7+o3qfGII6t2ngp9IMEnUIxtmtwGAb0t1EDwQTrTzO1v3
+         1q45/+tfns2sAZuhf7gfx3SiHXmaaq896/dufYJoawlkyQNf9ehp9wcLp0tUwHQti34U
+         K1lIHRT5SgLQYObvoE3Y6ngp907URiXc+DgrGdQT8CHdfgRimwVt+4gIZvOiw/zTuXjU
+         /QWn11r0Og3Ijy9uw/jZYS55h1x7y2CQuNIPOGoTrezUkPyvIglH14WWlUfs+jAJsfrT
+         ox7A==
+X-Gm-Message-State: AAQBX9fBY4T2g/NDkc72BtEUUuYCri/BexBUFngIRnyV0B16r1NK61HK
+        ly6pI5QxW++PySPeKeAcE4UVfQ==
+X-Google-Smtp-Source: AKy350b1rlGbHV/ZqnW3dz26WRMbmKf54LQJWDdP80OW6WaojgFD3laTViuXV1OQzbIbItrUdqokLA==
+X-Received: by 2002:a17:906:82c5:b0:94b:88c6:9282 with SMTP id a5-20020a17090682c500b0094b88c69282mr12465494ejy.22.1681820558103;
+        Tue, 18 Apr 2023 05:22:38 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a276:7d35:5226:1c77? ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
+        by smtp.gmail.com with ESMTPSA id rx22-20020a1709068e1600b0094f968ecc97sm2278664ejc.13.2023.04.18.05.22.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 05:22:37 -0700 (PDT)
+Message-ID: <c79e7d05-0b62-40e6-0864-35b2821c69e7@linaro.org>
+Date:   Tue, 18 Apr 2023 14:22:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: C17NSCQQWqH3gqKbKkn2AUFBqlwItjx9
-X-Proofpoint-ORIG-GUID: C17NSCQQWqH3gqKbKkn2AUFBqlwItjx9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-18_09,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 spamscore=0 suspectscore=0 impostorscore=0 phishscore=0
- mlxlogscore=877 clxscore=1011 priorityscore=1501 mlxscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304180106
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 0/7] Add JH7110 USB and USB PHY driver support
+To:     Minda Chen <minda.chen@starfivetech.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Mason Huo <mason.huo@starfivetech.com>
+References: <20230406015216.27034-1-minda.chen@starfivetech.com>
+ <517670ca-ba2e-811e-3eb2-7f38011c9690@linaro.org>
+ <985d0a57-1fc8-5725-4d3a-33dcc5d49d67@starfivetech.com>
+ <5953bc83-9609-6d12-7e9b-ca5202151fb3@linaro.org>
+ <a75ed45c-55c4-ff94-86f9-313ec79720ac@starfivetech.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <a75ed45c-55c4-ff94-86f9-313ec79720ac@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When the dwc3 device is runtime suspended, various required clocks would
-get disabled and it is not guaranteed that access to any registers would
-work. Depending on the SoC glue, a register read could be as benign as
-returning 0 or be fatal enough to hang the system.
+On 18/04/2023 13:12, Minda Chen wrote:
+>>>>>
+>>>>>
+>>>>> base-commit: 0ec57cfa721fbd36b4c4c0d9ccc5d78a78f7fa35
+>>>>> prerequisite-patch-id: 24a6e3442ed1f5454ffb4a514cfd768436a87090
+>>>>> prerequisite-patch-id: 55390537360f25c8b9cbfdc30b73ade004f436f7
+>>>>
+>>>> fatal: bad object 55390537360f25c8b9cbfdc30b73ade004f436f7
+>>>>
+>>>> What commits do you reference? How are they helpful?
+>>>>
+>>> I use "git format-patch --base=(commit) to generate patchset.
+>>> Maybe I set the wrong base commit.
+>>
+>> How are they helpful if these are private commits?
+>>> Best regards,
+>> Krzysztof
+>>
+> base-commit is not private commits. 
+> I should set base commit 197b6b60ae7bc51dd0814953c562833143b292aa. This is 6.3-rc4 commit.
+> But I set 0ec57cfa721fbd36b4c4c0d9ccc5d78a78f7fa35. This is 6.3-rc4's previous commit.
 
-In order to prevent such scenarios of fatal errors, make sure to resume
-dwc3 then allow the function to proceed.
+You missed the point. I am not talking about base commit. I am talking
+about your prerequisites, which are useless. What can we do with such SHA?
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
----
-v5: Reworked the patch to resume dwc3 while accessing the registers.
-
- drivers/usb/dwc3/debugfs.c | 123 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 123 insertions(+)
-
-diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
-index e4a2560b9dc0..d622b0dfeb76 100644
---- a/drivers/usb/dwc3/debugfs.c
-+++ b/drivers/usb/dwc3/debugfs.c
-@@ -332,6 +332,13 @@ static int dwc3_lsp_show(struct seq_file *s, void *unused)
- 	unsigned int		current_mode;
- 	unsigned long		flags;
- 	u32			reg;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (!ret || ret < 0) {
-+		pm_runtime_put(dwc->dev);
-+		return 0;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
-@@ -349,6 +356,7 @@ static int dwc3_lsp_show(struct seq_file *s, void *unused)
- 		break;
- 	}
- 	spin_unlock_irqrestore(&dwc->lock, flags);
-+	pm_runtime_put(dwc->dev);
- 
- 	return 0;
- }
-@@ -395,6 +403,13 @@ static int dwc3_mode_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = s->private;
- 	unsigned long		flags;
- 	u32			reg;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (!ret || ret < 0) {
-+		pm_runtime_put(dwc->dev);
-+		return 0;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
-@@ -414,6 +429,7 @@ static int dwc3_mode_show(struct seq_file *s, void *unused)
- 		seq_printf(s, "UNKNOWN %08x\n", DWC3_GCTL_PRTCAP(reg));
- 	}
- 
-+	pm_runtime_put(dwc->dev);
- 	return 0;
- }
- 
-@@ -463,6 +479,13 @@ static int dwc3_testmode_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = s->private;
- 	unsigned long		flags;
- 	u32			reg;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (!ret || ret < 0) {
-+		pm_runtime_put(dwc->dev);
-+		return 0;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
-@@ -493,6 +516,7 @@ static int dwc3_testmode_show(struct seq_file *s, void *unused)
- 		seq_printf(s, "UNKNOWN %d\n", reg);
- 	}
- 
-+	pm_runtime_put(dwc->dev);
- 	return 0;
- }
- 
-@@ -509,6 +533,7 @@ static ssize_t dwc3_testmode_write(struct file *file,
- 	unsigned long		flags;
- 	u32			testmode = 0;
- 	char			buf[32];
-+	int			ret;
- 
- 	if (copy_from_user(&buf, ubuf, min_t(size_t, sizeof(buf) - 1, count)))
- 		return -EFAULT;
-@@ -526,10 +551,17 @@ static ssize_t dwc3_testmode_write(struct file *file,
- 	else
- 		testmode = 0;
- 
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (!ret || ret < 0) {
-+		pm_runtime_put(dwc->dev);
-+		return 0;
-+	}
-+
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	dwc3_gadget_set_test_mode(dwc, testmode);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put(dwc->dev);
- 	return count;
- }
- 
-@@ -548,12 +580,20 @@ static int dwc3_link_state_show(struct seq_file *s, void *unused)
- 	enum dwc3_link_state	state;
- 	u32			reg;
- 	u8			speed;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (!ret || ret < 0) {
-+		pm_runtime_put(dwc->dev);
-+		return 0;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
- 	if (DWC3_GSTS_CURMOD(reg) != DWC3_GSTS_CURMOD_DEVICE) {
- 		seq_puts(s, "Not available\n");
- 		spin_unlock_irqrestore(&dwc->lock, flags);
-+		pm_runtime_put(dwc->dev);
- 		return 0;
- 	}
- 
-@@ -566,6 +606,7 @@ static int dwc3_link_state_show(struct seq_file *s, void *unused)
- 		   dwc3_gadget_hs_link_string(state));
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put(dwc->dev);
- 	return 0;
- }
- 
-@@ -584,6 +625,7 @@ static ssize_t dwc3_link_state_write(struct file *file,
- 	char			buf[32];
- 	u32			reg;
- 	u8			speed;
-+	int			ret;
- 
- 	if (copy_from_user(&buf, ubuf, min_t(size_t, sizeof(buf) - 1, count)))
- 		return -EFAULT;
-@@ -603,10 +645,17 @@ static ssize_t dwc3_link_state_write(struct file *file,
- 	else
- 		return -EINVAL;
- 
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (!ret || ret < 0) {
-+		pm_runtime_put(dwc->dev);
-+		return 0;
-+	}
-+
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
- 	if (DWC3_GSTS_CURMOD(reg) != DWC3_GSTS_CURMOD_DEVICE) {
- 		spin_unlock_irqrestore(&dwc->lock, flags);
-+		pm_runtime_put(dwc->dev);
- 		return -EINVAL;
- 	}
- 
-@@ -616,12 +665,14 @@ static ssize_t dwc3_link_state_write(struct file *file,
- 	if (speed < DWC3_DSTS_SUPERSPEED &&
- 	    state != DWC3_LINK_STATE_RECOV) {
- 		spin_unlock_irqrestore(&dwc->lock, flags);
-+		pm_runtime_put(dwc->dev);
- 		return -EINVAL;
- 	}
- 
- 	dwc3_gadget_set_link_state(dwc, state);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put(dwc->dev);
- 	return count;
- }
- 
-@@ -645,6 +696,13 @@ static int dwc3_tx_fifo_size_show(struct seq_file *s, void *unused)
- 	unsigned long		flags;
- 	u32			mdwidth;
- 	u32			val;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (!ret || ret < 0) {
-+		pm_runtime_put(dwc->dev);
-+		return 0;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_TXFIFO);
-@@ -657,6 +715,7 @@ static int dwc3_tx_fifo_size_show(struct seq_file *s, void *unused)
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put(dwc->dev);
- 	return 0;
- }
- 
-@@ -667,6 +726,13 @@ static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
- 	unsigned long		flags;
- 	u32			mdwidth;
- 	u32			val;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (!ret || ret < 0) {
-+		pm_runtime_put(dwc->dev);
-+		return 0;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_RXFIFO);
-@@ -679,6 +745,7 @@ static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put(dwc->dev);
- 	return 0;
- }
- 
-@@ -688,12 +755,20 @@ static int dwc3_tx_request_queue_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
- 	u32			val;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (!ret || ret < 0) {
-+		pm_runtime_put(dwc->dev);
-+		return 0;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_TXREQQ);
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put(dwc->dev);
- 	return 0;
- }
- 
-@@ -703,12 +778,20 @@ static int dwc3_rx_request_queue_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
- 	u32			val;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (!ret || ret < 0) {
-+		pm_runtime_put(dwc->dev);
-+		return 0;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_RXREQQ);
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put(dwc->dev);
- 	return 0;
- }
- 
-@@ -718,12 +801,20 @@ static int dwc3_rx_info_queue_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
- 	u32			val;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (!ret || ret < 0) {
-+		pm_runtime_put(dwc->dev);
-+		return 0;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_RXINFOQ);
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put(dwc->dev);
- 	return 0;
- }
- 
-@@ -733,12 +824,20 @@ static int dwc3_descriptor_fetch_queue_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
- 	u32			val;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (!ret || ret < 0) {
-+		pm_runtime_put(dwc->dev);
-+		return 0;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_DESCFETCHQ);
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put(dwc->dev);
- 	return 0;
- }
- 
-@@ -748,12 +847,20 @@ static int dwc3_event_queue_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
- 	u32			val;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (!ret || ret < 0) {
-+		pm_runtime_put(dwc->dev);
-+		return 0;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_EVENTQ);
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put(dwc->dev);
- 	return 0;
- }
- 
-@@ -798,6 +905,13 @@ static int dwc3_trb_ring_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
- 	int			i;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (!ret || ret < 0) {
-+		pm_runtime_put(dwc->dev);
-+		return 0;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	if (dep->number <= 1) {
-@@ -827,6 +941,7 @@ static int dwc3_trb_ring_show(struct seq_file *s, void *unused)
- out:
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put(dwc->dev);
- 	return 0;
- }
- 
-@@ -839,6 +954,13 @@ static int dwc3_ep_info_register_show(struct seq_file *s, void *unused)
- 	u32			lower_32_bits;
- 	u32			upper_32_bits;
- 	u32			reg;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (!ret || ret < 0) {
-+		pm_runtime_put(dwc->dev);
-+		return 0;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	reg = DWC3_GDBGLSPMUX_EPSELECT(dep->number);
-@@ -851,6 +973,7 @@ static int dwc3_ep_info_register_show(struct seq_file *s, void *unused)
- 	seq_printf(s, "0x%016llx\n", ep_info);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put(dwc->dev);
- 	return 0;
- }
- 
--- 
-2.17.1
+Best regards,
+Krzysztof
 
