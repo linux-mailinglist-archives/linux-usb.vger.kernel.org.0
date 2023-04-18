@@ -2,89 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9F36E6121
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Apr 2023 14:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5A16E6504
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Apr 2023 14:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbjDRMWn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Apr 2023 08:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
+        id S232311AbjDRMyH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Apr 2023 08:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjDRMWl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Apr 2023 08:22:41 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA4A30F4
-        for <linux-usb@vger.kernel.org>; Tue, 18 Apr 2023 05:22:39 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id c9so33816382ejz.1
-        for <linux-usb@vger.kernel.org>; Tue, 18 Apr 2023 05:22:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681820558; x=1684412558;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9NCi64XGNvnIcRoPfYbsVQEhFpTLdIc0VlKvzW5v7qU=;
-        b=maFFAOMtTbJViPc8gHoncMZVt1U2Au3ypnEeegMeWLUYOz6jdNkKS7yJLBivFHX7J+
-         jeU/saqkWGkaad+b3a/AkjcMbAsLUZNS+KdH5D6U92eyJMJ/oeHuW9kyfBN4dYvlR6dg
-         tyJ0Xsiax7fTOTj2z5GhwpsK/PY8T5SvFWA0JIaKYVoVrj+hE2izgsjeVWS4sope6xdO
-         Vl9l3xhodT7SzE+rpu4QOMchQwMFpLLw+ZTXH8vUdwS5eMjzBTHwvmkTqKGMJR4hSYAF
-         /HCx5yMn6FXudnjiaHZz4m4/Kd4oEFC8yPXzZSW9tQgp6iBj79h0aGxj2ERsNK8TepBO
-         iy4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681820558; x=1684412558;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9NCi64XGNvnIcRoPfYbsVQEhFpTLdIc0VlKvzW5v7qU=;
-        b=iRNPXkm2yve6zwS4oBEfsf8AMEASQp6vVn6H4DjWQO//I5+15DqDXa4ueLFQxqX2dH
-         yiTgUM/BrifchaBPrb8i29B7+o3qfGII6t2ngp9IMEnUIxtmtwGAb0t1EDwQTrTzO1v3
-         1q45/+tfns2sAZuhf7gfx3SiHXmaaq896/dufYJoawlkyQNf9ehp9wcLp0tUwHQti34U
-         K1lIHRT5SgLQYObvoE3Y6ngp907URiXc+DgrGdQT8CHdfgRimwVt+4gIZvOiw/zTuXjU
-         /QWn11r0Og3Ijy9uw/jZYS55h1x7y2CQuNIPOGoTrezUkPyvIglH14WWlUfs+jAJsfrT
-         ox7A==
-X-Gm-Message-State: AAQBX9fBY4T2g/NDkc72BtEUUuYCri/BexBUFngIRnyV0B16r1NK61HK
-        ly6pI5QxW++PySPeKeAcE4UVfQ==
-X-Google-Smtp-Source: AKy350b1rlGbHV/ZqnW3dz26WRMbmKf54LQJWDdP80OW6WaojgFD3laTViuXV1OQzbIbItrUdqokLA==
-X-Received: by 2002:a17:906:82c5:b0:94b:88c6:9282 with SMTP id a5-20020a17090682c500b0094b88c69282mr12465494ejy.22.1681820558103;
-        Tue, 18 Apr 2023 05:22:38 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a276:7d35:5226:1c77? ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
-        by smtp.gmail.com with ESMTPSA id rx22-20020a1709068e1600b0094f968ecc97sm2278664ejc.13.2023.04.18.05.22.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 05:22:37 -0700 (PDT)
-Message-ID: <c79e7d05-0b62-40e6-0864-35b2821c69e7@linaro.org>
-Date:   Tue, 18 Apr 2023 14:22:36 +0200
+        with ESMTP id S232306AbjDRMx4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Apr 2023 08:53:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E16714F7F
+        for <linux-usb@vger.kernel.org>; Tue, 18 Apr 2023 05:53:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EED296347C
+        for <linux-usb@vger.kernel.org>; Tue, 18 Apr 2023 12:53:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11D99C4339B;
+        Tue, 18 Apr 2023 12:53:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1681822434;
+        bh=CM2sExAnwfsEjvvUHWGScTZSC2ZVJtbTyg7/uo0KJ38=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1iimwit9pMjNb9ZnZ0DGDHGZHS8iJ4j+p5xPxlTy8apEZgEYXpBjjteLuHMmZIHN3
+         sxn0frrMu/3YuifxilA9DUueGhmFourQWjYdusIWqSBxYbfppgKMypMKWCJTFThPfY
+         xHpo75c3K3MaQ47HJ/mPLpEmbrV8OWGS0E8b+yWU=
+Date:   Tue, 18 Apr 2023 14:25:38 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Udipto Goswami <quic_ugoswami@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>, linux-usb@vger.kernel.org,
+        Oliver Neukum <oneukum@suse.com>,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: Re: [PATCH v5] usb: dwc3: debugfs: Prevent any register access when
+ devices
+Message-ID: <2023041821-oak-comrade-f859@gregkh>
+References: <20230418121835.17550-1-quic_ugoswami@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 0/7] Add JH7110 USB and USB PHY driver support
-To:     Minda Chen <minda.chen@starfivetech.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Mason Huo <mason.huo@starfivetech.com>
-References: <20230406015216.27034-1-minda.chen@starfivetech.com>
- <517670ca-ba2e-811e-3eb2-7f38011c9690@linaro.org>
- <985d0a57-1fc8-5725-4d3a-33dcc5d49d67@starfivetech.com>
- <5953bc83-9609-6d12-7e9b-ca5202151fb3@linaro.org>
- <a75ed45c-55c4-ff94-86f9-313ec79720ac@starfivetech.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a75ed45c-55c4-ff94-86f9-313ec79720ac@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418121835.17550-1-quic_ugoswami@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -93,31 +54,19 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18/04/2023 13:12, Minda Chen wrote:
->>>>>
->>>>>
->>>>> base-commit: 0ec57cfa721fbd36b4c4c0d9ccc5d78a78f7fa35
->>>>> prerequisite-patch-id: 24a6e3442ed1f5454ffb4a514cfd768436a87090
->>>>> prerequisite-patch-id: 55390537360f25c8b9cbfdc30b73ade004f436f7
->>>>
->>>> fatal: bad object 55390537360f25c8b9cbfdc30b73ade004f436f7
->>>>
->>>> What commits do you reference? How are they helpful?
->>>>
->>> I use "git format-patch --base=(commit) to generate patchset.
->>> Maybe I set the wrong base commit.
->>
->> How are they helpful if these are private commits?
->>> Best regards,
->> Krzysztof
->>
-> base-commit is not private commits. 
-> I should set base commit 197b6b60ae7bc51dd0814953c562833143b292aa. This is 6.3-rc4 commit.
-> But I set 0ec57cfa721fbd36b4c4c0d9ccc5d78a78f7fa35. This is 6.3-rc4's previous commit.
+On Tue, Apr 18, 2023 at 05:48:35PM +0530, Udipto Goswami wrote:
+> When the dwc3 device is runtime suspended, various required clocks would
+> get disabled and it is not guaranteed that access to any registers would
+> work. Depending on the SoC glue, a register read could be as benign as
+> returning 0 or be fatal enough to hang the system.
+> 
+> In order to prevent such scenarios of fatal errors, make sure to resume
+> dwc3 then allow the function to proceed.
+> 
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-You missed the point. I am not talking about base commit. I am talking
-about your prerequisites, which are useless. What can we do with such SHA?
+Where did they sign off on this?  I don't see that in the v4 thread, did
+I miss it somewhere?
 
-Best regards,
-Krzysztof
-
+greg k-h
