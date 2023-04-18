@@ -2,528 +2,272 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BBD56E5680
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Apr 2023 03:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C215C6E5724
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Apr 2023 03:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjDRBeQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Apr 2023 21:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
+        id S230349AbjDRBuu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Apr 2023 21:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjDRBeP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Apr 2023 21:34:15 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4944CD1
-        for <linux-usb@vger.kernel.org>; Mon, 17 Apr 2023 18:34:13 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1a6674bcad4so11700655ad.1
-        for <linux-usb@vger.kernel.org>; Mon, 17 Apr 2023 18:34:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681781653; x=1684373653;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WEcfnWYDcxyHG+Iity0I1HSVdF+952ZLZD9VE2qe3bs=;
-        b=hk5Ol+/lDfaWAyqOaxDxrsoya/4qPI4Zu88CEhb8cIB0LC13YgYhq3MKB5C9pdDJiI
-         sSKpef2bA7ojUdS2bLtO92eL3/sO4cfzU+93DWtPP+8QNi5UtdYITLB/pdmWapIqwSDc
-         m1yImdAIhSkue0aZTYpknBS5MywyFaDw2iqkasvrDwmJAam6zVVMm4d14GvEWozSI3Bh
-         SjZxPhI2yNKHt/bP5j7BHa2yxDBwH9QrZqMF+O2LawnakQoaJXaoWckve+Zza1PUM7nb
-         P/0EpydTp6x2BQTgsdfYQB635lo2cPABzLgtHSD8bCXdc8u3tuoIcTuhaE8QrOABFYF0
-         bVow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681781653; x=1684373653;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WEcfnWYDcxyHG+Iity0I1HSVdF+952ZLZD9VE2qe3bs=;
-        b=J4xbP2iDMe4paidfVcPt9r9YkuT1IuDsmjXH+6I77PFaGaF0iGwr8iOBlSqoXW9tv/
-         kZJ463hsS0J2hDLOnOGgTHpM66j8VyZHFRv3uXN3NYVG/sIJ7qov3l+2xkRSWjtmD0Tr
-         WiUoO01VgLQG/GOfn19VCJGQXfoIZx4VKc9y5GPDskIlr9X8PlZeJNFVLM0fj5ea/MfB
-         3NNUAoRRbO/0M1LerFlnrcx7GpCuzyDfqbj4itusL9YqzmbMGp8tu2em78Ljmk+Ns7OD
-         PCaBQd27ic0+QqvHvNs2Ck+6KfLibd6AEMSz0u6fB/cURrCf/VGQee0D0ZBlazpF7aHO
-         qbYQ==
-X-Gm-Message-State: AAQBX9dtszi44JU5m93ISVMlDIX4kKGmwHYTsBkeCfHRRsPeez1O36nU
-        lXN8lyiyIOSNtyf5P4T//RnOoi/Vp1TS3SU7SgAaL5yg
-X-Google-Smtp-Source: AKy350ZK7LUpZo77tiIN8AuEmkotR4lKImKKmEMOd8cakeGtDAdnvIt7kCGTNnH7KOUbQWBouLgSFg==
-X-Received: by 2002:a17:903:187:b0:1a6:87e3:db50 with SMTP id z7-20020a170903018700b001a687e3db50mr597760plg.1.1681781652434;
-        Mon, 17 Apr 2023 18:34:12 -0700 (PDT)
-Received: from [192.168.60.239] (124.190.199.35.bc.googleusercontent.com. [35.199.190.124])
-        by smtp.gmail.com with ESMTPSA id l19-20020a17090aec1300b00240aff612f0sm7798625pjy.5.2023.04.17.18.34.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 18:34:12 -0700 (PDT)
-Message-ID: <3a9ee93a-b0ec-ac92-77ab-2956c1c4f434@google.com>
-Date:   Mon, 17 Apr 2023 18:34:11 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: UVC Gadget Driver shows glitched frames with a Linux host
+        with ESMTP id S231286AbjDRBtk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Apr 2023 21:49:40 -0400
+Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0EE7A85;
+        Mon, 17 Apr 2023 18:48:09 -0700 (PDT)
+Received: from pps.filterd (m0297266.ppops.net [127.0.0.1])
+        by mx0a-00230701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33HKwJ3a003506;
+        Mon, 17 Apr 2023 18:46:54 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=pfptdkimsnps;
+ bh=CB5MlItyirDvx6SVwyyMU0It5WMKDNSTddmR5Lu6R98=;
+ b=bmL8pZVR/sdJg0qoioaa+P3dtTvMbOECam9JEZp0OrYUYxJUZ3/OSuNzLk8vC0hOKt1D
+ 1WHYM5vCND38Za07qG8bBVIBVQGVZFlfIbjxRwtE1/bAvBOO91I/MSI34v1C5zR9UuW0
+ pG9INX8EOzZY9x4KHDeFlvJynQ+yjfaJpMWtRSQuU7k3+HiDK3jL7/9wiD5uWUP7WRe5
+ Ze85ih83p/m1rqTbMG0Q68l1fZlBiN71//+BGUMk3Mg5/78x8YBY1Dz0v7D9y/tnwFQ9
+ zY7Xux5b2pk/Eijv9RQ2o91GPOtvVtnWeqY2GJw7S2ms3jByiigq407Pe6JNbg0Ys+MZ AA== 
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
+        by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3pyu66134y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Apr 2023 18:46:54 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1681782413; bh=CB5MlItyirDvx6SVwyyMU0It5WMKDNSTddmR5Lu6R98=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=HNGzvWCM7wCeLnUVkwYAb0oOXGyfXfY7yqcswYoKbkbbdQWH4GyYMq6BizUV7Tu90
+         vo7urSSTHhegy4XuS+zqwu5jrA2cUW8gA1vIfm8tpbLvlWA2x7/uD3eiWcysUGH7nR
+         MvWTBS1qkMiWuKRI39GRUHNP+ePuvIhj6CoKrJqCaFeI+ubdA96HHwRv18sZuQiveA
+         gtFDEFSjrhGs8Cn18H+Bdc/y2Or2eNngn8VOw+Ccv6KsY0e3No2U11IxeuR7Ykvcg6
+         7BUTdxs6LUPDEtX14xe1kq5kfF48l+8bq/+mlxvNG2oTX1W+fz64T5mR7LMXyeUgGL
+         Ui49W6UpkNXWw==
+Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits)
+         client-signature RSA-PSS (2048 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 6337740565;
+        Tue, 18 Apr 2023 01:46:52 +0000 (UTC)
+Received: from o365relay-in.synopsys.com (us03-o365relay1.synopsys.com [10.4.161.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
+        by mailhost.synopsys.com (Postfix) with ESMTPS id ABD3CA007A;
+        Tue, 18 Apr 2023 01:46:52 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=D/7gjXIR;
+        dkim-atps=neutral
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2174.outbound.protection.outlook.com [104.47.55.174])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 925B440DE2;
+        Tue, 18 Apr 2023 01:46:51 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BDgxAdKz1/ISP/TAjsNL3W80wAilLRi6FWXprjB34rhbijraqKsO29PRaywFlx4fUxxrdb/TqJT3iKSB+0zodtN5S90jdkb2J7nqxRoGBzqScobJCyUIXMb5jmEZBG5GSt6WWLBbDlOEzR3CKNqcUvPV1wrVYc4DQE7zlN0TTwVV0R05KKxhdhdJcwPwmNsSIlTTlV5nv08IG/TR67tGwxmGOTmr/gqZfeSddnUTmUadaB7w2EKtYtn1cOPAhdVbLVaGxLg2t/iARpsqM+s7filETm3SugntgW1vsDizm3pkFAion8ZgZTDv6/c4KTTOiB8QrPuRh/NQJ1TU8QOdcw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CB5MlItyirDvx6SVwyyMU0It5WMKDNSTddmR5Lu6R98=;
+ b=YI5s4uc8/G4+aGdzwK5l6u92m0FkXUoTrOez03o4UTuDRKIKmluBGFZPlNnAGO+T2pk60RWZLydR3ZvRGW7qrDJWTBu9bEwaYlsvmgxAYGSm0NwfDvL7H2ZCzwwcx27pPAKNIfUBFAyr3YbYexhEqtLN9hRuHoHmmJf+ibkRiCxix1GOx7WVxh2/OBjdD7dgQj2buxMDPpoGPymzrhTcg7YaoxQH9+q9hXKYO6G9fZvBw5QFkdkqC0eXZ0o+cV7vXkfYnpXpPd1aWNxFqb+UpPK3bHV0brXdWp5G/vPYtx020X3kftL8kaHnlds7DDMJRdT4Xf6Db6/Sh61SBpJDyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CB5MlItyirDvx6SVwyyMU0It5WMKDNSTddmR5Lu6R98=;
+ b=D/7gjXIRDD85DNp/kNhPsMNpDhWjQbubFvElMuVQL5bizEzR5RlAOgAXlMb44/aUXzsGiOPOaYb32Z/8UBohqXfmQdCXIcP0AHVsIX3xaepAI2cMcDL7D+L8p1a4u6qSWcs/t/jwP58GJEGQz4QyL8AEmgSC8E9dWfrIjAe24XE=
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
+ by CY5PR12MB6108.namprd12.prod.outlook.com (2603:10b6:930:27::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Tue, 18 Apr
+ 2023 01:46:48 +0000
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::3103:ba85:b667:315d]) by BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::3103:ba85:b667:315d%6]) with mapi id 15.20.6298.045; Tue, 18 Apr 2023
+ 01:46:47 +0000
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v5 1/3] usb: dwc3: gadget: Stall and restart EP0 if host
+ is unresponsive
+Thread-Topic: [PATCH v5 1/3] usb: dwc3: gadget: Stall and restart EP0 if host
+ is unresponsive
+Thread-Index: AQHZbkJuxQdOpGs9mk+Ptv8y4biCtK8wUrMA
+Date:   Tue, 18 Apr 2023 01:46:47 +0000
+Message-ID: <20230418014636.d6wk6zbdmdxgwdpc@synopsys.com>
+References: <20230413195742.11821-1-quic_wcheng@quicinc.com>
+ <20230413195742.11821-2-quic_wcheng@quicinc.com>
+In-Reply-To: <20230413195742.11821-2-quic_wcheng@quicinc.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     laurent.pinchart@ideasonboard.com, dan.scally@ideasonboard.com,
-        Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
-        Jayant Chowdhary <jchowdhary@google.com>,
-        "Eino-Ville Talvala (Eddy)" <etalvala@google.com>
-References: <CAMHf4WKbi6KBPQztj9FA4kPvESc1fVKrC8G73-cs6tTeQby9=w@mail.gmail.com>
- <ZD1ObUuy8deAvupf@kroah.com>
-From:   Avichal Rakesh <arakesh@google.com>
-In-Reply-To: <ZD1ObUuy8deAvupf@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR12MB4791:EE_|CY5PR12MB6108:EE_
+x-ms-office365-filtering-correlation-id: 18ec7c0e-3b45-4d83-fc8d-08db3faec5a2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kWaKBLmS7Qg46F7i0MDeWeaj9TW8OvoUw3iEJXVBiEVXcFYJMmmm1Xj0SmWNIBaKWryBf2LDGjiN/NDuLQj78f/VLVWj2fdAdkty3BsXH3HL3XHF1SgYCgQLf0Gpr1ZVhDbwfrCPYZFE/Cv6Gwtgc+tdQF2WXqj32iNIuSlMojIxs4xcqDsXoYlCP7zGsRS75BIved5iyBMP7P6rv6RLi6ln8yT+BxUKbTFSrBPdj80V3PxIGp+q55jt93CSPzCpCd+bSahDUEnZ3a0BLq0fLuEN22uFdtGP4ok7buIDDoVEIsnmjxiOBMFKUXBAVItzM7jGQ5HwJpbtsXl5OwQaY1KxboqrICGrjD8IBPcZxkAj9YmwH8GU/spTWorHBIRQigMTLff8E1JTZZAaUWRU3VlnYmVd8/VVZtv3mORSuLqp7BrFFuleJxfYYfEt/nV2/d1VfkmsgeIpTQ1Eih5+mn8hn5hbl33KvrfU2cMAYanEUxSeivVENBBC05S0+k//QAM/47NkVXNMTNx2nq/GAbSAIoOyueKAdJJdQ/2D5LEti0xYs2cUEP1jCkVOeOLiSV11o7N0b2gytwPiS4vgXigK4H3cQPatyjPSt+aGJh1GkkYz4ipPa2NPgQUWuF5yhOH1Y3Z9olw4TcVJGs/xyg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(396003)(39860400002)(346002)(366004)(451199021)(1076003)(6506007)(6512007)(186003)(26005)(2616005)(83380400001)(6486002)(71200400001)(36756003)(54906003)(316002)(41300700001)(5660300002)(2906002)(4326008)(478600001)(6916009)(38100700002)(86362001)(38070700005)(8676002)(8936002)(66556008)(122000001)(64756008)(66446008)(66946007)(66476007)(76116006)(309714004);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VllydEhIVUVuMmpBTzQ3cWdub080QkdXcUQvbi8yeVdtekR5UXVYNHoxcVhk?=
+ =?utf-8?B?ZEl3WjJMd0IrTCtPajE0WlZCNnBxbHpEQklvMkhVWDlLNEhoWmdSeVhjNHor?=
+ =?utf-8?B?UTd2R1NtZjlHOGlFcmhTSmEya0dsVHVnTDR0cG5YVm43cTJRTzh3QWxsWW91?=
+ =?utf-8?B?aFJvZ2J1MEMreG42YVpRc0hLaElrLzgycmNzTmpJQlE4ZDlIRDE2bU82MHN4?=
+ =?utf-8?B?dEV0ZEh2Y1lpWUMvVXdGWFZONlpxK0ZKRGQ3SDA2UFVkcGQ5c1M5amI2UXc0?=
+ =?utf-8?B?alJiNTNzQWpPdjZsUVpGcUZzdGF0NEVTTWdmUFBVdDN1bkJGdm1DYkhNbzlW?=
+ =?utf-8?B?QXIzRWNWRjBWNjBCMThHSE9seHA3S0pSTzlYcVBrTmtmbDhvNkdkVGZLRGhY?=
+ =?utf-8?B?N05EM253Y0p3cXVhdUlENWNYZXdzekpNYzdIVW03bWpDNUVib2VRUDUxdExK?=
+ =?utf-8?B?aVdkN3Q5SlhlcERmMnRnZE1EbW13MXk3S0NXVkRVVUpqWWlvakdaL3FPb3ha?=
+ =?utf-8?B?bGYwa3NqSFpuMDF0VUMwY2tWbElWV0sxMHFVLzREdW5NckFDS2tOMzZQSi9P?=
+ =?utf-8?B?OTVHdVRZNTY0K3hZVnZNN3NzZ2xqbjcxaVNmRTVMeFllQUIycFZBZ0plODZZ?=
+ =?utf-8?B?VVpuRlV6RkxFMXJ4MDB5Sm5OVi9XZUpXVXRJVTdSaSswR1l1aHZOZUdDNVJ5?=
+ =?utf-8?B?T25VMlBWcWRpSXZSaVpSbXVPb3hIUytsQytNQ0NlZ0tpWlZhMjRGM1FobjRi?=
+ =?utf-8?B?OXVDbG40TkxXNTV2ZkZTUVhpcm0zcmtlYUZkNnFvSEcwTFR5RlY3TlJJYUhE?=
+ =?utf-8?B?bnEwYXhNYUlWai8xYXFlVW1aV2ZuSUtWOUt1czYycXZmUWtvNHA2STBuVFE2?=
+ =?utf-8?B?VURxUHNaTjcvZjkzWUVidjdWSml1SzFkSSsxQVB6akw4a0g5UDRlUHl6OHBn?=
+ =?utf-8?B?U053bjBkeG85THMwWWM5TGV4aklIaHRURllwRW83c29RN25jWVVMNHU4eHRr?=
+ =?utf-8?B?bHdvd25YNWNzZmhNdVpxZmFJVXIyVklJNzFqSEZyQXdnUzJmcm5OR2s5eUhN?=
+ =?utf-8?B?YjlaQ1RaeE13WXpFcXE4MjNxWTJnclc1MTArT0Z5TDkyT2hYb2ZHbXRaYjZB?=
+ =?utf-8?B?eE9RTnBBU2JQQ05YR01Ra1g5dnlZcy9oQ0g3MERzVDk5UjJlVmtNUWRzRFZY?=
+ =?utf-8?B?WldsT2tEL1pTNWRrcUN2am92VTFtUEx4UWZrQ0g0Y0NrZ1F2SjZUeEN0V1hp?=
+ =?utf-8?B?cFI3Mm01R244YVFWU01YS2ZEN29uM0ZkUzlPOXR0cjAzVi9Da2hqZU1uc0RG?=
+ =?utf-8?B?L0Z1cFlGS0RYcUdUbjBHSWhscWx3OGdjSXVFN1FGM1pSZGM1Qjl5T3hXS1U2?=
+ =?utf-8?B?UERqSzhocmJLcVU4dGZRc3ZPVXQ5b0plSExpR3hJV2lndlRJaHNnQkhOZXFG?=
+ =?utf-8?B?aFJPdGtvRWZMcFhUMkMxekhtMU04S0ltNjFSWHNucC8zVFc0VGdGZ3RuZkN2?=
+ =?utf-8?B?YSsya09GZ0FOMjkwZklVU3ZzakdqbGRucy9mVGk1RDNWeUJwV2JxV2VwWG5j?=
+ =?utf-8?B?cC90TmF5azhEKzI0VFhmV2dJZlYvOGE1c1FCQnpyRmRwK2M4VU9Gb2tDNkkr?=
+ =?utf-8?B?T2lBTGlQRldDZFFYbGtzRC9OY2dFU0pCUUVtMkdzYWZmaFZhMHJTalJGVE1H?=
+ =?utf-8?B?bUhTRmhQTW5sTU1STXR0QjNvcEdXZEdneUhFakJGVkt5TDdzdWFKNjFGOFZL?=
+ =?utf-8?B?bXRnQnU2Uzh4Y3dFRHBjSFlDcDZpOUk1bkkxNG96cGxOMTV1dEhxTm94TUpv?=
+ =?utf-8?B?dlFMRFl1SHYxaW1lOEN0K0VXaGZaUjVWY0VZNmdxWnU2eFcwM0pGUFV0Rmpo?=
+ =?utf-8?B?UWxKTW9oeDgwSVBPaEt5QVJCNlIvM0xBaTg4dU9BR0VpRnpWd2NvdGw4aE43?=
+ =?utf-8?B?eXAvSXNKeW1SQWZjNjZXa0VWMWdvRmdqNVUybkhYOUpsbXV6bUducndTYVFh?=
+ =?utf-8?B?OHVxZUJCVDF5RGhBRlE5dllHV3VYOGJOS1dGK3lZdUo5WkNlMndTK0pKRldW?=
+ =?utf-8?B?WmdjZWZjcDZNdUlCcWZxTFl2V0x3ZHNlaVBtUlo4ZWNBU092eGFxa2NMb01O?=
+ =?utf-8?Q?LiYEuHkCNHZT/18VHR1H8zU+U?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F20C15A1EA6EB448867373450D8D1A20@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: b4XaRWfaAZfHaDCYtXa7ZhYTbBOSAT0QURdVqGPhbP4+d2oxOZGUq1N1kB8GSP/Dp3ZgJDgfmEnZ+xsmG9YLUIWBaS0vNji0tL/txsvgC0LGuc+p2nTZL7tenN/Xt7Cn+sj02IlIGp/9RVCmyLKByn40r8GRZrqxrJBThLEuMqwk22fflXGMyEVVk7fC696PiNY/PnT3dq2/VlrZLUwkf6cNRY5lzFB32EYeWhJOdriyyxTS7XnRRVmQI7+fDV3WAIgbTmyJkvgnfOW77WxmmRYoy0iEcG34kFWHvpusYXflQvzLLmsitE98NrrcspTNHDNswOd0NPdDT3F+WZkZf6ffx8IlsvKnBn+dQMq0jZSbc++c6qTAKd210I3DUe4/YvBJNzzT8OeChADbwkM8cAdz3HxO9liUkWjwGXAHw0xNOSj72tqA8NvT3LZXYW+COOWi0GJa2dh4usrFp6uTN8GRZI1YMIgmAePzfoVbnRCCZkPDGRX80k7Bo6pCiCYqf2zUD1WJ3qNR5REIFgPgIgKqHl5hi3GWm9RpcUm+0segncarjscMRf3n9R2WDCCZxcr/qo7s0ENYdzrP9M+iTXTjh4qJlqN1n+OwD1cEXbUFi/oQoT6dTv24WU8mqBTuyH6PxPTtWM6QT7z9wsLayUyrwv3PeBm5rB0hPf7wQ7Djx1XUEbxTqf4rmsPr7VG9/fti56rSE3bnC4WmZLO/dh9b1i38U0lrn1kzF9kzHT22WcSE4dVxTEOPKyP6qCZoKSqUZbW8XML9FoQgf4AqAPkjWQheg9DlM+vufZqQA0KixCebIV6ThS/cGJ5Rl1QioJ4A02FF0pkqQrr/x9ikfDIBhWbH4gsu/HHEYnM3bADgFn5I8jgt8602Hia4oVDpHrav4tekbfMkfT05EWmzfw==
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 18ec7c0e-3b45-4d83-fc8d-08db3faec5a2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Apr 2023 01:46:47.5337
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: o3eZGA67HBREODCoN3BwIg+t+d9rnSyR/b458SC2wqVSr5kzWDjz+qHSOQUtb3SPhJgtHZO3w0No/kJoi103sA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6108
+X-Proofpoint-ORIG-GUID: FpmDDbxWXHrbKYxDTOC-PRaQFN9_xEka
+X-Proofpoint-GUID: FpmDDbxWXHrbKYxDTOC-PRaQFN9_xEka
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-17_14,2023-04-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
+ bulkscore=0 malwarescore=0 phishscore=0 mlxscore=0 clxscore=1015
+ impostorscore=0 spamscore=0 lowpriorityscore=0 priorityscore=1501
+ suspectscore=0 adultscore=0 mlxlogscore=999 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304180014
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 4/17/23 06:49, Greg KH wrote:
-> On Fri, Apr 14, 2023 at 02:03:02PM -0700, Avichal Rakesh wrote:
->> Hey all,
->>
->> First off, I am very new to the kernel space, so apologies for any
->> newb mistakes. Please feel free to point them out!
->>
->> I've been trying to get the UVC gadget driver to work on an Android
->> device and have been seeing partial/glitched frames when streaming to
->> a Linux (or Windows) host fairly frequently (once every 2-4s). The UVC
->> gadget driver shows no error/exception logs, and neither does the
->> host's UVC driver.
->>
->> Enabling tracing for the UVC gadget driver and the host's UVC driver
->> shows that the gadget sees a missed ISOC transfer, and the host sees a
->> frame with suspiciously low packet count at the same time as the
->> glitched frame.
->>
->> ```
->> [691171.704583] usb 1-4: frame 9274 stats: 0/8/8 packets, 0/0/0 pts
->> (!early !initial), 7/8 scr, last pts/stc/sof 0/259279856/14353
->> [691171.704602] usb 1-4: Frame complete (EOF found)
->> [691171.732584] usb 1-4: frame 9275 stats: 0/4/4 packets, 0/0/0 pts
->> (!early !initial), 3/4 scr, last pts/stc/sof 0/261131744/14661
->> [691171.732621] usb 1-4: Frame complete (EOF found)
->> [691171.768578] usb 1-4: frame 9276 stats: 0/8/8 packets, 0/0/0 pts
->> (!early !initial), 7/8 scr, last pts/stc/sof 0/262525136/14894
->> [691171.768616] usb 1-4: Frame complete (EOF found)
->> ```
->>
->> For reference, I am streaming 640x480 MJPEG frames of a (mostly)
->> static scene, and every frame takes 7-8 packets (~22kB). So 4 packets
->> for a frame is definitely not normal. From the logs, it looks like the
->> host sees an EOF header for the video frame that had the ISOC failure
->> and tries to display the frame with a partial buffer resulting in the
->> glitched frame.
-> 
-> But with isoc packets, it's ok to drop them, that's what the protocol is
-> for.  If you require loss-less data transfer, you can NOT use isoc
-> endpoints.
-
-Maybe I am misunderstanding something here: It is okay for isoc packets
-to be dropped, but if we are trying to send some contiguous information
-over a sequence of isoc packets and one of the packets in the sequence
-gets dropped, there should be a mechanism (either on the gadget side, or
-the host side) to invalidate the set of packets associated with the
-dropped packet?
-
-In this instance, we "encode" one video frame into a sequence of isoc
-packets, and queue them up, but if one of those isoc packets is dropped
-after video frame is fully "encoded", there doesn't seem to be any
-handling to invalidate the other packets that relates to the video
-frame. It is okay to drop a video frame in this case as the drop is
-invisible to the user, but the host needs to know about the invalidated
-frame.
-
-> 
-> So this sounds like it is working correctly, but you need to figure out
-> why your device can't keep up on the data stream properly.
-
-I haven't profiled this, but as far as I can tell the device can keep up
-with the data stream. The frame glitches and all other observations here
-were observed at 30fps, and we've successfully pushed 60fps with no
-streaming stutters, but the glitched frame still comes up at about the
-same frequency (in terms of number of frames). So it doesn't seem like
-the data stream is lagging behind.
-
-> 
->> This can happen because the UVC gadget driver waits for the encode
->> loop to drop the video frame
->> (https://lore.kernel.org/all/20221018215044.765044-4-w36195@motorola.com/).
->> However, because video frames are encoded (to usb_requests)
->> asynchronously, it is possible that the video frame is completely
->> encoded before the ISOC transfer failure is reported. In this case,
->> the next frame would be dropped, but the frame with missed ISOC will
->> remain in queue.
-> 
-> So you need a faster processor?  :)
-
-Haha! I wouldn't say no to that! Each "encode" iteration is effectively
-a memcpy, so runs quite a bit faster than the USB controller can
-pump out data to the host. The encode loop runs in its own thread and
-doesn't wait for the complete callbacks from the usb controller to queue
-up new requests. It is inevitable that we will end up with a set of
-usb_requests queued up to the controller. In my testing, 5/6
-usb_requests being queued up was not uncommon (which is quite the
-fraction of one frame considering one frame is 7/8 usb_requests long).
-Eventually the usb_request containing the EOF header will be queued up
-and be behind other packets of the same video frame. A missed ISOC at
-this point won't cancel the usb_request with the EOF header.
-
-> 
->> This problem may be further exaggerated by the DWC3 controller driver
->> (which is what my device has) not setting the IMI flag when
->> no_interrupt flag is set
->> (https://lore.kernel.org/all/ced336c84434571340c07994e3667a0ee284fefe.1666735451.git.Thinh.Nguyen@synopsys.com/)?
->> UVC Gadget Driver sets the no_interrupt flag for ~3/4 of its queued
->> usb_request, so an ISOC failure may not immediately interrupt the UVC
->> gadget driver, leaving more time for the frame to finish encoding.
->>
->> I couldn't find any concrete error handling rules in the UVC specs, so
->> I am not sure what the proper solution here is. To try out, I created
->> a patch (attached below) that dequeues all queued usb_requests from
->> the endpoint in case of an ISOC failure and clears the uvc buffer
->> queue. This eliminated the partial frames with no perceivable frame
->> drops.
->>
->> So my questions here are:
->> 1. Is this a known issue, and if so are there workarounds for it?
->> 2. If the answer to above is "No", does the explanation and mitigation
->> seem reasonable?
->>
->> Patch follows (mostly for illustration, I can formalize it if
->> needed!). It adds a new 'req_inflight' list to track queued
->> usb_requests that have not been given back to the gadget driver and
->> drops all the queued requests in case of an ISOC failure. The other
->> changes are for the extra bookkeeping required to handle dropping all
->> frames. I haven't been able to confirm it, but as far as I can tell
->> the issue exists at ToT as well.
->>
->> ---
->> drivers/usb/gadget/function/uvc.h | 6 ++-
->> drivers/usb/gadget/function/uvc_queue.c | 16 ++++--
->> drivers/usb/gadget/function/uvc_queue.h | 2 +-
->> drivers/usb/gadget/function/uvc_video.c | 71 +++++++++++++++++++------
->> 4 files changed, 72 insertions(+), 23 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/uvc.h
->> b/drivers/usb/gadget/function/uvc.h
->> index 100475b1363e..d2c837011546 100644
->> --- a/drivers/usb/gadget/function/uvc.h
->> +++ b/drivers/usb/gadget/function/uvc.h
->> @@ -80,7 +80,8 @@ struct uvc_request {
->> struct uvc_video *video;
->> struct sg_table sgt;
->> u8 header[UVCG_REQUEST_HEADER_LEN];
->> - struct uvc_buffer *last_buf;
->> + struct uvc_buffer *uvc_buf;
->> + bool is_last;
->> };
-> 
-> The patch is corrupted and can't be applied by anyone, sorry :(
-> 
-> Please fix up your email client and submit it as a real patch?
-> 
-> thanks,
-> 
-> greg k-h
-
-Sorry about the patch, looks like all the tabs were converted to single
-spaces :(. Reattaching:
-
----
- drivers/usb/gadget/function/uvc.h       |  6 ++-
- drivers/usb/gadget/function/uvc_queue.c | 16 ++++--
- drivers/usb/gadget/function/uvc_queue.h |  2 +-
- drivers/usb/gadget/function/uvc_video.c | 71 +++++++++++++++++++------
- 4 files changed, 72 insertions(+), 23 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index 100475b1363e..d2c837011546 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -80,7 +80,8 @@ struct uvc_request {
- 	struct uvc_video *video;
- 	struct sg_table sgt;
- 	u8 header[UVCG_REQUEST_HEADER_LEN];
--	struct uvc_buffer *last_buf;
-+	struct uvc_buffer *uvc_buf;
-+	bool is_last;
- };
- 
- struct uvc_video {
-@@ -103,8 +104,9 @@ struct uvc_video {
- 	/* Requests */
- 	unsigned int req_size;
- 	struct uvc_request *ureq;
--	struct list_head req_free;
-+	struct list_head req_free; /* protected by req_lock */
- 	spinlock_t req_lock;
-+	struct list_head req_inflight; /* protected by queue->irqlock */
- 
- 	unsigned int req_int_count;
- 
-diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-index 0aa3d7e1f3cc..32fab1e5b32d 100644
---- a/drivers/usb/gadget/function/uvc_queue.c
-+++ b/drivers/usb/gadget/function/uvc_queue.c
-@@ -250,10 +250,22 @@ unsigned long uvcg_queue_get_unmapped_area(struct uvc_video_queue *queue,
-  */
- void uvcg_queue_cancel(struct uvc_video_queue *queue, int disconnect)
- {
--	struct uvc_buffer *buf;
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&queue->irqlock, flags);
-+	uvcg_queue_cancel_locked(queue, disconnect);
-+	spin_unlock_irqrestore(&queue->irqlock, flags);
-+}
-+
-+/*
-+ * see uvcg_queue_cancel()
-+ *
-+ * Must be called with &queue_irqlock held.
-+ */
-+void uvcg_queue_cancel_locked(struct uvc_video_queue *queue, int disconnect)
-+{
-+	struct uvc_buffer *buf;
-+
- 	while (!list_empty(&queue->irqqueue)) {
- 		buf = list_first_entry(&queue->irqqueue, struct uvc_buffer,
- 				       queue);
-@@ -272,7 +284,6 @@ void uvcg_queue_cancel(struct uvc_video_queue *queue, int disconnect)
- 	 */
- 	if (disconnect)
- 		queue->flags |= UVC_QUEUE_DISCONNECTED;
--	spin_unlock_irqrestore(&queue->irqlock, flags);
- }
- 
- /*
-@@ -356,4 +367,3 @@ struct uvc_buffer *uvcg_queue_head(struct uvc_video_queue *queue)
- 
- 	return buf;
- }
--
-diff --git a/drivers/usb/gadget/function/uvc_queue.h b/drivers/usb/gadget/function/uvc_queue.h
-index 41f87b917f6b..622c0f146847 100644
---- a/drivers/usb/gadget/function/uvc_queue.h
-+++ b/drivers/usb/gadget/function/uvc_queue.h
-@@ -89,6 +89,7 @@ unsigned long uvcg_queue_get_unmapped_area(struct uvc_video_queue *queue,
- #endif /* CONFIG_MMU */
- 
- void uvcg_queue_cancel(struct uvc_video_queue *queue, int disconnect);
-+void uvcg_queue_cancel_locked(struct uvc_video_queue *queue, int disconnect);
- 
- int uvcg_queue_enable(struct uvc_video_queue *queue, int enable);
- 
-@@ -98,4 +99,3 @@ void uvcg_complete_buffer(struct uvc_video_queue *queue,
- struct uvc_buffer *uvcg_queue_head(struct uvc_video_queue *queue);
- 
- #endif /* _UVC_QUEUE_H_ */
--
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index dd1c6b2ca7c6..6c2698eca242 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -109,19 +109,18 @@ uvc_video_encode_bulk(struct usb_request *req, struct uvc_video *video,
- 
- 	req->length = video->req_size - len;
- 	req->zero = video->payload_size == video->max_payload_size;
-+	ureq->uvc_buf = buf;
- 
- 	if (buf->bytesused == video->queue.buf_used) {
- 		video->queue.buf_used = 0;
- 		buf->state = UVC_BUF_STATE_DONE;
- 		list_del(&buf->queue);
- 		video->fid ^= UVC_STREAM_FID;
--		ureq->last_buf = buf;
--
-+		ureq->is_last = true;
- 		video->payload_size = 0;
- 	}
- 
- 	if (video->payload_size == video->max_payload_size ||
--	    video->queue.flags & UVC_QUEUE_DROP_INCOMPLETE ||
- 	    buf->bytesused == video->queue.buf_used)
- 		video->payload_size = 0;
- }
-@@ -181,15 +180,15 @@ uvc_video_encode_isoc_sg(struct usb_request *req, struct uvc_video *video,
- 
- 	req->length -= len;
- 	video->queue.buf_used += req->length - header_len;
-+	ureq->uvc_buf = buf;
- 
--	if (buf->bytesused == video->queue.buf_used || !buf->sg ||
--			video->queue.flags & UVC_QUEUE_DROP_INCOMPLETE) {
-+	if (buf->bytesused == video->queue.buf_used || !buf->sg) {
- 		video->queue.buf_used = 0;
- 		buf->state = UVC_BUF_STATE_DONE;
- 		buf->offset = 0;
- 		list_del(&buf->queue);
- 		video->fid ^= UVC_STREAM_FID;
--		ureq->last_buf = buf;
-+		ureq->is_last = true;
- 	}
- }
- 
-@@ -212,14 +211,14 @@ uvc_video_encode_isoc(struct usb_request *req, struct uvc_video *video,
- 	len -= ret;
- 
- 	req->length = video->req_size - len;
-+	ureq->uvc_buf = buf;
- 
--	if (buf->bytesused == video->queue.buf_used ||
--			video->queue.flags & UVC_QUEUE_DROP_INCOMPLETE) {
-+	if (buf->bytesused == video->queue.buf_used) {
- 		video->queue.buf_used = 0;
- 		buf->state = UVC_BUF_STATE_DONE;
- 		list_del(&buf->queue);
- 		video->fid ^= UVC_STREAM_FID;
--		ureq->last_buf = buf;
-+		ureq->is_last = true;
- 	}
- }
- 
-@@ -231,11 +230,13 @@ static int uvcg_video_ep_queue(struct uvc_video *video, struct usb_request *req)
- {
- 	int ret;
- 
-+	list_add_tail(&req->list, &video->req_inflight);
- 	ret = usb_ep_queue(video->ep, req, GFP_ATOMIC);
- 	if (ret < 0) {
- 		uvcg_err(&video->uvc->func, "Failed to queue request (%d).\n",
- 			 ret);
- 
-+		list_del(&req->list);
- 		/* If the endpoint is disabled the descriptor may be NULL. */
- 		if (video->ep->desc) {
- 			/* Isochronous endpoints can't be halted. */
-@@ -254,15 +255,46 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 	struct uvc_video *video = ureq->video;
- 	struct uvc_video_queue *queue = &video->queue;
- 	struct uvc_device *uvc = video->uvc;
-+	struct uvc_buffer *uvc_buf = ureq->uvc_buf;
-+	struct usb_request *itr;
- 	unsigned long flags;
- 
-+	spin_lock_irqsave(&queue->irqlock, flags);
-+	list_del(&req->list);
-+	spin_unlock_irqrestore(&queue->irqlock, flags);
-+
- 	switch (req->status) {
- 	case 0:
- 		break;
- 
- 	case -EXDEV:
- 		uvcg_dbg(&video->uvc->func, "VS request missed xfer.\n");
--		queue->flags |= UVC_QUEUE_DROP_INCOMPLETE;
-+		spin_lock_irqsave(&queue->irqlock, flags);
-+		list_for_each_entry(itr, &video->req_inflight, list) {
-+			usb_ep_dequeue(ep, itr);
-+		}
-+
-+		if (uvc_buf->state != UVC_BUF_STATE_DONE) {
-+			video->fid = UVC_STREAM_FID;
-+		} else {
-+			queue->flags |= UVC_QUEUE_DROP_INCOMPLETE;
-+		}
-+
-+		/*
-+		 * We cancel the entire queue because calling usb_ep_dequeue on any pending request will
-+		 * cancel all queued requests (on some USB controllers). ISOC transfers are "best effort"
-+		 * and a missed frame or two won't really be noticeable. Rather than adding extra
-+		 * bookkeeping to try and find the precise set of frames that need to be dropped, we drop
-+		 * the entire queue.
-+		 */
-+		uvcg_queue_cancel_locked(queue, 0);
-+		video->req_int_count = 0;
-+		spin_unlock_irqrestore(&queue->irqlock, flags);
-+		break;
-+
-+	case -ECONNRESET:
-+		uvcg_dbg(&video->uvc->func, "VS request dqed.\n");
-+		// Request dequeued using usb_ep_dequeue, no special handling required
- 		break;
- 
- 	case -ESHUTDOWN:	/* disconnect from host. */
-@@ -277,10 +309,11 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 		uvcg_queue_cancel(queue, 0);
- 	}
- 
--	if (ureq->last_buf) {
--		uvcg_complete_buffer(&video->queue, ureq->last_buf);
--		ureq->last_buf = NULL;
-+	if (ureq->is_last) {
-+		uvcg_complete_buffer(&video->queue, ureq->uvc_buf);
- 	}
-+	ureq->is_last = false;
-+	ureq->uvc_buf = NULL;
- 
- 	spin_lock_irqsave(&video->req_lock, flags);
- 	list_add_tail(&req->list, &video->req_free);
-@@ -315,6 +348,7 @@ uvc_video_free_requests(struct uvc_video *video)
- 	}
- 
- 	INIT_LIST_HEAD(&video->req_free);
-+	INIT_LIST_HEAD(&video->req_inflight);
- 	video->req_size = 0;
- 	return 0;
- }
-@@ -350,7 +384,8 @@ uvc_video_alloc_requests(struct uvc_video *video)
- 		video->ureq[i].req->complete = uvc_video_complete;
- 		video->ureq[i].req->context = &video->ureq[i];
- 		video->ureq[i].video = video;
--		video->ureq[i].last_buf = NULL;
-+		video->ureq[i].uvc_buf = NULL;
-+		video->ureq[i].is_last = false;
- 
- 		list_add_tail(&video->ureq[i].req->list, &video->req_free);
- 		/* req_size/PAGE_SIZE + 1 for overruns and + 1 for header */
-@@ -385,6 +420,7 @@ static void uvcg_video_pump(struct work_struct *work)
- 	struct usb_request *req = NULL;
- 	struct uvc_buffer *buf;
- 	unsigned long flags;
-+	bool must_interrupt = false;
- 	int ret;
- 
- 	while (video->ep->enabled) {
-@@ -400,6 +436,7 @@ static void uvcg_video_pump(struct work_struct *work)
- 		req = list_first_entry(&video->req_free, struct usb_request,
- 					list);
- 		list_del(&req->list);
-+		must_interrupt = list_empty(&video->req_free);
- 		spin_unlock_irqrestore(&video->req_lock, flags);
- 
- 		/*
-@@ -420,14 +457,14 @@ static void uvcg_video_pump(struct work_struct *work)
- 		 * interrupt load to a quarter but also catches the corner
- 		 * cases, which needs to be handled.
- 		 */
--		if (list_empty(&video->req_free) ||
-+		if (must_interrupt ||
- 		    buf->state == UVC_BUF_STATE_DONE ||
- 		    !(video->req_int_count %
- 		       DIV_ROUND_UP(video->uvc_num_requests, 4))) {
- 			video->req_int_count = 0;
- 			req->no_interrupt = 0;
- 		} else {
--			req->no_interrupt = 1;
-+			req->no_interrupt = 0;
- 		}
- 
- 		/* Queue the USB request */
-@@ -507,6 +544,7 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
- int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
- {
- 	INIT_LIST_HEAD(&video->req_free);
-+	INIT_LIST_HEAD(&video->req_inflight);
- 	spin_lock_init(&video->req_lock);
- 	INIT_WORK(&video->pump, uvcg_video_pump);
- 
-@@ -527,4 +565,3 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
- 			V4L2_BUF_TYPE_VIDEO_OUTPUT, &video->mutex);
- 	return 0;
- }
--
--- 
+T24gVGh1LCBBcHIgMTMsIDIwMjMsIFdlc2xleSBDaGVuZyB3cm90ZToNCj4gSXQgd2FzIG9ic2Vy
+dmVkIHRoYXQgdGhlcmUgYXJlIGhvc3RzIHRoYXQgbWF5IGNvbXBsZXRlIHBlbmRpbmcgU0VUVVAN
+Cj4gdHJhbnNhY3Rpb25zIGJlZm9yZSB0aGUgc3RvcCBhY3RpdmUgdHJhbnNmZXJzIGFuZCBjb250
+cm9sbGVyIGhhbHQgb2NjdXJzLA0KPiBsZWFkaW5nIHRvIGxpbmdlcmluZyBlbmR4ZmVyIGNvbW1h
+bmRzIG9uIERFUHMgb24gc3Vic2VxdWVudCBwdWxsdXAvZ2FkZ2V0DQo+IHN0YXJ0IGl0ZXJhdGlv
+bnMuDQo+IA0KPiAgIGR3YzNfZ2FkZ2V0X2VwX2Rpc2FibGUgICBuYW1lPWVwOGluIGZsYWdzPTB4
+MzAwOSAgZGlyZWN0aW9uPTENCj4gICBkd2MzX2dhZGdldF9lcF9kaXNhYmxlICAgbmFtZT1lcDRp
+biBmbGFncz0xICBkaXJlY3Rpb249MQ0KPiAgIGR3YzNfZ2FkZ2V0X2VwX2Rpc2FibGUgICBuYW1l
+PWVwM291dCBmbGFncz0xICBkaXJlY3Rpb249MA0KPiAgIHVzYl9nYWRnZXRfZGlzY29ubmVjdCAg
+IGRlYWN0aXZhdGVkPTAgIGNvbm5lY3RlZD0wICByZXQ9MA0KPiANCj4gVGhlIHNlcXVlbmNlIHNo
+b3dzIHRoYXQgdGhlIFVTQiBnYWRnZXQgZGlzY29ubmVjdCAoZHdjM19nYWRnZXRfcHVsbHVwKDAp
+KQ0KPiByb3V0aW5lIGNvbXBsZXRlZCBzdWNjZXNzZnVsbHksIGFsbG93aW5nIGZvciB0aGUgVVNC
+IGdhZGdldCB0byBwcm9jZWVkIHdpdGgNCj4gYSBVU0IgZ2FkZ2V0IGNvbm5lY3QuICBIb3dldmVy
+LCBpZiB0aGlzIG9jY3VycyB0aGUgc3lzdGVtIHJ1bnMgaW50byBhbg0KPiBpc3N1ZSB3aGVyZToN
+Cj4gDQo+ICAgQlVHOiBzcGlubG9jayBhbHJlYWR5IHVubG9ja2VkIG9uIENQVQ0KPiAgIHNwaW5f
+YnVnKzB4MA0KPiAgIGR3YzNfcmVtb3ZlX3JlcXVlc3RzKzB4Mjc4DQo+ICAgZHdjM19lcDBfb3V0
+X3N0YXJ0KzB4YjANCj4gICBfX2R3YzNfZ2FkZ2V0X3N0YXJ0KzB4MjVjDQo+IA0KPiBUaGlzIGlz
+IGR1ZSB0byB0aGUgcGVuZGluZyBlbmR4ZmVycywgbGVhZGluZyB0byBnYWRnZXQgc3RhcnQgKHcv
+byBsb2NrDQo+IGhlbGQpIHRvIGV4ZWN1dGUgdGhlIHJlbW92ZSByZXF1ZXN0cywgd2hpY2ggd2ls
+bCB1bmxvY2sgdGhlIGR3YzMNCj4gc3BpbmxvY2sgYXMgcGFydCBvZiBnaXZlYmFjay4NCj4gDQo+
+IFRvIG1pdGlnYXRlIHRoaXMsIHJlc29sdmUgdGhlIHBlbmRpbmcgZW5keGZlcnMgb24gdGhlIHB1
+bGx1cCBkaXNhYmxlDQo+IHBhdGggYnkgcmUtbG9jYXRpbmcgdGhlIFNFVFVQIHBoYXNlIGNoZWNr
+IGFmdGVyIHN0b3AgYWN0aXZlIHRyYW5zZmVycywgc2luY2UNCj4gdGhhdCBpcyB3aGVyZSB0aGUg
+RFdDM19FUF9ERUxBWV9TVE9QIGlzIHBvdGVudGlhbGx5IHNldC4gIFRoaXMgYWxzbyBhbGxvd3MN
+Cj4gZm9yIGhhbmRsaW5nIG9mIGEgaG9zdCB0aGF0IG1heSBiZSB1bnJlc3BvbnNpdmUgYnkgdXNp
+bmcgdGhlIGNvbXBsZXRpb24NCj4gdGltZW91dCB0byB0cmlnZ2VyIHRoZSBzdGFsbCBhbmQgcmVz
+dGFydCBmb3IgRVAwLg0KPiANCj4gRml4ZXM6IGM5NjY4Mzc5OGUyNyAoInVzYjogZHdjMzogZXAw
+OiBEb24ndCBwcmVwYXJlIGJleW9uZCBTZXR1cCBzdGFnZSIpDQo+IENjOiBzdGFibGVAdmdlci5r
+ZXJuZWwub3JnDQo+IFNpZ25lZC1vZmYtYnk6IFdlc2xleSBDaGVuZyA8cXVpY193Y2hlbmdAcXVp
+Y2luYy5jb20+DQo+IC0tLQ0KPiAgZHJpdmVycy91c2IvZHdjMy9nYWRnZXQuYyB8IDQ5ICsrKysr
+KysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0tLS0tLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDMy
+IGluc2VydGlvbnMoKyksIDE3IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZl
+cnMvdXNiL2R3YzMvZ2FkZ2V0LmMgYi9kcml2ZXJzL3VzYi9kd2MzL2dhZGdldC5jDQo+IGluZGV4
+IDNjNjNmYTk3YTY4MC4uYmU4NGMxMzNmMGQ3IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3VzYi9k
+d2MzL2dhZGdldC5jDQo+ICsrKyBiL2RyaXZlcnMvdXNiL2R3YzMvZ2FkZ2V0LmMNCj4gQEAgLTI1
+MjgsMjkgKzI1MjgsMTcgQEAgc3RhdGljIGludCBfX2R3YzNfZ2FkZ2V0X3N0YXJ0KHN0cnVjdCBk
+d2MzICpkd2MpOw0KPiAgc3RhdGljIGludCBkd2MzX2dhZGdldF9zb2Z0X2Rpc2Nvbm5lY3Qoc3Ry
+dWN0IGR3YzMgKmR3YykNCj4gIHsNCj4gIAl1bnNpZ25lZCBsb25nIGZsYWdzOw0KPiArCWludCBy
+ZXQ7DQo+ICANCj4gIAlzcGluX2xvY2tfaXJxc2F2ZSgmZHdjLT5sb2NrLCBmbGFncyk7DQo+ICAJ
+ZHdjLT5jb25uZWN0ZWQgPSBmYWxzZTsNCj4gIA0KPiAgCS8qDQo+IC0JICogUGVyIGRhdGFib29r
+LCB3aGVuIHdlIHdhbnQgdG8gc3RvcCB0aGUgZ2FkZ2V0LCBpZiBhIGNvbnRyb2wgdHJhbnNmZXIN
+Cj4gLQkgKiBpcyBzdGlsbCBpbiBwcm9jZXNzLCBjb21wbGV0ZSBpdCBhbmQgZ2V0IHRoZSBjb3Jl
+IGludG8gc2V0dXAgcGhhc2UuDQo+ICsJICogQXR0ZW1wdCB0byBlbmQgcGVuZGluZyBTRVRVUCBz
+dGF0dXMgcGhhc2UsIGFuZCBub3Qgd2FpdCBmb3IgdGhlDQo+ICsJICogZnVuY3Rpb24gdG8gZG8g
+c28uDQo+ICAJICovDQo+IC0JaWYgKGR3Yy0+ZXAwc3RhdGUgIT0gRVAwX1NFVFVQX1BIQVNFKSB7
+DQo+IC0JCWludCByZXQ7DQo+IC0NCj4gLQkJaWYgKGR3Yy0+ZGVsYXllZF9zdGF0dXMpDQo+IC0J
+CQlkd2MzX2VwMF9zZW5kX2RlbGF5ZWRfc3RhdHVzKGR3Yyk7DQo+IC0NCj4gLQkJcmVpbml0X2Nv
+bXBsZXRpb24oJmR3Yy0+ZXAwX2luX3NldHVwKTsNCj4gLQ0KPiAtCQlzcGluX3VubG9ja19pcnFy
+ZXN0b3JlKCZkd2MtPmxvY2ssIGZsYWdzKTsNCj4gLQkJcmV0ID0gd2FpdF9mb3JfY29tcGxldGlv
+bl90aW1lb3V0KCZkd2MtPmVwMF9pbl9zZXR1cCwNCj4gLQkJCQltc2Vjc190b19qaWZmaWVzKERX
+QzNfUFVMTF9VUF9USU1FT1VUKSk7DQo+IC0JCXNwaW5fbG9ja19pcnFzYXZlKCZkd2MtPmxvY2ss
+IGZsYWdzKTsNCj4gLQkJaWYgKHJldCA9PSAwKQ0KPiAtCQkJZGV2X3dhcm4oZHdjLT5kZXYsICJ0
+aW1lZCBvdXQgd2FpdGluZyBmb3IgU0VUVVAgcGhhc2VcbiIpOw0KPiAtCX0NCj4gKwlpZiAoZHdj
+LT5kZWxheWVkX3N0YXR1cykNCj4gKwkJZHdjM19lcDBfc2VuZF9kZWxheWVkX3N0YXR1cyhkd2Mp
+Ow0KPiAgDQo+ICAJLyoNCj4gIAkgKiBJbiB0aGUgU3lub3BzeXMgRGVzaWduV2FyZSBDb3JlcyBV
+U0IzIERhdGFib29rIFJldi4gMy4zMGENCj4gQEAgLTI1NjMsNiArMjU1MSwzMyBAQCBzdGF0aWMg
+aW50IGR3YzNfZ2FkZ2V0X3NvZnRfZGlzY29ubmVjdChzdHJ1Y3QgZHdjMyAqZHdjKQ0KPiAgCV9f
+ZHdjM19nYWRnZXRfc3RvcChkd2MpOw0KPiAgCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJmR3Yy0+
+bG9jaywgZmxhZ3MpOw0KPiAgDQo+ICsJLyoNCj4gKwkgKiBQZXIgZGF0YWJvb2ssIHdoZW4gd2Ug
+d2FudCB0byBzdG9wIHRoZSBnYWRnZXQsIGlmIGEgY29udHJvbCB0cmFuc2Zlcg0KPiArCSAqIGlz
+IHN0aWxsIGluIHByb2Nlc3MsIGNvbXBsZXRlIGl0IGFuZCBnZXQgdGhlIGNvcmUgaW50byBzZXR1
+cCBwaGFzZS4NCj4gKwkgKiBJbiBjYXNlIHRoZSBob3N0IGlzIHVucmVzcG9uc2l2ZSB0byBhIFNF
+VFVQIHRyYW5zYWN0aW9uLCBmb3JjZWZ1bGx5DQo+ICsJICogc3RhbGwgdGhlIHRyYW5zZmVyLCBh
+bmQgbW92ZSBiYWNrIHRvIHRoZSBTRVRVUCBwaGFzZSwgc28gdGhhdCBhbnkNCj4gKwkgKiBwZW5k
+aW5nIGVuZHhmZXJzIGNhbiBiZSBleGVjdXRlZC4NCj4gKwkgKi8NCj4gKwlpZiAoZHdjLT5lcDBz
+dGF0ZSAhPSBFUDBfU0VUVVBfUEhBU0UpIHsNCj4gKwkJcmVpbml0X2NvbXBsZXRpb24oJmR3Yy0+
+ZXAwX2luX3NldHVwKTsNCj4gKw0KPiArCQlyZXQgPSB3YWl0X2Zvcl9jb21wbGV0aW9uX3RpbWVv
+dXQoJmR3Yy0+ZXAwX2luX3NldHVwLA0KPiArCQkJCW1zZWNzX3RvX2ppZmZpZXMoRFdDM19QVUxM
+X1VQX1RJTUVPVVQpKTsNCj4gKwkJaWYgKHJldCA9PSAwKSB7DQo+ICsJCQl1bnNpZ25lZCBpbnQg
+ICAgZGlyOw0KPiArDQo+ICsJCQlkZXZfd2Fybihkd2MtPmRldiwgIndhaXQgZm9yIFNFVFVQIHBo
+YXNlIHRpbWVkIG91dFxuIik7DQo+ICsJCQlzcGluX2xvY2tfaXJxc2F2ZSgmZHdjLT5sb2NrLCBm
+bGFncyk7DQo+ICsJCQlkaXIgPSAhIWR3Yy0+ZXAwX2V4cGVjdF9pbjsNCj4gKwkJCWlmIChkd2Mt
+PmVwMHN0YXRlID09IEVQMF9EQVRBX1BIQVNFKQ0KPiArCQkJCWR3YzNfZXAwX2VuZF9jb250cm9s
+X2RhdGEoZHdjLCBkd2MtPmVwc1tkaXJdKTsNCj4gKwkJCWVsc2UNCj4gKwkJCQlkd2MzX2VwMF9l
+bmRfY29udHJvbF9kYXRhKGR3YywgZHdjLT5lcHNbIWRpcl0pOw0KPiArCQkJZHdjM19lcDBfc3Rh
+bGxfYW5kX3Jlc3RhcnQoZHdjKTsNCj4gKwkJCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJmR3Yy0+
+bG9jaywgZmxhZ3MpOw0KPiArCQl9DQo+ICsJfQ0KPiArDQo+ICAJLyoNCj4gIAkgKiBOb3RlOiBp
+ZiB0aGUgR0VWTlRDT1VOVCBpbmRpY2F0ZXMgZXZlbnRzIGluIHRoZSBldmVudCBidWZmZXIsIHRo
+ZQ0KPiAgCSAqIGRyaXZlciBuZWVkcyB0byBhY2tub3dsZWRnZSB0aGVtIGJlZm9yZSB0aGUgY29u
+dHJvbGxlciBjYW4gaGFsdC4NCg0KQWNrZWQtYnk6IFRoaW5oIE5ndXllbiA8VGhpbmguTmd1eWVu
+QHN5bm9wc3lzLmNvbT4NCg0KVGhhbmtzLA0KVGhpbmg=
