@@ -2,73 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554C26E5FAE
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Apr 2023 13:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F616E5FC9
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Apr 2023 13:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjDRLTl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Apr 2023 07:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
+        id S229598AbjDRL0U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Apr 2023 07:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjDRLTj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Apr 2023 07:19:39 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDC24C29;
-        Tue, 18 Apr 2023 04:19:05 -0700 (PDT)
-Received: from [192.168.1.103] (31.173.80.61) by msexch01.omp.ru (10.188.4.12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 18 Apr
- 2023 14:17:16 +0300
-Subject: Re: [PATCH] usb: phy: phy-tahvo: fix memory leak in tahvo_usb_probe()
-To:     Li Yang <lidaxian@hust.edu.cn>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-CC:     Dongliang Mu <dzm91@hust.edu.cn>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230418090758.18756-1-lidaxian@hust.edu.cn>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <96c7edf5-e1cc-03f6-ee52-ef373ae9d820@omp.ru>
-Date:   Tue, 18 Apr 2023 14:17:15 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S229504AbjDRL0T (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Apr 2023 07:26:19 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DC11A4
+        for <linux-usb@vger.kernel.org>; Tue, 18 Apr 2023 04:26:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681817178; x=1713353178;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JPPAD0VSWJWkbNeWNnSf+XtCF61+Scc5aoXaxcvRWVE=;
+  b=MN8ZxczQQg4t8qNwKui1G+uc+gF5hNotsweqPYtO7F/sFjV6U30a1XpP
+   68mZWQDI23TAKqsT9nttOArT5t4AXfHo/y1tDz6anLE9jrIrfPJi8bgYh
+   dmK3fdFwMHrVDDHPumVJtZLW0RJ065DIWtowKmQVdCg+ZlS77yEW+P1lX
+   Egmafb2aPKahPPireTjSQDhTdvndQnz6wH26PYiVng9po0XyN8jchDNPy
+   bzn+yAbLNJw6mbNmdzMGfrUCKm/NKQqAxZDjU9aSlvDCEgiW9WZXZD5E3
+   YrgYt7wMdhfRl07rb1O+itFLlaNChf6f+seaDBBPoks8CDpDdjHO+TuuR
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="408042095"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="408042095"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 04:26:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="815173376"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="815173376"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 18 Apr 2023 04:26:06 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 7E9CA1A8; Tue, 18 Apr 2023 14:26:11 +0300 (EEST)
+Date:   Tue, 18 Apr 2023 14:26:11 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Subject: [GIT PULL] Thunderbolt/USB4 changes for v6.4 merge window
+Message-ID: <20230418112611.GF66750@black.fi.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20230418090758.18756-1-lidaxian@hust.edu.cn>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.80.61]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 04/18/2023 10:57:34
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 176790 [Apr 18 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 509 509 b12bcaa7ba85624b485f2b6b92324b70964a1c65
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;31.173.80.61:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.80.61
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 04/18/2023 11:00:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 4/18/2023 7:17:00 AM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,49 +63,47 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+Hi Greg,
 
-On 4/18/23 12:07 PM, Li Yang wrote:
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
-> Smatch reports:
-> drivers/usb/phy/phy-tahvo.c: tahvo_usb_probe()
-> warn: missing unwind goto?
-> 
-> After geting irq, if ret < 0, it will return without error handling to
-> free memory.
-> Just add error handling to fix this problem.
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-   Oops, I'm sorry for missing that one...
+are available in the Git repository at:
 
-> Fixes: 0d45a1373e66 ("usb: phy: tahvo: add IRQ check")
-> Signed-off-by: Li Yang <lidaxian@hust.edu.cn>
-> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
-> ---
-> The issue is found by static analysis, and the patch remains untest.
-> ---
->  drivers/usb/phy/phy-tahvo.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/phy/phy-tahvo.c b/drivers/usb/phy/phy-tahvo.c
-> index f2d2cc586c5b..184a5f3d7473 100644
-> --- a/drivers/usb/phy/phy-tahvo.c
-> +++ b/drivers/usb/phy/phy-tahvo.c
-> @@ -390,8 +390,11 @@ static int tahvo_usb_probe(struct platform_device *pdev)
->  	dev_set_drvdata(&pdev->dev, tu);
->  
->  	tu->irq = ret = platform_get_irq(pdev, 0);
-> -	if (ret < 0)
-> -		return ret;
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev, "could not get irq: %d\n",
-> +				ret);
+  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.4-rc1
 
-   Adding the error message needs another patch, strictly speaking...
+for you to fetch changes up to 1f15af76784cc902a1fe85e864c7ddf3d74b4130:
 
-> +		goto err_remove_phy;
-> +	}
->  	ret = request_threaded_irq(tu->irq, NULL, tahvo_usb_vbus_interrupt,
->  				   IRQF_ONESHOT,
->  				   "tahvo-vbus", tu);
+  thunderbolt: Introduce usb4_port_sb_opcode_err_to_errno() helper (2023-04-03 08:37:18 +0300)
 
-MBR, Sergey
+----------------------------------------------------------------
+thunderbolt: Changes for v6.4 merge window
+
+This includes following Thunderbolt/USB4 changes for the v6.4 merge
+window:
+
+  - Refactoring of DROM read code paths
+  - Convert to use SI units from units.h
+  - A couple of cleanups
+
+All these have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Andy Shevchenko (3):
+      thunderbolt: Get rid of redundant 'else'
+      thunderbolt: Make use of SI units from units.h
+      thunderbolt: Introduce usb4_port_sb_opcode_err_to_errno() helper
+
+Mario Limonciello (2):
+      thunderbolt: use `tb_eeprom_get_drom_offset` to discover DROM offset
+      thunderbolt: Refactor DROM reading
+
+ drivers/thunderbolt/acpi.c    |   2 +-
+ drivers/thunderbolt/ctl.c     |   2 +-
+ drivers/thunderbolt/eeprom.c  | 204 ++++++++++++++++++++++--------------------
+ drivers/thunderbolt/nhi.c     |   3 +-
+ drivers/thunderbolt/switch.c  |   4 +-
+ drivers/thunderbolt/usb4.c    |  52 +++++------
+ drivers/thunderbolt/xdomain.c |  24 +++--
+ 7 files changed, 149 insertions(+), 142 deletions(-)
