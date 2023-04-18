@@ -2,51 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1CE06E5EFC
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Apr 2023 12:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 989196E5F0D
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Apr 2023 12:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbjDRKhl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Apr 2023 06:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
+        id S231309AbjDRKkr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Apr 2023 06:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbjDRKhk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Apr 2023 06:37:40 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99BB4234;
-        Tue, 18 Apr 2023 03:37:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681814257; x=1713350257;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=olvbMIAds1r3OfML+pqLtKkuDpNWkp+Wct/C4ieNxcI=;
-  b=GVH8MV/3vPGmvq09YKu1b97I1oX0/kMeU8L014SD3DPYWdI/X0MGAtYe
-   UiUo8fPh3uqwfybhtV0hmpqhb+tTD8HiN0Vt6siW1Y4/7Ow+pqvH6S20Q
-   lxRFEnHeJ6AgDGlpklE+4vC3GNSkFqCU6Bhd9IEHyantbFPWwJMYa18fW
-   nsz+dW9wuluJSpvq21bSfCt3OI4dLWDZI4dctlqq+Yvmuuf515KjoMWUL
-   17r6+iq0YmagABGJ9dqGHni2l38sdqqzimkl5JdZbnzYzrv1xKlWv9BBI
-   YIP26pYi/6KjjN3+NvcJyf+Exe2/kz1NaXHK6wToQkwXC9XjPLt0CD3I3
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="408034212"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="408034212"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 03:37:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="834837004"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="834837004"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 18 Apr 2023 03:37:33 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 18 Apr 2023 13:37:33 +0300
-Date:   Tue, 18 Apr 2023 13:37:33 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+        with ESMTP id S230307AbjDRKkq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Apr 2023 06:40:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A22D449D;
+        Tue, 18 Apr 2023 03:40:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0417C62FEF;
+        Tue, 18 Apr 2023 10:40:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4B0C433EF;
+        Tue, 18 Apr 2023 10:40:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1681814444;
+        bh=xDMKA9FoRNcqFbWL1PKwxfPqy4WBygGisOwZl5zE7Is=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jFdJtxow6kjLoGtpMzRNsQEcRYeZtKDxpr+YN8SCY3LpbqqWV24pgtFCBg0XwYXQP
+         ZcDZ1ETAbE1K7I8zDBOF2Bnqrbgf//0tIzEBfMd/p6kQSbw9bq77PwV2+IKYpuKFYu
+         M4m8HG7NuGM9fvUqpwGxgwCi/nXj5MIsJr30AmIM=
+Date:   Tue, 18 Apr 2023 12:40:41 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2] usb: typec: intel_pmc_mux: Expose IOM port status to
  debugfs
-Message-ID: <ZD5y7anCaWAiDDGV@kuha.fi.intel.com>
+Message-ID: <2023041845-eastcoast-precinct-3b8c@gregkh>
 References: <20230414081910.1336405-1-rajat.khandelwal@linux.intel.com>
  <ZDo2mzmjZpWIKbxk@kroah.com>
  <2c960f0c-5cbb-4c2d-07cb-dafd94d22414@linux.intel.com>
@@ -58,10 +47,10 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <19c137ac-ac95-e6da-27d8-27d9cc8e9e40@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -164,15 +153,12 @@ On Tue, Apr 18, 2023 at 03:53:46PM +0530, Rajat Khandelwal wrote:
 > We still didn't arrive on a culminating note. :)
 > What do you suggest I could do for now? This would be a useful debug tool
 > for us since we deal with it quite often.
-> 
+
+Then do it properly please.  Look at the /sys/kernel/debug/usb/
+directory for examples, specifically /sys/kernel/debug/xhci/.
+
 > If we don't have anything constraining this for now, can we keep it like
-> this? Let's ameliorate it once such systems actually arrive.
-> Suggestions?
+> this?
 
-You can use the device name. Please check for example how
-drivers/usb/typec/tcpm/fusb302.c creates the directory.
+No.
 
-thanks,
-
--- 
-heikki
