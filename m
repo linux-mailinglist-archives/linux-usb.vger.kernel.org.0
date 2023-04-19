@@ -2,70 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4ED16E74CC
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Apr 2023 10:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EED56E75BE
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Apr 2023 10:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232324AbjDSIQx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 19 Apr 2023 04:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56968 "EHLO
+        id S232783AbjDSIz3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Apr 2023 04:55:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjDSIQw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Apr 2023 04:16:52 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCED100;
-        Wed, 19 Apr 2023 01:16:50 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 12E2824DBBD;
-        Wed, 19 Apr 2023 16:16:42 +0800 (CST)
-Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 19 Apr
- 2023 16:16:41 +0800
-Received: from [192.168.125.108] (113.72.144.253) by EXMBX171.cuchost.com
- (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 19 Apr
- 2023 16:16:40 +0800
-Message-ID: <f7e07efc-c274-4fc2-20c1-4c5e2e1c989e@starfivetech.com>
-Date:   Wed, 19 Apr 2023 16:16:40 +0800
+        with ESMTP id S232848AbjDSIzU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Apr 2023 04:55:20 -0400
+X-Greylist: delayed 497 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Apr 2023 01:55:12 PDT
+Received: from mail-200167.simplelogin.co (mail-200167.simplelogin.co [176.119.200.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3431026E
+        for <linux-usb@vger.kernel.org>; Wed, 19 Apr 2023 01:55:11 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 08:46:42 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=8shield.net; s=dkim;
+        t=1681894012;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=svMD8qCdCdMeuX7byvejAfnFeoEkqnuCAiytCVsrX9I=;
+        b=BN91Nhk3WNk2wdWndHhRGlVATg8Gk5ZPGxw42M5y6/jyMpQNUePNX8WM5K58t1WBZzOTWe
+        5JwvONJVdlZTvvE5ClXvoJcR5oqWAijcLEg6Bn0t5YJriwoh0eQkFV4CiL54glBZe5iMzE
+        Ep+DYCoNI7BOrbb+34rIJHlnP5fpkU0=
+Subject: Re: btusb driver need to be unloaded and reloaded after boot & lag
+ issue
+In-Reply-To: <dbbf4556-2719-5827-efbd-da9e87c0de40@molgen.mpg.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v4 0/7] Add JH7110 USB and USB PHY driver support
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>,
-        "Kishon Vijay Abraham I" <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Peter Chen" <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Mason Huo" <mason.huo@starfivetech.com>
-References: <20230406015216.27034-1-minda.chen@starfivetech.com>
- <517670ca-ba2e-811e-3eb2-7f38011c9690@linaro.org>
- <985d0a57-1fc8-5725-4d3a-33dcc5d49d67@starfivetech.com>
- <5953bc83-9609-6d12-7e9b-ca5202151fb3@linaro.org>
- <a75ed45c-55c4-ff94-86f9-313ec79720ac@starfivetech.com>
- <c79e7d05-0b62-40e6-0864-35b2821c69e7@linaro.org>
-From:   Minda Chen <minda.chen@starfivetech.com>
-In-Reply-To: <c79e7d05-0b62-40e6-0864-35b2821c69e7@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [113.72.144.253]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX171.cuchost.com
- (172.16.6.91)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; protocol="application/pgp-signature";
+ micalg=pgp-sha512;
+ boundary="------58bb509cbf61eb58031cdc6e0e682bf96f7bc10ce8327a5812e43e037274263f";
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
+From:   help.7ocym@8shield.net
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        regressions@lists.linux.dev
+Message-ID: <168189401011.9.1190609165422904967.121288919@8shield.net>
+References: <168133719213.7.14774994518515251513.119182329@8shield.net>
+ <dbbf4556-2719-5827-efbd-da9e87c0de40@molgen.mpg.de>
+X-SimpleLogin-Type: Reply
+X-SimpleLogin-EmailLog-ID: 121288930
+X-SimpleLogin-Want-Signing: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,35 +55,151 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------58bb509cbf61eb58031cdc6e0e682bf96f7bc10ce8327a5812e43e037274263f
+Content-Type: multipart/mixed;boundary=---------------------d434d8696c798ef5f060dccd015a521b
+
+-----------------------d434d8696c798ef5f060dccd015a521b
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;charset=utf-8
+
+Hi,
+
+------- Original Message -------
+On Thursday, April 13th, 2023 at 7:39 AM, Paul Menzel - pmenzel at molgen.=
+mpg.de <pmenzel_at_molgen_mpg_de_rislbjit@simplelogin.co> wrote:
 
 
-On 2023/4/18 20:22, Krzysztof Kozlowski wrote:
-> On 18/04/2023 13:12, Minda Chen wrote:
->>>>>>
->>>>>>
->>>>>> base-commit: 0ec57cfa721fbd36b4c4c0d9ccc5d78a78f7fa35
->>>>>> prerequisite-patch-id: 24a6e3442ed1f5454ffb4a514cfd768436a87090
->>>>>> prerequisite-patch-id: 55390537360f25c8b9cbfdc30b73ade004f436f7
->>>>>
->>>>> fatal: bad object 55390537360f25c8b9cbfdc30b73ade004f436f7
->>>>>
->>>>> What commits do you reference? How are they helpful?
->>>>>
->>>> I use "git format-patch --base=(commit) to generate patchset.
->>>> Maybe I set the wrong base commit.
->>>
->>> How are they helpful if these are private commits?
->>>> Best regards,
->>> Krzysztof
->>>
->> base-commit is not private commits. 
->> I should set base commit 197b6b60ae7bc51dd0814953c562833143b292aa. This is 6.3-rc4 commit.
->> But I set 0ec57cfa721fbd36b4c4c0d9ccc5d78a78f7fa35. This is 6.3-rc4's previous commit.
-> 
-> You missed the point. I am not talking about base commit. I am talking
-> about your prerequisites, which are useless. What can we do with such SHA?
-> 
-> Best regards,
-> Krzysztof
-> 
-OK， I will delete them
+> [Cc: +regressions@lists.linux.dev]
+>
+> Dear JLM,
+>
+>
+> Am 13.04.23 um 00:06 schrieb help.7ocym@8shield.net:
+>
+> > sorry to address both list, but this issue seems related, without
+> > knowing where lies the issue > my hardware : https://wiki.gentoo.org/w=
+iki/Lenovo_Yoga_900
+> > I use the pre-built gentoo linux kernel,
+> > 6.2.8-gentoo-dist #1 SMP PREEMPT_DYNAMIC Wed Mar 22 17:15:39 -00 2023 =
+x86_64 Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz GenuineIntel GNU/Linux
+> >
+> > since a few update (sadly I didn't noted the latest kernel version
+> > that didn't had the issue), after a boot, the bluetooth isn't
+> > working, nothing bad in dmesg, I just have to unload btusb module and
+> > modprobe it again to have bluetooth working again...
+> >
+> > after a suspend to ram, I have to power off-power on the bluetooth to
+> > have it work again (bluetoothctl power off; bluetoothctl power on)
+> >
+> > bluetooth mouse can also be extremely laggy sometimes,but without
+> > error message in dmesg, most of the time `bluetoothctl power` off-on
+> > cycling do solve the issue....
+> >
+> > I also included the usb mailing list because it might be related to
+> > some behavior I noticed :
+> >
+> > I have usb3.0 micro sd card reader (SanDisk MobileMate UHS-I microSD
+> > Reader/Writer USB 3.0 Reader, Kingston MobileLite Plus (MLPM) microSD
+> > Card Reader USB 3.1 microSDHC/SDXC UHS-II, for example) and some
+> > extra fast micro sd cards (like sandisk extrem 512G), when
+> > transferring data the read rate can be as high as 110Mo/s and write
+> > 70Mo/s sustained, nothing impressive but when such rate is achieved
+> > for a long time (big file transfer) either reading only access,
+> > writing only access or read write, the usb bus become unusable, I
+> > can't even use a usb mouse connected to it by wire... even if cpu
+> > usage is really low (less than 10%) I don't have the issue if I
+> > connect a M2 usb3 flash drive, with comparable transfert speed... so
+> > not related to some bus over usage...
+> >
+> > so I suspect that there is an issue with the usb driver, and that
+> > maybe the bluetooth issue can be related to the usb issue, since the
+> > bluetooth controller is on the usb bus on the laptop >
+> > the transfer issue of usb is much more older than the bluetooth
+> > issue, it's approximative, but : > - the btusb boot issue is about 3 m=
+onth old,
+> > - the suspend/resume issue of bluetooth is more than a year old
+> > - the usb transfer issue as more than a year...
+> >
+> > I'll gladly provide any useful information, can also do patch tries...
+>
+> As you use Gentoo and are able to build your own Linux kernel, the
+> fastest way to get these issues addressed is to bisect them. To shorten
+> the test cycles, I recommend to try, if you can reproduce the issues in
+> QEMU and passing through the problematic devices to the VM [1][2].
+>
+> I also recommend to start a separate thread for each issue and, as these
+> seem to be regressions, also keep the regression folks in the loop [3].
+>
+>
+> Kind regards,
+>
+> Paul
+>
+>
+> [1]:
+> https://lore.kernel.org/all/5891f0d5-8d51-9da5-7663-718f301490b1@molgen.=
+mpg.de/
+> (The commands were working for after all, and the device didn=E2=80=99t
+> show up due to a (second) Linux kernel regression.)
+> [2]: https://station.eciton.net/qemu-usb-host-device-pass-through.html
+> [3]:
+> https://www.kernel.org/doc/html/latest/admin-guide/reporting-regressions=
+.html
+
+thanks for the reply,
+after upgrade to 6.2.11 version, =
+
+
+- seems that the issue at boot of btusb module is gone... I don't have any=
+more to unload btusb module after a boot... so that's great news! =
+
+
+- the bluetooth resumes also after a suspend S3 (suspend to ram)! so great=
+ news again! (I've to check for suspend to disk, but I'm confident about s=
+uccess)
+
+I still have to do some check with the micro usb readers to see if the bug=
+ "bus monopolization" is still present, so far so good!
+
+
+
+Sent with Proton Mail secure email.
+
+-----------------------d434d8696c798ef5f060dccd015a521b
+Content-Type: application/pgp-keys; filename="publickey - jl.malet@protonmail.com - 0xA25F20CF.asc"; name="publickey - jl.malet@protonmail.com - 0xA25F20CF.asc"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="publickey - jl.malet@protonmail.com - 0xA25F20CF.asc"; name="publickey - jl.malet@protonmail.com - 0xA25F20CF.asc"
+
+LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgp4ak1FWkRHNGx4WUpLd1lCQkFI
+YVJ3OEJBUWRBc0o4TVNPaVhCR2tKWnlzYm52cExJN3NXR0xHaXNXeDQKbmxlUkRiRlpiRy9OTVdw
+c0xtMWhiR1YwUUhCeWIzUnZibTFoYVd3dVkyOXRJRHhxYkM1dFlXeGxkRUJ3CmNtOTBiMjV0WVds
+c0xtTnZiVDdDakFRUUZnb0FQZ1dDWkRHNGx3UUxDUWNJQ1pEVy9aZ2x2N3RnQ2dNVgpDQW9FRmdB
+Q0FRSVpBUUtiQXdJZUFSWWhCS0pmSU05bm5OS2RzS2RMcnRiOW1DVy91MkFLQUFES3lnRUEKdlpr
+VjRWV3l4dXJxUWVOSDM2UmhncjR2QVdUQ1RRQjl6Z1ZrTXFFTHF5VUEvUk9UbFJOMnFVQjAzdE5r
+CmRwZXJPV0VQa3JvWG1XRHBYWU0rMldOWk1uWVB6amdFWkRHNGx4SUtLd1lCQkFHWFZRRUZBUUVI
+UURJWQpIOHpvdytIeFowSkUyeHJkcy96WlRIa3pZS2lmc0RUUXVRL2o0dEFKQXdFSUI4SjRCQmdX
+Q0FBcUJZSmsKTWJpWENaRFcvWmdsdjd0Z0NnS2JEQlloQktKZklNOW5uTktkc0tkTHJ0YjltQ1cv
+dTJBS0FBQmFqd0Q4CkM5VmNtRWVTWmpyNFNabWlOSFM2MUtqZlZlaEZJYkJmZnEzTUVCZGFxcHdB
+LzJHSTY4a010MzdOSkhTcAo1Q2Fid2UrZ05HZVg5S3RESUxjS2NUbVRjVmNECj04SW9hCi0tLS0t
+RU5EIFBHUCBQVUJMSUMgS0VZIEJMT0NLLS0tLS0K
+-----------------------d434d8696c798ef5f060dccd015a521b--
+
+--------58bb509cbf61eb58031cdc6e0e682bf96f7bc10ce8327a5812e43e037274263f
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: ProtonMail
+
+wnUEARYKACcFgmQ/qmIJkNb9mCW/u2AKFiEEol8gz2ec0p2wp0uu1v2YJb+7
+YAoAAK/OAP0XIqIp32TYnR4LaBq82EkLkqgQdADqzn2qFgOQuNb+kQEAgfZO
+/gl/jcYzocTpyJ/ew05D5D2OXkZoI4EhtqVKIgk=
+=ogYk
+-----END PGP SIGNATURE-----
+
+
+--------58bb509cbf61eb58031cdc6e0e682bf96f7bc10ce8327a5812e43e037274263f--
+
+
