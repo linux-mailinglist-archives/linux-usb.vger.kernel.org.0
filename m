@@ -2,143 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB4B6E729B
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Apr 2023 07:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 281E16E72EF
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Apr 2023 08:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbjDSF0Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Apr 2023 01:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40844 "EHLO
+        id S231532AbjDSGPA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Apr 2023 02:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230393AbjDSF0Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Apr 2023 01:26:24 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CE55B85
-        for <linux-usb@vger.kernel.org>; Tue, 18 Apr 2023 22:26:22 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-32b102ca487so18177495ab.2
-        for <linux-usb@vger.kernel.org>; Tue, 18 Apr 2023 22:26:22 -0700 (PDT)
+        with ESMTP id S231796AbjDSGOr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Apr 2023 02:14:47 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDB91B5
+        for <linux-usb@vger.kernel.org>; Tue, 18 Apr 2023 23:14:37 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-2fde2879eabso826906f8f.1
+        for <linux-usb@vger.kernel.org>; Tue, 18 Apr 2023 23:14:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681881982; x=1684473982;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ct3Na6M/xT5xpruNbmycXumlxBn9w5eid+GwUOWewnk=;
-        b=3T54kjcdFkac8pEN4jedjpZXIy1QfnwFLQjWT0ZGVen34STS1jGIJQix5ZSkRNlpjN
-         tHmFgE0JBye2JtXSYck+iiP6HgCYsDwG9KJVrYx69e3qfwlZTeaMt5PmcklavbjNn3DR
-         MiusSj/P77BNE0YEquRMgo0IdQePoSa+ITA5YgJ4JMZUn8Ngh/5IeFWBYUqoijNYbhI1
-         SD129+epW0aDHDArr1l2vi4zENYRiQtMIWQYu3yNeBLhjSY1zsXA+H5PqeY3FnGumF5c
-         JkFMd1qivAeUidSFAd81edG1FdTBbUrLGzSXWvILIIUxqkBSVne3iS79nYU6eS5ArmW0
-         i7bw==
+        d=gmail.com; s=20221208; t=1681884876; x=1684476876;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SQwYf25Qlfs+qKG9Lr1OKtT5gdFHla7zNr/1YdTEv6I=;
+        b=FQxjN73Pj5KGIQV2CnO/5RrVnmvgLW+qQ6C+TnX5UQK6Pwk/LM7ztPsgC+sSUsF3PR
+         qRYi8uA7UdHH5y+YSkDH2XuTrVsJOg5zQKj7/zQ/Lp+3GJovkuk6eqM0hPT+xRdTWz7L
+         tj9lI1CjqQeiVcE0gkI3rJLElsRbBSBg+Aps7496LwGeO1dQIlmusP+7mVi0U7G/Dxx+
+         7w9eidKWM+8N+2JZxh3CE/nHtzUM1a5YHkYqd84Vgg/MinPpCBdHsA6hZJuMZSyL+wgH
+         8VBqG41curFpPSjcNSDhurPzvpOMpTdxppqnY9KMe/6JEymnys5yXMDO/HF8g6IvQboS
+         NSDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681881982; x=1684473982;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ct3Na6M/xT5xpruNbmycXumlxBn9w5eid+GwUOWewnk=;
-        b=J0pEZgV+Ds8Hgi2z/fu2gxWhLwCiLIMCAVPzk2LjvDBLUA3VAaBlU7TQvb1eOX4ApB
-         H3fFx3cZMfHXGgWOaihF15uWHJ4ec4RaP85NN/Nw9SoaqWaAzhrkvjgG+NC4+c6aWICs
-         PcIie2R4/5mEzBlbFlnM2gognUoGIcbuBOjJMLY/WBwTqbbNElmfPRk8ZgALtC6xVtbK
-         dwM3lXTy9QVvykrMsUw1fZL2/a2RG3M1tyfb+5a0fhYVL4LhSGOZ3Esjf5xX3zJgfyKT
-         VHWEpqGKO3Zd2OqzxZe8GxJ+jpvVk+NsFTf96+HCuei1a8M9p/qAsznrPfD1K1ZlQDCN
-         uYeA==
-X-Gm-Message-State: AAQBX9cd+KbE4sBRm0my2DYyRMPn72qTZ3C5dZjlOFxzPmVy8Tkb5SOg
-        Cncv9Z3MkVQ5M65Kzhk1b55cxz2UYTSc0EMzFDQFEw==
-X-Google-Smtp-Source: AKy350aen6YZYMq7ANSn/mFZWTH5RiZrUh72EcQirnbmHjSmo0mqMG2GyH8rwuyAs2eGZFPVHmV8POzzCCR/zkGoHng=
-X-Received: by 2002:a92:cd50:0:b0:32a:e399:b984 with SMTP id
- v16-20020a92cd50000000b0032ae399b984mr10185708ilq.7.1681881982186; Tue, 18
- Apr 2023 22:26:22 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681884876; x=1684476876;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SQwYf25Qlfs+qKG9Lr1OKtT5gdFHla7zNr/1YdTEv6I=;
+        b=WQJckl7G9/74K2eZgFPd1wU+e3em2rBskCq6r7ZPkeJrfUv+C4WgiEHS7C5TIjw83g
+         JN5cIjT3WyncCr2t8v+z1krSinJEU1O02raR4iLFLlceS7K60tzsSbKhPbgwOpzAsc1O
+         9SY4ExqqDJBmmhkdSos5PvM+mAhHVG/sZjt3wFMqLK4ewObSni/k6/D0Sw8XhQRz93Vg
+         wpi2pvKrWNAHR3NtQqpFP2UepaAIx1fj2qIe+YxkM5aiGO/wOGK+JOgRpqaAQr5WJPt/
+         2+0F3EOsUt+FnAJosVJOmzer2E/5hEu6z93cL9J/U8XZ8aqSIOLYIx2DzDY4EP+NcJyj
+         yEhQ==
+X-Gm-Message-State: AAQBX9fSow4yv7grNCk+6upLhQokI5YXs7t/tco5auru+rPowDUauUDe
+        nmAiqKBOtYe8X0oR8eDLeU8=
+X-Google-Smtp-Source: AKy350ZKiWvF3vnXAECKoI9j9rtTtW7/t+Y5TrimA6/MGDFGU8paBfjnxm7EmjuwhE6eyDVHSvLZ6A==
+X-Received: by 2002:a5d:428c:0:b0:2ef:ae66:c0e3 with SMTP id k12-20020a5d428c000000b002efae66c0e3mr3419754wrq.12.1681884875935;
+        Tue, 18 Apr 2023 23:14:35 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id a1-20020a05600c224100b003f175b360e5sm1125271wmm.0.2023.04.18.23.14.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 23:14:35 -0700 (PDT)
+From:   kernel test robot <error27@gmail.com>
+X-Google-Original-From: kernel test robot <lkp@intel.com>
+Date:   Wed, 19 Apr 2023 09:14:32 +0300
+To:     oe-kbuild@lists.linux.dev,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     lkp@intel.com, Dan Carpenter <error27@gmail.com>,
+        oe-kbuild-all@lists.linux.dev,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>, linux-usb@vger.kernel.org,
+        Oliver Neukum <oneukum@suse.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>
+Subject: Re: [PATCH v5] usb: dwc3: debugfs: Prevent any register access when
+ devices
+Message-ID: <ZD+GyFCRUc6SdUl+@kadam>
 MIME-Version: 1.0
-References: <CAMHf4WKbi6KBPQztj9FA4kPvESc1fVKrC8G73-cs6tTeQby9=w@mail.gmail.com>
- <ZD1ObUuy8deAvupf@kroah.com> <3a9ee93a-b0ec-ac92-77ab-2956c1c4f434@google.com>
- <20230418024937.h6mipfdvdqomtz36@synopsys.com> <CAMHf4WKzU7uWj5HVHdcBnJ2ugK5cfkk=-38dn7=z1fCwXtegLw@mail.gmail.com>
- <20230418193951.zjwgg25cyhg3lsay@synopsys.com> <CAMHf4WKYzmmqO+7AsUBo+d8AHLKFXugxwh__NYi9grQAJk7VBA@mail.gmail.com>
- <47244f7e-feb5-4958-be14-7fd9f0814566@rowland.harvard.edu>
-In-Reply-To: <47244f7e-feb5-4958-be14-7fd9f0814566@rowland.harvard.edu>
-From:   Avichal Rakesh <arakesh@google.com>
-Date:   Tue, 18 Apr 2023 22:26:11 -0700
-Message-ID: <CAMHf4WL9dOWiw-+V2DQeQ=3jxmk3LHg5ONdWSwcp3Gx0AD17yg@mail.gmail.com>
-Subject: Re: UVC Gadget Driver shows glitched frames with a Linux host
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>,
-        "dan.scally@ideasonboard.com" <dan.scally@ideasonboard.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Jayant Chowdhary <jchowdhary@google.com>,
-        "Eino-Ville Talvala (Eddy)" <etalvala@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418121835.17550-1-quic_ugoswami@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 6:07=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Tue, Apr 18, 2023 at 03:45:53PM -0700, Avichal Rakesh wrote:
-> > I see, and I think I understand Greg's previous comment better as
-> > well: The UVC driver isn't falling behind on the video stream, it is
-> > falling behind the usb controller's monotonic isoc stream.
-> >
-> > From what I can see, this leaves us in an interesting place: UVC
-> > allows the host to configure the camera's output resolution and fps,
-> > which effectively controls how fast the camera is generating data.
-> > This is at odds with the UVC gadget driver, which currently packs each
-> > video frame into as few usb_requests as possible (using the full
-> > available size in usb_requests). Effectively, the UVC gadget driver
-> > attempts to use the "full" bandwidth of isoc transfers even when the
-> > camera isn't generating data fast enough. For example, in my
-> > observations: 1 video frame is ~22kB. At 30fps, this represents 1/30
-> > of the amount of data the camera would generate in a second. This 22kB
-> > is split into 8 usb_requests which is about 1/1000 the number of
-> > requests UVC driver needs to generate per second to prevent isoc
-> > failures (assuming 125us monotonic uframes). Assuming some fudge
-> > factor from the simplifications in your explanation gives the uvc
-> > driver some extra leeway with request queuing, we're still roughly two
-> > order of magnitudes out of sync. Even with perfect 'complete'
-> > callbacks and video frame encodings, an underrun seems inevitable.
-> > Data is being generated at a far slower rate than it is being
-> > transferred. Does this reasoning seem valid?
-> >
-> > Just as a test I'll try updating the UVC driver to consume 266
-> > usb_requests per video frame (~1/30 of 8000), which should be enough
-> > to keep the usb controller queue occupied for ~1/30s. Ideally, by the
-> > time the controller queue is empty, the camera would have produced a
-> > new frame. This doesn't solve the issue with latencies around callback
-> > and an isoc failure might still happen, hopefully the failure
-> > frequency is reduced because UVC queues enough requests per video
-> > frame to not starve the controller's queue while waiting on a new
-> > frame and the only way they go out of sync is from 'complete' callback
-> > timings. I am assuming this has been tried before, but my LKML search
-> > skills are failing and I can't find much on it.
->
-> Note that there's nothing wrong with submitting a 0-length isochronous
-> transfer.  If there's no data left but you still need to send
-> _something_ in order to fill out the remaining slots in the controller's
-> schedule, this is a good way to do it.
->
-Oh, this is very good to know, thank you!! We just need to reach a
-steady state of UVC queuing enough requests monotonically (even if
-they are empty), and the usb controller calling the 'complete'
-callback to give it more requests to queue. Although I wonder how the
-host's UVC driver would interpret the zero length packets, if it would
-even care.
+Hi Udipto,
 
-I am unfortunately being pulled into some other work for the next few
-days, but I will try out both: splitting one frame into many many
-requests and just sending 0 length requests, and see what happens on
-the host. Will report back with what I find. Any other insights are
-welcome. I want to fix this problem for good if possible, and am happy
-to try out whatever it takes!
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus westeri-thunderbolt/next linus/master v6.3-rc7 next-20230418]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Udipto-Goswami/usb-dwc3-debugfs-Prevent-any-register-access-when-devices/20230418-202039
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230418121835.17550-1-quic_ugoswami%40quicinc.com
+patch subject: [PATCH v5] usb: dwc3: debugfs: Prevent any register access when devices
+config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20230419/202304191354.gk7ee6Gf-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
 
---=20
-- Avi.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202304191354.gk7ee6Gf-lkp@intel.com/
+
+smatch warnings:
+drivers/usb/dwc3/debugfs.c:338 dwc3_lsp_show() warn: pm_runtime_get_sync() also returns 1 on success
+drivers/usb/dwc3/debugfs.c:409 dwc3_mode_show() warn: pm_runtime_get_sync() also returns 1 on success
+drivers/usb/dwc3/debugfs.c:485 dwc3_testmode_show() warn: pm_runtime_get_sync() also returns 1 on success
+drivers/usb/dwc3/debugfs.c:555 dwc3_testmode_write() warn: pm_runtime_get_sync() also returns 1 on success
+drivers/usb/dwc3/debugfs.c:586 dwc3_link_state_show() warn: pm_runtime_get_sync() also returns 1 on success
+drivers/usb/dwc3/debugfs.c:649 dwc3_link_state_write() warn: pm_runtime_get_sync() also returns 1 on success
+drivers/usb/dwc3/debugfs.c:702 dwc3_tx_fifo_size_show() warn: pm_runtime_get_sync() also returns 1 on success
+drivers/usb/dwc3/debugfs.c:732 dwc3_rx_fifo_size_show() warn: pm_runtime_get_sync() also returns 1 on success
+drivers/usb/dwc3/debugfs.c:761 dwc3_tx_request_queue_show() warn: pm_runtime_get_sync() also returns 1 on success
+drivers/usb/dwc3/debugfs.c:784 dwc3_rx_request_queue_show() warn: pm_runtime_get_sync() also returns 1 on success
+drivers/usb/dwc3/debugfs.c:807 dwc3_rx_info_queue_show() warn: pm_runtime_get_sync() also returns 1 on success
+drivers/usb/dwc3/debugfs.c:830 dwc3_descriptor_fetch_queue_show() warn: pm_runtime_get_sync() also returns 1 on success
+drivers/usb/dwc3/debugfs.c:853 dwc3_event_queue_show() warn: pm_runtime_get_sync() also returns 1 on success
+drivers/usb/dwc3/debugfs.c:911 dwc3_trb_ring_show() warn: pm_runtime_get_sync() also returns 1 on success
+drivers/usb/dwc3/debugfs.c:960 dwc3_ep_info_register_show() warn: pm_runtime_get_sync() also returns 1 on success
+
+vim +338 drivers/usb/dwc3/debugfs.c
+
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  329  static int dwc3_lsp_show(struct seq_file *s, void *unused)
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  330  {
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  331  	struct dwc3		*dwc = s->private;
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  332  	unsigned int		current_mode;
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  333  	unsigned long		flags;
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  334  	u32			reg;
+86f75fd9ae2609 Udipto Goswami            2023-04-18  335  	int			ret;
+86f75fd9ae2609 Udipto Goswami            2023-04-18  336  
+86f75fd9ae2609 Udipto Goswami            2023-04-18  337  	ret = pm_runtime_get_sync(dwc->dev);
+86f75fd9ae2609 Udipto Goswami            2023-04-18 @338  	if (!ret || ret < 0) {
+86f75fd9ae2609 Udipto Goswami            2023-04-18  339  		pm_runtime_put(dwc->dev);
+86f75fd9ae2609 Udipto Goswami            2023-04-18  340  		return 0;
+
+I don't know what's going on here, but Smatch doesn't like it.  :P
+
+86f75fd9ae2609 Udipto Goswami            2023-04-18  341  	}
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  342  
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  343  	spin_lock_irqsave(&dwc->lock, flags);
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  344  	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  345  	current_mode = DWC3_GSTS_CURMOD(reg);
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  346  
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  347  	switch (current_mode) {
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  348  	case DWC3_GSTS_CURMOD_HOST:
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  349  		dwc3_host_lsp(s);
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  350  		break;
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  351  	case DWC3_GSTS_CURMOD_DEVICE:
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  352  		dwc3_gadget_lsp(s);
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  353  		break;
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  354  	default:
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  355  		seq_puts(s, "Mode is unknown, no LSP register printed\n");
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  356  		break;
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  357  	}
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  358  	spin_unlock_irqrestore(&dwc->lock, flags);
+86f75fd9ae2609 Udipto Goswami            2023-04-18  359  	pm_runtime_put(dwc->dev);
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  360  
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  361  	return 0;
+62ba09d6bb6330 Thinh Nguyen              2018-11-07  362  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
