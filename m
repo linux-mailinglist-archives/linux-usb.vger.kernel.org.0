@@ -2,81 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 952D66E75E4
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Apr 2023 11:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9126E7741
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Apr 2023 12:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232475AbjDSJAy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Apr 2023 05:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
+        id S232558AbjDSKQq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Apr 2023 06:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbjDSJAw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Apr 2023 05:00:52 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E4B5B9D;
-        Wed, 19 Apr 2023 02:00:43 -0700 (PDT)
-Received: from [192.168.1.103] (178.176.73.14) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Wed, 19 Apr
- 2023 12:00:35 +0300
-Subject: Re: [PATCH] usb: phy: phy-tahvo: fix memory leak in tahvo_usb_probe()
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-To:     Li Yang <lidaxian@hust.edu.cn>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-CC:     Dongliang Mu <dzm91@hust.edu.cn>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230418090758.18756-1-lidaxian@hust.edu.cn>
- <96c7edf5-e1cc-03f6-ee52-ef373ae9d820@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <eb33b694-b422-a9d5-35dc-2f8af79d47f1@omp.ru>
-Date:   Wed, 19 Apr 2023 12:00:32 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S232164AbjDSKQp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Apr 2023 06:16:45 -0400
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5650E1BD
+        for <linux-usb@vger.kernel.org>; Wed, 19 Apr 2023 03:16:43 -0700 (PDT)
+Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-32ac22bff76so53384965ab.0
+        for <linux-usb@vger.kernel.org>; Wed, 19 Apr 2023 03:16:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681899402; x=1684491402;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lHjfQRfXbjdHN3NrBo1io8SY3+2TWu2ff8M792CObcc=;
+        b=MWsp23Ti33DX1oFqJGc3k60Kirz36rUXPSAvyEVxItVwqUz7UGdC2lXN2WO/0URRdH
+         +aY/bunyVIIxNtPErJU2y+kFkRdmPoyQ7eZCZ7QET00mOfq+T2+F0hTcF4lOtq22isrk
+         jhMAqjZJEATW36X5RdJW5idu3/TXIYnCoa0CFk1K6KgxWNjkz+QtjUXTcfmYJrd4HYqw
+         HWGDIomApW++vtkdDtYZ6voBggR/BG0G9VuefkyWIePMawLP4BRtWsedSFWf3ep+vTn1
+         6Aaa8hHdW9s5tbw5y3ZgcCxRVpSYxN4dBlNJ+JO2BzTFBZQE8IJQCkzYqul1760T6CYy
+         JPKg==
+X-Gm-Message-State: AAQBX9cIB7hM293VusRWoeQYrt7hknF0XnmrlbPH6Us99lqjSQ4poTtW
+        qIQvwXmTq5u/DpJz8wSEl/v34nqsoo45B9l21Hfec8orbUO6
+X-Google-Smtp-Source: AKy350aVck6E004kOFNJwGkuHTlYaLDG6WD9XBP8Yly2G+nSNeCt6nhF79T17FQO1m70rA6dp2uoLCbWQ96YSF4gk1jCjg2938m9
 MIME-Version: 1.0
-In-Reply-To: <96c7edf5-e1cc-03f6-ee52-ef373ae9d820@omp.ru>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.73.14]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 04/19/2023 08:49:37
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 176827 [Apr 19 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 509 509 b12bcaa7ba85624b485f2b6b92324b70964a1c65
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.14 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.14 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2;178.176.73.14:7.1.2
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.73.14
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 04/19/2023 08:53:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 4/19/2023 6:14:00 AM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6e02:106:b0:325:a8e7:126c with SMTP id
+ t6-20020a056e02010600b00325a8e7126cmr10031345ilm.0.1681899402649; Wed, 19 Apr
+ 2023 03:16:42 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 03:16:42 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000716a3705f9adb8ee@google.com>
+Subject: [syzbot] [usb?] WARNING in usbtmc_ioctl/usb_submit_urb (2)
+From:   syzbot <syzbot+ce77725b89b7bd52425c@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,46 +53,73 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 4/18/23 2:17 PM, Sergey Shtylyov wrote:
-[...]
->> Smatch reports:
->> drivers/usb/phy/phy-tahvo.c: tahvo_usb_probe()
->> warn: missing unwind goto?
->>
->> After geting irq, if ret < 0, it will return without error handling to
->> free memory.
->> Just add error handling to fix this problem.
-> 
->    Oops, I'm sorry for missing that one...
-> 
->> Fixes: 0d45a1373e66 ("usb: phy: tahvo: add IRQ check")
->> Signed-off-by: Li Yang <lidaxian@hust.edu.cn>
->> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
->> ---
->> The issue is found by static analysis, and the patch remains untest.
->> ---
->>  drivers/usb/phy/phy-tahvo.c | 7 +++++--
->>  1 file changed, 5 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/phy/phy-tahvo.c b/drivers/usb/phy/phy-tahvo.c
->> index f2d2cc586c5b..184a5f3d7473 100644
->> --- a/drivers/usb/phy/phy-tahvo.c
->> +++ b/drivers/usb/phy/phy-tahvo.c
->> @@ -390,8 +390,11 @@ static int tahvo_usb_probe(struct platform_device *pdev)
->>  	dev_set_drvdata(&pdev->dev, tu);
->>  
->>  	tu->irq = ret = platform_get_irq(pdev, 0);
->> -	if (ret < 0)
->> -		return ret;
->> +	if (ret < 0) {
->> +		dev_err(&pdev->dev, "could not get irq: %d\n",
->> +				ret);
-> 
->    Adding the error message needs another patch, strictly speaking...
+Hello,
 
-   And if you look at platform_get_irq(), you'll see that it prints an error msg
-itself...
+syzbot found the following issue on:
 
-[...]
+HEAD commit:    95abc817ab3a Merge tag 'acpi-6.3-rc7' of git://git.kernel...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=137cee2bc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c21559e740385326
+dashboard link: https://syzkaller.appspot.com/bug?extid=ce77725b89b7bd52425c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-MBR, Sergey
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4eed56ed732d/disk-95abc817.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e3d153beec24/vmlinux-95abc817.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/61c1a80c61a8/bzImage-95abc817.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ce77725b89b7bd52425c@syzkaller.appspotmail.com
+
+WARNING: CPU: 0 PID: 23804 at drivers/usb/core/urb.c:411 usb_submit_urb+0x14a7/0x1880 drivers/usb/core/urb.c:411
+Modules linked in:
+CPU: 0 PID: 23804 Comm: syz-executor.1 Not tainted 6.3.0-rc6-syzkaller-00168-g95abc817ab3a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+RIP: 0010:usb_submit_urb+0x14a7/0x1880 drivers/usb/core/urb.c:411
+Code: 7c 24 40 e8 eb 8e 64 fb 48 8b 7c 24 40 e8 31 cd f2 fe 45 89 e8 44 89 f1 4c 89 e2 48 89 c6 48 c7 c7 60 39 fb 8a e8 19 04 2d fb <0f> 0b e9 9f ee ff ff e8 bd 8e 64 fb 0f b6 1d b6 82 43 08 31 ff 41
+RSP: 0018:ffffc90007e97b00 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff88807bff7058 RCX: ffffc900042b3000
+RDX: 0000000000040000 RSI: ffffffff814b6237 RDI: 0000000000000001
+RBP: ffff88807ebb10f0 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff88802bd88410
+R13: 0000000000000080 R14: 0000000080006f80 R15: ffff88802a7c7200
+FS:  00007f2f0b7e3700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f0eb75831b8 CR3: 000000002255b000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ usb_start_wait_urb+0x101/0x4b0 drivers/usb/core/message.c:58
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0x320/0x4a0 drivers/usb/core/message.c:153
+ usbtmc_ioctl_request drivers/usb/class/usbtmc.c:1954 [inline]
+ usbtmc_ioctl+0x1b3d/0x2840 drivers/usb/class/usbtmc.c:2097
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f2f0aa8c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f2f0b7e3168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f2f0ababf80 RCX: 00007f2f0aa8c169
+RDX: 0000000020000040 RSI: 00000000c0105b08 RDI: 0000000000000004
+RBP: 00007f2f0aae7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f2f0accfb1f R14: 00007f2f0b7e3300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
