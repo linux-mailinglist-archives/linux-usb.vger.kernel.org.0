@@ -2,52 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EED56E75BE
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Apr 2023 10:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 952D66E75E4
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Apr 2023 11:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232783AbjDSIz3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Apr 2023 04:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
+        id S232475AbjDSJAy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Apr 2023 05:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232848AbjDSIzU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Apr 2023 04:55:20 -0400
-X-Greylist: delayed 497 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Apr 2023 01:55:12 PDT
-Received: from mail-200167.simplelogin.co (mail-200167.simplelogin.co [176.119.200.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3431026E
-        for <linux-usb@vger.kernel.org>; Wed, 19 Apr 2023 01:55:11 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 08:46:42 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=8shield.net; s=dkim;
-        t=1681894012;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=svMD8qCdCdMeuX7byvejAfnFeoEkqnuCAiytCVsrX9I=;
-        b=BN91Nhk3WNk2wdWndHhRGlVATg8Gk5ZPGxw42M5y6/jyMpQNUePNX8WM5K58t1WBZzOTWe
-        5JwvONJVdlZTvvE5ClXvoJcR5oqWAijcLEg6Bn0t5YJriwoh0eQkFV4CiL54glBZe5iMzE
-        Ep+DYCoNI7BOrbb+34rIJHlnP5fpkU0=
-Subject: Re: btusb driver need to be unloaded and reloaded after boot & lag
- issue
-In-Reply-To: <dbbf4556-2719-5827-efbd-da9e87c0de40@molgen.mpg.de>
+        with ESMTP id S232557AbjDSJAw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Apr 2023 05:00:52 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E4B5B9D;
+        Wed, 19 Apr 2023 02:00:43 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.73.14) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Wed, 19 Apr
+ 2023 12:00:35 +0300
+Subject: Re: [PATCH] usb: phy: phy-tahvo: fix memory leak in tahvo_usb_probe()
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+To:     Li Yang <lidaxian@hust.edu.cn>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     Dongliang Mu <dzm91@hust.edu.cn>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230418090758.18756-1-lidaxian@hust.edu.cn>
+ <96c7edf5-e1cc-03f6-ee52-ef373ae9d820@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <eb33b694-b422-a9d5-35dc-2f8af79d47f1@omp.ru>
+Date:   Wed, 19 Apr 2023 12:00:32 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pgp-signature";
- micalg=pgp-sha512;
- boundary="------58bb509cbf61eb58031cdc6e0e682bf96f7bc10ce8327a5812e43e037274263f";
- charset=utf-8
+In-Reply-To: <96c7edf5-e1cc-03f6-ee52-ef373ae9d820@omp.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-From:   help.7ocym@8shield.net
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        regressions@lists.linux.dev
-Message-ID: <168189401011.9.1190609165422904967.121288919@8shield.net>
-References: <168133719213.7.14774994518515251513.119182329@8shield.net>
- <dbbf4556-2719-5827-efbd-da9e87c0de40@molgen.mpg.de>
-X-SimpleLogin-Type: Reply
-X-SimpleLogin-EmailLog-ID: 121288930
-X-SimpleLogin-Want-Signing: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+X-Originating-IP: [178.176.73.14]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 04/19/2023 08:49:37
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 176827 [Apr 19 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 509 509 b12bcaa7ba85624b485f2b6b92324b70964a1c65
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.14 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.14 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2;178.176.73.14:7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.73.14
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 04/19/2023 08:53:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 4/19/2023 6:14:00 AM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,151 +84,46 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------58bb509cbf61eb58031cdc6e0e682bf96f7bc10ce8327a5812e43e037274263f
-Content-Type: multipart/mixed;boundary=---------------------d434d8696c798ef5f060dccd015a521b
+On 4/18/23 2:17 PM, Sergey Shtylyov wrote:
+[...]
+>> Smatch reports:
+>> drivers/usb/phy/phy-tahvo.c: tahvo_usb_probe()
+>> warn: missing unwind goto?
+>>
+>> After geting irq, if ret < 0, it will return without error handling to
+>> free memory.
+>> Just add error handling to fix this problem.
+> 
+>    Oops, I'm sorry for missing that one...
+> 
+>> Fixes: 0d45a1373e66 ("usb: phy: tahvo: add IRQ check")
+>> Signed-off-by: Li Yang <lidaxian@hust.edu.cn>
+>> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+>> ---
+>> The issue is found by static analysis, and the patch remains untest.
+>> ---
+>>  drivers/usb/phy/phy-tahvo.c | 7 +++++--
+>>  1 file changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/usb/phy/phy-tahvo.c b/drivers/usb/phy/phy-tahvo.c
+>> index f2d2cc586c5b..184a5f3d7473 100644
+>> --- a/drivers/usb/phy/phy-tahvo.c
+>> +++ b/drivers/usb/phy/phy-tahvo.c
+>> @@ -390,8 +390,11 @@ static int tahvo_usb_probe(struct platform_device *pdev)
+>>  	dev_set_drvdata(&pdev->dev, tu);
+>>  
+>>  	tu->irq = ret = platform_get_irq(pdev, 0);
+>> -	if (ret < 0)
+>> -		return ret;
+>> +	if (ret < 0) {
+>> +		dev_err(&pdev->dev, "could not get irq: %d\n",
+>> +				ret);
+> 
+>    Adding the error message needs another patch, strictly speaking...
 
------------------------d434d8696c798ef5f060dccd015a521b
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;charset=utf-8
+   And if you look at platform_get_irq(), you'll see that it prints an error msg
+itself...
 
-Hi,
+[...]
 
-------- Original Message -------
-On Thursday, April 13th, 2023 at 7:39 AM, Paul Menzel - pmenzel at molgen.=
-mpg.de <pmenzel_at_molgen_mpg_de_rislbjit@simplelogin.co> wrote:
-
-
-> [Cc: +regressions@lists.linux.dev]
->
-> Dear JLM,
->
->
-> Am 13.04.23 um 00:06 schrieb help.7ocym@8shield.net:
->
-> > sorry to address both list, but this issue seems related, without
-> > knowing where lies the issue > my hardware : https://wiki.gentoo.org/w=
-iki/Lenovo_Yoga_900
-> > I use the pre-built gentoo linux kernel,
-> > 6.2.8-gentoo-dist #1 SMP PREEMPT_DYNAMIC Wed Mar 22 17:15:39 -00 2023 =
-x86_64 Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz GenuineIntel GNU/Linux
-> >
-> > since a few update (sadly I didn't noted the latest kernel version
-> > that didn't had the issue), after a boot, the bluetooth isn't
-> > working, nothing bad in dmesg, I just have to unload btusb module and
-> > modprobe it again to have bluetooth working again...
-> >
-> > after a suspend to ram, I have to power off-power on the bluetooth to
-> > have it work again (bluetoothctl power off; bluetoothctl power on)
-> >
-> > bluetooth mouse can also be extremely laggy sometimes,but without
-> > error message in dmesg, most of the time `bluetoothctl power` off-on
-> > cycling do solve the issue....
-> >
-> > I also included the usb mailing list because it might be related to
-> > some behavior I noticed :
-> >
-> > I have usb3.0 micro sd card reader (SanDisk MobileMate UHS-I microSD
-> > Reader/Writer USB 3.0 Reader, Kingston MobileLite Plus (MLPM) microSD
-> > Card Reader USB 3.1 microSDHC/SDXC UHS-II, for example) and some
-> > extra fast micro sd cards (like sandisk extrem 512G), when
-> > transferring data the read rate can be as high as 110Mo/s and write
-> > 70Mo/s sustained, nothing impressive but when such rate is achieved
-> > for a long time (big file transfer) either reading only access,
-> > writing only access or read write, the usb bus become unusable, I
-> > can't even use a usb mouse connected to it by wire... even if cpu
-> > usage is really low (less than 10%) I don't have the issue if I
-> > connect a M2 usb3 flash drive, with comparable transfert speed... so
-> > not related to some bus over usage...
-> >
-> > so I suspect that there is an issue with the usb driver, and that
-> > maybe the bluetooth issue can be related to the usb issue, since the
-> > bluetooth controller is on the usb bus on the laptop >
-> > the transfer issue of usb is much more older than the bluetooth
-> > issue, it's approximative, but : > - the btusb boot issue is about 3 m=
-onth old,
-> > - the suspend/resume issue of bluetooth is more than a year old
-> > - the usb transfer issue as more than a year...
-> >
-> > I'll gladly provide any useful information, can also do patch tries...
->
-> As you use Gentoo and are able to build your own Linux kernel, the
-> fastest way to get these issues addressed is to bisect them. To shorten
-> the test cycles, I recommend to try, if you can reproduce the issues in
-> QEMU and passing through the problematic devices to the VM [1][2].
->
-> I also recommend to start a separate thread for each issue and, as these
-> seem to be regressions, also keep the regression folks in the loop [3].
->
->
-> Kind regards,
->
-> Paul
->
->
-> [1]:
-> https://lore.kernel.org/all/5891f0d5-8d51-9da5-7663-718f301490b1@molgen.=
-mpg.de/
-> (The commands were working for after all, and the device didn=E2=80=99t
-> show up due to a (second) Linux kernel regression.)
-> [2]: https://station.eciton.net/qemu-usb-host-device-pass-through.html
-> [3]:
-> https://www.kernel.org/doc/html/latest/admin-guide/reporting-regressions=
-.html
-
-thanks for the reply,
-after upgrade to 6.2.11 version, =
-
-
-- seems that the issue at boot of btusb module is gone... I don't have any=
-more to unload btusb module after a boot... so that's great news! =
-
-
-- the bluetooth resumes also after a suspend S3 (suspend to ram)! so great=
- news again! (I've to check for suspend to disk, but I'm confident about s=
-uccess)
-
-I still have to do some check with the micro usb readers to see if the bug=
- "bus monopolization" is still present, so far so good!
-
-
-
-Sent with Proton Mail secure email.
-
------------------------d434d8696c798ef5f060dccd015a521b
-Content-Type: application/pgp-keys; filename="publickey - jl.malet@protonmail.com - 0xA25F20CF.asc"; name="publickey - jl.malet@protonmail.com - 0xA25F20CF.asc"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="publickey - jl.malet@protonmail.com - 0xA25F20CF.asc"; name="publickey - jl.malet@protonmail.com - 0xA25F20CF.asc"
-
-LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgp4ak1FWkRHNGx4WUpLd1lCQkFI
-YVJ3OEJBUWRBc0o4TVNPaVhCR2tKWnlzYm52cExJN3NXR0xHaXNXeDQKbmxlUkRiRlpiRy9OTVdw
-c0xtMWhiR1YwUUhCeWIzUnZibTFoYVd3dVkyOXRJRHhxYkM1dFlXeGxkRUJ3CmNtOTBiMjV0WVds
-c0xtTnZiVDdDakFRUUZnb0FQZ1dDWkRHNGx3UUxDUWNJQ1pEVy9aZ2x2N3RnQ2dNVgpDQW9FRmdB
-Q0FRSVpBUUtiQXdJZUFSWWhCS0pmSU05bm5OS2RzS2RMcnRiOW1DVy91MkFLQUFES3lnRUEKdlpr
-VjRWV3l4dXJxUWVOSDM2UmhncjR2QVdUQ1RRQjl6Z1ZrTXFFTHF5VUEvUk9UbFJOMnFVQjAzdE5r
-CmRwZXJPV0VQa3JvWG1XRHBYWU0rMldOWk1uWVB6amdFWkRHNGx4SUtLd1lCQkFHWFZRRUZBUUVI
-UURJWQpIOHpvdytIeFowSkUyeHJkcy96WlRIa3pZS2lmc0RUUXVRL2o0dEFKQXdFSUI4SjRCQmdX
-Q0FBcUJZSmsKTWJpWENaRFcvWmdsdjd0Z0NnS2JEQlloQktKZklNOW5uTktkc0tkTHJ0YjltQ1cv
-dTJBS0FBQmFqd0Q4CkM5VmNtRWVTWmpyNFNabWlOSFM2MUtqZlZlaEZJYkJmZnEzTUVCZGFxcHdB
-LzJHSTY4a010MzdOSkhTcAo1Q2Fid2UrZ05HZVg5S3RESUxjS2NUbVRjVmNECj04SW9hCi0tLS0t
-RU5EIFBHUCBQVUJMSUMgS0VZIEJMT0NLLS0tLS0K
------------------------d434d8696c798ef5f060dccd015a521b--
-
---------58bb509cbf61eb58031cdc6e0e682bf96f7bc10ce8327a5812e43e037274263f
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-Version: ProtonMail
-
-wnUEARYKACcFgmQ/qmIJkNb9mCW/u2AKFiEEol8gz2ec0p2wp0uu1v2YJb+7
-YAoAAK/OAP0XIqIp32TYnR4LaBq82EkLkqgQdADqzn2qFgOQuNb+kQEAgfZO
-/gl/jcYzocTpyJ/ew05D5D2OXkZoI4EhtqVKIgk=
-=ogYk
------END PGP SIGNATURE-----
-
-
---------58bb509cbf61eb58031cdc6e0e682bf96f7bc10ce8327a5812e43e037274263f--
-
-
+MBR, Sergey
