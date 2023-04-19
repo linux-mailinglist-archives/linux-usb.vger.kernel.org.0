@@ -2,68 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22FFD6E7419
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Apr 2023 09:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4ED16E74CC
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Apr 2023 10:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232335AbjDSHgH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Apr 2023 03:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
+        id S232324AbjDSIQx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 19 Apr 2023 04:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbjDSHgB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Apr 2023 03:36:01 -0400
-X-Greylist: delayed 341 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Apr 2023 00:36:00 PDT
-Received: from mail.mahavavy.com (mail.mahavavy.com [92.222.170.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA0F61B4
-        for <linux-usb@vger.kernel.org>; Wed, 19 Apr 2023 00:36:00 -0700 (PDT)
-Received: by mail.mahavavy.com (Postfix, from userid 1002)
-        id 0FA5623400; Wed, 19 Apr 2023 07:30:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mahavavy.com; s=mail;
-        t=1681889418; bh=IfqQW79nVX/qUpmHcJiWDpV9BQnOf/s+Zcq9ON74QJY=;
-        h=Date:From:To:Subject:From;
-        b=cOiVo+y+25WCi1QWafgG66nvF1gQc7ihLMEjpePUwPVwL046++fIsBGlQfNWGYWD4
-         H4RAIrMhfCsvrrze/yX53Ui1QXhReJlx1QSQXt8rYZYvidInE7LqnRLy317AP9lhja
-         nvWvYRrSvBwX1FQZ95Fwkh9bOngn2b7GA2tRSc/oWR/YSjxZ42nmgbuMv+uJuSU5Fh
-         +yH4IDZimlvuEwkbcEhvUkk1pCo/tK1igd+v0N9XHddDku3NDRss7M0aXYCzuy3+Y6
-         GBQT3SCcZ/gk0mSoW37pj7rPhRYZ+0x2fCnGnpk3xotOsSBHi09/emiv577QKwXMRA
-         ecZjoLuZblDMQ==
-Received: by mail.mahavavy.com for <linux-usb@vger.kernel.org>; Wed, 19 Apr 2023 07:30:12 GMT
-Message-ID: <20230419064500-0.1.22.35cw.0.1d4s4qlssv@mahavavy.com>
-Date:   Wed, 19 Apr 2023 07:30:12 GMT
-From:   =?UTF-8?Q? "Kristi=C3=A1n_Plet=C3=A1nek" ?= 
-        <kristian.pletanek@mahavavy.com>
-To:     <linux-usb@vger.kernel.org>
-Subject: =?UTF-8?Q?Tlakov=C4=9B_lit=C3=BD?=
-X-Mailer: mail.mahavavy.com
+        with ESMTP id S229978AbjDSIQw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Apr 2023 04:16:52 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCED100;
+        Wed, 19 Apr 2023 01:16:50 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 12E2824DBBD;
+        Wed, 19 Apr 2023 16:16:42 +0800 (CST)
+Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 19 Apr
+ 2023 16:16:41 +0800
+Received: from [192.168.125.108] (113.72.144.253) by EXMBX171.cuchost.com
+ (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 19 Apr
+ 2023 16:16:40 +0800
+Message-ID: <f7e07efc-c274-4fc2-20c1-4c5e2e1c989e@starfivetech.com>
+Date:   Wed, 19 Apr 2023 16:16:40 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v4 0/7] Add JH7110 USB and USB PHY driver support
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>,
+        "Kishon Vijay Abraham I" <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Peter Chen" <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Mason Huo" <mason.huo@starfivetech.com>
+References: <20230406015216.27034-1-minda.chen@starfivetech.com>
+ <517670ca-ba2e-811e-3eb2-7f38011c9690@linaro.org>
+ <985d0a57-1fc8-5725-4d3a-33dcc5d49d67@starfivetech.com>
+ <5953bc83-9609-6d12-7e9b-ca5202151fb3@linaro.org>
+ <a75ed45c-55c4-ff94-86f9-313ec79720ac@starfivetech.com>
+ <c79e7d05-0b62-40e6-0864-35b2821c69e7@linaro.org>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <c79e7d05-0b62-40e6-0864-35b2821c69e7@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIXED_ES,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [113.72.144.253]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX171.cuchost.com
+ (172.16.6.91)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dobr=C3=A9 r=C3=A1no,
 
-zaji=C5=A1=C5=A5ujeme technologii tlakov=C3=A9ho lit=C3=AD hlin=C3=ADku.
 
-M=C3=A1me v=C3=BDrobn=C3=AD z=C3=A1vody v Polsku, =C5=A0v=C3=A9dsku a =C4=
-=8C=C3=ADn=C4=9B se schopnost=C3=AD flexibiln=C4=9B p=C5=99esouvat v=C3=BD=
-robu mezi lokalitami.
-
-Na=C5=A1e lic=C3=AD bu=C5=88ky jsou v=C4=9Bt=C5=A1inou automatick=C3=A9 n=
-ebo poloautomatick=C3=A9, co=C5=BE umo=C5=BE=C5=88uje v=C3=BDrobu velk=C3=
-=BDch v=C3=BDrobn=C3=ADch s=C3=A9ri=C3=AD s vysokou flexibilitou detail=C5=
-=AF.
-=20
-Poskytujeme podporu v ka=C5=BEd=C3=A9 f=C3=A1zi v=C3=BDvoje projektu, vyv=
-=C3=ADj=C3=ADme strukturu detailu.
-
-Cht=C4=9Bli byste mluvit o spolupr=C3=A1ci v t=C3=A9to oblasti?
-
-Pozdravy
-Kristi=C3=A1n Plet=C3=A1nek
+On 2023/4/18 20:22, Krzysztof Kozlowski wrote:
+> On 18/04/2023 13:12, Minda Chen wrote:
+>>>>>>
+>>>>>>
+>>>>>> base-commit: 0ec57cfa721fbd36b4c4c0d9ccc5d78a78f7fa35
+>>>>>> prerequisite-patch-id: 24a6e3442ed1f5454ffb4a514cfd768436a87090
+>>>>>> prerequisite-patch-id: 55390537360f25c8b9cbfdc30b73ade004f436f7
+>>>>>
+>>>>> fatal: bad object 55390537360f25c8b9cbfdc30b73ade004f436f7
+>>>>>
+>>>>> What commits do you reference? How are they helpful?
+>>>>>
+>>>> I use "git format-patch --base=(commit) to generate patchset.
+>>>> Maybe I set the wrong base commit.
+>>>
+>>> How are they helpful if these are private commits?
+>>>> Best regards,
+>>> Krzysztof
+>>>
+>> base-commit is not private commits. 
+>> I should set base commit 197b6b60ae7bc51dd0814953c562833143b292aa. This is 6.3-rc4 commit.
+>> But I set 0ec57cfa721fbd36b4c4c0d9ccc5d78a78f7fa35. This is 6.3-rc4's previous commit.
+> 
+> You missed the point. I am not talking about base commit. I am talking
+> about your prerequisites, which are useless. What can we do with such SHA?
+> 
+> Best regards,
+> Krzysztof
+> 
+OK， I will delete them
