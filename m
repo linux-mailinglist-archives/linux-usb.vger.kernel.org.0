@@ -2,104 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2946E70EC
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Apr 2023 04:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8191C6E71C6
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Apr 2023 05:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231623AbjDSCBE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Apr 2023 22:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
+        id S231902AbjDSDok (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Apr 2023 23:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbjDSCBA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Apr 2023 22:01:00 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6E16EAB;
-        Tue, 18 Apr 2023 19:00:58 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33J20jaP6021960, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33J20jaP6021960
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Wed, 19 Apr 2023 10:00:45 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Wed, 19 Apr 2023 10:00:45 +0800
-Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Wed, 19 Apr 2023 10:00:44 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
- 15.1.2375.32 via Frontend Transport; Wed, 19 Apr 2023 10:00:44 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Stanley Chang <stanley_chang@realtek.com>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,parkmode-disable-hs-quirk' quirk
-Date:   Wed, 19 Apr 2023 10:00:43 +0800
-Message-ID: <20230419020044.15475-2-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230419020044.15475-1-stanley_chang@realtek.com>
-References: <20230419020044.15475-1-stanley_chang@realtek.com>
+        with ESMTP id S231887AbjDSDoi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Apr 2023 23:44:38 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C7246B4
+        for <linux-usb@vger.kernel.org>; Tue, 18 Apr 2023 20:44:34 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33J3JQX2032266;
+        Wed, 19 Apr 2023 03:44:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=5VZUuU1EKu3itvVoguIJaOUqeiNJdmilHIJAMWSF6Os=;
+ b=GJstOlQ0uEg239go+zmH0GBL/U2f1/6Ctq5JvDAw8zD3TnIjt4VOXbenZnEgQBiqHD/Y
+ 4noU6UjqXfry1EHX1d2mYTwLWNAzPn+upsO42u4vCvIuOC3aJX8i1URvfQNGFHFEZT3V
+ XqFF1M8exC0mN8PhQLJsS8K+FaoPudrXf5iDxaekT4xvM/6KP6cbsvqk65pbFfLYb3Sl
+ /2CHiuah6sU3exl+qiV+7BCF2hKx4tZzkxpPHjBG2KEd/JtLBKNmfsCkTrU0xptGlfJQ
+ oXbmfzzqUrnup4rVM/w+/9U4ltNhRz+Z0nE+4yaPqykdrLEe9f0vxDQvifv+k6LBb4Zp pw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q1nf8jtea-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Apr 2023 03:44:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33J3hkI5010360
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Apr 2023 03:43:46 GMT
+Received: from [10.217.217.211] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 18 Apr
+ 2023 20:43:44 -0700
+Message-ID: <149d9492-8166-24d4-d4cc-154eec4c44a7@quicinc.com>
+Date:   Wed, 19 Apr 2023 09:13:41 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXMBS03.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v5] usb: dwc3: debugfs: Prevent any register access when
+ devices
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>
+CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        <linux-usb@vger.kernel.org>, Oliver Neukum <oneukum@suse.com>,
+        Johan Hovold <johan+linaro@kernel.org>
+References: <20230418121835.17550-1-quic_ugoswami@quicinc.com>
+ <ZD6Us2PoD4UfY27S@hovoldconsulting.com> <2023041813-stowing-rug-710a@gregkh>
+Content-Language: en-US
+From:   Udipto Goswami <quic_ugoswami@quicinc.com>
+In-Reply-To: <2023041813-stowing-rug-710a@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: RYFUqQeTfLG-AARvrYXMvqgqZ6v4wLk5
+X-Proofpoint-ORIG-GUID: RYFUqQeTfLG-AARvrYXMvqgqZ6v4wLk5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-18_17,2023-04-18_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=2 clxscore=1015 impostorscore=0
+ lowpriorityscore=0 phishscore=0 malwarescore=0 suspectscore=0
+ priorityscore=1501 bulkscore=0 mlxlogscore=179 adultscore=0 mlxscore=2
+ spamscore=2 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304190033
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add a new 'snps,parkmode-disable-hs-quirk' DT quirk to dwc3 core for
-disable the high-speed parkmode.
 
-For some USB wifi devices, if enable this feature it will reduce the
-performance. Therefore, add an option for disabling HS park mode by
-device-tree.
 
-In Synopsys's dwc3 data book:
-In a few high speed devices when an IN request is sent within 900ns of the
-ACK of the previous packet, these devices send a NAK. When connected to
-these devices, if required, the software can disable the park mode if you
-see performance drop in your system. When park mode is disabled,
-pipelining of multiple packet is disabled and instead one packet at a time
-is requested by the scheduler. This allows up to 12 NAKs in a micro-frame
-and improves performance of these slow devices.
+On 4/18/23 6:56 PM, Greg Kroah-Hartman wrote:
+> On Tue, Apr 18, 2023 at 03:01:39PM +0200, Johan Hovold wrote:
+>> On Tue, Apr 18, 2023 at 05:48:35PM +0530, Udipto Goswami wrote:
+>>
+>> First, the subject of this patch looks wrong.
+>>
+>>> When the dwc3 device is runtime suspended, various required clocks would
+>>> get disabled and it is not guaranteed that access to any registers would
+>>> work. Depending on the SoC glue, a register read could be as benign as
+>>> returning 0 or be fatal enough to hang the system.
+>>>
+>>> In order to prevent such scenarios of fatal errors, make sure to resume
+>>> dwc3 then allow the function to proceed.
+>>>
+>>> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+>>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+>>
+>> I did not sign-off on this patch (and neither did Oliver I presume).
+>>
+>> You must never add a SoB on behalf on someone else without their
+>> permission. Please read Documentation/process/submitting-patches.rst and
+>> make sure you understand what SoB means before sending any further
+>> patches.
+> 
+> Ah, I thought so :(
+> 
+> Udipto, please go complete the developer legal training that I know your
+> company provides for dealing with things like this as they take it very
+> seriously, before you resubmit this, or any other kernel patches.
+> 
+> thanks,
+> 
+> greg k-h
 
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-Acked-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+Hi Greg, Johan, Oliver,
 
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index be36956af53b..45ca967b8d14 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -232,6 +232,11 @@ properties:
-       When set, all SuperSpeed bus instances in park mode are disabled.
-     type: boolean
- 
-+  snps,parkmode-disable-hs-quirk:
-+    description:
-+      When set, all HighSpeed bus instances in park mode are disabled.
-+    type: boolean
-+
-   snps,dis_metastability_quirk:
-     description:
-       When set, disable metastability workaround. CAUTION! Use only if you are
--- 
-2.34.1
+Apologies for this, will go through the guidelines and rework the patch
+accordingly.
+
 
