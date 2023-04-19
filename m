@@ -2,74 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 962956E7A5A
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Apr 2023 15:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 099B06E7E8A
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Apr 2023 17:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233274AbjDSNNd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Apr 2023 09:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
+        id S233158AbjDSPl6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Apr 2023 11:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232976AbjDSNNc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Apr 2023 09:13:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6B6CC3A;
-        Wed, 19 Apr 2023 06:13:31 -0700 (PDT)
+        with ESMTP id S233103AbjDSPl5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Apr 2023 11:41:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46CC5FD2
+        for <linux-usb@vger.kernel.org>; Wed, 19 Apr 2023 08:41:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0976063A36;
-        Wed, 19 Apr 2023 13:13:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B95C433EF;
-        Wed, 19 Apr 2023 13:13:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681910010;
-        bh=ZNNHYQW9RITA/JCRpVr8LXHZCHfLZxHZphc4AnU7FAc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tUGn84hvSl+SyKVBIN7bTAF31irVek91ZabWgwhVWBlUJ31XaGroEdQgVxnCJ0U9P
-         48Hk/7fxIvHja1J/UHhtNzGG5inatvNvN3Z+PTmS/alxgG0UindqN16P4UTA0ljdHj
-         +JOYaiPVVhcEighGmCdj91fvKDeb587dieDahyIo=
-Date:   Wed, 19 Apr 2023 15:13:28 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: typec: intel_pmc_mux: Expose IOM port status to
- debugfs
-Message-ID: <2023041928-step-salsa-3cba@gregkh>
-References: <20230419130345.1689915-1-rajat.khandelwal@linux.intel.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51080637B8
+        for <linux-usb@vger.kernel.org>; Wed, 19 Apr 2023 15:41:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B567AC4339B
+        for <linux-usb@vger.kernel.org>; Wed, 19 Apr 2023 15:41:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681918915;
+        bh=PMldeax6QANEEwK96LmV6Z+PTilCTtgoE8DpC2nXTQ0=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=aydi214Agj6xn1U5geMvZzV+Cju0usFt2R9C2FBVgWp4OazZBgQ2TOwHsOEXI9xrw
+         f5X0hPYLbbDHsvOXMwYuOCeXV3axUUE40BX177GhPWMhHr3dDh52gs+f9A1mKlvprZ
+         v1BRvS0ihDnHcNqe6l721vt9sH1dxvBY4OXf8Q9wDc0X5/ggX18Rbo+bxp7mu0YJnZ
+         J3uImdRaN2mhE7//Diifw/z9mUQbC31brDw1CoODWAHCoutLc0X2U58CezldUKLeWI
+         UiJ+njmWMuYwgtxVRcwXDoODKOt3xNvmZq8YNiyURMSRHuHXuj05PteOvcx+Fivwnu
+         A+fBDRX/kqylg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 8C7FDC43143; Wed, 19 Apr 2023 15:41:55 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217242] CPU hard lockup related to xhci/dma
+Date:   Wed, 19 Apr 2023 15:41:55 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mathias.nyman@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217242-208809-EvD2K6CuuU@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217242-208809@https.bugzilla.kernel.org/>
+References: <bug-217242-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230419130345.1689915-1-rajat.khandelwal@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 06:33:45PM +0530, Rajat Khandelwal wrote:
-> IOM status has a crucial role during debugging to check the
-> current state of the type-C port.
-> There are ways to fetch the status, but all those require the
-> IOM port status offset, which could change with platform.
-> 
-> Make a debugfs directory for intel_pmc_mux and expose the status
-> under it per port basis.
-> 
-> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-> ---
-> 
-> v3: Allocate the debugfs directory name for the platform device with
-> its ACPI dev name included
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217242
 
-{sigh}   No, sorry, this is not correct.
+--- Comment #24 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
+Thanks, I see whats going on now.
 
-Also, you did not properly follow the rules that all Intel kernel
-developers are supposed to follow.  Please consult your local kernel
-developer team and do so before sending any more kernel patches out.
+Some transfers that are further ahead on the ring can simply be turned to n=
+o-op
+trbs by driver when cancelled. These are not added back to num_trbs_free.=
+=20=20
 
-greg k-h
+This is the case when several URBs are queued for an endpoint and then
+cancelled in reverse order.
+
+I have a untested fix for this that goes on top of previous debug patch.
+Can you try it out?
+
+I'm also reworking this whole thing, but we need a small fix like this for
+older stable kernels.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
