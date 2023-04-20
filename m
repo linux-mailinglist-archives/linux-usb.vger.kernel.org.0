@@ -2,70 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B866E9B91
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 20:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D54576EA909
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 13:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjDTSZS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Apr 2023 14:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
+        id S229818AbjDULWN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Apr 2023 07:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjDTSZR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 14:25:17 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67FC272C
-        for <linux-usb@vger.kernel.org>; Thu, 20 Apr 2023 11:25:16 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-247122e9845so908211a91.0
-        for <linux-usb@vger.kernel.org>; Thu, 20 Apr 2023 11:25:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682015116; x=1684607116;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xQIffIkqtd6hNHJB4rxz+31IegGCQwc44vhkiOJj92s=;
-        b=Cu+0B+PK0MYjzW2+i39kldcN/aIaCuQSrcf6eHv158AOp3/C82ldUrcadYPioAd8cg
-         8oS44bwIyEEtz0GeHTU7gSeXuFqH56+gqEdkHK2rflMfP/toGQXPsfy/n5Zq/0mZaGLh
-         4puPiIkNOG+mc7CXImqhd1dcahBPxw1rNwYgphWLeTKU+Cext4qvjZ872AKHJ6Q62Kbn
-         /oK4xcmMZ9q0Ytc5iNPa0VMb6AasZ5QmZrJr4l8f0Dg8Pn2c+B5MAqf+pIZhQmM5aGQ1
-         I6pOYiXDcombtpkrj0aDrwopntvC5IZZKoZBmbUDxjZY4A6TrcqTvJvtfH9JpeIiAnL4
-         miiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682015116; x=1684607116;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xQIffIkqtd6hNHJB4rxz+31IegGCQwc44vhkiOJj92s=;
-        b=ZihTmQQ6vI9I4N6XBHLblKEHVmAFkgAZegtgxq2F/yrXRi4sAjg64frwbsEsKIFGHE
-         pQOiZTVGlorHqj1LaSj9pTM5nCdAEzCmNVBsmsfyplfXIcTH5XSWmmUs2y4DAPIqK4vS
-         LdxVExqD78NPtzz75KvTRlRhec5GG77HA/1c2sk72iThSZj66i7pGRFnbwLzJYIXpxTs
-         GTv/mcQdS1POAqN8ftCNhX49NTEs4ghzkV6wTF8ERafT+x0pS0N0baTJP7jHA8RJHiQK
-         Uobc6nt3kb3fpOm5zCtKIvW/Sz95/hBKemZpJ6KaXO6KpN6WQB+kFs1Md+3Mkg3NKcM5
-         z9Tg==
-X-Gm-Message-State: AAQBX9f8LAoZvWX0C5n3o70qLvxwsho3d04eEUh7J+m4yaWPKJSs5m8V
-        pbmdiNgEXt9ihEsf+KKHF+wLYzU7yInLFRq3FXo=
-X-Google-Smtp-Source: AKy350brJO/zNn8d4ey0DD2/QmHk/6Wt3Kn/ImgDOGHKVt0z6+jMqv8kbReO+gSOwv0Shhyf2EhFmdPqtEfajXKmb8k=
-X-Received: by 2002:a17:90a:fd17:b0:247:1de8:8263 with SMTP id
- cv23-20020a17090afd1700b002471de88263mr2755705pjb.4.1682015116262; Thu, 20
- Apr 2023 11:25:16 -0700 (PDT)
+        with ESMTP id S229657AbjDULWL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 07:22:11 -0400
+X-Greylist: delayed 1496 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 21 Apr 2023 04:22:10 PDT
+Received: from ODEDI148698.home (odedi148698.mywhc.ca [144.217.254.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4019133
+        for <linux-usb@vger.kernel.org>; Fri, 21 Apr 2023 04:22:10 -0700 (PDT)
+DKIM-Signature: v=1; c=relaxed/relaxed; h=content-type:mime-version:content-transfer-encoding:content-description:subject:to:from:date:reply-to:message-id;
+ d=a2ict.com; s=default; a=rsa-sha256;
+ bh=FQE3y/+3GQQzdAQHGLO+y57Gs24Zx9iAkvAV5kT0Bhk=;
+ b=Ti1ulOJ3Az4qsN7Ax7zpArZRID3KCPSZTDj8GelFhifKpsWJMhH+sEL3s94ckLFom
+ H2tXRGbpeOthRFUfPVsW0RzZIUoi8YZzB/iUp1SA4fCJJRl/b+qI+FDIM+g7ryF/MOC
+ mdhe++WZ9w5gavqb9fh4Z4mgQdhhxfiVxPRAk1E=;
+Received: from [51.89.94.142] ([51.89.94.142]) by home with
+ MailEnable ESMTPA; Thu, 20 Apr 2023 18:29:15 +0000
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Received: by 2002:a05:7022:2082:b0:61:d1d:be20 with HTTP; Thu, 20 Apr 2023
- 11:25:15 -0700 (PDT)
-Reply-To: jennifertrujillo735@gmail.com
-From:   Jennifer Trujillo <williamsjohn0967@gmail.com>
-Date:   Thu, 20 Apr 2023 19:25:15 +0100
-Message-ID: <CABDAQzRU5GdoorNn-wKsOOm7GSwBcyWwiGW0MSg+O=E6ZLi87Q@mail.gmail.com>
-Subject: HALLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: ich bin Edwin Castro
+To:     linux-usb@vger.kernel.org
+From:   "Mr. Edwin Castro" <admin@a2ict.com>
+Date:   Thu, 20 Apr 2023 11:29:14 -0700
+Reply-To: charityhome_edwin@yahoo.com
+Message-ID: <3197F742E16C438DBE7F277D3FADF77E.MAI@home>
+X-Spam-Status: Yes, score=6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        HK_NAME_MR_MRS,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,NIXSPAM_IXHASH,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: a2ict.com]
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  1.0 HK_NAME_MR_MRS No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  2.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
-Hallo,
-Wie geht es dir?
+Mein Name ist Edwin Castro, ich habe den Powerball-Jackpot gewonnen und ich=
+ spende die Summe von 2,8 Millionen Dollar an f=FCnf gl=FCckliche Menschen =
+auf der ganzen Welt...
+
+Kontaktieren Sie mich unter meiner E-Mail:charityhome_edwin@yahoo.com f=FCr=
+ weitere Einzelheiten.
