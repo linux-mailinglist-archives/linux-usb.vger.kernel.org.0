@@ -2,48 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B54B6E8E0F
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 11:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EFC36E8794
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 03:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232073AbjDTJ3a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Apr 2023 05:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46730 "EHLO
+        id S231833AbjDTBrF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Apr 2023 21:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjDTJ33 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 05:29:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C630E73;
-        Thu, 20 Apr 2023 02:29:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3857961239;
-        Thu, 20 Apr 2023 09:29:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27FC7C433D2;
-        Thu, 20 Apr 2023 09:29:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681982967;
-        bh=MMMl7kH1YtbeKQgLBTGDIf6d7RIzlMxyfIZqKKutXn4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ajy9RP4liIVsSd4FNmCVmHRPbg1Ex6Fet6qwQKXEkz1hh7Iy/AFXrsdRGxYh4rE3X
-         G+SMZ88F1+ETk1WnENG+pe13uldOmNvGekwdKOrYQ7W+Abtw5vx8vIYiubWllYjrLc
-         oze1LJBED8sefzgzo9lYzTRkmlCZmAH31AOn5Lkc=
-Date:   Thu, 20 Apr 2023 11:29:24 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tonywwang@zhaoxin.com,
-        weitaowang@zhaoxin.com
-Subject: Re: [PATCH 0/3] Fix some issues of xHCI for zhaoxin
-Message-ID: <ZEEF9E4Mmeg5hRWu@kroah.com>
-References: <20230420172130.375819-1-WeitaoWang-oc@zhaoxin.com>
+        with ESMTP id S229547AbjDTBrC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Apr 2023 21:47:02 -0400
+X-Greylist: delayed 653 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Apr 2023 18:47:00 PDT
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9C8558E
+        for <linux-usb@vger.kernel.org>; Wed, 19 Apr 2023 18:47:00 -0700 (PDT)
+X-ASG-Debug-ID: 1681954564-1eb14e63892a7b0001-YVMibp
+Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx2.zhaoxin.com with ESMTP id lcfoYTgH1z6X2Wio (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 20 Apr 2023 09:36:04 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
+ (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
+ 2023 09:36:03 +0800
+Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
+ 2023 09:36:03 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
+Subject: [PATCH] xhci:fix issue with resume from system Sx state in zhaoxin platform
+Date:   Thu, 20 Apr 2023 17:36:03 +0800
+X-ASG-Orig-Subj: [PATCH] xhci:fix issue with resume from system Sx state in zhaoxin platform
+Message-ID: <20230420093603.3344-1-WeitaoWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420172130.375819-1-WeitaoWang-oc@zhaoxin.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.29.8.21]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
+X-Barracuda-Start-Time: 1681954564
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 979
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0019 1.0000 -2.0084
+X-Barracuda-Spam-Score: 1.10
+X-Barracuda-Spam-Status: No, SCORE=1.10 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107658
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,27 +69,29 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 01:21:27AM +0800, Weitao Wang wrote:
-> Fix some issues of xHCI for zhaoxin.
-> 
-> Weitao Wang (3):
->   xhci: Add a quirk for zhaoxin xhci to fix issues.
->   xhci: Add zhaoxin xHCI U1/U2 feature support
->   xhci: Show zhaoxin xHCI root hub speed correctly
-> 
->  drivers/usb/host/xhci-pci.c |  5 ++++
->  drivers/usb/host/xhci.c     | 49 +++++++++++++++++++++++++++++++++++--
->  drivers/usb/host/xhci.h     |  1 +
->  3 files changed, 53 insertions(+), 2 deletions(-)
-> 
-> -- 
-> 2.32.0
-> 
+On Zhaoxin ZX-100 project, xHCI can't work normally after resume
+from system Sx state. To fix this issue, when resume from system
+Sx state, reinitialize xHCI instead of restore.
 
-Do these replace:
-https://lore.kernel.org/r/20230420093603.3344-1-WeitaoWang-oc@zhaoxin.com
-or are they on top of them?
+Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+---
+ drivers/usb/host/xhci-pci.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-thanks,
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 6db07ca419c3..b0f0ed088f81 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -334,6 +334,9 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	     pdev->device == PCI_DEVICE_ID_AMD_PROMONTORYA_4))
+ 		xhci->quirks |= XHCI_NO_SOFT_RETRY;
+ 
++	if (pdev->vendor == PCI_VENDOR_ID_ZHAOXIN && pdev->device == 0x9202)
++		xhci->quirks |= XHCI_RESET_ON_RESUME;
++
+ 	/* xHC spec requires PCI devices to support D3hot and D3cold */
+ 	if (xhci->hci_version >= 0x120)
+ 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+-- 
+2.32.0
 
-greg k-h
