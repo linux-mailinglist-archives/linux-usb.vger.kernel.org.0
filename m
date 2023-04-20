@@ -2,113 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5776E8F96
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 12:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B866E9B91
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 20:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234354AbjDTKMS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Apr 2023 06:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54834 "EHLO
+        id S230089AbjDTSZS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Apr 2023 14:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234344AbjDTKLt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 06:11:49 -0400
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F5DA24B
-        for <linux-usb@vger.kernel.org>; Thu, 20 Apr 2023 03:08:31 -0700 (PDT)
-X-ASG-Debug-ID: 1681985308-1eb14e63882dfa0001-YVMibp
-Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id UldYrculNOYAjf4U (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 20 Apr 2023 18:08:28 +0800 (CST)
-X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX2.zhaoxin.com
- (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
- 2023 18:08:28 +0800
-Received: from [10.29.8.21] (10.29.8.21) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
- 2023 18:08:27 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Message-ID: <b65291ea-acca-7cd4-b5f5-f5bb46e679b4@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.8.21
-Date:   Fri, 21 Apr 2023 02:08:14 +0800
+        with ESMTP id S229661AbjDTSZR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 14:25:17 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67FC272C
+        for <linux-usb@vger.kernel.org>; Thu, 20 Apr 2023 11:25:16 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-247122e9845so908211a91.0
+        for <linux-usb@vger.kernel.org>; Thu, 20 Apr 2023 11:25:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682015116; x=1684607116;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xQIffIkqtd6hNHJB4rxz+31IegGCQwc44vhkiOJj92s=;
+        b=Cu+0B+PK0MYjzW2+i39kldcN/aIaCuQSrcf6eHv158AOp3/C82ldUrcadYPioAd8cg
+         8oS44bwIyEEtz0GeHTU7gSeXuFqH56+gqEdkHK2rflMfP/toGQXPsfy/n5Zq/0mZaGLh
+         4puPiIkNOG+mc7CXImqhd1dcahBPxw1rNwYgphWLeTKU+Cext4qvjZ872AKHJ6Q62Kbn
+         /oK4xcmMZ9q0Ytc5iNPa0VMb6AasZ5QmZrJr4l8f0Dg8Pn2c+B5MAqf+pIZhQmM5aGQ1
+         I6pOYiXDcombtpkrj0aDrwopntvC5IZZKoZBmbUDxjZY4A6TrcqTvJvtfH9JpeIiAnL4
+         miiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682015116; x=1684607116;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xQIffIkqtd6hNHJB4rxz+31IegGCQwc44vhkiOJj92s=;
+        b=ZihTmQQ6vI9I4N6XBHLblKEHVmAFkgAZegtgxq2F/yrXRi4sAjg64frwbsEsKIFGHE
+         pQOiZTVGlorHqj1LaSj9pTM5nCdAEzCmNVBsmsfyplfXIcTH5XSWmmUs2y4DAPIqK4vS
+         LdxVExqD78NPtzz75KvTRlRhec5GG77HA/1c2sk72iThSZj66i7pGRFnbwLzJYIXpxTs
+         GTv/mcQdS1POAqN8ftCNhX49NTEs4ghzkV6wTF8ERafT+x0pS0N0baTJP7jHA8RJHiQK
+         Uobc6nt3kb3fpOm5zCtKIvW/Sz95/hBKemZpJ6KaXO6KpN6WQB+kFs1Md+3Mkg3NKcM5
+         z9Tg==
+X-Gm-Message-State: AAQBX9f8LAoZvWX0C5n3o70qLvxwsho3d04eEUh7J+m4yaWPKJSs5m8V
+        pbmdiNgEXt9ihEsf+KKHF+wLYzU7yInLFRq3FXo=
+X-Google-Smtp-Source: AKy350brJO/zNn8d4ey0DD2/QmHk/6Wt3Kn/ImgDOGHKVt0z6+jMqv8kbReO+gSOwv0Shhyf2EhFmdPqtEfajXKmb8k=
+X-Received: by 2002:a17:90a:fd17:b0:247:1de8:8263 with SMTP id
+ cv23-20020a17090afd1700b002471de88263mr2755705pjb.4.1682015116262; Thu, 20
+ Apr 2023 11:25:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/3] Fix some issues of xHCI for zhaoxin
-Content-Language: en-US
-X-ASG-Orig-Subj: Re: [PATCH 0/3] Fix some issues of xHCI for zhaoxin
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <tonywwang@zhaoxin.com>,
-        <weitaowang@zhaoxin.com>
-References: <20230420172130.375819-1-WeitaoWang-oc@zhaoxin.com>
- <ZEEF9E4Mmeg5hRWu@kroah.com>
-From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-In-Reply-To: <ZEEF9E4Mmeg5hRWu@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.29.8.21]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
-X-Barracuda-Start-Time: 1681985308
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 1179
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: 1.09
-X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107673
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
-        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7022:2082:b0:61:d1d:be20 with HTTP; Thu, 20 Apr 2023
+ 11:25:15 -0700 (PDT)
+Reply-To: jennifertrujillo735@gmail.com
+From:   Jennifer Trujillo <williamsjohn0967@gmail.com>
+Date:   Thu, 20 Apr 2023 19:25:15 +0100
+Message-ID: <CABDAQzRU5GdoorNn-wKsOOm7GSwBcyWwiGW0MSg+O=E6ZLi87Q@mail.gmail.com>
+Subject: HALLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2023/4/20 17:29, Greg KH wrote:
-> On Fri, Apr 21, 2023 at 01:21:27AM +0800, Weitao Wang wrote:
->> Fix some issues of xHCI for zhaoxin.
->>
->> Weitao Wang (3):
->>    xhci: Add a quirk for zhaoxin xhci to fix issues.
->>    xhci: Add zhaoxin xHCI U1/U2 feature support
->>    xhci: Show zhaoxin xHCI root hub speed correctly
->>
->>   drivers/usb/host/xhci-pci.c |  5 ++++
->>   drivers/usb/host/xhci.c     | 49 +++++++++++++++++++++++++++++++++++--
->>   drivers/usb/host/xhci.h     |  1 +
->>   3 files changed, 53 insertions(+), 2 deletions(-)
->>
->> -- 
->> 2.32.0
->>
-> 
-> Do these replace:
-> https://lore.kernel.org/r/20230420093603.3344-1-WeitaoWang-oc@zhaoxin.com
-> or are they on top of them?
-> 
-
-This [patch 2/3] and [patch 3/3] share a xhci quirk flag XHCI_ZHAOXIN_HOST,
-So I put these independent functional patch in this set group.
-Above url and below url are independent xHCI patch for zhaoxin.
-Is it more suitable to put all the patch for zhaoxin xhci in one group?
-I Hope to receive your guidance. Thanks!
-
-https://lore.kernel.org/all/20230420104826.4727-1-WeitaoWang-oc@zhaoxin.com/
-
-Best Regards,
-Weitao
-
-> thanks,
-> 
-> greg k-h
-> .
+-- 
+Hallo,
+Wie geht es dir?
