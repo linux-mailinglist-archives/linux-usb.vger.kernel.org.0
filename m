@@ -2,120 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7C66E947C
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 14:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E156E963A
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 15:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234983AbjDTMdX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Apr 2023 08:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
+        id S230459AbjDTNtK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Apr 2023 09:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234936AbjDTMdQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 08:33:16 -0400
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732E83C30;
-        Thu, 20 Apr 2023 05:32:58 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-18665c1776dso615787fac.2;
-        Thu, 20 Apr 2023 05:32:58 -0700 (PDT)
+        with ESMTP id S229980AbjDTNtI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 09:49:08 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92E65245;
+        Thu, 20 Apr 2023 06:49:07 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-517c01edaaaso763408a12.3;
+        Thu, 20 Apr 2023 06:49:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681998547; x=1684590547;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=wnjUcH5y1Pb8R4/f3gZ/CX/Eqa1ZM5qT0lnDQJSddVI=;
+        b=ppBsWpCXOkPI9VqP8f0CZnLVdZL6ouH7XsmTPYI2heigN9JKfbVzxPgw5dA17iUhDA
+         8g1djWzw5GXkFikwzYddWzDRYS9hDRMhWXqly6PRWF4z3cfzFTmpUFUm9aeQ1pRKAX0H
+         JRH/zWEA0R9MPsBUCdF0fGRZe4uRkQG0AIdoD1TfB7x4ufQ/sM0+TplNeWvfCBLdkcPy
+         TEvJfY3x8aHbyB4VEdJaCGy5p5PDua+7O0Psq/TmbZxgd0cuJs9fV0Ev42zNLYlzwz0Y
+         OqlkUjGi6YmUq9ily1EzjFuYrHYxusN8+X732ZCMRpQP3xE1QoJGSqN87RzJrgeAUYqM
+         PBCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681993977; x=1684585977;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=n7z0JmwHaex/uFH0ZYyDvToigtvE+3W/gbf5o0Is7Ho=;
-        b=OBkMo2LkzLoVM5h8kQpDEMcnrNY7rC2mn3o58ExbDs9bg55LcP6Pef7/HOnmjZ3AcD
-         BkbbQ62RF3hfEbaTI7iTo/rKh6rlRZDFZkWVBlx7ppw0Ar255LmUZO/JWC7rwmzH/zeF
-         9/qFWhNaixRJIQIM1NwZVicrTLR5R8wHn5MZMqMBfPr8AKWZiFfHUm3BtlcNYpnPCS/s
-         SYhyj66KETnJE9Powihy6xmsavVkx0FSOuJtyarZVYMLKB9bRDSRXw9sTQjhgO4hjI6J
-         FGuusluvyG54NbCOKNR9Ltov8RjYURSC5KKT6r/YoqOSqa92mfYUX8gTZ7fe30JKLzv9
-         hfhA==
-X-Gm-Message-State: AAQBX9cov7AAV7QllXKJFkO56Y2eDFUM/fzIeHwaNusuNPJnK5TtaT8W
-        8fg06uUe2bgGQzoazJITDziaWzfO5g==
-X-Google-Smtp-Source: AKy350Y107Wu1RAl2s+KH7dc+aZ13lz9F0Ey0F68DyRy1iyrsdRSN2Bux4WCxJa0ZbDCN1BlqkUgiw==
-X-Received: by 2002:a05:6871:707:b0:188:5:bc87 with SMTP id f7-20020a056871070700b001880005bc87mr1163265oap.6.1681993977566;
-        Thu, 20 Apr 2023 05:32:57 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e21-20020a056830201500b0069f8ff38bcbsm662919otp.16.2023.04.20.05.32.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 05:32:57 -0700 (PDT)
-Received: (nullmailer pid 2632253 invoked by uid 1000);
-        Thu, 20 Apr 2023 12:32:54 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        d=1e100.net; s=20221208; t=1681998547; x=1684590547;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wnjUcH5y1Pb8R4/f3gZ/CX/Eqa1ZM5qT0lnDQJSddVI=;
+        b=B9acNGAC3OwyKHL0pUArS2bAfO3+nGqJ4C8aQ8o82f6d8fZOJ3OYBcf3GAN6QELiXT
+         vo44ZlONmZOQjwymiSLSqG/B4UX3jfnfbuh6XGtSLOilgKuCHtavlfZKQA3Wo3Nkc8Tn
+         fL9r1j4lIn9amvp0IuFJUi+AmY5omGQkoLhQgfE3z112lMFiqPmN7EWsc5boJM+rGwnR
+         m8hVV7rAGk8pEpnVsxVG0pF9Yves7w2ZCffOfhUV5XqN747RdnQlNYgZgWblnQWq4Bw0
+         Jul5d0BK/RbrjTum8r2WYdMc+AG9Z0pYfVXpNWIhJ6+ZM8k2cRZnbMnjTmeboXVYD4IY
+         W/4w==
+X-Gm-Message-State: AAQBX9e22gcIotmxZNKbqJqLtPnGyGZC+QVRPWV5/hczS2ALxGerygys
+        cMHMpUeue537FAQl75L96o10HT8l5vM=
+X-Google-Smtp-Source: AKy350b4gVTrT0jdEJyTAOLAle1O9HpAQ2FZJ2O2eMbVOAtJVpzK7840rFjgpPtYWntiYEt7eg6fFg==
+X-Received: by 2002:a17:90b:3904:b0:246:ee10:cb5d with SMTP id ob4-20020a17090b390400b00246ee10cb5dmr1795004pjb.14.1681998547069;
+        Thu, 20 Apr 2023 06:49:07 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l5-20020a17090a598500b00247a2498075sm1188313pji.48.2023.04.20.06.49.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 06:49:06 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <dff23f7b-86a4-6984-5ce0-70aa6dbfad8e@roeck-us.net>
+Date:   Thu, 20 Apr 2023 06:49:03 -0700
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Minda Chen <minda.chen@starfivetech.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Mason Huo <mason.huo@starfivetech.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        Peter Chen <peter.chen@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-In-Reply-To: <20230420110052.3182-6-minda.chen@starfivetech.com>
-References: <20230420110052.3182-1-minda.chen@starfivetech.com>
- <20230420110052.3182-6-minda.chen@starfivetech.com>
-Message-Id: <168199392033.2631023.325205203535545069.robh@kernel.org>
-Subject: Re: [PATCH v5 5/7] dt-bindings: usb: Add StarFive JH7110 USB
- controller
-Date:   Thu, 20 Apr 2023 07:32:54 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] usb: typec: tcpm: fix multiple times discover svids
+ error
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Frank Wang <frank.wang@rock-chips.com>, heiko@sntech.de,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
+        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
+        yubing.zhang@rock-chips.com, wmc@rock-chips.com
+References: <20230316081149.24519-1-frank.wang@rock-chips.com>
+ <ZBROkdOFAP4GPPU6@kuha.fi.intel.com> <ZEDzGydXbbpekeaB@kroah.com>
+Content-Language: en-US
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <ZEDzGydXbbpekeaB@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-On Thu, 20 Apr 2023 19:00:50 +0800, Minda Chen wrote:
-> StarFive JH7110 platforms USB have a wrapper module around
-> the Cadence USBSS-DRD controller. Add binding information doc
-> for that.
+On 4/20/23 01:08, Greg KH wrote:
+> On Fri, Mar 17, 2023 at 01:27:13PM +0200, Heikki Krogerus wrote:
+>> On Thu, Mar 16, 2023 at 04:11:49PM +0800, Frank Wang wrote:
+>>> PD3.0 Spec 6.4.4.3.2 say that only Responder supports 12 or more SVIDs,
+>>> the Discover SVIDs Command Shall be executed multiple times until a
+>>> Discover SVIDs VDO is returned ending either with a SVID value of
+>>> 0x0000 in the last part of the last VDO or with a VDO containing two
+>>> SVIDs with values of 0x0000.
+>>>
+>>> In the current implementation, if the last VDO does not find that the
+>>> Discover SVIDs Command would be executed multiple times even if the
+>>> Responder SVIDs are less than 12, and we found some odd dockers just
+>>> meet this case. So fix it.
+>>>
+>>> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
+>>> ---
+>>>   drivers/usb/typec/tcpm/tcpm.c | 16 +++++++++++++++-
+>>>   1 file changed, 15 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+>>> index 66de02a56f512..a3ae2c79f3540 100644
+>>> --- a/drivers/usb/typec/tcpm/tcpm.c
+>>> +++ b/drivers/usb/typec/tcpm/tcpm.c
+>>> @@ -1515,7 +1515,21 @@ static bool svdm_consume_svids(struct tcpm_port *port, const u32 *p, int cnt)
+>>>   		pmdata->svids[pmdata->nsvids++] = svid;
+>>>   		tcpm_log(port, "SVID %d: 0x%x", pmdata->nsvids, svid);
+>>>   	}
+>>> -	return true;
+>>> +
+>>> +	/*
+>>> +	 * PD3.0 Spec 6.4.4.3.2: The SVIDs are returned 2 per VDO (see Table
+>>> +	 * 6-43), and can be returned maximum 6 VDOs per response (see Figure
+>>> +	 * 6-19). If the Respondersupports 12 or more SVID then the Discover
+>>> +	 * SVIDs Command Shall be executed multiple times until a Discover
+>>> +	 * SVIDs VDO is returned ending either with a SVID value of 0x0000 in
+>>> +	 * the last part of the last VDO or with a VDO containing two SVIDs
+>>> +	 * with values of 0x0000.
+>>> +	 *
+>>> +	 * However, some odd dockers support SVIDs less than 12 but without
+>>> +	 * 0x0000 in the last VDO, so we need to break the Discover SVIDs
+>>> +	 * request and return false here.
+>>> +	 */
+>>> +	return cnt == 7;
+>>>   abort:
+>>>   	tcpm_log(port, "SVID_DISCOVERY_MAX(%d) too low!", SVID_DISCOVERY_MAX);
+>>>   	return false;
+>>
+>> This is OK by men, but let's wait for Guenter.
 > 
-> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
-> Reviewed-by: Peter Chen <peter.chen@kernel.org>
-> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
-> ---
->  .../bindings/usb/starfive,jh7110-usb.yaml     | 131 ++++++++++++++++++
->  1 file changed, 131 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
+> What ever happened to this patch?
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+It got lost in space.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml:73:9: [warning] too many spaces after hyphen (hyphens)
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-dtschema/dtc warnings/errors:
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230420110052.3182-6-minda.chen@starfivetech.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Guenter
 
