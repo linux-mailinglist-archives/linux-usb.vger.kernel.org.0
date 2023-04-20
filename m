@@ -2,126 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332366E8C90
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 10:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE0F6E8CF1
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 10:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234396AbjDTIVK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Apr 2023 04:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51896 "EHLO
+        id S233977AbjDTIjK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Apr 2023 04:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233947AbjDTIVJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 04:21:09 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3688B35B1;
-        Thu, 20 Apr 2023 01:21:08 -0700 (PDT)
+        with ESMTP id S233830AbjDTIjJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 04:39:09 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9C140C7;
+        Thu, 20 Apr 2023 01:39:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681978868; x=1713514868;
+  t=1681979948; x=1713515948;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=4/conQ/6kczdzx/+dtomCs4WTfQIoGhLLwAeEZdDT40=;
-  b=dP/zgW+STXui9fGDf9uXbiFD/3l77t4lwM5fhkIzGghIzsRDRev2ZOz+
-   MDbxLHgUGiy/R+HA939WdIwsj7XUpOe1+alCgcYSZtYTRF64QJBA6lecM
-   +OpsCPeUeO1qUA4GmkxuPHdeDfAknn9U8Hk53wQ4rgSkhRFVo3FFVVyhF
-   dQGukaKCkKsK0zDgiBFJfyZD2jNeqT8EQ3TcU1TssE+A71HyT0nvUrCvY
-   7qHekXNSvJYqbgd9O0g6VdffMcE427a2FwLlL+QWHnvvA6lT1kLVxnqX5
-   Cnt/mxzKpy0xdVlYDtl4/OI7GyjgTe0e+oWSVkB2BZ4JPMCna09umEWeB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="344425647"
+  bh=4VPKHoRggY1IUF6tvOUimijOTqeaqrgEirRfDRYdkX4=;
+  b=ENpSpNiiaKrxZ8/CL53kH9kQd7/4n2qJ7P6GDinCF0T2XhGoM4tnwjV+
+   V0SjEnb7gIue16PUwKCLc8d/svXr0DQ5XAor0D0gIDck8BzZ73Zwat38y
+   JPCGEKQoAbUNr8TvxsiQyg6pcBhETuKDwN19CEwvo8MciUCqSGYakNw2U
+   wupdVZcWGdjb8t1PooOcJs5UqkC2C6Hp1ZNwuDEegnQsiyAAN/pVsBedF
+   EPt99PWEIRmyyK97eiB0zU5QWMfZNfGVf75X1hMqubmb64Mz6KrFL7kxx
+   zGkBGRbsrjQrr37DcEW1TtdN9mCNuvw/NDhXYR8dd2x96OFjAYSxVJULv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="410912719"
 X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="344425647"
+   d="scan'208";a="410912719"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 01:21:04 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 01:39:08 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="835631405"
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="835635411"
 X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="835631405"
+   d="scan'208";a="835635411"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 20 Apr 2023 01:21:00 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 20 Apr 2023 11:20:58 +0300
-Date:   Thu, 20 Apr 2023 11:20:58 +0300
+  by fmsmga001.fm.intel.com with SMTP; 20 Apr 2023 01:39:05 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 20 Apr 2023 11:39:04 +0300
+Date:   Thu, 20 Apr 2023 11:39:04 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Frank Wang <frank.wang@rock-chips.com>, linux@roeck-us.net,
-        heiko@sntech.de, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        huangtao@rock-chips.com, william.wu@rock-chips.com,
-        jianwei.zheng@rock-chips.com, yubing.zhang@rock-chips.com,
-        wmc@rock-chips.com
-Subject: Re: [PATCH v2] usb: typec: tcpm: fix multiple times discover svids
- error
-Message-ID: <ZED16m8B1K+7sdJK@kuha.fi.intel.com>
-References: <20230316081149.24519-1-frank.wang@rock-chips.com>
- <ZBROkdOFAP4GPPU6@kuha.fi.intel.com>
- <ZEDzGydXbbpekeaB@kroah.com>
+To:     Maxim Korotkov <korotkov.maxim.s@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH] usb: typec: fix potential NULL dereference
+Message-ID: <ZED6KBl6HNT8D0ae@kuha.fi.intel.com>
+References: <20230417195003.19504-1-korotkov.maxim.s@gmail.com>
+ <ZD41tLi3sMB71Xf2@kroah.com>
+ <22a5bd86-8d41-14e2-bb5a-968d15618adf@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZEDzGydXbbpekeaB@kroah.com>
+In-Reply-To: <22a5bd86-8d41-14e2-bb5a-968d15618adf@gmail.com>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 10:08:59AM +0200, Greg KH wrote:
-> On Fri, Mar 17, 2023 at 01:27:13PM +0200, Heikki Krogerus wrote:
-> > On Thu, Mar 16, 2023 at 04:11:49PM +0800, Frank Wang wrote:
-> > > PD3.0 Spec 6.4.4.3.2 say that only Responder supports 12 or more SVIDs,
-> > > the Discover SVIDs Command Shall be executed multiple times until a
-> > > Discover SVIDs VDO is returned ending either with a SVID value of
-> > > 0x0000 in the last part of the last VDO or with a VDO containing two
-> > > SVIDs with values of 0x0000.
+On Tue, Apr 18, 2023 at 09:56:51AM +0300, Maxim Korotkov wrote:
+> On 18.04.2023 09:16, Greg Kroah-Hartman wrote:
+> > On Mon, Apr 17, 2023 at 10:50:03PM +0300, Maxim Korotkov wrote:
+> > > The pointer 'adev' was being dereferenced before being checked for NULL
+> > > in the 'type_alt mode_enter()' and 'type_alt mode_exit()' functions.
+> > > Although this is a hypothetical issue, it's better to move the pointer
+> > > assignment after the NULL check to avoid any potential problems.
 > > > 
-> > > In the current implementation, if the last VDO does not find that the
-> > > Discover SVIDs Command would be executed multiple times even if the
-> > > Responder SVIDs are less than 12, and we found some odd dockers just
-> > > meet this case. So fix it.
+> > > Found by Linux Verification Center with Svace static analyzer.
 > > > 
-> > > Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
+> > > Fixes: 8a37d87d72f0 ("usb: typec: Bus type for alternate modes")
+> > > Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
 > > > ---
-> > >  drivers/usb/typec/tcpm/tcpm.c | 16 +++++++++++++++-
-> > >  1 file changed, 15 insertions(+), 1 deletion(-)
+> > >   drivers/usb/typec/bus.c | 13 +++++++++----
+> > >   1 file changed, 9 insertions(+), 4 deletions(-)
 > > > 
-> > > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> > > index 66de02a56f512..a3ae2c79f3540 100644
-> > > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > > @@ -1515,7 +1515,21 @@ static bool svdm_consume_svids(struct tcpm_port *port, const u32 *p, int cnt)
-> > >  		pmdata->svids[pmdata->nsvids++] = svid;
-> > >  		tcpm_log(port, "SVID %d: 0x%x", pmdata->nsvids, svid);
-> > >  	}
-> > > -	return true;
-> > > +
-> > > +	/*
-> > > +	 * PD3.0 Spec 6.4.4.3.2: The SVIDs are returned 2 per VDO (see Table
-> > > +	 * 6-43), and can be returned maximum 6 VDOs per response (see Figure
-> > > +	 * 6-19). If the Respondersupports 12 or more SVID then the Discover
-> > > +	 * SVIDs Command Shall be executed multiple times until a Discover
-> > > +	 * SVIDs VDO is returned ending either with a SVID value of 0x0000 in
-> > > +	 * the last part of the last VDO or with a VDO containing two SVIDs
-> > > +	 * with values of 0x0000.
-> > > +	 *
-> > > +	 * However, some odd dockers support SVIDs less than 12 but without
-> > > +	 * 0x0000 in the last VDO, so we need to break the Discover SVIDs
-> > > +	 * request and return false here.
-> > > +	 */
-> > > +	return cnt == 7;
-> > >  abort:
-> > >  	tcpm_log(port, "SVID_DISCOVERY_MAX(%d) too low!", SVID_DISCOVERY_MAX);
-> > >  	return false;
+> > > diff --git a/drivers/usb/typec/bus.c b/drivers/usb/typec/bus.c
+> > > index 098f0efaa58d..ae0aca8f33db 100644
+> > > --- a/drivers/usb/typec/bus.c
+> > > +++ b/drivers/usb/typec/bus.c
+> > > @@ -125,13 +125,16 @@ EXPORT_SYMBOL_GPL(typec_altmode_notify);
+> > >    */
+> > >   int typec_altmode_enter(struct typec_altmode *adev, u32 *vdo)
+> > >   {
+> > > -	struct altmode *partner = to_altmode(adev)->partner;
+> > > -	struct typec_altmode *pdev = &partner->adev;
+> > > +	struct altmode *partner;
+> > > +	struct typec_altmode *pdev;
+> > >   	int ret;
+> > >   	if (!adev || adev->active)
+> > >   		return 0;
+> > > +	partner = to_altmode(adev)->partner;
+> > > +	pdev = &partner->adev;
 > > 
-> > This is OK by men, but let's wait for Guenter.
+> > As you point out, the original code is still fine here, we check before
+> > we actually use these values.
+> > 
+> > Also, can adev every actually be NULL?  In looking at the code paths, I
+> > can't see how that could happen.
+> > 
+> > thanks,
+> > 
+> > greg k-h
 > 
-> What ever happened to this patch?
+> I agree that the adev will most likely never be NULL, but usually this
+> pointer is checked before usage (for example in typec_altmode_notify() or
+> typec_altmode_vdm()). It is a little odd that in these functions it utilized
+> before check. Is it just extra check that can be removed?
 
-I wanted to wait for Guenter's review, but FWIW:
-
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Please go ahead and remove it.
 
 thanks,
 
