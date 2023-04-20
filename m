@@ -2,174 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 181766E8BE8
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 09:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 566E16E8C19
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 10:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234305AbjDTHzn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Apr 2023 03:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34300 "EHLO
+        id S234303AbjDTIFz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Apr 2023 04:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234265AbjDTHzf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 03:55:35 -0400
-X-Greylist: delayed 529 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 Apr 2023 00:55:10 PDT
-Received: from mail-200167.simplelogin.co (mail-200167.simplelogin.co [176.119.200.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0741E1710
-        for <linux-usb@vger.kernel.org>; Thu, 20 Apr 2023 00:55:10 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 07:46:09 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=8shield.net; s=dkim;
-        t=1681976779;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BUjwNV/VpEbLHLi9ougHi6A/OfPUTK4fNksYYjjUi0o=;
-        b=fvtWNgBV2Rt++chINNGrDeI8sHzYvQvLp7Bu8y7RlF30QS/nT6Tom0J9VjThhwro3zc15h
-        mzALauYVpjkuf8r70ifGEI6U3xQitdeVNX2yuWj7HixUnWjPZqVCDPkXWKbSyyzB6o0SE5
-        7bnw/S2+5eoHYj8TEdoDkOQ9ONpb+gA=
-Subject: Re: btusb driver need to be unloaded and reloaded after boot & lag
- issue
-In-Reply-To: <JeOOK1M3oQrgyJmlzKuvQx2O1xwE6THHXiN_zsFAtx0o-1iXxaPIi7whg1y-a8BcT6XHIKxSHXikQrw3WDpS2JRquVXwPB4jHEyuIvhuo2E=@protonmail.com>
+        with ESMTP id S233697AbjDTIFy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 04:05:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939C613E;
+        Thu, 20 Apr 2023 01:05:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FD7A645C8;
+        Thu, 20 Apr 2023 08:05:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B640C433EF;
+        Thu, 20 Apr 2023 08:05:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1681977951;
+        bh=+qe60FxZ8S+AEFk5qkOdglqHYeXQSiB/ZLnG9r85jZU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vJyiMIBuG3fkJoXI39w2qRTLx5IQcOH27ELWkNr5bSIuY+sTdigfl+u++ulqEf9i2
+         FeAyLzyQ1EajgMqHRUBVGq4lnlrAU2QqBuThZbeH9ycUjyN/Cl2FqSIIGP0ew/o4be
+         AYZI0lZgdKPUla9/fSkhSfBc2u5G0msSMRmqWh5I=
+Date:   Thu, 20 Apr 2023 10:05:44 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tonywwang@zhaoxin.com,
+        weitaowang@zhaoxin.com
+Subject: Re: [PATCH] =?utf-8?B?VUhDSe+8mmFkanVz?= =?utf-8?Q?t?= zhaoxin UHCI
+ controllers OverCurrent bit value
+Message-ID: <ZEDyWC7GsbcEn7UK@kroah.com>
+References: <20230420111445.5028-1-WeitaoWang-oc@zhaoxin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   help.7ocym@8shield.net
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        regressions@lists.linux.dev
-Message-ID: <168197677832.7.17052177272272311417.121629099@8shield.net>
-References: <168133719213.7.14774994518515251513.119182329@8shield.net>
- <dbbf4556-2719-5827-efbd-da9e87c0de40@molgen.mpg.de>
- <168189401011.9.1190609165422904967.121288919@8shield.net>
-X-SimpleLogin-Type: Reply
-X-SimpleLogin-EmailLog-ID: 121629101
-X-SimpleLogin-Want-Signing: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230420111445.5028-1-WeitaoWang-oc@zhaoxin.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, Apr 20, 2023 at 07:14:45PM +0800, Weitao Wang wrote:
+> Over Current condition is not standardized in the UHCI spec.
+> Zhaoxin UHCI controllers report OverCurrent bit active off.
+> Intel controllers report it active on, so we'll adjust the bit value.
+> 
+> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
 
-Hi,
+Note, your Subject: line has odd characters in it, can you rewrite it to
+just use ascii?  I think it's the '：' character which should be ':',
+right?
 
-Sent with Proton Mail secure email.
+> ---
+>  drivers/usb/host/uhci-pci.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/host/uhci-pci.c b/drivers/usb/host/uhci-pci.c
+> index 3592f757fe05..177e3c2aa287 100644
+> --- a/drivers/usb/host/uhci-pci.c
+> +++ b/drivers/usb/host/uhci-pci.c
+> @@ -126,6 +126,10 @@ static int uhci_pci_init(struct usb_hcd *hcd)
+>  	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA)
+>  		uhci->oc_low = 1;
+>  
+> +	/* ZHAOXIN controllers report OverCurrent bit active off. */
+> +	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_ZHAOXIN)
+> +		uhci->oc_low = 1;
+> +
 
-------- Original Message -------
-On Wednesday, April 19th, 2023 at 10:46 AM, jl.malet <jl.malet@protonmail.c=
-om> wrote:
+This should also go to the stable kernels, right?
 
+But a new UHCI controller?  And this affects all of them?  And why is
+Intel an issue here (as you mention in the changelog text)?
 
-> Hi,
->=20
-> ------- Original Message -------
-> On Thursday, April 13th, 2023 at 7:39 AM, Paul Menzel - pmenzel at molgen=
-.mpg.de pmenzel_at_molgen_mpg_de_rislbjit@simplelogin.co wrote:
->=20
->=20
->=20
-> > [Cc: +regressions@lists.linux.dev]
-> >=20
-> > Dear JLM,
-> >=20
-> > Am 13.04.23 um 00:06 schrieb help.7ocym@8shield.net:
-> >=20
-> > > sorry to address both list, but this issue seems related, without
-> > > knowing where lies the issue > my hardware : https://wiki.gentoo.org/=
-wiki/Lenovo_Yoga_900
-> > > I use the pre-built gentoo linux kernel,
-> > > 6.2.8-gentoo-dist #1 SMP PREEMPT_DYNAMIC Wed Mar 22 17:15:39 -00 2023=
- x86_64 Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz GenuineIntel GNU/Linux
-> > >=20
-> > > since a few update (sadly I didn't noted the latest kernel version
-> > > that didn't had the issue), after a boot, the bluetooth isn't
-> > > working, nothing bad in dmesg, I just have to unload btusb module and
-> > > modprobe it again to have bluetooth working again...
-> > >=20
-> > > after a suspend to ram, I have to power off-power on the bluetooth to
-> > > have it work again (bluetoothctl power off; bluetoothctl power on)
-> > >=20
-> > > bluetooth mouse can also be extremely laggy sometimes,but without
-> > > error message in dmesg, most of the time `bluetoothctl power` off-on
-> > > cycling do solve the issue....
-> > >=20
-> > > I also included the usb mailing list because it might be related to
-> > > some behavior I noticed :
-> > >=20
-> > > I have usb3.0 micro sd card reader (SanDisk MobileMate UHS-I microSD
-> > > Reader/Writer USB 3.0 Reader, Kingston MobileLite Plus (MLPM) microSD
-> > > Card Reader USB 3.1 microSDHC/SDXC UHS-II, for example) and some
-> > > extra fast micro sd cards (like sandisk extrem 512G), when
-> > > transferring data the read rate can be as high as 110Mo/s and write
-> > > 70Mo/s sustained, nothing impressive but when such rate is achieved
-> > > for a long time (big file transfer) either reading only access,
-> > > writing only access or read write, the usb bus become unusable, I
-> > > can't even use a usb mouse connected to it by wire... even if cpu
-> > > usage is really low (less than 10%) I don't have the issue if I
-> > > connect a M2 usb3 flash drive, with comparable transfert speed... so
-> > > not related to some bus over usage...
-> > >=20
-> > > so I suspect that there is an issue with the usb driver, and that
-> > > maybe the bluetooth issue can be related to the usb issue, since the
-> > > bluetooth controller is on the usb bus on the laptop >
-> > > the transfer issue of usb is much more older than the bluetooth
-> > > issue, it's approximative, but : > - the btusb boot issue is about 3 =
-month old,
-> > > - the suspend/resume issue of bluetooth is more than a year old
-> > > - the usb transfer issue as more than a year...
-> > >=20
-> > > I'll gladly provide any useful information, can also do patch tries..=
-.
-> >=20
-> > As you use Gentoo and are able to build your own Linux kernel, the
-> > fastest way to get these issues addressed is to bisect them. To shorten
-> > the test cycles, I recommend to try, if you can reproduce the issues in
-> > QEMU and passing through the problematic devices to the VM [1][2].
-> >=20
-> > I also recommend to start a separate thread for each issue and, as thes=
-e
-> > seem to be regressions, also keep the regression folks in the loop [3].
-> >=20
-> > Kind regards,
-> >=20
-> > Paul
-> >=20
-> > (The commands were working for after all, and the device didn=E2=80=
-=99t
-> > show up due to a (second) Linux kernel regression.)
-> > [2]: https://station.eciton.net/qemu-usb-host-device-pass-through.html
-> > [3]:
-> > https://www.kernel.org/doc/html/latest/admin-guide/reporting-regression=
-s.html
->=20
->=20
-> thanks for the reply,
-> after upgrade to 6.2.11 version,
-> - seems that the issue at boot of btusb module is gone... I don't have an=
-ymore to unload btusb module after a boot... so that's great news!
-> - the bluetooth resumes also after a suspend S3 (suspend to ram)! so grea=
-t news again! (I've to check for suspend to disk, but I'm confident about s=
-uccess)
->=20
-> I still have to do some check with the micro usb readers to see if the bu=
-g "bus monopolization" is still present, so far so good!
->=20
->=20
->=20
-> Sent with Proton Mail secure email.
+thanks,
 
-so far, so good... the usb congestion seems also to be gone... tried {usb m=
-icro flash reader}->{disk}, {disk}->{usb micro flash reader}, {usb micro fl=
-ash reader}->{usb micro flash reader}, all CPU 100% due to gentoo upgrade..=
-. and the {bluetooth mouse} connected to the {bluetooth usb host} had no la=
-g... before (2~3 years) I used the trackpad because it was soooo laggy or n=
-ot even moving... so, there is something between  6.2.8 and 6.2.11 that did=
- fixed the issue.
-
-sorry for the inconvenience, seems that just reporting the issue (that was =
-annoying me for years) did fixed the issue...
-this can be closed, thanks and regards
-JLM
-
+greg k-h
