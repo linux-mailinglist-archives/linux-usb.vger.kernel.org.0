@@ -2,151 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 164496E91CF
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 13:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05DDD6E887E
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 05:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234610AbjDTLFa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Apr 2023 07:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55154 "EHLO
+        id S233350AbjDTDO7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Apr 2023 23:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235358AbjDTLEx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 07:04:53 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4501B4;
-        Thu, 20 Apr 2023 04:03:29 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id E4AFE24E2AB;
-        Thu, 20 Apr 2023 19:01:00 +0800 (CST)
-Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 20 Apr
- 2023 19:01:00 +0800
-Received: from ubuntu.localdomain (113.72.144.253) by EXMBX171.cuchost.com
- (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 20 Apr
- 2023 19:00:59 +0800
-From:   Minda Chen <minda.chen@starfivetech.com>
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Minda Chen" <minda.chen@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: [PATCH v5 7/7] riscv: dts: starfive: Add USB dts configuration for JH7110
-Date:   Thu, 20 Apr 2023 19:00:52 +0800
-Message-ID: <20230420110052.3182-8-minda.chen@starfivetech.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230420110052.3182-1-minda.chen@starfivetech.com>
-References: <20230420110052.3182-1-minda.chen@starfivetech.com>
+        with ESMTP id S232414AbjDTDOv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Apr 2023 23:14:51 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA66CE57
+        for <linux-usb@vger.kernel.org>; Wed, 19 Apr 2023 20:14:49 -0700 (PDT)
+X-ASG-Debug-ID: 1681960486-1eb14e63872b340001-YVMibp
+Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id KWBNUDq3hfWgjigh (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 20 Apr 2023 11:14:46 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX2.zhaoxin.com
+ (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
+ 2023 11:14:46 +0800
+Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
+ 2023 11:14:46 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
+Subject: [PATCH] =?UTF-8?q?UHCI=EF=BC=9Aadjust=20zhaoxin=20UHCI=20controll?= =?UTF-8?q?ers=20OverCurrent=20bit=20value?=
+Date:   Thu, 20 Apr 2023 19:14:45 +0800
+X-ASG-Orig-Subj: [PATCH] =?UTF-8?q?UHCI=EF=BC=9Aadjust=20zhaoxin=20UHCI=20controll?= =?UTF-8?q?ers=20OverCurrent=20bit=20value?=
+Message-ID: <20230420111445.5028-1-WeitaoWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [113.72.144.253]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX171.cuchost.com
- (172.16.6.91)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.29.8.21]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
+X-Barracuda-Start-Time: 1681960486
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 1007
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0103 1.0000 -1.9535
+X-Barracuda-Spam-Score: 1.16
+X-Barracuda-Spam-Status: No, SCORE=1.16 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107661
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add USB wrapper layer and Cadence USB3 controller dts
-configuration for StarFive JH7110 SoC and VisionFive2
-Board.
-USB controller connect to PHY, The PHY dts configuration
-are also added.
+Over Current condition is not standardized in the UHCI spec.
+Zhaoxin UHCI controllers report OverCurrent bit active off.
+Intel controllers report it active on, so we'll adjust the bit value.
 
-Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
 ---
- .../jh7110-starfive-visionfive-2.dtsi         |  7 +++
- arch/riscv/boot/dts/starfive/jh7110.dtsi      | 44 +++++++++++++++++++
- 2 files changed, 51 insertions(+)
+ drivers/usb/host/uhci-pci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-index 1155b97b593d..fa97ebfd93ad 100644
---- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-@@ -221,3 +221,10 @@
- 	pinctrl-0 = <&uart0_pins>;
- 	status = "okay";
- };
-+
-+&usb0 {
-+	phys = <&usbphy0>;
-+	phy-names = "usb2";
-+	dr_mode = "peripheral";
-+	status = "okay";
-+};
-diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-index 29cd798b6732..eee395e19cdb 100644
---- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-@@ -366,6 +366,50 @@
- 			status = "disabled";
- 		};
+diff --git a/drivers/usb/host/uhci-pci.c b/drivers/usb/host/uhci-pci.c
+index 3592f757fe05..177e3c2aa287 100644
+--- a/drivers/usb/host/uhci-pci.c
++++ b/drivers/usb/host/uhci-pci.c
+@@ -126,6 +126,10 @@ static int uhci_pci_init(struct usb_hcd *hcd)
+ 	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA)
+ 		uhci->oc_low = 1;
  
-+		usb0: usb@10100000 {
-+			compatible = "starfive,jh7110-usb";
-+			reg = <0x0 0x10100000 0x0 0x10000>,
-+			      <0x0 0x10110000 0x0 0x10000>,
-+			      <0x0 0x10120000 0x0 0x10000>;
-+			reg-names = "otg", "xhci", "dev";
-+			interrupts = <100>, <108>, <110>;
-+			interrupt-names = "host", "peripheral", "otg";
-+			clocks = <&stgcrg JH7110_STGCLK_USB0_LPM>,
-+				 <&stgcrg JH7110_STGCLK_USB0_STB>,
-+				 <&stgcrg JH7110_STGCLK_USB0_APB>,
-+				 <&stgcrg JH7110_STGCLK_USB0_AXI>,
-+				 <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
-+			clock-names = "lpm", "stb", "apb", "axi", "utmi_apb";
-+			resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
-+				 <&stgcrg JH7110_STGRST_USB0_APB>,
-+				 <&stgcrg JH7110_STGRST_USB0_AXI>,
-+				 <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
-+			reset-names = "pwrup", "apb", "axi", "utmi_apb";
-+			starfive,stg-syscon = <&stg_syscon 0x4>;
-+			status = "disabled";
-+		};
++	/* ZHAOXIN controllers report OverCurrent bit active off. */
++	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_ZHAOXIN)
++		uhci->oc_low = 1;
 +
-+		usbphy0: phy@10200000 {
-+			compatible = "starfive,jh7110-usb-phy";
-+			reg = <0x0 0x10200000 0x0 0x10000>;
-+			clocks = <&syscrg JH7110_SYSCLK_USB_125M>,
-+				 <&stgcrg JH7110_STGCLK_USB0_APP_125>;
-+			clock-names = "125m", "app_125m";
-+			#phy-cells = <0>;
-+		};
-+
-+		pciephy0: phy@10210000 {
-+			compatible = "starfive,jh7110-pcie-phy";
-+			reg = <0x0 0x10210000 0x0 0x10000>;
-+			#phy-cells = <0>;
-+		};
-+
-+		pciephy1: phy@10220000 {
-+			compatible = "starfive,jh7110-pcie-phy";
-+			reg = <0x0 0x10220000 0x0 0x10000>;
-+			#phy-cells = <0>;
-+		};
-+
- 		stgcrg: clock-controller@10230000 {
- 			compatible = "starfive,jh7110-stgcrg";
- 			reg = <0x0 0x10230000 0x0 0x10000>;
+ 	/* HP's server management chip requires a longer port reset delay. */
+ 	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_HP)
+ 		uhci->wait_for_hp = 1;
 -- 
-2.17.1
+2.32.0
 
