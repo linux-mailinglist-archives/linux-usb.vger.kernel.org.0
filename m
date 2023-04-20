@@ -2,122 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A776E951F
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 14:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE436E9DD3
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 23:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbjDTM41 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Apr 2023 08:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
+        id S231954AbjDTV2R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Apr 2023 17:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjDTM40 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 08:56:26 -0400
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F26C2108
-        for <linux-usb@vger.kernel.org>; Thu, 20 Apr 2023 05:56:23 -0700 (PDT)
-X-ASG-Debug-ID: 1681995379-1eb14e63862f150001-YVMibp
-Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id bUovl42uH9HcTUzy (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 20 Apr 2023 20:56:19 +0800 (CST)
-X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX2.zhaoxin.com
- (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
- 2023 20:56:19 +0800
-Received: from [10.29.8.21] (10.29.8.21) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
- 2023 20:56:18 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Message-ID: <14108824-1e8b-e494-bbc7-e99eafefa632@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.8.21
-Date:   Fri, 21 Apr 2023 04:56:17 +0800
+        with ESMTP id S229833AbjDTV2Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 17:28:16 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF1A1992;
+        Thu, 20 Apr 2023 14:28:15 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33KKxw9Q016401;
+        Thu, 20 Apr 2023 21:28:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=U7UpkUhTftXG9M2L8KSmPzF9/d6cKDHeX2VFkDIoXFo=;
+ b=O7j5glLEG92Uk1AQgLpZXUeVQtGSsgadc89GoIrk2PPYFZl0pJJDe4K5N2LAUiUMynHn
+ XXNvYSq7lS0PwJaA0OlvUDuG0XCXordJQ2AhkzbtXleBrotI0EbMTvsxg5CKx3Rtq2Py
+ 5LIGbIgceo0ufRd6NkmC1TA0xSyp7et4V3+lKK5W6qRYw9zypsd5XRLc0ptUzUxfLMQ3
+ NdVlnVlC8pyxCRMOTVr3CGCH5Z7uRMcEPw+Gk1TiZlUVmqwf24TrPdwlDuBSPYcU/q8l
+ qNXBLO8/CVuQcj/OyDhGpvGKbtwEnNfstxyKoEHALQ5Qw6+WcyQ4pZaSYM3WyAWmbt0p mQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q2nn83b26-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Apr 2023 21:28:12 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33KLSBb2028402
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Apr 2023 21:28:11 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 20 Apr 2023 14:28:10 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH v6 0/2] Avoid having pending end transfers on soft disconnect
+Date:   Thu, 20 Apr 2023 14:27:57 -0700
+Message-ID: <20230420212759.29429-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/3] Fix some issues of xHCI for zhaoxin
-Content-Language: en-US
-X-ASG-Orig-Subj: Re: [PATCH 0/3] Fix some issues of xHCI for zhaoxin
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <tonywwang@zhaoxin.com>,
-        <weitaowang@zhaoxin.com>
-References: <20230420172130.375819-1-WeitaoWang-oc@zhaoxin.com>
- <ZEEF9E4Mmeg5hRWu@kroah.com>
- <b65291ea-acca-7cd4-b5f5-f5bb46e679b4@zhaoxin.com>
- <ZEEQoHY12zfLM7Yd@kroah.com>
-From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-In-Reply-To: <ZEEQoHY12zfLM7Yd@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.29.8.21]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
-X-Barracuda-Start-Time: 1681995379
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 1579
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: 1.09
-X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107678
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
-        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 9WYr-6JPLhh0QOesTTJFs8cVUEZbkeDa
+X-Proofpoint-GUID: 9WYr-6JPLhh0QOesTTJFs8cVUEZbkeDa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-20_15,2023-04-20_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ spamscore=0 impostorscore=0 clxscore=1015 phishscore=0 mlxlogscore=709
+ bulkscore=0 priorityscore=1501 adultscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304200180
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2023/4/20 18:14, Greg KH wrote:
-> On Fri, Apr 21, 2023 at 02:08:14AM +0800, WeitaoWang-oc@zhaoxin.com wrote:
->> On 2023/4/20 17:29, Greg KH wrote:
->>> On Fri, Apr 21, 2023 at 01:21:27AM +0800, Weitao Wang wrote:
->>>> Fix some issues of xHCI for zhaoxin.
->>>>
->>>> Weitao Wang (3):
->>>>     xhci: Add a quirk for zhaoxin xhci to fix issues.
->>>>     xhci: Add zhaoxin xHCI U1/U2 feature support
->>>>     xhci: Show zhaoxin xHCI root hub speed correctly
->>>>
->>>>    drivers/usb/host/xhci-pci.c |  5 ++++
->>>>    drivers/usb/host/xhci.c     | 49 +++++++++++++++++++++++++++++++++++--
->>>>    drivers/usb/host/xhci.h     |  1 +
->>>>    3 files changed, 53 insertions(+), 2 deletions(-)
->>>>
->>>> -- 
->>>> 2.32.0
->>>>
->>>
->>> Do these replace:
->>> https://lore.kernel.org/r/20230420093603.3344-1-WeitaoWang-oc@zhaoxin.com
->>> or are they on top of them?
->>>
->>
->> This [patch 2/3] and [patch 3/3] share a xhci quirk flag XHCI_ZHAOXIN_HOST,
->> So I put these independent functional patch in this set group.
->> Above url and below url are independent xHCI patch for zhaoxin.
->> Is it more suitable to put all the patch for zhaoxin xhci in one group?
->> I Hope to receive your guidance. Thanks!
->>
->> https://lore.kernel.org/all/20230420104826.4727-1-WeitaoWang-oc@zhaoxin.com/
-> 
-> Please resend them all as a patch series so we know what we are supposed
-> to be reviewing and accepting.  Otherwise it's quite confusing.
+In case there is a host which takes time to complete a SETUP transaction,
+during the soft disconnect sequence multiple DWC3 EPs will have their
+DWC3_EP_DELAY_STOP flag set w/o issuing the end transfer command.  Once the
+controller halt sequence occurs, the soft disconnect is successful, and
+the subsequent soft connect will attempt to flush the pending end transfers.
 
-Okay, I'll resend all patch for zhaoxin xHCI in a patch series.
+Soft disconnect sequence:
+  dwc3_gadget_ep_disable   name=ep8in flags=0x3009  direction=1
+  dwc3_gadget_ep_disable   name=ep4in flags=1  direction=1
+  dwc3_gadget_ep_disable   name=ep3out flags=1  direction=0
+  usb_gadget_disconnect   deactivated=0  connected=0  ret=0
 
-Best Regards,
-weitao
+Soft connect bug:
+  BUG: spinlock already unlocked on CPU
+  spin_bug+0x0
+  dwc3_remove_requests+0x278
+  dwc3_ep0_out_start+0xb0
+  __dwc3_gadget_start+0x25c
 
-> thanks,
-> 
-> greg k-h
-> .
+The bug occurs due to the flush of the pending end transfers, as the gadget
+start routine is not held with a spinlock.  However, if the DWC3_EP_DELAY_STOP
+is set, it will call the giveback API, which attempts to unlock the dwc->lock.
+Ideally, the DWC3 gadget should not have pending end transfers on a soft
+connect, so fix this by:
+
+ 1. Re-locating the SETUP phase check after stop active transfers, since
+ that is where the DWC3_EP_DELAY_STOP is potentially set.  This also allows
+ for handling of a host that may be unresponsive by using the completion
+ timeout to trigger the stall and restart for EP0.
+
+ 2. Do not call gadget stop until the poll for controller halt is
+ completed.  DEVTEN is cleared as part of gadget stop, so the intention to
+ allow ep0 events to continue while waiting for controller halt is not
+ happening.
+
+Changes in v6:
+- Rebased on usb-testing
+
+Changes in v5:
+- Fixed stable tag
+
+Changes in v4:
+- Added stable to patches that address the actual issue
+- Re-ordered patch series to include the refactor change at the end to remove
+  any dependencies to the actual fix.
+
+Changes in v3:
+- Removed fixes tag in the refactor change
+Wesley Cheng (2):
+  usb: dwc3: gadget: Execute gadget stop after halting the controller
+  usb: dwc3: gadget: Refactor EP0 forced stall/restart into a separate
+    API
+
+ drivers/usb/dwc3/gadget.c | 68 +++++++++++++++++++--------------------
+ 1 file changed, 34 insertions(+), 34 deletions(-)
+
