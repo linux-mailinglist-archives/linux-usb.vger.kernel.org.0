@@ -2,47 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566E16E8C19
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 10:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3897B6E8C33
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 10:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234303AbjDTIFz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Apr 2023 04:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
+        id S234316AbjDTIIB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Apr 2023 04:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233697AbjDTIFy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 04:05:54 -0400
+        with ESMTP id S233822AbjDTIH7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 04:07:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939C613E;
-        Thu, 20 Apr 2023 01:05:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9666430E8;
+        Thu, 20 Apr 2023 01:07:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FD7A645C8;
-        Thu, 20 Apr 2023 08:05:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B640C433EF;
-        Thu, 20 Apr 2023 08:05:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32A9D645CB;
+        Thu, 20 Apr 2023 08:07:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3291C433EF;
+        Thu, 20 Apr 2023 08:07:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681977951;
-        bh=+qe60FxZ8S+AEFk5qkOdglqHYeXQSiB/ZLnG9r85jZU=;
+        s=korg; t=1681978077;
+        bh=NuiCfwAC6tMz7jWBrBvLf45vkDlVaqOK7W0qEp70idE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vJyiMIBuG3fkJoXI39w2qRTLx5IQcOH27ELWkNr5bSIuY+sTdigfl+u++ulqEf9i2
-         FeAyLzyQ1EajgMqHRUBVGq4lnlrAU2QqBuThZbeH9ycUjyN/Cl2FqSIIGP0ew/o4be
-         AYZI0lZgdKPUla9/fSkhSfBc2u5G0msSMRmqWh5I=
-Date:   Thu, 20 Apr 2023 10:05:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tonywwang@zhaoxin.com,
-        weitaowang@zhaoxin.com
-Subject: Re: [PATCH] =?utf-8?B?VUhDSe+8mmFkanVz?= =?utf-8?Q?t?= zhaoxin UHCI
- controllers OverCurrent bit value
-Message-ID: <ZEDyWC7GsbcEn7UK@kroah.com>
-References: <20230420111445.5028-1-WeitaoWang-oc@zhaoxin.com>
+        b=G62TCUgDovvCWqZndYPAb45lUB0477MQCqrCzEz1+xQl2iv6Jy0naO7bGMq7lFt6w
+         Hgig0oJd1TGz9zKuhvTTP5+B/fnYSbYo6tBaPKgaC/wLlnbPKIOTKoIDNvuzMa+FS/
+         CNf0Xh5xZc4cohnOb4omp/hswqGtIPNO+Siaf1aI=
+Date:   Thu, 20 Apr 2023 10:07:49 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: mtk-xhci: add an optional frame
+ count clock
+Message-ID: <ZEDy1bTsU7AsF2kR@kroah.com>
+References: <20230417024213.17973-1-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230420111445.5028-1-WeitaoWang-oc@zhaoxin.com>
+In-Reply-To: <20230417024213.17973-1-chunfeng.yun@mediatek.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,38 +60,17 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 07:14:45PM +0800, Weitao Wang wrote:
-> Over Current condition is not standardized in the UHCI spec.
-> Zhaoxin UHCI controllers report OverCurrent bit active off.
-> Intel controllers report it active on, so we'll adjust the bit value.
+On Mon, Apr 17, 2023 at 10:42:12AM +0800, Chunfeng Yun wrote:
+> Add optional clock 'frmcnt_ck' used on 4nm or advanced process SoC
 > 
-> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-
-Note, your Subject: line has odd characters in it, can you rewrite it to
-just use ascii?  I think it's the '：' character which should be ':',
-right?
-
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 > ---
->  drivers/usb/host/uhci-pci.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/host/uhci-pci.c b/drivers/usb/host/uhci-pci.c
-> index 3592f757fe05..177e3c2aa287 100644
-> --- a/drivers/usb/host/uhci-pci.c
-> +++ b/drivers/usb/host/uhci-pci.c
-> @@ -126,6 +126,10 @@ static int uhci_pci_init(struct usb_hcd *hcd)
->  	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA)
->  		uhci->oc_low = 1;
->  
-> +	/* ZHAOXIN controllers report OverCurrent bit active off. */
-> +	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_ZHAOXIN)
-> +		uhci->oc_low = 1;
-> +
+> v3: add acked-by and Reviewed-by tags
 
-This should also go to the stable kernels, right?
-
-But a new UHCI controller?  And this affects all of them?  And why is
-Intel an issue here (as you mention in the changelog text)?
+There's never a need to do this as our tools pick them up automatically.
+This resend did nothing but move it later in the queue to review :(
 
 thanks,
 
