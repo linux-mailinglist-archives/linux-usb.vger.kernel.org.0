@@ -2,142 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E156E963A
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 15:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8DD6E9698
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 16:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjDTNtK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Apr 2023 09:49:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
+        id S230424AbjDTOFw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Apr 2023 10:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbjDTNtI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 09:49:08 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92E65245;
-        Thu, 20 Apr 2023 06:49:07 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-517c01edaaaso763408a12.3;
-        Thu, 20 Apr 2023 06:49:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681998547; x=1684590547;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=wnjUcH5y1Pb8R4/f3gZ/CX/Eqa1ZM5qT0lnDQJSddVI=;
-        b=ppBsWpCXOkPI9VqP8f0CZnLVdZL6ouH7XsmTPYI2heigN9JKfbVzxPgw5dA17iUhDA
-         8g1djWzw5GXkFikwzYddWzDRYS9hDRMhWXqly6PRWF4z3cfzFTmpUFUm9aeQ1pRKAX0H
-         JRH/zWEA0R9MPsBUCdF0fGRZe4uRkQG0AIdoD1TfB7x4ufQ/sM0+TplNeWvfCBLdkcPy
-         TEvJfY3x8aHbyB4VEdJaCGy5p5PDua+7O0Psq/TmbZxgd0cuJs9fV0Ev42zNLYlzwz0Y
-         OqlkUjGi6YmUq9ily1EzjFuYrHYxusN8+X732ZCMRpQP3xE1QoJGSqN87RzJrgeAUYqM
-         PBCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681998547; x=1684590547;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wnjUcH5y1Pb8R4/f3gZ/CX/Eqa1ZM5qT0lnDQJSddVI=;
-        b=B9acNGAC3OwyKHL0pUArS2bAfO3+nGqJ4C8aQ8o82f6d8fZOJ3OYBcf3GAN6QELiXT
-         vo44ZlONmZOQjwymiSLSqG/B4UX3jfnfbuh6XGtSLOilgKuCHtavlfZKQA3Wo3Nkc8Tn
-         fL9r1j4lIn9amvp0IuFJUi+AmY5omGQkoLhQgfE3z112lMFiqPmN7EWsc5boJM+rGwnR
-         m8hVV7rAGk8pEpnVsxVG0pF9Yves7w2ZCffOfhUV5XqN747RdnQlNYgZgWblnQWq4Bw0
-         Jul5d0BK/RbrjTum8r2WYdMc+AG9Z0pYfVXpNWIhJ6+ZM8k2cRZnbMnjTmeboXVYD4IY
-         W/4w==
-X-Gm-Message-State: AAQBX9e22gcIotmxZNKbqJqLtPnGyGZC+QVRPWV5/hczS2ALxGerygys
-        cMHMpUeue537FAQl75L96o10HT8l5vM=
-X-Google-Smtp-Source: AKy350b4gVTrT0jdEJyTAOLAle1O9HpAQ2FZJ2O2eMbVOAtJVpzK7840rFjgpPtYWntiYEt7eg6fFg==
-X-Received: by 2002:a17:90b:3904:b0:246:ee10:cb5d with SMTP id ob4-20020a17090b390400b00246ee10cb5dmr1795004pjb.14.1681998547069;
-        Thu, 20 Apr 2023 06:49:07 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l5-20020a17090a598500b00247a2498075sm1188313pji.48.2023.04.20.06.49.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 06:49:06 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <dff23f7b-86a4-6984-5ce0-70aa6dbfad8e@roeck-us.net>
-Date:   Thu, 20 Apr 2023 06:49:03 -0700
+        with ESMTP id S229960AbjDTOFv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 10:05:51 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E591BE3;
+        Thu, 20 Apr 2023 07:05:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681999549; x=1713535549;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ORVWQB3PIs3oj9CLXBuce/f03MnSy/PHilD5oKnmU+I=;
+  b=dVXiq6024CiFsT12WUVfJb/r/k5phtoKdt7W9EUTxNFGRrFjxRS+i9Xo
+   r9D5CHFvaoADLMRjlf2ubNhuOp6p3Ha2cxgUMdzsUWs7lMO/AcbdeFBwA
+   wvfQWN0L8rvz1UiUJgsQ3ikTBhNEI3bBXLQGpux2U4uStu+IE7o4e7Ghl
+   gu+sNkzsYOPQ2HLghPZZMhjEdFH9I1jSPgYB1V+dZvY0HOFRlRoLQw6qi
+   Pa2fn00k+6pP4L9AL5ceO/xxawo4jvnIgnid+1xM5UghfJTxFNJCZsKUD
+   dmU+BZsYJfHFqaMvjIIduk+3V8SHTBl18uQli3oDhZ8MvJMw8LrOUjCDl
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="345750044"
+X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
+   d="scan'208";a="345750044"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 07:05:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="781247683"
+X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
+   d="scan'208";a="781247683"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Apr 2023 07:05:47 -0700
+Message-ID: <92cf6ed0-be37-d8a6-14c7-c5043f076916@intel.com>
+Date:   Thu, 20 Apr 2023 17:07:16 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] usb: typec: tcpm: fix multiple times discover svids
- error
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Frank Wang <frank.wang@rock-chips.com>, heiko@sntech.de,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com
-References: <20230316081149.24519-1-frank.wang@rock-chips.com>
- <ZBROkdOFAP4GPPU6@kuha.fi.intel.com> <ZEDzGydXbbpekeaB@kroah.com>
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH 2/3] xhci: Add zhaoxin xHCI U1/U2 feature support
 Content-Language: en-US
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <ZEDzGydXbbpekeaB@kroah.com>
+To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
+References: <20230420172130.375819-1-WeitaoWang-oc@zhaoxin.com>
+ <20230420172130.375819-3-WeitaoWang-oc@zhaoxin.com>
+From:   Mathias Nyman <mathias.nyman@intel.com>
+In-Reply-To: <20230420172130.375819-3-WeitaoWang-oc@zhaoxin.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 4/20/23 01:08, Greg KH wrote:
-> On Fri, Mar 17, 2023 at 01:27:13PM +0200, Heikki Krogerus wrote:
->> On Thu, Mar 16, 2023 at 04:11:49PM +0800, Frank Wang wrote:
->>> PD3.0 Spec 6.4.4.3.2 say that only Responder supports 12 or more SVIDs,
->>> the Discover SVIDs Command Shall be executed multiple times until a
->>> Discover SVIDs VDO is returned ending either with a SVID value of
->>> 0x0000 in the last part of the last VDO or with a VDO containing two
->>> SVIDs with values of 0x0000.
->>>
->>> In the current implementation, if the last VDO does not find that the
->>> Discover SVIDs Command would be executed multiple times even if the
->>> Responder SVIDs are less than 12, and we found some odd dockers just
->>> meet this case. So fix it.
->>>
->>> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
->>> ---
->>>   drivers/usb/typec/tcpm/tcpm.c | 16 +++++++++++++++-
->>>   1 file changed, 15 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
->>> index 66de02a56f512..a3ae2c79f3540 100644
->>> --- a/drivers/usb/typec/tcpm/tcpm.c
->>> +++ b/drivers/usb/typec/tcpm/tcpm.c
->>> @@ -1515,7 +1515,21 @@ static bool svdm_consume_svids(struct tcpm_port *port, const u32 *p, int cnt)
->>>   		pmdata->svids[pmdata->nsvids++] = svid;
->>>   		tcpm_log(port, "SVID %d: 0x%x", pmdata->nsvids, svid);
->>>   	}
->>> -	return true;
->>> +
->>> +	/*
->>> +	 * PD3.0 Spec 6.4.4.3.2: The SVIDs are returned 2 per VDO (see Table
->>> +	 * 6-43), and can be returned maximum 6 VDOs per response (see Figure
->>> +	 * 6-19). If the Respondersupports 12 or more SVID then the Discover
->>> +	 * SVIDs Command Shall be executed multiple times until a Discover
->>> +	 * SVIDs VDO is returned ending either with a SVID value of 0x0000 in
->>> +	 * the last part of the last VDO or with a VDO containing two SVIDs
->>> +	 * with values of 0x0000.
->>> +	 *
->>> +	 * However, some odd dockers support SVIDs less than 12 but without
->>> +	 * 0x0000 in the last VDO, so we need to break the Discover SVIDs
->>> +	 * request and return false here.
->>> +	 */
->>> +	return cnt == 7;
->>>   abort:
->>>   	tcpm_log(port, "SVID_DISCOVERY_MAX(%d) too low!", SVID_DISCOVERY_MAX);
->>>   	return false;
->>
->> This is OK by men, but let's wait for Guenter.
+On 20.4.2023 20.21, Weitao Wang wrote:
+> Add U1/U2 feature support of xHCI for zhaoxin.
 > 
-> What ever happened to this patch?
+> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+> ---
+>   drivers/usb/host/xhci-pci.c |  5 +++++
+>   drivers/usb/host/xhci.c     | 27 +++++++++++++++++++++++++--
+>   2 files changed, 30 insertions(+), 2 deletions(-)
 > 
+> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> index 6db07ca419c3..a235effe8e5c 100644
+> --- a/drivers/usb/host/xhci-pci.c
+> +++ b/drivers/usb/host/xhci-pci.c
+> @@ -334,6 +334,11 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+>   	     pdev->device == PCI_DEVICE_ID_AMD_PROMONTORYA_4))
+>   		xhci->quirks |= XHCI_NO_SOFT_RETRY;
+>   
+> +	if (pdev->vendor == PCI_VENDOR_ID_ZHAOXIN) {
+> +		xhci->quirks |= XHCI_LPM_SUPPORT;
+> +		xhci->quirks |= XHCI_ZHAOXIN_HOST;
+> +	}
+> +
+>   	/* xHC spec requires PCI devices to support D3hot and D3cold */
+>   	if (xhci->hci_version >= 0x120)
+>   		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 6307bae9cddf..730c0f68518d 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -4802,7 +4802,7 @@ static u16 xhci_calculate_u1_timeout(struct xhci_hcd *xhci,
+>   		}
+>   	}
+>   
+> -	if (xhci->quirks & XHCI_INTEL_HOST)
+> +	if (xhci->quirks & (XHCI_INTEL_HOST | XHCI_ZHAOXIN_HOST))
+>   		timeout_ns = xhci_calculate_intel_u1_timeout(udev, desc);
 
-It got lost in space.
+Looks odd to tie Zhaoxin vendor to Intel specific values but ok,
+if they diverge in the future we anyway need to modify this.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+>   	else
+>   		timeout_ns = udev->u1_params.sel;
+> @@ -4866,7 +4866,7 @@ static u16 xhci_calculate_u2_timeout(struct xhci_hcd *xhci,
+>   		}
+>   	}
+>   
+> -	if (xhci->quirks & XHCI_INTEL_HOST)
+> +	if (xhci->quirks & (XHCI_INTEL_HOST | XHCI_ZHAOXIN_HOST))
+>   		timeout_ns = xhci_calculate_intel_u2_timeout(udev, desc);
 
-Guenter
+same.
+
+>   	else
+>   		timeout_ns = udev->u2_params.sel;
+> @@ -4938,6 +4938,27 @@ static int xhci_update_timeout_for_interface(struct xhci_hcd *xhci,
+>   	return 0;
+>   }
+>   
+> +static int xhci_check_zhaoxin_tier_policy(struct usb_device *udev,
+> +		enum usb3_link_state state)
+> +{
+> +	struct usb_device *parent;
+> +	unsigned int num_hubs;
+> +
+> +	/* Don't enable U1/U2 if the device is on an external hub. */
+> +	for (parent = udev->parent, num_hubs = 0; parent->parent;
+> +			parent = parent->parent)
+> +		num_hubs++;
+> +
+> +	if (num_hubs < 1)
+> +		return 0;
+> +
+> +	dev_dbg(&udev->dev, "Disabling U1/U2 link state for device"
+> +			" below external hub.\n");
+> +	dev_dbg(&udev->dev, "Plug device into root hub "
+> +			"to decrease power consumption.\n");
+> +	return -E2BIG;
+> +}
+> +
+
+I don't think we should add more vendor specific functions, this is almost
+an exact copy of xhci_check_intel_tier_policy().
+
+How about getting rid of both of those and use something like this instead (untested):
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 2b280beb0011..e9a25e4d99cf 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -4926,10 +4926,24 @@ static int xhci_check_tier_policy(struct xhci_hcd *xhci,
+                 struct usb_device *udev,
+                 enum usb3_link_state state)
+  {
+-       if (xhci->quirks & XHCI_INTEL_HOST)
+-               return xhci_check_intel_tier_policy(udev, state);
+-       else
+-               return 0;
++       struct usb_device *parent = udev->parent;
++       int tier = 1; /* roothub is tier1 */
++
++       while (parent) {
++               parent = parent->parent;
++               tier++;
++       }
++
++       if (xhci->quirks & XHCI_INTEL_HOST && tier > 3)
++               goto fail;
++       if (xhci->quirks & XHCI_ZHAOXIN_HOST && tier > 2)
++               goto fail;
++
++       return 0;
++fail:
++       dev_dbg(&udev->dev, "Tier policy prevents U1/U2 LPM states for devices at tier %d\n",
++               tier);
++       return -E2BIG;
+  }
+
+Or possibly even add a xhci->max_tier_for_lpm that can be set during probe based on
+vendor or from device property.
+
+Thanks
+-Mathias
 
