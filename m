@@ -2,78 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B79B6E96AE
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 16:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 365CF6E96F1
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 16:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbjDTOKl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Apr 2023 10:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
+        id S231435AbjDTOWi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Apr 2023 10:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjDTOKk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 10:10:40 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837851BD1;
-        Thu, 20 Apr 2023 07:10:39 -0700 (PDT)
-Received: from legion.. ([172.16.0.254])
-        (user=lidaxian@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 33KE98SN016427-33KE98SO016427
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 20 Apr 2023 22:09:13 +0800
-From:   Li Yang <lidaxian@hust.edu.cn>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Li Yang <lidaxian@hust.edu.cn>,
-        Dongliang Mu <dzm91@hust.edu.cn>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] usb: phy: phy-tahvo: fix memory leak in tahvo_usb_probe()
-Date:   Thu, 20 Apr 2023 22:08:31 +0800
-Message-Id: <20230420140832.9110-1-lidaxian@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S231998AbjDTOWc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 10:22:32 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BBC63A92;
+        Thu, 20 Apr 2023 07:22:21 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4ec817735a7so570931e87.3;
+        Thu, 20 Apr 2023 07:22:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682000539; x=1684592539;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X0Xu7MA+NjArIa7BJ4lZIO3ZzLFDar+90AWHOHge/mw=;
+        b=qJPA1ftO1tKXvkL3q1Uf/Ib91CY7vR+c+KIVRnc2UijFKmWUlG3HNSmsTc8VsQjlCV
+         7lS20yf5HJOY/Mi5Td0Y+ecA8s0XgiCj35dpBWlqWY+z6Mtq6FxqcyHWxoeeho6o970G
+         WnfP9BTlkD/nyRvhUVkJYKx6f2OL+cc+05ThKN//f7OXf18/0mfK0VLwl8Gp9QkLTqZ4
+         ke2vW3jSGxL0jtGwZteI7kTZxgF0h2kAYBKv5he0OKTJwgl/ZK6IeHAs2nCTMHEcK1Y+
+         rxSW1jx5bsZL0YpXRKOxYAl6NW/NtK1UJvCcEJl2udeDXYFUiE5z1JcGGsKl2dRAIKk8
+         kVng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682000539; x=1684592539;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X0Xu7MA+NjArIa7BJ4lZIO3ZzLFDar+90AWHOHge/mw=;
+        b=KdXkoy2L5iPR7gyi9PqiDZ9+894A86mgfxszr5xfziKDmDsvQhdPe9HxM5r5gaEjde
+         IPqWM382cIaBle/hBIsVf1DZapkYAKVDEuu0HnWqH1gmFC3byiVAZIJlt204xjCgYePY
+         Qgtz8FEZJ7brrwCGien3Qjl1+Ku+gdHLziIKta9W/AJmGlPj94FKgCAfF+RwsnH/V+Yg
+         H55zLmxzxSlTbXEyM33oWNBrTG83YUeAQZvA4KH5fQa1X/hPH0vnCGWDpqYpzRVPh68B
+         v8CVC7EYy2FEAMzRgx3KepRBra0Ufc3qMsAu0Ti4/tQT2p8IGSrwM4zBAUcHHHghplsZ
+         uQIw==
+X-Gm-Message-State: AAQBX9cpfAX9w0Pnp04BSgFd+neAUA2hJFOV2sJeip9Em9TZpMv2lsJK
+        pxgtDHmFXwxHDvmjfaKn4yM=
+X-Google-Smtp-Source: AKy350bWZTaKEQQ5q303VQeZj6+SmnubAmp5wjQRO/uQRl9mlNzf4VCqRyj9VfpzrgdBkPCuw77FTg==
+X-Received: by 2002:ac2:46cb:0:b0:4eb:4002:a5ca with SMTP id p11-20020ac246cb000000b004eb4002a5camr427993lfo.66.1682000539534;
+        Thu, 20 Apr 2023 07:22:19 -0700 (PDT)
+Received: from [192.168.1.103] ([31.173.82.218])
+        by smtp.gmail.com with ESMTPSA id u10-20020ac251ca000000b004eb19a51896sm237634lfm.83.2023.04.20.07.22.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 07:22:19 -0700 (PDT)
+Subject: Re: [PATCH 2/3] xhci: Add zhaoxin xHCI U1/U2 feature support
+To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>,
+        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
+References: <20230420172130.375819-1-WeitaoWang-oc@zhaoxin.com>
+ <20230420172130.375819-3-WeitaoWang-oc@zhaoxin.com>
+ <c853436a-85c7-d0f8-0990-bc64977cbd47@gmail.com>
+ <f0f0d62d-edde-547d-5d6e-a02e2f8e8648@zhaoxin.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <54aa1618-63b7-965a-d303-5d35cb554c20@gmail.com>
+Date:   Thu, 20 Apr 2023 17:22:17 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <f0f0d62d-edde-547d-5d6e-a02e2f8e8648@zhaoxin.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: lidaxian@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Smatch reports:
-drivers/usb/phy/phy-tahvo.c: tahvo_usb_probe()
-warn: missing unwind goto?
+On 4/20/23 11:21 PM, WeitaoWang-oc@zhaoxin.com wrote:
 
-After geting irq, if ret < 0, it will return without error handling to
-free memory.
-Just add error handling to fix this problem.
+>>> Add U1/U2 feature support of xHCI for zhaoxin.
+>>>
+>>> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+>> [...]
+>>
+>>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>>> index 6307bae9cddf..730c0f68518d 100644
+>>> --- a/drivers/usb/host/xhci.c
+>>> +++ b/drivers/usb/host/xhci.c
+>> [...]
+>>> @@ -4938,6 +4938,27 @@ static int xhci_update_timeout_for_interface(struct xhci_hcd *xhci,
+>>>       return 0;
+>>>   }
+>>>   +static int xhci_check_zhaoxin_tier_policy(struct usb_device *udev,
+>>> +        enum usb3_link_state state)
+>>> +{
+>>> +    struct usb_device *parent;
+>>> +    unsigned int num_hubs;
+>>> +
+>>> +    /* Don't enable U1/U2 if the device is on an external hub. */
+>>> +    for (parent = udev->parent, num_hubs = 0; parent->parent;
+>>> +            parent = parent->parent)
+>>> +        num_hubs++;
+>>> +
+>>> +    if (num_hubs < 1)
+>>> +        return 0;
+>>> +
+>>> +    dev_dbg(&udev->dev, "Disabling U1/U2 link state for device"
+>>> +            " below external hub.\n");
+>>> +    dev_dbg(&udev->dev, "Plug device into root hub "
+>>> +            "to decrease power consumption.\n");
+>>
+>>     Please don't break up the message strings.
+> 
+> Thanks for your advice, and I will merge this message in next patch version.
+>> [...]
+>>> @@ -4965,6 +4986,8 @@ static int xhci_check_tier_policy(struct xhci_hcd *xhci,
+>>>   {
+>>>       if (xhci->quirks & XHCI_INTEL_HOST)
+>>>           return xhci_check_intel_tier_policy(udev, state);
+>>> +    else if (xhci->quirks & XHCI_ZHAOXIN_HOST)
+>>
+>>     *else* not needed after *return*.
+> This function need a "int" type return value. If remove "else" branch,
+> vendor other than intel and zhaoxin will not get a return value.
 
-Fixes: 0d45a1373e66 ("usb: phy: tahvo: add IRQ check")
-Signed-off-by: Li Yang <lidaxian@hust.edu.cn>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
----
-v1->v2: Remove unnecessary dev_err().
-The issue is found by static analysis, and the patch is remains untested.
----
- drivers/usb/phy/phy-tahvo.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+   I didn't tell you to remove the whole branch, just the *else* keyword.
 
-diff --git a/drivers/usb/phy/phy-tahvo.c b/drivers/usb/phy/phy-tahvo.c
-index f2d2cc586c5b..da63d7e4d270 100644
---- a/drivers/usb/phy/phy-tahvo.c
-+++ b/drivers/usb/phy/phy-tahvo.c
-@@ -391,7 +391,7 @@ static int tahvo_usb_probe(struct platform_device *pdev)
- 
- 	tu->irq = ret = platform_get_irq(pdev, 0);
- 	if (ret < 0)
--		return ret;
-+		goto err_remove_phy;
- 	ret = request_threaded_irq(tu->irq, NULL, tahvo_usb_vbus_interrupt,
- 				   IRQF_ONESHOT,
- 				   "tahvo-vbus", tu);
--- 
-2.34.1
+[...]
+> Best Regards,
+> Weitao
 
+MBR, Sergey
