@@ -2,153 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA5F6E9A88
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 19:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A8B6E8DD6
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Apr 2023 11:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbjDTRUV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Apr 2023 13:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54666 "EHLO
+        id S234139AbjDTJVg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Apr 2023 05:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbjDTRUN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 13:20:13 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B30E44AE
-        for <linux-usb@vger.kernel.org>; Thu, 20 Apr 2023 10:20:02 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (133-32-181-51.west.xps.vectant.ne.jp [133.32.181.51])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 54B8F9DE;
-        Thu, 20 Apr 2023 19:19:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1682011193;
-        bh=ZoNVTyLc/tmgT9Tdt64+rznxDWli7COr3nrn2nkwC1g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZLbx1cjOdZLvNrM9y4Mb+TJh/m4McfN+hSXaiS4rBwO6acJe4+MPBah4aQVvHsZgN
-         6J+3b7o3iGJX+oXIoQyqiT10uuy/hZSkGPMkg/G33H39IBHCHntgr5L4CZr69nmMbI
-         8+xkoYu1+vCE+VToppV3wKijJeCSLXy6ijx7eTu0=
-Date:   Thu, 20 Apr 2023 20:20:11 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Avichal Rakesh <arakesh@google.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "dan.scally@ideasonboard.com" <dan.scally@ideasonboard.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Jayant Chowdhary <jchowdhary@google.com>,
-        "Eino-Ville Talvala (Eddy)" <etalvala@google.com>
-Subject: Re: UVC Gadget Driver shows glitched frames with a Linux host
-Message-ID: <20230420172011.GF21943@pendragon.ideasonboard.com>
-References: <CAMHf4WKbi6KBPQztj9FA4kPvESc1fVKrC8G73-cs6tTeQby9=w@mail.gmail.com>
- <ZD1ObUuy8deAvupf@kroah.com>
- <3a9ee93a-b0ec-ac92-77ab-2956c1c4f434@google.com>
- <20230418024937.h6mipfdvdqomtz36@synopsys.com>
- <CAMHf4WKzU7uWj5HVHdcBnJ2ugK5cfkk=-38dn7=z1fCwXtegLw@mail.gmail.com>
- <20230418193951.zjwgg25cyhg3lsay@synopsys.com>
- <CAMHf4WKYzmmqO+7AsUBo+d8AHLKFXugxwh__NYi9grQAJk7VBA@mail.gmail.com>
- <47244f7e-feb5-4958-be14-7fd9f0814566@rowland.harvard.edu>
- <CAMHf4WL9dOWiw-+V2DQeQ=3jxmk3LHg5ONdWSwcp3Gx0AD17yg@mail.gmail.com>
+        with ESMTP id S231614AbjDTJVf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 05:21:35 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1096926B6
+        for <linux-usb@vger.kernel.org>; Thu, 20 Apr 2023 02:21:34 -0700 (PDT)
+X-ASG-Debug-ID: 1681982491-1eb14e63872da70001-YVMibp
+Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx2.zhaoxin.com with ESMTP id YZHkuArtaiHDPmvN (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 20 Apr 2023 17:21:31 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
+ (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
+ 2023 17:21:30 +0800
+Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
+ 2023 17:21:30 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
+Subject: [PATCH 0/3] Fix some issues of xHCI for zhaoxin
+Date:   Fri, 21 Apr 2023 01:21:27 +0800
+X-ASG-Orig-Subj: [PATCH 0/3] Fix some issues of xHCI for zhaoxin
+Message-ID: <20230420172130.375819-1-WeitaoWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMHf4WL9dOWiw-+V2DQeQ=3jxmk3LHg5ONdWSwcp3Gx0AD17yg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.29.8.21]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
+X-Barracuda-Start-Time: 1681982491
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 432
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.1337 1.0000 -1.1941
+X-Barracuda-Spam-Score: 1.91
+X-Barracuda-Spam-Status: No, SCORE=1.91 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107672
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Avichal,
+Fix some issues of xHCI for zhaoxin.
 
-First of all, thank you for looking into the problem and initiating this
-discussion. The whole mail thread was very helpful, Thanks to Thinh and
-Alan as well for all the help.
+Weitao Wang (3):
+  xhci: Add a quirk for zhaoxin xhci to fix issues.
+  xhci: Add zhaoxin xHCI U1/U2 feature support
+  xhci: Show zhaoxin xHCI root hub speed correctly
 
-On Tue, Apr 18, 2023 at 10:26:11PM -0700, Avichal Rakesh wrote:
-> On Tue, Apr 18, 2023 at 6:07 PM Alan Stern wrote:
-> > On Tue, Apr 18, 2023 at 03:45:53PM -0700, Avichal Rakesh wrote:
-> > > I see, and I think I understand Greg's previous comment better as
-> > > well: The UVC driver isn't falling behind on the video stream, it is
-> > > falling behind the usb controller's monotonic isoc stream.
-> > >
-> > > From what I can see, this leaves us in an interesting place: UVC
-> > > allows the host to configure the camera's output resolution and fps,
-> > > which effectively controls how fast the camera is generating data.
-> > > This is at odds with the UVC gadget driver, which currently packs each
-> > > video frame into as few usb_requests as possible (using the full
-> > > available size in usb_requests). Effectively, the UVC gadget driver
-> > > attempts to use the "full" bandwidth of isoc transfers even when the
-> > > camera isn't generating data fast enough. For example, in my
-> > > observations: 1 video frame is ~22kB. At 30fps, this represents 1/30
-> > > of the amount of data the camera would generate in a second. This 22kB
-> > > is split into 8 usb_requests which is about 1/1000 the number of
-> > > requests UVC driver needs to generate per second to prevent isoc
-> > > failures (assuming 125us monotonic uframes). Assuming some fudge
-> > > factor from the simplifications in your explanation gives the uvc
-> > > driver some extra leeway with request queuing, we're still roughly two
-> > > order of magnitudes out of sync. Even with perfect 'complete'
-> > > callbacks and video frame encodings, an underrun seems inevitable.
-> > > Data is being generated at a far slower rate than it is being
-> > > transferred. Does this reasoning seem valid?
-> > >
-> > > Just as a test I'll try updating the UVC driver to consume 266
-> > > usb_requests per video frame (~1/30 of 8000), which should be enough
-> > > to keep the usb controller queue occupied for ~1/30s. Ideally, by the
-> > > time the controller queue is empty, the camera would have produced a
-> > > new frame. This doesn't solve the issue with latencies around callback
-> > > and an isoc failure might still happen, hopefully the failure
-> > > frequency is reduced because UVC queues enough requests per video
-> > > frame to not starve the controller's queue while waiting on a new
-> > > frame and the only way they go out of sync is from 'complete' callback
-> > > timings. I am assuming this has been tried before, but my LKML search
-> > > skills are failing and I can't find much on it.
-> >
-> > Note that there's nothing wrong with submitting a 0-length isochronous
-> > transfer.  If there's no data left but you still need to send
-> > _something_ in order to fill out the remaining slots in the controller's
-> > schedule, this is a good way to do it.
->
-> Oh, this is very good to know, thank you!! We just need to reach a
-> steady state of UVC queuing enough requests monotonically (even if
-> they are empty), and the usb controller calling the 'complete'
-> callback to give it more requests to queue. Although I wonder how the
-> host's UVC driver would interpret the zero length packets, if it would
-> even care.
-> 
-> I am unfortunately being pulled into some other work for the next few
-> days, but I will try out both: splitting one frame into many many
-> requests and just sending 0 length requests, and see what happens on
-> the host. Will report back with what I find.
-
-I'm looking forward to this :-)
-
-> Any other insights are
-> welcome. I want to fix this problem for good if possible, and am happy
-> to try out whatever it takes!
-
-As far as I understand, we have two ways forward here to avoid running
-out of requests to send: sending data as quickly as possible (maximizing
-the number of bytes sent in each packet) and filling up with 0-length
-requests in-between, and spreading the data across packets. I'll call
-the first one burst mode for lack of a better term.
-
-Both mechanisms require a form of dynamic rate adaptation, monitoring
-the consumption of bytes or packets by the UDC to decide how to fill the
-next packets. In non-burst mode, we may still need to insert zero-length
-packets if we really run out of data (for instance in case of a V4L2
-buffer queue underrun), so the burst mode implementation may be simpler.
-
-On the host side, both option should work, the uvcvideo driver shouldn't
-have any problem with zero-length packets. As the driver offloads memcpy
-operations to a work queue, I believe burst mode would be more efficient
-on the host side as it would lower the number of times the work queue
-needs to be woken up, and overall reduce the work performed in interrupt
-context. If burst mode doesn't negatively impact the gadget side (from a
-CPU time or a power consumption point of view), it would thus be
-preferred.
+ drivers/usb/host/xhci-pci.c |  5 ++++
+ drivers/usb/host/xhci.c     | 49 +++++++++++++++++++++++++++++++++++--
+ drivers/usb/host/xhci.h     |  1 +
+ 3 files changed, 53 insertions(+), 2 deletions(-)
 
 -- 
-Regards,
+2.32.0
 
-Laurent Pinchart
