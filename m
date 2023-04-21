@@ -2,87 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BA06EB151
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 20:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554E96EAA82
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 14:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232177AbjDUSBl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Apr 2023 14:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58978 "EHLO
+        id S232070AbjDUMjJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Apr 2023 08:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230406AbjDUSBd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 14:01:33 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7597D172C;
-        Fri, 21 Apr 2023 11:01:32 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-18665c1776dso1760581fac.2;
-        Fri, 21 Apr 2023 11:01:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682100092; x=1684692092;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nnmTMZtvA/f6TPhezgaB/eM/0Kt2Nz3CF0RXPywChaE=;
-        b=Vghxhr6U7Cb/tTXVnZLqZWNTURAJoIClkTSV/9F25DsHwk3vjI2BHC8dkhekZ9u3bo
-         6YOCkFoSUOEfsYm2UKq2F83MxvR7FhNTSJRw1saHHO/EMGtoBNLwST1AIeAe1Xj+M3tb
-         ziu+WDnbiIy4VcqZEoEKMAAT/CfkGYgujs1a68TOZWnVm/Eo4xfs8mEcFoq5Sqlcq2C3
-         cIPLJB1AT+61IT7nZJHLLmRnH86JNG7kt2Niaj2O6iTHBUnjEdly255+3AOmcyYAW3vp
-         Xbt1p4y69HNGz+TuNap/TNgbDrh/WweeKAdgelceIGLmebZM6qD7Mi48yW024Xquig5e
-         r19g==
-X-Gm-Message-State: AAQBX9flw9JUKbI7tVnz8JmEcn21RTj9d0bLMwbMp1GsdytdMyjywH9q
-        5r09ppfnggMB6grnbp7Qkg==
-X-Google-Smtp-Source: AKy350bS6Yt9+puose4G3XnzK+iG2RBGcT82lno6wn46NVV3zf3nyr8BIptdf9X2gnZJqGbUtRaqFw==
-X-Received: by 2002:a05:6871:84:b0:17f:e13:9c96 with SMTP id u4-20020a056871008400b0017f0e139c96mr4884396oaa.51.1682100091343;
-        Fri, 21 Apr 2023 11:01:31 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id c3-20020a056870b28300b0018b22156e84sm1790729oao.38.2023.04.21.11.01.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 11:01:30 -0700 (PDT)
-Received: (nullmailer pid 1552920 invoked by uid 1000);
-        Fri, 21 Apr 2023 18:01:29 -0000
-Date:   Fri, 21 Apr 2023 13:01:29 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     linux-usb@vger.kernel.org, hanjie.lin@amlogic.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        yue.wang@amlogic.com, rockosov@gmail.com, robh+dt@kernel.org,
-        hminas@synopsys.com, martin.blumenstingl@googlemail.com,
-        mturquette@baylibre.com, linux-arm-kernel@lists.infradead.org,
-        jbrunet@baylibre.com, neil.armstrong@linaro.org,
-        linux-phy@lists.infradead.org, vkoul@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-amlogic@lists.infradead.org, khilman@baylibre.com,
-        kishon@kernel.org, Thinh.Nguyen@synopsys.com,
-        kernel@sberdevices.ru, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] dt-bindings: usb: dwc2: add support for Amlogic
- A1 SoC USB peripheral
-Message-ID: <168210008936.1552867.8929832255980698687.robh@kernel.org>
-References: <20230418111612.19479-1-ddrokosov@sberdevices.ru>
- <20230418111612.19479-4-ddrokosov@sberdevices.ru>
+        with ESMTP id S232040AbjDUMjD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 08:39:03 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07244272B
+        for <linux-usb@vger.kernel.org>; Fri, 21 Apr 2023 05:38:57 -0700 (PDT)
+X-ASG-Debug-ID: 1682080734-1eb14e6388386f0001-YVMibp
+Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id 37mxsCJQR2Tv15ej (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Fri, 21 Apr 2023 20:38:54 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
+ (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Fri, 21 Apr
+ 2023 20:38:54 +0800
+Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Fri, 21 Apr
+ 2023 20:38:53 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
+Subject: [PATCH v2 0/4] Fix some issues of xHCI for zhaoxin
+Date:   Sat, 22 Apr 2023 04:38:49 +0800
+X-ASG-Orig-Subj: [PATCH v2 0/4] Fix some issues of xHCI for zhaoxin
+Message-ID: <20230421203853.387210-1-WeitaoWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230418111612.19479-4-ddrokosov@sberdevices.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.29.8.21]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
+X-Barracuda-Start-Time: 1682080734
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 539
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.1931 1.0000 -0.8641
+X-Barracuda-Spam-Score: 2.24
+X-Barracuda-Spam-Status: No, SCORE=2.24 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107724
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Fix some issues of xHCI for zhaoxin.
 
-On Tue, 18 Apr 2023 14:16:10 +0300, Dmitry Rokosov wrote:
-> Provide the appropriate compatible string for the DWC2 IP that is found
-> inside the Amlogic A1 SoC and used in peripheral mode.
-> 
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> ---
->  Documentation/devicetree/bindings/usb/dwc2.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Weitao Wang (4):
+  xhci: Add some quirks for zhaoxin xhci to fix issues
+  xhci: fix issue of cross page boundary in TRB prefetch
+  xhci: Show zhaoxin xHCI root hub speed correctly
+  xhci: Add zhaoxin xHCI U1/U2 feature support
 
-Acked-by: Rob Herring <robh@kernel.org>
+ drivers/usb/host/xhci-mem.c |  8 +++--
+ drivers/usb/host/xhci-pci.c | 11 +++++++
+ drivers/usb/host/xhci.c     | 65 +++++++++++++++++++++++--------------
+ drivers/usb/host/xhci.h     |  2 ++
+ 4 files changed, 59 insertions(+), 27 deletions(-)
+
+-- 
+2.32.0
 
