@@ -2,110 +2,198 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BBC6EA3B4
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 08:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10BB16EA536
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 09:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjDUGTZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Apr 2023 02:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54908 "EHLO
+        id S231285AbjDUHtn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Apr 2023 03:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjDUGSx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 02:18:53 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBD22123;
-        Thu, 20 Apr 2023 23:18:45 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33L6IRw14024623, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33L6IRw14024623
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Fri, 21 Apr 2023 14:18:27 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Fri, 21 Apr 2023 14:18:27 +0800
-Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 21 Apr 2023 14:18:26 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
- 15.1.2507.17 via Frontend Transport; Fri, 21 Apr 2023 14:18:26 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Stanley Chang <stanley_chang@realtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,global-regs-starting-offset' quirk
-Date:   Fri, 21 Apr 2023 14:18:24 +0800
-Message-ID: <20230421061825.2233-2-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230421061825.2233-1-stanley_chang@realtek.com>
-References: <20230421061825.2233-1-stanley_chang@realtek.com>
+        with ESMTP id S230114AbjDUHtm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 03:49:42 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7312D57;
+        Fri, 21 Apr 2023 00:49:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682063381; x=1713599381;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vyjw8gaJvfXStzUI8gtf7qcqGZwPkXifYf2vhi91CVI=;
+  b=ATFKrbkzbdVdLCu+OKC+QUtx6dxXa9ytUmg0fGgIEqkgyE7Orlbx+I/3
+   1pukV2NpMZxSfUDIFX0HSBL9WQr1KEzvx55lOFKRBsQ720JTxHT3f9U3N
+   AkhtYP4y1Vrw940swRPMoqrO9t/heW6ApR6jFC8IUuLe5lCX/zMGopaMP
+   Wcp5bg80g2NX7VFt4dHfvVHRoVoR6hj+TxiOb4OwwPx7GOR9PS7GdV0Fk
+   kfyzvk7uT4fzd98SKKEgdBtoaRZhzfmMVxllF/fzzKqk/8D7H7E0yaWTp
+   nWYXdaCXo8T8vYQi28vl+/G9uG75DuVUi1hw+Eju2CZzLyIjVp4WjZpbw
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="344693371"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="344693371"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 00:49:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="685652489"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="685652489"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga007.jf.intel.com with ESMTP; 21 Apr 2023 00:49:38 -0700
+Message-ID: <a2bea61f-05c2-77bf-73d7-04e35e5023af@linux.intel.com>
+Date:   Fri, 21 Apr 2023 10:51:06 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXMBS01.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH 2/3] xhci: Add zhaoxin xHCI U1/U2 feature support
+Content-Language: en-US
+To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
+References: <20230420172130.375819-1-WeitaoWang-oc@zhaoxin.com>
+ <20230420172130.375819-3-WeitaoWang-oc@zhaoxin.com>
+ <92cf6ed0-be37-d8a6-14c7-c5043f076916@intel.com>
+ <a270bd46-fb39-50a7-c2a7-da98b06458ff@zhaoxin.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <a270bd46-fb39-50a7-c2a7-da98b06458ff@zhaoxin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add a new 'snps,global-regs-starting-offset' DT to dwc3 core to remap
-the global register start address
+On 21.4.2023 13.56, WeitaoWang-oc@zhaoxin.com wrote:
+> On 2023/4/20 22:07, Mathias Nyman wrote:
+>> On 20.4.2023 20.21, Weitao Wang wrote:
+>>> Add U1/U2 feature support of xHCI for zhaoxin.
+>>>
+>>> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+>>> ---
+>>>   drivers/usb/host/xhci-pci.c |  5 +++++
+>>>   drivers/usb/host/xhci.c     | 27 +++++++++++++++++++++++++--
+>>>   2 files changed, 30 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+>>> index 6db07ca419c3..a235effe8e5c 100644
+>>> --- a/drivers/usb/host/xhci-pci.c
+>>> +++ b/drivers/usb/host/xhci-pci.c
+>>> @@ -334,6 +334,11 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+>>>            pdev->device == PCI_DEVICE_ID_AMD_PROMONTORYA_4))
+>>>           xhci->quirks |= XHCI_NO_SOFT_RETRY;
+>>> +    if (pdev->vendor == PCI_VENDOR_ID_ZHAOXIN) {
+>>> +        xhci->quirks |= XHCI_LPM_SUPPORT;
+>>> +        xhci->quirks |= XHCI_ZHAOXIN_HOST;
+>>> +    }
+>>> +
+>>>       /* xHC spec requires PCI devices to support D3hot and D3cold */
+>>>       if (xhci->hci_version >= 0x120)
+>>>           xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+>>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>>> index 6307bae9cddf..730c0f68518d 100644
+>>> --- a/drivers/usb/host/xhci.c
+>>> +++ b/drivers/usb/host/xhci.c
+>>> @@ -4802,7 +4802,7 @@ static u16 xhci_calculate_u1_timeout(struct xhci_hcd *xhci,
+>>>           }
+>>>       }
+>>> -    if (xhci->quirks & XHCI_INTEL_HOST)
+>>> +    if (xhci->quirks & (XHCI_INTEL_HOST | XHCI_ZHAOXIN_HOST))
+>>>           timeout_ns = xhci_calculate_intel_u1_timeout(udev, desc);
+>>
+>> Looks odd to tie Zhaoxin vendor to Intel specific values but ok,
+>> if they diverge in the future we anyway need to modify this.
+> 
+> These Intel specific values look good for zhaoxin xHCI with test.
+> Reused this piece of code for simplicity. If there are any difference
+> for these value, update will be submitted in the future.
+> 
+>>>       else
+>>>           timeout_ns = udev->u1_params.sel;
+>>> @@ -4866,7 +4866,7 @@ static u16 xhci_calculate_u2_timeout(struct xhci_hcd *xhci,
+>>>           }
+>>>       }
+>>> -    if (xhci->quirks & XHCI_INTEL_HOST)
+>>> +    if (xhci->quirks & (XHCI_INTEL_HOST | XHCI_ZHAOXIN_HOST))
+>>>           timeout_ns = xhci_calculate_intel_u2_timeout(udev, desc);
+>>
+>> same.
+>>
+>>>       else
+>>>           timeout_ns = udev->u2_params.sel;
+>>> @@ -4938,6 +4938,27 @@ static int xhci_update_timeout_for_interface(struct xhci_hcd *xhci,
+>>>       return 0;
+>>>   }
+>>> +static int xhci_check_zhaoxin_tier_policy(struct usb_device *udev,
+>>> +        enum usb3_link_state state)
+>>> +{
+>>> +    struct usb_device *parent;
+>>> +    unsigned int num_hubs;
+>>> +
+>>> +    /* Don't enable U1/U2 if the device is on an external hub. */
+>>> +    for (parent = udev->parent, num_hubs = 0; parent->parent;
+>>> +            parent = parent->parent)
+>>> +        num_hubs++;
+>>> +
+>>> +    if (num_hubs < 1)
+>>> +        return 0;
+>>> +
+>>> +    dev_dbg(&udev->dev, "Disabling U1/U2 link state for device"
+>>> +            " below external hub.\n");
+>>> +    dev_dbg(&udev->dev, "Plug device into root hub "
+>>> +            "to decrease power consumption.\n");
+>>> +    return -E2BIG;
+>>> +}
+>>> +
+>>
+>> I don't think we should add more vendor specific functions, this is almost
+>> an exact copy of xhci_check_intel_tier_policy().
+> 
+> Adding duplicate vendor related code is indeed a bit redundant.
+> 
+>> How about getting rid of both of those and use something like this instead (untested):
+>>
+>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>> index 2b280beb0011..e9a25e4d99cf 100644
+>> --- a/drivers/usb/host/xhci.c
+>> +++ b/drivers/usb/host/xhci.c
+>> @@ -4926,10 +4926,24 @@ static int xhci_check_tier_policy(struct xhci_hcd *xhci,
+>>                  struct usb_device *udev,
+>>                  enum usb3_link_state state)
+>>   {
+>> -       if (xhci->quirks & XHCI_INTEL_HOST)
+>> -               return xhci_check_intel_tier_policy(udev, state);
+>> -       else
+>> -               return 0;
+>> +       struct usb_device *parent = udev->parent;
+>> +       int tier = 1; /* roothub is tier1 */
+>> +
+>> +       while (parent) {
+>> +               parent = parent->parent;
+>> +               tier++;
+>> +       }
+>> +
+>> +       if (xhci->quirks & XHCI_INTEL_HOST && tier > 3)
+>> +               goto fail;
+>> +       if (xhci->quirks & XHCI_ZHAOXIN_HOST && tier > 2)
+>> +               goto fail;
+>> +
+>> +       return 0;
+>> +fail:
+>> +       dev_dbg(&udev->dev, "Tier policy prevents U1/U2 LPM states for devices at tier %d\n",
+>> +               tier);
+>> +       return -E2BIG;
+>>   }
+> 
+> These code looks very elegant. Could I resubmit patch using your code
+> after testing pass on Intel and Zhaoxin platform.
+> 
 
-The RTK DHC SoCs were designed the global register address offset at
-0x8100. The default address offset is constant at DWC3_GLOBALS_REGS_START
-(0xc100). Therefore, add the property of device-tree to adjust this
-address offset.
+Yes, you can add Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
----
- v2 to v3 change:
-1.  Fix the dtschema validation error.
-
- v1 to v2 change:
-1. Change the name of the property "snps,global-regs-starting-offset".
-2. Adjust the format of comment.
-3. Add initial value of the global_regs_starting_offset
-4. Remove the log of dev_info.
----
- Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index be36956af53b..4f83fa8cb6cb 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -359,6 +359,14 @@ properties:
-     items:
-       enum: [1, 4, 8, 16, 32, 64, 128, 256]
- 
-+  snps,global-regs-starting-offset:
-+    description:
-+      value for remapping global register start address. For some dwc3
-+      controller, the dwc3 global register start address is not at
-+      default DWC3_GLOBALS_REGS_START (0xc100). This property is added to
-+      adjust the address.
-+    $ref: '/schemas/types.yaml#/definitions/uint32'
-+
-   port:
-     $ref: /schemas/graph.yaml#/properties/port
-     description:
--- 
-2.34.1
-
+Thanks
+Mathias
