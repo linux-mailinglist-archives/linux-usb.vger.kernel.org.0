@@ -2,73 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C506EA605
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 10:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42EF76EA7BB
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 11:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjDUIkl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Apr 2023 04:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
+        id S231658AbjDUJ7T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Apr 2023 05:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjDUIkj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 04:40:39 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5B47DA8;
-        Fri, 21 Apr 2023 01:40:38 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33L8e5glD015276, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33L8e5glD015276
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Fri, 21 Apr 2023 16:40:05 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Fri, 21 Apr 2023 16:40:06 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 21 Apr 2023 16:40:05 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Fri, 21 Apr 2023 16:40:05 +0800
-From:   =?big5?B?U3RhbmxleSBDaGFuZ1up96h8vHdd?= <stanley_chang@realtek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Alan Stern <stern@rowland.harvard.edu>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Ray Chi <raychi@google.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v1] usb: phy: add usb phy notify port status API
-Thread-Topic: [PATCH v1] usb: phy: add usb phy notify port status API
-Thread-Index: AQHZdCfF18CT8wCSd0W6JiweSZ5Lg6805gYAgACG7aA=
-Date:   Fri, 21 Apr 2023 08:40:05 +0000
-Message-ID: <fdf65c4eca9b420bb1ed29edb66482fb@realtek.com>
-References: <20230421080333.18681-1-stanley_chang@realtek.com>
- <ZEJHdCpLZ7f0946B@kroah.com>
-In-Reply-To: <ZEJHdCpLZ7f0946B@kroah.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        with ESMTP id S231273AbjDUJ7R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 05:59:17 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51B8AF38;
+        Fri, 21 Apr 2023 02:59:15 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33L9Zl95013077;
+        Fri, 21 Apr 2023 09:58:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=mH1yRwdyfBGlx7ue1iz6rfx3JzGxQNBiTPZdXuAKA20=;
+ b=gnXAnoEu3DjamoQMVwxHSzwbt4OWXcBgneGzmScoe0XZubpD0XNvTGOFbBglCf9i4v3b
+ xt8qhwymRk432lsTO2Zdu5ueuCyXRTPqDdvP+zZPFVS19jb+/Ius3hdwWxUXSxEa9F6w
+ BxNpswsJzdOUu3sgpDcbSEWIjkRaEwfHLSkVktKAvP7B92CTVuGuHfVU//P76QOFiP3d
+ SgM+LFbVsHxfg6/SkP/hky3+t29L40GqU8gi1vYfEqNtjtA51OTnUrcsOtkTc9Ttx+4C
+ /eNOHxHBtfHVn26rJTHiiYWs/xnlUzrHpoZHSba4SYmCmEnIckseagv8OfJBJQ9uiYWl ZQ== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q3dcmh9cc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Apr 2023 09:58:50 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33L9wnt1026221
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Apr 2023 09:58:49 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 21 Apr 2023 02:58:43 -0700
+Date:   Fri, 21 Apr 2023 15:28:39 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Johan Hovold <johan@kernel.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v8 2/8] dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3
+ PHY
+Message-ID: <20230421095838.GA5813@varda-linux.qualcomm.com>
+References: <cover.1680693149.git.quic_varada@quicinc.com>
+ <1efa9a64499767d939efadd0aef897ac4a6e54eb.1680693149.git.quic_varada@quicinc.com>
+ <0a66e291-a86d-1ff9-e674-839b8cc8f1da@linaro.org>
+ <ZDz9t9TkBqZ1fcfn@hovoldconsulting.com>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZDz9t9TkBqZ1fcfn@hovoldconsulting.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: HkjpSBWiKHcIpBqiN8ceaiazLMOuKFFz
+X-Proofpoint-GUID: HkjpSBWiKHcIpBqiN8ceaiazLMOuKFFz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-21_03,2023-04-20_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 adultscore=0 phishscore=0 spamscore=0 impostorscore=0
+ mlxlogscore=999 malwarescore=0 suspectscore=0 clxscore=1011 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304210085
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,20 +87,56 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2NvcmUvaHViLmMgYi9kcml2ZXJzL3VzYi9j
-b3JlL2h1Yi5jIGluZGV4DQo+ID4gOTdhMGY4ZmFlYTZlLi5iNGZiYmVhZTE5MjcgMTAwNjQ0DQo+
-ID4gLS0tIGEvZHJpdmVycy91c2IvY29yZS9odWIuYw0KPiA+ICsrKyBiL2RyaXZlcnMvdXNiL2Nv
-cmUvaHViLmMNCj4gPiBAQCAtNjE0LDYgKzYxNCwxOSBAQCBzdGF0aWMgaW50IGh1Yl9leHRfcG9y
-dF9zdGF0dXMoc3RydWN0IHVzYl9odWIgKmh1YiwNCj4gaW50IHBvcnQxLCBpbnQgdHlwZSwNCj4g
-PiAgICAgICAgICAgICAgIHJldCA9IDA7DQo+ID4gICAgICAgfQ0KPiA+ICAgICAgIG11dGV4X3Vu
-bG9jaygmaHViLT5zdGF0dXNfbXV0ZXgpOw0KPiA+ICsNCj4gPiArICAgICBpZiAoIXJldCkgew0K
-PiA+ICsgICAgICAgICAgICAgc3RydWN0IHVzYl9kZXZpY2UgKmhkZXYgPSBodWItPmhkZXY7DQo+
-ID4gKw0KPiA+ICsgICAgICAgICAgICAgaWYgKGhkZXYgJiYgIWhkZXYtPnBhcmVudCkgew0KPiAN
-Cj4gSG93IGNhbiB5b3UgaGF2ZSBhIGRldmljZSB3aXRob3V0IGEgcGFyZW50PyAgQW5kIHdoeSBk
-b2VzIGl0IG1hdHRlcj8NCg0KSWYgdGhlIGh1YiBpcyBhIHJvb3QgaHViLCB0aGUgcGFyZW50IG9m
-IGh1YiB3aWxsIGJlIE5VTEwuDQpBbmQgd2Ugb25seSBzZW5kIHRoZSBwb3J0IHN0YXR1cyB0byBw
-aHkgZHJpdmVyIGZvciByb290IGh1Yi4NCj4gDQo+IEFuZCBob3cgY291bGQgaGRldiBiZSBOVUxM
-PyAgQW5kIGlmIGl0IGNhbiBjaGFuZ2UgdG8gYmUgTlVMTCwgd2hhdCBwcmV2ZW50cw0KPiBpdCBm
-cm9tIGNoYW5naW5nIHJpZ2h0IGFmdGVyIHlvdSBjaGVja2VkIGZvciBpdD8NCj4gDQoNCkl0IGlz
-IHJpZ2h0LiBoZGV2IGlzIG5ldmVyIE5VTEwsIHRoaXMgaXMgYSByZWR1bmRhbnQgY2hlY2suDQoN
-ClRoYW5rcywNClN0YW5sZXkNCg==
+On Mon, Apr 17, 2023 at 10:05:11AM +0200, Johan Hovold wrote:
+> On Thu, Apr 06, 2023 at 09:41:49AM +0200, Krzysztof Kozlowski wrote:
+> > On 05/04/2023 13:41, Varadarajan Narayanan wrote:
+> > > Add dt-bindings for USB3 PHY found on Qualcomm IPQ9574
+> > >
+> > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > > ---
+> > >  Changes in v8:
+> > > 	- Update clock names for ipq9574
+> > >
+> > >  Changes in v6:
+> > > 	- Made power-domains optional
+> > >
+> > > Note: In the earlier patch sets, had used the (legacy)
+> > > specification available in qcom,msm8996-qmp-usb3-phy.yaml. Moved
+> > > to newer specification in qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> > > ---
+> > >  .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml        | 43 +++++++++++++++++++---
+> > >  1 file changed, 37 insertions(+), 6 deletions(-)
+>
+> > > +        clock-names:
+> > > +          items:
+> > > +            - const: aux
+> > > +            - const: ref
+> > > +            - const: com_aux
+> >
+> > Can anyone explain me why do we name these (here and other Qualcomm
+> > bindings) based on clock name, not input? Just because different clock
+> > is fed to the block, does not necessarily mean the input should be named
+> > differently.
+>
+> I guess part of the answer is that this has just been copied from the
+> vendor dts and (almost) no one but Qualcomm has access to the
+> documentation. What would the input names be here?
+>
+> Also note that there are SoCs that enable both 'cfg_ahb' and 'com_aux'
+> (e.g. sc7180).
+
+The clock name definitions are auto-generated based on the clock
+tree definitions provided by the h/w team. We followed the naming
+pattern done in the previous SoCs.
+
+Thanks
+Varada
+
+>
+> > > +            - const: pipe
+> > > +
+> > >  examples:
+> > >    - |
+> > >      #include <dt-bindings/clock/qcom,gcc-sc8280xp.h>
+>
+> Johan
