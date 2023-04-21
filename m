@@ -2,211 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EF16EABE0
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 15:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1855E6EAC48
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 16:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232397AbjDUNld (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Apr 2023 09:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57020 "EHLO
+        id S232434AbjDUOIA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Apr 2023 10:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231183AbjDUNlU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 09:41:20 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20988118E2;
-        Fri, 21 Apr 2023 06:41:02 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33LDUViu007028;
-        Fri, 21 Apr 2023 13:40:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=vaATKEvIff/FfpRV6D3k8hDPCfL/mA87Q5z+Mae/UCE=;
- b=Ec2gM5X0eweHSVSA6zR41VuzPu6/vcUzfZdrEnDIB6oBz24IAvHoH7ClxqhltNFV/oAt
- z47swiXnLTLMGaLGKWPHhLC7G9HJi7NTNrm9iLSQhBBQfSMJtJPGvyLckTl8zMaMSN+U
- mqC+7PKfFEieAUK/amV34JmKYHtUohI1NVN+Np2q7a2ZDeDaKxfBwCStw+z9JVGozOGj
- ST+BjuyIMVo4pJ6fziDlcAAxioIFGt/GC2HjExlvnDKxm3JlVdqs3luOXpAtXe7aVYHV
- PuRFKW4mvJBaaIunkUh/eRJnMHVqjfF/Wv11FcUl5BF3pPXPeHvIGGBAvhbbPT0zouLf 7Q== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q3thdr46c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Apr 2023 13:40:56 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33LDeupL015600
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Apr 2023 13:40:56 GMT
-Received: from hu-shazhuss-hyd.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 21 Apr 2023 06:40:51 -0700
-From:   Shazad Hussain <quic_shazhuss@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     Shazad Hussain <quic_shazhuss@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "Kishon Vijay Abraham I" <kishon@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-Subject: [PATCH v1 6/6] arm64: dts: qcom: sa8775p-ride: enable USB nodes
-Date:   Fri, 21 Apr 2023 19:09:21 +0530
-Message-ID: <20230421133922.8520-7-quic_shazhuss@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230421133922.8520-1-quic_shazhuss@quicinc.com>
-References: <20230421133922.8520-1-quic_shazhuss@quicinc.com>
+        with ESMTP id S232053AbjDUOH7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 10:07:59 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2055.outbound.protection.outlook.com [40.107.212.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121F61BC0;
+        Fri, 21 Apr 2023 07:07:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eiiLMUWcZpPdCJpLVZSkYL4VMg+e7sKMF8Z0lMY8pr5tRF5z89P0cbj2c5dRIQCPmK98sTyF7fsdf1iG/Sb5SB964dxwgg5ZEpI+gpC0n2t/BuWcOZj/otoppcLmymzVXz0+m/z4DC5+ucDo+XBcUCrwWoT5lrf5sON8Eh1qYrQIyrqTbYk6mr1U429TbFdaI5+EN72qT3+yjL89gArjqbWR21q0SkjKY+9EkELyPoQ0wgGn7s5q2lrYGVxUwAWm+S2TH8JC9+bRr3mQzIa5aahGcNSgPMxxwKrDMICUi5hjVTONoDIEBBYhPGEwgUnGbj5z3mxfSB2koM/HNdS/LQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VmesdzkhLU5evKDz8cs9mjCfTxQoXkgTSopuH3wGBfU=;
+ b=QZPKnxDTcPGBDn4GaQxXpkMxg+0BWl9/VyzMPP5Fl1CwAUowPmyCf/UWJCSvReKpNr0wPZMP7UCF4Vb/af7Mrc+bK/VGA8bgfDJ+D4ci/bzIIaLcvUi0ZJN9QMIQTbVvxbiUfu+fBxykwkDaL/jUcMlul71JxdQ7ps3qjysPcPsBI21Wmcde2v4DE27pV7mqCUGS4PZxGAahZu5CZ7LNRS/Gw6RPYZmE6e2/l1ppgxir3TlXukTZQbaOuTaMM7LoY5Ku338vQSxOfLS19mJhmO9mFgqKTqJHVNbewEDrZEPXDrzbsa1ua5outh+7PL73D5YZSyMRUuMtQADkeiYHMw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VmesdzkhLU5evKDz8cs9mjCfTxQoXkgTSopuH3wGBfU=;
+ b=aJMiu2FHt+1zVQsGdE2hUqAk5321UTCTFEgqiI8vMDQi4E9zLBPmg99hJb9hwxsFF/hv8OSyHS/p/jnGpLg678PM4pMnxbm8y0SZQZOgg6chdPV81qcuz/+1bubw+umNljMGdkeYaK/tYzJVoskUOctxYORBiOp1eidUYA0aVpM=
+Received: from MW4PR04CA0081.namprd04.prod.outlook.com (2603:10b6:303:6b::26)
+ by CYYPR12MB8869.namprd12.prod.outlook.com (2603:10b6:930:bf::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Fri, 21 Apr
+ 2023 14:07:55 +0000
+Received: from CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:6b:cafe::aa) by MW4PR04CA0081.outlook.office365.com
+ (2603:10b6:303:6b::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.25 via Frontend
+ Transport; Fri, 21 Apr 2023 14:07:55 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT033.mail.protection.outlook.com (10.13.174.247) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6319.27 via Frontend Transport; Fri, 21 Apr 2023 14:07:55 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 21 Apr
+ 2023 09:07:53 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+CC:     S Sanath <Sanath.S@amd.com>, <richard.gong@amd.com>,
+        <Sanju.Mehta@amd.com>, Takashi Iwai <tiwai@suse.de>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] thunderbolt: Clear registers properly when auto clear isn't in use
+Date:   Fri, 21 Apr 2023 09:07:24 -0500
+Message-ID: <20230421140725.495-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: CFPB77Ex6Nqnd0tXBvokhvyu6Q4POTNh
-X-Proofpoint-GUID: CFPB77Ex6Nqnd0tXBvokhvyu6Q4POTNh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-21_06,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- clxscore=1015 priorityscore=1501 malwarescore=0 mlxlogscore=612 mlxscore=0
- impostorscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304210119
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT033:EE_|CYYPR12MB8869:EE_
+X-MS-Office365-Filtering-Correlation-Id: e130469a-120c-471d-feb2-08db4271cdd4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: it7bxBo8Lf7QjnSf6WDu0tUim6VP88JJovSm2s9ySsIJFvriOlYpjT0W3TEq5G/NjhN6lXkMD1PuegSfiKBru0JzAPLXOft+R3XE/Mojoya5NwoIjJxNCf5KvXrveRSVdOqeHfYMJ68d7Ae8smf6hvB2GsPD1bWNSKn5rDcCtDLh/9IWK5jC0jkgVmdJrLO/s4P5du/lxCz+GxKdBJODDmwukncy2EAiRalCuhikuvTSmeaJeJJybFhmPnd+X/GSG1623ZDkbkAyDAW+WCIRt6ihQRzGTM/iioxqDBKOVVekI+hPSMv4Qe978VCB6VeMVQ+v/B69xr0HxtK0Kd1TP8SGd5w30GPwcBcFFzElJkSW0/IAV547q6O9X5WIVOKtxvs1ST0FvLqmt/Mpsz2ga4oA8VqTLlAALIr5AUrh24XR23NkbQnt86ZceonDBxfvMANtTGPcW3H6bpMq+o7UNicqmvoywEy2NP0EqUdRBO57xp/+pKdkEPvInc/bAoILc9qENn47aUkmjB9CAr4MMJUYtKSgjm/SscBm4zrbUWsN2bBk3hmMkXqZKAjOpReIdZjGmutinZa8yjEdFIDX9fH5JqtFucNVK0LLT/kmTy4RXof6eApQ1UE4YTUMILs2PADMW1JK7CMMP4/res9vmCpey/16tzt/+hBGFYAmO7OZM/ciSMJK0f/SoHoB755F62c+91ws40ncjw6mph+bDp6i4NGbT2QrpOY89kDC4oA=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(376002)(39860400002)(346002)(451199021)(40470700004)(36840700001)(46966006)(84970400001)(4326008)(70586007)(110136005)(316002)(966005)(54906003)(70206006)(7049001)(36756003)(1076003)(40460700003)(16526019)(36860700001)(26005)(81166007)(336012)(426003)(2616005)(47076005)(186003)(83380400001)(356005)(40480700001)(5660300002)(8676002)(41300700001)(82310400005)(478600001)(7696005)(2906002)(6666004)(8936002)(82740400003)(86362001)(44832011)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 14:07:55.3364
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e130469a-120c-471d-feb2-08db4271cdd4
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8869
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable usb0, usb1 and usb2 nodes and their respective phy's.
+When `QUIRK_AUTO_CLEAR_INT` isn't set, interrupt masking should be
+cleared by writing to Interrupt Mask Clear (IMR) and interrupt
+status should be cleared properly at shutdown/init.
 
-Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
+This fixes an error where interrupts are left enabled during resume
+from hibernation with `CONFIG_USB4=y`.
+
+Fixes: 468c49f44759 ("thunderbolt: Disable interrupt auto clear for rings")
+Reported-by: Takashi Iwai <tiwai@suse.de>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=217343
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Tested-by: Takashi Iwai <tiwai@suse.de>
 ---
- arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 92 +++++++++++++++++++++++
- 1 file changed, 92 insertions(+)
+I tried to base this off thunderbolt.git/next (tag: thunderbolt-for-v6.4-rc1)
+but the following 3 commits are missing from that branch but are in 6.3-rc7:
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-index f238a02a5448..13ac60ddd170 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-@@ -291,6 +291,13 @@
- 			  "BT_EN",
- 			  "USB2_PWR_EN",
- 			  "USB2_FAULT";
+58cdfe6f58b3 thunderbolt: Rename shadowed variables bit to interrupt_bit and auto_clear_bit
+468c49f44759 thunderbolt: Disable interrupt auto clear for rings
+1716efdb0793 thunderbolt: Use const qualifier for `ring_interrupt_index`
+
+I cherry picked them first as this patch builds on them.
+---
+ drivers/thunderbolt/nhi.c      | 28 +++++++++++++++++++++-------
+ drivers/thunderbolt/nhi_regs.h |  1 +
+ 2 files changed, 22 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
+index d76e923fbc6a..7c543a6a5711 100644
+--- a/drivers/thunderbolt/nhi.c
++++ b/drivers/thunderbolt/nhi.c
+@@ -61,8 +61,9 @@ static int ring_interrupt_index(const struct tb_ring *ring)
+  */
+ static void ring_interrupt_active(struct tb_ring *ring, bool active)
+ {
+-	int reg = REG_RING_INTERRUPT_BASE +
+-		  ring_interrupt_index(ring) / 32 * 4;
++	int index = ring_interrupt_index(ring) / 32 * 4;
++	int reg = REG_RING_INTERRUPT_BASE + index;
++	int clear = REG_RING_INTERRUPT_MASK_CLEAR_BASE + index;
+ 	int interrupt_bit = ring_interrupt_index(ring) & 31;
+ 	int mask = 1 << interrupt_bit;
+ 	u32 old, new;
+@@ -123,7 +124,11 @@ static void ring_interrupt_active(struct tb_ring *ring, bool active)
+ 					 "interrupt for %s %d is already %s\n",
+ 					 RING_TYPE(ring), ring->hop,
+ 					 active ? "enabled" : "disabled");
+-	iowrite32(new, ring->nhi->iobase + reg);
 +
-+	usb2_en_state: usb2-en-state {
-+		pins = "gpio9";
-+		function = "normal";
-+		output-high;
-+		power-source = <0>;
-+	};
- };
++	if (active)
++		iowrite32(new, ring->nhi->iobase + reg);
++	else
++		iowrite32(mask, ring->nhi->iobase + clear);
+ }
  
- &pmm8654au_2_gpios {
-@@ -306,6 +313,20 @@
- 			  "USB1_PWR_ENABLE",
- 			  "USB1_FAULT",
- 			  "VMON_SPX8";
-+
-+	usb0_en_state: usb0-en-state {
-+		pins = "gpio3";
-+		function = "normal";
-+		output-high;
-+		power-source = <0>;
-+	};
-+
-+	usb1_en_state: usb1-en-state {
-+		pins = "gpio10";
-+		function = "normal";
-+		output-high;
-+		power-source = <0>;
-+	};
- };
+ /*
+@@ -135,12 +140,21 @@ static void nhi_disable_interrupts(struct tb_nhi *nhi)
+ {
+ 	int i = 0;
+ 	/* disable interrupts */
+-	for (i = 0; i < RING_INTERRUPT_REG_COUNT(nhi); i++)
+-		iowrite32(0, nhi->iobase + REG_RING_INTERRUPT_BASE + 4 * i);
++	for (i = 0; i < RING_INTERRUPT_REG_COUNT(nhi); i++) {
++		if (nhi->quirks & QUIRK_AUTO_CLEAR_INT)
++			iowrite32(0, nhi->iobase + REG_RING_INTERRUPT_BASE + 4 * i);
++		else
++			iowrite32(0xffffffff,
++				  nhi->iobase + REG_RING_INTERRUPT_MASK_CLEAR_BASE + 4 * i);
++	}
  
- &pmm8654au_3_gpios {
-@@ -426,6 +447,77 @@
- 	status = "okay";
- };
+ 	/* clear interrupt status bits */
+-	for (i = 0; i < RING_NOTIFY_REG_COUNT(nhi); i++)
+-		ioread32(nhi->iobase + REG_RING_NOTIFY_BASE + 4 * i);
++	for (i = 0; i < RING_NOTIFY_REG_COUNT(nhi); i++) {
++		if (nhi->quirks & QUIRK_AUTO_CLEAR_INT)
++			ioread32(nhi->iobase + REG_RING_NOTIFY_BASE + 4 * i);
++		else
++			iowrite32(0xffffffff, nhi->iobase + REG_RING_INT_CLEAR + 4 * i);
++	}
+ }
  
-+&usb_0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&usb0_en_state>;
-+
-+	status = "okay";
-+};
-+
-+&usb_0_dwc3 {
-+	dr_mode = "peripheral";
-+};
-+
-+&usb_0_hsphy {
-+	vdda-pll-supply = <&vreg_l7a>;
-+	vdda18-supply = <&vreg_l6c>;
-+	vdda33-supply = <&vreg_l9a>;
-+
-+	status = "okay";
-+};
-+
-+&usb_0_qmpphy {
-+	vdda-phy-supply = <&vreg_l1c>;
-+	vdda-pll-supply = <&vreg_l7a>;
-+
-+	status = "okay";
-+};
-+
-+&usb_1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&usb1_en_state>;
-+
-+	status = "okay";
-+};
-+
-+&usb_1_dwc3 {
-+	dr_mode = "host";
-+};
-+
-+&usb_1_hsphy {
-+	vdda-pll-supply = <&vreg_l7a>;
-+	vdda18-supply = <&vreg_l6c>;
-+	vdda33-supply = <&vreg_l9a>;
-+
-+	status = "okay";
-+};
-+
-+&usb_1_qmpphy {
-+	vdda-phy-supply = <&vreg_l1c>;
-+	vdda-pll-supply = <&vreg_l7a>;
-+
-+	status = "okay";
-+};
-+
-+&usb_2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&usb2_en_state>;
-+
-+	status = "okay";
-+};
-+
-+&usb_2_dwc3 {
-+	dr_mode = "host";
-+};
-+
-+&usb_2_hsphy {
-+	vdda-pll-supply = <&vreg_l7a>;
-+	vdda18-supply = <&vreg_l6c>;
-+	vdda33-supply = <&vreg_l9a>;
-+
-+	status = "okay";
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <38400000>;
- };
+ /* ring helper methods */
+diff --git a/drivers/thunderbolt/nhi_regs.h b/drivers/thunderbolt/nhi_regs.h
+index faef165a919c..db95ad5d2814 100644
+--- a/drivers/thunderbolt/nhi_regs.h
++++ b/drivers/thunderbolt/nhi_regs.h
+@@ -92,6 +92,7 @@ struct ring_desc {
+  */
+ #define REG_RING_INTERRUPT_BASE	0x38200
+ #define RING_INTERRUPT_REG_COUNT(nhi) ((31 + 2 * nhi->hop_count) / 32)
++#define REG_RING_INTERRUPT_MASK_CLEAR_BASE	0x38208
+ 
+ #define REG_INT_THROTTLING_RATE	0x38c00
+ 
 -- 
-2.17.1
+2.34.1
 
