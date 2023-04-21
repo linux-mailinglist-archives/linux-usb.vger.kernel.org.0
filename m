@@ -2,85 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 524FB6EB13F
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 19:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BA06EB151
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 20:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjDURzT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Apr 2023 13:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
+        id S232177AbjDUSBl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Apr 2023 14:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233561AbjDURzE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 13:55:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C321BFA
-        for <linux-usb@vger.kernel.org>; Fri, 21 Apr 2023 10:54:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6551561028
-        for <linux-usb@vger.kernel.org>; Fri, 21 Apr 2023 17:54:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BBA8EC433D2
-        for <linux-usb@vger.kernel.org>; Fri, 21 Apr 2023 17:54:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682099692;
-        bh=ozCnC41PGUEnlAEl9Ct9mGUtqWZljPvZFOwdkZPscLs=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=NC02G6EsjLT0XXSr2CA3cgcs8vu5iz4oxM65+3Bsp+YUpG+fqK+6iEwPYaKlTzjC1
-         Mwz2q+ccFRA73ozhSvuj2yzbDINw+w0wJcXevpJCAvUam2XxSWs3vJ89T0sMSZs1uL
-         lu82Xz0/9yTBfJXVRmMNq/8st8+qKKpxbi+bTe33Bvl4oDTnRIB4ZfMABbh4CViWXp
-         VjarN4ktEkewIyj+bmAPcmWcI1vdKRAC8cvpGTQNtWO1e3UZeHF8EXQbrQ1Cs80A7V
-         mRzVq1hgE19brDz6Db4aY3MUjRWLB9lyd9TfUjSZdMN4WdKHcI9VxVT3hcNzD1zPHt
-         e0VEhtqjoT7UQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 9BC4EC43141; Fri, 21 Apr 2023 17:54:52 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217242] CPU hard lockup related to xhci/dma
-Date:   Fri, 21 Apr 2023 17:54:52 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: austin.domino@hotmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217242-208809-pZLoaPYWS5@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217242-208809@https.bugzilla.kernel.org/>
-References: <bug-217242-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S230406AbjDUSBd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 14:01:33 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7597D172C;
+        Fri, 21 Apr 2023 11:01:32 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-18665c1776dso1760581fac.2;
+        Fri, 21 Apr 2023 11:01:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682100092; x=1684692092;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nnmTMZtvA/f6TPhezgaB/eM/0Kt2Nz3CF0RXPywChaE=;
+        b=Vghxhr6U7Cb/tTXVnZLqZWNTURAJoIClkTSV/9F25DsHwk3vjI2BHC8dkhekZ9u3bo
+         6YOCkFoSUOEfsYm2UKq2F83MxvR7FhNTSJRw1saHHO/EMGtoBNLwST1AIeAe1Xj+M3tb
+         ziu+WDnbiIy4VcqZEoEKMAAT/CfkGYgujs1a68TOZWnVm/Eo4xfs8mEcFoq5Sqlcq2C3
+         cIPLJB1AT+61IT7nZJHLLmRnH86JNG7kt2Niaj2O6iTHBUnjEdly255+3AOmcyYAW3vp
+         Xbt1p4y69HNGz+TuNap/TNgbDrh/WweeKAdgelceIGLmebZM6qD7Mi48yW024Xquig5e
+         r19g==
+X-Gm-Message-State: AAQBX9flw9JUKbI7tVnz8JmEcn21RTj9d0bLMwbMp1GsdytdMyjywH9q
+        5r09ppfnggMB6grnbp7Qkg==
+X-Google-Smtp-Source: AKy350bS6Yt9+puose4G3XnzK+iG2RBGcT82lno6wn46NVV3zf3nyr8BIptdf9X2gnZJqGbUtRaqFw==
+X-Received: by 2002:a05:6871:84:b0:17f:e13:9c96 with SMTP id u4-20020a056871008400b0017f0e139c96mr4884396oaa.51.1682100091343;
+        Fri, 21 Apr 2023 11:01:31 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c3-20020a056870b28300b0018b22156e84sm1790729oao.38.2023.04.21.11.01.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 11:01:30 -0700 (PDT)
+Received: (nullmailer pid 1552920 invoked by uid 1000);
+        Fri, 21 Apr 2023 18:01:29 -0000
+Date:   Fri, 21 Apr 2023 13:01:29 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     linux-usb@vger.kernel.org, hanjie.lin@amlogic.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        yue.wang@amlogic.com, rockosov@gmail.com, robh+dt@kernel.org,
+        hminas@synopsys.com, martin.blumenstingl@googlemail.com,
+        mturquette@baylibre.com, linux-arm-kernel@lists.infradead.org,
+        jbrunet@baylibre.com, neil.armstrong@linaro.org,
+        linux-phy@lists.infradead.org, vkoul@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-amlogic@lists.infradead.org, khilman@baylibre.com,
+        kishon@kernel.org, Thinh.Nguyen@synopsys.com,
+        kernel@sberdevices.ru, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] dt-bindings: usb: dwc2: add support for Amlogic
+ A1 SoC USB peripheral
+Message-ID: <168210008936.1552867.8929832255980698687.robh@kernel.org>
+References: <20230418111612.19479-1-ddrokosov@sberdevices.ru>
+ <20230418111612.19479-4-ddrokosov@sberdevices.ru>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418111612.19479-4-ddrokosov@sberdevices.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217242
 
---- Comment #28 from Austin Domino (austin.domino@hotmail.com) ---
-A quick update.  I've been running a kernel with this patch on a system for
-about a day and a half now, I haven't run into any issues so far, and there=
-'s
-nothing notable in any of the logs.  I'll likely respond back sometime next
-week with further updates, but things are looking good so far.
+On Tue, 18 Apr 2023 14:16:10 +0300, Dmitry Rokosov wrote:
+> Provide the appropriate compatible string for the DWC2 IP that is found
+> inside the Amlogic A1 SoC and used in peripheral mode.
+> 
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+>  Documentation/devicetree/bindings/usb/dwc2.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
---=20
-You may reply to this email to add a comment.
+Acked-by: Rob Herring <robh@kernel.org>
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
