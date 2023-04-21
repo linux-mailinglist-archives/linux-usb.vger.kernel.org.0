@@ -2,179 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E286EA84F
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 12:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9ABB6EA22E
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 05:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbjDUK0c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Apr 2023 06:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
+        id S233498AbjDUDLI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Apr 2023 23:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjDUK0a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 06:26:30 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C7FE60
-        for <linux-usb@vger.kernel.org>; Fri, 21 Apr 2023 03:26:28 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-94f7a0818aeso194535866b.2
-        for <linux-usb@vger.kernel.org>; Fri, 21 Apr 2023 03:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1682072787; x=1684664787;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Iet7yaiulN1KsP/2/aLjRVmvZfhTeLjdC9dKF+QtX7U=;
-        b=Rn3FOi9y++YS9buU9tuOjKmGanEcbXsFTUNuJf4fpERfZx3g30UqZiLc+Wso6HFaiY
-         qprwVJRG1AC/bPirQrvm2TM5vl11j842uHuk67x7PpGD+y4NcNWi8ouBvb175uZFY679
-         fApgx3TzqpoW8DyHutIhEma0WX9fMFM59RQwSCAXA7lb7El346nR5RCBGsZk9o0j80OR
-         I/GxxVatc1+8LvjS/3Eqgjv4GNNY0XAySFJHyGOlFrXMTTfD5ahakjm4BoMMDptjRu+6
-         Y9Xg+ZCAxkh6+i9yBw98Xz/tN8PTtNfywf78ndQhlVIVY+sm7877M4oV2dghGk3KZrRK
-         xigA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682072787; x=1684664787;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Iet7yaiulN1KsP/2/aLjRVmvZfhTeLjdC9dKF+QtX7U=;
-        b=fvUknfXoua/MeToLIPQg7i/wmN1SA+sR4kP2W8MCJ7RcZGCpZAFdNeCOPhY9bcdS5m
-         cV6CowGLrifBE03ZtzzVJ2WTRUhWO5Xs/DQVSRl+y5swagJg9LRJv23TXG+HiRoIJleX
-         OkHMIf9Suga5iwTKDVx6bTNjlaTqoCYNWM7qMUxOPBrsYyP7sKfdpgYpy9iaNTU7qh/+
-         KMRX9juaYUt1yjHzMNKbL2Lf94zhhWvnWCGC9oY5bUX0MAiQTPQn3McIHKj0vY7ULoU6
-         txVxBGIqBesWfRMaTWIYPQDUJ9Z5atCokqLzCgIPzi5aJI/PMpQjuJ99fuUEq8inxsvq
-         W62g==
-X-Gm-Message-State: AAQBX9dEMilm3VZAdXzhjTuNAs6kyFuM9jxRVSUuj4OTbgQjCaFh2hfP
-        hKFdlihSH0l7A8MXa6SjjhX/5g==
-X-Google-Smtp-Source: AKy350YsMYot67V+M+M4Rk0yTffiTXWyediKG6DRN3K8T+AxlqX8zn/mMqi/cxL30F+7Ol19z9Aa+Q==
-X-Received: by 2002:a17:906:a18c:b0:928:796d:71e8 with SMTP id s12-20020a170906a18c00b00928796d71e8mr1664800ejy.3.1682072786738;
-        Fri, 21 Apr 2023 03:26:26 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id l7-20020a1709060e0700b0094ee21fe943sm1862553eji.116.2023.04.21.03.26.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 03:26:26 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 21 Apr 2023 12:26:25 +0200
-Message-Id: <CS2D1E4ZYKZ8.2CWDCP9VR0C11@otso>
-Cc:     <caleb.connolly@linaro.org>, <konrad.dybcio@linaro.org>,
-        <subbaram@quicinc.com>, <jackp@quicinc.com>,
-        <robertom@qti.qualcomm.com>
-Subject: Re: [PATCH v5 00/14] Add Qualcomm PMIC TPCM support
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        <linux@roeck-us.net>, <heikki.krogerus@linux.intel.com>,
-        <gregkh@linuxfoundation.org>, <andersson@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-X-Mailer: aerc 0.14.0
-References: <20230413113438.1577658-1-bryan.odonoghue@linaro.org>
- <CRVOZOPMKBX4.2T7FOCWF0RKBJ@otso>
- <10551f5e-4516-c0cc-0b04-73aa38f80a2c@linaro.org>
- <CRWA2OP2T6KT.RCWAVWF5Q2T2@otso>
- <ccc9fa4c-ca52-d8f3-a8b3-45031bea673f@linaro.org>
- <CRYUWMIJDSB2.BJWEPJEA3Y1D@otso>
- <75d00efb-ff3c-b1f8-a141-3fa78a39557a@linaro.org>
-In-Reply-To: <75d00efb-ff3c-b1f8-a141-3fa78a39557a@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S233094AbjDUDK6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Apr 2023 23:10:58 -0400
+X-Greylist: delayed 1159 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 Apr 2023 20:10:52 PDT
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF536EAB
+        for <linux-usb@vger.kernel.org>; Thu, 20 Apr 2023 20:10:52 -0700 (PDT)
+X-ASG-Debug-ID: 1682045488-086e237e5035540001-YVMibp
+Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx1.zhaoxin.com with ESMTP id jHYewwdp8MwaxFTS (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Fri, 21 Apr 2023 10:51:28 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX2.zhaoxin.com
+ (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Fri, 21 Apr
+ 2023 10:51:28 +0800
+Received: from [10.29.8.21] (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Fri, 21 Apr
+ 2023 10:51:27 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Message-ID: <375a82ab-7628-4895-fcda-ad19e5958d4b@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.8.21
+Date:   Fri, 21 Apr 2023 18:51:26 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/3] xhci: Add zhaoxin xHCI U1/U2 feature support
+Content-Language: en-US
+X-ASG-Orig-Subj: Re: [PATCH 2/3] xhci: Add zhaoxin xHCI U1/U2 feature support
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
+References: <20230420172130.375819-1-WeitaoWang-oc@zhaoxin.com>
+ <20230420172130.375819-3-WeitaoWang-oc@zhaoxin.com>
+ <c853436a-85c7-d0f8-0990-bc64977cbd47@gmail.com>
+ <f0f0d62d-edde-547d-5d6e-a02e2f8e8648@zhaoxin.com>
+ <54aa1618-63b7-965a-d303-5d35cb554c20@gmail.com>
+From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+In-Reply-To: <54aa1618-63b7-965a-d303-5d35cb554c20@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.29.8.21]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
+X-Barracuda-Start-Time: 1682045488
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 2291
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: 1.09
+X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107704
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Bryan,
+On 2023/4/20 22:22, Sergei Shtylyov wrote:
+> On 4/20/23 11:21 PM, WeitaoWang-oc@zhaoxin.com wrote:
+> 
+>>>> Add U1/U2 feature support of xHCI for zhaoxin.
+>>>>
+>>>> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+>>> [...]
+>>>
+>>>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>>>> index 6307bae9cddf..730c0f68518d 100644
+>>>> --- a/drivers/usb/host/xhci.c
+>>>> +++ b/drivers/usb/host/xhci.c
+>>> [...]
+>>>> @@ -4938,6 +4938,27 @@ static int xhci_update_timeout_for_interface(struct xhci_hcd *xhci,
+>>>>        return 0;
+>>>>    }
+>>>>    +static int xhci_check_zhaoxin_tier_policy(struct usb_device *udev,
+>>>> +        enum usb3_link_state state)
+>>>> +{
+>>>> +    struct usb_device *parent;
+>>>> +    unsigned int num_hubs;
+>>>> +
+>>>> +    /* Don't enable U1/U2 if the device is on an external hub. */
+>>>> +    for (parent = udev->parent, num_hubs = 0; parent->parent;
+>>>> +            parent = parent->parent)
+>>>> +        num_hubs++;
+>>>> +
+>>>> +    if (num_hubs < 1)
+>>>> +        return 0;
+>>>> +
+>>>> +    dev_dbg(&udev->dev, "Disabling U1/U2 link state for device"
+>>>> +            " below external hub.\n");
+>>>> +    dev_dbg(&udev->dev, "Plug device into root hub "
+>>>> +            "to decrease power consumption.\n");
+>>>
+>>>      Please don't break up the message strings.
+>>
+>> Thanks for your advice, and I will merge this message in next patch version.
+>>> [...]
+>>>> @@ -4965,6 +4986,8 @@ static int xhci_check_tier_policy(struct xhci_hcd *xhci,
+>>>>    {
+>>>>        if (xhci->quirks & XHCI_INTEL_HOST)
+>>>>            return xhci_check_intel_tier_policy(udev, state);
+>>>> +    else if (xhci->quirks & XHCI_ZHAOXIN_HOST)
+>>>
+>>>      *else* not needed after *return*.
+>> This function need a "int" type return value. If remove "else" branch,
+>> vendor other than intel and zhaoxin will not get a return value.
+> 
+>     I didn't tell you to remove the whole branch, just the *else* keyword.
 
-On Mon Apr 17, 2023 at 12:04 PM CEST, Bryan O'Donoghue wrote:
-> On 17/04/2023 08:35, Luca Weiss wrote:
-> > Do you have an idea in which part of the code to start debugging this?
-> > Since orientation detection is working is it maybe in the phy code and
-> > not in the tcpm driver? Or does that also touch crucial stuff for USB
-> > apart from telling phy which direction to use?
->
-> PHY - I'd almost just do the following
->
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c=20
-> b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> index edb788a71edeb..bbac82bd093f8 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> @@ -3369,7 +3369,7 @@ static int qmp_combo_typec_switch_set(struct=20
-> typec_switch_dev *sw,
->
->          dev_dbg(qmp->dev, "Toggling orientation current %d requested %d\=
-n",
->                  qmp->orientation, orientation);
-> -
-> +return 0;
->
-> In that case the PHY should "just work" for host or device in one=20
-> orientation.
->
-> The other possibility is that the data role message is not hitting dwc3=
-=20
-> drd on your platform.
->
-> If you take the last commit on this branch - plus the updated PHY commit
->
-> Commit: 171d7f507511 ("usb: dwc3: drd: Enable user-space triggered=20
-> role-switching")
->
-> Commit: eb0daa19f3ad ("phy: qcom-qmp: Register as a typec switch for=20
-> orientation detection")
->
-> https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/linux-next-23-04=
--17-pm8150b-tcpm-qcom-wrapper-typec-mux
->
-> cat /sys/class/usb_role/a600000.usb-role-switch/role
->
-> On SM8250 it looks like this
->
-> - Attach TypeC accessory with USB key plugged in [1]
->    Mount USB key, read/write some data
->    Unmount USB key
->
->    cat /sys/class/usb_role/a600000.usb-role-switch/role
->    host
+I understand what you mean this time. Here's code needs more concise.
+I'll try to do more think and test.Thanks again!
 
-It feels like I spent way too much time now trying to understand the
-current behavior across the different patch versions, it's a bit messy,
-but in short:
-
-With the "user-space triggered role-switching" patch I can see that
-whatever scenario the USB-C port is in, the role is stuck on "device".=20
-
-Nothing =3D
-    Role: device, Orientation: unknown
-
-USB(-A) cable to laptop (either direction) =3D
-    Role: device, Orientation: unknown
-
-USB stick up =3D
-    Role: device, Orientation: reverse
-
-USB stick down =3D
-    Role: device, Orientation: normal
-
-Sometimes/mostly when the USB cable is attached during boot I get USB
-connection to the laptop until I unplug, then it won't reenable itself.
-
-Also the early return in qmp_combo_typec_switch_set doesn't seem to
-change much I believe? But for sure normally qmp_combo_dp_power_off/on
-does not get called so I wouldn't be suprised if this reinit breaks
-something in the phy.
-
-> <snip>
->
-> Yep its worth checking out that the data-role switch is working, we=20
-> might be looking at the wrong thing for you on the PHY.
->
-
-So this seems to be the case? If that's useful, I can also go back to
-the previous (v4?) TCPM revision where the switching mostly worked fine.
-
-(btw the subject has a typo, TPCM instead of TCPM :) )
-
-Regards
-Luca
+weitao
+> [...]
+>> Best Regards,
+>> Weitao
+> 
+> MBR, Sergey
+> .
