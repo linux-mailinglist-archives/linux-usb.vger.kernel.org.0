@@ -2,86 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD9C6EAEE1
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 18:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F55B6EAF0A
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 18:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233027AbjDUQNS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Apr 2023 12:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
+        id S233127AbjDUQ2I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Apr 2023 12:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233082AbjDUQNM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 12:13:12 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C35414F7D;
-        Fri, 21 Apr 2023 09:13:03 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33LGCXn14002175, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33LGCXn14002175
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Sat, 22 Apr 2023 00:12:33 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Sat, 22 Apr 2023 00:12:34 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Sat, 22 Apr 2023 00:12:33 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Sat, 22 Apr 2023 00:12:33 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Rob Herring <robh+dt@kernel.org>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v3 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,global-regs-starting-offset' quirk
-Thread-Topic: [PATCH v3 2/2] dt-bindings: usb: snps,dwc3: Add
- 'snps,global-regs-starting-offset' quirk
-Thread-Index: AQHZdBkVGzo+T+kwpkqSDn6NeDDx1681NUYAgAC6KHA=
-Date:   Fri, 21 Apr 2023 16:12:33 +0000
-Message-ID: <6273cc836dee42809f6ac5c5cdbcec04@realtek.com>
-References: <20230421061825.2233-1-stanley_chang@realtek.com>
- <20230421061825.2233-2-stanley_chang@realtek.com>
- <CAL_JsqJBDuxCAnZmHBnHuMkjTXTLet2d3o5kLRZQ_YuqVB9Pcw@mail.gmail.com>
-In-Reply-To: <CAL_JsqJBDuxCAnZmHBnHuMkjTXTLet2d3o5kLRZQ_YuqVB9Pcw@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S233085AbjDUQ2F (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 12:28:05 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1EE13F90
+        for <linux-usb@vger.kernel.org>; Fri, 21 Apr 2023 09:28:01 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-504dfc87927so3121909a12.0
+        for <linux-usb@vger.kernel.org>; Fri, 21 Apr 2023 09:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682094479; x=1684686479;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S51TzJEKK9WWVDYr4Tc1gJpcMzkHWh1WXqblt4YDlC0=;
+        b=CETPV90ihN3b3DZOnlv9hQKr0fh4gspi1VCr9VdP4hwDkdtmZ9AgF5tdmnECAHPp+V
+         RKWp1KvQD2X5o8mx+dj5hshVZywtPp011NNTJ1RVMADvlgve1fngNYOOtu8/mkGQv8S3
+         UQ4bja+i7aMHCdtiERCr0Kgvko21kA8OJ2FNFCa6SRpFiBUyyaljnZWHdVDyu8sksfeI
+         h/qQuwtNvzj1lVvuYVJr/87Ah+oIUnGt4mEOfV5eBH3noIbpPg+/FxLR9om20wPDR89K
+         TyR4zf0P3Hb8lkQ6duOweA3p9nR6TklUsLo05M+ge6x8oJzsaY0bBFh/y2FVuvSzXZaw
+         IJhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682094479; x=1684686479;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S51TzJEKK9WWVDYr4Tc1gJpcMzkHWh1WXqblt4YDlC0=;
+        b=MZnGwxm3QtDQUhVQ7YyELX9kfy2XjbvzOoqSoI+Ylm3AlCc5gwv7jMe0fDUjX5Vzvz
+         2OjqR0jdkedbGlMdxCIyw3zMYq1MRrvHDlBJdWJo35ABhEokqhdQvPeLdm1umZGAmMOf
+         F/YM9fuIKRErUKVQ9fts2uyxDMkRcNa9oXQHyDcgTIecqAx4q2RBbKgMBMEtvHAy+65p
+         ydPQRQPO5r8dIjtLSS5pbpnjJtOyKoyBTYLhkl8hRk2cDeUC7qRyxhumtZRMMOODE3sV
+         lZdYvsXrOkY8fY36yxbDd5dPccoScoLZtRk04Sfcua9rxIRcQjk/0AsrIpHA2KVuy9j7
+         AJoA==
+X-Gm-Message-State: AAQBX9djEH7PRH6XSOZ8Hp4lFf+wUAMEknzo6zpdi3NAWOUoQSWow3KA
+        j3RFKfBrSwVVVZBXdZz519gl75IUCG5FP2XmB5OQug==
+X-Google-Smtp-Source: AKy350YDsOgKLoK5tAIioZExs34dWYBZrpIx7o0tWafmx6898YyxY8cwVVzZn6+Qk1owXo7rwySlYg==
+X-Received: by 2002:a05:6402:6c7:b0:504:9345:ffa4 with SMTP id n7-20020a05640206c700b005049345ffa4mr7172456edy.21.1682094479554;
+        Fri, 21 Apr 2023 09:27:59 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:687d:8c5:41cb:9883? ([2a02:810d:15c0:828:687d:8c5:41cb:9883])
+        by smtp.gmail.com with ESMTPSA id v1-20020aa7dbc1000000b005029c47f814sm1983225edt.49.2023.04.21.09.27.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 09:27:59 -0700 (PDT)
+Message-ID: <f8aae62c-e3c5-5fca-7a56-0bc9c0efbd66@linaro.org>
+Date:   Fri, 21 Apr 2023 18:27:57 +0200
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v8 2/8] dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3
+ PHY
+Content-Language: en-US
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>,
+        Johan Hovold <johan@kernel.org>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+References: <cover.1680693149.git.quic_varada@quicinc.com>
+ <1efa9a64499767d939efadd0aef897ac4a6e54eb.1680693149.git.quic_varada@quicinc.com>
+ <0a66e291-a86d-1ff9-e674-839b8cc8f1da@linaro.org>
+ <ZDz9t9TkBqZ1fcfn@hovoldconsulting.com>
+ <20230421095838.GA5813@varda-linux.qualcomm.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230421095838.GA5813@varda-linux.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgUm9iLA0KDQo+IEFnYWluLCB3ZSdyZSBub3QgZ29pbmcgdG8ga2VlcCBhZGRpbmcgcHJvcGVy
-dGllcyBmb3IgZXZlcnkgRFdDMyB2YXJpYXRpb24uIElmDQo+IGl0IGlzIGJvYXJkIHNwZWNpZmlj
-LCB0aGVuIHllcyBhIHByb3BlcnR5IGlzIGFwcHJvcHJpYXRlLiBJZiBpdCBpcyBTb0Mgc3BlY2lm
-aWMsIHRoZW4NCj4gaW1wbHkgaXQgZnJvbSB0aGUgY29tcGF0aWJsZS4NCj4gT3IgaW4gdGhpcyBj
-YXNlLCB5b3UgY291bGQgcG9zc2libHkgYWRkIGFub3RoZXIgcmVnIGVudHJ5Lg0KPiANCj4gUm9i
-DQo+IA0KTGV0IG1lIHRyeSB0byB1bmRlcnN0YW5kIHlvdXIgY29uY2VybnMuDQoNClRoZSBkZXZp
-Y2UtdHJlZSBwcm9wZXJ0eSBzaG91bGQgd29yayBmb3IgYWxsIGR3YzMgSVBzIGFuZCBjYW4gYmUg
-c3BlY2lmaWVkIGJ5IGRpZmZlcmVudCBib2FyZHMuDQpGb3IgYSBTb0Mgc3BlY2lmaWMsIGl0IHNo
-b3VsZCB1c2UgYSBjb21wYXRpYmxlIG9yIHJlZ2lzdHJ5IGVudHJ5IHRvIGNoYW5nZSBpdC4NClNv
-IHlvdSB0aGluayB3ZSBjYW4ndCB1c2UgYSBwcm9wZXJ0eSB0byBzcGVjaWZ5IHRoaXMgb2Zmc2V0
-Lg0KDQpJcyBteSB1bmRlcnN0YW5kaW5nIGNvcnJlY3Q/DQoNCklmIGl0IGlzIHJpZ2h0LCB1c2lu
-ZyBwcm9wZXJ0eSB0byBzb2x2ZSB0aGlzIHByb2JsZW0gd2FzIG15IG1pc3Rha2UuDQpJIHdpbGwg
-dGhpbmsgYSBuZXcgbWV0aG9kIHRvIHJlc29sdmUgaXQuDQoNCg==
+On 21/04/2023 11:58, Varadarajan Narayanan wrote:
+> On Mon, Apr 17, 2023 at 10:05:11AM +0200, Johan Hovold wrote:
+>> On Thu, Apr 06, 2023 at 09:41:49AM +0200, Krzysztof Kozlowski wrote:
+>>> On 05/04/2023 13:41, Varadarajan Narayanan wrote:
+>>>> Add dt-bindings for USB3 PHY found on Qualcomm IPQ9574
+>>>>
+>>>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>>>> ---
+>>>>  Changes in v8:
+>>>> 	- Update clock names for ipq9574
+>>>>
+>>>>  Changes in v6:
+>>>> 	- Made power-domains optional
+>>>>
+>>>> Note: In the earlier patch sets, had used the (legacy)
+>>>> specification available in qcom,msm8996-qmp-usb3-phy.yaml. Moved
+>>>> to newer specification in qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+>>>> ---
+>>>>  .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml        | 43 +++++++++++++++++++---
+>>>>  1 file changed, 37 insertions(+), 6 deletions(-)
+>>
+>>>> +        clock-names:
+>>>> +          items:
+>>>> +            - const: aux
+>>>> +            - const: ref
+>>>> +            - const: com_aux
+>>>
+>>> Can anyone explain me why do we name these (here and other Qualcomm
+>>> bindings) based on clock name, not input? Just because different clock
+>>> is fed to the block, does not necessarily mean the input should be named
+>>> differently.
+>>
+>> I guess part of the answer is that this has just been copied from the
+>> vendor dts and (almost) no one but Qualcomm has access to the
+>> documentation. What would the input names be here?
+>>
+>> Also note that there are SoCs that enable both 'cfg_ahb' and 'com_aux'
+>> (e.g. sc7180).
+> 
+> The clock name definitions are auto-generated based on the clock
+> tree definitions provided by the h/w team. We followed the naming
+> pattern done in the previous SoCs.
+
+Are you sure? We talk about clock inputs here.
+
+Best regards,
+Krzysztof
+
