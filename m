@@ -2,169 +2,282 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65696EAA80
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 14:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2A96EB350
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 23:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbjDUMjI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Apr 2023 08:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
+        id S232753AbjDUVHH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Apr 2023 17:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232017AbjDUMjE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 08:39:04 -0400
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3103CC0D
-        for <linux-usb@vger.kernel.org>; Fri, 21 Apr 2023 05:39:00 -0700 (PDT)
-X-ASG-Debug-ID: 1682080734-1eb14e6388386f0005-YVMibp
-Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id NYfORPVgddCDGJOK (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Fri, 21 Apr 2023 20:38:56 +0800 (CST)
-X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
- (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Fri, 21 Apr
- 2023 20:38:55 +0800
-Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Fri, 21 Apr
- 2023 20:38:54 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
-To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v2 4/4] xhci: Add zhaoxin xHCI U1/U2 feature support
-Date:   Sat, 22 Apr 2023 04:38:53 +0800
-X-ASG-Orig-Subj: [PATCH v2 4/4] xhci: Add zhaoxin xHCI U1/U2 feature support
-Message-ID: <20230421203853.387210-5-WeitaoWang-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20230421203853.387210-1-WeitaoWang-oc@zhaoxin.com>
-References: <20230421203853.387210-1-WeitaoWang-oc@zhaoxin.com>
+        with ESMTP id S229543AbjDUVHG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 17:07:06 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5571FCE
+        for <linux-usb@vger.kernel.org>; Fri, 21 Apr 2023 14:07:04 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4edc63c82d1so2219997e87.0
+        for <linux-usb@vger.kernel.org>; Fri, 21 Apr 2023 14:07:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682111222; x=1684703222;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=82dMk4mt/EjUUXDK3gwazIb7If9XP1IvoU6IArIL6n8=;
+        b=dPdnLjphGPi5Yca8Po1OlnshGQ8H0HTl0QRcZVZ2+e0BY/y4/MsiOczEkloFJ9wUbo
+         tbNCvXliE+TRW5odTMh0hV3if8bE4XAhUiF7AaVQsktkO9llNzf8BvORpSGk0D8w2ccg
+         5Lik5Bvz4m/TNcrhkGi2kkpn3S6OXGX35uebgnWyxb+sqM841fkLkVDG4u9EGKtK/E7p
+         d/Wwx6hzO4E62WdK9ctkbeOl0rOb9NyTXGIfpXp4gGWaivRs2w7YyNlf/YthwcFxvaj/
+         FBVZf7R2S6JcWtJZ6qv1KrAoDL50YYSk8Jc4HzAv8F3JaTg15c46MFpRmg6I+4tz0blo
+         hodg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682111222; x=1684703222;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=82dMk4mt/EjUUXDK3gwazIb7If9XP1IvoU6IArIL6n8=;
+        b=TMj0Nhs1ttjSAfbi+ho8Uz3+Q5lDBbES1KwgR5l6CvR2pXE3idEZ03d+cP+N6JqTwb
+         lQC9CKalgxNfYz+ma3SxyJTzjdigZgvhdzCwrmk0yeKOoP0MFjOPlbd83e5vPm5FU6WO
+         0VGMckCdzZWTFeTw4gpPiy3A495Fv303L1kaxJgK9c3WZKelK6zzDXP3xTCDMExsSkdM
+         bqNIS5+TvzOOj4WGQ1MbmsD/gq4ewYF+wvaNQnZoE+QWTpsHn86+Rqj5VHchaAdeudL8
+         KMAnpCB9UktcaT+TH3Dtnc6lwQouk/3ES51uqQvW6d0hj7GPZXJL7vqXjWRX0aVSYaIA
+         xMVQ==
+X-Gm-Message-State: AAQBX9fdM7q55ho9pMkMziYekvLWu6VX3jqkzZXjcPs0xFN+k653UntN
+        fvhONeQQgQrxySYTASur6LmtgQ==
+X-Google-Smtp-Source: AKy350bqoCFN01OEXtQlGn2CeqSMEabbxAwFrZ72ZtfGWyK5b3OyapH7u9ISCIcCajwZC32ofWYANg==
+X-Received: by 2002:ac2:5098:0:b0:4ed:c3c9:cb06 with SMTP id f24-20020ac25098000000b004edc3c9cb06mr1517113lfm.27.1682111222182;
+        Fri, 21 Apr 2023 14:07:02 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id d9-20020a05651221c900b004edca9174bbsm673949lft.148.2023.04.21.14.07.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 14:07:01 -0700 (PDT)
+Message-ID: <e142ff5d-543f-80bb-94f9-3f1fb90f1b83@linaro.org>
+Date:   Sat, 22 Apr 2023 00:07:01 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.29.8.21]
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
-X-Barracuda-Start-Time: 1682080736
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 3160
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: 1.09
-X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107724
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
-        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v8 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
+Content-Language: en-GB
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+References: <cover.1680693149.git.quic_varada@quicinc.com>
+ <55db8487a7cbf3354749dd2d3a35c05bfd9fa4fc.1680693149.git.quic_varada@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <55db8487a7cbf3354749dd2d3a35c05bfd9fa4fc.1680693149.git.quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add U1/U2 feature support of xHCI for zhaoxin.
-Since both Intel and Zhaoxin need to check the tier where the device is
-located to determine whether to enabled U1/U2, remove the previous Intel
-U1/U2 tier policy and add common policy in xhci_check_tier_policy.
-If vendor has specific U1/U2 enable policy,quirks can be add to declare.
+On 05/04/2023 14:41, Varadarajan Narayanan wrote:
+> Add USB phy and controller related nodes
+> 
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+>   Changes in v8:
+> 	- Change clocks order to match the bindings
+>   Changes in v7:
+> 	- Change com_aux -> cfg_ahb
+>   Changes in v6:
+> 	- Introduce fixed regulators for the phy
+> 	- Resolved all 'make dtbs_check' messages
+> 
+>   Changes in v5:
+> 	- Fix additional comments
+> 	- Edit nodes to match with qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> 	- 'make dtbs_check' giving the following messages since
+> 	  ipq9574 doesn't have power domains. Hope this is ok
+> 
+> 		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
+>          	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> 		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
+>          	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> 
+>   Changes in v4:
+> 	- Use newer bindings without subnodes
+> 	- Fix coding style issues
+> 
+>   Changes in v3:
+> 	- Insert the nodes at proper location
+> 
+>   Changes in v2:
+> 	- Fixed issues flagged by Krzysztof
+> 	- Fix issues reported by make dtbs_check
+> 	- Remove NOC related clocks (to be added with proper
+> 	  interconnect support)
+> ---
+>   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 120 ++++++++++++++++++++++++++++++++++
+>   1 file changed, 120 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> index 43a3dbe..1242382 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> @@ -150,6 +150,33 @@
+>   		method = "smc";
+>   	};
+>   
+> +	reg_usb_3p3: s3300 {
 
-Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
----
- v1->v2
- - Modify the description.
- - Adjust U1/U2 tier enable policy.
+The node names do not look generic enough. Please take a look at other 
+platforms.
 
- drivers/usb/host/xhci.c | 43 +++++++++++++++++------------------------
- 1 file changed, 18 insertions(+), 25 deletions(-)
+> +		compatible = "regulator-fixed";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-boot-on;
+> +		regulator-always-on;
+> +		regulator-name = "usb-phy-vdd-dummy";
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 31d6ace9cace..b81a69126188 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -4802,7 +4802,7 @@ static u16 xhci_calculate_u1_timeout(struct xhci_hcd *xhci,
- 		}
- 	}
- 
--	if (xhci->quirks & XHCI_INTEL_HOST)
-+	if (xhci->quirks & (XHCI_INTEL_HOST | XHCI_ZHAOXIN_HOST))
- 		timeout_ns = xhci_calculate_intel_u1_timeout(udev, desc);
- 	else
- 		timeout_ns = udev->u1_params.sel;
-@@ -4866,7 +4866,7 @@ static u16 xhci_calculate_u2_timeout(struct xhci_hcd *xhci,
- 		}
- 	}
- 
--	if (xhci->quirks & XHCI_INTEL_HOST)
-+	if (xhci->quirks & (XHCI_INTEL_HOST | XHCI_ZHAOXIN_HOST))
- 		timeout_ns = xhci_calculate_intel_u2_timeout(udev, desc);
- 	else
- 		timeout_ns = udev->u2_params.sel;
-@@ -4938,37 +4938,30 @@ static int xhci_update_timeout_for_interface(struct xhci_hcd *xhci,
- 	return 0;
- }
- 
--static int xhci_check_intel_tier_policy(struct usb_device *udev,
-+static int xhci_check_tier_policy(struct xhci_hcd *xhci,
-+		struct usb_device *udev,
- 		enum usb3_link_state state)
- {
--	struct usb_device *parent;
--	unsigned int num_hubs;
-+	struct usb_device *parent = udev->parent;
-+	int tier = 1; /* roothub is tier1 */
- 
--	/* Don't enable U1 if the device is on a 2nd tier hub or lower. */
--	for (parent = udev->parent, num_hubs = 0; parent->parent;
--			parent = parent->parent)
--		num_hubs++;
-+	while (parent) {
-+		parent = parent->parent;
-+		tier++;
-+	}
- 
--	if (num_hubs < 2)
--		return 0;
-+	if (xhci->quirks & XHCI_INTEL_HOST && tier > 3)
-+		goto fail;
-+	if (xhci->quirks & XHCI_ZHAOXIN_HOST && tier > 2)
-+		goto fail;
- 
--	dev_dbg(&udev->dev, "Disabling U1/U2 link state for device"
--			" below second-tier hub.\n");
--	dev_dbg(&udev->dev, "Plug device into first-tier hub "
--			"to decrease power consumption.\n");
-+	return 0;
-+fail:
-+	dev_dbg(&udev->dev, "Tier policy prevents U1/U2 LPM states for devices at tier %d\n",
-+			tier);
- 	return -E2BIG;
- }
- 
--static int xhci_check_tier_policy(struct xhci_hcd *xhci,
--		struct usb_device *udev,
--		enum usb3_link_state state)
--{
--	if (xhci->quirks & XHCI_INTEL_HOST)
--		return xhci_check_intel_tier_policy(udev, state);
--	else
--		return 0;
--}
--
- /* Returns the U1 or U2 timeout that should be enabled.
-  * If the tier check or timeout setting functions return with a non-zero exit
-  * code, that means the timeout value has been finalized and we shouldn't look
+This also doesn't look correct. This regulator should not just fill the 
+gap. Does it represent a generic voltage network on the board?
+
+Please do not add 'dummy' voltage regulators if there is no real voltage 
+wire.
+
+> +	};
+> +
+> +	reg_usb_1p8: s1800 {
+> +		compatible = "regulator-fixed";
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +		regulator-boot-on;
+> +		regulator-always-on;
+> +		regulator-name = "usb-phy-pll-dummy";
+> +	};
+> +
+> +	reg_usb_0p925: s0925 {
+> +		compatible = "regulator-fixed";
+> +		regulator-min-microvolt = <925000>;
+> +		regulator-max-microvolt = <925000>;
+> +		regulator-boot-on;
+> +		regulator-always-on;
+> +		regulator-name = "usb-phy-dummy";
+> +	};
+> +
+>   	reserved-memory {
+>   		#address-cells = <2>;
+>   		#size-cells = <2>;
+> @@ -179,6 +206,52 @@
+>   		#size-cells = <1>;
+>   		ranges = <0 0 0 0xffffffff>;
+>   
+> +		usb_0_qusbphy: phy@7b000 {
+> +			compatible = "qcom,ipq9574-qusb2-phy";
+> +			reg = <0x0007b000 0x180>;
+> +			#phy-cells = <0>;
+> +
+> +			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> +				 <&xo_board_clk>;
+> +			clock-names = "cfg_ahb",
+> +				      "ref";
+> +
+> +			vdd-supply = <&reg_usb_0p925>;
+> +			vdda-pll-supply = <&reg_usb_1p8>;
+> +			vdda-phy-dpdm-supply = <&reg_usb_3p3>;
+> +
+> +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> +			status = "disabled";
+> +		};
+> +
+> +		usb_0_qmpphy: phy@7d000 {
+> +			compatible = "qcom,ipq9574-qmp-usb3-phy";
+> +			reg = <0x0007d000 0xa00>;
+> +			#phy-cells = <0>;
+> +
+> +			clocks = <&gcc GCC_USB0_AUX_CLK>,
+> +				 <&xo_board_clk>,
+> +				 <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> +				 <&gcc GCC_USB0_PIPE_CLK>;
+> +			clock-names = "aux",
+> +				      "ref",
+> +				      "cfg_ahb",
+> +				      "pipe";
+> +
+> +			resets = <&gcc GCC_USB0_PHY_BCR>,
+> +				 <&gcc GCC_USB3PHY_0_PHY_BCR>;
+> +			reset-names = "phy",
+> +				      "phy_phy";
+> +
+> +			vdda-pll-supply = <&reg_usb_1p8>;
+> +			vdda-phy-supply = <&reg_usb_0p925>;
+> +
+> +			status = "disabled";
+> +
+> +			#clock-cells = <0>;
+> +			clock-output-names = "usb0_pipe_clk";
+> +		};
+> +
+>   		pcie0_phy: phy@84000 {
+>   			compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
+>   			reg = <0x00084000 0x1000>;
+> @@ -548,6 +621,53 @@
+>   			status = "disabled";
+>   		};
+>   
+> +		usb3: usb@8a00000 {
+> +			compatible = "qcom,ipq9574-dwc3", "qcom,dwc3";
+> +			reg = <0x08af8800 0x400>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+> +
+> +			clocks = <&gcc GCC_SNOC_USB_CLK>,
+> +				 <&gcc GCC_USB0_MASTER_CLK>,
+> +				 <&gcc GCC_ANOC_USB_AXI_CLK>,
+> +				 <&gcc GCC_USB0_SLEEP_CLK>,
+> +				 <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> +
+> +			clock-names = "cfg_noc",
+> +				      "core",
+> +				      "iface",
+> +				      "sleep",
+> +				      "mock_utmi";
+> +
+> +			assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
+> +					  <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> +			assigned-clock-rates = <200000000>,
+> +					       <24000000>;
+> +
+> +			interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "pwr_event";
+> +
+> +			resets = <&gcc GCC_USB_BCR>;
+> +			status = "disabled";
+> +
+> +			dwc_0: usb@8a00000 {
+> +				compatible = "snps,dwc3";
+> +				reg = <0x8a00000 0xcd00>;
+> +				clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> +				clock-names = "ref";
+> +				interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+> +				phys = <&usb_0_qusbphy>, <&usb_0_qmpphy>;
+> +				phy-names = "usb2-phy", "usb3-phy";
+> +				tx-fifo-resize;
+> +				snps,is-utmi-l1-suspend;
+> +				snps,hird-threshold = /bits/ 8 <0x0>;
+> +				snps,dis_u2_susphy_quirk;
+> +				snps,dis_u3_susphy_quirk;
+> +				dr_mode = "host";
+> +			};
+> +		};
+> +
+>   		intc: interrupt-controller@b000000 {
+>   			compatible = "qcom,msm-qgic2";
+>   			reg = <0x0b000000 0x1000>,  /* GICD */
+
 -- 
-2.32.0
+With best wishes
+Dmitry
 
