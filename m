@@ -2,65 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C746EA74F
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 11:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 524FB6EB13F
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Apr 2023 19:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjDUJly (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Apr 2023 05:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
+        id S229578AbjDURzT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Apr 2023 13:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjDUJlw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 05:41:52 -0400
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E5DAD2D
-        for <linux-usb@vger.kernel.org>; Fri, 21 Apr 2023 02:41:46 -0700 (PDT)
-X-ASG-Debug-ID: 1682070104-1eb14e6387376d0001-YVMibp
-Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id sJ8LRkrTU6nIIko7 (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Fri, 21 Apr 2023 17:41:44 +0800 (CST)
-X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
- (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Fri, 21 Apr
- 2023 17:41:43 +0800
-Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Fri, 21 Apr
- 2023 17:41:43 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
-To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v2] UHCI:adjust zhaoxin UHCI controllers OverCurrent bit value
-Date:   Sat, 22 Apr 2023 01:41:42 +0800
-X-ASG-Orig-Subj: [PATCH v2] UHCI:adjust zhaoxin UHCI controllers OverCurrent bit value
-Message-ID: <20230421174142.382602-1-WeitaoWang-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.32.0
+        with ESMTP id S233561AbjDURzE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Apr 2023 13:55:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C321BFA
+        for <linux-usb@vger.kernel.org>; Fri, 21 Apr 2023 10:54:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6551561028
+        for <linux-usb@vger.kernel.org>; Fri, 21 Apr 2023 17:54:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BBA8EC433D2
+        for <linux-usb@vger.kernel.org>; Fri, 21 Apr 2023 17:54:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682099692;
+        bh=ozCnC41PGUEnlAEl9Ct9mGUtqWZljPvZFOwdkZPscLs=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=NC02G6EsjLT0XXSr2CA3cgcs8vu5iz4oxM65+3Bsp+YUpG+fqK+6iEwPYaKlTzjC1
+         Mwz2q+ccFRA73ozhSvuj2yzbDINw+w0wJcXevpJCAvUam2XxSWs3vJ89T0sMSZs1uL
+         lu82Xz0/9yTBfJXVRmMNq/8st8+qKKpxbi+bTe33Bvl4oDTnRIB4ZfMABbh4CViWXp
+         VjarN4ktEkewIyj+bmAPcmWcI1vdKRAC8cvpGTQNtWO1e3UZeHF8EXQbrQ1Cs80A7V
+         mRzVq1hgE19brDz6Db4aY3MUjRWLB9lyd9TfUjSZdMN4WdKHcI9VxVT3hcNzD1zPHt
+         e0VEhtqjoT7UQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 9BC4EC43141; Fri, 21 Apr 2023 17:54:52 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217242] CPU hard lockup related to xhci/dma
+Date:   Fri, 21 Apr 2023 17:54:52 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: austin.domino@hotmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217242-208809-pZLoaPYWS5@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217242-208809@https.bugzilla.kernel.org/>
+References: <bug-217242-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.29.8.21]
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
-X-Barracuda-Start-Time: 1682070104
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 1596
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0002 1.0000 -2.0198
-X-Barracuda-Spam-Score: 1.09
-X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107717
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
-        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,43 +70,17 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-OverCurrent condition is not standardized in the UHCI spec.
-Zhaoxin UHCI controllers report OverCurrent bit active off.
-In order to handle OverCurrent condition correctly, the uhci-hcd
-driver needs to be told to expect the active-off behavior.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217242
 
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-Cc: stable@vger.kernel.org
-Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
----
-v1->v2
- - Modify the description of this patch.
- - Let Zhaoxin and VIA share a common oc_low flag
+--- Comment #28 from Austin Domino (austin.domino@hotmail.com) ---
+A quick update.  I've been running a kernel with this patch on a system for
+about a day and a half now, I haven't run into any issues so far, and there=
+'s
+nothing notable in any of the logs.  I'll likely respond back sometime next
+week with further updates, but things are looking good so far.
 
- drivers/usb/host/uhci-pci.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+--=20
+You may reply to this email to add a comment.
 
-diff --git a/drivers/usb/host/uhci-pci.c b/drivers/usb/host/uhci-pci.c
-index 3592f757fe05..034586911bb5 100644
---- a/drivers/usb/host/uhci-pci.c
-+++ b/drivers/usb/host/uhci-pci.c
-@@ -119,11 +119,12 @@ static int uhci_pci_init(struct usb_hcd *hcd)
- 
- 	uhci->rh_numports = uhci_count_ports(hcd);
- 
--	/* Intel controllers report the OverCurrent bit active on.
--	 * VIA controllers report it active off, so we'll adjust the
--	 * bit value.  (It's not standardized in the UHCI spec.)
-+	/* Intel controllers report the OverCurrent bit active on.  VIA
-+	 * and ZHAOXIN controllers report it active off, so we'll adjust
-+	 * the bit value.  (It's not standardized in the UHCI spec.)
- 	 */
--	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA)
-+	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA ||
-+		to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_ZHAOXIN)
- 		uhci->oc_low = 1;
- 
- 	/* HP's server management chip requires a longer port reset delay. */
--- 
-2.32.0
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
