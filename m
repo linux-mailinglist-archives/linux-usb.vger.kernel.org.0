@@ -2,92 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE89F6EBA52
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Apr 2023 18:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C72F26EBBFD
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Apr 2023 00:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbjDVQ1I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Apr 2023 12:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
+        id S229725AbjDVWQy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Apr 2023 18:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjDVQ1H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Apr 2023 12:27:07 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E3D1FD8;
-        Sat, 22 Apr 2023 09:27:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
-        bh=WYJjJ0ufD3sIHjK1nesBtmpTeSxxm3POed2ryYQ19Zc=; b=f15dHkm9IQt9dUpahuBub2J8P6
-        2SZj3gbBWzih+AA4Kx6HSeO7Uq43V6cGz3WOPmiLZOcpJOMNiTO7vH4LRtrZ53l7WG4fM6lxa82/y
-        rWY7hfQhT3DRhp2m/ssy2TkvRM0t26P4g+8KG0ek5lLSvVAuorq0rQJH4zScNPolqAR0YAV8Ncyd7
-        McptYZdlpoDB6Ze6sVtqEYqyhwEYhPcQe/+dfQLHlvJEhy6orqGTZ3/XJ3XMUEiPna0Xy+UcFg99F
-        6hl22NAv6IwzTNTjPP8z2jHzRPeYD5nlKVuvgqQMfOn90tDscKdqUhM214RqjckLsCaiSNI9qaSKL
-        Hnc4sgVg==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pqG4g-00D6up-0P;
-        Sat, 22 Apr 2023 16:26:58 +0000
-Message-ID: <526e0474-7775-ed17-40a8-48ce95966c0a@infradead.org>
-Date:   Sat, 22 Apr 2023 09:26:54 -0700
+        with ESMTP id S229785AbjDVWQx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Apr 2023 18:16:53 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2751F2700
+        for <linux-usb@vger.kernel.org>; Sat, 22 Apr 2023 15:16:31 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-2fa47de5b04so2923001f8f.1
+        for <linux-usb@vger.kernel.org>; Sat, 22 Apr 2023 15:16:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nexus-software-ie.20221208.gappssmtp.com; s=20221208; t=1682201789; x=1684793789;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FAcEHpRyaO1VrwCQ6C3hSL9cSf9f8unSS7yQpJNhFBc=;
+        b=DY2Ad11m7+YFSzcEHfjQbGflLO9YolWZmtHC3UbbnuaeFjwvWcBkEsBgL770Q0lyCg
+         y8oszNz+TSSCwuRwIU+sfbznw4vZavqYJMUON3VuZYItB2hGiHCQGOL79QWSvhcSSz3/
+         XbH7WL9PyVf3GMKTcVPV48VZrZIuuTMf8rTV7L1TMHci4DA/mYUUuDTLRCj1JLVDWfup
+         1kogRGRxTV7OM3hPdIUoiLxM6hMnU6mbk3X6D+2RV8QdM0dStMn27GB/tXoPSGtYJ8ud
+         hEdkVx//sOx35csdDfne5JqY5zAyF2t75kXExTaMxI7HRn6JcbNIBDydrhwft5NP1Qaf
+         Rn2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682201789; x=1684793789;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FAcEHpRyaO1VrwCQ6C3hSL9cSf9f8unSS7yQpJNhFBc=;
+        b=k7+EFAg/1UDYM11C/iqDiKQs5PCIWM7ksM4uWBq79hfQs2su6u9au3DtYW/gqKrzF+
+         YCoTRxv7RlEPto3KwtBgiwmJbod17E3zqtBwdR4N/MXlETBukToBRkdLKFiuH15iv6UX
+         Yc9yH0SxwtSZVIjFqGwrVoZWNUlTsjgxEl12LF3DT2JJ4IcyggPdTgy233M7U8ixzU8Q
+         pgA+0UfzvsHWc9u7VIlOfdl6OHQIncZdZWpGq3eujR0l/dtnSbPgSqTYwXGgZJ329+Ms
+         u0oE2vbPtwF/1tA9VlCXHwgemD1BTfNH9f3vXX74Z0YudMKY3L+Yu5DGBwV0MQjKZlTv
+         UGrw==
+X-Gm-Message-State: AAQBX9elZ4iSO7l+JFIrZGBYiGSoaubGPt7dIBEOuZYyOqo4lJHKyAHs
+        09Z8ahHOJxRnMx2zyUpGUwFWow==
+X-Google-Smtp-Source: AKy350aUkncBG1Wucp0ooIQNdZWBpg4cRTj2E6ZWGyiW+vfE3DG9fe5mIkySexaG3ugZmz1U0Wyj4w==
+X-Received: by 2002:a5d:6711:0:b0:2fe:562c:c0e6 with SMTP id o17-20020a5d6711000000b002fe562cc0e6mr6183440wru.42.1682201789595;
+        Sat, 22 Apr 2023 15:16:29 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id w6-20020adfee46000000b002f0442a2d3asm7399795wro.48.2023.04.22.15.16.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Apr 2023 15:16:29 -0700 (PDT)
+Message-ID: <c0a231db-ba7c-c540-a745-3fd3dc47abe0@nexus-software.ie>
+Date:   Sat, 22 Apr 2023 23:16:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] usb: gadget: drop superfluous ':' in doc string
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v5 00/14] Add Qualcomm PMIC TPCM support
 Content-Language: en-US
-To:     =?UTF-8?B?SsOzIMOBZ2lsYSBCaXRzY2g=?= <jgilab@gmail.com>,
-        Greg KH <greg@kroah.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-usb@vger.kernel.org
-References: <ZEQFzMntIrwvZl4+@jo-einhundert>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <ZEQFzMntIrwvZl4+@jo-einhundert>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, andersson@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     caleb.connolly@linaro.org, konrad.dybcio@linaro.org,
+        subbaram@quicinc.com, jackp@quicinc.com, robertom@qti.qualcomm.com
+References: <20230413113438.1577658-1-bryan.odonoghue@linaro.org>
+ <CRVOZOPMKBX4.2T7FOCWF0RKBJ@otso>
+ <10551f5e-4516-c0cc-0b04-73aa38f80a2c@linaro.org>
+ <CRWA2OP2T6KT.RCWAVWF5Q2T2@otso>
+ <ccc9fa4c-ca52-d8f3-a8b3-45031bea673f@linaro.org>
+ <CRYUWMIJDSB2.BJWEPJEA3Y1D@otso>
+ <75d00efb-ff3c-b1f8-a141-3fa78a39557a@linaro.org>
+ <CS2D1E4ZYKZ8.2CWDCP9VR0C11@otso>
+From:   Bryan O'Donoghue <pure.logic@nexus-software.ie>
+In-Reply-To: <CS2D1E4ZYKZ8.2CWDCP9VR0C11@otso>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 21/04/2023 11:26, Luca Weiss wrote:
+> With the "user-space triggered role-switching" patch I can see that
+> whatever scenario the USB-C port is in, the role is stuck on "device".
 
+Hmm.
 
-On 4/22/23 09:05, Jó Ágila Bitsch wrote:
-> There was one superfluous ':' that kernel-doc complained about.
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Closes: https://lore.kernel.org/all/c718a490-028d-2682-9ad7-8256d16504bf@infradead.org/
-> Fixes: fb6211f1584a ("usb: gadget: add doc to struct usb_composite_dev")
-> Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
+Could you share a branch ?
 
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
-> ---
->  include/linux/usb/composite.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
-> index a2448e98854f..07531c4f4350 100644
-> --- a/include/linux/usb/composite.h
-> +++ b/include/linux/usb/composite.h
-> @@ -443,7 +443,7 @@ static inline struct usb_composite_driver *to_cdriver(
->   * @bcd_webusb_version: 0x0100 by default, WebUSB specification version
->   * @b_webusb_vendor_code: 0x0 by default, vendor code for WebUSB
->   * @landing_page: empty by default, landing page to announce in WebUSB
-> - * @use_webusb:: false by default, interested gadgets set it
-> + * @use_webusb: false by default, interested gadgets set it
->   * @os_desc_config: the configuration to be used with OS descriptors
->   * @setup_pending: true when setup request is queued but not completed
->   * @os_desc_pending: true when os_desc request is queued but not completed
-
--- 
-~Randy
+---
+bod
