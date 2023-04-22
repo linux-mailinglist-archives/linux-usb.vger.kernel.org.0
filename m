@@ -2,98 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C72F26EBBFD
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Apr 2023 00:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C226EB9E9
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Apr 2023 17:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjDVWQy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Apr 2023 18:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39546 "EHLO
+        id S229739AbjDVPMB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Apr 2023 11:12:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjDVWQx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Apr 2023 18:16:53 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2751F2700
-        for <linux-usb@vger.kernel.org>; Sat, 22 Apr 2023 15:16:31 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-2fa47de5b04so2923001f8f.1
-        for <linux-usb@vger.kernel.org>; Sat, 22 Apr 2023 15:16:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexus-software-ie.20221208.gappssmtp.com; s=20221208; t=1682201789; x=1684793789;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FAcEHpRyaO1VrwCQ6C3hSL9cSf9f8unSS7yQpJNhFBc=;
-        b=DY2Ad11m7+YFSzcEHfjQbGflLO9YolWZmtHC3UbbnuaeFjwvWcBkEsBgL770Q0lyCg
-         y8oszNz+TSSCwuRwIU+sfbznw4vZavqYJMUON3VuZYItB2hGiHCQGOL79QWSvhcSSz3/
-         XbH7WL9PyVf3GMKTcVPV48VZrZIuuTMf8rTV7L1TMHci4DA/mYUUuDTLRCj1JLVDWfup
-         1kogRGRxTV7OM3hPdIUoiLxM6hMnU6mbk3X6D+2RV8QdM0dStMn27GB/tXoPSGtYJ8ud
-         hEdkVx//sOx35csdDfne5JqY5zAyF2t75kXExTaMxI7HRn6JcbNIBDydrhwft5NP1Qaf
-         Rn2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682201789; x=1684793789;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FAcEHpRyaO1VrwCQ6C3hSL9cSf9f8unSS7yQpJNhFBc=;
-        b=k7+EFAg/1UDYM11C/iqDiKQs5PCIWM7ksM4uWBq79hfQs2su6u9au3DtYW/gqKrzF+
-         YCoTRxv7RlEPto3KwtBgiwmJbod17E3zqtBwdR4N/MXlETBukToBRkdLKFiuH15iv6UX
-         Yc9yH0SxwtSZVIjFqGwrVoZWNUlTsjgxEl12LF3DT2JJ4IcyggPdTgy233M7U8ixzU8Q
-         pgA+0UfzvsHWc9u7VIlOfdl6OHQIncZdZWpGq3eujR0l/dtnSbPgSqTYwXGgZJ329+Ms
-         u0oE2vbPtwF/1tA9VlCXHwgemD1BTfNH9f3vXX74Z0YudMKY3L+Yu5DGBwV0MQjKZlTv
-         UGrw==
-X-Gm-Message-State: AAQBX9elZ4iSO7l+JFIrZGBYiGSoaubGPt7dIBEOuZYyOqo4lJHKyAHs
-        09Z8ahHOJxRnMx2zyUpGUwFWow==
-X-Google-Smtp-Source: AKy350aUkncBG1Wucp0ooIQNdZWBpg4cRTj2E6ZWGyiW+vfE3DG9fe5mIkySexaG3ugZmz1U0Wyj4w==
-X-Received: by 2002:a5d:6711:0:b0:2fe:562c:c0e6 with SMTP id o17-20020a5d6711000000b002fe562cc0e6mr6183440wru.42.1682201789595;
-        Sat, 22 Apr 2023 15:16:29 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id w6-20020adfee46000000b002f0442a2d3asm7399795wro.48.2023.04.22.15.16.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Apr 2023 15:16:29 -0700 (PDT)
-Message-ID: <c0a231db-ba7c-c540-a745-3fd3dc47abe0@nexus-software.ie>
-Date:   Sat, 22 Apr 2023 23:16:27 +0100
+        with ESMTP id S229587AbjDVPL6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Apr 2023 11:11:58 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E3C1BEF
+        for <linux-usb@vger.kernel.org>; Sat, 22 Apr 2023 08:11:55 -0700 (PDT)
+X-ASG-Debug-ID: 1682176311-1eb14e638841370001-YVMibp
+Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx2.zhaoxin.com with ESMTP id ljftPdxn0Gr5sTUK (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Sat, 22 Apr 2023 23:11:51 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
+ (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Sat, 22 Apr
+ 2023 23:11:51 +0800
+Received: from [192.168.0.100] (115.171.114.112) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Sat, 22 Apr
+ 2023 23:11:49 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Message-ID: <235c2ebc-ca9b-8765-0914-fcd839f1e45c@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 192.168.0.100
+Date:   Sun, 23 Apr 2023 07:11:49 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 00/14] Add Qualcomm PMIC TPCM support
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] UHCI:adjust zhaoxin UHCI controllers OverCurrent bit
+ value
 Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, andersson@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     caleb.connolly@linaro.org, konrad.dybcio@linaro.org,
-        subbaram@quicinc.com, jackp@quicinc.com, robertom@qti.qualcomm.com
-References: <20230413113438.1577658-1-bryan.odonoghue@linaro.org>
- <CRVOZOPMKBX4.2T7FOCWF0RKBJ@otso>
- <10551f5e-4516-c0cc-0b04-73aa38f80a2c@linaro.org>
- <CRWA2OP2T6KT.RCWAVWF5Q2T2@otso>
- <ccc9fa4c-ca52-d8f3-a8b3-45031bea673f@linaro.org>
- <CRYUWMIJDSB2.BJWEPJEA3Y1D@otso>
- <75d00efb-ff3c-b1f8-a141-3fa78a39557a@linaro.org>
- <CS2D1E4ZYKZ8.2CWDCP9VR0C11@otso>
-From:   Bryan O'Donoghue <pure.logic@nexus-software.ie>
-In-Reply-To: <CS2D1E4ZYKZ8.2CWDCP9VR0C11@otso>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-ASG-Orig-Subj: Re: [PATCH v2] UHCI:adjust zhaoxin UHCI controllers OverCurrent bit
+ value
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <tonywwang@zhaoxin.com>,
+        <weitaowang@zhaoxin.com>, <stable@vger.kernel.org>
+References: <20230421174142.382602-1-WeitaoWang-oc@zhaoxin.com>
+ <a55aa38d-0fbf-4a95-a2b2-40821815275f@rowland.harvard.edu>
+From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+In-Reply-To: <a55aa38d-0fbf-4a95-a2b2-40821815275f@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [115.171.114.112]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
+X-Barracuda-Start-Time: 1682176311
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 2276
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: 1.09
+X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107774
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21/04/2023 11:26, Luca Weiss wrote:
-> With the "user-space triggered role-switching" patch I can see that
-> whatever scenario the USB-C port is in, the role is stuck on "device".
+On 2023/4/21 22:59, Alan Stern wrote:
+> On Sat, Apr 22, 2023 at 01:41:42AM +0800, Weitao Wang wrote:
+>> OverCurrent condition is not standardized in the UHCI spec.
+>> Zhaoxin UHCI controllers report OverCurrent bit active off.
+>> In order to handle OverCurrent condition correctly, the uhci-hcd
+>> driver needs to be told to expect the active-off behavior.
+>>
+>> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+>> ---
+>> v1->v2
+>>   - Modify the description of this patch.
+>>   - Let Zhaoxin and VIA share a common oc_low flag
+>>
+>>   drivers/usb/host/uhci-pci.c | 9 +++++----
+>>   1 file changed, 5 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/usb/host/uhci-pci.c b/drivers/usb/host/uhci-pci.c
+>> index 3592f757fe05..034586911bb5 100644
+>> --- a/drivers/usb/host/uhci-pci.c
+>> +++ b/drivers/usb/host/uhci-pci.c
+>> @@ -119,11 +119,12 @@ static int uhci_pci_init(struct usb_hcd *hcd)
+>>   
+>>   	uhci->rh_numports = uhci_count_ports(hcd);
+>>   
+>> -	/* Intel controllers report the OverCurrent bit active on.
+>> -	 * VIA controllers report it active off, so we'll adjust the
+>> -	 * bit value.  (It's not standardized in the UHCI spec.)
+>> +	/* Intel controllers report the OverCurrent bit active on.  VIA
+>> +	 * and ZHAOXIN controllers report it active off, so we'll adjust
+>> +	 * the bit value.  (It's not standardized in the UHCI spec.)
+>>   	 */
+> 
+> The style we use now for multi-line comments is:
+> 
+> 	/*
+> 	 * Blah blah blah
+> 	 * blah blah blah
+> 	 */
+> 
+>> -	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA)
+>> +	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA ||
+>> +		to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_ZHAOXIN)
+> 
+> The indentation level of the continuation line should be different from
+> the indentation of the statement below.  Otherwise it looks like the
+> continuation line is part of the conditional block.
+> 
+I see, Thanks for your careful examination. I'll change it later.
 
-Hmm.
+Best Regards,
+Weitao
 
-Could you share a branch ?
-
----
-bod
+> Alan Stern
+> 
+>>   		uhci->oc_low = 1;
+>>   
+>>   	/* HP's server management chip requires a longer port reset delay. */
+>> -- 
+>> 2.32.0
+>>
+> .
