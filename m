@@ -2,69 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0D36EBA2A
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Apr 2023 18:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8F26EBA2E
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Apr 2023 18:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjDVQFi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Apr 2023 12:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45068 "EHLO
+        id S229718AbjDVQJL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Apr 2023 12:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjDVQFh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Apr 2023 12:05:37 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E811736;
-        Sat, 22 Apr 2023 09:05:36 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-94a34d3812cso487568066b.2;
-        Sat, 22 Apr 2023 09:05:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682179534; x=1684771534;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:to:from:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GYcLnekjQPJfJ02gPVa4lLw0GXPBlTFUVleo72kNbmQ=;
-        b=Ex1DQNWtLbC8EIw3ECbYiwwQqtKMPAF9oiISSRsHGQHP5vP3kp8Xf2/Qz23x6h6/jV
-         dYj7ttGXlBTDsrLEKpJ+44XoKG3qQvb1pOHL15PklP+WAEdKVnBjTK1y5ARoohy3x5aA
-         pR+NOJTwlE+rP7JSDxpfqUdurh2U5xtJqMbsMxIKPpOj717JDqBiIYLvY5bDmls1HIri
-         0pKROrfVs112el3O9jeoKfHwCVpgVPRso+oc89qz3//MhaZk4yen4Ne1I1DDRHq2tGhQ
-         gssJyDlolluSayrC9rlP52tMjlkrl+RQyGLyqyWxfshMsQeMp3FTJ0lSemuk77kr9fRM
-         yPTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682179534; x=1684771534;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GYcLnekjQPJfJ02gPVa4lLw0GXPBlTFUVleo72kNbmQ=;
-        b=HGW9Js5FG0j3REOgqakFWW7DJXv7oR8UyC6SktGzrMH//D/do86Q7AK+a6UitD0t45
-         G43Q/l8Aptmqi0KWyOsr5R0iX86K52mUePc16vcb8HU1BqeipQW77OW7qkMQccSa/Nmh
-         WTUID9LE1Sm+JUAwO9+l7jR7UNZOFUp0t//5knKm80Be0IWOf2VQfhvlqZsNeX5akvxX
-         Ir9fPeqH2pP0sPXyPulnpCsSRFElbskXkH65JMoma3m/TixXAXc5PaM/PPN2v1r6xgc1
-         d3wJEshm9kLOv6uRw297ZW8bRw2w71OKOiaIob0PXQH7D+Wsqxar7UI3SU2nvfjAqGsZ
-         vSTQ==
-X-Gm-Message-State: AAQBX9dLLtRmVkx+TzmV5uKBKBKfrZiQplZb+ITLKX81pq/3upnN0VrY
-        xeiH8mAMbfUyaLIuc4vdyutKSUC9zs4=
-X-Google-Smtp-Source: AKy350bpK4Rxqbj+q8j3pPhMzYKge7G6gWFKtcpEtm9PtB4Aid8BhygHyj6iBdwLZ2e0kPeqqwWH3A==
-X-Received: by 2002:a17:906:ca2:b0:931:1e69:e1da with SMTP id k2-20020a1709060ca200b009311e69e1damr5476912ejh.7.1682179534117;
-        Sat, 22 Apr 2023 09:05:34 -0700 (PDT)
-Received: from jo-einhundert ([2a02:908:13d6:2180:1b01:a567:fcb4:e356])
-        by smtp.gmail.com with ESMTPSA id jo2-20020a170906f6c200b009538cc79241sm3428272ejb.56.2023.04.22.09.05.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Apr 2023 09:05:33 -0700 (PDT)
-Date:   Sat, 22 Apr 2023 18:05:32 +0200
-From:   =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
-To:     Randy Dunlap <rdunlap@infradead.org>, Greg KH <greg@kroah.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] usb: gadget: drop superfluous ':' in doc string
-Message-ID: <ZEQFzMntIrwvZl4+@jo-einhundert>
+        with ESMTP id S229556AbjDVQJK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Apr 2023 12:09:10 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D944C1BE3;
+        Sat, 22 Apr 2023 09:09:08 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33MFu61S009541;
+        Sat, 22 Apr 2023 16:08:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=82bzTA9forC2gL1CVr/H9J1y4F0eFZKRnesgn480eEw=;
+ b=pR/EkArY26U6sD7qGo8R6BqzOa5gqayXA87M8BcFj9IGFGj6snHoeBAVwbRBJi4M/qNE
+ mo5WVBkxpejcf3xMDd3p0AWoQIquM3E5eTB1D01XhBDNoLcI+1I9XQNxdipzaYlNz97Z
+ klU1NOq9x/1SzsLfdrgFjKF5jX9rE1wHsfyYYnD7EE8uRiLENavcSIgzEiTLwV3JQcvJ
+ UrZqW5QyBd7yZnjQfrkPqfIZWTg16+Rm/0e7uC1oKHxF6bPsfa4+/uvUvH4/aBybMq+s
+ 4q1bo/LH7MOamquIXm9WMnrHH2zB9CPGf3wW04WeFgpX+Y+NRxxrtX4aqht+NJA74sRY 5g== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q48bq0mdt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 22 Apr 2023 16:08:55 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33MG8tLC021226
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 22 Apr 2023 16:08:55 GMT
+Received: from [10.216.16.28] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sat, 22 Apr
+ 2023 09:08:48 -0700
+Message-ID: <28a58bf9-5ad8-4084-11d6-cd1b0d3a2998@quicinc.com>
+Date:   Sat, 22 Apr 2023 21:38:44 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v6 6/8] arm64: dts: qcom: sc8280xp: Add multiport
+ controller node for SC8280
+Content-Language: en-US
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+To:     Andrew Halaney <ahalaney@redhat.com>,
+        Johan Hovold <johan+linaro@kernel.org>
+CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>,
+        <quic_harshq@quicinc.com>, <quic_shazhuss@quicinc.com>
+References: <20230405125759.4201-1-quic_kriskura@quicinc.com>
+ <20230405125759.4201-7-quic_kriskura@quicinc.com>
+ <20230414154527.vsjtgtfsd5kc7vww@halaney-x13s>
+ <333ce700-8ca2-e230-3b5a-a95e4c021e45@quicinc.com>
+In-Reply-To: <333ce700-8ca2-e230-3b5a-a95e4c021e45@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 9D_524ipiLzJk5v9Fic9Igv8FOO5EkHr
+X-Proofpoint-ORIG-GUID: 9D_524ipiLzJk5v9Fic9Igv8FOO5EkHr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-21_08,2023-04-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ malwarescore=0 mlxlogscore=999 priorityscore=1501 clxscore=1011
+ impostorscore=0 adultscore=0 phishscore=0 suspectscore=0
+ lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304220147
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,29 +94,137 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There was one superfluous ':' that kernel-doc complained about.
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Closes: https://lore.kernel.org/all/c718a490-028d-2682-9ad7-8256d16504bf@infradead.org/
-Fixes: fb6211f1584a ("usb: gadget: add doc to struct usb_composite_dev")
-Signed-off-by: J� �gila Bitsch <jgilab@gmail.com>
----
- include/linux/usb/composite.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
-index a2448e98854f..07531c4f4350 100644
---- a/include/linux/usb/composite.h
-+++ b/include/linux/usb/composite.h
-@@ -443,7 +443,7 @@ static inline struct usb_composite_driver *to_cdriver(
-  * @bcd_webusb_version: 0x0100 by default, WebUSB specification version
-  * @b_webusb_vendor_code: 0x0 by default, vendor code for WebUSB
-  * @landing_page: empty by default, landing page to announce in WebUSB
-- * @use_webusb:: false by default, interested gadgets set it
-+ * @use_webusb: false by default, interested gadgets set it
-  * @os_desc_config: the configuration to be used with OS descriptors
-  * @setup_pending: true when setup request is queued but not completed
-  * @os_desc_pending: true when os_desc request is queued but not completed
--- 
-2.39.2
+On 4/16/2023 12:34 AM, Krishna Kurapati PSSNV wrote:
+> 
+> 
+> On 4/14/2023 9:15 PM, Andrew Halaney wrote:
+>> On Wed, Apr 05, 2023 at 06:27:57PM +0530, Krishna Kurapati wrote:
+>>> Add USB and DWC3 node for tertiary port of SC8280 along with multiport
+>>> IRQ's and phy's. This will be used as a base for SA8295P and SA8295-Ride
+>>> platforms.
+>>>
+>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>>> ---
+>>> Link to v5: 
+>>> https://lore.kernel.org/all/20230310163420.7582-7-quic_kriskura@quicinc.com/
+>>>
+>>>   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 58 ++++++++++++++++++++++++++
+>>>   1 file changed, 58 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi 
+>>> b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>>> index 42bfa9fa5b96..7b81f2b0449d 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>>> @@ -3108,6 +3108,64 @@ usb_1_role_switch: endpoint {
+>>>               };
+>>>           };
+>>> +        usb_2: usb@a4f8800 {
+>>> +            compatible = "qcom,sc8280xp-dwc3", "qcom,dwc3";
+>>> +            reg = <0 0x0a4f8800 0 0x400>;
+>>> +            #address-cells = <2>;
+>>> +            #size-cells = <2>;
+>>> +            ranges;
+>>> +
+>>> +            clocks = <&gcc GCC_CFG_NOC_USB3_MP_AXI_CLK>,
+>>> +                 <&gcc GCC_USB30_MP_MASTER_CLK>,
+>>> +                 <&gcc GCC_AGGRE_USB3_MP_AXI_CLK>,
+>>> +                 <&gcc GCC_USB30_MP_SLEEP_CLK>,
+>>> +                 <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
+>>> +                 <&gcc GCC_AGGRE_USB_NOC_AXI_CLK>,
+>>> +                 <&gcc GCC_AGGRE_USB_NOC_NORTH_AXI_CLK>,
+>>> +                 <&gcc GCC_AGGRE_USB_NOC_SOUTH_AXI_CLK>,
+>>> +                 <&gcc GCC_SYS_NOC_USB_AXI_CLK>;
+>>> +            clock-names = "cfg_noc", "core", "iface", "sleep", 
+>>> "mock_utmi",
+>>> +                      "noc_aggr", "noc_aggr_north", 
+>>> "noc_aggr_south", "noc_sys";
+>>> +
+>>> +            assigned-clocks = <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
+>>> +                      <&gcc GCC_USB30_MP_MASTER_CLK>;
+>>> +            assigned-clock-rates = <19200000>, <200000000>;
+>>> +
+>>> +            interrupts-extended = <&pdc 127 IRQ_TYPE_EDGE_RISING>,
+>>> +                        <&pdc 126 IRQ_TYPE_EDGE_RISING>,
+>>> +                        <&pdc 16 IRQ_TYPE_LEVEL_HIGH>;
+>>> +
+>>> +            interrupt-names = "dp_hs_phy_irq", "dm_hs_phy_irq",
+>>> +                        "ss_phy_irq";
+>>> +
+>>
+>> This is breaking the current schema (with the full series applied),
+>> I am not sure if a pwr_event IRQ exists or but it maybe necessary to
+>> modify qcom,dwc3.yaml in order to explain hardware if it doesn't exist:
+>>
+>> (dtschema) ahalaney@halaney-x13s ~/git/linux-next (git)-[718f2024524f] 
+>> % make CHECK_DTBS=y DT_SCHEMA_FILES=/usb/qcom,dwc3.yaml 
+>> qcom/sa8540p-ride.dtb                                                                                   :(
+>>    LINT    Documentation/devicetree/bindings
+>>    CHKDT   Documentation/devicetree/bindings/processed-schema.json
+>>    SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+>>    DTC_CHK arch/arm64/boot/dts/qcom/sa8540p-ride.dtb
+>> /home/ahalaney/git/linux-next/arch/arm64/boot/dts/qcom/sa8540p-ride.dtb: usb@a4f8800: interrupt-names:0: 'pwr_event' was expected
+>>     From schema: 
+>> /home/ahalaney/git/linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>> /home/ahalaney/git/linux-next/arch/arm64/boot/dts/qcom/sa8540p-ride.dtb: usb@a4f8800: interrupt-names:1: 'dp_hs_phy_irq' was expected
+>>     From schema: 
+>> /home/ahalaney/git/linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>> /home/ahalaney/git/linux-next/arch/arm64/boot/dts/qcom/sa8540p-ride.dtb: usb@a4f8800: interrupt-names:2: 'dm_hs_phy_irq' was expected
+>>     From schema: 
+>> /home/ahalaney/git/linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>> /home/ahalaney/git/linux-next/arch/arm64/boot/dts/qcom/sa8540p-ride.dtb: usb@a4f8800: interrupt-names: ['dp_hs_phy_irq', 'dm_hs_phy_irq', 'ss_phy_irq'] is too short
+>>     From schema: 
+>> /home/ahalaney/git/linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>> /home/ahalaney/git/linux-next/arch/arm64/boot/dts/qcom/sa8540p-ride.dtb: usb@a4f8800: interrupts-extended: [[99, 127, 1], [99, 126, 1], [99, 16, 4]] is too short
+>>     From schema: 
+>> /home/ahalaney/git/linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>> make CHECK_DTBS=y DT_SCHEMA_FILES=/usb/qcom,dwc3.yaml 
+>> qcom/sa8540p-ride.dtb  22.61s user 0.54s system 99% cpu 23.172 total
+>> (dtschema) ahalaney@halaney-x13s ~/git/linux-next (git)-[718f2024524f] %
+>>
+>> Thanks,
+>> Andrew
+>>
+> 
+> Hi Andrew,
+> 
+>   Thanks for pointing it out. Let me check and get back on the 
+> pwr_event_irq.
+> 
+> Probably I might have missed it 😅. If so, will make sure to add it in 
+> next version.
+> 
+> Regards,
+> Krishna,
 
+
+Hi Andrew, Johan,
+
+   I was looking at the pwr_event_irq interrupts for Multiport 
+controller and see that there are two of them as per HW specs. All 
+targets till date have only 1 pwr_event_irq required.
+
+The reason I thought I missed pwr_event_irq in my patches is because in 
+downstream this is a required IRQ for all targets, so I was under 
+assumption that we need it for upstream targets as well. But upstream 
+qcom driver doesn't have support for this IRQ yet. And this has been 
+made a required one only for SC8280 [1]/[2].
+
+Probably we can proceed in one of the following ways:
+1. Remove pwr_event_irq in both bindings and DT as driver support is not 
+present currently.
+2. Update the bindings for SC8280 to include an optional secondary 
+pwr_event_irq for multiport controller.
+
+I would prefer option-1 as removing them would be better because they 
+are not being used. Please let me know your thoughts on this.
+
+[1]: 
+https://lore.kernel.org/all/20220713131340.29401-2-johan+linaro@kernel.org/
+[2]: 
+https://lore.kernel.org/all/20220713131340.29401-6-johan+linaro@kernel.org/
+
+Regards,
+Krishna,
