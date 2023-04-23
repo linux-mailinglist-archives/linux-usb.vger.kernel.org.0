@@ -2,110 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18EBC6EBC83
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Apr 2023 05:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E46806EC16C
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Apr 2023 19:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjDWC76 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Apr 2023 22:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49472 "EHLO
+        id S229579AbjDWRmk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Apr 2023 13:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbjDWC74 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Apr 2023 22:59:56 -0400
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9207B2132
-        for <linux-usb@vger.kernel.org>; Sat, 22 Apr 2023 19:59:54 -0700 (PDT)
-X-ASG-Debug-ID: 1682218791-1eb14e638744c60001-YVMibp
-Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx2.zhaoxin.com with ESMTP id wAEo9SqO79MjJgxb (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Sun, 23 Apr 2023 10:59:51 +0800 (CST)
-X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
- (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Sun, 23 Apr
- 2023 10:59:50 +0800
-Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Sun, 23 Apr
- 2023 10:59:50 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
-To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v3] UHCI:adjust zhaoxin UHCI controllers OverCurrent bit value
-Date:   Sun, 23 Apr 2023 18:59:52 +0800
-X-ASG-Orig-Subj: [PATCH v3] UHCI:adjust zhaoxin UHCI controllers OverCurrent bit value
-Message-ID: <20230423105952.4526-1-WeitaoWang-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.32.0
+        with ESMTP id S229458AbjDWRmj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Apr 2023 13:42:39 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937CD10C9;
+        Sun, 23 Apr 2023 10:42:38 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-95369921f8eso531641466b.0;
+        Sun, 23 Apr 2023 10:42:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1682271757; x=1684863757;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iA+bFNXU5lnOq/dCAFC+X0Kqr+6jDOeqz+/GHp8kMoU=;
+        b=K+runzIHR2GUuCZS0hxnRvuqLe8cxdW9DAJtsL8nSZ+fz5eVKaACjVavRLa9BMC3n2
+         ExcQjW0oMjxhnol1oqfaaWQ+Z4hipBQVfTFFz0tVWsIASlVM3iWS96KXyF+uje6KBadb
+         9606h/DVUIAj57AWet15IzumE0EP6CFKSYLFaA2ltMifY6yioqjJC3kpO4M14UxLGuEt
+         Tyqq/0PQZlFNkXFHlQv64iYiVxyLH76HmQ/YZXbkNTWjOalELGWczEPZu45z6xyLcDYu
+         u3j+kB7ziImEVj7GUkNAH/CZmaV7+otGMhXLV48+0wj0x5WYwvIPJyYKBzOYs2B/32U7
+         dsfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682271757; x=1684863757;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iA+bFNXU5lnOq/dCAFC+X0Kqr+6jDOeqz+/GHp8kMoU=;
+        b=jyudMacdrpgfXd/G8bPNpgoe1HlnctopXsz60SLX2rHCWTvDIWl+O3XjgqOEoLUE25
+         1Ilt244DF22TIRa+Q4LdY6jfmYzGPdXiFjBPDf5lxPcQPWJtp6avN0fAfa8W8C7Arfxn
+         NVVmgqlXbZChIv6t5hJbyDLUToGmoo9UhGHlTaA0JvLeP7mpDf7/4kKPn/a18QusELyC
+         Xq5M4OqpnM1Ez89Tj44i0s9UiykIU7HNZsVki/R1R2gvCOyaW7ipQ8ZqaWXLu0u1nLng
+         RyD471WkrYF4syEfvmrOvQOYbLp0ux0aORvuBXSzNsTgKHYUQ9nTVcM/BxoxWvEc472l
+         rMEg==
+X-Gm-Message-State: AAQBX9dRbrfihWohhyLXI0j+/gX9jfsqg3OwslReqJ6j0YNlbcWKwBYR
+        j+nbvgxdR78okuuf1EylERO5LZ4d11QxOHcQSSg=
+X-Google-Smtp-Source: AKy350bOdYkKefr9OG/iFTwW9Y8zJi7WP0q8ncdz0K81CjLsSSyV47R6xfpW3r2gOJHzwOS5zcVVfmeI2K2pEIvtR4k=
+X-Received: by 2002:a17:906:a10a:b0:94f:695e:b0c9 with SMTP id
+ t10-20020a170906a10a00b0094f695eb0c9mr8386847ejy.5.1682271756815; Sun, 23 Apr
+ 2023 10:42:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.29.8.21]
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
-X-Barracuda-Start-Time: 1682218791
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 1541
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0002 1.0000 -2.0196
-X-Barracuda-Spam-Score: 1.09
-X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107798
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
-        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230418111612.19479-1-ddrokosov@sberdevices.ru> <20230418111612.19479-2-ddrokosov@sberdevices.ru>
+In-Reply-To: <20230418111612.19479-2-ddrokosov@sberdevices.ru>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sun, 23 Apr 2023 19:42:25 +0200
+Message-ID: <CAFBinCDyhBQ5Nob38EmXor1PtcO09dRdReDTW+tc5CN4i20HhA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] phy: amlogic: enable/disable clkin during Amlogic
+ USB PHY init/exit
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, neil.armstrong@linaro.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        mturquette@baylibre.com, vkoul@kernel.org, kishon@kernel.org,
+        hminas@synopsys.com, Thinh.Nguyen@synopsys.com,
+        yue.wang@amlogic.com, hanjie.lin@amlogic.com,
+        kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-phy@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-OverCurrent condition is not standardized in the UHCI spec.
-Zhaoxin UHCI controllers report OverCurrent bit active off.
-In order to handle OverCurrent condition correctly, the uhci-hcd
-driver needs to be told to expect the active-off behavior.
+Hi Dmitry,
 
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-Cc: stable@vger.kernel.org
-Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
----
-v2->v3
- - Change patch code style.
+On Tue, Apr 18, 2023 at 1:16=E2=80=AFPM Dmitry Rokosov <ddrokosov@sberdevic=
+es.ru> wrote:
+>
+> Previously, all Amlogic boards used the XTAL clock as the default board
+> clock for the USB PHY input, so there was no need to enable it.
+> However, with the introduction of new Amlogic SoCs like the A1 family,
+> the USB PHY now uses a gated clock. Hence, it is necessary to enable
+> this gated clock during the PHY initialization sequence, or disable it
+> during the PHY exit, as appropriate.
+>
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+>  drivers/phy/amlogic/phy-meson-g12a-usb2.c | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/phy/amlogic/phy-meson-g12a-usb2.c b/drivers/phy/amlo=
+gic/phy-meson-g12a-usb2.c
+> index 9d1efa0d9394..80938751da4f 100644
+> --- a/drivers/phy/amlogic/phy-meson-g12a-usb2.c
+> +++ b/drivers/phy/amlogic/phy-meson-g12a-usb2.c
+> @@ -172,10 +172,16 @@ static int phy_meson_g12a_usb2_init(struct phy *phy=
+)
+>         int ret;
+>         unsigned int value;
+>
+> -       ret =3D reset_control_reset(priv->reset);
+> +       ret =3D clk_prepare_enable(priv->clk);
+>         if (ret)
+>                 return ret;
+>
+> +       ret =3D reset_control_reset(priv->reset);
+> +       if (ret) {
+> +               clk_disable_unprepare(priv->clk);
+> +               return ret;
+> +       }
+> +
+This part looks good. You asked why I suggested this approach instead
+of enabling the clock at probe time and only now I have time to reply
+to it.
+Consider the following scenario:
+- modprobe phy-meson-g12a-usb2
+- modprobe dwc3-meson-g12a (this will call phy_init)
+- rmmod dwc3-meson-g12a (this will call phy_exit)
 
- drivers/usb/host/uhci-pci.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+If the clock was enabled at probe time then it would only be disabled
+when using rmmod phy-meson-g12a-usb2.
+By manually calling clk_prepare_enable/clk_disable_unprepare we ensure
+that the clock gets disabled when we don't need the PHY anymore.
+Whether this makes any difference in terms of power draw: I can't say.
 
-diff --git a/drivers/usb/host/uhci-pci.c b/drivers/usb/host/uhci-pci.c
-index 3592f757fe05..7bd2fddde770 100644
---- a/drivers/usb/host/uhci-pci.c
-+++ b/drivers/usb/host/uhci-pci.c
-@@ -119,11 +119,13 @@ static int uhci_pci_init(struct usb_hcd *hcd)
- 
- 	uhci->rh_numports = uhci_count_ports(hcd);
- 
--	/* Intel controllers report the OverCurrent bit active on.
--	 * VIA controllers report it active off, so we'll adjust the
--	 * bit value.  (It's not standardized in the UHCI spec.)
-+	/*
-+	 * Intel controllers report the OverCurrent bit active on.  VIA
-+	 * and ZHAOXIN controllers report it active off, so we'll adjust
-+	 * the bit value.  (It's not standardized in the UHCI spec.)
- 	 */
--	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA)
-+	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA ||
-+			to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_ZHAOXIN)
- 		uhci->oc_low = 1;
- 
- 	/* HP's server management chip requires a longer port reset delay. */
--- 
-2.32.0
+>         udelay(RESET_COMPLETE_TIME);
+>
+>         /* usb2_otg_aca_en =3D=3D 0 */
+> @@ -277,8 +283,11 @@ static int phy_meson_g12a_usb2_init(struct phy *phy)
+>  static int phy_meson_g12a_usb2_exit(struct phy *phy)
+>  {
+>         struct phy_meson_g12a_usb2_priv *priv =3D phy_get_drvdata(phy);
+> +       int ret =3D reset_control_reset(priv->reset);
+> +
+> +       clk_disable_unprepare(priv->clk);
+>
+> -       return reset_control_reset(priv->reset);
+> +       return ret;
+I think this can cause issues in case when reset_control_reset returns
+an error: If I understand the code in phy-core.c correctly it will
+only decrease the init ref-count if exit returns 0.
+Whenever phy_exit is called for the second time
+clk_disable_unprepare() will be called with a clock ref-count of 0, so
+it'll likely print some warning.
 
+My suggestion is to return early if reset_control_reset() fails and
+not call clk_disable_unprepare() in that case.
+What do you think?
+
+
+Best regards,
+Martin
