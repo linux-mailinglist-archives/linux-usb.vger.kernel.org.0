@@ -2,67 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD716ECB19
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Apr 2023 13:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C141A6ECB28
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Apr 2023 13:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbjDXLOz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Apr 2023 07:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
+        id S231667AbjDXLRX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Apr 2023 07:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjDXLOy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Apr 2023 07:14:54 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B9530DA;
-        Mon, 24 Apr 2023 04:14:51 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id B97F424DC7D;
-        Mon, 24 Apr 2023 19:14:50 +0800 (CST)
-Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 24 Apr
- 2023 19:14:50 +0800
-Received: from [192.168.125.108] (113.72.145.137) by EXMBX171.cuchost.com
- (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 24 Apr
- 2023 19:14:49 +0800
-Message-ID: <c014f16d-8383-af3e-49a3-4e16e6008959@starfivetech.com>
-Date:   Mon, 24 Apr 2023 19:14:48 +0800
+        with ESMTP id S231611AbjDXLRV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Apr 2023 07:17:21 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5447430E5
+        for <linux-usb@vger.kernel.org>; Mon, 24 Apr 2023 04:17:18 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-b992e28c141so4993508276.0
+        for <linux-usb@vger.kernel.org>; Mon, 24 Apr 2023 04:17:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682335037; x=1684927037;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iaX8xsPGl4rslxp6ho/AchvXG89eWPF4+LjwLKPk3Q0=;
+        b=PjF+k3XpknjTI7vcWJKwUWfFS+VCgLz/H1srKu1Hhq6NRjbIziu7HYWCwPHns/hCK9
+         rlMKZ5aGNpcuZDdYQEdE7x5ed3atiOFOYwwDna13UuuFoeEaJPUqw6efAxvVKU+eFiVG
+         uLBG9q5M5YX08kkJCzhtwY2TSguOjvxMkv6xX+9oKQq1O6LNx4QFM5r+GE71HtplyYKT
+         A1GiRKyTukMkRU7Pu1zDtX91ER3BcBOAicPq2ab46lQ/D6UO0mzfHeFl+DfLfmtf4Kvt
+         XPHIePWEvnxMoSFkSYRBVGrvzbOB6LuNyW2CZ4fUZeHujaDFP9CNRaJj9NOb6WZhg4RO
+         PiCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682335037; x=1684927037;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iaX8xsPGl4rslxp6ho/AchvXG89eWPF4+LjwLKPk3Q0=;
+        b=CHrgNUpS+b33/vK0yJd07cF9c8D4VqCKyLDecq24WII0VzPyFGIodEfl3rt4o1fYJM
+         bMWX/5gC3ISSopClV6/ABXjD2ZE2HlxJEhRe3GEGiAZDSZmW/pjWjgH8e/C7SQpc82L5
+         U3D1UrOQNPM8kza2U1tC46uwVLBwNH0y68/HfGqG9xB3FKAdDUdZ1iJXlX6LQMDroI6m
+         UF2UJB29Q/vu0+pKftx7b88wBEExvRxHu4Hkhzmq6AzT+9/dkTAIyuAdE///DzNZ8WML
+         29vYOLvo1pMzm2R/qEZhICdz+0wOlz1xf7+oE2CpEK6FMn745Qczj/MUhmaW2o5MOt1Y
+         0e4Q==
+X-Gm-Message-State: AAQBX9c6nfHABv2tC1nOo9unHRWti4fYkXjcMgYPY3J+ueQjlexZDIcn
+        3RpkO4Xw75PwyYszAKQH8r49gzshmucRrg2TrUjQsg==
+X-Google-Smtp-Source: AKy350bW1CBxsge2Wn46uHD3D4/voh1BiG85nt/HNpSdQU1MdQwI+nEPHhfHyq0OqmXbZqbZ6fnfVz6e3TAMzWRsC9I=
+X-Received: by 2002:a25:aaa4:0:b0:b8e:cb88:1b69 with SMTP id
+ t33-20020a25aaa4000000b00b8ecb881b69mr9636527ybi.34.1682335037478; Mon, 24
+ Apr 2023 04:17:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5 4/7] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
-Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>,
-        "Vinod Koul" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Mason Huo" <mason.huo@starfivetech.com>
-References: <20230420110052.3182-1-minda.chen@starfivetech.com>
- <20230420110052.3182-5-minda.chen@starfivetech.com>
- <44e5ba0a-7a76-caa8-349d-ced41aaa8836@kernel.org>
-From:   Minda Chen <minda.chen@starfivetech.com>
-In-Reply-To: <44e5ba0a-7a76-caa8-349d-ced41aaa8836@kernel.org>
+References: <cover.1680693149.git.quic_varada@quicinc.com> <55db8487a7cbf3354749dd2d3a35c05bfd9fa4fc.1680693149.git.quic_varada@quicinc.com>
+ <e142ff5d-543f-80bb-94f9-3f1fb90f1b83@linaro.org> <20230424090402.GB21232@varda-linux.qualcomm.com>
+In-Reply-To: <20230424090402.GB21232@varda-linux.qualcomm.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 24 Apr 2023 14:17:06 +0300
+Message-ID: <CAA8EJprqH5esxQkH3v-1i539OO3jQG9fN-YOqjZTwEqqgUfUyg@mail.gmail.com>
+Subject: Re: [PATCH v8 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.137]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX171.cuchost.com
- (172.16.6.91)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,315 +72,256 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, 24 Apr 2023 at 12:04, Varadarajan Narayanan
+<quic_varada@quicinc.com> wrote:
+>
+> On Sat, Apr 22, 2023 at 12:07:01AM +0300, Dmitry Baryshkov wrote:
+> > On 05/04/2023 14:41, Varadarajan Narayanan wrote:
+> > >Add USB phy and controller related nodes
+> > >
+> > >Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > >---
+> > >  Changes in v8:
+> > >     - Change clocks order to match the bindings
+> > >  Changes in v7:
+> > >     - Change com_aux -> cfg_ahb
+> > >  Changes in v6:
+> > >     - Introduce fixed regulators for the phy
+> > >     - Resolved all 'make dtbs_check' messages
+> > >
+> > >  Changes in v5:
+> > >     - Fix additional comments
+> > >     - Edit nodes to match with qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> > >     - 'make dtbs_check' giving the following messages since
+> > >       ipq9574 doesn't have power domains. Hope this is ok
+> > >
+> > >             /local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
+> > >             From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> > >             /local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
+> > >             From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > >
+> > >  Changes in v4:
+> > >     - Use newer bindings without subnodes
+> > >     - Fix coding style issues
+> > >
+> > >  Changes in v3:
+> > >     - Insert the nodes at proper location
+> > >
+> > >  Changes in v2:
+> > >     - Fixed issues flagged by Krzysztof
+> > >     - Fix issues reported by make dtbs_check
+> > >     - Remove NOC related clocks (to be added with proper
+> > >       interconnect support)
+> > >---
+> > >  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 120 ++++++++++++++++++++++++++++++++++
+> > >  1 file changed, 120 insertions(+)
+> > >
+> > >diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > >index 43a3dbe..1242382 100644
+> > >--- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > >+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > >@@ -150,6 +150,33 @@
+> > >             method = "smc";
+> > >     };
+> > >+    reg_usb_3p3: s3300 {
+> >
+> > The node names do not look generic enough. Please take a look at other
+> > platforms.
+>
+> Please see below.
+>
+> > >+            compatible = "regulator-fixed";
+> > >+            regulator-min-microvolt = <3300000>;
+> > >+            regulator-max-microvolt = <3300000>;
+> > >+            regulator-boot-on;
+> > >+            regulator-always-on;
+> > >+            regulator-name = "usb-phy-vdd-dummy";
+> >
+> > This also doesn't look correct. This regulator should not just fill the gap.
+> > Does it represent a generic voltage network on the board?
+> >
+> > Please do not add 'dummy' voltage regulators if there is no real voltage
+> > wire.
+>
+> These are real voltage wires. I used dummy since they are
+> always-on and cannot be increased/decreased (i.e. fixed).
+> Would something along the following lines be appropriate?
+
+Still not fully correct. Please use regulator name that corresponds to
+the power grid on the board schematics. I don't think that you have a
+separate power grids for USB PHY.
+
+>
+>         vreg_ae10_3p3: s3300 {
+
+Naming suggests that these voltages are generated by some PMIC. Is
+this correct? If so, please describe the PMIC instead.
+
+>                 compatible = "regulator-fixed";
+>                 regulator-min-microvolt = <3300000>;
+>                 regulator-max-microvolt = <3300000>;
+>                 regulator-boot-on;
+>                 regulator-always-on;
+>                 regulator-name = "usb-phy-vdd";
+>         };
+>
+>         vreg_ad8_1p8: s1800 {
+>                 compatible = "regulator-fixed";
+>                 regulator-min-microvolt = <1800000>;
+>                 regulator-max-microvolt = <1800000>;
+>                 regulator-boot-on;
+>                 regulator-always-on;
+>                 regulator-name = "usb-phy-pll";
+>         };
+>
+>         vreg_ad9_0p925: s0925 {
+>                 compatible = "regulator-fixed";
+>                 regulator-min-microvolt = <925000>;
+>                 regulator-max-microvolt = <925000>;
+>                 regulator-boot-on;
+>                 regulator-always-on;
+>                 regulator-name = "usb-phy";
+>         };
+>
+> Thanks
+> Varada
+>
+> > >+    };
+> > >+
+> > >+    reg_usb_1p8: s1800 {
+> > >+            compatible = "regulator-fixed";
+> > >+            regulator-min-microvolt = <1800000>;
+> > >+            regulator-max-microvolt = <1800000>;
+> > >+            regulator-boot-on;
+> > >+            regulator-always-on;
+> > >+            regulator-name = "usb-phy-pll-dummy";
+> > >+    };
+> > >+
+> > >+    reg_usb_0p925: s0925 {
+> > >+            compatible = "regulator-fixed";
+> > >+            regulator-min-microvolt = <925000>;
+> > >+            regulator-max-microvolt = <925000>;
+> > >+            regulator-boot-on;
+> > >+            regulator-always-on;
+> > >+            regulator-name = "usb-phy-dummy";
+> > >+    };
+> > >+
+> > >     reserved-memory {
+> > >             #address-cells = <2>;
+> > >             #size-cells = <2>;
+> > >@@ -179,6 +206,52 @@
+> > >             #size-cells = <1>;
+> > >             ranges = <0 0 0 0xffffffff>;
+> > >+            usb_0_qusbphy: phy@7b000 {
+> > >+                    compatible = "qcom,ipq9574-qusb2-phy";
+> > >+                    reg = <0x0007b000 0x180>;
+> > >+                    #phy-cells = <0>;
+> > >+
+> > >+                    clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> > >+                             <&xo_board_clk>;
+> > >+                    clock-names = "cfg_ahb",
+> > >+                                  "ref";
+> > >+
+> > >+                    vdd-supply = <&reg_usb_0p925>;
+> > >+                    vdda-pll-supply = <&reg_usb_1p8>;
+> > >+                    vdda-phy-dpdm-supply = <&reg_usb_3p3>;
+> > >+
+> > >+                    resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> > >+                    status = "disabled";
+> > >+            };
+> > >+
+> > >+            usb_0_qmpphy: phy@7d000 {
+> > >+                    compatible = "qcom,ipq9574-qmp-usb3-phy";
+> > >+                    reg = <0x0007d000 0xa00>;
+> > >+                    #phy-cells = <0>;
+> > >+
+> > >+                    clocks = <&gcc GCC_USB0_AUX_CLK>,
+> > >+                             <&xo_board_clk>,
+> > >+                             <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> > >+                             <&gcc GCC_USB0_PIPE_CLK>;
+> > >+                    clock-names = "aux",
+> > >+                                  "ref",
+> > >+                                  "cfg_ahb",
+> > >+                                  "pipe";
+> > >+
+> > >+                    resets = <&gcc GCC_USB0_PHY_BCR>,
+> > >+                             <&gcc GCC_USB3PHY_0_PHY_BCR>;
+> > >+                    reset-names = "phy",
+> > >+                                  "phy_phy";
+> > >+
+> > >+                    vdda-pll-supply = <&reg_usb_1p8>;
+> > >+                    vdda-phy-supply = <&reg_usb_0p925>;
+> > >+
+> > >+                    status = "disabled";
+> > >+
+> > >+                    #clock-cells = <0>;
+> > >+                    clock-output-names = "usb0_pipe_clk";
+> > >+            };
+> > >+
+> > >             pcie0_phy: phy@84000 {
+> > >                     compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
+> > >                     reg = <0x00084000 0x1000>;
+> > >@@ -548,6 +621,53 @@
+> > >                     status = "disabled";
+> > >             };
+> > >+            usb3: usb@8a00000 {
+> > >+                    compatible = "qcom,ipq9574-dwc3", "qcom,dwc3";
+> > >+                    reg = <0x08af8800 0x400>;
+> > >+                    #address-cells = <1>;
+> > >+                    #size-cells = <1>;
+> > >+                    ranges;
+> > >+
+> > >+                    clocks = <&gcc GCC_SNOC_USB_CLK>,
+> > >+                             <&gcc GCC_USB0_MASTER_CLK>,
+> > >+                             <&gcc GCC_ANOC_USB_AXI_CLK>,
+> > >+                             <&gcc GCC_USB0_SLEEP_CLK>,
+> > >+                             <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> > >+
+> > >+                    clock-names = "cfg_noc",
+> > >+                                  "core",
+> > >+                                  "iface",
+> > >+                                  "sleep",
+> > >+                                  "mock_utmi";
+> > >+
+> > >+                    assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
+> > >+                                      <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> > >+                    assigned-clock-rates = <200000000>,
+> > >+                                           <24000000>;
+> > >+
+> > >+                    interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
+> > >+                    interrupt-names = "pwr_event";
+> > >+
+> > >+                    resets = <&gcc GCC_USB_BCR>;
+> > >+                    status = "disabled";
+> > >+
+> > >+                    dwc_0: usb@8a00000 {
+> > >+                            compatible = "snps,dwc3";
+> > >+                            reg = <0x8a00000 0xcd00>;
+> > >+                            clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> > >+                            clock-names = "ref";
+> > >+                            interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+> > >+                            phys = <&usb_0_qusbphy>, <&usb_0_qmpphy>;
+> > >+                            phy-names = "usb2-phy", "usb3-phy";
+> > >+                            tx-fifo-resize;
+> > >+                            snps,is-utmi-l1-suspend;
+> > >+                            snps,hird-threshold = /bits/ 8 <0x0>;
+> > >+                            snps,dis_u2_susphy_quirk;
+> > >+                            snps,dis_u3_susphy_quirk;
+> > >+                            dr_mode = "host";
+> > >+                    };
+> > >+            };
+> > >+
+> > >             intc: interrupt-controller@b000000 {
+> > >                     compatible = "qcom,msm-qgic2";
+> > >                     reg = <0x0b000000 0x1000>,  /* GICD */
+> >
+> > --
+> > With best wishes
+> > Dmitry
+> >
 
 
-On 2023/4/24 17:23, Roger Quadros wrote:
-> 
-> 
-> On 20/04/2023 14:00, Minda Chen wrote:
->> Add Starfive JH7110 SoC PCIe 2.0 PHY driver support.
->> PCIe 2.0 PHY default connect to PCIe controller.
->> But pcie0 PHY can connect to USB 3.0 controlller.
-> 
-> s/controlller/controller
-> 
-ok
->> 
->> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
->> ---
->>  MAINTAINERS                            |   4 +-
->>  drivers/phy/starfive/Kconfig           |  11 ++
->>  drivers/phy/starfive/Makefile          |   1 +
->>  drivers/phy/starfive/phy-jh7110-pcie.c | 202 +++++++++++++++++++++++++
->>  4 files changed, 217 insertions(+), 1 deletion(-)
->>  create mode 100644 drivers/phy/starfive/phy-jh7110-pcie.c
->> 
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index c09ea66dcd5a..8e0f755ba91b 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -19968,10 +19968,12 @@ M:	William Qiu <william.qiu@starfivetech.com>
->>  S:	Supported
->>  F:	Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
->>  
->> -STARFIVE JH71X0 USB PHY DRIVER
->> +STARFIVE JH71X0 PCIE AND USB PHY DRIVER
->>  M:	Minda Chen <minda.chen@starfivetech.com>
->>  S:	Supported
->> +F:	Documentation/devicetree/bindings/phy/starfive,jh7110-pcie-phy.yaml
->>  F:	Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
->> +F:	drivers/phy/starfive/phy-jh7110-pcie.c
->>  F:	drivers/phy/starfive/phy-jh7110-usb.c
->>  
->>  STATIC BRANCH/CALL
->> diff --git a/drivers/phy/starfive/Kconfig b/drivers/phy/starfive/Kconfig
->> index 2c013c390dee..c21c21d284a6 100644
->> --- a/drivers/phy/starfive/Kconfig
->> +++ b/drivers/phy/starfive/Kconfig
->> @@ -12,6 +12,17 @@ config PHY_STARFIVE_DPHY_RX
->>  	  system. If M is selected, the module will be called
->>  	  phy-starfive-dphy-rx.
->>  
->> +config PHY_STARFIVE_JH7110_PCIE
->> +	tristate "Starfive JH7110 PCIE 2.0/USB 3.0 PHY support"
->> +	depends on USB_SUPPORT
-> 
-> What if system has PCIE and no USB. Then they can't use this PHY
-> as it cannot be built?
-> 
-ok, I will delete it
->> +	select GENERIC_PHY
->> +	select USB_PHY
->> +	help
->> +	  Enable this to support the StarFive PCIe 2.0 PHY,
->> +	  or used as USB 3.0 PHY.
->> +	  If M is selected, the module will be called
->> +	  phy-jh7110-pcie.ko.
->> +
->>  config PHY_STARFIVE_JH7110_USB
->>  	tristate "Starfive JH7110 USB 2.0 PHY support"
->>  	depends on USB_SUPPORT
->> diff --git a/drivers/phy/starfive/Makefile b/drivers/phy/starfive/Makefile
->> index 176443852f4d..03a55aad53a2 100644
->> --- a/drivers/phy/starfive/Makefile
->> +++ b/drivers/phy/starfive/Makefile
->> @@ -1,3 +1,4 @@
->>  # SPDX-License-Identifier: GPL-2.0
->>  obj-$(CONFIG_PHY_STARFIVE_DPHY_RX)      += phy-starfive-dphy-rx.o
->> +obj-$(CONFIG_PHY_STARFIVE_JH7110_PCIE)	+= phy-jh7110-pcie.o
->>  obj-$(CONFIG_PHY_STARFIVE_JH7110_USB)	+= phy-jh7110-usb.o
->> diff --git a/drivers/phy/starfive/phy-jh7110-pcie.c b/drivers/phy/starfive/phy-jh7110-pcie.c
->> new file mode 100644
->> index 000000000000..fe029daef62e
->> --- /dev/null
->> +++ b/drivers/phy/starfive/phy-jh7110-pcie.c
->> @@ -0,0 +1,202 @@
->> +// SPDX-License-Identifier: GPL-2.0+
->> +/*
->> + * StarFive JH7110 PCIe 2.0 PHY driver
->> + *
->> + * Copyright (C) 2023 StarFive Technology Co., Ltd.
->> + * Author: Minda Chen <minda.chen@starfivetech.com>
->> + */
->> +
->> +#include <linux/bits.h>
->> +#include <linux/clk.h>
->> +#include <linux/err.h>
->> +#include <linux/io.h>
->> +#include <linux/module.h>
->> +#include <linux/mfd/syscon.h>
->> +#include <linux/phy/phy.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/regmap.h>
->> +
->> +#define PCIE_KVCO_LEVEL_OFF		(0x28)
->> +#define PCIE_USB3_PHY_PLL_CTL_OFF	(0x7c)
->> +#define PCIE_KVCO_TUNE_SIGNAL_OFF	(0x80)
-> 
-> Brackets not required.
-> 
-ok
->> +#define PCIE_USB3_PHY_ENABLE		BIT(4)
->> +#define PHY_KVCO_FINE_TUNE_LEVEL	0x91
->> +#define PHY_KVCO_FINE_TUNE_SIGNALS	0xc
->> +
->> +#define USB_PDRSTN_SPLIT		BIT(17)
->> +
->> +#define PCIE_PHY_MODE			BIT(20)
->> +#define PCIE_PHY_MODE_MASK		GENMASK(21, 20)
->> +#define PCIE_USB3_BUS_WIDTH_MASK	GENMASK(3, 2)
->> +#define PCIE_USB3_RATE_MASK		GENMASK(6, 5)
->> +#define PCIE_USB3_RX_STANDBY_MASK	BIT(7)
->> +#define PCIE_USB3_PHY_ENABLE		BIT(4)
->> +
->> +struct jh7110_pcie_phy {
->> +	struct phy *phy;
->> +	struct regmap *stg_syscon;
->> +	struct regmap *sys_syscon;
->> +	void __iomem *regs;
->> +	u32 sys_phy_connect;
->> +	u32 stg_pcie_mode;
->> +	u32 stg_pcie_usb;
->> +	enum phy_mode mode;
->> +};
->> +
->> +static int jh7110_usb3_mode_set(struct jh7110_pcie_phy *data)
->> +{
->> +	if (!data->stg_syscon || !data->sys_syscon) {
->> +		dev_info(&data->phy->dev, "don't support usb3 mode\n");
-> 
-> s/don't/doesn't
-> 
-> dev_err()
-> 
->> +		return -EINVAL;
->> +	}
->> +
->> +	regmap_update_bits(data->stg_syscon, data->stg_pcie_mode,
->> +			   PCIE_PHY_MODE_MASK, PCIE_PHY_MODE);
->> +	regmap_update_bits(data->stg_syscon, data->stg_pcie_usb,
->> +			   PCIE_USB3_BUS_WIDTH_MASK, 0);
->> +	regmap_update_bits(data->stg_syscon, data->stg_pcie_usb,
->> +			   PCIE_USB3_RATE_MASK, 0);
->> +	regmap_update_bits(data->stg_syscon, data->stg_pcie_usb,
->> +			   PCIE_USB3_RX_STANDBY_MASK, 0);
->> +	regmap_update_bits(data->stg_syscon, data->stg_pcie_usb,
->> +			   PCIE_USB3_PHY_ENABLE, PCIE_USB3_PHY_ENABLE);
->> +
->> +	/* Connect usb 3.0 phy mode */
->> +	regmap_update_bits(data->sys_syscon, data->sys_phy_connect,
->> +			   USB_PDRSTN_SPLIT, 0);
->> +
->> +	/* Configuare spread-spectrum mode: down-spread-spectrum */
->> +	writel(PCIE_USB3_PHY_ENABLE, data->regs + PCIE_USB3_PHY_PLL_CTL_OFF);
->> +
->> +	return 0;
->> +}
->> +
->> +static void jh7110_pcie_mode_set(struct jh7110_pcie_phy *phy)
->> +{
->> +	/* PCIe Multi-PHY PLL KVCO Gain fine tune settings: */
->> +	writel(PHY_KVCO_FINE_TUNE_LEVEL, phy->regs + PCIE_KVCO_LEVEL_OFF);
->> +	writel(PHY_KVCO_FINE_TUNE_SIGNALS, phy->regs + PCIE_KVCO_TUNE_SIGNAL_OFF);
-> 
-> In cases where PHY can be connected to both USB and PCIe don't you have to
-> make sure PHY is connected to PCIe controller by setting data->sys_syscon
-> and data->stg_syscon appropriately?
-> 
-PHY default connect to pcie. In our products so far, The PHY connected to either USB or PCIe. So I don't set the syscon register.
-But the case of PHY can be connected to both USB and PCIe maybe existed. I will add this case.
->> +}
->> +
->> +static int jh7110_pcie_phy_set_mode(struct phy *_phy,
->> +				    enum phy_mode mode, int submode)
->> +{
->> +	struct jh7110_pcie_phy *phy = phy_get_drvdata(_phy);
->> +	int ret;
->> +
->> +	if (mode == phy->mode)
->> +		return 0;
->> +
->> +	switch (mode) {
->> +	case PHY_MODE_USB_HOST:
->> +	case PHY_MODE_USB_DEVICE:
->> +	case PHY_MODE_USB_OTG:
->> +		ret = jh7110_usb3_mode_set(phy);
->> +		if (ret)
->> +			return ret;
->> +		break;
->> +	case PHY_MODE_PCIE:
->> +		jh7110_pcie_mode_set(phy);
->> +		break;
->> +	default:
->> +		return -EINVAL;
->> +	}
->> +
->> +	dev_info(&_phy->dev, "Changing phy mode to %d\n", mode);
-> 
-> dev_dbg()?
-> 
-ok
->> +	phy->mode = mode;
->> +
->> +	return 0;
->> +}
->> +
->> +static int jh7110_pcie_phy_init(struct phy *_phy)
->> +{
->> +	return 0;
->> +}
->> +
->> +static int jh7110_pcie_phy_exit(struct phy *_phy)
->> +{
->> +	return 0;
->> +}
->> +
->> +static const struct phy_ops jh7110_pcie_phy_ops = {
->> +	.init		= jh7110_pcie_phy_init,
->> +	.exit		= jh7110_pcie_phy_exit,
-> 
-> As you are not doing anything in init/exit, you don't have to set them.
-> 
-ok
->> +	.set_mode	= jh7110_pcie_phy_set_mode,
->> +	.owner		= THIS_MODULE,
->> +};
->> +
->> +static int jh7110_pcie_phy_probe(struct platform_device *pdev)
->> +{
->> +	struct jh7110_pcie_phy *phy;
->> +	struct device *dev = &pdev->dev;
->> +	struct phy_provider *phy_provider;
->> +	u32 args[2];
->> +
->> +	phy = devm_kzalloc(dev, sizeof(*phy), GFP_KERNEL);
->> +	if (!phy)
->> +		return -ENOMEM;
->> +
->> +	phy->regs = devm_platform_ioremap_resource(pdev, 0);
->> +	if (IS_ERR(phy->regs))
->> +		return PTR_ERR(phy->regs);
->> +
->> +	phy->phy = devm_phy_create(dev, NULL, &jh7110_pcie_phy_ops);
->> +	if (IS_ERR(phy->phy))
->> +		return dev_err_probe(dev, PTR_ERR(phy->regs),
->> +			"Failed to map phy base\n");
->> +
->> +	phy->sys_syscon =
->> +		syscon_regmap_lookup_by_phandle_args(pdev->dev.of_node,
->> +						     "starfive,sys-syscon",
->> +						     1, args);
->> +
->> +	if (!IS_ERR_OR_NULL(phy->sys_syscon))
->> +		phy->sys_phy_connect = args[0];
->> +	else
->> +		phy->sys_syscon = NULL;
->> +
->> +	phy->stg_syscon =
->> +		syscon_regmap_lookup_by_phandle_args(pdev->dev.of_node,
->> +						     "starfive,stg-syscon",
->> +						     2, args);
->> +
->> +	if (!IS_ERR_OR_NULL(phy->stg_syscon)) {
->> +		phy->stg_pcie_mode = args[0];
->> +		phy->stg_pcie_usb = args[1];
->> +	} else {
->> +		phy->stg_syscon = NULL;
->> +	}
->> +
->> +	platform_set_drvdata(pdev, phy);
->> +	phy_set_drvdata(phy->phy, phy);
->> +	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
->> +
->> +	return PTR_ERR_OR_ZERO(phy_provider);
->> +}
->> +
->> +static int jh7110_pcie_phy_remove(struct platform_device *pdev)
->> +{
->> +	platform_set_drvdata(pdev, NULL);
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct of_device_id jh7110_pcie_phy_of_match[] = {
->> +	{ .compatible = "starfive,jh7110-pcie-phy" },
->> +	{ /* sentinel */ },
->> +};
->> +MODULE_DEVICE_TABLE(of, jh7110_pcie_phy_of_match);
->> +
->> +static struct platform_driver jh7110_pcie_phy_driver = {
->> +	.probe	= jh7110_pcie_phy_probe,
->> +	.remove	= jh7110_pcie_phy_remove,
->> +	.driver = {
->> +		.of_match_table	= jh7110_pcie_phy_of_match,
->> +		.name  = "jh7110-pcie-phy",
->> +	}
->> +};
->> +module_platform_driver(jh7110_pcie_phy_driver);
->> +
->> +MODULE_DESCRIPTION("StarFive JH7110 PCIe 2.0 PHY driver");
->> +MODULE_AUTHOR("Minda Chen <minda.chen@starfivetech.com>");
->> +MODULE_LICENSE("GPL");
-> 
-> cheers,
-> -roger
+
+-- 
+With best wishes
+Dmitry
