@@ -2,165 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2A76EC4C7
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Apr 2023 07:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A3986EC4D8
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Apr 2023 07:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjDXFYj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Apr 2023 01:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
+        id S230287AbjDXFcq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Apr 2023 01:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjDXFYh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Apr 2023 01:24:37 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A40126AD;
-        Sun, 23 Apr 2023 22:24:36 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33O4gdvx028544;
-        Mon, 24 Apr 2023 05:24:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=LaWl1S+PXsR1xtwUdfUOSm3pr8sZXB8zPkYY3h/eMVs=;
- b=oXj5A8P+JBgOK6ySP5cFk/yrPPmsQxmqR5mf06+zkvLBWQe2RELFCgWRl7ANafRdqs01
- 842Xk3dRaOOcoFeFLKOL8XqOayOGpWJQQAxX28TbBP0Ve3vm28us5ivnagnp4DYIyMDd
- 4vecbDJM4DrIzp/XP0mRBK0A0m6Z85GAzGg5oLd9g9khueAcE//WXp3w2WqVicffXtd9
- xFTIBwF0WWxnNEuEueKEJer9yx4qljxx/HNxxkVMRzjQpVk9ldvFq8oUIJcYJX+j02r7
- PVBbCiOGLuXx0WE+EiEvOv7S14qLs1R+L5zmCHq9+/yd6r5WTNPJt+sNyKOnyXN6+jKa TQ== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q48h3agdh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 05:24:20 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33O5OJSf032322
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 05:24:19 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Sun, 23 Apr 2023 22:24:13 -0700
-Date:   Mon, 24 Apr 2023 10:54:09 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v8 2/8] dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3
- PHY
-Message-ID: <20230424052408.GA21232@varda-linux.qualcomm.com>
-References: <cover.1680693149.git.quic_varada@quicinc.com>
- <1efa9a64499767d939efadd0aef897ac4a6e54eb.1680693149.git.quic_varada@quicinc.com>
- <b9763bee-c0c8-86be-14de-2ed077b1f1d5@linaro.org>
- <20230421101345.GB5813@varda-linux.qualcomm.com>
- <6750910d-22a0-7bed-f163-db57424133c6@linaro.org>
+        with ESMTP id S229507AbjDXFco (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Apr 2023 01:32:44 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D9A1FD8;
+        Sun, 23 Apr 2023 22:32:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682314363; x=1713850363;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1n43/fJLjYfG3QHQXcc4cXYaQSDmQZ6CPC6WO9kddpk=;
+  b=T4Dgs1Y98SMWqbiPRd5iaDgidCmAGWcqV51x8sWnk02wwXjeqnmtkF26
+   zbAc3MYH02AjZTMptaQCN5dMIGQgqfRGu4KemCP1JFoRdfUqsCQPwRdo4
+   Wd5iq6+FA9F4pWom57jzNBs8rprzcia2fsXQ8Bq/U1qkzMNMmyQTqCjZ6
+   NSHqEVabBQZh0yLQ+CIWYddPoQWhsA7MVC5ICgqlwcdT6iNs9O4nyW25V
+   4U5mWzJy9pkP4bRvvkcCpD60v9p46PvN9l97WK1slAKmyu/iNJp8yvuQw
+   yFG31YDY02FGRWhQJ9TjAypCNQ1f7bCIvTTsbdo00S1M6oeYkdJM9P0hk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="349164994"
+X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
+   d="scan'208";a="349164994"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 22:32:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="836825069"
+X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
+   d="scan'208";a="836825069"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 23 Apr 2023 22:32:40 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pqooa-000iHg-0k;
+        Mon, 24 Apr 2023 05:32:40 +0000
+Date:   Mon, 24 Apr 2023 13:32:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jarkko Sonninen <kasper@iki.fi>
+Cc:     oe-kbuild-all@lists.linux.dev, Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
+Message-ID: <202304241303.WkdqPPbt-lkp@intel.com>
+References: <20230423185929.1595056-1-kasper@iki.fi>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6750910d-22a0-7bed-f163-db57424133c6@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 3ysVaDMeimyH8j0RhMm42s1CkrAxm7sM
-X-Proofpoint-GUID: 3ysVaDMeimyH8j0RhMm42s1CkrAxm7sM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-24_02,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=935 mlxscore=0
- adultscore=0 priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1015
- lowpriorityscore=0 malwarescore=0 phishscore=0 suspectscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304240049
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230423185929.1595056-1-kasper@iki.fi>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 05:19:58PM +0300, Dmitry Baryshkov wrote:
-> On 21/04/2023 13:13, Varadarajan Narayanan wrote:
-> >On Thu, Apr 06, 2023 at 09:42:31AM +0200, Krzysztof Kozlowski wrote:
-> >>On 05/04/2023 13:41, Varadarajan Narayanan wrote:
-> >>>Add dt-bindings for USB3 PHY found on Qualcomm IPQ9574
-> >>>
-> >>>Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> >>>---
-> >>>  Changes in v8:
-> >>>	- Update clock names for ipq9574
-> >>>
-> >>>  Changes in v6:
-> >>>	- Made power-domains optional
-> >>>
-> >>>Note: In the earlier patch sets, had used the (legacy)
-> >>>specification available in qcom,msm8996-qmp-usb3-phy.yaml. Moved
-> >>>to newer specification in qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-> >>>---
-> >>>  .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml        | 43 +++++++++++++++++++---
-> >>>  1 file changed, 37 insertions(+), 6 deletions(-)
-> >>>
-> >>>diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-> >>>index 16fce10..e902a0d 100644
-> >>>--- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-> >>>+++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-> >>>@@ -16,6 +16,7 @@ description:
-> >>>  properties:
-> >>>    compatible:
-> >>>      enum:
-> >>>+      - qcom,ipq9574-qmp-usb3-phy
-> >>>        - qcom,sc8280xp-qmp-usb3-uni-phy
-> >>>
-> >>>    reg:
-> >>>@@ -25,11 +26,7 @@ properties:
-> >>>      maxItems: 4
-> >>>
-> >>>    clock-names:
-> >>>-    items:
-> >>>-      - const: aux
-> >>>-      - const: ref
-> >>>-      - const: com_aux
-> >>>-      - const: pipe
-> >>>+    maxItems: 4
-> >>>
-> >>>    power-domains:
-> >>>      maxItems: 1
-> >>>@@ -60,7 +57,6 @@ required:
-> >>>    - reg
-> >>>    - clocks
-> >>>    - clock-names
-> >>>-  - power-domains
-> >>
-> >>Power domains are required. Commit msg does not explain why this should
-> >>be now optional.
-> >
-> >Since IPQ9574 doesn't have power switches couldn't provide power-domains details.
-> >So, had to make it optional to pass 'make dtbs_check'.
->
-> This should be a part of the commit message, so that the next developer
-> understands your intentions without going to mail archives.
+Hi Jarkko,
 
-Thanks for the feedback. Have posted v9 that includes the above
-in commit message.
+kernel test robot noticed the following build warnings:
 
-https://lore.kernel.org/lkml/b00042df41420ac337703ca99ac7876c46552946.1682092324.git.quic_varada@quicinc.com/
+[auto build test WARNING on johan-usb-serial/usb-next]
+[also build test WARNING on johan-usb-serial/usb-linus linus/master v6.3 next-20230421]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks
-Varada
+url:    https://github.com/intel-lab-lkp/linux/commits/Jarkko-Sonninen/USB-serial-xr-Add-TIOCGRS485-and-TIOCSRS485-ioctls/20230424-030038
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git usb-next
+patch link:    https://lore.kernel.org/r/20230423185929.1595056-1-kasper%40iki.fi
+patch subject: [PATCH v4] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
+config: ia64-randconfig-s053-20230423 (https://download.01.org/0day-ci/archive/20230424/202304241303.WkdqPPbt-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/a80fa27b4fe1974bad2427d7f3260012a04b721a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jarkko-Sonninen/USB-serial-xr-Add-TIOCGRS485-and-TIOCSRS485-ioctls/20230424-030038
+        git checkout a80fa27b4fe1974bad2427d7f3260012a04b721a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/usb/serial/
 
-> >>Best regards,
-> >>Krzysztof
-> >>
->
-> --
-> With best wishes
-> Dmitry
->
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304241303.WkdqPPbt-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/usb/serial/xr_serial.c:856:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got struct serial_rs485 *argp @@
+   drivers/usb/serial/xr_serial.c:856:26: sparse:     expected void [noderef] __user *to
+   drivers/usb/serial/xr_serial.c:856:26: sparse:     got struct serial_rs485 *argp
+>> drivers/usb/serial/xr_serial.c:872:36: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got struct serial_rs485 *argp @@
+   drivers/usb/serial/xr_serial.c:872:36: sparse:     expected void const [noderef] __user *from
+   drivers/usb/serial/xr_serial.c:872:36: sparse:     got struct serial_rs485 *argp
+   drivers/usb/serial/xr_serial.c:881:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got struct serial_rs485 *argp @@
+   drivers/usb/serial/xr_serial.c:881:26: sparse:     expected void [noderef] __user *to
+   drivers/usb/serial/xr_serial.c:881:26: sparse:     got struct serial_rs485 *argp
+>> drivers/usb/serial/xr_serial.c:893:49: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct serial_rs485 *argp @@     got void [noderef] __user *argp @@
+   drivers/usb/serial/xr_serial.c:893:49: sparse:     expected struct serial_rs485 *argp
+   drivers/usb/serial/xr_serial.c:893:49: sparse:     got void [noderef] __user *argp
+   drivers/usb/serial/xr_serial.c:895:49: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct serial_rs485 *argp @@     got void [noderef] __user *argp @@
+   drivers/usb/serial/xr_serial.c:895:49: sparse:     expected struct serial_rs485 *argp
+   drivers/usb/serial/xr_serial.c:895:49: sparse:     got void [noderef] __user *argp
+
+vim +856 drivers/usb/serial/xr_serial.c
+
+   848	
+   849	static int xr_get_rs485_config(struct tty_struct *tty,
+   850				       struct serial_rs485 *argp)
+   851	{
+   852		struct usb_serial_port *port = tty->driver_data;
+   853		struct xr_data *data = usb_get_serial_port_data(port);
+   854	
+   855		mutex_lock(&data->lock);
+ > 856		if (copy_to_user(argp, &data->rs485, sizeof(data->rs485))) {
+   857			mutex_unlock(&data->lock);
+   858			return -EFAULT;
+   859		}
+   860		mutex_unlock(&data->lock);
+   861	
+   862		return 0;
+   863	}
+   864	
+   865	static int xr_set_rs485_config(struct tty_struct *tty,
+   866				       struct serial_rs485 *argp)
+   867	{
+   868		struct usb_serial_port *port = tty->driver_data;
+   869		struct xr_data *data = usb_get_serial_port_data(port);
+   870		struct serial_rs485 rs485;
+   871	
+ > 872		if (copy_from_user(&rs485, argp, sizeof(rs485)))
+   873			return -EFAULT;
+   874		xr_sanitize_serial_rs485(&rs485);
+   875	
+   876		mutex_lock(&data->lock);
+   877		data->rs485 = rs485;
+   878		xr_set_flow_mode(tty, port, NULL);
+   879		mutex_unlock(&data->lock);
+   880	
+   881		if (copy_to_user(argp, &rs485, sizeof(rs485)))
+   882			return -EFAULT;
+   883	
+   884		return 0;
+   885	}
+   886	
+   887	static int xr_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
+   888	{
+   889		void __user *argp = (void __user *)arg;
+   890	
+   891		switch (cmd) {
+   892		case TIOCGRS485:
+ > 893			return xr_get_rs485_config(tty, argp);
+   894		case TIOCSRS485:
+   895			return xr_set_rs485_config(tty, argp);
+   896		}
+   897	
+   898		return -ENOIOCTLCMD;
+   899	}
+   900	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
