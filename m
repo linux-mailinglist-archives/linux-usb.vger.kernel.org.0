@@ -2,199 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C28AD6EC5D5
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Apr 2023 08:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BE66EC7F7
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Apr 2023 10:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjDXGBM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Apr 2023 02:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
+        id S230499AbjDXIkE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Apr 2023 04:40:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231551AbjDXGAN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Apr 2023 02:00:13 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FF640C3;
-        Sun, 23 Apr 2023 22:59:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682315991; x=1713851991;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7fZxlv44jx7mpWlQVRHk0kqq7SqXLfuv7cMllKv067w=;
-  b=kj/xMrNo57ATj7E0J6djSwhgAEehMHhXiGpTfTyxewtgHAnALd6QMIp8
-   L6ByLn0jnra2b+GKOnW4Pgh+mhj9V5APUebYV6Q6Y854sEDyg+IYsAeiS
-   VODtNwV4EmkadFEpujHEuLREsi9/YLZyRIN/2eI2gcF8Ebfsgoo9L2/75
-   QaJys75gAsHLuTLVCnsLw150Ds/baRGH+23JNjVtWHbOMwqGQKXgg1JJW
-   eMNNajA+HIjJcZKCuqr3jxP7zD+d5+lqDWxm15Q3AHgG6mx5pFUuksscO
-   /mm/wc77WIqO+awQozqnVJE0R7kp1hTcCqDWKwHRY3BUjdw667CGo4xjH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="345126010"
-X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
-   d="scan'208";a="345126010"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 22:58:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="762292510"
-X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
-   d="scan'208";a="762292510"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Apr 2023 22:58:46 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id DF02F11D; Mon, 24 Apr 2023 08:58:51 +0300 (EEST)
-Date:   Mon, 24 Apr 2023 08:58:51 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        S Sanath <Sanath.S@amd.com>, richard.gong@amd.com,
-        Sanju.Mehta@amd.com, Takashi Iwai <tiwai@suse.de>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Clear registers properly when auto clear
- isn't in use
-Message-ID: <20230424055851.GR66750@black.fi.intel.com>
-References: <20230421140725.495-1-mario.limonciello@amd.com>
+        with ESMTP id S229603AbjDXIkD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Apr 2023 04:40:03 -0400
+Received: from smtp.smtpout.orange.fr (smtp-13.smtpout.orange.fr [80.12.242.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E2FE48
+        for <linux-usb@vger.kernel.org>; Mon, 24 Apr 2023 01:40:01 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id qrjpp9pdVS2Yhqrjqpy8BT; Mon, 24 Apr 2023 10:39:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1682325599;
+        bh=vgMfnD5w8L8osmiEQCPKAcBxZ5zFalY5WsdQV5PqFVU=;
+        h=From:To:Cc:Subject:Date;
+        b=X9QChUa0hH2ybgHWlFRyPLmC5Dd0l0eKvnf5G6fJo66FWer4zD/ICt0pjXKSaN76J
+         y/J8oE8QazQDRAZkQvMnNDELOuZq66MPu0VaRSnO45ebxzG1gTBVSf6vQqtMTiVdBq
+         9xoBjg6jyAfzx8JfM3fWaXhAeOcm6qfWGI7jkifXS6CSNXBFJnF7KIusxzgwfWO70n
+         HdvGnUzH2/g3MnX5YgfksRY636m0p6Tc/h4YufQzqyEsAhQ81hgMsLZCI6sYAyX0Zb
+         eIrWarETpt4fDopYH99zjv38VHPTW4mYE60syRYxi45Sii3+sZccwAy4t3U2WATTOD
+         uOREdSNVtKMWw==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 24 Apr 2023 10:39:59 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] usb: typec: mux: Remove some unneeded includes
+Date:   Mon, 24 Apr 2023 10:39:56 +0200
+Message-Id: <1db1e8bd253cbb652835c0cef6a0a2bb9a4970eb.1682325582.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230421140725.495-1-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mario,
+This driver includes many header files that are unneeded.
+Remove them and add <linux/device.h> where devm_kzalloc() is defined.
 
-On Fri, Apr 21, 2023 at 09:07:24AM -0500, Mario Limonciello wrote:
-> When `QUIRK_AUTO_CLEAR_INT` isn't set, interrupt masking should be
-> cleared by writing to Interrupt Mask Clear (IMR) and interrupt
-> status should be cleared properly at shutdown/init.
-> 
-> This fixes an error where interrupts are left enabled during resume
-> from hibernation with `CONFIG_USB4=y`.
-> 
-> Fixes: 468c49f44759 ("thunderbolt: Disable interrupt auto clear for rings")
-> Reported-by: Takashi Iwai <tiwai@suse.de>
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217343
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> Tested-by: Takashi Iwai <tiwai@suse.de>
-> ---
-> I tried to base this off thunderbolt.git/next (tag: thunderbolt-for-v6.4-rc1)
-> but the following 3 commits are missing from that branch but are in 6.3-rc7:
-> 
-> 58cdfe6f58b3 thunderbolt: Rename shadowed variables bit to interrupt_bit and auto_clear_bit
-> 468c49f44759 thunderbolt: Disable interrupt auto clear for rings
-> 1716efdb0793 thunderbolt: Use const qualifier for `ring_interrupt_index`
-> 
-> I cherry picked them first as this patch builds on them.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Based on one of my script, this reduces the number of included files
+during the build process of this file from 551 to 345.
+---
+ drivers/usb/typec/mux/gpio-sbu-mux.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Okay, so if I take this after v6.4-rc1 is released and send it forward
-to for -rc2 Greg it should apply just fine?
+diff --git a/drivers/usb/typec/mux/gpio-sbu-mux.c b/drivers/usb/typec/mux/gpio-sbu-mux.c
+index f62516dafe8f..c07856069d43 100644
+--- a/drivers/usb/typec/mux/gpio-sbu-mux.c
++++ b/drivers/usb/typec/mux/gpio-sbu-mux.c
+@@ -3,14 +3,11 @@
+  * Copyright (C) 2022 Linaro Ltd.
+  */
+ 
+-#include <linux/bits.h>
+-#include <linux/i2c.h>
+-#include <linux/kernel.h>
++#include <linux/device.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/platform_device.h>
+-#include <linux/regmap.h>
+ #include <linux/usb/typec_dp.h>
+ #include <linux/usb/typec_mux.h>
+ 
+-- 
+2.34.1
 
-> ---
->  drivers/thunderbolt/nhi.c      | 28 +++++++++++++++++++++-------
->  drivers/thunderbolt/nhi_regs.h |  1 +
->  2 files changed, 22 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-> index d76e923fbc6a..7c543a6a5711 100644
-> --- a/drivers/thunderbolt/nhi.c
-> +++ b/drivers/thunderbolt/nhi.c
-> @@ -61,8 +61,9 @@ static int ring_interrupt_index(const struct tb_ring *ring)
->   */
->  static void ring_interrupt_active(struct tb_ring *ring, bool active)
->  {
-> -	int reg = REG_RING_INTERRUPT_BASE +
-> -		  ring_interrupt_index(ring) / 32 * 4;
-> +	int index = ring_interrupt_index(ring) / 32 * 4;
-> +	int reg = REG_RING_INTERRUPT_BASE + index;
-> +	int clear = REG_RING_INTERRUPT_MASK_CLEAR_BASE + index;
->  	int interrupt_bit = ring_interrupt_index(ring) & 31;
->  	int mask = 1 << interrupt_bit;
->  	u32 old, new;
-> @@ -123,7 +124,11 @@ static void ring_interrupt_active(struct tb_ring *ring, bool active)
->  					 "interrupt for %s %d is already %s\n",
->  					 RING_TYPE(ring), ring->hop,
->  					 active ? "enabled" : "disabled");
-> -	iowrite32(new, ring->nhi->iobase + reg);
-> +
-> +	if (active)
-> +		iowrite32(new, ring->nhi->iobase + reg);
-> +	else
-> +		iowrite32(mask, ring->nhi->iobase + clear);
-
-Since it is doing this for all hardware, even for Intel, I will need to
-run some testing to make sure this still works.
-
->  }
->  
->  /*
-> @@ -135,12 +140,21 @@ static void nhi_disable_interrupts(struct tb_nhi *nhi)
->  {
->  	int i = 0;
->  	/* disable interrupts */
-> -	for (i = 0; i < RING_INTERRUPT_REG_COUNT(nhi); i++)
-> -		iowrite32(0, nhi->iobase + REG_RING_INTERRUPT_BASE + 4 * i);
-> +	for (i = 0; i < RING_INTERRUPT_REG_COUNT(nhi); i++) {
-> +		if (nhi->quirks & QUIRK_AUTO_CLEAR_INT)
-> +			iowrite32(0, nhi->iobase + REG_RING_INTERRUPT_BASE + 4 * i);
-> +		else
-> +			iowrite32(0xffffffff,
-
-~0
-
-> +				  nhi->iobase + REG_RING_INTERRUPT_MASK_CLEAR_BASE + 4 * i);
-
-Btw, we have now quite many places with
-
-	if (nhi->quirks & QUIRK_AUTO_CLEAR_INT)
-		// Intel stuff
-	else
-		// non-Intel stuff
-
-I wonder if we could move these behind a wrapper and then here (and
-similar places) just call
-
-	nhi_mask_interrupt(nhi, ...)
-
-
-> +	}
->  
->  	/* clear interrupt status bits */
-> -	for (i = 0; i < RING_NOTIFY_REG_COUNT(nhi); i++)
-> -		ioread32(nhi->iobase + REG_RING_NOTIFY_BASE + 4 * i);
-> +	for (i = 0; i < RING_NOTIFY_REG_COUNT(nhi); i++) {
-> +		if (nhi->quirks & QUIRK_AUTO_CLEAR_INT)
-> +			ioread32(nhi->iobase + REG_RING_NOTIFY_BASE + 4 * i);
-> +		else
-> +			iowrite32(0xffffffff, nhi->iobase + REG_RING_INT_CLEAR + 4 * i);
-
-~0
-
-	nhi_clear_interrupt(nhi, ...)
-
-> +	}
->  }
->  
->  /* ring helper methods */
-> diff --git a/drivers/thunderbolt/nhi_regs.h b/drivers/thunderbolt/nhi_regs.h
-> index faef165a919c..db95ad5d2814 100644
-> --- a/drivers/thunderbolt/nhi_regs.h
-> +++ b/drivers/thunderbolt/nhi_regs.h
-> @@ -92,6 +92,7 @@ struct ring_desc {
->   */
->  #define REG_RING_INTERRUPT_BASE	0x38200
->  #define RING_INTERRUPT_REG_COUNT(nhi) ((31 + 2 * nhi->hop_count) / 32)
-
-Empty line here.
-
-> +#define REG_RING_INTERRUPT_MASK_CLEAR_BASE	0x38208
->  
->  #define REG_INT_THROTTLING_RATE	0x38c00
->  
-> -- 
-> 2.34.1
