@@ -2,72 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E066ED848
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 01:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453BF6ED8D8
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 01:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbjDXXD6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Apr 2023 19:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
+        id S232846AbjDXXal (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Apr 2023 19:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233015AbjDXXDt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Apr 2023 19:03:49 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189869741
-        for <linux-usb@vger.kernel.org>; Mon, 24 Apr 2023 16:03:44 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-54fc1824f0bso57262417b3.0
-        for <linux-usb@vger.kernel.org>; Mon, 24 Apr 2023 16:03:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682377423; x=1684969423;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xRrth/2rPlHJRD57ZDquRzBPnCdvHhyHdVMWOLBhruc=;
-        b=pwTi6X4Nah2HOzAB1Ma+a9krICtX2pHckFVINb88v52GBWheZ7jNNAHDVo8Dnp5zsZ
-         wuJDfJTRWf9GdX6CanriP+Pu1yBthY4U12nueDOM1sq+a9AYrud+7bkuee8qPbzhqQNS
-         eSF8AfTN5oMY3xh7hUEhIiu5DCIlMS8bs+rduoF78daKpkxi+ykuz0ImcKQt4grSnFyx
-         O3tIl8t1S3YoAf+71PDzbzsIStpGrhiNCSpgRfO8l1LD20TmV+aOAm4DdrhMmbHJXXtM
-         9nWRUsfqJeEv+wO+5qHzsDsCN5nmk6Mg96rCymIFnFZk+Az51S7i5tUAwERWVkxY3c1p
-         dK2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682377423; x=1684969423;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xRrth/2rPlHJRD57ZDquRzBPnCdvHhyHdVMWOLBhruc=;
-        b=FVZZYRKtF7BPqEkqJSUdtAtjcD9zgQYxpQRlm/70VbIC2ptoQa1f/V5EKlUFNY4Llz
-         vOxkSsaB9Y8sSaPg3Fi01vuIetldmIekVOaR+U5QHpyoTeZGuVGAj52TZIwNDNPqRwuA
-         D12UfV/7lBRq1gY1NSRTE8SBWQbMqBYC2fucDH6fynRRR9Fddj6qmNJH/y4+Dov9j8l+
-         LKjDKsKH++41d85q6gxVibwm5Yt0grQtpXQk+7HOlCyFqxUOc61CQhMri9nUOjzA5izR
-         2ZkpGdX2QNGPFQfyxFhGG/MVQvpO8etCuMfCBTPonZ/zN1m97pyWDvovMMELRIO4g0qc
-         HEUw==
-X-Gm-Message-State: AAQBX9eDzbKVWn0P1yGPdjOKJOXXlx6segQQ1TfLdz64hRJ1w9l8IHZ8
-        YBc3ytDENzCKa11i9mvBUbG2HM+Wz12keXbYiqwQCQ==
-X-Google-Smtp-Source: AKy350bUIDhOyA/75JWrk6ft3Se2t9sPXfgR909GdW/OWl6txSewv5q6VCQpcF8tzR9yOS7WWg8fvn4NqZyvM03Udk8=
-X-Received: by 2002:a0d:e68b:0:b0:54f:9e41:df5a with SMTP id
- p133-20020a0de68b000000b0054f9e41df5amr9223949ywe.15.1682377423165; Mon, 24
- Apr 2023 16:03:43 -0700 (PDT)
+        with ESMTP id S232966AbjDXXaf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Apr 2023 19:30:35 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6EA46A9;
+        Mon, 24 Apr 2023 16:30:26 -0700 (PDT)
+Received: from [IPV6:2408:824e:f25:7460:b092:16d8:698e:4b1a] ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=PLAIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33ONTtLx029003-33ONTtM0029003
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Tue, 25 Apr 2023 07:29:56 +0800
+Message-ID: <ead628fe-c7fc-5e1e-0eba-02683a21b429@hust.edu.cn>
+Date:   Tue, 25 Apr 2023 07:29:55 +0800
 MIME-Version: 1.0
-References: <20230421133922.8520-1-quic_shazhuss@quicinc.com> <ZEcEGJiikEC2wIVE@fedora>
-In-Reply-To: <ZEcEGJiikEC2wIVE@fedora>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 25 Apr 2023 02:03:32 +0300
-Message-ID: <CAA8EJpr27=2jAXbamN6J7yF+7G=L5Af8+XReB5UnFuihcEwMQA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/6] arm64: qcom: sa8775p: add support for USB
-To:     Adrien Thierry <athierry@redhat.com>
-Cc:     Shazad Hussain <quic_shazhuss@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH RESEND] usb: dwc3: remove dead code in dwc3_otg_get_irq
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        lihuya <lihuya@hust.edu.cn>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "hust-os-kernel-patches@googlegroups.com" 
+        <hust-os-kernel-patches@googlegroups.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230424105930.49944-1-lihuya@hust.edu.cn>
+ <20230424213339.avocjfchjd2ptaqg@synopsys.com>
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+In-Reply-To: <20230424213339.avocjfchjd2ptaqg@synopsys.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,124 +48,54 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 25 Apr 2023 at 01:36, Adrien Thierry <athierry@redhat.com> wrote:
->
-> Hi Shazad,
->
-> On Fri, Apr 21, 2023 at 07:09:15PM +0530, Shazad Hussain wrote:
-> > Update relavent DT bindings for USB, add new config to the phy driver,
-> > add USB and PHY nodes to the .dtsi and enable them in the board .dts
-> > for the sa8775p-ride platform.
-> >
-> > Shazad Hussain (6):
-> >   dt-bindings: usb: qcom,dwc3: Add bindings for SA8775P
-> >   dt-bindings: phy: qcom,usb-snps-femto-v2: Add bindings for SA8775P
-> >   dt-bindings: phy: qcom,sc8280xp-qmp-usb3-uni: Add SA8775P USB PHY
-> >     binding
-> >   phy: qcom-qmp: Add SA8775P USB3 UNI phy
-> >   arm64: dts: qcom: sa8775p: add USB nodes
-> >   arm64: dts: qcom: sa8775p-ride: enable USB nodes
-> >
-> >  .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml   |   1 +
-> >  .../bindings/phy/qcom,usb-snps-femto-v2.yaml  |   1 +
-> >  .../devicetree/bindings/usb/qcom,dwc3.yaml    |   5 +
-> >  arch/arm64/boot/dts/qcom/sa8775p-ride.dts     |  92 +++++++
-> >  arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 239 +++++++++++++++++-
-> >  drivers/phy/qualcomm/phy-qcom-qmp-usb.c       |  45 ++++
-> >  6 files changed, 381 insertions(+), 2 deletions(-)
-> >
-> > --
-> > 2.17.1
-> >
->
-> Thanks for posting this. I tested the series on the sa8775p, and it seems
-> initialization for the controller at a400000 sometimes fails with a
-> timeout (-110) error:
->
->     dwc3 a400000.usb: Adding to iommu group 2
->     xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
->     xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
->     xhci-hcd xhci-hcd.0.auto: can't setup: -110
->     xhci-hcd xhci-hcd.0.auto: USB bus 1 deregistered
->     xhci-hcd: probe of xhci-hcd.0.auto failed with error -110
 
-Semi-random suggestion, but could you please try using
-clk_regmap_phy_mux/clk_regmap_phy_mux_ops for USB pipe clk src?
+On 2023/4/25 05:33, 'Thinh Nguyen' via HUST OS Kernel Contribution wrote:
+> On Mon, Apr 24, 2023, lihuya wrote:
+>> platform_get_irq() only return non-zero irq number on success, or
+>> negative error number on failure.
+>>
+>> There is no need to check the return value of platform_get_irq()
+>> to determine the return value of dwc3_otg_get_irq(), removing
+>> them to solve this problem.
+>>
+>> Signed-off-by: lihuya <lihuya@hust.edu.cn>
+> Is this your full name?
 
+Hi Yuhang,
 
->     dwc3 a600000.usb: Adding to iommu group 3
->     dwc3 a800000.usb: Adding to iommu group 4
->     xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
->     xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 1
->     xhci-hcd xhci-hcd.1.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000000000010010
->     xhci-hcd xhci-hcd.1.auto: irq 162, io mem 0x0a800000
->     xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
->     xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 2
->     xhci-hcd xhci-hcd.1.auto: Host supports USB 3.1 Enhanced SuperSpeed
->     hub 1-0:1.0: USB hub found
->     hub 1-0:1.0: 1 port detected
->     usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
->     hub 2-0:1.0: USB hub found
->     hub 2-0:1.0: 1 port detected
->
-> In this case, only usb devices for a800000 are showing:
->
->     dracut:/# ls -alh /sys/bus/usb/devices
->     total 0
->     drwxr-xr-x 2 root root 0 Feb 27 00:00 .
->     drwxr-xr-x 4 root root 0 Feb 27 00:00 ..
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 1-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb1/1-0:1.0
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 2-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb2/2-0:1.0
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb1 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb1
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb2 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb2
->
-> This happens approximately 1 out of 2 reboots. Here's the kernel output
-> when initialization succeeds:
->
->     dwc3 a600000.usb: Adding to iommu group 2
->     dwc3 a800000.usb: Adding to iommu group 3
->     xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
->     xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
->     xhci-hcd xhci-hcd.0.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000000000010010
->     xhci-hcd xhci-hcd.0.auto: irq 161, io mem 0x0a800000
->     xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
->     xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 2
->     xhci-hcd xhci-hcd.0.auto: Host supports USB 3.1 Enhanced SuperSpeed
->     hub 1-0:1.0: USB hub found
->     hub 1-0:1.0: 1 port detected
->     usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
->     hub 2-0:1.0: USB hub found
->     hub 2-0:1.0: 1 port detected
->     dwc3 a400000.usb: Adding to iommu group 4
->     xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
->     xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 3
->     xhci-hcd xhci-hcd.1.auto: USB3 root hub has no ports
->     xhci-hcd xhci-hcd.1.auto: hcc params 0x0220fe65 hci version 0x110 quirks 0x0000000000010010
->     xhci-hcd xhci-hcd.1.auto: irq 162, io mem 0x0a400000
->     hub 3-0:1.0: USB hub found
->     hub 3-0:1.0: 1 port detected
->
-> And the list of usb devices:
->
->     dracut:/# ls -alh /sys/bus/usb/devices
->     total 0
->     drwxr-xr-x 2 root root 0 Feb 27 00:00 .
->     drwxr-xr-x 4 root root 0 Feb 27 00:00 ..
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 1-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb1/1-0:1.0
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 2-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb2/2-0:1.0
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 3-0:1.0 -> ../../../devices/platform/soc@0/a4f8800.usb/a400000.usb/xhci-hcd.1.auto/usb3/3-0:1.0
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb1 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb1
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb2 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb2
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb3 -> ../../../devices/platform/soc@0/a4f8800.usb/a400000.usb/xhci-hcd.1.auto/usb3
->
-> Have you also encountered this?
->
-> Best,
->
-> Adrien
->
+Please use your full name: Yuhang Liang. This is essential in the kernel 
+patch submission.
 
+Dongliang Mu
 
--- 
-With best wishes
-Dmitry
+>
+>> ---
+>>   drivers/usb/dwc3/drd.c | 5 -----
+>>   1 file changed, 5 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+>> index 039bf241769a..c2e09700212d 100644
+>> --- a/drivers/usb/dwc3/drd.c
+>> +++ b/drivers/usb/dwc3/drd.c
+>> @@ -154,11 +154,6 @@ static int dwc3_otg_get_irq(struct dwc3 *dwc)
+>>   		goto out;
+>>   
+>>   	irq = platform_get_irq(dwc3_pdev, 0);
+>> -	if (irq > 0)
+>> -		goto out;
+>> -
+>> -	if (!irq)
+>> -		irq = -EINVAL;
+>>   
+>>   out:
+>>   	return irq;
+>> -- 
+>> 2.34.1
+>>
+> FWIW, here's the ack again.
+>
+> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+>
+> Thanks,
+> Thinh
+>
