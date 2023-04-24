@@ -2,63 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905316ED0E6
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Apr 2023 17:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE48F6ED4D7
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Apr 2023 20:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbjDXPEG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Apr 2023 11:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
+        id S232458AbjDXSw5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Apr 2023 14:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbjDXPEE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Apr 2023 11:04:04 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B7061B0
-        for <linux-usb@vger.kernel.org>; Mon, 24 Apr 2023 08:04:01 -0700 (PDT)
+        with ESMTP id S232263AbjDXSwz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Apr 2023 14:52:55 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EB486A8;
+        Mon, 24 Apr 2023 11:52:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682348641; x=1713884641;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=eap7d9PCBozFdOUx06UPoSH8Y2m4Q1vAjq7leEzeJSs=;
-  b=G/QE0Il68IZmi6vD/em+fv20cc3q6MiUY/NBtz5W3zupFZ95OxWtmkDi
-   u2JXh2PxtiXIgR+iCi+vaIwP72q7PQXogY8QuX2zx62zX0hD7N4b3R8xx
-   RDrc2JUL/bluj0jUaRMP0KCJ0N1/z6zK/q216oZ37aLKHr4Ovu0B8Biu5
-   Lg6YDAnXgNyuGwZDU2tVC55d7f6X6sOSsRujnP4ne/h8hQVsliQMoAOQa
-   qvrbsbnWclL2UWxzHMVpAwp5cGM3EOOGT0aK1k9pJJf56CUApIcjUbzaG
-   L/EAgge/jnjKbDjH5s8leTUSRJiX03HHgg8YQYI5X7UtRopH6AX6rSmPb
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="345230159"
+  t=1682362347; x=1713898347;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=huei9fm8wqaE4e2eRVEs7QavJaIOdk/zO+CVVXYTZpc=;
+  b=koue/2VniW9Bb3qtVP3JQqF2NvZWifKdUVXBUVyxORi0kuyzoehSfOIS
+   it1OoHJhp2mdUvR7x8tozGhmpksLlEjfYPgICY9PBc5Gx7jQU4SLpKLS0
+   FYjuIiaKGxzJ15kopW7zoTgXNmYAQ33uc3RdRmqrSUewLRNZ9Mt9IXdtp
+   cIkfPNQOYWJP6dgbd4T/S6pQoeRu8xXcP5VFYxBqBnZ8Gb6myCpQMsqwS
+   qM/f1zKU8RBQGkBISUi6Mee0OzaBCqDgufnIn+nBLQZFCm7tet2wh4EJc
+   ZHGxxwmPzYMcMdRGYGjKtEOCYWabLp4C7VMUyAx5l/vSapc5zAsakmEHf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="349339346"
 X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="345230159"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 08:04:00 -0700
+   d="scan'208";a="349339346"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 11:51:00 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="686875023"
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="782506404"
 X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="686875023"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga007.jf.intel.com with ESMTP; 24 Apr 2023 08:03:56 -0700
-Message-ID: <5a4b3d95-c783-b4b2-93d7-57b69b679f7a@linux.intel.com>
-Date:   Mon, 24 Apr 2023 18:05:26 +0300
+   d="scan'208";a="782506404"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Apr 2023 11:50:58 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pr1H7-000iau-2q;
+        Mon, 24 Apr 2023 18:50:57 +0000
+Date:   Tue, 25 Apr 2023 02:50:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
+        Donghun Yoon <donghun.yoon@lge.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] xhci-pci: Only run d3cold avoidance quirk for s2idle
+Message-ID: <202304250239.9WShH3NB-lkp@intel.com>
+References: <20230424134926.1416-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Content-Language: en-US
-To:     Basavaraj Natikar <bnatikar@amd.com>,
-        Mark Hasemeyer <markhas@chromium.org>,
-        basavaraj.natikar@amd.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        mathias.nyman@intel.com, stern@rowland.harvard.edu
-References: <20230418140817.3651909-3-Basavaraj.Natikar@amd.com>
- <20230420170337.14110-1-markhas@chromium.org>
- <346ea37a-9ec6-af36-b6ed-026aefb2cf4b@amd.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH 2/2] xhci: Improve the XHCI resume time
-In-Reply-To: <346ea37a-9ec6-af36-b6ed-026aefb2cf4b@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230424134926.1416-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,76 +68,85 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21.4.2023 7.58, Basavaraj Natikar wrote:
-> 
-> On 4/20/2023 10:33 PM, Mark Hasemeyer wrote:
->>> It may be necessary to wait only for auto-resume cases.
->> I find this comment misleading as the patch assumes that it's only necessary to
->> wait for auto-resume cases. Are there any cases where the driver should wait
->> during system-resume?
-> 
-> Only in case of auto-resume (runtime resume).
-> 
-> Rewording the commit message as follows.
+Hi Mario,
 
-Thanks for fixing this extra system resume delay
+kernel test robot noticed the following build errors:
 
-Maybe some kind of big picture explanation could be added to the commit message,
-such as:
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.3 next-20230421]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Avoid extra 120ms delay during system resume.
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/xhci-pci-Only-run-d3cold-avoidance-quirk-for-s2idle/20230424-215356
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230424134926.1416-1-mario.limonciello%40amd.com
+patch subject: [PATCH] xhci-pci: Only run d3cold avoidance quirk for s2idle
+config: i386-randconfig-a003-20230424 (https://download.01.org/0day-ci/archive/20230425/202304250239.9WShH3NB-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/8e287659296330d0cb31e4730daacc92d0467e63
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mario-Limonciello/xhci-pci-Only-run-d3cold-avoidance-quirk-for-s2idle/20230424-215356
+        git checkout 8e287659296330d0cb31e4730daacc92d0467e63
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/host/
 
-xHC controller may signal wake up to 120ms before it shows which USB device
-caused the wake on the xHC port registers.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304250239.9WShH3NB-lkp@intel.com/
 
-The xhci driver therefore checks for port activity up to 120ms during resume,
-making sure that the hub driver can see the port change, and won't immediately
-runtime suspend back due to no port activity.
+All errors (new ones prefixed by >>):
 
-This is however only needed for runtime resume as system resume will resume
-all child hubs and other child usb devices anyway.
-
-> 
-> Each XHCI controller while xhci_resumes by default takes 120 ms more if
-> there is no activity on the ports or no ports connected. Therefore, if
-> there are more USB controllers on the system, 120 ms more per controller
-> will add delay to system resume from suspended states like s2idle, S3 or
-> S4 states.
-> 
-> Once the XHCI controller is in runtime suspended state (D3 state), on USB
-> device hotplug controller will runtime resume (D0 state) and check for
-> pending port events if no events, wait for 120 ms to re-check for port
-> activity to handle missed wake signal.
-> 
-> A delay of 120 ms more to re-check for port activity is needed only in
-> auto-resume (runtime resume) cases. Hence, add a check only for runtime
-> resume from runtime suspend (D3->D0) to avoid the 120ms more delay for
-> other PM events (system resume from suspend states like s2idle, S3 or S4
-> states) so that the system resume time can be improved.
-> 
-> Please let me know if any inputs.
-
-I can only think of one minor side-effect that would be runtime suspending back
-too early after system resume. This could happen when connecting the first
-usb device to a roothub on a (system) suspended setup?
-
-steps:
-1. in system suspend, no usb devices connected, xhci in D3, can signal wake with PME#
-2. connect first usb device, xHC signals PME# wake
-3. system resumes, xhci resumes to D0, but no actity visible on xHC port registers
-4. rootubs resumes, no other children on this bus.
-5. roothubs sees no activity (due to 120ms max latency before visible on port registers)
-6. roothubs runtime suspend
-7. xhci runtime suspends
-8. same device now causes xHC to PME# wake again,
-9. runtime reusume xhci, do wait 120ms for port activity
-10. see port activity, resume hub, enumerate device.
-
-It might be that this really isn't an issue due to the the graceperiod fix:
-
-33e321586e37 xhci: Add grace period after xHC start to prevent premature runtime suspend.
-
-Thanks
--Mathias
+>> drivers/usb/host/xhci-pci.c:806:7: error: use of undeclared identifier 'pm_suspend_target_state'
+               (pm_suspend_target_state == PM_SUSPEND_TO_IDLE &&
+                ^
+   1 error generated.
 
 
+vim +/pm_suspend_target_state +806 drivers/usb/host/xhci-pci.c
+
+   794	
+   795	static int xhci_pci_suspend(struct usb_hcd *hcd, bool do_wakeup)
+   796	{
+   797		struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+   798		struct pci_dev		*pdev = to_pci_dev(hcd->self.controller);
+   799		int			ret;
+   800	
+   801		/*
+   802		 * Systems with the TI redriver that loses port status change events
+   803		 * need to have the registers polled during D3, so avoid D3cold.
+   804		 */
+   805		if (xhci->quirks & XHCI_COMP_MODE_QUIRK ||
+ > 806		    (pm_suspend_target_state == PM_SUSPEND_TO_IDLE &&
+   807		     xhci->quirks & (XHCI_BROKEN_D3COLD_S2I)))
+   808			pci_d3cold_disable(pdev);
+   809	
+   810		if (xhci->quirks & XHCI_PME_STUCK_QUIRK)
+   811			xhci_pme_quirk(hcd);
+   812	
+   813		if (xhci->quirks & XHCI_SSIC_PORT_UNUSED)
+   814			xhci_ssic_port_unused_quirk(hcd, true);
+   815	
+   816		if (xhci->quirks & XHCI_DISABLE_SPARSE)
+   817			xhci_sparse_control_quirk(hcd);
+   818	
+   819		ret = xhci_suspend(xhci, do_wakeup);
+   820	
+   821		/* synchronize irq when using MSI-X */
+   822		xhci_msix_sync_irqs(xhci);
+   823	
+   824		if (ret && (xhci->quirks & XHCI_SSIC_PORT_UNUSED))
+   825			xhci_ssic_port_unused_quirk(hcd, false);
+   826	
+   827		return ret;
+   828	}
+   829	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
