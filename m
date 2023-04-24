@@ -2,78 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287226EC44F
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Apr 2023 06:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2A76EC4C7
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Apr 2023 07:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbjDXEUn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Apr 2023 00:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S230319AbjDXFYj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Apr 2023 01:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjDXEUm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Apr 2023 00:20:42 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 06BCC1726;
-        Sun, 23 Apr 2023 21:20:39 -0700 (PDT)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 620EC180120C7B;
-        Mon, 24 Apr 2023 12:20:30 +0800 (CST)
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   Suhui <suhui@nfschina.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, Suhui <suhui@nfschina.com>
-Subject: [PATCH] usb: typec: tcpm: remove unnecessary (void*) conversions
-Date:   Mon, 24 Apr 2023 12:19:40 +0800
-Message-Id: <20230424041940.132866-1-suhui@nfschina.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S229476AbjDXFYh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Apr 2023 01:24:37 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A40126AD;
+        Sun, 23 Apr 2023 22:24:36 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33O4gdvx028544;
+        Mon, 24 Apr 2023 05:24:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=LaWl1S+PXsR1xtwUdfUOSm3pr8sZXB8zPkYY3h/eMVs=;
+ b=oXj5A8P+JBgOK6ySP5cFk/yrPPmsQxmqR5mf06+zkvLBWQe2RELFCgWRl7ANafRdqs01
+ 842Xk3dRaOOcoFeFLKOL8XqOayOGpWJQQAxX28TbBP0Ve3vm28us5ivnagnp4DYIyMDd
+ 4vecbDJM4DrIzp/XP0mRBK0A0m6Z85GAzGg5oLd9g9khueAcE//WXp3w2WqVicffXtd9
+ xFTIBwF0WWxnNEuEueKEJer9yx4qljxx/HNxxkVMRzjQpVk9ldvFq8oUIJcYJX+j02r7
+ PVBbCiOGLuXx0WE+EiEvOv7S14qLs1R+L5zmCHq9+/yd6r5WTNPJt+sNyKOnyXN6+jKa TQ== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q48h3agdh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Apr 2023 05:24:20 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33O5OJSf032322
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Apr 2023 05:24:19 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Sun, 23 Apr 2023 22:24:13 -0700
+Date:   Mon, 24 Apr 2023 10:54:09 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v8 2/8] dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3
+ PHY
+Message-ID: <20230424052408.GA21232@varda-linux.qualcomm.com>
+References: <cover.1680693149.git.quic_varada@quicinc.com>
+ <1efa9a64499767d939efadd0aef897ac4a6e54eb.1680693149.git.quic_varada@quicinc.com>
+ <b9763bee-c0c8-86be-14de-2ed077b1f1d5@linaro.org>
+ <20230421101345.GB5813@varda-linux.qualcomm.com>
+ <6750910d-22a0-7bed-f163-db57424133c6@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <6750910d-22a0-7bed-f163-db57424133c6@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 3ysVaDMeimyH8j0RhMm42s1CkrAxm7sM
+X-Proofpoint-GUID: 3ysVaDMeimyH8j0RhMm42s1CkrAxm7sM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-24_02,2023-04-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=935 mlxscore=0
+ adultscore=0 priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1015
+ lowpriorityscore=0 malwarescore=0 phishscore=0 suspectscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304240049
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-No need cast (void*) to (struct fusb302_chip *) or (struct tcpm_port *).
+On Fri, Apr 21, 2023 at 05:19:58PM +0300, Dmitry Baryshkov wrote:
+> On 21/04/2023 13:13, Varadarajan Narayanan wrote:
+> >On Thu, Apr 06, 2023 at 09:42:31AM +0200, Krzysztof Kozlowski wrote:
+> >>On 05/04/2023 13:41, Varadarajan Narayanan wrote:
+> >>>Add dt-bindings for USB3 PHY found on Qualcomm IPQ9574
+> >>>
+> >>>Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> >>>---
+> >>>  Changes in v8:
+> >>>	- Update clock names for ipq9574
+> >>>
+> >>>  Changes in v6:
+> >>>	- Made power-domains optional
+> >>>
+> >>>Note: In the earlier patch sets, had used the (legacy)
+> >>>specification available in qcom,msm8996-qmp-usb3-phy.yaml. Moved
+> >>>to newer specification in qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> >>>---
+> >>>  .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml        | 43 +++++++++++++++++++---
+> >>>  1 file changed, 37 insertions(+), 6 deletions(-)
+> >>>
+> >>>diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> >>>index 16fce10..e902a0d 100644
+> >>>--- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> >>>+++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> >>>@@ -16,6 +16,7 @@ description:
+> >>>  properties:
+> >>>    compatible:
+> >>>      enum:
+> >>>+      - qcom,ipq9574-qmp-usb3-phy
+> >>>        - qcom,sc8280xp-qmp-usb3-uni-phy
+> >>>
+> >>>    reg:
+> >>>@@ -25,11 +26,7 @@ properties:
+> >>>      maxItems: 4
+> >>>
+> >>>    clock-names:
+> >>>-    items:
+> >>>-      - const: aux
+> >>>-      - const: ref
+> >>>-      - const: com_aux
+> >>>-      - const: pipe
+> >>>+    maxItems: 4
+> >>>
+> >>>    power-domains:
+> >>>      maxItems: 1
+> >>>@@ -60,7 +57,6 @@ required:
+> >>>    - reg
+> >>>    - clocks
+> >>>    - clock-names
+> >>>-  - power-domains
+> >>
+> >>Power domains are required. Commit msg does not explain why this should
+> >>be now optional.
+> >
+> >Since IPQ9574 doesn't have power switches couldn't provide power-domains details.
+> >So, had to make it optional to pass 'make dtbs_check'.
+>
+> This should be a part of the commit message, so that the next developer
+> understands your intentions without going to mail archives.
 
-Signed-off-by: Suhui <suhui@nfschina.com>
----
- drivers/usb/typec/tcpm/fusb302.c | 2 +-
- drivers/usb/typec/tcpm/tcpm.c    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks for the feedback. Have posted v9 that includes the above
+in commit message.
 
-diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-index 1ffce00d94b4..4b7b8f6af3ca 100644
---- a/drivers/usb/typec/tcpm/fusb302.c
-+++ b/drivers/usb/typec/tcpm/fusb302.c
-@@ -190,7 +190,7 @@ static void fusb302_log(struct fusb302_chip *chip, const char *fmt, ...)
- 
- static int fusb302_debug_show(struct seq_file *s, void *v)
- {
--	struct fusb302_chip *chip = (struct fusb302_chip *)s->private;
-+	struct fusb302_chip *chip = s->private;
- 	int tail;
- 
- 	mutex_lock(&chip->logbuffer_lock);
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 1ee774c263f0..ab3a54662ed9 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -737,7 +737,7 @@ static void tcpm_log_source_caps(struct tcpm_port *port)
- 
- static int tcpm_debug_show(struct seq_file *s, void *v)
- {
--	struct tcpm_port *port = (struct tcpm_port *)s->private;
-+	struct tcpm_port *port = s->private;
- 	int tail;
- 
- 	mutex_lock(&port->logbuffer_lock);
--- 
-2.30.2
+https://lore.kernel.org/lkml/b00042df41420ac337703ca99ac7876c46552946.1682092324.git.quic_varada@quicinc.com/
 
+Thanks
+Varada
+
+> >>Best regards,
+> >>Krzysztof
+> >>
+>
+> --
+> With best wishes
+> Dmitry
+>
