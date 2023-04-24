@@ -2,176 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3986EC4D8
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Apr 2023 07:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C28AD6EC5D5
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Apr 2023 08:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbjDXFcq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Apr 2023 01:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
+        id S230205AbjDXGBM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Apr 2023 02:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjDXFco (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Apr 2023 01:32:44 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D9A1FD8;
-        Sun, 23 Apr 2023 22:32:43 -0700 (PDT)
+        with ESMTP id S231551AbjDXGAN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Apr 2023 02:00:13 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FF640C3;
+        Sun, 23 Apr 2023 22:59:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682314363; x=1713850363;
+  t=1682315991; x=1713851991;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=1n43/fJLjYfG3QHQXcc4cXYaQSDmQZ6CPC6WO9kddpk=;
-  b=T4Dgs1Y98SMWqbiPRd5iaDgidCmAGWcqV51x8sWnk02wwXjeqnmtkF26
-   zbAc3MYH02AjZTMptaQCN5dMIGQgqfRGu4KemCP1JFoRdfUqsCQPwRdo4
-   Wd5iq6+FA9F4pWom57jzNBs8rprzcia2fsXQ8Bq/U1qkzMNMmyQTqCjZ6
-   NSHqEVabBQZh0yLQ+CIWYddPoQWhsA7MVC5ICgqlwcdT6iNs9O4nyW25V
-   4U5mWzJy9pkP4bRvvkcCpD60v9p46PvN9l97WK1slAKmyu/iNJp8yvuQw
-   yFG31YDY02FGRWhQJ9TjAypCNQ1f7bCIvTTsbdo00S1M6oeYkdJM9P0hk
+  bh=7fZxlv44jx7mpWlQVRHk0kqq7SqXLfuv7cMllKv067w=;
+  b=kj/xMrNo57ATj7E0J6djSwhgAEehMHhXiGpTfTyxewtgHAnALd6QMIp8
+   L6ByLn0jnra2b+GKOnW4Pgh+mhj9V5APUebYV6Q6Y854sEDyg+IYsAeiS
+   VODtNwV4EmkadFEpujHEuLREsi9/YLZyRIN/2eI2gcF8Ebfsgoo9L2/75
+   QaJys75gAsHLuTLVCnsLw150Ds/baRGH+23JNjVtWHbOMwqGQKXgg1JJW
+   eMNNajA+HIjJcZKCuqr3jxP7zD+d5+lqDWxm15Q3AHgG6mx5pFUuksscO
+   /mm/wc77WIqO+awQozqnVJE0R7kp1hTcCqDWKwHRY3BUjdw667CGo4xjH
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="349164994"
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="345126010"
 X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
-   d="scan'208";a="349164994"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 22:32:42 -0700
+   d="scan'208";a="345126010"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 22:58:48 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="836825069"
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="762292510"
 X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
-   d="scan'208";a="836825069"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Apr 2023 22:32:40 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pqooa-000iHg-0k;
-        Mon, 24 Apr 2023 05:32:40 +0000
-Date:   Mon, 24 Apr 2023 13:32:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jarkko Sonninen <kasper@iki.fi>
-Cc:     oe-kbuild-all@lists.linux.dev, Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+   d="scan'208";a="762292510"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 23 Apr 2023 22:58:46 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id DF02F11D; Mon, 24 Apr 2023 08:58:51 +0300 (EEST)
+Date:   Mon, 24 Apr 2023 08:58:51 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        S Sanath <Sanath.S@amd.com>, richard.gong@amd.com,
+        Sanju.Mehta@amd.com, Takashi Iwai <tiwai@suse.de>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
-Message-ID: <202304241303.WkdqPPbt-lkp@intel.com>
-References: <20230423185929.1595056-1-kasper@iki.fi>
+Subject: Re: [PATCH] thunderbolt: Clear registers properly when auto clear
+ isn't in use
+Message-ID: <20230424055851.GR66750@black.fi.intel.com>
+References: <20230421140725.495-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230423185929.1595056-1-kasper@iki.fi>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230421140725.495-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Jarkko,
+Hi Mario,
 
-kernel test robot noticed the following build warnings:
+On Fri, Apr 21, 2023 at 09:07:24AM -0500, Mario Limonciello wrote:
+> When `QUIRK_AUTO_CLEAR_INT` isn't set, interrupt masking should be
+> cleared by writing to Interrupt Mask Clear (IMR) and interrupt
+> status should be cleared properly at shutdown/init.
+> 
+> This fixes an error where interrupts are left enabled during resume
+> from hibernation with `CONFIG_USB4=y`.
+> 
+> Fixes: 468c49f44759 ("thunderbolt: Disable interrupt auto clear for rings")
+> Reported-by: Takashi Iwai <tiwai@suse.de>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217343
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Tested-by: Takashi Iwai <tiwai@suse.de>
+> ---
+> I tried to base this off thunderbolt.git/next (tag: thunderbolt-for-v6.4-rc1)
+> but the following 3 commits are missing from that branch but are in 6.3-rc7:
+> 
+> 58cdfe6f58b3 thunderbolt: Rename shadowed variables bit to interrupt_bit and auto_clear_bit
+> 468c49f44759 thunderbolt: Disable interrupt auto clear for rings
+> 1716efdb0793 thunderbolt: Use const qualifier for `ring_interrupt_index`
+> 
+> I cherry picked them first as this patch builds on them.
 
-[auto build test WARNING on johan-usb-serial/usb-next]
-[also build test WARNING on johan-usb-serial/usb-linus linus/master v6.3 next-20230421]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Okay, so if I take this after v6.4-rc1 is released and send it forward
+to for -rc2 Greg it should apply just fine?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jarkko-Sonninen/USB-serial-xr-Add-TIOCGRS485-and-TIOCSRS485-ioctls/20230424-030038
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git usb-next
-patch link:    https://lore.kernel.org/r/20230423185929.1595056-1-kasper%40iki.fi
-patch subject: [PATCH v4] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
-config: ia64-randconfig-s053-20230423 (https://download.01.org/0day-ci/archive/20230424/202304241303.WkdqPPbt-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/a80fa27b4fe1974bad2427d7f3260012a04b721a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jarkko-Sonninen/USB-serial-xr-Add-TIOCGRS485-and-TIOCSRS485-ioctls/20230424-030038
-        git checkout a80fa27b4fe1974bad2427d7f3260012a04b721a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/usb/serial/
+> ---
+>  drivers/thunderbolt/nhi.c      | 28 +++++++++++++++++++++-------
+>  drivers/thunderbolt/nhi_regs.h |  1 +
+>  2 files changed, 22 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
+> index d76e923fbc6a..7c543a6a5711 100644
+> --- a/drivers/thunderbolt/nhi.c
+> +++ b/drivers/thunderbolt/nhi.c
+> @@ -61,8 +61,9 @@ static int ring_interrupt_index(const struct tb_ring *ring)
+>   */
+>  static void ring_interrupt_active(struct tb_ring *ring, bool active)
+>  {
+> -	int reg = REG_RING_INTERRUPT_BASE +
+> -		  ring_interrupt_index(ring) / 32 * 4;
+> +	int index = ring_interrupt_index(ring) / 32 * 4;
+> +	int reg = REG_RING_INTERRUPT_BASE + index;
+> +	int clear = REG_RING_INTERRUPT_MASK_CLEAR_BASE + index;
+>  	int interrupt_bit = ring_interrupt_index(ring) & 31;
+>  	int mask = 1 << interrupt_bit;
+>  	u32 old, new;
+> @@ -123,7 +124,11 @@ static void ring_interrupt_active(struct tb_ring *ring, bool active)
+>  					 "interrupt for %s %d is already %s\n",
+>  					 RING_TYPE(ring), ring->hop,
+>  					 active ? "enabled" : "disabled");
+> -	iowrite32(new, ring->nhi->iobase + reg);
+> +
+> +	if (active)
+> +		iowrite32(new, ring->nhi->iobase + reg);
+> +	else
+> +		iowrite32(mask, ring->nhi->iobase + clear);
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304241303.WkdqPPbt-lkp@intel.com/
+Since it is doing this for all hardware, even for Intel, I will need to
+run some testing to make sure this still works.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/usb/serial/xr_serial.c:856:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got struct serial_rs485 *argp @@
-   drivers/usb/serial/xr_serial.c:856:26: sparse:     expected void [noderef] __user *to
-   drivers/usb/serial/xr_serial.c:856:26: sparse:     got struct serial_rs485 *argp
->> drivers/usb/serial/xr_serial.c:872:36: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got struct serial_rs485 *argp @@
-   drivers/usb/serial/xr_serial.c:872:36: sparse:     expected void const [noderef] __user *from
-   drivers/usb/serial/xr_serial.c:872:36: sparse:     got struct serial_rs485 *argp
-   drivers/usb/serial/xr_serial.c:881:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got struct serial_rs485 *argp @@
-   drivers/usb/serial/xr_serial.c:881:26: sparse:     expected void [noderef] __user *to
-   drivers/usb/serial/xr_serial.c:881:26: sparse:     got struct serial_rs485 *argp
->> drivers/usb/serial/xr_serial.c:893:49: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct serial_rs485 *argp @@     got void [noderef] __user *argp @@
-   drivers/usb/serial/xr_serial.c:893:49: sparse:     expected struct serial_rs485 *argp
-   drivers/usb/serial/xr_serial.c:893:49: sparse:     got void [noderef] __user *argp
-   drivers/usb/serial/xr_serial.c:895:49: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct serial_rs485 *argp @@     got void [noderef] __user *argp @@
-   drivers/usb/serial/xr_serial.c:895:49: sparse:     expected struct serial_rs485 *argp
-   drivers/usb/serial/xr_serial.c:895:49: sparse:     got void [noderef] __user *argp
+>  }
+>  
+>  /*
+> @@ -135,12 +140,21 @@ static void nhi_disable_interrupts(struct tb_nhi *nhi)
+>  {
+>  	int i = 0;
+>  	/* disable interrupts */
+> -	for (i = 0; i < RING_INTERRUPT_REG_COUNT(nhi); i++)
+> -		iowrite32(0, nhi->iobase + REG_RING_INTERRUPT_BASE + 4 * i);
+> +	for (i = 0; i < RING_INTERRUPT_REG_COUNT(nhi); i++) {
+> +		if (nhi->quirks & QUIRK_AUTO_CLEAR_INT)
+> +			iowrite32(0, nhi->iobase + REG_RING_INTERRUPT_BASE + 4 * i);
+> +		else
+> +			iowrite32(0xffffffff,
 
-vim +856 drivers/usb/serial/xr_serial.c
+~0
 
-   848	
-   849	static int xr_get_rs485_config(struct tty_struct *tty,
-   850				       struct serial_rs485 *argp)
-   851	{
-   852		struct usb_serial_port *port = tty->driver_data;
-   853		struct xr_data *data = usb_get_serial_port_data(port);
-   854	
-   855		mutex_lock(&data->lock);
- > 856		if (copy_to_user(argp, &data->rs485, sizeof(data->rs485))) {
-   857			mutex_unlock(&data->lock);
-   858			return -EFAULT;
-   859		}
-   860		mutex_unlock(&data->lock);
-   861	
-   862		return 0;
-   863	}
-   864	
-   865	static int xr_set_rs485_config(struct tty_struct *tty,
-   866				       struct serial_rs485 *argp)
-   867	{
-   868		struct usb_serial_port *port = tty->driver_data;
-   869		struct xr_data *data = usb_get_serial_port_data(port);
-   870		struct serial_rs485 rs485;
-   871	
- > 872		if (copy_from_user(&rs485, argp, sizeof(rs485)))
-   873			return -EFAULT;
-   874		xr_sanitize_serial_rs485(&rs485);
-   875	
-   876		mutex_lock(&data->lock);
-   877		data->rs485 = rs485;
-   878		xr_set_flow_mode(tty, port, NULL);
-   879		mutex_unlock(&data->lock);
-   880	
-   881		if (copy_to_user(argp, &rs485, sizeof(rs485)))
-   882			return -EFAULT;
-   883	
-   884		return 0;
-   885	}
-   886	
-   887	static int xr_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
-   888	{
-   889		void __user *argp = (void __user *)arg;
-   890	
-   891		switch (cmd) {
-   892		case TIOCGRS485:
- > 893			return xr_get_rs485_config(tty, argp);
-   894		case TIOCSRS485:
-   895			return xr_set_rs485_config(tty, argp);
-   896		}
-   897	
-   898		return -ENOIOCTLCMD;
-   899	}
-   900	
+> +				  nhi->iobase + REG_RING_INTERRUPT_MASK_CLEAR_BASE + 4 * i);
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Btw, we have now quite many places with
+
+	if (nhi->quirks & QUIRK_AUTO_CLEAR_INT)
+		// Intel stuff
+	else
+		// non-Intel stuff
+
+I wonder if we could move these behind a wrapper and then here (and
+similar places) just call
+
+	nhi_mask_interrupt(nhi, ...)
+
+
+> +	}
+>  
+>  	/* clear interrupt status bits */
+> -	for (i = 0; i < RING_NOTIFY_REG_COUNT(nhi); i++)
+> -		ioread32(nhi->iobase + REG_RING_NOTIFY_BASE + 4 * i);
+> +	for (i = 0; i < RING_NOTIFY_REG_COUNT(nhi); i++) {
+> +		if (nhi->quirks & QUIRK_AUTO_CLEAR_INT)
+> +			ioread32(nhi->iobase + REG_RING_NOTIFY_BASE + 4 * i);
+> +		else
+> +			iowrite32(0xffffffff, nhi->iobase + REG_RING_INT_CLEAR + 4 * i);
+
+~0
+
+	nhi_clear_interrupt(nhi, ...)
+
+> +	}
+>  }
+>  
+>  /* ring helper methods */
+> diff --git a/drivers/thunderbolt/nhi_regs.h b/drivers/thunderbolt/nhi_regs.h
+> index faef165a919c..db95ad5d2814 100644
+> --- a/drivers/thunderbolt/nhi_regs.h
+> +++ b/drivers/thunderbolt/nhi_regs.h
+> @@ -92,6 +92,7 @@ struct ring_desc {
+>   */
+>  #define REG_RING_INTERRUPT_BASE	0x38200
+>  #define RING_INTERRUPT_REG_COUNT(nhi) ((31 + 2 * nhi->hop_count) / 32)
+
+Empty line here.
+
+> +#define REG_RING_INTERRUPT_MASK_CLEAR_BASE	0x38208
+>  
+>  #define REG_INT_THROTTLING_RATE	0x38c00
+>  
+> -- 
+> 2.34.1
