@@ -2,88 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BE66EC7F7
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Apr 2023 10:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6576EC80B
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Apr 2023 10:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbjDXIkE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Apr 2023 04:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
+        id S231248AbjDXIqP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Apr 2023 04:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjDXIkD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Apr 2023 04:40:03 -0400
-Received: from smtp.smtpout.orange.fr (smtp-13.smtpout.orange.fr [80.12.242.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E2FE48
-        for <linux-usb@vger.kernel.org>; Mon, 24 Apr 2023 01:40:01 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id qrjpp9pdVS2Yhqrjqpy8BT; Mon, 24 Apr 2023 10:39:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1682325599;
-        bh=vgMfnD5w8L8osmiEQCPKAcBxZ5zFalY5WsdQV5PqFVU=;
-        h=From:To:Cc:Subject:Date;
-        b=X9QChUa0hH2ybgHWlFRyPLmC5Dd0l0eKvnf5G6fJo66FWer4zD/ICt0pjXKSaN76J
-         y/J8oE8QazQDRAZkQvMnNDELOuZq66MPu0VaRSnO45ebxzG1gTBVSf6vQqtMTiVdBq
-         9xoBjg6jyAfzx8JfM3fWaXhAeOcm6qfWGI7jkifXS6CSNXBFJnF7KIusxzgwfWO70n
-         HdvGnUzH2/g3MnX5YgfksRY636m0p6Tc/h4YufQzqyEsAhQ81hgMsLZCI6sYAyX0Zb
-         eIrWarETpt4fDopYH99zjv38VHPTW4mYE60syRYxi45Sii3+sZccwAy4t3U2WATTOD
-         uOREdSNVtKMWw==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 24 Apr 2023 10:39:59 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] usb: typec: mux: Remove some unneeded includes
-Date:   Mon, 24 Apr 2023 10:39:56 +0200
-Message-Id: <1db1e8bd253cbb652835c0cef6a0a2bb9a4970eb.1682325582.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S230451AbjDXIqN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Apr 2023 04:46:13 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B79610D;
+        Mon, 24 Apr 2023 01:46:11 -0700 (PDT)
+Received: from lihuya$hust.edu.cn ( [172.16.0.254] ) by ajax-webmail-app2
+ (Coremail) ; Mon, 24 Apr 2023 16:45:14 +0800 (GMT+08:00)
+X-Originating-IP: [172.16.0.254]
+Date:   Mon, 24 Apr 2023 16:45:14 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5qKB5a6H6Iiq?= <lihuya@hust.edu.cn>
+To:     "thinh nguyen" <thinh.nguyen@synopsys.com>
+Cc:     "greg kroah-hartman" <gregkh@linuxfoundation.org>,
+        "dzm91@hust.edu.cn" <dzm91@hust.edu.cn>,
+        hust-os-kernel-patches@googlegroups.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH] usb: dwc3: remove dead code in dwc3_otg_get_irq
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
+ Copyright (c) 2002-2023 www.mailtech.cn hust
+In-Reply-To: <20230324182853.rbguxi2lng2mhm3s@synopsys.com>
+References: <20230323053946.53094-1-lihuya@hust.edu.cn>
+ <20230324182853.rbguxi2lng2mhm3s@synopsys.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <4d6dd98f.41e10.187b27043ca.Coremail.lihuya@hust.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID: GQEQrAAXaJWaQUZkR_i_Aw--.55381W
+X-CM-SenderInfo: bpsqjjaxrxlko6kx23oohg3hdfq/1tbiAQsLAl7Em5Oi2wABsp
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This driver includes many header files that are unneeded.
-Remove them and add <linux/device.h> where devm_kzalloc() is defined.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Based on one of my script, this reduces the number of included files
-during the build process of this file from 551 to 345.
----
- drivers/usb/typec/mux/gpio-sbu-mux.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/drivers/usb/typec/mux/gpio-sbu-mux.c b/drivers/usb/typec/mux/gpio-sbu-mux.c
-index f62516dafe8f..c07856069d43 100644
---- a/drivers/usb/typec/mux/gpio-sbu-mux.c
-+++ b/drivers/usb/typec/mux/gpio-sbu-mux.c
-@@ -3,14 +3,11 @@
-  * Copyright (C) 2022 Linaro Ltd.
-  */
- 
--#include <linux/bits.h>
--#include <linux/i2c.h>
--#include <linux/kernel.h>
-+#include <linux/device.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/gpio/consumer.h>
- #include <linux/platform_device.h>
--#include <linux/regmap.h>
- #include <linux/usb/typec_dp.h>
- #include <linux/usb/typec_mux.h>
- 
--- 
-2.34.1
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiVGhpbmggTmd1eWVuIiA8VGhp
+bmguTmd1eWVuQHN5bm9wc3lzLmNvbT4KPiBTZW50IFRpbWU6IDIwMjMtMDMtMjUgMDI6Mjg6NTYg
+KFNhdHVyZGF5KQo+IFRvOiBsaWh1eWEgPGxpaHV5YUBodXN0LmVkdS5jbj4KPiBDYzogIlRoaW5o
+IE5ndXllbiIgPFRoaW5oLk5ndXllbkBzeW5vcHN5cy5jb20+LCAiR3JlZyBLcm9haC1IYXJ0bWFu
+IiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc+LCAiZHptOTFAaHVzdC5lZHUuY24iIDxkem05
+MUBodXN0LmVkdS5jbj4sICJodXN0LW9zLWtlcm5lbC1wYXRjaGVzQGdvb2dsZWdyb3Vwcy5jb20i
+IDxodXN0LW9zLWtlcm5lbC1wYXRjaGVzQGdvb2dsZWdyb3Vwcy5jb20+LCAibGludXgtdXNiQHZn
+ZXIua2VybmVsLm9yZyIgPGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmc+LCAibGludXgta2VybmVs
+QHZnZXIua2VybmVsLm9yZyIgPGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc+Cj4gU3ViamVj
+dDogUmU6IFtQQVRDSF0gdXNiOiBkd2MzOiByZW1vdmUgZGVhZCBjb2RlIGluIGR3YzNfb3RnX2dl
+dF9pcnEKPiAKPiBPbiBUaHUsIE1hciAyMywgMjAyMywgbGlodXlhIHdyb3RlOgo+ID4gcGxhdGZv
+cm1fZ2V0X2lycSgpIG9ubHkgcmV0dXJuIG5vbi16ZXJvIGlycSBudW1iZXIgb24gc3VjY2Vzcywg
+b3IKPiA+IG5lZ2F0aXZlIGVycm9yIG51bWJlciBvbiBmYWlsdXJlLgo+ID4gCj4gPiBUaGVyZSBp
+cyBubyBuZWVkIHRvIGNoZWNrIHRoZSByZXR1cm4gdmFsdWUgb2YgcGxhdGZvcm1fZ2V0X2lycSgp
+Cj4gPiB0byBkZXRlcm1pbmUgdGhlIHJldHVybiB2YWx1ZSBvZiBkd2MzX290Z19nZXRfaXJxKCks
+IHJlbW92aW5nCj4gPiB0aGVtIHRvIHNvbHZlIHRoaXMgcHJvYmxlbS4KPiA+IAo+ID4gU2lnbmVk
+LW9mZi1ieTogbGlodXlhIDxsaWh1eWFAaHVzdC5lZHUuY24+Cj4gPiAtLS0KPiA+ICBkcml2ZXJz
+L3VzYi9kd2MzL2RyZC5jIHwgNSAtLS0tLQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA1IGRlbGV0aW9u
+cygtKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZHdjMy9kcmQuYyBiL2RyaXZl
+cnMvdXNiL2R3YzMvZHJkLmMKPiA+IGluZGV4IDAzOWJmMjQxNzY5YS4uYzJlMDk3MDAyMTJkIDEw
+MDY0NAo+ID4gLS0tIGEvZHJpdmVycy91c2IvZHdjMy9kcmQuYwo+ID4gKysrIGIvZHJpdmVycy91
+c2IvZHdjMy9kcmQuYwo+ID4gQEAgLTE1NCwxMSArMTU0LDYgQEAgc3RhdGljIGludCBkd2MzX290
+Z19nZXRfaXJxKHN0cnVjdCBkd2MzICpkd2MpCj4gPiAgCQlnb3RvIG91dDsKPiA+ICAKPiA+ICAJ
+aXJxID0gcGxhdGZvcm1fZ2V0X2lycShkd2MzX3BkZXYsIDApOwo+ID4gLQlpZiAoaXJxID4gMCkK
+PiA+IC0JCWdvdG8gb3V0Owo+ID4gLQo+ID4gLQlpZiAoIWlycSkKPiA+IC0JCWlycSA9IC1FSU5W
+QUw7Cj4gPiAgCj4gPiAgb3V0Ogo+ID4gIAlyZXR1cm4gaXJxOwo+ID4gLS0gCj4gPiAyLjM0LjEK
+PiA+IAo+IAo+IEFja2VkLWJ5OiBUaGluaCBOZ3V5ZW4gPFRoaW5oLk5ndXllbkBzeW5vcHN5cy5j
+b20+Cj4gCj4gVGhhbmtzLAo+IFRoaW5oCgpIaSBUaGluaCwKCkknbSBjaGVja2luZyBpbiBhYm91
+dCBteSBwYXRjaCBzdWJtaXNzaW9uIGZvciB1c2IgZHdjMyB0aGF0IHdhcyAKImFjaydlZCIgb24g
+My8yNSwgYnV0IGhhc24ndCBiZWVuIG1lcmdlZCBpbnRvIHRoZSBzdWJ0cmVlIHlldC4gCkNvdWxk
+IHlvdSBwbGVhc2UgcHJvdmlkZSBtZSB3aXRoIGFuIHVwZGF0ZSBvbiBpdHMgc3RhdHVzIGFuZCBs
+ZXQgCm1lIGtub3cgaWYgdGhlcmUgYXJlIGFueSBpc3N1ZXMgb3IgY29uY2VybnMgdGhhdCBuZWVk
+IHRvIGJlIGFkZHJlc3NlZD8K
