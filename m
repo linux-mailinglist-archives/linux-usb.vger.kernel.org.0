@@ -2,134 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0009C6EE0DA
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 13:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4569C6EE19E
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 14:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233835AbjDYLH0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Apr 2023 07:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
+        id S233508AbjDYMIc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Apr 2023 08:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233929AbjDYLHG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 07:07:06 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1411E13C2F;
-        Tue, 25 Apr 2023 04:06:37 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 4E56F5FD3E;
-        Tue, 25 Apr 2023 14:06:12 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1682420772;
-        bh=jORapi60saGb6s8dqt0Qj/N+jnHOySKoftd9srjwQEs=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=rRc5dU1h7elVVrLMdQ68XUElEEtq7bwWwUgtV6+mOM9NJnSZxUU/TIdyE5cVikw02
-         vK6EdxY2XsJi0G+50e30/FWNBX4dJvX2zdD5NT24ll6uDNdCBmrhUFCQBh+ie+U4VI
-         sP15RdoSlG29gtUtuThXm4SWxwId9ahah4GRv5/B+GartSYov43VR8WMd8aIwpGLEi
-         /lzZU2VSNpCJuz9Sk2Hzxfn4FfLudJ6OhkrygOpPcR5nnivQMbkcCs/VnclwXOWEG7
-         OO6qz+mZzjfy4tHqjYueG+s+azXsSKtWSO0egJxufitROVUXABrZoX/zAIU+1zkBJX
-         zi+nTaA/xqwZA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 25 Apr 2023 14:06:10 +0300 (MSK)
-Date:   Tue, 25 Apr 2023 14:06:10 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <neil.armstrong@linaro.org>,
-        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
-        <mturquette@baylibre.com>, <vkoul@kernel.org>, <kishon@kernel.org>,
-        <hminas@synopsys.com>, <Thinh.Nguyen@synopsys.com>,
-        <yue.wang@amlogic.com>, <hanjie.lin@amlogic.com>,
-        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>
-Subject: Re: [PATCH v2 5/5] arm64: dts: meson: a1: support USB controller in
- OTG mode
-Message-ID: <20230425110610.ezhhz2vauc6o4nu2@CAB-WSD-L081021>
-References: <20230418111612.19479-1-ddrokosov@sberdevices.ru>
- <20230418111612.19479-6-ddrokosov@sberdevices.ru>
- <CAFBinCDvyweC-m=nKw+FZFYvASDE2x3e-Vt=JkSzBifu87cnNw@mail.gmail.com>
+        with ESMTP id S232881AbjDYMIb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 08:08:31 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006E849CB
+        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 05:08:29 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4edcc885d8fso6264550e87.1
+        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 05:08:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682424508; x=1685016508;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=t0zGAyfvuBOl901b9x32jl8b0vHTFEeezVTSqmkq6+Q=;
+        b=B9Glg16/Dtt+Um5cxZmlJGJ2b8nebW1rjbrMOb/OaudIdlz9cajOE22YheRps4ws+/
+         8pOV8hKsbb9Bzo0dBEPPV9HpxsiW4Gwbr6JGlia+SVm2pgDJaJ0ebaW28YM0UGSgdOfk
+         cs6+bnJUINrrOCu+f/FqYOYA9A0jRELiPMpj6EL/Bm0omSBKpYpRm8ziHfUh7JcqjIKk
+         sFK4643LmoddvAyZu1JTtltp55O/XE3SGprZ/9g5hswbNt+bPfqUTq1eSym0MtYUKxS5
+         z6KMb7YgMmFQnPh/iCaL+mjcmGEv49FehDgCQgGBORNqnF58dG/55NZ5FR7MNjVH1mS2
+         30sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682424508; x=1685016508;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t0zGAyfvuBOl901b9x32jl8b0vHTFEeezVTSqmkq6+Q=;
+        b=P+/QvJOM/g2UC0+iO1L5ewzcEzCdtl5I5MsY5LK30pW5xu5Klo7kF58kEn4wseMbvI
+         F0557TohP6y37qaq151p7I92Zzc5PHn+kMsSeg9zKJhw12aYyQrdXg3i4q5JjNVtuAjF
+         Cb9ziLj0UeYIxT+NLPjhufENMZjmwUbESAjMwxMN+Lk6v3bndBL+u7kw+ZMtDTVUzqJo
+         wmQkvPlPUrqWnEk0+VAb1kEBiSg4/0clz1wIcIsQxepFdyJe5Ih+fJHLwdDJ1p78dJkM
+         pTk0oCMYjNVqDMnxLZYypOV0WRkOVVJfnn3jPIPS4IcpOvcfFGiZrhl9xG+EpIRtnSug
+         7gbA==
+X-Gm-Message-State: AAQBX9dZPDOv4lHiYaEAEEWEULgc9HlNzwAmOVHE8o5kc6ZfWMYDOxzr
+        LkQYX1TbsTpcI/CnH5IkH4Q=
+X-Google-Smtp-Source: AKy350ZXfRW5tXr0wZu5jxSQwTulBpo0J4GzoZVFj5NAXeqhnP96GqOMkXvPZ36zd2cvwlaraV1X+A==
+X-Received: by 2002:a2e:9556:0:b0:2a8:c4d0:b135 with SMTP id t22-20020a2e9556000000b002a8c4d0b135mr3321976ljh.49.1682424508014;
+        Tue, 25 Apr 2023 05:08:28 -0700 (PDT)
+Received: from t630.example.org (45-11-61-13.ip4.greenlan.pl. [45.11.61.13])
+        by smtp.googlemail.com with ESMTPSA id f22-20020a2e9196000000b002a483f01d9csm2093548ljg.85.2023.04.25.05.08.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 05:08:27 -0700 (PDT)
+From:   Wlodzimierz Lipert <wlodzimierz.lipert@gmail.com>
+To:     gregkh@linuxfoundation.org, balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org,
+        Wlodzimierz Lipert <wlodzimierz.lipert@gmail.com>
+Subject: [PATCH] usb: libcomposite: prevent duplicate bEndpointAddress by usb_ep_autoconfig_ss.
+Date:   Tue, 25 Apr 2023 14:08:10 +0200
+Message-Id: <20230425120810.5365-1-wlodzimierz.lipert@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFBinCDvyweC-m=nKw+FZFYvASDE2x3e-Vt=JkSzBifu87cnNw@mail.gmail.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/25 07:55:00 #21159618
-X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Apr 23, 2023 at 07:51:31PM +0200, Martin Blumenstingl wrote:
-> On Tue, Apr 18, 2023 at 1:16 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> [...]
-> > +                       usb2_phy1: phy@4000 {
-> > +                               compatible = "amlogic,a1-usb2-phy";
-> > +                               clocks = <&clkc CLKID_USB_PHY_IN>;
-> > +                               clock-names = "xtal";
-> Out of curiosity since there's also a CLKID_USB_PHY clock (which is
-> used for the dwc3 controller below):
-> Do we know that this part of the clock hierarchy is correct? I have no
-> way to check this myself, so I'm curious if you could verify this
-> somehow.
-> 
-> [...]
+usb_ep_autoconfig_ss tries to use endpoint name or internal counters to generate
+bEndpointAddress - this leads to duplicate addresses. Fix is simple -
+use only internal counter and dont rely on ep naming scheme.
 
-I've developed a clock driver for A1 and verified it against the Amlogic
-custom driver and datasheet. As you pointed out, there are indeed two
-USB phy clocks.
-They are labeled as follows in my clock driver:
-    * CLKID_USB_PHY_IN (xtal -> usb_phy gated clock) - the phy input clock
-    * CLKID_USB_PHY (SYS_CLK_EN based gate) - the synopsys IP gated clock
+Signed-off-by: Wlodzimierz Lipert <wlodzimierz.lipert@gmail.com>
+---
+ drivers/usb/gadget/epautoconf.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-The current representation of the USB phy clocks is solely based on
-my technical opinion, as the datasheet does not provide any detailed
-information about them.
-
-Clock driver:
-https://lore.kernel.org/all/20230405195927.13487-1-ddrokosov@sberdevices.ru/
-
-> > +                       dwc2: usb@ff500000 {
-> > +                               compatible = "amlogic,meson-a1-usb", "snps,dwc2";
-> > +                               reg = <0x0 0xff500000 0x0 0x40000>;
-> > +                               interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>;
-> > +                               phys = <&usb2_phy1>;
-> > +                               phy-names = "usb2_phy";
-> Documentation/devicetree/bindings/usb/dwc2.yaml only allows a
-> "usb2-phy" (dash instead of underscore).
-> 
-> [...]
-
-Ah, my fault..
-
-> > +                       dwc3: usb@ff400000 {
-> > +                               compatible = "snps,dwc3";
-> > +                               reg = <0x0 0xff400000 0x0 0x100000>;
-> Note to self: interesting that Amlogic swapped the register location
-> of the dwc2 and dwc3 controllers since the G12 generation.
-
-Indeed, during the bringup process, I was surprised to discover that
-the dwc2 engine wasn't starting properly. It was quite unexpected, but
-also admittedly intriguing as I delved into the issue and tried to
-understand the root cause.
-
+diff --git a/drivers/usb/gadget/epautoconf.c b/drivers/usb/gadget/epautoconf.c
+index 1eb4fa2e623f..40adf09079ed 100644
+--- a/drivers/usb/gadget/epautoconf.c
++++ b/drivers/usb/gadget/epautoconf.c
+@@ -93,10 +93,7 @@ struct usb_ep *usb_ep_autoconfig_ss(
+ 
+ 	/* report address */
+ 	desc->bEndpointAddress &= USB_DIR_IN;
+-	if (isdigit(ep->name[2])) {
+-		u8 num = simple_strtoul(&ep->name[2], NULL, 10);
+-		desc->bEndpointAddress |= num;
+-	} else if (desc->bEndpointAddress & USB_DIR_IN) {
++	if (desc->bEndpointAddress & USB_DIR_IN) {
+ 		if (++gadget->in_epnum > 15)
+ 			return NULL;
+ 		desc->bEndpointAddress = USB_DIR_IN | gadget->in_epnum;
 -- 
-Thank you,
-Dmitry
+2.39.2
+
