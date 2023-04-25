@@ -2,88 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F206EE776
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 20:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EBB46EE791
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 20:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234482AbjDYST3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Apr 2023 14:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
+        id S234553AbjDYSho (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Apr 2023 14:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjDYST1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 14:19:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AAA7687
-        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 11:19:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F07062B5C
-        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 18:19:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 805DDC433D2;
-        Tue, 25 Apr 2023 18:19:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682446765;
-        bh=a5e362dR6ySmw3iQpUCph0QtcBgaA6XNxOfsDsKytJ8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=hUbarVppEHXayqsLjl4Il6wCkfQW/tj7LIAge1mA22D+CPDvYi9xL0fuAL8c0GZky
-         iX0Uh7x6sV2naYai+MHUlMcALiypzNGTq87og0UNAq7BfGlp6yMgrDr/dRgZojq7Zx
-         +7tGAJMTY1XptODsTAeBLUTyjQsiWeI8RBbTAbbX5uq0iSdNnl6MSCYs5eqD6Z4xZw
-         LNoI3ncfEk86w6aaFgMhYkuqMxgL+fybqVF2rREnco5ALB9JVAduDtP9VOhcnH+NCR
-         9/pNrcNSQHXT4Oi/naqPpgSbdhalLWijaJLmovHrZhTUwKtMDw/SX/rx4C5YfUbLrm
-         CaRfNdXdJn5cg==
-Date:   Tue, 25 Apr 2023 11:19:24 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        regressions@lists.linux.dev
-Subject: USB sound card freezes USB after resume from suspend
-Message-ID: <20230425111924.05cf8b13@kernel.org>
+        with ESMTP id S233992AbjDYShm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 14:37:42 -0400
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E9B26A8;
+        Tue, 25 Apr 2023 11:37:41 -0700 (PDT)
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-6a5dd070aa1so2414047a34.3;
+        Tue, 25 Apr 2023 11:37:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682447860; x=1685039860;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iRaUadFCSKE/QoppZMed0RxSBw/AjnCOvErTwInNFFk=;
+        b=CJxqLtzYgWX7ha9EhX5hbkG5iwhRcymhYi/fuUarhw1nGEnSJE/u82sX1aNr/zUZ5l
+         atRsiZyVrQJ1K4riSfRI4ybC1Kt3+BzFZoLSB4C3Zr1cOICn38EKESGhk1b1vEt7ePqG
+         WrETsCvrQNo8QR2dIeEJYsWGFg7iWw3LQs37K2X3fCwqKo1Sx7bPSYq11eP9ptjZaP5S
+         3whA4cWn3X8yR1GlEdgCBEy3oaI64Sc4FMxuEk8pmGqi3lfhZO2Upi8mn68SLoReDRFm
+         fO14p1gVl43NDUPUc+rTjvtY9uwuP9++1hmvd3F0Pgok5Whl53+psdaBvU5QmWP7/+Xg
+         mt9A==
+X-Gm-Message-State: AAQBX9ehCpGbD0GntFk3lELlnp/kQKpvpn3bkTF1+yTn5HwWvCyjpFH7
+        H+MiZSd5gVKmny4mS8Qa3w==
+X-Google-Smtp-Source: AKy350Zkmeo+/KqUAL8RCuMQa36bWUyJkm9hsLv/I+bgaWDPIGEFpGOsdVC2hJi0uLO21uhFBLH8IQ==
+X-Received: by 2002:a05:6830:3a93:b0:6a4:4286:e7da with SMTP id dj19-20020a0568303a9300b006a44286e7damr8808493otb.37.1682447860386;
+        Tue, 25 Apr 2023 11:37:40 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id d2-20020a0568301b6200b0069f0794861asm5964175ote.63.2023.04.25.11.37.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 11:37:40 -0700 (PDT)
+Received: (nullmailer pid 2060265 invoked by uid 1000);
+        Tue, 25 Apr 2023 18:37:39 -0000
+Date:   Tue, 25 Apr 2023 13:37:39 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v9 2/8] dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3
+ PHY
+Message-ID: <20230425183739.GA2032053-robh@kernel.org>
+References: <cover.1682092324.git.quic_varada@quicinc.com>
+ <b00042df41420ac337703ca99ac7876c46552946.1682092324.git.quic_varada@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b00042df41420ac337703ca99ac7876c46552946.1682092324.git.quic_varada@quicinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi!
+On Fri, Apr 21, 2023 at 09:24:44PM +0530, Varadarajan Narayanan wrote:
+> * Add dt-bindings for USB3 PHY found on Qualcomm IPQ9574
+> 
+> * Making power-domains as optional since IPQ9574 doesn't have GDSCs
+> 
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> 
+> ---
+>  Changes in v9:
+> 	- Move 'allOf' to the correct position
+> 
+>  Changes in v8:
+> 	- Update clock names for ipq9574
+> 
+>  Changes in v6:
+> 	- Made power-domains optional
+> 
+> Note: In the earlier patch sets, had used the (legacy)
+> specification available in qcom,msm8996-qmp-usb3-phy.yaml. Moved
+> to newer specification in qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> ---
+>  .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml        | 43 +++++++++++++++++++---
+>  1 file changed, 37 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> index 16fce10..b9dcda2 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> @@ -16,6 +16,7 @@ description:
+>  properties:
+>    compatible:
+>      enum:
+> +      - qcom,ipq9574-qmp-usb3-phy
+>        - qcom,sc8280xp-qmp-usb3-uni-phy
+>  
+>    reg:
+> @@ -25,11 +26,7 @@ properties:
+>      maxItems: 4
+>  
+>    clock-names:
+> -    items:
+> -      - const: aux
+> -      - const: ref
+> -      - const: com_aux
+> -      - const: pipe
+> +    maxItems: 4
+>  
+>    power-domains:
+>      maxItems: 1
+> @@ -60,7 +57,6 @@ required:
+>    - reg
+>    - clocks
+>    - clock-names
+> -  - power-domains
+>    - resets
+>    - reset-names
+>    - vdda-phy-supply
+> @@ -69,6 +65,41 @@ required:
+>    - clock-output-names
+>    - "#phy-cells"
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,ipq9574-qmp-usb3-phy
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 4
 
-For a few weeks now I can't use any USB devices if I suspend my laptop
-with my USB sound card active and resuming it without it connected.
+Doesn't the top-level already say this?
 
-USB worker threads seems to be sitting in:
-
-[<0>] snd_pcm_dev_disconnect+0x1e8/0x280 [snd_pcm]
-[<0>] snd_device_disconnect_all+0x42/0x80 [snd]
-[<0>] snd_card_disconnect+0x128/0x290 [snd]
-[<0>] usb_audio_disconnect+0x11a/0x2c0 [snd_usb_audio]
-[<0>] usb_unbind_interface+0x8c/0x270
-[<0>] device_release_driver_internal+0x1b2/0x230
-[<0>] bus_remove_device+0xd8/0x150
-[<0>] device_del+0x18b/0x410
-[<0>] usb_disable_device+0xc6/0x1e0
-[<0>] usb_disconnect+0xda/0x2c0
-[<0>] usb_disconnect+0xbf/0x2c0
-[<0>] usb_disconnect+0xbf/0x2c0
-[<0>] usb_disconnect+0xbf/0x2c0
-[<0>] hub_event+0xf01/0x1cd0
-[<0>] process_one_work+0x1c4/0x3d0
-[<0>] worker_thread+0x4d/0x380
-[<0>] kthread+0xe6/0x110
-[<0>] ret_from_fork+0x29/0x50
-
-Which is:
-
-snd_pcm_dev_disconnect (/usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:818 /usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:812 /usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:1129) snd_pcm
-
-It happens on Fedora 37 and Fedora 38, it seems to have coincided with
-the 6.2 kernel but I'm not 100% sure.
-
-The USB devices come back after half an hour or so, silently.
-There's nothing of note in dmesg.
+> +        clock-names:
+> +          items:
+> +            - const: aux
+> +            - const: ref
+> +            - const: cfg_ahb
+> +            - const: pipe
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sc8280xp-qmp-usb3-uni-phy
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 4
+> +        clock-names:
+> +          items:
+> +            - const: aux
+> +            - const: ref
+> +            - const: com_aux
+> +            - const: pipe
+> +
+>  additionalProperties: false
+>  
+>  examples:
+> -- 
+> 2.7.4
+> 
