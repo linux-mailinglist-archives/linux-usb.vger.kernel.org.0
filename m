@@ -2,200 +2,248 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F816EE8B2
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 21:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B596EE919
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 22:34:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235080AbjDYTyw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Apr 2023 15:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58652 "EHLO
+        id S236261AbjDYUed (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Apr 2023 16:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234754AbjDYTys (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 15:54:48 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247E97687
-        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 12:54:47 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33PJbIqj009891;
-        Tue, 25 Apr 2023 19:54:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=qi/sk4z8v1wHCgaBi9Dc4O2gtLmKkcVaNWvb1veFq8Y=;
- b=KxrXncWkWuL3i5/Su6N5PoKXB5Yzl7SaxScIE0ONDx+DH63ia13J7RCV9g5kJ54+ovVH
- U+cDGUnh/PvND2HUHw2dnOXe/XBGhOIU3JNpQXv8FwxycuIp2zc6wpFT9GHatyY7czKI
- KtTuWPsLMKyhDFKIXgfuJ/3SuTQzooHXpg6MlYhyQyeuxFvKN3ggTVYK03pP4WGWatHy
- YJUak6BdTvzXAsd5p5dfFfYaNW6HLGIcoBHq6TS+FQZE6MXgxWOXCvVwMJVpxslrp1Nc
- 5NyQsh+feD0sfaY9eQ+DhCZvPcSyNwZdhiM8BMx40Hvt4lLzl4CJv1kswi3QqjEhfL14 VA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q6gak0uue-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Apr 2023 19:54:32 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33PJs9fW023961
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Apr 2023 19:54:09 GMT
-Received: from [10.110.17.95] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 25 Apr
- 2023 12:54:09 -0700
-Message-ID: <0f5c5e14-a1fb-1807-1a69-9ba51776ce6b@quicinc.com>
-Date:   Tue, 25 Apr 2023 12:54:08 -0700
+        with ESMTP id S236216AbjDYUeZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 16:34:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBE114458
+        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 13:33:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682454817;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h5tdSr0yUH0NfUrSmIfXDBJS+fKv28jR9I4BQNRViKk=;
+        b=K6H9L8z7fMhUw9Ga+hYEt44DYk0aoeAJwvh1T+QkmOFd72VfBc5RXkIWzPIhlRnUaI5Iho
+        R1kYTOA5G512zJVEQE3/BxC9OxZLlDe+gW0iNHWK9uWecKHAGvK6IsgesUvAUuUsgyjAQs
+        FGMbWmMeNcQgrNb2reYjxYEyivX0dMo=
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
+ [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-607-_RXy5y3bOnSTXoGrPiLedA-1; Tue, 25 Apr 2023 16:33:34 -0400
+X-MC-Unique: _RXy5y3bOnSTXoGrPiLedA-1
+Received: by mail-oo1-f71.google.com with SMTP id 006d021491bc7-5469ab1632eso4459314eaf.2
+        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 13:33:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682454813; x=1685046813;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h5tdSr0yUH0NfUrSmIfXDBJS+fKv28jR9I4BQNRViKk=;
+        b=MlDSk/VDzaahHKyZacWNx3C3NkXQ2bbkfJB6MCmfEIqxVHLguJFgo1CgtVxrFTUvaq
+         IwDNdrLarwv1azVm5zhwigdv8enwd1SAxWGD6UDl3SPSYsvIMzfFRLiLRCNkegsCuy2R
+         Gzj4KPDIfffm2Kj5NcCeAk2OIQIKTuRe0b6zSb7G88qoC7BqoMCyIJGBvvzWoh1OUgDl
+         rDGkgar9i8aVecmVOu2HDdgLYWAauHtNstI8J3GZP05AZq2IQYZCRuu/wAkJZOqKbq49
+         DGSxdgwzxKI9RNpzkoGk6zMrxlbR+mXQ1oVNPNFuwGdij+MceSJYcICtJMrtL9nywutQ
+         FPkQ==
+X-Gm-Message-State: AAQBX9ejassA9KW2o6df4eoSf9vxFrTIimkYrkURsxDQLKqL5QwyDKGD
+        VMG0yNMt9ytpuIyW5jookUmS3AOIpRAqQQBQov0So06dogBSkC7yACqyK02ERTpx/bk+5t7aDRu
+        kXQYDDVxBRnraDST78bwV
+X-Received: by 2002:a05:6808:1885:b0:38e:4a25:2125 with SMTP id bi5-20020a056808188500b0038e4a252125mr10743326oib.18.1682454813588;
+        Tue, 25 Apr 2023 13:33:33 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bV2wSHJIhY5qS6dBbjNydN6E9nxfDFfxEa+5HJvmGjHUeuCswJpaJeLjx3DBjNrKQVTWLfUA==
+X-Received: by 2002:a05:6808:1885:b0:38e:4a25:2125 with SMTP id bi5-20020a056808188500b0038e4a252125mr10743275oib.18.1682454811825;
+        Tue, 25 Apr 2023 13:33:31 -0700 (PDT)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::22])
+        by smtp.gmail.com with ESMTPSA id g3-20020a056870c38300b0018456166c7asm5908752oao.39.2023.04.25.13.33.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 13:33:31 -0700 (PDT)
+Date:   Tue, 25 Apr 2023 15:33:28 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        quic_harshq@quicinc.com, quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v6 6/8] arm64: dts: qcom: sc8280xp: Add multiport
+ controller node for SC8280
+Message-ID: <20230425203328.hrz5dw7f2vsbbbgk@halaney-x13s>
+References: <20230405125759.4201-1-quic_kriskura@quicinc.com>
+ <20230405125759.4201-7-quic_kriskura@quicinc.com>
+ <20230414154527.vsjtgtfsd5kc7vww@halaney-x13s>
+ <333ce700-8ca2-e230-3b5a-a95e4c021e45@quicinc.com>
+ <28a58bf9-5ad8-4084-11d6-cd1b0d3a2998@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/2] xhci: Improve the XHCI resume time
-Content-Language: en-US
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Basavaraj Natikar <bnatikar@amd.com>,
-        Mark Hasemeyer <markhas@chromium.org>,
-        <basavaraj.natikar@amd.com>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <mathias.nyman@intel.com>, <stern@rowland.harvard.edu>
-References: <20230418140817.3651909-3-Basavaraj.Natikar@amd.com>
- <20230420170337.14110-1-markhas@chromium.org>
- <346ea37a-9ec6-af36-b6ed-026aefb2cf4b@amd.com>
- <5a4b3d95-c783-b4b2-93d7-57b69b679f7a@linux.intel.com>
- <5157f331-0e0d-c6c2-1896-bb09c13ee3c0@quicinc.com>
- <a81a39ed-bc05-19e7-ec05-25632535ea5c@linux.intel.com>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <a81a39ed-bc05-19e7-ec05-25632535ea5c@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: GbZzdGP3vd0DRroyws4U-vhhgjiu5E_c
-X-Proofpoint-GUID: GbZzdGP3vd0DRroyws4U-vhhgjiu5E_c
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-25_08,2023-04-25_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- suspectscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
- priorityscore=1501 mlxlogscore=843 adultscore=0 impostorscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304250179
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <28a58bf9-5ad8-4084-11d6-cd1b0d3a2998@quicinc.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
-
-On 4/25/2023 2:04 AM, Mathias Nyman wrote:
-> On 25.4.2023 3.09, Wesley Cheng wrote:
->> Hi Mathias,
->>
->> On 4/24/2023 8:05 AM, Mathias Nyman wrote:
->>> On 21.4.2023 7.58, Basavaraj Natikar wrote:
->>>>
->>>> On 4/20/2023 10:33 PM, Mark Hasemeyer wrote:
->>>>>> It may be necessary to wait only for auto-resume cases.
->>>>> I find this comment misleading as the patch assumes that it's only 
->>>>> necessary to
->>>>> wait for auto-resume cases. Are there any cases where the driver 
->>>>> should wait
->>>>> during system-resume?
->>>>
->>>> Only in case of auto-resume (runtime resume).
->>>>
->>>> Rewording the commit message as follows.
->>>
->>> Thanks for fixing this extra system resume delay
->>>
->>> Maybe some kind of big picture explanation could be added to the 
->>> commit message,
->>> such as:
->>>
->>> Avoid extra 120ms delay during system resume.
->>>
->>> xHC controller may signal wake up to 120ms before it shows which USB 
->>> device
->>> caused the wake on the xHC port registers.
->>>
->>> The xhci driver therefore checks for port activity up to 120ms during 
->>> resume,
->>> making sure that the hub driver can see the port change, and won't 
->>> immediately
->>> runtime suspend back due to no port activity.
->>>
->>> This is however only needed for runtime resume as system resume will 
->>> resume
->>> all child hubs and other child usb devices anyway.
->>>
->>>>
->>>> Each XHCI controller while xhci_resumes by default takes 120 ms more if
->>>> there is no activity on the ports or no ports connected. Therefore, if
->>>> there are more USB controllers on the system, 120 ms more per 
->>>> controller
->>>> will add delay to system resume from suspended states like s2idle, 
->>>> S3 or
->>>> S4 states.
->>>>
->>>> Once the XHCI controller is in runtime suspended state (D3 state), 
->>>> on USB
->>>> device hotplug controller will runtime resume (D0 state) and check for
->>>> pending port events if no events, wait for 120 ms to re-check for port
->>>> activity to handle missed wake signal.
->>>>
->>>> A delay of 120 ms more to re-check for port activity is needed only in
->>>> auto-resume (runtime resume) cases. Hence, add a check only for runtime
->>>> resume from runtime suspend (D3->D0) to avoid the 120ms more delay for
->>>> other PM events (system resume from suspend states like s2idle, S3 
->>>> or S4
->>>> states) so that the system resume time can be improved.
->>>>
->>>> Please let me know if any inputs.
->>>
->>> I can only think of one minor side-effect that would be runtime 
->>> suspending back
->>> too early after system resume. This could happen when connecting the 
->>> first
->>> usb device to a roothub on a (system) suspended setup?
->>>
->>> steps:
->>> 1. in system suspend, no usb devices connected, xhci in D3, can 
->>> signal wake with PME#
->>> 2. connect first usb device, xHC signals PME# wake
->>> 3. system resumes, xhci resumes to D0, but no actity visible on xHC 
->>> port registers
->>
->> Thanks for bringing up this topic Basavaraj.
->>
->> Sorry for jumping into this thread, but was looking to optimize this 
->> resume timing as well, since it is affecting some of the host driven 
->> bus resume situations.  Just had a quick question about where the 
->> 120ms delay is required...
->>
->>  From what I'm gathering from the USB3 spec, the 120ms timeout is the 
->> recommended time for tU3WakeupRetryDelay ("Table 7-12. LTSSM State 
->> Transition Timeouts").  This is the retry time that the device will 
->> wait before re-issuing another (potential) LFPS U3 wake.
->>
->> My idea was to see if we could limit this delay only for when a SSUSB 
->> device is already connected to the root hub.  (ignore if HSUSB device 
->> connected)  We would be able to eliminate the delay for:
->> 1.  No device connected to root hub
->> 2.  Only HSUSB device connected
->>
->> Is that a possibility we can add on top of what Basavaraj is adding?
->>
+On Sat, Apr 22, 2023 at 09:38:44PM +0530, Krishna Kurapati PSSNV wrote:
 > 
-> Sounds reasonable,
-> Yes the 120ms was intended for the U3 wake delay for SuperSpeed devices.
 > 
-> We should probably also check for CAS bit in xhci_pending_portevent()
-> (I'll add that CAS check)
+> On 4/16/2023 12:34 AM, Krishna Kurapati PSSNV wrote:
+> > 
+> > 
+> > On 4/14/2023 9:15 PM, Andrew Halaney wrote:
+> > > On Wed, Apr 05, 2023 at 06:27:57PM +0530, Krishna Kurapati wrote:
+> > > > Add USB and DWC3 node for tertiary port of SC8280 along with multiport
+> > > > IRQ's and phy's. This will be used as a base for SA8295P and SA8295-Ride
+> > > > platforms.
+> > > > 
+> > > > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> > > > ---
+> > > > Link to v5: https://lore.kernel.org/all/20230310163420.7582-7-quic_kriskura@quicinc.com/
+> > > > 
+> > > >   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 58 ++++++++++++++++++++++++++
+> > > >   1 file changed, 58 insertions(+)
+> > > > 
+> > > > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > > > b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > > > index 42bfa9fa5b96..7b81f2b0449d 100644
+> > > > --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > > > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > > > @@ -3108,6 +3108,64 @@ usb_1_role_switch: endpoint {
+> > > >               };
+> > > >           };
+> > > > +        usb_2: usb@a4f8800 {
+> > > > +            compatible = "qcom,sc8280xp-dwc3", "qcom,dwc3";
+> > > > +            reg = <0 0x0a4f8800 0 0x400>;
+> > > > +            #address-cells = <2>;
+> > > > +            #size-cells = <2>;
+> > > > +            ranges;
+> > > > +
+> > > > +            clocks = <&gcc GCC_CFG_NOC_USB3_MP_AXI_CLK>,
+> > > > +                 <&gcc GCC_USB30_MP_MASTER_CLK>,
+> > > > +                 <&gcc GCC_AGGRE_USB3_MP_AXI_CLK>,
+> > > > +                 <&gcc GCC_USB30_MP_SLEEP_CLK>,
+> > > > +                 <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
+> > > > +                 <&gcc GCC_AGGRE_USB_NOC_AXI_CLK>,
+> > > > +                 <&gcc GCC_AGGRE_USB_NOC_NORTH_AXI_CLK>,
+> > > > +                 <&gcc GCC_AGGRE_USB_NOC_SOUTH_AXI_CLK>,
+> > > > +                 <&gcc GCC_SYS_NOC_USB_AXI_CLK>;
+> > > > +            clock-names = "cfg_noc", "core", "iface", "sleep",
+> > > > "mock_utmi",
+> > > > +                      "noc_aggr", "noc_aggr_north",
+> > > > "noc_aggr_south", "noc_sys";
+> > > > +
+> > > > +            assigned-clocks = <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
+> > > > +                      <&gcc GCC_USB30_MP_MASTER_CLK>;
+> > > > +            assigned-clock-rates = <19200000>, <200000000>;
+> > > > +
+> > > > +            interrupts-extended = <&pdc 127 IRQ_TYPE_EDGE_RISING>,
+> > > > +                        <&pdc 126 IRQ_TYPE_EDGE_RISING>,
+> > > > +                        <&pdc 16 IRQ_TYPE_LEVEL_HIGH>;
+> > > > +
+> > > > +            interrupt-names = "dp_hs_phy_irq", "dm_hs_phy_irq",
+> > > > +                        "ss_phy_irq";
+> > > > +
+> > > 
+> > > This is breaking the current schema (with the full series applied),
+> > > I am not sure if a pwr_event IRQ exists or but it maybe necessary to
+> > > modify qcom,dwc3.yaml in order to explain hardware if it doesn't exist:
+> > > 
+> > > (dtschema) ahalaney@halaney-x13s ~/git/linux-next
+> > > (git)-[718f2024524f] % make CHECK_DTBS=y
+> > > DT_SCHEMA_FILES=/usb/qcom,dwc3.yaml qcom/sa8540p-ride.dtb                                                                                  
+> > > :(
+> > >    LINT    Documentation/devicetree/bindings
+> > >    CHKDT   Documentation/devicetree/bindings/processed-schema.json
+> > >    SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+> > >    DTC_CHK arch/arm64/boot/dts/qcom/sa8540p-ride.dtb
+> > > /home/ahalaney/git/linux-next/arch/arm64/boot/dts/qcom/sa8540p-ride.dtb: usb@a4f8800: interrupt-names:0: 'pwr_event' was expected
+> > >     From schema: /home/ahalaney/git/linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > > /home/ahalaney/git/linux-next/arch/arm64/boot/dts/qcom/sa8540p-ride.dtb: usb@a4f8800: interrupt-names:1: 'dp_hs_phy_irq' was expected
+> > >     From schema: /home/ahalaney/git/linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > > /home/ahalaney/git/linux-next/arch/arm64/boot/dts/qcom/sa8540p-ride.dtb: usb@a4f8800: interrupt-names:2: 'dm_hs_phy_irq' was expected
+> > >     From schema: /home/ahalaney/git/linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > > /home/ahalaney/git/linux-next/arch/arm64/boot/dts/qcom/sa8540p-ride.dtb: usb@a4f8800: interrupt-names: ['dp_hs_phy_irq', 'dm_hs_phy_irq', 'ss_phy_irq'] is too short
+> > >     From schema: /home/ahalaney/git/linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > > /home/ahalaney/git/linux-next/arch/arm64/boot/dts/qcom/sa8540p-ride.dtb: usb@a4f8800: interrupts-extended: [[99, 127, 1], [99, 126, 1], [99, 16, 4]] is too short
+> > >     From schema: /home/ahalaney/git/linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > > make CHECK_DTBS=y DT_SCHEMA_FILES=/usb/qcom,dwc3.yaml
+> > > qcom/sa8540p-ride.dtb  22.61s user 0.54s system 99% cpu 23.172 total
+> > > (dtschema) ahalaney@halaney-x13s ~/git/linux-next (git)-[718f2024524f] %
+> > > 
+> > > Thanks,
+> > > Andrew
+> > > 
+> > 
+> > Hi Andrew,
+> > 
+> >   Thanks for pointing it out. Let me check and get back on the
+> > pwr_event_irq.
+> > 
+> > Probably I might have missed it 😅. If so, will make sure to add it in
+> > next version.
+> > 
+> > Regards,
+> > Krishna,
+> 
+> 
+> Hi Andrew, Johan,
+> 
+>   I was looking at the pwr_event_irq interrupts for Multiport controller and
+> see that there are two of them as per HW specs. All targets till date have
+> only 1 pwr_event_irq required.
+> 
+> The reason I thought I missed pwr_event_irq in my patches is because in
+> downstream this is a required IRQ for all targets, so I was under assumption
+> that we need it for upstream targets as well. But upstream qcom driver
+> doesn't have support for this IRQ yet. And this has been made a required one
+> only for SC8280 [1]/[2].
+> 
+> Probably we can proceed in one of the following ways:
+> 1. Remove pwr_event_irq in both bindings and DT as driver support is not
+> present currently.
+> 2. Update the bindings for SC8280 to include an optional secondary
+> pwr_event_irq for multiport controller.
+> 
+> I would prefer option-1 as removing them would be better because they are
+> not being used. Please let me know your thoughts on this.
+> 
+> [1]:
+> https://lore.kernel.org/all/20220713131340.29401-2-johan+linaro@kernel.org/
+> [2]:
+> https://lore.kernel.org/all/20220713131340.29401-6-johan+linaro@kernel.org/
 > 
 
-Thanks for the info.  I'll make a change to add the checks I mentioned 
-above and submit it as a separate patch for review.
+Personally, I prefer option 2 since the IRQ does exist technically
+(although it isn't currently used), I like it being described... it
+makes the dt-binding a more complete description of the hardware.
 
-Thanks
-Wesley Cheng
+I am unsure of the rules wrt dt-bindings and usage in drivers, but I
+always like to view it as "this is a description of the hardware", and
+the driver bit is just nice to have to ensure that whoever is adding the
+binding is actually describing things sufficiently.
+
+You could probably add a new compatible string for the multiport
+sc8280xp IP as well, and make the second IRQ non-optional in dt-binding
+evaluation? That seems more inline with reality, the regular IP has 1
+pwr_event_irq, multiport on this platform has 2, they behave slightly
+differently and thus they deserve their own string to match on despite
+being on the same platform.
+
+Please note, I'm just a contributor -- I would not be surprised to find
+out that my view is not aligned with what maintainers here think, but
+that's my interpretation of things!
+
+Hope that helps,
+Andrew
+
