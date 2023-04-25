@@ -2,231 +2,200 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78AFF6EE827
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 21:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F816EE8B2
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 21:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235632AbjDYTYI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Apr 2023 15:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
+        id S235080AbjDYTyw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Apr 2023 15:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235554AbjDYTX4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 15:23:56 -0400
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7B918BAE
-        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 12:23:52 -0700 (PDT)
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-7639ebbef32so706794439f.2
-        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 12:23:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682450631; x=1685042631;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7wp9/5MJgDYCIUfKNZXJR2m1Kl0JfYcxjRayQuhYEtM=;
-        b=lRxWWq1gHPCawGJuIuGJBsF6vjGDVGQlXH9fawYpAiyfDpAdjco+o2R5wsZtor64jE
-         qOuqIUsW8D3cSCNF+cxu/69697XLBMtGBl9SOv9d7TU8Ric3+a+iD8AD2Pc1QWvakKmn
-         ml5cY+rECSZOinzE8E2v5ySMHvVyWJs9S401gA/AvfHPdfZkiDDCq1t3PMIWnFWOHVBa
-         Rd6BDW0KpufGNMyM4nmV3cKga4qcy9q33pYFwbulnB8INyGEbJNwPMK65Iu5sLuE1L8a
-         vixZPQ89Zji8/JdLsahBlAP0IurtZ3rnwLqlIKBF/ak2xaTC3i5ZF8d4A07qZatNl7M4
-         cWYg==
-X-Gm-Message-State: AAQBX9egTN0tWBusWhHJ16KTLFttuLcl/dkd3wTfJW25E+UVQgkgjUap
-        CfbPzEFIsrQ0FcgQLPiTFT66YE+6w6B/mxEi6etfWH9Nv4pG
-X-Google-Smtp-Source: AKy350ZQKXuzUAurJ6lf35jiy82lk7RV10MpNHhQ60zclN1QTHlzonRs9Pcctvxdt7LMdl3iGiZWzsKMWGDTDgko/Wt/MDWTt2ZO
+        with ESMTP id S234754AbjDYTys (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 15:54:48 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247E97687
+        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 12:54:47 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33PJbIqj009891;
+        Tue, 25 Apr 2023 19:54:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=qi/sk4z8v1wHCgaBi9Dc4O2gtLmKkcVaNWvb1veFq8Y=;
+ b=KxrXncWkWuL3i5/Su6N5PoKXB5Yzl7SaxScIE0ONDx+DH63ia13J7RCV9g5kJ54+ovVH
+ U+cDGUnh/PvND2HUHw2dnOXe/XBGhOIU3JNpQXv8FwxycuIp2zc6wpFT9GHatyY7czKI
+ KtTuWPsLMKyhDFKIXgfuJ/3SuTQzooHXpg6MlYhyQyeuxFvKN3ggTVYK03pP4WGWatHy
+ YJUak6BdTvzXAsd5p5dfFfYaNW6HLGIcoBHq6TS+FQZE6MXgxWOXCvVwMJVpxslrp1Nc
+ 5NyQsh+feD0sfaY9eQ+DhCZvPcSyNwZdhiM8BMx40Hvt4lLzl4CJv1kswi3QqjEhfL14 VA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q6gak0uue-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Apr 2023 19:54:32 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33PJs9fW023961
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Apr 2023 19:54:09 GMT
+Received: from [10.110.17.95] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 25 Apr
+ 2023 12:54:09 -0700
+Message-ID: <0f5c5e14-a1fb-1807-1a69-9ba51776ce6b@quicinc.com>
+Date:   Tue, 25 Apr 2023 12:54:08 -0700
 MIME-Version: 1.0
-X-Received: by 2002:a02:b109:0:b0:40f:cf8d:86e6 with SMTP id
- r9-20020a02b109000000b0040fcf8d86e6mr7525030jah.4.1682450631423; Tue, 25 Apr
- 2023 12:23:51 -0700 (PDT)
-Date:   Tue, 25 Apr 2023 12:23:51 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003cfeb205fa2e10e0@google.com>
-Subject: [syzbot] [wireless?] INFO: task hung in ath9k_hif_usb_firmware_cb (2)
-From:   syzbot <syzbot+d5635158fb0281b27bff@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        kvalo@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com, toke@toke.dk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/2] xhci: Improve the XHCI resume time
+Content-Language: en-US
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Basavaraj Natikar <bnatikar@amd.com>,
+        Mark Hasemeyer <markhas@chromium.org>,
+        <basavaraj.natikar@amd.com>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <mathias.nyman@intel.com>, <stern@rowland.harvard.edu>
+References: <20230418140817.3651909-3-Basavaraj.Natikar@amd.com>
+ <20230420170337.14110-1-markhas@chromium.org>
+ <346ea37a-9ec6-af36-b6ed-026aefb2cf4b@amd.com>
+ <5a4b3d95-c783-b4b2-93d7-57b69b679f7a@linux.intel.com>
+ <5157f331-0e0d-c6c2-1896-bb09c13ee3c0@quicinc.com>
+ <a81a39ed-bc05-19e7-ec05-25632535ea5c@linux.intel.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <a81a39ed-bc05-19e7-ec05-25632535ea5c@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: GbZzdGP3vd0DRroyws4U-vhhgjiu5E_c
+X-Proofpoint-GUID: GbZzdGP3vd0DRroyws4U-vhhgjiu5E_c
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-25_08,2023-04-25_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ suspectscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
+ priorityscore=1501 mlxlogscore=843 adultscore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304250179
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi Mathias,
 
-syzbot found the following issue on:
+On 4/25/2023 2:04 AM, Mathias Nyman wrote:
+> On 25.4.2023 3.09, Wesley Cheng wrote:
+>> Hi Mathias,
+>>
+>> On 4/24/2023 8:05 AM, Mathias Nyman wrote:
+>>> On 21.4.2023 7.58, Basavaraj Natikar wrote:
+>>>>
+>>>> On 4/20/2023 10:33 PM, Mark Hasemeyer wrote:
+>>>>>> It may be necessary to wait only for auto-resume cases.
+>>>>> I find this comment misleading as the patch assumes that it's only 
+>>>>> necessary to
+>>>>> wait for auto-resume cases. Are there any cases where the driver 
+>>>>> should wait
+>>>>> during system-resume?
+>>>>
+>>>> Only in case of auto-resume (runtime resume).
+>>>>
+>>>> Rewording the commit message as follows.
+>>>
+>>> Thanks for fixing this extra system resume delay
+>>>
+>>> Maybe some kind of big picture explanation could be added to the 
+>>> commit message,
+>>> such as:
+>>>
+>>> Avoid extra 120ms delay during system resume.
+>>>
+>>> xHC controller may signal wake up to 120ms before it shows which USB 
+>>> device
+>>> caused the wake on the xHC port registers.
+>>>
+>>> The xhci driver therefore checks for port activity up to 120ms during 
+>>> resume,
+>>> making sure that the hub driver can see the port change, and won't 
+>>> immediately
+>>> runtime suspend back due to no port activity.
+>>>
+>>> This is however only needed for runtime resume as system resume will 
+>>> resume
+>>> all child hubs and other child usb devices anyway.
+>>>
+>>>>
+>>>> Each XHCI controller while xhci_resumes by default takes 120 ms more if
+>>>> there is no activity on the ports or no ports connected. Therefore, if
+>>>> there are more USB controllers on the system, 120 ms more per 
+>>>> controller
+>>>> will add delay to system resume from suspended states like s2idle, 
+>>>> S3 or
+>>>> S4 states.
+>>>>
+>>>> Once the XHCI controller is in runtime suspended state (D3 state), 
+>>>> on USB
+>>>> device hotplug controller will runtime resume (D0 state) and check for
+>>>> pending port events if no events, wait for 120 ms to re-check for port
+>>>> activity to handle missed wake signal.
+>>>>
+>>>> A delay of 120 ms more to re-check for port activity is needed only in
+>>>> auto-resume (runtime resume) cases. Hence, add a check only for runtime
+>>>> resume from runtime suspend (D3->D0) to avoid the 120ms more delay for
+>>>> other PM events (system resume from suspend states like s2idle, S3 
+>>>> or S4
+>>>> states) so that the system resume time can be improved.
+>>>>
+>>>> Please let me know if any inputs.
+>>>
+>>> I can only think of one minor side-effect that would be runtime 
+>>> suspending back
+>>> too early after system resume. This could happen when connecting the 
+>>> first
+>>> usb device to a roothub on a (system) suspended setup?
+>>>
+>>> steps:
+>>> 1. in system suspend, no usb devices connected, xhci in D3, can 
+>>> signal wake with PME#
+>>> 2. connect first usb device, xHC signals PME# wake
+>>> 3. system resumes, xhci resumes to D0, but no actity visible on xHC 
+>>> port registers
+>>
+>> Thanks for bringing up this topic Basavaraj.
+>>
+>> Sorry for jumping into this thread, but was looking to optimize this 
+>> resume timing as well, since it is affecting some of the host driven 
+>> bus resume situations.  Just had a quick question about where the 
+>> 120ms delay is required...
+>>
+>>  From what I'm gathering from the USB3 spec, the 120ms timeout is the 
+>> recommended time for tU3WakeupRetryDelay ("Table 7-12. LTSSM State 
+>> Transition Timeouts").  This is the retry time that the device will 
+>> wait before re-issuing another (potential) LFPS U3 wake.
+>>
+>> My idea was to see if we could limit this delay only for when a SSUSB 
+>> device is already connected to the root hub.  (ignore if HSUSB device 
+>> connected)  We would be able to eliminate the delay for:
+>> 1.  No device connected to root hub
+>> 2.  Only HSUSB device connected
+>>
+>> Is that a possibility we can add on top of what Basavaraj is adding?
+>>
+> 
+> Sounds reasonable,
+> Yes the 120ms was intended for the U3 wake delay for SuperSpeed devices.
+> 
+> We should probably also check for CAS bit in xhci_pending_portevent()
+> (I'll add that CAS check)
+> 
 
-HEAD commit:    8f40fc080813 usb: dwc3: gadget: Refactor EP0 forced stall/..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=14a6e320280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=51fcd1c8b17faf3c
-dashboard link: https://syzkaller.appspot.com/bug?extid=d5635158fb0281b27bff
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Thanks for the info.  I'll make a change to add the checks I mentioned 
+above and submit it as a separate patch for review.
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/25d265ba0e56/disk-8f40fc08.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/117b3f370e35/vmlinux-8f40fc08.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/7046fc173e38/bzImage-8f40fc08.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d5635158fb0281b27bff@syzkaller.appspotmail.com
-
-INFO: task kworker/1:0:21 blocked for more than 143 seconds.
-      Not tainted 6.3.0-rc6-syzkaller-g8f40fc080813 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/1:0     state:D stack:21984 pid:21    ppid:2      flags:0x00004000
-Workqueue: events request_firmware_work_func
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5307 [inline]
- __schedule+0xa90/0x2da0 kernel/sched/core.c:6625
- schedule+0xde/0x1a0 kernel/sched/core.c:6701
- schedule_preempt_disabled+0x13/0x20 kernel/sched/core.c:6760
- __mutex_lock_common kernel/locking/mutex.c:679 [inline]
- __mutex_lock+0xa3b/0x1350 kernel/locking/mutex.c:747
- device_lock include/linux/device.h:832 [inline]
- ath9k_hif_usb_firmware_fail drivers/net/wireless/ath/ath9k/hif_usb.c:1146 [inline]
- ath9k_hif_usb_firmware_cb+0x3a9/0x620 drivers/net/wireless/ath/ath9k/hif_usb.c:1279
- request_firmware_work_func+0x130/0x240 drivers/base/firmware_loader/main.c:1107
- process_one_work+0x991/0x15c0 kernel/workqueue.c:2390
- worker_thread+0x669/0x1090 kernel/workqueue.c:2537
- kthread+0x2ee/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-Showing all locks held in the system:
-5 locks held by kworker/0:0/7:
-1 lock held by rcu_tasks_kthre/11:
- #0: ffffffff87c9bb70 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0xd80 kernel/rcu/tasks.h:510
-1 lock held by rcu_tasks_trace/12:
- #0: ffffffff87c9b870 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0xd80 kernel/rcu/tasks.h:510
-3 locks held by kworker/1:0/21:
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:639 [inline]
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:666 [inline]
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x87a/0x15c0 kernel/workqueue.c:2361
- #1: ffffc9000016fda8 ((work_completion)(&fw_work->work)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x15c0 kernel/workqueue.c:2365
- #2: ffff88810e9d5190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
- #2: ffff88810e9d5190 (&dev->mutex){....}-{3:3}, at: ath9k_hif_usb_firmware_fail drivers/net/wireless/ath/ath9k/hif_usb.c:1146 [inline]
- #2: ffff88810e9d5190 (&dev->mutex){....}-{3:3}, at: ath9k_hif_usb_firmware_cb+0x3a9/0x620 drivers/net/wireless/ath/ath9k/hif_usb.c:1279
-1 lock held by khungtaskd/27:
- #0: ffffffff87c9c6c0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x55/0x340 kernel/locking/lockdep.c:6495
-2 locks held by getty/2413:
- #0: ffff8881101e3098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x26/0x80 drivers/tty/tty_ldisc.c:244
- #1: ffffc900000452f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xef4/0x13e0 drivers/tty/n_tty.c:2177
-2 locks held by kworker/1:4/5200:
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:639 [inline]
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:666 [inline]
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x87a/0x15c0 kernel/workqueue.c:2361
- #1: ffffc90001977da8 ((work_completion)(&fw_work->work)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x15c0 kernel/workqueue.c:2365
-4 locks held by udevd/7445:
- #0: ffff8881156c62f0 (&p->lock){+.+.}-{3:3}, at: seq_read_iter+0xe3/0x12d0 fs/seq_file.c:182
- #1: ffff8881256c3888 (&of->mutex){+.+.}-{3:3}, at: kernfs_seq_start+0x4b/0x450 fs/kernfs/file.c:154
- #2: ffff88811dae3da0 (kn->active#28){++++}-{0:0}, at: kernfs_seq_start+0x75/0x450 fs/kernfs/file.c:155
- #3: ffff88810d5cd190 (&dev->mutex){....}-{3:3}, at: device_lock_interruptible include/linux/device.h:837 [inline]
- #3: ffff88810d5cd190 (&dev->mutex){....}-{3:3}, at: manufacturer_show+0x26/0xa0 drivers/usb/core/sysfs.c:142
-4 locks held by udevd/7446:
- #0: ffff888110bb19e0 (&p->lock){+.+.}-{3:3}, at: seq_read_iter+0xe3/0x12d0 fs/seq_file.c:182
- #1: ffff88811a753488 (&of->mutex){+.+.}-{3:3}, at: kernfs_seq_start+0x4b/0x450 fs/kernfs/file.c:154
- #2: ffff88810d9c1a00 (kn->active#28){++++}-{0:0}, at: kernfs_seq_start+0x75/0x450 fs/kernfs/file.c:155
- #3: ffff8881161f3190 (&dev->mutex){....}-{3:3}, at: device_lock_interruptible include/linux/device.h:837 [inline]
- #3: ffff8881161f3190 (&dev->mutex){....}-{3:3}, at: manufacturer_show+0x26/0xa0 drivers/usb/core/sysfs.c:142
-6 locks held by kworker/1:6/7527:
- #0: ffff888109030938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888109030938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff888109030938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
- #0: ffff888109030938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:639 [inline]
- #0: ffff888109030938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:666 [inline]
- #0: ffff888109030938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x87a/0x15c0 kernel/workqueue.c:2361
- #1: ffffc900027afda8 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x15c0 kernel/workqueue.c:2365
- #2: ffff88810ea91190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
- #2: ffff88810ea91190 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c0/0x4ed0 drivers/usb/core/hub.c:5739
- #3: ffff88810d5cd190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
- #3: ffff88810d5cd190 (&dev->mutex){....}-{3:3}, at: __device_attach+0x76/0x4b0 drivers/base/dd.c:973
- #4: ffff8881256db118 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
- #4: ffff8881256db118 (&dev->mutex){....}-{3:3}, at: __device_attach+0x76/0x4b0 drivers/base/dd.c:973
- #5: ffff8881f673b0d8 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested kernel/sched/core.c:539 [inline]
- #5: ffff8881f673b0d8 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock kernel/sched/sched.h:1366 [inline]
- #5: ffff8881f673b0d8 (&rq->__lock){-.-.}-{2:2}, at: rq_lock kernel/sched/sched.h:1653 [inline]
- #5: ffff8881f673b0d8 (&rq->__lock){-.-.}-{2:2}, at: __schedule+0x263/0x2da0 kernel/sched/core.c:6542
-2 locks held by kworker/0:6/7578:
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:639 [inline]
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:666 [inline]
- #0: ffff888100070d38 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x87a/0x15c0 kernel/workqueue.c:2361
- #1: ffffc90005c0fda8 ((work_completion)(&fw_work->work)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x15c0 kernel/workqueue.c:2365
-
-=============================================
-
-NMI backtrace for cpu 0
-CPU: 0 PID: 27 Comm: khungtaskd Not tainted 6.3.0-rc6-syzkaller-g8f40fc080813 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- nmi_cpu_backtrace+0x29c/0x350 lib/nmi_backtrace.c:113
- nmi_trigger_cpumask_backtrace+0x273/0x2d0 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:222 [inline]
- watchdog+0xe16/0x1090 kernel/hung_task.c:379
- kthread+0x2ee/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 PID: 5211 Comm: syz-executor.5 Not tainted 6.3.0-rc6-syzkaller-g8f40fc080813 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-RIP: 0010:wait_consider_task+0xa9/0x3ce0 kernel/exit.c:1389
-Code: 55 33 00 49 8d 87 f0 04 00 00 48 89 44 24 10 48 c1 e8 03 0f b6 04 28 84 c0 74 08 3c 03 0f 8e 6c 1a 00 00 45 8b a7 f0 04 00 00 <bf> 10 00 00 00 44 89 e6 e8 ba 51 33 00 41 83 fc 10 0f 84 f3 00 00
-RSP: 0018:ffffc900019d7b60 EFLAGS: 00000246
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff88810b338000 RSI: ffffffff811734c2 RDI: ffffc900019d7d18
-RBP: dffffc0000000000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000004 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff88810b338000 R14: 0000000000000004 R15: ffff888118bb3900
-FS:  0000555556c19400(0000) GS:ffff8881f6700000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f3100143918 CR3: 000000012a818000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- do_wait_thread kernel/exit.c:1495 [inline]
- do_wait+0x799/0xc30 kernel/exit.c:1612
- kernel_wait4+0x150/0x260 kernel/exit.c:1775
- __do_sys_wait4+0x13f/0x150 kernel/exit.c:1803
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f2239d01d06
-Code: 1f 44 00 00 31 c9 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 49 89 ca 64 8b 04 25 18 00 00 00 85 c0 75 11 b8 3d 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 90 48 83 ec 28 89 54 24 14 48 89 74 24
-RSP: 002b:00007ffc75448bd8 EFLAGS: 00000246 ORIG_RAX: 000000000000003d
-RAX: ffffffffffffffda RBX: 000000000000010c RCX: 00007f2239d01d06
-RDX: 0000000040000001 RSI: 00007ffc75448c3c RDI: 00000000ffffffff
-RBP: 00007ffc75448c3c R08: 0000000000000150 R09: 00007ffc755ab080
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000032
-R13: 00000000000521a2 R14: 0000000000000000 R15: 00007ffc75448ca0
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Thanks
+Wesley Cheng
