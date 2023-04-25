@@ -2,43 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF4E6EDEC9
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 11:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5786EDF8A
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 11:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233214AbjDYJKt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Apr 2023 05:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54260 "EHLO
+        id S233536AbjDYJpK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Apr 2023 05:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232430AbjDYJKs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 05:10:48 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36E010CE;
-        Tue, 25 Apr 2023 02:10:47 -0700 (PDT)
-Received: from [IPV6:2001:250:4000:5113:b4e1:4fd9:48ca:cb80] ([172.16.0.254])
-        (user=dzm91@hust.edu.cn mech=PLAIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 33P9AEMM009718-33P9AEMN009718
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Tue, 25 Apr 2023 17:10:14 +0800
-Message-ID: <559cf3a3-f740-89d3-9e63-d0016d767a8a@hust.edu.cn>
-Date:   Tue, 25 Apr 2023 17:10:14 +0800
+        with ESMTP id S233605AbjDYJpI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 05:45:08 -0400
+Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B011C6E97
+        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 02:45:07 -0700 (PDT)
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id 1F38C83472; Tue, 25 Apr 2023 10:44:00 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1682415861; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=QF8TKfWRuqx2zWbA9SYqchugL5U9HIYtrLp389UmWLji+fwDx3O1knAdZ2gTa3ZX5
+         7ZiZOsf+ZKg7ogkqBBgWayVhP9b6qSn0kGnFps26lfCxAYTYvYp87IGxf0rboI9fsB
+         fL0rbQPTAJT64Tijz1ya0nz97rrM1yL2A3udymiCsIh68TjL/HTatx01yo+jvqj3BZ
+         E9Fjy8jVoEs0/5HxNDJ3vqHU7MNI+Cc8OPZaNvEe4xCG4cKNeUPm6JjFyWtmaonaRG
+         J3ciRezohqX2RDx/0SwBFXr0+h1AT1Yf0l28tmzrUrr53pVtNBu73rpWgNGS++kbeO
+         nT1uoyO5wkl/A==
+Received: by mail.lokoho.com for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 09:42:51 GMT
+Message-ID: <20230425102243-0.1.5k.20153.0.xnak4re6pf@lokoho.com>
+Date:   Tue, 25 Apr 2023 09:42:51 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-usb@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH RESEND] usb: dwc3: remove dead code in dwc3_otg_get_irq
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>, lihuya <lihuya@hust.edu.cn>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     hust-os-kernel-patches@googlegroups.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230424105930.49944-1-lihuya@hust.edu.cn>
- <887b6226-ea4f-e75c-bfde-0785ccf30c77@omp.ru>
-From:   Dongliang Mu <dzm91@hust.edu.cn>
-In-Reply-To: <887b6226-ea4f-e75c-bfde-0785ccf30c77@omp.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-FEAS-AUTH-USER: dzm91@hust.edu.cn
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,35 +45,19 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Dzie=C5=84 dobry,
 
-On 2023/4/25 16:57, Sergey Shtylyov wrote:
-> Hello!
->
-> On 4/24/23 1:59 PM, lihuya wrote:
->
->> platform_get_irq() only return non-zero irq number on success, or
->> negative error number on failure.
->>
->> There is no need to check the return value of platform_get_irq()
->> to determine the return value of dwc3_otg_get_irq(), removing
->> them to solve this problem.
->     I was going to submit such patch myself at some point... which
-> has never happened. :-/
->
->> Signed-off-by: lihuya <lihuya@hust.edu.cn>
-> Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-Hi Sergey,
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-Please take a look at the following thread [1]. Yuhang sent a v2 patch 
-since he did not use his real name in the Signed-off-by.
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
-Greg already had some comments on this patch.
 
-[1] https://lore.kernel.org/lkml/20230425015532.13622-1-lihuya@hust.edu.cn/
-
->
-> [...]
->
-> MBR, Sergey
->
+Pozdrawiam
+Adam Charachuta
