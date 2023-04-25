@@ -2,101 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD266EE74D
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 20:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F206EE776
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 20:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235029AbjDYSEh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Apr 2023 14:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
+        id S234482AbjDYST3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Apr 2023 14:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234749AbjDYSEg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 14:04:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ADD15457
-        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 11:03:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682445823;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mLRDaEM8IkNU4aroONTY8q5AePgj7Z5Af/7/yOM3ivs=;
-        b=NSJ45argVsQAzuQQHaDhmDT4bFNf0IkdRpvhyUoXw15F8AvZ2HZ+4jobJAlaxNs4ypqN3/
-        SsEKSP4w8TlttruTBdOfIJuMNKnMLjaIWpZrKw1ChL4yvIWnZC/GCSs9GzXZ7ie3Kiijci
-        UPqR3oaZXA1ChQNhGrYuzpiYzsm4sNk=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-74-T2rLXoLJPkWZ_QEW_V-SOw-1; Tue, 25 Apr 2023 14:03:42 -0400
-X-MC-Unique: T2rLXoLJPkWZ_QEW_V-SOw-1
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-3f0a65d5a1dso25276521cf.2
-        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 11:03:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682445820; x=1685037820;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mLRDaEM8IkNU4aroONTY8q5AePgj7Z5Af/7/yOM3ivs=;
-        b=OZXNNS5yRX2N6HsDTDrYInw9A5BgormdHsUopB/4w+sbltpvoLpSNfT2CGzL0gQmOR
-         UG/DP5vDeA6JqLj/VNj7FDucYnPtHW4bM9lwg1I0AB1ypnd0hjyzmiido+Mjp4GnB0jL
-         Zk7foKZ0Rsc3EGL2zdJ0PVJ3zelVSB57ffyV25uSEYhNi8rIaEaDrgj473eatmkxTwcT
-         ZncRMgtwPlLCPhnWG7H+yMhCyWiJbfEPBWPItyQafGgrmk8aJo7lqsJBYr6FM15qldgQ
-         Fgfy2nu5YSQqkOOQBwfvAkoyKjPEC3NosUIg63votyKNrqjJ6mSfTdkuPsfkPyLPhKsY
-         4yzA==
-X-Gm-Message-State: AAQBX9fGNO2gPeJh9WBUqYkgQ9LMf4UOfZJS0bzHs7xw8IFnjGcmKsAM
-        IADfQLM0Gk+CoFbha0VyC+aFx3WHBS2GQV1fj1FmJtPY3XWq7GVdG0TVVszxH/mD7NKNypyAWWC
-        vszQiNjXIizBCYdDXepeuzDNHYwqn
-X-Received: by 2002:ac8:5c01:0:b0:3e1:59e8:745a with SMTP id i1-20020ac85c01000000b003e159e8745amr28268777qti.3.1682445820200;
-        Tue, 25 Apr 2023 11:03:40 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZR+URkOBjqHmQb78faZMLxITsne2FMxrzysNlFS71f08K8wvOrg5C2bC9hBB1dS3N1M/UwJg==
-X-Received: by 2002:ac8:5c01:0:b0:3e1:59e8:745a with SMTP id i1-20020ac85c01000000b003e159e8745amr28268745qti.3.1682445819878;
-        Tue, 25 Apr 2023 11:03:39 -0700 (PDT)
-Received: from fedora (modemcable181.5-202-24.mc.videotron.ca. [24.202.5.181])
-        by smtp.gmail.com with ESMTPSA id ge8-20020a05622a5c8800b003e3914c6839sm1868947qtb.43.2023.04.25.11.03.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 11:03:39 -0700 (PDT)
-Date:   Tue, 25 Apr 2023 14:03:36 -0400
-From:   Adrien Thierry <athierry@redhat.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Shazad Hussain <quic_shazhuss@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
+        with ESMTP id S231200AbjDYST1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 14:19:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AAA7687
+        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 11:19:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F07062B5C
+        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 18:19:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 805DDC433D2;
+        Tue, 25 Apr 2023 18:19:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682446765;
+        bh=a5e362dR6ySmw3iQpUCph0QtcBgaA6XNxOfsDsKytJ8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hUbarVppEHXayqsLjl4Il6wCkfQW/tj7LIAge1mA22D+CPDvYi9xL0fuAL8c0GZky
+         iX0Uh7x6sV2naYai+MHUlMcALiypzNGTq87og0UNAq7BfGlp6yMgrDr/dRgZojq7Zx
+         +7tGAJMTY1XptODsTAeBLUTyjQsiWeI8RBbTAbbX5uq0iSdNnl6MSCYs5eqD6Z4xZw
+         LNoI3ncfEk86w6aaFgMhYkuqMxgL+fybqVF2rREnco5ALB9JVAduDtP9VOhcnH+NCR
+         9/pNrcNSQHXT4Oi/naqPpgSbdhalLWijaJLmovHrZhTUwKtMDw/SX/rx4C5YfUbLrm
+         CaRfNdXdJn5cg==
+Date:   Tue, 25 Apr 2023 11:19:24 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 0/6] arm64: qcom: sa8775p: add support for USB
-Message-ID: <ZEgV+H3yZLp48Dlc@fedora>
-References: <20230421133922.8520-1-quic_shazhuss@quicinc.com>
- <ZEcEGJiikEC2wIVE@fedora>
- <CAA8EJpr27=2jAXbamN6J7yF+7G=L5Af8+XReB5UnFuihcEwMQA@mail.gmail.com>
+        regressions@lists.linux.dev
+Subject: USB sound card freezes USB after resume from suspend
+Message-ID: <20230425111924.05cf8b13@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA8EJpr27=2jAXbamN6J7yF+7G=L5Af8+XReB5UnFuihcEwMQA@mail.gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Dmitry,
+Hi!
 
-> Semi-random suggestion, but could you please try using
-> clk_regmap_phy_mux/clk_regmap_phy_mux_ops for USB pipe clk src?
+For a few weeks now I can't use any USB devices if I suspend my laptop
+with my USB sound card active and resuming it without it connected.
 
-Which specific clock are you refering to? I'm not very familiar with
-those, in the device tree I'm seeing "pipe" clocks for usb_0 and usb_1
-phys, but not for usb_2, which is the one that's causing issues.
+USB worker threads seems to be sitting in:
 
-Best,
+[<0>] snd_pcm_dev_disconnect+0x1e8/0x280 [snd_pcm]
+[<0>] snd_device_disconnect_all+0x42/0x80 [snd]
+[<0>] snd_card_disconnect+0x128/0x290 [snd]
+[<0>] usb_audio_disconnect+0x11a/0x2c0 [snd_usb_audio]
+[<0>] usb_unbind_interface+0x8c/0x270
+[<0>] device_release_driver_internal+0x1b2/0x230
+[<0>] bus_remove_device+0xd8/0x150
+[<0>] device_del+0x18b/0x410
+[<0>] usb_disable_device+0xc6/0x1e0
+[<0>] usb_disconnect+0xda/0x2c0
+[<0>] usb_disconnect+0xbf/0x2c0
+[<0>] usb_disconnect+0xbf/0x2c0
+[<0>] usb_disconnect+0xbf/0x2c0
+[<0>] hub_event+0xf01/0x1cd0
+[<0>] process_one_work+0x1c4/0x3d0
+[<0>] worker_thread+0x4d/0x380
+[<0>] kthread+0xe6/0x110
+[<0>] ret_from_fork+0x29/0x50
 
-Adrien
+Which is:
 
+snd_pcm_dev_disconnect (/usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:818 /usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:812 /usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:1129) snd_pcm
+
+It happens on Fedora 37 and Fedora 38, it seems to have coincided with
+the 6.2 kernel but I'm not 100% sure.
+
+The USB devices come back after half an hour or so, silently.
+There's nothing of note in dmesg.
