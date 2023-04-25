@@ -2,106 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F149B6EDE99
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 10:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8376EDEA5
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 11:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233528AbjDYI5e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Apr 2023 04:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
+        id S233086AbjDYJCy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Apr 2023 05:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233568AbjDYI5b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 04:57:31 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64B4768A;
-        Tue, 25 Apr 2023 01:57:28 -0700 (PDT)
-Received: from [192.168.1.103] (178.176.79.165) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 25 Apr
- 2023 11:57:18 +0300
-Subject: Re: [PATCH RESEND] usb: dwc3: remove dead code in dwc3_otg_get_irq
-To:     lihuya <lihuya@hust.edu.cn>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <hust-os-kernel-patches@googlegroups.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230424105930.49944-1-lihuya@hust.edu.cn>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <887b6226-ea4f-e75c-bfde-0785ccf30c77@omp.ru>
-Date:   Tue, 25 Apr 2023 11:57:18 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S233595AbjDYJCv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 05:02:51 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EF04495
+        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 02:02:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682413369; x=1713949369;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=i9CFIwx5bvWinc0VErzbt/DMCK2TJe5nPYhOumuAtrE=;
+  b=BAptvcNfX1UYwYgZFDgflnlh/mMRvk5tT6d38YiStm37RZXUTWIZm9LM
+   uDVvaoJr1OvONbOymxVJ4U0HSw8UQKC1Q5p25PTvHKJJvRDuXnAqH15OU
+   B24D434VTefM4TxeAjezuY++/iFoGXcBVZPRFx/KfSJVk3c1a7jhSKAjs
+   m2rJtoGjlYY/xqh4O99sZKyu58X/QKW4CbgUSvYotcRDFeibd7x98zrGQ
+   8SrHR1MhIrt+yS9WD7LWVawykCASBa5dK7pISFY+aEb322A/A9FvgXQBd
+   s7cFhoRfMCWNOsuHJM34vjutnZV2FLNSVgCW/nnjIO9M7xTrQ9apIQqnP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="409648573"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="409648573"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 02:02:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="693418327"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="693418327"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga002.jf.intel.com with ESMTP; 25 Apr 2023 02:02:46 -0700
+Message-ID: <a81a39ed-bc05-19e7-ec05-25632535ea5c@linux.intel.com>
+Date:   Tue, 25 Apr 2023 12:04:16 +0300
 MIME-Version: 1.0
-In-Reply-To: <20230424105930.49944-1-lihuya@hust.edu.cn>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.79.165]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 04/25/2023 08:35:21
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 176957 [Apr 25 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 510 510 bc345371020d3ce827abc4c710f5f0ecf15eaf2e
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.79.165 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.79.165 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2;178.176.79.165:7.4.1,7.1.2,7.7.3
-X-KSE-AntiSpam-Info: {iprep_blacklist}
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.79.165
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 04/25/2023 08:41:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 4/25/2023 7:02:00 AM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        Basavaraj Natikar <bnatikar@amd.com>,
+        Mark Hasemeyer <markhas@chromium.org>,
+        basavaraj.natikar@amd.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        mathias.nyman@intel.com, stern@rowland.harvard.edu
+References: <20230418140817.3651909-3-Basavaraj.Natikar@amd.com>
+ <20230420170337.14110-1-markhas@chromium.org>
+ <346ea37a-9ec6-af36-b6ed-026aefb2cf4b@amd.com>
+ <5a4b3d95-c783-b4b2-93d7-57b69b679f7a@linux.intel.com>
+ <5157f331-0e0d-c6c2-1896-bb09c13ee3c0@quicinc.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH 2/2] xhci: Improve the XHCI resume time
+In-Reply-To: <5157f331-0e0d-c6c2-1896-bb09c13ee3c0@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
-
-On 4/24/23 1:59 PM, lihuya wrote:
-
-> platform_get_irq() only return non-zero irq number on success, or
-> negative error number on failure.
+On 25.4.2023 3.09, Wesley Cheng wrote:
+> Hi Mathias,
 > 
-> There is no need to check the return value of platform_get_irq()
-> to determine the return value of dwc3_otg_get_irq(), removing
-> them to solve this problem.
+> On 4/24/2023 8:05 AM, Mathias Nyman wrote:
+>> On 21.4.2023 7.58, Basavaraj Natikar wrote:
+>>>
+>>> On 4/20/2023 10:33 PM, Mark Hasemeyer wrote:
+>>>>> It may be necessary to wait only for auto-resume cases.
+>>>> I find this comment misleading as the patch assumes that it's only necessary to
+>>>> wait for auto-resume cases. Are there any cases where the driver should wait
+>>>> during system-resume?
+>>>
+>>> Only in case of auto-resume (runtime resume).
+>>>
+>>> Rewording the commit message as follows.
+>>
+>> Thanks for fixing this extra system resume delay
+>>
+>> Maybe some kind of big picture explanation could be added to the commit message,
+>> such as:
+>>
+>> Avoid extra 120ms delay during system resume.
+>>
+>> xHC controller may signal wake up to 120ms before it shows which USB device
+>> caused the wake on the xHC port registers.
+>>
+>> The xhci driver therefore checks for port activity up to 120ms during resume,
+>> making sure that the hub driver can see the port change, and won't immediately
+>> runtime suspend back due to no port activity.
+>>
+>> This is however only needed for runtime resume as system resume will resume
+>> all child hubs and other child usb devices anyway.
+>>
+>>>
+>>> Each XHCI controller while xhci_resumes by default takes 120 ms more if
+>>> there is no activity on the ports or no ports connected. Therefore, if
+>>> there are more USB controllers on the system, 120 ms more per controller
+>>> will add delay to system resume from suspended states like s2idle, S3 or
+>>> S4 states.
+>>>
+>>> Once the XHCI controller is in runtime suspended state (D3 state), on USB
+>>> device hotplug controller will runtime resume (D0 state) and check for
+>>> pending port events if no events, wait for 120 ms to re-check for port
+>>> activity to handle missed wake signal.
+>>>
+>>> A delay of 120 ms more to re-check for port activity is needed only in
+>>> auto-resume (runtime resume) cases. Hence, add a check only for runtime
+>>> resume from runtime suspend (D3->D0) to avoid the 120ms more delay for
+>>> other PM events (system resume from suspend states like s2idle, S3 or S4
+>>> states) so that the system resume time can be improved.
+>>>
+>>> Please let me know if any inputs.
+>>
+>> I can only think of one minor side-effect that would be runtime suspending back
+>> too early after system resume. This could happen when connecting the first
+>> usb device to a roothub on a (system) suspended setup?
+>>
+>> steps:
+>> 1. in system suspend, no usb devices connected, xhci in D3, can signal wake with PME#
+>> 2. connect first usb device, xHC signals PME# wake
+>> 3. system resumes, xhci resumes to D0, but no actity visible on xHC port registers
+> 
+> Thanks for bringing up this topic Basavaraj.
+> 
+> Sorry for jumping into this thread, but was looking to optimize this resume timing as well, since it is affecting some of the host driven bus resume situations.  Just had a quick question about where the 120ms delay is required...
+> 
+>  From what I'm gathering from the USB3 spec, the 120ms timeout is the recommended time for tU3WakeupRetryDelay ("Table 7-12. LTSSM State Transition Timeouts").  This is the retry time that the device will wait before re-issuing another (potential) LFPS U3 wake.
+> 
+> My idea was to see if we could limit this delay only for when a SSUSB device is already connected to the root hub.  (ignore if HSUSB device connected)  We would be able to eliminate the delay for:
+> 1.  No device connected to root hub
+> 2.  Only HSUSB device connected
+> 
+> Is that a possibility we can add on top of what Basavaraj is adding?
+> 
 
-   I was going to submit such patch myself at some point... which
-has never happened. :-/
+Sounds reasonable,
+Yes the 120ms was intended for the U3 wake delay for SuperSpeed devices.
 
-> Signed-off-by: lihuya <lihuya@hust.edu.cn>
+We should probably also check for CAS bit in xhci_pending_portevent()
+(I'll add that CAS check)
 
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+-Mathias
 
-[...]
+  
 
-MBR, Sergey
