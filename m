@@ -2,345 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4696EE638
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 18:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD266EE74D
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 20:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234611AbjDYQ7S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Apr 2023 12:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
+        id S235029AbjDYSEh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Apr 2023 14:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234866AbjDYQ7P (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 12:59:15 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772E9194;
-        Tue, 25 Apr 2023 09:59:08 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33PBaMC9015340;
-        Tue, 25 Apr 2023 16:58:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=vIzM4wMULdSE7yQDpAk7izMtRgAMW3ZgoxM+xzIC9wc=;
- b=UEWy98v7JAKa44S6rtT2ukGitUB+g2l6TTuvPrVHCnHp7Qp76f9nIwcHVG0RaoOi1t4O
- sSZ3hyvR97wx5jSmNdu1JMqHGXtcIjV/lZOMjzIctaUZSamFBtFa+W+YRwEL633vHyT4
- YLakJkZ0kY9r3QGQoetcOOmyOCnZi1je9rh8BR3/y3ASlDILcXzvQl4mZC/mU5mEN8zs
- VbSP7+NsJdT1yiCdGMvSSjn4Jaqw/P27uZ+r+RN8Z3FsmF+UrpquiIXxjB4PmCjnmzFF
- EJusIfavCuziW8ta8nS3pgDZ8XPo8YTOC6VAoE4+jLMVhSfUZ0Pp4TjoU16m9tzlY36W nw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q5qv6uyc2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Apr 2023 16:58:50 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33PGwnvJ013999
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Apr 2023 16:58:49 GMT
-Received: from [10.216.20.150] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 25 Apr
- 2023 09:58:44 -0700
-Message-ID: <55cfaedc-bd33-610c-143e-0342a14a41b6@quicinc.com>
-Date:   Tue, 25 Apr 2023 22:28:41 +0530
+        with ESMTP id S234749AbjDYSEg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 14:04:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ADD15457
+        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 11:03:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682445823;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mLRDaEM8IkNU4aroONTY8q5AePgj7Z5Af/7/yOM3ivs=;
+        b=NSJ45argVsQAzuQQHaDhmDT4bFNf0IkdRpvhyUoXw15F8AvZ2HZ+4jobJAlaxNs4ypqN3/
+        SsEKSP4w8TlttruTBdOfIJuMNKnMLjaIWpZrKw1ChL4yvIWnZC/GCSs9GzXZ7ie3Kiijci
+        UPqR3oaZXA1ChQNhGrYuzpiYzsm4sNk=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-74-T2rLXoLJPkWZ_QEW_V-SOw-1; Tue, 25 Apr 2023 14:03:42 -0400
+X-MC-Unique: T2rLXoLJPkWZ_QEW_V-SOw-1
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-3f0a65d5a1dso25276521cf.2
+        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 11:03:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682445820; x=1685037820;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mLRDaEM8IkNU4aroONTY8q5AePgj7Z5Af/7/yOM3ivs=;
+        b=OZXNNS5yRX2N6HsDTDrYInw9A5BgormdHsUopB/4w+sbltpvoLpSNfT2CGzL0gQmOR
+         UG/DP5vDeA6JqLj/VNj7FDucYnPtHW4bM9lwg1I0AB1ypnd0hjyzmiido+Mjp4GnB0jL
+         Zk7foKZ0Rsc3EGL2zdJ0PVJ3zelVSB57ffyV25uSEYhNi8rIaEaDrgj473eatmkxTwcT
+         ZncRMgtwPlLCPhnWG7H+yMhCyWiJbfEPBWPItyQafGgrmk8aJo7lqsJBYr6FM15qldgQ
+         Fgfy2nu5YSQqkOOQBwfvAkoyKjPEC3NosUIg63votyKNrqjJ6mSfTdkuPsfkPyLPhKsY
+         4yzA==
+X-Gm-Message-State: AAQBX9fGNO2gPeJh9WBUqYkgQ9LMf4UOfZJS0bzHs7xw8IFnjGcmKsAM
+        IADfQLM0Gk+CoFbha0VyC+aFx3WHBS2GQV1fj1FmJtPY3XWq7GVdG0TVVszxH/mD7NKNypyAWWC
+        vszQiNjXIizBCYdDXepeuzDNHYwqn
+X-Received: by 2002:ac8:5c01:0:b0:3e1:59e8:745a with SMTP id i1-20020ac85c01000000b003e159e8745amr28268777qti.3.1682445820200;
+        Tue, 25 Apr 2023 11:03:40 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZR+URkOBjqHmQb78faZMLxITsne2FMxrzysNlFS71f08K8wvOrg5C2bC9hBB1dS3N1M/UwJg==
+X-Received: by 2002:ac8:5c01:0:b0:3e1:59e8:745a with SMTP id i1-20020ac85c01000000b003e159e8745amr28268745qti.3.1682445819878;
+        Tue, 25 Apr 2023 11:03:39 -0700 (PDT)
+Received: from fedora (modemcable181.5-202-24.mc.videotron.ca. [24.202.5.181])
+        by smtp.gmail.com with ESMTPSA id ge8-20020a05622a5c8800b003e3914c6839sm1868947qtb.43.2023.04.25.11.03.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 11:03:39 -0700 (PDT)
+Date:   Tue, 25 Apr 2023 14:03:36 -0400
+From:   Adrien Thierry <athierry@redhat.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Shazad Hussain <quic_shazhuss@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1 0/6] arm64: qcom: sa8775p: add support for USB
+Message-ID: <ZEgV+H3yZLp48Dlc@fedora>
+References: <20230421133922.8520-1-quic_shazhuss@quicinc.com>
+ <ZEcEGJiikEC2wIVE@fedora>
+ <CAA8EJpr27=2jAXbamN6J7yF+7G=L5Af8+XReB5UnFuihcEwMQA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 1/2] usb: dwc3: gadget: Bail out in pullup if soft
- reset timeout happens
-Content-Language: en-US
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Jiantao Zhang <water.zhangjiantao@huawei.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_ugoswami@quicinc.com" <quic_ugoswami@quicinc.com>
-References: <20230328160756.30520-1-quic_kriskura@quicinc.com>
- <20230328160756.30520-2-quic_kriskura@quicinc.com>
- <20230328212048.rpm4ly265etahwm3@synopsys.com>
- <0aa1caae-ab09-2ef9-0ec8-3dd01a3f3af0@quicinc.com>
- <20230330001003.rwzo4n2hl6i22vh3@synopsys.com>
- <4f473d08-156a-622f-2ef2-ad11caa7ccda@quicinc.com>
- <20230403234937.sotn3pznu4winlkw@synopsys.com>
- <e769cc7c-8b87-c346-5cef-9d89f3ccb91e@quicinc.com>
- <20230404214347.mi6rmksr7pym74rp@synopsys.com>
- <f334b8b9-b8d8-240d-5ace-bed255f4609a@quicinc.com>
- <20230406004510.yxoxby2rwkalpqlh@synopsys.com>
- <e5e82a2f-dd89-bdfc-f521-c9d2543a139a@quicinc.com>
-In-Reply-To: <e5e82a2f-dd89-bdfc-f521-c9d2543a139a@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: XiNzZBeQbPlhXbqU2Zs7O5_g_uc_aoV3
-X-Proofpoint-ORIG-GUID: XiNzZBeQbPlhXbqU2Zs7O5_g_uc_aoV3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-25_08,2023-04-25_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- adultscore=0 impostorscore=0 lowpriorityscore=0 mlxlogscore=999
- bulkscore=0 mlxscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304250153
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpr27=2jAXbamN6J7yF+7G=L5Af8+XReB5UnFuihcEwMQA@mail.gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Dmitry,
 
+> Semi-random suggestion, but could you please try using
+> clk_regmap_phy_mux/clk_regmap_phy_mux_ops for USB pipe clk src?
 
-On 4/6/2023 7:44 AM, Krishna Kurapati PSSNV wrote:
-> 
-> 
-> On 4/6/2023 6:15 AM, Thinh Nguyen wrote:
->> On Wed, Apr 05, 2023, Krishna Kurapati PSSNV wrote:
->>>
->>>
->>> On 4/5/2023 3:13 AM, Thinh Nguyen wrote:
->>>> On Tue, Apr 04, 2023, Krishna Kurapati PSSNV wrote:
->>>>>
->>>>>
->>>>> On 4/4/2023 5:19 AM, Thinh Nguyen wrote:
->>>>>> On Thu, Mar 30, 2023, Krishna Kurapati PSSNV wrote:
->>>>>>>
->>>>>>>
->>>>>>> On 3/30/2023 5:40 AM, Thinh Nguyen wrote:
->>>>>>>> On Wed, Mar 29, 2023, Krishna Kurapati PSSNV wrote:
->>>>>>>>>
->>>>>>>>>
->>>>>>>>> On 3/29/2023 2:50 AM, Thinh Nguyen wrote:
->>>>>>>>>> Hi,
->>>>>>>>>>
->>>>>>>>>> On Tue, Mar 28, 2023, Krishna Kurapati wrote:
->>>>>>>>>>> If the core soft reset timeout happens, avoid setting up event
->>>>>>>>>>> buffers and starting gadget as the writes to these registers
->>>>>>>>>>> may not reflect when in reset and setting the run stop bit
->>>>>>>>>>> can lead the controller to access wrong event buffer address
->>>>>>>>>>> resulting in a crash.
->>>>>>>>>>>
->>>>>>>>>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->>>>>>>>>>> ---
->>>>>>>>>>>       drivers/usb/dwc3/gadget.c | 5 ++++-
->>>>>>>>>>>       1 file changed, 4 insertions(+), 1 deletion(-)
->>>>>>>>>>>
->>>>>>>>>>> diff --git a/drivers/usb/dwc3/gadget.c 
->>>>>>>>>>> b/drivers/usb/dwc3/gadget.c
->>>>>>>>>>> index 3c63fa97a680..f0472801d9a5 100644
->>>>>>>>>>> --- a/drivers/usb/dwc3/gadget.c
->>>>>>>>>>> +++ b/drivers/usb/dwc3/gadget.c
->>>>>>>>>>> @@ -2620,13 +2620,16 @@ static int dwc3_gadget_pullup(struct 
->>>>>>>>>>> usb_gadget *g, int is_on)
->>>>>>>>>>>                * device-initiated disconnect requires a core 
->>>>>>>>>>> soft reset
->>>>>>>>>>>                * (DCTL.CSftRst) before enabling the run/stop 
->>>>>>>>>>> bit.
->>>>>>>>>>>                */
->>>>>>>>>>> -        dwc3_core_soft_reset(dwc);
->>>>>>>>>>> +        ret = dwc3_core_soft_reset(dwc);
->>>>>>>>>>> +        if (ret)
->>>>>>>>>>> +            goto done;
->>>>>>>>>>>               dwc3_event_buffers_setup(dwc);
->>>>>>>>>>>               __dwc3_gadget_start(dwc);
->>>>>>>>>>>               ret = dwc3_gadget_run_stop(dwc, true, false);
->>>>>>>>>>>           }
->>>>>>>>>>> +done:
->>>>>>>>>>>           pm_runtime_put(dwc->dev);
->>>>>>>>>>>           return ret;
->>>>>>>>>>> -- 
->>>>>>>>>>> 2.40.0
->>>>>>>>>>>
->>>>>>>>>>
->>>>>>>>>> I think there's one more place that may needs this check. Can 
->>>>>>>>>> you also
->>>>>>>>>> add this check in __dwc3_set_mode()?
->>>>>>>>>
->>>>>>>>> Hi Thinh,
->>>>>>>>>
->>>>>>>>>       Sure. Will do it.
->>>>>>>>> Will the below be good enough ? Or would it be good to add an 
->>>>>>>>> error/warn log
->>>>>>>>> there>
->>>>>>>>
->>>>>>>> There's already a warning message in dwc3_core_soft_reset() if 
->>>>>>>> it fails.
->>>>>>>>
->>>>>>>>>
->>>>>>>>> kriskura@hu-kriskura-hyd:/local/mnt/workspace/krishna/skales2/skales/kernel$
->>>>>>>>> git diff drivers/usb/
->>>>>>>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->>>>>>>>> index 476b63618511..8d1d213d1dcd 100644
->>>>>>>>> --- a/drivers/usb/dwc3/core.c
->>>>>>>>> +++ b/drivers/usb/dwc3/core.c
->>>>>>>>> @@ -210,7 +210,9 @@ static void __dwc3_set_mode(struct 
->>>>>>>>> work_struct *work)
->>>>>>>>>                     }
->>>>>>>>>                     break;
->>>>>>>>>             case DWC3_GCTL_PRTCAP_DEVICE:
->>>>>>>>> -               dwc3_core_soft_reset(dwc);
->>>>>>>>> +               ret = dwc3_core_soft_reset(dwc);
->>>>>>>>> +               if (ret)
->>>>>>>>> +                       goto out;
->>>>>>>>>
->>>>>>>>>                     dwc3_event_buffers_setup(dwc);
->>>>>>>>>
->>>>>>>>
->>>>>>>> If soft-reset failed, the controller is in a bad state. We 
->>>>>>>> should not
->>>>>>>> perform any further operation until the next hard reset. We 
->>>>>>>> should flag
->>>>>>>> the controller as dead. I don't think we have the equivalent of the
->>>>>>>> host's HCD_FLAG_DEAD. It may require some work in the UDC core. 
->>>>>>>> Perhaps
->>>>>>>> we can flag within dwc3 for now and prevent any further 
->>>>>>>> operation for a
->>>>>>>> simpler fix.
->>>>>>>>
->>>>>>> Hi Thinh,
->>>>>>>
->>>>>>>     Are you referring that if __dwc3_set_mode failed with core 
->>>>>>> soft reset
->>>>>>> timing out, the caller i.e., dwc3_set_mode who queues the work 
->>>>>>> need to know
->>>>>>> that the operation actually failed. So we can add a flag to 
->>>>>>> indicate that
->>>>>>> gadget is dead and the caller of dwc3_set_mode can check the flag 
->>>>>>> to see if
->>>>>>> the operation is successful or not.
->>>>>>>
->>>>>>> Or am I misunderstanding your comment ?
->>>>>>>
->>>>>>
->>>>>> Not just in __dwc3_set_mode(). I mean any time dwc3_core_soft_reset
->>>>>> fails, then we set this flag. So that it can prevent the user calling
->>>>>> any gadget ops causing more crashes/invalid behavior. The
->>>>>> dwc->softconnect is already wrong on pullup() on failure.
->>>>>>
->>>>>> So that we can have a check in different gadget ops. For pullup():
->>>>>>
->>>>>> static int dwc3_gadget_pullup() {
->>>>>>     if (dwc->udc_is_dead) {
->>>>>>         dev_err(dev, "reset me. x_x \n");
->>>>>>         return;
->>>>>>     }
->>>>>>
->>>>>>     abc();
->>>>>> }
->>>>>>
->>>>>> Perhaps the effort is probably the same if we enhance the UDC core 
->>>>>> for
->>>>>> this? In any case, I'm fine either way.
->>>>>>
->>>>>> Thanks,
->>>>>> Thinh
->>>>>
->>>>> Hi Thinh,
->>>>>
->>>>>    So you don't want UDC to retry pullup if it fails the first time 
->>>>> ? As per
->>>>> patch-2 of this series, I was trying to propagate the EITMEDOUT to 
->>>>> UDC so
->>>>> that the caller (most probably configfs) can take appropriate 
->>>>> action as to
->>>>> whether it must retry pullup or not.
->>>>>
->>>>
->>>> Now I'm confused. If the soft-reset times out, that means that the
->>>> soft-reset (self-clearing) bit isn't cleared. How can we retry if it's
->>>> stuck in this state? My impression is that soft-reset would not 
->>>> complete
->>>> at all. Is that not the case for you, or it's simply because we need a
->>>> longer soft-reset timeout?
->>>>
->>>> Thanks,
->>>> Thinh
->>>
->>> Hi Thinh,
->>>
->>>    Sorry for not being clear. The intention of patch-1 was to ensure 
->>> we don't
->>> start the controller if reset times out and patch-2 was to ensure 
->>> that UDC
->>> is in sync with controller by understanding that gadget_connect has 
->>> failed
->>> and necessary cleanup has to be done in gadget_bind_driver.
->>
->> That should still be there.
->>
->>>
->>> But usually since the UDC_store is the one that is causing pullup to be
->>> called, the error value is propagated back to UDC_store. If it sees a
->>> failure, it does a retry to pullup.
->>>
->>> I didn't check  whether subsequent retries by UDC to pullup are helping
->>> clear the reset bit or not. But I thought retrying pullup won't be of 
->>> any
->>> harm.
->>
->> It's fine to retry. I'm thinking that the controller is in a bad state
->> at this point that we can't recover (hopefully that's not the case).
->>
->>>
->>> I now get that my patches are incomplete w.r.t handling the timeout.
->>>
->>> IIRC one of the following is what you are suggesting we need to do:
->>>
->>> Option-1:
->>> Set a flag when reset times out and clear it upon core_exit / 
->>> core_init. If
->>> the flag is set, block calls to all the gadget_ops in dwc3. Basically 
->>> even
->>> if retry happens from configfs/UDC, we bail out in pullup/udc_start even
->>> without trying the requested gadget operation.
->>>
->>> Option-2:
->>> If gadget_connect fails with -ETIMEDOUT in UDC, handle the failure and
->>> implement the same flag in UDC and don't even call any gadget_ops.
->>>
->>
-> Hi Thinh,
-> 
-> Thanks for the review.
-> 
->> I'm thinking of option-1. For option-2, we can't control if the
->> gadget_ops will be called. We only have control how we will respond in
->> case they get called again.
->>
->> But now I'm thinking again, I think it may be ok without adding the
->> flag. The UDC core and gadget driver won't do anything else before
->> pullup(1) is successful. Calling other gadget_ops should be harmless
->> (ie. it won't crash/break the system)?
->>
-> I can give this a try in long run testing (For 7-14 days) and see if 
-> anything else is breaking.
-> 
-> Most probably we do a composition switch / PIPO in between which can 
-> call usb_gadget_unregister_driver which might invoke a pullup(0) 
-> followed by udc_stop() and like you mentioned must not be a problem.
-> 
->> Sorry for the noise, but I think it may be ok without marking the
->> controller dead. I wonder if we can confirm my suspiction on retry? I
->> believe this is not easy to reproduce on your setup? If not, I think we
->> can take your change as is.
+Which specific clock are you refering to? I'm not very familiar with
+those, in the device tree I'm seeing "pipe" clocks for usb_0 and usb_1
+phys, but not for usb_2, which is the one that's causing issues.
 
-Hi Thinh,
+Best,
 
-   I got this patch tested on two diff Gen-2 targets for around 10 days 
-and no issues were seen. (No SMMU fault seen on a 10 day run). Let me 
-know of any other concerns that might come up with this patch. Else I 
-can rebase it to get merged.
+Adrien
 
-Regards,
-Krishna,
