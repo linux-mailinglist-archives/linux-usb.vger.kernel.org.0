@@ -2,35 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4CDD6EE059
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 12:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0009C6EE0DA
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 13:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233530AbjDYK3x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Apr 2023 06:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
+        id S233835AbjDYLH0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Apr 2023 07:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233782AbjDYK3v (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 06:29:51 -0400
+        with ESMTP id S233929AbjDYLHG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 07:07:06 -0400
 Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02DB5257;
-        Tue, 25 Apr 2023 03:29:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1411E13C2F;
+        Tue, 25 Apr 2023 04:06:37 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id C33525FD3A;
-        Tue, 25 Apr 2023 13:29:16 +0300 (MSK)
+        by mx.sberdevices.ru (Postfix) with ESMTP id 4E56F5FD3E;
+        Tue, 25 Apr 2023 14:06:12 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1682418556;
-        bh=7hJUvsqyjWvVw7Khab8QmwY8D6Cfdc1hwURLPhG6nao=;
+        s=mail; t=1682420772;
+        bh=jORapi60saGb6s8dqt0Qj/N+jnHOySKoftd9srjwQEs=;
         h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=R8pi8/0owL2UIrCSxT7v/uznrT6w4UND+ouhHulfzffi8K9KU7C0DQcQhAhVmfAUO
-         bHj8WqBB6H3BW1VsgjG3heM0vG131VbHEWGjsGvYd6WiRfhLDQC+BjixfJoQWUJeiz
-         ROjtBRLmM6MkBYX2seBbll/WzJT3znwgbP3HS2VrCZQ5nh/kBIi7sdABi4Fqda4bgR
-         7INi08hXNI89fs09g1mxsJ/25OH3jp7k2WWjMjIm5VGQsmkI1P6sBaNM8CrPG8UyB8
-         lnkB6hSsKBEYNlxyImd8z94Jdf+255FWgkHqsDP4ABG6+1fWhF2DEYPaq3rK9kj7H1
-         e1HLqiXav4S0Q==
+        b=rRc5dU1h7elVVrLMdQ68XUElEEtq7bwWwUgtV6+mOM9NJnSZxUU/TIdyE5cVikw02
+         vK6EdxY2XsJi0G+50e30/FWNBX4dJvX2zdD5NT24ll6uDNdCBmrhUFCQBh+ie+U4VI
+         sP15RdoSlG29gtUtuThXm4SWxwId9ahah4GRv5/B+GartSYov43VR8WMd8aIwpGLEi
+         /lzZU2VSNpCJuz9Sk2Hzxfn4FfLudJ6OhkrygOpPcR5nnivQMbkcCs/VnclwXOWEG7
+         OO6qz+mZzjfy4tHqjYueG+s+azXsSKtWSO0egJxufitROVUXABrZoX/zAIU+1zkBJX
+         zi+nTaA/xqwZA==
 Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
         by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 25 Apr 2023 13:29:12 +0300 (MSK)
-Date:   Tue, 25 Apr 2023 13:29:12 +0300
+        Tue, 25 Apr 2023 14:06:10 +0300 (MSK)
+Date:   Tue, 25 Apr 2023 14:06:10 +0300
 From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
 To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
@@ -45,17 +45,17 @@ CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-amlogic@lists.infradead.org>,
         <linux-phy@lists.infradead.org>
-Subject: Re: [PATCH v2 1/5] phy: amlogic: enable/disable clkin during Amlogic
- USB PHY init/exit
-Message-ID: <20230425102912.qhey7fpbuqvwg44j@CAB-WSD-L081021>
+Subject: Re: [PATCH v2 5/5] arm64: dts: meson: a1: support USB controller in
+ OTG mode
+Message-ID: <20230425110610.ezhhz2vauc6o4nu2@CAB-WSD-L081021>
 References: <20230418111612.19479-1-ddrokosov@sberdevices.ru>
- <20230418111612.19479-2-ddrokosov@sberdevices.ru>
- <CAFBinCDyhBQ5Nob38EmXor1PtcO09dRdReDTW+tc5CN4i20HhA@mail.gmail.com>
+ <20230418111612.19479-6-ddrokosov@sberdevices.ru>
+ <CAFBinCDvyweC-m=nKw+FZFYvASDE2x3e-Vt=JkSzBifu87cnNw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFBinCDyhBQ5Nob38EmXor1PtcO09dRdReDTW+tc5CN4i20HhA@mail.gmail.com>
+In-Reply-To: <CAFBinCDvyweC-m=nKw+FZFYvASDE2x3e-Vt=JkSzBifu87cnNw@mail.gmail.com>
 User-Agent: NeoMutt/20220415
 X-Originating-IP: [172.16.1.6]
 X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
@@ -77,93 +77,58 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Martin,
-
-Thanks a lot for the review! Appreciate it!
-Please find my comments below.
-
-On Sun, Apr 23, 2023 at 07:42:25PM +0200, Martin Blumenstingl wrote:
-> Hi Dmitry,
-> 
+On Sun, Apr 23, 2023 at 07:51:31PM +0200, Martin Blumenstingl wrote:
 > On Tue, Apr 18, 2023 at 1:16 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> >
-> > Previously, all Amlogic boards used the XTAL clock as the default board
-> > clock for the USB PHY input, so there was no need to enable it.
-> > However, with the introduction of new Amlogic SoCs like the A1 family,
-> > the USB PHY now uses a gated clock. Hence, it is necessary to enable
-> > this gated clock during the PHY initialization sequence, or disable it
-> > during the PHY exit, as appropriate.
-> >
-> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> > ---
-> >  drivers/phy/amlogic/phy-meson-g12a-usb2.c | 13 +++++++++++--
-> >  1 file changed, 11 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/phy/amlogic/phy-meson-g12a-usb2.c b/drivers/phy/amlogic/phy-meson-g12a-usb2.c
-> > index 9d1efa0d9394..80938751da4f 100644
-> > --- a/drivers/phy/amlogic/phy-meson-g12a-usb2.c
-> > +++ b/drivers/phy/amlogic/phy-meson-g12a-usb2.c
-> > @@ -172,10 +172,16 @@ static int phy_meson_g12a_usb2_init(struct phy *phy)
-> >         int ret;
-> >         unsigned int value;
-> >
-> > -       ret = reset_control_reset(priv->reset);
-> > +       ret = clk_prepare_enable(priv->clk);
-> >         if (ret)
-> >                 return ret;
-> >
-> > +       ret = reset_control_reset(priv->reset);
-> > +       if (ret) {
-> > +               clk_disable_unprepare(priv->clk);
-> > +               return ret;
-> > +       }
-> > +
-> This part looks good. You asked why I suggested this approach instead
-> of enabling the clock at probe time and only now I have time to reply
-> to it.
-> Consider the following scenario:
-> - modprobe phy-meson-g12a-usb2
-> - modprobe dwc3-meson-g12a (this will call phy_init)
-> - rmmod dwc3-meson-g12a (this will call phy_exit)
+> [...]
+> > +                       usb2_phy1: phy@4000 {
+> > +                               compatible = "amlogic,a1-usb2-phy";
+> > +                               clocks = <&clkc CLKID_USB_PHY_IN>;
+> > +                               clock-names = "xtal";
+> Out of curiosity since there's also a CLKID_USB_PHY clock (which is
+> used for the dwc3 controller below):
+> Do we know that this part of the clock hierarchy is correct? I have no
+> way to check this myself, so I'm curious if you could verify this
+> somehow.
 > 
-> If the clock was enabled at probe time then it would only be disabled
-> when using rmmod phy-meson-g12a-usb2.
-> By manually calling clk_prepare_enable/clk_disable_unprepare we ensure
-> that the clock gets disabled when we don't need the PHY anymore.
-> Whether this makes any difference in terms of power draw: I can't say.
+> [...]
+
+I've developed a clock driver for A1 and verified it against the Amlogic
+custom driver and datasheet. As you pointed out, there are indeed two
+USB phy clocks.
+They are labeled as follows in my clock driver:
+    * CLKID_USB_PHY_IN (xtal -> usb_phy gated clock) - the phy input clock
+    * CLKID_USB_PHY (SYS_CLK_EN based gate) - the synopsys IP gated clock
+
+The current representation of the USB phy clocks is solely based on
+my technical opinion, as the datasheet does not provide any detailed
+information about them.
+
+Clock driver:
+https://lore.kernel.org/all/20230405195927.13487-1-ddrokosov@sberdevices.ru/
+
+> > +                       dwc2: usb@ff500000 {
+> > +                               compatible = "amlogic,meson-a1-usb", "snps,dwc2";
+> > +                               reg = <0x0 0xff500000 0x0 0x40000>;
+> > +                               interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>;
+> > +                               phys = <&usb2_phy1>;
+> > +                               phy-names = "usb2_phy";
+> Documentation/devicetree/bindings/usb/dwc2.yaml only allows a
+> "usb2-phy" (dash instead of underscore).
 > 
+> [...]
 
-It makes sense. I fully agree with your approach, which looks better
-compared to using the automatic devm_clk API.
+Ah, my fault..
 
-> >         udelay(RESET_COMPLETE_TIME);
-> >
-> >         /* usb2_otg_aca_en == 0 */
-> > @@ -277,8 +283,11 @@ static int phy_meson_g12a_usb2_init(struct phy *phy)
-> >  static int phy_meson_g12a_usb2_exit(struct phy *phy)
-> >  {
-> >         struct phy_meson_g12a_usb2_priv *priv = phy_get_drvdata(phy);
-> > +       int ret = reset_control_reset(priv->reset);
-> > +
-> > +       clk_disable_unprepare(priv->clk);
-> >
-> > -       return reset_control_reset(priv->reset);
-> > +       return ret;
-> I think this can cause issues in case when reset_control_reset returns
-> an error: If I understand the code in phy-core.c correctly it will
-> only decrease the init ref-count if exit returns 0.
-> Whenever phy_exit is called for the second time
-> clk_disable_unprepare() will be called with a clock ref-count of 0, so
-> it'll likely print some warning.
-> 
-> My suggestion is to return early if reset_control_reset() fails and
-> not call clk_disable_unprepare() in that case.
-> What do you think?
+> > +                       dwc3: usb@ff400000 {
+> > +                               compatible = "snps,dwc3";
+> > +                               reg = <0x0 0xff400000 0x0 0x100000>;
+> Note to self: interesting that Amlogic swapped the register location
+> of the dwc2 and dwc3 controllers since the G12 generation.
 
-After taking a closer look at the phy_exit core code, it appears that
-your idea is spot on. Exiting immediately when reset fails seems like
-the better choice.
-I will work on a new version of the code accordingly.
+Indeed, during the bringup process, I was surprised to discover that
+the dwc2 engine wasn't starting properly. It was quite unexpected, but
+also admittedly intriguing as I delved into the issue and tried to
+understand the root cause.
 
 -- 
 Thank you,
