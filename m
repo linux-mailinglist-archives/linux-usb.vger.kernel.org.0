@@ -2,47 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FC06EDB0D
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 07:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753666EDB16
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Apr 2023 07:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbjDYFMW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Apr 2023 01:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
+        id S231646AbjDYFPp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Apr 2023 01:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjDYFMU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 01:12:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E02C83CB;
-        Mon, 24 Apr 2023 22:12:19 -0700 (PDT)
+        with ESMTP id S230195AbjDYFPn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Apr 2023 01:15:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA0083CB;
+        Mon, 24 Apr 2023 22:15:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39054614B0;
-        Tue, 25 Apr 2023 05:12:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C1FCC433D2;
-        Tue, 25 Apr 2023 05:12:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99279622E7;
+        Tue, 25 Apr 2023 05:15:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F2F9C433EF;
+        Tue, 25 Apr 2023 05:15:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1682399538;
-        bh=e+5pBIG9ZCreZChuRW8NpnnKMK4kVj6h0Q9BwcdUO6Y=;
+        s=korg; t=1682399742;
+        bh=rsBha+TxrWP7EfBGpjDX9i+tOjwFVeXBTrNnvpzrmsY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qLW4ihj6ONnqmEf7FmSz7jDLFiF3np1+qR6BGToOM5/9mE0b2B85MBTx80vXpYKRw
-         o4Yaw1Da5mqG9LeSezMbpciLcto7LZ7bI1mRwbJM8rf94Nv6SyiZAH6Vol2px2T5xr
-         TGb2IxthourIesKCWc4YxgqU2mK/F0fLhiJzUSVQ=
-Date:   Tue, 25 Apr 2023 07:12:15 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Liang Yuhang <lihuya@hust.edu.cn>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        hust-os-kernel-patches@googlegroups.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v2] usb: dwc3: remove dead code in dwc3_otg_get_irq
-Message-ID: <ZEdhLyEw_x49zZKp@kroah.com>
-References: <20230425015532.13622-1-lihuya@hust.edu.cn>
+        b=wmjx1jJVIP6+tVyr0+p1Uhggc6kkBzBl3ejTh5mFVZra4vmERsalUyhxzXIwYSLPd
+         hb/HGdYgb7mRAScua9/RXT4p3Q6usyuDa3uw89uNcSvugICSgTQbmaJ0igNVG6xQf6
+         55Yx/hj87t+5EU8cE2h7czFbVYL2z/Ryyv9X9mKA=
+Date:   Tue, 25 Apr 2023 07:15:39 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     ktestrobot@126.com, U201911841@hust.edu.cn
+Cc:     lidaxian@hust.edu.cn, hust-os-kernel-patches@googlegroups.com,
+        dzm91@hust.edu.cn, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, balbi@kernel.org, s.shtylyov@omp.ru
+Subject: Re: [PATCH v2] usb: phy: phy-tahvo: fix memory leak in
+ tahvo_usb_probe()
+Message-ID: <ZEdh-_Jv02qb6K4n@kroah.com>
+References: <644741EB.013E97.00008@m126.mail.126.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230425015532.13622-1-lihuya@hust.edu.cn>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <644741EB.013E97.00008@m126.mail.126.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,28 +52,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 09:55:32AM +0800, Liang Yuhang wrote:
-> platform_get_irq() only return non-zero irq number on success, or
-> negative error number on failure.
-> 
-> There is no need to check the return value of platform_get_irq()
-> to determine the return value of dwc3_otg_get_irq(), removing
-> them to solve this problem.
-> 
-> Signed-off-by: Liang Yuhang <lihuya@hust.edu.cn>
-> 
-> ---
-> v1 -> v2: change name to real name
-> ---
->  drivers/usb/dwc3/drd.c | 5 -----
->  1 file changed, 5 deletions(-)
+On Tue, Apr 25, 2023 at 10:58:51AM +0800, ktestrobot@126.com wrote:
+> Hi, Li Yang
+> This email is automatically replied by KTestRobot(Beta). Please do not reply to this email.
 
-Why is this a RESEND?  And why is it resent?  You changed something from
-v1 to v2, but that does not mean it is a resend.
+But I will!
 
-Note, I STRONGLY encourage people to get experience by working in
-drivers/staging/ first, before going out to the rest of the kernel and
-dealing with fast-moving subsystems.  Perhaps try that first?
+> If you have any questions or suggestions about KTestRobot, please contact ZhongYong <U201911841@hust.edu.cn>
+
+First question, why are you responding from an email that is not allowed
+to be responded to and forced to have us manually add an address?
+That's not very nice or helpful for us who have to see these messages,
+please fix that.
+
+> --- Changed Paths ---
+> drivers/usb/phy/phy-tahvo.c
+> --- Log Message ---
+> Smatch reports:
+> drivers/usb/phy/phy-tahvo.c: tahvo_usb_probe()
+> warn: missing unwind goto?
+> 
+> After geting irq, if ret < 0, it will return without error handling to
+> free memory.
+> Just add error handling to fix this problem.
+> 
+> --- Test Result ---
+> *** CheckPatch	PASS ***
+> *** CheckSmatch	PASS ***
+> *** ApplyToLinuxNext	PASS ***
+
+Why is only "does the patch apply" matter for this bot?  What is it
+supposed to be doing here?  Is it going to run on every single patch to
+this mailing list, and if so, how can we turn it off as "it applied!" is
+a very very low bar to be testing something for, and we already have a
+bot that does this.
 
 thanks,
 
