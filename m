@@ -2,117 +2,207 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0696EF44E
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 14:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D2C6EF4A0
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 14:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240889AbjDZM3X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Apr 2023 08:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
+        id S240318AbjDZMrY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Apr 2023 08:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240887AbjDZM3T (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 08:29:19 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109995FCE;
-        Wed, 26 Apr 2023 05:29:06 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33QCStOE2006642, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33QCStOE2006642
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Wed, 26 Apr 2023 20:28:55 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Wed, 26 Apr 2023 20:28:57 +0800
-Received: from fc34.localdomain (172.22.228.98) by RTEXMBS04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Wed, 26 Apr
- 2023 20:28:55 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     <kuba@kernel.org>, <davem@davemloft.net>
-CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Hayes Wang <hayeswang@realtek.com>
-Subject: [PATCH net 3/3] r8152: move setting r8153b_rx_agg_chg_indicate()
-Date:   Wed, 26 Apr 2023 20:28:05 +0800
-Message-ID: <20230426122805.23301-403-nic_swsd@realtek.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230426122805.23301-400-nic_swsd@realtek.com>
-References: <20230426122805.23301-400-nic_swsd@realtek.com>
+        with ESMTP id S240303AbjDZMrW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 08:47:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4839D5FCA;
+        Wed, 26 Apr 2023 05:46:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A451F6364D;
+        Wed, 26 Apr 2023 12:46:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C02C2C433EF;
+        Wed, 26 Apr 2023 12:46:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682513172;
+        bh=6wRdWp5ZpsEcT/z2Q3IrFU3hpwPCXkjls4+igISayBY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WR9mzrdB0a2QcQSr2cebEYy0+rSZZIT2UeeZJtYZ2cjuRYbyexcANkIpYHj0Ch7fA
+         n7nsTIEmrWi8JwBlVqWlU/BQI8GFplCoJzV/cwAv6T+sExWOfO8ze9h8//BJ/7nLj1
+         yu3c0qEMOJ+UVVg8pNMZRM4EK9CKTdyUnj2HTk3aQ/YSzh08lwyxNSL3rMgqMQlzbz
+         G+JUuuIngQtA8VGGSM2lFI6BfGa5n7vd6yCjClg/6T8g0SUBUZrMyGKLpKxsPA+bhh
+         HqWFmOqcFHef0hnau22g7/dLnnRSnXY8cK55AXGKS5iiX0avqfTLz4uAamqGO2+nd3
+         rfgHJp4PWdd8w==
+Message-ID: <d1051856-1177-b5b8-6761-28da80a3cb7c@kernel.org>
+Date:   Wed, 26 Apr 2023 15:46:04 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.22.228.98]
-X-ClientProxiedBy: RTEXH36505.realtek.com.tw (172.21.6.25) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v5 7/7] riscv: dts: starfive: Add USB dts configuration
+ for JH7110
+Content-Language: en-US
+To:     Minda Chen <minda.chen@starfivetech.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Mason Huo <mason.huo@starfivetech.com>
+References: <20230420110052.3182-1-minda.chen@starfivetech.com>
+ <20230420110052.3182-8-minda.chen@starfivetech.com>
+ <3f2baded-c5d6-7d94-00f3-6d8fb24262c4@kernel.org>
+ <4b0220ac-23bf-4206-eba2-2842a216bb24@starfivetech.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <4b0220ac-23bf-4206-eba2-2842a216bb24@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Move setting r8153b_rx_agg_chg_indicate() for 2.5G devices. The
-r8153b_rx_agg_chg_indicate() has to be called after enabling tx/rx.
-Otherwise, the coalescing settings are useless.
+Hi Minda,
 
-Fixes: 195aae321c82 ("r8152: support new chips")
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
----
- drivers/net/usb/r8152.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+On 26/04/2023 14:05, Minda Chen wrote:
+> 
+> 
+> On 2023/4/24 22:53, Roger Quadros wrote:
+>>
+>>
+>> On 20/04/2023 14:00, Minda Chen wrote:
+>>> Add USB wrapper layer and Cadence USB3 controller dts
+>>> configuration for StarFive JH7110 SoC and VisionFive2
+>>> Board.
+>>> USB controller connect to PHY, The PHY dts configuration
+>>> are also added.
+>>>
+>>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+>>> ---
+>>>  .../jh7110-starfive-visionfive-2.dtsi         |  7 +++
+>>>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 44 +++++++++++++++++++
+>>>  2 files changed, 51 insertions(+)
+>>>
+>>> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>>> index 1155b97b593d..fa97ebfd93ad 100644
+>>> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>>> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>>> @@ -221,3 +221,10 @@
+>>>  	pinctrl-0 = <&uart0_pins>;
+>>>  	status = "okay";
+>>>  };
+>>> +
+>>> +&usb0 {
+>>> +	phys = <&usbphy0>;
+>>> +	phy-names = "usb2";
+>>> +	dr_mode = "peripheral";
+>>> +	status = "okay";
+>>> +};
+>>> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>>> index 29cd798b6732..eee395e19cdb 100644
+>>> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>>> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>>> @@ -366,6 +366,50 @@
+>>>  			status = "disabled";
+>>>  		};
+>>>  
+>>> +		usb0: usb@10100000 {
+>>> +			compatible = "starfive,jh7110-usb";
+>>> +			reg = <0x0 0x10100000 0x0 0x10000>,
+>>> +			      <0x0 0x10110000 0x0 0x10000>,
+>>> +			      <0x0 0x10120000 0x0 0x10000>;
+>>> +			reg-names = "otg", "xhci", "dev";
+>>> +			interrupts = <100>, <108>, <110>;
+>>> +			interrupt-names = "host", "peripheral", "otg";
+>>> +			clocks = <&stgcrg JH7110_STGCLK_USB0_LPM>,
+>>> +				 <&stgcrg JH7110_STGCLK_USB0_STB>,
+>>> +				 <&stgcrg JH7110_STGCLK_USB0_APB>,
+>>> +				 <&stgcrg JH7110_STGCLK_USB0_AXI>,
+>>> +				 <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
+>>> +			clock-names = "lpm", "stb", "apb", "axi", "utmi_apb";
+>>> +			resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
+>>> +				 <&stgcrg JH7110_STGRST_USB0_APB>,
+>>> +				 <&stgcrg JH7110_STGRST_USB0_AXI>,
+>>> +				 <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
+>>> +			reset-names = "pwrup", "apb", "axi", "utmi_apb";
+>>
+>> All this can really be "cdns,usb3" node. The cdns,usb3 driver should
+>> do reset and clocks init as it is generic.
+>>
+> But I can't find clock and reset init in Cadence codes while dwc usb3 can find. 
+> It looks only if clocks and reset generic init codes required to be added in  Cadence codes to support generic clock and reset init.
+>>> +			starfive,stg-syscon = <&stg_syscon 0x4>;
+>>> +			status = "disabled";
+>>
+>> Only the syscon handling looks starfive specific so only that handling
+>> should be done in starfive USB driver.
+>>
+>> This node should look like this
+>>
+>>  
+>> 	starfive-usb@4 {
+>> 		compatible = "starfive,jh7110-usb";
+>> 		starfive,stg-syscon = <&stg_syscon 0x4>;
+>>
+>> 		usb0: usb@10100000 {
+>> 			compatible = "cdns,usb3";
+>> 			reg = <0x0 0x10100000 0x0 0x10000>,
+>> 			      <0x0 0x10110000 0x0 0x10000>,
+>> 			      <0x0 0x10120000 0x0 0x10000>;
+>> 			reg-names = "otg", "xhci", "dev";
+>> 			interrupts = <100>, <108>, <110>;
+>> 			interrupt-names = "host", "peripheral", "otg";
+>> 			clocks = <&stgcrg JH7110_STGCLK_USB0_LPM>,
+>> 				 <&stgcrg JH7110_STGCLK_USB0_STB>,
+>> 				 <&stgcrg JH7110_STGCLK_USB0_APB>,
+>> 				 <&stgcrg JH7110_STGCLK_USB0_AXI>,
+>> 				 <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
+>> 			clock-names = "lpm", "stb", "apb", "axi", "utmi_apb";
+>> 			resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
+>> 				 <&stgcrg JH7110_STGRST_USB0_APB>,
+>> 				 <&stgcrg JH7110_STGRST_USB0_AXI>,
+>> 				 <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
+>> 			reset-names = "pwrup", "apb", "axi", "utmi_apb";
+>> 			starfive,stg-syscon = <&stg_syscon 0x4>;
+>> 			status = "disabled";
+>> 		};
+>> 	}
+>>> In starfife-usb driver you can use of_platform_default_populate()
+>> to create the cdns,usb3 child for you.
+>>
+> But actually the the syscon is not belong to USB. Below is Rob's previous comments. I am follow Rob's comments to change this.
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 3ecd4651ae29..c464da385511 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -3023,12 +3023,16 @@ static int rtl_enable(struct r8152 *tp)
- 	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_CR, ocp_data);
- 
- 	switch (tp->version) {
--	case RTL_VER_08:
--	case RTL_VER_09:
--	case RTL_VER_14:
--		r8153b_rx_agg_chg_indicate(tp);
-+	case RTL_VER_01:
-+	case RTL_VER_02:
-+	case RTL_VER_03:
-+	case RTL_VER_04:
-+	case RTL_VER_05:
-+	case RTL_VER_06:
-+	case RTL_VER_07:
- 		break;
- 	default:
-+		r8153b_rx_agg_chg_indicate(tp);
- 		break;
- 	}
- 
-@@ -3082,7 +3086,6 @@ static void r8153_set_rx_early_timeout(struct r8152 *tp)
- 			       640 / 8);
- 		ocp_write_word(tp, MCU_TYPE_USB, USB_RX_EXTRA_AGGR_TMR,
- 			       ocp_data);
--		r8153b_rx_agg_chg_indicate(tp);
- 		break;
- 
- 	default:
-@@ -3116,7 +3119,6 @@ static void r8153_set_rx_early_size(struct r8152 *tp)
- 	case RTL_VER_15:
- 		ocp_write_word(tp, MCU_TYPE_USB, USB_RX_EARLY_SIZE,
- 			       ocp_data / 8);
--		r8153b_rx_agg_chg_indicate(tp);
- 		break;
- 	default:
- 		WARN_ON_ONCE(1);
--- 
-2.40.0
+Managing these syscon registers cannot be done in cdns,usb3 driver.
+So you definitely need a wrapper driver for that.
 
+>  
+>   This pattern of USB wrapper and then a "generic" IP node is discouraged if it is just clocks, resets, power-domains, etc. IOW, unless there's an actual wrapper h/w block with its own registers, then don't do this split. 
+>   Merge it all into a single node.
+> 
+> Rob and Rogers
+>   Could you design whether merge the usb nodes？ 
+> dt-binding，USB codes are different in two case.
+>  
+
+There should ideally be only one USB node and that should use "cdns,usb3" compatible.
+Clocks, resets and power-domain handling should be done in cdns,usb3 driver.
+
+But since you also need to manage some syscon registers "cdsn,usb3" driver is not
+sufficient for you.
+
+I will leave the DT-binding question for this case to Rob.
+
+cheers,
+-roger
