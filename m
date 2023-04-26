@@ -2,169 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AB86EFADE
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 21:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 722666EFB12
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 21:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239420AbjDZTUL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Apr 2023 15:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
+        id S238588AbjDZTZF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Apr 2023 15:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236381AbjDZTUK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 15:20:10 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1613BFF
-        for <linux-usb@vger.kernel.org>; Wed, 26 Apr 2023 12:20:07 -0700 (PDT)
-Received: (qmail 133613 invoked by uid 1000); 26 Apr 2023 15:20:07 -0400
-Date:   Wed, 26 Apr 2023 15:20:07 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Maxime Bizon <mbizon@freebox.fr>
-Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-scsi@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: Re: Reproducible deadlock when usb-storage scsi command timeouts
- twice
-Message-ID: <34a2e50b-e899-45ee-ac14-31fa0bb1616b@rowland.harvard.edu>
-References: <ZEllnjMKT8ulZbJh@sakura>
+        with ESMTP id S239587AbjDZTYw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 15:24:52 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5221B3591
+        for <linux-usb@vger.kernel.org>; Wed, 26 Apr 2023 12:24:34 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f19a7f9424so52041695e9.2
+        for <linux-usb@vger.kernel.org>; Wed, 26 Apr 2023 12:24:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1682537073; x=1685129073;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=623I+b9sj9JQHMoE8gUBonB4YWYfafGdl6RvYOXiA9s=;
+        b=txkwhL2liSvbgv2V/br5OZELzu6PxeKpE67gU/OpfSZOLRPr0Q4IV/1S3HnN8lZxEB
+         ULpXoOzuVoXSeHCYF68J/dRTwZmz+IVYElEolOaUDHtcxkLXqj6+IvkayBKFSIAFU4Cp
+         Cj5tlC/+5zaEq08fnKxONhIGkLIlq+eUak7jnRM0QfKTF3Q521FOP1ObWWn8JWtjgHZT
+         5YcQnB8aF+8t67t/8ISkHQy+Wb2BIvnvRly7vLpGjbQg82slREEwpsVsnd0eS6Bg6v2u
+         XynQPcxW3uibdKTUncqjLaGbT6tgNC7YGI8ux5ZLDPpwboRld+QuiKDSuGlsw8iWee/9
+         BaFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682537073; x=1685129073;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=623I+b9sj9JQHMoE8gUBonB4YWYfafGdl6RvYOXiA9s=;
+        b=YRAdDZAlmbAer2BBNvbxWRd+oRwsR/v6qWl3xtwzp8nC3Mej48Pn1gqCLjguclVp2L
+         V4U/cJZH3VrkEV50OFxrn1w0i2N8nDjUx8n9ZjSDOjtAptYB3eqtP4HFl1D0o6QcktMl
+         yBaxWbB8BNPhPSQGkcoSUg3CS7xEJCjj/veEM+3IIVWrjPAoqIISXexFWk/JyqVy9zKa
+         wCGepgdzJqfB1tg02Uy3P4XIANfI+J84seT9caKmUd++qtv7EhFqG0IA4ebRGkMEODry
+         KiJ3c/OFHv7sxPcM/DhePQvrfGyZrFUn3gL37haBT7JfzU4Z8l3xUFKwqArNWSNgkXCn
+         cOCQ==
+X-Gm-Message-State: AAQBX9fVhVKI2E3W0NKmzDvhTqqxCiGRTnVnkeOea5YQ546qIREZ9OwE
+        3liQdo5wHxrkzAj3zJ1+H+sSWw==
+X-Google-Smtp-Source: AKy350b61s1hT/fGboWfJrsEyVqrqX9zy/B/kQ0qe65IuuQ1Z++YEaoBMpkDWIvqEtn+zzLVEq47Sw==
+X-Received: by 2002:a7b:cb47:0:b0:3f0:967e:2cfb with SMTP id v7-20020a7bcb47000000b003f0967e2cfbmr14555881wmj.36.1682537072613;
+        Wed, 26 Apr 2023 12:24:32 -0700 (PDT)
+Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.googlemail.com with ESMTPSA id m6-20020a05600c4f4600b003ee5fa61f45sm22482137wmq.3.2023.04.26.12.24.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Apr 2023 12:24:31 -0700 (PDT)
+From:   amergnat@baylibre.com
+Date:   Wed, 26 Apr 2023 21:24:20 +0200
+Subject: [PATCH] usb: mtu3: Don't check the USB3 status bits if the max
+ speed is USB2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZEllnjMKT8ulZbJh@sakura>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230426-usb-mtu3-improvement-v1-1-1cf02434b478@baylibre.com>
+X-B4-Tracking: v=1; b=H4sIAGN6SWQC/23OSw6CMBSF4a2Qjr0WqFJwK8ZBHxe5gz7SlsaEs
+ HfBscN/8J2cjWVMhJk9mo0lrJQp+CO6S8PMovwbgezRrG970d76AdaswZVVALmYQkWHvoCUdhq
+ lxXmakR1Uq4ygk/JmOfEaeR2uApLpeAmRDHdlFMOd/xs7fUw40+d36/na9y9zOhGspgAAAA==
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1260; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=lnjx8kcqUDfgilr0fGyRB+NAq/rLS5pv35XuHVTlGDc=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkSXpvI7p5QNlCaGzZG7dVJB/7HfFq9BIZoExjwmkv
+ 080ExUCJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZEl6bwAKCRArRkmdfjHURY+HD/
+ 4hwG+Mdt3GhTLAJLObbayoktgbVLjxIFDSoY/xq48qazZ9BPkPhY2Qte2zfBbTjYjy8rJ2mBsSiRB0
+ eZ1CCWQSwaCsiT//hW2xlKAjSPb4k5ceRUF0HssuEtBokGnZMK95x5J+FcEiS5OwRnd/BDc/Xx/cHE
+ 0UoYi5hMJUiUtJA0yQzSRmwL1k7c7mTZrM3v60qAU2/EV1V04OdQUOifGw2d2BaY4WGRhEyiu2C8gM
+ NyiCGqXNsvHTLKdQsNQ1YXFi8g8NIT3NNzAmLAd8W8RjnRCP8i3icnvygNKzm6mDY5JEtgbdSt3u9L
+ NUKgxtJ6UF7TQNEb8BjY1aAS0aGyKRJ5O936nOq0HY0oIMKqWqSD4vk3GTugAIkWGSjtFKp3qS/gp2
+ 9imZjJlZtyK8jMF0N1frygUANSKcqd/1oIS0qSB7YgR6yPv99JJEqzxHyr1QfPLbZPfklU1lRbAASZ
+ I1v1/PZROhA8SSc5FRGiceKuOJ+v25kBk92Jjs0oPwraLRVxDPqCTBd8nFyslj+Hc4QocqgNpCi7I+
+ /unp2jqRGVoo9iEh3kZp/AJ2CNPySp9rCsfeZo1xX2c4PBb1eBvrCnv9eXhl+VUTadHPpgipqHFcHU
+ PvCjX56Zf08oS7nE6mMbS0m1gESio5CeRG0Ps3FhjWsOBc4c1KvLuT1kjIDA==
+X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
+ fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[Adding linux-scsi and Martin to the CC: list, since this looks like it 
-might be a problem in the SCSI core]
+From: Alexandre Bailon <abailon@baylibre.com>
 
-On Wed, Apr 26, 2023 at 07:55:42PM +0200, Maxime Bizon wrote:
-> 
-> Hello,
-> 
-> I have a faulty 128MB USB stick that happens to randomly timeout when
-> reading a specific block.
-> 
-> After the first timeout, the scsi layer retries the command. If that
-> retry work, then everything goes well. But if the retried command
-> timeouts as well, then I get a deadlock.
+If the IP is U3, the driver will check some USB3 status bits.
+This could fail if only USB2 is used.
+This only check these bits if USB operate at USB3 speed.
 
-What version of the kernel are you using?
+Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
+Signed-off-by: Fabien Parent <fparent@baylibre.com>
+Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+---
+This patch is ported from downstream. Without this fix, USB doesn't
+work if USB2 protocol is used first.
+---
+ drivers/usb/mtu3/mtu3_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> To reproduce fast & reliable, I'm using these settings:
-> 
-> # echo 10 >/proc/sys/kernel/hung_task_timeout_secs
-> # echo 0x3f > /proc/sys/dev/scsi/logging_level
-> # cd /sys/block/sda/queue/
-> # echo none > scheduler
-> # echo 1 > nr_requests
-> # echo 1 > nomerges
-> # echo 4 > max_sectors_kb
-> # echo 5000 > io_timeout
-> # cat /dev/sda > /dev/null
-> 
-> 
-> dmesg with timestamps so it's easy to spot the timeouts:
+diff --git a/drivers/usb/mtu3/mtu3_core.c b/drivers/usb/mtu3/mtu3_core.c
+index a3a6282893d0..00dba871aff8 100644
+--- a/drivers/usb/mtu3/mtu3_core.c
++++ b/drivers/usb/mtu3/mtu3_core.c
+@@ -100,7 +100,7 @@ static int mtu3_device_enable(struct mtu3 *mtu)
+ 
+ 	mtu3_clrbits(ibase, U3D_SSUSB_IP_PW_CTRL2, SSUSB_IP_DEV_PDN);
+ 
+-	if (mtu->u3_capable) {
++	if (mtu->u3_capable && mtu->max_speed >= USB_SPEED_SUPER) {
+ 		check_clk = SSUSB_U3_MAC_RST_B_STS;
+ 		mtu3_clrbits(ibase, SSUSB_U3_CTRL(0),
+ 			(SSUSB_U3_PORT_DIS | SSUSB_U3_PORT_PDN |
 
-> [  211.733162] *** thread awakened
-> [  211.733174] Command READ_10 (10 bytes)
-> [  211.733183] bytes: 28 00 00 02 02 00 00 00 08 00
-> [  211.733192] Bulk Command S 0x43425355 T 0xb8cb L 4096 F 128 Trg 0 LUN 0 CL 10
-> [  211.733204] xfer 31 bytes
-> [  211.733288] Status code 0; transferred 31/31
-> [  211.733300] -- transfer complete
-> [  211.733306] Bulk command transfer result=0
-> [  211.733313] xfer 4096 bytes, 1 entries
-> [  218.089304] sd 0:0:0:0: [sda] tag#0 abort scheduled
-> [  218.109297] sd 0:0:0:0: [sda] tag#0 aborting command
-> [  218.109315] command_abort called
-> [  218.109324] -- cancelling sg request
-> [  218.112380] Status code -104; transferred 3072/4096
-> [  218.112393] -- transfer cancelled
-> [  218.112400] Bulk data transfer result 0x4
-> [  218.112407] -- command was aborted
-> [  218.209278] usb 1-1.2: reset high-speed USB device number 3 using orion-ehci
-> [  218.359923] usb_reset_device returns 0
-> [  218.359936] scsi command aborted
-> [  218.359947] *** thread sleeping
-> [  218.359964] sd 0:0:0:0: [sda] tag#0 retry aborted command
-> [  218.399298] *** thread awakened
-> [  218.399311] Command READ_10 (10 bytes)
-> [  218.399320] bytes: 28 00 00 02 02 00 00 00 08 00
-> [  218.399330] Bulk Command S 0x43425355 T 0xb8cc L 4096 F 128 Trg 0 LUN 0 CL 10
-> [  218.399342] xfer 31 bytes
-> [  218.399544] Status code 0; transferred 31/31
-> [  218.399556] -- transfer complete
-> [  218.399562] Bulk command transfer result=0
-> [  218.399570] xfer 4096 bytes, 1 entries
-> [  225.129297] sd 0:0:0:0: [sda] tag#0 previous abort failed
-> [  225.129337] scsi host0: Waking error handler thread
-> [  225.129358] scsi host0: scsi_eh_0: waking up 0/1/1
-> [  225.129375] scsi host0: scsi_eh_prt_fail_stats: cmds failed: 0, cancel: 1
-> [  225.129387] scsi host0: Total of 1 commands on 1 devices require eh work
-> [  225.129402] sd 0:0:0:0: scsi_eh_0: Sending BDR
-> [  225.129414] device_reset called
-> [  235.369290] INFO: task scsi_eh_0:173 blocked for more than 10 seconds.
-> [  235.369311]       Not tainted 6.3.0-00615-gffe64935a4a2 #9
-> [  235.369320] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> [  235.369327] task:scsi_eh_0       state:D stack:0     pid:173   ppid:2      flags:0x00000000
-> [  235.369350]  __schedule from schedule+0x70/0xac
-> [  235.369374]  schedule from schedule_preempt_disabled+0x24/0x34
-> [  235.369393]  schedule_preempt_disabled from __mutex_lock.constprop.0+0x14c/0x280
-> [  235.369412]  __mutex_lock.constprop.0 from device_reset+0x28/0x64
-> [  235.369433]  device_reset from scsi_try_bus_device_reset+0x24/0x58
-> [  235.369452]  scsi_try_bus_device_reset from scsi_eh_ready_devs+0x2f0/0x97c
-> [  235.369470]  scsi_eh_ready_devs from scsi_error_handler+0x238/0x49c
-> [  235.369488]  scsi_error_handler from kthread+0xc4/0xdc
-> [  235.369507]  kthread from ret_from_fork+0x14/0x3c
-> [  235.369567] INFO: task usb-storage:176 blocked for more than 10 seconds.
-> [  235.369576]       Not tainted 6.3.0-00615-gffe64935a4a2 #9
-> [  235.369583] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> [  235.369590] task:usb-storage     state:D stack:0     pid:176   ppid:2      flags:0x00000000
-> [  235.369606]  __schedule from schedule+0x70/0xac
-> [  235.369622]  schedule from schedule_timeout+0x18/0xd0
-> [  235.369641]  schedule_timeout from __wait_for_common+0xc0/0x13c
-> [  235.369660]  __wait_for_common from usb_sg_wait+0x10c/0x118
-> [  235.369677]  usb_sg_wait from usb_stor_bulk_transfer_sglist+0xc4/0x118
-> [  235.369695]  usb_stor_bulk_transfer_sglist from usb_stor_bulk_srb+0x24/0x3c
-> [  235.369713]  usb_stor_bulk_srb from usb_stor_Bulk_transport+0x164/0x44c
-> [  235.369731]  usb_stor_Bulk_transport from usb_stor_invoke_transport+0x20/0x5c4
-> [  235.369750]  usb_stor_invoke_transport from usb_stor_control_thread+0x1a4/0x2bc
-> [  235.369769]  usb_stor_control_thread from kthread+0xc4/0xdc
-> [  235.369786]  kthread from ret_from_fork+0x14/0x3c
-> 
-> 
-> Turns out eh_device_reset_handler() is called with a pending command
-> (srb == us->srb), and I don't know if the usb code was expecting
-> eh_abort_handler() to be called first.
+---
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+change-id: 20230426-usb-mtu3-improvement-77d987def9fe
 
-usb-storage definitely expects any pending command to be aborted before 
-a reset is attempted.
+Best regards,
+-- 
+Alexandre Mergnat <amergnat@baylibre.com>
 
-> This patch fixes the issue, not sure if it's correct:
-> 
-> --- a/drivers/usb/storage/scsiglue.c
-> +++ b/drivers/usb/storage/scsiglue.c
-> @@ -455,6 +455,9 @@ static int device_reset(struct scsi_cmnd *srb)
->  
->         usb_stor_dbg(us, "%s called\n", __func__);
->  
-> +       if (us->srb == srb)
-> +               command_abort(srb);
-> +
->         /* lock the device pointers and do the reset */
->         mutex_lock(&(us->dev_mutex));
->         result = us->transport_reset(us);
-
-Maybe...  But it would be better to check first whether the SCSI core is 
-supposed to be reusing an active srb in this way.
-
-Martin, can tell us what is supposed to happen here?  Is the 
-eh_device_reset_handler routine supposed to be called with a scsi_cmnd 
-for a currently active command?
-
-Alan Stern
