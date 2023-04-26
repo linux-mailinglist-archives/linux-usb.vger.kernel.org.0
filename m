@@ -2,148 +2,215 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C689C6EF304
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 13:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0D26EF307
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 13:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239361AbjDZLE3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Apr 2023 07:04:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53882 "EHLO
+        id S240304AbjDZLFN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 26 Apr 2023 07:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbjDZLE2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 07:04:28 -0400
-Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61298E78
-        for <linux-usb@vger.kernel.org>; Wed, 26 Apr 2023 04:04:26 -0700 (PDT)
-Received: from mail1.perex.cz (localhost [127.0.0.1])
-        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 17C8711D5;
-        Wed, 26 Apr 2023 13:04:23 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 17C8711D5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
-        t=1682507063; bh=Z5AfyzJPQrmIlFFnt6/C2yrchA/TVjV0DYQRCZ7Rq94=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=XIkx1eZ3+VfivIVLcCKOWBpOHgb+Ia9nWev3ayHsF33pDRDpgzUellGVyBd2/nTHv
-         aYvah3RVn16/SNisWmmshOuz+6J+/qP8eOvxXvqDXh7s1tH1Q/skGM2I0aE/fuUYCH
-         lNh0H8wBXEQ4tvdiQLiTNEmQOvLqkrin2veerEAs=
-Received: from [192.168.100.98] (unknown [192.168.100.98])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: perex)
-        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
-        Wed, 26 Apr 2023 13:04:16 +0200 (CEST)
-Message-ID: <a2e18eaa-2984-c2ba-f101-e16ad1dae0a0@perex.cz>
-Date:   Wed, 26 Apr 2023 13:04:15 +0200
+        with ESMTP id S231915AbjDZLFM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 07:05:12 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD70CDE;
+        Wed, 26 Apr 2023 04:05:10 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 4A83424E1D2;
+        Wed, 26 Apr 2023 19:05:09 +0800 (CST)
+Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 26 Apr
+ 2023 19:05:09 +0800
+Received: from [192.168.125.108] (113.72.145.137) by EXMBX171.cuchost.com
+ (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 26 Apr
+ 2023 19:05:08 +0800
+Message-ID: <4b0220ac-23bf-4206-eba2-2842a216bb24@starfivetech.com>
+Date:   Wed, 26 Apr 2023 19:05:07 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v5 7/7] riscv: dts: starfive: Add USB dts configuration
+ for JH7110
 Content-Language: en-US
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org,
+To:     Roger Quadros <rogerq@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>,
+        "Vinod Koul" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        regressions@lists.linux.dev
-References: <20230425111924.05cf8b13@kernel.org> <87pm7rtdul.wl-tiwai@suse.de>
- <7645c6c8-a21c-23d7-5c19-cd2892b98481@perex.cz> <87leifjc16.wl-tiwai@suse.de>
-From:   Jaroslav Kysela <perex@perex.cz>
-Subject: Re: USB sound card freezes USB after resume from suspend
-In-Reply-To: <87leifjc16.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Peter Chen <peter.chen@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Mason Huo" <mason.huo@starfivetech.com>
+References: <20230420110052.3182-1-minda.chen@starfivetech.com>
+ <20230420110052.3182-8-minda.chen@starfivetech.com>
+ <3f2baded-c5d6-7d94-00f3-6d8fb24262c4@kernel.org>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <3f2baded-c5d6-7d94-00f3-6d8fb24262c4@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [113.72.145.137]
+X-ClientProxiedBy: EXCAS065.cuchost.com (172.16.6.25) To EXMBX171.cuchost.com
+ (172.16.6.91)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 26. 04. 23 10:14, Takashi Iwai wrote:
-> On Wed, 26 Apr 2023 10:01:11 +0200,
-> Jaroslav Kysela wrote:
->>
->> On 26. 04. 23 7:24, Takashi Iwai wrote:
->>> On Tue, 25 Apr 2023 20:19:24 +0200,
->>> Jakub Kicinski wrote:
->>>>
->>>> Hi!
->>>>
->>>> For a few weeks now I can't use any USB devices if I suspend my laptop
->>>> with my USB sound card active and resuming it without it connected.
->>>>
->>>> USB worker threads seems to be sitting in:
->>>>
->>>> [<0>] snd_pcm_dev_disconnect+0x1e8/0x280 [snd_pcm]
->>>> [<0>] snd_device_disconnect_all+0x42/0x80 [snd]
->>>> [<0>] snd_card_disconnect+0x128/0x290 [snd]
->>>> [<0>] usb_audio_disconnect+0x11a/0x2c0 [snd_usb_audio]
->>>> [<0>] usb_unbind_interface+0x8c/0x270
->>>> [<0>] device_release_driver_internal+0x1b2/0x230
->>>> [<0>] bus_remove_device+0xd8/0x150
->>>> [<0>] device_del+0x18b/0x410
->>>> [<0>] usb_disable_device+0xc6/0x1e0
->>>> [<0>] usb_disconnect+0xda/0x2c0
->>>> [<0>] usb_disconnect+0xbf/0x2c0
->>>> [<0>] usb_disconnect+0xbf/0x2c0
->>>> [<0>] usb_disconnect+0xbf/0x2c0
->>>> [<0>] hub_event+0xf01/0x1cd0
->>>> [<0>] process_one_work+0x1c4/0x3d0
->>>> [<0>] worker_thread+0x4d/0x380
->>>> [<0>] kthread+0xe6/0x110
->>>> [<0>] ret_from_fork+0x29/0x50
->>>>
->>>> Which is:
->>>>
->>>> snd_pcm_dev_disconnect (/usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:818 /usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:812 /usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:1129) snd_pcm
->>>>
->>>> It happens on Fedora 37 and Fedora 38, it seems to have coincided with
->>>> the 6.2 kernel but I'm not 100% sure.
->>>>
->>>> The USB devices come back after half an hour or so, silently.
->>>> There's nothing of note in dmesg.
->>>
->>> AFAIK, there has been no similar report, so far.
->>>
->>> Is it a regression?  If yes, could you figure out which kernel version
->>> starts showing the problem (or at best bisection)?
->>
->> It seems that it may be related to free_chmap():
->>
->> (gdb) l *(snd_pcm_dev_disconnect+0x1e8)
->> 0xef0 is in snd_pcm_dev_disconnect (sound/core/pcm.c:817).
->> 812	static void free_chmap(struct snd_pcm_str *pstr)
->> 813	{
->> 814		if (pstr->chmap_kctl) {
->> 815			struct snd_card *card = pstr->pcm->card;
->> 816	
->> 817			down_write(&card->controls_rwsem);
->> 818			snd_ctl_remove(card, pstr->chmap_kctl);
->> 819			up_write(&card->controls_rwsem);
->> 820			pstr->chmap_kctl = NULL;
->> 821		}
->>
->> I think that the chmap should be freed only in snd_pcm_free_stream()
->> to avoid possible nested mutex locks. This operation does not belong
->> to disconnect.
+
+
+On 2023/4/24 22:53, Roger Quadros wrote:
 > 
-> A good point, it'll be a patch like below.
-
-It looks good.
-
-Reviewed-by: Jaroslav Kysela <perex@perex.cz>
-
-> But we still need to figure out what's actually happening there.
->   
->> But I cannot reproduce this lock here.
 > 
-> Here too.  Could be tied with the config or the device?
+> On 20/04/2023 14:00, Minda Chen wrote:
+>> Add USB wrapper layer and Cadence USB3 controller dts
+>> configuration for StarFive JH7110 SoC and VisionFive2
+>> Board.
+>> USB controller connect to PHY, The PHY dts configuration
+>> are also added.
+>> 
+>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+>> ---
+>>  .../jh7110-starfive-visionfive-2.dtsi         |  7 +++
+>>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 44 +++++++++++++++++++
+>>  2 files changed, 51 insertions(+)
+>> 
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> index 1155b97b593d..fa97ebfd93ad 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> @@ -221,3 +221,10 @@
+>>  	pinctrl-0 = <&uart0_pins>;
+>>  	status = "okay";
+>>  };
+>> +
+>> +&usb0 {
+>> +	phys = <&usbphy0>;
+>> +	phy-names = "usb2";
+>> +	dr_mode = "peripheral";
+>> +	status = "okay";
+>> +};
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> index 29cd798b6732..eee395e19cdb 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> @@ -366,6 +366,50 @@
+>>  			status = "disabled";
+>>  		};
+>>  
+>> +		usb0: usb@10100000 {
+>> +			compatible = "starfive,jh7110-usb";
+>> +			reg = <0x0 0x10100000 0x0 0x10000>,
+>> +			      <0x0 0x10110000 0x0 0x10000>,
+>> +			      <0x0 0x10120000 0x0 0x10000>;
+>> +			reg-names = "otg", "xhci", "dev";
+>> +			interrupts = <100>, <108>, <110>;
+>> +			interrupt-names = "host", "peripheral", "otg";
+>> +			clocks = <&stgcrg JH7110_STGCLK_USB0_LPM>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_STB>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_APB>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_AXI>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
+>> +			clock-names = "lpm", "stb", "apb", "axi", "utmi_apb";
+>> +			resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
+>> +				 <&stgcrg JH7110_STGRST_USB0_APB>,
+>> +				 <&stgcrg JH7110_STGRST_USB0_AXI>,
+>> +				 <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
+>> +			reset-names = "pwrup", "apb", "axi", "utmi_apb";
+> 
+> All this can really be "cdns,usb3" node. The cdns,usb3 driver should
+> do reset and clocks init as it is generic.
+> 
+But I can't find clock and reset init in Cadence codes while dwc usb3 can find. 
+It looks only if clocks and reset generic init codes required to be added in  Cadence codes to support generic clock and reset init.
+>> +			starfive,stg-syscon = <&stg_syscon 0x4>;
+>> +			status = "disabled";
+> 
+> Only the syscon handling looks starfive specific so only that handling
+> should be done in starfive USB driver.
+> 
+> This node should look like this
+> 
+>  
+> 	starfive-usb@4 {
+> 		compatible = "starfive,jh7110-usb";
+> 		starfive,stg-syscon = <&stg_syscon 0x4>;
+> 
+> 		usb0: usb@10100000 {
+> 			compatible = "cdns,usb3";
+> 			reg = <0x0 0x10100000 0x0 0x10000>,
+> 			      <0x0 0x10110000 0x0 0x10000>,
+> 			      <0x0 0x10120000 0x0 0x10000>;
+> 			reg-names = "otg", "xhci", "dev";
+> 			interrupts = <100>, <108>, <110>;
+> 			interrupt-names = "host", "peripheral", "otg";
+> 			clocks = <&stgcrg JH7110_STGCLK_USB0_LPM>,
+> 				 <&stgcrg JH7110_STGCLK_USB0_STB>,
+> 				 <&stgcrg JH7110_STGCLK_USB0_APB>,
+> 				 <&stgcrg JH7110_STGCLK_USB0_AXI>,
+> 				 <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
+> 			clock-names = "lpm", "stb", "apb", "axi", "utmi_apb";
+> 			resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
+> 				 <&stgcrg JH7110_STGRST_USB0_APB>,
+> 				 <&stgcrg JH7110_STGRST_USB0_AXI>,
+> 				 <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
+> 			reset-names = "pwrup", "apb", "axi", "utmi_apb";
+> 			starfive,stg-syscon = <&stg_syscon 0x4>;
+> 			status = "disabled";
+> 		};
+> 	}
+>> In starfife-usb driver you can use of_platform_default_populate()
+> to create the cdns,usb3 child for you.
+> 
+But actually the the syscon is not belong to USB. Below is Rob's previous comments. I am follow Rob's comments to change this.
+ 
+  This pattern of USB wrapper and then a "generic" IP node is discouraged if it is just clocks, resets, power-domains, etc. IOW, unless there's an actual wrapper h/w block with its own registers, then don't do this split. 
+  Merge it all into a single node.
 
-Perhaps. Jakub, could you do more debugging (printk, traces)?
-
-					Jaroslav
-
--- 
-Jaroslav Kysela <perex@perex.cz>
-Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
-
+Rob and Rogers
+  Could you design whether merge the usb nodes？ 
+dt-binding，USB codes are different in two case.
+ 
+>> +		};
+>> +
+>> +		usbphy0: phy@10200000 {
+>> +			compatible = "starfive,jh7110-usb-phy";
+>> +			reg = <0x0 0x10200000 0x0 0x10000>;
+>> +			clocks = <&syscrg JH7110_SYSCLK_USB_125M>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_APP_125>;
+>> +			clock-names = "125m", "app_125m";
+>> +			#phy-cells = <0>;
+>> +		};
+>> +
+>> +		pciephy0: phy@10210000 {
+>> +			compatible = "starfive,jh7110-pcie-phy";
+>> +			reg = <0x0 0x10210000 0x0 0x10000>;
+>> +			#phy-cells = <0>;
+>> +		};
+>> +
+>> +		pciephy1: phy@10220000 {
+>> +			compatible = "starfive,jh7110-pcie-phy";
+>> +			reg = <0x0 0x10220000 0x0 0x10000>;
+>> +			#phy-cells = <0>;
+>> +		};
+>> +
+>>  		stgcrg: clock-controller@10230000 {
+>>  			compatible = "starfive,jh7110-stgcrg";
+>>  			reg = <0x0 0x10230000 0x0 0x10000>;
+> 
+> cheers,
+> -roger
