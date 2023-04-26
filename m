@@ -2,215 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0D26EF307
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 13:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 605946EF384
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 13:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240304AbjDZLFN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 26 Apr 2023 07:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
+        id S240513AbjDZLlq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Apr 2023 07:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbjDZLFM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 07:05:12 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD70CDE;
-        Wed, 26 Apr 2023 04:05:10 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 4A83424E1D2;
-        Wed, 26 Apr 2023 19:05:09 +0800 (CST)
-Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 26 Apr
- 2023 19:05:09 +0800
-Received: from [192.168.125.108] (113.72.145.137) by EXMBX171.cuchost.com
- (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 26 Apr
- 2023 19:05:08 +0800
-Message-ID: <4b0220ac-23bf-4206-eba2-2842a216bb24@starfivetech.com>
-Date:   Wed, 26 Apr 2023 19:05:07 +0800
+        with ESMTP id S239947AbjDZLlp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 07:41:45 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F5D46A6
+        for <linux-usb@vger.kernel.org>; Wed, 26 Apr 2023 04:41:43 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4ec816d64afso30238072e87.1
+        for <linux-usb@vger.kernel.org>; Wed, 26 Apr 2023 04:41:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682509302; x=1685101302;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Rhrj4sQwygc9XaiC9VmfgJL3i2AK8zPKePp35VK5NY=;
+        b=oQQO45pVb+kXER+qfn7OqtTceonMhxFnFPlkvRPixviEwPBIIAN4Ou6910X3FbD1Dn
+         d0HV/CBqDTRK/dbyuuWpslnTjUcn6ZjbCKxSkMIPBPkN9ytkOMOGJZoJ1KpdRtS87gBd
+         H6IskwaK4H87ACc/Evefxr3vK+uF47jSuvDyC8WhnepdDCkws1nuq7B8x7EZ0wX0Tx1r
+         cou+S7E6pAnGdHS7rwdC/R6REcieGiGEx2HLfgw+JdB2E4SE5GLrsmQM8kWDvWxDl3f5
+         PpODBT3wXQ+6/PjFgM74kCBsjeiGfL1ZFWP3eVuP5pUQ5qSBsU9TX1x5dl6C8ZWlj7Sx
+         tPPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682509302; x=1685101302;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+Rhrj4sQwygc9XaiC9VmfgJL3i2AK8zPKePp35VK5NY=;
+        b=lsIrfEHAQvZ7mv7kYQ/vbTXwVDXcoLxjW8Wh28/N5wvhdXM/rzd0+JiXYK3Pkk49fC
+         boeLmoX/tvQh462a80b11edgGxLrDyHYwNGGaz5jVwTFrp+XluuCIOU1w7obdPlf32rn
+         YDzANj3otOp1lU2awIONjJoy29oqDpEzZf2jvOm2WwKVVyjco4PJBXM46FiNbuFmXRi7
+         Ijf3y0MKk0HQ4L9i24mtiGaPpoLdzHuIyK8Tgvgr3rDgwhLbulTS2zZwM5ZlvB582wC8
+         eCptRRn/HcePiIWvfr4ZFGh1+1MWSMxzGaa/Mnqz98lcHsYN35mxYDjo/6Bcch6nENos
+         UeGA==
+X-Gm-Message-State: AC+VfDxxXbZUYr40ruGmWzifUXjZeWMT9QkQ69Al07I5AnQTVh22mjoD
+        mLMf5N8m/EW/IY9RhU4Ygcw=
+X-Google-Smtp-Source: ACHHUZ5+l99R5UcUTcn6ggonoyA3WbpI8mEeOT11UWi2t5lxgyyptrlPXpmSJpGt8xERqZuJEp233w==
+X-Received: by 2002:ac2:5464:0:b0:4d8:51e7:9f23 with SMTP id e4-20020ac25464000000b004d851e79f23mr545160lfn.34.1682509301329;
+        Wed, 26 Apr 2023 04:41:41 -0700 (PDT)
+Received: from t630.example.org (45-11-61-13.ip4.greenlan.pl. [45.11.61.13])
+        by smtp.googlemail.com with ESMTPSA id x24-20020a19f618000000b004db3e7dfb8csm2461011lfe.189.2023.04.26.04.41.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Apr 2023 04:41:40 -0700 (PDT)
+From:   Wlodzimierz Lipert <wlodzimierz.lipert@gmail.com>
+To:     gregkh@linuxfoundation.org, balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org,
+        Wlodzimierz Lipert <wlodzimierz.lipert@gmail.com>
+Subject: [PATCH] usb: prevent duplicate bEndpointAddress by usb_ep_autoconfig_ss (bitmap).
+Date:   Wed, 26 Apr 2023 13:41:20 +0200
+Message-Id: <20230426114120.3603-1-wlodzimierz.lipert@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5 7/7] riscv: dts: starfive: Add USB dts configuration
- for JH7110
-Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>,
-        "Vinod Koul" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Mason Huo" <mason.huo@starfivetech.com>
-References: <20230420110052.3182-1-minda.chen@starfivetech.com>
- <20230420110052.3182-8-minda.chen@starfivetech.com>
- <3f2baded-c5d6-7d94-00f3-6d8fb24262c4@kernel.org>
-From:   Minda Chen <minda.chen@starfivetech.com>
-In-Reply-To: <3f2baded-c5d6-7d94-00f3-6d8fb24262c4@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [113.72.145.137]
-X-ClientProxiedBy: EXCAS065.cuchost.com (172.16.6.25) To EXMBX171.cuchost.com
- (172.16.6.91)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+usb_ep_autoconfig_ss tries to use endpoint name or internal counters to generate
+bEndpointAddress - this leads to duplicate addresses. Fix changes the
+way in/out_epnum is used, now as bitmap which represents unavailable ep numbers.
 
+Signed-off-by: Wlodzimierz Lipert <wlodzimierz.lipert@gmail.com>
+---
+ drivers/usb/gadget/epautoconf.c | 35 ++++++++++++++++++++++-----------
+ include/linux/usb/gadget.h      |  4 ++--
+ 2 files changed, 26 insertions(+), 13 deletions(-)
 
-On 2023/4/24 22:53, Roger Quadros wrote:
-> 
-> 
-> On 20/04/2023 14:00, Minda Chen wrote:
->> Add USB wrapper layer and Cadence USB3 controller dts
->> configuration for StarFive JH7110 SoC and VisionFive2
->> Board.
->> USB controller connect to PHY, The PHY dts configuration
->> are also added.
->> 
->> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
->> ---
->>  .../jh7110-starfive-visionfive-2.dtsi         |  7 +++
->>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 44 +++++++++++++++++++
->>  2 files changed, 51 insertions(+)
->> 
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> index 1155b97b593d..fa97ebfd93ad 100644
->> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> @@ -221,3 +221,10 @@
->>  	pinctrl-0 = <&uart0_pins>;
->>  	status = "okay";
->>  };
->> +
->> +&usb0 {
->> +	phys = <&usbphy0>;
->> +	phy-names = "usb2";
->> +	dr_mode = "peripheral";
->> +	status = "okay";
->> +};
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> index 29cd798b6732..eee395e19cdb 100644
->> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> @@ -366,6 +366,50 @@
->>  			status = "disabled";
->>  		};
->>  
->> +		usb0: usb@10100000 {
->> +			compatible = "starfive,jh7110-usb";
->> +			reg = <0x0 0x10100000 0x0 0x10000>,
->> +			      <0x0 0x10110000 0x0 0x10000>,
->> +			      <0x0 0x10120000 0x0 0x10000>;
->> +			reg-names = "otg", "xhci", "dev";
->> +			interrupts = <100>, <108>, <110>;
->> +			interrupt-names = "host", "peripheral", "otg";
->> +			clocks = <&stgcrg JH7110_STGCLK_USB0_LPM>,
->> +				 <&stgcrg JH7110_STGCLK_USB0_STB>,
->> +				 <&stgcrg JH7110_STGCLK_USB0_APB>,
->> +				 <&stgcrg JH7110_STGCLK_USB0_AXI>,
->> +				 <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
->> +			clock-names = "lpm", "stb", "apb", "axi", "utmi_apb";
->> +			resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
->> +				 <&stgcrg JH7110_STGRST_USB0_APB>,
->> +				 <&stgcrg JH7110_STGRST_USB0_AXI>,
->> +				 <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
->> +			reset-names = "pwrup", "apb", "axi", "utmi_apb";
-> 
-> All this can really be "cdns,usb3" node. The cdns,usb3 driver should
-> do reset and clocks init as it is generic.
-> 
-But I can't find clock and reset init in Cadence codes while dwc usb3 can find. 
-It looks only if clocks and reset generic init codes required to be added in  Cadence codes to support generic clock and reset init.
->> +			starfive,stg-syscon = <&stg_syscon 0x4>;
->> +			status = "disabled";
-> 
-> Only the syscon handling looks starfive specific so only that handling
-> should be done in starfive USB driver.
-> 
-> This node should look like this
-> 
->  
-> 	starfive-usb@4 {
-> 		compatible = "starfive,jh7110-usb";
-> 		starfive,stg-syscon = <&stg_syscon 0x4>;
-> 
-> 		usb0: usb@10100000 {
-> 			compatible = "cdns,usb3";
-> 			reg = <0x0 0x10100000 0x0 0x10000>,
-> 			      <0x0 0x10110000 0x0 0x10000>,
-> 			      <0x0 0x10120000 0x0 0x10000>;
-> 			reg-names = "otg", "xhci", "dev";
-> 			interrupts = <100>, <108>, <110>;
-> 			interrupt-names = "host", "peripheral", "otg";
-> 			clocks = <&stgcrg JH7110_STGCLK_USB0_LPM>,
-> 				 <&stgcrg JH7110_STGCLK_USB0_STB>,
-> 				 <&stgcrg JH7110_STGCLK_USB0_APB>,
-> 				 <&stgcrg JH7110_STGCLK_USB0_AXI>,
-> 				 <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
-> 			clock-names = "lpm", "stb", "apb", "axi", "utmi_apb";
-> 			resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
-> 				 <&stgcrg JH7110_STGRST_USB0_APB>,
-> 				 <&stgcrg JH7110_STGRST_USB0_AXI>,
-> 				 <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
-> 			reset-names = "pwrup", "apb", "axi", "utmi_apb";
-> 			starfive,stg-syscon = <&stg_syscon 0x4>;
-> 			status = "disabled";
-> 		};
-> 	}
->> In starfife-usb driver you can use of_platform_default_populate()
-> to create the cdns,usb3 child for you.
-> 
-But actually the the syscon is not belong to USB. Below is Rob's previous comments. I am follow Rob's comments to change this.
+diff --git a/drivers/usb/gadget/epautoconf.c b/drivers/usb/gadget/epautoconf.c
+index 1eb4fa2e623f..50a2e8a90447 100644
+--- a/drivers/usb/gadget/epautoconf.c
++++ b/drivers/usb/gadget/epautoconf.c
+@@ -67,6 +67,11 @@ struct usb_ep *usb_ep_autoconfig_ss(
+ )
+ {
+ 	struct usb_ep	*ep;
++	unsigned *epnum_map;
++	/* ep num 0 is reserved: not available for auto configuration */
++	u8 num = 1;
++	/* USB allows up to 16 IN and 16 OUT enpoints */
++	unsigned num_mask = 0xFFFFU;
  
-  This pattern of USB wrapper and then a "generic" IP node is discouraged if it is just clocks, resets, power-domains, etc. IOW, unless there's an actual wrapper h/w block with its own registers, then don't do this split. 
-  Merge it all into a single node.
-
-Rob and Rogers
-  Could you design whether merge the usb nodes？ 
-dt-binding，USB codes are different in two case.
+ 	if (gadget->ops->match_ep) {
+ 		ep = gadget->ops->match_ep(gadget, desc, ep_comp);
+@@ -94,18 +99,25 @@ struct usb_ep *usb_ep_autoconfig_ss(
+ 	/* report address */
+ 	desc->bEndpointAddress &= USB_DIR_IN;
+ 	if (isdigit(ep->name[2])) {
+-		u8 num = simple_strtoul(&ep->name[2], NULL, 10);
+-		desc->bEndpointAddress |= num;
+-	} else if (desc->bEndpointAddress & USB_DIR_IN) {
+-		if (++gadget->in_epnum > 15)
++		num = simple_strtoul(&ep->name[2], NULL, 10);
++		if(num > 15)
+ 			return NULL;
+-		desc->bEndpointAddress = USB_DIR_IN | gadget->in_epnum;
+-	} else {
+-		if (++gadget->out_epnum > 15)
+-			return NULL;
+-		desc->bEndpointAddress |= gadget->out_epnum;
++		num_mask = 1U << num;
+ 	}
  
->> +		};
->> +
->> +		usbphy0: phy@10200000 {
->> +			compatible = "starfive,jh7110-usb-phy";
->> +			reg = <0x0 0x10200000 0x0 0x10000>;
->> +			clocks = <&syscrg JH7110_SYSCLK_USB_125M>,
->> +				 <&stgcrg JH7110_STGCLK_USB0_APP_125>;
->> +			clock-names = "125m", "app_125m";
->> +			#phy-cells = <0>;
->> +		};
->> +
->> +		pciephy0: phy@10210000 {
->> +			compatible = "starfive,jh7110-pcie-phy";
->> +			reg = <0x0 0x10210000 0x0 0x10000>;
->> +			#phy-cells = <0>;
->> +		};
->> +
->> +		pciephy1: phy@10220000 {
->> +			compatible = "starfive,jh7110-pcie-phy";
->> +			reg = <0x0 0x10220000 0x0 0x10000>;
->> +			#phy-cells = <0>;
->> +		};
->> +
->>  		stgcrg: clock-controller@10230000 {
->>  			compatible = "starfive,jh7110-stgcrg";
->>  			reg = <0x0 0x10230000 0x0 0x10000>;
-> 
-> cheers,
-> -roger
++	epnum_map = desc->bEndpointAddress & USB_DIR_IN
++		? &gadget->in_epnum : &gadget->out_epnum;
++
++	/* check if requested ep number (if name encodes it) or any is available */
++	if (num_mask == (*epnum_map & num_mask))
++		return NULL;
++
++	/* find first available ep number (if not encoded in ep name) */
++	while(*epnum_map & (1U << num))
++		++num;
++
++	*epnum_map |= 1U << num;
++	desc->bEndpointAddress |= num;
+ 	ep->address = desc->bEndpointAddress;
+ 	ep->desc = NULL;
+ 	ep->comp_desc = NULL;
+@@ -208,7 +220,8 @@ void usb_ep_autoconfig_reset (struct usb_gadget *gadget)
+ 		ep->claimed = false;
+ 		ep->driver_data = NULL;
+ 	}
+-	gadget->in_epnum = 0;
+-	gadget->out_epnum = 0;
++	/* ep num 0 is reserved: not available for auto configuration */
++	gadget->in_epnum = 1U;
++	gadget->out_epnum = 1U;
+ }
+ EXPORT_SYMBOL_GPL(usb_ep_autoconfig_reset);
+diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+index 6a178177e4c9..1e00e22202bc 100644
+--- a/include/linux/usb/gadget.h
++++ b/include/linux/usb/gadget.h
+@@ -343,8 +343,8 @@ struct usb_gadget_ops {
+  *	and sometimes configuration.
+  * @dev: Driver model state for this abstract device.
+  * @isoch_delay: value from Set Isoch Delay request. Only valid on SS/SSP
+- * @out_epnum: last used out ep number
+- * @in_epnum: last used in ep number
++ * @out_epnum: bitmap of allocated out ep numbers
++ * @in_epnum: bitmap of allocated in ep numbers
+  * @mA: last set mA value
+  * @otg_caps: OTG capabilities of this gadget.
+  * @sg_supported: true if we can handle scatter-gather
+-- 
+2.39.2
+
