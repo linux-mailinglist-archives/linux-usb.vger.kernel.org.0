@@ -2,83 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BA76EF3F5
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 14:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 123296EF43C
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 14:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240773AbjDZMGP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Apr 2023 08:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
+        id S240722AbjDZMZ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Apr 2023 08:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240267AbjDZMGN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 08:06:13 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F241B6;
-        Wed, 26 Apr 2023 05:06:11 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33QAq4XQ028089;
-        Wed, 26 Apr 2023 12:05:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Z2jHxQbkgWifyzS7It9g20bYYdz3itj1DvYyz0UFD2w=;
- b=cwKoDA6wwWge/jJD6apwLlcxzvcVXqmBSaqDdbtuk+R7YPLS2U5mMlSJrxodhsfYcjYr
- r3f9vrbsbQe22vES5eI0wiP89EyqnsS6/NqzvLgYMfLEI40MKEX/saeMT0xCtBPEEFNn
- iLC1cWRWSRWCCvaJorgigbijWd5mV+2T/f1WeuX3nMc93dfpUWdCz+KPeGray7SvJ/oU
- aa8Cat/Qi9g6yzcvrNFx60T4zdHXAJsDMWdHdKIwcvzU3WNgn1Ks/LvZlbaVMRMsX7iq
- c23RcOn+G+jiTFfR75Do7oUqs7eDQKaBMNxrCnSQLp3LiL+4VT+nwmHN80rs2GtJZvwH SA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q6rk0sfsa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Apr 2023 12:05:56 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33QC5t6n001527
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Apr 2023 12:05:55 GMT
-Received: from [10.218.19.109] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 26 Apr
- 2023 05:05:50 -0700
-Message-ID: <f051bfe8-e612-f54e-7729-7816591fa21c@quicinc.com>
-Date:   Wed, 26 Apr 2023 17:35:40 +0530
+        with ESMTP id S240143AbjDZMZ4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 08:25:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C675B85
+        for <linux-usb@vger.kernel.org>; Wed, 26 Apr 2023 05:25:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA988635F3
+        for <linux-usb@vger.kernel.org>; Wed, 26 Apr 2023 12:25:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E23B8C433EF;
+        Wed, 26 Apr 2023 12:25:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1682511943;
+        bh=kWd3EF0VU3aLMDssMpwSTSs7GIeUWs2lPc2YH0N4nyM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=stNo5QpiecYG6yheFkFMNQ/n4j7FpEA7NT+uHKoMhTHF3YzD2dN4pAqfxm9byxg57
+         Q0WgZOxkg11qddxMGNQbJ/ybMxDIAGnhSfxJwOu6dhfgNuzSRbaPbxV9qumUtvYb+Y
+         +ij9oDj4cTUEBy9IKsC2nOtBD95NvGi3p/MZve8M=
+Date:   Wed, 26 Apr 2023 14:25:40 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wlodzimierz Lipert <wlodzimierz.lipert@gmail.com>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: prevent duplicate bEndpointAddress by
+ usb_ep_autoconfig_ss (bitmap).
+Message-ID: <2023042629-slobbery-headway-b5f5@gregkh>
+References: <20230426114528.3996-1-wlodzimierz.lipert@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v1 0/6] arm64: qcom: sa8775p: add support for USB
-To:     Adrien Thierry <athierry@redhat.com>
-CC:     <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "Kishon Vijay Abraham I" <kishon@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-References: <20230421133922.8520-1-quic_shazhuss@quicinc.com>
- <ZEcEGJiikEC2wIVE@fedora>
-Content-Language: en-US
-From:   Shazad Hussain <quic_shazhuss@quicinc.com>
-In-Reply-To: <ZEcEGJiikEC2wIVE@fedora>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: cp0MOlgnQ56BPstlgv_si6hnHIMqXW7n
-X-Proofpoint-ORIG-GUID: cp0MOlgnQ56BPstlgv_si6hnHIMqXW7n
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-26_04,2023-04-26_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- clxscore=1011 spamscore=0 mlxlogscore=604 lowpriorityscore=0 mlxscore=0
- suspectscore=0 bulkscore=0 impostorscore=0 priorityscore=1501 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304260108
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230426114528.3996-1-wlodzimierz.lipert@gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,121 +50,122 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Adrien,
-
-On 4/25/2023 4:05 AM, Adrien Thierry wrote:
-> Hi Shazad,
+On Wed, Apr 26, 2023 at 01:45:28PM +0200, Wlodzimierz Lipert wrote:
+> usb_ep_autoconfig_ss tries to use endpoint name or internal counters to generate
+> bEndpointAddress - this leads to duplicate addresses. Fix changes the
+> way in/out_epnum is used, now as bitmap which represents unavailable ep numbers.
 > 
-> On Fri, Apr 21, 2023 at 07:09:15PM +0530, Shazad Hussain wrote:
->> Update relavent DT bindings for USB, add new config to the phy driver,
->> add USB and PHY nodes to the .dtsi and enable them in the board .dts
->> for the sa8775p-ride platform.
->>
->> Shazad Hussain (6):
->>    dt-bindings: usb: qcom,dwc3: Add bindings for SA8775P
->>    dt-bindings: phy: qcom,usb-snps-femto-v2: Add bindings for SA8775P
->>    dt-bindings: phy: qcom,sc8280xp-qmp-usb3-uni: Add SA8775P USB PHY
->>      binding
->>    phy: qcom-qmp: Add SA8775P USB3 UNI phy
->>    arm64: dts: qcom: sa8775p: add USB nodes
->>    arm64: dts: qcom: sa8775p-ride: enable USB nodes
->>
->>   .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml   |   1 +
->>   .../bindings/phy/qcom,usb-snps-femto-v2.yaml  |   1 +
->>   .../devicetree/bindings/usb/qcom,dwc3.yaml    |   5 +
->>   arch/arm64/boot/dts/qcom/sa8775p-ride.dts     |  92 +++++++
->>   arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 239 +++++++++++++++++-
->>   drivers/phy/qualcomm/phy-qcom-qmp-usb.c       |  45 ++++
->>   6 files changed, 381 insertions(+), 2 deletions(-)
->>
->> -- 
->> 2.17.1
->>
+> Signed-off-by: Wlodzimierz Lipert <wlodzimierz.lipert@gmail.com>
+> ---
+>  drivers/usb/gadget/epautoconf.c | 35 ++++++++++++++++++++++-----------
+>  include/linux/usb/gadget.h      |  4 ++--
+>  2 files changed, 26 insertions(+), 13 deletions(-)
 > 
-> Thanks for posting this. I tested the series on the sa8775p, and it seems
-> initialization for the controller at a400000 sometimes fails with a
-> timeout (-110) error:
-> 
->      dwc3 a400000.usb: Adding to iommu group 2
->      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
->      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
->      xhci-hcd xhci-hcd.0.auto: can't setup: -110
->      xhci-hcd xhci-hcd.0.auto: USB bus 1 deregistered
->      xhci-hcd: probe of xhci-hcd.0.auto failed with error -110
->      dwc3 a600000.usb: Adding to iommu group 3
->      dwc3 a800000.usb: Adding to iommu group 4
->      xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
->      xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 1
->      xhci-hcd xhci-hcd.1.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000000000010010
->      xhci-hcd xhci-hcd.1.auto: irq 162, io mem 0x0a800000
->      xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
->      xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 2
->      xhci-hcd xhci-hcd.1.auto: Host supports USB 3.1 Enhanced SuperSpeed
->      hub 1-0:1.0: USB hub found
->      hub 1-0:1.0: 1 port detected
->      usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
->      hub 2-0:1.0: USB hub found
->      hub 2-0:1.0: 1 port detected
-> 
-> In this case, only usb devices for a800000 are showing:
-> 
->      dracut:/# ls -alh /sys/bus/usb/devices
->      total 0
->      drwxr-xr-x 2 root root 0 Feb 27 00:00 .
->      drwxr-xr-x 4 root root 0 Feb 27 00:00 ..
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 1-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb1/1-0:1.0
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 2-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb2/2-0:1.0
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb1 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb1
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb2 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb2
-> 
-> This happens approximately 1 out of 2 reboots. Here's the kernel output
-> when initialization succeeds:
-> 
->      dwc3 a600000.usb: Adding to iommu group 2
->      dwc3 a800000.usb: Adding to iommu group 3
->      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
->      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
->      xhci-hcd xhci-hcd.0.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000000000010010
->      xhci-hcd xhci-hcd.0.auto: irq 161, io mem 0x0a800000
->      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
->      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 2
->      xhci-hcd xhci-hcd.0.auto: Host supports USB 3.1 Enhanced SuperSpeed
->      hub 1-0:1.0: USB hub found
->      hub 1-0:1.0: 1 port detected
->      usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
->      hub 2-0:1.0: USB hub found
->      hub 2-0:1.0: 1 port detected
->      dwc3 a400000.usb: Adding to iommu group 4
->      xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
->      xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 3
->      xhci-hcd xhci-hcd.1.auto: USB3 root hub has no ports
->      xhci-hcd xhci-hcd.1.auto: hcc params 0x0220fe65 hci version 0x110 quirks 0x0000000000010010
->      xhci-hcd xhci-hcd.1.auto: irq 162, io mem 0x0a400000
->      hub 3-0:1.0: USB hub found
->      hub 3-0:1.0: 1 port detected
-> 
-> And the list of usb devices:
-> 
->      dracut:/# ls -alh /sys/bus/usb/devices
->      total 0
->      drwxr-xr-x 2 root root 0 Feb 27 00:00 .
->      drwxr-xr-x 4 root root 0 Feb 27 00:00 ..
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 1-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb1/1-0:1.0
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 2-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb2/2-0:1.0
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 3-0:1.0 -> ../../../devices/platform/soc@0/a4f8800.usb/a400000.usb/xhci-hcd.1.auto/usb3/3-0:1.0
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb1 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb1
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb2 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb2
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb3 -> ../../../devices/platform/soc@0/a4f8800.usb/a400000.usb/xhci-hcd.1.auto/usb3
-> 
-> Have you also encountered this?
+> diff --git a/drivers/usb/gadget/epautoconf.c b/drivers/usb/gadget/epautoconf.c
+> index 1eb4fa2e623f..50a2e8a90447 100644
+> --- a/drivers/usb/gadget/epautoconf.c
+> +++ b/drivers/usb/gadget/epautoconf.c
+> @@ -67,6 +67,11 @@ struct usb_ep *usb_ep_autoconfig_ss(
+>  )
+>  {
+>  	struct usb_ep	*ep;
+> +	unsigned *epnum_map;
+> +	/* ep num 0 is reserved: not available for auto configuration */
+> +	u8 num = 1;
+> +	/* USB allows up to 16 IN and 16 OUT enpoints */
+> +	unsigned num_mask = 0xFFFFU;
+>  
+>  	if (gadget->ops->match_ep) {
+>  		ep = gadget->ops->match_ep(gadget, desc, ep_comp);
+> @@ -94,18 +99,25 @@ struct usb_ep *usb_ep_autoconfig_ss(
+>  	/* report address */
+>  	desc->bEndpointAddress &= USB_DIR_IN;
+>  	if (isdigit(ep->name[2])) {
+> -		u8 num = simple_strtoul(&ep->name[2], NULL, 10);
+> -		desc->bEndpointAddress |= num;
+> -	} else if (desc->bEndpointAddress & USB_DIR_IN) {
+> -		if (++gadget->in_epnum > 15)
+> +		num = simple_strtoul(&ep->name[2], NULL, 10);
+> +		if (num > 15)
+>  			return NULL;
+> -		desc->bEndpointAddress = USB_DIR_IN | gadget->in_epnum;
+> -	} else {
+> -		if (++gadget->out_epnum > 15)
+> -			return NULL;
+> -		desc->bEndpointAddress |= gadget->out_epnum;
+> +		num_mask = 1U << num;
+>  	}
+>  
+> +	epnum_map = desc->bEndpointAddress & USB_DIR_IN
+> +		? &gadget->in_epnum : &gadget->out_epnum;
+> +
+> +	/* check if requested ep number (if name encodes it) or any is available */
+> +	if (num_mask == (*epnum_map & num_mask))
+> +		return NULL;
+> +
+> +	/* find first available ep number (if not encoded in ep name) */
+> +	while (*epnum_map & (1U << num))
+> +		++num;
+> +
+> +	*epnum_map |= 1U << num;
+> +	desc->bEndpointAddress |= num;
+>  	ep->address = desc->bEndpointAddress;
+>  	ep->desc = NULL;
+>  	ep->comp_desc = NULL;
+> @@ -208,7 +220,8 @@ void usb_ep_autoconfig_reset (struct usb_gadget *gadget)
+>  		ep->claimed = false;
+>  		ep->driver_data = NULL;
+>  	}
+> -	gadget->in_epnum = 0;
+> -	gadget->out_epnum = 0;
+> +	/* ep num 0 is reserved: not available for auto configuration */
+> +	gadget->in_epnum = 1U;
+> +	gadget->out_epnum = 1U;
+>  }
+>  EXPORT_SYMBOL_GPL(usb_ep_autoconfig_reset);
+> diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+> index 6a178177e4c9..1e00e22202bc 100644
+> --- a/include/linux/usb/gadget.h
+> +++ b/include/linux/usb/gadget.h
+> @@ -343,8 +343,8 @@ struct usb_gadget_ops {
+>   *	and sometimes configuration.
+>   * @dev: Driver model state for this abstract device.
+>   * @isoch_delay: value from Set Isoch Delay request. Only valid on SS/SSP
+> - * @out_epnum: last used out ep number
+> - * @in_epnum: last used in ep number
+> + * @out_epnum: bitmap of allocated out ep numbers
+> + * @in_epnum: bitmap of allocated in ep numbers
+>   * @mA: last set mA value
+>   * @otg_caps: OTG capabilities of this gadget.
+>   * @sg_supported: true if we can handle scatter-gather
+> -- 
+> 2.39.2
 > 
 
-I did try 10 reboots and did not encounter this issue on my setup tough.
+Hi,
 
-> Best,
-> 
-> Adrien
-> 
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
----
--Shazad
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
