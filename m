@@ -2,172 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104276EF200
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 12:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCA06EF2FC
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 13:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240459AbjDZK36 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Apr 2023 06:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57570 "EHLO
+        id S240448AbjDZLAj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Apr 2023 07:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240280AbjDZK3o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 06:29:44 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDA449DD;
-        Wed, 26 Apr 2023 03:29:42 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id E9FD05FD7F;
-        Wed, 26 Apr 2023 13:29:40 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1682504981;
-        bh=4lHHCxkIlnUR0GNXGWVdUkMmB9fJMh5SedGakqeeYVI=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=BE6Xe3NNGVrY40Kh9GMYS8/HS2NaAoNO2icJfHY+d5SLEeMRRBO6emtzmswN3h0yn
-         GquNCBfF3VQmW2M5Ir6XPyAWjMpAgOYOfLEWS1LHUaQV/tsx+EJm23ch9kLx23u2aq
-         kM9ePmuqyW/r2EvWNmjdxae0O9l4dY02rcR+yS13bkCbkHUYdefcDnZgePw5k9jVVR
-         nfMH58iDE3RzXgmSi94vxab352SaLUqVHX8wyEeEVnpGPjK0QPZfOzu/26HXCdfpIO
-         UofV61pCLVElSrFviaKgHxBbyJR5/FUv1AY9oGZwUvA4xMbvsg5Zuws6gDzJsTiqNp
-         tNcNORqrFoeDQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 26 Apr 2023 13:29:40 +0300 (MSK)
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <neil.armstrong@linaro.org>,
-        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>, <mturquette@baylibre.com>,
-        <vkoul@kernel.org>, <kishon@kernel.org>, <hminas@synopsys.com>,
-        <Thinh.Nguyen@synopsys.com>
-CC:     <yue.wang@amlogic.com>, <hanjie.lin@amlogic.com>,
-        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Subject: [PATCH v3 5/5] arm64: dts: meson: a1: support USB controller in OTG mode
-Date:   Wed, 26 Apr 2023 13:29:22 +0300
-Message-ID: <20230426102922.19705-6-ddrokosov@sberdevices.ru>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20230426102922.19705-1-ddrokosov@sberdevices.ru>
-References: <20230426102922.19705-1-ddrokosov@sberdevices.ru>
+        with ESMTP id S229937AbjDZLAh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 07:00:37 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BA4BF;
+        Wed, 26 Apr 2023 04:00:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682506836; x=1714042836;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=G95PT19yFXrzWRVnbAntY6KRml0hHubfjUN5KoCVDjk=;
+  b=E5VQMjTh//rCxghwZqe7qD9BEbE84dtQDEXtgtcPCxoPNVuv03KYNBzY
+   grftcIqwWqlUdmGN90Pua+M0taPQvtgU9HKjMdJXctsuMVDUdSmiNDoQh
+   Zgd496VWoJ1TbynHQy08fWh9azQeFEgCHDw7JauxDvncS8REpMT4v9mcx
+   /ocC+l1Wna/paaA3hwaCKrx2qr5vHv+ANCWWjAonVYeR4EVU5QV4fk2wn
+   4qg364RKPDlqUEy53G2T777OSPr+HxoaBAJKPW1gVURRR/9aIgP35+lzj
+   2M4h9SsAArMW9lMuT05Sd4XVE/wQoKIpfqzwKKwuterx6BaQeI/8yTF79
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="345826522"
+X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
+   d="scan'208";a="345826522"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 04:00:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="837879261"
+X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
+   d="scan'208";a="837879261"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 26 Apr 2023 04:00:34 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 5C2D24B9; Wed, 26 Apr 2023 14:00:40 +0300 (EEST)
+Date:   Wed, 26 Apr 2023 14:00:40 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        S Sanath <Sanath.S@amd.com>, richard.gong@amd.com,
+        Sanju.Mehta@amd.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] thunderbolt: Move Intel quirks into quirks.c
+Message-ID: <20230426110040.GA66750@black.fi.intel.com>
+References: <20230424195556.2233-1-mario.limonciello@amd.com>
+ <20230424195556.2233-2-mario.limonciello@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/26 04:45:00 #21166225
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230424195556.2233-2-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Amlogic A1 SoC family has USB2.0 controller based on dwc2 and dwc3
-heads. It supports otg/host/peripheral modes.
+Hi,
 
-Signed-off-by: Yue Wang <yue.wang@amlogic.com>
-Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
----
- arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 59 +++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+On Mon, Apr 24, 2023 at 02:55:55PM -0500, Mario Limonciello wrote:
+> There are two Intel specific quirks for auto clear and end to end
+> that are not specified in the quirks file.  Move them to this location
+> instead.
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-index ae7d39cff07a..5588ee602161 100644
---- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-@@ -8,6 +8,8 @@
- #include <dt-bindings/gpio/meson-a1-gpio.h>
- #include <dt-bindings/clock/amlogic,a1-pll-clkc.h>
- #include <dt-bindings/clock/amlogic,a1-clkc.h>
-+#include <dt-bindings/power/meson-a1-power.h>
-+#include <dt-bindings/reset/amlogic,meson-a1-reset.h>
- 
- / {
- 	compatible = "amlogic,a1";
-@@ -169,6 +171,17 @@ gpio_intc: interrupt-controller@0440 {
- 				amlogic,channel-interrupts =
- 					<49 50 51 52 53 54 55 56>;
- 			};
-+
-+			usb2_phy1: phy@4000 {
-+				compatible = "amlogic,a1-usb2-phy";
-+				clocks = <&clkc CLKID_USB_PHY_IN>;
-+				clock-names = "xtal";
-+				reg = <0x0 0x4000 0x0 0x60>;
-+				resets = <&reset RESET_USBPHY>;
-+				reset-names = "phy";
-+				#phy-cells = <0>;
-+				power-domains = <&pwrc PWRC_USB_ID>;
-+			};
- 		};
- 
- 		gic: interrupt-controller@ff901000 {
-@@ -192,6 +205,52 @@ spifc: spi@fd000400 {
- 			#size-cells = <0>;
- 			status = "disabled";
- 		};
-+
-+		usb: usb@fe004400 {
-+			status = "disabled";
-+			compatible = "amlogic,meson-a1-usb-ctrl";
-+			reg = <0x0 0xfe004400 0x0 0xa0>;
-+			interrupts = <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+
-+			clocks = <&clkc CLKID_USB_CTRL>,
-+				 <&clkc CLKID_USB_BUS>,
-+				 <&clkc CLKID_USB_CTRL_IN>;
-+			clock-names = "usb_ctrl", "usb_bus", "xtal_usb_ctrl";
-+			resets = <&reset RESET_USBCTRL>;
-+			reset-name = "usb_ctrl";
-+
-+			dr_mode = "otg";
-+
-+			phys = <&usb2_phy1>;
-+			phy-names = "usb2-phy1";
-+
-+			dwc2: usb@ff500000 {
-+				compatible = "amlogic,meson-a1-usb", "snps,dwc2";
-+				reg = <0x0 0xff500000 0x0 0x40000>;
-+				interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>;
-+				phys = <&usb2_phy1>;
-+				phy-names = "usb2-phy";
-+				clocks = <&clkc CLKID_USB_PHY>;
-+				clock-names = "otg";
-+				dr_mode = "peripheral";
-+				g-rx-fifo-size = <192>;
-+				g-np-tx-fifo-size = <128>;
-+				g-tx-fifo-size = <128 128 16 16 16>;
-+			};
-+
-+			dwc3: usb@ff400000 {
-+				compatible = "snps,dwc3";
-+				reg = <0x0 0xff400000 0x0 0x100000>;
-+				interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
-+				dr_mode = "host";
-+				snps,dis_u2_susphy_quirk;
-+				snps,quirk-frame-length-adjustment = <0x20>;
-+				snps,parkmode-disable-ss-quirk;
-+			};
-+		};
- 	};
- 
- 	timer {
--- 
-2.36.0
+quirks.c is for USB4 domain quirks (router, retimer, anything actually
+connected to the USB4 domain).
 
+nhi.c is the correct place for host interface quirks for now.
