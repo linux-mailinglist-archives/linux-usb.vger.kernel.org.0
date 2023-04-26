@@ -2,79 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DCA06EF2FC
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 13:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C689C6EF304
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 13:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240448AbjDZLAj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Apr 2023 07:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
+        id S239361AbjDZLE3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Apr 2023 07:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbjDZLAh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 07:00:37 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BA4BF;
-        Wed, 26 Apr 2023 04:00:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682506836; x=1714042836;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=G95PT19yFXrzWRVnbAntY6KRml0hHubfjUN5KoCVDjk=;
-  b=E5VQMjTh//rCxghwZqe7qD9BEbE84dtQDEXtgtcPCxoPNVuv03KYNBzY
-   grftcIqwWqlUdmGN90Pua+M0taPQvtgU9HKjMdJXctsuMVDUdSmiNDoQh
-   Zgd496VWoJ1TbynHQy08fWh9azQeFEgCHDw7JauxDvncS8REpMT4v9mcx
-   /ocC+l1Wna/paaA3hwaCKrx2qr5vHv+ANCWWjAonVYeR4EVU5QV4fk2wn
-   4qg364RKPDlqUEy53G2T777OSPr+HxoaBAJKPW1gVURRR/9aIgP35+lzj
-   2M4h9SsAArMW9lMuT05Sd4XVE/wQoKIpfqzwKKwuterx6BaQeI/8yTF79
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="345826522"
-X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
-   d="scan'208";a="345826522"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 04:00:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="837879261"
-X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
-   d="scan'208";a="837879261"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 26 Apr 2023 04:00:34 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 5C2D24B9; Wed, 26 Apr 2023 14:00:40 +0300 (EEST)
-Date:   Wed, 26 Apr 2023 14:00:40 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        S Sanath <Sanath.S@amd.com>, richard.gong@amd.com,
-        Sanju.Mehta@amd.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] thunderbolt: Move Intel quirks into quirks.c
-Message-ID: <20230426110040.GA66750@black.fi.intel.com>
-References: <20230424195556.2233-1-mario.limonciello@amd.com>
- <20230424195556.2233-2-mario.limonciello@amd.com>
+        with ESMTP id S231915AbjDZLE2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 07:04:28 -0400
+Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61298E78
+        for <linux-usb@vger.kernel.org>; Wed, 26 Apr 2023 04:04:26 -0700 (PDT)
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 17C8711D5;
+        Wed, 26 Apr 2023 13:04:23 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 17C8711D5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+        t=1682507063; bh=Z5AfyzJPQrmIlFFnt6/C2yrchA/TVjV0DYQRCZ7Rq94=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=XIkx1eZ3+VfivIVLcCKOWBpOHgb+Ia9nWev3ayHsF33pDRDpgzUellGVyBd2/nTHv
+         aYvah3RVn16/SNisWmmshOuz+6J+/qP8eOvxXvqDXh7s1tH1Q/skGM2I0aE/fuUYCH
+         lNh0H8wBXEQ4tvdiQLiTNEmQOvLqkrin2veerEAs=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: perex)
+        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+        Wed, 26 Apr 2023 13:04:16 +0200 (CEST)
+Message-ID: <a2e18eaa-2984-c2ba-f101-e16ad1dae0a0@perex.cz>
+Date:   Wed, 26 Apr 2023 13:04:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230424195556.2233-2-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        regressions@lists.linux.dev
+References: <20230425111924.05cf8b13@kernel.org> <87pm7rtdul.wl-tiwai@suse.de>
+ <7645c6c8-a21c-23d7-5c19-cd2892b98481@perex.cz> <87leifjc16.wl-tiwai@suse.de>
+From:   Jaroslav Kysela <perex@perex.cz>
+Subject: Re: USB sound card freezes USB after resume from suspend
+In-Reply-To: <87leifjc16.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On 26. 04. 23 10:14, Takashi Iwai wrote:
+> On Wed, 26 Apr 2023 10:01:11 +0200,
+> Jaroslav Kysela wrote:
+>>
+>> On 26. 04. 23 7:24, Takashi Iwai wrote:
+>>> On Tue, 25 Apr 2023 20:19:24 +0200,
+>>> Jakub Kicinski wrote:
+>>>>
+>>>> Hi!
+>>>>
+>>>> For a few weeks now I can't use any USB devices if I suspend my laptop
+>>>> with my USB sound card active and resuming it without it connected.
+>>>>
+>>>> USB worker threads seems to be sitting in:
+>>>>
+>>>> [<0>] snd_pcm_dev_disconnect+0x1e8/0x280 [snd_pcm]
+>>>> [<0>] snd_device_disconnect_all+0x42/0x80 [snd]
+>>>> [<0>] snd_card_disconnect+0x128/0x290 [snd]
+>>>> [<0>] usb_audio_disconnect+0x11a/0x2c0 [snd_usb_audio]
+>>>> [<0>] usb_unbind_interface+0x8c/0x270
+>>>> [<0>] device_release_driver_internal+0x1b2/0x230
+>>>> [<0>] bus_remove_device+0xd8/0x150
+>>>> [<0>] device_del+0x18b/0x410
+>>>> [<0>] usb_disable_device+0xc6/0x1e0
+>>>> [<0>] usb_disconnect+0xda/0x2c0
+>>>> [<0>] usb_disconnect+0xbf/0x2c0
+>>>> [<0>] usb_disconnect+0xbf/0x2c0
+>>>> [<0>] usb_disconnect+0xbf/0x2c0
+>>>> [<0>] hub_event+0xf01/0x1cd0
+>>>> [<0>] process_one_work+0x1c4/0x3d0
+>>>> [<0>] worker_thread+0x4d/0x380
+>>>> [<0>] kthread+0xe6/0x110
+>>>> [<0>] ret_from_fork+0x29/0x50
+>>>>
+>>>> Which is:
+>>>>
+>>>> snd_pcm_dev_disconnect (/usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:818 /usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:812 /usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:1129) snd_pcm
+>>>>
+>>>> It happens on Fedora 37 and Fedora 38, it seems to have coincided with
+>>>> the 6.2 kernel but I'm not 100% sure.
+>>>>
+>>>> The USB devices come back after half an hour or so, silently.
+>>>> There's nothing of note in dmesg.
+>>>
+>>> AFAIK, there has been no similar report, so far.
+>>>
+>>> Is it a regression?  If yes, could you figure out which kernel version
+>>> starts showing the problem (or at best bisection)?
+>>
+>> It seems that it may be related to free_chmap():
+>>
+>> (gdb) l *(snd_pcm_dev_disconnect+0x1e8)
+>> 0xef0 is in snd_pcm_dev_disconnect (sound/core/pcm.c:817).
+>> 812	static void free_chmap(struct snd_pcm_str *pstr)
+>> 813	{
+>> 814		if (pstr->chmap_kctl) {
+>> 815			struct snd_card *card = pstr->pcm->card;
+>> 816	
+>> 817			down_write(&card->controls_rwsem);
+>> 818			snd_ctl_remove(card, pstr->chmap_kctl);
+>> 819			up_write(&card->controls_rwsem);
+>> 820			pstr->chmap_kctl = NULL;
+>> 821		}
+>>
+>> I think that the chmap should be freed only in snd_pcm_free_stream()
+>> to avoid possible nested mutex locks. This operation does not belong
+>> to disconnect.
+> 
+> A good point, it'll be a patch like below.
 
-On Mon, Apr 24, 2023 at 02:55:55PM -0500, Mario Limonciello wrote:
-> There are two Intel specific quirks for auto clear and end to end
-> that are not specified in the quirks file.  Move them to this location
-> instead.
+It looks good.
 
-quirks.c is for USB4 domain quirks (router, retimer, anything actually
-connected to the USB4 domain).
+Reviewed-by: Jaroslav Kysela <perex@perex.cz>
 
-nhi.c is the correct place for host interface quirks for now.
+> But we still need to figure out what's actually happening there.
+>   
+>> But I cannot reproduce this lock here.
+> 
+> Here too.  Could be tied with the config or the device?
+
+Perhaps. Jakub, could you do more debugging (printk, traces)?
+
+					Jaroslav
+
+-- 
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+
