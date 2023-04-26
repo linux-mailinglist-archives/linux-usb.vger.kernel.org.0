@@ -2,72 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 208A86EEDF8
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 08:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDCF06EEFEC
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 10:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239393AbjDZGFm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Apr 2023 02:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
+        id S240079AbjDZIJJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Apr 2023 04:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDZGFl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 02:05:41 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579B82134
-        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 23:05:40 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-18b5c8c2a49so4143819fac.3
-        for <linux-usb@vger.kernel.org>; Tue, 25 Apr 2023 23:05:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682489139; x=1685081139;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=V4i0azaBg7O2s6i4lwA15XawiNtASRWPXQ/VuKlA5y4=;
-        b=DZGRz3tSKIM2yXRQmQejA1m9L1rhn9ngygTpxg2tEEFW4UHsFzpizqKNaC0i5ZMsB9
-         Wf/6DqLPtTBZ4UCIRcvDMsFtPExPvuKsnYn4cl/6V09kaJV2b7KuHdAPGGqg14Ba71/6
-         BFWTSJonGZp1HtMPI1LRPuGCoo2jkqSoTJXpGZNE3wZ7HumZfFY99/gKVhgH013dnqpa
-         nZ2Cbhare84sYNoDNaIBkyN42makDPewKDVUGI4hghhDjUhSx8Xy0dU4GyjX9CEfs6XQ
-         sTA+nSvekL+Jt0zR4FcB2ITzZUnEPY6BM7l6Wqgl7RNiQBycHPo/lYgkYZcV40J35XI0
-         nQOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682489139; x=1685081139;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V4i0azaBg7O2s6i4lwA15XawiNtASRWPXQ/VuKlA5y4=;
-        b=a+ziQ9nnc18gt5JDQ2niDQ/Z7ozIDbO1rd5qtlGGFMNqv0pOKvSuS3NBZn9VgW2eK1
-         oIbSfUMW8CXEq0uKV5LoXFbEsLR+Ys2QIsoBuKOCe32MUwJ37a/nJcfHJVplMZ1fv35y
-         oE51a/ZlzR0cANI8LhMPYnsPT9Ut3Bj3ThoP9PxX4m/e7V5xPdWKxsPRHNEIvKMXrs7p
-         Cb2QuZNJU22+sjVsJF+9veDPWrYT9LD4JwtOrvV9ycqPq6bB/Oz0nGxZzEyoUcq1XtzI
-         hYXPeXSNL2sKBcIj49Vp1qnvoxL1iY0rVosln8XDWDRtLxeLjhg8ABvF9p9vq8yZs9jU
-         WFTA==
-X-Gm-Message-State: AAQBX9fNYN9wS1T4fpFR2Jw9gzZyYywc7RndKhl/6LIbf6ioLEo8M63k
-        SFkwTs/H1OEAQtMmShH0i3hbR2/8TIgLN4z6vhU=
-X-Google-Smtp-Source: AKy350ZHxqPcx48WmgJoNKk72NuAnR2wRNBXtbnH/rNu5oApfZDn4ef/OFrMfGVEPtbRYNXgZGn/UQ==
-X-Received: by 2002:a05:6870:8a11:b0:184:6a66:fd9e with SMTP id p17-20020a0568708a1100b001846a66fd9emr11813434oaq.8.1682489139578;
-        Tue, 25 Apr 2023 23:05:39 -0700 (PDT)
-Received: from geday ([2804:7f2:8006:a502:65e3:3fd9:3321:ba17])
-        by smtp.gmail.com with ESMTPSA id p22-20020a05687052d600b0017243edbe5bsm6280115oak.58.2023.04.25.23.05.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 23:05:39 -0700 (PDT)
-Date:   Wed, 26 Apr 2023 03:05:53 -0300
-From:   Geraldo Nascimento <geraldogabriel@gmail.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org,
+        with ESMTP id S240115AbjDZIJD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 04:09:03 -0400
+X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 26 Apr 2023 01:08:53 PDT
+Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C42310F8
+        for <linux-usb@vger.kernel.org>; Wed, 26 Apr 2023 01:08:53 -0700 (PDT)
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 6930A11D5;
+        Wed, 26 Apr 2023 10:01:19 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 6930A11D5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+        t=1682496079; bh=LA08Mj7uhWXsX144rk3cRnKnNYVgZqF98ZDwkiwSJyE=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=BjHatFwfvQrvMD6BSbG/cXYO3u6A6u1cI55AMDRvliNhMk4ESPQu4QzFQoVMz+Kl1
+         v5IUyAvrYsHGfumc6AdbQkPrMm9ZkmaZW5PklxV0sNGfOaCGhxR3NM1bcsxfLiYkGo
+         iAZoL4KeTcb7L9jDS3QayRGTMK4L7tbEnFI+6CA0=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: perex)
+        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+        Wed, 26 Apr 2023 10:01:12 +0200 (CEST)
+Message-ID: <7645c6c8-a21c-23d7-5c19-cd2892b98481@perex.cz>
+Date:   Wed, 26 Apr 2023 10:01:11 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>, Jakub Kicinski <kuba@kernel.org>
+Cc:     Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         regressions@lists.linux.dev
+References: <20230425111924.05cf8b13@kernel.org> <87pm7rtdul.wl-tiwai@suse.de>
+From:   Jaroslav Kysela <perex@perex.cz>
 Subject: Re: USB sound card freezes USB after resume from suspend
-Message-ID: <ZEi/QWRlJetMZ2R9@geday>
-References: <20230425111924.05cf8b13@kernel.org>
- <87pm7rtdul.wl-tiwai@suse.de>
- <ZEi6x155vF5GLeXT@geday>
- <87mt2vtc31.wl-tiwai@suse.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mt2vtc31.wl-tiwai@suse.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <87pm7rtdul.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,39 +59,74 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 08:02:58AM +0200, Takashi Iwai wrote:
-> On Wed, 26 Apr 2023 07:46:47 +0200,
-> Geraldo Nascimento wrote:
-> > 
-> > Hello Jakub and Takashi,
-> > 
-> > On Wed, Apr 26, 2023 at 07:24:50AM +0200, Takashi Iwai wrote:
-> > > On Tue, 25 Apr 2023 20:19:24 +0200,
-> > > Jakub Kicinski wrote:
-> > > > 
-> > > > Hi!
-> > > > 
-> > > > For a few weeks now I can't use any USB devices if I suspend my laptop
-> > > > with my USB sound card active and resuming it without it connected.
-> > 
-> > Takashi, did you pay attention to the workflow of triggering Jakub's
-> > bug? He suspends the computer with the sound card active, disconnects
-> > the sound card and expects to resume his computer back to an usable
-> > state.
+On 26. 04. 23 7:24, Takashi Iwai wrote:
+> On Tue, 25 Apr 2023 20:19:24 +0200,
+> Jakub Kicinski wrote:
+>>
+>> Hi!
+>>
+>> For a few weeks now I can't use any USB devices if I suspend my laptop
+>> with my USB sound card active and resuming it without it connected.
+>>
+>> USB worker threads seems to be sitting in:
+>>
+>> [<0>] snd_pcm_dev_disconnect+0x1e8/0x280 [snd_pcm]
+>> [<0>] snd_device_disconnect_all+0x42/0x80 [snd]
+>> [<0>] snd_card_disconnect+0x128/0x290 [snd]
+>> [<0>] usb_audio_disconnect+0x11a/0x2c0 [snd_usb_audio]
+>> [<0>] usb_unbind_interface+0x8c/0x270
+>> [<0>] device_release_driver_internal+0x1b2/0x230
+>> [<0>] bus_remove_device+0xd8/0x150
+>> [<0>] device_del+0x18b/0x410
+>> [<0>] usb_disable_device+0xc6/0x1e0
+>> [<0>] usb_disconnect+0xda/0x2c0
+>> [<0>] usb_disconnect+0xbf/0x2c0
+>> [<0>] usb_disconnect+0xbf/0x2c0
+>> [<0>] usb_disconnect+0xbf/0x2c0
+>> [<0>] hub_event+0xf01/0x1cd0
+>> [<0>] process_one_work+0x1c4/0x3d0
+>> [<0>] worker_thread+0x4d/0x380
+>> [<0>] kthread+0xe6/0x110
+>> [<0>] ret_from_fork+0x29/0x50
+>>
+>> Which is:
+>>
+>> snd_pcm_dev_disconnect (/usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:818 /usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:812 /usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:1129) snd_pcm
+>>
+>> It happens on Fedora 37 and Fedora 38, it seems to have coincided with
+>> the 6.2 kernel but I'm not 100% sure.
+>>
+>> The USB devices come back after half an hour or so, silently.
+>> There's nothing of note in dmesg.
 > 
-> It's a pretty normal procedure for many people; most of USB type-C
-> docks have a USB audio built-in, and people remove the machine from
-> the dock after suspend.  So that's an operation that is seen everyday
-> everywhere.
+> AFAIK, there has been no similar report, so far.
 > 
-> Still I haven't heard this issue, and it implies that it's either
-> something new or specific to the machine or the environment.  Or we've
-> been just lucky...
-> 
-> 
-> Takashi
+> Is it a regression?  If yes, could you figure out which kernel version
+> starts showing the problem (or at best bisection)?
 
-Understood, sorry for adding noise then.
+It seems that it may be related to free_chmap():
 
-Thanks,
-Geraldo Nascimento
+(gdb) l *(snd_pcm_dev_disconnect+0x1e8)
+0xef0 is in snd_pcm_dev_disconnect (sound/core/pcm.c:817).
+812	static void free_chmap(struct snd_pcm_str *pstr)
+813	{
+814		if (pstr->chmap_kctl) {
+815			struct snd_card *card = pstr->pcm->card;
+816	
+817			down_write(&card->controls_rwsem);
+818			snd_ctl_remove(card, pstr->chmap_kctl);
+819			up_write(&card->controls_rwsem);
+820			pstr->chmap_kctl = NULL;
+821		}
+
+I think that the chmap should be freed only in snd_pcm_free_stream() to avoid 
+possible nested mutex locks. This operation does not belong to disconnect.
+
+But I cannot reproduce this lock here.
+
+					Jaroslav
+
+-- 
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+
