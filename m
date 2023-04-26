@@ -2,103 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFBD16EF1C5
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 12:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04C26EF1F4
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 12:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbjDZKSA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Apr 2023 06:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
+        id S240296AbjDZK3u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Apr 2023 06:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbjDZKR6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 06:17:58 -0400
-Received: from www484.your-server.de (www484.your-server.de [78.47.237.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C99A35AD
-        for <linux-usb@vger.kernel.org>; Wed, 26 Apr 2023 03:17:56 -0700 (PDT)
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-        by www484.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <k.graefe@gateware.de>)
-        id 1prcDh-0001QV-Lh; Wed, 26 Apr 2023 12:17:53 +0200
-Received: from [2003:ca:6730:e8f8:9f6:94bc:5149:da49]
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <k.graefe@gateware.de>)
-        id 1prcDh-000TAb-CI; Wed, 26 Apr 2023 12:17:53 +0200
-Content-Type: multipart/mixed; boundary="------------DC5h5dqW7X9JBXaH0H8pQaFG"
-Message-ID: <d62f5a2b-ec47-6cee-4cf1-0d1ea18dee56@gateware.de>
-Date:   Wed, 26 Apr 2023 12:17:53 +0200
+        with ESMTP id S239463AbjDZK3l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 06:29:41 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4490249F0;
+        Wed, 26 Apr 2023 03:29:39 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id A06385FD7A;
+        Wed, 26 Apr 2023 13:29:37 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1682504977;
+        bh=G2zp6fXp50ZrnxTL45q7kYiCTTf6jCTtGwh/0Q+wtss=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=TuYBmAqFr809pIi+6bVNedFGOtePyBzWRfuu4qWOQbnHjW3reDXL/t3nwejNgv53k
+         FiXNL54F3rxJtviC8KOfwrX/pM5EgqXxiC+uAuNHP6Ra+TsLWDhLZx+6Po6fW4EEtR
+         LqBqIpoBFQKnNtw/w3RRyyMUJH2MM3tjwLFht3fyey2WuV4iiixgYkeQjipdH8dPjT
+         3u3kBl77oMxFJ9WwanIiJ52RtHisH0hDzJP0lNW7vyxv9TYeORcoidVvUdFxRsfJux
+         6VeTgFjrDiEuFNGHwNpU1lxF51TO7DbCdvNDdIDNA8MKg7XMkOqNrLgoTBQNyh9biA
+         YUThncWFN1BCw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed, 26 Apr 2023 13:29:35 +0300 (MSK)
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <neil.armstrong@linaro.org>,
+        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>, <mturquette@baylibre.com>,
+        <vkoul@kernel.org>, <kishon@kernel.org>, <hminas@synopsys.com>,
+        <Thinh.Nguyen@synopsys.com>
+CC:     <yue.wang@amlogic.com>, <hanjie.lin@amlogic.com>,
+        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Subject: [PATCH v3 0/5] arm64: meson: support Amlogic A1 USB OTG controller
+Date:   Wed, 26 Apr 2023 13:29:17 +0300
+Message-ID: <20230426102922.19705-1-ddrokosov@sberdevices.ru>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-From:   =?UTF-8?Q?Konrad_Gr=c3=a4fe?= <k.graefe@gateware.de>
-Subject: [PATCH] usb: gadget: u_ether: Fix host MAC address case
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, quentin.schulz@theobroma-systems.com
-References: <2023042534-thing-shamrock-88c1@gregkh>
-Content-Language: en-US
-In-Reply-To: <2023042534-thing-shamrock-88c1@gregkh>
-X-Authenticated-Sender: k.graefe@gateware.de
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26888/Wed Apr 26 09:32:41 2023)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/26 04:45:00 #21166225
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------DC5h5dqW7X9JBXaH0H8pQaFG
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+This patch series introduces full support for the Amlogic A1 USB controller
+in OTG mode (peripheral and host modes switching).
 
+Previously, Amlogic's patch series [1] was applied to the upstream tree,
+but it only had USB host mode support.
+Furthermore, the device tree patchset [2] wasn't merged due to a missing
+clk driver.
+Patchset [2] has been completely reworked:
+    - changed register base offsets to proper values
+    - introduced dwc2 in peripheral mode
+    - OTG mode support
+    - the SoB of Amlogic authors still remain
 
-As the CDC-ECM specification states the host MAC address must be sent to
-the host as an uppercase hexadecimal string:
-     The Unicode character is chosen from the set of values 30h through
-     39h and 41h through 46h (0-9 and A-F).
+Testing:
+    - USB OTG role switching between gadget and host - OK
+    - Peripheral mode - OK (tested with adb shell/push/pop)
+    - Host mode - OK (tested only USB enumeration and detection)
 
-However, snprintf(.., "%pm", ..) generates a lowercase MAC address
-string. While most host drivers are tolerant to this, UsbNcm.sys on
-Windows 10 is not. Instead it uses a different MAC address with all
-bytes set to zero including and after the first byte containing a
-lowercase letter. On Windows 11 Microsoft fixed it, but apparently they
-did not backport the fix.
+Changes v3 since v2 at [4]:
+    - if reset_control_reset() fails during phy_exit() callback
+      execution, do not disable clkin, instead, return an error
+      immediately
+    - provide proper 'phy-names' for the dwc2 device tree node as
+      'usb2-phy' instead of 'usb2_phy' (replace underscore with dash)
 
-This change fixes the issue by upper-casing the MAC to comply with the
-specification.
+Changes v2 since v1 at [3]:
+    - as Martin suggested in v1, this commit completely removes
+      the 'otg_switch_supported' parameter from dwc3_meson_g12a_drvdata;
+      this parameter is no longer necessary as all IP versions now
+      support OTG switching
+    - this commit moves the USB PHY clkin enable/disable calls to
+      the PHY init/exit routines
 
-Signed-off-by: Konrad Gräfe <k.graefe@gateware.de>
----
-V1 -> V2: Fixed checkpatch.pl warnings
+Links:
+    [1] https://lore.kernel.org/all/1581990859-135234-1-git-send-email-hanjie.lin@amlogic.com/
+    [2] https://lore.kernel.org/all/1581990859-135234-4-git-send-email-hanjie.lin@amlogic.com/
+    [3] https://lore.kernel.org/all/20230414152423.19842-1-ddrokosov@sberdevices.ru/
+    [4] https://lore.kernel.org/all/20230418111612.19479-1-ddrokosov@sberdevices.ru/
 
-  drivers/usb/gadget/function/u_ether.c | 9 ++++++++-
-  1 file changed, 8 insertions(+), 1 deletion(-)
+Dmitry Rokosov (5):
+  phy: amlogic: enable/disable clkin during Amlogic USB PHY init/exit
+  usb: dwc2: support dwc2 IP for Amlogic A1 SoC family
+  dt-bindings: usb: dwc2: add support for Amlogic A1 SoC USB peripheral
+  usb: dwc3-meson-g12a: support OTG switch for all IP versions
+  arm64: dts: meson: a1: support USB controller in OTG mode
 
+ .../devicetree/bindings/usb/dwc2.yaml         |  1 +
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi     | 59 +++++++++++++++++++
+ drivers/phy/amlogic/phy-meson-g12a-usb2.c     | 15 ++++-
+ drivers/usb/dwc2/params.c                     | 21 +++++++
+ drivers/usb/dwc3/dwc3-meson-g12a.c            | 16 +----
+ 5 files changed, 97 insertions(+), 15 deletions(-)
 
---------------DC5h5dqW7X9JBXaH0H8pQaFG
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-usb-gadget-u_ether-Fix-host-MAC-address-case.patch"
-Content-Disposition: attachment;
- filename="0001-usb-gadget-u_ether-Fix-host-MAC-address-case.patch"
-Content-Transfer-Encoding: base64
+-- 
+2.36.0
 
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91X2V0aGVyLmMgYi9k
-cml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vdV9ldGhlci5jCmluZGV4IDY5NTZhZDhiYThk
-ZC4uMjUwNzM0ZTA5MGZjIDEwMDY0NAotLS0gYS9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rp
-b24vdV9ldGhlci5jCisrKyBiL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91X2V0aGVy
-LmMKQEAgLTk1OCw2ICs5NTgsNyBAQCBFWFBPUlRfU1lNQk9MX0dQTChnZXRoZXJfZ2V0X2hv
-c3RfYWRkcik7CiBpbnQgZ2V0aGVyX2dldF9ob3N0X2FkZHJfY2RjKHN0cnVjdCBuZXRfZGV2
-aWNlICpuZXQsIGNoYXIgKmhvc3RfYWRkciwgaW50IGxlbikKIHsKIAlzdHJ1Y3QgZXRoX2Rl
-diAqZGV2OworCWludCBpLCBzbGVuOwogCiAJaWYgKGxlbiA8IDEzKQogCQlyZXR1cm4gLUVJ
-TlZBTDsKQEAgLTk2NSw3ICs5NjYsMTMgQEAgaW50IGdldGhlcl9nZXRfaG9zdF9hZGRyX2Nk
-YyhzdHJ1Y3QgbmV0X2RldmljZSAqbmV0LCBjaGFyICpob3N0X2FkZHIsIGludCBsZW4pCiAJ
-ZGV2ID0gbmV0ZGV2X3ByaXYobmV0KTsKIAlzbnByaW50Zihob3N0X2FkZHIsIGxlbiwgIiVw
-bSIsIGRldi0+aG9zdF9tYWMpOwogCi0JcmV0dXJuIHN0cmxlbihob3N0X2FkZHIpOworCisJ
-c2xlbiA9IHN0cmxlbihob3N0X2FkZHIpOworCisJZm9yIChpID0gMDsgaSA8IHNsZW47IGkr
-KykKKwkJaG9zdF9hZGRyW2ldID0gdG91cHBlcihob3N0X2FkZHJbaV0pOworCisJcmV0dXJu
-IHNsZW47CiB9CiBFWFBPUlRfU1lNQk9MX0dQTChnZXRoZXJfZ2V0X2hvc3RfYWRkcl9jZGMp
-OwogCgo=
-
---------------DC5h5dqW7X9JBXaH0H8pQaFG--
