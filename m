@@ -2,59 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 605946EF384
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 13:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F356EF39A
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 13:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240513AbjDZLlq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Apr 2023 07:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
+        id S240123AbjDZLpm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Apr 2023 07:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239947AbjDZLlp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 07:41:45 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F5D46A6
-        for <linux-usb@vger.kernel.org>; Wed, 26 Apr 2023 04:41:43 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4ec816d64afso30238072e87.1
-        for <linux-usb@vger.kernel.org>; Wed, 26 Apr 2023 04:41:43 -0700 (PDT)
+        with ESMTP id S230401AbjDZLpk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 07:45:40 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E464C3F
+        for <linux-usb@vger.kernel.org>; Wed, 26 Apr 2023 04:45:39 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2a8baeac4d1so69266671fa.1
+        for <linux-usb@vger.kernel.org>; Wed, 26 Apr 2023 04:45:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682509302; x=1685101302;
+        d=gmail.com; s=20221208; t=1682509537; x=1685101537;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Rhrj4sQwygc9XaiC9VmfgJL3i2AK8zPKePp35VK5NY=;
-        b=oQQO45pVb+kXER+qfn7OqtTceonMhxFnFPlkvRPixviEwPBIIAN4Ou6910X3FbD1Dn
-         d0HV/CBqDTRK/dbyuuWpslnTjUcn6ZjbCKxSkMIPBPkN9ytkOMOGJZoJ1KpdRtS87gBd
-         H6IskwaK4H87ACc/Evefxr3vK+uF47jSuvDyC8WhnepdDCkws1nuq7B8x7EZ0wX0Tx1r
-         cou+S7E6pAnGdHS7rwdC/R6REcieGiGEx2HLfgw+JdB2E4SE5GLrsmQM8kWDvWxDl3f5
-         PpODBT3wXQ+6/PjFgM74kCBsjeiGfL1ZFWP3eVuP5pUQ5qSBsU9TX1x5dl6C8ZWlj7Sx
-         tPPQ==
+        bh=kp5hVblDUf2X2DcjhbH6TNN8htu/kIR8aai0vHTMtQ0=;
+        b=HDivSCVywhUdC6r8arLBrxrsyQGfSkicyyogWFwePBvLf7GcL1zJkmqX2O+6BltuAS
+         1Ac9REFbG+Aw/lWFDlH5UpGOhRPxIzoczd9t/Y3Q1YIAltwQP2uhLG0K1ic+jgQwLWVb
+         HdXPkOj8UiaY+Wc3jmR2FgBxcT9S0INancp0Y/ZxrArimedRdJzS3S4HDrzgSdkelPdW
+         7sfGu4ocBN5t68jgHhHHuEqzmFMXPk08ZdQXerJRJzf0R9vv1WdRDmsUAebjT88ONLDb
+         QV6YzofoVjSfVIQecMAL+q6SGeNFJkIo82odp59vECT9YtNOcvQokxz1f0SHpnrop6MW
+         t1LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682509302; x=1685101302;
+        d=1e100.net; s=20221208; t=1682509537; x=1685101537;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+Rhrj4sQwygc9XaiC9VmfgJL3i2AK8zPKePp35VK5NY=;
-        b=lsIrfEHAQvZ7mv7kYQ/vbTXwVDXcoLxjW8Wh28/N5wvhdXM/rzd0+JiXYK3Pkk49fC
-         boeLmoX/tvQh462a80b11edgGxLrDyHYwNGGaz5jVwTFrp+XluuCIOU1w7obdPlf32rn
-         YDzANj3otOp1lU2awIONjJoy29oqDpEzZf2jvOm2WwKVVyjco4PJBXM46FiNbuFmXRi7
-         Ijf3y0MKk0HQ4L9i24mtiGaPpoLdzHuIyK8Tgvgr3rDgwhLbulTS2zZwM5ZlvB582wC8
-         eCptRRn/HcePiIWvfr4ZFGh1+1MWSMxzGaa/Mnqz98lcHsYN35mxYDjo/6Bcch6nENos
-         UeGA==
-X-Gm-Message-State: AC+VfDxxXbZUYr40ruGmWzifUXjZeWMT9QkQ69Al07I5AnQTVh22mjoD
-        mLMf5N8m/EW/IY9RhU4Ygcw=
-X-Google-Smtp-Source: ACHHUZ5+l99R5UcUTcn6ggonoyA3WbpI8mEeOT11UWi2t5lxgyyptrlPXpmSJpGt8xERqZuJEp233w==
-X-Received: by 2002:ac2:5464:0:b0:4d8:51e7:9f23 with SMTP id e4-20020ac25464000000b004d851e79f23mr545160lfn.34.1682509301329;
-        Wed, 26 Apr 2023 04:41:41 -0700 (PDT)
+        bh=kp5hVblDUf2X2DcjhbH6TNN8htu/kIR8aai0vHTMtQ0=;
+        b=CKWbMVGQfYiVTEcRZkcmXCLUbbsvMv8ZEoq8EQLMJQ7j6P79FyWdy0zA4uQOUXwv3S
+         NSlkYqvnvnnyJLDYmObh4c1+Lz+XuZS1YSVvQgIn6TPs8zD7E4B1n9YLceA/rTE9mPwT
+         JTBaO9Olk5lFdY7hqMFq102mrM47bZZ28BdLQD97x45KQgunGiETzSMoDPc1p8QuAzJE
+         xuE8REnefWQ/NqLWnRp8HP8LKf+Il9hvY9vbli314RVfzNUWcyDSH8iOunb5HBJuTFD0
+         +oNonwuT2fkk1Mm/m8SmvCvbdHxeVSW2Oct63rcn6hulkKUAFjcSHA1FWDYiYlIJaS56
+         JTag==
+X-Gm-Message-State: AAQBX9dML9Ek3qbdhZCtX7mlZj1WrddJ8Xg1hWDDN3llPkXBWMN4KW/Q
+        rIxSeqZHKVIoq3Gj8QSv1Bk=
+X-Google-Smtp-Source: AKy350YjSXDiWoqVmmcwsy0PHsVo4WICBvg8KBVzjH5yznGvkKa+HSZ76vFiIcUTVMqud3QWkApYdg==
+X-Received: by 2002:a2e:9903:0:b0:2a0:202c:93a7 with SMTP id v3-20020a2e9903000000b002a0202c93a7mr3951907lji.14.1682509537072;
+        Wed, 26 Apr 2023 04:45:37 -0700 (PDT)
 Received: from t630.example.org (45-11-61-13.ip4.greenlan.pl. [45.11.61.13])
-        by smtp.googlemail.com with ESMTPSA id x24-20020a19f618000000b004db3e7dfb8csm2461011lfe.189.2023.04.26.04.41.40
+        by smtp.googlemail.com with ESMTPSA id 13-20020a05651c008d00b0029b32a40934sm2439907ljq.113.2023.04.26.04.45.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 04:41:40 -0700 (PDT)
+        Wed, 26 Apr 2023 04:45:36 -0700 (PDT)
 From:   Wlodzimierz Lipert <wlodzimierz.lipert@gmail.com>
 To:     gregkh@linuxfoundation.org, balbi@kernel.org
 Cc:     linux-usb@vger.kernel.org,
         Wlodzimierz Lipert <wlodzimierz.lipert@gmail.com>
-Subject: [PATCH] usb: prevent duplicate bEndpointAddress by usb_ep_autoconfig_ss (bitmap).
-Date:   Wed, 26 Apr 2023 13:41:20 +0200
-Message-Id: <20230426114120.3603-1-wlodzimierz.lipert@gmail.com>
+Subject: [PATCH v2] usb: prevent duplicate bEndpointAddress by usb_ep_autoconfig_ss (bitmap).
+Date:   Wed, 26 Apr 2023 13:45:28 +0200
+Message-Id: <20230426114528.3996-1-wlodzimierz.lipert@gmail.com>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -103,7 +103,7 @@ index 1eb4fa2e623f..50a2e8a90447 100644
 -	} else if (desc->bEndpointAddress & USB_DIR_IN) {
 -		if (++gadget->in_epnum > 15)
 +		num = simple_strtoul(&ep->name[2], NULL, 10);
-+		if(num > 15)
++		if (num > 15)
  			return NULL;
 -		desc->bEndpointAddress = USB_DIR_IN | gadget->in_epnum;
 -	} else {
@@ -121,7 +121,7 @@ index 1eb4fa2e623f..50a2e8a90447 100644
 +		return NULL;
 +
 +	/* find first available ep number (if not encoded in ep name) */
-+	while(*epnum_map & (1U << num))
++	while (*epnum_map & (1U << num))
 +		++num;
 +
 +	*epnum_map |= 1U << num;
