@@ -2,163 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3866EF004
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 10:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 900876EF0F5
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Apr 2023 11:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239976AbjDZIOT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Apr 2023 04:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
+        id S240224AbjDZJUj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 26 Apr 2023 05:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239771AbjDZIOS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 04:14:18 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D543591
-        for <linux-usb@vger.kernel.org>; Wed, 26 Apr 2023 01:14:15 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B2B9521A0C;
-        Wed, 26 Apr 2023 08:14:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1682496853; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M1G4S3FK1yY2QyDvXyKj5CqNV7wvs8bTdK4+2pu9qQw=;
-        b=FrGexklZXUKD1AveKLSowcb78cfdPMtA3xNiQJ3UsbRe09CRcFYNpGHZMX1aGUq2INfCVg
-        yvJIFC99oRIc2ewYzbG6nschyvbmNsrUYe2EugRCENu2GF6y/u2LWlwfUldfcr5sBDA2V5
-        Up87MO+wakF+SXqZ/TC2VOz5y3VNJlU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1682496853;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M1G4S3FK1yY2QyDvXyKj5CqNV7wvs8bTdK4+2pu9qQw=;
-        b=J8Jlz6bEQEpMzJrot5tTUrEdomfsvz/127koz4BXYjXWI1ermlbwJIbRTlOND9MJt+Hzkp
-        bpzTGwmMTRrQrkCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 93AB513421;
-        Wed, 26 Apr 2023 08:14:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Q6uVI1XdSGTBEAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Wed, 26 Apr 2023 08:14:13 +0000
-Date:   Wed, 26 Apr 2023 10:14:13 +0200
-Message-ID: <87leifjc16.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Jaroslav Kysela <perex@perex.cz>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org,
+        with ESMTP id S240249AbjDZJTl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Apr 2023 05:19:41 -0400
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF463C03;
+        Wed, 26 Apr 2023 02:19:08 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-b9246a5f3feso12231382276.1;
+        Wed, 26 Apr 2023 02:19:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682500702; x=1685092702;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nea43AGTHWHWBjILaENIfdEesjmp3NJp5Ib9Fbp61ic=;
+        b=SByM82THatNkntNrzsAnwcGHyR03DjnVbSsGClf+vRSDh2CisJloEB6VesjtCE9pCK
+         7COUSdiQUijfP/KVTrVSNtIzQwyeZhVAinIbWxASOd9eWUVK4yE7l2SOfezDNcy/7KYL
+         hRnhgfa9FWRJk4gtz7NSWldox3z/4K4Kh4wLjS4nihq9IFOleB2JRcMBYejVrpV3j5Ui
+         HZ7fU80f7OddA9FkI6WK+XMsRqS38H5aBVHOrCKM5+A3CCxoWbr1/wor9yzGAWQGpS2m
+         RnYa9pLhDzg3Ceq2cJojdbzNBfhosF0dpBP0/kPS7LiLcLmHp9VAEOe9XAQ1DgXIt9Ct
+         DBTA==
+X-Gm-Message-State: AC+VfDyxYzUtS264tpHo+D4UHA++gIQ3cSZnJE2vCtwbjL2iqQHFBPB7
+        ixvG6My+Vf1V4TMQZP8zyYb6EqipiiSWpw==
+X-Google-Smtp-Source: ACHHUZ46BdIb5iKIODz22Gu2INxw8w+7w4zeHklIu49Rq7WsBDELZH0eDbSf9TgEBk4Iyg/HYTEIiQ==
+X-Received: by 2002:a25:a10a:0:b0:b99:e0ff:5f16 with SMTP id z10-20020a25a10a000000b00b99e0ff5f16mr4560707ybh.18.1682500701873;
+        Wed, 26 Apr 2023 02:18:21 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id e131-20020a253789000000b00b7767ca7473sm3951047yba.16.2023.04.26.02.18.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Apr 2023 02:18:21 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-b8f549d36e8so12204172276.3;
+        Wed, 26 Apr 2023 02:18:21 -0700 (PDT)
+X-Received: by 2002:a25:1683:0:b0:b8f:54a4:9a55 with SMTP id
+ 125-20020a251683000000b00b8f54a49a55mr12415557ybw.65.1682500701204; Wed, 26
+ Apr 2023 02:18:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230328160756.30520-1-quic_kriskura@quicinc.com>
+ <20230328160756.30520-3-quic_kriskura@quicinc.com> <dde01219-57f7-3cc2-c4fb-5b6a38bd7a9c@quicinc.com>
+In-Reply-To: <dde01219-57f7-3cc2-c4fb-5b6a38bd7a9c@quicinc.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 26 Apr 2023 11:18:06 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXdP6fPPQxvAdQCz2P_SPnCLjEpqiTHerF05e7tJmWHFg@mail.gmail.com>
+Message-ID: <CAMuHMdXdP6fPPQxvAdQCz2P_SPnCLjEpqiTHerF05e7tJmWHFg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] usb: gadget: udc: Handle gadget_connect failure
+ during bind operation
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        regressions@lists.linux.dev
-Subject: Re: USB sound card freezes USB after resume from suspend
-In-Reply-To: <7645c6c8-a21c-23d7-5c19-cd2892b98481@perex.cz>
-References: <20230425111924.05cf8b13@kernel.org>
-        <87pm7rtdul.wl-tiwai@suse.de>
-        <7645c6c8-a21c-23d7-5c19-cd2892b98481@perex.cz>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Alan Stern <stern@rowland.harvard.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Jiantao Zhang <water.zhangjiantao@huawei.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+        quic_jackp@quicinc.com, quic_ugoswami@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 26 Apr 2023 10:01:11 +0200,
-Jaroslav Kysela wrote:
-> 
-> On 26. 04. 23 7:24, Takashi Iwai wrote:
-> > On Tue, 25 Apr 2023 20:19:24 +0200,
-> > Jakub Kicinski wrote:
-> >> 
-> >> Hi!
-> >> 
-> >> For a few weeks now I can't use any USB devices if I suspend my laptop
-> >> with my USB sound card active and resuming it without it connected.
-> >> 
-> >> USB worker threads seems to be sitting in:
-> >> 
-> >> [<0>] snd_pcm_dev_disconnect+0x1e8/0x280 [snd_pcm]
-> >> [<0>] snd_device_disconnect_all+0x42/0x80 [snd]
-> >> [<0>] snd_card_disconnect+0x128/0x290 [snd]
-> >> [<0>] usb_audio_disconnect+0x11a/0x2c0 [snd_usb_audio]
-> >> [<0>] usb_unbind_interface+0x8c/0x270
-> >> [<0>] device_release_driver_internal+0x1b2/0x230
-> >> [<0>] bus_remove_device+0xd8/0x150
-> >> [<0>] device_del+0x18b/0x410
-> >> [<0>] usb_disable_device+0xc6/0x1e0
-> >> [<0>] usb_disconnect+0xda/0x2c0
-> >> [<0>] usb_disconnect+0xbf/0x2c0
-> >> [<0>] usb_disconnect+0xbf/0x2c0
-> >> [<0>] usb_disconnect+0xbf/0x2c0
-> >> [<0>] hub_event+0xf01/0x1cd0
-> >> [<0>] process_one_work+0x1c4/0x3d0
-> >> [<0>] worker_thread+0x4d/0x380
-> >> [<0>] kthread+0xe6/0x110
-> >> [<0>] ret_from_fork+0x29/0x50
-> >> 
-> >> Which is:
-> >> 
-> >> snd_pcm_dev_disconnect (/usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:818 /usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:812 /usr/src/debug/kernel-6.2.12/linux-6.2.12-300.fc38.x86_64/sound/core/pcm.c:1129) snd_pcm
-> >> 
-> >> It happens on Fedora 37 and Fedora 38, it seems to have coincided with
-> >> the 6.2 kernel but I'm not 100% sure.
-> >> 
-> >> The USB devices come back after half an hour or so, silently.
-> >> There's nothing of note in dmesg.
-> > 
-> > AFAIK, there has been no similar report, so far.
-> > 
-> > Is it a regression?  If yes, could you figure out which kernel version
-> > starts showing the problem (or at best bisection)?
-> 
-> It seems that it may be related to free_chmap():
-> 
-> (gdb) l *(snd_pcm_dev_disconnect+0x1e8)
-> 0xef0 is in snd_pcm_dev_disconnect (sound/core/pcm.c:817).
-> 812	static void free_chmap(struct snd_pcm_str *pstr)
-> 813	{
-> 814		if (pstr->chmap_kctl) {
-> 815			struct snd_card *card = pstr->pcm->card;
-> 816	
-> 817			down_write(&card->controls_rwsem);
-> 818			snd_ctl_remove(card, pstr->chmap_kctl);
-> 819			up_write(&card->controls_rwsem);
-> 820			pstr->chmap_kctl = NULL;
-> 821		}
-> 
-> I think that the chmap should be freed only in snd_pcm_free_stream()
-> to avoid possible nested mutex locks. This operation does not belong
-> to disconnect.
+Hi Krishna,
 
-A good point, it'll be a patch like below.
-But we still need to figure out what's actually happening there.
- 
-> But I cannot reproduce this lock here.
+On Wed, Apr 26, 2023 at 3:17 AM Krishna Kurapati PSSNV
+<quic_kriskura@quicinc.com> wrote:
+> Hi Alan, Geert,
+>
+>   Can you help review and provide comments/approval on the following patch.
 
-Here too.  Could be tied with the config or the device?
+I don't know why you are addressing me, as I never touched the affected
+file, am not listed as its maintainer, and don't know much about USB UDC.
 
+Gr{oetje,eeting}s,
 
-thanks,
+                        Geert
 
-Takashi
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
--- 8< --
---- a/sound/core/pcm.c
-+++ b/sound/core/pcm.c
-@@ -1126,7 +1126,6 @@ static int snd_pcm_dev_disconnect(struct snd_device *device)
- 	pcm_call_notify(pcm, n_disconnect);
- 	for (cidx = 0; cidx < 2; cidx++) {
- 		snd_unregister_device(&pcm->streams[cidx].dev);
--		free_chmap(&pcm->streams[cidx]);
- 	}
- 	mutex_unlock(&pcm->open_mutex);
- 	mutex_unlock(&register_mutex);
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
