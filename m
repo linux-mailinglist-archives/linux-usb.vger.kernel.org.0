@@ -2,216 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35A76F0ACC
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 19:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6D46F0B34
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 19:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244290AbjD0RZY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Apr 2023 13:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
+        id S244423AbjD0Rnh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Apr 2023 13:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244098AbjD0RZT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 13:25:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0632709
-        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 10:24:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682616272;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=28q8f1R5ATkZZRKbMVPNKfNQWWUbVatXGNvWfYjHmSs=;
-        b=QstcTcbJyzVLyZn185aqSafia7+k+bbK6CwJQIZpFEKyd8JcNYp7H/p9ke+HvfsEGR+UqZ
-        Keg0L8rZ+qga3nXzO5EGeBP6OPklU4fxZjHS8pw9vKNCOT5r0pH2F2ZGFpN+vs9Iu1k2aH
-        ueC0ftsVLl/Yw4u/h8GYo6qkQVAttkY=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-668-VeQtMJtqOEWmjV0YkPUvgg-1; Thu, 27 Apr 2023 13:24:31 -0400
-X-MC-Unique: VeQtMJtqOEWmjV0YkPUvgg-1
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-74deda8705dso618818285a.1
-        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 10:24:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682616271; x=1685208271;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=28q8f1R5ATkZZRKbMVPNKfNQWWUbVatXGNvWfYjHmSs=;
-        b=Cor9PLBV62SVjxW2FnzfavteaLIM458XH2mVCzhm1SmmKC3NAuttSIQmqP+9RmhQbI
-         xGGponVLmQfRDJ08rZl26FpmiM/lIaQT+AWEJnWFnh0JYqhnwQQVSsVY76Mz3Ibq9OCA
-         aotnB0bxI5Bk0/zh47EA3sxOaipFCtBdjSES8xkgOH/iCbnjgMSzoK2mtNUDBa08ddSD
-         0GZ4uc+0rPP/AyhHqmIS6BxTBjlinNYBgU2cTETRLYZgpcFQawlKS/KFubrLPJZoXxui
-         AytonXOUK2LuOCi3bXIYrvLnNQWn4P0q8Ud8i3YOcGms+XvjyOiQ05nfTA1jHA/pfpiR
-         28Fw==
-X-Gm-Message-State: AC+VfDwNCzQqiyxoFnxxpyPrT/bEb67nlaKiJ9bVpQdLzum/RPu/zavY
-        nmbjWTHBNGkCyepp4OVG3w2TZtWGlF8e8DVBNtQnmo+DvkMBoHH6nLXkpN5nU7bxFEZxwK4EQla
-        OkFexdsq40+eNS9MX2wq8
-X-Received: by 2002:a05:622a:11cf:b0:3ef:62be:e09b with SMTP id n15-20020a05622a11cf00b003ef62bee09bmr3430007qtk.40.1682616270989;
-        Thu, 27 Apr 2023 10:24:30 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5svrizMCWCHRmMrWSPvzIzZhBUFHpvLgjbJkFvifxcpqqAJAjdkw0lFQmIdO2/HiJtRgKJ1A==
-X-Received: by 2002:a05:622a:11cf:b0:3ef:62be:e09b with SMTP id n15-20020a05622a11cf00b003ef62bee09bmr3429975qtk.40.1682616270651;
-        Thu, 27 Apr 2023 10:24:30 -0700 (PDT)
-Received: from fedora (modemcable181.5-202-24.mc.videotron.ca. [24.202.5.181])
-        by smtp.gmail.com with ESMTPSA id k1-20020ac86041000000b003ecf475286csm6297422qtm.39.2023.04.27.10.24.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 10:24:29 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 13:24:27 -0400
-From:   Adrien Thierry <athierry@redhat.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Shazad Hussain <quic_shazhuss@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 0/6] arm64: qcom: sa8775p: add support for USB
-Message-ID: <ZEqvy+khHeTkC2hf@fedora>
-References: <20230421133922.8520-1-quic_shazhuss@quicinc.com>
- <ZEcEGJiikEC2wIVE@fedora>
- <ac49075d-439e-da46-9ef6-0b0828f8e072@linaro.org>
+        with ESMTP id S244545AbjD0RnQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 13:43:16 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2069.outbound.protection.outlook.com [40.107.244.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8291A5253
+        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 10:42:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nvZQrr/btZMk0Jj8TjTeSg9QJhnxFOLHYufQi9sEikSn/ayWA/LcHNWdqibVBPopCerh+UiOYD4+lntAZq2Oy8Da0+RmKDO6SUxp64wi28D1j5XYX+9w+Qa5K/WoPLHg5+VPPu6HX24VdALjlnynHvUK/GBCbDbJS+x1eWBCktzSMSNTCkP3btpM+kzhkRhZBDWdCAgEd71xYrHlv7YdI9GxESPW/SokB8MdHak6igwhospq0jTIZLUPkPgHlXkd4+egAZKaqgLJbGLL9ClJXo+vMKy4E1t48P4ZGi1ijuacOvdZ7GPq6FoIoImsvTl5oXOnVnXKWxkP5+GRbGlwyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mRQMV2zEN3Yo3l6KxjI1fhNCBrXfLWEMWjLYOx9awsE=;
+ b=e/q+GlPz0YZt4uZ/E+dnwz7r66R1cnSPZNoJWvVCSjfqN8zY2zwpil0Z18E6d+4Dnu8mn7WPwsX7AHAmKtfnOwTKDpfU5zKZH6J6OLwRkJ5dtVrr6tPz+vA1O7NX/g270i9fJXmRFlEQzYS/4MK+kEkc4AtQ2KORRziJ1n8hpyY6FHQetaAcpmziAV6tUmbXJOGJevAewxIgu/WfZUq/MATV6CJCFwh/fjKFgU1YQRWp5d+fWAcfX4qBfaLTc2OB05KQc3Fmt41zaKiDA/FISSg7mGpGTm8fgHQrtXUkG+PgFE6NUnvyesvgvMxfj6zyrKA4t2iFrRmas9FLw7KGMw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mRQMV2zEN3Yo3l6KxjI1fhNCBrXfLWEMWjLYOx9awsE=;
+ b=2zT/0yyJAHojF2MAWGDd6EVOu+5GxM8bCAl8RW6Xfs6S4z1GJg6NlcGhHpkz/xutsMfDjCrJnAvFGCSzOSpA9anb1AtexBinvIdC20BFdOckaHa+wa7Tkur0BtCoZjW2+5eKtmDBEueSM395iw7vlSLon8+M1dQtUhV6ToaOFsI=
+Received: from MW4PR04CA0076.namprd04.prod.outlook.com (2603:10b6:303:6b::21)
+ by MN2PR12MB4342.namprd12.prod.outlook.com (2603:10b6:208:264::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.34; Thu, 27 Apr
+ 2023 17:42:44 +0000
+Received: from CO1NAM11FT010.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:6b:cafe::3) by MW4PR04CA0076.outlook.office365.com
+ (2603:10b6:303:6b::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.22 via Frontend
+ Transport; Thu, 27 Apr 2023 17:42:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT010.mail.protection.outlook.com (10.13.175.88) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6340.22 via Frontend Transport; Thu, 27 Apr 2023 17:42:43 +0000
+Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 27 Apr
+ 2023 12:42:40 -0500
+From:   Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+To:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
+        <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>
+CC:     Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Subject: [PATCH v3 0/2] Handle PM events for pci resume 
+Date:   Thu, 27 Apr 2023 23:12:18 +0530
+Message-ID: <20230427174220.3953123-1-Basavaraj.Natikar@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ac49075d-439e-da46-9ef6-0b0828f8e072@linaro.org>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT010:EE_|MN2PR12MB4342:EE_
+X-MS-Office365-Filtering-Correlation-Id: 70914e97-1e51-4609-9424-08db4746ce34
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PnW85AyZm8F/9xShb8CF/P+TgNcL2DK7hGqB2B0O1aoBi2/zK3bwwnoGkSOBnVsnnEw2Mwom6W/jqHbyPLXDpu0eHp0S31/VKiM23j3KenybvsQzvXmkS20sv0aU9j3iyX4tTHxYBE9YaHSOcTPvms5LEVz4bmqFlMvwfAANgLEEmLv1JEN+E7mRBYCsS4V9B//n8jzeBG61mocn5SC/L1g6F8Hazc/9k4aPs+WjwNkARjkNg6/vsGs2Sv4ZE84bUkY4lb5SpdAJX2HvTCOreKXA2AWlmnRdhb5uqyLkltiAm87/NxJXXYTa6UwebdQaWv+tdvk7SMbj6WFBmuUwwHAoBQh0JPGvmg/BvjE0RsvJkSe3N0weU57kUmTLGZFupq/3awWWJ0lSUdUsyVvtoltCuGtImgxwj0heCJNPTfnX+xk8CODMGJ+UZL8jqYm+bQFQ4Pfit7Y7/vDzk8EYlQtLuj4unFWP45xudtAlN4/UuP8MWZ9NuceuMXVcEGky/cVC4jMA9968k9q7aZqiIHDWSm7oLem88Wbo3xbCrbchbWcid7/jtD64J/VRMmf24x5Uprz/l2S9tJxDiOda46eBBcROD9yJTdi7uxGrrrEjUa1fH+VfQgLcaqresC4Kx0v01bSFUscKtolSC4zMCxCPdt/o+wBaMbFmqH3BBwxBBg3ohDNPg3QfQTCYJUzFIn0sHnT58jR2Zs1DabpLlqAeYZ4sCzQ7ilqm2fq8IIg=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(136003)(396003)(376002)(451199021)(46966006)(40470700004)(36840700001)(426003)(336012)(186003)(4743002)(966005)(356005)(41300700001)(81166007)(7696005)(47076005)(6666004)(83380400001)(2616005)(1076003)(16526019)(26005)(36860700001)(478600001)(110136005)(40460700003)(82310400005)(40480700001)(70206006)(4326008)(316002)(82740400003)(5660300002)(8936002)(8676002)(86362001)(2906002)(36756003)(70586007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2023 17:42:43.4329
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 70914e97-1e51-4609-9424-08db4746ce34
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT010.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4342
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Konrad,
+This series includes enhancements to the PCI resume function that allow it
+to handle PM events in order to improve the XHCI system resume time.
 
-On Thu, Apr 27, 2023 at 12:42:15AM +0100, Konrad Dybcio wrote:
-> 
-> On 4/24/23 23:35, Adrien Thierry wrote:
-> > Hi Shazad,
-> > 
-> > On Fri, Apr 21, 2023 at 07:09:15PM +0530, Shazad Hussain wrote:
-> > > Update relavent DT bindings for USB, add new config to the phy driver,
-> > > add USB and PHY nodes to the .dtsi and enable them in the board .dts
-> > > for the sa8775p-ride platform.
-> > > 
-> > > Shazad Hussain (6):
-> > >    dt-bindings: usb: qcom,dwc3: Add bindings for SA8775P
-> > >    dt-bindings: phy: qcom,usb-snps-femto-v2: Add bindings for SA8775P
-> > >    dt-bindings: phy: qcom,sc8280xp-qmp-usb3-uni: Add SA8775P USB PHY
-> > >      binding
-> > >    phy: qcom-qmp: Add SA8775P USB3 UNI phy
-> > >    arm64: dts: qcom: sa8775p: add USB nodes
-> > >    arm64: dts: qcom: sa8775p-ride: enable USB nodes
-> > > 
-> > >   .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml   |   1 +
-> > >   .../bindings/phy/qcom,usb-snps-femto-v2.yaml  |   1 +
-> > >   .../devicetree/bindings/usb/qcom,dwc3.yaml    |   5 +
-> > >   arch/arm64/boot/dts/qcom/sa8775p-ride.dts     |  92 +++++++
-> > >   arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 239 +++++++++++++++++-
-> > >   drivers/phy/qualcomm/phy-qcom-qmp-usb.c       |  45 ++++
-> > >   6 files changed, 381 insertions(+), 2 deletions(-)
-> > > 
-> > > -- 
-> > > 2.17.1
-> > > 
-> > Thanks for posting this. I tested the series on the sa8775p, and it seems
-> > initialization for the controller at a400000 sometimes fails with a
-> > timeout (-110) error:
-> > 
-> >      dwc3 a400000.usb: Adding to iommu group 2
-> >      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
-> >      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
-> >      xhci-hcd xhci-hcd.0.auto: can't setup: -110
-> >      xhci-hcd xhci-hcd.0.auto: USB bus 1 deregistered
-> >      xhci-hcd: probe of xhci-hcd.0.auto failed with error -110
-> >      dwc3 a600000.usb: Adding to iommu group 3
-> >      dwc3 a800000.usb: Adding to iommu group 4
-> >      xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
-> >      xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 1
-> >      xhci-hcd xhci-hcd.1.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000000000010010
-> >      xhci-hcd xhci-hcd.1.auto: irq 162, io mem 0x0a800000
-> >      xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
-> >      xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 2
-> >      xhci-hcd xhci-hcd.1.auto: Host supports USB 3.1 Enhanced SuperSpeed
-> >      hub 1-0:1.0: USB hub found
-> >      hub 1-0:1.0: 1 port detected
-> >      usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
-> >      hub 2-0:1.0: USB hub found
-> >      hub 2-0:1.0: 1 port detected
-> > 
-> > In this case, only usb devices for a800000 are showing:
-> > 
-> >      dracut:/# ls -alh /sys/bus/usb/devices
-> >      total 0
-> >      drwxr-xr-x 2 root root 0 Feb 27 00:00 .
-> >      drwxr-xr-x 4 root root 0 Feb 27 00:00 ..
-> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 1-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb1/1-0:1.0
-> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 2-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb2/2-0:1.0
-> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb1 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb1
-> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb2 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb2
-> > 
-> > This happens approximately 1 out of 2 reboots. Here's the kernel output
-> > when initialization succeeds:
-> > 
-> >      dwc3 a600000.usb: Adding to iommu group 2
-> >      dwc3 a800000.usb: Adding to iommu group 3
-> >      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
-> >      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
-> >      xhci-hcd xhci-hcd.0.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000000000010010
-> >      xhci-hcd xhci-hcd.0.auto: irq 161, io mem 0x0a800000
-> >      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
-> >      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 2
-> >      xhci-hcd xhci-hcd.0.auto: Host supports USB 3.1 Enhanced SuperSpeed
-> >      hub 1-0:1.0: USB hub found
-> >      hub 1-0:1.0: 1 port detected
-> >      usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
-> >      hub 2-0:1.0: USB hub found
-> >      hub 2-0:1.0: 1 port detected
-> >      dwc3 a400000.usb: Adding to iommu group 4
-> >      xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
-> >      xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 3
-> >      xhci-hcd xhci-hcd.1.auto: USB3 root hub has no ports
-> >      xhci-hcd xhci-hcd.1.auto: hcc params 0x0220fe65 hci version 0x110 quirks 0x0000000000010010
-> >      xhci-hcd xhci-hcd.1.auto: irq 162, io mem 0x0a400000
-> >      hub 3-0:1.0: USB hub found
-> >      hub 3-0:1.0: 1 port detected
-> > 
-> > And the list of usb devices:
-> > 
-> >      dracut:/# ls -alh /sys/bus/usb/devices
-> >      total 0
-> >      drwxr-xr-x 2 root root 0 Feb 27 00:00 .
-> >      drwxr-xr-x 4 root root 0 Feb 27 00:00 ..
-> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 1-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb1/1-0:1.0
-> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 2-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb2/2-0:1.0
-> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 3-0:1.0 -> ../../../devices/platform/soc@0/a4f8800.usb/a400000.usb/xhci-hcd.1.auto/usb3/3-0:1.0
-> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb1 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb1
-> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb2 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb2
-> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb3 -> ../../../devices/platform/soc@0/a4f8800.usb/a400000.usb/xhci-hcd.1.auto/usb3
-> > 
-> > Have you also encountered this?
-> 
-> I've had some issues with QMPPHY not (sometimes?) probing in time on SM6115 only when built as a module.. perhaps it'd be worth checking out of it works fine with =y?
+v3:
+	- Fix for parameter of incompatible type reported by 
+	  kernel test robot <lkp@intel.com>
+	  Link: https://lore.kernel.org/oe-kbuild-all/202304272147.qSiPDNIh-lkp@intel.com/
 
-Looks like that might be the cause indeed. The arm64 defconfig has the
-PHYs built as modules, but with either CONFIG_PHY_QCOM_QMP_USB=y or
-CONFIG_PHY_QCOM_USB_SNPS_FEMTO_V2=y, the controllers initialize properly
-all the time.
+v2:
+        - use the same indentation style.
+        - keep same function name.
+        - avoid wrapper for uhci_resume.
+        - use pm_message_t type for PM events.
+        - reword commit title and commit message accordingly.
 
-So, the series is:
+Basavaraj Natikar (2):
+  USB: Extend pci resume function to handle PM events
+  xhci: Improve the XHCI system resume time
 
-Tested-by: Adrien Thierry <athierry@redhat.com>
+ drivers/usb/core/hcd-pci.c    | 24 +++++++++++++-----------
+ drivers/usb/host/ehci-pci.c   |  3 ++-
+ drivers/usb/host/ohci-pci.c   |  8 +++++++-
+ drivers/usb/host/uhci-pci.c   |  7 ++++---
+ drivers/usb/host/xhci-histb.c |  2 +-
+ drivers/usb/host/xhci-pci.c   |  4 ++--
+ drivers/usb/host/xhci-plat.c  |  4 ++--
+ drivers/usb/host/xhci-tegra.c |  2 +-
+ drivers/usb/host/xhci.c       |  5 +++--
+ drivers/usb/host/xhci.h       |  2 +-
+ include/linux/usb/hcd.h       |  2 +-
+ 11 files changed, 37 insertions(+), 26 deletions(-)
 
-> 
-> 
-> Konrad
-> 
-> > 
-> > Best,
-> > 
-> > Adrien
-> > 
+-- 
+2.25.1
 
