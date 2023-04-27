@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156ED6F06E8
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 15:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4C66F0716
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 16:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243417AbjD0Nz2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Apr 2023 09:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
+        id S243211AbjD0OQL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Apr 2023 10:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243218AbjD0Nz1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 09:55:27 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7822103
-        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 06:55:26 -0700 (PDT)
+        with ESMTP id S243581AbjD0OQH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 10:16:07 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC814690
+        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 07:16:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682603726; x=1714139726;
+  t=1682604965; x=1714140965;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=mNSZDs7qQlMaTmlLQZhTljzdWxEEggLo0iwbLX2jz20=;
-  b=ZyteHVDaYOyC2/SLiZUfw43cff5OsfCWAo3UfX6YPALNE4olCmtfC36w
-   WQb74FLLLSyBHA3wYybYiQ+nmwTz6z9r0/jFT8zpdo7H97JlEEpKMk92r
-   UOrHEet3cU4n6YK9PGUKcO1st8ObU0cuk9YDHgumvz7DO/yanR5WNmot7
-   uYEIPxv9jyp3L15A2jXVC8RYDOfohYoNliQmxPoGNDn/mFa7Y1saL5E8C
-   xLG2Xt4Tst7CpSBwb8p8e9SLx1xfciKDvZSwR4RLcM1GEn6Zn8RO11yOl
-   dQty5H2KhfZHVULik/k8zVu9XygZUXOtZW0Q4pWOT+FImyhgpOTtr/J9l
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="327057785"
+  bh=eCwAykhxfez5wbK3yQdYOYy7KHTQG9/cq1djBX12nws=;
+  b=kLHMlU19NypahvBmP9TcM1wA2o8eUOvF3saGHPaTwnOQHXMsSa04PeHX
+   ispoMnL2kReO7ARDTBwV3MMwtYswDzzC8lJ2Mtl2XCpvdU6fxgyyAoiMY
+   D+vBAvm+7eDFgNGFSxlVXMAyO858WptBJSkTy8VgPEh72WCrFd+RBmDCI
+   b55Q/lF4fcvT4SfdOfVZSGcQJ8SxrqS+Gr+nkBju5jb8oefnAzk5+LPuc
+   YL/7y2jNE1MyB/S2h28UKD31RCBLd53LzGQ7LhLr2eW1p588YFiv1S8DR
+   t4uTshcv1zFGTi/3ReN0D/qI7Dio5uNXs4nHtNpVrVGnByAQ68dQ55eV3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="336416848"
 X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="327057785"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 06:55:25 -0700
+   d="scan'208";a="336416848"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 06:55:25 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="727077340"
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="694393565"
 X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="727077340"
+   d="scan'208";a="694393565"
 Received: from lkp-server01.sh.intel.com (HELO 1e0e07564161) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 27 Apr 2023 06:55:23 -0700
+  by orsmga002.jf.intel.com with ESMTP; 27 Apr 2023 06:55:23 -0700
 Received: from kbuild by 1e0e07564161 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1ps25i-0000Fj-1V;
+        id 1ps25i-0000Fh-1P;
         Thu, 27 Apr 2023 13:55:22 +0000
-Date:   Thu, 27 Apr 2023 21:54:27 +0800
+Date:   Thu, 27 Apr 2023 21:54:28 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
         gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
         mathias.nyman@intel.com, linux-usb@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev,
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
         Basavaraj Natikar <Basavaraj.Natikar@amd.com>
 Subject: Re: [PATCH v2 1/2] USB: Extend pci resume function to handle PM
  events
-Message-ID: <202304272113.D8iiep8w-lkp@intel.com>
+Message-ID: <202304272147.qSiPDNIh-lkp@intel.com>
 References: <20230427104805.3560591-2-Basavaraj.Natikar@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -59,8 +59,8 @@ Content-Disposition: inline
 In-Reply-To: <20230427104805.3560591-2-Basavaraj.Natikar@amd.com>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,8 +81,8 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Basavaraj-Natikar/USB-Ext
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
 patch link:    https://lore.kernel.org/r/20230427104805.3560591-2-Basavaraj.Natikar%40amd.com
 patch subject: [PATCH v2 1/2] USB: Extend pci resume function to handle PM events
-config: arc-randconfig-r043-20230427 (https://download.01.org/0day-ci/archive/20230427/202304272113.D8iiep8w-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
+config: hexagon-randconfig-r045-20230427 (https://download.01.org/0day-ci/archive/20230427/202304272147.qSiPDNIh-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -92,28 +92,61 @@ reproduce (this is a W=1 build):
         git checkout c56600f81d90e04002ac435d27ccd0358b560d88
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/usb/host/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/host/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304272113.D8iiep8w-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304272147.qSiPDNIh-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/usb/host/xhci-histb.c: In function 'xhci_histb_resume':
->> drivers/usb/host/xhci-histb.c:370:34: error: incompatible type for argument 2 of 'xhci_resume'
-     370 |         return xhci_resume(xhci, 0);
-         |                                  ^
-         |                                  |
-         |                                  int
-   In file included from drivers/usb/host/xhci-histb.c:19:
-   drivers/usb/host/xhci.h:2143:53: note: expected 'pm_message_t' {aka 'struct pm_message'} but argument is of type 'int'
-    2143 | int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg);
-         |                                        ~~~~~~~~~~~~~^~~
+   In file included from drivers/usb/host/xhci-histb.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/usb/host/xhci-histb.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/usb/host/xhci-histb.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/usb/host/xhci-histb.c:370:27: error: passing 'int' to parameter of incompatible type 'pm_message_t' (aka 'struct pm_message')
+           return xhci_resume(xhci, 0);
+                                    ^
+   drivers/usb/host/xhci.h:2143:53: note: passing argument to parameter 'msg' here
+   int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg);
+                                                       ^
+   6 warnings and 1 error generated.
 
 
-vim +/xhci_resume +370 drivers/usb/host/xhci-histb.c
+vim +370 drivers/usb/host/xhci-histb.c
 
 c508f41da07882 Jianguo Sun 2018-05-21  360  
 c508f41da07882 Jianguo Sun 2018-05-21  361  static int __maybe_unused xhci_histb_resume(struct device *dev)
