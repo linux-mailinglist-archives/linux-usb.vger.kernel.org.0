@@ -2,158 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330866F074A
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 16:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E54A86F0747
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 16:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243981AbjD0O0Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Apr 2023 10:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45366 "EHLO
+        id S243630AbjD0O0O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Apr 2023 10:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243662AbjD0O0X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 10:26:23 -0400
-Received: from www484.your-server.de (www484.your-server.de [78.47.237.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518BA83;
-        Thu, 27 Apr 2023 07:26:11 -0700 (PDT)
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www484.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <k.graefe@gateware.de>)
-        id 1ps2ZS-0008uX-8N; Thu, 27 Apr 2023 16:26:06 +0200
-Received: from [2003:ca:6730:e8f8:a2c4:4e1c:f83c:db4b]
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <k.graefe@gateware.de>)
-        id 1ps2ZR-0009eG-Hz; Thu, 27 Apr 2023 16:26:05 +0200
-Message-ID: <b8ca96d0-d1e3-4f2f-5541-a6c82489243a@gateware.de>
-Date:   Thu, 27 Apr 2023 16:26:05 +0200
+        with ESMTP id S243211AbjD0O0N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 10:26:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7062293
+        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 07:26:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12A7F63D5E
+        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 14:26:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA5B4C433EF;
+        Thu, 27 Apr 2023 14:26:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1682605571;
+        bh=Bbmdl759Hh9cA7UEcFJPlccjkjpV/98+oif+Jl2ij0I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GwFV2JsVFpoWvtxk0VWm67yKRG+EO5z1heH4lK7b8k7yv/IhYebqPe7ZG6lV2DGtu
+         ktmrQ3KA2boLnC+9oaldMbDuJxgUkRq/ddqsbqM/lOeR1QrVcocISgIITFO9S0GiUY
+         GbA801Hbt7IHPLFoHZQmgpn+i29e5w2+ANVhXVmA=
+Date:   Thu, 27 Apr 2023 16:26:08 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Udipto Goswami <quic_ugoswami@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v7] usb: dwc3: debugfs: Prevent any register access when
+ devices is runtime suspended
+Message-ID: <2023042719-upstairs-shout-80b1@gregkh>
+References: <20230427091056.18716-1-quic_ugoswami@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Felipe Balbi <balbi@ti.com>
-Cc:     stable@vger.kernel.org
-References: <2023042625-rendition-distort-fe06@gregkh>
- <20230427115120.241954-1-k.graefe@gateware.de>
- <d1a14976-5f53-3373-0695-e10e6a9371de@rasmusvillemoes.dk>
-Content-Language: en-US
-From:   =?UTF-8?Q?Konrad_Gr=c3=a4fe?= <k.graefe@gateware.de>
-In-Reply-To: <d1a14976-5f53-3373-0695-e10e6a9371de@rasmusvillemoes.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: k.graefe@gateware.de
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26889/Thu Apr 27 09:25:48 2023)
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        NO_DNS_FOR_FROM,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230427091056.18716-1-quic_ugoswami@quicinc.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, Apr 27, 2023 at 02:40:56PM +0530, Udipto Goswami wrote:
+> When the dwc3 device is runtime suspended, various required clocks would
+> get disabled and it is not guaranteed that access to any registers would
+> work. Depending on the SoC glue, a register read could be as benign as
+> returning 0 or be fatal enough to hang the system.
+> 
+> In order to prevent such scenarios of fatal errors, make sure to resume
+> dwc3 then allow the function to proceed.
+> 
+> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+> ---
+> v7: Replaced pm_runtime_put with pm_runtime_put_sync & returned proper values.
+> v6: Added changes to handle get_dync failure appropriately.
+> v5: Reworked the patch to resume dwc3 while accessing the registers.
+> v4: Introduced pm_runtime_get_if_in_use in order to make sure dwc3 isn't
+> 	suspended while accessing the registers.
+> v3: Replace pr_err to dev_err. 
+> v2: Replaced return 0 with -EINVAL & seq_puts with pr_err.
+> 
+>  drivers/usb/dwc3/debugfs.c | 128 ++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 126 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
+> index e4a2560b9dc0..859184de37b6 100644
+> --- a/drivers/usb/dwc3/debugfs.c
+> +++ b/drivers/usb/dwc3/debugfs.c
+> @@ -332,6 +332,13 @@ static int dwc3_lsp_show(struct seq_file *s, void *unused)
+>  	unsigned int		current_mode;
+>  	unsigned long		flags;
+>  	u32			reg;
+> +	int			ret;
+> +
+> +	ret = pm_runtime_get_sync(dwc->dev);
+> +	if (ret < 0) {
+> +		pm_runtime_put_sync(dwc->dev);
+> +		return ret;
+> +	}
 
-On 27.04.23 14:35, Rasmus Villemoes wrote:
-> On 27/04/2023 13.51, Konrad Gräfe wrote:
->> The CDC-ECM specification requires an USB gadget to send the host MAC
->> address as uppercase hex string. This change adds the appropriate
->> modifier.
->>
->> Cc: stable@vger.kernel.org
-> 
-> Why cc stable?
+If you use this, shouldn't you really be calling
+pm_runtime_resume_and_get() instead?  That's what the documentation says
+to do...
 
-I believe the second patch matches the criteria but it uses this one.
+thanks,
 
-> 
->> Signed-off-by: Konrad Gräfe <k.graefe@gateware.de>
->> ---
->> Added in v3
->>
->>   lib/vsprintf.c | 18 +++++++++++++++---
->>   1 file changed, 15 insertions(+), 3 deletions(-)
-> 
-> The diffstat here, or for some other patch in the same series,
-> definitely ought to mention lib/test_printf.c.
-> 
->> diff --git a/lib/vsprintf.c b/lib/vsprintf.c
->> index be71a03c936a..8aee1caabd9e 100644
->> --- a/lib/vsprintf.c
->> +++ b/lib/vsprintf.c
->> @@ -1269,9 +1269,10 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
->>   {
->>   	char mac_addr[sizeof("xx:xx:xx:xx:xx:xx")];
->>   	char *p = mac_addr;
->> -	int i;
->> +	int i, pos;
->>   	char separator;
->>   	bool reversed = false;
->> +	bool uppercase = false;
->>   
->>   	if (check_pointer(&buf, end, addr, spec))
->>   		return buf;
->> @@ -1281,6 +1282,10 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
->>   		separator = '-';
->>   		break;
->>   
->> +	case 'U':
->> +		uppercase = true;
->> +		break;
->> +
->>   	case 'R':
->>   		reversed = true;
->>   		fallthrough;
-> 
-> This seems broken, and I'm surprised the compiler doesn't warn about
-> separator possibly being uninitialized further down. I'm also surprised
-> your testing hasn't caught this. For reference, the full switch
-> statement is currently
-> 
->          switch (fmt[1]) {
->          case 'F':
->                  separator = '-';
->                  break;
-> 
->          case 'R':
->                  reversed = true;
->                  fallthrough;
-> 
->          default:
->                  separator = ':';
->                  break;
->          }
-> 
->> @@ -1292,9 +1297,14 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
->>   
->>   	for (i = 0; i < 6; i++) {
->>   		if (reversed)
->> -			p = hex_byte_pack(p, addr[5 - i]);
->> +			pos = 5 - i;
->> +		else
->> +			pos = i;
->> +
->> +		if (uppercase)
->> +			p = hex_byte_pack_upper(p, addr[pos]);
->>   		else
->> -			p = hex_byte_pack(p, addr[i]);
->> +			p = hex_byte_pack(p, addr[pos]);
-> 
-> I think this becomes quite hard to follow. We have string_upper() in
-> linux/string_helpers.h, so I'd rather just leave this loop alone and do
-> 
->    if (uppercase)
->      string_upper(mac_addr, mac_addr);
-> 
-> after the nul-termination.
-> 
-> Rasmus
-> 
+greg k-h
