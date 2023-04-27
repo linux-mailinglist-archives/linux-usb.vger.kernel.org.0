@@ -2,103 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E01F6F05B5
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 14:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A74776F05C0
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 14:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243678AbjD0M0F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Apr 2023 08:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
+        id S243958AbjD0M1b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Apr 2023 08:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243155AbjD0M0E (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 08:26:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E48230E8;
-        Thu, 27 Apr 2023 05:26:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD46560A5A;
-        Thu, 27 Apr 2023 12:26:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94798C433EF;
-        Thu, 27 Apr 2023 12:26:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1682598363;
-        bh=NDjcnjrD5MYzmw1SLBy1J2PWWpUOnpu9UddoVoHMpQM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=beqeBPWHIW7HJkLMlmT08248JmMIqiHrt43q8BBhTk2Jz2E1JuyvfNko+56z98ClJ
-         Ucfv9H4KCA5Q0x4BApVC2BSCuK9Ylp1552sqTMOhP8hCpXBlymrojPyGFtkGKhvPT2
-         goib2pFmGq0bWc8Ev7UBeymkGQeku2LaPy1xqltk=
-Date:   Thu, 27 Apr 2023 14:26:00 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Konrad =?iso-8859-1?Q?Gr=E4fe?= <k.graefe@gateware.de>
-Cc:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Felipe Balbi <balbi@ti.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
-Message-ID: <2023042731-pedigree-bash-809b@gregkh>
-References: <2023042625-rendition-distort-fe06@gregkh>
- <20230427115120.241954-1-k.graefe@gateware.de>
+        with ESMTP id S243429AbjD0M1a (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 08:27:30 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2035B93;
+        Thu, 27 Apr 2023 05:27:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=j8pd3+4XWrJ0SsoTVsir25DVL+uxcXLJo87srUeRyUQ=; b=mCqK8M4FfKmKvzWqejsRSaDa33
+        wpr/HX9dCnZG8IW6w2nP4KfKPhNN+MNy3sGvHdIbCYp/sY4QsMoWDx0UZfBgnWlOiJFkBBMvDBeJl
+        Q9AzyQA7H9YBxbmrqlFfOA1YDdjRRkCMd/nHw/XC+Y9Bz4TklaKV2iWH2MT2kmWi3X0Q=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ps0iT-00BLpJ-SG; Thu, 27 Apr 2023 14:27:17 +0200
+Date:   Thu, 27 Apr 2023 14:27:17 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH net v2 0/3] r8152: fix 2.5G devices
+Message-ID: <a1e306c1-ec0c-40a5-86b2-f31b74dd36ba@lunn.ch>
+References: <20230426122805.23301-400-nic_swsd@realtek.com>
+ <20230427121057.29155-405-nic_swsd@realtek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230427115120.241954-1-k.graefe@gateware.de>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230427121057.29155-405-nic_swsd@realtek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 01:51:19PM +0200, Konrad Gräfe wrote:
-> The CDC-ECM specification requires an USB gadget to send the host MAC
-> address as uppercase hex string. This change adds the appropriate
-> modifier.
+On Thu, Apr 27, 2023 at 08:10:54PM +0800, Hayes Wang wrote:
+> v2:
+> For patch #1, Remove inline for fc_pause_on_auto() and fc_pause_off_auto(),
+> and update the commit message.
 > 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Konrad Gräfe <k.graefe@gateware.de>
-> ---
-> Added in v3
+> For patch #2, define the magic value for OCP register 0xa424.
 > 
->  lib/vsprintf.c | 18 +++++++++++++++---
->  1 file changed, 15 insertions(+), 3 deletions(-)
-> 
-> diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-> index be71a03c936a..8aee1caabd9e 100644
-> --- a/lib/vsprintf.c
-> +++ b/lib/vsprintf.c
-> @@ -1269,9 +1269,10 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
->  {
->  	char mac_addr[sizeof("xx:xx:xx:xx:xx:xx")];
->  	char *p = mac_addr;
-> -	int i;
-> +	int i, pos;
->  	char separator;
->  	bool reversed = false;
-> +	bool uppercase = false;
->  
->  	if (check_pointer(&buf, end, addr, spec))
->  		return buf;
-> @@ -1281,6 +1282,10 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
->  		separator = '-';
->  		break;
->  
-> +	case 'U':
-> +		uppercase = true;
-> +		break;
+> v1:
+> These patches are used to fix some issues of RTL8156.
 
-No documentation update as well?
+Please always create a new thread. The patch automation bots can get
+confused if you append to an existing thread, they assume it is just
+comments to the original patchset.
 
-thanks,
-
-greg k-h
+	 Andrew
