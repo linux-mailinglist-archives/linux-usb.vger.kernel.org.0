@@ -2,62 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8641F6F05C1
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 14:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F5F6F05E2
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 14:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243832AbjD0M2a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Apr 2023 08:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45412 "EHLO
+        id S243513AbjD0Mf0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Apr 2023 08:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243406AbjD0M23 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 08:28:29 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A473D4C39;
-        Thu, 27 Apr 2023 05:28:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=ZKyLvoJ2fNug57URvpaiOBCAIlqtWrGQ11WQPzruF9Y=; b=tPmc5rywTjzIgXh7NuHKYYAfh8
-        WaHBxGay50P5YmPGUgMZ0h3v47yqGkxs7rI0flhlcC1FhvY+Emiwb940Zoy5yb8Op3dBkeEZn5Ajh
-        MYp7zgDY1WPuwcSD/jKcUEZbuCncyojBm90oIjNB0ivJuFUk2eSuSjHkAc7kzI6Ima2E=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ps0jD-00BLpu-C9; Thu, 27 Apr 2023 14:28:03 +0200
-Date:   Thu, 27 Apr 2023 14:28:03 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH net v2 3/3] r8152: move setting
- r8153b_rx_agg_chg_indicate()
-Message-ID: <2209d5a9-31ea-4ca1-a2e8-f1a64290b2d2@lunn.ch>
-References: <20230426122805.23301-400-nic_swsd@realtek.com>
- <20230427121057.29155-405-nic_swsd@realtek.com>
- <20230427121057.29155-408-nic_swsd@realtek.com>
+        with ESMTP id S243251AbjD0MfZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 08:35:25 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E933AAA
+        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 05:35:23 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5068e99960fso14609468a12.1
+        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 05:35:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google; t=1682598922; x=1685190922;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a0QszDde8nFcOEA4DV9dWez8Vmn1d3+3MQK7HdYNTk0=;
+        b=Ca1f7Q8QfwsxqnNXTzClKKFDeAyt7kiBMGkpSXoeJRu1dphQh0I2JCVODSjW04F8vi
+         CjTjLl7H2NQ6vkJtEJby5nMlylaSHmZX+3X9P/QBhjFbFR7AEkFC8WLHv7BA7FfE2goN
+         upf8jFn7C6RaZo7YWKMh/RG19f+lxewE/y3OU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682598922; x=1685190922;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a0QszDde8nFcOEA4DV9dWez8Vmn1d3+3MQK7HdYNTk0=;
+        b=KRINH7Y7W50GvrEYIgkhn24Xg04t6UCIGgzqWsrGFLG5cP3o1VTC7DAIYIJ/iS6eYN
+         CaH7FKz2CcXuwF4GfJC0LNih2+wn5t1qj9qJrpcuNW+MIR8CmX6dc2YR0o4YusBVXDIL
+         LpkcIZ8FoEdrHjd6lZgWKPc8MRmE3VLjHBe59cn0Yn9J5f63IFfPEQ5IgOW8Q1LdjIOR
+         bshUSZk9KxihevksSMGsIwcOsWuRtpLkvN3wdTehyZAh/GWv4EAijMU1XVe0lXMp/J8G
+         ofA2sarPS/WYCU+70Xp2SIGp5J/IWjSG3pA4wC1Xs0q3V/7GrvQ8HqtVaOeH+bWLCZta
+         oZOw==
+X-Gm-Message-State: AC+VfDxjOAwyCvm7XU6F7/ILbW6x+Xd4oObEfobuXmJPsTe9Gt5zA7eE
+        lYCGejblPNFTV8zyATAGPZEj2Q==
+X-Google-Smtp-Source: ACHHUZ7MmYITJ6kQO4xKV6rvxaVEOOg18gzPAiCryL/tpudRIuT0AQEi3mmw5CFBtqHWXygrP5W2qA==
+X-Received: by 2002:aa7:c94c:0:b0:505:4f7:8a50 with SMTP id h12-20020aa7c94c000000b0050504f78a50mr1328614edt.5.1682598921957;
+        Thu, 27 Apr 2023 05:35:21 -0700 (PDT)
+Received: from [172.16.11.116] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id n20-20020aa7d054000000b004fc01b0aa55sm7969319edo.4.2023.04.27.05.35.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 05:35:21 -0700 (PDT)
+Message-ID: <d1a14976-5f53-3373-0695-e10e6a9371de@rasmusvillemoes.dk>
+Date:   Thu, 27 Apr 2023 14:35:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230427121057.29155-408-nic_swsd@realtek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
+Content-Language: en-US, da
+To:     =?UTF-8?Q?Konrad_Gr=c3=a4fe?= <k.graefe@gateware.de>,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Felipe Balbi <balbi@ti.com>
+Cc:     stable@vger.kernel.org
+References: <2023042625-rendition-distort-fe06@gregkh>
+ <20230427115120.241954-1-k.graefe@gateware.de>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20230427115120.241954-1-k.graefe@gateware.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 08:10:57PM +0800, Hayes Wang wrote:
-> Move setting r8153b_rx_agg_chg_indicate() for 2.5G devices. The
-> r8153b_rx_agg_chg_indicate() has to be called after enabling tx/rx.
-> Otherwise, the coalescing settings are useless.
+On 27/04/2023 13.51, Konrad Gräfe wrote:
+> The CDC-ECM specification requires an USB gadget to send the host MAC
+> address as uppercase hex string. This change adds the appropriate
+> modifier.
 > 
-> Fixes: 195aae321c82 ("r8152: support new chips")
-> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+> Cc: stable@vger.kernel.org
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Why cc stable?
 
-    Andrew
+> Signed-off-by: Konrad Gräfe <k.graefe@gateware.de>
+> ---
+> Added in v3
+> 
+>  lib/vsprintf.c | 18 +++++++++++++++---
+>  1 file changed, 15 insertions(+), 3 deletions(-)
+
+The diffstat here, or for some other patch in the same series,
+definitely ought to mention lib/test_printf.c.
+
+> diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+> index be71a03c936a..8aee1caabd9e 100644
+> --- a/lib/vsprintf.c
+> +++ b/lib/vsprintf.c
+> @@ -1269,9 +1269,10 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
+>  {
+>  	char mac_addr[sizeof("xx:xx:xx:xx:xx:xx")];
+>  	char *p = mac_addr;
+> -	int i;
+> +	int i, pos;
+>  	char separator;
+>  	bool reversed = false;
+> +	bool uppercase = false;
+>  
+>  	if (check_pointer(&buf, end, addr, spec))
+>  		return buf;
+> @@ -1281,6 +1282,10 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
+>  		separator = '-';
+>  		break;
+>  
+> +	case 'U':
+> +		uppercase = true;
+> +		break;
+> +
+>  	case 'R':
+>  		reversed = true;
+>  		fallthrough;
+
+This seems broken, and I'm surprised the compiler doesn't warn about
+separator possibly being uninitialized further down. I'm also surprised
+your testing hasn't caught this. For reference, the full switch
+statement is currently
+
+        switch (fmt[1]) {
+        case 'F':
+                separator = '-';
+                break;
+
+        case 'R':
+                reversed = true;
+                fallthrough;
+
+        default:
+                separator = ':';
+                break;
+        }
+
+> @@ -1292,9 +1297,14 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
+>  
+>  	for (i = 0; i < 6; i++) {
+>  		if (reversed)
+> -			p = hex_byte_pack(p, addr[5 - i]);
+> +			pos = 5 - i;
+> +		else
+> +			pos = i;
+> +
+> +		if (uppercase)
+> +			p = hex_byte_pack_upper(p, addr[pos]);
+>  		else
+> -			p = hex_byte_pack(p, addr[i]);
+> +			p = hex_byte_pack(p, addr[pos]);
+
+I think this becomes quite hard to follow. We have string_upper() in
+linux/string_helpers.h, so I'd rather just leave this loop alone and do
+
+  if (uppercase)
+    string_upper(mac_addr, mac_addr);
+
+after the nul-termination.
+
+Rasmus
+
