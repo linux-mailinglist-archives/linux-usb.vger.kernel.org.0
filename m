@@ -2,156 +2,216 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B089C6F0A38
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 18:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B35A76F0ACC
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 19:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244311AbjD0Qsc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Apr 2023 12:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
+        id S244290AbjD0RZY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Apr 2023 13:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243777AbjD0Qsa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 12:48:30 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5FC1FDA;
-        Thu, 27 Apr 2023 09:48:22 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33RGRbXp027771;
-        Thu, 27 Apr 2023 16:48:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=3Bz1s2bPw4j0xZ78jaBtwrdzGbGcQMA+0N4JXTzlnEU=;
- b=kkyhEW0E+TycokSMd1xoCE5rbADjXcldTMjxTq7Ddu8xPZ+LQZ2pu4k5NX8crLvH80jV
- ZH6mlokAiuzgZ+r/42vQLsT3ehXVWXIaSal6+6FOzqTr4NtRe/Sxjk/s37HEYQ2jaQJW
- PAT2giJfsiaCjfN/jwJvRKgvF5VwE4EqqWggHbvpfL2uqb132UMMpJ63xS7A2Py/3xqU
- IsQzgaE+57fLv9BOL7Y11JH8TGmWOMKFyrt9gGJ9YWquV3B2bonyoB4bNA7GWgLn5DqP
- T1sO3a+HReQenzcb5P06UtvZ/+N73JNlTmvUq7PHpFK6veurRBw/i84WvU+yxl3AZWPe Gg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q7thv0fw0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 16:48:13 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33RGmC8U022338
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 16:48:12 GMT
-Received: from [10.216.5.230] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 27 Apr
- 2023 09:48:07 -0700
-Message-ID: <5a49421b-d5a4-f8fe-cb54-2fd3b73a146b@quicinc.com>
-Date:   Thu, 27 Apr 2023 22:18:04 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v1 1/6] dt-bindings: usb: qcom,dwc3: Add bindings for
- SA8775P
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "Kishon Vijay Abraham I" <kishon@kernel.org>,
+        with ESMTP id S244098AbjD0RZT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 13:25:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0632709
+        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 10:24:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682616272;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=28q8f1R5ATkZZRKbMVPNKfNQWWUbVatXGNvWfYjHmSs=;
+        b=QstcTcbJyzVLyZn185aqSafia7+k+bbK6CwJQIZpFEKyd8JcNYp7H/p9ke+HvfsEGR+UqZ
+        Keg0L8rZ+qga3nXzO5EGeBP6OPklU4fxZjHS8pw9vKNCOT5r0pH2F2ZGFpN+vs9Iu1k2aH
+        ueC0ftsVLl/Yw4u/h8GYo6qkQVAttkY=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-668-VeQtMJtqOEWmjV0YkPUvgg-1; Thu, 27 Apr 2023 13:24:31 -0400
+X-MC-Unique: VeQtMJtqOEWmjV0YkPUvgg-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-74deda8705dso618818285a.1
+        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 10:24:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682616271; x=1685208271;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=28q8f1R5ATkZZRKbMVPNKfNQWWUbVatXGNvWfYjHmSs=;
+        b=Cor9PLBV62SVjxW2FnzfavteaLIM458XH2mVCzhm1SmmKC3NAuttSIQmqP+9RmhQbI
+         xGGponVLmQfRDJ08rZl26FpmiM/lIaQT+AWEJnWFnh0JYqhnwQQVSsVY76Mz3Ibq9OCA
+         aotnB0bxI5Bk0/zh47EA3sxOaipFCtBdjSES8xkgOH/iCbnjgMSzoK2mtNUDBa08ddSD
+         0GZ4uc+0rPP/AyhHqmIS6BxTBjlinNYBgU2cTETRLYZgpcFQawlKS/KFubrLPJZoXxui
+         AytonXOUK2LuOCi3bXIYrvLnNQWn4P0q8Ud8i3YOcGms+XvjyOiQ05nfTA1jHA/pfpiR
+         28Fw==
+X-Gm-Message-State: AC+VfDwNCzQqiyxoFnxxpyPrT/bEb67nlaKiJ9bVpQdLzum/RPu/zavY
+        nmbjWTHBNGkCyepp4OVG3w2TZtWGlF8e8DVBNtQnmo+DvkMBoHH6nLXkpN5nU7bxFEZxwK4EQla
+        OkFexdsq40+eNS9MX2wq8
+X-Received: by 2002:a05:622a:11cf:b0:3ef:62be:e09b with SMTP id n15-20020a05622a11cf00b003ef62bee09bmr3430007qtk.40.1682616270989;
+        Thu, 27 Apr 2023 10:24:30 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5svrizMCWCHRmMrWSPvzIzZhBUFHpvLgjbJkFvifxcpqqAJAjdkw0lFQmIdO2/HiJtRgKJ1A==
+X-Received: by 2002:a05:622a:11cf:b0:3ef:62be:e09b with SMTP id n15-20020a05622a11cf00b003ef62bee09bmr3429975qtk.40.1682616270651;
+        Thu, 27 Apr 2023 10:24:30 -0700 (PDT)
+Received: from fedora (modemcable181.5-202-24.mc.videotron.ca. [24.202.5.181])
+        by smtp.gmail.com with ESMTPSA id k1-20020ac86041000000b003ecf475286csm6297422qtm.39.2023.04.27.10.24.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 10:24:29 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 13:24:27 -0400
+From:   Adrien Thierry <athierry@redhat.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Shazad Hussain <quic_shazhuss@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Wesley Cheng <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1 0/6] arm64: qcom: sa8775p: add support for USB
+Message-ID: <ZEqvy+khHeTkC2hf@fedora>
 References: <20230421133922.8520-1-quic_shazhuss@quicinc.com>
- <20230421133922.8520-2-quic_shazhuss@quicinc.com>
- <20230427142205.GA2979206-robh@kernel.org>
-From:   Shazad Hussain <quic_shazhuss@quicinc.com>
-In-Reply-To: <20230427142205.GA2979206-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: XHMhw1OkXmM3D2FZrFPVbxw6H46lefbZ
-X-Proofpoint-ORIG-GUID: XHMhw1OkXmM3D2FZrFPVbxw6H46lefbZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-27_07,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
- malwarescore=0 lowpriorityscore=0 suspectscore=0 mlxscore=0 phishscore=0
- spamscore=0 adultscore=0 priorityscore=1501 mlxlogscore=632
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304270146
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+ <ZEcEGJiikEC2wIVE@fedora>
+ <ac49075d-439e-da46-9ef6-0b0828f8e072@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ac49075d-439e-da46-9ef6-0b0828f8e072@linaro.org>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Konrad,
 
-On 4/27/2023 7:52 PM, Rob Herring wrote:
-> On Fri, Apr 21, 2023 at 07:09:16PM +0530, Shazad Hussain wrote:
->> Add the compatible string for SA8775P SoC from Qualcomm.
->>
->> Set minItems to 3 for interrupts as usb2 i.e third usb port supports
->> only high speed mode and does not require ss_phy_irq.
->>
->> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
->> ---
->>   Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->> index d84281926f10..3ae02cffae49 100644
->> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->> @@ -23,6 +23,7 @@ properties:
->>             - qcom,msm8998-dwc3
->>             - qcom,qcm2290-dwc3
->>             - qcom,qcs404-dwc3
->> +          - qcom,sa8775p-dwc3
->>             - qcom,sc7180-dwc3
->>             - qcom,sc7280-dwc3
->>             - qcom,sc8280xp-dwc3
->> @@ -180,6 +181,7 @@ allOf:
->>                 - qcom,msm8953-dwc3
->>                 - qcom,msm8996-dwc3
->>                 - qcom,msm8998-dwc3
->> +              - qcom,sa8775p-dwc3
->>                 - qcom,sc7180-dwc3
->>                 - qcom,sc7280-dwc3
->>                 - qcom,sdm670-dwc3
->> @@ -443,12 +445,15 @@ allOf:
->>           compatible:
->>             contains:
->>               enum:
->> +              - qcom,sa8775p-dwc3
->>                 - qcom,sc8280xp-dwc3
->>       then:
->>         properties:
->>           interrupts:
->> +          minItems: 3
+On Thu, Apr 27, 2023 at 12:42:15AM +0100, Konrad Dybcio wrote:
 > 
-> Now 3 interrupts is valid for qcom,sc8280xp-dwc3?
+> On 4/24/23 23:35, Adrien Thierry wrote:
+> > Hi Shazad,
+> > 
+> > On Fri, Apr 21, 2023 at 07:09:15PM +0530, Shazad Hussain wrote:
+> > > Update relavent DT bindings for USB, add new config to the phy driver,
+> > > add USB and PHY nodes to the .dtsi and enable them in the board .dts
+> > > for the sa8775p-ride platform.
+> > > 
+> > > Shazad Hussain (6):
+> > >    dt-bindings: usb: qcom,dwc3: Add bindings for SA8775P
+> > >    dt-bindings: phy: qcom,usb-snps-femto-v2: Add bindings for SA8775P
+> > >    dt-bindings: phy: qcom,sc8280xp-qmp-usb3-uni: Add SA8775P USB PHY
+> > >      binding
+> > >    phy: qcom-qmp: Add SA8775P USB3 UNI phy
+> > >    arm64: dts: qcom: sa8775p: add USB nodes
+> > >    arm64: dts: qcom: sa8775p-ride: enable USB nodes
+> > > 
+> > >   .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml   |   1 +
+> > >   .../bindings/phy/qcom,usb-snps-femto-v2.yaml  |   1 +
+> > >   .../devicetree/bindings/usb/qcom,dwc3.yaml    |   5 +
+> > >   arch/arm64/boot/dts/qcom/sa8775p-ride.dts     |  92 +++++++
+> > >   arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 239 +++++++++++++++++-
+> > >   drivers/phy/qualcomm/phy-qcom-qmp-usb.c       |  45 ++++
+> > >   6 files changed, 381 insertions(+), 2 deletions(-)
+> > > 
+> > > -- 
+> > > 2.17.1
+> > > 
+> > Thanks for posting this. I tested the series on the sa8775p, and it seems
+> > initialization for the controller at a400000 sometimes fails with a
+> > timeout (-110) error:
+> > 
+> >      dwc3 a400000.usb: Adding to iommu group 2
+> >      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+> >      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
+> >      xhci-hcd xhci-hcd.0.auto: can't setup: -110
+> >      xhci-hcd xhci-hcd.0.auto: USB bus 1 deregistered
+> >      xhci-hcd: probe of xhci-hcd.0.auto failed with error -110
+> >      dwc3 a600000.usb: Adding to iommu group 3
+> >      dwc3 a800000.usb: Adding to iommu group 4
+> >      xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
+> >      xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 1
+> >      xhci-hcd xhci-hcd.1.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000000000010010
+> >      xhci-hcd xhci-hcd.1.auto: irq 162, io mem 0x0a800000
+> >      xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
+> >      xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 2
+> >      xhci-hcd xhci-hcd.1.auto: Host supports USB 3.1 Enhanced SuperSpeed
+> >      hub 1-0:1.0: USB hub found
+> >      hub 1-0:1.0: 1 port detected
+> >      usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
+> >      hub 2-0:1.0: USB hub found
+> >      hub 2-0:1.0: 1 port detected
+> > 
+> > In this case, only usb devices for a800000 are showing:
+> > 
+> >      dracut:/# ls -alh /sys/bus/usb/devices
+> >      total 0
+> >      drwxr-xr-x 2 root root 0 Feb 27 00:00 .
+> >      drwxr-xr-x 4 root root 0 Feb 27 00:00 ..
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 1-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb1/1-0:1.0
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 2-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb2/2-0:1.0
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb1 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb1
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb2 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb2
+> > 
+> > This happens approximately 1 out of 2 reboots. Here's the kernel output
+> > when initialization succeeds:
+> > 
+> >      dwc3 a600000.usb: Adding to iommu group 2
+> >      dwc3 a800000.usb: Adding to iommu group 3
+> >      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+> >      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
+> >      xhci-hcd xhci-hcd.0.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000000000010010
+> >      xhci-hcd xhci-hcd.0.auto: irq 161, io mem 0x0a800000
+> >      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+> >      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 2
+> >      xhci-hcd xhci-hcd.0.auto: Host supports USB 3.1 Enhanced SuperSpeed
+> >      hub 1-0:1.0: USB hub found
+> >      hub 1-0:1.0: 1 port detected
+> >      usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
+> >      hub 2-0:1.0: USB hub found
+> >      hub 2-0:1.0: 1 port detected
+> >      dwc3 a400000.usb: Adding to iommu group 4
+> >      xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
+> >      xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 3
+> >      xhci-hcd xhci-hcd.1.auto: USB3 root hub has no ports
+> >      xhci-hcd xhci-hcd.1.auto: hcc params 0x0220fe65 hci version 0x110 quirks 0x0000000000010010
+> >      xhci-hcd xhci-hcd.1.auto: irq 162, io mem 0x0a400000
+> >      hub 3-0:1.0: USB hub found
+> >      hub 3-0:1.0: 1 port detected
+> > 
+> > And the list of usb devices:
+> > 
+> >      dracut:/# ls -alh /sys/bus/usb/devices
+> >      total 0
+> >      drwxr-xr-x 2 root root 0 Feb 27 00:00 .
+> >      drwxr-xr-x 4 root root 0 Feb 27 00:00 ..
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 1-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb1/1-0:1.0
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 2-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb2/2-0:1.0
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 3-0:1.0 -> ../../../devices/platform/soc@0/a4f8800.usb/a400000.usb/xhci-hcd.1.auto/usb3/3-0:1.0
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb1 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb1
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb2 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb2
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb3 -> ../../../devices/platform/soc@0/a4f8800.usb/a400000.usb/xhci-hcd.1.auto/usb3
+> > 
+> > Have you also encountered this?
 > 
+> I've had some issues with QMPPHY not (sometimes?) probing in time on SM6115 only when built as a module.. perhaps it'd be worth checking out of it works fine with =y?
 
-Hi Rob,
-I was under the impression from [1] that usb_2 for sc8280xp has only 3
-irq's, but it seems it does required all 4 irq's.
-I would take care of this in next version of the patch. Thanks for
-pointing it out.
+Looks like that might be the cause indeed. The arm64 defconfig has the
+PHYs built as modules, but with either CONFIG_PHY_QCOM_QMP_USB=y or
+CONFIG_PHY_QCOM_USB_SNPS_FEMTO_V2=y, the controllers initialize properly
+all the time.
 
-[1]:
-https://lore.kernel.org/lkml/20230405125759.4201-7-quic_kriskura@quicinc.com/
+So, the series is:
 
->>             maxItems: 4
->>           interrupt-names:
->> +          minItems: 3
->>             items:
->>               - const: pwr_event
->>               - const: dp_hs_phy_irq
->> -- 
->> 2.17.1
->>
--Shazad
+Tested-by: Adrien Thierry <athierry@redhat.com>
+
+> 
+> 
+> Konrad
+> 
+> > 
+> > Best,
+> > 
+> > Adrien
+> > 
+
