@@ -2,133 +2,394 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25776F0B36
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 19:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B44616F0B64
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 19:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244608AbjD0Rnj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Apr 2023 13:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50306 "EHLO
+        id S244271AbjD0Rur (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Apr 2023 13:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244414AbjD0RnS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 13:43:18 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2044.outbound.protection.outlook.com [40.107.243.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAB26197
-        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 10:42:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Tmu6csB1N6Lw5pZiwiAS2fCeum+C3tiGu4ScnSMoayTtPJj5o+vhTEZSMUkQrFwXXnNDh4Lb78DU2x6Fo4TIqgHvqu7CvdI6SRE7BhRlEAgsnplFuI7bPqFz/LAOEcKOjpMHmFpDv3hEkzHYM8rwV0hxzxiYcNKiRxOnQDENvW2mG46/XDWY1YT5ep6FZ5GGMsnuYQyH6K7me3I20Vt9s2Fw1L8bZDb9hTPw99tlSsV+0V5lTJI7r0u6G7kZktkREoRMVMp+G0K7gt2msmi0xs8jNx3uM2xTe1JO1pngZeyxlc9iZD/ydhwst1nyMLsPGEluXJ0ca3AOIrH5YKuAdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a3h/A/IqYh8C1+lU+h4i/rVuhk9gj1hCwHMddEMfHQ8=;
- b=Yl/2WUJstusxJNBLs5gLafePkeFNdR7XYnbe5yrgrXdvb0SK1VRl7wNo063CV3+JwAA1eZ9RYp4uAVB6ntzuoDpzDqx7Z0Yjb4GPIvvAai7599RUrB9E/YRkbczGs6Wq5dhFSYp05+ZSEYWtvGrbmTSfOYzTx6nYWcuOJWjIWUYEdcyAxyYkfM+UmCJbh2zgNDlpRhvaepIyQ+iqqb+kosOn+zstPI6Qrr6le9Qf3i7B07cSYHl3brhsxe5XtMdkpGBBRHlqROMs+nZaSzG/YkzLtOz6ygHdiietqco0pXx9ajIOsQJYv1vWSqTrRCJBhCMTTcIWapyDKYlla/hZJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a3h/A/IqYh8C1+lU+h4i/rVuhk9gj1hCwHMddEMfHQ8=;
- b=Fy1vQRv8nHF0TiImS1mhtJhinwN2vf2AouswB9uygT2q+2lqqB7BS0ewd8PUbhzBEh8KULZHb1rTUj0NSjL8NS1OK8Mn0hLRtavk+i4iLFlf7BMU58Ng8n/Ni/IfY4NccRVAMtPRhk9PTe0Jutk/h28ZTWFuvLxWvoSJkGFz2TU=
-Received: from MW4P222CA0026.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:114::31)
- by PH7PR12MB6836.namprd12.prod.outlook.com (2603:10b6:510:1b6::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.20; Thu, 27 Apr
- 2023 17:42:48 +0000
-Received: from CO1NAM11FT094.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:114:cafe::f4) by MW4P222CA0026.outlook.office365.com
- (2603:10b6:303:114::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.22 via Frontend
- Transport; Thu, 27 Apr 2023 17:42:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT094.mail.protection.outlook.com (10.13.174.161) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6340.23 via Frontend Transport; Thu, 27 Apr 2023 17:42:47 +0000
-Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 27 Apr
- 2023 12:42:44 -0500
-From:   Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-To:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
-        <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>
-CC:     Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-Subject: [PATCH v3 2/2] xhci: Improve the XHCI system resume time
-Date:   Thu, 27 Apr 2023 23:12:20 +0530
-Message-ID: <20230427174220.3953123-3-Basavaraj.Natikar@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230427174220.3953123-1-Basavaraj.Natikar@amd.com>
-References: <20230427174220.3953123-1-Basavaraj.Natikar@amd.com>
+        with ESMTP id S244105AbjD0Rup (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 13:50:45 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D2D10EC
+        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 10:50:43 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50a14564d17so9231321a12.0
+        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 10:50:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682617842; x=1685209842;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V0RanLx/6AEy/8D1MbP9QBdlEEiZGpiLjh28jdSQewY=;
+        b=ZU7urcH/DiF8AzmgSHXv7tdjNUaBv/l4TE+hlu3vZTlxJN12W6wLHDt7MXSmS67UWA
+         pYTMdITf4M0IvYkgvkRHrbI8E1CJo0dMCwGbJEaECisX3jHLp8TyAemkVWtVS53UQY/n
+         4Hyr3VEB+TBwtbvdx3Ve6c7K5KzLCLnqsVVH8sxWJUHOW7Q4az3Whkry7igeJgdLwfDX
+         VlsuNQxLuhNBJMjdfTs0WTKUYFHcG22FmhUAwKuNtE4os/7sQwkjunE0Toh3ZgjHIHf/
+         4WPNAr5Ee5nIs+pGa+NAAXiz0foc1R/B2mb5YNyGWBnW0a6OSnT+TFVFAl/yCWbB3Cbq
+         3vGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682617842; x=1685209842;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V0RanLx/6AEy/8D1MbP9QBdlEEiZGpiLjh28jdSQewY=;
+        b=lNIIhQsU/FEZ4pODtB48ZWYEmr8MXIE3FpQvFOUYHFrs45ZloBWSgoOE6PVTWYwPSW
+         WWee1qYhK+35OBZNnB2oq0UomOkZ2evVp/XI5uJZs3ZMeMEBC9oL19avjIHE9q5ClhCg
+         rzrf+VIgvCfLxJ8tVELgyV9V/C+WJlZhNWGIsTloeAQbFN57YSavVh8KsplbEHei9gFF
+         jpM2fAhOKK68chk11eqMTBINeg89FA0ySm3XhsEOcX5wGn/byn0r/zMDzHw8V5p5h6eQ
+         LueUZmjnTXnYekRR41XXDaWCdGFMbIr4FPOGn+3G2Z3Uob19Zdt3A7cnwG2QSfBjiC3L
+         3FZA==
+X-Gm-Message-State: AC+VfDz0axlz4BiKV8W1InALae9w5Pn6CMh+KgDz4M0Dy4VxucPVby+v
+        7Sddvu9t38UkvFZnD6tMULVPBA==
+X-Google-Smtp-Source: ACHHUZ5XJ6WcNyPw3Vm7tdrrduEu6mH122BbzbER9mAczURLJ4xh4bqkVcL3W7fBXnyZguZj/WPquQ==
+X-Received: by 2002:a17:906:4492:b0:953:834d:899b with SMTP id y18-20020a170906449200b00953834d899bmr6434300ejo.29.1682617841668;
+        Thu, 27 Apr 2023 10:50:41 -0700 (PDT)
+Received: from [172.23.2.5] ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id z26-20020a170906715a00b0094f0237c32bsm9823283ejj.208.2023.04.27.10.50.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 10:50:40 -0700 (PDT)
+Message-ID: <8f2eefc5-abc9-4cce-2170-7202b148e9c7@linaro.org>
+Date:   Thu, 27 Apr 2023 20:50:39 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT094:EE_|PH7PR12MB6836:EE_
-X-MS-Office365-Filtering-Correlation-Id: 340903a3-3ea4-4092-197c-08db4746d09b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gjIsijzZYeL5Au3c1NSxp+CpqJ5BuIz80uNJAkBjoqnijEcwgJ9tkQwq48+7wRCTnQvr6w9zSvPup4TyBXkETecNzqeYmXX+iHarib8sJ/gJGeqNZ2l5vkBDLpmAttrJOG8+ad1k68sIcoAy8CM8IooztfwBkQTz4YE44fRVFCkzwNGqNJahmbLclxwW5u8dQG+GrAgw/091FbpHAybLhrcMUcqpG5LJxAzpkLNhNYpiTFzZnVGlGHuSydEYBE4zii6ALlRX8QfOCoBQ1m5Kf9/0vi4/penkZXREk5oQr0YV4nZZMeEpo5tXRd7hpL8Ke1ZM4H6LYAX7bFiOW7H9jO6etGgQPEs0eahwS2ca8OXwmacCFt6Eth3A8EqTJnayW3O8Zcc5962eND0TAlaUz8Q98pHHQXCXUj+rsWknDJi/3VfP807kOpEwg3zAkseLbbOZGYL5de8zGi1oH4IXK89f2p7dOkhRLU0EMX9bTnLVi4rVwRBSllp84slYqjV5erxMeOzI+HpKuoaM8JdcVhT3XyuKHgXviEYmmCRYSq0V159IAJ8WCd41aYaFHfCNi3Ax7eBga3aajlv7ILE49hJrOrmRTirHEGKvkAfMi+HD5ql+fVdTkOtLZealuS/8Sx+pq/pKPiICgVkPr1/Axnl7yJpN2lx6hU9H/V31icuCEl1/wvmH48gMoJrsO0khbrxxqY1Vx/EPs7c2BTQJO70F4IgGuzuflirYbZ2qYO4=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(346002)(396003)(136003)(451199021)(46966006)(36840700001)(40470700004)(478600001)(2616005)(47076005)(83380400001)(36860700001)(7696005)(40480700001)(26005)(1076003)(6666004)(70586007)(356005)(70206006)(4326008)(82740400003)(110136005)(426003)(336012)(186003)(16526019)(5660300002)(8936002)(8676002)(81166007)(41300700001)(316002)(40460700003)(2906002)(86362001)(82310400005)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2023 17:42:47.4759
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 340903a3-3ea4-4092-197c-08db4746d09b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT094.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6836
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v8 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
+Content-Language: en-GB
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+References: <cover.1680693149.git.quic_varada@quicinc.com>
+ <55db8487a7cbf3354749dd2d3a35c05bfd9fa4fc.1680693149.git.quic_varada@quicinc.com>
+ <e142ff5d-543f-80bb-94f9-3f1fb90f1b83@linaro.org>
+ <20230424090402.GB21232@varda-linux.qualcomm.com>
+ <CAA8EJprqH5esxQkH3v-1i539OO3jQG9fN-YOqjZTwEqqgUfUyg@mail.gmail.com>
+ <20230426095157.GA884@varda-linux.qualcomm.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230426095157.GA884@varda-linux.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Avoid extra 120ms delay during system resume.
+On 26/04/2023 12:51, Varadarajan Narayanan wrote:
+> On Mon, Apr 24, 2023 at 02:17:06PM +0300, Dmitry Baryshkov wrote:
+>> On Mon, 24 Apr 2023 at 12:04, Varadarajan Narayanan
+>> <quic_varada@quicinc.com> wrote:
+>>>
+>>> On Sat, Apr 22, 2023 at 12:07:01AM +0300, Dmitry Baryshkov wrote:
+>>>> On 05/04/2023 14:41, Varadarajan Narayanan wrote:
+>>>>> Add USB phy and controller related nodes
+>>>>>
+>>>>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>>>>> ---
+>>>>>   Changes in v8:
+>>>>>      - Change clocks order to match the bindings
+>>>>>   Changes in v7:
+>>>>>      - Change com_aux -> cfg_ahb
+>>>>>   Changes in v6:
+>>>>>      - Introduce fixed regulators for the phy
+>>>>>      - Resolved all 'make dtbs_check' messages
+>>>>>
+>>>>>   Changes in v5:
+>>>>>      - Fix additional comments
+>>>>>      - Edit nodes to match with qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+>>>>>      - 'make dtbs_check' giving the following messages since
+>>>>>        ipq9574 doesn't have power domains. Hope this is ok
+>>>>>
+>>>>>              /local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
+>>>>>              From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+>>>>>              /local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
+>>>>>              From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>>>>
+>>>>>   Changes in v4:
+>>>>>      - Use newer bindings without subnodes
+>>>>>      - Fix coding style issues
+>>>>>
+>>>>>   Changes in v3:
+>>>>>      - Insert the nodes at proper location
+>>>>>
+>>>>>   Changes in v2:
+>>>>>      - Fixed issues flagged by Krzysztof
+>>>>>      - Fix issues reported by make dtbs_check
+>>>>>      - Remove NOC related clocks (to be added with proper
+>>>>>        interconnect support)
+>>>>> ---
+>>>>>   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 120 ++++++++++++++++++++++++++++++++++
+>>>>>   1 file changed, 120 insertions(+)
+>>>>>
+>>>>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>>>>> index 43a3dbe..1242382 100644
+>>>>> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>>>>> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>>>>> @@ -150,6 +150,33 @@
+>>>>>              method = "smc";
+>>>>>      };
+>>>>> +    reg_usb_3p3: s3300 {
+>>>>
+>>>> The node names do not look generic enough. Please take a look at other
+>>>> platforms.
+>>>
+>>> Please see below.
+>>>
+>>>>> +            compatible = "regulator-fixed";
+>>>>> +            regulator-min-microvolt = <3300000>;
+>>>>> +            regulator-max-microvolt = <3300000>;
+>>>>> +            regulator-boot-on;
+>>>>> +            regulator-always-on;
+>>>>> +            regulator-name = "usb-phy-vdd-dummy";
+>>>>
+>>>> This also doesn't look correct. This regulator should not just fill the gap.
+>>>> Does it represent a generic voltage network on the board?
+>>>>
+>>>> Please do not add 'dummy' voltage regulators if there is no real voltage
+>>>> wire.
+>>>
+>>> These are real voltage wires. I used dummy since they are
+>>> always-on and cannot be increased/decreased (i.e. fixed).
+>>> Would something along the following lines be appropriate?
+>>
+>> Still not fully correct. Please use regulator name that corresponds to
+>> the power grid on the board schematics. I don't think that you have a
+>> separate power grids for USB PHY.
+>>
+>>>
+>>>          vreg_ae10_3p3: s3300 {
+>>
+>> Naming suggests that these voltages are generated by some PMIC. Is
+>> this correct? If so, please describe the PMIC instead.
+> 
+> SS PHY needs two supplies and HS PHY needs three supplies. 3.3V
+> and 0.925V are from fixed DC - DC regulators and 1.8V is
+> generated from MP5496 PMIC. Would the following node definitions
+> be ok?
+> 
+> usb_hs_vreg0: usb_hs_vreg0 {
+> 	compatible = "regulator-fixed";
+> 	regulator-min-microvolt = <3300000>;
+> 	regulator-max-microvolt = <3300000>;
+> 	regulator-boot-on;
+> 	regulator-always-on;
+> 	regulator-name = "usb-phy-vdd";
+> };
+> 
+> usb_hs_vreg1: usb_hs_vreg1 {
+> 	compatible = "regulator-fixed";
+> 	regulator-min-microvolt = <925000>;
+> 	regulator-max-microvolt = <925000>;
+> 	regulator-boot-on;
+> 	regulator-always-on;
+> 	regulator-name = "usb-phy";
+> };
 
-The xHC controller may signal wake up to 120ms before showing which usb
-device caused the wake on the xHC port registers.
+Again. The voltage rails on the board are not USB-specific, are they? So 
+why are you declaring usb-phy regulators? Would another consumer of 3.3V 
+rail use the same usb-phy-vdd regulator?
 
-The xhci driver therefore checks for port activity up to 120ms during
-resume, making sure that the hub driver can see the port change, and
-won't immediately runtime suspend back due to no port activity.
+> 
+> &rpm_requests {
+> 	regulators {
+> 		compatible = "qcom,rpm-mp5496-regulators";
+> 		.
+> 		.
+> 		.
+> 		ipq9574_l2: l2 {
 
-This is however only needed for runtime resume as system resume will
-resume all child hubs and other child usb devices anyway.
+mp5496_l2
 
-Fixes: 253f588c70f6 ("xhci: Improve detection of device initiated wake signal.")
-Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
----
- drivers/usb/host/xhci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 			regulator-min-microvolt = <1800000>;
+> 			regulator-max-microvolt = <1800000>;
+> 			regulator-boot-on;
+> 			regulator-always-on;
+> 		};
+> 	};
+> };
+> 
+> Thanks
+> Varada
+> 
+>>>                  compatible = "regulator-fixed";
+>>>                  regulator-min-microvolt = <3300000>;
+>>>                  regulator-max-microvolt = <3300000>;
+>>>                  regulator-boot-on;
+>>>                  regulator-always-on;
+>>>                  regulator-name = "usb-phy-vdd";
+>>>          };
+>>>
+>>>          vreg_ad8_1p8: s1800 {
+>>>                  compatible = "regulator-fixed";
+>>>                  regulator-min-microvolt = <1800000>;
+>>>                  regulator-max-microvolt = <1800000>;
+>>>                  regulator-boot-on;
+>>>                  regulator-always-on;
+>>>                  regulator-name = "usb-phy-pll";
+>>>          };
+>>>
+>>>          vreg_ad9_0p925: s0925 {
+>>>                  compatible = "regulator-fixed";
+>>>                  regulator-min-microvolt = <925000>;
+>>>                  regulator-max-microvolt = <925000>;
+>>>                  regulator-boot-on;
+>>>                  regulator-always-on;
+>>>                  regulator-name = "usb-phy";
+>>>          };
+>>>
+>>> Thanks
+>>> Varada
+>>>
+>>>>> +    };
+>>>>> +
+>>>>> +    reg_usb_1p8: s1800 {
+>>>>> +            compatible = "regulator-fixed";
+>>>>> +            regulator-min-microvolt = <1800000>;
+>>>>> +            regulator-max-microvolt = <1800000>;
+>>>>> +            regulator-boot-on;
+>>>>> +            regulator-always-on;
+>>>>> +            regulator-name = "usb-phy-pll-dummy";
+>>>>> +    };
+>>>>> +
+>>>>> +    reg_usb_0p925: s0925 {
+>>>>> +            compatible = "regulator-fixed";
+>>>>> +            regulator-min-microvolt = <925000>;
+>>>>> +            regulator-max-microvolt = <925000>;
+>>>>> +            regulator-boot-on;
+>>>>> +            regulator-always-on;
+>>>>> +            regulator-name = "usb-phy-dummy";
+>>>>> +    };
+>>>>> +
+>>>>>      reserved-memory {
+>>>>>              #address-cells = <2>;
+>>>>>              #size-cells = <2>;
+>>>>> @@ -179,6 +206,52 @@
+>>>>>              #size-cells = <1>;
+>>>>>              ranges = <0 0 0 0xffffffff>;
+>>>>> +            usb_0_qusbphy: phy@7b000 {
+>>>>> +                    compatible = "qcom,ipq9574-qusb2-phy";
+>>>>> +                    reg = <0x0007b000 0x180>;
+>>>>> +                    #phy-cells = <0>;
+>>>>> +
+>>>>> +                    clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+>>>>> +                             <&xo_board_clk>;
+>>>>> +                    clock-names = "cfg_ahb",
+>>>>> +                                  "ref";
+>>>>> +
+>>>>> +                    vdd-supply = <&reg_usb_0p925>;
+>>>>> +                    vdda-pll-supply = <&reg_usb_1p8>;
+>>>>> +                    vdda-phy-dpdm-supply = <&reg_usb_3p3>;
+>>>>> +
+>>>>> +                    resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+>>>>> +                    status = "disabled";
+>>>>> +            };
+>>>>> +
+>>>>> +            usb_0_qmpphy: phy@7d000 {
+>>>>> +                    compatible = "qcom,ipq9574-qmp-usb3-phy";
+>>>>> +                    reg = <0x0007d000 0xa00>;
+>>>>> +                    #phy-cells = <0>;
+>>>>> +
+>>>>> +                    clocks = <&gcc GCC_USB0_AUX_CLK>,
+>>>>> +                             <&xo_board_clk>,
+>>>>> +                             <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+>>>>> +                             <&gcc GCC_USB0_PIPE_CLK>;
+>>>>> +                    clock-names = "aux",
+>>>>> +                                  "ref",
+>>>>> +                                  "cfg_ahb",
+>>>>> +                                  "pipe";
+>>>>> +
+>>>>> +                    resets = <&gcc GCC_USB0_PHY_BCR>,
+>>>>> +                             <&gcc GCC_USB3PHY_0_PHY_BCR>;
+>>>>> +                    reset-names = "phy",
+>>>>> +                                  "phy_phy";
+>>>>> +
+>>>>> +                    vdda-pll-supply = <&reg_usb_1p8>;
+>>>>> +                    vdda-phy-supply = <&reg_usb_0p925>;
+>>>>> +
+>>>>> +                    status = "disabled";
+>>>>> +
+>>>>> +                    #clock-cells = <0>;
+>>>>> +                    clock-output-names = "usb0_pipe_clk";
+>>>>> +            };
+>>>>> +
+>>>>>              pcie0_phy: phy@84000 {
+>>>>>                      compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
+>>>>>                      reg = <0x00084000 0x1000>;
+>>>>> @@ -548,6 +621,53 @@
+>>>>>                      status = "disabled";
+>>>>>              };
+>>>>> +            usb3: usb@8a00000 {
+>>>>> +                    compatible = "qcom,ipq9574-dwc3", "qcom,dwc3";
+>>>>> +                    reg = <0x08af8800 0x400>;
+>>>>> +                    #address-cells = <1>;
+>>>>> +                    #size-cells = <1>;
+>>>>> +                    ranges;
+>>>>> +
+>>>>> +                    clocks = <&gcc GCC_SNOC_USB_CLK>,
+>>>>> +                             <&gcc GCC_USB0_MASTER_CLK>,
+>>>>> +                             <&gcc GCC_ANOC_USB_AXI_CLK>,
+>>>>> +                             <&gcc GCC_USB0_SLEEP_CLK>,
+>>>>> +                             <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+>>>>> +
+>>>>> +                    clock-names = "cfg_noc",
+>>>>> +                                  "core",
+>>>>> +                                  "iface",
+>>>>> +                                  "sleep",
+>>>>> +                                  "mock_utmi";
+>>>>> +
+>>>>> +                    assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
+>>>>> +                                      <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+>>>>> +                    assigned-clock-rates = <200000000>,
+>>>>> +                                           <24000000>;
+>>>>> +
+>>>>> +                    interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
+>>>>> +                    interrupt-names = "pwr_event";
+>>>>> +
+>>>>> +                    resets = <&gcc GCC_USB_BCR>;
+>>>>> +                    status = "disabled";
+>>>>> +
+>>>>> +                    dwc_0: usb@8a00000 {
+>>>>> +                            compatible = "snps,dwc3";
+>>>>> +                            reg = <0x8a00000 0xcd00>;
+>>>>> +                            clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+>>>>> +                            clock-names = "ref";
+>>>>> +                            interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+>>>>> +                            phys = <&usb_0_qusbphy>, <&usb_0_qmpphy>;
+>>>>> +                            phy-names = "usb2-phy", "usb3-phy";
+>>>>> +                            tx-fifo-resize;
+>>>>> +                            snps,is-utmi-l1-suspend;
+>>>>> +                            snps,hird-threshold = /bits/ 8 <0x0>;
+>>>>> +                            snps,dis_u2_susphy_quirk;
+>>>>> +                            snps,dis_u3_susphy_quirk;
+>>>>> +                            dr_mode = "host";
+>>>>> +                    };
+>>>>> +            };
+>>>>> +
+>>>>>              intc: interrupt-controller@b000000 {
+>>>>>                      compatible = "qcom,msm-qgic2";
+>>>>>                      reg = <0x0b000000 0x1000>,  /* GICD */
+>>>>
+>>>> --
+>>>> With best wishes
+>>>> Dmitry
+>>>>
+>>
+>>
+>>
+>> --
+>> With best wishes
+>> Dmitry
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 11a87b9cbb50..4c0a2b9ca7b2 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1315,7 +1315,7 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg)
- 		 * the first wake signalling failed, give it that chance.
- 		 */
- 		pending_portevent = xhci_pending_portevent(xhci);
--		if (!pending_portevent) {
-+		if (!pending_portevent && msg.event == PM_EVENT_AUTO_RESUME) {
- 			msleep(120);
- 			pending_portevent = xhci_pending_portevent(xhci);
- 		}
 -- 
-2.25.1
+With best wishes
+Dmitry
 
