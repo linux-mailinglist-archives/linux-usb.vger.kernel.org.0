@@ -2,57 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422CC6F0530
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 13:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B76536F0571
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 14:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243609AbjD0LwJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Apr 2023 07:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
+        id S243845AbjD0MMr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Apr 2023 08:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243572AbjD0LwI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 07:52:08 -0400
-X-Greylist: delayed 168789 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Apr 2023 04:52:06 PDT
-Received: from www484.your-server.de (www484.your-server.de [IPv6:2a01:4f8:d0a:63c4::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE36BB4
-        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 04:52:06 -0700 (PDT)
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www484.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <k.graefe@gateware.de>)
-        id 1ps0AK-000Duq-2I; Thu, 27 Apr 2023 13:52:00 +0200
-Received: from [2003:ca:6730:e8f8:a2c4:4e1c:f83c:db4b] (helo=tethys.gateware.dom)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <k.graefe@gateware.de>)
-        id 1ps0AJ-000Hyr-Av; Thu, 27 Apr 2023 13:51:59 +0200
-From:   =?UTF-8?q?Konrad=20Gr=C3=A4fe?= <k.graefe@gateware.de>
-To:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Felipe Balbi <balbi@ti.com>
-Cc:     =?UTF-8?q?Konrad=20Gr=C3=A4fe?= <k.graefe@gateware.de>,
-        stable@vger.kernel.org
-Subject: [PATCH v3 2/2] usb: gadget: u_ether: Fix host MAC address case
-Date:   Thu, 27 Apr 2023 13:51:20 +0200
-Message-Id: <20230427115120.241954-2-k.graefe@gateware.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230427115120.241954-1-k.graefe@gateware.de>
-References: <2023042625-rendition-distort-fe06@gregkh>
- <20230427115120.241954-1-k.graefe@gateware.de>
+        with ESMTP id S243617AbjD0MMm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 08:12:42 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A354698;
+        Thu, 27 Apr 2023 05:12:14 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33RCBd5yA030753, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33RCBd5yA030753
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 27 Apr 2023 20:11:39 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Thu, 27 Apr 2023 20:11:41 +0800
+Received: from fc34.localdomain (172.22.228.98) by RTEXMBS04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Thu, 27 Apr
+ 2023 20:11:41 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     <kuba@kernel.org>, <davem@davemloft.net>
+CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Hayes Wang <hayeswang@realtek.com>
+Subject: [PATCH net v2 0/3] r8152: fix 2.5G devices
+Date:   Thu, 27 Apr 2023 20:10:54 +0800
+Message-ID: <20230427121057.29155-405-nic_swsd@realtek.com>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230426122805.23301-400-nic_swsd@realtek.com>
+References: <20230426122805.23301-400-nic_swsd@realtek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: k.graefe@gateware.de
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26889/Thu Apr 27 09:25:48 2023)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.22.228.98]
+X-ClientProxiedBy: RTEXH36505.realtek.com.tw (172.21.6.25) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,51 +62,23 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The CDC-ECM specification [1] requires to send the host MAC address as
-an uppercase hexadecimal string in chapter "5.4 Ethernet Networking
-Functional Descriptor":
-    The Unicode character is chosen from the set of values 30h through
-    39h and 41h through 46h (0-9 and A-F).
+v2:
+For patch #1, Remove inline for fc_pause_on_auto() and fc_pause_off_auto(),
+and update the commit message.
 
-However, snprintf(.., "%pm", ..) generates a lowercase MAC address
-string. While most host drivers are tolerant to this, UsbNcm.sys on
-Windows 10 is not. Instead it uses a different MAC address with all
-bytes set to zero including and after the first byte containing a
-lowercase letter. On Windows 11 Microsoft fixed it, but apparently they
-did not backport the fix.
+For patch #2, define the magic value for OCP register 0xa424.
 
-This change fixes the issue by using "%pmU" to generate an uppercase hex
-string to comply with the specification.
+v1:
+These patches are used to fix some issues of RTL8156.
 
-[1]: https://www.usb.org/document-library/class-definitions-communication-devices-12, file ECM120.pdf
+Hayes Wang (3):
+  r8152: fix flow control issue of RTL8156A
+  r8152: fix the poor throughput for 2.5G devices
+  r8152: move setting r8153b_rx_agg_chg_indicate()
 
-Fixes: bcd4a1c40bee ("usb: gadget: u_ether: construct with default values and add setters/getters")
-Cc: stable@vger.kernel.org
-Signed-off-by: Konrad Gräfe <k.graefe@gateware.de>
----
-Changes since v2:
-* Add uppercase MAC address format string and use that instead of
-  manually uppercasing the resulting MAC address string.
+ drivers/net/usb/r8152.c | 84 ++++++++++++++++++++++++++++-------------
+ 1 file changed, 58 insertions(+), 26 deletions(-)
 
-Changes since v1:
-* Fixed checkpatch.pl warnings
-
- drivers/usb/gadget/function/u_ether.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index 6956ad8ba8dd..70e6b825654c 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -963,7 +963,7 @@ int gether_get_host_addr_cdc(struct net_device *net, char *host_addr, int len)
- 		return -EINVAL;
- 
- 	dev = netdev_priv(net);
--	snprintf(host_addr, len, "%pm", dev->host_mac);
-+	snprintf(host_addr, len, "%pmU", dev->host_mac);
- 
- 	return strlen(host_addr);
- }
 -- 
-2.34.1
+2.40.0
 
