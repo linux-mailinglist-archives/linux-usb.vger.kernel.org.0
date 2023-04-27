@@ -2,78 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F5F6F05E2
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 14:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 156ED6F06E8
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 15:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243513AbjD0Mf0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Apr 2023 08:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
+        id S243417AbjD0Nz2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Apr 2023 09:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243251AbjD0MfZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 08:35:25 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E933AAA
-        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 05:35:23 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5068e99960fso14609468a12.1
-        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 05:35:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1682598922; x=1685190922;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a0QszDde8nFcOEA4DV9dWez8Vmn1d3+3MQK7HdYNTk0=;
-        b=Ca1f7Q8QfwsxqnNXTzClKKFDeAyt7kiBMGkpSXoeJRu1dphQh0I2JCVODSjW04F8vi
-         CjTjLl7H2NQ6vkJtEJby5nMlylaSHmZX+3X9P/QBhjFbFR7AEkFC8WLHv7BA7FfE2goN
-         upf8jFn7C6RaZo7YWKMh/RG19f+lxewE/y3OU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682598922; x=1685190922;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a0QszDde8nFcOEA4DV9dWez8Vmn1d3+3MQK7HdYNTk0=;
-        b=KRINH7Y7W50GvrEYIgkhn24Xg04t6UCIGgzqWsrGFLG5cP3o1VTC7DAIYIJ/iS6eYN
-         CaH7FKz2CcXuwF4GfJC0LNih2+wn5t1qj9qJrpcuNW+MIR8CmX6dc2YR0o4YusBVXDIL
-         LpkcIZ8FoEdrHjd6lZgWKPc8MRmE3VLjHBe59cn0Yn9J5f63IFfPEQ5IgOW8Q1LdjIOR
-         bshUSZk9KxihevksSMGsIwcOsWuRtpLkvN3wdTehyZAh/GWv4EAijMU1XVe0lXMp/J8G
-         ofA2sarPS/WYCU+70Xp2SIGp5J/IWjSG3pA4wC1Xs0q3V/7GrvQ8HqtVaOeH+bWLCZta
-         oZOw==
-X-Gm-Message-State: AC+VfDxjOAwyCvm7XU6F7/ILbW6x+Xd4oObEfobuXmJPsTe9Gt5zA7eE
-        lYCGejblPNFTV8zyATAGPZEj2Q==
-X-Google-Smtp-Source: ACHHUZ7MmYITJ6kQO4xKV6rvxaVEOOg18gzPAiCryL/tpudRIuT0AQEi3mmw5CFBtqHWXygrP5W2qA==
-X-Received: by 2002:aa7:c94c:0:b0:505:4f7:8a50 with SMTP id h12-20020aa7c94c000000b0050504f78a50mr1328614edt.5.1682598921957;
-        Thu, 27 Apr 2023 05:35:21 -0700 (PDT)
-Received: from [172.16.11.116] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id n20-20020aa7d054000000b004fc01b0aa55sm7969319edo.4.2023.04.27.05.35.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 05:35:21 -0700 (PDT)
-Message-ID: <d1a14976-5f53-3373-0695-e10e6a9371de@rasmusvillemoes.dk>
-Date:   Thu, 27 Apr 2023 14:35:19 +0200
+        with ESMTP id S243218AbjD0Nz1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 09:55:27 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7822103
+        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 06:55:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682603726; x=1714139726;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mNSZDs7qQlMaTmlLQZhTljzdWxEEggLo0iwbLX2jz20=;
+  b=ZyteHVDaYOyC2/SLiZUfw43cff5OsfCWAo3UfX6YPALNE4olCmtfC36w
+   WQb74FLLLSyBHA3wYybYiQ+nmwTz6z9r0/jFT8zpdo7H97JlEEpKMk92r
+   UOrHEet3cU4n6YK9PGUKcO1st8ObU0cuk9YDHgumvz7DO/yanR5WNmot7
+   uYEIPxv9jyp3L15A2jXVC8RYDOfohYoNliQmxPoGNDn/mFa7Y1saL5E8C
+   xLG2Xt4Tst7CpSBwb8p8e9SLx1xfciKDvZSwR4RLcM1GEn6Zn8RO11yOl
+   dQty5H2KhfZHVULik/k8zVu9XygZUXOtZW0Q4pWOT+FImyhgpOTtr/J9l
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="327057785"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="327057785"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 06:55:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="727077340"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="727077340"
+Received: from lkp-server01.sh.intel.com (HELO 1e0e07564161) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 27 Apr 2023 06:55:23 -0700
+Received: from kbuild by 1e0e07564161 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ps25i-0000Fj-1V;
+        Thu, 27 Apr 2023 13:55:22 +0000
+Date:   Thu, 27 Apr 2023 21:54:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        mathias.nyman@intel.com, linux-usb@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Subject: Re: [PATCH v2 1/2] USB: Extend pci resume function to handle PM
+ events
+Message-ID: <202304272113.D8iiep8w-lkp@intel.com>
+References: <20230427104805.3560591-2-Basavaraj.Natikar@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
-Content-Language: en-US, da
-To:     =?UTF-8?Q?Konrad_Gr=c3=a4fe?= <k.graefe@gateware.de>,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Felipe Balbi <balbi@ti.com>
-Cc:     stable@vger.kernel.org
-References: <2023042625-rendition-distort-fe06@gregkh>
- <20230427115120.241954-1-k.graefe@gateware.de>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20230427115120.241954-1-k.graefe@gateware.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230427104805.3560591-2-Basavaraj.Natikar@amd.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,94 +67,68 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 27/04/2023 13.51, Konrad Gräfe wrote:
-> The CDC-ECM specification requires an USB gadget to send the host MAC
-> address as uppercase hex string. This change adds the appropriate
-> modifier.
-> 
-> Cc: stable@vger.kernel.org
+Hi Basavaraj,
 
-Why cc stable?
+kernel test robot noticed the following build errors:
 
-> Signed-off-by: Konrad Gräfe <k.graefe@gateware.de>
-> ---
-> Added in v3
-> 
->  lib/vsprintf.c | 18 +++++++++++++++---
->  1 file changed, 15 insertions(+), 3 deletions(-)
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.3 next-20230426]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The diffstat here, or for some other patch in the same series,
-definitely ought to mention lib/test_printf.c.
+url:    https://github.com/intel-lab-lkp/linux/commits/Basavaraj-Natikar/USB-Extend-pci-resume-function-to-handle-PM-events/20230427-185141
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230427104805.3560591-2-Basavaraj.Natikar%40amd.com
+patch subject: [PATCH v2 1/2] USB: Extend pci resume function to handle PM events
+config: arc-randconfig-r043-20230427 (https://download.01.org/0day-ci/archive/20230427/202304272113.D8iiep8w-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c56600f81d90e04002ac435d27ccd0358b560d88
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Basavaraj-Natikar/USB-Extend-pci-resume-function-to-handle-PM-events/20230427-185141
+        git checkout c56600f81d90e04002ac435d27ccd0358b560d88
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/usb/host/
 
-> diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-> index be71a03c936a..8aee1caabd9e 100644
-> --- a/lib/vsprintf.c
-> +++ b/lib/vsprintf.c
-> @@ -1269,9 +1269,10 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
->  {
->  	char mac_addr[sizeof("xx:xx:xx:xx:xx:xx")];
->  	char *p = mac_addr;
-> -	int i;
-> +	int i, pos;
->  	char separator;
->  	bool reversed = false;
-> +	bool uppercase = false;
->  
->  	if (check_pointer(&buf, end, addr, spec))
->  		return buf;
-> @@ -1281,6 +1282,10 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
->  		separator = '-';
->  		break;
->  
-> +	case 'U':
-> +		uppercase = true;
-> +		break;
-> +
->  	case 'R':
->  		reversed = true;
->  		fallthrough;
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304272113.D8iiep8w-lkp@intel.com/
 
-This seems broken, and I'm surprised the compiler doesn't warn about
-separator possibly being uninitialized further down. I'm also surprised
-your testing hasn't caught this. For reference, the full switch
-statement is currently
+All errors (new ones prefixed by >>):
 
-        switch (fmt[1]) {
-        case 'F':
-                separator = '-';
-                break;
+   drivers/usb/host/xhci-histb.c: In function 'xhci_histb_resume':
+>> drivers/usb/host/xhci-histb.c:370:34: error: incompatible type for argument 2 of 'xhci_resume'
+     370 |         return xhci_resume(xhci, 0);
+         |                                  ^
+         |                                  |
+         |                                  int
+   In file included from drivers/usb/host/xhci-histb.c:19:
+   drivers/usb/host/xhci.h:2143:53: note: expected 'pm_message_t' {aka 'struct pm_message'} but argument is of type 'int'
+    2143 | int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg);
+         |                                        ~~~~~~~~~~~~~^~~
 
-        case 'R':
-                reversed = true;
-                fallthrough;
 
-        default:
-                separator = ':';
-                break;
-        }
+vim +/xhci_resume +370 drivers/usb/host/xhci-histb.c
 
-> @@ -1292,9 +1297,14 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
->  
->  	for (i = 0; i < 6; i++) {
->  		if (reversed)
-> -			p = hex_byte_pack(p, addr[5 - i]);
-> +			pos = 5 - i;
-> +		else
-> +			pos = i;
-> +
-> +		if (uppercase)
-> +			p = hex_byte_pack_upper(p, addr[pos]);
->  		else
-> -			p = hex_byte_pack(p, addr[i]);
-> +			p = hex_byte_pack(p, addr[pos]);
+c508f41da07882 Jianguo Sun 2018-05-21  360  
+c508f41da07882 Jianguo Sun 2018-05-21  361  static int __maybe_unused xhci_histb_resume(struct device *dev)
+c508f41da07882 Jianguo Sun 2018-05-21  362  {
+c508f41da07882 Jianguo Sun 2018-05-21  363  	struct xhci_hcd_histb *histb = dev_get_drvdata(dev);
+c508f41da07882 Jianguo Sun 2018-05-21  364  	struct usb_hcd *hcd = histb->hcd;
+c508f41da07882 Jianguo Sun 2018-05-21  365  	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+c508f41da07882 Jianguo Sun 2018-05-21  366  
+c508f41da07882 Jianguo Sun 2018-05-21  367  	if (!device_may_wakeup(dev))
+c508f41da07882 Jianguo Sun 2018-05-21  368  		xhci_histb_host_enable(histb);
+c508f41da07882 Jianguo Sun 2018-05-21  369  
+c508f41da07882 Jianguo Sun 2018-05-21 @370  	return xhci_resume(xhci, 0);
+c508f41da07882 Jianguo Sun 2018-05-21  371  }
+c508f41da07882 Jianguo Sun 2018-05-21  372  
 
-I think this becomes quite hard to follow. We have string_upper() in
-linux/string_helpers.h, so I'd rather just leave this loop alone and do
-
-  if (uppercase)
-    string_upper(mac_addr, mac_addr);
-
-after the nul-termination.
-
-Rasmus
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
