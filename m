@@ -2,470 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5436F0329
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 11:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949336F0478
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Apr 2023 12:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242986AbjD0JLr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Apr 2023 05:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
+        id S243598AbjD0Ks4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Apr 2023 06:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243003AbjD0JLq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 05:11:46 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BD95241
-        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 02:11:17 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33R5kSck013677;
-        Thu, 27 Apr 2023 09:11:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=Oe14RwvH6w4sI/UdN3UWLZahwXbWH5qiTOMam8ifHds=;
- b=BWWINCIz5F+n4tr9rrQ7TquhM1fyOnXyVVKXKbaQzAyBbXh1zas+HY1OTMgp26IzbWeN
- Od81iioUPHA8FCDoD4RkeY1TXgTJ6mHMcomf1SRWhaFsmm6pc7v9bFm59UODwseUaYUp
- 6wr6deEU0eLWsgTtUG5ZIL+cg5+1OSM3U7YTDNE5kW5K/f0qAYvtqKqek30Y03jDWsOK
- Z3PT6SLxMTKVDwnpohxxHURG/D6JkM5nlRVINZMneBbfNzNMNrJIHQ2Em9+cPv7efhq9
- EC28BUwcGm3t7cpxxQq7orYB6F6/YTfIyszwT6z8C7W3/GR5RTBDghBfZSoemg3uMvyX qw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q7j4erhsx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 09:11:10 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33R9B9qe019666
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 09:11:09 GMT
-Received: from hu-ugoswami-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 27 Apr 2023 02:11:06 -0700
-From:   Udipto Goswami <quic_ugoswami@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        "Oliver Neukum" <oneukum@suse.com>, <linux-usb@vger.kernel.org>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>
-Subject: [PATCH v7] usb: dwc3: debugfs: Prevent any register access when devices is runtime suspended
-Date:   Thu, 27 Apr 2023 14:40:56 +0530
-Message-ID: <20230427091056.18716-1-quic_ugoswami@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S233094AbjD0Ksv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 06:48:51 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A8D2D76
+        for <linux-usb@vger.kernel.org>; Thu, 27 Apr 2023 03:48:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C8h8jc5plEFp34nctIsN5AdH+uQ/Xfat8TmWYLy5gwdYH1ZEQkFfomOOd04NrWxh6cyisEENUzM/8/u1re89+ZzTM84pHEKNTJbLcVWa3WwQR2ChQ/e1zSAJzHGtv/2a4hdibHOfBOfoP+gFI9XnXV4GRoeLzJG6GiCdfsX5l4i+fjwtZzSV4uw/mQJPKgTTcIgQcwqBHzNQ2ElMUt4M44GrhAAUBfrxNDBeYjXN3raUBSHMRTYS+jOtxeFaEoODaMobFOVV0pYHY8lh3yFMKiZL/CSTf78uO/4aoui+h5HX17kDgflHQeZz6MAtA+Mm16U0Hn72vl+3jtcry7Xg8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=082zrOSRAfZ80Z9dAuqwcQFcK9V6HnUiuvi5s7jHFbQ=;
+ b=jAcOsdLyUDLvpXe6Zz9EqjDhBciRJgKHENySfd5SPZuGwY/PxRLNoocU9dbwlR+x0eKGxnKMZyvXs3nwsP1jHkIVsbmWDjYqITx4anqNICezmznNF9B7ZjulLqz/xHB/BNlUMLeR6mHNchB8HJvX0WBmVPD21g3LdJmd/TqJBT+aQpmdARumelbVxeZzG7rqA1cZl9hm6mJ7QbOxxdSP6EliTAJjWDh/1Zemuuu6ON+bKbtLnSblLjHEGKN4+rMLoXhCR1qsVDXhfD8T/8JwMJO7Cf3EKVEtyJhrnJL6g4zuUeQi1BAo3TEl1sYmbnCoy2t3VwdZHu/oOiIUCOFV1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=082zrOSRAfZ80Z9dAuqwcQFcK9V6HnUiuvi5s7jHFbQ=;
+ b=NOZLDeXwJG4otdSMH1nHuF9EQws4TPot73dqk8W9Dxj0Pacc0A2hIHHdKe6T6Sxo3QCBmwnUWdmyw64d4lh/Qdaqs1bJNTP6u94+HlT8wZqfJKLtJ3dO5LlIL+m6I1msKnuLa26121xZs0lLXKLhNOr9hXXWoy0/UYNggb5j4qM=
+Received: from BN9PR03CA0294.namprd03.prod.outlook.com (2603:10b6:408:f5::29)
+ by SJ0PR12MB8140.namprd12.prod.outlook.com (2603:10b6:a03:4e3::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Thu, 27 Apr
+ 2023 10:48:45 +0000
+Received: from BN8NAM11FT113.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:f5:cafe::f7) by BN9PR03CA0294.outlook.office365.com
+ (2603:10b6:408:f5::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21 via Frontend
+ Transport; Thu, 27 Apr 2023 10:48:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT113.mail.protection.outlook.com (10.13.176.163) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6340.22 via Frontend Transport; Thu, 27 Apr 2023 10:48:44 +0000
+Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 27 Apr
+ 2023 05:48:42 -0500
+From:   Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+To:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
+        <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>
+CC:     Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Subject: [PATCH v2 0/2] Handle PM events for pci resume 
+Date:   Thu, 27 Apr 2023 16:18:03 +0530
+Message-ID: <20230427104805.3560591-1-Basavaraj.Natikar@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: HbTFO4nXCKuAWZNenN8f-yE-NyUDRVRc
-X-Proofpoint-GUID: HbTFO4nXCKuAWZNenN8f-yE-NyUDRVRc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-27_06,2023-04-26_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- bulkscore=0 impostorscore=0 priorityscore=1501 spamscore=0 mlxscore=0
- mlxlogscore=897 lowpriorityscore=0 phishscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304270079
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT113:EE_|SJ0PR12MB8140:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5a76efe4-81a2-47c4-c858-08db470cf8e9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1QP4H6rwrXBirErePMmmLstMnEDxszidyp+shK2bBy7xCg8W09Z8SFeI7umjXFEO803wkwGRlb/U5P/tTtGdP7CzmHWugKGBf+7uaOWDQX60lzVDLX+YphHD7NyWl8q29dRUpFTFe+xKv3QN0MlNikfl8nHDIKuKduPQM5eIlW91HF9Dbe8XDvhrM6MGka5R/LgFBy7dJjF9SuMqpjepBEiHvrR4Ad1kI1PycbIaws5Aw/0DedqPz218l98Nr/mTAyuj6UyN4VhRyl0gOycxA1kJQP0LULDAUeaQ8y5GYXJ8X+TKKWo8S/k+RYzeWdB83TBAfeIdZN0uVdcGXY6HvCPFqyYPzlgAaSLoz4J9gl2T7F9meN89rVKPXzl/GNpWkKu4iP/wk+jU6p52o2RNiohDXp94BfRD9KR6NuZw3G7syl9+UvWU7CPlTtdqES2vrxu51K5/TqXTdamMkuCAJF9ChcL30tyH6fDJrAJQgDpXe6qdTHwwgcQMye+ltriFExjTzAkr/xZ8pDX+75+ECVDKOp045fHe+bcfG2gX7S8Z/lJm/IfrmtVfmq8R5Rd/7wxKI0QzCjJQQ3egNklpF6sImItYI95vRQasOJbe0C85Tv/HEue6l8Th7PKZFvVaEZ6wikTOo+cYtW4a3Lr3pnXoYP3tZCQcpgCG1jatRGKMCPBmeOBCW0bRURcKxGqlKvSA7X84ua0Mlb/YiV7pkk+UULXRO2y4fe5lCuy3atA=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(346002)(396003)(39860400002)(451199021)(40470700004)(46966006)(36840700001)(83380400001)(5660300002)(82740400003)(316002)(47076005)(8676002)(41300700001)(81166007)(70586007)(2906002)(2616005)(356005)(70206006)(4744005)(4326008)(6666004)(8936002)(478600001)(336012)(86362001)(426003)(36756003)(82310400005)(7696005)(36860700001)(110136005)(186003)(4743002)(1076003)(26005)(40480700001)(16526019)(40460700003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2023 10:48:44.3839
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a76efe4-81a2-47c4-c858-08db470cf8e9
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT113.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB8140
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When the dwc3 device is runtime suspended, various required clocks would
-get disabled and it is not guaranteed that access to any registers would
-work. Depending on the SoC glue, a register read could be as benign as
-returning 0 or be fatal enough to hang the system.
+This series includes enhancements to the PCI resume function that allow it
+to handle PM events in order to improve the XHCI system resume time.
 
-In order to prevent such scenarios of fatal errors, make sure to resume
-dwc3 then allow the function to proceed.
+v2:
+	- use the same indentation style.
+	- keep same function name.
+	- avoid wrapper for uhci_resume.
+	- use pm_message_t type for PM events.
+	- reword commit title and commit message accordingly.
 
-Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
----
-v7: Replaced pm_runtime_put with pm_runtime_put_sync & returned proper values.
-v6: Added changes to handle get_dync failure appropriately.
-v5: Reworked the patch to resume dwc3 while accessing the registers.
-v4: Introduced pm_runtime_get_if_in_use in order to make sure dwc3 isn't
-	suspended while accessing the registers.
-v3: Replace pr_err to dev_err. 
-v2: Replaced return 0 with -EINVAL & seq_puts with pr_err.
+Basavaraj Natikar (2):
+  USB: Extend pci resume function to handle PM events
+  xhci: Improve the XHCI system resume time
 
- drivers/usb/dwc3/debugfs.c | 128 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 126 insertions(+), 2 deletions(-)
+ drivers/usb/core/hcd-pci.c   | 24 +++++++++++++-----------
+ drivers/usb/host/ehci-pci.c  |  3 ++-
+ drivers/usb/host/ohci-pci.c  |  8 +++++++-
+ drivers/usb/host/uhci-pci.c  |  7 ++++---
+ drivers/usb/host/xhci-pci.c  |  4 ++--
+ drivers/usb/host/xhci-plat.c |  4 ++--
+ drivers/usb/host/xhci.c      |  5 +++--
+ drivers/usb/host/xhci.h      |  2 +-
+ include/linux/usb/hcd.h      |  2 +-
+ 9 files changed, 35 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
-index e4a2560b9dc0..859184de37b6 100644
---- a/drivers/usb/dwc3/debugfs.c
-+++ b/drivers/usb/dwc3/debugfs.c
-@@ -332,6 +332,13 @@ static int dwc3_lsp_show(struct seq_file *s, void *unused)
- 	unsigned int		current_mode;
- 	unsigned long		flags;
- 	u32			reg;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_sync(dwc->dev);
-+		return ret;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
-@@ -349,6 +356,7 @@ static int dwc3_lsp_show(struct seq_file *s, void *unused)
- 		break;
- 	}
- 	spin_unlock_irqrestore(&dwc->lock, flags);
-+	pm_runtime_put_sync(dwc->dev);
- 
- 	return 0;
- }
-@@ -395,6 +403,13 @@ static int dwc3_mode_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = s->private;
- 	unsigned long		flags;
- 	u32			reg;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_sync(dwc->dev);
-+		return ret;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
-@@ -414,6 +429,7 @@ static int dwc3_mode_show(struct seq_file *s, void *unused)
- 		seq_printf(s, "UNKNOWN %08x\n", DWC3_GCTL_PRTCAP(reg));
- 	}
- 
-+	pm_runtime_put_sync(dwc->dev);
- 	return 0;
- }
- 
-@@ -463,6 +479,13 @@ static int dwc3_testmode_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = s->private;
- 	unsigned long		flags;
- 	u32			reg;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_sync(dwc->dev);
-+		return ret;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
-@@ -493,6 +516,7 @@ static int dwc3_testmode_show(struct seq_file *s, void *unused)
- 		seq_printf(s, "UNKNOWN %d\n", reg);
- 	}
- 
-+	pm_runtime_put_sync(dwc->dev);
- 	return 0;
- }
- 
-@@ -509,6 +533,7 @@ static ssize_t dwc3_testmode_write(struct file *file,
- 	unsigned long		flags;
- 	u32			testmode = 0;
- 	char			buf[32];
-+	int			ret;
- 
- 	if (copy_from_user(&buf, ubuf, min_t(size_t, sizeof(buf) - 1, count)))
- 		return -EFAULT;
-@@ -526,10 +551,17 @@ static ssize_t dwc3_testmode_write(struct file *file,
- 	else
- 		testmode = 0;
- 
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_sync(dwc->dev);
-+		return ret;
-+	}
-+
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	dwc3_gadget_set_test_mode(dwc, testmode);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put_sync(dwc->dev);
- 	return count;
- }
- 
-@@ -548,12 +580,20 @@ static int dwc3_link_state_show(struct seq_file *s, void *unused)
- 	enum dwc3_link_state	state;
- 	u32			reg;
- 	u8			speed;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_sync(dwc->dev);
-+		return ret;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
- 	if (DWC3_GSTS_CURMOD(reg) != DWC3_GSTS_CURMOD_DEVICE) {
- 		seq_puts(s, "Not available\n");
- 		spin_unlock_irqrestore(&dwc->lock, flags);
-+		pm_runtime_put_sync(dwc->dev);
- 		return 0;
- 	}
- 
-@@ -566,6 +606,7 @@ static int dwc3_link_state_show(struct seq_file *s, void *unused)
- 		   dwc3_gadget_hs_link_string(state));
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put_sync(dwc->dev);
- 	return 0;
- }
- 
-@@ -584,6 +625,7 @@ static ssize_t dwc3_link_state_write(struct file *file,
- 	char			buf[32];
- 	u32			reg;
- 	u8			speed;
-+	int			ret;
- 
- 	if (copy_from_user(&buf, ubuf, min_t(size_t, sizeof(buf) - 1, count)))
- 		return -EFAULT;
-@@ -603,11 +645,18 @@ static ssize_t dwc3_link_state_write(struct file *file,
- 	else
- 		return -EINVAL;
- 
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_sync(dwc->dev);
-+		return ret;
-+	}
-+
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
- 	if (DWC3_GSTS_CURMOD(reg) != DWC3_GSTS_CURMOD_DEVICE) {
- 		spin_unlock_irqrestore(&dwc->lock, flags);
--		return -EINVAL;
-+		pm_runtime_put_sync(dwc->dev);
-+		return ret;
- 	}
- 
- 	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
-@@ -616,12 +665,14 @@ static ssize_t dwc3_link_state_write(struct file *file,
- 	if (speed < DWC3_DSTS_SUPERSPEED &&
- 	    state != DWC3_LINK_STATE_RECOV) {
- 		spin_unlock_irqrestore(&dwc->lock, flags);
--		return -EINVAL;
-+		pm_runtime_put_sync(dwc->dev);
-+		return ret;
- 	}
- 
- 	dwc3_gadget_set_link_state(dwc, state);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put_sync(dwc->dev);
- 	return count;
- }
- 
-@@ -645,6 +696,13 @@ static int dwc3_tx_fifo_size_show(struct seq_file *s, void *unused)
- 	unsigned long		flags;
- 	u32			mdwidth;
- 	u32			val;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_sync(dwc->dev);
-+		return ret;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_TXFIFO);
-@@ -657,6 +715,7 @@ static int dwc3_tx_fifo_size_show(struct seq_file *s, void *unused)
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put_sync(dwc->dev);
- 	return 0;
- }
- 
-@@ -667,6 +726,13 @@ static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
- 	unsigned long		flags;
- 	u32			mdwidth;
- 	u32			val;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_sync(dwc->dev);
-+		return ret;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_RXFIFO);
-@@ -679,6 +745,7 @@ static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put_sync(dwc->dev);
- 	return 0;
- }
- 
-@@ -688,12 +755,20 @@ static int dwc3_tx_request_queue_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
- 	u32			val;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_sync(dwc->dev);
-+		return ret;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_TXREQQ);
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put_sync(dwc->dev);
- 	return 0;
- }
- 
-@@ -703,12 +778,20 @@ static int dwc3_rx_request_queue_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
- 	u32			val;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_sync(dwc->dev);
-+		return ret;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_RXREQQ);
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put_sync(dwc->dev);
- 	return 0;
- }
- 
-@@ -718,12 +801,20 @@ static int dwc3_rx_info_queue_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
- 	u32			val;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_sync(dwc->dev);
-+		return ret;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_RXINFOQ);
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put_sync(dwc->dev);
- 	return 0;
- }
- 
-@@ -733,12 +824,20 @@ static int dwc3_descriptor_fetch_queue_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
- 	u32			val;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_sync(dwc->dev);
-+		return ret;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_DESCFETCHQ);
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put_sync(dwc->dev);
- 	return 0;
- }
- 
-@@ -748,12 +847,20 @@ static int dwc3_event_queue_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
- 	u32			val;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_sync(dwc->dev);
-+		return ret;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_EVENTQ);
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put_sync(dwc->dev);
- 	return 0;
- }
- 
-@@ -798,6 +905,13 @@ static int dwc3_trb_ring_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
- 	int			i;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_sync(dwc->dev);
-+		return ret;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	if (dep->number <= 1) {
-@@ -827,6 +941,7 @@ static int dwc3_trb_ring_show(struct seq_file *s, void *unused)
- out:
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put_sync(dwc->dev);
- 	return 0;
- }
- 
-@@ -839,6 +954,13 @@ static int dwc3_ep_info_register_show(struct seq_file *s, void *unused)
- 	u32			lower_32_bits;
- 	u32			upper_32_bits;
- 	u32			reg;
-+	int			ret;
-+
-+	ret = pm_runtime_get_sync(dwc->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_sync(dwc->dev);
-+		return ret;
-+	}
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	reg = DWC3_GDBGLSPMUX_EPSELECT(dep->number);
-@@ -851,6 +973,7 @@ static int dwc3_ep_info_register_show(struct seq_file *s, void *unused)
- 	seq_printf(s, "0x%016llx\n", ep_info);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	pm_runtime_put_sync(dwc->dev);
- 	return 0;
- }
- 
-@@ -910,6 +1033,7 @@ void dwc3_debugfs_init(struct dwc3 *dwc)
- 	dwc->regset->regs = dwc3_regs;
- 	dwc->regset->nregs = ARRAY_SIZE(dwc3_regs);
- 	dwc->regset->base = dwc->regs - DWC3_GLOBALS_REGS_START;
-+	dwc->regset->dev = dwc->dev;
- 
- 	root = debugfs_create_dir(dev_name(dwc->dev), usb_debug_root);
- 	dwc->debug_root = root;
 -- 
-2.17.1
+2.25.1
 
