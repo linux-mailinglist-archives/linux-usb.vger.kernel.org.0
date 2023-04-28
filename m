@@ -2,65 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10036F10D5
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Apr 2023 05:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7676F11EF
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Apr 2023 08:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjD1Det convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 27 Apr 2023 23:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57698 "EHLO
+        id S1345349AbjD1Gti (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Apr 2023 02:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjD1Des (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Apr 2023 23:34:48 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272C526B1;
-        Thu, 27 Apr 2023 20:34:44 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33S3YLHc8012556, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33S3YLHc8012556
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Fri, 28 Apr 2023 11:34:22 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Fri, 28 Apr 2023 11:34:24 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 28 Apr 2023 11:34:23 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Fri, 28 Apr 2023 11:34:23 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     "kuba@kernel.org" <kuba@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        nic_swsd <nic_swsd@realtek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH net v2 0/3] r8152: fix 2.5G devices
-Thread-Topic: [PATCH net v2 0/3] r8152: fix 2.5G devices
-Thread-Index: AQHZeQFtBL7D4RMrxE+Z9xkxLlT6wA==
-Date:   Fri, 28 Apr 2023 03:34:23 +0000
-Message-ID: <b18fae8a6a2e470fa6473f5cf590f4cc@realtek.com>
-References: <20230426122805.23301-400-nic_swsd@realtek.com>
- <20230427121057.29155-405-nic_swsd@realtek.com>
- <a1e306c1-ec0c-40a5-86b2-f31b74dd36ba@lunn.ch>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.22.228.6]
-x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        with ESMTP id S1345251AbjD1Gth (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Apr 2023 02:49:37 -0400
+Received: from www484.your-server.de (www484.your-server.de [78.47.237.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C858330F1;
+        Thu, 27 Apr 2023 23:49:34 -0700 (PDT)
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www484.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <k.graefe@gateware.de>)
+        id 1psHv7-000KXe-Jc; Fri, 28 Apr 2023 08:49:29 +0200
+Received: from [2003:ca:6730:e8f8:9fd6:4f62:9dbd:374f] (helo=tethys.gateware.dom)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <k.graefe@gateware.de>)
+        id 1psHv6-0005zg-Tg; Fri, 28 Apr 2023 08:49:28 +0200
+From:   =?UTF-8?q?Konrad=20Gr=C3=A4fe?= <k.graefe@gateware.de>
+To:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc:     =?UTF-8?q?Konrad=20Gr=C3=A4fe?= <k.graefe@gateware.de>,
+        stable@vger.kernel.org
+Subject: [PATCH v4 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
+Date:   Fri, 28 Apr 2023 08:49:04 +0200
+Message-Id: <20230428064905.145858-1-k.graefe@gateware.de>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230427115120.241954-2-k.graefe@gateware.de>
+References: <20230427115120.241954-2-k.graefe@gateware.de>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: k.graefe@gateware.de
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26889/Thu Apr 27 09:25:48 2023)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,14 +57,106 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 4/27/2023 8:27 PM, Andrew Lunn wrote:
-[...]
-> Please always create a new thread. The patch automation bots can get
-> confused if you append to an existing thread, they assume it is just
-> comments to the original patchset.
-It 's my mistake. Sorry.
+The CDC-ECM specification requires an USB gadget to send the host MAC
+address as uppercase hex string. This change adds the appropriate
+modifier.
 
-Best Regards,
-Hayes
+Cc: stable@vger.kernel.org
+Signed-off-by: Konrad Gräfe <k.graefe@gateware.de>
+---
 
+Changes since v3:
+* Added documentation
+* Added test cases
+* Use string_upper() after conversion to simplify conversion loop
+* Fixed maybe-uninitalized variable warning
+
+Added in v3
+
+ Documentation/core-api/printk-formats.rst | 15 ++++++++++-----
+ lib/test_printf.c                         |  2 ++
+ lib/vsprintf.c                            |  5 +++++
+ 3 files changed, 17 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/core-api/printk-formats.rst b/Documentation/core-api/printk-formats.rst
+index dbe1aacc79d0..1ec682bdfe94 100644
+--- a/Documentation/core-api/printk-formats.rst
++++ b/Documentation/core-api/printk-formats.rst
+@@ -298,11 +298,13 @@ MAC/FDDI addresses
+ 
+ ::
+ 
+-	%pM	00:01:02:03:04:05
+-	%pMR	05:04:03:02:01:00
+-	%pMF	00-01-02-03-04-05
+-	%pm	000102030405
+-	%pmR	050403020100
++	%pM	00:01:02:03:aa:bb
++	%pMR	aa:bb:03:02:01:00
++	%pMF	00-01-02-03-aa-bb
++	%pMU	00:01:02:03:AA:BB
++	%pm	00010203aabb
++	%pmR	bbaa03020100
++	%pmU	00010203AABB
+ 
+ For printing 6-byte MAC/FDDI addresses in hex notation. The ``M`` and ``m``
+ specifiers result in a printed address with (M) or without (m) byte
+@@ -316,6 +318,9 @@ For Bluetooth addresses the ``R`` specifier shall be used after the ``M``
+ specifier to use reversed byte order suitable for visual interpretation
+ of Bluetooth addresses which are in the little endian order.
+ 
++For uppercase hex notation the ``U`` specifier shall be used after the ``M``
++and ``m`` specifiers.
++
+ Passed by reference.
+ 
+ IPv4 addresses
+diff --git a/lib/test_printf.c b/lib/test_printf.c
+index 46b4e6c414a3..7f4de2ecafbc 100644
+--- a/lib/test_printf.c
++++ b/lib/test_printf.c
+@@ -416,9 +416,11 @@ mac(void)
+ 	const u8 addr[6] = {0x2d, 0x48, 0xd6, 0xfc, 0x7a, 0x05};
+ 
+ 	test("2d:48:d6:fc:7a:05", "%pM", addr);
++	test("2D:48:D6:FC:7A:05", "%pMU", addr);
+ 	test("05:7a:fc:d6:48:2d", "%pMR", addr);
+ 	test("2d-48-d6-fc-7a-05", "%pMF", addr);
+ 	test("2d48d6fc7a05", "%pm", addr);
++	test("2D48D6FC7A05", "%pmU", addr);
+ 	test("057afcd6482d", "%pmR", addr);
+ }
+ 
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index be71a03c936a..c82616c335e0 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -1301,6 +1301,9 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
+ 	}
+ 	*p = '\0';
+ 
++	if (fmt[1] == 'U')
++		string_upper(mac_addr, mac_addr);
++
+ 	return string_nocheck(buf, end, mac_addr, spec);
+ }
+ 
+@@ -2280,6 +2283,7 @@ char *rust_fmt_argument(char *buf, char *end, void *ptr);
+  * - 'MF' For a 6-byte MAC FDDI address, it prints the address
+  *       with a dash-separated hex notation
+  * - '[mM]R' For a 6-byte MAC address, Reverse order (Bluetooth)
++ * - '[mM]U' For a 6-byte MAC address in uppercase hex
+  * - 'I' [46] for IPv4/IPv6 addresses printed in the usual way
+  *       IPv4 uses dot-separated decimal without leading 0's (1.2.3.4)
+  *       IPv6 uses colon separated network-order 16 bit hex with leading 0's
+@@ -2407,6 +2411,7 @@ char *pointer(const char *fmt, char *buf, char *end, void *ptr,
+ 	case 'M':			/* Colon separated: 00:01:02:03:04:05 */
+ 	case 'm':			/* Contiguous: 000102030405 */
+ 					/* [mM]F (FDDI) */
++					/* [mM]U (Uppercase hex) */
+ 					/* [mM]R (Reverse order; Bluetooth) */
+ 		return mac_address_string(buf, end, ptr, spec, fmt);
+ 	case 'I':			/* Formatted IP supported
+-- 
+2.34.1
 
