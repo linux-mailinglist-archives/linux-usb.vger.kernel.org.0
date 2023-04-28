@@ -2,132 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 239116F1A19
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Apr 2023 15:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7781F6F1A1C
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Apr 2023 16:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346344AbjD1N7e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Apr 2023 09:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56172 "EHLO
+        id S229846AbjD1OB1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Apr 2023 10:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjD1N7d (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Apr 2023 09:59:33 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF851735;
-        Fri, 28 Apr 2023 06:59:32 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33S8WERM030672;
-        Fri, 28 Apr 2023 13:59:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=sXgCvAqReI9c/G7x++MikQU7zyYHVvzEj4BLpnZ95vs=;
- b=BZtgEM2Wd+iRqqSBZ3I8lwxG1KsFuz7BM/yFBEebC5/e93kmn8N9Y4ySc878FW39AvdN
- lBocCXPxNdb2mc5r0z7wfRScS5eOSP0+cIquQ/KpOt+HeAZHj2cg62KCrbtA+UdZT4yv
- +K58qsB3ELNPpmQ09L3kXMJn+V4u1H/ABPz0lNo4WhnJw8wTlhKuarUZwv8tIzjWZX05
- yMWKzLy253iO8wdysGIZ03Vm+NLhWvTzhiZoCRiZRAhTOiP7SAFgZgoGVNmGF7yTmXiw
- 27/1F/dMoEOl8g8FuLouuIpS10Qg/pAr30QLvUr5J1gMN1VbnVHfnFdXMXmJDlPgSbx0 Xg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q7xdyagg5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Apr 2023 13:59:24 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33SDxFNV025719
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Apr 2023 13:59:15 GMT
-Received: from [10.216.44.214] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 28 Apr
- 2023 06:59:09 -0700
-Message-ID: <3fe4ff88-4640-a348-e88f-ef7d8bcbef19@quicinc.com>
-Date:   Fri, 28 Apr 2023 19:29:06 +0530
+        with ESMTP id S229692AbjD1OB0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Apr 2023 10:01:26 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2064.outbound.protection.outlook.com [40.107.100.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF621995
+        for <linux-usb@vger.kernel.org>; Fri, 28 Apr 2023 07:01:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gfbEWtGe7T2uRE5pAMFthKs8phX7ZrBBfk9NmeMMNegjqhlAci3M2b8W8Q1GmgtftDlAfyyMLdt9WyfPxBfUxmDxVfDY+qX3Q+bAKksPZiKJOfi+9lgjQIHbEednjYJxits2vwHjjMAhxAmHxnBSO89S2ZVw5r3qMFSh7Q+qLEhQFhGj+oHHtCRFBv2qDfpOo8L2lX4ctKA0QpcUvXznBFqDFgv68m1MxCE3hXlWGgRf6RYOC9kbZ+nQOZ33GiTDZ7/X8Nia944dVqheWPBf0zgN47/Cij5mfqgXaJ66kRA63UBkzr6Fhdj/HnQJAPaLnxDz/l1+EOmPEYKnxclX8g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ks2hTQWJo884k/X0FKNM7bkIvnRWIttinCLbvOfjNME=;
+ b=SnIgCMQeH/WLHMTfM4TSub4wfOOSoKCVR6N6iJwX3EKs5Oqyo9IrDNaS+qwqrt9ztFt2mqgGCnBCA6uF6eoRA8hxAyAetKs7MufKCZEW2GhxV3Y85Kfboi5tp0sPDruIQ77Ra/wqLbQCbeAaFsPoI0W/82zPhIRdNowITXYup9nSF8UO1jXp5w0hemrnzD8bDe/0ZQWW0oqUO0rSBWuSbS7MdjxvruwsrpPoGr+82QZs2djoAa3uUZjoyKAi7HOovaPEoRqOmMTMNHi68xPvu8K7SwXE40JHjQbhudsox1qibsM2wq12D3PH1azIW3jGIBXRtuzl74toBhH/2/nykw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ks2hTQWJo884k/X0FKNM7bkIvnRWIttinCLbvOfjNME=;
+ b=BHFf7+N18PQ1i17WVIyIRpIVLLjgOPwWtRboXmh8P1UdEXdImZ7B1AMgbYi53dUhONT98IYcFQVjEPQwNO3ebwsuVRhoAUM45oGcyuh84KeKTdKL0+h3RGEpTwUTsKTF1t+4df7s8l2J6ebnSnewJ5SRw3Kd+95TqEq4Xki1J0k=
+Received: from BN0PR02CA0058.namprd02.prod.outlook.com (2603:10b6:408:e5::33)
+ by MN2PR12MB4549.namprd12.prod.outlook.com (2603:10b6:208:268::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.24; Fri, 28 Apr
+ 2023 14:01:19 +0000
+Received: from BN8NAM11FT096.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e5:cafe::29) by BN0PR02CA0058.outlook.office365.com
+ (2603:10b6:408:e5::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.24 via Frontend
+ Transport; Fri, 28 Apr 2023 14:01:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT096.mail.protection.outlook.com (10.13.177.195) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6340.25 via Frontend Transport; Fri, 28 Apr 2023 14:01:19 +0000
+Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 28 Apr
+ 2023 09:01:17 -0500
+From:   Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+To:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
+        <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>
+CC:     Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Subject: [PATCH v4 0/2] Handle PM events for pci resume
+Date:   Fri, 28 Apr 2023 19:30:54 +0530
+Message-ID: <20230428140056.1318981-1-Basavaraj.Natikar@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v2 1/6] dt-bindings: usb: qcom,dwc3: Add bindings for
- SA8775P
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <dmitry.baryshkov@linaro.org>, <athierry@redhat.com>,
-        <robh@kernel.org>, <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "Kishon Vijay Abraham I" <kishon@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-References: <20230428130824.23803-1-quic_shazhuss@quicinc.com>
- <20230428130824.23803-2-quic_shazhuss@quicinc.com>
- <4b690859-be5a-c331-8243-b875136d4807@linaro.org>
-From:   Shazad Hussain <quic_shazhuss@quicinc.com>
-In-Reply-To: <4b690859-be5a-c331-8243-b875136d4807@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ZoZMd2WWWcv0frsVlMOGPDzxgLeb-BuF
-X-Proofpoint-ORIG-GUID: ZoZMd2WWWcv0frsVlMOGPDzxgLeb-BuF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-28_04,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 suspectscore=0 bulkscore=0 priorityscore=1501
- phishscore=0 adultscore=0 mlxlogscore=390 clxscore=1015 mlxscore=0
- spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304280115
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT096:EE_|MN2PR12MB4549:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4abda3c8-e6e2-40c7-a624-08db47f10ade
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tIm7VcovjlNx7lIl6fljbUw+fZMVbZUnTteGnccLKyJat4Ndv2l2gvFIPzVt0zKP484SH2I4TY89go9feTwqQblrnxqXFzsjur3q9O5zdZf/KZlbC++GDqs/zNJ5tLEXB3pH28hilSmWnbGLFupnUs+VUi1y1Q43w9voMwhkRqBtOwzX3CDnHZzgw4zESw7c5Bypo1K+UyDVTNdLfxOJN+ltLtyxSKsf6XdD2iSSMu+K7j05uz/dV2Y/Kd0C6eeFOw5XyzCswOen56XBCIifICYdwLgkfCUHzGouclTFh4qK56tGIUxNUQ2AQaR1KboSGp8VknjsjNFyRoaex11ZAydudzveZle7bqFCZn8aQwseDTDJd8sIecGS1jvmxQaknTmPZTe6AFuXmUg4OP23pnzXCErb+bxpy3FPFBkLyoN2CurOiDMcDHUGAcyH6VluPcfAfBFNtDaq4zGdoXDdH/LZMBNpDVg/e4FCich4cLaLmsR5km456VeTEX5TqPE+UBgiJ8KtD7GOtUnvZ/pWqeTWCKZZ7g745hnTDzwiRjuc+ZYBXdRoHCJqgxm8oOsRPc87igtuUFIzuuFHhOpIi73jCj5O4IDa1+/SpLueyZw05pVyVJ3fmQnYt/n5bSY9D+Mx0QPkHda4L6CZKdOb5+uYlYZ7YTMEGX/9RDFpAhqHpzSSphZgxT+1chfibnjIhjo3dRmiFRMN/CGsg7iCUKMX9Tjs0FV2l2suwu0ivFk=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(346002)(396003)(136003)(451199021)(36840700001)(40470700004)(46966006)(40480700001)(40460700003)(478600001)(86362001)(82310400005)(7696005)(36756003)(6666004)(966005)(8936002)(8676002)(5660300002)(356005)(81166007)(316002)(82740400003)(41300700001)(110136005)(70586007)(70206006)(2906002)(4326008)(186003)(16526019)(1076003)(26005)(426003)(336012)(36860700001)(47076005)(2616005)(83380400001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2023 14:01:19.7642
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4abda3c8-e6e2-40c7-a624-08db47f10ade
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT096.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4549
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Krzysztof,
+This series includes enhancements to the PCI resume function that allow it
+to handle PM events in order to improve the XHCI system resume time.
 
-On 4/28/2023 6:57 PM, Krzysztof Kozlowski wrote:
-> On 28/04/2023 15:08, Shazad Hussain wrote:
->> Add the compatible string for SA8775P SoC from Qualcomm.
->>
->> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
->> ---
-> 
-> (...)
-> 
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - qcom,sa8775p-dwc3
->> +    then:
->> +      properties:
->> +        interrupts:
->> +          minItems: 3
->> +          maxItems: 4
->> +        interrupt-names:
->> +          minItems: 3
->> +          items:
->> +            - const: pwr_event
->> +            - const: dp_hs_phy_irq
->> +            - const: dm_hs_phy_irq
->> +            - const: ss_phy_irq
-> 
-> Why the last interrupt line is optional? Is it really optional?
-> 
+v4:	
+	- update PMSG_AUTO_RESUME or PMSG_RESUME in all other resume cases
+	  accordingly.
 
-Third usb controller i.e usb_2 supports only high speed, so I believe
-ss_phy_irq is not required for that instance.
+v3:
+        - Fix for parameter of incompatible type reported by
+          kernel test robot <lkp@intel.com>
+          Link: https://lore.kernel.org/oe-kbuild-all/202304272147.qSiPDNIh-lkp@intel.com/
 
-> Best regards,
-> Krzysztof
-> 
+v2:
+        - use the same indentation style.
+        - keep same function name.
+        - avoid wrapper for uhci_resume.
+        - use pm_message_t type for PM events.
+        - reword commit title and commit message accordingly.
+ 
+Basavaraj Natikar (2):
+  USB: Extend pci resume function to handle PM events
+  xhci: Improve the XHCI system resume time
 
--Shazad
+ drivers/usb/core/hcd-pci.c    | 24 +++++++++++++-----------
+ drivers/usb/host/ehci-pci.c   |  3 ++-
+ drivers/usb/host/ohci-pci.c   |  8 +++++++-
+ drivers/usb/host/uhci-pci.c   |  7 ++++---
+ drivers/usb/host/xhci-histb.c |  2 +-
+ drivers/usb/host/xhci-pci.c   |  4 ++--
+ drivers/usb/host/xhci-plat.c  |  4 ++--
+ drivers/usb/host/xhci-tegra.c |  2 +-
+ drivers/usb/host/xhci.c       |  5 +++--
+ drivers/usb/host/xhci.h       |  2 +-
+ include/linux/usb/hcd.h       |  2 +-
+ 11 files changed, 37 insertions(+), 26 deletions(-)
+
+-- 
+2.25.1
+
