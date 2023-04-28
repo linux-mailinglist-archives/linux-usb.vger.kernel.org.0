@@ -2,411 +2,247 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BBA46F16FF
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Apr 2023 13:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD576F1726
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Apr 2023 14:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345914AbjD1Lpz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Apr 2023 07:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39590 "EHLO
+        id S1345989AbjD1MFM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Apr 2023 08:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbjD1Lpy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Apr 2023 07:45:54 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202515BB2;
-        Fri, 28 Apr 2023 04:45:50 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33SBUiUB024655;
-        Fri, 28 Apr 2023 11:45:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=eMlmCPXOYlfghcZ5ReYKOmVkdZz0QefrbdVESqio7UY=;
- b=PjjvfSt4brREymp9wrQ8rXvt+2WlZzjVQnJX+5P2vnm7zz0nBG7uwUHnh58YKLY+BYDR
- 2saOq+TOG7eH9kW4fLW9qhWQ/+M6tfkJ1mTxFvHcTzZrT5ZpWo+wqV/c0WY18hbo3a+7
- 7p8Iab+yukP1sQED/kOWY8tNaeCodcsiNHv9M6/C1kRuRcyS5nrcf55jCrXEBG1yRFHj
- 1ldtPsrKASdNdrpeVQ9YXMmmGK06dml75b7DRq9E7utQUpHP4FytIrFFuVEzWjif0cYe
- PmYnLPxwJtGAzpRBMULV4Szoy3aH/tXiQRio0D2IaCTkUIeDyn7ZEuSVIR2MiyWRsUGL Ag== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q8db4014n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Apr 2023 11:45:38 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33SBjbBF020692
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Apr 2023 11:45:37 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 28 Apr 2023 04:45:32 -0700
-Date:   Fri, 28 Apr 2023 17:15:28 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v8 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
-Message-ID: <20230428114527.GA28972@varda-linux.qualcomm.com>
-References: <cover.1680693149.git.quic_varada@quicinc.com>
- <55db8487a7cbf3354749dd2d3a35c05bfd9fa4fc.1680693149.git.quic_varada@quicinc.com>
- <e142ff5d-543f-80bb-94f9-3f1fb90f1b83@linaro.org>
- <20230424090402.GB21232@varda-linux.qualcomm.com>
- <CAA8EJprqH5esxQkH3v-1i539OO3jQG9fN-YOqjZTwEqqgUfUyg@mail.gmail.com>
- <20230426095157.GA884@varda-linux.qualcomm.com>
- <8f2eefc5-abc9-4cce-2170-7202b148e9c7@linaro.org>
+        with ESMTP id S1345978AbjD1MFD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Apr 2023 08:05:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBEB5B86;
+        Fri, 28 Apr 2023 05:05:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A817164342;
+        Fri, 28 Apr 2023 12:05:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11923C433EF;
+        Fri, 28 Apr 2023 12:04:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682683501;
+        bh=oI4qwh6vPhdcG/dlVhK2Fk245tdN9D5ZpWq2ymG0G2Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=tnYTQulnZ/dZh6H/4wLI2c0g/tN8PusSZZPibQTXiu9+R7STTNm9UisFDypXrpC3U
+         cdR7XLldhS/9/mbXLlqhglZwB6EyCQxmWSB8EyarSRr3r5QPK8OZnCRWQVyaDt63QL
+         G//4yJxLnbPv+Zxi1Y3WtjRLqzV8B07HyQlo0M7BJ5r90Dx+D87b5qKpECy9Eki9Wg
+         wmYVt5mVQ7N/yLDqUfMXKGDu4VlBpnIlDJ0O4CCJ7UKUo9lMvKS6enB7kwDE1VXG/c
+         LvaDHTNn0G9DZi08FsWmNmMG7Xhj5unN2mH9Z4NxfBWoyMASesJp+epqbvSXyrQWK2
+         mF4/A+TcJMWdA==
+Message-ID: <83dfad53-b38e-54c9-0f90-8fe834a1bca6@kernel.org>
+Date:   Fri, 28 Apr 2023 15:04:57 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <8f2eefc5-abc9-4cce-2170-7202b148e9c7@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: stgstj_82b58dvM3B7CmkzdV5oGYzpq-
-X-Proofpoint-GUID: stgstj_82b58dvM3B7CmkzdV5oGYzpq-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-28_04,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- impostorscore=0 suspectscore=0 bulkscore=0 spamscore=0 mlxlogscore=999
- phishscore=0 malwarescore=0 priorityscore=1501 lowpriorityscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304280097
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: dwc3 gadget: controller stop times out on system sleep
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <24c9f271-ed74-fffa-a49f-6e83da857593@kernel.org>
+ <20230426200140.xa4unnbaw2vog2je@synopsys.com>
+ <dafed705-292e-6c03-7599-1b1374b95122@kernel.org>
+ <20230427221315.nmvy32j6lfxlsmdk@synopsys.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230427221315.nmvy32j6lfxlsmdk@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 08:50:39PM +0300, Dmitry Baryshkov wrote:
-> On 26/04/2023 12:51, Varadarajan Narayanan wrote:
-> >On Mon, Apr 24, 2023 at 02:17:06PM +0300, Dmitry Baryshkov wrote:
-> >>On Mon, 24 Apr 2023 at 12:04, Varadarajan Narayanan
-> >><quic_varada@quicinc.com> wrote:
-> >>>
-> >>>On Sat, Apr 22, 2023 at 12:07:01AM +0300, Dmitry Baryshkov wrote:
-> >>>>On 05/04/2023 14:41, Varadarajan Narayanan wrote:
-> >>>>>Add USB phy and controller related nodes
-> >>>>>
-> >>>>>Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> >>>>>---
-> >>>>>  Changes in v8:
-> >>>>>     - Change clocks order to match the bindings
-> >>>>>  Changes in v7:
-> >>>>>     - Change com_aux -> cfg_ahb
-> >>>>>  Changes in v6:
-> >>>>>     - Introduce fixed regulators for the phy
-> >>>>>     - Resolved all 'make dtbs_check' messages
-> >>>>>
-> >>>>>  Changes in v5:
-> >>>>>     - Fix additional comments
-> >>>>>     - Edit nodes to match with qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-> >>>>>     - 'make dtbs_check' giving the following messages since
-> >>>>>       ipq9574 doesn't have power domains. Hope this is ok
-> >>>>>
-> >>>>>             /local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
-> >>>>>             From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-> >>>>>             /local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
-> >>>>>             From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> >>>>>
-> >>>>>  Changes in v4:
-> >>>>>     - Use newer bindings without subnodes
-> >>>>>     - Fix coding style issues
-> >>>>>
-> >>>>>  Changes in v3:
-> >>>>>     - Insert the nodes at proper location
-> >>>>>
-> >>>>>  Changes in v2:
-> >>>>>     - Fixed issues flagged by Krzysztof
-> >>>>>     - Fix issues reported by make dtbs_check
-> >>>>>     - Remove NOC related clocks (to be added with proper
-> >>>>>       interconnect support)
-> >>>>>---
-> >>>>>  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 120 ++++++++++++++++++++++++++++++++++
-> >>>>>  1 file changed, 120 insertions(+)
-> >>>>>
-> >>>>>diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> >>>>>index 43a3dbe..1242382 100644
-> >>>>>--- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> >>>>>+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> >>>>>@@ -150,6 +150,33 @@
-> >>>>>             method = "smc";
-> >>>>>     };
-> >>>>>+    reg_usb_3p3: s3300 {
-> >>>>
-> >>>>The node names do not look generic enough. Please take a look at other
-> >>>>platforms.
-> >>>
-> >>>Please see below.
-> >>>
-> >>>>>+            compatible = "regulator-fixed";
-> >>>>>+            regulator-min-microvolt = <3300000>;
-> >>>>>+            regulator-max-microvolt = <3300000>;
-> >>>>>+            regulator-boot-on;
-> >>>>>+            regulator-always-on;
-> >>>>>+            regulator-name = "usb-phy-vdd-dummy";
-> >>>>
-> >>>>This also doesn't look correct. This regulator should not just fill the gap.
-> >>>>Does it represent a generic voltage network on the board?
-> >>>>
-> >>>>Please do not add 'dummy' voltage regulators if there is no real voltage
-> >>>>wire.
-> >>>
-> >>>These are real voltage wires. I used dummy since they are
-> >>>always-on and cannot be increased/decreased (i.e. fixed).
-> >>>Would something along the following lines be appropriate?
-> >>
-> >>Still not fully correct. Please use regulator name that corresponds to
-> >>the power grid on the board schematics. I don't think that you have a
-> >>separate power grids for USB PHY.
-> >>
-> >>>
-> >>>         vreg_ae10_3p3: s3300 {
-> >>
-> >>Naming suggests that these voltages are generated by some PMIC. Is
-> >>this correct? If so, please describe the PMIC instead.
-> >
-> >SS PHY needs two supplies and HS PHY needs three supplies. 3.3V
-> >and 0.925V are from fixed DC - DC regulators and 1.8V is
-> >generated from MP5496 PMIC. Would the following node definitions
-> >be ok?
-> >
-> >usb_hs_vreg0: usb_hs_vreg0 {
-> >	compatible = "regulator-fixed";
-> >	regulator-min-microvolt = <3300000>;
-> >	regulator-max-microvolt = <3300000>;
-> >	regulator-boot-on;
-> >	regulator-always-on;
-> >	regulator-name = "usb-phy-vdd";
-> >};
-> >
-> >usb_hs_vreg1: usb_hs_vreg1 {
-> >	compatible = "regulator-fixed";
-> >	regulator-min-microvolt = <925000>;
-> >	regulator-max-microvolt = <925000>;
-> >	regulator-boot-on;
-> >	regulator-always-on;
-> >	regulator-name = "usb-phy";
-> >};
->
-> Again. The voltage rails on the board are not USB-specific, are they? So why
-> are you declaring usb-phy regulators? Would another consumer of 3.3V rail
-> use the same usb-phy-vdd regulator?
 
-Ok. Will rename them as follows
 
-	usb_hs_vreg0 -> fixed_3p3
-	usb_hs_vreg1 -> fixed_0p925
+On 28/04/2023 01:13, Thinh Nguyen wrote:
+> On Thu, Apr 27, 2023, Roger Quadros wrote:
+>> Hi,
+>>
+>> On 26/04/2023 23:01, Thinh Nguyen wrote:
+>>> Hi,
+>>>
+>>> On Wed, Apr 26, 2023, Roger Quadros wrote:
+>>>> Hi Thinh,
+>>>>
+>>>> On Linux kernel v6.3
+>>>> Test procedure: 
+>>>>
+>>>> - modprobe g_zero
+>>>> - Connect to PC host
+>>>> - systemctl suspend
+>>>>
+>>>> A large delay of 3 seconds is observed. The delay comes from dwc3_gadget_suspend()->dwc3_gadget_run_stop() waiting for DWC3_DSTS_DEVCTRLHLT to be set.
+>>>> It returns -ETIMEDOUT.
+>>>>
+>>>> Are we missing something to do a clean stop during suspend?
+>>>>
+>>>> FYI. Unloading g_zero does not show this delay on stop.
+>>>>
+>>>> cheers,
+>>>> -roger
+>>>
+>>> When clearing run_stop bit and the controller doesn't halt, that usually
+>>> means there are active transfers/endpoints that aren't ended yet.
+>>>
+>>> The dwc3_gadget_suspend() doesn't properly do all the cleanup before
+>>> clearing the run_stop bit. I think you just need to call
+>>> dwc3_gadget_soft_disconnect() in dwc3_gadget_suspend() to fix this.
+>>
+>> That seems to do the trick.
+>> How does this look?
+>>
+>> -------------------------- drivers/usb/dwc3/gadget.c --------------------------
+>> @@ -4674,11 +4676,18 @@ void dwc3_gadget_exit(struct dwc3 *dwc)
+>>  int dwc3_gadget_suspend(struct dwc3 *dwc)
+>>  {
+>>  	unsigned long flags;
+>> +	int ret;
+>>  
+>> -	if (!dwc->gadget_driver)
+>> +	if (!dwc->gadget_driver || !dwc->softconnect)
+>>  		return 0;
+>>  
+>> -	dwc3_gadget_run_stop(dwc, false, false);
+>> +	ret = dwc3_gadget_soft_disconnect(dwc);
+>> +	if (ret)
+>> +		goto err0;
+>> +
+>> +	ret = dwc3_gadget_run_stop(dwc, false, false);
+>> +	if (ret)
+>> +		goto err1;
+>>  
+> 
+> We already clear run_stop in dwc3_gadget_soft_disconnect().
+> 
+> Can you try the following change (not tested):
+> 
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index c0ca4d12f95d..2996bcb4d53d 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -2699,6 +2699,21 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
+>  	return ret;
+>  }
+>  
+> +static int dwc3_gadget_soft_connect(struct dwc3 *dwc)
+> +{
+> +	/*
+> +	 * In the Synopsys DWC_usb31 1.90a programming guide section
+> +	 * 4.1.9, it specifies that for a reconnect after a
+> +	 * device-initiated disconnect requires a core soft reset
+> +	 * (DCTL.CSftRst) before enabling the run/stop bit.
+> +	 */
+> +	dwc3_core_soft_reset(dwc);
+> +
+> +	dwc3_event_buffers_setup(dwc);
+> +	__dwc3_gadget_start(dwc);
+> +	return dwc3_gadget_run_stop(dwc, true);
 
-	regulator-name = "usb-phy-vdd";	-> fixed_3p3
-	regulator-name = "usb-phy";	-> fixed_0p925
+return dwc3_gadget_run_stop(dwc, true, false);
 
-> >&rpm_requests {
-> >	regulators {
-> >		compatible = "qcom,rpm-mp5496-regulators";
-> >		.
-> >		.
-> >		.
-> >		ipq9574_l2: l2 {
->
-> mp5496_l2
+> +}> +
+>  static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>  {
+>  	struct dwc3		*dwc = gadget_to_dwc(g);
+> @@ -2737,21 +2752,10 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>  
+>  	synchronize_irq(dwc->irq_gadget);
+>  
+> -	if (!is_on) {
+> +	if (!is_on)
+>  		ret = dwc3_gadget_soft_disconnect(dwc);
+> -	} else {
+> -		/*
+> -		 * In the Synopsys DWC_usb31 1.90a programming guide section
+> -		 * 4.1.9, it specifies that for a reconnect after a
+> -		 * device-initiated disconnect requires a core soft reset
+> -		 * (DCTL.CSftRst) before enabling the run/stop bit.
+> -		 */
+> -		dwc3_core_soft_reset(dwc);
+> -
+> -		dwc3_event_buffers_setup(dwc);
+> -		__dwc3_gadget_start(dwc);
+> -		ret = dwc3_gadget_run_stop(dwc, true);
+> -	}
+> +	else
+> +		ret = dwc3_gadget_soft_connect(dwc);
+>  
+>  	pm_runtime_put(dwc->dev);
+>  
+> @@ -4655,42 +4659,39 @@ void dwc3_gadget_exit(struct dwc3 *dwc)
+>  int dwc3_gadget_suspend(struct dwc3 *dwc)
+>  {
+>  	unsigned long flags;
+> +	int ret;
+>  
+>  	if (!dwc->gadget_driver)
 
-Ok.
+We need to check for dwc->softconnect here. If it is not set that means
+controller has already stopped so we can simply exit.
 
-Thanks
-Varada
+>  		return 0;
+>  
+> -	dwc3_gadget_run_stop(dwc, false);
+> +	ret = dwc3_gadget_soft_disconnect(dwc);
+> +	if (ret)
+> +		goto err;
+>  
+>  	spin_lock_irqsave(&dwc->lock, flags);
+>  	dwc3_disconnect_gadget(dwc);
+> -	__dwc3_gadget_stop(dwc);
+>  	spin_unlock_irqrestore(&dwc->lock, flags);
+>  
+>  	return 0;
+> +
+> +err:
+> +	/*
+> +	 * Attempt to reset the controller's state. Likely no
+> +	 * communication can be established until the host
+> +	 * performs a port reset.
+> +	 */
+> +	if (dwc->softconnect)
+> +		dwc3_gadget_soft_connect(dwc);
+> +
+> +	return ret;
+>  }
+>  
+>  int dwc3_gadget_resume(struct dwc3 *dwc)
+>  {
+> -	int			ret;
+> -
+>  	if (!dwc->gadget_driver || !dwc->softconnect)
+>  		return 0;
+>  
+> -	ret = __dwc3_gadget_start(dwc);
+> -	if (ret < 0)
+> -		goto err0;
+> -
+> -	ret = dwc3_gadget_run_stop(dwc, true);
+> -	if (ret < 0)
+> -		goto err1;
+> -
+> -	return 0;
+> -
+> -err1:
+> -	__dwc3_gadget_stop(dwc);
+> -
+> -err0:
+> -	return ret;
+> +	return dwc3_gadget_soft_connect(dwc);
+>  }
+>  
+>  void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
 
-> >			regulator-min-microvolt = <1800000>;
-> >			regulator-max-microvolt = <1800000>;
-> >			regulator-boot-on;
-> >			regulator-always-on;
-> >		};
-> >	};
-> >};
-> >
-> >Thanks
-> >Varada
-> >
-> >>>                 compatible = "regulator-fixed";
-> >>>                 regulator-min-microvolt = <3300000>;
-> >>>                 regulator-max-microvolt = <3300000>;
-> >>>                 regulator-boot-on;
-> >>>                 regulator-always-on;
-> >>>                 regulator-name = "usb-phy-vdd";
-> >>>         };
-> >>>
-> >>>         vreg_ad8_1p8: s1800 {
-> >>>                 compatible = "regulator-fixed";
-> >>>                 regulator-min-microvolt = <1800000>;
-> >>>                 regulator-max-microvolt = <1800000>;
-> >>>                 regulator-boot-on;
-> >>>                 regulator-always-on;
-> >>>                 regulator-name = "usb-phy-pll";
-> >>>         };
-> >>>
-> >>>         vreg_ad9_0p925: s0925 {
-> >>>                 compatible = "regulator-fixed";
-> >>>                 regulator-min-microvolt = <925000>;
-> >>>                 regulator-max-microvolt = <925000>;
-> >>>                 regulator-boot-on;
-> >>>                 regulator-always-on;
-> >>>                 regulator-name = "usb-phy";
-> >>>         };
-> >>>
-> >>>Thanks
-> >>>Varada
-> >>>
-> >>>>>+    };
-> >>>>>+
-> >>>>>+    reg_usb_1p8: s1800 {
-> >>>>>+            compatible = "regulator-fixed";
-> >>>>>+            regulator-min-microvolt = <1800000>;
-> >>>>>+            regulator-max-microvolt = <1800000>;
-> >>>>>+            regulator-boot-on;
-> >>>>>+            regulator-always-on;
-> >>>>>+            regulator-name = "usb-phy-pll-dummy";
-> >>>>>+    };
-> >>>>>+
-> >>>>>+    reg_usb_0p925: s0925 {
-> >>>>>+            compatible = "regulator-fixed";
-> >>>>>+            regulator-min-microvolt = <925000>;
-> >>>>>+            regulator-max-microvolt = <925000>;
-> >>>>>+            regulator-boot-on;
-> >>>>>+            regulator-always-on;
-> >>>>>+            regulator-name = "usb-phy-dummy";
-> >>>>>+    };
-> >>>>>+
-> >>>>>     reserved-memory {
-> >>>>>             #address-cells = <2>;
-> >>>>>             #size-cells = <2>;
-> >>>>>@@ -179,6 +206,52 @@
-> >>>>>             #size-cells = <1>;
-> >>>>>             ranges = <0 0 0 0xffffffff>;
-> >>>>>+            usb_0_qusbphy: phy@7b000 {
-> >>>>>+                    compatible = "qcom,ipq9574-qusb2-phy";
-> >>>>>+                    reg = <0x0007b000 0x180>;
-> >>>>>+                    #phy-cells = <0>;
-> >>>>>+
-> >>>>>+                    clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-> >>>>>+                             <&xo_board_clk>;
-> >>>>>+                    clock-names = "cfg_ahb",
-> >>>>>+                                  "ref";
-> >>>>>+
-> >>>>>+                    vdd-supply = <&reg_usb_0p925>;
-> >>>>>+                    vdda-pll-supply = <&reg_usb_1p8>;
-> >>>>>+                    vdda-phy-dpdm-supply = <&reg_usb_3p3>;
-> >>>>>+
-> >>>>>+                    resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-> >>>>>+                    status = "disabled";
-> >>>>>+            };
-> >>>>>+
-> >>>>>+            usb_0_qmpphy: phy@7d000 {
-> >>>>>+                    compatible = "qcom,ipq9574-qmp-usb3-phy";
-> >>>>>+                    reg = <0x0007d000 0xa00>;
-> >>>>>+                    #phy-cells = <0>;
-> >>>>>+
-> >>>>>+                    clocks = <&gcc GCC_USB0_AUX_CLK>,
-> >>>>>+                             <&xo_board_clk>,
-> >>>>>+                             <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-> >>>>>+                             <&gcc GCC_USB0_PIPE_CLK>;
-> >>>>>+                    clock-names = "aux",
-> >>>>>+                                  "ref",
-> >>>>>+                                  "cfg_ahb",
-> >>>>>+                                  "pipe";
-> >>>>>+
-> >>>>>+                    resets = <&gcc GCC_USB0_PHY_BCR>,
-> >>>>>+                             <&gcc GCC_USB3PHY_0_PHY_BCR>;
-> >>>>>+                    reset-names = "phy",
-> >>>>>+                                  "phy_phy";
-> >>>>>+
-> >>>>>+                    vdda-pll-supply = <&reg_usb_1p8>;
-> >>>>>+                    vdda-phy-supply = <&reg_usb_0p925>;
-> >>>>>+
-> >>>>>+                    status = "disabled";
-> >>>>>+
-> >>>>>+                    #clock-cells = <0>;
-> >>>>>+                    clock-output-names = "usb0_pipe_clk";
-> >>>>>+            };
-> >>>>>+
-> >>>>>             pcie0_phy: phy@84000 {
-> >>>>>                     compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
-> >>>>>                     reg = <0x00084000 0x1000>;
-> >>>>>@@ -548,6 +621,53 @@
-> >>>>>                     status = "disabled";
-> >>>>>             };
-> >>>>>+            usb3: usb@8a00000 {
-> >>>>>+                    compatible = "qcom,ipq9574-dwc3", "qcom,dwc3";
-> >>>>>+                    reg = <0x08af8800 0x400>;
-> >>>>>+                    #address-cells = <1>;
-> >>>>>+                    #size-cells = <1>;
-> >>>>>+                    ranges;
-> >>>>>+
-> >>>>>+                    clocks = <&gcc GCC_SNOC_USB_CLK>,
-> >>>>>+                             <&gcc GCC_USB0_MASTER_CLK>,
-> >>>>>+                             <&gcc GCC_ANOC_USB_AXI_CLK>,
-> >>>>>+                             <&gcc GCC_USB0_SLEEP_CLK>,
-> >>>>>+                             <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> >>>>>+
-> >>>>>+                    clock-names = "cfg_noc",
-> >>>>>+                                  "core",
-> >>>>>+                                  "iface",
-> >>>>>+                                  "sleep",
-> >>>>>+                                  "mock_utmi";
-> >>>>>+
-> >>>>>+                    assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
-> >>>>>+                                      <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> >>>>>+                    assigned-clock-rates = <200000000>,
-> >>>>>+                                           <24000000>;
-> >>>>>+
-> >>>>>+                    interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
-> >>>>>+                    interrupt-names = "pwr_event";
-> >>>>>+
-> >>>>>+                    resets = <&gcc GCC_USB_BCR>;
-> >>>>>+                    status = "disabled";
-> >>>>>+
-> >>>>>+                    dwc_0: usb@8a00000 {
-> >>>>>+                            compatible = "snps,dwc3";
-> >>>>>+                            reg = <0x8a00000 0xcd00>;
-> >>>>>+                            clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> >>>>>+                            clock-names = "ref";
-> >>>>>+                            interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-> >>>>>+                            phys = <&usb_0_qusbphy>, <&usb_0_qmpphy>;
-> >>>>>+                            phy-names = "usb2-phy", "usb3-phy";
-> >>>>>+                            tx-fifo-resize;
-> >>>>>+                            snps,is-utmi-l1-suspend;
-> >>>>>+                            snps,hird-threshold = /bits/ 8 <0x0>;
-> >>>>>+                            snps,dis_u2_susphy_quirk;
-> >>>>>+                            snps,dis_u3_susphy_quirk;
-> >>>>>+                            dr_mode = "host";
-> >>>>>+                    };
-> >>>>>+            };
-> >>>>>+
-> >>>>>             intc: interrupt-controller@b000000 {
-> >>>>>                     compatible = "qcom,msm-qgic2";
-> >>>>>                     reg = <0x0b000000 0x1000>,  /* GICD */
-> >>>>
-> >>>>--
-> >>>>With best wishes
-> >>>>Dmitry
-> >>>>
-> >>
-> >>
-> >>
-> >>--
-> >>With best wishes
-> >>Dmitry
->
-> --
-> With best wishes
-> Dmitry
->
+Everything else looks ok. I will send a patch soon.
+
+--
+cheers,
+-roger
