@@ -2,83 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A199A6F136C
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Apr 2023 10:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EBEB6F13B0
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Apr 2023 10:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345400AbjD1IpN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Apr 2023 04:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
+        id S1345751AbjD1I45 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Apr 2023 04:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjD1IpL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Apr 2023 04:45:11 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232662D40;
-        Fri, 28 Apr 2023 01:45:10 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1psJj2-0005Ab-HS; Fri, 28 Apr 2023 10:45:08 +0200
-Message-ID: <563d96ca-8c2f-3c84-bef6-10311fa5ebcf@leemhuis.info>
-Date:   Fri, 28 Apr 2023 10:45:08 +0200
+        with ESMTP id S1345675AbjD1I4d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Apr 2023 04:56:33 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBF361A3;
+        Fri, 28 Apr 2023 01:55:54 -0700 (PDT)
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33S8rsSF3024827, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33S8rsSF3024827
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Fri, 28 Apr 2023 16:53:54 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Fri, 28 Apr 2023 16:53:48 +0800
+Received: from fc34.localdomain (172.22.228.98) by RTEXMBS04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Fri, 28 Apr
+ 2023 16:53:47 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     <kuba@kernel.org>, <davem@davemloft.net>
+CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Hayes Wang <hayeswang@realtek.com>
+Subject: [PATCH net v3 0/3] r8152: fix 2.5G devices
+Date:   Fri, 28 Apr 2023 16:53:28 +0800
+Message-ID: <20230428085331.34550-409-nic_swsd@realtek.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: issues with cdc ncm host class driver
-Content-Language: en-US, de-DE
-To:     Oliver Neukum <oneukum@suse.com>,
-        "Purohit, Kaushal" <kaushal.purohit@ti.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <da37bb0d43de465185c10aad9924f265@ti.com>
- <3a51acb5-6862-7558-5807-c94f8e0d0f64@suse.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <3a51acb5-6862-7558-5807-c94f8e0d0f64@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1682671510;9fae6006;
-X-HE-SMSGID: 1psJj2-0005Ab-HS
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.22.228.98]
+X-ClientProxiedBy: RTEXH36505.realtek.com.tw (172.21.6.25) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 05.04.23 12:53, Oliver Neukum wrote:
-> On 03.04.23 08:14, Purohit, Kaushal wrote:
->>
->> Referring to patch with commit ID
->> (*e10dcb1b6ba714243ad5a35a11b91cc14103a9a9*).
->>
->> This is a spec violation for CDC NCM class driver. Driver clearly says
->> the significance of network capabilities. (snapshot below)
->>
->> However, with the mentioned patch these values are disrespected and
->> commands specific to these capabilities are sent from the host
->> regardless of device' capabilities to handle them.
->>
->> Currently we are setting these bits to 0 indicating no capabilities on
->> our device and still we observe that Host (Linux kernel host cdc
->> driver) has been sending requests specific to these capabilities.
-> 
-> Hi,
-> 
-> please test the patch I've attached to kernel.org's bugzilla.
+v3:
+For patch #2, modify the comment.
 
-Did you ever do that? Doesn't look like it from here, but maybe I'm
-missing something.
+v2:
+For patch #1, Remove inline for fc_pause_on_auto() and fc_pause_off_auto(),
+and update the commit message.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+For patch #2, define the magic value for OCP register 0xa424.
 
-BTW, let me fix something up in regzbot while at it:
+v1:
+These patches are used to fix some issues of RTL8156.
 
-#regzbot from: Kaushal Purohit
-#regzbot poke
+Hayes Wang (3):
+  r8152: fix flow control issue of RTL8156A
+  r8152: fix the poor throughput for 2.5G devices
+  r8152: move setting r8153b_rx_agg_chg_indicate()
+
+ drivers/net/usb/r8152.c | 84 ++++++++++++++++++++++++++++-------------
+ 1 file changed, 58 insertions(+), 26 deletions(-)
+
+-- 
+2.40.0
+
