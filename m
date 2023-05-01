@@ -2,127 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A38ED6F32B6
-	for <lists+linux-usb@lfdr.de>; Mon,  1 May 2023 17:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C926F32BF
+	for <lists+linux-usb@lfdr.de>; Mon,  1 May 2023 17:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232643AbjEAPTd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 May 2023 11:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
+        id S232665AbjEAPVU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 May 2023 11:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbjEAPTc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 May 2023 11:19:32 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id C46F8186
-        for <linux-usb@vger.kernel.org>; Mon,  1 May 2023 08:19:29 -0700 (PDT)
-Received: (qmail 304556 invoked by uid 1000); 1 May 2023 11:19:29 -0400
-Date:   Mon, 1 May 2023 11:19:29 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+ce77725b89b7bd52425c@syzkaller.appspotmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] WARNING in usbtmc_ioctl/usb_submit_urb (2)
-Message-ID: <38c0a2fd-cd9c-43b3-99f0-4f9ed2fdc69f@rowland.harvard.edu>
-References: <000000000000716a3705f9adb8ee@google.com>
- <00000000000082cdb705faa08ffb@google.com>
+        with ESMTP id S232535AbjEAPVT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 May 2023 11:21:19 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5E510C1;
+        Mon,  1 May 2023 08:21:17 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-24e0c29733fso736822a91.2;
+        Mon, 01 May 2023 08:21:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682954477; x=1685546477;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YIW8hGeCn/ue9KjRFquGeBC2nEcAJQT+02yegm0SocM=;
+        b=m2UHHXvRGgaSM8dENcJZiaVawtH2use02hDfKHt1qkzkzchJvNWhEyG/bJEBdAFqWY
+         oQlQFJ0YH4fPtC0itJsVLNMiOPbkV330f6+au788eu1b72Hs9avGA+AzErA7IvftMzlD
+         s/L3Gh4Jhin/76f0aMghP4/aD3uralJbyZGpdPxr1sHXaYl049jzvs9WC9WBk9kPEvyz
+         ZSb2opy6hXUSi3RfxuIsfVAozh2Yk75uGSqDKt+JTxJ4rQkUkpROVa0wuw9qIdr6Ycuv
+         vYyHffHBMtSzlqP5dxN+L9/CbhtxiFxa8aUz+94Hvv3qzoVPQCbO6mA+OWe2hvSPVgU2
+         TWCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682954477; x=1685546477;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YIW8hGeCn/ue9KjRFquGeBC2nEcAJQT+02yegm0SocM=;
+        b=WKRE7BpGHsrrPt/SUtNASAtekZxYHjdwHJSRuOGkfVqeKOMCSCQ6Th/OS2CAoNd2jw
+         ON4cmtL8guHoNdG/diDndGfPDdtWPqKVKoDpI2NmjPe1F3cxWIpy5JWYHAV6Oplb7xv+
+         FzPWFsS6sw+PuThkOxhEeMoHgA7D0BnXAgyUpRRRuvR4hKIfxG6SV3o+Y7dqbYiW3lpv
+         JplEamhYTC0GrjZ3Un6moeT8o5HNHfxCxtvQdIhsrpqGeWyJhbNaFC/ozx5wU2CkpX2V
+         xhcQov57e5Ua9tmppLK4q+VLAr9AjpqIERKB+seWqqcExVP8p9Qt4cbTsESPP6RNKw/l
+         4giA==
+X-Gm-Message-State: AC+VfDwwDfMt6QjOd23JTGJ4hLERAYrbhpUt5pMFwRFPPzKJ01oYMPb0
+        hJGlR6iC0Q2Zd++2fo8d4eY=
+X-Google-Smtp-Source: ACHHUZ6QiwkjIxtXvOSW/qLrIvk3SCU2xO8RalT5TCxA8EqDnwm2+lhUK1ySph96OG1n9a8ar+28sQ==
+X-Received: by 2002:a17:90a:bb17:b0:24d:d7fd:86c3 with SMTP id u23-20020a17090abb1700b0024dd7fd86c3mr7546946pjr.16.1682954477327;
+        Mon, 01 May 2023 08:21:17 -0700 (PDT)
+Received: from Gentoo (n220246252240.netvigator.com. [220.246.252.240])
+        by smtp.gmail.com with ESMTPSA id n4-20020a17090a928400b0024c1ac09394sm6157536pjo.19.2023.05.01.08.21.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 08:21:16 -0700 (PDT)
+Date:   Mon, 1 May 2023 23:21:08 +0800
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, andersson@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        luca.weiss@fairphone.com, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        caleb.connolly@linaro.org, konrad.dybcio@linaro.org,
+        subbaram@quicinc.com, jackp@quicinc.com, robertom@qti.qualcomm.com
+Subject: Re: [PATCH v6 12/13] arm64: dts: qcom: qrb5165-rb5: Switch on TCPM
+ usb-role-switching for usb_1
+Message-ID: <ZE_Y5BvxiimB9mu8@Gentoo>
+References: <20230501121111.1058190-1-bryan.odonoghue@linaro.org>
+ <20230501121111.1058190-13-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <00000000000082cdb705faa08ffb@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230501121111.1058190-13-bryan.odonoghue@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 01, 2023 at 04:59:52AM -0700, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
+On Mon, May 01, 2023 at 01:11:10PM +0100, Bryan O'Donoghue wrote:
+> Switch on usb-role-switching for usb_1 via TCPM. We need to declare
+> usb-role-switch in &usb_1 and associate with the remote-endpoint in TCPM
+> which provides the necessary signal.
 > 
-> HEAD commit:    58390c8ce1bd Merge tag 'iommu-updates-v6.4' of git://git.k..
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=17d08158280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=d56ffc213bf6bf4a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=ce77725b89b7bd52425c
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15027ef7c80000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16d7550c280000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/51c43e265c8a/disk-58390c8c.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/7c64f4eeaf4d/vmlinux-58390c8c.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/e5d8f49c4804/bzImage-58390c8c.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+ce77725b89b7bd52425c@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> usb 3-1: BOGUS control dir, pipe 80000b80 doesn't match bRequestType fd
-> WARNING: CPU: 0 PID: 5100 at drivers/usb/core/urb.c:411 usb_submit_urb+0x14a7/0x1880 drivers/usb/core/urb.c:411
-> Modules linked in:
-> CPU: 0 PID: 5100 Comm: syz-executor428 Not tainted 6.3.0-syzkaller-12049-g58390c8ce1bd #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-> RIP: 0010:usb_submit_urb+0x14a7/0x1880 drivers/usb/core/urb.c:411
-> Code: 7c 24 40 e8 1b 13 5c fb 48 8b 7c 24 40 e8 21 1d f0 fe 45 89 e8 44 89 f1 4c 89 e2 48 89 c6 48 c7 c7 e0 b5 fc 8a e8 19 c8 23 fb <0f> 0b e9 9f ee ff ff e8 ed 12 5c fb 0f b6 1d 12 8a 3c 08 31 ff 41
-> RSP: 0018:ffffc90003d2fb00 EFLAGS: 00010282
-> RAX: 0000000000000000 RBX: ffff8880789e9058 RCX: 0000000000000000
-> RDX: ffff888029593b80 RSI: ffffffff814c1447 RDI: 0000000000000001
-> RBP: ffff88801ea742f8 R08: 0000000000000001 R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000001 R12: ffff88802915e528
-> R13: 00000000000000fd R14: 0000000080000b80 R15: ffff8880222b3100
-> FS:  0000555556ca63c0(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f9ef4d18150 CR3: 0000000073e5b000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  usb_start_wait_urb+0x101/0x4b0 drivers/usb/core/message.c:58
->  usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
->  usb_control_msg+0x320/0x4a0 drivers/usb/core/message.c:153
->  usbtmc_ioctl_request drivers/usb/class/usbtmc.c:1954 [inline]
->  usbtmc_ioctl+0x1b3d/0x2840 drivers/usb/class/usbtmc.c:2097
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:870 [inline]
->  __se_sys_ioctl fs/ioctl.c:856 [inline]
->  __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f9ef4ca4e49
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007fff8d0be0d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f9ef4ca4e49
-> RDX: 0000000020000040 RSI: 00000000c0105b08 RDI: 0000000000000004
-> RBP: 0000000000000000 R08: 000000000000000f R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000015f73
-> R13: 00007fff8d0be160 R14: 00007fff8d0be150 R15: 00007fff8d0be11c
->  </TASK>
-> 
-> 
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > ---
-> If you want syzbot to run the reproducer, reply with:
-> #syz test: git://repo/address.git branch-or-commit-hash
-> If you attach or paste a git patch, syzbot will apply it before testing.
+>  arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 19 ++++++++++++++++++-
+>  arch/arm64/boot/dts/qcom/sm8250.dtsi     |  4 ++++
+>  2 files changed, 22 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> index 1e0b6fd59abc9..b5cc45358a474 100644
+> --- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> +++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> @@ -1273,7 +1273,13 @@ &usb_1 {
+>  };
+>  
+>  &usb_1_dwc3 {
+> -	dr_mode = "peripheral";
+> +	dr_mode = "otg";
+> +	usb-role-switch;
+> +	port {
+> +		dwc3_role_switch_in: endpoint {
+> +			remote-endpoint = <&pm8150b_role_switch_out>;
+> +		};
+> +	};
+>  };
+>  
+>  &usb_1_hsphy {
+> @@ -1359,5 +1365,16 @@ connector {
+>  					 PDO_FIXED_DUAL_ROLE |
+>  					 PDO_FIXED_USB_COMM |
+>  					 PDO_FIXED_DATA_SWAP)>;
+> +		ports {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			port@0 {
+> +				reg = <0>;
+> +				pm8150b_role_switch_out: endpoint {
+> +					remote-endpoint = <&dwc3_role_switch_in>;
+> +				};
+> +			};
+This port node should be moved out to the block of pm8150b_typec rather than
+usb-c-connector. Otherwise, 
 
-usbtmc needs to check whether the user got the direction wrong for 
-0-length control transfers.
+[   10.998897] OF: graph: no port node found in /soc@0/spmi@c440000/pmic@2/typec@1500
 
-Alan Stern
-
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ 58390c8ce1bd
-
-Index: usb-devel/drivers/usb/class/usbtmc.c
-===================================================================
---- usb-devel.orig/drivers/usb/class/usbtmc.c
-+++ usb-devel/drivers/usb/class/usbtmc.c
-@@ -1928,6 +1928,8 @@ static int usbtmc_ioctl_request(struct u
- 
- 	if (request.req.wLength > USBTMC_BUFSIZE)
- 		return -EMSGSIZE;
-+	if (request.req.wLength == 0)	/* Length-0 requests are never IN */
-+		request.req.bRequestType &= ~USB_DIR_IN;
- 
- 	is_in = request.req.bRequestType & USB_DIR_IN;
- 
+> +		};
+>  	};
+>  };
+> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> index af16d3ba76b8e..af988328db6b9 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> @@ -3740,6 +3740,10 @@ usb_1_dwc3: usb@a600000 {
+>  				snps,dis_enblslpm_quirk;
+>  				phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
+>  				phy-names = "usb2-phy", "usb3-phy";
+> +
+> +				port {
+> +					dwc3_role_switch_in: endpoint {};
+> +				};
+>  			};
+>  		};
+>  
+> -- 
+> 2.39.2
+> 
+> 
