@@ -2,54 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24DD16F2EC0
-	for <lists+linux-usb@lfdr.de>; Mon,  1 May 2023 08:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7906F2EC9
+	for <lists+linux-usb@lfdr.de>; Mon,  1 May 2023 08:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbjEAGkY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 May 2023 02:40:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50808 "EHLO
+        id S232085AbjEAGmL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 May 2023 02:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232085AbjEAGkX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 May 2023 02:40:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44779E72;
-        Sun, 30 Apr 2023 23:40:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8698861AC2;
-        Mon,  1 May 2023 06:40:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CA6B7C433D2;
-        Mon,  1 May 2023 06:40:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682923220;
-        bh=+kp7Zc0nbZpMcZEMGDgEaR3CxcsWsrfmBcJF7m8AJrM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=OkYj2XxqUw0VQ3pGRc45AksA6DTKi28kGr4UbqQDi+VyMgzEU2Nn//55DdYXefDp8
-         VK1mGKFNSzx9+lT2618vkYVhsE5qLR9lZ9h2IX3mPRoYUT33FE6dGYiDiZRebmxArq
-         u7TZIsTOOzPD8EhZ0DPtdTVFyezAzoNa/tHcfX4GmG7QGXR6XCrPcV4sSK83DJ8lYx
-         iarfH5Jcd9diiS+n6dj4ZSrdViw3qoYsEp7kePRJYBRMKFv25kaPr9p1OD/IvnOMr8
-         l4yh6Ub3jbtmMrV5qOktZSffNIueCKnZ+sCI/0t4ltsDmtYoZgiSg2X2mM/DU1Dkyd
-         yN0OYo4pG+2GQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AABF2C43158;
-        Mon,  1 May 2023 06:40:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229928AbjEAGmK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 May 2023 02:42:10 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4661210DB
+        for <linux-usb@vger.kernel.org>; Sun, 30 Apr 2023 23:42:08 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-94f109b1808so440145366b.1
+        for <linux-usb@vger.kernel.org>; Sun, 30 Apr 2023 23:42:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682923327; x=1685515327;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+Ug3ALriauxRZK5BuCGHz3hy7oRHCk3NYUeB/1prBrY=;
+        b=yt4JG8tWk8wAOJfdh9RJqmqYq+roQX5gM6HshQPz6CUcPGCj2zgsoNeviCmkeSK1tu
+         jLH0eWFDXwvPLCM1TByk4uSY7nKHkCqrzb94JchNYgFfM2hVp0DLuwFXaSuzH4p5ViM8
+         SC2eMqgoSPA2hPTDMaOsbRIHPxKsiQmMk1gGwAiLhu7xNqd2SZEiLNZIQcoe4ItIz5pF
+         VMlWNVe6ecfuN7CYfc/8rYbNZ2TPBAt0gV1dDSwiVRCSJCskh6fRup0ZtwYnKmKgoyDT
+         /e2TtOW+gMlHD2EKruh6ByuUhwuzGXvdm2nqF367cylbXkVOH9TW8++pjimXZTr5WjtX
+         /DzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682923327; x=1685515327;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Ug3ALriauxRZK5BuCGHz3hy7oRHCk3NYUeB/1prBrY=;
+        b=KCPvhXMdXlHyW9WyqIHRpKGWJrgivykakYH4Si2C+VY/j/aDW3TjRGHjPW6Ip+qwH3
+         jD2hrnfrtS5R/OowZkToMdEuLXt1vA7qkquObmye0AB9Jfryj461uGHm7kL6ZEBtzaEh
+         lZCflqI6rjR+5Aw7XJ6KTQ9TqemUwtB3FZM5VF/aWMnA4pkIeQ4E8+uHteu3SSJ0XtsD
+         9f7u/xtkgysKyjFkRQ6CUM81zXLGaB9+HAkEqC9l1A1DeOd070Xgv/znlmMGGQuTXMpM
+         6XLsWu7R+bpbo7Fetntq+I73luk2V1Zo3oZOWa7AJXpkxNYyQudDcBcGEaU0uFhWY9vU
+         4ajQ==
+X-Gm-Message-State: AC+VfDzaMF9pWqzjTTIH1TGNdUdCwL+oSSlz5XRXVyZUv+Oj0EQezYfV
+        JbblRssDxdjiaQG7R4D3fYisAg==
+X-Google-Smtp-Source: ACHHUZ4oeAdjiUq5MyBqbc28cNuh/LNOYUFqAHRwLNOTfAIWvWHzI5qhT7JQdltUKNsMvkYD7E9eGA==
+X-Received: by 2002:a17:907:7245:b0:88f:a236:69e6 with SMTP id ds5-20020a170907724500b0088fa23669e6mr10854766ejc.7.1682923326687;
+        Sun, 30 Apr 2023 23:42:06 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:637a:fd0c:58fd:9f00? ([2a02:810d:15c0:828:637a:fd0c:58fd:9f00])
+        by smtp.gmail.com with ESMTPSA id pv22-20020a170907209600b0094f0025983fsm14605371ejb.84.2023.04.30.23.42.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 30 Apr 2023 23:42:06 -0700 (PDT)
+Message-ID: <e9a00e55-e2f5-1f02-56c7-8e12b551867b@linaro.org>
+Date:   Mon, 1 May 2023 08:42:04 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3 0/3] r8152: fix 2.5G devices
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168292322069.19130.7182582489809893129.git-patchwork-notify@kernel.org>
-Date:   Mon, 01 May 2023 06:40:20 +0000
-References: <20230428085331.34550-409-nic_swsd@realtek.com>
-In-Reply-To: <20230428085331.34550-409-nic_swsd@realtek.com>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 1/6] dt-bindings: usb: qcom,dwc3: Add bindings for
+ SA8775P
+Content-Language: en-US
+To:     Shazad Hussain <quic_shazhuss@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     dmitry.baryshkov@linaro.org, athierry@redhat.com, robh@kernel.org,
+        konrad.dybcio@linaro.org, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230428130824.23803-1-quic_shazhuss@quicinc.com>
+ <20230428130824.23803-2-quic_shazhuss@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230428130824.23803-2-quic_shazhuss@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,32 +84,15 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri, 28 Apr 2023 16:53:28 +0800 you wrote:
-> v3:
-> For patch #2, modify the comment.
+On 28/04/2023 15:08, Shazad Hussain wrote:
+> Add the compatible string for SA8775P SoC from Qualcomm.
 > 
-> v2:
-> For patch #1, Remove inline for fc_pause_on_auto() and fc_pause_off_auto(),
-> and update the commit message.
-> 
-> [...]
+> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
+> ---
 
-Here is the summary with links:
-  - [net,v3,1/3] r8152: fix flow control issue of RTL8156A
-    https://git.kernel.org/netdev/net/c/8ceda6d5a1e5
-  - [net,v3,2/3] r8152: fix the poor throughput for 2.5G devices
-    https://git.kernel.org/netdev/net/c/61b0ad6f58e2
-  - [net,v3,3/3] r8152: move setting r8153b_rx_agg_chg_indicate()
-    https://git.kernel.org/netdev/net/c/cce8334f4aac
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+Best regards,
+Krzysztof
 
