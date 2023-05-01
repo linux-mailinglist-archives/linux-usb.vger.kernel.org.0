@@ -2,33 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F7E6F35C3
-	for <lists+linux-usb@lfdr.de>; Mon,  1 May 2023 20:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88EF76F368F
+	for <lists+linux-usb@lfdr.de>; Mon,  1 May 2023 21:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbjEASWj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 May 2023 14:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
+        id S232778AbjEATQt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 May 2023 15:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbjEASWi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 May 2023 14:22:38 -0400
+        with ESMTP id S232659AbjEATQr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 May 2023 15:16:47 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id EC7B913A
-        for <linux-usb@vger.kernel.org>; Mon,  1 May 2023 11:22:35 -0700 (PDT)
-Received: (qmail 312068 invoked by uid 1000); 1 May 2023 14:22:35 -0400
-Date:   Mon, 1 May 2023 14:22:35 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1F35B2719
+        for <linux-usb@vger.kernel.org>; Mon,  1 May 2023 12:16:46 -0700 (PDT)
+Received: (qmail 313863 invoked by uid 1000); 1 May 2023 15:16:45 -0400
+Date:   Mon, 1 May 2023 15:16:45 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     USB mailing list <linux-usb@vger.kernel.org>,
+To:     syzbot <syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, rafael@kernel.org,
         syzkaller-bugs@googlegroups.com
-Subject: [PATCH] USB: usbtmc: Fix direction for 0-length ioctl control
- messages
-Message-ID: <ede1ee02-b718-49e7-a44c-51339fec706b@rowland.harvard.edu>
-References: <38c0a2fd-cd9c-43b3-99f0-4f9ed2fdc69f@rowland.harvard.edu>
- <0000000000004b903305faa3ad0c@google.com>
+Subject: Re: [syzbot] [usb?] memory leak in class_create
+Message-ID: <ba18f241-72ef-4d10-acaf-5fc34edbd695@rowland.harvard.edu>
+References: <00000000000077472605faa4aad5@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0000000000004b903305faa3ad0c@google.com>
+In-Reply-To: <00000000000077472605faa4aad5@google.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
@@ -38,62 +37,83 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The syzbot fuzzer found a problem in the usbtmc driver: When a user
-submits an ioctl for a 0-length control transfer, the driver does not
-check that the direction is set to OUT:
+On Mon, May 01, 2023 at 09:53:45AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    22b8cc3e78f5 Merge tag 'x86_mm_for_6.4' of git://git.kerne..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=16fc7958280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=5046ebeca744dd40
+> dashboard link: https://syzkaller.appspot.com/bug?extid=e7afd76ad060fa0d2605
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1599a2b4280000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14eb395fc80000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/3ad2088c196b/disk-22b8cc3e.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/61919a5b89c6/vmlinux-22b8cc3e.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/a7adb5503ac8/bzImage-22b8cc3e.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com
+> 
+> BUG: memory leak
+> unreferenced object 0xffff88810af67080 (size 96):
+>   comm "kworker/0:2", pid 4402, jiffies 4294950769 (age 14.190s)
+>   hex dump (first 32 bytes):
+>     bf 03 9b 85 ff ff ff ff 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff81544e14>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
+>     [<ffffffff82b65445>] kmalloc include/linux/slab.h:559 [inline]
+>     [<ffffffff82b65445>] kzalloc include/linux/slab.h:680 [inline]
+>     [<ffffffff82b65445>] class_create+0x25/0x90 drivers/base/class.c:261
+>     [<ffffffff831f7a80>] init_usb_class drivers/usb/core/file.c:91 [inline]
+>     [<ffffffff831f7a80>] usb_register_dev+0x290/0x3d0 drivers/usb/core/file.c:179
+>     [<ffffffff832cffc4>] usblp_probe+0x4e4/0x750 drivers/usb/class/usblp.c:1208
+>     [<ffffffff831f39a9>] usb_probe_interface+0x179/0x3c0 drivers/usb/core/driver.c:396
+>     [<ffffffff82b62d7d>] call_driver_probe drivers/base/dd.c:579 [inline]
+>     [<ffffffff82b62d7d>] really_probe+0x12d/0x430 drivers/base/dd.c:658
+>     [<ffffffff82b63141>] __driver_probe_device+0xc1/0x1a0 drivers/base/dd.c:800
+>     [<ffffffff82b6324a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:830
+>     [<ffffffff82b6343b>] __device_attach_driver+0xfb/0x150 drivers/base/dd.c:958
+>     [<ffffffff82b60191>] bus_for_each_drv+0xc1/0x110 drivers/base/bus.c:457
+>     [<ffffffff82b63962>] __device_attach+0x102/0x2a0 drivers/base/dd.c:1030
+>     [<ffffffff82b618fa>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
+>     [<ffffffff82b5def3>] device_add+0x993/0xc60 drivers/base/core.c:3625
+>     [<ffffffff831f0a89>] usb_set_configuration+0x9a9/0xc90 drivers/usb/core/message.c:2211
+>     [<ffffffff832033a1>] usb_generic_driver_probe+0xa1/0x100 drivers/usb/core/generic.c:238
+>     [<ffffffff831f3080>] usb_probe_device+0x60/0x140 drivers/usb/core/driver.c:293
 
+There is definitely a memory leak in usb_register_dev()'s error pathways 
+-- it doesn't call destroy_usb_class() -- but I don't think that is the 
+cause of this bug.  Let's try some diagnostics.
 
-------------[ cut here ]------------
-usb 3-1: BOGUS control dir, pipe 80000b80 doesn't match bRequestType fd
-WARNING: CPU: 0 PID: 5100 at drivers/usb/core/urb.c:411 usb_submit_urb+0x14a7/0x1880 drivers/usb/core/urb.c:411
-Modules linked in:
-CPU: 0 PID: 5100 Comm: syz-executor428 Not tainted 6.3.0-syzkaller-12049-g58390c8ce1bd #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-RIP: 0010:usb_submit_urb+0x14a7/0x1880 drivers/usb/core/urb.c:411
-Code: 7c 24 40 e8 1b 13 5c fb 48 8b 7c 24 40 e8 21 1d f0 fe 45 89 e8 44 89 f1 4c 89 e2 48 89 c6 48 c7 c7 e0 b5 fc 8a e8 19 c8 23 fb <0f> 0b e9 9f ee ff ff e8 ed 12 5c fb 0f b6 1d 12 8a 3c 08 31 ff 41
-RSP: 0018:ffffc90003d2fb00 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff8880789e9058 RCX: 0000000000000000
-RDX: ffff888029593b80 RSI: ffffffff814c1447 RDI: 0000000000000001
-RBP: ffff88801ea742f8 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000001 R12: ffff88802915e528
-R13: 00000000000000fd R14: 0000000080000b80 R15: ffff8880222b3100
-FS:  0000555556ca63c0(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f9ef4d18150 CR3: 0000000073e5b000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- usb_start_wait_urb+0x101/0x4b0 drivers/usb/core/message.c:58
- usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
- usb_control_msg+0x320/0x4a0 drivers/usb/core/message.c:153
- usbtmc_ioctl_request drivers/usb/class/usbtmc.c:1954 [inline]
- usbtmc_ioctl+0x1b3d/0x2840 drivers/usb/class/usbtmc.c:2097
+Alan Stern
 
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ 22b8cc3e78f5
 
-To fix this, we must override the direction in the bRequestType field
-of the control request structure when the length is 0.
-
-Reported-and-tested-by: syzbot+ce77725b89b7bd52425c@syzkaller.appspotmail.com
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/linux-usb/000000000000716a3705f9adb8ee@google.com/
-CC: <stable@vger.kernel.org>
-
----
-
- drivers/usb/class/usbtmc.c |    2 ++
- 1 file changed, 2 insertions(+)
-
-Index: usb-devel/drivers/usb/class/usbtmc.c
+Index: usb-devel/drivers/usb/core/file.c
 ===================================================================
---- usb-devel.orig/drivers/usb/class/usbtmc.c
-+++ usb-devel/drivers/usb/class/usbtmc.c
-@@ -1928,6 +1928,8 @@ static int usbtmc_ioctl_request(struct u
+--- usb-devel.orig/drivers/usb/core/file.c
++++ usb-devel/drivers/usb/core/file.c
+@@ -209,6 +209,8 @@ int usb_register_dev(struct usb_interfac
+ 		retval = PTR_ERR(intf->usb_dev);
+ 	}
+ 	up_write(&minor_rwsem);
++	dev_info(&intf->dev, "Post class create: refcount %d\n",
++			atomic_read(&usb_class->kref.refcount.refs));
+ 	return retval;
+ }
+ EXPORT_SYMBOL_GPL(usb_register_dev);
+@@ -242,6 +244,8 @@ void usb_deregister_dev(struct usb_inter
  
- 	if (request.req.wLength > USBTMC_BUFSIZE)
- 		return -EMSGSIZE;
-+	if (request.req.wLength == 0)	/* Length-0 requests are never IN */
-+		request.req.bRequestType &= ~USB_DIR_IN;
- 
- 	is_in = request.req.bRequestType & USB_DIR_IN;
- 
+ 	intf->usb_dev = NULL;
+ 	intf->minor = -1;
++	dev_info(&intf->dev, "Pre class destroy: refcount %d\n",
++			atomic_read(&usb_class->kref.refcount.refs));
+ 	destroy_usb_class();
+ }
+ EXPORT_SYMBOL_GPL(usb_deregister_dev);
