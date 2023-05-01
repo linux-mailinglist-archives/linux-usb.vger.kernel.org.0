@@ -2,81 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7906F2EC9
-	for <lists+linux-usb@lfdr.de>; Mon,  1 May 2023 08:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C366F2FC3
+	for <lists+linux-usb@lfdr.de>; Mon,  1 May 2023 11:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232085AbjEAGmL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 May 2023 02:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
+        id S232248AbjEAJGV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 May 2023 05:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjEAGmK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 May 2023 02:42:10 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4661210DB
-        for <linux-usb@vger.kernel.org>; Sun, 30 Apr 2023 23:42:08 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-94f109b1808so440145366b.1
-        for <linux-usb@vger.kernel.org>; Sun, 30 Apr 2023 23:42:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682923327; x=1685515327;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+Ug3ALriauxRZK5BuCGHz3hy7oRHCk3NYUeB/1prBrY=;
-        b=yt4JG8tWk8wAOJfdh9RJqmqYq+roQX5gM6HshQPz6CUcPGCj2zgsoNeviCmkeSK1tu
-         jLH0eWFDXwvPLCM1TByk4uSY7nKHkCqrzb94JchNYgFfM2hVp0DLuwFXaSuzH4p5ViM8
-         SC2eMqgoSPA2hPTDMaOsbRIHPxKsiQmMk1gGwAiLhu7xNqd2SZEiLNZIQcoe4ItIz5pF
-         VMlWNVe6ecfuN7CYfc/8rYbNZ2TPBAt0gV1dDSwiVRCSJCskh6fRup0ZtwYnKmKgoyDT
-         /e2TtOW+gMlHD2EKruh6ByuUhwuzGXvdm2nqF367cylbXkVOH9TW8++pjimXZTr5WjtX
-         /DzA==
+        with ESMTP id S232496AbjEAJGD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 May 2023 05:06:03 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A039410C
+        for <linux-usb@vger.kernel.org>; Mon,  1 May 2023 02:05:52 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-32cb1ba941fso13442255ab.3
+        for <linux-usb@vger.kernel.org>; Mon, 01 May 2023 02:05:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682923327; x=1685515327;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Ug3ALriauxRZK5BuCGHz3hy7oRHCk3NYUeB/1prBrY=;
-        b=KCPvhXMdXlHyW9WyqIHRpKGWJrgivykakYH4Si2C+VY/j/aDW3TjRGHjPW6Ip+qwH3
-         jD2hrnfrtS5R/OowZkToMdEuLXt1vA7qkquObmye0AB9Jfryj461uGHm7kL6ZEBtzaEh
-         lZCflqI6rjR+5Aw7XJ6KTQ9TqemUwtB3FZM5VF/aWMnA4pkIeQ4E8+uHteu3SSJ0XtsD
-         9f7u/xtkgysKyjFkRQ6CUM81zXLGaB9+HAkEqC9l1A1DeOd070Xgv/znlmMGGQuTXMpM
-         6XLsWu7R+bpbo7Fetntq+I73luk2V1Zo3oZOWa7AJXpkxNYyQudDcBcGEaU0uFhWY9vU
-         4ajQ==
-X-Gm-Message-State: AC+VfDzaMF9pWqzjTTIH1TGNdUdCwL+oSSlz5XRXVyZUv+Oj0EQezYfV
-        JbblRssDxdjiaQG7R4D3fYisAg==
-X-Google-Smtp-Source: ACHHUZ4oeAdjiUq5MyBqbc28cNuh/LNOYUFqAHRwLNOTfAIWvWHzI5qhT7JQdltUKNsMvkYD7E9eGA==
-X-Received: by 2002:a17:907:7245:b0:88f:a236:69e6 with SMTP id ds5-20020a170907724500b0088fa23669e6mr10854766ejc.7.1682923326687;
-        Sun, 30 Apr 2023 23:42:06 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:637a:fd0c:58fd:9f00? ([2a02:810d:15c0:828:637a:fd0c:58fd:9f00])
-        by smtp.gmail.com with ESMTPSA id pv22-20020a170907209600b0094f0025983fsm14605371ejb.84.2023.04.30.23.42.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Apr 2023 23:42:06 -0700 (PDT)
-Message-ID: <e9a00e55-e2f5-1f02-56c7-8e12b551867b@linaro.org>
-Date:   Mon, 1 May 2023 08:42:04 +0200
+        d=1e100.net; s=20221208; t=1682931951; x=1685523951;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KhoeRD70on/oigp93ouNpP+4MhwmnlaB7dvFyQVtaVA=;
+        b=K/H+Gy8p6qfqZyH9K6uJduoYKSs/gJas8VROMYVmARFJWTq4IDgyeX+X9KlQSWCOeC
+         6gHgFKBYXj20SEM8OADaDBxjL2LLd0ZQ6PbKfla9043SNb/zzoatrtZOZCM9zSMsdoHy
+         Wq8EbmRSKx2PmDUYNr/wT1Aue5Fj+2K1apgyySvBYZHXltg4Howi9T/iz93ubb1Wjtbc
+         sL7PGJDdk3a2ZLt2IcVSYgl/cTiiPFdNVDf8ydfHdg8AGQFLSm2Ee2qHM/nthSdUws52
+         /k94ewFWYglbavIf0gzfyeAy+5WUXtrsOO8Xdd2CQro4UZht3MPLLwmthA5jSQv8UFvh
+         iRaA==
+X-Gm-Message-State: AC+VfDxd2A6SOWqFd5BBom0/AHNztMIrflLOMizzeC3qV4cBduvN+YPK
+        3JUX/M8LjLaI77EMW7hKpekoV+V+bHT5twTDrpsOrXMmoZcp
+X-Google-Smtp-Source: ACHHUZ6lkXYSSop/rfC6wIAmaqxSYHh1CutB+tEupm397xSb9q97wbZSIr7Uh6hoJ97gwb8udkZylLr2Kk2zhIJrgqN3GjO8p+mM
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 1/6] dt-bindings: usb: qcom,dwc3: Add bindings for
- SA8775P
-Content-Language: en-US
-To:     Shazad Hussain <quic_shazhuss@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     dmitry.baryshkov@linaro.org, athierry@redhat.com, robh@kernel.org,
-        konrad.dybcio@linaro.org, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20230428130824.23803-1-quic_shazhuss@quicinc.com>
- <20230428130824.23803-2-quic_shazhuss@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230428130824.23803-2-quic_shazhuss@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Received: by 2002:a92:ccc8:0:b0:32b:13ad:3e3f with SMTP id
+ u8-20020a92ccc8000000b0032b13ad3e3fmr6690335ilq.3.1682931951513; Mon, 01 May
+ 2023 02:05:51 -0700 (PDT)
+Date:   Mon, 01 May 2023 02:05:51 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000026b5f505fa9e21f1@google.com>
+Subject: [syzbot] Monthly usb report (Apr 2023)
+From:   syzbot <syzbot+list7915d07c2502675e2a16@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,15 +53,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 28/04/2023 15:08, Shazad Hussain wrote:
-> Add the compatible string for SA8775P SoC from Qualcomm.
-> 
-> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
-> ---
+Hello usb maintainers/developers,
 
+This is a 31-day syzbot report for the usb subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/usb
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+During the period, 2 new issues were detected and 4 were fixed.
+In total, 63 issues are still open and 313 have been fixed so far.
 
-Best regards,
-Krzysztof
+Some of the still happening issues:
 
+Ref  Crashes Repro Title
+<1>  2277    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
+                   https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
+<2>  1758    Yes   WARNING in firmware_fallback_sysfs
+                   https://syzkaller.appspot.com/bug?extid=95f2e2439b97575ec3c0
+<3>  1526    Yes   KMSAN: uninit-value in mii_nway_restart
+                   https://syzkaller.appspot.com/bug?extid=1f53a30781af65d2c955
+<4>  801     Yes   WARNING in ar5523_submit_rx_cmd/usb_submit_urb
+                   https://syzkaller.appspot.com/bug?extid=6101b0c732dea13ea55b
+<5>  645     No    INFO: task hung in usb_get_descriptor (2)
+                   https://syzkaller.appspot.com/bug?extid=e8db9d9e65feff8fa471
+<6>  472     Yes   INFO: task hung in usb_register_dev
+                   https://syzkaller.appspot.com/bug?extid=e761775e8f4a28711f19
+<7>  397     Yes   WARNING in smsusb_term_device
+                   https://syzkaller.appspot.com/bug?extid=40ac6e73326e79ee8ecb
+<8>  279     Yes   INFO: task hung in r871xu_dev_remove
+                   https://syzkaller.appspot.com/bug?extid=f39c1dad0b7db49ca4a8
+<9>  258     No    INFO: task hung in usb_deregister_dev
+                   https://syzkaller.appspot.com/bug?extid=4189d5cde8630463053f
+<10> 252     Yes   INFO: task hung in usbdev_open (2)
+                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
