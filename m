@@ -2,100 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC20F6F41D7
-	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 12:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E34D6F41F4
+	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 12:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233657AbjEBKjQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 May 2023 06:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
+        id S233608AbjEBKqA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 May 2023 06:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233888AbjEBKiv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 06:38:51 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F47459F0;
-        Tue,  2 May 2023 03:37:54 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 342AbZoT5026435, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 342AbZoT5026435
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Tue, 2 May 2023 18:37:35 +0800
-Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 2 May 2023 18:37:39 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 2 May 2023 18:37:39 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Tue, 2 May 2023 18:37:39 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v4 2/2] dt-bindings: usb: snps,dwc3: Add the compatible name 'snps,dwc3-rtk-soc'
-Thread-Topic: [PATCH v4 2/2] dt-bindings: usb: snps,dwc3: Add the compatible
- name 'snps,dwc3-rtk-soc'
-Thread-Index: AQHZfLOhYfbzHfxzYE2TNUg+fEIenq9GE1eAgACG7nD//4ryAIAAh9bw//+RWQCAAIlt4A==
-Date:   Tue, 2 May 2023 10:37:39 +0000
-Message-ID: <c44baa9fae5c445c90103cd2e129ab0b@realtek.com>
-References: <20230502050452.27276-1-stanley_chang@realtek.com>
- <20230502050452.27276-2-stanley_chang@realtek.com>
- <2653e0d1-6570-7469-51da-b539b5c14299@linaro.org>
- <bc5cd630d96f44bcaad7f95f2f45aac1@realtek.com>
- <49d2b103-de1e-637a-1bf0-aaba1c6afaf4@linaro.org>
- <a04e70f97bcb48048edb2f6db7bb6c25@realtek.com>
- <f51b4dc9-e1da-7c9c-1e39-c8510569db9d@linaro.org>
-In-Reply-To: <f51b4dc9-e1da-7c9c-1e39-c8510569db9d@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S229457AbjEBKp7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 06:45:59 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28C2193
+        for <linux-usb@vger.kernel.org>; Tue,  2 May 2023 03:45:57 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so4461917a12.1
+        for <linux-usb@vger.kernel.org>; Tue, 02 May 2023 03:45:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683024356; x=1685616356;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2RjKRf4rxtbcC4Sh8zFnfVKYv2B+zGR4PixvmDCtDjQ=;
+        b=S4H0G+L+2uU1rG8lOMfYBkk46EkfFR11eEvSrn5PQ3z8YoATN2a5gCL8nvNoIw/DEm
+         laZDROi5tNLD9YVH/pv/ss/5VBzvIzR/yQ+HlYHgw5fXA83ZgYXJYeAKSMHUCb3pCaGp
+         gPRBwx61THx2FPYpFpyhfAQ4CuKR5xbkB2WWsQYPjIxTd4/r71xcgmu8Q8RhWDxzvt4Z
+         9G/MongLXK1GrANAK7hqdvrRkOR+5Z1jDl/DelppI/4tt0dejDDjc706QB74ZRt5SvZT
+         BFo3pJaP56ZVT9LHJOAFF6X3Hju7u0scsILsPvUpWmbvOKK1iOPwP8PcmisKQbCyrmum
+         Rdsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683024356; x=1685616356;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2RjKRf4rxtbcC4Sh8zFnfVKYv2B+zGR4PixvmDCtDjQ=;
+        b=ht4BJxZaGb/OraUhTg6QivrK3JLmI+fTpf15B0k6ZV29FyD9UNY+QKnTWrsJbkJ1yh
+         nkkY22R4KOdAgdjBQ42XQM3f61datFhMR3hbSGOOv1rUNtIFePlHpXvAj5Dnxc43+BJd
+         glOhFAX5H3qBB7Bju8688lC3nfiZwEQhU9asHiKJQbbJArOD3DYU/2qqMSqmpMBLFLpy
+         UFPpTwqlfGnRiiKvxuD8Pxlxzz0kqp9BbndTCospDbefBOYiCyYkrGrIb7YpvbvLBV7D
+         yRTqpiC5rBQCeNXgWEMriJFo7znP/+XBLsuFvHhI+gnfkMutKUgM1nNa15LtOZVasTGF
+         sTOg==
+X-Gm-Message-State: AC+VfDyC4pdUlDApQR0gYV6uzibC5OzXmsuHCKvBWMbz7olEH9oPxbGc
+        8BXKx8gQaOe/fJmNvGPMIAr24Q==
+X-Google-Smtp-Source: ACHHUZ7j4yYkI9Nc9gpEH5cvzDvZWy/LY1LcCUvSGpVLfs2Wdk7mJ+7jjHCPYGyLlyGRTkohW1yAYg==
+X-Received: by 2002:a17:907:8687:b0:94e:ffab:4ce3 with SMTP id qa7-20020a170907868700b0094effab4ce3mr17024356ejc.32.1683024356305;
+        Tue, 02 May 2023 03:45:56 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:bafd:1283:b136:5f6a? ([2a02:810d:15c0:828:bafd:1283:b136:5f6a])
+        by smtp.gmail.com with ESMTPSA id s22-20020a170906169600b0094f3132cb86sm15798854ejd.40.2023.05.02.03.45.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 03:45:55 -0700 (PDT)
+Message-ID: <c3107648-3041-c6e3-1380-0a2fc354889c@linaro.org>
+Date:   Tue, 2 May 2023 12:45:48 +0200
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v6 04/13] dt-bindings: phy: qcom,sc7180-qmp-usb3-dp-phy:
+ Add input and output ports
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, luca.weiss@fairphone.com,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     caleb.connolly@linaro.org, konrad.dybcio@linaro.org,
+        subbaram@quicinc.com, jackp@quicinc.com, robertom@qti.qualcomm.com
+References: <20230501121111.1058190-1-bryan.odonoghue@linaro.org>
+ <20230501121111.1058190-5-bryan.odonoghue@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230501121111.1058190-5-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgS3J6eXN6dG9mLA0KDQo+ID4+Pj4gT24gMDIvMDUvMjAyMyAwNzowNCwgU3RhbmxleSBDaGFu
-ZyB3cm90ZToNCj4gPj4+Pj4gQWRkIGEgbmV3IGNvbXBhdGlibGUgbmFtZSAnc25wcyxkd2MzLXJ0
-ay1zb2MnIG9mIERUIGZvciByZWFsdGVrDQo+ID4+Pj4+IGR3YzMgY29yZSB0byBhZGp1c3QgdGhl
-IGdsb2JhbCByZWdpc3RlciBzdGFydCBhZGRyZXNzDQo+ID4+Pj4+DQo+ID4+Pj4+IFRoZSBSVEsg
-REhDIFNvQ3Mgd2VyZSBkZXNpZ25lZCwgdGhlIGdsb2JhbCByZWdpc3RlciBhZGRyZXNzIG9mZnNl
-dA0KPiA+Pj4+PiBhdA0KPiA+Pj4+DQo+ID4+Pj4gV2hhdCBhcmU6ICJSVEsiIGFuZCAiREhDIj8g
-VGhlc2UgYXJlIG1hbnVmYWN0dXJlZCBieSBTeW5vcHN5cyBhcw0KPiA+Pj4+IHlvdSBzdWdnZXN0
-IGluIHRoZSBwYXRjaD8NCj4gPj4+DQo+ID4+PiBSVEsgaXMgUmVhbHRlay4NCj4gPj4+IERIQyBp
-cyB0aGUgZGVwYXJ0bWVudCBuYW1lIGluIFJlYWx0ZWsgYW5kIHRoZSBhYmJyZXZpYXRpb24gb2Yg
-dGhlDQo+ID4+PiBEaWdpdGFsDQo+ID4+IEhvbWUgQ2VudGVyLg0KPiA+Pj4gVGhlIFVTQiBjb250
-cm9sbGVyIG9mIFJUSyBESEMgU29DcyB1c2VkIHRoZSBEV0MzIElQIG9mIFN5bm9wc3lzLg0KPiA+
-Pg0KPiA+PiBUaGVuIGVudGlyZSBjb21wYXRpYmxlIGlzIG5vdCBjb3JyZWN0LiBWZW5kb3IgaXMg
-UmVhbHRlayBub3QgU3lub3BzeXMuDQo+ID4+IERIQyBpcyBub3QgZXZlbiBkZXZpY2UgbmFtZS4g
-VXNlIHJlYWwgZGV2aWNlIG5hbWVzLg0KPiA+DQo+ID4gU28sIGNhbiB3ZSB1c2UgdGhlIGNvbXBh
-dGlibGUgbmFtZSBhcyAncmVhbHRlayxkd2MzJyA/DQo+IA0KPiBkd2MzIGlzIG5vdCBhIHJlYWwg
-ZGV2aWNlIG5hbWUgZm9yIFJlYWx0ZWsuDQoNCldlIHN0aWxsIHVzZSBkd2MzIElQIGluIFJlYWx0
-ZWsncyBTb0MuIFdoeSBpcyB0aGUgbmFtZSAiZHdjMyIgaW5hcHByb3ByaWF0ZT8NCg0KU2hvdWxk
-IGNvbXBhdGliaWxpdHkgbmFtZXMgdXNlIHRoZSBTb0MgbmFtZT8NCkZvciBleGFtcGxlLCBvdXIg
-U29DIG5hbWUNClJURDEyOXgsIFJURDEzOXgsIFJURDE2MXgsIFJURDE2MXhCLCBldGMuDQpTaG91
-bGQgd2UgdXNlIHRoZXNlIG5hbWVzIGluIGNvbXBhdGlibGUgbmFtZXM/DQoicmVhbHRlaywgcnRk
-MTI5eCIsICJyZWFsdGVrLCBydGQxMzl4IiwgInJlYWx0ZWssIHJ0ZDE2MXgiLi4uZXRjLg0KDQpU
-aGFua3MsDQpTdGFubGV5DQo=
+On 01/05/2023 14:11, Bryan O'Donoghue wrote:
+> Add a ports declaration which is optional containing two port@
+> declarations.
+> 
+> port@0 to receive an orientation-switch message from the Type-C port or
+> redriver
+> 
+> port@1 to subsequently transmit the orientation-switch on once the PHY has
+> finished doing its orientation turn-around.
+> 
+> If ports is declared the input port port@0 is mandatory but the output
+> port@1 is optional.
+> 
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>  .../phy/qcom,sc7180-qmp-usb3-dp-phy.yaml      | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml
+> index d307343388888..c370b9cd58c2e 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml
+> @@ -65,6 +65,25 @@ properties:
+>      description: Flag the port as possible handler of orientation switching
+>      type: boolean
+>  
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+
+on this level: additionalProperties: false
+(because otherwise it will allow port@2 etc)
+
+
+Best regards,
+Krzysztof
+
