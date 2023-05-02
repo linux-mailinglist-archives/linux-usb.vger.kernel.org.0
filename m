@@ -2,67 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AF66F4229
-	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 13:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC35D6F422C
+	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 13:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233858AbjEBLAu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 May 2023 07:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53674 "EHLO
+        id S233859AbjEBLBb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 May 2023 07:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233855AbjEBLAs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 07:00:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3424749C6
-        for <linux-usb@vger.kernel.org>; Tue,  2 May 2023 04:00:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEAA16230C
-        for <linux-usb@vger.kernel.org>; Tue,  2 May 2023 11:00:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2C1E8C4339B
-        for <linux-usb@vger.kernel.org>; Tue,  2 May 2023 11:00:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683025245;
-        bh=FgZJF4joJ9lheefs0c0bkrptL44rUJeMuHE/cGkCq2w=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=ZrsDBF8xL651mSz5pSt0Eff+J3vdPrbwvgJxH3/Ozui737m4SQsnN/QN5rNluubqL
-         T0LQj1Tn+gbfDuUpOf5SRJ8AgxBgUTeYSdk7dFg+COv+AByxqqk2v3lYY1RO6HLLS8
-         qPMgHiqcA6ndQ1nK6i1gvtVLZ6cmB5LzaiwKjM1OjzyWT2Lr/YXEPRx0t/Y3Z8mHTP
-         oIEXpntzoF/uhl4xRfIJyHp3OE1l3mGygtFIr1GeT7OYppHe134xNHEu+EdyIHvyRM
-         Turx4Eeba627+FDZ5dMnHnass7xfcfjgITgczICItOldx+3/Q3yZT6+k5UED0ERiKI
-         pzyvADcjtXDpw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 1B61CC43145; Tue,  2 May 2023 11:00:45 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216728] Thunderbolt USB Controller died after resume on Intel
- CometLake platform
-Date:   Tue, 02 May 2023 11:00:44 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: Liang.Xiao1@dell.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-216728-208809-MLVqW9aQUr@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216728-208809@https.bugzilla.kernel.org/>
-References: <bug-216728-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S233817AbjEBLB3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 07:01:29 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB13E469B
+        for <linux-usb@vger.kernel.org>; Tue,  2 May 2023 04:01:27 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2a8baeac4d1so36378631fa.1
+        for <linux-usb@vger.kernel.org>; Tue, 02 May 2023 04:01:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683025286; x=1685617286;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3AHG7QyY7Uakdx6REQCYSG7RD4RaqzmrdD7vCsADEuw=;
+        b=MR51foAq/zrcxaAEBdjLcZ5f/OhepH79/4rBiT9OxhDshbb8bYZT6RtQ4oE1X2ukBj
+         /rsI1d3Wu/PMRo3crYuWoYmN3lDrx0E9e3/gtqUbwStUtxQsFPFghNGx7mrwN0YgDSI4
+         FXbfycGAfA8ty93bUs6XRTJqjHKl0DADM5kteuj0rH0AB5XKTOz5p96GomAV0sCNHlAt
+         dzQnsvp19Lr69C3AsXemwRV8YjesuyVbRtidpFDAiN3nzFJu8QfW10PDapR8MqMa5y7k
+         6tiVW5C4P8tnkbdzhZ/IUQNaUihUWA6lqo1L+/9PcgkDDX/ZKBet1lg4j3PAHTBGqVzY
+         fakQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683025286; x=1685617286;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3AHG7QyY7Uakdx6REQCYSG7RD4RaqzmrdD7vCsADEuw=;
+        b=FF3uVYKsiOUgk5QnzdJ2cm0iKKBLNZJrU1s6vakExj6u/cQvMZVG/cnhmCsvNzGZBY
+         63tVtAyJ2CUe6+QTYXm4wXhw5jDTrOShI/NALpmeCHzG4H01kXwhtGsBKBUltKcVTH+7
+         lzfU6CUr/IuoOdSyj4+bK7hQw2unDyIc1KgLHJNXslEyzHu9DCfxPGSn1IzPoJnNM7A+
+         9Ul1cR0i5fXNM1tlILsBBsd9Eymi9ha8n+dQhVW8VEO9rWPRRlnO6uViFI2H0p1IJ4wt
+         oWX+ufbJkR8prdg21bsHTCvBOHncp/pOIVE5mHwwr78F6Xl+d6zqkIz5yATzGEBeBEmi
+         y7Yg==
+X-Gm-Message-State: AC+VfDyPjbz/MR6QslIelK3/z61dQoXXKn2i3R5iiDf7LekCEHkBpZeg
+        Kse0tvMwCldIoOkU0bhoBkdZYg==
+X-Google-Smtp-Source: ACHHUZ4gCQgkWoSRtBReko1joJOgCQi75hy+YTkIVExaO1jeKusCQ4URppbt/NV8ey8OWNhUtEpd3Q==
+X-Received: by 2002:a2e:7818:0:b0:2a8:baab:fb2e with SMTP id t24-20020a2e7818000000b002a8baabfb2emr4785110ljc.47.1683025285988;
+        Tue, 02 May 2023 04:01:25 -0700 (PDT)
+Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
+        by smtp.gmail.com with ESMTPSA id z17-20020a2e8e91000000b002a8a77f4d03sm5280365ljk.59.2023.05.02.04.01.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 04:01:25 -0700 (PDT)
+Message-ID: <62f14bec-c293-7e62-50af-9d87be5853b7@linaro.org>
+Date:   Tue, 2 May 2023 13:01:23 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v6 13/13] arm64: dts: qcom: qrb5165-rb5: Switch on TCPM
+ orientation-switch for usb_1_qmpphy
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, luca.weiss@fairphone.com,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     caleb.connolly@linaro.org, subbaram@quicinc.com, jackp@quicinc.com,
+        robertom@qti.qualcomm.com
+References: <20230501121111.1058190-1-bryan.odonoghue@linaro.org>
+ <20230501121111.1058190-14-bryan.odonoghue@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230501121111.1058190-14-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,20 +81,51 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216728
 
---- Comment #29 from Liang.Xiao1@dell.com ---
-Hi Dear Sender,
-I'm OoO for Labor Day Holiday during 4/29 ~ 5/5 without email access, please
-expect my delay response.
 
-Sorry for inconvinence.
+On 1.05.2023 14:11, Bryan O'Donoghue wrote:
+> Switch on USB orientation-switching for usb_1_qmp via TCPM. Detecting the
+> orientation switch is required to get the PHY to reset and bring-up the PHY
+> with the CC lines set to the appropriate lane.
+> 
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> index b5cc45358a474..8935a8e327904 100644
+> --- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> +++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> @@ -1295,6 +1295,14 @@ &usb_1_qmpphy {
+>  
+>  	vdda-phy-supply = <&vreg_l9a_1p2>;
+>  	vdda-pll-supply = <&vreg_l18a_0p92>;
+> +	orientation-switch;
+> +	ports {
+> +		port@1 {
+> +			qmpphy_typec_mux_in: endpoint {
+You defined these ports in patch 6, you can simply reference the
+labels and assign endpoints.
 
-Thanks
-/Liang
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Konrad
+> +				remote-endpoint = <&pm8150b_typec_mux_out>;
+> +			};
+> +		};
+> +	};
+>  };
+>  
+>  &usb_2 {
+> @@ -1375,6 +1383,12 @@ pm8150b_role_switch_out: endpoint {
+>  					remote-endpoint = <&dwc3_role_switch_in>;
+>  				};
+>  			};
+> +			port@1 {
+> +				reg = <1>;
+> +				pm8150b_typec_mux_out: endpoint {
+> +					remote-endpoint = <&qmpphy_typec_mux_in>;
+> +				};
+> +			};
+>  		};
+>  	};
+>  };
