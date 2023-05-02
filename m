@@ -2,88 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A39186F43B3
-	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 14:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A33F26F43E3
+	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 14:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233737AbjEBMXN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 May 2023 08:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
+        id S234127AbjEBM2c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 May 2023 08:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEBMXM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 08:23:12 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608F7F5;
-        Tue,  2 May 2023 05:23:10 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 1CF3B1F8BE;
-        Tue,  2 May 2023 12:23:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1683030189; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rpq/YOA2Q6NcOyBEqPAtPKwqdnVr3RL2S8jyTOYKx38=;
-        b=E5aokJVmN+jHpsNd8DP9p105k0emCQTSinruXmu1ftje8AFOFPqifHIr20RRU45v5R0EkX
-        3+6Ybnq8FpRRlcJ1+403QG6JiojNfSG/tigO1MGc3nD2+PDhHJvBGzWMuSG//jEr46Xoap
-        qvMgIEcWCV64sDbPjzXHNLVvQHEWqnU=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 231412C141;
-        Tue,  2 May 2023 12:23:08 +0000 (UTC)
-Date:   Tue, 2 May 2023 14:23:07 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Konrad =?iso-8859-1?Q?Gr=E4fe?= <k.graefe@gateware.de>,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        with ESMTP id S233998AbjEBM2b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 08:28:31 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A0912C;
+        Tue,  2 May 2023 05:28:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683030510; x=1714566510;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pVyqURKJmfYfAEdHqOhsTYfJHIgtzPIa63rM74G0UvM=;
+  b=Xy5QnxD/f8vrtHbq3UvFrdSlUlSL8vrbwhWGUJ3NaBkMJphVtAq4pPed
+   QZrOEkLTfupbCcyvDYapJoS+HUyu1IqvjokweM1Y9UWgwG+kBTCqi7oOV
+   9BcqkvjjLtU4TheBddpgZeH3bpohTyb+rA9bX/btQZ8aey2qmZNT6W/Mo
+   KhrAWIQdCrz+qMzdhi6r1Yg8ho8T0LOQF70IbAqyJZN2mWQzWINcZZPM3
+   Kirm996jwa+k3Vbvovvjx+cNJD9//OYDjKi8QIOX8tbvV3qOinrePcdok
+   4pwrunEnLH+9jRQ4hSFxGBekfDwXDbXp+jXtmSxSB78lK0ZqGx/wpyPM4
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="413825454"
+X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
+   d="scan'208";a="413825454"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 05:28:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="840277781"
+X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
+   d="scan'208";a="840277781"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 02 May 2023 05:28:24 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ptp7H-00012g-1B;
+        Tue, 02 May 2023 12:28:23 +0000
+Date:   Tue, 2 May 2023 20:27:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Felipe Balbi <balbi@ti.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
-Message-ID: <ZFEAq7r-awo0OYzp@alley>
-References: <2023042625-rendition-distort-fe06@gregkh>
- <20230427115120.241954-1-k.graefe@gateware.de>
- <c075b668-8194-6aea-484c-0223f164cb4d@rasmusvillemoes.dk>
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
+        quic_harshq@quicinc.com, ahalaney@redhat.com,
+        quic_shazhuss@quicinc.com,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: Re: [PATCH v7 3/9] usb: dwc3: core: Access XHCI address space
+ temporarily to read port info
+Message-ID: <202305022053.Tqtl2ROK-lkp@intel.com>
+References: <20230501143445.3851-4-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c075b668-8194-6aea-484c-0223f164cb4d@rasmusvillemoes.dk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230501143445.3851-4-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri 2023-04-28 08:56:59, Rasmus Villemoes wrote:
-> On 27/04/2023 13.51, Konrad Gräfe wrote:
-> > The CDC-ECM specification requires an USB gadget to send the host MAC
-> > address as uppercase hex string. This change adds the appropriate
-> > modifier.
-> 
-> Thinking more about it, I'm not sure this is appropriate, not for a
-> single user like this. vsprintf() should not and cannot satisfy all
-> possible string formatting requirements for the whole kernel. The %pX
-> extensions are convenient for use with printk() and friends where one
-> needs what in other languages would be "string interpolation" (because
-> then the caller doesn't need to deal with temporary stack buffers and
-> pass them as %s arguments), but for single items like this, snprintf()
-> is not necessarily the right tool for the job.
->
-> In this case, the caller can just as well call string_upper() on the
-> result
+Hi Krishna,
 
-I tend to agree with Rasmus. string_upper() is a super-easy solution.
-One user does not look worth adding all the churn into vsprintf().
+kernel test robot noticed the following build warnings:
 
-Best Regards,
-Petr
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus linus/master next-20230428]
+[cannot apply to robh/for-next v6.3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Kurapati/dt-bindings-usb-qcom-dwc3-Add-bindings-for-SC8280-Multiport/20230501-224209
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230501143445.3851-4-quic_kriskura%40quicinc.com
+patch subject: [PATCH v7 3/9] usb: dwc3: core: Access XHCI address space temporarily to read port info
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/840e9a485800cf72e5fbf4dca1aaf92085aad584
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Krishna-Kurapati/dt-bindings-usb-qcom-dwc3-Add-bindings-for-SC8280-Multiport/20230501-224209
+        git checkout 840e9a485800cf72e5fbf4dca1aaf92085aad584
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305022053.Tqtl2ROK-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Documentation/driver-api/usb/dwc3:687: ./drivers/usb/dwc3/core.h:1674: WARNING: Unexpected indentation.
+>> Documentation/driver-api/usb/dwc3:687: ./drivers/usb/dwc3/core.h:1675: WARNING: Block quote ends without a blank line; unexpected unindent.
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
