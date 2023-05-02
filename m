@@ -2,79 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E976F3F73
-	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 10:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 624D66F3F91
+	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 10:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233926AbjEBIpS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 May 2023 04:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
+        id S233946AbjEBItO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 May 2023 04:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbjEBIpA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 04:45:00 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60834EDB
-        for <linux-usb@vger.kernel.org>; Tue,  2 May 2023 01:44:57 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bc4ba28cbso3647820a12.0
-        for <linux-usb@vger.kernel.org>; Tue, 02 May 2023 01:44:57 -0700 (PDT)
+        with ESMTP id S233654AbjEBIsp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 04:48:45 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7DC46AF
+        for <linux-usb@vger.kernel.org>; Tue,  2 May 2023 01:47:41 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50bcb229adaso2289046a12.2
+        for <linux-usb@vger.kernel.org>; Tue, 02 May 2023 01:47:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683017096; x=1685609096;
+        d=linaro.org; s=google; t=1683017260; x=1685609260;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=brUDPgOvzwj8MygKH5XVldqWhb9T2TXDISFxJEfAkvQ=;
-        b=jRph/bcjoY17ZpsA49xJ/ytd6O7vBZe2QNqNBSpFhbYWL4jinY8HGILkKxDo9ZOqeX
-         zNcxRilPb0F2spiToCrTHb4sSP+ZV0kQ5uJOxGlYieK0raWoP6KSDzgV+BZ7QoPouxdF
-         rYn/CETJF5xOl73Tju4KUEQtFpHd9bLn/UR26fTW7Nu0pcNdEeuauWZCW/uzt5iZgjRF
-         oxWsuvINeYvAg8jiq7c1uOuYEJFhVCgexrUCSb01PErMnPuPorhP5H7Zrm/E78x3ZiU7
-         ZEUjZnfSb4LQUalvBnhiig7L5pco4TjHlwdfvEB2GhXuiHskodW7pJmNeYjBf8Nj6YPf
-         pulw==
+        bh=sCflCmx5CoveGF/v/9+Y+5fkMVwZkJVQ2C0NfAviXuo=;
+        b=jfSZLnSQ7eGu+JLRyXFjIPROXJzAOkbNbawnzcyHatN1RxRnbULg5LNS9bPF4m+9VA
+         FdWsLO4VWRYqChh1hWTldOX5pfkl4riNFSSSWrI8Cn0b5SuDynZrZu13khAQ/NVQx6My
+         JVeLBMBlgvVdz2b2Z7Zt3fy8zqVOAYXnU3SjhekdwxngD4ZktHm+EoLDiHByfDfpL2Nd
+         ZVDH1oQdqsFUkwYyo8Fx63S12c8GDvh8w7+Rc+MK9rJ+84IAjB2HXNNUaZdYkK/JeL0D
+         HLvn4UI91CLASIecCEPcPw0mwvc0SRqTu1vUgEyfDiQB1rZzqdXVgmJTWkJF0LTW4IsH
+         yOlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683017096; x=1685609096;
+        d=1e100.net; s=20221208; t=1683017260; x=1685609260;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=brUDPgOvzwj8MygKH5XVldqWhb9T2TXDISFxJEfAkvQ=;
-        b=MbXXt0pWEKWZzkE7TjLvqBy6JsAvRNb9/MqRrAa5ISAGJLxio6jMpm2ccMkjUoP8wd
-         dLz146GOHsnHPqr2jFvEtSVLDxj/Q/bssdq3LuhFz7ljuWNjFaFisfhxbarwv3EPstZf
-         2pcuZRLwGoddPF1d/biIYFXJbfq/R4D02caKdDZ+5g5kZygvy6V7wLqMAOmMfVA4R9VZ
-         nY6XIPcrYZc1kX7KUsI6dnqmCGaSMaE0utsxBXJK0/Mf+uq5tXrUZR/Zp42LQD/DSqNs
-         KLHqAjKJAn7e6tv1e/qQR+eE4zJyPaijXsZ1UkQ0ropowRiNx9TC6Wu4uX+OLbSBHUU7
-         Rn/g==
-X-Gm-Message-State: AC+VfDwMRJuo1wUQF/C8/Ili4eIKDB0P46rY87MHKX/SfNQBaVC68GbC
-        WuHzKJMhVp6gwzeVAxqMh93qiQ==
-X-Google-Smtp-Source: ACHHUZ542NfmR9+d3Go/cLXLumhkt/Q/oJ9K34oLs40NkS5jvHsJP3xBBxIHYYYHLNH34t0rWU6f2A==
-X-Received: by 2002:aa7:c1c3:0:b0:506:82b7:10c3 with SMTP id d3-20020aa7c1c3000000b0050682b710c3mr7217924edp.41.1683017096407;
-        Tue, 02 May 2023 01:44:56 -0700 (PDT)
+        bh=sCflCmx5CoveGF/v/9+Y+5fkMVwZkJVQ2C0NfAviXuo=;
+        b=TFGV2TQsNYMqS3KX9yxavxmzoF33oUQcD2NR9TcR/nIqVu/QkURFRSedIx9f1yJIFp
+         4Ue6GXcDKHOxs4WUfrgTfvf14ilHVJlFeb2I9d2PY57+9jduMi+i/QbFDnddwua/ZaLF
+         htFiHYItjH1cB4QN/T2QLSbOv/oKh3caf4vviKe7aifIFmKK+VAhlDPujnmvQxgS0Lo1
+         5NB5hSheZYGN46MlT/tTduuGQvCRXPloesRTOw6JbIhSBg8c5lGeeNMN2XSD1FfS+Rvr
+         kwWdqjLFmSHpcrVCqFX3UoF7m3C6O194E/6qvCCzZoKi3ttNgLAoP1trVqU6SZkh6T74
+         g+Og==
+X-Gm-Message-State: AC+VfDyhpJI5NUzjag3N12gCTmnU+VnMSMA5HUGMhUxT2CZ+ZYJEF4Gt
+        Ig8t0CignCj78TXAbwwPgyaxUg==
+X-Google-Smtp-Source: ACHHUZ63B0Ahr5OE/6ydoe7FknwEhIFEj7JmTTSg83HbaHGsBbokJ8+Be0zQlKhO6TeLKYXynAHw6Q==
+X-Received: by 2002:a05:6402:1285:b0:506:8838:45cc with SMTP id w5-20020a056402128500b00506883845ccmr7733735edv.6.1683017260075;
+        Tue, 02 May 2023 01:47:40 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:bafd:1283:b136:5f6a? ([2a02:810d:15c0:828:bafd:1283:b136:5f6a])
-        by smtp.gmail.com with ESMTPSA id f12-20020a056402160c00b0050bd427a539sm353071edv.60.2023.05.02.01.44.54
+        by smtp.gmail.com with ESMTPSA id m18-20020a056402051200b0050bcd197549sm887925edv.38.2023.05.02.01.47.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 01:44:55 -0700 (PDT)
-Message-ID: <49d2b103-de1e-637a-1bf0-aaba1c6afaf4@linaro.org>
-Date:   Tue, 2 May 2023 10:44:54 +0200
+        Tue, 02 May 2023 01:47:38 -0700 (PDT)
+Message-ID: <0f2dea5a-b6f7-b659-f41e-55d1777b4dd1@linaro.org>
+Date:   Tue, 2 May 2023 10:47:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.1
-Subject: Re: [PATCH v4 2/2] dt-bindings: usb: snps,dwc3: Add the compatible
- name 'snps,dwc3-rtk-soc'
+Subject: Re: [PATCH v7 1/9] dt-bindings: usb: qcom,dwc3: Add bindings for
+ SC8280 Multiport
 Content-Language: en-US
-To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230502050452.27276-1-stanley_chang@realtek.com>
- <20230502050452.27276-2-stanley_chang@realtek.com>
- <2653e0d1-6570-7469-51da-b539b5c14299@linaro.org>
- <bc5cd630d96f44bcaad7f95f2f45aac1@realtek.com>
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com, quic_shazhuss@quicinc.com
+References: <20230501143445.3851-1-quic_kriskura@quicinc.com>
+ <20230501143445.3851-2-quic_kriskura@quicinc.com>
+ <df24efb2-8279-ef15-a118-2a24885288c8@linaro.org>
+ <a001c9c0-f186-f125-daab-e646790badfe@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <bc5cd630d96f44bcaad7f95f2f45aac1@realtek.com>
+In-Reply-To: <a001c9c0-f186-f125-daab-e646790badfe@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -85,40 +91,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 02/05/2023 10:05, Stanley Chang[昌育德] wrote:
+On 02/05/2023 10:35, Krishna Kurapati PSSNV wrote:
+> 
+> 
+> On 5/2/2023 1:18 PM, Krzysztof Kozlowski wrote:
+>> On 01/05/2023 16:34, Krishna Kurapati wrote:
+>>> Add the compatible string for SC8280 Multiport USB controller from
+>>> Qualcomm.
+>>>
+>>> There are 4 power event irq interrupts supported by this controller
+>>> (one for each port of multiport). Added all the 4 as non-optional
+>>> interrupts for SC8280XP-MP
+>>>
+>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>>> ---
+>>>   .../devicetree/bindings/usb/qcom,dwc3.yaml    | 21 +++++++++++++++++++
+>>>   1 file changed, 21 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>> index d84281926f10..2c96da1ce5b8 100644
+>>> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>> @@ -26,6 +26,7 @@ properties:
+>>>             - qcom,sc7180-dwc3
+>>>             - qcom,sc7280-dwc3
+>>>             - qcom,sc8280xp-dwc3
+>>> +          - qcom,sc8280xp-dwc3-mp
+>>
+>> SC8280xp comes with two USB controllers: one single-port and one multi-port?
+> 
 > Hi Krzysztof,
 > 
->> On 02/05/2023 07:04, Stanley Chang wrote:
->>> Add a new compatible name 'snps,dwc3-rtk-soc' of DT for realtek dwc3
->>> core to adjust the global register start address
->>>
->>> The RTK DHC SoCs were designed, the global register address offset at
->>
->> What are: "RTK" and "DHC"? These are manufactured by Synopsys as you
->> suggest in the patch?
+>    SC8280XP comes with 3 controllers. The first two are single port 
+> controller and the third one is a multiport controller. In DTSI:
+> usb_0 / usb1: have compatible set to : "qcom,sc8280xp-dwc3"
 > 
-> RTK is Realtek.
-> DHC is the department name in Realtek and the abbreviation of the Digital Home Center.
-> The USB controller of RTK DHC SoCs used the DWC3 IP of Synopsys.
+> And multiport controller has it set to "qcom,sc8280xp-dwc3-mp"
 
-Then entire compatible is not correct. Vendor is Realtek not Synopsys.
-DHC is not even device name. Use real device names.
+OK, then this looks fine.
 
-> 
->>> 0x8100. The default address offset is constant at
->>> DWC3_GLOBALS_REGS_START (0xc100). Therefore, add the compatible
->> name
->>> of device-tree to specify the SoC custom's global register start address.
->>>
->>> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
->>
->> Based on your email, rtk could mean Realtek, so the compatible is clearly
->> wrong.
-> 
-> The compatible name "snps,dwc3-rtk-soc" wants to represent the dwc3 driver, which requires a different offset for Realtek SoCs
-
-No. The compatible represents hardware, not driver. Use compatible
-matching real hardware.
+Please add the compatible to existing allOf:if:then to constrain clocks
+and other pieces. If none of existing if:then: matches your case, add
+new one.
 
 Best regards,
 Krzysztof
