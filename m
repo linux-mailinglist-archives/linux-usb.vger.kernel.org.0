@@ -2,185 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 807A46F483C
-	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 18:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F409F6F49E8
+	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 20:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233961AbjEBQVs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 May 2023 12:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49900 "EHLO
+        id S229511AbjEBStz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 May 2023 14:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233865AbjEBQVr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 12:21:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E17A1FCF;
-        Tue,  2 May 2023 09:21:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0E966269A;
-        Tue,  2 May 2023 16:21:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2944BC433D2;
-        Tue,  2 May 2023 16:21:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683044505;
-        bh=b9tefdzOc1bWXV5kmOP1p0fNq2clTQHh+ZqUpM8gGtg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V9oxEH7Qn0fCfI1+zCTzDe/iIXyCxd64aiBIgCh6iRUrhVaF2rwAeOFcM5nXMx+7/
-         mRAz5rgyfKMuve8fFY/FG0k1sNdWHwVm+godXEMbfIZZuUPFoq+D8z8E0Ibx/hFoZT
-         TVLG5suliIe/RNSHfsjwuUYjwtj+h3SIkOFAal4ZhqSMXVYDw4OVnOxDxpOB9MSQBg
-         FiVK1OpwroNWsRx6+pZqoj3qaRN8ijybOkqPJJlBvWCKeTvkBZC4OJnCf7EvmhslSX
-         VIFiN1g7+Z/wYOQcexnbeZlYus3faAeOtQnx1MdRfWN/Tc7Qn24Tr+xXuhXn0LhegF
-         HlfBJn0n5u6aQ==
-From:   Roger Quadros <rogerq@kernel.org>
-To:     Thinh.Nguyen@synopsys.com
-Cc:     gregkh@linuxfoundation.org, r-gunasekaran@ti.com, srk@ti.com,
-        wcheng@codeaurora.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Roger Quadros <rogerq@kernel.org>,
-        stable@vger.kernel.org
-Subject: [PATCH v2 2/2] usb: dwc3: gadget: Improve dwc3_gadget_suspend() and dwc3_gadget_resume()
-Date:   Tue,  2 May 2023 19:21:33 +0300
-Message-Id: <20230502162133.148821-3-rogerq@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230502162133.148821-1-rogerq@kernel.org>
-References: <20230502162133.148821-1-rogerq@kernel.org>
+        with ESMTP id S229458AbjEBSty (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 14:49:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F7F10CF
+        for <linux-usb@vger.kernel.org>; Tue,  2 May 2023 11:49:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683053349;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DZ0W+FU8PsLfAAZv9zbz/cngBwAlCp+YIRm01kljAiE=;
+        b=GQIY2+KDbcuIxxBJwCVDnVWBN9AOghKkGJnbtIdb3t3/Y/QKkvoRa2Q2JDdqOuqzhlRqc6
+        bPgfj/4Ci0E6a/4rhcWLRLfpDZWQpegYZgTOByGBow+n9acoQLEP9ayPAR1t3hsYUrsBem
+        Vms+VtrPOFVv1EYYwJeFVRUxsLSPlCc=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-540-XRaZjwk7N82_tFDDnRFIQA-1; Tue, 02 May 2023 14:49:06 -0400
+X-MC-Unique: XRaZjwk7N82_tFDDnRFIQA-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-61a66010dd7so16064716d6.3
+        for <linux-usb@vger.kernel.org>; Tue, 02 May 2023 11:49:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683053346; x=1685645346;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DZ0W+FU8PsLfAAZv9zbz/cngBwAlCp+YIRm01kljAiE=;
+        b=VNVYO6o2WpFzHu+0vao0xSypeTixkLrcacs8GhZvkzeeLKy+65crZ/N4VKHgDmMpOQ
+         2NV/AF3KdcaLC7hH3+X5a22YXNVjm4Ak2l9oqaha1O+SONOUWhSzNgifDeqYGRyHpriy
+         0S0b3tVEY4c8jcUMrL4nVL/RMpDmJR6wXS+V8cEJ3IkenNP/on4jbVw9HhHSub4z7D6d
+         wUZptRSVTKcLmNA0lA995OB7iaHlc8g4fFwhhzns18+AI0fTf0ZwLQ2WftieR9JgeAM+
+         dZzIgq/vuiNBGxBsmaqHAzlNq30Ds0s5qzJ+eRYxK+Cg79aysQKFvH4NsLAWQklkp0ZF
+         Ge2A==
+X-Gm-Message-State: AC+VfDxOYzUrdJIGegi+IZx67fvKPvEFep5Hdn7R9mi0S1pAj+XFkZa6
+        CjRZYnTKDDYUjPSBtzaJ6KIhVXl5jTXi0cX4TuqtuLobulWXDQgX7BySgSjwhRNpxH1/3CIKagg
+        qqfZLRBt2HjuOFFFIUr+x
+X-Received: by 2002:ad4:596b:0:b0:616:5c8b:59d with SMTP id eq11-20020ad4596b000000b006165c8b059dmr6197873qvb.20.1683053346391;
+        Tue, 02 May 2023 11:49:06 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5Wy2JnTAhWuNet9cEToNtvnh6Rgxw5wsbBieiyINBFnufP8DZTowekkRqdmisuq2+jBHV9JA==
+X-Received: by 2002:ad4:596b:0:b0:616:5c8b:59d with SMTP id eq11-20020ad4596b000000b006165c8b059dmr6197852qvb.20.1683053346170;
+        Tue, 02 May 2023 11:49:06 -0700 (PDT)
+Received: from fedora (modemcable181.5-202-24.mc.videotron.ca. [24.202.5.181])
+        by smtp.gmail.com with ESMTPSA id y10-20020ad445aa000000b006057140e017sm9063235qvu.89.2023.05.02.11.49.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 May 2023 11:49:05 -0700 (PDT)
+Date:   Tue, 2 May 2023 14:49:03 -0400
+From:   Adrien Thierry <athierry@redhat.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Shazad Hussain <quic_shazhuss@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1 0/6] arm64: qcom: sa8775p: add support for USB
+Message-ID: <ZFFbH7bH0pCDdoN1@fedora>
+References: <20230421133922.8520-1-quic_shazhuss@quicinc.com>
+ <ZEcEGJiikEC2wIVE@fedora>
+ <CAA8EJpr27=2jAXbamN6J7yF+7G=L5Af8+XReB5UnFuihcEwMQA@mail.gmail.com>
+ <ZEgV+H3yZLp48Dlc@fedora>
+ <3dc6e993-bcca-4e0d-5aca-686fcc8b5b73@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3dc6e993-bcca-4e0d-5aca-686fcc8b5b73@linaro.org>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Prevent -ETIMEDOUT error on .suspend().
-e.g. If gadget driver is loaded and we are connected to a USB host,
-all transfers must be stopped before stopping the controller else
-we will not get a clean stop i.e. dwc3_gadget_run_stop() will take
-several seconds to complete and will return -ETIMEDOUT.
+Hi Dmitry,
 
-Handle error cases properly in dwc3_gadget_suspend().
-Simplify dwc3_gadget_resume() by using the introduced helper function.
+On Sat, Apr 29, 2023 at 12:41:39AM +0300, Dmitry Baryshkov wrote:
+> On 25/04/2023 21:03, Adrien Thierry wrote:
+> > Hi Dmitry,
+> > 
+> > > Semi-random suggestion, but could you please try using
+> > > clk_regmap_phy_mux/clk_regmap_phy_mux_ops for USB pipe clk src?
+> > 
+> > Which specific clock are you refering to? I'm not very familiar with
+> > those, in the device tree I'm seeing "pipe" clocks for usb_0 and usb_1
+> > phys, but not for usb_2, which is the one that's causing issues.
+> > 
+> 
+> Ah, I see. Could you please try adding the 'qcom,select-utmi-as-pipe-clk'
+> property to the usb_2 host node and running the test again?
+>
 
-Fixes: 9f8a67b65a49 ("usb: dwc3: gadget: fix gadget suspend/resume")
-Cc: stable@vger.kernel.org
-Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Roger Quadros <rogerq@kernel.org>
----
- drivers/usb/dwc3/gadget.c | 66 +++++++++++++++++++--------------------
- 1 file changed, 33 insertions(+), 33 deletions(-)
+Thanks for the suggestion. I tested this but unfortunately the issue is
+still happening.
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index b5170374cd18..869f1695565d 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2699,6 +2699,21 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
- 	return ret;
- }
- 
-+static int dwc3_gadget_soft_connect(struct dwc3 *dwc)
-+{
-+	/*
-+	 * In the Synopsys DWC_usb31 1.90a programming guide section
-+	 * 4.1.9, it specifies that for a reconnect after a
-+	 * device-initiated disconnect requires a core soft reset
-+	 * (DCTL.CSftRst) before enabling the run/stop bit.
-+	 */
-+	dwc3_core_soft_reset(dwc);
-+
-+	dwc3_event_buffers_setup(dwc);
-+	__dwc3_gadget_start(dwc);
-+	return dwc3_gadget_run_stop(dwc, true);
-+}
-+
- static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- {
- 	struct dwc3		*dwc = gadget_to_dwc(g);
-@@ -2737,21 +2752,10 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- 
- 	synchronize_irq(dwc->irq_gadget);
- 
--	if (!is_on) {
-+	if (!is_on)
- 		ret = dwc3_gadget_soft_disconnect(dwc);
--	} else {
--		/*
--		 * In the Synopsys DWC_usb31 1.90a programming guide section
--		 * 4.1.9, it specifies that for a reconnect after a
--		 * device-initiated disconnect requires a core soft reset
--		 * (DCTL.CSftRst) before enabling the run/stop bit.
--		 */
--		dwc3_core_soft_reset(dwc);
--
--		dwc3_event_buffers_setup(dwc);
--		__dwc3_gadget_start(dwc);
--		ret = dwc3_gadget_run_stop(dwc, true);
--	}
-+	else
-+		ret = dwc3_gadget_soft_connect(dwc);
- 
- 	pm_runtime_put(dwc->dev);
- 
-@@ -4655,42 +4659,38 @@ void dwc3_gadget_exit(struct dwc3 *dwc)
- int dwc3_gadget_suspend(struct dwc3 *dwc)
- {
- 	unsigned long flags;
-+	int ret;
- 
- 	if (!dwc->gadget_driver || !dwc->softconnect)
- 		return 0;
- 
--	dwc3_gadget_run_stop(dwc, false);
-+	ret = dwc3_gadget_soft_disconnect(dwc);
-+	if (ret)
-+		goto err;
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	dwc3_disconnect_gadget(dwc);
--	__dwc3_gadget_stop(dwc);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
- 	return 0;
-+
-+err:
-+	/*
-+	 * Attempt to reset the controller's state. Likely no
-+	 * communication can be established until the host
-+	 * performs a port reset.
-+	 */
-+	dwc3_gadget_soft_connect(dwc);
-+
-+	return ret;
- }
- 
- int dwc3_gadget_resume(struct dwc3 *dwc)
- {
--	int			ret;
--
- 	if (!dwc->gadget_driver || !dwc->softconnect)
- 		return 0;
- 
--	ret = __dwc3_gadget_start(dwc);
--	if (ret < 0)
--		goto err0;
--
--	ret = dwc3_gadget_run_stop(dwc, true);
--	if (ret < 0)
--		goto err1;
--
--	return 0;
--
--err1:
--	__dwc3_gadget_stop(dwc);
--
--err0:
--	return ret;
-+	return dwc3_gadget_soft_connect(dwc);
- }
- 
- void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
--- 
-2.34.1
+Best,
+
+Adrien
 
