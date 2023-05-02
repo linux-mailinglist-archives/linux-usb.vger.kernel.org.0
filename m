@@ -2,129 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915C36F3837
-	for <lists+linux-usb@lfdr.de>; Mon,  1 May 2023 21:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 581B96F3C70
+	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 05:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233342AbjEATi0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 May 2023 15:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
+        id S233271AbjEBDhY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 May 2023 23:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233361AbjEAThx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 May 2023 15:37:53 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79722D4B
-        for <linux-usb@vger.kernel.org>; Mon,  1 May 2023 12:37:24 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-32ad2e6cf31so45106245ab.2
-        for <linux-usb@vger.kernel.org>; Mon, 01 May 2023 12:37:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682969844; x=1685561844;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lL9+eqzTbFpszMPAGwdcjGQPxkrmAwjR3imb9BQU1Bw=;
-        b=fGhJZtuYQtVmFdIxNTgU2YsRbzWCEdDODsBBO6YLxkwVWzryjxy4OsyDcYje+scMRK
-         kbBtutVNbzwrNlCqnp1V3JVhceRYm1/clb7NZCRgHQYY7J087DOOIWN6CPKFpVdLCL0t
-         HYZpYZUsTMhXbndxWP6JjPPixDVt+845Q1AIULdXvwYATzZ3x2jqTh9xL15DK0AKhSHb
-         FUW1AdsTHNC5WM4E8kCYxVa3zmuY+bDnUJDuaWNvEvCLnjW+IHR45MmZDi4K04lnNIT6
-         pP0+aeR0WV4pUMrpxSerbL+gKsujLfWnrx90xQ5OyuMqj+R9WHyS6rfZIuZrhYqpB4eP
-         71zA==
-X-Gm-Message-State: AC+VfDxTANxEgs/0PuvZYwPLRc7pWUk4pWyY7vdVPXR3LfItdN+TkKJX
-        wRfnLX+euWCyadHqzPfzcH3iMAFbqjlxMf4Ofm7c8U5LCgdf
-X-Google-Smtp-Source: ACHHUZ4NBYTE8DBwA4VTr98R6VfDE0D0c+ThHQpBTEHd9wAKkzWpbjKXrNp1F+aBCSrkvxfFNE01C+4tYUJkYCQsymPazlo6gNRb
+        with ESMTP id S232790AbjEBDhX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 May 2023 23:37:23 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D7C19BB;
+        Mon,  1 May 2023 20:37:22 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3423b3PX1017557, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3423b3PX1017557
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Tue, 2 May 2023 11:37:03 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Tue, 2 May 2023 11:36:58 +0800
+Received: from fc34.localdomain (172.22.228.98) by RTEXMBS04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Tue, 2 May 2023
+ 11:36:57 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     <kuba@kernel.org>, <davem@davemloft.net>
+CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Hayes Wang <hayeswang@realtek.com>
+Subject: [PATCH net] r8152: fix the autosuspend doesn't work
+Date:   Tue, 2 May 2023 11:36:27 +0800
+Message-ID: <20230502033627.2795-413-nic_swsd@realtek.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:cf42:0:b0:32b:7087:5bc1 with SMTP id
- c2-20020a92cf42000000b0032b70875bc1mr7937628ilr.2.1682969844210; Mon, 01 May
- 2023 12:37:24 -0700 (PDT)
-Date:   Mon, 01 May 2023 12:37:24 -0700
-In-Reply-To: <ba18f241-72ef-4d10-acaf-5fc34edbd695@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bb868005faa6f31a@google.com>
-Subject: Re: [syzbot] [usb?] memory leak in class_create
-From:   syzbot <syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, rafael@kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.22.228.98]
+X-ClientProxiedBy: RTEXH36505.realtek.com.tw (172.21.6.25) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Set supports_autosuspend = 1 for the rtl8152_cfgselector_driver.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-memory leak in class_create
+Fixes: ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
+Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+---
+ drivers/net/usb/r8152.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-BUG: memory leak
-unreferenced object 0xffff88810a6af480 (size 96):
-  comm "kworker/0:2", pid 1755, jiffies 4294944661 (age 9.520s)
-  hex dump (first 32 bytes):
-    c7 03 9b 85 ff ff ff ff 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff81544e14>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff82b65445>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff82b65445>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff82b65445>] class_create+0x25/0x90 drivers/base/class.c:261
-    [<ffffffff831f7a9b>] init_usb_class drivers/usb/core/file.c:91 [inline]
-    [<ffffffff831f7a9b>] usb_register_dev+0x2ab/0x3e0 drivers/usb/core/file.c:179
-    [<ffffffff832cfff4>] usblp_probe+0x4e4/0x750 drivers/usb/class/usblp.c:1208
-    [<ffffffff831f39a9>] usb_probe_interface+0x179/0x3c0 drivers/usb/core/driver.c:396
-    [<ffffffff82b62d7d>] call_driver_probe drivers/base/dd.c:579 [inline]
-    [<ffffffff82b62d7d>] really_probe+0x12d/0x430 drivers/base/dd.c:658
-    [<ffffffff82b63141>] __driver_probe_device+0xc1/0x1a0 drivers/base/dd.c:800
-    [<ffffffff82b6324a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:830
-    [<ffffffff82b6343b>] __device_attach_driver+0xfb/0x150 drivers/base/dd.c:958
-    [<ffffffff82b60191>] bus_for_each_drv+0xc1/0x110 drivers/base/bus.c:457
-    [<ffffffff82b63962>] __device_attach+0x102/0x2a0 drivers/base/dd.c:1030
-    [<ffffffff82b618fa>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
-    [<ffffffff82b5def3>] device_add+0x993/0xc60 drivers/base/core.c:3625
-    [<ffffffff831f0a89>] usb_set_configuration+0x9a9/0xc90 drivers/usb/core/message.c:2211
-    [<ffffffff832033d1>] usb_generic_driver_probe+0xa1/0x100 drivers/usb/core/generic.c:238
-    [<ffffffff831f3080>] usb_probe_device+0x60/0x140 drivers/usb/core/driver.c:293
-
-BUG: memory leak
-unreferenced object 0xffff888114088c00 (size 512):
-  comm "kworker/0:2", pid 1755, jiffies 4294944661 (age 9.520s)
-  hex dump (first 32 bytes):
-    00 8c 08 14 81 88 ff ff 00 8c 08 14 81 88 ff ff  ................
-    00 00 00 00 00 00 00 00 c7 03 9b 85 ff ff ff ff  ................
-  backtrace:
-    [<ffffffff81544e14>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff82b65308>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff82b65308>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff82b65308>] class_register+0x28/0x140 drivers/base/class.c:186
-    [<ffffffff82b65467>] class_create+0x47/0x90 drivers/base/class.c:270
-    [<ffffffff831f7a9b>] init_usb_class drivers/usb/core/file.c:91 [inline]
-    [<ffffffff831f7a9b>] usb_register_dev+0x2ab/0x3e0 drivers/usb/core/file.c:179
-    [<ffffffff832cfff4>] usblp_probe+0x4e4/0x750 drivers/usb/class/usblp.c:1208
-    [<ffffffff831f39a9>] usb_probe_interface+0x179/0x3c0 drivers/usb/core/driver.c:396
-    [<ffffffff82b62d7d>] call_driver_probe drivers/base/dd.c:579 [inline]
-    [<ffffffff82b62d7d>] really_probe+0x12d/0x430 drivers/base/dd.c:658
-    [<ffffffff82b63141>] __driver_probe_device+0xc1/0x1a0 drivers/base/dd.c:800
-    [<ffffffff82b6324a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:830
-    [<ffffffff82b6343b>] __device_attach_driver+0xfb/0x150 drivers/base/dd.c:958
-    [<ffffffff82b60191>] bus_for_each_drv+0xc1/0x110 drivers/base/bus.c:457
-    [<ffffffff82b63962>] __device_attach+0x102/0x2a0 drivers/base/dd.c:1030
-    [<ffffffff82b618fa>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
-    [<ffffffff82b5def3>] device_add+0x993/0xc60 drivers/base/core.c:3625
-    [<ffffffff831f0a89>] usb_set_configuration+0x9a9/0xc90 drivers/usb/core/message.c:2211
-    [<ffffffff832033d1>] usb_generic_driver_probe+0xa1/0x100 drivers/usb/core/generic.c:238
-
-
-
-Tested on:
-
-commit:         22b8cc3e Merge tag 'x86_mm_for_6.4' of git://git.kerne..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=14569d94280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5046ebeca744dd40
-dashboard link: https://syzkaller.appspot.com/bug?extid=e7afd76ad060fa0d2605
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=138259d7c80000
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 755b0f72dd44..0999a58ca9d2 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -9910,6 +9910,7 @@ static struct usb_device_driver rtl8152_cfgselector_driver = {
+ 	.probe =	rtl8152_cfgselector_probe,
+ 	.id_table =	rtl8152_table,
+ 	.generic_subclass = 1,
++	.supports_autosuspend = 1,
+ };
+ 
+ static int __init rtl8152_driver_init(void)
+-- 
+2.40.0
 
