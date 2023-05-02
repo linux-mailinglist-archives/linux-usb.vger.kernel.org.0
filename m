@@ -2,25 +2,25 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C7A6F3F0C
-	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 10:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD106F3F06
+	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 10:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233817AbjEBIVG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 May 2023 04:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
+        id S233774AbjEBITu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 May 2023 04:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233812AbjEBIVE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 04:21:04 -0400
+        with ESMTP id S233786AbjEBITq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 04:19:46 -0400
 Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027724EE9;
-        Tue,  2 May 2023 01:20:48 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D63C4EF6;
+        Tue,  2 May 2023 01:19:33 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 2436024DB84;
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id C7FF124DE41;
         Tue,  2 May 2023 16:18:07 +0800 (CST)
-Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 2 May
+Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 2 May
  2023 16:18:07 +0800
 Received: from ubuntu.localdomain (183.27.99.121) by EXMBX171.cuchost.com
  (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 2 May
@@ -36,10 +36,12 @@ To:     Rob Herring <robh+dt@kernel.org>,
 CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-usb@vger.kernel.org>,
         Minda Chen <minda.chen@starfivetech.com>
-Subject: [PATCH v1 0/2] Add clock and reset in cdns3 platform
-Date:   Tue, 2 May 2023 16:18:03 +0800
-Message-ID: <20230502081805.112149-1-minda.chen@starfivetech.com>
+Subject: [PATCH v1 1/2] dt-binding: cdns,usb3: Add clock and reset
+Date:   Tue, 2 May 2023 16:18:04 +0800
+Message-ID: <20230502081805.112149-2-minda.chen@starfivetech.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230502081805.112149-1-minda.chen@starfivetech.com>
+References: <20230502081805.112149-1-minda.chen@starfivetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [183.27.99.121]
@@ -55,24 +57,37 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The patchset is add generic clock and reset init codes in
-Cadence USBSS controller.
+To support generic clock and reset init in Cadence USBSS
+controller. Add clock and reset dts configuration.
 
-This patchset is base on v6.3-rc4.
+Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+---
+ Documentation/devicetree/bindings/usb/cdns,usb3.yaml | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-patch 1 is add clock and reset dts in cdns3 dt-binding doc.
-patch 2 is cdns3 platform codes changes.
-
-Minda Chen (2):
-  dt-binding: cdns,usb3: Add clock and reset
-  usb: cdns3: cdns3-plat: Add clk and reset init
-
- .../devicetree/bindings/usb/cdns,usb3.yaml    | 12 +++++
- drivers/usb/cdns3/cdns3-plat.c                | 52 +++++++++++++++++++
- drivers/usb/cdns3/core.h                      |  3 ++
- 3 files changed, 67 insertions(+)
-
-
-base-commit: 197b6b60ae7bc51dd0814953c562833143b292aa
+diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+index cae46c4982ad..7bffd8fb1e38 100644
+--- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
++++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+@@ -42,6 +42,18 @@ properties:
+       - const: otg
+       - const: wakeup
+ 
++  clocks:
++    minItems: 1
++
++  clock-names:
++    minItems: 1
++
++  resets:
++    minItems: 1
++
++  reset-names:
++    minItems: 1
++
+   dr_mode:
+     enum: [host, otg, peripheral]
+ 
 -- 
 2.17.1
+
