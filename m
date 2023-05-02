@@ -2,89 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE306F4AD9
-	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 22:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 707D36F4AE6
+	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 22:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjEBUD4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 May 2023 16:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
+        id S229802AbjEBUIM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 May 2023 16:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjEBUDy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 16:03:54 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B809F1997;
-        Tue,  2 May 2023 13:03:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683057829; x=1714593829;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=DyYgu8EaagPkfyeH/Mvma9nZqR7FqJ8nacbfBWhR9Wc=;
-  b=QvHfI0K6mPtT159OUS3L5OZj81wiqTs/FsuptJA5e1VOM4dev3i3+4+b
-   ip3fd0X7lmH3A2MFYqu0aveCNccTAosJ8r/kNvQSlQF/7MnLOWHYs3fbO
-   Dg6W7WeNPaMGOClHDySUFi4pCl8EzVrZaVQfbeltF12yp+poBaTA0PTYG
-   EunkPNME7KP/sAsOiZHiH9Yz5zhHbCKABGpE5pqvY0BzTR2CtfdIHj9xB
-   X3ox3iaQPEbJuo8i6RSh9EuP/VKofSQ5PYL+/+VdYlINLgmwRfNgBZtKI
-   KClvTCjA2CplXH9VB4kbsfFDUz/RwPM0yRX1UcuRLT/GugWIOMt2B6E41
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="350567698"
-X-IronPort-AV: E=Sophos;i="5.99,245,1677571200"; 
-   d="scan'208";a="350567698"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 13:03:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="942578101"
-X-IronPort-AV: E=Sophos;i="5.99,245,1677571200"; 
-   d="scan'208";a="942578101"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 02 May 2023 13:03:45 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ptwDv-008DIu-06;
-        Tue, 02 May 2023 23:03:43 +0300
-Date:   Tue, 2 May 2023 23:03:42 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Konrad =?iso-8859-1?Q?Gr=E4fe?= <k.graefe@gateware.de>
-Cc:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
-Message-ID: <ZFFsni5znI4hS953@smile.fi.intel.com>
-References: <20230427115120.241954-2-k.graefe@gateware.de>
- <20230428064905.145858-1-k.graefe@gateware.de>
+        with ESMTP id S229629AbjEBUIH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 16:08:07 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7FA198C
+        for <linux-usb@vger.kernel.org>; Tue,  2 May 2023 13:08:05 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-959a3e2dc72so850869866b.2
+        for <linux-usb@vger.kernel.org>; Tue, 02 May 2023 13:08:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683058084; x=1685650084;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RqIi6IvcdeuU0KYQE4Z8uSC27gkyAcL78XpC/FHuojo=;
+        b=z0PGfQl1sdu0SPr1lcAsrKinpMmdDtmFFNAQNUrPQQohxTUGannTjljIHqGwrDl/yX
+         I6s2ZkoNRBmbD1Z0jELAJXiBUWVRG56d0lFzubKXsHLHVZBXJ5EwLtQ/JRJ+4w9GsBcI
+         soEGIPgwqTTQC/MbbP49KJehYOGz5RShaPorm7TtT1E5BxV52QtftwQNrVs9fu4qNA78
+         HsH+TTPoDbLBJQKJElXMvf+d/3CLWYigDKcURXLI8k/Ez605TtB/Kjf3NPvRX+r6NCGn
+         X9SgpUxsBhlp+eX7wVLXp6qjJmnOvnFBA1T023iR2AF3CLuViQXrVJhlejD6UiGhk/Tn
+         u/bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683058084; x=1685650084;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RqIi6IvcdeuU0KYQE4Z8uSC27gkyAcL78XpC/FHuojo=;
+        b=OJOBXDvj8LWQzcWaVA765PwoI2lJ6PgSX1ph3hsyjojtq2UCnXT9iw79e4XG9Bn5Xj
+         AWXiNzRSLPLCKQli+1FNyz2PNmByFuaC50UruCBzk9s3gAtAeygcCbzqvMu45vrKQ8Xl
+         jhiMw0f8gwVATSFgtH4B4koifm9tXMe72LW0ATkJcmgfJfLHXFyJ6ye+iw6/Bl/rVVBI
+         jxDm7LFCFE6W76V3t8MNawI2Ulz3qsBma1TEyx+ip+0o1QxnDd0CzLa5tXzT7ZjuQB2o
+         R14dURwv2OCLW3A/jaN0/vcyYfmJcpHLlmr+m7E2PneAxz/ftdYzyQ026WOjzK0DiQq+
+         4OwQ==
+X-Gm-Message-State: AC+VfDzpH73PG5gsB/M0Ss/LNcKqAcC8bQrLCPQrGWoumjJPDOFhlC2d
+        5yBYj3ezV826IO0U6NfR4uknvA==
+X-Google-Smtp-Source: ACHHUZ7f0OZxRF1W5f7zHOtmLIacEffm2Y54nHgHHQa7Nlc8GDC5YkXBLpB86wa2xsrxeWY1Rk97uw==
+X-Received: by 2002:a17:907:1ca5:b0:94e:4489:f24d with SMTP id nb37-20020a1709071ca500b0094e4489f24dmr1251365ejc.61.1683058084097;
+        Tue, 02 May 2023 13:08:04 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:37be:eda5:e303:19e0? ([2a02:810d:15c0:828:37be:eda5:e303:19e0])
+        by smtp.gmail.com with ESMTPSA id bv13-20020a170907934d00b009584c5bcbc7sm13457255ejc.49.2023.05.02.13.08.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 13:08:03 -0700 (PDT)
+Message-ID: <154c67fc-3c4c-f65d-cf23-9c127175472f@linaro.org>
+Date:   Tue, 2 May 2023 22:08:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230428064905.145858-1-k.graefe@gateware.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v1 1/2] dt-binding: cdns,usb3: Add clock and reset
+Content-Language: en-US
+To:     Minda Chen <minda.chen@starfivetech.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20230502081805.112149-1-minda.chen@starfivetech.com>
+ <20230502081805.112149-2-minda.chen@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230502081805.112149-2-minda.chen@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 08:49:04AM +0200, Konrad Gräfe wrote:
-> The CDC-ECM specification requires an USB gadget to send the host MAC
-> address as uppercase hex string. This change adds the appropriate
-> modifier.
+On 02/05/2023 10:18, Minda Chen wrote:
+> To support generic clock and reset init in Cadence USBSS
+> controller. Add clock and reset dts configuration.
+> 
+> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
 
-Why not teaching %ph to provide an uppercase? Would be much more useful than
-this.
+Subject prefix: dt-bindings
 
--- 
-With Best Regards,
-Andy Shevchenko
+> ---
+>  Documentation/devicetree/bindings/usb/cdns,usb3.yaml | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+> index cae46c4982ad..7bffd8fb1e38 100644
+> --- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+> @@ -42,6 +42,18 @@ properties:
+>        - const: otg
+>        - const: wakeup
+>  
+> +  clocks:
+> +    minItems: 1
 
+no, this must maxItems.
+
+> +
+> +  clock-names:
+> +    minItems: 1
+
+Drop entire property, not useful without descriptive name.
+
+> +
+> +  resets:
+> +    minItems: 1
+
+instead maxItems.
+
+> +
+> +  reset-names:
+> +    minItems: 1
+
+Drop entire property, not useful without descriptive name.
+
+> +
+>    dr_mode:
+>      enum: [host, otg, peripheral]
+>  
+
+Best regards,
+Krzysztof
 
