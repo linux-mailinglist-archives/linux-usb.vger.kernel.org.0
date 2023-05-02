@@ -2,110 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFC5D6F40E0
-	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 12:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC20F6F41D7
+	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 12:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233823AbjEBKP7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 May 2023 06:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56268 "EHLO
+        id S233657AbjEBKjQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 May 2023 06:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233791AbjEBKPn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 06:15:43 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D83A55A5
-        for <linux-usb@vger.kernel.org>; Tue,  2 May 2023 03:15:33 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-957dbae98b4so549741366b.1
-        for <linux-usb@vger.kernel.org>; Tue, 02 May 2023 03:15:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683022532; x=1685614532;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZrpxqbKEzamc5RG0FnnS0fxPW9rAuEu+YqpkL0lepMc=;
-        b=C54XOXZDaUskwznqU0zAZlzDkAkltYduWzHXMpZpBh2zIZNLFJZ6H48SR0j7u9L9h9
-         RpM8OTOBbz6+Kloc92rmImOHY5RZglfJTqnVrt3oIBYaeft/wgyqQIX43nRjymOqxCrb
-         E0iF4d0lf0TxC/XwcBvzlWI6PiS2buvlQUXJfMrWKgzfY6DpxXMmKfRsEcEmnC3zC9BL
-         4x/Z/MEy+siIRghQzue8PxIyXRr7k+Tb4B2UiWZW1ZeffklDqfcUJW1uhxVPNDvAs6QN
-         Zmf55sZj0FQJrz/aHAGpEF/A0c74iwRTqwMbuseFOkNoIdrRnt33rUa90OKn3rkBBfQ/
-         4U5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683022532; x=1685614532;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZrpxqbKEzamc5RG0FnnS0fxPW9rAuEu+YqpkL0lepMc=;
-        b=jtAMbsqMuNS7BwU90UwlAlourdze50oSnhuh5+2Mwzz3t/e1I0aaZ0S4rhy5Vf1akg
-         zH4qinPaiGz6Kl7xutJpvrnoPHasD9YZEWruRsW/bIe99U5h5VHobT3Lz4H2Fa5BXbdk
-         FCZsUkJnxyrCOspehldOcuU/qavxRX57/PAvLfljf/Trds41BC/qP8gCj7s6FzqXX/EK
-         MmN0y94Np3tQRjUD3G4SOeMPTDki0Zs0Y9+KeswzkJ4/a8xhmvhlOF5/JBf//uKqAFl2
-         FTGlD6VdJiqD9FuoGPYPOb0C3f5BvCp2fy/zi8kfva2OzeDEuUyIIQ+R7Gz98JdHhxJZ
-         fjfA==
-X-Gm-Message-State: AC+VfDyyPgKrhnH7krZjxPQci2VlL3LpQfU8G7U7Z7KJhzAAWBQ5v+1j
-        GWLdl02wH26iS2fkoZF8OVcOTg==
-X-Google-Smtp-Source: ACHHUZ4uY4Ep+mspEXhMJeXZP+sFc7XAIzlJdXhPCxEsdPCTOdSnD1ndWScze17CMcPb5JXXt4So/A==
-X-Received: by 2002:a17:906:ef0d:b0:953:8c0b:32d with SMTP id f13-20020a170906ef0d00b009538c0b032dmr16391748ejs.52.1683022531752;
-        Tue, 02 May 2023 03:15:31 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:bafd:1283:b136:5f6a? ([2a02:810d:15c0:828:bafd:1283:b136:5f6a])
-        by smtp.gmail.com with ESMTPSA id sb10-20020a1709076d8a00b00958079b676asm13249281ejc.122.2023.05.02.03.15.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 03:15:31 -0700 (PDT)
-Message-ID: <f6193f9d-796e-66aa-12cb-e2c331015f04@linaro.org>
-Date:   Tue, 2 May 2023 12:15:29 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v7 1/9] dt-bindings: usb: qcom,dwc3: Add bindings for
- SC8280 Multiport
-Content-Language: en-US
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        with ESMTP id S233888AbjEBKiv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 06:38:51 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F47459F0;
+        Tue,  2 May 2023 03:37:54 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 342AbZoT5026435, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 342AbZoT5026435
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Tue, 2 May 2023 18:37:35 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Tue, 2 May 2023 18:37:39 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 2 May 2023 18:37:39 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Tue, 2 May 2023 18:37:39 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com, quic_shazhuss@quicinc.com
-References: <20230501143445.3851-1-quic_kriskura@quicinc.com>
- <20230501143445.3851-2-quic_kriskura@quicinc.com>
- <df24efb2-8279-ef15-a118-2a24885288c8@linaro.org>
- <a001c9c0-f186-f125-daab-e646790badfe@quicinc.com>
- <0f2dea5a-b6f7-b659-f41e-55d1777b4dd1@linaro.org>
- <aab0ee5c-4573-759a-ebda-401b041a65cb@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <aab0ee5c-4573-759a-ebda-401b041a65cb@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v4 2/2] dt-bindings: usb: snps,dwc3: Add the compatible name 'snps,dwc3-rtk-soc'
+Thread-Topic: [PATCH v4 2/2] dt-bindings: usb: snps,dwc3: Add the compatible
+ name 'snps,dwc3-rtk-soc'
+Thread-Index: AQHZfLOhYfbzHfxzYE2TNUg+fEIenq9GE1eAgACG7nD//4ryAIAAh9bw//+RWQCAAIlt4A==
+Date:   Tue, 2 May 2023 10:37:39 +0000
+Message-ID: <c44baa9fae5c445c90103cd2e129ab0b@realtek.com>
+References: <20230502050452.27276-1-stanley_chang@realtek.com>
+ <20230502050452.27276-2-stanley_chang@realtek.com>
+ <2653e0d1-6570-7469-51da-b539b5c14299@linaro.org>
+ <bc5cd630d96f44bcaad7f95f2f45aac1@realtek.com>
+ <49d2b103-de1e-637a-1bf0-aaba1c6afaf4@linaro.org>
+ <a04e70f97bcb48048edb2f6db7bb6c25@realtek.com>
+ <f51b4dc9-e1da-7c9c-1e39-c8510569db9d@linaro.org>
+In-Reply-To: <f51b4dc9-e1da-7c9c-1e39-c8510569db9d@linaro.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 02/05/2023 10:52, Krishna Kurapati PSSNV wrote:
->> Best regards,
->> Krzysztof
->>
-> 
-> Thanks Krzysztof. One query:
-> 
-> Clocks are same for both single/multiport controllers. Would the 
-> following be fine ?
-> 
-
-Yes, thanks.
-
-Best regards,
-Krzysztof
-
+SGkgS3J6eXN6dG9mLA0KDQo+ID4+Pj4gT24gMDIvMDUvMjAyMyAwNzowNCwgU3RhbmxleSBDaGFu
+ZyB3cm90ZToNCj4gPj4+Pj4gQWRkIGEgbmV3IGNvbXBhdGlibGUgbmFtZSAnc25wcyxkd2MzLXJ0
+ay1zb2MnIG9mIERUIGZvciByZWFsdGVrDQo+ID4+Pj4+IGR3YzMgY29yZSB0byBhZGp1c3QgdGhl
+IGdsb2JhbCByZWdpc3RlciBzdGFydCBhZGRyZXNzDQo+ID4+Pj4+DQo+ID4+Pj4+IFRoZSBSVEsg
+REhDIFNvQ3Mgd2VyZSBkZXNpZ25lZCwgdGhlIGdsb2JhbCByZWdpc3RlciBhZGRyZXNzIG9mZnNl
+dA0KPiA+Pj4+PiBhdA0KPiA+Pj4+DQo+ID4+Pj4gV2hhdCBhcmU6ICJSVEsiIGFuZCAiREhDIj8g
+VGhlc2UgYXJlIG1hbnVmYWN0dXJlZCBieSBTeW5vcHN5cyBhcw0KPiA+Pj4+IHlvdSBzdWdnZXN0
+IGluIHRoZSBwYXRjaD8NCj4gPj4+DQo+ID4+PiBSVEsgaXMgUmVhbHRlay4NCj4gPj4+IERIQyBp
+cyB0aGUgZGVwYXJ0bWVudCBuYW1lIGluIFJlYWx0ZWsgYW5kIHRoZSBhYmJyZXZpYXRpb24gb2Yg
+dGhlDQo+ID4+PiBEaWdpdGFsDQo+ID4+IEhvbWUgQ2VudGVyLg0KPiA+Pj4gVGhlIFVTQiBjb250
+cm9sbGVyIG9mIFJUSyBESEMgU29DcyB1c2VkIHRoZSBEV0MzIElQIG9mIFN5bm9wc3lzLg0KPiA+
+Pg0KPiA+PiBUaGVuIGVudGlyZSBjb21wYXRpYmxlIGlzIG5vdCBjb3JyZWN0LiBWZW5kb3IgaXMg
+UmVhbHRlayBub3QgU3lub3BzeXMuDQo+ID4+IERIQyBpcyBub3QgZXZlbiBkZXZpY2UgbmFtZS4g
+VXNlIHJlYWwgZGV2aWNlIG5hbWVzLg0KPiA+DQo+ID4gU28sIGNhbiB3ZSB1c2UgdGhlIGNvbXBh
+dGlibGUgbmFtZSBhcyAncmVhbHRlayxkd2MzJyA/DQo+IA0KPiBkd2MzIGlzIG5vdCBhIHJlYWwg
+ZGV2aWNlIG5hbWUgZm9yIFJlYWx0ZWsuDQoNCldlIHN0aWxsIHVzZSBkd2MzIElQIGluIFJlYWx0
+ZWsncyBTb0MuIFdoeSBpcyB0aGUgbmFtZSAiZHdjMyIgaW5hcHByb3ByaWF0ZT8NCg0KU2hvdWxk
+IGNvbXBhdGliaWxpdHkgbmFtZXMgdXNlIHRoZSBTb0MgbmFtZT8NCkZvciBleGFtcGxlLCBvdXIg
+U29DIG5hbWUNClJURDEyOXgsIFJURDEzOXgsIFJURDE2MXgsIFJURDE2MXhCLCBldGMuDQpTaG91
+bGQgd2UgdXNlIHRoZXNlIG5hbWVzIGluIGNvbXBhdGlibGUgbmFtZXM/DQoicmVhbHRlaywgcnRk
+MTI5eCIsICJyZWFsdGVrLCBydGQxMzl4IiwgInJlYWx0ZWssIHJ0ZDE2MXgiLi4uZXRjLg0KDQpU
+aGFua3MsDQpTdGFubGV5DQo=
