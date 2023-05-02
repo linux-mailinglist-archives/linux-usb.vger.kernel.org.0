@@ -2,143 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4706E6F4A51
-	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 21:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5016F4ABC
+	for <lists+linux-usb@lfdr.de>; Tue,  2 May 2023 22:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjEBT1W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 May 2023 15:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
+        id S229659AbjEBUBV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 May 2023 16:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjEBT1U (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 15:27:20 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8981BD4
-        for <linux-usb@vger.kernel.org>; Tue,  2 May 2023 12:27:18 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-94f109b1808so830753166b.1
-        for <linux-usb@vger.kernel.org>; Tue, 02 May 2023 12:27:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683055637; x=1685647637;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WlvJAhh++/0u4nv0c2v/4jbnMZEEfAgSioFHncVcNHM=;
-        b=FuzPEm5a6HfsdGz0cZuE8bc1PmkbfYtG+rxbUTbb8BBMdYd2jSC9/YA56sI3mATvhk
-         9vQFdOvKCs6DMIxixdQlZajWC3k3WpluPi1PAIGBbsC1shROzMCecCYdnmDKrhKmEDL5
-         5lLdDUV6n2Lnm65XggKvOZKa8TmJ99xl6xzTk9a1R2/7HpeW98AYAyPRwy7WR7Qcg4ns
-         ZO1QTaCGoXu23k18bF4Z5oLUekYI8e+2Eim19pQGftwQLd1QH7bjQymgMYMjlLNrPY6N
-         BhdccBth6VCpiZRdchGPhGUAHReo5J8vYhCCJ30h3idWpAHphSQve29M1d1MfQBl7/Tt
-         /Eww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683055637; x=1685647637;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WlvJAhh++/0u4nv0c2v/4jbnMZEEfAgSioFHncVcNHM=;
-        b=gnmBpmQ+xv3EtPXlLnF2Aq/b8bzIzWFZZruPF4ukg2xCJtsqlcatbqC4U7MNqeDDeg
-         p4DcaOahioEIY4k86L6AaqpZcgjZ0djSfu0AHdyRauC4yreAkKORj6cAZuK417bo2V3F
-         CX/SFdJLWnAcMhqDnwkcDQfd/if+gq1fIFAToYH7HKeHa77TT8phNEsqjnBxt6aQ9C8x
-         OLPhNmyOHmICrmvEfiAepeRPPiwMiJmRUy+E8H/fAiZ4LBQxhhnVT8H/8Cysv2TuKceo
-         R6EARWWWmn5VJGQ+lMS0z8o0sQjtK0xVb4ZVhte1adYZPj3asO+veIWzlE6Ox3iG6lnl
-         3Gqg==
-X-Gm-Message-State: AC+VfDzsPTnx7FjJyaruU0Ur2YqKV9vXtjBSjSjoe3zgKIPE5r38dvf8
-        70e12u/CHsshzN2rz7+ZzU/xOg==
-X-Google-Smtp-Source: ACHHUZ72IXzYWeoI10TEpLTlgpk2WAsUnkKi/OYB2kOkCAuBunsYCUpywh4DXYYrck3DimaL2dxCsQ==
-X-Received: by 2002:a17:907:608b:b0:88f:a236:69e6 with SMTP id ht11-20020a170907608b00b0088fa23669e6mr931504ejc.7.1683055637249;
-        Tue, 02 May 2023 12:27:17 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:37be:eda5:e303:19e0? ([2a02:810d:15c0:828:37be:eda5:e303:19e0])
-        by smtp.gmail.com with ESMTPSA id my24-20020a1709065a5800b0094a8115e148sm16431638ejc.87.2023.05.02.12.27.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 12:27:16 -0700 (PDT)
-Message-ID: <676dae73-9b59-d0bb-37ca-eaa120e8dcb5@linaro.org>
-Date:   Tue, 2 May 2023 21:27:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v4 2/2] dt-bindings: usb: snps,dwc3: Add the compatible
- name 'snps,dwc3-rtk-soc'
-Content-Language: en-US
-To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
+        with ESMTP id S229496AbjEBUBU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 May 2023 16:01:20 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B64D10FF;
+        Tue,  2 May 2023 13:01:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683057679; x=1714593679;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=XNLfq1FKE5HOh8rOGIhhAA4qWJQTxU3C5Z2Bm9Da1bg=;
+  b=hUAXw2vnebwa8AAVwofdj18whP0L71vW+jselfduEgd0Wp9LswCCww8Z
+   1vawo4jLsNmnyv7y1YwPk43s8jnvknwHD2G7Ogpu356LCppyEsFX4V2m1
+   5cGKwEH461TqgVQhiXJUpTzmlC0SjlfC/1f6A6MSeG9EcMmkWH19Zigge
+   9skox8iNRdfm2KGjeNv+Aib37cwYCgaD/wDAUdnvsQXQAK/48rcQIKacQ
+   6U53/dxZ6LpQNGT8HXHjzQgjSglDOPvfPNEdl3b41P2TbkxLG9cNQS0oA
+   HBsz+DKNqXBIJkKy02R4ZMNyUxpQ7oidSKQs96v08bt1caBQbiz5wJ73e
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="351472440"
+X-IronPort-AV: E=Sophos;i="5.99,245,1677571200"; 
+   d="scan'208";a="351472440"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 13:01:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="761246188"
+X-IronPort-AV: E=Sophos;i="5.99,245,1677571200"; 
+   d="scan'208";a="761246188"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 02 May 2023 13:01:14 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ptwBU-008DEp-1k;
+        Tue, 02 May 2023 23:01:12 +0300
+Date:   Tue, 2 May 2023 23:01:12 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Rasmus Villemoes' <linux@rasmusvillemoes.dk>,
+        Konrad =?iso-8859-1?Q?Gr=E4fe?= <k.graefe@gateware.de>,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230502050452.27276-1-stanley_chang@realtek.com>
- <20230502050452.27276-2-stanley_chang@realtek.com>
- <2653e0d1-6570-7469-51da-b539b5c14299@linaro.org>
- <bc5cd630d96f44bcaad7f95f2f45aac1@realtek.com>
- <49d2b103-de1e-637a-1bf0-aaba1c6afaf4@linaro.org>
- <a04e70f97bcb48048edb2f6db7bb6c25@realtek.com>
- <f51b4dc9-e1da-7c9c-1e39-c8510569db9d@linaro.org>
- <c44baa9fae5c445c90103cd2e129ab0b@realtek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c44baa9fae5c445c90103cd2e129ab0b@realtek.com>
-Content-Type: text/plain; charset=UTF-8
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Felipe Balbi <balbi@ti.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
+Message-ID: <ZFFsCHzbS6B0+Jbp@smile.fi.intel.com>
+References: <2023042625-rendition-distort-fe06@gregkh>
+ <20230427115120.241954-1-k.graefe@gateware.de>
+ <c075b668-8194-6aea-484c-0223f164cb4d@rasmusvillemoes.dk>
+ <954a3b8d5be0487e8ead23bef450fabe@AcuMS.aculab.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <954a3b8d5be0487e8ead23bef450fabe@AcuMS.aculab.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 02/05/2023 12:37, Stanley Chang[昌育德] wrote:
-> Hi Krzysztof,
+On Fri, Apr 28, 2023 at 07:46:14AM +0000, David Laight wrote:
+> From: Rasmus Villemoes
+> > Sent: 28 April 2023 07:57
+> > On 27/04/2023 13.51, Konrad Gr�fe wrote:
+> > > The CDC-ECM specification requires an USB gadget to send the host MAC
+> > > address as uppercase hex string. This change adds the appropriate
+> > > modifier.
+> > 
+> > Thinking more about it, I'm not sure this is appropriate, not for a
+> > single user like this. vsprintf() should not and cannot satisfy all
+> > possible string formatting requirements for the whole kernel. The %pX
+> > extensions are convenient for use with printk() and friends where one
+> > needs what in other languages would be "string interpolation" (because
+> > then the caller doesn't need to deal with temporary stack buffers and
+> > pass them as %s arguments), but for single items like this, snprintf()
+> > is not necessarily the right tool for the job.
+> > 
+> > In this case, the caller can just as well call string_upper() on the
+> > result, or not use sprintf() at all and do a tiny loop with
+> > hex_byte_pack_upper().
 > 
->>>>>> On 02/05/2023 07:04, Stanley Chang wrote:
->>>>>>> Add a new compatible name 'snps,dwc3-rtk-soc' of DT for realtek
->>>>>>> dwc3 core to adjust the global register start address
->>>>>>>
->>>>>>> The RTK DHC SoCs were designed, the global register address offset
->>>>>>> at
->>>>>>
->>>>>> What are: "RTK" and "DHC"? These are manufactured by Synopsys as
->>>>>> you suggest in the patch?
->>>>>
->>>>> RTK is Realtek.
->>>>> DHC is the department name in Realtek and the abbreviation of the
->>>>> Digital
->>>> Home Center.
->>>>> The USB controller of RTK DHC SoCs used the DWC3 IP of Synopsys.
->>>>
->>>> Then entire compatible is not correct. Vendor is Realtek not Synopsys.
->>>> DHC is not even device name. Use real device names.
->>>
->>> So, can we use the compatible name as 'realtek,dwc3' ?
->>
->> dwc3 is not a real device name for Realtek.
-> 
-> We still use dwc3 IP in Realtek's SoC. Why is the name "dwc3" inappropriate?
+> Or snprintf with "%02X:%02X:%02X:%02X:%02X:%02X".
 
-dwc3 is the name of design coming from Synopsys. Your device is probably
-called differently. Why it is inappropriate? Because your device is not
-called DWC3, even though you use IP from Synopsys.
+Of course this is a step back. Why? Have you read actually what we have in %p
+extensions already?
 
-Although vendor,dwc3 is already used as compatible in several cases, I
-don't think it is a good pattern.
+Also, what about stack?
 
-> 
-> Should compatibility names use the SoC name?
-> For example, our SoC name
-> RTD129x, RTD139x, RTD161x, RTD161xB, etc.
-> Should we use these names in compatible names?
-> "realtek, rtd129x", "realtek, rtd139x", "realtek, rtd161x"...etc.
+Entire %pm/M exists due to reversed order. Otherwise it's an alias to %6phD or
+alike.
 
-Regular rules apply, because your device is not special.
-https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Therefore either SoC-based device specific name or followed by:
-1. SoC-based device specific fallback,
-2. Family-device generic fallback,
-
-
-Best regards,
-Krzysztof
 
