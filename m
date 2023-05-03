@@ -2,48 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048C86F56C2
-	for <lists+linux-usb@lfdr.de>; Wed,  3 May 2023 13:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 489CD6F56F9
+	for <lists+linux-usb@lfdr.de>; Wed,  3 May 2023 13:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjECLBW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 May 2023 07:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59592 "EHLO
+        id S230059AbjECLKp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 May 2023 07:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbjECLBU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 May 2023 07:01:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7DF59F2;
-        Wed,  3 May 2023 04:00:55 -0700 (PDT)
+        with ESMTP id S229606AbjECLKo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 May 2023 07:10:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5B526A9;
+        Wed,  3 May 2023 04:10:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE948621B6;
-        Wed,  3 May 2023 11:00:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EC01C433D2;
-        Wed,  3 May 2023 11:00:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26D3862CC7;
+        Wed,  3 May 2023 11:10:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80EE0C433D2;
+        Wed,  3 May 2023 11:10:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683111654;
-        bh=aVQhtxN0NqJG5qAwFQGM7qQW6a+VAP6JwXVNlk6TTI4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Pew2rThKTE2IVaEDpnKSwdq2+hrdTIOJoGtZu56OmT77m7fLKOssjQ+M9ZANRvl+F
-         Y2QyZ23JuiorwffwwZAkfU7XiQ4CCt5svNwaOyod14xrccDZR1nnXdAGLMbzW+thWs
-         OyCUMrDZPyC4rm48OZ1/+5iFTQKb4Dh3AR4EuvyRavi//egHyZ2V28Z4xkcKwTCP6F
-         gkh5AyYIRKOULoFyaTfy9AnkdU1VfvqMcGCYo0YzHmOcn6HpCUhtI6ddFK77rPUG21
-         A9Ax+uOwoyRdbO74GV3qqg04G0skrXu4aXYWpfzAZDp+Va76gC5OSDuvfkT1GfdfUc
-         OnSXeRmTt9ZQQ==
-From:   Roger Quadros <rogerq@kernel.org>
-To:     Thinh.Nguyen@synopsys.com
-Cc:     gregkh@linuxfoundation.org, r-gunasekaran@ti.com, srk@ti.com,
+        s=k20201202; t=1683112242;
+        bh=s0Ua0IGvfJHjDVRFs1MEv5s7m2oj87gMVXpVRmE+ezY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ks2JmkYxOm4r8x2pfckba6C/Ure5b9zp/hQAQHQjowbCDSnCLwfhzlT2VuhYIRAMF
+         SWpqFzbbBaMAi9kuYtd8aOrX8K6Nhm42DqQ+CYAD2Vb2VNSi4alcoYDX7e5DdkuR/e
+         cD6WCF632kXF2iNHTLMMUD/uMcxSAb7njJPJatnd7bojlNfLJU4oH19OuXeGnWRmVk
+         MERDKuv7c3NYHaOoCyQZ3OV1ZoZQbJxhmhC4GWgnfvelVPEZAZsUm7po+Oec7KR9c7
+         UMIsSWnqkNAgD4Fed/D7btblZplPfCupRmVOjvR2qjzIUWhVKRueUbc7hfwTDa8Ze2
+         6DiwuIhMwJD6g==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1puANj-0001mf-Rl; Wed, 03 May 2023 13:10:47 +0200
+Date:   Wed, 3 May 2023 13:10:47 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roger Quadros <rogerq@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH v3] usb: dwc3: gadget: Improve dwc3_gadget_suspend() and dwc3_gadget_resume()
-Date:   Wed,  3 May 2023 14:00:48 +0300
-Message-Id: <20230503110048.30617-1-rogerq@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com, quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v7 5/9] usb: dwc3: core: Refactor PHY logic to support
+ Multiport Controller
+Message-ID: <ZFJBN2i5tXkY8ARA@hovoldconsulting.com>
+References: <20230501143445.3851-1-quic_kriskura@quicinc.com>
+ <20230501143445.3851-6-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230501143445.3851-6-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,147 +71,30 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Prevent -ETIMEDOUT error on .suspend().
-e.g. If gadget driver is loaded and we are connected to a USB host,
-all transfers must be stopped before stopping the controller else
-we will not get a clean stop i.e. dwc3_gadget_run_stop() will take
-several seconds to complete and will return -ETIMEDOUT.
+On Mon, May 01, 2023 at 08:04:41PM +0530, Krishna Kurapati wrote:
+> Currently the DWC3 driver supports only single port controller
+> which requires at most one HS and one SS PHY.
+> 
+> But the DWC3 USB controller can be connected to multiple ports and
+> each port can have their own PHYs. Each port of the multiport
+> controller can either be HS+SS capable or HS only capable
+> Proper quantification of them is required to modify GUSB2PHYCFG
+> and GUSB3PIPECTL registers appropriately.
+> 
+> Add support for detecting, obtaining and configuring phy's supported
+> by a multiport controller and limit the max number of ports
+> supported to 4.
+> 
+> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  drivers/usb/dwc3/core.c | 262 +++++++++++++++++++++++++++++-----------
+>  drivers/usb/dwc3/core.h |  12 +-
+>  drivers/usb/dwc3/drd.c  |  13 +-
+>  3 files changed, 209 insertions(+), 78 deletions(-)
 
-Handle error cases properly in dwc3_gadget_suspend().
-Simplify dwc3_gadget_resume() by using the introduced helper function.
+Note that this patch no longer applies and you need to rebase the series
+on mainline (e.g. including commit 1d72fab47656 ("USB: dwc3: refactor
+phy handling").
 
-Fixes: 9f8a67b65a49 ("usb: dwc3: gadget: fix gadget suspend/resume")
-Cc: stable@vger.kernel.org
-Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Roger Quadros <rogerq@kernel.org>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
----
-
-Changelog:
-
-v3:
-- dropped patch 1. Now no longer check for softconnect during .suspend
-- in suspend error path check for softconnect and enable softconnect accordingly
-- added Acked-by tag by Thinh Nguyen
-
-v2:
-- rebase on greg/usb-next
-- split into 2 patches. Add Fixes tag and cc stable.
-- do not check for !softconnect in error condition in dwc3_gadget_suspend()
-
- drivers/usb/dwc3/gadget.c | 67 ++++++++++++++++++++-------------------
- 1 file changed, 34 insertions(+), 33 deletions(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index c0ca4d12f95d..2996bcb4d53d 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2699,6 +2699,21 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
- 	return ret;
- }
- 
-+static int dwc3_gadget_soft_connect(struct dwc3 *dwc)
-+{
-+	/*
-+	 * In the Synopsys DWC_usb31 1.90a programming guide section
-+	 * 4.1.9, it specifies that for a reconnect after a
-+	 * device-initiated disconnect requires a core soft reset
-+	 * (DCTL.CSftRst) before enabling the run/stop bit.
-+	 */
-+	dwc3_core_soft_reset(dwc);
-+
-+	dwc3_event_buffers_setup(dwc);
-+	__dwc3_gadget_start(dwc);
-+	return dwc3_gadget_run_stop(dwc, true);
-+}
-+
- static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- {
- 	struct dwc3		*dwc = gadget_to_dwc(g);
-@@ -2737,21 +2752,10 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- 
- 	synchronize_irq(dwc->irq_gadget);
- 
--	if (!is_on) {
-+	if (!is_on)
- 		ret = dwc3_gadget_soft_disconnect(dwc);
--	} else {
--		/*
--		 * In the Synopsys DWC_usb31 1.90a programming guide section
--		 * 4.1.9, it specifies that for a reconnect after a
--		 * device-initiated disconnect requires a core soft reset
--		 * (DCTL.CSftRst) before enabling the run/stop bit.
--		 */
--		dwc3_core_soft_reset(dwc);
--
--		dwc3_event_buffers_setup(dwc);
--		__dwc3_gadget_start(dwc);
--		ret = dwc3_gadget_run_stop(dwc, true);
--	}
-+	else
-+		ret = dwc3_gadget_soft_connect(dwc);
- 
- 	pm_runtime_put(dwc->dev);
- 
-@@ -4655,42 +4659,39 @@ void dwc3_gadget_exit(struct dwc3 *dwc)
- int dwc3_gadget_suspend(struct dwc3 *dwc)
- {
- 	unsigned long flags;
-+	int ret;
- 
- 	if (!dwc->gadget_driver)
- 		return 0;
- 
--	dwc3_gadget_run_stop(dwc, false);
-+	ret = dwc3_gadget_soft_disconnect(dwc);
-+	if (ret)
-+		goto err;
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	dwc3_disconnect_gadget(dwc);
--	__dwc3_gadget_stop(dwc);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
- 	return 0;
-+
-+err:
-+	/*
-+	 * Attempt to reset the controller's state. Likely no
-+	 * communication can be established until the host
-+	 * performs a port reset.
-+	 */
-+	if (dwc->softconnect)
-+		dwc3_gadget_soft_connect(dwc);
-+
-+	return ret;
- }
- 
- int dwc3_gadget_resume(struct dwc3 *dwc)
- {
--	int			ret;
--
- 	if (!dwc->gadget_driver || !dwc->softconnect)
- 		return 0;
- 
--	ret = __dwc3_gadget_start(dwc);
--	if (ret < 0)
--		goto err0;
--
--	ret = dwc3_gadget_run_stop(dwc, true);
--	if (ret < 0)
--		goto err1;
--
--	return 0;
--
--err1:
--	__dwc3_gadget_stop(dwc);
--
--err0:
--	return ret;
-+	return dwc3_gadget_soft_connect(dwc);
- }
- 
- void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
--- 
-2.34.1
-
+Johan
