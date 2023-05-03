@@ -2,228 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5DA6F5929
-	for <lists+linux-usb@lfdr.de>; Wed,  3 May 2023 15:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D2D6F5969
+	for <lists+linux-usb@lfdr.de>; Wed,  3 May 2023 15:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbjECNj1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 May 2023 09:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
+        id S230154AbjECNzE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 May 2023 09:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjECNj0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 May 2023 09:39:26 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2055.outbound.protection.outlook.com [40.107.92.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230391A5;
-        Wed,  3 May 2023 06:39:25 -0700 (PDT)
+        with ESMTP id S230030AbjECNy7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 May 2023 09:54:59 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2087.outbound.protection.outlook.com [40.107.22.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FD95FE8;
+        Wed,  3 May 2023 06:54:51 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JiQimyOQ7Jj/kYWDiAOUfY4N5haI610ibHUMOAE99VHJ+WN59f+L4PqbBNwUDsCQRwbWoNCGuhD8Jdobw0IGOSb/qV27DCxtZDjPkpMFBPjf9K9kn/pTnr8+VIw9gt4/VbMsaZw4bXpbBPZk8XvoNDHtqgxBsL9tX0PthhwA7e7w7S3VJPS4+XEFX0uQF3ig0SFa2xW4eZ8RC2f5aitQM21G4eHpmpcSuWz+UZQOMvPgEgkXl1eGx/ssXubCqcsESxo0ZeqVBT+dLjOpHkCAKTwGkXLghC4aUlHkdvyBGJzHFI0D7+fZ1ab5hWBRCyb4DZ4AJdQpn4Fosf1wpfioTw==
+ b=CB4uCZ1Vbip7n3VTGxaUZtSpL8tLsHxc+/3PtI5cLopP7RmtciG3TjhNlF7ahMfYGi15ZPGKEeCMe567rvwk2XGqIQ3qpQIPGbJt5gArYlRG7Bf4tTmX8eGmePa9s3B6DtBgFF4lHkjbjOGdaeo4NjkVTrJ8Cvn2KxJSnNctthckJlvgRPP6uGxVNxnupxcXJq7hgN1VPj9tMflYxN57JFPCJEcsybmOcZy4C26g7q38SFWLFY/TSsxGNBhXxocR8QEszhlzFMdRT9W+nZEs+vOBHH+NHIAhEx5NHJJ1YFkJjUgr2cz0Eyfp5zvf7e+115hmRrGoQUJKQGf+4kvjbw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lJi/nihUqXN73rBq9I/9tBHfzaYbTxwJ4w4e/NAtMaA=;
- b=QMtFRmwvwaAvuJjqL4tL1NjfGn5IkqS57C8RpM+QeTGcSiYHHVEnyVqxcohR+cN4YD41k7db1YGYCkeY7d9FNSMcgxv6OclMYjPI+tj65z0MpeuXTIt1pPDRBXMGaqnrcK4b4YCsc8oC86/UllFj5XG6dvdndqy93AGcY/s46H5mKJ4EXH/CZDs8ecqVqF6cwx19b993wxNJu2eoJH92rpiRe9KZP2hlWP+qR6rgutu/WnAJEw5PpHlyja742w6v5rFXANPI6RpXC76kdBrleocM7tVSH7YNSlPiDdpjRXCfcTZ65kRz85Butsl0IjIWrJSijKnbhPXUJ18TjbtsEA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=8jVrjbmnv4ge7Kmb641affgXNTsddZdEUlnhf0OeSIQ=;
+ b=SzIvnNGZL6pY3R+bmUMsbfwdxzScTt+0d8ByA3GGfFu7dLSUkcdQe6UM+TvurDuWbWm8DWLf9xuBliACAVWt1CbGVVw9XR5eQ7mwf2rqdBLdaiyiuLRYitQ/+oIPJIHV78p8CEqOmxFIYVRurvBElycG0iiLqlRFAA9p9SNHvjGYg3NiSkZtLKWfknuc7dV2MtqrjkRf4RW/Q29BObYwGgvrRwViewmo/EXgHByuP+5EkM0hWpdwzx7Z2eZFsIg0dWUp7UCWCJTQNtigrfzTTqk+Mtj0Vqr2DEA+q26m7hdYV433l1CRBZ2JZ3C8fogwzYx1G3Ca/mdUNeCZ6bsX9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lJi/nihUqXN73rBq9I/9tBHfzaYbTxwJ4w4e/NAtMaA=;
- b=ilLRTOCNCyM0Vv0oFYprj8W4RnSBh9t9I/jj1S1C66ZSu2kyXA1WXBuhbuqZWnx+MOHt3x8+WQetdMlrFWZtzmS5lxBwb/A+MvqOlgIjHfnQ7UMgZ1pWXyjFbP6CtQp7wd2AhEaTLd/JNpg+iEoCYp0RD59mNlVhm9FoKkNEpXM=
-Received: from MW4PR03CA0324.namprd03.prod.outlook.com (2603:10b6:303:dd::29)
- by IA1PR12MB6353.namprd12.prod.outlook.com (2603:10b6:208:3e3::9) with
+ bh=8jVrjbmnv4ge7Kmb641affgXNTsddZdEUlnhf0OeSIQ=;
+ b=obUsKVxGhnxkRTG8gomZk+GxPONnmqRtqcsMKJr8ho6VERw5+wovp4HTrnrXIFO41XaX4XIWHj3VSkfMfHoQ60i/7SHh/ke1sUesNinCuQPw+p84/xRtsCszikfowObIqnBjat0q9G7GhpkVw+jwhVLPojXG77FqNB2vpZTOOl0/CLJQLbLOd4WWde1grQ+WZuBfS+qjnBKgAFYziunB05GqctW8aDak2MmFTyY/rnC1AF5BnxrpBpne5CtLrwOZ7PI9R4yLB23yn3dKAKmxPvSdwmAddNTUHqL5aygGWGfg1QIXUB+MeN56C5APyaJqcZxws3gQg0+PQnMdAgcyXA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by DBAPR04MB7255.eurprd04.prod.outlook.com (2603:10a6:10:1a9::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.22; Wed, 3 May
- 2023 13:39:21 +0000
-Received: from CO1PEPF000042AB.namprd03.prod.outlook.com
- (2603:10b6:303:dd:cafe::a2) by MW4PR03CA0324.outlook.office365.com
- (2603:10b6:303:dd::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.22 via Frontend
- Transport; Wed, 3 May 2023 13:39:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000042AB.mail.protection.outlook.com (10.167.243.40) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6363.21 via Frontend Transport; Wed, 3 May 2023 13:39:20 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 3 May
- 2023 08:39:18 -0500
-From:   Michal Simek <michal.simek@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-        <michal.simek@xilinx.com>, <git@xilinx.com>,
-        <ilias.apalodimas@linaro.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Piyush Mehta <piyush.mehta@amd.com>,
-        "Rob Herring" <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-Subject: [PATCH] dt-bindings: usb: Add binding for Microchip usb5744 hub controller
-Date:   Wed, 3 May 2023 15:39:15 +0200
-Message-ID: <cca068980ae0b902168a9a9b78cab4efb43157a8.1683121150.git.michal.simek@amd.com>
-X-Mailer: git-send-email 2.36.1
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.21; Wed, 3 May
+ 2023 13:54:48 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::6c14:307b:6fd3:3bfc]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::6c14:307b:6fd3:3bfc%7]) with mapi id 15.20.6363.022; Wed, 3 May 2023
+ 13:54:48 +0000
+Message-ID: <d25bfa50-b5a0-bd0e-fd14-94967e374033@suse.com>
+Date:   Wed, 3 May 2023 15:54:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: Reproducible deadlock when usb-storage scsi command timeouts
+ twice
+Content-Language: en-US
+To:     Benjamin Block <bblock@linux.ibm.com>,
+        Oliver Neukum <oneukum@suse.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Hannes Reinecke <hare@suse.de>,
+        Maxime Bizon <mbizon@freebox.fr>, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net, linux-scsi@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+References: <ZEllnjMKT8ulZbJh@sakura>
+ <34a2e50b-e899-45ee-ac14-31fa0bb1616b@rowland.harvard.edu>
+ <20230503102440.GL18384@t480-pf1aa2c2.fritz.box>
+ <941e8420-f99f-5832-2ea9-3ba5eca545ad@suse.com>
+ <20230503125137.GA1032383@t480-pf1aa2c2.fritz.box>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20230503125137.GA1032383@t480-pf1aa2c2.fritz.box>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0146.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:98::7) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000042AB:EE_|IA1PR12MB6353:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3e0e8ccb-2f5d-4e44-7cee-08db4bdbccb8
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|DBAPR04MB7255:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0ff61ccc-d268-456c-27c1-08db4bddf562
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7zYx9iWtCJ8FhbW4VuYcxJW+zQsIjkhmMyu14IaJhHUOsGejvu2sXby3eRdEhahUf6FrgsWLNK0c1xnGNLhY5RzL6bkdapajC3uIjJRY5t7k0kw/nJNBj0Xt9KE/shzwVgZ4me9ukOwU00HcrF6dop6P6uVeX0mTVenXMaJNjGPw0x9rEjFJWqynb9F4BvTQ+bu306fEUKcyXRffvEVihLXisF+zwj611bTbhzAJke4KcWv+mfnKKyupg6KGy16qqV98AQz2Kt0K5kcQEu6oYGcPePnBK/qPQukae6z92xL80BkvUJXVkWZQWgRZt+/2U91lytMnIxV98Q4jRVVqjnux0AGK/ZcXfJ2TOEOT4CRiHTbnq6SUnpG8CtsILWIzUqR289f3G4g3D9HDMlGQ/uH8R5baTwQt04MpQbi2fWYcb54LZWs91vLlFb5RnaJdVx+qaCEac1X5tO3cpQkDEW6tQp3erjXIWwsVfiHIf3OPBQ79QsiqLmgqxiigEq/jKzucVyNxsSRwTrQvLpcNKK6OA5Nfmrh5PM7eSzPRSM/yATwM228CJzQ1bDw/q7TjUC0x3EeCucT72oYfyiUwvXFdKsr9CFIpKFyZKsWCbgTiGeC4Ffng0287zSy7XHCXuHXnux+tH7KRt08aQh3YAvTVt+2mH5H96WK82M1ugyIsnql8d67r3nOyiQ1/QI92E+fMROaGCyEfHXKTrm6/VvYA2+0pjwAck6Teqx9zDC8fSfFT9AMKC22OmkJgH5barj29Obr8rLt2WWpOwKOp4FwwEv0jwKh6cl8hUBk4J48=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(39860400002)(396003)(346002)(451199021)(46966006)(36840700001)(40470700004)(40460700003)(66899021)(4326008)(70206006)(966005)(70586007)(6666004)(478600001)(316002)(110136005)(54906003)(36756003)(86362001)(47076005)(426003)(336012)(26005)(36860700001)(8676002)(8936002)(5660300002)(44832011)(41300700001)(82310400005)(40480700001)(2906002)(82740400003)(16526019)(186003)(81166007)(356005)(2616005)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2023 13:39:20.5902
+X-Microsoft-Antispam-Message-Info: XHcN0z1wPJBkSgngWMnJ9x74UOd3GFsIOUQmF0y2s/YWVaco4cYfnM7p/vL2lr3XDsIMTjt7S9Ecc5mndN3xZgiWj0+VAoCAtCi2Ayph50xnIo91BzJyknZzgCnj6hYLtXaDMc3+GYOVPXkxaYe8I/QcHcQ5ySsEWaYKO9/29IJ5Kq8B3IvKgk+jShFD/Te8C7nI+aGc3LydZu1wb7bBx4ZHVFdYGyPX+dZhsXf2H4gkFppuAh3FBzpqzHOtL1M4j7UrAOmtKJC6mOisSwJuTsgJtF4/Ua1PKvsA136HVT2c0FAqAFbr2FxkIDRXtCpIFcabVwJoaaN/25T4agXPPbQTKkUZQM0otskgE6p7x/ihxepukYmzseYWtCey4oSokqNGErY63u7eihs4vb+DXjvNUyVl1D/d1nXcFkzkoxcj8lOoNaILcP5D7QZbSWmC1vfTMQ2AC0WK4mzvgW1y8OOPE6naS83qZpvQZWoy4sTmcudMDLSU1DyZg+HoOBGk8XChrmxwEE7W2fFdpWDncj78QB4HNZTWqXZDKVm8EpGztYVBFLH7P8RQJGqgDKWcLc6yoU/IgfRIcY60iEid6X7phAXOmwcKF3RK8c6NurlSitZ3S8JzetZqfKz9lQ4rFBs6cqTiKfRXQ8cTFTUIPw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39860400002)(366004)(376002)(136003)(346002)(451199021)(31686004)(36756003)(5660300002)(2906002)(38100700002)(86362001)(31696002)(316002)(66556008)(66946007)(66476007)(4326008)(41300700001)(8676002)(8936002)(83380400001)(54906003)(6506007)(53546011)(6512007)(186003)(6486002)(478600001)(110136005)(2616005)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SFJ6QnRzQ3JSSlhzNElwZXBCak9JdUpRN2RuT3ByS2szZFY0by94N0hEYU93?=
+ =?utf-8?B?QkZGbEdxOHFyUDdwV0t1VFFhK090QmRvS05sbk1DeEFCWUZFMnhFUERrcGZC?=
+ =?utf-8?B?TzhIeERNUmwyTHhxQktPaHFjekhRalQ0Wmc5Rkd3U1JSc1Z2eU1pNlBITmNs?=
+ =?utf-8?B?WjBRUVUraUY1NWNJTklJR2JmYUVoZEVLRWhrUys5TUtLMm1jbTdpdHZmTFZO?=
+ =?utf-8?B?NTE1UXhGRnpWcUdNSVk4NzlWdXJuYnl4eDFEYmVCM0p2QlB5N2ZqZ2thLzRC?=
+ =?utf-8?B?R2s5K0VQRG5FS053YkVudU9rNnV2V2NCNlAvRjNHNEc2NSthNkJYZjFVcjJi?=
+ =?utf-8?B?TkI1ZS9tT1pSME9hVzhQTS9OSEZ4YWF6L0t5bysxRWkzRFBwUVNwYTFnMnFo?=
+ =?utf-8?B?K1FjalUrbVRMbURwUVBFT3IzMUdPYmVqbmN2OWxHVHhsVnNEVGZBNGRleURD?=
+ =?utf-8?B?SlpqeXZpSjEzSzlpQUZrR1VrdHRQZi9heWsyNkl3eWViTWNheDIyaFR4U0I2?=
+ =?utf-8?B?MjNCc3NPU2FUTTFiTzdxTS9BcDB2S0dGbHVERlUyZEVsS0dZYjNXMWZzeFFM?=
+ =?utf-8?B?MGEvSjF0c2g1VEFTQXYxZ2RHUEJpcFlFeXcya3lidHlWR1BxbzZzNFFWWldB?=
+ =?utf-8?B?YTlQOXg0R1NHVmhHTjZqMUJVR0d5Q0pjT1RXMHFKNWdVNWMwMS8rbGhXSE81?=
+ =?utf-8?B?S0sybVBVdU9XanJBaWNJcjZMV1Z5bUJSOVBuM2JpRGZZaDNONGtqKzY5cFZw?=
+ =?utf-8?B?VmRMSmJnSVFyQ2lBeHVsU0V3K2tZcXZTa04yRUVnUUJoY3ZOZVo2RVdlM3kw?=
+ =?utf-8?B?N2x4c3hpUnRIdTF1d2ZNU24zc1VhUVFCTUg3VHU2WGZKVnlmSUZkVUFQZFBX?=
+ =?utf-8?B?REw3aEVkMEFyc2FVNzdlREpPRGdsRnVSSWtLaWNuY0hkMW4vM3JLWXVFWGU4?=
+ =?utf-8?B?U2xXcjlnL0tRb2htL25UbkZrSUpBMzZoVUdWcWdBN3ZQTHhJdGtPbGhWeDlr?=
+ =?utf-8?B?U2dmSHJ1VlFsejhaRUxJNTZVMXVORTl5OFUzdlovT2MvdjYyZXFKNUY1czVX?=
+ =?utf-8?B?SVZNVHQ2bm1nRUsxMjdTMUpadmliajNLZXBOd2JDUkZ6bEx6WlBaWjQxZHBu?=
+ =?utf-8?B?OE1zVE9NRmJ0bE85RWZDZXJaWW1naVRNSit3ZG1vL3dpaUJCR3pCZEIvOHkr?=
+ =?utf-8?B?MllyWFNEcWZKRnpjc1UrNHZYZHhBWFZlSnY1YWk3YlBQYnV4d2cwYzB3am0r?=
+ =?utf-8?B?a0hGa01md2NSSVZPbUkzTGRWVmFtRWtTSlBZaEVGcms3K2l2WjhjTXNiQWxq?=
+ =?utf-8?B?cFBWd2JlY0s1cVVhVWtxSHlMQTUvNnI3ekM1anFxT0lkblNjMjhsZkJLOVJv?=
+ =?utf-8?B?Zy9JYkJxV3BETjVBaEFhM2Y5SE9FTjNCQjRaN01GK0VkTzcvL2RXcS83YzJ4?=
+ =?utf-8?B?WHpGaGNMSXBOZHJXd090SnJQTFVKaUt5NmorMTNodlN5aVk4ditzSzBIQjRQ?=
+ =?utf-8?B?djl6WUFUU212aUdUOVF6MTE5ekV5ay9XV0V4czNMRnFJZXhNdWduOTRTQUJR?=
+ =?utf-8?B?UDkzTzRVejZubUdqejdOQTVlbnIvZWw4QWUvbVZ0a1F4ZGFYVEtaZytsMW9Y?=
+ =?utf-8?B?NjFjMEJVYWlndXFsMGswdGZPSmpid29zdUI5WVdwTTJWcU5zTHpZSkc1RWZZ?=
+ =?utf-8?B?QmU0eHB6ZE1DZXEzTFVLUnZZOEd5YVNldkw0UzI1VTdXa0dvcTNpR1U5UThD?=
+ =?utf-8?B?MUowTStMOFg3QjRFUWlvRzVNVUIybGVWVUljbk04L3RGQlJmbzU2WkZxa0pU?=
+ =?utf-8?B?NWFDTDhvcmJOZXk0T2dVeXJQYjFLR3hEWVJWVGJkckVZd1EvQVE3VHdpSjI2?=
+ =?utf-8?B?MjR0Q1pkeThGNU1iNy9pK1N6eFJleGZkc1FBUVhoYmxJbmQ2bTNyNVJ5RHdD?=
+ =?utf-8?B?WFJPakpveFg1bGtURCtJdWlyT1ZIODZSU3VEQjRSWWRSUi84U20wUTRYTXpR?=
+ =?utf-8?B?VmQvSjBLWEFUYm41eWJ1REdPZE5iVzNBVTQvZU03TXE4Wk5DUVgyeGZtYVJ1?=
+ =?utf-8?B?bk9TTFRNN2oybWJXTlYrR2tGNUp3UFYzMzAyVzIzTlFaQndJNFB6ZWpuQ1VR?=
+ =?utf-8?B?ZkpXaHJ3dng2OFM4bWdBenBYS2dYSWpYOXRwWXVmTk5OVlN3bkxVblkzbkla?=
+ =?utf-8?Q?3YD7A7BW1dokaCDKC5OOVJE5fEEpn8T4nc9jfF4O7N+b?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ff61ccc-d268-456c-27c1-08db4bddf562
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2023 13:54:48.1595
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e0e8ccb-2f5d-4e44-7cee-08db4bdbccb8
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000042AB.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6353
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lKwR9tEocitx+rY8iqjM0VZHSgYCqMyfZ/WLqGh12qglj7VJ/R02YSCrQ30NTaDNJFRCm1kE/MLf30L4kdFhAw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7255
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Microchip usb5744 is a SS/HS USB 3.0 hub controller with 4 ports.
-The binding describes USB related aspects of the USB5744 hub, it as
-well cover the option of connecting the controller as an i2c slave.
-When i2c interface is connected hub needs to be initialized first.
-Hub itself has fixed i2c address 0x2D but hardcoding address is not good
-idea because address can be shifted by i2c address translator in the
-middle.
+On 03.05.23 14:51, Benjamin Block wrote:
 
-Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
-Signed-off-by: Michal Simek <michal.simek@amd.com>
----
+>> usb-storage can do a reset only on the USB device level,
+>> which translates to a bus reset on the SCSI level.
+>>
+>> And we are supposed to cancel any communication with the device
+>> before that.
+> 
+> Is that a limitation of the devices or drivers? Because then you don't
+> match SCSI semantics for LU reset - which aborts all running commands
 
-It looks like that usb8041 has also an optional i2c interface which is not
-covered. But it is mentioned at commit 40e58a8a7ca6 ("dt-bindings: usb:
-Add binding for TI USB8041 hub controller").
+We do not support a LUN reset. That's a limitation of the protocol.
+If something goes wrong you need to reset the whole USB device, which
+corresponds to a host adaptor on the SCSI level.
 
-i2c-bus name property was suggested by Rob at
-https://lore.kernel.org/all/CAL_JsqJedhX6typpUKbnzV7CLK6UZVjq3CyG9iY_j5DLPqvVdw@mail.gmail.com/
-and
-https://lore.kernel.org/all/CAL_JsqJZBbu+UXqUNdZwg-uv0PAsNg55026PTwhKr5wQtxCjVQ@mail.gmail.com/
+> on that scope among things. Which might explain the reason/choice behind
+> this unexpected behavior for you.
 
-the question is if adding address like this is acceptable.
-But it must be specified.
+For the device a reset presumably does wipe out the command currently
+under execution. The problem is within the driver. It thinks that
+a command is still active. And we are limited to one command at a time
+(on the whole bus - again protocol limitation)
 
-Driver will follow based on final dt-binding.
+> On random thought I had: in theory you could implement your own EH
+> strategy handler if the default one doesn't work for you. ATA and SAS do so.
+> [drivers/scsi/scsi_error.c:2285 `shost->transportt->eh_strategy_handler()`]
+> This can re-use parts/all of the existing escalation sequence in
+> `scsi_eh_ready_devs()`.
+> 
+> But that's no short-term fix.
 
----
- .../bindings/usb/microchip,usb5744.yaml       | 85 +++++++++++++++++++
- 1 file changed, 85 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+That looks like using a sledge hammer.
 
-diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-new file mode 100644
-index 000000000000..fafe275a35df
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-@@ -0,0 +1,85 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/microchip,usb5744.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Microchip USB5744 4-port Hub Controller
-+
-+description:
-+  Microchip's USB5744 SmartHubTM IC is a 4 port, SuperSpeed (SS)/Hi-Speed (HS),
-+  low power, low pin count configurable and fully compliant with the USB 3.1
-+  Gen 1 specification. The USB5744 also supports Full Speed (FS) and Low Speed
-+  (LS) USB signaling, offering complete coverage of all defined USB operating
-+  speeds. The new SuperSpeed hubs operate in parallel with the USB 2.0
-+  controller, so 5 Gbps SuperSpeed data transfers are not affected by slower
-+  USB 2.0 traffic.
-+
-+maintainers:
-+  - Piyush Mehta <piyush.mehta@amd.com>
-+  - Michal Simek <michal.simek@amd.com>
-+
-+allOf:
-+  - $ref: usb-device.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - usb424,5744
-+      - usb424,2744
-+
-+  reg: true
-+
-+  reset-gpios:
-+    maxItems: 1
-+    description:
-+      GPIO controlling the GRST# pin.
-+
-+  vdd-supply:
-+    description:
-+      VDD power supply to the hub
-+
-+  peer-hub:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      phandle to the peer hub on the controller.
-+
-+  i2c-bus:
-+    maxItems: 1
-+    description:
-+      phandle of an I2C controller to link usb-hub for usb attach and reset
-+      followed by i2c address.
-+
-+required:
-+  - compatible
-+  - reg
-+  - peer-hub
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    usb {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        /* 2.0 hub on port 1 */
-+        hub_2_0: hub@1 {
-+          compatible = "usb424,5744";
-+          reg = <1>;
-+          peer-hub = <&hub_3_0>;
-+          i2c-bus = <&i2c 0x2d>;
-+          reset-gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
-+        };
-+
-+        /* 3.0 hub on port 2 */
-+        hub_3_0: hub@2 {
-+          compatible = "usb424,2744";
-+          reg = <2>;
-+          peer-hub = <&hub_2_0>;
-+          i2c-bus = <&i2c 0x2d>;
-+          reset-gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
-+        };
-+    };
--- 
-2.36.1
+	Regards
+		Oliver
 
