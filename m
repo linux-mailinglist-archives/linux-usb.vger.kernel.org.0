@@ -2,96 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1C16F5037
-	for <lists+linux-usb@lfdr.de>; Wed,  3 May 2023 08:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FE76F52FC
+	for <lists+linux-usb@lfdr.de>; Wed,  3 May 2023 10:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjECGdS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 May 2023 02:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S229750AbjECIU2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 May 2023 04:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjECGdR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 May 2023 02:33:17 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CAA359B
-        for <linux-usb@vger.kernel.org>; Tue,  2 May 2023 23:33:16 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-94f1d0d2e03so800095366b.0
-        for <linux-usb@vger.kernel.org>; Tue, 02 May 2023 23:33:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683095594; x=1685687594;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xUfDTtPAs1VWSq2y6k2Y/B2HUp9LdmNS7Q2wGxGx+BM=;
-        b=Hj0MG7ZSFYFCnFWJIfNXbW8h0OOyZyXTI4v4wD8YLPGZuFyXyO+cPtRxSbXeTPvBZE
-         kPl5difWvM1C+1xukigJm+oR10UbqpLjOT0TjHsYF5wkxebpau1+kuVn77U9q+STJeJb
-         WhzFCYGhOUF0I8WfEr+RP+Yw96TwXCTrv1+XAoJ6htEUR3U38YjlRKuYI/B+hM7RK/5v
-         YhLhnnJScgNIZX7J9TJMQ0Atdm/UyNwHCWkpIwt5jp1PmVVOgkY2CBUxksj72nlheUOA
-         URoyGz1XlRE4NwhWHFr/uwBKivOTwNHLZFZ5mTsVGnx2aM0ngqHGNOxo2gOXnzMcrv9i
-         cHgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683095594; x=1685687594;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xUfDTtPAs1VWSq2y6k2Y/B2HUp9LdmNS7Q2wGxGx+BM=;
-        b=QHcDkZPQ8l9bQPHGvvz1WROkpkYEvewzmYqDFiSUYzwolkU3ZiWZ06jEKe0YqBZGHP
-         wRLWENPdsWiHPGxk8QrdykZEo8RXIpNv6mGScKG5fYvLXfafJed4xaLWeWx6S8qShlqB
-         EAON4wuj66A0AnOAgb0dwZ5QX/pqMvR4wR/qRbV+0dA96RrMUROGsGzfYfWbkceR7gor
-         86ub9YTOpaiFf3HbknQWup8oxQgg/WFRu2Gc/hzspQRW1oS47xmQTpUZugetk0mX9osu
-         AN+MZiH3vII0MWTqqpQz2X57wUjEWeVoM8jMhTAgSqnJlwQlnmR9L/ejb+nS7KPthQxf
-         Pw3Q==
-X-Gm-Message-State: AC+VfDxW61dEWNkuwlp9UlwDcl/Bo4kFXMdRFrkAOHqXDAGE19iyrlms
-        niaP6T39xdGQYtvqS681G+lIMw==
-X-Google-Smtp-Source: ACHHUZ6sUA3+dOmkpHHCog4RHngkJAQVGrhsV30sYHwumv1fCJ3ZkHaXNLuTjSQVW998HfnO6D8dag==
-X-Received: by 2002:a17:907:3686:b0:94b:b4a5:30f with SMTP id bi6-20020a170907368600b0094bb4a5030fmr2653324ejc.55.1683095594686;
-        Tue, 02 May 2023 23:33:14 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a40b:9d8:1fa0:ecc5? ([2a02:810d:15c0:828:a40b:9d8:1fa0:ecc5])
-        by smtp.gmail.com with ESMTPSA id f10-20020a170906048a00b0094eeea5c649sm16917107eja.114.2023.05.02.23.33.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 23:33:14 -0700 (PDT)
-Message-ID: <06c35008-3547-10be-2578-4d78c66b805e@linaro.org>
-Date:   Wed, 3 May 2023 08:33:12 +0200
+        with ESMTP id S229575AbjECIU0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 May 2023 04:20:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CE74C1D;
+        Wed,  3 May 2023 01:20:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D56FB62B8C;
+        Wed,  3 May 2023 08:20:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2FA0DC433D2;
+        Wed,  3 May 2023 08:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683102021;
+        bh=iBRLUxOOLNDNJJVdCjPD7ZNfD+zJIZUk4GzFTWLqUs8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=PVYEay/UZjdHAp4AUWK8+KJR69U9ycokpfc847p5wW8y6euvymhYIdjErvJwOBaF6
+         8lwRBlGeZGrCUeHxPsy8r+XKWIM2nKMUwyuPMDG10FEzUjPabUL0Qj9X5pxceMKVBT
+         quHh/aOhUTCnyUe7lczgyClbLYpcxHzv3RXBAsjbKVCAY+OkD0H09x2rBcZuy/r5O+
+         4CGDykW7TuAm6HcezGjVympOsWZeY3cZQ/cIWrRAFKjwoJn6K3LtqJEDFC9ihqAdHI
+         zgT3PvTPibyQuxRv1ZZbW+zjchk/vNohyQz2sp020CoDdFPTLBAeL54ozEao9njR7e
+         2QdZtkEOfkNXQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0B928C395FD;
+        Wed,  3 May 2023 08:20:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 2/2] dt-bindings: soc: qcom: eud: Fix compatible string
- in the example
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, linux-usb@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-References: <20230502093959.1258889-1-bhupesh.sharma@linaro.org>
- <20230502093959.1258889-3-bhupesh.sharma@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230502093959.1258889-3-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] r8152: fix the autosuspend doesn't work
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168310202104.22454.6926310039404404080.git-patchwork-notify@kernel.org>
+Date:   Wed, 03 May 2023 08:20:21 +0000
+References: <20230502033627.2795-413-nic_swsd@realtek.com>
+In-Reply-To: <20230502033627.2795-413-nic_swsd@realtek.com>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 02/05/2023 11:39, Bhupesh Sharma wrote:
-> As noted by Konrad while reviewing [1], the example node in the EUD
-> yaml documentation has a compatible string with no space after a comma.
+Hello:
+
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Tue, 2 May 2023 11:36:27 +0800 you wrote:
+> Set supports_autosuspend = 1 for the rtl8152_cfgselector_driver.
 > 
-> Fix the same.
-> 
-> [1]. https://lore.kernel.org/linux-arm-msm/20221231131945.3286639-1-bhupesh.sharma@linaro.org
-> 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> Fixes: ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
+> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
 > ---
+>  drivers/net/usb/r8152.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Here is the summary with links:
+  - [net] r8152: fix the autosuspend doesn't work
+    https://git.kernel.org/netdev/net/c/0fbd79c01a9a
 
-Best regards,
-Krzysztof
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
