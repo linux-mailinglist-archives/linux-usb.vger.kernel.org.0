@@ -2,78 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2379C6F5A7A
-	for <lists+linux-usb@lfdr.de>; Wed,  3 May 2023 16:56:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0F46F5CF7
+	for <lists+linux-usb@lfdr.de>; Wed,  3 May 2023 19:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjECO4P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 May 2023 10:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
+        id S229879AbjECRWH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 May 2023 13:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjECO4N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 May 2023 10:56:13 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276FC420B
-        for <linux-usb@vger.kernel.org>; Wed,  3 May 2023 07:56:12 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4edcc885d8fso6238855e87.1
-        for <linux-usb@vger.kernel.org>; Wed, 03 May 2023 07:56:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683125770; x=1685717770;
-        h=content-transfer-encoding:subject:to:from:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=/IH0bXTd7xM4TJ8FNuoToZkbq/2hYCkpo6CUgnIw9FM=;
-        b=baL1ifuCHo6ugTjfVgfQDngXo/lnjgBpfO/85+GP9SKM8GCkPo9dTh3n6sOeBivoIG
-         xSSrRj55XBLelFhZi0ovB3P3VE7tixzJ6byIMijTMSRSuukx0zCmvxpMTlQFWD3SO6dQ
-         casRvcRTQS4M62H65glZ3ZJL6hjOK1Xpj72r52gSmHBsnh2O+ONA67iIklrCV0vsHhp6
-         koVESUphh7eAIw4dwaG0eBI47Y45QH7Gba6rJT92ie42lCWxLg0HmHFCCcHU/JtTutvP
-         iUdCcLmZD3l74hVAsUUObwgiRy5L70Jj13oXCMCY/osjR1zKu+SXmUf9OEroPEYm3Bhd
-         0Fcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683125770; x=1685717770;
-        h=content-transfer-encoding:subject:to:from:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/IH0bXTd7xM4TJ8FNuoToZkbq/2hYCkpo6CUgnIw9FM=;
-        b=LlUVOO3S2LCmLHMWAvHXMwncKoComFctK5bUVxEHbCoeeS6ox7fHreFgEZ/qIci6XI
-         +WgeQzzmJILtf+04QKDX6+weozLh20WPpuTBPxA3vB5EPwgPrYLVLowC69tDBpt5jK7Q
-         LJXgRiAaL05+NpvBb+AddextCBazhilPHdXUX8D1FSWXZj++oiQ6N/TQfhYXPnvJ3xP5
-         iYU2bV6eIRkoMPFwffDVFHNcMIE1Xmf/as/R/WU+8e4vAF6eWRHhgHTCyzQZBIE4/r5I
-         f1aYm/aK4SsUhJl0hSojxj2f/0sEJiy4S3J+phqbr+rO4+v8tA2Vf0/TlV0ugLQ77f0O
-         BQZw==
-X-Gm-Message-State: AC+VfDwbwvleEl+crMbIYgR7UQ0RWvHVeSEJnuxcJF+9mWpb1LJ8Bqu1
-        rWUWmItF8muJHVRR07S/EYBkOzQhxg==
-X-Google-Smtp-Source: ACHHUZ6pV0tQ4dUNO01A2o7RBmn1ZuaF5dCemLo79NFzfcouiKbGdhtN8sMMnT3+v/n0/p0+hdr5Tw==
-X-Received: by 2002:a19:7616:0:b0:4e9:813e:409c with SMTP id c22-20020a197616000000b004e9813e409cmr969791lff.28.1683125770061;
-        Wed, 03 May 2023 07:56:10 -0700 (PDT)
-Received: from DESKTOP-BKF2J9E ([203.109.40.79])
-        by smtp.gmail.com with ESMTPSA id x24-20020a19f618000000b004db3e7dfb8csm6072101lfe.189.2023.05.03.07.56.09
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Wed, 03 May 2023 07:56:09 -0700 (PDT)
-Message-ID: <64527609.190a0220.2dfc5.14d5@mx.google.com>
-Date:   Wed, 03 May 2023 07:56:09 -0700 (PDT)
-X-Google-Original-Date: 3 May 2023 19:56:09 +0500
+        with ESMTP id S229767AbjECRWF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 May 2023 13:22:05 -0400
+X-Greylist: delayed 385 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 03 May 2023 10:22:03 PDT
+Received: from master.debian.org (master.debian.org [IPv6:2001:41b8:202:deb:216:36ff:fe40:4001])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CD9CF
+        for <linux-usb@vger.kernel.org>; Wed,  3 May 2023 10:22:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.master; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
+        In-Reply-To:References; bh=DdNve2GwmYcDyICDrI6fHqcpOTdBC6ozvrriesR8zCs=; b=wJ
+        Yh0uBGl5YYcJq2v5G7Nmw8rwfWcpj4it3Vk4h5+sxc2ThQTKQyCJthl3laKDKz2ercUQSSOGVzBqS
+        pZ4cghb8vvfRXsxoCcjL4pjf6Nv4oeO/R78UNHyPvL7o5X/Sqj6xLgQiIHClhEL2kZcZqLUUqKP4d
+        ol1Og6wj8F1AbMlukh1qig2Al9XO6N0QOAWYaBAKjHg9H7B8CPqpSxi8WANYSf6uZb1IGOS5XBToH
+        Xu9ANinNHpifdqyEmnasScJ8LCe6x7NW3s0M6E3JPTQICjigzOjnqai1lBIzKvbEovVAg8VMQ26AG
+        r8jQ99kHHjtrnriWdT6SRmaa3kDw8xXw==;
+Received: from ukleinek by master.debian.org with local (Exim 4.94.2)
+        (envelope-from <ukleinek@master.debian.org>)
+        id 1puG4h-005CwA-D6; Wed, 03 May 2023 17:15:31 +0000
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@debian.org>
+To:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Hongren Zheng <i@zenithal.me>, linux-usb@vger.kernel.org
+Subject: [PATCH] usbip: Use _FORTIFY_SOURCE=2 instead of (implicitly) =1
+Date:   Wed,  3 May 2023 19:15:23 +0200
+Message-Id: <20230503171523.1070704-1-ukleinek@debian.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-From:   antonialiu5320@gmail.com
-To:     linux-usb@vger.kernel.org
-Subject: Cost Estimation
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1014; i=ukleinek@debian.org; h=from:subject; bh=naAgnG4zlVieKufvJ/8iNhB3Hg69zyrRhopXPCwhvVA=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkUpaqqr8TomWuNePabHVX8Dm1Bw309OCkh0dFo qLS6AMGuQqJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZFKWqgAKCRCPgPtYfRL+ TvQ3B/0Swm2m3Ly/4VYvLBZOvDV6HJlUaO+6w1hmHcAebB3oluEDYvgffCjTWZD7pxocgHmFvUE 1a6iAww4qYchwZELqMslmR1cyr7QPYqC/ozKJGrCdF9PvvDuDjEbnscguTdxE1GHGmCv15mF+iA 5+9fdK+MZAFQcaTZKUbPBrwlLJ9bm9R1un18m+LeoaEEi9w05qYFvCZl8PeEyQbL4ZUd+y7VRqQ fWl+250iDm6IOVtbipSbHW6ov6rmbdi4KZg3cRvX/fvte/ly7zoxX++MYE7YmEm0e3cPKHQzPTX SXANNdBLSf/UjrZvT3A1VDjF17Kp/7eubbs2JKz/kITF23Lm
+X-Developer-Key: i=ukleinek@debian.org; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=0D=0AHi,=0D=0A=0D=0AIt's  from Crown Estimation, LLC=0D=0A=0D=0A=
-We are specializing in full cost estimates and all related biddin=
-g services for all construction projects in all 50 states. We pro=
-vide our services for general and sub-contractors as well as owne=
-rs/developers, architects and engineers.=0D=0A =0D=0AFeel free to=
- contact me if you have any query or you want to see our sample w=
-ork.=0D=0A=0D=0ABest Regards!=0D=0AAntonia Liu=0D=0AMarketing Man=
-ager=0D=0ACrown Estimation, LLC
+_FORTIFY_SOURCE=2 uses more and stricter checks. This is what e.g.
+Debian recommends to build packages with.
+
+Signed-off-by: Uwe Kleine-König <ukleinek@debian.org>
+---
+ tools/usb/usbip/configure.ac | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/usb/usbip/configure.ac b/tools/usb/usbip/configure.ac
+index 607d05c5ccfd..9a849846a34a 100644
+--- a/tools/usb/usbip/configure.ac
++++ b/tools/usb/usbip/configure.ac
+@@ -94,11 +94,11 @@ AC_SUBST([USBIDS_DIR])
+ AC_MSG_CHECKING([whether to use fortify])
+ AC_ARG_WITH([fortify],
+ 	    [AS_HELP_STRING([--with-fortify],
+-			    [use _FORTIFY_SROUCE option when compiling)])],
++			    [use _FORTIFY_SROUCE=2 option when compiling)])],
+ 			    dnl [ACTION-IF-GIVEN]
+ 			    [if test "$withval" = "yes"; then
+ 				AC_MSG_RESULT([yes])
+-				CFLAGS="$CFLAGS -D_FORTIFY_SOURCE -O"
++				CFLAGS="$CFLAGS -D_FORTIFY_SOURCE=2 -O"
+ 			     else
+ 			     	AC_MSG_RESULT([no])
+ 				CFLAGS="$CFLAGS -U_FORTIFY_SOURCE"
+-- 
+2.39.2
 
