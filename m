@@ -2,83 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B16F06F676A
-	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 10:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA906F6770
+	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 10:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjEDI32 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 May 2023 04:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
+        id S230169AbjEDIa1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 May 2023 04:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjEDI3O (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 May 2023 04:29:14 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D02855A8;
-        Thu,  4 May 2023 01:26:17 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3448Q2qsC028464, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3448Q2qsC028464
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 4 May 2023 16:26:02 +0800
-Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 4 May 2023 16:26:07 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 4 May 2023 16:26:06 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Thu, 4 May 2023 16:26:06 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v5] usb: dwc3: core: add support for realtek SoCs custom's global register start address
-Thread-Topic: [PATCH v5] usb: dwc3: core: add support for realtek SoCs
- custom's global register start address
-Thread-Index: AQHZfjq3WwrVqDL5u06W58kFX8Z8v69JN46AgACNR7A=
-Date:   Thu, 4 May 2023 08:26:06 +0000
-Message-ID: <44451716afa541e298b2e5640fe3aec9@realtek.com>
-References: <20230504034423.20813-1-stanley_chang@realtek.com>
- <96706396-7023-b895-169a-788aad11adcb@gmail.com>
-In-Reply-To: <96706396-7023-b895-169a-788aad11adcb@gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S230196AbjEDIaB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 May 2023 04:30:01 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325B56A5E
+        for <linux-usb@vger.kernel.org>; Thu,  4 May 2023 01:27:11 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6436e075166so196011b3a.0
+        for <linux-usb@vger.kernel.org>; Thu, 04 May 2023 01:27:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683188830; x=1685780830;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1dtXpIHsf8HhXYxkkEaWjrnt2Jd8Ht3xr81JX4hMlcQ=;
+        b=p29Gmm0Fdg+GEgF2b4MD0yK+ugICJM4CLI3wmw2xlq0duglICQjK3XTy/2vSvg4N3j
+         /sKN+KnQ1K7H9jvdZYm524/YYu/L1Y5Exkmp7KE93s9vzbsgobLGs5gXLNBSBYM+8WXN
+         OkPexcdbkxteu5QVHYVNg8+G9PQb1Uj/T6rtlonGkhEr9VNU98fKN+XrkfSNiMWu4UO0
+         i76plCvHW7xeIwdcLX0pEGt6zM+dpnczMGi1dT6MQOE2au54aRZ82XpJIP0h2mp7/4iH
+         OZo+lpRq4p+r/Prd+ut8FUA2BLljrz288kIS7B8r4593Ziu8FpFyeF/6eA8UZkejXQcA
+         eBfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683188830; x=1685780830;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1dtXpIHsf8HhXYxkkEaWjrnt2Jd8Ht3xr81JX4hMlcQ=;
+        b=GmDHeEWdAbKb80gm5sCW28pxQ/ck2o/+xu3Z3o+YaK8bX1tzXv+u/xLwrV9sRWYFSI
+         sVQ4fbhhPf41u5X+VTJTJHZgDuNvzN6joCVpNVd/XOrrx4RcaVDAZVxJhWm3XORRL7MJ
+         S39UTOEPUM/NmYBqrGrxZV5pbfU2iueobjkMHCRSUBSYf3cgPXI90ng8DxvaVuAzEU86
+         5JppNt3HpKldLG7Nm+RRMzx1R9GXglkdLKHWA2sfNX/fc5kmaddm+9R3LFRKdgJ75mqV
+         XI9aSJeJ7f7CAw4z9klyBzgd2A63zTaZLPcz9VTo47nd0cray4J7iEw4PUkswD4NDQtm
+         oJ0Q==
+X-Gm-Message-State: AC+VfDzP5988XSnaMaCBNJGMHKQBdae96AqfThMTBsD7XwwCQbaPUw9i
+        Ryzmx9R0d7mC/VQrTiPACkIz/g==
+X-Google-Smtp-Source: ACHHUZ7StNANc/fM+kaiVcC8kHbqaHz9hbMa/DQmPb/0QJ1VagnznMT8jbmJEnPaS2n6hZrsCg1CnQ==
+X-Received: by 2002:a05:6a00:2395:b0:63a:cefa:9d44 with SMTP id f21-20020a056a00239500b0063acefa9d44mr1564981pfc.14.1683188830471;
+        Thu, 04 May 2023 01:27:10 -0700 (PDT)
+Received: from localhost.localdomain ([223.233.65.180])
+        by smtp.gmail.com with ESMTPSA id s1-20020a056a00178100b00625d84a0194sm24913973pfg.107.2023.05.04.01.27.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 01:27:10 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        bhupesh.sharma@linaro.org, robh+dt@kernel.org,
+        linux-usb@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        krzysztof.kozlowski@linaro.org
+Subject: [PATCH v3 0/5] Add Qualcomm SM6115 / SM4250 EUD dt-bindings & driver support
+Date:   Thu,  4 May 2023 13:56:39 +0530
+Message-Id: <20230504082644.1461582-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PiBPbiA1LzQvMjMgNjo0NCBBTSwgU3RhbmxleSBDaGFuZyB3cm90ZToNCj4gDQo+ID4gVGhlIFJl
-YWx0ZWsgUlREMXh4eCBTb0NzIHdlcmUgZGVzaWduZWQsIHRoZSBnbG9iYWwgcmVnaXN0ZXIgYWRk
-cmVzcw0KPiA+IG9mZnNldCBhdCAweDgxMDAuDQo+IA0KPiAgIENhbid0IHBhcnNlIHRoYXQsIHBl
-cmhhcHMgIndpdGgiIGlzIG1pc3Npbmc/DQo+IA0KPiA+IFRoZSBkZWZhdWx0IGFkZHJlc3Mgb2Zm
-c2V0IGlzIGNvbnN0YW50IGF0IERXQzNfR0xPQkFMU19SRUdTX1NUQVJUDQo+ID4gKDB4YzEwMCku
-IFRoZXJlZm9yZSwgYWRkIGEgY2hlY2sgaWYgdGhlIGNvbXBhdGlibGUgbmFtZSBvZiB0aGUgcGFy
-ZW50DQo+ID4gaXMgInJlYWx0ZWsscnRkMXh4eC1kd2MzIiwgdGhlbiBnbG9iYWwNCj4gDQo+ICAg
-IFdpbGRjYXJkcyBhcmUgbm90IGFsbG93ZWQgaW4gdGhlICJjb21wYXRpYmxlIiBwcm9wcy4uLg0K
-DQpJIGNhbid0IHVuZGVyc3RhbmQgeW91ciBtZWFuaW5nLg0KRG8geW91IG1lYW4gSSBjYW4ndCB1
-c2UgcnRkMXh4eCA/DQoNCg==
+Changes since v2:
+----------------
+- v2 can be viewed here: https://www.spinics.net/lists/linux-arm-msm/msg137025.html 
+- Addressed Bjorn and Krzysztof's comments.
+- Added [PATCH 1/5] which fixes the 'qcom_eud' sysfs path. 
+- Added [PATCH 5/5] to enable EUD for Qualcomm QRB4210-RB2 boards.
+
+Changes since v1:
+----------------
+- v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20221231130743.3285664-1-bhupesh.sharma@linaro.org
+- Added Krzysztof in Cc list.
+- Fixed the following issue reported by kernel test bot:
+  >> ERROR: modpost: "qcom_scm_io_writel" [drivers/usb/misc/qcom_eud.ko] undefined!
+
+This series adds the dt-binding and driver support for SM6115 / SM4250
+EUD (Embedded USB Debugger) block available on Qualcomm SoCs.
+
+It also enables the same for QRB4210-RB2 boards by default (the user
+still needs to enable the same via sysfs).
+
+The EUD is a mini-USB hub implemented on chip to support the USB-based debug
+and trace capabilities.
+
+EUD driver listens to events like USB attach or detach and then
+informs the USB about these events via ROLE-SWITCH.
+
+Bhupesh Sharma (5):
+  usb: misc: eud: Fix eud sysfs path (use 'qcom_eud')
+  dt-bindings: soc: qcom: eud: Add SM6115 / SM4250 support
+  usb: misc: eud: Add driver support for SM6115 / SM4250
+  arm64: dts: qcom: sm6115: Add EUD dt node and dwc3 connector
+  arm64: dts: qcom: qrb4210-rb2: Enable EUD debug peripheral
+
+ Documentation/ABI/testing/sysfs-driver-eud    |  2 +-
+ .../bindings/soc/qcom/qcom,eud.yaml           | 16 +++++
+ arch/arm64/boot/dts/qcom/qrb4210-rb2.dts      | 27 +++++++-
+ arch/arm64/boot/dts/qcom/sm6115.dtsi          | 48 ++++++++++++++
+ drivers/usb/misc/Kconfig                      |  1 +
+ drivers/usb/misc/qcom_eud.c                   | 66 +++++++++++++++++--
+ 6 files changed, 153 insertions(+), 7 deletions(-)
+
+-- 
+2.38.1
+
