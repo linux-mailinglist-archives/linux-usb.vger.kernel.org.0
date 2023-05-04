@@ -2,60 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5FC6F68B8
-	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 11:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9BCA6F68D3
+	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 12:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjEDJxx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 May 2023 05:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37418 "EHLO
+        id S229873AbjEDKI4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 May 2023 06:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbjEDJxt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 May 2023 05:53:49 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C238B46AC
-        for <linux-usb@vger.kernel.org>; Thu,  4 May 2023 02:53:46 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4effb818c37so297933e87.3
-        for <linux-usb@vger.kernel.org>; Thu, 04 May 2023 02:53:46 -0700 (PDT)
+        with ESMTP id S229545AbjEDKIz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 May 2023 06:08:55 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B980A49EC
+        for <linux-usb@vger.kernel.org>; Thu,  4 May 2023 03:08:53 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f00d41df22so9156974e87.1
+        for <linux-usb@vger.kernel.org>; Thu, 04 May 2023 03:08:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683194025; x=1685786025;
+        d=linaro.org; s=google; t=1683194932; x=1685786932;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=fhz3O9BzWKakpJoLNASXwlnplTMxOKAb7/tbotrDYZA=;
-        b=n9bfzA293hypbCgNkm5RhVK68ZEqXzMn5XlurLUe9KNExGlTMb5sVYBxtF6HuoxZZY
-         fo0bfZBQd3Y+XOY2Mb/G3ujYS9rTs8sqvrnFCPOucvvMhp+/jVe6n0eHevJymQ+MJkol
-         pQqToh4BzFTlQ+LeRnW66EiEpKOx63L7hSWxrArrSUk3QSnPj2mdN3UpsUMj8kQfjaQ2
-         prB6SgAPphBE+3Jm6hRcRUnw5ocNi7EET2ZDI6P2cwM83nqM//vbxHKktxXzYWayfjq2
-         1Ll2bj5LtnsQodBPa2Zb0qHT2Q9SgMeCZwcbz0MTxo0QV+qZhStTz2ABHpJTitYqlzY5
-         8CqQ==
+        bh=jfq4Q0bzKgqrrdmGoknn8Gs1xzMa+RN+wrvnwiQJFjM=;
+        b=cSyFFQbvDN3WMuHAWCxfwE8GIqkKZ2xDrgeCKigzBghlDNPxcVEPKbZitXUsUPmgjD
+         PLh1yVu99pW7I1KjB7wNs3LebkD+4TymZRwylcxhj8RgdkcpawQxGSFN32ZetVaJBG8u
+         5TDmGIi3rLctyZrmXmVGKlWpz8ZyGdmAMTYoW+UZXuHercyRCxpgd9YbYh1jub883fRI
+         Y7M+tEKbV89W8fa5t+TDKGemGjc84/Uqn2Eklx/4fZnG1okOPAW0ONplIG7vwmpUQciv
+         fhSVoF96Neg1+uCMWWfgtBKJkFOohrqxnlmyzc/5sxI/We33grIu7gaSMIIQkzX5Lphe
+         6bEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683194025; x=1685786025;
+        d=1e100.net; s=20221208; t=1683194932; x=1685786932;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fhz3O9BzWKakpJoLNASXwlnplTMxOKAb7/tbotrDYZA=;
-        b=V56SlK5PO2r0WNgcqeT84S205j/h94/+JlP0VaakzECb92T80oR62J+D7rNkUjqWfu
-         hxD7dIQ7pP3B/OVgjLe3wzps2pv+ZOaGvWf/sC4COLgsRGjT+fv8Guf/ymHvi90RTD0Y
-         oiiMoMyvaFOizCqSRcOgDjmmWpkpgb7Znm40yOgKF1Jsxftl+2ouslyRlNBmuJ+1rL/r
-         66l2HpfAnu86R+ND+n11BLRQXOuoMJd7mE+edSZo478NDdZ3peEyPXuMTSKjHGDaUsxj
-         UgTR5nZKal3V1QXqRIp+Z30e8XgR6nbAo9yD7F9b7aIDeUrW+FOLFIJmL5H47c77IXmY
-         oBwA==
-X-Gm-Message-State: AC+VfDwyNIxVnH4lCah2Qu/CTeHTAZy911FeTImN/81O/RPOsuFOFLst
-        vp53q1neqcDdokXi1JSIAKg+2g==
-X-Google-Smtp-Source: ACHHUZ4qUP3oJDTPyYnMqjUWG5RqMudfjwAWrR9EbIYc2Ic9y0gIf0WyKkeeIobgBRA/aDyXDKz4PA==
-X-Received: by 2002:a05:6512:505:b0:4ef:d4ee:1a6a with SMTP id o5-20020a056512050500b004efd4ee1a6amr1478525lfb.44.1683194025045;
-        Thu, 04 May 2023 02:53:45 -0700 (PDT)
+        bh=jfq4Q0bzKgqrrdmGoknn8Gs1xzMa+RN+wrvnwiQJFjM=;
+        b=Ek738NkxP+ga89bZ9ERtKArplBrRGi5CMcUnbW9ZYTPrsuB/rD41Q134v8AFzh8MVG
+         nQkFTerVZPZg8v4saBeUnUc6QAuunQ79widAbUBDs4Yxtsg8ae9WValj0SKjG5eQaR2D
+         w2MwMQzqxgnn9Bh2A6N4ZHYlnDWQXAy/L7ZbEyhfrBbvK+HW6kv/IY+eBo5oFpzv4Icv
+         Yu7i/NnD5QLkZ2BksOkuViaPBH001OSMJOqPjWvzegntWcAYcHIag13vT59OXb47WsjQ
+         t336R/1GbpsbYJBiqqQphApMy3vOWEtbXRY2RYO83NHApBJUmL4cId3AIFT2tyT88YcN
+         UGQQ==
+X-Gm-Message-State: AC+VfDyv5Ze2iqIgM4YnFdswhPy3oYzlK1OtsF+jK2KX45L4xb5evoMl
+        SckjXmsraTtqgqqXAeG5B/aRFA==
+X-Google-Smtp-Source: ACHHUZ6Cq/N2Z10u4/9KpdPELT4RkD+I/Ruwf4DKPzXnq0qBktOAKbyATb7vY1fXJ1VKdyn8ZgZiog==
+X-Received: by 2002:a2e:721a:0:b0:2a4:fada:edd1 with SMTP id n26-20020a2e721a000000b002a4fadaedd1mr669030ljc.16.1683194932007;
+        Thu, 04 May 2023 03:08:52 -0700 (PDT)
 Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id u5-20020a056512040500b004efd2b04f7fsm901483lfk.87.2023.05.04.02.53.43
+        by smtp.gmail.com with ESMTPSA id u22-20020a2ea176000000b002ab1216de44sm5108191ljl.71.2023.05.04.03.08.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 02:53:44 -0700 (PDT)
-Message-ID: <99686fdf-73eb-30e0-8ad2-64af1b6b3508@linaro.org>
-Date:   Thu, 4 May 2023 11:53:43 +0200
+        Thu, 04 May 2023 03:08:51 -0700 (PDT)
+Message-ID: <37603081-e41a-2977-7905-2063abed98cc@linaro.org>
+Date:   Thu, 4 May 2023 12:08:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.1
-Subject: Re: [PATCH v3 4/5] arm64: dts: qcom: sm6115: Add EUD dt node and dwc3
- connector
+Subject: Re: [PATCH v3 5/5] arm64: dts: qcom: qrb4210-rb2: Enable EUD debug
+ peripheral
 Content-Language: en-US
 To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
@@ -64,15 +64,15 @@ Cc:     agross@kernel.org, andersson@kernel.org,
         robh+dt@kernel.org, linux-usb@vger.kernel.org,
         krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org
 References: <20230504082644.1461582-1-bhupesh.sharma@linaro.org>
- <20230504082644.1461582-5-bhupesh.sharma@linaro.org>
+ <20230504082644.1461582-6-bhupesh.sharma@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230504082644.1461582-5-bhupesh.sharma@linaro.org>
+In-Reply-To: <20230504082644.1461582-6-bhupesh.sharma@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,101 +82,66 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 On 4.05.2023 10:26, Bhupesh Sharma wrote:
-> Add the Embedded USB Debugger(EUD) device tree node for
-> SM6115 / SM4250 SoC.
+> Since the USB-C type port on the Qualcomm QRB4210-RB2 board
+> can be set primarily in a 'device' configuration (with the default
+> DIP switch settings), it makes sense to enable the EUD debug
+> peripheral on the board by default by setting the USB 'dr_mode' property
+> as 'otg'.
 > 
-> The node contains EUD base register region, EUD mode manager
-> register region and TCSR Base register region along with the
-> interrupt entry.
-> 
-> Also add the typec connector node for EUD which is attached to
-> EUD node via port. EUD is also attached to DWC3 node via port.
-> 
-> To enable the role switch, we need to set dr_mode = "otg" property
-> for 'usb_dwc3' sub-node in the board dts file.
-> 
-> Also the EUD device can be enabled on a board once linux is boot'ed
-> by setting:
->  $ echo 1 > /sys/bus/platform/drivers/qcom_eud/../enable
+> Now, the EUD debug peripheral can be enabled by executing:
+>  $ echo 1 > /sys/bus/platform/drivers/qcom_eud/1610000.eud/enable
 > 
 > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > ---
->  arch/arm64/boot/dts/qcom/sm6115.dtsi | 48 ++++++++++++++++++++++++++++
->  1 file changed, 48 insertions(+)
+>  arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 27 +++++++++++++++++++++++-
+>  1 file changed, 26 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> index f67863561f3f..6865342fc42f 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> @@ -180,6 +180,18 @@ core3 {
->  		};
+> diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> index 1a0776a0cfd0..0ce72f1ebc10 100644
+> --- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> +++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> @@ -30,6 +30,10 @@ vph_pwr: vph-pwr-regulator {
 >  	};
+>  };
 >  
-> +	eud_typec: connector {
-> +		compatible = "usb-c-connector";
+> +&eud {
+> +	status = "okay";
+> +};
 > +
-> +		ports {
-> +			port@0 {
-> +				con_eud: endpoint {
-> +					remote-endpoint = <&eud_con>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
->  	firmware {
->  		scm: scm {
->  			compatible = "qcom,scm-sm6115", "qcom,scm";
-> @@ -647,6 +659,35 @@ gcc: clock-controller@1400000 {
->  			#power-domain-cells = <1>;
->  		};
+>  &qupv3_id_0 {
+>  	status = "okay";
+>  };
+> @@ -253,7 +257,28 @@ &usb {
 >  
-> +		eud: eud@1610000 {
-> +			compatible = "qcom,sm6115-eud", "qcom,eud";
-> +			reg = <0x0 0x01610000 0x0 0x2000>,
-> +			      <0x0 0x01612000 0x0 0x1000>,
-> +			      <0x0 0x003c0000 0x0 0x40000>;
-> +			interrupts = <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>;
-> +			qcom,secure-mode-enable;
-> +			status = "disabled";
+>  &usb_dwc3 {
+>  	maximum-speed = "super-speed";
+> -	dr_mode = "peripheral";
 > +
-> +			ports {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				port@0 {
-> +					reg = <0>;
-Please insert a newline before each child node.
+> +	/*
+> +	 * There is only one USB DWC3 controller on QRB4210 board and it is connected
+> +	 * via a DIP Switch:
+> +	 * - to either an USB - C type connector or an USB - A type connector
+> +	 *   (via a GL3590-S hub), and
+> +	 * - to either an USB - A type connector (via a GL3590-S hub) or a connector
+> +	 *   for further connection with a mezzanine board.
+> +	 *
+> +	 * All of the above hardware muxes would allow us to hook things up in
+> +	 * different ways to some potential benefit for static configurations (for e.g.
+> +	 * on one hand we can have two USB - A type connectors and a USB - Ethernet
+> +	 * connection available and on the other we can use the USB - C type in
+> +	 * peripheral mode).
+> +	 *
+> +	 * Note that since the USB - C type can be used only in peripehral mode,
+> +	 * so hardcoding the mode to 'peripheral' here makes sense.
+> +	 *
+> +	 * However since we want to use the EUD debug device, we set the mode as
+> +	 * 'otg' here.
+> +	 */
+> +	dr_mode = "otg";
+So if I understand correctly, EUD works via the type-C connector and
+only when the switch is turned such that the type-C connector is in use?
 
 Konrad
-> +					eud_ep: endpoint {
-> +						remote-endpoint = <&usb2_role_switch>;
-> +					};
-> +				};
-> +
-> +				port@1 {
-> +					reg = <1>;
-> +					eud_con: endpoint {
-> +						remote-endpoint = <&con_eud>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
->  		usb_hsphy: phy@1613000 {
->  			compatible = "qcom,sm6115-qusb2-phy";
->  			reg = <0x0 0x01613000 0x0 0x180>;
-> @@ -1144,6 +1185,13 @@ usb_dwc3: usb@4e00000 {
->  				snps,has-lpm-erratum;
->  				snps,hird-threshold = /bits/ 8 <0x10>;
->  				snps,usb3_lpm_capable;
-> +				usb-role-switch;
-> +
-> +				port {
-> +					usb2_role_switch: endpoint {
-> +						remote-endpoint = <&eud_ep>;
-> +					};
-> +				};
->  			};
->  		};
+>  };
 >  
+>  &usb_hsphy {
