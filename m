@@ -2,157 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A516F623E
-	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 01:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 594E56F6246
+	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 02:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjECXw7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 May 2023 19:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
+        id S229564AbjEDABi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 May 2023 20:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjECXw6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 May 2023 19:52:58 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53910903A
-        for <linux-usb@vger.kernel.org>; Wed,  3 May 2023 16:52:51 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-24e4f674356so1133817a91.3
-        for <linux-usb@vger.kernel.org>; Wed, 03 May 2023 16:52:51 -0700 (PDT)
+        with ESMTP id S229459AbjEDABh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 May 2023 20:01:37 -0400
+Received: from mail-ua1-x94a.google.com (mail-ua1-x94a.google.com [IPv6:2607:f8b0:4864:20::94a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A65449D
+        for <linux-usb@vger.kernel.org>; Wed,  3 May 2023 17:01:35 -0700 (PDT)
+Received: by mail-ua1-x94a.google.com with SMTP id a1e0cc1a2514c-779f4178ffdso1848981241.2
+        for <linux-usb@vger.kernel.org>; Wed, 03 May 2023 17:01:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683157971; x=1685749971;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qIk186o9zoU+mH9r76xErzn/99J8aYL+vdhv+aIdc+U=;
-        b=SqfLZAXg/l88TDO+OsrXZVcZFb6V6f1Q+efyB31p2r9PNxlRc3eTU52bgTZRc+jQYq
-         DuX+kmZM38KFAEPH9tqVJZO7ED+df11RKSSXsKOA3jH5bSUSivfS2TdDkHpb8lj+QI1T
-         2zyJ9Rn7faPmjPqhhJRmx4PBguV2dpspCQjVS1q1O+lCuyO6DU7mgGKC7vNQaZDEnM9R
-         Nr83bdxfjPEKs/N8AQh+D3B1fWfhMu+SIE/GPBRnmd5xJW9CCMLrkPm16GvfluGgZFOX
-         m5P1g/+3x+4vDYjdZbJfCHgvhNXvWR9TFx82p9z+dULbdSNKWosOnBryG6ekyWTNstTh
-         4oxA==
+        d=google.com; s=20221208; t=1683158495; x=1685750495;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=huFx2QvDQwsYXGCCCCBMBfy2FLXsfhWYQfF5nBlr79I=;
+        b=lHO7Oxeg/rcvTJ6A63c1GAy4Ybs22O9huvREAir9TIYIe+P4aC/Colr7NfCzaa679H
+         0YeM84/uCokGHlJryJp7QV3wGzFt+DYV8zjwq3zbEJmu1HgM3+Ll92gXjlfpRpqh1IrZ
+         WvFHPWE4Tb67HKzXWNdiEHLAE8QNIvHKG0U8mRu67j0403cm4e0tqlIAhuTD0cn77e2H
+         TDzgogGpwwZAViblUqihk0fnkhmTji79j3mUayHAZn4C+VvMqfyb/UWACVeTxkr95ZDf
+         ks3CreJyXNqDhECL92Eh5/7pPdirCtUNPdwLOGLZZfJgFg5yMH4e0wF/6vWJ41GsOmXP
+         G+zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683157971; x=1685749971;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qIk186o9zoU+mH9r76xErzn/99J8aYL+vdhv+aIdc+U=;
-        b=ZoOASYsg7lMFl0bPMFO6YTZpmRfOqr984aQxlzUNB7Fxhh935gHal8tzv2BbOPLiwr
-         7ksZIQsiP3/mVvk/bgOahKCcjIlTp81jL6GHfcIl0HyM3WERNTcFBHnGoqRr/93cY71q
-         ZY0e0/sTpoOJ4RoBdSEBBVw2ODmYyAp0mgWthGwKv5gTsSXRfsbR6T7LNSB1dSUysokg
-         A0sf/rvWyZLYP25j5VPG2lqFhBnTO1U3/dB2KVts6YRdbN+2SjUSu44Bo3a31DPAjDd4
-         mRvLug7jByDE0XPOtBJ43pb9io57rP/JEHM5mdwzuC26IO6ytPX3Duh33QrJ5spCWlDd
-         N5tQ==
-X-Gm-Message-State: AC+VfDxZYl+9cRN54sJQ8ePsVhvjrr4R1S2H5j5mj+PItkiNAzphOBDb
-        LzhrhigjBF8oXR0LtWig+txOVmBHMY9Euo4iyOYHQw==
-X-Google-Smtp-Source: ACHHUZ6IvK70ra4SbMwggP39kQV39c9YHLb6NIq/oUHesC3ufy/d/lgHtkxwpjTxLgX6H0Oi5Yq7MhZjRGw8RemgCx8=
-X-Received: by 2002:a17:90a:883:b0:24e:20df:e74d with SMTP id
- v3-20020a17090a088300b0024e20dfe74dmr334855pjc.18.1683157970566; Wed, 03 May
- 2023 16:52:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230503003144.3782774-1-royluo@google.com> <20230503230053.mbhh6p2h4qakfc65@synopsys.com>
-In-Reply-To: <20230503230053.mbhh6p2h4qakfc65@synopsys.com>
+        d=1e100.net; s=20221208; t=1683158495; x=1685750495;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=huFx2QvDQwsYXGCCCCBMBfy2FLXsfhWYQfF5nBlr79I=;
+        b=KEUJ0DC3lXu9HwzzrKZy1Nj0wITq/jn7RJgWKXbJgferyYZ3QMhBSjAOENTsFZmtDT
+         +GpcM/8YPA5fI5M7v9vqXMwq46k4erACg+E0EsJy2QHhbA3qoxoUHnXcMgcWtcJe+b12
+         gEubmecRS1DeCliM1rA1wDiqTQ9PiVOQUbJd46VfoeK+9ukt86OZndksGti5As6MxjXF
+         5we8+5bHYbCI+N5N9tL1Uq2BJP+hKLpWFWMPg4Hzf4jTdGWNZ+rfAYESaMRLjpAxaNbP
+         3h8zztMkIQfCix+7XPDH5Q8V1Mn0dkQmb1J6Ax4InIFOcICLf9AYnVb9HFf67+VtUDM1
+         OknA==
+X-Gm-Message-State: AC+VfDyS0XbFgCDXVVxEY9QTlD/8+yS0tw/vCW4hgcUkl/YKoJ1vvxyl
+        P5ebjc0ZDumD0fqA4hLlzyadX8ke2Q8=
+X-Google-Smtp-Source: ACHHUZ64JZobIfxyRIThzFSKwv4Sp5yqy2vgzT3E5vWWFt9knroNDmnH1EnrUwjb2Urbl98PSnPkzLSFbtc=
+X-Received: from royluo-cloudtop0.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:bb8])
+ (user=royluo job=sendgmr) by 2002:a67:d81c:0:b0:42e:38a3:244b with SMTP id
+ e28-20020a67d81c000000b0042e38a3244bmr3490332vsj.5.1683158494939; Wed, 03 May
+ 2023 17:01:34 -0700 (PDT)
+Date:   Thu,  4 May 2023 00:01:29 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
+Message-ID: <20230504000129.728316-1-royluo@google.com>
+Subject: [PATCH v2] usb: dwc3: Add error logs for unknown endpoint events
 From:   Roy Luo <royluo@google.com>
-Date:   Wed, 3 May 2023 16:52:14 -0700
-Message-ID: <CA+zupgxGesS5MVUW6uHAzA7QzS_gq-CYQdfP+ZBVCv_2NSDVeQ@mail.gmail.com>
-Subject: Re: [PATCH v1] usb: dwc3: Add error logs for unknown endpoint events
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "badhri@google.com" <badhri@google.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        badhri@google.com, Roy Luo <royluo@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 3, 2023 at 4:01=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@synopsys.=
-com> wrote:
->
-> On Wed, May 03, 2023, Roy Luo wrote:
-> > In cases where the controller somehow fails to write to event buffer
-> > memory (e.g. due to incorrect MMU config), the driver would receive
-> > all-zero dwc3 events. However, the abnormal event is silently dropped
-> > as a regular ep0out event.
->
-> When it does happen, will these prints flood the dmesg log?
+In cases where the controller somehow fails to write to event buffer
+memory (e.g. due to incorrect MMU config), the driver would receive
+all-zero dwc3 events. However, the abnormal event is silently dropped
+as a regular ep0out event.
+Add error logs when an unknown endpoint event is received to highlight
+the anomaly.
 
-When this does happen, the driver cannot do the required actions to
-move things forward in correspondence to the HW events (e.g.
-Xfercomplete, reset, connection done, etc.).
-Therefore, the controller might throw some events in the beginning but
-it would cease quickly until the host does a new move that triggers
-the controller to send new events.
+Signed-off-by: Roy Luo <royluo@google.com>
+---
+ drivers/usb/dwc3/ep0.c    | 3 +++
+ drivers/usb/dwc3/gadget.c | 3 +++
+ 2 files changed, 6 insertions(+)
 
->
-> > Add error logs when an unknown endpoint event is received to highlight
-> > the anamoly.
->
-> anomaly?
+diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+index 953b752a5052..b94243237293 100644
+--- a/drivers/usb/dwc3/ep0.c
++++ b/drivers/usb/dwc3/ep0.c
+@@ -1207,5 +1207,8 @@ void dwc3_ep0_interrupt(struct dwc3 *dwc,
+ 			dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
+ 		}
+ 		break;
++	default:
++		dev_err(dwc->dev, "unknown endpoint event %d\n", event->endpoint_event);
++		break;
+ 	}
+ }
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index c0ca4d12f95d..7163d5d0eea0 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -3803,6 +3803,9 @@ static void dwc3_endpoint_interrupt(struct dwc3 *dwc,
+ 		break;
+ 	case DWC3_DEPEVT_RXTXFIFOEVT:
+ 		break;
++	default:
++		dev_err(dwc->dev, "unknown endpoint event %d\n", event->endpoint_event);
++		break;
+ 	}
+ }
+ 
 
-Thanks for catching this typo, will fix it in the next patchset.
+base-commit: c8c655c34e33544aec9d64b660872ab33c29b5f1
+-- 
+2.40.1.495.gc816e09b53d-goog
 
->
-> >
-> > Signed-off-by: Roy Luo <royluo@google.com>
-> > ---
-> >  drivers/usb/dwc3/ep0.c    | 2 ++
-> >  drivers/usb/dwc3/gadget.c | 2 ++
-> >  2 files changed, 4 insertions(+)
-> >
-> > diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-> > index 953b752a5052..8c9560a9999e 100644
-> > --- a/drivers/usb/dwc3/ep0.c
-> > +++ b/drivers/usb/dwc3/ep0.c
-> > @@ -1207,5 +1207,7 @@ void dwc3_ep0_interrupt(struct dwc3 *dwc,
-> >                       dep->flags &=3D ~DWC3_EP_TRANSFER_STARTED;
-> >               }
-> >               break;
-> > +     default:
-> > +             dev_err(dwc->dev, "unknown endpoint event %d\n", event->e=
-ndpoint_event);
->
-> Can we add a break here?
-
-Sure ,will do it in the next patchset.
-
->
-> >       }
-> >  }
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index c0ca4d12f95d..054f6f297e17 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -3803,6 +3803,8 @@ static void dwc3_endpoint_interrupt(struct dwc3 *=
-dwc,
-> >               break;
-> >       case DWC3_DEPEVT_RXTXFIFOEVT:
-> >               break;
-> > +     default:
-> > +             dev_err(dwc->dev, "unknown endpoint event %d\n", event->e=
-ndpoint_event);
->
-> and here too.
-
-Sure ,will do.
-
->
-> >       }
-> >  }
-> >
-> >
-> > base-commit: c8c655c34e33544aec9d64b660872ab33c29b5f1
-> > --
-> > 2.40.1.495.gc816e09b53d-goog
-> >
->
-> Thanks,
-> Thinh
-
-Regards,
-Roy Luo
