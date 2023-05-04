@@ -2,101 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 155536F6787
-	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 10:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE436F6799
+	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 10:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjEDIbE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 May 2023 04:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
+        id S229625AbjEDIgi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 May 2023 04:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbjEDIa2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 May 2023 04:30:28 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACD45FC2;
-        Thu,  4 May 2023 01:27:39 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f00c33c3d6so204254e87.2;
-        Thu, 04 May 2023 01:27:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683188856; x=1685780856;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7BtbTazpmLK0KSvj4AZeeyjj76DWKlTXEWvhg3rsLf0=;
-        b=np3+HZuDjKNtHhzInJKaL4ni7hmJwGjw4t1PgOPYsSARUNDRNfEIgkaxROwcfPNW5B
-         JsGuTYTCihmxm9MoKbm5pT6qraIdN07ozJpgh3erjqKs291SvhUNcQSqylqGfIJ1K4Hd
-         39JzqpILR3ZByLm+tLDvK+6VWltcOkJeOL4sxXstRMZt48yw6Tb5+OovfhegQjrdJIDn
-         Roxx/15qo+tLPhfatNccapdhnhjHwgz8Q7zTYTv8H2+K87LPcECTwM7GnB9LhVJk1Dg3
-         CHtGDvQX5kVJ6OumAp0Z8WbU2hHoKabTRWYNobdqh3627GxxmTBSd1XFjPKQ96akKOl8
-         H/SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683188856; x=1685780856;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7BtbTazpmLK0KSvj4AZeeyjj76DWKlTXEWvhg3rsLf0=;
-        b=bvEgR2biR8sihQEqnVlApvKeKhbDfDxRCc+DlUbO0rSxlFE8uaURDvW0c7grVeQqSN
-         VSesjDp0xAZqit8O03GDczrnnaQn7sylovAG3fh4MN4iPp2CEGXzGLFIq1IFxwO3RxxX
-         F4VkSlosP7t0P3876bqHM6LMJ1AABdYDHnGwdlp2+X0iKckh2EZ4N+ql7DO2LyBvsoDJ
-         hz9OkuJt12Hj/eZUPHoaE0tFTgSDNGynRxVd97ufc8EXoqboSwcbxdy5fISOeP2zNuje
-         8S9HPnCX2/1kGsFry81zsyIPDX9K/V+ZT/o0oQcKLzUdAGnQUrK11wJdjsA8Ubb0cnDs
-         T8WA==
-X-Gm-Message-State: AC+VfDwwM/bBdM2paug5P0p/+RF2I6C2E8jc86IcjRmvokkAX6MlzkWI
-        8yzkmvanU8Eg8IVhYkIeT+gAc4b8qto=
-X-Google-Smtp-Source: ACHHUZ6WxHnARl3Y7wPkAyRHxQ9IZvhzKELRZSJbTLi3e2ghMfMi8VKMYojoluPBJy+0pbL2ESqwyQ==
-X-Received: by 2002:ac2:4353:0:b0:4f0:80:d0c0 with SMTP id o19-20020ac24353000000b004f00080d0c0mr2162900lfl.63.1683188855735;
-        Thu, 04 May 2023 01:27:35 -0700 (PDT)
-Received: from [192.168.1.103] ([178.176.76.17])
-        by smtp.gmail.com with ESMTPSA id j1-20020a19f501000000b004eff0bcb276sm5210649lfb.7.2023.05.04.01.27.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 01:27:35 -0700 (PDT)
-Subject: Re: [PATCH v5] usb: dwc3: core: add support for realtek SoCs custom's
- global register start address
-To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>,
+        with ESMTP id S229628AbjEDIgf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 May 2023 04:36:35 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23534A6;
+        Thu,  4 May 2023 01:36:33 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3448aKRk9016839, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3448aKRk9016839
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 4 May 2023 16:36:20 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Thu, 4 May 2023 16:36:25 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 4 May 2023 16:36:25 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Thu, 4 May 2023 16:36:25 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v5] usb: dwc3: core: add support for realtek SoCs custom's global register start address
+Thread-Topic: [PATCH v5] usb: dwc3: core: add support for realtek SoCs
+ custom's global register start address
+Thread-Index: AQHZfjq3WwrVqDL5u06W58kFX8Z8v69JN46AgACNR7D//30mAIAAhxJA
+Date:   Thu, 4 May 2023 08:36:24 +0000
+Message-ID: <59143dd6704540eda26b56a1ecf350e4@realtek.com>
 References: <20230504034423.20813-1-stanley_chang@realtek.com>
  <96706396-7023-b895-169a-788aad11adcb@gmail.com>
  <44451716afa541e298b2e5640fe3aec9@realtek.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <747ce0a9-a629-e3f9-c59c-388333d3d911@gmail.com>
-Date:   Thu, 4 May 2023 11:27:34 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+ <747ce0a9-a629-e3f9-c59c-388333d3d911@gmail.com>
+In-Reply-To: <747ce0a9-a629-e3f9-c59c-388333d3d911@gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <44451716afa541e298b2e5640fe3aec9@realtek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/4/23 11:26 AM, Stanley Chang[昌育德] wrote:
-[...]
-
->>> The Realtek RTD1xxx SoCs were designed, the global register address
->>> offset at 0x8100.
->>
->>   Can't parse that, perhaps "with" is missing?
->>
->>> The default address offset is constant at DWC3_GLOBALS_REGS_START
->>> (0xc100). Therefore, add a check if the compatible name of the parent
->>> is "realtek,rtd1xxx-dwc3", then global
->>
->>    Wildcards are not allowed in the "compatible" props...
-> 
-> I can't understand your meaning.
-> Do you mean I can't use rtd1xxx ?
-
-   You can't, indeed.
-
-MBR, Sergey
+DQo+ID4gSSBjYW4ndCB1bmRlcnN0YW5kIHlvdXIgbWVhbmluZy4NCj4gPiBEbyB5b3UgbWVhbiBJ
+IGNhbid0IHVzZSBydGQxeHh4ID8NCj4gDQo+ICAgIFlvdSBjYW4ndCwgaW5kZWVkLg0KPiANClRo
+ZSBuYW1yIHJ0ZDF4eHggaXMgcmVwcmVzZW50IHRoZSBuYW1lIG9mIFNvQ3MsIGZvciBydGQxMjl4
+LCBydGQxMzl4LCBydGQxNnh4LCAuLi4gZXRjLg0KDQpNdXN0IEkgdXNlIGEgcmVhbCBjaGlwIG5h
+bWUsIGV4YW1wbGUgcnRkMTI5eD8NCk9yIGNhbiBJIHVzZSAicnRkIiBvbmx5IHRvIHJlcHJlc2Vu
+dCBhbGwgU29jcz8NCg0K
