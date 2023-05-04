@@ -2,262 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D24B6F7084
-	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 19:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839E26F71B4
+	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 20:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjEDRKv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 May 2023 13:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42378 "EHLO
+        id S229827AbjEDSEN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 May 2023 14:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjEDRKs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 May 2023 13:10:48 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD3D5FCA
-        for <linux-usb@vger.kernel.org>; Thu,  4 May 2023 10:10:28 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-30644c18072so551424f8f.2
-        for <linux-usb@vger.kernel.org>; Thu, 04 May 2023 10:10:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683220227; x=1685812227;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pJpYk7FyfhnD3BtuxCCzvxRDbIq/0dZEMKhDfDZ1Z+U=;
-        b=Q9AvnvHwE5GSMeGC8jWp6Nj/YSzX0zhUv0s9ljtRnNTHUQK2qAkxwqPV1wU2d5ZwfN
-         lQSV5Kbyj57j+s9eCtYj3LUZ17NawG7sqWXH14qLZlo1s/0QVda0M2YCTV9I3hsIkViv
-         gWyxno1lg/nwW0bYxUUKm88jzKrZj0/QtcM0VC902mxWIK0GVCfeu9K2PXBS7RU9U2wv
-         sY942RASuaqv6oqEuhvBtjACcZV85c1N9wtmG9rdYdZr0TuT1b04p23lzKCZ2Pjx0Kth
-         MFwQOIZI456IlTaeeKnqaxLaHNtvA6TV6YGCQijuryq3rHJJpoIYBrRpHb7HwMMakd07
-         S+cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683220227; x=1685812227;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pJpYk7FyfhnD3BtuxCCzvxRDbIq/0dZEMKhDfDZ1Z+U=;
-        b=JlbvLLQJ8dA4dhLt5dgLlkSsp0UqW2Zq+9TqzyCwD594k+vHAFNNJP0N1/uQHPlN1/
-         1J2Itix9KJMG6ioDr5g9JzTkiteSmGlJ2bPICnGLRA20C/dBnjQ2onHuch+WzYM9Zoqq
-         1ePlWJt6VD3U2mEuhhOfvfchIJ/MYb83NnUxh94pF3/TYPY+Y5knpacCaqJrvjzcbbRq
-         CaslfpduKg7j/HVRnEGl9Ol3FqVV1M+mHHntL3yENeWsAboteh1WveR0iwrksWbqp3L7
-         d7XMJh2h0r6rVylZL9U+mKIHHhYuXAzphGurtGk/wsg6S1V5lOwKrMNy6otN6HZXJL6o
-         RsZg==
-X-Gm-Message-State: AC+VfDx+NpUVHU9w/HLwZx6h9ElYXP8z5j/eF0c8JmWZyMd02rJikixC
-        D438Axm/3R/qxwtWUAtk3VrB8JgxdJcsmabdW+7dgg==
-X-Google-Smtp-Source: ACHHUZ41LmJZheJk/hsWyMJ2KDBn+M67xJfyItsrxUnGzlMD8NznalIeiSZvmwu8HOuRatJjMpWQM2HmtzeAsTHMc24=
-X-Received: by 2002:a5d:5547:0:b0:306:30e2:c84c with SMTP id
- g7-20020a5d5547000000b0030630e2c84cmr2929684wrw.49.1683220226723; Thu, 04 May
- 2023 10:10:26 -0700 (PDT)
+        with ESMTP id S229449AbjEDSEM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 May 2023 14:04:12 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554D51BCC;
+        Thu,  4 May 2023 11:04:10 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 344BlV63013169;
+        Thu, 4 May 2023 18:03:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=dIQM/IxZx2gsJVXsqEYgNIwEqFxDum1d1ZVaPq4CXv4=;
+ b=De4imCXjRvkP8hRycq1OUTBeZtouNEV17SaswUr9m0VCP6tetyFPqOr2zaug6rYfS2LR
+ /aRy2P0CLAi61z5IlbPL2RNzkivADdLqJlRWWHb6V/cvwclZkVbJdVMWOAHcJsbrzdro
+ nY+1T1x3EhQiX4Ik8OWW8fJN+ViHKWvvuNB2P35lCbwUZBqg0rDCj59YoJS+cN2LE4e7
+ 80UaocMOcEXINwvehSuH1dUNyW8PI5MUeZ/ypvzEjblUn/CBQgm4yqYna8AIFVU3lDXm
+ +GRwX9rrV+TxWSSgkdSPSxg62/ZGTFELKJXUptg9ccFIbuxjXTiNAFeLTWc6Ekiz1RRW Jg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qc7a41msc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 May 2023 18:03:55 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 344I3sQq005175
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 4 May 2023 18:03:54 GMT
+Received: from [10.216.20.183] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 4 May 2023
+ 11:03:48 -0700
+Message-ID: <50c37e0c-3171-bce2-d97e-371150e1854f@quicinc.com>
+Date:   Thu, 4 May 2023 23:33:44 +0530
 MIME-Version: 1.0
-References: <20230504082644.1461582-1-bhupesh.sharma@linaro.org>
- <20230504082644.1461582-4-bhupesh.sharma@linaro.org> <344b34d8-c69e-bde4-7446-30d32657ee40@linaro.org>
-In-Reply-To: <344b34d8-c69e-bde4-7446-30d32657ee40@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Thu, 4 May 2023 22:40:14 +0530
-Message-ID: <CAH=2NtzVEatke2LFyTFJDBgrQ07yz-AQgV7ubq+F6oxPmbKiZw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] usb: misc: eud: Add driver support for SM6115 / SM4250
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, andersson@kernel.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, linux-usb@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v7 9/9] arm64: dts: qcom: sa8540-ride: Enable first port
+ of tertiary usb controller
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>,
+        <ahalaney@redhat.com>, <quic_shazhuss@quicinc.com>
+References: <20230501143445.3851-1-quic_kriskura@quicinc.com>
+ <20230501143445.3851-10-quic_kriskura@quicinc.com>
+ <0e76a9f6-f062-2802-d9de-3c0b2b897a4e@linaro.org>
+Content-Language: en-US
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <0e76a9f6-f062-2802-d9de-3c0b2b897a4e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 5u2iymyeyDmAHLUFP63Y4Y9eE9SwnywN
+X-Proofpoint-ORIG-GUID: 5u2iymyeyDmAHLUFP63Y4Y9eE9SwnywN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-04_12,2023-05-04_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ malwarescore=0 priorityscore=1501 adultscore=0 clxscore=1015
+ mlxlogscore=832 mlxscore=0 lowpriorityscore=0 phishscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305040145
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 4 May 2023 at 15:22, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> On 4.05.2023 10:26, Bhupesh Sharma wrote:
-> > Add SM6115 / SM4250 SoC EUD support in qcom_eud driver.
-> >
-> > On some SoCs (like the SM6115 / SM4250 SoC), the mode manager
-> > needs to be accessed only via the secure world (through 'scm'
-> > calls).
-> >
-> > Also, the enable bit inside 'tcsr_check_reg' needs to be set
-> > first to set the eud in 'enable' mode on these SoCs.
-> >
-> > Since this difference comes from how the firmware is configured, so
-> > the driver now relies on the presence of an extra boolean DT property
-> > to identify if secure access is needed.
-> >
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >  drivers/usb/misc/Kconfig    |  1 +
-> >  drivers/usb/misc/qcom_eud.c | 66 ++++++++++++++++++++++++++++++++++---
-> >  2 files changed, 62 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-> > index 99b15b77dfd5..fe1b5fec1dfc 100644
-> > --- a/drivers/usb/misc/Kconfig
-> > +++ b/drivers/usb/misc/Kconfig
-> > @@ -147,6 +147,7 @@ config USB_APPLEDISPLAY
-> >  config USB_QCOM_EUD
-> >       tristate "QCOM Embedded USB Debugger(EUD) Driver"
-> >       depends on ARCH_QCOM || COMPILE_TEST
-> > +     select QCOM_SCM
-> >       select USB_ROLE_SWITCH
-> >       help
-> >         This module enables support for Qualcomm Technologies, Inc.
-> > diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-> > index b7f13df00764..b4736edcc64c 100644
-> > --- a/drivers/usb/misc/qcom_eud.c
-> > +++ b/drivers/usb/misc/qcom_eud.c
-> > @@ -5,12 +5,14 @@
-> >
-> >  #include <linux/bitops.h>
-> >  #include <linux/err.h>
-> > +#include <linux/firmware/qcom/qcom_scm.h>
-> >  #include <linux/interrupt.h>
-> >  #include <linux/io.h>
-> >  #include <linux/iopoll.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> > +#include <linux/of_device.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/slab.h>
-> >  #include <linux/sysfs.h>
-> > @@ -30,15 +32,22 @@
-> >  #define EUD_INT_SAFE_MODE    BIT(4)
-> >  #define EUD_INT_ALL          (EUD_INT_VBUS | EUD_INT_SAFE_MODE)
-> >
-> > +struct eud_soc_cfg {
-> > +     u32 tcsr_check_offset;
-> > +};
-> Not sure if turning this into a struct is necessary.. can't
-> we just store the offset, or do we expect more changes?
 
-I can see future versions already supporting newer features, so I kept
-it a struct for now.
 
-> > +
-> >  struct eud_chip {
-> >       struct device                   *dev;
-> >       struct usb_role_switch          *role_sw;
-> > +     const struct eud_soc_cfg        *eud_cfg;
-> >       void __iomem                    *base;
-> >       void __iomem                    *mode_mgr;
-> >       unsigned int                    int_status;
-> >       int                             irq;
-> >       bool                            enabled;
-> >       bool                            usb_attached;
-> > +     bool                            secure_mode_enable;
-> > +     phys_addr_t                     secure_mode_mgr;
-> >  };
-> >
-> >  static int enable_eud(struct eud_chip *priv)
-> > @@ -46,7 +55,11 @@ static int enable_eud(struct eud_chip *priv)
-> >       writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
-> >       writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
-> >                       priv->base + EUD_REG_INT1_EN_MASK);
-> > -     writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
-> > +
-> > +     if (priv->secure_mode_mgr)
-> > +             qcom_scm_io_writel(priv->secure_mode_mgr + EUD_REG_EUD_EN2, BIT(0));
-> #define [field name] BIT(0)
+On 5/2/2023 4:37 PM, Konrad Dybcio wrote:
+> 
+> 
+> On 1.05.2023 16:34, Krishna Kurapati wrote:
+>> There is now support for the multiport USB controller this uses so
+>> enable it.
+>>
+>> The board only has a single port hooked up (despite it being wired up to
+>> the multiport IP on the SoC). There's also a USB 2.0 mux hooked up,
+>> which by default on boot is selected to mux properly. Grab the gpio
+>> controlling that and ensure it stays in the right position so USB 2.0
+>> continues to be routed from the external port to the SoC.
+>>
+>> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+> same comments as patch 8
+> 
+> Konrad
 
-Ok.
+Hi Konrad,
 
-> > +     else
-> > +             writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
-> s/1/[field name]/
+   Sure, will add a default value for drive-strength for this pinctrl node.
 
-Ok.
+Hi Andrew Halaney,
 
-> >       return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
-> >  }
-> > @@ -54,7 +67,11 @@ static int enable_eud(struct eud_chip *priv)
-> >  static void disable_eud(struct eud_chip *priv)
-> >  {
-> >       writel(0, priv->base + EUD_REG_CSR_EUD_EN);
-> > -     writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
-> > +
-> > +     if (priv->secure_mode_mgr)
-> > +             qcom_scm_io_writel(priv->secure_mode_mgr + EUD_REG_EUD_EN2, 0);
-> > +     else
-> > +             writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
-> >  }
-> >
-> >  static ssize_t enable_show(struct device *dev,
-> > @@ -178,12 +195,15 @@ static void eud_role_switch_release(void *data)
-> >  static int eud_probe(struct platform_device *pdev)
-> >  {
-> >       struct eud_chip *chip;
-> > +     struct resource *res;
-> > +     phys_addr_t tcsr_base, tcsr_check;
-> >       int ret;
-> >
-> >       chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
-> >       if (!chip)
-> >               return -ENOMEM;
-> >
-> > +
-> ?
+  I currently don't have a Ride device with me to test this change. Can 
+you help test this patch on SA8540-Ride including (drive-strength = 
+<2>;) property (which I believe is the default value).
 
-Oops, I will fix it in v4.
+I can test the same on SA8295-ADP and can push the next version quickly.
 
-> >       chip->dev = &pdev->dev;
-> >
-> >       chip->role_sw = usb_role_switch_get(&pdev->dev);
-> > @@ -200,9 +220,40 @@ static int eud_probe(struct platform_device *pdev)
-> >       if (IS_ERR(chip->base))
-> >               return PTR_ERR(chip->base);
-> >
-> > -     chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
-> > -     if (IS_ERR(chip->mode_mgr))
-> > -             return PTR_ERR(chip->mode_mgr);
-> > +     chip->secure_mode_enable = of_property_read_bool(chip->dev->of_node,
-> > +                                             "qcom,secure-mode-enable");
-> If we map this region iff it's supposed to be used, we may just check
-> for its presence and skip the additional property. Then, the address
-> being non-NULL would invalidate the boolean property.
+Regards,
+Krishna,
 
-Bjorn requested during the review of the last version that we should not ioremap
-the secure mode_mgr region. So, I followed this approach instead.
-
-> > +     /*
-> > +      * EUD block on a few Qualcomm SoCs need secure register access.
-> > +      * Check for the same.
-> > +      */
-> > +     if (chip->secure_mode_enable) {
-> > +             res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> > +             if (!res)
-> > +                     return dev_err_probe(chip->dev, -ENODEV,
-> > +                                          "failed to get secure_mode_mgr reg base\n");
-> > +
-> > +             chip->secure_mode_mgr = res->start;
-> > +     } else {
-> > +             chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
-> > +             if (IS_ERR(chip->mode_mgr))
-> > +                     return PTR_ERR(chip->mode_mgr);
-> > +     }
-> > +
-> > +     /* Check for any SoC specific config data */
-> > +     chip->eud_cfg = of_device_get_match_data(&pdev->dev);
-> > +     if (chip->eud_cfg) {
-> > +             res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
-> I'd vouch to use _byname, in case we get some EUD impl that needs a
-> different sort of a register set..
-
-Sure, it makes sense.
-
-> > +             if (!res)
-> > +                     return dev_err_probe(chip->dev, -ENODEV,
-> > +                                          "failed to get tcsr reg base\n");
-> > +
-> > +             tcsr_base = res->start;
-> > +             tcsr_check = tcsr_base + chip->eud_cfg->tcsr_check_offset;
-> > +
-> > +             ret = qcom_scm_io_writel(tcsr_check, BIT(0));
-> s/BIT(0)/..
-
-Ok.
-
-Thanks,
-Bhupesh
+>>   arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 22 ++++++++++++++++++++++
+>>   1 file changed, 22 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+>> index 24fa449d48a6..53d47593306e 100644
+>> --- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+>> @@ -309,6 +309,19 @@ &usb_2_qmpphy0 {
+>>   	status = "okay";
+>>   };
+>>   
+>> +&usb_2 {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&usb2_en_state>;
+>> +
+>> +	status = "okay";
+>> +};
+>> +
+>> +&usb_2_dwc3 {
+>> +	dr_mode = "host";
+>> +	phy-names = "usb2-port0", "usb3-port0";
+>> +	phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>;
+>> +};
+>> +
+>>   &xo_board_clk {
+>>   	clock-frequency = <38400000>;
+>>   };
+>> @@ -401,4 +414,13 @@ wake-pins {
+>>   			bias-pull-up;
+>>   		};
+>>   	};
+>> +
+>> +	usb2_en_state: usb2-en-state {
+>> +		/* TS3USB221A USB2.0 mux select */
+>> +		pins = "gpio24";
+>> +		function = "gpio";
+>> +		drive-strength = <2>;
+>> +		bias-disable;
+>> +		output-low;
+>> +	};
+>>   };
