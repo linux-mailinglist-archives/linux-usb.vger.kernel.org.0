@@ -2,148 +2,221 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD81C6F66DD
-	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 10:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 822156F6733
+	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 10:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjEDIKn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 May 2023 04:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
+        id S230193AbjEDIXy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 May 2023 04:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230354AbjEDIJz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 May 2023 04:09:55 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329EF525D
-        for <linux-usb@vger.kernel.org>; Thu,  4 May 2023 01:08:15 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9619095f479so23308566b.1
-        for <linux-usb@vger.kernel.org>; Thu, 04 May 2023 01:08:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683187691; x=1685779691;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=byDPUDOt8GYOJTy7S9gC54C3ZXLMwnnDCwgExcgBbwE=;
-        b=jUVQge6ZTztk15UsR6kt2KVGMyX190Jy8FmDLHp7XDobF+uXgFac3qVXk8o1y8ZaLi
-         YzJSzkHrJvnjjSiDmTOD3Ou8ZcM3yurHQo+9yvUo0A41qMXMyglkj99MAW6lEW8DPruh
-         HL2ivjbE9YEYBLRxRPibRaOhC8IgKxwgDxziqfIm4FLPjgqpQ7QrkKEfaa2rpbZYMqkm
-         qYx4Oq3+QwK7xBXWFKj4yzSn3d9F8C+s3RxS6Ky9KLvilSL3VdtZMbelOHGFOk0+kPn2
-         2cQboQoS3QG49qvvAxxnOc1K26oM2JImD18iesEQAEF3fr1kX8kULe5EDYi7iDKpuwo1
-         zacg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683187691; x=1685779691;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=byDPUDOt8GYOJTy7S9gC54C3ZXLMwnnDCwgExcgBbwE=;
-        b=PyhEGDA0InYHqQ3z5ApwcthHZ0Csn3VxQ6HpKqNhik+WMTt4Xg9t9p9K9yAFXT2HMS
-         vBBiJyDZGs7mL56w1Fp75/Q+GT+jw1mMoWzwYgK+JXeCTLcbMbwPawhTsFN9wuE0WGxG
-         s/yUiYB3+bouM/JX+JCwUlJQqWKzg6FZ9jY5UtbdPFrAu69MqmnAG9kvwc/nVQj8mtkc
-         fiuXpBL/dklOy7XJFklrwaPUvQ3viDtJnfzYjls37q+X2jJ5hSfrVyW4aVNoAIXKbcpu
-         oU1hRj/0QXV4a6crl1l4B/+BqrHwqYwblqIh4FkrcAUVxjEPar2OIzYUt6qNlKPQxvYv
-         DvJA==
-X-Gm-Message-State: AC+VfDwTfQW48p+cHRuziuK9Rw2kWx1QuNoNue/RXheve7cODX424Zcm
-        Eqt/6BtWGYYjPI5Q/cn/2SKYrw==
-X-Google-Smtp-Source: ACHHUZ7V4VVbuu2QABVgsj2CM8GAltUPKXVXETrFrfDTBh8Bi5Dawj08rUb7EF/Ch99f+XpES0mFPQ==
-X-Received: by 2002:a17:907:2681:b0:961:272d:bdb9 with SMTP id bn1-20020a170907268100b00961272dbdb9mr6177923ejc.43.1683187691630;
-        Thu, 04 May 2023 01:08:11 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
-        by smtp.gmail.com with ESMTPSA id my34-20020a1709065a6200b0094f6f45b2c1sm18500238ejc.156.2023.05.04.01.08.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 01:08:11 -0700 (PDT)
-Message-ID: <5564bc98-2de9-d697-23f4-a778dec8088c@linaro.org>
-Date:   Thu, 4 May 2023 10:08:10 +0200
+        with ESMTP id S230071AbjEDIXP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 May 2023 04:23:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9231146AB
+        for <linux-usb@vger.kernel.org>; Thu,  4 May 2023 01:17:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F13360909
+        for <linux-usb@vger.kernel.org>; Thu,  4 May 2023 08:16:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2DBAC4339B;
+        Thu,  4 May 2023 08:16:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683188195;
+        bh=xIvK3I999peRWhSE7is2bSZntDlruIp/jXoDfPB0MNY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EnTkzw1z9cmx4wUIoJX38qyQiRzdnwBE4vkYNGLJkXh3RAHFydSlho5fdhfqzVn+4
+         JdZyIYhk/Rq+WWy7OK5TA+f3MT6czYNLWnB3mtxJKS6q4AWf//Bs2zZYK+T2n5C/gN
+         U9pN9OxPGf9jWqBg1p6YaKOV2UCFT8wOmt8dug5jNDaFuGGxb3RWp1rjnILLw6uR76
+         x8dEz6tqeZVelHKzOf3v8GU/imFw5bXmwMfC8n7xQOKlb2kWagnNZxMxkQRs+7N2qd
+         8/yi1+QcyNfDBSyUsjlsFKvLcLBaMvmRm3zra0HOzXog6CLmbKBfTsl9FYNgX5kZIP
+         OqYzYi4ahTW8g==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1puU8o-0005J4-Uo; Thu, 04 May 2023 10:16:43 +0200
+Date:   Thu, 4 May 2023 10:16:42 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Udipto Goswami <quic_ugoswami@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8] usb: dwc3: debugfs: Prevent any register access when
+ devices is runtime suspended
+Message-ID: <ZFNp6mzcvUyX-eon@hovoldconsulting.com>
+References: <20230504045052.22347-1-quic_ugoswami@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] dt-bindings: usb: Add binding for Microchip usb5744 hub
- controller
-Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
-        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
-        ilias.apalodimas@linaro.org, Marek Vasut <marex@denx.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Piyush Mehta <piyush.mehta@amd.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <cca068980ae0b902168a9a9b78cab4efb43157a8.1683121150.git.michal.simek@amd.com>
- <4aa7adbf-f89e-6819-64d2-5942a456528a@linaro.org>
- <eb325b2a-d265-d8bb-8e98-9eef8f03355a@amd.com>
- <d5763073-3aaa-8a7f-1336-337c125b1a0e@linaro.org>
- <66c1efb3-32c1-b751-0faf-1fd6814bf05c@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <66c1efb3-32c1-b751-0faf-1fd6814bf05c@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230504045052.22347-1-quic_ugoswami@quicinc.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 04/05/2023 09:55, Michal Simek wrote:
-> 
-> 
-> On 5/4/23 09:31, Krzysztof Kozlowski wrote:
->> CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
->>
->>
->> On 04/05/2023 09:25, Michal Simek wrote:
->>>
->>>
->>> On 5/4/23 08:46, Krzysztof Kozlowski wrote:
->>>> On 03/05/2023 15:39, Michal Simek wrote:
->>>>> The Microchip usb5744 is a SS/HS USB 3.0 hub controller with 4 ports.
->>>>> The binding describes USB related aspects of the USB5744 hub, it as
->>>>> well cover the option of connecting the controller as an i2c slave.
->>>>> When i2c interface is connected hub needs to be initialized first.
->>>>> Hub itself has fixed i2c address 0x2D but hardcoding address is not good
->>>>> idea because address can be shifted by i2c address translator in the
->>>>> middle.
->>>>>
->>>>> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
->>>>> Signed-off-by: Michal Simek <michal.simek@amd.com>
->>>>> ---
->>>>>
->>>>> It looks like that usb8041 has also an optional i2c interface which is not
->>>>> covered. But it is mentioned at commit 40e58a8a7ca6 ("dt-bindings: usb:
->>>>> Add binding for TI USB8041 hub controller").
->>>>>
->>>>> i2c-bus name property was suggested by Rob at
->>>>> https://lore.kernel.org/all/CAL_JsqJedhX6typpUKbnzV7CLK6UZVjq3CyG9iY_j5DLPqvVdw@mail.gmail.com/
->>>>> and
->>>>> https://lore.kernel.org/all/CAL_JsqJZBbu+UXqUNdZwg-uv0PAsNg55026PTwhKr5wQtxCjVQ@mail.gmail.com/
->>>>>
->>>>> the question is if adding address like this is acceptable.
->>>>> But it must be specified.
->>>>
->>>> Why? phandle points it explicitly.
->>>
->>> Ok it means just list usb hub on i2c with label and point to it. Works for me.
->>
->> Right. I missed you want the address of the hub but phandle goes to the
->> bus. I think listing it on I2C bus (see
->> arch/arm/boot/dts/vf610-zii-scu4-aib.dts) should work. I think we can
->> have I2C devices without compatibles.
-> 
-> Device is definitely on i2c bus. But the problem with phande to bus is that 
-> there could more the same usb hubs and different i2c addresses of it. That's why 
-> I need to have exact match.
-> Marek has similar hub where i2c address can be strapped too.
-> 
->> The problem is that property should have only one definition/type and
->> i2c-bus is already used in other cases as just "phandle". If we go with
->> your phandle+address approach, then this should be phandle-array with
->> items and then we have two different types.
-> 
-> What to do with it then?
+Please use a more succinct Subject. The current one is over 80 chars
+which generally too long. Please also check the grammar (e.g. "devices
+is") and make sure that the subject reflects what your patch does (and
+not what it did in v1).
 
-Your idea. I think you missed part of my comment. Add hub to the I2C bus
-and phandle to the hub I2C device node.
+On Thu, May 04, 2023 at 10:20:52AM +0530, Udipto Goswami wrote:
+> When the dwc3 device is runtime suspended, various required clocks would
+> get disabled and it is not guaranteed that access to any registers would
+> work. Depending on the SoC glue, a register read could be as benign as
+> returning 0 or be fatal enough to hang the system.
+> 
+> In order to prevent such scenarios of fatal errors, make sure to resume
+> dwc3 then allow the function to proceed.
 
-Best regards,
-Krzysztof
+As this fixes a crash/hang you should also add a Fixes and CC-stable
+tag.
 
+> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+> ---
+> v8: Replace pm_runtime_get_sync with pm_runtime_resume_and get.
+> v7: Replaced pm_runtime_put with pm_runtime_put_sync & returned proper values.
+> v6: Added changes to handle get_dync failure appropriately.
+> v5: Reworked the patch to resume dwc3 while accessing the registers.
+> v4: Introduced pm_runtime_get_if_in_use in order to make sure dwc3 isn't
+> 	suspended while accessing the registers.
+> v3: Replace pr_err to dev_err. 
+> v2: Replaced return 0 with -EINVAL & seq_puts with pr_err.
+> 
+>  drivers/usb/dwc3/debugfs.c | 99 +++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 97 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
+> index e4a2560b9dc0..a996e3580150 100644
+> --- a/drivers/usb/dwc3/debugfs.c
+> +++ b/drivers/usb/dwc3/debugfs.c
+> @@ -332,6 +332,11 @@ static int dwc3_lsp_show(struct seq_file *s, void *unused)
+>  	unsigned int		current_mode;
+>  	unsigned long		flags;
+>  	u32			reg;
+> +	int			ret;
+> +
+> +	ret = pm_runtime_resume_and_get(dwc->dev);
+> +	if (ret < 0)
+> +		return ret;
+>  
+>  	spin_lock_irqsave(&dwc->lock, flags);
+>  	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
+> @@ -349,6 +354,7 @@ static int dwc3_lsp_show(struct seq_file *s, void *unused)
+>  		break;
+>  	}
+>  	spin_unlock_irqrestore(&dwc->lock, flags);
+
+Add a newline here for symmetry.
+
+> +	pm_runtime_put_sync(dwc->dev);
+>  
+>  	return 0;
+>  }
+> @@ -395,6 +401,11 @@ static int dwc3_mode_show(struct seq_file *s, void *unused)
+>  	struct dwc3		*dwc = s->private;
+>  	unsigned long		flags;
+>  	u32			reg;
+> +	int			ret;
+> +
+> +	ret = pm_runtime_resume_and_get(dwc->dev);
+> +	if (ret < 0)
+> +		return ret;
+>  
+>  	spin_lock_irqsave(&dwc->lock, flags);
+>  	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+> @@ -414,6 +425,7 @@ static int dwc3_mode_show(struct seq_file *s, void *unused)
+>  		seq_printf(s, "UNKNOWN %08x\n", DWC3_GCTL_PRTCAP(reg));
+>  	}
+>  
+> +	pm_runtime_put_sync(dwc->dev);
+
+For consistency and readability, add a newline here before the return
+statement. Same below.
+
+>  	return 0;
+>  }
+>  
+ 
+> @@ -584,6 +615,7 @@ static ssize_t dwc3_link_state_write(struct file *file,
+>  	char			buf[32];
+>  	u32			reg;
+>  	u8			speed;
+> +	int			ret;
+>  
+>  	if (copy_from_user(&buf, ubuf, min_t(size_t, sizeof(buf) - 1, count)))
+>  		return -EFAULT;
+> @@ -603,11 +635,16 @@ static ssize_t dwc3_link_state_write(struct file *file,
+>  	else
+>  		return -EINVAL;
+>  
+> +	ret = pm_runtime_resume_and_get(dwc->dev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	spin_lock_irqsave(&dwc->lock, flags);
+>  	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
+>  	if (DWC3_GSTS_CURMOD(reg) != DWC3_GSTS_CURMOD_DEVICE) {
+>  		spin_unlock_irqrestore(&dwc->lock, flags);
+> -		return -EINVAL;
+> +		pm_runtime_put_sync(dwc->dev);
+> +		return ret;
+
+Why are you changing the return value here? That's simply wrong.
+
+>  	}
+>  
+>  	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
+> @@ -616,12 +653,14 @@ static ssize_t dwc3_link_state_write(struct file *file,
+>  	if (speed < DWC3_DSTS_SUPERSPEED &&
+>  	    state != DWC3_LINK_STATE_RECOV) {
+>  		spin_unlock_irqrestore(&dwc->lock, flags);
+> -		return -EINVAL;
+> +		pm_runtime_put_sync(dwc->dev);
+> +		return ret;
+
+Same here.
+
+>  	}
+>  
+>  	dwc3_gadget_set_link_state(dwc, state);
+>  	spin_unlock_irqrestore(&dwc->lock, flags);
+>  
+> +	pm_runtime_put_sync(dwc->dev);
+>  	return count;
+>  }
+>  
+ 
+> @@ -667,6 +712,12 @@ static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
+>  	unsigned long		flags;
+>  	u32			mdwidth;
+>  	u32			val;
+> +	int			ret;
+> +
+> +	ret = pm_runtime_resume_and_get(dwc->dev);
+> +	if (ret < 0)
+> +		pm_runtime_put_sync(dwc->dev);
+> +		return ret;
+
+As the build bot reported, you forgot to remove pm_runtime_put_sync()
+here which means that you just broke this function which now always
+returns some random stack data.
+
+>  
+>  	spin_lock_irqsave(&dwc->lock, flags);
+>  	val = dwc3_core_fifo_space(dep, DWC3_RXFIFO);
+> @@ -679,6 +730,7 @@ static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
+>  	seq_printf(s, "%u\n", val);
+>  	spin_unlock_irqrestore(&dwc->lock, flags);
+>  
+> +	pm_runtime_put_sync(dwc->dev);
+>  	return 0;
+>  }
+
+Johan
