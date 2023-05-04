@@ -2,68 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3716F65B6
-	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 09:29:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4916F65BC
+	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 09:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjEDH3I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 May 2023 03:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
+        id S229765AbjEDHb6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 May 2023 03:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjEDH3H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 May 2023 03:29:07 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC082711
-        for <linux-usb@vger.kernel.org>; Thu,  4 May 2023 00:29:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683185345; x=1714721345;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Qqog3UgR/OdjR+4dTD7w94qHYBgJVGzAhZla4LARuBQ=;
-  b=lksoB9JyRuc9eAARD9I9BYSFwQ9ZVxaKjNVLvAUX0KagyqKNtDYdf/Ok
-   zk6ZiGnEKDKn+n9/9bQQRBGJW2V4o9V0TofUwcSI0MhQHWswb2eJmAItl
-   LXl6oRtbuWuLKPj6mnHsjuRkE4/kuKHXgykm47+lQo9M0tbjn9+SMpNu5
-   1D+J4eIx0KJSHOUBKQ3TBhCQ+fCtm4keeC3CpeohKoKC0j+Qp543ddqdY
-   jW9QGPSsCJTRDcinTeg1Fbzj4bCQh6xWtTg0yP2iPN/8tBB4jc0WPVUhF
-   nwGzURObkoFYjNjfv/0tCoGyBoqGzCn2qJIpV0IFF9xnJEp7wviranfb1
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="351847513"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="351847513"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 00:29:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="786414616"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="786414616"
-Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 04 May 2023 00:29:02 -0700
-Received: from kbuild by e3434d64424d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1puTOf-0002gK-2J;
-        Thu, 04 May 2023 07:29:01 +0000
-Date:   Thu, 4 May 2023 15:28:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Udipto Goswami <quic_ugoswami@quicinc.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-        Udipto Goswami <quic_ugoswami@quicinc.com>
-Subject: Re: [PATCH v8] usb: dwc3: debugfs: Prevent any register access when
- devices is runtime suspended
-Message-ID: <202305041526.hBiM1g2W-lkp@intel.com>
-References: <20230504045052.22347-1-quic_ugoswami@quicinc.com>
+        with ESMTP id S229564AbjEDHb5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 May 2023 03:31:57 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB3D2728
+        for <linux-usb@vger.kernel.org>; Thu,  4 May 2023 00:31:56 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50b9ef67f35so162554a12.2
+        for <linux-usb@vger.kernel.org>; Thu, 04 May 2023 00:31:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683185514; x=1685777514;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=miV7b+SshaQlHrD2jqZS3Us38P+QM+iYksIAvVacfxk=;
+        b=zrOnMPWAnce687JSlYUR27AdFML+XzKEnjg24lepkBzDlxOuyi3iCF94+CVHNcGGKs
+         lbXyiVZDtuS8IUgcJgu7OiGb83e5sdTyVPckDjZEbTMc/nDUE4uut1PTq3AG/LfFMsjH
+         EsOOLyqLdr9SJUTjkVs639ivEC8fcHxnbi4SUeCrY4+BZmnLOt+AIX+Us8tCVr1yT/zI
+         ad1vNzBMrw9FzOZCULvuW7r54MzVSTE8fZEfGidkqlSlCjx/CFvjsPfuFYAQx6rv0HdX
+         1QnoktYzMkCxavN8ICrSmAgMhors+DxbQp2t2O+xF/zVbX3nCgCKNBdf+Zj0/5JeUUr4
+         b4lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683185514; x=1685777514;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=miV7b+SshaQlHrD2jqZS3Us38P+QM+iYksIAvVacfxk=;
+        b=QGPWyEJ2p2YOqir26o2rpmloFMOicyyxrPFwo0av/OJuXvFc0DzI21ek/uMXk6hV8e
+         44PuLXvJ8a6Y07TAiHJ4sWgrfQFhChzqjHjPvtVoJ3ew61UAqGov9UCSP0NXqr4Jq2wQ
+         Qzkj1vDWuJvOAxlzOj+wZHWZQr5n3vWSKxOVHaHASgz0euMl4CS9FQJWQuSxBrmMNbZx
+         buQwzAtfdPAYLmQbg2cS0k4TqcugZHlDPJu5PFkIBjPe5sTuwka2YA25YAOnFXfTEo7g
+         oAGnHJdW8ohVg3o6hXy01cKyuyp0Kt5MXcLHl4VoG1fzYHAHNgItqYRnHTo5xi719RuI
+         nVKA==
+X-Gm-Message-State: AC+VfDzqi2E3QtXbfEyym5gnvshRMClH1jPTocCnnTt/asXtjwY23LOa
+        7o7vmFIO9bJ88xOV+dIe25wwNA==
+X-Google-Smtp-Source: ACHHUZ7pAW7s9g3po57k0AkL6h6LbDWiYlNgz4s2ncT/hDscFpRG5nwoXCfZhtRy6isyrcLNBlpahw==
+X-Received: by 2002:a17:907:3209:b0:94e:8d26:f610 with SMTP id xg9-20020a170907320900b0094e8d26f610mr4773457ejb.28.1683185514476;
+        Thu, 04 May 2023 00:31:54 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
+        by smtp.gmail.com with ESMTPSA id u13-20020a170906c40d00b0094aa087578csm18626016ejz.171.2023.05.04.00.31.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 00:31:54 -0700 (PDT)
+Message-ID: <d5763073-3aaa-8a7f-1336-337c125b1a0e@linaro.org>
+Date:   Thu, 4 May 2023 09:31:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230504045052.22347-1-quic_ugoswami@quicinc.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] dt-bindings: usb: Add binding for Microchip usb5744 hub
+ controller
+Content-Language: en-US
+To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
+        ilias.apalodimas@linaro.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Piyush Mehta <piyush.mehta@amd.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <cca068980ae0b902168a9a9b78cab4efb43157a8.1683121150.git.michal.simek@amd.com>
+ <4aa7adbf-f89e-6819-64d2-5942a456528a@linaro.org>
+ <eb325b2a-d265-d8bb-8e98-9eef8f03355a@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <eb325b2a-d265-d8bb-8e98-9eef8f03355a@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,82 +82,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Udipto,
+On 04/05/2023 09:25, Michal Simek wrote:
+> 
+> 
+> On 5/4/23 08:46, Krzysztof Kozlowski wrote:
+>> On 03/05/2023 15:39, Michal Simek wrote:
+>>> The Microchip usb5744 is a SS/HS USB 3.0 hub controller with 4 ports.
+>>> The binding describes USB related aspects of the USB5744 hub, it as
+>>> well cover the option of connecting the controller as an i2c slave.
+>>> When i2c interface is connected hub needs to be initialized first.
+>>> Hub itself has fixed i2c address 0x2D but hardcoding address is not good
+>>> idea because address can be shifted by i2c address translator in the
+>>> middle.
+>>>
+>>> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+>>> Signed-off-by: Michal Simek <michal.simek@amd.com>
+>>> ---
+>>>
+>>> It looks like that usb8041 has also an optional i2c interface which is not
+>>> covered. But it is mentioned at commit 40e58a8a7ca6 ("dt-bindings: usb:
+>>> Add binding for TI USB8041 hub controller").
+>>>
+>>> i2c-bus name property was suggested by Rob at
+>>> https://lore.kernel.org/all/CAL_JsqJedhX6typpUKbnzV7CLK6UZVjq3CyG9iY_j5DLPqvVdw@mail.gmail.com/
+>>> and
+>>> https://lore.kernel.org/all/CAL_JsqJZBbu+UXqUNdZwg-uv0PAsNg55026PTwhKr5wQtxCjVQ@mail.gmail.com/
+>>>
+>>> the question is if adding address like this is acceptable.
+>>> But it must be specified.
+>>
+>> Why? phandle points it explicitly.
+> 
+> Ok it means just list usb hub on i2c with label and point to it. Works for me.
 
-kernel test robot noticed the following build warnings:
+Right. I missed you want the address of the hub but phandle goes to the
+bus. I think listing it on I2C bus (see
+arch/arm/boot/dts/vf610-zii-scu4-aib.dts) should work. I think we can
+have I2C devices without compatibles.
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus johan-usb-serial/usb-next johan-usb-serial/usb-linus linus/master v6.3 next-20230428]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The problem is that property should have only one definition/type and
+i2c-bus is already used in other cases as just "phandle". If we go with
+your phandle+address approach, then this should be phandle-array with
+items and then we have two different types.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Udipto-Goswami/usb-dwc3-debugfs-Prevent-any-register-access-when-devices-is-runtime-suspended/20230504-125225
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230504045052.22347-1-quic_ugoswami%40quicinc.com
-patch subject: [PATCH v8] usb: dwc3: debugfs: Prevent any register access when devices is runtime suspended
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230504/202305041526.hBiM1g2W-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1c53edaeee33380f0fc3e0d262829ffaa66f45e1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Udipto-Goswami/usb-dwc3-debugfs-Prevent-any-register-access-when-devices-is-runtime-suspended/20230504-125225
-        git checkout 1c53edaeee33380f0fc3e0d262829ffaa66f45e1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/usb/
+Best regards,
+Krzysztof
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305041526.hBiM1g2W-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/usb/dwc3/debugfs.c: In function 'dwc3_rx_fifo_size_show':
->> drivers/usb/dwc3/debugfs.c:718:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
-     718 |         if (ret < 0)
-         |         ^~
-   drivers/usb/dwc3/debugfs.c:720:17: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
-     720 |                 return ret;
-         |                 ^~~~~~
-
-
-vim +/if +718 drivers/usb/dwc3/debugfs.c
-
-   707	
-   708	static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
-   709	{
-   710		struct dwc3_ep		*dep = s->private;
-   711		struct dwc3		*dwc = dep->dwc;
-   712		unsigned long		flags;
-   713		u32			mdwidth;
-   714		u32			val;
-   715		int			ret;
-   716	
-   717		ret = pm_runtime_resume_and_get(dwc->dev);
- > 718		if (ret < 0)
-   719			pm_runtime_put_sync(dwc->dev);
-   720			return ret;
-   721	
-   722		spin_lock_irqsave(&dwc->lock, flags);
-   723		val = dwc3_core_fifo_space(dep, DWC3_RXFIFO);
-   724	
-   725		/* Convert to bytes */
-   726		mdwidth = dwc3_mdwidth(dwc);
-   727	
-   728		val *= mdwidth;
-   729		val >>= 3;
-   730		seq_printf(s, "%u\n", val);
-   731		spin_unlock_irqrestore(&dwc->lock, flags);
-   732	
-   733		pm_runtime_put_sync(dwc->dev);
-   734		return 0;
-   735	}
-   736	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
