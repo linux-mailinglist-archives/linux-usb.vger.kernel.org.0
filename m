@@ -2,51 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583D56F6DAD
-	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 16:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3DA56F6DB4
+	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 16:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbjEDO1k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 May 2023 10:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
+        id S230265AbjEDO34 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 May 2023 10:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjEDO1j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 May 2023 10:27:39 -0400
+        with ESMTP id S229845AbjEDO3y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 May 2023 10:29:54 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BD05BBD
-        for <linux-usb@vger.kernel.org>; Thu,  4 May 2023 07:27:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D87A49CA
+        for <linux-usb@vger.kernel.org>; Thu,  4 May 2023 07:29:53 -0700 (PDT)
 Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1puZvK-0002Nr-OF; Thu, 04 May 2023 16:27:10 +0200
+        id 1puZxs-0002f5-I1; Thu, 04 May 2023 16:29:48 +0200
 Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1puZvI-0003dF-IR; Thu, 04 May 2023 16:27:08 +0200
-Date:   Thu, 4 May 2023 16:27:08 +0200
+        id 1puZxr-0003en-HH; Thu, 04 May 2023 16:29:47 +0200
+Date:   Thu, 4 May 2023 16:29:47 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     andreas@fatal.se, jun.li@nxp.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+To:     Rob Herring <robh@kernel.org>
+Cc:     jun.li@nxp.com, Bjorn Andersson <andersson@kernel.org>,
         Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
+        linux-kernel@vger.kernel.org, andreas@fatal.se,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fabio Estevam <festevam@gmail.com>, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
         NXP Linux Team <linux-imx@nxp.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 3/4] usb: typec: tcpci: clear the fault status bit
-Message-ID: <20230504142708.l4xo4sbl7wzsrbql@pengutronix.de>
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: usb: gpio-sbu-mux: add support for
+ ss-data lanes mux
+Message-ID: <20230504142947.imc3raeszxsz7xgj@pengutronix.de>
 References: <20230504-b4-v6-3-topic-boards-imx8mp-evk-dual-role-usb-v2-0-3889b1b2050c@pengutronix.de>
- <20230504-b4-v6-3-topic-boards-imx8mp-evk-dual-role-usb-v2-3-3889b1b2050c@pengutronix.de>
- <6a894ff0-3232-4ef0-5e26-95471cc33ed9@roeck-us.net>
+ <20230504-b4-v6-3-topic-boards-imx8mp-evk-dual-role-usb-v2-1-3889b1b2050c@pengutronix.de>
+ <168320933573.1721948.14807819257456373317.robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6a894ff0-3232-4ef0-5e26-95471cc33ed9@roeck-us.net>
+In-Reply-To: <168320933573.1721948.14807819257456373317.robh@kernel.org>
 User-Agent: NeoMutt/20180716
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
 X-SA-Exim-Mail-From: mfe@pengutronix.de
@@ -61,87 +63,32 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23-05-04, Guenter Roeck wrote:
-> On 5/4/23 06:46, Marco Felsch wrote:
-> > According the "USB Type-C Port Controller Interface Specification v2.0"
-> > the TCPC sets the fault status register bit-7
-> > (AllRegistersResetToDefault) once the registers have been reseted to
+On 23-05-04, Rob Herring wrote:
 > 
-> cleared ? set ?
-
-Sry. I don't get this.
-
-> > their default values.
-> > 
-> > This triggers an alert(-irq) on PTN5110 devices albeit we do mask the
-> > fault-irq. Fix this gernally by writing a one to the correspondig
-> 
-> generically ?
-
-Sure, thanks.
-
-> corresponding
-
-Of course!
-
-> > bit-7.
+> On Thu, 04 May 2023 15:46:50 +0200, Marco Felsch wrote:
+> > This adds the support for GPIO based USB-C SS data lane muxing.
 > > 
 > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 > > ---
-> >   drivers/usb/typec/tcpm/tcpci.c | 5 +++++
-> >   include/linux/usb/tcpci.h      | 1 +
-> >   2 files changed, 6 insertions(+)
+> >  .../devicetree/bindings/usb/gpio-sbu-mux.yaml      | 82 +++++++++++++++++++---
+> >  1 file changed, 71 insertions(+), 11 deletions(-)
 > > 
-> > diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> > index 8da23240afbe..15632d023e4c 100644
-> > --- a/drivers/usb/typec/tcpm/tcpci.c
-> > +++ b/drivers/usb/typec/tcpm/tcpci.c
-> > @@ -602,6 +602,11 @@ static int tcpci_init(struct tcpc_dev *tcpc)
-> >   	if (time_after(jiffies, timeout))
-> >   		return -ETIMEDOUT;
-> > +	regmap_read(tcpci->regmap, TCPC_FAULT_STATUS, &reg);
 > 
-> Needs error check.
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> Documentation/devicetree/bindings/usb/gpio-sbu-mux.example.dts:96.47-98.27: ERROR (duplicate_label): /example-1/tcpm/connector/ports/port@0/endpoint: Duplicate label 'tcpm_hs_out' on /example-1/tcpm/connector/ports/port@0/endpoint and /example-0/tcpm/connector/ports/port@0/endpoint
+> Documentation/devicetree/bindings/usb/gpio-sbu-mux.example.dts:103.47-105.27: ERROR (duplicate_label): /example-1/tcpm/connector/ports/port@1/endpoint: Duplicate label 'tcpm_ss_out' on /example-1/tcpm/connector/ports/port@1/endpoint and /example-0/tcpm/connector/ports/port@1/endpoint
+> ERROR: Input tree has errors, aborting (use -f to force output)
+> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/usb/gpio-sbu-mux.example.dtb] Error 2
+> make[1]: *** Waiting for unfinished jobs....
+> make: *** [Makefile:1512: dt_binding_check] Error 2
 
-I will add this.
+While adding the example I thought about the need for it. Is it okay for
+you if I drop the example since most of it is just copy'n'paste.
 
-> Also, I am not sure if this is the correct place for this code. The alert
-> status is cleared after vendor initialization. Should the same be done
-> here ?
-
-According the spec the bit must be cleared before the TCPC_ALERT is
-cleared. Of course the vendor-init can (re-)trigger the bit, therefore
-we should move behind the vendor init and right before the TCPC_ALERT
-clear.
-
-> Also, why not just write the bit unconditionally, similar
-> to TCPC_ALERT ?
-
-Thought about this too.. I will change it in the v3.
-
-Thanks for the feedback,
+Regards,
   Marco
-
-> 
-> Thanks,
-> Guenter
-> 
-> > +	if (reg & TCPC_FAULT_STATUS_ALL_REG_RST_TO_DEFAULT)
-> > +		tcpci_write16(tcpci, TCPC_FAULT_STATUS,
-> > +			      TCPC_FAULT_STATUS_ALL_REG_RST_TO_DEFAULT);
-> > +
-> >   	/* Handle vendor init */
-> >   	if (tcpci->data->init) {
-> >   		ret = tcpci->data->init(tcpci, tcpci->data);
-> > diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
-> > index 85e95a3251d3..83376473ac76 100644
-> > --- a/include/linux/usb/tcpci.h
-> > +++ b/include/linux/usb/tcpci.h
-> > @@ -103,6 +103,7 @@
-> >   #define TCPC_POWER_STATUS_SINKING_VBUS	BIT(0)
-> >   #define TCPC_FAULT_STATUS		0x1f
-> > +#define TCPC_FAULT_STATUS_ALL_REG_RST_TO_DEFAULT BIT(7)
-> >   #define TCPC_ALERT_EXTENDED		0x21
-> > 
-> 
-> 
