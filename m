@@ -2,63 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBBFB6F6533
-	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 08:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 603DD6F65AB
+	for <lists+linux-usb@lfdr.de>; Thu,  4 May 2023 09:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjEDGqv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 May 2023 02:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
+        id S230005AbjEDH0G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 May 2023 03:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjEDGqu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 May 2023 02:46:50 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C37212F
-        for <linux-usb@vger.kernel.org>; Wed,  3 May 2023 23:46:48 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50bc4ba28cbso113241a12.0
-        for <linux-usb@vger.kernel.org>; Wed, 03 May 2023 23:46:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683182807; x=1685774807;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M7vw8A+fPBvQQ7FZ7Zi1LK3WXKYiCvrkFtHK4YoEOPY=;
-        b=NJB48wgq8GaIWJfLNyX9Xph8XZknqa3JZ+QwdR8JtY4eLr142KuLjIFZQEA1Avf62D
-         rOwf/8NNDFoicTajh6DcOMjtMJPHSdPgsaCLb76kK8VJThqNsFKN5FnUvc0yhDNJkZ6g
-         zLzpjRvEgDdzhluvdCJMKSX4OT5lXrtwUbdA78TatEHKf+qHc5jVJRCf54en6xuXpYPq
-         WQLvOMtYnB1Le7URGZRQ+GrrjxnJVPuZ0p2oCQMk8YkBiJIVcLHpKm0AhgH3/tvWQkVz
-         tgVc/mclRts18VaHlldJb+BEe6Zyz6+hdGuKTCz2kAg06gohn1iwOhPVQL+p42V5/IWR
-         JHjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683182807; x=1685774807;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M7vw8A+fPBvQQ7FZ7Zi1LK3WXKYiCvrkFtHK4YoEOPY=;
-        b=VMFlwe+YbI36ElOdIt+vGTrV7bzDn37xo8DHH9Q3aI62WWUMqZn4iKtaT8j42lEWBX
-         mB2jXv8kbQqRuENWZAJJcivWkxc/V3b+XLcXuDaeg/fszKJU+1LAhAwE54wlh+/XY4hg
-         t8hNAMgnncJYROkrivljTiEJNOfqaSX819idf2JEJuBfd/f8kiy0Sfejmb1sPOmcAciQ
-         GDNVHJql78njrTZaRlg18h0oyd7cO2H/miyv0dJ38ftnro2m68VX48gUoC+8l79GX3Lr
-         2/NYzq3HoH/WGz5n23MCId43xBvG+mS6h1DS2qpLycbPpcbhxnM1XeO0ca1DqD4boB8t
-         Ad0w==
-X-Gm-Message-State: AC+VfDxSEBb3H87iva/aXPf8SgRhwIbm1huXy0qZ2T5Lt0s4FNjN0kic
-        lTVR8vRISZvjglShx17t1ooP3w==
-X-Google-Smtp-Source: ACHHUZ6UY8A2CuWiZF7JTRIhZOxqHEYlLakXgHOXDn41+YXqXV2Z9n4jJZ+YqlYAwptXMo8AV6xSmg==
-X-Received: by 2002:a17:907:3e22:b0:931:6921:bdb7 with SMTP id hp34-20020a1709073e2200b009316921bdb7mr5892628ejc.60.1683182807040;
-        Wed, 03 May 2023 23:46:47 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
-        by smtp.gmail.com with ESMTPSA id 10-20020a170906328a00b009599c3a019fsm14027418ejw.60.2023.05.03.23.46.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 23:46:46 -0700 (PDT)
-Message-ID: <4aa7adbf-f89e-6819-64d2-5942a456528a@linaro.org>
-Date:   Thu, 4 May 2023 08:46:45 +0200
-MIME-Version: 1.0
+        with ESMTP id S229707AbjEDH0D (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 May 2023 03:26:03 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2042.outbound.protection.outlook.com [40.107.94.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE842728;
+        Thu,  4 May 2023 00:26:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dccqwHVPUB6s4iH6cQr4t09LPUVIkemkhFcujp4CeaCR8vptBtaV/8UNKzzZmoSIAIPsIcmbEoK/nmGH4dmBK8FQpkJDRwkD8J1qtuJp9M+Zk8PiridMD0OyfhT4QtukgegcfObu6YoI4aWv2FK0grZpUf6uggJaoy8yWzqH8cVTvzjXvLJ09TrLUJ/osUiAWfK3cmNJlQfvkNjVcjpDQ/saFL1CEkNPrWhPrxrV2pAgAiJqcmKkOSY8knfkCiQgfVhb2YE4U+qgWjFeNpKvdf+8TYKs+3dlEfsI5bgvHAWRMVtkHXiqwGyx4Gjmz7IexxUYd77YL+A2oEt38a923g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DtrKIW34oECzFpjUUyl49qvgvouQRhTrjChU56YAzZ0=;
+ b=FxDW3voHBLyc16k9TxMjgwG7pVDsVJrXo3+WjwLpKFvvoMtAOH/xFA86nbZb55cVPeVMK3BSAloAQBMfG0pARKuThzPIwBlZ3m0VHuFnaeQwXIFuo5+JVrVsqkgdiTwvL5RsTssP7FvhOndqXwpTYYTPDUWE3IEZR34M4Q4UKTMyjUT8gGazyEEN+AY9hK4faMk7h/2jPdL04U7v319zwvLssrOQRqhVjtu8O8nJgpKVJEa8Cwh5nVqsmrsSZLLBaTh/7qSF+uca75DbkjqX83IUb0Gkmm/w0ZUvcshTFK5o6WD6y/yT6bHa9mu/bvIUIMHz2hVKz3Wb4egJkJGVaw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DtrKIW34oECzFpjUUyl49qvgvouQRhTrjChU56YAzZ0=;
+ b=QPWZkP1nKLXwhLSYnmuooC0aGNuAj3z4zp85SeDjSvX2qHEjVlD4CHx0Jgpc1kqVxDcwWbmJ2gT475dovKZtNRf5VVG2EGWbqFHg1sIwG5LeQS7wrnOtKxb8f4B23zYwtalOqOsmUydpEtiBLO11c3ULK92FmdjfsCIMWTgGh5A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB4758.namprd12.prod.outlook.com (2603:10b6:a03:a5::28)
+ by IA1PR12MB6138.namprd12.prod.outlook.com (2603:10b6:208:3ea::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.22; Thu, 4 May
+ 2023 07:25:59 +0000
+Received: from BYAPR12MB4758.namprd12.prod.outlook.com
+ ([fe80::20b9:d472:1981:cf94]) by BYAPR12MB4758.namprd12.prod.outlook.com
+ ([fe80::20b9:d472:1981:cf94%4]) with mapi id 15.20.6340.031; Thu, 4 May 2023
+ 07:25:59 +0000
+Message-ID: <eb325b2a-d265-d8bb-8e98-9eef8f03355a@amd.com>
+Date:   Thu, 4 May 2023 09:25:44 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
+ Thunderbird/102.10.0
 Subject: Re: [PATCH] dt-bindings: usb: Add binding for Microchip usb5744 hub
  controller
 Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
-        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com,
         ilias.apalodimas@linaro.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -66,141 +56,113 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-usb@vger.kernel.org
 References: <cca068980ae0b902168a9a9b78cab4efb43157a8.1683121150.git.michal.simek@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <cca068980ae0b902168a9a9b78cab4efb43157a8.1683121150.git.michal.simek@amd.com>
-Content-Type: text/plain; charset=UTF-8
+ <4aa7adbf-f89e-6819-64d2-5942a456528a@linaro.org>
+From:   Michal Simek <michal.simek@amd.com>
+In-Reply-To: <4aa7adbf-f89e-6819-64d2-5942a456528a@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: FR3P281CA0209.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a5::8) To BYAPR12MB4758.namprd12.prod.outlook.com
+ (2603:10b6:a03:a5::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB4758:EE_|IA1PR12MB6138:EE_
+X-MS-Office365-Filtering-Correlation-Id: 60c56957-ffbe-46a0-9d6c-08db4c70ce76
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dbRw6AjfLrDTSujdlRDmMAvFoooB1+QiWBlRINVPvWZGF+WdXUTVFmXuK6ed2VcfibL6R0EFAqzt+/vmmNon+hMT5Sa0EhI1bn1C87pgGIB+H0LlE+GZv15naxmwjVu1CVbUcq2uNPMvPgnOH+aU6xUiGgpU0INcY1jOACIMeibJjbqKJd6bdqQg/gRFd/gRjOEKX0QunwLFj9wj/6n1cfigwSZ+EHh9XI0B7pyJNFtisk7r+GsT7rLMhhxduAuRvluNDzuHTnHa0H+AgtiOH63b8YJtJoNDlOyhwY1DhqU0W47sfnOLgIxYosIAOuHkU3C+jzgxf1H+hAZeqbaTiKDOKkrzAppe+OVBQBOExwXaQMtmsYXbykYdlo87q28S4tQw2fVO61Qf18u18jkigKO30v7n/VGV36UQxxjR1b+87kymiGq+xheJ7gWdJ00S5Z4tTBsWhQch9M3qLVgr9zd8iPPuEpdlnzNg11522KnJR6Guzw9UZt7egH7U8RHMT6dQD/VQLDjIA3aU6ohjNhZnPU9FbWtuC7KRlVMfntMfYTzth9rNPWxVeyACc5Ch5yxyiAT/S+n/HYg0b3Jx5SJ+EPtla6yWxgQ0MooW8ICgLTBbHnXxlf8/GapJ8ZFV0/CUMyfh17M0k1oytQb4cdmDLN+qhaiH7L0R1EYSfQIxySaTDLcHbU/gDT6MJzIg
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4758.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(366004)(346002)(136003)(376002)(451199021)(38100700002)(7416002)(6666004)(478600001)(966005)(6486002)(5660300002)(316002)(66556008)(66476007)(41300700001)(8676002)(44832011)(8936002)(54906003)(2616005)(66946007)(4326008)(2906002)(186003)(26005)(6512007)(6506007)(53546011)(31696002)(86362001)(31686004)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YnhXak9QUm8vYWFGNW16amdRUCtQb29BVHFTcW1LL2Z5UURzaGdtenRCZ29t?=
+ =?utf-8?B?RUtzSUEra01maXlVZG5oMk4rOStubHV6ekxPT3BFaW92QUowN245cDVBcFRi?=
+ =?utf-8?B?MXVIRnVsNmw1RFp3dWhXMTRwVWdEbG1zeFJESkpzdm5ieGR2SWpyYkMwTTFo?=
+ =?utf-8?B?SmxlYXNKeE9zUnV6cXVnd0E0VndTRDVPTWJobFBaazFZbHpUcEM1K24wUzJz?=
+ =?utf-8?B?eGdKaGZHdTRKTW1BaWVXN2dXRGNBckc0YTZrYzJLUVdvOVlrQXpzdWM3VGRr?=
+ =?utf-8?B?ZmhOVE01MWV3bHN4TnZSVzFzRVdRWHh3c0REcXpCM2R5OGoxb2x1RWViSUhJ?=
+ =?utf-8?B?MGVJV0QrcFcwdFpTdEI0Zi9rLys4N3p3YTFVZ2I3alBvaXY0QnVjOFo2MTBs?=
+ =?utf-8?B?YSs5ZnViTzFtYWpuU05PWFRxZlFLWlhncnpqR2NTN1lxbmdNWXdROGtOempk?=
+ =?utf-8?B?V0pFQndLdjdOZ3l4d2pHdDIvSWRNbFZhRW5waVlyTmlLSkJFQ2lwc0FJMnJK?=
+ =?utf-8?B?Yk5UcGJsdFdPc0ovSUJrSEpzL0EwQ3o1aHNrOHFGT2NhVCtvU0FiNGFnQlBm?=
+ =?utf-8?B?Yjh4YU1DcHczb3JVbndleXByTW8yL3M1ZUhMTGI3eVZJSytjcHVLRVZ6VkJL?=
+ =?utf-8?B?TStYdjJrbDFUYlVmbnZseEI1U3RFVXMrTnN4bDBKRXZVQzBkZkZ4UHIvSWVk?=
+ =?utf-8?B?SlRBeXd2RmpUVnBjTnJUTXhyaXVlNnhraGdXanBMZy9iMlFJVXBjRFhGTTNM?=
+ =?utf-8?B?OVE5eEkzdGxzK3UwaDZva3BOUzVJUEpKUk81SENQeGk2MlRGZE1ya3EvNjNo?=
+ =?utf-8?B?TXVTUXdPS25ZZC9FdlFWMEh1Q0F3a2JNMTVmWWRjWTA0YkRiajcwQ2xXY0FX?=
+ =?utf-8?B?c21DT3dkdUFEQjd0d2NFMDZSTnVidkgyVVQ3eU8vSno2UW9lYittNkNPTCt2?=
+ =?utf-8?B?YW1TNnloc1d2MzRVZkRsNUhZaFR4K3lDNWRhcWI1dXVxekRrSTZhdGdxUlhY?=
+ =?utf-8?B?TGZoeU9iSkdld1RwZHd4aStIdVErK2d2V296ZmJkUm5MWHRFc0JHUmVVNXRR?=
+ =?utf-8?B?bnV1ZGJCc3JkWklCMUZoL1ovREIvcUcxUnY4TU9OODBhemFEUHpYMExMaExR?=
+ =?utf-8?B?cVljYVZqcCt3YjNaNm1kN1ZpcC9SNVhVNkRFNW9xdndzem5iTGVyd3QxcjUx?=
+ =?utf-8?B?Q290Yk5aT21mOGsvSktkbEE0cEpGd09wQWdlTHVLNlVadlhwU2U3ajludXhX?=
+ =?utf-8?B?SUYxZjJZdEt2NVRnRE9rNFJ2cjJvSnEyZzQ3R2VZSlVwQjZOektlZk9OSWMy?=
+ =?utf-8?B?Qm5sZG1wbDkrd1hJa1hGZlVuMTY2R2pZVW1sdUtlTlVVNmtnQStFWU5oZ0s0?=
+ =?utf-8?B?bzJvL3czQ2l4UjRFanNmaDBWK3FmdTg1VVJGMDFLb3NrZXI1c3VZRFRmMzNE?=
+ =?utf-8?B?N2h1QXh2c25DRjM1bVZ6NVB2QXdzaEhDYm4zamhsYzZRL1B4RHlBNEd2QTND?=
+ =?utf-8?B?bGxEMFlZYVVrOU9Da01vdW81eUp5S1FuRU1IVG1wd3VZTWpOT0x2MHl3aUFN?=
+ =?utf-8?B?VStQT3ArRDc4MTdTRXJIUFV6QlhjL1ZJbFpaMVI2eDFxQXQ3d3IyWWxNdE1D?=
+ =?utf-8?B?SS92bkNjZ0JwMDBHMUZwWnY4RmtHd3E3NWxDalg4R2xYMjVoM01KcXFtTW55?=
+ =?utf-8?B?VGZTVVZrQmcvRTRvbDhKRFVvS3MzRXRIc0FHZ1NsMGcvNzVmY1dYWFpES0xI?=
+ =?utf-8?B?UnRxYTNmQUd1SW1tajlQaGdFTEJjTW9USGxUbGZpOUtZd3UzZkhTSXhqM3Vp?=
+ =?utf-8?B?VElPYUdKSVNrVlNJcjhQZzZyU0lSRGM3aWd0cUx6aWtkelZqM1hCaFVIUnVU?=
+ =?utf-8?B?a3ZWY2tjMDlPVDVzQ1VQNTFtVjl6Z3pTTUZFQTJ5dlF5KzB3Yi85RG1XSzRp?=
+ =?utf-8?B?cWJvTHJVR2xOdU1qSlBKU0tsVzhESVh3UWMvWkhMMG1WUWVzdmlxckRBTkQw?=
+ =?utf-8?B?OGZhczdmaXhRVHFjakdxbzA1TFl5WmtvTzVVUVUvRG5EbStOZVFPK1R6ZkNl?=
+ =?utf-8?B?VUpyTWQxU2k3ZFhoRHVVZHB2bTJHbndaWGx1T0pRa1laVGRPcnNIL3FwYnh6?=
+ =?utf-8?Q?17w47UUzj8a/qmv12+ehVD3ip?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 60c56957-ffbe-46a0-9d6c-08db4c70ce76
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4758.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 07:25:59.0501
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: a7niYS7gDpxhYLY7EbsfKqFw6tUAvQ27ObFh5ULvn4XhRXBlV8DqDXZfuUbWP8U3
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6138
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 03/05/2023 15:39, Michal Simek wrote:
-> The Microchip usb5744 is a SS/HS USB 3.0 hub controller with 4 ports.
-> The binding describes USB related aspects of the USB5744 hub, it as
-> well cover the option of connecting the controller as an i2c slave.
-> When i2c interface is connected hub needs to be initialized first.
-> Hub itself has fixed i2c address 0x2D but hardcoding address is not good
-> idea because address can be shifted by i2c address translator in the
-> middle.
-> 
-> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> ---
-> 
-> It looks like that usb8041 has also an optional i2c interface which is not
-> covered. But it is mentioned at commit 40e58a8a7ca6 ("dt-bindings: usb:
-> Add binding for TI USB8041 hub controller").
-> 
-> i2c-bus name property was suggested by Rob at
-> https://lore.kernel.org/all/CAL_JsqJedhX6typpUKbnzV7CLK6UZVjq3CyG9iY_j5DLPqvVdw@mail.gmail.com/
-> and
-> https://lore.kernel.org/all/CAL_JsqJZBbu+UXqUNdZwg-uv0PAsNg55026PTwhKr5wQtxCjVQ@mail.gmail.com/
-> 
-> the question is if adding address like this is acceptable.
-> But it must be specified.
 
-Why? phandle points it explicitly.
 
+On 5/4/23 08:46, Krzysztof Kozlowski wrote:
+> On 03/05/2023 15:39, Michal Simek wrote:
+>> The Microchip usb5744 is a SS/HS USB 3.0 hub controller with 4 ports.
+>> The binding describes USB related aspects of the USB5744 hub, it as
+>> well cover the option of connecting the controller as an i2c slave.
+>> When i2c interface is connected hub needs to be initialized first.
+>> Hub itself has fixed i2c address 0x2D but hardcoding address is not good
+>> idea because address can be shifted by i2c address translator in the
+>> middle.
+>>
+>> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+>> Signed-off-by: Michal Simek <michal.simek@amd.com>
+>> ---
+>>
+>> It looks like that usb8041 has also an optional i2c interface which is not
+>> covered. But it is mentioned at commit 40e58a8a7ca6 ("dt-bindings: usb:
+>> Add binding for TI USB8041 hub controller").
+>>
+>> i2c-bus name property was suggested by Rob at
+>> https://lore.kernel.org/all/CAL_JsqJedhX6typpUKbnzV7CLK6UZVjq3CyG9iY_j5DLPqvVdw@mail.gmail.com/
+>> and
+>> https://lore.kernel.org/all/CAL_JsqJZBbu+UXqUNdZwg-uv0PAsNg55026PTwhKr5wQtxCjVQ@mail.gmail.com/
+>>
+>> the question is if adding address like this is acceptable.
+>> But it must be specified.
 > 
-> Driver will follow based on final dt-binding.
-> 
-> ---
->  .../bindings/usb/microchip,usb5744.yaml       | 85 +++++++++++++++++++
->  1 file changed, 85 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-> new file mode 100644
-> index 000000000000..fafe275a35df
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-> @@ -0,0 +1,85 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/microchip,usb5744.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip USB5744 4-port Hub Controller
-> +
-> +description:
-> +  Microchip's USB5744 SmartHubTM IC is a 4 port, SuperSpeed (SS)/Hi-Speed (HS),
-> +  low power, low pin count configurable and fully compliant with the USB 3.1
-> +  Gen 1 specification. The USB5744 also supports Full Speed (FS) and Low Speed
-> +  (LS) USB signaling, offering complete coverage of all defined USB operating
-> +  speeds. The new SuperSpeed hubs operate in parallel with the USB 2.0
-> +  controller, so 5 Gbps SuperSpeed data transfers are not affected by slower
-> +  USB 2.0 traffic.
-> +
-> +maintainers:
-> +  - Piyush Mehta <piyush.mehta@amd.com>
-> +  - Michal Simek <michal.simek@amd.com>
-> +
-> +allOf:
-> +  - $ref: usb-device.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - usb424,5744
-> +      - usb424,2744
+> Why? phandle points it explicitly.
 
-Keep the list ordered, so 2744 before 5744.
+Ok it means just list usb hub on i2c with label and point to it. Works for me.
 
-> +
-> +  reg: true
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +    description:
-> +      GPIO controlling the GRST# pin.
-> +
-> +  vdd-supply:
-> +    description:
-> +      VDD power supply to the hub
-> +
-> +  peer-hub:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      phandle to the peer hub on the controller.
-> +
-> +  i2c-bus:
-> +    maxItems: 1
-> +    description:
-> +      phandle of an I2C controller to link usb-hub for usb attach and reset
-> +      followed by i2c address.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - peer-hub
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    usb {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        /* 2.0 hub on port 1 */
-> +        hub_2_0: hub@1 {
-> +          compatible = "usb424,5744";
-
-Mixed indentation, use four spaces here as well.
-
-> +          reg = <1>;
-> +          peer-hub = <&hub_3_0>;
-> +          i2c-bus = <&i2c 0x2d>;
-> +          reset-gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
-> +        };
-Krzysztof
-
+Thanks,
+Michal
