@@ -2,117 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B884C6F7FCA
-	for <lists+linux-usb@lfdr.de>; Fri,  5 May 2023 11:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8370C6F7FD1
+	for <lists+linux-usb@lfdr.de>; Fri,  5 May 2023 11:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbjEEJVr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 May 2023 05:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S231659AbjEEJYD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 May 2023 05:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbjEEJVq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 05:21:46 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19439C4;
-        Fri,  5 May 2023 02:21:45 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3459AjVN016190;
-        Fri, 5 May 2023 09:21:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Kweh12pVCAfMn2iqw6+n6p7Ho2umE5weOtMMprpVnf8=;
- b=AJztk2yvQR0xySC0OUf4OuIoLZ3Xv1wPZB1JnZvDMbN1Zr6IWUZNSMaaNIbgwliviPgm
- sFj3sjvjbHX2auF32j0IvuD7eY/wDXmPJ9BcWbg+t6HCOcPoFuNtJmpYKt+E/r7ryA6D
- XWjMBHAEadf8VToDRLs5Qf5M03aL6/nzQjhwp/O8wWte2sBLGUWSa29NAmpqni3kvlWN
- LEaAVlnnaS5NMG6G99oM2THcy//WnuVpHT0Yke/5ELh0FbMg23yya8JKNLvzMZymctAC
- YL/x47VJwY14AwVrx/CytQoZFP4FPcGLbwSxBrn/TqEvkPvrdUdCvMADGRB1B5xowzSk mw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qcmm394qx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 May 2023 09:21:38 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3459LbBw001380
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 5 May 2023 09:21:37 GMT
-Received: from [10.217.218.131] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 5 May 2023
- 02:21:35 -0700
-Message-ID: <0f33ea7f-d0a4-bc39-1d26-02518fa460a4@quicinc.com>
-Date:   Fri, 5 May 2023 14:51:31 +0530
+        with ESMTP id S230398AbjEEJYA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 05:24:00 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D047EF3;
+        Fri,  5 May 2023 02:23:57 -0700 (PDT)
+Received: from booty (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 05C59240006;
+        Fri,  5 May 2023 09:23:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1683278636;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mWElEqoC0tf6AE16wm3wb4hzf8ICo35KcifM6UnLMzo=;
+        b=gAdUn58zRii8F5j9HadQN4CxZRzA5r+uSeedshZX4vU10xEvC3twC47IIhZGAeHGmyI9pF
+        cKE/T0V/qJJFYy8MK1yIAFz6k8g1tDAP6ONhv3ehCthYYReSR0N6YS9KaU8j4EjJecS2VG
+        Yl9C7rgu1/FzdL578HPrX8NMotO8E+BoGVP6k2dJN4cDbbSu6FhIHLmztuFORS3T1iCVee
+        uZACtTPtRvIihqG3JL4yzO4LzF1xnAXMguHdK+pu2nMlNQe7GOBZngFbBgKTnBSzCBVSSm
+        OWG/K8tre5GbMqejMgI4zh4rFKT9eng7izNuNpDzg1sNh4PT28JQtLPOwbhP6g==
+Date:   Fri, 5 May 2023 11:23:51 +0200
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Francesco Dolcini <francesco@dolcini.it>
+Cc:     devicetree@vger.kernel.org, festevam@gmail.com,
+        gregkh@linuxfoundation.org, jun.li@nxp.com, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        peter.chen@nxp.com, robh+dt@kernel.org, s.hauer@pengutronix.de,
+        shawnguo@kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        francesco.dolcini@toradex.com
+Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
+Message-ID: <20230505112351.1c79f6b2@booty>
+In-Reply-To: <ZFPiRvoF5l8uGzzZ@francesco-nb.int.toradex.com>
+References: <23672d66d229d3be4cc854ddf1462c3507f1c2fc.camel@toradex.com>
+        <20230504162312.1506763-1-luca.ceresoli@bootlin.com>
+        <ZFPiRvoF5l8uGzzZ@francesco-nb.int.toradex.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5] usb: gadget: u_serial: Add null pointer check in
- gserial_resume
-Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1676309438-14922-1-git-send-email-quic_prashk@quicinc.com>
- <Y+p6TUBtikbmnTGe@rowland.harvard.edu>
-From:   Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <Y+p6TUBtikbmnTGe@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: jj1yjN6GZI_VivsWB7pPdg4-awzvVHdP
-X-Proofpoint-GUID: jj1yjN6GZI_VivsWB7pPdg4-awzvVHdP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-05_15,2023-05-04_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=360 mlxscore=0
- priorityscore=1501 impostorscore=0 adultscore=0 malwarescore=0
- suspectscore=0 phishscore=0 clxscore=1015 bulkscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305050077
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello Francesco,
 
+On Thu, 4 May 2023 18:50:14 +0200
+Francesco Dolcini <francesco@dolcini.it> wrote:
 
-On 13-02-23 11:28 pm, Alan Stern wrote:
-> On Mon, Feb 13, 2023 at 11:00:38PM +0530, Prashanth K wrote:
->> Consider a case where gserial_disconnect has already cleared
->> gser->ioport. And if a wakeup interrupt triggers afterwards,
->> gserial_resume gets called, which will lead to accessing of
->> gser->ioport and thus causing null pointer dereference.Add
->> a null pointer check to prevent this.
->>
->> Added a static spinlock to prevent gser->ioport from becoming
->> null after the newly added check.
->>
->> Fixes: aba3a8d01d62 ("usb: gadget: u_serial: add suspend resume callbacks")
->> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
->> ---
->> v5: Updated the comment in new patch
+> Hello Luca,
+> I guess your mail to Philippe bounced, let me try to answer since I am aware
+> of the issue here.
 > 
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> On Thu, May 04, 2023 at 06:23:12PM +0200, Luca Ceresoli wrote:
+> > I found this thread after several hours spent in debugging why USB host is
+> > not detecting new devices on a custom board using the iMX6ULL Colibri
+> > SoM.
+> > 
+> > My best workaround at the moment is:  
+> We have the same workaround in our BSP since quite some time, see
+> https://git.toradex.com/cgit/meta-toradex-bsp-common.git/tree/recipes-kernel/linux/linux-toradex-mainline-git/0002-drivers-chipidea-disable-runtime-pm-for-imx6ul.patch
 > 
-> I'm not very familiar with the u_serial function.  Is it possible for
-> gserial_disconnect to cause a similar problem in gserial_suspend?
-> 
-> Alan Stern
-> 
-Hi Alen,
+> > I haven't found any follow-up patches from you, so I'm wondering whether
+> > you have made any progress on this issue.  
+> You can find the latest discussion on that regard here
+> https://lore.kernel.org/all/Y1vLpaxpc5WBCuGD@francesco-nb.int.toradex.com/
 
-You were right, we have similar issue in suspend path also. I have 
-pushed a patch for the same.
+Thanks for this pointer! I have read the discussion and it was a bit
+confusing, especially about whether the hardware can work at all.
 
-Regards,
-Prashanth K
+Are you planning to continue on that work? I would be very glad to test
+on product based on the i.MX6ULL Colibri module I am currently working
+on.
+
+Best regards,
+Luca
+
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
