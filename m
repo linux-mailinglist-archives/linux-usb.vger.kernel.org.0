@@ -2,120 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF3766F7FBD
-	for <lists+linux-usb@lfdr.de>; Fri,  5 May 2023 11:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAAF86F7FC5
+	for <lists+linux-usb@lfdr.de>; Fri,  5 May 2023 11:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbjEEJSx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 May 2023 05:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
+        id S231643AbjEEJUn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 May 2023 05:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjEEJSw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 05:18:52 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C28F103;
-        Fri,  5 May 2023 02:18:52 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3458xPCi008611;
-        Fri, 5 May 2023 09:18:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=v7Ibotq0lCmPp6SgUbADSFzMro73waUPO5bKxROq51Y=;
- b=Q9Ovi6kxdkjKkjcjt8u9rj2AGak+5x1Iky9aMwIW/U+ZAAFOoCzBQpyQO1DDQCeCJK/x
- ZKXVDo0L9soov9M5szO3ZWPgLnRhX5x1j0MjywflyYYQ1nds8b16SCNbzZWBVdK72+qX
- 7BgjxvbDu20D8YmPkKqVZo/dlCBmdxNIi02Gd3oJ5uvNftMX/J8ES9cKDFZnFYAszl4G
- 4KpEn4iLLcbs8i6AQFJo7mYrI455+GVVb5Azox6+B/pU0QOxIFNi1OKRt9jqh9svR8oE
- Yh6wobalG5pC6VH+0EywvOWyW4ZKhYy+HdaqqEgUEZgOomwPHVJz/XK1MkiOBOkB3szr LQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qcf24hx0v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 May 2023 09:18:45 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3459IiIL030210
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 5 May 2023 09:18:44 GMT
-Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 5 May 2023 02:18:42 -0700
-From:   Prashanth K <quic_prashk@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC:     Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Prashanth K <quic_prashk@quicinc.com>
-Subject: [PATCH] usb: gadget: u_serial: Add null pointer check in gserial_suspend
-Date:   Fri, 5 May 2023 14:48:37 +0530
-Message-ID: <1683278317-11774-1-git-send-email-quic_prashk@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S231633AbjEEJUm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 05:20:42 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3ED19A9
+        for <linux-usb@vger.kernel.org>; Fri,  5 May 2023 02:20:40 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-555e853d3c5so13791477b3.2
+        for <linux-usb@vger.kernel.org>; Fri, 05 May 2023 02:20:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683278439; x=1685870439;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CUmVNNVC+NFm1W3KNQtznbgGM7aUA3zExZZF/LzaVUs=;
+        b=FP/p5a3Rz53t8Hiu9p1mm5qnJtqy8k8DPZEj9OIZWBicvtZTm0NV6bUKvKL9s/LyuT
+         kPWITrgznSc7G0gHTudHZg51Ym5Jz85rr3xxjeAE4g9c3tQhWPM88PNPAnYyA8iRv2Rc
+         /qaAudMVsKqE0av2f9jkQUu9kV+fuM/cUQX7t6s8o+A1Yb5IMJseFDL0OMiEXWfxStxN
+         7GmxgySoOXuIhVDIuS2TVRt/UoC35jKuy2okLrVpnPrPI2ShD/1X/uQO4nFF6yuUp+1H
+         UQqCdYvj3wW+hT+k0rc/yV5szgmhj1m/6qfDuD1KM2j6JxEQiyvkOxB0HY59bDNjQJ/T
+         kGfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683278439; x=1685870439;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CUmVNNVC+NFm1W3KNQtznbgGM7aUA3zExZZF/LzaVUs=;
+        b=J4nRZLHX2umA+dbE0i2SY8937mC7lHzceX6TYwT/x/NV4dId4gIor46LPwIjnnNtRb
+         5Kfv91oELpcMaET+pmT2vipyS8PwQxLuCA87j7FZtzB6HtdllHxkxZAahprVIDBwG4qp
+         lKFQwx0a6f664hR8dMuvccfKAGvOFH9ZbWLscWp3XZPJ7tizkY9VGF1B+2ZyZr8B/OHa
+         3CbkI0rjZ2uJaJHFSgfr+y1/PVYPBjdA+aeEns0wEMFSGRDL1t4KqORXrcnZ63qu/vEK
+         144q4xmTLKE6z3MCV+OGfDco2hbJ9zDmH4AEvLNPZzAfbPG9EEF61mrR8er1F5sppJag
+         e7iQ==
+X-Gm-Message-State: AC+VfDxxhm9xxitumcUfyi00la4b9h8q9Y71BktN+EmK69XIqYNZ9RjU
+        yigqg9G/M9TFOW2BcPcDHzHnTK3tHcycY1eoOI29WA==
+X-Google-Smtp-Source: ACHHUZ58rj28L5oxCYIFKkyMOzoHfNWeQkq2DTYySQPBe8Qwd4K17ixkp8gSzmsMgU09dboiqo31SDXmeK2W4fGOIpM=
+X-Received: by 2002:a0d:e405:0:b0:54e:ffbc:7ac2 with SMTP id
+ n5-20020a0de405000000b0054effbc7ac2mr832957ywe.45.1683278439545; Fri, 05 May
+ 2023 02:20:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: nRRKmzfMZVESRDjZcsK6qApru5ymByWh
-X-Proofpoint-GUID: nRRKmzfMZVESRDjZcsK6qApru5ymByWh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-05_15,2023-05-04_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- suspectscore=0 bulkscore=0 impostorscore=0 phishscore=0 priorityscore=1501
- spamscore=0 malwarescore=0 clxscore=1011 mlxlogscore=621
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305050076
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <cover.1683183860.git.quic_varada@quicinc.com> <4464003b6d955c6f5da991acbecf0411348fc38d.1683183860.git.quic_varada@quicinc.com>
+In-Reply-To: <4464003b6d955c6f5da991acbecf0411348fc38d.1683183860.git.quic_varada@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 5 May 2023 12:20:28 +0300
+Message-ID: <CAA8EJprcSEFgQzfX-ULVv3HA2LzBMArZobAuabmE74Ft6mJTzg@mail.gmail.com>
+Subject: Re: [PATCH v10 6/9] phy: qcom: qmp: Update IPQ9574 USB Phy
+ initialization Sequence
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org,
+        Praveenkumar I <quic_ipkumar@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Consider a case where gserial_disconnect has already cleared
-gser->ioport. And if gserial_suspend gets called afterwards,
-it will lead to accessing of gser->ioport and thus causing
-null pointer dereference.
+On Fri, 5 May 2023 at 11:23, Varadarajan Narayanan
+<quic_varada@quicinc.com> wrote:
+>
+> Updated USB QMP PHY Init sequence based on HPG for IPQ9574.
+> Reused clock and reset list from existing targets.
+>
+> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+>  Changes in v6:
+>         - Fix pcs_usb offset
+>         - Use correct clock names array
+>  Changes in v5:
+>         - Fix additional review comments
+>         - Use V3 register offsets
+>  Changes in v4:
+>         - Use qmp_usb_offsets for register space access
+>  Changes in v3:
+>         - Fix hex captitalization
+>  Changes in v2:
+>         - Removed unused phy register offsets
+>         - Moved the clock entries to the correct place
+>         - Maintain sorted order
+> ---
+>  drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 115 ++++++++++++++++++++++++++++++++
+>  1 file changed, 115 insertions(+)
+>
 
-Avoid this by adding a null pointer check. Added a static
-spinlock to prevent gser->ioport from becoming null after
-the newly added null pointer check.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Fixes: aba3a8d01d62 ("usb: gadget: u_serial: add suspend resume callbacks")
-Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
----
- drivers/usb/gadget/function/u_serial.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index a0ca47f..e5d522d 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -1420,10 +1420,19 @@ EXPORT_SYMBOL_GPL(gserial_disconnect);
- 
- void gserial_suspend(struct gserial *gser)
- {
--	struct gs_port	*port = gser->ioport;
-+	struct gs_port	*port;
- 	unsigned long	flags;
- 
--	spin_lock_irqsave(&port->port_lock, flags);
-+	spin_lock_irqsave(&serial_port_lock, flags);
-+	port = gser->ioport;
-+
-+	if (!port) {
-+		spin_unlock_irqrestore(&serial_port_lock, flags);
-+		return;
-+	}
-+
-+	spin_lock(&port->port_lock);
-+	spin_unlock(&serial_port_lock);
- 	port->suspended = true;
- 	spin_unlock_irqrestore(&port->port_lock, flags);
- }
--- 
-2.7.4
-
+--
+With best wishes
+Dmitry
