@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2016F7D14
-	for <lists+linux-usb@lfdr.de>; Fri,  5 May 2023 08:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B356F7D19
+	for <lists+linux-usb@lfdr.de>; Fri,  5 May 2023 08:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230497AbjEEGlD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 May 2023 02:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
+        id S230510AbjEEGlH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 May 2023 02:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbjEEGk7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 02:40:59 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6908116097
-        for <linux-usb@vger.kernel.org>; Thu,  4 May 2023 23:40:52 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-52c6f8ba7e3so1248294a12.3
-        for <linux-usb@vger.kernel.org>; Thu, 04 May 2023 23:40:52 -0700 (PDT)
+        with ESMTP id S230478AbjEEGlF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 02:41:05 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91665160A6
+        for <linux-usb@vger.kernel.org>; Thu,  4 May 2023 23:40:56 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1aaf21bb427so9959635ad.1
+        for <linux-usb@vger.kernel.org>; Thu, 04 May 2023 23:40:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683268852; x=1685860852;
+        d=linaro.org; s=google; t=1683268856; x=1685860856;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Fcm7rdxyr0xQGgW24k3dhsiALIquYRobfBwbbRtNKtU=;
-        b=Q6yy787yvN0xQS4jJfeyx9C2FRtdQmyTxVJ8w7F4NVmq1evCftj87C9EkmVGTnPf8l
-         A6qvGHwGmgAfiPENVMgd/ZcdntZIopxTdu5XhdtgvN62Eti98pUKbmkWr6FLnMHbGct4
-         nLi38fMcJKxCPAE064e0H5pgW8KVO87k2jTYE3LDmdqWMbrBkiOQlB5SkCWCkd2621zc
-         T3R4gvJtKzMEpDVja25xIv43yV9q+J69LiHjqEzokeMrljiYvEY08sBPobOkVifdUAxR
-         /xuMi/zd/Y0arjAqhiCUaOBCllhlR6RU7WOyhe+/hIJtL+G4iUyuqiLzNwoBpSeU8OxT
-         QmcQ==
+        bh=tpKnP1YDIVbRZiADGr23D8oPufyg/cq5r9T3i6z6bvI=;
+        b=WDGKOcE/FqB/GE1K1S4uwtGh0vKOxbxdgPVXny6oxcV6ELPkwE0oO6wteOa7dVpuGF
+         4IZcPC5nAhF0NwCIuS5r8t660wUQiFv7/JbH/q05Nj2/mH7hrP2N2rIhCFDxMuQ6veao
+         KlugUTS4vzzLdHyHSCxwORtKZq7PAcznLjS1Zv/DvBrU1xRJkmnuD2R4x4vx5sG7TxFr
+         awrWCIZK9QBEg78rcfnGvTcHb92YzObLp2+bAf5lXL2Cwt8Y7/BlvWTzp42z/O0z2Gcf
+         QyS1Y5FilonYnTVz53rxVxcuyYPtBe/KXXybt332TQUpNnga2nEZrIwY8CbEpLI+l85l
+         AlIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683268852; x=1685860852;
+        d=1e100.net; s=20221208; t=1683268856; x=1685860856;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Fcm7rdxyr0xQGgW24k3dhsiALIquYRobfBwbbRtNKtU=;
-        b=G7liyAXqQ6TjfMBPkbKoBqX22rb92dtm6pgWPsu0AHI70uY1YClIebaOnPDcoH/mri
-         3WK3opgY1on7J5ltU9nE5QXxZdYJ5s9W9pWoRlRo/axwmWXBFeY49Pk/a2OdEuRmZouU
-         epXjLXuSQ+bg9E11whLf4cHLd8wpkzooqTmei8EJu62bHnKm04Rz7+h8JRoN+cTQkH48
-         /EaxbK7FD0wlRVMHBckXo/OBcsfsyyOvG6ZnRIyiS1bM2ZTruNgn3W0F617/tm/Zg8mV
-         zUyIoBvmiwrlNQpespJa80GPcUymEnuTaUyoDPf3CHitJMewkzLDOsckJg9Evq8ffYHs
-         jINw==
-X-Gm-Message-State: AC+VfDyEzuaBldZVujGrK8tpyoax6kZ6RBSIUQRGFD/2yUiWdUwAW0+3
-        tRhERp3B6NiWLH7avtdNG7Amug==
-X-Google-Smtp-Source: ACHHUZ6jemHRhjG0GcxYNktlk6dyt8FRpMgQ9x4jI0pFw6UN9dzfK/kCHY6vKO33CIBWlB8B2mLkmg==
-X-Received: by 2002:a17:902:8691:b0:1a5:150f:8558 with SMTP id g17-20020a170902869100b001a5150f8558mr397342plo.17.1683268851927;
-        Thu, 04 May 2023 23:40:51 -0700 (PDT)
+        bh=tpKnP1YDIVbRZiADGr23D8oPufyg/cq5r9T3i6z6bvI=;
+        b=GRrU2XrDZ0NA8jhOoJWH3CT8s+xwNK0yC43Iimz5nljYFecTXN4E77AlKedN+BKAVh
+         dJEYW7qWRKV1tgo6a83FY1+Y6Ji6KqNldE6x/zj3dXhxes2Cs2tzv7iHX3VnB9wW6+kr
+         eYCOHzwQ0auELtxneGhJzo34IXqOfHTBlQZh7k8+xXpvzkRsRKN/BGllCQKnDRb1oiXn
+         9s5SPKODMdaY2y1Bwjl6vpYxkHsu+v4MJ4kvcht0cI0nLke7cik7uHPD4TLb0pnPeJ9p
+         kwhJAJ7+IFkyNMRgG2a+BSbI75DPE07R+F6zmcl8AIYqjH2Wplkw/vnNpAnGY2bJdfqF
+         +jTQ==
+X-Gm-Message-State: AC+VfDzWJLEFgzm9Iny49I3JV8rqW0DqJgvYDCMUOcdP52l10ELOQw45
+        8vwCr20OuQJ9hKSS2ZkF6HprAg==
+X-Google-Smtp-Source: ACHHUZ6MMo/HLA1Gv2YAbG3oUKKVDbJY3AY4Pc1AnYFRJAXjH15QHfQWx74AKStc9XKhLJc+KdzF9Q==
+X-Received: by 2002:a17:903:2405:b0:1a6:4b60:3195 with SMTP id e5-20020a170903240500b001a64b603195mr437377plo.66.1683268856042;
+        Thu, 04 May 2023 23:40:56 -0700 (PDT)
 Received: from localhost.localdomain ([223.233.65.180])
-        by smtp.gmail.com with ESMTPSA id c4-20020a170902848400b001ab0b2dad2fsm816251plo.211.2023.05.04.23.40.48
+        by smtp.gmail.com with ESMTPSA id c4-20020a170902848400b001ab0b2dad2fsm816251plo.211.2023.05.04.23.40.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 23:40:51 -0700 (PDT)
+        Thu, 04 May 2023 23:40:55 -0700 (PDT)
 From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-usb@vger.kernel.org
@@ -56,9 +56,9 @@ Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
         bhupesh.sharma@linaro.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org
-Subject: [PATCH v4 1/5] usb: misc: eud: Fix eud sysfs path (use 'qcom_eud')
-Date:   Fri,  5 May 2023 12:10:35 +0530
-Message-Id: <20230505064039.1630025-2-bhupesh.sharma@linaro.org>
+Subject: [PATCH v4 2/5] dt-bindings: soc: qcom: eud: Add SM6115 / SM4250 support
+Date:   Fri,  5 May 2023 12:10:36 +0530
+Message-Id: <20230505064039.1630025-3-bhupesh.sharma@linaro.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230505064039.1630025-1-bhupesh.sharma@linaro.org>
 References: <20230505064039.1630025-1-bhupesh.sharma@linaro.org>
@@ -74,31 +74,61 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The eud sysfs enablement path is currently mentioned in the
-Documentation as:
-  /sys/bus/platform/drivers/eud/.../enable
+Add dt-bindings for EUD found on Qualcomm SM6115 / SM4250 SoC.
 
-Instead it should be:
-  /sys/bus/platform/drivers/qcom_eud/.../enable
+On this SoC (and derivatives) the enable bit inside 'tcsr_check_reg'
+needs to be set first to 'enable' the eud module.
 
-Fix the same.
+So, update the dt-bindings to accommodate the third register
+property (TCSR Base) required by the driver on these SoCs.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Also for these SoCs, introduce a new bool property
+'qcom,secure-mode-enable', which indicates that the mode manager
+needs to be accessed only via the secure world.
+
 Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 ---
- Documentation/ABI/testing/sysfs-driver-eud | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../devicetree/bindings/soc/qcom/qcom,eud.yaml   | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-eud b/Documentation/ABI/testing/sysfs-driver-eud
-index 83f3872182a4..2bab0db2d2f0 100644
---- a/Documentation/ABI/testing/sysfs-driver-eud
-+++ b/Documentation/ABI/testing/sysfs-driver-eud
-@@ -1,4 +1,4 @@
--What:		/sys/bus/platform/drivers/eud/.../enable
-+What:		/sys/bus/platform/drivers/qcom_eud/.../enable
- Date:           February 2022
- Contact:        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
- Description:
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+index f2c5ec7e6437..3b92cdf4e306 100644
+--- a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+@@ -18,17 +18,33 @@ properties:
+     items:
+       - enum:
+           - qcom,sc7280-eud
++          - qcom,sm6115-eud
+       - const: qcom,eud
+ 
+   reg:
++    minItems: 2
+     items:
+       - description: EUD Base Register Region
+       - description: EUD Mode Manager Register
++      - description: TCSR Base Register Region
++
++  reg-names:
++    minItems: 2
++    items:
++      - const: eud-base
++      - const: eud-mode-mgr
++      - const: tcsr-base
+ 
+   interrupts:
+     description: EUD interrupt
+     maxItems: 1
+ 
++  qcom,secure-mode-enable:
++    type: boolean
++    description:
++      Indicates that the mode manager needs to be accessed only via the secure
++      world (through 'scm' calls).
++
+   ports:
+     $ref: /schemas/graph.yaml#/properties/ports
+     description:
 -- 
 2.38.1
 
