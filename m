@@ -2,281 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7C76F80B2
-	for <lists+linux-usb@lfdr.de>; Fri,  5 May 2023 12:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1286F8108
+	for <lists+linux-usb@lfdr.de>; Fri,  5 May 2023 12:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbjEEKUL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 May 2023 06:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
+        id S231814AbjEEKuz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 May 2023 06:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjEEKUJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 06:20:09 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C39B18854;
-        Fri,  5 May 2023 03:20:07 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3458luUJ014530;
-        Fri, 5 May 2023 10:19:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=aNHgU+0nC7vnaXDt9HRwFXY3R2EPk1kMa3lnhR84wv4=;
- b=SKfGqRYpGNi41XqRxF7oQiR5u2YTHdCYKhGBmQoFAqZBIAmIe6Zqv56n4dlAWbwKr08y
- 3nYsY0IDvcjp21H8WKWG182ydhLUCksnW1m9GzubntUTJ+oGOk1z7HdaiRXKbAd61NHE
- JLvL70WXn9Cpt6X86A5N1YpNltwvCZDPoYZw4um1L9HVgJX9Bnl2ebmLUadXriCaMH+U
- HdeX8+WodSU+77wpHYqZjB5g6TT9ZUW6QzQe7sGxAN5o6RI6yCrb4gMsDuJDnu+/5+zr
- d8bRuFQiH91l8ch9wc0v2l9LAQNvvtEclqzo44jjmqcq28gNTxywJJENiOCjkCEdMaOD gg== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qcb24augd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 May 2023 10:19:59 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 345AJwwX026871
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 5 May 2023 10:19:58 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 5 May 2023 03:19:52 -0700
-Date:   Fri, 5 May 2023 15:49:48 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v10 7/9] arm64: dts: qcom: ipq9574: Add USB related nodes
-Message-ID: <20230505101947.GB10918@varda-linux.qualcomm.com>
-References: <cover.1683183860.git.quic_varada@quicinc.com>
- <efb655fd19354ee77cf03b3b96a2206065106590.1683183860.git.quic_varada@quicinc.com>
- <CAA8EJprrk7+jRWdhz2MWdFj-jf2ehbXrz97KrkZ4NE6FqhiCNw@mail.gmail.com>
+        with ESMTP id S230411AbjEEKuy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 06:50:54 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29865F4;
+        Fri,  5 May 2023 03:50:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683283853; x=1714819853;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=ni/vJgiG6XHfX4g7uVzKoHiKBa270MzkVO6QSlgMSB8=;
+  b=Mok0mXZbDE/F7skYfaLDy257RA9plQ717XTzF4C8UjIdaDUT4ybqlPi2
+   Ytpie7O2Z5PdgqxLHKWtYCHiuF4ExzJfdWCqAQpZLRKI07mTOV0tH71+S
+   0R77+nlX19xFFNIAoilIFZjkSs7J86hvfFEkMppOxn0azOW4i9haan5J0
+   ezN7L05Xiu1r+vxgzXSOCRQaEPH3CdlowBp/dxMrmn7GS3hHlgXObA4un
+   vA49Cz/lfNGMIRtUs/uQPVZn33xfpX6sk+gYEMXJGx5K22ig02DQWJiSx
+   i9gHngkfR/RqaUnZQdkkA2hj/CT3qe/w5UBEcdk5kCdSsLk6kJsH+Uaif
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="412411064"
+X-IronPort-AV: E=Sophos;i="5.99,251,1677571200"; 
+   d="scan'208";a="412411064"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 03:50:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="871775693"
+X-IronPort-AV: E=Sophos;i="5.99,251,1677571200"; 
+   d="scan'208";a="871775693"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga005.jf.intel.com with ESMTP; 05 May 2023 03:50:50 -0700
+Message-ID: <f6689241-9749-28a2-6da4-842f3253c678@linux.intel.com>
+Date:   Fri, 5 May 2023 13:52:22 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAA8EJprrk7+jRWdhz2MWdFj-jf2ehbXrz97KrkZ4NE6FqhiCNw@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 64DwHVbdC2GWT7uYtzJeQul7pfC4LZbj
-X-Proofpoint-ORIG-GUID: 64DwHVbdC2GWT7uYtzJeQul7pfC4LZbj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-05_16,2023-05-04_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- impostorscore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0
- priorityscore=1501 malwarescore=0 clxscore=1015 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305050084
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Content-Language: en-US
+To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
+        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
+References: <20230421203853.387210-1-WeitaoWang-oc@zhaoxin.com>
+ <20230421203853.387210-4-WeitaoWang-oc@zhaoxin.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v2 3/4] xhci: Show zhaoxin xHCI root hub speed correctly
+In-Reply-To: <20230421203853.387210-4-WeitaoWang-oc@zhaoxin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 05, 2023 at 12:31:11PM +0300, Dmitry Baryshkov wrote:
-> On Fri, 5 May 2023 at 11:23, Varadarajan Narayanan
-> <quic_varada@quicinc.com> wrote:
-> >
-> > Add USB phy and controller related nodes
-> >
-> > SS PHY need two supplies and HS PHY needs three supplies. 0.925V
-> > and 3.3V are from fixed regulators and 1.8V is generated from
-> > PMIC's LDO
-> >
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
-> >  Changes in v10:
-> >         - Fix regulator definitions
-> >  Changes in v8:
-> >         - Change clocks order to match the bindings
-> >  Changes in v7:
-> >         - Change com_aux -> cfg_ahb
-> >  Changes in v6:
-> >         - Introduce fixed regulators for the phy
-> >         - Resolved all 'make dtbs_check' messages
-> >
-> >  Changes in v5:
-> >         - Fix additional comments
-> >         - Edit nodes to match with qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-> >         - 'make dtbs_check' giving the following messages since
-> >           ipq9574 doesn't have power domains. Hope this is ok
-> >
-> >                 /local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
-> >                 From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-> >                 /local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
-> >                 From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> >
-> >  Changes in v4:
-> >         - Use newer bindings without subnodes
-> >         - Fix coding style issues
-> >
-> >  Changes in v3:
-> >         - Insert the nodes at proper location
-> >
-> >  Changes in v2:
-> >         - Fixed issues flagged by Krzysztof
-> >         - Fix issues reported by make dtbs_check
-> >         - Remove NOC related clocks (to be added with proper
-> >           interconnect support)
-> > ---
-> >  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 104 ++++++++++++++++++++++++++++++++++
-> >  1 file changed, 104 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> > index 93b4ba9..84b80cc 100644
-> > --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> > @@ -150,6 +150,24 @@
-> >                 method = "smc";
-> >         };
-> >
-> > +       fixed_3p3: s3300 {
-> > +               compatible = "regulator-fixed";
-> > +               regulator-min-microvolt = <3300000>;
-> > +               regulator-max-microvolt = <3300000>;
-> > +               regulator-boot-on;
-> > +               regulator-always-on;
-> > +               regulator-name = "fixed_3p3";
-> > +       };
-> > +
-> > +       fixed_0p925: s0925 {
-> > +               compatible = "regulator-fixed";
-> > +               regulator-min-microvolt = <925000>;
-> > +               regulator-max-microvolt = <925000>;
-> > +               regulator-boot-on;
-> > +               regulator-always-on;
-> > +               regulator-name = "fixed_0p925";
-> > +       };
-> > +
-> >         reserved-memory {
-> >                 #address-cells = <2>;
-> >                 #size-cells = <2>;
-> > @@ -191,6 +209,45 @@
-> >                         reg = <0x00060000 0x6000>;
-> >                 };
-> >
-> > +               usb_0_qusbphy: phy@7b000 {
-> > +                       compatible = "qcom,ipq9574-qusb2-phy";
-> > +                       reg = <0x0007b000 0x180>;
-> > +                       #phy-cells = <0>;
-> > +
-> > +                       clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-> > +                                <&xo_board_clk>;
-> > +                       clock-names = "cfg_ahb",
-> > +                                     "ref";
-> > +
-> > +                       resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-> > +                       status = "disabled";
-> > +               };
-> > +
-> > +               usb_0_qmpphy: phy@7d000 {
-> > +                       compatible = "qcom,ipq9574-qmp-usb3-phy";
-> > +                       reg = <0x0007d000 0xa00>;
-> > +                       #phy-cells = <0>;
-> > +
-> > +                       clocks = <&gcc GCC_USB0_AUX_CLK>,
-> > +                                <&xo_board_clk>,
-> > +                                <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-> > +                                <&gcc GCC_USB0_PIPE_CLK>;
-> > +                       clock-names = "aux",
-> > +                                     "ref",
-> > +                                     "cfg_ahb",
-> > +                                     "pipe";
-> > +
-> > +                       resets = <&gcc GCC_USB0_PHY_BCR>,
-> > +                                <&gcc GCC_USB3PHY_0_PHY_BCR>;
-> > +                       reset-names = "phy",
-> > +                                     "phy_phy";
-> > +
-> > +                       status = "disabled";
-> > +
-> > +                       #clock-cells = <0>;
-> > +                       clock-output-names = "usb0_pipe_clk";
-> > +               };
-> > +
-> >                 pcie0_phy: phy@84000 {
-> >                         compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
-> >                         reg = <0x00084000 0x1000>;
-> > @@ -560,6 +617,53 @@
-> >                         status = "disabled";
-> >                 };
-> >
-> > +               usb3: usb@8a00000 {
-> > +                       compatible = "qcom,ipq9574-dwc3", "qcom,dwc3";
-> > +                       reg = <0x08af8800 0x400>;
-> > +                       #address-cells = <1>;
-> > +                       #size-cells = <1>;
-> > +                       ranges;
-> > +
-> > +                       clocks = <&gcc GCC_SNOC_USB_CLK>,
-> > +                                <&gcc GCC_USB0_MASTER_CLK>,
-> > +                                <&gcc GCC_ANOC_USB_AXI_CLK>,
-> > +                                <&gcc GCC_USB0_SLEEP_CLK>,
-> > +                                <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> > +
-> > +                       clock-names = "cfg_noc",
-> > +                                     "core",
-> > +                                     "iface",
-> > +                                     "sleep",
-> > +                                     "mock_utmi";
-> > +
-> > +                       assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
-> > +                                         <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> > +                       assigned-clock-rates = <200000000>,
-> > +                                              <24000000>;
-> > +
-> > +                       interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
-> > +                       interrupt-names = "pwr_event";
-> > +
-> > +                       resets = <&gcc GCC_USB_BCR>;
-> > +                       status = "disabled";
-> > +
-> > +                       dwc_0: usb@8a00000 {
->
-> As I wrote in the other email, this better have the usb_0_dwc3 alias.
-> With that fixed:
->
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+On 21.4.2023 23.38, Weitao Wang wrote:
+> Some zhaoxin xHCI controllers follow usb3.1 spec,
+> but only support gen1 speed 5G. While in Linux kernel,
+> if xHCI suspport usb3.1,root hub speed will show on 10G.
+> To fix this issue of zhaoxin xHCI platforms, read usb speed ID
+> supported by xHCI to determine root hub speed.
+> 
+> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+> ---
+>   drivers/usb/host/xhci.c | 22 ++++++++++++++++++++++
+>   1 file changed, 22 insertions(+)
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 6307bae9cddf..31d6ace9cace 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -5294,6 +5294,7 @@ static void xhci_hcd_init_usb2_data(struct xhci_hcd *xhci, struct usb_hcd *hcd)
+>   static void xhci_hcd_init_usb3_data(struct xhci_hcd *xhci, struct usb_hcd *hcd)
+>   {
+>   	unsigned int minor_rev;
+> +	unsigned int i, j;
+>   
+>   	/*
+>   	 * Early xHCI 1.1 spec did not mention USB 3.1 capable hosts
+> @@ -5323,6 +5324,27 @@ static void xhci_hcd_init_usb3_data(struct xhci_hcd *xhci, struct usb_hcd *hcd)
+>   		hcd->self.root_hub->ssp_rate = USB_SSP_GEN_2x1;
+>   		break;
+>   	}
+> +
+> +	/* Usb3.1 has gen1 and gen2, Some zhaoxin's xHCI controller
+> +	 * that follow usb3.1 spec but only support gen1.
+> +	 */
+> +	if (xhci->quirks & XHCI_ZHAOXIN_HOST) {
+> +		minor_rev = 0;
+> +		for (j = 0; j < xhci->num_port_caps; j++) {
+> +			for (i = 0; i < xhci->port_caps[j].psi_count; i++) {
+> +				if (XHCI_EXT_PORT_PSIV(xhci->port_caps[j].psi[i]) >= 5) {
+> +					minor_rev = 1;
+> +					break;
+> +				}
+> +			}
+> +			if (minor_rev)
+> +				break;
+> +		}
+> +		if (minor_rev != 1) {
+> +			hcd->speed = HCD_USB3;
+> +			hcd->self.root_hub->speed = USB_SPEED_SUPER;
+> +		}
+> +	}
+>   	xhci_info(xhci, "Host supports USB 3.%x %sSuperSpeed\n",
+>   		  minor_rev, minor_rev ? "Enhanced " : "");
+>   
 
-Sure. Will rename it and send a revised version.
+How about checking if port support over 5Gbps (psiv >= 5) when we parse the protocol speed ID
+entries the first time? This way we could avoid looping through all the port_cap psiv values.
+
+Something like:
+
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index c4170421bc9c..2e4c80eb4972 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -1961,7 +1961,7 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+  {
+         u32 temp, port_offset, port_count;
+         int i;
+-       u8 major_revision, minor_revision;
++       u8 major_revision, minor_revision, tmp_minor_revision;
+         struct xhci_hub *rhub;
+         struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+         struct xhci_port_cap *port_cap;
+@@ -1981,6 +1981,11 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+                  */
+                 if (minor_revision > 0x00 && minor_revision < 0x10)
+                         minor_revision <<= 4;
++               if (xhci->quirks & XHCI_ZHAOXIN_HOST) {
++                       tmp_minor_revision = minor_revision;
++                       minor_revision = 0;
++               }
++
+         } else if (major_revision <= 0x02) {
+                 rhub = &xhci->usb2_rhub;
+         } else {
+@@ -1989,10 +1994,6 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+                 /* Ignoring port protocol we can't understand. FIXME */
+                 return;
+         }
+-       rhub->maj_rev = XHCI_EXT_PORT_MAJOR(temp);
+-
+-       if (rhub->min_rev < minor_revision)
+-               rhub->min_rev = minor_revision;
+  
+         /* Port offset and count in the third dword, see section 7.2 */
+         temp = readl(addr + 2);
+@@ -2010,8 +2011,6 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+         if (xhci->num_port_caps > max_caps)
+                 return;
+  
+-       port_cap->maj_rev = major_revision;
+-       port_cap->min_rev = minor_revision;
+         port_cap->psi_count = XHCI_EXT_PORT_PSIC(temp);
+  
+         if (port_cap->psi_count) {
+@@ -2032,6 +2031,10 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+                                   XHCI_EXT_PORT_PSIV(port_cap->psi[i - 1])))
+                                 port_cap->psi_uid_count++;
+  
++                       if (xhci->quirks & XHCI_ZHAOXIN_HOST &&
++                           XHCI_EXT_PORT_PSIV(port_cap->psi[i]) >= 5)
++                               minor_revision = tmp_minor_revision;
++
+                         xhci_dbg(xhci, "PSIV:%d PSIE:%d PLT:%d PFD:%d LP:%d PSIM:%d\n",
+                                   XHCI_EXT_PORT_PSIV(port_cap->psi[i]),
+                                   XHCI_EXT_PORT_PSIE(port_cap->psi[i]),
+@@ -2041,6 +2044,15 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+                                   XHCI_EXT_PORT_PSIM(port_cap->psi[i]));
+                 }
+         }
++
++       rhub->maj_rev = major_revision;
++
++       if (rhub->min_rev < minor_revision)
++               rhub->min_rev = minor_revision;
++
++       port_cap->maj_rev = major_revision;
++       port_cap->min_rev = minor_revision;
++
+         /* cache usb2 port capabilities */
+         if (major_revision < 0x03 && xhci->num_ext_caps < max_caps)
+                 xhci->ext_caps[xhci->num_ext_caps++] = temp;
 
 Thanks
-Varada
-
-> > +                               compatible = "snps,dwc3";
-> > +                               reg = <0x8a00000 0xcd00>;
-> > +                               clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> > +                               clock-names = "ref";
-> > +                               interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-> > +                               phys = <&usb_0_qusbphy>, <&usb_0_qmpphy>;
-> > +                               phy-names = "usb2-phy", "usb3-phy";
-> > +                               tx-fifo-resize;
-> > +                               snps,is-utmi-l1-suspend;
-> > +                               snps,hird-threshold = /bits/ 8 <0x0>;
-> > +                               snps,dis_u2_susphy_quirk;
-> > +                               snps,dis_u3_susphy_quirk;
-> > +                               dr_mode = "host";
-> > +                       };
-> > +               };
-> > +
-> >                 intc: interrupt-controller@b000000 {
-> >                         compatible = "qcom,msm-qgic2";
-> >                         reg = <0x0b000000 0x1000>,  /* GICD */
-> > --
-> > 2.7.4
-> >
->
->
-> --
-> With best wishes
-> Dmitry
+Mathias
