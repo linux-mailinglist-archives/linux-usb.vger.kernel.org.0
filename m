@@ -2,71 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 595856F7D25
-	for <lists+linux-usb@lfdr.de>; Fri,  5 May 2023 08:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB60C6F7D98
+	for <lists+linux-usb@lfdr.de>; Fri,  5 May 2023 09:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbjEEGli (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 May 2023 02:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57180 "EHLO
+        id S230369AbjEEHQQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 May 2023 03:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbjEEGla (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 02:41:30 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B3E16372
-        for <linux-usb@vger.kernel.org>; Thu,  4 May 2023 23:41:09 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-528cdc9576cso940760a12.0
-        for <linux-usb@vger.kernel.org>; Thu, 04 May 2023 23:41:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683268868; x=1685860868;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fz6g2/625qlFmhiR93VnIJ+EVOsf12tbuuuDirZwZ9U=;
-        b=MmA7Y+uUYYhv+yAq02uAK8CEia0LlV4pux4QKHpZFC0gkmfB1CQgMBVEQQg/9XU48g
-         qYArqTuHSsRi8p5ZmrZYxMze6dorq5vbED1me6hx7gKOUkOcNk4qN0ZBhQtcB0mpMEJL
-         DGEFs1sPgNw82bJdShebVPVxdBcZc/SwcCEp8AKfOiHStBE7L/hXSxKrjnGPu4211oyF
-         rL43hNZYqLdiGqiI+KbaA/Pp5kWjLiyPFpXU83xoWhRjd9BuESvbieLZOmEPO7ux26T5
-         WEinZT8zCN7PTBiYTtPSVhySoqy3VAiXGmd336t6Gngckqh3aG28ZWrGCkPjU0UpNYH3
-         CBrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683268868; x=1685860868;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fz6g2/625qlFmhiR93VnIJ+EVOsf12tbuuuDirZwZ9U=;
-        b=Fgf/TowGtrgp9lhtdKnk+kpPY83z+8pBSFTdZmOO+VYWIUHjUYOePAwgLBfL/WZn2y
-         GT2ObJJCP9JfVzqxM/cLRokiyDJT7Rb7cCb/oI83YFQk9uBbLVv4lI5TvdWizAyD+SXm
-         RcMtVjnrbMVoIZhP6Nuc2i0cVdmWWYbICoJbDD+8jSZwSmKZpAfDueeHd459intlyc5C
-         IqLoF+5XqAFlnsj94bcIi0m9dEdojDX4eKckq2j476w5SVmAAsK/ZbOL3l4dNDIMe8wj
-         YU0QXXemY7GQ+9ZAyMCfVW9L31kMcCOcFV/3FjFvCl74/wlNGARaRV+InNHXyztEd6Fa
-         0QzQ==
-X-Gm-Message-State: AC+VfDy1yUxE0Ad02w5P0i8TzHY4EM28Ri2UYGCK8h4Jnx7FLGWL9vlU
-        43qVVUYrPmd4SNEBd3HRgsZ7GA==
-X-Google-Smtp-Source: ACHHUZ7bu2wArNoHuLvlQnjk8//3Ao/e4FZ1KTLuUotie7kxB4Xc+nU1hmRfbTzX8r59/0PujftApw==
-X-Received: by 2002:a17:90b:3a8d:b0:23f:9fac:6b35 with SMTP id om13-20020a17090b3a8d00b0023f9fac6b35mr419434pjb.39.1683268868592;
-        Thu, 04 May 2023 23:41:08 -0700 (PDT)
-Received: from localhost.localdomain ([223.233.65.180])
-        by smtp.gmail.com with ESMTPSA id c4-20020a170902848400b001ab0b2dad2fsm816251plo.211.2023.05.04.23.41.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 23:41:08 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        bhupesh.sharma@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org
-Subject: [PATCH v4 5/5] arm64: dts: qcom: qrb4210-rb2: Enable EUD debug peripheral
-Date:   Fri,  5 May 2023 12:10:39 +0530
-Message-Id: <20230505064039.1630025-6-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230505064039.1630025-1-bhupesh.sharma@linaro.org>
-References: <20230505064039.1630025-1-bhupesh.sharma@linaro.org>
+        with ESMTP id S230317AbjEEHQP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 03:16:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11B51637A
+        for <linux-usb@vger.kernel.org>; Fri,  5 May 2023 00:16:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66A8E63A7A
+        for <linux-usb@vger.kernel.org>; Fri,  5 May 2023 07:16:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF451C433EF;
+        Fri,  5 May 2023 07:16:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683270973;
+        bh=dpvu8dXm1BYIfuHAch0A0DQKt4KwyLsS/SqsKq0/SZw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lbk8UUOT6hMpLRlJSUwcfZOzQrZYsS60KbDPRfz5UvAyCiErcW2CFZE+Gwus7/Zlb
+         4X390ED7M8xs8mhkD8xaVscTCwo5aWlEDp8LuxYbbuY75Qv5C4nzKfc8p4SNf30k9x
+         7Qe71wG9MQ7hHKYalhBYb8RKxbluLuxFYPhs9TgE5TMaz+z+0kDAs6pYkgsUzAPzTP
+         5ArzHf3d4bhSTUSwcnylbtKc1/0J1hYD96A+Rl13vSImhtRAlNGjaZkJubMC2Hy/6/
+         dmZ62GXUMNcCY3vDa0VuRiEW//F2wyBQV/iyWZVKvsjGAcpOFxJWU1yhaY5yDMg+XM
+         BPrCTkffagTxw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pupfz-0006ZK-P0; Fri, 05 May 2023 09:16:24 +0200
+Date:   Fri, 5 May 2023 09:16:23 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     qianfanguijin@163.com, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bin Liu <b-liu@ti.com>, Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH v1] drivers: usb: wwan: treat any error as a fatal error
+Message-ID: <ZFStRzPPek8OrJUx@hovoldconsulting.com>
+References: <20230414055306.8805-1-qianfanguijin@163.com>
+ <ZDj6Vhv6XHUADSFQ@hovoldconsulting.com>
+ <a0226d7b-c03a-5e45-4ecb-2748c25126a2@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a0226d7b-c03a-5e45-4ecb-2748c25126a2@suse.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,65 +59,62 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since the USB-C type port on the Qualcomm QRB4210-RB2 board
-can be set primarily in a 'device' configuration (with the default
-DIP switch settings), it makes sense to enable the EUD debug
-peripheral on the board by default by setting the USB 'dr_mode' property
-as 'otg'.
+Hi Oliver,
 
-Now, the EUD debug peripheral can be enabled by executing:
- $ echo 1 > /sys/bus/platform/drivers/qcom_eud/1610000.eud/enable
+and sorry about the late follow-up on this. Was travelling last week.
 
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 27 +++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+On Mon, Apr 17, 2023 at 11:50:34AM +0200, Oliver Neukum wrote:
+> 
+> 
+> On 14.04.23 09:01, Johan Hovold wrote:
+> > On Fri, Apr 14, 2023 at 01:53:06PM +0800, qianfanguijin@163.com wrote:
+> >> From: qianfan Zhao <qianfanguijin@163.com>
+> >>
+> >> Kernel print such flood message when the modem dead (the device is not
+> >> disconnected but it doesn't response anything):
+> >>
+> >> option1 ttyUSB1: usb_wwan_indat_callback: nonzero status: -71 on endpoint 05.
+> >> option1 ttyUSB1: usb_wwan_indat_callback: nonzero status: -71 on endpoint 05.
+> >> ...
+> >>
+> >> So treat any error that doesn't recognized as a fatal error and do not
+> >> resubmit again.
+> > 
+> > This could potentially break setups that are currently able to recover
+> > from intermittent errors.
+> 
+> Yes. The basic issue is that a physically disconnected device
+> produces the same errors as an intermittent failure for a short
+> time before the disconnection is detected.
+> 
+> Hence the correct way to handle this would be like usbhid does
+> with hid_io_error(), that is a delay before resubmitting
+> and eventually a device reset.
+> 
+> > Try adding the missing known fatal ones as you suggested in your other
+> > thread first.
+> > 
+> > There could still be an issue with -EPROTO (-71) error that would
+> > require some kind of back-off or limit, but that would need to be
+> > implemented in a more central place rather than in each and every usb
+> > driver (as has been discussed in the past).
+> 
+> Exactly. How would that look like conceptually?
+> A centralized work with a pool of URBs to be retried after a delay
+> and eventually a device reset?
 
-diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-index 1a0776a0cfd0..0ce72f1ebc10 100644
---- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-+++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-@@ -30,6 +30,10 @@ vph_pwr: vph-pwr-regulator {
- 	};
- };
+I haven't tried to solve this yet, so I don't have a solution, but
+ideally this would work seamlessly for drivers either by handling it in
+core or possibly in the affected host-controller drivers if it's just
+some of them.
+
+If that's not doable, we should at least try to provide a generic
+implementation which we'd then need to hook up each and every driver to
+use.
  
-+&eud {
-+	status = "okay";
-+};
-+
- &qupv3_id_0 {
- 	status = "okay";
- };
-@@ -253,7 +257,28 @@ &usb {
- 
- &usb_dwc3 {
- 	maximum-speed = "super-speed";
--	dr_mode = "peripheral";
-+
-+	/*
-+	 * There is only one USB DWC3 controller on QRB4210 board and it is connected
-+	 * via a DIP Switch:
-+	 * - to either an USB - C type connector or an USB - A type connector
-+	 *   (via a GL3590-S hub), and
-+	 * - to either an USB - A type connector (via a GL3590-S hub) or a connector
-+	 *   for further connection with a mezzanine board.
-+	 *
-+	 * All of the above hardware muxes would allow us to hook things up in
-+	 * different ways to some potential benefit for static configurations (for e.g.
-+	 * on one hand we can have two USB - A type connectors and a USB - Ethernet
-+	 * connection available and on the other we can use the USB - C type in
-+	 * peripheral mode).
-+	 *
-+	 * Note that since the USB - C type can be used only in peripehral mode,
-+	 * so hardcoding the mode to 'peripheral' here makes sense.
-+	 *
-+	 * However since we want to use the EUD debug device, we set the mode as
-+	 * 'otg' here.
-+	 */
-+	dr_mode = "otg";
- };
- 
- &usb_hsphy {
--- 
-2.38.1
+> Handling unbinding a driver would be tough, though.
 
+Why would that be a problem? We should be able to differentiate a
+stopped URB from other errors, right?
+
+Johan
