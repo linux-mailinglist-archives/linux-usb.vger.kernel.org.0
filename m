@@ -2,261 +2,205 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F966F83F0
-	for <lists+linux-usb@lfdr.de>; Fri,  5 May 2023 15:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEDD16F846E
+	for <lists+linux-usb@lfdr.de>; Fri,  5 May 2023 16:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232555AbjEENZp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 May 2023 09:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
+        id S232758AbjEEOBt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 May 2023 10:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232549AbjEENZn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 09:25:43 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2089.outbound.protection.outlook.com [40.107.95.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3168F20752;
-        Fri,  5 May 2023 06:25:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lLpOvZIZamY83XeEnZb1SnZE7xYXq5uDvMvX38oPLdCjcCi5LKlMhUYTgbCAkAgAtqzYNHxm2cvvQlT4GV6ycvXOfqyVw0rU7bAH6347QdvTf2g+DVntFx6a6tZbp5NxEy9Hfw8uI2IcNChRIY2LhObcttYWm9FbZn4F83XD5Jh/ECKw950xtK/Yi2c9lQ7VsGnUQUenO7zgWRcuwf/jdWg5qhYN45SQ2Brvb8tznKFHvgQMzrYHZGwYzkEXinABymE+ewtq3CADx824w6V1/13YfCVAjJPsC9zSsu4RUDnI0XL5gKiQ5LdouqCWuEOoz8Kb9cN82FwK/7zEnUQddA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ixQee8tBH5dKHYObYo7rmfWZGP7FyNkve0MkVk8T8WM=;
- b=kBQxAam4VAU5LnMhFMq1tMy08aIMiDorHfBqi1xexc0GwMhpcr5iWFwGdlg//JYjeu1qGXnXhJrnboHnifw5Kn7fMoT+j5St6FbYKFzcHMOLQoDRj6RAxAlNZjnsIA4uUjZc8yUQ/ya8/TvnhhEwSf2MgnihK8Kv+UFXaGwOhP2ZoVUdpvZ48KGPFJa8sUF8wDVCz6DFuOG2hvn5J3AHjFl8nAg+l4LU1+kYlkYEh2PHr5s1B2DOihHyZBC1R+O8rCBzwmDjZXx+E3pQyDDYIrs7N2rV28OaLEYq8GbNF/6l549DjlE3CNwxU1QvJVg0/NzoQW4Sl5EjcvIvd5MD5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ixQee8tBH5dKHYObYo7rmfWZGP7FyNkve0MkVk8T8WM=;
- b=WgrPrCFyR247fD9561zXv2jPPDTsj7ReS8DYnKmuDGkKakh88etqS1acWet37fhUn4DQMD9zYqC9g6rsVBCLOqYKbknclAypeACP73xTGPPnsN2qwX2oRo5pFpYe+FC9qwjghBIZvfJdDZjPJTgJYHheqq2SLMpa84Itbl214BM=
-Received: from MW4PR03CA0021.namprd03.prod.outlook.com (2603:10b6:303:8f::26)
- by BY5PR12MB4306.namprd12.prod.outlook.com (2603:10b6:a03:206::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.22; Fri, 5 May
- 2023 13:25:38 +0000
-Received: from CO1NAM11FT072.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8f:cafe::c2) by MW4PR03CA0021.outlook.office365.com
- (2603:10b6:303:8f::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.27 via Frontend
- Transport; Fri, 5 May 2023 13:25:38 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT072.mail.protection.outlook.com (10.13.174.106) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6363.27 via Frontend Transport; Fri, 5 May 2023 13:25:37 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 5 May
- 2023 08:25:34 -0500
-From:   Michal Simek <michal.simek@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-        <michal.simek@xilinx.com>, <git@xilinx.com>,
-        <ilias.apalodimas@linaro.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Piyush Mehta <piyush.mehta@amd.com>,
-        "Rob Herring" <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-Subject: [PATCH v2] dt-bindings: usb: Add binding for Microchip usb5744 hub controller
-Date:   Fri, 5 May 2023 15:25:31 +0200
-Message-ID: <dd31f987316fb2739644628b5840a6d447b5a587.1683293125.git.michal.simek@amd.com>
-X-Mailer: git-send-email 2.36.1
+        with ESMTP id S231686AbjEEOBs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 10:01:48 -0400
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A74270D
+        for <linux-usb@vger.kernel.org>; Fri,  5 May 2023 07:01:46 -0700 (PDT)
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-76978e7cd59so111620039f.2
+        for <linux-usb@vger.kernel.org>; Fri, 05 May 2023 07:01:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683295306; x=1685887306;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wl7vEIfvjX1GQVBYs0qBxlowKzBp/cj+YSrMqUiEgjw=;
+        b=a1deyleq2dg7bqQihfnpeP0mK5RsbP0Wl+G/Logt7s6y7kYgYr420efMDNDrXfw0o1
+         CbTo8NRm5JEY1Knl0Qr9PK/XmSqfa8I/hy3RlCdfQIAkIn1Gj2fWw5HSVOJJEeZf9nhW
+         KtEgS17n5xykb8Rrha1tyQ1xOKTf01PiWcg2EPYIk/fjr+28W5DyMBLLzhgHO4tJot7n
+         oj3BaohBHf5ep7oVShM7HmHWxi3ObImEJlE9N11XBTYOGhUjsW1v/auqm3th6tbj0n3V
+         RxSEotamhHq3lztpf4qEtGPdIWStMjN+Sz1RHvhc+TxE3stgp0ilzBq+De5NDjpTbrhp
+         MTHw==
+X-Gm-Message-State: AC+VfDwT5QtGfiMb8PwLMmiG8C4XWNZZVAAMSQFyfdrItWQbTFL1v7tH
+        L0qrcHb7VHGtN+8kXacl85O6VJBnEeFHPnnZu8XHNf/MY24X
+X-Google-Smtp-Source: ACHHUZ6QbiJTBbIPC/3MSCRw8akgK0iYSwEgfzs6EKJr2Epl32CH9qfszWl/Kdc6IF7nfS8hdwKf25QtoDZaK8CMGi4vpJJni220
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT072:EE_|BY5PR12MB4306:EE_
-X-MS-Office365-Filtering-Correlation-Id: 42e15340-745e-43df-db15-08db4d6c3722
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QhJm/JzB/AcmiatXfyMZQb/EiUgoVc+fUGkpa/dGLYqIGLZlZVkyU1OwniF+U3jZBWnjoZU52+ED3pqvEynB1CvzyCRFJgDm4UVY0imbR5hsmT6yOFNF1OdDvhCsS8Pp3TjL67iaZtFwoIQWIcx6OQUmM89sq4/I9AP5AqxiZ/lOkChWHi51Mz82Tct+J30JQAzJmr4iro6ImcEsK7K4XoFdslrldjWvlZPchP9tIyUVFzd7iN5vAPMqBc1fOvaxIQkeu6dgHFphJcvih2qVKt6flicJj7xiXtUNvvXckc0C37KNGMg/+kKOTpSYz4sY4MBzOqWR7bYtSGt9R4tQz6Yc/c1e031mRFTWkcA2d2qgyMa6k2iuvwdDCTNP5yDz4AUFoI3cpsYnMZk4r8e2nhb4Q7oqnTVT2w21vtCMBsb27wirO7tDAKU27ei2yw/dyFVgVjJDXqqGHaFy/uLU+dl9bVBll9Oj3DPEjy+gsAuRRRB2OhpcytczLpS8bUbHlf54YNQZIEpBN2iGv9f7f2T1jTSwXH9BRDPuZGn6S1/R74PhLzG22U2yMmQzLpqX3D9bGHIzicZ83EjY6Km3yh3De/3WBTFgAEJRjFY8nsmApS2xw0AbMNnXHSLH0MX+u9qyNI4aFFkWTIveh+ln/frbF2vKeIaUvdEtkucc2FBtUfbEN7ejIwBHpKFynvmkidQpnav+zPibg8yTJk7L++EmzrRWcBceTGIczQL7MJR0vvyeVgW+yjyuVHilWvUTkgM0RWv5colZMYfCCIEt/CXKmO+lS9yzL5HE76AB2eQ=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(136003)(396003)(39860400002)(451199021)(46966006)(36840700001)(40470700004)(40460700003)(66899021)(8676002)(966005)(426003)(2616005)(336012)(26005)(36756003)(40480700001)(356005)(8936002)(47076005)(44832011)(82310400005)(4326008)(5660300002)(186003)(6666004)(70586007)(41300700001)(70206006)(478600001)(86362001)(82740400003)(316002)(54906003)(110136005)(36860700001)(16526019)(2906002)(81166007)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2023 13:25:37.8332
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 42e15340-745e-43df-db15-08db4d6c3722
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT072.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4306
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:9d0c:0:b0:760:ebc0:c396 with SMTP id
+ j12-20020a5d9d0c000000b00760ebc0c396mr576322ioj.3.1683295305892; Fri, 05 May
+ 2023 07:01:45 -0700 (PDT)
+Date:   Fri, 05 May 2023 07:01:45 -0700
+In-Reply-To: <000000000000fd3ea305f0644a0b@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c2922605faf2baeb@google.com>
+Subject: Re: [syzbot] [usb?] INFO: task hung in usb_get_descriptor (2)
+From:   syzbot <syzbot+e8db9d9e65feff8fa471@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, mailhol.vincent@wanadoo.fr,
+        mkl@pengutronix.de, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Microchip usb5744 is a SS/HS USB 3.0 hub controller with 4 ports.
-The binding describes USB related aspects of the USB5744 hub, it as
-well cover the option of connecting the controller as an i2c slave.
-When i2c interface is connected hub needs to be initialized first.
-Hub itself has fixed i2c address 0x2D but hardcoding address is not good
-idea because address can be shifted by i2c address translator in the
-middle.
+syzbot has found a reproducer for the following issue on:
 
-Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
-Signed-off-by: Michal Simek <michal.simek@amd.com>
+HEAD commit:    3c4aa4434377 Merge tag 'ceph-for-6.4-rc1' of https://githu..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=12b780bc280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=87f9126139666d37
+dashboard link: https://syzkaller.appspot.com/bug?extid=e8db9d9e65feff8fa471
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1132f45c280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14328870280000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/5c99ec63ebd1/disk-3c4aa443.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e6de84bd47ce/vmlinux-3c4aa443.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/f12b28027b9e/bzImage-3c4aa443.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e8db9d9e65feff8fa471@syzkaller.appspotmail.com
+
+INFO: task kworker/0:2:758 blocked for more than 143 seconds.
+      Not tainted 6.3.0-syzkaller-13091-g3c4aa4434377 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/0:2     state:D stack:25768 pid:758   ppid:2      flags:0x00004000
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5343 [inline]
+ __schedule+0xc9a/0x5880 kernel/sched/core.c:6669
+ schedule+0xde/0x1a0 kernel/sched/core.c:6745
+ usb_kill_urb.part.0+0x19a/0x220 drivers/usb/core/urb.c:728
+ usb_kill_urb+0x83/0xa0 drivers/usb/core/urb.c:717
+ usb_start_wait_urb+0x24a/0x4b0 drivers/usb/core/message.c:64
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0x320/0x4a0 drivers/usb/core/message.c:153
+ usb_get_descriptor+0xe1/0x1d0 drivers/usb/core/message.c:793
+ usb_get_device_descriptor+0x85/0xf0 drivers/usb/core/message.c:1072
+ hub_port_init+0x859/0x3900 drivers/usb/core/hub.c:4969
+ hub_port_connect drivers/usb/core/hub.c:5336 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
+ port_event drivers/usb/core/hub.c:5711 [inline]
+ hub_event+0x2b89/0x4e40 drivers/usb/core/hub.c:5793
+ process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+ worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+
+Showing all locks held in the system:
+1 lock held by rcu_tasks_kthre/13:
+ #0: ffffffff8c798670 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0xd80 kernel/rcu/tasks.h:518
+1 lock held by rcu_tasks_trace/14:
+ #0: ffffffff8c798370 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0xd80 kernel/rcu/tasks.h:518
+1 lock held by khungtaskd/28:
+ #0: ffffffff8c799280 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x55/0x340 kernel/locking/lockdep.c:6545
+5 locks held by kworker/0:2/758:
+ #0: ffff888147e7c138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888147e7c138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888147e7c138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1324 [inline]
+ #0: ffff888147e7c138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:643 [inline]
+ #0: ffff888147e7c138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:670 [inline]
+ #0: ffff888147e7c138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x883/0x15e0 kernel/workqueue.c:2376
+ #1: ffffc9000404fdb0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8b7/0x15e0 kernel/workqueue.c:2380
+ #2: ffff888142b9b190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:837 [inline]
+ #2: ffff888142b9b190 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c0/0x4e40 drivers/usb/core/hub.c:5739
+ #3: ffff888142b9e4f8 (&port_dev->status_lock){+.+.}-{3:3}, at: usb_lock_port drivers/usb/core/hub.c:3147 [inline]
+ #3: ffff888142b9e4f8 (&port_dev->status_lock){+.+.}-{3:3}, at: hub_port_connect drivers/usb/core/hub.c:5303 [inline]
+ #3: ffff888142b9e4f8 (&port_dev->status_lock){+.+.}-{3:3}, at: hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
+ #3: ffff888142b9e4f8 (&port_dev->status_lock){+.+.}-{3:3}, at: port_event drivers/usb/core/hub.c:5711 [inline]
+ #3: ffff888142b9e4f8 (&port_dev->status_lock){+.+.}-{3:3}, at: hub_event+0x278e/0x4e40 drivers/usb/core/hub.c:5793
+ #4: ffff8881427f4d68 (hcd->address0_mutex){+.+.}-{3:3}, at: hub_port_connect drivers/usb/core/hub.c:5304 [inline]
+ #4: ffff8881427f4d68 (hcd->address0_mutex){+.+.}-{3:3}, at: hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
+ #4: ffff8881427f4d68 (hcd->address0_mutex){+.+.}-{3:3}, at: port_event drivers/usb/core/hub.c:5711 [inline]
+ #4: ffff8881427f4d68 (hcd->address0_mutex){+.+.}-{3:3}, at: hub_event+0x27c3/0x4e40 drivers/usb/core/hub.c:5793
+2 locks held by getty/4760:
+ #0: ffff88814ae7f098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x26/0x80 drivers/tty/tty_ldisc.c:243
+ #1: ffffc900015802f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xef4/0x13e0 drivers/tty/n_tty.c:2176
+1 lock held by strace-static-x/5000:
+ #0: ffffffff8c40a098 (tasklist_lock){.+.+}-{2:2}, at: raw_spin_rq_lock_nested+0x2f/0x120 kernel/sched/core.c:558
+2 locks held by dhcpcd/28900:
+ #0: ffff88807a84e130 (sk_lock-AF_PACKET){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1697 [inline]
+ #0: ffff88807a84e130 (sk_lock-AF_PACKET){+.+.}-{0:0}, at: packet_do_bind+0x2f/0xe30 net/packet/af_packet.c:3204
+ #1: ffffffff8c7a46f8 (rcu_state.exp_mutex){+.+.}-{3:3}, at: exp_funnel_lock kernel/rcu/tree_exp.h:293 [inline]
+ #1: ffffffff8c7a46f8 (rcu_state.exp_mutex){+.+.}-{3:3}, at: synchronize_rcu_expedited+0x64a/0x770 kernel/rcu/tree_exp.h:992
+
+=============================================
+
+NMI backtrace for cpu 0
+CPU: 0 PID: 28 Comm: khungtaskd Not tainted 6.3.0-syzkaller-13091-g3c4aa4434377 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ nmi_cpu_backtrace+0x29c/0x350 lib/nmi_backtrace.c:113
+ nmi_trigger_cpumask_backtrace+0x2a4/0x300 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:222 [inline]
+ watchdog+0xe16/0x1090 kernel/hung_task.c:379
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 PID: 12 Comm: kworker/u4:1 Not tainted 6.3.0-syzkaller-13091-g3c4aa4434377 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+Workqueue: events_unbound toggle_allocation_gate
+RIP: 0010:hlock_class kernel/locking/lockdep.c:228 [inline]
+RIP: 0010:__lock_acquire+0x1727/0x5df0 kernel/locking/lockdep.c:5070
+Code: f8 66 81 e3 ff 1f 0f b7 db be 08 00 00 00 48 89 d8 48 c1 e8 06 48 8d 3c c5 00 8d 52 91 e8 51 8b 71 00 48 0f a3 1d f9 e4 ec 0f <0f> 83 51 06 00 00 48 8d 1c 5b 48 c1 e3 06 48 81 c3 20 91 52 91 48
+RSP: 0018:ffffc90000117598 EFLAGS: 00000047
+RAX: 0000000000000001 RBX: 00000000000000bb RCX: ffffffff8165a7ff
+RDX: fffffbfff22a51a3 RSI: 0000000000000008 RDI: ffffffff91528d10
+RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff91528d17
+R10: fffffbfff22a51a2 R11: 0000000000000000 R12: ffff888016646458
+R13: ffff888016645940 R14: 0000000000000000 R15: c19cd5fde613a6fd
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fe22eb1e0cf CR3: 000000000c571000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ lock_acquire kernel/locking/lockdep.c:5691 [inline]
+ lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5656
+ _raw_spin_lock_nested+0x34/0x40 kernel/locking/spinlock.c:378
+ raw_spin_rq_lock_nested+0x2f/0x120 kernel/sched/core.c:558
+ raw_spin_rq_lock kernel/sched/sched.h:1366 [inline]
+ _raw_spin_rq_lock_irqsave kernel/sched/sched.h:1385 [inline]
+ rq_lock_irqsave kernel/sched/sched.h:1637 [inline]
+ update_blocked_averages+0x80/0x1dd0 kernel/sched/fair.c:9021
+ newidle_balance+0x485/0x11d0 kernel/sched/fair.c:11800
+ pick_next_task_fair+0x9a/0x1290 kernel/sched/fair.c:8107
+ __pick_next_task kernel/sched/core.c:5972 [inline]
+ pick_next_task kernel/sched/core.c:6047 [inline]
+ __schedule+0x462/0x5880 kernel/sched/core.c:6633
+ schedule+0xde/0x1a0 kernel/sched/core.c:6745
+ toggle_allocation_gate mm/kfence/core.c:833 [inline]
+ toggle_allocation_gate+0x1ad/0x230 mm/kfence/core.c:823
+ process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+ worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+
+
 ---
-
-Changes in v2:
-- fix i2c-bus property
-- swap usb2.0/3.0 compatible strings
-- fix indentation in example (4 spaces)
-- add new i2c node with microchip,usb5744 compatible property
-
-It looks like that usb8041 has also an optional i2c interface which is not
-covered. But it is mentioned at commit 40e58a8a7ca6 ("dt-bindings: usb:
-Add binding for TI USB8041 hub controller").
-
-i2c-bus name property was suggested by Rob at
-https://lore.kernel.org/all/CAL_JsqJedhX6typpUKbnzV7CLK6UZVjq3CyG9iY_j5DLPqvVdw@mail.gmail.com/
-and
-https://lore.kernel.org/all/CAL_JsqJZBbu+UXqUNdZwg-uv0PAsNg55026PTwhKr5wQtxCjVQ@mail.gmail.com/
-
-the question is if adding address like this is acceptable.
-But it must be specified.
-
-Driver will follow based on final dt-binding.
-
-$ref: usb-device.yaml# should be also added but have no idea how to wire it
-up to be applied only on usb node not i2c one.
-
----
- .../bindings/usb/microchip,usb5744.yaml       | 110 ++++++++++++++++++
- 1 file changed, 110 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-
-diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-new file mode 100644
-index 000000000000..7e0a3472ea95
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-@@ -0,0 +1,110 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/microchip,usb5744.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Microchip USB5744 4-port Hub Controller
-+
-+description:
-+  Microchip's USB5744 SmartHubTM IC is a 4 port, SuperSpeed (SS)/Hi-Speed (HS),
-+  low power, low pin count configurable and fully compliant with the USB 3.1
-+  Gen 1 specification. The USB5744 also supports Full Speed (FS) and Low Speed
-+  (LS) USB signaling, offering complete coverage of all defined USB operating
-+  speeds. The new SuperSpeed hubs operate in parallel with the USB 2.0
-+  controller, so 5 Gbps SuperSpeed data transfers are not affected by slower
-+  USB 2.0 traffic.
-+
-+maintainers:
-+  - Piyush Mehta <piyush.mehta@amd.com>
-+  - Michal Simek <michal.simek@amd.com>
-+
-+select:
-+  properties:
-+    compatible:
-+      contains:
-+        const: microchip,usb5744
-+  required:
-+    - compatible
-+
-+properties:
-+  compatible:
-+    enum:
-+      - usb424,2744
-+      - usb424,5744
-+      - microchip,usb5744
-+
-+  reg: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - usb424,2744
-+              - usb424,5744
-+    then:
-+      properties:
-+        reset-gpios:
-+          maxItems: 1
-+          description:
-+            GPIO controlling the GRST# pin.
-+
-+        vdd-supply:
-+          description:
-+            VDD power supply to the hub
-+
-+        peer-hub:
-+          $ref: /schemas/types.yaml#/definitions/phandle
-+          description:
-+            phandle to the peer hub on the controller.
-+
-+        i2c-bus:
-+          $ref: /schemas/types.yaml#/definitions/phandle
-+          description:
-+            phandle of an usb hub connected via i2c bus.
-+
-+      required:
-+        - peer-hub
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    i2c: i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        hub: usb-hub@2d {
-+            compatible = "microchip,usb5744";
-+            reg = <0x2d>;
-+        };
-+    };
-+
-+    usb {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        /* 2.0 hub on port 1 */
-+        hub_2_0: hub@1 {
-+            compatible = "usb424,2744";
-+            reg = <1>;
-+            peer-hub = <&hub_3_0>;
-+            i2c-bus = <&hub>;
-+            reset-gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
-+        };
-+
-+        /* 3.0 hub on port 2 */
-+        hub_3_0: hub@2 {
-+            compatible = "usb424,5744";
-+            reg = <2>;
-+            peer-hub = <&hub_2_0>;
-+            i2c-bus = <&hub>;
-+            reset-gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
-+        };
-+    };
--- 
-2.36.1
-
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
