@@ -2,93 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6205C6F805F
-	for <lists+linux-usb@lfdr.de>; Fri,  5 May 2023 11:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B83BD6F808B
+	for <lists+linux-usb@lfdr.de>; Fri,  5 May 2023 12:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbjEEJt2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 May 2023 05:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53458 "EHLO
+        id S231574AbjEEKG3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 May 2023 06:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbjEEJtZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 05:49:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399FB1A13F
-        for <linux-usb@vger.kernel.org>; Fri,  5 May 2023 02:49:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC93B63CFD
-        for <linux-usb@vger.kernel.org>; Fri,  5 May 2023 09:49:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 248D1C4339B
-        for <linux-usb@vger.kernel.org>; Fri,  5 May 2023 09:49:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683280163;
-        bh=pCpe7yfdM7Ku764y0jU4y5Hk1+KqPZXeDSfX7zYBNSU=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=trfaxv+l34qOFg5ui+Fel2pTXR7448xeoBe7yTd5fXKdUFeImpaIq9tFfTKe9yP8s
-         gAzQbNylNLep6lxqTNUWa4MqKcnjE01yZhN7TPCVVoZFpuW34hsSDQ3NR80eCLNToh
-         5AbdoFMVZSuWlfIKL2d7Q7TTw8GWwT2rqCvKAN2tF9EYv/8PDRxNjTBYHfhz1URwzV
-         WEeBc0M/kj5xvm2G1YY97B/tRLkjNT5p5nBL9TYts5z/e9JvvaRNZ2ctAhMoGhgz8r
-         vcTlXKDf22MKPt+Hi1Vi4j1TpnrDA8rddHXq9AqukwTJgmDXV5r/I0hJ7EIfcpcvox
-         X0WhP4M9v8Ypw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 060BBC43141; Fri,  5 May 2023 09:49:23 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217399] Kernel OOPS on boot with Kernel 6.3(.1) and RTL8153
- Gigabit Ethernet Adapter
-Date:   Fri, 05 May 2023 09:49:22 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: regressions@leemhuis.info
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-217399-208809-znuRLUGTVU@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217399-208809@https.bugzilla.kernel.org/>
-References: <bug-217399-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229441AbjEEKG1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 06:06:27 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DB0199D;
+        Fri,  5 May 2023 03:06:24 -0700 (PDT)
+Received: from booty (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 394D41C000B;
+        Fri,  5 May 2023 10:06:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1683281183;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9a6n7DwxZclGXMi3qvsG0oZbkEqa2URoW/Q1gWp3eig=;
+        b=L9RcZyhKswX31T7f9QBhd8sR7VkQlmtGRM7fC4zdmhlkD1h9JjVmqTjwgkaNq+4GnBSNA3
+        Teb010QpYvH6ycpVHUVSCvYkxaS/fvvjnG0LlMg+32jBeHAXgjaTgUMsGFE0M02b8O2CIi
+        d3ZNYmT+Ywc78TBke0IXkmo/h+bUqxMTi20rDNx4l+IydrD1j3N99gn9UEZNs8mLbalDYu
+        RHp6mgKMQ/f2ltydN5Px5PPnqZfi2FZDKlwFYVR8792QSoYCDLYv8bt9w3HFOd5ah49C8U
+        o0FpU0i80D2J0xYOQ2ADi3Xta6W7Qj1KJgTS2pLYx9FAPISx7tjkzWVldQpHcA==
+Date:   Fri, 5 May 2023 12:06:18 +0200
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Jun Li <jun.li@nxp.com>
+Cc:     Francesco Dolcini <francesco@dolcini.it>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "peter.chen@nxp.com" <peter.chen@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>
+Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
+Message-ID: <20230505120618.2f4cf22c@booty>
+In-Reply-To: <PA4PR04MB96403377F5E37C12AD8C25B389729@PA4PR04MB9640.eurprd04.prod.outlook.com>
+References: <23672d66d229d3be4cc854ddf1462c3507f1c2fc.camel@toradex.com>
+        <20230504162312.1506763-1-luca.ceresoli@bootlin.com>
+        <ZFPiRvoF5l8uGzzZ@francesco-nb.int.toradex.com>
+        <PA4PR04MB96403377F5E37C12AD8C25B389729@PA4PR04MB9640.eurprd04.prod.outlook.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217399
+Hello Jun,
 
-The Linux kernel's regression tracker (Thorsten Leemhuis) (regressions@leem=
-huis.info) changed:
+On Fri, 5 May 2023 09:49:16 +0000
+Jun Li <jun.li@nxp.com> wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |regressions@leemhuis.info
+> > -----Original Message-----
+> > From: Francesco Dolcini <francesco@dolcini.it>
+> > Sent: Friday, May 5, 2023 12:50 AM
+> > To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> > Cc: devicetree@vger.kernel.org; festevam@gmail.com;
+> > gregkh@linuxfoundation.org; Jun Li <jun.li@nxp.com>;
+> > kernel@pengutronix.de; linux-arm-kernel@lists.infradead.org;
+> > dl-linux-imx <linux-imx@nxp.com>; linux-kernel@vger.kernel.org;
+> > linux-usb@vger.kernel.org; peter.chen@nxp.com; robh+dt@kernel.org;
+> > s.hauer@pengutronix.de; shawnguo@kernel.org; Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org>; Francesco Dolcini
+> > <francesco.dolcini@toradex.com>
+> > Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
+> >
+> > Hello Luca,
+> > I guess your mail to Philippe bounced, let me try to answer since I am aware
+> > of the issue here.
+> >
+> > On Thu, May 04, 2023 at 06:23:12PM +0200, Luca Ceresoli wrote:  
+> > > I found this thread after several hours spent in debugging why USB host  
+> > is  
+> > > not detecting new devices on a custom board using the iMX6ULL Colibri
+> > > SoM.
+> > >
+> > > My best workaround at the moment is:  
+> > We have the same workaround in our BSP since quite some time, see
+> > https://git.t/
+> > oradex.com%2Fcgit%2Fmeta-toradex-bsp-common.git%2Ftree%2Frecipes-kernel
+> > %2Flinux%2Flinux-toradex-mainline-git%2F0002-drivers-chipidea-disable-r
+> > untime-pm-for-imx6ul.patch&data=05%7C01%7Cjun.li%40nxp.com%7C776dc1e71a
+> > 554ee20ed908db4cbfa5aa%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638
+> > 188158228795706%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2l
+> > uMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3cFsUurgKBfic
+> > LNfRxMOErukGiMczhJREFGvaFYTH34%3D&reserved=0
+> >  
+> > > I haven't found any follow-up patches from you, so I'm wondering whether
+> > > you have made any progress on this issue.  
+> > You can find the latest discussion on that regard here
+> > https://lore/.
+> > kernel.org%2Fall%2FY1vLpaxpc5WBCuGD%40francesco-nb.int.toradex.com%2F&d
+> > ata=05%7C01%7Cjun.li%40nxp.com%7C776dc1e71a554ee20ed908db4cbfa5aa%7C686
+> > ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638188158228795706%7CUnknown%7C
+> > TWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI
+> > 6Mn0%3D%7C3000%7C%7C%7C&sdata=xgIAlY5Az9zQgOBaUTHeGJDXNIyNRmEBlcR49JOVB
+> > sI%3D&reserved=0
+> >  
+> > > As I see it, a quirk in the driver would make sense.  
+> > I am not sure.
+> >
+> > The reason this is not working is that the VBUS is not directly
+> > connected to the SOC and the USB IP is powered in a different way (all
+> > of that was reviewed/acked by NXP when the board was designed).  
+> 
+> Hi Luca,
+> 
+> Is your board design similar like Francesco's as below?
 
---- Comment #4 from The Linux kernel's regression tracker (Thorsten Leemhui=
-s) (regressions@leemhuis.info) ---
-Forwarded the report to the developers:
+Possibly, but I'm afraid I can't say: I am using the Toradex Colibri
+i.MX6ULL SoM, whose schematics are not public.
 
-https://lore.kernel.org/regressions/ec4be122-e213-ca5b-f5d6-e8f9c3fd3bee@le=
-emhuis.info/T/#u
+Best regards,
+Luca
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
