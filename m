@@ -2,288 +2,459 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F146F862D
-	for <lists+linux-usb@lfdr.de>; Fri,  5 May 2023 17:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 636DB6F8631
+	for <lists+linux-usb@lfdr.de>; Fri,  5 May 2023 17:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232909AbjEEPvH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 May 2023 11:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
+        id S232898AbjEEPvp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 May 2023 11:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232747AbjEEPvG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 11:51:06 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831391891B
-        for <linux-usb@vger.kernel.org>; Fri,  5 May 2023 08:50:59 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-304935cc79bso1833593f8f.2
-        for <linux-usb@vger.kernel.org>; Fri, 05 May 2023 08:50:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683301858; x=1685893858;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=h9cCZXdV0e0FA3mYk5WSPZnVN23oQKCgNX0pPyxJwF4=;
-        b=X57YfR+h8XsgeH3mTCPtZH9gUUCKuk8GAPzLcX+W4M5KyVvc3reB5sLuIioIsdn1Il
-         DJKkTkG3y/3t7tsAPAWiUjD7E84cvsn6l999bsKlCukEl50ELuY5SKpV4Yab4Dsln8GA
-         18VBdllK5rzbunoYuQsxpx8BqLQ0NAqE+ntmhHG+RF7KeM+2+F9eTXbx6vsm+uvF2zey
-         C4SHOWj7lC/0Gdfvj/B6/kfufU1n3xTYrhUyl3nkqzgBxY8D7MCWXvIyr8YdqF//MghN
-         PqCkzE2fcjcdorWnYy1RR1xYaB4f/Zd++5EqJJgS6/372QvMNjvzFjKpj7echh+QOgjR
-         LD6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683301858; x=1685893858;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h9cCZXdV0e0FA3mYk5WSPZnVN23oQKCgNX0pPyxJwF4=;
-        b=IfCuEGGMJfRnPPhnxe7/VSElP0PyCBJe7RqBQdwTERvbYqHDMfX9so6f4vVXLo5Yx7
-         T89PJmFXgGnTeH1b4oJa+kIgmXhirfQuFH/WrH8K3ZD1rVs5qFmQRKBNxd3Xz3ZjWNaz
-         qTYVVFgsa/0XRrodjmR7yXCK6sDWXonupLJ+948xuMuzm+41DxhbrhfqU2MfkbyIEjF+
-         FNvkk0dR7iDY3t+yz0pUOQgbuHofc6z6/ZuBJCkG4QeQ0dWXs7eY5c8FiXDqkII9elmY
-         mCx4wLYn8ZBFeEboK8q0Tsk6UfvUu3Li7uKEHlsI9m2HjjcWBOSTl7kI2biN217VouAL
-         akzw==
-X-Gm-Message-State: AC+VfDxT3IAulK9LX/MWDqwI99/yWbQkYbhnXy8lvaGIeorkDKqdA0Lx
-        YR2bW2/gAYu4XTizhQVH25E/y+gg6oDt0fnKZDBI+Q==
-X-Google-Smtp-Source: ACHHUZ5QXczwnqyk5gj6d8YAQdTD0sLpoLEfozkmK5DNMO8oV97USIkxTN8jgxIouop+Xw45+URxVXeEW+pJYn0tcmo=
-X-Received: by 2002:adf:f604:0:b0:2f4:a3ea:65d2 with SMTP id
- t4-20020adff604000000b002f4a3ea65d2mr1827773wrp.57.1683301857744; Fri, 05 May
- 2023 08:50:57 -0700 (PDT)
+        with ESMTP id S232761AbjEEPvo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 11:51:44 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B9FAD39;
+        Fri,  5 May 2023 08:51:30 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 345BFgLW023788;
+        Fri, 5 May 2023 15:51:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=905he+T+o11HD48FvD5xWF2jUyiE6o5zP89q5jztLFQ=;
+ b=EiXnRLEdT//s6jt0Zj7FsQvjy4NgJg8mtfoYmLlJFf+cnqGhToorUd84oUnQ5Q/M9eXt
+ dwq1++12Mo49eIqoX9pt491mCmGaaasklqOB9ueoYDumOkGJ0lZjMp3K/fj9WAIHi3R0
+ 0pIErqL1P1ENFR5fj+3Brrtj2YyXohS9VsFRTM7fuKg29p5t5N+X12QWLFVCR/08HW2M
+ FE3WZofBK9FgBRGdZ6AdFifISd6QR6QDVYrNwXwku5A/ZrmbcvptgRG5Xun5Zs9XV74g
+ nN8HNysMP/zBL+IEWmhrmH8ayDuQ5Q6dGxjtpXKkdCEY79s9uEPQ6XSPr8fEoKudP/qu QQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qctfu9cuc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 May 2023 15:51:18 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 345FpGVN010644
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 5 May 2023 15:51:16 GMT
+Received: from hu-ugoswami-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 5 May 2023 08:51:13 -0700
+From:   Udipto Goswami <quic_ugoswami@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        "Oliver Neukum" <oneukum@suse.com>, <linux-usb@vger.kernel.org>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v9] usb: dwc3: debugfs: Prevent any register access when devices is runtime suspended
+Date:   Fri, 5 May 2023 21:21:03 +0530
+Message-ID: <20230505155103.30098-1-quic_ugoswami@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20230505064039.1630025-1-bhupesh.sharma@linaro.org>
- <20230505064039.1630025-4-bhupesh.sharma@linaro.org> <84dd0aa0-0ee3-fc85-449d-a9509d7bb765@linaro.org>
-In-Reply-To: <84dd0aa0-0ee3-fc85-449d-a9509d7bb765@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Fri, 5 May 2023 21:20:46 +0530
-Message-ID: <CAH=2NtwbGCFzGNvgNdtTR2h0CWzKtA-_=XimKQECZmf+BrSYQw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/5] usb: misc: eud: Add driver support for SM6115 / SM4250
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, agross@kernel.org, andersson@kernel.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        krzysztof.kozlowski@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 7035nuOTBZKzINkTfo_DnKd0O-AIyUjf
+X-Proofpoint-ORIG-GUID: 7035nuOTBZKzINkTfo_DnKd0O-AIyUjf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-05_22,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=765 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ spamscore=0 mlxscore=0 phishscore=0 adultscore=0 priorityscore=1501
+ bulkscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305050131
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 5 May 2023 at 16:35, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> On 5.05.2023 08:40, Bhupesh Sharma wrote:
-> > Add SM6115 / SM4250 SoC EUD support in qcom_eud driver.
-> >
-> > On some SoCs (like the SM6115 / SM4250 SoC), the mode manager
-> > needs to be accessed only via the secure world (through 'scm'
-> > calls).
-> >
-> > Also, the enable bit inside 'tcsr_check_reg' needs to be set
-> > first to set the eud in 'enable' mode on these SoCs.
-> >
-> > Since this difference comes from how the firmware is configured, so
-> > the driver now relies on the presence of an extra boolean DT property
-> > to identify if secure access is needed.
-> >
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >  drivers/usb/misc/Kconfig    |  1 +
-> >  drivers/usb/misc/qcom_eud.c | 74 +++++++++++++++++++++++++++++++++----
-> >  2 files changed, 68 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-> > index 99b15b77dfd5..fe1b5fec1dfc 100644
-> > --- a/drivers/usb/misc/Kconfig
-> > +++ b/drivers/usb/misc/Kconfig
-> > @@ -147,6 +147,7 @@ config USB_APPLEDISPLAY
-> >  config USB_QCOM_EUD
-> >       tristate "QCOM Embedded USB Debugger(EUD) Driver"
-> >       depends on ARCH_QCOM || COMPILE_TEST
-> > +     select QCOM_SCM
-> >       select USB_ROLE_SWITCH
-> >       help
-> >         This module enables support for Qualcomm Technologies, Inc.
-> > diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-> > index b7f13df00764..18a2dee3b4b9 100644
-> > --- a/drivers/usb/misc/qcom_eud.c
-> > +++ b/drivers/usb/misc/qcom_eud.c
-> > @@ -5,12 +5,14 @@
-> >
-> >  #include <linux/bitops.h>
-> >  #include <linux/err.h>
-> > +#include <linux/firmware/qcom/qcom_scm.h>
-> >  #include <linux/interrupt.h>
-> >  #include <linux/io.h>
-> >  #include <linux/iopoll.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> > +#include <linux/of_device.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/slab.h>
-> >  #include <linux/sysfs.h>
-> > @@ -22,23 +24,35 @@
-> >  #define EUD_REG_VBUS_INT_CLR 0x0080
-> >  #define EUD_REG_CSR_EUD_EN   0x1014
-> >  #define EUD_REG_SW_ATTACH_DET        0x1018
-> > -#define EUD_REG_EUD_EN2        0x0000
-> > +#define EUD_REG_EUD_EN2              0x0000
-> >
-> >  #define EUD_ENABLE           BIT(0)
-> > -#define EUD_INT_PET_EUD      BIT(0)
-> > +#define EUD_INT_PET_EUD              BIT(0)
-> >  #define EUD_INT_VBUS         BIT(2)
-> >  #define EUD_INT_SAFE_MODE    BIT(4)
-> >  #define EUD_INT_ALL          (EUD_INT_VBUS | EUD_INT_SAFE_MODE)
-> >
-> > +#define EUD_EN2_SECURE_EN    BIT(0)
-> > +#define EUD_EN2_NONSECURE_EN (1)
-> BIT(0) == 1, is that actually a separate register or does it just
-> reflect whether scm_writel is used?
->
-> If the latter, perhaps it'd be okay to just call it EUD_EN2_EN or
-> something along those lines? Isn't that perhaps what the docs call it?
+When the dwc3 device is runtime suspended, various required clocks would
+get disabled and it is not guaranteed that access to any registers would
+work. Depending on the SoC glue, a register read could be as benign as
+returning 0 or be fatal enough to hang the system.
 
-Ok, let's name it as EUD_EN2_ENABLE then.
+In order to prevent such scenarios of fatal errors, make sure to resume
+dwc3 then allow the function to proceed.
 
-> > +#define EUD_EN2_DISABLE              (0)
-> > +#define TCSR_CHECK_EN                BIT(0)
-> > +
-> > +struct eud_soc_cfg {
-> > +     u32 tcsr_check_offset;
-> > +};
-> > +
-> >  struct eud_chip {
-> >       struct device                   *dev;
-> >       struct usb_role_switch          *role_sw;
-> > +     const struct eud_soc_cfg        *eud_cfg;
-> >       void __iomem                    *base;
-> >       void __iomem                    *mode_mgr;
-> >       unsigned int                    int_status;
-> >       int                             irq;
-> >       bool                            enabled;
-> >       bool                            usb_attached;
-> > +     bool                            secure_mode_enable;
-> Since it's only used in the probe function now, we can get rid
-> of it!
+Fixes: 62ba09d6bb63 ("usb: dwc3: debugfs: Dump internal LSP and ep registers")
+Cc: stable@vger.kernel.org
+Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+---
+v9: Fixed function dwc3_rx_fifo_size_show & return values in function
+	dwc3_link_state_write along with minor changes for code symmetry.
+v8: Replace pm_runtime_get_sync with pm_runtime_resume_and get.
+v7: Replaced pm_runtime_put with pm_runtime_put_sync & returned proper values.
+v6: Added changes to handle get_dync failure appropriately.
+v5: Reworked the patch to resume dwc3 while accessing the registers.
+v4: Introduced pm_runtime_get_if_in_use in order to make sure dwc3 isn't
+	suspended while accessing the registers.
+v3: Replace pr_err to dev_err. 
+v2: Replaced return 0 with -EINVAL & seq_puts with pr_err.
 
-Ok.
+ drivers/usb/dwc3/debugfs.c | 109 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 109 insertions(+)
 
-> > +     phys_addr_t                     secure_mode_mgr;
-> >  };
-> >
-> >  static int enable_eud(struct eud_chip *priv)
-> > @@ -46,7 +60,11 @@ static int enable_eud(struct eud_chip *priv)
-> >       writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
-> >       writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
-> >                       priv->base + EUD_REG_INT1_EN_MASK);
-> > -     writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
-> > +
-> > +     if (priv->secure_mode_mgr)
-> > +             qcom_scm_io_writel(priv->secure_mode_mgr + EUD_REG_EUD_EN2, EUD_EN2_SECURE_EN);
-> > +     else
-> > +             writel(EUD_EN2_NONSECURE_EN, priv->mode_mgr + EUD_REG_EUD_EN2);
-> >
-> >       return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
-> >  }
-> > @@ -54,7 +72,11 @@ static int enable_eud(struct eud_chip *priv)
-> >  static void disable_eud(struct eud_chip *priv)
-> >  {
-> >       writel(0, priv->base + EUD_REG_CSR_EUD_EN);
-> > -     writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
-> > +
-> > +     if (priv->secure_mode_mgr)
-> > +             qcom_scm_io_writel(priv->secure_mode_mgr + EUD_REG_EUD_EN2, EUD_EN2_DISABLE);
-> > +     else
-> > +             writel(EUD_EN2_DISABLE, priv->mode_mgr + EUD_REG_EUD_EN2);
-> >  }
-> >
-> >  static ssize_t enable_show(struct device *dev,
-> > @@ -178,6 +200,8 @@ static void eud_role_switch_release(void *data)
-> >  static int eud_probe(struct platform_device *pdev)
-> >  {
-> >       struct eud_chip *chip;
-> > +     struct resource *res;
-> > +     phys_addr_t tcsr_base, tcsr_check;
-> >       int ret;
-> >
-> >       chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
-> > @@ -200,9 +224,40 @@ static int eud_probe(struct platform_device *pdev)
-> >       if (IS_ERR(chip->base))
-> >               return PTR_ERR(chip->base);
-> >
-> > -     chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
-> > -     if (IS_ERR(chip->mode_mgr))
-> > -             return PTR_ERR(chip->mode_mgr);
-> > +     chip->secure_mode_enable = of_property_read_bool(chip->dev->of_node,
-> > +                                             "qcom,secure-mode-enable");
-> > +     /*
-> > +      * EUD block on a few Qualcomm SoCs need secure register access.
-> > +      * Check for the same.
-> > +      */
-> > +     if (chip->secure_mode_enable) {
-> if (of_property_read_bool...)
+diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
+index e4a2560b9dc0..ebf03468fac4 100644
+--- a/drivers/usb/dwc3/debugfs.c
++++ b/drivers/usb/dwc3/debugfs.c
+@@ -332,6 +332,11 @@ static int dwc3_lsp_show(struct seq_file *s, void *unused)
+ 	unsigned int		current_mode;
+ 	unsigned long		flags;
+ 	u32			reg;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
+@@ -350,6 +355,8 @@ static int dwc3_lsp_show(struct seq_file *s, void *unused)
+ 	}
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -395,6 +402,11 @@ static int dwc3_mode_show(struct seq_file *s, void *unused)
+ 	struct dwc3		*dwc = s->private;
+ 	unsigned long		flags;
+ 	u32			reg;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+@@ -414,6 +426,8 @@ static int dwc3_mode_show(struct seq_file *s, void *unused)
+ 		seq_printf(s, "UNKNOWN %08x\n", DWC3_GCTL_PRTCAP(reg));
+ 	}
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -463,6 +477,11 @@ static int dwc3_testmode_show(struct seq_file *s, void *unused)
+ 	struct dwc3		*dwc = s->private;
+ 	unsigned long		flags;
+ 	u32			reg;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
+@@ -493,6 +512,8 @@ static int dwc3_testmode_show(struct seq_file *s, void *unused)
+ 		seq_printf(s, "UNKNOWN %d\n", reg);
+ 	}
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -509,6 +530,7 @@ static ssize_t dwc3_testmode_write(struct file *file,
+ 	unsigned long		flags;
+ 	u32			testmode = 0;
+ 	char			buf[32];
++	int			ret;
+ 
+ 	if (copy_from_user(&buf, ubuf, min_t(size_t, sizeof(buf) - 1, count)))
+ 		return -EFAULT;
+@@ -526,10 +548,16 @@ static ssize_t dwc3_testmode_write(struct file *file,
+ 	else
+ 		testmode = 0;
+ 
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
++
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	dwc3_gadget_set_test_mode(dwc, testmode);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return count;
+ }
+ 
+@@ -548,12 +576,18 @@ static int dwc3_link_state_show(struct seq_file *s, void *unused)
+ 	enum dwc3_link_state	state;
+ 	u32			reg;
+ 	u8			speed;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
+ 	if (DWC3_GSTS_CURMOD(reg) != DWC3_GSTS_CURMOD_DEVICE) {
+ 		seq_puts(s, "Not available\n");
+ 		spin_unlock_irqrestore(&dwc->lock, flags);
++		pm_runtime_put_sync(dwc->dev);
+ 		return 0;
+ 	}
+ 
+@@ -566,6 +600,8 @@ static int dwc3_link_state_show(struct seq_file *s, void *unused)
+ 		   dwc3_gadget_hs_link_string(state));
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -584,6 +620,7 @@ static ssize_t dwc3_link_state_write(struct file *file,
+ 	char			buf[32];
+ 	u32			reg;
+ 	u8			speed;
++	int			ret;
+ 
+ 	if (copy_from_user(&buf, ubuf, min_t(size_t, sizeof(buf) - 1, count)))
+ 		return -EFAULT;
+@@ -603,10 +640,15 @@ static ssize_t dwc3_link_state_write(struct file *file,
+ 	else
+ 		return -EINVAL;
+ 
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
++
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
+ 	if (DWC3_GSTS_CURMOD(reg) != DWC3_GSTS_CURMOD_DEVICE) {
+ 		spin_unlock_irqrestore(&dwc->lock, flags);
++		pm_runtime_put_sync(dwc->dev);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -616,12 +658,15 @@ static ssize_t dwc3_link_state_write(struct file *file,
+ 	if (speed < DWC3_DSTS_SUPERSPEED &&
+ 	    state != DWC3_LINK_STATE_RECOV) {
+ 		spin_unlock_irqrestore(&dwc->lock, flags);
++		pm_runtime_put_sync(dwc->dev);
+ 		return -EINVAL;
+ 	}
+ 
+ 	dwc3_gadget_set_link_state(dwc, state);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return count;
+ }
+ 
+@@ -645,6 +690,11 @@ static int dwc3_tx_fifo_size_show(struct seq_file *s, void *unused)
+ 	unsigned long		flags;
+ 	u32			mdwidth;
+ 	u32			val;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_TXFIFO);
+@@ -657,6 +707,8 @@ static int dwc3_tx_fifo_size_show(struct seq_file *s, void *unused)
+ 	seq_printf(s, "%u\n", val);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -667,6 +719,11 @@ static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
+ 	unsigned long		flags;
+ 	u32			mdwidth;
+ 	u32			val;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_RXFIFO);
+@@ -679,6 +736,8 @@ static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
+ 	seq_printf(s, "%u\n", val);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -688,12 +747,19 @@ static int dwc3_tx_request_queue_show(struct seq_file *s, void *unused)
+ 	struct dwc3		*dwc = dep->dwc;
+ 	unsigned long		flags;
+ 	u32			val;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_TXREQQ);
+ 	seq_printf(s, "%u\n", val);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -703,12 +769,19 @@ static int dwc3_rx_request_queue_show(struct seq_file *s, void *unused)
+ 	struct dwc3		*dwc = dep->dwc;
+ 	unsigned long		flags;
+ 	u32			val;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_RXREQQ);
+ 	seq_printf(s, "%u\n", val);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -718,12 +791,19 @@ static int dwc3_rx_info_queue_show(struct seq_file *s, void *unused)
+ 	struct dwc3		*dwc = dep->dwc;
+ 	unsigned long		flags;
+ 	u32			val;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_RXINFOQ);
+ 	seq_printf(s, "%u\n", val);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -733,12 +813,19 @@ static int dwc3_descriptor_fetch_queue_show(struct seq_file *s, void *unused)
+ 	struct dwc3		*dwc = dep->dwc;
+ 	unsigned long		flags;
+ 	u32			val;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_DESCFETCHQ);
+ 	seq_printf(s, "%u\n", val);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -748,12 +835,19 @@ static int dwc3_event_queue_show(struct seq_file *s, void *unused)
+ 	struct dwc3		*dwc = dep->dwc;
+ 	unsigned long		flags;
+ 	u32			val;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_EVENTQ);
+ 	seq_printf(s, "%u\n", val);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -798,6 +892,11 @@ static int dwc3_trb_ring_show(struct seq_file *s, void *unused)
+ 	struct dwc3		*dwc = dep->dwc;
+ 	unsigned long		flags;
+ 	int			i;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	if (dep->number <= 1) {
+@@ -827,6 +926,8 @@ static int dwc3_trb_ring_show(struct seq_file *s, void *unused)
+ out:
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -839,6 +940,11 @@ static int dwc3_ep_info_register_show(struct seq_file *s, void *unused)
+ 	u32			lower_32_bits;
+ 	u32			upper_32_bits;
+ 	u32			reg;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	reg = DWC3_GDBGLSPMUX_EPSELECT(dep->number);
+@@ -851,6 +957,8 @@ static int dwc3_ep_info_register_show(struct seq_file *s, void *unused)
+ 	seq_printf(s, "0x%016llx\n", ep_info);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -910,6 +1018,7 @@ void dwc3_debugfs_init(struct dwc3 *dwc)
+ 	dwc->regset->regs = dwc3_regs;
+ 	dwc->regset->nregs = ARRAY_SIZE(dwc3_regs);
+ 	dwc->regset->base = dwc->regs - DWC3_GLOBALS_REGS_START;
++	dwc->regset->dev = dwc->dev;
+ 
+ 	root = debugfs_create_dir(dev_name(dwc->dev), usb_debug_root);
+ 	dwc->debug_root = root;
+-- 
+2.17.1
 
-Sure.
-
-> > +             res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> > +             if (!res)
-> > +                     return dev_err_probe(chip->dev, -ENODEV,
-> > +                                          "failed to get secure_mode_mgr reg base\n");
-> > +
-> > +             chip->secure_mode_mgr = res->start;
-> > +     } else {
-> > +             chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
-> > +             if (IS_ERR(chip->mode_mgr))
-> > +                     return PTR_ERR(chip->mode_mgr);
-> > +     }
-> > +
-> > +     /* Check for any SoC specific config data */
-> > +     chip->eud_cfg = of_device_get_match_data(&pdev->dev);
-> > +     if (chip->eud_cfg) {
-> > +             res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "tcsr-base");
-> > +             if (!res)
-> > +                     return dev_err_probe(chip->dev, -ENODEV,
-> > +                                          "failed to get tcsr reg base\n");
-> > +
-> > +             tcsr_base = res->start;
-> This variable does not seem very useful, we can get rid of it.
-
-Ok.
-
-> > +             tcsr_check = tcsr_base + chip->eud_cfg->tcsr_check_offset;
-> > +
-> > +             ret = qcom_scm_io_writel(tcsr_check, TCSR_CHECK_EN);
-> > +             if (ret)
-> > +                     return dev_err_probe(chip->dev, ret, "failed to write tcsr check reg\n");
-> > +     }
-> >
-> >       chip->irq = platform_get_irq(pdev, 0);
-> >       ret = devm_request_threaded_irq(&pdev->dev, chip->irq, handle_eud_irq,
-> > @@ -230,8 +285,13 @@ static int eud_remove(struct platform_device *pdev)
-> >       return 0;
-> >  }
-> >
-> > +static const struct eud_soc_cfg sm6115_eud_cfg = {
-> This could be marked __initconst, but I'm not sure if future
-> additions won't need to be accessed after the driver has already
-> gone through its probe function.. Your call!
-
-Like Dmitry also mentioned, I have my apprehensions as well marking this
-as __initconst, so let's not do that.
-
-I will wait for a few more comments and then will send a new version across.
-
-Thanks,
-Bhupesh
-
-> > +     .tcsr_check_offset = 0x25018,
-> > +};
-> > +
-> >  static const struct of_device_id eud_dt_match[] = {
-> >       { .compatible = "qcom,sc7280-eud" },
-> > +     { .compatible = "qcom,sm6115-eud", .data = &sm6115_eud_cfg },
-> >       { }
-> >  };
-> >  MODULE_DEVICE_TABLE(of, eud_dt_match);
