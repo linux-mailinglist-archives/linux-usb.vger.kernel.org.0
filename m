@@ -2,48 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D986F8DB2
-	for <lists+linux-usb@lfdr.de>; Sat,  6 May 2023 03:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29DB16F8DC1
+	for <lists+linux-usb@lfdr.de>; Sat,  6 May 2023 03:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbjEFBnI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 May 2023 21:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32906 "EHLO
+        id S232741AbjEFBua (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 May 2023 21:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjEFBnH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 21:43:07 -0400
-Received: from zg8tndyumtaxlji0oc4xnzya.icoremail.net (zg8tndyumtaxlji0oc4xnzya.icoremail.net [46.101.248.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 32B6349E2;
-        Fri,  5 May 2023 18:43:03 -0700 (PDT)
-Received: from jleng.ambarella.net (unknown [116.246.37.178])
-        by mail-app3 (Coremail) with SMTP id cC_KCgD3_w+ZsFVkOBEAAg--.23024S2;
-        Sat, 06 May 2023 09:43:00 +0800 (CST)
-From:   Jing Leng <3090101217@zju.edu.cn>
-To:     pawell@cadence.com, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Jing Leng <3090101217@zju.edu.cn>
-Subject: [PATCH] usb: cdnsp: fix kernel crash when usb_ep_dequeue
-Date:   Sat,  6 May 2023 09:42:42 +0800
-Message-Id: <20230506014242.21912-1-3090101217@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgD3_w+ZsFVkOBEAAg--.23024S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxur4kAr1rAr4xZFW3Kw45Jrb_yoW5Ar18pF
-        48GFWakr48Z390qrs7Kr4UZr4rJan2yasrKrZ7Ka4fZFZ3J3yku3W8GFyYqF47Gry8Zr47
-        t3WIgw40gr4agaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4U
-        JVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
-        rcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUb0PfJUUUU
-        U==
-X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwIHBWRVG1wHPAAAsO
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        with ESMTP id S229739AbjEFBu2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 May 2023 21:50:28 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DCE3C14;
+        Fri,  5 May 2023 18:50:26 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 4E4ED24E1BA;
+        Sat,  6 May 2023 09:50:25 +0800 (CST)
+Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 6 May
+ 2023 09:50:25 +0800
+Received: from [192.168.125.108] (183.27.98.219) by EXMBX171.cuchost.com
+ (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 6 May
+ 2023 09:50:24 +0800
+Message-ID: <7c1a344b-38f8-23c5-f813-2670665f2a93@starfivetech.com>
+Date:   Sat, 6 May 2023 09:50:23 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1 2/2] usb: cdns3: cdns3-plat: Add clk and reset init
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Peter Chen" <peter.chen@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+References: <20230502081805.112149-1-minda.chen@starfivetech.com>
+ <20230502081805.112149-3-minda.chen@starfivetech.com>
+ <8bedea06-b68e-0f17-87fc-5d1317f315eb@kernel.org>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <8bedea06-b68e-0f17-87fc-5d1317f315eb@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.98.219]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX171.cuchost.com
+ (172.16.6.91)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,83 +61,169 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The crash appears in the following situations:
-1. Call usb_ep_dequeue without calling usb_ep_queue first
-2. Repeated call usb_ep_dequeue
 
-Below is the log of kernel crash when stopping USB FFS device:
-[ 1044.732419] Unable to handle kernel NULL pointer dereference
-               at virtual address 0000000000000000
-...
-[ 1044.946689] Call trace:
-[ 1044.949133]  cdnsp_trb_in_td.constprop.0+0x4/0xd0 [cdns3]
-[ 1044.954545]  cdnsp_gadget_ep_dequeue+0x88/0xf0 [cdns3]
-[ 1044.959695]  usb_ep_dequeue+0x18/0x24
-[ 1044.963366]  functionfs_unbind+0x2c/0xb4 [usb_f_fs]
-[ 1044.968256]  ffs_func_unbind+0x110/0x124 [usb_f_fs]
-[ 1044.973144]  purge_configs_funcs+0x9c/0x124 [libcomposite]
-[ 1044.978646]  configfs_composite_unbind+0x5c/0xbc [libcomposite]
-[ 1044.984581]  usb_gadget_remove_driver+0x60/0xf4
-[ 1044.989120]  usb_gadget_unregister_driver+0x70/0xe4
-[ 1044.994008]  unregister_gadget_item+0x30/0x58 [libcomposite]
-[ 1044.999682]  ffs_data_clear+0x144/0x158 [usb_f_fs]
-[ 1045.004483]  ffs_data_closed+0xdc/0x174 [usb_f_fs]
-[ 1045.009283]  ffs_ep0_release+0x14/0x24 [usb_f_fs]
 
-Signed-off-by: Jing Leng <3090101217@zju.edu.cn>
----
- drivers/usb/cdns3/cdnsp-gadget.c | 11 +++++++++--
- drivers/usb/cdns3/cdnsp-ring.c   |  5 +++++
- 2 files changed, 14 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
-index fff9ec9c391f..160680a56e1d 100644
---- a/drivers/usb/cdns3/cdnsp-gadget.c
-+++ b/drivers/usb/cdns3/cdnsp-gadget.c
-@@ -1072,6 +1072,7 @@ static struct usb_request *cdnsp_gadget_ep_alloc_request(struct usb_ep *ep,
- 
- 	preq->epnum = pep->number;
- 	preq->pep = pep;
-+	INIT_LIST_HEAD(&preq->td.td_list);
- 
- 	trace_cdnsp_alloc_request(preq);
- 
-@@ -1120,11 +1121,17 @@ static int cdnsp_gadget_ep_queue(struct usb_ep *ep,
- static int cdnsp_gadget_ep_dequeue(struct usb_ep *ep,
- 				   struct usb_request *request)
- {
--	struct cdnsp_ep *pep = to_cdnsp_ep(ep);
--	struct cdnsp_device *pdev = pep->pdev;
-+	struct cdnsp_ep *pep;
-+	struct cdnsp_device *pdev;
- 	unsigned long flags;
- 	int ret;
- 
-+	if (!request || !ep)
-+		return -EINVAL;
-+
-+	pep = to_cdnsp_ep(ep);
-+	pdev = pep->pdev;
-+
- 	if (!pep->endpoint.desc) {
- 		dev_err(pdev->dev,
- 			"%s: can't dequeue to disabled endpoint\n",
-diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-index 07f6068342d4..12dc3fb100e9 100644
---- a/drivers/usb/cdns3/cdnsp-ring.c
-+++ b/drivers/usb/cdns3/cdnsp-ring.c
-@@ -705,6 +705,11 @@ int cdnsp_remove_request(struct cdnsp_device *pdev,
- 	trace_cdnsp_remove_request_td(preq);
- 
- 	cur_td = &preq->td;
-+
-+	/* Prevent kernel crash caused by re-running usb_ep_dequeue */
-+	if (list_empty(&cur_td->td_list))
-+		return ret;
-+
- 	ep_ring = cdnsp_request_to_transfer_ring(pdev, preq);
- 
- 	/*
--- 
-2.17.1
-
+On 2023/5/4 20:45, Roger Quadros wrote:
+> Hi,
+> 
+> On 02/05/2023 11:18, Minda Chen wrote:
+>> Add gereric clk and reset init codes to Cadence USBSS
+>> controller. The codes has been tested by starfive vf2
+>> board.
+>> 
+>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+>> ---
+>>  drivers/usb/cdns3/cdns3-plat.c | 52 ++++++++++++++++++++++++++++++++++
+>>  drivers/usb/cdns3/core.h       |  3 ++
+>>  2 files changed, 55 insertions(+)
+>> 
+>> diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
+>> index 2bc5d094548b..1820844c74d2 100644
+>> --- a/drivers/usb/cdns3/cdns3-plat.c
+>> +++ b/drivers/usb/cdns3/cdns3-plat.c
+>> @@ -12,11 +12,13 @@
+>>   *         Roger Quadros <rogerq@ti.com>
+>>   */
+>>  
+>> +#include <linux/clk.h>
+>>  #include <linux/module.h>
+>>  #include <linux/irq.h>
+>>  #include <linux/kernel.h>
+>>  #include <linux/platform_device.h>
+>>  #include <linux/pm_runtime.h>
+>> +#include <linux/reset.h>
+>>  
+>>  #include "core.h"
+>>  #include "gadget-export.h"
+>> @@ -43,6 +45,34 @@ static void set_phy_power_off(struct cdns *cdns)
+>>  	phy_power_off(cdns->usb2_phy);
+>>  }
+>>  
+>> +static int cdns3_clk_rst_init(struct cdns *cdns)
+>> +{
+>> +	int ret;
+>> +
+>> +	if (cdns->num_clks) {
+>> +		ret = clk_bulk_prepare_enable(cdns->num_clks, cdns->clks);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+>> +
+>> +	ret = reset_control_deassert(cdns->resets);
+>> +	if (ret && cdns->num_clks)
+>> +		goto err_clk_init;
+> 
+> if (ret)
+> 	goto err_clk_init;
+> 
+>> +
+>> +	return ret;
+>> +
+>> +err_clk_init:
+>> +	clk_bulk_disable_unprepare(cdns->num_clks, cdns->clks);
+> 
+> if (cdns->num_clks)
+> 	clk_bulk_disable_unprepare(cdns->num_clks, cdns->clks);
+> 
+> This way is more nicer I think.
+> 
+OK, thanks.
+>> +	return ret;
+>> +}
+>> +
+>> +static void cdns3_clk_rst_deinit(struct cdns *cdns)
+>> +{
+>> +	reset_control_assert(cdns->resets);
+>> +	if (cdns->num_clks)
+>> +		clk_bulk_disable_unprepare(cdns->num_clks, cdns->clks);
+>> +}
+>> +
+>>  /**
+>>   * cdns3_plat_probe - probe for cdns3 core device
+>>   * @pdev: Pointer to cdns3 core platform device
+>> @@ -116,6 +146,16 @@ static int cdns3_plat_probe(struct platform_device *pdev)
+>>  		cdns->wakeup_irq = 0x0;
+>>  	}
+>>  
+>> +	ret = devm_clk_bulk_get_all(dev, &cdns->clks);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	cdns->num_clks = ret;
+>> +
+>> +	cdns->resets = devm_reset_control_array_get_optional_exclusive(dev);
+>> +	if (IS_ERR(cdns->resets))
+>> +		return PTR_ERR(cdns->resets);
+>> +
+>>  	cdns->usb2_phy = devm_phy_optional_get(dev, "cdns3,usb2-phy");
+>>  	if (IS_ERR(cdns->usb2_phy))
+>>  		return PTR_ERR(cdns->usb2_phy);
+>> @@ -128,6 +168,10 @@ static int cdns3_plat_probe(struct platform_device *pdev)
+>>  	if (IS_ERR(cdns->usb3_phy))
+>>  		return PTR_ERR(cdns->usb3_phy);
+>>  
+>> +	ret = cdns3_clk_rst_init(cdns);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>>  	ret = phy_init(cdns->usb3_phy);
+>>  	if (ret)
+>>  		goto err_phy3_init;
+>> @@ -165,6 +209,7 @@ static int cdns3_plat_probe(struct platform_device *pdev)
+>>  	phy_exit(cdns->usb3_phy);
+>>  err_phy3_init:
+>>  	phy_exit(cdns->usb2_phy);
+>> +	cdns3_clk_rst_deinit(cdns);
+>>  
+>>  	return ret;
+>>  }
+>> @@ -187,6 +232,8 @@ static int cdns3_plat_remove(struct platform_device *pdev)
+>>  	set_phy_power_off(cdns);
+>>  	phy_exit(cdns->usb2_phy);
+>>  	phy_exit(cdns->usb3_phy);
+>> +	cdns3_clk_rst_deinit(cdns);
+>> +
+>>  	return 0;
+>>  }
+>>  
+>> @@ -220,6 +267,8 @@ static int cdns3_controller_suspend(struct device *dev, pm_message_t msg)
+>>  
+>>  	cdns3_set_platform_suspend(cdns->dev, true, wakeup);
+>>  	set_phy_power_off(cdns);
+>> +	if (!PMSG_IS_AUTO(msg))
+>> +		cdns3_clk_rst_deinit(cdns);
+> 
+> If you reset the controller here all state will be lost.
+> How is it expected to work on system resume?
+> 
+I will delete them. This is platform codes. 
+>>  	spin_lock_irqsave(&cdns->lock, flags);
+>>  	cdns->in_lpm = true;
+>>  	spin_unlock_irqrestore(&cdns->lock, flags);
+>> @@ -237,6 +286,9 @@ static int cdns3_controller_resume(struct device *dev, pm_message_t msg)
+>>  	if (!cdns->in_lpm)
+>>  		return 0;
+>>  
+>> +	if (!PMSG_IS_AUTO(msg))
+>> +		cdns3_clk_rst_init(cdns);
+>> +
+>>  	if (cdns_power_is_lost(cdns)) {
+>>  		phy_exit(cdns->usb2_phy);
+>>  		ret = phy_init(cdns->usb2_phy);
+>> diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
+>> index 2d332a788871..b894768ee485 100644
+>> --- a/drivers/usb/cdns3/core.h
+>> +++ b/drivers/usb/cdns3/core.h
+>> @@ -111,6 +111,9 @@ struct cdns {
+>>  	struct mutex			mutex;
+>>  	enum usb_dr_mode		dr_mode;
+>>  	struct usb_role_switch		*role_sw;
+>> +	struct reset_control *resets;
+>> +	struct clk_bulk_data *clks;
+>> +	int num_clks;
+>>  	bool				in_lpm;
+>>  	bool				wakeup_pending;
+>>  	struct cdns3_platform_data	*pdata;
+> 
+> cheers,
+> -roger
