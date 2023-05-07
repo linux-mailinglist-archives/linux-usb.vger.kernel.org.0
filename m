@@ -2,35 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A076F966A
-	for <lists+linux-usb@lfdr.de>; Sun,  7 May 2023 03:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066C16F95E4
+	for <lists+linux-usb@lfdr.de>; Sun,  7 May 2023 02:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbjEGBM6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 May 2023 21:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
+        id S231928AbjEGAij (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 6 May 2023 20:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjEGBM5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 May 2023 21:12:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2131B132A2;
-        Sat,  6 May 2023 18:12:56 -0700 (PDT)
+        with ESMTP id S232053AbjEGAiA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 May 2023 20:38:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D67F2CD2B;
+        Sat,  6 May 2023 17:36:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDBD160EF0;
-        Sun,  7 May 2023 00:35:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9293FC4339B;
-        Sun,  7 May 2023 00:35:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34C1861538;
+        Sun,  7 May 2023 00:35:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4217C433EF;
+        Sun,  7 May 2023 00:35:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683419708;
-        bh=IVzfOwZ7QIXc91Rakl7Vd2n7qhxihifkzDH5KNvh3kc=;
+        s=k20201202; t=1683419737;
+        bh=5CSFNrJ+7fmRauoE6zdCwIjGWwnDDcSsIiTX+nKJ2PE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S2Uzw4T9u4laV+z5d11SEKT656Zm8oOsqxGrgu9NV9v1WjuHgQIo5Dmyh6DmRUrzR
-         E5KOGYXtBoW3WhRF6sJsWD2FD4UpCrOXX85EOPNOde8SVYBswsZWt/LIbuGhDpqnyY
-         gSAU9HUQxzAJA4hNFoW4ilozpINQVY5U6yg9eTuO+r6h/CFxvvXe/5UH49M8RgRpKv
-         jR6ZFPAXHGX2ELNAO6JZc+wst70QAawqU1KB93hKiDEiujZIgYoPR186BHRcNTxHnv
-         lu4guIDS8CgPTpy0hr0dlLSUadyilR5BI9LhoAw9w1RwaBZHSRRTRdgti+hQILpIKM
-         Rs5Fy7NKtab0A==
+        b=ankX2/J1owfZApjTQv3UV10pTlV1VXnfEwZtyYwqAyFya5NtVJPg+NnaMYcKcUwRI
+         sB/M4xVpqVkTE2yXRGiYYrGgBs2tQSMO6jswgtI+IAf4gVUcT/9IiCjHsTvYGueXfF
+         arrGtLpfBAHsOvLXw8tZJFCNVY0SvX4IbRsLlIQftnY91IBoTQ74s/ZEvYf75bpkXo
+         mdLgp1L7nOi/6UbdRsS2VwywmGY6fCp+KM5RH0eu3bhflHsZVv7CKOi4AuQe71Io/A
+         6LZNOacatjaZlbrDBcFAXp75oKsQh4twPnT835pkFtVEP1e1EEnOAGwUFqDBdFLjiJ
+         onImSvFnvayfQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Frank Wang <frank.wang@rock-chips.com>,
@@ -38,18 +38,18 @@ Cc:     Frank Wang <frank.wang@rock-chips.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux@roeck-us.net,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 17/19] usb: typec: tcpm: fix multiple times discover svids error
-Date:   Sat,  6 May 2023 20:34:15 -0400
-Message-Id: <20230507003417.4077259-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 08/10] usb: typec: tcpm: fix multiple times discover svids error
+Date:   Sat,  6 May 2023 20:35:14 -0400
+Message-Id: <20230507003517.4078384-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230507003417.4077259-1-sashal@kernel.org>
-References: <20230507003417.4077259-1-sashal@kernel.org>
+In-Reply-To: <20230507003517.4078384-1-sashal@kernel.org>
+References: <20230507003517.4078384-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,10 +83,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 032d21a967799..524099634a1d4 100644
+index 81329605757fa..c6e5991b38689 100644
 --- a/drivers/usb/typec/tcpm/tcpm.c
 +++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -1514,7 +1514,21 @@ static bool svdm_consume_svids(struct tcpm_port *port, const u32 *p, int cnt)
+@@ -1506,7 +1506,21 @@ static bool svdm_consume_svids(struct tcpm_port *port, const u32 *p, int cnt)
  		pmdata->svids[pmdata->nsvids++] = svid;
  		tcpm_log(port, "SVID %d: 0x%x", pmdata->nsvids, svid);
  	}
