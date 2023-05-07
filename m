@@ -2,50 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BC86F953E
-	for <lists+linux-usb@lfdr.de>; Sun,  7 May 2023 02:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079EF6F9553
+	for <lists+linux-usb@lfdr.de>; Sun,  7 May 2023 02:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbjEGAbJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 May 2023 20:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
+        id S230450AbjEGAcX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 6 May 2023 20:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjEGAa7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 May 2023 20:30:59 -0400
+        with ESMTP id S230502AbjEGAcQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 May 2023 20:32:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF231992C;
-        Sat,  6 May 2023 17:30:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169A221573;
+        Sat,  6 May 2023 17:31:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0E5161467;
-        Sun,  7 May 2023 00:30:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DDA0C433D2;
-        Sun,  7 May 2023 00:30:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C4666145A;
+        Sun,  7 May 2023 00:31:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66C9DC433D2;
+        Sun,  7 May 2023 00:31:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683419449;
-        bh=VRBMOAthZcWh7p7Zd4HD+qU//YN0XSOn9uaq3l6VrNo=;
+        s=k20201202; t=1683419463;
+        bh=x94HLNRbcLTPOqzvs73lGBziHJYvCWq2DfQX91kQl4k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KmC7nH+Z7ckZlntkfUjtj0QeIRqjsviLk1NFypvNmMOtZ4LoySqHixcjjE2EhhCDT
-         JMGlb6LiKvpWHBACCigyFDrZU0Ctv1z74TW0RsDKmudfnge289cqQrJT8i28PZuy8Q
-         LAZr7HABqdui597oOxtstAWoPbqnya003stBqRx8qEoMSHUXyaoT/XIYqK49O3JQs2
-         k3uo/ew8DfR2lmtmAzYONVIav2sutKtvxH8BNLHWJtcqULnlJGnPOIrZ2JshgJwX//
-         ez3sUnPt8lkbJ3Ksijr5+dD81UGbBst+cI/iqNwBYFF5emH5gcVFF9oVegNK7/Nw3l
-         w56DVLGz5xb2Q==
+        b=X1Ftd9zhOZ3Gya2ar46L0VsWfVhDJsoJv+bzyCkzX7KHI+8BrnUhMcGS1/vTj0G3e
+         7EnVpjusvdWJXCnXq0fO4GjPsuO+VFP3EG960NTDR/qjkthzj4bwmTmWEsikKf5liU
+         mdRch6oQRUEpa9hxQNRYTXfW2HN6U6howCcgVzLAOnRnTsTYfbHzpJHjoJ7Hwx3GAg
+         VXY3Mc0EVVyN0s9CplMBoXpfKcAp/Brqpk0pL+Mu3QEXLfDOw57A0A5wsCvzX+04+g
+         c1qPqqddhhM0UwSO+qB6LBzRu0jhVRWCgWvSjhlpsEBCKhZBFeABvrMgrpDjcLicBU
+         2r+ne+DJ7j6ZQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Josue David Hernandez Gutierrez 
-        <josue.d.hernandez.gutierrez@intel.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
+Cc:     =?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, mathias.nyman@intel.com,
+        Sasha Levin <sashal@kernel.org>, hdegoede@redhat.com,
+        rafael.j.wysocki@intel.com, error27@gmail.com,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 08/24] xhci: Avoid PCI MSI/MSIX interrupt reinitialization at resume
-Date:   Sat,  6 May 2023 20:30:04 -0400
-Message-Id: <20230507003022.4070535-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.3 14/24] usb: typec: ucsi: acpi: add quirk for ASUS Zenbook UM325
+Date:   Sat,  6 May 2023 20:30:10 -0400
+Message-Id: <20230507003022.4070535-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230507003022.4070535-1-sashal@kernel.org>
 References: <20230507003022.4070535-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -59,121 +60,131 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Josue David Hernandez Gutierrez <josue.d.hernandez.gutierrez@intel.com>
+From: Samuel Čavoj <samuel@cavoj.net>
 
-[ Upstream commit 944e7deb4238d10cd16905474574236ac8a8e847 ]
+[ Upstream commit 326e1c208f3f24d14b93f910b8ae32c94923d22c ]
 
-xhci MSI setup is currently done at the same time as xHC host is started
-in xhci_run(). This couples the generic xhci code with PCI, and will
-reconfigure MSI/MSIX interrupts every time xHC is started.
+On some ACPI platforms (namely the ASUS Zenbook UM325) the _DSM method must
+not be called after a notification is received but instead the mailbox
+should be read immediately from RAM. This is because the ACPI interrupt
+handler destroys the CCI in ERAM after copying to system memory, and when
+_DSM is later called to perform a second copy, it retrieves a garbage
+value.
 
-Decouple MSI/MSIX configuration from generic xhci code by moving MSI/MSIX
-part to a PCI specific xhci_pci_run() function overriding xhci_run().
+Instead, the _DSM(read) method should only be called when necessary, i.e.
+for polling the state after reset and for retrieving the version. Other
+reads should not call _DSM and only peek into the RAM region.
 
-This allows us to remove unnecessay MSI/MSIX reconfiguration done every
-time PCI xhci resumes from suspend. i.e. remove the xhci_cleanup_msix()
-call from xhci_resume() and the xhci_try_enale_msi() call in xhci_run()
-called a bit later by xhci_resume()
+This adds a separate read operation for the Zenbook that syncs the
+ACPI mailbox only with polled commands.
 
-[minor changes and commit message rewrite -Mathias]
-
-Signed-off-by: Josue David Hernandez Gutierrez <josue.d.hernandez.gutierrez@intel.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20230317154715.535523-10-mathias.nyman@linux.intel.com
+Link: https://lore.kernel.org/linux-usb/20210823180626.tb6m7h5tp6adhvt2@fastboi.localdomain/
+Signed-off-by: Samuel Čavoj <samuel@cavoj.net>
+[ heikki : handling everything in ucsi_acpi.c with DMI quirk ]
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Link: https://lore.kernel.org/r/20230405134456.49607-1-heikki.krogerus@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-pci.c | 15 +++++++++++++++
- drivers/usb/host/xhci.c     |  8 ++------
- drivers/usb/host/xhci.h     |  1 +
- 3 files changed, 18 insertions(+), 6 deletions(-)
+ drivers/usb/typec/ucsi/ucsi_acpi.c | 44 ++++++++++++++++++++++++++++--
+ 1 file changed, 42 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 6db07ca419c31..8060782a2367d 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -78,14 +78,29 @@ static const char hcd_name[] = "xhci_hcd";
- static struct hc_driver __read_mostly xhci_pci_hc_driver;
+diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+index 62206a6b8ea75..217355f1f9b94 100644
+--- a/drivers/usb/typec/ucsi/ucsi_acpi.c
++++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+@@ -9,6 +9,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/module.h>
+ #include <linux/acpi.h>
++#include <linux/dmi.h>
  
- static int xhci_pci_setup(struct usb_hcd *hcd);
-+static int xhci_pci_run(struct usb_hcd *hcd);
- static int xhci_pci_update_hub_device(struct usb_hcd *hcd, struct usb_device *hdev,
- 				      struct usb_tt *tt, gfp_t mem_flags);
+ #include "ucsi.h"
  
- static const struct xhci_driver_overrides xhci_pci_overrides __initconst = {
- 	.reset = xhci_pci_setup,
-+	.start = xhci_pci_run,
- 	.update_hub_device = xhci_pci_update_hub_device,
+@@ -23,6 +24,7 @@ struct ucsi_acpi {
+ 	struct completion complete;
+ 	unsigned long flags;
+ 	guid_t guid;
++	u64 cmd;
  };
  
-+static int xhci_pci_run(struct usb_hcd *hcd)
+ static int ucsi_acpi_dsm(struct ucsi_acpi *ua, int func)
+@@ -62,6 +64,7 @@ static int ucsi_acpi_async_write(struct ucsi *ucsi, unsigned int offset,
+ 	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
+ 
+ 	memcpy(ua->base + offset, val, val_len);
++	ua->cmd = *(u64 *)val;
+ 
+ 	return ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_WRITE);
+ }
+@@ -93,13 +96,46 @@ static const struct ucsi_operations ucsi_acpi_ops = {
+ 	.async_write = ucsi_acpi_async_write
+ };
+ 
++static int
++ucsi_zenbook_read(struct ucsi *ucsi, unsigned int offset, void *val, size_t val_len)
 +{
++	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
 +	int ret;
 +
-+	if (usb_hcd_is_primary_hcd(hcd)) {
-+		ret = xhci_try_enable_msi(hcd);
++	if (offset == UCSI_VERSION || UCSI_COMMAND(ua->cmd) == UCSI_PPM_RESET) {
++		ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
 +		if (ret)
 +			return ret;
 +	}
 +
-+	return xhci_run(hcd);
++	memcpy(val, ua->base + offset, val_len);
++
++	return 0;
 +}
 +
- /* called after powerup, by probe or system-pm "wakeup" */
- static int xhci_pci_reinit(struct xhci_hcd *xhci, struct pci_dev *pdev)
++static const struct ucsi_operations ucsi_zenbook_ops = {
++	.read = ucsi_zenbook_read,
++	.sync_write = ucsi_acpi_sync_write,
++	.async_write = ucsi_acpi_async_write
++};
++
++static const struct dmi_system_id zenbook_dmi_id[] = {
++	{
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
++		},
++	},
++	{ }
++};
++
+ static void ucsi_acpi_notify(acpi_handle handle, u32 event, void *data)
  {
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 6307bae9cddff..f498df6b02c80 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -436,7 +436,7 @@ static void __maybe_unused xhci_msix_sync_irqs(struct xhci_hcd *xhci)
- 	}
- }
+ 	struct ucsi_acpi *ua = data;
+ 	u32 cci;
+ 	int ret;
  
--static int xhci_try_enable_msi(struct usb_hcd *hcd)
-+int xhci_try_enable_msi(struct usb_hcd *hcd)
+-	ret = ucsi_acpi_read(ua->ucsi, UCSI_CCI, &cci, sizeof(cci));
++	ret = ua->ucsi->ops->read(ua->ucsi, UCSI_CCI, &cci, sizeof(cci));
+ 	if (ret)
+ 		return;
+ 
+@@ -114,6 +150,7 @@ static void ucsi_acpi_notify(acpi_handle handle, u32 event, void *data)
+ static int ucsi_acpi_probe(struct platform_device *pdev)
  {
- 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
- 	struct pci_dev  *pdev;
-@@ -490,6 +490,7 @@ static int xhci_try_enable_msi(struct usb_hcd *hcd)
- 	hcd->irq = pdev->irq;
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(xhci_try_enable_msi);
+ 	struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
++	const struct ucsi_operations *ops = &ucsi_acpi_ops;
+ 	struct ucsi_acpi *ua;
+ 	struct resource *res;
+ 	acpi_status status;
+@@ -143,7 +180,10 @@ static int ucsi_acpi_probe(struct platform_device *pdev)
+ 	init_completion(&ua->complete);
+ 	ua->dev = &pdev->dev;
  
- #else
+-	ua->ucsi = ucsi_create(&pdev->dev, &ucsi_acpi_ops);
++	if (dmi_check_system(zenbook_dmi_id))
++		ops = &ucsi_zenbook_ops;
++
++	ua->ucsi = ucsi_create(&pdev->dev, ops);
+ 	if (IS_ERR(ua->ucsi))
+ 		return PTR_ERR(ua->ucsi);
  
-@@ -705,10 +706,6 @@ int xhci_run(struct usb_hcd *hcd)
- 
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "xhci_run");
- 
--	ret = xhci_try_enable_msi(hcd);
--	if (ret)
--		return ret;
--
- 	temp_64 = xhci_read_64(xhci, &ir->ir_set->erst_dequeue);
- 	temp_64 &= ~ERST_PTR_MASK;
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-@@ -1250,7 +1247,6 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
- 		spin_unlock_irq(&xhci->lock);
- 		if (retval)
- 			return retval;
--		xhci_cleanup_msix(xhci);
- 
- 		xhci_dbg(xhci, "// Disabling event ring interrupts\n");
- 		temp = readl(&xhci->op_regs->status);
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 786002bb35db0..26fccc8d90556 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -2143,6 +2143,7 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated);
- 
- irqreturn_t xhci_irq(struct usb_hcd *hcd);
- irqreturn_t xhci_msi_irq(int irq, void *hcd);
-+int xhci_try_enable_msi(struct usb_hcd *hcd);
- int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev);
- int xhci_alloc_tt_info(struct xhci_hcd *xhci,
- 		struct xhci_virt_device *virt_dev,
 -- 
 2.39.2
 
