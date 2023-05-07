@@ -2,112 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA7C6F962E
-	for <lists+linux-usb@lfdr.de>; Sun,  7 May 2023 02:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BFB26F9770
+	for <lists+linux-usb@lfdr.de>; Sun,  7 May 2023 10:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbjEGAkx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 May 2023 20:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38274 "EHLO
+        id S231144AbjEGIHS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 7 May 2023 04:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbjEGAip (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 May 2023 20:38:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7511A115;
-        Sat,  6 May 2023 17:36:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 050FD6151C;
-        Sun,  7 May 2023 00:36:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAF31C4339B;
-        Sun,  7 May 2023 00:36:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683419813;
-        bh=bnMyapBWPgckjN1DKJMsqaEcgib2kKhWz1y+df38jZ4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IU18ym83zTtBlYiIk97VAbRANsAS4QWx24nxQvkw0HNnI3WeHS04xJ2S3ghv4VHVk
-         aNF1BHwCgxEsF+Y02XA75tqrzpUPu9BnqTJkjShxAcMc7UvKlCicfPl+8auXBXSEnQ
-         wM0pwhsTYpo33ophKkDcZ3G7znQnwN0DZF+Cqg2+ubTSJc7L7V2p6FkW5Pd/kbms6W
-         vNFCKJFvHDH9FARU6UrTTSaenVbqo6n0YnkEBPjL8+VJZAklYV1SvMjv+v7rjHN9/r
-         unSB2DKO6AcEqVgRu+7/RcyCpfLy89u332374hLGq6LiMlnNH8ROmd8NTG3ubUlBFi
-         YkEazqiuiOiqw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Frank Wang <frank.wang@rock-chips.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 7/9] usb: typec: tcpm: fix multiple times discover svids error
-Date:   Sat,  6 May 2023 20:36:34 -0400
-Message-Id: <20230507003637.4080781-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230507003637.4080781-1-sashal@kernel.org>
-References: <20230507003637.4080781-1-sashal@kernel.org>
+        with ESMTP id S230523AbjEGIHQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 May 2023 04:07:16 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F078AD03
+        for <linux-usb@vger.kernel.org>; Sun,  7 May 2023 01:07:15 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9659e9bbff5so613416966b.1
+        for <linux-usb@vger.kernel.org>; Sun, 07 May 2023 01:07:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683446833; x=1686038833;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BPCDpA9ON3RbTUJjWYPJh7fPUugTZXUrag6brzxvZjU=;
+        b=MV1Rn4JZg0E/0wPwKg5LUYpXfczpW2IBak6tuxhJqYghHy2Ci7zcXALAgkdwzXHivH
+         iChtB/zp5ys3zXL1LTQTvG2GQ/MQWby7w/z7u/+rIC4GEH3rKuQuimN+J6QiZgIJAENS
+         eG6Xk3inB3pjrbdwutVCrtOVObNPScCNj4rYf+BPT9DqtYjUAoVV1RG6m3ktHYlmiesu
+         7KKtwufgRgeWzvXEf0Jx4PxuLjRimgbyRcWZmMXQJXx7uZv1Jldti+/wxzVYKVqnC1hZ
+         VswtVxRuq0MaDUGThOPLg3mvbnqTeIKtujJ9S6mDxt32ozApa/AgD8TQBLXiqlrCCCav
+         WZcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683446833; x=1686038833;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BPCDpA9ON3RbTUJjWYPJh7fPUugTZXUrag6brzxvZjU=;
+        b=bqYXEBekf+DA3jS2ezay6JdPNCLQzvZLRAORLP29TnrCaDs2ikARlJlgRR2pQap0t8
+         houQmrTN/+IvbytXzswp3feLOAIbFcKZfvRfGtQAWIpaUA2EGE5vPj9P/gfZ2M3pIJ9d
+         Jjmd+rFSyFT829msEBJAR1jqOwXhfAWfd/txUUomrlXvHyh1aH9r/Nj6CZ4VvBL5/3hn
+         Tz3jpHNmFWP4lZn7WNT4GWj48IcHBDZn9AYHwTy6Vydn2EpL7fM8tAPAmzfIrOrkYCG8
+         jMt8JW4XPdy8ybFfSq/zZfUlBRwNJMO5ojFJFZ8bcnBVfhj4J6UgAjluj7LttnKHYp/4
+         ZYRA==
+X-Gm-Message-State: AC+VfDzxG0G8I9pDjs96wdY0LcGhaAnRyeD8WkTtu4Z1ge0dmf3UhKs8
+        Ioi45c3pwUpDYdJW6oVBsPBV1w==
+X-Google-Smtp-Source: ACHHUZ4Hh4C+4JQeDZol3Tut9oWeVm/8kkfUix9/AkgjyNscJVuDTqOo0Wy0E77C60kSrnGRaSfZnA==
+X-Received: by 2002:a17:907:9806:b0:958:5817:1e08 with SMTP id ji6-20020a170907980600b0095858171e08mr6362425ejc.11.1683446833604;
+        Sun, 07 May 2023 01:07:13 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:183b:950f:b4d5:135a? ([2a02:810d:15c0:828:183b:950f:b4d5:135a])
+        by smtp.gmail.com with ESMTPSA id ks22-20020a170906f85600b0094f67ea6598sm3343513ejb.193.2023.05.07.01.07.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 May 2023 01:07:12 -0700 (PDT)
+Message-ID: <32aa46df-9ed5-7d2a-868f-a36414f54534@linaro.org>
+Date:   Sun, 7 May 2023 10:07:11 +0200
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2] dt-bindings: usb: Add binding for Microchip usb5744
+ hub controller
+Content-Language: en-US
+To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
+        ilias.apalodimas@linaro.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Piyush Mehta <piyush.mehta@amd.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <dd31f987316fb2739644628b5840a6d447b5a587.1683293125.git.michal.simek@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <dd31f987316fb2739644628b5840a6d447b5a587.1683293125.git.michal.simek@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Frank Wang <frank.wang@rock-chips.com>
+On 05/05/2023 15:25, Michal Simek wrote:
+> The Microchip usb5744 is a SS/HS USB 3.0 hub controller with 4 ports.
+> The binding describes USB related aspects of the USB5744 hub, it as
+> well cover the option of connecting the controller as an i2c slave.
+> When i2c interface is connected hub needs to be initialized first.
+> Hub itself has fixed i2c address 0x2D but hardcoding address is not good
+> idea because address can be shifted by i2c address translator in the
+> middle.
+> 
+> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
+> 
+> Changes in v2:
+> - fix i2c-bus property
+> - swap usb2.0/3.0 compatible strings
+> - fix indentation in example (4 spaces)
+> - add new i2c node with microchip,usb5744 compatible property
+> 
+> It looks like that usb8041 has also an optional i2c interface which is not
+> covered. But it is mentioned at commit 40e58a8a7ca6 ("dt-bindings: usb:
+> Add binding for TI USB8041 hub controller").
+> 
+> i2c-bus name property was suggested by Rob at
+> https://lore.kernel.org/all/CAL_JsqJedhX6typpUKbnzV7CLK6UZVjq3CyG9iY_j5DLPqvVdw@mail.gmail.com/
+> and
+> https://lore.kernel.org/all/CAL_JsqJZBbu+UXqUNdZwg-uv0PAsNg55026PTwhKr5wQtxCjVQ@mail.gmail.com/
+> 
+> the question is if adding address like this is acceptable.
+> But it must be specified.
+> 
+> Driver will follow based on final dt-binding.
+> 
+> $ref: usb-device.yaml# should be also added but have no idea how to wire it
+> up to be applied only on usb node not i2c one.
+> 
+> ---
+>  .../bindings/usb/microchip,usb5744.yaml       | 110 ++++++++++++++++++
+>  1 file changed, 110 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+> new file mode 100644
+> index 000000000000..7e0a3472ea95
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+> @@ -0,0 +1,110 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/microchip,usb5744.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip USB5744 4-port Hub Controller
+> +
+> +description:
+> +  Microchip's USB5744 SmartHubTM IC is a 4 port, SuperSpeed (SS)/Hi-Speed (HS),
+> +  low power, low pin count configurable and fully compliant with the USB 3.1
+> +  Gen 1 specification. The USB5744 also supports Full Speed (FS) and Low Speed
+> +  (LS) USB signaling, offering complete coverage of all defined USB operating
+> +  speeds. The new SuperSpeed hubs operate in parallel with the USB 2.0
+> +  controller, so 5 Gbps SuperSpeed data transfers are not affected by slower
+> +  USB 2.0 traffic.
+> +
+> +maintainers:
+> +  - Piyush Mehta <piyush.mehta@amd.com>
+> +  - Michal Simek <michal.simek@amd.com>
+> +
+> +select:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        const: microchip,usb5744
+> +  required:
+> +    - compatible
 
-[ Upstream commit dac3b192107b978198e89ec0f77375738352e0c8 ]
+I don't understand why do you need this select. It basically disables
+schema matching for other ones.
 
-PD3.0 Spec 6.4.4.3.2 say that only Responder supports 12 or more SVIDs,
-the Discover SVIDs Command Shall be executed multiple times until a
-Discover SVIDs VDO is returned ending either with a SVID value of
-0x0000 in the last part of the last VDO or with a VDO containing two
-SVIDs with values of 0x0000.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - usb424,2744
+> +      - usb424,5744
+> +      - microchip,usb5744
+> +
+> +  reg: true
 
-In the current implementation, if the last VDO does not find that the
-Discover SVIDs Command would be executed multiple times even if the
-Responder SVIDs are less than 12, and we found some odd dockers just
-meet this case. So fix it.
+maxItems: 1
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
-Link: https://lore.kernel.org/r/20230316081149.24519-1-frank.wang@rock-chips.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/typec/tcpm.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
 
-diff --git a/drivers/usb/typec/tcpm.c b/drivers/usb/typec/tcpm.c
-index e4308f97d9739..0fdae44c9b8cf 100644
---- a/drivers/usb/typec/tcpm.c
-+++ b/drivers/usb/typec/tcpm.c
-@@ -1006,7 +1006,21 @@ static bool svdm_consume_svids(struct tcpm_port *port, const __le32 *payload,
- 		pmdata->svids[pmdata->nsvids++] = svid;
- 		tcpm_log(port, "SVID %d: 0x%x", pmdata->nsvids, svid);
- 	}
--	return true;
-+
-+	/*
-+	 * PD3.0 Spec 6.4.4.3.2: The SVIDs are returned 2 per VDO (see Table
-+	 * 6-43), and can be returned maximum 6 VDOs per response (see Figure
-+	 * 6-19). If the Respondersupports 12 or more SVID then the Discover
-+	 * SVIDs Command Shall be executed multiple times until a Discover
-+	 * SVIDs VDO is returned ending either with a SVID value of 0x0000 in
-+	 * the last part of the last VDO or with a VDO containing two SVIDs
-+	 * with values of 0x0000.
-+	 *
-+	 * However, some odd dockers support SVIDs less than 12 but without
-+	 * 0x0000 in the last VDO, so we need to break the Discover SVIDs
-+	 * request and return false here.
-+	 */
-+	return cnt == 7;
- abort:
- 	tcpm_log(port, "SVID_DISCOVERY_MAX(%d) too low!", SVID_DISCOVERY_MAX);
- 	return false;
--- 
-2.39.2
+
+Best regards,
+Krzysztof
 
