@@ -2,128 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A656FA369
-	for <lists+linux-usb@lfdr.de>; Mon,  8 May 2023 11:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8986FABC9
+	for <lists+linux-usb@lfdr.de>; Mon,  8 May 2023 13:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233133AbjEHJeF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 May 2023 05:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
+        id S235442AbjEHLR1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 May 2023 07:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232803AbjEHJeE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 05:34:04 -0400
-Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772A44230
-        for <linux-usb@vger.kernel.org>; Mon,  8 May 2023 02:34:01 -0700 (PDT)
-X-ASG-Debug-ID: 1683538437-086e237e516de40001-YVMibp
-Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx1.zhaoxin.com with ESMTP id Yl6PW2wbkHolTVsk (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 08 May 2023 17:33:57 +0800 (CST)
-X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX2.zhaoxin.com
- (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 8 May
- 2023 17:33:57 +0800
-Received: from [192.168.3.72] (222.128.104.110) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 8 May
- 2023 17:33:56 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Message-ID: <734023dc-3001-3653-399f-aa66b99ba27e@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 192.168.3.72
-Date:   Tue, 9 May 2023 01:33:54 +0800
+        with ESMTP id S233955AbjEHLRZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 07:17:25 -0400
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D72D32356;
+        Mon,  8 May 2023 04:17:21 -0700 (PDT)
+Received: from francesco-nb.int.toradex.com (31-10-206-125.static.upc.ch [31.10.206.125])
+        by mail11.truemail.it (Postfix) with ESMTPA id 4C53F202F9;
+        Mon,  8 May 2023 13:17:18 +0200 (CEST)
+Date:   Mon, 8 May 2023 13:17:11 +0200
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Jun Li <jun.li@nxp.com>
+Cc:     Francesco Dolcini <francesco@dolcini.it>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Xu Yang <xu.yang_2@nxp.com>
+Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
+Message-ID: <ZFjaNzY32x8o2XG7@francesco-nb.int.toradex.com>
+References: <23672d66d229d3be4cc854ddf1462c3507f1c2fc.camel@toradex.com>
+ <20230504162312.1506763-1-luca.ceresoli@bootlin.com>
+ <ZFPiRvoF5l8uGzzZ@francesco-nb.int.toradex.com>
+ <PA4PR04MB96403377F5E37C12AD8C25B389729@PA4PR04MB9640.eurprd04.prod.outlook.com>
+ <20230505120618.2f4cf22c@booty>
+ <ZFThyn/D/dDK9nk3@francesco-nb.int.toradex.com>
+ <PA4PR04MB96405EE2468555EA900B340189739@PA4PR04MB9640.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 1/4] xhci: Add some quirks for zhaoxin xhci to fix
- issues
-Content-Language: en-US
-X-ASG-Orig-Subj: Re: [PATCH v3 1/4] xhci: Add some quirks for zhaoxin xhci to fix
- issues
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>,
-        <stable@vger.kernel.org>
-References: <20230506201536.7362-1-WeitaoWang-oc@zhaoxin.com>
- <20230506201536.7362-2-WeitaoWang-oc@zhaoxin.com>
- <71834813-4f59-a453-5d17-1a44010047ad@linux.intel.com>
-From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-In-Reply-To: <71834813-4f59-a453-5d17-1a44010047ad@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [222.128.104.110]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
-X-Barracuda-Start-Time: 1683538437
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 1589
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: 1.09
-X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.108481
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
-        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PA4PR04MB96405EE2468555EA900B340189739@PA4PR04MB9640.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2023/5/8 17:01, Mathias Nyman wrote:
-> On 6.5.2023 23.15, Weitao Wang wrote:
->> Add a quirk XHCI_ZHAOXIN_HOST for zhaoxin xhci to fix issues,
->> there are two cases will be used.
->> - add u1/u2 support.
->> - fix xHCI root hub speed show issue in zhaoxin platform.
->>
->> Add a quirk XHCI_ZHAOXIN_TRB_FETCH to fix TRB prefetch issue.
->>
->> On Zhaoxin ZX-100 project, xHCI can't work normally after resume
->> from system Sx state. To fix this issue, when resume from system
->> Sx state, reinitialize xHCI instead of restore.
->> So, Add XHCI_RESET_ON_RESUME quirk for ZX-100 to fix issue of
->> resuming from system Sx state.
->>
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+On Sat, May 06, 2023 at 09:02:39AM +0000, Jun Li wrote:
+> > -----Original Message-----
+> > From: Francesco Dolcini <francesco@dolcini.it>
+> > Sent: Friday, May 5, 2023 7:00 PM
+> > To: Luca Ceresoli <luca.ceresoli@bootlin.com>; Jun Li <jun.li@nxp.com>
+> > Cc: Francesco Dolcini <francesco@dolcini.it>; devicetree@vger.kernel.org;
+> > festevam@gmail.com; gregkh@linuxfoundation.org; kernel@pengutronix.de;
+> > linux-arm-kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>;
+> > linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org;
+> > peter.chen@nxp.com; robh+dt@kernel.org; s.hauer@pengutronix.de;
+> > shawnguo@kernel.org; Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>;
+> > Francesco Dolcini <francesco.dolcini@toradex.com>
+> > Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
+> > 
+> > On Fri, May 05, 2023 at 12:06:18PM +0200, Luca Ceresoli wrote:
+> > > On Fri, 5 May 2023 09:49:16 +0000
+> > > Jun Li <jun.li@nxp.com> wrote:
+> > > > Is your board design similar like Francesco's as below?
+> > >
+> > > Possibly, but I'm afraid I can't say: I am using the Toradex Colibri
+> > > i.MX6ULL SoM, whose schematics are not public.
+> > 
+> > I can confirm that it's the same.
 > 
+> Thanks Francesco for the confirmation, had a check with design team,
+> there is no status bit which can be used to judge the VDD_USB_CAP is
+> powered or not, so we have to add a board level dts property to tell
+> this usb phy driver to bypass MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS.
 > 
-> I'd split this series into different logical parts:
-> 
-> patch 1/4
->    Set XHCI_RESET_ON_RESUME quirk to ZHAOXIN host to fix resume issue.
->    cc: stable
-> 
-> patch 2/4
->    Add XHCI_ZHAOXIN_TRB_FETCH quirk flag together with code that allocates double pages
->    cc: stable
-> 
-> patch 3/4
->    Add XHCI_ZHAOXIN_HOST quirk flag together with code that corrects USB3 roothub minor 
-> version
->    cc: stable
-> 
-> patch 4/4
->    Set XHCI_LPM_SUPPORT quirk together with code that sets tier policy and u1/u2 timeouts,
->    Don't add stable as this is about adding feature support.
-> 
-Okay,no problem, I'll modify this patch series according to
-above solution and order in the next version.
+> Before send a formal patch, I want to confirm this should work for your
+> HW design, like below simple hack:
 
-Best Regards,
-Weitao
-> (Accidentally replied to older v2 series with the above comments)
-> 
-> Thanks
-> -Mathias
-> 
-> .
+Thanks Li Jun, I tested it with v6.3.1 kernel and it's all good.
+I would be happy to test the patch as soon as you send it.
+
+
+With that said I had another issue that I assume is unrelated.
+In addition to the USB Host port, we have an additional OTG one. This
+interface has the same circuit WRT to the VBUS, however in this case
+it's possible to read the VBUS using extcon, e.g. a standard GPIO input.
+
+With that setup, while doing a role switch, I had a couple of time this
+error:
+
+[  187.310421] ci_hdrc ci_hdrc.0: USB bus 2 deregistered
+[  192.351452] ci_hdrc ci_hdrc.0: timeout waiting for 00000800 in OTGSC
+
+that was recovered only doing an additional transition.
+
+More complete logs here:
+
+[  184.997619] usb 2-1: USB disconnect, device number 9
+[  185.019620] ci_hdrc ci_hdrc.0: remove, state 1
+[  185.024271] usb usb2: USB disconnect, device number 1
+[  185.334975] ci_hdrc ci_hdrc.0: USB bus 2 deregistered
+[  185.353857] ci_hdrc ci_hdrc.0: EHCI Host Controller
+[  185.389670] ci_hdrc ci_hdrc.0: new USB bus registered, assigned bus number 2
+[  185.470170] ci_hdrc ci_hdrc.0: USB 2.0 started, EHCI 1.00
+[  185.476097] usb usb2: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.01
+[  185.484527] usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[  185.491811] usb usb2: Product: EHCI Host Controller
+[  185.496704] usb usb2: Manufacturer: Linux 6.1.22-6.2.0+git.3b29299e5f60 ehci_hcd
+[  185.504148] usb usb2: SerialNumber: ci_hdrc.0
+[  185.531121] hub 2-0:1.0: USB hub found
+[  185.542636] hub 2-0:1.0: 1 port detected
+[  185.556586] mxs_phy 20c9000.usbphy: vbus is not valid
+[  187.271684] ci_hdrc ci_hdrc.0: remove, state 4
+[  187.276281] usb usb2: USB disconnect, device number 1
+[  187.310421] ci_hdrc ci_hdrc.0: USB bus 2 deregistered
+[  192.351452] ci_hdrc ci_hdrc.0: timeout waiting for 00000800 in OTGSC
+
+
+> diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
+> index e1a2b2ea098b..ec5ee790455e 100644
+> --- a/drivers/usb/phy/phy-mxs-usb.c
+> +++ b/drivers/usb/phy/phy-mxs-usb.c
+> @@ -178,7 +178,6 @@ static const struct mxs_phy_data imx6sx_phy_data = {
+>  };
+>  
+>  static const struct mxs_phy_data imx6ul_phy_data = {
+> -       .flags = MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS,
+>  };
+>  
+>  static const struct mxs_phy_data imx7ulp_phy_data = {
+
+Francesco
+
