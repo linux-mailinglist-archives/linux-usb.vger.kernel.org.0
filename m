@@ -2,135 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15F96FDAC9
-	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 11:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2784E6FDC0B
+	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 12:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236135AbjEJJbv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 May 2023 05:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
+        id S233852AbjEJK5p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 May 2023 06:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235609AbjEJJbu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 05:31:50 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC7910F5;
-        Wed, 10 May 2023 02:31:48 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f22908a082so4791684e87.1;
-        Wed, 10 May 2023 02:31:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683711107; x=1686303107;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uHkiT6Uiynl0Lruythe0Uk6VgeBS4SqWbF3W79uTkOQ=;
-        b=XBkSADTR4TScrcB27eBtMX/nsX8ZEZDE/tSEpJp9ibkEuX1/v8nVP7uCIUvpSrolMY
-         wvKD5HLh3L/64IzOnN0/CSiLBPT5zqYR2xOVhQhadzlnfWj+VYKs5MIFhGgVqaOy6USZ
-         CMNg/UupDl+9Q5uvhQ3Cbo80n9zDZ8BJqSXW60SaQ8HD20mLa/YaZKRtpsaIdevWUCcp
-         xjJUUO2R/vc+sqU256M0tFZiG1guQgz8Wn+4OQAJG4AwUwP+CkILhrvVjuvBCIfzLReF
-         DfC4mF2r1N65Jk/YJ8RWQS9wf+nCysqBEyfUk+WRhmM0mUmWUHtnvVSKHrJlAPvDCIjj
-         Rcow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683711107; x=1686303107;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uHkiT6Uiynl0Lruythe0Uk6VgeBS4SqWbF3W79uTkOQ=;
-        b=GQ8E+iCKoCMwpLYkK9YzPKs/aEfIEH8m6IfRumiB2srOpzhLBheEh4ZHULHSnULGW7
-         bxniAc25ySWIfnxp2xKkf6GkfNGfU1ujkxaqiIY93NkelIA3joTtvvDM6NcPtLy1KerB
-         FLmgKPx9+6SUOsoUGhgkZ6VLToPNksyOPwGeHuI/rVsM5Czp7qNH2wYzUkGmVwzEAZ4N
-         mcZPDaPh8QJ8djwDDoINSfHJ3QKzzSo0k021ExlMnQzzQkFfN6zDBg604aR17CMxW/ca
-         Jz9bWk25LlkDeRR5j5xJ5Eux3ZQbDM0pTkTrxdoV/ZBv3opFnkK9n3hD6ELULMJCbbnH
-         D3Vg==
-X-Gm-Message-State: AC+VfDxeHvIWDLZU7XB1L1vt19Us2/lVIRvjCEyLyGIDkIGk4ZDl4cqz
-        nNQgzHaxAFqEwtNZtnARLZYVU1WT4vg=
-X-Google-Smtp-Source: ACHHUZ7Gr1dzdpi5ADr+OqFL1vY/Srp+tgQIV00ug9sEtf+f3XhebE+tndbF72z8KvuaD5cdNdyoUw==
-X-Received: by 2002:ac2:4c8a:0:b0:4dd:af29:92c1 with SMTP id d10-20020ac24c8a000000b004ddaf2992c1mr1391092lfl.44.1683711106673;
-        Wed, 10 May 2023 02:31:46 -0700 (PDT)
-Received: from [192.168.1.103] ([31.173.86.195])
-        by smtp.gmail.com with ESMTPSA id v15-20020a056512096f00b004b55ddeb7e3sm667654lft.309.2023.05.10.02.31.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 02:31:46 -0700 (PDT)
-Subject: Re: [PATCH v3 2/2] usb: gadget: udc: Handle gadget_connect failure
- during bind operation
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jiantao Zhang <water.zhangjiantao@huawei.com>,
-        Badhri Jagan Sridharan <badhri@google.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com
-References: <20230510075252.31023-1-quic_kriskura@quicinc.com>
- <20230510075252.31023-3-quic_kriskura@quicinc.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <cb8c326c-b2b4-2fe8-cdfc-f78908b1d1bd@gmail.com>
-Date:   Wed, 10 May 2023 12:31:44 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S236404AbjEJK5Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 06:57:16 -0400
+X-Greylist: delayed 4200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 10 May 2023 03:57:04 PDT
+Received: from mail.rawlinsfis.com (mail.rawlinsfis.com [89.40.118.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6567AA4
+        for <linux-usb@vger.kernel.org>; Wed, 10 May 2023 03:57:04 -0700 (PDT)
+Received: by mail.rawlinsfis.com (Postfix, from userid 1001)
+        id 236C58179F; Mon,  8 May 2023 08:31:17 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rawlinsfis.com;
+        s=mail; t=1683531085;
+        bh=lDo1OjfzzJ3sOfR9tSDg5RMmT4aDyBP45hIVJCLtIrE=;
+        h=Date:From:To:Subject:From;
+        b=GXKWjS7RF3AY71vH/649/26HB0FMga/pLm42fAmHWwE0ulFrmKBVXZQeppwxJisJF
+         UevHz7l8FYDYRrcKkP57W+hdIew5p9vWHkFSPOVQLqPE/NIllWeB76tAL7+RJclcln
+         37edevOQqiw219y+GZ/V+6D1g0fkO6m4XmZIDqp0guBk8jy3lcMDniuoOuHjI5Dkj9
+         hJbr3dtAaKs0ecN80g0mzPCYB/+43DoFTlT5Kqn1HLBh8YoJqYJvqPPZUxrSqHHdZL
+         F5ZfJ/ckeoZdCBz7bAVwaXWBLtYYN2BbhVg+cdlQdTEbgdUGpNFeN+iubw0xKqV4Yx
+         SMST8L0uPQcLw==
+Received: by mail.rawlinsfis.com for <linux-usb@vger.kernel.org>; Mon,  8 May 2023 07:31:13 GMT
+Message-ID: <20230508074500-0.1.3d.5lgt.0.t9hd2s4ese@rawlinsfis.com>
+Date:   Mon,  8 May 2023 07:31:13 GMT
+From:   "Damian Hordych" <damian.hordych@rawlinsfis.com>
+To:     <linux-usb@vger.kernel.org>
+Subject: =?UTF-8?Q?Pompy_ciep=C5=82a_-_nowe_warunki_?=
+X-Mailer: mail.rawlinsfis.com
 MIME-Version: 1.0
-In-Reply-To: <20230510075252.31023-3-quic_kriskura@quicinc.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+Dzie=C5=84 dobry,
 
-On 5/10/23 10:52 AM, Krishna Kurapati wrote:
+w ramach nowej edycji programu Czyste Powietrze dla klient=C3=B3w indywid=
+ualnych mog=C4=85 otrzyma=C4=87 Pa=C5=84stwo do 135 tys. z=C5=82 wsparcia=
+ na zakup pompy ciep=C5=82a.
 
-> In the event, gadget_connect call (which invokes pullup) fails,
-> propagate the error to udc bind operation which inturn sends the
-> error to configfs. The userspace can then retry enumeartion if
-> it chooses to.
-> 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> ---
-> changes in v3: Rebase on top of usb-next
-> 
->  drivers/usb/gadget/udc/core.c | 21 +++++++++++++++++----
->  1 file changed, 17 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index 4641153e9706..69041cca5d24 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -1122,12 +1122,16 @@ EXPORT_SYMBOL_GPL(usb_gadget_set_state);
->  /* ------------------------------------------------------------------------- */
->  
->  /* Acquire connect_lock before calling this function. */
-> -static void usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
-> +static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
->  {
-> +	int ret;
-> +
->  	if (udc->vbus && udc->started)
-> -		usb_gadget_connect_locked(udc->gadget);
-> +		ret = usb_gadget_connect_locked(udc->gadget);
+Pr=C3=B3cz wy=C5=BCszego dofinansowania program zak=C5=82ada m.in. podwy=C5=
+=BCszenie prog=C3=B3w dochodowych oraz mo=C5=BCliwo=C5=9B=C4=87 z=C5=82o=C5=
+=BCenia kolejnego wniosku o dofinansowanie dla tych, kt=C3=B3rzy ju=C5=BC=
+ wcze=C5=9Bniej skorzystali z Programu.
 
-   Why not just:
+Jako firma specjalizuj=C4=85ca si=C4=99 w dostawie, monta=C5=BCu i serwis=
+ie pomp ciep=C5=82a pomo=C5=BCemy Pa=C5=84stwu w uzyskaniu dofinansowania=
+ wraz z kompleksow=C4=85 realizacj=C4=85 ca=C5=82ego projektu.
 
-	return usb_gadget_connect_locked(udc->gadget)
+S=C4=85 Pa=C5=84stwo zainteresowani?
 
->  	else
-> -		usb_gadget_disconnect_locked(udc->gadget);
-> +		ret = usb_gadget_disconnect_locked(udc->gadget);
-
-   Likewise here?
-
-> +
-> +	return ret;
->  }
->  
->  /**
-[...]
-
-MBR, Sergey
+Pozdrawiam
+Damian Hordych
