@@ -2,125 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 102466FB145
-	for <lists+linux-usb@lfdr.de>; Mon,  8 May 2023 15:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E0536FB21F
+	for <lists+linux-usb@lfdr.de>; Mon,  8 May 2023 16:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234108AbjEHNSj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 May 2023 09:18:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
+        id S234367AbjEHOBW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 May 2023 10:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbjEHNS1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 09:18:27 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E9239BB1;
-        Mon,  8 May 2023 06:18:01 -0700 (PDT)
-Received: from booty (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id EB4B1E0002;
-        Mon,  8 May 2023 13:17:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1683551879;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=enm7EUfHqK7UBTbWSYhTmWN9a9/L22u9i8BI5feMG94=;
-        b=Of7X0Z3DotjRgU4wcDZNoyGeTSdaFfmz+q/cvFxbAAXxtf6DzzzAOmH0SFmG8LHGNjMaIl
-        upaEzzwS6gVAklDTj1GYc4RJiz0U3F4hY97GITjAN/q53Q2lSyHvKaa1ofI/YFlgYBhQUX
-        i+mkNoPIpqnc0SICMCAMvpUAoaGv0j16qAEVDcpZM8qVIfv71xDUJUcywS4jD9matvduva
-        d3M95MQ5DIggZAl85FcI+TZyJ4VzAu6ZG096iZpRbIiq+7Ns3DlfNckwocWVca3VOUk9h7
-        5KfOHrT4vhdkxfxV288snNHVv6pRSgAqgXjXMQ0r51GcEE/mG10QRMT/1KX7vQ==
-Date:   Mon, 8 May 2023 15:17:56 +0200
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Francesco Dolcini <francesco@dolcini.it>
-Cc:     Jun Li <jun.li@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Xu Yang <xu.yang_2@nxp.com>
-Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
-Message-ID: <20230508151756.785ec07e@booty>
-In-Reply-To: <ZFjaNzY32x8o2XG7@francesco-nb.int.toradex.com>
-References: <23672d66d229d3be4cc854ddf1462c3507f1c2fc.camel@toradex.com>
-        <20230504162312.1506763-1-luca.ceresoli@bootlin.com>
-        <ZFPiRvoF5l8uGzzZ@francesco-nb.int.toradex.com>
-        <PA4PR04MB96403377F5E37C12AD8C25B389729@PA4PR04MB9640.eurprd04.prod.outlook.com>
-        <20230505120618.2f4cf22c@booty>
-        <ZFThyn/D/dDK9nk3@francesco-nb.int.toradex.com>
-        <PA4PR04MB96405EE2468555EA900B340189739@PA4PR04MB9640.eurprd04.prod.outlook.com>
-        <ZFjaNzY32x8o2XG7@francesco-nb.int.toradex.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S233475AbjEHOBV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 10:01:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E330C348B5;
+        Mon,  8 May 2023 07:01:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78DF962D9B;
+        Mon,  8 May 2023 14:01:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BDCEC433EF;
+        Mon,  8 May 2023 14:01:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1683554475;
+        bh=O8tjsOi+oKea2wipKtbwhwqOEm7vtb389lfsVLc4ECo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ymgv1cowBjCfDf/5ikYFlNvu2+D2jnmp7vR8c95Fs+X+AO9Z9RAYUOf1OlPwVxept
+         XHDgQUFJxDL98IXbSNLc2U1JKnisBGWsYm51DJ4IHGYzDojlv1On+XTfmI4RPFvvN/
+         be00CmCOf7hXa1tkn7Ni0VP7Fa4OSn8dnJMw6SZQ=
+Date:   Mon, 8 May 2023 16:01:12 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>
+Subject: Re: [BUG] Kmemleak, possibly hiddev_connect(), in 6.3.0+ torvalds
+ tree commit gfc4354c6e5c2
+Message-ID: <2023050854-collage-dreamt-660c@gregkh>
+References: <f64b17fa-d509-ad30-6e8d-e4c979818047@alu.unizg.hr>
+ <2023050824-juiciness-catching-9290@gregkh>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2023050824-juiciness-catching-9290@gregkh>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Jun, Francesco,
-
-On Mon, 8 May 2023 13:17:11 +0200
-Francesco Dolcini <francesco@dolcini.it> wrote:
-
-> On Sat, May 06, 2023 at 09:02:39AM +0000, Jun Li wrote:
-> > > -----Original Message-----
-> > > From: Francesco Dolcini <francesco@dolcini.it>
-> > > Sent: Friday, May 5, 2023 7:00 PM
-> > > To: Luca Ceresoli <luca.ceresoli@bootlin.com>; Jun Li <jun.li@nxp.com>
-> > > Cc: Francesco Dolcini <francesco@dolcini.it>; devicetree@vger.kernel.org;
-> > > festevam@gmail.com; gregkh@linuxfoundation.org; kernel@pengutronix.de;
-> > > linux-arm-kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>;
-> > > linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org;
-> > > peter.chen@nxp.com; robh+dt@kernel.org; s.hauer@pengutronix.de;
-> > > shawnguo@kernel.org; Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>;
-> > > Francesco Dolcini <francesco.dolcini@toradex.com>
-> > > Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
-> > > 
-> > > On Fri, May 05, 2023 at 12:06:18PM +0200, Luca Ceresoli wrote:  
-> > > > On Fri, 5 May 2023 09:49:16 +0000
-> > > > Jun Li <jun.li@nxp.com> wrote:  
-> > > > > Is your board design similar like Francesco's as below?  
-> > > >
-> > > > Possibly, but I'm afraid I can't say: I am using the Toradex Colibri
-> > > > i.MX6ULL SoM, whose schematics are not public.  
-> > > 
-> > > I can confirm that it's the same.  
+On Mon, May 08, 2023 at 08:51:55AM +0200, Greg Kroah-Hartman wrote:
+> On Mon, May 08, 2023 at 08:30:07AM +0200, Mirsad Goran Todorovac wrote:
+> > Hi,
 > > 
-> > Thanks Francesco for the confirmation, had a check with design team,
-> > there is no status bit which can be used to judge the VDD_USB_CAP is
-> > powered or not, so we have to add a board level dts property to tell
-> > this usb phy driver to bypass MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS.
+> > There seems to be a kernel memory leak in the USB keyboard driver.
 > > 
-> > Before send a formal patch, I want to confirm this should work for your
-> > HW design, like below simple hack:  
+> > The leaked memory allocs are 96 and 512 bytes.
+> > 
+> > The platform is Ubuntu 22.04 LTS on a assembled AMD Ryzen 9 with X670E PG
+> > Lightning mobo,
+> > and Genius SlimStar i220 GK-080012 keyboard.
+> > 
+> > (Logitech M100 HID mouse is not affected by the bug.)
+> > 
+> > BIOS is:
+> > 
+> >      *-firmware
+> >           description: BIOS
+> >           vendor: American Megatrends International, LLC.
+> >           physical id: 0
+> >           version: 1.21
+> >           date: 04/26/2023
+> >           size: 64KiB
+> > 
+> > The kernel is 6.3.0-torvalds-<id>-13466-gfc4354c6e5c2.
+> > 
+> > The keyboard is recognised as Chicony:
+> > 
+> >                  *-usb
+> >                       description: Keyboard
+> >                       product: CHICONY USB Keyboard
+> >                       vendor: CHICONY
+> >                       physical id: 2
+> >                       bus info: usb@5:2
+> >                       logical name: input35
+> >                       logical name: /dev/input/event4
+> >                       logical name: input35::capslock
+> >                       logical name: input35::numlock
+> >                       logical name: input35::scrolllock
+> >                       logical name: input36
+> >                       logical name: /dev/input/event5
+> >                       logical name: input37
+> >                       logical name: /dev/input/event6
+> >                       logical name: input38
+> >                       logical name: /dev/input/event8
+> >                       version: 2.30
+> >                       capabilities: usb-2.00 usb
+> >                       configuration: driver=usbhid maxpower=100mA
+> > speed=1Mbit/s
+> > 
+> > The bug is easily reproduced by unplugging the USB keyboard, waiting about a
+> > couple of seconds,
+> > and then reconnect and scan for memory leaks twice.
+> > 
+> > The kmemleak log is as follows [edited privacy info]:
+> > 
+> > root@hostname:/home/username# cat /sys/kernel/debug/kmemleak
+> > unreferenced object 0xffff8dd020037c00 (size 96):
+> >   comm "systemd-udevd", pid 435, jiffies 4294892550 (age 8909.356s)
+> >   hex dump (first 32 bytes):
+> >     5d 8e 4e b9 ff ff ff ff 00 00 00 00 00 00 00 00 ].N.............
+> >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+> >   backtrace:
+> >     [<ffffffffb81a74be>] __kmem_cache_alloc_node+0x22e/0x2b0
+> >     [<ffffffffb8127b6e>] kmalloc_trace+0x2e/0xa0
+> >     [<ffffffffb87543d9>] class_create+0x29/0x80
+> >     [<ffffffffb8880d24>] usb_register_dev+0x1d4/0x2e0
 > 
-> Thanks Li Jun, I tested it with v6.3.1 kernel and it's all good.
-> I would be happy to test the patch as soon as you send it.
+> As the call to class_create() in this path is now gone in 6.4-rc1, can
+> you retry that release to see if this is still there or not?
 
-Thanks Jun, it works here as well, on 6.1.27!
+No, wait, it's still there, I was looking at a development branch of
+mine that isn't sent upstream yet.  And syzbot just reported the same
+thing:
+	https://lore.kernel.org/r/00000000000058d15f05fb264013@google.com
 
-Best regards,
-Luca
+So something's wrong here, let me dig into it tomorrow when I get a
+chance...
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+thanks,
+
+greg k-h
