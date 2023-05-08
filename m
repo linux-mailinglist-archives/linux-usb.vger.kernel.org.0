@@ -2,229 +2,221 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CD426FBB86
-	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 01:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08056FBB8F
+	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 01:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjEHXtY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 May 2023 19:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54322 "EHLO
+        id S233752AbjEHXvy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 May 2023 19:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjEHXtX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 19:49:23 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DD972B7
-        for <linux-usb@vger.kernel.org>; Mon,  8 May 2023 16:49:21 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50db7f0a1b4so311199a12.3
-        for <linux-usb@vger.kernel.org>; Mon, 08 May 2023 16:49:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683589760; x=1686181760;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2WCjRWad0x/rOwokq+XFzj9N91Oo+YXYDlAZvly+I00=;
-        b=sgux41zKecHf1RQyPAiwoN1U+GVzOaONK6Mz9nA9sDCPHqPNaO3Mp3D8oXEHalJeqJ
-         syQFws2fdSWZWe6mD4/z+5mbBcOKzDKzEkj+YkFSkUJIfkCZ/qp1V0mQNA3suBjc0R3r
-         hEvlPcxp1XrxMcFqM0LCukQnPEP4GR/03RXTwJ00nfzyNzFnKqEqg6AEhYtVm9oUyHfO
-         1MVFr6Heg+XnH4WEFFvvOWMBHjhbklMFt5fXDSaL1giGMzRmi4a/nexM6Uf/QSQS/Pzi
-         1VSi/a+N1YwweLmVRqoON7XWmeKVPawRZARuML6+HHK/kbw3nUmRIFgzhLGUtbd9j6J7
-         vMxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683589760; x=1686181760;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2WCjRWad0x/rOwokq+XFzj9N91Oo+YXYDlAZvly+I00=;
-        b=itKMFbE84Mcn4eDdCnXvGi5/7eHgXQViq/IzLwxvghT3sdAlx+rEPNeMyfT9IsohuK
-         5UeixESimiXDr9MkLneYNFV4BMpdinTb4g1tjGPjB5MJeIPreSHm5YVOlBSYDXVIM5so
-         rgkg/It8mOMLH/38DU66FN6em1yk6lk1ZTLtN87XZTRhADNmOC8skssL9pfU4HHAcOEo
-         ifd/HUoK/YhbyeIFaRYw1I4L08xpryigYMWSGce7AN1g8ttNx+daLvHmeX2+614eeQx7
-         7OzMxVMTVjDc79Rw2lmeOtRJf3SkR040RhspXsWg1QpMNtM4NfMFOoT+O2iyoCvqdHtb
-         ycuw==
-X-Gm-Message-State: AC+VfDym5oSEPtFPrEfiw0yGFycMFolfS7IAgSNBLuJYcafJkIUGD1wv
-        RfCoabbPwK0L3A1Z+Vs4QB0BXQ3LWZaMYsru6ttcOg==
-X-Google-Smtp-Source: ACHHUZ6srTcRW/ur389z38BaUQX39fNejMNWfSTITpuSSMYRgWHDsba8qBzwkNnsrJ/rWXOxw+MbC824p7d+vFOUxjI=
-X-Received: by 2002:a17:906:9755:b0:94a:a0d7:b7bc with SMTP id
- o21-20020a170906975500b0094aa0d7b7bcmr11643496ejy.10.1683589760116; Mon, 08
- May 2023 16:49:20 -0700 (PDT)
+        with ESMTP id S229455AbjEHXvx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 19:51:53 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025DD35A8;
+        Mon,  8 May 2023 16:51:49 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 52FEB60161;
+        Tue,  9 May 2023 01:51:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.hr; s=mail;
+        t=1683589904; bh=Kl5KwN2Hk4Bxo2MfCiVRdaQoK10KwhuHuwPofStqIdQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kxoHXML3Q4MK9fREL29E9q3FguFu3vkTh3RGKKsFbuuM/negVlKSnU62n+IpGDpQZ
+         8iKpMYH3Er7blzChupQNc+TOSTnToRVgfIGSF6IGjRq9n/RK15p/RIWdsmaOfJWxIN
+         hGcM5Sa73E+KA8J4ImQj11hEiT22cv21ZQLtUhBkAZcXtWSNURrfnu0LDAVmhsJAEd
+         vxreAxpIYq+Z2B0z49YTeB1xknEIjQaeZJBUz7pRlfVaR5gzOH/HnS8+XS5By499vQ
+         kUo4Kk7G1BGaEu/a2pz5zdxQbca73ptxvWN0Q2txaSzQthmrM9S2IMqkc1cFxYZ6nn
+         Arzn/11OBLyrw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id soHJW2JYGjeY; Tue,  9 May 2023 01:51:41 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [77.237.113.62])
+        by domac.alu.hr (Postfix) with ESMTPSA id E54F06015F;
+        Tue,  9 May 2023 01:51:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1683589901; bh=Kl5KwN2Hk4Bxo2MfCiVRdaQoK10KwhuHuwPofStqIdQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ClHpS4rUtQNzlASce7C18rGhzlg9RaNE1goK24E1RKfhHdevHYFEJSDaVvRjzNCDz
+         VAWfOeAaHbUAoDpYvur0fVyXoF9q8DbySGh62/LKv88cFGG6ET032W9oTYYd+m32zG
+         BIa2It8l8dtmo2BQrLjaJIDFi7fUS5rRh4gojfVy3caQH3aSvdSdJVIZz0w6viF19W
+         emMRYHVRJc2V5FY7z/5yfsK2y2inCTkE3M5qG02DjdiRTIDtfzSjODiF1Cv7UhiSba
+         oIfjyhV4EONHJye8c07n4UYEDO4vODvLm/AK7xxlNkqIzvt0o6B7R38k92HOvRCHCf
+         UoIrQsR5Rg1qQ==
+Message-ID: <c73471aa-522a-83a4-5614-506581604301@alu.unizg.hr>
+Date:   Tue, 9 May 2023 01:51:35 +0200
 MIME-Version: 1.0
-References: <ZD1ObUuy8deAvupf@kroah.com> <3a9ee93a-b0ec-ac92-77ab-2956c1c4f434@google.com>
- <20230418024937.h6mipfdvdqomtz36@synopsys.com> <CAMHf4WKzU7uWj5HVHdcBnJ2ugK5cfkk=-38dn7=z1fCwXtegLw@mail.gmail.com>
- <20230418193951.zjwgg25cyhg3lsay@synopsys.com> <CAMHf4WKYzmmqO+7AsUBo+d8AHLKFXugxwh__NYi9grQAJk7VBA@mail.gmail.com>
- <47244f7e-feb5-4958-be14-7fd9f0814566@rowland.harvard.edu>
- <CAMHf4WL9dOWiw-+V2DQeQ=3jxmk3LHg5ONdWSwcp3Gx0AD17yg@mail.gmail.com>
- <20230420172011.GF21943@pendragon.ideasonboard.com> <0610f776-44c8-4372-975b-52c2a1f0af8d@google.com>
- <20230506125317.GD17474@pendragon.ideasonboard.com>
-In-Reply-To: <20230506125317.GD17474@pendragon.ideasonboard.com>
-From:   Avichal Rakesh <arakesh@google.com>
-Date:   Mon, 8 May 2023 16:49:08 -0700
-Message-ID: <CAMHf4WLMAjigKypYho24TqeuWx6Y9-LWjq2cj_5ad31pqsKDzg@mail.gmail.com>
-Subject: Re: UVC Gadget Driver shows glitched frames with a Linux host
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Dan Scally <dan.scally@ideasonboard.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "Eino-Ville Talvala (Eddy)" <etalvala@google.com>,
-        Jayant Chowdhary <jchowdhary@google.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [BUG] Kmemleak, possibly hiddev_connect(), in 6.3.0+ torvalds
+ tree commit gfc4354c6e5c2
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>
+References: <f64b17fa-d509-ad30-6e8d-e4c979818047@alu.unizg.hr>
+ <2023050824-juiciness-catching-9290@gregkh>
+ <2023050854-collage-dreamt-660c@gregkh>
+From:   Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
+In-Reply-To: <2023050854-collage-dreamt-660c@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 6, 2023 at 5:53=E2=80=AFAM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
 
-> > The first thing I tried was to split one video frame over 266 frames, w=
-ithout
-> > changing the number of requests allocated. And it works! However, as La=
-urent
-> > mentioned, it does add a fair amount of bookkeeping to split a video fr=
-ame into
-> > the required number of requests. I also hardcoded the number 266 from o=
-ur
-> > discussion, but I am not sure how to figure out that number dynamically=
-. 266
-> > also didn't work if the host started sending frames at more than 30fps =
-:/, so
-> > our dynamic calculation would need to take camera's real output fps int=
-o
-> > account, which as far as I can tell is not known to the UVC driver.
->
-> It would probably need to monitor how full the request queue is, and
-> adapt the number of bytes it queues in each request accordingly. That's
-> indeed quite a bit of work, for little gain compared to the option you
-> describe below.
->
-Agreed, especially if the hosts already handle 0 length packets.
-As long as the usb controllers can keep up, the burst approach seems
-more reasonable.
 
-> > With those issues I tried what Laurent called the "burst" approach
-> > (attached below), i.e. send the video frames in as few packets as possi=
-ble,
-> > and then queue up 0 length packets to keep the ISOC queue happy. This a=
-pproach
-> > works perfectly as far as I can tell. Locally I tried with a Linux, Win=
-dow,
-> > and MacOS host with no frame drops or ISOC failures on any of them!
-> >
-> > In the current patch, UVC gadget driver keeps the ISOC cadence by effec=
-tively
-> > maintaining a back-pressure on the USB controller (at least to the best=
- of its
-> > capabilities). Any usb_request available to the UVC gadget gets immedia=
-tely
-> > queued back to the USB controller. If a video frame is available, the f=
-rame is
-> > encoded, if not, the length is set to 0. The idea being that the host's=
- polling
-> > and the controller's 'complete' callback will result in a somewhat cons=
-istent
-> > cadence for the uvc driver after the initial burst of packets.
-> >
-> > However this does mean that at worst, the new video frames are up to 63
-> > usb_requests behind, but assuming a 125us per usb_request, that amounts=
- to ~8ms
-> > latency at the worst, which seems acceptable?
->
-> There's a trade off between latency and the risk of underruns. We could
-> decrease the number of queued requests to lower the latency, as long as
-> we ensure the margin is high enough to avoid underruns in higher load
-> conditions. We could also do so only when queuing 0-size requests, and
-> queue the data in burst mode with a higher number of requests.
+On 08. 05. 2023. 16:01, Greg Kroah-Hartman wrote:
+> On Mon, May 08, 2023 at 08:51:55AM +0200, Greg Kroah-Hartman wrote:
+>> On Mon, May 08, 2023 at 08:30:07AM +0200, Mirsad Goran Todorovac wrote:
+>>> Hi,
+>>>
+>>> There seems to be a kernel memory leak in the USB keyboard driver.
+>>>
+>>> The leaked memory allocs are 96 and 512 bytes.
+>>>
+>>> The platform is Ubuntu 22.04 LTS on a assembled AMD Ryzen 9 with X670E PG
+>>> Lightning mobo,
+>>> and Genius SlimStar i220 GK-080012 keyboard.
+>>>
+>>> (Logitech M100 HID mouse is not affected by the bug.)
+>>>
+>>> BIOS is:
+>>>
+>>>       *-firmware
+>>>            description: BIOS
+>>>            vendor: American Megatrends International, LLC.
+>>>            physical id: 0
+>>>            version: 1.21
+>>>            date: 04/26/2023
+>>>            size: 64KiB
+>>>
+>>> The kernel is 6.3.0-torvalds-<id>-13466-gfc4354c6e5c2.
+>>>
+>>> The keyboard is recognised as Chicony:
+>>>
+>>>                   *-usb
+>>>                        description: Keyboard
+>>>                        product: CHICONY USB Keyboard
+>>>                        vendor: CHICONY
+>>>                        physical id: 2
+>>>                        bus info: usb@5:2
+>>>                        logical name: input35
+>>>                        logical name: /dev/input/event4
+>>>                        logical name: input35::capslock
+>>>                        logical name: input35::numlock
+>>>                        logical name: input35::scrolllock
+>>>                        logical name: input36
+>>>                        logical name: /dev/input/event5
+>>>                        logical name: input37
+>>>                        logical name: /dev/input/event6
+>>>                        logical name: input38
+>>>                        logical name: /dev/input/event8
+>>>                        version: 2.30
+>>>                        capabilities: usb-2.00 usb
+>>>                        configuration: driver=usbhid maxpower=100mA
+>>> speed=1Mbit/s
+>>>
+>>> The bug is easily reproduced by unplugging the USB keyboard, waiting about a
+>>> couple of seconds,
+>>> and then reconnect and scan for memory leaks twice.
+>>>
+>>> The kmemleak log is as follows [edited privacy info]:
+>>>
+>>> root@hostname:/home/username# cat /sys/kernel/debug/kmemleak
+>>> unreferenced object 0xffff8dd020037c00 (size 96):
+>>>    comm "systemd-udevd", pid 435, jiffies 4294892550 (age 8909.356s)
+>>>    hex dump (first 32 bytes):
+>>>      5d 8e 4e b9 ff ff ff ff 00 00 00 00 00 00 00 00 ].N.............
+>>>      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+>>>    backtrace:
+>>>      [<ffffffffb81a74be>] __kmem_cache_alloc_node+0x22e/0x2b0
+>>>      [<ffffffffb8127b6e>] kmalloc_trace+0x2e/0xa0
+>>>      [<ffffffffb87543d9>] class_create+0x29/0x80
+>>>      [<ffffffffb8880d24>] usb_register_dev+0x1d4/0x2e0
+>>
+>> As the call to class_create() in this path is now gone in 6.4-rc1, can
+>> you retry that release to see if this is still there or not?
+> 
+> No, wait, it's still there, I was looking at a development branch of
+> mine that isn't sent upstream yet.  And syzbot just reported the same
+> thing:
+> 	https://lore.kernel.org/r/00000000000058d15f05fb264013@google.com
+> 
+> So something's wrong here, let me dig into it tomorrow when I get a
+> chance...
 
-Would 8ms of latency be considered significant? Unless the host asks
-for >125fps,
-that amounts to less than a frame of latency, so frames should not be dropp=
-ed
-by the host for being "late". Admittedly, I don't know enough about UVC usa=
-ge to
-say if 8ms (at worst) will be problematic for certain usages. The
-hosts don't seem to
-have any issues when streaming at <=3D60fps.
+If this could help, here is the bisect of the bug (I could not discern 
+what could possibly be wrong):
 
-> > Another concern I had was about how the back-pressure might affect othe=
-r USB
-> > controllers. DWC3 doesn't seem to be sweating and in local testing I sa=
-w no
-> > EXDEVs or frame drops other than when the stream was being transitioned=
- from
-> > one configuration to another, but I don't know how this interaction mig=
-ht go for
-> > other USB controllers. Would you have any insights into non-DWC3 contro=
-llers,
-> > and if they might be negatively affected by having up to 64 requests qu=
-eued at
-> > once?
->
-> Dan, do I recall correctly you have tested uvc-gadget with dwc2 too ?
-> Could you test the patch below ? Testing with musb would be nice too.
->
-> > Here's the patch, it doesn't currently handle bulk transfers, but I can=
- upload a
-> > formal patch with it if this approach seems acceptable!
-> >
-> > ---
-> >  drivers/usb/gadget/function/uvc_video.c | 24 ++++++++++++++++--------
-> >  1 file changed, 16 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadg=
-et/function/uvc_video.c
-> > index dd1c6b2ca7c6..d7ad278709d4 100644
-> > --- a/drivers/usb/gadget/function/uvc_video.c
-> > +++ b/drivers/usb/gadget/function/uvc_video.c
-> > @@ -386,6 +386,7 @@ static void uvcg_video_pump(struct work_struct *wor=
-k)
-> >       struct uvc_buffer *buf;
-> >       unsigned long flags;
-> >       int ret;
-> > +     bool buf_int;
-> >
-> >       while (video->ep->enabled) {
-> >               /*
-> > @@ -408,20 +409,29 @@ static void uvcg_video_pump(struct work_struct *w=
-ork)
-> >                */
-> >               spin_lock_irqsave(&queue->irqlock, flags);
-> >               buf =3D uvcg_queue_head(queue);
-> > -             if (buf =3D=3D NULL) {
-> > +
-> > +             if (buf !=3D NULL) {
-> > +                     // Encode video frame if we have one.
->
-> C-style comments please.
->
-Addressed this comment and uploaded a formal patch:
-https://lore.kernel.org/20230508231103.1621375-1-arakesh@google.com/
-It is basically this patch with an extra flag to ensure that we don't
-spam a bulk endpoint with 0-length requests.
+user@host:~/linux/kernel/linux_torvalds$ git bisect log
+git bisect start
+# bad: [ac9a78681b921877518763ba0e89202254349d1b] Linux 6.4-rc1
+git bisect bad ac9a78681b921877518763ba0e89202254349d1b
+# good: [c9c3395d5e3dcc6daee66c6908354d47bf98cb0c] Linux 6.2
+git bisect good c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
+# good: [85496c9b3bf8dbe15e2433d3a0197954d323cadc] Merge branch 
+'net-remove-some-rcu_bh-cruft'
+git bisect good 85496c9b3bf8dbe15e2433d3a0197954d323cadc
+# good: [b68ee1c6131c540a62ecd443be89c406401df091] Merge tag 'scsi-misc' 
+of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
+git bisect good b68ee1c6131c540a62ecd443be89c406401df091
+# bad: [888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0] Merge tag 
+'sysctl-6.4-rc1' of 
+git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux
+git bisect bad 888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0
+# good: [34b62f186db9614e55d021f8c58d22fc44c57911] Merge tag 
+'pci-v6.4-changes' of git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci
+git bisect good 34b62f186db9614e55d021f8c58d22fc44c57911
+# good: [34da76dca4673ab1819830b4924bb5b436325b26] Merge tag 
+'for-linus-2023042601' of 
+git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid
+git bisect good 34da76dca4673ab1819830b4924bb5b436325b26
+# good: [97b2ff294381d05e59294a931c4db55276470cb5] Merge tag 
+'staging-6.4-rc1' of 
+git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging
+git bisect good 97b2ff294381d05e59294a931c4db55276470cb5
+# good: [2025b2ca8004c04861903d076c67a73a0ec6dfca] mcb-lpc: Reallocate 
+memory region to avoid memory overlapping
+git bisect good 2025b2ca8004c04861903d076c67a73a0ec6dfca
+# bad: [d06f5a3f7140921ada47d49574ae6fa4de5e2a89] cdx: fix build failure 
+due to sysfs 'bus_type' argument needing to be const
+git bisect bad d06f5a3f7140921ada47d49574ae6fa4de5e2a89
+# good: [dcfbb67e48a2becfce7990386e985b9c45098ee5] driver core: class: 
+use lock_class_key already present in struct subsys_private
+git bisect good dcfbb67e48a2becfce7990386e985b9c45098ee5
+# bad: [6f14c02220c791d5c46b0f965b9340c58f3d503d] driver core: create 
+class_is_registered()
+git bisect bad 6f14c02220c791d5c46b0f965b9340c58f3d503d
+# good: [2f9e87f5a2941b259336c7ea6c5a1499ede4554a] driver core: Add a 
+comment to set_primary_fwnode() on nullifying
+git bisect good 2f9e87f5a2941b259336c7ea6c5a1499ede4554a
+# bad: [02fe26f25325b547b7a31a65deb0326c04bb5174] firmware_loader: Add 
+debug message with checksum for FW file
+git bisect bad 02fe26f25325b547b7a31a65deb0326c04bb5174
+# good: [884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82] driver core: class: 
+implement class_get/put without the private pointer.
+git bisect good 884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82
+# bad: [3f84aa5ec052dba960baca4ab8a352d43d47028e] base: soc: populate 
+machine name in soc_device_register if empty
+git bisect bad 3f84aa5ec052dba960baca4ab8a352d43d47028e
+# bad: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver core: class.c: 
+convert to only use class_to_subsys
+git bisect bad 7b884b7f24b42fa25e92ed724ad82f137610afaf
+# first bad commit: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver 
+core: class.c: convert to only use class_to_subsys
+user@host:~/linux/kernel/linux_torvalds$
 
-I wrote a script to detect abrupt size changes in uvc frames on the
-host. In my two hours of testing with the above patch, I've recorded
-only one "short" frame.
-```
-[616677.453290] usb 1-6: frame 1 stats: 0/31/31 packets, 0/0/0 pts
-(!early !initial), 30/31 scr, last pts/stc/sof 0/4055830784/1298
-[617701.585256] usb 1-6: frame 30594 stats: 0/1/1 packets, 0/0/0 pts
-(!early !initial), 0/1 scr, last pts/stc/sof 0/1677462368/2636
-[617701.621240] usb 1-6: frame 30596 stats: 0/32/32 packets, 0/0/0 pts
-(!early !initial), 31/32 scr, last pts/stc/sof 0/1679244656/2933
-```
-First log is when streaming starts (abrupt change from 0 to 31).
-Frame 30594 had only 1 packet for some reason  (I couldn't capture
-gadget logs at the time :/), but the stream recovered after one
-skipped frame.
+Have a nice day and God bless.
 
-Will leave the script running overnight, and report back if there's
-anything significant there.
-
-- Avi.
+Best regards,
+Mirsad
