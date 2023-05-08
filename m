@@ -2,87 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 158736FBA1B
-	for <lists+linux-usb@lfdr.de>; Mon,  8 May 2023 23:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2043E6FBA22
+	for <lists+linux-usb@lfdr.de>; Mon,  8 May 2023 23:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbjEHVnC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 May 2023 17:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
+        id S230101AbjEHVpB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 May 2023 17:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjEHVnA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 17:43:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDBC49CF
-        for <linux-usb@vger.kernel.org>; Mon,  8 May 2023 14:41:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683582061;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SbaY/+tG3VKfkc100DquRuCLrkw9MdA9beMhNTT5GyA=;
-        b=WH/lcgnXiB9uSe4bLJB1wpij5nSp/1IbBo8kcN3skPuhRvdezgW+xlCMwU3QQXkFx3bi90
-        fpqyczscl2cIv+yrtmX4s4+q+OCUZgt6rvQaeCxGZRiOL8Mo42N8jRzt04eqhmhBq4c+zu
-        Ow0UqEoLzYG2995WDQRwqlMGVNL2N4c=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-580-dv2OPDmOMzucMoBkarLS3g-1; Mon, 08 May 2023 17:37:06 -0400
-X-MC-Unique: dv2OPDmOMzucMoBkarLS3g-1
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-24e3f2bff83so2801279a91.2
-        for <linux-usb@vger.kernel.org>; Mon, 08 May 2023 14:37:05 -0700 (PDT)
+        with ESMTP id S234230AbjEHVo4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 17:44:56 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3875BDC
+        for <linux-usb@vger.kernel.org>; Mon,  8 May 2023 14:44:55 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-643842c87dbso5118902b3a.1
+        for <linux-usb@vger.kernel.org>; Mon, 08 May 2023 14:44:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683582295; x=1686174295;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YWAqI/Kk7C1aWuQUx3p0nPdIT/a5Kqtc/ZwtQTnIWi4=;
+        b=7kGs2scBYldQX+e+k2+m1q6fU/9c9u6Vb1STUfW0e1BlcplFBmLBusMn2WStRMaf/q
+         sDAJO5hcwd7J7ZOIW+DkVpSUtojg1OfxSIMuT17etWTdyr+NBdFb2taBNCBTNN9t/YCV
+         j1TQTmlLCc2gIydnSJFQOsbiDBghwfZBZ3mtz5XNN4MTKct/vxS6dL30ngBYPtIh1d/A
+         jOFXWgTnZLKRG0ha1QKL+yqW91DtGOlvfHFxk12e4bWsYfUSwnPkXFZaqLi/drexzaqQ
+         v+4tA/R/ZBRFWxjBynQJynJRKBjrvtjpmgHMMwXcO4U1z8n5GqbHgRd8YsYCtAaQ8Y2v
+         JDTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683581825; x=1686173825;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SbaY/+tG3VKfkc100DquRuCLrkw9MdA9beMhNTT5GyA=;
-        b=l7qTsVWSYCBHt0XBbRwvYlMJQgULE1fIaLGEwQ6l68xP/dTBiZ3oEUZsmkHuwYlGTN
-         l7CSFBYqYTcUMs4i0Zz9GPnAHvbL2/rtdBID6CS3coa+eH52Gtad1pdjIVO7cPsUfNV7
-         32xgA1BD7LyszfxYby0ef+zU2H9+VLZQwC+db+gcznXUwMOa4nHth0TaRBaSlOi+SgBR
-         npOc7ACDaO2+NzYCJ9aq8M1rftwXOwKhfFfmYzBsjewUAs8Q6TNuCpGhRScb1alyGsMc
-         w1fopocSXh2I7xtzQrZmjhbTDlgh+FJnpp+M70Or8mK5wMjzCeJ01tJaOzVqOvTfq2rZ
-         ijFA==
-X-Gm-Message-State: AC+VfDxShyrFTrogM+vCpLgUm+cCXxZvPsQNCBJ49mfLqn3esRx9Kyql
-        yvdDlqiIwvMvGz+RpavJj/wrlvcA/LxvYS78QkyC8XtZmxRGOaEdEEmi+4bR0LNwkBbBlGCc4vB
-        gTZC6qr9nDKEGvilBKp7l
-X-Received: by 2002:a17:90b:85:b0:24e:4350:cb50 with SMTP id bb5-20020a17090b008500b0024e4350cb50mr11893368pjb.29.1683581824915;
-        Mon, 08 May 2023 14:37:04 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7nKf1qYn8A5U44GBKxCnO/4AvQjaPfLG0Rt4rAZhAHdTrR5txTZCZtvxSUeejYPDf00CLB0Q==
-X-Received: by 2002:a17:90b:85:b0:24e:4350:cb50 with SMTP id bb5-20020a17090b008500b0024e4350cb50mr11893353pjb.29.1683581824527;
-        Mon, 08 May 2023 14:37:04 -0700 (PDT)
-Received: from ?IPV6:2001:4958:15a0:30:5835:5bd3:f0c8:e5ef? ([2001:4958:15a0:30:5835:5bd3:f0c8:e5ef])
-        by smtp.gmail.com with ESMTPSA id m187-20020a6326c4000000b00524dde7231dsm6819401pgm.9.2023.05.08.14.37.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 14:37:04 -0700 (PDT)
-Message-ID: <8019cf35-e631-0252-0d38-d2454f5f0e11@redhat.com>
-Date:   Mon, 8 May 2023 23:37:03 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: usbdev_mmap causes type confusion in page_table_check
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ruihan Li <lrh2000@pku.edu.cn>
-Cc:     syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Matthew Wilcox <willy@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-References: <000000000000258e5e05fae79fc1@google.com>
- <20230507135844.1231056-1-lrh2000@pku.edu.cn>
- <CA+CK2bBe2YKYM3rUTCnZ0RF=NFUR9VqO-QYn3ygPsFJWLY1MUA@mail.gmail.com>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <CA+CK2bBe2YKYM3rUTCnZ0RF=NFUR9VqO-QYn3ygPsFJWLY1MUA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        d=1e100.net; s=20221208; t=1683582295; x=1686174295;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YWAqI/Kk7C1aWuQUx3p0nPdIT/a5Kqtc/ZwtQTnIWi4=;
+        b=hznQAJ0fZcrEkpS7SEj+3/t8rHqRrtPpV27tt+fgrdElsHK2riKA/gGZIYqnuqfnOc
+         V/+r1ECvwGltVoKUydo2x+7J+pRUbYYWnyFxwBcDQU6HilXx0jNsYzkHX7yk1dTAKjww
+         EJZj8xHKPPlzaxx0esj8I/LNoejpbd2pKRRdGMdwzFkzaNhvs12rWeVluaFrzvY7ex/a
+         8W+2cYTgz7vv5kTI13YU/b6+YTxC4iulxOZBSTW9jYgPlycZY46V0by1fVKv6xz2XaOG
+         Gkyc3nNusAU82YK8IoeDhQ12yhotVBnfPCYgTtNwDJkMEekHWwYgtbBslQh/WI/F+u11
+         Vfgw==
+X-Gm-Message-State: AC+VfDwLBVcR+Dd2QAegWHattwinuobuWsoFA2egtGnDDZjNg/BtuckQ
+        TIVaIrPp31lwv+iFmGi9FXdSGBWECoQ=
+X-Google-Smtp-Source: ACHHUZ61341pA9qEScQl2VDXrr3EWfRPmN1j2nEY8MJxum0m00avLJW6vDpsnFV9QEBwWteJvfIlUv/R0zA=
+X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
+ (user=badhri job=sendgmr) by 2002:a05:6a00:d68:b0:643:6fa8:e7f4 with SMTP id
+ n40-20020a056a000d6800b006436fa8e7f4mr3494658pfv.0.1683582294746; Mon, 08 May
+ 2023 14:44:54 -0700 (PDT)
+Date:   Mon,  8 May 2023 21:44:43 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
+Message-ID: <20230508214443.893436-1-badhri@google.com>
+Subject: [PATCH v1] usb: typec: altmodes/displayport: fix pin_assignment_show
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rdbabiera@google.com, stable@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,119 +66,51 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 08.05.23 23:27, Pasha Tatashin wrote:
-> On Sun, May 7, 2023 at 9:58 AM Ruihan Li <lrh2000@pku.edu.cn> wrote:
->>
->> Hi all,
-> 
-> Hi Ruihan,
-> 
-> Thank you for bisecting, and great analysis of the problem.
-> 
->> Recently, syzbot reported [1] ("kernel BUG in page_table_check_clear"). After
->> some bisection, I found out that when usbdev_mmap calls remap_pfn_range on
->> kmalloc'ed memory, it causes type confusion between struct folio and slab in
->> page_table_check. As I will explain below, it seems that both usb-side and
->> mm-side need some fixes. So I have cc'd linux-usb and linux-mm here, as well
->> as their maintainers, to see whether there are any comments on the proposed
->> way to fix.
->>
->>   [1] https://lore.kernel.org/all/000000000000258e5e05fae79fc1@google.com/
->>
->> To handle mmap requests for /dev/bus/usb/XXX/YYY, usbdev_mmap first allocates
->> memory by calling usb_alloc_coherent and then maps it into the user space
->> using remap_pfn_range:
->>
->> static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
->> {
->>          // ...
->>          mem = usb_alloc_coherent(ps->dev, size, GFP_USER | __GFP_NOWARN,
->>                          &dma_handle);
->>          // ...
->>          if (hcd->localmem_pool || !hcd_uses_dma(hcd)) {
->>                  if (remap_pfn_range(vma, vma->vm_start,
->>                                      virt_to_phys(usbm->mem) >> PAGE_SHIFT,
->>                                      size, vma->vm_page_prot) < 0) {
->>                          // ...
->>                  }
->>          }
->>          // ...
->> }
->>
->> Note that in this case, we consider the DMA-unavailable scenario, which, to be
->> honest, is rare in practice. However, syzbot emulates USB devices using a
->> module named dummy_hcd, and since these devices are emulated, DMA is not
->> available at all.
->>
->> Meanwhile, usb_alloc_coherent calls hcd_buffer_alloc, which uses kmalloc for
->> memory allocation:
->>
->> void *hcd_buffer_alloc(
->>          struct usb_bus          *bus,
->>          size_t                  size,
->>          gfp_t                   mem_flags,
->>          dma_addr_t              *dma
->> )
->> {
->>          // ...
->>          if (!hcd_uses_dma(hcd)) {
->>                  *dma = ~(dma_addr_t) 0;
->>                  return kmalloc(size, mem_flags);
->>          }
->>          // ...
->> }
->>
->> However, during the update of the page table to map the kmalloc'd page into
->> the user space, page_table_check_set attempts to determine whether the page is
->> anonymous using PageAnon:
->>
->> static void page_table_check_set(struct mm_struct *mm, unsigned long addr,
->>                                   unsigned long pfn, unsigned long pgcnt,
->>                                   bool rw)
->> {
->>          // ...
->>          anon = PageAnon(page);
->>          for (i = 0; i < pgcnt; i++) {
->>                  // ...
->>                  if (anon) {
->>                          BUG_ON(atomic_read(&ptc->file_map_count));
->>                          BUG_ON(atomic_inc_return(&ptc->anon_map_count) > 1 && rw);
->>                  } else {
->>                          BUG_ON(atomic_read(&ptc->anon_map_count));
->>                          BUG_ON(atomic_inc_return(&ptc->file_map_count) < 0);
->>                  }
->>                  // ...
->>          }
->>          // ...
->> }
->>
->> This call to PageAnon is invalid for slab pages because slab reuses the bits
->> in struct page/folio to store its internal states, and the anonymity bit only
->> exists in struct page/folio. As a result, the counters are incorrectly updated
->> and checked in page_table_check_set and page_table_check_clear, leading to the
->> bug being raised.
-> 
-> We should change anon boolean to be:
-> 
-> anon = !PageSlab(page) && PageAnon(page);
-> 
-> This way, we will have a correct way to determine anon pages, and the
-> rest will fall into file_map_count. The file (non-anon) PTEs are OK to
-> be double mapped, so there won't be any problems from page_table_check
-> point of view even if it is a slab page.
+This patch fixes negative indexing of buf array in pin_assignment_show
+when get_current_pin_assignments returns 0 i.e. no compatible pin
+assignments are found.
 
+BUG: KASAN: use-after-free in pin_assignment_show+0x26c/0x33c
+...
+Call trace:
+dump_backtrace+0x110/0x204
+dump_stack_lvl+0x84/0xbc
+print_report+0x358/0x974
+kasan_report+0x9c/0xfc
+__do_kernel_fault+0xd4/0x2d4
+do_bad_area+0x48/0x168
+do_tag_check_fault+0x24/0x38
+do_mem_abort+0x6c/0x14c
+el1_abort+0x44/0x68
+el1h_64_sync_handler+0x64/0xa4
+el1h_64_sync+0x78/0x7c
+pin_assignment_show+0x26c/0x33c
+dev_attr_show+0x50/0xc0
 
-I'm surprised that we allow mapping slab pages to user space. I somehow 
-remember that this is a big no-no.
+Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
+Cc: stable@vger.kernel.org
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/usb/typec/altmodes/displayport.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Do we really want to allow that? Are there many such users or is this 
-the only one?
+diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+index 8f3e884222ad..66de880b28d0 100644
+--- a/drivers/usb/typec/altmodes/displayport.c
++++ b/drivers/usb/typec/altmodes/displayport.c
+@@ -516,6 +516,10 @@ static ssize_t pin_assignment_show(struct device *dev,
+ 
+ 	mutex_unlock(&dp->lock);
+ 
++	/* get_current_pin_assignments can return 0 when no matching pin assignments are found */
++	if (len == 0)
++		len++;
++
+ 	buf[len - 1] = '\n';
+ 	return len;
+ }
 
-If we do support it, we might want to update some PageAnon() checks in 
-mm/gup.c too to exclude slab pages ...
-
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
 -- 
-Thanks,
-
-David / dhildenb
+2.40.1.521.gf1e218fcd8-goog
 
