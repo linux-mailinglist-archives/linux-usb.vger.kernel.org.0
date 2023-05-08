@@ -2,83 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1986FA1A4
-	for <lists+linux-usb@lfdr.de>; Mon,  8 May 2023 09:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2FF66FA2A7
+	for <lists+linux-usb@lfdr.de>; Mon,  8 May 2023 10:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233587AbjEHHzC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 May 2023 03:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
+        id S233375AbjEHIzM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 May 2023 04:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233607AbjEHHy7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 03:54:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884AC1BFE
-        for <linux-usb@vger.kernel.org>; Mon,  8 May 2023 00:54:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D38E62045
-        for <linux-usb@vger.kernel.org>; Mon,  8 May 2023 07:54:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 81368C4339B
-        for <linux-usb@vger.kernel.org>; Mon,  8 May 2023 07:54:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683532497;
-        bh=HTbTDq4wDTKEdsxrhZLo7i/wX0h4Vpylwu2MEBU6E2A=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=A+HYZ1+kivp30BmiqJKlAXXP7E9wUNOgBJY2ySl5eF+Fi3HzGkdwz3r1cuj9FX3wB
-         mltCFGF0txAJa/xQ7nBupWwB4rh3UaCZ1QFy3LxZcQuti45L2LyZBWtzBTsquepzwG
-         clka43ZHc2QO8+Y79JI8HO77ne/N7Mc0U2MLhA/NRci5cToCBE25Ne0Cu/aCIkzIje
-         SpEjKQqtvkPMCWPv33VkhDwC6ZeGGKCFGXo2+rxybOReaSjliPW1Jk6ZqBYJr++/GF
-         El3vPoIi7SMGdglJK155aMvw5dACGfDhZx6YcnGnWG6fp2L72Q2orpRsJDV66idYTU
-         H3BNOIHXs13QA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 6B465C43143; Mon,  8 May 2023 07:54:57 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217242] CPU hard lockup related to xhci/dma
-Date:   Mon, 08 May 2023 07:54:57 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mathias.nyman@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217242-208809-8gcDDfh8VS@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217242-208809@https.bugzilla.kernel.org/>
-References: <bug-217242-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229491AbjEHIzK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 04:55:10 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577E44ED7;
+        Mon,  8 May 2023 01:55:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683536109; x=1715072109;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=AWmWl70RzQ8bynQO/SBe1KoPGhvlrfJclFBw3z2YPoI=;
+  b=OYDb/uzkTuOjm1WM9MTV4CVPGKgeVZGcXqLZ5XCRtgcG7vG+Tjfh/BHM
+   gj3VG+hOvDmbYOeNJHtnkbc844MwmJNdSZvKt/ScGJD/KAVLoQ1rEiaUv
+   M6LSR2R42JdJoYErpN/1WSq7j6ahbUzR1EPlzi7VFK/Q8PtesVfHt/Nq6
+   FU0AdUd+uqfBN3yiip7hkq60yqCNi98fOni9vXAYkLVcaC1C3ihZdiJUc
+   zk9g5qjEZksLQuKuzgvQhJ6iThYkaGwZ/s0Au7c/MrfVi0DyC2sDUVceq
+   5xxHw0RsZ1ur9Rf80BtFqZW6fFCEdS42KbG47hZAHUlhsN64+Bk3443Ev
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="377685270"
+X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
+   d="scan'208";a="377685270"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 01:55:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="872723153"
+X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
+   d="scan'208";a="872723153"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga005.jf.intel.com with ESMTP; 08 May 2023 01:55:02 -0700
+Message-ID: <06a03d3b-f1a1-8058-3b8c-c9786d66d3de@linux.intel.com>
+Date:   Mon, 8 May 2023 11:56:35 +0300
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Content-Language: en-US
+To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
+        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     tonywwang@zhaoxin.com, weitaowang@zhaoxin.com,
+        stable@vger.kernel.org
+References: <20230421203853.387210-1-WeitaoWang-oc@zhaoxin.com>
+ <20230421203853.387210-2-WeitaoWang-oc@zhaoxin.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v2 1/4] xhci: Add some quirks for zhaoxin xhci to fix
+ issues
+In-Reply-To: <20230421203853.387210-2-WeitaoWang-oc@zhaoxin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217242
+On 21.4.2023 23.38, Weitao Wang wrote:
+> Add a quirk XHCI_ZHAOXIN_HOST for zhaoxin xhci to fix issues,
+> there are two cases will be used.
+> - add u1/u2 support.
+> - fix xHCI root hub speed show issue in zhaoxin platform.
+> 
+> Add a quirk XHCI_ZHAOXIN_TRB_FETCH to fix TRB prefetch issue.
+> 
+> On Zhaoxin ZX-100 project, xHCI can't work normally after resume
+> from system Sx state. To fix this issue, when resume from system
+> sx state, reinitialize xHCI instead of restore.
+> So, Add XHCI_RESET_ON_RESUME quirk for zx-100 to fix issue of
+> resuming from system sx state.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+> ---
 
---- Comment #35 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-Thanks for testing the larger rework, no logs needed.
-Can I add "Tested-by: Miller Hunter <MillerH@hearthnhome.com>" tag to that
-series?
+I'd split this series into different logical parts:
 
---=20
-You may reply to this email to add a comment.
+patch 1/4
+   Set XHCI_RESET_ON_RESUME quirk to ZHAOXIN host to fix resume issue.
+   cc: stable
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+patch 2/4
+   Add XHCI_ZHAOXIN_TRB_FETCH quirk flag together with code that allocates double pages
+   cc: stable
+
+patch 3/4
+   Add XHCI_ZHAOXIN_HOST quirk flag together with code that corrects USB3 roothub minor version
+   cc: stable
+
+patch 4/4
+   Set XHCI_LPM_SUPPORT quirk together with code that sets tier policy and u1/u2 timeouts,
+   Don't add stable as this is about adding feature support.
+
+Thanks
+-Mathias
+
