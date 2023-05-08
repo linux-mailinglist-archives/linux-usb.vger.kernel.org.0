@@ -2,71 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD5DA6FAC3A
-	for <lists+linux-usb@lfdr.de>; Mon,  8 May 2023 13:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE536FAD7F
+	for <lists+linux-usb@lfdr.de>; Mon,  8 May 2023 13:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235596AbjEHLWK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 May 2023 07:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
+        id S235959AbjEHLfO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 May 2023 07:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233964AbjEHLWI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 07:22:08 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B092535B3E
-        for <linux-usb@vger.kernel.org>; Mon,  8 May 2023 04:22:03 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-55a829411b5so38835357b3.1
-        for <linux-usb@vger.kernel.org>; Mon, 08 May 2023 04:22:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683544923; x=1686136923;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ko/U1fePk/WQPy7Vn3m2ZCRRwSMISl8BqLJIER3u0Oc=;
-        b=lmH0XMw8PpvMAbg4bTIjxo7HrMUANXnsUFHAGj4B/mc9GFBCjA8omr6ylekmWkYkhn
-         6Z6uO30eTzH+govAWZABsibcAaCFm4bxOHizPQYwPIX998PelJ/aRHI9BhWZvuA/0RTc
-         L27hLqc7EVPLe5WpS1yCjZXfSORDmbnHsH9qYJsXK6gRuQDaVw1B4EQwt/WVy54savt8
-         CTObqlSg0mBBX9N4XY2o7IoofdceWwM2Jkgf9UH8/a8V3K9LECpbwxeAASI1HSGsnlDH
-         VWbxvbXnl6V4UczO1yrBQo5vMiRDzC1WnKLkdPf4o9OJNIQKVwjwFFVIYE4VMAJJp+gw
-         43lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683544923; x=1686136923;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ko/U1fePk/WQPy7Vn3m2ZCRRwSMISl8BqLJIER3u0Oc=;
-        b=FgkgsA/l5crwqcB2VNU1YXoFDPBEIomxyR3cjYrnN4pyXkDkdW/xkIxdsLm87wlc1A
-         SlhwNi2gW5w0Xb0Kyoe+jwA6duGafjSmyM/EvmxLQoyglX96myTkmn4pOYor4zjNY7qE
-         A+uVMP/3DDXBo/y0tKQIn3UM4cNKZWpqQSky1bY2dPwah31fua5uBeAGJumQy1DNgiYE
-         vCjJqYubzieVBoWH5S/q1Auto/38FtU87IZAj2WIgs1L4U6ARjFvyMyz3cKT07IDD45S
-         gGcdPeUEq2aMiBafHqcNm6mOmaZZ4umbXDJYileTP7rV8pE+S0KHMRoDocIREyZCasRJ
-         +PGg==
-X-Gm-Message-State: AC+VfDzZw6yqnFFpCgcF2RlSR4u8n+c3V9X8e+etczgLBZB9XbJfYNVV
-        7dPysgkrFcMyMqaVu8DdzUz3ue085aLsWd9MtA/txA==
-X-Google-Smtp-Source: ACHHUZ5au/Vo+wSxMFwJFjI/9KWWlfBLe/b0UuwxkO/sVsdYW6os9E+PkdqReYK5feb3ykElLiD8ESJVRHb4HRFlL5A=
-X-Received: by 2002:a25:d008:0:b0:b92:3958:dad9 with SMTP id
- h8-20020a25d008000000b00b923958dad9mr10268569ybg.40.1683544922857; Mon, 08
- May 2023 04:22:02 -0700 (PDT)
+        with ESMTP id S235948AbjEHLfB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 07:35:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933253DCB2;
+        Mon,  8 May 2023 04:34:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 148B363223;
+        Mon,  8 May 2023 11:34:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72F37C4339B;
+        Mon,  8 May 2023 11:34:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683545646;
+        bh=ZILwEctvAK18Hu7PlI1bveD9toRdgnBJ+HsGTT+MR2o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MnYZ8L4k2KG1HX52v5lWPCh69Y33RV3dEYpmXEuQ4LnfDqEayU0bhanLQ8PpxUGCD
+         q/Br9plvVRcCRjfZwXCM9Cpm/keXJf2w/gMpQXz9x//hxkur6ZDU+g1s4f849rQNhB
+         iRSalTnIxeWRZVbulB3xm/ueWXWqH6MryB3cKiuT3211/XS6gyGOUr+Kr0HBsEAlry
+         w4Gejl3Oea3kzYNwxOufZgyDo3PXtguZyYPCJdB5v+etjdvAgjJe9dhspQ811lmFoK
+         XFgbjLC0jEpGSQhhCqGkntcgCOCCKz8fNhlxZGcnzYxmHQiHglU2uYT4v3SGihXVk1
+         ZkxzYctQHHbnQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pvz8I-0002MF-La; Mon, 08 May 2023 13:34:23 +0200
+Date:   Mon, 8 May 2023 13:34:22 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v9] usb: dwc3: debugfs: Prevent any register access when
+ devices is runtime suspended
+Message-ID: <ZFjePu8Wb6NUwCav@hovoldconsulting.com>
+References: <20230505155103.30098-1-quic_ugoswami@quicinc.com>
+ <20230506013036.j533xncixkky5uf6@synopsys.com>
 MIME-Version: 1.0
-References: <cover.1683183860.git.quic_varada@quicinc.com> <8894bf2c44eaf4959c7a1966b66229e6cf5cda96.1683183860.git.quic_varada@quicinc.com>
- <CAA8EJppvj2nzqwdsC+Xct4cJg2-_yPpiGDELjHJG4HyAH3zGMA@mail.gmail.com>
- <20230506110918.GC10918@varda-linux.qualcomm.com> <CAA8EJpqg2htfa2QZ7q6SP58N5YAABa8knBn4c5eYqYOU6HQNiA@mail.gmail.com>
- <20230508051657.GA24472@varda-linux.qualcomm.com>
-In-Reply-To: <20230508051657.GA24472@varda-linux.qualcomm.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 8 May 2023 14:21:52 +0300
-Message-ID: <CAA8EJppubMsUrG3Vo=2W8Y6=MCBKd7OCViM30jdGAdCc8x65Ww@mail.gmail.com>
-Subject: Re: [PATCH v10 8/9] arm64: dts: qcom: ipq9574: Add LDO regulator node
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230506013036.j533xncixkky5uf6@synopsys.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,92 +64,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 8 May 2023 at 08:17, Varadarajan Narayanan
-<quic_varada@quicinc.com> wrote:
->
-> On Sat, May 06, 2023 at 02:33:11PM +0300, Dmitry Baryshkov wrote:
-> > On Sat, 6 May 2023 at 14:09, Varadarajan Narayanan
-> > <quic_varada@quicinc.com> wrote:
-> > >
-> > > On Fri, May 05, 2023 at 12:29:54PM +0300, Dmitry Baryshkov wrote:
-> > > > On Fri, 5 May 2023 at 11:23, Varadarajan Narayanan
-> > > > <quic_varada@quicinc.com> wrote:
-> > > > >
-> > > > > Add LDO regulator node
-> > > >
-> > > > As this LDO is provided by the PMIC, it would be nice to know why it
-> > > > is modelled as an always-on regulator instead of the proper PMIC
-> > > > regulator. Up to now we were doing this only for the outstanding power
-> > > > rails like CX/MX or EBI.
-> > >
-> > > These are always ON because USB phy doesn't support power
-> > > collapse, and there is a chance that other IP blocks might be
-> > > sharing the rail.
-> >
-> > You are describing the software side here. From the hardware point of
-> > view, it is an I2C regulator, which is probably also exported as an
-> > SMD_RPM regulator. Unless you have a good reason not to do so, there
-> > should be a node under rpm-requests, which describes mp5496 regulators
-> > exported via RPM. then USB should refer to those regulators.
->
-> Yes. It is a part of rpm-requests. That is why have mentioned V10
-> is dependent on
-> https://lore.kernel.org/lkml/20230407155727.20615-1-quic_devipriy@quicinc.com/T/.
-> The 4th patch of the above series
-> (https://lore.kernel.org/lkml/20230407155727.20615-1-quic_devipriy@quicinc.com/T/#mea3f0ea37c53cf5e39e10cd6cf3bed5243cec629)
-> adds the rpm_requests node and this regulator definition is added
-> to it. Hope that is ok.
+On Sat, May 06, 2023 at 01:30:52AM +0000, Thinh Nguyen wrote:
 
-It is fine. Most probably I was mistaken by the patch itself. Please
-excuse me. If this this is an RPM regulator, it's is fine and correct.
+Udipto, looks like you just ignored my comment about fixing up the patch
+Subject.
 
->
-> Thanks
-> Varada
->
-> > > > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > > > > ---
-> > > > >  Changes in v10:
-> > > > >         - Add LDO regulator node
-> > > > > ---
-> > > > >  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 7 +++++++
-> > > > >  1 file changed, 7 insertions(+)
-> > > > >
-> > > > > diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> > > > > index bdc1434..1f5d14f 100644
-> > > > > --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> > > > > +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> > > > > @@ -60,6 +60,13 @@
-> > > > >                         regulator-min-microvolt = <725000>;
-> > > > >                         regulator-max-microvolt = <1075000>;
-> > > > >                 };
-> > > > > +
-> > > > > +               mp5496_l2: l2 {
-> > > > > +                       regulator-min-microvolt = <1800000>;
-> > > > > +                       regulator-max-microvolt = <1800000>;
-> > > > > +                       regulator-boot-on;
-> > > > > +                       regulator-always-on;
-> > > > > +               };
-> > > > >         };
-> > > > >  };
-> > > > >
-> > > > > --
-> > > > > 2.7.4
-> > > > >
-> > > >
-> > > >
-> > > > --
-> > > > With best wishes
-> > > > Dmitry
-> >
-> >
-> >
-> > --
-> > With best wishes
-> > Dmitry
+> On Fri, May 05, 2023, Udipto Goswami wrote:
+> > When the dwc3 device is runtime suspended, various required clocks would
+> > get disabled and it is not guaranteed that access to any registers would
+> > work. Depending on the SoC glue, a register read could be as benign as
+> > returning 0 or be fatal enough to hang the system.
+> > 
+> > In order to prevent such scenarios of fatal errors, make sure to resume
+> > dwc3 then allow the function to proceed.
+> > 
+> > Fixes: 62ba09d6bb63 ("usb: dwc3: debugfs: Dump internal LSP and ep registers")
+> 
+> This fix goes before the above change.
 
+Yes, this clearly is not the commit that first introduced this issue.
 
+Either add a Fixes tag for the oldest one or add one for each commit
+that introduced debugfs attributes with this issues.
 
--- 
-With best wishes
-Dmitry
+> This also touches on many places and is more than 100 lines. While this
+> is a fix, I'm not sure if Cc stable is needed. Perhaps others can
+> comment.
+
+I believe this should be backported as it fixes a crash/hang.
+
+The stable rules are flexible, but it may also be possible to break the
+patch up in pieces and add a corresponding Fixes tag.
+
+Johan
