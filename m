@@ -2,146 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614136FAFB4
-	for <lists+linux-usb@lfdr.de>; Mon,  8 May 2023 14:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 102466FB145
+	for <lists+linux-usb@lfdr.de>; Mon,  8 May 2023 15:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233651AbjEHMOZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 May 2023 08:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
+        id S234108AbjEHNSj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 May 2023 09:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232700AbjEHMOX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 08:14:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E502037C4C;
-        Mon,  8 May 2023 05:14:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A4C8615DB;
-        Mon,  8 May 2023 12:14:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6775DC433D2;
-        Mon,  8 May 2023 12:14:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1683548061;
-        bh=s0zYPiwZHS3OcIOtGvMLCWYR3x28j1/vGt0bpuO02PQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SuLyFmnRPQ8HSTYXu5AEsp6Wn/XI0ma1kVo03Q2oUu5rViW7vpjzFgMROC6KfpkWx
-         xpmMeiH6AoSvPF9m3iMbvxaIBcIRZdluEruwSt7zYdONg8UeKo2FMGPIZD99W+CDWT
-         StIYIPqp9Q+Z4iFKaEG4J8lxlI7rNvBx8N2paQl0=
-Date:   Mon, 8 May 2023 14:14:18 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     AKASH KUMAR <quic_akakum@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Jing Leng <jleng@ambarella.com>,
-        Pratham =?iso-8859-1?Q?Pratap=A0?= <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_uac2: uevent changes for uac2
-Message-ID: <2023050801-handshake-refusing-0367@gregkh>
-References: <20230508120535.31472-1-quic_akakum@quicinc.com>
+        with ESMTP id S232166AbjEHNS1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 09:18:27 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E9239BB1;
+        Mon,  8 May 2023 06:18:01 -0700 (PDT)
+Received: from booty (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id EB4B1E0002;
+        Mon,  8 May 2023 13:17:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1683551879;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=enm7EUfHqK7UBTbWSYhTmWN9a9/L22u9i8BI5feMG94=;
+        b=Of7X0Z3DotjRgU4wcDZNoyGeTSdaFfmz+q/cvFxbAAXxtf6DzzzAOmH0SFmG8LHGNjMaIl
+        upaEzzwS6gVAklDTj1GYc4RJiz0U3F4hY97GITjAN/q53Q2lSyHvKaa1ofI/YFlgYBhQUX
+        i+mkNoPIpqnc0SICMCAMvpUAoaGv0j16qAEVDcpZM8qVIfv71xDUJUcywS4jD9matvduva
+        d3M95MQ5DIggZAl85FcI+TZyJ4VzAu6ZG096iZpRbIiq+7Ns3DlfNckwocWVca3VOUk9h7
+        5KfOHrT4vhdkxfxV288snNHVv6pRSgAqgXjXMQ0r51GcEE/mG10QRMT/1KX7vQ==
+Date:   Mon, 8 May 2023 15:17:56 +0200
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Francesco Dolcini <francesco@dolcini.it>
+Cc:     Jun Li <jun.li@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Xu Yang <xu.yang_2@nxp.com>
+Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
+Message-ID: <20230508151756.785ec07e@booty>
+In-Reply-To: <ZFjaNzY32x8o2XG7@francesco-nb.int.toradex.com>
+References: <23672d66d229d3be4cc854ddf1462c3507f1c2fc.camel@toradex.com>
+        <20230504162312.1506763-1-luca.ceresoli@bootlin.com>
+        <ZFPiRvoF5l8uGzzZ@francesco-nb.int.toradex.com>
+        <PA4PR04MB96403377F5E37C12AD8C25B389729@PA4PR04MB9640.eurprd04.prod.outlook.com>
+        <20230505120618.2f4cf22c@booty>
+        <ZFThyn/D/dDK9nk3@francesco-nb.int.toradex.com>
+        <PA4PR04MB96405EE2468555EA900B340189739@PA4PR04MB9640.eurprd04.prod.outlook.com>
+        <ZFjaNzY32x8o2XG7@francesco-nb.int.toradex.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508120535.31472-1-quic_akakum@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 08, 2023 at 05:35:35PM +0530, AKASH KUMAR wrote:
-> Adding uvent from usb audio gadget driver for
+Hello Jun, Francesco,
 
-What is a "uvent"?
+On Mon, 8 May 2023 13:17:11 +0200
+Francesco Dolcini <francesco@dolcini.it> wrote:
 
-> uac2 playback/capture events, which userspace reads
-> and later reads sysfs entry to know if playback
-> or capture has stopped or started by host
-> application.
-
-Please use your full 72 columns please.
-
+> On Sat, May 06, 2023 at 09:02:39AM +0000, Jun Li wrote:
+> > > -----Original Message-----
+> > > From: Francesco Dolcini <francesco@dolcini.it>
+> > > Sent: Friday, May 5, 2023 7:00 PM
+> > > To: Luca Ceresoli <luca.ceresoli@bootlin.com>; Jun Li <jun.li@nxp.com>
+> > > Cc: Francesco Dolcini <francesco@dolcini.it>; devicetree@vger.kernel.org;
+> > > festevam@gmail.com; gregkh@linuxfoundation.org; kernel@pengutronix.de;
+> > > linux-arm-kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>;
+> > > linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org;
+> > > peter.chen@nxp.com; robh+dt@kernel.org; s.hauer@pengutronix.de;
+> > > shawnguo@kernel.org; Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>;
+> > > Francesco Dolcini <francesco.dolcini@toradex.com>
+> > > Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
+> > > 
+> > > On Fri, May 05, 2023 at 12:06:18PM +0200, Luca Ceresoli wrote:  
+> > > > On Fri, 5 May 2023 09:49:16 +0000
+> > > > Jun Li <jun.li@nxp.com> wrote:  
+> > > > > Is your board design similar like Francesco's as below?  
+> > > >
+> > > > Possibly, but I'm afraid I can't say: I am using the Toradex Colibri
+> > > > i.MX6ULL SoM, whose schematics are not public.  
+> > > 
+> > > I can confirm that it's the same.  
+> > 
+> > Thanks Francesco for the confirmation, had a check with design team,
+> > there is no status bit which can be used to judge the VDD_USB_CAP is
+> > powered or not, so we have to add a board level dts property to tell
+> > this usb phy driver to bypass MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS.
+> > 
+> > Before send a formal patch, I want to confirm this should work for your
+> > HW design, like below simple hack:  
 > 
-> /config/usb_gadget/g1/functions/uac2.0 # cat c_status
-> 1  --> capture started
-> 0  --> capture stopped
-> /config/usb_gadget/g1/functions/uac2.0 # cat p_status
-> 1 --> playback started
-> 0 --> playback stopped
+> Thanks Li Jun, I tested it with v6.3.1 kernel and it's all good.
+> I would be happy to test the patch as soon as you send it.
 
-You need to document these new files in Documentation/ABI/ right?
+Thanks Jun, it works here as well, on 6.1.27!
 
-> 
-> Signed-off-by: AKASH KUMAR <quic_akakum@quicinc.com>
+Best regards,
+Luca
 
-No need to UPPER CASE your name :)
-
-> ---
->  drivers/usb/gadget/function/f_uac2.c | 57 ++++++++++++++++++++++++++++
->  drivers/usb/gadget/function/u_uac2.h |  7 ++++
->  2 files changed, 64 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-> index 0219cd79493a..d0a5fa6b49b8 100644
-> --- a/drivers/usb/gadget/function/f_uac2.c
-> +++ b/drivers/usb/gadget/function/f_uac2.c
-> @@ -1423,6 +1423,8 @@ afunc_set_alt(struct usb_function *fn, unsigned intf, unsigned alt)
->  	struct usb_gadget *gadget = cdev->gadget;
->  	struct device *dev = &gadget->dev;
->  	int ret = 0;
-> +	struct f_uac2_opts *audio_opts =
-> +		container_of(fn->fi, struct f_uac2_opts, func_inst);
->  
->  	/* No i/f has more than 2 alt settings */
->  	if (alt > 1) {
-> @@ -1454,6 +1456,7 @@ afunc_set_alt(struct usb_function *fn, unsigned intf, unsigned alt)
->  			ret = u_audio_start_capture(&uac2->g_audio);
->  		else
->  			u_audio_stop_capture(&uac2->g_audio);
-> +		audio_opts->c_status = alt;
->  	} else if (intf == uac2->as_in_intf) {
->  		uac2->as_in_alt = alt;
->  
-> @@ -1461,10 +1464,14 @@ afunc_set_alt(struct usb_function *fn, unsigned intf, unsigned alt)
->  			ret = u_audio_start_playback(&uac2->g_audio);
->  		else
->  			u_audio_stop_playback(&uac2->g_audio);
-> +		audio_opts->p_status = alt;
->  	} else {
->  		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
->  		return -EINVAL;
->  	}
-> +#ifdef CONFIG_USB_CONFIGFS_UEVENT
-> +	schedule_work(&audio_opts->work);
-> +#endif
-
-Why the #ifdef?  Please never do that in .c files if at all possible.
-
->  
->  	return ret;
->  }
-> @@ -1493,9 +1500,17 @@ static void
->  afunc_disable(struct usb_function *fn)
->  {
->  	struct f_uac2 *uac2 = func_to_uac2(fn);
-> +	struct f_uac2_opts *audio_opts =
-> +		container_of(fn->fi, struct f_uac2_opts, func_inst);
->  
->  	uac2->as_in_alt = 0;
->  	uac2->as_out_alt = 0;
-> +	audio_opts->p_status = 0;//alt;
-> +	audio_opts->c_status = 0; //alt;
-> +
-> +#ifdef CONFIG_USB_CONFIGFS_UEVENT
-> +	schedule_work(&audio_opts->work);
-> +#endif
-
-Same here and elsewhere in this patch.
-
-thanks,
-
-greg k-h
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
