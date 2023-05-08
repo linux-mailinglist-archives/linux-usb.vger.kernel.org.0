@@ -2,276 +2,296 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CA76FB242
-	for <lists+linux-usb@lfdr.de>; Mon,  8 May 2023 16:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E3C6FB281
+	for <lists+linux-usb@lfdr.de>; Mon,  8 May 2023 16:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234401AbjEHOJZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 May 2023 10:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
+        id S234557AbjEHOX0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 May 2023 10:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234292AbjEHOJY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 10:09:24 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2044.outbound.protection.outlook.com [40.107.92.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D264116357;
-        Mon,  8 May 2023 07:09:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lOWpIeOM+cEK9Jd0wYil5/IDo+MHd+jUUDBPZOfB8BZtwXwPs7rw+81Jtfy4/7rtUKPKoT7DiSWDfutl2h9jvUPRBJR2koRI40vJmKtu5CQunDNYClGWchUOefg9efe0akU3YpPZav3pIyhjgINrMMq1P1ANTbT7zQPWYZ++10eS6p+GwUoSsTEfmAvK/GAqr/zSUUnZh91GmqTTydAbG14wkB1Q45nufJhp9uAdrpYoB9cn+Z5dTJ/syI1aF376z3bGcfHMgA2ZU3T1PgB07zAPujvhy83m7Z4P6PItkNnfAvn2v/v2lYXx8KehoJFsQW1DvnT0RgP73igLO6Ruxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UFKVxYvbrwJ0hFoV6+HJePhZHF0GEvxrSdFoZRkiW7A=;
- b=DHImhw71PdYGNTuNJZj9OiyGo+m5aFRxwXp+dmnkDrxk+lqsoWE1ThUJQWSYtWKKOdsx2tOGSONP0qsyI17DHHvciSk4yGXb6D57+a4W9rKsbsHR+n8Xww4D8N0fk5phDb7DNUXd9JXKGg/usxCq4eH+o11rZMoHWvFwUeKWxmIGBuESZiwVtpxTsXbby5nJIsGRBvOSvaA4FTGxJsJf2lxzyNkOc3EbuvQrBiVq9Ok8F2lq7utXEFS4uvWpzGuAI4LJRaOQ1YS1BXLwdfWRimnHme5HLFa8cujYPEhdw4HSplIVNNtQBrvP+2tiNqaisFH+0xLOhZVBmYznwOCeOg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UFKVxYvbrwJ0hFoV6+HJePhZHF0GEvxrSdFoZRkiW7A=;
- b=TWmpMWbUiYgd3Nv+BIRrY2Viucj51BXj4965Y7F2UH+abblTyzuBOLP6wO3pJmpXlmOwg6kCnA8NDwg8IGthFskREz4y4OgLO9qE/7daA+q+kOpafSiHSLufAm5TpGgp99rC6i/3YvcLM3x9O5wA+cHQ99AAK0ZxW+j078V+ebM=
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by CH2PR12MB4875.namprd12.prod.outlook.com (2603:10b6:610:35::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Mon, 8 May
- 2023 14:09:17 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::3f45:358e:abba:24f5]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::3f45:358e:abba:24f5%3]) with mapi id 15.20.6363.032; Mon, 8 May 2023
- 14:09:17 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-CC:     "S, Sanath" <Sanath.S@amd.com>,
-        "Gong, Richard" <Richard.Gong@amd.com>,
-        "Mehta, Sanju" <Sanju.Mehta@amd.com>, Takashi Iwai <tiwai@suse.de>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 1/2] thunderbolt: Clear registers properly when auto
- clear isn't in use
-Thread-Topic: [PATCH v2 1/2] thunderbolt: Clear registers properly when auto
- clear isn't in use
-Thread-Index: AQHZdubWCKo2G26emki2NBlh5J/tta9Qfznw
-Date:   Mon, 8 May 2023 14:09:17 +0000
-Message-ID: <MN0PR12MB61019560E0A264485B46CB27E2719@MN0PR12MB6101.namprd12.prod.outlook.com>
-References: <20230424195556.2233-1-mario.limonciello@amd.com>
-In-Reply-To: <20230424195556.2233-1-mario.limonciello@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=79df7a3e-df01-4c8a-b9f5-0a3dae7012f8;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-05-08T14:08:07Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR12MB6101:EE_|CH2PR12MB4875:EE_
-x-ms-office365-filtering-correlation-id: b6c66e3d-79dd-472a-bb9b-08db4fcdcfe9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: rpRJPsfLfuPP59evWlR23ye9SHnbjmBoMuuqTp91CC9Etf1lSOXCXGO/n9wOQVoyJI7/XOHpdt9oaowIASi7tZHD32o/4PclZqJhh6jpe3JQqEW3H7ioLslAzRW2xRdLuopIml+x05bBo8nl3QpKGAkrxT01g8xWb+eU9SMzDv1Zu9Inx8YkXYkR3b03gdqdvZ/QgN7cXTXzFezYcx2Vrd83Xywqm8XgV8Yf3u9bSOOQ96+kLSFwi7nzfsoACGMIrv5ds1DBMR68j+jSKC1Qd0DQRECdtSCUrY8SgUdAypX/Q6/lNNJW8me1yow2CsrzsSfMG4vVfmcUjr5Q9lj5ksV/zb1XAipTG/vbJ/v1FVXToc3DAcBc+f13NCWYle+mlfLyocG9L8ao48TmoiFSvb27r2wyPGv+qfIhDb6h4IO/wDc2d5jXh4eMn8oGAAxC3w7D1/w5QrnrreEFDn5UxlnxVDjgoOQBoBc2gXqDAEtM30UdBI2GJIHIAcmVhaL9sjVG74+/CC9+W98Drha5kPPgZypkrI4abOccqVUH9hQzhtA8WTN6NhBavoVElGkTzJGZVaaxAxEj8lZrhvPHDKFdZM7G8s7FK6dErsZ+PVo=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(136003)(396003)(346002)(376002)(451199021)(86362001)(66446008)(33656002)(966005)(316002)(54906003)(110136005)(64756008)(4326008)(76116006)(66476007)(66556008)(7696005)(66946007)(478600001)(55016003)(52536014)(8676002)(2906002)(8936002)(5660300002)(41300700001)(71200400001)(38070700005)(122000001)(38100700002)(186003)(53546011)(6506007)(26005)(9686003)(83380400001)(84970400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?2HhABJi8k3aKHJJD4lZk0FhgYI1VBLQfHhWIk1MHf58vOVS27fclI3bT8D6H?=
- =?us-ascii?Q?+Bn9mxQePBRknbAY/Dm8Ta51XEcKkZZzTQ12f4PuPdW1wfZ3H/stGgV+r7OS?=
- =?us-ascii?Q?yWQbZD70zsZAuDEl6H1Aue6UQfFqntIEGE5LaQn6VRExHcgbwTIasC2h6Lqk?=
- =?us-ascii?Q?bOYFisn0g1Tx+EC4ZfL7s0k32z/eRFZRziIkUy7kpPJXlmQafRjgLHdWEuN3?=
- =?us-ascii?Q?F9kIRKOIYzUh0EgF8svd494CRzd1Xe3kesbDEC/Yjlud0YWN+uAi+2EHZwui?=
- =?us-ascii?Q?NwRpW3ljn/YGjI8Nc3xh2cemcmVgxrCCQeNILy/MlJ5//3TQ5YXlj8MaXnP1?=
- =?us-ascii?Q?LHyT8GilGD7sIMLmhwT0eC2PBHkYLCtc9eEYK3grtnYrnbGGgYHBHpibzbhD?=
- =?us-ascii?Q?UH+Bd6gb/k9iCnX0gSMJhK0s5IvKq+i/ID5WKVFBfRU9P+PiVm41fInXVX3d?=
- =?us-ascii?Q?j02BAjazurMYtKFAwHCpn2+rYktCdc4qdRJWKd94a/wu7aWWYDX0WmsGD0OC?=
- =?us-ascii?Q?gYdfZgDu/5ohGAijT34F0LT50aeVkMqFTJJDw9UyPLZVkXY2oRXc+kN6zqRl?=
- =?us-ascii?Q?zzEOxmbIvmUKX4SVuMCGqOsCR5qIWsxyFEEu8G5STxCMC+hdB9h6pnFH4678?=
- =?us-ascii?Q?jDRYKAiaqwoCNSUwMFOLtsZfnx0/MjM0wBdP/Z9NtndLuuKDUT6u91yj6w42?=
- =?us-ascii?Q?QyK6D38TEjN8R80fE9c13k5gY1IIt3Ec9uKmC9BS3K4B7b4ynEADv74kkq1F?=
- =?us-ascii?Q?I+t0hDsxpMMIN1gq0hiP+VNYavKhcI8L7CVd3bTyIjqPxTyudcaBdUCWgGCk?=
- =?us-ascii?Q?LjP/bhS8wEm9D2zzKbn5ALkFyVymp86NPUKPBVSkahfpkNXpPS6Isl0JljVN?=
- =?us-ascii?Q?tS/VebzCQhH3I8dIe6MFYdVybhCeCqBo0XnzprFK8JsIX5bwrDh8cQ2uNUJT?=
- =?us-ascii?Q?S29/BG/CdECsFJICb2GNgiyNsDrSegVWf5rueGAi433An2ea3B/v54YUlJRc?=
- =?us-ascii?Q?lNggmZClvs9fZeMDoGMvv2P3RRTMiwwJBe8mLFURm8/Ivvi0ZHLpEsg4V2MN?=
- =?us-ascii?Q?0jMg2hHXDCY7Wi0INGzRtn/i8q5sjLDBsAhfAmnaa3dZ6qOohWknq1RGUnOw?=
- =?us-ascii?Q?HUfxD9mmf28oyXIiCq0d8/Ki5NCUFFfU0MLhkKNKbWjbWdqeCriMxUtewhfx?=
- =?us-ascii?Q?qfcn8NnKUO74eR0K20klKKZKC0N5l2M7v7ChwYXkVhjHh4IVgQPFZt8Ll++I?=
- =?us-ascii?Q?U8s9X2rI1BaOcz6nHdlOIBgz6sCVR03kaFYLaTDW1iYI/Tq3Z3sMp1UvXxzQ?=
- =?us-ascii?Q?q2qSo5bwJUnhXwl/wkl3gW5pb7vY3Zlb5bKLLnu+4o6mmjIEsWN+zyIBefud?=
- =?us-ascii?Q?br1j42ChF47dYXm28KhEAlnA1jin8QGKXvys/utUg1moGlb5NUsyporseaH0?=
- =?us-ascii?Q?ATTLaNom2Euuk8jZZZ08ny4RB8U6Xx/b2lGND6g5okVWXQfLQyk/5QGy/IGM?=
- =?us-ascii?Q?AzxFv+c6hk16fRUmNIowu2iMgE84FGfvhYYbh88Wfne7MJW/ScvTZzVRYHpQ?=
- =?us-ascii?Q?degvXTCn2YGRnCATppc=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S234548AbjEHOXZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 10:23:25 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A0F1BD8
+        for <linux-usb@vger.kernel.org>; Mon,  8 May 2023 07:23:19 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f19323259dso46760935e9.3
+        for <linux-usb@vger.kernel.org>; Mon, 08 May 2023 07:23:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683555798; x=1686147798;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9G1leSGGglMdHgO7DDdvTpSALWNAimDPzEUF6uwyp4I=;
+        b=k9OQsnGndg/I3ixOlbXuY4Ebpreh+Dqad/P+GTsOmi9voRIR57U1oisTqRWZvneoh+
+         jnSjPy4SD/rQbCnuqp3/aCVLk3aq3OGtjFsrkCOmI71HHC/SHcfOq19scCLXhs/zqSXi
+         1k7usU1eFGGkYU4kWseGy3XzRbpyzF0DEcX+a8YtMhnyPLZTb5WHlxFsbqj2PY8cY9bC
+         ntKb0yyetNe7YhTl7QqpysAkxIg+XTw7zv16p6U4ZYjn0K7eUmeynTGszubV43OoOYjt
+         ZEbPUyVY/TLxtlOpuqzFeCVcTVuxRSmF8FRfMtV19wd90lZk6eqaMkit/O8BsNjra3BQ
+         +VCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683555798; x=1686147798;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9G1leSGGglMdHgO7DDdvTpSALWNAimDPzEUF6uwyp4I=;
+        b=dmS09oG01mHpFqM5+gWUSsgciEw2f5F34AoMOvFqnwft+Lyks7sncTWONWXcDP9HX8
+         maRLRzuAiD2Zr/OQCuMZaeQaJ+Yq2f7orJsKOoaxOI7v+98Z3dv5Grtquz8xVVeR43mv
+         BCuszec51EyLiOQABFKxy9gmcQ85pJCBHyWdv65U/9T/TEPKaZKucuRZBOQjJfchZRIL
+         rJqJwpcY2GwbSTbuuERRNxoYDrV6lHd16DUTqq+Voq2/eL6kh6FFJ6qPTiLSes6jUTnt
+         SJK6HS8FUwToZS/WjGhhkWUX70aOJ7c1tzn41V/pesVqP4vdAyz0Tmu1bPGH2D2gdMjV
+         raBA==
+X-Gm-Message-State: AC+VfDxI2h0qnk3NvKyTXgTey3EIHpzApqeC5WVpqJ3SSjxg+pSs1WtX
+        6WbABDpFxu5q0XNdExwKSLdOXg==
+X-Google-Smtp-Source: ACHHUZ4mlUY3frch+nF2E8SH83KRPctG/UuNn7RmdCSl5YTrd7l2W99kCPoH6tjVi4VUqX4s5PlWxg==
+X-Received: by 2002:a05:600c:b4d:b0:3f4:253f:c3d9 with SMTP id k13-20020a05600c0b4d00b003f4253fc3d9mr2015425wmr.25.1683555797976;
+        Mon, 08 May 2023 07:23:17 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id y25-20020a05600c365900b003f42456c490sm4081544wmq.33.2023.05.08.07.23.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 07:23:17 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, andersson@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        luca.weiss@fairphone.com, lujianhua000@gmail.com,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     konrad.dybcio@linaro.org, caleb.connolly@linaro.org,
+        bryan.odonoghue@linaro.org, subbaram@quicinc.com,
+        jackp@quicinc.com, robertom@qti.qualcomm.com
+Subject: [PATCH v7 00/13] Add Qualcomm PMIC TPCM support 
+Date:   Mon,  8 May 2023 15:22:55 +0100
+Message-Id: <20230508142308.1656410-1-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b6c66e3d-79dd-472a-bb9b-08db4fcdcfe9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 May 2023 14:09:17.8138
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: N0YgreYscHbSiI9nQ2DhRZPlnQuu0gjBgAmW8yRGtD4Q/gal6J5ZvzC3Dmmdw/RrFjAbX+N6GcQTRKayZ8fGAw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4875
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[AMD Official Use Only - General]
+I'm dropping the previous V1-V6 log because the text is getting too long
+here's a link to the previous cover letter instead
+Link: https://lore.kernel.org/linux-arm-msm/20230501121111.1058190-1-bryan.odonoghue@linaro.org/
 
-> -----Original Message-----
-> From: Limonciello, Mario <Mario.Limonciello@amd.com>
-> Sent: Monday, April 24, 2023 2:56 PM
-> To: Andreas Noever <andreas.noever@gmail.com>; Michael Jamet
-> <michael.jamet@intel.com>; Mika Westerberg
-> <mika.westerberg@linux.intel.com>; Yehezkel Bernat
-> <YehezkelShB@gmail.com>; Limonciello, Mario
-> <Mario.Limonciello@amd.com>
-> Cc: S, Sanath <Sanath.S@amd.com>; Gong, Richard
-> <Richard.Gong@amd.com>; Mehta, Sanju <Sanju.Mehta@amd.com>;
-> Takashi Iwai <tiwai@suse.de>; linux-usb@vger.kernel.org; linux-
-> kernel@vger.kernel.org
-> Subject: [PATCH v2 1/2] thunderbolt: Clear registers properly when auto
-> clear isn't in use
->
-> When `QUIRK_AUTO_CLEAR_INT` isn't set, interrupt masking should be
-> cleared by writing to Interrupt Mask Clear (IMR) and interrupt
-> status should be cleared properly at shutdown/init.
->
-> This fixes an error where interrupts are left enabled during resume
-> from hibernation with `CONFIG_USB4=3Dy`.
->
-> Fixes: 468c49f44759 ("thunderbolt: Disable interrupt auto clear for rings=
-")
-> Reported-by: Takashi Iwai <tiwai@suse.de>
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217343
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
-> v1->v2:
->  * Whitespace changes
->  * Add new static functions for nhi_mask_interrupt() and
->    nhi_clear_interrupt()
->
-> I tried to base this off thunderbolt.git/next (tag: thunderbolt-for-v6.4-=
-rc1)
-> but the following 3 commits are missing from that branch but are in 6.3-r=
-c7:
->
-> 58cdfe6f58b3 thunderbolt: Rename shadowed variables bit to interrupt_bit
-> and auto_clear_bit
-> 468c49f44759 thunderbolt: Disable interrupt auto clear for rings
-> 1716efdb0793 thunderbolt: Use const qualifier for `ring_interrupt_index`
->
-> I cherry picked them first as this patch builds on them. It's expected th=
-at
-> this patch should apply on top of 6.4-rc1 properly.
+Bootable tree
+Link: https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/linux-next-23-05-07-pm8150b-tcpm-qcom-wrapper-typec-mux-bjorn
 
-Mika,
+Please note patch#5 and patch#6 should be merged in tandem not separately.
 
-Since 6.4-rc1 is out, you should be able to test and apply this patch now.
-If you need any changes I'll send a v3 dropping the second patch.
+V7:
+- Adds R/B to "dt-bindings: phy: qcom,sc7180-qmp-usb3-dp-phy: Add input and output ports" - Krzysztof
+- Fixes indicated, adds R/B to "dt-bindings: usb: Add Qualcomm PMIC Type-C" - Krzysztof
+- Fixes indicated, adds R/B to "usb: typec: qcom: Add Qualcomm PMIC Type-C driver" - Guenter
+- Fixes indicated, adds R/B to "usb: typec: qcom: Add Qualcomm PMIC Type-C driver" - Caleb
+- Adds R/B to "arm64: dts: qcom: sm8250: Define ports for qmpphy orientation-switching" - Konrad
+- Adds R/B to "arm64: dts: qcom: qrb5165-rb5: Switch on Type-C VBUS boost" - Konrad
+- Fixes indicated, adds R/B to "arm64: dts: qcom: qrb5165-rb5: Switch on basic TCPM" - Jianhua, Konrad
+- Connector ports/endpoints left inside of connector
+  Documentation/devicetree/bindings/connector/usb-connector.yaml - Jianhua
+- dwc3_role_switch_in -> usb_1_dwc3_role_switch_in
+  qmpphy_typec_mux_in -> usb_1_qmpphy_typec_mux_in
+  Both ports/endpoints defined inside of pm8150b dtsi - Konrad
 
-Thanks!
+  I modified the name of both so that the port/endpoint would be directly
+  adjacent to the containing node in the dtsi file for code locality/readbility - bod
 
-> ---
->  drivers/thunderbolt/nhi.c      | 29 ++++++++++++++++++++++++-----
->  drivers/thunderbolt/nhi_regs.h |  2 ++
->  2 files changed, 26 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-> index d76e923fbc6a..c0aee5dc5237 100644
-> --- a/drivers/thunderbolt/nhi.c
-> +++ b/drivers/thunderbolt/nhi.c
-> @@ -54,6 +54,21 @@ static int ring_interrupt_index(const struct tb_ring
-> *ring)
->       return bit;
->  }
->
-> +static void nhi_mask_interrupt(struct tb_nhi *nhi, int mask, int ring)
-> +{
-> +     if (nhi->quirks & QUIRK_AUTO_CLEAR_INT)
-> +             return;
-> +     iowrite32(mask, nhi->iobase +
-> REG_RING_INTERRUPT_MASK_CLEAR_BASE + ring);
-> +}
-> +
-> +static void nhi_clear_interrupt(struct tb_nhi *nhi, int ring)
-> +{
-> +     if (nhi->quirks & QUIRK_AUTO_CLEAR_INT)
-> +             ioread32(nhi->iobase + REG_RING_NOTIFY_BASE + ring);
-> +     else
-> +             iowrite32(~0, nhi->iobase + REG_RING_INT_CLEAR + ring);
-> +}
-> +
->  /*
->   * ring_interrupt_active() - activate/deactivate interrupts for a single=
- ring
->   *
-> @@ -61,8 +76,8 @@ static int ring_interrupt_index(const struct tb_ring
-> *ring)
->   */
->  static void ring_interrupt_active(struct tb_ring *ring, bool active)
->  {
-> -     int reg =3D REG_RING_INTERRUPT_BASE +
-> -               ring_interrupt_index(ring) / 32 * 4;
-> +     int index =3D ring_interrupt_index(ring) / 32 * 4;
-> +     int reg =3D REG_RING_INTERRUPT_BASE + index;
->       int interrupt_bit =3D ring_interrupt_index(ring) & 31;
->       int mask =3D 1 << interrupt_bit;
->       u32 old, new;
-> @@ -123,7 +138,11 @@ static void ring_interrupt_active(struct tb_ring *ri=
-ng,
-> bool active)
->                                        "interrupt for %s %d is already
-> %s\n",
->                                        RING_TYPE(ring), ring->hop,
->                                        active ? "enabled" : "disabled");
-> -     iowrite32(new, ring->nhi->iobase + reg);
-> +
-> +     if (active)
-> +             iowrite32(new, ring->nhi->iobase + reg);
-> +     else
-> +             nhi_mask_interrupt(ring->nhi, mask, index);
->  }
->
->  /*
-> @@ -136,11 +155,11 @@ static void nhi_disable_interrupts(struct tb_nhi
-> *nhi)
->       int i =3D 0;
->       /* disable interrupts */
->       for (i =3D 0; i < RING_INTERRUPT_REG_COUNT(nhi); i++)
-> -             iowrite32(0, nhi->iobase + REG_RING_INTERRUPT_BASE + 4
-> * i);
-> +             nhi_mask_interrupt(nhi, ~0, 4 * i);
->
->       /* clear interrupt status bits */
->       for (i =3D 0; i < RING_NOTIFY_REG_COUNT(nhi); i++)
-> -             ioread32(nhi->iobase + REG_RING_NOTIFY_BASE + 4 * i);
-> +             nhi_clear_interrupt(nhi, 4 * i);
->  }
->
->  /* ring helper methods */
-> diff --git a/drivers/thunderbolt/nhi_regs.h b/drivers/thunderbolt/nhi_reg=
-s.h
-> index faef165a919c..6ba295815477 100644
-> --- a/drivers/thunderbolt/nhi_regs.h
-> +++ b/drivers/thunderbolt/nhi_regs.h
-> @@ -93,6 +93,8 @@ struct ring_desc {
->  #define REG_RING_INTERRUPT_BASE      0x38200
->  #define RING_INTERRUPT_REG_COUNT(nhi) ((31 + 2 * nhi->hop_count) /
-> 32)
->
-> +#define REG_RING_INTERRUPT_MASK_CLEAR_BASE   0x38208
-> +
->  #define REG_INT_THROTTLING_RATE      0x38c00
->
->  /* Interrupt Vector Allocation */
-> --
-> 2.34.1
+- Fixes newline indicated "arm64: dts: qcom: qrb5165-rb5: Switch on TCPM usb-role-switching for usb_1" - Jianhua, Konrad
+- Fixes newline indicated "arm64: dts: qcom: qrb5165-rb5: Switch on TCPM orientation-switch for usb_1_qmpphy" - Jianhua, Konrad
+
+- connector
+  I have left the connector defintion and its ports/endpoints in the platform dts
+
+  The reason for this
+  a) Prior art e.g. arch/arm64/boot/dts/qcom/sc8280xp*
+  b) The connector is really a non-SoC/PMIC component its something that is defined
+     for your platform.
+
+  I'm open to further debate on this topic:
+  Link: https://imgflip.com/i/7kw6ck
+
+- port@1 -> port@1 "arm64: dts: qcom: qrb5165-rb5: Switch on TCPM orientation-switch for usb_1_qmpphy" - Jianhua
+
+- OF: graph: no port node found in /soc@0/spmi@c440000/pmic@2/typec@1500
+
+  I left this as-is since the DT model we want is to connect the connector directly to
+  the PHY for orientation or controller for data-role switching
+
+  I similarly didn't put this hack in place to remove the warning but "it would work"
+  &pm8150b_typec {
+        status = "okay";
+ 
+  +       ports {
+  +               port@0 {
+  +                       reg = <0>;
+  +               };
+  +        };
+  +
+
+- Fairphone4 / sm7225
+  pm7250b is a derivative of pm8150b I have the hardware but, haven't booted to test/debug on this hardware yet
+
+- RB3 / sdm845
+  Caleb has a WIP patchset based on this series which is our next likely upstream candidate
+
+Here's how I'm testing using an RB5/SM8250
+
+A) Confirm device mode works in both orientations
+
+- Boot to a Linux shell
+- Run usb-ecm-up.sh [1]
+- This provides usb0 on the device side @ 192.168.8.2
+- Attach Type-C cable to host PC
+- On host PC "sudo ifconfig usb0 192.168.8.1"
+- Ping 192.168.8.2 confirming ping works
+- Switch cable orientation
+- On the PC side re-assign the ip address "sudo ifconfig usb0 192.168.8.1"
+- Ping again confirming connectivity
+
+B) Test automatic host-mode transition, orientation and SuperSpeed
+- Remove cable from PC
+- Attach a Type-C USB key
+- Validate the orientation detection
+  cat /sys/class/typec/port0/orientation 
+  normal 
+- Confirm the RB5 sees the USB key as a SuperSpeed device
+- Remove USB key and physically invert it along the horizontal axis
+- Re-insert the key
+- Confirm the RB5 sees the USB key as a SuperSpeed device
+- Validate the orientation detection
+  cat /sys/class/typec/port0/orientation 
+  reverse
+
+C) Test Type-C accessory automatic host-mode transition, orientation and SuperSpeed
+- Remove USB key from RB5
+- Attach a Type-C USB accessory
+- Validate the orientation detection
+  cat /sys/class/typec/port0/orientation 
+  normal
+- Attach a SuperSpeed capable USB key to the Type-C accessory
+- Confirm the RB5 sees the USB key as a SuperSpeed device
+- Remove the USB key from the Type-C accessory
+- Remove the Type-C accessory from the RB5
+- Physically invert the Type-C accessory along the horizontal axis
+- Re-insert the Type-C accessory
+- Validate the orientation detection
+  cat /sys/class/typec/port0/orientation 
+  reverse
+- Re-insert the key
+- Confirm the RB5 sees the USB key as a SuperSpeed device
+
+D) Goto Test-A
+- Confirming that automatic switch to device mode happens
+- Repeat the above loop in ~ any order
+
+[1] usb-ecm-up.sh 
+#!/usr/bin/env bash
+
+# load libcomposite module
+modprobe libcomposite
+
+# ensure function is loaded
+modprobe usb_f_ecm
+modprobe usb_f_ncm
+
+mount -t configfs none /sys/kernel/config/
+
+# create a gadget
+mkdir /sys/kernel/config/usb_gadget/g0
+
+# cd to its configfs node
+cd /sys/kernel/config/usb_gadget/g0
+
+# configure it (vid/pid can be anything if USB Class is used for driver compat)
+echo 0x0525 > idVendor
+echo 0xa4a4 > idProduct
+
+# configure its serial/mfg/product
+mkdir strings/0x409
+
+echo 0xCAFEBABE > strings/0x409/serialnumber
+echo Linaro > strings/0x409/manufacturer
+echo qrb5165-rb5 > strings/0x409/product
+
+# create configs
+mkdir configs/c.1
+mkdir configs/c.1/strings/0x409
+
+# create the function (name must match a usb_f_<name> module such as 'acm')
+mkdir functions/ncm.0
+
+echo "CDC ECM" > configs/c.1/strings/0x409/configuration
+
+# associate function with config
+ln -s functions/ncm.0 configs/c.1
+
+# Set USB version 3.1
+echo 0x0310 > bcdUSB
+
+echo "super-speed-plus" > max_speed
+
+# enable gadget by binding it to a UDC from /sys/class/udc
+echo a600000.usb > UDC
+# to unbind it: echo "" > UDC; sleep 1; rm -rf /sys/kernel/config/usb_gadget/g0
+
+sleep 1
+
+ifconfig usb0 192.168.8.2
+
+Bryan O'Donoghue (13):
+  dt-bindings: regulator: qcom,usb-vbus-regulator: Mark reg as required
+  dt-bindings: regulator: qcom,usb-vbus-regulator: Mark
+    regulator-*-microamp required
+  dt-bindings: phy: qcom,sc7180-qmp-usb3-dp-phy: Add orientation-switch
+    as optional
+  dt-bindings: phy: qcom,sc7180-qmp-usb3-dp-phy: Add input and output
+    ports
+  dt-bindings: usb: Add Qualcomm PMIC Type-C
+  dt-bindings: mfd: qcom,spmi-pmic: Add typec to SPMI device types
+  usb: typec: qcom: Add Qualcomm PMIC Type-C driver
+  arm64: dts: qcom: sm8250: Define ports for qmpphy
+    orientation-switching
+  arm64: dts: qcom: pm8150b: Add a TCPM description
+  arm64: dts: qcom: qrb5165-rb5: Switch on Type-C VBUS boost
+  arm64: dts: qcom: qrb5165-rb5: Switch on basic TCPM
+  arm64: dts: qcom: qrb5165-rb5: Switch on TCPM usb-role-switching for
+    usb_1
+  arm64: dts: qcom: qrb5165-rb5: Switch on TCPM orientation-switch for
+    usb_1_qmpphy
+
+ .../bindings/mfd/qcom,spmi-pmic.yaml          |   4 +
+ .../phy/qcom,sc7180-qmp-usb3-dp-phy.yaml      |  44 ++
+ .../regulator/qcom,usb-vbus-regulator.yaml    |  10 +-
+ .../bindings/usb/qcom,pmic-typec.yaml         | 190 ++++++
+ MAINTAINERS                                   |  10 +
+ arch/arm64/boot/dts/qcom/pm8150b.dtsi         |  40 ++
+ arch/arm64/boot/dts/qcom/qrb5165-rb5.dts      |  54 +-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |  18 +
+ drivers/usb/typec/Kconfig                     |  13 -
+ drivers/usb/typec/Makefile                    |   1 -
+ drivers/usb/typec/qcom-pmic-typec.c           | 261 --------
+ drivers/usb/typec/tcpm/Kconfig                |  11 +
+ drivers/usb/typec/tcpm/Makefile               |   1 +
+ drivers/usb/typec/tcpm/qcom/Makefile          |   6 +
+ drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 346 +++++++++++
+ .../typec/tcpm/qcom/qcom_pmic_typec_pdphy.c   | 528 +++++++++++++++++
+ .../typec/tcpm/qcom/qcom_pmic_typec_pdphy.h   | 119 ++++
+ .../typec/tcpm/qcom/qcom_pmic_typec_port.c    | 556 ++++++++++++++++++
+ .../typec/tcpm/qcom/qcom_pmic_typec_port.h    | 195 ++++++
+ 19 files changed, 2130 insertions(+), 277 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
+ delete mode 100644 drivers/usb/typec/qcom-pmic-typec.c
+ create mode 100644 drivers/usb/typec/tcpm/qcom/Makefile
+ create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
+ create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+ create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.h
+ create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
+ create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.h
+
+-- 
+2.39.2
 
