@@ -2,57 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF826FA345
-	for <lists+linux-usb@lfdr.de>; Mon,  8 May 2023 11:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C385E6FA355
+	for <lists+linux-usb@lfdr.de>; Mon,  8 May 2023 11:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233205AbjEHJ2I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 May 2023 05:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        id S233355AbjEHJav (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 May 2023 05:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233057AbjEHJ2F (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 05:28:05 -0400
+        with ESMTP id S233311AbjEHJar (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 05:30:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADAA1A1F8;
-        Mon,  8 May 2023 02:27:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB858694;
+        Mon,  8 May 2023 02:30:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C26326196E;
-        Mon,  8 May 2023 09:27:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AF88C4339B;
-        Mon,  8 May 2023 09:27:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0DD361CE6;
+        Mon,  8 May 2023 09:30:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67E41C433D2;
+        Mon,  8 May 2023 09:30:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683538076;
-        bh=xjtpkJFszM9BNKzTaTVwrSPwHtleGTIEPou2QwMYpds=;
+        s=k20201202; t=1683538245;
+        bh=+eYVnMlwoYZ6LFjPJ8noxaWaBZjBLxV6a3cd6KJhDvM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oLA3fa/0kDp64fOT1Hd+PK81rCvKxAgPJtioHFS6K6/gX3qgdlddUzap/83sEaE2o
-         pUeWDbV6MiWa67vSJlTSUnPW6cbvIcplh96TUwg7nrfxfGnmHABJMelSr4E4EuoMr8
-         h8IzaMoaIDwpwYIvFHta2sKD3Xi73Fj6CljsuVvJ3eGEGIQx/n3AzjnP9J6mkrNHIa
-         CLBdAAIx1DMGQahTsrjfVzN8Q7rq/Ba603mX1kvd/FMj1XXyduxpirm7tlzHIqK8Um
-         7LNIU4XXlRAguFtmYi/f0XpaxNeZP/WO/gDeTGvitzQzAW7vTVyO3Oeccj51pTUkLJ
-         Lt9um+WzS+C4g==
-Date:   Mon, 8 May 2023 14:57:52 +0530
+        b=d9gpGa5Yd53ziAwgOAXmo5UVXpZuqYAjgdPsVYF1eDRameQcM/t2bG+v6OB4FofcM
+         j51t+wMWezQHCEPZikaRYsgJN7d0d2fftsA4SEQmO8IjQVbXIaVpfscL5t8U3sKvJ7
+         zOz+ZKyBidGs4vp7Y/aF6nv84GfkMtNTWk64o8MkAp5e7yMS35ARBYbknte5krDr5z
+         NQexFw1C6HWvhlotMHJghVcyDiOiAVK54/+PlU01AKmKID2vi7PpHiqYnL3emh9Hfz
+         cXhL0Im1JTEaEIU/WaEnefh0KJ/kTIGAGFrIPpGi4Gw22DgXKGeHKVFkqp33vexSnI
+         KpiUXSzG9f4MA==
+Date:   Mon, 8 May 2023 15:00:41 +0530
 From:   Vinod Koul <vkoul@kernel.org>
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, neil.armstrong@linaro.org,
-        khilman@baylibre.com, jbrunet@baylibre.com,
-        martin.blumenstingl@googlemail.com, mturquette@baylibre.com,
-        kishon@kernel.org, hminas@synopsys.com, Thinh.Nguyen@synopsys.com,
-        yue.wang@amlogic.com, hanjie.lin@amlogic.com,
-        kernel@sberdevices.ru, rockosov@gmail.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-phy@lists.infradead.org
-Subject: Re: [PATCH v3 1/5] phy: amlogic: enable/disable clkin during Amlogic
- USB PHY init/exit
-Message-ID: <ZFjAmCcc/35MhcuI@matsya>
-References: <20230426102922.19705-1-ddrokosov@sberdevices.ru>
- <20230426102922.19705-2-ddrokosov@sberdevices.ru>
+To:     Shazad Hussain <quic_shazhuss@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, dmitry.baryshkov@linaro.org,
+        athierry@redhat.com, robh@kernel.org, konrad.dybcio@linaro.org,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] arm64: qcom: sa8775p: add support for USB
+Message-ID: <ZFjBQXCgvwWVvA30@matsya>
+References: <20230428130824.23803-1-quic_shazhuss@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230426102922.19705-2-ddrokosov@sberdevices.ru>
+In-Reply-To: <20230428130824.23803-1-quic_shazhuss@quicinc.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,15 +60,12 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 26-04-23, 13:29, Dmitry Rokosov wrote:
-> Previously, all Amlogic boards used the XTAL clock as the default board
-> clock for the USB PHY input, so there was no need to enable it.
-> However, with the introduction of new Amlogic SoCs like the A1 family,
-> the USB PHY now uses a gated clock. Hence, it is necessary to enable
-> this gated clock during the PHY initialization sequence, or disable it
-> during the PHY exit, as appropriate.
+On 28-04-23, 18:38, Shazad Hussain wrote:
+> Update relavent DT bindings for USB, add new config to the phy driver,
+> add USB and PHY nodes to the .dtsi and enable them in the board .dts
+> for the sa8775p-ride platform.
 
-Applied to phy/next, thanks
+Applied 1-4, thanks
 
 -- 
 ~Vinod
