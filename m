@@ -2,112 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D306FBD23
-	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 04:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7B26FBD6B
+	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 04:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjEIC26 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 May 2023 22:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
+        id S234331AbjEIC7z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 May 2023 22:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjEIC25 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 22:28:57 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2132.outbound.protection.outlook.com [40.107.113.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645E01A7
-        for <linux-usb@vger.kernel.org>; Mon,  8 May 2023 19:28:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gZAA0PUFQecgk6LdFNo20+kY02Z8KYACsCSCb83REZu7LekaqFFbB//OR2rns1lCQpOSdtgmBFuEYa+EPbdTSwELCo8FR3EOTL0p6P4+5zJjAfv6IqRP+Ct47iPDv07kKEQZc+p12HWfNpGk3USR4KwNTsxezW8JqljpCdGL7+zEO3y6KkIO/W6pldDE9ZsI1KBaIyeSyRMdCuz9HY7hj5osfin5apsDn43chZUHxUidxW1+r1wnQaWE/wTSvLKOyd6AQGha483ZZBM8r7d3a8X7UrmBqQyUQ7cgozRC0xsotozN4HhowTDh3dLA4OLLCAcJHAIqA2rdkZgkPrz/5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kwtDRmHu5HJszpaks++pQ/TqmZAK2vivYKq5bA2xhuc=;
- b=c+PK1meD4LMEW3oo01CqP35Isi3Io333n3I80vY8bWjrdH78zoTpg0eH3PlgDscZ8Aq2BzFgklj1LoPsaIn/YHvkCmKNAhXZ0AqBEko4w29zBUyaGYFOOei8nHq+sPd/81qMiUBbzI9P3ZQf07j6fuLH5bTRAVsTXtDkma7Z3loalcPE0o8fHSx9NmXYf3L2aCRd8n/Atr1TihIVzcchTn62Flw6Mfa8gGdL7bsQ4kjIXiVXKaV9ay0xl9LeoyiUqYBc7ULTMvMkIkkp2Dn8tMVL6puzsUKCqEdg6yR/kEyNX2aQgbWNPIzRggyg+P5kejeCoWKJc61wNLSOxrU4qg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=zenithal.me; dmarc=pass action=none header.from=zenithal.me;
- dkim=pass header.d=zenithal.me; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zenithal.me;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kwtDRmHu5HJszpaks++pQ/TqmZAK2vivYKq5bA2xhuc=;
- b=j5TMZfxz4OfjSPAJoSpcVVtzvLVhgFbZQXyM8jV/MvqYKu4PoqIkq1SRnoR0U81Wj4DMirbNWQg+6xlAcIM3EuxKLZ5o6EKYO3fx5LFsu7BiVND0gJXWZsJBnOgfrivj4ML6Fv1w7RaD/0/6s9UA7bpS3Zqf7nP/s9Y1XFLpErc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=zenithal.me;
-Received: from TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:c0::6) by
- OS7P286MB3742.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:237::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6363.33; Tue, 9 May 2023 02:28:52 +0000
-Received: from TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
- ([fe80::91e1:d460:5907:34d6]) by TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
- ([fe80::91e1:d460:5907:34d6%3]) with mapi id 15.20.6363.033; Tue, 9 May 2023
- 02:28:52 +0000
-Date:   Tue, 9 May 2023 10:28:35 +0800
-From:   Hongren Zheng <i@zenithal.me>
-To:     Galen Guyer <galen@galenguyer.com>
-Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usbip: give a more helpful error message if vhdi_hcd
- isn't loaded
-Message-ID: <ZFmv033l5ahyrlVc@Sun>
-References: <20230508212120.435329-1-galen@galenguyer.com>
- <ZFmtO64UqItxjsSz@Sun>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFmtO64UqItxjsSz@Sun>
-X-Operating-System: Linux Sun 5.15.67
-X-Mailer: Mutt 2.2.7 (2022-08-07)
-X-ClientProxiedBy: BYAPR21CA0021.namprd21.prod.outlook.com
- (2603:10b6:a03:114::31) To TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:c0::6)
+        with ESMTP id S233059AbjEIC7x (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 22:59:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9E95269;
+        Mon,  8 May 2023 19:59:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C73EE630C5;
+        Tue,  9 May 2023 02:59:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D6E7C433EF;
+        Tue,  9 May 2023 02:59:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1683601191;
+        bh=e/8vDWFGbBKxRx6vmR5upAyXHj6TIzXRSmqVZmD1rzA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m3ENmpbW6/q82yaTDqwhnBtP5Bh1krK7ZGeqyvj4wEn+l3h99bm/ff59OGjFAnAui
+         uNzqCYSGR5HM6pivSjuem6zquLPR1y2HwJpwJHX+EwuwP6g1RDoR+7GPaWx4zaT3Uz
+         VwkCqzbVnq2dYsBdVXCwUnzwK/hBQZuQ7dqVZfdA=
+Date:   Tue, 9 May 2023 04:59:47 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>
+Subject: Re: [BUG] Kmemleak, possibly hiddev_connect(), in 6.3.0+ torvalds
+ tree commit gfc4354c6e5c2
+Message-ID: <2023050958-precut-vividly-94bf@gregkh>
+References: <f64b17fa-d509-ad30-6e8d-e4c979818047@alu.unizg.hr>
+ <2023050824-juiciness-catching-9290@gregkh>
+ <2023050854-collage-dreamt-660c@gregkh>
+ <c73471aa-522a-83a4-5614-506581604301@alu.unizg.hr>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCP286MB1393:EE_|OS7P286MB3742:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6a0895a4-3e66-40ed-5f46-08db503520ef
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 73PEyeW1L5E3Bg7GhzwcG+hGavRbvSxOrqW0rDwKuF4gHTgi4m8q74FHskGCKHXD2S1d+kfmIahkyaSbq9KdgbGRCwVbgW2OmqsZFc2mYdRkPMcaiGI0TBRV0wJHEK7vj48f31nDPXmSXIH4Ntg5N6ZDWYGLhX8CAaaLA28/nbCKYOL1U7U6jpwAMiganZEkr/MSJYCbAZg43XaT5mvmDVBWl9wn8b4ICGlMlYMAx6a1gigzGqWGmpiAoF/zkuyBNe8rab+RHi8TN8l2nPuNcIk9nJfoxXu/drqRHLrZjmyudWTDbqBszXPInVHa8UtvTMgpe9vvDvdIvVo4ZuhMGtytb+bRlIhhhKai2jw+6UXyxnq/+3kSFjDfJU+9kVSsL5EhdFqbmvy6dd9Egj2yo3dkslxFEAXKRIoO4/dulUrT3PxfxK6Xfx9zhEgwscT2HUevS34XSfsfs+U+4EdLGyVCpR6XRSm6O77nPh/bTRbKcYVqp6xuRYHw8OHq6xayMczhtfZdPYLnKbi4vRzxbEoH7x1Ip4zhZ7i92zflF23zRyQ8Nsg1dNI38AesLnZ6JXPhrPJ3tdyurE1+cvoZFXHELh4FmPfODhL6Q+Xii3A=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39830400003)(346002)(376002)(366004)(396003)(136003)(451199021)(8936002)(8676002)(2906002)(15650500001)(5660300002)(33716001)(41320700001)(38100700002)(478600001)(6666004)(6486002)(54906003)(83380400001)(186003)(6506007)(6512007)(86362001)(41300700001)(316002)(786003)(66946007)(6916009)(66556008)(66476007)(4326008)(9686003)(49092004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SqvXwWzjZskXQaoNQjpk/cam9nqgzIVcMu9i9k4OMV1CL5GrqWNlOFB224YF?=
- =?us-ascii?Q?msgNhjJBrvEgSnt1aqaktnm+awPbmQ0xXSjSZjOuzDKQdB3lQk4OiYQF/YPq?=
- =?us-ascii?Q?n6/qxcrtx5GPDNvVefeYXU27nospsG16DzjhchYmCV/UAwoL2l/ZqyFMpUas?=
- =?us-ascii?Q?5jS1fH2R7G5p2jHYsQC9/rZY3pUGUls7edHddrnZh5k54N13e0q+/cP+ka1w?=
- =?us-ascii?Q?i2BgnpN0ngt8w9psyzQceXp6NMn8HfCgsNXhhii7OuzStQqN6UZs/xHvkNYh?=
- =?us-ascii?Q?mY/vgPtmDt6fhqx7LXzcerHe+8rm3nfqIMffLkrzZAWrfqn+JhVHML905dqS?=
- =?us-ascii?Q?ahVC/SuqP+YAJ1Wo6dmlJm5dTWHz5Pb3mv3ByRzkX19S3gNtt0cMW6uTPfzL?=
- =?us-ascii?Q?LefkX3hA4mROOBxi9b5CwCfATBqiotxwhI4lLR6vcWhww6/Pb5y31YmAmf/A?=
- =?us-ascii?Q?beHohxnd95njHAGEYqOwC4SS16k0kJiy9a3B9GUnoEubcbdUaiWdHFzZhDfO?=
- =?us-ascii?Q?bWONlVgxS5OuH8ZNBiithtHvsoX96ZllCKBcMSW9cEs9njiuAs5kfB9B5aDL?=
- =?us-ascii?Q?KUVwhXXKpDsb4pDXtXmgxoVvVOEiuZkw2LjCIpgnGRVTIezssGI7lZFY4n5D?=
- =?us-ascii?Q?gPz3vpPSC3OcOBIdd4ZSJzNLQcUW4MRCIfggKYPhTcyBYkrIBOb9bdmddiat?=
- =?us-ascii?Q?Lzo89Ww6ZZOQJ+6uNrDLFEahJf8gEbXs5NddYXOJHLUlWlZekZp44AaPtvv+?=
- =?us-ascii?Q?5XttallH/7oNfx4CAjf/Aw7RLzOugnutCkDzpRHoj8esHTHeq2yOIKYGlyjj?=
- =?us-ascii?Q?RZlhdJUfQ9LI2iUbFq5LcAd/rNn7Jxpvqj8h6aHhzql5snAD6rNRTb+JKTbD?=
- =?us-ascii?Q?2oku4mxR9g/mS3AHzovnTk+mN++lqxMJyLdumwEXA2MZY5SWClMY/FmGyC74?=
- =?us-ascii?Q?KhzC/E+DSWfBjM0Vd126ZXblRupcum1o+HICwVKToHuWknzkNnsA5gtt7/4M?=
- =?us-ascii?Q?t74FgNtemtnW2HrC0opVHg41y5smjNnIl9dvX7t7/F8RR5w54enMY74KoLHD?=
- =?us-ascii?Q?k5oQwU3Z/YX3hbD2LN6+JvxOj2eXOTBprxWXfdfOVeaWXBSk9LsbOQnvcxD5?=
- =?us-ascii?Q?XB7rv2TEOF3c4IndjQPdLsw4gjLZRlwG9JBjj9Rz/6wbuoKRTac1SxOadXJw?=
- =?us-ascii?Q?0O/LOS29Fkf6JIHAXZWGydXxfHoZ/E+ZQYuGlWqP7GImSgbxm7QMw6IR9IIW?=
- =?us-ascii?Q?o2XVyFJXWr45/Mix2uqpnaDgy7k2Wcy1AYSwryVpbidgNeMmQR632HIK/MAt?=
- =?us-ascii?Q?8hghL3kIPE07uQgaP2EaM8SNdR/9lpuJnSNFJdcbfGrj1+Y0cgNiQrLOUKFz?=
- =?us-ascii?Q?eq7Vp7NYzenNXj7Ix5S4QGOIVSVdGOYyst1QK5FvIYe0HX/h2B31mEEUKjy8?=
- =?us-ascii?Q?bF39cnTTwP7LG0HSN94wo0aVYwNsBd/Ai3VI1I3t1l/HPjFJWarrlfe9F2qA?=
- =?us-ascii?Q?PUyLYNdCz3DsWeqABsGzIOmu98cfE/fiI5FD1K+86pxkcoo+4oBNrzxA6cU2?=
- =?us-ascii?Q?rUSbAeY/VG51u8dF34cMD5mlrGdzFLSoEkxsoUcZ?=
-X-OriginatorOrg: zenithal.me
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a0895a4-3e66-40ed-5f46-08db503520ef
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 02:28:51.9944
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 436d481c-43b1-4418-8d7f-84c1e4887cf0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mZVPGFTGPb4Ull4ikvujmIdXTQcObHmkIRh3Gy1Y+s/kQwmMFiL56dOTisSzQOpH
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS7P286MB3742
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c73471aa-522a-83a4-5614-506581604301@alu.unizg.hr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,83 +57,154 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 09, 2023 at 10:17:31AM +0800, Hongren Zheng wrote:
-> On Mon, May 08, 2023 at 05:21:20PM -0400, Galen Guyer wrote:
-> > Suggest loading vhdi_hcd if it's not loaded to make error message less opaque
+On Tue, May 09, 2023 at 01:51:35AM +0200, Mirsad Goran Todorovac wrote:
+> 
+> 
+> On 08. 05. 2023. 16:01, Greg Kroah-Hartman wrote:
+> > On Mon, May 08, 2023 at 08:51:55AM +0200, Greg Kroah-Hartman wrote:
+> > > On Mon, May 08, 2023 at 08:30:07AM +0200, Mirsad Goran Todorovac wrote:
+> > > > Hi,
+> > > > 
+> > > > There seems to be a kernel memory leak in the USB keyboard driver.
+> > > > 
+> > > > The leaked memory allocs are 96 and 512 bytes.
+> > > > 
+> > > > The platform is Ubuntu 22.04 LTS on a assembled AMD Ryzen 9 with X670E PG
+> > > > Lightning mobo,
+> > > > and Genius SlimStar i220 GK-080012 keyboard.
+> > > > 
+> > > > (Logitech M100 HID mouse is not affected by the bug.)
+> > > > 
+> > > > BIOS is:
+> > > > 
+> > > >       *-firmware
+> > > >            description: BIOS
+> > > >            vendor: American Megatrends International, LLC.
+> > > >            physical id: 0
+> > > >            version: 1.21
+> > > >            date: 04/26/2023
+> > > >            size: 64KiB
+> > > > 
+> > > > The kernel is 6.3.0-torvalds-<id>-13466-gfc4354c6e5c2.
+> > > > 
+> > > > The keyboard is recognised as Chicony:
+> > > > 
+> > > >                   *-usb
+> > > >                        description: Keyboard
+> > > >                        product: CHICONY USB Keyboard
+> > > >                        vendor: CHICONY
+> > > >                        physical id: 2
+> > > >                        bus info: usb@5:2
+> > > >                        logical name: input35
+> > > >                        logical name: /dev/input/event4
+> > > >                        logical name: input35::capslock
+> > > >                        logical name: input35::numlock
+> > > >                        logical name: input35::scrolllock
+> > > >                        logical name: input36
+> > > >                        logical name: /dev/input/event5
+> > > >                        logical name: input37
+> > > >                        logical name: /dev/input/event6
+> > > >                        logical name: input38
+> > > >                        logical name: /dev/input/event8
+> > > >                        version: 2.30
+> > > >                        capabilities: usb-2.00 usb
+> > > >                        configuration: driver=usbhid maxpower=100mA
+> > > > speed=1Mbit/s
+> > > > 
+> > > > The bug is easily reproduced by unplugging the USB keyboard, waiting about a
+> > > > couple of seconds,
+> > > > and then reconnect and scan for memory leaks twice.
+> > > > 
+> > > > The kmemleak log is as follows [edited privacy info]:
+> > > > 
+> > > > root@hostname:/home/username# cat /sys/kernel/debug/kmemleak
+> > > > unreferenced object 0xffff8dd020037c00 (size 96):
+> > > >    comm "systemd-udevd", pid 435, jiffies 4294892550 (age 8909.356s)
+> > > >    hex dump (first 32 bytes):
+> > > >      5d 8e 4e b9 ff ff ff ff 00 00 00 00 00 00 00 00 ].N.............
+> > > >      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+> > > >    backtrace:
+> > > >      [<ffffffffb81a74be>] __kmem_cache_alloc_node+0x22e/0x2b0
+> > > >      [<ffffffffb8127b6e>] kmalloc_trace+0x2e/0xa0
+> > > >      [<ffffffffb87543d9>] class_create+0x29/0x80
+> > > >      [<ffffffffb8880d24>] usb_register_dev+0x1d4/0x2e0
+> > > 
+> > > As the call to class_create() in this path is now gone in 6.4-rc1, can
+> > > you retry that release to see if this is still there or not?
 > > 
-> > Signed-off-by: Galen Guyer <galen@galenguyer.com>
-> 
-> Reviewed-By: Hongren Zheng <i@zenithal.me>
-> 
-> When I was young I usually get confused with this error message.
-> 
-> BTW would you like to make other patches regarding the error generated
-> when kernel module not loaded? For example, when usbip-host is not
-> loaded, the error message of usbip bind does not give much help.
-> 
-> $ usbip bind -b 1-6
-> usbip: error: unable to bind device on 1-6
-> 
-> Another example is that when there is no gadget attached to
-> the usbip-vudc, the following error messages are not helpful
-> 
-> $ usbipd -e -D
-> libusbip: error: Cannot read vudc device descr file: No such device
-> 
-> $ usbip list -d
-> usbip: error: problem getting device attributes: No such device
-> 
-> 
-> > ---
-> >  tools/usb/usbip/src/usbip_attach.c | 2 +-
-> >  tools/usb/usbip/src/usbip_detach.c | 2 +-
-> >  tools/usb/usbip/src/usbip_port.c   | 2 +-
-> >  3 files changed, 3 insertions(+), 3 deletions(-)
+> > No, wait, it's still there, I was looking at a development branch of
+> > mine that isn't sent upstream yet.  And syzbot just reported the same
+> > thing:
+> > 	https://lore.kernel.org/r/00000000000058d15f05fb264013@google.com
 > > 
-> > diff --git a/tools/usb/usbip/src/usbip_attach.c b/tools/usb/usbip/src/usbip_attach.c
-> > index b4aeb9f1f493..531a415538f9 100644
-> > --- a/tools/usb/usbip/src/usbip_attach.c
-> > +++ b/tools/usb/usbip/src/usbip_attach.c
-> > @@ -86,7 +86,7 @@ static int import_device(int sockfd, struct usbip_usb_device *udev)
-> >  
-> >  	rc = usbip_vhci_driver_open();
-> >  	if (rc < 0) {
-> > -		err("open vhci_driver");
-> > +		err("open vhci_driver (is vhci_hcd loaded?)");
+> > So something's wrong here, let me dig into it tomorrow when I get a
+> > chance...
+> 
+> If this could help, here is the bisect of the bug (I could not discern what
+> could possibly be wrong):
+> 
+> user@host:~/linux/kernel/linux_torvalds$ git bisect log
+> git bisect start
+> # bad: [ac9a78681b921877518763ba0e89202254349d1b] Linux 6.4-rc1
+> git bisect bad ac9a78681b921877518763ba0e89202254349d1b
+> # good: [c9c3395d5e3dcc6daee66c6908354d47bf98cb0c] Linux 6.2
+> git bisect good c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
+> # good: [85496c9b3bf8dbe15e2433d3a0197954d323cadc] Merge branch
+> 'net-remove-some-rcu_bh-cruft'
+> git bisect good 85496c9b3bf8dbe15e2433d3a0197954d323cadc
+> # good: [b68ee1c6131c540a62ecd443be89c406401df091] Merge tag 'scsi-misc' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
+> git bisect good b68ee1c6131c540a62ecd443be89c406401df091
+> # bad: [888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0] Merge tag 'sysctl-6.4-rc1'
+> of git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux
+> git bisect bad 888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0
+> # good: [34b62f186db9614e55d021f8c58d22fc44c57911] Merge tag
+> 'pci-v6.4-changes' of git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci
+> git bisect good 34b62f186db9614e55d021f8c58d22fc44c57911
+> # good: [34da76dca4673ab1819830b4924bb5b436325b26] Merge tag
+> 'for-linus-2023042601' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid
+> git bisect good 34da76dca4673ab1819830b4924bb5b436325b26
+> # good: [97b2ff294381d05e59294a931c4db55276470cb5] Merge tag
+> 'staging-6.4-rc1' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging
+> git bisect good 97b2ff294381d05e59294a931c4db55276470cb5
+> # good: [2025b2ca8004c04861903d076c67a73a0ec6dfca] mcb-lpc: Reallocate
+> memory region to avoid memory overlapping
+> git bisect good 2025b2ca8004c04861903d076c67a73a0ec6dfca
+> # bad: [d06f5a3f7140921ada47d49574ae6fa4de5e2a89] cdx: fix build failure due
+> to sysfs 'bus_type' argument needing to be const
+> git bisect bad d06f5a3f7140921ada47d49574ae6fa4de5e2a89
+> # good: [dcfbb67e48a2becfce7990386e985b9c45098ee5] driver core: class: use
+> lock_class_key already present in struct subsys_private
+> git bisect good dcfbb67e48a2becfce7990386e985b9c45098ee5
+> # bad: [6f14c02220c791d5c46b0f965b9340c58f3d503d] driver core: create
+> class_is_registered()
+> git bisect bad 6f14c02220c791d5c46b0f965b9340c58f3d503d
+> # good: [2f9e87f5a2941b259336c7ea6c5a1499ede4554a] driver core: Add a
+> comment to set_primary_fwnode() on nullifying
+> git bisect good 2f9e87f5a2941b259336c7ea6c5a1499ede4554a
+> # bad: [02fe26f25325b547b7a31a65deb0326c04bb5174] firmware_loader: Add debug
+> message with checksum for FW file
+> git bisect bad 02fe26f25325b547b7a31a65deb0326c04bb5174
+> # good: [884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82] driver core: class:
+> implement class_get/put without the private pointer.
+> git bisect good 884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82
+> # bad: [3f84aa5ec052dba960baca4ab8a352d43d47028e] base: soc: populate
+> machine name in soc_device_register if empty
+> git bisect bad 3f84aa5ec052dba960baca4ab8a352d43d47028e
+> # bad: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver core: class.c:
+> convert to only use class_to_subsys
+> git bisect bad 7b884b7f24b42fa25e92ed724ad82f137610afaf
+> # first bad commit: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver core:
+> class.c: convert to only use class_to_subsys
+> user@host:~/linux/kernel/linux_torvalds$
 
-One more thing: the kernel module is called vhci-hcd.ko instead of
-vhci_hcd. Though dmesg often shows vhci_hcd and this name is used
-in the code.
+This helps a lot, thanks.  I got the reference counting wrong somewhere
+in here, I thought I tested this better, odd it shows up now...
 
-> >  		goto err_out;
-> >  	}
-> >  
-> > diff --git a/tools/usb/usbip/src/usbip_detach.c b/tools/usb/usbip/src/usbip_detach.c
-> > index aec993159036..b29101986b5a 100644
-> > --- a/tools/usb/usbip/src/usbip_detach.c
-> > +++ b/tools/usb/usbip/src/usbip_detach.c
-> > @@ -50,7 +50,7 @@ static int detach_port(char *port)
-> >  
-> >  	ret = usbip_vhci_driver_open();
-> >  	if (ret < 0) {
-> > -		err("open vhci_driver");
-> > +		err("open vhci_driver (is vhci_hcd loaded?)");
-> >  		return -1;
-> >  	}
-> >  
-> > diff --git a/tools/usb/usbip/src/usbip_port.c b/tools/usb/usbip/src/usbip_port.c
-> > index 4d14387df13d..21a20e378419 100644
-> > --- a/tools/usb/usbip/src/usbip_port.c
-> > +++ b/tools/usb/usbip/src/usbip_port.c
-> > @@ -18,7 +18,7 @@ static int list_imported_devices(void)
-> >  
-> >  	ret = usbip_vhci_driver_open();
-> >  	if (ret < 0) {
-> > -		err("open vhci_driver");
-> > +		err("open vhci_driver (is vhci_hcd loaded?)");
-> >  		goto err_names_free;
-> >  	}
-> >  
-> > -- 
-> > 2.40.1
-> > 
+I'll try to work on it this week.
+
+thanks,
+
+greg k-h
