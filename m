@@ -2,84 +2,192 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C6E6FBF6A
-	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 08:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B48C6FC09F
+	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 09:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234934AbjEIGla (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 May 2023 02:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
+        id S234319AbjEIHol (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 May 2023 03:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234916AbjEIGl3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 May 2023 02:41:29 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3115DAD35;
-        Mon,  8 May 2023 23:41:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683614471; x=1715150471;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9PGhDpF0Ehm92gwScDb0cpgrpvmpX0MTZeTBVtGjmEI=;
-  b=G/dD+U3iatmwcqSIvgNJsyrdH3S0SmZDRJMPfy1J7b2qT0jWotFwztXK
-   PQuJaWzUgu6InMrsaOjlGWY0+Wui/oWDl3DRQM1JWlIUpPsO5yoG7HSSI
-   bR7g+8GUhKu6Mvmuz5gnv2LV5A6BUgQWhAlH6ujxxsZZ9y5GjNtdYB5OX
-   6ZmZVTAId8K8hKRcC1CzfTvFCiVnZR44zMGmHF5yXeVo1WfNmeR8hAN4m
-   4hempkVw14XWXIhbNVgDMbKmpt4pvNya7MzxVB7m6vCPMKCzyj155fGWv
-   JGfGoFWDVNU/bJ+QMserEVxOuaGKW4RK1eJlqV1Aw4LSPrgIS2mmzW0Rc
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="329443412"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="329443412"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 23:41:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="873049819"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="873049819"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 08 May 2023 23:41:07 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 7EE9923E; Tue,  9 May 2023 09:41:16 +0300 (EEST)
-Date:   Tue, 9 May 2023 09:41:16 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        S Sanath <Sanath.S@amd.com>, richard.gong@amd.com,
-        Sanju.Mehta@amd.com, Takashi Iwai <tiwai@suse.de>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] thunderbolt: Clear registers properly when auto
- clear isn't in use
-Message-ID: <20230509064116.GM66750@black.fi.intel.com>
-References: <20230424195556.2233-1-mario.limonciello@amd.com>
+        with ESMTP id S234299AbjEIHoj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 May 2023 03:44:39 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085E87EC0
+        for <linux-usb@vger.kernel.org>; Tue,  9 May 2023 00:44:37 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f315735514so195733575e9.1
+        for <linux-usb@vger.kernel.org>; Tue, 09 May 2023 00:44:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683618275; x=1686210275;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=/tIWIjCU0WB4+s+0CLXZp3rE/hrVxQbRrR7hGm/i1t8=;
+        b=FS045pxekPIy3zvybkfVPHe6eMBCAkuvJgWnUdb31Avcc4yyadf8jCoDTyTn3dQp7X
+         nJeSCyxtCn23b8AEbg8AUd9eRaIq/xYZcwQAk2hEWCjBTHvAeajabpDyQNklwEMZ58DU
+         Kz4J2Htyn4dGPyzXyy70is1VHwsrsSzx8ia/px/eMY4UWpcUu9piuWERmxYqNasXIL08
+         N85eWBxxiQxVr0JUNGHr2szdrhhx7g8JzYJjvO4oMM9gngmxNqPElviZpictdF6A+3EF
+         4wMQzw2SyPMwAPsmI78QFBgadv2JzPwaFe0uk/mPPCK7LBGv3biIhaXQmUyVRtPRVu2Y
+         96eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683618275; x=1686210275;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/tIWIjCU0WB4+s+0CLXZp3rE/hrVxQbRrR7hGm/i1t8=;
+        b=VrFGDvg+iQtpEtHEAgEPJh9vqScDP2n+WfcqZN7PhziRIBvtFeDNUnZA2HnHWZMIXY
+         UmAyWn3x+//4+273qsoH6dKq+fcVm0nCZkYrComeddW/5zJpv2UjPkm1AE0D3v9wZEOz
+         kugzAgqZIsxdnAaLBfESGXMJ8cjT2VXP3KRcMGyAO1mbNQB1Un8QtZ/HQdn0Akt6ijZw
+         HCCRQtO4XRZHPU/wppkCH5XFPynRpnTWQ94wQ+LgRTvPyFGhsY7HPxn+J2+qqSLVDubz
+         G3cIni7lIX0rPvHy2iLD+jI8ZAP9h2z2uNGjcI+xSHxozvIwL5xLOaDWeLDbIn3fUYwD
+         wV8g==
+X-Gm-Message-State: AC+VfDyq5yfL0T/AlzWBEMcH6F3mEuAC8gGL8N5HSJOrpcAVj/coTVEg
+        5TVneYy2074UmFSGx7/oD5TeQA==
+X-Google-Smtp-Source: ACHHUZ5azk0AtvIKQkzwUK42XJg0J/YOW/KQyQjpBHJ5Rilppz/v+9dWNUtHMmojYs5nx4Y5u/mbwQ==
+X-Received: by 2002:adf:e483:0:b0:2ff:801b:dec6 with SMTP id i3-20020adfe483000000b002ff801bdec6mr8605708wrm.20.1683618275426;
+        Tue, 09 May 2023 00:44:35 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:79ab:8da0:d16d:9990? ([2a01:e0a:982:cbb0:79ab:8da0:d16d:9990])
+        by smtp.gmail.com with ESMTPSA id e15-20020a5d4e8f000000b0030629536e64sm13492065wru.30.2023.05.09.00.44.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 00:44:35 -0700 (PDT)
+Message-ID: <acc5eb75-c6ed-98c7-6d69-f8b0f024c744@linaro.org>
+Date:   Tue, 9 May 2023 09:44:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230424195556.2233-1-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+From:   neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v3 5/5] arm64: dts: meson: a1: support USB controller in
+ OTG mode
+Content-Language: en-US
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        mturquette@baylibre.com, vkoul@kernel.org, kishon@kernel.org,
+        hminas@synopsys.com, Thinh.Nguyen@synopsys.com
+Cc:     yue.wang@amlogic.com, hanjie.lin@amlogic.com,
+        kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-phy@lists.infradead.org
+References: <20230426102922.19705-1-ddrokosov@sberdevices.ru>
+ <20230426102922.19705-6-ddrokosov@sberdevices.ru>
+Organization: Linaro Developer Services
+In-Reply-To: <20230426102922.19705-6-ddrokosov@sberdevices.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mario,
+Hi,
 
-On Mon, Apr 24, 2023 at 02:55:54PM -0500, Mario Limonciello wrote:
-> When `QUIRK_AUTO_CLEAR_INT` isn't set, interrupt masking should be
-> cleared by writing to Interrupt Mask Clear (IMR) and interrupt
-> status should be cleared properly at shutdown/init.
+On 26/04/2023 12:29, Dmitry Rokosov wrote:
+> Amlogic A1 SoC family has USB2.0 controller based on dwc2 and dwc3
+> heads. It supports otg/host/peripheral modes.
 > 
-> This fixes an error where interrupts are left enabled during resume
-> from hibernation with `CONFIG_USB4=y`.
+> Signed-off-by: Yue Wang <yue.wang@amlogic.com>
+> Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+>   arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 59 +++++++++++++++++++++++
+>   1 file changed, 59 insertions(+)
 > 
-> Fixes: 468c49f44759 ("thunderbolt: Disable interrupt auto clear for rings")
-> Reported-by: Takashi Iwai <tiwai@suse.de>
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217343
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> index ae7d39cff07a..5588ee602161 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> @@ -8,6 +8,8 @@
+>   #include <dt-bindings/gpio/meson-a1-gpio.h>
+>   #include <dt-bindings/clock/amlogic,a1-pll-clkc.h>
+>   #include <dt-bindings/clock/amlogic,a1-clkc.h>
+> +#include <dt-bindings/power/meson-a1-power.h>
+> +#include <dt-bindings/reset/amlogic,meson-a1-reset.h>
+>   
+>   / {
+>   	compatible = "amlogic,a1";
+> @@ -169,6 +171,17 @@ gpio_intc: interrupt-controller@0440 {
+>   				amlogic,channel-interrupts =
+>   					<49 50 51 52 53 54 55 56>;
+>   			};
+> +
+> +			usb2_phy1: phy@4000 {
+> +				compatible = "amlogic,a1-usb2-phy";
+> +				clocks = <&clkc CLKID_USB_PHY_IN>;
+> +				clock-names = "xtal";
+> +				reg = <0x0 0x4000 0x0 0x60>;
+> +				resets = <&reset RESET_USBPHY>;
+> +				reset-names = "phy";
+> +				#phy-cells = <0>;
+> +				power-domains = <&pwrc PWRC_USB_ID>;
+> +			};
+>   		};
+>   
+>   		gic: interrupt-controller@ff901000 {
+> @@ -192,6 +205,52 @@ spifc: spi@fd000400 {
+>   			#size-cells = <0>;
+>   			status = "disabled";
+>   		};
+> +
+> +		usb: usb@fe004400 {
+> +			status = "disabled";
+> +			compatible = "amlogic,meson-a1-usb-ctrl";
+> +			reg = <0x0 0xfe004400 0x0 0xa0>;
+> +			interrupts = <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +
+> +			clocks = <&clkc CLKID_USB_CTRL>,
+> +				 <&clkc CLKID_USB_BUS>,
+> +				 <&clkc CLKID_USB_CTRL_IN>;
+> +			clock-names = "usb_ctrl", "usb_bus", "xtal_usb_ctrl";
+> +			resets = <&reset RESET_USBCTRL>;
+> +			reset-name = "usb_ctrl";
+> +
+> +			dr_mode = "otg";
+> +
+> +			phys = <&usb2_phy1>;
+> +			phy-names = "usb2-phy1";
+> +
+> +			dwc2: usb@ff500000 {
+> +				compatible = "amlogic,meson-a1-usb", "snps,dwc2";
+> +				reg = <0x0 0xff500000 0x0 0x40000>;
+> +				interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>;
+> +				phys = <&usb2_phy1>;
+> +				phy-names = "usb2-phy";
+> +				clocks = <&clkc CLKID_USB_PHY>;
+> +				clock-names = "otg";
+> +				dr_mode = "peripheral";
+> +				g-rx-fifo-size = <192>;
+> +				g-np-tx-fifo-size = <128>;
+> +				g-tx-fifo-size = <128 128 16 16 16>;
+> +			};
+> +
+> +			dwc3: usb@ff400000 {
+> +				compatible = "snps,dwc3";
+> +				reg = <0x0 0xff400000 0x0 0x100000>;
+> +				interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
+> +				dr_mode = "host";
+> +				snps,dis_u2_susphy_quirk;
+> +				snps,quirk-frame-length-adjustment = <0x20>;
+> +				snps,parkmode-disable-ss-quirk;
+> +			};
+> +		};
+>   	};
+>   
+>   	timer {
 
-Applied to fixes, thanks!
+This patcj is fine, but depends on clock bindings & dt, so now Vinod took the PHY
+patch, please resend this wiyhout patches 1 & 5, then resend the DT patch later when
+the clock bindings is merged.
+
+Thanks,
+Neil
