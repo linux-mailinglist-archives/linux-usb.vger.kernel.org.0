@@ -2,188 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8526FBE5E
-	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 06:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5CC6FBE7E
+	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 07:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234534AbjEIEpC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 May 2023 00:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
+        id S229562AbjEIFIT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 May 2023 01:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234624AbjEIEpA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 May 2023 00:45:00 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221327688
-        for <linux-usb@vger.kernel.org>; Mon,  8 May 2023 21:44:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683607499; x=1715143499;
-  h=date:from:to:cc:subject:message-id;
-  bh=pixqkkPKIupM4t0ljnTeRSFtPfoablu6yslSJyF8h/s=;
-  b=SBDx9WLvX8C6o5VtnwkQnqYB70rwARd77ud/+nG9kg+DRzALvf/UhGPv
-   PWyteFMuhr7qZgGuebUxxcKtQbvF4/RKmTXAGPlw27tKBBxhE99+1tKGh
-   7YcqukDeNFjAJblAawWAU4t8dt7frvgCvWXKKLOl2+EBv54EK+XL/MbgE
-   dI90PphxyUKMh+jjoe8t7Ah0FBfgWZueZQVK68TfQ0DmkNeN+WZO1XiHP
-   dM4QbcyeW21NjzkftW3zo8A418hu9y+dc7wSlEUcRWeyC7lRJ7zz3Dscz
-   n/cL9ZwCFm2sCMPyloD9I6FoBgNlzMaFXq0IqYnOmyUesTCdR4FOVQmZn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="349845532"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="349845532"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 21:44:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="810508423"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="810508423"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 08 May 2023 21:44:58 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pwFDd-0001i8-1S;
-        Tue, 09 May 2023 04:44:57 +0000
-Date:   Tue, 09 May 2023 12:44:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:rndis-removal] BUILD SUCCESS
- ce3480c31462229e77b324c746b69e842a6d8a1b
-Message-ID: <20230509044431.AouLf%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229472AbjEIFIS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 May 2023 01:08:18 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB40F7DA1
+        for <linux-usb@vger.kernel.org>; Mon,  8 May 2023 22:08:16 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3494dVdS022767;
+        Tue, 9 May 2023 05:07:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=pD5SIj54cKJyzYA27Ort+hU3KYu953iuwcxoetlMHfM=;
+ b=h/Kq+csq4d+vquIplLGfhlOJT7tRUigApx+6K7+Rm6CnjXpBKGwfLbmiee1BWOCcy8JM
+ ej12u9fr4TOA3IODcROK1JTiuYYIM2VrUSnMHmk8VhV2xu2PXjnO1mRpheRtTDC8ucG7
+ V3V24L+6qnZDNQ2OXJL2nNK5sxRdjQmVTRpMHPed1F/a7u2WrAWYHebeGQ7+Blwm0qIQ
+ /Q/eqSXGow9tMmqRYEBBimPuyPGFY9NA1Lb9ndLs4OCjPFGT2FN5Ru+lK8HZ/MO7c/jh
+ IiutSXUvEgrPxFQZlbMc6YqTHkGmDN6hxMtV1HkRX53GzhJvb3Sc3+MA0Rx2qX2voHOj uw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf7858u6a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 May 2023 05:07:56 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34957sb4005793
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 9 May 2023 05:07:54 GMT
+Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 8 May 2023 22:07:53 -0700
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [PATCH v7] usb: dwc3: fix gadget mode suspend interrupt handler issue
+Date:   Tue, 9 May 2023 13:07:43 +0800
+Message-ID: <20230509050743.5781-1-quic_linyyuan@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: _hzD1hEn25NEjt5Q_Ji2u5_2gNt1iCRm
+X-Proofpoint-GUID: _hzD1hEn25NEjt5Q_Ji2u5_2gNt1iCRm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-09_02,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ bulkscore=0 adultscore=0 priorityscore=1501 mlxlogscore=999
+ lowpriorityscore=0 malwarescore=0 mlxscore=0 impostorscore=0 clxscore=1015
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305090038
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git rndis-removal
-branch HEAD: ce3480c31462229e77b324c746b69e842a6d8a1b  USB: disable all RNDIS protocol drivers
+When work in gadget mode, currently driver doesn't update software level
+link_state correctly as link state change event is not enabled for most
+devices, in function dwc3_gadget_suspend_interrupt(), it will only pass
+suspend event to UDC core when software level link state changes, so when
+interrupt generated in sequences of suspend -> reset -> conndone ->
+suspend, link state is not updated during reset and conndone, so second
+suspend interrupt event will not pass to UDC core.
 
-elapsed time: 720m
+Remove link_state compare in dwc3_gadget_suspend_interrupt() and add a
+suspended flag to replace the compare function.
 
-configs tested: 112
-configs skipped: 12
+Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+---
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+v7: (refer v6 https://lore.kernel.org/linux-usb/20230505014902.27313-1-quic_linyyuan@quicinc.com/)
+1) reword suspended flag comment
+2) remove one extra space in if operation
+4) clear suspended flag for wakeup/reset/disconnect interrupt
+3) clear suspended flag for remote wakeup related case.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r003-20230508   gcc  
-alpha                randconfig-r023-20230507   gcc  
-alpha                randconfig-r035-20230507   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r002-20230508   gcc  
-arc                  randconfig-r043-20230507   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r002-20230507   clang
-arm                  randconfig-r003-20230507   clang
-arm                  randconfig-r014-20230508   clang
-arm                  randconfig-r046-20230507   gcc  
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r005-20230508   clang
-arm64                               defconfig   gcc  
-arm64                randconfig-r004-20230508   clang
-arm64                randconfig-r011-20230507   clang
-arm64                randconfig-r033-20230507   gcc  
-csky                                defconfig   gcc  
-hexagon              randconfig-r041-20230507   clang
-hexagon              randconfig-r045-20230507   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r002-20230508   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230508   clang
-i386                 randconfig-a002-20230508   clang
-i386                 randconfig-a003-20230508   clang
-i386                 randconfig-a004-20230508   clang
-i386                 randconfig-a005-20230508   clang
-i386                 randconfig-a006-20230508   clang
-i386                 randconfig-a011-20230508   gcc  
-i386                 randconfig-a012-20230508   gcc  
-i386                 randconfig-a013-20230508   gcc  
-i386                 randconfig-a014-20230508   gcc  
-i386                 randconfig-a015-20230508   gcc  
-i386                 randconfig-a016-20230508   gcc  
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r003-20230508   gcc  
-ia64         buildonly-randconfig-r004-20230508   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r031-20230508   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r016-20230507   gcc  
-microblaze           randconfig-r011-20230508   gcc  
-microblaze           randconfig-r024-20230507   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r026-20230507   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r014-20230507   gcc  
-nios2                randconfig-r021-20230507   gcc  
-nios2                randconfig-r032-20230507   gcc  
-openrisc             randconfig-r013-20230507   gcc  
-openrisc             randconfig-r015-20230507   gcc  
-openrisc             randconfig-r034-20230508   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r012-20230508   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r006-20230507   gcc  
-powerpc              randconfig-r033-20230508   clang
-powerpc              randconfig-r036-20230507   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230507   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r001-20230508   clang
-s390                 randconfig-r006-20230508   clang
-s390                 randconfig-r036-20230508   clang
-s390                 randconfig-r044-20230507   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r005-20230508   gcc  
-sh                   randconfig-r013-20230508   gcc  
-sh                   randconfig-r034-20230507   gcc  
-sh                   randconfig-r035-20230508   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r001-20230507   gcc  
-sparc64              randconfig-r022-20230507   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230508   clang
-x86_64               randconfig-a002-20230508   clang
-x86_64               randconfig-a003-20230508   clang
-x86_64               randconfig-a004-20230508   clang
-x86_64               randconfig-a005-20230508   clang
-x86_64               randconfig-a006-20230508   clang
-x86_64               randconfig-a011-20230508   gcc  
-x86_64               randconfig-a012-20230508   gcc  
-x86_64               randconfig-a013-20230508   gcc  
-x86_64               randconfig-a014-20230508   gcc  
-x86_64               randconfig-a015-20230508   gcc  
-x86_64               randconfig-a016-20230508   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r032-20230508   gcc  
+v6: (refer v5 https://lore.kernel.org/linux-usb/1682476780-2367-1-git-send-email-quic_linyyuan@quicinc.com/)
+1) change subject
+2) only keep suspended flag related change
 
+v5: (refer v4 https://lore.kernel.org/linux-usb/1682393256-15572-1-git-send-email-quic_linyyuan@quicinc.com/)
+1) rename suspend_irq_happen to suspended and document it
+2) add old_link_state for link change interrupt usage and change accordingly
+
+v4: (refer v3 https://lore.kernel.org/linux-usb/1682053861-21737-1-git-send-email-quic_linyyuan@quicinc.com/)
+1) remove link state checking in dwc3_gadget_wakeup_interrupt()
+2) remove two switch/case to if opeartion
+
+v3: (refer v2 https://lore.kernel.org/linux-usb/1682042472-21222-1-git-send-email-quic_linyyuan@quicinc.com/)
+no code change since v2, changes compare v1 as below,
+1) add a flag suspend_irq_happen to simplify dwc3_gadget_suspend_interrupt(),
+   it will avoid refer to software level link_state, finally link_state will
+   only used in dwc3_gadget_linksts_change_interrupt().
+2) remove sw setting of link_state in dwc3_gadget_func_wakeup()
+3) add dwc3_gadget_interrupt_early() to correct setting of link_state
+   and suspend_irq_happen.
+
+v2: update according v1 discussion
+v1: https://lore.kernel.org/linux-usb/1675221286-23833-1-git-send-email-quic_linyyuan@quicinc.com/
+
+ drivers/usb/dwc3/core.h   |  2 ++
+ drivers/usb/dwc3/gadget.c | 11 ++++++++++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index d56457c02996..1f043c31a096 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1116,6 +1116,7 @@ struct dwc3_scratchpad_array {
+  * @dis_metastability_quirk: set to disable metastability quirk.
+  * @dis_split_quirk: set to disable split boundary.
+  * @wakeup_configured: set if the device is configured for remote wakeup.
++ * @suspended: set to track suspend event due to U3/L2.
+  * @imod_interval: set the interrupt moderation interval in 250ns
+  *			increments or 0 to disable.
+  * @max_cfg_eps: current max number of IN eps used across all USB configs.
+@@ -1332,6 +1333,7 @@ struct dwc3 {
+ 	unsigned		dis_split_quirk:1;
+ 	unsigned		async_callbacks:1;
+ 	unsigned		wakeup_configured:1;
++	unsigned		suspended:1;
+ 
+ 	u16			imod_interval;
+ 
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index c0ca4d12f95d..b2ce96716d06 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2440,6 +2440,7 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
+ 			return -EINVAL;
+ 		}
+ 		dwc3_resume_gadget(dwc);
++		dwc->suspended = false;
+ 		dwc->link_state = DWC3_LINK_STATE_U0;
+ 	}
+ 
+@@ -4277,6 +4278,7 @@ static void dwc3_gadget_linksts_change_interrupt(struct dwc3 *dwc,
+ 		if (dwc->gadget->wakeup_armed) {
+ 			dwc3_gadget_enable_linksts_evts(dwc, false);
+ 			dwc3_resume_gadget(dwc);
++			dwc->suspended = false;
+ 		}
+ 		break;
+ 	case DWC3_LINK_STATE_U1:
+@@ -4303,8 +4305,10 @@ static void dwc3_gadget_suspend_interrupt(struct dwc3 *dwc,
+ {
+ 	enum dwc3_link_state next = evtinfo & DWC3_LINK_STATE_MASK;
+ 
+-	if (dwc->link_state != next && next == DWC3_LINK_STATE_U3)
++	if (!dwc->suspended && next == DWC3_LINK_STATE_U3) {
++		dwc->suspended = true;
+ 		dwc3_suspend_gadget(dwc);
++	}
+ 
+ 	dwc->link_state = next;
+ }
+@@ -4312,6 +4316,11 @@ static void dwc3_gadget_suspend_interrupt(struct dwc3 *dwc,
+ static void dwc3_gadget_interrupt(struct dwc3 *dwc,
+ 		const struct dwc3_event_devt *event)
+ {
++	if (event->type == DWC3_DEVICE_EVENT_DISCONNECT ||
++	    event->type == DWC3_DEVICE_EVENT_RESET ||
++	    event->type == DWC3_DEVICE_EVENT_WAKEUP)
++		dwc->suspended = false;
++
+ 	switch (event->type) {
+ 	case DWC3_DEVICE_EVENT_DISCONNECT:
+ 		dwc3_gadget_disconnect_interrupt(dwc);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.17.1
+
