@@ -2,85 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912156FC14F
-	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 10:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF606FC277
+	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 11:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234865AbjEIIJJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 May 2023 04:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
+        id S234609AbjEIJPL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 May 2023 05:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234912AbjEIIIs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 May 2023 04:08:48 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4ED6A59;
-        Tue,  9 May 2023 01:08:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683619687; x=1715155687;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=CsBQVDzs+AyhViIYfvFI7BjnqmBy7jowKSpDt9yNVOM=;
-  b=XOEVcmiWEHbkfhPTN4msxsgwJItL2C9B+T/xKlszgwswY5A8l6ALvM+R
-   FPHBYHnaUpaiNAsauWOJMY7f2NWSaFcN3B9LhLLPRfVSoF4C7igbEvszg
-   7MraUzyp+O5B2uwSVUbkVrLt+80COhglPhd1oS8jl0ccG/K6G5+plGUO6
-   3zxFrIkr80/kbmIHVhqQUZBO0NXw9y9k3gXr2VKTzs0Gw2NAn7yjcmp3b
-   Wi1heGGjUFHrYWUQBdt9UNLTvO8bwfjRFJWRwMJVEu3RLyLzR7/JOJSRv
-   3XYrmKH4O0sEAz5t4kpwkka/i8LQXBlIeWHUea2WACMvc1WpF6CGE6KKJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="415400202"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="415400202"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 01:06:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="1028722785"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="1028722785"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga005.fm.intel.com with ESMTP; 09 May 2023 01:06:26 -0700
-Message-ID: <d59ce91a-1992-6cae-1a6a-ada922594cda@intel.com>
-Date:   Tue, 9 May 2023 11:08:00 +0300
+        with ESMTP id S229937AbjEIJPH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 May 2023 05:15:07 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6204BDC58
+        for <linux-usb@vger.kernel.org>; Tue,  9 May 2023 02:15:05 -0700 (PDT)
+X-ASG-Debug-ID: 1683623699-1eb14e63866ee00001-YVMibp
+Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx2.zhaoxin.com with ESMTP id lQHn8UbFhW9MmM3a (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Tue, 09 May 2023 17:14:59 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
+ (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Tue, 9 May
+ 2023 17:14:59 +0800
+Received: from [192.168.3.85] (222.128.104.110) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Tue, 9 May
+ 2023 17:14:57 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Message-ID: <3202ceef-f369-4622-a83a-ff85c3011199@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 192.168.3.85
+Date:   Wed, 10 May 2023 01:14:57 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
 Subject: Re: [PATCH v4 0/4] Fix some issues for ZHAOXIN xHCI host
 Content-Language: en-US
-To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     WeitaoWang@zhaoxin.com
+X-ASG-Orig-Subj: Re: [PATCH v4 0/4] Fix some issues for ZHAOXIN xHCI host
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <WeitaoWang@zhaoxin.com>
 References: <20230508212058.6307-1-WeitaoWang-oc@zhaoxin.com>
-From:   Mathias Nyman <mathias.nyman@intel.com>
-In-Reply-To: <20230508212058.6307-1-WeitaoWang-oc@zhaoxin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+ <d59ce91a-1992-6cae-1a6a-ada922594cda@intel.com>
+From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+In-Reply-To: <d59ce91a-1992-6cae-1a6a-ada922594cda@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [222.128.104.110]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
+X-Barracuda-Start-Time: 1683623699
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 812
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: 1.09
+X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.108524
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9.5.2023 0.20, Weitao Wang wrote:
-> Fix some issues for ZHAOXIN xHCI host.
+On 2023/5/9 16:08, Mathias Nyman wrote:
+> On 9.5.2023 0.20, Weitao Wang wrote:
+>> Fix some issues for ZHAOXIN xHCI host.
+>>
+>> Weitao Wang (4):
+>>    xhci: Fix resume issue of some ZHAOXIN hosts
+>>    xhci: Fix TRB prefetch issue of ZHAOXIN hosts
+>>    xhci: Show ZHAOXIN xHCI root hub speed correctly
+>>    xhci: Add ZHAOXIN xHCI host U1/U2 feature support
+>>
+>>   drivers/usb/host/xhci-mem.c | 38 ++++++++++++++++++++++++--------
+>>   drivers/usb/host/xhci-pci.c | 13 +++++++++++
+>>   drivers/usb/host/xhci.c     | 43 ++++++++++++++++---------------------
+>>   drivers/usb/host/xhci.h     |  2 ++
+>>   4 files changed, 62 insertions(+), 34 deletions(-)
+>>
 > 
-> Weitao Wang (4):
->    xhci: Fix resume issue of some ZHAOXIN hosts
->    xhci: Fix TRB prefetch issue of ZHAOXIN hosts
->    xhci: Show ZHAOXIN xHCI root hub speed correctly
->    xhci: Add ZHAOXIN xHCI host U1/U2 feature support
+> Thanks, added to queue
 > 
->   drivers/usb/host/xhci-mem.c | 38 ++++++++++++++++++++++++--------
->   drivers/usb/host/xhci-pci.c | 13 +++++++++++
->   drivers/usb/host/xhci.c     | 43 ++++++++++++++++---------------------
->   drivers/usb/host/xhci.h     |  2 ++
->   4 files changed, 62 insertions(+), 34 deletions(-)
-> 
+> -Mathias
 
-Thanks, added to queue
+That's great! Thanks again for your help and suggestion.
+Weitao
 
--Mathias
