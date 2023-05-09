@@ -2,209 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7B26FBD6B
-	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 04:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8526FBE5E
+	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 06:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234331AbjEIC7z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 May 2023 22:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49450 "EHLO
+        id S234534AbjEIEpC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 May 2023 00:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbjEIC7x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 May 2023 22:59:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9E95269;
-        Mon,  8 May 2023 19:59:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C73EE630C5;
-        Tue,  9 May 2023 02:59:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D6E7C433EF;
-        Tue,  9 May 2023 02:59:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1683601191;
-        bh=e/8vDWFGbBKxRx6vmR5upAyXHj6TIzXRSmqVZmD1rzA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m3ENmpbW6/q82yaTDqwhnBtP5Bh1krK7ZGeqyvj4wEn+l3h99bm/ff59OGjFAnAui
-         uNzqCYSGR5HM6pivSjuem6zquLPR1y2HwJpwJHX+EwuwP6g1RDoR+7GPaWx4zaT3Uz
-         VwkCqzbVnq2dYsBdVXCwUnzwK/hBQZuQ7dqVZfdA=
-Date:   Tue, 9 May 2023 04:59:47 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>
-Subject: Re: [BUG] Kmemleak, possibly hiddev_connect(), in 6.3.0+ torvalds
- tree commit gfc4354c6e5c2
-Message-ID: <2023050958-precut-vividly-94bf@gregkh>
-References: <f64b17fa-d509-ad30-6e8d-e4c979818047@alu.unizg.hr>
- <2023050824-juiciness-catching-9290@gregkh>
- <2023050854-collage-dreamt-660c@gregkh>
- <c73471aa-522a-83a4-5614-506581604301@alu.unizg.hr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c73471aa-522a-83a4-5614-506581604301@alu.unizg.hr>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S234624AbjEIEpA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 May 2023 00:45:00 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221327688
+        for <linux-usb@vger.kernel.org>; Mon,  8 May 2023 21:44:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683607499; x=1715143499;
+  h=date:from:to:cc:subject:message-id;
+  bh=pixqkkPKIupM4t0ljnTeRSFtPfoablu6yslSJyF8h/s=;
+  b=SBDx9WLvX8C6o5VtnwkQnqYB70rwARd77ud/+nG9kg+DRzALvf/UhGPv
+   PWyteFMuhr7qZgGuebUxxcKtQbvF4/RKmTXAGPlw27tKBBxhE99+1tKGh
+   7YcqukDeNFjAJblAawWAU4t8dt7frvgCvWXKKLOl2+EBv54EK+XL/MbgE
+   dI90PphxyUKMh+jjoe8t7Ah0FBfgWZueZQVK68TfQ0DmkNeN+WZO1XiHP
+   dM4QbcyeW21NjzkftW3zo8A418hu9y+dc7wSlEUcRWeyC7lRJ7zz3Dscz
+   n/cL9ZwCFm2sCMPyloD9I6FoBgNlzMaFXq0IqYnOmyUesTCdR4FOVQmZn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="349845532"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="349845532"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 21:44:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="810508423"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="810508423"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 08 May 2023 21:44:58 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwFDd-0001i8-1S;
+        Tue, 09 May 2023 04:44:57 +0000
+Date:   Tue, 09 May 2023 12:44:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:rndis-removal] BUILD SUCCESS
+ ce3480c31462229e77b324c746b69e842a6d8a1b
+Message-ID: <20230509044431.AouLf%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 09, 2023 at 01:51:35AM +0200, Mirsad Goran Todorovac wrote:
-> 
-> 
-> On 08. 05. 2023. 16:01, Greg Kroah-Hartman wrote:
-> > On Mon, May 08, 2023 at 08:51:55AM +0200, Greg Kroah-Hartman wrote:
-> > > On Mon, May 08, 2023 at 08:30:07AM +0200, Mirsad Goran Todorovac wrote:
-> > > > Hi,
-> > > > 
-> > > > There seems to be a kernel memory leak in the USB keyboard driver.
-> > > > 
-> > > > The leaked memory allocs are 96 and 512 bytes.
-> > > > 
-> > > > The platform is Ubuntu 22.04 LTS on a assembled AMD Ryzen 9 with X670E PG
-> > > > Lightning mobo,
-> > > > and Genius SlimStar i220 GK-080012 keyboard.
-> > > > 
-> > > > (Logitech M100 HID mouse is not affected by the bug.)
-> > > > 
-> > > > BIOS is:
-> > > > 
-> > > >       *-firmware
-> > > >            description: BIOS
-> > > >            vendor: American Megatrends International, LLC.
-> > > >            physical id: 0
-> > > >            version: 1.21
-> > > >            date: 04/26/2023
-> > > >            size: 64KiB
-> > > > 
-> > > > The kernel is 6.3.0-torvalds-<id>-13466-gfc4354c6e5c2.
-> > > > 
-> > > > The keyboard is recognised as Chicony:
-> > > > 
-> > > >                   *-usb
-> > > >                        description: Keyboard
-> > > >                        product: CHICONY USB Keyboard
-> > > >                        vendor: CHICONY
-> > > >                        physical id: 2
-> > > >                        bus info: usb@5:2
-> > > >                        logical name: input35
-> > > >                        logical name: /dev/input/event4
-> > > >                        logical name: input35::capslock
-> > > >                        logical name: input35::numlock
-> > > >                        logical name: input35::scrolllock
-> > > >                        logical name: input36
-> > > >                        logical name: /dev/input/event5
-> > > >                        logical name: input37
-> > > >                        logical name: /dev/input/event6
-> > > >                        logical name: input38
-> > > >                        logical name: /dev/input/event8
-> > > >                        version: 2.30
-> > > >                        capabilities: usb-2.00 usb
-> > > >                        configuration: driver=usbhid maxpower=100mA
-> > > > speed=1Mbit/s
-> > > > 
-> > > > The bug is easily reproduced by unplugging the USB keyboard, waiting about a
-> > > > couple of seconds,
-> > > > and then reconnect and scan for memory leaks twice.
-> > > > 
-> > > > The kmemleak log is as follows [edited privacy info]:
-> > > > 
-> > > > root@hostname:/home/username# cat /sys/kernel/debug/kmemleak
-> > > > unreferenced object 0xffff8dd020037c00 (size 96):
-> > > >    comm "systemd-udevd", pid 435, jiffies 4294892550 (age 8909.356s)
-> > > >    hex dump (first 32 bytes):
-> > > >      5d 8e 4e b9 ff ff ff ff 00 00 00 00 00 00 00 00 ].N.............
-> > > >      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
-> > > >    backtrace:
-> > > >      [<ffffffffb81a74be>] __kmem_cache_alloc_node+0x22e/0x2b0
-> > > >      [<ffffffffb8127b6e>] kmalloc_trace+0x2e/0xa0
-> > > >      [<ffffffffb87543d9>] class_create+0x29/0x80
-> > > >      [<ffffffffb8880d24>] usb_register_dev+0x1d4/0x2e0
-> > > 
-> > > As the call to class_create() in this path is now gone in 6.4-rc1, can
-> > > you retry that release to see if this is still there or not?
-> > 
-> > No, wait, it's still there, I was looking at a development branch of
-> > mine that isn't sent upstream yet.  And syzbot just reported the same
-> > thing:
-> > 	https://lore.kernel.org/r/00000000000058d15f05fb264013@google.com
-> > 
-> > So something's wrong here, let me dig into it tomorrow when I get a
-> > chance...
-> 
-> If this could help, here is the bisect of the bug (I could not discern what
-> could possibly be wrong):
-> 
-> user@host:~/linux/kernel/linux_torvalds$ git bisect log
-> git bisect start
-> # bad: [ac9a78681b921877518763ba0e89202254349d1b] Linux 6.4-rc1
-> git bisect bad ac9a78681b921877518763ba0e89202254349d1b
-> # good: [c9c3395d5e3dcc6daee66c6908354d47bf98cb0c] Linux 6.2
-> git bisect good c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
-> # good: [85496c9b3bf8dbe15e2433d3a0197954d323cadc] Merge branch
-> 'net-remove-some-rcu_bh-cruft'
-> git bisect good 85496c9b3bf8dbe15e2433d3a0197954d323cadc
-> # good: [b68ee1c6131c540a62ecd443be89c406401df091] Merge tag 'scsi-misc' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
-> git bisect good b68ee1c6131c540a62ecd443be89c406401df091
-> # bad: [888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0] Merge tag 'sysctl-6.4-rc1'
-> of git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux
-> git bisect bad 888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0
-> # good: [34b62f186db9614e55d021f8c58d22fc44c57911] Merge tag
-> 'pci-v6.4-changes' of git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci
-> git bisect good 34b62f186db9614e55d021f8c58d22fc44c57911
-> # good: [34da76dca4673ab1819830b4924bb5b436325b26] Merge tag
-> 'for-linus-2023042601' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid
-> git bisect good 34da76dca4673ab1819830b4924bb5b436325b26
-> # good: [97b2ff294381d05e59294a931c4db55276470cb5] Merge tag
-> 'staging-6.4-rc1' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging
-> git bisect good 97b2ff294381d05e59294a931c4db55276470cb5
-> # good: [2025b2ca8004c04861903d076c67a73a0ec6dfca] mcb-lpc: Reallocate
-> memory region to avoid memory overlapping
-> git bisect good 2025b2ca8004c04861903d076c67a73a0ec6dfca
-> # bad: [d06f5a3f7140921ada47d49574ae6fa4de5e2a89] cdx: fix build failure due
-> to sysfs 'bus_type' argument needing to be const
-> git bisect bad d06f5a3f7140921ada47d49574ae6fa4de5e2a89
-> # good: [dcfbb67e48a2becfce7990386e985b9c45098ee5] driver core: class: use
-> lock_class_key already present in struct subsys_private
-> git bisect good dcfbb67e48a2becfce7990386e985b9c45098ee5
-> # bad: [6f14c02220c791d5c46b0f965b9340c58f3d503d] driver core: create
-> class_is_registered()
-> git bisect bad 6f14c02220c791d5c46b0f965b9340c58f3d503d
-> # good: [2f9e87f5a2941b259336c7ea6c5a1499ede4554a] driver core: Add a
-> comment to set_primary_fwnode() on nullifying
-> git bisect good 2f9e87f5a2941b259336c7ea6c5a1499ede4554a
-> # bad: [02fe26f25325b547b7a31a65deb0326c04bb5174] firmware_loader: Add debug
-> message with checksum for FW file
-> git bisect bad 02fe26f25325b547b7a31a65deb0326c04bb5174
-> # good: [884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82] driver core: class:
-> implement class_get/put without the private pointer.
-> git bisect good 884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82
-> # bad: [3f84aa5ec052dba960baca4ab8a352d43d47028e] base: soc: populate
-> machine name in soc_device_register if empty
-> git bisect bad 3f84aa5ec052dba960baca4ab8a352d43d47028e
-> # bad: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver core: class.c:
-> convert to only use class_to_subsys
-> git bisect bad 7b884b7f24b42fa25e92ed724ad82f137610afaf
-> # first bad commit: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver core:
-> class.c: convert to only use class_to_subsys
-> user@host:~/linux/kernel/linux_torvalds$
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git rndis-removal
+branch HEAD: ce3480c31462229e77b324c746b69e842a6d8a1b  USB: disable all RNDIS protocol drivers
 
-This helps a lot, thanks.  I got the reference counting wrong somewhere
-in here, I thought I tested this better, odd it shows up now...
+elapsed time: 720m
 
-I'll try to work on it this week.
+configs tested: 112
+configs skipped: 12
 
-thanks,
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-greg k-h
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r003-20230508   gcc  
+alpha                randconfig-r023-20230507   gcc  
+alpha                randconfig-r035-20230507   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r002-20230508   gcc  
+arc                  randconfig-r043-20230507   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r002-20230507   clang
+arm                  randconfig-r003-20230507   clang
+arm                  randconfig-r014-20230508   clang
+arm                  randconfig-r046-20230507   gcc  
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r005-20230508   clang
+arm64                               defconfig   gcc  
+arm64                randconfig-r004-20230508   clang
+arm64                randconfig-r011-20230507   clang
+arm64                randconfig-r033-20230507   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r041-20230507   clang
+hexagon              randconfig-r045-20230507   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r002-20230508   clang
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230508   clang
+i386                 randconfig-a002-20230508   clang
+i386                 randconfig-a003-20230508   clang
+i386                 randconfig-a004-20230508   clang
+i386                 randconfig-a005-20230508   clang
+i386                 randconfig-a006-20230508   clang
+i386                 randconfig-a011-20230508   gcc  
+i386                 randconfig-a012-20230508   gcc  
+i386                 randconfig-a013-20230508   gcc  
+i386                 randconfig-a014-20230508   gcc  
+i386                 randconfig-a015-20230508   gcc  
+i386                 randconfig-a016-20230508   gcc  
+ia64                             allmodconfig   gcc  
+ia64         buildonly-randconfig-r003-20230508   gcc  
+ia64         buildonly-randconfig-r004-20230508   gcc  
+ia64                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r031-20230508   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r016-20230507   gcc  
+microblaze           randconfig-r011-20230508   gcc  
+microblaze           randconfig-r024-20230507   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r026-20230507   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r014-20230507   gcc  
+nios2                randconfig-r021-20230507   gcc  
+nios2                randconfig-r032-20230507   gcc  
+openrisc             randconfig-r013-20230507   gcc  
+openrisc             randconfig-r015-20230507   gcc  
+openrisc             randconfig-r034-20230508   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r012-20230508   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r006-20230507   gcc  
+powerpc              randconfig-r033-20230508   clang
+powerpc              randconfig-r036-20230507   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230507   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r001-20230508   clang
+s390                 randconfig-r006-20230508   clang
+s390                 randconfig-r036-20230508   clang
+s390                 randconfig-r044-20230507   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r005-20230508   gcc  
+sh                   randconfig-r013-20230508   gcc  
+sh                   randconfig-r034-20230507   gcc  
+sh                   randconfig-r035-20230508   gcc  
+sparc                               defconfig   gcc  
+sparc64              randconfig-r001-20230507   gcc  
+sparc64              randconfig-r022-20230507   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230508   clang
+x86_64               randconfig-a002-20230508   clang
+x86_64               randconfig-a003-20230508   clang
+x86_64               randconfig-a004-20230508   clang
+x86_64               randconfig-a005-20230508   clang
+x86_64               randconfig-a006-20230508   clang
+x86_64               randconfig-a011-20230508   gcc  
+x86_64               randconfig-a012-20230508   gcc  
+x86_64               randconfig-a013-20230508   gcc  
+x86_64               randconfig-a014-20230508   gcc  
+x86_64               randconfig-a015-20230508   gcc  
+x86_64               randconfig-a016-20230508   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r032-20230508   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
