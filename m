@@ -2,221 +2,460 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A7D6FC8BA
-	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 16:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 809CC6FC976
+	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 16:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235548AbjEIOUM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 May 2023 10:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
+        id S235952AbjEIOtS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 May 2023 10:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235027AbjEIOUK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 May 2023 10:20:10 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2067.outbound.protection.outlook.com [40.107.102.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282A930D6;
-        Tue,  9 May 2023 07:20:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Nobpo8+tNchjRUJ3Ec0jqEj8JfkPO/1//53VboU8GevAUJL2ytr1P9hP7Mjw3/i66eOBPvnLCMcbYlYTGXd44FwLcztAd83ImHB2YTyF7B3HrPs83ofQLT7woMCAFgktew7HAVzTCG74s4YJcO6VHqVR5QQBjRFQdAgDmNKE3OTvFNEHMYInI2AQ/f9abj9H3tJPP3LyvaL+yJo5aSQn/f57af32kVBZAjcJ5DiyCOJy8NaQ/I50t8VqHZJjROkVMDVJNsqbLj+55pBSR95S/RlBY/eVx8uKhUseb4xb0DOrzLwFmPO8VFn22psaUWVdjERTBmvMSZsuhMyC8nfluA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dDyrVSAQLyyeKL8iaML1gzPwmGtVPrgQ3QZk/2z7his=;
- b=lylCUJYp6XeTpjW3syuXHEXZqikLXxD4b4t5s31tojkSRT8Pf5tvqxwq+pVBPYVCCsmL9BSWeESvR48DEEK9ufcR/BHaB5HNapRK8JGjocCIGHmmq/Lmbs+aFGgDFHSHr4FrGRXOXuU/qbBqw/3E866xIYpAg4xSqn/Lzu00kmJWM+jtWGXLR5MLdIxWw/nglaDkA7RqNfHdiNR1+vXvNAU4lg/m9Ow7RmPBwejtsPs7ZjEqaDppNDUiBKbxGOY4c7zprRPBuEXCaLya67YaDjAq3nWtr6kdehJ8DCBEow/nnKH3yVsbR+1cCpCS4lE9YVpCFVZXH0OcLERfEGKREw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dDyrVSAQLyyeKL8iaML1gzPwmGtVPrgQ3QZk/2z7his=;
- b=b3c48RvEIlBFddCfsG78RPfSr1KjiXVnrupU9RnpGRgPjuP46n+sCiDDUm0d5DAFKk4r9jEE4KNWKK4vv3t7/QHev72AGM8ZVL5s0ALKfcjObK7aJgeWyw2Tk0/PJF1/1Lwha1PLspFh1cpxuiovNpQCEu6mlNPPNxIgKkQvlY8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com (2603:10b6:a03:a5::28)
- by DM6PR12MB4122.namprd12.prod.outlook.com (2603:10b6:5:214::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Tue, 9 May
- 2023 14:20:02 +0000
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::20b9:d472:1981:cf94]) by BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::20b9:d472:1981:cf94%4]) with mapi id 15.20.6363.032; Tue, 9 May 2023
- 14:20:01 +0000
-Message-ID: <1868d9ae-1376-d91d-a789-9e510bde96a7@amd.com>
-Date:   Tue, 9 May 2023 16:19:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2] dt-bindings: usb: Add binding for Microchip usb5744
- hub controller
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com,
-        ilias.apalodimas@linaro.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Piyush Mehta <piyush.mehta@amd.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <dd31f987316fb2739644628b5840a6d447b5a587.1683293125.git.michal.simek@amd.com>
- <32aa46df-9ed5-7d2a-868f-a36414f54534@linaro.org>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <32aa46df-9ed5-7d2a-868f-a36414f54534@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR06CA0168.eurprd06.prod.outlook.com
- (2603:10a6:803:c8::25) To BYAPR12MB4758.namprd12.prod.outlook.com
- (2603:10b6:a03:a5::28)
+        with ESMTP id S229550AbjEIOtQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 May 2023 10:49:16 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A9830F9;
+        Tue,  9 May 2023 07:49:14 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 349CM94m025799;
+        Tue, 9 May 2023 14:49:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=Aq6v2rJLOgdYWwEKEDItqqwSLSKAWtteeRDRngmA220=;
+ b=AJOPIkJjVVuLmeFxu/ogVk+9RFM23dufVV+a/yrhlMly1hRldtT2oUXt7H+xOCqlfZTW
+ uH/TLYQc+yTmRwDEQf4PaqIP1ULi3HFwnQ1D7y5/t4p1uwC8BqZcshl63ChR76EjzCQB
+ NzD33NYI5wz1HAJtqFWM08f6iIsDWWChgglg1KnTuhbeu8HyYl9TrJlIQioty6UaOH5s
+ 4qFRH8OAWgyzRtHCKrf83YjtTUTG7D5L6dlHANADtJeHRHa0nnkiqa1XHUud4yLWovij
+ d+cWd6WKOwdFOxgJVelLTJKn5gGo2lYdTvULHVE5mDuuxDaf4AYb3utwqHLXsYtOJDXT CA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf77ha2jr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 May 2023 14:49:07 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 349Emo20008154
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 9 May 2023 14:48:50 GMT
+Received: from hu-ugoswami-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 9 May 2023 07:48:47 -0700
+From:   Udipto Goswami <quic_ugoswami@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        "Oliver Neukum" <oneukum@suse.com>, <linux-usb@vger.kernel.org>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v10] usb: dwc3: debugfs: Resume dwc3 before accessing registers
+Date:   Tue, 9 May 2023 20:18:36 +0530
+Message-ID: <20230509144836.6803-1-quic_ugoswami@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4758:EE_|DM6PR12MB4122:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4ec104ee-adf6-489c-76f4-08db50987a0a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CE4q/Mob3l4iO4JHbFlCgMqCq8hIe88YHAWjJhkBGOl9YIS3EeBGQR2noGx4IuU6TU0+qOMldKkrrLyhKDu7EzOyEPNFlcNHBnQ9JAU7S2l8MNzwAf5tiWbczJaSupMMCTeiuSr01yDfnIqT+1NMkAozFV1ZNJcNqcU5HPbOTMGvp4VTZjVVdc2AIIsyQ56xBxAzROxPBK6AaqSioFXaZRwTzAk0FlpVis54fZd8khD2ylYsm/1oB0RzglCcyuQIEB02haUVOozrxr1I/v0DoJ83PhAVphBZRoJPmOwImIk5FrOnzi4nbUM7Mgq30yN/ZPClMntIIpuiO3lUUQ8GAUottukEASbt85du+1m3kFggbYHxpfyyt7hBCdSZM1nR6Mwey5284nWMPyhsaanTQtLu5VR/Nfnv8uBw816dgAUGDJKpRAoeoi4U+gmgtzXcwINVSRGskGTTyMiJZe3XgaWYCgw/ennuXlZZ8I9my5/pX7GOAYT3+cK2ilb47bbbqb0iXyeMB9HaTxKCiUI0EkhiBz8W7cFooBWWZGu9wWp467d5tbPCsExWyC1cT8G9dzYquml18X94Hjo4qzoN+RbFpJIvaPkH/TDqxIteXjIAHTfmrzK9WsMDDxBeMQG/uXIPDHKC0fYk/B/T/L6/TFL1+xcIabeAC4Bih9XcbSki9ayV4jO2iMjWmT8eQlBo
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4758.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(366004)(39860400002)(136003)(451199021)(2616005)(8676002)(8936002)(66899021)(53546011)(6512007)(6506007)(38100700002)(26005)(7416002)(478600001)(44832011)(36756003)(5660300002)(186003)(2906002)(66946007)(66556008)(66476007)(31686004)(4326008)(54906003)(6486002)(316002)(966005)(86362001)(31696002)(6666004)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UzJGcXBrdHVpKzlYVlhUZEM1L3pIbEpjZ1BCK1N6U050UExlL0YvV1l6cVJx?=
- =?utf-8?B?NWE3TU50ekp6ZzRzazI1eDF6S3VCZk5UY3VOSEdYa3RhMWZmbENOTTBZNUtR?=
- =?utf-8?B?RFhHcmxVNThwVkYvUzUzQjhHTWRxTElwOUYxN1hXU0gyRERnQzE1U3B6UHor?=
- =?utf-8?B?QW42SGZLM3ZZaENQZVFSRDNHQTUwTFkvU1pKSytvKzRmN2gwYk5ESko4UGV0?=
- =?utf-8?B?ZG1yaEdqSlIvZ2NSaDFLSFVuZHZIaXVaYjFVbEUzcERrY3RWZUZkV1F6T0Rw?=
- =?utf-8?B?UUwvZkNQdU9TSXZHSmdsQXNwbVl5MU9xZGhDM21vdTl6d3dGRHY1TTNHU2ow?=
- =?utf-8?B?UjZGS0pRMFdPR1J5OVc4QjNsUFZCS0VnQXludzZBYkxGbFFRV2lxbFdsTTZx?=
- =?utf-8?B?cElqT0VPd25XR25lbmZ6RGdnUW16by8vOUd0eU5Ed2o1ak43RjdiUi9ibUR5?=
- =?utf-8?B?TGM4WDdHcXhzbjY3cHhlSUs4MzhEekN0UjdrdGNocUxBcmVzaERzK24yY0Rv?=
- =?utf-8?B?ZHVjd2VKSi84WVVPeDhvNnBtbGNleVBuY2VpMExqUmhQSHk4STRCZjV3TWp4?=
- =?utf-8?B?dlFyVTd4NEg1T2JtMUxkMHplZGxVdlZkVFBFZG16ZVROUldRZXVnejc4TVBC?=
- =?utf-8?B?VWpMZEd4aWUzbzc0KytKVnIwYTNPQStmN1g3SW5Qb1FHRXQyZHFyRFR0ZGJR?=
- =?utf-8?B?WWVyeUEyM3Y2NnNlOXlUKzV5LzZkamw4eGlRQ3QvVVg0T1dQTjg1WGNwbld3?=
- =?utf-8?B?cHA5WlZZUFpYWGVBVEtkaEdOQnZHbDhjWk9YTit2cmRaQ1Nwem0yUjZQcWM0?=
- =?utf-8?B?ZkErdEJ0bW9mSnBiMGhNRjZPeHc5T2lOejdONW5yK1NIWkhSQ2h1NklRa3Iz?=
- =?utf-8?B?MUtEWVppK2JhZThjMlViS081QkI1L3RCVE5IWE9ZV01qeTc3S3VjMW1VV29k?=
- =?utf-8?B?OHZsSEE4c1dCL1g1SUtYdG5pUW05WDFxVkw3K2RNbEdYMzVzTEJuYzRka2p6?=
- =?utf-8?B?TWlhRkZHVEpGRzBWZG1NV0ZWalcvTytIMU1CQjIyK2VIaHNDc0JpVE5CRXFT?=
- =?utf-8?B?S2p4dWxzVzJkai9SdUxpaXJZM2ZZeWlSWXd5SEVzKzJKamdUVU9vYjdnTWdt?=
- =?utf-8?B?YU5Vc1FDV2RCbVpYNmVLNFpyYzdmL01vMVMrSzR2REZidGh4dmdaNytRQytC?=
- =?utf-8?B?bitNZGtTeC9UbkxxTW10aDF4QS9JUXExczVvV3pwZVU3cnBBSW91YU5CTWFX?=
- =?utf-8?B?YjR2OWRtNDBldTZ1MjlTZHhiV1YzQ2txRFhxbzN6a09qdkRvdmJ0NU5Dc3hk?=
- =?utf-8?B?amsxNWUvUkV3NGxZd1lDOUovRGlOUGIxdm8zMTVxM3c0aTgxVFl1L1VlcHpK?=
- =?utf-8?B?TkdzU1RsZ2ZWbUJueFNPeEV2amdhUnNwdmVOZ1hoTmErY2E3S09WOXdUWDFp?=
- =?utf-8?B?R0RLR2ZtK3pTTHFUUTUrbzVpdHVEMFU1VDNCVkcxTUpxMHFpU3RIeXl5c0xu?=
- =?utf-8?B?MHp5T3V4Y1pTeXdiSnNSSEQxNDN3TzdOUDNxUUY0Nm5WZVR4d3ZWQjBJeUdS?=
- =?utf-8?B?bzlqQS9ydzJ2eHBHQWMrRGc1ZERRaDY1Q1NBNmxSQ0hpSmRwblBxNnd1N2pi?=
- =?utf-8?B?UktleTJLbXN5KzhpUE1FMk9oR0ptZ2tJc2sxd0JjWURMQnpoY1NKS2J0aUFF?=
- =?utf-8?B?R3drS0VRd2hqT3FGSExXUDA2Snkxd044TlMybDloMHFqNXhLVXdKMWdwY1pw?=
- =?utf-8?B?VExKWmNIOGhmOVdxaTdHUUg3N3pRSGtjZTA0RXVReklYbCtFKzgzN0RZOHpZ?=
- =?utf-8?B?bjR0N0h6VTloVjh2b2RZaTh3MC8rTHJOMzlMNUdVQStYZFJGcnJ3ZjZrSlZ3?=
- =?utf-8?B?RXVOSndicUpKRzFDblhqSms3dVBKaTd1YUFaMTR3bHdGSGlvWmJSMlJjTlhM?=
- =?utf-8?B?U3B5a3VJZHhONXlzUjh3dmtEdVptUnkrMXUxL3I0aFNzaFhHL01sNFBrQXl5?=
- =?utf-8?B?K2xMaHdmWng3TVNwZUNrZDFsdndwek9DaGM0UjVmMVFVMUhoZW9US253dXNl?=
- =?utf-8?B?anEzWGF1aUNPemNudTBoMC9Ea1ZYMWxxTjYyWEVTbmo5K2hJOXNKd2dmRksw?=
- =?utf-8?Q?zsIFS/YG6X5MvMgpyI29ZWP1n?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ec104ee-adf6-489c-76f4-08db50987a0a
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4758.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 14:20:01.8696
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: moTf+dvZ1vXoRw5uQ4Rqf8QqHQPPAemS7yb3a1xdLRW78BRHlat80vWCKgQweekJ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4122
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: wYM1Onm2LF83or9EpJqKmg5yki4EprDo
+X-Proofpoint-ORIG-GUID: wYM1Onm2LF83or9EpJqKmg5yki4EprDo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-09_08,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ bulkscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 suspectscore=0 phishscore=0 mlxlogscore=658
+ adultscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305090122
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+When the dwc3 device is runtime suspended, various required clocks are in
+disabled state and it is not guaranteed that access to any registers would
+work. Depending on the SoC glue, a register read could be as benign as
+returning 0 or be fatal enough to hang the system.
 
+In order to prevent such scenarios of fatal errors, make sure to resume
+dwc3 then allow the function to proceed.
 
-On 5/7/23 10:07, Krzysztof Kozlowski wrote:
-> On 05/05/2023 15:25, Michal Simek wrote:
->> The Microchip usb5744 is a SS/HS USB 3.0 hub controller with 4 ports.
->> The binding describes USB related aspects of the USB5744 hub, it as
->> well cover the option of connecting the controller as an i2c slave.
->> When i2c interface is connected hub needs to be initialized first.
->> Hub itself has fixed i2c address 0x2D but hardcoding address is not good
->> idea because address can be shifted by i2c address translator in the
->> middle.
->>
->> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
->> Signed-off-by: Michal Simek <michal.simek@amd.com>
->> ---
->>
->> Changes in v2:
->> - fix i2c-bus property
->> - swap usb2.0/3.0 compatible strings
->> - fix indentation in example (4 spaces)
->> - add new i2c node with microchip,usb5744 compatible property
->>
->> It looks like that usb8041 has also an optional i2c interface which is not
->> covered. But it is mentioned at commit 40e58a8a7ca6 ("dt-bindings: usb:
->> Add binding for TI USB8041 hub controller").
->>
->> i2c-bus name property was suggested by Rob at
->> https://lore.kernel.org/all/CAL_JsqJedhX6typpUKbnzV7CLK6UZVjq3CyG9iY_j5DLPqvVdw@mail.gmail.com/
->> and
->> https://lore.kernel.org/all/CAL_JsqJZBbu+UXqUNdZwg-uv0PAsNg55026PTwhKr5wQtxCjVQ@mail.gmail.com/
->>
->> the question is if adding address like this is acceptable.
->> But it must be specified.
->>
->> Driver will follow based on final dt-binding.
->>
->> $ref: usb-device.yaml# should be also added but have no idea how to wire it
->> up to be applied only on usb node not i2c one.
->>
->> ---
->>   .../bindings/usb/microchip,usb5744.yaml       | 110 ++++++++++++++++++
->>   1 file changed, 110 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
->> new file mode 100644
->> index 000000000000..7e0a3472ea95
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
->> @@ -0,0 +1,110 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/usb/microchip,usb5744.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Microchip USB5744 4-port Hub Controller
->> +
->> +description:
->> +  Microchip's USB5744 SmartHubTM IC is a 4 port, SuperSpeed (SS)/Hi-Speed (HS),
->> +  low power, low pin count configurable and fully compliant with the USB 3.1
->> +  Gen 1 specification. The USB5744 also supports Full Speed (FS) and Low Speed
->> +  (LS) USB signaling, offering complete coverage of all defined USB operating
->> +  speeds. The new SuperSpeed hubs operate in parallel with the USB 2.0
->> +  controller, so 5 Gbps SuperSpeed data transfers are not affected by slower
->> +  USB 2.0 traffic.
->> +
->> +maintainers:
->> +  - Piyush Mehta <piyush.mehta@amd.com>
->> +  - Michal Simek <michal.simek@amd.com>
->> +
->> +select:
->> +  properties:
->> +    compatible:
->> +      contains:
->> +        const: microchip,usb5744
->> +  required:
->> +    - compatible
-> 
-> I don't understand why do you need this select. It basically disables
-> schema matching for other ones.
+Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
+Cc: stable@vger.kernel.org #3.2: 30332eeefec8: debugfs: regset32: Add Runtime PM support
+Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+---
+v10: Re-wrote the subject & the commit text along with the dependency.
+v9: Fixed function dwc3_rx_fifo_size_show & return values in function
+	dwc3_link_state_write along with minor changes for code symmetry.
+v8: Replace pm_runtime_get_sync with pm_runtime_resume_and get.
+v7: Replaced pm_runtime_put with pm_runtime_put_sync & returned proper values.
+v6: Added changes to handle get_dync failure appropriately.
+v5: Reworked the patch to resume dwc3 while accessing the registers.
+v4: Introduced pm_runtime_get_if_in_use in order to make sure dwc3 isn't
+	suspended while accessing the registers.
+v3: Replace pr_err to dev_err. 
+v2: Replaced return 0 with -EINVAL & seq_puts with pr_err.
 
-I didn't find a way how to have usbXXX,XXXX compatible strings and 
-microchip,usb5744 compatible in the same file. I am definitely lacking knowledge 
-how to write it properly that's why any advise is welcome.
+ drivers/usb/dwc3/debugfs.c | 109 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 109 insertions(+)
 
-Thanks,
-Michal
+diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
+index e4a2560b9dc0..ebf03468fac4 100644
+--- a/drivers/usb/dwc3/debugfs.c
++++ b/drivers/usb/dwc3/debugfs.c
+@@ -332,6 +332,11 @@ static int dwc3_lsp_show(struct seq_file *s, void *unused)
+ 	unsigned int		current_mode;
+ 	unsigned long		flags;
+ 	u32			reg;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
+@@ -350,6 +355,8 @@ static int dwc3_lsp_show(struct seq_file *s, void *unused)
+ 	}
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -395,6 +402,11 @@ static int dwc3_mode_show(struct seq_file *s, void *unused)
+ 	struct dwc3		*dwc = s->private;
+ 	unsigned long		flags;
+ 	u32			reg;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+@@ -414,6 +426,8 @@ static int dwc3_mode_show(struct seq_file *s, void *unused)
+ 		seq_printf(s, "UNKNOWN %08x\n", DWC3_GCTL_PRTCAP(reg));
+ 	}
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -463,6 +477,11 @@ static int dwc3_testmode_show(struct seq_file *s, void *unused)
+ 	struct dwc3		*dwc = s->private;
+ 	unsigned long		flags;
+ 	u32			reg;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
+@@ -493,6 +512,8 @@ static int dwc3_testmode_show(struct seq_file *s, void *unused)
+ 		seq_printf(s, "UNKNOWN %d\n", reg);
+ 	}
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -509,6 +530,7 @@ static ssize_t dwc3_testmode_write(struct file *file,
+ 	unsigned long		flags;
+ 	u32			testmode = 0;
+ 	char			buf[32];
++	int			ret;
+ 
+ 	if (copy_from_user(&buf, ubuf, min_t(size_t, sizeof(buf) - 1, count)))
+ 		return -EFAULT;
+@@ -526,10 +548,16 @@ static ssize_t dwc3_testmode_write(struct file *file,
+ 	else
+ 		testmode = 0;
+ 
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
++
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	dwc3_gadget_set_test_mode(dwc, testmode);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return count;
+ }
+ 
+@@ -548,12 +576,18 @@ static int dwc3_link_state_show(struct seq_file *s, void *unused)
+ 	enum dwc3_link_state	state;
+ 	u32			reg;
+ 	u8			speed;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
+ 	if (DWC3_GSTS_CURMOD(reg) != DWC3_GSTS_CURMOD_DEVICE) {
+ 		seq_puts(s, "Not available\n");
+ 		spin_unlock_irqrestore(&dwc->lock, flags);
++		pm_runtime_put_sync(dwc->dev);
+ 		return 0;
+ 	}
+ 
+@@ -566,6 +600,8 @@ static int dwc3_link_state_show(struct seq_file *s, void *unused)
+ 		   dwc3_gadget_hs_link_string(state));
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -584,6 +620,7 @@ static ssize_t dwc3_link_state_write(struct file *file,
+ 	char			buf[32];
+ 	u32			reg;
+ 	u8			speed;
++	int			ret;
+ 
+ 	if (copy_from_user(&buf, ubuf, min_t(size_t, sizeof(buf) - 1, count)))
+ 		return -EFAULT;
+@@ -603,10 +640,15 @@ static ssize_t dwc3_link_state_write(struct file *file,
+ 	else
+ 		return -EINVAL;
+ 
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
++
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
+ 	if (DWC3_GSTS_CURMOD(reg) != DWC3_GSTS_CURMOD_DEVICE) {
+ 		spin_unlock_irqrestore(&dwc->lock, flags);
++		pm_runtime_put_sync(dwc->dev);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -616,12 +658,15 @@ static ssize_t dwc3_link_state_write(struct file *file,
+ 	if (speed < DWC3_DSTS_SUPERSPEED &&
+ 	    state != DWC3_LINK_STATE_RECOV) {
+ 		spin_unlock_irqrestore(&dwc->lock, flags);
++		pm_runtime_put_sync(dwc->dev);
+ 		return -EINVAL;
+ 	}
+ 
+ 	dwc3_gadget_set_link_state(dwc, state);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return count;
+ }
+ 
+@@ -645,6 +690,11 @@ static int dwc3_tx_fifo_size_show(struct seq_file *s, void *unused)
+ 	unsigned long		flags;
+ 	u32			mdwidth;
+ 	u32			val;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_TXFIFO);
+@@ -657,6 +707,8 @@ static int dwc3_tx_fifo_size_show(struct seq_file *s, void *unused)
+ 	seq_printf(s, "%u\n", val);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -667,6 +719,11 @@ static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
+ 	unsigned long		flags;
+ 	u32			mdwidth;
+ 	u32			val;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_RXFIFO);
+@@ -679,6 +736,8 @@ static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
+ 	seq_printf(s, "%u\n", val);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -688,12 +747,19 @@ static int dwc3_tx_request_queue_show(struct seq_file *s, void *unused)
+ 	struct dwc3		*dwc = dep->dwc;
+ 	unsigned long		flags;
+ 	u32			val;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_TXREQQ);
+ 	seq_printf(s, "%u\n", val);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -703,12 +769,19 @@ static int dwc3_rx_request_queue_show(struct seq_file *s, void *unused)
+ 	struct dwc3		*dwc = dep->dwc;
+ 	unsigned long		flags;
+ 	u32			val;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_RXREQQ);
+ 	seq_printf(s, "%u\n", val);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -718,12 +791,19 @@ static int dwc3_rx_info_queue_show(struct seq_file *s, void *unused)
+ 	struct dwc3		*dwc = dep->dwc;
+ 	unsigned long		flags;
+ 	u32			val;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_RXINFOQ);
+ 	seq_printf(s, "%u\n", val);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -733,12 +813,19 @@ static int dwc3_descriptor_fetch_queue_show(struct seq_file *s, void *unused)
+ 	struct dwc3		*dwc = dep->dwc;
+ 	unsigned long		flags;
+ 	u32			val;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_DESCFETCHQ);
+ 	seq_printf(s, "%u\n", val);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -748,12 +835,19 @@ static int dwc3_event_queue_show(struct seq_file *s, void *unused)
+ 	struct dwc3		*dwc = dep->dwc;
+ 	unsigned long		flags;
+ 	u32			val;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	val = dwc3_core_fifo_space(dep, DWC3_EVENTQ);
+ 	seq_printf(s, "%u\n", val);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -798,6 +892,11 @@ static int dwc3_trb_ring_show(struct seq_file *s, void *unused)
+ 	struct dwc3		*dwc = dep->dwc;
+ 	unsigned long		flags;
+ 	int			i;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	if (dep->number <= 1) {
+@@ -827,6 +926,8 @@ static int dwc3_trb_ring_show(struct seq_file *s, void *unused)
+ out:
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -839,6 +940,11 @@ static int dwc3_ep_info_register_show(struct seq_file *s, void *unused)
+ 	u32			lower_32_bits;
+ 	u32			upper_32_bits;
+ 	u32			reg;
++	int			ret;
++
++	ret = pm_runtime_resume_and_get(dwc->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	reg = DWC3_GDBGLSPMUX_EPSELECT(dep->number);
+@@ -851,6 +957,8 @@ static int dwc3_ep_info_register_show(struct seq_file *s, void *unused)
+ 	seq_printf(s, "0x%016llx\n", ep_info);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
++	pm_runtime_put_sync(dwc->dev);
++
+ 	return 0;
+ }
+ 
+@@ -910,6 +1018,7 @@ void dwc3_debugfs_init(struct dwc3 *dwc)
+ 	dwc->regset->regs = dwc3_regs;
+ 	dwc->regset->nregs = ARRAY_SIZE(dwc3_regs);
+ 	dwc->regset->base = dwc->regs - DWC3_GLOBALS_REGS_START;
++	dwc->regset->dev = dwc->dev;
+ 
+ 	root = debugfs_create_dir(dev_name(dwc->dev), usb_debug_root);
+ 	dwc->debug_root = root;
+-- 
+2.17.1
+
