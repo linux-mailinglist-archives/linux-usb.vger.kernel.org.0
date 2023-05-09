@@ -2,63 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007376FBF3C
-	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 08:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C6E6FBF6A
+	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 08:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234821AbjEIG3y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 May 2023 02:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
+        id S234934AbjEIGla (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 May 2023 02:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234648AbjEIG3x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 May 2023 02:29:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F84A65A4;
-        Mon,  8 May 2023 23:29:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D00861683;
-        Tue,  9 May 2023 06:29:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 771BFC433D2;
-        Tue,  9 May 2023 06:29:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683613791;
-        bh=EWKmzmpmpIPk+tYsSQfEsNi+FvW3K1hTnV5qm+E9KKA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PVgirDeM/TOBShMWhAS+cU40d4jVIskEqHM8d5CurWK62swipZHL/6lIpnN4cLj6g
-         Mz8PczXzf8QDPDcvc26jO5YWEe1bsVlclARetdRywIQ75p1i/M9N+5ft6FNd0UF7u3
-         L+QgTa/8Tx9NKhV6X6qLz5kjpg7t18EGA55ajR9PxdKRiwJKJBcCd+k3+2bYSUG713
-         yDsL1gadY+5na7qGbXD9HH3Bl1xacva4wj4KwMLoPkDGq1U6+wzQgnqH9wyVtZT3wM
-         V4hdDvirNpLq0j3DLeVQV7Il9FsnMlwVR7eVTLU4yOVtSIJ2W0n0AgeOu5qoLekQXk
-         dK+bqrFUzKG8w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pwGrS-0007EC-Mt; Tue, 09 May 2023 08:30:10 +0200
-Date:   Tue, 9 May 2023 08:30:10 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Udipto Goswami <quic_ugoswami@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v9] usb: dwc3: debugfs: Prevent any register access when
- devices is runtime suspended
-Message-ID: <ZFnoctKuC2i2T8qV@hovoldconsulting.com>
-References: <20230505155103.30098-1-quic_ugoswami@quicinc.com>
- <20230506013036.j533xncixkky5uf6@synopsys.com>
- <ZFjePu8Wb6NUwCav@hovoldconsulting.com>
- <34a33b09-20aa-13e3-e4bd-c8b5854450a4@quicinc.com>
+        with ESMTP id S234916AbjEIGl3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 May 2023 02:41:29 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3115DAD35;
+        Mon,  8 May 2023 23:41:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683614471; x=1715150471;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9PGhDpF0Ehm92gwScDb0cpgrpvmpX0MTZeTBVtGjmEI=;
+  b=G/dD+U3iatmwcqSIvgNJsyrdH3S0SmZDRJMPfy1J7b2qT0jWotFwztXK
+   PQuJaWzUgu6InMrsaOjlGWY0+Wui/oWDl3DRQM1JWlIUpPsO5yoG7HSSI
+   bR7g+8GUhKu6Mvmuz5gnv2LV5A6BUgQWhAlH6ujxxsZZ9y5GjNtdYB5OX
+   6ZmZVTAId8K8hKRcC1CzfTvFCiVnZR44zMGmHF5yXeVo1WfNmeR8hAN4m
+   4hempkVw14XWXIhbNVgDMbKmpt4pvNya7MzxVB7m6vCPMKCzyj155fGWv
+   JGfGoFWDVNU/bJ+QMserEVxOuaGKW4RK1eJlqV1Aw4LSPrgIS2mmzW0Rc
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="329443412"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="329443412"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 23:41:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="873049819"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="873049819"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 08 May 2023 23:41:07 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 7EE9923E; Tue,  9 May 2023 09:41:16 +0300 (EEST)
+Date:   Tue, 9 May 2023 09:41:16 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        S Sanath <Sanath.S@amd.com>, richard.gong@amd.com,
+        Sanju.Mehta@amd.com, Takashi Iwai <tiwai@suse.de>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] thunderbolt: Clear registers properly when auto
+ clear isn't in use
+Message-ID: <20230509064116.GM66750@black.fi.intel.com>
+References: <20230424195556.2233-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <34a33b09-20aa-13e3-e4bd-c8b5854450a4@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230424195556.2233-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,33 +67,19 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 08, 2023 at 09:18:17PM +0530, Udipto Goswami wrote:
+Hi Mario,
 
-> > I believe this should be backported as it fixes a crash/hang.
-> > 
-> > The stable rules are flexible, but it may also be possible to break the
-> > patch up in pieces and add a corresponding Fixes tag.
+On Mon, Apr 24, 2023 at 02:55:54PM -0500, Mario Limonciello wrote:
+> When `QUIRK_AUTO_CLEAR_INT` isn't set, interrupt masking should be
+> cleared by writing to Interrupt Mask Clear (IMR) and interrupt
+> status should be cleared properly at shutdown/init.
 > 
-> Agree, I will add a fixes tag for the oldest change that introduced the 
-> debugfs attributes instead of breaking it to multiple patches and adding 
-> fixes for each one. (I think the present code changes can stay in one 
-> patch as we are fixing the same issue in all the functions).
+> This fixes an error where interrupts are left enabled during resume
+> from hibernation with `CONFIG_USB4=y`.
 > 
-> Let me know if you think otherwise?
+> Fixes: 468c49f44759 ("thunderbolt: Disable interrupt auto clear for rings")
+> Reported-by: Takashi Iwai <tiwai@suse.de>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217343
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-Sounds good to me. Note that the fix depends on 
-
-	30332eeefec8 ("debugfs: regset32: Add Runtime PM support")
-
-which went into 5.7.
-
-This can be documented as
-
-	Cc: stable@vger.kernel.org	# 3.2: 30332eeefec8: debugfs: regset32: Add Runtime PM support
-
-(see Documentation/process/stable-kernel-rules.rst).
-
-Note that this issue appears to have been there since the driver was
-first merged in 3.2.
-
-Johan
+Applied to fixes, thanks!
