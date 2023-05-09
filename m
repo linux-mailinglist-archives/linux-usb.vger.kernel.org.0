@@ -2,152 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E7A6FC450
-	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 12:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D516FC575
+	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 13:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234856AbjEIKya (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 May 2023 06:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
+        id S235597AbjEILyf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 May 2023 07:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234584AbjEIKy2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 May 2023 06:54:28 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2C165B4
-        for <linux-usb@vger.kernel.org>; Tue,  9 May 2023 03:54:05 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-306dbad5182so3610973f8f.1
-        for <linux-usb@vger.kernel.org>; Tue, 09 May 2023 03:54:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683629644; x=1686221644;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=496R25BHVFmCHB4tTwWl5+MSfc4ofDJgsUV109nYDKE=;
-        b=nExnE/2dHW0Ch4uqyd8NvrhRt0gem4wS/Fv+gmzf9cpsk1/zgJb2IqRF4UH17DF6D5
-         aOMCoIZW4XEBhO44Co+VvNmO4gj0nOm+VtfuWCeiqH0Dgd9WJxFGbdLn0Rozezo1CQlQ
-         OBnn2HfIKivXUbXMBrcZzUjj0aO68DQcXvPT1b/4YlHD+rADwzOAyMLE5hALAZ8JDTWq
-         HdBlJN8oyexUlQ5pYatj0e3XITDyo4v+QOAAC0/1TZA2hGQwlTPt2Y/qOpy3a90Z4fDy
-         wc22GAt809prgpp5SB2Y7ClJoVgB5ZIGnErO4pjFdXOxOF1upUc1oIQ7oEk4+wkFmvfD
-         ohmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683629644; x=1686221644;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=496R25BHVFmCHB4tTwWl5+MSfc4ofDJgsUV109nYDKE=;
-        b=db3i6y42d3zYbOnD8ZEywsfKcvXbnJ2xaJirGFoQmNIR7uWlqTsh1EfHKgiMv9hQRg
-         sS7JVb3gZPh5eF0wivH1xZghFUmQRESRjEcmAHO2ptPlrRHOLWmhZbtSoOj+R+VYLLbO
-         M02C4NzMgasaPn1R122kuEhlo6QuusCJeCoMWNPBO1SaASNngl2f79upcIfscv4XS7r3
-         O+rZyGzZ23tyLuKQPXTCWYy3+KtDZF7IIIXnvHeEPJCXG3sjdlyzeu/nZ6oVB1NcG2nF
-         uPjSJNZ3Gi8nUiS6j/Ztnle3I1Pg2iUIVw93ofnHYVy91Vbfk2KJPXPg+8+adZ2mXp6+
-         poMQ==
-X-Gm-Message-State: AC+VfDw5oOgE8XyGSnw/DugKowbu3lH0vLheFwksA4WUBnx+qsTG4Qvf
-        1oxWBv79s+N4qPAE8/3hBo6M5zNzm2fgUnu3P57q5S2HCTB+aqG1tR8=
-X-Google-Smtp-Source: ACHHUZ7Et1agHoOJJ/wu2bg1tg/gf2Uyhrq5Atd1Du4pWTVqynOOkjHaq4BSy8kOZwo7ziK+J+oVC9JGrCuAMyRnlAc=
-X-Received: by 2002:a5d:6041:0:b0:306:2c39:5d52 with SMTP id
- j1-20020a5d6041000000b003062c395d52mr9362712wrt.57.1683629644145; Tue, 09 May
- 2023 03:54:04 -0700 (PDT)
+        with ESMTP id S235423AbjEILye (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 May 2023 07:54:34 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237981713;
+        Tue,  9 May 2023 04:54:33 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 349Ajjuo025009;
+        Tue, 9 May 2023 11:54:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=C0IUByqP6P3Y1odG476PVj3s63YZi31x7NmJwEDO1L8=;
+ b=GCQWGwXAhcdNdSW1WjTrW1XVOW1xhEGggDI6Yg0oUx65lU7/JTjE4OeEGkeHtFb6ljix
+ qMsnDMBZ1jKToUsN1G7+5d+iTB0a1vQboPqjNgJHwdtctEVM9DMbX45QmiVmemPrKZXD
+ p5K32PUspRklRp85t/HoVhDT0C0jko2hW4p4w7ITnaXqX1M5OvpBc5V316qbRHa2N8rb
+ r+DmjC+u0Qsi8b09rFEtQTasgYwkWGdifEigtU4tIPjNjklwITKyjr868L7a9xWiQkDe
+ qj3RkQI5JAdpSfuedAAVwIy4l141HnkEb0IQmpHYbCGsXVX1r1brdjfV9WvqYDpgHXth QA== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf7861mak-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 May 2023 11:54:22 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 349BsLo8021268
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 9 May 2023 11:54:21 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 9 May 2023 04:54:15 -0700
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-clk@vger.kernel.org>
+CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v11 0/9] Enable IPQ9754 USB
+Date:   Tue, 9 May 2023 17:24:00 +0530
+Message-ID: <cover.1683630932.git.quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20230505064039.1630025-1-bhupesh.sharma@linaro.org>
- <20230505064039.1630025-3-bhupesh.sharma@linaro.org> <fe326d38-ee52-b0a4-21d8-f00f22449417@linaro.org>
- <CAH=2NtyqZVVwqk1FsCGrsGn25wxvzuhV-3z+q=5+JmpOoNm-vQ@mail.gmail.com> <6dc848f9-9955-5785-246e-53371d0a274d@linaro.org>
-In-Reply-To: <6dc848f9-9955-5785-246e-53371d0a274d@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Tue, 9 May 2023 16:23:52 +0530
-Message-ID: <CAH=2NtyByvwxrYgisO-tOrgPu-bQdDC=gntVVicXKkU=k3G6bg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] dt-bindings: soc: qcom: eud: Add SM6115 / SM4250 support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
-        bhupesh.linux@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: JmnXnQMhY8YL3DRQAIbv3Xfm4zeAbTyl
+X-Proofpoint-ORIG-GUID: JmnXnQMhY8YL3DRQAIbv3Xfm4zeAbTyl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-09_08,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ suspectscore=0 clxscore=1011 lowpriorityscore=0 malwarescore=0
+ phishscore=0 impostorscore=0 mlxlogscore=778 bulkscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305090095
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Krzysztof,
+This patch series adds the relevant phy and controller
+configurations for enabling USB on IPQ9754
 
-On Fri, 5 May 2023 at 23:27, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 05/05/2023 18:31, Bhupesh Sharma wrote:
-> > HI Krzysztof,
-> >
-> > On Fri, 5 May 2023 at 21:54, Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 05/05/2023 08:40, Bhupesh Sharma wrote:
-> >>> Add dt-bindings for EUD found on Qualcomm SM6115 / SM4250 SoC.
-> >>>
-> >>> On this SoC (and derivatives) the enable bit inside 'tcsr_check_reg'
-> >>> needs to be set first to 'enable' the eud module.
-> >>>
-> >>> So, update the dt-bindings to accommodate the third register
-> >>> property (TCSR Base) required by the driver on these SoCs.
-> >>>
-> >>> Also for these SoCs, introduce a new bool property
-> >>> 'qcom,secure-mode-enable', which indicates that the mode manager
-> >>> needs to be accessed only via the secure world.
-> >>>
-> >>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> >>> ---
-> >>>  .../devicetree/bindings/soc/qcom/qcom,eud.yaml   | 16 ++++++++++++++++
-> >>>  1 file changed, 16 insertions(+)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
-> >>> index f2c5ec7e6437..3b92cdf4e306 100644
-> >>> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
-> >>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
-> >>> @@ -18,17 +18,33 @@ properties:
-> >>>      items:
-> >>>        - enum:
-> >>>            - qcom,sc7280-eud
-> >>> +          - qcom,sm6115-eud
-> >>>        - const: qcom,eud
-> >>>
-> >>>    reg:
-> >>> +    minItems: 2
-> >>>      items:
-> >>>        - description: EUD Base Register Region
-> >>>        - description: EUD Mode Manager Register
-> >>> +      - description: TCSR Base Register Region
-> >>> +
-> >>> +  reg-names:
-> >>> +    minItems: 2
-> >>> +    items:
-> >>> +      - const: eud-base
-> >>> +      - const: eud-mode-mgr
-> >>> +      - const: tcsr-base
-> >>>
-> >>>    interrupts:
-> >>>      description: EUD interrupt
-> >>>      maxItems: 1
-> >>>
-> >>> +  qcom,secure-mode-enable:
-> >>> +    type: boolean
-> >>> +    description:
-> >>> +      Indicates that the mode manager needs to be accessed only via the secure
-> >>> +      world (through 'scm' calls).
-> >>
-> >> I understood tcsr-base aplies only to SM6115, so this should be further
-> >> constrained in allOf:if:then:.
-> >
-> > Please refer to my reply to your query in another review.
-> > I can see that secure access to mode_mgr register via TCSR will be
-> > exposed by other Qualcomm SoCs as well (from the available EUD
-> > documentation). So, maybe keeping it generic instead of limiting it to
-> > sm6115 only would be more useful, for future changes.
->
-> Your reply does not say that qcom,sc7280-eud uses it, so I don't
-> understand. This is not valid to qcom,sc7280-eud, so allowing it there
-> is not correct.
+Depends on:
+https://lore.kernel.org/all/20230217142030.16012-1-quic_devipriy@quicinc.com/
+https://lore.kernel.org/lkml/20230407155727.20615-1-quic_devipriy@quicinc.com/T/
 
-Ok, I got your concern now. I will send a v5 with the change shortly.
+[v11]:
+	- Rename dwc_0 -> usb_0_dwc3
+	- Minor change in qcom,sc8280xp-qmp-usb3-uni-phy.yaml to factor in
+	  latest updates to the file
 
-Thanks.
+[v10]:
+	- Fix regulator definitions
+	- Address couple of other comments
+
+[v9]:
+	- Update bindings to make power-domains as optional since
+	  IPQ9574 doesn't have GDSCs
+
+[v8]:
+	- Update bindings for the clock name change
+[v7]:
+	- com_aux -> cfg_ahb in patch 7
+
+[v6]:
+        - Incorporated review comments
+	- Resolve make dtbs_check messages
+	- Fixed pcs_usb offset
+	- Board dts file name changed
+
+[v5]:
+        - Incorporated review comments
+	- 'make dtbs_check' giving the following messages since
+	  ipq9574 doesn't have power domains. Hope this is ok
+
+		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
+        	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
+        	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+
+	- Move qmp phy DT node to newer specification
+
+[v4]:
+        - Incorporated review comments
+	- Address all 'make dtbs_check' errors
+
+[v3]:
+        - Incorporated review comments regarding coding style
+
+[v2]:
+        - Incorporated review comments regarding coding style,
+          maintaining sorted order of entries and unused phy register
+          offsets
+        - Removed NOC clock entries from DT node (will be implemented
+          later with interconnect support)
+        - Fixed 'make dtbs_check' errors/warnings
+
+[v1]:
+        https://lore.kernel.org/linux-arm-msm/5dac3aa4-8dc7-f9eb-5cf3-b361efdc9494@linaro.org/T/
+
+Varadarajan Narayanan (9):
+  dt-bindings: phy: qcom,qusb2: Document IPQ9574 compatible
+  dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3 PHY
+  dt-bindings: usb: dwc3: Add IPQ9574 compatible
+  clk: qcom: gcc-ipq9574: Add USB related clocks
+  phy: qcom-qusb2: add QUSB2 support for IPQ9574
+  phy: qcom: qmp: Update IPQ9574 USB Phy initialization Sequence
+  arm64: dts: qcom: ipq9574: Add USB related nodes
+  arm64: dts: qcom: ipq9574: Add LDO regulator node
+  arm64: dts: qcom: ipq9574: Enable USB
+
+ .../devicetree/bindings/phy/qcom,qusb2-phy.yaml    |   3 +-
+ .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml        |  44 ++++++--
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         |   3 +-
+ arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts        |  30 ++++++
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi              | 104 +++++++++++++++++++
+ drivers/clk/qcom/gcc-ipq9574.c                     |  37 +++++++
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c            | 115 +++++++++++++++++++++
+ drivers/phy/qualcomm/phy-qcom-qusb2.c              |   3 +
+ include/dt-bindings/clock/qcom,ipq9574-gcc.h       |   2 +
+ 9 files changed, 333 insertions(+), 8 deletions(-)
+
+-- 
+2.7.4
+
