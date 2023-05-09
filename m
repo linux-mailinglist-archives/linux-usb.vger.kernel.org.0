@@ -2,96 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277966FC9D1
-	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 17:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27EAE6FCAB4
+	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 18:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235953AbjEIPFb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 May 2023 11:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34282 "EHLO
+        id S235645AbjEIQEI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 May 2023 12:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236036AbjEIPF2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 May 2023 11:05:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB463A87;
-        Tue,  9 May 2023 08:05:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9208E634A9;
-        Tue,  9 May 2023 15:05:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7837C433A7;
-        Tue,  9 May 2023 15:05:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683644725;
-        bh=muCXZxs7biHloNS/IxippC0Pd+LQEmkED1bdYH6kwMk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c0n9xdjaR28f5huH2Mj2pGLm9k9K/q8EYv3L71xHH5demWbJLd6b09uXaCS+aLp3H
-         CI+NF75Cwcht0US5VHRJLFjGL63ti2iWKStW9xjRxOUSrVdS/NxOh3au+wv4xQTLnq
-         DDOawbiKIOrdiJdCtU9VXBYo7Y9okNiX7t7UnEe/9STSBxy7fnrs2gBXcOS+zlMiBr
-         ZDH/g085HZppNFuvEezoqbY86iZC0kZaO4SaTYVZcvIJYee/ywKEXJqW8BWroInl0x
-         Xnp/d9UBjhsklyRjrmVdtlRzxFbSN/EnE/iEHQb7gUTRLCa9YPyIoIW8lRa3sQDb43
-         ikvc95Dvog+oA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pwOuP-0007pg-Qh; Tue, 09 May 2023 17:05:45 +0200
-Date:   Tue, 9 May 2023 17:05:45 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Udipto Goswami <quic_ugoswami@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v10] usb: dwc3: debugfs: Resume dwc3 before accessing
- registers
-Message-ID: <ZFphSUFrUT6dMsQN@hovoldconsulting.com>
-References: <20230509144836.6803-1-quic_ugoswami@quicinc.com>
+        with ESMTP id S235388AbjEIQEG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 May 2023 12:04:06 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB72A30F9
+        for <linux-usb@vger.kernel.org>; Tue,  9 May 2023 09:04:03 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so60445758a12.0
+        for <linux-usb@vger.kernel.org>; Tue, 09 May 2023 09:04:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683648242; x=1686240242;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0W2AbGXoin+5hxz/sFqIGD40a3J1EXdYBNV+hW/GpDI=;
+        b=O+4+Ah3ABLUbCNXJT1RMTBCBbF5rL3gK5S3T1/5rN4g0XuQ3kBpcdFJDQwavIXVfUT
+         MwK9q3k8Wb/+WBOGcEoJVZJv3EC3aL0D/dyWbxvD3CSAMcR9cE4aVU0TM8MHtFckgn3/
+         MrNzUXSbds9aKS7vEmqqe2y9K/HGZS+MV4JXj1zTmp0A2tSAJSP50zxMOWFNsdiwzHOq
+         Eqet0WKojWkrwAguAm84x02vTe2WNS+Qo1eK6dy30V9atUnOBm0MhDF1LiFN9/upPz5m
+         rmQnmvrQPUmqPQpNEhbGTIKj47TFfCKIKZZ3gV9rFSCrlrc5vPfwirGWtT0f+gebLw5S
+         N+yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683648242; x=1686240242;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0W2AbGXoin+5hxz/sFqIGD40a3J1EXdYBNV+hW/GpDI=;
+        b=ayV8UNF4geIhRYop2XPY1cdUvKQXefukWA6RBuEqZGWhMF4/j/T8D2Tk4JgTrRB3Du
+         fVqDDAv/QCW8zRfM2IdRMLtiTqCS0AXfhKVl/h7jBtnDe8f4wyQBrKObglkiCyctHWU9
+         wSVBkK3cjdLkOZTRL857gOXTdC/DGSePnvdspwCyvS8PokSa6s8dbCIgn9OERRQEr7v8
+         /jOXig0tagMoARim/kElLk1G0nmgwUIyZZtX4Czqpjw2xEghki/D7qYv46ieF2mrsUhu
+         pQSF0wyP+dmjjSc8vPzW+9XRDmmJ1c3YeJUkJf4qa10e41Y9KGX5kPBKJ36vS+5ONmdh
+         WOmA==
+X-Gm-Message-State: AC+VfDxP3AmmV0J2cVXCSVjZNnJIlXfsIIwsuyntFw+FHP6gxTgKfvCm
+        BGiXI59Zm0aXFzoONnSehom0zQ==
+X-Google-Smtp-Source: ACHHUZ7jsGZVu6tjUq2cwD0yDjE+mb4ZAnC7nOsl5zt9oE6kmtKM+6HxNI35Ddob1uM3Rt65zodX6g==
+X-Received: by 2002:a17:907:1c25:b0:969:9c0c:4c97 with SMTP id nc37-20020a1709071c2500b009699c0c4c97mr4171312ejc.1.1683648242301;
+        Tue, 09 May 2023 09:04:02 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d0d5:7818:2f46:5e76? ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
+        by smtp.gmail.com with ESMTPSA id la17-20020a170907781100b00957dad777c1sm1484712ejc.107.2023.05.09.09.04.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 09:04:01 -0700 (PDT)
+Message-ID: <27232a95-6ef8-1a98-4f5d-7d0ea29c20c4@linaro.org>
+Date:   Tue, 9 May 2023 18:04:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230509144836.6803-1-quic_ugoswami@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] dt-bindings: usb: Add binding for Microchip usb5744
+ hub controller
+Content-Language: en-US
+To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
+        ilias.apalodimas@linaro.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Piyush Mehta <piyush.mehta@amd.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <dd31f987316fb2739644628b5840a6d447b5a587.1683293125.git.michal.simek@amd.com>
+ <32aa46df-9ed5-7d2a-868f-a36414f54534@linaro.org>
+ <1868d9ae-1376-d91d-a789-9e510bde96a7@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1868d9ae-1376-d91d-a789-9e510bde96a7@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 09, 2023 at 08:18:36PM +0530, Udipto Goswami wrote:
-> When the dwc3 device is runtime suspended, various required clocks are in
-> disabled state and it is not guaranteed that access to any registers would
-> work. Depending on the SoC glue, a register read could be as benign as
-> returning 0 or be fatal enough to hang the system.
+On 09/05/2023 16:19, Michal Simek wrote:
 > 
-> In order to prevent such scenarios of fatal errors, make sure to resume
-> dwc3 then allow the function to proceed.
 > 
-> Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
-> Cc: stable@vger.kernel.org #3.2: 30332eeefec8: debugfs: regset32: Add Runtime PM support
-> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
-> ---
-> v10: Re-wrote the subject & the commit text along with the dependency.
-> v9: Fixed function dwc3_rx_fifo_size_show & return values in function
-> 	dwc3_link_state_write along with minor changes for code symmetry.
-> v8: Replace pm_runtime_get_sync with pm_runtime_resume_and get.
-> v7: Replaced pm_runtime_put with pm_runtime_put_sync & returned proper values.
-> v6: Added changes to handle get_dync failure appropriately.
-> v5: Reworked the patch to resume dwc3 while accessing the registers.
-> v4: Introduced pm_runtime_get_if_in_use in order to make sure dwc3 isn't
-> 	suspended while accessing the registers.
-> v3: Replace pr_err to dev_err. 
-> v2: Replaced return 0 with -EINVAL & seq_puts with pr_err.
+> On 5/7/23 10:07, Krzysztof Kozlowski wrote:
+>> On 05/05/2023 15:25, Michal Simek wrote:
+>>> The Microchip usb5744 is a SS/HS USB 3.0 hub controller with 4 ports.
+>>> The binding describes USB related aspects of the USB5744 hub, it as
+>>> well cover the option of connecting the controller as an i2c slave.
+>>> When i2c interface is connected hub needs to be initialized first.
+>>> Hub itself has fixed i2c address 0x2D but hardcoding address is not good
+>>> idea because address can be shifted by i2c address translator in the
+>>> middle.
+>>>
+>>> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+>>> Signed-off-by: Michal Simek <michal.simek@amd.com>
+>>> ---
+>>>
+>>> Changes in v2:
+>>> - fix i2c-bus property
+>>> - swap usb2.0/3.0 compatible strings
+>>> - fix indentation in example (4 spaces)
+>>> - add new i2c node with microchip,usb5744 compatible property
+>>>
+>>> It looks like that usb8041 has also an optional i2c interface which is not
+>>> covered. But it is mentioned at commit 40e58a8a7ca6 ("dt-bindings: usb:
+>>> Add binding for TI USB8041 hub controller").
+>>>
+>>> i2c-bus name property was suggested by Rob at
+>>> https://lore.kernel.org/all/CAL_JsqJedhX6typpUKbnzV7CLK6UZVjq3CyG9iY_j5DLPqvVdw@mail.gmail.com/
+>>> and
+>>> https://lore.kernel.org/all/CAL_JsqJZBbu+UXqUNdZwg-uv0PAsNg55026PTwhKr5wQtxCjVQ@mail.gmail.com/
+>>>
+>>> the question is if adding address like this is acceptable.
+>>> But it must be specified.
+>>>
+>>> Driver will follow based on final dt-binding.
+>>>
+>>> $ref: usb-device.yaml# should be also added but have no idea how to wire it
+>>> up to be applied only on usb node not i2c one.
+>>>
+>>> ---
+>>>   .../bindings/usb/microchip,usb5744.yaml       | 110 ++++++++++++++++++
+>>>   1 file changed, 110 insertions(+)
+>>>   create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+>>> new file mode 100644
+>>> index 000000000000..7e0a3472ea95
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+>>> @@ -0,0 +1,110 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/usb/microchip,usb5744.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Microchip USB5744 4-port Hub Controller
+>>> +
+>>> +description:
+>>> +  Microchip's USB5744 SmartHubTM IC is a 4 port, SuperSpeed (SS)/Hi-Speed (HS),
+>>> +  low power, low pin count configurable and fully compliant with the USB 3.1
+>>> +  Gen 1 specification. The USB5744 also supports Full Speed (FS) and Low Speed
+>>> +  (LS) USB signaling, offering complete coverage of all defined USB operating
+>>> +  speeds. The new SuperSpeed hubs operate in parallel with the USB 2.0
+>>> +  controller, so 5 Gbps SuperSpeed data transfers are not affected by slower
+>>> +  USB 2.0 traffic.
+>>> +
+>>> +maintainers:
+>>> +  - Piyush Mehta <piyush.mehta@amd.com>
+>>> +  - Michal Simek <michal.simek@amd.com>
+>>> +
+>>> +select:
+>>> +  properties:
+>>> +    compatible:
+>>> +      contains:
+>>> +        const: microchip,usb5744
+>>> +  required:
+>>> +    - compatible
+>>
+>> I don't understand why do you need this select. It basically disables
+>> schema matching for other ones.
+> 
+> I didn't find a way how to have usbXXX,XXXX compatible strings and 
+> microchip,usb5744 compatible in the same file. I am definitely lacking knowledge 
+> how to write it properly that's why any advise is welcome.
 
-I've verified that this prevents the system from hanging when accessing
-the debugfs interface while the controller is runtime suspended on the
-ThinkPad X13s (sc8280xp):
+Hm, if you just have both of them like you have now, what happens?
 
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-Tested-by: Johan Hovold <johan+linaro@kernel.org>
+Best regards,
+Krzysztof
 
-Johan
