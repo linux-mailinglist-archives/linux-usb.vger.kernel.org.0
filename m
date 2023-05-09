@@ -2,174 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27EAE6FCAB4
-	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 18:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B25E6FCCC4
+	for <lists+linux-usb@lfdr.de>; Tue,  9 May 2023 19:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235645AbjEIQEI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 May 2023 12:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
+        id S229770AbjEIRcC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 May 2023 13:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235388AbjEIQEG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 May 2023 12:04:06 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB72A30F9
-        for <linux-usb@vger.kernel.org>; Tue,  9 May 2023 09:04:03 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so60445758a12.0
-        for <linux-usb@vger.kernel.org>; Tue, 09 May 2023 09:04:03 -0700 (PDT)
+        with ESMTP id S229600AbjEIRcA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 May 2023 13:32:00 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D7740C0
+        for <linux-usb@vger.kernel.org>; Tue,  9 May 2023 10:31:59 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-50bc25f0c7dso11526197a12.3
+        for <linux-usb@vger.kernel.org>; Tue, 09 May 2023 10:31:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683648242; x=1686240242;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1683653518; x=1686245518;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0W2AbGXoin+5hxz/sFqIGD40a3J1EXdYBNV+hW/GpDI=;
-        b=O+4+Ah3ABLUbCNXJT1RMTBCBbF5rL3gK5S3T1/5rN4g0XuQ3kBpcdFJDQwavIXVfUT
-         MwK9q3k8Wb/+WBOGcEoJVZJv3EC3aL0D/dyWbxvD3CSAMcR9cE4aVU0TM8MHtFckgn3/
-         MrNzUXSbds9aKS7vEmqqe2y9K/HGZS+MV4JXj1zTmp0A2tSAJSP50zxMOWFNsdiwzHOq
-         Eqet0WKojWkrwAguAm84x02vTe2WNS+Qo1eK6dy30V9atUnOBm0MhDF1LiFN9/upPz5m
-         rmQnmvrQPUmqPQpNEhbGTIKj47TFfCKIKZZ3gV9rFSCrlrc5vPfwirGWtT0f+gebLw5S
-         N+yw==
+        bh=CgudkpE/XXuEJbi6kVtZntpRgZwfZvwHa+KTpRSfG84=;
+        b=qi5aQvnnWPOLinC/jLCZf13CBVkM6FG3QOcdLfbuvwQP4XQbi7o7O9GhxbouDNwiRe
+         myoPeE50qKEbJpB6arQ+03tEkTQeoceaqezgivj7x5hWepxoTWm+eEbJtW18WDF+Alxb
+         R6TreSItd4esRPPLxX9Lm9M8AdHnW1hEwZRvQY+MSkzn1NQl6fzMJF6Trng6CcdBemqI
+         BvodfS5PH6gEiGqgwEi7qDi4coExA1XOvLPNiySbDiva15i38Z/EldMz1n7Up9ju7fY8
+         AIpwLJkgz6fyHqLSgZCFNAF12KnTYrdpHnwYDRP028+TVb5/WGuE6ds3VzuOlXRw3tAw
+         ixFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683648242; x=1686240242;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20221208; t=1683653518; x=1686245518;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0W2AbGXoin+5hxz/sFqIGD40a3J1EXdYBNV+hW/GpDI=;
-        b=ayV8UNF4geIhRYop2XPY1cdUvKQXefukWA6RBuEqZGWhMF4/j/T8D2Tk4JgTrRB3Du
-         fVqDDAv/QCW8zRfM2IdRMLtiTqCS0AXfhKVl/h7jBtnDe8f4wyQBrKObglkiCyctHWU9
-         wSVBkK3cjdLkOZTRL857gOXTdC/DGSePnvdspwCyvS8PokSa6s8dbCIgn9OERRQEr7v8
-         /jOXig0tagMoARim/kElLk1G0nmgwUIyZZtX4Czqpjw2xEghki/D7qYv46ieF2mrsUhu
-         pQSF0wyP+dmjjSc8vPzW+9XRDmmJ1c3YeJUkJf4qa10e41Y9KGX5kPBKJ36vS+5ONmdh
-         WOmA==
-X-Gm-Message-State: AC+VfDxP3AmmV0J2cVXCSVjZNnJIlXfsIIwsuyntFw+FHP6gxTgKfvCm
-        BGiXI59Zm0aXFzoONnSehom0zQ==
-X-Google-Smtp-Source: ACHHUZ7jsGZVu6tjUq2cwD0yDjE+mb4ZAnC7nOsl5zt9oE6kmtKM+6HxNI35Ddob1uM3Rt65zodX6g==
-X-Received: by 2002:a17:907:1c25:b0:969:9c0c:4c97 with SMTP id nc37-20020a1709071c2500b009699c0c4c97mr4171312ejc.1.1683648242301;
-        Tue, 09 May 2023 09:04:02 -0700 (PDT)
+        bh=CgudkpE/XXuEJbi6kVtZntpRgZwfZvwHa+KTpRSfG84=;
+        b=DidI2T/rHEg/kRTQte3nhWrnkmh5GrqAa08LkW3ZqAGBznTQhlXjhAQrpluO4WaB7J
+         ecmOub/Wzzh/j8ihmv5rEWZ8+z6Wptb/K9Grg7JMhJS6MAkcLwX8/6b2X9T/qIpbf/1K
+         0+i3pEdRA3hpeNzquxsNf4/jdOsDgCPI9SYenF7cY175KkcniUCJvQI+D4hqXOeo7QSe
+         xY+i+Yd1Uxtt5V7V4loK6ZFiAHCAFZhGER63h80Eyxf2m5HVQDlS1MdgzGwemUYll7X0
+         I7RYMtqA7Ed3D3OKN+wtoz/njM0MHENm/T57gc0QkFYduPLWo7p/6E8I51C9rpXj8v/2
+         woKQ==
+X-Gm-Message-State: AC+VfDxAZZ4tbYT1GtpcmgwpKGu7lQlIq8y86e3n6adq8NNyDMfZAh95
+        osUAkmKEKJjh8LUV0qquT0ResQ==
+X-Google-Smtp-Source: ACHHUZ6xfvURHYmwCA0rkcPEIbdWHaDDrsTw1yTug0O3WbxYCOy7Dpv+vT71lqkBRT29ssdlLeZXqw==
+X-Received: by 2002:aa7:c24c:0:b0:50b:c582:7be2 with SMTP id y12-20020aa7c24c000000b0050bc5827be2mr12287972edo.29.1683653518253;
+        Tue, 09 May 2023 10:31:58 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:d0d5:7818:2f46:5e76? ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
-        by smtp.gmail.com with ESMTPSA id la17-20020a170907781100b00957dad777c1sm1484712ejc.107.2023.05.09.09.04.01
+        by smtp.gmail.com with ESMTPSA id v17-20020aa7cd51000000b0050daa883545sm976490edw.64.2023.05.09.10.31.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 09:04:01 -0700 (PDT)
-Message-ID: <27232a95-6ef8-1a98-4f5d-7d0ea29c20c4@linaro.org>
-Date:   Tue, 9 May 2023 18:04:00 +0200
+        Tue, 09 May 2023 10:31:57 -0700 (PDT)
+Message-ID: <75e66496-6a54-1430-7344-fa816400fa7c@linaro.org>
+Date:   Tue, 9 May 2023 19:31:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v2] dt-bindings: usb: Add binding for Microchip usb5744
- hub controller
+Subject: Re: [PATCH v11 2/9] dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3
+ PHY
 Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
-        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
-        ilias.apalodimas@linaro.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Piyush Mehta <piyush.mehta@amd.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <dd31f987316fb2739644628b5840a6d447b5a587.1683293125.git.michal.simek@amd.com>
- <32aa46df-9ed5-7d2a-868f-a36414f54534@linaro.org>
- <1868d9ae-1376-d91d-a789-9e510bde96a7@amd.com>
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+References: <cover.1683630932.git.quic_varada@quicinc.com>
+ <064614c5b28f6d813634ad14a59b0bf94ac334b7.1683630932.git.quic_varada@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1868d9ae-1376-d91d-a789-9e510bde96a7@amd.com>
+In-Reply-To: <064614c5b28f6d813634ad14a59b0bf94ac334b7.1683630932.git.quic_varada@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 09/05/2023 16:19, Michal Simek wrote:
+On 09/05/2023 13:54, Varadarajan Narayanan wrote:
+> * Add dt-bindings for USB3 PHY found on Qualcomm IPQ9574
 > 
+> * Making power-domains as optional since IPQ9574 doesn't have GDSCs
 > 
-> On 5/7/23 10:07, Krzysztof Kozlowski wrote:
->> On 05/05/2023 15:25, Michal Simek wrote:
->>> The Microchip usb5744 is a SS/HS USB 3.0 hub controller with 4 ports.
->>> The binding describes USB related aspects of the USB5744 hub, it as
->>> well cover the option of connecting the controller as an i2c slave.
->>> When i2c interface is connected hub needs to be initialized first.
->>> Hub itself has fixed i2c address 0x2D but hardcoding address is not good
->>> idea because address can be shifted by i2c address translator in the
->>> middle.
->>>
->>> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
->>> Signed-off-by: Michal Simek <michal.simek@amd.com>
->>> ---
->>>
->>> Changes in v2:
->>> - fix i2c-bus property
->>> - swap usb2.0/3.0 compatible strings
->>> - fix indentation in example (4 spaces)
->>> - add new i2c node with microchip,usb5744 compatible property
->>>
->>> It looks like that usb8041 has also an optional i2c interface which is not
->>> covered. But it is mentioned at commit 40e58a8a7ca6 ("dt-bindings: usb:
->>> Add binding for TI USB8041 hub controller").
->>>
->>> i2c-bus name property was suggested by Rob at
->>> https://lore.kernel.org/all/CAL_JsqJedhX6typpUKbnzV7CLK6UZVjq3CyG9iY_j5DLPqvVdw@mail.gmail.com/
->>> and
->>> https://lore.kernel.org/all/CAL_JsqJZBbu+UXqUNdZwg-uv0PAsNg55026PTwhKr5wQtxCjVQ@mail.gmail.com/
->>>
->>> the question is if adding address like this is acceptable.
->>> But it must be specified.
->>>
->>> Driver will follow based on final dt-binding.
->>>
->>> $ref: usb-device.yaml# should be also added but have no idea how to wire it
->>> up to be applied only on usb node not i2c one.
->>>
->>> ---
->>>   .../bindings/usb/microchip,usb5744.yaml       | 110 ++++++++++++++++++
->>>   1 file changed, 110 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
->>> new file mode 100644
->>> index 000000000000..7e0a3472ea95
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
->>> @@ -0,0 +1,110 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/usb/microchip,usb5744.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Microchip USB5744 4-port Hub Controller
->>> +
->>> +description:
->>> +  Microchip's USB5744 SmartHubTM IC is a 4 port, SuperSpeed (SS)/Hi-Speed (HS),
->>> +  low power, low pin count configurable and fully compliant with the USB 3.1
->>> +  Gen 1 specification. The USB5744 also supports Full Speed (FS) and Low Speed
->>> +  (LS) USB signaling, offering complete coverage of all defined USB operating
->>> +  speeds. The new SuperSpeed hubs operate in parallel with the USB 2.0
->>> +  controller, so 5 Gbps SuperSpeed data transfers are not affected by slower
->>> +  USB 2.0 traffic.
->>> +
->>> +maintainers:
->>> +  - Piyush Mehta <piyush.mehta@amd.com>
->>> +  - Michal Simek <michal.simek@amd.com>
->>> +
->>> +select:
->>> +  properties:
->>> +    compatible:
->>> +      contains:
->>> +        const: microchip,usb5744
->>> +  required:
->>> +    - compatible
->>
->> I don't understand why do you need this select. It basically disables
->> schema matching for other ones.
-> 
-> I didn't find a way how to have usbXXX,XXXX compatible strings and 
-> microchip,usb5744 compatible in the same file. I am definitely lacking knowledge 
-> how to write it properly that's why any advise is welcome.
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+>  Changes in v11:
+> 	- Have power-domains as required for non ipq9574 SoCs
 
-Hm, if you just have both of them like you have now, what happens?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
