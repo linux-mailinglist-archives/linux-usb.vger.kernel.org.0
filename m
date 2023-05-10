@@ -2,146 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0672B6FD8A7
-	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 09:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA7C6FDA23
+	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 10:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236434AbjEJHx7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 May 2023 03:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
+        id S236849AbjEJI4G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 May 2023 04:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236436AbjEJHxx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 03:53:53 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273CE44AB;
-        Wed, 10 May 2023 00:53:42 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34A7RIAU017497;
-        Wed, 10 May 2023 07:53:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=TWfriI1GPViFPiF9QfSprwUBp0trQtulsgwwLsgPKAY=;
- b=n7hg07RMT84PZJYqqr75XTzL6R+Z6hBLafurv+LOMfZEEgf6aqEVSNbbVWhAQRdA3z2z
- HeY9Cg6NEYQIXR8zU0o9ht/rK5Pr3p2ijTSiishDkyvJToeA7FrWNhUQsysuN/6Vk/3i
- ejjBMZVX2yyy8l8iHNOEdHuxgSVnDxWi7OXooDiFkkWmTLWk2irBakhTSKfD2IWOjCww
- r053Alomxh8cpW+HRASXWLHXQQJ3OxrGMJMlIM7uwhPoFckwfH6FY/gEk8GU+ixT3eT3
- uLWlm+hOccRJE7swJ8SUC67hs9kLWwiRwjMjWI91+kksq7Gd3M7MJ2hs6ubpqj2GPbbz 7g== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qfrut9mwc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 07:53:19 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34A7rHQd015468
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 07:53:17 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 10 May 2023 00:53:14 -0700
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        with ESMTP id S236813AbjEJI4E (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 04:56:04 -0400
+Received: from pku.edu.cn (mx19.pku.edu.cn [162.105.129.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27A9BE45;
+        Wed, 10 May 2023 01:55:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=5fgX4Fhl0a
+        Sp9FXpCFf3QP/h9Q7cD/Xeogk7PFQTbxg=; b=YOYEJbkx3Q7PrqHtYF/iMqaE6I
+        nBpO1/Vlr1JQA3ZxAOsPmiY6ekTTBJpPkhIMeuDCyc/Bdep4JpBSnZPepdASfwmV
+        sJ9drPAkkk+QZQYyrEkOk0cxbZO6OHC32wmVK5S6jLBbyYSy70V0RUlL52ui0cSk
+        pEMKBV+HjoXkx+cgQ=
+Received: from localhost.localdomain (unknown [10.7.101.92])
+        by front01 (Coremail) with SMTP id 5oFpogBnb2cIXFtkW9d5Ag--.63159S2;
+        Wed, 10 May 2023 16:55:39 +0800 (CST)
+From:   Ruihan Li <lrh2000@pku.edu.cn>
+To:     linux-mm@kvack.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Jiantao Zhang" <water.zhangjiantao@huawei.com>,
-        Badhri Jagan Sridharan <badhri@google.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH v3 2/2] usb: gadget: udc: Handle gadget_connect failure during bind operation
-Date:   Wed, 10 May 2023 13:22:52 +0530
-Message-ID: <20230510075252.31023-3-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230510075252.31023-1-quic_kriskura@quicinc.com>
-References: <20230510075252.31023-1-quic_kriskura@quicinc.com>
+        Ruihan Li <lrh2000@pku.edu.cn>
+Subject: [PATCH 0/4] Fix type confusion in page_table_check
+Date:   Wed, 10 May 2023 16:55:23 +0800
+Message-Id: <20230510085527.57953-1-lrh2000@pku.edu.cn>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: pwcW3T6yZNhZ2L6Peo3B0s5wVvZ-m0Em
-X-Proofpoint-ORIG-GUID: pwcW3T6yZNhZ2L6Peo3B0s5wVvZ-m0Em
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- priorityscore=1501 impostorscore=0 suspectscore=0 phishscore=0 bulkscore=0
- clxscore=1015 adultscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305100061
+X-CM-TRANSID: 5oFpogBnb2cIXFtkW9d5Ag--.63159S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1fJw4ktrW7Jw4ftrWDJwb_yoW8XrW8p3
+        WUCr1YqF4rG3s3Jw1SkanYk34ruF4rG3y7CryIk3yY93s5Jr1IkFn3Wr13Za4kAryUGr15
+        KF4agry7Kr18Ja7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBY1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAac4AC62xK8xCEY4
+        vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
+        628vn2kIc2xKxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8V
+        WkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
+        C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF
+        04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
+        CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbHa0DUUUUU==
+X-CM-SenderInfo: yssqiiarrvmko6sn3hxhgxhubq/1tbiAgEEBVPy770DbwAVsI
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In the event, gadget_connect call (which invokes pullup) fails,
-propagate the error to udc bind operation which inturn sends the
-error to configfs. The userspace can then retry enumeartion if
-it chooses to.
+Recently, syzbot reported [1] ("kernel BUG in page_table_check_clear").
+The root cause is that usbdev_mmap calls remap_pfn_range on kmalloc'ed
+memory, which leads to type confusion between struct page and slab in
+page_table_check. This series of patches fixes the usb side by avoiding
+mapping slab pages into userspace, and fixes the mm side by enforcing
+that all user-accessible pages are not slab pages. A more detailed
+analysis and some discussion of how to fix the problem can also be found
+in [1].
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
----
-changes in v3: Rebase on top of usb-next
+ [1] https://lore.kernel.org/lkml/20230507135844.1231056-1-lrh2000@pku.edu.cn/T/
 
- drivers/usb/gadget/udc/core.c | 21 +++++++++++++++++----
- 1 file changed, 17 insertions(+), 4 deletions(-)
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 4641153e9706..69041cca5d24 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1122,12 +1122,16 @@ EXPORT_SYMBOL_GPL(usb_gadget_set_state);
- /* ------------------------------------------------------------------------- */
- 
- /* Acquire connect_lock before calling this function. */
--static void usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
-+static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
- {
-+	int ret;
-+
- 	if (udc->vbus && udc->started)
--		usb_gadget_connect_locked(udc->gadget);
-+		ret = usb_gadget_connect_locked(udc->gadget);
- 	else
--		usb_gadget_disconnect_locked(udc->gadget);
-+		ret = usb_gadget_disconnect_locked(udc->gadget);
-+
-+	return ret;
- }
- 
- /**
-@@ -1583,12 +1587,21 @@ static int gadget_bind_driver(struct device *dev)
- 		goto err_start;
- 	}
- 	usb_gadget_enable_async_callbacks(udc);
--	usb_udc_connect_control_locked(udc);
-+	ret = usb_udc_connect_control_locked(udc);
-+	if (ret)
-+		goto err_connect_control;
-+
- 	mutex_unlock(&udc->connect_lock);
- 
- 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
- 	return 0;
- 
-+ err_connect_control:
-+	usb_gadget_disable_async_callbacks(udc);
-+	if (gadget->irq)
-+		synchronize_irq(gadget->irq);
-+	usb_gadget_udc_stop_locked(udc);
-+
-  err_start:
- 	driver->unbind(udc->gadget);
- 
+Ruihan Li (4):
+  usb: usbfs: Enforce page requirements for mmap
+  usb: usbfs: Use consistent mmap functions
+  mm: page_table_check: Make it dependent on !DEVMEM
+  mm: page_table_check: Ensure user pages are not slab pages
+
+ Documentation/mm/page_table_check.rst | 18 ++++++++++++
+ drivers/usb/core/buffer.c             | 41 +++++++++++++++++++++++++++
+ drivers/usb/core/devio.c              | 15 +++++++---
+ include/linux/page-flags.h            |  6 ++++
+ include/linux/usb/hcd.h               |  5 ++++
+ mm/Kconfig.debug                      |  2 +-
+ mm/page_table_check.c                 |  6 ++++
+ 7 files changed, 88 insertions(+), 5 deletions(-)
+
 -- 
-2.40.0
+2.40.1
 
