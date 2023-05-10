@@ -2,208 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB23E6FDE85
-	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 15:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFCD26FDFB2
+	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 16:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237038AbjEJN2e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 May 2023 09:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35790 "EHLO
+        id S236989AbjEJOLi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 May 2023 10:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237083AbjEJN2c (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 09:28:32 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D5E44A8;
-        Wed, 10 May 2023 06:28:25 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 74C4124E1B7;
-        Wed, 10 May 2023 21:28:19 +0800 (CST)
-Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 10 May
- 2023 21:28:19 +0800
-Received: from ubuntu.localdomain (183.27.98.219) by EXMBX171.cuchost.com
- (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 10 May
- 2023 21:28:18 +0800
-From:   Minda Chen <minda.chen@starfivetech.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        Minda Chen <minda.chen@starfivetech.com>
-Subject: [PATCH v2 2/2] usb: cdns3: cdns3-plat: Add clk and reset init
-Date:   Wed, 10 May 2023 21:28:16 +0800
-Message-ID: <20230510132816.108820-3-minda.chen@starfivetech.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230510132816.108820-1-minda.chen@starfivetech.com>
-References: <20230510132816.108820-1-minda.chen@starfivetech.com>
+        with ESMTP id S237201AbjEJOLh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 10:11:37 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD820114
+        for <linux-usb@vger.kernel.org>; Wed, 10 May 2023 07:11:35 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-b9a6f17f2b6so36037518276.1
+        for <linux-usb@vger.kernel.org>; Wed, 10 May 2023 07:11:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683727895; x=1686319895;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ABREL4RA4HQkooXBZ4vFWzYroT9eYO8/4h0/bu7hTPg=;
+        b=nJecOsJyqcRvaPT9m6MbM8DDYx5vc8NikACtgnGDBMlsZ7jEUJkdiuqpUXSwJ+VDLR
+         SV8mBBD/MDHq53G/wg7Y67l/cSYGGnu8Z5LWkidbHXZ8v0zSeOCnpwAO0nSQzFXbVY8z
+         fREaKLtEXgrcDSUNKwxcbxQRHq4YrFYpLHlc8TcY4xQEqEyzykC24djuJbI5K5v9Q775
+         05gR4e2Exo5gy8VpID15rkL7IZNqvJfmwHzeIixJ4NxhmP5fM1+neOLV9IfuD+TN6rBJ
+         VR1FKFpkYm6OLaVPBErbw+bW+/4vfdFxt3vDpMvbuBsqA0C41Te1XXj6Ah1IcqKn+/B7
+         46VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683727895; x=1686319895;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ABREL4RA4HQkooXBZ4vFWzYroT9eYO8/4h0/bu7hTPg=;
+        b=CPOS2/cuZdXi0wlqhIedCuRlp9+n3jaVAlHUJHip/e3JZLj3263fOR4EYfuc9N8FXL
+         5RvFZgwm89g0zQinE1sA2SG2rUiZuLPA+rZhJASg49k0sUYfomgVwn5g8CnM7Ft1Yhgq
+         P6WCDL3tBCH9yVI+cPV0xo2iKMEwcQpOXyl1YwqMMa4Rq9EkxW2vsxmAWiWXpS52hDAQ
+         q6ZtsRXI4bqnmbTwkTTNww1THcyZKGNjzg/R4vLHZtSUJHegt6X+FPC3ZyOrxwohSpy0
+         ORYXVcysy1VmR0TSxyvW4d3td1VNGgPF4F38a4w+G9DmYlju/ZuoZUqivbXXv0anygvn
+         Y/Ag==
+X-Gm-Message-State: AC+VfDyzXSrw9NBMhfm4/7RsN5+L0JzsWDtoIkPlst+Pt6HxVyPd5Agp
+        wTg+PXjc7/LQLqsL40UuWNIVFgwW0bQ3N8NiawgBV+dCHDTQIL2r
+X-Google-Smtp-Source: ACHHUZ6qSFZacUexcQkHcVAJ+XtxS7EGJ0Aso4chPxbPdm4XjwCwQpJtI34WDH2cWrBtoFXh8o5rCwC8gRl71XOUXuU=
+X-Received: by 2002:a25:a87:0:b0:b9e:772f:34bc with SMTP id
+ 129-20020a250a87000000b00b9e772f34bcmr21231831ybk.22.1683727894999; Wed, 10
+ May 2023 07:11:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [183.27.98.219]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX171.cuchost.com
- (172.16.6.91)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <cover.1683630932.git.quic_varada@quicinc.com> <42bf6244582d6208f51db1a9299fe1c8afab4e14.1683630932.git.quic_varada@quicinc.com>
+ <CAA8EJpqkSNzx=73JS1Csw+ivVovhrFeM0R5j2tpruEfNqvT48Q@mail.gmail.com> <20230510102244.GA21530@varda-linux.qualcomm.com>
+In-Reply-To: <20230510102244.GA21530@varda-linux.qualcomm.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 10 May 2023 17:11:24 +0300
+Message-ID: <CAA8EJppgkHREJrBzhSDn9VT--RRcpcxMYvTWoYfkXkv4XFtK6Q@mail.gmail.com>
+Subject: Re: [PATCH v11 8/9] arm64: dts: qcom: ipq9574: Add LDO regulator node
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add gereric clk and reset init codes to Cadence USBSS
-controller. The codes has been tested by starfive vf2
-board.
+On Wed, 10 May 2023 at 13:23, Varadarajan Narayanan
+<quic_varada@quicinc.com> wrote:
+>
+> On Tue, May 09, 2023 at 04:08:59PM +0300, Dmitry Baryshkov wrote:
+> > On Tue, 9 May 2023 at 14:56, Varadarajan Narayanan
+> > <quic_varada@quicinc.com> wrote:
+> > >
+> > > Add LDO regulator node
+> > >
+> > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > > ---
+> > >  Changes in v10:
+> > >         - Add LDO regulator node
+> > > ---
+> > >  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 7 +++++++
+> > >  1 file changed, 7 insertions(+)
+> >
+> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >
+> > Minor question below:
+> >
+> > >
+> > > diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> > > index bdc1434..1f5d14f 100644
+> > > --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> > > +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> > > @@ -60,6 +60,13 @@
+> > >                         regulator-min-microvolt = <725000>;
+> > >                         regulator-max-microvolt = <1075000>;
+> > >                 };
+> > > +
+> > > +               mp5496_l2: l2 {
+> > > +                       regulator-min-microvolt = <1800000>;
+> > > +                       regulator-max-microvolt = <1800000>;
+> > > +                       regulator-boot-on;
+> > > +                       regulator-always-on;
+> >
+> > This usually points out that there are other users which are not yet
+> > enabled/properly specified. What users are there for this supply which
+> > demand it to be always on?
+>
+> The 1.8v rail is used by PCIe PHY, PLL for Ethernet SerDes
+> interface and PLLs that generate SoC clocks. The voting for this
+> rail is managed by the RPM f/w.
 
-Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
----
- drivers/usb/cdns3/cdns3-plat.c | 58 ++++++++++++++++++++++++++++++++++
- drivers/usb/cdns3/core.h       |  3 ++
- 2 files changed, 61 insertions(+)
+Then I'm looking forward to seeing the patch which declares all the
+actual users of the lane. Please do not declare power lanes as
+boot-on/always-on unless there is a strong reason for doing it.
 
-diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
-index 2bc5d094548b..30da808e0a2f 100644
---- a/drivers/usb/cdns3/cdns3-plat.c
-+++ b/drivers/usb/cdns3/cdns3-plat.c
-@@ -12,11 +12,13 @@
-  *         Roger Quadros <rogerq@ti.com>
-  */
- 
-+#include <linux/clk.h>
- #include <linux/module.h>
- #include <linux/irq.h>
- #include <linux/kernel.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
-+#include <linux/reset.h>
- 
- #include "core.h"
- #include "gadget-export.h"
-@@ -43,6 +45,40 @@ static void set_phy_power_off(struct cdns *cdns)
- 	phy_power_off(cdns->usb2_phy);
- }
- 
-+static int cdns3_clk_rst_init(struct cdns *cdns, bool clk_only)
-+{
-+	int ret = 0;
-+
-+	if (cdns->num_clks) {
-+		ret = clk_bulk_prepare_enable(cdns->num_clks, cdns->clks);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (clk_only)
-+		return ret;
-+
-+	ret = reset_control_deassert(cdns->resets);
-+	if (ret)
-+		goto err_clk_init;
-+
-+	return ret;
-+
-+err_clk_init:
-+	if (cdns->num_clks)
-+		clk_bulk_disable_unprepare(cdns->num_clks, cdns->clks);
-+	return ret;
-+}
-+
-+static void cdns3_clk_rst_deinit(struct cdns *cdns, bool clk_only)
-+{
-+	if (!clk_only)
-+		reset_control_assert(cdns->resets);
-+
-+	if (cdns->num_clks)
-+		clk_bulk_disable_unprepare(cdns->num_clks, cdns->clks);
-+}
-+
- /**
-  * cdns3_plat_probe - probe for cdns3 core device
-  * @pdev: Pointer to cdns3 core platform device
-@@ -116,6 +152,16 @@ static int cdns3_plat_probe(struct platform_device *pdev)
- 		cdns->wakeup_irq = 0x0;
- 	}
- 
-+	ret = devm_clk_bulk_get_all(dev, &cdns->clks);
-+	if (ret < 0)
-+		return ret;
-+
-+	cdns->num_clks = ret;
-+
-+	cdns->resets = devm_reset_control_array_get_optional_exclusive(dev);
-+	if (IS_ERR(cdns->resets))
-+		return PTR_ERR(cdns->resets);
-+
- 	cdns->usb2_phy = devm_phy_optional_get(dev, "cdns3,usb2-phy");
- 	if (IS_ERR(cdns->usb2_phy))
- 		return PTR_ERR(cdns->usb2_phy);
-@@ -128,6 +174,10 @@ static int cdns3_plat_probe(struct platform_device *pdev)
- 	if (IS_ERR(cdns->usb3_phy))
- 		return PTR_ERR(cdns->usb3_phy);
- 
-+	ret = cdns3_clk_rst_init(cdns, false);
-+	if (ret)
-+		return ret;
-+
- 	ret = phy_init(cdns->usb3_phy);
- 	if (ret)
- 		goto err_phy3_init;
-@@ -165,6 +215,7 @@ static int cdns3_plat_probe(struct platform_device *pdev)
- 	phy_exit(cdns->usb3_phy);
- err_phy3_init:
- 	phy_exit(cdns->usb2_phy);
-+	cdns3_clk_rst_deinit(cdns, false);
- 
- 	return ret;
- }
-@@ -187,6 +238,8 @@ static int cdns3_plat_remove(struct platform_device *pdev)
- 	set_phy_power_off(cdns);
- 	phy_exit(cdns->usb2_phy);
- 	phy_exit(cdns->usb3_phy);
-+	cdns3_clk_rst_deinit(cdns, false);
-+
- 	return 0;
- }
- 
-@@ -220,6 +273,8 @@ static int cdns3_controller_suspend(struct device *dev, pm_message_t msg)
- 
- 	cdns3_set_platform_suspend(cdns->dev, true, wakeup);
- 	set_phy_power_off(cdns);
-+	if (!PMSG_IS_AUTO(msg))
-+		cdns3_clk_rst_deinit(cdns, true);
- 	spin_lock_irqsave(&cdns->lock, flags);
- 	cdns->in_lpm = true;
- 	spin_unlock_irqrestore(&cdns->lock, flags);
-@@ -237,6 +292,9 @@ static int cdns3_controller_resume(struct device *dev, pm_message_t msg)
- 	if (!cdns->in_lpm)
- 		return 0;
- 
-+	if (!PMSG_IS_AUTO(msg))
-+		cdns3_clk_rst_init(cdns, true);
-+
- 	if (cdns_power_is_lost(cdns)) {
- 		phy_exit(cdns->usb2_phy);
- 		ret = phy_init(cdns->usb2_phy);
-diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
-index 2d332a788871..b894768ee485 100644
---- a/drivers/usb/cdns3/core.h
-+++ b/drivers/usb/cdns3/core.h
-@@ -111,6 +111,9 @@ struct cdns {
- 	struct mutex			mutex;
- 	enum usb_dr_mode		dr_mode;
- 	struct usb_role_switch		*role_sw;
-+	struct reset_control *resets;
-+	struct clk_bulk_data *clks;
-+	int num_clks;
- 	bool				in_lpm;
- 	bool				wakeup_pending;
- 	struct cdns3_platform_data	*pdata;
+>
+> Thanks
+> Varada
+>
+> > > +               };
+> > >         };
+> > >  };
+> > >
+> > > --
+> > > 2.7.4
+> > >
+> >
+> >
+> > --
+> > With best wishes
+> > Dmitry
+
+
+
 -- 
-2.17.1
-
+With best wishes
+Dmitry
