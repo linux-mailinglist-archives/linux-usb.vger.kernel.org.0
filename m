@@ -2,142 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 528196FE1B5
-	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 17:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 450856FE24B
+	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 18:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237655AbjEJPlc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 May 2023 11:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
+        id S231402AbjEJQX3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 May 2023 12:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237622AbjEJPlZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 11:41:25 -0400
-Received: from pku.edu.cn (mx19.pku.edu.cn [162.105.129.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF7E63583;
-        Wed, 10 May 2023 08:41:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
-        Message-ID:References:MIME-Version:Content-Type:
-        Content-Disposition:In-Reply-To; bh=f2kwca3p5lvmK1UKkYNiCNtEhFHR
-        gCfnV1Hv36vabJE=; b=AUAyj4Rh8ryw5jfWK+eYdxwMtpGmL+2cMOMiHRSIKmRO
-        Ux8B+3fGADgsT9+Y57nXL03gP7QhZ/Koli5PlZj447yjYLzMU4pazuL1FRvlYgWL
-        D3bj89QLxyVciAJ05H3DVZ5Q+FwurbUdFHFVvztcxIUAjDbvB1hFuVX9ikdiTHc=
-Received: from localhost (unknown [10.7.101.92])
-        by front02 (Coremail) with SMTP id 54FpogCXbjgRu1tkSAlvEw--.9090S2;
-        Wed, 10 May 2023 23:41:10 +0800 (CST)
-Date:   Wed, 10 May 2023 23:41:05 +0800
-From:   Ruihan Li <lrh2000@pku.edu.cn>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-mm@kvack.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
+        with ESMTP id S230112AbjEJQX1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 12:23:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE4A5593
+        for <linux-usb@vger.kernel.org>; Wed, 10 May 2023 09:22:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683735763;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7LdhAJieegVHrXtma/ffaQ+dm+tSLZToc/pLp+pQaYE=;
+        b=DRap2P0jwgZVnoAfEJwN9DN3rlX/wWAiyyuqn4S7Ht8LXRD38k6EBabomer4nziip6vDSr
+        GaLn5MQPoZZ4eVpQm/ntP8PadHb4fRyH/kC9xLDGWFwCSRWjelo3nBJkigP4OOMP64RX3g
+        dR0hwSftqLFg/Z3PVArpFtPzbrJy3GU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-318-Ay-rr86bMduvR9CcyruC3w-1; Wed, 10 May 2023 12:22:39 -0400
+X-MC-Unique: Ay-rr86bMduvR9CcyruC3w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 55D54863E8A;
+        Wed, 10 May 2023 16:22:37 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.195.159])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2B9004078906;
+        Wed, 10 May 2023 16:22:34 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Pavel Machek <pavel@ucw.cz>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ruihan Li <lrh2000@pku.edu.cn>
-Subject: Re: [PATCH 2/4] usb: usbfs: Use consistent mmap functions
-Message-ID: <w6keszmqdkwsuw5k3dsyl67zgndorxsoeenysjyzlzf5v4p6bl@mvztdsgt7qjj>
-References: <20230510085527.57953-1-lrh2000@pku.edu.cn>
- <20230510085527.57953-3-lrh2000@pku.edu.cn>
- <e197f549-0ee7-446e-86af-ac173d047df5@rowland.harvard.edu>
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-leds@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org
+Subject: [PATCH RESEND 0/4] Fix oops about sleeping in led_trigger_blink()
+Date:   Wed, 10 May 2023 18:22:30 +0200
+Message-Id: <20230510162234.291439-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e197f549-0ee7-446e-86af-ac173d047df5@rowland.harvard.edu>
-X-CM-TRANSID: 54FpogCXbjgRu1tkSAlvEw--.9090S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAr4fXFWUAry5Jr4xtF48Crg_yoW5Xw4xpF
-        W8t3yjkF4YqFyI9r12van8WFyfGwn5KFyUGryIv3sxu3W3Xr1SkFySkFy5ZF12yr10qr1I
-        vFWqyw13u3W5uFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBY1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24V
-        AvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
-        McIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
-        v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-        8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26w
-        4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
-        r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6x
-        IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAI
-        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
-        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1c4S5UUUUU==
-X-CM-SenderInfo: yssqiiarrvmko6sn3hxhgxhubq/1tbiAgEHBVPy772BUwAGsm
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
+Hi All,
 
-On Wed, May 10, 2023 at 10:38:48AM -0400, Alan Stern wrote:
-> On Wed, May 10, 2023 at 04:55:25PM +0800, Ruihan Li wrote:
-> > When hcd->localmem_pool is non-null, it is used to allocate DMA memory.
-> > In this case, the dma address will be properly returned (in dma_handle),
-> > and dma_mmap_coherent should be used to map this memory into the user
-> > space. However, the current implementation uses pfn_remap_range, which
-> > is supposed to map normal pages (instead of DMA pages).
-> > 
-> > Instead of repeating the logic in the memory allocation function, this
-> > patch introduces a more robust solution. To address the previous issue,
-> > this patch checks the type of allocated memory by testing whether
-> > dma_handle is properly set. If dma_handle is properly returned, it means
-> > some DMA pages are allocated and dma_mmap_coherent should be used to map
-> > them. Otherwise, normal pages are allocated and pfn_remap_range should
-> > be called. This ensures that the correct mmap functions are used
-> > consistently, independently with logic details that determine which type
-> > of memory gets allocated.
-> > 
-> > Fixes: a0e710a7def4 ("USB: usbfs: fix mmap dma mismatch")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Ruihan Li <lrh2000@pku.edu.cn>
-> > ---
-> >  drivers/usb/core/devio.c | 10 ++++++++--
-> >  1 file changed, 8 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-> > index b4cf9e860..5067030b7 100644
-> > --- a/drivers/usb/core/devio.c
-> > +++ b/drivers/usb/core/devio.c
-> > @@ -235,7 +235,7 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
-> >  	size_t size = vma->vm_end - vma->vm_start;
-> >  	void *mem;
-> >  	unsigned long flags;
-> > -	dma_addr_t dma_handle;
-> > +	dma_addr_t dma_handle = DMA_MAPPING_ERROR;
-> >  	int ret;
-> >  
-> >  	ret = usbfs_increase_memory_usage(size + sizeof(struct usb_memory));
-> > @@ -265,7 +265,13 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
-> >  	usbm->vma_use_count = 1;
-> >  	INIT_LIST_HEAD(&usbm->memlist);
-> >  
-> > -	if (hcd->localmem_pool || !hcd_uses_dma(hcd)) {
-> > +	/* In DMA-unavailable cases, hcd_buffer_alloc_pages allocates
-> > +	 * normal pages and assigns DMA_MAPPING_ERROR to dma_handle. Check
-> > +	 * whether we are in such cases, and then use remap_pfn_range (or
-> > +	 * dma_mmap_coherent) to map normal (or DMA) pages into the user
-> > +	 * space, respectively.
-> > +	 */
-> 
-> Another stylistic issue.  For multi-line comments, the format we use is:
-> 
-> 	/*
-> 	 * Blah, blah, blah
-> 	 * Blah, blah, blah
-> 	 */
-> 
-> Alan Stern
+This is a resend with al the subsys maintainers of files touched
+by the small led_trigger_blink() / led_trigger_blink_oneshot()
+API/prototype change in the first patch in this series.
 
-Yeah, I am pretty sure it is another style difference with the net
-subsystem. Again, in the next version, I'll follow the coding style that
-you have pointed out.
+ARCNet, power-supply, USB, MAC80211 and netfilter maintainers,
+may we please have your ack for merging patch 1/4 through Lee's
+LED tree: https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git/
+?
 
-Thanks,
-Ruihan Li
+Orginal cover letter:
+
+Here is a patch series to fix an oops about sleeping in led_trigger_blink()
++ one other small bugfix.
+
+Fixes: 0b9536c95709 ("leds: Add ability to blink via simple trigger")
+
+tag, but Fixes tags tend to lead to patches getting automatically added
+to the stable series and I would prefer to see this series get some
+significant testing time in mainline first, so I have chosen to omit
+the tag.
+
+Regards,
+
+Hans
+
+
+Hans de Goede (4):
+  leds: Change led_trigger_blink[_oneshot]() delay parameters to
+    pass-by-value
+  leds: Fix set_brightness_delayed() race
+  leds: Fix oops about sleeping in led_trigger_blink()
+  leds: Clear LED_INIT_DEFAULT_TRIGGER when clearing current trigger
+
+ drivers/leds/led-core.c                  | 81 ++++++++++++++++++++----
+ drivers/leds/led-triggers.c              | 17 ++---
+ drivers/leds/trigger/ledtrig-disk.c      |  9 +--
+ drivers/leds/trigger/ledtrig-mtd.c       |  8 +--
+ drivers/net/arcnet/arcnet.c              |  8 +--
+ drivers/power/supply/power_supply_leds.c |  5 +-
+ drivers/usb/common/led.c                 |  4 +-
+ include/linux/leds.h                     | 43 ++++++++++---
+ net/mac80211/led.c                       |  2 +-
+ net/mac80211/led.h                       |  8 +--
+ net/netfilter/xt_LED.c                   |  3 +-
+ 11 files changed, 125 insertions(+), 63 deletions(-)
+
+-- 
+2.40.1
 
