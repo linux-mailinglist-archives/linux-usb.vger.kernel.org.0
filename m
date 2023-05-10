@@ -2,29 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC616FE1AD
-	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 17:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 528196FE1B5
+	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 17:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237584AbjEJPj4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 May 2023 11:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54224 "EHLO
+        id S237655AbjEJPlc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 May 2023 11:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232912AbjEJPjr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 11:39:47 -0400
+        with ESMTP id S237622AbjEJPlZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 11:41:25 -0400
 Received: from pku.edu.cn (mx19.pku.edu.cn [162.105.129.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A62811BE4;
-        Wed, 10 May 2023 08:39:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF7E63583;
+        Wed, 10 May 2023 08:41:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pku.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
         Message-ID:References:MIME-Version:Content-Type:
-        Content-Disposition:In-Reply-To; bh=E5X1EnY8H+9y2Bd0/LtCE7uJbb9e
-        Ek4yWHczmrin+AY=; b=ZHxe2XQz9hSXcE4d88DTlLHtyDTyeiwG9+TTEVy0B1FH
-        /GKBjvRkDEncHlC5rfaJ0T2ElgUf0/gMxVf6AHRUNGbvw5m4kkiVXRRZ2WS9mE9V
-        +eeMJuqszXAVs3wTUw3IoDlbAPbUHfJ3DUl683KrLs6B9p06ZsR5W82AhSTQQRs=
+        Content-Disposition:In-Reply-To; bh=f2kwca3p5lvmK1UKkYNiCNtEhFHR
+        gCfnV1Hv36vabJE=; b=AUAyj4Rh8ryw5jfWK+eYdxwMtpGmL+2cMOMiHRSIKmRO
+        Ux8B+3fGADgsT9+Y57nXL03gP7QhZ/Koli5PlZj447yjYLzMU4pazuL1FRvlYgWL
+        D3bj89QLxyVciAJ05H3DVZ5Q+FwurbUdFHFVvztcxIUAjDbvB1hFuVX9ikdiTHc=
 Received: from localhost (unknown [10.7.101.92])
-        by front01 (Coremail) with SMTP id 5oFpogCH7b5lultkKXGDAg--.38057S2;
-        Wed, 10 May 2023 23:38:18 +0800 (CST)
-Date:   Wed, 10 May 2023 23:38:12 +0800
+        by front02 (Coremail) with SMTP id 54FpogCXbjgRu1tkSAlvEw--.9090S2;
+        Wed, 10 May 2023 23:41:10 +0800 (CST)
+Date:   Wed, 10 May 2023 23:41:05 +0800
 From:   Ruihan Li <lrh2000@pku.edu.cn>
 To:     Alan Stern <stern@rowland.harvard.edu>
 Cc:     linux-mm@kvack.org, linux-usb@vger.kernel.org,
@@ -35,35 +35,34 @@ Cc:     linux-mm@kvack.org, linux-usb@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Christoph Hellwig <hch@infradead.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.comm,
         stable@vger.kernel.org, Ruihan Li <lrh2000@pku.edu.cn>
-Subject: Re: [PATCH 1/4] usb: usbfs: Enforce page requirements for mmap
-Message-ID: <a6ltxooqc5kvgnw5xhinbt2k4g4l3o6osdvlp3mfcxdp6oo6oc@6cpny4hyexqj>
+Subject: Re: [PATCH 2/4] usb: usbfs: Use consistent mmap functions
+Message-ID: <w6keszmqdkwsuw5k3dsyl67zgndorxsoeenysjyzlzf5v4p6bl@mvztdsgt7qjj>
 References: <20230510085527.57953-1-lrh2000@pku.edu.cn>
- <20230510085527.57953-2-lrh2000@pku.edu.cn>
- <65ae7b7f-9dea-429f-aca6-2ce4a75b6531@rowland.harvard.edu>
+ <20230510085527.57953-3-lrh2000@pku.edu.cn>
+ <e197f549-0ee7-446e-86af-ac173d047df5@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <65ae7b7f-9dea-429f-aca6-2ce4a75b6531@rowland.harvard.edu>
-X-CM-TRANSID: 5oFpogCH7b5lultkKXGDAg--.38057S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCr4DJr48uw4DGF1kJrW5KFg_yoW5uF1fpF
-        WrWr1Yka98tr93CrnIgFn8uFy5Zan5XFy5GryIv34rZr9xZry3Krn0yF45ur1kAr40ga1F
-        qFs0yF1Yka45Za7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+In-Reply-To: <e197f549-0ee7-446e-86af-ac173d047df5@rowland.harvard.edu>
+X-CM-TRANSID: 54FpogCXbjgRu1tkSAlvEw--.9090S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAr4fXFWUAry5Jr4xtF48Crg_yoW5Xw4xpF
+        W8t3yjkF4YqFyI9r12van8WFyfGwn5KFyUGryIv3sxu3W3Xr1SkFySkFy5ZF12yr10qr1I
+        vFWqyw13u3W5uFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUBY1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
         w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
         IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
         z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24V
         AvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
-        McIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
+        McIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
         v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
         8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26w
         4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
         r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6x
         IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAI
         w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
-        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbHa0DUUUUU==
-X-CM-SenderInfo: yssqiiarrvmko6sn3hxhgxhubq/1tbiAgEHBVPy772BUwADsj
+        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1c4S5UUUUU==
+X-CM-SenderInfo: yssqiiarrvmko6sn3hxhgxhubq/1tbiAgEHBVPy772BUwAGsm
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -76,81 +75,68 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi Alan,
 
-On Wed, May 10, 2023 at 10:37:45AM -0400, Alan Stern wrote:
-> On Wed, May 10, 2023 at 04:55:24PM +0800, Ruihan Li wrote:
-> > The current implementation of usbdev_mmap uses usb_alloc_coherent to
-> > allocate memory pages that will later be mapped into the user space.
-> > Meanwhile, usb_alloc_coherent employs three different methods to
-> > allocate memory, as outlined below:
-> >  * If hcd->localmem_pool is non-null, it uses gen_pool_dma_alloc to
-> >    allocate memory.
-> >  * If DMA is not available, it uses kmalloc to allocate memory.
-> >  * Otherwise, it uses dma_alloc_coherent.
+On Wed, May 10, 2023 at 10:38:48AM -0400, Alan Stern wrote:
+> On Wed, May 10, 2023 at 04:55:25PM +0800, Ruihan Li wrote:
+> > When hcd->localmem_pool is non-null, it is used to allocate DMA memory.
+> > In this case, the dma address will be properly returned (in dma_handle),
+> > and dma_mmap_coherent should be used to map this memory into the user
+> > space. However, the current implementation uses pfn_remap_range, which
+> > is supposed to map normal pages (instead of DMA pages).
 > > 
-> > However, it should be noted that gen_pool_dma_alloc does not guarantee
-> > that the resulting memory will be page-aligned. Furthermore, trying to
-> > map slab pages (i.e., memory allocated by kmalloc) into the user space
-> > is not resonable and can lead to problems, such as a type confusion bug
-> > when PAGE_TABLE_CHECK=y [1].
+> > Instead of repeating the logic in the memory allocation function, this
+> > patch introduces a more robust solution. To address the previous issue,
+> > this patch checks the type of allocated memory by testing whether
+> > dma_handle is properly set. If dma_handle is properly returned, it means
+> > some DMA pages are allocated and dma_mmap_coherent should be used to map
+> > them. Otherwise, normal pages are allocated and pfn_remap_range should
+> > be called. This ensures that the correct mmap functions are used
+> > consistently, independently with logic details that determine which type
+> > of memory gets allocated.
 > > 
-> > To address these issues, this patch introduces hcd_alloc_coherent_pages,
-> > which addresses the above two problems. Specifically,
-> > hcd_alloc_coherent_pages uses gen_pool_dma_alloc_align instead of
-> > gen_pool_dma_alloc to ensure that the memory is page-aligned. To replace
-> > kmalloc, hcd_alloc_coherent_pages directly allocates pages by calling
-> > __get_free_pages.
-> > 
-> > Reported-by: syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.comm
-> > Closes: https://lore.kernel.org/lkml/000000000000258e5e05fae79fc1@google.com/ [1]
+> > Fixes: a0e710a7def4 ("USB: usbfs: fix mmap dma mismatch")
 > > Cc: stable@vger.kernel.org
 > > Signed-off-by: Ruihan Li <lrh2000@pku.edu.cn>
 > > ---
-> 
-> I'm never quite sure about when it makes sense to complain about 
-> stylistic issues.  Nevertheless, I'm going to do so here...
-> 
-> >  drivers/usb/core/buffer.c | 41 +++++++++++++++++++++++++++++++++++++++
-> >  drivers/usb/core/devio.c  |  9 +++++----
-> >  include/linux/usb/hcd.h   |  5 +++++
-> >  3 files changed, 51 insertions(+), 4 deletions(-)
+> >  drivers/usb/core/devio.c | 10 ++++++++--
+> >  1 file changed, 8 insertions(+), 2 deletions(-)
 > > 
-> > diff --git a/drivers/usb/core/buffer.c b/drivers/usb/core/buffer.c
-> > index fbb087b72..6010ef9f5 100644
-> > --- a/drivers/usb/core/buffer.c
-> > +++ b/drivers/usb/core/buffer.c
-> > @@ -172,3 +172,44 @@ void hcd_buffer_free(
-> >  	}
-> >  	dma_free_coherent(hcd->self.sysdev, size, addr, dma);
-> >  }
-> > +
-> > +void *hcd_buffer_alloc_pages(struct usb_hcd *hcd, size_t size,
-> > +			     gfp_t mem_flags, dma_addr_t *dma)
-> > +{
-> > +	if (size == 0)
-> > +		return NULL;
-> > +
-> > +	if (hcd->localmem_pool)
-> > +		return gen_pool_dma_alloc_align(hcd->localmem_pool,
-> > +						size, dma, PAGE_SIZE);
+> > diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+> > index b4cf9e860..5067030b7 100644
+> > --- a/drivers/usb/core/devio.c
+> > +++ b/drivers/usb/core/devio.c
+> > @@ -235,7 +235,7 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
+> >  	size_t size = vma->vm_end - vma->vm_start;
+> >  	void *mem;
+> >  	unsigned long flags;
+> > -	dma_addr_t dma_handle;
+> > +	dma_addr_t dma_handle = DMA_MAPPING_ERROR;
+> >  	int ret;
+> >  
+> >  	ret = usbfs_increase_memory_usage(size + sizeof(struct usb_memory));
+> > @@ -265,7 +265,13 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
+> >  	usbm->vma_use_count = 1;
+> >  	INIT_LIST_HEAD(&usbm->memlist);
+> >  
+> > -	if (hcd->localmem_pool || !hcd_uses_dma(hcd)) {
+> > +	/* In DMA-unavailable cases, hcd_buffer_alloc_pages allocates
+> > +	 * normal pages and assigns DMA_MAPPING_ERROR to dma_handle. Check
+> > +	 * whether we are in such cases, and then use remap_pfn_range (or
+> > +	 * dma_mmap_coherent) to map normal (or DMA) pages into the user
+> > +	 * space, respectively.
+> > +	 */
 > 
-> C isn't Lisp.  Expressions in C are not based entirely around 
-> parentheses, and it's not necessary to align our code based on the 
-> parenthesized sub-expressions to avoid hopelessly confusing the reader.
+> Another stylistic issue.  For multi-line comments, the format we use is:
 > 
-> The style used in this file (and many other places in the USB core) is 
-> to indent continuation lines by two tab stops.  The same comment applies 
-> to all the other continuation lines you added or changed in this patch 
-> and in patch 2/4.
+> 	/*
+> 	 * Blah, blah, blah
+> 	 * Blah, blah, blah
+> 	 */
 > 
 > Alan Stern
 
-I'm just a bit shocked to find out that different subsystems might
-prefer different styles of coding. In the net subsystem, checkpatch.pl
-will complain that:
-	CHECK: Alignment should match open parenthesis
-
-Nevertheless, in the next version, I'll follow the coding style that you
-have pointed out.
+Yeah, I am pretty sure it is another style difference with the net
+subsystem. Again, in the next version, I'll follow the coding style that
+you have pointed out.
 
 Thanks,
 Ruihan Li
