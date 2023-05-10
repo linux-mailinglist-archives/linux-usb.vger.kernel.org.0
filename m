@@ -2,106 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD446FDE56
-	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 15:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3536FDE88
+	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 15:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236904AbjEJNRT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 May 2023 09:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55188 "EHLO
+        id S237112AbjEJN2g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 May 2023 09:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjEJNRS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 09:17:18 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3583C76B7;
-        Wed, 10 May 2023 06:17:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+qrq/mo5VPvcpdlilPoSg0gpK2tGH3zsYjRUh/mtynI=; b=gmSUWcEluIFGMhZfnaqi0WCy5X
-        OJgr05KExnaf9gouKQ1TppKOtz2Z8DoEXlWxa9wpktSaINvC4zvJiQrZmVmaalopDVm3Bd5iWFela
-        mpyZFBWiiLjBK1sbsVsUjTbpV2S5xEKCfuuZRZ0z+1R+hCHAiOHhG2Kcj9LTOAtbOt2vydZPu6e3n
-        VOK7CZ68w7qjIEZWoBQSl4XzBEWb68ojLa3Mqz4yXRmWCo6EHb/UcG9d6p4YGcdiSCiKT7rBM23Rt
-        c3+yypyDmShq8RpReCxDAzb+DD6iNgk4QW18rz7qVlKoM1E16rt24k3LMw2YnPYA2Ns9sWBfyg9CT
-        jke6Xmcg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pwjgq-006D1Y-0G;
-        Wed, 10 May 2023 13:17:08 +0000
-Date:   Wed, 10 May 2023 06:17:08 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Ruihan Li <lrh2000@pku.edu.cn>,
-        syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, pasha.tatashin@soleen.com,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: usbdev_mmap causes type confusion in page_table_check
-Message-ID: <ZFuZVDcU81WmqEvJ@infradead.org>
-References: <000000000000258e5e05fae79fc1@google.com>
- <20230507135844.1231056-1-lrh2000@pku.edu.cn>
- <ZFpJ1rs+XinCYfPs@infradead.org>
- <2023050934-launch-shifty-0bbb@gregkh>
+        with ESMTP id S237091AbjEJN2c (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 09:28:32 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B08949D2;
+        Wed, 10 May 2023 06:28:22 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 5CC7A24E00D;
+        Wed, 10 May 2023 21:28:18 +0800 (CST)
+Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 10 May
+ 2023 21:28:18 +0800
+Received: from ubuntu.localdomain (183.27.98.219) by EXMBX171.cuchost.com
+ (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 10 May
+ 2023 21:28:17 +0800
+From:   Minda Chen <minda.chen@starfivetech.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        Minda Chen <minda.chen@starfivetech.com>
+Subject: [PATCH v2 0/2] Add clock and reset in cdns3 platform
+Date:   Wed, 10 May 2023 21:28:14 +0800
+Message-ID: <20230510132816.108820-1-minda.chen@starfivetech.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023050934-launch-shifty-0bbb@gregkh>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [183.27.98.219]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX171.cuchost.com
+ (172.16.6.91)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 09, 2023 at 04:01:02PM +0200, Greg KH wrote:
-> > > 	mem = usb_alloc_coherent(ps->dev, size, GFP_USER | __GFP_NOWARN,
-> > > 			&dma_handle);
-> > > 	// ...
-> > > 	if (hcd->localmem_pool || !hcd_uses_dma(hcd)) {
-> > > 		if (remap_pfn_range(vma, vma->vm_start,
-> > > 				    virt_to_phys(usbm->mem) >> PAGE_SHIFT,
-> > 
-> > usb_alloc_coherent and up in the DMA coherent allocator (usually
-> > anyway), and you absolutely must never do a virt_to_phys or virt_to_page
-> > on that return value.  This code is a buggy as f**k.
-> 
-> Odd, you gave it a reviewed-by: in commit a0e710a7def4 ("USB: usbfs: fix
-> mmap dma mismatch") back in 2020 when it was merged as you said that was
-> the way to fix this up.  :)
-> 
-> Do you have a better way to do it now that is more correct?  Did some
-> DMA changes happen that missed this codepath getting fixed up?
+The patchset is add generic clock and reset init codes in
+Cadence USBSS controller.
 
-Sorry, I should not have shouted as quickly.  The code is clearly
-guarded by the same conditional that makes it not use the DMA API,
-so from the DMA API POV this is actually correct, just ugly.
+This patchset is base on v6.4-rc1.
 
-The fix for the actual remap_file_ranges thing is probably something
-like this:
+patch 1 is add clock and reset dts in cdns3 dt-binding doc.
+patch 2 is cdns3 platform codes changes.
 
-diff --git a/drivers/usb/core/buffer.c b/drivers/usb/core/buffer.c
-index fbb087b728dc98..be56eba2558814 100644
---- a/drivers/usb/core/buffer.c
-+++ b/drivers/usb/core/buffer.c
-@@ -131,7 +131,7 @@ void *hcd_buffer_alloc(
- 	/* some USB hosts just use PIO */
- 	if (!hcd_uses_dma(hcd)) {
- 		*dma = ~(dma_addr_t) 0;
--		return kmalloc(size, mem_flags);
-+		return (void *)__get_free_pages(get_order(size), mem_flags);
- 	}
- 
- 	for (i = 0; i < HCD_BUFFER_POOLS; i++) {
-@@ -160,7 +160,7 @@ void hcd_buffer_free(
- 	}
- 
- 	if (!hcd_uses_dma(hcd)) {
--		kfree(addr);
-+		free_pages((unsigned long)addr, get_order(size));
- 		return;
- 	}
- 
+previous commits
+v1: https://patchwork.kernel.org/project/linux-usb/cover/20230502081805.112149-1-minda.chen@starfivetech.com/
+
+changes:
+v2:
+    patch 1
+      - add maxItem in clocks and resets.
+      - add clocks and reset in example.
+    patch 2
+      - suspend/resume just disable/enable clocks.
+
+Minda Chen (2):
+  dt-bindings: cdns,usb3: Add clock and reset
+  usb: cdns3: cdns3-plat: Add clk and reset init
+
+ .../devicetree/bindings/usb/cdns,usb3.yaml    | 14 +++++
+ drivers/usb/cdns3/cdns3-plat.c                | 58 +++++++++++++++++++
+ drivers/usb/cdns3/core.h                      |  3 +
+ 3 files changed, 75 insertions(+)
+
+
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+-- 
+2.17.1
+
