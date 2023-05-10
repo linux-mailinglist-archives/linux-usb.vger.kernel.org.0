@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569836FE67B
-	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 23:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97596FE67C
+	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 23:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235540AbjEJVwy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 May 2023 17:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S236008AbjEJVyj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 May 2023 17:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbjEJVwx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 17:52:53 -0400
+        with ESMTP id S230165AbjEJVyh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 17:54:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B6846A5
-        for <linux-usb@vger.kernel.org>; Wed, 10 May 2023 14:52:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0C8527A
+        for <linux-usb@vger.kernel.org>; Wed, 10 May 2023 14:54:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 635FD6134C
-        for <linux-usb@vger.kernel.org>; Wed, 10 May 2023 21:52:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BBF00C433D2
-        for <linux-usb@vger.kernel.org>; Wed, 10 May 2023 21:52:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 836696134C
+        for <linux-usb@vger.kernel.org>; Wed, 10 May 2023 21:54:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E1813C433EF
+        for <linux-usb@vger.kernel.org>; Wed, 10 May 2023 21:54:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683755571;
-        bh=OjtEjdP059egPw3IK/hLU1zUq1wdXjhSHeq6Uo0EWZ4=;
+        s=k20201202; t=1683755675;
+        bh=nkKNHNo9CDL+d/e4HM0V5Lh48Km3AdJKB/hbhbZggDk=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=JLBEWwPiS+9pDGngS5e7yJwn7tDAkJhpTMDQIo4Mb00fskCIrgbjaR6A08GtsDgJt
-         NcvU6zkL8ZmUceoSxeeB7ksD9hk/RAU/d+EQ89FY1Ud1zOTqPC1QjzRY5VBJRcm2Qw
-         x/Q6wibbTKfbXJ0ShDH1FiHFauCE1oHgJ3I3scBrlDzETrRqvcj1tXCF0hzGstMO4D
-         7yR7c6QNnkKKdF3CufyGanqDF+OkiPf7edA3mXI+aiUjPU4QuVPHGeKaugJIKguz/k
-         tjKMwl8RuHrcUXzA89iybvQfUScEyApmurF8cRLWuAfZYgsV7QVjarjOG+JdZ7G8j0
-         6ifLkphrpMIKg==
+        b=gMvZZyu4q9EGYjH2O3Wr0olEe+xTIB2kw9PVy7XQHxpRxCKYfI57/8MQ4ULL9FJRm
+         jIQkv/o7VpmP7xRbD4gxjygW/9gR3bXkRCbSblTVTEGYAqp8dgS0pC6PfhGAWe1lb1
+         JuontilSF+Ya8aJ43mIGHiOSIVPNqdwET4hELNf1pGenBbz+ROcMA6rsRi30wmTtqA
+         0ck8s0dmumjaTeU05tsble2QMJAUNEogWwOKqcguUZW7g9xOxtlc5M6hztCfBeKk6i
+         qZSrpYAovZxwLgnw9DnN3TDH1zOboa0OPeoWKf/QDkPLJpbI/Wm42lGOPVKMdt24Vv
+         mnYhTiCiYE3FA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id AC66AC43142; Wed, 10 May 2023 21:52:51 +0000 (UTC)
+        id CA358C43141; Wed, 10 May 2023 21:54:35 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 217122] Regression in xhci driver since 6.1 "Transfer event TRB
  DMA ptr not part of current TD"
-Date:   Wed, 10 May 2023 21:52:51 +0000
+Date:   Wed, 10 May 2023 21:54:35 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -46,14 +46,14 @@ X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mario.limonciello@amd.com
+X-Bugzilla-Who: t-5@t-5.eu
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217122-208809-3Qfo6Fwinq@https.bugzilla.kernel.org/>
+Message-ID: <bug-217122-208809-gBJBW3NVjK@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-217122-208809@https.bugzilla.kernel.org/>
 References: <bug-217122-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -73,19 +73,9 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D217122
 
---- Comment #17 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-> I found an option in the BIOS named "AMD security processor" - disabled it
-> and I will test now...
-
-If you disabled it and no longer have a /dev/tpm0 then yes that's the corre=
-ct
-option.
-
->  If that does still fail I will apply "f1324bbc4011 ("tpm: disable hwrng =
-for
->  fTPM on some AMD designs")"
-
-OK.
+--- Comment #18 from J=C3=BCrgen Herrmann (t-5@t-5.eu) ---
+can confirm, there's no longer a /dev/tpm0. Will compile previously failing
+6.1.0 now and see what happens...
 
 --=20
 You may reply to this email to add a comment.
