@@ -2,145 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5419E6FDA60
-	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 11:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15F96FDAC9
+	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 11:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236938AbjEJJEV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 May 2023 05:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55682 "EHLO
+        id S236135AbjEJJbv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 May 2023 05:31:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236946AbjEJJEM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 05:04:12 -0400
-Received: from pku.edu.cn (mx19.pku.edu.cn [162.105.129.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78D962D6D;
-        Wed, 10 May 2023 02:03:53 -0700 (PDT)
+        with ESMTP id S235609AbjEJJbu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 05:31:50 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC7910F5;
+        Wed, 10 May 2023 02:31:48 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f22908a082so4791684e87.1;
+        Wed, 10 May 2023 02:31:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id:In-Reply-To:References:MIME-Version:
-        Content-Transfer-Encoding; bh=2eQiKNbmNB0cBb76E1biqVCFyySu9cxeIj
-        xUbq5lhR4=; b=IjabRYa2Ap9uopNiQeD47aPcufM28HR0RHjoKsOhIR12qQ4ZpT
-        FROSfqWOuZffd0CES1/syPG+YdyibjIl6z5gURXgj8a9RLFQ8Nwp6tJTQNQwwnCR
-        RxsCp/BaDPJC9c4eQIgayWUQtumxuwH+la46uhM9AavTn2zsJmeUxgb94=
-Received: from localhost.localdomain (unknown [10.7.101.92])
-        by front01 (Coremail) with SMTP id 5oFpogBnb2cIXFtkW9d5Ag--.63159S6;
-        Wed, 10 May 2023 16:55:43 +0800 (CST)
-From:   Ruihan Li <lrh2000@pku.edu.cn>
-To:     linux-mm@kvack.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
+        d=gmail.com; s=20221208; t=1683711107; x=1686303107;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uHkiT6Uiynl0Lruythe0Uk6VgeBS4SqWbF3W79uTkOQ=;
+        b=XBkSADTR4TScrcB27eBtMX/nsX8ZEZDE/tSEpJp9ibkEuX1/v8nVP7uCIUvpSrolMY
+         wvKD5HLh3L/64IzOnN0/CSiLBPT5zqYR2xOVhQhadzlnfWj+VYKs5MIFhGgVqaOy6USZ
+         CMNg/UupDl+9Q5uvhQ3Cbo80n9zDZ8BJqSXW60SaQ8HD20mLa/YaZKRtpsaIdevWUCcp
+         xjJUUO2R/vc+sqU256M0tFZiG1guQgz8Wn+4OQAJG4AwUwP+CkILhrvVjuvBCIfzLReF
+         DfC4mF2r1N65Jk/YJ8RWQS9wf+nCysqBEyfUk+WRhmM0mUmWUHtnvVSKHrJlAPvDCIjj
+         Rcow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683711107; x=1686303107;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uHkiT6Uiynl0Lruythe0Uk6VgeBS4SqWbF3W79uTkOQ=;
+        b=GQ8E+iCKoCMwpLYkK9YzPKs/aEfIEH8m6IfRumiB2srOpzhLBheEh4ZHULHSnULGW7
+         bxniAc25ySWIfnxp2xKkf6GkfNGfU1ujkxaqiIY93NkelIA3joTtvvDM6NcPtLy1KerB
+         FLmgKPx9+6SUOsoUGhgkZ6VLToPNksyOPwGeHuI/rVsM5Czp7qNH2wYzUkGmVwzEAZ4N
+         mcZPDaPh8QJ8djwDDoINSfHJ3QKzzSo0k021ExlMnQzzQkFfN6zDBg604aR17CMxW/ca
+         Jz9bWk25LlkDeRR5j5xJ5Eux3ZQbDM0pTkTrxdoV/ZBv3opFnkK9n3hD6ELULMJCbbnH
+         D3Vg==
+X-Gm-Message-State: AC+VfDxeHvIWDLZU7XB1L1vt19Us2/lVIRvjCEyLyGIDkIGk4ZDl4cqz
+        nNQgzHaxAFqEwtNZtnARLZYVU1WT4vg=
+X-Google-Smtp-Source: ACHHUZ7Gr1dzdpi5ADr+OqFL1vY/Srp+tgQIV00ug9sEtf+f3XhebE+tndbF72z8KvuaD5cdNdyoUw==
+X-Received: by 2002:ac2:4c8a:0:b0:4dd:af29:92c1 with SMTP id d10-20020ac24c8a000000b004ddaf2992c1mr1391092lfl.44.1683711106673;
+        Wed, 10 May 2023 02:31:46 -0700 (PDT)
+Received: from [192.168.1.103] ([31.173.86.195])
+        by smtp.gmail.com with ESMTPSA id v15-20020a056512096f00b004b55ddeb7e3sm667654lft.309.2023.05.10.02.31.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 02:31:46 -0700 (PDT)
+Subject: Re: [PATCH v3 2/2] usb: gadget: udc: Handle gadget_connect failure
+ during bind operation
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ruihan Li <lrh2000@pku.edu.cn>,
-        syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com,
-        stable@vger.kernel.org
-Subject: [PATCH 4/4] mm: page_table_check: Ensure user pages are not slab pages
-Date:   Wed, 10 May 2023 16:55:27 +0800
-Message-Id: <20230510085527.57953-5-lrh2000@pku.edu.cn>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230510085527.57953-1-lrh2000@pku.edu.cn>
-References: <20230510085527.57953-1-lrh2000@pku.edu.cn>
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jiantao Zhang <water.zhangjiantao@huawei.com>,
+        Badhri Jagan Sridharan <badhri@google.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+        quic_jackp@quicinc.com
+References: <20230510075252.31023-1-quic_kriskura@quicinc.com>
+ <20230510075252.31023-3-quic_kriskura@quicinc.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <cb8c326c-b2b4-2fe8-cdfc-f78908b1d1bd@gmail.com>
+Date:   Wed, 10 May 2023 12:31:44 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: 5oFpogBnb2cIXFtkW9d5Ag--.63159S6
-X-Coremail-Antispam: 1UD129KBjvJXoWxurWrCw4UAFyDWF48ZF17GFg_yoW5Wr48pa
-        95u3W0yrW5Ka43Kw1DZ3ZayryrJa98G3yUC347J3WYv3ZxtFy0vF1jkr9Iy345KrW7Ca45
-        AFZ8tr1jvrWDX3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUB21xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2
-        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAac4AC62xK8xCEY4
-        vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
-        628vn2kIc2xKxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8V
-        WkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
-        C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE
-        42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-        kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOlksUUUUU
-X-CM-SenderInfo: yssqiiarrvmko6sn3hxhgxhubq/1tbiAgEHBVPy77151gAAsd
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230510075252.31023-3-quic_kriskura@quicinc.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The current uses of PageAnon in page table check functions can lead to
-type confusion bugs between struct page and slab [1], if slab pages are
-accidentally mapped into the user space. This is because slab reuses the
-bits in struct page to store its internal states, which renders PageAnon
-ineffective on slab pages.
+Hello!
 
-Since slab pages are not expected to be mapped into user spaces, this
-patch adds BUG_ON(PageSlab(page)) checks to ensure that slab pages are
-not inadvertently mapped. Otherwise, there must be some bugs in the
-kernel.
+On 5/10/23 10:52 AM, Krishna Kurapati wrote:
 
-Reported-by: syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/lkml/000000000000258e5e05fae79fc1@google.com/ [1]
-Fixes: df4e817b7108 ("mm: page table check")
-Cc: <stable@vger.kernel.org> # 5.17
-Signed-off-by: Ruihan Li <lrh2000@pku.edu.cn>
----
- include/linux/page-flags.h | 6 ++++++
- mm/page_table_check.c      | 6 ++++++
- 2 files changed, 12 insertions(+)
+> In the event, gadget_connect call (which invokes pullup) fails,
+> propagate the error to udc bind operation which inturn sends the
+> error to configfs. The userspace can then retry enumeartion if
+> it chooses to.
+> 
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> ---
+> changes in v3: Rebase on top of usb-next
+> 
+>  drivers/usb/gadget/udc/core.c | 21 +++++++++++++++++----
+>  1 file changed, 17 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+> index 4641153e9706..69041cca5d24 100644
+> --- a/drivers/usb/gadget/udc/core.c
+> +++ b/drivers/usb/gadget/udc/core.c
+> @@ -1122,12 +1122,16 @@ EXPORT_SYMBOL_GPL(usb_gadget_set_state);
+>  /* ------------------------------------------------------------------------- */
+>  
+>  /* Acquire connect_lock before calling this function. */
+> -static void usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
+> +static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
+>  {
+> +	int ret;
+> +
+>  	if (udc->vbus && udc->started)
+> -		usb_gadget_connect_locked(udc->gadget);
+> +		ret = usb_gadget_connect_locked(udc->gadget);
 
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index 1c68d67b8..7475a5399 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -617,6 +617,12 @@ PAGEFLAG_FALSE(VmemmapSelfHosted, vmemmap_self_hosted)
-  * Please note that, confusingly, "page_mapping" refers to the inode
-  * address_space which maps the page from disk; whereas "page_mapped"
-  * refers to user virtual address space into which the page is mapped.
-+ *
-+ * For slab pages, since slab reuses the bits in struct page to store its
-+ * internal states, the page->mapping does not exist as such, nor do these
-+ * flags below.  So in order to avoid testing non-existent bits, please
-+ * make sure that PageSlab(page) actually evaluates to false before calling
-+ * the following functions (e.g., PageAnon).  See slab.h.
-  */
- #define PAGE_MAPPING_ANON	0x1
- #define PAGE_MAPPING_MOVABLE	0x2
-diff --git a/mm/page_table_check.c b/mm/page_table_check.c
-index 25d8610c0..f2baf97d5 100644
---- a/mm/page_table_check.c
-+++ b/mm/page_table_check.c
-@@ -71,6 +71,8 @@ static void page_table_check_clear(struct mm_struct *mm, unsigned long addr,
- 
- 	page = pfn_to_page(pfn);
- 	page_ext = page_ext_get(page);
-+
-+	BUG_ON(PageSlab(page));
- 	anon = PageAnon(page);
- 
- 	for (i = 0; i < pgcnt; i++) {
-@@ -107,6 +109,8 @@ static void page_table_check_set(struct mm_struct *mm, unsigned long addr,
- 
- 	page = pfn_to_page(pfn);
- 	page_ext = page_ext_get(page);
-+
-+	BUG_ON(PageSlab(page));
- 	anon = PageAnon(page);
- 
- 	for (i = 0; i < pgcnt; i++) {
-@@ -133,6 +137,8 @@ void __page_table_check_zero(struct page *page, unsigned int order)
- 	struct page_ext *page_ext;
- 	unsigned long i;
- 
-+	BUG_ON(PageSlab(page));
-+
- 	page_ext = page_ext_get(page);
- 	BUG_ON(!page_ext);
- 	for (i = 0; i < (1ul << order); i++) {
--- 
-2.40.1
+   Why not just:
 
+	return usb_gadget_connect_locked(udc->gadget)
+
+>  	else
+> -		usb_gadget_disconnect_locked(udc->gadget);
+> +		ret = usb_gadget_disconnect_locked(udc->gadget);
+
+   Likewise here?
+
+> +
+> +	return ret;
+>  }
+>  
+>  /**
+[...]
+
+MBR, Sergey
