@@ -2,103 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C046FE269
-	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 18:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C526FE290
+	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 18:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235624AbjEJQYk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 May 2023 12:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
+        id S235540AbjEJQfG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 May 2023 12:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235547AbjEJQYQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 12:24:16 -0400
+        with ESMTP id S231175AbjEJQfF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 12:35:05 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E6B7EC5
-        for <linux-usb@vger.kernel.org>; Wed, 10 May 2023 09:22:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F777D99
+        for <linux-usb@vger.kernel.org>; Wed, 10 May 2023 09:34:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683735772;
+        s=mimecast20190719; t=1683736459;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bmFE/obqR+JSVry8KVLBdovb1+Ke/0GWPdt6GSde0jc=;
-        b=PJMHGLFARAquXxsKK2BePYsor+hZgsmo27Yr3caPyJhrB1RgI7Sozi9bZBVglJ8Rp+zWhQ
-        H0XaKZUrdmOTPRi0/5ByMcJYEbBy6mGZV9p6Gcu1bMwOgP7HOOvIdAQPPK5c7NcDOfNKtd
-        b/92NG18A59+8Cr4pfBLQ6WKwLzDTI8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-6-gxXNVDeNM8qqHmY3rKli0w-1; Wed, 10 May 2023 12:22:48 -0400
-X-MC-Unique: gxXNVDeNM8qqHmY3rKli0w-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C2B05863E8F;
-        Wed, 10 May 2023 16:22:46 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.195.159])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A82564078906;
-        Wed, 10 May 2023 16:22:44 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Pavel Machek <pavel@ucw.cz>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-leds@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, Yauhen Kharuzhy <jekhor@gmail.com>
-Subject: [PATCH RESEND 4/4] leds: Clear LED_INIT_DEFAULT_TRIGGER when clearing current trigger
-Date:   Wed, 10 May 2023 18:22:34 +0200
-Message-Id: <20230510162234.291439-5-hdegoede@redhat.com>
-In-Reply-To: <20230510162234.291439-1-hdegoede@redhat.com>
-References: <20230510162234.291439-1-hdegoede@redhat.com>
+        bh=c+QqxpiG1U+G+dOtpx1ITq0GjqRCMSQvjjIZjS6KV1Q=;
+        b=ZhQGX7YTvxONRGleDVgUwDybyz19V1jj/PZH7B788V72mCh1KDLhBWdabCP4nS9nvEe6Ww
+        uUCfCedtq6A7tgvc514JojPuMqiuPuwCqniWx9rpAGZZFuY4dp2/MPBX4Knu8yyggt7eLN
+        J8M8AmmCEyHvN0CCuRvi/a7PvB50Qug=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-202-ADYlMlx5O1S1knixM7uNXQ-1; Wed, 10 May 2023 12:34:18 -0400
+X-MC-Unique: ADYlMlx5O1S1knixM7uNXQ-1
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-24de504c5fcso7433217a91.2
+        for <linux-usb@vger.kernel.org>; Wed, 10 May 2023 09:34:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683736457; x=1686328457;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c+QqxpiG1U+G+dOtpx1ITq0GjqRCMSQvjjIZjS6KV1Q=;
+        b=AxmyEbDkapgwO2G8zeH/t6ebjrzsbR7i3NhNuU3YHtqIBl3yMbxBUCpZgIYv1WtPSn
+         xgc4X49mUT+6JBTUbMe3ZhqoUVzV533WAXd2bKsbkNk5aSiIZGxSqpp/J8kew63M+6hv
+         WjHjdTv58faFxy/Z4rQKi+ilwGhuo2oSNl1VwHz/dC5zp6+mRN9B+7EW8etgeJS4ZwCk
+         SJDAp/off57nE2lizQ+9fxpvm637cXPB8CoG9wRoNn5cnHj3ua9sLXQ7NmBj9+lQiLJd
+         8TZRyTrVoV7znYM1sVZJC2OxL7NRgWKP0ikElWSoCYlWrgLpWbJUWWm9F2/xqQA1Fq4k
+         7BiQ==
+X-Gm-Message-State: AC+VfDwu4aQ/5LbzYNnur4EHcopBCmQ06Ph2+Lmxoru8/KlXnjeYIGL8
+        HUTTulU01DvS7f6wAK4mSfxjYaYnEomG55kbbHP8cZ9Zxs8yjLZuLJWahLfKDHs5DWnzD9VNuh6
+        5B+TKtj69oCQqMATqFR4N
+X-Received: by 2002:a17:90b:314e:b0:252:75ed:eff5 with SMTP id ip14-20020a17090b314e00b0025275edeff5mr1245112pjb.30.1683736457238;
+        Wed, 10 May 2023 09:34:17 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7EdgNF0FnAHwSa6p1ZBdA+qjfDeebFN0AfPJYEoCiiN4duL77pDs94kbQ+vfFR/hWf3NeGtg==
+X-Received: by 2002:a17:90b:314e:b0:252:75ed:eff5 with SMTP id ip14-20020a17090b314e00b0025275edeff5mr1245083pjb.30.1683736456926;
+        Wed, 10 May 2023 09:34:16 -0700 (PDT)
+Received: from ?IPV6:2001:4958:15a0:30:5835:5bd3:f0c8:e5ef? ([2001:4958:15a0:30:5835:5bd3:f0c8:e5ef])
+        by smtp.gmail.com with ESMTPSA id gp24-20020a17090adf1800b0024e227828a9sm8880080pjb.24.2023.05.10.09.34.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 09:34:16 -0700 (PDT)
+Message-ID: <48a47f2e-0506-ca0f-07d5-15918865cd19@redhat.com>
+Date:   Wed, 10 May 2023 18:34:15 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/4] usb: usbfs: Use consistent mmap functions
+Content-Language: en-US
+To:     Ruihan Li <lrh2000@pku.edu.cn>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-mm@kvack.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+References: <20230510085527.57953-1-lrh2000@pku.edu.cn>
+ <20230510085527.57953-3-lrh2000@pku.edu.cn>
+ <e197f549-0ee7-446e-86af-ac173d047df5@rowland.harvard.edu>
+ <w6keszmqdkwsuw5k3dsyl67zgndorxsoeenysjyzlzf5v4p6bl@mvztdsgt7qjj>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <w6keszmqdkwsuw5k3dsyl67zgndorxsoeenysjyzlzf5v4p6bl@mvztdsgt7qjj>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Not all triggers use LED_INIT_DEFAULT_TRIGGER, which means that it
-will not get cleared when the default trigger is a trigger which
-does not use it such as "default-on".
+On 10.05.23 17:41, Ruihan Li wrote:
+> Hi Alan,
+> 
+> On Wed, May 10, 2023 at 10:38:48AM -0400, Alan Stern wrote:
+>> On Wed, May 10, 2023 at 04:55:25PM +0800, Ruihan Li wrote:
+>>> When hcd->localmem_pool is non-null, it is used to allocate DMA memory.
+>>> In this case, the dma address will be properly returned (in dma_handle),
+>>> and dma_mmap_coherent should be used to map this memory into the user
+>>> space. However, the current implementation uses pfn_remap_range, which
+>>> is supposed to map normal pages (instead of DMA pages).
+>>>
+>>> Instead of repeating the logic in the memory allocation function, this
+>>> patch introduces a more robust solution. To address the previous issue,
+>>> this patch checks the type of allocated memory by testing whether
+>>> dma_handle is properly set. If dma_handle is properly returned, it means
+>>> some DMA pages are allocated and dma_mmap_coherent should be used to map
+>>> them. Otherwise, normal pages are allocated and pfn_remap_range should
+>>> be called. This ensures that the correct mmap functions are used
+>>> consistently, independently with logic details that determine which type
+>>> of memory gets allocated.
+>>>
+>>> Fixes: a0e710a7def4 ("USB: usbfs: fix mmap dma mismatch")
+>>> Cc: stable@vger.kernel.org
+>>> Signed-off-by: Ruihan Li <lrh2000@pku.edu.cn>
+>>> ---
+>>>   drivers/usb/core/devio.c | 10 ++++++++--
+>>>   1 file changed, 8 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+>>> index b4cf9e860..5067030b7 100644
+>>> --- a/drivers/usb/core/devio.c
+>>> +++ b/drivers/usb/core/devio.c
+>>> @@ -235,7 +235,7 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
+>>>   	size_t size = vma->vm_end - vma->vm_start;
+>>>   	void *mem;
+>>>   	unsigned long flags;
+>>> -	dma_addr_t dma_handle;
+>>> +	dma_addr_t dma_handle = DMA_MAPPING_ERROR;
+>>>   	int ret;
+>>>   
+>>>   	ret = usbfs_increase_memory_usage(size + sizeof(struct usb_memory));
+>>> @@ -265,7 +265,13 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
+>>>   	usbm->vma_use_count = 1;
+>>>   	INIT_LIST_HEAD(&usbm->memlist);
+>>>   
+>>> -	if (hcd->localmem_pool || !hcd_uses_dma(hcd)) {
+>>> +	/* In DMA-unavailable cases, hcd_buffer_alloc_pages allocates
+>>> +	 * normal pages and assigns DMA_MAPPING_ERROR to dma_handle. Check
+>>> +	 * whether we are in such cases, and then use remap_pfn_range (or
+>>> +	 * dma_mmap_coherent) to map normal (or DMA) pages into the user
+>>> +	 * space, respectively.
+>>> +	 */
+>>
+>> Another stylistic issue.  For multi-line comments, the format we use is:
+>>
+>> 	/*
+>> 	 * Blah, blah, blah
+>> 	 * Blah, blah, blah
+>> 	 */
+>>
+>> Alan Stern
+> 
+> Yeah, I am pretty sure it is another style difference with the net
+> subsystem. Again, in the next version, I'll follow the coding style that
+> you have pointed out.
 
-If the default trigger then later gets replaced by a trigger which
-does check LED_INIT_DEFAULT_TRIGGER, such as "timer" then that trigger
-will behave as if it is the default trigger which it should not do.
+Documentation/process/coding-style.rst
 
-To fix this clear the LED_INIT_DEFAULT_TRIGGER flag when clearing
-the current trigger, so that it will not be set for any subsequently
-set (non default) triggers.
+spells out that net/ and drivers/net/ are "special".
 
-Reviewed-by: Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Tested-by: Yauhen Kharuzhy <jekhor@gmail.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/leds/led-triggers.c | 1 +
- 1 file changed, 1 insertion(+)
+Regarding breaking long lines, it's just an inconsistent, undocumented 
+mess IIRC ...
 
-diff --git a/drivers/leds/led-triggers.c b/drivers/leds/led-triggers.c
-index 8214d3f7bc5f..6a5e1f41f9a4 100644
---- a/drivers/leds/led-triggers.c
-+++ b/drivers/leds/led-triggers.c
-@@ -185,6 +185,7 @@ int led_trigger_set(struct led_classdev *led_cdev, struct led_trigger *trig)
- 		led_cdev->trigger = NULL;
- 		led_cdev->trigger_data = NULL;
- 		led_cdev->activated = false;
-+		led_cdev->flags &= ~LED_INIT_DEFAULT_TRIGGER;
- 		led_set_brightness(led_cdev, LED_OFF);
- 	}
- 	if (trig) {
 -- 
-2.40.1
+Thanks,
+
+David / dhildenb
 
