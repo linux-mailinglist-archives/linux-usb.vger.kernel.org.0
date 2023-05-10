@@ -2,94 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3DE16FE355
-	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 19:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0476D6FE39C
+	for <lists+linux-usb@lfdr.de>; Wed, 10 May 2023 20:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjEJRkF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 May 2023 13:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
+        id S229656AbjEJSI3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 May 2023 14:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235631AbjEJRjp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 13:39:45 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788AB468E;
-        Wed, 10 May 2023 10:39:44 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f4449fa085so10520425e9.0;
-        Wed, 10 May 2023 10:39:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683740383; x=1686332383;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=KqxPzDXgXdJ+A/E42EU+WNg4JndxRLg1TSWxQty68Dw=;
-        b=Va5ePUCsUNIPz0ClUeX/F4iuYUSLsuIcytSFzpqYA1xqPz/cuBBP+udw6cGfExC1jb
-         s1dlw85OBNBXY78WqAco608YLMCywZ6xzpa4r+79M89ACwvNrkXVYlrY2kM8HvVpf/ZK
-         r4bLnAinTjjc/DMmdd8q2xTICQV3CuFOuqUkra7mPn9WllyZTXPhjVpRzWF2DtutWKYi
-         4Sq66nW+gcHHogulxQnMCY09Q/XX/4sBcEzrgzpOX2s+VZAlqIeJCFqIw+zNhCmPgFgo
-         +2xm+12Xv6uMXyUPnUszpwn/HZzLdjxZOWp3P2skwZ+nWbU71fcHO3JEPVl0qZu42AdI
-         SvJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683740383; x=1686332383;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KqxPzDXgXdJ+A/E42EU+WNg4JndxRLg1TSWxQty68Dw=;
-        b=Y5VcAC/7TeBVMShFmQdJsNuVwVCIaKIZNdrLNZpsz9jhO1vvo127ma0SG0XOT0KbB5
-         n7B/hqkNW71V8ThEhNkHCxyIAY75WYOcgvEL3XQwkyeb0qofJyLEh8+9gHH6huH+Af8+
-         PkBaUpexPvLoQJ0guXTVBYW4SVBWkZmWyNcE0+BUY+WVvI5eytSVJ1Ha60ytQ2RrXl9T
-         BgQlUPdUoklrmgtRBYGkiiiTtYYlFtICRfZPkL9tl7mN28fPdWEuTShP2UEyFPQRkA+v
-         ZHrIvlUPJZ7Gn9O3Fdg8P96U1p9EAVr8RQYSW+ihBUfQ9DwTCQyQAq6lq8uEV9LRmF4o
-         DOAQ==
-X-Gm-Message-State: AC+VfDzxUzLqFl/+GwZzLHvaI0jng8XdfxWA+LObD0UZpOx5TXcvyBdE
-        /Na7f+STz1VN4x1ZmCi3B7s=
-X-Google-Smtp-Source: ACHHUZ4nRspDgDYA0xiP8LjY0SQAypftYEtCae8akp2CgHsYDiy/co1nMyb1nNjWf3ZBb/BpPkeNCQ==
-X-Received: by 2002:a05:600c:2904:b0:3f4:2c21:b52c with SMTP id i4-20020a05600c290400b003f42c21b52cmr4692823wmd.39.1683740382828;
-        Wed, 10 May 2023 10:39:42 -0700 (PDT)
-Received: from ?IPv6:2a02:168:6806:0:7251:37be:dc31:d566? ([2a02:168:6806:0:7251:37be:dc31:d566])
-        by smtp.gmail.com with ESMTPSA id l11-20020adfe58b000000b002f22c44e974sm17941316wrm.102.2023.05.10.10.39.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 10:39:42 -0700 (PDT)
-Message-ID: <0d3c3938dbd255e21f40884408076fd24222211a.camel@gmail.com>
-Subject: Re: [PATCH v1] usb: xhci: plat: remove error log for failure to get
- usb-phy
-From:   Klaus Kudielka <klaus.kudielka@gmail.com>
-To:     Stanley Chang <stanley_chang@realtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 10 May 2023 19:39:41 +0200
-In-Reply-To: <20230510075129.28047-1-stanley_chang@realtek.com>
-References: <20230510075129.28047-1-stanley_chang@realtek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+        with ESMTP id S229506AbjEJSI2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 May 2023 14:08:28 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA21F59F9
+        for <linux-usb@vger.kernel.org>; Wed, 10 May 2023 11:08:27 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34AGljKc032456;
+        Wed, 10 May 2023 18:08:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : from : subject : to : cc : content-type :
+ content-transfer-encoding; s=qcppdkim1;
+ bh=yuRvC/8CByP7Om0MrcW/JaUeCbefnkpJqzW66BvDza8=;
+ b=Bkr7nEr72Kyjb3WC1uLFrnIahSW18rnEPg6VqOS8yUAXk6qF4/mrrMPV7HL8qhbjDUTk
+ gP7yiTRjwrPTpCesN406ijX5t0dCGO3YJvMd7i/mFRRGJab8cXJMqyPLeiGRMYaNo7+v
+ G7kwo25WzT/X3ZTxCjLchWJBw+S11btw56/frpKqCyWwYx/0GozPWoN0MC7j3A/a1elI
+ /JOSMjJQKUW1rmkTY9ENyuxcncEkXRZoM8+p2owf/Ojafgeud02m27m1DKuNlncfeWXt
+ +h1nOfep/oYlk4RjLsxgAc+mrAgLClJ+CPGuSVvcJSxXrmJKDK0axhyH0UU+ooC3ezTa +A== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qfyx09yp2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 May 2023 18:08:25 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34AI8OK3015685
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 May 2023 18:08:24 GMT
+Received: from [10.216.32.57] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 10 May
+ 2023 11:08:23 -0700
+Message-ID: <e465c69c-3a9d-cbdb-d44e-96b99cfa1a92@quicinc.com>
+Date:   Wed, 10 May 2023 23:38:19 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Subject: Setting LLUCTL force gen1 bit if max speed is SS for Gen2 controller
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Content-Language: en-US
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: HFT40LEdUYsK_LuUICMlQLvSPLm6nr1l
+X-Proofpoint-GUID: HFT40LEdUYsK_LuUICMlQLvSPLm6nr1l
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 malwarescore=0 phishscore=0 mlxlogscore=599
+ clxscore=1015 impostorscore=0 suspectscore=0 spamscore=0 bulkscore=0
+ lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305100146
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2023-05-10 at 15:51 +0800, Stanley Chang wrote:
-> Remove this log to avoid non-error conditions.
-> If CONFIG_USB_PHY is disabled, the following error message appears:
-> [=C2=A0=C2=A0=C2=A0 0.231609] xhci-hcd f10f0000.usb3: xhci_plat_probe get=
- usb3phy fail (ret=3D-6)
-> [=C2=A0=C2=A0=C2=A0 0.239716] xhci-hcd f10f8000.usb3: xhci_plat_probe get=
- usb3phy fail (ret=3D-6)
-> In this case, devm_usb_get_phy_by_phandle is declared static inline
-> and returns -ENXIO.
->=20
-> It is easy to pinpoint the failure to get the usb-phy using the debug
-> log in drivers/usb/phy/phy.c. Therefore, it can be removed.
->=20
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+Hi Team,
 
-Thanks, the false positives are now gone for those without CONFIG_USB_PHY.
+  If we set maximum speed to "super-speed" for a SSP capable controller, 
+I see device mode working in SS but host mode still works in SSP. From 
+the yaml documentation of max-speed, I see the following:
 
-Tested-by: Klaus Kudielka <klaus.kudielka@gmail.com>
+  maximum-speed:
+    description:
+      Tells USB controllers we want to work up to a certain speed. 
+Incase  this isn't passed via DT, USB controllers should default to 
+their maximum HW capability.
 
+Shouldn't this maximum speed get limited to gen1 even for host mode ?
+
+If so, can we set LLUCTL Force_Gen1 bit if (Controller is Gen2  && 
+max_speed = SuperSpeed) somewhere after GCTL core soft reset is done in 
+set_mode ?
+
+The reason being, there were some compliance issues seen with SSP on 
+some of our targets and we wanted to drop down to Gen-1 in our targets, 
+but limiting maximum-speed is affecting only device mode.
+
+Regards,
+Krishna,
