@@ -2,127 +2,217 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47066FEE0F
-	for <lists+linux-usb@lfdr.de>; Thu, 11 May 2023 10:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E83FA6FEEA5
+	for <lists+linux-usb@lfdr.de>; Thu, 11 May 2023 11:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235759AbjEKIwu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 May 2023 04:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
+        id S237544AbjEKJXs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 May 2023 05:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233644AbjEKIwr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 May 2023 04:52:47 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3849DF7;
-        Thu, 11 May 2023 01:52:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683795165; x=1715331165;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sA6r4ztuDtSV/drVYgGMTHrFo41zvPrwRt4BVErTnkw=;
-  b=Odg5hbK/NCaQCL7DJwLRBKxkLW15+F8iC6hwrgLGCzBYgXE0WbtwmG5J
-   qodAdZFo6X1Cbmvde6Zcchh9rYfjJ04nYSkzR6WpmEGOKiasz+CG1RuN5
-   nvNw5adTiXq9X/yjWyLgV56GeFb2HjRJrglvk6WH57znxMeStOjnhplyf
-   Q10dHGSLm4ic3jLqnEMLterbGKPJKuDYFuTEObckHN0otI2sXWSxqUzzs
-   mdAtnWM9GUFgZfc4z2GJ2tg6k9LoxNQ7MINo77blNWzZ9l7hk4WXL9bGd
-   Y8Pyz4j0k2GU9grN8I2jzh6ZplYqpHI6zqzd1cECtXimCT/nxYeIDn0cK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="334922135"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="334922135"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 01:51:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="946056206"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="946056206"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 11 May 2023 01:51:44 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id BB6A11FC; Thu, 11 May 2023 11:51:54 +0300 (EEST)
-Date:   Thu, 11 May 2023 11:51:54 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, USB list <linux-usb@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
-Subject: Re: make localmodconfig doesn't work for thunderbolt
-Message-ID: <20230511085154.GQ66750@black.fi.intel.com>
-References: <4cb758c7-f4f5-820c-c7e7-5b900ccc2534@kernel.org>
+        with ESMTP id S232333AbjEKJXn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 May 2023 05:23:43 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019EB7EF4
+        for <linux-usb@vger.kernel.org>; Thu, 11 May 2023 02:23:37 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50be17a1eceso15728944a12.2
+        for <linux-usb@vger.kernel.org>; Thu, 11 May 2023 02:23:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683797016; x=1686389016;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vl4pq/TFO3VQR0kVuaJWgJWglK6FzIisqhV2TGEMWBo=;
+        b=c6XFMFoSN2wtB3zRfDgTwLYZGqARzAVdIAmpazUc5hYAkqsYPWyD6HdnmX3hwBi4UN
+         aFamlAThX8tqDyddf+n1l/FysCUP6KFVtX5M8QcPcsnyYf7OPwog+BE7iNJKd1svhhaj
+         mwpK2EobCyCIRRc002JrhmKpJ9b/sHv/MQiE448LvsQjCbBMAjk/a85ChmEH5mBnn801
+         jfBuYm64YTOsJLlUdhHWOvsHosuZ+RDYWT9Si3+7S/M7xeJ4w9ACQpEJQrDa27XcnSVn
+         c3D4yto3dWyOAtWkfhrdJSVpDpwZQIIJqhaRcPl+27Xcad0ihtQFfrVzvRgxsrTLe+ur
+         M/cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683797016; x=1686389016;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vl4pq/TFO3VQR0kVuaJWgJWglK6FzIisqhV2TGEMWBo=;
+        b=doa2DcS2iuPDt5jUdFXJ9xQFkTZ6TFYHFn4XF3xZDP/jTXph8gKi+SjOPLCRrQcLaB
+         NMezj/iQP6/KdAmnS14xeUr/K3vZ/akaxcPTCg64BVugR6TVPn9NE4czTj6unh3oZGjz
+         GqZyGVZOzQirDteeg+sDDJplvoF731zAPbI4J6POAWPOMNWUlBKPQeNwCjCJCHaq7Qol
+         POJiCvLdM8FDWiLOm4Xt2QTB3VeobfOsYwHKZDRose4YMWXV9865W6WSczqgpF/JJCGY
+         9DkKDc7yHloBiz/ckzPro0o4RBKjhlj5X/sfFMOR7buaGZtZogAOUgXkd6rSD8yzhfCw
+         eY0Q==
+X-Gm-Message-State: AC+VfDxO1mQWcdR9RujxpIQcw1KKi3cs8pU+8/rNHTNi0lgrNGh45/RG
+        twiZXTRW+uC9LNWLYcKw4VcRvQ==
+X-Google-Smtp-Source: ACHHUZ5hH0nv0/reQLP7DrNigh3PbGejsk3yC0vC8eazBflipY9G2qypAnsLVsJZ4JmXFYmGDAkn+A==
+X-Received: by 2002:a17:907:a408:b0:94e:5780:23f9 with SMTP id sg8-20020a170907a40800b0094e578023f9mr20712928ejc.48.1683797016340;
+        Thu, 11 May 2023 02:23:36 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:7e61:f14a:c3a4:809e? ([2a02:810d:15c0:828:7e61:f14a:c3a4:809e])
+        by smtp.gmail.com with ESMTPSA id e17-20020a170906845100b0095844605bb8sm3801632ejy.10.2023.05.11.02.23.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 02:23:35 -0700 (PDT)
+Message-ID: <634ae7fc-7f63-da83-9889-b08d728a21a4@linaro.org>
+Date:   Thu, 11 May 2023 11:23:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4cb758c7-f4f5-820c-c7e7-5b900ccc2534@kernel.org>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3] dt-bindings: usb: Add support for Microchip usb5744
+ hub controller
+Content-Language: en-US
+To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
+        ilias.apalodimas@linaro.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Piyush Mehta <piyush.mehta@amd.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <f99d284dc70ca897d3908b1e4c92a9910f350584.1683729282.git.michal.simek@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <f99d284dc70ca897d3908b1e4c92a9910f350584.1683729282.git.michal.simek@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On 10/05/2023 16:34, Michal Simek wrote:
+> The Microchip usb5744 is a SS/HS USB 3.0 hub controller with 4 ports.
+> Add description for USB related aspects of the USB5744 hub, it as
+> well cover the option of connecting the controller as an i2c slave.
+> When i2c interface is connected hub needs to be initialized first.
+> Hub itself has fixed i2c address 0x2D but hardcoding address is not good
+> idea because address can be shifted by i2c address translator in the
+> middle.
+> 
+> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
+> 
+> Changes in v3:
+> - add maxItems to reg property
+> - remove select and define properties not used for i2c node and required
+>   for usb
+> - s/binding/support/ in subject
+> - reword descripion to remove binding word from commit message
+> - wire usb-device.yaml for usb hub properties
+> 
+> Changes in v2:
+> - fix i2c-bus property
+> - swap usb2.0/3.0 compatible strings
+> - fix indentation in example (4 spaces)
+> - add new i2c node with microchip,usb5744 compatible property
+> 
+> It looks like that usb8041 has also an optional i2c interface which is not
+> covered. But it is mentioned at commit 40e58a8a7ca6 ("dt-bindings: usb:
+> Add binding for TI USB8041 hub controller").
+> 
+> i2c-bus name property was suggested by Rob at
+> https://lore.kernel.org/all/CAL_JsqJedhX6typpUKbnzV7CLK6UZVjq3CyG9iY_j5DLPqvVdw@mail.gmail.com/
+> and
+> https://lore.kernel.org/all/CAL_JsqJZBbu+UXqUNdZwg-uv0PAsNg55026PTwhKr5wQtxCjVQ@mail.gmail.com/
+> 
+> the question is if adding address like this is acceptable.
+> But it must be specified.
+> 
+> Driver will follow based on final dt-binding.
+> 
+> $ref: usb-device.yaml# should be also added but have no idea how to wire it
+> up to be applied only on usb node not i2c one.
+> 
+> ---
+>  .../bindings/usb/microchip,usb5744.yaml       | 107 ++++++++++++++++++
+>  1 file changed, 107 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+> new file mode 100644
+> index 000000000000..408c5bf00cc2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+> @@ -0,0 +1,107 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/microchip,usb5744.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip USB5744 4-port Hub Controller
+> +
+> +description:
+> +  Microchip's USB5744 SmartHubTM IC is a 4 port, SuperSpeed (SS)/Hi-Speed (HS),
+> +  low power, low pin count configurable and fully compliant with the USB 3.1
+> +  Gen 1 specification. The USB5744 also supports Full Speed (FS) and Low Speed
+> +  (LS) USB signaling, offering complete coverage of all defined USB operating
+> +  speeds. The new SuperSpeed hubs operate in parallel with the USB 2.0
+> +  controller, so 5 Gbps SuperSpeed data transfers are not affected by slower
+> +  USB 2.0 traffic.
+> +
+> +maintainers:
+> +  - Piyush Mehta <piyush.mehta@amd.com>
+> +  - Michal Simek <michal.simek@amd.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - usb424,2744
+> +      - usb424,5744
+> +      - microchip,usb5744
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +    description:
+> +      GPIO controlling the GRST# pin.
+> +
+> +  vdd-supply:
+> +    description:
+> +      VDD power supply to the hub
+> +
+> +  peer-hub:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      phandle to the peer hub on the controller.
+> +
+> +  i2c-bus:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      phandle of an usb hub connected via i2c bus.
+> +
+> +allOf:
 
-On Wed, May 10, 2023 at 01:00:54PM +0200, Jiri Slaby wrote:
-> Hi,
-> 
-> if I use localmodconfig for example like this:
-> mkdir /tmp/tb/
-> echo thunderbolt >/tmp/tb/lsmod
-> make O=/tmp/tb LSMOD=/tmp/tb/lsmod localmodconfig
-> 
-> I get:
-> using config: '.config'
-> thunderbolt config not found!!
-> 
-> $ grep 'USB4\>' /tmp/tb/.config
-> # CONFIG_USB4 is not set
-> 
-> I believe it's due to:
->   obj-${CONFIG_USB4} := thunderbolt.o
-> in drivers/thunderbolt/Makefile. I.e. ${} used instead of more common $().
-> 
-> But even if I change the parser:
-> 
-> --- a/scripts/kconfig/streamline_config.pl
-> +++ b/scripts/kconfig/streamline_config.pl
-> @@ -317,7 +317,7 @@ foreach my $makefile (@makefiles) {
->         $_ = convert_vars($_, %make_vars);
-> 
->         # collect objects after obj-$(CONFIG_FOO_BAR)
-> -       if (/obj-\$\((CONFIG_[^\)]*)\)\s*[+:]?=\s*(.*)/) {
-> +       if (/obj-\$[({](CONFIG_[^})]*)[)}]\s*[+:]?=\s*(.*)/) {
->             $var = $1;
->             $objs = $2;
-> 
-> 
-> I see:
-> module thunderbolt did not have configs CONFIG_USB4
-> 
-> and:
-> $ grep 'USB4\>' /tmp/tb/.config
-> # CONFIG_USB4 is not set
-> 
-> So two questions:
-> 1) is ${} supported and should be the above change sent as a patch? Or
-> should be drivers/thunderbolt/Makefile fixed to use $(). (And maybe other
-> Makefiles too.)
+Put allOf: block after required:. Just like in example schema.
 
-The streamline_config.pl mentions use of ${} in comments itself:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: microchip,usb5744
+> +    then:
+> +      properties:
+> +        reset-gpios: false
+> +        vdd-supply: false
+> +        peer-hub: false
+> +        i2c-bus: false
+> +    else:
+> +      $ref: /schemas/usb/usb-device.yaml
+> +      required:
+> +        - peer-hub
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
 
-# add to the configs hash all configs that are needed to enable
-# a loaded module. This is a direct obj-${CONFIG_FOO} += bar.o
-# where we know we need bar.o so we add FOO to the list.
 
-So I think it should be made to support this.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> 2) how to fix that 'thunderbolt did not have configs'?
+Best regards,
+Krzysztof
 
-There are bunch of other symbols that generate the same (after the above
-fix from you), not just Thunderbolt so figuring that out and fix would
-be the way forward I think. However, my perl skills are are not up to
-this task at the moment. I can take a look but cannot promise that I
-figure a solution.
