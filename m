@@ -2,177 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA766FF6E7
-	for <lists+linux-usb@lfdr.de>; Thu, 11 May 2023 18:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0226FF6FB
+	for <lists+linux-usb@lfdr.de>; Thu, 11 May 2023 18:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238671AbjEKQQa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 May 2023 12:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        id S238776AbjEKQTd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 May 2023 12:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238150AbjEKQQ3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 May 2023 12:16:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC232681;
-        Thu, 11 May 2023 09:16:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F15C5619A5;
-        Thu, 11 May 2023 16:16:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F355C4339E;
-        Thu, 11 May 2023 16:16:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683821786;
-        bh=37BLDMCQApsAYWkD2Fzkf9WBWnl8ntaXgQXEeNJfu6g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=vFduNp+AFVlR1whHWfYkSSUXtqdrbdmkSvG29SAJ52Fo0fYb7Za4cEdoiqrLKFoYL
-         iSxEE9zmu3ljSqd/ykPAiKPbHFmZEAE1o8IX7Ej6ylyQIXFcaEUyThU73H1xSACKcl
-         C21nEWbeImzjsQ4YRDUrYy+Zko54/xhHj5BKauuFicWNrXtohDqx3uzj2zl5iPetw+
-         YIU3Rb8GqcklpcVqBigUvTcg4DWNkPz7YgxoDE114K1RL3FrUjyDCS+gxyYwoBVJHc
-         hCYVzN3MlxvSYrvIn07dnnqa3Kn+SrwUmJASt2EoZCRo3auEAQigxFq/XbVB5NVXsx
-         yTieR1wDilSVA==
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-192cfb46e75so4017367fac.3;
-        Thu, 11 May 2023 09:16:26 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxQJoHFS3yu9RLiSqx35BMhtUMKgjelLHf5bmZczhHUpOsDgeJ1
-        c/2Ch3vtUdDgl1NyEExNNAuVuBkrVaoEj38uloI=
-X-Google-Smtp-Source: ACHHUZ4T2QkjrGxdQHl22Ge1T3nDuhIFk9OGTimOV7hj2Mp6VKkmVCr4clyp0D4xpw355k0a1jz+0o15ZxnnvtR6tlA=
-X-Received: by 2002:a05:6870:a455:b0:196:3004:cc07 with SMTP id
- n21-20020a056870a45500b001963004cc07mr4435471oal.39.1683821785529; Thu, 11
- May 2023 09:16:25 -0700 (PDT)
+        with ESMTP id S238204AbjEKQTc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 May 2023 12:19:32 -0400
+Received: from pku.edu.cn (mx19.pku.edu.cn [162.105.129.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 69EE3E70;
+        Thu, 11 May 2023 09:19:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pku.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
+        Message-ID:References:MIME-Version:Content-Type:
+        Content-Disposition:In-Reply-To; bh=T46lKjyksdSH1mMWMKwFyNNuZqIq
+        3bsgJShvfu2imFw=; b=EYxzrv7yMThObCD2fNLyafIhForMgk7uoc+tziV+8jNF
+        hQWhx+2nWjh/PPfagI73Jl3svDIVmHR8Gtjt0SIe9CS0V04XGTWr8DudC/nYsAle
+        huohL4AKMJo2DMsSrr9HqSlPk5TPxNazbbZiUC8Nq/XpaFEaAdn1BACFDYW4mJ0=
+Received: from localhost (unknown [10.7.101.92])
+        by front02 (Coremail) with SMTP id 54FpogCXbjh9FV1kchqUEw--.22912S2;
+        Fri, 12 May 2023 00:19:15 +0800 (CST)
+Date:   Fri, 12 May 2023 00:19:09 +0800
+From:   Ruihan Li <lrh2000@pku.edu.cn>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-mm@kvack.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ruihan Li <lrh2000@pku.edu.cn>
+Subject: Re: [PATCH 0/4] Fix type confusion in page_table_check
+Message-ID: <zwixiok55avpjvfiknp7tzm7e4aragjj43a46abna4qqegdvdx@suat6sk34lgb>
+References: <20230510085527.57953-1-lrh2000@pku.edu.cn>
+ <2023051108-lens-unsocial-8425@gregkh>
+ <cyym2uqyqdtegfbdpworng4fa7iiuyh3e2wjrf4lp47jksvoxt@wwhvnzy5757c>
+ <ZF0KcRgclDJ6POrb@infradead.org>
 MIME-Version: 1.0
-References: <4cb758c7-f4f5-820c-c7e7-5b900ccc2534@kernel.org>
-In-Reply-To: <4cb758c7-f4f5-820c-c7e7-5b900ccc2534@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 12 May 2023 01:15:49 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATQeT8MaQr450x0SpHJV=QU7nrfWfDO1ZRKimppVZG4KA@mail.gmail.com>
-Message-ID: <CAK7LNATQeT8MaQr450x0SpHJV=QU7nrfWfDO1ZRKimppVZG4KA@mail.gmail.com>
-Subject: Re: make localmodconfig doesn't work for thunderbolt
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        YehezkelShB@gmail.com, USB list <linux-usb@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZF0KcRgclDJ6POrb@infradead.org>
+X-CM-TRANSID: 54FpogCXbjh9FV1kchqUEw--.22912S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtFy5uF4kXw15Cr4UCr17KFg_yoWDCFgE9F
+        yDKFnF93yDJa13tr43tF4IqrZ3KF4kXF10vFZYqr4IkF98XF97t3WkGrnrZF1xGw4Fva45
+        Crnaya42vr12qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbSkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
+        87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2vYz4IE04
+        k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF
+        7I0E8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6c
+        x26w4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
+        xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
+        IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY
+        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
+        CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1c4S5UUUUU==
+X-CM-SenderInfo: yssqiiarrvmko6sn3hxhgxhubq/1tbiAgEHBVPy772BUwARsx
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-+CC Steven Rostedt, author of streamline_config.pl
+On Thu, May 11, 2023 at 08:32:01AM -0700, Christoph Hellwig wrote:
+> On Thu, May 11, 2023 at 09:44:55PM +0800, Ruihan Li wrote:
+> > Christoph's patch perfectly fixes _one_ problem: kmalloc'ed memory
+> > cannot be mapped to user space. However, as I detailed in the commit
+> > message, this series of patches fixes _three_ problems.
+> 
+> FYI, I agree with you.  My simple patch was sent before reading
+> your new series, and is a strict subset of it.
 
+Thank you for the clarification.
 
+> > I have to say that the original code is quite buggy. In the
+> > gen_pool_dma_alloc path, there is no guarantee of page alignment. 
+> 
+> I also find this whole interface very problematic to start with,
+> but that's a separate discussion for later.
 
-On Wed, May 10, 2023 at 8:01=E2=80=AFPM Jiri Slaby <jirislaby@kernel.org> w=
-rote:
->
-> Hi,
->
-> if I use localmodconfig for example like this:
-> mkdir /tmp/tb/
-> echo thunderbolt >/tmp/tb/lsmod
-> make O=3D/tmp/tb LSMOD=3D/tmp/tb/lsmod localmodconfig
->
-> I get:
-> using config: '.config'
-> thunderbolt config not found!!
->
-> $ grep 'USB4\>' /tmp/tb/.config
-> # CONFIG_USB4 is not set
->
-> I believe it's due to:
->    obj-${CONFIG_USB4} :=3D thunderbolt.o
-> in drivers/thunderbolt/Makefile. I.e. ${} used instead of more common $()=
-.
->
-> But even if I change the parser:
->
-> --- a/scripts/kconfig/streamline_config.pl
-> +++ b/scripts/kconfig/streamline_config.pl
-> @@ -317,7 +317,7 @@ foreach my $makefile (@makefiles) {
->          $_ =3D convert_vars($_, %make_vars);
->
->          # collect objects after obj-$(CONFIG_FOO_BAR)
-> -       if (/obj-\$\((CONFIG_[^\)]*)\)\s*[+:]?=3D\s*(.*)/) {
-> +       if (/obj-\$[({](CONFIG_[^})]*)[)}]\s*[+:]?=3D\s*(.*)/) {
->              $var =3D $1;
->              $objs =3D $2;
->
->
-> I see:
-> module thunderbolt did not have configs CONFIG_USB4
->
-> and:
-> $ grep 'USB4\>' /tmp/tb/.config
-> # CONFIG_USB4 is not set
->
-> So two questions:
-> 1) is ${} supported and should be the above change sent as a patch? Or
-> should be drivers/thunderbolt/Makefile fixed to use $(). (And maybe
-> other Makefiles too.)
+Yes. I don't think hybrid allocation of DMA memory and normal memory in
+one function is a good thing, but currently there is no clear way to fix
+this. Mixing memory allocation and page allocation is another bad thing,
+and at least, my patch can (hopefully) solve the second (and much
+easier) issue.
 
+Thanks,
+Ruihan Li
 
-I believe streamline_config.pl should be fixed.
-
-There is no good reason to support only $(), but not ${}.
-
-
-In fact, the comment line around line 395 of this script
-uses the curly brace style.
-
-  # a loaded module. This is a direct obj-${CONFIG_FOO} +=3D bar.o
-
-
-
-
-
-
-> 2) how to fix that 'thunderbolt did not have configs'?
-
-That warning is CONFIG_USB4 was unset in the resulting .config.
-
-Was CONFIG_USB4 enabled before running localmodconfig?
-
-In my understanding, the purpose of localmodconfig
-is to slim down the .config file.
-
-It disables unneeded CONFIG options, but
-it does not enable needed CONFIG options.
-
-
-
-
-If I start from allnoconfig (i.e. CONFIG_USB4 is unset), I see the warning.
-
-$ echo thunderbolt >/tmp/tb/lsmod
-$ make -s O=3D/tmp/tb allnoconfig
-$ make O=3D/tmp/tb LSMOD=3D/tmp/tb/lsmod  localmodconfig
-  GEN     Makefile
-using config: '.config'
-module thunderbolt did not have configs CONFIG_USB4
-
-
-
-If I start from allmodconfig (i.e. CONFIG_USB4 is m), I do not see the warn=
-ing.
-
-$ echo thunderbolt >/tmp/tb/lsmod
-$ make -s O=3D/tmp/tb allmodconfig
-$ make O=3D/tmp/tb LSMOD=3D/tmp/tb/lsmod  localmodconfig
-  GEN     Makefile
-using config: '.config'
-
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
