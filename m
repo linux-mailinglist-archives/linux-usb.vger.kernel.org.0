@@ -2,125 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0D6700652
-	for <lists+linux-usb@lfdr.de>; Fri, 12 May 2023 13:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AFD700654
+	for <lists+linux-usb@lfdr.de>; Fri, 12 May 2023 13:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240569AbjELLIB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 May 2023 07:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S240853AbjELLIj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 May 2023 07:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240091AbjELLIA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 May 2023 07:08:00 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3291720
-        for <linux-usb@vger.kernel.org>; Fri, 12 May 2023 04:07:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1683888954; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=Aw1M/UbYyytpcMpiQxQzWfWNSArV/QO8rGWfMOd2Wy8n8aujh4ZdVnPnQuC97BaHEl
-    m2EVGUZUhrLJepfBqQAEQDMJmdv/VHpwf0Ctv/yCLRkJQIxOVYb5+CAEcVnCKb2lLAfG
-    Cfxp0yNGDDqFJX5JtkUZRqq7KpUGCD8W+YaB7cYiaBGwRjjlwz2EUf2ty8OguEYptCJY
-    Le9CzXOXxbfoDWZqDwfn5vShdn1twZecqOefnL8KUr5BYSlM/Gb9JbB4bYNqrUqrYMCZ
-    RNEiTI+jNxAUX0KxBbwm+yulImsM8Ji0Kh6d9B8Ws6Z/85RnkKvt1GDYMQKVRM9aIWwM
-    RF8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1683888954;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=IcnC9fQoMISibPV6bWeUYZDoYQ3HREw+uIToY4kSiuI=;
-    b=VY0rMiVBuRsrU9CwBUEiIDZCcMQMPCON0BNynoiCvGqUQifuSUO0O+07amI3MEodsu
-    C3yzQYvrm/d7cHsuXN9M4caIJ6ovXGsWF4Di0b/fQxbYuWXCR9c6l26RqlASVyO+36wY
-    Eb4fbijilY7dvJyLE7Fn1hRb8t/UOlRh18wue5tE6kvt++oCvlK87E5trgwBOtBqxdf1
-    nOSxEuBgqk8Ib3+IOOpD1hooKNRvc7cyZK3iCRGnC9ViZAjOitDmNDBUcfKKsY1S20Ah
-    bzINHVTm/eClAiPKcLTpEV9I0/kJykt2BncIATTFa/xU7FEUjoaX5ipgvDX41L7Uh5bh
-    ABNQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1683888953;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=IcnC9fQoMISibPV6bWeUYZDoYQ3HREw+uIToY4kSiuI=;
-    b=gguczXTCu2J8Sezn9hZ7yxNZXT6l3A8tWGtb42MNf8uJV59p8DtLxmYk+Ig+Fu4zkJ
-    Q21emEE0/RNpEoLnkQtTTHZ3H+QVbqrEt6pdOXwodnd5XpCqZRVcAG15NwyP8yScHQBS
-    0YwZX5r8CghLCLtFKDGVlIHPtSSHZ6Hetdfcoz7kfIYq3DQopwxghCo7AsERcb/94se1
-    X9hqQ0DK/96gBlc7rcmmrH5WS+cpvduUWTPwSBdboso5LYbhf07Xj7bTRi0FeCAHs10o
-    bh3m21zTNTUieNO8mEfkmMOOzdZNWkhQeJvvqAEIdbEfZgqUxY5UdhdqX7i26qKKJajM
-    PStA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1683888953;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=IcnC9fQoMISibPV6bWeUYZDoYQ3HREw+uIToY4kSiuI=;
-    b=qImzTiCB12p3WnxeMcNXHT/YJItRgBWRxrLefPfzG3u8cJhx0dE5k2rYSuu5j8wqB1
-    zc4gKSxLJWvZLm3WKECQ==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA8piL1A=="
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
-    with ESMTPSA id j6420az4CAtruum
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 12 May 2023 12:55:53 +0200 (CEST)
-Date:   Fri, 12 May 2023 12:55:46 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Francesco Dolcini <francesco@dolcini.it>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        francesco.dolcini@toradex.com, liu.ming50@gmail.com,
-        Badhri Jagan Sridharan <badhri@google.com>
-Subject: Re: USB gadget regression on v6.4-rc1 and v6.1.28
-Message-ID: <ZF4bMptC3Lf2Hnee@gerhold.net>
-References: <ZF4BvgsOyoKxdPFF@francesco-nb.int.toradex.com>
+        with ESMTP id S240591AbjELLIh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 May 2023 07:08:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F71100E2;
+        Fri, 12 May 2023 04:08:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CFCD60BBA;
+        Fri, 12 May 2023 11:08:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29AC6C433EF;
+        Fri, 12 May 2023 11:08:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683889714;
+        bh=9uveR+4HYlpo1o+OKWBaWxTrmSSdNHP4bkHON+B5Ca4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=eZDFxVHWMJnaWOukTLVUSpkhBXwrNDHdPhZFxbpxgbEbGOQZGH0Ti3Nr0r2iKfCsG
+         s3yH9nCaIFpVL+fSqouciEkGPOrRRe7jWDt1WeavYEA97j5PhRgfUBC7JInsW0EnUV
+         fYwLxf00oDA9dS76n8MS52KBqrw5LvzEsjAvCnj4rWa/jS/Eh6EQk8XUBwm0sxbMs0
+         IUhMQ5D4dxQrufUL7/AU7eo2T6QozVrKa03b6A5YSmyBjWAld/kZyoXhhPoPjCAmjR
+         zo3ryU55J8OzNKIPsTfIkuewUq9SlkOfWbwmcjpuOOE1kRlOpPuw3S1j7bnKEotS9W
+         zhgFEstL2dEsQ==
+Message-ID: <40592737-4330-101b-5425-091572e61c6f@kernel.org>
+Date:   Fri, 12 May 2023 14:08:29 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZF4BvgsOyoKxdPFF@francesco-nb.int.toradex.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: cdns,usb3: Add clock and reset
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Minda Chen <minda.chen@starfivetech.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20230510132816.108820-1-minda.chen@starfivetech.com>
+ <20230510132816.108820-2-minda.chen@starfivetech.com>
+ <9cf5965a-8290-dfff-9f92-07ed2df66650@linaro.org>
+ <05057f6d-cb38-8e4a-5d30-82863e0cda44@kernel.org>
+ <028fb8ac-d6cc-6fee-f50b-b965e69e7d0c@linaro.org>
+Content-Language: en-US
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <028fb8ac-d6cc-6fee-f50b-b965e69e7d0c@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 12, 2023 at 11:07:10AM +0200, Francesco Dolcini wrote:
-> Hello all,
-> I recently did have a regression on v6.4rc1, and it seems that the same
-> exact issue is now happening also on v6.1.28.
+
+
+On 11/05/2023 17:49, Krzysztof Kozlowski wrote:
+> On 11/05/2023 14:16, Roger Quadros wrote:
+>>
+>>
+>> On 11/05/2023 12:26, Krzysztof Kozlowski wrote:
+>>> On 10/05/2023 15:28, Minda Chen wrote:
+>>>> To support generic clock and reset init in Cadence USBSS
+>>>> controller, add clock and reset dts configuration.
+>>>>
+>>>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+>>>> ---
+>>>>  .../devicetree/bindings/usb/cdns,usb3.yaml         | 14 ++++++++++++++
+>>>>  1 file changed, 14 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+>>>> index cae46c4982ad..623c6b34dee3 100644
+>>>> --- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+>>>> +++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+>>>> @@ -42,6 +42,18 @@ properties:
+>>>>        - const: otg
+>>>>        - const: wakeup
+>>>>  
+>>>> +  clocks:
+>>>> +    minItems: 1
+>>>> +    maxItems: 8
+>>>> +    description:
+>>>> +      USB controller clocks.
+>>>
+>>> You need to list the items. And why is it variable? Your clock choice in
+>>> the example is poor, I doubt it is real.
+>>>
+>>>> +
+>>>> +  resets:
+>>>> +    minItems: 1
+>>>> +    maxItems: 8
+>>>> +    description:
+>>>> +      USB controller generic resets.
+>>>
+>>> Here as well.
+>>>
+>>> You had one clock last time, thus the review was - drop the names. Now
+>>> you changed it to 8 clocks... I don't understand.
+>>>
+>>
+>> Different platforms may have different number of clocks/resets or none.
+>> So I don't think minItems/maxItems should be specified.
 > 
-> I was not able yet to bisect it (yet), but what is happening is that
-> libusbgx[1] that we use to configure a USB NCM gadget interface[2][3] just
-> hang completely at boot.
-> 
-> This is happening with multiple ARM32 and ARM64 i.MX SOC (i.MX6, i.MX7,
-> i.MX8MM).
-> 
-> The logs is something like that
-> 
-> ```
-> [*     �F] A start job is running for Load def…t schema g1.schema (6s / no limit)
-> M[K[**    �F] A start job is running for Load def…t schema g1.schema (7s / no limit)
-> M[K[***   �F] A start job is running for Load def…t schema g1.schema (8s / no limit)
-> M[K[ ***  �F] A start job is running for Load def…t schema g1.schema (8s / no limit)
-> ```
-> 
-> I will try to bisect this and provide more useful feedback ASAP, I
-> decided to not wait for it and just send this email in case someone has
-> some insight on what is going on.
+> Yeah, but we want the clocks to be specific per platform. Not anything
+> anywhere.
 > 
 
-I noticed a similar problem on the Qualcomm MSM8916 SoC (chipidea USB
-driver) and reverting commit 0db213ea8eed ("usb: gadget: udc: core:
-Invoke usb_gadget_connect only when started") fixes it for me. The
-follow-up commit a3afbf5cc887 ("usb: gadget: udc: core: Prevent
-redundant calls to pullup") must be reverted first to avoid conflicts.
-These two were also backported into 6.1.28.
+Agreed. So we don't specify min/maxItems at top level but use conditional
+constraints per platform?
+Which means we will need to add platform specific compatibles as well.
 
-I didn't have time to investigate it further yet. With these patches it
-just hangs forever when setting up the USB gadget.
-
-Stephan
+-- 
+cheers,
+-roger
