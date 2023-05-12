@@ -2,36 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 494C0700375
-	for <lists+linux-usb@lfdr.de>; Fri, 12 May 2023 11:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2688A70051F
+	for <lists+linux-usb@lfdr.de>; Fri, 12 May 2023 12:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240087AbjELJNP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 May 2023 05:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
+        id S240667AbjELKWm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 May 2023 06:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239907AbjELJNO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 May 2023 05:13:14 -0400
-Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C5A1710;
-        Fri, 12 May 2023 02:13:13 -0700 (PDT)
-Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        by mail11.truemail.it (Postfix) with ESMTPA id B02492034F;
-        Fri, 12 May 2023 11:13:09 +0200 (CEST)
-Date:   Fri, 12 May 2023 11:13:04 +0200
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, stable@vger.kernel.org
-Cc:     francesco.dolcini@toradex.com, liu.ming50@gmail.com,
-        Badhri Jagan Sridharan <badhri@google.com>
-Subject: Re: USB gadget regression on v6.4-rc1 and v6.1.28
-Message-ID: <ZF4DIFZJ596AIfRL@francesco-nb.int.toradex.com>
-References: <ZF4BvgsOyoKxdPFF@francesco-nb.int.toradex.com>
+        with ESMTP id S240745AbjELKWf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 May 2023 06:22:35 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2D7CE;
+        Fri, 12 May 2023 03:22:23 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 7A34424E22D;
+        Fri, 12 May 2023 18:22:22 +0800 (CST)
+Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 12 May
+ 2023 18:22:22 +0800
+Received: from [192.168.125.108] (113.72.146.187) by EXMBX171.cuchost.com
+ (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 12 May
+ 2023 18:22:21 +0800
+Message-ID: <d4de3b1b-31b6-c257-29a5-f404ff0fbe99@starfivetech.com>
+Date:   Fri, 12 May 2023 18:22:21 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZF4BvgsOyoKxdPFF@francesco-nb.int.toradex.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: cdns,usb3: Add clock and reset
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+References: <20230510132816.108820-1-minda.chen@starfivetech.com>
+ <20230510132816.108820-2-minda.chen@starfivetech.com>
+ <9cf5965a-8290-dfff-9f92-07ed2df66650@linaro.org>
+ <05057f6d-cb38-8e4a-5d30-82863e0cda44@kernel.org>
+ <028fb8ac-d6cc-6fee-f50b-b965e69e7d0c@linaro.org>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <028fb8ac-d6cc-6fee-f50b-b965e69e7d0c@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.146.187]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX171.cuchost.com
+ (172.16.6.91)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -39,20 +64,86 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 12, 2023 at 11:07:10AM +0200, Francesco Dolcini wrote:
-> I recently did have a regression on v6.4rc1, and it seems that the same
-> exact issue is now happening also on v6.1.28.
+
+
+On 2023/5/11 22:49, Krzysztof Kozlowski wrote:
+> On 11/05/2023 14:16, Roger Quadros wrote:
+>> 
+>> 
+>> On 11/05/2023 12:26, Krzysztof Kozlowski wrote:
+>>> On 10/05/2023 15:28, Minda Chen wrote:
+>>>> To support generic clock and reset init in Cadence USBSS
+>>>> controller, add clock and reset dts configuration.
+>>>>
+>>>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+>>>> ---
+>>>>  .../devicetree/bindings/usb/cdns,usb3.yaml         | 14 ++++++++++++++
+>>>>  1 file changed, 14 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+>>>> index cae46c4982ad..623c6b34dee3 100644
+>>>> --- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+>>>> +++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+>>>> @@ -42,6 +42,18 @@ properties:
+>>>>        - const: otg
+>>>>        - const: wakeup
+>>>>  
+>>>> +  clocks:
+>>>> +    minItems: 1
+>>>> +    maxItems: 8
+>>>> +    description:
+>>>> +      USB controller clocks.
+>>>
+>>> You need to list the items. And why is it variable? Your clock choice in
+>>> the example is poor, I doubt it is real.
+>>>
+>>>> +
+>>>> +  resets:
+>>>> +    minItems: 1
+>>>> +    maxItems: 8
+>>>> +    description:
+>>>> +      USB controller generic resets.
+>>>
+>>> Here as well.
+>>>
+>>> You had one clock last time, thus the review was - drop the names. Now
+>>> you changed it to 8 clocks... I don't understand.
+>>>
+>> 
+>> Different platforms may have different number of clocks/resets or none.
+>> So I don't think minItems/maxItems should be specified.
 > 
-> I was not able yet to bisect it (yet), but what is happening is that
-> libusbgx[1] that we use to configure a USB NCM gadget interface[2][3] just
-> hang completely at boot.
+> Yeah, but we want the clocks to be specific per platform. Not anything
+> anywhere.
+> 
+> Best regards,
+> Krzysztof
+> 
 
-...
+I can change like these. Are these changes can be approved?
+lpm , bus clock and "pwrup" reset can be specific cases. (The changes are from snps,dwc3.yaml.)
 
-> [3] https://git.toradex.com/cgit/meta-toradex-bsp-common.git/tree/recipes-support/libusbgx/files/g1.schema.in?h=kirkstone-6.x.y
+  clocks:
+    description:
+      In general the core supports two types of clocks. bus is a SoC Bus
+      Clock(AHB/AXI/APB). lpm is a link power management clock. But particular
+      cases may differ from that having less or more clock sources with
+      another names.
 
-Whoops, this is supposed to be
+  clock-names:
+    contains:
+      anyOf:
+        - enum: [bus, lpm]
+        - true
 
-[3] https://git.toradex.com/cgit/meta-toradex-bsp-common.git/tree/recipes-support/libusbgx/files/usbg.service?h=kirkstone-6.x.y
+  resets:
+    description:
+      In general the core supports controller power-up reset. Also clock and
+      other resets can be added. Particular cases may differ from that having
+      less or more resets with another names.
 
-
+  reset-names:
+    contains:
+      anyOf:
+        - const: pwrup
+        - true
