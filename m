@@ -2,174 +2,193 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C53536FFF00
-	for <lists+linux-usb@lfdr.de>; Fri, 12 May 2023 04:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE4F6FFF99
+	for <lists+linux-usb@lfdr.de>; Fri, 12 May 2023 06:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239514AbjELCiW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 May 2023 22:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36890 "EHLO
+        id S239903AbjELESk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 May 2023 00:18:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238815AbjELCiF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 May 2023 22:38:05 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E366C3C16
-        for <linux-usb@vger.kernel.org>; Thu, 11 May 2023 19:38:03 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-763646b324aso1383488439f.0
-        for <linux-usb@vger.kernel.org>; Thu, 11 May 2023 19:38:03 -0700 (PDT)
+        with ESMTP id S239854AbjELES3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 May 2023 00:18:29 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8188D40E4
+        for <linux-usb@vger.kernel.org>; Thu, 11 May 2023 21:18:26 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f41dceb9c9so46871205e9.3
+        for <linux-usb@vger.kernel.org>; Thu, 11 May 2023 21:18:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683865105; x=1686457105;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lKSRIDy0J+UduLCQdBIRVgaNQhqBgLMPH7ha37U/mpY=;
+        b=blQ1l551mkk+RhRNR4/CbhJIKKut5nb8rgm1ZlVdYS3Xs/ZAsSfjl9OmJXiFhLRw//
+         fLThEdWuA50YQnH2BZtawfZwWJQL4qD7NbGHby0VERYx9vzBTpa+wxNjToFvj4uRjARx
+         Q1zj3aHn8M1OaIfRQN7nFnUYn/LIwrmKZ9YP9n3+D1R+hkV6k7Z8RenSqfHy9PuHieTZ
+         40zj5vxBqUuHpHvSZhtL86t70GXZZQNBvXN0cCqktdTtlrE2uWJ+HfdDCT8K7BmgBJCA
+         IV0REqLjOlrUvv0Ycs8yZm0zBIQrPutGQ7/qQZScPERY/ozbTz3c+t9jXjAATkuqlv49
+         j0tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683859083; x=1686451083;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6mqvjxLoa4rHNVpGPVS/SfycGbbBXHvMhFDxNvAM1VQ=;
-        b=BrY5Ha9qWqd9zRwTh4rBd+yFkAa3yClOmFKeJRKXX/CnSIp36YZteofRFQtqEb7m54
-         meVgWrKfM505FgV+2dFSGcV/GiCtnhZ/xqsLNpiFGiOjCxZun83pgcOP9UaFgYYAgFyD
-         ytJApyGZjjIKWjgLk+kIXJ4ecGwaoD6h+l/O9Pe0Io9wogWLYWac6Q6h0XvuE/YC5Aws
-         +MnLB7gRj4cOGVSA2ZSp4PMDhlVB1RE/+64rkQOJSXrPsVO+8rLr8Ziwyz4ZZVKZM/Ce
-         BN4ssaDXJWKg74pTGuEgDG+YnqdUkLv5uctAOnlfXNlvTlibX8/lJeipHABl5JeKu4CB
-         pQVQ==
-X-Gm-Message-State: AC+VfDz/epn4dyn+YQGn15Iq0EJgooaoNan73Cs+SibjNk/T+RoE0JTe
-        ZH5e+tnVG2ByMkKuffaNJLDqou+/ZftDjZLgZKU+Fmlqr97Q
-X-Google-Smtp-Source: ACHHUZ4tFCy7JYrOHet0uHWxvnRtWJLAiNMJcmBmqU0D4u9jven5x2H7hHQ4qqso/VJ72m1H70g4HtpOF/ZZK9sSeIL1mS0PLli2
+        d=1e100.net; s=20221208; t=1683865105; x=1686457105;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lKSRIDy0J+UduLCQdBIRVgaNQhqBgLMPH7ha37U/mpY=;
+        b=efLEH5Mnu7B0onylqGQw62YvTHFN7mUcyZOhb+W47k/iJ7MkbHUS3YGTLjgM4qI8O+
+         1+U2Br1+zNYQ6eMHyddKWmtaxkEE0wEMVHVW9yLdWh10MbDsvZ9B70T8WlGwunvSidWR
+         h4B03yloUJRDBhT6ymA95dWZFAcm28n0w2mEtBRvHFgiYyD7Wp0jIKYKEgre4yv8PkRx
+         bOG1qxedzMKiwmb6mmWZ5volTXMBGp7cMMxCOp4B7IHsDxPOgxr1ft91dYSxdbQfLhgz
+         H2RhGMCfSbhHyMNx0xFRx16JXb2zbWzTggEjszeoCOFVVGdFsHSOjFplAJmlEDewboJq
+         +kqw==
+X-Gm-Message-State: AC+VfDzfkZ/Ytp2ciFee8b0xPRF9Jrpguk8FN8Ggto8jVCvrFYPaLOkz
+        SaHeoiQdon2t1CxW9i98eqCe7w==
+X-Google-Smtp-Source: ACHHUZ5p1QJeBJjKCYP8wu3GMgGcx+MS7p0O3HhkJyuYY/Yip8cIUKZ3F1vH9Kfd5azZX90khyqONQ==
+X-Received: by 2002:a7b:c85a:0:b0:3f4:ecf0:8c93 with SMTP id c26-20020a7bc85a000000b003f4ecf08c93mr2384658wml.20.1683865104843;
+        Thu, 11 May 2023 21:18:24 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id x16-20020a05600c21d000b003f318be9442sm27555561wmj.40.2023.05.11.21.18.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 21:18:23 -0700 (PDT)
+Date:   Fri, 12 May 2023 07:18:16 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     oe-kbuild@lists.linux.dev,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>,
+        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>
+Subject: Re: [PATCH 2/2] usb: dwc3: Modify runtime pm ops to handle bus
+ suspend
+Message-ID: <3e035312-3c06-44e1-95ef-0a4d36456a7d@kili.mountain>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:960e:0:b0:76c:74d8:a2d7 with SMTP id
- w14-20020a5d960e000000b0076c74d8a2d7mr3194789iol.4.1683859083249; Thu, 11 May
- 2023 19:38:03 -0700 (PDT)
-Date:   Thu, 11 May 2023 19:38:03 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008254fa05fb75fedd@google.com>
-Subject: [syzbot] [usb?] WARNING in amradio_set_mute/usb_submit_urb
-From:   syzbot <syzbot+347ac4ce4eeebbe8a129@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1683827311-1462-3-git-send-email-quic_eserrao@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi Elson,
 
-syzbot found the following issue on:
+kernel test robot noticed the following build warnings:
 
-HEAD commit:    14f8db1c0f9a Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=17275338280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a837a8ba7e88bb45
-dashboard link: https://syzkaller.appspot.com/bug?extid=347ac4ce4eeebbe8a129
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14a13424280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15b7c75c280000
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ad6ce516eed3/disk-14f8db1c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1f38c2cc7667/vmlinux-14f8db1c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/d795115eee39/Image-14f8db1c.gz.xz
+url:    https://github.com/intel-lab-lkp/linux/commits/Elson-Roy-Serrao/usb-function-u_ether-Handle-rx-requests-during-suspend-resume/20230512-015036
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/1683827311-1462-3-git-send-email-quic_eserrao%40quicinc.com
+patch subject: [PATCH 2/2] usb: dwc3: Modify runtime pm ops to handle bus suspend
+config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20230512/202305120709.tCFYCtsd-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+347ac4ce4eeebbe8a129@syzkaller.appspotmail.com
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202305120709.tCFYCtsd-lkp@intel.com/
 
-usb 1-1: New USB device found, idVendor=07ca, idProduct=b800, bcdDevice=b9.c5
-usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-------------[ cut here ]------------
-usb 1-1: BOGUS urb xfer, pipe 1 != type 3
-WARNING: CPU: 0 PID: 2016 at drivers/usb/core/urb.c:505 usb_submit_urb+0xa44/0x1588 drivers/usb/core/urb.c:504
-Modules linked in:
-CPU: 0 PID: 2016 Comm: kworker/0:2 Not tainted 6.3.0-rc7-syzkaller-g14f8db1c0f9a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-Workqueue: usb_hub_wq hub_event
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : usb_submit_urb+0xa44/0x1588 drivers/usb/core/urb.c:504
-lr : usb_submit_urb+0xa44/0x1588 drivers/usb/core/urb.c:504
-sp : ffff800024726740
-x29: ffff800024726780 x28: 0000000000000001 x27: ffff8000138dd388
-x26: ffff0000c6ef2c00 x25: ffff0000d4abe000 x24: 0000000000000008
-x23: ffff8000138e3c00 x22: dfff800000000000 x21: 0000000000000002
-x20: 0000000000000c00 x19: ffff0000cf47bc00 x18: ffff800024725c60
-x17: 0000000000000000 x16: ffff80001236e294 x15: 0000000000000002
-x14: 0000000000000000 x13: 0000000000000001 x12: 0000000000000001
-x11: 0000000000000000 x10: 0000000000000000 x9 : b47e7648083a6600
-x8 : b47e7648083a6600 x7 : 0000000000000001 x6 : 0000000000000001
-x5 : ffff800024726038 x4 : ffff800015e4ccc0 x3 : ffff800008584230
-x2 : 0000000000000001 x1 : 0000000100000000 x0 : 0000000000000000
-Call trace:
- usb_submit_urb+0xa44/0x1588 drivers/usb/core/urb.c:504
- usb_start_wait_urb+0xec/0x414 drivers/usb/core/message.c:58
- usb_bulk_msg+0x2ec/0x3ec drivers/usb/core/message.c:387
- amradio_send_cmd drivers/media/radio/radio-mr800.c:150 [inline]
- amradio_set_mute+0x1d4/0x428 drivers/media/radio/radio-mr800.c:182
- usb_amradio_init drivers/media/radio/radio-mr800.c:411 [inline]
- usb_amradio_probe+0x388/0x6f8 drivers/media/radio/radio-mr800.c:554
- usb_probe_interface+0x500/0x984 drivers/usb/core/driver.c:396
- really_probe+0x394/0xa7c drivers/base/dd.c:631
- __driver_probe_device+0x1bc/0x3f8 drivers/base/dd.c:768
- driver_probe_device+0x78/0x330 drivers/base/dd.c:798
- __device_attach_driver+0x2a8/0x4f4 drivers/base/dd.c:926
- bus_for_each_drv+0x228/0x2bc drivers/base/bus.c:457
- __device_attach+0x2b4/0x434 drivers/base/dd.c:998
- device_initial_probe+0x24/0x34 drivers/base/dd.c:1047
- bus_probe_device+0x178/0x240 drivers/base/bus.c:532
- device_add+0xabc/0xf58 drivers/base/core.c:3589
- usb_set_configuration+0x15a4/0x1b1c drivers/usb/core/message.c:2171
- usb_generic_driver_probe+0x8c/0x148 drivers/usb/core/generic.c:238
- usb_probe_device+0x120/0x25c drivers/usb/core/driver.c:293
- really_probe+0x394/0xa7c drivers/base/dd.c:631
- __driver_probe_device+0x1bc/0x3f8 drivers/base/dd.c:768
- driver_probe_device+0x78/0x330 drivers/base/dd.c:798
- __device_attach_driver+0x2a8/0x4f4 drivers/base/dd.c:926
- bus_for_each_drv+0x228/0x2bc drivers/base/bus.c:457
- __device_attach+0x2b4/0x434 drivers/base/dd.c:998
- device_initial_probe+0x24/0x34 drivers/base/dd.c:1047
- bus_probe_device+0x178/0x240 drivers/base/bus.c:532
- device_add+0xabc/0xf58 drivers/base/core.c:3589
- usb_new_device+0x904/0x142c drivers/usb/core/hub.c:2575
- hub_port_connect drivers/usb/core/hub.c:5407 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
- port_event drivers/usb/core/hub.c:5711 [inline]
- hub_event+0x25e4/0x474c drivers/usb/core/hub.c:5793
- process_one_work+0x788/0x12d4 kernel/workqueue.c:2390
- worker_thread+0x8e0/0xfe8 kernel/workqueue.c:2537
- kthread+0x250/0x2d8 kernel/kthread.c:376
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:870
-irq event stamp: 156472
-hardirqs last  enabled at (156471): [<ffff8000083416f0>] __up_console_sem+0x60/0xb4 kernel/printk/printk.c:345
-hardirqs last disabled at (156472): [<ffff800012369e90>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
-softirqs last  enabled at (154114): [<ffff800008020c1c>] softirq_handle_end kernel/softirq.c:414 [inline]
-softirqs last  enabled at (154114): [<ffff800008020c1c>] __do_softirq+0xac0/0xd54 kernel/softirq.c:600
-softirqs last disabled at (154103): [<ffff80000802a658>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:80
----[ end trace 0000000000000000 ]---
- (null): radio-mr800 - initialization failed
-radio-mr800: probe of 1-1:6.199 failed with error -71
-usbhid 1-1:6.199: couldn't find an input interrupt endpoint
+New smatch warnings:
+drivers/usb/dwc3/gadget.c:2409 dwc3_gadget_wakeup() warn: pm_runtime_get_sync() also returns 1 on success
+drivers/usb/dwc3/gadget.c:2437 dwc3_gadget_func_wakeup() warn: pm_runtime_get_sync() also returns 1 on success
 
+Old smatch warnings:
+drivers/usb/dwc3/gadget.c:1648 __dwc3_gadget_kick_transfer() warn: missing error code? 'ret'
+drivers/usb/dwc3/gadget.c:2744 dwc3_gadget_pullup() warn: pm_runtime_get_sync() also returns 1 on success
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +2409 drivers/usb/dwc3/gadget.c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+218ef7b647e336 Felipe Balbi     2016-04-04  2392  static int dwc3_gadget_wakeup(struct usb_gadget *g)
+218ef7b647e336 Felipe Balbi     2016-04-04  2393  {
+218ef7b647e336 Felipe Balbi     2016-04-04  2394  	struct dwc3		*dwc = gadget_to_dwc(g);
+218ef7b647e336 Felipe Balbi     2016-04-04  2395  	unsigned long		flags;
+218ef7b647e336 Felipe Balbi     2016-04-04  2396  	int			ret;
+218ef7b647e336 Felipe Balbi     2016-04-04  2397  
+047161686b813a Elson Roy Serrao 2023-03-24  2398  	if (!dwc->wakeup_configured) {
+047161686b813a Elson Roy Serrao 2023-03-24  2399  		dev_err(dwc->dev, "remote wakeup not configured\n");
+047161686b813a Elson Roy Serrao 2023-03-24  2400  		return -EINVAL;
+047161686b813a Elson Roy Serrao 2023-03-24  2401  	}
+047161686b813a Elson Roy Serrao 2023-03-24  2402  
+047161686b813a Elson Roy Serrao 2023-03-24  2403  	if (!dwc->gadget->wakeup_armed) {
+047161686b813a Elson Roy Serrao 2023-03-24  2404  		dev_err(dwc->dev, "not armed for remote wakeup\n");
+047161686b813a Elson Roy Serrao 2023-03-24  2405  		return -EINVAL;
+047161686b813a Elson Roy Serrao 2023-03-24  2406  	}
+047161686b813a Elson Roy Serrao 2023-03-24  2407  
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2408  	ret = pm_runtime_get_sync(dwc->dev);
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11 @2409  	if (ret) {
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+The checker is correct.  These days it's better to use the
+pm_runtime_resume_and_get() function instead of pm_runtime_get_sync().
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2410  		pm_runtime_put(dwc->dev);
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2411  		return ret;
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2412  	}
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2413  
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2414  	spin_lock_irqsave(&dwc->lock, flags);
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2415  	ret = __dwc3_gadget_wakeup(dwc, true);
+72246da40f3719 Felipe Balbi     2011-08-19  2416  	spin_unlock_irqrestore(&dwc->lock, flags);
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2417  	pm_runtime_put_noidle(dwc->dev);
+72246da40f3719 Felipe Balbi     2011-08-19  2418  
+72246da40f3719 Felipe Balbi     2011-08-19  2419  	return ret;
+72246da40f3719 Felipe Balbi     2011-08-19  2420  }
+72246da40f3719 Felipe Balbi     2011-08-19  2421  
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2422  static void dwc3_resume_gadget(struct dwc3 *dwc);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2423  
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2424  static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2425  {
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2426  	struct  dwc3		*dwc = gadget_to_dwc(g);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2427  	unsigned long		flags;
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2428  	int			ret;
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2429  	int			link_state;
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2430  
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2431  	if (!dwc->wakeup_configured) {
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2432  		dev_err(dwc->dev, "remote wakeup not configured\n");
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2433  		return -EINVAL;
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2434  	}
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2435  
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2436  	ret = pm_runtime_get_sync(dwc->dev);
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11 @2437  	if (ret) {
 
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+Same.
 
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2438  		pm_runtime_put(dwc->dev);
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2439  		return ret;
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2440  	}
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2441  
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2442  	spin_lock_irqsave(&dwc->lock, flags);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2443  	/*
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2444  	 * If the link is in U3, signal for remote wakeup and wait for the
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2445  	 * link to transition to U0 before sending device notification.
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2446  	 */
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2447  	link_state = dwc3_gadget_get_link_state(dwc);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2448  	if (link_state == DWC3_LINK_STATE_U3) {
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2449  		ret = __dwc3_gadget_wakeup(dwc, false);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2450  		if (ret) {
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2451  			spin_unlock_irqrestore(&dwc->lock, flags);
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2452  			pm_runtime_put_noidle(dwc->dev);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2453  			return -EINVAL;
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2454  		}
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2455  		dwc3_resume_gadget(dwc);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2456  		dwc->link_state = DWC3_LINK_STATE_U0;
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2457  	}
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2458  
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2459  	ret = dwc3_send_gadget_generic_command(dwc, DWC3_DGCMD_DEV_NOTIFICATION,
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2460  					       DWC3_DGCMDPAR_DN_FUNC_WAKE |
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2461  					       DWC3_DGCMDPAR_INTF_SEL(intf_id));
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2462  	if (ret)
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2463  		dev_err(dwc->dev, "function remote wakeup failed, ret:%d\n", ret);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2464  
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2465  	spin_unlock_irqrestore(&dwc->lock, flags);
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2466  	pm_runtime_put_noidle(dwc->dev);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2467  
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2468  	return ret;
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2469  }
 
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
+
