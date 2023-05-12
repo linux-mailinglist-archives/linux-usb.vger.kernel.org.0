@@ -2,248 +2,246 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0A8700F06
-	for <lists+linux-usb@lfdr.de>; Fri, 12 May 2023 20:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17DED700F2C
+	for <lists+linux-usb@lfdr.de>; Fri, 12 May 2023 21:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239089AbjELSqw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 May 2023 14:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59080 "EHLO
+        id S238909AbjELTIJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 May 2023 15:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbjELSqv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 May 2023 14:46:51 -0400
-Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14D64EFE;
-        Fri, 12 May 2023 11:46:49 -0700 (PDT)
-Received: from pps.filterd (m0098571.ppops.net [127.0.0.1])
-        by mx0a-00230701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CEvaPw006089;
-        Fri, 12 May 2023 11:46:47 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=pfptdkimsnps;
- bh=7RwGb4vDcVkRnBz/Li9TE5oJew3GBSG9x3hHQA8Nl5A=;
- b=YYaBnw479SQtuBAPd3xTg0ioCawZ9cBSLXQkS+w5x0Yb25tq0rVH5vKMba3nBocoUE8I
- h5l+DYe9EGe/j9Pr9EeYxRE3UaUoatEDNFpkrWnaKFMtHh4TFUp1eCR/Nvg0i7TsldrB
- gqaHosUsoAss056JkMerUnU8predA/SMY4oM6e92VcIuPQwzUQepm54TqDiOxtUbdxV6
- It2q0NiR4itEGEY49/HqBgiI05WgUf+S4KWN1qiPhzfYfly357p4knxM3LEtlIm8sgmc
- GjQrqovjRNxTYjfeRrgQy5hXhMJ8/dIToXPQGIY0sTzW6BOTqaDiAv+O+ipspv0rS2la lQ== 
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
-        by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3qf772p3td-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 11:46:46 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1683917206; bh=7RwGb4vDcVkRnBz/Li9TE5oJew3GBSG9x3hHQA8Nl5A=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=M8GGla14Fxq81NujeWyFcQr6ExC0IHwL+nTN4GzGWA4vcwBy6TE6xyNB+B2DCZQai
-         j4OcGVBD8WtBL7wm5MgCxufseA6lSCe9avMPNQpwy4M1Z3hBRiAxQV04h7QtUClat+
-         BMV/oSv/OfYp5epIULtV/mk5WBLQuRuh8AP2RFc9BbYAKnNTotdg8JbQ9p6Jm3l3AP
-         bJ3G3ixxrqqrNCLHAGflJug+mTZRRdqZJozaXhUGT6xfBPs8nWWxrBbv092g/Ns3+c
-         wSplfxRSNrYGTQyKucBIPkf7hrXJvdRQ9oCHzZuLCYdaZ5EqNaTQJugWfeE623ta36
-         wgJvmJeRTHmRw==
-Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits)
-         client-signature RSA-PSS (2048 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 38DD840636;
-        Fri, 12 May 2023 18:46:46 +0000 (UTC)
-Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-        by mailhost.synopsys.com (Postfix) with ESMTPS id B911AA0073;
-        Fri, 12 May 2023 18:46:45 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=NyemgLcQ;
-        dkim-atps=neutral
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id B1BAF40639;
-        Fri, 12 May 2023 18:46:44 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b/o2fe+yeO0kT0F6VsRNSV9zYJ0kQfaVrxqlGTbHWheUQnKrnLA+gM5WEMfJke3y+4ibd7iYc1XP347zv8dJtE8oQX5zIoN/EAtBzMQpG7ajnE/y/wSC3NylbtjnGCGGdOiCKh/nIV5AkwRJov1Z6fJMiG5N37uHjSFaXtEFpAOjp58uVH8yFLYKNsYsJ3tAamViO7CjMP7mR22RV4fLuuTYQP7ygGekQv2FmnjqI9r9OZbJEf80Z4j9s1aU38yesimU2+bDmnc1Wz7JlscGKSIArWfgPWF2If2/4Nv6+nNFMYHR0YSzs8CzfKh/T9L4YM95j/8gAI2XgAChB5suPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7RwGb4vDcVkRnBz/Li9TE5oJew3GBSG9x3hHQA8Nl5A=;
- b=OOXOXXmjwaHtQS5IdeqaGDN3q05M/LC3fiG4RB3BUdWjgVRf37Ox5+XNMuPkFt0sfvVLkFcbrYTZu0jhRq++FGcsBUbinUF6MMiuBbf8EwOdCqaSOPSixMT1qjcP5j1IN2/3lauc/NckQe/kOpbObdpZMgCRbeYkKt+Wmwj1B8KHv9Bc2DqM0EozFd0HBtZKnU2DJ7dVMHN19+DYOk5uG4yOrUSZNqyDvOxc2rCI9UtQfavQyd8SgFqIzhgjVyf1otQR3eu282Qd0RQ4uqyc2/ehE9YXBYOIyOTW4+43Lfda//hAnqZwlay82cuEx/wdZzqBqQtE2OqZmIMb45HqfQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7RwGb4vDcVkRnBz/Li9TE5oJew3GBSG9x3hHQA8Nl5A=;
- b=NyemgLcQWRSg4xAOQSSugVt/e7TDmsVU/7XfIX+MTFivSYMQArrucyE5RejF5QfOGoy+ebufkWOhY5k0zWX28NfQzZVjQZRhllMtzMMf1yo1OpeOZ08Z8EBB/V6W8kEoizZwI1LCN1sDDiWEN7iJdVidw1NQ1rm/SSTZeORy9yo=
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
- by PH7PR12MB6858.namprd12.prod.outlook.com (2603:10b6:510:1b4::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Fri, 12 May
- 2023 18:46:41 +0000
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::3400:81ff:f191:b312]) by BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::3400:81ff:f191:b312%5]) with mapi id 15.20.6387.019; Fri, 12 May 2023
- 18:46:41 +0000
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-Subject: Re: [RFC] usb: dwc3: core: set force_gen1 bit in USB31 devices if max
- speed is SS
-Thread-Topic: [RFC] usb: dwc3: core: set force_gen1 bit in USB31 devices if
- max speed is SS
-Thread-Index: AQHZhPNlNPBGFOTT10qNz/75xZwuva9W+joA
-Date:   Fri, 12 May 2023 18:46:41 +0000
-Message-ID: <20230512184630.2kt4xgneiovb3vac@synopsys.com>
-References: <20230512170107.18821-1-quic_kriskura@quicinc.com>
-In-Reply-To: <20230512170107.18821-1-quic_kriskura@quicinc.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR12MB4791:EE_|PH7PR12MB6858:EE_
-x-ms-office365-filtering-correlation-id: e0924771-f9b4-404e-c2bf-08db531939bd
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mIH8BZGCM6vewg0qLF6MknjpM2moFa8xyTLQIWhn4fGdICiFaVtKKgLkMt6r0FOPxj+XnA+boFx6hk/yNiywtvJNVwzurn27rzR0bjZrDrtwRH4BZQkEmZDJ9AU0AKHNXrOxdYjx/fRFTEKsVNC0Y2aZ8N8rPawX7tmY43jwxbM46tOxD07GSQu55Jv6zGJElB/CPblVz/s71K+25be3nyOqKwRDQOQVtrD30riTqSJ+cf+z9RxB2CxdHBtS2PZ7dcE54nhA23n/8O9OHf6et4UdvXWmRk1VBSd/P1L7f3m7O8TmL8nVnsL0qFpTOewvjrSclVdcz/L8mkutyndwAbip5HqjxV9wBjkUno1ntp79z5sNzfR2gRChQ2Y0R/1J+E0O/1SpfbYolq0NbcD84wup33g21YOY/H/wQAG23eFKlieN7yqMtxxXneYW/R9A7ewzKFYznAf86hLHJHkv4bLX6xA/jCXHr7Io4gRzdZWfanhb9in4wY2g5v0CgISEFgbwZTazZy7Go3kMId9Q5f/Zx0KBEniSyASnDD1LiZd1H/kG+jHQM7jRbxwXehx7MWmnVNN8PqqEyTYd9kCiGi9eADUTatf9oYM8NlaVCXc=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(136003)(346002)(366004)(39860400002)(376002)(451199021)(2906002)(38070700005)(86362001)(83380400001)(186003)(4326008)(2616005)(6916009)(36756003)(66476007)(66556008)(64756008)(66946007)(76116006)(66446008)(6506007)(6512007)(1076003)(26005)(41300700001)(5660300002)(38100700002)(966005)(6486002)(54906003)(122000001)(71200400001)(316002)(8936002)(8676002)(478600001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MDIvRzRHdFFWcm1kUWtuSFhZWEg4ajQva0xoTFpVRzFBNGw1bE42ZUd5SEVw?=
- =?utf-8?B?OWdLOEF3T0VORENtNC9Sc3hna0NVNEsxb1V5RjVhWFRmbnM3cHBwcndpdmp3?=
- =?utf-8?B?eitwem05b0svTE1rVlNWUGxUYmJ3WU9vTkF5YnBkUFBadHVTVXhpUG83NDQ5?=
- =?utf-8?B?bHlxVS8zOVQ1YWliRHF5VCt1WTBWYy94WWoxK09nZGdBbTRMZS9paENtWTBF?=
- =?utf-8?B?Tm1NNGFvWkRWK0JPblAyTTZVaWZoWGxiOGozV0M3Wlk2RDU3Q1dpUVZTR0tX?=
- =?utf-8?B?ZklKczB1bXI2UVAwTXpGa2EvR1pLTDFTdWRVMzBrU2lieXp2Y2c3aDVuTTl5?=
- =?utf-8?B?UTZSc2Y5MnJYNnIzMlh4Ujh1NXRuVWwyL2NETEE0RGFuTmdqbEJ5MTNKeVJy?=
- =?utf-8?B?d3V0SzNsMG9hZDBiU0VyNG9iSHVpYWhkOFB5Nk0xd003MVF4cFcxbk9wOElw?=
- =?utf-8?B?d1ZuRk9RL1pTc1NhRjgrY0RHZDNUQkV0OFJKaFNKVmoxb0JVZU9aSng5R2sv?=
- =?utf-8?B?TmloYnkrSEdSNnpvRllnY2VucThwOVVQQUo1ZXBZamlWQkNCR2djN0FYR096?=
- =?utf-8?B?YVlTQ1ZtVGJkWnRpSXdnY3duOHBuN1ovdjQ0cjNoQmxsZ2RlUVFibzlMRmNi?=
- =?utf-8?B?ZE92ZEJxWGk3MmZ5KzJBSG9LYU5NK2R5ZEVxMVFKWFM4YVpLSDlkSlRuellU?=
- =?utf-8?B?czk3VnZsMjFuWEkybDF0anJITXVmVnphRFlKcllpRUwrblZrZkQ4S21tSTM4?=
- =?utf-8?B?MnZPdVBJb25MWTZwTk9GWWtNVTJlSVY1WFdVZzVrczkybDNzNi9KWFhqZmQ5?=
- =?utf-8?B?cUpKQWR3cTd3Y1BycXpVZmdJek1iTHlIcHRFQTdnTlkyblFVNWZvalc1YUk4?=
- =?utf-8?B?eVJpVjRWbXJYMTRyQ3h4aExqai9nUy9OSDhPbFVpUXRpZHJLVGxZYnZpK1Aw?=
- =?utf-8?B?S0tjeUpjcXhrTEtOcWF0WTBMS1VENkVHNHZ5cm96cHVub0xvZjVhc2wxS2Iz?=
- =?utf-8?B?SUxlYUxGLzhQK1VoL0h4L2EvVllvYUoyTDFUR053a3hiVmxNeVVSQzVUeDlZ?=
- =?utf-8?B?WndoUE8xdy9acjByWGFycDRmSEVLNnMxcVZTZUNBQ3hKejNuYVFvcGlhZ2lv?=
- =?utf-8?B?OTZpRkVjT0JBMFVMUjZ1OXRYVldlV3BLU2t4SUhUcDk3djlpMFNIY2V1R2hh?=
- =?utf-8?B?cFliOUtZbGpPNWsrUlgwdEtZNWZncXh2ZWxRYzVzWGh5dExUdWlMZHZCNG5n?=
- =?utf-8?B?SWlSMzBWUTF4TDNOaFJ5T0czN2pEU0JMSFJZa0FZOHJFMWZSWGZXUnZhWXgw?=
- =?utf-8?B?SVhPejM2bDNNV3lldCs5T2dVajd4dmtRdGJpTTE0cDh6UllBby8zcjhBTnRZ?=
- =?utf-8?B?RjhSbkZtZmM5ZkdXeUZTTkNrTFkxNUxEQThGd2RXNC8vS08xLzAwOG5rQkFq?=
- =?utf-8?B?RTh0N3Bmc25INHlZeXdGcGR3U1lUWkU3WXZCdU9NcnZpWnV0ZG4xRUVURVpM?=
- =?utf-8?B?Wis3WkhvTXRFWEhsbDhXaGhDSnU4cm9xQWkxdjQzb1I5cVhZNW0yYTBwbmk0?=
- =?utf-8?B?SXh3U1U5TW1KcU9FZmhPY1pCOE12TVN0MHhqdEpUQTFsb2RPdDNvejhSenBa?=
- =?utf-8?B?NTI0MGlVR09oTml4Tm5BckhXd2kvcXQxR0wxSzRDbU43Z0ptTlNjQm92d0Uz?=
- =?utf-8?B?MFFvQ3hvSERZWS9GODRrNmhPU0kva1FnZ3JVOTlmMXFMaGNleVdacGtNaDRC?=
- =?utf-8?B?RGRGTWM4cG1oRUZaL3FXbG1qTVJERXQ4SU1RVElySGE2Vm5LRS9uaUxMSUFT?=
- =?utf-8?B?N1R6L05ycm9WalRHOERXOHRDNHh1SlMwOEtaN1NPZEhCdnlyU1pLZFRONGls?=
- =?utf-8?B?K3RMWTRRQ3g0VVNaY056WWtveU1ka2tQSE5WRFkvMGNpOThPMDBNZXlJNHN1?=
- =?utf-8?B?b1FPM0hWYnp1UGJFRHVQY0FCanVNY0lzSzJsc1N2b2tVd2FsSDc4WTRFaDlw?=
- =?utf-8?B?V3dkRVZaQUY1ejhTRHhCcW1mR0hOVWZKWWRmOTYzMnpmSXVyMy8yWTBqSyt4?=
- =?utf-8?B?U3FDREdXYSt0MENub3l6dG1tU25wU2RTVlVFSzc2S2l5dnJkVThkUnVVQUZO?=
- =?utf-8?Q?6D7IU0oVAGDrwyZ7pnbi5Sgai?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <92C2AB0BA3C38D4FB6CFA871BAA26C5E@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S229901AbjELTII (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 May 2023 15:08:08 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9136B59ED;
+        Fri, 12 May 2023 12:08:06 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 4B3E26016E;
+        Fri, 12 May 2023 21:08:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1683918485; bh=olPRuHD47Mn/7ru/A/AU2wqJbQyl0hcJAZoJt24S8b0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=n0amUuwxKfyl6u3w9Up9M9WEW8L1ktwEBk4ZeY9RHI0yfOMyO09yJAORw9idWWHe+
+         Mj1/nwQuBysv8K42RqLjpGAYA45j+wnl/swlarBnb6Xn1vJa2FieUtklZv3iVOUYB8
+         MOSuyD28Cu4G2js7K3z7Leac91uew8n2EahpaJQ9Bisc0vjRwa3pu5f2dFYT0s9IwU
+         TYQ3NTo5Ee5RwqSchxC8GtxeW4ms8UGwosDqa/z0DpDK7UkCsVxoBJASNleVsJvLGn
+         tMZCJqyor7hajgsyPBB005xqTLCgYiNsxFFD9rtoCSxzHoq9ro4W6O01MA25nBv4ni
+         oy/+ZGyxJJTRg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id wjCYGLiUAO0z; Fri, 12 May 2023 21:08:02 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [77.237.113.62])
+        by domac.alu.hr (Postfix) with ESMTPSA id 57AF66015F;
+        Fri, 12 May 2023 21:08:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1683918482; bh=olPRuHD47Mn/7ru/A/AU2wqJbQyl0hcJAZoJt24S8b0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SlNPyqe9ANF2mDBCUgIKRo9twyZ4/8XFVaX+KNR7gKreruAfFNpPK2+57LLLfj2Ly
+         LIVwhjXd7elXMIgns87Yxl9plUphLoUgg9xrgqMCQSJ4/5dmeTffBLaC7sYgC9pVEe
+         QRZm2oPPzux1FnqXuiUBke7Zdft7PmMutlE9hehTJW28dO1N1GNp9jErm0wADmDCHe
+         rRfmOuvGKBnr0Giz61tpAHROwNApjSx/qExm87KwLJ7vrHSWcV0yJ14uLIbXkDd2/m
+         J34+EEXp+iYaQAOBH8hBJYPeakVebJDKeIhKGay4wL3GCU0uQ0dr4hMs9qbsd9lIR3
+         gebW6z6h4gdrA==
+Message-ID: <32dc44cd-b559-78eb-56ef-f651a598b6fc@alu.unizg.hr>
+Date:   Fri, 12 May 2023 21:08:02 +0200
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: /IL+Q98fDT7x/3ZWIvkgGcLExTf4S4K4WUuACXHFXxppIhvMClnolAGyOtje1iucb4xSL+yeFAkkaESGRYCCW9mlF6bYgCM5AVZx6Zweky8y++z2+yt31toTf+GpSJ6OP3m1dHDqOxQL/HlsvvDCJQgIyEUL7Eyl4RFY6DKTUnGbaf0Pcg/1XnSUtlKcWmrBAWa5OdWSAoY5z58+bnQ+z7+mXCvSX62hZ730zyI9XmOEWx9MGNr402SwrlHX46jUb3VCJ5A+5ZcobN+bC77PtnuweVdPIpzYMu6cZpF/HnJotMy8PIhFk5eAo3oDcb/aQpU4fOenkSffpWcNfb9Zt68kHn+OgrMrAOO6dJP8OLl/64AFxq+8Z0WUsUZIegiTgmzz0SrHQMCaQMl/IAfUSVHZgPRYGYcuP06WWcmhvAmXvh8FFsUzEhpv5jPz6w7Tevz5CdJotRLctwI1mVe2sy/E+8obkMGQBs++IGxiy9MfTwvLh8khA6GwbPb10GtPY6V5ylIM9JvXPyZd6wmtV4XEF5PoEwcmv2+QTqszVwE0F57sAvgE0MjCVAaUDYPpb7oNa6kwvuNhVoAf0KNq9E80IZRxsV0a8JtwDAX+E5bAU7VVsa5Z2CaNLwOu08YQ54h3P1Z92ouX1CmMgrA8OhWXPFvCuhjNOhhzmlyFcF/S5R9yoVTv6r/rPYMJ2y/zeUUU7J6yNjAkfhHvSzuIi4f5Z5WbpvVQ8x5BwP3DG57vhqqNo25XEHfO0PtWuVy+q98YU6jEXqmPmG/MShVwAsutXwijFF1///K72KjtYT8lgI3RkFE0NIKchC+SrDoz9ctUL/gSoyPZyIlIG9WiL0+sZxo+7+/Kn/k99sZferOrite4ycFCa2bNaaiYsVIoj50B42HbR2opmiNgqf9btQ==
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e0924771-f9b4-404e-c2bf-08db531939bd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 May 2023 18:46:41.0597
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: C4GHqFPiJDLXZUQ3JPg2MhZgDftcmM1XkyX88mY00dloWYC4Ru9Yw7Gg1NfdX31pA4/QtB1tPu/KVbPUJcfzBw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6858
-X-Proofpoint-GUID: I4Cl8CLMJh_kuExNzEpxa4B4aKOHD-Gz
-X-Proofpoint-ORIG-GUID: I4Cl8CLMJh_kuExNzEpxa4B4aKOHD-Gz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-12_11,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
- malwarescore=0 spamscore=0 lowpriorityscore=0 mlxlogscore=999 phishscore=0
- adultscore=0 clxscore=1015 suspectscore=0 bulkscore=0 priorityscore=1501
- mlxscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305120157
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [BUG] Kmemleak, possibly hiddev_connect(), in 6.3.0+ torvalds
+ tree commit gfc4354c6e5c2
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>
+References: <f64b17fa-d509-ad30-6e8d-e4c979818047@alu.unizg.hr>
+ <2023050824-juiciness-catching-9290@gregkh>
+ <2023050854-collage-dreamt-660c@gregkh>
+ <c73471aa-522a-83a4-5614-506581604301@alu.unizg.hr>
+ <2023050958-precut-vividly-94bf@gregkh>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <2023050958-precut-vividly-94bf@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gRnJpLCBNYXkgMTIsIDIwMjMsIEtyaXNobmEgS3VyYXBhdGkgd3JvdGU6DQo+IEN1cnJlbnRs
-eSBmb3IgZHdjM191c2IzMSBkZXZpY2VzLCBpZiBtYXhpbXVtX3NwZWVkIGlzIGxpbWl0ZWQgdG8N
-Cg0KV2UgdXN1YWxseSBjYWxsIHRoZSBjb250cm9sbGVyIGR3Y191c2IzLCBkd2NfdXNiMzEsIG9y
-IGR3Y191c2IzMi4NCg0KPiBzdXBlci1zcGVlZCBpbiBEVCwgdGhlbiBkZXZpY2UgbW9kZSBpcyBs
-aW1pdGVkIHRvIFNTLCBidXQgaG9zdCBtb2RlDQo+IHN0aWxsIHdvcmtzIGluIFNTUC4NCj4gDQo+
-IFRoZSBkb2N1bWVudGF0aW9uIGZvciBtYXgtc3BlZWQgcHJvcGVydHkgaXMgYXMgZm9sbG93czoN
-Cj4gDQo+ICJUZWxscyBVU0IgY29udHJvbGxlcnMgd2Ugd2FudCB0byB3b3JrIHVwIHRvIGEgY2Vy
-dGFpbiBzcGVlZC4NCj4gSW5jYXNlICB0aGlzIGlzbid0IHBhc3NlZCB2aWEgRFQsIFVTQiBjb250
-cm9sbGVycyBzaG91bGQgZGVmYXVsdCB0bw0KPiB0aGVpciBtYXhpbXVtIEhXIGNhcGFiaWxpdHku
-Ig0KPiANCj4gSXQgZG9lc24ndCBzcGVjaWZ5IHRoYXQgdGhlIHByb3BlcnR5IGlzIG9ubHkgZm9y
-IGRldmljZSBtb2RlLg0KDQpTaW5jZSB0aGlzIGlzbid0IHJlYWxseSBhIGZpeCwgY2FuIHdlIHJl
-cGhyYXNlIHRoZSBsaW5lcyBiZWxvdw0KDQo+IEZpeCB0aGlzIGJ5IGZvcmNpbmcgY29udHJvbGxl
-ciBzdXBwb3J0ZWQgbWF4IHNwZWVkIHRvIEdlbjEgYnkNCj4gc2V0dGluZyBMTFVDVEwuRm9yY2Vf
-R2VuMSBiaXQgaWYgY29udHJvbGxlciBpcyBEV0MzX1VTQjMxIGFuZA0KPiBtYXggc3BlZWQgaXMg
-bWVudGlvbmVkIGFzIFNTIGluIERULg0KDQpBcyBmb2xsb3c6DQpUaGVyZSBhcmUgY2FzZXMgd2hl
-cmUgd2UgbmVlZCB0byBsaW1pdCB0aGUgaG9zdCdzIG1heGltdW0gc3BlZWQgdG8NClN1cGVyU3Bl
-ZWQgb25seS4gVXNlIHRoaXMgcHJvcGVydHkgZm9yIGhvc3QgbW9kZSB0byBjb250cmFpbiBob3N0
-J3MNCnNwZWVkIHRvIFN1cGVyU3BlZWQuDQoNCg0KPiANCj4gU2lnbmVkLW9mZi1ieTogS3Jpc2hu
-YSBLdXJhcGF0aSA8cXVpY19rcmlza3VyYUBxdWljaW5jLmNvbT4NCj4gLS0tDQo+IERpc2N1c3Np
-b24gcmVnYXJkaW5nIHRoZSBzYW1lIGF0Og0KPiBodHRwczovL3VybGRlZmVuc2UuY29tL3YzL19f
-aHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsL2U0NjVjNjljLTNhOWQtY2JkYi1kNDRlLTk2Yjk5
-Y2ZhMWE5MkBxdWljaW5jLmNvbS9fXzshIUE0RjJSOUdfcGchWWlRcGpaSUpBdy15dTZnRXdiS3Fi
-NW51c2puS1E5ZFFKcnVseDM5bFFQLTdKTWhjTkEyeGQ4dUxKb1pfSEU4U3VHNFJtMnV2aEpUU2RR
-MmswZkpWQXhVMlJXWUhIZyQgDQo+IA0KPiAgZHJpdmVycy91c2IvZHdjMy9jb3JlLmMgfCAxMyAr
-KysrKysrKysrKysrDQo+ICBkcml2ZXJzL3VzYi9kd2MzL2NvcmUuaCB8ICA0ICsrKysNCj4gIDIg
-ZmlsZXMgY2hhbmdlZCwgMTcgaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvdXNiL2R3YzMvY29yZS5jIGIvZHJpdmVycy91c2IvZHdjMy9jb3JlLmMNCj4gaW5kZXggMGJl
-YWFiOTMyZTdkLi45ODlkYzc2ZWNiY2EgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdXNiL2R3YzMv
-Y29yZS5jDQo+ICsrKyBiL2RyaXZlcnMvdXNiL2R3YzMvY29yZS5jDQo+IEBAIC0xMTYsNiArMTE2
-LDE4IEBAIHZvaWQgZHdjM19zZXRfcHJ0Y2FwKHN0cnVjdCBkd2MzICpkd2MsIHUzMiBtb2RlKQ0K
-PiAgCWR3Yy0+Y3VycmVudF9kcl9yb2xlID0gbW9kZTsNCj4gIH0NCj4gIA0KPiArc3RhdGljIHZv
-aWQgZHdjM19jb25maWd1cmVfaG9zdF9zcGVlZChzdHJ1Y3QgZHdjMyAqZHdjKQ0KPiArew0KPiAr
-CXUzMiByZWc7DQo+ICsNCj4gKwlpZiAoRFdDM19JUF9JUyhEV0MzMSkgJiYNCj4gKwkgICAoZHdj
-LT5tYXhpbXVtX3NwZWVkID09IFVTQl9TUEVFRF9TVVBFUikpIHsNCj4gKwkJcmVnID0gZHdjM19y
-ZWFkbChkd2MtPnJlZ3MsIERXQzNfTExVQ1RMKTsNCj4gKwkJcmVnIHw9IERXQzNfTExVQ1RMX0ZP
-UkNFX0dFTjE7DQo+ICsJCWR3YzNfd3JpdGVsKGR3Yy0+cmVncywgRFdDM19MTFVDVEwsIHJlZyk7
-DQo+ICsJfQ0KPiArfQ0KPiArDQo+ICBzdGF0aWMgdm9pZCBfX2R3YzNfc2V0X21vZGUoc3RydWN0
-IHdvcmtfc3RydWN0ICp3b3JrKQ0KPiAgew0KPiAgCXN0cnVjdCBkd2MzICpkd2MgPSB3b3JrX3Rv
-X2R3Yyh3b3JrKTsNCj4gQEAgLTE5NCw2ICsyMDYsNyBAQCBzdGF0aWMgdm9pZCBfX2R3YzNfc2V0
-X21vZGUoc3RydWN0IHdvcmtfc3RydWN0ICp3b3JrKQ0KPiAgDQo+ICAJc3dpdGNoIChkZXNpcmVk
-X2RyX3JvbGUpIHsNCj4gIAljYXNlIERXQzNfR0NUTF9QUlRDQVBfSE9TVDoNCj4gKwkJZHdjM19j
-b25maWd1cmVfaG9zdF9zcGVlZChkd2MpOw0KDQpUaGUgTExVQ1RMIGRvZXNuJ3QgY2hhbmdlIHVu
-dGlsIHRoZXJlJ3MgYSBWY2MgcmVzZXQuIExldCdzIGp1c3QNCmluaXRpYWxpemUgaXQgb25jZSBk
-dXJpbmcgZHdjM19jb3JlX2luaXQoKSBpZiB0aGUgR0hXUEFSQU0gaW5kaWNhdGVzIHRoZQ0KY29u
-dHJvbGxlciBpcyBEUkQgb3IgaG9zdCBvbmx5Lg0KDQo+ICAJCXJldCA9IGR3YzNfaG9zdF9pbml0
-KGR3Yyk7DQo+ICAJCWlmIChyZXQpIHsNCj4gIAkJCWRldl9lcnIoZHdjLT5kZXYsICJmYWlsZWQg
-dG8gaW5pdGlhbGl6ZSBob3N0XG4iKTsNCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2R3YzMv
-Y29yZS5oIGIvZHJpdmVycy91c2IvZHdjMy9jb3JlLmgNCj4gaW5kZXggZDU2NDU3YzAyOTk2Li4y
-OWI3ODBhNThkYzYgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdXNiL2R3YzMvY29yZS5oDQo+ICsr
-KyBiL2RyaXZlcnMvdXNiL2R3YzMvY29yZS5oDQo+IEBAIC0xMjEsNiArMTIxLDEwIEBADQo+ICAj
-ZGVmaW5lIERXQzNfR1BSVEJJTUFQX0ZTMAkweGMxODgNCj4gICNkZWZpbmUgRFdDM19HUFJUQklN
-QVBfRlMxCTB4YzE4Yw0KPiAgI2RlZmluZSBEV0MzX0dVQ1RMMgkJMHhjMTljDQo+ICsjZGVmaW5l
-IERXQzNfTExVQ1RMCQkweGQwMjQNCg0KUGxlYXNlIHBsYWNlIHRoZSByZWdpc3RlciBhY2NvcmRp
-bmcgdG8gaXRzIG9mZnNldCBvcmRlci4NCg0KPiArDQo+ICsvKiBGb3JjZSBHZW4xIHNwZWVkIG9u
-IEdlbjIgbGluayAqLw0KPiArI2RlZmluZSBEV0MzX0xMVUNUTF9GT1JDRV9HRU4xCUJJVCgxMCkN
-Cj4gIA0KPiAgI2RlZmluZSBEV0MzX1ZFUl9OVU1CRVIJCTB4YzFhMA0KPiAgI2RlZmluZSBEV0Mz
-X1ZFUl9UWVBFCQkweGMxYTQNCj4gLS0gDQo+IDIuNDAuMA0KPiANCg0KVGhhbmtzLA0KVGhpbmg=
+Hi, Greg,
+
+On 09. 05. 2023. 04:59, Greg Kroah-Hartman wrote:
+> On Tue, May 09, 2023 at 01:51:35AM +0200, Mirsad Goran Todorovac wrote:
+>>
+>>
+>> On 08. 05. 2023. 16:01, Greg Kroah-Hartman wrote:
+>>> On Mon, May 08, 2023 at 08:51:55AM +0200, Greg Kroah-Hartman wrote:
+>>>> On Mon, May 08, 2023 at 08:30:07AM +0200, Mirsad Goran Todorovac wrote:
+>>>>> Hi,
+>>>>>
+>>>>> There seems to be a kernel memory leak in the USB keyboard driver.
+>>>>>
+>>>>> The leaked memory allocs are 96 and 512 bytes.
+>>>>>
+>>>>> The platform is Ubuntu 22.04 LTS on a assembled AMD Ryzen 9 with X670E PG
+>>>>> Lightning mobo,
+>>>>> and Genius SlimStar i220 GK-080012 keyboard.
+>>>>>
+>>>>> (Logitech M100 HID mouse is not affected by the bug.)
+>>>>>
+>>>>> BIOS is:
+>>>>>
+>>>>>        *-firmware
+>>>>>             description: BIOS
+>>>>>             vendor: American Megatrends International, LLC.
+>>>>>             physical id: 0
+>>>>>             version: 1.21
+>>>>>             date: 04/26/2023
+>>>>>             size: 64KiB
+>>>>>
+>>>>> The kernel is 6.3.0-torvalds-<id>-13466-gfc4354c6e5c2.
+>>>>>
+>>>>> The keyboard is recognised as Chicony:
+>>>>>
+>>>>>                    *-usb
+>>>>>                         description: Keyboard
+>>>>>                         product: CHICONY USB Keyboard
+>>>>>                         vendor: CHICONY
+>>>>>                         physical id: 2
+>>>>>                         bus info: usb@5:2
+>>>>>                         logical name: input35
+>>>>>                         logical name: /dev/input/event4
+>>>>>                         logical name: input35::capslock
+>>>>>                         logical name: input35::numlock
+>>>>>                         logical name: input35::scrolllock
+>>>>>                         logical name: input36
+>>>>>                         logical name: /dev/input/event5
+>>>>>                         logical name: input37
+>>>>>                         logical name: /dev/input/event6
+>>>>>                         logical name: input38
+>>>>>                         logical name: /dev/input/event8
+>>>>>                         version: 2.30
+>>>>>                         capabilities: usb-2.00 usb
+>>>>>                         configuration: driver=usbhid maxpower=100mA
+>>>>> speed=1Mbit/s
+>>>>>
+>>>>> The bug is easily reproduced by unplugging the USB keyboard, waiting about a
+>>>>> couple of seconds,
+>>>>> and then reconnect and scan for memory leaks twice.
+>>>>>
+>>>>> The kmemleak log is as follows [edited privacy info]:
+>>>>>
+>>>>> root@hostname:/home/username# cat /sys/kernel/debug/kmemleak
+>>>>> unreferenced object 0xffff8dd020037c00 (size 96):
+>>>>>     comm "systemd-udevd", pid 435, jiffies 4294892550 (age 8909.356s)
+>>>>>     hex dump (first 32 bytes):
+>>>>>       5d 8e 4e b9 ff ff ff ff 00 00 00 00 00 00 00 00 ].N.............
+>>>>>       00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+>>>>>     backtrace:
+>>>>>       [<ffffffffb81a74be>] __kmem_cache_alloc_node+0x22e/0x2b0
+>>>>>       [<ffffffffb8127b6e>] kmalloc_trace+0x2e/0xa0
+>>>>>       [<ffffffffb87543d9>] class_create+0x29/0x80
+>>>>>       [<ffffffffb8880d24>] usb_register_dev+0x1d4/0x2e0
+>>>>
+>>>> As the call to class_create() in this path is now gone in 6.4-rc1, can
+>>>> you retry that release to see if this is still there or not?
+>>>
+>>> No, wait, it's still there, I was looking at a development branch of
+>>> mine that isn't sent upstream yet.  And syzbot just reported the same
+>>> thing:
+>>> 	https://lore.kernel.org/r/00000000000058d15f05fb264013@google.com
+>>>
+>>> So something's wrong here, let me dig into it tomorrow when I get a
+>>> chance...
+>>
+>> If this could help, here is the bisect of the bug (I could not discern what
+>> could possibly be wrong):
+>>
+>> user@host:~/linux/kernel/linux_torvalds$ git bisect log
+>> git bisect start
+>> # bad: [ac9a78681b921877518763ba0e89202254349d1b] Linux 6.4-rc1
+>> git bisect bad ac9a78681b921877518763ba0e89202254349d1b
+>> # good: [c9c3395d5e3dcc6daee66c6908354d47bf98cb0c] Linux 6.2
+>> git bisect good c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
+>> # good: [85496c9b3bf8dbe15e2433d3a0197954d323cadc] Merge branch
+>> 'net-remove-some-rcu_bh-cruft'
+>> git bisect good 85496c9b3bf8dbe15e2433d3a0197954d323cadc
+>> # good: [b68ee1c6131c540a62ecd443be89c406401df091] Merge tag 'scsi-misc' of
+>> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
+>> git bisect good b68ee1c6131c540a62ecd443be89c406401df091
+>> # bad: [888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0] Merge tag 'sysctl-6.4-rc1'
+>> of git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux
+>> git bisect bad 888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0
+>> # good: [34b62f186db9614e55d021f8c58d22fc44c57911] Merge tag
+>> 'pci-v6.4-changes' of git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci
+>> git bisect good 34b62f186db9614e55d021f8c58d22fc44c57911
+>> # good: [34da76dca4673ab1819830b4924bb5b436325b26] Merge tag
+>> 'for-linus-2023042601' of
+>> git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid
+>> git bisect good 34da76dca4673ab1819830b4924bb5b436325b26
+>> # good: [97b2ff294381d05e59294a931c4db55276470cb5] Merge tag
+>> 'staging-6.4-rc1' of
+>> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging
+>> git bisect good 97b2ff294381d05e59294a931c4db55276470cb5
+>> # good: [2025b2ca8004c04861903d076c67a73a0ec6dfca] mcb-lpc: Reallocate
+>> memory region to avoid memory overlapping
+>> git bisect good 2025b2ca8004c04861903d076c67a73a0ec6dfca
+>> # bad: [d06f5a3f7140921ada47d49574ae6fa4de5e2a89] cdx: fix build failure due
+>> to sysfs 'bus_type' argument needing to be const
+>> git bisect bad d06f5a3f7140921ada47d49574ae6fa4de5e2a89
+>> # good: [dcfbb67e48a2becfce7990386e985b9c45098ee5] driver core: class: use
+>> lock_class_key already present in struct subsys_private
+>> git bisect good dcfbb67e48a2becfce7990386e985b9c45098ee5
+>> # bad: [6f14c02220c791d5c46b0f965b9340c58f3d503d] driver core: create
+>> class_is_registered()
+>> git bisect bad 6f14c02220c791d5c46b0f965b9340c58f3d503d
+>> # good: [2f9e87f5a2941b259336c7ea6c5a1499ede4554a] driver core: Add a
+>> comment to set_primary_fwnode() on nullifying
+>> git bisect good 2f9e87f5a2941b259336c7ea6c5a1499ede4554a
+>> # bad: [02fe26f25325b547b7a31a65deb0326c04bb5174] firmware_loader: Add debug
+>> message with checksum for FW file
+>> git bisect bad 02fe26f25325b547b7a31a65deb0326c04bb5174
+>> # good: [884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82] driver core: class:
+>> implement class_get/put without the private pointer.
+>> git bisect good 884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82
+>> # bad: [3f84aa5ec052dba960baca4ab8a352d43d47028e] base: soc: populate
+>> machine name in soc_device_register if empty
+>> git bisect bad 3f84aa5ec052dba960baca4ab8a352d43d47028e
+>> # bad: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver core: class.c:
+>> convert to only use class_to_subsys
+>> git bisect bad 7b884b7f24b42fa25e92ed724ad82f137610afaf
+>> # first bad commit: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver core:
+>> class.c: convert to only use class_to_subsys
+>> user@host:~/linux/kernel/linux_torvalds$
+> 
+> This helps a lot, thanks.  I got the reference counting wrong somewhere
+> in here, I thought I tested this better, odd it shows up now...
+> 
+> I'll try to work on it this week.
+> 
+> thanks,
+> 
+> greg k-h
+
+Not at all!
+
+I hope you had better luck because this part of code still looks to me 
+like hieroglyphs.
+
+Linux kernel rose to 10.9M lines, and it would take me thirty years to
+just read it once, 1000 lines a day ... 6.7M lines are "just drivers".
+
+# find . -name '*.c' -o -name '*.h' -print0 | wc --files0-from -
+10913623 35587483 631377958 total
+# find drivers -name '*.c' -o -name '*.h' -print0 | wc --files0-from -
+6705084 19985060 495162001 total
+
+Best regards,
+Mirsad
