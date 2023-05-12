@@ -2,71 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5313A6FFE1C
-	for <lists+linux-usb@lfdr.de>; Fri, 12 May 2023 02:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C53536FFF00
+	for <lists+linux-usb@lfdr.de>; Fri, 12 May 2023 04:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239504AbjELApl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 May 2023 20:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
+        id S239514AbjELCiW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 May 2023 22:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjELApk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 May 2023 20:45:40 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429882101
-        for <linux-usb@vger.kernel.org>; Thu, 11 May 2023 17:45:38 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34C04gNv024862;
-        Fri, 12 May 2023 00:45:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=78qp2M7q/PkV08p2jb5DIqcz1scEEbSrZlXleJOQJpc=;
- b=BcuBd7Ukfve/xJY51m6L69wnKG/yeyOl4Y9ZoIh/7BJ4S3EY1ol902zRIEPOgoG/NRTS
- O7glN3lDT7SBDVsqIa8ellI9S6aeAsoEj917j5QtEqZfqI0D7qC4yWQo03c2RDFh4Qfr
- B654fWXig5VOab89wASyATHBM4hyoIyffebQcpAovOEHdWSvH3oN2dmvSdty5M9/mcbO
- x51v0kevbwAFwL7twIRzKhk4al1A+LU2wSFrWu5fZMGGFfRjBtK4V/WXTB2K4x4IwgHD
- DzaAFh7EAHUYlWaiCY2CfKPK4w5nuP0uVCmLYjzu1+5O217Kzm4VDa5IlsbJHU58Ies/ Pg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qgpfk2ubq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 00:45:35 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34C0jYFA003514
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 00:45:34 GMT
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 11 May 2023 17:45:33 -0700
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH v10] usb: dwc3: fix gadget mode suspend interrupt handler issue
-Date:   Fri, 12 May 2023 08:45:24 +0800
-Message-ID: <20230512004524.31950-1-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S238815AbjELCiF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 May 2023 22:38:05 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E366C3C16
+        for <linux-usb@vger.kernel.org>; Thu, 11 May 2023 19:38:03 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-763646b324aso1383488439f.0
+        for <linux-usb@vger.kernel.org>; Thu, 11 May 2023 19:38:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683859083; x=1686451083;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6mqvjxLoa4rHNVpGPVS/SfycGbbBXHvMhFDxNvAM1VQ=;
+        b=BrY5Ha9qWqd9zRwTh4rBd+yFkAa3yClOmFKeJRKXX/CnSIp36YZteofRFQtqEb7m54
+         meVgWrKfM505FgV+2dFSGcV/GiCtnhZ/xqsLNpiFGiOjCxZun83pgcOP9UaFgYYAgFyD
+         ytJApyGZjjIKWjgLk+kIXJ4ecGwaoD6h+l/O9Pe0Io9wogWLYWac6Q6h0XvuE/YC5Aws
+         +MnLB7gRj4cOGVSA2ZSp4PMDhlVB1RE/+64rkQOJSXrPsVO+8rLr8Ziwyz4ZZVKZM/Ce
+         BN4ssaDXJWKg74pTGuEgDG+YnqdUkLv5uctAOnlfXNlvTlibX8/lJeipHABl5JeKu4CB
+         pQVQ==
+X-Gm-Message-State: AC+VfDz/epn4dyn+YQGn15Iq0EJgooaoNan73Cs+SibjNk/T+RoE0JTe
+        ZH5e+tnVG2ByMkKuffaNJLDqou+/ZftDjZLgZKU+Fmlqr97Q
+X-Google-Smtp-Source: ACHHUZ4tFCy7JYrOHet0uHWxvnRtWJLAiNMJcmBmqU0D4u9jven5x2H7hHQ4qqso/VJ72m1H70g4HtpOF/ZZK9sSeIL1mS0PLli2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 2j4jV2euZtCicDjKxIUOYvWI8Upt0Rsg
-X-Proofpoint-GUID: 2j4jV2euZtCicDjKxIUOYvWI8Upt0Rsg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-11_19,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- suspectscore=0 mlxlogscore=999 lowpriorityscore=0 adultscore=0
- malwarescore=0 priorityscore=1501 bulkscore=0 mlxscore=0 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305120005
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Received: by 2002:a5d:960e:0:b0:76c:74d8:a2d7 with SMTP id
+ w14-20020a5d960e000000b0076c74d8a2d7mr3194789iol.4.1683859083249; Thu, 11 May
+ 2023 19:38:03 -0700 (PDT)
+Date:   Thu, 11 May 2023 19:38:03 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008254fa05fb75fedd@google.com>
+Subject: [syzbot] [usb?] WARNING in amradio_set_mute/usb_submit_urb
+From:   syzbot <syzbot+347ac4ce4eeebbe8a129@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,145 +53,123 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When work in gadget mode, currently driver doesn't update software level
-link_state correctly as link state change event is not enabled for most
-devices, in function dwc3_gadget_suspend_interrupt(), it will only pass
-suspend event to UDC core when software level link state changes, so when
-interrupt generated in sequences of suspend -> reset -> conndone ->
-suspend, link state is not updated during reset and conndone, so second
-suspend interrupt event will not pass to UDC core.
+Hello,
 
-Remove link_state compare in dwc3_gadget_suspend_interrupt() and add a
-suspended flag to replace the compare function.
+syzbot found the following issue on:
 
-Fixes: 799e9dc82968 ("usb: dwc3: gadget: conditionally disable Link State change events")
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+HEAD commit:    14f8db1c0f9a Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=17275338280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a837a8ba7e88bb45
+dashboard link: https://syzkaller.appspot.com/bug?extid=347ac4ce4eeebbe8a129
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14a13424280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15b7c75c280000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ad6ce516eed3/disk-14f8db1c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1f38c2cc7667/vmlinux-14f8db1c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d795115eee39/Image-14f8db1c.gz.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+347ac4ce4eeebbe8a129@syzkaller.appspotmail.com
+
+usb 1-1: New USB device found, idVendor=07ca, idProduct=b800, bcdDevice=b9.c5
+usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+------------[ cut here ]------------
+usb 1-1: BOGUS urb xfer, pipe 1 != type 3
+WARNING: CPU: 0 PID: 2016 at drivers/usb/core/urb.c:505 usb_submit_urb+0xa44/0x1588 drivers/usb/core/urb.c:504
+Modules linked in:
+CPU: 0 PID: 2016 Comm: kworker/0:2 Not tainted 6.3.0-rc7-syzkaller-g14f8db1c0f9a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+Workqueue: usb_hub_wq hub_event
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : usb_submit_urb+0xa44/0x1588 drivers/usb/core/urb.c:504
+lr : usb_submit_urb+0xa44/0x1588 drivers/usb/core/urb.c:504
+sp : ffff800024726740
+x29: ffff800024726780 x28: 0000000000000001 x27: ffff8000138dd388
+x26: ffff0000c6ef2c00 x25: ffff0000d4abe000 x24: 0000000000000008
+x23: ffff8000138e3c00 x22: dfff800000000000 x21: 0000000000000002
+x20: 0000000000000c00 x19: ffff0000cf47bc00 x18: ffff800024725c60
+x17: 0000000000000000 x16: ffff80001236e294 x15: 0000000000000002
+x14: 0000000000000000 x13: 0000000000000001 x12: 0000000000000001
+x11: 0000000000000000 x10: 0000000000000000 x9 : b47e7648083a6600
+x8 : b47e7648083a6600 x7 : 0000000000000001 x6 : 0000000000000001
+x5 : ffff800024726038 x4 : ffff800015e4ccc0 x3 : ffff800008584230
+x2 : 0000000000000001 x1 : 0000000100000000 x0 : 0000000000000000
+Call trace:
+ usb_submit_urb+0xa44/0x1588 drivers/usb/core/urb.c:504
+ usb_start_wait_urb+0xec/0x414 drivers/usb/core/message.c:58
+ usb_bulk_msg+0x2ec/0x3ec drivers/usb/core/message.c:387
+ amradio_send_cmd drivers/media/radio/radio-mr800.c:150 [inline]
+ amradio_set_mute+0x1d4/0x428 drivers/media/radio/radio-mr800.c:182
+ usb_amradio_init drivers/media/radio/radio-mr800.c:411 [inline]
+ usb_amradio_probe+0x388/0x6f8 drivers/media/radio/radio-mr800.c:554
+ usb_probe_interface+0x500/0x984 drivers/usb/core/driver.c:396
+ really_probe+0x394/0xa7c drivers/base/dd.c:631
+ __driver_probe_device+0x1bc/0x3f8 drivers/base/dd.c:768
+ driver_probe_device+0x78/0x330 drivers/base/dd.c:798
+ __device_attach_driver+0x2a8/0x4f4 drivers/base/dd.c:926
+ bus_for_each_drv+0x228/0x2bc drivers/base/bus.c:457
+ __device_attach+0x2b4/0x434 drivers/base/dd.c:998
+ device_initial_probe+0x24/0x34 drivers/base/dd.c:1047
+ bus_probe_device+0x178/0x240 drivers/base/bus.c:532
+ device_add+0xabc/0xf58 drivers/base/core.c:3589
+ usb_set_configuration+0x15a4/0x1b1c drivers/usb/core/message.c:2171
+ usb_generic_driver_probe+0x8c/0x148 drivers/usb/core/generic.c:238
+ usb_probe_device+0x120/0x25c drivers/usb/core/driver.c:293
+ really_probe+0x394/0xa7c drivers/base/dd.c:631
+ __driver_probe_device+0x1bc/0x3f8 drivers/base/dd.c:768
+ driver_probe_device+0x78/0x330 drivers/base/dd.c:798
+ __device_attach_driver+0x2a8/0x4f4 drivers/base/dd.c:926
+ bus_for_each_drv+0x228/0x2bc drivers/base/bus.c:457
+ __device_attach+0x2b4/0x434 drivers/base/dd.c:998
+ device_initial_probe+0x24/0x34 drivers/base/dd.c:1047
+ bus_probe_device+0x178/0x240 drivers/base/bus.c:532
+ device_add+0xabc/0xf58 drivers/base/core.c:3589
+ usb_new_device+0x904/0x142c drivers/usb/core/hub.c:2575
+ hub_port_connect drivers/usb/core/hub.c:5407 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
+ port_event drivers/usb/core/hub.c:5711 [inline]
+ hub_event+0x25e4/0x474c drivers/usb/core/hub.c:5793
+ process_one_work+0x788/0x12d4 kernel/workqueue.c:2390
+ worker_thread+0x8e0/0xfe8 kernel/workqueue.c:2537
+ kthread+0x250/0x2d8 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:870
+irq event stamp: 156472
+hardirqs last  enabled at (156471): [<ffff8000083416f0>] __up_console_sem+0x60/0xb4 kernel/printk/printk.c:345
+hardirqs last disabled at (156472): [<ffff800012369e90>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
+softirqs last  enabled at (154114): [<ffff800008020c1c>] softirq_handle_end kernel/softirq.c:414 [inline]
+softirqs last  enabled at (154114): [<ffff800008020c1c>] __do_softirq+0xac0/0xd54 kernel/softirq.c:600
+softirqs last disabled at (154103): [<ffff80000802a658>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:80
+---[ end trace 0000000000000000 ]---
+ (null): radio-mr800 - initialization failed
+radio-mr800: probe of 1-1:6.199 failed with error -71
+usbhid 1-1:6.199: couldn't find an input interrupt endpoint
+
+
 ---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-v10: (refer v9: https://lore.kernel.org/linux-usb/20230511054540.28239-1-quic_linyyuan@quicinc.com/)
-1) update better changeset as Fixes tag 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-v9: (refer v8 https://lore.kernel.org/linux-usb/20230510014718.13872-1-quic_linyyuan@quicinc.com/)
-1) add a Fixes tag
-2) add Acked-by tag from Thinh
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-v8: (refer v7 https://lore.kernel.org/linux-usb/20230509050743.5781-1-quic_linyyuan@quicinc.com/)
-1) move some suspended flag clear to specific event handler
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-v7: (refer v6 https://lore.kernel.org/linux-usb/20230505014902.27313-1-quic_linyyuan@quicinc.com/)
-1) reword suspended flag comment
-2) remove one extra space in if operation
-4) clear suspended flag for wakeup/reset/disconnect interrupt
-3) clear suspended flag for remote wakeup related case.
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-v6: (refer v5 https://lore.kernel.org/linux-usb/1682476780-2367-1-git-send-email-quic_linyyuan@quicinc.com/)
-1) change subject
-2) only keep suspended flag related change
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
 
-v5: (refer v4 https://lore.kernel.org/linux-usb/1682393256-15572-1-git-send-email-quic_linyyuan@quicinc.com/)
-1) rename suspend_irq_happen to suspended and document it
-2) add old_link_state for link change interrupt usage and change accordingly
-
-v4: (refer v3 https://lore.kernel.org/linux-usb/1682053861-21737-1-git-send-email-quic_linyyuan@quicinc.com/)
-1) remove link state checking in dwc3_gadget_wakeup_interrupt()
-2) remove two switch/case to if opeartion
-
-v3: (refer v2 https://lore.kernel.org/linux-usb/1682042472-21222-1-git-send-email-quic_linyyuan@quicinc.com/)
-no code change since v2, changes compare v1 as below,
-1) add a flag suspend_irq_happen to simplify dwc3_gadget_suspend_interrupt(),
-   it will avoid refer to software level link_state, finally link_state will
-   only used in dwc3_gadget_linksts_change_interrupt().
-2) remove sw setting of link_state in dwc3_gadget_func_wakeup()
-3) add dwc3_gadget_interrupt_early() to correct setting of link_state
-   and suspend_irq_happen.
-
-v2: update according v1 discussion
-v1: https://lore.kernel.org/linux-usb/1675221286-23833-1-git-send-email-quic_linyyuan@quicinc.com/
-
- drivers/usb/dwc3/core.h   |  2 ++
- drivers/usb/dwc3/gadget.c | 12 +++++++++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index d56457c02996..1f043c31a096 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1116,6 +1116,7 @@ struct dwc3_scratchpad_array {
-  * @dis_metastability_quirk: set to disable metastability quirk.
-  * @dis_split_quirk: set to disable split boundary.
-  * @wakeup_configured: set if the device is configured for remote wakeup.
-+ * @suspended: set to track suspend event due to U3/L2.
-  * @imod_interval: set the interrupt moderation interval in 250ns
-  *			increments or 0 to disable.
-  * @max_cfg_eps: current max number of IN eps used across all USB configs.
-@@ -1332,6 +1333,7 @@ struct dwc3 {
- 	unsigned		dis_split_quirk:1;
- 	unsigned		async_callbacks:1;
- 	unsigned		wakeup_configured:1;
-+	unsigned		suspended:1;
- 
- 	u16			imod_interval;
- 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index c0ca4d12f95d..f244bebf1ea0 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2440,6 +2440,7 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
- 			return -EINVAL;
- 		}
- 		dwc3_resume_gadget(dwc);
-+		dwc->suspended = false;
- 		dwc->link_state = DWC3_LINK_STATE_U0;
- 	}
- 
-@@ -3938,6 +3939,8 @@ static void dwc3_gadget_disconnect_interrupt(struct dwc3 *dwc)
- {
- 	int			reg;
- 
-+	dwc->suspended = false;
-+
- 	dwc3_gadget_set_link_state(dwc, DWC3_LINK_STATE_RX_DET);
- 
- 	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
-@@ -3962,6 +3965,8 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
- {
- 	u32			reg;
- 
-+	dwc->suspended = false;
-+
- 	/*
- 	 * Ideally, dwc3_reset_gadget() would trigger the function
- 	 * drivers to stop any active transfers through ep disable.
-@@ -4180,6 +4185,8 @@ static void dwc3_gadget_conndone_interrupt(struct dwc3 *dwc)
- 
- static void dwc3_gadget_wakeup_interrupt(struct dwc3 *dwc, unsigned int evtinfo)
- {
-+	dwc->suspended = false;
-+
- 	/*
- 	 * TODO take core out of low power mode when that's
- 	 * implemented.
-@@ -4277,6 +4284,7 @@ static void dwc3_gadget_linksts_change_interrupt(struct dwc3 *dwc,
- 		if (dwc->gadget->wakeup_armed) {
- 			dwc3_gadget_enable_linksts_evts(dwc, false);
- 			dwc3_resume_gadget(dwc);
-+			dwc->suspended = false;
- 		}
- 		break;
- 	case DWC3_LINK_STATE_U1:
-@@ -4303,8 +4311,10 @@ static void dwc3_gadget_suspend_interrupt(struct dwc3 *dwc,
- {
- 	enum dwc3_link_state next = evtinfo & DWC3_LINK_STATE_MASK;
- 
--	if (dwc->link_state != next && next == DWC3_LINK_STATE_U3)
-+	if (!dwc->suspended && next == DWC3_LINK_STATE_U3) {
-+		dwc->suspended = true;
- 		dwc3_suspend_gadget(dwc);
-+	}
- 
- 	dwc->link_state = next;
- }
--- 
-2.17.1
-
+If you want to undo deduplication, reply with:
+#syz undup
