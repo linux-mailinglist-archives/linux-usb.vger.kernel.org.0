@@ -2,159 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6C47000F7
-	for <lists+linux-usb@lfdr.de>; Fri, 12 May 2023 09:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4633F700242
+	for <lists+linux-usb@lfdr.de>; Fri, 12 May 2023 10:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240031AbjELHD3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 May 2023 03:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
+        id S240314AbjELIJe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 May 2023 04:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239625AbjELHD2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 May 2023 03:03:28 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F399D7685
-        for <linux-usb@vger.kernel.org>; Fri, 12 May 2023 00:03:23 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so86630688a12.0
-        for <linux-usb@vger.kernel.org>; Fri, 12 May 2023 00:03:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683875002; x=1686467002;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Hk7vHQ0BNvgpEVliVNBIkVdWv3ZlYBdzOpOVtAlYss4=;
-        b=nHcLuBAMzY/Xr1V6NT3wCzGZRsgLH6aCKFw/q/+DZa3cLizCmLSRPYrRRzT3hGNrKu
-         Y8ARm743/EI7Q0mXCI9NQ7XEfR6CLAffXvd+u1VwBCrJP6DDFM0lirSNwUPsADL/Gk5k
-         bBRaKeLZQrwIJ7GaN2fbx8+8aMK/dt7KSUUBquVYFCNYFd6VIfUjD9JcG9I2bGy7UXms
-         Isc+BpcyNmGDJaWm/Imr54Bw5wp4HxqPmCuXhuhIGd90B42iAYGN72FKV30crVmsx/yN
-         QEeSaSRKa/G0wyZ2GepsxqXr+yhGY80GYlMcx6FwnNU+WXZDZAQMUggJsC9rH8WNBN5m
-         CuiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683875002; x=1686467002;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hk7vHQ0BNvgpEVliVNBIkVdWv3ZlYBdzOpOVtAlYss4=;
-        b=SMz/NCRVJsAxYFbrITy19hOPC0LwCHxZYS1SnvFHn/2wgjOGc/HpGmgrRJZ/sPKerY
-         eDs5yvjz3cw4zZlAj5KYX7LkPTpLB0gZd9ERdFblWmTaykEE/Im6az8MkHDggqnk/qSm
-         QwRd/GjUhhUfqwdV/jHN63856Nt3fHPglkogm1O+bb5yj6DeljBVxTU0Zbk2dI++WJKo
-         qkVtlZwezG/sREonh05TVoJ89yJRYzMKxzQpQWzB3yl1ENx1hiqpJuljEi/OuoqaWyIr
-         KUEDVrxUP012asJ7oLr5PGPgUL3sU0FV8MNZRSoJlPvMWoy2B0YoAZ81ps6h6dPMZZUC
-         QJ1g==
-X-Gm-Message-State: AC+VfDy9PbE+xe+0c0cLBEo/2WyEMfL4XZH+w9B73gqdgWI0F5+O3iwg
-        kZfHa+OFQnu48/5Ejt1zFvX9+g==
-X-Google-Smtp-Source: ACHHUZ6KzIf22wqXzMbPLVmqXVtt+8JIieW5G13Rh3ucq71tzS3lD6u+RX7ZiCeB1Oyy7NDEHzyjyg==
-X-Received: by 2002:a17:907:7baa:b0:966:1484:469e with SMTP id ne42-20020a1709077baa00b009661484469emr18120747ejc.17.1683875002490;
-        Fri, 12 May 2023 00:03:22 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:7ede:fc7b:2328:3883? ([2a02:810d:15c0:828:7ede:fc7b:2328:3883])
-        by smtp.gmail.com with ESMTPSA id mc11-20020a170906eb4b00b00969f25b96basm4410829ejb.204.2023.05.12.00.03.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 00:03:22 -0700 (PDT)
-Message-ID: <76dfbf27-8ad2-6e09-5354-b006b9e81af1@linaro.org>
-Date:   Fri, 12 May 2023 09:03:20 +0200
+        with ESMTP id S240096AbjELIJA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 May 2023 04:09:00 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2053.outbound.protection.outlook.com [40.107.212.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FA611B56;
+        Fri, 12 May 2023 01:07:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=i45mtqPOH4AjiMl0DUHivWkxzAVxT3Tudq4S3ekyMXKfGAQTptpaYTPcOAUkBzYARGBUAlRRD0C8oRlV5epjEz2KYkCGPZA8bFsQD2en7nxG4zk1RiGAZqnwSd7fMifkE2cxC89Pi3x6d0IgR1UG5EFmqaVdp0c7OS7qqJqYjH7jHIrz2ClY7Pe3FCA/vcnhNNn68BNfwPTqViCe/sNUMCdKdA3osgC24NKWI+kuiu5Itlz/q8xvZpikuyhAd6SGT4xyRIXm6egCJN31k2PiAfgPU3m1gJ2regohfhENwi5DwqjFIiJFeyvKk68adcGytfmEGAy8oX4GWzFYE+eIYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4//we3IhoNGzyNeBkW96AV0EdeKGiIT7YrztSsfn8iM=;
+ b=AVC+0HDGcf6nRBvVfvLNGdiGptpG9vRFbx7Lf2AS+l6rBqIu70ZqZ8oZsbF2umlhNI/qq8NYazTn9LXbQIDyF4fvz6bWBiQczbrLbIUWUfn/EpN73wqO3MVFWMCDu2Sb7P2U3WXJFaxVP/n1TBCCcSHszFxexPnTpgs/qC9oloXDDawdbiYNJ8xl+fIEkQ6A9wOOwRm/0G/8RZjWiHH+HppT0ekr15Qj1WMUH582z+FC1UE6QNslCLB+2B2djXVOkgmEQU/f8TNReprLEYooNvEB7XD6zofRAMH1GE3eWunbAU8a4iwsnVXli1O6aCIrb/CHCKuA+PyNeSNwb0EUmA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4//we3IhoNGzyNeBkW96AV0EdeKGiIT7YrztSsfn8iM=;
+ b=WJzm5ApHTAshr4UypF8c2/x0R9mdIrPlFYcLET0sUjkqsTqZoWD5A+PECoB8QG413xXcf8JazCFPed3EdoVkSljmCVRMoH1KMEMLycc5/WPlkyHUGzxP9IHyPRMjhGNbBY84D2FHLlrSJakvI8peFYWR6mQz87eXVQXaadshPQMaHOTJxA3IXnfZB6/N53MM/OORubZeyOhzPnD8gTaN5Hw+vPSz89T1vLi+8noVMAsP4un43rGIBNXXRLRcHjLhinYVl4ZrZeKENk9QRsFMugFFn4BoB79XK7Nga5KSkvMnh/uONavbaVco0STRo3g8FU2Z7ENQc/Rp0SWfGNuNAw==
+Received: from CY5PR15CA0140.namprd15.prod.outlook.com (2603:10b6:930:67::10)
+ by PH7PR12MB6564.namprd12.prod.outlook.com (2603:10b6:510:210::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.22; Fri, 12 May
+ 2023 08:05:39 +0000
+Received: from CY4PEPF0000C969.namprd02.prod.outlook.com
+ (2603:10b6:930:67:cafe::23) by CY5PR15CA0140.outlook.office365.com
+ (2603:10b6:930:67::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.24 via Frontend
+ Transport; Fri, 12 May 2023 08:05:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CY4PEPF0000C969.mail.protection.outlook.com (10.167.241.73) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6387.21 via Frontend Transport; Fri, 12 May 2023 08:05:38 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 12 May 2023
+ 01:05:27 -0700
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 12 May
+ 2023 01:05:26 -0700
+Received: from jilin-desktop.nvidia.com (10.127.8.13) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Fri, 12 May 2023 01:05:25 -0700
+From:   Jim Lin <jilin@nvidia.com>
+To:     <gregkh@linuxfoundation.org>
+CC:     <mathias.nyman@intel.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <linux-usb@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Henry Lin <henryl@nvidia.com>, Jim Lin <jilin@nvidia.com>
+Subject: [PATCH] usb: xhci: tegra: enable stream protocol support
+Date:   Fri, 12 May 2023 16:04:23 +0800
+Message-ID: <20230512080423.27978-1-jilin@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V2] dt-bindings: usb: dwc3: Add interrupt-names property
- support for wakeup interrupt
-Content-Language: en-US
-To:     "Mehta, Piyush" <piyush.mehta@amd.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "Paladugu, Siva Durga Prasad" <siva.durga.prasad.paladugu@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>
-References: <20230511072154.2030703-1-piyush.mehta@amd.com>
- <ca8b31f5-ce4e-d7b1-d077-3684862083bf@linaro.org>
- <MN2PR12MB4333A304BF5D7B97836BACE388759@MN2PR12MB4333.namprd12.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <MN2PR12MB4333A304BF5D7B97836BACE388759@MN2PR12MB4333.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000C969:EE_|PH7PR12MB6564:EE_
+X-MS-Office365-Filtering-Correlation-Id: 23bc18fe-e3a5-4acb-ef5e-08db52bfac46
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BnoHcrprqzblLXOMlLVkOogsLLs4QLdNvHL8Hv4LYrIu/3BJd5t16DaCiVCw62PkJTiSW/NVWJ7ZlkkzomJiQ+mCIxjXeFxHr8IAy9WWangkuegRmCQCHKavdj/sf5PwEnd2eewednCFtkGrar+Vt3+T2DnXToasn/So7LPWQr2pNkKE3jOZpDuQ8P1oJuWW4fmXNII0RClTaeejr1iQh6dSlXnvZKPK2TOQm1sLN+O++tlQIPq0ihEb7Iiavr+GzhcVPhOV3oh44qi39aWRU1yN4KXbQXmNOfHKuEhrQI3i50JGfpLf3tBhxp9UGl01plbyibX3tPjzcfyXtMUwUq8Z5vxU4+PK8Fz63tmCfyZSouCYEYwa3HG4PvBx1fegAnb+ycPfjk4kZTVt9+UcyqeJcXTjL2ENmGsiMusjtoI8uy0pLXepBuW6H2Esfoo/iBNFYMkmUSUhuvRWPnMbkYiO8PnX3q4OygMuYJVDgcvgO+5BsfPBZKF4PpiPgVm6s8XpIG5mHVzZQ1dSr9V2OqecHf4amoIAFXzIpnsizwvcBwuwhLwpEUgHI5gK7dy4PWM5zDGF+xz7/KkmKFXSMUlje9zxSxEOziCu0w74mOZrsmEEYk4bJPY55VDyoZzzY7B+pofjbK/swCO9QUJk5XKiduOF5nBwZ2pq/rG1HY+YbSAZD8uuWeb+mdIuBwqEKnQ+RHcLLbcfDcv1YvrMk0xCPa/zTC1p5GwOI5PTqNOj3mCY2L9Pk+h7zaEkrOvh
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(346002)(376002)(451199021)(36840700001)(46966006)(40470700004)(86362001)(36756003)(54906003)(70586007)(70206006)(316002)(6916009)(4326008)(478600001)(7696005)(82310400005)(4744005)(40480700001)(5660300002)(8676002)(8936002)(2906002)(7636003)(41300700001)(356005)(82740400003)(2616005)(107886003)(26005)(1076003)(36860700001)(426003)(336012)(47076005)(186003)(40460700003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 08:05:38.4524
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 23bc18fe-e3a5-4acb-ef5e-08db52bfac46
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C969.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6564
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 12/05/2023 08:57, Mehta, Piyush wrote:
-> Hi,
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Thursday, May 11, 2023 3:05 PM
->> To: Mehta, Piyush <piyush.mehta@amd.com>; gregkh@linuxfoundation.org;
->> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
->> conor+dt@kernel.org; balbi@kernel.org; michal.simek@xilinx.com
->> Cc: linux-usb@vger.kernel.org; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org; Simek, Michal <michal.simek@amd.com>; Paladugu,
->> Siva Durga Prasad <siva.durga.prasad.paladugu@amd.com>; git (AMD-Xilinx)
->> <git@amd.com>
->> Subject: Re: [PATCH V2] dt-bindings: usb: dwc3: Add interrupt-names property
->> support for wakeup interrupt
->>
->> On 11/05/2023 09:21, Piyush Mehta wrote:
->>> The hibernation feature enabled for Xilinx Versal NET SoC in DWC3 IP.
->>> As the DWC3 IP supports the hibernation feature, to handle the wakeup
->>> or hibernation interrupt, add host mode "wakeup" interrupt-names
->>> optional property in the binding schema to capture remote-wakeup and
->>> connect/ disconnect event in the hibernation state.
->>>
->>> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
->>> ---
->>> Change in V2:
->>> -  Addressed ROB review comments
->>>  - Updated name of interrupt-names property with "wakeup"
->>>  - Move interrupt-names property from dwc3-xilinx core to dwc3 core.
->>>
->>> Link:
->>>
->> https://lore.kernel.org/all/CAL_JsqK6_7XD7+w+EQvPPmbmSOpfo3JDb0xDN4St
->> u
->>> HUm1kgchw@mail.gmail.com/
->>> ---
->>>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 2 ++
->>>  1 file changed, 2 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>> b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>> index 50edc4da780e..db512769bd80 100644
->>> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>> @@ -53,6 +53,8 @@ properties:
->>>        - const: dwc_usb3
->>>        - items:
->>>            enum: [host, peripheral, otg]
->>> +      - items:
->>> +          enum: [dwc_usb3, otg, wakeup]
->>
->> You didn't add only "wakeup" but also dwc_usb3 which does not look correct
->> here as it is common interrupt. The change does not match commit msg and I
->> don't know what you actually want to achieve.
->>
-> 
-> We have dedicated irq line for hibernation feature,  "wakeup" irq line triggers hibernation interrupt and the system wakes up.
-> DWC3 core supports the hibernation feature, we have a dedicated code which is yet to be upstreamed.
-> As the hibernation feature provided by dwc3-core, so this will be supported by other SOC/vendors.
-> 
-> For this, we need the interrupt-name/ interrupt property. To enable the hibernation feature for
-> Xilinx Versal NET SoC, the interrupt-name enum would be:
-> - enum [host, peripheral, otg, wakeup]
+From: Henry Lin <henryl@nvidia.com>
 
-Yes, this makes sense. Other combination could be dwc_usb3 and wakeup
-but only if it is real... adding random entries sounds like not really.
+This commit enables stream transfer protocol for Tegra XHCI.
 
-Best regards,
-Krzysztof
+Signed-off-by: Henry Lin <henryl@nvidia.com>
+Signed-off-by: Jim Lin <jilin@nvidia.com>
+---
+
+ drivers/usb/host/xhci-tegra.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index c75d93244143..ea55e401c70e 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -1828,6 +1828,9 @@ static int tegra_xusb_probe(struct platform_device *pdev)
+ 		goto remove_usb2;
+ 	}
+ 
++	if (HCC_MAX_PSA(xhci->hcc_params) >= 4)
++		xhci->shared_hcd->can_do_streams = 1;
++
+ 	err = usb_add_hcd(xhci->shared_hcd, tegra->xhci_irq, IRQF_SHARED);
+ 	if (err < 0) {
+ 		dev_err(&pdev->dev, "failed to add shared HCD: %d\n", err);
+-- 
+2.17.1
 
