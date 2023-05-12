@@ -2,72 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17DED700F2C
-	for <lists+linux-usb@lfdr.de>; Fri, 12 May 2023 21:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6EA700F36
+	for <lists+linux-usb@lfdr.de>; Fri, 12 May 2023 21:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238909AbjELTIJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 May 2023 15:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
+        id S232673AbjELTPn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 May 2023 15:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjELTII (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 May 2023 15:08:08 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9136B59ED;
-        Fri, 12 May 2023 12:08:06 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 4B3E26016E;
-        Fri, 12 May 2023 21:08:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1683918485; bh=olPRuHD47Mn/7ru/A/AU2wqJbQyl0hcJAZoJt24S8b0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=n0amUuwxKfyl6u3w9Up9M9WEW8L1ktwEBk4ZeY9RHI0yfOMyO09yJAORw9idWWHe+
-         Mj1/nwQuBysv8K42RqLjpGAYA45j+wnl/swlarBnb6Xn1vJa2FieUtklZv3iVOUYB8
-         MOSuyD28Cu4G2js7K3z7Leac91uew8n2EahpaJQ9Bisc0vjRwa3pu5f2dFYT0s9IwU
-         TYQ3NTo5Ee5RwqSchxC8GtxeW4ms8UGwosDqa/z0DpDK7UkCsVxoBJASNleVsJvLGn
-         tMZCJqyor7hajgsyPBB005xqTLCgYiNsxFFD9rtoCSxzHoq9ro4W6O01MA25nBv4ni
-         oy/+ZGyxJJTRg==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id wjCYGLiUAO0z; Fri, 12 May 2023 21:08:02 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [77.237.113.62])
-        by domac.alu.hr (Postfix) with ESMTPSA id 57AF66015F;
-        Fri, 12 May 2023 21:08:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1683918482; bh=olPRuHD47Mn/7ru/A/AU2wqJbQyl0hcJAZoJt24S8b0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=SlNPyqe9ANF2mDBCUgIKRo9twyZ4/8XFVaX+KNR7gKreruAfFNpPK2+57LLLfj2Ly
-         LIVwhjXd7elXMIgns87Yxl9plUphLoUgg9xrgqMCQSJ4/5dmeTffBLaC7sYgC9pVEe
-         QRZm2oPPzux1FnqXuiUBke7Zdft7PmMutlE9hehTJW28dO1N1GNp9jErm0wADmDCHe
-         rRfmOuvGKBnr0Giz61tpAHROwNApjSx/qExm87KwLJ7vrHSWcV0yJ14uLIbXkDd2/m
-         J34+EEXp+iYaQAOBH8hBJYPeakVebJDKeIhKGay4wL3GCU0uQ0dr4hMs9qbsd9lIR3
-         gebW6z6h4gdrA==
-Message-ID: <32dc44cd-b559-78eb-56ef-f651a598b6fc@alu.unizg.hr>
-Date:   Fri, 12 May 2023 21:08:02 +0200
+        with ESMTP id S229901AbjELTPm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 May 2023 15:15:42 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B666E89;
+        Fri, 12 May 2023 12:15:40 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CCm2TW027653;
+        Fri, 12 May 2023 19:15:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=msJvFmBMRESXvxsoSn+HqjI7LHXCYr9128ys7dQyalc=;
+ b=a6GVh1QwDt8VYpP2YmCwJQNpIZ2UmqIiq5EhwXrPQ5JnFwB6+zXNeisJBNbCprLNlEKo
+ LvFa/trx8K4I3wDpdJdEojx90vgS6puLeMJj4EWvWW3vvEdjBDUcPoMMzgZefz9Xn9Fz
+ fCR2KDgLGAeb7ZOru1hov0aN8RO4zsejeXcdr0qkwlp6co+OqQwJ0nKOwVdLjSpx2JM3
+ oEv+IAr6fNeL/KxJhYOqfKFNr8fewH2ZA8rlRHxs0nUvykzvsb8Od8jYSuIEq2HqbCqH
+ xiY7rUmGUjMJD58OkpyZ4IT86FFJ6uPvaIbhwfaZDeQc7Lv9TQ+HfS+ZL1raYZ7X9lMP rw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qhayt277a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 19:15:38 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34CJFbul018969
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 19:15:37 GMT
+Received: from [10.216.49.187] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 12 May
+ 2023 12:15:35 -0700
+Message-ID: <989832ad-e9b4-7c59-f157-6a9239c1b5eb@quicinc.com>
+Date:   Sat, 13 May 2023 00:45:31 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [BUG] Kmemleak, possibly hiddev_connect(), in 6.3.0+ torvalds
- tree commit gfc4354c6e5c2
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [RFC] usb: dwc3: core: set force_gen1 bit in USB31 devices if max
+ speed is SS
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <20230512170107.18821-1-quic_kriskura@quicinc.com>
+ <20230512184630.2kt4xgneiovb3vac@synopsys.com>
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>
-References: <f64b17fa-d509-ad30-6e8d-e4c979818047@alu.unizg.hr>
- <2023050824-juiciness-catching-9290@gregkh>
- <2023050854-collage-dreamt-660c@gregkh>
- <c73471aa-522a-83a4-5614-506581604301@alu.unizg.hr>
- <2023050958-precut-vividly-94bf@gregkh>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <2023050958-precut-vividly-94bf@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <20230512184630.2kt4xgneiovb3vac@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 3d59z5dPqzupkNnnIP-K6MqLbMkFd-Gh
+X-Proofpoint-GUID: 3d59z5dPqzupkNnnIP-K6MqLbMkFd-Gh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-12_12,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ phishscore=0 priorityscore=1501 suspectscore=0 spamscore=0 adultscore=0
+ impostorscore=0 bulkscore=0 malwarescore=0 clxscore=1015
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305120162
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,173 +84,115 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi, Greg,
+Hi Thinh,
 
-On 09. 05. 2023. 04:59, Greg Kroah-Hartman wrote:
-> On Tue, May 09, 2023 at 01:51:35AM +0200, Mirsad Goran Todorovac wrote:
->>
->>
->> On 08. 05. 2023. 16:01, Greg Kroah-Hartman wrote:
->>> On Mon, May 08, 2023 at 08:51:55AM +0200, Greg Kroah-Hartman wrote:
->>>> On Mon, May 08, 2023 at 08:30:07AM +0200, Mirsad Goran Todorovac wrote:
->>>>> Hi,
->>>>>
->>>>> There seems to be a kernel memory leak in the USB keyboard driver.
->>>>>
->>>>> The leaked memory allocs are 96 and 512 bytes.
->>>>>
->>>>> The platform is Ubuntu 22.04 LTS on a assembled AMD Ryzen 9 with X670E PG
->>>>> Lightning mobo,
->>>>> and Genius SlimStar i220 GK-080012 keyboard.
->>>>>
->>>>> (Logitech M100 HID mouse is not affected by the bug.)
->>>>>
->>>>> BIOS is:
->>>>>
->>>>>        *-firmware
->>>>>             description: BIOS
->>>>>             vendor: American Megatrends International, LLC.
->>>>>             physical id: 0
->>>>>             version: 1.21
->>>>>             date: 04/26/2023
->>>>>             size: 64KiB
->>>>>
->>>>> The kernel is 6.3.0-torvalds-<id>-13466-gfc4354c6e5c2.
->>>>>
->>>>> The keyboard is recognised as Chicony:
->>>>>
->>>>>                    *-usb
->>>>>                         description: Keyboard
->>>>>                         product: CHICONY USB Keyboard
->>>>>                         vendor: CHICONY
->>>>>                         physical id: 2
->>>>>                         bus info: usb@5:2
->>>>>                         logical name: input35
->>>>>                         logical name: /dev/input/event4
->>>>>                         logical name: input35::capslock
->>>>>                         logical name: input35::numlock
->>>>>                         logical name: input35::scrolllock
->>>>>                         logical name: input36
->>>>>                         logical name: /dev/input/event5
->>>>>                         logical name: input37
->>>>>                         logical name: /dev/input/event6
->>>>>                         logical name: input38
->>>>>                         logical name: /dev/input/event8
->>>>>                         version: 2.30
->>>>>                         capabilities: usb-2.00 usb
->>>>>                         configuration: driver=usbhid maxpower=100mA
->>>>> speed=1Mbit/s
->>>>>
->>>>> The bug is easily reproduced by unplugging the USB keyboard, waiting about a
->>>>> couple of seconds,
->>>>> and then reconnect and scan for memory leaks twice.
->>>>>
->>>>> The kmemleak log is as follows [edited privacy info]:
->>>>>
->>>>> root@hostname:/home/username# cat /sys/kernel/debug/kmemleak
->>>>> unreferenced object 0xffff8dd020037c00 (size 96):
->>>>>     comm "systemd-udevd", pid 435, jiffies 4294892550 (age 8909.356s)
->>>>>     hex dump (first 32 bytes):
->>>>>       5d 8e 4e b9 ff ff ff ff 00 00 00 00 00 00 00 00 ].N.............
->>>>>       00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
->>>>>     backtrace:
->>>>>       [<ffffffffb81a74be>] __kmem_cache_alloc_node+0x22e/0x2b0
->>>>>       [<ffffffffb8127b6e>] kmalloc_trace+0x2e/0xa0
->>>>>       [<ffffffffb87543d9>] class_create+0x29/0x80
->>>>>       [<ffffffffb8880d24>] usb_register_dev+0x1d4/0x2e0
->>>>
->>>> As the call to class_create() in this path is now gone in 6.4-rc1, can
->>>> you retry that release to see if this is still there or not?
->>>
->>> No, wait, it's still there, I was looking at a development branch of
->>> mine that isn't sent upstream yet.  And syzbot just reported the same
->>> thing:
->>> 	https://lore.kernel.org/r/00000000000058d15f05fb264013@google.com
->>>
->>> So something's wrong here, let me dig into it tomorrow when I get a
->>> chance...
->>
->> If this could help, here is the bisect of the bug (I could not discern what
->> could possibly be wrong):
->>
->> user@host:~/linux/kernel/linux_torvalds$ git bisect log
->> git bisect start
->> # bad: [ac9a78681b921877518763ba0e89202254349d1b] Linux 6.4-rc1
->> git bisect bad ac9a78681b921877518763ba0e89202254349d1b
->> # good: [c9c3395d5e3dcc6daee66c6908354d47bf98cb0c] Linux 6.2
->> git bisect good c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
->> # good: [85496c9b3bf8dbe15e2433d3a0197954d323cadc] Merge branch
->> 'net-remove-some-rcu_bh-cruft'
->> git bisect good 85496c9b3bf8dbe15e2433d3a0197954d323cadc
->> # good: [b68ee1c6131c540a62ecd443be89c406401df091] Merge tag 'scsi-misc' of
->> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
->> git bisect good b68ee1c6131c540a62ecd443be89c406401df091
->> # bad: [888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0] Merge tag 'sysctl-6.4-rc1'
->> of git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux
->> git bisect bad 888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0
->> # good: [34b62f186db9614e55d021f8c58d22fc44c57911] Merge tag
->> 'pci-v6.4-changes' of git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci
->> git bisect good 34b62f186db9614e55d021f8c58d22fc44c57911
->> # good: [34da76dca4673ab1819830b4924bb5b436325b26] Merge tag
->> 'for-linus-2023042601' of
->> git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid
->> git bisect good 34da76dca4673ab1819830b4924bb5b436325b26
->> # good: [97b2ff294381d05e59294a931c4db55276470cb5] Merge tag
->> 'staging-6.4-rc1' of
->> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging
->> git bisect good 97b2ff294381d05e59294a931c4db55276470cb5
->> # good: [2025b2ca8004c04861903d076c67a73a0ec6dfca] mcb-lpc: Reallocate
->> memory region to avoid memory overlapping
->> git bisect good 2025b2ca8004c04861903d076c67a73a0ec6dfca
->> # bad: [d06f5a3f7140921ada47d49574ae6fa4de5e2a89] cdx: fix build failure due
->> to sysfs 'bus_type' argument needing to be const
->> git bisect bad d06f5a3f7140921ada47d49574ae6fa4de5e2a89
->> # good: [dcfbb67e48a2becfce7990386e985b9c45098ee5] driver core: class: use
->> lock_class_key already present in struct subsys_private
->> git bisect good dcfbb67e48a2becfce7990386e985b9c45098ee5
->> # bad: [6f14c02220c791d5c46b0f965b9340c58f3d503d] driver core: create
->> class_is_registered()
->> git bisect bad 6f14c02220c791d5c46b0f965b9340c58f3d503d
->> # good: [2f9e87f5a2941b259336c7ea6c5a1499ede4554a] driver core: Add a
->> comment to set_primary_fwnode() on nullifying
->> git bisect good 2f9e87f5a2941b259336c7ea6c5a1499ede4554a
->> # bad: [02fe26f25325b547b7a31a65deb0326c04bb5174] firmware_loader: Add debug
->> message with checksum for FW file
->> git bisect bad 02fe26f25325b547b7a31a65deb0326c04bb5174
->> # good: [884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82] driver core: class:
->> implement class_get/put without the private pointer.
->> git bisect good 884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82
->> # bad: [3f84aa5ec052dba960baca4ab8a352d43d47028e] base: soc: populate
->> machine name in soc_device_register if empty
->> git bisect bad 3f84aa5ec052dba960baca4ab8a352d43d47028e
->> # bad: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver core: class.c:
->> convert to only use class_to_subsys
->> git bisect bad 7b884b7f24b42fa25e92ed724ad82f137610afaf
->> # first bad commit: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver core:
->> class.c: convert to only use class_to_subsys
->> user@host:~/linux/kernel/linux_torvalds$
+On 5/13/2023 12:16 AM, Thinh Nguyen wrote:
+> On Fri, May 12, 2023, Krishna Kurapati wrote:
+>> Currently for dwc3_usb31 devices, if maximum_speed is limited to
 > 
-> This helps a lot, thanks.  I got the reference counting wrong somewhere
-> in here, I thought I tested this better, odd it shows up now...
+> We usually call the controller dwc_usb3, dwc_usb31, or dwc_usb32.
 > 
-> I'll try to work on it this week.
+>> super-speed in DT, then device mode is limited to SS, but host mode
+>> still works in SSP.
+>>
+>> The documentation for max-speed property is as follows:
+>>
+>> "Tells USB controllers we want to work up to a certain speed.
+>> Incase  this isn't passed via DT, USB controllers should default to
+>> their maximum HW capability."
+>>
+>> It doesn't specify that the property is only for device mode.
 > 
-> thanks,
+> Since this isn't really a fix, can we rephrase the lines below
 > 
-> greg k-h
+>> Fix this by forcing controller supported max speed to Gen1 by
+>> setting LLUCTL.Force_Gen1 bit if controller is DWC3_USB31 and
+>> max speed is mentioned as SS in DT.
+> 
+> As follow:
+> There are cases where we need to limit the host's maximum speed to
+> SuperSpeed only. Use this property for host mode to contrain host's
+> speed to SuperSpeed.
+> 
+> 
+Sure, will rephrase it accordingly. Thanks for the suggestion.
+>>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>> Discussion regarding the same at:
+>> https://urldefense.com/v3/__https://lore.kernel.org/all/e465c69c-3a9d-cbdb-d44e-96b99cfa1a92@quicinc.com/__;!!A4F2R9G_pg!YiQpjZIJAw-yu6gEwbKqb5nusjnKQ9dQJrulx39lQP-7JMhcNA2xd8uLJoZ_HE8SuG4Rm2uvhJTSdQ2k0fJVAxU2RWYHHg$
+>>
+>>   drivers/usb/dwc3/core.c | 13 +++++++++++++
+>>   drivers/usb/dwc3/core.h |  4 ++++
+>>   2 files changed, 17 insertions(+)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index 0beaab932e7d..989dc76ecbca 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -116,6 +116,18 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
+>>   	dwc->current_dr_role = mode;
+>>   }
+>>   
+>> +static void dwc3_configure_host_speed(struct dwc3 *dwc)
+>> +{
+>> +	u32 reg;
+>> +
+>> +	if (DWC3_IP_IS(DWC31) &&
+>> +	   (dwc->maximum_speed == USB_SPEED_SUPER)) {
+>> +		reg = dwc3_readl(dwc->regs, DWC3_LLUCTL);
+>> +		reg |= DWC3_LLUCTL_FORCE_GEN1;
+>> +		dwc3_writel(dwc->regs, DWC3_LLUCTL, reg);
+>> +	}
+>> +}
+>> +
+>>   static void __dwc3_set_mode(struct work_struct *work)
+>>   {
+>>   	struct dwc3 *dwc = work_to_dwc(work);
+>> @@ -194,6 +206,7 @@ static void __dwc3_set_mode(struct work_struct *work)
+>>   
+>>   	switch (desired_dr_role) {
+>>   	case DWC3_GCTL_PRTCAP_HOST:
+>> +		dwc3_configure_host_speed(dwc);
+>  > The LLUCTL doesn't change until there's a Vcc reset. Let's just> 
+initialize it once during dwc3_core_init() if the GHWPARAM indicates the
+> controller is DRD or host only.
+> 
 
-Not at all!
+I thought GCTL Core soft reset might clear this bit. That is why I 
+placed it here. For device mode gadget.c takes care of limiting speed. 
+So wanted to do this setting only for host mode, before we invoke host init.
 
-I hope you had better luck because this part of code still looks to me 
-like hieroglyphs.
+Thanks for letting know that only VCC reset affects this. Will move this 
+check to core init.
 
-Linux kernel rose to 10.9M lines, and it would take me thirty years to
-just read it once, 1000 lines a day ... 6.7M lines are "just drivers".
+Regards,
+Krishna,
 
-# find . -name '*.c' -o -name '*.h' -print0 | wc --files0-from -
-10913623 35587483 631377958 total
-# find drivers -name '*.c' -o -name '*.h' -print0 | wc --files0-from -
-6705084 19985060 495162001 total
-
-Best regards,
-Mirsad
+>>   		ret = dwc3_host_init(dwc);
+>>   		if (ret) {
+>>   			dev_err(dwc->dev, "failed to initialize host\n");
+>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>> index d56457c02996..29b780a58dc6 100644
+>> --- a/drivers/usb/dwc3/core.h
+>> +++ b/drivers/usb/dwc3/core.h
+>> @@ -121,6 +121,10 @@
+>>   #define DWC3_GPRTBIMAP_FS0	0xc188
+>>   #define DWC3_GPRTBIMAP_FS1	0xc18c
+>>   #define DWC3_GUCTL2		0xc19c
+>> +#define DWC3_LLUCTL		0xd024
+> 
+> Please place the register according to its offset order.
+> 
+>> +
+>> +/* Force Gen1 speed on Gen2 link */
+>> +#define DWC3_LLUCTL_FORCE_GEN1	BIT(10)
+>>   
+>>   #define DWC3_VER_NUMBER		0xc1a0
+>>   #define DWC3_VER_TYPE		0xc1a4
+>> -- 
+>> 2.40.0
+>>
+> 
+> Thanks,
+> Thinh
