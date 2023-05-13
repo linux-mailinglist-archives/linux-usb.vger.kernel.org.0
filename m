@@ -2,65 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 629E8701786
-	for <lists+linux-usb@lfdr.de>; Sat, 13 May 2023 15:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 624D0701902
+	for <lists+linux-usb@lfdr.de>; Sat, 13 May 2023 20:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238565AbjEMNwA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 13 May 2023 09:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38900 "EHLO
+        id S237230AbjEMSJa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 13 May 2023 14:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238074AbjEMNv7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 13 May 2023 09:51:59 -0400
+        with ESMTP id S237273AbjEMSJO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 13 May 2023 14:09:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEBD2716
-        for <linux-usb@vger.kernel.org>; Sat, 13 May 2023 06:51:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FEE46A0;
+        Sat, 13 May 2023 11:09:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E8BA60C82
-        for <linux-usb@vger.kernel.org>; Sat, 13 May 2023 13:51:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6B5DBC433EF
-        for <linux-usb@vger.kernel.org>; Sat, 13 May 2023 13:51:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2320D60B4A;
+        Sat, 13 May 2023 18:09:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C5A8C4339B;
+        Sat, 13 May 2023 18:09:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683985917;
-        bh=vIwZGOE09Ga43vHwPQdH+/st2rLCrvYgC4xfS6yJ+Hc=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=syVw02Tb6ANKwBBTN26E2Kg0Ow+4n13VoCt8Y8QI4splxwaCj4XtAgq/08C6/Qdka
-         vKprIGVY+D3shejsFVLQ867Ou02Xu5++TGOD1LBA1lpoOfqX4fY0tdpc8pHjabtCz8
-         GSskjvEMgLmOVHQMqD0s2Xnh1c77ZLB+SpCU24g6FEYkIW7lmJMEtxu9gRs3GPf/mk
-         seoT9xVUuunQSD5nZo7Tz2sOfi0qQc3RQlhS/PthPwCVzmxeoMJk6hoF42YwUkW9IT
-         Idqnkr3S0aB7vnUFOw9elZy51hbZEvSXFh72YRzCL25zOK07kpmVg0Ak7bP/9BZkJN
-         un0P1J4L3XL4w==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 529EEC43143; Sat, 13 May 2023 13:51:57 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217399] Kernel OOPS on boot with Kernel 6.3(.1) and RTL8153
- Gigabit Ethernet Adapter
-Date:   Sat, 13 May 2023 13:51:57 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: b.buschinski@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217399-208809-YiBoZvh695@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217399-208809@https.bugzilla.kernel.org/>
-References: <bug-217399-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        s=k20201202; t=1684001346;
+        bh=wT2fUHM1k0O+v6UkjWQ+uwgWRy1V21/bwijOGAblZx4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AiPGMkDLmhVSDOe4TCDo2/fwNXnNQeZqRFER9UzpG2T894t8U/bbnBPoXAOaIl9Jm
+         la7moPigivxNlMK+6rlG+QK15wKjBP31FtoE1ocTndMMKubJy1AdBT/VRs+oGDkN/t
+         hRqDyePsXASImLXxKkwYhl+PYpIiKiZLhRKosk8wcEUv3PfKRLAaTcgBjyifCDJu0K
+         OgJ5GsU8cCtVMPSQt+O1k79Sm++Mq64GSgDHNvjnQ/5om0TVhKI36/JLJ2Vb4BCqh9
+         5qtHqWkArtVY8OLKvdwSfUy8xvP9EZWKORv6F5DwvlqFhdHUBArBsI9rsgXSstw67R
+         CmSqv+sF1GVVw==
+Date:   Sat, 13 May 2023 19:09:01 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Takashi Iwai <tiwai@suse.de>, Hyunwoo Kim <imv4bel@gmail.com>,
+        kernel@tuxforce.de, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, cai.huoqing@linux.dev
+Subject: Re: [PATCH v3 0/4] Fix multiple race condition vulnerabilities in
+ dvb-core and device driver
+Message-ID: <20230513190901.0f403933@sal.lan>
+In-Reply-To: <20230309171714.GS9667@google.com>
+References: <20221117045925.14297-1-imv4bel@gmail.com>
+        <87lema8ocn.wl-tiwai@suse.de>
+        <Y/YXbNgBhhWhfjwS@google.com>
+        <Y/3mT9uSsuviT+sa@google.com>
+        <20230307103659.GA347928@google.com>
+        <20230309011525.49ac3399@coco.lan>
+        <20230309171714.GS9667@google.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -71,20 +62,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217399
+Hi Lee,
 
---- Comment #8 from Bernd Buschinski (b.buschinski@gmail.com) ---
-Hello, since I saw that kernel 6.3.2 also had some bpf changes, I tried it.
+Em Thu, 9 Mar 2023 17:17:14 +0000
+Lee Jones <lee@kernel.org> escreveu:
 
-Vanilla 6.3.2: failed to boot
-Patch + 6.3.2: works fine
+> > > Still nothing heard from the author or any maintainer.  
+> >
+> > We're currently lacking a sub-maintainer for dvb. Changes at the
+> > DVB mutexes have been problematic and require tests on some
+> > devices, specially on those with multiple frontends.
+> >
+> > I'll try to find some time to review and test those patches.  
+> 
+> Thank you Mauro, I fully appreciate the struggles and the effort.
 
-Is there anything else that I can help you with? Something to test? Do you =
-need
-any additional information?
+It took more time than I originally anticipated, as I had to setup
+a way to test it here with some DVB-T devices, but I reviewed the
+code and tested it.
 
---=20
-You may reply to this email to add a comment.
+I'm placing the patches I picked at this series:
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+	https://lore.kernel.org/lkml/53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org/T/#t
+
+They seemed to work fine. I tested using two devices:
+
+	USB ID 2013:0246 PCTV Systems PCTV 74E
+	USB ID 2040:5200 Hauppauge NovaT 500Stick
+
+The second one has two DVB-T independent devices on it.
+
+I did some tests of removing and re-inserting them with the
+devices closed and with the device opened and streamed. I didn't
+find any regressions. I didn't try to use kmemleak or KASAN to
+detect UAF conditions, though.
+
+Regards,
+Mauro
