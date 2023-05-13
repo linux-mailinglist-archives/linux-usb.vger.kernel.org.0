@@ -2,62 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD96A701778
-	for <lists+linux-usb@lfdr.de>; Sat, 13 May 2023 15:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629E8701786
+	for <lists+linux-usb@lfdr.de>; Sat, 13 May 2023 15:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238096AbjEMNmo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 13 May 2023 09:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
+        id S238565AbjEMNwA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 13 May 2023 09:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234642AbjEMNmn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 13 May 2023 09:42:43 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8E2AA10F1
-        for <linux-usb@vger.kernel.org>; Sat, 13 May 2023 06:42:40 -0700 (PDT)
-Received: (qmail 729531 invoked by uid 1000); 13 May 2023 09:42:39 -0400
-Date:   Sat, 13 May 2023 09:42:39 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+1cb937c125adb93fad2d@syzkaller.appspotmail.com>
-Cc:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] WARNING in shark_write_val/usb_submit_urb
-Message-ID: <bc3011b3-e742-4576-989a-e360a936182b@rowland.harvard.edu>
-References: <000000000000121ea5058e445936@google.com>
- <00000000000047c61c05fb85d44e@google.com>
+        with ESMTP id S238074AbjEMNv7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 13 May 2023 09:51:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEBD2716
+        for <linux-usb@vger.kernel.org>; Sat, 13 May 2023 06:51:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E8BA60C82
+        for <linux-usb@vger.kernel.org>; Sat, 13 May 2023 13:51:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6B5DBC433EF
+        for <linux-usb@vger.kernel.org>; Sat, 13 May 2023 13:51:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683985917;
+        bh=vIwZGOE09Ga43vHwPQdH+/st2rLCrvYgC4xfS6yJ+Hc=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=syVw02Tb6ANKwBBTN26E2Kg0Ow+4n13VoCt8Y8QI4splxwaCj4XtAgq/08C6/Qdka
+         vKprIGVY+D3shejsFVLQ867Ou02Xu5++TGOD1LBA1lpoOfqX4fY0tdpc8pHjabtCz8
+         GSskjvEMgLmOVHQMqD0s2Xnh1c77ZLB+SpCU24g6FEYkIW7lmJMEtxu9gRs3GPf/mk
+         seoT9xVUuunQSD5nZo7Tz2sOfi0qQc3RQlhS/PthPwCVzmxeoMJk6hoF42YwUkW9IT
+         Idqnkr3S0aB7vnUFOw9elZy51hbZEvSXFh72YRzCL25zOK07kpmVg0Ak7bP/9BZkJN
+         un0P1J4L3XL4w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 529EEC43143; Sat, 13 May 2023 13:51:57 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217399] Kernel OOPS on boot with Kernel 6.3(.1) and RTL8153
+ Gigabit Ethernet Adapter
+Date:   Sat, 13 May 2023 13:51:57 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: b.buschinski@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217399-208809-YiBoZvh695@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217399-208809@https.bugzilla.kernel.org/>
+References: <bug-217399-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000047c61c05fb85d44e@google.com>
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 12, 2023 at 02:31:34PM -0700, syzbot wrote:
-> syzbot suspects this issue was fixed by commit:
-> 
-> commit 76e31045ba030e94e72105c01b2e98f543d175ac
-> Author: Alan Stern <stern@rowland.harvard.edu>
-> Date:   Mon Apr 10 19:40:05 2023 +0000
-> 
->     media: radio-shark: Add endpoint checks
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17cfcfca280000
-> start commit:   b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=2f98d9171d58550f
-> dashboard link: https://syzkaller.appspot.com/bug?extid=1cb937c125adb93fad2d
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17070aa6880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177ab2da880000
-> 
-> If the result looks correct, please mark the issue as fixed by replying with:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217399
 
-#syz fix: media: radio-shark: Add endpoint checks
+--- Comment #8 from Bernd Buschinski (b.buschinski@gmail.com) ---
+Hello, since I saw that kernel 6.3.2 also had some bpf changes, I tried it.
 
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Vanilla 6.3.2: failed to boot
+Patch + 6.3.2: works fine
+
+Is there anything else that I can help you with? Something to test? Do you =
+need
+any additional information?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
