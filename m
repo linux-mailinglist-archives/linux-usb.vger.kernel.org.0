@@ -2,70 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0CE701DEE
-	for <lists+linux-usb@lfdr.de>; Sun, 14 May 2023 17:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334F67020A2
+	for <lists+linux-usb@lfdr.de>; Mon, 15 May 2023 01:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235342AbjENPIs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 14 May 2023 11:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
+        id S229963AbjENXLU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 14 May 2023 19:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjENPIr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 May 2023 11:08:47 -0400
-Received: from pku.edu.cn (mx19.pku.edu.cn [162.105.129.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 737FB1BC5;
-        Sun, 14 May 2023 08:08:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
-        Message-ID:References:MIME-Version:Content-Type:
-        Content-Disposition:In-Reply-To; bh=Ni4GctG6j2JiKGvnSbCcZe/JfZsD
-        B8hY8dsw53qz1zI=; b=DE6z7MdkJsS+bHcnlf7igxWIoUzmIn3KFRIiCBGjR/Rl
-        XDJcF3y6fuCf/riHiMLxrxrTNifVzSGT7k7DQGKSQPiPlLTuDVKmNPg7B6MYoBoH
-        nvualjmSTFxe6uFXkqFzwg0a7IS7BrU+mtwE4VLHtvBiKYu0gNHUiT9mgnjhpAU=
-Received: from localhost (unknown [10.7.98.243])
-        by front01 (Coremail) with SMTP id 5oFpogAHnTxb+WBkkWwfAw--.45456S2;
-        Sun, 14 May 2023 23:08:15 +0800 (CST)
-Date:   Sun, 14 May 2023 23:08:11 +0800
-From:   Ruihan Li <lrh2000@pku.edu.cn>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ruihan Li <lrh2000@pku.edu.cn>
-Subject: Re: [PATCH 0/4] Fix type confusion in page_table_check
-Message-ID: <zwcena7ynuhyqqioppeh47jdlgvkc5k2uar3cnvkgwzck4w7w3@riv4ca62kyjr>
-References: <20230510085527.57953-1-lrh2000@pku.edu.cn>
- <2023051108-lens-unsocial-8425@gregkh>
- <cyym2uqyqdtegfbdpworng4fa7iiuyh3e2wjrf4lp47jksvoxt@wwhvnzy5757c>
- <ZF0KcRgclDJ6POrb@infradead.org>
- <zwixiok55avpjvfiknp7tzm7e4aragjj43a46abna4qqegdvdx@suat6sk34lgb>
- <2023051324-attentive-footwork-9dec@gregkh>
+        with ESMTP id S229800AbjENXLT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 May 2023 19:11:19 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C037E79;
+        Sun, 14 May 2023 16:11:17 -0700 (PDT)
+Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 13178847CF;
+        Mon, 15 May 2023 01:11:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1684105876;
+        bh=qbKC27OXD3a+sAVXe2pU/nJvOObH8por3f0ttK7EJVU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SBex1qckjm1XCOG9HjZ8nIISzCJVJh3vhFFDMbn7EADj+bGchV83E6pip/ZCKJlJM
+         y2UNEP24O+FAPJydr382ff+4rXa63qAkcJ06jr420w12Br0ro50a9FHfLTKV0xSBA8
+         H96ggcRDpH9ygeNm6Kmfb5WxNkiKwUxi5GI0o/hxxTUTuyWUBJW5HN5Hi+U0PfqSEj
+         0RvAQUJbo5OW699Uh5scqaTtaXLsXCxg/05QFu8BaG/T3VOQED8P0af4S6N/ODnE5g
+         qdwSq+ihR2VqBl6ihMm+T9kCt4ck25r3MW76BSjuwsf5F4FLGwtLPvceesgFVwY46J
+         5oHkDMKyHUihg==
+From:   Marek Vasut <marex@denx.de>
+To:     devicetree@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>, Conor Dooley <conor+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH] dt-bindings: usb: snps,dwc3: Fix "snps,hsphy_interface" type
+Date:   Mon, 15 May 2023 01:11:02 +0200
+Message-Id: <20230514231102.788841-1-marex@denx.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023051324-attentive-footwork-9dec@gregkh>
-X-CM-TRANSID: 5oFpogAHnTxb+WBkkWwfAw--.45456S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJr4xuF45Wr1xKw45GF1Utrb_yoW8Xr4Dpa
-        y3tayDta1ktwn3Aw1Ivw1xu34rt3yfKryUW34Yq34fC3ZIgry3KrsrKr4a9F9xCr1kW3W7
-        XF4jvasxZ3WYy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUB01xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24V
-        AvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
-        McIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
-        v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-        8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26w
-        4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
-        r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6x
-        IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAI
-        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
-        0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUOlksUUUUU
-X-CM-SenderInfo: yssqiiarrvmko6sn3hxhgxhubq/1tbiAgEJBVPy773nzgACsX
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,42 +55,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 13, 2023 at 06:37:52PM +0900, Greg Kroah-Hartman wrote:
-> 
-> On Fri, May 12, 2023 at 12:19:09AM +0800, Ruihan Li wrote:
-> > On Thu, May 11, 2023 at 08:32:01AM -0700, Christoph Hellwig wrote:
-> > > On Thu, May 11, 2023 at 09:44:55PM +0800, Ruihan Li wrote:
-> > > > Christoph's patch perfectly fixes _one_ problem: kmalloc'ed memory
-> > > > cannot be mapped to user space. However, as I detailed in the commit
-> > > > message, this series of patches fixes _three_ problems.
-> > > 
-> > > FYI, I agree with you.  My simple patch was sent before reading
-> > > your new series, and is a strict subset of it.
-> > 
-> > Thank you for the clarification.
-> > 
-> > > > I have to say that the original code is quite buggy. In the
-> > > > gen_pool_dma_alloc path, there is no guarantee of page alignment. 
-> > > 
-> > > I also find this whole interface very problematic to start with,
-> > > but that's a separate discussion for later.
-> > 
-> > Yes. I don't think hybrid allocation of DMA memory and normal memory in
-> > one function is a good thing, but currently there is no clear way to fix
-> > this. Mixing memory allocation and page allocation is another bad thing,
-> > and at least, my patch can (hopefully) solve the second (and much
-> > easier) issue.
-> 
-> Ok, I'll take these through the usb tree if I can get an ack for the
-> mm-specific patches.  Or were you going to send a v2 series?
-> 
-> thanks,
-> 
-> greg k-h
+The "snps,hsphy_interface" is string, not u8. Fix the type.
 
-There are some comments from Alan and David, so I'll send a v2 series to
-address them (probably tomorrow).
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+---
+ Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Ruihan Li
+diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+index 50edc4da780e9..4f7625955cccc 100644
+--- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+@@ -287,7 +287,7 @@ properties:
+     description:
+       High-Speed PHY interface selection between UTMI+ and ULPI when the
+       DWC_USB3_HSPHY_INTERFACE has value 3.
+-    $ref: /schemas/types.yaml#/definitions/uint8
++    $ref: /schemas/types.yaml#/definitions/string
+     enum: [utmi, ulpi]
+ 
+   snps,quirk-frame-length-adjustment:
+-- 
+2.39.2
 
