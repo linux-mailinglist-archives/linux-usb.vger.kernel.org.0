@@ -2,132 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5253702E65
-	for <lists+linux-usb@lfdr.de>; Mon, 15 May 2023 15:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A47702E82
+	for <lists+linux-usb@lfdr.de>; Mon, 15 May 2023 15:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242399AbjEONhK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 May 2023 09:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
+        id S241313AbjEONkS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 May 2023 09:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242079AbjEONhI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 09:37:08 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F2A270A
-        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 06:37:01 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f4c6c4b51eso57179305e9.2
-        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 06:37:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684157819; x=1686749819;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3aLrbkfYK1T8L/pww+3+UJGfuSXtltlajZdwftVgkQc=;
-        b=BnikwaqXfHdIuZS2cIM3Om/ecj6nLAfiOLyEaauLoE4A6R/CXRLwvoJn+JXPkhx/lG
-         O/CRhu3bjLTFRqvYSMq2/4yMO1PAzsa19HbWWvnKvl0MJ3agppjqtc16K8JaaCgC+5K2
-         Avq5L6zan2cr3EMNBkNMDrRcX/aBlsd/ZbJCqpk7rspDZFfdphu59pu70/lrevRLPmA0
-         bGb90myeoure8/AvcT+MXbh+rGt4Y1EQnRD3YYu/Qvz7j1k30TxggQq1UihaQ/d8zKRh
-         1g6jdD3yJTjM64QG0UfRKud4TYLIqi8c6y7Qh9tHEHndUqfLyCFt2iGSwlNoesKTEMPs
-         PHag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684157819; x=1686749819;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3aLrbkfYK1T8L/pww+3+UJGfuSXtltlajZdwftVgkQc=;
-        b=GW2Lfs60DKbFO8VAE5Zj0mwt85OLfOJmYV0Oe1Q+XpmQhto8b8UvOXy1jru50xwj2r
-         HCb1quXFNMybjxpXXFR6+siQvXH3awowLS1Yvnfw8+VZM3I+8iw8NFg3nZ25yBFNPxxk
-         U7oU7w38Qo3J7LVIpfV3fE+j/nf4/Wr+EGMU6JX1ygI7G5LkSHa3aDmG2RXmOS40CQ4F
-         eY8y0XqL1ObLateD8vcJl7D5wDKIe51x4RsE2Yqz8hQr08yIbcKcpcnyyNVLzsAhvNV7
-         mIqjD2IV5WwnHSkIa0ak0Xyt6rohMxc5rW7ryFGmJgSXog3jSA8ie3b9wJd2YwQe9FOC
-         GJKw==
-X-Gm-Message-State: AC+VfDxuCZHvAFIHrVPzs9XE2ivGbvpcbUeN0Y1/BLXzo6Q5Cwj4l4U1
-        tDp1XhoGF7Mu3F04qMykM55D3wlYS0DAySGGr4eTpw==
-X-Google-Smtp-Source: ACHHUZ7oRl/buvDQZ+RQ5GbsstJk9HNPMo1h33o5zQFneFBK+k3QHszvPczoryrclzRYZrEDhnxfWw==
-X-Received: by 2002:a1c:f703:0:b0:3f1:979f:a733 with SMTP id v3-20020a1cf703000000b003f1979fa733mr25294002wmh.31.1684157819440;
-        Mon, 15 May 2023 06:36:59 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id o17-20020a5d4091000000b003078a3f3a24sm28856634wrp.114.2023.05.15.06.36.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 06:36:59 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, andersson@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        luca.weiss@fairphone.com, lujianhua000@gmail.com,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     konrad.dybcio@linaro.org, caleb.connolly@linaro.org,
-        bryan.odonoghue@linaro.org, subbaram@quicinc.com,
-        jackp@quicinc.com, robertom@qti.qualcomm.com
-Subject: [PATCH v8 11/11] arm64: dts: qcom: qrb5165-rb5: Switch on TCPM orientation-switch for usb_1_qmpphy
-Date:   Mon, 15 May 2023 14:36:43 +0100
-Message-Id: <20230515133643.3621656-12-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230515133643.3621656-1-bryan.odonoghue@linaro.org>
-References: <20230515133643.3621656-1-bryan.odonoghue@linaro.org>
+        with ESMTP id S242164AbjEONkN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 09:40:13 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653801FE7
+        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 06:40:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684158012; x=1715694012;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5o+MaGLkIVfqDIeqewK1JIOB3ymWtY1XJZV4fhqiD5g=;
+  b=Ja9StQ602l3IZO8VGReHsQuq+dTBBqMtt+1GLfI3suf/PL8W0gbYh9gW
+   hehcW1yfiS4dCNHjKXcUKIDG8Eozpp4gEWdm1UUdwOM5XW9GkwDmaaEdj
+   0EnaCds1WbWEfcOb52XLjosjFvTCLyaGwHP3KY76NfmolmE3bwexaU7Oy
+   e1dkKu4xSnSXKyK4W6jupNphrd2AxLEHxACJRIYLUuZ1leYgUAnVED4M+
+   teJanU7y9syhMidvhULo3PPmggw+c5hr2NMBkxlO038vsZOwz70EbIKEy
+   /8emOD1Z/xZeRRfUKI3TrUR6yRMpSy4oNX1y1fbWjEGj99Z10TiOxKzgq
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="414598001"
+X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
+   d="scan'208";a="414598001"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 06:39:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="700964221"
+X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
+   d="scan'208";a="700964221"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by orsmga002.jf.intel.com with ESMTP; 15 May 2023 06:39:54 -0700
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/2] xhci fixes for usb-linus
+Date:   Mon, 15 May 2023 16:40:57 +0300
+Message-Id: <20230515134059.161110-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Switch on USB orientation-switching for usb_1_qmp via TCPM. Detecting the
-orientation switch is required to get the PHY to reset and bring-up the PHY
-with the CC lines set to the appropriate lane.
+Hi Greg
 
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 11 +++++++++++
- arch/arm64/boot/dts/qcom/sm8250.dtsi     |  1 +
- 2 files changed, 12 insertions(+)
+A couple xhci fixes for 6.4
+Fixing a S3 resume issue on AMD hosts, and a flaw in calculating free TRBs
+in ring buffer which may cause xhci to hog extra memory.
 
-diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-index 580ed63c6fb54..9b314c390e3f8 100644
---- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-+++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-@@ -1294,6 +1294,11 @@ &usb_1_qmpphy {
- 
- 	vdda-phy-supply = <&vreg_l9a_1p2>;
- 	vdda-pll-supply = <&vreg_l18a_0p92>;
-+	orientation-switch;
-+};
-+
-+&usb_1_qmpphy_typec_mux_in {
-+	remote-endpoint = <&pm8150b_typec_mux_out>;
- };
- 
- &usb_2 {
-@@ -1378,6 +1383,12 @@ pm8150b_role_switch_out: endpoint {
- 					remote-endpoint = <&usb_1_dwc3_role_switch_in>;
- 				};
- 			};
-+			port@1 {
-+				reg = <1>;
-+				pm8150b_typec_mux_out: endpoint {
-+					remote-endpoint = <&usb_1_qmpphy_typec_mux_in>;
-+				};
-+			};
- 		};
- 	};
- };
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index b9f55a9ef89f8..f538216f3704f 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -3588,6 +3588,7 @@ ports {
- 
- 				port@0 {
- 					reg = <0>;
-+					usb_1_qmpphy_typec_mux_in: endpoint {};
- 				};
- 
- 				port@1 {
+Thanks
+Mathias
+
+Mario Limonciello (1):
+  xhci-pci: Only run d3cold avoidance quirk for s2idle
+
+Mathias Nyman (1):
+  xhci: Fix incorrect tracking of free space on transfer rings
+
+ drivers/usb/host/xhci-pci.c  | 12 ++++++++++--
+ drivers/usb/host/xhci-ring.c | 29 ++++++++++++++++++++++++++++-
+ drivers/usb/host/xhci.h      |  2 +-
+ 3 files changed, 39 insertions(+), 4 deletions(-)
+
 -- 
-2.39.2
+2.25.1
 
