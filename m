@@ -2,61 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC75702DA4
-	for <lists+linux-usb@lfdr.de>; Mon, 15 May 2023 15:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC3B702DB1
+	for <lists+linux-usb@lfdr.de>; Mon, 15 May 2023 15:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242159AbjEONKS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 May 2023 09:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
+        id S242337AbjEONLX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 May 2023 09:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242205AbjEONKB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 09:10:01 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F58C2D49;
-        Mon, 15 May 2023 06:09:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684156178; x=1715692178;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mN86vB30umdkiNNMC51DwKrQ3kdN0DjtgJpVmuFVIzQ=;
-  b=gd9wM+5Dca1tgxoyNkWbESnCBRtn7HfST/g98KwzyJRtUWYrjZqwgW9W
-   uxbm2tmtEFTPejZyTE3qPvsxHFlQVipf/MLn3PR1FSIdT5N+fvox7hEKZ
-   YmFDog9L7U9vuqbFbZSRAOXPIRhHv94Q6p4b6w8jvBuXQ6O8yDRE4LFdP
-   EMLs1YHfJE7GjVmsMeSt7mxDezNB18TkYdanWPpEjVsndl4xMFyI0v68s
-   9yAnl2BsqRXkUYjeX57EpCRPLuR84VVyo7l9A6842oz5Zjd4f2I3s4rLS
-   T2xWgLBNlIhSVR35uazOrHfsiym7wHDagbx0tbgLUqejJJKD1HDIqPNLq
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="437536261"
-X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
-   d="scan'208";a="437536261"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 06:09:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="845256782"
-X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
-   d="scan'208";a="845256782"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 15 May 2023 06:09:15 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 15 May 2023 16:09:14 +0300
-Date:   Mon, 15 May 2023 16:09:14 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     bryan.odonoghue@linaro.org, linux@roeck-us.net, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        gregkh@linuxfoundation.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: qcom: set pm8150b_typec_res
- storage-class-specifier to static
-Message-ID: <ZGIu+tmiMRH64luT@kuha.fi.intel.com>
-References: <20230515114043.3452010-1-trix@redhat.com>
+        with ESMTP id S241718AbjEONKw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 09:10:52 -0400
+Received: from pku.edu.cn (mx19.pku.edu.cn [162.105.129.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF6972130;
+        Mon, 15 May 2023 06:10:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=7xP0On4kxe
+        WWPTALWosP9FmQHvyKTJsqUxCPEueBxBA=; b=PyktA73T0EpdMP25nHKIC6+pYR
+        ePo7FQpi3nT0OD4EhVD1vH7lAqqcsJZJJG36MSe5JAI4UTP3RibTfOsqkyq0qL8/
+        oVF2di/eCNH2HkQEp6dFXTODuHprDjFmg1ORnZOFjZyIVU83XwO3CkK8Qn40BW9d
+        2W2oY56GUXWSmWzIw=
+Received: from localhost.localdomain (unknown [10.7.98.243])
+        by front02 (Coremail) with SMTP id 54FpogAnLDgqL2JkVboyFA--.10053S2;
+        Mon, 15 May 2023 21:10:06 +0800 (CST)
+From:   Ruihan Li <lrh2000@pku.edu.cn>
+To:     linux-mm@kvack.org, linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ruihan Li <lrh2000@pku.edu.cn>
+Subject: [PATCH v2 0/4] Fix type confusion in page_table_check 
+Date:   Mon, 15 May 2023 21:09:54 +0800
+Message-Id: <20230515130958.32471-1-lrh2000@pku.edu.cn>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515114043.3452010-1-trix@redhat.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: 54FpogAnLDgqL2JkVboyFA--.10053S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1fJw4ktrW7Jw4ftry5urg_yoW8Cw43pF
+        1UCw13XFs5G3s3Jw1SkanY9a4ruF4rGay7A34xK345u3s5A34xCFn3Wr13Za4kArWUG34Y
+        qF42gryUKw18J37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24V
+        AvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
+        McIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
+        v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF
+        7I0E8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6c
+        x26w4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
+        xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
+        IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY
+        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
+        CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbHa0DUUUUU==
+X-CM-SenderInfo: yssqiiarrvmko6sn3hxhgxhubq/1tbiAgEMBVPy7743xAABsI
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,34 +69,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 15, 2023 at 07:40:43AM -0400, Tom Rix wrote:
-> smatch reports
-> drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c:323:29: warning: symbol
->   'pm8150b_typec_res' was not declared. Should it be static?
-> 
-> This variable is only used in its defining file, so it should be static
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Recently, syzbot reported [1] ("kernel BUG in page_table_check_clear").
+The root cause is that usbdev_mmap calls remap_pfn_range on kmalloc'ed
+memory, which leads to type confusion between struct page and slab in
+page_table_check. This series of patches fixes the usb side by avoiding
+mapping slab pages into userspace, and fixes the mm side by enforcing
+that all user-accessible pages are not slab pages. A more detailed
+analysis and some discussion of how to fix the problem can also be found
+in [1].
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+ [1] https://lore.kernel.org/lkml/20230507135844.1231056-1-lrh2000@pku.edu.cn/T/
 
-> ---
->  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-> index 191458ce4a06..937e855a6c4c 100644
-> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-> @@ -320,7 +320,7 @@ static struct pmic_typec_port_resources pm8150b_port_res = {
->  	.nr_irqs = 7,
->  };
->  
-> -struct pmic_typec_resources pm8150b_typec_res = {
-> +static struct pmic_typec_resources pm8150b_typec_res = {
->  	.pdphy_res = &pm8150b_pdphy_res,
->  	.port_res = &pm8150b_port_res,
->  };
+Changes since v1:
+  * Fix inconsistent coding styles. (Alan Stern)
+  * Relax !DEVMEM requirements to EXCLUSIVE_SYSTEM_RAM, which is
+    equivalent to !DEVMEM || STRICT_DEVMEM. (David Hildenbrand)
+  * A few random tweaks in commit messages and code comments, none of
+    them major.
+Link to v1:
+  https://lore.kernel.org/lkml/20230510085527.57953-1-lrh2000@pku.edu.cn/T/
+
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Ruihan Li (4):
+  usb: usbfs: Enforce page requirements for mmap
+  usb: usbfs: Use consistent mmap functions
+  mm: page_table_check: Make it dependent on EXCLUSIVE_SYSTEM_RAM
+  mm: page_table_check: Ensure user pages are not slab pages
+
+ Documentation/mm/page_table_check.rst | 18 ++++++++++++
+ drivers/usb/core/buffer.c             | 41 +++++++++++++++++++++++++++
+ drivers/usb/core/devio.c              | 20 +++++++++----
+ include/linux/page-flags.h            |  6 ++++
+ include/linux/usb/hcd.h               |  5 ++++
+ mm/Kconfig.debug                      |  2 +-
+ mm/page_table_check.c                 |  6 ++++
+ 7 files changed, 91 insertions(+), 7 deletions(-)
 
 -- 
-heikki
+2.40.1
+
