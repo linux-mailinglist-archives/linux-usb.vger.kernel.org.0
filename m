@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EEDC702E60
-	for <lists+linux-usb@lfdr.de>; Mon, 15 May 2023 15:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2319C702E61
+	for <lists+linux-usb@lfdr.de>; Mon, 15 May 2023 15:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242396AbjEONhF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 May 2023 09:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
+        id S242375AbjEONhG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 May 2023 09:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242366AbjEONhD (ORCPT
+        with ESMTP id S241672AbjEONhD (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 09:37:03 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C972701
-        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 06:36:58 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-306dbad5182so8388770f8f.1
-        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 06:36:58 -0700 (PDT)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA5B1FE2
+        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 06:36:59 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f4c6c4b425so36862035e9.2
+        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 06:36:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684157817; x=1686749817;
+        d=linaro.org; s=google; t=1684157818; x=1686749818;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=USITxvLm1tGcaHImZMsGsNG5AjtA8MZCeVdVYmxvE4U=;
-        b=WROTeU8Xa5lXQPjD+CBjizc0bCNC+EYTMOCRWH0fNhLz/pIc7Al3AI0C9R7ri/h+b0
-         Og/wtByaxJHBC3xBLjH3a/GbnH4E/WRNLSejWeuh1HEqe0/qQzr/n0O1oNwvPg4L6lEn
-         4YEG1m/mLq4Z7hvlf9pZfGRHC7Kc9eWL4eVBcv2DWh18eEcmoGbRrueWOzKNims+ptAV
-         FM3lxZOYB5B/DtWdwb1BOTvsxcsHz0/vqXUspxD95jfSF8YtnfsurG+aDEzqA9mZ9Frg
-         yKabh+tdJiLcxe5lvnmoV79VVRVHRpvt+j7UNy1QT3L4yrZPp8IxZ3Tsu8fYbzKTMHd4
-         yY4g==
+        bh=QxfuaO1huHKQXCMzo1kIjQt/GPBP6/klFwtWCLW8SEc=;
+        b=MTD7QY5BXtqdHafZQzpFSQ8HhNmH9JGr/TaH1E/691Dh1tgBbwTTL3ADatt+98jq5y
+         l1uY8IkQEvyJ0vrRENEse3bm3LynqtvjoUY0749ktP2z2tA7fVqQzybCW1so5fcDbxfb
+         gNg/5+nTjfb/XOPROTBVoSqN5uCuShj4n4VGwJ3pEGB/iBR4r2V4melxIdgzxSfLtiiW
+         3I7aU3htP7NQCVqKToSKO+rWm5kK9awBcTS3vLX5kmNiv06UuelFuHD7ZiCBEARxBeC5
+         wlCD/6rQhxUTf0zG257NbsRDUorjdcCfhCjvMbU83iplBfD80AAISpEGaOaLTHBpGR4z
+         QLeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684157817; x=1686749817;
+        d=1e100.net; s=20221208; t=1684157818; x=1686749818;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=USITxvLm1tGcaHImZMsGsNG5AjtA8MZCeVdVYmxvE4U=;
-        b=XO3hdqXxtZldTfgRwlfdoC7W7oz+zKI75jnTRklcpDVJZE7kibsaGpKTGJzHSfQwNw
-         Z53+1zUpBNUIeyYtMa2SIUnUeTFL98bFbXRSIIRYXw7Lb48iv2Tw5zBQA4nzf6Dnv6hA
-         RpMvYS4LTvNfTfmdH4Q6hFLpZNwK6/XD7h/o9G4ZNWJIhb+wnRU6l0rY1GZsqiEeJXS1
-         Ze8iCiXoAFBzPxfQD46Ah4DqBEpKCvKE4efqDn9GmtYsd1xGeaEmQ55B+kT8E9g5oz+q
-         TO7eid5yK9a7uMjLJLyR/bAw6Sd/AAAXdfUcGgIjqdIPNtkXzfTDsRyvyR314YwSrXPX
-         9baA==
-X-Gm-Message-State: AC+VfDzhgAEx2gU0ZEvu05Broth31MYG2U3vQqt70orYUhGe9NeO1OwO
-        Ot8HScJys3/QO/fSlnEKi460mQ==
-X-Google-Smtp-Source: ACHHUZ7j66atIuz7y2XFA9yFf3j6UHlYN9jpXXs6+CGQINjTXsENRbzXk4RZKFVIqU3nYmbP8YIUTQ==
-X-Received: by 2002:adf:f245:0:b0:306:2d28:d556 with SMTP id b5-20020adff245000000b003062d28d556mr20831036wrp.34.1684157816952;
-        Mon, 15 May 2023 06:36:56 -0700 (PDT)
+        bh=QxfuaO1huHKQXCMzo1kIjQt/GPBP6/klFwtWCLW8SEc=;
+        b=DfjGgpdJxx1htTFm72UXswWTOvz+BuG3d8w8hmpYs1kJDsxW58ik4r/ceZq4PEv9wB
+         HYID8FQ0G5bl/7pddjypyDGj8bhjERREd6dAHigYozN9IJCBWzO9gxeLQiCxjnM9ZZi0
+         XjyJsUD0FV9ZTiwdOJODM7ZOZJDJnU4pwHbMsck5cL5PDUwZM+MEaMAob9TbGafvgev0
+         svRlXGmVovX7mznLs0Bx5saF4GlvSogOQwkrkXTZwIWJ1ZLakWZXc+l1pjVYsQ92AFaA
+         Y5loGuyu9Al552eCjQrZk1Kh0jJeEGVHmjNtbFotoC3HIFPbSTbBpiLR6tDwuAEaUkmk
+         sCdQ==
+X-Gm-Message-State: AC+VfDzrJMj66F+MI8zb4LzN7b/1pdfdK6YV3GbvAJJBqoqFLci6DoJJ
+        qiv0Nt2i43S5y/PUugUI4MKsRg==
+X-Google-Smtp-Source: ACHHUZ6dQ62N4rb6QjZWzK9ObMS6DlOjeGndmXHT4R51yNPY8lJA2vD6CH3syFqHE0J0CjXw+8suiw==
+X-Received: by 2002:a05:6000:48:b0:307:7c2d:dc79 with SMTP id k8-20020a056000004800b003077c2ddc79mr23247671wrx.16.1684157818252;
+        Mon, 15 May 2023 06:36:58 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id o17-20020a5d4091000000b003078a3f3a24sm28856634wrp.114.2023.05.15.06.36.55
+        by smtp.gmail.com with ESMTPSA id o17-20020a5d4091000000b003078a3f3a24sm28856634wrp.114.2023.05.15.06.36.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 06:36:56 -0700 (PDT)
+        Mon, 15 May 2023 06:36:57 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
         gregkh@linuxfoundation.org, andersson@kernel.org,
@@ -59,9 +59,9 @@ To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
 Cc:     konrad.dybcio@linaro.org, caleb.connolly@linaro.org,
         bryan.odonoghue@linaro.org, subbaram@quicinc.com,
         jackp@quicinc.com, robertom@qti.qualcomm.com
-Subject: [PATCH v8 09/11] arm64: dts: qcom: qrb5165-rb5: Switch on basic TCPM
-Date:   Mon, 15 May 2023 14:36:41 +0100
-Message-Id: <20230515133643.3621656-10-bryan.odonoghue@linaro.org>
+Subject: [PATCH v8 10/11] arm64: dts: qcom: qrb5165-rb5: Switch on TCPM usb-role-switching for usb_1
+Date:   Mon, 15 May 2023 14:36:42 +0100
+Message-Id: <20230515133643.3621656-11-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230515133643.3621656-1-bryan.odonoghue@linaro.org>
 References: <20230515133643.3621656-1-bryan.odonoghue@linaro.org>
@@ -69,7 +69,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,50 +77,67 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Switch on TCPM for the RB5. Here we declare as a source only not a sink
-since qrb5165 doesn't support powering exclusively from the type-c port.
+Switch on usb-role-switching for usb_1 via TCPM. We need to declare
+usb-role-switch in &usb_1 and associate with the remote-endpoint in TCPM
+which provides the necessary signal.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 19 ++++++++++++++++++-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi     |  4 ++++
+ 2 files changed, 22 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-index b326bdeeb7742..d80a22bff7969 100644
+index d80a22bff7969..580ed63c6fb54 100644
 --- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
 +++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-@@ -9,6 +9,7 @@
- #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
- #include <dt-bindings/sound/qcom,q6afe.h>
- #include <dt-bindings/sound/qcom,q6asm.h>
-+#include <dt-bindings/usb/pd.h>
- #include "sm8250.dtsi"
- #include "pm8150.dtsi"
- #include "pm8150b.dtsi"
-@@ -1344,3 +1345,22 @@ &pm8150b_vbus {
- 	regulator-max-microamp = <3000000>;
- 	status = "okay";
+@@ -1273,7 +1273,12 @@ &usb_1 {
  };
-+
-+&pm8150b_typec {
-+	status = "okay";
-+
-+	vdd-pdphy-supply = <&vreg_l2a_3p1>;
-+
-+	connector {
-+		compatible = "usb-c-connector";
-+
-+		power-role = "source";
-+		data-role = "dual";
-+		self-powered;
-+
-+		source-pdos = <PDO_FIXED(5000, 3000,
-+					 PDO_FIXED_DUAL_ROLE |
-+					 PDO_FIXED_USB_COMM |
-+					 PDO_FIXED_DATA_SWAP)>;
-+	};
+ 
+ &usb_1_dwc3 {
+-	dr_mode = "peripheral";
++	dr_mode = "otg";
++	usb-role-switch;
 +};
++
++&usb_1_dwc3_role_switch_in {
++	remote-endpoint = <&pm8150b_role_switch_out>;
+ };
+ 
+ &usb_1_hsphy {
+@@ -1362,5 +1367,17 @@ connector {
+ 					 PDO_FIXED_DUAL_ROLE |
+ 					 PDO_FIXED_USB_COMM |
+ 					 PDO_FIXED_DATA_SWAP)>;
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++				pm8150b_role_switch_out: endpoint {
++					remote-endpoint = <&usb_1_dwc3_role_switch_in>;
++				};
++			};
++		};
+ 	};
+ };
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index 0bc7486e59e54..b9f55a9ef89f8 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -3740,6 +3740,10 @@ usb_1_dwc3: usb@a600000 {
+ 				snps,dis_enblslpm_quirk;
+ 				phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
+ 				phy-names = "usb2-phy", "usb3-phy";
++
++				port {
++					usb_1_dwc3_role_switch_in: endpoint {};
++				};
+ 			};
+ 		};
+ 
 -- 
 2.39.2
 
