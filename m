@@ -2,153 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3031C703DEE
-	for <lists+linux-usb@lfdr.de>; Mon, 15 May 2023 21:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57845703EB5
+	for <lists+linux-usb@lfdr.de>; Mon, 15 May 2023 22:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245024AbjEOT4I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 May 2023 15:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
+        id S245402AbjEOUjM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 May 2023 16:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244989AbjEOT4F (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 15:56:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2182E100EB;
-        Mon, 15 May 2023 12:56:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CBEF631F3;
-        Mon, 15 May 2023 19:55:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C99CDC4339B;
-        Mon, 15 May 2023 19:55:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684180559;
-        bh=INkfx3982UDfhbh2ERXdH+2k7xJotsdpjMphfR9pqUQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ycqe2tn2RXiA4rL0/kWU/4KhewpOuYpAD92QeBNCdOuVcsupo5JxGjUEJHxfunykm
-         LT2hNk/tanAvxfGGSAeo4BysVDbZ10TcinWqXkALy+dtCjsi51eNuKtq1wxQIL3Fib
-         L+m12XxoIfXGXWula59KQVV/+sx6qfpk7HlBdTbjYTwEU0gY4Tc1fXuIcvUduGK2iU
-         CC9xEhu8eCqCY8foYcAeLzMosyWE0X6zq0uff3QSmZUDM2ixW+a5OCQWfwwZYAwIXn
-         TymM1mnncz0/sFP08foKcwh4Gufo1fFDTo6e8nNs7aQJXCpopdnWCg6zEBV9RZbnGA
-         n9iLjKm1xaI4Q==
-Date:   Mon, 15 May 2023 12:59:49 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, luca.weiss@fairphone.com,
-        lujianhua000@gmail.com, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        konrad.dybcio@linaro.org, caleb.connolly@linaro.org,
-        subbaram@quicinc.com, jackp@quicinc.com, robertom@qti.qualcomm.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v8 04/11] dt-bindings: phy: qcom,sc7180-qmp-usb3-dp-phy:
- Add input and output ports
-Message-ID: <20230515195949.yemdw4n2pquive2r@ripper>
-References: <20230515133643.3621656-1-bryan.odonoghue@linaro.org>
- <20230515133643.3621656-5-bryan.odonoghue@linaro.org>
+        with ESMTP id S231910AbjEOUjI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 16:39:08 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A952D66
+        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 13:39:08 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-2502346bea0so8299385a91.2
+        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 13:39:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684183147; x=1686775147;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3VnIlIKlgYtK2cK+0dhB1nFTXDfzrC4hKFVLUidauWQ=;
+        b=4lEo7PiBFRrylrAWAv8CLnPJVHW8HCY0TI0xbb3qciNDlGiv5aV83Vku9oMZe6ckdD
+         2BZLis1r43qAZyku0rmm2m1whIY587nZsxZpedIZZqqEDbF8XQ1Qz+faKVaumUxM3iPw
+         jJDDF+l2/WTT3r+9lskPZZfCA+4bnbaMJM6x/2/RnhCo1MHeT2nKghzA56ztbMHHQo0I
+         0Rvr92MWC6nVEnVWXrdzNA6oTj9XAxpKAF3cvSwazzGonfSdwJExkJlYvyYdB6GeWq5j
+         ssnL6oNBJq7I6fKHsHb2loOIMs9OKHnxOYFUA0Kj3Y0sp0/Vlrb198e4dQ5kYEwOGaTI
+         m5XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684183147; x=1686775147;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3VnIlIKlgYtK2cK+0dhB1nFTXDfzrC4hKFVLUidauWQ=;
+        b=Vre0Ty6Akj00CYZUH7R27kCs9sZ4BHQPCo7vHlRPoudCzq8GGjxIGKiV7pNt8mfAzi
+         ylU6mToyF9btFfVJ9RuNL0TczD41w0tATa6pa5RlvNuwZtZIj9gqxdIVHKHJbuz7Q9jz
+         rOx5SjKQyjpSZQxt5qR9b+FaUvZ6uNIkauTzPT/RGr72HwMl3IPvGtrGFloQRY3lIqnB
+         7cQ3ZFyBsiKnBJS/1eQlvSlD3fTp91F9RQ2x/cC0F3ITiigSR09cl2lLvaUkcHesvn7r
+         Ibal0yByOdbPU2Us+NazUQ3SvwbQdexjkYKUJUAkdDNUU57qBdv9rd1aXyCdVcJpVgs3
+         fEFA==
+X-Gm-Message-State: AC+VfDwScC8VSS/s2yCILDQJJg4kV9XOqWchjL6ILejyky5NRELwX21s
+        m0vVMoHzoCqOlyvRz40VH/IYD/rRYpbj/rHm72mYEQl4L4HH9gdLhG8=
+X-Google-Smtp-Source: ACHHUZ4ifykc1+tBQypDNvbOXYPO6HKpgor4vVWAxDkB3OBtzFJShON/PwlC6C4drmtuMCyBjdYMFGeDGxZuyk5BY4w=
+X-Received: by 2002:a17:90b:384b:b0:252:c3b7:6689 with SMTP id
+ nl11-20020a17090b384b00b00252c3b76689mr10261495pjb.49.1684183147398; Mon, 15
+ May 2023 13:39:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515133643.3621656-5-bryan.odonoghue@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <ZF4BvgsOyoKxdPFF@francesco-nb.int.toradex.com>
+ <ZF4bMptC3Lf2Hnee@gerhold.net> <13285014.O9o76ZdvQC@z3ntu.xyz> <ZF5evXbOXhWFoaus@francesco-nb.int.toradex.com>
+In-Reply-To: <ZF5evXbOXhWFoaus@francesco-nb.int.toradex.com>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Mon, 15 May 2023 13:38:30 -0700
+Message-ID: <CAPTae5+uv3ZJaF7kAdkCzGnTgz3LzoCsT97_Mtv10+5kaEXrQA@mail.gmail.com>
+Subject: Re: USB gadget regression on v6.4-rc1 and v6.1.28
+To:     Francesco Dolcini <francesco@dolcini.it>
+Cc:     Luca Weiss <luca@z3ntu.xyz>, Stephan Gerhold <stephan@gerhold.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        francesco.dolcini@toradex.com, liu.ming50@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 15, 2023 at 02:36:36PM +0100, Bryan O'Donoghue wrote:
-> Add a ports declaration which is optional containing two port@
-> declarations.
-> 
-> port@0 to receive an orientation-switch message from the Type-C port or
-> redriver
-> 
-> port@1 to subsequently transmit the orientation-switch on once the PHY has
-> finished doing its orientation turn-around.
-> 
-> If ports is declared the input port port@0 is mandatory but the output
-> port@1 is optional.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  .../phy/qcom,sc7180-qmp-usb3-dp-phy.yaml      | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml
-> index d307343388888..c370b9cd58c2e 100644
-> --- a/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml
-> @@ -65,6 +65,25 @@ properties:
->      description: Flag the port as possible handler of orientation switching
->      type: boolean
->  
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +    description: OF graph bindings that model incoming orientation-switch and
-> +      outgoing orientation-switch messages. An example of an incoming
-> +      orientation-switch message might come form a Type-C connector or a USB
-> +      redriver. An example of an output would be a DisplayPort controller.
+Hi all,
 
-Orientation switching is just one of the uses of this graph, and each
-port is both input and output of different signals (orientation switch,
-altmode switch, hot plug signals, signal path).
+Thanks for reporting !
+Do you see the system to crash (or) wait indefinitely for the gadget
+being pulled up ?
+Is it possible to get the stack trace ?
+
+Thanks,
+Badhri
 
 
-How about aligning this version of the QMP binding with the proposed
-binding for 8280xp here:
-https://lore.kernel.org/linux-arm-msm/20230515032743.400170-2-quic_bjorande@quicinc.com/
 
-Perhaps we could put some of this in a separate yaml and include that?
 
-Regards,
-Bjorn
 
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: Type-C mux orientation-switch input.
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: PHY orientation-switch output.
-> +
-> +    required:
-> +      - port@0
-> +
->    resets:
->      items:
->        - description: reset of phy block.
-> @@ -279,4 +298,23 @@ examples:
->              #clock-cells = <1>;
->              #phy-cells = <0>;
->          };
-> +
-> +        ports {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            port@0 {
-> +                reg = <0>;
-> +                qmpphy_typec_mux_in: endpoint {
-> +                    remote-endpoint = <&pmic_typec_mux_out>;
-> +                };
-> +            };
-> +
-> +            port@1 {
-> +                reg = <1>;
-> +                qmpphy_typec_mux_out: endpoint {
-> +                    remote-endpoint = <&dp_typec_mux_in>;
-> +                };
-> +            };
-> +        };
->      };
-> -- 
-> 2.39.2
-> 
+On Fri, May 12, 2023 at 8:44=E2=80=AFAM Francesco Dolcini <francesco@dolcin=
+i.it> wrote:
+>
+> On Fri, May 12, 2023 at 05:42:03PM +0200, Luca Weiss wrote:
+> > to confirm I'm seeing the same issue on Qualcomm MSM8974 and MSM8226 bo=
+ards.
+> > Reverting the patches Stephan mentioned makes it work again on v6.4-rc1=
+.
+>
+> https://lore.kernel.org/all/20230512131435.205464-1-francesco@dolcini.it/
+>
