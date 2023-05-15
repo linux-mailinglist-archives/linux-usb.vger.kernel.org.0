@@ -2,219 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC9B70319B
-	for <lists+linux-usb@lfdr.de>; Mon, 15 May 2023 17:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BAED7031B5
+	for <lists+linux-usb@lfdr.de>; Mon, 15 May 2023 17:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242424AbjEOPcg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 May 2023 11:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
+        id S239423AbjEOPhp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 May 2023 11:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242417AbjEOPcf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 11:32:35 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175DA1BC9;
-        Mon, 15 May 2023 08:32:34 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34FEeUK2031390;
-        Mon, 15 May 2023 15:32:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=TAlD90dXc/rktBgVfR0wgp7XrmKmHudrO7IIMnPdVCY=;
- b=jfVn5FLRS/gJf/o4lOwCdG5kRegH6joXBAwmYNvPivsZPI6OlefdvNfj814FOTXoLOKz
- oohk30kyzILjjuWXixNbmOTvmVeSY1cGDJWrwmXgWF70yYl/4UK6kt8DvU6PEjTGu/EZ
- ux0sUWiL1bW6ksdv6PW0q3sxsuyzl69G7ik7GlYNyFhmq6i3o13xvbipbGSdaGWkOAZr
- dlpDT9m+w/ZM5JjMkGPKCrm5562BxKwQTsjWomueNro+Nt2vbl3+lSgamH5s7YYPQ6nE
- wBvVSQnT2mcz/2SeE2pqz1zvdU4745j3mMH9U9rd445nqqL9Avj/0KE80TEZ6oUK4lag dw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qkgq6s9vm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 15:32:23 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34FFWMJM014623
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 15:32:22 GMT
-Received: from [10.216.35.75] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 15 May
- 2023 08:32:15 -0700
-Message-ID: <d14567fd-0576-55bb-40c0-442e060c28ba@quicinc.com>
-Date:   Mon, 15 May 2023 21:02:13 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v8 7/9] arm64: dts: qcom: sc8280xp: Add multiport
- controller node for SC8280
-To:     Johan Hovold <johan@kernel.org>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        with ESMTP id S242439AbjEOPhn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 11:37:43 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2089.outbound.protection.outlook.com [40.107.6.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045F019BC;
+        Mon, 15 May 2023 08:37:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WJ8tZbC+OQr86FIHfXsuD7HJ8nb1gSbvEwH/7f5po0id+RnYM21FZ8bY9icYANVF8EOxajyny3lyEH0gxX6lLqtXmyQ7gQidRN/eHVN/Az0fN3NAd9mv4n4qxw1l6MRlq78/ANquCgnf1vL9eM9HUBM/6BxEQWVlbDlUnPOvboFZSL3SDjR5m7ywLlB9/udwJamvqFCEh66fkc7Rs3+Yc68Qyz1qkfG58vjOCtaJF4r8G240qnh+MqR6i8lpd54+PoEWeyZT3Q4kTNaAJ6G3yfF9zti1+gyMe+i0uzG0ABzB+bYmf1kCoOg8mLMErnR9hatt4rLs+tncJVekctLR4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YyhdutEfxChnbqgo7yb5kxN7LsM+HotZlDiFdbP3YOQ=;
+ b=LKZ7aA8g8lJ1qJQph3y2GgbvTaC0POOZpXPe8sBOdj9EGa8FBqGRzCGre6ckxKRVyVOyfdJCNoEMCOIeE3hDiGOrTTMJJW1ZlWNJKa0AGunBeXH2eqII2sfD4WUSoKQBcnXO1U/TmSA2omtXzicsKuxom9nYl3YeFcdfym91qL0bGZ263ONUqGVSWHT2rYSzBUo8ANiF4Bl6i3Bynl63GSTp7yqgBXw2Mb47mWonVRYgoD4xSXOr+QQuQO1aArqkcWAHWnA1lBvCcwI1dXSbtcbbkOyUViziqC6OkQvWL/Plg8pArLDYgu15BJIdySY1QEUrf/w6XqHLK4DRPMTKoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YyhdutEfxChnbqgo7yb5kxN7LsM+HotZlDiFdbP3YOQ=;
+ b=Ca8G4g2xl/vCIoLdtET8w+uXic48+D59qPWGiguefh+iVh5scDeU7tCXm38aGcGoL9WQsM0FW3D5oiqi4NhsJY3XKIW/zcPsrkMbWMaR9m3Uw9mwCa5IoJPj0RGXpvfxE41/IQco9WO/oiQSRcQ+dGhmWDW5KkFWc3eU+FHIWC8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
+ by VI1PR04MB6909.eurprd04.prod.outlook.com (2603:10a6:803:13d::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
+ 2023 15:37:31 +0000
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::25d3:de2:ef1:3884]) by AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::25d3:de2:ef1:3884%4]) with mapi id 15.20.6387.030; Mon, 15 May 2023
+ 15:37:31 +0000
+From:   Frank Li <Frank.Li@nxp.com>
+To:     shawnguo@kernel.org, Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>,
-        <ahalaney@redhat.com>
-References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
- <20230514054917.21318-8-quic_kriskura@quicinc.com>
- <ZGJBLUsPcbsxj989@hovoldconsulting.com>
-Content-Language: en-US
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <ZGJBLUsPcbsxj989@hovoldconsulting.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: nmyNzzX9rv7MTM0Z_ompwG15xsGzBiTW
-X-Proofpoint-GUID: nmyNzzX9rv7MTM0Z_ompwG15xsGzBiTW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-15_12,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
- lowpriorityscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
- adultscore=0 mlxscore=0 bulkscore=0 spamscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305150128
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-usb@vger.kernel.org (open list:CADENCE USB3 DRD IP DRIVER),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list)
+Cc:     imx@lists.linux.dev
+Subject: [PATCH v2 1/2] dt-binding: cdns,usb3: Fix cdns,on-chip-buff-size type
+Date:   Mon, 15 May 2023 11:37:09 -0400
+Message-Id: <20230515153710.2799008-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR06CA0030.namprd06.prod.outlook.com
+ (2603:10b6:a03:d4::43) To AM6PR04MB4838.eurprd04.prod.outlook.com
+ (2603:10a6:20b:4::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|VI1PR04MB6909:EE_
+X-MS-Office365-Filtering-Correlation-Id: 40009bc6-bc57-43ab-5e0b-08db555a4bb0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SyOu2pXIEzaciiJIBtnH+FuP3SxUjyyMTbwnF3vFZdPDMCcoStZMzqtSGKZuVhvF0f2ozE0XUy60oaz6L1ZxZPuinwNV2UTgeScpZxn6Eyhq0ees8ftoTkDJDzGFkcnbTSHy3YeV++f10NMvmCy5UBZCGCFNAB7SULa8VFblImDV9lv1bcpgME5J3touIyvrsIMIQ0V+DG9XOTSgyBIpQG1hXXm0IoS+mw3lLcoo3RmJ0EKSZelm+t/jQn+a8LeLqXHah+081uxq3kTtyU6gBIPenuROI3D/CG9JHAXZr2forYw8kLVmw/xwf2zcLFMts/AegA1fJPTfKGNEtEk1FTYn6E706wBXpj8sPvmhbDt7BAWkV6JjBNSS3w4TmWt3BbHf8mIMUcqetCgdXtshZVME7ZCUcGbIDChzE5vnFyJb8bORlzG/WbsZ+t1HG5pVlT38DBqhheePTwWLu+aVCWd29qgHa4SSzJ/fZYszRKDBItI6aW8PWfWL2SzX1XtO6ksRaZnFVgSjW0Q9h1tvKbyTdcVhGin0b/rZL39BNHZhmMncx6dfrXNrCRbcPcJiTjwa8/xs5JaAnYIRaEKIxcbQhYBteO4owCLUrQUt9lL0MHdyRR91wYKCR2l242cDo45s54SfldCyrbBwwXhJvQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(346002)(396003)(376002)(39860400002)(451199021)(83380400001)(66476007)(66556008)(66946007)(2616005)(6486002)(52116002)(1076003)(26005)(6506007)(6512007)(478600001)(110136005)(6666004)(186003)(7416002)(2906002)(5660300002)(4744005)(86362001)(8936002)(8676002)(36756003)(4326008)(316002)(41300700001)(921005)(38100700002)(38350700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9wWcVP12nE8lvfGUp24QibKuJ3/sbh3TeN3VCeJA4b4lM15a07rH0920hle1?=
+ =?us-ascii?Q?lyUy6dlvn+21kXJIui+/VkIBA9Vn9lBRTbmnNTNdmOfPlK1h4TS+xU1MwJIX?=
+ =?us-ascii?Q?CTz78N30GH5EP5+F6UtZHOyoCdkY5IM/XsgTfgk/c2MALQq51uds8Fli4eTp?=
+ =?us-ascii?Q?A6AAX4nJ7EKWcE0dhcxsG1zFqx0/wYnIk7htC/+/IPYMNOdbzZKCaH/eXh/G?=
+ =?us-ascii?Q?oybtsSo9hZGCDFr8tCgHM4oolKTYrJhPTabB1ur+IQKF15+Rx5yTxuO0sGU7?=
+ =?us-ascii?Q?IHz5XOPHlwzQtx/vpJNXZykJyoU1bo7VkPZOWklgYKlv4UzwK0FvPcCNCSXV?=
+ =?us-ascii?Q?g6ltxIMqpB3/XaFk5Be1l0u4cEphDAAB7EWnumxcTacjQ3YTLfFJ4vlheN3C?=
+ =?us-ascii?Q?lqpX5cSJP+PVAohUZnFWrZ8aIVlc19jrJy/Px7p48ptkC7sMtQ7xF7oAFXrh?=
+ =?us-ascii?Q?XIhvgqfcd7MR1Gr4+6PSOU5D9YvpmBQK6gXXDWDkdpvoMqrRjjFd9xNmiaLD?=
+ =?us-ascii?Q?MoR9SRQ7dj/gkxnLN4bVSy5pqitMCZ2ddv5BoQZSw63LCfIf7EgSoiSs11tx?=
+ =?us-ascii?Q?R07eW9EmqDJsvIskt1/MdqkRHlOUUGjKwUccx/WhzwkX4HOz4mzotiXHYj6D?=
+ =?us-ascii?Q?Q39TsDdOeThfP4qQgQ5ySxehfRfvWwFayvURHLcLoiRRoiHRaAjPwSueFWYR?=
+ =?us-ascii?Q?XjsZVnOEqnAFg6ktFVhEdK4wqYzxDHsgK1p5WrwS98zKt7fw0zx+fztHDoTg?=
+ =?us-ascii?Q?gZewMNj7S2Cg31tHFPdyOYcLZ6e/TMyfB6oktNg9Dg99tgcyJ27jwHQluFLL?=
+ =?us-ascii?Q?94DvEvZNQukWQC4wkmoEZJKFbCRpgofvcZjZZvI+eUaQzHI4zwDznNvd3OG5?=
+ =?us-ascii?Q?eExBM3MTMmK+VbFFXEz+1qP627kkPyhILtVmabZR6sZG5olGnbS/FIRKpqWG?=
+ =?us-ascii?Q?m//mzKIu9dkcX5U8qkrtPJe0ZZtSk40H31xGwPuY6jJ4CDAPUBm8U0jlE6AT?=
+ =?us-ascii?Q?DrzGuvEANALXve/zREoLPNLW1mpeSelh+/hwlXwQvPW9+SjAF8cR2jmgYEBu?=
+ =?us-ascii?Q?/PU9QPtrIOKvHxjdM9ipH8Cy1O7mm6SArvu7/02D6jE16hYxghBds48TTUM6?=
+ =?us-ascii?Q?QhbstVNyz65rSm0RFr9W9OQbhi+APSnfD+cAKWxoyLZ2fMjCk7JMgSRacoeJ?=
+ =?us-ascii?Q?KK0hQnnTsZlMDp8q5a4LDIPZ6IK4yfoPk3RlfmdLjjsO6t47dB00wK2m5NNF?=
+ =?us-ascii?Q?9P+wCAzBsRnfY8EPhoN/CXcAsXOV6ZBzUtWD9Djjn++XnM3sjhMAlroNDNtE?=
+ =?us-ascii?Q?7HyWI/orY+n30M+UHfodJrcOFmaVSwvzvu0zBQGNm/RAvYgdBh4Zi5jUUeng?=
+ =?us-ascii?Q?0fgZiIOwE4GwXX6fMaDw4DP0oULcWKsLMjNc6WqzYRGjU/UMwX2pgBu54Wvu?=
+ =?us-ascii?Q?ZkK1iG+EOJ0KKgAs5XJNFZmCLXl3mZzZ6R8Ts5ZiB5hLlcGKy7J06io0kKiG?=
+ =?us-ascii?Q?lelGu5SSzVQ3ZzvwSvqUoeVJSYtBsAS/3fwZMeot6Vj5fXIlF1GKqXzTNltu?=
+ =?us-ascii?Q?2oXUWX/J5YPANuc1kSE=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40009bc6-bc57-43ab-5e0b-08db555a4bb0
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 15:37:31.1132
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: r7d3FY/eeeL4JFcX66YXqsH1sAzGEUdaGC2llUUB5qOi6FSb/IOz4qXvCSkreJc/kKLKIrBcraawQaeAxT6nBw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6909
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+In cdns3-gadget.c, 'cdns,on-chip-buff-size' was read using
+device_property_read_u16(). It resulted in 0 if a 32bit value was used
+in dts. This commit fixes the dt binding doc to declare it as u16.
 
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+Change from v1 to v2
+- new patch
 
-On 5/15/2023 7:56 PM, Johan Hovold wrote:
-> On Sun, May 14, 2023 at 11:19:15AM +0530, Krishna Kurapati wrote:
->> Add USB and DWC3 node for tertiary port of SC8280 along with multiport
->> IRQ's and phy's. This will be used as a base for SA8295P and SA8295-Ride
->> platforms.
->>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 66 ++++++++++++++++++++++++++
->>   1 file changed, 66 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
->> index 8fa9fbfe5d00..50f6a8424537 100644
->> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
->> @@ -3133,6 +3133,72 @@ usb_1_role_switch: endpoint {
->>   			};
->>   		};
->>   
->> +		usb_2: usb@a4f8800 {
-> 
-> As I believe someone already pointed out, this node is not in sort order
-> (i.e. it should go before usb@a6f8800).
-> 
-Hi Johan,
+ Documentation/devicetree/bindings/usb/cdns,usb3.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-   I missed that message, but since I named it usb_2, so I placed it in 
-order after usb_1. Hope that is fine !!
+diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+index cae46c4982ad..69a93a0722f0 100644
+--- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
++++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+@@ -64,7 +64,7 @@ properties:
+     description:
+       size of memory intended as internal memory for endpoints
+       buffers expressed in KB
+-    $ref: /schemas/types.yaml#/definitions/uint32
++    $ref: /schemas/types.yaml#/definitions/uint16
+ 
+   cdns,phyrst-a-enable:
+     description: Enable resetting of PHY if Rx fail is detected
+-- 
+2.34.1
 
->> +			compatible = "qcom,sc8280xp-dwc3-mp", "qcom,dwc3";
->> +			reg = <0 0x0a4f8800 0 0x400>;
->> +			#address-cells = <2>;
->> +			#size-cells = <2>;
->> +			ranges;
->> +
->> +			clocks = <&gcc GCC_CFG_NOC_USB3_MP_AXI_CLK>,
->> +				 <&gcc GCC_USB30_MP_MASTER_CLK>,
->> +				 <&gcc GCC_AGGRE_USB3_MP_AXI_CLK>,
->> +				 <&gcc GCC_USB30_MP_SLEEP_CLK>,
->> +				 <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
->> +				 <&gcc GCC_AGGRE_USB_NOC_AXI_CLK>,
->> +				 <&gcc GCC_AGGRE_USB_NOC_NORTH_AXI_CLK>,
->> +				 <&gcc GCC_AGGRE_USB_NOC_SOUTH_AXI_CLK>,
->> +				 <&gcc GCC_SYS_NOC_USB_AXI_CLK>;
->> +			clock-names = "cfg_noc", "core", "iface", "sleep", "mock_utmi",
->> +				      "noc_aggr", "noc_aggr_north", "noc_aggr_south", "noc_sys";
->> +
->> +			assigned-clocks = <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
->> +					  <&gcc GCC_USB30_MP_MASTER_CLK>;
->> +			assigned-clock-rates = <19200000>, <200000000>;
->> +
->> +			interrupts-extended = <&pdc 127 IRQ_TYPE_EDGE_RISING>,
->> +					      <&pdc 126 IRQ_TYPE_EDGE_RISING>,
->> +					      <&pdc 16 IRQ_TYPE_LEVEL_HIGH>,
->> +					      <&intc GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>,
->> +					      <&intc GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH>,
->> +					      <&intc GIC_SPI 857 IRQ_TYPE_LEVEL_HIGH>,
->> +					      <&intc GIC_SPI 856 IRQ_TYPE_LEVEL_HIGH>;
->> +
->> +			interrupt-names = "dp_hs_phy_irq",
->> +					  "dm_hs_phy_irq",
->> +					  "ss_phy_irq",
->> +					  "pwr_event_1",
->> +					  "pwr_event_2",
->> +					  "pwr_event_3",
->> +					  "pwr_event_4";
->> +
->> +			power-domains = <&gcc USB30_MP_GDSC>;
->> +			required-opps = <&rpmhpd_opp_nom>;
->> +
->> +			resets = <&gcc GCC_USB30_MP_BCR>;
->> +
->> +			interconnects = <&aggre1_noc MASTER_USB3_1 0 &mc_virt SLAVE_EBI1 0>,
->> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_1 0>;
-> 
-> This is not the correct interconnect master and slave; it should be
-> MASTER_USB3_MP and SLAVE_USB3_MP.
-> 
-Thanks for pointing it out. I need to check how it was working all these 
-days. (Probably since both of them vote for the same NOC, it didn't show 
-any affect)
->> +			interconnect-names = "usb-ddr", "apps-usb";
-> 
-> Looks like 'wakeup-source' is missing here too.
-> 
-
-I believe this property was added to enable wakeup from system suspend 
-in host mode. I didn't add this property as currently I don't need to 
-support wakeup. If any requirement comes in future, then I might need to 
-add dp/dm interrupts (if any) for other ports as well and then need to 
-change driver code to enable/disable them on suspend/resume.
-
->> +
->> +			status = "disabled";
->> +
->> +			usb_2_dwc3: usb@a400000 {
->> +				compatible = "snps,dwc3";
->> +				reg = <0 0x0a400000 0 0xcd00>;
->> +				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
->> +				iommus = <&apps_smmu 0x800 0x0>;
->> +				phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>,
->> +					<&usb_2_hsphy1>, <&usb_2_qmpphy1>,
->> +					<&usb_2_hsphy2>,
->> +					<&usb_2_hsphy3>;
->> +				phy-names = "usb2-port0", "usb3-port0",
->> +						"usb2-port1", "usb3-port1",
->> +						"usb2-port2",
->> +						"usb2-port3";
-> 
-> The phys and phy-names continuation lines above are still not aligned.
-> 
-Missed it. Will fix it in next version.
-
-Thanks,
-Krishna,
->> +			};
->> +		};
->> +
->>   		mdss0: display-subsystem@ae00000 {
->>   			compatible = "qcom,sc8280xp-mdss";
->>   			reg = <0 0x0ae00000 0 0x1000>;
-> 
-> Johan
