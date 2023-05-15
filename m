@@ -2,75 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 822B5702BE2
-	for <lists+linux-usb@lfdr.de>; Mon, 15 May 2023 13:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38417702D38
+	for <lists+linux-usb@lfdr.de>; Mon, 15 May 2023 14:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241578AbjEOLyp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 May 2023 07:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
+        id S242096AbjEOM4a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 May 2023 08:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241304AbjEOLy2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 07:54:28 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A84426BD
-        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 04:42:27 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f41d087b3bso96411765e9.0
-        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 04:42:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684150945; x=1686742945;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3LD5Rvc3k/RtIbhopk19Y3M9HNSW6Y86XANxNzfI2Io=;
-        b=xiqjFttHxg0o83PmsBCpWxnbssUkfwGFFEOvU1JCzaVuo9xvQ02OoYilbsUnl2UX5x
-         l1SmeMnXrkVgaQE9OanM/TZhWD8jAoTFHUBIWCIpfmC1hScdLlJyHtgGj5a241rq0R42
-         xaIYIR4KbpfOHe8/SIl2u/numC1CfWN8kSfKVFJ/VEGwVZf9FUJPo/S+LfonA4DYdp+W
-         otPoUgh+YQeQNfqufcF5yQB/Hji9L3BTXlounauxi4iUfWyNuzo845rVdoQDxK3Pc+gf
-         fNYtd/xmmTqj3fOZROuXBK1GNyeSO1CtFzC/sWRC3Xy7grHBjQAvDi0BEFTOoUo9EmWD
-         dXMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684150945; x=1686742945;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3LD5Rvc3k/RtIbhopk19Y3M9HNSW6Y86XANxNzfI2Io=;
-        b=fKs/yEZogxiuX7a1+emF+ACpzsfkt4tkDq89Fj2W8TJqsr/+IW5tK49FtazSYw5GKf
-         FMKJjkKd4BeljWMRXnnUEPT2//y6rmKR3rwoFkogwoyUjooXw8V9PZwiWwf7FhtH1tHu
-         gYPDRXOqbzs8EmSpfq/O/QeAiPMPM8OmedTu5rS6ntzqfZ0DV1AL4wULSlKd7AKc8Qvm
-         9A3hKPA2YOW4I08GzeD85rd+W5EuFMLszasco0awx3IyQBGRbJ0AmwWceMP8UsRt3dqI
-         xqtdhPsQ3PlQAnGlt9QkQIkjg39GSNa+otdPQIEs9pfpV5DcvybBRFH3B8/jjpqF9jn/
-         aoVg==
-X-Gm-Message-State: AC+VfDy+NlTE+R6/FBtUr/PeYiIukgdMQqTYlz3g3KhvN2SrDU0/NIuY
-        ZA+mX2B2cbRb2WQPCCmui1GnDw==
-X-Google-Smtp-Source: ACHHUZ7i7eP2RR9RrR6RUzHCndr3cNcP7Q7FqrLZqJzXW3kEDrPonEIAsGYQV8ySK0NlcDWIO97Isw==
-X-Received: by 2002:a05:600c:2201:b0:3f4:253b:92ae with SMTP id z1-20020a05600c220100b003f4253b92aemr16922436wml.0.1684150945549;
-        Mon, 15 May 2023 04:42:25 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id 17-20020a05600c229100b003f423a04016sm24545869wmf.18.2023.05.15.04.42.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 04:42:24 -0700 (PDT)
-Message-ID: <54aaec74-c3a0-563d-5eda-a583782c2f57@linaro.org>
-Date:   Mon, 15 May 2023 12:42:23 +0100
+        with ESMTP id S242164AbjEOM4Z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 08:56:25 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D47A1BC5;
+        Mon, 15 May 2023 05:55:50 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id B25E985F71;
+        Mon, 15 May 2023 14:55:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1684155348;
+        bh=q7l/rpFtzMMtTi2QEH2d8cneVzx5hYI5+mDkbNkqf4o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Gil6/kBpXeWn4qsccIAb1SoAD96Ezr43ETkPH8VFrk6pF0jEqXBFmluTIvk1wAIDw
+         ORjlwBTZZz58/O2tscA2qzjVYsprcsYlEBJAWpl5fQdtYCAZF/lfjqljZdynVnmjsh
+         zqWMLbLLH0ubhmR6kZOESZvji9QZ6/Kk0rPrxHaeiOaq9UcAYsLPNUbynmFAMTivBo
+         Vx64Bc2hE1sUSNDMaPisyF/8aO/ih6E3x6fbBo9IziFsZ0yjm9khbz1rxF/Vpmad2S
+         8Yje5aFizpsXPGtuRDbAuT5lZ1vlfaaAr/kghvcIen/iEunfwnFSWLofxBAQidGV+U
+         wl5iaGerG1Olw==
+Message-ID: <9b62a0db-1374-2c89-5ea3-286467bd1e4e@denx.de>
+Date:   Mon, 15 May 2023 14:55:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] usb: typec: qcom: set pm8150b_typec_res
- storage-class-specifier to static
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] dt-bindings: usb: usb251xb: correct swap-dx-lanes type to
+ uint32
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Richard Leitner <richard.leitner@linux.dev>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     mike.looijmans@topic.nl
+References: <20230515103337.130607-1-krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
-To:     Tom Rix <trix@redhat.com>, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        gregkh@linuxfoundation.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230515114043.3452010-1-trix@redhat.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230515114043.3452010-1-trix@redhat.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20230515103337.130607-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,30 +63,37 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 15/05/2023 12:40, Tom Rix wrote:
-> smatch reports
-> drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c:323:29: warning: symbol
->    'pm8150b_typec_res' was not declared. Should it be static?
+On 5/15/23 12:33, Krzysztof Kozlowski wrote:
+> The "swap-dx-lanes" was never described as uint8 in original TXT
+> bindings and Linuxx driver expects uint32.  Fix the type to match Linux
+
+Linux , one x too many .
+
+> driver expectation and original binding.
 > 
-> This variable is only used in its defining file, so it should be static
+> Fixes: fff61d4ccf3d ("dt-bindings: usb: usb251xb: Convert to YAML schema")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> Signed-off-by: Tom Rix <trix@redhat.com>
 > ---
->   drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 2 +-
+> 
+> Cc: mike.looijmans@topic.nl
+> ---
+>   Documentation/devicetree/bindings/usb/usb251xb.yaml | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-> index 191458ce4a06..937e855a6c4c 100644
-> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-> @@ -320,7 +320,7 @@ static struct pmic_typec_port_resources pm8150b_port_res = {
->   	.nr_irqs = 7,
->   };
+> diff --git a/Documentation/devicetree/bindings/usb/usb251xb.yaml b/Documentation/devicetree/bindings/usb/usb251xb.yaml
+> index 4d1530816817..ac5b99710332 100644
+> --- a/Documentation/devicetree/bindings/usb/usb251xb.yaml
+> +++ b/Documentation/devicetree/bindings/usb/usb251xb.yaml
+> @@ -231,7 +231,7 @@ properties:
+>         power-on sequence to a port until the port has adequate power.
 >   
-> -struct pmic_typec_resources pm8150b_typec_res = {
-> +static struct pmic_typec_resources pm8150b_typec_res = {
->   	.pdphy_res = &pm8150b_pdphy_res,
->   	.port_res = &pm8150b_port_res,
->   };
+>     swap-dx-lanes:
+> -    $ref: /schemas/types.yaml#/definitions/uint8-array
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>       description: |
+>         Specifies the ports which will swap the differential-pair (D+/D-),
+>         default is not-swapped.
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Would it make more sense to update the driver instead ? I doubt you 
+could have more than 256 ports on this device after all.
