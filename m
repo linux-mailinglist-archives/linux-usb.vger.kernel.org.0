@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37504704005
-	for <lists+linux-usb@lfdr.de>; Mon, 15 May 2023 23:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 571187040E6
+	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 00:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245635AbjEOVn4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 May 2023 17:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
+        id S245534AbjEOWXm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 May 2023 18:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245631AbjEOVnx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 17:43:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37E37DAA;
-        Mon, 15 May 2023 14:43:40 -0700 (PDT)
+        with ESMTP id S236784AbjEOWXl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 18:23:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDFEA3;
+        Mon, 15 May 2023 15:23:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 908C66153D;
-        Mon, 15 May 2023 21:43:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88361C4339E;
-        Mon, 15 May 2023 21:43:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 035846334A;
+        Mon, 15 May 2023 22:23:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 191A4C433D2;
+        Mon, 15 May 2023 22:23:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684187020;
-        bh=b+pXr4Hrxo2j7GrVI2Y1r49la08BF7ssH996PN0WsJw=;
+        s=k20201202; t=1684189419;
+        bh=OqIemthk74Japxf8JKty+wpFYdyckxcj/Mt28A6kSCU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YoiPYmWfQxUh4yS2f9BOVWk4MJtIqlqiw0TaU1DxI8jJitoIaE3iWpUKUB83n8lSF
-         Lf5e/onvs8yvVj8g1eYGgmEUA2SptH8QRh7dCUYpygfQGEcNo9n887hfKBxC83o6kl
-         M7ouOIlsUVU9TC3wVRt/GZgtJRTABw/sDSu8UFUAnolgZNTgfqs8k1FwZsspMpGVnb
-         cpacoB+hmpZ141HUzvcJFYqMoXsGadxNrcs7H0yOYZD4kD4SpXoGKBpbsTd9zsSloS
-         ZIpI1Uj1EDEqYRxxOyTHIPT4e5+bX18jBW2LVQ86YTO+nOJ1U3HSfruX426QZzigMI
-         GkoHNgtRaUYBg==
-Date:   Mon, 15 May 2023 14:47:30 -0700
+        b=J5uGurHmS/0tRRbC7hB2MmYS8N06SxfaPIOP4Ch/thZWa/94X9c8zKIl1D0wSnCjk
+         dqBRrTNde11hMZcSBH1zyPJWt5MateFyXxPxSGOpd2jT2Fz51l3xmilc1MRjo/DIj4
+         4lhVERDDv1fNus0XCxlYxU4dh2qNS5Kx3vA+78uNSXIkU7pC/qnYwuA2hqEO2n6mgt
+         EFhtTDAGl8p27u3cho7fV2IuBkc4I5HiciCI+zqUNU0BrF8KtveSqHCOIc5bIVi4Ua
+         EC0GuBHLmURNMjkxGUfDl/CXGuJniAGQ9al+OlAK1Bj6Oki4cyH2cCXBchjTNW8y/r
+         2OzRZOJEMwQPw==
+Date:   Mon, 15 May 2023 15:27:30 -0700
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     Krishna Kurapati <quic_kriskura@quicinc.com>
 Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
@@ -47,17 +47,17 @@ Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
         quic_jackp@quicinc.com, quic_harshq@quicinc.com,
         ahalaney@redhat.com
-Subject: Re: [PATCH v8 5/9] usb: dwc3: core: Refactor PHY logic to support
- Multiport Controller
-Message-ID: <20230515214730.epeelsnp3bznssr5@ripper>
+Subject: Re: [PATCH v8 6/9] usb: dwc3: qcom: Add multiport controller support
+ for qcom wrapper
+Message-ID: <20230515222730.7snn2i33gkg6ctd2@ripper>
 References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
- <20230514054917.21318-6-quic_kriskura@quicinc.com>
+ <20230514054917.21318-7-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230514054917.21318-6-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230514054917.21318-7-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,195 +66,73 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, May 14, 2023 at 11:19:13AM +0530, Krishna Kurapati wrote:
-> Currently the DWC3 driver supports only single port controller
-> which requires at most one HS and one SS PHY.
+On Sun, May 14, 2023 at 11:19:14AM +0530, Krishna Kurapati wrote:
+> QCOM SoC SA8295P's tertiary quad port controller supports 2 HS+SS
+> ports and 2 HS only ports. Add support for configuring PWR_EVENT_IRQ's
+> for all the ports during suspend/resume.
 > 
-> But the DWC3 USB controller can be connected to multiple ports and
-> each port can have their own PHYs. Each port of the multiport
-> controller can either be HS+SS capable or HS only capable
-> Proper quantification of them is required to modify GUSB2PHYCFG
-> and GUSB3PIPECTL registers appropriately.
-> 
-> Add support for detecting, obtaining and configuring phy's supported
-> by a multiport controller and limit the max number of ports
-> supported to 4.
-> 
-> Co-developed-by: Harsh Agarwal <quic_harshq@quicinc.com>
-
-Please include Harsh's signed-off-by as well here, to clarify that you
-both certify the origin of this patch.
-
 > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 > ---
->  drivers/usb/dwc3/core.c | 266 ++++++++++++++++++++++++++++++----------
->  drivers/usb/dwc3/core.h |  11 +-
->  drivers/usb/dwc3/drd.c  |  13 +-
->  3 files changed, 213 insertions(+), 77 deletions(-)
+>  drivers/usb/dwc3/dwc3-qcom.c | 28 ++++++++++++++++++++++------
+>  1 file changed, 22 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-[..]
-> @@ -744,22 +777,38 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
->  static int dwc3_phy_init(struct dwc3 *dwc)
->  {
->  	int ret;
-> +	int i;
-> +	int j;
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 959fc925ca7c..7a9bce66295d 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -37,7 +37,10 @@
+>  #define PIPE3_PHYSTATUS_SW			BIT(3)
+>  #define PIPE_UTMI_CLK_DIS			BIT(8)
 >  
->  	usb_phy_init(dwc->usb2_phy);
->  	usb_phy_init(dwc->usb3_phy);
+> -#define PWR_EVNT_IRQ_STAT_REG			0x58
+> +#define PWR_EVNT_IRQ1_STAT_REG			0x58
+> +#define PWR_EVNT_IRQ2_STAT_REG			0x1dc
+> +#define PWR_EVNT_IRQ3_STAT_REG			0x228
+> +#define PWR_EVNT_IRQ4_STAT_REG			0x238
+>  #define PWR_EVNT_LPM_IN_L2_MASK			BIT(4)
+>  #define PWR_EVNT_LPM_OUT_L2_MASK		BIT(5)
 >  
-> -	ret = phy_init(dwc->usb2_generic_phy);
-> -	if (ret < 0)
-> -		goto err_shutdown_usb3_phy;
-> +	for (i = 0; i < dwc->num_usb2_ports; i++) {
-> +		ret = phy_init(dwc->usb2_generic_phy[i]);
-> +		if (ret < 0) {
-> +			/* clean up prior initialized HS PHYs */
-> +			for (j = 0; j < i; j++)
-> +				phy_exit(dwc->usb2_generic_phy[j]);
-> +			goto err_shutdown_usb3_phy;
-
-The idiomatic form is to goto err_exit_usb2_phy and let it phy_exit()
-from i - 1 to 0. That would avoid duplicating this snippet.
-
-> +		}
-> +	}
+> @@ -93,6 +96,13 @@ struct dwc3_qcom {
+>  	struct icc_path		*icc_path_apps;
+>  };
 >  
-> -	ret = phy_init(dwc->usb3_generic_phy);
-> -	if (ret < 0)
-> -		goto err_exit_usb2_phy;
-> +	for (i = 0; i < dwc->num_usb2_ports; i++) {
+> +static u32 pwr_evnt_irq_stat_reg_offset[4] = {
+> +			PWR_EVNT_IRQ1_STAT_REG,
+> +			PWR_EVNT_IRQ2_STAT_REG,
+> +			PWR_EVNT_IRQ3_STAT_REG,
+> +			PWR_EVNT_IRQ4_STAT_REG,
 
-When you call dwc3_ss_phy_setup() the index refer to port0, port1... but
-when you refer to the phys you consistently loops over num_usb2_ports.
+Seems to be excessive indentation of these...
 
-The only case I can think of where this would be useful is if it's not
-the first N ports that are SS-capable (e.g. port0 and port can do SS).
+Can you also please confirm that these should be counted starting at 1 -
+given that you otherwise talk about port0..N-1?
 
-If this is the case, is it correct that this should not be reflected in
-the index passed to e.g. dwc3_ss_phy_setup()?
-
-If this is not the case, could you please transition these SS-related
-loops to iterate over usb3_generic_phy[0..num_usb3_ports)?
-
-> +		ret = phy_init(dwc->usb3_generic_phy[i]);
-> +		if (ret < 0) {
-> +			/* clean up prior initialized SS PHYs */
-> +			for (j = 0; j < i; j++)
-> +				phy_exit(dwc->usb3_generic_phy[j]);
-> +			goto err_exit_usb2_phy;
-
-For the purpose of symmetry, same suggestion as above. phy_exit() i - 1
-through 0, then reset j to dwc->num_usb2_ports and fall through to
-err_exit_usb2_phy.
-
-> +		}
-> +	}
->  
->  	return 0;
->  
->  err_exit_usb2_phy:
-> -	phy_exit(dwc->usb2_generic_phy);
-> +	for (i = 0; i < dwc->num_usb2_ports; i++)
-> +		phy_exit(dwc->usb2_generic_phy[i]);
+> +};
 > +
->  err_shutdown_usb3_phy:
->  	usb_phy_shutdown(dwc->usb3_phy);
->  	usb_phy_shutdown(dwc->usb2_phy);
-> @@ -769,8 +818,12 @@ static int dwc3_phy_init(struct dwc3 *dwc)
-[..]
->  static int dwc3_phy_power_on(struct dwc3 *dwc)
+>  static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
 >  {
->  	int ret;
-> +	int i;
-> +	int j;
+>  	u32 reg;
+> @@ -413,13 +423,16 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
+>  {
+>  	u32 val;
+>  	int i, ret;
+> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
 >  
->  	usb_phy_set_suspend(dwc->usb2_phy, 0);
->  	usb_phy_set_suspend(dwc->usb3_phy, 0);
+>  	if (qcom->is_suspended)
+>  		return 0;
 >  
-> -	ret = phy_power_on(dwc->usb2_generic_phy);
-> -	if (ret < 0)
-> -		goto err_suspend_usb3_phy;
+> -	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
+> -	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
+> -		dev_err(qcom->dev, "HS-PHY not in L2\n");
 > +	for (i = 0; i < dwc->num_usb2_ports; i++) {
-> +		ret = phy_power_on(dwc->usb2_generic_phy[i]);
-> +		if (ret < 0) {
-> +			/* Turn off prior ON'ed HS Phy's */
-> +			for (j = 0; j < i; j++)
-> +				phy_power_off(dwc->usb2_generic_phy[j]);
-> +			goto err_suspend_usb3_phy;
 
-As above, I'd prefer that you don't duplicate the phy_power_off() loop.
+In the event that the dwc3 core fails to acquire or enable e.g. clocks
+its drvdata will be NULL. If you then hit a runtime pm transition in the
+dwc3-qcom glue you will dereference NULL here. (You can force this issue
+by e.g. returning -EINVAL from dwc3_clk_enable()).
 
-> +		}
-> +	}
->  
-> -	ret = phy_power_on(dwc->usb3_generic_phy);
-> -	if (ret < 0)
-> -		goto err_power_off_usb2_phy;
-> +	for (i = 0; i < dwc->num_usb2_ports; i++) {
-> +		ret = phy_power_on(dwc->usb3_generic_phy[i]);
-> +		if (ret < 0) {
-> +			/* Turn of prior ON'ed SS Phy's */
-> +			for (j = 0; j < i; j++)
-> +				phy_power_off(dwc->usb3_generic_phy[j]);
-> +			goto err_power_off_usb2_phy;
-> +		}
-> +	}
->  
->  	return 0;
-[..]
-> +static int dwc3_get_multiport_phys(struct dwc3 *dwc)
-> +{
-> +	int ret;
-> +	struct device *dev = dwc->dev;
-> +	int i;
-> +	char phy_name[11];
-
-It would be prettier if you sorted these lines by length, longest
-first...
-
-[..]
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index d3401963bc27..84f6303922aa 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -35,6 +35,9 @@
->  
->  #define DWC3_MSG_MAX	500
->  
-> +/* Number of ports supported by a multiport controller */
-> +#define MAX_PORTS_SUPPORTED	4
-
-I think it would be preferred to prefix this DWC3_ (so perhaps just
-DWC3_MAX_PORTS, to keep it shorter)
+So if you're peaking into qcom->dwc3 you need to handle the fact that
+dwc might be NULL, here and in resume below.
 
 Regards,
 Bjorn
-
-> +
->  /* Define XHCI Extcap register offsets for getting multiport info */
->  #define XHCI_HCC_PARAMS_OFFSET	0x10
->  #define DWC3_XHCI_HCSPARAMS1	0x04
-> @@ -1038,8 +1041,8 @@ struct dwc3_scratchpad_array {
->   * @usb3_phy: pointer to USB3 PHY
->   * @num_usb2_ports: number of usb2 ports.
->   * @num_usb3_ports: number of usb3 ports.
-> - * @usb2_generic_phy: pointer to USB2 PHY
-> - * @usb3_generic_phy: pointer to USB3 PHY
-> + * @usb2_generic_phy: pointer to array of USB2 PHY
-> + * @usb3_generic_phy: pointer to array of USB3 PHY
->   * @phys_ready: flag to indicate that PHYs are ready
->   * @ulpi: pointer to ulpi interface
->   * @ulpi_ready: flag to indicate that ULPI is initialized
-> @@ -1178,8 +1181,8 @@ struct dwc3 {
->  	u8			num_usb2_ports;
->  	u8			num_usb3_ports;
->  
-> -	struct phy		*usb2_generic_phy;
-> -	struct phy		*usb3_generic_phy;
-> +	struct phy		*usb2_generic_phy[MAX_PORTS_SUPPORTED];
-> +	struct phy		*usb3_generic_phy[MAX_PORTS_SUPPORTED];
->  
->  	bool			phys_ready;
-
