@@ -2,129 +2,218 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D78CE70241E
-	for <lists+linux-usb@lfdr.de>; Mon, 15 May 2023 08:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73187702494
+	for <lists+linux-usb@lfdr.de>; Mon, 15 May 2023 08:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238374AbjEOGIS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 May 2023 02:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
+        id S239690AbjEOGZf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 May 2023 02:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238378AbjEOGH4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 02:07:56 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A2D3ABD
-        for <linux-usb@vger.kernel.org>; Sun, 14 May 2023 23:06:03 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f27977aed6so3552906e87.2
-        for <linux-usb@vger.kernel.org>; Sun, 14 May 2023 23:06:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684130761; x=1686722761;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ikNQkrdrAJGCNAvergzNJwqSJvekujKYKl5hFESSnUY=;
-        b=EKXVUTUTriHmUgh+qSGooFfpgsIh+mTO4nw6Qa2EbMkRWT77OwdkDQ4iFiH25fE5op
-         03763HyXOTZXwec9ufUxsRY2iKU+rbibsZSp3SJZMtJmx0tRS/IeATDUVcfo9TfImd3/
-         Yf/q2GIfc41ITkRZ7YcVSX3QJg6nyuOkeNAP2lZJIvPzJu5/CPUigjO+tkR0gOTpT5iV
-         ZcqW56QNBrBnEWWzSeSK8XerfFpGytc7z4rh4EQtnoM+11nT7nMJsOOyZqjXI2MRB/6k
-         hy+mwVX964jdxBbNW/Eipkr+a51S8PBFzmBjwPB9F/Jm4ij9c8bIqzvFJ86qRlOfYK+4
-         LZAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684130761; x=1686722761;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ikNQkrdrAJGCNAvergzNJwqSJvekujKYKl5hFESSnUY=;
-        b=FMXo0Kc2QLqX7cxCLWPwgrDAV9QiWAYkGlCmxghXDDcmZGY1LTS0jA14X3zwY77gJD
-         QhGUqhueOCyscZm/klIUK3Ux+P37dvAN0G/+nK8qfEMcrgqWY4go9oHWyZ1ttGmYOgUX
-         puXZagPBn2ba0gWpeKc96yCdqoqC5X6ANW6fFUM5ZZUR+65i130qB24M52ll9bxAMGDc
-         OtGvolLurPQKVox+5pHcvN4iuEUNx3CdYbN2eRdvfTBrHHsTLVVG63YwlRa97zCZufID
-         TyHkCn7w/le4XqV8NEARGn+ezzj1Xr8Vt3r4ihEqlE5BgbLyc0RzpSAXtEsrEDeyZLga
-         wtdA==
-X-Gm-Message-State: AC+VfDx8N8bXN8pdu2co7jsyUBswxNd2qmLLj042hWOTF6Kp//tM315g
-        TDSrRFENxOl58Xbym2rLSCpecWxASasRlTdk7MQ=
-X-Google-Smtp-Source: ACHHUZ67kGlnLEVTsEqyit+X3AiJBq8D1zm3v6DKD3Db/DcVbo9yrZ35RaRs1ZRzO/yofsfT9eNQEMBL5c1hMj4VgO0=
-X-Received: by 2002:a05:6512:21a6:b0:4e9:cfd2:e2d with SMTP id
- c6-20020a05651221a600b004e9cfd20e2dmr5511791lft.65.1684130761032; Sun, 14 May
- 2023 23:06:01 -0700 (PDT)
+        with ESMTP id S239633AbjEOGZc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 02:25:32 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on20623.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e1b::623])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE8526A8;
+        Sun, 14 May 2023 23:25:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=topic.nl; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+IJUozzBV3ITTHoJunYUHYXDKWhVa9s20GQxi5ii0iE=;
+ b=XijtSBbbKov+S8i3NiMkg5qTGC3qWLM7GyGMBjJB/9rojRwzcraHINXJACrfaRcDvIHc5f7WTw8NBsgCj2PZfIJLeVxJHweWVN+Hq1aOFu2fRCaC2PdJ/LcpfZPKxA7ikICgP4/k2daIETODV3OJUeIqhZ5uiSZPOo1MvuLXDGb4y7DUvmYT0gldniQqEfC6VIow3Se+LspqEx5EaSatjnrUnS/0gCEAf2xo3RWiS/NDtWAe3pclk8LiKtCDIZKsy5yvDP3x4pVg2K6qqvRjqdAoZIC7g98ACufw8+MZCCP59d37UztXbVDr6K8ovh3cjr6nKbU98wkZ41zKKVIdPQ==
+Received: from DB6PR0202CA0019.eurprd02.prod.outlook.com (2603:10a6:4:29::29)
+ by AM8PR04MB7379.eurprd04.prod.outlook.com (2603:10a6:20b:1c4::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
+ 2023 06:25:14 +0000
+Received: from DB5EUR01FT091.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:4:29:cafe::ea) by DB6PR0202CA0019.outlook.office365.com
+ (2603:10a6:4:29::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.29 via Frontend
+ Transport; Mon, 15 May 2023 06:25:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 13.93.42.39)
+ smtp.mailfrom=topicproducts.com; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=topic.nl;
+Received-SPF: Pass (protection.outlook.com: domain of topicproducts.com
+ designates 13.93.42.39 as permitted sender) receiver=protection.outlook.com;
+ client-ip=13.93.42.39; helo=westeu12-emailsignatures-cloud.codetwo.com; pr=C
+Received: from westeu12-emailsignatures-cloud.codetwo.com (13.93.42.39) by
+ DB5EUR01FT091.mail.protection.outlook.com (10.152.5.217) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6387.29 via Frontend Transport; Mon, 15 May 2023 06:25:13 +0000
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (104.47.51.177) by westeu12-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Mon, 15 May 2023 06:25:13 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fBaiM/WCXzU7azsk2z7MAsu1ZxtEhQVkRNFFiuqYR14ininV5ZRlcfKGQag2lZ0MXv9h9Vp/4tlOypaCGl1SpZUBL494NvIzWNkG4UaF4dxq4jWmvxizGzZs9GtiL+oBqq+XnkpRZpVyCz+HgxEiQD0js29g2Ysk5u1w3LBKcTVn/24nblF1w3GnAKpqg3bGk49B1YvOCADf6e4OFIodMtL1EphQQyrY/PmRVP70Fd23O3AmSp8f0Lh2b8tBrHNR3DXeRRkPgMAX9H76Vq6MRTXqDC38D3AKwuWi+N4YHC3NGCGaafAQ9cZ+yopSabA9Q4wTqgIL9nnMp4uJjpv/9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OIGSnjgWpwba90XCwWe82ADgDCq40CxnyXT241WntnE=;
+ b=fr3F4EGuPpupWgKrfmJ8OphfsWSbfvY73lpmnlMon3UrKRT/U53LiWlNsq/Va1k8Omr4YCNXpUxJ6iIDLNHsTcHKj2SIwnS1IVAJVIJahNC2Pioqwj+XT4sQak/th5ZKOdyKg70kux3uY4+xYTauyLNr5CbRfF4NEjyB2r7W26v2lArKJSXHpTypnzYmVDSsAUA2/pMyXlRwshkRgY0XA0DYEI+TX9EYVV1QEUEmkgufzEKJTwQMfh/lhlYM7zjv8MNRbNt1P41J28AyeNof3JgkckWhiLvChyVLczhCLXm1K2Xf485smiFVW4KcSRpSSEPwVAcqg5r2+ISrZigIKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=topicproducts.com; dmarc=pass action=none header.from=topic.nl;
+ dkim=pass header.d=topic.nl; arc=none
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=topic.nl;
+Received: from DB8PR04MB6523.eurprd04.prod.outlook.com (2603:10a6:10:10f::26)
+ by AM9PR04MB8795.eurprd04.prod.outlook.com (2603:10a6:20b:40a::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
+ 2023 06:25:09 +0000
+Received: from DB8PR04MB6523.eurprd04.prod.outlook.com
+ ([fe80::f4fa:8429:9de2:41c3]) by DB8PR04MB6523.eurprd04.prod.outlook.com
+ ([fe80::f4fa:8429:9de2:41c3%6]) with mapi id 15.20.6387.030; Mon, 15 May 2023
+ 06:25:09 +0000
+From:   Mike Looijmans <mike.looijmans@topic.nl>
+To:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org
+CC:     Mike Looijmans <mike.looijmans@topic.nl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: usb: Add microchip USB5807 HUB
+Date:   Mon, 15 May 2023 08:25:01 +0200
+Message-ID: <20230515062502.29273-1-mike.looijmans@topic.nl>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: AM4PR07CA0005.eurprd07.prod.outlook.com
+ (2603:10a6:205:1::18) To DB8PR04MB6523.eurprd04.prod.outlook.com
+ (2603:10a6:10:10f::26)
 MIME-Version: 1.0
-Sender: aminataouedraoga057@gmail.com
-Received: by 2002:a2e:9bcd:0:b0:2a8:c1ab:1c8a with HTTP; Sun, 14 May 2023
- 23:06:00 -0700 (PDT)
-From:   Wolfgang Hermann <wolfgangtrebsch4@gmail.com>
-Date:   Sun, 14 May 2023 23:06:00 -0700
-X-Google-Sender-Auth: KP9Dc2XgDriITtbll2BdGIjdGlw
-Message-ID: <CAMjNxnsc0_NzSdsBUYEYMLvPaevwWjS4FnVmq+LAMzN1AsxfmA@mail.gmail.com>
-Subject: Awaiting your response
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:132 listed in]
-        [list.dnswl.org]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [aminataouedraoga057[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [wolfgangtrebsch4[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  2.6 MONEY_FRAUD_5 Lots of money and many fraud phrases
-X-Spam-Level: ******
+X-MS-TrafficTypeDiagnostic: DB8PR04MB6523:EE_|AM9PR04MB8795:EE_|DB5EUR01FT091:EE_|AM8PR04MB7379:EE_
+X-MS-Office365-Filtering-Correlation-Id: 674c377a-9796-4b20-fae4-08db550d249f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: hg0yo2QMBwEJCIzTA1hbyI8WWnVlZPqcDnQwvVWw6YBs3VXcJ2HxMOTu/w9q5jA9/YjKBBJAloMrxY92hiSfqYNb+nd3tY2MlXvirxvafkp54ygrVktofopz5rT9xO/P/BARz6yBaB39IpKXQljbngWKH3hRKFrdJGTi7la7aVX6kgar4OgFojj4KYx/wmXia5WdL9tc7oF175TXGLbyQiOqDoTWw2xhWWyZpuLv0jyGQI3XvYIMoo+3ZgFfhtREhTKbGAa1NC2VeFghv1xeA16Wlgz6GWrZTR7WL/klSs27OlwLE+c4/Vy/+UgQ08b0yp0RRVvDnmqlVk+fqbw1Ys63XeZ1jHsMyKmHEFnw7s1B4Mm6ruZFCmm6pG3Yj61hdSnTDDeoid00Rqce8f14OnzGKC0HlVd6h6WCWjN0ObepoXj/f570a1rx8BDLswaIzNmuNf3MOweZZI1GhSzPsZhlfiJJ7f8LW2pwHsnDm7mK8b2qguRYgqFH+Wpod48c+Li261KMtoTvHlZD0z4I6nM22XtMW+ihRZeuWrO78+VaC3cbysQRlUTTkY9ejKgUzqRw69fxAXfTHHGvVvqC9rXIEd0acbblvExHQbP9PNg=
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6523.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(396003)(136003)(366004)(39830400003)(451199021)(316002)(4326008)(66946007)(2906002)(5660300002)(44832011)(8936002)(8676002)(66476007)(66556008)(41300700001)(42882007)(54906003)(478600001)(2616005)(966005)(52116002)(36756003)(6666004)(6486002)(26005)(6512007)(1076003)(186003)(6506007)(83170400001)(38350700002)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8795
+X-CodeTwo-MessageID: 05461389-e3ba-428d-9dd9-8afea7a2ce17.20230515062513@westeu12-emailsignatures-cloud.codetwo.com
+X-CodeTwoProcessed: true
+References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.f4f6ec47-9e6b-4978-b229-53520227ed28@emailsignatures365.codetwo.com>
+Content-Transfer-Encoding: quoted-printable
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB5EUR01FT091.eop-EUR01.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: e18b0fc3-4138-4113-e9e0-08db550d21e7
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7+Vp1piS8X/QO/wd22wnVS5Q8d3GnEjSU3RMERHgt7JY3bGQihIqQ8GUJ4X0ibt4FdycbVkNY0JE6Itd6ot6dagbKc/84d/oxucHtal2EHOz4UzBtnA3bd/fBj41VvbVMQROjK17Tlqvrau6thxj8NM2VxLggB5myXjds4njvIIuoJwMf7cDMicCt2Rxn9ZWEOi/WJ1q6byMcakG1Mdlfy/Pr5Vijysl1w4S4Qnux26WRbsuDSfeY7Rk7naFSQHSQtrVsrxjaldRcoh5YQ7OLir76K3dGffeMp4ed3CQZd+MqCiDMo1UNp/HK05B5y7XUUU37B3aOOhaKWxfFft9XTVnbdW56WbPEPCX+IyiifXG8vhnGa8rE9Gu3URIm1oAU5NKmyp0r3PpFVNu72E99NBAbq7XovxQE5W/emZrkq06tIUki6IUoiYT7MNT7rt/50sbf5QXeWQCEFgHCwwmIBU+kCBO1GZv+BZ1lIWkHrBNDpomJr62NRQpYv8vwzu2RMM2f7UfiHydyYQOnX5t0zpXfENWu3RSBTMFkmBfEsB+qdM+YRMOB+IQQ8uCbwvX7B4xw6MwcVo3WmvgLRIcEZAVsPuLVfgkRi8OCHDjLD3GTA0zANyljxl7Zye7hLwWhmNxubPAAshDJtEujUFWdbdo4x+d9HY1XGqlW51LD/8/5G4UTz6V1ChUnMvIJ5PI
+X-Forefront-Antispam-Report: CIP:13.93.42.39;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:westeu12-emailsignatures-cloud.codetwo.com;PTR:westeu12-emailsignatures-cloud.codetwo.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(396003)(136003)(39830400003)(451199021)(46966006)(36840700001)(316002)(4326008)(70586007)(70206006)(2906002)(5660300002)(44832011)(8936002)(8676002)(41300700001)(42882007)(54906003)(478600001)(2616005)(966005)(40480700001)(36756003)(6666004)(6486002)(26005)(6512007)(1076003)(186003)(15974865002)(6506007)(47076005)(336012)(36860700001)(7636003)(7596003)(356005)(83170400001)(82310400005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: topic.nl
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 06:25:13.8894
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 674c377a-9796-4b20-fae4-08db550d249f
+X-MS-Exchange-CrossTenant-Id: 449607a5-3517-482d-8d16-41dd868cbda3
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=449607a5-3517-482d-8d16-41dd868cbda3;Ip=[13.93.42.39];Helo=[westeu12-emailsignatures-cloud.codetwo.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT091.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7379
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+The USB5807 is a 7-port USB 3.1 hub that can be configured by I2C.
+This driver resets the chip, optionally allows D+/D- lines to be
+swapped in the devicetree config, and then sends an ATTACH command to
+put the device in operational mode.
 
-I am Mr Wolfgang Hermann Triebsch, a dua Citizen of Germany and
-Canada, but living in Burkina Faso. I am 80 years old, I lost my wife
-and two daughters during the Burkina Faso Political unrest that
-happened in August 2016 you can view the link below:
+Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
 
-I am a philanthropist and a God fearing devoted Christian, a Crude Oil
-dealer and Architecture.
+---
 
-Due to the shock of their death that resulted in me being diagnosed
-with High Blood Pressure (HBP) also with Paralysis.
+Changes in v2:
+Rename to microchip,usb5807.yaml
+Remove reset-gpios description
+Add maxItems
+Add vddXX-supply properties
 
-I cannot walk or stand, I have been bedridden for (4) years now,
-recently I was diagnosed with Prostate Cancer, and I have concluded
-that I will donate all my savings to charities and churches.
+ .../bindings/usb/microchip,usb5807.yaml       | 57 +++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb5807=
+.yaml
 
-Since I know that I have very limited time to stay on earth before I
-die according to my Doctors, I have been helping and contributing some
-amounts of money to Orphanage Homes and to Charity Organizations, as
-well as Foundations with the help of the Priest of the Catholic church
-where i worship, I have given donations to over 10 Charity
-Organizations and Foundations, in Africa, Asia, South America, etc. at
-this moment I have the balance deposit sum of $6,000,000,00 USD,
- in one of the prime bank here in Burkina Faso which i
-want to entrust in you or your church or your foundation for charity
-project in your country with my name.
+diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5807.yaml b=
+/Documentation/devicetree/bindings/usb/microchip,usb5807.yaml
+new file mode 100644
+index 000000000000..ac5f1a959aae
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/microchip,usb5807.yaml
+@@ -0,0 +1,57 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/microchip,usb5807.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Microchip USB 3.1 SuperSpeed Hub Controller
++
++maintainers:
++  - Mike Looijmans <mike.looijmans@topic.nl>
++
++properties:
++  compatible:
++    enum:
++      - microchip,usb5807
++
++  reg:
++    maxItems: 1
++
++  reset-gpios:
++    maxItems: 1
++
++  vdd12-supply:
++    description: core power supply (1.2V)
++
++  vdd33-supply:
++    description: main power supply (3.3V)
++
++  swap-dx-lanes:
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    maxItems: 8
++    description:
++      Specifies the ports which will swap the differential-pair (D+/D-),
++      default is not-swapped.
++
++additionalProperties: false
++
++required:
++  - compatible
++  - reg
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    i2c {
++      #address-cells =3D <1>;
++      #size-cells =3D <0>;
++
++      usb-hub@2d {
++        compatible =3D "microchip,usb5807";
++        reg =3D <0x2d>;
++        reset-gpios =3D <&gpio1 4 GPIO_ACTIVE_LOW>;
++        /* Swapped D+/D- on port 0 */
++        swap-dx-lanes =3D <0>;
++      };
++    };
+--=20
+2.17.1
 
-As soon as I receive your reply I shall give you the contact of my
-bank where you will send your bank details and other requirements they
-may need from you .I want you and the church to always pray for me.
 
-Thanks for your understanding.
-
-Best regards,
-Mr. Wolfgang Hermann Triebsch
+Met vriendelijke groet / kind regards,=0A=
+=0A=
+Mike Looijmans=0A=
+System Expert=0A=
+=0A=
+=0A=
+TOPIC Embedded Products B.V.=0A=
+Materiaalweg 4, 5681 RJ Best=0A=
+The Netherlands=0A=
+=0A=
+T: +31 (0) 499 33 69 69=0A=
+E: mike.looijmans@topicproducts.com=0A=
+W: www.topic.nl=0A=
+=0A=
+Please consider the environment before printing this e-mail=0A=
