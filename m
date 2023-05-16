@@ -2,73 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8D27050A9
-	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 16:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6537050B8
+	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 16:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233769AbjEPO1Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 May 2023 10:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
+        id S233899AbjEPO2k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 May 2023 10:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233755AbjEPO1X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 May 2023 10:27:23 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCBD136
-        for <linux-usb@vger.kernel.org>; Tue, 16 May 2023 07:27:20 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-331632be774so36162345ab.0
-        for <linux-usb@vger.kernel.org>; Tue, 16 May 2023 07:27:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684247240; x=1686839240;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fEdNI2ivYxOT1+ehWt92KVPedJERHmit4xqcWHC12Fc=;
-        b=dSjrDEaYmUa8NpWxu9MICKEyhDDdgtjUBEAbKYoiogptYEkuLNwZkoe8Dss8w6rj3N
-         mMtcoRJUBh9CgAIY/MqumkjKCyi1Hcu2P970sn6VlcX4x1CVai6HUiRvgJKqA5ge84bv
-         GwFTNy3UhEr7wQnbxf3x/OUGBziiD46ROvi2Bk7hVSjkzpjBqm4E7EFXr0FAYuwjw/mA
-         bT+v2jWRlZ0m6O1bvR6M0Nx/B7IEfX0mH5iMJgsC1zXc4mtb+40l6y1qqcfBuxHOvmeQ
-         0odQkrzIoUXFsHWfmDc3r7iCPbtuCucsD/DLjaTgDctHChWf/hZmAwYzc4C33CWPiP36
-         0Qcw==
-X-Gm-Message-State: AC+VfDyQwfDYCb4rdn9PDlIlDFjPd0xBciCt/5rx39nB163BCa5Ii0UZ
-        bDeQpBXar2cwXZrEn/BwUpH46SXbT+iW0WaKHbnTw1TlYCfm
-X-Google-Smtp-Source: ACHHUZ5ntS4dKyRbs/lNewwEt+atIVkoR5+v3/EYXMrsVGZwJu5BXxjfMh71AdRlLC3A/vGmMWyNjR1EC0CzbhRMsmzz1yM7ZmR/
+        with ESMTP id S233913AbjEPO2h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 May 2023 10:28:37 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A861BC6;
+        Tue, 16 May 2023 07:28:34 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GCAecw004449;
+        Tue, 16 May 2023 14:28:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=RMFXA7ZudVjHyZ4kH0k4IsYmxdb+amxND9ev4TL+PJg=;
+ b=i/5efG5oQ5S2n9dcGNFeOm50w+dd95BVSdWs0r2Rtt0DZE1wBsIXyA3+CBQQLoEa/2/S
+ Vw0TlhR4RHyjdzJ3HIK/5SIWg0+NyXvG9CjoCpE8sqvjKK9A8BwNIRe04llJ4P0+/uea
+ 2Hdql0k7wyPUwOVqSCrLHoIJwSdAdnX3hv6vdWUtUa3bWd7YhKXuwmLKqzm/MxU5wkuy
+ lMsyXvkUlaHdnHmMXoLiuw4iPqd2j2JORBwsLa5rSBvwkcVRio51LQdCXtvy2i/UB+e3
+ w7VV4qY4c1t22DOv0szZ6PfHXTXqIFqrcFml2evPj8cF8NqLSSUcygoCHRoby15jLm8K dw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qm1x096x7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 14:28:23 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34GESL02026238
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 14:28:22 GMT
+Received: from [10.216.35.75] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 16 May
+ 2023 07:28:14 -0700
+Message-ID: <52b5c1ac-ac69-2ca7-1bf4-01b1f53b1634@quicinc.com>
+Date:   Tue, 16 May 2023 19:58:10 +0530
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9da0:0:b0:76f:e71e:5f9d with SMTP id
- ay32-20020a5d9da0000000b0076fe71e5f9dmr2354070iob.1.1684247240261; Tue, 16
- May 2023 07:27:20 -0700 (PDT)
-Date:   Tue, 16 May 2023 07:27:20 -0700
-In-Reply-To: <2023051628-thumb-boaster-5680@gregkh>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000078459205fbd05edf@google.com>
-Subject: Re: [syzbot] [usb?] memory leak in class_create
-From:   syzbot <syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, rafael@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v8 4/9] usb: dwc3: core: Skip setting event buffers for
+ host only controllers
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>
+CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>,
+        <ahalaney@redhat.com>
+References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
+ <20230514054917.21318-5-quic_kriskura@quicinc.com>
+ <ZGN0W0YbIjzmQnH1@hovoldconsulting.com>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <ZGN0W0YbIjzmQnH1@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: THSS0IZNn5baN6Z7Bij_d4pFBAaLOwkV
+X-Proofpoint-GUID: THSS0IZNn5baN6Z7Bij_d4pFBAaLOwkV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-16_07,2023-05-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 mlxlogscore=999 bulkscore=0 mlxscore=0 impostorscore=0
+ spamscore=0 adultscore=0 phishscore=0 clxscore=1015 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305160121
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Reported-and-tested-by: syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com
+On 5/16/2023 5:47 PM, Johan Hovold wrote:
+> On Sun, May 14, 2023 at 11:19:12AM +0530, Krishna Kurapati wrote:
+>> On some SoC's like SA8295P where the tertiary controller is host-only
+>> capable, GEVTADDRHI/LO, GEVTSIZ, GEVTCOUNT registers are not accessible.
+>> Trying to setup them up during core_init leads to a crash.
+>>
+>> For DRD/Peripheral supported controllers, event buffer setup is done
+>> again in gadget_pullup. Skip setup or cleanup of event buffers if
+>> controller is host-only capable.
+>>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/core.c | 10 ++++++++++
+>>   1 file changed, 10 insertions(+)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index e983aef1fb93..46192d08d1b6 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -505,6 +505,11 @@ static int dwc3_alloc_event_buffers(struct dwc3 *dwc, unsigned int length)
+>>   int dwc3_event_buffers_setup(struct dwc3 *dwc)
+>>   {
+>>   	struct dwc3_event_buffer	*evt;
+>> +	unsigned int			hw_mode;
+>> +
+>> +	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+>> +	if (hw_mode == DWC3_GHWPARAMS0_MODE_HOST)
+>> +		return 0;
+>>   
+>>   	evt = dwc->ev_buf;
+> 
+> How about adding this check to dwc3_alloc_event_buffers() instead as
+> there should be no need to allocate buffer that you never use?
+> 
+> Then you can just check dwc->ev_buf here and elsewhere.
+> 
 
-Tested on:
+Thanks for this idea. We can save 4096 bytes from being allocated this 
+way. Will get this in next version.
 
-commit:         22b8cc3e Merge tag 'x86_mm_for_6.4' of git://git.kerne..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=16eedb6e280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c317b48f2c445e87
-dashboard link: https://syzkaller.appspot.com/bug?extid=e7afd76ad060fa0d2605
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=17ed8b21280000
-
-Note: testing is done by a robot and is best-effort only.
+Regards,
+Krishna,
