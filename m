@@ -2,93 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 699D07054FA
-	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 19:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B403705651
+	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 20:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjEPR15 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 May 2023 13:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
+        id S230158AbjEPStR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 May 2023 14:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjEPR14 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 May 2023 13:27:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFACFC;
-        Tue, 16 May 2023 10:27:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B945963CF0;
-        Tue, 16 May 2023 17:27:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7792C433EF;
-        Tue, 16 May 2023 17:27:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684258075;
-        bh=DfKxgGY4iCyh00gadtHR9ZZJib1hLgMeWEqpNAnGF14=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HcThpdKavmaa7uVl/qxgnjFu9KleSv7V21ssdL1ceXUdgkGh3Z5b1h5eBXFjMafvt
-         q7bfmwlErmY1062WfG46SR8cWfpAdpdS15yLHUJomu3oB8EehgfoDnnla6CKKZbSIT
-         O8VMfhXPxwX+ONwFWD5smWWWLf1doQXFWYlRZcrIz3y4EWdrh1KxncrijW5z8OGYnC
-         hqIfSC8AI9IrJNKRoC53nCY7Ll6y2jit+qaPdLp5Rb7aQZrP3oGImzBnaSKjAeXH0c
-         zRl5mfUKslElaEolxefVszmONzMaF73jryHHjG/P0hIM5ekMPYPXOaFuWjUQUABgiV
-         H4KtHLaQjvZlg==
-Date:   Tue, 16 May 2023 18:27:50 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Richard Leitner <richard.leitner@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Marek Vasut <marex@denx.de>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mike.looijmans@topic.nl
-Subject: Re: [PATCH v2] dt-bindings: usb: usb251xb: correct swap-dx-lanes
- type to uint32
-Message-ID: <20230516-smasher-aerospace-1096bd7096fd@spud>
-References: <20230516083432.18579-1-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S229791AbjEPStP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 May 2023 14:49:15 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2079.outbound.protection.outlook.com [40.107.243.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B52E4F;
+        Tue, 16 May 2023 11:49:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R9V+oMIGoGNwxnxCkTl+o6tp4hWkwrGDvGJAOtwfAf6Xnps28RyQYpyVNQDrny56r1dVXOdQLGgBt69aUqbnvYjQFqSflx/rVHZpVpjf178HtKCG18d1NoUWzYDSyvmDJXfnKg8MEXWbv4GhQMyEwsW+xdWKHxgssQawWUpyino1cWQwcvvI6Y4iclXpOJzlbLxGh/ULhcXkZikA0WHqWVgY9MX14I1ZkChGJ0BpCp8RidfmkBbMejCfuW76g/SOrg2YRHvRavGcBv9+IyJMvOVATMlZjEEXoQaAuYfxK5o2qkkMbqs2daKz4tYW28bXn4I3p7fA8gLuQJjvouHHlw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tgJQGW92H9EgAFzAMCemC5nx7QQbXKO/jsvUv1+gn1E=;
+ b=k27a3ogko0zlSejSj/muFo2FQW0Bel87fXWpJk1LMusMJTBT+eGzcABprzqhfllr0ir2/0KqadXiGbIeyWIFFqXorcnh9VkBoDWNexuWpPPg3BUNtSVF8Cpk82ZfFN7XayFSYRdygnqPXmb+vo4HWl7uPy60unE+JyRSpbZh097ByYl3hqREfQygMC4/e4w9fZZlkvdhygU1YkBmWFPGts43lxR074+8+aLFJ0tKQpPnEykeegkFmkq0EvABy15D78GqRDfjvCx1vxDS9At2NHNo/PCyoJBsG+2mAu9p6AGY336ZUsInxKj3IURYUIQr2KU7u978MVR2zdxXEvrHLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tgJQGW92H9EgAFzAMCemC5nx7QQbXKO/jsvUv1+gn1E=;
+ b=kE8GmghiCRALdm20Y02ZHRDQuPABMkHsV+79hi1rcifj82Bpkvb9IokkdfxnDruSgCFwQSzwFG9MDEMAnalTAR8GXmfKP7isAG3Ym1p0sY57vFWpjIbEw7UwoJAhL0K/WWdSNr3A3W+WZsmabnoVWLZs3XcpHiueoqq/0WK8ZX0=
+Received: from BN0PR02CA0030.namprd02.prod.outlook.com (2603:10b6:408:e4::35)
+ by SJ0PR12MB6736.namprd12.prod.outlook.com (2603:10b6:a03:47a::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Tue, 16 May
+ 2023 18:49:11 +0000
+Received: from BN8NAM11FT108.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e4:cafe::23) by BN0PR02CA0030.outlook.office365.com
+ (2603:10b6:408:e4::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.31 via Frontend
+ Transport; Tue, 16 May 2023 18:49:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT108.mail.protection.outlook.com (10.13.176.155) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6411.17 via Frontend Transport; Tue, 16 May 2023 18:49:10 +0000
+Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 16 May
+ 2023 13:49:07 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <heikki.krogerus@linux.intel.com>, <rafael@kernel.org>,
+        <ajayg@nvidia.com>, <andriy.shevchenko@linux.intel.com>
+CC:     <linux-i2c@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <Evan.Quan@amd.com>, <Lijo.Lazar@amd.com>,
+        <Sanket.Goswami@amd.com>,
+        "Mario Limonciello" <mario.limonciello@amd.com>
+Subject: [PATCH 0/2] Adjust logic for power_supply_is_system_supplied()
+Date:   Tue, 16 May 2023 13:25:39 -0500
+Message-ID: <20230516182541.5836-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="AQJn1tvMQYsj72xo"
-Content-Disposition: inline
-In-Reply-To: <20230516083432.18579-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT108:EE_|SJ0PR12MB6736:EE_
+X-MS-Office365-Filtering-Correlation-Id: 939e87f7-0116-4298-8d60-08db563e3c6e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AOhsuuI6ROzamXj1yQVZpGDRCQ5wVDjaV3QizDnMDTYogjsvCqnL1pC7FMecm7JD/0uaQpwK1wcgbbGmn8oT96KS3Ll2pmNaYRab+7BWOZ3as+GLe5+w6Nt1v5Tml7IxTHUQV6jPjhLxRS3hDOLvC0MOEd/dbgN4QF2HJbQB/2pfTKe2LILDP8Hif91IEAXacn3tb6U5YhG93n/TApyOjkZ8R8r+u/+RHtn0cCsXypMIuJm/Mmsl+X8kOYbxSO6Xg1Qj/zQmyCfryVfEysJ/e+zrkU4+4oBCdOgyjLN+PU7da4bgx6Mr9vd52R0qG65gG16NNg8ixLrAPDa2+y/dDkQjF47Vpqs2SJODTNq87K+T0vbWaaWGa+h1fWvTjYfhI+Ex51tOitgBDEep+lsTZvnHacJoEfQpO3vU8jsnoG9n1MJ96X9cKpjtXTBzB/KHTwllKwF5VVSmMKQd/JN+wsEXZxYqzVTrabC+GjEzNnyuYOLJysG16EvQ5+0fRDyZDtK8WkX9nVLnuv6fL+rcRgH4f9KukSwZSqt4ave0xYJyCry2ihTvxSKQhwbx6VrfTveQfE84iUawyl4hQB+A08bLHh2t3TkhJFHOt7ZbtwBZ6B9/i7CDalqM+cOPwviTwi6G9ItAN/tboOq5P12Rm52mDoPszqg0n04OsRI0xAW9A8ZI6hiHh3iEip/gFMtOmA/O221yBCJOrIhHeZ/9V4orAX3xOI1Ih1gQeCCap1PiyBVvfeCp3lBgXdg2BztiEodEwJGQQv0uuAoNZ7CzlC/uD7xD9q3dtKhZpy2coPQ=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(396003)(136003)(376002)(451199021)(36840700001)(40470700004)(46966006)(7696005)(86362001)(54906003)(82740400003)(16526019)(41300700001)(186003)(1076003)(4744005)(47076005)(36756003)(26005)(2906002)(8936002)(8676002)(336012)(426003)(2616005)(110136005)(44832011)(478600001)(5660300002)(6666004)(4326008)(36860700001)(83380400001)(70586007)(40480700001)(316002)(70206006)(81166007)(82310400005)(356005)(40460700003)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 18:49:10.4427
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 939e87f7-0116-4298-8d60-08db563e3c6e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT108.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6736
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Some systems don't provide any ACPI power supplies, but drivers use
+the function power_supply_is_system_supplied() to make policy decisions.
 
---AQJn1tvMQYsj72xo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This logic works fine until a new device is added to the system that
+provides a UCSI power supply. This power supply doesn't power the system
+but the logic assumes it does.
 
-On Tue, May 16, 2023 at 10:34:32AM +0200, Krzysztof Kozlowski wrote:
-> The "swap-dx-lanes" was never described as uint8 in original TXT
-> bindings and Linux driver expects uint32.  Fix the type to match Linux
-> driver expectation.
->=20
-> Fixes: fff61d4ccf3d ("dt-bindings: usb: usb251xb: Convert to YAML schema")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This series adjusts the logic so that these power supplies are not
+considered when making these policy decisions.
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Mario Limonciello (2):
+  power: supply: Use the scope of power supplies to tell if power is
+    system supplied
+  usb: typec: ucsi: Don't create power supplies for dGPUs
 
-Thanks,
-Conor.
+ drivers/i2c/busses/i2c-designware-pcidrv.c | 13 ++++++++++++-
+ drivers/i2c/busses/i2c-nvidia-gpu.c        |  3 +++
+ drivers/power/supply/power_supply_core.c   |  8 ++++++--
+ drivers/usb/typec/ucsi/psy.c               | 14 ++++++++++++++
+ 4 files changed, 35 insertions(+), 3 deletions(-)
 
---AQJn1tvMQYsj72xo
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.34.1
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGO9FgAKCRB4tDGHoIJi
-0tSCAPsE3OtjPbw73sXHdoDXLdIwlg9hNuSSjUShyz184zzqYwEArIX2ECJn++0Y
-nVf3gxQDwC2jRwqBNWQn4cw6HqwogQw=
-=6u02
------END PGP SIGNATURE-----
-
---AQJn1tvMQYsj72xo--
