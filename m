@@ -2,72 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2136704D0C
-	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 13:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2114D704D5E
+	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 14:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232825AbjEPLxJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 May 2023 07:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
+        id S232905AbjEPMF7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 May 2023 08:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbjEPLxI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 May 2023 07:53:08 -0400
-Received: from pku.edu.cn (mx18.pku.edu.cn [162.105.129.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CDC275592;
-        Tue, 16 May 2023 04:52:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
-        Message-ID:References:MIME-Version:Content-Type:
-        Content-Disposition:Content-Transfer-Encoding:In-Reply-To; bh=VS
-        +nfB/HDB6UiMWHB0tfrnL0IzjksWjCC8c/qPgjfM4=; b=YCK/QyFJMV6H+G9ugE
-        SEE3gVFxOfyVQLaOzVc8LR0n2JMo/osesjt9jeW2N3jLc+8rPhlpCR/cVF4GuiE8
-        YO+q830PIIxaOLROE83jHcUu0uQscdxxuZ4XClq4hbZEcMQIAgWkcrbkVTKddX+/
-        8pXiiXPFFe7efNBgL9qgZuKGo=
-Received: from localhost (unknown [10.7.98.243])
-        by front01 (Coremail) with SMTP id 5oFpogBnYrxdbmNk7jBtAw--.4402S2;
-        Tue, 16 May 2023 19:52:02 +0800 (CST)
-Date:   Tue, 16 May 2023 19:51:57 +0800
-From:   Ruihan Li <lrh2000@pku.edu.cn>
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc:     linux-mm@kvack.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com,
-        stable@vger.kernel.org, Ruihan Li <lrh2000@pku.edu.cn>
-Subject: Re: [PATCH v2 4/4] mm: page_table_check: Ensure user pages are not
- slab pages
-Message-ID: <mgnjfbklr6ew7p4utamdidrvdtchaazovfuduaabplwtpq3se2@uamamaee3rlk>
-References: <20230515130958.32471-1-lrh2000@pku.edu.cn>
- <20230515130958.32471-5-lrh2000@pku.edu.cn>
- <CA+CK2bBD_fdmz1fFjB8MXBGMHf4jzRWeBRirH3HdWRLqY7cmtw@mail.gmail.com>
+        with ESMTP id S232607AbjEPMF6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 May 2023 08:05:58 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6B110D2;
+        Tue, 16 May 2023 05:05:54 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GBTu8j016044;
+        Tue, 16 May 2023 12:05:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=tX/my1SwYZPgLxEVNvnjUMSY7/9Bl5CftXwMRn4aaL0=;
+ b=BPGWpxhkcaECGNCG/BfPrzTHBBLaIsPErYJs+s86L3uCUja7XxfSHa2+skHywIV5ILs1
+ q1XD1SGP3AcDcL24HZPpWyffXJp7dUDzPbYlx6FDV7V1oqXXMaHpR0MBqGCdwkLuJa9+
+ cnB6++WKQY3qwJpUcDo2YTPFEdS+Cq9dK5xjIq2z97zh9jyg/EJru95GmKH/PGQwX0kR
+ gj7Le0KMvhGqbn77Lx0vSP1GC9W9O0zPvqXW2Rwo9YfS357ylLyn9fyxmn6OlRkaKifp
+ 85PiVT0D+mPQcvwhMbL2cKwQ5SvGT3gAvuWlb7AlL93SeoeN3uZfZgnvR9h5sEvzwaRg sQ== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qkqg8t434-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 12:05:46 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34GC5jBY019170
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 12:05:45 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 16 May 2023 05:05:39 -0700
+Date:   Tue, 16 May 2023 17:35:35 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Kathiravan T <quic_kathirav@quicinc.com>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v11 7/9] arm64: dts: qcom: ipq9574: Add USB related nodes
+Message-ID: <20230516120535.GB1679@varda-linux.qualcomm.com>
+References: <cover.1683630932.git.quic_varada@quicinc.com>
+ <b4c9dcfbfc328e9404be0edeaa70dde076cb7144.1683630932.git.quic_varada@quicinc.com>
+ <dc816d43-d3ca-62be-3e8d-9e6d7470c530@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+CK2bBD_fdmz1fFjB8MXBGMHf4jzRWeBRirH3HdWRLqY7cmtw@mail.gmail.com>
-X-CM-TRANSID: 5oFpogBnYrxdbmNk7jBtAw--.4402S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7WF1xur45Gr17XFyfCFyDZFb_yoW8Wr45p3
-        ykC3Z2kFs5KF92k3ZFqwsI9w1FyayDAay5Zrn5tF1vv3ZIyryxCr1UZwsa9rnI9rZFk34j
-        vF4Yqry0vayDZ37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBY1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24V
-        AvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
-        McIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
-        v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-        8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26w
-        4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
-        r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6x
-        IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAI
-        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
-        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbZmitUUUUU==
-X-CM-SenderInfo: yssqiiarrvmko6sn3hxhgxhubq/1tbiAgEMBVPy7743xAAWsf
+In-Reply-To: <dc816d43-d3ca-62be-3e8d-9e6d7470c530@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: CZTdxF-EgkOSF8rP1cgjb77J_zTu2FLL
+X-Proofpoint-GUID: CZTdxF-EgkOSF8rP1cgjb77J_zTu2FLL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-16_04,2023-05-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 phishscore=0 lowpriorityscore=0 mlxlogscore=999 spamscore=0
+ impostorscore=0 clxscore=1015 mlxscore=0 malwarescore=0 suspectscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305160102
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,45 +84,138 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 15, 2023 at 12:28:54PM -0400, Pasha Tatashin wrote:
+On Mon, May 15, 2023 at 04:06:29PM +0530, Kathiravan T wrote:
 > 
-> On Mon, May 15, 2023 at 9:10 AM Ruihan Li <lrh2000@pku.edu.cn> wrote:
+> On 5/9/2023 5:24 PM, Varadarajan Narayanan wrote:
+> >Add USB phy and controller related nodes
 > >
-> > The current uses of PageAnon in page table check functions can lead to
-> > type confusion bugs between struct page and slab [1], if slab pages are
-> > accidentally mapped into the user space. This is because slab reuses the
-> > bits in struct page to store its internal states, which renders PageAnon
-> > ineffective on slab pages.
+> >SS PHY need two supplies and HS PHY needs three supplies. 0.925V
+> >and 3.3V are from fixed regulators and 1.8V is generated from
+> >PMIC's LDO
 > >
-> > Since slab pages are not expected to be mapped into the user space, this
-> > patch adds BUG_ON(PageSlab(page)) checks to make sure that slab pages
-> > are not inadvertently mapped. Otherwise, there must be some bugs in the
-> > kernel.
+> >Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> >---
+> >  Changes in v11:
+> >	- Rename dwc_0 -> usb_0_dwc3
+> >  Changes in v10:
+> >	- Fix regulator definitions
+> >  Changes in v8:
+> >	- Change clocks order to match the bindings
+> >  Changes in v7:
+> >	- Change com_aux -> cfg_ahb
+> >  Changes in v6:
+> >	- Introduce fixed regulators for the phy
+> >	- Resolved all 'make dtbs_check' messages
 > >
-> > Reported-by: syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com
-> > Closes: https://lore.kernel.org/lkml/000000000000258e5e05fae79fc1@google.com/ [1]
-> > Fixes: df4e817b7108 ("mm: page table check")
-> > Cc: <stable@vger.kernel.org> # 5.17
-> > Signed-off-by: Ruihan Li <lrh2000@pku.edu.cn>
+> >  Changes in v5:
+> >	- Fix additional comments
+> >	- Edit nodes to match with qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> >	- 'make dtbs_check' giving the following messages since
+> >	  ipq9574 doesn't have power domains. Hope this is ok
+> >
+> >		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
+> >         	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> >		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
+> >         	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> >
+> >  Changes in v4:
+> >	- Use newer bindings without subnodes
+> >	- Fix coding style issues
+> >
+> >  Changes in v3:
+> >	- Insert the nodes at proper location
+> >
+> >  Changes in v2:
+> >	- Fixed issues flagged by Krzysztof
+> >	- Fix issues reported by make dtbs_check
+> >	- Remove NOC related clocks (to be added with proper
+> >	  interconnect support)
+> >---
+> >  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 104 ++++++++++++++++++++++++++++++++++
+> >  1 file changed, 104 insertions(+)
+> >
+> >diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> >index 93b4ba9..42b61f6 100644
+> >--- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> >+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> >@@ -150,6 +150,24 @@
+> >  		method = "smc";
+> >  	};
+> >+	fixed_3p3: s3300 {
+> >+		compatible = "regulator-fixed";
+> >+		regulator-min-microvolt = <3300000>;
+> >+		regulator-max-microvolt = <3300000>;
+> >+		regulator-boot-on;
+> >+		regulator-always-on;
+> >+		regulator-name = "fixed_3p3";
+> >+	};
+> >+
+> >+	fixed_0p925: s0925 {
+> >+		compatible = "regulator-fixed";
+> >+		regulator-min-microvolt = <925000>;
+> >+		regulator-max-microvolt = <925000>;
+> >+		regulator-boot-on;
+> >+		regulator-always-on;
+> >+		regulator-name = "fixed_0p925";
+> >+	};
+> >+
+> >  	reserved-memory {
+> >  		#address-cells = <2>;
+> >  		#size-cells = <2>;
+> >@@ -191,6 +209,45 @@
+> >  			reg = <0x00060000 0x6000>;
+> >  		};
+> >+		usb_0_qusbphy: phy@7b000 {
+> >+			compatible = "qcom,ipq9574-qusb2-phy";
+> >+			reg = <0x0007b000 0x180>;
+> >+			#phy-cells = <0>;
+> >+
+> >+			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> >+				 <&xo_board_clk>;
+> >+			clock-names = "cfg_ahb",
+> >+				      "ref";
+> >+
+> >+			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> >+			status = "disabled";
+> >+		};
+> >+
+> >+		usb_0_qmpphy: phy@7d000 {
+> >+			compatible = "qcom,ipq9574-qmp-usb3-phy";
+> >+			reg = <0x0007d000 0xa00>;
+> >+			#phy-cells = <0>;
+> >+
+> >+			clocks = <&gcc GCC_USB0_AUX_CLK>,
+> >+				 <&xo_board_clk>,
+> >+				 <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> >+				 <&gcc GCC_USB0_PIPE_CLK>;
+> >+			clock-names = "aux",
+> >+				      "ref",
+> >+				      "cfg_ahb",
+> >+				      "pipe";
+> >+
+> >+			resets = <&gcc GCC_USB0_PHY_BCR>,
+> >+				 <&gcc GCC_USB3PHY_0_PHY_BCR>;
+> >+			reset-names = "phy",
+> >+				      "phy_phy";
+> >+
+> >+			status = "disabled";
+> >+
+> >+			#clock-cells = <0>;
+> >+			clock-output-names = "usb0_pipe_clk";
+> >+		};
+> >+
+> >  		pcie0_phy: phy@84000 {
+> >  			compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
+> >  			reg = <0x00084000 0x1000>;
+> >@@ -560,6 +617,53 @@
+> >  			status = "disabled";
+> >  		};
+> >+		usb3: usb@8a00000 {
 > 
-> Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> 
-> I would also update order in mm/memory.c
-> static int validate_page_before_insert(struct page *page)
-> {
-> if (PageAnon(page) || PageSlab(page) || page_has_type(page))
-> 
-> It is not strictly a bug there, as it works by accident, but
-> PageSlab() should go before PageAnon(), because without checking if
-> this is PageSlab() we should not be testing for PageAnon().
+> node address should be updated to 8af8800 ?
 
-Right. Perhaps it would be better to send another patch for this
-separately.
+Ok. Will update and post a new patchset.
 
-> 
-> Thanks you,
-> Pasha
-
-Thanks,
-Ruihan Li
-
+Thanks
+Varada
