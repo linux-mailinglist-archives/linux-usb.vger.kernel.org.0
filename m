@@ -2,107 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C9F7056F6
-	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 21:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92217057F2
+	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 21:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjEPTUY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 May 2023 15:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47314 "EHLO
+        id S229452AbjEPTvl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 May 2023 15:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjEPTUW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 May 2023 15:20:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554BD86AF;
-        Tue, 16 May 2023 12:20:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D56E563E42;
-        Tue, 16 May 2023 19:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1F66C433EF;
-        Tue, 16 May 2023 19:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1684264818;
-        bh=/YeNawdh+oXFKTr0sy424iogPM406LAx5W7VDSqlidM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=x4guEzn6i6g07MTgAw/xrdPb7tYg0jgEBLLTHZgHh2SyEmdnMziwtQ1NYa/4+exvy
-         +N3sI36ZP0Wsl4VI4tyD7kWmr37b7F/DOxuzLUdFkB4VZlhVVtKGvgmLo60dovJvGu
-         dfbQhAssAPtDTv7SPoMte5VO5I9NNQ68w5lUrgNg=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH] driver core: class: properly reference count class_dev_iter()
-Date:   Tue, 16 May 2023 21:20:14 +0200
-Message-Id: <2023051610-stove-condense-9a77@gregkh>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S229717AbjEPTvj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 May 2023 15:51:39 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9C2DC4C2E
+        for <linux-usb@vger.kernel.org>; Tue, 16 May 2023 12:51:31 -0700 (PDT)
+Received: (qmail 845160 invoked by uid 1000); 16 May 2023 15:51:30 -0400
+Date:   Tue, 16 May 2023 15:51:30 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4 35/41] usb: uhci: handle HAS_IOPORT dependencies
+Message-ID: <23936929-80e4-4599-827a-d09b4960f3ab@rowland.harvard.edu>
+References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+ <20230516110038.2413224-36-schnelle@linux.ibm.com>
+ <2023051643-overtime-unbridle-7cdd@gregkh>
+ <4e291030-99d9-4b8b-9389-9b8f2560b8e8@app.fastmail.com>
 MIME-Version: 1.0
-Lines:  50
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1854; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=/YeNawdh+oXFKTr0sy424iogPM406LAx5W7VDSqlidM=; b=owGbwMvMwCRo6H6F97bub03G02pJDCnJ17P3XawPS+FX2ZOxhG/nyl2Xk2bw9BzY/U47ssb4y 96Wr59aO2JZGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAi3KcYZrOn5b/afWdS8APf U9xRXX218zXNZjMsWOq73dDq7ot3apcuT/jIP3+VRbdULAA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4e291030-99d9-4b8b-9389-9b8f2560b8e8@app.fastmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When class_dev_iter is initialized, the reference count for the subsys
-private structure is incremented, but never decremented, causing a
-memory leak over time.  To resolve this, save off a pointer to the
-internal structure into the class_dev_iter structure and then when the
-iterator is finished, drop the reference count.
+On Tue, May 16, 2023 at 06:44:34PM +0200, Arnd Bergmann wrote:
+> On Tue, May 16, 2023, at 18:29, Greg Kroah-Hartman wrote:
+> > On Tue, May 16, 2023 at 01:00:31PM +0200, Niklas Schnelle wrote:
+> 
+> >>  #ifndef CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC
+> >>  /* Support PCI only */
+> >>  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
+> >>  {
+> >> -	return inl(uhci->io_addr + reg);
+> >> +	return UHCI_IN(inl(uhci->io_addr + reg));
+> >>  }
+> >>  
+> >>  static inline void uhci_writel(const struct uhci_hcd *uhci, u32 val, int reg)
+> >>  {
+> >> -	outl(val, uhci->io_addr + reg);
+> >> +	UHCI_OUT(outl(val, uhci->io_addr + reg));
+> >
+> > I'm confused now.
+> >
+> > So if CONFIG_HAS_IOPORT is enabled, wonderful, all is good.
+> >
+> > But if it isn't, then these are just no-ops that do nothing?  So then
+> > the driver will fail to work?  Why have these stubs at all?
+> >
+> > Why not just not build the driver at all if this option is not enabled?
+> 
+> If I remember correctly, the problem here is the lack of
+> abstractions in the uhci driver, it instead supports all
+> combinations of on-chip non-PCI devices using readb()/writeb()
+> and PCI devices using inb()/outb() in a shared codebase.
 
-Reported-and-tested-by: syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com
-Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/base/class.c         | 2 ++
- include/linux/device/class.h | 1 +
- 2 files changed, 3 insertions(+)
+Isn't that an abstraction?  A single set of operations (uhci_readl(), 
+uhci_writel(), etc.) that always does the right sort of I/O even when 
+talking to different buses?
 
-diff --git a/drivers/base/class.c b/drivers/base/class.c
-index ac1808d1a2e8..05d9df90f621 100644
---- a/drivers/base/class.c
-+++ b/drivers/base/class.c
-@@ -320,6 +320,7 @@ void class_dev_iter_init(struct class_dev_iter *iter, const struct class *class,
- 		start_knode = &start->p->knode_class;
- 	klist_iter_init_node(&sp->klist_devices, &iter->ki, start_knode);
- 	iter->type = type;
-+	iter->sp = sp;
- }
- EXPORT_SYMBOL_GPL(class_dev_iter_init);
- 
-@@ -361,6 +362,7 @@ EXPORT_SYMBOL_GPL(class_dev_iter_next);
- void class_dev_iter_exit(struct class_dev_iter *iter)
- {
- 	klist_iter_exit(&iter->ki);
-+	subsys_put(iter->sp);
- }
- EXPORT_SYMBOL_GPL(class_dev_iter_exit);
- 
-diff --git a/include/linux/device/class.h b/include/linux/device/class.h
-index 9deeaeb457bb..abf3d3bfb6fe 100644
---- a/include/linux/device/class.h
-+++ b/include/linux/device/class.h
-@@ -74,6 +74,7 @@ struct class {
- struct class_dev_iter {
- 	struct klist_iter		ki;
- 	const struct device_type	*type;
-+	struct subsys_private		*sp;
- };
- 
- int __must_check class_register(const struct class *class);
--- 
-2.40.1
+So I'm not sure what you mean by "the lack of abstractions".
 
+> A particularly tricky combination is a kernel that supports on-chip
+> UHCI as well as CONFIG_USB_PCI (for EHCI/XHCI) but does not support
+> I/O ports because of platform limitations. The trick is to come up
+> with a set of changes that doesn't have to rewrite the entire logic
+> but also doesn't add an obscene number of #ifdef checks.
+
+Indeed, in a kernel supporting that tricky combination the no-op code 
+would be generated.  But it would never execute at runtime because the 
+uhci_has_pci_registers(uhci) test would always return 0, and so the 
+driver wouldn't fail.
+
+> That said, there is a minor problem with the empty definition
+> 
+> +#define UHCI_OUT(x)
+> 
+> I think this should be "do { } while (0)" to avoid warnings
+> about empty if/else blocks.
+
+I'm sure Niklas wouldn't mind making such a change.  But do we really 
+get such warnings?  Does the compiler really think that this kind of 
+(macro-expanded) code:
+
+	if (uhci_has_pci_registers(uhci))
+		;
+	else if (uhci_is_aspeed(uhci))
+		writel(val, uhci->regs + uhci_aspeed_reg(reg));
+
+deserves a warning?  I write stuff like that fairly often; it's a good 
+way to showcase a high-probability do-nothing pathway at the start of a 
+series of conditional cases.  And I haven't noticed any complaints from 
+the compiler.
+
+Alan Stern
