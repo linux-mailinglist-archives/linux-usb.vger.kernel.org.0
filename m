@@ -2,101 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52314704254
-	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 02:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 301E27042A0
+	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 03:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240909AbjEPAfL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 May 2023 20:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
+        id S1343543AbjEPBIa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 May 2023 21:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbjEPAfJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 20:35:09 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9E683E2
-        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 17:35:08 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-965ac4dd11bso2686838566b.2
-        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 17:35:07 -0700 (PDT)
+        with ESMTP id S243968AbjEPBI2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 21:08:28 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDF95B9D
+        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 18:08:23 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2ac7f53ae44so143838621fa.2
+        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 18:08:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684197306; x=1686789306;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qlyewVsl07mfZ/ig/ivXHrl1wbeTT3E/NvZX1X8th8I=;
-        b=qz4H5xm707Ayn04kPAWj9pkL2iV1WzKEyzrUstuKgtPnOqGRDi2y6/v85QFnWJE4xn
-         WNaXJj1yShGXbhJ+QdccYReyxrktXCN0/JOeoBcyGBVeyugdaHeTNlv2OgTvJ+6zr+GL
-         i9zlcXPcZiEtogSz2YNpzjidO4g3kqrui13irRoxPiJ8F2V/4hV2hraO8yhHgsXvx1cq
-         7Wem2oVWeccaMmGAKe3sA/LhlTZluOp82+njCzceFH6oKzzXeuOXPaO2ggkcUwK//H/P
-         WlgFo6UwlOQ8XW/fRIqybrd829vUqp7hDq8v3BMBnfU7tEMmo5F7/A8unHwT1GPHO+r+
-         g3lg==
+        d=linaro.org; s=google; t=1684199302; x=1686791302;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Lyzlb1knfLNloYB6AlxNxhOYp8O4rjeCw8TEVU/6wrs=;
+        b=K+xV7UkWFhHrH+cyZjQLTvXQRg8U+IYM2T2Ap2WI+gjyfg/BUTTzMHFYJ+9h4GZgHJ
+         0Z+bbAhqqeJNocTsBdAVJXVjBxevp1xRjF95LYKnHUoii0QqVrwPbKfxzK93ID1SfUSx
+         NdGZPaBPUyS40nCUOlD6u0vMsvI3ZFVfTzKqhD3e5Hwbeu11I0imt6AxpseuRC5VMVXm
+         nlbjvHP5h28Rkzo/bzg4UL+I95OnJ1G5iFVUB0IVqFUDQ73q1QvOq3Jt0al2cWxEoVAZ
+         0IuHA9+aSCWoZ2bYj2l6X1ae61CfKaswE68J8GNuarGO12ZO3e+q99iSFvNX7kau4Sde
+         gqrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684197306; x=1686789306;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qlyewVsl07mfZ/ig/ivXHrl1wbeTT3E/NvZX1X8th8I=;
-        b=mE1GES1rR+qK491wB6n/DNHMIZ3sDgtJmSOgWQbu+8XILZqBJQo/K26AaU6png+030
-         LMgSWi+wUjRHeGznnKKRnsRbl2BAnkiqFkjNZ6UVSl+Nz5Ep59+4QgEW5PMuasiSLDeU
-         SXCVBgd3SGH83eR4BiKCMGJYTr/fqEYTgl7jG/4rqXWHLxvJnNZDgsZrDKfR9M7v5qXZ
-         IefGhT7N8shNETh+ws26Vkl0MSxVu1fZI8pCwr1TtYyjQpkr2uxwAjWeNLDTiGEfyVJ1
-         Rqs1L9fzs1hp7v1dn4nyvw8FgAbcEPdMpfOM1BP6reC3GnoNlXzjT0tJ+nJ2Cfnj2I/F
-         GKZw==
-X-Gm-Message-State: AC+VfDwDYKrCoTreNXBZXo/sOcl4LwIAWywG4+ai66bCscsGq12OCjrg
-        WM2serCHmxq5Z5QAW0ME6sXFwvNOIA7EfX7FR/rgDpj8jjoVtf22ZPR+utQTwUA=
-X-Google-Smtp-Source: ACHHUZ7qaEmDr91lp4M2/EvTukiyFZ2ZyXgG9tCfJgd/BJ8hwf3FEAb63o9IW08v9ldzY5kIUKgDtsvI60pdrPLKqOo=
-X-Received: by 2002:a17:907:d86:b0:953:42c0:86e7 with SMTP id
- go6-20020a1709070d8600b0095342c086e7mr31242838ejc.4.1684197306358; Mon, 15
- May 2023 17:35:06 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684199302; x=1686791302;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lyzlb1knfLNloYB6AlxNxhOYp8O4rjeCw8TEVU/6wrs=;
+        b=UqcElHtfoXCb4f9m0j8lkwoWKKIfGXkbS1J77BkmjqO9BG0wkUYaHWFSlV2HjynBF6
+         V6HkB0I4J1tV7YMNIWSVUygIbrhp69u4IbhZYXWMr6b/juFuAoj5Quf1Vkv9TjohCXAx
+         ceolk7J5kmJBNzvGK01jsUTlwQjtPNvVyxsXBSDveyvC4P+qWva03SwnXFD30WIQu8tO
+         lifvEh1JgQh3ENNgeos3GMD0OJSMfGwhuKIpvkWXCLkar9x+b1lGiABl5d3VXC5B9Ihv
+         VkpqRFIj2BCfJ2aOK7B8exWwOc+DuM720/1fQk63TgPuPJH1RoFoRtYhCRGql+dx3Qhv
+         LFGg==
+X-Gm-Message-State: AC+VfDyLE4HpoxcUhj7WcSVD5DN3sAk/WJuNtAwgrr/ZcnPO8AkSQqHV
+        xbLywMyu64fI1Eov8puXsw0YqQ==
+X-Google-Smtp-Source: ACHHUZ7Vbb5JZKPQUWR7eE/rFp0x8+WxhI3f0tbA8gkCNyc76Q2iwI2ZhTdlT/f0YKuX7mr9lQRPJw==
+X-Received: by 2002:a2e:9f47:0:b0:2ac:90db:2a3d with SMTP id v7-20020a2e9f47000000b002ac90db2a3dmr7807292ljk.8.1684199301811;
+        Mon, 15 May 2023 18:08:21 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id x15-20020a05651c104f00b002ada919a09asm2577682ljm.73.2023.05.15.18.08.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 18:08:21 -0700 (PDT)
+Message-ID: <8a5d13e2-b06a-417e-5d8b-1db749efb0cd@linaro.org>
+Date:   Tue, 16 May 2023 03:08:19 +0200
 MIME-Version: 1.0
-References: <CAMHf4WKYzmmqO+7AsUBo+d8AHLKFXugxwh__NYi9grQAJk7VBA@mail.gmail.com>
- <47244f7e-feb5-4958-be14-7fd9f0814566@rowland.harvard.edu>
- <CAMHf4WL9dOWiw-+V2DQeQ=3jxmk3LHg5ONdWSwcp3Gx0AD17yg@mail.gmail.com>
- <20230420172011.GF21943@pendragon.ideasonboard.com> <0610f776-44c8-4372-975b-52c2a1f0af8d@google.com>
- <20230506125317.GD17474@pendragon.ideasonboard.com> <CAMHf4WLMAjigKypYho24TqeuWx6Y9-LWjq2cj_5ad31pqsKDzg@mail.gmail.com>
- <20230509002143.7x5zo6bohvn5dyb2@synopsys.com> <CAMHf4WLzx3Bj-TR1ZrqsW1tfY+WUtgTt8TVObOFnkNcx2Pc9kw@mail.gmail.com>
- <20230509223526.5e6oqqri3mhwc34l@synopsys.com> <20230509224241.vvylagjkqbwo4hbk@synopsys.com>
- <c68249a8-4e22-abd9-5c7c-7e8b7f383898@google.com>
-In-Reply-To: <c68249a8-4e22-abd9-5c7c-7e8b7f383898@google.com>
-From:   Avichal Rakesh <arakesh@google.com>
-Date:   Mon, 15 May 2023 17:34:54 -0700
-Message-ID: <CAMHf4WLxxWM+DQz6=CEff34WcfX3s1cQoSKkv1qgJvJSMYmDQg@mail.gmail.com>
-Subject: Re: UVC Gadget Driver shows glitched frames with a Linux host
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Dan Scally <dan.scally@ideasonboard.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Eino-Ville Talvala (Eddy)" <etalvala@google.com>,
-        Jayant Chowdhary <jchowdhary@google.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 6/6] dt-bindings: thermal: tsens: Add QCM2290
+Content-Language: en-US
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230314-topic-2290_compats-v1-0-47e26c3c0365@linaro.org>
+ <20230314-topic-2290_compats-v1-6-47e26c3c0365@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230314-topic-2290_compats-v1-6-47e26c3c0365@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 15, 2023 at 5:29=E2=80=AFPM Avichal Rakesh <arakesh@google.com>=
- wrote:
 
->
-> TL;DR: Naively queueing up 0-length requests as fast as possible has the
-> consequence of delaying the entire stream by ~8ms, but does not seem to b=
-e
-> delaying frames individually any more than before. Changing the number of
-> 0-length requests has very little consequence on the stream, but increase=
-s
-> the chances of missed ISOCs.
->
 
-Dan and Laurent, could you review
-https://lore.kernel.org/20230508231103.1621375-1-arakesh@google.com/ when
-you get the chance?
+On 14.03.2023 13:53, Konrad Dybcio wrote:
+> Add the TSENS v2.x controller found on QCM2290.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+<bump>
+This one got lost!
 
-Thank you!
-Avi
+Konrad
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index 926e9c51c93c..1a6ffbf11bcc 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -48,6 +48,7 @@ properties:
+>                - qcom,msm8953-tsens
+>                - qcom,msm8996-tsens
+>                - qcom,msm8998-tsens
+> +              - qcom,qcm2290-tsens
+>                - qcom,sc7180-tsens
+>                - qcom,sc7280-tsens
+>                - qcom,sc8180x-tsens
+> 
