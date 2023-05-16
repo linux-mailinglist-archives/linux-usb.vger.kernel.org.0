@@ -2,91 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B90DB704A3A
-	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 12:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B82704B29
+	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 12:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232051AbjEPKPP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 May 2023 06:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
+        id S232155AbjEPKyR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 May 2023 06:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbjEPKPO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 May 2023 06:15:14 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70161E6A
-        for <linux-usb@vger.kernel.org>; Tue, 16 May 2023 03:15:13 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f4449fa085so48828705e9.0
-        for <linux-usb@vger.kernel.org>; Tue, 16 May 2023 03:15:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684232112; x=1686824112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u6hotZHN8F9GNcRVXqml63G6mGoDwzmzd1ogRplEl7A=;
-        b=SDhZGQz5V3SpYUUAG+uNAFNGhnNYPNqZAwiuBxZuB26G0qwLy9arpDWno5m+HEtaSd
-         viRZEzVSIoMJeRNV3JZT/flDlg7xAOdRRui4DCMyKJaMnN17VosKMzvqpN2XFSPSaqS5
-         EA9FClOtKW/q5SxCn1QNh6rUaSvk12dpOzdQCRzrtfZZTxcDtWr6AWoTtyLjy2m48r7S
-         drGc0xro/Txc9sqafClJooMRNPqPEjyJw61DvShlvObUAfkfu81FX52w6CfIWh1FqS7A
-         yXyF1K0uI7wG1kOe5F2TMEbeYL4NVzAk1CArA7BynVp7y6B61dAqRN9alIqgSZ8vZo2F
-         bhxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684232112; x=1686824112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u6hotZHN8F9GNcRVXqml63G6mGoDwzmzd1ogRplEl7A=;
-        b=TWciZgT+zZOGbHqfH/05I8NiJdUKNElVvJSamwW8DhKko9FTzE2txFTcJuSUup8asj
-         v4/hxYR5qp8xtsLdoDM39Waun9HqQnaNQPkRzgXPHvoAtB8m8Crszs77cdI7JDjsGV6u
-         B4ctdH9ks4afZ79HJXPQDuq7ipumEQ8RlhC3AMFtYOP2E4BYnPgDgolgGZWQyAMQyUdc
-         0XDay06rKBQ+y4VVhkOuPri2NUZrx+GdmXtqMH6naIrUAs6+53s9Dniac8Hi8aRdqIj0
-         74tbYz2GGasBMpKYTtLMCNO9EaqvZsx05DL3MnWpthJdKODMrD1pspz1NpYMdVIO9BxH
-         7mxw==
-X-Gm-Message-State: AC+VfDzeSsr4/Pob8hRso7mgNuYK8ik+IMSBYDmoXQBB61YJ7ysZ8cMM
-        /0w8DJ7z86jgM2Rm1y+2DAJzKw==
-X-Google-Smtp-Source: ACHHUZ65rv/dw7p0nohu7DByQygeobX+M09FaCDj6gFZbJEE3WkNFueyBIUJEXdBv1OGMUkYFyePZg==
-X-Received: by 2002:a1c:770e:0:b0:3f5:e88:ffc4 with SMTP id t14-20020a1c770e000000b003f50e88ffc4mr3507273wmi.33.1684232111893;
-        Tue, 16 May 2023 03:15:11 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id m7-20020a7bcb87000000b003f4290720d0sm1742351wmi.47.2023.05.16.03.15.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 03:15:11 -0700 (PDT)
-Message-ID: <f4b774a6-d739-2fae-cdbb-9554fb0db707@linaro.org>
-Date:   Tue, 16 May 2023 11:15:10 +0100
+        with ESMTP id S231773AbjEPKyQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 May 2023 06:54:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60EE2D4E;
+        Tue, 16 May 2023 03:54:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AF8863269;
+        Tue, 16 May 2023 10:54:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B79E3C433EF;
+        Tue, 16 May 2023 10:54:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684234442;
+        bh=paHYLnFWTcB7RJB+E5stDQFsNxE2riSRbIlNnygHpvA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n2O/Hu5c0ODvDcCEzcHaiTdrBnK6A5nlfO8sespVz1X5CFmVnstH7yV1zHBuxhOgl
+         ytyfdKQww5QNpmJmddMfW2guobnDKeSOnaSp6FFfzrIO5bTc7Pjj8xfr4PRWvM0BH4
+         dLjB0Gn31EFsQel5tyNr1CS+Vo6mjlEawCEDpxDoZSTiMPH1/toZarYL6sslLPNiIw
+         78ngRpFnCjNd8/iSihpd/CnJynHRYds3QxYQEXRftcEvF7C3hbL77R5GETnnqF7Hzc
+         gj9rUpJfCStYaehCaCX2oyaqhy/MZm9uQ3WY+0UM24rOpraeTEaxo8PVM2lRTThW7Q
+         ImrlYEzkjBptw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pysJe-0007ix-CP; Tue, 16 May 2023 12:54:02 +0200
+Date:   Tue, 16 May 2023 12:54:02 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com
+Subject: Re: [PATCH v8 7/9] arm64: dts: qcom: sc8280xp: Add multiport
+ controller node for SC8280
+Message-ID: <ZGNgyo8ZRcC26W5l@hovoldconsulting.com>
+References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
+ <20230514054917.21318-8-quic_kriskura@quicinc.com>
+ <ZGJBLUsPcbsxj989@hovoldconsulting.com>
+ <d14567fd-0576-55bb-40c0-442e060c28ba@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v8 04/11] dt-bindings: phy: qcom,sc7180-qmp-usb3-dp-phy:
- Add input and output ports
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, luca.weiss@fairphone.com,
-        lujianhua000@gmail.com, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        konrad.dybcio@linaro.org, caleb.connolly@linaro.org,
-        subbaram@quicinc.com, jackp@quicinc.com, robertom@qti.qualcomm.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20230515133643.3621656-1-bryan.odonoghue@linaro.org>
- <20230515133643.3621656-5-bryan.odonoghue@linaro.org>
- <20230515195949.yemdw4n2pquive2r@ripper>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230515195949.yemdw4n2pquive2r@ripper>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d14567fd-0576-55bb-40c0-442e060c28ba@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 15/05/2023 20:59, Bjorn Andersson wrote:
-> Perhaps we could put some of this in a separate yaml and include that?
+On Mon, May 15, 2023 at 09:02:13PM +0530, Krishna Kurapati PSSNV wrote:
+> On 5/15/2023 7:56 PM, Johan Hovold wrote:
+> > On Sun, May 14, 2023 at 11:19:15AM +0530, Krishna Kurapati wrote:
 
-Ok sure.
+> >> @@ -3133,6 +3133,72 @@ usb_1_role_switch: endpoint {
+> >>   			};
+> >>   		};
+> >>   
+> >> +		usb_2: usb@a4f8800 {
+> > 
+> > As I believe someone already pointed out, this node is not in sort order
+> > (i.e. it should go before usb@a6f8800).
 
----
-bod
+>    I missed that message, but since I named it usb_2, so I placed it in 
+> order after usb_1. Hope that is fine !!
+
+No, the nodes should be sorted by unit address so you need to move it.
+
+> >> +			interrupts-extended = <&pdc 127 IRQ_TYPE_EDGE_RISING>,
+> >> +					      <&pdc 126 IRQ_TYPE_EDGE_RISING>,
+> >> +					      <&pdc 16 IRQ_TYPE_LEVEL_HIGH>,
+> >> +					      <&intc GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>,
+> >> +					      <&intc GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH>,
+> >> +					      <&intc GIC_SPI 857 IRQ_TYPE_LEVEL_HIGH>,
+> >> +					      <&intc GIC_SPI 856 IRQ_TYPE_LEVEL_HIGH>;
+> >> +
+> >> +			interrupt-names = "dp_hs_phy_irq",
+> >> +					  "dm_hs_phy_irq",
+> >> +					  "ss_phy_irq",
+> >> +					  "pwr_event_1",
+> >> +					  "pwr_event_2",
+> >> +					  "pwr_event_3",
+> >> +					  "pwr_event_4";
+
+> >> +			interconnect-names = "usb-ddr", "apps-usb";
+> > 
+> > Looks like 'wakeup-source' is missing here too.
+> > 
+> 
+> I believe this property was added to enable wakeup from system suspend 
+> in host mode. I didn't add this property as currently I don't need to 
+> support wakeup. If any requirement comes in future, then I might need to 
+> add dp/dm interrupts (if any) for other ports as well and then need to 
+> change driver code to enable/disable them on suspend/resume.
+
+If there are dp/dm/ss interrupts per ports then those need to be defined
+in the binding and devicetree from the start.
+
+Similar for 'wakeup-source' which indicates that the controller *can* be
+used to wakeup the system from suspend (which those pdc interrupts
+indicates).
+
+Remember that the devicetree is supposed to describe the hardware, and
+which features are currently supported in some version of software is
+mostly irrelevant.
+
+Johan
