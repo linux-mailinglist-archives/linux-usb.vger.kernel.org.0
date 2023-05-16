@@ -2,137 +2,293 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 571187040E6
-	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 00:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67DDB70424B
+	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 02:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245534AbjEOWXm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 May 2023 18:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
+        id S245192AbjEPA36 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 May 2023 20:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236784AbjEOWXl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 18:23:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDFEA3;
-        Mon, 15 May 2023 15:23:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 035846334A;
-        Mon, 15 May 2023 22:23:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 191A4C433D2;
-        Mon, 15 May 2023 22:23:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684189419;
-        bh=OqIemthk74Japxf8JKty+wpFYdyckxcj/Mt28A6kSCU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J5uGurHmS/0tRRbC7hB2MmYS8N06SxfaPIOP4Ch/thZWa/94X9c8zKIl1D0wSnCjk
-         dqBRrTNde11hMZcSBH1zyPJWt5MateFyXxPxSGOpd2jT2Fz51l3xmilc1MRjo/DIj4
-         4lhVERDDv1fNus0XCxlYxU4dh2qNS5Kx3vA+78uNSXIkU7pC/qnYwuA2hqEO2n6mgt
-         EFhtTDAGl8p27u3cho7fV2IuBkc4I5HiciCI+zqUNU0BrF8KtveSqHCOIc5bIVi4Ua
-         EC0GuBHLmURNMjkxGUfDl/CXGuJniAGQ9al+OlAK1Bj6Oki4cyH2cCXBchjTNW8y/r
-         2OzRZOJEMwQPw==
-Date:   Mon, 15 May 2023 15:27:30 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com
-Subject: Re: [PATCH v8 6/9] usb: dwc3: qcom: Add multiport controller support
- for qcom wrapper
-Message-ID: <20230515222730.7snn2i33gkg6ctd2@ripper>
-References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
- <20230514054917.21318-7-quic_kriskura@quicinc.com>
+        with ESMTP id S236089AbjEPA3y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 20:29:54 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBE86E9D
+        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 17:29:52 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-6439e6f5a33so8387815b3a.2
+        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 17:29:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684196992; x=1686788992;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mbq6qIohEBC5PM2VjZ0aHgzC6DdmqfRvyCwykJ5PZvI=;
+        b=ZXuQMmdRgks0KWM9tjGP5zomTPaMw6633qTHh7X1xMHJLqP6ZzelL8+mBbuN1gWW5j
+         QG2+r4yDJmuBk1dQkFQ13U77TqdSPZeYOWB8K8rO4ofLroMWIDYwInd0l277U+Mg3qiH
+         wwwdnSfD5220CQE62XFvKqXGnVVVHm7qBtjDaR3E8cAO9mqppoGtr1XbzE5AsXpSTCE0
+         AxiKGI/CH3FWwU9mSGEWT0NT7DWSFMe1fQLRcGW1qcl67/LIpE2d6B6YhpE0WwtDRGxn
+         Z2TiKmnnc0OqeLSgN3WIEop0jddQqZDqLeay3eaKhm5juf3f6oew54JwoCHTmv/pqcX5
+         zcKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684196992; x=1686788992;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mbq6qIohEBC5PM2VjZ0aHgzC6DdmqfRvyCwykJ5PZvI=;
+        b=JOxhzYD8BCzxK+VRdYHHDdrdP5F7dBE8PCCZJiJ+A/nOk/Xn956uqj5PHIIIkw4Ic6
+         hNaldfy3Q1BHOw0yx3L2Sx9ExhXVZktE3f3V70u8Wgajq+/akehGbz7ZxA54DLvPJCG5
+         9eZoWsP4oANEQSOwq8W9tC0Tm5q1GRoKkLPt2zsDZKn6cSCpRUAKK2YtfDB1FpRvroDy
+         eyvbDOBEJinuuUfqXYJoOmuIxcYiWmA5XtDs4dIP2I41N5d1D/qn1cMioOtKpQcg68eI
+         mNmWErzFsNhkLzU/rIEAnmeDgore/Tgpxe5/SMuBWm4eIF9UA4eGlf1EUCqT4F9jl/jn
+         SVAQ==
+X-Gm-Message-State: AC+VfDz3ptKMzz0SJ6dSmDiTbgNxuUmDvbUM8W6zd57u2NdS413XaEYv
+        JgyrdCzLmqvlGSi10Ogx7U29fg==
+X-Google-Smtp-Source: ACHHUZ5CwL61E1rS0JEoG+EeuNpnmJx2QHbEQaxTYkhC/IBWXbWQhshDwUc6axIiec4XuPAKAwjN6w==
+X-Received: by 2002:a05:6a00:2443:b0:624:7c9a:c832 with SMTP id d3-20020a056a00244300b006247c9ac832mr47223043pfj.8.1684196991967;
+        Mon, 15 May 2023 17:29:51 -0700 (PDT)
+Received: from [192.168.60.239] (124.190.199.35.bc.googleusercontent.com. [35.199.190.124])
+        by smtp.gmail.com with ESMTPSA id g4-20020a62e304000000b00627ed4e23e0sm12314511pfh.101.2023.05.15.17.29.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 17:29:51 -0700 (PDT)
+Message-ID: <c68249a8-4e22-abd9-5c7c-7e8b7f383898@google.com>
+Date:   Mon, 15 May 2023 17:29:50 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230514054917.21318-7-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: UVC Gadget Driver shows glitched frames with a Linux host
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dan Scally <dan.scally@ideasonboard.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Eino-Ville Talvala (Eddy)" <etalvala@google.com>,
+        Jayant Chowdhary <jchowdhary@google.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+References: <CAMHf4WKYzmmqO+7AsUBo+d8AHLKFXugxwh__NYi9grQAJk7VBA@mail.gmail.com>
+ <47244f7e-feb5-4958-be14-7fd9f0814566@rowland.harvard.edu>
+ <CAMHf4WL9dOWiw-+V2DQeQ=3jxmk3LHg5ONdWSwcp3Gx0AD17yg@mail.gmail.com>
+ <20230420172011.GF21943@pendragon.ideasonboard.com>
+ <0610f776-44c8-4372-975b-52c2a1f0af8d@google.com>
+ <20230506125317.GD17474@pendragon.ideasonboard.com>
+ <CAMHf4WLMAjigKypYho24TqeuWx6Y9-LWjq2cj_5ad31pqsKDzg@mail.gmail.com>
+ <20230509002143.7x5zo6bohvn5dyb2@synopsys.com>
+ <CAMHf4WLzx3Bj-TR1ZrqsW1tfY+WUtgTt8TVObOFnkNcx2Pc9kw@mail.gmail.com>
+ <20230509223526.5e6oqqri3mhwc34l@synopsys.com>
+ <20230509224241.vvylagjkqbwo4hbk@synopsys.com>
+From:   Avichal Rakesh <arakesh@google.com>
+In-Reply-To: <20230509224241.vvylagjkqbwo4hbk@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-21.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, May 14, 2023 at 11:19:14AM +0530, Krishna Kurapati wrote:
-> QCOM SoC SA8295P's tertiary quad port controller supports 2 HS+SS
-> ports and 2 HS only ports. Add support for configuring PWR_EVENT_IRQ's
-> for all the ports during suspend/resume.
+
+
+On 5/9/23 15:42, Thinh Nguyen wrote:
+> On Tue, May 09, 2023, Thinh Nguyen wrote:
+
 > 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 28 ++++++++++++++++++++++------
->  1 file changed, 22 insertions(+), 6 deletions(-)
+> Just want to clarify that complete here is from the perspective of the
+> controller. The controller driver doesn't automatically update the
+> request and give back the request to the gadget driver yet.
 > 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 959fc925ca7c..7a9bce66295d 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -37,7 +37,10 @@
->  #define PIPE3_PHYSTATUS_SW			BIT(3)
->  #define PIPE_UTMI_CLK_DIS			BIT(8)
->  
-> -#define PWR_EVNT_IRQ_STAT_REG			0x58
-> +#define PWR_EVNT_IRQ1_STAT_REG			0x58
-> +#define PWR_EVNT_IRQ2_STAT_REG			0x1dc
-> +#define PWR_EVNT_IRQ3_STAT_REG			0x228
-> +#define PWR_EVNT_IRQ4_STAT_REG			0x238
->  #define PWR_EVNT_LPM_IN_L2_MASK			BIT(4)
->  #define PWR_EVNT_LPM_OUT_L2_MASK		BIT(5)
->  
-> @@ -93,6 +96,13 @@ struct dwc3_qcom {
->  	struct icc_path		*icc_path_apps;
->  };
->  
-> +static u32 pwr_evnt_irq_stat_reg_offset[4] = {
-> +			PWR_EVNT_IRQ1_STAT_REG,
-> +			PWR_EVNT_IRQ2_STAT_REG,
-> +			PWR_EVNT_IRQ3_STAT_REG,
-> +			PWR_EVNT_IRQ4_STAT_REG,
+> BR,
+> Thinh
+> 
 
-Seems to be excessive indentation of these...
+Hey all,
 
-Can you also please confirm that these should be counted starting at 1 -
-given that you otherwise talk about port0..N-1?
+Sorry in advance for the long message. I have been running more tests to
+quantify if (and how) performance is affected with my patch. I wanted to
+quantify what the 8ms latency looks like, so I modified the gadget driver to
+track some stats. Specifically, I tracked the round trip time of
+usb_requests and the time between two consecutive frames being queued.
 
-> +};
-> +
->  static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
->  {
->  	u32 reg;
-> @@ -413,13 +423,16 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
->  {
->  	u32 val;
->  	int i, ret;
-> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
->  
->  	if (qcom->is_suspended)
->  		return 0;
->  
-> -	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
-> -	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
-> -		dev_err(qcom->dev, "HS-PHY not in L2\n");
-> +	for (i = 0; i < dwc->num_usb2_ports; i++) {
+TL;DR: Naively queueing up 0-length requests as fast as possible has the
+consequence of delaying the entire stream by ~8ms, but does not seem to be
+delaying frames individually any more than before. Changing the number of
+0-length requests has very little consequence on the stream, but increases
+the chances of missed ISOCs.
 
-In the event that the dwc3 core fails to acquire or enable e.g. clocks
-its drvdata will be NULL. If you then hit a runtime pm transition in the
-dwc3-qcom glue you will dereference NULL here. (You can force this issue
-by e.g. returning -EINVAL from dwc3_clk_enable()).
+For usb_requests' RTTs, I tracked the time it takes between 'usb_ep_queue' and
+the controller's 'complete' callback to return the usb_request. This is
+affected by the 'no_interrupt' flag as the controller will call 'complete'
+callback in batches.
 
-So if you're peaking into qcom->dwc3 you need to handle the fact that
-dwc might be NULL, here and in resume below.
+Frame time is defined as the time elapsed between completely queueing two
+consecutive video frames. This is meant to give an idea of how long the
+frame sat around waiting for usb_requests to come back.
 
-Regards,
-Bjorn
+These were collected in 4 settings:
+  1. Unpatched: As the name implies, ToT!
+  2. Burst: (Name borrowed from Laurent) Queue requests ASAP. This is the
+        implementation in
+        https://lore.kernel.org/20230508231103.1621375-1-arakesh@google.com/.
+  3. Burst w/ more interrupts: Same as (2) but instead of interrupting every
+        16th 0-length request, interrupt every 8th request. The idea was to
+        increase the gadget's driver responsiveness at the cost of extra
+        interrupts.
+  4. Burst w/ limited 0-length packets: Same as Burst but only queue up at most
+        32 0-length requests. The idea was to reduce the number of empty
+        usb_requests that a video frame could get stuck behind.
+
+Some other things to note before the logs:
+  - All times are reported in ns
+  - Samples were randomly collected during an ongoing 1080p @ 30fps stream
+  - The number of allocated usb_requests was fixed at 64 for all tests.
+
+Okay, so here are the numbers:
+
+1. Unpatched:
+```
+usb_request rtt : min/max/mean: 3860718 : 220744/5710327/3372587
+usb_request rtt : min/max/mean: 3857951 : 220744/5710327/3372587
+usb_request rtt : min/max/mean: 3854004 : 220744/5710327/3372587
+usb_request rtt : min/max/mean: 3847575 : 220744/5710327/3372587
+usb_request rtt : min/max/mean: 3841594 : 220744/5710327/3372587
+usb_request rtt : min/max/mean: 3834066 : 220744/5710327/3372587
+usb_request rtt : min/max/mean: 3426879 : 220744/5710327/3372587
+usb_request rtt : min/max/mean: 3414632 : 220744/5710327/3372587
+usb_request rtt : min/max/mean: 3408203 : 220744/5710327/3372587
+usb_request rtt : min/max/mean: 3401489 : 220744/5710327/3372587
+```
+
+```
+frame time: curr: min/max/mean: 33385376 : 15103638/60926513/33474315
+frame time: curr: min/max/mean: 31438558 : 15103638/60926513/33472507
+frame time: curr: min/max/mean: 31650391 : 15103638/60926513/33470890
+frame time: curr: min/max/mean: 36657959 : 15103638/60926513/33473715
+frame time: curr: min/max/mean: 31758260 : 15103638/60926513/33472195
+frame time: curr: min/max/mean: 34915934 : 15103638/60926513/33473472
+frame time: curr: min/max/mean: 34599447 : 15103638/60926513/33474467
+frame time: curr: min/max/mean: 33658162 : 15103638/60926513/33474629
+frame time: curr: min/max/mean: 44577637 : 15103638/60926513/33484428
+```
+
+With no changes, the usb_requests spend ~3ms in flight, and there
+is one video frame dispatched every ~33ms. Unfortunately (or perhaps
+fortunately?), it seems like the system latencies add to >8ms of per frame
+jitter when encoding frames.
+
+
+2. Burst:
+```
+usb_request rtt curr : min/max/mean: 7966878 : 1663778/9449341/7878007
+usb_request rtt curr : min/max/mean: 7964966 : 1663778/9449341/7878008
+usb_request rtt curr : min/max/mean: 7963582 : 1663778/9449341/7878009
+usb_request rtt curr : min/max/mean: 7920817 : 1663778/9449341/7878009
+usb_request rtt curr : min/max/mean: 7923503 : 1663778/9449341/7878009
+usb_request rtt curr : min/max/mean: 7916545 : 1663778/9449341/7878009
+usb_request rtt curr : min/max/mean: 7914021 : 1663778/9449341/7878009
+usb_request rtt curr : min/max/mean: 7914348 : 1663778/9449341/7878009
+usb_request rtt curr : min/max/mean: 7914469 : 1663778/9449341/7878009
+```
+
+```
+frame time: curr: min/max/mean: 31675130 : 14732381/121984294/33563117
+frame time: curr: min/max/mean: 33192668 : 14732381/121984294/33563095
+frame time: curr: min/max/mean: 35761963 : 14732381/121984294/33563223
+frame time: curr: min/max/mean: 30776733 : 14732381/121984294/33563059
+frame time: curr: min/max/mean: 31940471 : 14732381/121984294/33562964
+frame time: curr: min/max/mean: 39079834 : 14732381/121984294/33563286
+frame time: curr: min/max/mean: 30279500 : 14732381/121984294/33563093
+frame time: curr: min/max/mean: 38558472 : 14732381/121984294/33563385
+frame time: curr: min/max/mean: 34294149 : 14732381/121984294/33563427
+frame time: curr: min/max/mean: 26993286 : 14732381/121984294/33563042
+```
+
+As discussed in the thread above, we do in fact see usb_requests taking an
+average of 8ms to be returned to the gadget. This means that the driver is
+generally keeping up the back pressure to the controller, which is consistent
+with no missed ISOCs.
+
+Slightly more interesting is that the frames are still being dispatched at the
+same frequency as (1), albeit a fraction slower than (1). The jitters for
+individual frames are difficult to show here, but they seemed about the same as
+(1). IIUC, this means that the 8ms delay gets applied to the entire the entire
+stream once a steady state is reached. However, with system latencies already
+showing jitter >8ms, it is possible that a slight regression here is being
+covered up.
+
+
+3. Burst w/ more interrupts
+```
+usb_request rtt curr : min/max/mean: 7982137 : 906942/11119832/7712539
+usb_request rtt curr : min/max/mean: 7998698 : 906942/11119832/7712539
+usb_request rtt curr : min/max/mean: 7998088 : 906942/11119832/7712539
+usb_request rtt curr : min/max/mean: 7933024 : 906942/11119832/7712539
+usb_request rtt curr : min/max/mean: 7948364 : 906942/11119832/7712539
+usb_request rtt curr : min/max/mean: 7945476 : 906942/11119832/7712539
+usb_request rtt curr : min/max/mean: 7968872 : 906942/11119832/7712539
+usb_request rtt curr : min/max/mean: 7982219 : 906942/11119832/7712539
+usb_request rtt curr : min/max/mean: 7983155 : 906942/11119832/7712539
+usb_request rtt curr : min/max/mean: 7649048 : 906942/11119832/7712538
+```
+
+```
+frame time: curr: min/max/mean: 40471069 : 21488363/46635051/33474386
+frame time: curr: min/max/mean: 29503703 : 21488363/46635051/33473695
+frame time: curr: min/max/mean: 27489502 : 21488363/46635051/33472654
+frame time: curr: min/max/mean: 36647908 : 21488363/46635051/33473205
+frame time: curr: min/max/mean: 34343506 : 21488363/46635051/33473356
+frame time: curr: min/max/mean: 31686198 : 21488363/46635051/33473045
+frame time: curr: min/max/mean: 34582601 : 21488363/46635051/33473237
+frame time: curr: min/max/mean: 32652425 : 21488363/46635051/33473094
+frame time: curr: min/max/mean: 31930054 : 21488363/46635051/33472826
+frame time: curr: min/max/mean: 34652669 : 21488363/46635051/33473030
+```
+
+There were no meaningful differences in usb_request RTTs from (2), which is
+expected, as the driver can still comfortably maintain the back pressure.
+
+However, we do see a very slight increase in responsiveness as the frames are
+queued at approximately the same frequency as (1). However, the per frame
+jitter is consistent with (1) and (2), so this could just be a sampling issue.
+
+
+4. Burst w/ limited 0-length packets:
+```
+usb_request rtt curr : min/max/mean: 6591879 : 644246/7986613/4202894
+usb_request rtt curr : min/max/mean: 6585978 : 644246/7986613/4202929
+usb_request rtt curr : min/max/mean: 6582805 : 644246/7986613/4202964
+usb_request rtt curr : min/max/mean: 3980957 : 644246/7986613/4202960
+usb_request rtt curr : min/max/mean: 4000162 : 644246/7986613/4202956
+usb_request rtt curr : min/max/mean: 3995484 : 644246/7986613/4202952
+usb_request rtt curr : min/max/mean: 3989380 : 644246/7986613/4202948
+usb_request rtt curr : min/max/mean: 3998942 : 644246/7986613/4202944
+usb_request rtt curr : min/max/mean: 3998779 : 644246/7986613/4202940
+```
+
+```
+frame time: curr: min/max/mean: 35985392 : 21889445/42860636/33474731
+frame time: curr: min/max/mean: 34428670 : 21889445/42860636/33476020
+frame time: curr: min/max/mean: 35499146 : 21889445/42860636/33478750
+frame time: curr: min/max/mean: 40315307 : 21889445/42860636/33487963
+frame time: curr: min/max/mean: 24934611 : 21889445/42860636/33476451
+frame time: curr: min/max/mean: 32321005 : 21889445/42860636/33474897
+frame time: curr: min/max/mean: 33268799 : 21889445/42860636/33474620
+frame time: curr: min/max/mean: 37001586 : 21889445/42860636/33479347
+frame time: curr: min/max/mean: 30968384 : 21889445/42860636/33475985
+```
+
+This showed the most jitter in usb_request RTTs, likely because controller was
+frequently underrun or on the verge of underrunning. So while the requests were
+delayed by an average of 4ms, there was significant deviation per packet.
+
+The video frames were still encoded at a stable frequency, but there were still
+flickers from when ISOC requests would eventually underrun.
+
+In conclusion, it seems like the naive approach (2) has similar
+characteristics to the current version (1), albeit with an 8ms stream latency,
+and optimizing by means of changing interrupt frequency or number of requests
+result is minor, if any, performance increases.
+
+- Avi.
