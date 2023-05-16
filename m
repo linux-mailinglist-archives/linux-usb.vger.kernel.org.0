@@ -2,86 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301E27042A0
-	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 03:08:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA54F7042CF
+	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 03:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343543AbjEPBIa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 May 2023 21:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40304 "EHLO
+        id S229587AbjEPBX0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 May 2023 21:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243968AbjEPBI2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 21:08:28 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDF95B9D
-        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 18:08:23 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2ac7f53ae44so143838621fa.2
-        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 18:08:23 -0700 (PDT)
+        with ESMTP id S229572AbjEPBXY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 May 2023 21:23:24 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29ADB2110
+        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 18:23:23 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2ac8ee9cf7aso125261661fa.2
+        for <linux-usb@vger.kernel.org>; Mon, 15 May 2023 18:23:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684199302; x=1686791302;
+        d=linaro.org; s=google; t=1684200201; x=1686792201;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Lyzlb1knfLNloYB6AlxNxhOYp8O4rjeCw8TEVU/6wrs=;
-        b=K+xV7UkWFhHrH+cyZjQLTvXQRg8U+IYM2T2Ap2WI+gjyfg/BUTTzMHFYJ+9h4GZgHJ
-         0Z+bbAhqqeJNocTsBdAVJXVjBxevp1xRjF95LYKnHUoii0QqVrwPbKfxzK93ID1SfUSx
-         NdGZPaBPUyS40nCUOlD6u0vMsvI3ZFVfTzKqhD3e5Hwbeu11I0imt6AxpseuRC5VMVXm
-         nlbjvHP5h28Rkzo/bzg4UL+I95OnJ1G5iFVUB0IVqFUDQ73q1QvOq3Jt0al2cWxEoVAZ
-         0IuHA9+aSCWoZ2bYj2l6X1ae61CfKaswE68J8GNuarGO12ZO3e+q99iSFvNX7kau4Sde
-         gqrQ==
+        bh=rdcz+tlufyCWWmwwRYaeolzxPDHo6Vkg33VyiauA0pw=;
+        b=Mw4KMu+EFSlqV0wV1eo6KCnJr+WVbPdA+8FJT5c6eJSfhILo4i/sBevX12Ios/Gpks
+         +WMapNODRme/GSwdhzReXInQ8cDG/dHggw0J/Xjh3QWbROlooH/tCguFmLSiMfq+FI7y
+         L3YqPyQuaoyKgH+wH+RdImfNTsfmzyuxnGeeGGCZnVB8NQjCpmxalkvLWJjBSjkrbCih
+         GC2FcrAYj73k0gSa/t0aYpmhB+liFlguMT76n3afTkrj6exGxm+BU4dSO2ZxVdS2KbUY
+         Q/M8DGghjm7/0kGKGn+klieK2eNZBrj5a3TyBq8eeS22YF36Mbgi2/Ydti9Z/6VSy1gl
+         Qhdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684199302; x=1686791302;
+        d=1e100.net; s=20221208; t=1684200201; x=1686792201;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lyzlb1knfLNloYB6AlxNxhOYp8O4rjeCw8TEVU/6wrs=;
-        b=UqcElHtfoXCb4f9m0j8lkwoWKKIfGXkbS1J77BkmjqO9BG0wkUYaHWFSlV2HjynBF6
-         V6HkB0I4J1tV7YMNIWSVUygIbrhp69u4IbhZYXWMr6b/juFuAoj5Quf1Vkv9TjohCXAx
-         ceolk7J5kmJBNzvGK01jsUTlwQjtPNvVyxsXBSDveyvC4P+qWva03SwnXFD30WIQu8tO
-         lifvEh1JgQh3ENNgeos3GMD0OJSMfGwhuKIpvkWXCLkar9x+b1lGiABl5d3VXC5B9Ihv
-         VkpqRFIj2BCfJ2aOK7B8exWwOc+DuM720/1fQk63TgPuPJH1RoFoRtYhCRGql+dx3Qhv
-         LFGg==
-X-Gm-Message-State: AC+VfDyLE4HpoxcUhj7WcSVD5DN3sAk/WJuNtAwgrr/ZcnPO8AkSQqHV
-        xbLywMyu64fI1Eov8puXsw0YqQ==
-X-Google-Smtp-Source: ACHHUZ7Vbb5JZKPQUWR7eE/rFp0x8+WxhI3f0tbA8gkCNyc76Q2iwI2ZhTdlT/f0YKuX7mr9lQRPJw==
-X-Received: by 2002:a2e:9f47:0:b0:2ac:90db:2a3d with SMTP id v7-20020a2e9f47000000b002ac90db2a3dmr7807292ljk.8.1684199301811;
-        Mon, 15 May 2023 18:08:21 -0700 (PDT)
+        bh=rdcz+tlufyCWWmwwRYaeolzxPDHo6Vkg33VyiauA0pw=;
+        b=RVCI6KFPbVjOdwyWTzgVcm97I33z2GOTMV6CArQxPgu2rLuGIfhYpJ9pXE2lQIG4l4
+         wbycm/IvRC89OFNJQJ0Sxo0lRXUuLWJ2QwFCl9rsgvKVd0tWh3JLJ0jBJBRVjfTGrhdt
+         f3MhxGdECoTXvTPZ8PyCBDy4uV+Bk42MXEtSzhkMZ2IanJ0ay+s64BSW0raLamJyoZaB
+         6ljc2lrMzDe4bfwPBG2aIGs6Tfku52qcDe1RWvM+K8jncvHgSJEOpGAK6lRTuQs32jWn
+         A6ViglbVt8gbprLQB0RNdhQOQPRYFa7JJP2dcAIHjc2p+c0J64bPp91MP3x+jQD747Kk
+         p/mw==
+X-Gm-Message-State: AC+VfDyGEuFNGItlWQC3aEuZvb07xsnmtVyMflCVaitZaOHAo/o9vPu0
+        ao4YAlZCw1rTKUQaWpjXHDC6Qg==
+X-Google-Smtp-Source: ACHHUZ6r9pzz9/eTWV8LflnTd0wsAp9+78FKTyrZ2P1/zI1IumkTrCsCMttylpIlB6cmdAu09tGo7w==
+X-Received: by 2002:a2e:87cc:0:b0:2a7:b168:9e87 with SMTP id v12-20020a2e87cc000000b002a7b1689e87mr7341738ljj.18.1684200201468;
+        Mon, 15 May 2023 18:23:21 -0700 (PDT)
 Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id x15-20020a05651c104f00b002ada919a09asm2577682ljm.73.2023.05.15.18.08.19
+        by smtp.gmail.com with ESMTPSA id p21-20020a2e8055000000b002ad8cbb7349sm3464568ljg.98.2023.05.15.18.23.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 18:08:21 -0700 (PDT)
-Message-ID: <8a5d13e2-b06a-417e-5d8b-1db749efb0cd@linaro.org>
-Date:   Tue, 16 May 2023 03:08:19 +0200
+        Mon, 15 May 2023 18:23:21 -0700 (PDT)
+Message-ID: <bfc92e7b-e5c0-b038-9719-151995396a8c@linaro.org>
+Date:   Tue, 16 May 2023 03:23:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 6/6] dt-bindings: thermal: tsens: Add QCM2290
+Subject: Re: [PATCH v4 4/5] arm64: dts: qcom: sm6115: Add EUD dt node and dwc3
+ connector
 Content-Language: en-US
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230314-topic-2290_compats-v1-0-47e26c3c0365@linaro.org>
- <20230314-topic-2290_compats-v1-6-47e26c3c0365@linaro.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        krzysztof.kozlowski@linaro.org
+References: <20230505064039.1630025-1-bhupesh.sharma@linaro.org>
+ <20230505064039.1630025-5-bhupesh.sharma@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230314-topic-2290_compats-v1-6-47e26c3c0365@linaro.org>
+In-Reply-To: <20230505064039.1630025-5-bhupesh.sharma@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -96,28 +82,105 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On 14.03.2023 13:53, Konrad Dybcio wrote:
-> Add the TSENS v2.x controller found on QCM2290.
+On 5.05.2023 08:40, Bhupesh Sharma wrote:
+> Add the Embedded USB Debugger(EUD) device tree node for
+> SM6115 / SM4250 SoC.
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> The node contains EUD base register region, EUD mode manager
+> register region and TCSR Base register region along with the
+> interrupt entry.
+> 
+> Also add the typec connector node for EUD which is attached to
+> EUD node via port. EUD is also attached to DWC3 node via port.
+> 
+> To enable the role switch, we need to set dr_mode = "otg" property
+> for 'usb_dwc3' sub-node in the board dts file.
+> 
+> Also the EUD device can be enabled on a board once linux is boot'ed
+> by setting:
+>  $ echo 1 > /sys/bus/platform/drivers/qcom_eud/../enable
+> 
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > ---
-<bump>
-This one got lost!
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 51 ++++++++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> index 926e9c51c93c..1a6ffbf11bcc 100644
-> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> @@ -48,6 +48,7 @@ properties:
->                - qcom,msm8953-tsens
->                - qcom,msm8996-tsens
->                - qcom,msm8998-tsens
-> +              - qcom,qcm2290-tsens
->                - qcom,sc7180-tsens
->                - qcom,sc7280-tsens
->                - qcom,sc8180x-tsens
-> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> index f67863561f3f..61a0af33ca43 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> @@ -180,6 +180,18 @@ core3 {
+>  		};
+>  	};
+>  
+> +	eud_typec: connector {
+> +		compatible = "usb-c-connector";
+> +
+> +		ports {
+> +			port@0 {
+> +				con_eud: endpoint {
+> +					remote-endpoint = <&eud_con>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+>  	firmware {
+>  		scm: scm {
+>  			compatible = "qcom,scm-sm6115", "qcom,scm";
+> @@ -647,6 +659,38 @@ gcc: clock-controller@1400000 {
+>  			#power-domain-cells = <1>;
+>  		};
+>  
+> +		eud: eud@1610000 {
+> +			compatible = "qcom,sm6115-eud", "qcom,eud";
+> +			reg = <0x0 0x01610000 0x0 0x2000>,
+> +			      <0x0 0x01612000 0x0 0x1000>,
+> +			      <0x0 0x003c0000 0x0 0x40000>;
+> +			reg-names = "eud-base", "eud-mode-mgr", "tcsr-base";
+> +			interrupts = <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>;
+> +			qcom,secure-mode-enable;
+> +			status = "disabled";
+> +
+> +			ports {
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
+> +
+> +				port@0 {
+> +					reg = <0>;
+> +
+> +					eud_ep: endpoint {
+> +						remote-endpoint = <&usb2_role_switch>;
+> +					};
+> +				};
+> +
+> +				port@1 {
+> +					reg = <1>;
+> +
+> +					eud_con: endpoint {
+> +						remote-endpoint = <&con_eud>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+>  		usb_hsphy: phy@1613000 {
+>  			compatible = "qcom,sm6115-qusb2-phy";
+>  			reg = <0x0 0x01613000 0x0 0x180>;
+> @@ -1144,6 +1188,13 @@ usb_dwc3: usb@4e00000 {
+>  				snps,has-lpm-erratum;
+>  				snps,hird-threshold = /bits/ 8 <0x10>;
+>  				snps,usb3_lpm_capable;
+> +				usb-role-switch;
+> +
+> +				port {
+> +					usb2_role_switch: endpoint {
+> +						remote-endpoint = <&eud_ep>;
+> +					};
+> +				};
+>  			};
+>  		};
+>  
