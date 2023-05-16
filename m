@@ -2,123 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92217057F2
-	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 21:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60D887058A5
+	for <lists+linux-usb@lfdr.de>; Tue, 16 May 2023 22:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbjEPTvl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 May 2023 15:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
+        id S230191AbjEPUV2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 May 2023 16:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjEPTvj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 May 2023 15:51:39 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9C2DC4C2E
-        for <linux-usb@vger.kernel.org>; Tue, 16 May 2023 12:51:31 -0700 (PDT)
-Received: (qmail 845160 invoked by uid 1000); 16 May 2023 15:51:30 -0400
-Date:   Tue, 16 May 2023 15:51:30 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 35/41] usb: uhci: handle HAS_IOPORT dependencies
-Message-ID: <23936929-80e4-4599-827a-d09b4960f3ab@rowland.harvard.edu>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
- <20230516110038.2413224-36-schnelle@linux.ibm.com>
- <2023051643-overtime-unbridle-7cdd@gregkh>
- <4e291030-99d9-4b8b-9389-9b8f2560b8e8@app.fastmail.com>
+        with ESMTP id S230181AbjEPUV1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 May 2023 16:21:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97473171E;
+        Tue, 16 May 2023 13:21:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3433063630;
+        Tue, 16 May 2023 20:21:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDB0DC433D2;
+        Tue, 16 May 2023 20:21:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684268470;
+        bh=n2VkfFrYD6ZvghT2rLwCZ8Tw+H30dUYKFB4kK3wrpLE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Egdq1JDtlfkHI3imIUtFlLPSk6qx9GFXiAbKi8sryfRJmytehbY4a0xOV+BSiGezZ
+         W7FDaUt61DKvSnIxjkpekm3I7kXTtkRUSUyWyvRFUPxCUjhJRRL+ndvJHaNzauFR20
+         I1PtN8K8k3bCQpJXuuRO7zyvmJIlFOUKBQlTSQuV8QLdh93ytSkE6wiK3YPGRcdAYN
+         vYKYNI/ZQtR4I8Qc+lMgpGH7OTJ4P3Ijxp7k5VtGbvhNZ3dHLTEt6BPnCnWGkToffn
+         dALxDGPc1Z7AIbxlHmmj9bRV7Ds025ncajsLb0fRcUudjoTy0gKm1sH/PqKZV/idWs
+         RbN1e/+fxQvvQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: hide unused usbfs_notify_suspend/resume functions
+Date:   Tue, 16 May 2023 22:17:42 +0200
+Message-Id: <20230516202103.558301-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4e291030-99d9-4b8b-9389-9b8f2560b8e8@app.fastmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 16, 2023 at 06:44:34PM +0200, Arnd Bergmann wrote:
-> On Tue, May 16, 2023, at 18:29, Greg Kroah-Hartman wrote:
-> > On Tue, May 16, 2023 at 01:00:31PM +0200, Niklas Schnelle wrote:
-> 
-> >>  #ifndef CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC
-> >>  /* Support PCI only */
-> >>  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
-> >>  {
-> >> -	return inl(uhci->io_addr + reg);
-> >> +	return UHCI_IN(inl(uhci->io_addr + reg));
-> >>  }
-> >>  
-> >>  static inline void uhci_writel(const struct uhci_hcd *uhci, u32 val, int reg)
-> >>  {
-> >> -	outl(val, uhci->io_addr + reg);
-> >> +	UHCI_OUT(outl(val, uhci->io_addr + reg));
-> >
-> > I'm confused now.
-> >
-> > So if CONFIG_HAS_IOPORT is enabled, wonderful, all is good.
-> >
-> > But if it isn't, then these are just no-ops that do nothing?  So then
-> > the driver will fail to work?  Why have these stubs at all?
-> >
-> > Why not just not build the driver at all if this option is not enabled?
-> 
-> If I remember correctly, the problem here is the lack of
-> abstractions in the uhci driver, it instead supports all
-> combinations of on-chip non-PCI devices using readb()/writeb()
-> and PCI devices using inb()/outb() in a shared codebase.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Isn't that an abstraction?  A single set of operations (uhci_readl(), 
-uhci_writel(), etc.) that always does the right sort of I/O even when 
-talking to different buses?
+The declaration is in an #ifdef, which causes warnings when building
+with 'make W=1' and without CONFIG_PM:
 
-So I'm not sure what you mean by "the lack of abstractions".
+drivers/usb/core/devio.c:742:6: error: no previous prototype for 'usbfs_notify_suspend'
+drivers/usb/core/devio.c:747:6: error: no previous prototype for 'usbfs_notify_resume'
 
-> A particularly tricky combination is a kernel that supports on-chip
-> UHCI as well as CONFIG_USB_PCI (for EHCI/XHCI) but does not support
-> I/O ports because of platform limitations. The trick is to come up
-> with a set of changes that doesn't have to rewrite the entire logic
-> but also doesn't add an obscene number of #ifdef checks.
+Use the same #ifdef check around the function definitions to avoid
+the warnings and slightly shrink the USB core.
 
-Indeed, in a kernel supporting that tricky combination the no-op code 
-would be generated.  But it would never execute at runtime because the 
-uhci_has_pci_registers(uhci) test would always return 0, and so the 
-driver wouldn't fail.
+Fixes: 7794f486ed0b ("usbfs: Add ioctls for runtime power management")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/usb/core/devio.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> That said, there is a minor problem with the empty definition
-> 
-> +#define UHCI_OUT(x)
-> 
-> I think this should be "do { } while (0)" to avoid warnings
-> about empty if/else blocks.
+diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+index e501a03d6c70..1622ad35428d 100644
+--- a/drivers/usb/core/devio.c
++++ b/drivers/usb/core/devio.c
+@@ -738,6 +738,7 @@ static int driver_resume(struct usb_interface *intf)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_PM
+ /* The following routines apply to the entire device, not interfaces */
+ void usbfs_notify_suspend(struct usb_device *udev)
+ {
+@@ -756,6 +757,7 @@ void usbfs_notify_resume(struct usb_device *udev)
+ 	}
+ 	mutex_unlock(&usbfs_mutex);
+ }
++#endif
+ 
+ struct usb_driver usbfs_driver = {
+ 	.name =		"usbfs",
+-- 
+2.39.2
 
-I'm sure Niklas wouldn't mind making such a change.  But do we really 
-get such warnings?  Does the compiler really think that this kind of 
-(macro-expanded) code:
-
-	if (uhci_has_pci_registers(uhci))
-		;
-	else if (uhci_is_aspeed(uhci))
-		writel(val, uhci->regs + uhci_aspeed_reg(reg));
-
-deserves a warning?  I write stuff like that fairly often; it's a good 
-way to showcase a high-probability do-nothing pathway at the start of a 
-series of conditional cases.  And I haven't noticed any complaints from 
-the compiler.
-
-Alan Stern
