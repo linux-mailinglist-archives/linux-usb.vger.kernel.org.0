@@ -2,111 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79FB970670E
-	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 13:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D080370663B
+	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 13:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbjEQLpT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 May 2023 07:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
+        id S229960AbjEQLLB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 07:11:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231332AbjEQLpR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 07:45:17 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F7A421D;
-        Wed, 17 May 2023 04:45:15 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pzEq4-0005Ph-I3; Wed, 17 May 2023 12:57:00 +0200
-Message-ID: <53213ba8-be58-0f97-8a06-3c9380bdff53@leemhuis.info>
-Date:   Wed, 17 May 2023 12:56:59 +0200
+        with ESMTP id S229501AbjEQLLA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 07:11:00 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105661B6;
+        Wed, 17 May 2023 04:10:58 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H97Rgl032303;
+        Wed, 17 May 2023 11:10:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=mL3f2MJE/PUQ3GiBfA6zOVgtNjLXqq0M9yCh/XNWMhU=;
+ b=ZUITHX00nE9X2XHKn5pdO/27p4TWYOhfWJMyAwo4w30+rkwgKbbkNfojKz1H5yv7yLi+
+ xGdjPcAWy4Qd6dXC36/ItH34fPo326aL3Golb9uqeaoD9iCugpXpNgdyw69dTyrLilNs
+ hvYPmBCYktfsXIYof9Szgve7pFqAT6bQtAlrcbuAjrfoDVUsJS8UVa5xmj87BzuIxFtn
+ 5jRIRV/BXfYIPIzN+2CzMS/B1NaRYPYBTyiCFDoYT5rBKe/n5nYAMp8CC2D3HWXhi/a5
+ rEV34XVI3meEWcTUvuYkdypo/wLhFMqkubjWQuw/0fdRZTMv7HYlVMPGUx4PfTGgIzjn 9w== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qmbk7a943-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 11:10:47 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34HBAc2Y000601
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 11:10:38 GMT
+Received: from [10.216.29.70] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 17 May
+ 2023 04:10:14 -0700
+Message-ID: <f2f8c7bf-6d1d-7890-a8b1-0e27969e63f6@quicinc.com>
+Date:   Wed, 17 May 2023 16:40:11 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 1/2] usb: gadget: udc: core: Invoke usb_gadget_connect
- only when started
-Content-Language: en-US, de-DE
-To:     Francesco Dolcini <francesco@dolcini.it>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Alistair <alistair@alistair23.me>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        colin.i.king@gmail.com, xuetao09@huawei.com,
-        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
-        peter.chen@freescale.com, balbi@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20230407030741.3163220-1-badhri@google.com>
- <0cf8c588b701d7cf25ffe1a9217b81716e6a5c51.camel@alistair23.me>
- <1ac16f0a-3cca-40ca-c444-82719f85a24c@leemhuis.info>
- <ZGStr1oZvmJ0XzSu@francesco-nb.int.toradex.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <ZGStr1oZvmJ0XzSu@francesco-nb.int.toradex.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v8 1/9] dt-bindings: usb: qcom,dwc3: Add bindings for
+ SC8280 Multiport
+To:     Johan Hovold <johan@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>,
+        <ahalaney@redhat.com>
+References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
+ <20230514054917.21318-2-quic_kriskura@quicinc.com>
+ <ZGNiDVq1duvyZBUB@hovoldconsulting.com>
+Content-Language: en-US
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <ZGNiDVq1duvyZBUB@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1684323915;0d7e538a;
-X-HE-SMSGID: 1pzEq4-0005Ph-I3
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 1mc-c92g0RVsIcGtcXrRUd0BbSg6wQQX
+X-Proofpoint-ORIG-GUID: 1mc-c92g0RVsIcGtcXrRUd0BbSg6wQQX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-17_02,2023-05-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ adultscore=0 priorityscore=1501 mlxlogscore=988 bulkscore=0 suspectscore=0
+ impostorscore=0 phishscore=0 lowpriorityscore=0 mlxscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305170091
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 17.05.23 12:35, Francesco Dolcini wrote:
-> On Wed, May 17, 2023 at 12:23:39PM +0200, Linux regression tracking (Thorsten Leemhuis) wrote:
->> [CCing Francesco Dolcini; and the regression list too, as it should be
->> in the loop for regressions:
->> https://docs.kernel.org/admin-guide/reporting-regressions.html]
+
+
+On 5/16/2023 4:29 PM, Johan Hovold wrote:
+> On Sun, May 14, 2023 at 11:19:09AM +0530, Krishna Kurapati wrote:
+>> Add the compatible string for SC8280 Multiport USB controller from
+>> Qualcomm.
 >>
->> On 16.05.23 14:53, Alistair wrote:
->>> On Fri, 2023-04-07 at 03:07 +0000, Badhri Jagan Sridharan wrote:
->>>> usb_udc_connect_control does not check to see if the udc has already
->>>> been started. This causes gadget->ops->pullup to be called through
->>>> usb_gadget_connect when invoked from usb_udc_vbus_handler even before
->>>> usb_gadget_udc_start is called. Guard this by checking for udc-
->>>>> started
->>>> in usb_udc_connect_control before invoking usb_gadget_connect.
->>> [...]
->>>> Cc: stable@vger.kernel.org
->>>> Fixes: 628ef0d273a6 ("usb: udc: add usb_udc_vbus_handler")
->>>> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
->>>
->>> This patch causes a kernel hang when trying to boot with the
->>> usb/chipidea/udc.c driver.
->>>
->>> The call stack below causes the hang:
->>>
->>>  - gadget_bind_driver(struct device *dev)
->>>     - mutex_lock(&udc->connect_lock);
->>>     - usb_gadget_udc_start_locked(struct usb_udc *udc)
->>>         - udc->gadget->ops->udc_start(udc->gadget, udc->driver)
->>>
->>> At which point we are calling ci_udc_start(..), but with the
->>> connect_lock mutex locked.
->>>
->>> ci_udc_start() then calls usb_udc_vbus_handler() which tries to lock
->>> the connect_lock while it's already locked. Resulting in a kernel hang.
->>>
->>> Reverting this patch fixes the hang.
+>> There are 4 power event irq interrupts supported by this controller
+>> (one for each port of multiport). Added all the 4 as non-optional
+>> interrupts for SC8280XP-MP
 >>
->> Not my area of expertise, but I guess it might be the same error as this
->> one:
->>
->> https://lore.kernel.org/all/ZF4BvgsOyoKxdPFF@francesco-nb.int.toradex.com/
->>
->> Francesco sent a revert on Friday, but no reaction from Badhri Jagan
->> Sridharan or Greg yet afaics.
->>
->> https://lore.kernel.org/all/20230512131435.205464-1-francesco@dolcini.it/
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   .../devicetree/bindings/usb/qcom,dwc3.yaml    | 22 +++++++++++++++++++
+>>   1 file changed, 22 insertions(+)
+>   
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - qcom,sc8280xp-dwc3-mp
+>> +    then:
+>> +      properties:
+>> +        interrupts:
+>> +          maxItems: 7
+>> +        interrupt-names:
+>> +          items:
+>> +            - const: dp_hs_phy_irq
+>> +            - const: dm_hs_phy_irq
+>> +            - const: ss_phy_irq
 > 
-> Revert patches were applied and are in linux-next. I expect those to
-> land in Linus tree with the next pull request from Greg.
+> I assume that these are only for the first port, and that you need to
+> define these interrupts also for ports 2-4.
+> 
 
-Ha, sorry, I missed that, as I only looked at lore. Should have looked
-in my own regression tracking, there it's marked as "fix incoming", as
-regzbot noticed the fix in next...
+Hi Johan,
 
-Ciao, Thorsten
+  I wanted to add them when wakeup-source is enabled but since you 
+mentioned that these must be added now and driver support can be added 
+later, I will make a patch separately for this in v9.
+
+Hi Krzysztof,
+
+  Can I use the following notation for the new interrupts ?
+
+dp_hs_port2_irq
+dm_hs_port2_irq
+dp_hs_port3_irq
+dm_hs_port3_irq
+dp_hs_port4_irq
+dm_hs_port4_irq
+
+
+That way the interrupt names for first port will be same as ones for 
+single port.
+
+Wanted to clarify this before I make a formal patch.
+
+Regards,
+Krishna,
