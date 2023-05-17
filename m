@@ -2,134 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3E7705EB6
-	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 06:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4459E705EF7
+	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 06:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbjEQEew (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 May 2023 00:34:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
+        id S231795AbjEQEvP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 00:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231714AbjEQEeu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 00:34:50 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD4D2D4F
-        for <linux-usb@vger.kernel.org>; Tue, 16 May 2023 21:34:48 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64388cf3263so178423b3a.3
-        for <linux-usb@vger.kernel.org>; Tue, 16 May 2023 21:34:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684298088; x=1686890088;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tG1kNE7UYC4wkLWo37BI0qTN7B7iDGV7Ktvk8Nl+rtI=;
-        b=MuMlnckAVwMdyNsDsScgi01FUkHiJREx6ygDmlCSAYvvmS3ShaK7bjW6fknneksRan
-         Gn8kVbl8VuR04QDcjcOn2IZnJGmGvyU3zvW/c88xIqeULitJJZH1zckUbCGEjZ6OnzNY
-         SccIUkQ0mjHOVZhY+pO8e52TMG5owPuhTKBYAAyxQO2Hbyv+n98NDE5vZ3hvvaIkGy3E
-         fQ8+2G4hADpDPjI5VuCaB0gvDfMtVanZtS32ty7ZxZB+attc6uabA3/RAs43VTmhYee8
-         CIrHZkp1AmUnfoPkzvz5wo1ccJnWqrkvU+2qdLasFp/mal9wglF54LZn881g095OZqmQ
-         xDUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684298088; x=1686890088;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tG1kNE7UYC4wkLWo37BI0qTN7B7iDGV7Ktvk8Nl+rtI=;
-        b=DR/f3xePaHbAerX3HyHfY814S3ew57P7GM6mSlfGfLFGldBnmLyVE0y3qJZKLeRQto
-         GMbUcjvkYtn95l+QavkdUDYam5Hk+JcrbL0giZxVAjgNZXcDtxVfE208yOe1iSegGxi2
-         zqYl/8pYSkgIhAs363QVvcUBKwNeYgSkwhySjYTA3d6Wwwgt7Qsr7Mynbwqr9D065ERE
-         bmXLrZocjiAHnJpgDrILqSNInH37pguCbjKDLfUFaXuOzk6bzlZyoBqFdpG0Uun/ttE0
-         aQi8bOZ0S+8hfBEC4TON+gwYVMYFYzbmF06E2zCiqGo9+Jvm1jZh6SfdXeH22JSot3GX
-         8KUg==
-X-Gm-Message-State: AC+VfDw4/pvqsdIsZi4VRSnWL46C5gKqDzKAbeNIqYMoDu2wjGm8Vyeq
-        4Fku0bESl0kaxB2hx+bfocH2bQ==
-X-Google-Smtp-Source: ACHHUZ7ZntCzPC6Kae1pDbO6DYSSci6YTuhSOAjEZpHtW1xnkNQFCJpFTJqzEf+yQY02x5W3U6f6sw==
-X-Received: by 2002:a05:6a00:c83:b0:64a:5cde:3a8c with SMTP id a3-20020a056a000c8300b0064a5cde3a8cmr24779255pfv.28.1684298088145;
-        Tue, 16 May 2023 21:34:48 -0700 (PDT)
-Received: from localhost ([122.172.82.60])
-        by smtp.gmail.com with ESMTPSA id k18-20020aa792d2000000b0064cca73d911sm1328858pfa.103.2023.05.16.21.34.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 21:34:47 -0700 (PDT)
-Date:   Wed, 17 May 2023 10:04:45 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>, Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 12/13] ARM: spear: include "pl080.h" for
- pl080_get_signal() prototype
-Message-ID: <20230517043445.qhc6ebfq4pwvgiqh@vireshk-i7>
-References: <20230516153109.514251-1-arnd@kernel.org>
- <20230516153109.514251-13-arnd@kernel.org>
+        with ESMTP id S231694AbjEQEvN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 00:51:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01DDC30D2;
+        Tue, 16 May 2023 21:51:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92D8D64168;
+        Wed, 17 May 2023 04:51:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81669C433D2;
+        Wed, 17 May 2023 04:50:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1684299060;
+        bh=1A4N2cqACkxyyJfl2oSoqVFVLCI/m4E0p25SJpeFf2I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QSOHjdPa779g0yJZEwvB03PDRBr2erJQZ4vx7/pabYc16D1kgrh0ouKhtgd8dqI/e
+         Su9cvdGXifPwY8MCRElYh5DpdNNjBFDsREb3O71TiZMg4WAoiFFXTUyd1szn1IWhx+
+         xpzEhQyRarIBp7tBROziY7DpThOmbaG0fcEnWtao=
+Date:   Wed, 17 May 2023 06:50:57 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
+        bhupesh.linux@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org
+Subject: Re: [PATCH v5 3/5] usb: misc: eud: Add driver support for SM6115 /
+ SM4250
+Message-ID: <2023051723-decibel-skiing-56ed@gregkh>
+References: <20230516213308.2432018-1-bhupesh.sharma@linaro.org>
+ <20230516213308.2432018-4-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230516153109.514251-13-arnd@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20230516213308.2432018-4-bhupesh.sharma@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 16-05-23, 17:31, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Wed, May 17, 2023 at 03:03:06AM +0530, Bhupesh Sharma wrote:
+> Add SM6115 / SM4250 SoC EUD support in qcom_eud driver.
+
+Why is the subject line duplicated here?
+
+> On some SoCs (like the SM6115 / SM4250 SoC), the mode manager
+> needs to be accessed only via the secure world (through 'scm'
+> calls).
 > 
-> pl080_get_signal() and pl080_put_signal() are declared in pl080.h
-> and defined in pl080.c, but this file is missing an include
-> of the header:
+> Also, the enable bit inside 'tcsr_check_reg' needs to be set
+> first to set the eud in 'enable' mode on these SoCs.
 > 
-> arch/arm/mach-spear/pl080.c:27:5: error: no previous prototype for 'pl080_get_signal'
-> arch/arm/mach-spear/pl080.c:62:6: error: no previous prototype for 'pl080_put_signal'
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > ---
->  arch/arm/mach-spear/pl080.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/usb/misc/Kconfig    |  1 +
+>  drivers/usb/misc/qcom_eud.c | 69 +++++++++++++++++++++++++++++++++----
+
+Given that you didn't cc the usb maintainer, I'm guessing you don't want
+this patch applied?
+
+>  2 files changed, 63 insertions(+), 7 deletions(-)
 > 
-> diff --git a/arch/arm/mach-spear/pl080.c b/arch/arm/mach-spear/pl080.c
-> index d6b8627d2544..47243a8153d0 100644
-> --- a/arch/arm/mach-spear/pl080.c
-> +++ b/arch/arm/mach-spear/pl080.c
-> @@ -16,6 +16,7 @@
->  #include <linux/spinlock_types.h>
->  #include "spear.h"
->  #include "misc_regs.h"
-> +#include "pl080.h"
+> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+> index 99b15b77dfd5..fe1b5fec1dfc 100644
+> --- a/drivers/usb/misc/Kconfig
+> +++ b/drivers/usb/misc/Kconfig
+> @@ -147,6 +147,7 @@ config USB_APPLEDISPLAY
+>  config USB_QCOM_EUD
+>  	tristate "QCOM Embedded USB Debugger(EUD) Driver"
+>  	depends on ARCH_QCOM || COMPILE_TEST
+> +	select QCOM_SCM
+
+How well is that going to work on building on non-QCOM systems?  Can
+QCOM_SCM build if COMPILE_TEST is enabled?  select is rough to get
+right, are you sure it's correct here?  If so, some documentation in the
+changelog would be appreciated.
+
+>  	select USB_ROLE_SWITCH
+>  	help
+>  	  This module enables support for Qualcomm Technologies, Inc.
+> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
+> index b7f13df00764..10d194604d4c 100644
+> --- a/drivers/usb/misc/qcom_eud.c
+> +++ b/drivers/usb/misc/qcom_eud.c
+> @@ -5,12 +5,14 @@
 >  
->  static spinlock_t lock = __SPIN_LOCK_UNLOCKED(x);
+>  #include <linux/bitops.h>
+>  #include <linux/err.h>
+> +#include <linux/firmware/qcom/qcom_scm.h>
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+There's no rule to keep these sorted, but it's your choice...
 
--- 
-viresh
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+>  #include <linux/iopoll.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/of_device.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/slab.h>
+>  #include <linux/sysfs.h>
+> @@ -22,23 +24,33 @@
+>  #define EUD_REG_VBUS_INT_CLR	0x0080
+>  #define EUD_REG_CSR_EUD_EN	0x1014
+>  #define EUD_REG_SW_ATTACH_DET	0x1018
+> -#define EUD_REG_EUD_EN2        0x0000
+> +#define EUD_REG_EUD_EN2		0x0000
+
+Why the coding style cleanup in the same patch?  Remember, changes only
+do one thing, and you have already listed 2 things in your commit
+message :(
+
+>  
+>  #define EUD_ENABLE		BIT(0)
+> -#define EUD_INT_PET_EUD	BIT(0)
+> +#define EUD_INT_PET_EUD		BIT(0)
+
+Again, why this change?
+
+thanks,
+
+greg k-h
