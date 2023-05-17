@@ -2,243 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB72705E23
-	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 05:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3E7705EB6
+	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 06:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbjEQDbV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 May 2023 23:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
+        id S232053AbjEQEew (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 00:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232459AbjEQDbQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 May 2023 23:31:16 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6259940EE
-        for <linux-usb@vger.kernel.org>; Tue, 16 May 2023 20:30:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684294251; x=1715830251;
-  h=date:from:to:cc:subject:message-id;
-  bh=KCsjFpslpXUR66SaH2VjPUmj14vhp/QrJcRusKoGTts=;
-  b=Rd6kUQtyIky9hcOoopJ6mfzoSY64cwU8ijnObTvYKrvMofz51uSmsbwi
-   +jD3+2SfQitU72VhMN7C95AE8cQIf2Vg5L6Ucw5wEfyY6mhK1N1o6ibr0
-   zVlaBI1GxhUdxTy3Q5h3UCMaJM+ksUJ9QFT5yblDyba0Yu95iStr6VO/Y
-   mdS6biW1iigkb1GoPHH9Ye3vwAN1qHZvBRLeQh/vKRGpG323A1d2PP/nB
-   p8INvhJNVnlO7VonSOMWLEBVxsndvz0ABm9z4fH0uW5c+gxG/ltRgAMBY
-   UOczQkgshR9qEBSApPZAcOR+BuFdkPx7OZXI+LPeN4nodz9dbQiQydVlo
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="415059515"
-X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
-   d="scan'208";a="415059515"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 20:30:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="845922761"
-X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
-   d="scan'208";a="845922761"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 16 May 2023 20:30:49 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pz7sH-0008BD-0d;
-        Wed, 17 May 2023 03:30:49 +0000
-Date:   Wed, 17 May 2023 11:30:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- fe82f16aafdaf8002281d3b9524291d4a4a28460
-Message-ID: <20230517033033.ySsoF%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231714AbjEQEeu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 00:34:50 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD4D2D4F
+        for <linux-usb@vger.kernel.org>; Tue, 16 May 2023 21:34:48 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64388cf3263so178423b3a.3
+        for <linux-usb@vger.kernel.org>; Tue, 16 May 2023 21:34:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684298088; x=1686890088;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tG1kNE7UYC4wkLWo37BI0qTN7B7iDGV7Ktvk8Nl+rtI=;
+        b=MuMlnckAVwMdyNsDsScgi01FUkHiJREx6ygDmlCSAYvvmS3ShaK7bjW6fknneksRan
+         Gn8kVbl8VuR04QDcjcOn2IZnJGmGvyU3zvW/c88xIqeULitJJZH1zckUbCGEjZ6OnzNY
+         SccIUkQ0mjHOVZhY+pO8e52TMG5owPuhTKBYAAyxQO2Hbyv+n98NDE5vZ3hvvaIkGy3E
+         fQ8+2G4hADpDPjI5VuCaB0gvDfMtVanZtS32ty7ZxZB+attc6uabA3/RAs43VTmhYee8
+         CIrHZkp1AmUnfoPkzvz5wo1ccJnWqrkvU+2qdLasFp/mal9wglF54LZn881g095OZqmQ
+         xDUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684298088; x=1686890088;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tG1kNE7UYC4wkLWo37BI0qTN7B7iDGV7Ktvk8Nl+rtI=;
+        b=DR/f3xePaHbAerX3HyHfY814S3ew57P7GM6mSlfGfLFGldBnmLyVE0y3qJZKLeRQto
+         GMbUcjvkYtn95l+QavkdUDYam5Hk+JcrbL0giZxVAjgNZXcDtxVfE208yOe1iSegGxi2
+         zqYl/8pYSkgIhAs363QVvcUBKwNeYgSkwhySjYTA3d6Wwwgt7Qsr7Mynbwqr9D065ERE
+         bmXLrZocjiAHnJpgDrILqSNInH37pguCbjKDLfUFaXuOzk6bzlZyoBqFdpG0Uun/ttE0
+         aQi8bOZ0S+8hfBEC4TON+gwYVMYFYzbmF06E2zCiqGo9+Jvm1jZh6SfdXeH22JSot3GX
+         8KUg==
+X-Gm-Message-State: AC+VfDw4/pvqsdIsZi4VRSnWL46C5gKqDzKAbeNIqYMoDu2wjGm8Vyeq
+        4Fku0bESl0kaxB2hx+bfocH2bQ==
+X-Google-Smtp-Source: ACHHUZ7ZntCzPC6Kae1pDbO6DYSSci6YTuhSOAjEZpHtW1xnkNQFCJpFTJqzEf+yQY02x5W3U6f6sw==
+X-Received: by 2002:a05:6a00:c83:b0:64a:5cde:3a8c with SMTP id a3-20020a056a000c8300b0064a5cde3a8cmr24779255pfv.28.1684298088145;
+        Tue, 16 May 2023 21:34:48 -0700 (PDT)
+Received: from localhost ([122.172.82.60])
+        by smtp.gmail.com with ESMTPSA id k18-20020aa792d2000000b0064cca73d911sm1328858pfa.103.2023.05.16.21.34.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 21:34:47 -0700 (PDT)
+Date:   Wed, 17 May 2023 10:04:45 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>, Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 12/13] ARM: spear: include "pl080.h" for
+ pl080_get_signal() prototype
+Message-ID: <20230517043445.qhc6ebfq4pwvgiqh@vireshk-i7>
+References: <20230516153109.514251-1-arnd@kernel.org>
+ <20230516153109.514251-13-arnd@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516153109.514251-13-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: INFO setup_repo_specs: /db/releases/20230517104217/lkp-src/repo/*/usb
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: fe82f16aafdaf8002281d3b9524291d4a4a28460  xhci: Fix incorrect tracking of free space on transfer rings
+On 16-05-23, 17:31, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> pl080_get_signal() and pl080_put_signal() are declared in pl080.h
+> and defined in pl080.c, but this file is missing an include
+> of the header:
+> 
+> arch/arm/mach-spear/pl080.c:27:5: error: no previous prototype for 'pl080_get_signal'
+> arch/arm/mach-spear/pl080.c:62:6: error: no previous prototype for 'pl080_put_signal'
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/mach-spear/pl080.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm/mach-spear/pl080.c b/arch/arm/mach-spear/pl080.c
+> index d6b8627d2544..47243a8153d0 100644
+> --- a/arch/arm/mach-spear/pl080.c
+> +++ b/arch/arm/mach-spear/pl080.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/spinlock_types.h>
+>  #include "spear.h"
+>  #include "misc_regs.h"
+> +#include "pl080.h"
+>  
+>  static spinlock_t lock = __SPIN_LOCK_UNLOCKED(x);
 
-elapsed time: 723m
-
-configs tested: 166
-configs skipped: 11
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r005-20230515   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r013-20230516   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r005-20230515   gcc  
-arc                  randconfig-r015-20230515   gcc  
-arc                  randconfig-r032-20230515   gcc  
-arc                  randconfig-r043-20230516   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r002-20230515   gcc  
-arm                  randconfig-r033-20230515   gcc  
-arm                  randconfig-r046-20230516   gcc  
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r003-20230515   clang
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r006-20230515   gcc  
-csky                 randconfig-r026-20230517   gcc  
-hexagon              randconfig-r041-20230516   clang
-hexagon              randconfig-r045-20230516   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                 randconfig-a011-20230515   gcc  
-i386                 randconfig-a012-20230515   gcc  
-i386                 randconfig-a013-20230515   gcc  
-i386                 randconfig-a014-20230515   gcc  
-i386                 randconfig-a015-20230515   gcc  
-i386                 randconfig-a016-20230515   gcc  
-i386                 randconfig-i051-20230515   clang
-i386                 randconfig-i052-20230515   clang
-i386                 randconfig-i053-20230515   clang
-i386                 randconfig-i054-20230515   clang
-i386                 randconfig-i055-20230515   clang
-i386                 randconfig-i056-20230515   clang
-i386                 randconfig-i061-20230515   clang
-i386                 randconfig-i062-20230515   clang
-i386                 randconfig-i063-20230515   clang
-i386                 randconfig-i064-20230515   clang
-i386                 randconfig-i065-20230515   clang
-i386                 randconfig-i066-20230515   clang
-i386                 randconfig-i071-20230515   gcc  
-i386                 randconfig-i072-20230515   gcc  
-i386                 randconfig-i073-20230515   gcc  
-i386                 randconfig-i074-20230515   gcc  
-i386                 randconfig-i075-20230515   gcc  
-i386                 randconfig-i076-20230515   gcc  
-i386                 randconfig-i081-20230515   gcc  
-i386                 randconfig-i082-20230515   gcc  
-i386                 randconfig-i083-20230515   gcc  
-i386                 randconfig-i084-20230515   gcc  
-i386                 randconfig-i085-20230515   gcc  
-i386                 randconfig-i086-20230515   gcc  
-i386                 randconfig-i091-20230515   clang
-i386                 randconfig-i092-20230515   clang
-i386                 randconfig-i093-20230515   clang
-i386                 randconfig-i094-20230515   clang
-i386                 randconfig-i095-20230515   clang
-i386                 randconfig-i096-20230515   clang
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r004-20230515   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r011-20230515   gcc  
-ia64                 randconfig-r011-20230516   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r001-20230516   gcc  
-loongarch    buildonly-randconfig-r002-20230515   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r003-20230516   gcc  
-m68k                                defconfig   gcc  
-microblaze           randconfig-r014-20230515   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r034-20230515   gcc  
-openrisc     buildonly-randconfig-r002-20230516   gcc  
-openrisc             randconfig-r036-20230515   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r003-20230515   gcc  
-parisc               randconfig-r012-20230516   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r006-20230516   clang
-powerpc              randconfig-r025-20230517   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r022-20230517   gcc  
-riscv                randconfig-r042-20230516   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390         buildonly-randconfig-r004-20230516   clang
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230516   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r035-20230515   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r031-20230515   gcc  
-sparc64              randconfig-r001-20230515   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230515   clang
-x86_64               randconfig-a002-20230515   clang
-x86_64               randconfig-a003-20230515   clang
-x86_64               randconfig-a004-20230515   clang
-x86_64               randconfig-a005-20230515   clang
-x86_64               randconfig-a006-20230515   clang
-x86_64               randconfig-a011-20230515   gcc  
-x86_64               randconfig-a012-20230515   gcc  
-x86_64               randconfig-a013-20230515   gcc  
-x86_64               randconfig-a014-20230515   gcc  
-x86_64               randconfig-a015-20230515   gcc  
-x86_64               randconfig-a016-20230515   gcc  
-x86_64               randconfig-x051-20230515   gcc  
-x86_64               randconfig-x052-20230515   gcc  
-x86_64               randconfig-x053-20230515   gcc  
-x86_64               randconfig-x054-20230515   gcc  
-x86_64               randconfig-x055-20230515   gcc  
-x86_64               randconfig-x056-20230515   gcc  
-x86_64               randconfig-x061-20230515   gcc  
-x86_64               randconfig-x062-20230515   gcc  
-x86_64               randconfig-x063-20230515   gcc  
-x86_64               randconfig-x064-20230515   gcc  
-x86_64               randconfig-x065-20230515   gcc  
-x86_64               randconfig-x066-20230515   gcc  
-x86_64               randconfig-x071-20230515   clang
-x86_64               randconfig-x072-20230515   clang
-x86_64               randconfig-x073-20230515   clang
-x86_64               randconfig-x074-20230515   clang
-x86_64               randconfig-x075-20230515   clang
-x86_64               randconfig-x076-20230515   clang
-x86_64               randconfig-x081-20230515   clang
-x86_64               randconfig-x082-20230515   clang
-x86_64               randconfig-x083-20230515   clang
-x86_64               randconfig-x084-20230515   clang
-x86_64               randconfig-x085-20230515   clang
-x86_64               randconfig-x086-20230515   clang
-x86_64               randconfig-x091-20230515   gcc  
-x86_64               randconfig-x092-20230515   gcc  
-x86_64               randconfig-x093-20230515   gcc  
-x86_64               randconfig-x094-20230515   gcc  
-x86_64               randconfig-x095-20230515   gcc  
-x86_64               randconfig-x096-20230515   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r001-20230515   gcc  
-xtensa               randconfig-r004-20230515   gcc  
-xtensa               randconfig-r014-20230516   gcc  
-xtensa               randconfig-r021-20230517   gcc  
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+viresh
