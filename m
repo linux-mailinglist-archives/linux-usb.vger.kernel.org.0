@@ -2,128 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40428706C48
-	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 17:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC1D706CA0
+	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 17:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbjEQPKz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 May 2023 11:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
+        id S232221AbjEQP0M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 11:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231687AbjEQPKu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 11:10:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB6AA5D4;
-        Wed, 17 May 2023 08:10:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C2A1A60FBD;
-        Wed, 17 May 2023 15:10:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CEE0C433EF;
-        Wed, 17 May 2023 15:10:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684336238;
-        bh=Ny0LoiDv3bdptEg6qSZYN06fzaz93keaVkr7dslnSLA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bjrUez/4cBi2daN/lwRZUVJr2uMICn2TiWwRJKY5GVljwxRJOtPmsMt6z2oSfhDDc
-         Y7RwIrQi3vSr6HeQjOf4WI+hDofp6G4GK7v7A3NtM9jpr9qKtqUjUbl7UPV/I76NJ5
-         Sa0bdeTErhYfHu7YdrPjpP7dzFT9ozbHgkDBuMpbjmT5Sr5VbUUP04Qu0lXHs9R4zh
-         IhgpGJd+v+zIHLhCMnrzGT4MDkq3rNDnZkTqGmnXqiI82k0+LCYUDakvZKOz2OdisR
-         4XEPouomRWHk9Irbh7o/AGGGwNbXx/JHMW977iXccU/BTP7tV6BAIDzEvDM06yKhI1
-         Cyc3s/ZLhGWSQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pzInW-0005qx-Fz; Wed, 17 May 2023 17:10:39 +0200
-Date:   Wed, 17 May 2023 17:10:38 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com
-Subject: Re: [PATCH v8 3/9] usb: dwc3: core: Access XHCI address space
- temporarily to read port info
-Message-ID: <ZGTubmBViN9rTiZC@hovoldconsulting.com>
-References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
- <20230514054917.21318-4-quic_kriskura@quicinc.com>
- <ZGNy6FvVrBjYmorz@hovoldconsulting.com>
- <b2954b92-8b12-700a-af50-b914af7b0ace@quicinc.com>
- <ZGSDr08h3Go1Dk8C@hovoldconsulting.com>
- <82a8c414-bfa8-5066-fb68-1ac117b76c4e@quicinc.com>
+        with ESMTP id S232196AbjEQP0K (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 11:26:10 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2063.outbound.protection.outlook.com [40.107.21.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525D31B7;
+        Wed, 17 May 2023 08:26:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Slab9hqcpWLBJpSvBOnk+/NYu3xe8xdaMWWfYH5YkZPH+Sh7+xzBZNYqAFlDJWVDmNMb911Vr68hzAT7ZJ+PgchnwyqUUKB8YX5vQBL14skBMnNtvnSn3EJYzRXmDo18bve/wjy9YXDlZy5mT8q/GyZPtrQvDNtwAet2WZy/eIOFEjJnXPbw0p/wuJDM1YGl+sp7KkSd1ii3qmu5lBZwg4P0BYDgpz+3YZiCNFZ9DnCTIlhqf6kGUf/0KmRsOCCuvQWv0peZ3zxh6Q2hn8p1Y22NOlohrV2lS9lCi5NbPsSBRADL3THNcwRC4UgIJKKtzHMLcRT/g8VcBXgtFcDrsg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lMjol5UHOl/NbR7CySQsP3RvcqPp0o7UgZD9PtNiwEI=;
+ b=XoeHtfTk0l41Bp/aNBtEZjq4QHJ+mFTxz/D5cn01s6xubcauXgecFm9N+tDO7Q+8z6Pct9cRrDR3P6wcyT01+KDbGIapWvezxXI3mo+I4USNM/MR+b1rVG2OajBbHxCwYmzJHpTAxHuTy7lLJ8xleP+BF/IMn2Adpg0k2JiRls3R7Ggw3oegRbrnolC8WTOS2F0P2+R5Po29VPZfID2gHizuoIqkDWXjDHDcC0OcJCs7FmIULWoOPVcuDLbMY9+6PMwpXg2N2gdItl0QwoNIjquYdVYfrXxsB8cDVgdw+j/B1HOFbgOfeRu5nvzmNxqPyUKLyVqZUy3NHMdmJTOuMw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lMjol5UHOl/NbR7CySQsP3RvcqPp0o7UgZD9PtNiwEI=;
+ b=HTjqf/OaVEE81OZpmbRhArDiwgsGAqavu3KOUQGCv1Yt/IMntkdpuUVm7eTplzupeG8rhso8xqcVJZoLffX+AlkVMBSwkE8GYKLdLkIGA+kk30qAHhU9lZrYETvgXDRkjlt8xCAk7joVH5SttQAqZqNv5X3+/rqXcfJV4bmba78=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
+ by AS1PR04MB9697.eurprd04.prod.outlook.com (2603:10a6:20b:480::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.32; Wed, 17 May
+ 2023 15:26:06 +0000
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::25d3:de2:ef1:3884]) by AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::25d3:de2:ef1:3884%4]) with mapi id 15.20.6387.033; Wed, 17 May 2023
+ 15:26:06 +0000
+From:   Frank Li <Frank.Li@nxp.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        peter.chen@kernel.org, pawell@cadence.com, rogerq@kernel.org,
+        a-govindraju@ti.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, imx@lists.linux.dev
+Subject: [PATCH 1/2] usb: cdns3: imx: simplify clock name usage
+Date:   Wed, 17 May 2023 11:25:44 -0400
+Message-Id: <20230517152545.3404508-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BY3PR05CA0030.namprd05.prod.outlook.com
+ (2603:10b6:a03:254::35) To AM6PR04MB4838.eurprd04.prod.outlook.com
+ (2603:10a6:20b:4::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <82a8c414-bfa8-5066-fb68-1ac117b76c4e@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|AS1PR04MB9697:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5f805a98-ee3f-4e3c-d8db-08db56eb083a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BG/k6FrExXHwOjwd0lAZ3/Q+tp8KaPxknJBh/ch47FjcdcCEnKOe4WAaZ4PvCG54yn3wIByfL3SX9Zn3YPLBnJgJUZBcIch7P2P4ZtJnzXlnhJjA7+CZc+ppZfElJuZa3LSbEdoEFOggvjyt+9Tcehdn8tKpKK1b4ojZkdzTOIMBfhkgPomOLPjDSFvk8kmFV0IyIwLw0/MAjCeuHj4gsNlmHAM4wCZ4sEM7aTWGswpj15/KdUQv53yW7+B+dmcQZ/y4e/yZlMzuzEUKGekW8udZldHuwmhvog6wqQc1FyHbpcjwWGD7M8ycIXcoJaUGw4xdLUqDemNs8/Q00RnHLP3u9hqE/WJDU0lMmQo247YAGauXhGOEtjZbp4BrL5ZgmgrRem3kjgZzEB51jy8Pj8aGKHVhBmkqMj0qz9ys+fMgoBlCeR37W1S7nSBcYqTipENwdDqmQBhFBerVOWzKP5Lwg7urSc0DLgJ6kO9M7Z0LzrNgysQUxBHZRuMvxdkurmePDVfnYJObR4rO3HjB2Mz+RtpGX11+C3MYi8x9ZZLYmB3dFNxxlsOSpdNRWUANMRAZYsC2LTYvxX70rO9LpZijVgAxcBZdNirpOIicy2g=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(376002)(366004)(396003)(346002)(451199021)(478600001)(38100700002)(38350700002)(1076003)(83380400001)(6506007)(6512007)(2616005)(26005)(52116002)(6666004)(6486002)(36756003)(186003)(966005)(316002)(41300700001)(86362001)(4326008)(66476007)(66556008)(2906002)(5660300002)(66946007)(8676002)(8936002)(7416002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OXUxKSxGzAI5eFzRFeUzbX2+htwkezWfqNHaczB4k7a0IjlU1P58XFJVyYEQ?=
+ =?us-ascii?Q?ckLl7aRDqnLd0IhS5Tgy3bU+3Jjym1pn926O3kFRX0sscVZqS5LB8jARRMQ4?=
+ =?us-ascii?Q?f++wVn9iV7qb/GOFDwyv9KuOgAcbgLd/cOSGs8+DznDDJr7HR5FxWBWWxZLa?=
+ =?us-ascii?Q?Y6mcHevCT0JmQfOBGh0Ul21ntTjIPF81pcyxps1nrpJXz94H24yd5jyvdoev?=
+ =?us-ascii?Q?vWjQiBQnL/MzxumECxvaxuLA9omo2G/nvC4V904cP4zNlA6qJveIjwg89d/D?=
+ =?us-ascii?Q?pU6172cMWxQJjB9ohKuhiYc8l5YGFH2hCe/7xN/HyGhpPI/XcAASiCxr4m1X?=
+ =?us-ascii?Q?yj0p8bl7Wdthe4JkxFwdPMjXlJy433xh8q11BiSLezDcAQ+ayzzpwKdnWeXp?=
+ =?us-ascii?Q?ZbCddcVqvsroKXH6RrWprHluxZUSQDK7m9ft6GYVu9NZ1NcFYJwXQ9zqXbQA?=
+ =?us-ascii?Q?WxAkmBcLPWfJGNNh+BppusOV5YR3OZ3gEnUCr9si9SJ0Xz9oEZ1/omgIQbe8?=
+ =?us-ascii?Q?NJEKP0JoY8m9voL8qF4oLyRcWFw4+6HHjxFr4AiWDTGFTaw2Y5f8mjZYdyh/?=
+ =?us-ascii?Q?eTaVxyJjn6cwMw9YgbjHv4tjP5Ad7nw65c7566MQdMrc1G3et+5/aQJH/vkb?=
+ =?us-ascii?Q?vlxnumvfNmR5MititMp77WGvdDVCZrpWC+4BZvZGguZzq5UPcGL2C+JR2/Wd?=
+ =?us-ascii?Q?DknhRLdEHDyJrMb/dUMevHu9zXE9NlJb0xP73PSNIaNQPR4qtPG6N0mUr4iQ?=
+ =?us-ascii?Q?m7gh63HglxnKWdQ7tp9fo2tcnJ6kQ8x9JX4QJkDNr1H6tU9VJsWcCIwAY5uD?=
+ =?us-ascii?Q?6sRWWD0yPWY5qVBDyHwlYK3YL6hgIJbyv1ItJQFPm0GIlPFtXyZ16uRRialA?=
+ =?us-ascii?Q?U+TOLGi4l79T2GBot4FLV04bgOdZeGDxRFCn0RH8XkakWwo6JpBo+mZuZkMf?=
+ =?us-ascii?Q?uSxmMK5wfKFYJVKhT71oPx6geoWITpd1JRV8gqo3DMQ+nIcLbKZwqpkWLiRQ?=
+ =?us-ascii?Q?lJ+VZNKypIJuyZCD7hQkgzUAHOSwWGu6V46YXGOWjGDmVpnvoPAtmm00RKSy?=
+ =?us-ascii?Q?BOmI03W+4S+8uyz3KAyUjUxZXoy/ukiQOU4UG+wMQwPHJGzDbSgZh61l9kXH?=
+ =?us-ascii?Q?w2Zg37vXu8zv+3BfdlykGQ3gYBpvPQS2KJ6P8wz8+PGnum5T9Y4JfksrZest?=
+ =?us-ascii?Q?n8cC7cyISrg//5IksYDseiEUIrGBOCcP7/QZ7/NY+/XPnJ02ZmPZPU++eCqg?=
+ =?us-ascii?Q?62chtuXIcOmn1FOLxvxl3H/r8oJpUuJQLdKtRUSS6zVwfzBDGLacILUMXZOk?=
+ =?us-ascii?Q?CkSO0tFWiK2KnU0Fp5LYNJ7hFuH0lx0N7W2fcz7fNj9ZrI5pgvun1suxTiIx?=
+ =?us-ascii?Q?LZXZEt7RhdlgbDA9aEz+A0f2OVX0CDaO906tHpAcI/r8BFHLSutaT5jH0BkC?=
+ =?us-ascii?Q?SSBgnm2QisZcp7Urs7//VVcO0HnJm5ZZDsZxIIcu56vw4YUw8hOYc29BQ1Sl?=
+ =?us-ascii?Q?3/gqrNwbskfIZIvVVXEhQ4O7DHZ337Xf5/AiAlVs0Rf1IjXroTVhp0Ny+/eh?=
+ =?us-ascii?Q?HtzODvJ4SdGE4ng2p0c=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f805a98-ee3f-4e3c-d8db-08db56eb083a
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 15:26:06.1455
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5YpFsYgrwBn5zCuRMp2nRlOsfDbP/G2oSfhaoZfsq++MFLHm9TyQyDducGxYMKYxklZga/psiUQq3LSAEjA1+w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9697
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 17, 2023 at 05:51:45PM +0530, Krishna Kurapati PSSNV wrote:
-> On 5/17/2023 1:05 PM, Johan Hovold wrote:
+Simplifies the clock names in imx_cdns3_core_clks[]. Such as, renaming
+"usb3_lpm_clk" to "lpm". The "usb3" prefix and "clk" suffix were
+redundant.
 
-> >>>> +	temp = readl(regs + DWC3_XHCI_HCSPARAMS1);
-> >>>> +	if (HCS_MAX_PORTS(temp) != (dwc->num_usb3_ports + dwc->num_usb2_ports)) {
-> >>>> +		dev_err(dwc->dev,
-> >>>> +			"Mismatched reported MAXPORTS (%d)\n", HCS_MAX_PORTS(temp));
-> >>>> +		ret = -EINVAL;
-> >>>> +		goto unmap_reg;
-> >>>> +	}
-> >>>
-> >>> Not sure this is needed either.
-> >>>
-> >>> Could this risk regressing platforms which does not have currently have
-> >>> all PHYs described in DT?
-> >>>
-> >> No, it doesn't. AFAIK, this only tells how many ports are present as per
-> >> the core consultant configuration of the device. I tried to explain what
-> >> would happen incase phy's are not present in DT in [2] & [3].
-> > 
-> > Right, whether the PHYs are described in DT is not directly related to
-> > this.
-> > 
-> > As long as HCS_MAX_PORTS by definition (assumption) is always
-> > (dwc->num_usb3_ports + dwc->num_usb2_ports) any such machines would
-> > continue to work.
-> > 
-> > But if you want to catch machines where this assumption does not hold,
-> > you could also end up regressing machines which have so far been working
-> > despite these numbers not adding up.
-> > 
-> > That may be acceptable, but I'm still not sure what the value of this
-> > check is (e.g. as xhci core will handle basic sanity checks like usb2 +
-> > usb3 <= max_ports).
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
 
->    Thanks for the review comments. Ideally the HCC_PARAMS1 must indicate 
-> total number of ports supported. If not then I believe the core 
-> consultant configuration is wrong.
-> 
-> According to the spec:
-> 
-> "The MaxPorts value in the HCSPARAMS1 register defines the number of
-> Port Register Sets (e.g. PORTSC, PORTPMSC, and PORTLI register sets)."
-> 
-> So shouldn't the (usb2+usb3 ports be equal to MaxPorts to ensure each 
-> port properly accesses the respective PortSC etc., ?
+This patch was missed at
+https://lore.kernel.org/imx/20230327145523.3121810-1-Frank.Li@nxp.com/
 
-Sure, that's what is expected, but why do you need to add a check for
-this in the glue driver all of a sudden? Your series does not seem to
-rely on this. This is the xHCI driver's business (as is parsing these
-registers in the first place, really).
+ drivers/usb/cdns3/cdns3-imx.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Johan
+diff --git a/drivers/usb/cdns3/cdns3-imx.c b/drivers/usb/cdns3/cdns3-imx.c
+index 59860d1753fd..5d9ca3c3c71d 100644
+--- a/drivers/usb/cdns3/cdns3-imx.c
++++ b/drivers/usb/cdns3/cdns3-imx.c
+@@ -105,11 +105,11 @@ static inline void cdns_imx_writel(struct cdns_imx *data, u32 offset, u32 value)
+ }
+ 
+ static const struct clk_bulk_data imx_cdns3_core_clks[] = {
+-	{ .id = "usb3_lpm_clk" },
+-	{ .id = "usb3_bus_clk" },
+-	{ .id = "usb3_aclk" },
+-	{ .id = "usb3_ipg_clk" },
+-	{ .id = "usb3_core_pclk" },
++	{ .id = "lpm" },
++	{ .id = "bus" },
++	{ .id = "aclk" },
++	{ .id = "ipg" },
++	{ .id = "core" },
+ };
+ 
+ static int cdns_imx_noncore_init(struct cdns_imx *data)
+-- 
+2.34.1
+
