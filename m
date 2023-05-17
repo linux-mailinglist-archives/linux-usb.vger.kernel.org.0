@@ -2,108 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED6B706BD1
-	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 16:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40428706C48
+	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 17:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjEQOzn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 May 2023 10:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48286 "EHLO
+        id S231449AbjEQPKz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 11:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbjEQOzl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 10:55:41 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4889030
-        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 07:55:12 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-510d6e1f1abso1186652a12.2
-        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 07:55:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684335310; x=1686927310;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wuaNZ4qT3VnOSKAHjsPxE9vvu/wKdQkttBJHmfbu46M=;
-        b=YLMSz5sCr/yKeJHAUxPSPb2tqXm+IZeIWiqfkhSTMOozshLHws0by/v1Kw9Vv7Jq70
-         IhkQvQUKHEDdv+MrPToptJnmeA+wbR3t7mft04XND43+PMHjblOr8oFPvbd5f3FG+FnW
-         4mBmN6WiaPqEZIlQaYjqWSKqMpX0c6tk4ySutPkgaxORQ0uygdC2dX+1bs60O0LjwUo8
-         y8NNuVuVbwE/4uuq/R9AXdjWGFYftW4uryXSYj1yBZ/cGnyLMUAzsPvheG2cXkv5ZmqQ
-         ZPO6RGrlTLip3EjkwXcWsfH2Bb7rHkCU0SivjsSTSjpZ5d9HCRSo/QwiToxIwOMGpKwM
-         5GLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684335310; x=1686927310;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wuaNZ4qT3VnOSKAHjsPxE9vvu/wKdQkttBJHmfbu46M=;
-        b=dSvfa4KXrpX7a2cElVC5okzBFnIbssGEgutNkciBVJjxe4QW+DEzRIob15DGDaQfsV
-         64YbDe3UOXG5K4vzqs2NlWWxGf1x6HC/J8uJqXQ6V2gdqEoodZ8W9ceHVIMFYaRi12OW
-         smwzfzt9WqMMw4Y3rhrelh+dECKPq1kIqSNpe111O/H/etrtxcsM2BYk+0SncVak0pFs
-         Vx0VIav47+CUF70SOrwNJPBkuW8dVCiBVdiTdPTDRKZ55uz4yViY/AbWGA7H6Af2lcfD
-         YMozXdGE0I51e1t0Nfw/7kl2Mnf9qn25RDWQQwRz65/p2hN3q9YwYax51xoGS5erhBDV
-         ScMQ==
-X-Gm-Message-State: AC+VfDwNGFObNiiFCQesENizlioqlRReDz5yHnBrgtfCqaOet85qAFPM
-        AMHa0mx79rxUNRUfqOBkXfP3rQ==
-X-Google-Smtp-Source: ACHHUZ7aBr3hTmUS/LPx8wWBXM9iju8dtYni/FIkn1fHA2UCheSCYCr+4Vq8hjAbA7eI7zTa6dqUEA==
-X-Received: by 2002:a17:907:9347:b0:94f:322d:909c with SMTP id bv7-20020a170907934700b0094f322d909cmr34154508ejc.34.1684335309988;
-        Wed, 17 May 2023 07:55:09 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c9ff:4c84:dd21:568d? ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
-        by smtp.gmail.com with ESMTPSA id ta26-20020a1709078c1a00b009663b1addb0sm12334186ejc.224.2023.05.17.07.55.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 07:55:09 -0700 (PDT)
-Message-ID: <a82e553b-c21d-0955-be77-77028806b314@linaro.org>
-Date:   Wed, 17 May 2023 16:55:08 +0200
+        with ESMTP id S231687AbjEQPKu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 11:10:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB6AA5D4;
+        Wed, 17 May 2023 08:10:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2A1A60FBD;
+        Wed, 17 May 2023 15:10:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CEE0C433EF;
+        Wed, 17 May 2023 15:10:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684336238;
+        bh=Ny0LoiDv3bdptEg6qSZYN06fzaz93keaVkr7dslnSLA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bjrUez/4cBi2daN/lwRZUVJr2uMICn2TiWwRJKY5GVljwxRJOtPmsMt6z2oSfhDDc
+         Y7RwIrQi3vSr6HeQjOf4WI+hDofp6G4GK7v7A3NtM9jpr9qKtqUjUbl7UPV/I76NJ5
+         Sa0bdeTErhYfHu7YdrPjpP7dzFT9ozbHgkDBuMpbjmT5Sr5VbUUP04Qu0lXHs9R4zh
+         IhgpGJd+v+zIHLhCMnrzGT4MDkq3rNDnZkTqGmnXqiI82k0+LCYUDakvZKOz2OdisR
+         4XEPouomRWHk9Irbh7o/AGGGwNbXx/JHMW977iXccU/BTP7tV6BAIDzEvDM06yKhI1
+         Cyc3s/ZLhGWSQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pzInW-0005qx-Fz; Wed, 17 May 2023 17:10:39 +0200
+Date:   Wed, 17 May 2023 17:10:38 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com
+Subject: Re: [PATCH v8 3/9] usb: dwc3: core: Access XHCI address space
+ temporarily to read port info
+Message-ID: <ZGTubmBViN9rTiZC@hovoldconsulting.com>
+References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
+ <20230514054917.21318-4-quic_kriskura@quicinc.com>
+ <ZGNy6FvVrBjYmorz@hovoldconsulting.com>
+ <b2954b92-8b12-700a-af50-b914af7b0ace@quicinc.com>
+ <ZGSDr08h3Go1Dk8C@hovoldconsulting.com>
+ <82a8c414-bfa8-5066-fb68-1ac117b76c4e@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 2/5] dt-bindings: soc: qcom: eud: Add SM6115 / SM4250
- support
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-References: <20230516213308.2432018-1-bhupesh.sharma@linaro.org>
- <20230516213308.2432018-3-bhupesh.sharma@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230516213308.2432018-3-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <82a8c414-bfa8-5066-fb68-1ac117b76c4e@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 16/05/2023 23:33, Bhupesh Sharma wrote:
-> Add dt-bindings for EUD found on Qualcomm SM6115 / SM4250 SoC.
+On Wed, May 17, 2023 at 05:51:45PM +0530, Krishna Kurapati PSSNV wrote:
+> On 5/17/2023 1:05 PM, Johan Hovold wrote:
+
+> >>>> +	temp = readl(regs + DWC3_XHCI_HCSPARAMS1);
+> >>>> +	if (HCS_MAX_PORTS(temp) != (dwc->num_usb3_ports + dwc->num_usb2_ports)) {
+> >>>> +		dev_err(dwc->dev,
+> >>>> +			"Mismatched reported MAXPORTS (%d)\n", HCS_MAX_PORTS(temp));
+> >>>> +		ret = -EINVAL;
+> >>>> +		goto unmap_reg;
+> >>>> +	}
+> >>>
+> >>> Not sure this is needed either.
+> >>>
+> >>> Could this risk regressing platforms which does not have currently have
+> >>> all PHYs described in DT?
+> >>>
+> >> No, it doesn't. AFAIK, this only tells how many ports are present as per
+> >> the core consultant configuration of the device. I tried to explain what
+> >> would happen incase phy's are not present in DT in [2] & [3].
+> > 
+> > Right, whether the PHYs are described in DT is not directly related to
+> > this.
+> > 
+> > As long as HCS_MAX_PORTS by definition (assumption) is always
+> > (dwc->num_usb3_ports + dwc->num_usb2_ports) any such machines would
+> > continue to work.
+> > 
+> > But if you want to catch machines where this assumption does not hold,
+> > you could also end up regressing machines which have so far been working
+> > despite these numbers not adding up.
+> > 
+> > That may be acceptable, but I'm still not sure what the value of this
+> > check is (e.g. as xhci core will handle basic sanity checks like usb2 +
+> > usb3 <= max_ports).
+
+>    Thanks for the review comments. Ideally the HCC_PARAMS1 must indicate 
+> total number of ports supported. If not then I believe the core 
+> consultant configuration is wrong.
 > 
-> On this SoC (and derivatives) the enable bit inside 'tcsr_check_reg'
-> needs to be set first to 'enable' the eud module.
+> According to the spec:
 > 
-> So, update the dt-bindings to accommodate the third register
+> "The MaxPorts value in the HCSPARAMS1 register defines the number of
+> Port Register Sets (e.g. PORTSC, PORTPMSC, and PORTLI register sets)."
+> 
+> So shouldn't the (usb2+usb3 ports be equal to MaxPorts to ensure each 
+> port properly accesses the respective PortSC etc., ?
 
+Sure, that's what is expected, but why do you need to add a check for
+this in the glue driver all of a sudden? Your series does not seem to
+rely on this. This is the xHCI driver's business (as is parsing these
+registers in the first place, really).
 
-> +    maxItems: 3
->  
->    interrupts:
->      description: EUD interrupt
-> @@ -52,6 +56,38 @@ required:
->  
->  additionalProperties: false
->  
-> +allOf:
-> +  - if:
-
-If there is going to be new version - put it before additionalProperties
-above, just like in example-schema.
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Johan
