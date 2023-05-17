@@ -2,139 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93464707402
-	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 23:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D98D8707572
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 00:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjEQVT3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 May 2023 17:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58592 "EHLO
+        id S229546AbjEQWaj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 18:30:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbjEQVTQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 17:19:16 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2A4D2F4
-        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 14:18:58 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64390dc0a7fso376654b3a.1
-        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 14:18:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684358316; x=1686950316;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nsC+YIR9GPviDXHSlkV5AONTmzt9XmYN5GUXlOjFZyw=;
-        b=mLEnL4+900Y3v1EqzSKYSJxW7S1yg/ELTQklPqGBcRBmawcubhgNP+sNXAvPz5XNQZ
-         bzYl/HCY0Gj0DjZz+yT+WpWJqnVxfV3I19QTXwM0TPs36dZnrb/kF1uLJuBQMC7ho3yw
-         D1VKf+c0humm1eT7OVArCXHOWmozEY2C4uwlCqgpNpe/JaziXFyfnlJchrdZ5pCFgSdQ
-         PSvtFyKcpeq4GUJctxBrsUFZYnWtuNtlXDM/uWayPRI1dDFGYaZywPPGal1mPWBz471K
-         ojUvE7j/m7OK1Hd3955o538yns9ywuFX4wL36FXlP6CP49dHP2T+PA4pRMEkg4HDfm2N
-         Q7bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684358316; x=1686950316;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nsC+YIR9GPviDXHSlkV5AONTmzt9XmYN5GUXlOjFZyw=;
-        b=Vdp01W/T5Q9IirzASnojN22I/kvH8l35y4GY3FM0r4oGP8fTM6IAq7wmQETInvMBtQ
-         jhkPcgZWYjnqNvBF4Eg4qasizTNJOMH3+2bucIS1IbotJ47vN+2Oo38ujZC7Nugtlcfx
-         EKkeF8prPQT9Me1JOsOKrUefOL51f8qJCUZAISaRoxJmcTtT+8ng8BYGivDXThW44OfS
-         xCJ8wqeIG6mVbaJvIOeyueyZPpMKBVrhuFUKB4D5tuqHf1ne1yz8Gajgiv2f8ZmKVndR
-         CZyFyugUZhcXTY2HOsdBcvZoMmhA00QB0rdI7EupSInjSkSSEXsDePK6m82u6Jmpr8Nn
-         WaBA==
-X-Gm-Message-State: AC+VfDyaupbcqi6dcs8rHgg8xerv/rFi597Ru3zaY5d4JF10WBv1xW4y
-        bG6Da4Sm0TCbke7/D2Qp+hkx/g==
-X-Google-Smtp-Source: ACHHUZ7ZROYmKec5DJ3xETJ6t99Gy8RZhTD5iWOnz0B+vLWZcQYsGJlm6hN9VNbIaLXHbMbdKvjBVQ==
-X-Received: by 2002:aa7:8882:0:b0:63b:54e4:871b with SMTP id z2-20020aa78882000000b0063b54e4871bmr778781pfe.8.1684358316360;
-        Wed, 17 May 2023 14:18:36 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1c60:6bed:7a51:340a:a439:1b87])
-        by smtp.gmail.com with ESMTPSA id n18-20020aa79052000000b0064cb6206463sm4359210pfo.85.2023.05.17.14.18.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 14:18:36 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        bhupesh.sharma@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org,
-        quic_schowdhu@quicinc.com, gregkh@linuxfoundation.org
-Subject: [PATCH v6 6/6] arm64: dts: qcom: qrb4210-rb2: Enable EUD debug peripheral
-Date:   Thu, 18 May 2023 02:47:56 +0530
-Message-Id: <20230517211756.2483552-7-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230517211756.2483552-1-bhupesh.sharma@linaro.org>
-References: <20230517211756.2483552-1-bhupesh.sharma@linaro.org>
+        with ESMTP id S229456AbjEQWai (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 18:30:38 -0400
+Received: from mail-4018.proton.ch (mail-4018.proton.ch [185.70.40.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D80959EE
+        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 15:30:34 -0700 (PDT)
+Date:   Wed, 17 May 2023 22:30:18 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pen.gy;
+        s=protonmail2; t=1684362631; x=1684621831;
+        bh=qk+Bpk79mjIP0qgSRVfyf0Z7+whgprOvwue3EctZ+AQ=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=qT2SwXMiQ5SSIiFpXFfQU5Y80cWsVHDXY5d4ByUHSUEaQWtGJwjslc2gxNrNTeUq3
+         lvqtIxJVC3nRHy8gVPIWkGwk1J1Xa4L//PlOBsTSobZtTueMJ8DFVo4rbeN0ZjmDsv
+         u/LaHlamw4cRQvRuPfCa9B2tKueh6OZAC+Isgo/lP+YdqipDbR4bzoLWok3Jdk7oDU
+         MtD6YaxP58N/VcXS94qWhwSthbamb/3N8hk+GfGoXzgiFjIyIGpbHd5Bw0g6OtsYQg
+         gTyKZ7ePKjavEmRe6EI68ltgklFycBCPojsV226SGtu5uVmHY1pIDw9m4fgqKpIuiW
+         TwicHyAL3sGlw==
+To:     Simon Horman <simon.horman@corigine.com>
+From:   Forst <forst@pen.gy>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, Georgi Valkov <gvalkov@gmail.com>
+Subject: Re: [PATCH] net: usb: ipheth: add CDC NCM support
+Message-ID: <00275913-6b7c-9b91-4f5c-d8a425bd3e46@pen.gy>
+In-Reply-To: <ZGSb4l8XcxclFsB1@corigine.com>
+References: <20230516210127.35841-1-forst@pen.gy> <ZGSb4l8XcxclFsB1@corigine.com>
+Feedback-ID: 31160380:user:proton
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since the USB-C type port on the Qualcomm QRB4210-RB2 board
-can be set primarily in a 'device' configuration (with the default
-DIP switch settings), it makes sense to enable the EUD debug
-peripheral on the board by default by setting the USB 'dr_mode' property
-as 'otg'.
+Hello Simon,
 
-Now, the EUD debug peripheral can be enabled by executing:
- $ echo 1 > /sys/bus/platform/drivers/qcom_eud/1610000.eud/enable
+Thank you for the speedy review.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 27 +++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+> nit: The target tree for this patch is probably net-next.
+>      As such it should be included in the Subject:
 
-diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-index 1a0776a0cfd0..0ce72f1ebc10 100644
---- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-+++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-@@ -30,6 +30,10 @@ vph_pwr: vph-pwr-regulator {
- 	};
- };
- 
-+&eud {
-+	status = "okay";
-+};
-+
- &qupv3_id_0 {
- 	status = "okay";
- };
-@@ -253,7 +257,28 @@ &usb {
- 
- &usb_dwc3 {
- 	maximum-speed = "super-speed";
--	dr_mode = "peripheral";
-+
-+	/*
-+	 * There is only one USB DWC3 controller on QRB4210 board and it is connected
-+	 * via a DIP Switch:
-+	 * - to either an USB - C type connector or an USB - A type connector
-+	 *   (via a GL3590-S hub), and
-+	 * - to either an USB - A type connector (via a GL3590-S hub) or a connector
-+	 *   for further connection with a mezzanine board.
-+	 *
-+	 * All of the above hardware muxes would allow us to hook things up in
-+	 * different ways to some potential benefit for static configurations (for e.g.
-+	 * on one hand we can have two USB - A type connectors and a USB - Ethernet
-+	 * connection available and on the other we can use the USB - C type in
-+	 * peripheral mode).
-+	 *
-+	 * Note that since the USB - C type can be used only in peripehral mode,
-+	 * so hardcoding the mode to 'peripheral' here makes sense.
-+	 *
-+	 * However since we want to use the EUD debug device, we set the mode as
-+	 * 'otg' here.
-+	 */
-+	dr_mode = "otg";
- };
- 
- &usb_hsphy {
--- 
-2.38.1
+Ack, will label the next patch revision accordingly. The netdev workflow
+doc has been very useful.
+
+> nit: Looking at Git history, probably the patch prefix should be
+>      'usbnet: ipheth: '
+
+I looked at the commit log for drivers/net/usb, and saw "net: usb:"
+prefix a lot more often than "usbnet:", that's why I chose the former.
+As for ipheth, you're right, "usbnet:" is more frequent. Will change to
+"usbnet:" in v2, unless there's a different opinion on this. Naming
+things is difficult. :)
+
+> I see that this patch applies  to current net-next, which is where> devel=
+opment occurs. Has the patch been tested there?
+
+I will make sure to test it on net-next before submitting v2, and make
+an explicit note about that in the comments.
+
+> I wonder if there are any issues with increasing the RX size
+> from 1514 to 65536. Not that I have anything specific in mind.
+
+The RX buffer increase was to accommodate for multiple Ethernet frames
+encapsulated in a single URB. Per the USB NCM spec [1], an NTB-16 is
+"shorter than 65,536 bytes", may include "up to forty 1514-byte
+Ethernet frames". Frames themselves are still up to 1514 bytes each.
+
+Somebody else may have to comment whether this has any other
+implications from the kernel side of things.
+
+> For networking code, please arrange local variables in reverse xmas tree
+> order - longest line to shortest.
+
+Ack
+
+>> +=09ncmh =3D (struct usb_cdc_ncm_nth16 *)(urb->transfer_buffer);
+> nit: There is no need to cast a void pointer.
+>=20
+>> +=09ncm0 =3D (struct usb_cdc_ncm_ndp16 *)(urb->transfer_buffer + le16_to=
+_cpu(ncmh->wNdpIndex));
+> Ditto.
+
+Ack
+
+> nit: Lines less than 80 columns wide a re a bit nicer IMHO
+
+Ack
+
+>> +=09if (retval =3D=3D 0)
+> nit: if (!retval)
+
+Ack
+
+>> @@ -510,8 +628,8 @@ static int ipheth_probe(struct usb_interface *intf,
+>>  =09ipheth_free_urbs(dev);
+>>  err_alloc_urbs:
+>>  err_get_macaddr:
+>> -err_alloc_ctrl_buf:
+>>  =09kfree(dev->ctrl_buf);
+>> +err_alloc_ctrl_buf:
+>>  err_endpoints:
+>>  =09free_netdev(netdev);
+>>  =09return retval;
+>=20
+> nit: this hunk seems unrelated to the rest of the patch
+
+You're right, this should live in a separate patch. Would you suggest
+making this a second patch in the same series, or submitting it
+separately?
+
+
+[1]: https://www.usb.org/document-library/network-control-model-devices-spe=
+cification-v10-and-errata-and-adopters-agreement
 
