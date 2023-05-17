@@ -2,167 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 753E1706031
-	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 08:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 887A570604A
+	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 08:40:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjEQGeN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 May 2023 02:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51022 "EHLO
+        id S229826AbjEQGke (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 02:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232755AbjEQGeL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 02:34:11 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C76140F9
-        for <linux-usb@vger.kernel.org>; Tue, 16 May 2023 23:34:04 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f417ea5252so2501005e9.0
-        for <linux-usb@vger.kernel.org>; Tue, 16 May 2023 23:34:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684305243; x=1686897243;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OpTLZX9KtlAuj1Cffw1z+96W8NMTOQYC35BDi4+L6fc=;
-        b=Gf/C3ZqVHbsEB6YKahXvqpjJgBu4gmKvRSW+lGXWxWqoaaDo3fOYjZBa+5vTl98D4o
-         tBO0gLpf4GuNgdoTKqqyL6kggSTNSUdSsp4R+LD1JL+IMXiA3v7AGs+zpBZ1Gbm7AaVB
-         lf3qvTlrEzDYI6SiyOTuqT4V8OTgjrDAZToEV4I+YM2icik9u3KuT9hb+MTbhJ0QDyrx
-         EUP5s42uUBTGYNGkZXNZlWxO4w0SGr3HgTLWD+AQoatYY7HIbAy9xHwUq/XRxGq1raKb
-         dp6+H+9fvNasxXLxaSYmrfGHR0ons0xeFsQOaI3g2v3fizk2PqL/3SyZHmz0aIKhGnXu
-         DAjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684305243; x=1686897243;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OpTLZX9KtlAuj1Cffw1z+96W8NMTOQYC35BDi4+L6fc=;
-        b=Bk292mZo2Sn3CO8wqOicmrJZRMQMtFgA9EHABxkVxNRYcIETHXiiQjbbLRaWm65/Rf
-         6bxz9zXzxNipJoXeiRB45CLlnaDsqziS/evzKkLT0hAd3HR+D7mWfwr+tCvjs2muHA7h
-         N6fowTW+fIEUzsuudc9ZNi12Mmzodn1dxGL4EZV6Ep++aVtL1SNaY6R2M9pFKvSeyUbL
-         G4vTLiYqBPRAkbdPs74GIyz4A5fAe86icQzcxmFQFO0AYSozqXqjEyxnoaB6TrHHJJKt
-         JqqxzfmnfoUqsM4zbTHt1pIjJPb69a8+Fsc32ZqH5skTHPlkCWLuNZSTUBt3ePDip/6W
-         Ej9A==
-X-Gm-Message-State: AC+VfDwxS/5a3E2T0fvc8WEgDHACKIHejht+41LzcAWfI26cMT2sLUD3
-        srzODNCn0u/V+c0DsyGVcoiYI/eN+WrOJNjivrQk/A==
-X-Google-Smtp-Source: ACHHUZ71GE4h3Ar8VfQUiWo22IRSBv5ttVtQNSLUBPBoPH8eMTBu0NUl70AEvntkEM7vyQhaU/sudjfs814G2Jpsmkc=
-X-Received: by 2002:a5d:4c82:0:b0:309:38af:91c6 with SMTP id
- z2-20020a5d4c82000000b0030938af91c6mr2390353wrs.68.1684305242680; Tue, 16 May
- 2023 23:34:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230516213308.2432018-1-bhupesh.sharma@linaro.org>
- <20230516213308.2432018-4-bhupesh.sharma@linaro.org> <2023051723-decibel-skiing-56ed@gregkh>
-In-Reply-To: <2023051723-decibel-skiing-56ed@gregkh>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Wed, 17 May 2023 12:03:51 +0530
-Message-ID: <CAH=2Ntx9LcH9Bm_n6u6KgN7oQXw7XhoxUuRBKEzk79btRxtt6w@mail.gmail.com>
-Subject: Re: [PATCH v5 3/5] usb: misc: eud: Add driver support for SM6115 / SM4250
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
-        bhupesh.linux@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S229525AbjEQGkc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 02:40:32 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87A0CE;
+        Tue, 16 May 2023 23:40:30 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id A5A755C01A5;
+        Wed, 17 May 2023 02:40:27 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 17 May 2023 02:40:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1684305627; x=1684392027; bh=kl6TNT66P/y7iDeev/8upXtGKNlx3dVK/bG
+        gkTY44/g=; b=dDepjuPQJpgpVcowQGAp9w9CSr8sS4dhN4qAyaBed7q08tauAKA
+        2JVAJPtCONiJyrmQqEUDNDyvKkkGeMzzhHDVORpiBuFBcnRJmRiuV+vrF/Q962QP
+        tZwalgxXh/0ZtE5RzAQyER7HXq2ngLal+K8eZUWX3QL2QYR9DRqkxLBYYxmrxLTq
+        64M/MrtC2X9tkI1WAaym1SGbvlp91I3xuHdeiuKRR5hlOX2x2AtteDfccnsqxqwJ
+        5CsPP24TnqrV0sjE0Aer95/M7NgZ/up3BzTEkEeVQPH60OzUIgZszVz57EPxY3uP
+        rMFGvmypNQBvgzdz2XSHXKsu8XnFmL/y3xg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1684305627; x=1684392027; bh=kl6TNT66P/y7iDeev/8upXtGKNlx3dVK/bG
+        gkTY44/g=; b=PipUvu0ehXleAfyypA9PUQLNwaI2g6c2IRoo+aylUllBX3EY2ES
+        XQz2+3ZvfVPqLVVOuoLtuZG5s50Y8MCOYOdsFo/jNk28UhjAfVdQ61BwzRlup4nj
+        pxrQhR8Sko0agy4sNPUNV050rnNxwWEC6HwXpXcL0Gnp3RZYTS/m/1SBL4/Xp/ye
+        IgLTQRhiINQ1HktO5BigEHjzcMyiB0MNjp7QYTfUAEwoR4VQcb1OUIXO1Ui78Xrn
+        XD/fIpYfQ28Uh9F/uYXo9iHfxWSVXBZ61FNlcd0gsf8qZk/4tPvCQh8DWor2I4C6
+        fJ0T9s6BC45qjosZzAf68noItbmhkrszv6g==
+X-ME-Sender: <xms:2XZkZIW9r5pDXvUOE3TzlEet6QUxsBAiN2Kou2aOO2OakqNmEQQ_XQ>
+    <xme:2XZkZMlLqxXEY-dMX6yWOkKmREEluiUAylF5d_eUMCn8NC5bFvQOLBGIbSkOVWR8F
+    kioh-vEpfS3Z8iEgvg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeitddguddtgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgfekueelgeeigefhudduledtkeefffejueelheelfedutedttdfgveeu
+    feefieegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:2XZkZMYyskLJEfaL4VUUnUgyHfCJda5CAqllXBYgjB4C-OiZN-qMFQ>
+    <xmx:2XZkZHXu6EZpul6Ml51QzRUL2ZmaPmfxpLxEKxWU0Xlj5eHeX9-h9w>
+    <xmx:2XZkZClqiv3kxVLfuDFJ7IW2IYSGqKkJie_F9JqwPbvsXCD63B9JAg>
+    <xmx:23ZkZFG39h66nlIjqAJI56u55rXpuzswWUC9U7JWRRqZoyJnw6dodw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 21F70B60086; Wed, 17 May 2023 02:40:25 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
+Mime-Version: 1.0
+Message-Id: <4e026f08-d733-4b01-ab47-e921d041e74e@app.fastmail.com>
+In-Reply-To: <CAOMZO5B0stW2X6YqPTTKDpCOAzPDvm=4HT8jfBAgbTy11gnKgg@mail.gmail.com>
+References: <20230516153109.514251-1-arnd@kernel.org>
+ <20230516153109.514251-6-arnd@kernel.org>
+ <CAOMZO5B0stW2X6YqPTTKDpCOAzPDvm=4HT8jfBAgbTy11gnKgg@mail.gmail.com>
+Date:   Wed, 17 May 2023 08:39:53 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Fabio Estevam" <festevam@gmail.com>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Martin Kaiser" <martin@kaiser.cx>
+Cc:     soc@kernel.org, "Russell King" <linux@armlinux.org.uk>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        "Hartley Sweeten" <hsweeten@visionengravers.com>,
+        "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
+        "Andre Przywara" <andre.przywara@arm.com>,
+        "Shawn Guo" <shawnguo@kernel.org>,
+        "Sascha Hauer" <s.hauer@pengutronix.de>,
+        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+        "NXP Linux Team" <linux-imx@nxp.com>,
+        "Vladimir Zapolskiy" <vz@mleia.com>,
+        "Aaro Koskinen" <aaro.koskinen@iki.fi>,
+        "Janusz Krzysztofik" <jmkrzyszt@gmail.com>,
+        "Tony Lindgren" <tony@atomide.com>, "Andrew Lunn" <andrew@lunn.ch>,
+        "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>,
+        "Gregory Clement" <gregory.clement@bootlin.com>,
+        "Daniel Mack" <daniel@zonque.org>,
+        "Haojian Zhuang" <haojian.zhuang@gmail.com>,
+        "Robert Jarzmik" <robert.jarzmik@free.fr>,
+        "Viresh Kumar" <vireshk@kernel.org>,
+        "Shiraz Hashim" <shiraz.linux.kernel@gmail.com>,
+        "Sudeep Holla" <sudeep.holla@arm.com>,
+        "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Alan Stern" <stern@rowland.harvard.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        linux-clk@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 05/13] ARM: imx: remove unused mx25_revision()
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
-
-On Wed, 17 May 2023 at 10:21, Greg KH <gregkh@linuxfoundation.org> wrote:
+On Wed, May 17, 2023, at 01:34, Fabio Estevam wrote:
+> On Tue, May 16, 2023 at 12:32=E2=80=AFPM Arnd Bergmann <arnd@kernel.or=
+g> wrote:
+>>
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> This function has no prototype and no callers:
+>>
+>> arm/mach-imx/cpu-imx25.c:43:5: error: no previous prototype for 'mx25=
+_revision' [-Werror=3Dmissing-prototypes]
+>>
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 >
-> On Wed, May 17, 2023 at 03:03:06AM +0530, Bhupesh Sharma wrote:
-> > Add SM6115 / SM4250 SoC EUD support in qcom_eud driver.
+> Martin Kaiser sent a patch adding a user for this function:
 >
-> Why is the subject line duplicated here?
+> https://lore.kernel.org/linux-arm-kernel/20220815190748.102664-2-marti=
+n@kaiser.cx/
 >
-> > On some SoCs (like the SM6115 / SM4250 SoC), the mode manager
-> > needs to be accessed only via the secure world (through 'scm'
-> > calls).
-> >
-> > Also, the enable bit inside 'tcsr_check_reg' needs to be set
-> > first to set the eud in 'enable' mode on these SoCs.
-> >
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >  drivers/usb/misc/Kconfig    |  1 +
-> >  drivers/usb/misc/qcom_eud.c | 69 +++++++++++++++++++++++++++++++++----
->
-> Given that you didn't cc the usb maintainer, I'm guessing you don't want
-> this patch applied?
+> It would be better to apply Martin's patch instead of removing mx25_re=
+vision().
 
-Oops, I will do that in the next version.
+I think either way is ok to address the warning. If we wanted to do this
+properly, the mx{25,27,31,35,5}_revision functions could all be removed
+and the logic hooked up to imx_set_soc_revision() in the same way that
+they already use mxc_set_cpu_type() for drivers/soc/imx/soc-imx.c.
 
-> >  2 files changed, 63 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-> > index 99b15b77dfd5..fe1b5fec1dfc 100644
-> > --- a/drivers/usb/misc/Kconfig
-> > +++ b/drivers/usb/misc/Kconfig
-> > @@ -147,6 +147,7 @@ config USB_APPLEDISPLAY
-> >  config USB_QCOM_EUD
-> >       tristate "QCOM Embedded USB Debugger(EUD) Driver"
-> >       depends on ARCH_QCOM || COMPILE_TEST
-> > +     select QCOM_SCM
->
-> How well is that going to work on building on non-QCOM systems?  Can
-> QCOM_SCM build if COMPILE_TEST is enabled?  select is rough to get
-> right, are you sure it's correct here?  If so, some documentation in the
-> changelog would be appreciated.
+I'll leave it up to you, if you want to merge Martin's patches or
+a replacement for the soc-imx driver through the imx tree for 6.5,
+I'll drop my patch from this series, otherwise I'll keep it for now
+and we can still do it better at later point.
 
-Ok, I will double check.
-
-> >       select USB_ROLE_SWITCH
-> >       help
-> >         This module enables support for Qualcomm Technologies, Inc.
-> > diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-> > index b7f13df00764..10d194604d4c 100644
-> > --- a/drivers/usb/misc/qcom_eud.c
-> > +++ b/drivers/usb/misc/qcom_eud.c
-> > @@ -5,12 +5,14 @@
-> >
-> >  #include <linux/bitops.h>
-> >  #include <linux/err.h>
-> > +#include <linux/firmware/qcom/qcom_scm.h>
->
-> There's no rule to keep these sorted, but it's your choice...
-
-Sure.
-
-> >  #include <linux/interrupt.h>
-> >  #include <linux/io.h>
-> >  #include <linux/iopoll.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> > +#include <linux/of_device.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/slab.h>
-> >  #include <linux/sysfs.h>
-> > @@ -22,23 +24,33 @@
-> >  #define EUD_REG_VBUS_INT_CLR 0x0080
-> >  #define EUD_REG_CSR_EUD_EN   0x1014
-> >  #define EUD_REG_SW_ATTACH_DET        0x1018
-> > -#define EUD_REG_EUD_EN2        0x0000
-> > +#define EUD_REG_EUD_EN2              0x0000
->
-> Why the coding style cleanup in the same patch?  Remember, changes only
-> do one thing, and you have already listed 2 things in your commit
-> message :(
-
-Sure, will spin a separate patch for cleanups.
-
-> >  #define EUD_ENABLE           BIT(0)
-> > -#define EUD_INT_PET_EUD      BIT(0)
-> > +#define EUD_INT_PET_EUD              BIT(0)
->
-> Again, why this change?
-
-Ack.
-Will send a v6 shortly.
-
-Thanks,
-Bhupesh
+    Arnd
