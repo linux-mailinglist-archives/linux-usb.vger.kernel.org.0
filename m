@@ -2,342 +2,312 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C95F70708A
-	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 20:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0954C707162
+	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 20:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjEQSPj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 May 2023 14:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
+        id S229833AbjEQS5m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 14:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjEQSPh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 14:15:37 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBEA7EF0
-        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 11:15:34 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pzLgS-00078s-3h; Wed, 17 May 2023 20:15:32 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pzLgR-000uNf-E6; Wed, 17 May 2023 20:15:31 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pzLgQ-005R5x-O5; Wed, 17 May 2023 20:15:30 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH] usb: Switch i2c drivers back to use .probe()
-Date:   Wed, 17 May 2023 20:15:28 +0200
-Message-Id: <20230517181528.167115-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S229492AbjEQS5l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 14:57:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C29C210C;
+        Wed, 17 May 2023 11:57:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADCDA64A3C;
+        Wed, 17 May 2023 18:57:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DC9CC433EF;
+        Wed, 17 May 2023 18:57:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1684349859;
+        bh=houOxRaAQdQjzD9j4cpp3vhHf0MKLLgoBQmDPfYszv4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uvfVaR35eQAi7QyXUIFppLaVXDJCRqB4Bfjtw2OGRxjUvANXy5xgm5/qtJDDq+Dig
+         ARseC4Fx8+DyTCOtq0STTt219CsFX1T3WYluSlW8B2gB445bFgtCqDkoNQaCCHIuoB
+         U5x2x2IiEQAX33B+biMOJo+SJk/ia30pyLFLYOl8=
+Date:   Wed, 17 May 2023 20:57:36 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>
+Subject: Re: [BUG][NEW DATA] Kmemleak, possibly hiddev_connect(), in 6.3.0+
+ torvalds tree commit gfc4354c6e5c2
+Message-ID: <2023051704-basket-hardcover-1a0c@gregkh>
+References: <f64b17fa-d509-ad30-6e8d-e4c979818047@alu.unizg.hr>
+ <2023050824-juiciness-catching-9290@gregkh>
+ <2023050854-collage-dreamt-660c@gregkh>
+ <c73471aa-522a-83a4-5614-506581604301@alu.unizg.hr>
+ <2023050958-precut-vividly-94bf@gregkh>
+ <987f9008-7eac-e2a4-31f6-8479f0e4a626@alu.unizg.hr>
+ <2023051607-sturdy-jiffy-ca99@gregkh>
+ <70dd7fa2-9a5f-9361-ebe0-bb337c523d09@alu.unizg.hr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10697; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=enknM87/S95deMw4G3hwm34AZP6owXaovT0kYwYPG/4=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkZRm9c89dRhWQ9uFa4mZvS7kV3CjEzHEjSbOsi xcE2ySkFYeJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZGUZvQAKCRCPgPtYfRL+ TkCOB/wMPMB2Tlik+DT9/IrqH8ffbwJrg2ohuu8FpKF1l+HcvXbzX7KT58h2Ar60vsxdzn80lTo mAnL0pq7Oo4h/n2Is7xbVPpDdgHY/wkBMkVP1poU8ZuVILcyVk5038ojTUetHS2gqVRgKO9uPEU MypiDY6h7Iy4x7iuD0wi3VRziHR+5phEQvjqqE4wdEEcTctC70uZg3shXzR/v93/qPq9wtfjehE O6lLhdAXoey4CoetIvU4JWzMO9EL8pgLiHIUPhZulvfAii/q7Q1fWWruv+wbFhgEljCe8DrxXOX y65blJvl3zhYSO9k02sNMcOePteeXx7UfK7kj4lSEaPrJELS
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <70dd7fa2-9a5f-9361-ebe0-bb337c523d09@alu.unizg.hr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-call-back type"), all drivers being converted to .probe_new() and then
-03c835f498b5 ("i2c: Switch .probe() to not take an id parameter") convert
-back to (the new) .probe() to be able to eventually drop .probe_new() from
-struct i2c_driver.
+On Wed, May 17, 2023 at 06:10:54PM +0200, Mirsad Goran Todorovac wrote:
+> On 5/16/23 16:36, Greg Kroah-Hartman wrote:
+> > On Fri, May 12, 2023 at 11:33:31PM +0200, Mirsad Goran Todorovac wrote:
+> > > Hi,
+> > > 
+> > > On 5/9/23 04:59, Greg Kroah-Hartman wrote:
+> > > > On Tue, May 09, 2023 at 01:51:35AM +0200, Mirsad Goran Todorovac wrote:
+> > > > > 
+> > > > > 
+> > > > > On 08. 05. 2023. 16:01, Greg Kroah-Hartman wrote:
+> > > > > > On Mon, May 08, 2023 at 08:51:55AM +0200, Greg Kroah-Hartman wrote:
+> > > > > > > On Mon, May 08, 2023 at 08:30:07AM +0200, Mirsad Goran Todorovac wrote:
+> > > > > > > > Hi,
+> > > > > > > > 
+> > > > > > > > There seems to be a kernel memory leak in the USB keyboard driver.
+> > > > > > > > 
+> > > > > > > > The leaked memory allocs are 96 and 512 bytes.
+> > > > > > > > 
+> > > > > > > > The platform is Ubuntu 22.04 LTS on a assembled AMD Ryzen 9 with X670E PG
+> > > > > > > > Lightning mobo,
+> > > > > > > > and Genius SlimStar i220 GK-080012 keyboard.
+> > > > > > > > 
+> > > > > > > > (Logitech M100 HID mouse is not affected by the bug.)
+> > > > > > > > 
+> > > > > > > > BIOS is:
+> > > > > > > > 
+> > > > > > > >         *-firmware
+> > > > > > > >              description: BIOS
+> > > > > > > >              vendor: American Megatrends International, LLC.
+> > > > > > > >              physical id: 0
+> > > > > > > >              version: 1.21
+> > > > > > > >              date: 04/26/2023
+> > > > > > > >              size: 64KiB
+> > > > > > > > 
+> > > > > > > > The kernel is 6.3.0-torvalds-<id>-13466-gfc4354c6e5c2.
+> > > > > > > > 
+> > > > > > > > The keyboard is recognised as Chicony:
+> > > > > > > > 
+> > > > > > > >                     *-usb
+> > > > > > > >                          description: Keyboard
+> > > > > > > >                          product: CHICONY USB Keyboard
+> > > > > > > >                          vendor: CHICONY
+> > > > > > > >                          physical id: 2
+> > > > > > > >                          bus info: usb@5:2
+> > > > > > > >                          logical name: input35
+> > > > > > > >                          logical name: /dev/input/event4
+> > > > > > > >                          logical name: input35::capslock
+> > > > > > > >                          logical name: input35::numlock
+> > > > > > > >                          logical name: input35::scrolllock
+> > > > > > > >                          logical name: input36
+> > > > > > > >                          logical name: /dev/input/event5
+> > > > > > > >                          logical name: input37
+> > > > > > > >                          logical name: /dev/input/event6
+> > > > > > > >                          logical name: input38
+> > > > > > > >                          logical name: /dev/input/event8
+> > > > > > > >                          version: 2.30
+> > > > > > > >                          capabilities: usb-2.00 usb
+> > > > > > > >                          configuration: driver=usbhid maxpower=100mA
+> > > > > > > > speed=1Mbit/s
+> > > > > > > > 
+> > > > > > > > The bug is easily reproduced by unplugging the USB keyboard, waiting about a
+> > > > > > > > couple of seconds,
+> > > > > > > > and then reconnect and scan for memory leaks twice.
+> > > > > > > > 
+> > > > > > > > The kmemleak log is as follows [edited privacy info]:
+> > > > > > > > 
+> > > > > > > > root@hostname:/home/username# cat /sys/kernel/debug/kmemleak
+> > > > > > > > unreferenced object 0xffff8dd020037c00 (size 96):
+> > > > > > > >      comm "systemd-udevd", pid 435, jiffies 4294892550 (age 8909.356s)
+> > > > > > > >      hex dump (first 32 bytes):
+> > > > > > > >        5d 8e 4e b9 ff ff ff ff 00 00 00 00 00 00 00 00 ].N.............
+> > > > > > > >        00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+> > > > > > > >      backtrace:
+> > > > > > > >        [<ffffffffb81a74be>] __kmem_cache_alloc_node+0x22e/0x2b0
+> > > > > > > >        [<ffffffffb8127b6e>] kmalloc_trace+0x2e/0xa0
+> > > > > > > >        [<ffffffffb87543d9>] class_create+0x29/0x80
+> > > > > > > >        [<ffffffffb8880d24>] usb_register_dev+0x1d4/0x2e0
+> > > > > > > 
+> > > > > > > As the call to class_create() in this path is now gone in 6.4-rc1, can
+> > > > > > > you retry that release to see if this is still there or not?
+> > > > > > 
+> > > > > > No, wait, it's still there, I was looking at a development branch of
+> > > > > > mine that isn't sent upstream yet.  And syzbot just reported the same
+> > > > > > thing:
+> > > > > > 	https://lore.kernel.org/r/00000000000058d15f05fb264013@google.com
+> > > > > > 
+> > > > > > So something's wrong here, let me dig into it tomorrow when I get a
+> > > > > > chance...
+> > > > > 
+> > > > > If this could help, here is the bisect of the bug (I could not discern what
+> > > > > could possibly be wrong):
+> > > > > 
+> > > > > user@host:~/linux/kernel/linux_torvalds$ git bisect log
+> > > > > git bisect start
+> > > > > # bad: [ac9a78681b921877518763ba0e89202254349d1b] Linux 6.4-rc1
+> > > > > git bisect bad ac9a78681b921877518763ba0e89202254349d1b
+> > > > > # good: [c9c3395d5e3dcc6daee66c6908354d47bf98cb0c] Linux 6.2
+> > > > > git bisect good c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
+> > > > > # good: [85496c9b3bf8dbe15e2433d3a0197954d323cadc] Merge branch
+> > > > > 'net-remove-some-rcu_bh-cruft'
+> > > > > git bisect good 85496c9b3bf8dbe15e2433d3a0197954d323cadc
+> > > > > # good: [b68ee1c6131c540a62ecd443be89c406401df091] Merge tag 'scsi-misc' of
+> > > > > git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
+> > > > > git bisect good b68ee1c6131c540a62ecd443be89c406401df091
+> > > > > # bad: [888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0] Merge tag 'sysctl-6.4-rc1'
+> > > > > of git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux
+> > > > > git bisect bad 888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0
+> > > > > # good: [34b62f186db9614e55d021f8c58d22fc44c57911] Merge tag
+> > > > > 'pci-v6.4-changes' of git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci
+> > > > > git bisect good 34b62f186db9614e55d021f8c58d22fc44c57911
+> > > > > # good: [34da76dca4673ab1819830b4924bb5b436325b26] Merge tag
+> > > > > 'for-linus-2023042601' of
+> > > > > git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid
+> > > > > git bisect good 34da76dca4673ab1819830b4924bb5b436325b26
+> > > > > # good: [97b2ff294381d05e59294a931c4db55276470cb5] Merge tag
+> > > > > 'staging-6.4-rc1' of
+> > > > > git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging
+> > > > > git bisect good 97b2ff294381d05e59294a931c4db55276470cb5
+> > > > > # good: [2025b2ca8004c04861903d076c67a73a0ec6dfca] mcb-lpc: Reallocate
+> > > > > memory region to avoid memory overlapping
+> > > > > git bisect good 2025b2ca8004c04861903d076c67a73a0ec6dfca
+> > > > > # bad: [d06f5a3f7140921ada47d49574ae6fa4de5e2a89] cdx: fix build failure due
+> > > > > to sysfs 'bus_type' argument needing to be const
+> > > > > git bisect bad d06f5a3f7140921ada47d49574ae6fa4de5e2a89
+> > > > > # good: [dcfbb67e48a2becfce7990386e985b9c45098ee5] driver core: class: use
+> > > > > lock_class_key already present in struct subsys_private
+> > > > > git bisect good dcfbb67e48a2becfce7990386e985b9c45098ee5
+> > > > > # bad: [6f14c02220c791d5c46b0f965b9340c58f3d503d] driver core: create
+> > > > > class_is_registered()
+> > > > > git bisect bad 6f14c02220c791d5c46b0f965b9340c58f3d503d
+> > > > > # good: [2f9e87f5a2941b259336c7ea6c5a1499ede4554a] driver core: Add a
+> > > > > comment to set_primary_fwnode() on nullifying
+> > > > > git bisect good 2f9e87f5a2941b259336c7ea6c5a1499ede4554a
+> > > > > # bad: [02fe26f25325b547b7a31a65deb0326c04bb5174] firmware_loader: Add debug
+> > > > > message with checksum for FW file
+> > > > > git bisect bad 02fe26f25325b547b7a31a65deb0326c04bb5174
+> > > > > # good: [884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82] driver core: class:
+> > > > > implement class_get/put without the private pointer.
+> > > > > git bisect good 884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82
+> > > > > # bad: [3f84aa5ec052dba960baca4ab8a352d43d47028e] base: soc: populate
+> > > > > machine name in soc_device_register if empty
+> > > > > git bisect bad 3f84aa5ec052dba960baca4ab8a352d43d47028e
+> > > > > # bad: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver core: class.c:
+> > > > > convert to only use class_to_subsys
+> > > > > git bisect bad 7b884b7f24b42fa25e92ed724ad82f137610afaf
+> > > > > # first bad commit: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver core:
+> > > > > class.c: convert to only use class_to_subsys
+> > > > > user@host:~/linux/kernel/linux_torvalds$
+> > > > 
+> > > > This helps a lot, thanks.  I got the reference counting wrong somewhere
+> > > > in here, I thought I tested this better, odd it shows up now...
+> > > > 
+> > > > I'll try to work on it this week.
+> > > 
+> > > I have figured out that the leak occurs on keyboard unplugging only, one
+> > > or two leaks (maybe a race condition?).
+> > > 
+> > > Please NOTE that the number of leaks is now odd:
+> > > 
+> > > root@defiant:/home/marvin# cat /sys/kernel/debug/kmemleak | grep comm
+> > >    comm "systemd-udevd", pid 330, jiffies 4294892588 (age 715.772s)
+> > >    comm "systemd-udevd", pid 330, jiffies 4294892588 (age 715.772s)
+> > >    comm "kworker/6:0", pid 54, jiffies 4294907989 (age 654.224s)
+> > >    comm "kworker/6:0", pid 54, jiffies 4294907989 (age 654.272s)
+> > >    comm "kworker/6:3", pid 3046, jiffies 4294935362 (age 544.780s)
+> > >    comm "kworker/6:0", pid 54, jiffies 4294964122 (age 429.740s)
+> > >    comm "kworker/6:0", pid 54, jiffies 4294964122 (age 429.784s)
+> > > root@defiant:/home/marvin#
+> > > 
+> > > At one time unplugging keyboard generated only one leak, but only at one
+> > > time. As it requires manually unplugging keyboard, I didn't seem to find a
+> > > way to automate it, but it doesn't seem to require root access.
+> > > 
+> > > BTW, I've seen in syzbot output that kmemleak output has debug source file
+> > > names and line numbers. I couldn't make that work with the dbg .deb.
+> > > 
+> > > I will do some more homework, but this was a rough week.
+> > 
+> > I made up a patch based on code inspection alone, as I couldn't
+> > reproduce this locally at all:
+> > 	https://lore.kernel.org/r/2023051628-thumb-boaster-5680@gregkh
+> > and it seemed to pass syzbot's tests.
+> > 
+> > I've included it here below, can you test it as well?
+> > 
+> > Hm, I only tested with a USB mouse unplug/plug cycle, maybe the issue is
+> > a keyboard?
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> > 
+> > -------------
+> > 
+> > diff --git a/drivers/base/class.c b/drivers/base/class.c
+> > index ac1808d1a2e8..9b44edc8416f 100644
+> > --- a/drivers/base/class.c
+> > +++ b/drivers/base/class.c
+> > @@ -320,6 +322,7 @@ void class_dev_iter_init(struct class_dev_iter *iter, const struct class *class,
+> >   		start_knode = &start->p->knode_class;
+> >   	klist_iter_init_node(&sp->klist_devices, &iter->ki, start_knode);
+> >   	iter->type = type;
+> > +	iter->sp = sp;
+> >   }
+> >   EXPORT_SYMBOL_GPL(class_dev_iter_init);
+> > @@ -361,6 +364,7 @@ EXPORT_SYMBOL_GPL(class_dev_iter_next);
+> >   void class_dev_iter_exit(struct class_dev_iter *iter)
+> >   {
+> >   	klist_iter_exit(&iter->ki);
+> > +	subsys_put(iter->sp);
+> >   }
+> >   EXPORT_SYMBOL_GPL(class_dev_iter_exit);
+> > diff --git a/include/linux/device/class.h b/include/linux/device/class.h
+> > index 9deeaeb457bb..abf3d3bfb6fe 100644
+> > --- a/include/linux/device/class.h
+> > +++ b/include/linux/device/class.h
+> > @@ -74,6 +74,7 @@ struct class {
+> >   struct class_dev_iter {
+> >   	struct klist_iter		ki;
+> >   	const struct device_type	*type;
+> > +	struct subsys_private		*sp;
+> >   };
+> >   int __must_check class_register(const struct class *class);
+> 
+> The build with the latest 6.4-rc2 and without this patch still leaked,
+> the build with the same commit and this patch applied was successful:
+> 
+> root@defiant:/home/marvin# cat /sys/kernel/debug/kmemleak
+> root@defiant:/home/marvin#
+> 
+> Tried three times, and it is a OK.
+> 
+> Congratulations! This had fixed the leak.
 
-While touching hd3ss3220.c fix a minor white space issue in the
-definition of struct hd3ss3220_driver.
+Wonderful, thanks for testing, can I add your "Tested-by:" to it?
 
-Signed-off-by: Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de>
----
-Hello,
+> I wonder why it didn't show in the other contexts, hardware and archs?
 
-I used v6.4-rc1 as base for this patch, but it also fits on top of
-today's next master. If there are some conflicts when you apply it, feel
-free to just drop all conflicting hunks, I'll care about the fallout
-later.
+It might depend on your keyboard if it has other things on it?  I don't
+know, sorry, I didn't spend much time digging after I found the "obvious
+leak" based on the bisection you provided, which was very very helpful,
+thanks for that.
 
-I chose to do this in a single patch for all drivers below drivers/usb.
-If you want me to split it, just tell me.
+And leaks are hard to notice, especially ones that only show up when you
+remove a specific type of device.
 
-Also note I didn't Cc: all the individual maintainers to not exceed the
-allowed length of To: and Cc:. If this patch will be split I can extend
-the audience accordingly.
+thanks again for your help here,
 
-Best regards
-Uwe
-
- drivers/usb/misc/usb251xb.c               | 2 +-
- drivers/usb/misc/usb3503.c                | 2 +-
- drivers/usb/misc/usb4604.c                | 2 +-
- drivers/usb/phy/phy-isp1301.c             | 2 +-
- drivers/usb/typec/anx7411.c               | 2 +-
- drivers/usb/typec/hd3ss3220.c             | 4 ++--
- drivers/usb/typec/mux/fsa4480.c           | 2 +-
- drivers/usb/typec/mux/pi3usb30532.c       | 2 +-
- drivers/usb/typec/rt1719.c                | 2 +-
- drivers/usb/typec/stusb160x.c             | 2 +-
- drivers/usb/typec/tcpm/fusb302.c          | 2 +-
- drivers/usb/typec/tcpm/tcpci.c            | 2 +-
- drivers/usb/typec/tcpm/tcpci_maxim_core.c | 2 +-
- drivers/usb/typec/tcpm/tcpci_rt1711h.c    | 2 +-
- drivers/usb/typec/tipd/core.c             | 2 +-
- drivers/usb/typec/ucsi/ucsi_ccg.c         | 2 +-
- drivers/usb/typec/ucsi/ucsi_stm32g0.c     | 2 +-
- drivers/usb/typec/wusb3801.c              | 2 +-
- 18 files changed, 19 insertions(+), 19 deletions(-)
-
-diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
-index ce1da80d3365..1f3329ef5c7a 100644
---- a/drivers/usb/misc/usb251xb.c
-+++ b/drivers/usb/misc/usb251xb.c
-@@ -746,7 +746,7 @@ static struct i2c_driver usb251xb_i2c_driver = {
- 		.of_match_table = usb251xb_of_match,
- 		.pm = &usb251xb_pm_ops,
- 	},
--	.probe_new = usb251xb_i2c_probe,
-+	.probe = usb251xb_i2c_probe,
- 	.id_table = usb251xb_id,
- };
- 
-diff --git a/drivers/usb/misc/usb3503.c b/drivers/usb/misc/usb3503.c
-index c6cfd1edaf76..2781d5408e5a 100644
---- a/drivers/usb/misc/usb3503.c
-+++ b/drivers/usb/misc/usb3503.c
-@@ -413,7 +413,7 @@ static struct i2c_driver usb3503_i2c_driver = {
- 		.pm = pm_ptr(&usb3503_i2c_pm_ops),
- 		.of_match_table = of_match_ptr(usb3503_of_match),
- 	},
--	.probe_new	= usb3503_i2c_probe,
-+	.probe		= usb3503_i2c_probe,
- 	.remove		= usb3503_i2c_remove,
- 	.id_table	= usb3503_id,
- };
-diff --git a/drivers/usb/misc/usb4604.c b/drivers/usb/misc/usb4604.c
-index 6b5e77231efa..065e269ba4e3 100644
---- a/drivers/usb/misc/usb4604.c
-+++ b/drivers/usb/misc/usb4604.c
-@@ -154,7 +154,7 @@ static struct i2c_driver usb4604_i2c_driver = {
- 		.pm = pm_ptr(&usb4604_i2c_pm_ops),
- 		.of_match_table = of_match_ptr(usb4604_of_match),
- 	},
--	.probe_new	= usb4604_i2c_probe,
-+	.probe		= usb4604_i2c_probe,
- 	.id_table	= usb4604_id,
- };
- module_i2c_driver(usb4604_i2c_driver);
-diff --git a/drivers/usb/phy/phy-isp1301.c b/drivers/usb/phy/phy-isp1301.c
-index f4ee14d98585..993d7525a102 100644
---- a/drivers/usb/phy/phy-isp1301.c
-+++ b/drivers/usb/phy/phy-isp1301.c
-@@ -132,7 +132,7 @@ static struct i2c_driver isp1301_driver = {
- 		.name = DRV_NAME,
- 		.of_match_table = isp1301_of_match,
- 	},
--	.probe_new = isp1301_probe,
-+	.probe = isp1301_probe,
- 	.remove = isp1301_remove,
- 	.id_table = isp1301_id,
- };
-diff --git a/drivers/usb/typec/anx7411.c b/drivers/usb/typec/anx7411.c
-index 3d5edce270a4..221604f933a4 100644
---- a/drivers/usb/typec/anx7411.c
-+++ b/drivers/usb/typec/anx7411.c
-@@ -1584,7 +1584,7 @@ static struct i2c_driver anx7411_driver = {
- 		.of_match_table = anx_match_table,
- 		.pm = &anx7411_pm_ops,
- 	},
--	.probe_new = anx7411_i2c_probe,
-+	.probe = anx7411_i2c_probe,
- 	.remove = anx7411_i2c_remove,
- 
- 	.id_table = anx7411_id,
-diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-index 8bbeb9b1e439..fb1242e82ffd 100644
---- a/drivers/usb/typec/hd3ss3220.c
-+++ b/drivers/usb/typec/hd3ss3220.c
-@@ -292,8 +292,8 @@ static struct i2c_driver hd3ss3220_driver = {
- 		.name = "hd3ss3220",
- 		.of_match_table = dev_ids,
- 	},
--	.probe_new = hd3ss3220_probe,
--	.remove =  hd3ss3220_remove,
-+	.probe = hd3ss3220_probe,
-+	.remove = hd3ss3220_remove,
- };
- 
- module_i2c_driver(hd3ss3220_driver);
-diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
-index d6495e533e58..b201dda63d77 100644
---- a/drivers/usb/typec/mux/fsa4480.c
-+++ b/drivers/usb/typec/mux/fsa4480.c
-@@ -206,7 +206,7 @@ static struct i2c_driver fsa4480_driver = {
- 		.name = "fsa4480",
- 		.of_match_table = fsa4480_of_table,
- 	},
--	.probe_new	= fsa4480_probe,
-+	.probe		= fsa4480_probe,
- 	.remove		= fsa4480_remove,
- 	.id_table	= fsa4480_table,
- };
-diff --git a/drivers/usb/typec/mux/pi3usb30532.c b/drivers/usb/typec/mux/pi3usb30532.c
-index 1cd388b55c30..8eeec135dcdb 100644
---- a/drivers/usb/typec/mux/pi3usb30532.c
-+++ b/drivers/usb/typec/mux/pi3usb30532.c
-@@ -178,7 +178,7 @@ static struct i2c_driver pi3usb30532_driver = {
- 	.driver = {
- 		.name = "pi3usb30532",
- 	},
--	.probe_new	= pi3usb30532_probe,
-+	.probe		= pi3usb30532_probe,
- 	.remove		= pi3usb30532_remove,
- 	.id_table	= pi3usb30532_table,
- };
-diff --git a/drivers/usb/typec/rt1719.c b/drivers/usb/typec/rt1719.c
-index ea8b700b0ceb..be02d420920e 100644
---- a/drivers/usb/typec/rt1719.c
-+++ b/drivers/usb/typec/rt1719.c
-@@ -949,7 +949,7 @@ static struct i2c_driver rt1719_driver = {
- 		.name = "rt1719",
- 		.of_match_table = rt1719_device_table,
- 	},
--	.probe_new = rt1719_probe,
-+	.probe = rt1719_probe,
- 	.remove = rt1719_remove,
- };
- module_i2c_driver(rt1719_driver);
-diff --git a/drivers/usb/typec/stusb160x.c b/drivers/usb/typec/stusb160x.c
-index 494b371151e0..3ab118df1bd4 100644
---- a/drivers/usb/typec/stusb160x.c
-+++ b/drivers/usb/typec/stusb160x.c
-@@ -870,7 +870,7 @@ static struct i2c_driver stusb160x_driver = {
- 		.pm = &stusb160x_pm_ops,
- 		.of_match_table = stusb160x_of_match,
- 	},
--	.probe_new = stusb160x_probe,
-+	.probe = stusb160x_probe,
- 	.remove = stusb160x_remove,
- };
- module_i2c_driver(stusb160x_driver);
-diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-index 62ba53357612..7fc1ffa14f76 100644
---- a/drivers/usb/typec/tcpm/fusb302.c
-+++ b/drivers/usb/typec/tcpm/fusb302.c
-@@ -1836,7 +1836,7 @@ static struct i2c_driver fusb302_driver = {
- 		   .pm = &fusb302_pm_ops,
- 		   .of_match_table = of_match_ptr(fusb302_dt_match),
- 		   },
--	.probe_new = fusb302_probe,
-+	.probe = fusb302_probe,
- 	.remove = fusb302_remove,
- 	.id_table = fusb302_i2c_device_id,
- };
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index 8da23240afbe..fc708c289a73 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -895,7 +895,7 @@ static struct i2c_driver tcpci_i2c_driver = {
- 		.name = "tcpci",
- 		.of_match_table = of_match_ptr(tcpci_of_match),
- 	},
--	.probe_new = tcpci_probe,
-+	.probe = tcpci_probe,
- 	.remove = tcpci_remove,
- 	.id_table = tcpci_id,
- };
-diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-index f32cda2a5e3a..9454b12a073c 100644
---- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-+++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-@@ -508,7 +508,7 @@ static struct i2c_driver max_tcpci_i2c_driver = {
- 		.name = "maxtcpc",
- 		.of_match_table = of_match_ptr(max_tcpci_of_match),
- 	},
--	.probe_new = max_tcpci_probe,
-+	.probe = max_tcpci_probe,
- 	.remove = max_tcpci_remove,
- 	.id_table = max_tcpci_id,
- };
-diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-index a0e9e3fe8564..17ebc5fb684f 100644
---- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-+++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-@@ -412,7 +412,7 @@ static struct i2c_driver rt1711h_i2c_driver = {
- 		.name = "rt1711h",
- 		.of_match_table = of_match_ptr(rt1711h_of_match),
- 	},
--	.probe_new = rt1711h_probe,
-+	.probe = rt1711h_probe,
- 	.remove = rt1711h_remove,
- 	.id_table = rt1711h_id,
- };
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index 8b075ca82ef6..aac8b57d39d8 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -947,7 +947,7 @@ static struct i2c_driver tps6598x_i2c_driver = {
- 		.pm = &tps6598x_pm_ops,
- 		.of_match_table = tps6598x_of_match,
- 	},
--	.probe_new = tps6598x_probe,
-+	.probe = tps6598x_probe,
- 	.remove = tps6598x_remove,
- 	.id_table = tps6598x_id,
- };
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index e0ed465bd518..607061a37eca 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -1495,7 +1495,7 @@ static struct i2c_driver ucsi_ccg_driver = {
- 		.acpi_match_table = amd_i2c_ucsi_match,
- 		.of_match_table = ucsi_ccg_of_match_table,
- 	},
--	.probe_new = ucsi_ccg_probe,
-+	.probe = ucsi_ccg_probe,
- 	.remove = ucsi_ccg_remove,
- 	.id_table = ucsi_ccg_device_id,
- };
-diff --git a/drivers/usb/typec/ucsi/ucsi_stm32g0.c b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-index 93fead0096b7..93d7806681cf 100644
---- a/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-+++ b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-@@ -763,7 +763,7 @@ static struct i2c_driver ucsi_stm32g0_i2c_driver = {
- 		.of_match_table = of_match_ptr(ucsi_stm32g0_typec_of_match),
- 		.pm = pm_sleep_ptr(&ucsi_stm32g0_pm_ops),
- 	},
--	.probe_new = ucsi_stm32g0_probe,
-+	.probe = ucsi_stm32g0_probe,
- 	.remove = ucsi_stm32g0_remove,
- 	.id_table = ucsi_stm32g0_typec_i2c_devid
- };
-diff --git a/drivers/usb/typec/wusb3801.c b/drivers/usb/typec/wusb3801.c
-index a43a18d4b02e..6062875fb04a 100644
---- a/drivers/usb/typec/wusb3801.c
-+++ b/drivers/usb/typec/wusb3801.c
-@@ -420,7 +420,7 @@ static const struct of_device_id wusb3801_of_match[] = {
- MODULE_DEVICE_TABLE(of, wusb3801_of_match);
- 
- static struct i2c_driver wusb3801_driver = {
--	.probe_new	= wusb3801_probe,
-+	.probe		= wusb3801_probe,
- 	.remove		= wusb3801_remove,
- 	.driver		= {
- 		.name		= "wusb3801",
-
-base-commit: ac9a78681b921877518763ba0e89202254349d1b
--- 
-2.39.2
-
+greg k-h
