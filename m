@@ -2,127 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A32706004
-	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 08:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753E1706031
+	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 08:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbjEQG2T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 May 2023 02:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
+        id S230187AbjEQGeN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 02:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232478AbjEQG2S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 02:28:18 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABEA358E
-        for <linux-usb@vger.kernel.org>; Tue, 16 May 2023 23:28:17 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-30796c0cbcaso316700f8f.1
-        for <linux-usb@vger.kernel.org>; Tue, 16 May 2023 23:28:17 -0700 (PDT)
+        with ESMTP id S232755AbjEQGeL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 02:34:11 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C76140F9
+        for <linux-usb@vger.kernel.org>; Tue, 16 May 2023 23:34:04 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f417ea5252so2501005e9.0
+        for <linux-usb@vger.kernel.org>; Tue, 16 May 2023 23:34:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684304896; x=1686896896;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WiAzzOsgenMkTRU7FnuCPRQM8PRLaof8x5kRxXJv4fg=;
-        b=HB6oQDtg9HIZ90EJAUPuJI+ELvU9YsbWcwFhybf5rnqCCmdWp4wmGMpC0W4i6sMsPX
-         5QCs1+RAcyeotoOa101VThh4Z0jXfDEpVS2VFuBI86avB+nmga2TaTjDdgNlOYR0Th2t
-         QNQ5BpfADs3Xl8ijJTsTijziAl2M6QMOeMotXpzrKVIp+dcwtloAB/PEDxIC/vbQt3CD
-         yDO1sD+zPjL8+0Y7ERIkOcm5PGfnLTT0xXYvrcGkoS4L6s3D3A2RD5chNTfngOBKiYht
-         CqDs/ndbwo6CaH+t++B0lVNtQ7TlwrbWcICVNS0DjsiX0+ScDK3L3mKd430FCNK7sPYk
-         BM5g==
+        d=linaro.org; s=google; t=1684305243; x=1686897243;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OpTLZX9KtlAuj1Cffw1z+96W8NMTOQYC35BDi4+L6fc=;
+        b=Gf/C3ZqVHbsEB6YKahXvqpjJgBu4gmKvRSW+lGXWxWqoaaDo3fOYjZBa+5vTl98D4o
+         tBO0gLpf4GuNgdoTKqqyL6kggSTNSUdSsp4R+LD1JL+IMXiA3v7AGs+zpBZ1Gbm7AaVB
+         lf3qvTlrEzDYI6SiyOTuqT4V8OTgjrDAZToEV4I+YM2icik9u3KuT9hb+MTbhJ0QDyrx
+         EUP5s42uUBTGYNGkZXNZlWxO4w0SGr3HgTLWD+AQoatYY7HIbAy9xHwUq/XRxGq1raKb
+         dp6+H+9fvNasxXLxaSYmrfGHR0ons0xeFsQOaI3g2v3fizk2PqL/3SyZHmz0aIKhGnXu
+         DAjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684304896; x=1686896896;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WiAzzOsgenMkTRU7FnuCPRQM8PRLaof8x5kRxXJv4fg=;
-        b=OKVZG0Z68Qt1rqLZjSpyLx611jaao90v1M9TAcf0gSk4V2f9zhXSYd2DUQGzXYeccD
-         nsv2iXbhDYFbligMP75OTjrO17icELfLpe3gKCIjnnyixbILlm9AXuqZaeyoYvjWvJxS
-         uP5KJI+X9HKxLcJxb7cHQQ7PDp7E9O7PO2O8UX89KwRM83u2i2oGwOmaeJV+dnkJDHpl
-         7yY3/Tc0/xJ+9+m4rd3Pe1AgmNWcHHuEWx2mu36b/o9BmCDvDVMGpPH5sUnSd/0OhkFN
-         Pi6JMFAVAYLl2agnoUHYlrnu1ZaQcjnmssmNTZEcYpE70Hu6gN5oNBbzUmH1tUSnK8oG
-         ZUHg==
-X-Gm-Message-State: AC+VfDx5+hnfWWvyntH+E04qQEGjIc1aaFntJif6XECo6mZbWdRe9bRA
-        Wp1QFvXNgV5bFCh7IjFtJGVAfEfVCnzU6SFIE23SgA==
-X-Google-Smtp-Source: ACHHUZ5zuJ5CUrWf4TfT3tPR1snFuP6lOoBzvts5MJhBsNH47mYmt3D/o5G1TwnTliGLWhqtUtaM7L1R230cSxuQMyU=
-X-Received: by 2002:adf:dd0f:0:b0:2fb:283a:1757 with SMTP id
- a15-20020adfdd0f000000b002fb283a1757mr27614579wrm.26.1684304895655; Tue, 16
- May 2023 23:28:15 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684305243; x=1686897243;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OpTLZX9KtlAuj1Cffw1z+96W8NMTOQYC35BDi4+L6fc=;
+        b=Bk292mZo2Sn3CO8wqOicmrJZRMQMtFgA9EHABxkVxNRYcIETHXiiQjbbLRaWm65/Rf
+         6bxz9zXzxNipJoXeiRB45CLlnaDsqziS/evzKkLT0hAd3HR+D7mWfwr+tCvjs2muHA7h
+         N6fowTW+fIEUzsuudc9ZNi12Mmzodn1dxGL4EZV6Ep++aVtL1SNaY6R2M9pFKvSeyUbL
+         G4vTLiYqBPRAkbdPs74GIyz4A5fAe86icQzcxmFQFO0AYSozqXqjEyxnoaB6TrHHJJKt
+         JqqxzfmnfoUqsM4zbTHt1pIjJPb69a8+Fsc32ZqH5skTHPlkCWLuNZSTUBt3ePDip/6W
+         Ej9A==
+X-Gm-Message-State: AC+VfDwxS/5a3E2T0fvc8WEgDHACKIHejht+41LzcAWfI26cMT2sLUD3
+        srzODNCn0u/V+c0DsyGVcoiYI/eN+WrOJNjivrQk/A==
+X-Google-Smtp-Source: ACHHUZ71GE4h3Ar8VfQUiWo22IRSBv5ttVtQNSLUBPBoPH8eMTBu0NUl70AEvntkEM7vyQhaU/sudjfs814G2Jpsmkc=
+X-Received: by 2002:a5d:4c82:0:b0:309:38af:91c6 with SMTP id
+ z2-20020a5d4c82000000b0030938af91c6mr2390353wrs.68.1684305242680; Tue, 16 May
+ 2023 23:34:02 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230516213308.2432018-1-bhupesh.sharma@linaro.org>
- <20230516213308.2432018-2-bhupesh.sharma@linaro.org> <20230517053838.GF4868@thinkpad>
-In-Reply-To: <20230517053838.GF4868@thinkpad>
+ <20230516213308.2432018-4-bhupesh.sharma@linaro.org> <2023051723-decibel-skiing-56ed@gregkh>
+In-Reply-To: <2023051723-decibel-skiing-56ed@gregkh>
 From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Wed, 17 May 2023 11:58:04 +0530
-Message-ID: <CAH=2Ntwvr0TV+W6-Bm8hwUn1XALAqNHndkJ_fDx0EAMai1OL1g@mail.gmail.com>
-Subject: Re: [PATCH v5 1/5] usb: misc: eud: Fix eud sysfs path (use 'qcom_eud')
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Date:   Wed, 17 May 2023 12:03:51 +0530
+Message-ID: <CAH=2Ntx9LcH9Bm_n6u6KgN7oQXw7XhoxUuRBKEzk79btRxtt6w@mail.gmail.com>
+Subject: Re: [PATCH v5 3/5] usb: misc: eud: Add driver support for SM6115 / SM4250
+To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-usb@vger.kernel.org, agross@kernel.org, andersson@kernel.org,
         konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
         bhupesh.linux@gmail.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 17 May 2023 at 11:08, Manivannan Sadhasivam
-<manivannan.sadhasivam@linaro.org> wrote:
->
-> On Wed, May 17, 2023 at 03:03:04AM +0530, Bhupesh Sharma wrote:
-> > The eud sysfs enablement path is currently mentioned in the
-> > Documentation as:
-> >   /sys/bus/platform/drivers/eud/.../enable
-> >
-> > Instead it should be:
-> >   /sys/bus/platform/drivers/qcom_eud/.../enable
-> >
-> > Fix the same.
-> >
-> > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->
-> I believe the path has changed during one of the EUD patch iterations. In=
- that
-> case, the documentation is wrong from day one. So this patch should have =
-the
-> relevant Fixes tag.
->
-> With that,
->
-> Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Hi Greg,
 
-Ok, I will add a Fixes tag.
+On Wed, 17 May 2023 at 10:21, Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, May 17, 2023 at 03:03:06AM +0530, Bhupesh Sharma wrote:
+> > Add SM6115 / SM4250 SoC EUD support in qcom_eud driver.
+>
+> Why is the subject line duplicated here?
+>
+> > On some SoCs (like the SM6115 / SM4250 SoC), the mode manager
+> > needs to be accessed only via the secure world (through 'scm'
+> > calls).
+> >
+> > Also, the enable bit inside 'tcsr_check_reg' needs to be set
+> > first to set the eud in 'enable' mode on these SoCs.
+> >
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+> >  drivers/usb/misc/Kconfig    |  1 +
+> >  drivers/usb/misc/qcom_eud.c | 69 +++++++++++++++++++++++++++++++++----
+>
+> Given that you didn't cc the usb maintainer, I'm guessing you don't want
+> this patch applied?
+
+Oops, I will do that in the next version.
+
+> >  2 files changed, 63 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+> > index 99b15b77dfd5..fe1b5fec1dfc 100644
+> > --- a/drivers/usb/misc/Kconfig
+> > +++ b/drivers/usb/misc/Kconfig
+> > @@ -147,6 +147,7 @@ config USB_APPLEDISPLAY
+> >  config USB_QCOM_EUD
+> >       tristate "QCOM Embedded USB Debugger(EUD) Driver"
+> >       depends on ARCH_QCOM || COMPILE_TEST
+> > +     select QCOM_SCM
+>
+> How well is that going to work on building on non-QCOM systems?  Can
+> QCOM_SCM build if COMPILE_TEST is enabled?  select is rough to get
+> right, are you sure it's correct here?  If so, some documentation in the
+> changelog would be appreciated.
+
+Ok, I will double check.
+
+> >       select USB_ROLE_SWITCH
+> >       help
+> >         This module enables support for Qualcomm Technologies, Inc.
+> > diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
+> > index b7f13df00764..10d194604d4c 100644
+> > --- a/drivers/usb/misc/qcom_eud.c
+> > +++ b/drivers/usb/misc/qcom_eud.c
+> > @@ -5,12 +5,14 @@
+> >
+> >  #include <linux/bitops.h>
+> >  #include <linux/err.h>
+> > +#include <linux/firmware/qcom/qcom_scm.h>
+>
+> There's no rule to keep these sorted, but it's your choice...
+
+Sure.
+
+> >  #include <linux/interrupt.h>
+> >  #include <linux/io.h>
+> >  #include <linux/iopoll.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/module.h>
+> >  #include <linux/of.h>
+> > +#include <linux/of_device.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/slab.h>
+> >  #include <linux/sysfs.h>
+> > @@ -22,23 +24,33 @@
+> >  #define EUD_REG_VBUS_INT_CLR 0x0080
+> >  #define EUD_REG_CSR_EUD_EN   0x1014
+> >  #define EUD_REG_SW_ATTACH_DET        0x1018
+> > -#define EUD_REG_EUD_EN2        0x0000
+> > +#define EUD_REG_EUD_EN2              0x0000
+>
+> Why the coding style cleanup in the same patch?  Remember, changes only
+> do one thing, and you have already listed 2 things in your commit
+> message :(
+
+Sure, will spin a separate patch for cleanups.
+
+> >  #define EUD_ENABLE           BIT(0)
+> > -#define EUD_INT_PET_EUD      BIT(0)
+> > +#define EUD_INT_PET_EUD              BIT(0)
+>
+> Again, why this change?
+
+Ack.
+Will send a v6 shortly.
 
 Thanks,
 Bhupesh
-
-> > ---
-> >  Documentation/ABI/testing/sysfs-driver-eud | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/ABI/testing/sysfs-driver-eud b/Documentation=
-/ABI/testing/sysfs-driver-eud
-> > index 83f3872182a4..2bab0db2d2f0 100644
-> > --- a/Documentation/ABI/testing/sysfs-driver-eud
-> > +++ b/Documentation/ABI/testing/sysfs-driver-eud
-> > @@ -1,4 +1,4 @@
-> > -What:                /sys/bus/platform/drivers/eud/.../enable
-> > +What:                /sys/bus/platform/drivers/qcom_eud/.../enable
-> >  Date:           February 2022
-> >  Contact:        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-> >  Description:
-> > --
-> > 2.38.1
-> >
->
-> --
-> =E0=AE=AE=E0=AE=A3=E0=AE=BF=E0=AE=B5=E0=AE=A3=E0=AF=8D=E0=AE=A3=E0=AE=A9=
-=E0=AF=8D =E0=AE=9A=E0=AE=A4=E0=AE=BE=E0=AE=9A=E0=AE=BF=E0=AE=B5=E0=AE=AE=
-=E0=AF=8D
