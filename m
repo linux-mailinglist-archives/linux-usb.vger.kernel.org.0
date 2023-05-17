@@ -2,125 +2,227 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81BC0706707
-	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 13:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C9470675D
+	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 14:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbjEQLo2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 May 2023 07:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
+        id S231487AbjEQMAa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 08:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbjEQLo1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 07:44:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8332C40E1;
-        Wed, 17 May 2023 04:44:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17E46638AE;
-        Wed, 17 May 2023 11:44:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72CE4C433EF;
-        Wed, 17 May 2023 11:44:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684323863;
-        bh=C02SHBQiu+tlh04YA0Fr1SR/mnCqkwhUZgY8QGG1bGo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=idk7gucnQ20R4EMJR0DI48jCP7YtxVUfVCY7hHsDY6XcM1LBIn4X+73TnIPr72uLE
-         xNQcvmX11a+FxV3TceCLELDeAJ3RxOaRAbY0Y0tEaxqIT/p1t8Cx7LY+jgfeEa0NNj
-         pj1o+UGYP5AQhbhoBGJR9SKL0n7gkjO/J/6KThTEoONpMy9uJrLAnagvdvXbgdl5Wk
-         mkd+Z9L537OeiW4rhiAm2fomIb3qwZ5QWbDPsZ/6mR9EtM+w/T63SZbcXaBIIXCx2k
-         FocN5iyLK9dlL6HoyoBdg6FRZthIc0AO/uNwlhLsD0YHWvlY2XE0Xu4tLwfqm1Ve7f
-         hZ6TLBs/ghGLQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pzFZv-0004D3-Cj; Wed, 17 May 2023 13:44:24 +0200
-Date:   Wed, 17 May 2023 13:44:23 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com
-Subject: Re: [PATCH v8 1/9] dt-bindings: usb: qcom,dwc3: Add bindings for
- SC8280 Multiport
-Message-ID: <ZGS-FymhdA_zOQmj@hovoldconsulting.com>
-References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
- <20230514054917.21318-2-quic_kriskura@quicinc.com>
- <ZGNiDVq1duvyZBUB@hovoldconsulting.com>
- <f2f8c7bf-6d1d-7890-a8b1-0e27969e63f6@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f2f8c7bf-6d1d-7890-a8b1-0e27969e63f6@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231416AbjEQMA0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 08:00:26 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D0A5B8E
+        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 05:00:08 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-556011695d1so9079457b3.1
+        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 05:00:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684324807; x=1686916807;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=D/MAqz2kFbEJtuNrHyReKvnqpR0qHORuHaOkTgOMC34=;
+        b=x+eOcBsA8fYI8sl6n1Pnu2JjRKBDnkK0SI0ouTSHJoSQVXvO1OerMgxoROiHq9ilmt
+         ucZAGvmcVNB8cj1XrLD9pOx00YcxGx7JOhxVo6MlGdMc8oGyydzeH4zzQ6RmGCWTMvC/
+         42MRj1SKbmGCgBh+GhBUyq8ZSPmzaFjpb9M+/T/PB+TtqwP/p69aQaAAIlKUHDdt4MUF
+         ww7Cr3KNTnbnxfwrMUFu3dETJvu3vbsv9mvQHxoZNzmN611mN3NQC7hw2FsvxQPEg1WL
+         OGVbgd/rJx9GcPGKdUJiiNmcY+m5MguudOqFBLtCgEJ1zUy7nE0poo8I/TcDOoK4iJMm
+         ePAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684324807; x=1686916807;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D/MAqz2kFbEJtuNrHyReKvnqpR0qHORuHaOkTgOMC34=;
+        b=IfWlUh/HULWk7Av8gawjkXoiFlHI9hBJTXaReZUjHVQ0p0qefmsWK+61fYGYLuf/GB
+         HkOEhe5KA9ErYUhhy1ETPB18FB3DkZY9Yz/jw4639qw2VII3uc2UURYERxush6bi9Iua
+         HIXrOLxRXnVJQ42YMH8qcByI0bAqh7XkMLXJaXVBEw25q3nTRpiSMaH5aD4qi06NcUF0
+         oQXFbBH25m4IN8wKQtW2wab5ZdYoFyOO3UlwwOKDFXJ8qCZmfhzqyBLY5agpGnmseDL0
+         k6sgTu8hp54mHl0RmKmx0FXll+w2RbyzxV0ZrZW09QOfhSRDtNP9cCOveAFSYVc72/FF
+         HiTQ==
+X-Gm-Message-State: AC+VfDzKDyAyvaCWAT89rgBVR/UG7FIvjgEobwxVfWqRKzEY+VWCFxVL
+        5Lqux16Dk4UQhVMqSVUF1hDwTHza9Zg=
+X-Google-Smtp-Source: ACHHUZ7qf7ZSuAveb/FnNTvY3Oya0BTMYouhwIyAX5UbATcBkjlYT2KD0bWSUgGAqZ4V4L92/qUIK6gLaiE=
+X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
+ (user=badhri job=sendgmr) by 2002:a81:ad51:0:b0:561:c732:75b6 with SMTP id
+ l17-20020a81ad51000000b00561c73275b6mr901523ywk.10.1684324807546; Wed, 17 May
+ 2023 05:00:07 -0700 (PDT)
+Date:   Wed, 17 May 2023 11:59:55 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+Message-ID: <20230517115955.1078339-1-badhri@google.com>
+Subject: [PATCH v1] usb: gadget: udc: core: Offload usb_udc_vbus_handler processing
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        colin.i.king@gmail.com, xuetao09@huawei.com,
+        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
+        peter.chen@freescale.com, balbi@ti.com, francesco@dolcini.it,
+        alistair@alistair23.me, stephan@gerhold.net, bagasdotme@gmail.com,
+        luca@z3ntu.xyz
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 17, 2023 at 04:40:11PM +0530, Krishna Kurapati PSSNV wrote:
-> On 5/16/2023 4:29 PM, Johan Hovold wrote:
-> > On Sun, May 14, 2023 at 11:19:09AM +0530, Krishna Kurapati wrote:
+chipidea udc calls usb_udc_vbus_handler from udc_start gadget
+ops causing a deadlock. Avoid this by offloading usb_udc_vbus_handler
+processing.
 
-> >> +        interrupts:
-> >> +          maxItems: 7
-> >> +        interrupt-names:
-> >> +          items:
-> >> +            - const: dp_hs_phy_irq
-> >> +            - const: dm_hs_phy_irq
-> >> +            - const: ss_phy_irq
-> > 
-> > I assume that these are only for the first port, and that you need to
-> > define these interrupts also for ports 2-4.
+============================================
+WARNING: possible recursive locking detected
+640-rc1-000-devel-00005-gcda3c69ebc14 #1 Not tainted
+-------------------------------------------
 
->   I wanted to add them when wakeup-source is enabled but since you 
-> mentioned that these must be added now and driver support can be added 
-> later, I will make a patch separately for this in v9.
+CPU0
+----
+lock(&udc->connect_lock);
+lock(&udc->connect_lock);
 
->   Can I use the following notation for the new interrupts ?
-> 
-> dp_hs_port2_irq
-> dm_hs_port2_irq
-> dp_hs_port3_irq
-> dm_hs_port3_irq
-> dp_hs_port4_irq
-> dm_hs_port4_irq
-> 
-> 
-> That way the interrupt names for first port will be same as ones for 
-> single port.
+ DEADLOCK
 
-For consistency, I'd say: use the same scheme also for port1. Perhaps
-"port" is unnecessary too.
+stack backtrace:
+  CPU: 1 PID: 566 Comm: echo Not tainted 640-rc1-000-devel-00005-gcda3c69ebc14 #1
+  Hardware name: Freescale iMX7 Dual (Device Tree)
+  unwind_backtrace from show_stack+0x10/0x14
+  show_stack from dump_stack_lvl+0x70/0xb0
+  dump_stack_lvl from __lock_acquire+0x924/0x22c4
+  __lock_acquire from lock_acquire+0x100/0x370
+  lock_acquire from __mutex_lock+0xa8/0xfb4
+  __mutex_lock from mutex_lock_nested+0x1c/0x24
+  mutex_lock_nested from usb_udc_vbus_handler+0x1c/0x60
+  usb_udc_vbus_handler from ci_udc_start+0x74/0x9c
+  ci_udc_start from gadget_bind_driver+0x130/0x230
+  gadget_bind_driver from really_probe+0xd8/0x3fc
+  really_probe from __driver_probe_device+0x94/0x1f0
+  __driver_probe_device from driver_probe_device+0x2c/0xc4
+  driver_probe_device from __driver_attach+0x114/0x1cc
+  __driver_attach from bus_for_each_dev+0x7c/0xcc
+  bus_for_each_dev from bus_add_driver+0xd4/0x200
+  bus_add_driver from driver_register+0x7c/0x114
+  driver_register from usb_gadget_register_driver_owner+0x40/0xe0
+  usb_gadget_register_driver_owner from gadget_dev_desc_UDC_store+0xd4/0x110
+  gadget_dev_desc_UDC_store from configfs_write_iter+0xac/0x118
+  configfs_write_iter from vfs_write+0x1b4/0x40c
+  vfs_write from ksys_write+0x70/0xf8
+  ksys_write from ret_fast_syscall+0x0/0x1c
 
-And since these are getting new names, you can drop the redundant "_irq"
-suffix as you did for the power-event lines.
+Fixes: 0db213ea8eed ("usb: gadget: udc: core: Invoke usb_gadget_connect only when started")
+Cc: stable@vger.kernel.org
+Reported-by: Stephan Gerhold <stephan@gerhold.net>
+Closes: https://lore.kernel.org/all/ZF4bMptC3Lf2Hnee@gerhold.net/
+Reported-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+Closes: https://lore.kernel.org/all/ZF4BvgsOyoKxdPFF@francesco-nb.int.toradex.com/
+Reported-by: Alistair <alistair@alistair23.me>
+Closes: https://lore.kernel.org/lkml/0cf8c588b701d7cf25ffe1a9217b81716e6a5c51.camel@alistair23.me/
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/usb/gadget/udc/core.c | 55 +++++++++++++++++++++++++++++++----
+ 1 file changed, 49 insertions(+), 6 deletions(-)
 
-For example:
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 69041cca5d24..bbcfab50f657 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -41,6 +41,9 @@ static const struct bus_type gadget_bus_type;
+  * functions. usb_gadget_connect_locked, usb_gadget_disconnect_locked,
+  * usb_udc_connect_control_locked, usb_gadget_udc_start_locked, usb_gadget_udc_stop_locked are
+  * called with this lock held.
++ * @vbus_events: list head for processing vbus updates on usb_udc_vbus_handler.
++ * @vbus_events_lock: protects vbus_events list
++ * @vbus_work: work item that invokes usb_udc_connect_control_locked.
+  *
+  * This represents the internal data structure which is used by the UDC-class
+  * to hold information about udc driver and gadget together.
+@@ -53,6 +56,19 @@ struct usb_udc {
+ 	bool				vbus;
+ 	bool				started;
+ 	struct mutex			connect_lock;
++	struct list_head		vbus_events;
++	struct mutex			vbus_events_lock;
++	struct work_struct		vbus_work;
++};
++
++/**
++ * struct vbus_event - used to notify vbus updates posted through usb_udc_vbus_handler.
++ * @vbus_on: true when vbus is on. false other wise.
++ * @node: list node for maintaining a list of pending updates to be processed.
++ */
++struct vbus_event {
++	bool vbus_on;
++	struct list_head node;
+ };
+ 
+ static struct class *udc_class;
+@@ -1134,6 +1150,23 @@ static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc-
+ 	return ret;
+ }
+ 
++static void vbus_event_work(struct work_struct *work)
++{
++	struct vbus_event *event, *n;
++	struct usb_udc *udc = container_of(work, struct usb_udc, vbus_work);
++
++	mutex_lock(&udc->vbus_events_lock);
++	list_for_each_entry_safe(event, n, &udc->vbus_events, node) {
++		mutex_lock(&udc->connect_lock);
++		udc->vbus = event->vbus_on;
++		usb_udc_connect_control_locked(udc);
++		list_del(&event->node);
++		kfree(event);
++		mutex_unlock(&udc->connect_lock);
++	}
++	mutex_unlock(&udc->vbus_events_lock);
++}
++
+ /**
+  * usb_udc_vbus_handler - updates the udc core vbus status, and try to
+  * connect or disconnect gadget
+@@ -1146,13 +1179,20 @@ static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc-
+ void usb_udc_vbus_handler(struct usb_gadget *gadget, bool status)
+ {
+ 	struct usb_udc *udc = gadget->udc;
++	struct vbus_event *vbus_event;
+ 
+-	mutex_lock(&udc->connect_lock);
+-	if (udc) {
+-		udc->vbus = status;
+-		usb_udc_connect_control_locked(udc);
+-	}
+-	mutex_unlock(&udc->connect_lock);
++	if (!udc)
++		return;
++
++	vbus_event = kzalloc(sizeof(*vbus_event), GFP_KERNEL);
++	if (!vbus_event)
++		return;
++
++	mutex_lock(&udc->vbus_events_lock);
++	vbus_event->vbus_on = status;
++	list_add_tail(&vbus_event->node, &udc->vbus_events);
++	mutex_unlock(&udc->vbus_events_lock);
++	schedule_work(&udc->vbus_work);
+ }
+ EXPORT_SYMBOL_GPL(usb_udc_vbus_handler);
+ 
+@@ -1379,6 +1419,9 @@ int usb_add_gadget(struct usb_gadget *gadget)
+ 	udc->gadget = gadget;
+ 	gadget->udc = udc;
+ 	mutex_init(&udc->connect_lock);
++	INIT_LIST_HEAD(&udc->vbus_events);
++	mutex_init(&udc->vbus_events_lock);
++	INIT_WORK(&udc->vbus_work, vbus_event_work);
+ 
+ 	udc->started = false;
+ 
 
-	pwr_event_1
-	dp_hs_phy_1
-	dm_hs_phy_1
-	ss_phy_1
-	...
+base-commit: 6bae03b0484b54f699d69339fbec5658e885c224
+-- 
+2.40.1.606.ga4b1b128d6-goog
 
-> Wanted to clarify this before I make a formal patch.
-
-Note that I have some more comments on the remaining patches in the
-series that you may want to wait for before posting v9.
-
-Johan
