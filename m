@@ -2,109 +2,192 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3AE17062DE
-	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 10:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9DE7062E5
+	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 10:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjEQIaE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 May 2023 04:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47106 "EHLO
+        id S230507AbjEQIal (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 04:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjEQI3b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 04:29:31 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F84B5B9A
-        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 01:29:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684312150; x=1715848150;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=LrgdL0oZEWbx2OeT9CNsrRv3H1WH9rEPVb6y3GOG4cM=;
-  b=gS1UGzXhgF7C3xpoXcFwgHGfgpKifGgvySPYx0Iup4lpDjgg3zJD406c
-   9xptYPcwSKSoqIFluI4Rmo7LBWyXnPvrMatK6hrFIOZuhqn37uab+14wG
-   J5OoEAKS81HPigj+1LpMMz1WbLoSgrJ9L8goAs6JitWLIYi7Kujzi43gl
-   rIeL8Y4tQbJ0scz2TXZ20TJYc0gNN12OufgxNjr8Yeer3MyJYBgosVS71
-   pVToD2zPBKWSw8FDPeeYP5FfmrP9AW5TeRNNsOilBiG+n2/TZhICMOujZ
-   73IQoVW8pOw3OaPjjDkdf/poANUzl9fUIRzSGjDuM5cJDK+XqucYtd6cO
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="438044255"
-X-IronPort-AV: E=Sophos;i="5.99,281,1677571200"; 
-   d="scan'208";a="438044255"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 01:29:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="734604862"
-X-IronPort-AV: E=Sophos;i="5.99,281,1677571200"; 
-   d="scan'208";a="734604862"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 17 May 2023 01:29:08 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 8484D618; Wed, 17 May 2023 11:29:19 +0300 (EEST)
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH] thunderbolt: dma_test: Use correct value for absent rings when creating paths
-Date:   Wed, 17 May 2023 11:29:19 +0300
-Message-Id: <20230517082919.34821-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S229758AbjEQIaK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 04:30:10 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5021961AD;
+        Wed, 17 May 2023 01:29:41 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H83Taj019707;
+        Wed, 17 May 2023 08:29:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=K8dSz1VSi5KMNCqzv/v+CmqKEFda7USjYbIoW8+RWPA=;
+ b=G5Vcbl6pu9JnasKr/Jrp74k8RVew2jKLXpRFaNj8+rJ56I74hMXe4txWQUL8hmRHGnru
+ yeLw7LA3HUZopq9MrknBXL3fjJTmC59B+ArS7DxJ119+SDO+6xzrV83QlJFUZ5lgTX09
+ PdD8GmeC0yIA+Ihgew3oPSpXm7I3kkxG+lsF0VP2zmZ+Fgbqxjj2DhpAPLM0iUqtdS92
+ A7ezSR1VEybji1cZFDxt1Mt8TBfCiBPJjLiopTlg8WSFSggsjEUBRmq7sogePqATp70H
+ ELrHDlcWUOxUBNxDmlWUQkDBD9UVROZOJBKxjbCDYKeCq339JNaHiTdP7YyJJ2Ng+HL3 VQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmu33gymm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 08:29:27 +0000
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34H8QrEG003309;
+        Wed, 17 May 2023 08:29:27 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmu33gym2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 08:29:27 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34H1LASE022307;
+        Wed, 17 May 2023 08:29:25 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3qj1tdsq7n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 08:29:25 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34H8TMmV13763118
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 17 May 2023 08:29:22 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A464520040;
+        Wed, 17 May 2023 08:29:22 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9039C20043;
+        Wed, 17 May 2023 08:29:21 +0000 (GMT)
+Received: from [9.179.22.107] (unknown [9.179.22.107])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 17 May 2023 08:29:21 +0000 (GMT)
+Message-ID: <33f6bd2277d2bdc5c5455c2987f479c3b2cd554d.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 35/41] usb: uhci: handle HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-usb@vger.kernel.org
+Date:   Wed, 17 May 2023 10:29:21 +0200
+In-Reply-To: <23936929-80e4-4599-827a-d09b4960f3ab@rowland.harvard.edu>
+References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+         <20230516110038.2413224-36-schnelle@linux.ibm.com>
+         <2023051643-overtime-unbridle-7cdd@gregkh>
+         <4e291030-99d9-4b8b-9389-9b8f2560b8e8@app.fastmail.com>
+         <23936929-80e4-4599-827a-d09b4960f3ab@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: cNeghrB-Fl803ZHecJIADJe8FW4yGHtE
+X-Proofpoint-GUID: DDn3Pa_fTkGb6tUVcF-u7Wwj4JwyIvzM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-16_14,2023-05-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ bulkscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0 mlxlogscore=441
+ clxscore=1015 malwarescore=0 priorityscore=1501 impostorscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305170065
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Both tb_xdomain_enable_paths() and tb_xdomain_disable_paths() expect -1,
-not 0, if the corresponding ring is not needed. For this reason change
-the driver to use correct value for the rings that are not needed.
+On Tue, 2023-05-16 at 15:51 -0400, Alan Stern wrote:
+> On Tue, May 16, 2023 at 06:44:34PM +0200, Arnd Bergmann wrote:
+> > On Tue, May 16, 2023, at 18:29, Greg Kroah-Hartman wrote:
+> > > On Tue, May 16, 2023 at 01:00:31PM +0200, Niklas Schnelle wrote:
+> >=20
+> > > >  #ifndef CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC
+> > > >  /* Support PCI only */
+> > > >  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
+> > > >  {
+> > > > -	return inl(uhci->io_addr + reg);
+> > > > +	return UHCI_IN(inl(uhci->io_addr + reg));
+> > > >  }
+> > > > =20
+> > > >  static inline void uhci_writel(const struct uhci_hcd *uhci, u32 va=
+l, int reg)
+> > > >  {
+> > > > -	outl(val, uhci->io_addr + reg);
+> > > > +	UHCI_OUT(outl(val, uhci->io_addr + reg));
+> > >=20
+> > > I'm confused now.
+> > >=20
+> > > So if CONFIG_HAS_IOPORT is enabled, wonderful, all is good.
+> > >=20
+> > > But if it isn't, then these are just no-ops that do nothing?  So then
+> > > the driver will fail to work?  Why have these stubs at all?
+> > >=20
+> > > Why not just not build the driver at all if this option is not enable=
+d?
 
-Fixes: 180b0689425c ("thunderbolt: Allow multiple DMA tunnels over a single XDomain connection")
-Cc: stable@vger.kernel.org
-Reported-by: Pengfei Xu <pengfei.xu@intel.com>
-Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- drivers/thunderbolt/dma_test.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+The driver supports multiple access methods in several functions
+similar to the following:
 
-diff --git a/drivers/thunderbolt/dma_test.c b/drivers/thunderbolt/dma_test.c
-index 3bedecb236e0..14bb6dec6c4b 100644
---- a/drivers/thunderbolt/dma_test.c
-+++ b/drivers/thunderbolt/dma_test.c
-@@ -192,9 +192,9 @@ static int dma_test_start_rings(struct dma_test *dt)
- 	}
- 
- 	ret = tb_xdomain_enable_paths(dt->xd, dt->tx_hopid,
--				      dt->tx_ring ? dt->tx_ring->hop : 0,
-+				      dt->tx_ring ? dt->tx_ring->hop : -1,
- 				      dt->rx_hopid,
--				      dt->rx_ring ? dt->rx_ring->hop : 0);
-+				      dt->rx_ring ? dt->rx_ring->hop : -1);
- 	if (ret) {
- 		dma_test_free_rings(dt);
- 		return ret;
-@@ -218,9 +218,9 @@ static void dma_test_stop_rings(struct dma_test *dt)
- 		tb_ring_stop(dt->tx_ring);
- 
- 	ret = tb_xdomain_disable_paths(dt->xd, dt->tx_hopid,
--				       dt->tx_ring ? dt->tx_ring->hop : 0,
-+				       dt->tx_ring ? dt->tx_ring->hop : -1,
- 				       dt->rx_hopid,
--				       dt->rx_ring ? dt->rx_ring->hop : 0);
-+				       dt->rx_ring ? dt->rx_ring->hop : -1);
- 	if (ret)
- 		dev_warn(&dt->svc->dev, "failed to disable DMA paths\n");
- 
--- 
-2.39.2
+static inline void uhci_writel(const struct uhci_hcd *uhci, u32 val, int re=
+g)
+{
+	if (uhci_has_pci_registers(uhci))
+		UHCI_OUT(outl(val, uhci->io_addr + reg));
+	else if (uhci_is_aspeed(uhci))
+		writel(val, uhci->regs + uhci_aspeed_reg(reg));
+#ifdef CONFIG_USB_UHCI_BIG_ENDIAN_MMIO
+	else if (uhci_big_endian_mmio(uhci))
+		writel_be(val, uhci->regs + reg);
+#endif
+	else
+		writel(val, uhci->regs + reg);
+}
 
+Instead of adding more #ifdefs Alan Stern suggested to just stub out
+both uhci_has_pci_registers() and the access itself. So with a half way
+optimizing compiler this shouldn't even leave no-ops in the binary.
+
+
+>=20
+> > That said, there is a minor problem with the empty definition
+> >=20
+> > +#define UHCI_OUT(x)
+> >=20
+> > I think this should be "do { } while (0)" to avoid warnings
+> > about empty if/else blocks.
+>=20
+> I'm sure Niklas wouldn't mind making such a change.  But do we really=20
+> get such warnings?  Does the compiler really think that this kind of=20
+> (macro-expanded) code:
+>=20
+> 	if (uhci_has_pci_registers(uhci))
+> 		;
+> 	else if (uhci_is_aspeed(uhci))
+> 		writel(val, uhci->regs + uhci_aspeed_reg(reg));
+>=20
+> deserves a warning?  I write stuff like that fairly often; it's a good=
+=20
+> way to showcase a high-probability do-nothing pathway at the start of a=
+=20
+> series of conditional cases.  And I haven't noticed any complaints from=
+=20
+> the compiler.
+>=20
+> Alan Stern
+
+I changed it to "do {} while (0)" for v5 but agree I haven't seen
+warnings for this either. Still doesn't hurt.
+
+Thanks,
+Niklas
