@@ -2,30 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A051770763E
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 01:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F07A670763C
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 01:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjEQXER (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 May 2023 19:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
+        id S229991AbjEQXEP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 19:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjEQXEH (ORCPT
+        with ESMTP id S229970AbjEQXEH (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 19:04:07 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C2761AD
-        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 16:03:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303FA61B5
+        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 16:03:39 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pzQAj-0000K3-P3; Thu, 18 May 2023 01:03:05 +0200
+        id 1pzQAj-0000Ji-P5; Thu, 18 May 2023 01:03:05 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pzQAi-000wvB-PP; Thu, 18 May 2023 01:03:04 +0200
+        id 1pzQAi-000wv7-Jy; Thu, 18 May 2023 01:03:04 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pzQAh-005UbK-Lz; Thu, 18 May 2023 01:03:03 +0200
+        id 1pzQAh-005UbN-Ti; Thu, 18 May 2023 01:03:03 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Guenter Roeck <linux@roeck-us.net>,
@@ -37,15 +37,15 @@ Cc:     AngeloGioacchino Del Regno
         linux-usb@vger.kernel.org, kernel@pengutronix.de,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH 93/97] usb: typec: tcpci_mt6360: Convert to platform remove callback returning void
-Date:   Thu, 18 May 2023 01:02:35 +0200
-Message-Id: <20230517230239.187727-94-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 94/97] usb: typec: tcpci_mt6360: Convert to platform remove callback returning void
+Date:   Thu, 18 May 2023 01:02:36 +0200
+Message-Id: <20230517230239.187727-95-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
 References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1805; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=bEdst6MD6puVUki4whk5sb3nOk+/3DbRlQ9P2NLa0vI=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkZVz4VYtPTKBqZJpxoZlbuUh64Qn01uJ/nTzuO vqgpIvQ7v6JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZGVc+AAKCRCPgPtYfRL+ TpHLB/48dbh7ghFa8RD1QJmXpnHzZgodSzLEhfR1gkVzCpzopPARENWaxJMDXY1ifb5ovC7G/8r ycWPAnynUGtCxBy2K5g339EMm9un3b9xIgEfgUla4DJ+UJNiKm7uE6I5xkDhkQiP5cUtAfwMart WVjV6680jdQYF4MhMOApZsDeT3FlIiy2sAX79G4E4/IXfXm17J6xUdiCxfmpQ/JRgI21+zLoFTV Y0hTt5HxormOp5Erhpwl1sRg06pvJejI4KS6hxL4h63c9SWBEwyTWwisUiLgxymIZqZVyVWUYko 6+isnRPorzPN5LHRLQhruTYlUFLBqKiCSeyGtrNgsn/VrY/I
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1763; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=ySuLhF08/2hdk62A9ACfiAgi7gCczjq8XSfTGIJpywg=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkZVz+8PYwX2lrDs+Qf8KByZmrjGyD10wS7UFA1 Oh8O9pZRfqJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZGVc/gAKCRCPgPtYfRL+ TlJ8CAC2GJLqxGYleQ1mGLAx+k6RSWPZXL4n2QpFoJZITUa1mqFClasT5/I22TKMcbAQ7Q83gH3 HPfCNNri+Jnu/mBrTLOaJFO3EY1bewAauiyKsLIgUoIjNlT/dg18VISgnTTFEy8NLHhYzjIL6xI jFcws8gdn/kwxMrqb+CSC/u3k1QNAdgYMdlSX9SLIyAmBuwPjBT+BL78VLNNEOAwRJTHT+tLT7G ME9+jO4hkRFx5L65OkRD0f4av0MXwtf+qFHcLreFu9TAPtiwpR8PALIe4tcsYVR5vRKesUyvVCy q3mThNI9igqVmFFgkT5EZL8uZGgesbhsYI3qqYpGc8zDQtgs
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -75,36 +75,35 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/usb/typec/tcpm/tcpci_mt6360.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/usb/typec/tcpm/tcpci_mt6370.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-index 6fa8fd5c8041..02b7fd302265 100644
---- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
-+++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-@@ -178,13 +178,12 @@ static int mt6360_tcpc_probe(struct platform_device *pdev)
+diff --git a/drivers/usb/typec/tcpm/tcpci_mt6370.c b/drivers/usb/typec/tcpm/tcpci_mt6370.c
+index c5bb201a5163..2a079464b398 100644
+--- a/drivers/usb/typec/tcpm/tcpci_mt6370.c
++++ b/drivers/usb/typec/tcpm/tcpci_mt6370.c
+@@ -178,12 +178,10 @@ static int mt6370_tcpc_probe(struct platform_device *pdev)
  	return 0;
  }
  
--static int mt6360_tcpc_remove(struct platform_device *pdev)
-+static void mt6360_tcpc_remove(struct platform_device *pdev)
+-static int mt6370_tcpc_remove(struct platform_device *pdev)
++static void mt6370_tcpc_remove(struct platform_device *pdev)
  {
- 	struct mt6360_tcpc_info *mti = platform_get_drvdata(pdev);
- 
- 	disable_irq(mti->irq);
- 	tcpci_unregister_port(mti->tcpci);
+ 	dev_pm_clear_wake_irq(&pdev->dev);
+ 	device_init_wakeup(&pdev->dev, false);
+-
 -	return 0;
  }
  
- static int __maybe_unused mt6360_tcpc_suspend(struct device *dev)
-@@ -222,7 +221,7 @@ static struct platform_driver mt6360_tcpc_driver = {
- 		.of_match_table = mt6360_tcpc_of_id,
+ static const struct of_device_id mt6370_tcpc_devid_table[] = {
+@@ -198,7 +196,7 @@ static struct platform_driver mt6370_tcpc_driver = {
+ 		.of_match_table = mt6370_tcpc_devid_table,
  	},
- 	.probe = mt6360_tcpc_probe,
--	.remove = mt6360_tcpc_remove,
-+	.remove_new = mt6360_tcpc_remove,
+ 	.probe = mt6370_tcpc_probe,
+-	.remove = mt6370_tcpc_remove,
++	.remove_new = mt6370_tcpc_remove,
  };
- module_platform_driver(mt6360_tcpc_driver);
+ module_platform_driver(mt6370_tcpc_driver);
  
 -- 
 2.39.2
