@@ -2,51 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5864670763F
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 01:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C18707600
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 01:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjEQXES (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 May 2023 19:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
+        id S229808AbjEQXD3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 19:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbjEQXEI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 19:04:08 -0400
+        with ESMTP id S229816AbjEQXDK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 19:03:10 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DDD49C1
-        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 16:03:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59995B99
+        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 16:03:01 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pzQAX-0007qP-CM; Thu, 18 May 2023 01:02:53 +0200
+        id 1pzQAV-0007yD-EW; Thu, 18 May 2023 01:02:51 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pzQAR-000wpU-UF; Thu, 18 May 2023 01:02:47 +0200
+        id 1pzQAT-000wpv-5r; Thu, 18 May 2023 01:02:49 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pzQAR-005UWo-3g; Thu, 18 May 2023 01:02:47 +0200
+        id 1pzQAR-005UWs-9l; Thu, 18 May 2023 01:02:47 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Lei YU <yulei.sh@bytedance.com>,
-        Neal Liu <neal_liu@aspeedtech.com>,
-        Henry Tian <tianxiaofeng@bytedance.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Andrew Jeffery <andrew@aj.id.au>, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, kernel@pengutronix.de
-Subject: [PATCH 25/97] usb: gadget: aspeed: Convert to platform remove callback returning void
-Date:   Thu, 18 May 2023 01:01:27 +0200
-Message-Id: <20230517230239.187727-26-u.kleine-koenig@pengutronix.de>
+To:     Cristian Birsan <cristian.birsan@microchip.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH 26/97] usb: gadget/atmel_usba_udc: Convert to platform remove callback returning void
+Date:   Thu, 18 May 2023 01:01:28 +0200
+Message-Id: <20230517230239.187727-27-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
 References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2088; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=MV0ThmzJUmcovzeeBYch+5BKOdB2tqS68iBUtqxhmXA=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkZVwHMxMU+ji6YX4DtbKukTr1obOqsXHNjQN2z w8O6lFzjmyJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZGVcBwAKCRCPgPtYfRL+ TvxDB/9MQtYjU8ldqJ1jR0G7lan8lFckbGe+rBHmW6p+mC7W8OxY4P9/PRB8UIMcqoUwy19ZPHq k6g68tYoUisF0+QR+FCOlpOhBcShZd2coljtyvR2/GNgPzP9sQ1skNdJWECZFss15ris3dNOoqw qPJgl7wBBo7vPM0ccOH/uo31B+mqCVCZIW1eUIVkvu3Q0PokcWZCHu7npHSzcv5Ce/nV8IwJnbN b8FV5DU5t5KgMz5B+2+mr8G4VT0iouiMlj9jrtFDOPbIoUA2vOwmg5EmDQGhCwh9HsdonZA6/tc S1rf64nBzQG1F57fNgTnPwTIXeg6AdOpct14FRF9shTlL6DW
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1912; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=nIGMRwP16/S7YCje/oPKRJD33QIYgeCG6HhFveJ7vVs=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkZVwNFXiyM/lMJwozsWfxT2Vqi+7y1Wa3VPJZk fh6CfkiupGJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZGVcDQAKCRCPgPtYfRL+ TmzoB/sGkWa9eIFSQQbRUC7bOWpFAGc28nOJxQsgHIjA66LBDZr3JvOB4NunleCRlDrRAROOd0I F/7/tc67b2nIcM7QX3bu99iuW0s2s0fbx0LlHKITF3UckAd0sxYpar2icywAGh+WMAlzmzBaT3C nFIq2R06iZ/Ukc3nx1WZL5joDKfVmj/WQ5k49T3Q2Jrny1LPQvlNyVjYMmR2t2UK4cfFgSIf+1D ZH04pkfW+zNNCcpE4F4bqC29geA5Se21IfbTxMZV6sSy+DUUL8/1Lt4QPYJXXQJRAbEWKXctifg TwlO65lOE34FHdvPXTndb8AkoXYC+F6QYa5R+j/0LSnm6t03
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -76,48 +73,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/usb/gadget/udc/aspeed-vhub/core.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/usb/gadget/udc/atmel_usba_udc.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/core.c b/drivers/usb/gadget/udc/aspeed-vhub/core.c
-index 86398a04a012..16f2db8c4a2b 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/core.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/core.c
-@@ -253,14 +253,14 @@ void ast_vhub_init_hw(struct ast_vhub *vhub)
- 	       vhub->regs + AST_VHUB_IER);
+diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.c b/drivers/usb/gadget/udc/atmel_usba_udc.c
+index 53ca38c4b3ec..6c0ed3fa5eb1 100644
+--- a/drivers/usb/gadget/udc/atmel_usba_udc.c
++++ b/drivers/usb/gadget/udc/atmel_usba_udc.c
+@@ -2369,7 +2369,7 @@ static int usba_udc_probe(struct platform_device *pdev)
+ 	return 0;
  }
  
--static int ast_vhub_remove(struct platform_device *pdev)
-+static void ast_vhub_remove(struct platform_device *pdev)
+-static int usba_udc_remove(struct platform_device *pdev)
++static void usba_udc_remove(struct platform_device *pdev)
  {
- 	struct ast_vhub *vhub = platform_get_drvdata(pdev);
- 	unsigned long flags;
+ 	struct usba_udc *udc;
  	int i;
- 
- 	if (!vhub || !vhub->regs)
--		return 0;
-+		return;
- 
- 	/* Remove devices */
- 	for (i = 0; i < vhub->max_ports; i++)
-@@ -289,8 +289,6 @@ static int ast_vhub_remove(struct platform_device *pdev)
- 				  vhub->ep0_bufs,
- 				  vhub->ep0_bufs_dma);
- 	vhub->ep0_bufs = NULL;
+@@ -2382,8 +2382,6 @@ static int usba_udc_remove(struct platform_device *pdev)
+ 	for (i = 1; i < udc->num_ep; i++)
+ 		usba_ep_cleanup_debugfs(&udc->usba_ep[i]);
+ 	usba_cleanup_debugfs(udc);
 -
 -	return 0;
  }
  
- static int ast_vhub_probe(struct platform_device *pdev)
-@@ -431,7 +429,7 @@ MODULE_DEVICE_TABLE(of, ast_vhub_dt_ids);
+ #ifdef CONFIG_PM_SLEEP
+@@ -2450,7 +2448,7 @@ static SIMPLE_DEV_PM_OPS(usba_udc_pm_ops, usba_udc_suspend, usba_udc_resume);
  
- static struct platform_driver ast_vhub_driver = {
- 	.probe		= ast_vhub_probe,
--	.remove		= ast_vhub_remove,
-+	.remove_new	= ast_vhub_remove,
+ static struct platform_driver udc_driver = {
+ 	.probe		= usba_udc_probe,
+-	.remove		= usba_udc_remove,
++	.remove_new	= usba_udc_remove,
  	.driver		= {
- 		.name	= KBUILD_MODNAME,
- 		.of_match_table	= ast_vhub_dt_ids,
+ 		.name		= "atmel_usba_udc",
+ 		.pm		= &usba_udc_pm_ops,
 -- 
 2.39.2
 
