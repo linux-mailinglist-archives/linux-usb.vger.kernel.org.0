@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6798B706A0A
-	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 15:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 233A4706A0C
+	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 15:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231867AbjEQNiY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 May 2023 09:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47436 "EHLO
+        id S231618AbjEQNiZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 09:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbjEQNiW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 09:38:22 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40874C3D
-        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 06:38:19 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2ac8c0fbb16so7237341fa.2
-        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 06:38:19 -0700 (PDT)
+        with ESMTP id S231450AbjEQNiX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 09:38:23 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E02F527D
+        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 06:38:20 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2ad714536cfso7786381fa.0
+        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 06:38:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google; t=1684330698; x=1686922698;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
         bh=Ly7Sv2grDSLouanjUEzIq82Frd3YseMb/l+QstdnfJQ=;
-        b=Dmvjct3gKXrPwPz7AhbdmHWwAuq2Es9vmNFvfxgsoJNv6V9hWhvklATBORJJB5qbJt
-         SV9VuHyHeiRFiMEl95USGDcvXq2EPact/RuQUMxHVytPsTpks6NzwLuxYWb4aojhRIUJ
-         Kd0wr9k/gjJeQS968vAdXqSZXpwdmQ/FQjJ5csPZErJn8sEUa7PCLxVkhNfItBtvLa3u
-         9WNV5VDFJGiNXHII+fxMMk+RvOAk+QFnWFTH5w7+uMwa2BlV9ygrWx16O0jKwHQh0qjw
-         UiSOh2bhAcYqZD1IQ+4AbiseFvrEej/lZ8vhXZqbd+D+hNv1PHkj+7Sf0Xc0vSzC7tdk
-         Wfyg==
+        b=FVanGQ7UhIPc14wGSoSU9P5nxPegIGBIJGLEQ6HW0kut5U8i5IZKs6x5pa7Ya0T1R1
+         dkB7tS3jVwc8Lnl1YLry5/x/o0JAMCkLbPIdIF8HDlmGUemXlagttlFNWWrdR9XHjyGV
+         tjrOmMcBnO7L1zCobRPnKLGKK4zd1Drx0NFiZY1DxMIbq0hy4ntFBzI8ZmJc81OE+bCY
+         pSIYXWwG0UghjbT37Y1i1UfFy3HhWHu2chb+MUoS9i+wb4DN+MSaUre3DDiLqIOfgH1h
+         HatzUo4nf9krpPHqBpu5JiUnrMv/pAJF2js+GaFKNUr5fiPpH+XK8iplfkT0kGEJe5ns
+         JUqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1684330698; x=1686922698;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=Ly7Sv2grDSLouanjUEzIq82Frd3YseMb/l+QstdnfJQ=;
-        b=SPs5+W3ktaWF23W1tJKLrePD6OabzQ00LiAiRKwtDTz/Q72XHgHnT53gPRV/PYyBQA
-         2rB9PxI3GizJVNCT+e/t4FzAT2eUH8i8Du5vpLSd4vICqdmH8WqwbAksucAzncT2Jcrn
-         h4LZDqh6koBXCy4IQaNVccPBavQFvZeJV4HAN6Y2/l4ewgFMOFFBKYO8vTTePC4W6Cx0
-         +awXhsQJ1uD6iUL1IRhJJMTBzyuA5V3OeMDsaCuuRp/5r6FIU+o1PY+Kmn2CkPaLoBDK
-         I66rgHN049n7cAJqxYry68D5SO4WJ5iHZsbapWU6prcG3wbMAol0DAnjsBUcMGkc/zb+
-         AEAA==
-X-Gm-Message-State: AC+VfDyrve/GCVUx2+H1zK8g6wVDMiirDuaa51APe83Op1PmX7F7M45M
-        R2rQ8kzNyGb/MBjD1hljm0VhGQ==
-X-Google-Smtp-Source: ACHHUZ5Zu6JBSjwmINQDKUtIcahDxpmKHXodYC2lqIyuKqZL4e7Pd3b00VZy7nQ5kCBe7qVZ7NygVQ==
-X-Received: by 2002:a2e:780d:0:b0:2a7:8b35:8270 with SMTP id t13-20020a2e780d000000b002a78b358270mr10375545ljc.35.1684330697871;
-        Wed, 17 May 2023 06:38:17 -0700 (PDT)
+        b=WVei69J3CALsoyWS5rebZ3eTxn1POdbrBzsPQa2xvaVuXi3ctZn3LOPqCD3OYN+i8c
+         YG6Y1Tw/i3eQs+Nv46XGHzc+H283hV4QzfPIYU67uaaSDISXt/qLpl20Dxv7XtFQJeNd
+         S213X84rWqnU1PIhRL4RT7JiXz9JEYu+MriVlCh1oeG+wiDx56hkx2LAdXDqTJKqpwam
+         qJdo5VZ0vSggwKaoQHIHOtugShuPPnKV6ALvfYQ3zi3mJiaD/dyO3OrEQ/Sgg+6CMs5Z
+         yOzZDFFiCQ7Fi9chWYZnRZSzY+9zpEOeBtXrcbc3Nv4Hckqwl9/p8mS5hS0JqlL2ie/+
+         UNlA==
+X-Gm-Message-State: AC+VfDwA/6aoSVDiVpiqSj3V+iMRtO7L9RZcbu6SElE8McnveznRHOcL
+        JTqZ8N+0YVeU35xL14MSuDLtmA==
+X-Google-Smtp-Source: ACHHUZ4Pt8XTxNqNgz54l1AgVbsFbbcC6PgjLhNgPTdYxZrVGR67m+sT8N9rrUZlW7usxz9+f7pesg==
+X-Received: by 2002:a2e:80c6:0:b0:2aa:43cd:57c9 with SMTP id r6-20020a2e80c6000000b002aa43cd57c9mr9471731ljg.36.1684330698554;
+        Wed, 17 May 2023 06:38:18 -0700 (PDT)
 Received: from ta1.c.googlers.com.com (61.215.228.35.bc.googleusercontent.com. [35.228.215.61])
         by smtp.gmail.com with ESMTPSA id k2-20020a2e8882000000b002addd80bc8csm1784844lji.66.2023.05.17.06.38.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 06:38:17 -0700 (PDT)
+        Wed, 17 May 2023 06:38:18 -0700 (PDT)
 From:   Tudor Ambarus <tudor.ambarus@linaro.org>
 To:     bjorn@mork.no, joneslee@google.com, oliver@neukum.org,
         davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
@@ -59,11 +59,12 @@ Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
         stable@vger.kernel.org,
         syzbot+9f575a1f15fc0c01ed69@syzkaller.appspotmail.com
 Subject: [PATCH] net: cdc_ncm: Deal with too low values of dwNtbOutMaxSize
-Date:   Wed, 17 May 2023 13:38:07 +0000
-Message-ID: <20230517133808.1873695-1-tudor.ambarus@linaro.org>
+Date:   Wed, 17 May 2023 13:38:08 +0000
+Message-ID: <20230517133808.1873695-2-tudor.ambarus@linaro.org>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-In-Reply-To: <87wnklivun.fsf@miraculix.mork.no>
+In-Reply-To: <20230517133808.1873695-1-tudor.ambarus@linaro.org>
 References: <87wnklivun.fsf@miraculix.mork.no>
+ <20230517133808.1873695-1-tudor.ambarus@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
