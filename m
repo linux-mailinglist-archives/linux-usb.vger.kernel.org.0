@@ -2,48 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB737075F3
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 01:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A127075E1
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 01:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjEQXDR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 May 2023 19:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44852 "EHLO
+        id S229776AbjEQXDC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 19:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjEQXDE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 19:03:04 -0400
+        with ESMTP id S229727AbjEQXCy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 19:02:54 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860165FD1
-        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 16:02:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4291F49C1
+        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 16:02:53 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pzQAS-0007ov-5X; Thu, 18 May 2023 01:02:48 +0200
+        id 1pzQAR-0007pF-PD; Thu, 18 May 2023 01:02:47 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pzQAQ-000wp6-QM; Thu, 18 May 2023 01:02:46 +0200
+        id 1pzQAR-000wpB-0e; Thu, 18 May 2023 01:02:47 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pzQAQ-005UWV-3N; Thu, 18 May 2023 01:02:46 +0200
+        id 1pzQAQ-005UWY-96; Thu, 18 May 2023 01:02:46 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+To:     Patrice Chotard <patrice.chotard@foss.st.com>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+Cc:     linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
         kernel@pengutronix.de
-Subject: [PATCH 20/97] usb: dwc3-qcom: Convert to platform remove callback returning void
-Date:   Thu, 18 May 2023 01:01:22 +0200
-Message-Id: <20230517230239.187727-21-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 21/97] usb: dwc3-st: Convert to platform remove callback returning void
+Date:   Thu, 18 May 2023 01:01:23 +0200
+Message-Id: <20230517230239.187727-22-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
 References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1881; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=zshZZOKhKaOmXjjFZX/6UJ2ZzFeLN5Dfj+shPazq61Q=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkZVwBD/efn5OCC88J/zQyrTwnXKuKpi6YIJ6a7 bnyjZ0bxM6JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZGVcAQAKCRCPgPtYfRL+ Tn3kCACcNTvD1PlNtNphLALqpQ9cn85j8jNjoOgOfCKP4TvGbBpx+75R00rwmCxVxfKmKyw5QrJ vhItHXrWFUzm/Y1TkK+Qjxu1ELgVhsNmb2dh5SgMOphNhGk4jVldhUAi1YR0NmaPYw04fT0EQe3 A5F0vmIpGqXD+xe8AmgygDHyu2R5Dk3rH8y2xCfee9MbZWi8/lggYDHRX1Cyfl44kvKLkoMrUI7 uYbUxfaIMZG9F6nTEFKvLLZk64aO6mmZIxaGe0MSx5E2CRgDLSUAYxYlll5aMD1VAiauteV5jsw g7c8yHQ/XrnVklovjrHzyXl0wkN5ipX1fzz33EZZOmsA/g0V
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1813; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=K8cwbiNwd+f+qmr+JugO2uK7CLbH7gcETdaoCKNxExU=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkZVwC869KaQR6o4cPUZRT2exnJfWyXW+ffMRwO ag0v6D6kdOJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZGVcAgAKCRCPgPtYfRL+ TiA5CACzuW1C4/VGO1XToOtEj5wBjkPoFNxWYvcKmnW1qDXW3xTD/1j4B3CJ0Mqehvf89V6xz5I eXfbTU2PLhxKzQb27B5qeG2vRmFO7OU+G8VnfaleZp+lkFmvI/zKlZdYjVoUMFGrZ201zXqd0z6 FekLmQSRBKxJ1gamu+O9cB4YSxlmASZAPBYvwh/n3B4UQWj8x7lBivrUSVa8w7RhfuMNGLFZNku ygT6qy38snUSidkh0Kd+qItMCCNY4/ENBKGILiWm3EOyDzfaFYU408qC6//kNevnrdcg0Jn8hFk dcXCoKVYC38lN9xh8xZRN6K8cRE6naAPR9KdrgNV5XnWZM4m
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -51,7 +49,7 @@ X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,40 +71,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/usb/dwc3/dwc3-qcom.c | 6 ++----
+ drivers/usb/dwc3/dwc3-st.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 959fc925ca7c..167f851c8e59 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -938,7 +938,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
+index fea5290de83f..211360eee95a 100644
+--- a/drivers/usb/dwc3/dwc3-st.c
++++ b/drivers/usb/dwc3/dwc3-st.c
+@@ -305,7 +305,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int dwc3_qcom_remove(struct platform_device *pdev)
-+static void dwc3_qcom_remove(struct platform_device *pdev)
+-static int st_dwc3_remove(struct platform_device *pdev)
++static void st_dwc3_remove(struct platform_device *pdev)
  {
- 	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
- 	struct device *dev = &pdev->dev;
-@@ -958,8 +958,6 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
+ 	struct st_dwc3 *dwc3_data = platform_get_drvdata(pdev);
  
- 	pm_runtime_allow(dev);
- 	pm_runtime_disable(dev);
+@@ -313,8 +313,6 @@ static int st_dwc3_remove(struct platform_device *pdev)
+ 
+ 	reset_control_assert(dwc3_data->rstc_pwrdn);
+ 	reset_control_assert(dwc3_data->rstc_rst);
 -
 -	return 0;
  }
  
- static int __maybe_unused dwc3_qcom_pm_suspend(struct device *dev)
-@@ -1052,7 +1050,7 @@ MODULE_DEVICE_TABLE(acpi, dwc3_qcom_acpi_match);
+ #ifdef CONFIG_PM_SLEEP
+@@ -364,7 +362,7 @@ MODULE_DEVICE_TABLE(of, st_dwc3_match);
  
- static struct platform_driver dwc3_qcom_driver = {
- 	.probe		= dwc3_qcom_probe,
--	.remove		= dwc3_qcom_remove,
-+	.remove_new	= dwc3_qcom_remove,
- 	.driver		= {
- 		.name	= "dwc3-qcom",
- 		.pm	= &dwc3_qcom_dev_pm_ops,
+ static struct platform_driver st_dwc3_driver = {
+ 	.probe = st_dwc3_probe,
+-	.remove = st_dwc3_remove,
++	.remove_new = st_dwc3_remove,
+ 	.driver = {
+ 		.name = "usb-st-dwc3",
+ 		.of_match_table = st_dwc3_match,
 -- 
 2.39.2
 
