@@ -2,46 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D852E7075E3
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 01:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A747D7075D2
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 01:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjEQXDE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 May 2023 19:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
+        id S229724AbjEQXCy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 19:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjEQXCy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 19:02:54 -0400
+        with ESMTP id S229678AbjEQXCu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 19:02:50 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76583AB3
-        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 16:02:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6745276
+        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 16:02:48 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pzQAR-0007kc-ES; Thu, 18 May 2023 01:02:47 +0200
+        id 1pzQAQ-0007m5-7E; Thu, 18 May 2023 01:02:46 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pzQAO-000woG-Sr; Thu, 18 May 2023 01:02:44 +0200
+        id 1pzQAP-000woZ-Fq; Thu, 18 May 2023 01:02:45 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pzQAO-005UVq-3o; Thu, 18 May 2023 01:02:44 +0200
+        id 1pzQAO-005UVu-At; Thu, 18 May 2023 01:02:44 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Prashanth K <quic_prashk@quicinc.com>
+To:     Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 10/97] usb: common: usb-conn-gpio: Convert to platform remove callback returning void
-Date:   Thu, 18 May 2023 01:01:12 +0200
-Message-Id: <20230517230239.187727-11-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 11/97] usb: dwc2/platform: Convert to platform remove callback returning void
+Date:   Thu, 18 May 2023 01:01:13 +0200
+Message-Id: <20230517230239.187727-12-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
 References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1882; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=iAI9OTHwn+ri33OrQsc8ms0447IPbtHUXp9nab+ukH4=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkZVv1wddOJ/yxMnKKFUe50iNomSKAeBulUbiJE 5eHi1dS6iaJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZGVb9QAKCRCPgPtYfRL+ Tp2LB/9qTMI65H21sXLpSWxpJlDULGvenv94tJp8SxhqP9Xcf2UviKBh3iVnmF130qCt+RJoFDg 6TRYV3AHcwC1rrdaUHVZ5HppQfqHcuc4xmh8H2FTAZ9lq3LdM9Vi6D4r0e+DdU4v3IgB5ABm9// dJLF/3Cmm0I0dMWe5yfsaT587cp0kw8pggih83u/KLixZyC8lfH/4Xq7vkQudEgQTZ23XVTIUo1 qg9PY8HqIVjHEYjjsmD4s+3VslRoy0zcsQap5Wsr0Je/vzfUgjRH1QD1LYAmqyWHpU5CATBVvYo d+Y9o1LeAcPCvT24xVVN3Ru/QdBbEDfjcK0fiNA2nEz/4YOM
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1875; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=OGgS/GQVc+n0DjeVx3kCPbw/xZNkDel9cy+Cog9KMuI=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkZVv3ph7GbV3zffwh3MvjJIWxoBT2SclZfkpfV WpqX1XUjOOJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZGVb9wAKCRCPgPtYfRL+ TsMpB/0fajK6xhDXQbSfqWl9vja+JuK6r6Lp9jtCttI5I/IVgDAXKcuCnhv0P0BqF5irsMGw1u4 rAa53fEvg0YSdJmBglx7wyigRdCn2d0d21izgsfY5S69ezA/bZOLSRGugV4qI1dB4bo04jm2w1C IIs0YhDyuiyZlH53sFUlLaVbC3sfmeabfi5fs3fbfZ+ockuNfX8GFqyfec+cr8/F4actyeHdRby NrSWILHxQb/Ty6D9y9k4kgD8E10d5WCU3C5LmU72Gr4LcaXGLrgz/2KYsZ60BFrwbskwFuYnICu 14p0hImaUpUZGuE0w3agA0MhsaFUWirHWqsJPoRfUooxesW7
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -71,40 +69,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/usb/common/usb-conn-gpio.c | 6 ++----
+ drivers/usb/dwc2/platform.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
-index e20874caba36..766005d20bae 100644
---- a/drivers/usb/common/usb-conn-gpio.c
-+++ b/drivers/usb/common/usb-conn-gpio.c
-@@ -267,7 +267,7 @@ static int usb_conn_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
--static int usb_conn_remove(struct platform_device *pdev)
-+static void usb_conn_remove(struct platform_device *pdev)
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index 5aee284018c0..3157db9f21bd 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -288,7 +288,7 @@ static int dwc2_lowlevel_hw_init(struct dwc2_hsotg *hsotg)
+  * stops device processing. Any resources used on behalf of this device are
+  * freed.
+  */
+-static int dwc2_driver_remove(struct platform_device *dev)
++static void dwc2_driver_remove(struct platform_device *dev)
  {
- 	struct usb_conn_info *info = platform_get_drvdata(pdev);
+ 	struct dwc2_hsotg *hsotg = platform_get_drvdata(dev);
+ 	struct dwc2_gregs_backup *gr;
+@@ -341,8 +341,6 @@ static int dwc2_driver_remove(struct platform_device *dev)
  
-@@ -277,8 +277,6 @@ static int usb_conn_remove(struct platform_device *pdev)
- 		regulator_disable(info->vbus);
- 
- 	usb_role_switch_put(info->role_sw);
+ 	reset_control_assert(hsotg->reset);
+ 	reset_control_assert(hsotg->reset_ecc);
 -
 -	return 0;
  }
  
- static int __maybe_unused usb_conn_suspend(struct device *dev)
-@@ -338,7 +336,7 @@ MODULE_DEVICE_TABLE(of, usb_conn_dt_match);
+ /**
+@@ -746,7 +744,7 @@ static struct platform_driver dwc2_platform_driver = {
+ 		.pm = &dwc2_dev_pm_ops,
+ 	},
+ 	.probe = dwc2_driver_probe,
+-	.remove = dwc2_driver_remove,
++	.remove_new = dwc2_driver_remove,
+ 	.shutdown = dwc2_driver_shutdown,
+ };
  
- static struct platform_driver usb_conn_driver = {
- 	.probe		= usb_conn_probe,
--	.remove		= usb_conn_remove,
-+	.remove_new	= usb_conn_remove,
- 	.driver		= {
- 		.name	= "usb-conn-gpio",
- 		.pm	= &usb_conn_pm_ops,
 -- 
 2.39.2
 
