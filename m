@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD347073FB
-	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 23:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93464707402
+	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 23:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbjEQVTZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 May 2023 17:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
+        id S230211AbjEQVT3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 17:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjEQVTN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 17:19:13 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BDFD2D1
-        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 14:18:56 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64d11974b45so83598b3a.2
-        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 14:18:56 -0700 (PDT)
+        with ESMTP id S230098AbjEQVTQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 17:19:16 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2A4D2F4
+        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 14:18:58 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64390dc0a7fso376654b3a.1
+        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 14:18:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684358311; x=1686950311;
+        d=linaro.org; s=google; t=1684358316; x=1686950316;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TaOxHre3ovU7Pucxt1LaFOdz4xHkq3r9vi0PelhMX8M=;
-        b=pyXV4Fhls1HBbuAaTrUbGFCRy5EipRtmSV3hfUir2wZPT3hVCHakLcBc7lgbqkKy8X
-         xV6s9Haquqh2efKd7ts10jabPFQOhBOF5i3aqlcA/DjOmv7HdENvJuA0MDkVg4TyPDUe
-         MZ6iy1HW6oPuChk7VrU8CAGss/JZs3jqjqSjNbrvNDcfzns8eDzFA3GyOXBGyYOT6/64
-         hIjApE19ySrr1ATionl25OKoNaNdriNIYVhDlcE1lz7RjrLkkWz/CdDR0lNlJzbY++4p
-         gBHfy+BhbAf4/GGPByCiCKk1oxmJGpYAsAnM28R9CtClLHT6kVPFJsM8nITOmFWtkbz7
-         YeUg==
+        bh=nsC+YIR9GPviDXHSlkV5AONTmzt9XmYN5GUXlOjFZyw=;
+        b=mLEnL4+900Y3v1EqzSKYSJxW7S1yg/ELTQklPqGBcRBmawcubhgNP+sNXAvPz5XNQZ
+         bzYl/HCY0Gj0DjZz+yT+WpWJqnVxfV3I19QTXwM0TPs36dZnrb/kF1uLJuBQMC7ho3yw
+         D1VKf+c0humm1eT7OVArCXHOWmozEY2C4uwlCqgpNpe/JaziXFyfnlJchrdZ5pCFgSdQ
+         PSvtFyKcpeq4GUJctxBrsUFZYnWtuNtlXDM/uWayPRI1dDFGYaZywPPGal1mPWBz471K
+         ojUvE7j/m7OK1Hd3955o538yns9ywuFX4wL36FXlP6CP49dHP2T+PA4pRMEkg4HDfm2N
+         Q7bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684358311; x=1686950311;
+        d=1e100.net; s=20221208; t=1684358316; x=1686950316;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TaOxHre3ovU7Pucxt1LaFOdz4xHkq3r9vi0PelhMX8M=;
-        b=XKhduTGvY9KB/QWZciLZXxcpeepmYGs5HA6kDrgh0v+shLwxjLjIaq/GAeQDtUZWCb
-         6dqP+eIsjjGXGIM3ChrNbROclYcEbP/YybeKNzOO1Q1ZV4BXgzdlm4oBTlMOC/SXwdFo
-         7R2wJJW2g4s7vw9SuKPMjNv7nWYEHr0F1QHvp4QRcodJA1fYwnUMeSITmQmfYG3NGVz6
-         R/7Mi4TL4RYH3Z0BIXxFwNPNm5I3f3c+EZ1YnE4Po8ep5xW/tkqgWtmo/2sDN/axeAK3
-         +7lwvg+eckrF4+s8jH85ExDFs60xiFE1ppnM0YP8YE0tg7n1mXMkEyNEdayJXV2eOUmP
-         mf7A==
-X-Gm-Message-State: AC+VfDxo7FvVT+EyB9qwwnyj5n17o0byhYttd7xkHnmdVsPaP766TrMH
-        D/alDHAGoSQzjiyETqVD5sUFZg==
-X-Google-Smtp-Source: ACHHUZ7masePph0GCUOSSsLvYgjE1D6uV20rKtOgRKNVUwYOlgLJUvuBZ2R9P7oPXxVe1uRK1WyD5w==
-X-Received: by 2002:a05:6a00:1948:b0:63d:47ab:65ed with SMTP id s8-20020a056a00194800b0063d47ab65edmr1558870pfk.7.1684358311634;
-        Wed, 17 May 2023 14:18:31 -0700 (PDT)
+        bh=nsC+YIR9GPviDXHSlkV5AONTmzt9XmYN5GUXlOjFZyw=;
+        b=Vdp01W/T5Q9IirzASnojN22I/kvH8l35y4GY3FM0r4oGP8fTM6IAq7wmQETInvMBtQ
+         jhkPcgZWYjnqNvBF4Eg4qasizTNJOMH3+2bucIS1IbotJ47vN+2Oo38ujZC7Nugtlcfx
+         EKkeF8prPQT9Me1JOsOKrUefOL51f8qJCUZAISaRoxJmcTtT+8ng8BYGivDXThW44OfS
+         xCJ8wqeIG6mVbaJvIOeyueyZPpMKBVrhuFUKB4D5tuqHf1ne1yz8Gajgiv2f8ZmKVndR
+         CZyFyugUZhcXTY2HOsdBcvZoMmhA00QB0rdI7EupSInjSkSSEXsDePK6m82u6Jmpr8Nn
+         WaBA==
+X-Gm-Message-State: AC+VfDyaupbcqi6dcs8rHgg8xerv/rFi597Ru3zaY5d4JF10WBv1xW4y
+        bG6Da4Sm0TCbke7/D2Qp+hkx/g==
+X-Google-Smtp-Source: ACHHUZ7ZROYmKec5DJ3xETJ6t99Gy8RZhTD5iWOnz0B+vLWZcQYsGJlm6hN9VNbIaLXHbMbdKvjBVQ==
+X-Received: by 2002:aa7:8882:0:b0:63b:54e4:871b with SMTP id z2-20020aa78882000000b0063b54e4871bmr778781pfe.8.1684358316360;
+        Wed, 17 May 2023 14:18:36 -0700 (PDT)
 Received: from localhost.localdomain ([2401:4900:1c60:6bed:7a51:340a:a439:1b87])
-        by smtp.gmail.com with ESMTPSA id n18-20020aa79052000000b0064cb6206463sm4359210pfo.85.2023.05.17.14.18.27
+        by smtp.gmail.com with ESMTPSA id n18-20020aa79052000000b0064cb6206463sm4359210pfo.85.2023.05.17.14.18.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 14:18:31 -0700 (PDT)
+        Wed, 17 May 2023 14:18:36 -0700 (PDT)
 From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-usb@vger.kernel.org
@@ -57,9 +57,9 @@ Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         bhupesh.sharma@linaro.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org,
         quic_schowdhu@quicinc.com, gregkh@linuxfoundation.org
-Subject: [PATCH v6 5/6] arm64: dts: qcom: sm6115: Add EUD dt node and dwc3 connector
-Date:   Thu, 18 May 2023 02:47:55 +0530
-Message-Id: <20230517211756.2483552-6-bhupesh.sharma@linaro.org>
+Subject: [PATCH v6 6/6] arm64: dts: qcom: qrb4210-rb2: Enable EUD debug peripheral
+Date:   Thu, 18 May 2023 02:47:56 +0530
+Message-Id: <20230517211756.2483552-7-bhupesh.sharma@linaro.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230517211756.2483552-1-bhupesh.sharma@linaro.org>
 References: <20230517211756.2483552-1-bhupesh.sharma@linaro.org>
@@ -75,104 +75,66 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the Embedded USB Debugger(EUD) device tree node for
-SM6115 / SM4250 SoC.
+Since the USB-C type port on the Qualcomm QRB4210-RB2 board
+can be set primarily in a 'device' configuration (with the default
+DIP switch settings), it makes sense to enable the EUD debug
+peripheral on the board by default by setting the USB 'dr_mode' property
+as 'otg'.
 
-The node contains EUD base register region, EUD mode manager
-register region and TCSR Base register region along with the
-interrupt entry.
-
-Also add the typec connector node for EUD which is attached to
-EUD node via port. EUD is also attached to DWC3 node via port.
-
-To enable the role switch, we need to set dr_mode = "otg" property
-for 'usb_dwc3' sub-node in the board dts file.
-
-Also the EUD device can be enabled on a board once linux is boot'ed
-by setting:
- $ echo 1 > /sys/bus/platform/drivers/qcom_eud/../enable
+Now, the EUD debug peripheral can be enabled by executing:
+ $ echo 1 > /sys/bus/platform/drivers/qcom_eud/1610000.eud/enable
 
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 50 ++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 27 +++++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index f67863561f3f..92a82d7172ca 100644
---- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -180,6 +180,18 @@ core3 {
- 		};
+diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+index 1a0776a0cfd0..0ce72f1ebc10 100644
+--- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
++++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+@@ -30,6 +30,10 @@ vph_pwr: vph-pwr-regulator {
  	};
+ };
  
-+	eud_typec: connector {
-+		compatible = "usb-c-connector";
++&eud {
++	status = "okay";
++};
 +
-+		ports {
-+			port@0 {
-+				con_eud: endpoint {
-+					remote-endpoint = <&eud_con>;
-+				};
-+			};
-+		};
-+	};
-+
- 	firmware {
- 		scm: scm {
- 			compatible = "qcom,scm-sm6115", "qcom,scm";
-@@ -647,6 +659,37 @@ gcc: clock-controller@1400000 {
- 			#power-domain-cells = <1>;
- 		};
+ &qupv3_id_0 {
+ 	status = "okay";
+ };
+@@ -253,7 +257,28 @@ &usb {
  
-+		eud: eud@1610000 {
-+			compatible = "qcom,sm6115-eud", "qcom,eud";
-+			reg = <0x0 0x01610000 0x0 0x2000>,
-+			      <0x0 0x01612000 0x0 0x1000>,
-+			      <0x0 0x003c0000 0x0 0x40000>;
-+			reg-names = "eud-base", "eud-mode-mgr", "tcsr-base";
-+			interrupts = <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>;
-+			status = "disabled";
+ &usb_dwc3 {
+ 	maximum-speed = "super-speed";
+-	dr_mode = "peripheral";
 +
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					eud_ep: endpoint {
-+						remote-endpoint = <&usb2_role_switch>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					eud_con: endpoint {
-+						remote-endpoint = <&con_eud>;
-+					};
-+				};
-+			};
-+		};
-+
- 		usb_hsphy: phy@1613000 {
- 			compatible = "qcom,sm6115-qusb2-phy";
- 			reg = <0x0 0x01613000 0x0 0x180>;
-@@ -1144,6 +1187,13 @@ usb_dwc3: usb@4e00000 {
- 				snps,has-lpm-erratum;
- 				snps,hird-threshold = /bits/ 8 <0x10>;
- 				snps,usb3_lpm_capable;
-+				usb-role-switch;
-+
-+				port {
-+					usb2_role_switch: endpoint {
-+						remote-endpoint = <&eud_ep>;
-+					};
-+				};
- 			};
- 		};
++	/*
++	 * There is only one USB DWC3 controller on QRB4210 board and it is connected
++	 * via a DIP Switch:
++	 * - to either an USB - C type connector or an USB - A type connector
++	 *   (via a GL3590-S hub), and
++	 * - to either an USB - A type connector (via a GL3590-S hub) or a connector
++	 *   for further connection with a mezzanine board.
++	 *
++	 * All of the above hardware muxes would allow us to hook things up in
++	 * different ways to some potential benefit for static configurations (for e.g.
++	 * on one hand we can have two USB - A type connectors and a USB - Ethernet
++	 * connection available and on the other we can use the USB - C type in
++	 * peripheral mode).
++	 *
++	 * Note that since the USB - C type can be used only in peripehral mode,
++	 * so hardcoding the mode to 'peripheral' here makes sense.
++	 *
++	 * However since we want to use the EUD debug device, we set the mode as
++	 * 'otg' here.
++	 */
++	dr_mode = "otg";
+ };
  
+ &usb_hsphy {
 -- 
 2.38.1
 
