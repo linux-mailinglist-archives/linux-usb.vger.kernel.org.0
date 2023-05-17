@@ -2,117 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF90F706583
-	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 12:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79FB970670E
+	for <lists+linux-usb@lfdr.de>; Wed, 17 May 2023 13:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjEQKmM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 17 May 2023 06:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
+        id S231351AbjEQLpT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 May 2023 07:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjEQKmJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 06:42:09 -0400
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6459D420B;
-        Wed, 17 May 2023 03:41:52 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-94a342f4c8eso13719866b.0;
-        Wed, 17 May 2023 03:41:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684320111; x=1686912111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cnrYckLOMdeQP/cDiOa38SdJDj0LdQRatYnbgv9Ep9A=;
-        b=hSlDZfxrVyV8JDvFe1ZdZm2NT2WU+K2lvAFWXVBuxvrPzV/94cPu79Ab8Q6PYoqOta
-         OhYpQqqztzz080gQhCkfQtEJ+yn6jDU/17B9BLMe5IeyVVke8ViJok8MsaOOkNYg+y2S
-         ip8btiob7Lq1xRA5GmQDR5agjaTCwNSugY6p5CW9zAL3OGlWrjjAMj6iunR5rWkpBPse
-         Rrl/Z+vxJKPKLuAm6F0xmnmIsmeeCjBl8GRQWLybuY4VOybNMG4y+cEXSIWToEfvvfkI
-         f1heZtOUwgLBSEFj9T/SMGhVyM8R1tLi2Ei+rDdB5kWw6eWpXxt+UsPFBK/GoBx0ZG2i
-         BrbA==
-X-Gm-Message-State: AC+VfDxK633w+VW1ruENsy1YvXCVkKtCNzIxt6PCGaZ8T2xFjqUMgOLc
-        kLdd2X0Z06SS959uR78PAmwswaezR3QZj6gkYXo=
-X-Google-Smtp-Source: ACHHUZ737VKfyM+JUSu6Rg5k5YwzOHwe6va5akiHl2b//bC8+5GIrD3s8T3PhzLz0sXmr0MWCsqp3+06juZ3/Vbh1uo=
-X-Received: by 2002:a17:906:51c4:b0:965:c518:4681 with SMTP id
- v4-20020a17090651c400b00965c5184681mr1637401ejk.7.1684320110524; Wed, 17 May
- 2023 03:41:50 -0700 (PDT)
+        with ESMTP id S231332AbjEQLpR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 May 2023 07:45:17 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F7A421D;
+        Wed, 17 May 2023 04:45:15 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pzEq4-0005Ph-I3; Wed, 17 May 2023 12:57:00 +0200
+Message-ID: <53213ba8-be58-0f97-8a06-3c9380bdff53@leemhuis.info>
+Date:   Wed, 17 May 2023 12:56:59 +0200
 MIME-Version: 1.0
-References: <2023051610-stove-condense-9a77@gregkh>
-In-Reply-To: <2023051610-stove-condense-9a77@gregkh>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 17 May 2023 12:41:38 +0200
-Message-ID: <CAJZ5v0h-jjoS7evdVS5HkO0A0v5mFwPnEQgoA4X+pmoeopRc=w@mail.gmail.com>
-Subject: Re: [PATCH] driver core: class: properly reference count class_dev_iter()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 1/2] usb: gadget: udc: core: Invoke usb_gadget_connect
+ only when started
+Content-Language: en-US, de-DE
+To:     Francesco Dolcini <francesco@dolcini.it>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Alistair <alistair@alistair23.me>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        colin.i.king@gmail.com, xuetao09@huawei.com,
+        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
+        peter.chen@freescale.com, balbi@ti.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20230407030741.3163220-1-badhri@google.com>
+ <0cf8c588b701d7cf25ffe1a9217b81716e6a5c51.camel@alistair23.me>
+ <1ac16f0a-3cca-40ca-c444-82719f85a24c@leemhuis.info>
+ <ZGStr1oZvmJ0XzSu@francesco-nb.int.toradex.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <ZGStr1oZvmJ0XzSu@francesco-nb.int.toradex.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1684323915;0d7e538a;
+X-HE-SMSGID: 1pzEq4-0005Ph-I3
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 16, 2023 at 9:20 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> When class_dev_iter is initialized, the reference count for the subsys
-> private structure is incremented, but never decremented, causing a
-> memory leak over time.  To resolve this, save off a pointer to the
-> internal structure into the class_dev_iter structure and then when the
-> iterator is finished, drop the reference count.
->
-> Reported-and-tested-by: syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com
-> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On 17.05.23 12:35, Francesco Dolcini wrote:
+> On Wed, May 17, 2023 at 12:23:39PM +0200, Linux regression tracking (Thorsten Leemhuis) wrote:
+>> [CCing Francesco Dolcini; and the regression list too, as it should be
+>> in the loop for regressions:
+>> https://docs.kernel.org/admin-guide/reporting-regressions.html]
+>>
+>> On 16.05.23 14:53, Alistair wrote:
+>>> On Fri, 2023-04-07 at 03:07 +0000, Badhri Jagan Sridharan wrote:
+>>>> usb_udc_connect_control does not check to see if the udc has already
+>>>> been started. This causes gadget->ops->pullup to be called through
+>>>> usb_gadget_connect when invoked from usb_udc_vbus_handler even before
+>>>> usb_gadget_udc_start is called. Guard this by checking for udc-
+>>>>> started
+>>>> in usb_udc_connect_control before invoking usb_gadget_connect.
+>>> [...]
+>>>> Cc: stable@vger.kernel.org
+>>>> Fixes: 628ef0d273a6 ("usb: udc: add usb_udc_vbus_handler")
+>>>> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+>>>
+>>> This patch causes a kernel hang when trying to boot with the
+>>> usb/chipidea/udc.c driver.
+>>>
+>>> The call stack below causes the hang:
+>>>
+>>>  - gadget_bind_driver(struct device *dev)
+>>>     - mutex_lock(&udc->connect_lock);
+>>>     - usb_gadget_udc_start_locked(struct usb_udc *udc)
+>>>         - udc->gadget->ops->udc_start(udc->gadget, udc->driver)
+>>>
+>>> At which point we are calling ci_udc_start(..), but with the
+>>> connect_lock mutex locked.
+>>>
+>>> ci_udc_start() then calls usb_udc_vbus_handler() which tries to lock
+>>> the connect_lock while it's already locked. Resulting in a kernel hang.
+>>>
+>>> Reverting this patch fixes the hang.
+>>
+>> Not my area of expertise, but I guess it might be the same error as this
+>> one:
+>>
+>> https://lore.kernel.org/all/ZF4BvgsOyoKxdPFF@francesco-nb.int.toradex.com/
+>>
+>> Francesco sent a revert on Friday, but no reaction from Badhri Jagan
+>> Sridharan or Greg yet afaics.
+>>
+>> https://lore.kernel.org/all/20230512131435.205464-1-francesco@dolcini.it/
+> 
+> Revert patches were applied and are in linux-next. I expect those to
+> land in Linus tree with the next pull request from Greg.
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Ha, sorry, I missed that, as I only looked at lore. Should have looked
+in my own regression tracking, there it's marked as "fix incoming", as
+regzbot noticed the fix in next...
 
-> ---
->  drivers/base/class.c         | 2 ++
->  include/linux/device/class.h | 1 +
->  2 files changed, 3 insertions(+)
->
-> diff --git a/drivers/base/class.c b/drivers/base/class.c
-> index ac1808d1a2e8..05d9df90f621 100644
-> --- a/drivers/base/class.c
-> +++ b/drivers/base/class.c
-> @@ -320,6 +320,7 @@ void class_dev_iter_init(struct class_dev_iter *iter, const struct class *class,
->                 start_knode = &start->p->knode_class;
->         klist_iter_init_node(&sp->klist_devices, &iter->ki, start_knode);
->         iter->type = type;
-> +       iter->sp = sp;
->  }
->  EXPORT_SYMBOL_GPL(class_dev_iter_init);
->
-> @@ -361,6 +362,7 @@ EXPORT_SYMBOL_GPL(class_dev_iter_next);
->  void class_dev_iter_exit(struct class_dev_iter *iter)
->  {
->         klist_iter_exit(&iter->ki);
-> +       subsys_put(iter->sp);
->  }
->  EXPORT_SYMBOL_GPL(class_dev_iter_exit);
->
-> diff --git a/include/linux/device/class.h b/include/linux/device/class.h
-> index 9deeaeb457bb..abf3d3bfb6fe 100644
-> --- a/include/linux/device/class.h
-> +++ b/include/linux/device/class.h
-> @@ -74,6 +74,7 @@ struct class {
->  struct class_dev_iter {
->         struct klist_iter               ki;
->         const struct device_type        *type;
-> +       struct subsys_private           *sp;
->  };
->
->  int __must_check class_register(const struct class *class);
-> --
-> 2.40.1
->
+Ciao, Thorsten
