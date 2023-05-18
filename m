@@ -2,68 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85589707E3D
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 12:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC94707E85
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 12:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbjERKiR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 May 2023 06:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
+        id S230090AbjERKvg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 May 2023 06:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbjERKiP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 06:38:15 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0BB11FD8
-        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 03:38:04 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-30789a4c537so1232815f8f.0
-        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 03:38:04 -0700 (PDT)
+        with ESMTP id S230049AbjERKve (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 06:51:34 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299311FE0
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 03:51:08 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f509ec3196so71182465e9.1
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 03:51:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684406283; x=1686998283;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WgXpFHyqifOXUE8I1+PymSK/x9dYBAVGMZl7up5+PU0=;
-        b=Bm7LxaqDtN3SA67GPQgi0QxFFOBWRFu+4Uv5ve+71Jh6p0oo4Ntm8r7kHGXHh03EQe
-         7JxrjonR5wz67YoC+sHKgECU+idi6ReKayX636uWLR9HU54BKlBrCnp15qF54UX+JZXD
-         FZPUiPE4jP+3yiHdtH6fi4j2KCilBzUddThPzRZy+Z1yExVzSwpmSZ/EZh5Qf3MDynBU
-         tUCwXFC74h/Mgh4nimu6pQ1QBC3k5zAiEheLaDDpbhiaieL7viCsqdF/QT8o/yHCgRwY
-         /okZ3z7APJXu9APd1ccwecmtgJITjco/mbJjStK9W3NyS/707xS0hb3mXPNtv5uZHl5z
-         fkYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684406283; x=1686998283;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1684407066; x=1686999066;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WgXpFHyqifOXUE8I1+PymSK/x9dYBAVGMZl7up5+PU0=;
-        b=NTE2jdpdBu6sGn+U/OXaLf3jAM+l2uEIrpRU5DXWe4v9d5yseEril6J1sXG/VaW2Dt
-         6IB4H2/BN5TICjswisVzkaREZJKOYDbd1au/C+VdbYcBP0WUQbGgfMltohUtkJJy/PF9
-         ZHDY/4nIEy3aXMgaqaLALGcFvts/HLK8bvsDdBbluKHVid7O+Rt4EktgbzEFMaS0JvnR
-         ZvadUuTFU+H9fw3uE2OX4wo9cAerGovt7jUPYTS7t+uL5T3nDVX/4DiCOR3fcnpqJUii
-         kQ/AAu9QwJNwrx4zLFZmeMvJIekMvqSAZoWQEmL9Mm0f+GZ5FG3xMlYnatjTywP0e2lN
-         AAXw==
-X-Gm-Message-State: AC+VfDzoZGQqo2OgGCgwHYFvlWKnKCt1qQ8tvPG2zvKgX7yqHNHG59Jd
-        63LH3ITwPeaXryRaHJTtTvGBvPN3CcPOdFmikio/0Q==
-X-Google-Smtp-Source: ACHHUZ7DJsLPY4beCCBkNY1sLavEjQX/ODkHWwEquHghfxTa80akrKboqELguxfMAk3rRa+5n3YqnKtlNElakWMJGpQ=
-X-Received: by 2002:a5d:6309:0:b0:309:433b:8414 with SMTP id
- i9-20020a5d6309000000b00309433b8414mr939323wru.54.1684406283064; Thu, 18 May
- 2023 03:38:03 -0700 (PDT)
+        bh=1vJ7owF2jZ1jgfetzeBylwbCZSWloUm6wP6XItRtZ8s=;
+        b=VMeB48dPma3GJC0dQwksluHosrINKA1DDP7qsDZlsdhI2GdU9ARLmgNlVFYW7haDNe
+         uQtLGh+D6d2QU5XRn+M4cszYk5KxMOiK9xFuOKQ6IeUc0HqQziLEhhqnlX2VlvyzXOwK
+         SdRYGijam05xx2lgOQdkinMlL3LE3xi4xN232/v7BvB+M3FKDbmHN/ddepo1gq0MlOBH
+         QlDqD9hTCtFXgsNtpSAcDFG+goTH9vqWVa+jB6ZUc0yd8zidl0lL4jJNF33DgoOQFovz
+         JVGPrcNEYg2wuYNkxmPjzJRKM6JO0lHZuru3DOSqNPLyYpZg0VdFfcTCLrs8frArVNLB
+         ZEYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684407066; x=1686999066;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1vJ7owF2jZ1jgfetzeBylwbCZSWloUm6wP6XItRtZ8s=;
+        b=F+NxwqBDBTIdIIkD2wUEkMsspkRluESa9/lInO3EMUravbBXeEfHBb7+l91DHYfLwN
+         y+m2E9CbI4sDl8rcBVXHH/lLx3kalu9lXaG+yTVFcDk64Lap26VektfdAs1jhrVTJE+r
+         M4X/LiKEtDt/Z0zm2QLbaezRLtiLOK9PaylZbTLKZBQrjsIftK1c2j5KYJrs2cxGm+Pe
+         1pYEjQL1G3da5cC2xKd+78A70LUvuPphkhzMexFASDRXUTw4cpbND+6TE752lsRMoxoB
+         Sm46Vc6WXTS7U7xYm+elO6aSzA492BQp5dirk0tNqfFTwZ9vTeYDluSHLFGKI2UMQyki
+         tKyg==
+X-Gm-Message-State: AC+VfDzL/hmtlkxwmNv5nM5EFDuv4vUc84OFiC3v0aLr2W5OJIe08UzJ
+        oGoD6tLAbVdZAcHZkrV51UgidQ==
+X-Google-Smtp-Source: ACHHUZ6aobTELqAgLfxSzBbfcI4AMLUJO+mzfT4FsHyrhGPPpkFnYckQgAINqLn5pHTye1+YLGvpNg==
+X-Received: by 2002:a5d:58e4:0:b0:307:d04a:60d8 with SMTP id f4-20020a5d58e4000000b00307d04a60d8mr1224645wrd.0.1684407066237;
+        Thu, 18 May 2023 03:51:06 -0700 (PDT)
+Received: from localhost (a109-49-33-111.cpe.netcabo.pt. [109.49.33.111])
+        by smtp.gmail.com with ESMTPSA id y18-20020a1c4b12000000b003f4fffccd73sm1669394wma.9.2023.05.18.03.51.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 May 2023 03:51:06 -0700 (PDT)
+From:   Rui Miguel Silva <rui.silva@linaro.org>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 85/97] usb: isp1760: Convert to platform remove callback
+ returning void
+In-Reply-To: <20230517230239.187727-86-u.kleine-koenig@pengutronix.de>
+References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
+ <20230517230239.187727-86-u.kleine-koenig@pengutronix.de>
+Date:   Thu, 18 May 2023 11:51:05 +0100
+Message-ID: <m3zg61ap5y.fsf@gmail.com>
 MIME-Version: 1.0
-References: <20230517211756.2483552-1-bhupesh.sharma@linaro.org>
- <20230517211756.2483552-5-bhupesh.sharma@linaro.org> <e3ed8dc6-61f1-e73c-2bc7-4e57e86b8647@linaro.org>
-In-Reply-To: <e3ed8dc6-61f1-e73c-2bc7-4e57e86b8647@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Thu, 18 May 2023 16:07:51 +0530
-Message-ID: <CAH=2Ntwrs=+dg8_KRRoEaKg3j6boyMNd6XDxaEK45=BVXqyoQA@mail.gmail.com>
-Subject: Re: [PATCH v6 4/6] usb: misc: eud: Add driver support for SM6115 / SM4250
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, agross@kernel.org, andersson@kernel.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        krzysztof.kozlowski@linaro.org, quic_schowdhu@quicinc.com,
-        gregkh@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,164 +74,65 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 18 May 2023 at 15:58, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> On 17.05.2023 23:17, Bhupesh Sharma wrote:
-> > Add SM6115 / SM4250 SoC EUD support in qcom_eud driver.
-> >
-> > On some SoCs (like the SM6115 / SM4250 SoC), the mode manager
-> > needs to be accessed only via the secure world (through 'scm'
-> > calls).
-> >
-> > Also, the enable bit inside 'tcsr_check_reg' needs to be set
-> > first to set the eud in 'enable' mode on these SoCs.
-> >
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >  drivers/usb/misc/Kconfig    |  2 +-
-> >  drivers/usb/misc/qcom_eud.c | 65 ++++++++++++++++++++++++++++++++++---
-> >  2 files changed, 61 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-> > index 99b15b77dfd5..51eb5140caa1 100644
-> > --- a/drivers/usb/misc/Kconfig
-> > +++ b/drivers/usb/misc/Kconfig
-> > @@ -146,7 +146,7 @@ config USB_APPLEDISPLAY
-> >
-> >  config USB_QCOM_EUD
-> >       tristate "QCOM Embedded USB Debugger(EUD) Driver"
-> > -     depends on ARCH_QCOM || COMPILE_TEST
-> > +     depends on (ARCH_QCOM && QCOM_SCM) || COMPILE_TEST
-> >       select USB_ROLE_SWITCH
-> >       help
-> >         This module enables support for Qualcomm Technologies, Inc.
-> > diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-> > index 74f2aeaccdcb..6face21b7fb7 100644
-> > --- a/drivers/usb/misc/qcom_eud.c
-> > +++ b/drivers/usb/misc/qcom_eud.c
-> > @@ -11,9 +11,11 @@
-> >  #include <linux/kernel.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> > +#include <linux/of_device.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/slab.h>
-> >  #include <linux/sysfs.h>
-> > +#include <linux/firmware/qcom/qcom_scm.h>
-> >  #include <linux/usb/role.h>
-> >
-> >  #define EUD_REG_INT1_EN_MASK 0x0024
-> > @@ -30,15 +32,25 @@
-> >  #define EUD_INT_SAFE_MODE    BIT(4)
-> >  #define EUD_INT_ALL          (EUD_INT_VBUS | EUD_INT_SAFE_MODE)
-> >
-> > +#define EUD_EN2_EN           BIT(0)
-> > +#define EUD_EN2_DISABLE              (0)
-> > +#define TCSR_CHECK_EN                BIT(0)
-> > +
-> > +struct eud_soc_cfg {
-> > +     u32 tcsr_check_offset;
-> > +};
-> > +
-> >  struct eud_chip {
-> >       struct device                   *dev;
-> >       struct usb_role_switch          *role_sw;
-> > +     const struct eud_soc_cfg        *eud_cfg;
-> >       void __iomem                    *base;
-> >       void __iomem                    *mode_mgr;
-> >       unsigned int                    int_status;
-> >       int                             irq;
-> >       bool                            enabled;
-> >       bool                            usb_attached;
-> > +     phys_addr_t                     secure_mode_mgr;
-> >  };
-> >
-> >  static int enable_eud(struct eud_chip *priv)
-> > @@ -46,7 +58,11 @@ static int enable_eud(struct eud_chip *priv)
-> >       writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
-> >       writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
-> >                       priv->base + EUD_REG_INT1_EN_MASK);
-> > -     writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
-> > +
-> > +     if (priv->secure_mode_mgr)
-> > +             qcom_scm_io_writel(priv->secure_mode_mgr + EUD_REG_EUD_EN2, EUD_EN2_EN);
-> > +     else
-> > +             writel(EUD_EN2_EN, priv->mode_mgr + EUD_REG_EUD_EN2);
-> >
-> >       return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
-> >  }
-> > @@ -54,7 +70,11 @@ static int enable_eud(struct eud_chip *priv)
-> >  static void disable_eud(struct eud_chip *priv)
-> >  {
-> >       writel(0, priv->base + EUD_REG_CSR_EUD_EN);
-> > -     writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
-> > +
-> > +     if (priv->secure_mode_mgr)
-> > +             qcom_scm_io_writel(priv->secure_mode_mgr + EUD_REG_EUD_EN2, EUD_EN2_DISABLE);
-> > +     else
-> > +             writel(EUD_EN2_DISABLE, priv->mode_mgr + EUD_REG_EUD_EN2);
-> >  }
-> >
-> >  static ssize_t enable_show(struct device *dev,
-> > @@ -178,6 +198,8 @@ static void eud_role_switch_release(void *data)
-> >  static int eud_probe(struct platform_device *pdev)
-> >  {
-> >       struct eud_chip *chip;
-> > +     struct resource *res;
-> > +     phys_addr_t tcsr_check;
-> >       int ret;
-> >
-> >       chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
-> > @@ -200,9 +222,37 @@ static int eud_probe(struct platform_device *pdev)
-> >       if (IS_ERR(chip->base))
-> >               return PTR_ERR(chip->base);
-> >
-> > -     chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
-> > -     if (IS_ERR(chip->mode_mgr))
-> > -             return PTR_ERR(chip->mode_mgr);
-> > +     /*
-> > +      * EUD block on a few Qualcomm SoCs needs secure register access.
-> > +      * Check for the same.
-> > +      */
-> > +     if (of_device_is_compatible(chip->dev->of_node, "qcom,sm6115-eud")) {
-> I didn't notice that this changed between v4 and v5, but in my v4 review
-> I suggested using
->
-> if (of_property_read_bool(chip->dev->of_node, "qcom,secure-mode-enable"))
->
-> as this was the only place where the value of that function was checked
-> and caching it in the driver struct simply made no sense (as of today, anyway)
->
-> checking the device compatible does not scale very well for something
-> generic, as now it'd require adding each qcom,smABCD-eud to this condition
-> as well.
->
-> > +             res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> > +             if (!res)
-> > +                     return dev_err_probe(chip->dev, -ENODEV,
-> > +                                          "failed to get secure_mode_mgr reg base\n");
-> This suggests the reg-name is "secure_mode_mgr" which is not true,
-> according to your binding patch. I thought about adding a separate
-> entry, but ultimately this would be against the DT philosophy, as it
-> references the same physical region as "eud-mode-mgr", just that due
-> to ACL software running at a higher exception level it's not
-> directly accessible..
->
-> I was debating suggesting moving it to SoC configuration, but that
-> also depends on the software stack (e.g. there are windows and cros
-> 7280 laptops with different security restrictions).. so I think
-> the dt property is the way to go.
+Hey Uwe,
 
-Well, the changes were done as per Krzysztof's comments on the earlier
-versions (see [1] and [2]):
+Thanks for the patch.
 
-[1]. https://lore.kernel.org/linux-arm-msm/fe326d38-ee52-b0a4-21d8-f00f22449417@linaro.org/
-[2]. https://lore.kernel.org/linux-arm-msm/e60af365-4260-a56f-1ec1-c7c60d172b38@linaro.org/
+Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> writes:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is ignored (apart from
+> emitting a warning) and this typically results in resource leaks. To impr=
+ove
+> here there is a quest to make the remove callback return void. In the fir=
+st
+> step of this quest all drivers are converted to .remove_new() which alrea=
+dy
+> returns void. Eventually after all drivers are converted, .remove_new() is
+> renamed to .remove().
+>
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-I am fine with either approach. As I originally argued, having a
-dt-property seems more useful to me to indicate a secure-mode access.
+LGTM
+Acked-by: Rui Miguel Silva <rui.silva@linaro.org>
 
-May be @Krzysztof Kozlowski , can share his opinions on the same.
-
-Thanks,
-Bhupesh
+Cheers,
+   Rui
+=20=20=20
+> ---
+>  drivers/usb/isp1760/isp1760-if.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/usb/isp1760/isp1760-if.c b/drivers/usb/isp1760/isp17=
+60-if.c
+> index 65ba5aca2a4f..fe1e3985419a 100644
+> --- a/drivers/usb/isp1760/isp1760-if.c
+> +++ b/drivers/usb/isp1760/isp1760-if.c
+> @@ -246,11 +246,9 @@ static int isp1760_plat_probe(struct platform_device=
+ *pdev)
+>  	return 0;
+>  }
+>=20=20
+> -static int isp1760_plat_remove(struct platform_device *pdev)
+> +static void isp1760_plat_remove(struct platform_device *pdev)
+>  {
+>  	isp1760_unregister(&pdev->dev);
+> -
+> -	return 0;
+>  }
+>=20=20
+>  #ifdef CONFIG_OF
+> @@ -265,7 +263,7 @@ MODULE_DEVICE_TABLE(of, isp1760_of_match);
+>=20=20
+>  static struct platform_driver isp1760_plat_driver =3D {
+>  	.probe	=3D isp1760_plat_probe,
+> -	.remove	=3D isp1760_plat_remove,
+> +	.remove_new =3D isp1760_plat_remove,
+>  	.driver	=3D {
+>  		.name	=3D "isp1760",
+>  		.of_match_table =3D of_match_ptr(isp1760_of_match),
+> --=20
+> 2.39.2
