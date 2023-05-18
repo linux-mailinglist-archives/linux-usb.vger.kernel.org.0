@@ -2,67 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A977089FA
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 23:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D93DA708A22
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 23:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjERU76 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 May 2023 16:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
+        id S230049AbjERVIb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 May 2023 17:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjERU75 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 16:59:57 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CB1EE
-        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 13:59:56 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-561a7d96f67so32548987b3.3
-        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 13:59:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684443596; x=1687035596;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XryR9Ncunvyn1ZtJaDPR6nedV8MCwjQ1jOB1dM16CzU=;
-        b=PCvkK1eNB66ffon4it+4eYF/lSpzUx5WPxk/ed4HTsjSwACbVu/gKdgrCar/5ydFOC
-         KWbWBo5RFMVzku7PfY3xz32/O2HgTW6kX6Twz2H4qILYxhyVob6gjBnPzRH4gLnnQuUs
-         VfqJiY1KQhjtmKX5V5rk0efoBtdEOGCmVgBruMmo+YL8ld460UNHUaRDknupeFLEVATY
-         jSYLJULSWwQ7BRjsSu3hy/L8DkEsvFjQu9lXYhfvvn8ivj+dKqVy9KqOJxy2b2ne3KCF
-         Knqy0Lzzkh6tfl+xLjBtXj/pRwZwqPH+VqBS9W2ppIiGwu3FspPSs4OvLj5aBXgxvy04
-         uvtQ==
+        with ESMTP id S229870AbjERVIa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 17:08:30 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5215910D2
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 14:08:27 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-333eb36e510so20571115ab.1
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 14:08:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684443596; x=1687035596;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XryR9Ncunvyn1ZtJaDPR6nedV8MCwjQ1jOB1dM16CzU=;
-        b=IwVnSDvteO7qpTvPUqD0Q3vuUIC/44B/LCuHvMvxcSX7ozeN4DrwfVXlk/d9svS61m
-         uck5nG/ZjfEkbnQvjX0hccvCpbyrwbdWnBWrf9UHfra+Sg1NmIoK57RCDGzaoUiPzg8y
-         pKvNquLqGyXgDlIdoXvgi1KuGStrBknPRJH1/xaGwdqaNNgRzpZsJ1msXwQCoWPUvUfy
-         nSjCy4a/sO85XE98woiGQ7kmNe+0bEmaO/TMbKpahMWA/c3T6i+iE/1IpDY/LAV6e5jN
-         RyeE8iU8CZWX7VH/agwtZY4PVii4pc/rypSEM4ArzYQtAuVsMi5E5fH4zxA3+zL6EDSL
-         dQJw==
-X-Gm-Message-State: AC+VfDyoC/GvtvQYJ9z6dGiWnhFFlK+p9JZRrrcX00iKnm3jAI+ljHrM
-        lCaBpvr7dIH4SbTzl6WJb+3qiU65YlzAxM0WXSEF4Nz2Zn5GjWDA
-X-Google-Smtp-Source: ACHHUZ49xBe6UtUNfmyJCboEIFA2EC6g3W1V0s7/ZMasqX35Pa5ofavlXXo1bq6hmJvgBjYfj/mIdP0rALzXnVSe2Mk=
-X-Received: by 2002:a0d:cb0d:0:b0:559:d9a0:5e52 with SMTP id
- n13-20020a0dcb0d000000b00559d9a05e52mr2162685ywd.31.1684443595784; Thu, 18
- May 2023 13:59:55 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684444106; x=1687036106;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oCJmZhikEGgvshSFtgr79kh24UyNzZUnmc8l6fNAyog=;
+        b=hj8M5qF1BPTpaMAqagaPfEN+289IKu9DHuFM2fHB55NlGSbC5horrQNPQKZ4xmlNLt
+         DXGWQWgLH6Y3zdn9bXAZsr20S6HY571kVA37EpCFh6RjyAoDKDF+Tn4BjyOTve8YXozi
+         Pz6vrqeIPVXBybDEdksZBnP/Cj/TZZyoXRiObEsLv7YZJK1JCbeSK+HonB3dvTDEk9lJ
+         RwIwzmOx3I/UfsLhGIbpEC/0EBrSrTNqWDhtj9L+57zAyRtr3NSP9aDx5GDerqx1K1yE
+         wkxY+VDVynVb6/NUcjeUVe+JPI0/0Gq6e7+2QLIpFzytLOAG9XqbSV1G7MNfIcXfyejg
+         y+Ow==
+X-Gm-Message-State: AC+VfDz/PWRr0FXHeX/HwLY9iTiOXAsmHfFUM8rE4KfEMnJ35Ju/i0nY
+        vRzNUjMaya454ykilQKeOtxoPK6OGKjRUUnVOzLtDkvuxZl/
+X-Google-Smtp-Source: ACHHUZ6O+AwC9jQ6/HWx9bF4gsIW4ateeFT9tlEiAvl6X0cm+bMtLLafLfqIApH9fHqyJCPWOSItmHrhVXZe54RUpchQdppkkfQY
 MIME-Version: 1.0
-References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de> <20230517230239.187727-24-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20230517230239.187727-24-u.kleine-koenig@pengutronix.de>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 18 May 2023 22:59:44 +0200
-Message-ID: <CACRpkdZiv=6Twf5UfxJORPSwWdB1MMKgEAUvccYwaxa90GZJVQ@mail.gmail.com>
-Subject: Re: [PATCH 23/97] usb: fotg210: Convert to platform remove callback
- returning void
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, kernel@pengutronix.de
+X-Received: by 2002:a02:93c7:0:b0:416:5d0f:f494 with SMTP id
+ z65-20020a0293c7000000b004165d0ff494mr1952410jah.5.1684444106608; Thu, 18 May
+ 2023 14:08:26 -0700 (PDT)
+Date:   Thu, 18 May 2023 14:08:26 -0700
+In-Reply-To: <c7b8e69a-cabe-4e17-a511-66179259d1d7@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009e5a1c05fbfe34c5@google.com>
+Subject: Re: [syzbot] [fbdev?] [usb?] WARNING in dlfb_submit_urb/usb_submit_urb
+ (2)
+From:   syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>
+To:     bernie@plugable.com, deller@gmx.de,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,30 +57,20 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 18, 2023 at 1:02=E2=80=AFAM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
+Hello,
 
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart fro=
-m
-> emitting a warning) and this typically results in resource leaks. To impr=
-ove
-> here there is a quest to make the remove callback return void. In the fir=
-st
-> step of this quest all drivers are converted to .remove_new() which alrea=
-dy
-> returns void. Eventually after all drivers are converted, .remove_new() i=
-s
-> renamed to .remove().
->
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Looks good
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Reported-and-tested-by: syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com
 
-Yours,
-Linus Walleij
+Tested on:
+
+commit:         a4422ff2 usb: typec: qcom: Add Qualcomm PMIC Type-C dr..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=10b6b9a6280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2414a945e4542ec1
+dashboard link: https://syzkaller.appspot.com/bug?extid=0e22d63dcebb802b9bc8
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1374e5a6280000
+
+Note: testing is done by a robot and is best-effort only.
