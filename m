@@ -2,132 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3AE9708884
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 21:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DDA8708982
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 22:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbjERTme (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 May 2023 15:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
+        id S229990AbjERU0q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 May 2023 16:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbjERTmd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 15:42:33 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED79E6D;
-        Thu, 18 May 2023 12:42:30 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 51F9E6018D;
-        Thu, 18 May 2023 21:42:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684438948; bh=8TuUr/tbhWxw/Wl+c1CUiJnNsg4NRh0wA3s+nfMW4/0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ULkr652diD3aZMEl8lIMDS5dVWGd0asdy7dR+2X7PL5Qonso9mzYF+yprshQCNiGq
-         X98B2Jo8FKpyKP3lu2F6CPzJtC5ilcZX+fz1Z0A57CQEC/JeUIAasCdb38AF0AkqTb
-         H/kNQHegJs+EZ/Bmy4WO8Hzz+vgHRzt2Q289h/ip4PXUMG0YdQ2V33Ram1bsT2CAgS
-         CP8iFXJ5hGzNUDiydEx2CR4+VGlq+/GqxrZA1oIZy4qgiuBpTsm11h19Urv/369tKv
-         mYeYfMaLzwwfvWH18d6OlEOw9els5HJPvpJ5t7PRo9s5ZSXAlg5lLkJmsP8069t5eH
-         KGDna0oltbX7Q==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id tzS0IgwIkEhc; Thu, 18 May 2023 21:42:25 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [77.237.113.62])
-        by domac.alu.hr (Postfix) with ESMTPSA id EDFA760189;
-        Thu, 18 May 2023 21:42:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684438945; bh=8TuUr/tbhWxw/Wl+c1CUiJnNsg4NRh0wA3s+nfMW4/0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EGTcjHmIDggZ8hor6P64XQL/UpBQoNU9/LBm/5CrxLwXPmQXQhS8rKlO2TseY/GDF
-         AY7u7syczZeCtxmS94m6DLjB17y5QUeZfucAvgyCasxw4yH7hF/m6b9xvuYHHjBmPx
-         C8LBSQ6FAYruE6sR4x5TIqmRyf8dAaqJU7vt749tGtMlGC1+rLomkj0UGqadAn3qxS
-         KbZUR3/b+/d0zL9T/rf1d8dmlNp3lywYsQJ4jPna1+VAht61NIIntoEzXCmPx787VU
-         ui5YPEosZF0dfGwYF/wOOwQ/lMHadnOLQqEEuRv99Aijl/3g3YUMEFaXd/K9Ns1N6i
-         gxKbdKctE6bbw==
-Message-ID: <bd373477-79eb-a178-b3c4-1f7699689fbb@alu.unizg.hr>
-Date:   Thu, 18 May 2023 21:42:10 +0200
+        with ESMTP id S229569AbjERU0p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 16:26:45 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E3510CF
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 13:26:44 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pzkCu-0003A8-Pp; Thu, 18 May 2023 22:26:40 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pzkCs-0019uv-Lu; Thu, 18 May 2023 22:26:38 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pzkCr-005kzo-VB; Thu, 18 May 2023 22:26:37 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-usb@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH] usb: host: fhci-hcd: Convert to platform remove callback returning void
+Date:   Thu, 18 May 2023 22:26:36 +0200
+Message-Id: <20230518202636.273407-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] driver core: class: properly reference count
- class_dev_iter()
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org,
-        syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-References: <2023051610-stove-condense-9a77@gregkh>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <2023051610-stove-condense-9a77@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1919; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=U/pz3gpSTGklDMn/VihzIDzUveB3lzRbFSPOeNyWh9U=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkZon7DlnyywFKXWL9kpDiImjXYe57qYSuHnhtF 5tq1TJ7xziJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZGaJ+wAKCRCPgPtYfRL+ TgM+B/wLX69xHUhP1UmEBK7HKJ7YGaY3fSkfQ5W+joAD1wMyPIKuXZS86moQSsF3OSD2L8GtvQ8 TMON9t9G8yYF5hKNZZxCZowpNX8jLvF+cVNu9iqAQBuQNElSXtLyosG5F4SH/Vh9njDN9i5apSg GmG4TTHxwo5rm0S9x8CYXHbduW0DHE57gWzAoPHUq4wAUTaHn8XoOqCO8xTE0ZqtjxY5b1xz45X qLzujwKa7EHyPCoFflDze0NV7k/l3Om5aXeXLdwOlQz6kQKXqJ4FIWpMLyscbL/eVB3j1VQjBxG 2U4WA8dUUrx8XR8wr7BauHRSq3ewibrlleDhBLv3HoDMAAkM
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/16/23 21:20, Greg Kroah-Hartman wrote:
-> When class_dev_iter is initialized, the reference count for the subsys
-> private structure is incremented, but never decremented, causing a
-> memory leak over time.  To resolve this, save off a pointer to the
-> internal structure into the class_dev_iter structure and then when the
-> iterator is finished, drop the reference count.
-> 
-> Reported-and-tested-by: syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com
-> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The .remove() callback for a platform driver returns an int which makes
+many driver authors wrongly assume it's possible to do error handling by
+returning an error code.  However the value returned is (mostly) ignored
+and this typically results in resource leaks. To improve here there is a
+quest to make the remove callback return void. In the first step of this
+quest all drivers are converted to .remove_new() which already returns
+void.
 
-Hi, Greg,
+Trivially convert this driver from always returning zero to the void
+returning variant.
 
-Did I forget to give the
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/usb/host/fhci-hcd.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-Tested-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+diff --git a/drivers/usb/host/fhci-hcd.c b/drivers/usb/host/fhci-hcd.c
+index 92794ffc25c8..66a045e01dad 100644
+--- a/drivers/usb/host/fhci-hcd.c
++++ b/drivers/usb/host/fhci-hcd.c
+@@ -757,7 +757,7 @@ static int of_fhci_probe(struct platform_device *ofdev)
+ 	return ret;
+ }
+ 
+-static int fhci_remove(struct device *dev)
++static void fhci_remove(struct device *dev)
+ {
+ 	struct usb_hcd *hcd = dev_get_drvdata(dev);
+ 	struct fhci_hcd *fhci = hcd_to_fhci(hcd);
+@@ -771,12 +771,11 @@ static int fhci_remove(struct device *dev)
+ 		qe_pin_free(fhci->pins[j]);
+ 	fhci_dfs_destroy(fhci);
+ 	usb_put_hcd(hcd);
+-	return 0;
+ }
+ 
+-static int of_fhci_remove(struct platform_device *ofdev)
++static void of_fhci_remove(struct platform_device *ofdev)
+ {
+-	return fhci_remove(&ofdev->dev);
++	fhci_remove(&ofdev->dev);
+ }
+ 
+ static const struct of_device_id of_fhci_match[] = {
+@@ -791,7 +790,7 @@ static struct platform_driver of_fhci_driver = {
+ 		.of_match_table = of_fhci_match,
+ 	},
+ 	.probe		= of_fhci_probe,
+-	.remove		= of_fhci_remove,
++	.remove_new	= of_fhci_remove,
+ };
+ 
+ module_platform_driver(of_fhci_driver);
 
-I apologise if I did.
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+-- 
+2.39.2
 
-Best regards,
-Mirsad
-
-> ---
->   drivers/base/class.c         | 2 ++
->   include/linux/device/class.h | 1 +
->   2 files changed, 3 insertions(+)
-> 
-> diff --git a/drivers/base/class.c b/drivers/base/class.c
-> index ac1808d1a2e8..05d9df90f621 100644
-> --- a/drivers/base/class.c
-> +++ b/drivers/base/class.c
-> @@ -320,6 +320,7 @@ void class_dev_iter_init(struct class_dev_iter *iter, const struct class *class,
->   		start_knode = &start->p->knode_class;
->   	klist_iter_init_node(&sp->klist_devices, &iter->ki, start_knode);
->   	iter->type = type;
-> +	iter->sp = sp;
->   }
->   EXPORT_SYMBOL_GPL(class_dev_iter_init);
->   
-> @@ -361,6 +362,7 @@ EXPORT_SYMBOL_GPL(class_dev_iter_next);
->   void class_dev_iter_exit(struct class_dev_iter *iter)
->   {
->   	klist_iter_exit(&iter->ki);
-> +	subsys_put(iter->sp);
->   }
->   EXPORT_SYMBOL_GPL(class_dev_iter_exit);
->   
-> diff --git a/include/linux/device/class.h b/include/linux/device/class.h
-> index 9deeaeb457bb..abf3d3bfb6fe 100644
-> --- a/include/linux/device/class.h
-> +++ b/include/linux/device/class.h
-> @@ -74,6 +74,7 @@ struct class {
->   struct class_dev_iter {
->   	struct klist_iter		ki;
->   	const struct device_type	*type;
-> +	struct subsys_private		*sp;
->   };
->   
->   int __must_check class_register(const struct class *class);
