@@ -2,197 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFC0707B0A
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 09:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A484707B28
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 09:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjERHei (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 May 2023 03:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
+        id S229820AbjERHiX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 May 2023 03:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbjERHeg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 03:34:36 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FC1ED;
-        Thu, 18 May 2023 00:34:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1684395265; i=deller@gmx.de;
-        bh=FZgYr3T8y3cSMK+jHqEyv7QLt7tFq/0H8uVHvwVWk6M=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=MoMpQNdr5zEiwQNd7K2aK1cI0p3ThRclSOgsj66q2WiUSF4ATCDeQLPKNbFg25Pxa
-         WViYyUdePqRPGNXASfMIakglgGaIMzsAGjPJe5NKqpXZVM5og28cJrtnBpVVhpnE35
-         TLsdiVhun9nSNcsyjvnB9B+1tAypfx13ifMBianCemABMQV08ns7mTrVNFAbr5iKsR
-         NcKMmRNjLbRcFS5c7yqHngmNjjbhyZW2+GFOekGsIH1FczveHYzs1FT6HiardTQCJE
-         89EWnOgrTO3mtW57/ye+SYtrtgmxvkKEtdd0kc20IFAa7SOJGS3rijHfVh2iZPlszz
-         dzLJ3IB94J3IA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from ls3530 ([94.134.154.30]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mwfac-1qO5QR39v0-00yCpu; Thu, 18
- May 2023 09:34:25 +0200
-Date:   Thu, 18 May 2023 09:34:24 +0200
-From:   Helge Deller <deller@gmx.de>
-To:     syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Cc:     bernie@plugable.com, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [fbdev?] [usb?] WARNING in
- dlfb_submit_urb/usb_submit_urb (2)
-Message-ID: <ZGXVANMhn5j/jObU@ls3530>
-References: <0000000000004a222005fbf00461@google.com>
+        with ESMTP id S229812AbjERHiW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 03:38:22 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583FEB7
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 00:38:20 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f13ef4ad91so2069994e87.3
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 00:38:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684395498; x=1686987498;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hSdiOiuqJAHUPhwp+X6FRpLlph26hY6u/p4vVDWTCR8=;
+        b=PRgiMbTjte5lz91ZaJWBDJ7UrV1Smn/rY9qdXJueUm8so7ZxISQl86vxplMfARZU/X
+         ZlHvQFHOiEnVvLBZsrIi16I/QTP+9cWYDj63eBI2eqaQuQsQlfXg4MO5TJHpwroiDNtn
+         NfwMLWIi9PyXVMk6XeC4n8Rmaoo/O3igmCu/ZF886raR4vOGzdlrZXUUp0GQ1i7CoyxN
+         S8un+IwiT49u4phVZZ7A/6izyQkKtiKZT405r2BIqbssdGBTUJKGY+Nr1MK/Beg3aGFK
+         MIwDMMDJcp/UEuSOZ/cj/A1doRuqK0X+D+rfCMZp3tjoy7WHDZyvy6hifVEvHWQuK1h+
+         yrrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684395498; x=1686987498;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hSdiOiuqJAHUPhwp+X6FRpLlph26hY6u/p4vVDWTCR8=;
+        b=j0YX7kiMefAz99OuIpOgfLZqwO8FqSNeiDJOTtjCD6caNi/OriAG7pY0YmKPdf5dLP
+         RUfFuXzeNPt3rDt62F5ynWX+bOS9ozc3BbLqHIRQ3UfZqbBOwMDTO8OcfkmFkMse2CBA
+         fj3T7uvseeRNYhohjG9ZDBoY/0Zr2kPokBEGkDysywBfwKJwz7b0Q17hEWX5j3LqunTa
+         HChKdU12/4h3V8k4ZIsjAeROl5FD/Hf5tjYRhpuNAWKqrCNChFMLGPUJJuPOZf5nJ1RE
+         tW53YzJ1HukaKJVG17gsQ+48setXLy0WCqAotb5AXWVTSCtEkpB0r9Q8WZEmL10KLZtQ
+         C9Mg==
+X-Gm-Message-State: AC+VfDyqWtpt95Sh1dLR9WlrvYzoYyWDteWgj4zqKdZNvS7BoIdUUVJ9
+        Rq+R5+/0a+q4Mld9vmlruc9+lw==
+X-Google-Smtp-Source: ACHHUZ7+Z8uEZegmwf+DhedLMsy7AfPt0iUSmaMEJ01Ttpr/+H1IA+SXNLeefuGi8XN3jXgJU76W3w==
+X-Received: by 2002:a19:7407:0:b0:4ee:d8f3:1390 with SMTP id v7-20020a197407000000b004eed8f31390mr916303lfe.53.1684395498627;
+        Thu, 18 May 2023 00:38:18 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a2b:c408:5834:f48e? ([2a02:810d:15c0:828:a2b:c408:5834:f48e])
+        by smtp.gmail.com with ESMTPSA id b17-20020ac25e91000000b004f272be230bsm149250lfq.230.2023.05.18.00.38.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 00:38:18 -0700 (PDT)
+Message-ID: <872d0dbc-18d8-800b-4647-d362a678086d@linaro.org>
+Date:   Thu, 18 May 2023 09:38:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000004a222005fbf00461@google.com>
-X-Provags-ID: V03:K1:zUPAArKGm/akodQZev5TT6+LSpI5YI8YKdFYXuQvLW+d25TdLpO
- AiDNmIid9kSsAswtadv+D5hcPd2HAwUgjJMhHWJ2Lj/vvbKONOX3OgPg632rvOnlZYsqtSz
- VXA0BX5qOQlJTQpLwxh528FF+zHjsQERAbX92PlkSSrbIBLpCQkwuUue1VqjCBbPMpPCRKL
- O+i3QhySsy2Po63To/sdQ==
-UI-OutboundReport: notjunk:1;M01:P0:ICelvk08EVc=;6E8igwb3dFTHD/FtKRA4efw+6S1
- PVOPtNEArRckGAnQHSJcT+eAVGKOkJo27ZCGxgCvWEFhrm3qltGr6ab1CIcQsons3EyJxwOew
- 1WPS7i86IgE4XX7Ltl0EK81Ggq5xYOXu42iVj5AdlEzoJE6HdPm61sTeMMP74ADwil2qJcI+U
- IrISHQyC6njvLrqGfWrve6kRWD+3ZgEZImKVIVeGsNMTU018HEMkcwGvdyGlLDxlpAhvsujI1
- D3hSNGKJRuyiC4alwaTJJ100PyyJ1YLXLRMI1h5lz9OggxQdHrRFuu+dna42WkBZMXvW+QKxD
- mrtLGT2pn53YI83/8KOqDJb7IrCSanYkWBn2Hc+gqgFRCvsK2Nb+UPMc+DqEYIHo4bdEpU+z6
- nHcDJ1/E5JJ8BVcI7skdzx0Oqh3ciHGuas5hwkY6nrSPn62tpA4yBGmhGzj6tTnPsVKzLQ/X5
- ZrgnPcOKwUNvXr8KFPy5Z95/7z8Mqt2T1rbqBhmGvXYoDR9Nz47Gp/6faPGDmK62zOBgDy156
- SMzGh+64K1pfnixS7eRS68irtQWNwot0o04+29NjpZI0BHLimXVi1XNNM0uLCQOxUltFx65II
- Mj4gSokE5wvWdiuz4i2WVFWBYR0JnU0H/2KzSNj9mc/YR6Z4w0kBhDnKz14P7aVOZJml2E2AT
- ZVKjReq0nJhc+Z67idxbJKhn5JLsL4h+ng+8cxuC4nHRVtUTaYKRce/ZiF4KJjtqt++23KnEW
- TbSm0bMVjKVEmBZu60MWhvilE2Fejovz3e69iYYY/v25otUCmollDPr+ewpZnIFf2TEj+ZauJ
- R2u2RGN3jCH5kuiGoOs7BhUh30bpVkM8tSTQ4dPTsCye1kz811V6YEhgXClod/T5ULvfjSwsT
- WeUDHzTRyh0kxAG+p2HFpI8p7n8l4LkqTAiytFZ38xDZadPJ4eXxAiRienPK4nr/o88uDhodz
- lmU2vw==
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v6 2/6] dt-bindings: soc: qcom: eud: Add SM6115 / SM4250
+ support
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        quic_schowdhu@quicinc.com, gregkh@linuxfoundation.org
+References: <20230517211756.2483552-1-bhupesh.sharma@linaro.org>
+ <20230517211756.2483552-3-bhupesh.sharma@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230517211756.2483552-3-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-* syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>:
-> syzbot found the following issue on:
->
-> HEAD commit:    a4422ff22142 usb: typec: qcom: Add Qualcomm PMIC Type-C =
-dr..
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/u=
-sb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D152455662800=
-00
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D2414a945e454=
-2ec1
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D0e22d63dcebb80=
-2b9bc8
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binut=
-ils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1720fd3a28=
-0000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D171a73ea2800=
-00
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/414817142fb7/di=
-sk-a4422ff2.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/448dba0d344e/vmlin=
-ux-a4422ff2.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/d0ad9fe848e2/=
-bzImage-a4422ff2.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the com=
-mit:
-> Reported-by: syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com
->
-> usb 1-1: Read EDID byte 0 failed: -71
-> usb 1-1: Unable to get valid EDID from device/display
-> ------------[ cut here ]------------
-> usb 1-1: BOGUS urb xfer, pipe 3 !=3D type 1
-> WARNING: CPU: 0 PID: 9 at drivers/usb/core/urb.c:504 usb_submit_urb+0xed=
-6/0x1880 drivers/usb/core/urb.c:504
-> Modules linked in:
-> CPU: 0 PID: 9 Comm: kworker/0:1 Not tainted 6.4.0-rc1-syzkaller-00016-ga=
-4422ff22142 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS =
-Google 04/28/2023
-> Workqueue: usb_hub_wq hub_event
-> RIP: 0010:usb_submit_urb+0xed6/0x1880 drivers/usb/core/urb.c:504
-> Code: 7c 24 18 e8 7c dc 5a fd 48 8b 7c 24 18 e8 42 ca 0b ff 41 89 d8 44 =
-89 e1 4c 89 ea 48 89 c6 48 c7 c7 60 34 cc 86 e8 0a fa 25 fd <0f> 0b e9 58 =
-f8 ff ff e8 4e dc 5a fd 48 81 c5 b8 05 00 00 e9 84 f7
-> RSP: 0018:ffffc9000009ed48 EFLAGS: 00010282
-> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-> RDX: ffff888103650000 RSI: ffffffff81163677 RDI: 0000000000000001
-> RBP: ffff88810cb32940 R08: 0000000000000001 R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000003
-> R13: ffff88810cf426b8 R14: 0000000000000003 R15: ffff888104272100
-> FS:  0000000000000000(0000) GS:ffff8881f6600000(0000) knlGS:000000000000=
-0000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000562147be3b70 CR3: 0000000110380000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  dlfb_submit_urb+0x92/0x180 drivers/video/fbdev/udlfb.c:1980
->  dlfb_set_video_mode+0x21f0/0x2950 drivers/video/fbdev/udlfb.c:315
->  dlfb_ops_set_par+0x2a7/0x8d0 drivers/video/fbdev/udlfb.c:1111
->  dlfb_usb_probe+0x149a/0x2710 drivers/video/fbdev/udlfb.c:1743
->  usb_probe_interface+0x30f/0x960 drivers/usb/core/driver.c:396
->  call_driver_probe drivers/base/dd.c:579 [inline]
->  really_probe+0x240/0xca0 drivers/base/dd.c:658
->  __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:800
->  driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
->  __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:958
->  bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
->  __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
->  bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
->  device_add+0x112d/0x1a40 drivers/base/core.c:3625
->  usb_set_configuration+0x1196/0x1bc0 drivers/usb/core/message.c:2211
->  usb_generic_driver_probe+0xcf/0x130 drivers/usb/core/generic.c:238
->  usb_probe_device+0xd8/0x2c0 drivers/usb/core/driver.c:293
->  call_driver_probe drivers/base/dd.c:579 [inline]
->  really_probe+0x240/0xca0 drivers/base/dd.c:658
->  __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:800
->  driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
->  __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:958
->  bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
->  __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
->  bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
->  device_add+0x112d/0x1a40 drivers/base/core.c:3625
->  usb_new_device+0xcb2/0x19d0 drivers/usb/core/hub.c:2575
->  hub_port_connect drivers/usb/core/hub.c:5407 [inline]
->  hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
->  port_event drivers/usb/core/hub.c:5711 [inline]
->  hub_event+0x2e3d/0x4ed0 drivers/usb/core/hub.c:5793
->  process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
->  worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
->  kthread+0x344/0x440 kernel/kthread.c:379
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+On 17/05/2023 23:17, Bhupesh Sharma wrote:
+> Add dt-bindings for EUD found on Qualcomm SM6115 / SM4250 SoC.
+> 
+> On this SoC (and derivatives) the enable bit inside 'tcsr_check_reg'
+> needs to be set first to 'enable' the eud module.
+> 
+> So, update the dt-bindings to accommodate the third register
+> property (TCSR Base) required by the driver on these SoCs.
+> 
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 
-I think this is an informational warning from the USB stack,
-since the syzbot usb device doesn't behave as expected.
+This is a friendly reminder during the review process.
 
-What happens with this patch applied?
+It looks like you received a tag and forgot to add it.
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git =
-usb-testing
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions. However, there's no need to repost patches *only* to add the
+tags. The upstream maintainer will do that for acks received on the
+version they apply.
 
-diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
-index 9f3c54032556..dd77b9e757da 100644
-=2D-- a/drivers/usb/core/urb.c
-+++ b/drivers/usb/core/urb.c
-@@ -501,7 +501,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
 
- 	/* Check that the pipe's type matches the endpoint's type */
- 	if (usb_pipe_type_check(urb->dev, urb->pipe))
--		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x !=3D type %x\n",
-+		printk("BOGUS urb xfer, pipe %x !=3D type %x (hardware misbehaviour?)\n=
-",
- 			usb_pipetype(urb->pipe), pipetypes[xfertype]);
+If a tag was not added on purpose, please state why and what changed.
 
- 	/* Check against a simple/standard policy */
+Also - no improvements.
 
-Helge
+Best regards,
+Krzysztof
+
