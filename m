@@ -2,76 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 971E8707B40
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 09:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C52707B89
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 10:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjERHkm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 May 2023 03:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
+        id S230013AbjERIBR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 May 2023 04:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjERHkk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 03:40:40 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C4A11F
-        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 00:40:39 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-76c6e0553f9so78147239f.1
-        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 00:40:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684395638; x=1686987638;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zdaBrx490s8k6dX8A9bwP75JHCsfXxu79WG1YDEQ+kU=;
-        b=TZPOckMEoaFoyNrTaN8BvemSWiEhEfrGoSiYFYfXtA/aJvB4PhQMHkwZIXMW7QzYAi
-         Rnma6swtQEFjF1g4blN+szXfrsdLC9+XU6Ri6z/yaD8BGBABw0t5VQKi72mxOH0kit7h
-         rPFBZm2kYtUOjPKnEgJu/rYLoYurHUA/OSYcF8q8f6Qb2f/L1nAb+2JW5LlXw6Ew4o6O
-         9SMl4RkeVxXRjL1qhon0zQYHiivCKa6s8WB8NUw2mOSf9q+QiIf88Qve9klfV128UfhG
-         vGskbQOwomf/soMgpvqreJauuaJuBKXF/Ii3Rk+0GjsYXEDhHZEA76P8FzmoxlximA6L
-         QEcQ==
-X-Gm-Message-State: AC+VfDwg7A/mEnZ6Bo0ciioBNzElnN6nypvg/BkACnfqyKsEqXclirSH
-        WwzoQoliLMMiPxgH1oy0A5fqgnRhHF22wifWDqBWNYknS7av
-X-Google-Smtp-Source: ACHHUZ5BSeJHwBlPAtnaWhHK6T9xhV3CzN1B/t33fjNEVVmiVfyZvhdq2Z74TG5jGUaYrDwcTXUEVGJx1XKuD6JL9ZzR1kLPfSI0
+        with ESMTP id S229931AbjERIBF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 04:01:05 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCD52708;
+        Thu, 18 May 2023 01:00:56 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 7B0C860173;
+        Thu, 18 May 2023 10:00:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1684396843; bh=d02Uw1o7ei0qXRNWctuY3MCRE3pmghS5xgEUwxNhwkg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KgW/umBSkF0WjYdsoKHiLB45Um0cBYWtGtfmacCc5P0kQarTneXGlNvCxGy05blDN
+         Zd+MXpxIHmBLxyypsFvQKT+X1TuQwmCEEwjugJlyECYGg1R2Nd2u4Qn16XSfiRKi1S
+         R+9qea5bhc3BlgGtTJPz+RsfbzNNHyE69yTYyfdzWjHDIWp227Y5p4zNglvAoBC+f7
+         MxUqpAabJTMF13aKFucRcuehdsd72uNmjqa8a17p+0NWc2rje8RcHoSfiJTLiNuo/s
+         KkjYYoohJIMZlpN3/ZIu42AatYxGs6SLo6F4M72M3p7wsqVeNIaqDjk49Sx3SjIpaa
+         Qlzf3nvjVElDg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id nnDtl1L0V8Vj; Thu, 18 May 2023 10:00:41 +0200 (CEST)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id 06CF460171;
+        Thu, 18 May 2023 10:00:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1684396841; bh=d02Uw1o7ei0qXRNWctuY3MCRE3pmghS5xgEUwxNhwkg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZPjM40Rc/4mmWx7D69vqErg/uOoxoDXYHTwKWyfERFES2Cz71f3w1dr+KD+LT80ME
+         VhrFYA6Zcf+BuzH6sBjCboR1EOEjVuSVPjlZ6nbcuu64COBZsqh3L/uKR4yxTI9GYI
+         2u+zROYcETgmMAGulYoqiVng8Ji9Oybuo38WLUu4/lX8bm0AD1NjHT+PlecOrL7s6g
+         VrjE80MXIKyBnVufir1OEtgSEZrmNuJJ1e9UwbTBp1cUWdK6bjBv/ATEXh9RWmJVtr
+         Hhm11XB9uva84sYKxT498v8KsJ6xKVtFcZeUVoS1crk4SJVZvJaoqQC96QUMIkoxGM
+         w8i3Nf7Xw69qQ==
+Message-ID: <b84fa328-91c2-fe02-da17-993236d91c81@alu.unizg.hr>
+Date:   Thu, 18 May 2023 10:00:36 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3713:b0:40f:8f07:e28e with SMTP id
- k19-20020a056638371300b0040f8f07e28emr790444jav.1.1684395638617; Thu, 18 May
- 2023 00:40:38 -0700 (PDT)
-Date:   Thu, 18 May 2023 00:40:38 -0700
-In-Reply-To: <ZGXVANMhn5j/jObU@ls3530>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b3803905fbf2eb97@google.com>
-Subject: Re: [syzbot] [fbdev?] [usb?] WARNING in dlfb_submit_urb/usb_submit_urb
- (2)
-From:   syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>
-To:     bernie@plugable.com, deller@gmx.de,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [BUG][NEW DATA] Kmemleak, possibly hiddev_connect(), in 6.3.0+
+ torvalds tree commit gfc4354c6e5c2
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>
+References: <f64b17fa-d509-ad30-6e8d-e4c979818047@alu.unizg.hr>
+ <2023050824-juiciness-catching-9290@gregkh>
+ <2023050854-collage-dreamt-660c@gregkh>
+ <c73471aa-522a-83a4-5614-506581604301@alu.unizg.hr>
+ <2023050958-precut-vividly-94bf@gregkh>
+ <987f9008-7eac-e2a4-31f6-8479f0e4a626@alu.unizg.hr>
+ <2023051607-sturdy-jiffy-ca99@gregkh>
+ <70dd7fa2-9a5f-9361-ebe0-bb337c523d09@alu.unizg.hr>
+ <2023051704-basket-hardcover-1a0c@gregkh>
+Content-Language: en-US, hr
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <2023051704-basket-hardcover-1a0c@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On 5/17/23 20:57, Greg Kroah-Hartman wrote:
 
-syzbot tried to test the proposed patch but the build/boot failed:
+> And leaks are hard to notice, especially ones that only show up when you
+> remove a specific type of device.
+> 
+> thanks again for your help here,
 
-failed to apply patch:
-checking file drivers/usb/core/urb.c
-patch: **** unexpected end of file in patch
+I feel like more of a hindrance from the real issues than being helpful.
 
+Memory leaks seem easy to detect, however, building with KMEMLEAK
+debugging on can take up to 50-67% of system time, as I've noticed
+a couple of days ago ...
 
+It is obviously incurring some overhead. I did not expect a kernel compilation
+as computation-heavy process to have such an impact from memory object
+debugging.
 
-Tested on:
+Best regards,
+Mirsad
 
-commit:         a4422ff2 usb: typec: qcom: Add Qualcomm PMIC Type-C dr..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-dashboard link: https://syzkaller.appspot.com/bug?extid=0e22d63dcebb802b9bc8
-compiler:       
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1524090e280000
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+
+"What’s this thing suddenly coming towards me very fast? Very very fast.
+... I wonder if it will be friends with me?"
