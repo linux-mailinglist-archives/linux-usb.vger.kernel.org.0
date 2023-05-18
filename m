@@ -2,67 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC94707E85
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 12:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5BD707F04
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 13:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbjERKvg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 May 2023 06:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
+        id S230346AbjERLSj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 May 2023 07:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjERKve (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 06:51:34 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299311FE0
-        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 03:51:08 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f509ec3196so71182465e9.1
-        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 03:51:08 -0700 (PDT)
+        with ESMTP id S229957AbjERLSi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 07:18:38 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56049B7
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 04:18:37 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f41dceb9d1so18586845e9.1
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 04:18:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684407066; x=1686999066;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1vJ7owF2jZ1jgfetzeBylwbCZSWloUm6wP6XItRtZ8s=;
-        b=VMeB48dPma3GJC0dQwksluHosrINKA1DDP7qsDZlsdhI2GdU9ARLmgNlVFYW7haDNe
-         uQtLGh+D6d2QU5XRn+M4cszYk5KxMOiK9xFuOKQ6IeUc0HqQziLEhhqnlX2VlvyzXOwK
-         SdRYGijam05xx2lgOQdkinMlL3LE3xi4xN232/v7BvB+M3FKDbmHN/ddepo1gq0MlOBH
-         QlDqD9hTCtFXgsNtpSAcDFG+goTH9vqWVa+jB6ZUc0yd8zidl0lL4jJNF33DgoOQFovz
-         JVGPrcNEYg2wuYNkxmPjzJRKM6JO0lHZuru3DOSqNPLyYpZg0VdFfcTCLrs8frArVNLB
-         ZEYQ==
+        d=linaro.org; s=google; t=1684408716; x=1687000716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pLUvkG7USbzCR0kby3sWcizMW3PyVgl9g57t4JxwVZU=;
+        b=dQeVH6exRbC2WVFHYh+DvlxSchEkdwKcRBXEbfegrP2H8aipKyyLXFTIyQ1LIfQ+7L
+         S7zod1lLIxdNLzmKxMulKMZNhq9Ssgl1kZNgALmXg3idIW82ukvTVr4fVdlOIqQ8ITsq
+         YMwDNNGEyQpFhlmI0dxyDRoNrEkt4fSlzRE6VYuBBfrTaa8pW8vVBNEVsYe/SVz6Z7Di
+         SU8f/bFDseLYYE1Y7ijxi4R3H4Mw5aIQn/VSoqTQpQdu8BgOXs11Cu2klGmI5NiQckos
+         TcttHECdg6kbPrILNRCUzvAviKrmnQMdEodrxu8ZVLAHXieopDflf1Xzyy3ZwtLF9Oh+
+         XcYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684407066; x=1686999066;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684408716; x=1687000716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1vJ7owF2jZ1jgfetzeBylwbCZSWloUm6wP6XItRtZ8s=;
-        b=F+NxwqBDBTIdIIkD2wUEkMsspkRluESa9/lInO3EMUravbBXeEfHBb7+l91DHYfLwN
-         y+m2E9CbI4sDl8rcBVXHH/lLx3kalu9lXaG+yTVFcDk64Lap26VektfdAs1jhrVTJE+r
-         M4X/LiKEtDt/Z0zm2QLbaezRLtiLOK9PaylZbTLKZBQrjsIftK1c2j5KYJrs2cxGm+Pe
-         1pYEjQL1G3da5cC2xKd+78A70LUvuPphkhzMexFASDRXUTw4cpbND+6TE752lsRMoxoB
-         Sm46Vc6WXTS7U7xYm+elO6aSzA492BQp5dirk0tNqfFTwZ9vTeYDluSHLFGKI2UMQyki
-         tKyg==
-X-Gm-Message-State: AC+VfDzL/hmtlkxwmNv5nM5EFDuv4vUc84OFiC3v0aLr2W5OJIe08UzJ
-        oGoD6tLAbVdZAcHZkrV51UgidQ==
-X-Google-Smtp-Source: ACHHUZ6aobTELqAgLfxSzBbfcI4AMLUJO+mzfT4FsHyrhGPPpkFnYckQgAINqLn5pHTye1+YLGvpNg==
-X-Received: by 2002:a5d:58e4:0:b0:307:d04a:60d8 with SMTP id f4-20020a5d58e4000000b00307d04a60d8mr1224645wrd.0.1684407066237;
-        Thu, 18 May 2023 03:51:06 -0700 (PDT)
-Received: from localhost (a109-49-33-111.cpe.netcabo.pt. [109.49.33.111])
-        by smtp.gmail.com with ESMTPSA id y18-20020a1c4b12000000b003f4fffccd73sm1669394wma.9.2023.05.18.03.51.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 03:51:06 -0700 (PDT)
-From:   Rui Miguel Silva <rui.silva@linaro.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 85/97] usb: isp1760: Convert to platform remove callback
- returning void
-In-Reply-To: <20230517230239.187727-86-u.kleine-koenig@pengutronix.de>
-References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
- <20230517230239.187727-86-u.kleine-koenig@pengutronix.de>
-Date:   Thu, 18 May 2023 11:51:05 +0100
-Message-ID: <m3zg61ap5y.fsf@gmail.com>
+        bh=pLUvkG7USbzCR0kby3sWcizMW3PyVgl9g57t4JxwVZU=;
+        b=htlAlIS/6sjl/Y76Bu8HH3vK+3R6+z7xSgn8YYqJ381PSBKJrlbMe6ig/NLL+etKVV
+         g9OWZsDNmDFHwIV5EridmgzZzxIe4ZD+9GUpNd3etlMB++A58Z7yrPRCKSh4Qlsz4o2G
+         sTRduy0kXNOIdub2IdQX42RvE1w3xaCuyBIleqjrWFXP0P5HJMOEzX4zS/0yiz9l8T3z
+         P94Wm/CElkCyGGNoHvrUeXDZ+sbddRdtiU8vxrff3YuiXujqaPEZc4FTCSgndvc2AHuH
+         bPoIHOSQq/ajwj//VLrBDQ++5B7jqjtXTj+X3ExoVqqvm7ug28UdyBnh6CGLhmNlL2L+
+         3OIw==
+X-Gm-Message-State: AC+VfDxPoCXYBkSljAGfBJe0WJAwngowUBU+eh/vhhFwIax9903HWaMV
+        zsSMMmQMnvn+c0HX2GJh/M5VyMvPcA2EToyT4+G9tg==
+X-Google-Smtp-Source: ACHHUZ7E+j3k3ijKvP6RP7KJ9kZa7n2ZSVSPKmMXGLWBalTGM3hfVayB2Ol8ggkmrJqmX4uRIXCZOCgpNFnJTmP4AJI=
+X-Received: by 2002:a1c:7311:0:b0:3f1:969f:c9d0 with SMTP id
+ d17-20020a1c7311000000b003f1969fc9d0mr1270596wmb.4.1684408715647; Thu, 18 May
+ 2023 04:18:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de> <20230517230239.187727-87-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230517230239.187727-87-u.kleine-koenig@pengutronix.de>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Thu, 18 May 2023 16:48:23 +0530
+Message-ID: <CAH=2NtxC6ufxR588ZbMqgwy7LEuKtUVhnCYgivU7uqKjDeczbw@mail.gmail.com>
+Subject: Re: [PATCH 86/97] usb: misc: eud: Convert to platform remove callback
+ returning void
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        kernel@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -74,65 +75,65 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hey Uwe,
-
-Thanks for the patch.
-
-Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> writes:
+On Thu, 18 May 2023 at 04:34, Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
 > The .remove() callback for a platform driver returns an int which makes
 > many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart from
+> returning an error code. However the value returned is ignored (apart fro=
+m
 > emitting a warning) and this typically results in resource leaks. To impr=
 ove
 > here there is a quest to make the remove callback return void. In the fir=
 st
 > step of this quest all drivers are converted to .remove_new() which alrea=
 dy
-> returns void. Eventually after all drivers are converted, .remove_new() is
+> returns void. Eventually after all drivers are converted, .remove_new() i=
+s
 > renamed to .remove().
 >
 > Trivially convert this driver from always returning zero in the remove
 > callback to the void returning variant.
 >
 > Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-
-LGTM
-Acked-by: Rui Miguel Silva <rui.silva@linaro.org>
-
-Cheers,
-   Rui
-=20=20=20
 > ---
->  drivers/usb/isp1760/isp1760-if.c | 6 ++----
+>  drivers/usb/misc/qcom_eud.c | 6 ++----
 >  1 file changed, 2 insertions(+), 4 deletions(-)
 >
-> diff --git a/drivers/usb/isp1760/isp1760-if.c b/drivers/usb/isp1760/isp17=
-60-if.c
-> index 65ba5aca2a4f..fe1e3985419a 100644
-> --- a/drivers/usb/isp1760/isp1760-if.c
-> +++ b/drivers/usb/isp1760/isp1760-if.c
-> @@ -246,11 +246,9 @@ static int isp1760_plat_probe(struct platform_device=
- *pdev)
->  	return 0;
+> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
+> index b7f13df00764..0dc414463759 100644
+> --- a/drivers/usb/misc/qcom_eud.c
+> +++ b/drivers/usb/misc/qcom_eud.c
+> @@ -217,7 +217,7 @@ static int eud_probe(struct platform_device *pdev)
+>         return 0;
 >  }
->=20=20
-> -static int isp1760_plat_remove(struct platform_device *pdev)
-> +static void isp1760_plat_remove(struct platform_device *pdev)
+>
+> -static int eud_remove(struct platform_device *pdev)
+> +static void eud_remove(struct platform_device *pdev)
 >  {
->  	isp1760_unregister(&pdev->dev);
+>         struct eud_chip *chip =3D platform_get_drvdata(pdev);
+>
+> @@ -226,8 +226,6 @@ static int eud_remove(struct platform_device *pdev)
+>
+>         device_init_wakeup(&pdev->dev, false);
+>         disable_irq_wake(chip->irq);
 > -
-> -	return 0;
+> -       return 0;
 >  }
->=20=20
->  #ifdef CONFIG_OF
-> @@ -265,7 +263,7 @@ MODULE_DEVICE_TABLE(of, isp1760_of_match);
->=20=20
->  static struct platform_driver isp1760_plat_driver =3D {
->  	.probe	=3D isp1760_plat_probe,
-> -	.remove	=3D isp1760_plat_remove,
-> +	.remove_new =3D isp1760_plat_remove,
->  	.driver	=3D {
->  		.name	=3D "isp1760",
->  		.of_match_table =3D of_match_ptr(isp1760_of_match),
-> --=20
+>
+>  static const struct of_device_id eud_dt_match[] =3D {
+> @@ -238,7 +236,7 @@ MODULE_DEVICE_TABLE(of, eud_dt_match);
+>
+>  static struct platform_driver eud_driver =3D {
+>         .probe  =3D eud_probe,
+> -       .remove =3D eud_remove,
+> +       .remove_new =3D eud_remove,
+>         .driver =3D {
+>                 .name =3D "qcom_eud",
+>                 .dev_groups =3D eud_groups,
+> --
 > 2.39.2
+
+Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+
+Thanks.
