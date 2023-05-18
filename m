@@ -2,78 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1732B707E1C
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 12:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28404707E27
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 12:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjERK27 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 May 2023 06:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
+        id S230308AbjERKci (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 May 2023 06:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbjERK2h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 06:28:37 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9071BD8
-        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 03:28:34 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2ac82912a59so19767991fa.3
-        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 03:28:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684405712; x=1686997712;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=frqXrLMqxZVJwjXSoXLQ+n8dLupemHAy++vbMKiVPaA=;
-        b=mT7kkX7tXn+gC99FWxK5L4oxD8k96/3CLes6vhjWGFP3myN9FaC+zcIGwFoRYkL94E
-         agPLyKLlR0R6yThicFoNXjS0etH9d4CqMVgrx/UTnXeqFSU1tgnsOQ9ZfFKsFWl42GDt
-         Ag+Ms0fwVSowSH7tjVTCD29Y9QmEMK10NeRzYGhs/I40flIgOdeNHAh9NnRSGGPGOhQt
-         ZFeDxGAL1BlWm9q/eeX2PKSUJY2g7Atq34yRYFcm6odeaLfX3SmLvFXdqkrIBcOr1Ymy
-         RRKtFu+wCDBPiFh+LMvMlvbAoE2jRr2tjDYIaqL2I22sVN20B8TbZzfB1QETjf0JEKCF
-         W90Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684405712; x=1686997712;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=frqXrLMqxZVJwjXSoXLQ+n8dLupemHAy++vbMKiVPaA=;
-        b=EwiWIR9zOsiA3j+bMasUvikJB7hi8qTbE98kq0fBomp8y/IHMCkvtc3zjVHmUYQf7h
-         qeHXp8GOGOtXYIrLLMOrowYRXbaEp6SjohmZTYQKnIWxk/aq2PZtsbOXnYwUeioFFj6Q
-         WSYesdHkb4iK2TY6Dvdtz9kfxYnc7lVbnR8Z2IirB2uJt9jmpV1SgvG7dhMRuDuN5nAB
-         O9MsSROTwYPYwMjY12TPtVTajmkNcS/bw3jDjoMO77LTB1Tqkd1BuLi3a9n7P0mz3T+L
-         vlFDi+u5qg+SoJt2OkJgg0wOkhuSCTkZBR9IdqQAzf1746IKR4SHavvt1ygujFHs3pDM
-         Vl1A==
-X-Gm-Message-State: AC+VfDxgW1Gg/qhzD0d5FpHOt7loGOe1/d0DHkkqmVVHOvZZCiNDgQeC
-        wdwOhHpDC0zesvUZLX9Xo/SIfA==
-X-Google-Smtp-Source: ACHHUZ5dbMgDMePc5aC61orf8kU39nqumPvu8biLx0YbCipzhC4wQZpYBW/JQ1Vyh2EMp4FZbQN0EQ==
-X-Received: by 2002:a2e:9590:0:b0:2a8:a859:b5c7 with SMTP id w16-20020a2e9590000000b002a8a859b5c7mr10115572ljh.0.1684405712531;
-        Thu, 18 May 2023 03:28:32 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id s15-20020a2e9c0f000000b002a9eba29c39sm220858lji.91.2023.05.18.03.28.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 03:28:32 -0700 (PDT)
-Message-ID: <e3ed8dc6-61f1-e73c-2bc7-4e57e86b8647@linaro.org>
-Date:   Thu, 18 May 2023 12:28:30 +0200
+        with ESMTP id S230271AbjERKci (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 06:32:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8781FC2;
+        Thu, 18 May 2023 03:32:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89E7164C1A;
+        Thu, 18 May 2023 10:32:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E776C433EF;
+        Thu, 18 May 2023 10:32:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1684405956;
+        bh=qcuIIFrV0HYuCZo4MxhSdAtu2G9Vl6jJfQro0EV5jFE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EezV9kRvovmhiPavc7xv9MDzTnxhP630H/UmxugMEifElrQf9RyQD8fB809XfbjWo
+         brJuCjqY9KLIC/B8gznaPBjEtTx5tvSVKTNZWUiQus6ImRXFtG2sXXmpa/9DhPpSJt
+         Oty3KT9wYLkucE89lGw5oKPNWcGuoxrGnULu6ojo=
+Date:   Thu, 18 May 2023 12:32:32 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v1] usb: dwc2: add pci_device_id driver_data parse support
+Message-ID: <2023051843-scruffy-gush-cdec@gregkh>
+References: <20230518092240.8023-1-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        krzysztof.kozlowski@linaro.org, quic_schowdhu@quicinc.com,
-        gregkh@linuxfoundation.org
-References: <20230517211756.2483552-1-bhupesh.sharma@linaro.org>
- <20230517211756.2483552-5-bhupesh.sharma@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH v6 4/6] usb: misc: eud: Add driver support for SM6115 /
- SM4250
-In-Reply-To: <20230517211756.2483552-5-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230518092240.8023-1-zhuyinbo@loongson.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,191 +54,165 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 17.05.2023 23:17, Bhupesh Sharma wrote:
-> Add SM6115 / SM4250 SoC EUD support in qcom_eud driver.
+On Thu, May 18, 2023 at 05:22:40PM +0800, Yinbo Zhu wrote:
+> The dwc2 driver has everything we need to run in PCI mode except
+> for pci_device_id driver_data parse.  With that to set Loongson
+> dwc2 element and added identified as PCI_VENDOR_ID_LOONGSON
+> and PCI_DEVICE_ID_LOONGSON_DWC2 in dwc2_pci_ids, the Loongson
+> dwc2 controller will work.
 > 
-> On some SoCs (like the SM6115 / SM4250 SoC), the mode manager
-> needs to be accessed only via the secure world (through 'scm'
-> calls).
-> 
-> Also, the enable bit inside 'tcsr_check_reg' needs to be set
-> first to set the eud in 'enable' mode on these SoCs.
-> 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 > ---
->  drivers/usb/misc/Kconfig    |  2 +-
->  drivers/usb/misc/qcom_eud.c | 65 ++++++++++++++++++++++++++++++++++---
->  2 files changed, 61 insertions(+), 6 deletions(-)
+>  drivers/usb/dwc2/core.h   |  1 +
+>  drivers/usb/dwc2/params.c | 33 +++++++++++++++++++++++++++++++--
+>  drivers/usb/dwc2/pci.c    | 14 +-------------
+>  include/linux/pci_ids.h   |  2 ++
+>  4 files changed, 35 insertions(+), 15 deletions(-)
 > 
-> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-> index 99b15b77dfd5..51eb5140caa1 100644
-> --- a/drivers/usb/misc/Kconfig
-> +++ b/drivers/usb/misc/Kconfig
-> @@ -146,7 +146,7 @@ config USB_APPLEDISPLAY
+> diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+> index 0bb4c0c845bf..c92a1da46a01 100644
+> --- a/drivers/usb/dwc2/core.h
+> +++ b/drivers/usb/dwc2/core.h
+> @@ -1330,6 +1330,7 @@ irqreturn_t dwc2_handle_common_intr(int irq, void *dev);
+>  /* The device ID match table */
+>  extern const struct of_device_id dwc2_of_match_table[];
+>  extern const struct acpi_device_id dwc2_acpi_match[];
+> +extern const struct pci_device_id dwc2_pci_ids[];
 >  
->  config USB_QCOM_EUD
->  	tristate "QCOM Embedded USB Debugger(EUD) Driver"
-> -	depends on ARCH_QCOM || COMPILE_TEST
-> +	depends on (ARCH_QCOM && QCOM_SCM) || COMPILE_TEST
->  	select USB_ROLE_SWITCH
->  	help
->  	  This module enables support for Qualcomm Technologies, Inc.
-> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-> index 74f2aeaccdcb..6face21b7fb7 100644
-> --- a/drivers/usb/misc/qcom_eud.c
-> +++ b/drivers/usb/misc/qcom_eud.c
-> @@ -11,9 +11,11 @@
->  #include <linux/kernel.h>
+>  int dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg);
+>  int dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg);
+> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+> index 21d16533bd2f..f7550d293c2d 100644
+> --- a/drivers/usb/dwc2/params.c
+> +++ b/drivers/usb/dwc2/params.c
+> @@ -7,6 +7,8 @@
 >  #include <linux/module.h>
->  #include <linux/of.h>
-> +#include <linux/of_device.h>
+>  #include <linux/of_device.h>
+>  #include <linux/usb/of.h>
+> +#include <linux/pci_ids.h>
+> +#include <linux/pci.h>
+>  
+>  #include "core.h"
+>  
+> @@ -55,6 +57,14 @@ static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
+>  		!device_property_read_bool(hsotg->dev, "disable-over-current");
+>  }
+>  
+> +static void dwc2_set_loongson_params(struct dwc2_hsotg *hsotg)
+> +{
+> +	struct dwc2_core_params *p = &hsotg->params;
+> +
+> +	p->phy_utmi_width = 8;
+> +	p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
+> +}
+> +
+>  static void dwc2_set_x1600_params(struct dwc2_hsotg *hsotg)
+>  {
+>  	struct dwc2_core_params *p = &hsotg->params;
+> @@ -281,6 +291,22 @@ const struct acpi_device_id dwc2_acpi_match[] = {
+>  };
+>  MODULE_DEVICE_TABLE(acpi, dwc2_acpi_match);
+>  
+> +const struct pci_device_id dwc2_pci_ids[] = {
+> +	{
+> +		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
+> +	},
+> +	{
+> +		PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
+> +			   PCI_DEVICE_ID_STMICRO_USB_OTG),
+> +	},
+> +	{
+> +		PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, PCI_DEVICE_ID_LOONGSON_DWC2),
+> +		.driver_data = (unsigned long)dwc2_set_loongson_params,
+> +	},
+> +	{ /* end: all zeroes */ }
+> +};
+> +MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
+> +
+>  static void dwc2_set_param_otg_cap(struct dwc2_hsotg *hsotg)
+>  {
+>  	switch (hsotg->hw_params.op_mode) {
+> @@ -929,10 +955,13 @@ int dwc2_init_params(struct dwc2_hsotg *hsotg)
+>  		set_params(hsotg);
+>  	} else {
+>  		const struct acpi_device_id *amatch;
+> +		const struct pci_device_id *pmatch;
+>  
+>  		amatch = acpi_match_device(dwc2_acpi_match, hsotg->dev);
+> -		if (amatch && amatch->driver_data) {
+> -			set_params = (set_params_cb)amatch->driver_data;
+> +		pmatch = pci_match_id(dwc2_pci_ids, to_pci_dev(hsotg->dev->parent));
+
+Ick, this means this is not a "real" PCI driver, right?  Why not?
+
+Please tie into the PCI device probe call, don't walk all PCI devices
+like this.
+
+How are you _sure_ that the parent is really a PCI device?  That is very
+very fragile and will break.
+
+Do this properly instead.
+
+
+> +
+> +		if ((amatch && amatch->driver_data) || (pmatch && pmatch->driver_data)) {
+> +			set_params = (set_params_cb)pmatch->driver_data;
+>  			set_params(hsotg);
+>  		}
+>  	}
+> diff --git a/drivers/usb/dwc2/pci.c b/drivers/usb/dwc2/pci.c
+> index b7306ed8be4c..f3a1e4232a31 100644
+> --- a/drivers/usb/dwc2/pci.c
+> +++ b/drivers/usb/dwc2/pci.c
+> @@ -24,7 +24,7 @@
 >  #include <linux/platform_device.h>
->  #include <linux/slab.h>
->  #include <linux/sysfs.h>
-> +#include <linux/firmware/qcom/qcom_scm.h>
->  #include <linux/usb/role.h>
+>  #include <linux/usb/usb_phy_generic.h>
 >  
->  #define EUD_REG_INT1_EN_MASK	0x0024
-> @@ -30,15 +32,25 @@
->  #define EUD_INT_SAFE_MODE	BIT(4)
->  #define EUD_INT_ALL		(EUD_INT_VBUS | EUD_INT_SAFE_MODE)
+> -#define PCI_PRODUCT_ID_HAPS_HSOTG	0xabc0
+> +#include "core.h"
 >  
-> +#define EUD_EN2_EN		BIT(0)
-> +#define EUD_EN2_DISABLE		(0)
-> +#define TCSR_CHECK_EN		BIT(0)
-> +
-> +struct eud_soc_cfg {
-> +	u32 tcsr_check_offset;
-> +};
-> +
->  struct eud_chip {
->  	struct device			*dev;
->  	struct usb_role_switch		*role_sw;
-> +	const struct eud_soc_cfg	*eud_cfg;
->  	void __iomem			*base;
->  	void __iomem			*mode_mgr;
->  	unsigned int			int_status;
->  	int				irq;
->  	bool				enabled;
->  	bool				usb_attached;
-> +	phys_addr_t			secure_mode_mgr;
->  };
+>  static const char dwc2_driver_name[] = "dwc2-pci";
 >  
->  static int enable_eud(struct eud_chip *priv)
-> @@ -46,7 +58,11 @@ static int enable_eud(struct eud_chip *priv)
->  	writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
->  	writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
->  			priv->base + EUD_REG_INT1_EN_MASK);
-> -	writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
-> +
-> +	if (priv->secure_mode_mgr)
-> +		qcom_scm_io_writel(priv->secure_mode_mgr + EUD_REG_EUD_EN2, EUD_EN2_EN);
-> +	else
-> +		writel(EUD_EN2_EN, priv->mode_mgr + EUD_REG_EUD_EN2);
->  
->  	return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
->  }
-> @@ -54,7 +70,11 @@ static int enable_eud(struct eud_chip *priv)
->  static void disable_eud(struct eud_chip *priv)
->  {
->  	writel(0, priv->base + EUD_REG_CSR_EUD_EN);
-> -	writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
-> +
-> +	if (priv->secure_mode_mgr)
-> +		qcom_scm_io_writel(priv->secure_mode_mgr + EUD_REG_EUD_EN2, EUD_EN2_DISABLE);
-> +	else
-> +		writel(EUD_EN2_DISABLE, priv->mode_mgr + EUD_REG_EUD_EN2);
+> @@ -122,18 +122,6 @@ static int dwc2_pci_probe(struct pci_dev *pci,
+>  	return ret;
 >  }
 >  
->  static ssize_t enable_show(struct device *dev,
-> @@ -178,6 +198,8 @@ static void eud_role_switch_release(void *data)
->  static int eud_probe(struct platform_device *pdev)
->  {
->  	struct eud_chip *chip;
-> +	struct resource *res;
-> +	phys_addr_t tcsr_check;
->  	int ret;
+> -static const struct pci_device_id dwc2_pci_ids[] = {
+> -	{
+> -		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
+> -	},
+> -	{
+> -		PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
+> -			   PCI_DEVICE_ID_STMICRO_USB_OTG),
+> -	},
+> -	{ /* end: all zeroes */ }
+> -};
+> -MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
+> -
+>  static struct pci_driver dwc2_pci_driver = {
+>  	.name = dwc2_driver_name,
+>  	.id_table = dwc2_pci_ids,
+> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> index e43ab203054a..6481f648695a 100644
+> --- a/include/linux/pci_ids.h
+> +++ b/include/linux/pci_ids.h
+> @@ -157,6 +157,7 @@
+>  #define PCI_VENDOR_ID_PCI_SIG		0x0001
 >  
->  	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
-> @@ -200,9 +222,37 @@ static int eud_probe(struct platform_device *pdev)
->  	if (IS_ERR(chip->base))
->  		return PTR_ERR(chip->base);
+>  #define PCI_VENDOR_ID_LOONGSON		0x0014
+> +#define PCI_DEVICE_ID_LOONGSON_DWC2	0x7a04
 >  
-> -	chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
-> -	if (IS_ERR(chip->mode_mgr))
-> -		return PTR_ERR(chip->mode_mgr);
-> +	/*
-> +	 * EUD block on a few Qualcomm SoCs needs secure register access.
-> +	 * Check for the same.
-> +	 */
-> +	if (of_device_is_compatible(chip->dev->of_node, "qcom,sm6115-eud")) {
-I didn't notice that this changed between v4 and v5, but in my v4 review
-I suggested using
-
-if (of_property_read_bool(chip->dev->of_node, "qcom,secure-mode-enable"))
-
-as this was the only place where the value of that function was checked
-and caching it in the driver struct simply made no sense (as of today, anyway)
-
-checking the device compatible does not scale very well for something
-generic, as now it'd require adding each qcom,smABCD-eud to this condition
-as well.
-
-> +		res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> +		if (!res)
-> +			return dev_err_probe(chip->dev, -ENODEV,
-> +					     "failed to get secure_mode_mgr reg base\n");
-This suggests the reg-name is "secure_mode_mgr" which is not true,
-according to your binding patch. I thought about adding a separate
-entry, but ultimately this would be against the DT philosophy, as it
-references the same physical region as "eud-mode-mgr", just that due
-to ACL software running at a higher exception level it's not
-directly accessible..
-
-I was debating suggesting moving it to SoC configuration, but that
-also depends on the software stack (e.g. there are windows and cros
-7280 laptops with different security restrictions).. so I think
-the dt property is the way to go.
-
-Konrad
-> +
-> +		chip->secure_mode_mgr = res->start;
-> +	} else {
-> +		chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
-> +		if (IS_ERR(chip->mode_mgr))
-> +			return PTR_ERR(chip->mode_mgr);
-> +	}
-> +
-> +	/* Check for any SoC specific config data */
-> +	chip->eud_cfg = of_device_get_match_data(&pdev->dev);
-> +	if (chip->eud_cfg) {
-> +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "tcsr-base");
-> +		if (!res)
-> +			return dev_err_probe(chip->dev, -ENODEV,
-> +					     "failed to get tcsr reg base\n");
-> +
-> +		tcsr_check = res->start + chip->eud_cfg->tcsr_check_offset;
-> +
-> +		ret = qcom_scm_io_writel(tcsr_check, TCSR_CHECK_EN);
-> +		if (ret)
-> +			return dev_err_probe(chip->dev, ret, "failed to write tcsr check reg\n");
-> +	}
+>  #define PCI_VENDOR_ID_SOLIDIGM		0x025e
 >  
->  	chip->irq = platform_get_irq(pdev, 0);
->  	ret = devm_request_threaded_irq(&pdev->dev, chip->irq, handle_eud_irq,
-> @@ -230,8 +280,13 @@ static int eud_remove(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> +static const struct eud_soc_cfg sm6115_eud_cfg = {
-> +	.tcsr_check_offset = 0x25018,
-> +};
-> +
->  static const struct of_device_id eud_dt_match[] = {
->  	{ .compatible = "qcom,sc7280-eud" },
-> +	{ .compatible = "qcom,sm6115-eud", .data = &sm6115_eud_cfg },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, eud_dt_match);
+> @@ -2356,6 +2357,7 @@
+>  #define PCI_DEVICE_ID_SYNOPSYS_HAPSUSB3_AXI	0xabce
+>  #define PCI_DEVICE_ID_SYNOPSYS_HAPSUSB31	0xabcf
+>  #define PCI_DEVICE_ID_SYNOPSYS_EDDA	0xedda
+> +#define PCI_PRODUCT_ID_HAPS_HSOTG       0xabc0
+
+Please read the top of this file for why you should not add new ids
+here.
+
+thanks,
+
+greg k-h
