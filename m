@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADCB8708142
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 14:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 279F9708146
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 14:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjERM25 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 May 2023 08:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58068 "EHLO
+        id S231563AbjERM3U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 May 2023 08:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjERM24 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 08:28:56 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6D710CF
-        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 05:28:55 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d24136685so245711b3a.1
-        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 05:28:55 -0700 (PDT)
+        with ESMTP id S231329AbjERM3N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 08:29:13 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E279010D2
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 05:29:12 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-53404873a19so1309532a12.3
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 05:29:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684412934; x=1687004934;
+        d=gmail.com; s=20221208; t=1684412952; x=1687004952;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=OvkXA2mPqSaFnAQuHS4A0rmOCQvSNCrXQRwg+sSPOMU=;
-        b=SurrS0NPOHoNg01wUHihvUXqjL3E+Y0johRZz2xt3EfXVjQTsoJxVDDrrTXmIUKaA+
-         mfr9VvpKcJnsEWPPkJGu3HlVp/BqZi43UwMNB/zTm4iWE5uSk+HObEM9nRJT6C3s0J9i
-         ETGgbEqViAdCXFQ1XpYCY+wSdtvo67g/mO4iWkbWbXaGCEOcT/dBx1y6h+voMOK2t7nM
-         oIBXJADj3PD30ITaY8HWSdAZ//kPlIO4i2WDlAEDmFtjCeFYJ0Ti0DrqEAOG6wl0xLmp
-         6nhSJl39BxBxVlEANi8rdql/+KNumyx3oXB8SK0WaTL/FpJF30p6SppKbUd0D0LHQKZS
-         HeQw==
+        bh=+ovHJT+oKcHWdvmi0CxlPgyNmMFmdo9aZyNXlJHi3zQ=;
+        b=jvyFsrkXMIwmBC2OZ/PVh2dkthMG/5310dq1TkKv8oe5nLo9cdsFFtbebSsHxW4suU
+         wXTqmVdgHfUs8T9iDIiASg8rU8aUUvQ2XW1m6YAnlCF54YFu3tldCXdjGpcsRRpuDnV/
+         gI4ws4CaN1EJTi7WD0ueEgU1QA5eUh/Z31hGMMVKgMCLPktEdWOwnkFjZZ4EDokzVrlg
+         wvAw35LV502ziDBD0IcwA6oE1Dfe2YSj8acmQhi2g2MxoaH3sw9m4zMdhrMA+RwD1WD8
+         mmin/eeGo8GPShrAEU8ntgphLc7lW4di/syenbCrmdPznmSM2G5pMusP9Lg2mcFiLvfp
+         4BMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684412934; x=1687004934;
+        d=1e100.net; s=20221208; t=1684412952; x=1687004952;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OvkXA2mPqSaFnAQuHS4A0rmOCQvSNCrXQRwg+sSPOMU=;
-        b=hjjoX5cHIxP97JTyBQB0q5bcQS0UbY1FMIa3L+/WmVm3Rtn2PHu0KPjaHbxM3erLto
-         iQE47fuj3VnHhu1xGpVyN8FfprhK4s9vy8NoV9amUpG4Q603fKZ0mJ9u1R5N6rnkvM7Y
-         Lwtkm6+1POb23YxjnD6wYknK6saNscayq+DFZL/DqQU15xGkOWKFDjm73P1lyJ/KbdFy
-         39AxB73OQIuquiFivFyzAAc19WDjiRFSj+G2t8ITmhqDvcoWB0vCPWuWbFoW6LT/fLyS
-         yzyEdIZHuY+7fvtlpyovU8E8hwlKgvkmX9IpKF6Ou8z45PCjvjNBT6d3tUmg/WQ1hw+Z
-         39lQ==
-X-Gm-Message-State: AC+VfDxXOyslfjfC0p5GfALu62DF+CFC+Eh/pPQa/UgGmbzBRWsqGMdr
-        3js6yG72csEgCMJ15eb3b70=
-X-Google-Smtp-Source: ACHHUZ6O+/H/cPs9HhB9sgWTZ158Wb2S5pgCVPuODTCiXEy3yT2GAzOqNBn2+X2UwvY8r1XsSBywSA==
-X-Received: by 2002:a05:6a00:10d4:b0:63b:6279:1039 with SMTP id d20-20020a056a0010d400b0063b62791039mr2913187pfu.0.1684412934342;
-        Thu, 18 May 2023 05:28:54 -0700 (PDT)
+        bh=+ovHJT+oKcHWdvmi0CxlPgyNmMFmdo9aZyNXlJHi3zQ=;
+        b=bBk/ZhMOE3ufoLpn/Tv9fJT//M1PRf9lINnf9Gs3m2Op3F+coFL8ePTvjT94cMZfbV
+         hYcPJSfAlM4FdeknwhBjuK+p5JO9K7taQSduFajSdeXeWiJl5hBHH5PVERd0rFkeni2+
+         ZM1Rf1jPj60BNsTWgUTIRmC7tYqXEYG/dJy1uBWJhF5gClW+PBRGAZL1X7hEDZZZiizm
+         LfC8aCDQ5+oIU4+tz1Jz2qehK6MBfCuEFlU1yxsEsUD6wKGGMxOGpZqZcnL/qjWRhWrz
+         99+4ilUaFNCM5YRzwUuFGg4VeVuC1stlvkGsI9GvrWhyn8YPM6z0sY839GLrr8tkd0sH
+         Q3IA==
+X-Gm-Message-State: AC+VfDxmz1+0DybzdK7TeRTTjUXwfO8+UhdQ2JIVBLDDgqmpAdxfnn8g
+        XvlIqiT5AfVM9tA31NGqnL8=
+X-Google-Smtp-Source: ACHHUZ75+ALZoBfMtEXlLlAxfxBazlz7y6MyID5JB/bb0qqMXCuSWrE1LzMkljdkpj/9+hJQb8CiJg==
+X-Received: by 2002:a17:902:ea07:b0:1ac:7d8a:365 with SMTP id s7-20020a170902ea0700b001ac7d8a0365mr2542290plg.26.1684412952263;
+        Thu, 18 May 2023 05:29:12 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s21-20020aa78295000000b0063f0068cf6csm1228153pfm.198.2023.05.18.05.28.53
+        by smtp.gmail.com with ESMTPSA id o12-20020a170902bccc00b001ac7ab3e97csm1282684pls.260.2023.05.18.05.29.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 05:28:53 -0700 (PDT)
+        Thu, 18 May 2023 05:29:11 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 18 May 2023 05:28:52 -0700
+Date:   Thu, 18 May 2023 05:29:10 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>
@@ -62,16 +62,16 @@ Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         linux-usb@vger.kernel.org, kernel@pengutronix.de,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 93/97] usb: typec: tcpci_mt6360: Convert to platform
+Subject: Re: [PATCH 94/97] usb: typec: tcpci_mt6360: Convert to platform
  remove callback returning void
-Message-ID: <9d467c12-90d5-43ae-b5da-2a6516ab6767@roeck-us.net>
+Message-ID: <2af0cb1b-b4f6-4fc5-809e-eaf07083c523@roeck-us.net>
 References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
- <20230517230239.187727-94-u.kleine-koenig@pengutronix.de>
+ <20230517230239.187727-95-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230517230239.187727-94-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230517230239.187727-95-u.kleine-koenig@pengutronix.de>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -83,7 +83,7 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 18, 2023 at 01:02:35AM +0200, Uwe Kleine-König wrote:
+On Thu, May 18, 2023 at 01:02:36AM +0200, Uwe Kleine-König wrote:
 > The .remove() callback for a platform driver returns an int which makes
 > many driver authors wrongly assume it's possible to do error handling by
 > returning an error code. However the value returned is ignored (apart from
@@ -101,36 +101,35 @@ On Thu, May 18, 2023 at 01:02:35AM +0200, Uwe Kleine-König wrote:
 Acked-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/usb/typec/tcpm/tcpci_mt6360.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  drivers/usb/typec/tcpm/tcpci_mt6370.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> index 6fa8fd5c8041..02b7fd302265 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> @@ -178,13 +178,12 @@ static int mt6360_tcpc_probe(struct platform_device *pdev)
+> diff --git a/drivers/usb/typec/tcpm/tcpci_mt6370.c b/drivers/usb/typec/tcpm/tcpci_mt6370.c
+> index c5bb201a5163..2a079464b398 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_mt6370.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_mt6370.c
+> @@ -178,12 +178,10 @@ static int mt6370_tcpc_probe(struct platform_device *pdev)
 >  	return 0;
 >  }
 >  
-> -static int mt6360_tcpc_remove(struct platform_device *pdev)
-> +static void mt6360_tcpc_remove(struct platform_device *pdev)
+> -static int mt6370_tcpc_remove(struct platform_device *pdev)
+> +static void mt6370_tcpc_remove(struct platform_device *pdev)
 >  {
->  	struct mt6360_tcpc_info *mti = platform_get_drvdata(pdev);
->  
->  	disable_irq(mti->irq);
->  	tcpci_unregister_port(mti->tcpci);
+>  	dev_pm_clear_wake_irq(&pdev->dev);
+>  	device_init_wakeup(&pdev->dev, false);
+> -
 > -	return 0;
 >  }
 >  
->  static int __maybe_unused mt6360_tcpc_suspend(struct device *dev)
-> @@ -222,7 +221,7 @@ static struct platform_driver mt6360_tcpc_driver = {
->  		.of_match_table = mt6360_tcpc_of_id,
+>  static const struct of_device_id mt6370_tcpc_devid_table[] = {
+> @@ -198,7 +196,7 @@ static struct platform_driver mt6370_tcpc_driver = {
+>  		.of_match_table = mt6370_tcpc_devid_table,
 >  	},
->  	.probe = mt6360_tcpc_probe,
-> -	.remove = mt6360_tcpc_remove,
-> +	.remove_new = mt6360_tcpc_remove,
+>  	.probe = mt6370_tcpc_probe,
+> -	.remove = mt6370_tcpc_remove,
+> +	.remove_new = mt6370_tcpc_remove,
 >  };
->  module_platform_driver(mt6360_tcpc_driver);
+>  module_platform_driver(mt6370_tcpc_driver);
 >  
 > -- 
 > 2.39.2
