@@ -2,58 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6609B707CB3
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 11:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FFB707D01
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 11:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjERJWv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 May 2023 05:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
+        id S230215AbjERJfY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 May 2023 05:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjERJWu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 05:22:50 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1378211B;
-        Thu, 18 May 2023 02:22:47 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8BxRPBm7mVkM84JAA--.17280S3;
-        Thu, 18 May 2023 17:22:46 +0800 (CST)
-Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxWdJi7mVkSKFnAA--.45037S2;
-        Thu, 18 May 2023 17:22:45 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Minas Harutyunyan <hminas@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v1] usb: dwc2: add pci_device_id driver_data parse support
-Date:   Thu, 18 May 2023 17:22:40 +0800
-Message-Id: <20230518092240.8023-1-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        with ESMTP id S230250AbjERJfX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 05:35:23 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3212127
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 02:35:22 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 690476605861;
+        Thu, 18 May 2023 10:35:20 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684402520;
+        bh=oL2En3yRR8knnoB60ZscJ7BTUbvS7K370Aaxx3iso24=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ksNchRgLVqMAcIOhWKBeezRW23u/UNXgmNQw2eBUkqq5toVMDhMv+C80ZCRREvjRf
+         oVivXiycpuPkOKCqrX1gpv8+WNcrdPOuRl8DkT3svemg7hy4fKX6OkYtAR+6jMXjE1
+         ghVHKzAu84DQn+ngf06g7scRETxfHnc2tlKRhX2oSuYci6Hb1N1YjEU3QyPDMILe65
+         nbVmKTGCbj1sEUjRao0WGLFLpcyGBqHpg24kKlGSnZngMmrXYsJNua+vOpTcoCai7G
+         UyLPam8dydoejmig0fWtCdBsjmVU4OK1PXc3w8pTcUvYwMJxhdP0wMmbK0Ve74toVW
+         csDLSjQ9nPwSQ==
+Message-ID: <f0628691-e76d-8c31-5c70-5c188d9b96a3@collabora.com>
+Date:   Thu, 18 May 2023 11:35:17 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 82/97] usb: xhci-mtk: Convert to platform remove callback
+ returning void
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@pengutronix.de
+References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
+ <20230517230239.187727-83-u.kleine-koenig@pengutronix.de>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230517230239.187727-83-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxWdJi7mVkSKFnAA--.45037S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxur4xWF13GFWrZry7Kr13XFb_yoW7Jr1DpF
-        ZrZFW0yrWktFsxCw13CF4UAFy5Zan7J34UCa47Kw1S9FZ7Ar4rXF1jkr45Cr93t390ga12
-        vF17tw48CF47J37anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bVAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1s
-        IEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GF
-        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-        4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j5
-        HUDUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,151 +63,21 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The dwc2 driver has everything we need to run in PCI mode except
-for pci_device_id driver_data parse.  With that to set Loongson
-dwc2 element and added identified as PCI_VENDOR_ID_LOONGSON
-and PCI_DEVICE_ID_LOONGSON_DWC2 in dwc2_pci_ids, the Loongson
-dwc2 controller will work.
+Il 18/05/23 01:02, Uwe Kleine-König ha scritto:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is ignored (apart from
+> emitting a warning) and this typically results in resource leaks. To improve
+> here there is a quest to make the remove callback return void. In the first
+> step of this quest all drivers are converted to .remove_new() which already
+> returns void. Eventually after all drivers are converted, .remove_new() is
+> renamed to .remove().
+> 
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
- drivers/usb/dwc2/core.h   |  1 +
- drivers/usb/dwc2/params.c | 33 +++++++++++++++++++++++++++++++--
- drivers/usb/dwc2/pci.c    | 14 +-------------
- include/linux/pci_ids.h   |  2 ++
- 4 files changed, 35 insertions(+), 15 deletions(-)
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index 0bb4c0c845bf..c92a1da46a01 100644
---- a/drivers/usb/dwc2/core.h
-+++ b/drivers/usb/dwc2/core.h
-@@ -1330,6 +1330,7 @@ irqreturn_t dwc2_handle_common_intr(int irq, void *dev);
- /* The device ID match table */
- extern const struct of_device_id dwc2_of_match_table[];
- extern const struct acpi_device_id dwc2_acpi_match[];
-+extern const struct pci_device_id dwc2_pci_ids[];
- 
- int dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg);
- int dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg);
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index 21d16533bd2f..f7550d293c2d 100644
---- a/drivers/usb/dwc2/params.c
-+++ b/drivers/usb/dwc2/params.c
-@@ -7,6 +7,8 @@
- #include <linux/module.h>
- #include <linux/of_device.h>
- #include <linux/usb/of.h>
-+#include <linux/pci_ids.h>
-+#include <linux/pci.h>
- 
- #include "core.h"
- 
-@@ -55,6 +57,14 @@ static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
- 		!device_property_read_bool(hsotg->dev, "disable-over-current");
- }
- 
-+static void dwc2_set_loongson_params(struct dwc2_hsotg *hsotg)
-+{
-+	struct dwc2_core_params *p = &hsotg->params;
-+
-+	p->phy_utmi_width = 8;
-+	p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
-+}
-+
- static void dwc2_set_x1600_params(struct dwc2_hsotg *hsotg)
- {
- 	struct dwc2_core_params *p = &hsotg->params;
-@@ -281,6 +291,22 @@ const struct acpi_device_id dwc2_acpi_match[] = {
- };
- MODULE_DEVICE_TABLE(acpi, dwc2_acpi_match);
- 
-+const struct pci_device_id dwc2_pci_ids[] = {
-+	{
-+		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
-+	},
-+	{
-+		PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
-+			   PCI_DEVICE_ID_STMICRO_USB_OTG),
-+	},
-+	{
-+		PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, PCI_DEVICE_ID_LOONGSON_DWC2),
-+		.driver_data = (unsigned long)dwc2_set_loongson_params,
-+	},
-+	{ /* end: all zeroes */ }
-+};
-+MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
-+
- static void dwc2_set_param_otg_cap(struct dwc2_hsotg *hsotg)
- {
- 	switch (hsotg->hw_params.op_mode) {
-@@ -929,10 +955,13 @@ int dwc2_init_params(struct dwc2_hsotg *hsotg)
- 		set_params(hsotg);
- 	} else {
- 		const struct acpi_device_id *amatch;
-+		const struct pci_device_id *pmatch;
- 
- 		amatch = acpi_match_device(dwc2_acpi_match, hsotg->dev);
--		if (amatch && amatch->driver_data) {
--			set_params = (set_params_cb)amatch->driver_data;
-+		pmatch = pci_match_id(dwc2_pci_ids, to_pci_dev(hsotg->dev->parent));
-+
-+		if ((amatch && amatch->driver_data) || (pmatch && pmatch->driver_data)) {
-+			set_params = (set_params_cb)pmatch->driver_data;
- 			set_params(hsotg);
- 		}
- 	}
-diff --git a/drivers/usb/dwc2/pci.c b/drivers/usb/dwc2/pci.c
-index b7306ed8be4c..f3a1e4232a31 100644
---- a/drivers/usb/dwc2/pci.c
-+++ b/drivers/usb/dwc2/pci.c
-@@ -24,7 +24,7 @@
- #include <linux/platform_device.h>
- #include <linux/usb/usb_phy_generic.h>
- 
--#define PCI_PRODUCT_ID_HAPS_HSOTG	0xabc0
-+#include "core.h"
- 
- static const char dwc2_driver_name[] = "dwc2-pci";
- 
-@@ -122,18 +122,6 @@ static int dwc2_pci_probe(struct pci_dev *pci,
- 	return ret;
- }
- 
--static const struct pci_device_id dwc2_pci_ids[] = {
--	{
--		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
--	},
--	{
--		PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
--			   PCI_DEVICE_ID_STMICRO_USB_OTG),
--	},
--	{ /* end: all zeroes */ }
--};
--MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
--
- static struct pci_driver dwc2_pci_driver = {
- 	.name = dwc2_driver_name,
- 	.id_table = dwc2_pci_ids,
-diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-index e43ab203054a..6481f648695a 100644
---- a/include/linux/pci_ids.h
-+++ b/include/linux/pci_ids.h
-@@ -157,6 +157,7 @@
- #define PCI_VENDOR_ID_PCI_SIG		0x0001
- 
- #define PCI_VENDOR_ID_LOONGSON		0x0014
-+#define PCI_DEVICE_ID_LOONGSON_DWC2	0x7a04
- 
- #define PCI_VENDOR_ID_SOLIDIGM		0x025e
- 
-@@ -2356,6 +2357,7 @@
- #define PCI_DEVICE_ID_SYNOPSYS_HAPSUSB3_AXI	0xabce
- #define PCI_DEVICE_ID_SYNOPSYS_HAPSUSB31	0xabcf
- #define PCI_DEVICE_ID_SYNOPSYS_EDDA	0xedda
-+#define PCI_PRODUCT_ID_HAPS_HSOTG       0xabc0
- 
- #define PCI_VENDOR_ID_USR		0x16ec
- 
--- 
-2.20.1
 
