@@ -2,68 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99FFB707D01
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 11:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D166707D6A
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 11:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbjERJfY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 May 2023 05:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
+        id S230324AbjERJ5e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 May 2023 05:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbjERJfX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 05:35:23 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3212127
-        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 02:35:22 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 690476605861;
-        Thu, 18 May 2023 10:35:20 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684402520;
-        bh=oL2En3yRR8knnoB60ZscJ7BTUbvS7K370Aaxx3iso24=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ksNchRgLVqMAcIOhWKBeezRW23u/UNXgmNQw2eBUkqq5toVMDhMv+C80ZCRREvjRf
-         oVivXiycpuPkOKCqrX1gpv8+WNcrdPOuRl8DkT3svemg7hy4fKX6OkYtAR+6jMXjE1
-         ghVHKzAu84DQn+ngf06g7scRETxfHnc2tlKRhX2oSuYci6Hb1N1YjEU3QyPDMILe65
-         nbVmKTGCbj1sEUjRao0WGLFLpcyGBqHpg24kKlGSnZngMmrXYsJNua+vOpTcoCai7G
-         UyLPam8dydoejmig0fWtCdBsjmVU4OK1PXc3w8pTcUvYwMJxhdP0wMmbK0Ve74toVW
-         csDLSjQ9nPwSQ==
-Message-ID: <f0628691-e76d-8c31-5c70-5c188d9b96a3@collabora.com>
-Date:   Thu, 18 May 2023 11:35:17 +0200
+        with ESMTP id S230323AbjERJ5d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 05:57:33 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58CBE7B
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 02:57:31 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2ac7f53ae44so19959241fa.2
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 02:57:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684403850; x=1686995850;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ii3IQNZBUSQL/0xcT98KiKH1C3SWxauYsCsVnRYuILo=;
+        b=qyu0OzkxQib109sezttk43W2IzgKzmuHFxr4Pc8tRGrVcwLEuESTrcVHO6BfVHsKrI
+         mCTxYYwbur77+IhaHsgof6Sm1ZNrslHg0g3pW8uu/7MAgdWdJJaQexiFqRXEHexNEOSr
+         3t3Oab0zZPVFe39m828uI7X8ad7XQIKc3sXjhf81SeNUrQo7iizN+pOLnpPK+cCPp6wJ
+         7uEp2RUfW4YGwy4sHRgHLd66aWyoM7Tw3vp9BoT43aK0RSo8mFRvxbIwCqZOBjDiUg6S
+         QqJn28FTAyE34GTdluc4dOv+1DbK9mwv7TFHP0pjZdSx1aYBHfP5wNH27Byc441isHVs
+         MszA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684403850; x=1686995850;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ii3IQNZBUSQL/0xcT98KiKH1C3SWxauYsCsVnRYuILo=;
+        b=btNHsNFbhRwd+ann2y8IGbmWolEodOxWAsNFHIhq+199aP3NCXG2bMGdz0rB5xhZGH
+         /bV/jA4/RSQZPCTe5hVaMKgsadSPGQeRkgbuuSM7mnUdQFfZEAe+MaIWhTfltJm6gUzK
+         QyggZVX/j9aaU57a9Qh5nmofI6wK5bwqaipTILZJvFO+80aiA7tLUn7N4H5R9pnX6asf
+         YbhPoz4dNqx6jDR0nne/5S6Rj6zFJqgj8cEioUJUIaQI3QD1t1EkyIerNUWjBkMYRQX6
+         gpqi+5y9JKuxWziXHhWLzHFoQA2MF9mzG8d1X3sPEs5dSXkRtDfmd2djQlbar1NN65dj
+         hmJw==
+X-Gm-Message-State: AC+VfDyE9bAWdhc3G8IvDZok1ytTxC27u2D4dalggw1cxm1S6wsm9q3e
+        C1JDRrqjMtd/HUIp018JFGIC1g==
+X-Google-Smtp-Source: ACHHUZ6lAXc5axy45y4oOclger4bxsHe0MjFQOcI6f3Jvbs7gyaI1VKtcUSA1Y5ypSsDTj2vXsEmnQ==
+X-Received: by 2002:a2e:2c17:0:b0:2ad:b674:a7a3 with SMTP id s23-20020a2e2c17000000b002adb674a7a3mr8717864ljs.31.1684403850053;
+        Thu, 18 May 2023 02:57:30 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id c16-20020a2e9490000000b002a93e0605ebsm216785ljh.8.2023.05.18.02.57.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 02:57:29 -0700 (PDT)
+Message-ID: <22143b03-fa5e-627e-05b1-44034779ba01@linaro.org>
+Date:   Thu, 18 May 2023 11:57:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 82/97] usb: xhci-mtk: Convert to platform remove callback
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 20/97] usb: dwc3-qcom: Convert to platform remove callback
  returning void
 Content-Language: en-US
 To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@pengutronix.de
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        kernel@pengutronix.de
 References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
- <20230517230239.187727-83-u.kleine-koenig@pengutronix.de>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230517230239.187727-83-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20230517230239.187727-21-u.kleine-koenig@pengutronix.de>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230517230239.187727-21-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Il 18/05/23 01:02, Uwe Kleine-König ha scritto:
+
+
+On 18.05.2023 01:01, Uwe Kleine-König wrote:
 > The .remove() callback for a platform driver returns an int which makes
 > many driver authors wrongly assume it's possible to do error handling by
 > returning an error code. However the value returned is ignored (apart from
@@ -77,7 +96,41 @@ Il 18/05/23 01:02, Uwe Kleine-König ha scritto:
 > callback to the void returning variant.
 > 
 > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-
+Konrad
+>  drivers/usb/dwc3/dwc3-qcom.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 959fc925ca7c..167f851c8e59 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -938,7 +938,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> -static int dwc3_qcom_remove(struct platform_device *pdev)
+> +static void dwc3_qcom_remove(struct platform_device *pdev)
+>  {
+>  	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
+>  	struct device *dev = &pdev->dev;
+> @@ -958,8 +958,6 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
+>  
+>  	pm_runtime_allow(dev);
+>  	pm_runtime_disable(dev);
+> -
+> -	return 0;
+>  }
+>  
+>  static int __maybe_unused dwc3_qcom_pm_suspend(struct device *dev)
+> @@ -1052,7 +1050,7 @@ MODULE_DEVICE_TABLE(acpi, dwc3_qcom_acpi_match);
+>  
+>  static struct platform_driver dwc3_qcom_driver = {
+>  	.probe		= dwc3_qcom_probe,
+> -	.remove		= dwc3_qcom_remove,
+> +	.remove_new	= dwc3_qcom_remove,
+>  	.driver		= {
+>  		.name	= "dwc3-qcom",
+>  		.pm	= &dwc3_qcom_dev_pm_ops,
