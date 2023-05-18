@@ -2,56 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A40B707922
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 06:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6137C7079D9
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 07:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbjEREfU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 May 2023 00:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
+        id S229704AbjERFvC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 May 2023 01:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjEREfE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 00:35:04 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD3B19BE
-        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 21:35:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684384503; x=1715920503;
-  h=date:from:to:cc:subject:message-id;
-  bh=n557yrkgJ0mouQSUaEaqI+pj/KOlhCBPz1FEtSR3e2E=;
-  b=BAwiCHbIIrfhJDKST8QZqQvkCcS+Ti2USaa5lVHBt1XgFv2kO67nYbfB
-   SCA7GfGQfK1uVF+qFwTxeRg13hY/n7F8wyq9QGeNnNvaTAVEPYbwjIkCp
-   7yvR0jN4zsi5MFSghO9X5HM62L/xOOt+6Kr5mYCDlACdml9PCKttotJLP
-   l9MeaIbLrsKvwcJNz3lKrrt90aeosBS45MX4pR0VORIayWw3mqW93bIfx
-   t5XFKG+6jrcNuF2JfT0nzFCJjwNWyCZ3ZdfKcxma+dkCTqcUAeCjy97Sy
-   1burvbcmdGCX7SnMGWH6Pp8SqrIPoNJacmDtRjXYIVqWKyRgJsRrCEGRw
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="331576392"
-X-IronPort-AV: E=Sophos;i="5.99,284,1677571200"; 
-   d="scan'208";a="331576392"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 21:35:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="696162096"
-X-IronPort-AV: E=Sophos;i="5.99,284,1677571200"; 
-   d="scan'208";a="696162096"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 17 May 2023 21:35:03 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pzVLx-0009Xg-1m;
-        Thu, 18 May 2023 04:35:01 +0000
-Date:   Thu, 18 May 2023 12:34:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 1e94be78ec1556e90056ac038b15231723d315a9
-Message-ID: <20230518043408.ny5HL%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S229524AbjERFvB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 01:51:01 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2137.outbound.protection.outlook.com [40.107.114.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7621721
+        for <linux-usb@vger.kernel.org>; Wed, 17 May 2023 22:50:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AKGkTDWkJtS1H+3SasEAnNjYNwFm79QkLDLJBM7hcPEM/ZjZxV7MFlEIR7MazeLhjEnhQrheq7fsg+jloemA14ixrFP/mAeGWNbXAkis2Dh7bbZybwCbn8sRjk4eCsXO+4dRx+rkTFLqz979Ea4AOx9oVSJgMTA8A8LHIWcOVXSblfJP62Pj1YNSkojv45jK5G8aU2k6n7O9BVT5JpqIp9DXMsHyiV5XQT7BPyZIuwLqbC8y8/GDj8w5pOR6WZleL6hCYq3kKnCf0CEFH267G7lKOK0Df2mgtiCxDQnDbr7sXcAtSOtZk1rd0XvRxlFISjl89JsthdT9Wnj6WQ06QQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S4SwGAm36ZDmvh2vvh0BjJEU1hTQXn0IaM74kzAVvQQ=;
+ b=btT1dsQFl7x9e8XhuVdRwxNXvLYn+ZM5dj/3aQCxvDkpP6ai6uNIyBR0Vy6rvBcqSh70LtFAtLbt9pUqwkmiDqnx0AlJhZTkCqbRnB8uh+3QdeONRzY+SsF8VJ8TwLpYo+RZMY6OEocZtI3pGfYcIsMrA18sPRuFGXyYT86MWt3Ckx/WwSDHbBfVNfnVa1HZeOf29RGpogOQXNKeCrwVxWg8riOKV5nQV7RIWk/sxHVa71+nHKqGmZgJTDiN2QTVC+du5L41XdynDrrc/H/TYspeI4xy1mc/Rtru4Zimo+KYBJ+iWRh0fjmmC56eU+HdHrC0iowTYRG5s6yanQxtLg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S4SwGAm36ZDmvh2vvh0BjJEU1hTQXn0IaM74kzAVvQQ=;
+ b=al2H1/82koZj+ATrl2T0PFI8l0IwU0m1WI5ufDFFdqam4xPpNpEJqbXoJqsw03qQTwQSPV/JsB7KlbL6EMr+zjSLZvvQJaSxLepwCDcqcBKkSXO1vHbU8j8eQSNiFFNyqxo69wl4iGZiX56i3JAF6jxDpWnxDlUNR+px4x468So=
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
+ by TYCPR01MB9733.jpnprd01.prod.outlook.com (2603:1096:400:20b::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Thu, 18 May
+ 2023 05:50:56 +0000
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::bd0a:a38d:b4d2:5d2]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::bd0a:a38d:b4d2:5d2%6]) with mapi id 15.20.6411.017; Thu, 18 May 2023
+ 05:50:53 +0000
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: RE: [PATCH 41/97] usb: gadget/rzv2m_usb3drd: Convert to platform
+ remove callback returning void
+Thread-Topic: [PATCH 41/97] usb: gadget/rzv2m_usb3drd: Convert to platform
+ remove callback returning void
+Thread-Index: AQHZiRO7mrXsQL+lJkS03oE3m1FcwK9fhudw
+Date:   Thu, 18 May 2023 05:50:53 +0000
+Message-ID: <OS0PR01MB59223C91CBA6891CE757BCF8867F9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
+ <20230517230239.187727-42-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230517230239.187727-42-u.kleine-koenig@pengutronix.de>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYCPR01MB9733:EE_
+x-ms-office365-filtering-correlation-id: eae5ec7f-c808-44d7-2bb4-08db5763d7b2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /W0UR3bkMgZ/UXnVkS0kcNY3PqxDOGWmXU5T5nma4Dy3afWrty5dc2L07bJC9GPtR+4TnD+KfYLaixXCGcgFmIjfZRP/bCsEsn/NxVzzlm/DFdggiFm7iN2c+Pg8P38+GfniRkLW1WV5qFwL0Mhc1MAOnfzTC7kruR6Nzu1F2nhWQTgAKudd2o4//HXgRuL5y3NYB+eczgw/JCXZ5qMfhb/aUh6miqrk4c1eBCZbPM91sZmbgD9iZxT66GgjwWz+RiNBtM75Qw/d3Up9Y72GowKOZxh8gDJUoG0/+ZSupbHF4K/JqHN1yGOAn5+z49CqaG8+QwcrVec8zlfrHMdOVTyXjws7XKAZE6aaqgD9+uZaMn7D6jaDZXB3vuNZrqRUBXE0LcAFSPp0COVvcfXu7o/U2NB+xlG0UYD+MtIQjqN92/CNMj6frVUBH8ZurXxwbX8E5cLv8IhfKdcc8OOoEHBaHL0WrcCV5GZFjRpHYH+gw4oRksuA69WJ8NFy+flnzTnEZZdkzWzpwCaGKaAFXukOBUqMvsamUL1Lwk5PPiRg8BMEqHuPm/pFiaOeDodwpNCfQ83fesJ4b3slO+y82C586FNLFrd3C6U41OZIgMUGU83jtZmxi5bLpaqctUxV
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(39860400002)(396003)(346002)(376002)(451199021)(478600001)(4326008)(316002)(2906002)(52536014)(8936002)(64756008)(41300700001)(66476007)(66556008)(66946007)(76116006)(8676002)(54906003)(110136005)(5660300002)(71200400001)(66446008)(7696005)(53546011)(9686003)(6506007)(26005)(186003)(122000001)(55016003)(66574015)(83380400001)(38070700005)(86362001)(38100700002)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?c2Z2VjJNY0t0dE1oRTJtcjUvNzJWRnQxcS9TTDkzVXBJeEhtTVpncWxKcVA2?=
+ =?utf-8?B?MmZVV2l2SlhRS0dleVB4WGRzMWk0TlM5VEF3eXVZazRsK1hjbC83QjY1L01B?=
+ =?utf-8?B?YUE2RXkwa0ZHYnJGdnUxZjBEUTFGem5pcjJZOTRRMldEbFMyYW1YbGhYQk9p?=
+ =?utf-8?B?RlN1U2RNTkFJYXVCbHFxOFhyZVpLK2g1b0xHaURDMXlSUFB3SURCMVhWTENw?=
+ =?utf-8?B?RU01YTN5Mnd0alJmVVRybUV4dmxYWkNOS1o4cGE2QlBWcDVlNDNTYzc0Z0hW?=
+ =?utf-8?B?VHdUS2g5UmRzNkVQQTBzL0x0WWJUOS91ZSs2ZGM0V3V4dzkvK281WGJ0ODlw?=
+ =?utf-8?B?YWpOS1NFeks4SUswVjRQTUpCVEI0Rnh0MmdjSzI4dWhPOFZxcDhaUUdiTmdH?=
+ =?utf-8?B?dDUzR293WlBhNTkzcGd4Q09EeWxwWVlyUmpod3JRWkluNm9hSXhkWWVwMUhJ?=
+ =?utf-8?B?U3lrZUNKc1FxM3UzamlYVVVJTm9BbTJWUStmWXN1RjVMK1RiczRFMVVJb0RU?=
+ =?utf-8?B?Q0RDZTZhKzVxWEh4T0p0b0xGeTNwcU5jSmhXY0lBa2lSdHB4THkvN3pHcmt2?=
+ =?utf-8?B?TDh3eXZ0VXRNK01HT0FGdmFjYTluVGo4M2FNMzlZR09kT3RzcndPU1RDd0hM?=
+ =?utf-8?B?RnFNODVsVTEvNkorejhtWHBlZWFIRk1TZ0V2QVB5YkhqNTJVVVdYc3VLc2Fr?=
+ =?utf-8?B?OTZidVJwc1lUNDlFeVVocjRSWlIxWGRQdUMvREZkSFdrb2MrMjNpSlpoSjJn?=
+ =?utf-8?B?RTM2a2VXcklVaFNZemVYY1ZPVWlpRUk5ZlRhM3dDajlNZndlUzFTaVEzRGdx?=
+ =?utf-8?B?NzN3ZUlxRytEUGpWeU1xYW5tRlA0bXVSYW5uRjQvRTBRM3pUVkM2L0RVdktz?=
+ =?utf-8?B?MHZ6NDVDeTA3YWJuUEhHbDl5eWdtSnBIMjFLL1lGeVpYakZucWpLeCtHQ2Nl?=
+ =?utf-8?B?VVJ3Sjd0Z1VDUHN3QmlTSVZEdGlJNXljZzNjS0tqa1dkdmdYTWxzSzVFNTRO?=
+ =?utf-8?B?UFpEeXF6SXo3YmpoU1cvUEZSYzRzRm1xZnlsa0lNZDM2YXN6Zk5hdytZcjhv?=
+ =?utf-8?B?TlBmdnNTSm5QMDA3YWZxZkl3OW05SDdnejZiZzBmL21QTm5qczN0NmtFekNI?=
+ =?utf-8?B?bTIzTGZzUFRvbTFXeGs2Qm1sQjI1NERpR0ptVlJFVkZjN2doS0h3ZWVCRUFp?=
+ =?utf-8?B?VVZHSHZrMmVOSjlkcW9ja2xxdE5od3p3SjI0WjFSUFlFa3ZVeldObHg4K0l5?=
+ =?utf-8?B?QmxvQVpoUWZPYkVYL0VYeDg2WWI0VWxwdXhoelVwcTNoQmVNMDN4Lzd5Z1Jp?=
+ =?utf-8?B?VHVOMjNVL25QYzZ1TFBUdm1oZXZNUjNyTFl0M25ta2t0SVJOaFFSNm1ZbG9W?=
+ =?utf-8?B?cTA1VlFiaDUzTStXdWkyMHozTVEzcit3ajRUOEI1VGh1WXFUeExnbnE3ZHJN?=
+ =?utf-8?B?em8zeFd4cU5RejNhMzBqK2lFKzNVWEpoZlowTGkwL0RKQ3VhWmlaVWZpYWNJ?=
+ =?utf-8?B?NWozWWtJR3FUcVFWSjdHdmJGZXV0MjRQVzBHK3l5OGVOdHhIOGhSRUcyWFVu?=
+ =?utf-8?B?UlJhTjZaTnNpYXlFU2s1Um9MVWEzdkl2dUd1NWJadFhkODYxREtycVVrZHJr?=
+ =?utf-8?B?d3dIdGFjbDhoZmtPMms1QURHUm9mbFhrMjF0WGFMTzBLMDRwVXBESlFYZVpn?=
+ =?utf-8?B?Z0RTUjZvWVhFQ1hBL0VvV3l1QWxEWi9GNVdhVHk5Y3B5MVZKMXVmNFFWNmtL?=
+ =?utf-8?B?U29SRlREbXZFcHJMekhCdWFMTUw3UnVteXhWaEdicGZmY2ErSnJwY0traHEz?=
+ =?utf-8?B?dTJOS25OQkljYVNURVYvV21TSWdSbmdyeHQzZDJFcExQV2ZFSUMrN09TMG4v?=
+ =?utf-8?B?ay9pOUJBNDNLbThsclVqaGxIRGE0QzNsd0RIbTJDSVh0UVM4L3NoOXpzd2Ro?=
+ =?utf-8?B?NXJQdUxmVVpYMkk0MWppWlhkSEdzQ1M5d3FQNlZGVjY3V0psbWxKQlg5a2FP?=
+ =?utf-8?B?VkNsUzRXbEg5QUR2VEFQZTdHdFFPSFE2L2Y3d1dyMk8zRXJhU0ptaEhQYURz?=
+ =?utf-8?B?YVovSzVaQjlwdWNoM0xPYU9TeGZIbmZ6YXFHbVNzYmx6d3BUM1NyajQ1RzJN?=
+ =?utf-8?Q?9ML2b+4z+4KiwRl3G8f4djwy0?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eae5ec7f-c808-44d7-2bb4-08db5763d7b2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2023 05:50:53.4610
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Z/TlJ2igylWPNXsltaTVNwOlHlPMRcm4Y7OvlPJajQJVQ+uTXxm+8k3LgJvQMyuNLagMrcJdT//UMkIT1F1a/YXSR4YPRS3ivLQquntB8R4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB9733
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,134 +133,52 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: INFO setup_repo_specs: /db/releases/20230517200055/lkp-src/repo/*/usb
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 1e94be78ec1556e90056ac038b15231723d315a9  Merge tag 'thunderbolt-for-v6.4-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
-
-elapsed time: 932m
-
-configs tested: 114
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r001-20230517   gcc  
-alpha        buildonly-randconfig-r005-20230517   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r005-20230517   gcc  
-alpha                randconfig-r024-20230517   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r036-20230517   gcc  
-arc                  randconfig-r043-20230517   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r003-20230517   gcc  
-arm                  randconfig-r026-20230517   clang
-arm                  randconfig-r046-20230517   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-hexagon      buildonly-randconfig-r004-20230517   clang
-hexagon              randconfig-r002-20230517   clang
-hexagon              randconfig-r041-20230517   clang
-hexagon              randconfig-r045-20230517   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r013-20230517   gcc  
-loongarch            randconfig-r035-20230517   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r004-20230517   gcc  
-m68k                 randconfig-r031-20230517   gcc  
-microblaze           randconfig-r012-20230517   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r015-20230517   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r023-20230517   gcc  
-openrisc     buildonly-randconfig-r002-20230517   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r016-20230517   gcc  
-riscv                randconfig-r042-20230517   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390         buildonly-randconfig-r006-20230517   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r011-20230517   gcc  
-s390                 randconfig-r044-20230517   gcc  
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r003-20230517   gcc  
-sh                   randconfig-r021-20230517   gcc  
-sh                   randconfig-r025-20230517   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r001-20230517   gcc  
-sparc                randconfig-r006-20230517   gcc  
-sparc                randconfig-r022-20230517   gcc  
-sparc64              randconfig-r032-20230517   gcc  
-sparc64              randconfig-r033-20230517   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                        randconfig-x051   gcc  
-x86_64                        randconfig-x052   clang
-x86_64                        randconfig-x053   gcc  
-x86_64                        randconfig-x054   clang
-x86_64                        randconfig-x055   gcc  
-x86_64                        randconfig-x056   clang
-x86_64                        randconfig-x061   gcc  
-x86_64                        randconfig-x062   clang
-x86_64                        randconfig-x063   gcc  
-x86_64                        randconfig-x064   clang
-x86_64                        randconfig-x065   gcc  
-x86_64                        randconfig-x066   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r014-20230517   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+SGkgVXdlLA0KDQpUaGFua3MgZm9yIHRoZSBwYXRjaC4NCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3Nh
+Z2UtLS0tLQ0KPiBGcm9tOiBVd2UgS2xlaW5lLUvDtm5pZyA8dS5rbGVpbmUta29lbmlnQHBlbmd1
+dHJvbml4LmRlPg0KPiBTZW50OiBUaHVyc2RheSwgTWF5IDE4LCAyMDIzIDEyOjAyIEFNDQo+IFRv
+OiBHcmVnIEtyb2FoLUhhcnRtYW4gPGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPjsgVGhpbmgg
+Tmd1eWVuDQo+IDxUaGluaC5OZ3V5ZW5Ac3lub3BzeXMuY29tPjsgQ2h1bmZlbmcgWXVuIDxjaHVu
+ZmVuZy55dW5AbWVkaWF0ZWsuY29tPjsNCj4gQmlqdSBEYXMgPGJpanUuZGFzLmp6QGJwLnJlbmVz
+YXMuY29tPjsgS3J6eXN6dG9mIEtvemxvd3NraQ0KPiA8a3J6eXN6dG9mLmtvemxvd3NraUBsaW5h
+cm8ub3JnPjsgUm9iIEhlcnJpbmcgPHJvYmhAa2VybmVsLm9yZz4NCj4gQ2M6IGxpbnV4LXVzYkB2
+Z2VyLmtlcm5lbC5vcmc7IGtlcm5lbEBwZW5ndXRyb25peC5kZQ0KPiBTdWJqZWN0OiBbUEFUQ0gg
+NDEvOTddIHVzYjogZ2FkZ2V0L3J6djJtX3VzYjNkcmQ6IENvbnZlcnQgdG8gcGxhdGZvcm0NCj4g
+cmVtb3ZlIGNhbGxiYWNrIHJldHVybmluZyB2b2lkDQo+IA0KPiBUaGUgLnJlbW92ZSgpIGNhbGxi
+YWNrIGZvciBhIHBsYXRmb3JtIGRyaXZlciByZXR1cm5zIGFuIGludCB3aGljaCBtYWtlcw0KPiBt
+YW55IGRyaXZlciBhdXRob3JzIHdyb25nbHkgYXNzdW1lIGl0J3MgcG9zc2libGUgdG8gZG8gZXJy
+b3IgaGFuZGxpbmcgYnkNCj4gcmV0dXJuaW5nIGFuIGVycm9yIGNvZGUuIEhvd2V2ZXIgdGhlIHZh
+bHVlIHJldHVybmVkIGlzIGlnbm9yZWQgKGFwYXJ0DQo+IGZyb20gZW1pdHRpbmcgYSB3YXJuaW5n
+KSBhbmQgdGhpcyB0eXBpY2FsbHkgcmVzdWx0cyBpbiByZXNvdXJjZSBsZWFrcy4NCj4gVG8gaW1w
+cm92ZSBoZXJlIHRoZXJlIGlzIGEgcXVlc3QgdG8gbWFrZSB0aGUgcmVtb3ZlIGNhbGxiYWNrIHJl
+dHVybg0KPiB2b2lkLiBJbiB0aGUgZmlyc3Qgc3RlcCBvZiB0aGlzIHF1ZXN0IGFsbCBkcml2ZXJz
+IGFyZSBjb252ZXJ0ZWQgdG8NCj4gLnJlbW92ZV9uZXcoKSB3aGljaCBhbHJlYWR5IHJldHVybnMg
+dm9pZC4gRXZlbnR1YWxseSBhZnRlciBhbGwgZHJpdmVycw0KPiBhcmUgY29udmVydGVkLCAucmVt
+b3ZlX25ldygpIGlzIHJlbmFtZWQgdG8gLnJlbW92ZSgpLg0KPiANCj4gVHJpdmlhbGx5IGNvbnZl
+cnQgdGhpcyBkcml2ZXIgZnJvbSBhbHdheXMgcmV0dXJuaW5nIHplcm8gaW4gdGhlIHJlbW92ZQ0K
+PiBjYWxsYmFjayB0byB0aGUgdm9pZCByZXR1cm5pbmcgdmFyaWFudC4NCj4gDQo+IFNpZ25lZC1v
+ZmYtYnk6IFV3ZSBLbGVpbmUtS8O2bmlnIDx1LmtsZWluZS1rb2VuaWdAcGVuZ3V0cm9uaXguZGU+
+DQoNClJldmlld2VkLWJ5OiBCaWp1IERhcyA8YmlqdS5kYXMuanpAYnAucmVuZXNhcy5jb20+DQoN
+CkNoZWVycywNCkJpanUNCg0KPiAtLS0NCj4gIGRyaXZlcnMvdXNiL2dhZGdldC91ZGMvcnp2Mm1f
+dXNiM2RyZC5jIHwgNiArKy0tLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyks
+IDQgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZ2FkZ2V0L3Vk
+Yy9yenYybV91c2IzZHJkLmMNCj4gYi9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL3J6djJtX3VzYjNk
+cmQuYw0KPiBpbmRleCA1ODljNzI1MmUwMTQuLjM2ZjRmZjAwZDIyZiAxMDA2NDQNCj4gLS0tIGEv
+ZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9yenYybV91c2IzZHJkLmMNCj4gKysrIGIvZHJpdmVycy91
+c2IvZ2FkZ2V0L3VkYy9yenYybV91c2IzZHJkLmMNCj4gQEAgLTU4LDcgKzU4LDcgQEAgdm9pZCBy
+enYybV91c2IzZHJkX3Jlc2V0KHN0cnVjdCBkZXZpY2UgKmRldiwgYm9vbA0KPiBob3N0KSAgfSAg
+RVhQT1JUX1NZTUJPTF9HUEwocnp2Mm1fdXNiM2RyZF9yZXNldCk7DQo+IA0KPiAtc3RhdGljIGlu
+dCByenYybV91c2IzZHJkX3JlbW92ZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAr
+c3RhdGljIHZvaWQgcnp2Mm1fdXNiM2RyZF9yZW1vdmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAq
+cGRldikNCj4gIHsNCj4gIAlzdHJ1Y3Qgcnp2Mm1fdXNiM2RyZCAqdXNiMyA9IHBsYXRmb3JtX2dl
+dF9kcnZkYXRhKHBkZXYpOw0KPiANCj4gQEAgLTY2LDggKzY2LDYgQEAgc3RhdGljIGludCByenYy
+bV91c2IzZHJkX3JlbW92ZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlDQo+ICpwZGV2KQ0KPiAgCXBt
+X3J1bnRpbWVfcHV0KHVzYjMtPmRldik7DQo+ICAJcG1fcnVudGltZV9kaXNhYmxlKCZwZGV2LT5k
+ZXYpOw0KPiAgCXJlc2V0X2NvbnRyb2xfYXNzZXJ0KHVzYjMtPmRyZF9yc3RjKTsNCj4gLQ0KPiAt
+CXJldHVybiAwOw0KPiAgfQ0KPiANCj4gIHN0YXRpYyBpbnQgcnp2Mm1fdXNiM2RyZF9wcm9iZShz
+dHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KSBAQCAtMTI5LDcNCj4gKzEyNyw3IEBAIHN0YXRp
+YyBzdHJ1Y3QgcGxhdGZvcm1fZHJpdmVyIHJ6djJtX3VzYjNkcmRfZHJpdmVyID0gew0KPiAgCQku
+b2ZfbWF0Y2hfdGFibGUgPSByenYybV91c2IzZHJkX29mX21hdGNoLA0KPiAgCX0sDQo+ICAJLnBy
+b2JlID0gcnp2Mm1fdXNiM2RyZF9wcm9iZSwNCj4gLQkucmVtb3ZlID0gcnp2Mm1fdXNiM2RyZF9y
+ZW1vdmUsDQo+ICsJLnJlbW92ZV9uZXcgPSByenYybV91c2IzZHJkX3JlbW92ZSwNCj4gIH07DQo+
+ICBtb2R1bGVfcGxhdGZvcm1fZHJpdmVyKHJ6djJtX3VzYjNkcmRfZHJpdmVyKTsNCj4gDQo+IC0t
+DQo+IDIuMzkuMg0KDQo=
