@@ -2,57 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79E6708BE4
-	for <lists+linux-usb@lfdr.de>; Fri, 19 May 2023 00:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 830E3708BE5
+	for <lists+linux-usb@lfdr.de>; Fri, 19 May 2023 00:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjERWsY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 May 2023 18:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
+        id S230141AbjERWsg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 May 2023 18:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjERWsX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 18:48:23 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C17F7
-        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 15:48:22 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-623921866bfso5784846d6.1
-        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 15:48:22 -0700 (PDT)
+        with ESMTP id S229487AbjERWsf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 18:48:35 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79A7E69
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 15:48:34 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-62384e391e3so10544006d6.3
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 15:48:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1684450101; x=1687042101;
+        d=broadcom.com; s=google; t=1684450114; x=1687042114;
         h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=tAwrRcD3zwRHDWMwV6DIq2ySWZ6MK5OChccUdAMj9A8=;
-        b=IMZTOlTl3rtRvYL7gCcdAO7DTip8ptZBGejR/SeyZQ1GAvQxLk17dWMJO6Bwtg/uEv
-         bE7wG5y+DU70rU/q+mw+Q7gfGHdPDtkr1jjyHUxqGr6a6kTO21C3zjr+AKl9NOjizsJi
-         CYYxvtBkpTzyi384mt9iMn4ezWVBdPt/qrqiQ=
+        bh=63EumBdqXKyyXb6gtNa1I4pU7B7KgMsRjiXgWA1/C9U=;
+        b=Y5HyPCNZLNFvtQkBaQJ6Nz3EiR6871XhJ7bJspDDyPOWDnpQuxhOncWtEVw95V+8iL
+         4IUqHgZGFRxTX56CO/6CV2UbKCnRVq0K/AUDxZDP9zz7nJfoUPhU8lU4fAXbt1AnCvrs
+         bwwg9b6DPGczFyWeC+cSV+9oqaTgzS1QzwbB4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684450101; x=1687042101;
+        d=1e100.net; s=20221208; t=1684450114; x=1687042114;
         h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tAwrRcD3zwRHDWMwV6DIq2ySWZ6MK5OChccUdAMj9A8=;
-        b=X8COHnvSdc0iDJhHAE+TWSy60pwNGg2qDkfUV8xsTSkB9JxNwBlKFnz8NM0cv4atHl
-         zdrd6q5mBGVdMnO5NvxpX4ynrlTVhViqgtoHLwshQOa5ifelduego/vYoAj714uxqXXY
-         KWE7DkxSgu3wjEl64xMUp1RKaQM53/dQku13xhWngNn7pXvC1N8dhH2CNJ7nEgkPgiHa
-         S8M7jZJ/HdA3vF2f4sjCLlSWqdDHZbFzd55wvRRCBbDgy8WjEjsfMYT17Nz1YzmJCHbZ
-         U4GTXAK33YQ1Pu65UB15Jb1UI831VrccZSYdg+ExLhVkDUgtTlUcACWm0K6DddNu9/11
-         ZVvg==
-X-Gm-Message-State: AC+VfDwEz13bRrHMJ9yZ7LwRJVaGpgBSb9SM3GorN8aLElLItuXx8f3n
-        Lwt0jm9obV/w83DbhbY0IRIeUw==
-X-Google-Smtp-Source: ACHHUZ7hyf0iWxyaunYn+7X+gDydzw36wfk686Q2/9bEMmiYjx16Jg6zcJeCFlVP2MBzca7mYTt4WA==
-X-Received: by 2002:ad4:574f:0:b0:577:5ffe:e0ce with SMTP id q15-20020ad4574f000000b005775ffee0cemr1352572qvx.25.1684450101206;
-        Thu, 18 May 2023 15:48:21 -0700 (PDT)
+        bh=63EumBdqXKyyXb6gtNa1I4pU7B7KgMsRjiXgWA1/C9U=;
+        b=BMYxD65cmIz9zV2MjUsyR5MbP0ZGY6ywF8w1V3EmPM4w7Dat09C3LpJLjfELcmhRdR
+         EouEbn+96uJEYEnRMe5VeewEx7EvvepIHSQCwIglN0UqRa2DbJmdkGuI5bGg4SSw0WrI
+         ngwOU0hoskaEgP5kJBUVQasnTzp7a8DXA3EKtUGnE0HWity/uSV20atctS07DAuB20Pa
+         PuyYbnWY9FwOpO/rKmMJO+f6kl4uqcLjKgeWn2Q5d7cEbovgVPwgjplLpSV9CNovKQkv
+         sKGfYguc8p7w3fwcC8+FuAVsaxVETG5AIJVRGPxSW1zYG5IIQljZv961qVRztsqhfQs+
+         y91A==
+X-Gm-Message-State: AC+VfDz9oNbS9Dyv+47fALiYjOZ5Ra/4c/XM9xBNzTLUieVVD+PP9sC2
+        Tqo5o3Htwc5ffqbhHxPuAlU5mg==
+X-Google-Smtp-Source: ACHHUZ5FmmbaVch5j07A9FhcgK0a3K5aAoKf4OZlGxXELgPM6k6s2GHcSA+MBx0UDUGZg81OfbnFvA==
+X-Received: by 2002:a05:6214:dad:b0:623:1a2f:fe06 with SMTP id h13-20020a0562140dad00b006231a2ffe06mr1528458qvh.10.1684450113766;
+        Thu, 18 May 2023 15:48:33 -0700 (PDT)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id g1-20020a0cf841000000b005f2dba7a5b0sm855128qvo.132.2023.05.18.15.48.19
+        by smtp.gmail.com with ESMTPSA id qh30-20020a0562144c1e00b0062383edece8sm850891qvb.91.2023.05.18.15.48.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 15:48:20 -0700 (PDT)
-Message-ID: <166bfd40-8782-7e37-a7c6-6bee35474324@broadcom.com>
-Date:   Thu, 18 May 2023 15:48:17 -0700
+        Thu, 18 May 2023 15:48:32 -0700 (PDT)
+Message-ID: <9e65a7dc-bb86-5176-417f-6cdf219627f1@broadcom.com>
+Date:   Thu, 18 May 2023 15:48:30 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 28/97] usb: bdc: Convert to platform remove callback
+Subject: Re: [PATCH 46/97] usb: ehci-brcm: Convert to platform remove callback
  returning void
 To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
         Justin Chen <justinpopo6@gmail.com>,
         Al Cooper <alcooperx@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -60,11 +61,11 @@ Cc:     Broadcom internal kernel review list
         <bcm-kernel-feedback-list@broadcom.com>, linux-usb@vger.kernel.org,
         kernel@pengutronix.de
 References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
- <20230517230239.187727-29-u.kleine-koenig@pengutronix.de>
+ <20230517230239.187727-47-u.kleine-koenig@pengutronix.de>
 From:   Florian Fainelli <florian.fainelli@broadcom.com>
-In-Reply-To: <20230517230239.187727-29-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230517230239.187727-47-u.kleine-koenig@pengutronix.de>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000f14f7505fbff990f"
+        boundary="000000000000b1690205fbff9a0b"
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -75,7 +76,7 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---000000000000f14f7505fbff990f
+--000000000000b1690205fbff9a0b
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
@@ -100,7 +101,7 @@ Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
 Florian
 
 
---000000000000f14f7505fbff990f
+--000000000000b1690205fbff9a0b
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -173,12 +174,12 @@ AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
 /D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIKv+2bZYCiIA5A2t
 Ge7Y/Tl70py9vdfd/7uXiyCrNbzwMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDUxODIyNDgyMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AQkFMQ8XDTIzMDUxODIyNDgzNFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAcPJ9gzD+VNRt6yNln9BOA/y51NKq9W23d
-dbVWxZwBPLocy2QCb0Hvhs8/yOdsfdR+Y2mgDTYIs4Fj80WbsMiK3PszbjyjV3lFxBklTY2itE0i
-M1A1LXCVT+CWIpNWFo3fJN3gDwejw4+/PlLC231OqBoKkFaUqvXyVanYpUlw1UwOLT+jJbJfLEjb
-q89xjQAny1RM+cKm9dkNCAzchbVk4EjmY4VEADCFRYaLANni2JgztRyVdBKm1zqcylEwdtt6I/dw
-P55pyVg19lyjYA/v2qiq5K9Bip9CPHDK/nu+vsVjS1WBBG1iARcyY8urHUJQsfOU8QRQ+mhuPQPR
-yKav
---000000000000f14f7505fbff990f--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQApn03YiVkQtIPVFkAjRQXS2jPxhiVWfdR4
+Iz7a0ammNBL+IB7P2LKQplLeaD6dI9RAk2nFWx7bVXyS+XITUYtmkmfWqrmY2pUQJCZG2mlpxdeY
+MquKw9DisfZ4D/kDHwNFi0+TISPea8vofBU3AhqVGLP+9Ja4Bp4dfEkq2676ULo/riDoorOKmeAf
+Yg8F77KOGwZlzvD47pcPbjRgv9RfXZYyFCzpSbgQAqS9Nam9+NekOz0Z1PMXPVL6ADVALQTvcFTQ
+jlit9Qx0ZEVaBF9FFw2uMzfDs0VLZaLmz6gJf4+TGaCvfrKHme8QH+LvCDlnriJx7Usyj4KWYrQm
+lZWU
+--000000000000b1690205fbff9a0b--
