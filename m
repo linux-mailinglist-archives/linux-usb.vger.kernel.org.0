@@ -2,231 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1B07085B4
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 18:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B97A708623
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 18:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjERQMY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 May 2023 12:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
+        id S229572AbjERQmY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 May 2023 12:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjERQMX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 12:12:23 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2083.outbound.protection.outlook.com [40.107.244.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E63BFE;
-        Thu, 18 May 2023 09:12:21 -0700 (PDT)
+        with ESMTP id S229493AbjERQmX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 12:42:23 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2117.outbound.protection.outlook.com [40.107.243.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2079F5;
+        Thu, 18 May 2023 09:42:21 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lQe4GPW92UWe/PhCY8ixfnHQQFc+Y9KM3YOn4VzTSMzwy8E8hRMTylqEt6eeaBORwHIhrM6wJoTN8hGITzU0NpuTLz8uCI0OrscXjQQGLUQWTytWyeUXiSdCfEYxL7YHbaYIsyqSO2NYuRLIYhe4QbXqr9QV5g0jOQYLeZEd2T2aUhdgJu3b3aNzO7w0R00doC/yYYkkMqrw8NXHvYTyJx5tJVobvPT45g91TV1k9GlkNX3Z5sd5unx8mc1kJFu62lNL5mnNB2zHrbkaP1kmATt0nbx10lUoB4qfG3lWQn0sxFnHrAi0YUKx58tKYqh6ZJXzfAwa67S7UpbVO/7x1Q==
+ b=JxaoLHfv9x3d8RuDRjCelsrbCTBy6oFAeKGm1EV3mvhSDSHwPcPboV4h/JNM/ZhXu24QfV0Pk9kNu+xHrD3j0ffL7RXoOdyTCMV4ZIdSJQjCLODoGOaagA/E8v06B+ZcAFT+dnmX094TTwp6CG/3MHfH4ZnyRD63gAKl7aTKgg1aGVssxGZwf9dY7/TNG8UBqsOjF9qywMoq9KMJ5qLLdf3ObVTeu991M30LcfDF8R1KQZizSaYyRXN0rAcBlt/S1YF4iDvy9dIgA0lKk430BrKv3dzEX0LcKWe9/7WtnFePG59dyv7b1wdEg3ocJ60Bl72fLV3+Fr3KWxMrP55fUg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p7ZcI+u5QOkEp2325OchhtpJ7Ri++tVH5Np9f5CmHK0=;
- b=LhzimnkdIjD0ppTcEv7mLzKvMuuPGFIiwLboGWJ7hBimzd0OI2767EQHNhaPaohmk+OjMigX7onMdBaIlgY7jRadIsQzpe4FeUW4Q7nAvrpve+kYfbi0QXdi83qWKbjfHDT4lBvPE15fqammYUT58rtZGUgPeRkXb1Zzv6H+peK/v8A2lyYfC9R2PIXH6L7PZ8fQaQEw42IXwjB5lOss6k5Nwv5GuxtW9aPNZrPrf+/xEpPeLs0Mt/fzXQPj2p5DdVZ6PZV4nvGdy/RMzd6kR9J/zY57EeNpFKFH8muK2I9wffpWo36OAskS7LuWkRNZVaGm6su9djS9GM8MyZsrZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=L6AC67PE9Rn95sNol8qsPQ695tw5/b0/kKwiRAgarMw=;
+ b=naGTl9LVeVNtyoSMNzPMWH2mDwNeN0C6yHMTdjkpaNP2G/WYm9FuOx+DZzWZy2myWhhmBvE3YZ+a8gNOWbq/CJ2ZMegXKAB71eI9KEUujhthwq/R584QRQdx5hfqOTLZX6g0A+HKba5Eyqv4aYstaj2n05caFHlvxxcdEwsO55eWEWvTsw4NhSMUsXJEoFJne+mecJZEdBjTIL/bLNEbp+OGju3XW78ddr9xygGVz9bV2IN73PtEK0MCYlduWt4Q7k06UMD9RRXITEFYccDN39QWm64fbYIhijMeA3ZhMizRLi1En7ma+g4A7vdXfPkxyE0oLmP4uXDUdrY/zgqzDA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p7ZcI+u5QOkEp2325OchhtpJ7Ri++tVH5Np9f5CmHK0=;
- b=5fMdWzSUp5g31ceTFPFFPlnZb3s2NqnoJCgHTeUQvS5EqAfrSK23m+mUds5MSYrHdU3z0SfV+x5i42AFH/GyP+dSBesbQoF8KYNU3sNNDLBwXGp2b/LTxkpmCZnwdvojwg5A7BkCwmfcaQ2z7CKJUbqwuEAStL71TQV6j+klIRs=
-Received: from DM6PR13CA0058.namprd13.prod.outlook.com (2603:10b6:5:134::35)
- by SJ2PR12MB7990.namprd12.prod.outlook.com (2603:10b6:a03:4c3::12) with
+ bh=L6AC67PE9Rn95sNol8qsPQ695tw5/b0/kKwiRAgarMw=;
+ b=M7wrKNXmfKfATm4faHM3KyHYClEjJA1b42PeiRQFL+5Lm4F1nwZFI2vFcP5o6z5JhDnMsmtjeal6x/ElNxOTvMQHoo9l1nsLIRcmF06NwdyovwmVOt6SJfj4o1RV076gee6SKpIVgRMJknvwet56UYNOoQHYGbV+pOyu/EZS6bA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SJ0PR13MB5600.namprd13.prod.outlook.com (2603:10b6:a03:426::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Thu, 18 May
- 2023 16:12:18 +0000
-Received: from DM6NAM11FT103.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:134:cafe::6b) by DM6PR13CA0058.outlook.office365.com
- (2603:10b6:5:134::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.15 via Frontend
- Transport; Thu, 18 May 2023 16:12:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT103.mail.protection.outlook.com (10.13.172.75) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.20 via Frontend Transport; Thu, 18 May 2023 16:12:18 +0000
-Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 18 May
- 2023 11:12:16 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <heikki.krogerus@linux.intel.com>, <ajayg@nvidia.com>,
-        <andriy.shevchenko@linux.intel.com>
-CC:     <linux-i2c@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <Evan.Quan@amd.com>, <Lijo.Lazar@amd.com>,
-        <Sanket.Goswami@amd.com>,
-        "Mario Limonciello" <mario.limonciello@amd.com>,
-        Evan Quan <evan.quan@amd.com>
-Subject: [PATCH v2] usb: typec: ucsi: Mark dGPUs as DEVICE scope
-Date:   Thu, 18 May 2023 11:11:50 -0500
-Message-ID: <20230518161150.92959-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Thu, 18 May
+ 2023 16:42:18 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.019; Thu, 18 May 2023
+ 16:42:18 +0000
+Date:   Thu, 18 May 2023 18:42:11 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc:     bjorn@mork.no, joneslee@google.com, oliver@neukum.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        syzbot+9f575a1f15fc0c01ed69@syzkaller.appspotmail.com
+Subject: Re: [PATCH] net: cdc_ncm: Deal with too low values of dwNtbOutMaxSize
+Message-ID: <ZGZVYx3k77Z3/9YQ@corigine.com>
+References: <87wnklivun.fsf@miraculix.mork.no>
+ <20230517133808.1873695-1-tudor.ambarus@linaro.org>
+ <20230517133808.1873695-2-tudor.ambarus@linaro.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517133808.1873695-2-tudor.ambarus@linaro.org>
+X-ClientProxiedBy: AS4PR10CA0016.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d8::8) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT103:EE_|SJ2PR12MB7990:EE_
-X-MS-Office365-Filtering-Correlation-Id: 315b40a3-95a6-4aa6-64eb-08db57baa71f
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ0PR13MB5600:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7801ac4d-a1da-4421-2c20-08db57bed7d7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: R60QjZvkUCf9HB9CMtx+W2Jsc5uGSaf8Ij9i2ZkdOdnlVYoTNKbRiiCTHI6HK+H0qNrJDnOUVgNzbQfkE6pzpVi2IBTW1e69bGm0oA4G8rWXuOkH4UuWSpXfqWsqss/16z0dt20R7LzlyeN9ZX8V6iXkRrq0P6TB/D+DcsymWmwajiamuycrTjtHVbyFMHOFa6DsKZo/KdqJPDys+atm5xufXcfoOKRQfD0cmelaLEf4u/yO5zDb66p0PYshTSGrIinw7os0OhDv/qseG/3Z3k8+sUZ1WCsuU4KchywvEmSM+L6IJxmQQBzQuHeWarju4AOdCQ6gHtHg+gGF6gbkjLUHiM9ITj8CItjFThCWI5eDBhnES2dHFb8D30FSVkz6rg6toEkYu0ONVuHrxd/fcmv7Qa1pcD0LNdDZfbYrbU6NcOFr22edxHbcsndGCr5g+QbzXB5JOyd7kDoAv4gi36mwQszjizb+Qi835vAcukAfXoCklJtzKlB7YBIM989NCdlljzYV/UPLFV5iYm8DQO9BcXNtSDRL/lbZ2dgDzomK6yX3CspvHaiVy39RUh0cHDxT/f7oklbwzy6XC0KXxRnhknm9h3Zp0sxtnW64Nem6yT2Ynu1cVmPlyX+a7VfBXJjhlR3KrE6k5mjkIjIPeFY+bIr5DcRraU4ptsLv84oqhkFHdybYzG+iVmXKkjXC76lEnPFrYRp3qozD2VWfHan2yoW4bLvHLA7fA5Q0No/lYFl9YWI3766u6tkglSXMxaNOdD9ZDL1/n+SlBZgtG0R0L5SKPy7hYoHWMGIihsY=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(346002)(376002)(451199021)(36840700001)(46966006)(40470700004)(86362001)(36756003)(16526019)(54906003)(316002)(4326008)(478600001)(70206006)(110136005)(70586007)(966005)(6666004)(7696005)(8676002)(8936002)(40480700001)(82310400005)(41300700001)(40460700003)(5660300002)(2906002)(44832011)(2616005)(336012)(81166007)(82740400003)(426003)(83380400001)(1076003)(26005)(186003)(36860700001)(47076005)(356005)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 16:12:18.1662
+X-Microsoft-Antispam-Message-Info: 7vohQAyV/IfpJEaEkLwwd6zm2+Td8HUekMPIE1Nvg3Fzz6ePKwNOnDl3TD1jB3rhP0vvPfLKnxYIAWE1hftIKNAgfj1KRQdx2Ks41Wv/D6m+ToWNtSszHtvuqpnU9umEY5dLRNYAIe3k1W+w+kxpR1H5JtZWGMy093ps3KLx+NRwb77olD302HyCnWxzVWBGrOSE8zayni5EPLyLowPrY9ehdW1ORCc6CmYBPK4jfzphBP7sIExIfZIEzelqUwRSP+VZvYAXgxXr+pjPy+btsDhY+vx4ZmuptyrTku/aPqoopTz2zuJfFkRtNc9AK1BkRMlFdyT308f+XA6zILfMqljOymjsKFraefJYo0BUjck2m93qQM0/9/KxXRU0nG53U3pQU2XiSDTdjqwcigOOCTpCrYw0eIBKxuopge3dx/Az+9KAoYa17u/nSVg1xA4by983tmtIeRnhOzQbTdti/7qJi000oYGbzAr+aClRq5/QbC4n4ZPq3KCScqHvCl7IcyBdH/ENRvBX4SUYpco1HBgbozhBoutCDdfTIlSs3Mdb/Pp4jqaUNCO2mx3NEV8JUoR97wgoouz9PR7LXHfXmB93Uj3BmwhpQC2Sd+YYuseKy5o+pby/SobH+BQx6Ah6R4ZRpYRy+tQnnBrWENe+pw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39840400004)(376002)(346002)(366004)(451199021)(66556008)(66476007)(66946007)(4326008)(6916009)(8676002)(8936002)(966005)(316002)(478600001)(66899021)(6666004)(41300700001)(6486002)(2906002)(86362001)(6512007)(6506007)(36756003)(7416002)(44832011)(38100700002)(5660300002)(2616005)(186003)(145543001)(145603002)(99710200001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZYH+QmPyu2eESwpYGCocdtXDx0L2fQix2N9LZRGIbVoYAFklH1XgCdsbCZGl?=
+ =?us-ascii?Q?fWOVy1nMPAsYOr/uYJ5COJoP0whCPkXahy62r7FNA3c0JGVKHoyCZbM8nx7r?=
+ =?us-ascii?Q?f16UbXj1wUqH/xnRow/tsFi1MqeaOx+ygR992t6+GhzCZxmDK34ULlzYIPtr?=
+ =?us-ascii?Q?MbH8LM1whJo+ub7AxhnhSU7p4xKpJcH0OcX6AjcoTmJDsPLZ2McdYF5elLdS?=
+ =?us-ascii?Q?rr5KGNQEP46Vef5dCrYRLiruI1Pwr23K3ga4wPXDPQ+V+rVePp/l4hMr4b2n?=
+ =?us-ascii?Q?aYB6eZqMAYUXwQpsy4qMRIiXMomPNN+NsnLsE2X54oNYGuIN6O9dMP6qwrnA?=
+ =?us-ascii?Q?9i7f7EsWEa4GIwR/bMame9YjNVRHSd7z+1OARtKdtJK3WVb01yU8MmR2ddGK?=
+ =?us-ascii?Q?JbGlFjG00xlQhMCsGmWtDDc+qMXUuVvt1S32IHSvpONmpgpHA7naOBm1Ojj+?=
+ =?us-ascii?Q?ZVcOJaRFQgap48L2+IAJMyI6e8ZgYvG72LENiTbzRyG7pHVRMRKdSDyx1vg2?=
+ =?us-ascii?Q?OJwgwvZsFFNhaMC14EmbKfiukXb9tOfhNZDYzq1OWm/+N2S4GQqAdzwIB3uN?=
+ =?us-ascii?Q?QIlRA8Jj0WHjXsT0yU31CGaZFc3Fyif32rGnVfZ4GPI6xZ927kuHrsQ6wE8H?=
+ =?us-ascii?Q?sL1JYtvI283MuIE94NNadO+pmJB6OEeyfPaL1wQSCK6hjSerZpLo6ly0jk9Q?=
+ =?us-ascii?Q?BQQ7b0dRl+Pmk1vfIhVLYoJ7d3PNg0n7t5B5gq1FCs/yy3MzHrWlUbnJ1h84?=
+ =?us-ascii?Q?GhPDUwSo5nwxHsItXH+fEwzgH+0wC/HDNWpE9CDOJJb56AuE/mpbhVr2s5u9?=
+ =?us-ascii?Q?at7qhYvD+7r9f8ZPgfL22xGknmUiDegq6TIUuqbK2i1CbiM6pkkTGQGa5PRY?=
+ =?us-ascii?Q?nHucHapynygLqvcskjQixpiXTPR2pTnWeEncw9muQ9VYRNQShauBiKDeWdCO?=
+ =?us-ascii?Q?5vFVvXtRYSjbsbTXwXHXt11gzM/2Oj0nlKO+TVDM1ijihu3x0AH93t8/P87O?=
+ =?us-ascii?Q?ZsFwopjOTq5k1mfPstGDIiO6TN4NioPEyEbVNvkHE/MmgX3/pOkjabG2Odue?=
+ =?us-ascii?Q?8X+/fjFzo328gtfj1puYhIHUPo51VW6yxuTmeIINXPL7oUMaIGmn+U7DlPou?=
+ =?us-ascii?Q?fh3c5v6gZgSgi0Mj4/+TrPyzl8EHrF6lvaykc/voL687QOvPOfpUzgaG2DFJ?=
+ =?us-ascii?Q?7YKbaPD7KoqN14LAPSvRrcY5sys4mQ2m1zYn/65JJS53jY9gYL75HbmXP0Gd?=
+ =?us-ascii?Q?BAuPCugCSmnY0ITdHTZqGPyYP7FQNwKnP2gqeRUvKFy2lULCoXrnOoNWQrd/?=
+ =?us-ascii?Q?D2fDNtswJBDNAmUKd6mx+TRQJvRx4gII5+n2UGP3bea72xgUsgaroj8tdW+S?=
+ =?us-ascii?Q?uCCC0dfsfrIaC+EBiHLa+JL21S0Byi6KAZuW+rtj9TELtgEwcljcOUvnuj+N?=
+ =?us-ascii?Q?dqt8CV8M5dKDIColqzBLbZ2h1qf+Ss7QIZSpv8YHLgsIsGl93pIKbUnjR6S9?=
+ =?us-ascii?Q?rKDszHrxmh3q3U0NWhwr+Zc7tafjv5MWG5twMpddWj3qTbKq/45MlmF4gekO?=
+ =?us-ascii?Q?hV1PrkXYurcCHAscC0o3hYWrQjGZU0cSEeKYLJHm0jyJLVtIyldMVf85AF5w?=
+ =?us-ascii?Q?aBx0l/FG95apUJQvfscJ4wyjPdF0Jl7axA0F3weu2k34w8sZLkBoABE/TyJ4?=
+ =?us-ascii?Q?SNU8vA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7801ac4d-a1da-4421-2c20-08db57bed7d7
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 16:42:18.1361
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 315b40a3-95a6-4aa6-64eb-08db57baa71f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT103.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7990
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0P0vGK8jgysYvZYnS6npoH1/rZWhY+uUM/sWw9eXjd+8yNB+W+hBLK1v3bJC0oAW6AC730Cr2JMM6ksp4W5mIG6UohVSMxxlcncgHrwFgBw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR13MB5600
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-power_supply_is_system_supplied() checks whether any power
-supplies are present that aren't batteries to decide whether
-the system is running on DC or AC.  Downstream drivers use
-this to make performance decisions.
+On Wed, May 17, 2023 at 01:38:08PM +0000, Tudor Ambarus wrote:
+> Currently in cdc_ncm_check_tx_max(), if dwNtbOutMaxSize is lower than
+> the calculated "min" value, but greater than zero, the logic sets
+> tx_max to dwNtbOutMaxSize. This is then used to allocate a new SKB in
+> cdc_ncm_fill_tx_frame() where all the data is handled.
+> 
+> For small values of dwNtbOutMaxSize the memory allocated during
+> alloc_skb(dwNtbOutMaxSize, GFP_ATOMIC) will have the same size, due to
+> how size is aligned at alloc time:
+> 	size = SKB_DATA_ALIGN(size);
+>         size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+> Thus we hit the same bug that we tried to squash with
+> commit 2be6d4d16a084 ("net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset or zero")
+> 
+> Low values of dwNtbOutMaxSize do not cause an issue presently because at
+> alloc_skb() time more memory (512b) is allocated than required for the
+> SKB headers alone (320b), leaving some space (512b - 320b = 192b)
+> for CDC data (172b).
+> 
+> However, if more elements (for example 3 x u64 = [24b]) were added to
+> one of the SKB header structs, say 'struct skb_shared_info',
+> increasing its original size (320b [320b aligned]) to something larger
+> (344b [384b aligned]), then suddenly the CDC data (172b) no longer
+> fits in the spare SKB data area (512b - 384b = 128b).
+> 
+> Consequently the SKB bounds checking semantics fails and panics:
+> 
+> skbuff: skb_over_panic: text:ffffffff831f755b len:184 put:172 head:ffff88811f1c6c00 data:ffff88811f1c6c00 tail:0xb8 end:0x80 dev:<NULL>
+> ------------[ cut here ]------------
+> kernel BUG at net/core/skbuff.c:113!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 57 Comm: kworker/0:2 Not tainted 5.15.106-syzkaller-00249-g19c0ed55a470 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+> Workqueue: mld mld_ifc_work
+> RIP: 0010:skb_panic net/core/skbuff.c:113 [inline]
+> RIP: 0010:skb_over_panic+0x14c/0x150 net/core/skbuff.c:118
+> [snip]
+> Call Trace:
+>  <TASK>
+>  skb_put+0x151/0x210 net/core/skbuff.c:2047
+>  skb_put_zero include/linux/skbuff.h:2422 [inline]
+>  cdc_ncm_ndp16 drivers/net/usb/cdc_ncm.c:1131 [inline]
+>  cdc_ncm_fill_tx_frame+0x11ab/0x3da0 drivers/net/usb/cdc_ncm.c:1308
+>  cdc_ncm_tx_fixup+0xa3/0x100
+> 
+> Deal with too low values of dwNtbOutMaxSize, clamp it in the range
+> [USB_CDC_NCM_NTB_MIN_OUT_SIZE, CDC_NCM_NTB_MAX_SIZE_TX]. We ensure
+> enough data space is allocated to handle CDC data by making sure
+> dwNtbOutMaxSize is not smaller than USB_CDC_NCM_NTB_MIN_OUT_SIZE.
+> 
+> Fixes: 289507d3364f ("net: cdc_ncm: use sysfs for rx/tx aggregation tuning")
+> Cc: stable@vger.kernel.org
+> Reported-by: syzbot+9f575a1f15fc0c01ed69@syzkaller.appspotmail.com
+> Link: https://syzkaller.appspot.com/bug?extid=b982f1059506db48409d
+> Link: https://lore.kernel.org/all/20211202143437.1411410-1-lee.jones@linaro.org/
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
-Navi dGPUs include an UCSI function that has been exported
-since commit 17631e8ca2d3 ("i2c: designware: Add driver
-support for AMD NAVI GPU").
-
-This UCSI function registers a power supply since commit
-992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
-but this is not a system power supply.
-
-As the power supply for a dGPU is only for powering devices connected
-to dGPU, create a device property to indicate that the UCSI endpoint
-is only for the scope of `POWER_SUPPLY_SCOPE_DEVICE`.
-
-Link: https://lore.kernel.org/lkml/20230516182541.5836-2-mario.limonciello@amd.com/
-Reviewed-by: Evan Quan <evan.quan@amd.com>
-Tested-by: Evan Quan <evan.quan@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v1->v2:
- * Drop patch 1, merged into a maintainers tree
- * Fix title
- * Add tags
- * Fix terminators
----
- drivers/i2c/busses/i2c-designware-pcidrv.c | 13 ++++++++++++-
- drivers/i2c/busses/i2c-nvidia-gpu.c        |  3 +++
- drivers/usb/typec/ucsi/psy.c               | 14 ++++++++++++++
- 3 files changed, 29 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index 782fe1ef3ca1..61d7a27aa070 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -20,6 +20,7 @@
- #include <linux/module.h>
- #include <linux/pci.h>
- #include <linux/pm_runtime.h>
-+#include <linux/power_supply.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
- 
-@@ -234,6 +235,16 @@ static const struct dev_pm_ops i2c_dw_pm_ops = {
- 	SET_RUNTIME_PM_OPS(i2c_dw_pci_runtime_suspend, i2c_dw_pci_runtime_resume, NULL)
- };
- 
-+static const struct property_entry dgpu_properties[] = {
-+	/* USB-C doesn't power the system */
-+	PROPERTY_ENTRY_U8("scope", POWER_SUPPLY_SCOPE_DEVICE),
-+	{}
-+};
-+
-+static const struct software_node dgpu_node = {
-+	.properties = dgpu_properties,
-+};
-+
- static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 			    const struct pci_device_id *id)
- {
-@@ -325,7 +336,7 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 	}
- 
- 	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU) {
--		dev->slave = i2c_new_ccgx_ucsi(&dev->adapter, dev->irq, NULL);
-+		dev->slave = i2c_new_ccgx_ucsi(&dev->adapter, dev->irq, &dgpu_node);
- 		if (IS_ERR(dev->slave))
- 			return dev_err_probe(dev->dev, PTR_ERR(dev->slave),
- 					     "register UCSI failed\n");
-diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
-index a8b99e7f6262..26622d24bb1b 100644
---- a/drivers/i2c/busses/i2c-nvidia-gpu.c
-+++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
-@@ -14,6 +14,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm.h>
- #include <linux/pm_runtime.h>
-+#include <linux/power_supply.h>
- 
- #include <asm/unaligned.h>
- 
-@@ -261,6 +262,8 @@ MODULE_DEVICE_TABLE(pci, gpu_i2c_ids);
- static const struct property_entry ccgx_props[] = {
- 	/* Use FW built for NVIDIA GPU only */
- 	PROPERTY_ENTRY_STRING("firmware-name", "nvidia,gpu"),
-+	/* USB-C doesn't power the system */
-+	PROPERTY_ENTRY_U8("scope", POWER_SUPPLY_SCOPE_DEVICE),
- 	{ }
- };
- 
-diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
-index 56bf56517f75..384b42267f1f 100644
---- a/drivers/usb/typec/ucsi/psy.c
-+++ b/drivers/usb/typec/ucsi/psy.c
-@@ -27,8 +27,20 @@ static enum power_supply_property ucsi_psy_props[] = {
- 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
- 	POWER_SUPPLY_PROP_CURRENT_MAX,
- 	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_SCOPE,
- };
- 
-+static int ucsi_psy_get_scope(struct ucsi_connector *con,
-+			      union power_supply_propval *val)
-+{
-+	u8 scope = POWER_SUPPLY_SCOPE_UNKNOWN;
-+	struct device *dev = con->ucsi->dev;
-+
-+	device_property_read_u8(dev, "scope", &scope);
-+	val->intval = scope;
-+	return 0;
-+}
-+
- static int ucsi_psy_get_online(struct ucsi_connector *con,
- 			       union power_supply_propval *val)
- {
-@@ -194,6 +206,8 @@ static int ucsi_psy_get_prop(struct power_supply *psy,
- 		return ucsi_psy_get_current_max(con, val);
- 	case POWER_SUPPLY_PROP_CURRENT_NOW:
- 		return ucsi_psy_get_current_now(con, val);
-+	case POWER_SUPPLY_PROP_SCOPE:
-+		return ucsi_psy_get_scope(con, val);
- 	default:
- 		return -EINVAL;
- 	}
--- 
-2.34.1
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
