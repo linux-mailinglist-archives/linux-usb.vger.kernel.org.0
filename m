@@ -2,205 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DD970882F
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 21:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3AE9708884
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 21:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjERTGY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 May 2023 15:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
+        id S230236AbjERTme (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 May 2023 15:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjERTGX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 15:06:23 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0959FCA;
-        Thu, 18 May 2023 12:06:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1684436774; i=deller@gmx.de;
-        bh=pBy6GELUpzGIiCShn/8+5zqDsJlsfeiFiD+3uO8JbY4=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=GW3ynz/DbLLzEQGUdqVylIi+hc3P+CxSdGHqGnRDPIU7MUlCu/VYRt2psVDzp7v3c
-         EIknENG18my1GD9v4SzuuZnfDmmijFT4QR9k5SkfFqWEuWhpk9YR9xuo13dlDDKAVn
-         Jx6V9JdZxNAhmhw6eL2zL/REpW3MT4D3dVbLraqoiqKDCqbursJ+/Tgi/6KiwNtgBv
-         +Nw3c8FozrBE1ql2uybHnSzCHIBgEEb1PY4QBWFl1cbJCgbnuLDB7AdDjBkyrip8tC
-         W3G8wJcIzwVwgcbHkWv0HHG756lTimjCJ8oJ2fUo+EbC/2xSubh+wvD296U4hlGT2x
-         OllpUAsKCYchw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from ls3530 ([94.134.154.30]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N0XD2-1qKfeU2SEG-00wZAK; Thu, 18
- May 2023 21:06:14 +0200
-Date:   Thu, 18 May 2023 21:06:12 +0200
-From:   Helge Deller <deller@gmx.de>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Cc:     syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>,
-        bernie@plugable.com, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [fbdev?] [usb?] WARNING in
- dlfb_submit_urb/usb_submit_urb (2)
-Message-ID: <ZGZ3JPLqxCxA2UB6@ls3530>
-References: <0000000000004a222005fbf00461@google.com>
- <ZGXVANMhn5j/jObU@ls3530>
- <4cd17511-2b60-4c37-baf3-c477cf6d1761@rowland.harvard.edu>
- <be824fbc-cde4-9a2a-8fb4-1ca23f498dca@gmx.de>
- <2905a85f-4a3b-4a4f-b8fb-a4d037d6c591@rowland.harvard.edu>
+        with ESMTP id S230031AbjERTmd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 15:42:33 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED79E6D;
+        Thu, 18 May 2023 12:42:30 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 51F9E6018D;
+        Thu, 18 May 2023 21:42:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1684438948; bh=8TuUr/tbhWxw/Wl+c1CUiJnNsg4NRh0wA3s+nfMW4/0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ULkr652diD3aZMEl8lIMDS5dVWGd0asdy7dR+2X7PL5Qonso9mzYF+yprshQCNiGq
+         X98B2Jo8FKpyKP3lu2F6CPzJtC5ilcZX+fz1Z0A57CQEC/JeUIAasCdb38AF0AkqTb
+         H/kNQHegJs+EZ/Bmy4WO8Hzz+vgHRzt2Q289h/ip4PXUMG0YdQ2V33Ram1bsT2CAgS
+         CP8iFXJ5hGzNUDiydEx2CR4+VGlq+/GqxrZA1oIZy4qgiuBpTsm11h19Urv/369tKv
+         mYeYfMaLzwwfvWH18d6OlEOw9els5HJPvpJ5t7PRo9s5ZSXAlg5lLkJmsP8069t5eH
+         KGDna0oltbX7Q==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id tzS0IgwIkEhc; Thu, 18 May 2023 21:42:25 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [77.237.113.62])
+        by domac.alu.hr (Postfix) with ESMTPSA id EDFA760189;
+        Thu, 18 May 2023 21:42:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1684438945; bh=8TuUr/tbhWxw/Wl+c1CUiJnNsg4NRh0wA3s+nfMW4/0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=EGTcjHmIDggZ8hor6P64XQL/UpBQoNU9/LBm/5CrxLwXPmQXQhS8rKlO2TseY/GDF
+         AY7u7syczZeCtxmS94m6DLjB17y5QUeZfucAvgyCasxw4yH7hF/m6b9xvuYHHjBmPx
+         C8LBSQ6FAYruE6sR4x5TIqmRyf8dAaqJU7vt749tGtMlGC1+rLomkj0UGqadAn3qxS
+         KbZUR3/b+/d0zL9T/rf1d8dmlNp3lywYsQJ4jPna1+VAht61NIIntoEzXCmPx787VU
+         ui5YPEosZF0dfGwYF/wOOwQ/lMHadnOLQqEEuRv99Aijl/3g3YUMEFaXd/K9Ns1N6i
+         gxKbdKctE6bbw==
+Message-ID: <bd373477-79eb-a178-b3c4-1f7699689fbb@alu.unizg.hr>
+Date:   Thu, 18 May 2023 21:42:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2905a85f-4a3b-4a4f-b8fb-a4d037d6c591@rowland.harvard.edu>
-X-Provags-ID: V03:K1:Q3nIu3LTT7sasw5uCAZngX5+JzZttsCCWf+9S/T/gP2tfMnOCUW
- BwpHjk/fKNMPjT4KWgBwNKfV0NExzypTNjj+eQqR5yhxduihabVfHEmzpPKMJD+9M7HP9bi
- 24WyALeLnxpLreLUBFlgueLDTY8G6MG7pjNLF0t1Cgwx7NFBMxOsWY4xuVJL2WFELj3bQ4g
- DKf10N5q0OIoLLX8Fnnkw==
-UI-OutboundReport: notjunk:1;M01:P0:y4zdltgRDIg=;hT62BpYCTxJ9wnrrSwFQrUxLRMP
- KNuz5bykn4UaZIUngZnebcjA296bIc/zRl5RwesJytwxfwDe+fjBddoN401UjPTQhKx8I4qSk
- /3ego8neUmYfVMvspZo4F2EgTnHpOjR4UA8SdcrFa/aLk/z31UfrYaFZobhFcPXbq00ZoovQc
- Sl48QUY8soF3JantHxXEJmxvkq8iJXirhxrZ/O4d+bV1nU9KhCfs8yUMwWEtQ97egyj3rXBy+
- KseszST5rP2rKiAgMQbVOu/XOaT4MkFGOE+KT7OiTdm6q/1d0d5tlCbCfst0Ihv4Eho7oezXh
- 94rBavAPPbr1HtpdsLZGOqUE+7m52M9dHmxQSsdey4xaL2UM/kMgsQ/+xE8xsvQJx409a8VBu
- oHi6h2rIoDsMVm9Ynxc6QE5N+nuxggbaUuhBt4Ow/PTtaRWkK7MH7yCwpfOrawBLW/CTCIJAK
- BG+ytBpZCLVMCk0zbLypuHD2wqgyJ8udAoignq42MwIKJmdmBoO2kaLFMTe/WGr6BNwgDhIEM
- 20lW14NRAvIcrq/bmIeLeyT9eGe8GORW4SVtuqFYyXue8ismouoPXyAx7ewdeZhKvhPlC97gw
- SoO49j0sRR+ojtFJPUdtopQ01V4r7vIiKDsHBcc6DBeyQqI515/VxVl0n2gTEM6iqDrhErjYh
- igP1sELoTYPWQhREddoszTq60/0YeSgaWJr7yNPfx3QVSRAha5hZdIreOKv+TDIZOkm0homed
- Ks0bxp9joXqwzav4ryAOyTRoTr/nwVMvrJDeAM7A8N6xpzzxQ8+q39tzdZ0ywvGYhKEzhaZf0
- i3GCLVqony8LJ3fgHdPYf3gDsytTukVp59dUepehu1W3Qf6F5PCFRM+obMC/+E7c4aOnQY72I
- r1nQ1XFoPVsuQaESOIXn46IOfbu8oB1Z1QNmuDF3ZRRRQ9ZWmtKmiCoDvfk4LRj+SR5Qn4wIJ
- WJNz/xyp7ysdprpKDGXkPz4pgSw=
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] driver core: class: properly reference count
+ class_dev_iter()
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org,
+        syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+References: <2023051610-stove-condense-9a77@gregkh>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <2023051610-stove-condense-9a77@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-* Alan Stern <stern@rowland.harvard.edu>:
-> On Thu, May 18, 2023 at 04:16:33PM +0200, Helge Deller wrote:
-> > On 5/18/23 15:54, Alan Stern wrote:
-> > > On Thu, May 18, 2023 at 09:34:24AM +0200, Helge Deller wrote:
-> > > > I think this is an informational warning from the USB stack,
-> > >
-> > > It is not informational.  It is a warning that the caller has a bug.
-> >
-> > I'm not a USB expert, so I searched for such bug reports, and it seems
-> > people sometimes faced this warning with different USB devices.
->
-> Yes.
->
-> > > You can't fix a bug by changing the line that reports it from dev_WA=
-RN
-> > > to printk!
-> >
-> > Of course this patch wasn't intended as "fix".
-> > It was intended to see how the udlfb driver behaves in this situation,=
- e.g.
-> > if the driver then crashes afterwards.
-> >
-> > Furthermore, why does usb_submit_urb() prints this WARNING and then co=
-ntinues?
-> > If it's a real bug, why doesn't it returns an error instead?
-> > So, in principle I still think this warning is kind of informational,
-> > which of course points to some kind of problem which should be fixed.
->
-> Depending on the situation, the bug may or may not lead to an error.  At
-> the time the dev_WARN was added, we were less careful about these sorts
-> of checks; I did not want to cause previously working devices to stop
-> working by failing the URB submission.
+On 5/16/23 21:20, Greg Kroah-Hartman wrote:
+> When class_dev_iter is initialized, the reference count for the subsys
+> private structure is incremented, but never decremented, causing a
+> memory leak over time.  To resolve this, save off a pointer to the
+> internal structure into the class_dev_iter structure and then when the
+> iterator is finished, drop the reference count.
+> 
+> Reported-and-tested-by: syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com
+> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Fair enough.
+Hi, Greg,
 
-> > > In this case it looks like dlfb_usb_probe() or one of the routines i=
-t
-> > > calls is wrong; it assumes that an endpoint has the expected type
-> > > without checking.  More precisely, it thinks an endpoint is BULK whe=
-n
-> > > actually it is INTERRUPT.  That's what needs to be fixed.
-> >
-> > Maybe usb_submit_urb() should return an error so that drivers can
-> > react on it, instead of adding the same kind of checks to all drivers?
->
-> Feel free to submit a patch doing this.
+Did I forget to give the
 
-As you wrote above, this may break other drivers too, so I'd leave that
-discussion & decision to the USB maintainers (like you).
+Tested-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 
-> But the checks should be added
-> in any case; without them the drivers are simply wrong.
+I apologise if I did.
 
-I pushed the hackish patch below through the syz tests which gives this lo=
-g:
-(see https://syzkaller.appspot.com/text?tag=3DCrashLog&x=3D160b7509280000)
-[   77.559566][    T9] usb 1-1: Unable to get valid EDID from device/displ=
-ay
-[   77.587021][    T9] WARNING: BOGUS urb xfer, pipe 3 !=3D type 1 (fix dr=
-iver to choose correct endpoint)
-[   77.596448][    T9] usb 1-1: dlfb_urb_completion - nonzero write bulk s=
-tatus received: -115
-[   77.605308][    T9] usb 1-1: submit urb error: -22
-[   77.613225][    T9] udlfb: probe of 1-1:0.52 failed with error -22
+Best regards,
+Mirsad
 
-So, basically there is no urgent fix needed for the dlfb fbdev driver,
-as it will gracefully fail as is (which is correct).
-
-What do you suggest we should do with this syzkaller-bug ?
-I'd rate it as false-alarm, but it will continue to complain because of
-the dev_WARN() in urb.c
-
-Helge
-=2D--
-
-From: Helge Deller <deller@gmx.de>
-Date: Thu, 18 May 2023 19:03:56 +0200
-Subject: [PATCH] fbdev: udlfb: check endpoint type, again
-
-Temporary patch to anaylze syzbot regression:
-https://syzkaller.appspot.com/bug?extid=3D0e22d63dcebb802b9bc8
-It's not planned to apply as-is!
-
-Fixes: aaf7dbe07385 ("video: fbdev: udlfb: properly check endpoint type")
-Signed-off-by: Helge Deller <deller@gmx.de>
-
-diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
-index 9f3c54032556..bb889a1da3ef 100644
-=2D-- a/drivers/usb/core/urb.c
-+++ b/drivers/usb/core/urb.c
-@@ -500,9 +500,12 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
- 	 */
-
- 	/* Check that the pipe's type matches the endpoint's type */
--	if (usb_pipe_type_check(urb->dev, urb->pipe))
--		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x !=3D type %x\n",
-+	if (usb_pipe_type_check(urb->dev, urb->pipe)) {
-+		/* temporarily use printk() instead of WARN() to fix bug in udlfb drive=
-r */
-+		printk("WARNING: BOGUS urb xfer, pipe %x !=3D type %x (fix driver to ch=
-oose correct endpoint)\n",
- 			usb_pipetype(urb->pipe), pipetypes[xfertype]);
-+		return -EINVAL;
-+	}
-
- 	/* Check against a simple/standard policy */
- 	allowed =3D (URB_NO_TRANSFER_DMA_MAP | URB_NO_INTERRUPT | URB_DIR_MASK |
-diff --git a/drivers/video/fbdev/udlfb.c b/drivers/video/fbdev/udlfb.c
-index 216d49c9d47e..5e56b2889c8c 100644
-=2D-- a/drivers/video/fbdev/udlfb.c
-+++ b/drivers/video/fbdev/udlfb.c
-@@ -1667,8 +1667,9 @@ static int dlfb_usb_probe(struct usb_interface *intf=
-,
- 	usb_set_intfdata(intf, dlfb);
-
- 	retval =3D usb_find_common_endpoints(intf->cur_altsetting, NULL, &out, N=
-ULL, NULL);
--	if (retval) {
--		dev_err(&intf->dev, "Device should have at lease 1 bulk endpoint!\n");
-+	if (retval || out =3D=3D NULL) {
-+		retval =3D -ENODEV;
-+		dev_err(&intf->dev, "Device should have at least one bulk endpoint!\n")=
-;
- 		goto error;
- 	}
-
+> ---
+>   drivers/base/class.c         | 2 ++
+>   include/linux/device/class.h | 1 +
+>   2 files changed, 3 insertions(+)
+> 
+> diff --git a/drivers/base/class.c b/drivers/base/class.c
+> index ac1808d1a2e8..05d9df90f621 100644
+> --- a/drivers/base/class.c
+> +++ b/drivers/base/class.c
+> @@ -320,6 +320,7 @@ void class_dev_iter_init(struct class_dev_iter *iter, const struct class *class,
+>   		start_knode = &start->p->knode_class;
+>   	klist_iter_init_node(&sp->klist_devices, &iter->ki, start_knode);
+>   	iter->type = type;
+> +	iter->sp = sp;
+>   }
+>   EXPORT_SYMBOL_GPL(class_dev_iter_init);
+>   
+> @@ -361,6 +362,7 @@ EXPORT_SYMBOL_GPL(class_dev_iter_next);
+>   void class_dev_iter_exit(struct class_dev_iter *iter)
+>   {
+>   	klist_iter_exit(&iter->ki);
+> +	subsys_put(iter->sp);
+>   }
+>   EXPORT_SYMBOL_GPL(class_dev_iter_exit);
+>   
+> diff --git a/include/linux/device/class.h b/include/linux/device/class.h
+> index 9deeaeb457bb..abf3d3bfb6fe 100644
+> --- a/include/linux/device/class.h
+> +++ b/include/linux/device/class.h
+> @@ -74,6 +74,7 @@ struct class {
+>   struct class_dev_iter {
+>   	struct klist_iter		ki;
+>   	const struct device_type	*type;
+> +	struct subsys_private		*sp;
+>   };
+>   
+>   int __must_check class_register(const struct class *class);
