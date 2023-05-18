@@ -2,111 +2,211 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABC1707C6C
-	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 11:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6609B707CB3
+	for <lists+linux-usb@lfdr.de>; Thu, 18 May 2023 11:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbjERJBG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 May 2023 05:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
+        id S230101AbjERJWv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 May 2023 05:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjERJBE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 05:01:04 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1AE1FE3
-        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 02:01:02 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f42c865535so17831855e9.1
-        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 02:01:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684400461; x=1686992461;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4EkpLtrQu6Wc5CurlBolghKtZarCo31NeGGAhO+Vwdo=;
-        b=zGCY0nu2lDFLcoz+k0LgvMJUPENDjUIXY00RK5+1tmvyQ52k317q45G55KSkN0kPK7
-         /M/Cge6lHiY7Ch8lez2leNgwA2Zp4IbgEdI0nUvXxgzACypvRS56cI0DET7W4Sb/Flcg
-         YAqQ3cpFjiiRACuHnyPdPdDBO9rXCbdYY8oARx5PLmnEU1pSslBVwQn58nbScnY68mDO
-         t7z77WknCLRpz1lKKh0cxytt99JLiSKHYRvIpKj343qwIHx0GRRdUBiqBetviiMqVqTa
-         CPEzCnm3uCx8trtQ34OAxYrpLcZmYImW2v0CVyiuvGQDavemLmo9VP8TO9aBZfPHghcL
-         yUsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684400461; x=1686992461;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4EkpLtrQu6Wc5CurlBolghKtZarCo31NeGGAhO+Vwdo=;
-        b=PgUL6Zo4bP+UCZbhtK0vEiFj9EVfn16c55HjemRFgcQZd2BhPSX7BVUeh7gR6f3/fs
-         HmA8361+z/u19uKNmmzbe/LjQMlf+fsVRCJcQhAd6FAbKqaLyfmPzqQ0QI/ZLikfR/ZC
-         j2ARO1g6eWHdUD1qpFUwBP5FndC6J4G74+K2cVraNr2iYvjpTxT4DBC4iKHrVxVBKYa9
-         8bUgKLPv/kFGYIL2JiTt6j11q6VHFv87xbCeraywl5ryd8H2ohhFLNnsCr9tTRhSB0r5
-         U2CpdOABKXJgMlfA63rrJnocS3UUA8Q6Jic5UwDLQiU3perJWCJ7IW1WAQfncuDRAn0a
-         CH7g==
-X-Gm-Message-State: AC+VfDyrpBYC3AtVbSxRYNwaeppADubUPs+MEeT8aIEoR6jYrpFmjGwt
-        fQaKJVAB19BwQOIwq5KzlfV3T1dEnBADccGf5cuzag==
-X-Google-Smtp-Source: ACHHUZ79A3p+DFYRGklrYuoZfFl+7T7BZItlVzgHOnwtl24lipXH9tiXm5WsYwNPO9ldSNuZeHa/XamBLS371hTK+Jc=
-X-Received: by 2002:a1c:f20b:0:b0:3f4:2438:e201 with SMTP id
- s11-20020a1cf20b000000b003f42438e201mr911283wmc.21.1684400461190; Thu, 18 May
- 2023 02:01:01 -0700 (PDT)
+        with ESMTP id S229810AbjERJWu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 May 2023 05:22:50 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1378211B;
+        Thu, 18 May 2023 02:22:47 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8BxRPBm7mVkM84JAA--.17280S3;
+        Thu, 18 May 2023 17:22:46 +0800 (CST)
+Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxWdJi7mVkSKFnAA--.45037S2;
+        Thu, 18 May 2023 17:22:45 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v1] usb: dwc2: add pci_device_id driver_data parse support
+Date:   Thu, 18 May 2023 17:22:40 +0800
+Message-Id: <20230518092240.8023-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20230517211756.2483552-1-bhupesh.sharma@linaro.org>
- <20230517211756.2483552-3-bhupesh.sharma@linaro.org> <872d0dbc-18d8-800b-4647-d362a678086d@linaro.org>
-In-Reply-To: <872d0dbc-18d8-800b-4647-d362a678086d@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Thu, 18 May 2023 14:30:49 +0530
-Message-ID: <CAH=2Ntw2nAAsddNBULeoHM6F0dpX1ef31LDbBH7AiHeeyDJWgw@mail.gmail.com>
-Subject: Re: [PATCH v6 2/6] dt-bindings: soc: qcom: eud: Add SM6115 / SM4250 support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
-        bhupesh.linux@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, quic_schowdhu@quicinc.com,
-        gregkh@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxWdJi7mVkSKFnAA--.45037S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxur4xWF13GFWrZry7Kr13XFb_yoW7Jr1DpF
+        ZrZFW0yrWktFsxCw13CF4UAFy5Zan7J34UCa47Kw1S9FZ7Ar4rXF1jkr45Cr93t390ga12
+        vF17tw48CF47J37anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bVAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
+        c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1s
+        IEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02
+        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GF
+        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
+        xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+        4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j5
+        HUDUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Krzysztof,
+The dwc2 driver has everything we need to run in PCI mode except
+for pci_device_id driver_data parse.  With that to set Loongson
+dwc2 element and added identified as PCI_VENDOR_ID_LOONGSON
+and PCI_DEVICE_ID_LOONGSON_DWC2 in dwc2_pci_ids, the Loongson
+dwc2 controller will work.
 
-On Thu, 18 May 2023 at 13:08, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 17/05/2023 23:17, Bhupesh Sharma wrote:
-> > Add dt-bindings for EUD found on Qualcomm SM6115 / SM4250 SoC.
-> >
-> > On this SoC (and derivatives) the enable bit inside 'tcsr_check_reg'
-> > needs to be set first to 'enable' the eud module.
-> >
-> > So, update the dt-bindings to accommodate the third register
-> > property (TCSR Base) required by the driver on these SoCs.
-> >
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->
-> This is a friendly reminder during the review process.
->
-> It looks like you received a tag and forgot to add it.
->
-> If you do not know the process, here is a short explanation:
-> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-> versions. However, there's no need to repost patches *only* to add the
-> tags. The upstream maintainer will do that for acks received on the
-> version they apply.
->
-> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
->
-> If a tag was not added on purpose, please state why and what changed.
->
-> Also - no improvements.
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+ drivers/usb/dwc2/core.h   |  1 +
+ drivers/usb/dwc2/params.c | 33 +++++++++++++++++++++++++++++++--
+ drivers/usb/dwc2/pci.c    | 14 +-------------
+ include/linux/pci_ids.h   |  2 ++
+ 4 files changed, 35 insertions(+), 15 deletions(-)
 
-Oops, seems I missed your review on v5 due to a label filter for
-'linux-usb' list.
-I will take care in future versions.
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index 0bb4c0c845bf..c92a1da46a01 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -1330,6 +1330,7 @@ irqreturn_t dwc2_handle_common_intr(int irq, void *dev);
+ /* The device ID match table */
+ extern const struct of_device_id dwc2_of_match_table[];
+ extern const struct acpi_device_id dwc2_acpi_match[];
++extern const struct pci_device_id dwc2_pci_ids[];
+ 
+ int dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg);
+ int dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg);
+diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+index 21d16533bd2f..f7550d293c2d 100644
+--- a/drivers/usb/dwc2/params.c
++++ b/drivers/usb/dwc2/params.c
+@@ -7,6 +7,8 @@
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+ #include <linux/usb/of.h>
++#include <linux/pci_ids.h>
++#include <linux/pci.h>
+ 
+ #include "core.h"
+ 
+@@ -55,6 +57,14 @@ static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
+ 		!device_property_read_bool(hsotg->dev, "disable-over-current");
+ }
+ 
++static void dwc2_set_loongson_params(struct dwc2_hsotg *hsotg)
++{
++	struct dwc2_core_params *p = &hsotg->params;
++
++	p->phy_utmi_width = 8;
++	p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
++}
++
+ static void dwc2_set_x1600_params(struct dwc2_hsotg *hsotg)
+ {
+ 	struct dwc2_core_params *p = &hsotg->params;
+@@ -281,6 +291,22 @@ const struct acpi_device_id dwc2_acpi_match[] = {
+ };
+ MODULE_DEVICE_TABLE(acpi, dwc2_acpi_match);
+ 
++const struct pci_device_id dwc2_pci_ids[] = {
++	{
++		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
++	},
++	{
++		PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
++			   PCI_DEVICE_ID_STMICRO_USB_OTG),
++	},
++	{
++		PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, PCI_DEVICE_ID_LOONGSON_DWC2),
++		.driver_data = (unsigned long)dwc2_set_loongson_params,
++	},
++	{ /* end: all zeroes */ }
++};
++MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
++
+ static void dwc2_set_param_otg_cap(struct dwc2_hsotg *hsotg)
+ {
+ 	switch (hsotg->hw_params.op_mode) {
+@@ -929,10 +955,13 @@ int dwc2_init_params(struct dwc2_hsotg *hsotg)
+ 		set_params(hsotg);
+ 	} else {
+ 		const struct acpi_device_id *amatch;
++		const struct pci_device_id *pmatch;
+ 
+ 		amatch = acpi_match_device(dwc2_acpi_match, hsotg->dev);
+-		if (amatch && amatch->driver_data) {
+-			set_params = (set_params_cb)amatch->driver_data;
++		pmatch = pci_match_id(dwc2_pci_ids, to_pci_dev(hsotg->dev->parent));
++
++		if ((amatch && amatch->driver_data) || (pmatch && pmatch->driver_data)) {
++			set_params = (set_params_cb)pmatch->driver_data;
+ 			set_params(hsotg);
+ 		}
+ 	}
+diff --git a/drivers/usb/dwc2/pci.c b/drivers/usb/dwc2/pci.c
+index b7306ed8be4c..f3a1e4232a31 100644
+--- a/drivers/usb/dwc2/pci.c
++++ b/drivers/usb/dwc2/pci.c
+@@ -24,7 +24,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/usb/usb_phy_generic.h>
+ 
+-#define PCI_PRODUCT_ID_HAPS_HSOTG	0xabc0
++#include "core.h"
+ 
+ static const char dwc2_driver_name[] = "dwc2-pci";
+ 
+@@ -122,18 +122,6 @@ static int dwc2_pci_probe(struct pci_dev *pci,
+ 	return ret;
+ }
+ 
+-static const struct pci_device_id dwc2_pci_ids[] = {
+-	{
+-		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
+-	},
+-	{
+-		PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
+-			   PCI_DEVICE_ID_STMICRO_USB_OTG),
+-	},
+-	{ /* end: all zeroes */ }
+-};
+-MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
+-
+ static struct pci_driver dwc2_pci_driver = {
+ 	.name = dwc2_driver_name,
+ 	.id_table = dwc2_pci_ids,
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index e43ab203054a..6481f648695a 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -157,6 +157,7 @@
+ #define PCI_VENDOR_ID_PCI_SIG		0x0001
+ 
+ #define PCI_VENDOR_ID_LOONGSON		0x0014
++#define PCI_DEVICE_ID_LOONGSON_DWC2	0x7a04
+ 
+ #define PCI_VENDOR_ID_SOLIDIGM		0x025e
+ 
+@@ -2356,6 +2357,7 @@
+ #define PCI_DEVICE_ID_SYNOPSYS_HAPSUSB3_AXI	0xabce
+ #define PCI_DEVICE_ID_SYNOPSYS_HAPSUSB31	0xabcf
+ #define PCI_DEVICE_ID_SYNOPSYS_EDDA	0xedda
++#define PCI_PRODUCT_ID_HAPS_HSOTG       0xabc0
+ 
+ #define PCI_VENDOR_ID_USR		0x16ec
+ 
+-- 
+2.20.1
 
-Please let me know if the R-B tag is still valid though :)
-
-Thanks.
