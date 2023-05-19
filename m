@@ -2,65 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B2D709189
-	for <lists+linux-usb@lfdr.de>; Fri, 19 May 2023 10:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44CE70918A
+	for <lists+linux-usb@lfdr.de>; Fri, 19 May 2023 10:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjESIR4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 May 2023 04:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
+        id S230326AbjESISQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 May 2023 04:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjESIRm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 May 2023 04:17:42 -0400
+        with ESMTP id S230325AbjESISE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 May 2023 04:18:04 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B051210DC
-        for <linux-usb@vger.kernel.org>; Fri, 19 May 2023 01:17:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A59610D
+        for <linux-usb@vger.kernel.org>; Fri, 19 May 2023 01:17:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684484255; x=1716020255;
+  t=1684484278; x=1716020278;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=9fCXL+QfManF/BO6ETnv3SaP6od/vI6ckK+D5YpEYQE=;
-  b=Vmq/9nocFfPdxAGfSB0JS61sIXeRnBUZlt1ygF1mDc9P96Qlj6e1OrOC
-   iqdOyiEkpTnnp/iXatY4sIYP0TyNVRteq2rltBRMTKlbctl6aSZnOHH6W
-   M82+JCwBdWffqnl94HX3to/46WVnX7cLRCLU1nR1amgjgyYBA3K34zByY
-   zkyqjveFmKQjh191M0qn9KVKZNQLt7+dglLE3aXDCY1TLhcSCEqy4dR0K
-   FruprCUMp8v517XqrS2FIki9AuD6YpEG1RMFMyfj9YVk9KyD+4UC5DyJV
-   8nBSYJk6riUkc8nup4hM70b+49duAlqv+bwAgVLu+oUVwAgIS+po9iQa9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="341749375"
+  bh=vBZkpKqYlXoC+Y5AkFuRQ+fNIc23nZEgKDw7oKvMbZE=;
+  b=IFX3pPur0i0TWqH0zHO9jtoOvxJUoC95yCAuYIpduu0OIhtnYlzpzylH
+   +ah3FtvE438FMURuzY1jySRlQKRyqToDZ1x/B1rmEzgAobs6jrBcHd8v0
+   ZBrTpY8YOR24+ZAIXC81fCJPBVEmOHnvTagKoZYiWmbIS7zqKsnmWlgVA
+   k1fuQr3Al2/77I94bvznOwLNvdc1304IRQJiOgb+/u1539Bdc2hMVvv7A
+   AgXhV0TajZE+IC1oK4gjhI94gBwZzlQa4y+QO0+Ux/7m+UQ/O2GzRfuDs
+   YO+jUUksJkpsUk6zg3ZDSNCLrPLyyo3978jqS8yqL1mVGStytnLbIgPHe
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="341749495"
 X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
-   d="scan'208";a="341749375"
+   d="scan'208";a="341749495"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2023 01:17:34 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2023 01:17:57 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="846811912"
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="846812260"
 X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
-   d="scan'208";a="846811912"
+   d="scan'208";a="846812260"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 19 May 2023 01:17:31 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 19 May 2023 11:17:30 +0300
-Date:   Fri, 19 May 2023 11:17:30 +0300
+  by fmsmga001.fm.intel.com with SMTP; 19 May 2023 01:17:55 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 19 May 2023 11:17:54 +0300
+Date:   Fri, 19 May 2023 11:17:54 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>
 Cc:     Guenter Roeck <linux@roeck-us.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-usb@vger.kernel.org, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 94/97] usb: typec: tcpci_mt6360: Convert to platform
- remove callback returning void
-Message-ID: <ZGcwmtUIgUSb1hVF@kuha.fi.intel.com>
+        linux-usb@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 95/97] usb: typec: wcove: Convert to platform remove
+ callback returning void
+Message-ID: <ZGcwsnVVAH9QbTrx@kuha.fi.intel.com>
 References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
- <20230517230239.187727-95-u.kleine-koenig@pengutronix.de>
+ <20230517230239.187727-96-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230517230239.187727-95-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230517230239.187727-96-u.kleine-koenig@pengutronix.de>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -72,7 +67,7 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 18, 2023 at 01:02:36AM +0200, Uwe Kleine-König wrote:
+On Thu, May 18, 2023 at 01:02:37AM +0200, Uwe Kleine-König wrote:
 > The .remove() callback for a platform driver returns an int which makes
 > many driver authors wrongly assume it's possible to do error handling by
 > returning an error code. However the value returned is ignored (apart from
@@ -90,36 +85,40 @@ On Thu, May 18, 2023 at 01:02:36AM +0200, Uwe Kleine-König wrote:
 Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/tcpm/tcpci_mt6370.c | 6 ++----
+>  drivers/usb/typec/tcpm/wcove.c | 6 ++----
 >  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_mt6370.c b/drivers/usb/typec/tcpm/tcpci_mt6370.c
-> index c5bb201a5163..2a079464b398 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_mt6370.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_mt6370.c
-> @@ -178,12 +178,10 @@ static int mt6370_tcpc_probe(struct platform_device *pdev)
+> diff --git a/drivers/usb/typec/tcpm/wcove.c b/drivers/usb/typec/tcpm/wcove.c
+> index 20917d85d6f4..87d4abde0ea2 100644
+> --- a/drivers/usb/typec/tcpm/wcove.c
+> +++ b/drivers/usb/typec/tcpm/wcove.c
+> @@ -671,7 +671,7 @@ static int wcove_typec_probe(struct platform_device *pdev)
 >  	return 0;
 >  }
 >  
-> -static int mt6370_tcpc_remove(struct platform_device *pdev)
-> +static void mt6370_tcpc_remove(struct platform_device *pdev)
+> -static int wcove_typec_remove(struct platform_device *pdev)
+> +static void wcove_typec_remove(struct platform_device *pdev)
 >  {
->  	dev_pm_clear_wake_irq(&pdev->dev);
->  	device_init_wakeup(&pdev->dev, false);
+>  	struct wcove_typec *wcove = platform_get_drvdata(pdev);
+>  	unsigned int val;
+> @@ -684,8 +684,6 @@ static int wcove_typec_remove(struct platform_device *pdev)
+>  
+>  	tcpm_unregister_port(wcove->tcpm);
+>  	fwnode_remove_software_node(wcove->tcpc.fwnode);
 > -
 > -	return 0;
 >  }
 >  
->  static const struct of_device_id mt6370_tcpc_devid_table[] = {
-> @@ -198,7 +196,7 @@ static struct platform_driver mt6370_tcpc_driver = {
->  		.of_match_table = mt6370_tcpc_devid_table,
+>  static struct platform_driver wcove_typec_driver = {
+> @@ -693,7 +691,7 @@ static struct platform_driver wcove_typec_driver = {
+>  		.name		= "bxt_wcove_usbc",
 >  	},
->  	.probe = mt6370_tcpc_probe,
-> -	.remove = mt6370_tcpc_remove,
-> +	.remove_new = mt6370_tcpc_remove,
+>  	.probe			= wcove_typec_probe,
+> -	.remove			= wcove_typec_remove,
+> +	.remove_new		= wcove_typec_remove,
 >  };
->  module_platform_driver(mt6370_tcpc_driver);
 >  
+>  module_platform_driver(wcove_typec_driver);
 > -- 
 > 2.39.2
 
