@@ -2,123 +2,219 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1017091D7
-	for <lists+linux-usb@lfdr.de>; Fri, 19 May 2023 10:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E174E709319
+	for <lists+linux-usb@lfdr.de>; Fri, 19 May 2023 11:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjESImS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 May 2023 04:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
+        id S231411AbjESJbe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 May 2023 05:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjESImR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 May 2023 04:42:17 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311F4E5A
-        for <linux-usb@vger.kernel.org>; Fri, 19 May 2023 01:42:15 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f42d937d2eso18266365e9.2
-        for <linux-usb@vger.kernel.org>; Fri, 19 May 2023 01:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684485733; x=1687077733;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Qj6uQgN1+vxh9RZBPkG03bBIocorGgNPBI/qslQJ5s8=;
-        b=FsxZ051YRylQq/5B4oscm9IUNqPtK0o/St+buTVwQzm+nnIlhcPRbnZ1EhwwSjOrou
-         NJ6/UnPeWArc04donPKQJt8JAALcSxZQ9eMU6jRp7vGkprLOzzmYOiIUoiOO6bFCZRKu
-         H0Xk88MYGfXQ5xTUff7hxGT/rdRJWs3B2T69dCV6ofeiPsoJLhdPcKlHz8rppCTgrCfu
-         Hy62FW1esfpeZHB8C/zVX16sKZ1FB9BaEpvNZGNs0GVJzRp/b/QDZWQ39AC4fdK3t0ZP
-         kf2D8uUC5WeW0YsVlOXpBHXYN1zmvxf5xVh46RtqZDzTkhLIF8Sl4rJ0xGL5sfn5L43C
-         LBIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684485733; x=1687077733;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qj6uQgN1+vxh9RZBPkG03bBIocorGgNPBI/qslQJ5s8=;
-        b=jWMeoTn7XVQ8klEfI+ZKlcKfPxzVLvU3duQOJbgjikHa/sNA1UqVCzcQzNw7P/tG2X
-         7eY4qFpZxPKLzIC7hhHaFZODqikqZGUiXxFn/e3uykHpK9RCehp7uH1vzsSW09WCSlgx
-         3Cezt6SW7pNrAkIg255sWgzJ3jdGa5uLNg4hKt+XHBCi1J3H/ei79nhybeObpbWsydGG
-         M1yb4aa/ixm27NBN+rPxosKKiXqtyuiADTb+H88FsPjpxck4R87IMsWKoOSAGjJrlwRr
-         v035bmae+pehzeQrQJ4sl37hiymdfVC9ouhfUzKsqIkuDf2O2Rij3Mbuc5mCoE0in6L4
-         +LQQ==
-X-Gm-Message-State: AC+VfDzYt5ixgTHIDlpjYyKvPdHQAzOviZkM+vGNUTPAc7bV1WquiFzs
-        mS35qDUuXV/p8ZPiyIORTOVHwsNHtRH4s4LriDjM+A==
-X-Google-Smtp-Source: ACHHUZ4pYqnT+QNSgIw7tLCyKnqAJpSKnRj3817DB9WLtNNuVND7AG9ya5U08W4gvbQi0+CNP9XOMg==
-X-Received: by 2002:adf:e64d:0:b0:307:979f:736e with SMTP id b13-20020adfe64d000000b00307979f736emr1344667wrn.55.1684485733660;
-        Fri, 19 May 2023 01:42:13 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id x15-20020adfec0f000000b002cea9d931e6sm4624731wrn.78.2023.05.19.01.42.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 01:42:13 -0700 (PDT)
-Message-ID: <50c285e2-2212-45c9-e62c-1b3804ec2cec@linaro.org>
-Date:   Fri, 19 May 2023 09:42:12 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] MAINTAINERS: remove broken entries in QUALCOMM TYPEC PORT
- MANAGER DRIVER
-Content-Language: en-US
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
+        with ESMTP id S230050AbjESJbc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 May 2023 05:31:32 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC0C19A;
+        Fri, 19 May 2023 02:31:31 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DF21722245;
+        Fri, 19 May 2023 09:31:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684488688; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=KZ/M1xl0Qi9Qr3MsXW4Bp0NVv7pwTZ+lB5C3/VZAk4k=;
+        b=tB6EqhCStrvD/jy1rRvzboPGwcWKiIu7icvSsCuIj34O7kIORHTic7gmIdCy6IBhgGQ8Cj
+        1/US6GWyJb3o9I9sNfREgS8Z0lSZjIvfPafCJ4unLlTWMydlKIxWCfLLfrkB6iMGKYs4Ci
+        rbvVSH7pEnIogEMKJnT0dueObGnr/Kc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684488688;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=KZ/M1xl0Qi9Qr3MsXW4Bp0NVv7pwTZ+lB5C3/VZAk4k=;
+        b=bR6dSBXO6E+kd2Wd3M/dKQuH7t5WuFmWQgXOrQ0F1cFQIMPXElwtHJHPKOXk+EULQqFcMD
+        sR1MFgBFuS/sGvDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AA6D213A12;
+        Fri, 19 May 2023 09:31:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id r0yQKPBBZ2RXJAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 19 May 2023 09:31:28 +0000
+From:   Takashi Iwai <tiwai@suse.de>
+To:     alsa-devel@alsa-project.org
+Cc:     linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230519041307.32322-1-lukas.bulwahn@gmail.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230519041307.32322-1-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        linux-usb@vger.kernel.org
+Subject: [PATCH 00/36] ALSA: Add MIDI 2.0 support
+Date:   Fri, 19 May 2023 11:30:38 +0200
+Message-Id: <20230519093114.28813-1-tiwai@suse.de>
+X-Mailer: git-send-email 2.35.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19/05/2023 05:13, Lukas Bulwahn wrote:
-> Commit a4422ff22142 ("usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
-> adds the section QUALCOMM TYPEC PORT MANAGER DRIVER in MAINTAINERS with
-> two file entries for header files in include/dt-bindings/usb/typec/.
-> 
-> However, these files are not added to the repository with this commit or
-> any commit in the related patch series. Probably, these file entries are
-> just needless leftover after the work went through some refactoring.
-> 
-> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-> broken reference.
-> 
-> Remove the two file entries for non-existent header files.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> Bryan, please ack.
-> 
-> Greg, please pick this minor cleanup patch on your usb-next tree.
-> 
->   MAINTAINERS | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 3182992769aa..a987ed462d64 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17559,8 +17559,6 @@ L:	linux-usb@vger.kernel.org
->   S:	Maintained
->   F:	Documentation/devicetree/bindings/usb/qcom,pmic-*.yaml
->   F:	drivers/usb/typec/tcpm/qcom/
-> -F:	include/dt-bindings/usb/typec/qcom,pmic-pdphy.h
-> -F:	include/dt-bindings/usb/typec/qcom,pmic-typec.h
->   
->   QUALCOMM VENUS VIDEO ACCELERATOR DRIVER
->   M:	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
+Hi,
 
-Oops
+this is a (largish) patch set for adding the support of MIDI 2.0
+functionality, mainly targeted for USB devices.  MIDI 2.0 is a
+complete overhaul of the 40-years old MIDI 1.0.  Unlike MIDI 1.0 byte
+stream, MIDI 2.0 uses packets in 32bit words for Universal MIDI Packet
+(UMP) protocol.  It supports both MIDI 1.0 commands for compatibility
+and the extended MIDI 2.0 commands for higher resolutions and more
+functions.
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+For supporting the UMP, the patch set extends the existing ALSA
+rawmidi and sequencer interfaces, and adds the USB MIDI 2.0 support to
+the standard USB-audio driver.
+
+The rawmidi for UMP has a different device name (/dev/snd/umpC*D*) and
+it reads/writes UMP packet data in 32bit CPU-native endianness.  For
+the old MIDI 1.0 applications, the legacy rawmidi interface is
+provided, too.
+
+As default, USB-audio driver will take the alternate setting for MIDI
+2.0 interface, and the compatibility with MIDI 1.0 is provided via the
+rawmidi common layer.  However, user may let the driver falling back
+to the old MIDI 1.0 interface by a module option, too.
+
+A UMP-capable rawmidi device can create the corresponding ALSA
+sequencer client(s) to support the UMP Endpoint and UMP Group
+connections.  As a nature of ALSA sequencer, arbitrary connections
+between clients/ports are allowed, and the ALSA sequencer core
+performs the automatic conversions for the connections between a new
+UMP sequencer client and a legacy MIDI 1.0 sequencer client.  It
+allows the existing application to use MIDI 2.0 devices without
+changes.
+
+The MIDI-CI, which is another major extension in MIDI 2.0, isn't
+covered by this patch set.  It would be implemented rather in
+user-space.
+
+Roughly speaking, the first half of this patch set is for extending
+the rawmidi and USB-audio, and the second half is for extending the
+ALSA sequencer interface.
+
+The patch set is based on 6.4-rc2 kernel, but all patches can be
+cleanly applicable on 6.2 and 6.3 kernels, too (while 6.1 and older
+kernels would need minor adjustment for uapi header changes).
+
+The updates for alsa-lib and alsa-utils will follow shortly later.
+
+The author thanks members of MIDI Association OS/API Working Group,
+especially Andrew Mee, for great helps for the initial design and
+debugging / testing the drivers.
+
+
+Takashi
+
+---
+
+Takashi Iwai (36):
+  ALSA: rawmidi: Pass rawmidi directly to snd_rawmidi_kernel_open()
+  ALSA: rawmidi: Add ioctl callback to snd_rawmidi_global_ops
+  ALSA: rawmidi: UMP support
+  ALSA: rawmidi: Skip UMP devices at SNDRV_CTL_IOCTL_RAWMIDI_NEXT_DEVICE
+  ALSA: ump: Additional proc output
+  ALSA: usb-audio: Manage number of rawmidis globally
+  ALSA: usb-audio: Define USB MIDI 2.0 specs
+  ALSA: usb-audio: USB MIDI 2.0 UMP support
+  ALSA: usb-audio: Get UMP EP name string from USB interface
+  ALSA: usb-audio: Trim superfluous "MIDI" suffix from UMP EP name
+  ALSA: usb-audio: Create UMP blocks from USB MIDI GTBs
+  ALSA: ump: Redirect rawmidi substream access via own helpers
+  ALSA: ump: Add legacy raw MIDI support
+  ALSA: usb-audio: Enable the legacy raw MIDI support
+  ALSA: usb-audio: Inform inconsistent protocols in GTBs
+  ALSA: seq: Clear padded bytes at expanding events
+  ALSA: seq: Add snd_seq_expand_var_event_at() helper
+  ALSA: seq: Treat snd_seq_client object directly in client drivers
+  ALSA: seq: Drop dead code for the old broadcast support
+  ALSA: seq: Check the conflicting port at port creation
+  ALSA: seq: Check validity before creating a port object
+  ALSA: seq: Prohibit creating ports with special numbers
+  ALSA: seq: Introduce SNDRV_SEQ_IOCTL_USER_PVERSION ioctl
+  ALSA: seq: Add UMP support
+  ALSA: seq: Add port inactive flag
+  ALSA: seq: Support MIDI 2.0 UMP Endpoint port
+  ALSA: seq: Add port direction to snd_seq_port_info
+  ALSA: seq: Add UMP group number to snd_seq_port_info
+  ALSA: seq: Automatic conversion of UMP events
+  ALSA: seq: Allow suppressing UMP conversions
+  ALSA: seq: Bind UMP device
+  ALSA: seq: ump: Create UMP Endpoint port for broadcast
+  ALSA: seq: Add ioctls for client UMP info query and setup
+  ALSA: seq: Print UMP Endpoint and Block information in proc outputs
+  ALSA: seq: Add UMP group filter
+  ALSA: docs: Add MIDI 2.0 documentation
+
+ Documentation/sound/designs/index.rst    |    1 +
+ Documentation/sound/designs/midi-2.0.rst |  342 ++++++
+ include/linux/usb/midi-v2.h              |   94 ++
+ include/sound/asequencer.h               |    4 +
+ include/sound/rawmidi.h                  |   16 +-
+ include/sound/seq_device.h               |    1 +
+ include/sound/seq_kernel.h               |   10 +
+ include/sound/ump.h                      |  175 ++++
+ include/sound/ump_msg.h                  |  540 ++++++++++
+ include/uapi/sound/asequencer.h          |   83 +-
+ include/uapi/sound/asound.h              |   58 +-
+ sound/core/Kconfig                       |   13 +
+ sound/core/Makefile                      |    3 +
+ sound/core/rawmidi.c                     |  233 +++--
+ sound/core/rawmidi_compat.c              |    4 +
+ sound/core/seq/Kconfig                   |   14 +
+ sound/core/seq/Makefile                  |    3 +
+ sound/core/seq/seq_clientmgr.c           |  577 +++++++----
+ sound/core/seq/seq_clientmgr.h           |   27 +-
+ sound/core/seq/seq_compat.c              |    3 +
+ sound/core/seq/seq_dummy.c               |    9 +
+ sound/core/seq/seq_memory.c              |   98 +-
+ sound/core/seq/seq_memory.h              |   19 +-
+ sound/core/seq/seq_midi.c                |   12 +-
+ sound/core/seq/seq_ports.c               |   46 +-
+ sound/core/seq/seq_ports.h               |   23 +-
+ sound/core/seq/seq_ump_client.c          |  464 +++++++++
+ sound/core/seq/seq_ump_convert.c         | 1203 ++++++++++++++++++++++
+ sound/core/seq/seq_ump_convert.h         |   22 +
+ sound/core/seq/seq_virmidi.c             |    1 +
+ sound/core/ump.c                         |  677 ++++++++++++
+ sound/core/ump_convert.c                 |  520 ++++++++++
+ sound/core/ump_convert.h                 |   43 +
+ sound/usb/Kconfig                        |   11 +
+ sound/usb/Makefile                       |    1 +
+ sound/usb/card.c                         |   12 +-
+ sound/usb/midi.c                         |    7 +-
+ sound/usb/midi.h                         |    5 +-
+ sound/usb/midi2.c                        | 1189 +++++++++++++++++++++
+ sound/usb/midi2.h                        |   33 +
+ sound/usb/quirks.c                       |    8 +-
+ sound/usb/usbaudio.h                     |    2 +
+ 42 files changed, 6274 insertions(+), 332 deletions(-)
+ create mode 100644 Documentation/sound/designs/midi-2.0.rst
+ create mode 100644 include/linux/usb/midi-v2.h
+ create mode 100644 include/sound/ump.h
+ create mode 100644 include/sound/ump_msg.h
+ create mode 100644 sound/core/seq/seq_ump_client.c
+ create mode 100644 sound/core/seq/seq_ump_convert.c
+ create mode 100644 sound/core/seq/seq_ump_convert.h
+ create mode 100644 sound/core/ump.c
+ create mode 100644 sound/core/ump_convert.c
+ create mode 100644 sound/core/ump_convert.h
+ create mode 100644 sound/usb/midi2.c
+ create mode 100644 sound/usb/midi2.h
+
+-- 
+2.35.3
+
