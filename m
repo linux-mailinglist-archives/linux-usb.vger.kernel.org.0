@@ -2,70 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C9E708EB3
-	for <lists+linux-usb@lfdr.de>; Fri, 19 May 2023 06:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B60708ED7
+	for <lists+linux-usb@lfdr.de>; Fri, 19 May 2023 06:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjESENV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 May 2023 00:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
+        id S229881AbjESEaZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 May 2023 00:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjESENT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 May 2023 00:13:19 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6903B10EA;
-        Thu, 18 May 2023 21:13:18 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9659f452148so529294666b.1;
-        Thu, 18 May 2023 21:13:18 -0700 (PDT)
+        with ESMTP id S229559AbjESEaY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 May 2023 00:30:24 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E5810C2
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 21:30:23 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-2535edae73cso1400763a91.2
+        for <linux-usb@vger.kernel.org>; Thu, 18 May 2023 21:30:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684469597; x=1687061597;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1684470622; x=1687062622;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LrcvNl9atwbaW1k9X95ljqmJldbIG/iywgMh4yMoDfM=;
-        b=GGodfivCHSnFwM5Axova+wchu7kt4iW3YiEJKx8JonToADWamINBlFj4STqUZU1Xy4
-         IGl/uoXkPfPzzGxTcoO1omSUWWoJtSVxe/J3v/Hg8q7PsObEo4riWksAdYiYNG8O6Cax
-         fEReM7ol/DUAAUxioHOxe3ZOt8eRZHXTrtoioN3yl6cRMKupVD/GtNp1OrotfZDlAQfK
-         /SnbwlSbpgpLiOEvtYY0SW0T1xUi15y559v3XaL6A08c411E3J2VdiWjQT25YYvRyLTn
-         T7N8qmcFtq3upi/kEcWQ+2tF37//n9En0KRi2OZExg5MrnIQ4tMwQfrL8W7dbRAj+HuU
-         M+hA==
+        bh=s7rhwTrEAMX08YzP/4DHviFyIbM+YD+5MP+UjCfh5d8=;
+        b=TNIczUF2G+oWvPr2w7jkkUbLgyuwkCadYukw22DE7XazUFdaLL16TY9GAmVMNt0396
+         KLOwihwV1a2RnUQ0PdCUCPerIB/9wLu1SR8Rukq7Dycij9HPFFmmKbhcLukreqiwASl5
+         TA1VWipq3P7NqmwL+V8ZgLhnLwZYLUdkp1OhwevxtYCo6hVe5LX0mFBnpbtYjzXbvXTy
+         Cc7jHBHnyGTDA480xgyWOxpa3Wx4u5MN2UiZBPSjeJzm0qjkapM6Beii5kRnavWdc1Lh
+         YRHM6AOePJ/otLwqVkUWeNUbcAgdmJsRiUmI3lCqGJhMtyEQLOVU8Lf6dvjvnEwWm77x
+         cSxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684469597; x=1687061597;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684470622; x=1687062622;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LrcvNl9atwbaW1k9X95ljqmJldbIG/iywgMh4yMoDfM=;
-        b=R1sMc4pmZQ7szIuueyYLvLpsmfHfPOXmDL0i+FceyKIqLZL6me8CFls/M7iyQggjfS
-         p03GAR8kL42nYP2VwmYxqBVcrINg1BzsA9MW67KIh8xw51Rl8MHg9L5uoTE9fKHp1f7P
-         fuMt23W/4iT9rrZ18qyQaYkLtYCdYGoo9SALiMWOq687D68UiYdYjVNGSgLWQ7fz2IhI
-         5BaLo7xraExHVydMShKW1wKWToamdgFq3QGgCUp/awKjQ20lH65F13dKVDPzDEPynVAr
-         mp8jhf75SdGWwRcHL2EoLrBqQ3x67gUi7EHTuKTHaBagUgP5BJvZcAOxeR/dYv4z9bXb
-         AXBA==
-X-Gm-Message-State: AC+VfDwq9oIKPdYqsBRf/xhBJQeoa379dcPht3WZgQFOlTj5Lz4nye1P
-        tfIDY5WfUTNRxJ2xdH7bHqnFVDlBUyw=
-X-Google-Smtp-Source: ACHHUZ60TyXBhznQXFeygSMzxImdpYgfWzTepX/yEGme4rJ4Bq27UeQq+Ukv+TPSOx9yHx91zjsHhQ==
-X-Received: by 2002:a17:907:9614:b0:966:2fdf:f66c with SMTP id gb20-20020a170907961400b009662fdff66cmr605789ejc.3.1684469596509;
-        Thu, 18 May 2023 21:13:16 -0700 (PDT)
-Received: from felia.fritz.box ([2a02:810d:7e40:14b0:cd27:98d3:5e2d:5b95])
-        by smtp.gmail.com with ESMTPSA id s9-20020a1709066c8900b0094f124a37c4sm1799505ejr.18.2023.05.18.21.13.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 21:13:15 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: remove broken entries in QUALCOMM TYPEC PORT MANAGER DRIVER
-Date:   Fri, 19 May 2023 06:13:07 +0200
-Message-Id: <20230519041307.32322-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        bh=s7rhwTrEAMX08YzP/4DHviFyIbM+YD+5MP+UjCfh5d8=;
+        b=iMgBRxyoTztfycwIQZR4GLrn3dN8Srb/VhBec9WcxvDUMrVnfgDPXP+urzXudR0nS5
+         5d5RXAwfyegvtOyG6HPc+Hyu/xs5JEQamsOW4VtFNIVz9HYb1oy3saQsjQIoonobesKo
+         49yHQNmbW2oV+mrvOAqo+3/KUI6sbJSxHrzgoAh79Asce9RrjPkrHH3lKsjK48GmyK+/
+         JOAfA0/1KeiUJ2RES/RNmuMVMA0JSrgGrUo2bAXHRXnJPrKbIhjDQsyySuOB/drhfgXw
+         qR8UK20AC2+DjyfEQhRlLxLNRZOou5CRKwfA70nan2wRdCTDZakX/fLhMMUdkjeia7WL
+         K+xg==
+X-Gm-Message-State: AC+VfDz49N0lL4gOvd3CSGhzMsgHlqrmIjKyCEY5sm+zi1sZFsZPiYs6
+        hsre7nqr4VGFe1zD6a7gBlPJcZqpYNz2s9Pr2u5sMw==
+X-Google-Smtp-Source: ACHHUZ6VjrLP43KWoztAM4tD22Kf73o24OLyIQjLaqps5vcL8vuqqDuLgZEL+qpzNX+LhVQ4cd7hc0MOG8M5Du6sc6Y=
+X-Received: by 2002:a17:90a:2b4f:b0:247:6ead:d0ed with SMTP id
+ y15-20020a17090a2b4f00b002476eadd0edmr986340pjc.28.1684470622331; Thu, 18 May
+ 2023 21:30:22 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230517115955.1078339-1-badhri@google.com> <c7f19b4e-469c-4e40-bd2e-e864ca5f7872@rowland.harvard.edu>
+ <CAPTae5JB2LLEF7ZNaJxMnF==8WCWoEYvmF_FK3F=BDq0Hko0xQ@mail.gmail.com> <c7cb96ea-628d-4591-908c-d6ea572ef5a0@rowland.harvard.edu>
+In-Reply-To: <c7cb96ea-628d-4591-908c-d6ea572ef5a0@rowland.harvard.edu>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Thu, 18 May 2023 21:29:45 -0700
+Message-ID: <CAPTae5KGN_KTFO+hj68heTMqJ0tfyBfjQnwLUGyMM40Uq+w_Eg@mail.gmail.com>
+Subject: Re: [PATCH v1] usb: gadget: udc: core: Offload usb_udc_vbus_handler processing
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
+        xuetao09@huawei.com, quic_eserrao@quicinc.com,
+        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
+        balbi@ti.com, francesco@dolcini.it, alistair@alistair23.me,
+        stephan@gerhold.net, bagasdotme@gmail.com, luca@z3ntu.xyz,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        Francesco Dolcini <francesco.dolcini@toradex.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,41 +76,76 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit a4422ff22142 ("usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
-adds the section QUALCOMM TYPEC PORT MANAGER DRIVER in MAINTAINERS with
-two file entries for header files in include/dt-bindings/usb/typec/.
+On Wed, May 17, 2023 at 1:01=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
+du> wrote:
+>
+> On Wed, May 17, 2023 at 10:19:25AM -0700, Badhri Jagan Sridharan wrote:
+> > On Wed, May 17, 2023 at 7:44=E2=80=AFAM Alan Stern <stern@rowland.harva=
+rd.edu> wrote:
+> > >
+> > > On Wed, May 17, 2023 at 11:59:55AM +0000, Badhri Jagan Sridharan wrot=
+e:
+> > > > chipidea udc calls usb_udc_vbus_handler from udc_start gadget
+> > > > ops causing a deadlock. Avoid this by offloading usb_udc_vbus_handl=
+er
+> > > > processing.
+> > >
+> > > Surely that is the wrong approach.
+> > >
+> > > The real problem here is that usb_udc_vbus_handler() gets called from
+> > > within a udc_start routine.  But this is totally unnecessary, because
+> > > the UDC core will call usb_udc_connect_control_locked() itself, later=
+ on
+> > > during gadget_bind_driver().
+> >
+> > Hi Alan,
+> >
+> > usb_udc_vbus_handler sets the udc->vbus flag as well apart from
+> > calling usb_udc_connect_control_locked().  So, removing usb_udc_vbus_ha=
+ndler
+> > from chip specific start callback might prevent the controller from
+> > starting.
+> >
+> > void usb_udc_vbus_handler(struct usb_gadget *gadget, bool status)
+> > {
+> > struct usb_udc *udc =3D gadget->udc;
+> >
+> > mutex_lock(&udc->connect_lock);
+> > if (udc) {
+> > udc->vbus =3D status;
+> > usb_udc_connect_control_locked(udc);
+>
+> Then add "udc->vbus =3D true;" at the appropriate spot in
+> gadget_bind_driver().
 
-However, these files are not added to the repository with this commit or
-any commit in the related patch series. Probably, these file entries are
-just needless leftover after the work went through some refactoring.
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
+Not sure if I am misunderstanding something.
+"udc->vbus =3D true" is set by usb_udc_vbus_handler based on invocation
+from the chip level gadget driver and gadget_bind_driver() does not
+seem to have the context for udc->vbus.
+Do you still think it makes sense to add  "udc->vbus =3D true;" to
+gadget_bind_driver() ?
 
-Remove the two file entries for non-existent header files.
+>
+>
+> Alan Stern
+>
+> PS: I just noticed that in max3420_udc.c, the max_3420_vbus_handler()
+> function calls usb_udc_vbus_handler() from within an interrupt handler.
+> This won't work, since interrupt handlers aren't allowed to sleep and
+> therefore can't lock mutexes.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Bryan, please ack.
 
-Greg, please pick this minor cleanup patch on your usb-next tree.
+Good point ! I didn't notice  that usb_udc_vbus_handler()  is invoked
+from interrupt context as well.
+I was looking at turning connect_lock into a spin lock. But looks like
+udc_lock which is acquired
+in usb_gadget_disconnect_locked is a mutex, So keeping connect_lock as
+mutex and changing
+vbus_events_lock into spin_lock is what that seems to be possible.
+Sending out V2 of this patch
+with these changes so that it's easier to see what I am referring to.
+Eager to know your thoughts !
 
- MAINTAINERS | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3182992769aa..a987ed462d64 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17559,8 +17559,6 @@ L:	linux-usb@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/usb/qcom,pmic-*.yaml
- F:	drivers/usb/typec/tcpm/qcom/
--F:	include/dt-bindings/usb/typec/qcom,pmic-pdphy.h
--F:	include/dt-bindings/usb/typec/qcom,pmic-typec.h
- 
- QUALCOMM VENUS VIDEO ACCELERATOR DRIVER
- M:	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
--- 
-2.17.1
-
+Thanks,
+Badhri
