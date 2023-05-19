@@ -2,127 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A0970918E
-	for <lists+linux-usb@lfdr.de>; Fri, 19 May 2023 10:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1017091D7
+	for <lists+linux-usb@lfdr.de>; Fri, 19 May 2023 10:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbjESISy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 May 2023 04:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
+        id S230454AbjESImS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 May 2023 04:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjESISq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 May 2023 04:18:46 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558C4E4D
-        for <linux-usb@vger.kernel.org>; Fri, 19 May 2023 01:18:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684484325; x=1716020325;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=h7Q6Jcgp0rcSZPlyVctS5xerllkR7CHu5zG0mrTD0wo=;
-  b=S+h8p70fqj5J2P79cv5NocHvY64XCLG2SV/rytvcxxi3OlgOEbIY+IIJ
-   VZu0L0sVlggkMF+FycsECqvK7GqwTU+b3kYmDAbvdcUBDqws1IFD1nLmj
-   6bQfimUmV4RMNZxDznLJcE2WFM2uuQxnQU24+t5fwyPCgEa9n4fSl7YYy
-   Y76ql1q4sZwT9xrquPKTID6N8qFqWKBR2Gp1E8GnQaJFL2A2whRgksGTF
-   CH4n+sltGomCUYiEDVGeNCdKRfaqvBCMLrAvymRClJWcNTkIS04YwnG7/
-   DY3nSGFo2YgreNWkGU5vKBLisVDeSKw3/q2NPrAw+URWM64ExtB7KzOng
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="341749623"
-X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
-   d="scan'208";a="341749623"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2023 01:18:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="846812631"
-X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
-   d="scan'208";a="846812631"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 19 May 2023 01:18:28 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 19 May 2023 11:18:27 +0300
-Date:   Fri, 19 May 2023 11:18:27 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Carpenter <error27@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>,
-        linux-usb@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 96/97] usb: typec: ucsi: acpi: Convert to platform remove
- callback returning void
-Message-ID: <ZGcw0zy67IOv0xjN@kuha.fi.intel.com>
-References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
- <20230517230239.187727-97-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S230418AbjESImR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 May 2023 04:42:17 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311F4E5A
+        for <linux-usb@vger.kernel.org>; Fri, 19 May 2023 01:42:15 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f42d937d2eso18266365e9.2
+        for <linux-usb@vger.kernel.org>; Fri, 19 May 2023 01:42:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684485733; x=1687077733;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Qj6uQgN1+vxh9RZBPkG03bBIocorGgNPBI/qslQJ5s8=;
+        b=FsxZ051YRylQq/5B4oscm9IUNqPtK0o/St+buTVwQzm+nnIlhcPRbnZ1EhwwSjOrou
+         NJ6/UnPeWArc04donPKQJt8JAALcSxZQ9eMU6jRp7vGkprLOzzmYOiIUoiOO6bFCZRKu
+         H0Xk88MYGfXQ5xTUff7hxGT/rdRJWs3B2T69dCV6ofeiPsoJLhdPcKlHz8rppCTgrCfu
+         Hy62FW1esfpeZHB8C/zVX16sKZ1FB9BaEpvNZGNs0GVJzRp/b/QDZWQ39AC4fdK3t0ZP
+         kf2D8uUC5WeW0YsVlOXpBHXYN1zmvxf5xVh46RtqZDzTkhLIF8Sl4rJ0xGL5sfn5L43C
+         LBIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684485733; x=1687077733;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qj6uQgN1+vxh9RZBPkG03bBIocorGgNPBI/qslQJ5s8=;
+        b=jWMeoTn7XVQ8klEfI+ZKlcKfPxzVLvU3duQOJbgjikHa/sNA1UqVCzcQzNw7P/tG2X
+         7eY4qFpZxPKLzIC7hhHaFZODqikqZGUiXxFn/e3uykHpK9RCehp7uH1vzsSW09WCSlgx
+         3Cezt6SW7pNrAkIg255sWgzJ3jdGa5uLNg4hKt+XHBCi1J3H/ei79nhybeObpbWsydGG
+         M1yb4aa/ixm27NBN+rPxosKKiXqtyuiADTb+H88FsPjpxck4R87IMsWKoOSAGjJrlwRr
+         v035bmae+pehzeQrQJ4sl37hiymdfVC9ouhfUzKsqIkuDf2O2Rij3Mbuc5mCoE0in6L4
+         +LQQ==
+X-Gm-Message-State: AC+VfDzYt5ixgTHIDlpjYyKvPdHQAzOviZkM+vGNUTPAc7bV1WquiFzs
+        mS35qDUuXV/p8ZPiyIORTOVHwsNHtRH4s4LriDjM+A==
+X-Google-Smtp-Source: ACHHUZ4pYqnT+QNSgIw7tLCyKnqAJpSKnRj3817DB9WLtNNuVND7AG9ya5U08W4gvbQi0+CNP9XOMg==
+X-Received: by 2002:adf:e64d:0:b0:307:979f:736e with SMTP id b13-20020adfe64d000000b00307979f736emr1344667wrn.55.1684485733660;
+        Fri, 19 May 2023 01:42:13 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id x15-20020adfec0f000000b002cea9d931e6sm4624731wrn.78.2023.05.19.01.42.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 01:42:13 -0700 (PDT)
+Message-ID: <50c285e2-2212-45c9-e62c-1b3804ec2cec@linaro.org>
+Date:   Fri, 19 May 2023 09:42:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230517230239.187727-97-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] MAINTAINERS: remove broken entries in QUALCOMM TYPEC PORT
+ MANAGER DRIVER
+Content-Language: en-US
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230519041307.32322-1-lukas.bulwahn@gmail.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20230519041307.32322-1-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 18, 2023 at 01:02:38AM +0200, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart from
-> emitting a warning) and this typically results in resource leaks. To improve
-> here there is a quest to make the remove callback return void. In the first
-> step of this quest all drivers are converted to .remove_new() which already
-> returns void. Eventually after all drivers are converted, .remove_new() is
-> renamed to .remove().
+On 19/05/2023 05:13, Lukas Bulwahn wrote:
+> Commit a4422ff22142 ("usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
+> adds the section QUALCOMM TYPEC PORT MANAGER DRIVER in MAINTAINERS with
+> two file entries for header files in include/dt-bindings/usb/typec/.
 > 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
+> However, these files are not added to the repository with this commit or
+> any commit in the related patch series. Probably, these file entries are
+> just needless leftover after the work went through some refactoring.
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+> broken reference.
+> 
+> Remove the two file entries for non-existent header files.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 > ---
->  drivers/usb/typec/ucsi/ucsi_acpi.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+> Bryan, please ack.
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
-> index 217355f1f9b9..6bbf490ac401 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-> @@ -212,7 +212,7 @@ static int ucsi_acpi_probe(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -static int ucsi_acpi_remove(struct platform_device *pdev)
-> +static void ucsi_acpi_remove(struct platform_device *pdev)
->  {
->  	struct ucsi_acpi *ua = platform_get_drvdata(pdev);
->  
-> @@ -221,8 +221,6 @@ static int ucsi_acpi_remove(struct platform_device *pdev)
->  
->  	acpi_remove_notify_handler(ACPI_HANDLE(&pdev->dev), ACPI_DEVICE_NOTIFY,
->  				   ucsi_acpi_notify);
-> -
-> -	return 0;
->  }
->  
->  static int ucsi_acpi_resume(struct device *dev)
-> @@ -247,7 +245,7 @@ static struct platform_driver ucsi_acpi_platform_driver = {
->  		.acpi_match_table = ACPI_PTR(ucsi_acpi_match),
->  	},
->  	.probe = ucsi_acpi_probe,
-> -	.remove = ucsi_acpi_remove,
-> +	.remove_new = ucsi_acpi_remove,
->  };
->  
->  module_platform_driver(ucsi_acpi_platform_driver);
-> -- 
-> 2.39.2
+> Greg, please pick this minor cleanup patch on your usb-next tree.
+> 
+>   MAINTAINERS | 2 --
+>   1 file changed, 2 deletions(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 3182992769aa..a987ed462d64 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17559,8 +17559,6 @@ L:	linux-usb@vger.kernel.org
+>   S:	Maintained
+>   F:	Documentation/devicetree/bindings/usb/qcom,pmic-*.yaml
+>   F:	drivers/usb/typec/tcpm/qcom/
+> -F:	include/dt-bindings/usb/typec/qcom,pmic-pdphy.h
+> -F:	include/dt-bindings/usb/typec/qcom,pmic-typec.h
+>   
+>   QUALCOMM VENUS VIDEO ACCELERATOR DRIVER
+>   M:	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
 
--- 
-heikki
+Oops
+
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
