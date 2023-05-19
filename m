@@ -2,78 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D0E70A5A7
-	for <lists+linux-usb@lfdr.de>; Sat, 20 May 2023 07:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F043770A698
+	for <lists+linux-usb@lfdr.de>; Sat, 20 May 2023 11:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbjETFYe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 20 May 2023 01:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
+        id S230166AbjETJJt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 20 May 2023 05:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjETFY1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 May 2023 01:24:27 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9311B1
-        for <linux-usb@vger.kernel.org>; Fri, 19 May 2023 22:24:26 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-76ce93a10f3so34931739f.0
-        for <linux-usb@vger.kernel.org>; Fri, 19 May 2023 22:24:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684560266; x=1687152266;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SrdV0ygMdYPqAmG7LwAZV4OGjE5KtVQqdUSmJPUHjZU=;
-        b=jfzx+PkXH+epE8SsTnNU9B/uG8640JyU9oNhh3sULc8PYa/MpWnudGfm22aLme591l
-         DjlZuAxHBAhDVpXENtgpuvT/lwZ/5STtktL64TCWzPNMIOTKPCpHmOFjqxuqGTNp0ITB
-         ipqXUjwoHhHi6MCPsx4cOyP3OGDw4nmfsZEyXvhS3V/hVcBKMFbPF3WJyZaB6XUoRvby
-         KKPBfBoLFOYuxfUC2nroILDHE7AD71pYZKUbfhu+PW3tBckDnwihWSnkjtEvBXToc86x
-         RNWUqE9Wba2Mgl6te2132WT/ADfX7NRQMd97iRhT9vC6ezh6ise9GTzox04CkJfxgE6C
-         bVxw==
-X-Gm-Message-State: AC+VfDyzTIjYUzCLAicWjmv7osGWHpL6YUiJ0phzXa/gG7qH7WnDVYld
-        vbOv/+kYh3CtYndndp2kv/UZr94HMV0BecUYEjEjX17Bjj23
-X-Google-Smtp-Source: ACHHUZ6hTFX7a0pVUYivQtv8iU28xZiCDjaD/cgUE6pqb8VNbogQ2Lh7JMQe9On01smA0p41OO2OMcJ1fCrx97WO3Na4JQboaq1h
+        with ESMTP id S229663AbjETJJr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 May 2023 05:09:47 -0400
+X-Greylist: delayed 90168 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 20 May 2023 02:09:46 PDT
+Received: from mail.corrib.pl (mail.corrib.pl [185.58.226.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4ED91A5
+        for <linux-usb@vger.kernel.org>; Sat, 20 May 2023 02:09:46 -0700 (PDT)
+Received: by mail.corrib.pl (Postfix, from userid 1001)
+        id E2A4AA4241; Fri, 19 May 2023 09:06:17 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corrib.pl; s=mail;
+        t=1684483578; bh=85MOfYTjIHwki6Ys5IeFKzEzX5V7umZoL3TytLG0W/k=;
+        h=Date:From:To:Subject:From;
+        b=IaHrnOr1gSOtnv1eMgmjsaXVy+TQ6m3dViPGoXVauDvC9J2f6NgoLkpcL+9FNgBsL
+         RplQ+DogwYIp7lHCGlYSudLVPi5MYChO5SGhgDhue7dILCdnrR+9D/GeLPpzE1cUTm
+         ULiYb5QEHUbcmJDrl9KCWLyPJS7A9p/z6E/ruHjSi2MgddUnipn5dFBwOynMJi03LT
+         OQOmWYZ5HpEMSW9BzJ2mMZ2Oi9yl/tg5ur1fyMAZ8CJN6ovgucwdXFUPIhyckn5CZY
+         sWiTtpHTZS/OHT3LbpzEbMCsoxQpw1wMiH2s6fIQ6j3gZXbMz5e5+B3ZFMl19dpiRk
+         EYkkb0Y6uaUlw==
+Received: by mail.corrib.pl for <linux-usb@vger.kernel.org>; Fri, 19 May 2023 08:06:12 GMT
+Message-ID: <20230519074500-0.1.7b.of7g.0.bgdypc2t83@corrib.pl>
+Date:   Fri, 19 May 2023 08:06:12 GMT
+From:   "Szczepan Andryszczuk" <szczepan.andryszczuk@corrib.pl>
+To:     <linux-usb@vger.kernel.org>
+Subject: Faktoring
+X-Mailer: mail.corrib.pl
 MIME-Version: 1.0
-X-Received: by 2002:a02:a10b:0:b0:416:5d0f:f494 with SMTP id
- f11-20020a02a10b000000b004165d0ff494mr1852614jag.5.1684560265963; Fri, 19 May
- 2023 22:24:25 -0700 (PDT)
-Date:   Fri, 19 May 2023 22:24:25 -0700
-In-Reply-To: <0000000000003a41f705a9c74dfa@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000041730905fc1940ff@google.com>
-Subject: Re: [syzbot] [usb?] INFO: task hung in usb_register_dev
-From:   syzbot <syzbot+e761775e8f4a28711f19@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, charu@tickmarks.net,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+Dzie=C5=84 dobry,
 
-commit df05a9b05e466a46725564528b277d0c570d0104
-Author: Alan Stern <stern@rowland.harvard.edu>
-Date:   Mon Apr 10 19:38:22 2023 +0000
+rozwa=C5=BCali Pa=C5=84stwo wyb=C3=B3r finansowania, kt=C3=B3re spe=C5=82=
+ni potrzeby firmy, zapewniaj=C4=85c natychmiastowy dost=C4=99p do got=C3=B3=
+wki, bez zb=C4=99dnych przestoj=C3=B3w?=20
 
-    USB: sisusbvga: Add endpoint checks
+Przygotowali=C5=9Bmy rozwi=C4=85zania faktoringowe dopasowane do Pa=C5=84=
+stwa bran=C5=BCy i wielko=C5=9Bci firmy, dzi=C4=99ki kt=C3=B3rym, nie mus=
+z=C4=85 Pa=C5=84stwo martwi=C4=87 si=C4=99 o niewyp=C5=82acalno=C5=9B=C4=87=
+ kontrahent=C3=B3w, poniewa=C5=BC transakcje s=C4=85 zabezpieczone i posi=
+adaj=C4=85 gwarancj=C4=99 sp=C5=82aty.=20
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1286f641280000
-start commit:   7d2a07b76933 Linux 5.14
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b04081cf516e2565
-dashboard link: https://syzkaller.appspot.com/bug?extid=e761775e8f4a28711f19
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=133519b1300000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=116ec82e300000
+Chc=C4=85 Pa=C5=84stwo przeanalizowa=C4=87 dost=C4=99pne opcje?
 
-If the result looks correct, please mark the issue as fixed by replying with:
 
-#syz fix: USB: sisusbvga: Add endpoint checks
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Pozdrawiam
+Szczepan Andryszczuk
