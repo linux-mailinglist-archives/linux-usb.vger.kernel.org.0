@@ -2,98 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE02709E5F
-	for <lists+linux-usb@lfdr.de>; Fri, 19 May 2023 19:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C97A709E62
+	for <lists+linux-usb@lfdr.de>; Fri, 19 May 2023 19:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbjESRkQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 May 2023 13:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
+        id S232085AbjESRkY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 May 2023 13:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232184AbjESRjz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 May 2023 13:39:55 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3857A1BC
-        for <linux-usb@vger.kernel.org>; Fri, 19 May 2023 10:39:45 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-96aae59bbd6so669921166b.3
-        for <linux-usb@vger.kernel.org>; Fri, 19 May 2023 10:39:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1684517983; x=1687109983;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/WaQbuE5cv39OYuI5y6ZtsKaLFzPY8lJPqoWNNkwtTU=;
-        b=gNzDPvFxzzNFgOhHoAxieNP/1nvGK+V+PZvuQDYJ1eHWrUjLQNwJb1D5F7VIKxTVLS
-         bq916MkfscYab9cZoFtxSWmdIcdN+ZwUetpa6w4Q8lZOZnwK/1P3KoSm8P+TBZV0z9qw
-         14oKCJteJKh7p1BkVNSt+5ekxTGJCIRHoYHV5xdT6ZHXTMZeUsbLOfafl2bZ0VebY/m+
-         EmpTLkZ/9VPJCZmRTIdMN3WhfMRKM8AyK2dwqj2GDRY9ely/3/sLeWRnjJLpe/htc9mV
-         kRuJJmn9ZCblA2qsZTxL3Hz6mv1xKcykj/xxqdH6kzUQpGBQewMNZfbrzev/SAfDLJy1
-         YbRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684517983; x=1687109983;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/WaQbuE5cv39OYuI5y6ZtsKaLFzPY8lJPqoWNNkwtTU=;
-        b=gGxbRT8gIJZzFfj1vFLveTvGSfafkWI4+H5bq0xLh4TtutVKZ7Q3prT4a4EMJCIesl
-         h5ejyosRpNsqiQ0YpINgUD5qVa6Mw5oGxnnOEig3O7Czei0k9FMIrd3nfdzoc+F2yos6
-         W38RjGrMHn5cyT7yhmMDKh7fsQdiOtCdA95fdWjKEUhMhn1WALnqeP4UpFWVEi2AVzfC
-         OK4PjJqR8P4J/GnSpuIVM/OHUm379kSRtTODEMA5mVUK/LlKp40pCNb3EM67UqYlxsTc
-         1/B6Rfx8a1RJKiAtTBhr9vOyYqIE2yJ8I+v2tp+ittI9i0RjoAEv+nxfjzDF2IAmvoao
-         mcug==
-X-Gm-Message-State: AC+VfDxCeFMq9Vvb1n7CiRnSSmJGT7rkBW148YWZUVkQ6EhhcACKiDTr
-        JGyEW/HObcnfImOHXDqbYbKpNH4qW3rnVT+q1r0=
-X-Google-Smtp-Source: ACHHUZ63jUyq64WtlKEA52qluNBTP5cLS8bHfVIg4CwlIviMD89PBiYTqinu3CU3sghaCbiRMp1eI59E/izhmzoOaXI=
-X-Received: by 2002:a17:907:6288:b0:946:be05:ed7a with SMTP id
- nd8-20020a170907628800b00946be05ed7amr2217094ejc.70.1684517983394; Fri, 19
- May 2023 10:39:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de> <20230517230239.187727-18-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20230517230239.187727-18-u.kleine-koenig@pengutronix.de>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Fri, 19 May 2023 19:39:32 +0200
-Message-ID: <CAFBinCCy2=bA2UghJ08itrdJF-heTJhDnnHHCdhTTVcRt_GbhQ@mail.gmail.com>
-Subject: Re: [PATCH 17/97] usb: dwc3-meson-g12a: Convert to platform remove
- callback returning void
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        with ESMTP id S231856AbjESRkW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 May 2023 13:40:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2E2F9;
+        Fri, 19 May 2023 10:40:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 313F6617CA;
+        Fri, 19 May 2023 17:40:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4EDEC433D2;
+        Fri, 19 May 2023 17:40:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684518020;
+        bh=UDkPTriVgF63ln4ZyrbQRph9MfKBLUZJt2i1hBGxbgI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Aqw8D6mpeQT4w0fcGePat4H8HZzBKIKWOeUIA8alAX2uA2qSAZBBelFH1hPRBkWB5
+         zCW7JnxXImPHDm1iFUam6V5xw63zRqh9PdXExsNYp081ytq/Tt16x0WpfMUCNOteX6
+         qBiUUORVTc5/nF6UChgQRNfB4VpikiTTxgof71VDpl6VjA3G0czOdDFRwvarH4XDND
+         pQlyZ9tx184IAxdcTRxFt2ul+EkdzLzzf+bYtdqnSAAjuEFWZA9OBQNYtxCjAw9P6N
+         D/Jgh9+OqviTJDwRB8ZudGMqBlFs6qx3Y0Pf4hWfzrXd6bpUg3KMCJ9IskzeXqQHQo
+         q94fvn1FHRRcQ==
+Date:   Fri, 19 May 2023 23:10:15 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Stanley Chang <stanley_chang@realtek.com>,
+        Paul Cercueil <paul@crapouillou.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ray Chi <raychi@google.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v1 2/3] usb: phy: Add driver for the Realtek SoC USB
+ 2.0/3.0 PHY
+Message-ID: <ZGe0f4OfaXzweSp3@matsya>
+References: <20230519045825.28369-1-stanley_chang@realtek.com>
+ <20230519045825.28369-2-stanley_chang@realtek.com>
+ <0d165c7efbb71a65803abddc364e1c5252b8b939.camel@crapouillou.net>
+ <0ee8a26205a041cab9a787ec29201a9f@realtek.com>
+ <f7edea0c-dbfe-4c16-8134-0656411a837d@app.fastmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f7edea0c-dbfe-4c16-8134-0656411a837d@app.fastmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 18, 2023 at 1:02=E2=80=AFAM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart fro=
-m
-> emitting a warning) and this typically results in resource leaks. To impr=
-ove
-> here there is a quest to make the remove callback return void. In the fir=
-st
-> step of this quest all drivers are converted to .remove_new() which alrea=
-dy
-> returns void. Eventually after all drivers are converted, .remove_new() i=
-s
-> renamed to .remove().
->
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+On 19-05-23, 13:01, Arnd Bergmann wrote:
+> On Fri, May 19, 2023, at 12:58, Stanley Chang[昌育德] wrote:
+> >> 
+> >> I'm pretty sure that drivers/usb/phy/ is deprecated now...
+> >> 
+> >> New drivers should be written for the generic PHY subsystem in
+> >> drivers/phy/.
+> 
+> Indeed, I missed that in my review.
+> 
+> > Thanks for your reminder.
+> > Will drivers/usb/phy be removed?
+> > Is it not allowed to add new drivers?
+> >
+> > In our application, driver/phy is not suitable.
+> > We need to notify the phy driver when the USB hub port status changes.
+> > However, generic PHY drivers are designed for various device's PHY.
+> > And it seems inappropriate to add this function. So we choose to use 
+> > driver/usb/phy. 
+> 
+> If you run into something that works in the old usbphy layer
+> but can't be done in drivers/phy, I think the better solution
+> would be to change the drivers/phy/ code to add this.
+
+The is correct, phy interfaces can be improved upon and have been added
+upon as and when we have users.
+
+FWIW there are already usb phy drivers in Generic phy susbystem, so you
+need to really justify why you need a new interface?
+
+-- 
+~Vinod
