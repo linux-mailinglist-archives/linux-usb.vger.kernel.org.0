@@ -2,67 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F261E709032
-	for <lists+linux-usb@lfdr.de>; Fri, 19 May 2023 09:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EED1B709050
+	for <lists+linux-usb@lfdr.de>; Fri, 19 May 2023 09:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjESHNd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 May 2023 03:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
+        id S230150AbjESHWE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 May 2023 03:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjESHNc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 May 2023 03:13:32 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC77310D0;
-        Fri, 19 May 2023 00:13:29 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Cx_eqXIWdkChkKAA--.17539S3;
-        Fri, 19 May 2023 15:13:27 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxX+SQIWdk0IVpAA--.48203S3;
-        Fri, 19 May 2023 15:13:20 +0800 (CST)
-Subject: Re: [PATCH v1] usb: dwc2: add pci_device_id driver_data parse support
-To:     kernel test robot <lkp@intel.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <helgaas@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230518092240.8023-1-zhuyinbo@loongson.cn>
- <202305190105.O6ycxCti-lkp@intel.com>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <933c829f-0d27-f3b9-3db6-f2211495b086@loongson.cn>
-Date:   Fri, 19 May 2023 15:13:20 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <202305190105.O6ycxCti-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-US
+        with ESMTP id S229970AbjESHV6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 May 2023 03:21:58 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C79114;
+        Fri, 19 May 2023 00:21:56 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3945180bef1so1817261b6e.1;
+        Fri, 19 May 2023 00:21:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684480916; x=1687072916;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2IOR7w7BSJsvirN+EhQ0URabvoF0Ui+FpLBmxQFZG4s=;
+        b=UOyCQLpcu3OPUmxAgv8HXSHDr0HAlUUUVwIpU+pNWNzE+SuqQL7Ip2D4DstOlS0WYU
+         fxQj0wXZEHvR9gd6RwK+EEkMlt31OxhGx3KkkAfLU6FGxpBxyQpCTjsB8c89jwv0+kIi
+         4DqjR4/YXyo7GWNETBn8qy7IRIb3p6fQn+tXUA8CGtWW0/Rt7VEqKfhF/RRAZKjlNpXY
+         JoKHApRtC1IKTSoXWlaq+RXpunJxjc+zvQz3wLmxxTvhpBcP67MDSSVRJnkG60XwEtlH
+         hpDqRcpBsM2PP5CjtrrPQgFSrCGzSzPw5/LCjsDlbQikXvGywwv2lc0B2EsMbiA0FIoj
+         JF+g==
+X-Gm-Message-State: AC+VfDygbdfIZHiYTYXvSlOz8/HX11YPV/IO9Pv1kY5LkMDmmKsIFlmP
+        zcJ/DurSpvrmoudxkx+PZrqHUuxctA==
+X-Google-Smtp-Source: ACHHUZ4Hx/ZbZtRBO65aGDwUX8MoiQLM3ifAOr1OlLqTwp8zpGcZ7hKvymgvutTpYkPcafPS7gkv8w==
+X-Received: by 2002:a05:6808:8c3:b0:392:5ce5:d20 with SMTP id k3-20020a05680808c300b003925ce50d20mr702787oij.48.1684480915978;
+        Fri, 19 May 2023 00:21:55 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j24-20020a9d7698000000b006acfdbdf37csm1418756otl.31.2023.05.19.00.21.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 00:21:55 -0700 (PDT)
+Received: (nullmailer pid 2968846 invoked by uid 1000);
+        Fri, 19 May 2023 07:21:54 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxX+SQIWdk0IVpAA--.48203S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxAw13AFW5ZFWkZFWUCw13twb_yoW5Jw4xpa
-        yUZrZFkr1Fqr18GayxGa4Uu3WYgrs5Ja4Ygr98Gw45ZrZrZa42qrs2kFy5trnrK3Z7GFy7
-        AFyfXrWv9a48Ja7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
-        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
-        7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
-        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jYnmiUUUUU=
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Piyush Mehta <piyush.mehta@amd.com>
+Cc:     balbi@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
+        git@amd.com, krzysztof.kozlowski+dt@linaro.org,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        linux-usb@vger.kernel.org, michal.simek@amd.com,
+        linux-kernel@vger.kernel.org, michal.simek@xilinx.com,
+        siva.durga.prasad.paladugu@amd.com
+In-Reply-To: <20230519065940.2190786-1-piyush.mehta@amd.com>
+References: <20230519065940.2190786-1-piyush.mehta@amd.com>
+Message-Id: <168448091422.2968830.10066003697035225886.robh@kernel.org>
+Subject: Re: [PATCH V3] dt-bindings: usb: dwc3: Add interrupt-names
+ property support for wakeup interrupt
+Date:   Fri, 19 May 2023 02:21:54 -0500
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,50 +68,114 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
+On Fri, 19 May 2023 12:29:40 +0530, Piyush Mehta wrote:
+> The hibernation feature enabled for Xilinx Versal NET SoC in DWC3 IP.
+> As the DWC3 IP supports the hibernation feature, to handle the wakeup
+> or hibernation interrupt, add host mode "wakeup" interrupt-names
+> optional property in the binding schema to capture remote-wakeup and
+> connect/ disconnect event in the hibernation state.
+> 
+> We have a dedicated IRQ line specifically for the hibernation feature.
+> When the "wakeup" IRQ line is triggered, it initiates a hibernation
+> interrupt, causing the system to wake up from the hibernation state.
+> 
+> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+> ---
+> Change in V2:
+> -  Addressed ROB review comments
+>  - Updated name of interrupt-names property with "wakeup"
+>  - Move interrupt-names property from dwc3-xilinx core to dwc3 core.
+> 
+> Link: https://lore.kernel.org/all/CAL_JsqK6_7XD7+w+EQvPPmbmSOpfo3JDb0xDN4StuHUm1kgchw@mail.gmail.com/
+> 
+> Change in V3:
+> -  Addressed Krzysztof Kozlowski comments
+>  - Update binding schema enum.
+>  - Upadet commit message.
+> 
+> Link: https://lore.kernel.org/all/76dfbf27-8ad2-6e09-5354-b006b9e81af1@linaro.org/
+> ---
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-在 2023/5/19 上午1:52, kernel test robot 写道:
-> Hi Yinbo,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on pci/next]
-> [also build test ERROR on pci/for-linus westeri-thunderbolt/next linus/master v6.4-rc2 next-20230518]
-> [cannot apply to usb/usb-testing usb/usb-next usb/usb-linus]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/usb-dwc2-add-pci_device_id-driver_data-parse-support/20230518-173721
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-> patch link:    https://lore.kernel.org/r/20230518092240.8023-1-zhuyinbo%40loongson.cn
-> patch subject: [PATCH v1] usb: dwc2: add pci_device_id driver_data parse support
-> config: powerpc-allmodconfig
-> compiler: powerpc-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/3ff56448e1442fe8b1e72651a8d4d6e1086ece32
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Yinbo-Zhu/usb-dwc2-add-pci_device_id-driver_data-parse-support/20230518-173721
->          git checkout 3ff56448e1442fe8b1e72651a8d4d6e1086ece32
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202305190105.O6ycxCti-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
-> 
->>> ERROR: modpost: "dwc2_pci_ids" [drivers/usb/dwc2/dwc2_pci.ko] undefined!
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
+yamllint warnings/errors:
 
-I test it was set dwc2 pci driver as built-in, so no error, this compile
-error was that dwc2_pci_ids not export when driver as module and I will
-add EXPORT_SYMBOL_GPL(dwc2_pci_ids) to fix that compile issue.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/dwc3-xilinx.example.dtb: usb@0: usb@fe200000:interrupt-names: More than one condition true in oneOf schema:
+	{'maxItems': 3,
+	 'minItems': 1,
+	 'oneOf': [{'items': [{'const': 'dwc_usb3'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {'items': {'enum': ['host', 'peripheral', 'otg']},
+	            'type': 'array'},
+	           {'items': {'enum': ['host', 'peripheral', 'otg', 'wakeup']},
+	            'type': 'array'}]}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/dwc3-xilinx.example.dtb: usb@0: usb@fe200000: Unevaluated properties are not allowed ('interrupt-names' was unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/dwc3-xilinx.example.dtb: usb@fe200000: interrupt-names: More than one condition true in oneOf schema:
+	{'maxItems': 3,
+	 'minItems': 1,
+	 'oneOf': [{'items': [{'const': 'dwc_usb3'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {'items': {'enum': ['host', 'peripheral', 'otg']},
+	            'type': 'array'},
+	           {'items': {'enum': ['host', 'peripheral', 'otg', 'wakeup']},
+	            'type': 'array'}]}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/dwc3-xilinx.example.dtb: usb@fe200000: Unevaluated properties are not allowed ('interrupt-names' was unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,am62-usb.example.dtb: usb@f910000: usb@31100000:interrupt-names: More than one condition true in oneOf schema:
+	{'maxItems': 3,
+	 'minItems': 1,
+	 'oneOf': [{'items': [{'const': 'dwc_usb3'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {'items': {'enum': ['host', 'peripheral', 'otg']},
+	            'type': 'array'},
+	           {'items': {'enum': ['host', 'peripheral', 'otg', 'wakeup']},
+	            'type': 'array'}]}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,am62-usb.example.dtb: usb@f910000: usb@31100000: Unevaluated properties are not allowed ('interrupt-names' was unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,am62-usb.example.dtb: usb@31100000: interrupt-names: More than one condition true in oneOf schema:
+	{'maxItems': 3,
+	 'minItems': 1,
+	 'oneOf': [{'items': [{'const': 'dwc_usb3'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {'items': {'enum': ['host', 'peripheral', 'otg']},
+	            'type': 'array'},
+	           {'items': {'enum': ['host', 'peripheral', 'otg', 'wakeup']},
+	            'type': 'array'}]}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,am62-usb.example.dtb: usb@31100000: Unevaluated properties are not allowed ('interrupt-names' was unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
 
-Thanks.
-> 
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230519065940.2190786-1-piyush.mehta@amd.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
