@@ -2,77 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076F570A8AD
-	for <lists+linux-usb@lfdr.de>; Sat, 20 May 2023 17:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE56E70A8B0
+	for <lists+linux-usb@lfdr.de>; Sat, 20 May 2023 17:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbjETPG1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 20 May 2023 11:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
+        id S231671AbjETPLW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 20 May 2023 11:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbjETPGZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 May 2023 11:06:25 -0400
+        with ESMTP id S229737AbjETPLU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 May 2023 11:11:20 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2D1FD115
-        for <linux-usb@vger.kernel.org>; Sat, 20 May 2023 08:06:24 -0700 (PDT)
-Received: (qmail 73707 invoked by uid 1000); 20 May 2023 11:06:23 -0400
-Date:   Sat, 20 May 2023 11:06:23 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id C6779EE
+        for <linux-usb@vger.kernel.org>; Sat, 20 May 2023 08:11:19 -0700 (PDT)
+Received: (qmail 73797 invoked by uid 1000); 20 May 2023 11:11:19 -0400
+Date:   Sat, 20 May 2023 11:11:19 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+e761775e8f4a28711f19@syzkaller.appspotmail.com>
-Cc:     andreyknvl@google.com, charu@tickmarks.net,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] INFO: task hung in usb_register_dev
-Message-ID: <32b49d74-16df-4f8e-9956-c7705a900ee9@rowland.harvard.edu>
-References: <0000000000003a41f705a9c74dfa@google.com>
- <00000000000041730905fc1940ff@google.com>
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [bug report] USB: gadget: Fix obscure lockdep violation for
+ udc_mutex
+Message-ID: <63e14a1b-8539-4a6a-8e13-db8e3878e7ab@rowland.harvard.edu>
+References: <683df726-4510-4a79-968a-b238e21c4346@kili.mountain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <00000000000041730905fc1940ff@google.com>
+In-Reply-To: <683df726-4510-4a79-968a-b238e21c4346@kili.mountain>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 19, 2023 at 10:24:25PM -0700, syzbot wrote:
-> syzbot suspects this issue was fixed by commit:
+On Sat, May 20, 2023 at 01:34:43PM +0300, Dan Carpenter wrote:
+> Hello Alan Stern,
 > 
-> commit df05a9b05e466a46725564528b277d0c570d0104
-> Author: Alan Stern <stern@rowland.harvard.edu>
-> Date:   Mon Apr 10 19:38:22 2023 +0000
+> The patch 1016fc0c096c: "USB: gadget: Fix obscure lockdep violation
+> for udc_mutex" from Aug 26, 2022, leads to the following Smatch
+> static checker warning:
 > 
->     USB: sisusbvga: Add endpoint checks
+> 	drivers/usb/gadget/udc/core.c:767 usb_gadget_disconnect()
+> 	warn: sleeping in atomic context
 > 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1286f641280000
-> start commit:   7d2a07b76933 Linux 5.14
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=b04081cf516e2565
-> dashboard link: https://syzkaller.appspot.com/bug?extid=e761775e8f4a28711f19
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=133519b1300000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=116ec82e300000
+> drivers/usb/gadget/udc/core.c
+>     757                  * Gadget will stay disconnected after activation.
+>     758                  */
+>     759                 gadget->connected = false;
+>     760                 goto out;
+>     761         }
+>     762 
+>     763         ret = gadget->ops->pullup(gadget, 0);
+>     764         if (!ret)
+>     765                 gadget->connected = 0;
+>     766 
+> --> 767         mutex_lock(&udc_lock);
+>     768         if (gadget->udc->driver)
+>     769                 gadget->udc->driver->disconnect(gadget);
+>     770         mutex_unlock(&udc_lock);
+>     771 
 > 
-> If the result looks correct, please mark the issue as fixed by replying with:
+> The call tree where we're holding a spinlock is:
 > 
-> #syz fix: USB: sisusbvga: Add endpoint checks
-> 
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> max3420_vbus_handler() <- disables preempt
+> -> usb_udc_vbus_handler()
+>    -> usb_udc_connect_control()
+>       -> usb_gadget_disconnect()
 
-If that commit does fix this problem, it's entirely by accident.  I 
-suspect that instead the commit merely prevents the reproducer from 
-entering the buggy pathway, but that pathway still exists.
+Indeed, I've been discussing this issue with Badhri Jagan Sridharan.  
+See these threads for more information:
 
-In fact, I'd guess from reading through the driver that the problem is 
-that it does dozens of I/O operations, with 5-second timeouts and 
-multiple retries, without checking for errors until the end.  All while 
-holding a contested mutex.
-
-However the driver is not maintained much AFAICT, so it's not likely to 
-get fixed.  It's probably also not used by more than a few people, if 
-any.
+https://lore.kernel.org/linux-usb/20230517115955.1078339-1-badhri@google.com/#r
+https://lore.kernel.org/linux-usb/20230519043041.1593578-1-badhri@google.com/#r
 
 Alan Stern
