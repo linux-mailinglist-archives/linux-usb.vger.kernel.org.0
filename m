@@ -2,41 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C134270A59B
-	for <lists+linux-usb@lfdr.de>; Sat, 20 May 2023 07:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D3D170A5A2
+	for <lists+linux-usb@lfdr.de>; Sat, 20 May 2023 07:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjETFNz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 20 May 2023 01:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
+        id S230307AbjETFTf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 20 May 2023 01:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjETFNy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 May 2023 01:13:54 -0400
+        with ESMTP id S229512AbjETFTe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 May 2023 01:19:34 -0400
 Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F84711F;
-        Fri, 19 May 2023 22:13:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9CB1B0;
+        Fri, 19 May 2023 22:19:32 -0700 (PDT)
 Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 34K5Ae7A2003673, This message is accepted by code: ctloc85258
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 34K5ILO00007046, This message is accepted by code: ctloc85258
 Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 34K5Ae7A2003673
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 34K5ILO00007046
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Sat, 20 May 2023 13:10:40 +0800
-Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+        Sat, 20 May 2023 13:18:21 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
  RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Sat, 20 May 2023 13:10:50 +0800
+ 15.1.2375.32; Sat, 20 May 2023 13:18:31 +0800
 Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Sat, 20 May 2023 13:10:49 +0800
+ 15.1.2375.7; Sat, 20 May 2023 13:18:30 +0800
 Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
  RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Sat, 20 May 2023 13:10:49 +0800
+ 15.01.2375.007; Sat, 20 May 2023 13:18:30 +0800
 From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
         <stanley_chang@realtek.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC:     Vinod Koul <vkoul@kernel.org>,
+To:     Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+CC:     Paul Cercueil <paul@crapouillou.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Kishon Vijay Abraham I <kishon@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -58,21 +57,22 @@ CC:     Vinod Koul <vkoul@kernel.org>,
 Subject: RE: [PATCH v1 2/3] usb: phy: Add driver for the Realtek SoC USB 2.0/3.0 PHY
 Thread-Topic: [PATCH v1 2/3] usb: phy: Add driver for the Realtek SoC USB
  2.0/3.0 PHY
-Thread-Index: AQHZig6UEIendKXQakm8Ocfv4iAbD69gulMAgACuYvD//3+eAIABtHCQ
-Date:   Sat, 20 May 2023 05:10:49 +0000
-Message-ID: <520a2595716d47359812dab8ad110f21@realtek.com>
+Thread-Index: AQHZig6UEIendKXQakm8Ocfv4iAbD69gulMAgACuYvD//3+eAIAAb2SAgAFHdSA=
+Date:   Sat, 20 May 2023 05:18:30 +0000
+Message-ID: <1b32419b8024407298e9bb5f33d3d47b@realtek.com>
 References: <20230519045825.28369-1-stanley_chang@realtek.com>
  <20230519045825.28369-2-stanley_chang@realtek.com>
  <0d165c7efbb71a65803abddc364e1c5252b8b939.camel@crapouillou.net>
  <0ee8a26205a041cab9a787ec29201a9f@realtek.com>
  <f7edea0c-dbfe-4c16-8134-0656411a837d@app.fastmail.com>
-In-Reply-To: <f7edea0c-dbfe-4c16-8134-0656411a837d@app.fastmail.com>
+ <ZGe0f4OfaXzweSp3@matsya>
+In-Reply-To: <ZGe0f4OfaXzweSp3@matsya>
 Accept-Language: zh-TW, en-US
 Content-Language: zh-TW
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
+x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
 x-kse-antispam-interceptor-info: fallback
 x-kse-antivirus-interceptor-info: fallback
 Content-Type: text/plain; charset="utf-8"
@@ -92,22 +92,14 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgQXJuZCwNCg0KPiA+PiBJJ20gcHJldHR5IHN1cmUgdGhhdCBkcml2ZXJzL3VzYi9waHkvIGlz
-IGRlcHJlY2F0ZWQgbm93Li4uDQo+ID4+DQo+ID4+IE5ldyBkcml2ZXJzIHNob3VsZCBiZSB3cml0
-dGVuIGZvciB0aGUgZ2VuZXJpYyBQSFkgc3Vic3lzdGVtIGluDQo+ID4+IGRyaXZlcnMvcGh5Ly4N
-Cj4gDQo+IEluZGVlZCwgSSBtaXNzZWQgdGhhdCBpbiBteSByZXZpZXcuDQo+IA0KPiA+IFRoYW5r
-cyBmb3IgeW91ciByZW1pbmRlci4NCj4gPiBXaWxsIGRyaXZlcnMvdXNiL3BoeSBiZSByZW1vdmVk
-Pw0KPiA+IElzIGl0IG5vdCBhbGxvd2VkIHRvIGFkZCBuZXcgZHJpdmVycz8NCj4gPg0KPiA+IElu
-IG91ciBhcHBsaWNhdGlvbiwgZHJpdmVyL3BoeSBpcyBub3Qgc3VpdGFibGUuDQo+ID4gV2UgbmVl
-ZCB0byBub3RpZnkgdGhlIHBoeSBkcml2ZXIgd2hlbiB0aGUgVVNCIGh1YiBwb3J0IHN0YXR1cyBj
-aGFuZ2VzLg0KPiA+IEhvd2V2ZXIsIGdlbmVyaWMgUEhZIGRyaXZlcnMgYXJlIGRlc2lnbmVkIGZv
-ciB2YXJpb3VzIGRldmljZSdzIFBIWS4NCj4gPiBBbmQgaXQgc2VlbXMgaW5hcHByb3ByaWF0ZSB0
-byBhZGQgdGhpcyBmdW5jdGlvbi4gU28gd2UgY2hvb3NlIHRvIHVzZQ0KPiA+IGRyaXZlci91c2Iv
-cGh5Lg0KPiANCj4gSWYgeW91IHJ1biBpbnRvIHNvbWV0aGluZyB0aGF0IHdvcmtzIGluIHRoZSBv
-bGQgdXNicGh5IGxheWVyIGJ1dCBjYW4ndCBiZSBkb25lDQo+IGluIGRyaXZlcnMvcGh5LCBJIHRo
-aW5rIHRoZSBiZXR0ZXIgc29sdXRpb24gd291bGQgYmUgdG8gY2hhbmdlIHRoZSBkcml2ZXJzL3Bo
-eS8NCj4gY29kZSB0byBhZGQgdGhpcy4NCj4gDQo+ICAgICAgIEFybmQNCj4gDQoNCkkgd291bGQg
-bW92ZSB0aGUgY29kZSB0byBkcml2ZXJzL3BoeS4NCkNhbiBJIHVzZSB0aGUgInN0cnVjdCB1c2Jf
-cGh5IiBpbnRlcmZhY2UgYWZ0ZXIgYWRkaW5nIHRoZSBjb2RlIHRvIHRoZSBkcml2ZXIvcGh5Pw0K
-DQpJIGZvdW5kIHRoYXQgc29tZSBkcml2ZXJzIHVzZSAidXNiX3BoeSIgaW4gZGVpdmVycy9waHkv
-Lg0KQ2FuIEkgZm9sbG93IHRoZXNlIGRyaXZlcnM/DQoNClRoYW5rcywNClN0YW5sZXkNCg==
+SGkgVmlub2QsDQoNCj4gVGhlIGlzIGNvcnJlY3QsIHBoeSBpbnRlcmZhY2VzIGNhbiBiZSBpbXBy
+b3ZlZCB1cG9uIGFuZCBoYXZlIGJlZW4gYWRkZWQNCj4gdXBvbiBhcyBhbmQgd2hlbiB3ZSBoYXZl
+IHVzZXJzLg0KPiANCj4gRldJVyB0aGVyZSBhcmUgYWxyZWFkeSB1c2IgcGh5IGRyaXZlcnMgaW4g
+R2VuZXJpYyBwaHkgc3VzYnlzdGVtLCBzbyB5b3UgbmVlZA0KPiB0byByZWFsbHkganVzdGlmeSB3
+aHkgeW91IG5lZWQgYSBuZXcgaW50ZXJmYWNlPw0KPiANCg0KSSB3aWxsIHJlZmVyZW5jZSB0aGUg
+dXMgcGh5IGRyaXZlcnMgaW4gZHJpdmVycy9waHkuDQpJcyB1c2luZyB1c2IgcGh5IGluIGRyaXZl
+cnMvcGh5IHRoZSByaWdodCBjaG9pY2U/DQpBcyB0aGUgZm9sbG93aW5nIGFzOg0KZHJpdmVycy9w
+aHkvdGkvcGh5LXR3bDQwMzAtdXNiLmMNCmRyaXZlcnMvcGh5L3RpL3BoeS1vbWFwLXVzYjIuYw0K
+ZHJpdmVycy9waHkvdGkvcGh5LWRtODE2eC11c2IuYw0KZHJpdmVycy9waHkvcGh5LWxnbS11c2Iu
+Yw0KZHJpdmVycy9waHkvdGVncmEveHVzYi5jDQpkcml2ZXJzL3BoeS9tb3Rvcm9sYS9waHktY3Bj
+YXAtdXNiLmMNCg0KVGhhbmtzLA0KU3RhbmxleQ0KDQo=
