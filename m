@@ -2,104 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3D170A5A2
-	for <lists+linux-usb@lfdr.de>; Sat, 20 May 2023 07:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D0E70A5A7
+	for <lists+linux-usb@lfdr.de>; Sat, 20 May 2023 07:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjETFTf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 20 May 2023 01:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
+        id S229518AbjETFYe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 20 May 2023 01:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjETFTe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 May 2023 01:19:34 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9CB1B0;
-        Fri, 19 May 2023 22:19:32 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 34K5ILO00007046, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 34K5ILO00007046
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Sat, 20 May 2023 13:18:21 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Sat, 20 May 2023 13:18:31 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Sat, 20 May 2023 13:18:30 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Sat, 20 May 2023 13:18:30 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-CC:     Paul Cercueil <paul@crapouillou.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ray Chi <raychi@google.com>,
-        "Bagas Sanjaya" <bagasdotme@gmail.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v1 2/3] usb: phy: Add driver for the Realtek SoC USB 2.0/3.0 PHY
-Thread-Topic: [PATCH v1 2/3] usb: phy: Add driver for the Realtek SoC USB
- 2.0/3.0 PHY
-Thread-Index: AQHZig6UEIendKXQakm8Ocfv4iAbD69gulMAgACuYvD//3+eAIAAb2SAgAFHdSA=
-Date:   Sat, 20 May 2023 05:18:30 +0000
-Message-ID: <1b32419b8024407298e9bb5f33d3d47b@realtek.com>
-References: <20230519045825.28369-1-stanley_chang@realtek.com>
- <20230519045825.28369-2-stanley_chang@realtek.com>
- <0d165c7efbb71a65803abddc364e1c5252b8b939.camel@crapouillou.net>
- <0ee8a26205a041cab9a787ec29201a9f@realtek.com>
- <f7edea0c-dbfe-4c16-8134-0656411a837d@app.fastmail.com>
- <ZGe0f4OfaXzweSp3@matsya>
-In-Reply-To: <ZGe0f4OfaXzweSp3@matsya>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S229901AbjETFY1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 May 2023 01:24:27 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9311B1
+        for <linux-usb@vger.kernel.org>; Fri, 19 May 2023 22:24:26 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-76ce93a10f3so34931739f.0
+        for <linux-usb@vger.kernel.org>; Fri, 19 May 2023 22:24:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684560266; x=1687152266;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SrdV0ygMdYPqAmG7LwAZV4OGjE5KtVQqdUSmJPUHjZU=;
+        b=jfzx+PkXH+epE8SsTnNU9B/uG8640JyU9oNhh3sULc8PYa/MpWnudGfm22aLme591l
+         DjlZuAxHBAhDVpXENtgpuvT/lwZ/5STtktL64TCWzPNMIOTKPCpHmOFjqxuqGTNp0ITB
+         ipqXUjwoHhHi6MCPsx4cOyP3OGDw4nmfsZEyXvhS3V/hVcBKMFbPF3WJyZaB6XUoRvby
+         KKPBfBoLFOYuxfUC2nroILDHE7AD71pYZKUbfhu+PW3tBckDnwihWSnkjtEvBXToc86x
+         RNWUqE9Wba2Mgl6te2132WT/ADfX7NRQMd97iRhT9vC6ezh6ise9GTzox04CkJfxgE6C
+         bVxw==
+X-Gm-Message-State: AC+VfDyzTIjYUzCLAicWjmv7osGWHpL6YUiJ0phzXa/gG7qH7WnDVYld
+        vbOv/+kYh3CtYndndp2kv/UZr94HMV0BecUYEjEjX17Bjj23
+X-Google-Smtp-Source: ACHHUZ6hTFX7a0pVUYivQtv8iU28xZiCDjaD/cgUE6pqb8VNbogQ2Lh7JMQe9On01smA0p41OO2OMcJ1fCrx97WO3Na4JQboaq1h
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a02:a10b:0:b0:416:5d0f:f494 with SMTP id
+ f11-20020a02a10b000000b004165d0ff494mr1852614jag.5.1684560265963; Fri, 19 May
+ 2023 22:24:25 -0700 (PDT)
+Date:   Fri, 19 May 2023 22:24:25 -0700
+In-Reply-To: <0000000000003a41f705a9c74dfa@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000041730905fc1940ff@google.com>
+Subject: Re: [syzbot] [usb?] INFO: task hung in usb_register_dev
+From:   syzbot <syzbot+e761775e8f4a28711f19@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, charu@tickmarks.net,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgVmlub2QsDQoNCj4gVGhlIGlzIGNvcnJlY3QsIHBoeSBpbnRlcmZhY2VzIGNhbiBiZSBpbXBy
-b3ZlZCB1cG9uIGFuZCBoYXZlIGJlZW4gYWRkZWQNCj4gdXBvbiBhcyBhbmQgd2hlbiB3ZSBoYXZl
-IHVzZXJzLg0KPiANCj4gRldJVyB0aGVyZSBhcmUgYWxyZWFkeSB1c2IgcGh5IGRyaXZlcnMgaW4g
-R2VuZXJpYyBwaHkgc3VzYnlzdGVtLCBzbyB5b3UgbmVlZA0KPiB0byByZWFsbHkganVzdGlmeSB3
-aHkgeW91IG5lZWQgYSBuZXcgaW50ZXJmYWNlPw0KPiANCg0KSSB3aWxsIHJlZmVyZW5jZSB0aGUg
-dXMgcGh5IGRyaXZlcnMgaW4gZHJpdmVycy9waHkuDQpJcyB1c2luZyB1c2IgcGh5IGluIGRyaXZl
-cnMvcGh5IHRoZSByaWdodCBjaG9pY2U/DQpBcyB0aGUgZm9sbG93aW5nIGFzOg0KZHJpdmVycy9w
-aHkvdGkvcGh5LXR3bDQwMzAtdXNiLmMNCmRyaXZlcnMvcGh5L3RpL3BoeS1vbWFwLXVzYjIuYw0K
-ZHJpdmVycy9waHkvdGkvcGh5LWRtODE2eC11c2IuYw0KZHJpdmVycy9waHkvcGh5LWxnbS11c2Iu
-Yw0KZHJpdmVycy9waHkvdGVncmEveHVzYi5jDQpkcml2ZXJzL3BoeS9tb3Rvcm9sYS9waHktY3Bj
-YXAtdXNiLmMNCg0KVGhhbmtzLA0KU3RhbmxleQ0KDQo=
+syzbot suspects this issue was fixed by commit:
+
+commit df05a9b05e466a46725564528b277d0c570d0104
+Author: Alan Stern <stern@rowland.harvard.edu>
+Date:   Mon Apr 10 19:38:22 2023 +0000
+
+    USB: sisusbvga: Add endpoint checks
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1286f641280000
+start commit:   7d2a07b76933 Linux 5.14
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b04081cf516e2565
+dashboard link: https://syzkaller.appspot.com/bug?extid=e761775e8f4a28711f19
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=133519b1300000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=116ec82e300000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: USB: sisusbvga: Add endpoint checks
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
