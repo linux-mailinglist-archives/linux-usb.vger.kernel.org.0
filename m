@@ -2,51 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4B170AD66
-	for <lists+linux-usb@lfdr.de>; Sun, 21 May 2023 12:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DEDD70AD6B
+	for <lists+linux-usb@lfdr.de>; Sun, 21 May 2023 12:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbjEUKIf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 May 2023 06:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
+        id S229978AbjEUKIl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 May 2023 06:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbjEUKHR (ORCPT
+        with ESMTP id S230518AbjEUKHR (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Sun, 21 May 2023 06:07:17 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663CFE1;
-        Sun, 21 May 2023 03:03:00 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 055B0240007;
-        Sun, 21 May 2023 10:02:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1684663377;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=P8r9NJbk4qZsebDC6iKmw/phyNT0VMoU31SIufOtdaY=;
-        b=n3BPvLjbXtZsTuhihgGPMP0u37RLKnAXjsi7DtKuY1mkD/KaK6Dr1+gxwMz7YczElkT5/P
-        u0LOv8vO2H6XqQl+580gKLl+6rSO/YLVHpEEh4Y2WUZrRd45OT3gppylD1/PL7tpZNdT1o
-        PsCjiigElFWjJEuuBvULYeUGS/veGNPZWIc9SJsSwLVfXzxIin74WWzffSz+Y82gWLlaP3
-        JTQyTkeznIt2EBtkjTIASeZzzepT0o2k3Xa/5Rk0EDziseg2jjhyVxyuN10o3FL/e/4lna
-        uyrvDpUit/hbx5V6ef71095VfznioPyG5crKki+1/dxtRrZ+/iK13Rl8CSGa5g==
-Date:   Sun, 21 May 2023 12:02:56 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 40/97] usb: gadget/renesas_usbf: Convert to platform
- remove callback returning void
-Message-ID: <20230521120256.0eae651f@bootlin.com>
-In-Reply-To: <20230517230239.187727-41-u.kleine-koenig@pengutronix.de>
-References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
-        <20230517230239.187727-41-u.kleine-koenig@pengutronix.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DEC184;
+        Sun, 21 May 2023 03:03:45 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34LA1aSD004786;
+        Sun, 21 May 2023 10:03:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=68kLvzwuNwZkgyfDs3LEwKDRLCkN60rJMtgAlw5OSlI=;
+ b=MdlldXfZtKMmfKA03uFPYnd4AGE2kwuRGHMGIkA0lnlDvqqxfMG5DlL3TRo+3nxkqw85
+ CnklEhLhfJUYZp3qWRIgBzzo5dnxotI5g/6VwSsiIDjk97mnAFILJIThmW+RZ8Un+qDj
+ iL0W5UiDRpb2L7NHt0Epn58SlDV8VOq/1kamc/pDxlkKpYQhsRKjlyDHMXB9uKl7Qa6a
+ htEQF3kt6dNDEEoVck9nqp7IFEVcNRONisWfj1W021hi7laN9b8WSwmcZ0FboQJQkr/I
+ f4iyQRC9N9FdrVaI9DyI8TW2i9+5mn660hbS5DjxNs53MDRkNB6UiB/lTc6Dw52cStNh Kg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qpqgf1fdv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 21 May 2023 10:03:43 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34LA3gsL003800
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 21 May 2023 10:03:42 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Sun, 21 May 2023 03:03:39 -0700
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [RFC] usb: dwc3: gadget: Fix amount of data copied from event buf to cache
+Date:   Sun, 21 May 2023 15:33:30 +0530
+Message-ID: <20230521100330.22478-1-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: tgts-eL5NTbPitm1W5NwuNnnMcUEg0zC
+X-Proofpoint-GUID: tgts-eL5NTbPitm1W5NwuNnnMcUEg0zC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-21_06,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ suspectscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
+ phishscore=0 mlxscore=0 bulkscore=0 mlxlogscore=759 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305210086
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -57,63 +77,74 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 18 May 2023 01:01:42 +0200
-Uwe Kleine-König <u.kleine-koenig@pengutronix.de> wrote:
+In the current implementation, the check_event_buf call reads the
+GEVNTCOUNT register to determine the amount of event data generated
+and copies it from ev->buf to ev->cache after masking interrupt.
 
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart from
-> emitting a warning) and this typically results in resource leaks. To improve
-> here there is a quest to make the remove callback return void. In the first
-> step of this quest all drivers are converted to .remove_new() which already
-> returns void. Eventually after all drivers are converted, .remove_new() is
-> renamed to .remove().
-> 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/usb/gadget/udc/renesas_usbf.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/renesas_usbf.c b/drivers/usb/gadget/udc/renesas_usbf.c
-> index 84ac9fe4ce7f..6cd0af83e91e 100644
-> --- a/drivers/usb/gadget/udc/renesas_usbf.c
-> +++ b/drivers/usb/gadget/udc/renesas_usbf.c
-> @@ -3361,15 +3361,13 @@ static int usbf_probe(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -static int usbf_remove(struct platform_device *pdev)
-> +static void usbf_remove(struct platform_device *pdev)
->  {
->  	struct usbf_udc *udc = platform_get_drvdata(pdev);
->  
->  	usb_del_gadget_udc(&udc->gadget);
->  
->  	pm_runtime_put(&pdev->dev);
-> -
-> -	return 0;
->  }
->  
->  static const struct of_device_id usbf_match[] = {
-> @@ -3385,7 +3383,7 @@ static struct platform_driver udc_driver = {
->  		.of_match_table = usbf_match,
->  	},
->  	.probe          = usbf_probe,
-> -	.remove         = usbf_remove,
-> +	.remove_new     = usbf_remove,
->  };
->  
->  module_platform_driver(udc_driver);
+During copy if the amount of data to be copied is more than
+(length - lpos), we fill the ev->cache till the end of 4096 byte
+buffer allocated and then start filling from the top (lpos = 0).
 
-Acked-by: Herve Codina <herve.codina@bootlin.com>
+In one instance of SMMU crash it is observed that GEVNTCOUNT register
+reads more than 4096 bytes:
 
-Thanks,
-Hervé
+dwc3_readl   base=0xffffffc0091dc000  offset=50188  value=63488
 
+(offset = 50188 -> 0xC40C)  -> reads 63488 bytes
+
+As per crash dump:
+dwc->lpos = 2056
+
+and evt->buf is at 0xFFFFFFC009185000 and the crash is at
+0xFFFFFFC009186000. The diff which is exactly 0x1000 bytes.
+
+We first memcpy 2040 bytes from (buf + lpos) to (buf + 0x1000).
+
+And then we copy the rest of the data (64388 - 2040) from beginning
+of dwc->ev_buf. While doing so we go beyond bounds as we are trying
+to memcpy 62348 bytes into a 4K buffer resulting in crash.
+
+Fix this by limiting the total data being copied to ev->length to
+avoid copying data beyond bounds. Moreover this is logical because if
+the controller generated events more than the size of ring buffer,
+some of them might have been overwritten by the controller.
+
+Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+---
+Only one instance of this crash was observed so far. As per the
+databook:
+
+"The controller always leaves one entry free in each Event Buffer.
+When the Event Buffer is almost full, hardware writes the Event
+Buffer Overflow event and the USB eventually gets stalled when
+endpoints start responding NRDY or the link layer stops returning
+credits (in SuperSpeed). This event is an indication to software that
+it is not processing events quickly enough. During this time, events
+are queued up internally. When software frees up Event Buffer space,
+the queued up events are written out and the USB returns to normal
+operation"
+
+I didn't see any overflow event in the event buffer after parsing
+crash dump. Although this could be some HW issue, I thought we can
+include this fix in software as well to avoid such scenario.
+
+ drivers/usb/dwc3/gadget.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 5965796bc5d5..cff043ab9017 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -4457,6 +4457,9 @@ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
+ 	if (!count)
+ 		return IRQ_NONE;
+ 
++	if (count > evt->length)
++		count  = evt->length;
++
+ 	evt->count = count;
+ 	evt->flags |= DWC3_EVENT_PENDING;
+ 
 -- 
-Hervé Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.40.0
+
