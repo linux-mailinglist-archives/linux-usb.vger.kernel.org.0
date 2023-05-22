@@ -2,388 +2,263 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7529F70B6EA
-	for <lists+linux-usb@lfdr.de>; Mon, 22 May 2023 09:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AD0270B712
+	for <lists+linux-usb@lfdr.de>; Mon, 22 May 2023 09:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232240AbjEVHq7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 May 2023 03:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
+        id S231699AbjEVHvw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 May 2023 03:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232763AbjEVHqf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 May 2023 03:46:35 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2052.outbound.protection.outlook.com [40.107.14.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AE3E6E;
-        Mon, 22 May 2023 00:45:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=topic.nl; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Kok0HA2ok9KO6TpUM9a0VhNJDyDE623iKyoRkFItEy8=;
- b=SsJpIz7WmVEtlxMKttpwIk/xHWyKdzKqepgY2d1tjQZ7PSKfX2pHVmjfbE/b1YybsJNWNWZ/C9hj5M9XQK3YGLYc8akyu1gUeagwQu7oE4Nr0UQiKETttU+GORQH5g0x+6wISDO49mycb2tT/pDWdCe1LX2fTM+zO/VWKBfv/Nw3bqd1kTHHTncqNfWnpT8M9BqchstfNnsZuyMkJtO/1VyVlM6cCNyh0vyGk6kyssrqfhIsLnNHU4Bedaou5fsPEk1j+1B6GJ6+FxEz1C8vxsxI3bgKLLozc+3nVYgm8HGsbw2UyxjEOxLjJBKe4z63YLBqR5txPj6DjvaOjdDuAQ==
-Received: from FR0P281CA0258.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:b5::10)
- by AS1PR04MB9240.eurprd04.prod.outlook.com (2603:10a6:20b:4c4::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
- 2023 07:45:24 +0000
-Received: from VE1EUR01FT061.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:d10:b5:cafe::fe) by FR0P281CA0258.outlook.office365.com
- (2603:10a6:d10:b5::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.13 via Frontend
- Transport; Mon, 22 May 2023 07:45:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 13.93.42.39)
- smtp.mailfrom=topicproducts.com; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=topic.nl;
-Received-SPF: Pass (protection.outlook.com: domain of topicproducts.com
- designates 13.93.42.39 as permitted sender) receiver=protection.outlook.com;
- client-ip=13.93.42.39; helo=westeu12-emailsignatures-cloud.codetwo.com; pr=C
-Received: from westeu12-emailsignatures-cloud.codetwo.com (13.93.42.39) by
- VE1EUR01FT061.mail.protection.outlook.com (10.152.3.81) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6433.14 via Frontend Transport; Mon, 22 May 2023 07:45:23 +0000
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (104.47.17.169) by westeu12-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Mon, 22 May 2023 07:45:22 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YbBYoE0GJ12bjMKNSSgXUXPKKQ3vKwhKCDURUbX0KZFgKEeilnrgEicAroS6WW7ORjPGMD2pMiclYZxkuwCbGTuQHqih9iJwYgpjYjhkFSheIeN1vcXiAbJ3eggF5nYRcekceWPLZOu9Dve7GepwHWWztLXQ+CUn7x1uU6+1o6JZUkEw3UXdcdgx+iVVizn+dfIpygIts3PyLAA1k0eZQBCw8zKe6Ta4g8UgkEGzgZva7pC5UO85dRVM1g08E83vxRI9wWTKwMPJEVx4bmYcfY7yTvL6by18FEz/fOISnazaTXZ8cgyziH33Jjx29VQK5sAJAQpjgJ794yWUaORT3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QKKU658ScgDBUjH3U4OBrZROwPjqjI9oUKripqflm6A=;
- b=aRS/FKQFw++iDzn1Ix2iAr+GzrX1DayGP+qDK5H9KTvfPMw/nFQrZWunfts5HLp4h61REHizzy8bruqqvdronpEKPqOCcxQwgI/O/1tj/qIDP25sk47EOAMQTcvgIEy7eU25S7trKL+JPbMHRXHP67+p0t/HYm/vlTICSPcSzTNDAhOCcwYJrQ7GfT3hhKofVe3fsFM0oLjyxEVJYLwYWivBg4EJ2AKVeEMzOjiw/o1x/F+xAzch4sadb8zSfAwxUstT2yF95n4CmwCMLCzvPgck1WqLZdhiv7xrd2jXRy28ODIja6YbOMc9ovAlz4EWTG16PVkt6hytrgKsI3DZaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=topicproducts.com; dmarc=pass action=none header.from=topic.nl;
- dkim=pass header.d=topic.nl; arc=none
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=topic.nl;
-Received: from DB8PR04MB6523.eurprd04.prod.outlook.com (2603:10a6:10:10f::26)
- by DB9PR04MB9626.eurprd04.prod.outlook.com (2603:10a6:10:309::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.27; Mon, 22 May
- 2023 07:45:17 +0000
-Received: from DB8PR04MB6523.eurprd04.prod.outlook.com
- ([fe80::4cd1:3e90:54e5:9696]) by DB8PR04MB6523.eurprd04.prod.outlook.com
- ([fe80::4cd1:3e90:54e5:9696%5]) with mapi id 15.20.6411.028; Mon, 22 May 2023
- 07:45:17 +0000
-From:   Mike Looijmans <mike.looijmans@topic.nl>
-To:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-CC:     Mike Looijmans <mike.looijmans@topic.nl>,
-        Douglas Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] usb: misc: usb5807: Add driver
-Date:   Mon, 22 May 2023 09:45:10 +0200
-Message-ID: <20230522074510.16367-2-mike.looijmans@topic.nl>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230522074510.16367-1-mike.looijmans@topic.nl>
-References: <20230522074510.16367-1-mike.looijmans@topic.nl>
- <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.6bd20433-e21f-423b-bdd5-c30faf9d0dc2@emailsignatures365.codetwo.com>
-Content-Type: text/plain
-X-ClientProxiedBy: AM0PR01CA0118.eurprd01.prod.exchangelabs.com
- (2603:10a6:208:168::23) To DB8PR04MB6523.eurprd04.prod.outlook.com
- (2603:10a6:10:10f::26)
+        with ESMTP id S232647AbjEVHv0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 May 2023 03:51:26 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0141726
+        for <linux-usb@vger.kernel.org>; Mon, 22 May 2023 00:49:54 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-53467c2486cso4218173a12.3
+        for <linux-usb@vger.kernel.org>; Mon, 22 May 2023 00:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684741757; x=1687333757;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TXqacZ7P4o4faz/vNysvlhG0FAAAOG2qV6n1Xw8uN8U=;
+        b=62rsH0qRQVhPkF00D/PVaZAfMh0xc3yvej0xDP506s/7NzkN3KHUghfPkTPaNbE8yB
+         V7wSu0BUowgTLMyeW5N2gk7NWCCxV8fOKuBhyk2Yo05sl8kpJU3LkBy5eeaakiq/gF1M
+         +SNhrU0MP/OdoANJ6OfPI2lfcsQ6IjH60lpsOLz0ghiS25BCHCIaaWaxhYJioRvpy1m6
+         1pWw/bKRY7crrO57dAmMa9BaUD8l0XruC5aBMmy4JkkvedNzrOdKh9pdPg18nQDU9v/J
+         Mocaxv3JgarDvJkQx/8/lNjoelrJEWtHmgra/uqNVuR4oeo6pz2jMb50AjXPkQR2u669
+         +0jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684741757; x=1687333757;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TXqacZ7P4o4faz/vNysvlhG0FAAAOG2qV6n1Xw8uN8U=;
+        b=TOBcUvZSLI+/lywjN2Uwpw9GAgz2qnakxyQRwjW6UQagb0Rs95OS7mHSYGISU/B7Ss
+         E2VX1lgUgvCMbjgzeEwz8zCICQK6lisg8HOTuAFllPkndn0aEoDLlmhfp75PRuYBBSDk
+         0lpHtyok+Bi76ne7TzS0wl55XeFi7WroRRUSSfY+lpVXV0ufEdliAk/0JkA2JpQLdBLZ
+         POKqTudwdtJ/3cLAoZgPPyMj0DlMkvwgY1vHB9CzhEpXyKlgot2KzgrFsE3AEeRxrIld
+         Jp03CQxZ/rZa0VtSoRf4+nm+luqScWr3lCVZYNugiqt+55Z2jOYCAmC6EFzfDCf0HEIZ
+         WDpw==
+X-Gm-Message-State: AC+VfDz9+viNsJiy4lnLfRVXAYDOoIxPX0DQGH0UVUPaAG3IqzLi7wHe
+        TNUztQgJx6WzEo1UN6HR22XFHBv/wPTI3CCRSrMG/g==
+X-Google-Smtp-Source: ACHHUZ6NS5u4I6xPkuvLTuCpIIAYU2qi4UK6iL3oKxLD9mYasKrRrM9Z9Y0s5FulOiYF0y1dlG3waM6ScIJvx/fIgqs=
+X-Received: by 2002:a17:90b:4397:b0:255:5b1a:be04 with SMTP id
+ in23-20020a17090b439700b002555b1abe04mr3326900pjb.4.1684741756884; Mon, 22
+ May 2023 00:49:16 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB8PR04MB6523:EE_|DB9PR04MB9626:EE_|VE1EUR01FT061:EE_|AS1PR04MB9240:EE_
-X-MS-Office365-Filtering-Correlation-Id: 95a33614-cc39-44e8-cc1b-08db5a98805a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: yheoEfOpNan8dsM8myXhvCZr/tb8gm5/rU8QCtBtfFBNUxiUlRZA3oJIDuKCYgSInjX4BcMgQrfF6tJEL64FRNskMt2rdfhZJQbKekDW+z+9U1eaVJkE00pCJwnP3aA5JKj6ajb1YERM7ulmUcNsDhB+SwTFtKvRe44SdDd9OJ3G+hvrLdhjYThjd9Z+R7YcAKlO2qm8DdBX5uZ2QcDRx9lNbTwBOVbT1ReWkh2Z/Q1SfZKEdgTgFfM9QQffBj5vshCSf5en9xKrecfNyiY/+yYNwwWUrT21PYqyYxeFXE0YwYKRaw+oWzTRYVDK7hg5tOvUeIjxy/Y71Rgx5Ak/fWBV3jJtMeNdyvoUxIyo+xr1liArxVlKQYVpdPr7nP7RTGdgYWllIXJh8k32jcU3E3QV8vmXOuyLMeeB8FF1YF4pZ3bihEjvLbIfmDr1VsYOtHQJ1gz5ktiO47QL6Fjiau/Uxh5Lmp8k4Zo0cnBcv/ReT3hTaHuWeG7BX9wycMDVe8QiL7yB4QztUHXwEfHdAPDpgAntrKWlhHum3XK0FxwAVOOxg00Nlpi5qQlEqz/oSq2fvuxZ7sx0Wq2xXPBu8BPqJk6rWUh4FWxn84pmUnRSXEcOM16Mn0vw96Kuxpv6
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6523.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(136003)(39840400004)(396003)(346002)(451199021)(83170400001)(38350700002)(38100700002)(36756003)(44832011)(6512007)(6506007)(1076003)(8936002)(8676002)(7416002)(42882007)(2616005)(2906002)(54906003)(478600001)(186003)(316002)(4326008)(26005)(41300700001)(5660300002)(66476007)(6666004)(6486002)(52116002)(66556008)(66946007)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9626
-X-CodeTwo-MessageID: 386875b0-ec7b-4676-8efe-c3d3960cd23d.20230522074522@westeu12-emailsignatures-cloud.codetwo.com
-X-CodeTwoProcessed: true
+References: <20230519043041.1593578-1-badhri@google.com> <c181c8ef-f342-4a31-9b8c-e1fa14ad214e@rowland.harvard.edu>
+ <a1d064e7-9847-4e2e-b74a-4ae4f39d3f04@rowland.harvard.edu>
+ <CAPTae5JKUW6g8cvUbJ3owMGm+npJSBgjr-O_xEiRm_tzXVBV1Q@mail.gmail.com> <a2305ca6-d343-473d-b220-556a2c2e7833@rowland.harvard.edu>
+In-Reply-To: <a2305ca6-d343-473d-b220-556a2c2e7833@rowland.harvard.edu>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Mon, 22 May 2023 00:48:39 -0700
+Message-ID: <CAPTae5Lke+DE3WzGuBxkMMZ=qbbux=avdDTgrxEc1A5SrCFevg@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: gadget: udc: core: Offload usb_udc_vbus_handler processing
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
+        xuetao09@huawei.com, quic_eserrao@quicinc.com,
+        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
+        balbi@ti.com, francesco@dolcini.it, alistair@alistair23.me,
+        stephan@gerhold.net, bagasdotme@gmail.com, luca@z3ntu.xyz,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        Francesco Dolcini <francesco.dolcini@toradex.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VE1EUR01FT061.eop-EUR01.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 6ba58456-da13-4cd9-a152-08db5a987c95
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +AvXnndnQ1xcgtUUt/QGnSvx7M7B8OvBt5dDjzYlkd7hkohurebLRAM6rV3sr9M20lc9Sp/aIBLf9QkQJKNyhOEmY9CYWwQE9pIdcbgcaFYiTTmp2++USZzFYO32D6H0cMsEg9nydvlDgKEEgZvsZ88rXnvi1Y2wF/D0peuk1ilTIJNAJI80TfHK0DQMWfkgR6ILIT5NnujjqbG/yRMaPnO+TX+BFEQiT8WfADReZGJoaS4NeR+NosKRM83Lu3a4HJzv6ttV27DxPq3MMqESZ8TgHB8Rda3LOBna/tJptft9hEWF/Bg6b3FIXlvugROdrkz9hlh0xYUpT1tVK9GkSJNxJQC4RlR58KQJRs/IRYq/Tq9L7Q+0hkl6fZ2QGhFWi+U0Lr+XSDFaa8y3zPdwbJs/K2kFvVe8g5Pe/aAAgPo1r7nMrAlrvMPWSTRaJr6pnlH4jMKOG6mXb0t2XxKWK4ESKAF2v9k+3J1uNsmG3jn/jIsgTcAffeakMqZWplnFqKAYPjTESYYhbP921HHuPyig/apGQ34mIAztHy3Cdj1x3l5WF2MfyGkozR1kf4WRs+P8/KaaFJBK5VOQPmd0nigXDFPHGDODX1WyfFpx0gIxrpiBbJ1LsOHcS68/zj3Zwie2N24D8XR32A621rjT5pmspjGqDua4VpNEU14MNclbA+VJEJzX44v6tMOAh4I0arN8EKwneFlwWMKNlz8IIg==
-X-Forefront-Antispam-Report: CIP:13.93.42.39;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:westeu12-emailsignatures-cloud.codetwo.com;PTR:westeu12-emailsignatures-cloud.codetwo.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(39840400004)(376002)(451199021)(46966006)(36840700001)(8676002)(8936002)(5660300002)(7416002)(44832011)(36860700001)(82310400005)(47076005)(186003)(26005)(1076003)(6512007)(6506007)(42882007)(83380400001)(336012)(2616005)(7636003)(7596003)(356005)(83170400001)(41300700001)(6666004)(6486002)(40480700001)(15974865002)(70206006)(70586007)(316002)(36756003)(4326008)(478600001)(54906003)(2906002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: topic.nl
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 07:45:23.5207
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95a33614-cc39-44e8-cc1b-08db5a98805a
-X-MS-Exchange-CrossTenant-Id: 449607a5-3517-482d-8d16-41dd868cbda3
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=449607a5-3517-482d-8d16-41dd868cbda3;Ip=[13.93.42.39];Helo=[westeu12-emailsignatures-cloud.codetwo.com]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT061.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9240
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The USB5807 is a 7-port USB 3.1 hub that can be configured by I2C.
-This drivers resets the chip, optionally allows D+/D- lines to be
-swapped in the devicetree config, and then sends an ATTACH command to
-put the device in operational mode.
+Hi Alan,
 
-Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
-
----
-
-(no changes since v2)
-
-Changes in v2:
-Add regulator support for vddXX supplies
-
- drivers/usb/misc/Kconfig   |   9 ++
- drivers/usb/misc/Makefile  |   1 +
- drivers/usb/misc/usb5807.c | 184 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 194 insertions(+)
- create mode 100644 drivers/usb/misc/usb5807.c
-
-diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-index 99b15b77dfd5..6659e917ea26 100644
---- a/drivers/usb/misc/Kconfig
-+++ b/drivers/usb/misc/Kconfig
-@@ -251,6 +251,15 @@ config USB_EZUSB_FX2
- 	  Say Y here if you need EZUSB device support.
- 	  (Cypress FX/FX2/FX2LP microcontrollers)
-=20
-+config USB_HUB_USB5807
-+	tristate "USB5807 Hub Controller Configuration Driver"
-+	depends on I2C
-+	help
-+	  This option enables support for configuration via SMBus of the
-+	  Microchip USB5807 USB 3.1 Hub Controller. Configuration parameters may
-+	  be set in devicetree.
-+	  Say Y or M here if you need to configure such a device via SMBus.
-+
- config USB_HUB_USB251XB
- 	tristate "USB251XB Hub Controller Configuration Driver"
- 	depends on I2C
-diff --git a/drivers/usb/misc/Makefile b/drivers/usb/misc/Makefile
-index 1992cc284d8a..e827ed251fa5 100644
---- a/drivers/usb/misc/Makefile
-+++ b/drivers/usb/misc/Makefile
-@@ -25,6 +25,7 @@ obj-$(CONFIG_USB_USS720)		+=3D uss720.o
- obj-$(CONFIG_USB_SEVSEG)		+=3D usbsevseg.o
- obj-$(CONFIG_USB_YUREX)			+=3D yurex.o
- obj-$(CONFIG_USB_HUB_USB251XB)		+=3D usb251xb.o
-+obj-$(CONFIG_USB_HUB_USB5807)		+=3D usb5807.o
- obj-$(CONFIG_USB_HSIC_USB3503)		+=3D usb3503.o
- obj-$(CONFIG_USB_HSIC_USB4604)		+=3D usb4604.o
- obj-$(CONFIG_USB_CHAOSKEY)		+=3D chaoskey.o
-diff --git a/drivers/usb/misc/usb5807.c b/drivers/usb/misc/usb5807.c
-new file mode 100644
-index 000000000000..c617f3371fa1
---- /dev/null
-+++ b/drivers/usb/misc/usb5807.c
-@@ -0,0 +1,184 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Driver for Microchip USB5807 USB 3.1 Hub
-+ * Configuration via SMBus.
-+ *
-+ * Copyright (c) 2023 Topic Embedded Products
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/err.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/i2c.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/regulator/consumer.h>
-+
-+#define USB5807_CMD_ATTACH 0xAA55
-+#define USB5807_CMD_CONFIG 0x9937
-+
-+#define USB5807_REG_LANE_SWAP 0x30FA
-+
-+#define USB5807_NUM_PORTS 7
-+
-+
-+static int usb5807_write(struct i2c_client *i2c, void *buf, u8 len)
-+{
-+	int ret;
-+	struct i2c_msg msg =3D {
-+		.addr	=3D i2c->addr,
-+		.flags  =3D 0x0,
-+		.len	=3D len,
-+		.buf	=3D buf,
-+	};
-+
-+	ret =3D i2c_transfer(i2c->adapter, &msg, 1);
-+	return ret < 0 ? ret : 0;
-+}
-+
-+/*
-+ * Send a command sequence, which is an I2C write transaction, with the co=
-mmand
-+ * word in big endian and a terminating "0" byte.
-+ */
-+static int usb5807_command(struct i2c_client *i2c, u16 cmd)
-+{
-+	u8 buf[3] =3D {cmd >> 8, cmd & 0xff, 0};
-+
-+	return usb5807_write(i2c, buf, sizeof(buf));
-+}
-+
-+static int usb5807_prepare_reg_u8(struct i2c_client *i2c, u16 reg, u8 valu=
-e)
-+{
-+	u8 buf[] =3D {
-+		0x00,
-+		0x00,		/* Memory offset */
-+		1 + 4,		/* Transaction size */
-+		0x00,		/* 0 =3D Register write operation */
-+		1,		/* Size of register data */
-+		(reg >> 8) & 0xff,
-+		reg & 0xff,	/* Register offset */
-+		value,		/* Register data */
-+		0		/* Terminating zero */
-+	};
-+
-+	return usb5807_write(i2c, buf, sizeof(buf));
-+}
-+
-+/*
-+ * Write an 8-bit register. First we must write the "set register" operati=
-on to
-+ * the chip's internal memory at offset 0, then issue a command to execute=
- said
-+ * operation.
-+ */
-+static int usb5807_write_reg_u8(struct i2c_client *i2c, u16 reg, u8 value)
-+{
-+	int ret;
-+
-+	ret =3D usb5807_prepare_reg_u8(i2c, reg, value);
-+	if (ret)
-+		return ret;
-+
-+	return usb5807_command(i2c, USB5807_CMD_CONFIG);
-+}
-+
-+/* Decode array of port numbers property into bit mask */
-+static u8 usb5807_get_ports_field(struct device *dev, const char *prop_nam=
-e)
-+{
-+	struct property *prop;
-+	const __be32 *p;
-+	u32 port;
-+	u8 result =3D 0;
-+
-+	of_property_for_each_u32(dev->of_node, prop_name, prop, p, port) {
-+		if (port < USB5807_NUM_PORTS)
-+			result |=3D BIT(port);
-+		else
-+			dev_warn(dev, "%s: port %u doesn't exist\n", prop_name,
-+				 port);
-+	}
-+	return result;
-+}
-+
-+static int usb5807_i2c_probe(struct i2c_client *i2c)
-+{
-+	struct gpio_desc *reset_gpio;
-+	int ret;
-+	u8 val;
-+
-+	/* Reset the chip to bring it into configuration mode */
-+	reset_gpio =3D devm_gpiod_get_optional(&i2c->dev, "reset",
-+					     GPIOD_OUT_HIGH);
-+	if (IS_ERR(reset_gpio)) {
-+		return dev_err_probe(&i2c->dev, PTR_ERR(reset_gpio),
-+				     "Failed to request reset GPIO\n");
-+	}
-+
-+	/* Enable power supplies while chip is held in reset */
-+	ret =3D devm_regulator_get_enable(&i2c->dev, "vdd12");
-+	if (ret)
-+		return ret;
-+
-+	ret =3D devm_regulator_get_enable(&i2c->dev, "vdd33");
-+	if (ret)
-+		return ret;
-+
-+	/* Reset timing: Assert for >=3D 5 us */
-+	usleep_range(5, 10);
-+
-+	/* Lock the bus for >=3D 1ms while the hub reads the I2C strapping */
-+	i2c_lock_bus(i2c->adapter, I2C_LOCK_SEGMENT);
-+
-+	gpiod_set_value_cansleep(reset_gpio, 0);
-+	usleep_range(1000, 2000);
-+
-+	i2c_unlock_bus(i2c->adapter, I2C_LOCK_SEGMENT);
-+
-+	/* The hub device needs additional time to boot up */
-+	msleep(20);
-+
-+	val =3D usb5807_get_ports_field(&i2c->dev, "swap-dx-lanes");
-+	if (val) {
-+		ret =3D usb5807_write_reg_u8(i2c, USB5807_REG_LANE_SWAP, val);
-+		if (ret < 0)
-+			dev_err(&i2c->dev, "Failed writing config: %d\n", ret);
-+	}
-+
-+	/*
-+	 * Send the "Attach" command which makes the device disappear from the
-+	 * I2C bus and starts USB enumeration.
-+	 */
-+	ret =3D usb5807_command(i2c, USB5807_CMD_ATTACH);
-+	if (ret) {
-+		dev_err(&i2c->dev, "Failed sending ATTACH command: %d\n", ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id usb5807_of_match[] =3D {
-+	{ .compatible =3D "microchip,usb5807" },
-+	{ } /* sentinel */
-+};
-+MODULE_DEVICE_TABLE(of, usb5807_of_match);
-+
-+static const struct i2c_device_id usb5807_id[] =3D {
-+	{ "usb5807", },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(i2c, usb5807_id);
-+
-+static struct i2c_driver usb5807_i2c_driver =3D {
-+	.driver =3D {
-+		.name =3D "usb5807",
-+		.of_match_table =3D of_match_ptr(usb5807_of_match),
-+	},
-+	.probe_new =3D usb5807_i2c_probe,
-+	.id_table =3D usb5807_id,
-+};
-+
-+module_i2c_driver(usb5807_i2c_driver);
-+
-+MODULE_AUTHOR("Mike Looijmans <mike.looijmans@topic.nl>");
-+MODULE_DESCRIPTION("USB5807 USB 3.1 Hub Controller Driver");
-+MODULE_LICENSE("GPL");
---=20
-2.17.1
+Thanks for taking the time out to share more details !
++1 on your comment: " A big problem with the USB gadget
+framework is that it does not clearly state which routines have to run
+in process context and which have to run in interrupt/atomic context."
 
 
-Met vriendelijke groet / kind regards,=0A=
-=0A=
-Mike Looijmans=0A=
-System Expert=0A=
-=0A=
-=0A=
-TOPIC Embedded Products B.V.=0A=
-Materiaalweg 4, 5681 RJ Best=0A=
-The Netherlands=0A=
-=0A=
-T: +31 (0) 499 33 69 69=0A=
-E: mike.looijmans@topicproducts.com=0A=
-W: www.topic.nl=0A=
-=0A=
-Please consider the environment before printing this e-mail=0A=
+I started to work on allow_connect and other suggestions that you had made.
+In one of the previous comments you had mentioned that the
+connect_lock should be a spinlock and not a mutex.
+Right now there are four conditions that seem to be deciding whether
+pullup needs to be enabled or disabled through gadget->ops->pullup().
+1. Gadget not deactivated through usb_gadget_deactivate()
+2. Gadget has to be started through usb_gadget_udc_start().
+soft_connect_store() can start/stop gadget.
+3. usb_gadget has been connected through usb_gadget_connect(). This is
+assuming we are getting rid of usb_udc_vbus_handler.
+4. allow_connect is true
+
+I have so far identified two constraints here:
+a. gadget->ops->pullup() can sleep in some implementations.
+For instance:
+BUG: scheduling while atomic: init/1/0x00000002
+..
+[   26.990631][    T1] Call trace:
+[   26.993759][    T1]  dump_backtrace+0x104/0x128
+[   26.998281][    T1]  show_stack+0x20/0x30
+[   27.002279][    T1]  dump_stack_lvl+0x6c/0x9c
+[   27.006627][    T1]  __schedule_bug+0x84/0xb4
+[   27.010973][    T1]  __schedule+0x6f0/0xaec
+[   27.015147][    T1]  schedule+0xc8/0x134
+[   27.019059][    T1]  schedule_timeout+0x98/0x134
+[   27.023666][    T1]  msleep+0x34/0x4c
+[   27.027317][    T1]  dwc3_core_soft_reset+0xf0/0x354
+[   27.032273][    T1]  dwc3_gadget_pullup+0xec/0x1d8
+[   27.037055][    T1]  usb_gadget_pullup_update_locked+0xa0/0x1e0
+[   27.042967][    T1]  udc_bind_to_driver+0x1e4/0x30c
+[   27.047835][    T1]  usb_gadget_probe_driver+0xd0/0x178
+[   27.053051][    T1]  gadget_dev_desc_UDC_store+0xf0/0x13c
+[   27.058442][    T1]  configfs_write_iter+0x100/0x178
+[   27.063399][    T1]  vfs_write+0x278/0x3c4
+[   27.067483][    T1]  ksys_write+0x80/0xf4
+
+b. gadget->ops->udc_start can also sleep in some implementations.
+For example:
+[   28.024255][    T1] BUG: scheduling while atomic: init/1/0x00000002
+....
+[   28.324996][    T1] Call trace:
+[   28.328126][    T1]  dump_backtrace+0x104/0x128
+[   28.332647][    T1]  show_stack+0x20/0x30
+[   28.336645][    T1]  dump_stack_lvl+0x6c/0x9c
+[   28.340993][    T1]  __schedule_bug+0x84/0xb4
+[   28.345340][    T1]  __schedule+0x6f0/0xaec
+[   28.349513][    T1]  schedule+0xc8/0x134
+[   28.353425][    T1]  schedule_timeout+0x4c/0x134
+[   28.358033][    T1]  wait_for_common+0xac/0x13c
+[   28.362554][    T1]  wait_for_completion_killable+0x20/0x3c
+[   28.368118][    T1]  __kthread_create_on_node+0xe4/0x1ec
+[   28.373422][    T1]  kthread_create_on_node+0x54/0x80
+[   28.378464][    T1]  setup_irq_thread+0x50/0x108
+[   28.383072][    T1]  __setup_irq+0x90/0x87c
+[   28.387245][    T1]  request_threaded_irq+0x144/0x180
+[   28.392287][    T1]  dwc3_gadget_start+0x50/0xac
+[   28.396866][    T1]  udc_bind_to_driver+0x14c/0x31c
+[   28.401763][    T1]  usb_gadget_probe_driver+0xd0/0x178
+[   28.406980][    T1]  gadget_dev_desc_UDC_store+0xf0/0x13c
+[   28.412370][    T1]  configfs_write_iter+0x100/0x178
+[   28.417325][    T1]  vfs_write+0x278/0x3c4
+[   28.421411][    T1]  ksys_write+0x80/0xf4
+
+static int dwc3_gadget_start(struct usb_gadget *g,
+                struct usb_gadget_driver *driver)
+{
+        struct dwc3             *dwc =3D gadget_to_dwc(g);
+...
+        irq =3D dwc->irq_gadget;
+        ret =3D request_threaded_irq(irq, dwc3_interrupt, dwc3_thread_inter=
+rupt,
+                        IRQF_SHARED, "dwc3", dwc->ev_buf);
+
+Given that "1016fc0c096c USB: gadget: Fix obscure lockdep violation
+for udc_mutex" has been there for a while and no one has reported
+issues so far, perhaps ->disconnect() callback is no longer being
+invoked in atomic context and the documentation is what that needs to
+be updated ?
+
+Thanks,
+Badhri
+
+On Fri, May 19, 2023 at 10:27=E2=80=AFAM Alan Stern <stern@rowland.harvard.=
+edu> wrote:
+>
+> On Fri, May 19, 2023 at 08:44:57AM -0700, Badhri Jagan Sridharan wrote:
+> > On Fri, May 19, 2023 at 8:07=E2=80=AFAM Alan Stern <stern@rowland.harva=
+rd.edu> wrote:
+> > >
+> > > On Fri, May 19, 2023 at 10:49:49AM -0400, Alan Stern wrote:
+> > > > On Fri, May 19, 2023 at 04:30:41AM +0000, Badhri Jagan Sridharan wr=
+ote:
+> > > > > chipidea udc calls usb_udc_vbus_handler from udc_start gadget
+> > > > > ops causing a deadlock. Avoid this by offloading usb_udc_vbus_han=
+dler
+> > > > > processing.
+> > > >
+> > > > Look, this is way overkill.
+> > > >
+> > > > usb_udc_vbus_handler() has only two jobs to do: set udc->vbus and c=
+all
+> > > > usb_udc_connect_control().  Furthermore, it gets called from only t=
+wo
+> > > > drivers: chipidea and max3420.
+> > > >
+> > > > Why not have the callers set udc->vbus themselves and then call
+> > > > usb_gadget_{dis}connect() directly?  Then we could eliminate
+> > > > usb_udc_vbus_handler() entirely.  And the unnecessary calls -- the =
+ones
+> > > > causing deadlocks -- from within udc_start() and udc_stop() handler=
+s can
+> > > > be removed with no further consequence.
+> > > >
+> > > > This approach simplifies and removes code.  Whereas your approach
+> > > > complicates and adds code for no good reason.
+> > >
+> > > I changed my mind.
+> > >
+> > > After looking more closely, I found the comment in gadget.h about
+> > > ->disconnect() callbacks happening in interrupt context.  This means =
+we
+> > > cannot use a mutex to protect the associated state, and therefore the
+> > > connect_lock _must_ be a spinlock, not a mutex.
+> >
+> > Quick observation so that I don't misunderstand.
+> > I already see gadget->udc->driver->disconnect(gadget) being called with
+> > udc_lock being held.
+> >
+> >                mutex_lock(&udc_lock);
+> >                if (gadget->udc->driver)
+> >                        gadget->udc->driver->disconnect(gadget);
+> >                mutex_unlock(&udc_lock);
+> >
+> > The below patch seems to have introduced it:
+> > 1016fc0c096c USB: gadget: Fix obscure lockdep violation for udc_mutex
+>
+> Hmmm...  You're right about this.  A big problem with the USB gadget
+> framework is that it does not clearly state which routines have to run
+> in process context and which have to run in interrupt/atomic context.
+> People therefore don't think about it and frequently get it wrong.
+>
+> So now the problem is that the UDC or transceiver driver may detect
+> (typically in an interrupt handler) that VBUS power has appeared or
+> disappeared, and it wants to tell the core to adjust the D+/D- pullup
+> signals appropriately.  The core notifies the UDC driver about this, and
+> then in the case of a disconnection, it has to notify the gadget driver.
+> But notifying the gadget driver requires process context for the
+> udc_lock mutex, the ultimate reason being that disconnect notifications
+> can race with gadget driver binding and unbinding.
+>
+> If we could prevent those races in some other way then we wouldn't need
+> to hold udc_lock in usb_gadget_disconnect().  This seems like a sensible
+> thing to do in any case; the UDC core should never allow a connection to
+> occur before a gadget driver is bound or after it is unbound.
+>
+> The first approach that occurs to me is to add a boolean allow_connect
+> flag to struct usb_udc, together with a global spinlock to synchronize
+> access to it.  Then usb_gadget_disconnect() could check the flag before
+> calling driver->disconnect(), gadget_bind_driver() could set the flag
+> before calling usb_udc_connect_control(), and gadget_unbind_driver()
+> could clear the flag before calling usb_gadget_disconnect().
+>
+> (Another possible approach would be to change gadget->deactivated into a
+> counter.  It would still need to be synchronized by a spinlock,
+> however.)
+>
+> This will simplify matters considerably.  udc_lock can remain a mutex
+> and the deadlock problem should go away.
+>
+> Do you want to try adding allow_connect as described here or would you
+> prefer that I do it?
+>
+> (And in any case, we should prevent the udc_start and udc_stop callbacks
+> in the chipidea and max3420 drivers from trying to update the connection
+> status.)
+>
+> Alan Stern
