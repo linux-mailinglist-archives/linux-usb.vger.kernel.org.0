@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BFE270C691
-	for <lists+linux-usb@lfdr.de>; Mon, 22 May 2023 21:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B5AC70C9B9
+	for <lists+linux-usb@lfdr.de>; Mon, 22 May 2023 21:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234298AbjEVTTf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 May 2023 15:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42486 "EHLO
+        id S235505AbjEVTvF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 May 2023 15:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234283AbjEVTTe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 May 2023 15:19:34 -0400
+        with ESMTP id S235402AbjEVTu4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 May 2023 15:50:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5FDA3;
-        Mon, 22 May 2023 12:19:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033DF18D;
+        Mon, 22 May 2023 12:50:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3625A627F7;
-        Mon, 22 May 2023 19:19:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53D7FC433D2;
-        Mon, 22 May 2023 19:19:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8B9C62B06;
+        Mon, 22 May 2023 19:50:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E854AC433D2;
+        Mon, 22 May 2023 19:50:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1684783172;
-        bh=xZ455jMDhB0RdiKwxwnNu9wuMeZgXRP5pt6WSDU0Xao=;
+        s=korg; t=1684785049;
+        bh=8RFKb6BkAvCRoieuFxAhj7c6BUO42qkMC7DClxoX/l4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x7d9qjpvhUrT1nJcQt9xNj8oLZ4QIcW9z3jvBxnAugASwEy0ltCpsPsB9q6nKgebn
-         0YGPol2aYo08zkNbJSd+jcx0brW3YqvgIaWywkR8g+yd8+yp/OcoaplWGF/U1e/p1j
-         i+I+MerC/bETxhq6Oa5hFWB4aqV0HgD9QxJaSvkw=
+        b=FQYx+YNDl362ye2bVXQdU2f8tJzZPGHLPU3PkBULHtQWHmly+lOqT4ogwos+g3E/W
+         bZyiNKG+z6i2DqVnRIJL5ie9hYotZPSX1YP2NUNwgo7/h/W+5AzzimsSFgy+qI4sbW
+         iyxwb/17JiWCcVgsFPLBjUlWiNxPXvf49sD5VVfU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         patches@lists.linux.dev, Maxime Bizon <mbizon@freebox.fr>,
         linux-usb@vger.kernel.org, stable <stable@kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH 5.15 163/203] usb-storage: fix deadlock when a scsi command timeouts more than once
-Date:   Mon, 22 May 2023 20:09:47 +0100
-Message-Id: <20230522190359.484723804@linuxfoundation.org>
+Subject: [PATCH 6.3 291/364] usb-storage: fix deadlock when a scsi command timeouts more than once
+Date:   Mon, 22 May 2023 20:09:56 +0100
+Message-Id: <20230522190420.046123538@linuxfoundation.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230522190354.935300867@linuxfoundation.org>
-References: <20230522190354.935300867@linuxfoundation.org>
+In-Reply-To: <20230522190412.801391872@linuxfoundation.org>
+References: <20230522190412.801391872@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -99,7 +99,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/usb/storage/scsiglue.c
 +++ b/drivers/usb/storage/scsiglue.c
-@@ -407,22 +407,25 @@ static DEF_SCSI_QCMD(queuecommand)
+@@ -406,22 +406,25 @@ static DEF_SCSI_QCMD(queuecommand)
   ***********************************************************************/
  
  /* Command timeout and abort */
@@ -132,7 +132,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  		return FAILED;
  	}
  
-@@ -445,6 +448,14 @@ static int command_abort(struct scsi_cmn
+@@ -444,6 +447,14 @@ static int command_abort(struct scsi_cmn
  	return SUCCESS;
  }
  
@@ -147,7 +147,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  /*
   * This invokes the transport reset mechanism to reset the state of the
   * device
-@@ -456,6 +467,9 @@ static int device_reset(struct scsi_cmnd
+@@ -455,6 +466,9 @@ static int device_reset(struct scsi_cmnd
  
  	usb_stor_dbg(us, "%s called\n", __func__);
  
