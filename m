@@ -2,136 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7EA70B978
-	for <lists+linux-usb@lfdr.de>; Mon, 22 May 2023 11:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BBA70BAD2
+	for <lists+linux-usb@lfdr.de>; Mon, 22 May 2023 12:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbjEVJye (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 May 2023 05:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44790 "EHLO
+        id S233088AbjEVKys (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 May 2023 06:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232659AbjEVJyX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 May 2023 05:54:23 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2778CC2;
-        Mon, 22 May 2023 02:54:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684749262; x=1716285262;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Tpv33id8FXgSyWY15secqhEjCEaHD/wMEKZRfaT7ChE=;
-  b=l8L7ePGqHJgHfE+GKVySJ0ZjsJ3r5rXPC9JPUr2ycjst71zrJnV6Z2R4
-   3zQYa8m8NIi1jnL6UA1h7X+sU6l7UxWTs8X5RF9Di1IfrAwaaar36dhdl
-   mO/V40e0Ox9flskIMwUOi4eeoHwPULYIJx//sAs+WyL0j5NtkOe9PEL7F
-   ZyKh55ST6x469aakH88C5Ai6GcotboebaJe0fpBmNbssjN2Qq2J797YyP
-   lcqzSub2AXnX8ycBKFI6qfJ6IIF/ufsqCTPzYc2mIg5F0mcdnaPqAh9EW
-   HOS2HQA6/8FywqZgzbsGqwp4lNlC4OHuVwcumuXXiyjfXsxjq3DZQcqsL
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="352900229"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="352900229"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 02:54:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="653884244"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="653884244"
-Received: from rajatkha-mobl.gar.corp.intel.com (HELO [10.67.146.41]) ([10.67.146.41])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 02:54:16 -0700
-Message-ID: <ab993b87-8475-7c71-f526-da9a0b5fa3a8@linux.intel.com>
-Date:   Mon, 22 May 2023 15:24:13 +0530
+        with ESMTP id S232933AbjEVKwp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 May 2023 06:52:45 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEC8FA;
+        Mon, 22 May 2023 03:51:42 -0700 (PDT)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MAHWa7005775;
+        Mon, 22 May 2023 10:51:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=Mhp4dDzKz7md9U7vaLxlSQvLfOTE4IcXqvMOwu7Kr5E=;
+ b=X++cniHoujqeIh0qqXrDUl413t7AIGEz36Ju/lqmKyX4Q9SP9mUNXtMbFb12q+Nt/tHU
+ UrBZpRU1Vz7Bb71y7sEYX9WlQfBtWNNQQ4jmD6tbFzRoYEIIusZRWG3Y8c1MJejNQNRj
+ pTIJGlYvZOQA1ifPLRBi9Jn+bANC5sePyRGQOiJB8w48nmm/l4Fimrh7/ODepHkeDbe8
+ S+WkdGY7btg67CsDqfjA00JO1JFbUQddkzW/NmzujR/Fvo/4qptT62ilPAAJufJBHLuD
+ uTxCrg5sHgacmVLL5aZi4QpF2bWAYEEEWngo9gMyk4U1riJjXp/ba99cxI/FPetO0Go4 7A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qq78bh2sb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 10:51:29 +0000
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34M9JRIF024416;
+        Mon, 22 May 2023 10:51:28 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qq78bh2qx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 10:51:28 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34M6KApL015110;
+        Mon, 22 May 2023 10:51:25 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3qppbmgrw8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 10:51:25 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34MApNdA21693080
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 May 2023 10:51:23 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ECE5220043;
+        Mon, 22 May 2023 10:51:22 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 926FA2004D;
+        Mon, 22 May 2023 10:51:22 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 22 May 2023 10:51:22 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v5 36/44] usb: add HAS_IOPORT dependencies
+Date:   Mon, 22 May 2023 12:50:41 +0200
+Message-Id: <20230522105049.1467313-37-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230522105049.1467313-1-schnelle@linux.ibm.com>
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v4] usb: typec: intel_pmc_mux: Expose IOM port status to
- debugfs
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230522070343.3675581-1-rajat.khandelwal@linux.intel.com>
- <2023052216-railway-zipfile-680f@gregkh>
-From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-In-Reply-To: <2023052216-railway-zipfile-680f@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: YpvmkpfA9MSJYdLIgFQ6GDm74CO4EwG_
+X-Proofpoint-GUID: Gb6NxgDpaE6GtTZ4RrUa6QEgPxk_54ga
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-22_06,2023-05-22_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ malwarescore=0 phishscore=0 impostorscore=0 priorityscore=1501
+ mlxlogscore=662 adultscore=0 lowpriorityscore=0 clxscore=1015 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305220089
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+not being declared. We thus need to add HAS_IOPORT as dependency for
+those drivers using them.
 
-On 5/22/2023 1:07 PM, Greg KH wrote:
-> On Mon, May 22, 2023 at 12:33:43PM +0530, Rajat Khandelwal wrote:
->> IOM status has a crucial role during debugging to check the
->> current state of the type-C port.
->> There are ways to fetch the status, but all those require the
->> IOM port status offset, which could change with platform.
->>
->> Make a debugfs directory for intel_pmc_mux and expose the status
->> under it per port basis.
->>
->> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
->> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
->> ---
->>
->> v4:
->> 1. Maintain a root directory for PMC module and incorporate devices
->> under it
->> 2. Add the debugfs module under '/sys/kernel/debug/usb'
->> 3. Use the platform device 'pmc->dev' to assign the device's name
->>
->> v3: Allocate the debugfs directory name for the platform device with
->> its ACPI dev name included
->>
->> v2:
->> 1. Remove static declaration of the debugfs root for 'intel_pmc_mux'
->> 2. Remove explicitly defined one-liner functions
->>
->>   drivers/usb/typec/mux/intel_pmc_mux.c | 54 ++++++++++++++++++++++++++-
->>   1 file changed, 53 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
->> index 34e4188a40ff..f400094c76f2 100644
->> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
->> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
->> @@ -15,6 +15,8 @@
->>   #include <linux/usb/typec_mux.h>
->>   #include <linux/usb/typec_dp.h>
->>   #include <linux/usb/typec_tbt.h>
->> +#include <linux/debugfs.h>
->> +#include <linux/usb.h>
->>   
->>   #include <asm/intel_scu_ipc.h>
->>   
->> @@ -143,8 +145,14 @@ struct pmc_usb {
->>   	struct acpi_device *iom_adev;
->>   	void __iomem *iom_base;
->>   	u32 iom_port_status_offset;
->> +
->> +#ifdef CONFIG_DEBUG_FS
->> +	struct dentry *dentry;
->> +#endif
-> No need for the #ifdef anymore, right?  In fact, I think it will break
-> the build if you have it this way and CONFIG_DEBUG_FS is not enabled,
-> right?
+Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+---
+ drivers/usb/host/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I guess you're right. Maybe it'd have been fine if the rest of the
-debugfs stuff was also enclosed within the conditional macros.
+diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+index c170672f847e..4448d0ab06f0 100644
+--- a/drivers/usb/host/Kconfig
++++ b/drivers/usb/host/Kconfig
+@@ -376,7 +376,7 @@ config USB_ISP116X_HCD
+ 
+ config USB_ISP1362_HCD
+ 	tristate "ISP1362 HCD support"
+-	depends on HAS_IOMEM
++	depends on HAS_IOPORT
+ 	depends on COMPILE_TEST # nothing uses this
+ 	help
+ 	  Supports the Philips ISP1362 chip as a host controller
+@@ -578,7 +578,7 @@ endif # USB_OHCI_HCD
+ 
+ config USB_UHCI_HCD
+ 	tristate "UHCI HCD (most Intel and VIA) support"
+-	depends on USB_PCI || USB_UHCI_SUPPORT_NON_PCI_HC
++	depends on (USB_PCI && HAS_IOPORT) || USB_UHCI_SUPPORT_NON_PCI_HC
+ 	help
+ 	  The Universal Host Controller Interface is a standard by Intel for
+ 	  accessing the USB hardware in the PC (which is also called the USB
+-- 
+2.39.2
 
-Anyways, removing it seems appropriate now.
-
-Also, is it OK to send you v5 on the public list directly?
-
-Thanks
-Rajat
-
-> thanks,
->
-> greg k-h
