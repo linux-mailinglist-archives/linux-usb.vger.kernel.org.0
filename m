@@ -2,263 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD0270B712
-	for <lists+linux-usb@lfdr.de>; Mon, 22 May 2023 09:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5834B70B795
+	for <lists+linux-usb@lfdr.de>; Mon, 22 May 2023 10:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231699AbjEVHvw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 May 2023 03:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
+        id S232106AbjEVI2J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 May 2023 04:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232647AbjEVHv0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 May 2023 03:51:26 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0141726
-        for <linux-usb@vger.kernel.org>; Mon, 22 May 2023 00:49:54 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-53467c2486cso4218173a12.3
-        for <linux-usb@vger.kernel.org>; Mon, 22 May 2023 00:49:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684741757; x=1687333757;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TXqacZ7P4o4faz/vNysvlhG0FAAAOG2qV6n1Xw8uN8U=;
-        b=62rsH0qRQVhPkF00D/PVaZAfMh0xc3yvej0xDP506s/7NzkN3KHUghfPkTPaNbE8yB
-         V7wSu0BUowgTLMyeW5N2gk7NWCCxV8fOKuBhyk2Yo05sl8kpJU3LkBy5eeaakiq/gF1M
-         +SNhrU0MP/OdoANJ6OfPI2lfcsQ6IjH60lpsOLz0ghiS25BCHCIaaWaxhYJioRvpy1m6
-         1pWw/bKRY7crrO57dAmMa9BaUD8l0XruC5aBMmy4JkkvedNzrOdKh9pdPg18nQDU9v/J
-         Mocaxv3JgarDvJkQx/8/lNjoelrJEWtHmgra/uqNVuR4oeo6pz2jMb50AjXPkQR2u669
-         +0jA==
+        with ESMTP id S229621AbjEVI2I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 May 2023 04:28:08 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8CCB6;
+        Mon, 22 May 2023 01:28:07 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-19a16355c51so4133124fac.0;
+        Mon, 22 May 2023 01:28:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684741757; x=1687333757;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TXqacZ7P4o4faz/vNysvlhG0FAAAOG2qV6n1Xw8uN8U=;
-        b=TOBcUvZSLI+/lywjN2Uwpw9GAgz2qnakxyQRwjW6UQagb0Rs95OS7mHSYGISU/B7Ss
-         E2VX1lgUgvCMbjgzeEwz8zCICQK6lisg8HOTuAFllPkndn0aEoDLlmhfp75PRuYBBSDk
-         0lpHtyok+Bi76ne7TzS0wl55XeFi7WroRRUSSfY+lpVXV0ufEdliAk/0JkA2JpQLdBLZ
-         POKqTudwdtJ/3cLAoZgPPyMj0DlMkvwgY1vHB9CzhEpXyKlgot2KzgrFsE3AEeRxrIld
-         Jp03CQxZ/rZa0VtSoRf4+nm+luqScWr3lCVZYNugiqt+55Z2jOYCAmC6EFzfDCf0HEIZ
-         WDpw==
-X-Gm-Message-State: AC+VfDz9+viNsJiy4lnLfRVXAYDOoIxPX0DQGH0UVUPaAG3IqzLi7wHe
-        TNUztQgJx6WzEo1UN6HR22XFHBv/wPTI3CCRSrMG/g==
-X-Google-Smtp-Source: ACHHUZ6NS5u4I6xPkuvLTuCpIIAYU2qi4UK6iL3oKxLD9mYasKrRrM9Z9Y0s5FulOiYF0y1dlG3waM6ScIJvx/fIgqs=
-X-Received: by 2002:a17:90b:4397:b0:255:5b1a:be04 with SMTP id
- in23-20020a17090b439700b002555b1abe04mr3326900pjb.4.1684741756884; Mon, 22
- May 2023 00:49:16 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684744086; x=1687336086;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=c1HKBQ+akoQdCTF/i+voPCUWtqT/79Q6B4nL7xrEPqw=;
+        b=TFUvpVxRi+PYNDjM+UFoJFYgAp9Om8nNMq9gMdhESOBrVHxFCRboONo0gXIN2Ai2SU
+         8YKySjOcxhajTY+FqKZcB8ToFvxoPd/92vlB7+w7UpEAbQdr5vqgM0wUrk1egFR1BKyq
+         AP/S7GUYPQpQ98cJAv+PC32MnjLlu3egcU1/MfSOKCBBAsSNjNxIIqthdfLudiUcolPY
+         aWstTr9xb/oEP8DGi/Kxo+Q6Fv/ajqS3XF14EQyl22MBIJQTcqoBa/iQs/wsAHzu1hso
+         ZnBjz7TER8Sln+lZougo9tpSykdS6+dabmty9v5az/0lvuHv8pm6TrQlls4aaepPGVPn
+         0Kkg==
+X-Gm-Message-State: AC+VfDwz1wexO04vZurKe+Gx5plM/qvSGyHhbzS9sinIFzN6PlX39uKY
+        zhujB8NkXBe8/vQCICsQVg==
+X-Google-Smtp-Source: ACHHUZ60bBEcwPBbD5uFzJBYz9S2d873YR3ZWPYkaNtRV5mF4vlNlVr8VPzjFAF+HZEQL9I+3sYvxQ==
+X-Received: by 2002:a05:6870:a501:b0:17e:cb7:29a3 with SMTP id o1-20020a056870a50100b0017e0cb729a3mr5766837oal.15.1684744086150;
+        Mon, 22 May 2023 01:28:06 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b2-20020a056870918200b0019e59515a0bsm683327oaf.33.2023.05.22.01.28.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 01:28:05 -0700 (PDT)
+Received: (nullmailer pid 1935868 invoked by uid 1000);
+        Mon, 22 May 2023 08:28:04 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-References: <20230519043041.1593578-1-badhri@google.com> <c181c8ef-f342-4a31-9b8c-e1fa14ad214e@rowland.harvard.edu>
- <a1d064e7-9847-4e2e-b74a-4ae4f39d3f04@rowland.harvard.edu>
- <CAPTae5JKUW6g8cvUbJ3owMGm+npJSBgjr-O_xEiRm_tzXVBV1Q@mail.gmail.com> <a2305ca6-d343-473d-b220-556a2c2e7833@rowland.harvard.edu>
-In-Reply-To: <a2305ca6-d343-473d-b220-556a2c2e7833@rowland.harvard.edu>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Mon, 22 May 2023 00:48:39 -0700
-Message-ID: <CAPTae5Lke+DE3WzGuBxkMMZ=qbbux=avdDTgrxEc1A5SrCFevg@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: gadget: udc: core: Offload usb_udc_vbus_handler processing
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
-        xuetao09@huawei.com, quic_eserrao@quicinc.com,
-        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
-        balbi@ti.com, francesco@dolcini.it, alistair@alistair23.me,
-        stephan@gerhold.net, bagasdotme@gmail.com, luca@z3ntu.xyz,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Mike Looijmans <mike.looijmans@topic.nl>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
+In-Reply-To: <20230522074510.16367-1-mike.looijmans@topic.nl>
+References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.656f2a13-85bf-42a3-8490-f97f2538d8c3@emailsignatures365.codetwo.com>
+ <20230522074510.16367-1-mike.looijmans@topic.nl>
+Message-Id: <168474408440.1935852.10036260685386476051.robh@kernel.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: Add microchip USB5807 HUB
+Date:   Mon, 22 May 2023 03:28:04 -0500
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
 
-Thanks for taking the time out to share more details !
-+1 on your comment: " A big problem with the USB gadget
-framework is that it does not clearly state which routines have to run
-in process context and which have to run in interrupt/atomic context."
+On Mon, 22 May 2023 09:45:09 +0200, Mike Looijmans wrote:
+> The USB5807 is a 7-port USB 3.1 hub that can be configured by I2C.
+> This driver resets the chip, optionally allows D+/D- lines to be
+> swapped in the devicetree config, and then sends an ATTACH command to
+> put the device in operational mode.
+> 
+> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+> 
+> ---
+> 
+> Changes in v3:
+> Add minItems
+> 
+> Changes in v2:
+> Rename to microchip,usb5807.yaml
+> Remove reset-gpios description
+> Add maxItems
+> Add vddXX-supply properties
+> 
+>  .../bindings/usb/microchip,usb5807.yaml       | 58 +++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb5807.yaml
+> 
 
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-I started to work on allow_connect and other suggestions that you had made.
-In one of the previous comments you had mentioned that the
-connect_lock should be a spinlock and not a mutex.
-Right now there are four conditions that seem to be deciding whether
-pullup needs to be enabled or disabled through gadget->ops->pullup().
-1. Gadget not deactivated through usb_gadget_deactivate()
-2. Gadget has to be started through usb_gadget_udc_start().
-soft_connect_store() can start/stop gadget.
-3. usb_gadget has been connected through usb_gadget_connect(). This is
-assuming we are getting rid of usb_udc_vbus_handler.
-4. allow_connect is true
+yamllint warnings/errors:
 
-I have so far identified two constraints here:
-a. gadget->ops->pullup() can sleep in some implementations.
-For instance:
-BUG: scheduling while atomic: init/1/0x00000002
-..
-[   26.990631][    T1] Call trace:
-[   26.993759][    T1]  dump_backtrace+0x104/0x128
-[   26.998281][    T1]  show_stack+0x20/0x30
-[   27.002279][    T1]  dump_stack_lvl+0x6c/0x9c
-[   27.006627][    T1]  __schedule_bug+0x84/0xb4
-[   27.010973][    T1]  __schedule+0x6f0/0xaec
-[   27.015147][    T1]  schedule+0xc8/0x134
-[   27.019059][    T1]  schedule_timeout+0x98/0x134
-[   27.023666][    T1]  msleep+0x34/0x4c
-[   27.027317][    T1]  dwc3_core_soft_reset+0xf0/0x354
-[   27.032273][    T1]  dwc3_gadget_pullup+0xec/0x1d8
-[   27.037055][    T1]  usb_gadget_pullup_update_locked+0xa0/0x1e0
-[   27.042967][    T1]  udc_bind_to_driver+0x1e4/0x30c
-[   27.047835][    T1]  usb_gadget_probe_driver+0xd0/0x178
-[   27.053051][    T1]  gadget_dev_desc_UDC_store+0xf0/0x13c
-[   27.058442][    T1]  configfs_write_iter+0x100/0x178
-[   27.063399][    T1]  vfs_write+0x278/0x3c4
-[   27.067483][    T1]  ksys_write+0x80/0xf4
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/usb251xb.example.dtb: usb-hub@2d: swap-dx-lanes: size is 32, expected 8
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/usb251xb.yaml
 
-b. gadget->ops->udc_start can also sleep in some implementations.
-For example:
-[   28.024255][    T1] BUG: scheduling while atomic: init/1/0x00000002
-....
-[   28.324996][    T1] Call trace:
-[   28.328126][    T1]  dump_backtrace+0x104/0x128
-[   28.332647][    T1]  show_stack+0x20/0x30
-[   28.336645][    T1]  dump_stack_lvl+0x6c/0x9c
-[   28.340993][    T1]  __schedule_bug+0x84/0xb4
-[   28.345340][    T1]  __schedule+0x6f0/0xaec
-[   28.349513][    T1]  schedule+0xc8/0x134
-[   28.353425][    T1]  schedule_timeout+0x4c/0x134
-[   28.358033][    T1]  wait_for_common+0xac/0x13c
-[   28.362554][    T1]  wait_for_completion_killable+0x20/0x3c
-[   28.368118][    T1]  __kthread_create_on_node+0xe4/0x1ec
-[   28.373422][    T1]  kthread_create_on_node+0x54/0x80
-[   28.378464][    T1]  setup_irq_thread+0x50/0x108
-[   28.383072][    T1]  __setup_irq+0x90/0x87c
-[   28.387245][    T1]  request_threaded_irq+0x144/0x180
-[   28.392287][    T1]  dwc3_gadget_start+0x50/0xac
-[   28.396866][    T1]  udc_bind_to_driver+0x14c/0x31c
-[   28.401763][    T1]  usb_gadget_probe_driver+0xd0/0x178
-[   28.406980][    T1]  gadget_dev_desc_UDC_store+0xf0/0x13c
-[   28.412370][    T1]  configfs_write_iter+0x100/0x178
-[   28.417325][    T1]  vfs_write+0x278/0x3c4
-[   28.421411][    T1]  ksys_write+0x80/0xf4
+doc reference errors (make refcheckdocs):
 
-static int dwc3_gadget_start(struct usb_gadget *g,
-                struct usb_gadget_driver *driver)
-{
-        struct dwc3             *dwc =3D gadget_to_dwc(g);
-...
-        irq =3D dwc->irq_gadget;
-        ret =3D request_threaded_irq(irq, dwc3_interrupt, dwc3_thread_inter=
-rupt,
-                        IRQF_SHARED, "dwc3", dwc->ev_buf);
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230522074510.16367-1-mike.looijmans@topic.nl
 
-Given that "1016fc0c096c USB: gadget: Fix obscure lockdep violation
-for udc_mutex" has been there for a while and no one has reported
-issues so far, perhaps ->disconnect() callback is no longer being
-invoked in atomic context and the documentation is what that needs to
-be updated ?
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-Thanks,
-Badhri
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-On Fri, May 19, 2023 at 10:27=E2=80=AFAM Alan Stern <stern@rowland.harvard.=
-edu> wrote:
->
-> On Fri, May 19, 2023 at 08:44:57AM -0700, Badhri Jagan Sridharan wrote:
-> > On Fri, May 19, 2023 at 8:07=E2=80=AFAM Alan Stern <stern@rowland.harva=
-rd.edu> wrote:
-> > >
-> > > On Fri, May 19, 2023 at 10:49:49AM -0400, Alan Stern wrote:
-> > > > On Fri, May 19, 2023 at 04:30:41AM +0000, Badhri Jagan Sridharan wr=
-ote:
-> > > > > chipidea udc calls usb_udc_vbus_handler from udc_start gadget
-> > > > > ops causing a deadlock. Avoid this by offloading usb_udc_vbus_han=
-dler
-> > > > > processing.
-> > > >
-> > > > Look, this is way overkill.
-> > > >
-> > > > usb_udc_vbus_handler() has only two jobs to do: set udc->vbus and c=
-all
-> > > > usb_udc_connect_control().  Furthermore, it gets called from only t=
-wo
-> > > > drivers: chipidea and max3420.
-> > > >
-> > > > Why not have the callers set udc->vbus themselves and then call
-> > > > usb_gadget_{dis}connect() directly?  Then we could eliminate
-> > > > usb_udc_vbus_handler() entirely.  And the unnecessary calls -- the =
-ones
-> > > > causing deadlocks -- from within udc_start() and udc_stop() handler=
-s can
-> > > > be removed with no further consequence.
-> > > >
-> > > > This approach simplifies and removes code.  Whereas your approach
-> > > > complicates and adds code for no good reason.
-> > >
-> > > I changed my mind.
-> > >
-> > > After looking more closely, I found the comment in gadget.h about
-> > > ->disconnect() callbacks happening in interrupt context.  This means =
-we
-> > > cannot use a mutex to protect the associated state, and therefore the
-> > > connect_lock _must_ be a spinlock, not a mutex.
-> >
-> > Quick observation so that I don't misunderstand.
-> > I already see gadget->udc->driver->disconnect(gadget) being called with
-> > udc_lock being held.
-> >
-> >                mutex_lock(&udc_lock);
-> >                if (gadget->udc->driver)
-> >                        gadget->udc->driver->disconnect(gadget);
-> >                mutex_unlock(&udc_lock);
-> >
-> > The below patch seems to have introduced it:
-> > 1016fc0c096c USB: gadget: Fix obscure lockdep violation for udc_mutex
->
-> Hmmm...  You're right about this.  A big problem with the USB gadget
-> framework is that it does not clearly state which routines have to run
-> in process context and which have to run in interrupt/atomic context.
-> People therefore don't think about it and frequently get it wrong.
->
-> So now the problem is that the UDC or transceiver driver may detect
-> (typically in an interrupt handler) that VBUS power has appeared or
-> disappeared, and it wants to tell the core to adjust the D+/D- pullup
-> signals appropriately.  The core notifies the UDC driver about this, and
-> then in the case of a disconnection, it has to notify the gadget driver.
-> But notifying the gadget driver requires process context for the
-> udc_lock mutex, the ultimate reason being that disconnect notifications
-> can race with gadget driver binding and unbinding.
->
-> If we could prevent those races in some other way then we wouldn't need
-> to hold udc_lock in usb_gadget_disconnect().  This seems like a sensible
-> thing to do in any case; the UDC core should never allow a connection to
-> occur before a gadget driver is bound or after it is unbound.
->
-> The first approach that occurs to me is to add a boolean allow_connect
-> flag to struct usb_udc, together with a global spinlock to synchronize
-> access to it.  Then usb_gadget_disconnect() could check the flag before
-> calling driver->disconnect(), gadget_bind_driver() could set the flag
-> before calling usb_udc_connect_control(), and gadget_unbind_driver()
-> could clear the flag before calling usb_gadget_disconnect().
->
-> (Another possible approach would be to change gadget->deactivated into a
-> counter.  It would still need to be synchronized by a spinlock,
-> however.)
->
-> This will simplify matters considerably.  udc_lock can remain a mutex
-> and the deadlock problem should go away.
->
-> Do you want to try adding allow_connect as described here or would you
-> prefer that I do it?
->
-> (And in any case, we should prevent the udc_start and udc_stop callbacks
-> in the chipidea and max3420 drivers from trying to update the connection
-> status.)
->
-> Alan Stern
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
