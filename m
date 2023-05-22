@@ -2,51 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5AC70C9B9
-	for <lists+linux-usb@lfdr.de>; Mon, 22 May 2023 21:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81DC870CBEE
+	for <lists+linux-usb@lfdr.de>; Mon, 22 May 2023 23:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235505AbjEVTvF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 May 2023 15:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
+        id S235263AbjEVVGH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 May 2023 17:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235402AbjEVTu4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 May 2023 15:50:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033DF18D;
-        Mon, 22 May 2023 12:50:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8B9C62B06;
-        Mon, 22 May 2023 19:50:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E854AC433D2;
-        Mon, 22 May 2023 19:50:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1684785049;
-        bh=8RFKb6BkAvCRoieuFxAhj7c6BUO42qkMC7DClxoX/l4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FQYx+YNDl362ye2bVXQdU2f8tJzZPGHLPU3PkBULHtQWHmly+lOqT4ogwos+g3E/W
-         bZyiNKG+z6i2DqVnRIJL5ie9hYotZPSX1YP2NUNwgo7/h/W+5AzzimsSFgy+qI4sbW
-         iyxwb/17JiWCcVgsFPLBjUlWiNxPXvf49sD5VVfU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Maxime Bizon <mbizon@freebox.fr>,
-        linux-usb@vger.kernel.org, stable <stable@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH 6.3 291/364] usb-storage: fix deadlock when a scsi command timeouts more than once
-Date:   Mon, 22 May 2023 20:09:56 +0100
-Message-Id: <20230522190420.046123538@linuxfoundation.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230522190412.801391872@linuxfoundation.org>
-References: <20230522190412.801391872@linuxfoundation.org>
-User-Agent: quilt/0.67
+        with ESMTP id S232267AbjEVVGG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 May 2023 17:06:06 -0400
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB02B94
+        for <linux-usb@vger.kernel.org>; Mon, 22 May 2023 14:06:04 -0700 (PDT)
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-333eb36e510so609265ab.1
+        for <linux-usb@vger.kernel.org>; Mon, 22 May 2023 14:06:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684789564; x=1687381564;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VLNW8RUeV1ytOiHOrZ5VF3AFlqsNVobO/I7Gz9UWEkc=;
+        b=gSg5YwpGW+crPAPW3Y6CG9ioNfkg0qSDsRkrz4mI1e5PulNkDPr/RmtBHV8ZsOZwia
+         m/sHI1QoF3AE+00oIdHvOjrFCGo9XGPzDXGGylZF514OCJqcPc1SOuTq2uioT/nZ4JmR
+         1riRQoLkrDuTedvwD6kJ/QbCX4ctSoTKBFmlrJ9n5iLc4EKeQ3b9Vvnd4lFUn4qq11Jr
+         6P5rr/qwEKY2A6b0ygn36hKoOEvcL9KyyNqWnberEW6qLkiUUb4tf2qoszHNPyDwtdeN
+         X1GNvPY+mJSTItSsKsz23AgDPZgAqFMnlYB3xvoScuC2Y+QkTZENeK/YE2BCF26kVLso
+         8TfA==
+X-Gm-Message-State: AC+VfDydDzcT+msgFBAXUyGBEW7OQ08+O16q/jpazXi+VH/mEfAsOcbN
+        hy1hurE6sS1IynOF1ihw3a7PbZsUfdA0npVoDBKr+VNqQusJ
+X-Google-Smtp-Source: ACHHUZ5Ew0z7LmUWGcfvyMiI4Iuu9t5wCenKIe7OhFXWmTqZnghnDpVrBn+FezGc/jEfaT3nEJrp0MkHfq9QdKzlTMuUGXhfDEDV
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:d6cf:0:b0:338:c5c6:91f9 with SMTP id
+ z15-20020a92d6cf000000b00338c5c691f9mr4847639ilp.1.1684789564206; Mon, 22 May
+ 2023 14:06:04 -0700 (PDT)
+Date:   Mon, 22 May 2023 14:06:04 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007ef71705fc4ea3ad@google.com>
+Subject: [syzbot] [usb?] WARNING in corrupted (3)
+From:   syzbot <syzbot+27b0b464864741b18b99@syzkaller.appspotmail.com>
+To:     duoming@zju.edu.cn, hverkuil-cisco@xs4all.nl,
+        jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,108 +55,89 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Maxime Bizon <mbizon@freebox.fr>
+Hello,
 
-commit a398d5eac6984316e71474e25b975688f282379b upstream.
+syzbot found the following issue on:
 
-With faulty usb-storage devices, read/write can timeout, in that case
-the SCSI layer will abort and re-issue the command. USB storage has no
-internal timeout, it relies on SCSI layer aborting commands via
-.eh_abort_handler() for non those responsive devices.
+HEAD commit:    4d6d4c7f541d Merge tag 'linux-kselftest-fixes-6.4-rc3' of ..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15a9a641280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ac0db1213414a978
+dashboard link: https://syzkaller.appspot.com/bug?extid=27b0b464864741b18b99
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12bc26ee280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17684629280000
 
-After two consecutive timeouts of the same command, SCSI layer calls
-.eh_device_reset_handler(), without calling .eh_abort_handler() first.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ebfde1c1eecf/disk-4d6d4c7f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4938c9109cd4/vmlinux-4d6d4c7f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8c31ee617052/bzImage-4d6d4c7f.xz
 
-With usb-storage, this causes a deadlock:
+The issue was bisected to:
 
-  -> .eh_device_reset_handler
-    -> device_reset
-      -> mutex_lock(&(us->dev_mutex));
+commit ebad8e731c1c06adf04621d6fd327b860c0861b5
+Author: Duoming Zhou <duoming@zju.edu.cn>
+Date:   Mon Jan 23 02:04:38 2023 +0000
 
-mutex already by usb_stor_control_thread(), which is waiting for
-command completion:
+    media: usb: siano: Fix use after free bugs caused by do_submit_urb
 
-  -> usb_stor_control_thread (mutex taken here)
-    -> usb_stor_invoke_transport
-      -> usb_stor_Bulk_transport
-        -> usb_stor_bulk_srb
-	  -> usb_stor_bulk_transfer_sglist
-	    -> usb_sg_wait
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16584629280000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=15584629280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=11584629280000
 
-Make sure we cancel any pending command in .eh_device_reset_handler()
-to avoid this.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+27b0b464864741b18b99@syzkaller.appspotmail.com
+Fixes: ebad8e731c1c ("media: usb: siano: Fix use after free bugs caused by do_submit_urb")
 
-Signed-off-by: Maxime Bizon <mbizon@freebox.fr>
-Cc: linux-usb@vger.kernel.org
-Cc: stable <stable@kernel.org>
-Link: https://lore.kernel.org/all/ZEllnjMKT8ulZbJh@sakura/
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/r/20230505114759.1189741-1-mbizon@freebox.fr
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-1: Product: syz
+usb 1-1: Manufacturer: syz
+usb 1-1: SerialNumber: syz
+usb 1-1: config 0 descriptor??
+smsusb:smsusb_probe: board id=7, interface number 0
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 897 at kernel/workqueue.c:3182 __flush_work+0x946/0xb60 kernel/workqueue.c:3182
+Modules linked in:
+CPU: 0 PID: 897 Comm: kworker/0:2 Not tainted 6.4.0-rc2-syzkaller-00018-g4d6d4c7f541d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:__flush_work+0x946/0xb60 kernel/workqueue.c:3182
+Code: 00 48 c7 c6 9b f7 53 81 48 c7 c7 40 90 79 8c e8 d0 ec 11 00 e9 6f fc ff ff e8 06 4b 30 00 0f 0b e9 63 fc ff ff e8 fa 4a 30 00 <0f> 0b 45 31 ed e9 54 fc ff ff e8 5b 12 83 00 e9 3e fb ff ff e8 e1
+RSP: 0018:ffffc90005026c08 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff88801f5e20e8 RCX: 0000000000000000
+RDX: ffff88801f431dc0 RSI: ffffffff8153f7d6 RDI: 0000000000000001
+RBP: ffffc90005026da0 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: ffffffff81d6e1f2 R12: ffff88801f5e20e8
+R13: 0000000000000001 R14: 0000000000000001 R15: ffff88801f5e2100
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000560d76a382c8 CR3: 0000000026f34000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+
+
 ---
- drivers/usb/storage/scsiglue.c |   28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
---- a/drivers/usb/storage/scsiglue.c
-+++ b/drivers/usb/storage/scsiglue.c
-@@ -406,22 +406,25 @@ static DEF_SCSI_QCMD(queuecommand)
-  ***********************************************************************/
- 
- /* Command timeout and abort */
--static int command_abort(struct scsi_cmnd *srb)
-+static int command_abort_matching(struct us_data *us, struct scsi_cmnd *srb_match)
- {
--	struct us_data *us = host_to_us(srb->device->host);
--
--	usb_stor_dbg(us, "%s called\n", __func__);
--
- 	/*
- 	 * us->srb together with the TIMED_OUT, RESETTING, and ABORTING
- 	 * bits are protected by the host lock.
- 	 */
- 	scsi_lock(us_to_host(us));
- 
--	/* Is this command still active? */
--	if (us->srb != srb) {
-+	/* is there any active pending command to abort ? */
-+	if (!us->srb) {
- 		scsi_unlock(us_to_host(us));
- 		usb_stor_dbg(us, "-- nothing to abort\n");
-+		return SUCCESS;
-+	}
-+
-+	/* Does the command match the passed srb if any ? */
-+	if (srb_match && us->srb != srb_match) {
-+		scsi_unlock(us_to_host(us));
-+		usb_stor_dbg(us, "-- pending command mismatch\n");
- 		return FAILED;
- 	}
- 
-@@ -444,6 +447,14 @@ static int command_abort(struct scsi_cmn
- 	return SUCCESS;
- }
- 
-+static int command_abort(struct scsi_cmnd *srb)
-+{
-+	struct us_data *us = host_to_us(srb->device->host);
-+
-+	usb_stor_dbg(us, "%s called\n", __func__);
-+	return command_abort_matching(us, srb);
-+}
-+
- /*
-  * This invokes the transport reset mechanism to reset the state of the
-  * device
-@@ -455,6 +466,9 @@ static int device_reset(struct scsi_cmnd
- 
- 	usb_stor_dbg(us, "%s called\n", __func__);
- 
-+	/* abort any pending command before reset */
-+	command_abort_matching(us, NULL);
-+
- 	/* lock the device pointers and do the reset */
- 	mutex_lock(&(us->dev_mutex));
- 	result = us->transport_reset(us);
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
