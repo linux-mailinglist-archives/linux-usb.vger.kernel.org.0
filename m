@@ -2,125 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A80870C345
-	for <lists+linux-usb@lfdr.de>; Mon, 22 May 2023 18:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F02AC70C368
+	for <lists+linux-usb@lfdr.de>; Mon, 22 May 2023 18:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232364AbjEVQ0y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 May 2023 12:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
+        id S232845AbjEVQaF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 May 2023 12:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232050AbjEVQ0w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 May 2023 12:26:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B1FFD;
-        Mon, 22 May 2023 09:26:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S232821AbjEVQ3p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 May 2023 12:29:45 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97C5FE;
+        Mon, 22 May 2023 09:29:42 -0700 (PDT)
+Received: from jupiter.universe (dyndsl-091-248-208-162.ewe-ip-backbone.de [91.248.208.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FC3F619D3;
-        Mon, 22 May 2023 16:26:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31C88C433EF;
-        Mon, 22 May 2023 16:26:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1684772807;
-        bh=+QBgGjkSmT8IRp213R2vBwO0H73ayKuAs2FpmTLOpZo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uxrHeBumrrNbQQx/qlTcvAWuJT/nue/NAARfPjVnh2vHGeozCHZeTDBc9D2fl3lba
-         fUqUbwyPSSUvAb0RgTdGN7itd6UpYdYhn2WgelZaDgksdoSjwfhBZpOk55DzSK36mQ
-         nS70+0/UHNHwsaEKttRM3eajXI7AtC9J8FXKBvJI=
-Date:   Mon, 22 May 2023 17:26:43 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] usb: typec: intel_pmc_mux: Expose IOM port status to
- debugfs
-Message-ID: <2023052215-skilled-polygraph-33dd@gregkh>
-References: <20230522070343.3675581-1-rajat.khandelwal@linux.intel.com>
- <2023052216-railway-zipfile-680f@gregkh>
- <ab993b87-8475-7c71-f526-da9a0b5fa3a8@linux.intel.com>
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2CD696606E6E;
+        Mon, 22 May 2023 17:29:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684772981;
+        bh=9ASGeUvinStCu5UjjzSmu8IdJUtabf2Tqkwqbkp/olU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=T95+iqMZb+YVI9iy2kUF2ABA1Ri/qRxWV7y5RFtj2o8KB2GbD/iDeO2mpT+lVQzUa
+         P28hxF11xl65H6SWwC1o/vLx7cjP2s1Ij7eY2wkqNjwPMGtqIH9alC8bXmQD5cXJEv
+         UfcVIDYQAdc+J4JPEqRVw/iKf7GVrEhSW83pdUbmHUOzt/dc8lSFmWazttu9V5ruC4
+         8Py9WE7+toaoE6ZfJugIHjRwoXZ7IORPoQjNNbl0czNIXW/DOIXpWjKKIdOpqhIi6r
+         pIrAllEtgGQlvPXI2Bf3AvrjRa6wEejhyW4RzU13oVNxaFfkEGRP3+3Cs+xj0l57No
+         S6NIXsGj62QLQ==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id EFC574805CC; Mon, 22 May 2023 18:29:37 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCH v5 0/3] generic-ohci/ehci: add RK3588 support
+Date:   Mon, 22 May 2023 18:29:34 +0200
+Message-Id: <20230522162937.53190-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ab993b87-8475-7c71-f526-da9a0b5fa3a8@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 22, 2023 at 03:24:13PM +0530, Rajat Khandelwal wrote:
-> Hi,
-> 
-> On 5/22/2023 1:07 PM, Greg KH wrote:
-> > On Mon, May 22, 2023 at 12:33:43PM +0530, Rajat Khandelwal wrote:
-> > > IOM status has a crucial role during debugging to check the
-> > > current state of the type-C port.
-> > > There are ways to fetch the status, but all those require the
-> > > IOM port status offset, which could change with platform.
-> > > 
-> > > Make a debugfs directory for intel_pmc_mux and expose the status
-> > > under it per port basis.
-> > > 
-> > > Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-> > > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > ---
-> > > 
-> > > v4:
-> > > 1. Maintain a root directory for PMC module and incorporate devices
-> > > under it
-> > > 2. Add the debugfs module under '/sys/kernel/debug/usb'
-> > > 3. Use the platform device 'pmc->dev' to assign the device's name
-> > > 
-> > > v3: Allocate the debugfs directory name for the platform device with
-> > > its ACPI dev name included
-> > > 
-> > > v2:
-> > > 1. Remove static declaration of the debugfs root for 'intel_pmc_mux'
-> > > 2. Remove explicitly defined one-liner functions
-> > > 
-> > >   drivers/usb/typec/mux/intel_pmc_mux.c | 54 ++++++++++++++++++++++++++-
-> > >   1 file changed, 53 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-> > > index 34e4188a40ff..f400094c76f2 100644
-> > > --- a/drivers/usb/typec/mux/intel_pmc_mux.c
-> > > +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-> > > @@ -15,6 +15,8 @@
-> > >   #include <linux/usb/typec_mux.h>
-> > >   #include <linux/usb/typec_dp.h>
-> > >   #include <linux/usb/typec_tbt.h>
-> > > +#include <linux/debugfs.h>
-> > > +#include <linux/usb.h>
-> > >   #include <asm/intel_scu_ipc.h>
-> > > @@ -143,8 +145,14 @@ struct pmc_usb {
-> > >   	struct acpi_device *iom_adev;
-> > >   	void __iomem *iom_base;
-> > >   	u32 iom_port_status_offset;
-> > > +
-> > > +#ifdef CONFIG_DEBUG_FS
-> > > +	struct dentry *dentry;
-> > > +#endif
-> > No need for the #ifdef anymore, right?  In fact, I think it will break
-> > the build if you have it this way and CONFIG_DEBUG_FS is not enabled,
-> > right?
-> 
-> I guess you're right. Maybe it'd have been fine if the rest of the
-> debugfs stuff was also enclosed within the conditional macros.
+Hi,
 
-Which is not needed and not good kernel coding style, so it's right that
-they are not there.
+This increases the max. allowed clocks for generic-ohci from 3 to 4.
+On RK3588 a total of 4 clocks is required to access the OHCI registers.
+EHCI already supports 4 clocks.
 
-> Anyways, removing it seems appropriate now.
-> 
-> Also, is it OK to send you v5 on the public list directly?
+Changes since PATCHv4:
+ * https://lore.kernel.org/linux-usb/20230413173150.71387-1-sebastian.reichel@collabora.com/
+ * Rebase to v6.4-rc1
+ * Re-add minItems for rockchip,rk3588-ohci = false
 
-Where else would you send it?
+Changes since PATCHv3:
+ * https://lore.kernel.org/all/20230406135552.23980-1-sebastian.reichel@collabora.com/
+ * Fix the PATCH version in the patchset subjects :)
+ * Collect Rob Herrings's Reviewed-by
+ * Drop maxItems = 4 from rockchip,rk3588-ohci = true branch (4 is the default value)
+ * Drop minItems = 1 from rockchip,rk3588-ohci = false branch (1 is the default value)
 
-confused,
+Changes since PATCHv2:
+ * https://lore.kernel.org/all/20230404145350.45388-1-sebastian.reichel@collabora.com/
+ * Added Krzysztof's Ack to the EHCI binding update
+ * Changed OHCI binding update according to Krzysztof's feedback
 
-greg k-h
+Changes since PATCHv1:
+ * https://lore.kernel.org/all/20230331163148.5863-1-sebastian.reichel@collabora.com/
+ * changed cover-letter subject
+ * Add Alan's Acked-by to the driver patch increasing the clock count
+ * Update bindings, adding rockchip,rk3588-ohci and rockchip,rk3588-ehci compatibles
+
+-- Sebastian
+
+Sebastian Reichel (3):
+  dt-bindings: usb: Add RK3588 OHCI
+  dt-bindings: usb: Add RK3588 EHCI
+  usb: host: ohci-platform: increase max clock number to 4
+
+ .../devicetree/bindings/usb/generic-ehci.yaml   |  1 +
+ .../devicetree/bindings/usb/generic-ohci.yaml   | 17 ++++++++++++++++-
+ drivers/usb/host/ohci-platform.c                |  2 +-
+ 3 files changed, 18 insertions(+), 2 deletions(-)
+
+-- 
+2.39.2
+
