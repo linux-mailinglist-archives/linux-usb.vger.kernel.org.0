@@ -2,123 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE2570D96A
-	for <lists+linux-usb@lfdr.de>; Tue, 23 May 2023 11:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 870B770D98E
+	for <lists+linux-usb@lfdr.de>; Tue, 23 May 2023 11:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235434AbjEWJqY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 May 2023 05:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33352 "EHLO
+        id S236483AbjEWJvi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 May 2023 05:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233035AbjEWJqW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 May 2023 05:46:22 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2070.outbound.protection.outlook.com [40.107.105.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54336121
-        for <linux-usb@vger.kernel.org>; Tue, 23 May 2023 02:45:54 -0700 (PDT)
+        with ESMTP id S236287AbjEWJte (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 May 2023 05:49:34 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2057.outbound.protection.outlook.com [40.107.15.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5F1119
+        for <linux-usb@vger.kernel.org>; Tue, 23 May 2023 02:49:24 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aKZFSz1uK9qXYXpp9mYbClW8QWOab7n1PAPTIMAdFaWRALmvzCKyKB70d0eS3RAv4eCPCdqptb2W+UwsS0eqmOR5zYZD7d1zeHsPgn999hrGhNp99PMXOgOBec4iPkz+LRGBI1kUYrP3YHOGO6VynwZ6BS2K7AdAjpynlfwJcCG5TahRfcUwBV7fH2b1A1vZxqfRGytko1oKd+Vt2uANiOun1fm99mdFVvRIV5s+t1AzjzCZxtDLnKaWtVPjfnBy8n03xrPUkS1opXL2lAg6YiSMn1MAnkusHyCyCpGCSYDP6jRqEcuRs3BBQJQ4ha1N74Y/gvObuzdGO+CTJm0czg==
+ b=OKj89HW/UTxEVC4r3sTMTjEjVeznGHEpPwbZqLb2occDRDoNqgriBRhqSi0KXY23Wf62zd30hszlYp/8MUAZz5ox5Yu/AmE+fgo0BPmTMWo1W9B5OGn6tfibf7eOm7J7s08mQ9H4JTsvSXlq+LQ28DPkuqi/kJEwW6cFkX2Vu2D/9aDPhUA3Nnj2voNXirkuIQdudQvLoMT3A3dRzoJzNChGlGoVoWCXfuXm++d4hMwvrISzADIlT1kYTAMpEofiHv6M7aRP0KuBdP8cSpzB0cH3SSO6Ip7UaQ5lVhjwhLpwFpA9mDOFoGVE68R8guf2o+sXGVu2ZRZvNJ1bgLvNWg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F7+GjrLdV4mGJW2gtlcdVy63itS2nuckKFmD+kVuO9M=;
- b=G3TNsL1zu7PHpeZdzLvAEUptkENv/Js6/uAoH5gIP2zaCVPq85IAVrvQp+l/WBQGWWKmFia+CkVdEmEMEUnIPlAthe4TOK7L1h1PCDy/5pNAawBZoIvygsYlqAQeV3aJbyvKyx09NtmFn7zQNNsi6pmI0VyKDMFjyt9MbRSjMGKaKFE1fHrWQNBdIWczLcMDC59PuLUjeVtob+sr5tGdHJz8+Vn4OZ9LVzMsrAkuFkfneNanuVd6UIiLNd1HtrLVfbzr/ZsDF6kdaEGYt3BNFgKEkGKVoOQvUqEygWPA36P6HvzjNsiI9PAe2V82exJPxRYSTdY7du4xyhuwSfKz4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nordicsemi.no; dmarc=pass action=none
- header.from=nordicsemi.no; dkim=pass header.d=nordicsemi.no; arc=none
+ bh=kKF88GiL5Q7F2wwnqtDLoPj63gbLGEgVEfvuvgjc7fA=;
+ b=WBV6gDnFcxMUJdzfQ8hiSkvR/Jv3Sz5N6h+R2BzJ46SVqDfYFxZ5doc5UsbJkoojUVlRD6TeOIZAlXzgCHLf3/t/9gWU6eViqS51MngYWbKbQ+J4mQ4BmpOZKZGSjsfLig727L2HeCugjEOg/YcI5w/1f9hK0mSEEUS5UsG53JlS10o12+h4rAxHaAZK1Nyzye+qZbSSxZRAsJ2+7Cqygb9eqJIQg2ZbZR5crpBRbTUFJ80HWM9VKkDoqumjjk5Knih+ZvV6f+02EcJhDlE9nG7uVq2df3iI/tEyAcYZCh4UH6tFePHwgOXFB3k5QTZIwnMMact7GOR/71X6de/TFw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.19.86.146) smtp.rcpttodomain=suse.com smtp.mailfrom=nordicsemi.no;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nordicsemi.no; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nordicsemi.no;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F7+GjrLdV4mGJW2gtlcdVy63itS2nuckKFmD+kVuO9M=;
- b=nNKCgb1nRD3u7vrqYVDiF/aprqrkK+nwXeEoVEWRXqtKPgHOHmeh7auVHhJXf9wD3DyZNTFzFskzKfC6gFMA5Lxd+s/043/0U9ucnXv3rzQxd3HB8EzFIvbx1UtLAX/3mdTGF1q/ysmFJQgxtZCv813Z81tVA3XeF9QbbmYc5e10/W/bDIlceaENIZRZz3lfiuajUkDHPrz8iTNGKSHZO0nxsRDo5JY8DQUPOU/YmQ0kSvw4tnEB/tsw9+9QWHI2bj5pGaf8yH/sK3D9NBJLcF0/oSubgBHMqBzckXnNtc0AR/pqndhEk/w3QbdRhGOsnSy3ZWIs+hnQozLEjqdOWw==
-Received: from AS8PR05MB8149.eurprd05.prod.outlook.com (2603:10a6:20b:31a::7)
- by PAXPR05MB8955.eurprd05.prod.outlook.com (2603:10a6:102:2b7::16) with
- Microsoft SMTP Server (version=TLS1_2,
+ bh=kKF88GiL5Q7F2wwnqtDLoPj63gbLGEgVEfvuvgjc7fA=;
+ b=Tq6wF6xlTq7eqqcghkTszvz/pVtHeuR9Rcq0CqxndC8maq+UjYaBJemTFDitoFariuiuRMhRQqIsaBGQmdTXyqfsO9AynVaMu6wvmAqitboDJ4uw7tijn6OkBXBbS5IDjE71bT9KUtFx1yXm/q3WgYXZ2bSqlMTaqNQO7bFQ7qmN6leDEHL1gE/N47mNtACxAIE6wmOo4L1dEjO4/Z/bPCLVitONA6cigY0pHK8H5EwoUqYqckSEkvX7w6OLKzK2G8iV8O/VtWwR6XmPd6oNOGzH3GxGelPvb+9QweeZ2e5Key5wOreCzXaU8/AB+4/CsRXDpqJg7XgIJXpt2QI59g==
+Received: from AS9PR01CA0008.eurprd01.prod.exchangelabs.com
+ (2603:10a6:20b:540::10) by DU0PR05MB10060.eurprd05.prod.outlook.com
+ (2603:10a6:10:47a::12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 23 May
- 2023 09:45:49 +0000
-Received: from AS8PR05MB8149.eurprd05.prod.outlook.com
- ([fe80::4fb5:8a89:3ae3:96e2]) by AS8PR05MB8149.eurprd05.prod.outlook.com
- ([fe80::4fb5:8a89:3ae3:96e2%3]) with mapi id 15.20.6411.029; Tue, 23 May 2023
- 09:45:49 +0000
-From:   =?utf-8?B?TW/FhCwgVG9tYXN6?= <tomasz.mon@nordicsemi.no>
-To:     "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>
-CC:     "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
-        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
-        "michael.jamet@intel.com" <michael.jamet@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+ 2023 09:49:21 +0000
+Received: from AM7EUR03FT041.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:20b:540:cafe::a0) by AS9PR01CA0008.outlook.office365.com
+ (2603:10a6:20b:540::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.29 via Frontend
+ Transport; Tue, 23 May 2023 09:49:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.19.86.146)
+ smtp.mailfrom=nordicsemi.no; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nordicsemi.no;
+Received-SPF: Pass (protection.outlook.com: domain of nordicsemi.no designates
+ 194.19.86.146 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.19.86.146; helo=mail.nordicsemi.no; pr=C
+Received: from mail.nordicsemi.no (194.19.86.146) by
+ AM7EUR03FT041.mail.protection.outlook.com (100.127.140.233) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.20.6433.14 via Frontend Transport; Tue, 23 May 2023 09:49:20 +0000
+Message-ID: <f2d012f027249718d257456856f46645fae0d8c4.camel@nordicsemi.no>
 Subject: Re: USB 2.0 host controller for Thunderbolt 4
-Thread-Topic: USB 2.0 host controller for Thunderbolt 4
-Thread-Index: AQHZjVQMztybc2SJW0m88m0XCPIwka9nj64AgAAMXgA=
-Date:   Tue, 23 May 2023 09:45:49 +0000
-Message-ID: <551c6ce270bac239fbcebd5280e426851b84ee0e.camel@nordicsemi.no>
+From:   Tomasz =?UTF-8?Q?Mo=C5=84?= <tomasz.mon@nordicsemi.no>
+To:     Oliver Neukum <oneukum@suse.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        "Mika Westerberg" <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        <linux-usb@vger.kernel.org>
+Date:   Tue, 23 May 2023 11:49:17 +0200
+In-Reply-To: <0dc2e12d-052f-aa59-07df-5158b924ec12@suse.com>
 References: <bd807b391dec726401e36a25f8c8987571d771be.camel@nordicsemi.no>
-         <20230523090132.GO45886@black.fi.intel.com>
-In-Reply-To: <20230523090132.GO45886@black.fi.intel.com>
-Accept-Language: pl-PL, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nordicsemi.no;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AS8PR05MB8149:EE_|PAXPR05MB8955:EE_
-x-ms-office365-filtering-correlation-id: 9b1724aa-bb7d-4ba8-7220-08db5b727db9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: aRsyEQsVMfGrEya1ahMJ/6t2MqKA1g93JZKeG1W0v4fzWpS3kiWKuTtuRQeQIc/NM/WBAb9wtCNDoOODgiIEr1k9HSmi+PV1NtuaWJmb4oZVzt0tD5FMP8GWsAxFsxpJXjECsHE27vnzvdwXdyGOPOAPIFAWBELhY5tkKsIV1w0XyiVT48Fv5/1DrlV5GROTuEENvpmrPpL++xtr2Xjvo641R2e4bhRXfIUI4mqUBQ6nLlcMJvNdw+U9aXVd3sn6bOFq6fdNpIAwOCRY8fVrRNYPKwBuazeFTZ+9spFWFmfeJ3yRTzPt05/gGXjsAQRzSivmI6buHn8dJT8kx6fCxA8/UjlusL46tIol2cCU9bgjtMvCEXZox0NOeG8lMnlbGTE0x6JAj4d6PFe3zmmME0M1pLJLaQoacF7lGFV7kY6ppTw5zSsEaNjD2BhNia56Qek2ELoi7May7WqLirsVL2U4tfYpdmnTtyw0T3fGHecinW/VZwrG8eb3TDks7TEJ6xKUQDtiINZZXP3Rigrwo2JcSaGTTlBEzOAW9VbJX6SKAk/buhBZcGr88nIJc6myBMlsO56SvVJD8nUzlb50V9viIP5l+jrIruvJS1M/zELLAMKfSJJNJgTA+5DKsVLVR7gI+eFUHlvmx8EFML/utw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR05MB8149.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(346002)(136003)(376002)(366004)(1590799018)(451199021)(71200400001)(1580799015)(8676002)(8936002)(5660300002)(186003)(26005)(6512007)(6506007)(41300700001)(38100700002)(38070700005)(54906003)(122000001)(66946007)(478600001)(86362001)(66556008)(66476007)(66446008)(64756008)(91956017)(76116006)(316002)(4326008)(6916009)(2616005)(36756003)(2906002)(85182001)(6486002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?S0h4cUwxR2RBa00vWVVYZzVsNVRmdk1kVDZQZmRkY2lXZUZRRkpxdk5sOWdE?=
- =?utf-8?B?N0lUVVJDK2p6Y2o3cEN6Z1pndmFIaGhJWjJxdlBqbXljaGZWWXVnUTRVeFg3?=
- =?utf-8?B?TVMreWhONmFDMUFPZW0zSnRhTDEzRHNWdEF3YVQyRVVicHBNVW5udHJrR1Rm?=
- =?utf-8?B?NjFXS0hDc09MenJ0OTZRc0NrUFcyUStsb1BLSVdoQ2VuMDBQWXN2Ky84b1Nv?=
- =?utf-8?B?c01SdEgvUUZOY0ZvTUhiYm9Zb1djbyszZ3YrUkVWUEluRUNmSG5PZmVQbTNP?=
- =?utf-8?B?Z25oSFpPNzc4S2xTTUdreStVRCtSRWsvcWxoNGtoTmRhS1F3UmQxTU1DN2Nj?=
- =?utf-8?B?MjFMV0YzbHhkYVZLQ3BYUHNhM1phTklVaXpLenJNTE50dGQ2dGhtQytGZlNR?=
- =?utf-8?B?UlBrMGpwN3piNzJDZkQ5VnVqUXc5R3V0UkczdWlRMGJ6Qy9PRXp2aHFHVUFG?=
- =?utf-8?B?TnRVNDhJNnZvYjQ3Z0V6QjU5MVpyYzdyRllTKzZLcEQyZHRUdjN0ZEp5Ri80?=
- =?utf-8?B?ZWJwMWhjejVaZ01mejc4N0VwWFFWUmZuQmhqazZLQlBkTmJQblRCNG9oNklm?=
- =?utf-8?B?MmpsazJ1U0xDN0NacitQMkRUN3pMcVpmUzJYVWNxa0hiYVdQU29WWkVDWFRI?=
- =?utf-8?B?aGpYSldaYVFPSFdMaHpiREE4VTVvK3QwNWdCYVJWZVFMZ1daYmpWWWZPTU1K?=
- =?utf-8?B?Qk5DYnZKU1hkblhkQWh3YWtacVZOcGk1YWp3c3d2bHhMRTBIQ25rdlV1Szda?=
- =?utf-8?B?N2pldmQ5R2lTTU41bHAxNEpmdXFaMUFKK3pENDExS1Bkak5hQW5DaFh4cEJn?=
- =?utf-8?B?UHE3VGYzNGd3aUc0M2xQQVJCMVJ0RDhsYTFYQkEwYmNlTkR3QkRIaHg2dmlx?=
- =?utf-8?B?aFhJVDFwM05LbjA5ZFRlZ3M4QWhZRW9zL1o3dGg2OUNzK0EwT052dXFtTzF6?=
- =?utf-8?B?THB5ajc0ZWRHOE9MdzljWTdyemhNU3R4QWhVUTN2bTdZeXF2dGhWQTcrb01R?=
- =?utf-8?B?Q0pyQkxmYjdxaExLZHlPTDllYkNRMlJVY2kycWhwSjhxY0Q0NTF2Zy9WQkdv?=
- =?utf-8?B?aXJkUmlIM2o0YjN1OW0xTUU1WVhhV0ZwWnVPWG9rT1plTC9zNThyTUFFblFu?=
- =?utf-8?B?Ykoxelh1Z3ExcDlWY1J1ZnQ1ZVpGUERsZkxqN29NVG9vQjZ4MFQ1V0ZtbSta?=
- =?utf-8?B?bVFEZ2dvL2pBYmlGeGo1M2RwUXhWa0ZTSGVoSGtHMGs5K2dNTUJ5bmlDMDBx?=
- =?utf-8?B?d1U0QVcyRndoaXNrSlg1ZXMwNFJHaXpvelFkU3U3T3JNTFdKSlRuSXVuTW42?=
- =?utf-8?B?dnFxc1haUE5XMy9qa0EwS1lHT0wrUHU0a25jYVdiTUM4R2RuQ1E0OHo3QU4w?=
- =?utf-8?B?ZzBIb0FmMEIrNStWYldic05rVVFVWDUxWDc0YlcvTU1ESnFNb3JLRXk4bkhk?=
- =?utf-8?B?cXVHK0VLNlN4Y2xWZVplTGdRcCs3YkVFRjZSdk1Lcnphb2xDamRrS3VXUkdO?=
- =?utf-8?B?M2xBVThFV29uMG5ONnBDaVZSbnBrcVQzaEN6czFJTHFFMTI2VVA1WFpKdmww?=
- =?utf-8?B?K1FUN3VId3lETUVjZFZBWXRkUEpobC9wb3BDbnlwS1lEVEZ0eHhtUlVIdXY5?=
- =?utf-8?B?YXdUd01QM1hPc1VFbTdwUjloUS90QnNYRjJRenFzdU93TGIyTGl2M0tJVENE?=
- =?utf-8?B?RjMrdHBZTnZ4eUdwWDRBVDZRc3RsYjZwelYzNzFtT3Rrc2dIS2IwTTFKTzRN?=
- =?utf-8?B?NzVKd0xNZ1JyU0REaWVnRzQxYml2c0NnMVkzc1haUTZ1S1psMlQrM0Q0TWdv?=
- =?utf-8?B?bzdIM0t1VVhrT3JsTk9LZ2ZUeU14dTdJaDJacHhSOEUybWtkVlAzTmxOUFdL?=
- =?utf-8?B?bCt0TDZMakJaREFwL1VWOStaYUpZdVZPZmFLM2hGZHdYbGpEYk9mQk5ETndS?=
- =?utf-8?B?NVFEOWNWOFM4UlpIZmZaNXVuejd5MVoxZDM2cDlQblB6ck13amVUM3VjdHlO?=
- =?utf-8?B?OUJCcmhzSndnbmh5QzJuU0JEeWc2bjdYRUM5S1A0QTdBQ0gvK0lJaUptaU90?=
- =?utf-8?B?aS8va2hTV2Fjc01veDBZZXpCUENnaXFyZkdHRGtOdjUvSDc3eUFUQXZWNU9y?=
- =?utf-8?B?TjdaL24reTJDcnVsOVVZcG01R0NsRUNMWncvd0xjcjg5Vm1LVFlDRDE2cG45?=
- =?utf-8?B?a2c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1FEFA1211DABB2468274617AA3A54532@eurprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+         <0dc2e12d-052f-aa59-07df-5158b924ec12@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 
 MIME-Version: 1.0
+X-Originating-IP: [10.241.138.38]
+X-ClientProxiedBy: exch02.nvlsi.no (192.9.200.127) To exch01.nvlsi.no
+ (192.9.200.126)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM7EUR03FT041:EE_|DU0PR05MB10060:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0c0cd1ba-1870-451a-6644-08db5b72fb8e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DDSZpQQ9050mhyazQJgfqNlKUXY74N8qpveopcNuF2kxyZwVxxO25m++BWsiX4r1p+uMAL1QtbctC5k6FhMZUqw0uDXrCPjdrp7a4y4u/dpPHvefwFWJvMffN61rSvjaC5FimT1ZQz68DSEvbMxw64h8V4ySkJJ2qdBO1xZGi2LBvavi3ZryBvjqLjB5Zvotg9B0MSQtg6NdmUACf2LcjazCbjuORl/prrwOK/gjTr6+/A2PFj8aIqo05DmTIsOsDLUjka/0Js9EyyeVLjeMylMXWhlu2b5j6BVCwDc8vNPCl9TD6I8ao3bHFh3Q9yCT20GDEoM9MYpYuworku8l/22bJgNdY8C9YQ52iLMcH+ruCir/9Qi0TXDhhyZNXZnpb+8m0HUaUWrF4Dtbhxdjn4xTlzcz1pfX5ISwSffqSAzxLQ5ofHM2nP/MOkFJNgJno8vTxKQUy/Z/TehEvNKtJnjprqKU0aN7Q1LxmLT5+4VYoXRTe3r4TW54gE2IbOEGsqPQJU+88j7PIp8UFMoG7iaTYXqSEKeSuYT1+7k6IpdMI4L9uorfm9VG1UUvOa4gIL1XhVimhMu3c0QQEB01pU6A7Nt1Hqd6ebdRsV3pqA5enkIowMcCkqTCwnxoKOf/judcoirbM8Oobk5WQnuKTcujrd/DxMGItCgHkxhOZpkBgL6Gf0LzU94Ahvyt9zFD6RzgW5yPjspIiSF+1DXh6A==
+X-Forefront-Antispam-Report: CIP:194.19.86.146;CTRY:NO;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nordicsemi.no;PTR:mx01.nordicsemi.no;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(346002)(376002)(396003)(451199021)(36840700001)(46966006)(36860700001)(47076005)(53546011)(9316004)(7636003)(356005)(26005)(82740400003)(118246002)(36756003)(956004)(2616005)(40480700001)(2906002)(186003)(336012)(36736006)(316002)(6666004)(70586007)(70206006)(41300700001)(6486002)(7696005)(82310400005)(110136005)(478600001)(86362001)(8676002)(8936002)(5660300002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: nordicsemi.no
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR05MB8149.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9b1724aa-bb7d-4ba8-7220-08db5b727db9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2023 09:45:49.6675
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 09:49:20.6932
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 28e5afa2-bf6f-419a-8cf6-b31c6e9e5e8d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 00NOVIK9IHddc6x+GlqkzQ1k2qui7r1qCbWSahrtb+oRcyKenk17kgK6G7eDUmKro4TuBZPpiTcgOwtxttgc7gOtczv5k4CChXexSZj7pQY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR05MB8955
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c0cd1ba-1870-451a-6644-08db5b72fb8e
+X-MS-Exchange-CrossTenant-Id: 28e5afa2-bf6f-419a-8cf6-b31c6e9e5e8d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=28e5afa2-bf6f-419a-8cf6-b31c6e9e5e8d;Ip=[194.19.86.146];Helo=[mail.nordicsemi.no]
+X-MS-Exchange-CrossTenant-AuthSource: AM7EUR03FT041.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR05MB10060
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
@@ -129,46 +99,101 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVHVlLCAyMDIzLTA1LTIzIGF0IDEyOjAxICswMzAwLCBNaWthIFdlc3RlcmJlcmcgd3JvdGU6
-DQo+IE9uIFR1ZSwgTWF5IDIzLCAyMDIzIGF0IDEwOjUzOjE3QU0gKzAyMDAsIFRvbWFzeiBNb8WE
-IHdyb3RlOg0KPiA+IFdoZW4gSSBjb25uZWN0IFRodW5kZXJib2x0IDMgZG9jaywgdHdvIG5ldyBo
-b3N0IGNvbnRyb2xsZXJzIHNob3cgdXA6DQo+ID4gICAqIHVzYjUgLSBVU0IgMi4wIEhpZ2gtU3Bl
-ZWQNCj4gPiAgICogdXNiNiAtIFVTQiAzLjAgU3VwZXJTcGVlZA0KPiA+IA0KPiA+IERldmljZXMg
-Y29ubmVjdGVkIHRocm91Z2ggVGh1bmRlcmJvbHQgMyBkb2NrIGVuZCB1cCBvbiBleHBlY3RlZCBo
-b3N0DQo+ID4gY29udHJvbGxlcnMsIGkuZS4gTG93L0Z1bGwvSGlnaC1TcGVlZCBkZXZpY2VzIGNv
-bm5lY3QgdG8gdXNiNSBhbmQNCj4gPiBTdXBlclNwZWVkIGRldmljZXMgZW5kIHVwIG9uIHVzYjYu
-DQo+ID4gDQo+ID4gSXMgVGh1bmRlcmJvbHQgMyBlc3NlbnRpYWxseSB0dW5uZWxsaW5nIHRoZSBV
-U0IgMi4wIHRyYWZmaWMgKGJ5DQo+ID4gdHVubmVsbGluZyBQQ0llIHhIQ0kgaG9zdCBjb250cm9s
-bGVyIHRyYWZmaWMpIG9uIHRoZSBzdXBlcnNwZWVkDQo+ID4gZGlmZmVyZW50aWFsIHBhaXJzIChv
-cGVyYXRpbmcgaW4gYWx0ZXJuYXRlIFRCVDMgbW9kZSk/DQo+IA0KPiBJdCBpcyBub3QuIFRoZSBV
-U0IgMi54IHdpcmVzIGFyZSBzZXBhcmF0ZSBvbiB0eXBlLUMgY2FibGVzLg0KDQpZZXMsIHRoZSBV
-U0IgMi54IHdpcmVzIGFyZSBzZXBhcmF0ZSBvbiB0eXBlLUMgY2FibGVzLiBCdXQgdGhpcyBkb2Vz
-IG5vdA0KYW5zd2VyIHRoZSBxdWVzdGlvbiB3aHkgdGhlcmUgaXMgbmV3IFVTQiAyLjAgSGlnaC1T
-cGVlZCBjb250cm9sbGVyDQpzaG93aW5nIHVwIHRoYXQgdGhlIGRldmljZXMgZG8gY29ubmVjdCB0
-by4NCg0KV291bGRuJ3QgdGhlIExvdy9GdWxsL0hpZ2gtU3BlZWQgZGV2aWNlcyB0cmFmZmljIGFw
-cGVhciBvbiB1c2IzIChQQ0gNCmNvbnRyb2xsZXIpIGlmIHRoZSBVU0IgMi54IHdpcmVzIGluIHR5
-cGUtQyBjYWJsZSB3ZXJlIHJlYWxseSB1c2VkIGluDQp0aGlzIGNhc2UgKGluc3RlYWQgb2YgdGhl
-IHVzYjUgd2hpY2ggYXBwZWFyZWQgb25seSBhZnRlciBUaHVuZGVyYm9sdCAzDQp3YXMgY29ubmVj
-dGVkKT8NCg0KSSBmb3Jnb3QgdG8gbWVudGlvbiB0aGF0IHRoZSBUaHVuZGVyYm9sdCAzIGRvY2tp
-bmcgc3RhdGlvbiBpbiBxdWVzdGlvbg0KaGFzIEludGVsIENvcnBvcmF0aW9uIERTTDY1NDAgVGh1
-bmRlcmJvbHQgMyBCcmlkZ2UgW0FscGluZSBSaWRnZSA0Qw0KMjAxNV0gYW5kIEFTTWVkaWEgVGVj
-aG5vbG9neSBJbmMuIEFTTTEwNDJBIFVTQiAzLjAgSG9zdCBDb250cm9sbGVyLg0KDQpUaGUgd2F5
-IEkgdW5kZXJzdGFuZCBpdCwgdGhhdCB0aGUgdXNiNSBhbmQgdXNiNiBjb21lIGZyb20gQVNNMTA0
-MkENCih3aGljaCBpbXBsZW1lbnRzIHhIQ0kpLiBUaGUgY29tbXVuaWNhdGlvbiB3b3VsZCB0aGVu
-IGJlOg0KICAqIERlbGwgTGF0aXR1ZGUgPC0+IFRodW5kZXJib2x0IDMgZG9jayAoVEJUMyB0dW5u
-ZWxsaW5nIFBDSWUgeEhDSSkNCiAgKiBBU00xMDQyIChpbiBUaHVuZGVyYm9sdCAzIGRvY2spIDwt
-PiBVU0IgMi54IGRldmljZXMgY29ubmVjdGVkIHRvDQp0aGUgZG9jayAoZGF0YSBuZXZlciBtYWtl
-cyBpdCB0byB0eXBlLUMgRCsvRC0gd2lyZXMsIGJlY2F1c2UgaXQgaXMNCkFTTTEwNDIgdGhhdCBn
-ZW5lcmF0ZXMgdGhlIHRva2VucykNCg0KSXMgdGhlcmUgYSBmbGF3IGluIG15IHVuZGVyc3RhbmRp
-bmc/DQoNCj4gPiBXaGVuIEkgY29ubmVjdCBUaHVuZGVyYm9sdCA0IGRvY2ssIHRoZSBTdXBlclNw
-ZWVkIGRldmljZXMgY29ubmVjdGVkIHRvDQo+ID4gZG9jayBwb3J0cyBlbmQgdXAgb24gdXNiMiBo
-b3N0IGNvbnRyb2xsZXIuIEhvd2V2ZXIsIExvdy9GdWxsL0hpZ2gtU3BlZWQNCj4gPiBkZXZpY2Vz
-IGRvIGVuZCB1cCBvbiB1c2IzIChVU0IgMy4yIHhIQ0kpIGFuZCBub3Qgb24gdXNiMSAoQWxkZXIg
-TGFrZS1QDQo+ID4gVGh1bmRlcmJvbHQgNCBVU0IgQ29udHJvbGxlcikuDQo+IA0KPiBZZXMsIHRo
-YXQncyBleHBlY3RlZCB0aGUgVEJUIFVTQiBjb250cm9sbGVyIChvbiB0aGUgaG9zdCkgZG9lcyBu
-b3QNCj4gc3VwcG9ydCBVU0IgMi54IHNvIGl0IGlzIHJvdXRlZCB0byB0aGUgUENIIG9uZS4NCg0K
-U2hvdWxkIHRoZSBkcml2ZXIgYmUgY2hhbmdlZCB0byBub3QgZXZlbiByZWdpc3RlciB0aGUgZHVt
-bXkgVVNCIDIuMA0KaW50ZXJmYWNlIGluIHN1Y2ggY2FzZT8NCg0KLS0gDQpUb21hc3ogTW/FhCAg
-ICAgICAgfCBTZW5pb3IgRmlybXdhcmUgRW5naW5lZXINClAgKzQ4IDg4MiA4MjYgMTExIHwgV3Jv
-Y8WCYXcsIFBvbGFuZA0Kbm9yZGljc2VtaS5jb20gICAgfCBkZXZ6b25lLm5vcmRpY3NlbWkuY29t
-DQo=
+On Tue, 2023-05-23 at 11:44 +0200, Oliver Neukum wrote:
+> On 23.05.23 10:53, Tomasz Mo=C5=84 wrote:
+> > Hello,
+> >=20
+> > Dell Latitude 5330 with 12th Gen Intel(R) Core(TM) i7-1265U contains
+> > following PCI devices:
+> >    * 8086:461e - Alder Lake-P Thunderbolt 4 USB Controller
+> >    * 8086:51ed - Alder Lake PCH USB 3.2 xHCI Host Controller
+> >=20
+> > Thunderbolt 4 USB Controller initializes first and therefore following
+> > usb host controllers are registered:
+> >    * usb1 - USB 2.0 High-Speed
+> >    * usb2 - USB 3.2 Enhanced SuperSpeed
+> >    * usb3 - USB 2.0 High-Speed
+> >    * usb4 - USB 3.1 Enhanced SuperSpeed
+> >=20
+> > When I connect SuperSpeed device directly to the Dell Latitude, it ends
+> > up on usb4. Low/Full/High-Speed devices end up on usb3 as expected.
+> >=20
+> > When I connect Thunderbolt 3 dock, two new host controllers show up:
+> >    * usb5 - USB 2.0 High-Speed
+> >    * usb6 - USB 3.0 SuperSpeed
+>=20
+> Could you provide lspci in that state?
+> AFAICT there is nothing that would prevent a vendor from putting
+> a PCI HC into a TB3 docking station.
+
+Below is diff between lspci output without and with Thunderbolt 3 dock
+connected.
+
+--- no-dock	2023-05-23 11:20:13.709836495 +0200
++++ tbt3-dock	2023-05-23 11:21:31.052970007 +0200
+@@ -1,24 +1,31 @@
+ 00:00.0 Host bridge: Intel Corporation Device 4601 (rev 04)
+ 00:02.0 VGA compatible controller: Intel Corporation Alder Lake-UP3 GT2 [I=
+ris Xe Graphics] (rev 0c)
+ 00:04.0 Signal processing controller: Intel Corporation Alder Lake Innovat=
+ion Platform Framework Processor Participant (rev 04)
+ 00:06.0 PCI bridge: Intel Corporation 12th Gen Core Processor PCI Express =
+x4 Controller #0 (rev 04)
+ 00:07.0 PCI bridge: Intel Corporation Alder Lake-P Thunderbolt 4 PCI Expre=
+ss Root Port #0 (rev 04)
+ 00:07.1 PCI bridge: Intel Corporation Alder Lake-P Thunderbolt 4 PCI Expre=
+ss Root Port #1 (rev 04)
+ 00:08.0 System peripheral: Intel Corporation 12th Gen Core Processor Gauss=
+ian & Neural Accelerator (rev 04)
+ 00:0d.0 USB controller: Intel Corporation Alder Lake-P Thunderbolt 4 USB C=
+ontroller (rev 04)
+ 00:0d.2 USB controller: Intel Corporation Alder Lake-P Thunderbolt 4 NHI #=
+0 (rev 04)
+ 00:12.0 Serial controller: Intel Corporation Alder Lake-P Integrated Senso=
+r Hub (rev 01)
+ 00:14.0 USB controller: Intel Corporation Alder Lake PCH USB 3.2 xHCI Host=
+ Controller (rev 01)
+ 00:14.2 RAM memory: Intel Corporation Alder Lake PCH Shared SRAM (rev 01)
+ 00:14.3 Network controller: Intel Corporation Alder Lake-P PCH CNVi WiFi (=
+rev 01)
+ 00:15.0 Serial bus controller: Intel Corporation Alder Lake PCH Serial IO =
+I2C Controller #0 (rev 01)
+ 00:15.1 Serial bus controller: Intel Corporation Alder Lake PCH Serial IO =
+I2C Controller #1 (rev 01)
+ 00:16.0 Communication controller: Intel Corporation Alder Lake PCH HECI Co=
+ntroller (rev 01)
+ 00:16.3 Serial controller: Intel Corporation Alder Lake AMT SOL Redirectio=
+n (rev 01)
+ 00:1d.0 PCI bridge: Intel Corporation Alder Lake PCI Express x1 Root Port =
+#10 (rev 01)
+ 00:1f.0 ISA bridge: Intel Corporation Alder Lake PCH eSPI Controller (rev =
+01)
+ 00:1f.3 Audio device: Intel Corporation Alder Lake PCH-P High Definition A=
+udio Controller (rev 01)
+ 00:1f.4 SMBus: Intel Corporation Alder Lake PCH-P SMBus Host Controller (r=
+ev 01)
+ 00:1f.5 Serial bus controller: Intel Corporation Alder Lake-P PCH SPI Cont=
+roller (rev 01)
+ 01:00.0 Non-Volatile memory controller: Sandisk Corp Device 5015 (rev 01)
++3a:00.0 PCI bridge: Intel Corporation DSL6540 Thunderbolt 3 Bridge [Alpine=
+ Ridge 4C 2015]
++3b:01.0 PCI bridge: Intel Corporation DSL6540 Thunderbolt 3 Bridge [Alpine=
+ Ridge 4C 2015]
++3b:04.0 PCI bridge: Intel Corporation DSL6540 Thunderbolt 3 Bridge [Alpine=
+ Ridge 4C 2015]
++3d:00.0 PCI bridge: Intel Corporation DSL6540 Thunderbolt 3 Bridge [Alpine=
+ Ridge 4C 2015]
++3e:01.0 PCI bridge: Intel Corporation DSL6540 Thunderbolt 3 Bridge [Alpine=
+ Ridge 4C 2015]
++3e:04.0 PCI bridge: Intel Corporation DSL6540 Thunderbolt 3 Bridge [Alpine=
+ Ridge 4C 2015]
++3f:00.0 USB controller: ASMedia Technology Inc. ASM1042A USB 3.0 Host Cont=
+roller
+ 72:00.0 Unassigned class [ff00]: Realtek Semiconductor Co., Ltd. RTS525A P=
+CI Express Card Reader (rev 01)
+
+
+--=20
+Tomasz Mo=C5=84        | Senior Firmware Engineer
+P +48 882 826 111 | Wroc=C5=82aw, Poland
+nordicsemi.com    | devzone.nordicsemi.com
