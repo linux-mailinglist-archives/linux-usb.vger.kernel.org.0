@@ -2,77 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80AFD70E266
-	for <lists+linux-usb@lfdr.de>; Tue, 23 May 2023 18:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C0970E4C9
+	for <lists+linux-usb@lfdr.de>; Tue, 23 May 2023 20:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237741AbjEWQme (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 May 2023 12:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
+        id S237394AbjEWShV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 May 2023 14:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237681AbjEWQm3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 May 2023 12:42:29 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E9A130;
-        Tue, 23 May 2023 09:42:24 -0700 (PDT)
-Received: from [192.168.1.103] (178.176.77.201) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 23 May
- 2023 19:42:16 +0300
-Subject: Re: [PATCH] usb: host: xhci: Do not re-initialize the XHCI HC if
- being removed
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     Wesley Cheng <quic_wcheng@quicinc.com>, <mathias.nyman@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <quic_jackp@quicinc.com>
-References: <20230523015354.18497-1-quic_wcheng@quicinc.com>
- <f34927c3-7f23-3971-9f16-88cb5773f973@omp.ru>
- <2023052303-dreaded-professed-d259@gregkh>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <ca38a375-d611-4084-a8ef-f4f4da72ea4f@omp.ru>
-Date:   Tue, 23 May 2023 19:42:15 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S236914AbjEWShU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 May 2023 14:37:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4512E41
+        for <linux-usb@vger.kernel.org>; Tue, 23 May 2023 11:37:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 087DC62DAB
+        for <linux-usb@vger.kernel.org>; Tue, 23 May 2023 18:36:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6A12FC4339C
+        for <linux-usb@vger.kernel.org>; Tue, 23 May 2023 18:36:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684867010;
+        bh=GG17fZfZdmnBtgquBk1U+VdaME6WxLDnOaMI483m9GE=;
+        h=From:To:Subject:Date:From;
+        b=XpEoY7B1diajLTrk5brKEVeoJ0Mglc74PbDvY5DCqzeY73FMgsGXQY1QZvYGsDttw
+         24Nji6vYh5C1T+4pyzZFrW+XiGvNRN6Ps4tyMttgJAW1NCHcMWt58izoUHCP1cms/d
+         UahPu3mDmaNZYkTYtLu7gEuI4sBFP81MnA6XNi0uVQMZ1dq45eRQRvRvkxoaHa/rN/
+         TQSQDwNyMifKh0wqgT+Vf0q/6TecN0YLc+raAT2rw7iruWO9hreBBQr9FUrOB7i89T
+         qQ2HgsvGYKb/KAU8/0YV6tHJ204ymfLspQwZRi4JxO/BYLNsAPbeyZkaRAZNkEtGlI
+         vyFOjTEK9XRvA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 328ADC43141; Tue, 23 May 2023 18:36:50 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217475] New: Foxconn / Hon Hai Bluetooth adapter 0489:e0cd
+ stops working on ThinkPad T14s AMD Gen1
+Date:   Tue, 23 May 2023 18:36:49 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: berto@igalia.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression
+Message-ID: <bug-217475-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <2023052303-dreaded-professed-d259@gregkh>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.77.201]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 05/23/2023 16:24:40
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 177559 [May 23 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 513 513 41a024eb192917672f8141390381bc9a34ec945f
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: 178.176.77.201:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.77.201
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 05/23/2023 16:29:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 5/23/2023 2:01:00 PM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,40 +71,114 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/23/23 7:33 PM, Greg KH wrote:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217475
 
->>> During XHCI resume, if there was a host controller error detected the
->>> routine will attempt to re-initialize the XHCI HC, so that it can return
->>> back to an operational state.  If the XHCI host controller is being
->>> removed, this sequence would be already handled within the XHCI halt path,
->>> leading to a duplicate set of reg ops/calls.  In addition, since the XHCI
->>> bus is being removed, the overhead added in restarting the HCD is
->>> unnecessary.  Check for the XHC state before setting the reinit_xhc
->>> parameter, which is responsible for triggering the restart.
->>>
->>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->>> ---
->>>  drivers/usb/host/xhci.c | 3 ++-
->>>  1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
->>> index b81313ffeb76..2017ed3ae4a7 100644
->>> --- a/drivers/usb/host/xhci.c
->>> +++ b/drivers/usb/host/xhci.c
->>> @@ -1028,7 +1028,8 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg)
->>>  	temp = readl(&xhci->op_regs->status);
->>>  
->>>  	/* re-initialize the HC on Restore Error, or Host Controller Error */
->>> -	if (temp & (STS_SRE | STS_HCE)) {
->>> +	if ((temp & (STS_SRE | STS_HCE)) &&
->>> +		!(xhci->xhc_state & XHCI_STATE_REMOVING)) {
->>
->>   Please add one more tab here in order not to blend it with the following lines.
-> 
-> Ick, no, please do not do that, it needs to move left instead.
+            Bug ID: 217475
+           Summary: Foxconn / Hon Hai Bluetooth adapter 0489:e0cd stops
+                    working on ThinkPad T14s AMD Gen1
+           Product: Drivers
+           Version: 2.5
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: berto@igalia.com
+        Regression: No
 
-   Don't we usually use 2 tabs to indent the continuation lines in the USB code?
+Hi,
 
-> greg k-h
+I'm running Linux on a ThinkPad T14s AMD Gen 1 and I'm having problems
+with its Bluetooth adapter.
 
-MBR, Sergey
+The adapter is a Foxconn / Hon Hai, USB ID 0489:e0cd, and it uses the
+Mediatek MT7921 driver. Sometimes it just works but often if I suspend
+the laptop and come back it stops working. This also happens when I
+use the RF kill switch. The kernel errors vary a bit depending on the
+moment but it's usually a combination of these:
+
+kernel: Bluetooth: hci0: Failed to get device id (-108)
+kernel: Bluetooth: hci0: Failed to get fw version (-108)
+kernel: bluetooth hci0: firmware: direct-loading firmware
+mediatek/BT_RAM_CODE_MT7961_1_2_hdr.bin
+kernel: Bluetooth: hci0: Execution of wmt command timed out
+kernel: Bluetooth: hci0: Failed to send wmt patch dwnld (-110)
+kernel: Bluetooth: hci0: Failed to set up firmware (-110)
+kernel: Bluetooth: hci0: HCI Enhanced Setup Synchronous Connection command =
+is
+advertised, but not supported.
+
+Interestingly I noticed that if I try to use it on a Linux VM (using
+USB passthrough) it generally works better, even when it's not working
+on the host and the guest and the host are running the same OS and
+kernel version. Still it fails sometimes, although the error messages
+tend to be a bit different:
+
+kernel: usbcore: registered new interface driver btusb
+kernel: Bluetooth: hci0: Device setup in 153593 usecs
+kernel: Bluetooth: hci0: HCI Enhanced Setup Synchronous Connection command =
+is
+advertised, but not supported.
+kernel: Bluetooth: hci0: Opcode 0x c03 failed: -110
+kernel: Bluetooth: hci0: Failed to read MSFT supported features (-110)
+kernel: Bluetooth: hci0: AOSP get vendor capabilities (-110)
+
+(I also tried the adapter with a Windows VM, again using USB
+passthrough, but here it works perfectly fine)
+
+Back to the host I found out that resetting the adapter using
+"usb_modeswitch -R -v 0489 -p e0cd" sometimes is enough to bring the
+adapter back to life and make it work. But this doesn't always
+succeed, and at some point I end up in a situation like this:
+
+kernel: xhci_hcd 0000:06:00.4: xHCI host not responding to stop endpoint
+command
+kernel: xhci_hcd 0000:06:00.4: xHCI host controller not responding, assume =
+dead
+kernel: xhci_hcd 0000:06:00.4: HC died; cleaning up
+
+Sometimes I can get out of it with this:
+
+$ echo 0000:06:00.4 > /sys/bus/pci/drivers/xhci_hcd/unbind
+$ echo 0000:06:00.4 > /sys/bus/pci/drivers/xhci_hcd/bind
+
+All this has been happening since I got the laptop, but I'm testing it
+now with Linux 6.3.3 and the problem is still there.
+
+The end result is that I basically cannot rely on the USB adapter so I
+have it almost always disabled.
+
+A bit more information about the system:
+
+$ lspci -nn | grep USB
+02:00.4 USB controller [0c03]: Realtek Semiconductor Co., Ltd. RTL811x EHCI
+host controller [10ec:816d] (rev 0e)
+05:00.0 USB controller [0c03]: Renesas Technology Corp. uPD720202 USB 3.0 H=
+ost
+Controller [1912:0015] (rev 02)
+06:00.3 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD]
+Renoir/Cezanne USB 3.1 [1022:1639]
+06:00.4 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD]
+Renoir/Cezanne USB 3.1 [1022:1639]
+
+$ lsusb
+Bus 007 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 006 Device 003: ID 0489:e0cd Foxconn / Hon Hai Wireless_Device
+Bus 006 Device 002: ID 06cb:00bd Synaptics, Inc. Prometheus MIS Touch
+Fingerprint Reader
+Bus 006 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 005 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 004 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 003 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 002 Device 002: ID 04f2:b6cb Chicony Electronics Co., Ltd Integrated Ca=
+mera
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
