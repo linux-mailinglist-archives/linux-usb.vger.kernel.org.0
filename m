@@ -2,66 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E2370E1B6
-	for <lists+linux-usb@lfdr.de>; Tue, 23 May 2023 18:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4E070E252
+	for <lists+linux-usb@lfdr.de>; Tue, 23 May 2023 18:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236991AbjEWQXX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 May 2023 12:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
+        id S237488AbjEWQdn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 May 2023 12:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233067AbjEWQXW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 May 2023 12:23:22 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73C9E5;
-        Tue, 23 May 2023 09:23:19 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d2981e3abso4506989b3a.1;
-        Tue, 23 May 2023 09:23:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684858999; x=1687450999;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BSLFIjazbnmJuk1PaO8RBmpoDwlcGuPVoUx253JXMIg=;
-        b=N/FkLRL7ItTCG2zSsiOw19DAcEG8xYItkOiFi2UcS9XVpCXu1yx7O0eLSb0WpkHhFl
-         IbmPn5zRZBPfJ64YlADS4vKRFXpXfAWaqQBEav+bG6cuUgo8pOMN0o5QYQL/DA8XejEp
-         5jXMdf+YuLLlIys7LGj7n2SkDYMCzHDojBA1BX5/HjWaGfc6gUVrEfICzlKu60q+H6nc
-         6S61SSewNVRlXtbYFZkCC3ie9LaHg5QwVRrvjq0zTkgID6s70HFadVg/DE2ToHheB5wp
-         PkcQfJt+izswOd5mwC7SyTlyV6KgVkGs7Lh3KFDkpWAcjdFA9sTl2NSRk1frfqQWyHmo
-         KNOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684858999; x=1687450999;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BSLFIjazbnmJuk1PaO8RBmpoDwlcGuPVoUx253JXMIg=;
-        b=Z0uHQCJRlD70VKZXyuRgdVq82Jky1ryOyW2rpEqsKQl1HuOJFAH/a8HZcqhU/Od1L5
-         zbt6MASyWiXfyn41lFzliotPzbeZYnp+iCdFAodWISGHQ2d+D5sg9tI2vFMPRTHDVv5D
-         W9F1JYpKxEoVx+J+S/Q69HevLxLfYxZ6dabhTksn/72tICgyKs+VOhsvTteI5Mf2oVgl
-         n6OItlw5nCjddJdwojudW1lQkESdKjg1Xh8hzs8VAEGk5FS8WcZdH/4AKc3QggTr3rXb
-         L3pj7f/MGUnERof2mJe9XPUCvCa1HX2kjUYCTdeQ5EiW2vgm2i16iKtb6hfjK47eQPg3
-         28nw==
-X-Gm-Message-State: AC+VfDxvPyKzlylT7QjSr1BeYmExQ1EK2ucEiz9z4kg6rNxMBgjhVkYk
-        +ZjZXXMO4vFMSOlJoM4b0ik=
-X-Google-Smtp-Source: ACHHUZ5Syl31doGd4JqexDKW+xM/ACKZ5a09sGX7hHRTYCLTLprkN/vhP8DA3KKKLbcs3tbpPXlZFA==
-X-Received: by 2002:a05:6a00:a20:b0:64a:4bfa:6b8d with SMTP id p32-20020a056a000a2000b0064a4bfa6b8dmr20477802pfh.6.1684858998958;
-        Tue, 23 May 2023 09:23:18 -0700 (PDT)
-Received: from ubuntu777.domain.name (36-228-81-153.dynamic-ip.hinet.net. [36.228.81.153])
-        by smtp.gmail.com with ESMTPSA id n18-20020a62e512000000b0064d6f4c8b0bsm3822212pff.94.2023.05.23.09.23.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 09:23:18 -0700 (PDT)
-From:   Min-Hua Chen <minhuadotchen@gmail.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Min-Hua Chen <minhuadotchen@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: typec: ucsi: correctly access opcode
-Date:   Wed, 24 May 2023 00:23:12 +0800
-Message-Id: <20230523162314.114274-1-minhuadotchen@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S237609AbjEWQdl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 May 2023 12:33:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD411A1;
+        Tue, 23 May 2023 09:33:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5276E62367;
+        Tue, 23 May 2023 16:33:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FED8C433D2;
+        Tue, 23 May 2023 16:33:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1684859606;
+        bh=WU8wuUmy21MK4qAdJrmBCBcvjo7GpSO/DkD02Z+SpZI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tGAyu2ndussgTOBNRGv7f91QfPhfaQJuLmNRlkwBs0UrAnb+ccgG0w9jCEYyCFO1c
+         Zk8FNdt/0CcViZWPjgcC9bBdSHgWAfpwbjpmAdv7/rHhAIq+dQj3LKgyzD75FabzlU
+         3t99TypKUxTm7sSdsFsCJYe7dMEtptHHZ8JfX5fE=
+Date:   Tue, 23 May 2023 17:33:22 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Wesley Cheng <quic_wcheng@quicinc.com>, mathias.nyman@intel.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        quic_jackp@quicinc.com
+Subject: Re: [PATCH] usb: host: xhci: Do not re-initialize the XHCI HC if
+ being removed
+Message-ID: <2023052303-dreaded-professed-d259@gregkh>
+References: <20230523015354.18497-1-quic_wcheng@quicinc.com>
+ <f34927c3-7f23-3971-9f16-88cb5773f973@omp.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f34927c3-7f23-3971-9f16-88cb5773f973@omp.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,34 +53,39 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-hdr->opcode is __le32 type, use le32_to_cpu() to cast opcode
-to integer in the switch..case statement to fix the following
-sparse warnings:
+On Tue, May 23, 2023 at 11:45:27AM +0300, Sergey Shtylyov wrote:
+> Hello!
+> 
+> On 5/23/23 4:53 AM, Wesley Cheng wrote:
+> 
+> > During XHCI resume, if there was a host controller error detected the
+> > routine will attempt to re-initialize the XHCI HC, so that it can return
+> > back to an operational state.  If the XHCI host controller is being
+> > removed, this sequence would be already handled within the XHCI halt path,
+> > leading to a duplicate set of reg ops/calls.  In addition, since the XHCI
+> > bus is being removed, the overhead added in restarting the HCD is
+> > unnecessary.  Check for the XHC state before setting the reinit_xhc
+> > parameter, which is responsible for triggering the restart.
+> > 
+> > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> > ---
+> >  drivers/usb/host/xhci.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > index b81313ffeb76..2017ed3ae4a7 100644
+> > --- a/drivers/usb/host/xhci.c
+> > +++ b/drivers/usb/host/xhci.c
+> > @@ -1028,7 +1028,8 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg)
+> >  	temp = readl(&xhci->op_regs->status);
+> >  
+> >  	/* re-initialize the HC on Restore Error, or Host Controller Error */
+> > -	if (temp & (STS_SRE | STS_HCE)) {
+> > +	if ((temp & (STS_SRE | STS_HCE)) &&
+> > +		!(xhci->xhc_state & XHCI_STATE_REMOVING)) {
+> 
+>   Please add one more tab here in order not to blend it with the following lines.
 
-drivers/usb/typec/ucsi/ucsi_glink.c:248:20: sparse: warning: restricted __le32 degrades to integer
-drivers/usb/typec/ucsi/ucsi_glink.c:248:20: sparse: warning: restricted __le32 degrades to integer
-drivers/usb/typec/ucsi/ucsi_glink.c:248:20: sparse: warning: restricted __le32 degrades to integer
+Ick, no, please do not do that, it needs to move left instead.
 
-No functional change.
-
-Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
----
- drivers/usb/typec/ucsi/ucsi_glink.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-index b454a5159896..1fe9cb5b6bd9 100644
---- a/drivers/usb/typec/ucsi/ucsi_glink.c
-+++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-@@ -245,7 +245,7 @@ static void pmic_glink_ucsi_callback(const void *data, size_t len, void *priv)
- 	struct pmic_glink_ucsi *ucsi = priv;
- 	const struct pmic_glink_hdr *hdr = data;
- 
--	switch (hdr->opcode) {
-+	switch (le32_to_cpu(hdr->opcode)) {
- 	case UC_UCSI_READ_BUF_REQ:
- 		pmic_glink_ucsi_read_ack(ucsi, data, len);
- 		break;
--- 
-2.34.1
-
+greg k-h
