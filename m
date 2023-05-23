@@ -2,142 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B027270D68A
-	for <lists+linux-usb@lfdr.de>; Tue, 23 May 2023 10:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B0070D757
+	for <lists+linux-usb@lfdr.de>; Tue, 23 May 2023 10:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235740AbjEWICn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 May 2023 04:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
+        id S235628AbjEWIZY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 May 2023 04:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235974AbjEWICk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 May 2023 04:02:40 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on20626.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::626])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D015EE0;
-        Tue, 23 May 2023 01:02:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C9me87FJajo6IXHn20ZCWm1uUwznr5jbROCFFnaJHM0VDN/bagrae5iSw6MCl9sAfcWNlIlKz108gCMrrjXrNrlrQMT1InnvHh1vDpKwVuZFAwSpVwyuqUKfHEQ8HIUl0HIBiF8O69crhqb9JMkrJFBUcIsQtMjHxQN04n89PaA82sRl+1kjZbv+2x4RCqV3giWRCUmw2BGJTq/2vcT58sOL/PuCiwDI8Dmvm4bFbiVsHgmQKx7d/UBEffmMmhmB0jvcQktakvw90G15KFaxsNdk2RXDN1XIo9WnDC/oK3Qg+JCXJc5SDbBe5FPOuueP6bU0iQBsK0J6J6QBsusENQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eo81fJmZHsRTyBsEaiVSv7dKeEvtvRcI+ad07KxRIv0=;
- b=QpRPxF5pMfT5qSoqAYyt6+vd5Kag21Qk8uQwJ3WQEo+t269LvjoKjq47yaJ6ybFvgxhhfrO9djX4OE+xZI3Tvy6x/i8WtpZKvFSnHAp4QvR2h2nbvKRN/OVm9A17M/nuId705Wq2N20IVPgxFV8AAKNcoO67OFydli0XayMTXNtf4D3QwXC5SkIJmAY0RRThY4pdQYVS7iAi9JnMeHmZjY6McdfI+wT/8Q2PDET9pV+7+XFIyHoogvyR9YtmMeQlqhxqA14sT84WDiPsJ6JxPV6EsI/avAQkz85CfNHCnMlSv7bfd6tgwSag6ST8XwkdfyTbjGWRA1CArBc4GZ5jhw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eo81fJmZHsRTyBsEaiVSv7dKeEvtvRcI+ad07KxRIv0=;
- b=GguUpuf3cniU+by0LzRzZko97+XWx2SrkPVIk2ICNchYkgmtPwC6MgfTCxQ4s/Wju9y9VHxS999i57lloSSnMdOVlWk+eYnUtsW1rmBXqWIzmpq+vvHNb64Rp5558CmEr1tgZFcf+w4XNmMXF+pVhF/OEkA9P/QTTk1jkiilahU=
-Received: from MW4PR03CA0020.namprd03.prod.outlook.com (2603:10b6:303:8f::25)
- by DM4PR12MB5359.namprd12.prod.outlook.com (2603:10b6:5:39e::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 23 May
- 2023 08:00:18 +0000
-Received: from CO1NAM11FT109.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8f:cafe::e6) by MW4PR03CA0020.outlook.office365.com
- (2603:10b6:303:8f::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28 via Frontend
- Transport; Tue, 23 May 2023 08:00:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT109.mail.protection.outlook.com (10.13.174.176) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.29 via Frontend Transport; Tue, 23 May 2023 08:00:18 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 23 May
- 2023 03:00:11 -0500
-From:   Michal Simek <michal.simek@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-        <michal.simek@xilinx.com>, <git@xilinx.com>, <piyush.mehta@amd.com>
-CC:     Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-usb@vger.kernel.org>
-Subject: [PATCH] dt-bindings: usb: xilinx: Replace Manish by Piyush
-Date:   Tue, 23 May 2023 10:00:09 +0200
-Message-ID: <504444f5c2f4e725ac39cba1d72032d5a00c7cda.1684828805.git.michal.simek@amd.com>
-X-Mailer: git-send-email 2.36.1
+        with ESMTP id S236247AbjEWIY4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 May 2023 04:24:56 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4266BE74
+        for <linux-usb@vger.kernel.org>; Tue, 23 May 2023 01:22:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.at; s=s31663417;
+        t=1684830150; i=christian.schaubschlaeger@gmx.at;
+        bh=X/8Bqwnx81nlWh7/MWYrX5anc7Iw6B8069D0lj6pvzY=;
+        h=X-UI-Sender-Class:Date:Subject:From:To:Cc:References:In-Reply-To;
+        b=O4jidIttvsAxTjGIfxBcXJ7rbxizeWiLSZZOJWmwP7IczkyGZ7uosMk4jvuBoeXsv
+         m6T2FjfEDJXpGM1WmehOPqu/vk/7jTxNJT1wx9XwvK44IcDckTVM/glAmq+vJUWxR7
+         ReZ1g5bxdx7iIWIMUzTAKrl0ZeoeJsC9+jKhbslXZ2o18rkIdVeUkBU+skuqizGNUD
+         ipDCOW9R0K/GdE782MH3mk5HMVxTjUo202BMZeH3tKKhRD67gnqlRpgq1Chtz3UBG9
+         dLJ2k4GHuxZWK2ahAr/oPFkR37jR7U1DPnQZicPMxr8jw6COrVQXGo6Ft1CC2wvgZL
+         xYtFO8Xl1m3wA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.70] ([88.116.17.66]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MvsEn-1qIl731Cdj-00svDT; Tue, 23
+ May 2023 10:22:30 +0200
+Message-ID: <c5193a7f-53c4-34da-f3b4-128356f9a6a0@gmx.at>
+Date:   Tue, 23 May 2023 10:22:28 +0200
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1474; i=michal.simek@amd.com; h=from:subject:message-id; bh=4FKBf7ilNnfh7qAml97Il1ZrBm/4wjR0cwmNGKOvuRo=; b=owGbwMvMwCR4yjP1tKYXjyLjabUkhpScorZL/IGeSieLTR79/fy78sZZ5hPCvHcidnWFJ56ut nPpEJ/REcvCIMjEICumyCJtc+XM3soZU4QvHpaDmcPKBDKEgYtTACYyuZZhwczK/hMXajnsDN5w JWVMVPh7LGqRLMP81ChXruZND/MKPm6YMfvyGwmtNJFqAA==
-X-Developer-Key: i=michal.simek@amd.com; a=openpgp; fpr=67350C9BF5CCEE9B5364356A377C7F21FE3D1F91
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT109:EE_|DM4PR12MB5359:EE_
-X-MS-Office365-Filtering-Correlation-Id: dec79204-c682-46eb-685e-08db5b63c010
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VmLxZWooxuNXvkRNCH883DwkPxBdJPrr8BP8Q923GZ8rd5Ug2oB+08Ur7j2d+/P394pEtSZ1+gDKnT1iOQitgxxQZhHMyVAcH/dz8C9oZfdjS20W6wQ9EECnC81oFS8UbcYI2rXxL4bbFo6gISsJx/llUWjaFJBg/YHu3ormYVJjskArqYf/Q0SoWEWdjpUlS+LEJJ1nyc0eGHE5cuq7NqA0lU2ZgAZLQ5LpCGp2uc/FTdHThkMsLAQD1zQMWeOmdUGyUss14fSV4vPetbMTXi8AI6bmC8jE624u0/udSiAX0rw+yzHNyLRat7OTl29EjvcHRM/FCEIexBJQU6nwdlGQ36HEUNxqS2KSomzjVMZTYAUitftb4SkJjnOd23gGfwAeHmU0wNaa9tUUd/Y7pZ+PUYR/ahbnMLLP9NeRBwdy9BLZWIl/6aMzfddoCiEkexbFe9QV7VYIghdOsUm0bBNdCYKSCmWVFAqx5USvyF0MkE1RYx1yUep39cOXY/iXkIV8G41UYRfYyWfR6tpcE4ub09lKwBXT3dOWwdWgDfY9EYUGScLMePagrIW/jlWApR9NhQaCybtTRcunR9cPpN6ckpigNxu8d0Es+1mhccuX8vRWidmGR3uKcmYcZXw31vrmR8GznIGqadZo8M1OAxu63+GPJnS+xewJyoSsceDlLpSu08h5NSezapveODqRau/w8lzG6Eudqug27yaiEAtMPQVe+hPbSuZ9FSyKp7ywQw2NlXv6V/yGNyN0qa5IyxlUaeLBuUx/YKNC8LApDo5Z+VwbMjmziRhKLKHA37c=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(376002)(136003)(346002)(451199021)(46966006)(40470700004)(36840700001)(54906003)(966005)(41300700001)(478600001)(82310400005)(110136005)(316002)(4326008)(6636002)(70586007)(70206006)(86362001)(5660300002)(8936002)(8676002)(40460700003)(44832011)(81166007)(356005)(26005)(7416002)(82740400003)(16526019)(186003)(2906002)(83380400001)(40480700001)(336012)(426003)(2616005)(36756003)(36860700001)(47076005)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 08:00:18.3841
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: dec79204-c682-46eb-685e-08db5b63c010
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT109.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5359
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: Possible problem with thunderbolt 4
+From:   =?UTF-8?Q?Christian_Schaubschl=c3=a4ger?= 
+        <christian.schaubschlaeger@gmx.at>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+References: <Y72AbwKFd9snjZrJ@black.fi.intel.com>
+ <3ccb150b-dbd9-c9d0-0e8c-8c169f0d8faf@gmx.at>
+ <Y76TS54PJpmseZs3@black.fi.intel.com>
+ <8c2da730-ba9b-6ec7-d493-1a6a2ce54622@gmx.at>
+ <Y8kXFFrue7l7DKf3@black.fi.intel.com>
+ <78c5218a-67ef-d61d-09fe-2c2cf7fdc87f@gmx.at>
+ <0c9e644e-a07d-e9bb-f8d6-692d2412fd30@gmx.at>
+ <Y9PDRYHHYNSJWwGe@black.fi.intel.com>
+ <47af73e9-0d3f-0ac2-52e6-b89a87bc602b@gmx.at>
+ <Y9fPxIKIOrkHmjHS@black.fi.intel.com>
+ <20230306115236.GE62143@black.fi.intel.com>
+ <5cb1771f-47e2-c83f-1081-6e975ed650e0@gmx.at>
+Content-Language: en-US
+In-Reply-To: <5cb1771f-47e2-c83f-1081-6e975ed650e0@gmx.at>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:aGp5RZEM0CR/LUzz9Nf5PQF6X5JjwMEJNxBeNgpr5ItzyFAcueE
+ PvDJzAsp4ly8yFgJ/L2M6Pc6W4tGbN7bKp4Km4LbCfCPduzK2jmRbJ7vZP94xE5FZjfpzYd
+ 3VHNsZhP8VahfrJJrO3ntCpOb5R6Xpp+cMKTUSkXwO8lltowUC4623ixT1LAhLxq3mCVDJ0
+ y/E2pzzbBAfjP1JCBu0qw==
+UI-OutboundReport: notjunk:1;M01:P0:m4aIn7MkGbw=;m2wAlNq1xE4yk2r6xC7OQkvs9Vd
+ M/QAWklNr/HmTKSHmkyVzOAfioivv0ikrGn9PJ2jhO0kWeHIT/8kRMWAoDKjq5zt6Hs2fUjgt
+ rh1Z6bF0DEJEfWLR1tu99r+zv0ztw7FJ/SIMHG3gpsnQWDPMClI75GsPcGMF0igiMBerDQzeW
+ 3TlFZFH+UlazjHFCHczA6+D/EwFe2L0MWu0SMwV9E9kxTnjcKX1vo56mcbjRRrO9b0m/z5EiY
+ Ss5jHCpN2C+tjerzdnc1OwupMU+R87AbF0+Qeayqp3F7UNpA8bo6M8QOSQKT0l2t1CUlQTavd
+ tQLpHifUg7cfvQi9kjD3qvVHGHnvrUlEVki16az0E8Qm22RI3kEIBU4kxXgCPCY2osOPIaEn3
+ oM8zmuBCjHv84XW5tWWgKdGw0LWbXglObeKYq/X7RPmbSEzTP4MFidM6SwdLtww9ZXaHlrp2m
+ qXstCmm+JBAlpknMLFhLZZSBIQf9w3PpzpbkPmj8aQyE6AfEDK31HJn3RG5Kg/A1iifXgL51z
+ cHtNcKTZsQoujaqE0AgAwGSpkBGQs77PE7r2kvfWMYNbIkAOJnHNIdB1C/xCKjDL+ZVa5YfyI
+ gnThn8RItzNVqp9v41blux6C3hU60WGV7/ugaK7HfepCq7pQTOoL3v9+s5gHqlayYzSsnGXgR
+ OuUf+8mRjqOnQWpLvnzjKBbW20TRflbUL/IX0Y88P6PGtNx3cxeUJk3U5WSQkxSXrnoV6CNTG
+ hLwLKDUwrA01/e/0XB4zd/bLF0AYdbZ1TgC2+mwsAZKLqOGi2wJMsClE4NDTa007eHv7kwD/8
+ c4rQY/ul7SjzsGeRK6z8RFCKaWRan9IgXkpPGtzYl1sBpuIwAnWEICVrppKMKNZMFOGuG2hyC
+ 8pfr3yhIXgcReYs1coonlegEx8+wrCDduQgLtkhFtp/x0GoLJpc9QX2ZCFZrStcTZNhJik2Pb
+ zyUDlg==
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Manish no longer works for AMD/Xilinx and there is also no activity from
-him. That's why proposing Piyush as the best candidate instead.
+Hi Mika,
 
-Signed-off-by: Michal Simek <michal.simek@amd.com>
----
+it seems that I have an issue here which seems similar to the one on the H=
+P earlier this year.
 
- Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml | 2 +-
- Documentation/devicetree/bindings/usb/xlnx,usb2.yaml   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This time the hardware is a Dell Latitude 7440 with a rather new Intel i5-=
+1345U (13th Gen.) and TB4. I have three Docks, one older Dell WD19TB, a ne=
+wer Dell WD22TB4, and a ThinkPad Universal USB-C Dock.
+With the TB4 dock everything works fine (meaning all hardware is functioni=
+ng in the UEFI firmware as well as in Windows after booting Linux first).
 
-diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-index 098b73134a1b..bb373eb025a5 100644
---- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-+++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Xilinx SuperSpeed DWC3 USB SoC controller
- 
- maintainers:
--  - Manish Narani <manish.narani@xilinx.com>
-+  - Piyush Mehta <piyush.mehta@amd.com>
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml b/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml
-index 04c123c7252a..868dffe314bc 100644
---- a/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml
-+++ b/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Xilinx udc controller
- 
- maintainers:
--  - Manish Narani <manish.narani@xilinx.com>
-+  - Piyush Mehta <piyush.mehta@amd.com>
- 
- properties:
-   compatible:
--- 
-2.36.1
+With the older TB dock, as well as with the USB-C dock the network interfa=
+ce on the dock is dead after Linux. But in contrast to the HP case from ea=
+rlier this year, this time the network interface remains dead when I boot =
+Linux again. After replugging the dock it becomes alive again.
+
+This can easilsy be reproduced by booting Ubuntu 22.04 from an USB device.=
+ Using a newer kernel with the UNSET_INBOUND_SBTX fix does not solve the i=
+ssue.
+
+I'm not sure if this is a USB or Thunderbolt issue, could be an issue with=
+ the network device, too (all three docks have the same Realtek 8153). But=
+ I don't see this problem with these docks on other Laptops I have access =
+to, so probably it's not the network device...
+
+Can I provide some logs, etc. to dive deeper into this?
+
+Thanks and best regards,
+Christian
+
+
+
+Am 06.03.23 um 13:27 schrieb Christian Schaubschl=C3=A4ger:
+> Hi Mika,
+>
+>> We are able to reproduce the issue and it was root caused to be missing
+>> UNSET_INBOUND_SBTX port operation during retimer enumeration. I posted =
+a
+>> series of fixes few minutes ago (with you Cc'd) and one of them should
+>> fix this issue:
+>>
+>> https://lore.kernel.org/linux-usb/20230306113605.46137-3-mika.westerber=
+g@linux.intel.com/
+> That's great news, thank you!
+> I'll apply this patch to a 6.1.15 kernel and give it a try. Could take a=
+ day or two, though, beacause I don't have the hardware here at the moment=
+. I'll let you know.
+>
+> Thanks and best regards,
+> Christian
+>
 
