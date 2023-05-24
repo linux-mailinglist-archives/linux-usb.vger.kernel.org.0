@@ -2,70 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D400070FE7A
-	for <lists+linux-usb@lfdr.de>; Wed, 24 May 2023 21:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0209670FE81
+	for <lists+linux-usb@lfdr.de>; Wed, 24 May 2023 21:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235667AbjEXTWg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 May 2023 15:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
+        id S230011AbjEXTYD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 May 2023 15:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233887AbjEXTWe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 May 2023 15:22:34 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC2D12F
-        for <linux-usb@vger.kernel.org>; Wed, 24 May 2023 12:22:32 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-760dff4b701so10424239f.0
-        for <linux-usb@vger.kernel.org>; Wed, 24 May 2023 12:22:32 -0700 (PDT)
+        with ESMTP id S229547AbjEXTYC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 May 2023 15:24:02 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2D8A4
+        for <linux-usb@vger.kernel.org>; Wed, 24 May 2023 12:24:00 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id ca18e2360f4ac-7748ca56133so6372739f.0
+        for <linux-usb@vger.kernel.org>; Wed, 24 May 2023 12:24:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1684956152; x=1687548152;
+        d=linuxfoundation.org; s=google; t=1684956240; x=1687548240;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=nzSqRithcVJSEIIF4wkFMi/pyzN6B3NO2/5rIhCU4EE=;
-        b=dIe6i6kAPJ6Qo4C3yDPFRKov0TLpzxQ21sIvchSBnT8P7ag8yj0zh+GqteaHfGElBQ
-         w3mDmUVEynp2Mo6kKGckHjnSW/Ue8reooO25q/oh2h2CfbXoxz2ib9pKspiFwmXE8otw
-         TwHu9H4hez70Snj/ZjtAZuKkydOt8ee4CN+SY=
+        bh=1EuGK2wj0nfYl9JFXwkFb231iqL2hB/JWylqcNoYsGM=;
+        b=gGrWhGI1hhJ5wCt1XO4BvoAIx5DvMnKjL8wm/iAWGln1Em7+zN3nFqHfl3+/dF4s8a
+         EN6HaCJoxSitJBCf4MsI5iPJxFpxEs8bPv/f6bUYJ/+rCBkwlyg2KRK1NeyAqUThQJY8
+         hZX9LqWsJ3pWtyrpPUMZm9Z+C+p0mt7wKvzDg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684956152; x=1687548152;
+        d=1e100.net; s=20221208; t=1684956240; x=1687548240;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nzSqRithcVJSEIIF4wkFMi/pyzN6B3NO2/5rIhCU4EE=;
-        b=cc3Esob/E9YPHacO2VOnivLnVHmxFrijheufzrFkjOZaNSQ2cTQb+HRvxWUncb/vBS
-         UqcR6EKGHbyO++EPwFIjBBD46fsvS2VLATliG6u38VMLgSP0fps3kj8aOalFDuoPcaTV
-         VysfWwv1ti53yh1N2sNt6X00L5iONyXFDjFN6CdpLyheSqCyvNg4ZopgvHYgSCH3zlJo
-         uEH1LWdTl9LfdkSKrUABZewTBYXz13P57JCROFtbdPJo6ET6QyxaZMslsgv0N3kDsSHb
-         Eia9O/wVoWhrZnS2jZ2KIh0fY5n6RiQ0yTu5s1xJq7sPlUBVoBPVvhvJyUJj9EzP+uPp
-         J1FA==
-X-Gm-Message-State: AC+VfDwwQk9glcbocW71xOJ87bLt9kMTK8VA94frMT1XUq08wn+VJbEj
-        AsndvOsaDy7H+CttzL1vpy7mBUae0Ha/XR6yXhg=
-X-Google-Smtp-Source: ACHHUZ409Nzg7vxKlMBpUGCxITyf6iMa6U06QpDvNebhfhN5ozMerlUhqz35xPJGg7puzuoaaiYf7Q==
-X-Received: by 2002:a6b:14cf:0:b0:774:9337:2d4c with SMTP id 198-20020a6b14cf000000b0077493372d4cmr1594405iou.1.1684956151980;
-        Wed, 24 May 2023 12:22:31 -0700 (PDT)
+        bh=1EuGK2wj0nfYl9JFXwkFb231iqL2hB/JWylqcNoYsGM=;
+        b=hziLa4H+o73f+6Tg641hBCVW6OXiOagFeHoQbTAHA0WAqHkqK+jZIwHFRRJBi8K2Dv
+         zNPk2fYf/O9g2jAK3pJE3z8nnPlF9z7Ys65RpKqi2LT7Ct/mlLtdMqjTYC4rMA3F2mur
+         hpkieSoscnK0XcIEpl7xd2xG1V4oSHOqzsYIsxH8eSVfGAUT1R84K57ewTMer7P6H7aS
+         E8vMsXh9acKvdu3bM0Xf30G5CdYMB6bD102Qi1fH7rCP8HIEBXh35iFJtlFtl81eU6pY
+         MzmB4laZCmP9caylEj28IsQ9pPJeU0LSmSnO1Ub6FWa9ZfQ4ykOUpGVie35xlqhSz8O8
+         KkAg==
+X-Gm-Message-State: AC+VfDye7X+uSp0o3Uw9zBuOouA2KK3AR68+wQZ1y4+ClI0/BL93Upx9
+        QFzRVvNw/QGHbGvR1QUIWSZrTA==
+X-Google-Smtp-Source: ACHHUZ5xkCfNh5peiQSqkO9jk8dLN1bjBsJPtf4uwjI3rbXQJC/z6eWUS8FESjevIHqZPPOQ6/YbkQ==
+X-Received: by 2002:a05:6e02:482:b0:32a:eacb:c5d4 with SMTP id b2-20020a056e02048200b0032aeacbc5d4mr9081629ils.0.1684956240322;
+        Wed, 24 May 2023 12:24:00 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id z21-20020a6be215000000b00774efe6fa24sm25647ioc.10.2023.05.24.12.22.31
+        by smtp.gmail.com with ESMTPSA id x24-20020a029718000000b0040f8b6933f0sm3261660jai.74.2023.05.24.12.23.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 12:22:31 -0700 (PDT)
-Message-ID: <68a74574-142c-6aff-50eb-2edf67139b21@linuxfoundation.org>
-Date:   Wed, 24 May 2023 13:22:30 -0600
+        Wed, 24 May 2023 12:23:59 -0700 (PDT)
+Message-ID: <e4bf6e65-c4d4-30a9-08f1-207689266842@linuxfoundation.org>
+Date:   Wed, 24 May 2023 13:23:59 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 97/97] usbip: vhci_hcd: Convert to platform remove
- callback returning void
+Subject: Re: [PATCH] usbip: give a more helpful error message if vhdi_hcd
+ isn't loaded
 Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Hongren Zheng <i@zenithal.me>, linux-usb@vger.kernel.org,
-        kernel@pengutronix.de, Shuah Khan <skhan@linuxfoundation.org>
-References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
- <20230517230239.187727-98-u.kleine-koenig@pengutronix.de>
+To:     Hongren Zheng <i@zenithal.me>, Galen Guyer <galen@galenguyer.com>
+Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230508212120.435329-1-galen@galenguyer.com>
+ <ZFmtO64UqItxjsSz@Sun> <ZFmv033l5ahyrlVc@Sun>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230517230239.187727-98-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <ZFmv033l5ahyrlVc@Sun>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -76,21 +74,15 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/17/23 17:02, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart from
-> emitting a warning) and this typically results in resource leaks. To improve
-> here there is a quest to make the remove callback return void. In the first
-> step of this quest all drivers are converted to .remove_new() which already
-> returns void. Eventually after all drivers are converted, .remove_new() is
-> renamed to .remove().
-> 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
+On 5/8/23 20:28, Hongren Zheng wrote:
+> On Tue, May 09, 2023 at 10:17:31AM +0800, Hongren Zheng wrote:
+>> On Mon, May 08, 2023 at 05:21:20PM -0400, Galen Guyer wrote:
+>>> Suggest loading vhdi_hcd if it's not loaded to make error message less opaque
+>>>
+>>> Signed-off-by: Galen Guyer <galen@galenguyer.com>
+>>
+>> Reviewed-By: Hongren Zheng <i@zenithal.me>
+>>
 
 Looks good to me.
 
