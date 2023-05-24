@@ -2,206 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C782670F669
-	for <lists+linux-usb@lfdr.de>; Wed, 24 May 2023 14:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D9370F7C3
+	for <lists+linux-usb@lfdr.de>; Wed, 24 May 2023 15:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233258AbjEXM3L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 May 2023 08:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49902 "EHLO
+        id S235028AbjEXNil (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 May 2023 09:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233185AbjEXM3I (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 May 2023 08:29:08 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76A5189;
-        Wed, 24 May 2023 05:29:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684931346; x=1716467346;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jYinoiwSTAG2jM4KAb/D7mX4WCXztKTtVt7qQRZL8Zk=;
-  b=f/Kmr9pIXk2D499DhJeezMT9Xr1fZzzBRKI2tjX6gpqETYjrOZc4887y
-   k7eNve6MtEzRwOJ2iX5lP/k0HTThJdAzQBJ7zIwQ3JLJEGdTti+4msVfr
-   Q1Dp55sWUmSQKnzq3DsMwNqHmzBPS+tpj90rG8ky+8gHOB2wyPsol+Gdl
-   0arhepNn4kMhNCwhziz3kUt0tprwXjUjMYS1KDSzKOU0I+vLu3mYK0xdp
-   pTGLdzhn1xc5Nu8Di6/OqdX2NrfKXL13Cn0bnBw4YdEvu4vw/Gl2Iy8cG
-   vVX0ef14b1F5JRf7Q3IF4ZTynEAoIvA5xRaeqN2CcpZOMZDHYthT3D+uk
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="333904927"
-X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
-   d="scan'208";a="333904927"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 05:29:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="848731385"
-X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
-   d="scan'208";a="848731385"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 24 May 2023 05:29:02 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        chrome-platform@lists.linux.dev, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>
-Subject: [PATCH v1 2/2] usb: typec: mux: Remove alt mode parameters from the API
-Date:   Wed, 24 May 2023 15:29:01 +0300
-Message-Id: <20230524122901.53659-3-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230524122901.53659-1-heikki.krogerus@linux.intel.com>
-References: <20230524122901.53659-1-heikki.krogerus@linux.intel.com>
+        with ESMTP id S230444AbjEXNik (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 May 2023 09:38:40 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDCEA9;
+        Wed, 24 May 2023 06:38:38 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34OBuOX7027585;
+        Wed, 24 May 2023 13:38:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=26Xe+0U7QMwhVh87IRNZwFBbY3ioRoGzRLacuVsKBEY=;
+ b=Yrk9wlrusa/ztg87WUw0WNCR121ZvOGX+l6WFY+EoKG8llGOhncAqJlm/SJV7EIjSlrO
+ wnbCO8jzR9FnDyFoM8XzsbPqt41xOjjTGs4kKrL1IXSYEnjcCU307oTshENgy85lacFe
+ FYiVl3Gm579pspGOs/rRCSPTLjxRzJ7dk33yWgATFDJiOS08f+tk80oI67wLfxHxvmU9
+ A71gi3UD9uf+OHaI+QvAdzicD4CAviA9KPnGQI+Zg20oNsrTUuGfVXjcd6OrDrWq9kTu
+ +CO/XisZOd7m01B+/KFliy+kFQuCCA4n1TF5QLJaK92CqCkKAKkMEAhyqFpC1ZJ0jNlH Yw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qs6981kru-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 13:38:28 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34ODcR9d019414
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 13:38:27 GMT
+Received: from [10.217.219.52] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 24 May
+ 2023 06:38:25 -0700
+Message-ID: <df3ddd18-f893-23d3-f035-d2f3572f1258@quicinc.com>
+Date:   Wed, 24 May 2023 19:06:41 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1684918441-14794-1-git-send-email-quic_prashk@quicinc.com>
+ <ebbbee51-8792-6c35-c29b-adb7f83dda23@collabora.com>
+From:   Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <ebbbee51-8792-6c35-c29b-adb7f83dda23@collabora.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: BuScpakT4Y0KHAtxZYB_u0Pqh9riFyh9
+X-Proofpoint-GUID: BuScpakT4Y0KHAtxZYB_u0Pqh9riFyh9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-24_09,2023-05-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=868
+ impostorscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0
+ bulkscore=0 malwarescore=0 suspectscore=0 priorityscore=1501 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305240111
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The alt mode descriptor parameters are not used anymore.
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Prashant Malani <pmalani@chromium.org>
-Cc: Benson Leung <bleung@chromium.org>
-Cc: Bjorn Andersson <andersson@kernel.org>
----
- drivers/platform/chrome/cros_ec_typec.c |  2 +-
- drivers/soc/qcom/pmic_glink_altmode.c   |  5 +----
- drivers/usb/typec/class.c               |  4 ++--
- drivers/usb/typec/mux.c                 |  6 ++----
- include/linux/usb/typec_mux.h           | 11 ++++-------
- 5 files changed, 10 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-index a673c33424706..25f9767c28e82 100644
---- a/drivers/platform/chrome/cros_ec_typec.c
-+++ b/drivers/platform/chrome/cros_ec_typec.c
-@@ -77,7 +77,7 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
- {
- 	int ret = 0;
- 
--	port->mux = fwnode_typec_mux_get(fwnode, NULL);
-+	port->mux = fwnode_typec_mux_get(fwnode);
- 	if (IS_ERR(port->mux)) {
- 		ret = PTR_ERR(port->mux);
- 		dev_dbg(dev, "Mux handle not found: %d.\n", ret);
-diff --git a/drivers/soc/qcom/pmic_glink_altmode.c b/drivers/soc/qcom/pmic_glink_altmode.c
-index 4d7895bdeaf2f..df48fbea4b686 100644
---- a/drivers/soc/qcom/pmic_glink_altmode.c
-+++ b/drivers/soc/qcom/pmic_glink_altmode.c
-@@ -369,7 +369,6 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
- {
- 	struct pmic_glink_altmode_port *alt_port;
- 	struct pmic_glink_altmode *altmode;
--	struct typec_altmode_desc mux_desc = {};
- 	const struct of_device_id *match;
- 	struct fwnode_handle *fwnode;
- 	struct device *dev = &adev->dev;
-@@ -427,9 +426,7 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
- 		alt_port->dp_alt.mode = USB_TYPEC_DP_MODE;
- 		alt_port->dp_alt.active = 1;
- 
--		mux_desc.svid = USB_TYPEC_DP_SID;
--		mux_desc.mode = USB_TYPEC_DP_MODE;
--		alt_port->typec_mux = fwnode_typec_mux_get(fwnode, &mux_desc);
-+		alt_port->typec_mux = fwnode_typec_mux_get(fwnode);
- 		if (IS_ERR(alt_port->typec_mux))
- 			return dev_err_probe(dev, PTR_ERR(alt_port->typec_mux),
- 					     "failed to acquire mode-switch for port: %d\n",
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 349cc2030c903..faa184ae3dac8 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -2110,7 +2110,7 @@ typec_port_register_altmode(struct typec_port *port,
- 	struct typec_mux *mux;
- 	struct typec_retimer *retimer;
- 
--	mux = typec_mux_get(&port->dev, desc);
-+	mux = typec_mux_get(&port->dev);
- 	if (IS_ERR(mux))
- 		return ERR_CAST(mux);
- 
-@@ -2274,7 +2274,7 @@ struct typec_port *typec_register_port(struct device *parent,
- 		return ERR_PTR(ret);
- 	}
- 
--	port->mux = typec_mux_get(&port->dev, NULL);
-+	port->mux = typec_mux_get(&port->dev);
- 	if (IS_ERR(port->mux)) {
- 		ret = PTR_ERR(port->mux);
- 		put_device(&port->dev);
-diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-index 089c2fd478318..a29945e2eb077 100644
---- a/drivers/usb/typec/mux.c
-+++ b/drivers/usb/typec/mux.c
-@@ -287,15 +287,13 @@ static void *typec_mux_match(const struct fwnode_handle *fwnode,
- /**
-  * fwnode_typec_mux_get - Find USB Type-C Multiplexer
-  * @fwnode: The caller device node
-- * @desc: Alt Mode description
-  *
-  * Finds a mux linked to the caller. This function is primarily meant for the
-  * Type-C drivers. Returns a reference to the mux on success, NULL if no
-  * matching connection was found, or ERR_PTR(-EPROBE_DEFER) when a connection
-  * was found but the mux has not been enumerated yet.
-  */
--struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
--				       const struct typec_altmode_desc *desc)
-+struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode)
- {
- 	struct typec_mux_dev *mux_devs[TYPEC_MUX_MAX_DEVS];
- 	struct typec_mux *mux;
-@@ -308,7 +306,7 @@ struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
- 		return ERR_PTR(-ENOMEM);
- 
- 	count = fwnode_connection_find_matches(fwnode, "mode-switch",
--					       (void *)desc, typec_mux_match,
-+					       NULL, typec_mux_match,
- 					       (void **)mux_devs,
- 					       ARRAY_SIZE(mux_devs));
- 	if (count <= 0) {
-diff --git a/include/linux/usb/typec_mux.h b/include/linux/usb/typec_mux.h
-index 9292f0e078464..11bfa314529fd 100644
---- a/include/linux/usb/typec_mux.h
-+++ b/include/linux/usb/typec_mux.h
-@@ -60,8 +60,7 @@ struct typec_mux_desc {
- 
- #if IS_ENABLED(CONFIG_TYPEC)
- 
--struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
--				       const struct typec_altmode_desc *desc);
-+struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode);
- void typec_mux_put(struct typec_mux *mux);
- int typec_mux_set(struct typec_mux *mux, struct typec_mux_state *state);
- 
-@@ -74,8 +73,7 @@ void *typec_mux_get_drvdata(struct typec_mux_dev *mux);
- 
- #else
- 
--static inline struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
--				       const struct typec_altmode_desc *desc)
-+static inline struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode);
- {
- 	return NULL;
- }
-@@ -102,10 +100,9 @@ static inline void *typec_mux_get_drvdata(struct typec_mux_dev *mux)
- 
- #endif /* CONFIG_TYPEC */
- 
--static inline struct typec_mux *
--typec_mux_get(struct device *dev, const struct typec_altmode_desc *desc)
-+static inline struct typec_mux *typec_mux_get(struct device *dev)
- {
--	return fwnode_typec_mux_get(dev_fwnode(dev), desc);
-+	return fwnode_typec_mux_get(dev_fwnode(dev));
- }
- 
- #endif /* __USB_TYPEC_MUX */
--- 
-2.39.2
+On 24-05-23 03:10 pm, AngeloGioacchino Del Regno wrote:
+> Il 24/05/23 10:54, Prashanth K ha scritto:
+>> Currently if we bootup a device without cable connected, then
+>> usb-conn-gpio won't call set_role() since last_role is same as
+>> current role. This happens because during probe last_role gets
+>> initialised to zero.
+>>
+>> To avoid this, last_role is set to USB_ROLE_UNKNOWN before
+>> performing the initial detection.
+>>
+>> Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection 
+>> detection driver")
+>> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+>> ---
+>>   drivers/usb/common/usb-conn-gpio.c | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/usb/common/usb-conn-gpio.c 
+>> b/drivers/usb/common/usb-conn-gpio.c
+>> index e20874c..00af735 100644
+>> --- a/drivers/usb/common/usb-conn-gpio.c
+>> +++ b/drivers/usb/common/usb-conn-gpio.c
+>> @@ -27,6 +27,8 @@
+>>   #define USB_CONN_IRQF    \
+>>       (IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT)
+>> +#define USB_ROLE_UNKNOWN    -1
+> 
+> I would add USB_ROLE_UNKNOWN to `enum usb_role` instead.
+> 
+> enum usb_role {
+>      USB_ROLE_UNKNOWN = -1,
+>      USB_ROLE_NONE,
+>      ....
+> };
+> 
+> Regards,
+> Angelo
 
+Thanks for the suggestion Agnelo. Will change it in next patch.
+
+Regards,
+Prashanth K
