@@ -2,59 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B51F70FD24
-	for <lists+linux-usb@lfdr.de>; Wed, 24 May 2023 19:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D400070FE7A
+	for <lists+linux-usb@lfdr.de>; Wed, 24 May 2023 21:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbjEXRtP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 May 2023 13:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
+        id S235667AbjEXTWg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 May 2023 15:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235933AbjEXRtN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 May 2023 13:49:13 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7F4B6
-        for <linux-usb@vger.kernel.org>; Wed, 24 May 2023 10:49:10 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-6238b15d298so348446d6.0
-        for <linux-usb@vger.kernel.org>; Wed, 24 May 2023 10:49:10 -0700 (PDT)
+        with ESMTP id S233887AbjEXTWe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 May 2023 15:22:34 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC2D12F
+        for <linux-usb@vger.kernel.org>; Wed, 24 May 2023 12:22:32 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-760dff4b701so10424239f.0
+        for <linux-usb@vger.kernel.org>; Wed, 24 May 2023 12:22:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684950549; x=1687542549;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=aNjYEyfiKsUmWEvKSDejhmYGJVl/ll0zEWjyhs/ooFo=;
-        b=sLQm0jjAkwCgIsIHcCWCXHo55i8r4fDg7I7zjNHWZ2y5ZOUsgCaSi8CU7grNt5Fqsy
-         4t172XFm3VuzqrbD3/e5u0PX3mfByOYz6fd5+YQjvYj167yK2woosOTnND+jsMOZroXV
-         pYnJEGL4QxWk6YyW8bh4VMGHpP0JmXjgGcr8UoRzgSMwpHwsr5st9NjEAaGT4KaOih6M
-         6rI8pc5BzZnivmUtwQhdBB+1u8ZmqDXFCGq7Zkn6+YkblaWUmzwWfDFIt7M4kzCj98kX
-         wLhcAYyldV4KN2lQIL5tGld2P+J5dbR6in8EAZKgP95ew2Ep1UcDrL28onTN+O3UHxA+
-         xF7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684950549; x=1687542549;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+        d=linuxfoundation.org; s=google; t=1684956152; x=1687548152;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=aNjYEyfiKsUmWEvKSDejhmYGJVl/ll0zEWjyhs/ooFo=;
-        b=YrV/+BR7LIVFs1yAsDPJTt8oar8oYmBYURxeA4oXoGaK/Voe+hEA5bsIuxJVZKp1qI
-         10M4yhEfz105XQUqevBXcWVZGYUJTLoZzshIasVMDqG3M/4cl7N8mDoJxaoMZwwjOXHU
-         MTaMmAivBYtaGbzkI3L6D9mfI0zgxlD951NIQCTE6ZCVQ1Bgl+KwGGcsF9Xcf9Wck48a
-         bn9nM1sPJyW/2HJSIRgXyACmu322UKUjKAZ2ZFN8XhHMvXps3VPdYa6kuxPSTY33RVrm
-         qwTdilLl+Us+WDzCRdKI3g6trizshkb1eI+S/LoY8SqkcNgFcd/CvtWHeBNIxqcc370f
-         dclQ==
-X-Gm-Message-State: AC+VfDyFMUtJ2cRGIAXY6gG6GJVQ0rZq7Xno3jApfwBuq3Ua/NFJUrqq
-        x+OHqHIdzfGNSOEE5/X+Wvy8o720V/U4LzOietQ=
-X-Google-Smtp-Source: ACHHUZ5e5brC5NmkWwjcHV+V8PU/EvkRJuV7iI9viikNCH7za9MhYfCzeSOCNL2JpzpF1ME8586dhGM2/eIWEwZiEvw=
-X-Received: by 2002:ad4:5e8b:0:b0:625:aa49:ceb5 with SMTP id
- jl11-20020ad45e8b000000b00625aa49ceb5mr3010106qvb.62.1684950549539; Wed, 24
- May 2023 10:49:09 -0700 (PDT)
+        bh=nzSqRithcVJSEIIF4wkFMi/pyzN6B3NO2/5rIhCU4EE=;
+        b=dIe6i6kAPJ6Qo4C3yDPFRKov0TLpzxQ21sIvchSBnT8P7ag8yj0zh+GqteaHfGElBQ
+         w3mDmUVEynp2Mo6kKGckHjnSW/Ue8reooO25q/oh2h2CfbXoxz2ib9pKspiFwmXE8otw
+         TwHu9H4hez70Snj/ZjtAZuKkydOt8ee4CN+SY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684956152; x=1687548152;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nzSqRithcVJSEIIF4wkFMi/pyzN6B3NO2/5rIhCU4EE=;
+        b=cc3Esob/E9YPHacO2VOnivLnVHmxFrijheufzrFkjOZaNSQ2cTQb+HRvxWUncb/vBS
+         UqcR6EKGHbyO++EPwFIjBBD46fsvS2VLATliG6u38VMLgSP0fps3kj8aOalFDuoPcaTV
+         VysfWwv1ti53yh1N2sNt6X00L5iONyXFDjFN6CdpLyheSqCyvNg4ZopgvHYgSCH3zlJo
+         uEH1LWdTl9LfdkSKrUABZewTBYXz13P57JCROFtbdPJo6ET6QyxaZMslsgv0N3kDsSHb
+         Eia9O/wVoWhrZnS2jZ2KIh0fY5n6RiQ0yTu5s1xJq7sPlUBVoBPVvhvJyUJj9EzP+uPp
+         J1FA==
+X-Gm-Message-State: AC+VfDwwQk9glcbocW71xOJ87bLt9kMTK8VA94frMT1XUq08wn+VJbEj
+        AsndvOsaDy7H+CttzL1vpy7mBUae0Ha/XR6yXhg=
+X-Google-Smtp-Source: ACHHUZ409Nzg7vxKlMBpUGCxITyf6iMa6U06QpDvNebhfhN5ozMerlUhqz35xPJGg7puzuoaaiYf7Q==
+X-Received: by 2002:a6b:14cf:0:b0:774:9337:2d4c with SMTP id 198-20020a6b14cf000000b0077493372d4cmr1594405iou.1.1684956151980;
+        Wed, 24 May 2023 12:22:31 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id z21-20020a6be215000000b00774efe6fa24sm25647ioc.10.2023.05.24.12.22.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 12:22:31 -0700 (PDT)
+Message-ID: <68a74574-142c-6aff-50eb-2edf67139b21@linuxfoundation.org>
+Date:   Wed, 24 May 2023 13:22:30 -0600
 MIME-Version: 1.0
-From:   Alexander Timofeev <alex42timofeev@gmail.com>
-Date:   Wed, 24 May 2023 20:48:58 +0300
-Message-ID: <CAM82uABnohNw1Rv8q7qJi-WT9wXCuHyYV5w3++A_EeaodZr46A@mail.gmail.com>
-Subject: [BUG] Potential race condition in usbip attach
-To:     valentina.manea.m@gmail.com, shuah@kernel.org,
-        skhan@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 97/97] usbip: vhci_hcd: Convert to platform remove
+ callback returning void
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Hongren Zheng <i@zenithal.me>, linux-usb@vger.kernel.org,
+        kernel@pengutronix.de, Shuah Khan <skhan@linuxfoundation.org>
+References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
+ <20230517230239.187727-98-u.kleine-koenig@pengutronix.de>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230517230239.187727-98-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,25 +76,26 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi!
+On 5/17/23 17:02, Uwe Kleine-König wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is ignored (apart from
+> emitting a warning) and this typically results in resource leaks. To improve
+> here there is a quest to make the remove callback return void. In the first
+> step of this quest all drivers are converted to .remove_new() which already
+> returns void. Eventually after all drivers are converted, .remove_new() is
+> renamed to .remove().
+> 
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
 
-Sorry if you have received this email twice. My first email contained
-html and was not accepted by the mailing list.
+Looks good to me.
 
-I think I have found a race condition which can be triggered for
-example when calling two usbip attach commands in parallel on the same
-host.
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-In file linux/tools/usb/usbip/src /usbip_attach.c:
-In function static int import_device(int sockfd, struct usbip_usb_device *udev):
+thanks,
+-- Shuah
 
-At first two processes may call usbip_vhci_driver_open() before
-entering the do-while loop.
-Next they both call usbip_vhci_get_free_port() and get the same free port.
-Finally, they pass the same port number to usbip_vhci_attach_device().
-
-Current recommendation to end users: run usbip attach commands only
-sequentially.
-
-Best,
-Alexander Timofeev
