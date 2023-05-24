@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B78070F1BD
-	for <lists+linux-usb@lfdr.de>; Wed, 24 May 2023 11:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB1170F1DC
+	for <lists+linux-usb@lfdr.de>; Wed, 24 May 2023 11:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240172AbjEXJFM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 May 2023 05:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
+        id S240548AbjEXJLx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 May 2023 05:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240314AbjEXJFJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 May 2023 05:05:09 -0400
+        with ESMTP id S240568AbjEXJLt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 May 2023 05:11:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C443D132
-        for <linux-usb@vger.kernel.org>; Wed, 24 May 2023 02:05:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2EC97
+        for <linux-usb@vger.kernel.org>; Wed, 24 May 2023 02:11:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5072E62DBD
-        for <linux-usb@vger.kernel.org>; Wed, 24 May 2023 09:05:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B3D28C4339B
-        for <linux-usb@vger.kernel.org>; Wed, 24 May 2023 09:05:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A78E63085
+        for <linux-usb@vger.kernel.org>; Wed, 24 May 2023 09:11:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C2704C4339B
+        for <linux-usb@vger.kernel.org>; Wed, 24 May 2023 09:11:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684919106;
-        bh=1gubJl0zdt0iG3Qx2UpMaAzTHqtHlZGO2E1AH5uYvgM=;
+        s=k20201202; t=1684919507;
+        bh=aWJ+aX984aXxVMCDDyW44M8/veBJMTP6PxV6JAUVEH0=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=eYQJw0pHpnfmc/kQLzEJRc7lJOCFw3wSTbc5m9h0/rAFmBBYmql7r76BBK5Ip+kmG
-         yhX1NyCzvb/qR/LT2tod8m0fRDXNYkeGbCvU4fWib8ZvkX0hBEHXPQJSOaTmd6DnF6
-         lUgenVrZgX8P9Y297adpmMH6nIiFyTwW4RXi//0cqtD7JNGTTPB9oE1cItSQW/6exZ
-         2QIDJUHi3l36oiv3gVBhIqyX15g7nVZSjQ8K1p9RQiU+EkfhhoqjZqD2coQphTXbhs
-         nIdaBJhZyegTNsyzv5hXONVV4V7FySo9toG0cni1EaovaUICZyCsoXEqUVm9Fv3uzk
-         SfZnAcYBv37vg==
+        b=PPDHA7gYfMOeAwvkPiK5lwN234rqkmMOj0pjMSbrQL+omwlTB7EryoUjSfkgCU55i
+         MeK+dLGPHIn4BY39tzc66A08oqsybxFkuLWGCaSYe2svF/orUuuG5o2C2ANpnOjXWa
+         yVF6fNXxeaZJHysFovOr5yJSisHFCuxJESnnkidyBfSr6gsHWybStzo9L9f1p/lZ5m
+         paVGH1g1RhlOiiLDR09mAHOXFkiQWv1dAtGpkj0KpW7+3AglGC3aQ2qsgw+KcQJBya
+         oPLi/XLR6QiSfCtFreq94mSZIt4vV3G9sNKfEKwmGhV7UhdPo8faaDxNzHmFIBLa0y
+         Kg9YoOrrqXmJA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 9CC30C43141; Wed, 24 May 2023 09:05:06 +0000 (UTC)
+        id A21B8C43142; Wed, 24 May 2023 09:11:47 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 217475] Foxconn / Hon Hai Bluetooth adapter 0489:e0cd stops
  working on ThinkPad T14s AMD Gen1
-Date:   Wed, 24 May 2023 09:05:06 +0000
+Date:   Wed, 24 May 2023 09:11:47 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -53,7 +53,7 @@ X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217475-208809-UsyUCgQHcF@https.bugzilla.kernel.org/>
+Message-ID: <bug-217475-208809-4OFNOn9PaF@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-217475-208809@https.bugzilla.kernel.org/>
 References: <bug-217475-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -73,38 +73,15 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D217475
 
---- Comment #2 from Alberto Garcia (berto@igalia.com) ---
-I have always had this problem with this computer. Linux got support for th=
-is
-Bluetooth adapter in 5.14 if I'm not wrong (64832df2ac05) and I probably tr=
-ied
-it for the first time with 5.15.3. I never saw it working fine, and I have
-tried lots of kernels and firmware versions since then. The most recent one=
- was
-6.3.3 as I mentioned in the bug report.
+--- Comment #3 from Alberto Garcia (berto@igalia.com) ---
+One more thing: when it's working on Linux it seems to be reliable, at leas=
+t I
+have never had the situation where I'm listening to music and it suddenly s=
+tops
+working.
 
-Since I can make it work with a Windows VM using USB passthrough I assume t=
-hat
-there's some problem with the initialization of the adapter, the HCI or
-something like that, but that's all I can guess with my limited knowledge of
-USB.
-
-To make it clear: when I talk about using a VM I'm talking about the scenar=
-io
-where
-
-1) I cannot use Bluetooth in my Linux system because of one of the errors t=
-hat
-I mentioned earlier ("hci0: Failed to get device id (-108)"). The device is=
- not
-detected by the Bluetooth stack although it does appears in lsusb.
-2) I launch a Windows VM using QEMU right away, without rebooting the compu=
-ter
-or doing anything else. The BT adapter works in that VM always.
-3) If I launch a Linux VM instead it tends to work, not always in this case=
- but
-I have a higher success rate than if I remove and reload the btusb module on
-the host.
+In my experience the problem appears when the adapter is disabled and then
+re-enabled, either when the laptop is suspended or with the RF kill switch.
 
 --=20
 You may reply to this email to add a comment.
