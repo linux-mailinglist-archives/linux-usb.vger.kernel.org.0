@@ -2,116 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C20470F183
-	for <lists+linux-usb@lfdr.de>; Wed, 24 May 2023 10:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B78070F1BD
+	for <lists+linux-usb@lfdr.de>; Wed, 24 May 2023 11:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240324AbjEXIyV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 May 2023 04:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
+        id S240172AbjEXJFM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 May 2023 05:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240169AbjEXIyU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 May 2023 04:54:20 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8A0FC;
-        Wed, 24 May 2023 01:54:18 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34O7ZRhU003297;
-        Wed, 24 May 2023 08:54:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=YnHB7FpBtR8Tse8rs4GaIWlXq+QS5MQbGYPk6a0WV9s=;
- b=TdYIAymkxInBAXWDz6DVR6tFm7ZvmRUKPPOtDGfFeVG5U32TYrK+DLL/Mfo804VbQknv
- NLkuNHfBjcHfAXux1krvjAyeMHVBkdkjWytJ3D2NUubbKAB1ANnMOcDoF9Km4CZ06+Hf
- bQ/85XR54g/a9+n2tcGVgvrVAEWIos9zbVcLwVuwZMdwVGPh4cZhzqNKUTlNXwVu7d0P
- Vjmgr/n8dBafvgpDwgX6vY0lE9+nSsMQhpQdssjwOLS8jStMhKXeeECUsmQgGN9qFCeG
- VGWznxRiArAYHMw10ByPV8PvN933+/Z/ONMcW1ZO0Wd86PVlH6tVJxESvvRYRWdT3QHY 5Q== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qs05sa128-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 08:54:15 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34O8sEYN032504
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 08:54:14 GMT
-Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 24 May 2023 01:54:12 -0700
-From:   Prashanth K <quic_prashk@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Prashanth K <quic_prashk@quicinc.com>
-Subject: [PATCH] usb: common: usb-conn-gpio: Set last role to unknown before initial detection
-Date:   Wed, 24 May 2023 14:24:01 +0530
-Message-ID: <1684918441-14794-1-git-send-email-quic_prashk@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S240314AbjEXJFJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 May 2023 05:05:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C443D132
+        for <linux-usb@vger.kernel.org>; Wed, 24 May 2023 02:05:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5072E62DBD
+        for <linux-usb@vger.kernel.org>; Wed, 24 May 2023 09:05:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B3D28C4339B
+        for <linux-usb@vger.kernel.org>; Wed, 24 May 2023 09:05:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684919106;
+        bh=1gubJl0zdt0iG3Qx2UpMaAzTHqtHlZGO2E1AH5uYvgM=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=eYQJw0pHpnfmc/kQLzEJRc7lJOCFw3wSTbc5m9h0/rAFmBBYmql7r76BBK5Ip+kmG
+         yhX1NyCzvb/qR/LT2tod8m0fRDXNYkeGbCvU4fWib8ZvkX0hBEHXPQJSOaTmd6DnF6
+         lUgenVrZgX8P9Y297adpmMH6nIiFyTwW4RXi//0cqtD7JNGTTPB9oE1cItSQW/6exZ
+         2QIDJUHi3l36oiv3gVBhIqyX15g7nVZSjQ8K1p9RQiU+EkfhhoqjZqD2coQphTXbhs
+         nIdaBJhZyegTNsyzv5hXONVV4V7FySo9toG0cni1EaovaUICZyCsoXEqUVm9Fv3uzk
+         SfZnAcYBv37vg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 9CC30C43141; Wed, 24 May 2023 09:05:06 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217475] Foxconn / Hon Hai Bluetooth adapter 0489:e0cd stops
+ working on ThinkPad T14s AMD Gen1
+Date:   Wed, 24 May 2023 09:05:06 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: berto@igalia.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217475-208809-UsyUCgQHcF@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217475-208809@https.bugzilla.kernel.org/>
+References: <bug-217475-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ACchDRO1baxKxziO4wrZEyL8aP8O0g8W
-X-Proofpoint-ORIG-GUID: ACchDRO1baxKxziO4wrZEyL8aP8O0g8W
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-24_05,2023-05-23_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- impostorscore=0 lowpriorityscore=0 mlxscore=0 phishscore=0 clxscore=1015
- bulkscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305240075
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently if we bootup a device without cable connected, then
-usb-conn-gpio won't call set_role() since last_role is same as
-current role. This happens because during probe last_role gets
-initialised to zero.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217475
 
-To avoid this, last_role is set to USB_ROLE_UNKNOWN before
-performing the initial detection.
+--- Comment #2 from Alberto Garcia (berto@igalia.com) ---
+I have always had this problem with this computer. Linux got support for th=
+is
+Bluetooth adapter in 5.14 if I'm not wrong (64832df2ac05) and I probably tr=
+ied
+it for the first time with 5.15.3. I never saw it working fine, and I have
+tried lots of kernels and firmware versions since then. The most recent one=
+ was
+6.3.3 as I mentioned in the bug report.
 
-Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
-Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
----
- drivers/usb/common/usb-conn-gpio.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Since I can make it work with a Windows VM using USB passthrough I assume t=
+hat
+there's some problem with the initialization of the adapter, the HCI or
+something like that, but that's all I can guess with my limited knowledge of
+USB.
 
-diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
-index e20874c..00af735 100644
---- a/drivers/usb/common/usb-conn-gpio.c
-+++ b/drivers/usb/common/usb-conn-gpio.c
-@@ -27,6 +27,8 @@
- #define USB_CONN_IRQF	\
- 	(IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT)
- 
-+#define USB_ROLE_UNKNOWN	-1
-+
- struct usb_conn_info {
- 	struct device *dev;
- 	struct usb_role_switch *role_sw;
-@@ -257,6 +259,9 @@ static int usb_conn_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, info);
- 	device_set_wakeup_capable(&pdev->dev, true);
- 
-+	/* Set last role to unknown before performing the initial detection */
-+	info->last_role = USB_ROLE_UNKNOWN;
-+
- 	/* Perform initial detection */
- 	usb_conn_queue_dwork(info, 0);
- 
--- 
-2.7.4
+To make it clear: when I talk about using a VM I'm talking about the scenar=
+io
+where
 
+1) I cannot use Bluetooth in my Linux system because of one of the errors t=
+hat
+I mentioned earlier ("hci0: Failed to get device id (-108)"). The device is=
+ not
+detected by the Bluetooth stack although it does appears in lsusb.
+2) I launch a Windows VM using QEMU right away, without rebooting the compu=
+ter
+or doing anything else. The BT adapter works in that VM always.
+3) If I launch a Linux VM instead it tends to work, not always in this case=
+ but
+I have a higher success rate than if I remove and reload the btusb module on
+the host.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
