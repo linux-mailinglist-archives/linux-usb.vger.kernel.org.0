@@ -2,101 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C2937112D1
-	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 19:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C37A711314
+	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 20:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233743AbjEYRvd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 May 2023 13:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
+        id S240978AbjEYSD0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 May 2023 14:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjEYRvc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 13:51:32 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF10B6;
-        Thu, 25 May 2023 10:51:31 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PFAZhA013006;
-        Thu, 25 May 2023 17:51:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=XYphsjpFQZ8qoW0HxD5fU0fwEGPiJV9LRkSsjbqnP9k=;
- b=GaEeyjzs6puh5Yx5kX6VrUsch3+XCch8JrpnvjV9zkj3gPnTCiCkpT7NEczCfu32uXwt
- APSEVBqA829LkpIDnfmBg37hZ2cpGbxe059a4y7ume28fJwG7SOpQ8hAnT41jGmxiWZJ
- OCRxFvVBg24kgTJrbA+EB59u/XcA21DABtC74q+IrWyy/r9uQOY4wFFjbBAsLqG50+BC
- rDdZqYyoFQYUini/TVuKP7FgbWrMiGV1Y9Hz0+Sa2YV5iMhLcB8I87cuy81Oh2KUDWp7
- vXF/rSs0RTsce7gZKPT3kb0CSQVsBI86mpOJa2S/0IR8TmqKwhkXPxswKjAIh6zMUMse vQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qsqgytprr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 17:51:27 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PHpHId022223
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 17:51:17 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 25 May 2023 10:51:17 -0700
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v2] usb: host: xhci: Do not re-initialize the XHCI HC if being removed
-Date:   Thu, 25 May 2023 10:51:02 -0700
-Message-ID: <20230525175102.22887-1-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S240888AbjEYSDL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 14:03:11 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id DC919E74
+        for <linux-usb@vger.kernel.org>; Thu, 25 May 2023 11:02:57 -0700 (PDT)
+Received: (qmail 260359 invoked by uid 1000); 25 May 2023 14:02:56 -0400
+Date:   Thu, 25 May 2023 14:02:56 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Roy Luo <royluo@google.com>
+Cc:     raychi@google.com, badhri@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Bastien Nocera <hadess@hadess.net>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Douglas Anderson <dianders@chromium.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [RFC PATCH v1] usb: core: add sysfs entry for usb device state
+Message-ID: <408575c0-2967-4cdb-92c7-1b2845038d20@rowland.harvard.edu>
+References: <20230525173818.219633-1-royluo@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: _Qf6dyDIvSF3Hhrte1nPrB-j0w3MzGD2
-X-Proofpoint-GUID: _Qf6dyDIvSF3Hhrte1nPrB-j0w3MzGD2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-25_09,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 malwarescore=0 impostorscore=0 mlxscore=0
- phishscore=0 suspectscore=0 clxscore=1015 spamscore=0 bulkscore=0
- mlxlogscore=708 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305250149
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230525173818.219633-1-royluo@google.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-During XHCI resume, if there was a host controller error detected the
-routine will attempt to re-initialize the XHCI HC, so that it can return
-back to an operational state.  If the XHCI host controller is being
-removed, this sequence would be already handled within the XHCI halt path,
-leading to a duplicate set of reg ops/calls.  In addition, since the XHCI
-bus is being removed, the overhead added in restarting the HCD is
-unnecessary.  Check for the XHC state before setting the reinit_xhc
-parameter, which is responsible for triggering the restart.
+On Thu, May 25, 2023 at 05:38:18PM +0000, Roy Luo wrote:
+> Expose usb device state to userland as the information is useful in
+> detecting non-compliant setups and diagnosing enumeration failures.
+> For example:
+> - End-to-end signal integrity issues: the device would fail port reset
+>   repeatedly and thus be stuck in POWERED state.
+> - Charge-only cables (missing D+/D- lines): the device would never enter
+>   POWERED state as the HC would not see any pullup.
+> 
+> What's the status quo?
+> We do have error logs such as "Cannot enable. Maybe the USB cable is bad?"
+> to flag potential setup issues, but there's no good way to expose them to
+> userspace.
+> 
+> Why add a sysfs entry in struct usb_port instead of struct usb_device?
+> The struct usb_device is not device_add() to the system until it's in
+> ADDRESS state hence we would miss the first two states. The struct
+> usb_port is a better place to keep the information because its life
+> cycle is longer than the struct usb_device that is attached to the port.
+> 
+> Signed-off-by: Roy Luo <royluo@google.com>
+> ---
 
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- drivers/usb/host/xhci.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+> index e23833562e4f..110143568c77 100644
+> --- a/drivers/usb/core/hub.h
+> +++ b/drivers/usb/core/hub.h
+> @@ -84,8 +84,10 @@ struct usb_hub {
+>   * @peer: related usb2 and usb3 ports (share the same connector)
+>   * @req: default pm qos request for hubs without port power control
+>   * @connect_type: port's connect type
+> + * @state: device state of the usb device attached to the port
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index b81313ffeb76..02a30b883bde 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1028,7 +1028,8 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg)
- 	temp = readl(&xhci->op_regs->status);
- 
- 	/* re-initialize the HC on Restore Error, or Host Controller Error */
--	if (temp & (STS_SRE | STS_HCE)) {
-+	if ((temp & (STS_SRE | STS_HCE)) &&
-+	    !(xhci->xhc_state & XHCI_STATE_REMOVING)) {
- 		reinit_xhc = true;
- 		if (!xhci->broken_suspend)
- 			xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n", temp);
+This member is essentially a duplicate of the .child member of the 
+usb_port structure.  That is, it points to the .state member of the 
+child device instead of to the child device itself, but this is pretty 
+much the same thing.  You could replace *(port_dev->state) with 
+port_dev->child->state.
+
+> diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+> index 06a8f1f84f6f..7f3430170115 100644
+> --- a/drivers/usb/core/port.c
+> +++ b/drivers/usb/core/port.c
+> @@ -160,6 +160,19 @@ static ssize_t connect_type_show(struct device *dev,
+>  }
+>  static DEVICE_ATTR_RO(connect_type);
+>  
+> +static ssize_t state_show(struct device *dev,
+> +			  struct device_attribute *attr, char *buf)
+> +{
+> +	struct usb_port *port_dev = to_usb_port(dev);
+> +	enum usb_device_state state = USB_STATE_NOTATTACHED;
+> +
+> +	if (port_dev->state)
+> +		state = *port_dev->state;
+> +
+> +	return sprintf(buf, "%s\n",  usb_state_string(state));
+
+This races with device addition and removal (and with device state 
+changes).  To prevent these races, you have to hold the 
+device_state_lock spinlock while accessing the child device and its 
+state.
+
+Unfortunately that spinlock is private to hub.c, so you will have to 
+make it public before you can use it here.
+
+Alan Stern
