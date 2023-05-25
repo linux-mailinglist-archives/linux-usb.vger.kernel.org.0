@@ -2,108 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 331487117BF
-	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 21:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9227117B9
+	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 21:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241950AbjEYT7I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 May 2023 15:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
+        id S235261AbjEYTzA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 May 2023 15:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234662AbjEYT7H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 15:59:07 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id DADC2D8
-        for <linux-usb@vger.kernel.org>; Thu, 25 May 2023 12:59:05 -0700 (PDT)
-Received: (qmail 268043 invoked by uid 1000); 25 May 2023 15:10:27 -0400
-Date:   Thu, 25 May 2023 15:10:27 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Roy Luo <royluo@google.com>
-Cc:     raychi@google.com, badhri@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bastien Nocera <hadess@hadess.net>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Douglas Anderson <dianders@chromium.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [RFC PATCH v1] usb: core: add sysfs entry for usb device state
-Message-ID: <89cf2c61-a55e-4c35-93b2-35fa7ab0266b@rowland.harvard.edu>
-References: <20230525173818.219633-1-royluo@google.com>
- <408575c0-2967-4cdb-92c7-1b2845038d20@rowland.harvard.edu>
- <CA+zupgwz8Mbd8=7ep7t0OU-34bbwsc9fMK4dHip0rgqD7FSd2A@mail.gmail.com>
+        with ESMTP id S242278AbjEYTy5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 15:54:57 -0400
+Received: from st43p00im-ztfb10063301.me.com (st43p00im-ztfb10063301.me.com [17.58.63.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7961BD
+        for <linux-usb@vger.kernel.org>; Thu, 25 May 2023 12:54:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pen.gy; s=sig1;
+        t=1685043805; bh=7qTQoFvIqowISFG0SsZjr8VVFkKEqUXMz8EjBTX/N9s=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=SJJ4ZJDQTYYGTcl/HoWkVi8tnsrisCEUmSq3u6Vz/z5aAqebXX3mxopFTeOW1wxvm
+         584lWPyZpiHTgWedvuVQyR41mVXu5wMkkIhLsuOYoiLWosodYNFZzJU+Y3R/QYeb9N
+         FdVmiG8ycUhzDQQX1Epd0vXid6/vGnFtNp/ySPHG8VbTe/soRmo8AmxuGIyhkCe8uV
+         nd09ylETMlNW0dum/YSUqAck4iWOAvKZX4BxhVDpG1MCpFHtMdcDm3rCLlJmc0Xy8a
+         1VoF037xMjRQgqdcyvtAG9oz+KlN8Lp9objirCDFYZllp/5fuloRGTnIrdI630tZST
+         UOQc3ZkbzVG2w==
+Received: from Eagle.se1.pen.gy (st43p00im-dlb-asmtp-mailmevip.me.com [17.42.251.41])
+        by st43p00im-ztfb10063301.me.com (Postfix) with ESMTPSA id AF0CE700477;
+        Thu, 25 May 2023 19:43:23 +0000 (UTC)
+From:   Foster Snowhill <forst@pen.gy>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Georgi Valkov <gvalkov@gmail.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next v2 1/2] usbnet: ipheth: fix risk of NULL pointer deallocation
+Date:   Thu, 25 May 2023 21:42:54 +0200
+Message-Id: <20230525194255.4516-1-forst@pen.gy>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+zupgwz8Mbd8=7ep7t0OU-34bbwsc9fMK4dHip0rgqD7FSd2A@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-ORIG-GUID: 3hI-HWMBjo6aieRqhnIrucz4KdKH5qNX
+X-Proofpoint-GUID: 3hI-HWMBjo6aieRqhnIrucz4KdKH5qNX
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.573,18.0.957,17.0.605.474.0000000_definitions?=
+ =?UTF-8?Q?=3D2023-05-18=5F15:2023-05-17=5F02,2023-05-18=5F15,2020-01-23?=
+ =?UTF-8?Q?=5F02_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0 bulkscore=0
+ mlxscore=0 spamscore=0 adultscore=0 clxscore=1030 malwarescore=0
+ mlxlogscore=590 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2305250166
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 25, 2023 at 11:46:23AM -0700, Roy Luo wrote:
-> On Thu, May 25, 2023 at 11:02 AM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Thu, May 25, 2023 at 05:38:18PM +0000, Roy Luo wrote:
-> > > Expose usb device state to userland as the information is useful in
-> > > detecting non-compliant setups and diagnosing enumeration failures.
-> > > For example:
-> > > - End-to-end signal integrity issues: the device would fail port reset
-> > >   repeatedly and thus be stuck in POWERED state.
-> > > - Charge-only cables (missing D+/D- lines): the device would never enter
-> > >   POWERED state as the HC would not see any pullup.
-> > >
-> > > What's the status quo?
-> > > We do have error logs such as "Cannot enable. Maybe the USB cable is bad?"
-> > > to flag potential setup issues, but there's no good way to expose them to
-> > > userspace.
-> > >
-> > > Why add a sysfs entry in struct usb_port instead of struct usb_device?
-> > > The struct usb_device is not device_add() to the system until it's in
-> > > ADDRESS state hence we would miss the first two states. The struct
-> > > usb_port is a better place to keep the information because its life
-> > > cycle is longer than the struct usb_device that is attached to the port.
-> > >
-> > > Signed-off-by: Roy Luo <royluo@google.com>
-> > > ---
-> >
-> > > diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
-> > > index e23833562e4f..110143568c77 100644
-> > > --- a/drivers/usb/core/hub.h
-> > > +++ b/drivers/usb/core/hub.h
-> > > @@ -84,8 +84,10 @@ struct usb_hub {
-> > >   * @peer: related usb2 and usb3 ports (share the same connector)
-> > >   * @req: default pm qos request for hubs without port power control
-> > >   * @connect_type: port's connect type
-> > > + * @state: device state of the usb device attached to the port
-> >
-> > This member is essentially a duplicate of the .child member of the
-> > usb_port structure.  That is, it points to the .state member of the
-> > child device instead of to the child device itself, but this is pretty
-> > much the same thing.  You could replace *(port_dev->state) with
-> > port_dev->child->state.
-> >
-> Alan, thanks for the quick response!
-> Yes, port_dev->state is indeed the same as port_dev->child->state. However,
-> I still add port_dev->state because port_dev->child won't be assigned until
-> the corresponding usb_device is in ADDRESS state.
-> I wish I can assign get port_dev->child assigned earlier, but I think
-> the current design - assign port_dev->child and device_add() after ADDRESS
-> state - also makes sense because there are many ways that the enumeration
-> could fail in the early stage. By adding port_dev->state, I can link
-> usb_device->state to usb_port as soon as the usb_device is created to get
-> around the limitation of port_dev->child.
-> I would be very happy to hear other ideas.
+From: Georgi Valkov <gvalkov@gmail.com>
 
-Is there any real reason not to set port_dev->child as soon as the 
-usb_device structure is created?  If enumeration fails, the pointer can 
-be cleared.
+The cleanup precedure in ipheth_probe will attempt to free a
+NULL pointer in dev->ctrl_buf if the memory allocation for
+this buffer is not successful. Rearrange the goto labels to
+avoid this risk.
 
-Alan Stern
+Signed-off-by: Georgi Valkov <gvalkov@gmail.com>
+---
+ drivers/net/usb/ipheth.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
+index 6a769df0b..8875a3d0e 100644
+--- a/drivers/net/usb/ipheth.c
++++ b/drivers/net/usb/ipheth.c
+@@ -510,8 +510,8 @@ static int ipheth_probe(struct usb_interface *intf,
+ 	ipheth_free_urbs(dev);
+ err_alloc_urbs:
+ err_get_macaddr:
+-err_alloc_ctrl_buf:
+ 	kfree(dev->ctrl_buf);
++err_alloc_ctrl_buf:
+ err_endpoints:
+ 	free_netdev(netdev);
+ 	return retval;
+-- 
+2.40.1
+
