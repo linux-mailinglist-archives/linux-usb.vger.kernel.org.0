@@ -2,116 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1994710E7F
-	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 16:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23278710FC2
+	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 17:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241156AbjEYOpe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 May 2023 10:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
+        id S241546AbjEYPis (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 May 2023 11:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241128AbjEYOpd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 10:45:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E349101
-        for <linux-usb@vger.kernel.org>; Thu, 25 May 2023 07:45:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD2F8611E6
-        for <linux-usb@vger.kernel.org>; Thu, 25 May 2023 14:45:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB1E3C433D2;
-        Thu, 25 May 2023 14:45:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685025931;
-        bh=OyuCLO+2oQu8ONaRyPG8onk55/DPug9osK03p99uAY0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SOan52YcWvxPFhR+ngb2adWVtkG6dva0rbMpyNG+m5tiISwbCGiwiWcr6bBWyMXUz
-         YHz/OWykVRX6leEmji85Oa4QRKMzEA2o6lmiKswyvO8cOBklyq7vd6TLyHSKj8Jy2s
-         2uPL2aiCOID77ZPsLLGMYZgKWA8MO0IalZwGUwPWZAafU5PUWNVZ+LjQfUNbgxkTeK
-         HGphdru/WT8OPj29eYuzoN2+moJE0zw5PrzTR0EBunf4mxWlCvfbwIYHcxwPct3Wwl
-         O7Mx04ATTUwQW84j1k3s7BRm9+4GTjXSRzAQjb230FIx6WsmIZX0ImjaXDr/abV1WE
-         //oFsbpwS/IZQ==
-Date:   Thu, 25 May 2023 07:49:21 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 90/97] usb: typec: mux: gpio-sbu: Convert to platform
- remove callback returning void
-Message-ID: <20230525144921.xkk7lnph7xrcs5nm@ripper>
-References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
- <20230517230239.187727-91-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S234225AbjEYPir (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 11:38:47 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2329CA3
+        for <linux-usb@vger.kernel.org>; Thu, 25 May 2023 08:38:45 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f6e1393f13so3763455e9.0
+        for <linux-usb@vger.kernel.org>; Thu, 25 May 2023 08:38:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685029123; x=1687621123;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ViAjcjtsfDoFKXKSJ3cJEJ7NDXZzNYfQtt5Kb/3P/+w=;
+        b=CgoK4GviG131uj619Y9xyuXh0pQZFPhsIXacQP0MxCDyMKE1/ms0lv237rN/rNyKv3
+         N2SSP6ijMSj3O1x9YL1yZ9hw4HyQupnF8RBg1eYPEU2dQHI93gF8h0oJe6eduzH/AnF4
+         oN0kJb+890cfo2qhWvPuGeL90XvanWMarQA8DXPJHZddx52rohzYCYeklsiCis9noHr7
+         PiNUhNVj+t0WZ2hdrcAdPfo+pKPBi5ZjDoaMayGVkKxL/p4Hjq3N/TPcvoTyDfLZ9cIv
+         v9nF8NJoobbNfbo+sjaejTrAIbH4wZPOhsqVV9SL1C1yKXTgcHIxK+g8CVEef7Xzi9FU
+         aQ5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685029123; x=1687621123;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ViAjcjtsfDoFKXKSJ3cJEJ7NDXZzNYfQtt5Kb/3P/+w=;
+        b=icGrEZ0XB/PK4L1yXixp5togTeEvadsFai3hzmo/HIPL3cqvF7BZg8yV+hNQsG+Owz
+         hKYAw4Hx0ASxPeFKBYPdEoPnhxlRTmxhyMXwJ+BL4k85i3LFCzAILIYydJd7iMnFDwup
+         vnvjFDD2WNFknjQ+1NRVWCHpcue/W4i2kHwRMnpP9+CF2h4NpqaUpk/XhX51ECfOKWXD
+         8VnZhtjnnZa4G85N3k51jX/B21AHl0Mxxa9CyqrrnMHDe3taB5k50Kp6e8PIdqKJQCEQ
+         KX0U11+PSoTmkNPDqj+CKhTMJmXg9ws+kxSglA406vIBAPZHUvNl5qWVT0LQsjEilizV
+         OiWw==
+X-Gm-Message-State: AC+VfDy9v6ZcoWtaTL76zafdV+kmicVDlHcSMotybEgxyqHTLrjv5DVb
+        O97RJcg/aYnCmfU+PQrkiOnY0N8avYsY/ZVPGKQ=
+X-Google-Smtp-Source: ACHHUZ4T02fMIl2HNUangLGDmcFcniOBW7c472wfdeCybtytDzrlfTCgWO2oLCOLi39BEq6NomkBbw==
+X-Received: by 2002:a05:600c:224d:b0:3f6:ad84:e603 with SMTP id a13-20020a05600c224d00b003f6ad84e603mr2926993wmm.28.1685029123569;
+        Thu, 25 May 2023 08:38:43 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id u20-20020a05600c211400b003f4ebeaa970sm2465178wml.25.2023.05.25.08.38.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 08:38:42 -0700 (PDT)
+Date:   Thu, 25 May 2023 18:38:37 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] usb: gadget: udc: fix NULL dereference in remove()
+Message-ID: <ZG+A/dNpFWAlCChk@kili>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230517230239.187727-91-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 18, 2023 at 01:02:32AM +0200, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart from
-> emitting a warning) and this typically results in resource leaks. To improve
-> here there is a quest to make the remove callback return void. In the first
-> step of this quest all drivers are converted to .remove_new() which already
-> returns void. Eventually after all drivers are converted, .remove_new() is
-> renamed to .remove().
-> 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
-> 
+The "udc" pointer was never set in the probe() function so it will
+lead to a NULL dereference in udc_pci_remove() when we do:
 
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+	usb_del_gadget_udc(&udc->gadget);
 
-Regards,
-Bjorn
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+ drivers/usb/gadget/udc/amd5536udc_pci.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/usb/typec/mux/gpio-sbu-mux.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/mux/gpio-sbu-mux.c b/drivers/usb/typec/mux/gpio-sbu-mux.c
-> index f62516dafe8f..94c5bc0f467d 100644
-> --- a/drivers/usb/typec/mux/gpio-sbu-mux.c
-> +++ b/drivers/usb/typec/mux/gpio-sbu-mux.c
-> @@ -140,7 +140,7 @@ static int gpio_sbu_mux_probe(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -static int gpio_sbu_mux_remove(struct platform_device *pdev)
-> +static void gpio_sbu_mux_remove(struct platform_device *pdev)
->  {
->  	struct gpio_sbu_mux *sbu_mux = platform_get_drvdata(pdev);
->  
-> @@ -148,8 +148,6 @@ static int gpio_sbu_mux_remove(struct platform_device *pdev)
->  
->  	typec_mux_unregister(sbu_mux->mux);
->  	typec_switch_unregister(sbu_mux->sw);
-> -
-> -	return 0;
->  }
->  
->  static const struct of_device_id gpio_sbu_mux_match[] = {
-> @@ -160,7 +158,7 @@ MODULE_DEVICE_TABLE(of, gpio_sbu_mux_match);
->  
->  static struct platform_driver gpio_sbu_mux_driver = {
->  	.probe = gpio_sbu_mux_probe,
-> -	.remove = gpio_sbu_mux_remove,
-> +	.remove_new = gpio_sbu_mux_remove,
->  	.driver = {
->  		.name = "gpio_sbu_mux",
->  		.of_match_table = gpio_sbu_mux_match,
-> -- 
-> 2.39.2
-> 
+diff --git a/drivers/usb/gadget/udc/amd5536udc_pci.c b/drivers/usb/gadget/udc/amd5536udc_pci.c
+index c80f9bd51b75..a36913ae31f9 100644
+--- a/drivers/usb/gadget/udc/amd5536udc_pci.c
++++ b/drivers/usb/gadget/udc/amd5536udc_pci.c
+@@ -170,6 +170,9 @@ static int udc_pci_probe(
+ 		retval = -ENODEV;
+ 		goto err_probe;
+ 	}
++
++	udc = dev;
++
+ 	return 0;
+ 
+ err_probe:
+-- 
+2.34.1
+
