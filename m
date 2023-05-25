@@ -2,50 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554BB71110E
-	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 18:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7B3711285
+	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 19:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbjEYQeo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 May 2023 12:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
+        id S233083AbjEYRlN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 May 2023 13:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjEYQen (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 12:34:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AF612F;
-        Thu, 25 May 2023 09:34:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3867460B01;
-        Thu, 25 May 2023 16:34:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 513BBC433D2;
-        Thu, 25 May 2023 16:34:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685032481;
-        bh=GUwaXXSAawFzg0yzZvs8wwZZ+yUjaLMOOAZgyVFAxfQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RKxNoUCBOJBwOjsEycQDzvHguwrKAUnNJA3Yn90Gr4bTb8CMA0u4rlEwKCQESbH1/
-         ZxL5SJEL56998qL6502OnFdWqbXPxFmtuVfo5EIpS6wP42ppQlGNsar4/NpcaABv9B
-         Kesk7BqDRuIwieX06CQ86OVj7UvE7zjUdH557pbs=
-Date:   Thu, 25 May 2023 17:34:39 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Message-ID: <2023052513-gestate-tartar-bf15@gregkh>
-References: <1685004825-30157-1-git-send-email-quic_prashk@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1685004825-30157-1-git-send-email-quic_prashk@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        with ESMTP id S230501AbjEYRlL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 13:41:11 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11AB19D
+        for <linux-usb@vger.kernel.org>; Thu, 25 May 2023 10:41:05 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-babb76a9831so1648021276.2
+        for <linux-usb@vger.kernel.org>; Thu, 25 May 2023 10:41:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685036465; x=1687628465;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=X23gKFEZT8DFV9NTcTfq0NoCckUC9kSkPSFA3d5vAAM=;
+        b=4MkrvE29ZOfRI6CIHrIHK1q0Rl2HlLW075NHo6JcQrnGRfVFjHyQ2NYo2ynSo3iYSz
+         m+aWqQEOBN0xuoLa5LPYBT2imayyCHPDv9VshSiIIGKb/pN3lABjAOw3r9ukwofIDgom
+         sR1OxFI6CZFYGRj34YfzvrAsM8kEqnuvS+wAp1Zr46+GM2UtjU6pVmRLUZw3W8wTHNrk
+         ntHxp2UJsAw2e+l5006NnBu6TYMnNjazuayT6Bff991YId1MogUOD5Srsw46xkZ7UEg7
+         j3X5eC8B5FnAykLlIqbyPJzdrW1aapbGrP62uHWxdqQUZc0jBr2+iTR29EoCPWBkbR6s
+         jk0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685036465; x=1687628465;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X23gKFEZT8DFV9NTcTfq0NoCckUC9kSkPSFA3d5vAAM=;
+        b=iVUbWOtHWwMTuK16ZkdvEJ/RKI6RW46aLst05uMtUtXdFWvYyOHU9ZSfp08mTTHLXi
+         pKTwqcJhQfI35OT2HxgQh3emWHufLmglE+0AgUIecXvwHTj9TCu8ID6FFO92JUCIL4ko
+         XfHf0IUVnX+OuLaroS2VuRIRvv3LT+qd49Rff2DpjWhFIkGvr7WIcQUUTowXlecVoeuY
+         vRIfr6BdATeX6Qohdl5TVUyawMQtirQmkT+wyJSUXn+sRXjFtNSpO5Wsgr812HJtfi6t
+         piqJZxg6VfShRgr1f2A2ldXjfIYxjijRc4SvWPK4DQBFqjqseQQHrcPMqAc/KvuH51wC
+         bAFw==
+X-Gm-Message-State: AC+VfDwkMGZ8Pkuzx+B7+x0K2S4s3umTuNDXAF2KF0+jZddD+rIywv7Q
+        SorRk8I/itDNdb+Y3JBkOzAyPyRTboI=
+X-Google-Smtp-Source: ACHHUZ6fodKp9XFABIlsgXUk3xeSE+Ahkd77UL4WmykzzMbx2pJHhn6Htmo+grKsyZOdLfxzk0LHBwP55lA=
+X-Received: from royluo-cloudtop0.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:bb8])
+ (user=royluo job=sendgmr) by 2002:a05:6902:118e:b0:ba8:9653:c948 with SMTP id
+ m14-20020a056902118e00b00ba89653c948mr2007334ybu.3.1685036465026; Thu, 25 May
+ 2023 10:41:05 -0700 (PDT)
+Date:   Thu, 25 May 2023 17:38:18 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <20230525173818.219633-1-royluo@google.com>
+Subject: [RFC PATCH v1] usb: core: add sysfs entry for usb device state
+From:   Roy Luo <royluo@google.com>
+To:     raychi@google.com, badhri@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Bastien Nocera <hadess@hadess.net>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Douglas Anderson <dianders@chromium.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Roy Luo <royluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,81 +75,215 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 25, 2023 at 02:23:45PM +0530, Prashanth K wrote:
-> Currently if we bootup a device without cable connected, then
-> usb-conn-gpio won't call set_role() since last_role is same as
-> current role. This happens because during probe last_role gets
-> initialised to zero.
-> 
-> To avoid this, added a new constant in enum usb_role, last_role
-> is set to USB_ROLE_UNKNOWN before performing initial detection.
-> 
-> While at it, also handle default case for the usb_role switch
-> in cdns3 to avoid build warnings.
-> 
-> Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
-> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
-> v5: Update commit text to mention the changes made in cdns3 driver.
-> v4: Added Reviewed-by tag.
-> v3: Added a default case in drivers/usb/cdns3/core.c as pointed out by
->     the test robot.
-> v2: Added USB_ROLE_UNKNWON to enum usb_role.
-> 
->  drivers/usb/cdns3/core.c           | 2 ++
->  drivers/usb/common/usb-conn-gpio.c | 3 +++
->  include/linux/usb/role.h           | 1 +
->  3 files changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> index dbcdf3b..69d2921 100644
-> --- a/drivers/usb/cdns3/core.c
-> +++ b/drivers/usb/cdns3/core.c
-> @@ -252,6 +252,8 @@ static enum usb_role cdns_hw_role_state_machine(struct cdns *cdns)
->  		if (!vbus)
->  			role = USB_ROLE_NONE;
->  		break;
-> +	default:
-> +		break;
+Expose usb device state to userland as the information is useful in
+detecting non-compliant setups and diagnosing enumeration failures.
+For example:
+- End-to-end signal integrity issues: the device would fail port reset
+  repeatedly and thus be stuck in POWERED state.
+- Charge-only cables (missing D+/D- lines): the device would never enter
+  POWERED state as the HC would not see any pullup.
 
-No error if this happens?
+What's the status quo?
+We do have error logs such as "Cannot enable. Maybe the USB cable is bad?"
+to flag potential setup issues, but there's no good way to expose them to
+userspace.
 
->  	}
->  
->  	dev_dbg(cdns->dev, "role %d -> %d\n", cdns->role, role);
-> diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
-> index e20874c..30bdb81 100644
-> --- a/drivers/usb/common/usb-conn-gpio.c
-> +++ b/drivers/usb/common/usb-conn-gpio.c
-> @@ -257,6 +257,9 @@ static int usb_conn_probe(struct platform_device *pdev)
->  	platform_set_drvdata(pdev, info);
->  	device_set_wakeup_capable(&pdev->dev, true);
->  
-> +	/* Set last role to unknown before performing the initial detection */
-> +	info->last_role = USB_ROLE_UNKNOWN;
+Why add a sysfs entry in struct usb_port instead of struct usb_device?
+The struct usb_device is not device_add() to the system until it's in
+ADDRESS state hence we would miss the first two states. The struct
+usb_port is a better place to keep the information because its life
+cycle is longer than the struct usb_device that is attached to the port.
 
-Shouldn't last_role have already been set to 0?  If so, why not just
-have this enum value be 0?
+Signed-off-by: Roy Luo <royluo@google.com>
+---
+ Documentation/ABI/testing/sysfs-bus-usb |  9 +++++++++
+ drivers/usb/core/hub.c                  | 18 ++++++++++++++++++
+ drivers/usb/core/hub.h                  |  5 +++++
+ drivers/usb/core/port.c                 | 23 +++++++++++++++++++++++
+ 4 files changed, 55 insertions(+)
 
+diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
+index cb172db41b34..155770f18f9c 100644
+--- a/Documentation/ABI/testing/sysfs-bus-usb
++++ b/Documentation/ABI/testing/sysfs-bus-usb
+@@ -292,6 +292,15 @@ Description:
+ 		which is marked with early_stop has failed to initialize, it will ignore
+ 		all future connections until this attribute is clear.
+ 
++What:		/sys/bus/usb/devices/.../<hub_interface>/port<X>/state
++Date:		May 2023
++Contact:	Roy Luo <royluo@google.com>
++Description:
++		Indicates current state of the USB device attached to the port. Valid
++		states are: 'not-attached', 'attached', 'powered',
++		'reconnecting', 'unauthenticated', 'default', 'addressed',
++		'configured', and 'suspended'.
++
+ What:		/sys/bus/usb/devices/.../power/usb2_lpm_l1_timeout
+ Date:		May 2013
+ Contact:	Mathias Nyman <mathias.nyman@linux.intel.com>
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 97a0f8faea6e..69de87c6ae9d 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -2018,6 +2018,18 @@ bool usb_device_is_owned(struct usb_device *udev)
+ 	return !!hub->ports[udev->portnum - 1]->port_owner;
+ }
+ 
++static void notify_port_device_state(struct usb_device *udev)
++{
++	struct usb_port *port_dev = NULL;
++	struct usb_hub *hub = NULL;
++
++	if (udev->parent) {
++		hub = usb_hub_to_struct_hub(udev->parent);
++		port_dev = hub->ports[udev->portnum - 1];
++		schedule_work(&port_dev->work);
++	}
++}
++
+ static void recursively_mark_NOTATTACHED(struct usb_device *udev)
+ {
+ 	struct usb_hub *hub = usb_hub_to_struct_hub(udev);
+@@ -2030,6 +2042,7 @@ static void recursively_mark_NOTATTACHED(struct usb_device *udev)
+ 	if (udev->state == USB_STATE_SUSPENDED)
+ 		udev->active_duration -= jiffies;
+ 	udev->state = USB_STATE_NOTATTACHED;
++	notify_port_device_state(udev);
+ }
+ 
+ /**
+@@ -2086,6 +2099,7 @@ void usb_set_device_state(struct usb_device *udev,
+ 				udev->state != USB_STATE_SUSPENDED)
+ 			udev->active_duration += jiffies;
+ 		udev->state = new_state;
++		notify_port_device_state(udev);
+ 	} else
+ 		recursively_mark_NOTATTACHED(udev);
+ 	spin_unlock_irqrestore(&device_state_lock, flags);
+@@ -2252,6 +2266,8 @@ void usb_disconnect(struct usb_device **pdev)
+ 		 */
+ 		if (!test_and_set_bit(port1, hub->child_usage_bits))
+ 			pm_runtime_get_sync(&port_dev->dev);
++
++		port_dev->state = NULL;
+ 	}
+ 
+ 	usb_remove_ep_devs(&udev->ep0);
+@@ -5315,6 +5331,7 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+ 			goto done;
+ 		}
+ 
++		port_dev->state = &udev->state;
+ 		usb_set_device_state(udev, USB_STATE_POWERED);
+ 		udev->bus_mA = hub->mA_per_port;
+ 		udev->level = hdev->level + 1;
+@@ -5437,6 +5454,7 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+ 			mutex_unlock(hcd->address0_mutex);
+ 			usb_unlock_port(port_dev);
+ 		}
++		port_dev->state = NULL;
+ 		usb_put_dev(udev);
+ 		if ((status == -ENOTCONN) || (status == -ENOTSUPP))
+ 			break;
+diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+index e23833562e4f..110143568c77 100644
+--- a/drivers/usb/core/hub.h
++++ b/drivers/usb/core/hub.h
+@@ -84,8 +84,10 @@ struct usb_hub {
+  * @peer: related usb2 and usb3 ports (share the same connector)
+  * @req: default pm qos request for hubs without port power control
+  * @connect_type: port's connect type
++ * @state: device state of the usb device attached to the port
+  * @location: opaque representation of platform connector location
+  * @status_lock: synchronize port_event() vs usb_port_{suspend|resume}
++ * @work: workqueue for sysfs_notify()
+  * @portnum: port index num based one
+  * @is_superspeed cache super-speed status
+  * @usb3_lpm_u1_permit: whether USB3 U1 LPM is permitted.
+@@ -100,8 +102,10 @@ struct usb_port {
+ 	struct usb_port *peer;
+ 	struct dev_pm_qos_request *req;
+ 	enum usb_port_connect_type connect_type;
++	enum usb_device_state	*state;
+ 	usb_port_location_t location;
+ 	struct mutex status_lock;
++	struct work_struct work;
+ 	u32 over_current_count;
+ 	u8 portnum;
+ 	u32 quirks;
+@@ -114,6 +118,7 @@ struct usb_port {
+ 
+ #define to_usb_port(_dev) \
+ 	container_of(_dev, struct usb_port, dev)
++#define work_to_usb_port(w)	(container_of((w), struct usb_port, work))
+ 
+ extern int usb_hub_create_port_device(struct usb_hub *hub,
+ 		int port1);
+diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+index 06a8f1f84f6f..7f3430170115 100644
+--- a/drivers/usb/core/port.c
++++ b/drivers/usb/core/port.c
+@@ -160,6 +160,19 @@ static ssize_t connect_type_show(struct device *dev,
+ }
+ static DEVICE_ATTR_RO(connect_type);
+ 
++static ssize_t state_show(struct device *dev,
++			  struct device_attribute *attr, char *buf)
++{
++	struct usb_port *port_dev = to_usb_port(dev);
++	enum usb_device_state state = USB_STATE_NOTATTACHED;
++
++	if (port_dev->state)
++		state = *port_dev->state;
++
++	return sprintf(buf, "%s\n",  usb_state_string(state));
++}
++static DEVICE_ATTR_RO(state);
++
+ static ssize_t over_current_count_show(struct device *dev,
+ 				       struct device_attribute *attr, char *buf)
+ {
+@@ -259,6 +272,7 @@ static DEVICE_ATTR_RW(usb3_lpm_permit);
+ 
+ static struct attribute *port_dev_attrs[] = {
+ 	&dev_attr_connect_type.attr,
++	&dev_attr_state.attr,
+ 	&dev_attr_location.attr,
+ 	&dev_attr_quirks.attr,
+ 	&dev_attr_over_current_count.attr,
+@@ -666,6 +680,13 @@ static const struct component_ops connector_ops = {
+ 	.unbind = connector_unbind,
+ };
+ 
++static void usb_port_state_work(struct work_struct *work)
++{
++	struct usb_port *port_dev = work_to_usb_port(work);
++
++	sysfs_notify(&port_dev->dev.kobj, NULL, "state");
++}
++
+ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
+ {
+ 	struct usb_port *port_dev;
+@@ -699,6 +720,7 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
+ 	dev_set_name(&port_dev->dev, "%s-port%d", dev_name(&hub->hdev->dev),
+ 			port1);
+ 	mutex_init(&port_dev->status_lock);
++	INIT_WORK(&port_dev->work, usb_port_state_work);
+ 	retval = device_register(&port_dev->dev);
+ 	if (retval) {
+ 		put_device(&port_dev->dev);
+@@ -764,6 +786,7 @@ void usb_hub_remove_port_device(struct usb_hub *hub, int port1)
+ 	peer = port_dev->peer;
+ 	if (peer)
+ 		unlink_peers(port_dev, peer);
++	flush_work(&port_dev->work);
+ 	component_del(&port_dev->dev, &connector_ops);
+ 	device_unregister(&port_dev->dev);
+ }
 
-> +
->  	/* Perform initial detection */
->  	usb_conn_queue_dwork(info, 0);
->  
-> diff --git a/include/linux/usb/role.h b/include/linux/usb/role.h
-> index b5deafd..221d462 100644
-> --- a/include/linux/usb/role.h
-> +++ b/include/linux/usb/role.h
-> @@ -8,6 +8,7 @@
->  struct usb_role_switch;
->  
->  enum usb_role {
-> +	USB_ROLE_UNKNOWN = -1,
+base-commit: 933174ae28ba72ab8de5b35cb7c98fc211235096
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
 
-Why is this explicitly set to a value?  What is magic about -1?  Why not
-0x42?  Or something else?  Or as I mention above, 0?
-
-thanks,
-
-greg k-h
