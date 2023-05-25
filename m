@@ -2,94 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23278710FC2
-	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 17:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 275EC7110CA
+	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 18:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241546AbjEYPis (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 May 2023 11:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
+        id S239472AbjEYQUM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 May 2023 12:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234225AbjEYPir (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 11:38:47 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2329CA3
-        for <linux-usb@vger.kernel.org>; Thu, 25 May 2023 08:38:45 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f6e1393f13so3763455e9.0
-        for <linux-usb@vger.kernel.org>; Thu, 25 May 2023 08:38:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685029123; x=1687621123;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ViAjcjtsfDoFKXKSJ3cJEJ7NDXZzNYfQtt5Kb/3P/+w=;
-        b=CgoK4GviG131uj619Y9xyuXh0pQZFPhsIXacQP0MxCDyMKE1/ms0lv237rN/rNyKv3
-         N2SSP6ijMSj3O1x9YL1yZ9hw4HyQupnF8RBg1eYPEU2dQHI93gF8h0oJe6eduzH/AnF4
-         oN0kJb+890cfo2qhWvPuGeL90XvanWMarQA8DXPJHZddx52rohzYCYeklsiCis9noHr7
-         PiNUhNVj+t0WZ2hdrcAdPfo+pKPBi5ZjDoaMayGVkKxL/p4Hjq3N/TPcvoTyDfLZ9cIv
-         v9nF8NJoobbNfbo+sjaejTrAIbH4wZPOhsqVV9SL1C1yKXTgcHIxK+g8CVEef7Xzi9FU
-         aQ5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685029123; x=1687621123;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ViAjcjtsfDoFKXKSJ3cJEJ7NDXZzNYfQtt5Kb/3P/+w=;
-        b=icGrEZ0XB/PK4L1yXixp5togTeEvadsFai3hzmo/HIPL3cqvF7BZg8yV+hNQsG+Owz
-         hKYAw4Hx0ASxPeFKBYPdEoPnhxlRTmxhyMXwJ+BL4k85i3LFCzAILIYydJd7iMnFDwup
-         vnvjFDD2WNFknjQ+1NRVWCHpcue/W4i2kHwRMnpP9+CF2h4NpqaUpk/XhX51ECfOKWXD
-         8VnZhtjnnZa4G85N3k51jX/B21AHl0Mxxa9CyqrrnMHDe3taB5k50Kp6e8PIdqKJQCEQ
-         KX0U11+PSoTmkNPDqj+CKhTMJmXg9ws+kxSglA406vIBAPZHUvNl5qWVT0LQsjEilizV
-         OiWw==
-X-Gm-Message-State: AC+VfDy9v6ZcoWtaTL76zafdV+kmicVDlHcSMotybEgxyqHTLrjv5DVb
-        O97RJcg/aYnCmfU+PQrkiOnY0N8avYsY/ZVPGKQ=
-X-Google-Smtp-Source: ACHHUZ4T02fMIl2HNUangLGDmcFcniOBW7c472wfdeCybtytDzrlfTCgWO2oLCOLi39BEq6NomkBbw==
-X-Received: by 2002:a05:600c:224d:b0:3f6:ad84:e603 with SMTP id a13-20020a05600c224d00b003f6ad84e603mr2926993wmm.28.1685029123569;
-        Thu, 25 May 2023 08:38:43 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id u20-20020a05600c211400b003f4ebeaa970sm2465178wml.25.2023.05.25.08.38.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 08:38:42 -0700 (PDT)
-Date:   Thu, 25 May 2023 18:38:37 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] usb: gadget: udc: fix NULL dereference in remove()
-Message-ID: <ZG+A/dNpFWAlCChk@kili>
+        with ESMTP id S240325AbjEYQT7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 12:19:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42754195;
+        Thu, 25 May 2023 09:19:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA88B6476D;
+        Thu, 25 May 2023 16:19:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F130C433D2;
+        Thu, 25 May 2023 16:19:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685031596;
+        bh=PEtK4XQujJVRG9JuuhXTpXbXc0yGWo0XW1UzlJpTm1U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YcA9yR8zEjfdA5VDDZwvy77Vy/0MjDzX9ob95Yk3imwGam7iCSYqs0X9xCzObBqaf
+         Y+mcZ+FeGGlaXhw7D21JwyaP4LPYABmiaGUFPkcu/LcmlnMF9zyLnS0VZXkC+95UGY
+         hCdblKo1/U26KBEFEKdUt3paAZSj316ZlZRBGbLCnad5yTmXJAun1tepg+TIoIOMFv
+         k4VSrT/d5jdRUvZ3ruG7L8BPS2DgRRg7f2kEkhRPZcltyr5K6J5syUtHrKvSqvZ/UN
+         exnwWOjvsdwtDYKAxtHO4y8TgYVaygUvVLL6AF+BrPYQQFjzFAHkmR45xIAfYHwaMF
+         ZtuK3EeJ7w/ew==
+Date:   Thu, 25 May 2023 17:19:51 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: tegra-xudc: Remove extraneous PHYs
+Message-ID: <20230525-pancake-amiable-903f8e96c58d@spud>
+References: <20230525094237.2846682-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="6032cX2oMZzLCuYF"
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230525094237.2846682-1-thierry.reding@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The "udc" pointer was never set in the probe() function so it will
-lead to a NULL dereference in udc_pci_remove() when we do:
 
-	usb_del_gadget_udc(&udc->gadget);
+--6032cX2oMZzLCuYF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- drivers/usb/gadget/udc/amd5536udc_pci.c | 3 +++
- 1 file changed, 3 insertions(+)
+On Thu, May 25, 2023 at 11:42:37AM +0200, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
+>=20
+> The USB device controller on Tegra210 and later supports one USB 2/3
+> port, so only a single pair of PHYs is needed. Drop any of the extra
+> PHYs from the bindings.
+>=20
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
 
-diff --git a/drivers/usb/gadget/udc/amd5536udc_pci.c b/drivers/usb/gadget/udc/amd5536udc_pci.c
-index c80f9bd51b75..a36913ae31f9 100644
---- a/drivers/usb/gadget/udc/amd5536udc_pci.c
-+++ b/drivers/usb/gadget/udc/amd5536udc_pci.c
-@@ -170,6 +170,9 @@ static int udc_pci_probe(
- 		retval = -ENODEV;
- 		goto err_probe;
- 	}
-+
-+	udc = dev;
-+
- 	return 0;
- 
- err_probe:
--- 
-2.34.1
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
+Thanks,
+Conor.
+
+> ---
+>  .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml         | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml=
+ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+> index e2270ce0c56b..c6e661e8915c 100644
+> --- a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+> +++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+> @@ -91,6 +91,7 @@ properties:
+> =20
+>    phys:
+>      minItems: 1
+> +    maxItems: 2
+>      description:
+>        Must contain an entry for each entry in phy-names.
+>        See ../phy/phy-bindings.txt for details.
+> @@ -99,13 +100,7 @@ properties:
+>      minItems: 1
+>      items:
+>        - const: usb2-0
+> -      - const: usb2-1
+> -      - const: usb2-2
+> -      - const: usb2-3
+>        - const: usb3-0
+> -      - const: usb3-1
+> -      - const: usb3-2
+> -      - const: usb3-3
+> =20
+>    avddio-usb-supply:
+>      description: PCIe/USB3 analog logic power supply. Must supply 1.05 V.
+> --=20
+> 2.40.1
+>=20
+
+--6032cX2oMZzLCuYF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG+KpwAKCRB4tDGHoIJi
+0jC4AQDylP8KaWqPnEBN44hFeAbp72VX8q8/FP2vVH7qdqpqiAEA8dY7ncKN7tjz
+mw3hkVsQWeBPoNshBboVWqINmLqnWQs=
+=kYkx
+-----END PGP SIGNATURE-----
+
+--6032cX2oMZzLCuYF--
