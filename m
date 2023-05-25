@@ -2,125 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275EC7110CA
-	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 18:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554BB71110E
+	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 18:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239472AbjEYQUM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 May 2023 12:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
+        id S231344AbjEYQeo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 May 2023 12:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240325AbjEYQT7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 12:19:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42754195;
-        Thu, 25 May 2023 09:19:57 -0700 (PDT)
+        with ESMTP id S229663AbjEYQen (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 12:34:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AF612F;
+        Thu, 25 May 2023 09:34:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA88B6476D;
-        Thu, 25 May 2023 16:19:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F130C433D2;
-        Thu, 25 May 2023 16:19:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685031596;
-        bh=PEtK4XQujJVRG9JuuhXTpXbXc0yGWo0XW1UzlJpTm1U=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3867460B01;
+        Thu, 25 May 2023 16:34:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 513BBC433D2;
+        Thu, 25 May 2023 16:34:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685032481;
+        bh=GUwaXXSAawFzg0yzZvs8wwZZ+yUjaLMOOAZgyVFAxfQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YcA9yR8zEjfdA5VDDZwvy77Vy/0MjDzX9ob95Yk3imwGam7iCSYqs0X9xCzObBqaf
-         Y+mcZ+FeGGlaXhw7D21JwyaP4LPYABmiaGUFPkcu/LcmlnMF9zyLnS0VZXkC+95UGY
-         hCdblKo1/U26KBEFEKdUt3paAZSj316ZlZRBGbLCnad5yTmXJAun1tepg+TIoIOMFv
-         k4VSrT/d5jdRUvZ3ruG7L8BPS2DgRRg7f2kEkhRPZcltyr5K6J5syUtHrKvSqvZ/UN
-         exnwWOjvsdwtDYKAxtHO4y8TgYVaygUvVLL6AF+BrPYQQFjzFAHkmR45xIAfYHwaMF
-         ZtuK3EeJ7w/ew==
-Date:   Thu, 25 May 2023 17:19:51 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: usb: tegra-xudc: Remove extraneous PHYs
-Message-ID: <20230525-pancake-amiable-903f8e96c58d@spud>
-References: <20230525094237.2846682-1-thierry.reding@gmail.com>
+        b=RKxNoUCBOJBwOjsEycQDzvHguwrKAUnNJA3Yn90Gr4bTb8CMA0u4rlEwKCQESbH1/
+         ZxL5SJEL56998qL6502OnFdWqbXPxFmtuVfo5EIpS6wP42ppQlGNsar4/NpcaABv9B
+         Kesk7BqDRuIwieX06CQ86OVj7UvE7zjUdH557pbs=
+Date:   Thu, 25 May 2023 17:34:39 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Prashanth K <quic_prashk@quicinc.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
+Message-ID: <2023052513-gestate-tartar-bf15@gregkh>
+References: <1685004825-30157-1-git-send-email-quic_prashk@quicinc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="6032cX2oMZzLCuYF"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230525094237.2846682-1-thierry.reding@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1685004825-30157-1-git-send-email-quic_prashk@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---6032cX2oMZzLCuYF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, May 25, 2023 at 11:42:37AM +0200, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
->=20
-> The USB device controller on Tegra210 and later supports one USB 2/3
-> port, so only a single pair of PHYs is needed. Drop any of the extra
-> PHYs from the bindings.
->=20
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks,
-Conor.
-
+On Thu, May 25, 2023 at 02:23:45PM +0530, Prashanth K wrote:
+> Currently if we bootup a device without cable connected, then
+> usb-conn-gpio won't call set_role() since last_role is same as
+> current role. This happens because during probe last_role gets
+> initialised to zero.
+> 
+> To avoid this, added a new constant in enum usb_role, last_role
+> is set to USB_ROLE_UNKNOWN before performing initial detection.
+> 
+> While at it, also handle default case for the usb_role switch
+> in cdns3 to avoid build warnings.
+> 
+> Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
+> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > ---
->  .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml         | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml=
- b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
-> index e2270ce0c56b..c6e661e8915c 100644
-> --- a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
-> +++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
-> @@ -91,6 +91,7 @@ properties:
-> =20
->    phys:
->      minItems: 1
-> +    maxItems: 2
->      description:
->        Must contain an entry for each entry in phy-names.
->        See ../phy/phy-bindings.txt for details.
-> @@ -99,13 +100,7 @@ properties:
->      minItems: 1
->      items:
->        - const: usb2-0
-> -      - const: usb2-1
-> -      - const: usb2-2
-> -      - const: usb2-3
->        - const: usb3-0
-> -      - const: usb3-1
-> -      - const: usb3-2
-> -      - const: usb3-3
-> =20
->    avddio-usb-supply:
->      description: PCIe/USB3 analog logic power supply. Must supply 1.05 V.
-> --=20
-> 2.40.1
->=20
+> v5: Update commit text to mention the changes made in cdns3 driver.
+> v4: Added Reviewed-by tag.
+> v3: Added a default case in drivers/usb/cdns3/core.c as pointed out by
+>     the test robot.
+> v2: Added USB_ROLE_UNKNWON to enum usb_role.
+> 
+>  drivers/usb/cdns3/core.c           | 2 ++
+>  drivers/usb/common/usb-conn-gpio.c | 3 +++
+>  include/linux/usb/role.h           | 1 +
+>  3 files changed, 6 insertions(+)
+> 
+> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+> index dbcdf3b..69d2921 100644
+> --- a/drivers/usb/cdns3/core.c
+> +++ b/drivers/usb/cdns3/core.c
+> @@ -252,6 +252,8 @@ static enum usb_role cdns_hw_role_state_machine(struct cdns *cdns)
+>  		if (!vbus)
+>  			role = USB_ROLE_NONE;
+>  		break;
+> +	default:
+> +		break;
 
---6032cX2oMZzLCuYF
-Content-Type: application/pgp-signature; name="signature.asc"
+No error if this happens?
 
------BEGIN PGP SIGNATURE-----
+>  	}
+>  
+>  	dev_dbg(cdns->dev, "role %d -> %d\n", cdns->role, role);
+> diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
+> index e20874c..30bdb81 100644
+> --- a/drivers/usb/common/usb-conn-gpio.c
+> +++ b/drivers/usb/common/usb-conn-gpio.c
+> @@ -257,6 +257,9 @@ static int usb_conn_probe(struct platform_device *pdev)
+>  	platform_set_drvdata(pdev, info);
+>  	device_set_wakeup_capable(&pdev->dev, true);
+>  
+> +	/* Set last role to unknown before performing the initial detection */
+> +	info->last_role = USB_ROLE_UNKNOWN;
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG+KpwAKCRB4tDGHoIJi
-0jC4AQDylP8KaWqPnEBN44hFeAbp72VX8q8/FP2vVH7qdqpqiAEA8dY7ncKN7tjz
-mw3hkVsQWeBPoNshBboVWqINmLqnWQs=
-=kYkx
------END PGP SIGNATURE-----
+Shouldn't last_role have already been set to 0?  If so, why not just
+have this enum value be 0?
 
---6032cX2oMZzLCuYF--
+
+> +
+>  	/* Perform initial detection */
+>  	usb_conn_queue_dwork(info, 0);
+>  
+> diff --git a/include/linux/usb/role.h b/include/linux/usb/role.h
+> index b5deafd..221d462 100644
+> --- a/include/linux/usb/role.h
+> +++ b/include/linux/usb/role.h
+> @@ -8,6 +8,7 @@
+>  struct usb_role_switch;
+>  
+>  enum usb_role {
+> +	USB_ROLE_UNKNOWN = -1,
+
+Why is this explicitly set to a value?  What is magic about -1?  Why not
+0x42?  Or something else?  Or as I mention above, 0?
+
+thanks,
+
+greg k-h
