@@ -2,564 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A777102DF
-	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 04:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B5A710342
+	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 05:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233652AbjEYC1r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 May 2023 22:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
+        id S230324AbjEYDVn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 May 2023 23:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbjEYC1q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 May 2023 22:27:46 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5A8139;
-        Wed, 24 May 2023 19:27:42 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 34P2QVKX0003148, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 34P2QVKX0003148
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 25 May 2023 10:26:31 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 25 May 2023 10:26:42 +0800
-Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 25 May 2023 10:26:42 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
- 15.1.2507.17 via Frontend Transport; Thu, 25 May 2023 10:26:42 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Stanley Chang <stanley_chang@realtek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        "Douglas Anderson" <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Ray Chi" <raychi@google.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-Subject: [PATCH v2 3/3] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 2.0/3.0 PHY
-Date:   Thu, 25 May 2023 10:26:04 +0800
-Message-ID: <20230525022617.30537-3-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230525022617.30537-1-stanley_chang@realtek.com>
-References: <20230525022617.30537-1-stanley_chang@realtek.com>
+        with ESMTP id S229459AbjEYDVm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 May 2023 23:21:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85E0C5;
+        Wed, 24 May 2023 20:21:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6359163456;
+        Thu, 25 May 2023 03:21:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40561C433D2;
+        Thu, 25 May 2023 03:21:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684984899;
+        bh=lgKBmTvgBzJ+dI7EcVQ1lM0GVoaJUUKSJKoKhDNjIQQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BPA/nMddJC5SmoPM+NPnp5Yt3qOj7z+dBqtyFuRBAjCH6sw3gl35TPy6n+VhyUhHC
+         pJIWQoMYd7+iKrnKZCQ1QIP99z9cozD/Hp/kbNnhmgvk8v4QqOY+id/eErEUOkYUoj
+         z7uQjIr+apaoOOfnxLI4QGPEAiys5QziLBPV9INOIB7LqAkWmiP/JZxjA4u0BDi7bz
+         tVhm+BGfbvEsrZywbKHdKblrz4vkei7S+BOEbpS1ajZ0ZqTP0YzOPy2qzh3N/zBAvk
+         RygP2tnxylrpNRN3Tw5eHRkU6s1aMt3aEAXnJvLoljsq8ES1LWwqVFz7SplHx1ENQF
+         gZiFzdZajGdtg==
+Date:   Wed, 24 May 2023 20:25:30 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        chrome-platform@lists.linux.dev, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] usb: typec: mux: Clean up mux_fwnode_match()
+Message-ID: <20230525032530.u5jecuucmdrsuroo@ripper>
+References: <20230524122901.53659-1-heikki.krogerus@linux.intel.com>
+ <20230524122901.53659-2-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXMBS03.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230524122901.53659-2-heikki.krogerus@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Two documentations explain the property about realtek USB PHY drivers.
+On Wed, May 24, 2023 at 03:29:00PM +0300, Heikki Krogerus wrote:
+> Removing the "svid" and "accessory" device property checks.
+> Those properties are not supported on any platform.
+> 
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Link: https://lore.kernel.org/lkml/20230522215348.uoyboow26n2o3tel@ripper/
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> ---
+>  drivers/usb/typec/mux.c | 55 ++++++-----------------------------------
+>  1 file changed, 7 insertions(+), 48 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
+> index d9eaf9a0b0bfd..089c2fd478318 100644
+> --- a/drivers/usb/typec/mux.c
+> +++ b/drivers/usb/typec/mux.c
+> @@ -265,60 +265,19 @@ static int mux_fwnode_match(struct device *dev, const void *fwnode)
+>  static void *typec_mux_match(const struct fwnode_handle *fwnode,
+>  			     const char *id, void *data)
+>  {
+> -	const struct typec_altmode_desc *desc = data;
+>  	struct device *dev;
+> -	bool match;
+> -	int nval;
+> -	u16 *val;
+> -	int ret;
+> -	int i;
+>  
+>  	/*
+> -	 * Check has the identifier already been "consumed". If it
+> -	 * has, no need to do any extra connection identification.
+> +	 * Device graph (OF graph) does not give any means to identify the
+> +	 * device type or the device class of the remote port parent that @fwnode
+> +	 * represents, so in order to identify the type or the class of @fwnode
+> +	 * an additional device property is needed. With typec switches the
 
-Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB 2.0/3.0
-controller. Added two drivers to drive the  USB 2.0/3.0 PHY transceivers.
-For USB 3.0 transceivers, a driver phy-rtk-usb3 is provided.
-The driver phy-rtk-usb2 is used to support USB 2.0 transceivers.
+s/switches/muxes/
 
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
----
-v1 to v2 change:
-    Add phy-cells for generic phy driver
----
- .../bindings/phy/realtek,usb2phy.yaml         | 255 ++++++++++++++++++
- .../bindings/phy/realtek,usb3phy.yaml         | 201 ++++++++++++++
- 2 files changed, 456 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
- create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
+> +	 * property is named "orientation-switch" (@id). The value of the device
 
-diff --git a/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml b/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
-new file mode 100644
-index 000000000000..a2a69da0a163
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
-@@ -0,0 +1,255 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2023 Realtek Semiconductor Corporation
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/phy/realtek,usb2phy.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Realtek DHC SoCs USB2 PHY
-+
-+maintainers:
-+  - Stanley Chang <stanley_chang@realtek.com>
-+
-+description: |
-+  Realtek USB 2.0 PHY support the digital home center (DHC) RTD series SoCs.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - realtek,usb2phy
-+      - realtek,rtd-usb2phy
-+      - realtek,rtd1295-usb2phy
-+      - realtek,rtd1395-usb2phy
-+      - realtek,rtd1619-usb2phy
-+      - realtek,rtd1319-usb2phy
-+      - realtek,rtd1619b-usb2phy
-+      - realtek,rtd1312c-usb2phy
-+      - realtek,rtd1319d-usb2phy
-+      - realtek,rtd1315e-usb2phy
-+
-+  reg:
-+    items:
-+      - description: PHY data registers
-+      - description: PHY control registers
-+
-+  "#phy-cells":
-+    const: 0
-+
-+  realtek,usb:
-+    description: The phandler of realtek dwc3 node
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  realtek,mac:
-+    description: The phandler of dwc3 node
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  realtek,usb_ctrl:
-+    description: The phandler of usb power control node
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  realtek,port-index:
-+    description: The index of USB 2.0 PHY
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  realtek,phyN:
-+    description: The total amount of USB 2.0 PHY
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  phy0:
-+    description: The child node of PHY for the parameter v1.
-+    type: object
-+    properties:
-+      realtek,phy-data-page0-size:
-+        description: PHY data page 0 size
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+      realtek,phy-data-page0-addr:
-+        description: PHY data page 0 address
-+        $ref: /schemas/types.yaml#/definitions/uint8-array
-+
-+      realtek,phy-data-page0-A00:
-+        description: PHY data page 0 value
-+        $ref: /schemas/types.yaml#/definitions/uint8-array
-+
-+      realtek,phy-data-page1-size:
-+        description: PHY data page 1 size
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+      realtek,phy-data-page1-addr:
-+        description: PHY data page 1 address
-+        $ref: /schemas/types.yaml#/definitions/uint8-array
-+
-+      realtek,phy-data-page1-A00:
-+        description: PHY data page 1 value
-+        $ref: /schemas/types.yaml#/definitions/uint8-array
-+
-+      realtek,phy-data-page2-size:
-+        description: PHY data page 2 size
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+      realtek,phy-data-page2-addr:
-+        description: PHY data page 2 address
-+        $ref: /schemas/types.yaml#/definitions/uint8-array
-+
-+      realtek,phy-data-page2-A00:
-+        description: PHY data page 2 value
-+        $ref: /schemas/types.yaml#/definitions/uint8-array
-+
-+      realtek,do-toggle:
-+        description: Do PHY parameter toggle when port status change
-+        type: boolean
-+
-+      realtek,check-efuse:
-+        description: Enable to fix PHY parameter from reading otp table
-+        type: boolean
-+
-+      realtek,use-default-parameter:
-+        description: Don't set parameter and use default value
-+        type: boolean
-+
-+      realtek,is-double-sensitivity-mode:
-+        description: Enable double sensitivity mode
-+        type: boolean
-+
-+      realtek,ldo-page0-e4-compensate:
-+        description: Adjust the PHY parameter for page 0 0xE4 for ldo mode
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+      realtek,page0-e4-compensate:
-+        description: Adjust the PHY parameter for page 0 0xE4
-+          for efuse table v2
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  phy0_data:
-+    description: The child node of PHY for parameter v2.
-+    type: object
-+    properties:
-+      realtek,page0-size:
-+        description: PHY data page 0 size
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+      realtek,page0-data-A00:
-+        description: PHY data page 0 address and value
-+        $ref: /schemas/types.yaml#/definitions/uint32-array
-+
-+      realtek,page1-size:
-+        description: PHY data page 1 size
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+      realtek,page1-data-A00:
-+        description: PHY data page 1 address and value
-+        $ref: /schemas/types.yaml#/definitions/uint32-array
-+
-+      realtek,page2-size:
-+        description: PHY data page 2 size
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+      realtek,page2-data-A00:
-+        description: PHY data page 2 address and value
-+        $ref: /schemas/types.yaml#/definitions/uint32-array
-+
-+      realtek,do-toggle:
-+        description: Do PHY parameter toggle when port status change
-+        type: boolean
-+
-+      realtek,do-toggle-driving:
-+        description: Do PHY parameter toggle for driving when port
-+          status change
-+        type: boolean
-+
-+      realtek,check-efuse:
-+        description: Enable to fix PHY parameter from reading otp table
-+        type: boolean
-+
-+      realtek,use-default-parameter:
-+        description: Don't set parameter and use default value
-+        type: boolean
-+
-+      realtek,is-double-sensitivity-mode:
-+        description: Enable double sensitivity mode
-+        type: boolean
-+
-+      realtek,ldo-force-enable:
-+        description: Force enable ldo mode
-+        type: boolean
-+
-+      realtek,ldo-page0-e4-compensate:
-+        description: Adjust the PHY parameter for page0 0xE4 for ldo mode
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+      realtek,page0-e4-compensate:
-+        description: Adjust the PHY parameter for page0 0xE4
-+          for efuse table v2
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#phy-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    dwc3_u3drd_usb2phy: dwc3_u3drd_usb2phy@98013e14 {
-+        compatible = "realtek,usb2phy";
-+        reg = <0x98013e14 0x4>, <0x98058280 0x4>;
-+        #phy-cells = <0>;
-+        status = "okay";
-+        realtek,phyN = <1>;
-+
-+        phy0 {
-+            realtek,phy-data-page0-size = <16>;
-+            realtek,phy-data-page0-addr = /bits/ 8
-+                <0xE0 0xE1 0xE2 0xE3 0xE4 0xE5 0xE6 0xE7 0xF0 0xF1
-+                0xF2 0xF3 0xF4 0xF5 0xF6 0xF7>;
-+            realtek,phy-data-page0-A00 = /bits/ 8
-+                <0xE0 0x30 0x79 0x8D 0x6A 0x65 0x01 0x71 0xFC 0x8C
-+                0x00 0x11 0x9B 0x00 0x00 0x0A>;
-+            realtek,phy-data-page0-B00 = /bits/ 8
-+                <0x18 0x30 0x79 0x8D 0x6A 0x65 0x01 0x71 0xFC 0x8C
-+                0x00 0x11 0x9B 0x00 0x00 0x32>;
-+            realtek,phy-data-page1-size = <8>;
-+            realtek,phy-data-page1-addr = /bits/ 8
-+                <0xE0 0xE1 0xE2 0xE3 0xE4 0xE5 0xE6 0xE7>;
-+            realtek,phy-data-page1-A00 = /bits/ 8
-+                <0x25 0xEF 0x60 0x44 0x00 0x0F 0x18 0xE3>;
-+            realtek,phy-data-page2-size = <1>;
-+            realtek,phy-data-page2-addr = /bits/ 8
-+                <0xE0>;
-+            realtek,phy-data-page2-A00 = /bits/ 8
-+                <0x01>;
-+            realtek,do-toggle;
-+            realtek,check-efuse;
-+            realtek,is-double-sensitivity-mode;
-+            realtek,ldo-page0-e4-compensate = <(-2)>;
-+        };
-+    };
-+
-+  - |
-+    usb_port0_usb2phy: usb_port0_usb2phy@13214 {
-+        compatible = "realtek,usb2phy";
-+        reg = <0x13214 0x4>, <0x28280 0x4>;
-+        #phy-cells = <0>;
-+        realtek,usb = <&usb_port0>;
-+        realtek,mac = <&port0_dwc3>;
-+        realtek,usb_ctrl = <&usb_ctrl>;
-+
-+        realtek,port-index = <0>;
-+        realtek,phyN = <1>;
-+        phy0_data {
-+            realtek,page0-size = <16>;
-+            realtek,page0-data-A00 = /* < addr data > */
-+                    <0xE0 0xA3>, <0xE4 0xB2>, <0xE5 0x4F>, <0xE6 0x42>;
-+            realtek,page1-size = <8>;
-+            realtek,page1-data-A00 = <0xE3 0x64>;
-+            realtek,page2-size = <8>;
-+            realtek,page2-data-A00 = <0xE7 0x45>;
-+            realtek,do-toggle;
-+            realtek.do-toggle-driving;
-+            realtek,disconnect-driving-updated = <0x8>;
-+            realtek,check-efuse;
-+            realtek,is-double-sensitivity-mode;
-+            realtek,ldo-force-enable;
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-new file mode 100644
-index 000000000000..2d2543acfb5d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-@@ -0,0 +1,201 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2023 Realtek Semiconductor Corporation
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/phy/realtek,usb3phy.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Realtek DHC SoCs USB3 PHY
-+
-+maintainers:
-+  - Stanley Chang <stanley_chang@realtek.com>
-+
-+description: |
-+  Realtek USB 3.0 PHY support the digital home center (DHC) RTD series SoCs.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - realtek,usb3phy
-+      - realtek,rtd-usb3phy
-+      - realtek,rtd1295-usb3phy
-+      - realtek,rtd1619-usb3phy
-+      - realtek,rtd1319-usb3phy
-+      - realtek,rtd1619b-usb3phy
-+      - realtek,rtd1319d-usb3phy
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#phy-cells":
-+    const: 0
-+
-+  realtek,usb:
-+    description: The phandler of realtek dwc3 node
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  realtek,mac:
-+    description: The phandler of dwc3 node
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  realtek,usb_ctrl:
-+    description: The phandler of usb power control node
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  realtek,port-index:
-+    description: The index of USB 3.0 PHY
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  realtek,phyN:
-+    description: The total amount of USB 3.0 PHY
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  phy0:
-+    description: The child node of PHY for parameter v1.
-+    type: object
-+    properties:
-+      realtek,phy-data-size:
-+        description: PHY data size
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+      realtek,phy-data-addr:
-+        description: PHY data address
-+        $ref: /schemas/types.yaml#/definitions/uint8-array
-+
-+      realtek,phy-data-A00:
-+        description: PHY data value
-+        $ref: /schemas/types.yaml#/definitions/uint32-array
-+
-+      realtek,do-toggle:
-+        description: Do PHY parameter toggle when port status change
-+        type: boolean
-+
-+      realtek,do-toggle-once:
-+        description: Do PHY parameter toggle only on PHY init
-+        type: boolean
-+
-+      realtek,check-efuse:
-+        description: Enable to fix PHY parameter from reading otp table
-+        type: boolean
-+
-+      realtek,use-default-parameter:
-+        description: Don't set parameter and use default value
-+        type: boolean
-+
-+      realtek,check-rx-front-end-offset:
-+        description: Enable to check rx front end offset
-+        type: boolean
-+
-+  phy0_data:
-+    description: The child node of PHY for parameter v2.
-+    type: object
-+    properties:
-+      realtek,phy-data-size:
-+        description: PHY data size
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+      realtek,phy-data-A00:
-+        description: PHY data address and value
-+        $ref: /schemas/types.yaml#/definitions/uint32-array
-+
-+      realtek,do-toggle:
-+        description: Do PHY parameter toggle when port status change
-+        type: boolean
-+
-+      realtek,do-toggle-once:
-+        description: Do PHY parameter toggle only on phy init
-+        type: boolean
-+
-+      realtek,check-efuse:
-+        description: Enable to fix PHY parameter from reading otp table
-+        type: boolean
-+
-+      realtek,use-default-parameter:
-+        description: Don't set parameter and use default value
-+        type: boolean
-+
-+      realtek,check-rx-front-end-offset:
-+        description: Enable to check rx front end offset
-+        type: boolean
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#phy-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    dwc3_u3drd_usb3phy: dwc3_u3drd_usb3phy@98013e10 {
-+        compatible = "realtek,usb3phy";
-+        reg = <0x98013e10 0x4>;
-+        #phy-cells = <0>;
-+        status = "okay";
-+        realtek,port-index = <0>; /* index in u3 port */
-+        realtek,phyN = <1>;
-+
-+        phy0 {
-+            realtek,phy-data-size = <0x30>;
-+            realtek,phy-data-addr = /bits/ 8
-+                <0x00 0x01 0x02 0x03 0x04 0x05 0x06
-+                0x07 0x08 0x09 0x0A 0x0B 0x0C 0x0D
-+                0x0E 0x0F 0x10 0x11 0x12 0x13 0x14
-+                0x15 0x16 0x17 0x18 0x19 0x1A 0x1B
-+                0x1C 0x1D 0x1E 0x1F 0x20 0x21 0x22
-+                0x23 0x24 0x25 0x26 0x27 0x28 0x29
-+                0x2A 0x2B 0x2C 0x2D 0x2E 0x2F>;
-+            realtek,phy-data-A00 = /bits/ 16
-+                <0x400C 0xAC86 0x6042 0x2771 0x72F5 0x2AD3 0x0003
-+                    0x2E00 0x3591 0x925C 0xA608 0xA905 0xC000 0xEF1E
-+                    0x2010 0x8D50 0x000C 0x4C10 0xFC00 0x0C81 0xDE01
-+                    0x0000 0x0000 0x0000 0x0000 0x6000 0x0085 0x2014
-+                    0xC900 0xA03F 0xC2E0 0x7E00 0x705A 0xF645 0x0013
-+                    0xCB66 0x4770 0x126C 0x840A 0x01D6 0xF802 0xff04
-+                    0x3040 0x8028 0xFFFF 0xFFFF 0x0000 0x8600>;
-+            realtek,phy-data-B00 = /bits/ 16
-+                <0x400C 0xAC86 0x6042 0x2771 0x72F5 0x2AD3 0x0003
-+                    0x2E00 0x3591 0x924C 0xA608 0xB905 0xC000 0xEF1E
-+                    0x2010 0x8D50 0x000C 0x4C10 0xFC00 0x0C81 0xDE01
-+                    0x0000 0x0000 0x0000 0x0000 0x6000 0x0085 0x2014
-+                    0xC900 0xA03F 0xC2E0 0x7E00 0x705A 0xF645 0x0013
-+                    0xCB66 0x4770 0x126C 0x840A 0x01D6 0xF802 0xff04
-+                    0x3040 0x8028 0xFFFF 0xFFFF 0x0000 0x8600>;
-+            realtek,do-toggle;
-+        };
-+    };
-+
-+  - |
-+    usb_port2_usb3phy: usb_port2_usb3phy@13e10 {
-+        compatible = "realtek,usb3phy";
-+        reg = <0x13e10 0x4>;
-+        #phy-cells = <0>;
-+        realtek,usb = <&usb_port2>;
-+        realtek,mac = <&port2_dwc3>;
-+        realtek,usb_ctrl = <&usb_ctrl>;
-+
-+        realtek,port-index = <0>; /* index in u3 port */
-+        realtek,phyN = <1>;
-+        phy0_data {
-+            realtek,phy-data-size = <0x30>;
-+            realtek,phy-data-A00 = /* <addr  data> */
-+                    <0x01 0xAC8C>,
-+                    <0x06 0x0017>,
-+                    <0x09 0x724C>,
-+                    <0x0B 0xB90D>,
-+                    <0x0A 0xB610>,
-+                    <0x0D 0xEF2A>,
-+                    <0x0F 0x9050>,
-+                    <0x10 0x000C>,
-+                    <0x20 0x70FF>,
-+                    <0x21 0xCFAA>,
-+                    <0x22 0x0013>,
-+                    <0x23 0xDB66>,
-+                    <0x26 0x8609>,
-+                    <0x29 0xFF13>,
-+                    <0x2A 0x3070>;
-+            realtek,do-toggle-once;
-+            realtek,check_efuse;
-+        };
-+    };
-+
--- 
-2.34.1
+s/orientation-switch/mode-switch/
 
+With that:
+
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+Tested-by: Bjorn Andersson <andersson@kernel.org>
+
+Thank you,
+Bjorn
+
+> +	 * property is ignored.
+>  	 */
+> -	match = !id;
+> -	if (match)
+> -		goto find_mux;
+> -
+> -	if (!desc) {
+> -		/*
+> -		 * Accessory Mode muxes & muxes which explicitly specify
+> -		 * the required identifier can avoid SVID matching.
+> -		 */
+> -		match = fwnode_property_present(fwnode, "accessory") ||
+> -			fwnode_property_present(fwnode, id);
+> -		if (match)
+> -			goto find_mux;
+> -		return NULL;
+> -	}
+> -
+> -	/* Alternate Mode muxes */
+> -	nval = fwnode_property_count_u16(fwnode, "svid");
+> -	if (nval <= 0)
+> +	if (id && !fwnode_property_present(fwnode, id))
+>  		return NULL;
+>  
+> -	val = kcalloc(nval, sizeof(*val), GFP_KERNEL);
+> -	if (!val)
+> -		return ERR_PTR(-ENOMEM);
+> -
+> -	ret = fwnode_property_read_u16_array(fwnode, "svid", val, nval);
+> -	if (ret < 0) {
+> -		kfree(val);
+> -		return ERR_PTR(ret);
+> -	}
+> -
+> -	for (i = 0; i < nval; i++) {
+> -		match = val[i] == desc->svid;
+> -		if (match) {
+> -			kfree(val);
+> -			goto find_mux;
+> -		}
+> -	}
+> -	kfree(val);
+> -	return NULL;
+> -
+> -find_mux:
+>  	dev = class_find_device(&typec_mux_class, NULL, fwnode,
+>  				mux_fwnode_match);
+>  
+> -- 
+> 2.39.2
+> 
