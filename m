@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7B8710838
+	by mail.lfdr.de (Postfix) with ESMTP id F0C11710839
 	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 11:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240493AbjEYJB0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 May 2023 05:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46428 "EHLO
+        id S240500AbjEYJB2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 May 2023 05:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240478AbjEYJBZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 05:01:25 -0400
+        with ESMTP id S240035AbjEYJB0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 05:01:26 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CACD18D
-        for <linux-usb@vger.kernel.org>; Thu, 25 May 2023 02:01:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B813198
+        for <linux-usb@vger.kernel.org>; Thu, 25 May 2023 02:01:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685005284; x=1716541284;
+  t=1685005285; x=1716541285;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=EPlWlvcgpP2QjheKqqAWfQtRtfWkomoVewnN3EONT0g=;
-  b=I31eyvui4SOyWemc475ISZeadeYZ3xJPutm3fGS0ecfT/O7ytDtlJ+BR
-   blHqGz/0A+ieHgPQw133zuf8/JsOk50cVriHckynKnw8KJP3nomulaR/O
-   DA/VKUcQcg/yRFmQ904bJiaUrIQ/O9hPNH69mmraeA3a6/gLAhg6rr2hR
-   WaoLvpTDT6ro8RHxi/D0b5lK9HvFlWTt6T0tmq+tLpY+rX4+5rfTLVQPP
-   SszTz8cIW1yEoxMs0HFKm/vqN8tUOPVJKTs9CIxNjwM74XpcQ+ZqlDmro
-   u3cy7Rnu6Vd5SaQWym35HKt5dTwKNTwyHRM7KOBBP7msPBbf+Hy5jFwwR
+  bh=gnl1aFN3BvyzLDDJi1KWPmXKZ1XJx9r0jZWzTMOdAE4=;
+  b=fTgN8WCIZPvHeOrjOJM+MN6SbHUSx3Qk7u37AwKigo/0kw6YTNAsXogq
+   K5kvykgjKQDmtwRvCmkSXhLJ55M45/kaaW0QRXeALIb4hxK8y8q5QYBuQ
+   jH0XwGSmyTupJVOKfDcbQiWA6lmMAVk0NFHYPaMjWb3ePlK6fWK8mlQV6
+   nwGedc2MUd+6pfCcZ2dOYej1kQszKcU+gc6/UWwVdsMuilaghqw0nT0oH
+   RZ6NVn5B6Kr9ZDEXWGYh50ZT/LNG54vx0Mmzl77SYOZWu5DKGi+mwFDsj
+   cCjmhNM/V7E3XdtVoWGWw1N7nbz+CcUqkRrQwyglk3GYUB5GbR0MZ8RAM
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="333452075"
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="333452077"
 X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="333452075"
+   d="scan'208";a="333452077"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 02:01:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="655135846"
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="655135848"
 X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="655135846"
+   d="scan'208";a="655135848"
 Received: from black.fi.intel.com ([10.237.72.28])
   by orsmga003.jf.intel.com with ESMTP; 25 May 2023 02:01:20 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id C3F1623A; Thu, 25 May 2023 12:01:24 +0300 (EEST)
+        id C88E0413; Thu, 25 May 2023 12:01:24 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -49,9 +49,9 @@ Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
         Koba Ko <koba.ko@canonical.com>,
         Imre Deak <imre.deak@intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 1/2] thunderbolt: Increase DisplayPort Connection Manager handshake timeout
-Date:   Thu, 25 May 2023 12:01:23 +0300
-Message-Id: <20230525090124.11614-2-mika.westerberg@linux.intel.com>
+Subject: [PATCH 2/2] thunderbolt: Do not touch CL state configuration during discovery
+Date:   Thu, 25 May 2023 12:01:24 +0300
+Message-Id: <20230525090124.11614-3-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525090124.11614-1-mika.westerberg@linux.intel.com>
 References: <20230525090124.11614-1-mika.westerberg@linux.intel.com>
@@ -67,36 +67,66 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It turns out that when plugging in VGA cable through USB-C to VGA/DVI
-dongle the Connection Manager handshake can take longer time, at least
-on Intel Titan Ridge based docks such as Dell WD91TB. This leads to
-following error in the dmesg:
+If the boot firmware has already established tunnels, especially ones
+that have special requirements from the link such as DisplayPort, we
+should not blindly enable CL states (nor change the TMU configuration).
+Otherwise the existing tunnels may not work as expected.
 
-  thunderbolt 0000:00:0d.3: 3:10: DP tunnel activation failed, aborting
-
-and the display stays blank (because we failed to establish the tunnel).
-For this reason increase the timeout to 3s.
+For this reason, skip the CL state enabling when we go over the existing
+topology. This will als keep the TMU settings untouched because we do
+not change the TMU configururation when CL states are not enabled.
 
 Reported-by: Koba Ko <koba.ko@canonical.com>
-Cc: stable@vger.kernel.org
+Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/7831
+Cc: stable@vger.kernel.org # v6.0+
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/tunnel.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thunderbolt/tb.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
-index 3bf2628a5dcd..3ebd32b897a0 100644
---- a/drivers/thunderbolt/tunnel.c
-+++ b/drivers/thunderbolt/tunnel.c
-@@ -531,7 +531,7 @@ static int tb_dp_xchg_caps(struct tb_tunnel *tunnel)
- 	 * Perform connection manager handshake between IN and OUT ports
- 	 * before capabilities exchange can take place.
- 	 */
--	ret = tb_dp_cm_handshake(in, out, 1500);
-+	ret = tb_dp_cm_handshake(in, out, 3000);
- 	if (ret)
- 		return ret;
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index 7bfbc9ca9ba4..c1af712ca728 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -737,6 +737,7 @@ static void tb_scan_port(struct tb_port *port)
+ {
+ 	struct tb_cm *tcm = tb_priv(port->sw->tb);
+ 	struct tb_port *upstream_port;
++	bool discovery = false;
+ 	struct tb_switch *sw;
+ 	int ret;
  
+@@ -804,8 +805,10 @@ static void tb_scan_port(struct tb_port *port)
+ 	 * tunnels and know which switches were authorized already by
+ 	 * the boot firmware.
+ 	 */
+-	if (!tcm->hotplug_active)
++	if (!tcm->hotplug_active) {
+ 		dev_set_uevent_suppress(&sw->dev, true);
++		discovery = true;
++	}
+ 
+ 	/*
+ 	 * At the moment Thunderbolt 2 and beyond (devices with LC) we
+@@ -835,10 +838,14 @@ static void tb_scan_port(struct tb_port *port)
+ 	 * CL0s and CL1 are enabled and supported together.
+ 	 * Silently ignore CLx enabling in case CLx is not supported.
+ 	 */
+-	ret = tb_switch_enable_clx(sw, TB_CL1);
+-	if (ret && ret != -EOPNOTSUPP)
+-		tb_sw_warn(sw, "failed to enable %s on upstream port\n",
+-			   tb_switch_clx_name(TB_CL1));
++	if (discovery) {
++		tb_sw_dbg(sw, "discovery, not touching CL states\n");
++	} else {
++		ret = tb_switch_enable_clx(sw, TB_CL1);
++		if (ret && ret != -EOPNOTSUPP)
++			tb_sw_warn(sw, "failed to enable %s on upstream port\n",
++				   tb_switch_clx_name(TB_CL1));
++	}
+ 
+ 	if (tb_switch_is_clx_enabled(sw, TB_CL1))
+ 		/*
 -- 
 2.39.2
 
