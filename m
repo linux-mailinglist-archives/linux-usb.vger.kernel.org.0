@@ -2,64 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C11710839
-	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 11:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F047108E1
+	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 11:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240500AbjEYJB2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 May 2023 05:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
+        id S239801AbjEYJ3y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 May 2023 05:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240035AbjEYJB0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 05:01:26 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B813198
-        for <linux-usb@vger.kernel.org>; Thu, 25 May 2023 02:01:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685005285; x=1716541285;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gnl1aFN3BvyzLDDJi1KWPmXKZ1XJx9r0jZWzTMOdAE4=;
-  b=fTgN8WCIZPvHeOrjOJM+MN6SbHUSx3Qk7u37AwKigo/0kw6YTNAsXogq
-   K5kvykgjKQDmtwRvCmkSXhLJ55M45/kaaW0QRXeALIb4hxK8y8q5QYBuQ
-   jH0XwGSmyTupJVOKfDcbQiWA6lmMAVk0NFHYPaMjWb3ePlK6fWK8mlQV6
-   nwGedc2MUd+6pfCcZ2dOYej1kQszKcU+gc6/UWwVdsMuilaghqw0nT0oH
-   RZ6NVn5B6Kr9ZDEXWGYh50ZT/LNG54vx0Mmzl77SYOZWu5DKGi+mwFDsj
-   cCjmhNM/V7E3XdtVoWGWw1N7nbz+CcUqkRrQwyglk3GYUB5GbR0MZ8RAM
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="333452077"
-X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="333452077"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 02:01:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="655135848"
-X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="655135848"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 25 May 2023 02:01:20 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id C88E0413; Thu, 25 May 2023 12:01:24 +0300 (EEST)
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Koba Ko <koba.ko@canonical.com>,
-        Imre Deak <imre.deak@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 2/2] thunderbolt: Do not touch CL state configuration during discovery
-Date:   Thu, 25 May 2023 12:01:24 +0300
-Message-Id: <20230525090124.11614-3-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525090124.11614-1-mika.westerberg@linux.intel.com>
-References: <20230525090124.11614-1-mika.westerberg@linux.intel.com>
+        with ESMTP id S240063AbjEYJ3r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 05:29:47 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B04191
+        for <linux-usb@vger.kernel.org>; Thu, 25 May 2023 02:29:45 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34P9PGrZ013925;
+        Thu, 25 May 2023 09:29:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=Saf3XI6y0I0Tx0sSFCtSp+dNchS4PAmoRlZSRo0431k=;
+ b=Rv6naMKoi3Aj0R7fMCYoploEDmRsnjuPkPsp4+xaFP9N+diuiulrLOtwNaDyh8pPpXgK
+ MLEaGoCpeb7SEfjPpB3TnCIbqxEn8DIbejCODtlG5f3hM/moNTs3AGb2/1keh0QOPIdD
+ sNMjy4Er2FNiRDFYsPJxloGYBsyNCD4F2T0NIOLCIQtiFqhug79BVxaeW3V/59iw7hvq
+ ryHk9xxG6tnU5EofJjGKN242ExyOnda5ORLGnNTY25m0USWjmsE0QMjemQkj/6MDTZhx
+ kX+WfcFppsY+aVdhlLJitMYfUQHNn1GVxMFLwhElxmW612UCuwOFniRMH8vHSkOekEtW wQ== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qt29frbu4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 09:29:40 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34P9TIH3014691
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 09:29:18 GMT
+Received: from hu-uaggarwa-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 25 May 2023 02:29:16 -0700
+From:   Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John Keeping <john@metanate.com>
+CC:     Linyu Yuan <quic_linyyuan@quicinc.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        <linux-usb@vger.kernel.org>,
+        Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
+Subject: [PATCH] usb: gadget: f_fs: Add unbind event before functionfs_unbind
+Date:   Thu, 25 May 2023 14:58:54 +0530
+Message-ID: <20230525092854.7992-1-quic_uaggarwa@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: xNZNGLnnYpQdhWDzBDINYvurFhUrqX0L
+X-Proofpoint-ORIG-GUID: xNZNGLnnYpQdhWDzBDINYvurFhUrqX0L
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-25_05,2023-05-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 priorityscore=1501 impostorscore=0 mlxscore=0
+ spamscore=0 malwarescore=0 suspectscore=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305250079
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,66 +75,61 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the boot firmware has already established tunnels, especially ones
-that have special requirements from the link such as DisplayPort, we
-should not blindly enable CL states (nor change the TMU configuration).
-Otherwise the existing tunnels may not work as expected.
+While exercising the unbind path, with the current implementation
+the functionfs_unbind would be calling which waits for the ffs->mutex
+to be available, however within the same time ffs_ep0_read is invoked
+& if no setup packets are pending, it will invoke function
+wait_event_interruptible_exclusive_locked_irq which by definition waits
+for the ev.count to be increased inside the same mutex for which
+functionfs_unbind is waiting.
+This creates deadlock situation because the functionfs_unbind won't
+get the lock until ev.count is increased which can only happen if
+the caller ffs_func_unbind can proceed further.
 
-For this reason, skip the CL state enabling when we go over the existing
-topology. This will als keep the TMU settings untouched because we do
-not change the TMU configururation when CL states are not enabled.
+Following is the illustration:
 
-Reported-by: Koba Ko <koba.ko@canonical.com>
-Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/7831
-Cc: stable@vger.kernel.org # v6.0+
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+	CPU1				CPU2
+
+ffs_func_unbind()		ffs_ep0_read()
+				mutex_lock(ffs->mutex)
+				wait_event(ffs->ev.count)
+functionfs_unbind()
+  mutex_lock(ffs->mutex)
+  mutex_unlock(ffs->mutex)
+
+ffs_event_add()
+
+<deadlock>
+
+Fix this by moving the event unbind before functionfs_unbind
+to ensure the ev.count is incrased properly.
+
+Fixes: 6a19da111057 ("usb: gadget: f_fs: Prevent race during ffs_ep0_queue_wait")
+Signed-off-by: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
 ---
- drivers/thunderbolt/tb.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ drivers/usb/gadget/function/f_fs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 7bfbc9ca9ba4..c1af712ca728 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -737,6 +737,7 @@ static void tb_scan_port(struct tb_port *port)
- {
- 	struct tb_cm *tcm = tb_priv(port->sw->tb);
- 	struct tb_port *upstream_port;
-+	bool discovery = false;
- 	struct tb_switch *sw;
- 	int ret;
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index a13c946e0663..f41a385a5c42 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -3535,6 +3535,7 @@ static void ffs_func_unbind(struct usb_configuration *c,
+ 	/* Drain any pending AIO completions */
+ 	drain_workqueue(ffs->io_completion_wq);
  
-@@ -804,8 +805,10 @@ static void tb_scan_port(struct tb_port *port)
- 	 * tunnels and know which switches were authorized already by
- 	 * the boot firmware.
- 	 */
--	if (!tcm->hotplug_active)
-+	if (!tcm->hotplug_active) {
- 		dev_set_uevent_suppress(&sw->dev, true);
-+		discovery = true;
-+	}
++	ffs_event_add(ffs, FUNCTIONFS_UNBIND);
+ 	if (!--opts->refcnt)
+ 		functionfs_unbind(ffs);
  
- 	/*
- 	 * At the moment Thunderbolt 2 and beyond (devices with LC) we
-@@ -835,10 +838,14 @@ static void tb_scan_port(struct tb_port *port)
- 	 * CL0s and CL1 are enabled and supported together.
- 	 * Silently ignore CLx enabling in case CLx is not supported.
- 	 */
--	ret = tb_switch_enable_clx(sw, TB_CL1);
--	if (ret && ret != -EOPNOTSUPP)
--		tb_sw_warn(sw, "failed to enable %s on upstream port\n",
--			   tb_switch_clx_name(TB_CL1));
-+	if (discovery) {
-+		tb_sw_dbg(sw, "discovery, not touching CL states\n");
-+	} else {
-+		ret = tb_switch_enable_clx(sw, TB_CL1);
-+		if (ret && ret != -EOPNOTSUPP)
-+			tb_sw_warn(sw, "failed to enable %s on upstream port\n",
-+				   tb_switch_clx_name(TB_CL1));
-+	}
+@@ -3559,7 +3560,6 @@ static void ffs_func_unbind(struct usb_configuration *c,
+ 	func->function.ssp_descriptors = NULL;
+ 	func->interfaces_nums = NULL;
  
- 	if (tb_switch_is_clx_enabled(sw, TB_CL1))
- 		/*
+-	ffs_event_add(ffs, FUNCTIONFS_UNBIND);
+ }
+ 
+ static struct usb_function *ffs_alloc(struct usb_function_instance *fi)
 -- 
-2.39.2
+2.17.1
 
