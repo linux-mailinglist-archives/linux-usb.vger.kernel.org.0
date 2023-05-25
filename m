@@ -2,111 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD9771091F
-	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 11:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90848710BFE
+	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 14:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239983AbjEYJmp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 May 2023 05:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
+        id S240858AbjEYMZw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 May 2023 08:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234050AbjEYJmn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 05:42:43 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6679A191;
-        Thu, 25 May 2023 02:42:42 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-514454733b8so498932a12.3;
-        Thu, 25 May 2023 02:42:42 -0700 (PDT)
+        with ESMTP id S231599AbjEYMZv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 08:25:51 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C77812E;
+        Thu, 25 May 2023 05:25:50 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1ae40dcdc18so10007015ad.2;
+        Thu, 25 May 2023 05:25:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685007761; x=1687599761;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6XQd90nNPC5bHeVCXpgMeDPAKRWOlZYVAdkPI9BTXzc=;
-        b=Q9zGzrF7z7hlFMbq0YtWmAN+STRLx6HxRirDP1yrRIwPbDuzGDlVvxPfTGXdsOaQ7u
-         TSZHnTYoRxvRycLXTzlxRRwmbKXjsVZ59OByukgyGazP4uLHjvcsI4BQa10cRCYd+ZF/
-         mRgVTkKAsw6Qw1hmI8fAmWnWiHo94fd7NzlQWw4ogyvNWzCvNNPT/zAvajc7uBmD2apl
-         VwVSM+BYOp+gcB+8cTVcdDVZDpR/nFk1qg/ppox4ecBEzvSLFF1Z+2intVEF6iA8psh7
-         bUHOLDPF6tyMEvyBeoIqHzPPdMuj2siasEQxr7kJuJMS1vSlXBSOiNUBa67ITzkCuhHT
-         /MMg==
+        d=gmail.com; s=20221208; t=1685017550; x=1687609550;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ymi8+ESyr5hcPy4jkcXXjlbBsSht1Su+Vk/ZbjlIT7s=;
+        b=MtMY9L1x0yFzPt+64KeTsJs6E7QNOtUtKr+nV1PG0mW9QbIdXDl1bFgJP0fLKtFZIf
+         h9r9533BBS7DkhP4JhYN5qaiYJUORnWw+dHjfM0P3khXnsvMN169n+zjXdJo645mdOC4
+         H2wTM14Im/gvkTq/BfL+dTsYflaf187P6UwEMdRwp7oh2jjnWW05JX6Lq3sYKufnN4DO
+         3Ok7wlldXcZIAcJHDHtJqMucE2/1hL5MtX5wFa9huy91SllUFPUaYClVQp0+6+NyXss+
+         DHch+E/L1TMhR2Yo8Po5uborvj8iiRDfn/zkrZ/83nzIG/vgJ+7qJ++tj6d8hZYeBWHx
+         F4rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685007761; x=1687599761;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6XQd90nNPC5bHeVCXpgMeDPAKRWOlZYVAdkPI9BTXzc=;
-        b=IIjmrC5xQe2nwpGNupkq/LuGRHwbV/Q3tWSlVrIYEn5EEpubBe8IZXeyRWy35VDyN9
-         V+mfxDSLv16SJJQsE58EJbQrXLUVKGGccisor5r7r3VVRka1TkvejMI7eOoYVHA3Dvda
-         S+2IIeVvha2aH8fb0+qZTEmLw+/9jEuE4y3oiW2oms9eaL/CGoGd1D8jkFfyPc+mIO15
-         zB4nUHgWivPD1phZbsmS2HEX0eJ3v5MpF2B9znSMRXFH5RKG/btswTuJ1Zc/N1PcMUGk
-         hSuZr0klQdgf6qDGKSA6dMVrqvirEi7/iQcng6+7X83wLrQwTLHYejf2UytxOt0KxLIe
-         c2aQ==
-X-Gm-Message-State: AC+VfDyhB3eCFIgF43rBAb1xWuq2nggM2TKDCi1ctbtEZ2EtqcZKoNYR
-        38tIEVQWBDSm4cs7ism7yOLkOwf1dE0=
-X-Google-Smtp-Source: ACHHUZ4hCYebNsaawH3EjvG+NnzYstOSTEu0rUk9IvAP//0je2d5iAzMdSrhBMjJbsacR0JCFY6KCA==
-X-Received: by 2002:a17:907:3faa:b0:970:c9f:2db6 with SMTP id hr42-20020a1709073faa00b009700c9f2db6mr905381ejc.63.1685007760531;
-        Thu, 25 May 2023 02:42:40 -0700 (PDT)
-Received: from localhost (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id q18-20020a170906b29200b0095844605bb8sm617552ejz.10.2023.05.25.02.42.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 02:42:40 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH] dt-bindings: usb: tegra-xudc: Remove extraneous PHYs
-Date:   Thu, 25 May 2023 11:42:37 +0200
-Message-Id: <20230525094237.2846682-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        d=1e100.net; s=20221208; t=1685017550; x=1687609550;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ymi8+ESyr5hcPy4jkcXXjlbBsSht1Su+Vk/ZbjlIT7s=;
+        b=V2II3DAZtC5x3siDS2JAtWTCfh8o+ZEUJgnRr1pZTo9gdYg1TsPOZkTFZPyL+jDXtn
+         r1fe/6sIZdvVo8a4bjwFretrEbNWQlAZljZcPIQwupdKMKR83w1schspokgFIG+cFx/+
+         /qwj1x+qQ5HpmeVLH41sDI3emb96F3Ocec6tGVFzdfEfDp3TELPyAQeUm5M+SsSmbwiN
+         KQTxITMT//Z1urPknMV1vgU2KmDhRnBsvFekiCU3d4/YHO3VA2bnSBYFr+1rGjAkJINV
+         emNg27/7IYhzSgDgAAqd2sZo0z/xIYloQUl6K0go1bzzFP2Zc8ab/LjtZX4LT2BfrAkH
+         Rpbw==
+X-Gm-Message-State: AC+VfDyZJwuhgiUJ1t1W64ni57QSLVJRaOejdqVTRNZrZQRmWsqbocD6
+        8d/5ySiIQ3jtDX8kjdwWK4kuFEO/B/UN3cVTkPg=
+X-Google-Smtp-Source: ACHHUZ6nkRBt2arGuTFntOI08nshgppWIKNKBkg/W4bziUDYoQB6qd4FobSOVhcYt61bwNFjevGUG9a/GQrfyxsvABg=
+X-Received: by 2002:a17:902:988c:b0:1af:d3b2:4eb7 with SMTP id
+ s12-20020a170902988c00b001afd3b24eb7mr1137397plp.21.1685017549501; Thu, 25
+ May 2023 05:25:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <80496b6d-990e-4fb3-808b-daf3143cef15@kili.mountain>
+In-Reply-To: <80496b6d-990e-4fb3-808b-daf3143cef15@kili.mountain>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Thu, 25 May 2023 20:22:15 +0800
+Message-ID: <CAD-N9QXOXrHRg+_-ZqPtcqokQvkgVBDEucMW91+xzt8Jm1c80A@mail.gmail.com>
+Subject: Re: [PATCH] usb: phy: tahvo: release resources on error in probe()
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Felipe Balbi <balbi@kernel.org>,
+        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+On Thu, May 25, 2023 at 4:12=E2=80=AFPM Dan Carpenter <dan.carpenter@linaro=
+.org> wrote:
+>
+> We need to do some clean up before returning on this error path.
+>
+> Fixes: 0d45a1373e66 ("usb: phy: tahvo: add IRQ check")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
 
-The USB device controller on Tegra210 and later supports one USB 2/3
-port, so only a single pair of PHYs is needed. Drop any of the extra
-PHYs from the bindings.
+Hi Dan,
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml         | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+it seems this patch is already submitted with Yang Li from our mailing
+list. Please refer to:
 
-diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
-index e2270ce0c56b..c6e661e8915c 100644
---- a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
-+++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
-@@ -91,6 +91,7 @@ properties:
- 
-   phys:
-     minItems: 1
-+    maxItems: 2
-     description:
-       Must contain an entry for each entry in phy-names.
-       See ../phy/phy-bindings.txt for details.
-@@ -99,13 +100,7 @@ properties:
-     minItems: 1
-     items:
-       - const: usb2-0
--      - const: usb2-1
--      - const: usb2-2
--      - const: usb2-3
-       - const: usb3-0
--      - const: usb3-1
--      - const: usb3-2
--      - const: usb3-3
- 
-   avddio-usb-supply:
-     description: PCIe/USB3 analog logic power supply. Must supply 1.05 V.
--- 
-2.40.1
+https://www.spinics.net/lists/linux-usb/msg240531.html
 
+> ---
+>  drivers/usb/phy/phy-tahvo.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/phy/phy-tahvo.c b/drivers/usb/phy/phy-tahvo.c
+> index 47562d49dfc1..5cac31c6029b 100644
+> --- a/drivers/usb/phy/phy-tahvo.c
+> +++ b/drivers/usb/phy/phy-tahvo.c
+> @@ -391,7 +391,7 @@ static int tahvo_usb_probe(struct platform_device *pd=
+ev)
+>
+>         tu->irq =3D ret =3D platform_get_irq(pdev, 0);
+>         if (ret < 0)
+> -               return ret;
+> +               goto err_remove_phy;
+>         ret =3D request_threaded_irq(tu->irq, NULL, tahvo_usb_vbus_interr=
+upt,
+>                                    IRQF_ONESHOT,
+>                                    "tahvo-vbus", tu);
+> --
+> 2.39.2
+>
