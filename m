@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECCD711932
-	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 23:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47450711938
+	for <lists+linux-usb@lfdr.de>; Thu, 25 May 2023 23:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241440AbjEYVeU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 May 2023 17:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41822 "EHLO
+        id S241777AbjEYVgu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 May 2023 17:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjEYVeT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 17:34:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3025099;
-        Thu, 25 May 2023 14:34:18 -0700 (PDT)
+        with ESMTP id S232481AbjEYVgs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 17:36:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DF0FB;
+        Thu, 25 May 2023 14:36:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1ACB64B51;
-        Thu, 25 May 2023 21:34:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EBA4C433EF;
-        Thu, 25 May 2023 21:34:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C03964B5F;
+        Thu, 25 May 2023 21:36:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDF05C433D2;
+        Thu, 25 May 2023 21:36:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685050457;
-        bh=zZK1RRwMzH2sbsee7VnC7rlgcun9B4/SN/dI3FKVvrg=;
+        s=k20201202; t=1685050604;
+        bh=fTgLUP/spX/1v/xhm+T8su551vODX+MVDzEHLjJVyC0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sYy8VE1VD0cAgEQuQim7zpsjY9TurkTcJPM8V//GYjopKthjG7swTE5W5MfBkiymv
-         gptEA5LzE3IQ95cBxZ2YaS+ouWHeojSMRaBTKoUhsGIXRsxsxPjsX6TPztQfMhMldh
-         SuTIH5cGrlLwRkrvhRW0H4JvwkVdYq4GVx9hTsSWN0X+ERFX/OkNNQPf1/WVd/JLgX
-         /AFo9muWJpPvbUiV5Vkz+O+/FB7GMsA1yaEPll0FSZXSUItNyIjw43FnpK+hMSGlrj
-         gSxpoHHqT3QTPfco7ev8HFXnGS/mrM0GTn+0tO7TzsMQgFzKyLBSEnWqD1V1v0qzTR
-         X5t+2G3DdOoZw==
-Date:   Thu, 25 May 2023 22:34:10 +0100
+        b=m6HB27VGJXeCbOAxlYtTT4a/HviFAW5evDIB38A/SneV95u29fkdGgrymnoPTo9I+
+         N+1wGdd2laYimC/zV2VmgRYK0AxX7Z4cJFe5S6azRUhhQ0ikqPnaR0tVA+w31A/nld
+         3aoR4MKfsMFBp0nYThfSCYlSUOV/GTkQnfRDr+3Xhm9Q31tEqI1QwTYy/Ylw5sCGZr
+         iPhV8IKeaVW5UOlpgf+fDQ2HMupdEVzNe0dWTYF1Qfzn8ch9qm5j6gYjBMJumbt4bW
+         geZTTXszI+HNd1PJlJt0hTGxbH7aY4sE2RUSKE1MkUPLqKgDlsOjv0WHs1Ar1rEwqB
+         1sidF7owc0fWQ==
+Date:   Thu, 25 May 2023 22:36:38 +0100
 From:   Conor Dooley <conor@kernel.org>
 To:     Minda Chen <minda.chen@starfivetech.com>
 Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
@@ -51,20 +51,20 @@ Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Mason Huo <mason.huo@starfivetech.com>
-Subject: Re: [PATCH v6 5/7] dt-bindings: usb: Add StarFive JH7110 USB
- controller
-Message-ID: <20230525-shopper-handbrake-27fc06aede32@spud>
+Subject: Re: [PATCH v6 7/7] riscv: dts: starfive: Add USB dts configuration
+ for JH7110
+Message-ID: <20230525-cross-daybreak-24dfed69e5d0@spud>
 References: <20230518112750.57924-1-minda.chen@starfivetech.com>
- <20230518112750.57924-6-minda.chen@starfivetech.com>
+ <20230518112750.57924-8-minda.chen@starfivetech.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="SLOnlnkMNKq6BWyy"
+        protocol="application/pgp-signature"; boundary="Vw7uD/P9k0KbWgXU"
 Content-Disposition: inline
-In-Reply-To: <20230518112750.57924-6-minda.chen@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230518112750.57924-8-minda.chen@starfivetech.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,60 +72,55 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---SLOnlnkMNKq6BWyy
+--Vw7uD/P9k0KbWgXU
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 18, 2023 at 07:27:48PM +0800, Minda Chen wrote:
-> StarFive JH7110 platforms USB have a wrapper module around
-> the Cadence USBSS-DRD controller. Add binding information doc
-> for that.
+Greg,
+
+On Thu, May 18, 2023 at 07:27:50PM +0800, Minda Chen wrote:
+> Add USB wrapper layer and Cadence USB3 controller dts
+> configuration for StarFive JH7110 SoC and VisionFive2
+> Board.
+> USB controller connect to PHY, The PHY dts configuration
+> are also added.
 >=20
 > Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
-> Reviewed-by: Peter Chen <peter.chen@kernel.org>
-> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
-> ---
->  .../bindings/usb/starfive,jh7110-usb.yaml     | 115 ++++++++++++++++++
->  1 file changed, 115 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/starfive,jh7110=
--usb.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.ya=
-ml b/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
-> new file mode 100644
-> index 000000000000..24aa9c10d6ab
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
-> @@ -0,0 +1,115 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/starfive,jh7110-usb.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: StarFive JH7110 wrapper module for the Cadence USBSS-DRD controll=
-er
 
-I think you told Krzysztof you'd rename this to "StarFive JH7110 Cadence
-USBSS-DRD SoC controller"?
+> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/d=
+ts/starfive/jh7110.dtsi
+> index 71a8e9acbe55..b65f06c5b1b7 100644
+> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> @@ -366,6 +366,59 @@
+>  			status =3D "disabled";
+>  		};
+> =20
+> +		usb0: usb@10100000 {
+> +			compatible =3D "starfive,jh7110-usb";
+> +			ranges =3D <0x0 0x0 0x10100000 0x100000>;
+> +			#address-cells =3D <1>;
+> +			#size-cells =3D <1>;
+> +			starfive,stg-syscon =3D <&stg_syscon 0x4>;
+> +			clocks =3D <&stgcrg JH7110_STGCLK_USB0_LPM>,
 
-Otherwise, it looks like all the stuff from him and Rob have been sorted
-out, so other than $title this is
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Please don't pick this patch, if the rest of the series is applicable,
+as this will break building the dtb as stgcrg does not yet exist in any
+maintainer tree.
 
 Thanks,
-Conor..
+Conor.
 
---SLOnlnkMNKq6BWyy
+--Vw7uD/P9k0KbWgXU
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG/UUgAKCRB4tDGHoIJi
-0v75AP9K+Svm5FyZzmMv+llB8XO317ghvBO5MrADfge2KP6pPwEAl0bZpPNFfw8m
-AK1S29TZeiBbhbcxD8KECfWuk1118AQ=
-=3/eV
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG/U5gAKCRB4tDGHoIJi
+0kaRAP4zsAQYWPoPnIY4GaVky+W0yED4WO9LFF+YaELQTfg7DQEAzHPY2f/ioXn1
+ujSP13F9xiLniw+VP2XQjb6uPGHmOwc=
+=LWIh
 -----END PGP SIGNATURE-----
 
---SLOnlnkMNKq6BWyy--
+--Vw7uD/P9k0KbWgXU--
