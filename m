@@ -2,24 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A63B7712D1C
-	for <lists+linux-usb@lfdr.de>; Fri, 26 May 2023 21:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D649712D5F
+	for <lists+linux-usb@lfdr.de>; Fri, 26 May 2023 21:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbjEZTNO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 May 2023 15:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39864 "EHLO
+        id S236575AbjEZT0i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 May 2023 15:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbjEZTNN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 May 2023 15:13:13 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id A9B1813A
-        for <linux-usb@vger.kernel.org>; Fri, 26 May 2023 12:13:10 -0700 (PDT)
-Received: (qmail 301648 invoked by uid 1000); 26 May 2023 15:13:09 -0400
-Date:   Fri, 26 May 2023 15:13:09 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Roy Luo <royluo@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, raychi@google.com,
-        badhri@google.com,
+        with ESMTP id S230100AbjEZT0g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 May 2023 15:26:36 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE41E56
+        for <linux-usb@vger.kernel.org>; Fri, 26 May 2023 12:26:05 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-307d58b3efbso734586f8f.0
+        for <linux-usb@vger.kernel.org>; Fri, 26 May 2023 12:26:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685129158; x=1687721158;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+6DrHgCFY4VauCddEqvyJr/ELyZNf9sKAZHK7/qr+50=;
+        b=1fZcXW8cRHgMnWT4prXi7NLHFSMIWcDDBhXNjf7n46YyigPwVGzHTUB7Q4//p4Z1sB
+         wcSXYsG1ZQx2LBQrL/XVzl52+KYHCKN2cxvamiNZ6DfIxlHwnY4NNyQG5X8r8yh6IIyX
+         HO816t2FVu/g86954JmJkH8jFQMglKi5hzQMWj1Ul4Ie1M5ijrPgjLq8OFqrIgLRbVms
+         ikBopAqfYciPsMpVuMsT60IZ01rUm1xwh9F1/pzojr67AF4YIcpMr2KGqEUXJyOk7okj
+         gzIkzltmxldnw2p/PrFBipfW8Mg0to7bpXaXwrFLFCYo7DJAunQFkCfIf54lhaUi9x8c
+         MqeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685129158; x=1687721158;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+6DrHgCFY4VauCddEqvyJr/ELyZNf9sKAZHK7/qr+50=;
+        b=DCahIM1/WLmAFNouNNL68BIwn2OTqQKE6fyOq1goxfCGVKO0W0Pe4aJODa30xnZuvl
+         oeNeB5RCeiBRACJu3y0Zt8ifyyVpxPkrXoXB/CIjzTlUmhENa4aG9/UfFOwx4RssRW3G
+         p2p8e19X3E7Yp5dKH9OhD5cVh0CwJX8j2x79/W+/JAffDlWPsZsq9ux3rmhfy2CTZLpw
+         fOBWJRnZ3IeHyckvyub4Il6QSagGEzD3HhCBeff/L5A/lCQhEMe1SHjLj/1/QGxovYZM
+         aqbZYcICHhzoSAdNQ0XHvyHSf9SInjUpqQF4QaRrchFo8gkDqwuIu3vr1WmBVjbDSQDQ
+         syhw==
+X-Gm-Message-State: AC+VfDwOhr2j5cD8WPsdyMSOQWBMSdOjExEdiFRc9ORon+N+G/wRRhXk
+        KEW3uiTqhpn3zAfKNmKzxSq1MxuGJvlhnTcSk6/46g==
+X-Google-Smtp-Source: ACHHUZ5RJ764F8x+H8Zvoem2nWjpzLlLe+acRLbm26xAm7v5HFVz+63/Y72Q6TjAzd/VFGDYJNLxOX+4DTC0ekA3sDw=
+X-Received: by 2002:adf:cd8e:0:b0:309:4620:e155 with SMTP id
+ q14-20020adfcd8e000000b003094620e155mr2075261wrj.49.1685129157886; Fri, 26
+ May 2023 12:25:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230525173818.219633-1-royluo@google.com> <2023052600-survey-fondness-27ce@gregkh>
+ <CA+zupgzTe7pVhByLPVr4tn-94kCMZbzNHxf_iVyTa3qi6bzvAQ@mail.gmail.com> <2023052619-morbidly-expediter-ab80@gregkh>
+In-Reply-To: <2023052619-morbidly-expediter-ab80@gregkh>
+From:   Roy Luo <royluo@google.com>
+Date:   Fri, 26 May 2023 12:25:21 -0700
+Message-ID: <CA+zupgztYNMHLw1zZbzMw4KLtmSf7hUNZN_4-jsmFGPHU=3bDg@mail.gmail.com>
+Subject: Re: [RFC PATCH v1] usb: core: add sysfs entry for usb device state
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     raychi@google.com, badhri@google.com,
+        Alan Stern <stern@rowland.harvard.edu>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         Michael Grzeschik <m.grzeschik@pengutronix.de>,
         Bastien Nocera <hadess@hadess.net>,
@@ -29,69 +66,43 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, raychi@google.com,
         Douglas Anderson <dianders@chromium.org>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [RFC PATCH v1] usb: core: add sysfs entry for usb device state
-Message-ID: <b1327e17-3d69-4f56-89f8-dec73af91977@rowland.harvard.edu>
-References: <20230525173818.219633-1-royluo@google.com>
- <2023052600-survey-fondness-27ce@gregkh>
- <CA+zupgzTe7pVhByLPVr4tn-94kCMZbzNHxf_iVyTa3qi6bzvAQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+zupgzTe7pVhByLPVr4tn-94kCMZbzNHxf_iVyTa3qi6bzvAQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 26, 2023 at 11:34:44AM -0700, Roy Luo wrote:
-> On Thu, May 25, 2023 at 5:50 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+On Fri, May 26, 2023 at 11:47=E2=80=AFAM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Fri, May 26, 2023 at 11:34:44AM -0700, Roy Luo wrote:
+> > > Also, what userspace code is now calling poll() on your new sysfs fil=
+e?
+> > >
 > >
-> > On Thu, May 25, 2023 at 01:31:17PM -0700, Roy Luo wrote:
-> > > Currently the usb core assumes the usb_device that port_dev->child points
-> > > to is enumerated and port_dev->child->dev is registered when
-> > > port_dev->child is present. Setting port_dev->child early would break this
-> > > fundamental assumption, hence I'm a bit reluctant to go this way.
-> >
-> > Well, you could remove that assumption by adding a "child_is_registered"
-> > flag and explicitly checking it.
-> >
-> > Alan Stern
-> 
-> Agree that's doable, with the following overheads:
-> 1. We can no longer safely access port_dev->child without checking
->     "child_is_registered", and there are plenty of places in the usb core that
->     touch port_dev->child. The implicit assumption could also hurt code
->     maintainability.
+> > We are looking at adding the code to the generic userspace components
+> > if not hardware abstraction layer in the userspace.
+>
+> I can not parse this at all, sorry.  Care to rephrase it and point to
+> some real source code?
+>
+> thanks,
+>
+> greg k-h
 
-That doesn't sound like a big deal.  Currently you can't safely access 
-port_dev->child without checking whether it is non-NULL.  You would just 
-have to replace one check with another.
+I meant the userspace part is still in development and it largely depends o=
+n
+how the kernel part plays out. Hence I'm trying to get early feedback here.
+The use cases we're aiming at are described in the commit message, is
+there anything specific you're looking for in the userspace code? I'm happy
+to answer questions you might have.
 
-The fact that plenty of places touch port_dev->child indicates someone 
-must have given some thought to protection against racing accesses.  
-Your modifications should be able to benefit from that thought.
-
-> 2. In the worst case where enumeration keeps failing, the retry loop in
->     hub_port_connect() would frequently hold device_state_lock in order
->     to link/unlink the usb_device to port_dev->child.
-> This would definitely make sense if more places need port_dev->child early.
-> However, we only need port_dev->child->state at this point, so it does not
-> seem like a good deal to me.
-
-Another alternative -- possibly a much simpler one -- is to replicate 
-port_dev->child->state in port_dev->state, purely for use by the new 
-sysfs routine.  In other words, keep the actual value there instead of a 
-pointer to some other location that might get deallocated at any time.
-
-Since presumably you don't care about precise synchronization (that is, 
-it doesn't matter if the value shown in the sysfs file is a few tens of 
-milliseconds out of date) you could do this without extra locking.  Just 
-use WRITE_ONCE() for updates and READ_ONCE() to see what the current 
-value is.
-
-Alan Stern
+Thanks,
+Roy
