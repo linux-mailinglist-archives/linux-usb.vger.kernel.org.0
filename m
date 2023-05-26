@@ -2,207 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD73F712244
-	for <lists+linux-usb@lfdr.de>; Fri, 26 May 2023 10:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C24971226F
+	for <lists+linux-usb@lfdr.de>; Fri, 26 May 2023 10:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242714AbjEZIdi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 May 2023 04:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
+        id S242749AbjEZImG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 May 2023 04:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241481AbjEZIdh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 May 2023 04:33:37 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A745213A;
-        Fri, 26 May 2023 01:33:35 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3093aa2f2a5so52833f8f.0;
-        Fri, 26 May 2023 01:33:35 -0700 (PDT)
+        with ESMTP id S242099AbjEZImE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 May 2023 04:42:04 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2117.outbound.protection.outlook.com [40.107.237.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503FB18D;
+        Fri, 26 May 2023 01:42:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZV9xts5dV92XqRTBawaalHPJ11I0zlocm9dQhC9slJFBLScnyx4vDzeq5Gg192aQYr/tGeAaJF4ViC98HOpPN2fyyNJm+kpUQva98j83Xgu5PPV1zyZqsXy4vMl33+US/AgsZ2neZXm+zbrSG9YyH/BGdPyGNIARsnf372l1l+XokKpz9qsxhPg0JdYoWWOW+ereOA/B0XUonix0Bo9vzdYFQzGN7gSpxz5VIYsn7piSp0kmqpmic1ibTTYZ0WZEMGr6g5Ap2dr2GCN27DpoMKxpEPbbj0VJ1GxMMd1WIeU3VfxKW0lfbC1/U9DkE3Rh+Tn1PQ0BYfY6Yk9MUejpBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CSxUHjIVbx1t90yweYpGi//XAn85wFkbSLg+L791ll0=;
+ b=TbaUwIoQLc45lIieeALiIss/kXJGcbaNueVt/PQOODYUwwwwecinV+oOHZ38K/v48Ron90y1Vdi0FelH46Psqdf7+qHsfPraoNRaFCcQjwPTawu+EumHV55OAS63Mc070dzh7c0xis8Rh8tFXxCRGZGFvMU6ID3V7m0eSgO6LnXbVYHrlH+sT1eobbrul86NIe2hfZl4RbaMgwM9YJwrZPsYaJAVywt11/b0KJZC3E7rR0atZIavJBRE28Fy4q0ydPjvHsnQbG/xRpQyQ/0IMzz+2yoOvVumzYWBGr2dhqNgIXpQjyoSzvNeoXxT9GJMBQcqWhWEqhqFd/J6108mxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685090014; x=1687682014;
-        h=references:to:cc:in-reply-to:date:subject:mime-version:message-id
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nRhRobWF9Hr3G4ofrhF1TL7x8KZgTqCRAivN1RjHiAY=;
-        b=dh885MJtpnnCAR1HoaRZO2f1Kcv/ajJu+pRmPCS3XXxbkXKTptXtn8eke3u6H2rgjU
-         qbuP8xXu2PhgMUD2teehIpNL4V5xeuTfrtxvPeqNP9RtxI2U9wR9VVvAArbFb70vAbj2
-         Bh0namDnVf+GEPbCOJSs7ohNjRAB5fgCzvsYDaviYp5ovvlYHtWzzIVOrerjvF7Bh3Pn
-         6b08TZM3NiyGoOhVTHX0o0JV98wqST3FClZsy00SxlFNY1hJspRnpbyBpBuCxaGJlDWT
-         JW4eLAt8tzL0O2VAZcGpcrGMN6w6rQHtE+UJlEdeW68Tx/FZVsbbzDcmnEloKyABGVw/
-         aY2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685090014; x=1687682014;
-        h=references:to:cc:in-reply-to:date:subject:mime-version:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nRhRobWF9Hr3G4ofrhF1TL7x8KZgTqCRAivN1RjHiAY=;
-        b=P0737YF6ZPDI2ekbNZ1/d1Y9KlbngNz6sGQNjUKs2Zz78lCCxKmXeIwkS8BGCLufX/
-         2GtWaRMXXLQR4iNyG0zkc8Jqv9xqoRx1OCzTWdRbSuGxzNb7tk2k9FJHUs4V102oBhYR
-         MyZ3mds3Xu0IYFfPCIz5MytUEg1Cb152gQzJwKDpPtF0Rg1xZmGbiKTqC7qUJHCACO6i
-         B8J9KNEKKiR25C+ZBzT2P1NjbAJeS9as+SS/ET9v5VvdV0QHo4m34yhubmf4c1clR8n3
-         d0CXSMkm6n4Gbn2qw5Bf8ORRUNBEXBy/FhIorJS44og8y9JF3ANqOrdp7MlQbLEi3euG
-         XwhQ==
-X-Gm-Message-State: AC+VfDyD96bZ4q4T6jlrGchE5k3sW4O+/nhrs5YcIC0TmFpv+Pvl/tzB
-        Suu0JpT8ksEJWKCy7C4hy3pF3xF0LIE2XA==
-X-Google-Smtp-Source: ACHHUZ7MGzp+g/hoKuvONM19NevX3m9E9u8iKlkxmxt9F3MLjZSkqLfL1LEGk7gSjoo8624Dmg/y2g==
-X-Received: by 2002:a5d:6910:0:b0:309:3a72:3cea with SMTP id t16-20020a5d6910000000b003093a723ceamr713191wru.0.1685090013739;
-        Fri, 26 May 2023 01:33:33 -0700 (PDT)
-Received: from smtpclient.apple (212-39-89-99.ip.btc-net.bg. [212.39.89.99])
-        by smtp.gmail.com with ESMTPSA id k7-20020a5d66c7000000b00307a83ea722sm4280769wrw.58.2023.05.26.01.33.32
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 26 May 2023 01:33:33 -0700 (PDT)
-From:   George Valkov <gvalkov@gmail.com>
-Message-Id: <C0FADE3B-5422-444A-8F09-32BE215B5E88@gmail.com>
-Content-Type: multipart/mixed;
-        boundary="Apple-Mail=_AE9305BA-4843-43E1-8A58-3CAC7A95C28A"
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
-Subject: Re: [PATCH net-next v2 1/2] usbnet: ipheth: fix risk of NULL pointer
- deallocation
-Date:   Fri, 26 May 2023 11:33:21 +0300
-In-Reply-To: <ZHBlShZDu3C8VOl3@corigine.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CSxUHjIVbx1t90yweYpGi//XAn85wFkbSLg+L791ll0=;
+ b=uXAQwq+fTkdVoG1PVqOYIeizN6xBIxRuE4PaDLUX0zRmDut3YOV9bKtn8lV4C4nNgngCOItbPZWVnmLGyVkjjBlESvoR64bmK3t2GEW2hWUsB19vOo+gYvu0zBGRgtQUay49XpfkPEqu7mKmNBg1UMr4bMHwGSSbU1MovAH43Ww=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BY3PR13MB4947.namprd13.prod.outlook.com (2603:10b6:a03:357::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.29; Fri, 26 May
+ 2023 08:42:00 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.017; Fri, 26 May 2023
+ 08:41:59 +0000
+Date:   Fri, 26 May 2023 10:41:54 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     George Valkov <gvalkov@gmail.com>
+Cc:     Foster Snowhill <forst@pen.gy>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         linux-usb <linux-usb@vger.kernel.org>,
         Linux Netdev List <netdev@vger.kernel.org>
-To:     Simon Horman <simon.horman@corigine.com>,
-        Foster Snowhill <forst@pen.gy>
+Subject: Re: [PATCH net-next v2 1/2] usbnet: ipheth: fix risk of NULL pointer
+ deallocation
+Message-ID: <ZHBw0l76XThhVS2Z@corigine.com>
 References: <20230525194255.4516-1-forst@pen.gy>
  <ZHBlShZDu3C8VOl3@corigine.com>
-X-Mailer: Apple Mail (2.3731.600.7)
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+ <C0FADE3B-5422-444A-8F09-32BE215B5E88@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <C0FADE3B-5422-444A-8F09-32BE215B5E88@gmail.com>
+X-ClientProxiedBy: AM0PR10CA0012.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:17c::22) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BY3PR13MB4947:EE_
+X-MS-Office365-Filtering-Correlation-Id: 70f8ae17-662b-49d1-b89a-08db5dc51230
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: S0P5ccs5/TEWgN2ktoxw71+1APhmCNwEBsZN9UUN3gZImx4XMGMgXK5Pr+l7Azu1Nmav4m08M+Y8xmy4Ar3GZdmWmjfCY/1KeLRC4W6AvE//q5Gh84OpMFBQUANH2hBAYcKDGTUVlnzTqKCTG9DozedjIE7gpH35tB5rVR3X5R1HYEuYG7hwC1Pn7g+/pIq4s60M1m96SztuhQt60SgSsvmxbQaJBTb03Q55/o1jhfcMCevBfOIfZQ8uem8g5YPhYPcjDk5cGrMA+Mve8H8359pUnI2KaMVrJkFMxyrxXVZM2WgiCC9i9glCCiVGL+rKiC6NAzQHFi40Vf2FKw67DnvRu+cs1V1tsIZn3+SffKr7IYvycgZ/a77guhXFO5SVojvsr8pczViFpLWfAknu1kvj5m+Lucly+HSxVKgIDQGmb9MiBToSAyAWGxRPEOCO9JbinTDYX6PxgfqtBQyR3Mzntr2v6U+L7ThFmisb/pZHy0oHmRKPb6OjJ6WsHSg2oO0UKB0N62YCKXvH5FQBJNwX4G/mJ+I5P6oo3aizbyX7o9l/ZPxuQAQ4ZJBmUMgQH9MtlCyhOtR6ai/uBxHWIB8n1sDFQkdMkpCG12xcxak=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39840400004)(376002)(136003)(396003)(346002)(451199021)(86362001)(41300700001)(6486002)(478600001)(316002)(6916009)(54906003)(66476007)(66946007)(6666004)(4326008)(66556008)(5660300002)(8936002)(8676002)(6512007)(38100700002)(44832011)(53546011)(83380400001)(2906002)(2616005)(186003)(6506007)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WjQ2S0lJUGduVWtKd09pbG9DMEtnNURmUUlEaThKMllWVVM5RVc1SGdnWmhl?=
+ =?utf-8?B?QW5YbG41VS8vcjFVdjZBRFJLRW5BWU5xZzdIeUV2b3c4cmc3UDdMVXZ4dTkw?=
+ =?utf-8?B?VmhQcVRIWDdIYjFLcUpZVjhTN3kzT3dwQm56SDNpbGRNejYyZWxMTEFFR0ZJ?=
+ =?utf-8?B?aVMxZXZIRndKV0ViUWZpTm1OOEdOcTE5MlpWQUsxbDdncEd2c1BNSFpxbHZJ?=
+ =?utf-8?B?OTI3RXRXejFXMjZjV0FXV0FhZXQ2UVg2NkU2aXhPejh5U05ySFN2TVc0ZmhB?=
+ =?utf-8?B?Y0RBOXAxMkExT21RSjR1cjM5Y29Zd1lCV2hpTXcvdngxdGJ0SVlKbU5WN3Rs?=
+ =?utf-8?B?Ukp3YVhNeFBJblZ4QjV3SUpjUEJBb0FoczdvUDl1b2l5amJnS2hpdE1mYWpC?=
+ =?utf-8?B?V0doQ1FLMFVDY2F2VGxLcThuQjdsUkNVZUJlUkxPTWVSaHJjNUZNbmZ1MWNJ?=
+ =?utf-8?B?MGROWCtKMkI2b21QaUZhZFhXYitGeDRkVllTWllNNXhja0ovY2NoQkF2T1dN?=
+ =?utf-8?B?NHJSYXY1WW1OZVg0eUVZS0YrQjRrYnMwR0Q0ejZCNU1BNFZBM0dlZUl4OHc3?=
+ =?utf-8?B?ellJZnRZVTAvYnN3Q2I1Y2NaZm8wN2pZQmRZaWFTZUxqV0h1Sy9OVWNhV0tT?=
+ =?utf-8?B?ZFF1c0dUK1ZYRnRpZzNzaFFseFppRDY4cm1BOGZuSE0za3dxcUJGQ2RBZHFm?=
+ =?utf-8?B?cjcycVdFc0V0UWdNTk0yNk9jZjl4cXhsMnh2SFBYRjNDQUx3SVRFQ0czVW9r?=
+ =?utf-8?B?RTZPZkk5VGtYdHNzOEFQUk4vRFpueFdRbFpSWmRrcjk3RVpKVjdVYUNHVThm?=
+ =?utf-8?B?RFVDbU1oY0JVb0xhZHkzOS9kVjdPSjNFQktPY2VaYXh6UElUenpwcENjeGpD?=
+ =?utf-8?B?ZWEvZUp2V21IWWR4dzYrQU5XUzQrbWRzZjJGRjNtK1pVVWVrSVdoYU9KSmts?=
+ =?utf-8?B?ZHNmY2haL0M2LzN6dkw1cjVKY29MREpFeVBWQ2dtWWY5bFptUWJIdURjWFBj?=
+ =?utf-8?B?L2taVmRyTlJkZkxiN3E4dGdxSmR5cGlocDVmelNKOUJHS1JjUHZtcWZTbE5Q?=
+ =?utf-8?B?aHRiRlgwNTdLZEJLc3FnenRLdG03YjlxaWVYMTBRbnlDV3FNZklQdHREUlE3?=
+ =?utf-8?B?UStKaXpRWUx4OHE0ZU5vYlptNTJkM09LSXUrU3ora25MQ1R6YUxGNVdBa2hu?=
+ =?utf-8?B?WnFvbDRxTGNHT2d3YWthd3E0N3c4Q1hvVG11dFZEMWpkRXB3UUdJWjRISnV5?=
+ =?utf-8?B?cGpwSW9xS3lFWS9qRm1Ub3NmTTdqL2hVTFZFQlhFcjNybE9RQk1Qam9oUjVQ?=
+ =?utf-8?B?eVA2YkkwSHR4YzZDMXl1cmZtRlZ0eGxPVVJ4RDNzZXFyazVhbklMNktkVjlH?=
+ =?utf-8?B?N2FoYmVjc3lZdWVRSmpMNlVhQU44cE9QQldmWmRuMG9wbEZMVExrQ0JEMTA2?=
+ =?utf-8?B?M0VMYVk3eW1YT0hrV2loUG92T1pYUmxVVjVSL215dVNSaWhQVU1kNEozWXli?=
+ =?utf-8?B?TjkyTzQwK1V2cjh6VmRKdS9mWm00U2l1dDFTcFBJeTJvc2dQUlA0SE5GUnh3?=
+ =?utf-8?B?MjZhY3hHZndBZXI1OWlKYzYvRTNnS2V3RE5rWkJ6cENsRGJpeVNidUFjSURh?=
+ =?utf-8?B?OTNPN3FMVGU2N0t4bmprMW1rcFY1NEVxMlpWTjRHU3p2OTZFZ3krcS9qbktR?=
+ =?utf-8?B?SnY2bzNpQnNMcGVYL013R2dKU0p2QjNidnViTGZEV0lyaXdZMzZ1UGcyZ2VS?=
+ =?utf-8?B?VStxUGNnaUZ0aHNaMk5BSHhWRHFUSFlmWnIzOFdUbHJDbjY0aFVvVHdvL1lU?=
+ =?utf-8?B?Zi9hR1dJSCtTeFhJWkttOFlGeTRNeklXdXRwVzZKWWwyZEVKTmgwc2RaNWVL?=
+ =?utf-8?B?VldsU0RsWXNPSFZrNTlCY0Z2eUt0ZnFjSkZSK1hVajN4Q3Z1L3JIdFdMZ3k1?=
+ =?utf-8?B?RFAyQlQ0SStxUnhySVlXWlVwNUpCQlVESG42NXNGaEdFMXRoTStZYVN5ekZo?=
+ =?utf-8?B?YWFQNGVsaFdQald4dHZJaHF0RmFKWXlXMW80TG1yVXBFR2NKbHZiVXJsYnlx?=
+ =?utf-8?B?ZGRIRnhUcUE4SlQ4ZXpvQUpRcE5JQnMvSkp2UGdtcUdEZllWcnpHOGs3NDlP?=
+ =?utf-8?B?NWp3RnVOcWkxUWRHbmx4NW5GR28ybUloc1BHOFNoQmFXYkxYU0tnK3BPM1dD?=
+ =?utf-8?B?NGQyaDRrSTdabHZqVEVhZEx3RE5DOThBREJGUGxPN1U2SkxGVWxINkg4eGZN?=
+ =?utf-8?B?Z3ExTm5vVzh0L2hKMmRmcjY4SEJBPT0=?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 70f8ae17-662b-49d1-b89a-08db5dc51230
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2023 08:41:59.9033
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KOrYEmdVpcKAuuAe2zuzQ/xS9g7NMCW3AoIDrepzZYQSFwUO3tqUYP9pdp4pghplNtn7d9oCQ+Yu1twJZWfJ8Qky+Bezu9voexanalY5Aa0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR13MB4947
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, May 26, 2023 at 10:33:21AM +0200, George Valkov wrote:
+> 
+> > On 26 May 2023, at 10:52 AM, Simon Horman <simon.horman@corigine.com> wrote:
+> >
+> > On Thu, May 25, 2023 at 09:42:54PM +0200, Foster Snowhill wrote:
+> >> From: Georgi Valkov <gvalkov@gmail.com>
+> >>
+> >> The cleanup precedure in ipheth_probe will attempt to free a
+> >> NULL pointer in dev->ctrl_buf if the memory allocation for
+> >> this buffer is not successful. Rearrange the goto labels to
+> >> avoid this risk.
+> >
+> > Hi Georgi and Foster,
+> >
+> > kfree will ignore a NULL argument, so I think the existing code is safe.
+> > But given the name of the label I do agree there is scope for a cleanup
+> > here.
+> 
+> It’s good to know that precaution has been taken in kfree to avoid this, yet at
+> my opinion knowingly attempting to free a NULL pointer is a red flag and bad
+> design. Likely a misplaced label.
+> 
+> > Could you consider rewording the patch description accordingly?
+> 
+> What would you like me to use as title and description? Can I use this?
+> 
+> usbnet: ipheth: avoid kfree with a NULL pointer
+> 
+> The cleanup precedure in ipheth_probe will attempt to free a
+> NULL pointer in dev->ctrl_buf if the memory allocation for
+> this buffer is not successful. While kfree ignores NULL pointers,
+> and the existing code is safe, it is a better design to rearrange
+> the goto labels and avoid this.
 
---Apple-Mail=_AE9305BA-4843-43E1-8A58-3CAC7A95C28A
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=utf-8
+Thanks, that looks good to me.
 
+> >> Signed-off-by: Georgi Valkov <gvalkov@gmail.com>
+> >
+> > If Georgi is the author of the patch, which seems to be the case,
+> > then the above is correct. But as the patch is being posted by Foster
+> > I think it should be followed by a Signed-off-by line for Foster.
+> 
+> Yes, I discovered the potential issue and authored the patch to help. We’ll
+> append Signed-off-by Foster as you suggested. Thanks Simon!
+> 
+> Something like that?
 
-> On 26 May 2023, at 10:52 AM, Simon Horman <simon.horman@corigine.com> =
-wrote:
->=20
-> On Thu, May 25, 2023 at 09:42:54PM +0200, Foster Snowhill wrote:
->> From: Georgi Valkov <gvalkov@gmail.com>
->>=20
->> The cleanup precedure in ipheth_probe will attempt to free a
->> NULL pointer in dev->ctrl_buf if the memory allocation for
->> this buffer is not successful. Rearrange the goto labels to
->> avoid this risk.
->=20
-> Hi Georgi and Foster,
->=20
-> kfree will ignore a NULL argument, so I think the existing code is =
-safe.
-> But given the name of the label I do agree there is scope for a =
-cleanup
-> here.
+Yes, I think that sounds good.
 
-It=E2=80=99s good to know that precaution has been taken in kfree to =
-avoid this, yet at my opinion knowingly attempting to free a NULL =
-pointer is a red flag and bad design. Likely a misplaced label.
+Please wait 24h before the posting of v2 before posting v3,
+to allow time for more review of v3 (from others).
 
-> Could you consider rewording the patch description accordingly?
+...
 
-What would you like me to use as title and description? Can I use this?
-
-usbnet: ipheth: avoid kfree with a NULL pointer
-
-The cleanup precedure in ipheth_probe will attempt to free a
-NULL pointer in dev->ctrl_buf if the memory allocation for
-this buffer is not successful. While kfree ignores NULL pointers,
-and the existing code is safe, it is a better design to rearrange
-the goto labels and avoid this.
-
-
->> Signed-off-by: Georgi Valkov <gvalkov@gmail.com>
->=20
-> If Georgi is the author of the patch, which seems to be the case,
-> then the above is correct. But as the patch is being posted by Foster
-> I think it should be followed by a Signed-off-by line for Foster.
-
-Yes, I discovered the potential issue and authored the patch to help. =
-We=E2=80=99ll append Signed-off-by Foster as you suggested. Thanks =
-Simon!
-
-Something like that?
-
-
---Apple-Mail=_AE9305BA-4843-43E1-8A58-3CAC7A95C28A
-Content-Disposition: attachment;
-	filename=0001-usbnet-ipheth-avoid-kfree-with-a-NULL-pointer.patch
-Content-Type: application/octet-stream;
-	x-unix-mode=0644;
-	name="0001-usbnet-ipheth-avoid-kfree-with-a-NULL-pointer.patch"
-Content-Transfer-Encoding: quoted-printable
-
-=46rom=2015dc5cec0d239d30856dc6d9b9a7a9528342cde0=20Mon=20Sep=2017=20=
-00:00:00=202001=0AFrom:=20Georgi=20Valkov=20<gvalkov@gmail.com>=0ADate:=20=
-Thu,=2025=20May=202023=2021:23:12=20+0200=0ASubject:=20[PATCH=20net-next=20=
-v3=201/2]=20usbnet:=20ipheth:=20avoid=20kfree=20with=20a=20NULL=20=
-pointer=0A=0AThe=20cleanup=20precedure=20in=20ipheth_probe=20will=20=
-attempt=20to=20free=20a=0ANULL=20pointer=20in=20dev->ctrl_buf=20if=20the=20=
-memory=20allocation=20for=0Athis=20buffer=20is=20not=20successful.=20=
-While=20kfree=20ignores=20NULL=20pointers,=0Aand=20the=20existing=20code=20=
-is=20safe,=20it=20is=20a=20better=20design=20to=20rearrange=0Athe=20goto=20=
-labels=20and=20avoid=20this.=0A=0ASigned-off-by:=20Georgi=20Valkov=20=
-<gvalkov@gmail.com>=0ASigned-off-by:=20Foster=20Snowhill=20=
-<forst@pen.gy>=0A---=0A=20drivers/net/usb/ipheth.c=20|=202=20+-=0A=201=20=
-file=20changed,=201=20insertion(+),=201=20deletion(-)=0A=0Adiff=20--git=20=
-a/drivers/net/usb/ipheth.c=20b/drivers/net/usb/ipheth.c=0Aindex=20=
-6a769df0b421..8875a3d0e6d9=20100644=0A---=20a/drivers/net/usb/ipheth.c=0A=
-+++=20b/drivers/net/usb/ipheth.c=0A@@=20-510,8=20+510,8=20@@=20static=20=
-int=20ipheth_probe(struct=20usb_interface=20*intf,=0A=20=09=
-ipheth_free_urbs(dev);=0A=20err_alloc_urbs:=0A=20err_get_macaddr:=0A=
--err_alloc_ctrl_buf:=0A=20=09kfree(dev->ctrl_buf);=0A=
-+err_alloc_ctrl_buf:=0A=20err_endpoints:=0A=20=09free_netdev(netdev);=0A=20=
-=09return=20retval;=0A--=20=0A2.40.1=0A=0A=
-
---Apple-Mail=_AE9305BA-4843-43E1-8A58-3CAC7A95C28A
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=us-ascii
-
-
-
-
-Georgi Valkov
-httpstorm.com
-nano RTOS
-
-> Link: =
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html?hig=
-hlight=3Dsigned+off#developer-s-certificate-of-origin-1-1
->=20
->> ---
->> drivers/net/usb/ipheth.c | 2 +-
->> 1 file changed, 1 insertion(+), 1 deletion(-)
->>=20
->> diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
->> index 6a769df0b..8875a3d0e 100644
->> --- a/drivers/net/usb/ipheth.c
->> +++ b/drivers/net/usb/ipheth.c
->> @@ -510,8 +510,8 @@ static int ipheth_probe(struct usb_interface =
-*intf,
->>        ipheth_free_urbs(dev);
->> err_alloc_urbs:
->> err_get_macaddr:
->> -err_alloc_ctrl_buf:
->>        kfree(dev->ctrl_buf);
->> +err_alloc_ctrl_buf:
->> err_endpoints:
->>        free_netdev(netdev);
->>        return retval;
->=20
-> --=20
-> pw-bot: cr
-
-
-
---Apple-Mail=_AE9305BA-4843-43E1-8A58-3CAC7A95C28A--
