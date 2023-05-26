@@ -2,109 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8797128BB
-	for <lists+linux-usb@lfdr.de>; Fri, 26 May 2023 16:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF0A71292A
+	for <lists+linux-usb@lfdr.de>; Fri, 26 May 2023 17:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244155AbjEZOkN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 May 2023 10:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
+        id S243886AbjEZPKI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 May 2023 11:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243917AbjEZOjo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 May 2023 10:39:44 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57F210EB;
-        Fri, 26 May 2023 07:39:10 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 42F0CF14B1;
-        Fri, 26 May 2023 07:38:49 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id bBdOD9a9ftPt; Fri, 26 May 2023 07:38:48 -0700 (PDT)
-From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1685111928; bh=dfF6XaE50ihs23TtTkgdj4tNvRZZ2hvvhNDTozYcucI=;
-        h=From:Date:Subject:To:Cc:From;
-        b=gseJCe7Eb3YHf7jqVIbSsYZjhanawrOeGdDn+kK067om4+ZohvVWAJZZYRWUMXrjz
-         8QSDjqE+DXUzGf/K0+bBP1OHQPGivFL2/Ye90cMeBuikDPJlnT1GZOe3ZZKIL1jD+E
-         l6xs2kZ+mg5PoPvDr2tqij0Re3xdU1PpjDktlrf3ABpWygu+YcytYdcR8qQwFUb+z8
-         3FhIBDU419omuX1I41s5g+9FkEB/tP8+Epf28fY8sKeU2k/WlHFI7jGJ5bKNuwa3gF
-         XZF1wAf9lCZf2n0Pjz7gh2yn3FM+sMYFg7FxHsnIq66YMzhcQU1tjL03R7PdNzulP/
-         FAj1Ede2VgDBw==
-Date:   Fri, 26 May 2023 16:38:11 +0200
-Subject: [PATCH] net: usb: qmi_wwan: Set DTR quirk for BroadMobi BM818
+        with ESMTP id S237375AbjEZPKH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 May 2023 11:10:07 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E59189;
+        Fri, 26 May 2023 08:10:03 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f60e730bf2so9371085e9.1;
+        Fri, 26 May 2023 08:10:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685113802; x=1687705802;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LnO5fGYX0OkjrzTSNzA8NBOW1UoQqbvusvkT6EgNPIg=;
+        b=MZ32lvxuUs2j3FpdIagFZQqmY/dYDsSxATXjrSZqwzvwyqGa2SNDHaRCrgS9thWlAj
+         HAoZphmOhdYtCHGisIp9fv2Y0wVnnMFaMvdXMj9RG5gY10Hn8Q3VLQZAFoo0t9BqKYDQ
+         AirVCi63vO0K8y03UJf/IeP+rlhef0qZfGkiU7zdg27DEmqlhzkPgjeK1TDDXIK3Hvhj
+         jbdImZRtg93hCn9+qM1x85CwYPL0uIAlAx+JbImNvi9/Uu1TKwtjD57XXLTdqaF3zQhR
+         E9gDt2tiUOtTd9aLSHm5a/eueqpkPauOeTEekInLcQ/oiIbte9nyTZeyPas2oRgFNc70
+         lyMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685113802; x=1687705802;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LnO5fGYX0OkjrzTSNzA8NBOW1UoQqbvusvkT6EgNPIg=;
+        b=W0XF4jlaGTgMNaDgM7l7xgIe9ig6EcfQRAmb7S4heL+4yRCEPDpeyrmrhSGP2Abo6u
+         CV64OnMqSzQT+CCtTLRXfQJTXwXmECYxERTyFdbun0KYfSAvrNoJbCMsnK7+WTLuPzxN
+         KbOKa3mzixcpexNGM7OgU1DyeEdbMcwCCiEh5Scd8IEVX8w3GnOqmNOQ86OHD/84qNda
+         TdZTGMvXWRsjJYglGeMGyxBpyebaXdoYcLc6eHKh588Spw28mz/FEbsVr+sHLFuGiQMA
+         OsYMXQTf+AOvqN0kAqeLmbhf4s0hgCaGsPro0+kJTtCppRnkK91TT78Gms+I7OtE+GV8
+         ilWA==
+X-Gm-Message-State: AC+VfDzSUwy3b1PsnwUt16ptnyIz76I5Ncu7NBtPc1+KmFgZBpaWcTh6
+        isddM8OcuctEqxwG3YwQ+l6X2538EBg=
+X-Google-Smtp-Source: ACHHUZ4xIs70msNIdB5IESwlO1NS7MTUFp013/lGvAuBgFEdzyg6MWtg1VqEycjSwKGjpV8I4y4Qtw==
+X-Received: by 2002:a7b:cc94:0:b0:3f6:2ae:230e with SMTP id p20-20020a7bcc94000000b003f602ae230emr1886582wma.3.1685113802121;
+        Fri, 26 May 2023 08:10:02 -0700 (PDT)
+Received: from localhost (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id o19-20020a05600c059300b003f60119ee08sm9060414wmd.43.2023.05.26.08.10.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 08:10:01 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jon Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: tegra-xudc: Remove extraneous PHYs
+Date:   Fri, 26 May 2023 17:10:01 +0200
+Message-Id: <168511377238.1214401.2087728425871694222.b4-ty@nvidia.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230525094237.2846682-1-thierry.reding@gmail.com>
+References: <20230525094237.2846682-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230526-bm818-dtr-v1-1-64bbfa6ba8af@puri.sm>
-X-B4-Tracking: v=1; b=H4sIAFLEcGQC/x2NywqDMBBFf0Vm3YEkPgj+inSRxGkd0CiTthQk/
- +7g8lzO5ZxQSJgKjM0JQj8uvGcF+2ggLSG/CXlWBmdca3o3YNy89Th/BC11NjjfkzEJ1I+hEEY
- JOS36yN911fEQevH/DkzPWi/W/LmncAAAAA==
-To:     =?utf-8?q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Angus Ainslie (Purism)" <angus@akkea.ca>,
-        Bob Ham <bob.ham@puri.sm>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@puri.sm,
-        stable@vger.kernel.org,
-        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1285;
- i=sebastian.krzyszkowiak@puri.sm; h=from:subject:message-id;
- bh=dfF6XaE50ihs23TtTkgdj4tNvRZZ2hvvhNDTozYcucI=;
- b=owEBbQKS/ZANAwAIAejyNc8728P/AcsmYgBkcMRvt0yPJ9mk/umNTjjMrTS5aXZ8PH+bsuxiZ
- d6PFy2DiLOJAjMEAAEIAB0WIQQi3Z+uAGoRQ1g2YXzo8jXPO9vD/wUCZHDEbwAKCRDo8jXPO9vD
- /7cHD/0QMo7yE+WKQsaWAm17cMslWLpDUFYE48RwGHMKWCcJlb6Jl5xFFLcrdJS3RtzwFbexVWy
- 6VGXuwecgDtlkiglY7v4TOP8dHdlwyG9nmHSTHlBVHLAAZfK9MEC1Pjex2M9078N8rRENBgiVH4
- 1c5/Khi3kjoYsaDH4rNvhys+dR40XSZ8fbN+n8v9S1NzPKfYNNg5bTt7/b0rwEDCy4ZKB4DQ1gY
- 5MASTnd1YxbPysx2RmopoIKW2GolJzoYTeUomEKYX3A99DQOXIoncNGzwLWWlUIwFo9zWKFOiMY
- PTenAbc/L0+iquI/FNI2DETkhvr+dG8+gT+ZI5NkePUIi3z6Amyumw8yf7QVCGGpUahxbnIfSIc
- WcmXHur0fVFt2mFBgHTWuAwFDJTeSxEMwwTdry588kcYaEnvMpLMOuTuzbY3PK/wtOx0PU4fn8u
- aclcyPQaa5aevucYdJhD8hdmIKWggWTKZZLqP+FmWd8GUJwzaBofR+HRObzafyU3TYKfk9PSfOh
- 1uBxGsZEf3YCd98fnDMgmN9YcUyUG/U6ImvEaqTWsXxnWgKASi8KW2+5wAyhfG+YOeDU/fh4Zqp
- Bd0fCyIg9Qnm7yvbUAj3VhxOdAPaR+UsRD8PBEGsVLvBTBaBWMTpD6ATdptOp41E/aqIq8/N6eK
- z9d8sPtTn94Z/CA==
-X-Developer-Key: i=sebastian.krzyszkowiak@puri.sm; a=openpgp;
- fpr=22DD9FAE006A11435836617CE8F235CF3BDBC3FF
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-BM818 is based on Qualcomm MDM9607 chipset.
+From: Thierry Reding <treding@nvidia.com>
 
-Fixes: 9a07406b00cd ("net: usb: qmi_wwan: Add the BroadMobi BM818 card")
-Cc: stable@vger.kernel.org
-Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
----
- drivers/net/usb/qmi_wwan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 571e37e67f9c..f1865d047971 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1325,7 +1325,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x2001, 0x7e3d, 4)},	/* D-Link DWM-222 A2 */
- 	{QMI_FIXED_INTF(0x2020, 0x2031, 4)},	/* Olicard 600 */
- 	{QMI_FIXED_INTF(0x2020, 0x2033, 4)},	/* BroadMobi BM806U */
--	{QMI_FIXED_INTF(0x2020, 0x2060, 4)},	/* BroadMobi BM818 */
-+	{QMI_QUIRK_SET_DTR(0x2020, 0x2060, 4)},	/* BroadMobi BM818 */
- 	{QMI_FIXED_INTF(0x0f3d, 0x68a2, 8)},    /* Sierra Wireless MC7700 */
- 	{QMI_FIXED_INTF(0x114f, 0x68a2, 8)},    /* Sierra Wireless MC7750 */
- 	{QMI_FIXED_INTF(0x1199, 0x68a2, 8)},	/* Sierra Wireless MC7710 in QMI mode */
+On Thu, 25 May 2023 11:42:37 +0200, Thierry Reding wrote:
+> The USB device controller on Tegra210 and later supports one USB 2/3
+> port, so only a single pair of PHYs is needed. Drop any of the extra
+> PHYs from the bindings.
+> 
+> 
 
----
-base-commit: 9b9e46aa07273ceb96866b2e812b46f1ee0b8d2f
-change-id: 20230526-bm818-dtr-1e41a285e00c
+Applied, thanks!
+
+[1/1] dt-bindings: usb: tegra-xudc: Remove extraneous PHYs
+      commit: 33f2d12d040059bce36dbd8ab9ecc7a580bd4d77
 
 Best regards,
 -- 
-Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-
+Thierry Reding <treding@nvidia.com>
