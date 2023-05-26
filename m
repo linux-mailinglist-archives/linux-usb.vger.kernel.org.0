@@ -2,57 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2655671252D
-	for <lists+linux-usb@lfdr.de>; Fri, 26 May 2023 13:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1ED7126C5
+	for <lists+linux-usb@lfdr.de>; Fri, 26 May 2023 14:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242942AbjEZLAn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 May 2023 07:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
+        id S236740AbjEZMgy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 May 2023 08:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242962AbjEZLAm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 May 2023 07:00:42 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FA51B0
-        for <linux-usb@vger.kernel.org>; Fri, 26 May 2023 04:00:36 -0700 (PDT)
+        with ESMTP id S229628AbjEZMgx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 May 2023 08:36:53 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0F79E
+        for <linux-usb@vger.kernel.org>; Fri, 26 May 2023 05:36:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685098836; x=1716634836;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Bdmp2fkpu4HnFt0KUavox11eIYajbGiNJQsh4hOW3Kw=;
-  b=MJpQpkOqg49K6U/hGQ0OtdDCMud+G/xla9YllAB4BiXvpW0E/rm4shIx
-   jqoan3Od5zUejkqxRe+cFMNhf+lCV5mxSSl6wRp8RtXWfq7Vv/gZzLKiF
-   Dm49lYlJrovkYbjW3/nB8ze2/hEy1YrJ6gbldbxx9fp7BSEbSw96Z8jtI
-   FTLo8qBYW4JTpTUIbxQWAI6z/kGcZtVTk5YST9/FekUfgY2Gex7nB3gJ2
-   K47ZYBKmgTxrnSes6ysd7tHn1QfU/CCOwdVV/g+oyFAyliVD6XvDS/1Vy
-   LjziGbvSSjm8ZyPgntElRvAuwRjl7LcP3Q2C9bzt5669crMRf6gh7vgmV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="417661951"
+  t=1685104612; x=1716640612;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=qJ9NEdmoD0M8iqxnVtoe8RU02DGfmCPxktHGW/rUqr0=;
+  b=b5/KY1S07cXy8RahpzanPX/HJoiocJ27c/YgIBVo/rWn5rOr53QK1cKq
+   4UoJ4ut5uJ5s3UNjQOrtgwTerW7L/FZoarYpYyUyw6zX/H3XgJcP1cLqy
+   Fcjza6OuZtOzBZE38doRfHDyJ5dV84XtWUtEHf3OOjb6yTJc6oltUNmqJ
+   veur900gW8VctSuTfen1FXQyK/Qlv8KCHCfJEDbI5GUCfn1EsipUH1CgV
+   7IuYMTREyNMGYJTkgshfW0jSGuTplG90aWRUD/KM2V+cMkpMF4BkBkF7s
+   vioPdu+l6t2daMcNXvaj0na002Ixe4XLctslaOLm0YpKjVa5QUgPNydhY
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="353033996"
 X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="417661951"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 04:00:35 -0700
+   d="scan'208";a="353033996"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 05:36:52 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="879524750"
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="1035350871"
 X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="879524750"
+   d="scan'208";a="1035350871"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 26 May 2023 04:00:33 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 26 May 2023 05:36:51 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id A524240F; Fri, 26 May 2023 14:00:37 +0300 (EEST)
+        id 53366413; Fri, 26 May 2023 15:36:55 +0300 (EEST)
+Date:   Fri, 26 May 2023 15:36:55 +0300
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH] thunderbolt: Log DisplayPort adapter rate and lanes on discovery
-Date:   Fri, 26 May 2023 14:00:37 +0300
-Message-Id: <20230526110037.20542-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
+To:     Christian =?utf-8?Q?Schaubschl=C3=A4ger?= 
+        <christian.schaubschlaeger@gmx.at>
+Cc:     linux-usb@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: USB issue on a TB4 controller?
+Message-ID: <20230526123655.GW45886@black.fi.intel.com>
+References: <a45b9989-c9da-bf4e-94c8-3e1341777b4d@gmx.at>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <a45b9989-c9da-bf4e-94c8-3e1341777b4d@gmx.at>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -63,75 +64,58 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This may be helpful when debugging possible issues around DisplayPort
-port tunneling.
+Hi,
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- drivers/thunderbolt/tunnel.c | 43 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+On Tue, May 23, 2023 at 01:15:30PM +0200, Christian Schaubschläger wrote:
+> Hi Mika,
+> 
+> attached you find two dmesg logs (with tunderbolt.dyndbg=+p), one from power off state were everything is ok (dmesg_ok.txt.xz).
+> The second one (dmesg_nok.txt.xz) is after a reboot when the network interface is in faulty state.
+> 
+> Hardware is:
+> Dell Inc. Latitude 7440/0XDRJY, BIOS 1.3.1 04/25/2023
+> CPU0: 13th Gen Intel(R) Core(TM) i5-1345U (family: 0x6, model: 0xba, stepping: 0x3)
+> thunderbolt 0-1: Dell WD19TB Thunderbolt Dock
 
-diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
-index 3ebd32b897a0..7df5f90e21d4 100644
---- a/drivers/thunderbolt/tunnel.c
-+++ b/drivers/thunderbolt/tunnel.c
-@@ -1137,6 +1137,47 @@ static int tb_dp_init_video_path(struct tb_path *path)
- 	return 0;
- }
- 
-+static void tb_dp_dump(struct tb_tunnel *tunnel)
-+{
-+	struct tb_port *in, *out;
-+	u32 dp_cap, rate, lanes;
-+
-+	in = tunnel->src_port;
-+	out = tunnel->dst_port;
-+
-+	if (tb_port_read(in, &dp_cap, TB_CFG_PORT,
-+			 in->cap_adap + DP_LOCAL_CAP, 1))
-+		return;
-+
-+	rate = tb_dp_cap_get_rate(dp_cap);
-+	lanes = tb_dp_cap_get_lanes(dp_cap);
-+
-+	tb_port_dbg(in, "maximum supported bandwidth %u Mb/s x%u = %u Mb/s\n",
-+		    rate, lanes, tb_dp_bandwidth(rate, lanes));
-+
-+	out = tunnel->dst_port;
-+
-+	if (tb_port_read(out, &dp_cap, TB_CFG_PORT,
-+			 out->cap_adap + DP_LOCAL_CAP, 1))
-+		return;
-+
-+	rate = tb_dp_cap_get_rate(dp_cap);
-+	lanes = tb_dp_cap_get_lanes(dp_cap);
-+
-+	tb_port_dbg(out, "maximum supported bandwidth %u Mb/s x%u = %u Mb/s\n",
-+		    rate, lanes, tb_dp_bandwidth(rate, lanes));
-+
-+	if (tb_port_read(in, &dp_cap, TB_CFG_PORT,
-+			 in->cap_adap + DP_REMOTE_CAP, 1))
-+		return;
-+
-+	rate = tb_dp_cap_get_rate(dp_cap);
-+	lanes = tb_dp_cap_get_lanes(dp_cap);
-+
-+	tb_port_dbg(in, "reduced bandwidth %u Mb/s x%u = %u Mb/s\n",
-+		    rate, lanes, tb_dp_bandwidth(rate, lanes));
-+}
-+
- /**
-  * tb_tunnel_discover_dp() - Discover existing Display Port tunnels
-  * @tb: Pointer to the domain structure
-@@ -1214,6 +1255,8 @@ struct tb_tunnel *tb_tunnel_discover_dp(struct tb *tb, struct tb_port *in,
- 		goto err_deactivate;
- 	}
- 
-+	tb_dp_dump(tunnel);
-+
- 	tb_tunnel_dbg(tunnel, "discovered\n");
- 	return tunnel;
- 
--- 
-2.39.2
+Sorry for the delay. I've been busy with some other issues.
 
+I guess we are talking about this xHCI:
+
+[   15.449690] xhci_hcd 0000:04:00.0: xHCI Host Controller
+[   15.450477] xhci_hcd 0000:04:00.0: new USB bus registered, assigned bus number 3
+[   15.452337] xhci_hcd 0000:04:00.0: hcc params 0x200077c1 hci version 0x110 quirks 0x00
+00000200009810
+[   15.453734] xhci_hcd 0000:04:00.0: xHCI Host Controller
+[   15.454437] xhci_hcd 0000:04:00.0: new USB bus registered, assigned bus number 4
+[   15.455092] xhci_hcd 0000:04:00.0: Host supports USB 3.1 Enhanced SuperSpeed
+
+In both cases the the SuperSpeed HUB is found:
+
+[    5.589178] usb 4-2.3: new SuperSpeed USB device number 3 using xhci_hcd
+[    5.622113] input: HDA Intel PCH Headphone Mic as /devices/pci0000:00/0000:00:1f.3/soun
+d/card0/input27
+[    5.635536] hub 4-2.3:1.0: USB hub found
+[    5.637176] hub 4-2.3:1.0: 4 ports detected
+
+However, the connected NIC is only found in dmesg_ok.txt.xz:
+
+[    5.904363] usb 4-2.4: new SuperSpeed USB device number 4 using xhci_hcd
+...
+[    6.192613] r8152-cfgselector 4-2.4: reset SuperSpeed USB device number 4 using xhci_hcd
+[    6.217838] r8152 4-2.4:1.0 (unnamed net_device) (uninitialized): Using pass-thru MAC addr ac:91:a1:95:63:bf
+[    6.258478] r8152 4-2.4:1.0: load rtl8153b-2 v1 10/23/19 successfully
+[    6.318568] r8152 4-2.4:1.0 eth0: v1.12.13
+
+To me it looks like the PCIe tunnel to the xHCI (0000:04:00.0) on the
+dock works fine, otherwise it would not show up at all. I'm not an xHCI
+expert so adding Mathias in case he has ideas how to debug this further.
+
+I think it makes sense to enable xHCI debugging and traces and provide
+them to Mathias. The following commands should do so:
+
+ # echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
+ # echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
+ # echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
+ # echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
+
+Trace buffer is /sys/kernel/debug/tracing/trace.
