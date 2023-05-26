@@ -2,120 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1ED7126C5
-	for <lists+linux-usb@lfdr.de>; Fri, 26 May 2023 14:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0538A712748
+	for <lists+linux-usb@lfdr.de>; Fri, 26 May 2023 15:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236740AbjEZMgy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 May 2023 08:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37800 "EHLO
+        id S243572AbjEZNOf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 May 2023 09:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjEZMgx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 May 2023 08:36:53 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0F79E
-        for <linux-usb@vger.kernel.org>; Fri, 26 May 2023 05:36:52 -0700 (PDT)
+        with ESMTP id S243549AbjEZNOe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 May 2023 09:14:34 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E852A12C;
+        Fri, 26 May 2023 06:14:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685104612; x=1716640612;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685106872; x=1716642872;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=qJ9NEdmoD0M8iqxnVtoe8RU02DGfmCPxktHGW/rUqr0=;
-  b=b5/KY1S07cXy8RahpzanPX/HJoiocJ27c/YgIBVo/rWn5rOr53QK1cKq
-   4UoJ4ut5uJ5s3UNjQOrtgwTerW7L/FZoarYpYyUyw6zX/H3XgJcP1cLqy
-   Fcjza6OuZtOzBZE38doRfHDyJ5dV84XtWUtEHf3OOjb6yTJc6oltUNmqJ
-   veur900gW8VctSuTfen1FXQyK/Qlv8KCHCfJEDbI5GUCfn1EsipUH1CgV
-   7IuYMTREyNMGYJTkgshfW0jSGuTplG90aWRUD/KM2V+cMkpMF4BkBkF7s
-   vioPdu+l6t2daMcNXvaj0na002Ixe4XLctslaOLm0YpKjVa5QUgPNydhY
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="353033996"
+   mime-version:in-reply-to;
+  bh=TaKFmPvcaWxL63IETqF5z2dA8t53A2LsdWOk3sZfXkU=;
+  b=eliijqDHfpkXIfz0x3Oi03fik49GAKI3iH2adKScOuGRXZ14xQq10nkW
+   CPO3aSjUuNpSnHvBs6chMvyO7ASlaAdVq2Ku0hvaV0N47GhUq1opFseGt
+   5sjTggGVFyvJ66iPwkxjInezVQUUeEDhRzKadYmR6SPGnYlQroDWCY6M5
+   AZ9eeqNUn9BAppmHf3/5Ytdf3r88FG5KeM8QNpRhW30ldGRk+vgoBk+XW
+   K781v3pHM3fJvfsHXg805cNuzxqOqtCwoaJlDSpktTcabw9U2RGt50JSK
+   EJX3WSi2Sl47WEtpKMeFN/MBX6g88dMSNj2IZD+gQ3P+wtXP2m5b5c4QX
+   w==;
 X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="353033996"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 05:36:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="1035350871"
-X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="1035350871"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 26 May 2023 05:36:51 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 53366413; Fri, 26 May 2023 15:36:55 +0300 (EEST)
-Date:   Fri, 26 May 2023 15:36:55 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Christian =?utf-8?Q?Schaubschl=C3=A4ger?= 
-        <christian.schaubschlaeger@gmx.at>
-Cc:     linux-usb@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: USB issue on a TB4 controller?
-Message-ID: <20230526123655.GW45886@black.fi.intel.com>
-References: <a45b9989-c9da-bf4e-94c8-3e1341777b4d@gmx.at>
+   d="asc'?scan'208";a="217467764"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 May 2023 06:14:26 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 26 May 2023 06:14:16 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 26 May 2023 06:14:12 -0700
+Date:   Fri, 26 May 2023 14:13:50 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Minda Chen <minda.chen@starfivetech.com>
+CC:     Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Mason Huo <mason.huo@starfivetech.com>
+Subject: Re: [PATCH v6 5/7] dt-bindings: usb: Add StarFive JH7110 USB
+ controller
+Message-ID: <20230526-grain-cubical-e0af96202007@wendy>
+References: <20230518112750.57924-1-minda.chen@starfivetech.com>
+ <20230518112750.57924-6-minda.chen@starfivetech.com>
+ <20230525-shopper-handbrake-27fc06aede32@spud>
+ <5124e6a8-8ca6-71a5-19d6-8c15e954c458@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2Bn+39uGEqQUGUUq"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a45b9989-c9da-bf4e-94c8-3e1341777b4d@gmx.at>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <5124e6a8-8ca6-71a5-19d6-8c15e954c458@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+--2Bn+39uGEqQUGUUq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 23, 2023 at 01:15:30PM +0200, Christian Schaubschläger wrote:
-> Hi Mika,
-> 
-> attached you find two dmesg logs (with tunderbolt.dyndbg=+p), one from power off state were everything is ok (dmesg_ok.txt.xz).
-> The second one (dmesg_nok.txt.xz) is after a reboot when the network interface is in faulty state.
-> 
-> Hardware is:
-> Dell Inc. Latitude 7440/0XDRJY, BIOS 1.3.1 04/25/2023
-> CPU0: 13th Gen Intel(R) Core(TM) i5-1345U (family: 0x6, model: 0xba, stepping: 0x3)
-> thunderbolt 0-1: Dell WD19TB Thunderbolt Dock
+On Fri, May 26, 2023 at 06:24:48PM +0800, Minda Chen wrote:
 
-Sorry for the delay. I've been busy with some other issues.
+> >> +title: StarFive JH7110 wrapper module for the Cadence USBSS-DRD contr=
+oller
+> >=20
+> > I think you told Krzysztof you'd rename this to "StarFive JH7110 Cadence
+> > USBSS-DRD SoC controller"?
+> >=20
+> The previous title describe whole USB controller for previous dts node is
+> merged. Now the dts node is split.=20
+> "starfive,jh7110-usb" just contain starfive wrapper layer dts configurati=
+on.
 
-I guess we are talking about this xHCI:
+Okay, I must have misunderstood the conversation on the previous
+version. Sorry about that.
 
-[   15.449690] xhci_hcd 0000:04:00.0: xHCI Host Controller
-[   15.450477] xhci_hcd 0000:04:00.0: new USB bus registered, assigned bus number 3
-[   15.452337] xhci_hcd 0000:04:00.0: hcc params 0x200077c1 hci version 0x110 quirks 0x00
-00000200009810
-[   15.453734] xhci_hcd 0000:04:00.0: xHCI Host Controller
-[   15.454437] xhci_hcd 0000:04:00.0: new USB bus registered, assigned bus number 4
-[   15.455092] xhci_hcd 0000:04:00.0: Host supports USB 3.1 Enhanced SuperSpeed
+> > Otherwise, it looks like all the stuff from him and Rob have been sorted
+> > out, so other than $title this is
+> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-In both cases the the SuperSpeed HUB is found:
 
-[    5.589178] usb 4-2.3: new SuperSpeed USB device number 3 using xhci_hcd
-[    5.622113] input: HDA Intel PCH Headphone Mic as /devices/pci0000:00/0000:00:1f.3/soun
-d/card0/input27
-[    5.635536] hub 4-2.3:1.0: USB hub found
-[    5.637176] hub 4-2.3:1.0: 4 ports detected
+--2Bn+39uGEqQUGUUq
+Content-Type: application/pgp-signature; name="signature.asc"
 
-However, the connected NIC is only found in dmesg_ok.txt.xz:
+-----BEGIN PGP SIGNATURE-----
 
-[    5.904363] usb 4-2.4: new SuperSpeed USB device number 4 using xhci_hcd
-...
-[    6.192613] r8152-cfgselector 4-2.4: reset SuperSpeed USB device number 4 using xhci_hcd
-[    6.217838] r8152 4-2.4:1.0 (unnamed net_device) (uninitialized): Using pass-thru MAC addr ac:91:a1:95:63:bf
-[    6.258478] r8152 4-2.4:1.0: load rtl8153b-2 v1 10/23/19 successfully
-[    6.318568] r8152 4-2.4:1.0 eth0: v1.12.13
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHCwjgAKCRB4tDGHoIJi
+0mgJAQClJBlPXs7N2vOvkTGSfZFOb6z47yAgyiaqavdIEp2UTQD9EB9gGDPr2W/F
+lNVtNtC8iRhO7w0elIt9BCJHjRITMwc=
+=AQaH
+-----END PGP SIGNATURE-----
 
-To me it looks like the PCIe tunnel to the xHCI (0000:04:00.0) on the
-dock works fine, otherwise it would not show up at all. I'm not an xHCI
-expert so adding Mathias in case he has ideas how to debug this further.
-
-I think it makes sense to enable xHCI debugging and traces and provide
-them to Mathias. The following commands should do so:
-
- # echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
- # echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
- # echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
- # echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
-
-Trace buffer is /sys/kernel/debug/tracing/trace.
+--2Bn+39uGEqQUGUUq--
