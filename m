@@ -1,96 +1,83 @@
 Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6F2711A3E
-	for <lists+linux-usb@lfdr.de>; Fri, 26 May 2023 00:43:12 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6FD711BAD
+	for <lists+linux-usb@lfdr.de>; Fri, 26 May 2023 02:51:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234910AbjEYWk5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 May 2023 18:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40306 "EHLO
+        id S236289AbjEZAvB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 May 2023 20:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234702AbjEYWk4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 18:40:56 -0400
-Received: from mail.peterfykh.hu (mail.peterfykh.hu [84.206.67.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11459E;
-        Thu, 25 May 2023 15:40:53 -0700 (PDT)
-Received: from mail.peterfykh.hu (localhost [127.0.0.1])
-        by mail.peterfykh.hu (Postfix) with ESMTP id 84605970;
-        Fri, 26 May 2023 00:10:40 +0200 (CEST)
+        with ESMTP id S235472AbjEZAu7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 May 2023 20:50:59 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7096E1B3
+        for <linux-usb@vger.kernel.org>; Thu, 25 May 2023 17:50:54 -0700 (PDT)
+Received: (qmail 276368 invoked by uid 1000); 25 May 2023 20:50:53 -0400
+Date:   Thu, 25 May 2023 20:50:53 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Roy Luo <royluo@google.com>
+Cc:     raychi@google.com, badhri@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Bastien Nocera <hadess@hadess.net>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Douglas Anderson <dianders@chromium.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [RFC PATCH v1] usb: core: add sysfs entry for usb device state
+Message-ID: <dfaa91d3-1169-4381-a2ef-83443ee3e4ce@rowland.harvard.edu>
+References: <20230525173818.219633-1-royluo@google.com>
+ <408575c0-2967-4cdb-92c7-1b2845038d20@rowland.harvard.edu>
+ <CA+zupgwz8Mbd8=7ep7t0OU-34bbwsc9fMK4dHip0rgqD7FSd2A@mail.gmail.com>
+ <89cf2c61-a55e-4c35-93b2-35fa7ab0266b@rowland.harvard.edu>
+ <CA+zupgyErTsDEZYerfAeEyVF073x+aTW6HiWZRA+2Y=a7U4XVg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Date:   Thu, 25 May 2023 23:10:40 +0100
-From:   mk <szekely.emilia@peterfykh.hu>
-To:     undisclosed-recipients:;
-Subject: Von einem Bewunderer
-Reply-To: kmarion709@gmail.com
-Mail-Reply-To: kmarion709@gmail.com
-Message-ID: <9148cdf644cbc18115c9d279cb8072f8@peterfykh.hu>
-X-Sender: szekely.emilia@peterfykh.hu
-User-Agent: Roundcube Webmail/1.2.3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=peterfykh.hu; s=mail; t=1685052659; bh=l9qzdQ+pL61YaJvLjvpEvNWUkbU/NeewFyTEeI/UDpM=; h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Subject:Reply-To:Message-ID; b=OmDIkxRB4y56JFnbHSke7aMLaiJaTivjNE1Wvk4bhwIbKZL/aGhaG+nrSqYH+7GLbYTfPb3NNACltCL7JL16nUMgxKw18rgTR/6Ny2RTwEm7h/iezrkkL8PtYZAf3TR5qbwWeu6YYBcYJuYek/MlaU+tDg6k67+Hyu1IpIIUEyE=
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,ODD_FREEM_REPTO,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4909]
-        *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: peterfykh.hu]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [kmarion709[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.6 ODD_FREEM_REPTO Has unusual reply-to header
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+In-Reply-To: <CA+zupgyErTsDEZYerfAeEyVF073x+aTW6HiWZRA+2Y=a7U4XVg@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hallo Schatz,
+On Thu, May 25, 2023 at 01:31:17PM -0700, Roy Luo wrote:
+> On Thu, May 25, 2023 at 12:10 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Thu, May 25, 2023 at 11:46:23AM -0700, Roy Luo wrote:
+> > > Alan, thanks for the quick response!
+> > > Yes, port_dev->state is indeed the same as port_dev->child->state. However,
+> > > I still add port_dev->state because port_dev->child won't be assigned until
+> > > the corresponding usb_device is in ADDRESS state.
+> > > I wish I can assign get port_dev->child assigned earlier, but I think
+> > > the current design - assign port_dev->child and device_add() after ADDRESS
+> > > state - also makes sense because there are many ways that the enumeration
+> > > could fail in the early stage. By adding port_dev->state, I can link
+> > > usb_device->state to usb_port as soon as the usb_device is created to get
+> > > around the limitation of port_dev->child.
+> > > I would be very happy to hear other ideas.
+> >
+> > Is there any real reason not to set port_dev->child as soon as the
+> > usb_device structure is created?  If enumeration fails, the pointer can
+> > be cleared.
+> >
+> > Alan Stern
+> 
+> Currently the usb core assumes the usb_device that port_dev->child points
+> to is enumerated and port_dev->child->dev is registered when
+> port_dev->child is present. Setting port_dev->child early would break this
+> fundamental assumption, hence I'm a bit reluctant to go this way.
 
-Es tut mir leid, Sie zu stören und in Ihre Privatsphäre einzudringen. 
-Ich bin Single, einsam und brauche einen fürsorglichen, liebevollen und 
-romantischen Begleiter.
+Well, you could remove that assumption by adding a "child_is_registered" 
+flag and explicitly checking it.
 
-Ich bin ein heimlicher Verehrer und würde gerne die Gelegenheit nutzen, 
-um mehr voneinander zu erfahren. Ich weiß, es ist seltsam, Sie auf diese 
-Weise zu kontaktieren, und ich hoffe, Sie können mir verzeihen. Ich bin 
-eine schüchterne Person und das ist der einzige Weg, wie ich weiß, dass 
-ich deine Aufmerksamkeit bekommen könnte. Ich möchte nur wissen, was Sie 
-denken, und es ist nicht meine Absicht, Sie zu beleidigen. Ich hoffe, 
-wir können Freunde sein, wenn du das willst, obwohl ich mehr als nur ein 
-Freund sein möchte. Ich weiß, dass Sie ein paar Fragen haben, und ich 
-hoffe, ich kann einige Antworten geben, um Ihre Neugier zu befriedigen.
-
-Ich glaube an das Sprichwort „Für die Welt bist du nur eine Person, aber 
-für jemand Besonderen bist du die Welt“. Alles, was ich will, ist Liebe, 
-romantische Fürsorge und Aufmerksamkeit von einem besonderen Begleiter, 
-von dem ich hoffe, dass Sie es sind.
-
-Ich hoffe, dass diese Nachricht der Beginn einer langfristigen 
-Kommunikation zwischen uns sein wird. Ich werde Ihre Antwort auf diese 
-Nachricht zu schätzen wissen, da sie mich sehr glücklich machen wird.
-
-
-Umarmungen und Küsse,
-
-Dein heimlicher Verehrer
+Alan Stern
