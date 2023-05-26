@@ -2,99 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08B8713013
-	for <lists+linux-usb@lfdr.de>; Sat, 27 May 2023 00:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4666671301F
+	for <lists+linux-usb@lfdr.de>; Sat, 27 May 2023 00:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbjEZWcM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 May 2023 18:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
+        id S231465AbjEZWp6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 May 2023 18:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjEZWcK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 May 2023 18:32:10 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15C6119
-        for <linux-usb@vger.kernel.org>; Fri, 26 May 2023 15:32:09 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-776f790de25so8449339f.0
-        for <linux-usb@vger.kernel.org>; Fri, 26 May 2023 15:32:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1685140329; x=1687732329;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9neysGGfncvfzLzl+KOCCQRQt1N0p92liqmG3pnjBa4=;
-        b=P7e6n+k3NWRNc3P9WXjZhTfG32xkAL9WI4I7i6hyhNKYuIguwhP8rV6zwWaozWWoOd
-         MIXcIausBnNDZNM8zUMKCMFibgbIV0tyfw5y5JLMBPjug8T2CgGDC+J7DFAjjCX1JAg/
-         EJ3MO3xawKEKbC7AUABAIDU8hMuG+quHH225I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685140329; x=1687732329;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9neysGGfncvfzLzl+KOCCQRQt1N0p92liqmG3pnjBa4=;
-        b=cqm3r+9xjPIIGpZZivTGA5qDwqvpUEENuDatZLuZkQIiNxV9XQ5PBqrVwx/EkBVW3l
-         hPF4uzq+4bAADeE9OzrhZLcxTWboo84CCKzziOxlCe3uQ051RqJ0mYD6z9n1BL1VcLkr
-         0CcuzvdXsYq3ltxUXBP9oN/+6jqcbaDiJ7yCm8H0o6yetmmPsciLesk2IOiuKQmBcwXU
-         JYaZCO3l3RUq5ivkP+qQ8gsrZX6U3tR+SACGAxYr1s9lZ6+5xhKbDzbrPkrgqROQLgDz
-         U3NTU7pWc3NXCR860CtMPj+vlMguAYyPfmSuYmCekSJw9iMXG8PIvjPhq6brC6TtU6AM
-         Sefg==
-X-Gm-Message-State: AC+VfDxe6A1GJspxNeg5HjhKS7tbWMuuwq9pLGVBfIqBRWOWd7Kg3nhQ
-        DNrxVQiYHTV4bZ8uytRC/a7WaQ==
-X-Google-Smtp-Source: ACHHUZ4s/IWNyhIuGK6qBNt7xgf2a2b4ySe1sVzWsejeAY/36Hiz9jxNIKUh55drt20mZ7MnNhlk7Q==
-X-Received: by 2002:a05:6e02:c6a:b0:331:30ac:f8fe with SMTP id f10-20020a056e020c6a00b0033130acf8femr1882723ilj.3.1685140329135;
-        Fri, 26 May 2023 15:32:09 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id w24-20020a029698000000b0041844cb2c2dsm1352674jai.115.2023.05.26.15.32.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 15:32:08 -0700 (PDT)
-Message-ID: <90e7ff3c-aaab-8427-7610-2a6d9229af14@linuxfoundation.org>
-Date:   Fri, 26 May 2023 16:32:08 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [BUG] Potential race condition in usbip attach
-Content-Language: en-US
-To:     Alexander Timofeev <alex42timofeev@gmail.com>,
-        valentina.manea.m@gmail.com, shuah@kernel.org
-Cc:     linux-usb@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <CAM82uABnohNw1Rv8q7qJi-WT9wXCuHyYV5w3++A_EeaodZr46A@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CAM82uABnohNw1Rv8q7qJi-WT9wXCuHyYV5w3++A_EeaodZr46A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229935AbjEZWpz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 May 2023 18:45:55 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F0AA7;
+        Fri, 26 May 2023 15:45:54 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34QMhIvS015208;
+        Fri, 26 May 2023 22:45:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=9TzElTBqBiWGy3ITsFgRPqH7LyPfTiugFHYUUA8u5Jo=;
+ b=C995BIOlS7yNxzxWTKaxgcr1AUZDBUsBEuG9xqTXryU/g8kjaR7NmDTC6/CM8hBlDGju
+ ubFiKer1rdRRA46aLRqD2MRtVtod3sKcWweCCQZt3ZGTsy0zLDJ1rPq8rcMvFTmy2q9Z
+ /z+g8RyH2J2X39LiodcTUZDnxJsppp/OR3SWdnMXORdb3jZWrKaM70fZNzf+jD3UvUhn
+ C997a+DCz670q/dfSEpP6wKeY4glDUmRmjt3piwXOjQw0mTcS8eb3leGBenWnDNB296n
+ WhE73zcQmTBHuralaAyn6S4C0Ga02LOi2AOU9Wzl0nBiuHjkjIpAc/To1CmrserHu+yv ig== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qttejhm2d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 May 2023 22:45:52 +0000
+Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34QMjoTs001432;
+        Fri, 26 May 2023 22:45:50 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTP id 3qtvwvaejv-1;
+        Fri, 26 May 2023 22:45:50 +0000
+Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34QMjohA001414;
+        Fri, 26 May 2023 22:45:50 GMT
+Received: from hu-devc-lv-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.164])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTP id 34QMjoH7001321;
+        Fri, 26 May 2023 22:45:50 +0000
+Received: by hu-devc-lv-c.qualcomm.com (Postfix, from userid 464172)
+        id 6A51720E0C; Fri, 26 May 2023 15:45:50 -0700 (PDT)
+From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
+To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>
+Subject: [PATCH v2 0/2] Support dwc3 runtime suspend during bus suspend
+Date:   Fri, 26 May 2023 15:45:38 -0700
+Message-Id: <1685141140-26228-1-git-send-email-quic_eserrao@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Mqg8E3r70CloSq8p_eZuH5MVtSoIkBAd
+X-Proofpoint-ORIG-GUID: Mqg8E3r70CloSq8p_eZuH5MVtSoIkBAd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-26_12,2023-05-25_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=40 clxscore=1015
+ priorityscore=1501 malwarescore=0 adultscore=0 spamscore=40 mlxlogscore=17
+ suspectscore=0 impostorscore=0 bulkscore=0 mlxscore=40 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305260195
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/24/23 11:48, Alexander Timofeev wrote:
-> Hi!
-> 
-> Sorry if you have received this email twice. My first email contained
-> html and was not accepted by the mailing list.
-> 
-> I think I have found a race condition which can be triggered for
-> example when calling two usbip attach commands in parallel on the same
-> host.
-> 
-> In file linux/tools/usb/usbip/src /usbip_attach.c:
-> In function static int import_device(int sockfd, struct usbip_usb_device *udev):
-> 
-> At first two processes may call usbip_vhci_driver_open() before
-> entering the do-while loop.
-> Next they both call usbip_vhci_get_free_port() and get the same free port.
-> Finally, they pass the same port number to usbip_vhci_attach_device().
-> 
-> Current recommendation to end users: run usbip attach commands only
-> sequentially.
-> 
+Changes in v2
+ - Used pm_runtime_resume_and_get() API instead of pm_runtime_get_sync()
+   as suggested by Dan.
+ - Handled the return value in ether_wakeup_host to print error message.
 
-Will you be able to share the reproducer?
+When a USB link is idle, the host sends a bus suspend event to the device
+so that the device can save power. But true power savings during bus
+suspend can be seen only if we let the USB controller enter low power
+mode and turn off the clocks. Vendor drivers may have their own runtime
+power management framework to power up/down the controller. But since
+vendor drivers' runtime suspend/resume routines depend on the dwc3 child
+node we would need a framework to trigger dwc3 runtime pm ops whenever a
+bus suspend is received. If the device wants to exit from bus suspend
+state it can send a wakeup signal to the host by first bringing out the
+controller from low power mode. This series implements the needed
+framework to achieve this functionality when a bus suspend interupt is
+received.
 
-thanks,
--- Shuah
+The series is organized in below fashion:
+Patch 1: This includes the modification needed from function driver u_ether
+to let UDC enter low power mode.
+Patch 2: This has the modification needed in the UDC driver to trigger runtime
+suspend whene a bus suspend interrupt is received. This also handles resume
+and remote wakeup features from power management perspective.
+
+Elson Roy Serrao (2):
+  usb: function: u_ether: Handle rx requests during suspend/resume
+  usb: dwc3: Modify runtime pm ops to handle bus suspend
+
+ drivers/usb/dwc3/core.c               | 19 ++++++++++++++
+ drivers/usb/dwc3/gadget.c             | 40 +++++++++++++++++++++++------
+ drivers/usb/gadget/function/u_ether.c | 47 ++++++++++++++++++++++++++++-------
+ 3 files changed, 90 insertions(+), 16 deletions(-)
+
+-- 
+2.7.4
 
