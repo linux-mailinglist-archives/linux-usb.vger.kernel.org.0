@@ -2,60 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 046C17134E0
-	for <lists+linux-usb@lfdr.de>; Sat, 27 May 2023 15:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5506E713533
+	for <lists+linux-usb@lfdr.de>; Sat, 27 May 2023 16:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbjE0NDy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 27 May 2023 09:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
+        id S232359AbjE0OvK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 27 May 2023 10:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbjE0NDx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 27 May 2023 09:03:53 -0400
-Received: from st43p00im-ztdg10063201.me.com (st43p00im-ztdg10063201.me.com [17.58.63.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A028114
-        for <linux-usb@vger.kernel.org>; Sat, 27 May 2023 06:03:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pen.gy; s=sig1;
-        t=1685192627; bh=sAkwUCZJq8o7DDumXaYGKFb5DhxFUhc13iLIaKMlieQ=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=Y59M6Duh+OW23MFsKo9gNBwPJc3vQ5dL6Q8g6S6nB+gvclipADdFDbJZwKchd/pr8
-         ECeI5/W7QKC6LqaKfKvaz1j+m3so4qEBzmJynKfuK4XAnNW6d9i6X/J/sLodAcM9QQ
-         c7UIT3oHHT7WgWqY8OhVDROr6OjpVYFt0rzTC767++Vb4qKRcT1Dj6T/kgIg6w4BL1
-         Y8dsJZtVOehlXNfyjj/z3b9U+cO7ldM+UfOhq/UjMAXJS8gpzZDOm6aAWlHHQdE/mW
-         TWq8ORBmL1hEY0x+cNaWFdRrOKN8VY7gDe7D4YcuKt85L5JTZ5TL0ENroT2lOm6BCw
-         sJrOSogRKOCzw==
-Received: from Eagle.se1.pen.gy (st43p00im-dlb-asmtp-mailmevip.me.com [17.42.251.41])
-        by st43p00im-ztdg10063201.me.com (Postfix) with ESMTPSA id 13E9B380916;
-        Sat, 27 May 2023 13:03:44 +0000 (UTC)
-From:   Foster Snowhill <forst@pen.gy>
-To:     "David S. Miller" <davem@davemloft.net>,
+        with ESMTP id S231436AbjE0OvI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 27 May 2023 10:51:08 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2108.outbound.protection.outlook.com [40.107.93.108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEACAE1;
+        Sat, 27 May 2023 07:51:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nonACX9pmA+zRWzVfH3wv2VaT/HUFvdm2Zjev9AXgXVY90j9wcUshjLjrmcmFhEJ9eHO5a0vD/9fIKnnKXp6PMd2peDeWzh0UxlDMwnv8rfyemt4RJZH0zuAN7yN3mKsJvtbIXdEWS0PxRPCrpbCRUe8dunTwOi+42KAKL5Pw6tx1FvKcoKH+RSmqWu1jZtclEOET2lOWlTjo0YPsqE0nz+mW7fkFX3mRZHQQ2rnLNK/5QkRBc9PwSlTt5CqnsSByMzBGmblG/V/1Hyyd5XAcXxSUtS9uNnL4s895WxB/Kh3vQj5eDr77RqbbgKxJ6UoD9H6CZGmn4Qwv3Tk7P/F4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=F/H6BpRgitubGrfuX/KcDIaK8EvST+C7kleuHYBvifM=;
+ b=Sx0qiNioo8QkYxLAvxnmkk0yTISpHDukSIl+AVimFA3r58i5lARG97qW/ItTOpXU5//XOm8ATnCQ0C3R/WaI/kmPXc2/4pChDydskU0oKDisnZ4chPBGSWoveXFdlvj9Wn7KIHlkDQNN9oRaEhj42xgClAuZ4vubBKGPTkpyS8lDLXEOX0aVy7SdQfGIBrGCCI4Ss0zRs6Y+557Pt2pptPVdWP6RgLqWNoGvIZizRqfkLNdPAqArslVletHbhL0nzBAtiSEh5lCNMMmJsj67VCiOZn0sYsUxdSmwRhtUen6YO80DOKVwfF94DtAT4xsFnqzSO0LMWUzVIyaFNim+MA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=F/H6BpRgitubGrfuX/KcDIaK8EvST+C7kleuHYBvifM=;
+ b=Zs5ydMcarPiK39IXWpEF1uVoQyDzwpBGgvQKpfKczG8mAucxoKjGDohESSIGeYhJ62FJXAaOTfkyBw36O6MmZsIDtDeAolzZFZ65KWo8YQNeNAQOdQ4UpsC1n9z7iA8EjC9l4pHmmphZLHxCfaYHEM70bOtGdARlgRocYjlkl0s=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CH2PR13MB4555.namprd13.prod.outlook.com (2603:10b6:610:61::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.18; Sat, 27 May
+ 2023 14:51:02 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.018; Sat, 27 May 2023
+ 14:51:02 +0000
+Date:   Sat, 27 May 2023 16:50:56 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Foster Snowhill <forst@pen.gy>
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Georgi Valkov <gvalkov@gmail.com>,
-        Simon Horman <simon.horman@corigine.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Georgi Valkov <gvalkov@gmail.com>,
         Jan Kiszka <jan.kiszka@siemens.com>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH net-next v3 2/2] usbnet: ipheth: add CDC NCM support
-Date:   Sat, 27 May 2023 15:03:09 +0200
-Message-Id: <20230527130309.34090-2-forst@pen.gy>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230527130309.34090-1-forst@pen.gy>
+Subject: Re: [PATCH net-next v3 1/2] usbnet: ipheth: fix risk of NULL pointer
+ deallocation
+Message-ID: <ZHIY0LJlcQP+VVDw@corigine.com>
 References: <20230527130309.34090-1-forst@pen.gy>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230527130309.34090-1-forst@pen.gy>
+X-ClientProxiedBy: AM0PR01CA0163.eurprd01.prod.exchangelabs.com
+ (2603:10a6:208:aa::32) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: tRzK_jEGc251rI2le6_9verwXvt5JAnU
-X-Proofpoint-GUID: tRzK_jEGc251rI2le6_9verwXvt5JAnU
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.957,17.11.170.22.0000000_definitions?=
- =?UTF-8?Q?=3D2023-05-18=5F15:2020-02-14=5F02,2023-05-18=5F15,2023-02-09?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 spamscore=0
- clxscore=1030 malwarescore=0 mlxlogscore=999 mlxscore=0 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2305270113
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH2PR13MB4555:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2b85dede-df08-4016-86c6-08db5ec1ca94
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: k//W7tTsNvsewAilyFAJ9FcNwB5gHnh21HPhsJDPLR9lXz54i54ryQB97TqgPg1z2tg8iFdj/n7wf93+oJxlZMzWdxTEmm18Ncd3/K1L/9j5uTBc4PqRORlPtmERoj9MwntxLLAA/STy2ed8RAHfJMmGyI/rMhX2dpfAZduFb7QAhQWyVfp0L01jKIVB5F+5KVdtIo2q3N4k/6MfXMzxrjvT1tsVqiDJxALUP7rVCTm37s3tyqILJ+BKBH4LF6h9Evz5syARHpFb662Rmz9a5G8jEg23dOz3txXF1X7v7x4iVMJXUsY5Duj8up05IYfc83ePxFyW7UsLQLoaExtHh+Zi6XWUpnKhLQ3ZgcJU0SYrCdAaG+lKAIo4KQJ5fCKZL3oUhaYNZ3/U5ZuQEWcm6yUfEiyzvTFdZei59DbCFnpLaAgbTISwies2X4r4/7OTSI6sasCRUUatzXQjgFu1emBOASphJPvS8b80T8HPkV2w7S3ZGB8a/Vw1sRVdJxftGe/j+415eDVNAFEDftsa531wHjpmJ/S3FlpuHgZM26bRB3tYQ67IbeWcgYkHLyk8nVfK+quaLhgIszOasWO+HK5xF4lKiMyi6g8A/q1mM+w=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(136003)(366004)(39830400003)(451199021)(54906003)(186003)(86362001)(478600001)(2616005)(4744005)(2906002)(66476007)(66946007)(44832011)(36756003)(66556008)(4326008)(6916009)(6666004)(6512007)(316002)(6506007)(6486002)(5660300002)(8676002)(41300700001)(8936002)(38100700002)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?c/Jcv5672Yt9ATzBRqeKKm+lOLzoXVch2flQPrJyUSPaU8AkFm9gTxC/zgyr?=
+ =?us-ascii?Q?HZvyx8N84nwfa+UWEvJMlpo968u5FjOEscdsDXs8MaYfdumhExP4RvS0IeIa?=
+ =?us-ascii?Q?jIQmY1xXmE30o8ahRWojjlYVtVZOPAig/zNddImPMEIt+XvVuW7Oo96GFN7G?=
+ =?us-ascii?Q?JtHA2AGXAr8IfHx2W1PxGte868Vg060j6bBdazN2Zm1QaHrohhK2+ptunHuU?=
+ =?us-ascii?Q?YkUEOpzPxXKjwqBxMh2c96qaIkPM4aDMGmbLryGWmFSnkUFxhA8A8DBpKOhl?=
+ =?us-ascii?Q?iZ8SnX6h4NMPjvZFTU7/Gbih1WdglnfBPieEvtnFnDReT8vvXD9LJ0VaMH46?=
+ =?us-ascii?Q?i5eulF/1N2HVOKiXjwmuaR4kFYHSQosduPkLQ8YFZsx9FYYX4yG9kfBkIkCj?=
+ =?us-ascii?Q?fJibKHc3hv9uOvCY5pZkC1Elwi1q/TI4NPrmPnCQgjKLZW4HPL2Qw3wbktfe?=
+ =?us-ascii?Q?3EI5i6NliFdiwrBbmupsd28DA51dOjxiVubYCbI1NnlL8/iOQm1EYae0gWBu?=
+ =?us-ascii?Q?4kx3GZtaihMESzyHmK0Fib/DfesxBE/XcRDScB605MbAt9njZ1CvkYqy4N/F?=
+ =?us-ascii?Q?sx4HEdFqYFx2DUpLD28OrZlg75CnudpWvNwQbtx8RJ4ZYhWpIrJqpnIOO7jE?=
+ =?us-ascii?Q?dpCq2IGv7N1l8Z7csjjZYxHtXeBhsKoWL7khDqYuGrTJqfJ3PUu7au+f3jvj?=
+ =?us-ascii?Q?WNEA8Sw8mz4VhxRptUX1/cplgpb4SVpBCYvn+Y+XkS9EsCRd/XuumujBXTxA?=
+ =?us-ascii?Q?Z4JeTJ4/hDJHWq7AxqmcMTQ88DW5hOp++rrLUjBFJSqfCkOO9oYeou6Z0iB9?=
+ =?us-ascii?Q?DqhYAF47TN2WqsoHz2RF6WM8L4SIeoYNdot3k3h2R36N/clvt6SX2xYIBuU9?=
+ =?us-ascii?Q?qKGkhy+JLOMNQ/B4XzbIfFX0tYb8hDlMBUVzspzWOlJ/EhjkIfaUed7D6Uux?=
+ =?us-ascii?Q?Rzm+F4PTtsEJ/fTVVA82gU+buRgHFzS2tbzCA7+llfBuLs1GfqBEum5+hUSX?=
+ =?us-ascii?Q?vGYkogA02wwQJkKQDU5lv3z17K41+6YakVywTJ4zeLjfaU0CJrhkJ05f4gF8?=
+ =?us-ascii?Q?+RoQE1JpuVo4ROvrY7RoXHi3HN1T8a9Ug+BzTxTlaDrYnBAGAiL/dd0SmW0M?=
+ =?us-ascii?Q?p98ykuNoA3lUirD06g4M9IA/cgZgN0uSIwJUzOi7VV8ym2O1NPmLqjrzCWQR?=
+ =?us-ascii?Q?uwJ5pDzAgZoZhU2j+OfHcA1vy+SIPRfJ9XwAv1RnbFkSHt4RHg6sn2H2cf/I?=
+ =?us-ascii?Q?0uFNda41aSV23F49S4R3XZ+x2kRG+B2nRfisa5A5+rjrvN27YqJLDLgpuonO?=
+ =?us-ascii?Q?+AHAlnsxG8sMkYm5s6un/RbCaytgq+EVj8soOy5514ZgNXnsr4gAiN4Nw3hq?=
+ =?us-ascii?Q?q/wGvwq4uQq8NROm5ZgzqjrQ5wmuNlWbdocaVNCA6SxDMV2updnX4YAR9S4G?=
+ =?us-ascii?Q?XZ9JCNJrt55sxZsXaGaFRAvBhQFt7HS45QpaAWTasFfGB1aoeQFkr5ljeewm?=
+ =?us-ascii?Q?g8miErFmnZZQLuR+2G+VZhNWw8s+K2rZf1XMC7QYKNmGIDhNpk2muY262fIi?=
+ =?us-ascii?Q?3LSub+VZd3niHpBcr4/ohJV0GY2P2aE+g9ZOTBbdLRa17KXry63CMlmg0wz2?=
+ =?us-ascii?Q?Hu01j9YIPzwmYdEuH8TCB6c1KHoQrdJ6r5DIb2XTb6jgtdBiUThe1+SjjuC5?=
+ =?us-ascii?Q?Cg9cUQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2b85dede-df08-4016-86c6-08db5ec1ca94
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2023 14:51:02.4368
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XhosEOMxyNH16Cd/G7yQG1j0SHHz39PwLE+NgngkBs1nI+yb6bKqPtXtGZyLJMl35Tt8XbUNS/uvuV5eaqcyI3AluURMAkRTtg/AKRloLu8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR13MB4555
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,358 +119,17 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Recent iOS releases support CDC NCM encapsulation on RX. This mode is
-the default on macOS and Windows. In this mode, an iOS device may include
-one or more Ethernet frames inside a single URB.
+On Sat, May 27, 2023 at 03:03:08PM +0200, Foster Snowhill wrote:
+> From: Georgi Valkov <gvalkov@gmail.com>
+> 
+> The cleanup precedure in ipheth_probe will attempt to free a
+> NULL pointer in dev->ctrl_buf if the memory allocation for
+> this buffer is not successful. While kfree ignores NULL pointers,
+> and the existing code is safe, it is a better design to rearrange
+> the goto labels and avoid this.
+> 
+> Signed-off-by: Georgi Valkov <gvalkov@gmail.com>
+> Signed-off-by: Foster Snowhill <forst@pen.gy>
 
-Freshly booted iOS devices start in legacy mode, but are put into
-NCM mode by the official Apple driver. When reconnecting such a device
-from a macOS/Windows machine to a Linux host, the device stays in
-NCM mode, making it unusable with the legacy ipheth driver code.
-
-To correctly support such a device, the driver has to either support
-the NCM mode too, or put the device back into legacy mode.
-
-To match the behaviour of the macOS/Windows driver, and since there
-is no documented control command to revert to legacy mode, implement
-NCM support. The device is attempted to be put into NCM mode by default,
-and falls back to legacy mode if the attempt fails.
-
-Signed-off-by: Foster Snowhill <forst@pen.gy>
-Tested-by: Georgi Valkov <gvalkov@gmail.com>
----
-v3:
-  No changes
-v2: https://lore.kernel.org/netdev/20230525194255.4516-2-forst@pen.gy/
-  - Fix code formatting (RCS, 80 col width, remove redundant type casts)
-  - Drop an unrelated goto label-related hunk from this patch
-v1: https://lore.kernel.org/netdev/20230516210127.35841-1-forst@pen.gy/
-
-v2 tested by me on net-next, amd64, Ubuntu 23.04, iPhone Xs Max, iOS 16.5.
-v3 has no code changes compared to v2.
----
- drivers/net/usb/ipheth.c | 185 ++++++++++++++++++++++++++++++++-------
- 1 file changed, 152 insertions(+), 33 deletions(-)
-
-diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
-index 8875a3d0e..6677ac700 100644
---- a/drivers/net/usb/ipheth.c
-+++ b/drivers/net/usb/ipheth.c
-@@ -52,6 +52,7 @@
- #include <linux/ethtool.h>
- #include <linux/usb.h>
- #include <linux/workqueue.h>
-+#include <linux/usb/cdc.h>
- 
- #define USB_VENDOR_APPLE        0x05ac
- 
-@@ -59,8 +60,11 @@
- #define IPHETH_USBINTF_SUBCLASS 253
- #define IPHETH_USBINTF_PROTO    1
- 
--#define IPHETH_BUF_SIZE         1514
- #define IPHETH_IP_ALIGN		2	/* padding at front of URB */
-+#define IPHETH_NCM_HEADER_SIZE  (12 + 96) /* NCMH + NCM0 */
-+#define IPHETH_TX_BUF_SIZE      ETH_FRAME_LEN
-+#define IPHETH_RX_BUF_SIZE      65536
-+
- #define IPHETH_TX_TIMEOUT       (5 * HZ)
- 
- #define IPHETH_INTFNUM          2
-@@ -71,6 +75,7 @@
- #define IPHETH_CTRL_TIMEOUT     (5 * HZ)
- 
- #define IPHETH_CMD_GET_MACADDR   0x00
-+#define IPHETH_CMD_ENABLE_NCM    0x04
- #define IPHETH_CMD_CARRIER_CHECK 0x45
- 
- #define IPHETH_CARRIER_CHECK_TIMEOUT round_jiffies_relative(1 * HZ)
-@@ -84,6 +89,8 @@ static const struct usb_device_id ipheth_table[] = {
- };
- MODULE_DEVICE_TABLE(usb, ipheth_table);
- 
-+static const char ipheth_start_packet[] = { 0x00, 0x01, 0x01, 0x00 };
-+
- struct ipheth_device {
- 	struct usb_device *udev;
- 	struct usb_interface *intf;
-@@ -97,6 +104,7 @@ struct ipheth_device {
- 	u8 bulk_out;
- 	struct delayed_work carrier_work;
- 	bool confirmed_pairing;
-+	int (*rcvbulk_callback)(struct urb *urb);
- };
- 
- static int ipheth_rx_submit(struct ipheth_device *dev, gfp_t mem_flags);
-@@ -116,12 +124,12 @@ static int ipheth_alloc_urbs(struct ipheth_device *iphone)
- 	if (rx_urb == NULL)
- 		goto free_tx_urb;
- 
--	tx_buf = usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE,
-+	tx_buf = usb_alloc_coherent(iphone->udev, IPHETH_TX_BUF_SIZE,
- 				    GFP_KERNEL, &tx_urb->transfer_dma);
- 	if (tx_buf == NULL)
- 		goto free_rx_urb;
- 
--	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN,
-+	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_RX_BUF_SIZE,
- 				    GFP_KERNEL, &rx_urb->transfer_dma);
- 	if (rx_buf == NULL)
- 		goto free_tx_buf;
-@@ -134,7 +142,7 @@ static int ipheth_alloc_urbs(struct ipheth_device *iphone)
- 	return 0;
- 
- free_tx_buf:
--	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, tx_buf,
-+	usb_free_coherent(iphone->udev, IPHETH_TX_BUF_SIZE, tx_buf,
- 			  tx_urb->transfer_dma);
- free_rx_urb:
- 	usb_free_urb(rx_urb);
-@@ -146,9 +154,9 @@ static int ipheth_alloc_urbs(struct ipheth_device *iphone)
- 
- static void ipheth_free_urbs(struct ipheth_device *iphone)
- {
--	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN, iphone->rx_buf,
-+	usb_free_coherent(iphone->udev, IPHETH_RX_BUF_SIZE, iphone->rx_buf,
- 			  iphone->rx_urb->transfer_dma);
--	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, iphone->tx_buf,
-+	usb_free_coherent(iphone->udev, IPHETH_TX_BUF_SIZE, iphone->tx_buf,
- 			  iphone->tx_urb->transfer_dma);
- 	usb_free_urb(iphone->rx_urb);
- 	usb_free_urb(iphone->tx_urb);
-@@ -160,14 +168,105 @@ static void ipheth_kill_urbs(struct ipheth_device *dev)
- 	usb_kill_urb(dev->rx_urb);
- }
- 
--static void ipheth_rcvbulk_callback(struct urb *urb)
-+static int ipheth_consume_skb(char *buf, int len, struct ipheth_device *dev)
- {
--	struct ipheth_device *dev;
- 	struct sk_buff *skb;
--	int status;
-+
-+	skb = dev_alloc_skb(len);
-+	if (!skb) {
-+		dev->net->stats.rx_dropped++;
-+		return -ENOMEM;
-+	}
-+
-+	skb_put_data(skb, buf, len);
-+	skb->dev = dev->net;
-+	skb->protocol = eth_type_trans(skb, dev->net);
-+
-+	dev->net->stats.rx_packets++;
-+	dev->net->stats.rx_bytes += len;
-+	netif_rx(skb);
-+
-+	return 0;
-+}
-+
-+static int ipheth_rcvbulk_callback_legacy(struct urb *urb)
-+{
-+	struct ipheth_device *dev;
- 	char *buf;
- 	int len;
- 
-+	dev = urb->context;
-+
-+	if (urb->actual_length <= IPHETH_IP_ALIGN) {
-+		dev->net->stats.rx_length_errors++;
-+		return -EINVAL;
-+	}
-+	len = urb->actual_length - IPHETH_IP_ALIGN;
-+	buf = urb->transfer_buffer + IPHETH_IP_ALIGN;
-+
-+	return ipheth_consume_skb(buf, len, dev);
-+}
-+
-+static int ipheth_rcvbulk_callback_ncm(struct urb *urb)
-+{
-+	struct usb_cdc_ncm_nth16 *ncmh;
-+	struct usb_cdc_ncm_ndp16 *ncm0;
-+	struct usb_cdc_ncm_dpe16 *dpe;
-+	struct ipheth_device *dev;
-+	int retval = -EINVAL;
-+	char *buf;
-+	int len;
-+
-+	dev = urb->context;
-+
-+	if (urb->actual_length < IPHETH_NCM_HEADER_SIZE) {
-+		dev->net->stats.rx_length_errors++;
-+		return retval;
-+	}
-+
-+	ncmh = urb->transfer_buffer;
-+	if (ncmh->dwSignature != cpu_to_le32(USB_CDC_NCM_NTH16_SIGN) ||
-+	    le16_to_cpu(ncmh->wNdpIndex) >= urb->actual_length) {
-+		dev->net->stats.rx_errors++;
-+		return retval;
-+	}
-+
-+	ncm0 = urb->transfer_buffer + le16_to_cpu(ncmh->wNdpIndex);
-+	if (ncm0->dwSignature != cpu_to_le32(USB_CDC_NCM_NDP16_NOCRC_SIGN) ||
-+	    le16_to_cpu(ncmh->wHeaderLength) + le16_to_cpu(ncm0->wLength) >=
-+	    urb->actual_length) {
-+		dev->net->stats.rx_errors++;
-+		return retval;
-+	}
-+
-+	dpe = ncm0->dpe16;
-+	while (le16_to_cpu(dpe->wDatagramIndex) != 0 &&
-+	       le16_to_cpu(dpe->wDatagramLength) != 0) {
-+		if (le16_to_cpu(dpe->wDatagramIndex) >= urb->actual_length ||
-+		    le16_to_cpu(dpe->wDatagramIndex) +
-+		    le16_to_cpu(dpe->wDatagramLength) > urb->actual_length) {
-+			dev->net->stats.rx_length_errors++;
-+			return retval;
-+		}
-+
-+		buf = urb->transfer_buffer + le16_to_cpu(dpe->wDatagramIndex);
-+		len = le16_to_cpu(dpe->wDatagramLength);
-+
-+		retval = ipheth_consume_skb(buf, len, dev);
-+		if (retval != 0)
-+			return retval;
-+
-+		dpe++;
-+	}
-+
-+	return 0;
-+}
-+
-+static void ipheth_rcvbulk_callback(struct urb *urb)
-+{
-+	struct ipheth_device *dev;
-+	int retval, status;
-+
- 	dev = urb->context;
- 	if (dev == NULL)
- 		return;
-@@ -187,29 +286,25 @@ static void ipheth_rcvbulk_callback(struct urb *urb)
- 		return;
- 	}
- 
--	if (urb->actual_length <= IPHETH_IP_ALIGN) {
--		dev->net->stats.rx_length_errors++;
--		return;
--	}
--	len = urb->actual_length - IPHETH_IP_ALIGN;
--	buf = urb->transfer_buffer + IPHETH_IP_ALIGN;
--
--	skb = dev_alloc_skb(len);
--	if (!skb) {
--		dev_err(&dev->intf->dev, "%s: dev_alloc_skb: -ENOMEM\n",
--			__func__);
--		dev->net->stats.rx_dropped++;
-+	/* The very first frame we receive from device has a fixed 4-byte value
-+	 * We can safely skip it
-+	 */
-+	if (unlikely
-+		(urb->actual_length == sizeof(ipheth_start_packet) &&
-+		 memcmp(urb->transfer_buffer, ipheth_start_packet,
-+			sizeof(ipheth_start_packet)) == 0
-+	))
-+		goto rx_submit;
-+
-+	retval = dev->rcvbulk_callback(urb);
-+	if (retval != 0) {
-+		dev_err(&dev->intf->dev, "%s: callback retval: %d\n",
-+			__func__, retval);
- 		return;
- 	}
- 
--	skb_put_data(skb, buf, len);
--	skb->dev = dev->net;
--	skb->protocol = eth_type_trans(skb, dev->net);
--
--	dev->net->stats.rx_packets++;
--	dev->net->stats.rx_bytes += len;
-+rx_submit:
- 	dev->confirmed_pairing = true;
--	netif_rx(skb);
- 	ipheth_rx_submit(dev, GFP_ATOMIC);
- }
- 
-@@ -310,6 +405,27 @@ static int ipheth_get_macaddr(struct ipheth_device *dev)
- 	return retval;
- }
- 
-+static int ipheth_enable_ncm(struct ipheth_device *dev)
-+{
-+	struct usb_device *udev = dev->udev;
-+	int retval;
-+
-+	retval = usb_control_msg(udev,
-+				 usb_sndctrlpipe(udev, IPHETH_CTRL_ENDP),
-+				 IPHETH_CMD_ENABLE_NCM, /* request */
-+				 0x40, /* request type */
-+				 0x00, /* value */
-+				 0x02, /* index */
-+				 NULL,
-+				 0,
-+				 IPHETH_CTRL_TIMEOUT);
-+
-+	dev_info(&dev->intf->dev, "%s: usb_control_msg: %d\n",
-+		 __func__, retval);
-+
-+	return retval;
-+}
-+
- static int ipheth_rx_submit(struct ipheth_device *dev, gfp_t mem_flags)
- {
- 	struct usb_device *udev = dev->udev;
-@@ -317,7 +433,7 @@ static int ipheth_rx_submit(struct ipheth_device *dev, gfp_t mem_flags)
- 
- 	usb_fill_bulk_urb(dev->rx_urb, udev,
- 			  usb_rcvbulkpipe(udev, dev->bulk_in),
--			  dev->rx_buf, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN,
-+			  dev->rx_buf, IPHETH_RX_BUF_SIZE,
- 			  ipheth_rcvbulk_callback,
- 			  dev);
- 	dev->rx_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
-@@ -365,7 +481,7 @@ static netdev_tx_t ipheth_tx(struct sk_buff *skb, struct net_device *net)
- 	int retval;
- 
- 	/* Paranoid */
--	if (skb->len > IPHETH_BUF_SIZE) {
-+	if (skb->len > IPHETH_TX_BUF_SIZE) {
- 		WARN(1, "%s: skb too large: %d bytes\n", __func__, skb->len);
- 		dev->net->stats.tx_dropped++;
- 		dev_kfree_skb_any(skb);
-@@ -373,12 +489,10 @@ static netdev_tx_t ipheth_tx(struct sk_buff *skb, struct net_device *net)
- 	}
- 
- 	memcpy(dev->tx_buf, skb->data, skb->len);
--	if (skb->len < IPHETH_BUF_SIZE)
--		memset(dev->tx_buf + skb->len, 0, IPHETH_BUF_SIZE - skb->len);
- 
- 	usb_fill_bulk_urb(dev->tx_urb, udev,
- 			  usb_sndbulkpipe(udev, dev->bulk_out),
--			  dev->tx_buf, IPHETH_BUF_SIZE,
-+			  dev->tx_buf, skb->len,
- 			  ipheth_sndbulk_callback,
- 			  dev);
- 	dev->tx_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
-@@ -450,6 +564,7 @@ static int ipheth_probe(struct usb_interface *intf,
- 	dev->net = netdev;
- 	dev->intf = intf;
- 	dev->confirmed_pairing = false;
-+	dev->rcvbulk_callback = ipheth_rcvbulk_callback_legacy;
- 	/* Set up endpoints */
- 	hintf = usb_altnum_to_altsetting(intf, IPHETH_ALT_INTFNUM);
- 	if (hintf == NULL) {
-@@ -481,6 +596,10 @@ static int ipheth_probe(struct usb_interface *intf,
- 	if (retval)
- 		goto err_get_macaddr;
- 
-+	retval = ipheth_enable_ncm(dev);
-+	if (!retval)
-+		dev->rcvbulk_callback = ipheth_rcvbulk_callback_ncm;
-+
- 	INIT_DELAYED_WORK(&dev->carrier_work, ipheth_carrier_check_work);
- 
- 	retval = ipheth_alloc_urbs(dev);
--- 
-2.40.1
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
