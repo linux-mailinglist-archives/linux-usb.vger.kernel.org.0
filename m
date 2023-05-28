@@ -2,49 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1ED771393A
-	for <lists+linux-usb@lfdr.de>; Sun, 28 May 2023 13:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECE9713941
+	for <lists+linux-usb@lfdr.de>; Sun, 28 May 2023 13:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjE1Leo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 28 May 2023 07:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
+        id S229502AbjE1Lhr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 28 May 2023 07:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjE1Len (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 May 2023 07:34:43 -0400
+        with ESMTP id S229451AbjE1Lhp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 May 2023 07:37:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571BCE3;
-        Sun, 28 May 2023 04:34:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03383BB;
+        Sun, 28 May 2023 04:37:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE20160CF6;
-        Sun, 28 May 2023 11:34:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 787B4C433D2;
-        Sun, 28 May 2023 11:34:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F17F6146E;
+        Sun, 28 May 2023 11:37:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CFAFC433D2;
+        Sun, 28 May 2023 11:37:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685273662;
-        bh=PghU2Hv+t8Aav202LeRgb+Lazw2/XSs0JbN+JNQ9TYc=;
+        s=korg; t=1685273862;
+        bh=BIru6hlSNmRQGDEmy/Ww2n/Ov46kOSzrO8WVSVMyVwk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SFmzVzQJeoPtVNJCFQG/ZE/4BCYxbbd5U5MbQ+lljN6ZZpEdgpvhSQRuz4JatKhKN
-         OCkxMO4qHBSwRZq3BWLAPQA5qbBFOuJrz+ELJw703sbr1G9KSrZkWp3pHvImZvmJie
-         YCWWaGbbtBy3nPbJt/uBwg8YaMpUb1v1Epz1eFcc=
-Date:   Sun, 28 May 2023 12:33:42 +0100
+        b=EKY74s2BqKVHsqdLZEJDtyzRLP27oRRAE5LsCzf35joLA4Bv8NFE6KwFSXzjEcDAc
+         /QHhhuwz8E4i4TDH5lCtMbNH7ouvxh60fkkTD/Otlm/A+C79fe6sGqqSkaxM+fI2/7
+         xnKqQUPfkVoUXTG/Y91VsilUBchm/3mfEM5jOOP0=
+Date:   Sun, 28 May 2023 12:37:17 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Prashanth K <quic_prashk@quicinc.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Lei YU <yulei.sh@bytedance.com>,
+        Neal Liu <neal_liu@aspeedtech.com>,
+        Henry Tian <tianxiaofeng@bytedance.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        Al Cooper <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Kalle Valo <kvalo@kernel.org>, Kang Chen <void0red@gmail.com>,
+        Shaomin Deng <dengshaomin@cdjrlc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Richard Leitner <richard.leitner@linux.dev>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Zheng Wang <zyytlz.wz@163.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Rob Herring <robh@kernel.org>, Wayne Chang <waynec@nvidia.com>,
+        Haotien Hsu <haotienh@nvidia.com>, Jim Lin <jilin@nvidia.com>,
+        Tang Bin <tangbin@cmss.chinamobile.com>,
+        Sing-Han Chen <singhanc@nvidia.com>,
+        Piyush Mehta <piyush.mehta@amd.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Darren Stevens <darren@stevens-zone.net>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Olav Kongas <ok@artecdesign.ee>,
+        Artur Bujdoso <artur.bujdoso@gmail.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rui Miguel Silva <rui.silva@linaro.org>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dan Carpenter <error27@gmail.com>,
+        Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
+        kernel@pengutronix.de, Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org, linux-omap@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
+        linux-aspeed@lists.ozlabs.org,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        openbmc@lists.ozlabs.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Message-ID: <2023052801-immersion-venus-ad0f@gregkh>
-References: <1685004825-30157-1-git-send-email-quic_prashk@quicinc.com>
- <2023052513-gestate-tartar-bf15@gregkh>
- <5f144d80-0439-d014-c845-1cfb1adb840a@quicinc.com>
+        linux-mediatek@lists.infradead.org, Hongren Zheng <i@zenithal.me>
+Subject: Re: [PATCH 00/97] usb: Convert to platform remove callback returning
+ void
+Message-ID: <2023052848-patronage-zen-de4b@gregkh>
+References: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <5f144d80-0439-d014-c845-1cfb1adb840a@quicinc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230517230239.187727-1-u.kleine-koenig@pengutronix.de>
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,78 +155,20 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 26, 2023 at 10:15:43AM +0530, Prashanth K wrote:
+On Thu, May 18, 2023 at 01:01:02AM +0200, Uwe Kleine-König wrote:
+> Hello,
 > 
+> this series convers the drivers below drivers/usb to the .remove_new()
+> callback of struct platform_driver(). The motivation is to make the
+> remove callback less prone for errors and wrong assumptions. See commit
+> 5c5a7680e67b ("platform: Provide a remove callback that returns no
+> value") for a more detailed rationale.
 > 
-> On 25-05-23 10:04 pm, Greg Kroah-Hartman wrote:
-> > On Thu, May 25, 2023 at 02:23:45PM +0530, Prashanth K wrote:
-> > > Currently if we bootup a device without cable connected, then
-> > > usb-conn-gpio won't call set_role() since last_role is same as
-> > > current role. This happens because during probe last_role gets
-> > > initialised to zero.
-> > > 
-> > > To avoid this, added a new constant in enum usb_role, last_role
-> > > is set to USB_ROLE_UNKNOWN before performing initial detection.
-> > > 
-> > > While at it, also handle default case for the usb_role switch
-> > > in cdns3 to avoid build warnings.
-> > > 
-> > > Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
-> > > Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-> > > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> > > ---
-> > > v5: Update commit text to mention the changes made in cdns3 driver.
-> > > v4: Added Reviewed-by tag.
-> > > v3: Added a default case in drivers/usb/cdns3/core.c as pointed out by
-> > >      the test robot.
-> > > v2: Added USB_ROLE_UNKNWON to enum usb_role.
-> > > 
-> > >   drivers/usb/cdns3/core.c           | 2 ++
-> > >   drivers/usb/common/usb-conn-gpio.c | 3 +++
-> > >   include/linux/usb/role.h           | 1 +
-> > >   3 files changed, 6 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> > > index dbcdf3b..69d2921 100644
-> > > --- a/drivers/usb/cdns3/core.c
-> > > +++ b/drivers/usb/cdns3/core.c
-> > > @@ -252,6 +252,8 @@ static enum usb_role cdns_hw_role_state_machine(struct cdns *cdns)
-> > >   		if (!vbus)
-> > >   			role = USB_ROLE_NONE;
-> > >   		break;
-> > > +	default:
-> > > +		break;
-> > 
-> > No error if this happens?
-> It wouldn't come to default case in as no one sets the role to
-> USB_ROLE_UNKNOWN in cdns3 driver. Moreover it would work the same
-> without the default case also (we have added it just to address a warning
-> pointed out be test-robot).
-> > 
-> > >   	}
-> > >   	dev_dbg(cdns->dev, "role %d -> %d\n", cdns->role, role);
-> > > diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
-> > > index e20874c..30bdb81 100644
-> > > --- a/drivers/usb/common/usb-conn-gpio.c
-> > > +++ b/drivers/usb/common/usb-conn-gpio.c
-> > > @@ -257,6 +257,9 @@ static int usb_conn_probe(struct platform_device *pdev)
-> > >   	platform_set_drvdata(pdev, info);
-> > >   	device_set_wakeup_capable(&pdev->dev, true);
-> > > +	/* Set last role to unknown before performing the initial detection */
-> > > +	info->last_role = USB_ROLE_UNKNOWN;
-> > 
-> > Shouldn't last_role have already been set to 0?  If so, why not just
-> > have this enum value be 0?
-> Last role would be 0 during first detection, that's the problem here.
-> During initial detection, if the the new role is detected as USB_ROLE_NONE
-> (0), then we wouldn't call the set_role(). But it should send the current
-> role to gadget after the inital detection.
+> All drivers converted here already returned zero unconditionally in their
+> .remove() callback, so converting them to .remove_new() is trivial.
 
-So you are hoping that the old enum type is still assigned to 0?  That's
-brave, please make it explicit otherwise it's very hard to follow or
-ensure that this really will happen.  And most of all, document it so
-that that value remains 0 in the future, otherwise a list of enum types
-without explicit values are seen as if the values do not matter.
+All but 2 patches applied, as one was for a driver that wasn't in the
+tree anymore, and the dwc2 patch didn't apply at all.
 
 thanks,
 
