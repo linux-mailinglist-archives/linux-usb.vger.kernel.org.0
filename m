@@ -2,91 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E38714771
-	for <lists+linux-usb@lfdr.de>; Mon, 29 May 2023 11:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D9D714785
+	for <lists+linux-usb@lfdr.de>; Mon, 29 May 2023 11:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbjE2JvU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 May 2023 05:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48186 "EHLO
+        id S231761AbjE2J4P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 May 2023 05:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231600AbjE2JvT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 May 2023 05:51:19 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A31990
-        for <linux-usb@vger.kernel.org>; Mon, 29 May 2023 02:51:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685353878; x=1716889878;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=iK3xCAELz89pSO52DJjfWYpb7LV9OGuibSeKucL0Xjs=;
-  b=PzRj9cTC8auhTU4NRcE+NPVFRsQe3oy3huYdvgz90+me55mRPeX4Sx8p
-   F8TTgHhVaWZ99OG4jV6yDO1mjiH3pIkFp7rATyJxYNXrxs4YT9AXvDetb
-   qTJ2bCfx8tdQb9nfqyTtWY2hVQt+YOdqtf2JCdiGEiaS1srXJuXkyOP99
-   idswjtEaYD8ltQ5A6vVR1/a4Wcuvgye1MBvaszSgGdgPiJtVrRDndCtGs
-   uErfFso+Z+kn4wJRQKBE0TIfFOOEQZ/taXZIVAN0+jAzA4qG/mNiTdahL
-   Rtl/wIxWGPhMqO8+xO8UB7e+SWZfGLrdaD7RGRWqltqAcPjhRo1S/N/4w
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="382923500"
-X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="scan'208";a="382923500"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 02:51:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="739092461"
-X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="scan'208";a="739092461"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 29 May 2023 02:50:57 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 96B92350; Mon, 29 May 2023 12:51:02 +0300 (EEST)
-Date:   Mon, 29 May 2023 12:51:02 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Yehezkel Bernat <yehezkelshb@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Koba Ko <koba.ko@canonical.com>,
-        Imre Deak <imre.deak@intel.com>
-Subject: Re: [PATCH 2/2] thunderbolt: Do not touch CL state configuration
- during discovery
-Message-ID: <20230529095102.GY45886@black.fi.intel.com>
-References: <20230525090124.11614-1-mika.westerberg@linux.intel.com>
- <20230525090124.11614-3-mika.westerberg@linux.intel.com>
- <CA+CmpXvpFQdgCRxUdRZxkqmwHZ5YQtsaat5+Ajooz8QGxu8wpg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+CmpXvpFQdgCRxUdRZxkqmwHZ5YQtsaat5+Ajooz8QGxu8wpg@mail.gmail.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229960AbjE2J4N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 May 2023 05:56:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEC9A7;
+        Mon, 29 May 2023 02:56:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93D5A6145E;
+        Mon, 29 May 2023 09:56:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3EE4C433D2;
+        Mon, 29 May 2023 09:56:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685354171;
+        bh=XYVh6RzQFkPOqtivE4ll/PWG350C32gRKH4S8zFV7ak=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=t9kOBPL4e5ky2rlmxcimmyy2YD73bM4aNV9F9U6z/v0ObtWoiK8vCoa24M9XwAG2k
+         WxokabhdoeapKQ2KmwuytFBsCfAH0on1zNCzYtuARbsLhvjazecdpUN9AouocEAqcR
+         2O5hUy6UVpgVhAybCFzgk07pkWUJw3jy+Bp5NqCDahTSCdc3z+b8kJ7wQF8uetwq6r
+         RFUxWs+aI/lgDCNMYXuzVJZLfV4QUVIXUxK5mO1J8J6z1FpgHe7xJ/eaqEJWK3y//n
+         Aj+D9HiBMHja47OvAJTapjeS85/rvSXhbrtaMnpIDfwZ3mvBu3M3Mq1/nwQLptCzBi
+         TaHWIfLw9yBDw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q3Zbj-0012eN-DS;
+        Mon, 29 May 2023 10:56:08 +0100
+Date:   Mon, 29 May 2023 10:56:02 +0100
+Message-ID: <87353flavh.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Zheng Wang <zyytlz.wz@163.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: udc: renesas_usb3: Fix RZ/V2M {modprobe,bind} error
+In-Reply-To: <OS0PR01MB59227E69FF1DE67327BDEF77864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <20230526143615.372338-1-biju.das.jz@bp.renesas.com>
+        <20230529061714.GA25984@pendragon.ideasonboard.com>
+        <OS0PR01MB592296756992262EC6D382D0864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+        <86bki3cxm2.wl-maz@kernel.org>
+        <OS0PR01MB59227E69FF1DE67327BDEF77864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: biju.das.jz@bp.renesas.com, laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org, zyytlz.wz@163.com, geert+renesas@glider.be, yoshihiro.shimoda.uh@renesas.com, wsa+renesas@sang-engineering.com, krzysztof.kozlowski@linaro.org, linux-usb@vger.kernel.org, prabhakar.mahadev-lad.rj@bp.renesas.com, linux-renesas-soc@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, May 28, 2023 at 11:06:16AM +0300, Yehezkel Bernat wrote:
-> On Thu, May 25, 2023 at 12:01 PM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > If the boot firmware has already established tunnels, especially ones
-> > that have special requirements from the link such as DisplayPort, we
-> > should not blindly enable CL states (nor change the TMU configuration).
-> > Otherwise the existing tunnels may not work as expected.
-> >
-> > For this reason, skip the CL state enabling when we go over the existing
-> > topology. This will als keep the TMU settings untouched because we do
->                                 ^ also
+On Mon, 29 May 2023 10:39:50 +0100,
+Biju Das <biju.das.jz@bp.renesas.com> wrote:
 > 
-> > not change the TMU configururation when CL states are not enabled.
->                                      ^ configuration
+> Hi Marc Zyngier,
 > 
-> For the both patches in the series:
+> Thanks for the feedback.
 > 
-> Acked-By: Yehezkel Bernat <YehezkelShB@gmail.com>
+> > Subject: Re: [PATCH] usb: gadget: udc: renesas_usb3: Fix RZ/V2M
+> > {modprobe,bind} error
+> > 
+> > On Mon, 29 May 2023 09:42:34 +0100,
+> > Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> > >
+> > > Hi Laurent,
+> > >
+> > > Thanks for the feedback.
+> > >
+> > > > Subject: Re: [PATCH] usb: gadget: udc: renesas_usb3: Fix RZ/V2M
+> > > > {modprobe,bind} error
+> > > >
+> > > > Hi Biju,
+> > > >
+> > > > Thank you for the patch.
+> > > >
+> > > > On Fri, May 26, 2023 at 03:36:15PM +0100, Biju Das wrote:
+> > > > > Currently {modprobe, bind} after {rmmod, unbind} results in probe
+> > > > failure.
+> > > > >
+> > > > > genirq: Flags mismatch irq 22. 00000004 (85070400.usb3drd) vs.
+> > > > > 00000004 (85070400.usb3drd)
+> > > > > renesas_usb3: probe of 85070000.usb3peri failed with error -16
+> > > > >
+> > > > > Fix this issue by replacing "parent dev"->"dev" as the irq
+> > > > > resource is managed by this driver.
+> > > >
+> > > > If the dev pointer passed to devm_request_irq() is not the correct
+> > > > one, how does it work the first time the driver is loaded ?
+> > >
+> > > + Marc/ Kernel.org to give some feedback on this issue
+> > >
+> > > I believe there may be a bug in the genirq (kernel/irq) driver.
+> > > first time it works ok. Maybe this driver is caching on unload with
+> > > null value and comparing with actual one (irq 22) during reload??
+> > >
+> > > Maybe genirq expert can comment what went wrong here??
+> > 
+> > You get shouted at because you are registering an interrupt handler for
+> > the same IRQ twice,
+> 
+> This not true. It is registering only one IRQ, but with parent device handle.
 
-Thanks! Fixed the typos and applied both to thunderbolt.git/fixes.
+And you're doing that *TWICE*. Once per load of this driver.
+
+>
+>  and the interrupt is not configured with the SHARED
+> > flag.
+> 
+> I haven't added SHARED flag as there is only one IRQ registration.
+> 
+>  If, as I understand it, you only have a single device using this
+> > interrupt, then it means your driver is not freeing its interrupt on
+> > unload.
+> 
+> You mean devm_request_irq(ddata->dev..)  doesn't free the resource as
+> we have unloaded only child device rather than parent.
+> 
+> But while parent is active, why genirq is giving error during reload?
+> It should show same behaviour like initial probe.
+
+Do you understand the meaning of the "dev" parameter you pass to
+devm_request_irq()?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
