@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C918C7147AD
-	for <lists+linux-usb@lfdr.de>; Mon, 29 May 2023 12:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB047147A6
+	for <lists+linux-usb@lfdr.de>; Mon, 29 May 2023 12:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbjE2KEm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 May 2023 06:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
+        id S231920AbjE2KEg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 May 2023 06:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbjE2KEh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 May 2023 06:04:37 -0400
+        with ESMTP id S231913AbjE2KEf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 May 2023 06:04:35 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10B3A7
-        for <linux-usb@vger.kernel.org>; Mon, 29 May 2023 03:04:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74599B5
+        for <linux-usb@vger.kernel.org>; Mon, 29 May 2023 03:04:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685354675; x=1716890675;
+  t=1685354674; x=1716890674;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ZGw1wDKauYZ3GmGFcp+GyjaqHNurd7o4dNvWNQaOh6w=;
-  b=LYkkEQsOw9svmGFEEOQSj25p1aUbepUcINEhEHva5b5i5p1hjfpgF3p3
-   z2nCTCTvBa5/yeT0eQzgf/V4ikSYYqyXF4gX5Vc5rsQwkRvbgFXKCh6Jw
-   XrSMtfcMTKEa3V/mMkwaKzQDFR6PVtJnuEAA/D4V+YH4VvMRN/huTQJf+
-   D+hoi4ej2HnPlzfRQbTr2HAAyr4J0PPGmbCjQTQP+sJVXEIXVfA8xTx+A
-   E1ubxMTdbZNsWKkfFs97KSV5AiHSFba/RmOx0gWQBl/6nafbC8pAI2OLt
-   0EeQqRVJpG5d8xrOk+fa6sjy+6rY8GcpZEiylBIc2SHiPagOFcvPV/qVs
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="354684440"
+  bh=wF5KjFmzuNFzp2s2TaW5HikN5gf8ZbKj9Zl30x3Pgbs=;
+  b=OOjrLhpjMdFFAR1jhI+h9b83yKA0g01qaBpOqo93vwitqQzSGMr/LFYM
+   EX5gVHsr8P3XnF4xtHwV6cRMoDQYWoM9pgdTdkXo9qkgygOU0lNaupFhm
+   qw8b+9kMF3LYdRnt7pUzUtmffeNAazIoJ5IBocph/e/R7dzJfH/oVsrO5
+   cdTYzt+iDDu3uR/UINkwyUx1FWNIJY+91uK5DT8nxAQ85P3WkFo+DuKyJ
+   lj43YfoPP7uigCqQZthcdCl5/kMyJ1fuC8HQX53HbI9/mSJBGxqaMw9C2
+   c0NrcTdyon4cqcUITNH0Kucfyk1f18A2zZRC6ki/ETGVT9PgpqySzJhvP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="354684426"
 X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="scan'208";a="354684440"
+   d="scan'208";a="354684426"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 03:04:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="683518472"
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="683518444"
 X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="scan'208";a="683518472"
+   d="scan'208";a="683518444"
 Received: from black.fi.intel.com ([10.237.72.28])
   by orsmga006.jf.intel.com with ESMTP; 29 May 2023 03:04:24 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 269D285F; Mon, 29 May 2023 13:04:26 +0300 (EEST)
+        id 2DBDB911; Mon, 29 May 2023 13:04:26 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -48,9 +48,9 @@ Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
         Andreas Noever <andreas.noever@gmail.com>,
         Gil Fine <gil.fine@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 08/20] thunderbolt: Move tb_enable_tmu() close to other TMU functions
-Date:   Mon, 29 May 2023 13:04:13 +0300
-Message-Id: <20230529100425.6125-9-mika.westerberg@linux.intel.com>
+Subject: [PATCH 09/20] thunderbolt: Check valid TMU configuration in tb_switch_tmu_configure()
+Date:   Mon, 29 May 2023 13:04:14 +0300
+Message-Id: <20230529100425.6125-10-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230529100425.6125-1-mika.westerberg@linux.intel.com>
 References: <20230529100425.6125-1-mika.westerberg@linux.intel.com>
@@ -66,89 +66,83 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This makes the code easier to follow. No functional changes.
+Instead of at enable time we can do this already in
+tb_switch_tmu_configure().
 
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/tb.c | 58 ++++++++++++++++++++--------------------
- 1 file changed, 29 insertions(+), 29 deletions(-)
+ drivers/thunderbolt/tb.c  |  6 ++++--
+ drivers/thunderbolt/tb.h  |  5 ++---
+ drivers/thunderbolt/tmu.c | 13 ++++++++-----
+ 3 files changed, 14 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 0630b877136e..41c353f462e7 100644
+index 41c353f462e7..91459bf2fd0f 100644
 --- a/drivers/thunderbolt/tb.c
 +++ b/drivers/thunderbolt/tb.c
-@@ -272,6 +272,35 @@ static void tb_increase_tmu_accuracy(struct tb_tunnel *tunnel)
- 	device_for_each_child(&sw->dev, NULL, tb_increase_switch_tmu_accuracy);
- }
- 
-+static int tb_enable_tmu(struct tb_switch *sw)
-+{
-+	int ret;
-+
-+	/*
-+	 * If CL1 is enabled then we need to configure the TMU accuracy
-+	 * level to normal. Otherwise we keep the TMU running at the
-+	 * highest accuracy.
-+	 */
-+	if (tb_switch_is_clx_enabled(sw, TB_CL1))
-+		tb_switch_tmu_configure(sw, TB_SWITCH_TMU_RATE_NORMAL, true);
-+	else
-+		tb_switch_tmu_configure(sw, TB_SWITCH_TMU_RATE_HIFI, false);
-+
-+	/* If it is already enabled in correct mode, don't touch it */
-+	if (tb_switch_tmu_is_enabled(sw))
-+		return 0;
-+
-+	ret = tb_switch_tmu_disable(sw);
-+	if (ret)
-+		return ret;
-+
-+	ret = tb_switch_tmu_post_time(sw);
-+	if (ret)
-+		return ret;
-+
-+	return tb_switch_tmu_enable(sw);
-+}
-+
- static void tb_switch_discover_tunnels(struct tb_switch *sw,
- 				       struct list_head *list,
- 				       bool alloc_hopids)
-@@ -383,35 +412,6 @@ static void tb_scan_xdomain(struct tb_port *port)
- 	}
- }
- 
--static int tb_enable_tmu(struct tb_switch *sw)
--{
--	int ret;
--
--	/*
--	 * If CL1 is enabled then we need to configure the TMU accuracy
--	 * level to normal. Otherwise we keep the TMU running at the
--	 * highest accuracy.
--	 */
--	if (tb_switch_is_clx_enabled(sw, TB_CL1))
+@@ -282,9 +282,11 @@ static int tb_enable_tmu(struct tb_switch *sw)
+ 	 * highest accuracy.
+ 	 */
+ 	if (tb_switch_is_clx_enabled(sw, TB_CL1))
 -		tb_switch_tmu_configure(sw, TB_SWITCH_TMU_RATE_NORMAL, true);
--	else
++		ret = tb_switch_tmu_configure(sw, TB_SWITCH_TMU_RATE_NORMAL, true);
+ 	else
 -		tb_switch_tmu_configure(sw, TB_SWITCH_TMU_RATE_HIFI, false);
--
--	/* If it is already enabled in correct mode, don't touch it */
--	if (tb_switch_tmu_is_enabled(sw))
--		return 0;
--
--	ret = tb_switch_tmu_disable(sw);
--	if (ret)
--		return ret;
--
--	ret = tb_switch_tmu_post_time(sw);
--	if (ret)
--		return ret;
--
--	return tb_switch_tmu_enable(sw);
--}
--
++		ret = tb_switch_tmu_configure(sw, TB_SWITCH_TMU_RATE_HIFI, false);
++	if (ret)
++		return ret;
+ 
+ 	/* If it is already enabled in correct mode, don't touch it */
+ 	if (tb_switch_tmu_is_enabled(sw))
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index 8cc64b79f35c..07e4e7b37f13 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -987,9 +987,8 @@ int tb_switch_tmu_init(struct tb_switch *sw);
+ int tb_switch_tmu_post_time(struct tb_switch *sw);
+ int tb_switch_tmu_disable(struct tb_switch *sw);
+ int tb_switch_tmu_enable(struct tb_switch *sw);
+-void tb_switch_tmu_configure(struct tb_switch *sw,
+-			     enum tb_switch_tmu_rate rate,
+-			     bool unidirectional);
++int tb_switch_tmu_configure(struct tb_switch *sw, enum tb_switch_tmu_rate rate,
++			    bool unidirectional);
  /**
-  * tb_find_unused_port() - return the first inactive port on @sw
-  * @sw: Switch to find the port on
+  * tb_switch_tmu_is_enabled() - Checks if the specified TMU mode is enabled
+  * @sw: Router whose TMU mode to check
+diff --git a/drivers/thunderbolt/tmu.c b/drivers/thunderbolt/tmu.c
+index 84abb783a6d9..be310d97ea7b 100644
+--- a/drivers/thunderbolt/tmu.c
++++ b/drivers/thunderbolt/tmu.c
+@@ -648,9 +648,6 @@ int tb_switch_tmu_enable(struct tb_switch *sw)
+ 	bool unidirectional = sw->tmu.unidirectional_request;
+ 	int ret;
+ 
+-	if (unidirectional && !sw->tmu.has_ucap)
+-		return -EOPNOTSUPP;
+-
+ 	/*
+ 	 * No need to enable TMU on devices that don't support CLx since on
+ 	 * these devices e.g. Alpine Ridge and earlier, the TMU mode HiFi
+@@ -724,10 +721,16 @@ int tb_switch_tmu_enable(struct tb_switch *sw)
+  *
+  * Selects the rate of the TMU and directionality (uni-directional or
+  * bi-directional). Must be called before tb_switch_tmu_enable().
++ *
++ * Returns %0 in success and negative errno otherwise.
+  */
+-void tb_switch_tmu_configure(struct tb_switch *sw,
+-			     enum tb_switch_tmu_rate rate, bool unidirectional)
++int tb_switch_tmu_configure(struct tb_switch *sw, enum tb_switch_tmu_rate rate,
++			    bool unidirectional)
+ {
++	if (unidirectional && !sw->tmu.has_ucap)
++		return -EINVAL;
++
+ 	sw->tmu.unidirectional_request = unidirectional;
+ 	sw->tmu.rate_request = rate;
++	return 0;
+ }
 -- 
 2.39.2
 
