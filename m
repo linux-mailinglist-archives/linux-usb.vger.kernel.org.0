@@ -2,153 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 639707147D0
-	for <lists+linux-usb@lfdr.de>; Mon, 29 May 2023 12:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D75871483E
+	for <lists+linux-usb@lfdr.de>; Mon, 29 May 2023 12:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232009AbjE2KSd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 May 2023 06:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59882 "EHLO
+        id S229958AbjE2K6Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 May 2023 06:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjE2KSc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 May 2023 06:18:32 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9F583;
-        Mon, 29 May 2023 03:18:30 -0700 (PDT)
-X-GND-Sasl: luca.ceresoli@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1685355509;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vUyuxrjpFgblrxgFyN4LMCGNQnaGs9nK3yiZjdqa8co=;
-        b=WYgn5Ck9kYUjG7GNjHvlrUTvNj4ZRLgl/6yS3N9FTeXdb84PzexkAoXW8IEqTub+6vL9Ex
-        yLUtkei6fEgTUbXslUME+CCT8bp0YgAdVw2hWZzWDft5/++89DAfHalIFUE+Wp/CDBe1UW
-        M6WxT/c9T4aARy1DodOaCxuFaHd0nq5gpg66/Dm0I+9TOyF8IDelS3bZ/gmBV5JY1Tdolk
-        IMmybcpc6d36NKGNu1h+IAmxPO4kuFYBawo/EvwbOiUnAAQyxmbKfVDJn/M+hhdshA28lb
-        zTBZiBm4WN8hmK+Qp6pfHmowgZ0jRc3HW0sHemZ7SBivWeLVjSfuay1YOPfqcA==
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 83341240005;
-        Mon, 29 May 2023 10:18:27 +0000 (UTC)
-Date:   Mon, 29 May 2023 12:18:25 +0200
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Jun Li <jun.li@nxp.com>
-Cc:     Francesco Dolcini <francesco@dolcini.it>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Xu Yang <xu.yang_2@nxp.com>
-Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
-Message-ID: <20230529121825.71e9b6d6@booty>
-In-Reply-To: <20230508151756.785ec07e@booty>
-References: <23672d66d229d3be4cc854ddf1462c3507f1c2fc.camel@toradex.com>
-        <20230504162312.1506763-1-luca.ceresoli@bootlin.com>
-        <ZFPiRvoF5l8uGzzZ@francesco-nb.int.toradex.com>
-        <PA4PR04MB96403377F5E37C12AD8C25B389729@PA4PR04MB9640.eurprd04.prod.outlook.com>
-        <20230505120618.2f4cf22c@booty>
-        <ZFThyn/D/dDK9nk3@francesco-nb.int.toradex.com>
-        <PA4PR04MB96405EE2468555EA900B340189739@PA4PR04MB9640.eurprd04.prod.outlook.com>
-        <ZFjaNzY32x8o2XG7@francesco-nb.int.toradex.com>
-        <20230508151756.785ec07e@booty>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S229597AbjE2K6O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 May 2023 06:58:14 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B12B2
+        for <linux-usb@vger.kernel.org>; Mon, 29 May 2023 03:58:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685357892; x=1716893892;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=tT8QiTPzze6+NZXZTp5C8npME2cVeHo4l2V/z+s/u6o=;
+  b=oKcMqtjgWIng1FxFf40rRGuhUaYMqiZBsu+ZjRIhBEHc/xB8xmeogbwd
+   cl4JsUYeCQrXIaoP/Zgq0Ev2uLCzsjazBP0pn3cZvWlW5p+VHhEApJB0F
+   Kqrxt6ufx1QXWY7EUVKvjUbCp+nbBBegesxdjhYh/gJhcRUSU5mcrVbOw
+   TIT3DElZIw3lAq3cahwbs9exqupnCGaHhiU8KExGtbgOFTu4qkHjmp91e
+   VrRki3Jkx+Pwou90KXwcOBrmkr2hsX50V8H9Tw+1uyLYhDzNyY98roHgw
+   BV4OolSDIssMfg6oDPrXH0jIRbZXYslast3AvGbeqeQRHsGlUF+1FuMLu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="357930558"
+X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
+   d="scan'208";a="357930558"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 03:58:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="771128205"
+X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
+   d="scan'208";a="771128205"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga008.fm.intel.com with ESMTP; 29 May 2023 03:58:11 -0700
+Message-ID: <0bbb844d-3348-dc28-311a-d4111f8a7f81@linux.intel.com>
+Date:   Mon, 29 May 2023 13:59:30 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Content-Language: en-US
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?Q?Christian_Schaubschl=c3=a4ger?= 
+        <christian.schaubschlaeger@gmx.at>
+Cc:     linux-usb@vger.kernel.org
+References: <a45b9989-c9da-bf4e-94c8-3e1341777b4d@gmx.at>
+ <20230526123655.GW45886@black.fi.intel.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: USB issue on a TB4 controller?
+In-Reply-To: <20230526123655.GW45886@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Jun,
-
-On Mon, 8 May 2023 15:17:56 +0200
-Luca Ceresoli <luca.ceresoli@bootlin.com> wrote:
-
-> Hello Jun, Francesco,
+On 26.5.2023 15.36, Mika Westerberg wrote:
+> Hi,
 > 
-> On Mon, 8 May 2023 13:17:11 +0200
-> Francesco Dolcini <francesco@dolcini.it> wrote:
+> On Tue, May 23, 2023 at 01:15:30PM +0200, Christian Schaubschläger wrote:
+>> Hi Mika,
+>>
+>> attached you find two dmesg logs (with tunderbolt.dyndbg=+p), one from power off state were everything is ok (dmesg_ok.txt.xz).
+>> The second one (dmesg_nok.txt.xz) is after a reboot when the network interface is in faulty state.
+>>
+>> Hardware is:
+>> Dell Inc. Latitude 7440/0XDRJY, BIOS 1.3.1 04/25/2023
+>> CPU0: 13th Gen Intel(R) Core(TM) i5-1345U (family: 0x6, model: 0xba, stepping: 0x3)
+>> thunderbolt 0-1: Dell WD19TB Thunderbolt Dock
 > 
-> > On Sat, May 06, 2023 at 09:02:39AM +0000, Jun Li wrote:  
-> > > > -----Original Message-----
-> > > > From: Francesco Dolcini <francesco@dolcini.it>
-> > > > Sent: Friday, May 5, 2023 7:00 PM
-> > > > To: Luca Ceresoli <luca.ceresoli@bootlin.com>; Jun Li <jun.li@nxp.com>
-> > > > Cc: Francesco Dolcini <francesco@dolcini.it>; devicetree@vger.kernel.org;
-> > > > festevam@gmail.com; gregkh@linuxfoundation.org; kernel@pengutronix.de;
-> > > > linux-arm-kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>;
-> > > > linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org;
-> > > > peter.chen@nxp.com; robh+dt@kernel.org; s.hauer@pengutronix.de;
-> > > > shawnguo@kernel.org; Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>;
-> > > > Francesco Dolcini <francesco.dolcini@toradex.com>
-> > > > Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
-> > > > 
-> > > > On Fri, May 05, 2023 at 12:06:18PM +0200, Luca Ceresoli wrote:    
-> > > > > On Fri, 5 May 2023 09:49:16 +0000
-> > > > > Jun Li <jun.li@nxp.com> wrote:    
-> > > > > > Is your board design similar like Francesco's as below?    
-> > > > >
-> > > > > Possibly, but I'm afraid I can't say: I am using the Toradex Colibri
-> > > > > i.MX6ULL SoM, whose schematics are not public.    
-> > > > 
-> > > > I can confirm that it's the same.    
-> > > 
-> > > Thanks Francesco for the confirmation, had a check with design team,
-> > > there is no status bit which can be used to judge the VDD_USB_CAP is
-> > > powered or not, so we have to add a board level dts property to tell
-> > > this usb phy driver to bypass MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS.
-> > > 
-> > > Before send a formal patch, I want to confirm this should work for your
-> > > HW design, like below simple hack:    
-> > 
-> > Thanks Li Jun, I tested it with v6.3.1 kernel and it's all good.
-> > I would be happy to test the patch as soon as you send it.  
+> Sorry for the delay. I've been busy with some other issues.
 > 
-> Thanks Jun, it works here as well, on 6.1.27!
+> I guess we are talking about this xHCI:
+> 
+> [   15.449690] xhci_hcd 0000:04:00.0: xHCI Host Controller
+> [   15.450477] xhci_hcd 0000:04:00.0: new USB bus registered, assigned bus number 3
+> [   15.452337] xhci_hcd 0000:04:00.0: hcc params 0x200077c1 hci version 0x110 quirks 0x00
+> 00000200009810
+> [   15.453734] xhci_hcd 0000:04:00.0: xHCI Host Controller
+> [   15.454437] xhci_hcd 0000:04:00.0: new USB bus registered, assigned bus number 4
+> [   15.455092] xhci_hcd 0000:04:00.0: Host supports USB 3.1 Enhanced SuperSpeed
+> 
+> In both cases the the SuperSpeed HUB is found:
+> 
+> [    5.589178] usb 4-2.3: new SuperSpeed USB device number 3 using xhci_hcd
+> [    5.622113] input: HDA Intel PCH Headphone Mic as /devices/pci0000:00/0000:00:1f.3/soun
+> d/card0/input27
+> [    5.635536] hub 4-2.3:1.0: USB hub found
+> [    5.637176] hub 4-2.3:1.0: 4 ports detected
+> 
+> However, the connected NIC is only found in dmesg_ok.txt.xz:
+> 
+> [    5.904363] usb 4-2.4: new SuperSpeed USB device number 4 using xhci_hcd
+> ...
+> [    6.192613] r8152-cfgselector 4-2.4: reset SuperSpeed USB device number 4 using xhci_hcd
+> [    6.217838] r8152 4-2.4:1.0 (unnamed net_device) (uninitialized): Using pass-thru MAC addr ac:91:a1:95:63:bf
+> [    6.258478] r8152 4-2.4:1.0: load rtl8153b-2 v1 10/23/19 successfully
+> [    6.318568] r8152 4-2.4:1.0 eth0: v1.12.13
+> 
+> To me it looks like the PCIe tunnel to the xHCI (0000:04:00.0) on the
+> dock works fine, otherwise it would not show up at all. I'm not an xHCI
+> expert so adding Mathias in case he has ideas how to debug this further.
+> 
+> I think it makes sense to enable xHCI debugging and traces and provide
+> them to Mathias. The following commands should do so:
+> 
+>   # echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
+>   # echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
+>   # echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
+>   # echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
+> 
+> Trace buffer is /sys/kernel/debug/tracing/trace.
 
-Have you managed to make progress on the patch after Francesco's and my
-tests?
+Also worth testing if rebinding/resetting the 4 port USB 3.1 hub built into the dock with
+the NIC connected to it helps.
 
-As I see it, a proper fix for mainline could be as simple as a new DT
-property to describe this specific hardware configuration and a patch
-to ignore the flag when the property is present. Is my understanding
-correct?
+# echo "4-2:1.0" > /sys/bus/usb/drivers/hub/unbind
+# echo "4-2:1.0" > /sys/bus/usb/drivers/hub/bind
 
-Best regards,
-Luca
+Thanks
+-Mathias
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+
