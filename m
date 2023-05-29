@@ -2,160 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 315A6713F49
-	for <lists+linux-usb@lfdr.de>; Sun, 28 May 2023 21:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3377141FA
+	for <lists+linux-usb@lfdr.de>; Mon, 29 May 2023 04:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbjE1Tnw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 28 May 2023 15:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58714 "EHLO
+        id S230328AbjE2CVV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 28 May 2023 22:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbjE1Tnu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 May 2023 15:43:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724D2A3;
-        Sun, 28 May 2023 12:43:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 073AC61F1D;
-        Sun, 28 May 2023 19:43:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2614DC433D2;
-        Sun, 28 May 2023 19:43:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685303028;
-        bh=xZ455jMDhB0RdiKwxwnNu9wuMeZgXRP5pt6WSDU0Xao=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UboNLSnKxq3Ub84Mp+0Kso5+UssTMQX9YhW2MF2TCnORmO+U8ljGuvkH+bAtYmjbA
-         KZBH9XnP+tBLSdwD3DMsAvZ/tHzXNby7YxQ4AYm21AjMXj1H5JiOfwHsldRPSPbwfB
-         8I06cTRtGKpRnd0jT23GJX84oXKfViyhlHtqHlYE=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Maxime Bizon <mbizon@freebox.fr>,
-        linux-usb@vger.kernel.org, stable <stable@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH 5.10 125/211] usb-storage: fix deadlock when a scsi command timeouts more than once
-Date:   Sun, 28 May 2023 20:10:46 +0100
-Message-Id: <20230528190846.653971329@linuxfoundation.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230528190843.514829708@linuxfoundation.org>
-References: <20230528190843.514829708@linuxfoundation.org>
-User-Agent: quilt/0.67
+        with ESMTP id S229453AbjE2CVS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 May 2023 22:21:18 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719FEBB;
+        Sun, 28 May 2023 19:21:17 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64d5f65a2f7so2037161b3a.1;
+        Sun, 28 May 2023 19:21:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685326877; x=1687918877;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TOEnxgrrxri26dldYxLmWoJUt5x//Zlg4TwdS9dGdoI=;
+        b=pOEp+2VwI45RYl7vSq4IkS5MFOcNXxZeWxAaVhZbey4KR7ZAazv/A91gDA/1FkaYr1
+         ImqWliZTLkHDRC1E8EB2pPccr5XOGP3E1ivfdUcz+NGrYjh6P39WVFrrbJpP/jkw7NMI
+         Rqr8SWp27qYp72gtOcAFMT+97oWHcpzHEn3TY6Xp7dQNa7dFK7NqzbIAC10x8Z2HPCSI
+         mo1abbWQwAoc1UQtfFNUPPn9a//wEKNUrLYqKJGBmoIiF5FnYf5q1JzTRgfxOUO7xn2D
+         feNRkqVFGyyeYhwepy+QwDqatCY3j8/V1fRpqi5dLMdMphHZiFilQP/SGqOivOCjoo6M
+         mZ4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685326877; x=1687918877;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TOEnxgrrxri26dldYxLmWoJUt5x//Zlg4TwdS9dGdoI=;
+        b=cWTj2FyJyvREU+aVOhaAtM6KNjbuU2GifDAxDJw5pIi04+oNUTfQJh+78n33c0hxja
+         PMckmACVbNETXx9Q0A0WnAOC6c/1ez0y25zgATkXE98DdEE72fbWG3POVAE8RmA0WK9t
+         DTosyg+171wXG0QSZ9g1e69QUwALB1Z/u1XHE8vBZHAN/sL+/+6rqNTYzVXPd7lWb8Bz
+         UiWd4Yz4DBS0vQD/jtAn0tLCEwgQCQT2vNMiTQ56Bfkk0RG/T7Qt4FgRvxCyhSTQQRPq
+         r8/sICahjnAFrsxGxzjMCPAK7OZO/Y9Wa+SBSIpHWZYGE0uO0GVI0STylFct/oxoV687
+         8TlQ==
+X-Gm-Message-State: AC+VfDyR5/AL6M8EPHcZWT2WdGq+bk1E+iTPdx0K5XFMKBnYipVrCZ1n
+        wx6vSYjSSt0eAet9hR4tDg4I6pXkdHs=
+X-Google-Smtp-Source: ACHHUZ5Z0y7zoB17YloXZJuJ1Mepg6iFTuaulcJSfMLeMxnNe7a6TFBiFQ5W7hu7sHXCYbcYV6BEwA==
+X-Received: by 2002:a05:6a20:8e05:b0:10b:f63f:27f with SMTP id y5-20020a056a208e0500b0010bf63f027fmr8213369pzj.60.1685326876732;
+        Sun, 28 May 2023 19:21:16 -0700 (PDT)
+Received: from debian.me (subs28-116-206-12-34.three.co.id. [116.206.12.34])
+        by smtp.gmail.com with ESMTPSA id f12-20020aa78b0c000000b0063afb08afeesm3113669pfd.67.2023.05.28.19.21.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 May 2023 19:21:16 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 48B7A106A0B; Mon, 29 May 2023 09:21:12 +0700 (WIB)
+Date:   Mon, 29 May 2023 09:21:12 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     beld zhang <beldzhang@gmail.com>, stable@vger.kernel.org
+Cc:     Linux Regressions <regressions@lists.linux.dev>,
+        Linux USB <linux-usb@vger.kernel.org>,
+        Linux Input Devices <linux-input@vger.kernel.org>
+Subject: Re: Fwd: 6.1.30: thunderbolt: Clear registers properly when auto
+ clear isn't in use cause call trace after resume
+Message-ID: <ZHQMGN-LAJk6vHjH@debian.me>
+References: <CAG7aomXv2KV9es2RiGwguesRnUTda-XzmeE42m0=GdpJ2qMOcg@mail.gmail.com>
+ <ZHKW5NeabmfhgLbY@debian.me>
+ <261a70b7-a425-faed-8cd5-7fbf807bdef7@amd.com>
+ <CAG7aomVVJyDpKjpZ=k=+9qKY5+13eFjcGPEWZ0T0+NTNfZWDfA@mail.gmail.com>
+ <CAG7aomXP0JHmHytsv5cMsyHzee61BQnG3fc-Y+NLzum7H3DyHA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ifHpYZTFasUnVXV+"
+Content-Disposition: inline
+In-Reply-To: <CAG7aomXP0JHmHytsv5cMsyHzee61BQnG3fc-Y+NLzum7H3DyHA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Maxime Bizon <mbizon@freebox.fr>
 
-commit a398d5eac6984316e71474e25b975688f282379b upstream.
+--ifHpYZTFasUnVXV+
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-With faulty usb-storage devices, read/write can timeout, in that case
-the SCSI layer will abort and re-issue the command. USB storage has no
-internal timeout, it relies on SCSI layer aborting commands via
-.eh_abort_handler() for non those responsive devices.
+On Sun, May 28, 2023 at 02:35:18PM -0400, beld zhang wrote:
+> ---------- Forwarded message ---------
+> From: beld zhang
+> Date: Sun, May 28, 2023 at 2:07=E2=80=AFPM
+> Subject: Re: 6.1.30: thunderbolt: Clear registers properly when auto
+> clear isn't in use cause call trace after resume
+> To: Mario Limonciello
+>=20
+> On Sun, May 28, 2023 at 8:55=E2=80=AFAM Mario Limonciello
+> <mario.limonciello@amd.com> wrote:
+> >
+> > This is specific resuming from s2idle, doesn't happen at boot?
+> >
+> > Does it happen with hot-plugging or hot-unplugging a TBT3 or USB4 dock =
+too?
+> >
+> > In addition to checking mainline, can you please attach a full dmesg to
+> > somewhere ephemeral like a kernel bugzilla with thunderbolt.dyndbg=3D'+=
+p'
+> > on the kernel command line set?
+> >
+>=20
+> 6.4-rc4:
+>     *) test 1~4 was done with usb hub with ethernet plugged-in
+>         model: UE330, usb 3.0 3-port hub & GIgabit Ether adapter
+>         a rapoo wireless mouse in one of the ports
+>     1) no crash at boot
+>         until [169.099024]
+>     2) no crash after plug an extra usb dock
+>         from [297.004691]
+>     3) no crash after remove it
+>         from [373.273511]
+>     4) crash after suspend/resume: 2 call-stacks
+>         from [438.356253]
+>     5) removed that hub(only ac-power left): NO crash after resume
+>         from [551.820333]
+>     6) plug in the hub(no mouse): NO crash after resume
+>         from [1250.256607]
+>     7) put on mouse: CRASH after resume
+>         from [1311.400963]
+>         mouse model: Rapoo Wireless Optical Mouse 1620
 
-After two consecutive timeouts of the same command, SCSI layer calls
-.eh_device_reset_handler(), without calling .eh_abort_handler() first.
+Before suspend, is attaching your mouse not crashing your system?
 
-With usb-storage, this causes a deadlock:
+>=20
+> sorry I have no idea how to fill a proper bug report at kernel
+> bugzilla, hope these shared links work.
+> btw I have no TB devices to test.
+>=20
+> dmesg:
+> https://drive.google.com/file/d/1bUWnV7q2ziM4tdTzmuGiVuvEzaLcdfKm/view?us=
+p=3Dsharing
+>=20
+> config:
+> https://drive.google.com/file/d/1It75_AV5tOzfkXXBAX5zAiZMoeJAe0Au/view?us=
+p=3Dsharing
 
-  -> .eh_device_reset_handler
-    -> device_reset
-      -> mutex_lock(&(us->dev_mutex));
+There is a functionality on Bugzilla to attach above files. Use it.
 
-mutex already by usb_stor_control_thread(), which is waiting for
-command completion:
+Thanks.
 
-  -> usb_stor_control_thread (mutex taken here)
-    -> usb_stor_invoke_transport
-      -> usb_stor_Bulk_transport
-        -> usb_stor_bulk_srb
-	  -> usb_stor_bulk_transfer_sglist
-	    -> usb_sg_wait
+--=20
+An old man doll... just what I always wanted! - Clara
 
-Make sure we cancel any pending command in .eh_device_reset_handler()
-to avoid this.
+--ifHpYZTFasUnVXV+
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Signed-off-by: Maxime Bizon <mbizon@freebox.fr>
-Cc: linux-usb@vger.kernel.org
-Cc: stable <stable@kernel.org>
-Link: https://lore.kernel.org/all/ZEllnjMKT8ulZbJh@sakura/
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/r/20230505114759.1189741-1-mbizon@freebox.fr
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/usb/storage/scsiglue.c |   28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
---- a/drivers/usb/storage/scsiglue.c
-+++ b/drivers/usb/storage/scsiglue.c
-@@ -407,22 +407,25 @@ static DEF_SCSI_QCMD(queuecommand)
-  ***********************************************************************/
- 
- /* Command timeout and abort */
--static int command_abort(struct scsi_cmnd *srb)
-+static int command_abort_matching(struct us_data *us, struct scsi_cmnd *srb_match)
- {
--	struct us_data *us = host_to_us(srb->device->host);
--
--	usb_stor_dbg(us, "%s called\n", __func__);
--
- 	/*
- 	 * us->srb together with the TIMED_OUT, RESETTING, and ABORTING
- 	 * bits are protected by the host lock.
- 	 */
- 	scsi_lock(us_to_host(us));
- 
--	/* Is this command still active? */
--	if (us->srb != srb) {
-+	/* is there any active pending command to abort ? */
-+	if (!us->srb) {
- 		scsi_unlock(us_to_host(us));
- 		usb_stor_dbg(us, "-- nothing to abort\n");
-+		return SUCCESS;
-+	}
-+
-+	/* Does the command match the passed srb if any ? */
-+	if (srb_match && us->srb != srb_match) {
-+		scsi_unlock(us_to_host(us));
-+		usb_stor_dbg(us, "-- pending command mismatch\n");
- 		return FAILED;
- 	}
- 
-@@ -445,6 +448,14 @@ static int command_abort(struct scsi_cmn
- 	return SUCCESS;
- }
- 
-+static int command_abort(struct scsi_cmnd *srb)
-+{
-+	struct us_data *us = host_to_us(srb->device->host);
-+
-+	usb_stor_dbg(us, "%s called\n", __func__);
-+	return command_abort_matching(us, srb);
-+}
-+
- /*
-  * This invokes the transport reset mechanism to reset the state of the
-  * device
-@@ -456,6 +467,9 @@ static int device_reset(struct scsi_cmnd
- 
- 	usb_stor_dbg(us, "%s called\n", __func__);
- 
-+	/* abort any pending command before reset */
-+	command_abort_matching(us, NULL);
-+
- 	/* lock the device pointers and do the reset */
- 	mutex_lock(&(us->dev_mutex));
- 	result = us->transport_reset(us);
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZHQMFwAKCRD2uYlJVVFO
+o2oZAQD4WEj7xFwvWRg8a+js048BS/G5uxkfbUwn1PtqjsOoyQD/aVX6452ePcjQ
+9lz0zEcPxwgK7BmaRxhkbe7dSmzxAw0=
+=DphI
+-----END PGP SIGNATURE-----
 
-
+--ifHpYZTFasUnVXV+--
