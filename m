@@ -2,270 +2,417 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45DF8715250
-	for <lists+linux-usb@lfdr.de>; Tue, 30 May 2023 01:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 004D0715253
+	for <lists+linux-usb@lfdr.de>; Tue, 30 May 2023 01:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjE2XdL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 May 2023 19:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
+        id S229752AbjE2XhI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 May 2023 19:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjE2XdI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 May 2023 19:33:08 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1400EC9
-        for <linux-usb@vger.kernel.org>; Mon, 29 May 2023 16:33:07 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b038064d97so11959885ad.0
-        for <linux-usb@vger.kernel.org>; Mon, 29 May 2023 16:33:07 -0700 (PDT)
+        with ESMTP id S229620AbjE2XhH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 May 2023 19:37:07 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E33B5
+        for <linux-usb@vger.kernel.org>; Mon, 29 May 2023 16:37:04 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-64d303dd87bso4086515b3a.0
+        for <linux-usb@vger.kernel.org>; Mon, 29 May 2023 16:37:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685403186; x=1687995186;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nHLHVnQt1jJTd4JLoTxuUwyNL7kxiAHIigjAHGBN+cE=;
-        b=V45gyUu3xKG9grwHGgnGJK0gZKqvqWFSg1HVWXa7QS4LKFtSdYUV2O8bAqDEs7QJXA
-         HBJJsDN5/WvpJ9Xzz6twHvdu45Tuu7RF5quqLfJyHsR9gtWu15X88pIHxGmIDr/5rP7e
-         xh8F5ywAWYBWgpsc/X6K+I28cVNqRSR+ZvTjP9n3uBrUNj4gKQYMoSvulMf3MDECjvQv
-         tV5DeIIZQkIZTyUowEYCoY9T0FuxJUvLsH69N3hCev7b5aHoV100JsUX8zFx0KNqLdKL
-         ZlVn6W6myAgPYGVTP5Nxr08JlB6k22xmB18le262mvfGVTaWQpkZAaO34q4LJJ6BYCNy
-         O7Lg==
+        d=google.com; s=20221208; t=1685403424; x=1687995424;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6Uyp78BwuKkKSAoGH7qLQxuCdpCnMLdJR8Z2rfI0Nzo=;
+        b=JSnJWYc+PZkNMi5GTqjJyNIqCmSQsw7f6Hrxil97LBpxTHNxp96eBkBikoqt4dODe0
+         LZV8QM7cziHWsvwjwRxwqCs0s7SBkKrlPj7zCi8gf5kwLwLrhbpcuTXGhUK8v+UfQ3b7
+         EyGbdcs3Kvv7y7Hs4yAboRGKozdK/sUWJ1LqCQ5/gshk9nRHfmX4/o4HUu1naaSkIIOt
+         qjBOW5GP2zO9orVS3BFRlaETLNNh4fjF330gBE8+b6oT4bYul29v3mmmdS+VkHmvNfsg
+         r0NLUhjvDbehnkQ0a2+CeKoiQ2Nf8+mf/LpbhaZ17WygcIH/sWBSbF2uRRBbRMvKi/v3
+         hbfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685403186; x=1687995186;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nHLHVnQt1jJTd4JLoTxuUwyNL7kxiAHIigjAHGBN+cE=;
-        b=R9MeKcxCmoj2Ws/n5A1oNFGm0kRmPgbmvQISRq5aZgXeItGhFCac3hYa903zs7hvfJ
-         HEBoBwcKvIcgZ4DYABWJFTOn9ypj28YD/OK4r3SX/UEcNLWzu9uiw8/kaKzyOxVxFvSu
-         dudgECW7hEOx/wF0ijaa6qNqrfnqjy0GMCrUS+pAVp1AKCIb97Agcl+agax3vvOJHmAU
-         BnM/PKX5P91sIl+K6mx+QJp1FAU7bNo0M5Yw2mVXm0iJ3PrdA5Raf9qwAkGsFzU6Z/Jo
-         EFb/io+U9YaJ9lsr/zeNFjDXCeMnoRnOD+173Zt97EVRMrEktiL7lDDlXSAGIVLZiHUT
-         /ABA==
-X-Gm-Message-State: AC+VfDz+ecn/PLR9jzyfVL9scwVgHg8Ep39HN1HFOqZFrnBhKn0rJMl/
-        dye5Q0huDTZYunAmwhaV8L8KTOkMS7mEUwF/ZwcaHw==
-X-Google-Smtp-Source: ACHHUZ6h9OpKYs96vQ4edAgKS4YsUwgRuleYT4IFOXvz3+qiDKPEvr1WQ9SIX9vgi2zu3jFg8V3Ob5RQrIMKWH7Vvmw=
-X-Received: by 2002:a17:903:2305:b0:1b0:3ab6:5140 with SMTP id
- d5-20020a170903230500b001b03ab65140mr608364plh.4.1685403186284; Mon, 29 May
- 2023 16:33:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230519043041.1593578-1-badhri@google.com> <c181c8ef-f342-4a31-9b8c-e1fa14ad214e@rowland.harvard.edu>
- <a1d064e7-9847-4e2e-b74a-4ae4f39d3f04@rowland.harvard.edu>
- <CAPTae5JKUW6g8cvUbJ3owMGm+npJSBgjr-O_xEiRm_tzXVBV1Q@mail.gmail.com>
- <a2305ca6-d343-473d-b220-556a2c2e7833@rowland.harvard.edu>
- <CAPTae5Lke+DE3WzGuBxkMMZ=qbbux=avdDTgrxEc1A5SrCFevg@mail.gmail.com>
- <547ecbb2-921d-4714-82b7-066202ccf292@rowland.harvard.edu>
- <CAPTae5J=VGeHNio0XAj=trrwqXWgGCiwcSaKsxQ4H_9j2mCVXA@mail.gmail.com> <406371f0-db48-4195-b85d-b75ce83e738b@rowland.harvard.edu>
-In-Reply-To: <406371f0-db48-4195-b85d-b75ce83e738b@rowland.harvard.edu>
+        d=1e100.net; s=20221208; t=1685403424; x=1687995424;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6Uyp78BwuKkKSAoGH7qLQxuCdpCnMLdJR8Z2rfI0Nzo=;
+        b=N/tBQnp0fzrmaWzFT9vxATbSSnr9VXpCCmlsR2ZIz2+WYra+45NLc6+jHmQl1LIVN+
+         CwKHGoOcC1B21bNEaqLfOt+UZzaQu6UrXQgh7lwfqK167SfC9wj8kaioPkIGhWb1166Z
+         CHpfDgwDNYORtHqfILWs/TiWh0FPZxd4wj3ugd8v/7FJrahnVTC2wJ+ia+8qmjTDrLie
+         v/DXIaoM29BqCHxa3RYTT6Z8IW98yYW5/lsOaDa6rG/fj3+bcM9X+MgOrsp1ksl7xIDu
+         RnO1IQsLAXfRU2Kv6qq82cKrQqTA6LPva+3yb/kXNxWUOSonl9q/f+LbT9znwm7KnauF
+         sUwQ==
+X-Gm-Message-State: AC+VfDy9/HXh1ezrHjfumVCqAfTad9rOI2q9RXU4vTHdsNlo0oXcLX+l
+        vIC9K4jQzaXD04NfaZAQnz9k+GHs5/k=
+X-Google-Smtp-Source: ACHHUZ5ggwClfSgHb5zMG0tgK8eTNl+85nmrvyXs1K5gZUXEYF8wpEZn9wuHdz+II0aLc2Hm+WnCpz9pzlc=
+X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
+ (user=badhri job=sendgmr) by 2002:a05:6a00:2d9b:b0:64d:2c58:f85c with SMTP id
+ fb27-20020a056a002d9b00b0064d2c58f85cmr92082pfb.0.1685403424037; Mon, 29 May
+ 2023 16:37:04 -0700 (PDT)
+Date:   Mon, 29 May 2023 23:36:58 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <20230529233700.3706661-1-badhri@google.com>
+Subject: [PATCH v3 1/3] Revert "Revert "usb: gadget: udc: core: Invoke
+ usb_gadget_connect only when started""
 From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Mon, 29 May 2023 16:32:29 -0700
-Message-ID: <CAPTae5LSvs+4pKJRgShPzH_tt7F4ZgdvNOQJXE1aLXTgt5Y+0A@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: gadget: udc: core: Offload usb_udc_vbus_handler processing
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
-        xuetao09@huawei.com, quic_eserrao@quicinc.com,
-        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
-        francesco@dolcini.it, alistair@alistair23.me, stephan@gerhold.net,
-        bagasdotme@gmail.com, luca@z3ntu.xyz, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        colin.i.king@gmail.com, xuetao09@huawei.com,
+        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
+        peter.chen@freescale.com, balbi@ti.com, francesco@dolcini.it,
+        alistair@alistair23.me, stephan@gerhold.net, bagasdotme@gmail.com,
+        luca@z3ntu.xyz
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 27, 2023 at 9:36=E2=80=AFAM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Fri, May 26, 2023 at 07:42:39PM -0700, Badhri Jagan Sridharan wrote:
-> > Thanks again Alan !
-> >
-> > On Mon, May 22, 2023 at 8:55=E2=80=AFAM Alan Stern <stern@rowland.harva=
-rd.edu> wrote:
-> > > Getting back to your first point, it looks like we need to assume any
-> > > routine that needs to communicate with the UDC hardware (such as the
-> > > ->pullup callback used in usb_gadget_{dis}connect()) must always be
-> > > called in process context.  This means that usb_udc_connect_control()
-> > > always has to run in process context, since it will do either a conne=
-ct
-> > > or a disconnect.
-> > >
-> > > On the other hand, some routines -- in particular,
-> > > usb_udc_vbus_handler() -- may be called by a UDC driver's interrupt
-> > > handler and therefore may run in interrupt context.  (This fact shoul=
-d
-> > > be noted in that routine's kerneldoc, by the way.)
-> > >
-> > > So here's the problem: usb_udc_vbus_handler() running in interrupt
-> > > context calls usb_udc_connect_control(), which has to run in process
-> > > context.  And this is not just a simple issue caused by the
-> > > ->disconnect() callback or use of mutexes; it's more fundamental.
-> > >
-> > > I'm led to conclude that you were right to offload part of
-> > > usb_udc_vbus_handler()'s job to a workqueue.  It's an awkward thing t=
-o
-> > > do, because you have to make sure to cancel the work item at times wh=
-en
-> > > it's no longer needed.  But there doesn't seem to be any other choice=
-.
-> > >
-> > > Here's two related problems for you to think about:
-> > >
-> > >     1.  Once gadget_unbind_driver() has called usb_gadget_disconnect(=
-),
-> > >         we don't want a VBUS change to cause usb_udc_vbus_handler()'s
-> > >         work routine to turn the pullup back on.  How can we prevent
-> > >         this?
-> > >
-> > >     2.  More generally, suppose usb_udc_vbus_handler() gets called at
-> > >         exactly the same time that some other pathway (either
-> > >         gadget_bind_driver() or soft_connect_store()) tries to do a
-> > >         connect or disconnect.  What should happen then?
-> >
-> >
-> > I believe I can solve the above races by protecting the flags set by
-> > each of them with connect_lock and not pulling up unless all of them
-> > are true.
-> >
-> > The caller will hold connect_lock, update the respective flag and
-> > invoke the below usb_gadget_pullup_update_locked function(shown
-> > below).
->
-> Are you certain this can be done without causing any deadlocks?
->
-> > Code stub:
-> > /* Internal version of usb_gadget_connect needs to be called with
-> > connect_lock held. */
-> > static int usb_gadget_pullup_update_locked(struct usb_gadget *gadget)
-> >         __must_hold(&gadget->udc->connect_lock)
-> > {
-> >         int ret =3D 0;
-> >         bool connect =3D !gadget->deactivated && gadget->udc->started &=
-&
-> > gadget->udc->vbus &&
-> >                              gadget->udc->allow_connect;
->
-> On further thought, I decided "allow_connect" is a dumb name.  Let's
-> call it "unbinding" instead, since it gets set only when a gadget driver
-> is about to be unbound (which is when we want to prevent new
-> connections).
+This reverts commit f22e9b67f19ccc73de1ae04375d4b30684e261f8.
 
-Sure, fixing it in v3.
+The regression reported in
+https://lore.kernel.org/all/ZF4bMptC3Lf2Hnee@gerhold.net/ is being
+fixed in
+commit 7d7863db7cc0 ("usb: gadget: udc: core: Offload usb_udc_vbus_handler processing").
+Hence reverting the revert.
 
->
-> >         if (!gadget->ops->pullup) {
-> >                 ret =3D -EOPNOTSUPP;
-> >                 goto out;
-> >         }
-> >
-> >         if (connect !=3D gadget->connected) {
->
-> You need to be more careful here.  It's possible to have
-> gadget->connected set at the same time as gadget->deactivated -- it
-> means that when the gadget gets re-activated, it will immediately try to
-> connect again.
->
-> In fact, this logic doesn't look right at all.  For example, suppose the
-> gadget driver wants to disconnect.  This routine will compute connect =3D
-> true and will see that gadget->connected is set, so it won't do
-> anything!
->
-> I think it would be better just to merge the new material into
-> usb_gadget_connect() and usb_gadget_disconnect().
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/usb/gadget/udc/core.c | 148 ++++++++++++++++++++++++----------
+ 1 file changed, 104 insertions(+), 44 deletions(-)
 
-I ended up merging them into usb_gadget_pullup_update_locked() so that
-each of the individual helper function can call
-usb_gadget_pullup_update_locked() while holding the connect_lock. I
-actually had usb_gadget_(dis)connect() set udc->vbus. It appears to me
-that both usb_gadget_(dis)connect() and usb_udc_vbus_handler() are
-meant to be called based on vbus presence and hence seem to be
-redundant. Wondering if we could get rid of usb_gadget_(dis)connect()
-given that drivers/power/supply/isp1704_charger.c is only call it and
-instead make it call usb_udc_vbus_handler() instead ?
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 52e6d2e84e35..583c339876ab 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -37,6 +37,10 @@ static const struct bus_type gadget_bus_type;
+  * @vbus: for udcs who care about vbus status, this value is real vbus status;
+  * for udcs who do not care about vbus status, this value is always true
+  * @started: the UDC's started state. True if the UDC had started.
++ * @connect_lock: protects udc->vbus, udc->started, gadget->connect, gadget->deactivate related
++ * functions. usb_gadget_connect_locked, usb_gadget_disconnect_locked,
++ * usb_udc_connect_control_locked, usb_gadget_udc_start_locked, usb_gadget_udc_stop_locked are
++ * called with this lock held.
+  *
+  * This represents the internal data structure which is used by the UDC-class
+  * to hold information about udc driver and gadget together.
+@@ -48,6 +52,7 @@ struct usb_udc {
+ 	struct list_head		list;
+ 	bool				vbus;
+ 	bool				started;
++	struct mutex			connect_lock;
+ };
+ 
+ static struct class *udc_class;
+@@ -687,17 +692,9 @@ int usb_gadget_vbus_disconnect(struct usb_gadget *gadget)
+ }
+ EXPORT_SYMBOL_GPL(usb_gadget_vbus_disconnect);
+ 
+-/**
+- * usb_gadget_connect - software-controlled connect to USB host
+- * @gadget:the peripheral being connected
+- *
+- * Enables the D+ (or potentially D-) pullup.  The host will start
+- * enumerating this gadget when the pullup is active and a VBUS session
+- * is active (the link is powered).
+- *
+- * Returns zero on success, else negative errno.
+- */
+-int usb_gadget_connect(struct usb_gadget *gadget)
++/* Internal version of usb_gadget_connect needs to be called with connect_lock held. */
++static int usb_gadget_connect_locked(struct usb_gadget *gadget)
++	__must_hold(&gadget->udc->connect_lock)
+ {
+ 	int ret = 0;
+ 
+@@ -706,10 +703,12 @@ int usb_gadget_connect(struct usb_gadget *gadget)
+ 		goto out;
+ 	}
+ 
+-	if (gadget->deactivated) {
++	if (gadget->deactivated || !gadget->udc->started) {
+ 		/*
+ 		 * If gadget is deactivated we only save new state.
+ 		 * Gadget will be connected automatically after activation.
++		 *
++		 * udc first needs to be started before gadget can be pulled up.
+ 		 */
+ 		gadget->connected = true;
+ 		goto out;
+@@ -724,22 +723,32 @@ int usb_gadget_connect(struct usb_gadget *gadget)
+ 
+ 	return ret;
+ }
+-EXPORT_SYMBOL_GPL(usb_gadget_connect);
+ 
+ /**
+- * usb_gadget_disconnect - software-controlled disconnect from USB host
+- * @gadget:the peripheral being disconnected
+- *
+- * Disables the D+ (or potentially D-) pullup, which the host may see
+- * as a disconnect (when a VBUS session is active).  Not all systems
+- * support software pullup controls.
++ * usb_gadget_connect - software-controlled connect to USB host
++ * @gadget:the peripheral being connected
+  *
+- * Following a successful disconnect, invoke the ->disconnect() callback
+- * for the current gadget driver so that UDC drivers don't need to.
++ * Enables the D+ (or potentially D-) pullup.  The host will start
++ * enumerating this gadget when the pullup is active and a VBUS session
++ * is active (the link is powered).
+  *
+  * Returns zero on success, else negative errno.
+  */
+-int usb_gadget_disconnect(struct usb_gadget *gadget)
++int usb_gadget_connect(struct usb_gadget *gadget)
++{
++	int ret;
++
++	mutex_lock(&gadget->udc->connect_lock);
++	ret = usb_gadget_connect_locked(gadget);
++	mutex_unlock(&gadget->udc->connect_lock);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(usb_gadget_connect);
++
++/* Internal version of usb_gadget_disconnect needs to be called with connect_lock held. */
++static int usb_gadget_disconnect_locked(struct usb_gadget *gadget)
++	__must_hold(&gadget->udc->connect_lock)
+ {
+ 	int ret = 0;
+ 
+@@ -751,10 +760,12 @@ int usb_gadget_disconnect(struct usb_gadget *gadget)
+ 	if (!gadget->connected)
+ 		goto out;
+ 
+-	if (gadget->deactivated) {
++	if (gadget->deactivated || !gadget->udc->started) {
+ 		/*
+ 		 * If gadget is deactivated we only save new state.
+ 		 * Gadget will stay disconnected after activation.
++		 *
++		 * udc should have been started before gadget being pulled down.
+ 		 */
+ 		gadget->connected = false;
+ 		goto out;
+@@ -774,6 +785,30 @@ int usb_gadget_disconnect(struct usb_gadget *gadget)
+ 
+ 	return ret;
+ }
++
++/**
++ * usb_gadget_disconnect - software-controlled disconnect from USB host
++ * @gadget:the peripheral being disconnected
++ *
++ * Disables the D+ (or potentially D-) pullup, which the host may see
++ * as a disconnect (when a VBUS session is active).  Not all systems
++ * support software pullup controls.
++ *
++ * Following a successful disconnect, invoke the ->disconnect() callback
++ * for the current gadget driver so that UDC drivers don't need to.
++ *
++ * Returns zero on success, else negative errno.
++ */
++int usb_gadget_disconnect(struct usb_gadget *gadget)
++{
++	int ret;
++
++	mutex_lock(&gadget->udc->connect_lock);
++	ret = usb_gadget_disconnect_locked(gadget);
++	mutex_unlock(&gadget->udc->connect_lock);
++
++	return ret;
++}
+ EXPORT_SYMBOL_GPL(usb_gadget_disconnect);
+ 
+ /**
+@@ -794,10 +829,11 @@ int usb_gadget_deactivate(struct usb_gadget *gadget)
+ 	if (gadget->deactivated)
+ 		goto out;
+ 
++	mutex_lock(&gadget->udc->connect_lock);
+ 	if (gadget->connected) {
+-		ret = usb_gadget_disconnect(gadget);
++		ret = usb_gadget_disconnect_locked(gadget);
+ 		if (ret)
+-			goto out;
++			goto unlock;
+ 
+ 		/*
+ 		 * If gadget was being connected before deactivation, we want
+@@ -807,6 +843,8 @@ int usb_gadget_deactivate(struct usb_gadget *gadget)
+ 	}
+ 	gadget->deactivated = true;
+ 
++unlock:
++	mutex_unlock(&gadget->udc->connect_lock);
+ out:
+ 	trace_usb_gadget_deactivate(gadget, ret);
+ 
+@@ -830,6 +868,7 @@ int usb_gadget_activate(struct usb_gadget *gadget)
+ 	if (!gadget->deactivated)
+ 		goto out;
+ 
++	mutex_lock(&gadget->udc->connect_lock);
+ 	gadget->deactivated = false;
+ 
+ 	/*
+@@ -837,7 +876,8 @@ int usb_gadget_activate(struct usb_gadget *gadget)
+ 	 * while it was being deactivated, we call usb_gadget_connect().
+ 	 */
+ 	if (gadget->connected)
+-		ret = usb_gadget_connect(gadget);
++		ret = usb_gadget_connect_locked(gadget);
++	mutex_unlock(&gadget->udc->connect_lock);
+ 
+ out:
+ 	trace_usb_gadget_activate(gadget, ret);
+@@ -1078,12 +1118,13 @@ EXPORT_SYMBOL_GPL(usb_gadget_set_state);
+ 
+ /* ------------------------------------------------------------------------- */
+ 
+-static void usb_udc_connect_control(struct usb_udc *udc)
++/* Acquire connect_lock before calling this function. */
++static void usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
+ {
+-	if (udc->vbus)
+-		usb_gadget_connect(udc->gadget);
++	if (udc->vbus && udc->started)
++		usb_gadget_connect_locked(udc->gadget);
+ 	else
+-		usb_gadget_disconnect(udc->gadget);
++		usb_gadget_disconnect_locked(udc->gadget);
+ }
+ 
+ /**
+@@ -1099,10 +1140,12 @@ void usb_udc_vbus_handler(struct usb_gadget *gadget, bool status)
+ {
+ 	struct usb_udc *udc = gadget->udc;
+ 
++	mutex_lock(&udc->connect_lock);
+ 	if (udc) {
+ 		udc->vbus = status;
+-		usb_udc_connect_control(udc);
++		usb_udc_connect_control_locked(udc);
+ 	}
++	mutex_unlock(&udc->connect_lock);
+ }
+ EXPORT_SYMBOL_GPL(usb_udc_vbus_handler);
+ 
+@@ -1124,7 +1167,7 @@ void usb_gadget_udc_reset(struct usb_gadget *gadget,
+ EXPORT_SYMBOL_GPL(usb_gadget_udc_reset);
+ 
+ /**
+- * usb_gadget_udc_start - tells usb device controller to start up
++ * usb_gadget_udc_start_locked - tells usb device controller to start up
+  * @udc: The UDC to be started
+  *
+  * This call is issued by the UDC Class driver when it's about
+@@ -1135,8 +1178,11 @@ EXPORT_SYMBOL_GPL(usb_gadget_udc_reset);
+  * necessary to have it powered on.
+  *
+  * Returns zero on success, else negative errno.
++ *
++ * Caller should acquire connect_lock before invoking this function.
+  */
+-static inline int usb_gadget_udc_start(struct usb_udc *udc)
++static inline int usb_gadget_udc_start_locked(struct usb_udc *udc)
++	__must_hold(&udc->connect_lock)
+ {
+ 	int ret;
+ 
+@@ -1153,7 +1199,7 @@ static inline int usb_gadget_udc_start(struct usb_udc *udc)
+ }
+ 
+ /**
+- * usb_gadget_udc_stop - tells usb device controller we don't need it anymore
++ * usb_gadget_udc_stop_locked - tells usb device controller we don't need it anymore
+  * @udc: The UDC to be stopped
+  *
+  * This call is issued by the UDC Class driver after calling
+@@ -1162,8 +1208,11 @@ static inline int usb_gadget_udc_start(struct usb_udc *udc)
+  * The details are implementation specific, but it can go as
+  * far as powering off UDC completely and disable its data
+  * line pullups.
++ *
++ * Caller should acquire connect lock before invoking this function.
+  */
+-static inline void usb_gadget_udc_stop(struct usb_udc *udc)
++static inline void usb_gadget_udc_stop_locked(struct usb_udc *udc)
++	__must_hold(&udc->connect_lock)
+ {
+ 	if (!udc->started) {
+ 		dev_err(&udc->dev, "UDC had already stopped\n");
+@@ -1322,6 +1371,7 @@ int usb_add_gadget(struct usb_gadget *gadget)
+ 
+ 	udc->gadget = gadget;
+ 	gadget->udc = udc;
++	mutex_init(&udc->connect_lock);
+ 
+ 	udc->started = false;
+ 
+@@ -1523,11 +1573,15 @@ static int gadget_bind_driver(struct device *dev)
+ 	if (ret)
+ 		goto err_bind;
+ 
+-	ret = usb_gadget_udc_start(udc);
+-	if (ret)
++	mutex_lock(&udc->connect_lock);
++	ret = usb_gadget_udc_start_locked(udc);
++	if (ret) {
++		mutex_unlock(&udc->connect_lock);
+ 		goto err_start;
++	}
+ 	usb_gadget_enable_async_callbacks(udc);
+-	usb_udc_connect_control(udc);
++	usb_udc_connect_control_locked(udc);
++	mutex_unlock(&udc->connect_lock);
+ 
+ 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+ 	return 0;
+@@ -1558,12 +1612,14 @@ static void gadget_unbind_driver(struct device *dev)
+ 
+ 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+ 
+-	usb_gadget_disconnect(gadget);
++	mutex_lock(&udc->connect_lock);
++	usb_gadget_disconnect_locked(gadget);
+ 	usb_gadget_disable_async_callbacks(udc);
+ 	if (gadget->irq)
+ 		synchronize_irq(gadget->irq);
+ 	udc->driver->unbind(gadget);
+-	usb_gadget_udc_stop(udc);
++	usb_gadget_udc_stop_locked(udc);
++	mutex_unlock(&udc->connect_lock);
+ 
+ 	mutex_lock(&udc_lock);
+ 	driver->is_bound = false;
+@@ -1649,11 +1705,15 @@ static ssize_t soft_connect_store(struct device *dev,
+ 	}
+ 
+ 	if (sysfs_streq(buf, "connect")) {
+-		usb_gadget_udc_start(udc);
+-		usb_gadget_connect(udc->gadget);
++		mutex_lock(&udc->connect_lock);
++		usb_gadget_udc_start_locked(udc);
++		usb_gadget_connect_locked(udc->gadget);
++		mutex_unlock(&udc->connect_lock);
+ 	} else if (sysfs_streq(buf, "disconnect")) {
+-		usb_gadget_disconnect(udc->gadget);
+-		usb_gadget_udc_stop(udc);
++		mutex_lock(&udc->connect_lock);
++		usb_gadget_disconnect_locked(udc->gadget);
++		usb_gadget_udc_stop_locked(udc);
++		mutex_unlock(&udc->connect_lock);
+ 	} else {
+ 		dev_err(dev, "unsupported command '%s'\n", buf);
+ 		ret = -EINVAL;
 
->
-> >                 ret =3D gadget->ops->pullup(gadget, connect);
-> >                 if (!ret)
-> >                         gadget->connected =3D connect;
-> >                 if (!connect) {
-> >                         mutex_lock(&udc_lock);
-> >                         if (gadget->udc->driver)
-> >                                 gadget->udc->driver->disconnect(gadget)=
-;
-> >                         mutex_unlock(&udc_lock);
-> >         }
-> >
-> > out:
-> >         trace_usb_gadget_connect(gadget, ret);
-> >
-> >         return ret;
-> > }
-> >
-> > However, while auditing the code again, I noticed another potential
-> > race as well:
-> > Looks like usb_del_gadget() can potentially race against
-> > usb_udc_vbus_handler() and call device_unregister.
-> > This implies usb_udc can be freed while usb_udc_vbus_handler() or the
-> > work item is executing.
-> >
-> > void usb_del_gadget(struct usb_gadget *gadget)
-> > {
-> >         struct usb_udc *udc =3D gadget->udc;
-> >
-> > ..
-> > ...
-> >         device_unregister(&udc->dev);
-> > }
-> > EXPORT_SYMBOL_GPL(usb_del_gadget);
-> >
-> > Does this look like a valid concern to you or am I misunderstanding thi=
-s ?
->
-> You're missing an important point.  Before doing device_unregister(),
-> this routine calls device_del(&gadget->dev).  That will unbind the
-> gadget driver, which (among other things) will stop the UDC, preventing
-> it from calling usb_udc_vbus_handler().  However, you're right that the
-> work item will need to be cancelled at some point before the usb_udc is
-> unregistered.
->
+base-commit: b4a4be8471846d96b0ac52a0e9e7d48005cc97e2
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
 
-Sure,  thought gadget_unbind_driver() might be a good place to cancel
-the work item. So, cancelling it there in V3.
-
-> > If so, I am afraid that the only way to solve this is by synchronizing
-> > usb_udc_vbus_handler() against usb_del_gadget() through a mutex as
-> > device_unregister() can sleep.
-> > So offloading usb_udc_vbus_handler() cannot work either.
-> >
-> > usb_udc_vbus_hander() seems to be invoked from the following drivers:
-> >
-> > 1. drivers/usb/chipidea/udc.c:
-> > usb_udc_vbus_hander()  is called from a non-atomic context.
-> >
-> > 2. drivers/usb/gadget/udc/max3420_udc.c
-> > usb_udc_vbus_hander()  is called from the interrupt handler.
-> > However, all the events are processed from max3420_thread kthread.
-> > So I am thinking of making them threaded irq handlers instead.
-> >
-> > 3. drivers/usb/gadget/udc/renesas_usbf.c
-> > This one looks more invasive. However, still attempting to move them
-> > to threaded irq handlers.
-> >
-> > As always, I'm looking forward to your feedback !
->
-> Moving those things to threaded IRQ handlers is a separate job.  Let's
-> get this issue fixed first.
-
-Sounds good !
-
-Thanks,
-Badhri
-
->
-> Alan Stern
