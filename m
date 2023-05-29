@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1D87147AE
-	for <lists+linux-usb@lfdr.de>; Mon, 29 May 2023 12:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4F67147AC
+	for <lists+linux-usb@lfdr.de>; Mon, 29 May 2023 12:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbjE2KEn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 May 2023 06:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
+        id S231947AbjE2KEl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 May 2023 06:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbjE2KEi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 May 2023 06:04:38 -0400
+        with ESMTP id S231929AbjE2KEg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 May 2023 06:04:36 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29DBBE
-        for <linux-usb@vger.kernel.org>; Mon, 29 May 2023 03:04:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB59D8
+        for <linux-usb@vger.kernel.org>; Mon, 29 May 2023 03:04:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685354676; x=1716890676;
+  t=1685354675; x=1716890675;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=HCL2y1xXfnUz7sRHFmtysR58hKnSfNBw2Kd0xE9pgmo=;
-  b=SXnOH7ekejKrE/YgWWGzs7aF/FTonF9MFw9Ye0fGcyGHsudPJLMGjZUW
-   WBjNUrr0i3c7FjZegbbim0vu9bNOHh+bx11LOQLH5IOAqZ8AhXcy6g7SN
-   +yxoyyNbVI/0chkOthyRwt8ZpjUn8JIZOjSW7KoKVruiP+KZNQinqVOKe
-   WuA2jb/D37+kNDo1XGaWWyJMNR73BwkJq3XN/dXYYwL2YUb6s6Pxyth4I
-   qGGgl56EPv48KHOvPGNuQFq9z8Jj8W72UW8AURBMYMnTfDayn/KyDBFnG
-   iXOD7us8auobH5G31mJ38prG8ZPdhS8Pv7zw438ZRkN4swabjZVWwLzib
+  bh=6ySPkHQ1Gq6BFKw2AQMmKvvZhXbGRgwqFzDOGrbZknk=;
+  b=estcqlSm+9dxZLSk+R3rkJXaABHkaDACZdX0fFz9viBNA1DC5OmQjiY+
+   vYDQ1rw1jiKj7UBJXbBARxsNGc8UM5hd6VGiY8z4u46y0RAMxvti5EDX6
+   dLrkw2qEJegTvp6TnOPYYB3ds76Ycn+Ktnp5A7xtS2jOkbWSFrB5H8wGd
+   EN1+PGEEjmS3MS4H3tB737j8Mu/hXlio2Bn/Bd/91W79dQQbAlkuQ+hup
+   mKc5nSkUMNFBQIkXzBWBBD5r54PsUfBxjzbpF58goL2XpIsHkn7keKrBg
+   4MK0eFT6rIvpQ4QNENAiVJmJjEQGNQOiWCNoUublo3Dg2HgwtO6YR0l82
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="354684447"
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="354684437"
 X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="scan'208";a="354684447"
+   d="scan'208";a="354684437"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 03:04:28 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 03:04:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="683518474"
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="683518470"
 X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="scan'208";a="683518474"
+   d="scan'208";a="683518470"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 29 May 2023 03:04:24 -0700
+  by orsmga006.jf.intel.com with ESMTP; 29 May 2023 03:04:25 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 426CE943; Mon, 29 May 2023 13:04:26 +0300 (EEST)
+        id 4970FA11; Mon, 29 May 2023 13:04:26 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -48,9 +48,9 @@ Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
         Andreas Noever <andreas.noever@gmail.com>,
         Gil Fine <gil.fine@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 11/20] thunderbolt: Get rid of __tb_switch_[en|dis]able_clx()
-Date:   Mon, 29 May 2023 13:04:16 +0300
-Message-Id: <20230529100425.6125-12-mika.westerberg@linux.intel.com>
+Subject: [PATCH 12/20] thunderbolt: Move CLx enabling into tb_enable_clx()
+Date:   Mon, 29 May 2023 13:04:17 +0300
+Message-Id: <20230529100425.6125-13-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230529100425.6125-1-mika.westerberg@linux.intel.com>
 References: <20230529100425.6125-1-mika.westerberg@linux.intel.com>
@@ -66,149 +66,86 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-No need to have separate functions for these so fold them into
-tb_switch_clx_enable() and tb_switch_clx_disable() accordingly.
-
-No functional changes.
+This avoids some duplication and makes the flow slightly easier to
+understand. Also follows what we do in tb_enable_tmu().
 
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/clx.c | 91 ++++++++++++++++++---------------------
- 1 file changed, 42 insertions(+), 49 deletions(-)
+ drivers/thunderbolt/tb.c | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/thunderbolt/clx.c b/drivers/thunderbolt/clx.c
-index d5b46a8e57c9..d1a502525425 100644
---- a/drivers/thunderbolt/clx.c
-+++ b/drivers/thunderbolt/clx.c
-@@ -205,12 +205,46 @@ static int tb_switch_mask_clx_objections(struct tb_switch *sw)
- 			   sw->cap_lp + offset, ARRAY_SIZE(val));
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index c7cfd740520a..e4f1233eb958 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -240,6 +240,18 @@ static void tb_discover_dp_resources(struct tb *tb)
+ 	}
  }
  
--static int __tb_switch_enable_clx(struct tb_switch *sw, enum tb_clx clx)
-+/**
-+ * tb_switch_clx_enable() - Enable CLx on upstream port of specified router
-+ * @sw: Router to enable CLx for
-+ * @clx: The CLx state to enable
-+ *
-+ * Enable CLx state only for first hop router. That is the most common
-+ * use-case, that is intended for better thermal management, and so helps
-+ * to improve performance. CLx is enabled only if both sides of the link
-+ * support CLx, and if both sides of the link are not configured as two
-+ * single lane links and only if the link is not inter-domain link. The
-+ * complete set of conditions is described in CM Guide 1.0 section 8.1.
-+ *
-+ * Return: Returns 0 on success or an error code on failure.
-+ */
-+int tb_switch_clx_enable(struct tb_switch *sw, enum tb_clx clx)
- {
-+	struct tb_switch *root_sw = sw->tb->root_switch;
- 	bool up_clx_support, down_clx_support;
- 	struct tb_port *up, *down;
- 	int ret;
- 
-+	if (!clx_enabled)
-+		return 0;
++static int tb_enable_clx(struct tb_switch *sw)
++{
++	int ret;
 +
 +	/*
-+	 * CLx is not enabled and validated on Intel USB4 platforms before
-+	 * Alder Lake.
++	 * CL0s and CL1 are enabled and supported together.
++	 * Silently ignore CLx enabling in case CLx is not supported.
 +	 */
-+	if (root_sw->generation < 4 || tb_switch_is_tiger_lake(root_sw))
-+		return 0;
++	ret = tb_switch_clx_enable(sw, TB_CL1);
++	return ret == -EOPNOTSUPP ? 0 : ret;
++}
 +
-+	switch (clx) {
-+	case TB_CL1:
-+		/* CL0s and CL1 are enabled and supported together */
-+		break;
-+
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
- 	if (!tb_switch_clx_is_supported(sw))
- 		return 0;
- 
-@@ -267,47 +301,28 @@ static int __tb_switch_enable_clx(struct tb_switch *sw, enum tb_clx clx)
- }
- 
- /**
-- * tb_switch_clx_enable() - Enable CLx on upstream port of specified router
-- * @sw: Router to enable CLx for
-- * @clx: The CLx state to enable
-- *
-- * Enable CLx state only for first hop router. That is the most common
-- * use-case, that is intended for better thermal management, and so helps
-- * to improve performance. CLx is enabled only if both sides of the link
-- * support CLx, and if both sides of the link are not configured as two
-- * single lane links and only if the link is not inter-domain link. The
-- * complete set of conditions is described in CM Guide 1.0 section 8.1.
-+ * tb_switch_clx_disable() - Disable CLx on upstream port of specified router
-+ * @sw: Router to disable CLx for
-+ * @clx: The CLx state to disable
-  *
-  * Return: Returns 0 on success or an error code on failure.
-  */
--int tb_switch_clx_enable(struct tb_switch *sw, enum tb_clx clx)
-+int tb_switch_clx_disable(struct tb_switch *sw, enum tb_clx clx)
+ static int tb_increase_switch_tmu_accuracy(struct device *dev, void *data)
  {
--	struct tb_switch *root_sw = sw->tb->root_switch;
-+	struct tb_port *up, *down;
-+	int ret;
- 
- 	if (!clx_enabled)
- 		return 0;
- 
--	/*
--	 * CLx is not enabled and validated on Intel USB4 platforms before
--	 * Alder Lake.
--	 */
--	if (root_sw->generation < 4 || tb_switch_is_tiger_lake(root_sw))
--		return 0;
--
- 	switch (clx) {
- 	case TB_CL1:
- 		/* CL0s and CL1 are enabled and supported together */
--		return __tb_switch_enable_clx(sw, clx);
-+		break;
- 
- 	default:
- 		return -EOPNOTSUPP;
- 	}
--}
--
--static int __tb_switch_disable_clx(struct tb_switch *sw, enum tb_clx clx)
--{
--	struct tb_port *up, *down;
+ 	struct tb_switch *sw;
+@@ -777,7 +789,6 @@ static void tb_scan_port(struct tb_port *port)
+ 	struct tb_port *upstream_port;
+ 	bool discovery = false;
+ 	struct tb_switch *sw;
 -	int ret;
  
- 	if (!tb_switch_clx_is_supported(sw))
- 		return 0;
-@@ -338,25 +353,3 @@ static int __tb_switch_disable_clx(struct tb_switch *sw, enum tb_clx clx)
- 	tb_port_dbg(up, "%s disabled\n", tb_switch_clx_name(clx));
- 	return 0;
- }
--
--/**
-- * tb_switch_cls_disable() - Disable CLx on upstream port of specified router
-- * @sw: Router to disable CLx for
-- * @clx: The CLx state to disable
-- *
-- * Return: Returns 0 on success or an error code on failure.
-- */
--int tb_switch_clx_disable(struct tb_switch *sw, enum tb_clx clx)
--{
--	if (!clx_enabled)
--		return 0;
--
--	switch (clx) {
--	case TB_CL1:
--		/* CL0s and CL1 are enabled and supported together */
--		return __tb_switch_disable_clx(sw, clx);
--
--	default:
--		return -EOPNOTSUPP;
+ 	if (tb_is_upstream_port(port))
+ 		return;
+@@ -876,14 +887,10 @@ static void tb_scan_port(struct tb_port *port)
+ 	 * CL0s and CL1 are enabled and supported together.
+ 	 * Silently ignore CLx enabling in case CLx is not supported.
+ 	 */
+-	if (discovery) {
++	if (discovery)
+ 		tb_sw_dbg(sw, "discovery, not touching CL states\n");
+-	} else {
+-		ret = tb_switch_clx_enable(sw, TB_CL1);
+-		if (ret && ret != -EOPNOTSUPP)
+-			tb_sw_warn(sw, "failed to enable %s on upstream port\n",
+-				   tb_switch_clx_name(TB_CL1));
 -	}
--}
++	else if (tb_enable_clx(sw))
++		tb_sw_warn(sw, "failed to enable CL states\n");
+ 
+ 	if (tb_enable_tmu(sw))
+ 		tb_sw_warn(sw, "failed to enable TMU\n");
+@@ -2022,20 +2029,13 @@ static int tb_suspend_noirq(struct tb *tb)
+ static void tb_restore_children(struct tb_switch *sw)
+ {
+ 	struct tb_port *port;
+-	int ret;
+ 
+ 	/* No need to restore if the router is already unplugged */
+ 	if (sw->is_unplugged)
+ 		return;
+ 
+-	/*
+-	 * CL0s and CL1 are enabled and supported together.
+-	 * Silently ignore CLx re-enabling in case CLx is not supported.
+-	 */
+-	ret = tb_switch_clx_enable(sw, TB_CL1);
+-	if (ret && ret != -EOPNOTSUPP)
+-		tb_sw_warn(sw, "failed to re-enable %s on upstream port\n",
+-			   tb_switch_clx_name(TB_CL1));
++	if (tb_enable_clx(sw))
++		tb_sw_warn(sw, "failed to re-enable CL states\n");
+ 
+ 	if (tb_enable_tmu(sw))
+ 		tb_sw_warn(sw, "failed to restore TMU configuration\n");
 -- 
 2.39.2
 
