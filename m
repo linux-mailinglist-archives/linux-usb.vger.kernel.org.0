@@ -2,47 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CFE2714BDF
-	for <lists+linux-usb@lfdr.de>; Mon, 29 May 2023 16:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A315714BFD
+	for <lists+linux-usb@lfdr.de>; Mon, 29 May 2023 16:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjE2OSe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 May 2023 10:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        id S229921AbjE2OZi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 May 2023 10:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjE2OSd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 May 2023 10:18:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC69AD;
-        Mon, 29 May 2023 07:18:31 -0700 (PDT)
+        with ESMTP id S230118AbjE2OZh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 May 2023 10:25:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FEABE;
+        Mon, 29 May 2023 07:25:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A41961AC6;
-        Mon, 29 May 2023 14:18:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A3CC433EF;
-        Mon, 29 May 2023 14:18:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C02326108F;
+        Mon, 29 May 2023 14:25:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6ABEC433D2;
+        Mon, 29 May 2023 14:25:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685369910;
-        bh=qtpoWinoDtek/CJTzXjRcfiz2zyP5qmWf/SqPGdUZTc=;
+        s=korg; t=1685370335;
+        bh=HXadNXLfa2pbjtGXi2soLzjDLazsmd3HtXkwWcxlYt0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YoPxVFPIEo6GxI+yiXTOZT4gKuMclf8ipxJS5+hCEv+Pfbm748coE5vgIquHXmOi5
-         +2HCPaeqOM5ME69ep9iaffkMYQ6X4O4exABd6aV5vYtmnGit7axgLYDoUKlDwyHy9C
-         w/vNh4RB/4DNAQ7jCeU/ZYP2RIGsiFVSuVv3399Q=
-Date:   Mon, 29 May 2023 15:18:28 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] usb: typec: intel_pmc_mux: Expose IOM port status to
- debugfs
-Message-ID: <2023052917-juicy-calamity-4b35@gregkh>
-References: <20230524104754.4154013-1-rajat.khandelwal@linux.intel.com>
+        b=bGci5ftxukNC7rajgrAB0odDczjRsSI1tM9XB83O3u3Qp5ipQeWPupRAzGEkY82y9
+         lGaeFs8LdcFF4Jx60BEDegK2e2cGvNOm82GfW5Wg61wYKzkGo74q7dA3o6LJYQmPaD
+         fXwNoUGhZ6tnRhuV/VT4+PtDZlUk9vNAdCheiGTU=
+Date:   Mon, 29 May 2023 15:25:33 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Stanley Chang <stanley_chang@realtek.com>
+Cc:     kernel test robot <lkp@intel.com>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Ray Chi <raychi@google.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] phy: realtek: usb: Add driver for the Realtek SoC
+ USB 2.0/3.0 PHY
+Message-ID: <2023052915-repurpose-partner-20a8@gregkh>
+References: <20230525022617.30537-1-stanley_chang@realtek.com>
+ <20230525022617.30537-2-stanley_chang@realtek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230524104754.4154013-1-rajat.khandelwal@linux.intel.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230525022617.30537-2-stanley_chang@realtek.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,16 +64,14 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 24, 2023 at 04:17:54PM +0530, Rajat Khandelwal wrote:
-> IOM status has a crucial role during debugging to check the
-> current state of the type-C port.
-> There are ways to fetch the status, but all those require the
-> IOM port status offset, which could change with platform.
+On Thu, May 25, 2023 at 10:26:03AM +0800, Stanley Chang wrote:
+> Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB 2.0/3.0
+> controller. Added two drivers to drive the  USB 2.0/3.0 PHY transceivers.
+> For USB 3.0 transceivers, a driver phy-rtk-usb3 is provided.
+> The driver phy-rtk-usb2 is used to support USB 2.0 transceivers.
 > 
-> Make a debugfs directory for intel_pmc_mux and expose the status
-> under it per port basis.
-> 
-> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+> Reported-by: kernel test robot <lkp@intel.com>
 
-Does not apply to my tree :(
+The kernel test robot did not report that a new driver was needed :(
+
