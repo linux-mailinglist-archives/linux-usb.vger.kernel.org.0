@@ -2,103 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B15B714F82
-	for <lists+linux-usb@lfdr.de>; Mon, 29 May 2023 21:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8E6714F84
+	for <lists+linux-usb@lfdr.de>; Mon, 29 May 2023 21:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjE2TBJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 May 2023 15:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
+        id S229676AbjE2TBe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 May 2023 15:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjE2TBI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 May 2023 15:01:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE838BE;
-        Mon, 29 May 2023 12:01:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 427F461CF2;
-        Mon, 29 May 2023 19:01:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CDD4C433D2;
-        Mon, 29 May 2023 19:01:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685386866;
-        bh=T+5R6lxbnuo+r+DOxgiHvINIJHvsFc4xC+EMiDuzDTc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W5TU1hUnj0wtvHQYLnOTZtlxCUwEWu7kG/96xchiAr4xX11dj9Icqw7QfVhOMF6Sa
-         RNfnyRjwxT6YL2pi1eVsCcIMd5DtBPp5h9HzONwPiUjHrhREwM8O1VI9b+2ZOWiMjB
-         MR8oWsGTJToppTAMuEl4Aha3dM/mUDl8/MvG2kFc=
-Date:   Mon, 29 May 2023 20:01:03 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Message-ID: <2023052943-headfirst-satchel-6d90@gregkh>
-References: <1685004825-30157-1-git-send-email-quic_prashk@quicinc.com>
- <2023052513-gestate-tartar-bf15@gregkh>
- <5f144d80-0439-d014-c845-1cfb1adb840a@quicinc.com>
- <2023052801-immersion-venus-ad0f@gregkh>
- <a86f3bd4-8c87-de67-bdb6-fbe88dc23a56@quicinc.com>
+        with ESMTP id S229674AbjE2TBc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 May 2023 15:01:32 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A48C9
+        for <linux-usb@vger.kernel.org>; Mon, 29 May 2023 12:01:29 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id 5614622812f47-392116ae103so2262470b6e.0
+        for <linux-usb@vger.kernel.org>; Mon, 29 May 2023 12:01:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685386889; x=1687978889;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fbr7vZiwx4QOx35ITuO1SEVHfkSNAhk+9ZBn9uxkxbM=;
+        b=mAn31QAXvM5Wu5aCLD+2W5RzPRucZuN3RE08HxxLhD8EcvZ9q0sODgS5holbF4vRa8
+         +cJJIUkC9ISoAW7/l9FBGnzMZCIBEM4SgNIPNTgjLm4xv0zuwY5/Qo9SNQRFHBRaJEd7
+         0G1+qv6KyC1OZ1eA612wuKEGx8LeL0eB0CsLHHKzk+7Sv7CjeUMahjppL7RmKSMCizSm
+         TWUKylrzVLdcyFK8WPFKKSo0hCy3XUOCWnc36zVfAqVai5rEh5OC8rtfUa+5Hm60KMpp
+         FvyWdB5Qd7OQ11iO11tR1vPnoKKXbLuKR9LjoTbzLygHj4Kplo1h4GHNpx6NcCo65K0i
+         BZlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685386889; x=1687978889;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fbr7vZiwx4QOx35ITuO1SEVHfkSNAhk+9ZBn9uxkxbM=;
+        b=i3Rp5Mne5RJEg2og64yBmpIEHQtdrJqiiQMLa4qR+v0bOtjPGQO6nnYCSGcOe5EINj
+         vR87YLe16lG8UbZ3n3whJYLN50kwdyOPVwBQNgkThYMdmCLCCdtH7Ye2HEaG1lAtFy8u
+         K6BBfrTTRchbQb2D6s/xmsg8v+wppfOGrwF7HMpvYtLYTdQNyeqLtJ2GsVuXUJ8/asq1
+         DZ0rZO0k7P70cwJtUQGwJGNpv/MlFA4avOagdYJCsstA3+vWRAz2dJOMwk/9SBM5Jsx2
+         qnO3EyzpAO0TENr1KvbT9Yx4dLFRMOWERSxUbEzuQP4amQqSBZ+Nv6kaFKoJpPrFuv7o
+         g0ow==
+X-Gm-Message-State: AC+VfDxxL+WVn9z6YnbLKHrCo3lt+ctBVCPH9DcO5qsCCoNqel8VVbSR
+        nrrYvZ6akrb7PIzFUzK19a3FSHKi3bvLwbY2wx0=
+X-Google-Smtp-Source: ACHHUZ65Qf1Tt26fwzXA+nIqoTg3pVfA6//2QmYAatILmMxG+zr1iiSrtgC89jGY3QjJnOvEz5T1iIhwgAgShQ4GKNk=
+X-Received: by 2002:a05:6808:1b29:b0:398:5a5c:e89c with SMTP id
+ bx41-20020a0568081b2900b003985a5ce89cmr6369927oib.28.1685386888914; Mon, 29
+ May 2023 12:01:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a86f3bd4-8c87-de67-bdb6-fbe88dc23a56@quicinc.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: dwellsmusik@gmail.com
+Received: by 2002:a05:6358:428f:b0:123:3afc:3d12 with HTTP; Mon, 29 May 2023
+ 12:01:28 -0700 (PDT)
+From:   Maya Williamson <mayawillmson@gmail.com>
+Date:   Mon, 29 May 2023 19:01:28 +0000
+X-Google-Sender-Auth: up6LVTjwO14CarIElbZcV_H20Ck
+Message-ID: <CALH7ZXju==kgz-QX21JSid2q9q15N0S6qvFnFxDpMGnDhxfqdA@mail.gmail.com>
+Subject: re
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 30, 2023 at 12:00:15AM +0530, Prashanth K wrote:
-> 
-> 
-> On 28-05-23 05:03 pm, Greg Kroah-Hartman wrote:
-> > > > > diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
-> > > > > index e20874c..30bdb81 100644
-> > > > > --- a/drivers/usb/common/usb-conn-gpio.c
-> > > > > +++ b/drivers/usb/common/usb-conn-gpio.c
-> > > > > @@ -257,6 +257,9 @@ static int usb_conn_probe(struct platform_device *pdev)
-> > > > >    	platform_set_drvdata(pdev, info);
-> > > > >    	device_set_wakeup_capable(&pdev->dev, true);
-> > > > > +	/* Set last role to unknown before performing the initial detection */
-> > > > > +	info->last_role = USB_ROLE_UNKNOWN;
-> > > > 
-> > > > Shouldn't last_role have already been set to 0?  If so, why not just
-> > > > have this enum value be 0?
-> > > Last role would be 0 during first detection, that's the problem here.
-> > > During initial detection, if the the new role is detected as USB_ROLE_NONE
-> > > (0), then we wouldn't call the set_role(). But it should send the current
-> > > role to gadget after the inital detection.
-> > 
-> > So you are hoping that the old enum type is still assigned to 0?  That's
-> > brave, please make it explicit otherwise it's very hard to follow or
-> > ensure that this really will happen.  And most of all, document it so
-> > that that value remains 0 in the future, otherwise a list of enum types
-> > without explicit values are seen as if the values do not matter.
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> 
-> So I think it would be better to add USB_ROLE_UNKNOWN towards the end of
-> enum usb_role, so that we can avoid explicit declaration. Is that fine?
-> 
->  enum usb_role {
->  	USB_ROLE_NONE,
->  	USB_ROLE_HOST,
->  	USB_ROLE_DEVICE,
-> +	USB_ROLE_UNKNOWN,
-
-Either is fine, be explicit, or not, just don't mix the two please.
-
-thanks,
-
-greg k-h
+-- 
+I'm Maya,
+I would like to talk to you
+hope you don't mind?.
