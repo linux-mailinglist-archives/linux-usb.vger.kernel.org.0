@@ -2,129 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7332671546E
-	for <lists+linux-usb@lfdr.de>; Tue, 30 May 2023 06:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 546A171548C
+	for <lists+linux-usb@lfdr.de>; Tue, 30 May 2023 06:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbjE3EMx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 May 2023 00:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
+        id S230055AbjE3EpB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 May 2023 00:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbjE3EMv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 May 2023 00:12:51 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2068.outbound.protection.outlook.com [40.107.243.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852C9E4;
-        Mon, 29 May 2023 21:12:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l9Ma9vaKQOof82ut4dzq8HmiS7BPL+l2WrKTcWIAm7Ysj9bV3BARxi+lJW8OdCDBydxnGaFdrFrfU3wM1h8OakqkRCFxemtOxiqXf0sADZ/QFjGLTohmrzeTBCoTmfif0ICP8FtQF1JEh9I7TuJmOMGNVx+Vny9E0MGomi8R9VDK8T7TJCBcmZNHbw900TVIubOb5RLp9kr4PwG66BmcVK8NCK4p6Yg1OiiTXfw68YjKVbr4D0FdTsF9U7GwyefU/HquDwTjo/MwjkUkVU4vAprPJXP0DvpU6MxT6VlyiOp3D1SHiUCAHGL3JkzisNP4qMGYrarZ+rc+1CYQudTChg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CaONbUQvDR+cf5a9btgdaLYowa1jbnre8fv+e4JWGas=;
- b=PwiMEQKnE5vHIameO5SxSNs1eRNwlSbdVDFNMXjufTvLYEH129osAF9wtM6drLOR/Axv0TKxJX6QcjpScCm8FP9ol4NvxKEVLSAWQXeRcnCFK+aLDdAGihOGYBSV0CK0Ec+uAB6cCdBtlxYOVVWUMBIyQb6d/PHTxoMD5B8myHG01sDg1MV652Xu5+i14WrHGsusWh/1x5zruz7zoMTWiP+yM44kTkJZDP0MyGoSuXE0k+qgU9MaTcA/ih7hn0511TwRWs4wkOw1HzDSkNs/5EJ8gIKyjJ0cO6YgpXRTOLCrjsXtACUYtajvtntemBtKjqc0NPLpkD4LsJ9KL66EJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CaONbUQvDR+cf5a9btgdaLYowa1jbnre8fv+e4JWGas=;
- b=owIAnoDPMf3+aQrRFcW+W/2FgGe/xJa+HsYyuHTZ/vZ4ZTT+O+WeCCWVVw763EGDAGlsdoq3x/MjNcDHahi3QidoleOziNcrpRROPKnhCiYALUoC9QSorma3jwA6DhpHHpFiELNXuRZarehtPds9NwAvtcH6+IVdKjyNqf6RDYA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DS0PR12MB8573.namprd12.prod.outlook.com (2603:10b6:8:162::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.22; Tue, 30 May
- 2023 04:12:48 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::a65c:3aa0:b759:8527]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::a65c:3aa0:b759:8527%5]) with mapi id 15.20.6433.022; Tue, 30 May 2023
- 04:12:48 +0000
-Message-ID: <e37b2f7f-d204-4204-ce72-e108975c2fe0@amd.com>
-Date:   Mon, 29 May 2023 23:12:45 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: 6.1.30: thunderbolt: Clear registers properly when auto clear
- isn't in use cause call trace after resume
-Content-Language: en-US
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        beld zhang <beldzhang@gmail.com>, stable@vger.kernel.org,
-        Linux USB <linux-usb@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Takashi Iwai <tiwai@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <CAG7aomXv2KV9es2RiGwguesRnUTda-XzmeE42m0=GdpJ2qMOcg@mail.gmail.com>
- <ZHKW5NeabmfhgLbY@debian.me> <261a70b7-a425-faed-8cd5-7fbf807bdef7@amd.com>
- <20230529113813.GZ45886@black.fi.intel.com>
-From:   Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20230529113813.GZ45886@black.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DM6PR08CA0032.namprd08.prod.outlook.com
- (2603:10b6:5:80::45) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        with ESMTP id S229749AbjE3Eo7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 May 2023 00:44:59 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88EABEA;
+        Mon, 29 May 2023 21:44:56 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34U3f17d022534;
+        Tue, 30 May 2023 04:44:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=ARpI1vp8nkCFJtP0O5zGcbQNQXbYtxd1j/fx2C1yJ54=;
+ b=nHlMwoqoWdGtYK/+1myvOzbG3wfYbtN8KPBTVBVuiCG6MfvOc0G+NdRLpRqgpCKcjm39
+ 98tVhBEeQtP+jdz5yKEt7H1ciaaftDUW3Q4/QTITbM5MoWwljP13RNe4yYAYCqirXc+F
+ Ofc9GtUlvg5/zfZfRVwdXQN4WJepiJZ+H5WltGTmECwRiFkFbfEXK3ajZLEcS/m8U7I9
+ haPhuTFBxNqJ28TKDY28DgWrY/fs+/3aX8tAGmV2ljDv1r+IG+7MWJDRYWwJFLsmHdsw
+ jnHJVEqQgz4Jd3Damwtp06giCeUMazojJ5qsXbfT2xhJcXtAYpvO7X4YdJopUsfQh7a3 Bw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qub56vs9u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 04:44:53 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34U4iqh5016807
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 04:44:52 GMT
+Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 29 May 2023 21:44:49 -0700
+From:   Prashanth K <quic_prashk@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Prashanth K <quic_prashk@quicinc.com>
+Subject: [PATCH v6] usb: common: usb-conn-gpio: Set last role to unknown before initial detection
+Date:   Tue, 30 May 2023 10:14:31 +0530
+Message-ID: <1685421871-25391-1-git-send-email-quic_prashk@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DS0PR12MB8573:EE_
-X-MS-Office365-Filtering-Correlation-Id: 90904920-f074-4e76-e016-08db60c420b7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: p3cM7fT1y/43vkMHQLQHAEMa1Tccq8hjfdCsfv3qJEPS9HgconF9nt7UwcCNVGEgY3zT+DiGOVTEpOSo+twCiW6SgyemiqdpZyjTZyIXYQ3ZiQu//lHnO+vf0377ezte9WPQJmV+Igkj/ouI+nlz0wB1R/HplipulslLZ3nAU5I24TwRtlCOryip4t7Zl3HuGgg8gKse6Gm0l3V5cDF0eh/WAbBDl26ao5GvZdXbv2uESVo1dMcr2HwOj8ol9hsEkj2XKcMbQyayvgVnb+RhS8ZR8KVPi8yNl7eR27+CeElIXQKgJ/UPMI3hQaXSrpC+8RlgqcY5HA27tDyshjTADLPjXYEbQBy9+cU2CtqXfEVrd2klIPGMk7fqS3cbyST/udTB4zF5UqoFIPsE0E+5I6EoPYfmQBiSG5G7rKlbZLqEtdXcGSd/LLzdQ5R8p9VYV+gXwBczfxS7SXHGrZxMxMhhMAoQAqcn+uXe4+08QXJO0h0JPEbfl+Ll/A80da0+MJUl6ZoNqMHvy71ikvcOeGg2SFSoRsGwPKCBqHB7M/g9vhTZ/3zoftoNp5HhNOQP+MYv6I0BswrL4zfZDfof72goxF2gnBsE4e1o75UEGMkrC3XUVzxUr5sSLo8jetdSKWxCekZNEiTBS5wJP0xnrw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(136003)(346002)(396003)(376002)(451199021)(54906003)(478600001)(8676002)(44832011)(8936002)(5660300002)(36756003)(2906002)(31696002)(86362001)(6916009)(66556008)(4326008)(66476007)(66946007)(316002)(38100700002)(41300700001)(2616005)(186003)(53546011)(6506007)(6512007)(6486002)(6666004)(31686004)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cmhjWWN3TnY2bnl1SFNuM0I0VXVHMHQ3YS9kOXlMU0h2UTR4YzNySFAxR3k3?=
- =?utf-8?B?eWFLQ2lteFFCdUZTaVl4a25wK1B4RHpKRXF4dm1vQXNhWnNpTm5VNmpPclMv?=
- =?utf-8?B?T3JINnNqRGFuaDJEUUJzTFBZYm1PckpmWXkrK09UTXlraGRINVUwSGUyNGJu?=
- =?utf-8?B?bkhHUXcwMCttRCt1Ry9KQ21YM0xpTkVabkp1SlNoVHdFK3pRSVI3eUgzb3cy?=
- =?utf-8?B?dEEwREtKblJDbnJLR2dLalMrM2paWHd2TUxRMlUxZ3NBbldPNzdZMytoalhr?=
- =?utf-8?B?bHRnUlZnTk5TMTJaZTVWVVhrNVhNU3Ria0x4TExYTVpySTBHUzhpOFFqQXU2?=
- =?utf-8?B?WTBybkg4bWN2dTRmQ2Z6bDhDMHRSMDVIeGh5cHVQV2tlV1dtbndOTXIyMUll?=
- =?utf-8?B?USs2SW1GMkUwU2tyVjZkRDVyOGdDbFROeXVqNHhscE5IMnB6Tk9RZTdmczA2?=
- =?utf-8?B?NDROcUt2aE5SWG9URUJvMk1kNUJlZkJTYk1HZ0dkWXhqL2NSeC9RdHZnZWFV?=
- =?utf-8?B?UFRxVHZxQnpRUFdmOFQxcjhRS3dKTVV4QllteUJybDJZbkovZ3FHelJyVmw4?=
- =?utf-8?B?QVBMRG5kRGhaQ294SzNrMEQxZHNpbnVjR28vcFRxYXVhR3N4TVU4SkY5L1g1?=
- =?utf-8?B?TVVnaTdmSVE2L2xWODdjOE9kaGtpM3JqMzZDcWJPOEFnYnFCN3lZMzNVV0VW?=
- =?utf-8?B?WWhxNXAxdFlEOGRXYVBUeE1OMEY3NWJlZGdKT2xlTkhjSXlJdUVEWnhqUnJ2?=
- =?utf-8?B?cm9EaEZyTHJVTHJGTFlFT3pWUDVOTHp5bmcyOHBicjJvcU1tNEZGN2l4NWRD?=
- =?utf-8?B?RzhGS3U4TEtKL1RSSDRvWDN2cmdpeUMvbXpWNGUwM1ZHTWFlUGZTVjFXcGpE?=
- =?utf-8?B?WFJLU1p3NDJYbWtRZTMyOTJpYzU3MmFLWUlkQ211TXh6VWtzRDY2YVVOUFlR?=
- =?utf-8?B?cThwV2lrNWZ5TVJ5aitCN0VQUWZsK3JoOXo1d1BEQy91bWRHUEl5R212Sjhx?=
- =?utf-8?B?Q29YSzlSbkpzdXNSTnNEdENwUWFUam5sNWUvcGZCa2EwMmI5YjltUmYzQTMw?=
- =?utf-8?B?c2ZCVlFIQ2cxS0JPUWNtM1dHL0pQcXVkQlh6MXp2elhqWVZmZ2FIU0x6M3pC?=
- =?utf-8?B?bStQZ3U2UnFhemx0YUVEWVJ1TzVZVTNiSEJDN0loSjA5d3FxaDhuZi92b0Rj?=
- =?utf-8?B?Q2R5OW9qYWo4WEwwaEEvQlpGVDBYN21hOWpvYzA2M0xqV29ySWpqbnI2a3RY?=
- =?utf-8?B?Ykp2UHVoTmxTazN4U05iNjBDK2dHTkVyZjFIM0NWUDF5SmlIWkVVVVk1WkpZ?=
- =?utf-8?B?STBCNHJ4RDdPWXFBM3MxeW94Rkc5bWNPcmE5WTRGYkZ2cDZZK0tzZHl3REpH?=
- =?utf-8?B?bFRxc2FrZjRwVnArMGVyVWZZWHJEWi9aemo0eFZnR2lTMUV3NWZ0V3pLYnFZ?=
- =?utf-8?B?MDYwTTdYNElZb04vN2xWVkxHSVljRW94ZWNJQzVVQVRndHVxMUFBdllTd3Bk?=
- =?utf-8?B?N1pDQmh0a1M1eU5QQm1CUHBBOVZYUXVoVm80NXhMMDBtUndUck1KdllsUVk5?=
- =?utf-8?B?aHFmSEovaDMzNENHMmVvbWJYSXpBTk5jcEJhT1pRenc3NTVxZkRQbUhVMnJR?=
- =?utf-8?B?NHpyRC9TcTZHUENWeXJOS3k3bTlUWkg5RTNqWnpYY2Y5VWx6VlVXWmdhb0Fr?=
- =?utf-8?B?NUV6WlcvNDBxVXkyKythdlN5aEF1WDVmUHVRSzBwbWZrYkxnSFl0U0JvcXhy?=
- =?utf-8?B?WENSb2c5OFR4a1YxN0lzcE5yOUgzbzlHUDBaQ09wZXpXOG1UK3hEVDR5ZEEy?=
- =?utf-8?B?RWxVWnNROUhRbkJUVSs1VTVmQTFZaXNkSXR5Z2hBV3F1Y0NUZ0REY2VONzZu?=
- =?utf-8?B?UGtnbG80OW1Ma212M3hFU0ZZayt2THUvVk9xZXlXRkZ6QmlBdklXdENRY05w?=
- =?utf-8?B?ZTdqQ3RnUzAvb2diNHRBZTI5OXpYckFHVG5PSmtzVEFmTFAyQm0wdWlSVUIz?=
- =?utf-8?B?bXJzZjdpOUkxTjRFVzJZR0JsRXNPQlUvNjEyWFFWY2pabFVDbUpvcmVkcEVO?=
- =?utf-8?B?cjJXRUNKZjBNT3JDV2NYSFkzMEZnbkt3RGpiU3hFZzA1WHhRc1BENGxTVUFj?=
- =?utf-8?B?ckpRQUZNZUVWWnl2YmhWME5HNGxpUEJEQnlKWisva2Mzc3I3NFBkL2U1K01M?=
- =?utf-8?B?RXc9PQ==?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 90904920-f074-4e76-e016-08db60c420b7
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 04:12:48.3270
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FcWz8PWl/GcdEPlFtTmk02KaGazRtyya21RMxp85edNwODHNsjvd35f8m5lkNh1Kv+8/r+XvuoHNEAhJQwjwFg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8573
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: eojhkxHtQg3dSMoAGFNQHSDRD2_Go3qh
+X-Proofpoint-ORIG-GUID: eojhkxHtQg3dSMoAGFNQHSDRD2_Go3qh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-30_02,2023-05-29_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 impostorscore=0 bulkscore=0 phishscore=0
+ lowpriorityscore=0 mlxlogscore=999 clxscore=1015 mlxscore=0 suspectscore=0
+ adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305300037
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -132,52 +75,71 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/29/23 06:38, Mika Westerberg wrote:
-> On Sun, May 28, 2023 at 07:55:39AM -0500, Mario Limonciello wrote:
->> On 5/27/23 18:48, Bagas Sanjaya wrote:
->>> On Sat, May 27, 2023 at 04:15:51PM -0400, beld zhang wrote:
->>>> Upgrade to 6.1.30, got crash message after resume, but looks still
->>>> running normally
->>
->> This is specific resuming from s2idle, doesn't happen at boot?
->>
->> Does it happen with hot-plugging or hot-unplugging a TBT3 or USB4 dock too?
-> 
-> Happens also when device is connected and do
-> 
->    # rmmod thunderbolt
->    # modprobe thunderbolt
-> 
-> I think it is because nhi_mask_interrupt() does not mask interrupt on
-> Intel now.
-> 
-> Can you try the patch below? I'm unable to try myself because my test
-> system has some booting issues at the moment.
-> 
-> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-> index 4c9f2811d20d..a11650da40f9 100644
-> --- a/drivers/thunderbolt/nhi.c
-> +++ b/drivers/thunderbolt/nhi.c
-> @@ -60,9 +60,12 @@ static int ring_interrupt_index(const struct tb_ring *ring)
->   
->   static void nhi_mask_interrupt(struct tb_nhi *nhi, int mask, int ring)
->   {
-> -	if (nhi->quirks & QUIRK_AUTO_CLEAR_INT)
-> -		return;
-> -	iowrite32(mask, nhi->iobase + REG_RING_INTERRUPT_MASK_CLEAR_BASE + ring);
-> +	if (nhi->quirks & QUIRK_AUTO_CLEAR_INT) {
-> +		u32 val = ioread32(nhi->iobase + REG_RING_INTERRUPT_BASE + ring);
-> +		iowrite32(val & ~mask, nhi->iobase + REG_RING_INTERRUPT_BASE + ring);
-> +	} else {
-> +		iowrite32(mask, nhi->iobase + REG_RING_INTERRUPT_MASK_CLEAR_BASE + ring);
-> +	}
->   }
->   
->   static void nhi_clear_interrupt(struct tb_nhi *nhi, int ring)
+Currently if we bootup a device without cable connected, then
+usb-conn-gpio won't call set_role() since last_role is same as
+current role. This happens because during probe last_role gets
+initialised to zero.
 
-Mika, that looks good for the issue, thanks!
+To avoid this, added a new constant in enum usb_role, last_role
+is set to USB_ROLE_UNKNOWN before performing initial detection.
 
-You can add:
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+While at it, also handle default case for the usb_role switch
+in cdns3 to avoid build warnings.
 
-When you submit it.
+Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
+Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+---
+v6: Moved USB_ROLE_UNKNOWN towards the end of enum usb_role.
+v5: Update commit text to mention the changes made in cdns3 driver.
+v4: Added Reviewed-by tag.
+v3: Added a default case in drivers/usb/cdns3/core.c as pointed out by
+    the test robot.
+v2: Added USB_ROLE_UNKNWON to enum usb_role.
+
+ drivers/usb/cdns3/core.c           | 2 ++
+ drivers/usb/common/usb-conn-gpio.c | 3 +++
+ include/linux/usb/role.h           | 1 +
+ 3 files changed, 6 insertions(+)
+
+diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+index dbcdf3b..69d2921 100644
+--- a/drivers/usb/cdns3/core.c
++++ b/drivers/usb/cdns3/core.c
+@@ -252,6 +252,8 @@ static enum usb_role cdns_hw_role_state_machine(struct cdns *cdns)
+ 		if (!vbus)
+ 			role = USB_ROLE_NONE;
+ 		break;
++	default:
++		break;
+ 	}
+ 
+ 	dev_dbg(cdns->dev, "role %d -> %d\n", cdns->role, role);
+diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
+index e20874c..30bdb81 100644
+--- a/drivers/usb/common/usb-conn-gpio.c
++++ b/drivers/usb/common/usb-conn-gpio.c
+@@ -257,6 +257,9 @@ static int usb_conn_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, info);
+ 	device_set_wakeup_capable(&pdev->dev, true);
+ 
++	/* Set last role to unknown before performing the initial detection */
++	info->last_role = USB_ROLE_UNKNOWN;
++
+ 	/* Perform initial detection */
+ 	usb_conn_queue_dwork(info, 0);
+ 
+diff --git a/include/linux/usb/role.h b/include/linux/usb/role.h
+index b5deafd..65e790a 100644
+--- a/include/linux/usb/role.h
++++ b/include/linux/usb/role.h
+@@ -11,6 +11,7 @@ enum usb_role {
+ 	USB_ROLE_NONE,
+ 	USB_ROLE_HOST,
+ 	USB_ROLE_DEVICE,
++	USB_ROLE_UNKNOWN,
+ };
+ 
+ typedef int (*usb_role_switch_set_t)(struct usb_role_switch *sw,
+-- 
+2.7.4
+
