@@ -2,95 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6739071586E
-	for <lists+linux-usb@lfdr.de>; Tue, 30 May 2023 10:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 560EF7159AE
+	for <lists+linux-usb@lfdr.de>; Tue, 30 May 2023 11:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjE3I0z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 May 2023 04:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
+        id S229936AbjE3JPS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 May 2023 05:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjE3I0w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 May 2023 04:26:52 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86720F1;
-        Tue, 30 May 2023 01:26:43 -0700 (PDT)
+        with ESMTP id S229446AbjE3JPR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 May 2023 05:15:17 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519E0CD;
+        Tue, 30 May 2023 02:15:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685435203; x=1716971203;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Nb6ku5hLPe/6ITYKwhYehWWwfKCYlCrGiz48NGA7ZLk=;
-  b=d8ulIDjJtiQy2xHcAY9PZqrXtpffEx4W2ObEP1gFN5vTa9XIXV4zk63x
-   Oj/IO7Bf1JILIv8Rx1MagA2AKcrDcfnbI79kFENcfYyezCYzmvhjqW1yU
-   NywcoTqVCgGZWHlDs96XF+rD0NDjuiDTGDgtkfADcj/diBsKwxG2seKzP
-   4541Jgb0NQDtZTAkyCIGLtPwdV9WI9/JT49SuZJIsubo+A5+qUABAGbo9
-   ZLzgoNXzCj4SjOTGSL+WqfPDOxPxagpqdjVCDAaXIBCUR1Uz2Kt9aKmsp
-   unz7eRs2y1vM3zUEMsOAs7Sfy9JZEuyd/Ti2prIvNaJVfvCzr1ScY6/D3
+  t=1685438115; x=1716974115;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ht5FlU3n6y7nFuAmHBrSvsNrWfyhEwrb7dbJw+ZY6no=;
+  b=FCmN+a6+E/r6afHE4cYsPSBkwFNFv8gGllmZJZhOOq3ZLW9gaOorYrCk
+   9YiiZcEF0jrF2NPNs5nmdw4wJntn5Udx8SVQcl9gjYNt80bwgsssqNCIt
+   3biam7ONBZCKKFaUxOFZBzZLZIzYtvYF3wTjEcNII1Bes8FlnaqxhF8uW
+   9+dRS5bX3BPaj+RtMnEhHcCAQax6t/yCbOBGqGip/8RJIDa3sOYAsb9ZT
+   wwlIE3UE1GL8LtSAAlSBmSKzTyiAAudTHDZf17xcaW8CXsmkV1Q3nlm5n
+   KwCGKGDDkJj1jMyDE6nHpII929fYH5HfvKHBCn2uWdX+ro7wjSbC5AkbC
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="344353041"
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="352361799"
 X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
-   d="scan'208";a="344353041"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 01:26:43 -0700
+   d="scan'208";a="352361799"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 02:15:08 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="850673533"
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="796199877"
 X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
-   d="scan'208";a="850673533"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 30 May 2023 01:26:40 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 30 May 2023 11:26:39 +0300
-Date:   Tue, 30 May 2023 11:26:39 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     gregkh@linuxfoundation.org, r-gunasekaran@ti.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tps6598x: Fix broken polling mode after
- system suspend/resume
-Message-ID: <ZHWzP6qsgzSayhIO@kuha.fi.intel.com>
-References: <20230530065926.6161-1-rogerq@kernel.org>
+   d="scan'208";a="796199877"
+Received: from rajatkha-mobl.gar.corp.intel.com (HELO [10.67.146.41]) ([10.67.146.41])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 02:15:06 -0700
+Message-ID: <0367a134-cb04-8a1c-bb46-bb5553df6f8a@linux.intel.com>
+Date:   Tue, 30 May 2023 14:45:03 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530065926.6161-1-rogerq@kernel.org>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v5] usb: typec: intel_pmc_mux: Expose IOM port status to
+ debugfs
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230524104754.4154013-1-rajat.khandelwal@linux.intel.com>
+ <2023052917-juicy-calamity-4b35@gregkh>
+From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+In-Reply-To: <2023052917-juicy-calamity-4b35@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 30, 2023 at 09:59:26AM +0300, Roger Quadros wrote:
-> During system resume we need to resume the polling workqueue
-> if client->irq is not set else polling will no longer work.
-> 
-> Fixes: 0d6a119cecd7 ("usb: typec: tps6598x: Add support for polling interrupts status")
-> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+Hi,
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+On 5/29/2023 7:48 PM, Greg KH wrote:
+> On Wed, May 24, 2023 at 04:17:54PM +0530, Rajat Khandelwal wrote:
+>> IOM status has a crucial role during debugging to check the
+>> current state of the type-C port.
+>> There are ways to fetch the status, but all those require the
+>> IOM port status offset, which could change with platform.
+>>
+>> Make a debugfs directory for intel_pmc_mux and expose the status
+>> under it per port basis.
+>>
+>> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+>> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Does not apply to my tree :(
 
-> ---
->  drivers/usb/typec/tipd/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index 438cc40660a1..603dbd44deba 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -920,7 +920,7 @@ static int __maybe_unused tps6598x_resume(struct device *dev)
->  		enable_irq(client->irq);
->  	}
->  
-> -	if (client->irq)
-> +	if (!client->irq)
->  		queue_delayed_work(system_power_efficient_wq, &tps->wq_poll,
->  				   msecs_to_jiffies(POLL_INTERVAL));
->  
-> -- 
-> 2.34.1
+I have pushed the patch on top of the Linus's tree.
+Had a quick check with the USB Linux tree and seems like its a lot
+behind?
+Can you please confirm once and come back?
 
--- 
-heikki
+Thanks
+Rajat
+
