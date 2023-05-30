@@ -2,112 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EAD9716AAC
-	for <lists+linux-usb@lfdr.de>; Tue, 30 May 2023 19:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B6F716EA3
+	for <lists+linux-usb@lfdr.de>; Tue, 30 May 2023 22:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233202AbjE3RTK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 May 2023 13:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48608 "EHLO
+        id S231527AbjE3U1V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 May 2023 16:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233001AbjE3RTI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 May 2023 13:19:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6391BD9;
-        Tue, 30 May 2023 10:19:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE7B7630C8;
-        Tue, 30 May 2023 17:19:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA22EC433D2;
-        Tue, 30 May 2023 17:19:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685467146;
-        bh=PIBi+WICffiBvaB2Kw9KN3H9bNAFCDH01ZgbVaQGbpg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E2Xa4JrAvvdRGyRf3zxeWBvkc5cuOtjqlw0qF7dZxyI06ngCrCEr+2VfwVIRMVVdd
-         V5zTylUXQRCf1KW4HPXzMIdv+9vrMt1yP+n7FUDa+t2FjNJ4LF5+BlKFZwjSqNBqRe
-         ZHB1IFdqYD9OcZl9/+Ecs/JcoSOvUOC9V09t4ZzWib5Tw6UHYj9RtfWvo7heP6Av47
-         dD3CVQoa6UM26DNqLEt2ojddXXiZcVQpH+lX3kslYjvfSLtg1sWzEWznuptvI921Y/
-         KH17pTxqsO/dGyBabW1mpfH4P2fEriexl3TKpaNOhSUcu+Vgyc5AIWsf3E+ZScPJZ6
-         l+0N0Pn0M1pBQ==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-pci@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-scsi@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Georgi Djakov <djakov@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: (subset) [PATCH v3 00/15] Introduce the SC8180x devices
-Date:   Tue, 30 May 2023 10:22:49 -0700
-Message-Id: <168546732606.2227271.7267063763992454803.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230530162454.51708-1-vkoul@kernel.org>
-References: <20230530162454.51708-1-vkoul@kernel.org>
+        with ESMTP id S231199AbjE3U1U (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 May 2023 16:27:20 -0400
+X-Greylist: delayed 3040 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 May 2023 13:27:18 PDT
+Received: from ns3046726.ip-164-132-202.eu (ns3046726.ip-164-132-202.eu [164.132.202.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9EEB5FC
+        for <linux-usb@vger.kernel.org>; Tue, 30 May 2023 13:27:18 -0700 (PDT)
+Received: from WIN-HM6FI4VOIEP (localhost [IPv6:::1])
+        by ns3046726.ip-164-132-202.eu (Postfix) with ESMTP id 17E94877BD
+        for <linux-usb@vger.kernel.org>; Tue, 30 May 2023 21:17:15 +0200 (CEST)
+Message-ID: <041cd79e-45076-fa0e8869793634@win-hm6fi4voiep>
+Reply-To: "Mrs. Maria E. Schaeffler" <kontactinfo69@gmail.com>
+From:   "Mrs. Maria E. Schaeffler" <donation@internationalmedicalcorps.org>
+To:     linux-usb@vger.kernel.org
+Subject: Covid-19 crisis - Urgent
+Date:   Tue, 30 May 2023 21:16:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Priority: 3
+X-Spam-Status: Yes, score=7.5 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_MR_MRS,
+        PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_PSBL,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  2.7 RCVD_IN_PSBL RBL: Received via a relay in PSBL
+        *      [164.132.202.175 listed in psbl.surriel.com]
+        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [kontactinfo69[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 PP_MIME_FAKE_ASCII_TEXT BODY: MIME text/plain claims to be
+        *      ASCII but isn't
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  1.0 HK_NAME_MR_MRS No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 30 May 2023 21:54:39 +0530, Vinod Koul wrote:
-> This introduces Qualcomm SC8180x SoC which features in Lenovo Flex 5G
-> laptop. This also adds support for Primus platform as well as Lenovo Flex 5G
-> laptop.
-> 
-> Changes in v3:
->  - Split DTS patch into smaller check
->  - checkpatch and dtbs check error fixes
->  - fix comments from Konrad/Krzysztof
-> 
-> [...]
+Hello Good Day,
 
-Quite a few DT validation warnings left, but let's get it merged so that we can
-work on those together.
+This is the second email Notification I am emailing to you without a response from you. This is just to notify you that this email account of yours was selected randomly to receive a voluntary donation of €1.7 million from Mrs. Maria Elisabeth Schaeffler. Please email me for details now.
 
-Applied, thanks!
+ 
+Thank You.
+Mrs. Maria Elisabeth Schaeffler( CEO/Founder )
+©2023 SCHAEFFLER All Rights Reserved
 
-[06/15] arm64: dts: qcom: Introduce the SC8180x platform
-        commit: 8575f197b077001591ef3ff709cdee48785daf0d
-[07/15] arm64: dts: qcom: sc8180x: Add interconnects and lmh
-        commit: f3be8a111d7eaf4e291b6c2d51dd0adb39934b32
-[08/15] arm64: dts: qcom: sc8180x: Add thermal zones
-        commit: d1d3ca03554e51be44546638f83169bb05b20ef8
-[09/15] arm64: dts: qcom: sc8180x: Add QUPs
-        commit: 0018761d1564f64d567e119fd9156c473b4592d7
-[10/15] arm64: dts: qcom: sc8180x: Add PCIe instances
-        commit: d20b6c84f56ae3a9823cc0fa5cfad330536ba0d1
-[11/15] arm64: dts: qcom: sc8180x: Add remoteprocs, wifi and usb nodes
-        commit: b080f53a8f44eeaa9db9628d8d339ab5a2afb5bd
-[12/15] arm64: dts: qcom: sc8180x: Add display and gpu nodes
-        commit: 494dec9b6f541451b2e82905b0eebd9a4ac9848b
-[13/15] arm64: dts: qcom: sc8180x: Add pmics
-        commit: d3302290f59e8533a56a8fa2455357f843d8dcf6
-[14/15] arm64: dts: qcom: sc8180x: Introduce Primus
-        commit: 2ce38cc1e8fea4e251e4563e436104369bf3b322
-[15/15] arm64: dts: qcom: sc8180x: Introduce Lenovo Flex 5G
-        commit: 20dea72a393c6d5572088b8ad01dbb9e9aca64ce
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
