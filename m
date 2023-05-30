@@ -2,59 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06493715CAC
-	for <lists+linux-usb@lfdr.de>; Tue, 30 May 2023 13:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA8B715CBD
+	for <lists+linux-usb@lfdr.de>; Tue, 30 May 2023 13:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjE3LKJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 May 2023 07:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
+        id S231833AbjE3LMA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 May 2023 07:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjE3LKI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 May 2023 07:10:08 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF124B0;
-        Tue, 30 May 2023 04:10:06 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f705976afbso4193005e9.1;
-        Tue, 30 May 2023 04:10:06 -0700 (PDT)
+        with ESMTP id S231772AbjE3LLz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 May 2023 07:11:55 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC9DE5;
+        Tue, 30 May 2023 04:11:50 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30ad48957f5so634949f8f.1;
+        Tue, 30 May 2023 04:11:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685445005; x=1688037005;
+        d=gmail.com; s=20221208; t=1685445108; x=1688037108;
         h=references:to:cc:in-reply-to:date:subject:mime-version:message-id
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=U3nxQl10l/SUhY3CCaY6+jTnP9nSdr+AvpeEnlCHIvk=;
-        b=U4Z33RtOodjSO0YCkNYhZsLpDf1NbX0mNaIuafMA7g+7Qi+nz+7MreC2AGU8TpKeNg
-         ykb9Wc3FC0SJF5vR76q7npdyqTdICYrAOAwY1n6sReQHJx+vkxkH7SQYVgHjbkLsV1rZ
-         kTts3m3d7yB92aqcAd2s63cv7RanS+/AYU7dN8wSXoM6WNWwJozCcn0yx558OV5pLoxc
-         CE0E9//LIyV+153HdqA4KF/+TdWTPWmCDCuOHE5xMRSI57kiLAYd9QZ+ahHgf7byYmiD
-         1qN83LIPHDIYerH8Ej6+shceZx9NlJSknEndb0W1CHNl2kMdl2Tzw7w946Pj4LRVttQB
-         I64A==
+        bh=jGuM0Qb5XQCYlcPeCqFivWAij9A8iPVD0+94q09YcBM=;
+        b=LlilW/Co/9Rjp+C0HtRQDmUGeJW41wZeIAC7pz4UyDqXOqOXpO7GOnEl/ksfPEyxGD
+         Hw0qbTLhLPrRD17SBZo7Ppd02wNHZltBT9tMOkQbiytNmevIh2MQWPi6LAER/iY/D8CQ
+         UZWThVIePWWkDW1CQJBSaK5Q5+uDhHZ7/SfERb+oY8hJSD2ECb/4i8Xqa8cbX8x/HGSS
+         mfy5rVxQqnIYT+by+7SbO8wXWxooBZfmpduNAQatQgpKzrLT0nws0BNNg+wByWKuFo/9
+         q06W76JxR6CTVNNFrWpV5f6l5YA90BD3y9OxcHxDQfF29EMm2K1UnwL8u11JWLuLL4BO
+         WO7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685445005; x=1688037005;
+        d=1e100.net; s=20221208; t=1685445108; x=1688037108;
         h=references:to:cc:in-reply-to:date:subject:mime-version:message-id
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U3nxQl10l/SUhY3CCaY6+jTnP9nSdr+AvpeEnlCHIvk=;
-        b=R6yL+gr/osm7QdE7j4em6YBXShErNFy/3/jgpAJqs+Nz8NhSKPuMOPX/LuqBso0C4x
-         yOgKcPtjw8mF+LuOBKKOO29NU0WCBU7UUxLBViGT8NC6HkK1T7vAyKs1iUm1P4BxTwoJ
-         MpRSHuRpHFA5ZowH3N/4F2XIjkW/YDrkjvrkaU3JA45p44a547nIkiaOSgx28smCq1zf
-         qkxvHkuTAuLH5VlPjWjxgvNBNFa0o3/m8uOw9FnnQIp4MovhokHYnm5pVZear4WJ+G1Q
-         CQBl72fpHiGHCoJJSgXdOI5UQrda4Ufqi+6jQkfkl/AYBKWNKp9F4mojYAsSpA+V0iAz
-         ecAA==
-X-Gm-Message-State: AC+VfDwR+EFAxAoajWORpjZAG8mBnBVuZH/cSjU3RXMVQQ0ODPI/0pEp
-        jb3hkOhODH70IZZDL+FrKB65c2Oz4Ru88Q==
-X-Google-Smtp-Source: ACHHUZ4QpfjAr0sha/VfkBxgDhZ8M8i7vAgcW3F7kfW6koZ/7MFLLmu15GqWs4OyMOsyTxk5x5Rsew==
-X-Received: by 2002:adf:db4b:0:b0:306:5f2a:8a65 with SMTP id f11-20020adfdb4b000000b003065f2a8a65mr1142778wrj.4.1685445005002;
-        Tue, 30 May 2023 04:10:05 -0700 (PDT)
+        bh=jGuM0Qb5XQCYlcPeCqFivWAij9A8iPVD0+94q09YcBM=;
+        b=jrdJkTPSWdL8WW0ckxszRdzAKP8KyFyV4t9oeA2k+xLSiT/fHEHdIOshNhvFKPPrN2
+         9TCwO/jB6k9S9suOKKqQ3GTPi64FF2inDwMytRXv58P+u28ztszjCf1/sFI+p2W7/C8/
+         wIjTa3EDfE22FtpSOHztlHx2Vat0iy11jqSDlJ4Xvzy8lmMkOW5AFIrIqpIvqkI0qCfp
+         0UiOiVNHoYNn3mdUQQem9Iu9/LGOgt1RegRd5X5bRmXecq8Asvlg5OMYCYG/dHQHSTu+
+         TMsGoyFL43H4rh+uet7utiHRhGJp0oAc7tuo91w/tGuqHC43j6szLEt1Ak688EBLNAke
+         nOXg==
+X-Gm-Message-State: AC+VfDwHwjs5TfxvTRwOuYMlAjn9uZ8wVzoUbE8XvSmZ+Xje6icIHTt7
+        /2TksXkd5+oP035tkBJHbm4=
+X-Google-Smtp-Source: ACHHUZ4vLiVqTIz+19OPvOyCpReIq5kCqDRhpf6w6/xbRRtee+eHK8ARwn5To3AmRXEHLQuWpuEKZQ==
+X-Received: by 2002:adf:f3c5:0:b0:30a:e55c:1e8e with SMTP id g5-20020adff3c5000000b0030ae55c1e8emr1074539wrp.2.1685445108442;
+        Tue, 30 May 2023 04:11:48 -0700 (PDT)
 Received: from smtpclient.apple (212-5-158-75.ip.btc-net.bg. [212.5.158.75])
-        by smtp.gmail.com with ESMTPSA id g15-20020adff40f000000b00307972e46fasm2903641wro.107.2023.05.30.04.10.03
+        by smtp.gmail.com with ESMTPSA id j18-20020a5d4492000000b002ffbf2213d4sm2927317wrq.75.2023.05.30.04.11.47
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 May 2023 04:10:04 -0700 (PDT)
+        Tue, 30 May 2023 04:11:47 -0700 (PDT)
 From:   George Valkov <gvalkov@gmail.com>
-Message-Id: <C6FF2A09-5208-4A0E-9D63-26F4CC1FE20D@gmail.com>
+Message-Id: <A4F3E461-E5BE-4707-B63A-BD6AAC3DBD02@gmail.com>
 Content-Type: multipart/mixed;
-        boundary="Apple-Mail=_783AABD0-D117-4490-B46D-E8E3ED159AD1"
+        boundary="Apple-Mail=_C11E7C7F-87BD-472F-9893-7A87CA263056"
 Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
 Subject: Re: [PATCH net-next v3 1/2] usbnet: ipheth: fix risk of NULL pointer
  deallocation
-Date:   Tue, 30 May 2023 14:09:52 +0300
+Date:   Tue, 30 May 2023 14:11:36 +0300
 In-Reply-To: <0f7a8b0c149daa49c34a817cc24d1d58acedb9f4.camel@redhat.com>
 Cc:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -78,31 +78,32 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---Apple-Mail=_783AABD0-D117-4490-B46D-E8E3ED159AD1
+--Apple-Mail=_C11E7C7F-87BD-472F-9893-7A87CA263056
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain;
 	charset=us-ascii
 
-Thanks Paolo! Something like that?
+Hi Paolo!
+Sorry, I attached the old version by mistake. Here is the new version:
 
 
---Apple-Mail=_783AABD0-D117-4490-B46D-E8E3ED159AD1
+--Apple-Mail=_C11E7C7F-87BD-472F-9893-7A87CA263056
 Content-Disposition: attachment;
-	filename=0001-usbnet-ipheth-avoid-kfree-with-a-NULL-pointer.patch
+	filename=0001-usbnet-ipheth-cleanup-the-initialization-error-path.patch
 Content-Type: application/octet-stream;
 	x-unix-mode=0644;
-	name="0001-usbnet-ipheth-avoid-kfree-with-a-NULL-pointer.patch"
+	name="0001-usbnet-ipheth-cleanup-the-initialization-error-path.patch"
 Content-Transfer-Encoding: quoted-printable
 
-=46rom=2015dc5cec0d239d30856dc6d9b9a7a9528342cde0=20Mon=20Sep=2017=20=
+=46rom=2009300ea33347fb07097417e3586494b632267a19=20Mon=20Sep=2017=20=
 00:00:00=202001=0AFrom:=20Georgi=20Valkov=20<gvalkov@gmail.com>=0ADate:=20=
 Thu,=2025=20May=202023=2021:23:12=20+0200=0ASubject:=20[PATCH=20net-next=20=
-v3=201/2]=20usbnet:=20ipheth:=20avoid=20kfree=20with=20a=20NULL=20=
-pointer=0A=0AThe=20cleanup=20precedure=20in=20ipheth_probe=20will=20=
-attempt=20to=20free=20a=0ANULL=20pointer=20in=20dev->ctrl_buf=20if=20the=20=
-memory=20allocation=20for=0Athis=20buffer=20is=20not=20successful.=20=
-While=20kfree=20ignores=20NULL=20pointers,=0Aand=20the=20existing=20code=20=
-is=20safe,=20it=20is=20a=20better=20design=20to=20rearrange=0Athe=20goto=20=
+v4=201/2]=20usbnet:=20ipheth:=20cleanup=20the=20initialization=20error=20=
+path=0A=0AThe=20cleanup=20precedure=20in=20ipheth_probe=20will=20attempt=20=
+to=20free=20a=0ANULL=20pointer=20in=20dev->ctrl_buf=20if=20the=20memory=20=
+allocation=20for=0Athis=20buffer=20is=20not=20successful.=20While=20=
+kfree=20ignores=20NULL=20pointers,=0Aand=20the=20existing=20code=20is=20=
+safe,=20it=20is=20a=20better=20design=20to=20rearrange=0Athe=20goto=20=
 labels=20and=20avoid=20this.=0A=0ASigned-off-by:=20Georgi=20Valkov=20=
 <gvalkov@gmail.com>=0ASigned-off-by:=20Foster=20Snowhill=20=
 <forst@pen.gy>=0A---=0A=20drivers/net/usb/ipheth.c=20|=202=20+-=0A=201=20=
@@ -116,7 +117,7 @@ ipheth_free_urbs(dev);=0A=20err_alloc_urbs:=0A=20err_get_macaddr:=0A=
 +err_alloc_ctrl_buf:=0A=20err_endpoints:=0A=20=09free_netdev(netdev);=0A=20=
 =09return=20retval;=0A--=20=0A2.40.1=0A=0A=
 
---Apple-Mail=_783AABD0-D117-4490-B46D-E8E3ED159AD1
+--Apple-Mail=_C11E7C7F-87BD-472F-9893-7A87CA263056
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain;
 	charset=us-ascii
@@ -155,4 +156,4 @@ nano RTOS
 > 
 
 
---Apple-Mail=_783AABD0-D117-4490-B46D-E8E3ED159AD1--
+--Apple-Mail=_C11E7C7F-87BD-472F-9893-7A87CA263056--
