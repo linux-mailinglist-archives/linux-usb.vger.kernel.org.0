@@ -2,48 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B53C47155E9
-	for <lists+linux-usb@lfdr.de>; Tue, 30 May 2023 08:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839F6715640
+	for <lists+linux-usb@lfdr.de>; Tue, 30 May 2023 09:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbjE3G7k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 May 2023 02:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39222 "EHLO
+        id S230230AbjE3HKF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 May 2023 03:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjE3G7d (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 May 2023 02:59:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4EBF0;
-        Mon, 29 May 2023 23:59:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229620AbjE3HKD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 May 2023 03:10:03 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2960E9C;
+        Tue, 30 May 2023 00:10:01 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 634A762ABF;
-        Tue, 30 May 2023 06:59:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C57AC433EF;
-        Tue, 30 May 2023 06:59:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685429971;
-        bh=U77OJ8fJKSyaH0FzfLIhkbSEu3xCuzLCd877xbOniB8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=o9xq2oz6vEhIM1Out6TzkYRnLr9vAbDibtwAIow6Tqz9YCpzpYNX+bMQRIXeHdbZ+
-         bl+8qLeYe2G5mTZydvlInQg572wQC/aApWK3p+EgWqwnhG2PVWf5D7+U7pVIn13PbO
-         /hHQ0+5Lp6hRyN9U7otGztcLg+C8eBFqUW9soGuaurKpJlGUCgJOl+wa7rwpYiDkV8
-         HCdChvBkNFgTjUrrnZKg2CooMj9PoFXKvXkrkIk5ynbZyMOk518FL93KtHOvzEBLVV
-         kusYo05TrPgJk0Q3riUqEQcsfRn+7vha8feCstdwn0h6RMOTCIJBEzdfAH4XUBDONy
-         n1Y7beX6KSIZg==
-From:   Roger Quadros <rogerq@kernel.org>
-To:     gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com
-Cc:     r-gunasekaran@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Roger Quadros <rogerq@kernel.org>
-Subject: [PATCH] usb: typec: tps6598x: Fix broken polling mode after system suspend/resume
-Date:   Tue, 30 May 2023 09:59:26 +0300
-Message-Id: <20230530065926.6161-1-rogerq@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9BD4B66059A8;
+        Tue, 30 May 2023 08:09:59 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685430599;
+        bh=gbkeXGoZObwdN2ipj3haLfblttLYhE6XU/0z3iE9Wkc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aFxwnxPfuAk4Jm9ojPCyvi9YLIrh7MCjtu+w4j6SAfK0FdsUwkjVANz6sM/XBkOwX
+         1oYF/nvrOEVHn5/rb4Zv5fgMqy1Wdj/fWnu8QMICf0wbkK3OwXwBIDkcZbOhpPevqr
+         z7WjnVD1ALHlu0RjcSMm/UrXJvds7b0WczRQduMXFLiaKP9hxG7czljCC0ptvbN/gY
+         A/0okV3nBpsS3RyxUJv2+L4i9poi2pri0b/W7k2I2fMqDEA2vb5ba+0/kTZkp1zLrR
+         1S55V8wm0ne6tpUtyxbpR/OXEYIJAUmos0bY9eVZe71lJpJLAcTsgtM0g5Yxy5HAJY
+         9xjjdIh1UhlMA==
+Message-ID: <4f22b6fd-4801-33f3-e3fe-978c465d37dc@collabora.com>
+Date:   Tue, 30 May 2023 09:09:57 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v6] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
+To:     Prashanth K <quic_prashk@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1685421871-25391-1-git-send-email-quic_prashk@quicinc.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <1685421871-25391-1-git-send-email-quic_prashk@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,28 +59,21 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-During system resume we need to resume the polling workqueue
-if client->irq is not set else polling will no longer work.
+Il 30/05/23 06:44, Prashanth K ha scritto:
+> Currently if we bootup a device without cable connected, then
+> usb-conn-gpio won't call set_role() since last_role is same as
+> current role. This happens because during probe last_role gets
+> initialised to zero.
+> 
+> To avoid this, added a new constant in enum usb_role, last_role
+> is set to USB_ROLE_UNKNOWN before performing initial detection.
+> 
+> While at it, also handle default case for the usb_role switch
+> in cdns3 to avoid build warnings.
+> 
+> Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
+> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
 
-Fixes: 0d6a119cecd7 ("usb: typec: tps6598x: Add support for polling interrupts status")
-Signed-off-by: Roger Quadros <rogerq@kernel.org>
----
- drivers/usb/typec/tipd/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index 438cc40660a1..603dbd44deba 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -920,7 +920,7 @@ static int __maybe_unused tps6598x_resume(struct device *dev)
- 		enable_irq(client->irq);
- 	}
- 
--	if (client->irq)
-+	if (!client->irq)
- 		queue_delayed_work(system_power_efficient_wq, &tps->wq_poll,
- 				   msecs_to_jiffies(POLL_INTERVAL));
- 
--- 
-2.34.1
 
