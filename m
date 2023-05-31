@@ -2,52 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A277173F7
-	for <lists+linux-usb@lfdr.de>; Wed, 31 May 2023 04:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 747CA7173F5
+	for <lists+linux-usb@lfdr.de>; Wed, 31 May 2023 04:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbjEaC6A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 May 2023 22:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
+        id S230296AbjEaC57 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 May 2023 22:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231396AbjEaC57 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 May 2023 22:57:59 -0400
+        with ESMTP id S229600AbjEaC56 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 May 2023 22:57:58 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5624EF9
-        for <linux-usb@vger.kernel.org>; Tue, 30 May 2023 19:57:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E48CF9
+        for <linux-usb@vger.kernel.org>; Tue, 30 May 2023 19:57:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685501878; x=1717037878;
+  t=1685501877; x=1717037877;
   h=date:from:to:cc:subject:message-id;
-  bh=FlCMkWUilEGUnDSEIW4RKFAC6XT3nei0j0DyBV/hF6M=;
-  b=n4BxNtMasdddvFH6dCsJ5hYIgff6jRcpkF7jZUc6VJnCgjCenaIZl56/
-   65AlYEZB7oCRlRysu7OswolAIBlRP/+IIMBRv5lSqLLQcJLJ4IWU9Yyyh
-   3hjzCFPA4OlwEKoLBo/kxqWaPFT5peE1wes9kmJtYnbTfJ71AG5bpenxF
-   LYBJp6vVZydYCAZZLo2yx6U/sjSGGOWbezGtEbs1vuMDbLVS8ZxYroLLe
-   GUKvIh94qjZkIWA/wWuZgiXTrNKJ36NJoOj/xuR51YLxF/N6XZW6joh8R
-   Ju6AzAEo6HvrNH2njfD/Ja6n9r7nyyY9x6/j9ThiAGsKFNSwVt6d12Opl
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="418608873"
+  bh=r3b4WxeLjZdDEK9KIumE+zoFVfWsRRqrJuMPvqXYiCE=;
+  b=RV95LD2FfJr+fVqZ8hEFx/CwUBKYQiSkO/596U5uVMAKpGVxMmI4iQyl
+   zqiJibtvI+jybii3BiRSoJ5mriqGmMYMszUlqeOiSRt6ARmThzNGxZIU8
+   kUeMWL5MzWEZ9xD1dORBeGupMk6DnL/QQPZHK58nuHWM/uSZMX6aDzvfY
+   8mPF2aaCL7bgYjYQijgGAom4wEQMUOz2QBrn7Q8FI/3KcJ4D7wiKRJCdy
+   /N3bspbCRPr2Q/iCVsBNASFRPIir7/+gR9ti1gkgnAbrvQ8pyxmlplR2q
+   1aepediGpxsE4HnNp3uYijQ87sOWHJPkk+SDET/9hBHayx9d1cn67fot6
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="418608869"
 X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="418608873"
+   d="scan'208";a="418608869"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 19:57:56 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="776599409"
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="776599410"
 X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="776599409"
+   d="scan'208";a="776599410"
 Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
   by fmsmga004.fm.intel.com with ESMTP; 30 May 2023 19:57:55 -0700
 Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1q4C27-00011H-09;
-        Wed, 31 May 2023 02:57:55 +0000
-Date:   Wed, 31 May 2023 10:57:18 +0800
+        id 1q4C26-000115-2v;
+        Wed, 31 May 2023 02:57:54 +0000
+Date:   Wed, 31 May 2023 10:57:24 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS WITH WARNING
- 922c0cb578ac9104a22c11a093cc1e0575c35a39
-Message-ID: <20230531025718.PEagR%lkp@intel.com>
+Subject: [usb:usb-linus] BUILD SUCCESS
+ fcfe84236ec0974fe92f0578d1d58ed805c4b70f
+Message-ID: <20230531025724.I7Exf%lkp@intel.com>
 User-Agent: s-nail v14.9.24
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -59,47 +59,16 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 922c0cb578ac9104a22c11a093cc1e0575c35a39  usb: typec: qcom-pmic-typec: Convert to platform remove callback returning void
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: fcfe84236ec0974fe92f0578d1d58ed805c4b70f  usb: typec: tps6598x: Fix broken polling mode after system suspend/resume
 
-Warning reports:
-
-https://lore.kernel.org/oe-kbuild-all/202305300608.8CuLyqAL-lkp@intel.com
-
-Warning: (recently discovered and may have been fixed)
-
-drivers/usb/cdns3/cdns3-starfive.c:23: warning: expecting prototype for cdns3(). Prototype was for USB_STRAP_HOST() instead
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arc-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm64-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- m68k-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- mips-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- mips-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- powerpc-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- riscv-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-`-- s390-allyesconfig
-    `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-
-elapsed time: 725m
+elapsed time: 726m
 
 configs tested: 40
 configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
 tested configs:
 alpha                            allyesconfig   gcc  
