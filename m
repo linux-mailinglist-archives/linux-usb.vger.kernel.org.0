@@ -2,109 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9407177FC
-	for <lists+linux-usb@lfdr.de>; Wed, 31 May 2023 09:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F78717874
+	for <lists+linux-usb@lfdr.de>; Wed, 31 May 2023 09:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234682AbjEaHXU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 31 May 2023 03:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33304 "EHLO
+        id S234310AbjEaHlh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 May 2023 03:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234697AbjEaHWv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 May 2023 03:22:51 -0400
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C3118D;
-        Wed, 31 May 2023 00:22:31 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-565ca65e7ffso36175857b3.0;
-        Wed, 31 May 2023 00:22:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685517750; x=1688109750;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R/WHCq8jPwA2zngW84yg7XRtXszELkTMTFuhdg7hSrw=;
-        b=BT5j2Kb7qNgQ8no0zoXaMSBEeWEKgc/jxKrISqGxZSGz7Reoj4Yi2na+ed2LRsbva8
-         NsMHnkOqIRue96O54Zqhcua+delagkK3DmJlHQk5Z96MrNykFlUgRspqIJ/8O1VsMvJP
-         fSyNlcfe0OSkHYBFwN6HRmoqcMY/i8XpkW3FXzugzO6ulGGK8r5qbkuhqks3BVE65l2S
-         pwBVgvxs0s1/QiyYimfGlQ4k6KtyNvv8sNWU5RWum5eyP/euDasfW9EASe+JsUkgi6kn
-         /jHee52Ea1zdarcXkYBuUrKvZ/vOdqF0QASIFQX3EEa9LUz5zPRoFHFOm4XX/hPvptTs
-         +Oeg==
-X-Gm-Message-State: AC+VfDyNdzApRD/cEKqaNr5m10E3+N4iOmjauvgyhJaD2nR7v/a3qlLa
-        JKJR8DYH4VBF3Dr7A1rR0viQu/hRfoHzjg==
-X-Google-Smtp-Source: ACHHUZ5e8Xgqcp4junm5e5QE9X83Er5U03MW0jMpqLmRvGRfPgDDZk8vRJaiPBAro2PaXwYRjWssrQ==
-X-Received: by 2002:a81:83cf:0:b0:561:b58e:31ff with SMTP id t198-20020a8183cf000000b00561b58e31ffmr4463225ywf.44.1685517750222;
-        Wed, 31 May 2023 00:22:30 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id s130-20020a817788000000b00559ec10f245sm5124138ywc.103.2023.05.31.00.22.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 00:22:29 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-565c9109167so36894997b3.2;
-        Wed, 31 May 2023 00:22:28 -0700 (PDT)
-X-Received: by 2002:a0d:dd92:0:b0:568:be91:c2c0 with SMTP id
- g140-20020a0ddd92000000b00568be91c2c0mr4648284ywe.6.1685517748466; Wed, 31
- May 2023 00:22:28 -0700 (PDT)
+        with ESMTP id S232077AbjEaHlf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 May 2023 03:41:35 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69D793
+        for <linux-usb@vger.kernel.org>; Wed, 31 May 2023 00:41:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685518894; x=1717054894;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bA6YHhl1fzzkusX+8GIYc+yYS3px/ug2lC/YP/W/OJE=;
+  b=Wf4t2jnUqbNfvyoaFEwPQSMbYR9BF5CU8Rubn5osF0opPiJHyac8dIuv
+   SygomZc0feSTDmWLk71wSLmU0AHx+XgXcZMiEXNKHisYn6FsmP8iXSKJn
+   OMXyackX7YYNNTFVExyqyvaiKwzf5ERMxJy0afzOB3SdyR+IFdyb1dFGx
+   IJC4wv3douRDkQK/Y0szmqVF7B5HZisLPaMs5iet46LMGTiw32idG6Ym+
+   po28pIJ8wDDu+8NN/Ilb3JQWzcPsxHaiyhhVXRJuN4rrM84GKBM82nlCp
+   DxbY6KOy3y7ctBUhX3w/oR9OWxw19i2RFJWaCkrn0jjFNdAeRhHmQt732
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="420930058"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="420930058"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 00:41:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="771901018"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="771901018"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 31 May 2023 00:41:26 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id CA0D4589; Wed, 31 May 2023 10:41:31 +0300 (EEST)
+Date:   Wed, 31 May 2023 10:41:31 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        beld zhang <beldzhang@gmail.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH] thunderbolt: Mask ring interrupt on Intel hardware as
+ well
+Message-ID: <20230531074131.GJ45886@black.fi.intel.com>
+References: <20230530075555.35239-1-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
-References: <20230530161720.179927-1-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20230530161720.179927-1-biju.das.jz@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 31 May 2023 09:22:15 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUY=tBdCuz=GD+8C9N395oXT+2OTSZpoWFz8SqSo8FVuA@mail.gmail.com>
-Message-ID: <CAMuHMdUY=tBdCuz=GD+8C9N395oXT+2OTSZpoWFz8SqSo8FVuA@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: gadget: udc: renesas_usb3: Fix RZ/V2M
- {modprobe,bind} error
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Zheng Wang <zyytlz.wz@163.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-usb@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230530075555.35239-1-mika.westerberg@linux.intel.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 30, 2023 at 6:17 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> Currently {modprobe, bind} after {rmmod, unbind} results in probe failure.
->
-> genirq: Flags mismatch irq 22. 00000004 (85070400.usb3drd) vs. 00000004 (85070400.usb3drd)
-> renesas_usb3: probe of 85070000.usb3peri failed with error -16
->
-> The reason is, it is trying to register an interrupt handler for the same
-> IRQ twice. The devm_request_irq() was called with the parent device.
-> So the interrupt handler won't be unregistered when the usb3-peri device
-> is unbound.
->
-> Fix this issue by replacing "parent dev"->"dev" as the irq resource
-> is managed by this driver.
->
-> Fixes: 9cad72dfc556 ("usb: gadget: Add support for RZ/V2M USB3DRD driver")
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
-> v1->v2:
->  * Added missing ')' at the end of the line for fixes tag.
->  * Updated commit description.
->  * Replaced "ddata->dev"->"&pdev->dev" for the devname parameter.
+On Tue, May 30, 2023 at 10:55:55AM +0300, Mika Westerberg wrote:
+> When resuming from system sleep states the driver issues following
+> warning on Intel hardware:
+> 
+>   thunderbolt 0000:07:00.0: interrupt for TX ring 0 is already enabled
+> 
+> The reason for this is that the commit in question did not mask the ring
+> interrupt on Intel hardware leaving the interrupt active. Fix this by
+> masking it also in Intel hardware.
+> 
+> Reported-by: beld zhang <beldzhang@gmail.com>
+> Closes: https://lore.kernel.org/linux-usb/ZHKW5NeabmfhgLbY@debian.me/
+> Fixes: c4af8e3fecd0 ("thunderbolt: Clear registers properly when auto clear isn't in use")
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Applied to thunderbolt.git/fixes.
