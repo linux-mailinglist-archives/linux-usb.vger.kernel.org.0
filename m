@@ -2,139 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 557B87174A5
-	for <lists+linux-usb@lfdr.de>; Wed, 31 May 2023 06:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9407177FC
+	for <lists+linux-usb@lfdr.de>; Wed, 31 May 2023 09:23:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234166AbjEaECY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 May 2023 00:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
+        id S234682AbjEaHXU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 31 May 2023 03:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234071AbjEaECP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 May 2023 00:02:15 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E92C10E
-        for <linux-usb@vger.kernel.org>; Tue, 30 May 2023 21:02:11 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565ba5667d5so87991227b3.0
-        for <linux-usb@vger.kernel.org>; Tue, 30 May 2023 21:02:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685505730; x=1688097730;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pTATTkgvxztq9cna9gYn1cQG7KZBsx+3nMydlu+2mlE=;
-        b=al+sJCyOmkaF/6ULIYjfy2VcVPz2C1bJQqcCbgFH/qdd7Y3x3ihhhi+6+rzdnEiUv8
-         lWpn7yW5seO+rgx/NlgTtfMTIYxkGcVq+TSRBWky9mfQUVCpRWY93+2uS5MuaL75iEDA
-         JQ10HgpgPVDpe+CX3mqaEzbLU4+OSdpKbgU8DULnbEDbNMZ98Xg5KZYbWZrFG/RMGaGR
-         jTnl1guy/5DX8hhiygVrhV049zJ1vcM2cd3XqRd4+0afw78MpemU5/cde1on4KzSuR9e
-         ipRGINz/G0pNg9bKudvd2xs9iSVvrJ7sMHbVynO6oRjOrqbl9maLQHug6QJH1nM5+8b2
-         OqGQ==
+        with ESMTP id S234697AbjEaHWv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 May 2023 03:22:51 -0400
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C3118D;
+        Wed, 31 May 2023 00:22:31 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-565ca65e7ffso36175857b3.0;
+        Wed, 31 May 2023 00:22:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685505730; x=1688097730;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pTATTkgvxztq9cna9gYn1cQG7KZBsx+3nMydlu+2mlE=;
-        b=JhFILVPq7AFzqt7Um2ZWo27D+zSDml3E9hV3gp55xL0TFlt9wRKfQCcaEwaGQe6tkq
-         Dl83QeHb7INYJdKV9L06xP9pNCV2dFukRtk/D39Q41+tLYSGxWDSD6T2HNgphyKslIsC
-         +hucEq9EyzuRHkXMwWYBQMIGBnOzaTlKI5bdkMn3B3s0sZt2keCubMPSr305o+bIz8Z6
-         pkhS978xZpSuJzJlC8flcg1WJrKek+wcGoyqYZcFZ5H66kQry51Uhzi7KosxJhp2KcoP
-         81+duJDRcf8DWErd4+MJnXbNnhW+SuYTHihGPnOM/VOBxs7Olau8DLVNeGw4NsyqFA1W
-         Izww==
-X-Gm-Message-State: AC+VfDxifDqm0ewVtkr6A7/IrIfpKXblgifJMrpHGR2+KIkpnVRurBq1
-        ownldY892OU88VEAUaLTD02FoUIXwtw=
-X-Google-Smtp-Source: ACHHUZ4p0nM25uD1L98TaYBOU36BLpBLGMgEtVGS7cVeo7z12dgaiYwxkeFtmy9TSgo24jh7ThbNKIabBSM=
-X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
- (user=badhri job=sendgmr) by 2002:a81:b661:0:b0:565:ce25:2693 with SMTP id
- h33-20020a81b661000000b00565ce252693mr2529499ywk.3.1685505730774; Tue, 30 May
- 2023 21:02:10 -0700 (PDT)
-Date:   Wed, 31 May 2023 04:02:03 +0000
-In-Reply-To: <20230531040203.19295-1-badhri@google.com>
-Mime-Version: 1.0
-References: <20230531040203.19295-1-badhri@google.com>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230531040203.19295-3-badhri@google.com>
-Subject: [PATCH v5 3/3] usb: gadget: udc: core: Prevent UDC from starting when unbound
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        colin.i.king@gmail.com, xuetao09@huawei.com,
-        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
-        peter.chen@freescale.com, balbi@ti.com, francesco@dolcini.it,
-        alistair@alistair23.me, stephan@gerhold.net, bagasdotme@gmail.com,
-        luca@z3ntu.xyz
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>,
-        stable <stable@kernel.org>
+        d=1e100.net; s=20221208; t=1685517750; x=1688109750;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R/WHCq8jPwA2zngW84yg7XRtXszELkTMTFuhdg7hSrw=;
+        b=BT5j2Kb7qNgQ8no0zoXaMSBEeWEKgc/jxKrISqGxZSGz7Reoj4Yi2na+ed2LRsbva8
+         NsMHnkOqIRue96O54Zqhcua+delagkK3DmJlHQk5Z96MrNykFlUgRspqIJ/8O1VsMvJP
+         fSyNlcfe0OSkHYBFwN6HRmoqcMY/i8XpkW3FXzugzO6ulGGK8r5qbkuhqks3BVE65l2S
+         pwBVgvxs0s1/QiyYimfGlQ4k6KtyNvv8sNWU5RWum5eyP/euDasfW9EASe+JsUkgi6kn
+         /jHee52Ea1zdarcXkYBuUrKvZ/vOdqF0QASIFQX3EEa9LUz5zPRoFHFOm4XX/hPvptTs
+         +Oeg==
+X-Gm-Message-State: AC+VfDyNdzApRD/cEKqaNr5m10E3+N4iOmjauvgyhJaD2nR7v/a3qlLa
+        JKJR8DYH4VBF3Dr7A1rR0viQu/hRfoHzjg==
+X-Google-Smtp-Source: ACHHUZ5e8Xgqcp4junm5e5QE9X83Er5U03MW0jMpqLmRvGRfPgDDZk8vRJaiPBAro2PaXwYRjWssrQ==
+X-Received: by 2002:a81:83cf:0:b0:561:b58e:31ff with SMTP id t198-20020a8183cf000000b00561b58e31ffmr4463225ywf.44.1685517750222;
+        Wed, 31 May 2023 00:22:30 -0700 (PDT)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id s130-20020a817788000000b00559ec10f245sm5124138ywc.103.2023.05.31.00.22.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 00:22:29 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-565c9109167so36894997b3.2;
+        Wed, 31 May 2023 00:22:28 -0700 (PDT)
+X-Received: by 2002:a0d:dd92:0:b0:568:be91:c2c0 with SMTP id
+ g140-20020a0ddd92000000b00568be91c2c0mr4648284ywe.6.1685517748466; Wed, 31
+ May 2023 00:22:28 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230530161720.179927-1-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20230530161720.179927-1-biju.das.jz@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 31 May 2023 09:22:15 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUY=tBdCuz=GD+8C9N395oXT+2OTSZpoWFz8SqSo8FVuA@mail.gmail.com>
+Message-ID: <CAMuHMdUY=tBdCuz=GD+8C9N395oXT+2OTSZpoWFz8SqSo8FVuA@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: gadget: udc: renesas_usb3: Fix RZ/V2M
+ {modprobe,bind} error
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Zheng Wang <zyytlz.wz@163.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-usb@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-UDC should neither be started nor pulled up unless the gadget driver is
-bound. The new flag "allow_start" is now set by gadget_bind_driver()
-and cleared by gadget_unbind_driver(). usb_gadget_udc_start_locked()
-now checks whether allow_start is set before starting the UDC by
-invoking the ->udc_start() callback.
+On Tue, May 30, 2023 at 6:17 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> Currently {modprobe, bind} after {rmmod, unbind} results in probe failure.
+>
+> genirq: Flags mismatch irq 22. 00000004 (85070400.usb3drd) vs. 00000004 (85070400.usb3drd)
+> renesas_usb3: probe of 85070000.usb3peri failed with error -16
+>
+> The reason is, it is trying to register an interrupt handler for the same
+> IRQ twice. The devm_request_irq() was called with the parent device.
+> So the interrupt handler won't be unregistered when the usb3-peri device
+> is unbound.
+>
+> Fix this issue by replacing "parent dev"->"dev" as the irq resource
+> is managed by this driver.
+>
+> Fixes: 9cad72dfc556 ("usb: gadget: Add support for RZ/V2M USB3DRD driver")
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+> v1->v2:
+>  * Added missing ')' at the end of the line for fixes tag.
+>  * Updated commit description.
+>  * Replaced "ddata->dev"->"&pdev->dev" for the devname parameter.
 
-Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
-Cc: stable <stable@kernel.org>
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
-v5 is the first version in this series.
----
- drivers/usb/gadget/udc/core.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 6ffe5fda8bb7..ac9d6186815d 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -37,6 +37,8 @@ static const struct bus_type gadget_bus_type;
-  * @vbus: for udcs who care about vbus status, this value is real vbus status;
-  * for udcs who do not care about vbus status, this value is always true
-  * @started: the UDC's started state. True if the UDC had started.
-+ * @allow_start: Indicates whether UDC is allowed to start. Set/cleared by gadget_(un)bind_driver()
-+ * after gadget driver is bound or unbound.
-  * @connect_lock: protects udc->vbus, udc->started, gadget->connect, gadget->deactivate related
-  * functions. usb_gadget_connect_locked, usb_gadget_disconnect_locked,
-  * usb_udc_connect_control_locked, usb_gadget_udc_start_locked, usb_gadget_udc_stop_locked are
-@@ -52,6 +54,7 @@ struct usb_udc {
- 	struct list_head		list;
- 	bool				vbus;
- 	bool				started;
-+	bool				allow_start;
- 	struct work_struct		vbus_work;
- 	struct mutex			connect_lock;
- };
-@@ -1204,6 +1207,9 @@ static inline int usb_gadget_udc_start_locked(struct usb_udc *udc)
- 	if (udc->started) {
- 		dev_err(&udc->dev, "UDC had already started\n");
- 		return -EBUSY;
-+	} else if (!udc->allow_start) {
-+		dev_err(&udc->dev, "UDC not allowed to start. Is gadget driver bound ?\n");
-+		return -EIO;
- 	}
- 
- 	ret = udc->gadget->ops->udc_start(udc->gadget, udc->driver);
-@@ -1590,6 +1596,7 @@ static int gadget_bind_driver(struct device *dev)
- 		goto err_bind;
- 
- 	mutex_lock(&udc->connect_lock);
-+	udc->allow_start = true;
- 	ret = usb_gadget_udc_start_locked(udc);
- 	if (ret) {
- 		mutex_unlock(&udc->connect_lock);
-@@ -1630,6 +1637,7 @@ static void gadget_unbind_driver(struct device *dev)
- 
- 	cancel_work_sync(&udc->vbus_work);
- 	mutex_lock(&udc->connect_lock);
-+	udc->allow_start = false;
- 	usb_gadget_disconnect_locked(gadget);
- 	usb_gadget_disable_async_callbacks(udc);
- 	if (gadget->irq)
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.41.0.rc0.172.g3f132b7071-goog
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
