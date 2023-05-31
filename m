@@ -2,134 +2,240 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6236A7188A4
-	for <lists+linux-usb@lfdr.de>; Wed, 31 May 2023 19:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9447188AB
+	for <lists+linux-usb@lfdr.de>; Wed, 31 May 2023 19:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbjEaRlt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 May 2023 13:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
+        id S229547AbjEaRms (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 May 2023 13:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjEaRln (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 May 2023 13:41:43 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1EB2EE55
-        for <linux-usb@vger.kernel.org>; Wed, 31 May 2023 10:41:00 -0700 (PDT)
-Received: (qmail 445117 invoked by uid 1000); 31 May 2023 13:40:53 -0400
-Date:   Wed, 31 May 2023 13:40:53 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
-        xuetao09@huawei.com, quic_eserrao@quicinc.com,
-        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
-        balbi@ti.com, francesco@dolcini.it, alistair@alistair23.me,
-        stephan@gerhold.net, bagasdotme@gmail.com, luca@z3ntu.xyz,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, stable <stable@kernel.org>
-Subject: Re: [PATCH v5 3/3] usb: gadget: udc: core: Prevent UDC from starting
- when unbound
-Message-ID: <9a537d74-28be-48fb-85e0-628f3385de7e@rowland.harvard.edu>
-References: <20230531040203.19295-1-badhri@google.com>
- <20230531040203.19295-3-badhri@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531040203.19295-3-badhri@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S229646AbjEaRmj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 May 2023 13:42:39 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7593B128
+        for <linux-usb@vger.kernel.org>; Wed, 31 May 2023 10:42:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685554957; x=1717090957;
+  h=date:from:to:cc:subject:message-id;
+  bh=oTfqfZVaDQgnFSgZ7B9wjkTceD2NP2Aw+G7Tg0WjGqE=;
+  b=SGcwtjUeekE/jxWQza4aRdRQd/2m7oBXSG0ZubgOSfZXo0ykcX3Nq8Ni
+   laXCxtxALdd92ZDGljV9qNg1z56j9YuvL7TnVXjCBk+P+PGXv6AWku1JC
+   HLDwt7aBnecZ7DOXSrrN3jhOe2+4ee/lqRxSilJmpk6tAJJ4ADs0pBGBl
+   F//hEVptXOr/k+KG5VGes8kYyMrMef1Vhvct3bsfpq4tm3fZ1tRbuo6T2
+   ORNy1puOiniU5LJLF/qFTPzcuFPaV23nUnTyvqGlmyekFGnIA2ejKkdIN
+   41Rbx3GlqRcTimRKVYN9HDi5joL1j7HcH16hh2TfF9p/VCQGx65m06+1/
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="358579344"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="358579344"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 10:42:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="740057588"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="740057588"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 31 May 2023 10:42:35 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q4PqE-0001WZ-1n;
+        Wed, 31 May 2023 17:42:34 +0000
+Date:   Thu, 01 Jun 2023 01:41:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Memory Management List <linux-mm@kvack.org>,
+        dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org
+Subject: [linux-next:master] BUILD REGRESSION
+ d4cee89031c80066ec461bb77b5e13a4f37d5fd2
+Message-ID: <20230531174141.u9Px1%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 31, 2023 at 04:02:03AM +0000, Badhri Jagan Sridharan wrote:
-> UDC should neither be started nor pulled up unless the gadget driver is
-> bound. The new flag "allow_start" is now set by gadget_bind_driver()
-> and cleared by gadget_unbind_driver(). usb_gadget_udc_start_locked()
-> now checks whether allow_start is set before starting the UDC by
-> invoking the ->udc_start() callback.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: d4cee89031c80066ec461bb77b5e13a4f37d5fd2  Add linux-next specific files for 20230531
 
-"allow_start" isn't quite the right name either, because there is a 
-short time interval during which the UDC is started but we don't want 
-to allow it to connect to the host (this occurs in 
-gadget_unbind_driver() between the disconnect call and the 
-usb_gadge_udc_stop call).  A more accurate name would be "allow_connect" 
-or "allow_pullup".
+Error/Warning reports:
 
-> Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
-> Cc: stable <stable@kernel.org>
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
-> v5 is the first version in this series.
-> ---
->  drivers/usb/gadget/udc/core.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index 6ffe5fda8bb7..ac9d6186815d 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -37,6 +37,8 @@ static const struct bus_type gadget_bus_type;
->   * @vbus: for udcs who care about vbus status, this value is real vbus status;
->   * for udcs who do not care about vbus status, this value is always true
->   * @started: the UDC's started state. True if the UDC had started.
-> + * @allow_start: Indicates whether UDC is allowed to start. Set/cleared by gadget_(un)bind_driver()
-> + * after gadget driver is bound or unbound.
->   * @connect_lock: protects udc->vbus, udc->started, gadget->connect, gadget->deactivate related
->   * functions. usb_gadget_connect_locked, usb_gadget_disconnect_locked,
->   * usb_udc_connect_control_locked, usb_gadget_udc_start_locked, usb_gadget_udc_stop_locked are
+https://lore.kernel.org/oe-kbuild-all/202305311652.OP9x8xkW-lkp@intel.com
 
-As before, wrap the comments around column 76.
+Error/Warning: (recently discovered and may have been fixed)
 
-> @@ -52,6 +54,7 @@ struct usb_udc {
->  	struct list_head		list;
->  	bool				vbus;
->  	bool				started;
-> +	bool				allow_start;
->  	struct work_struct		vbus_work;
->  	struct mutex			connect_lock;
->  };
-> @@ -1204,6 +1207,9 @@ static inline int usb_gadget_udc_start_locked(struct usb_udc *udc)
->  	if (udc->started) {
->  		dev_err(&udc->dev, "UDC had already started\n");
->  		return -EBUSY;
-> +	} else if (!udc->allow_start) {
-> +		dev_err(&udc->dev, "UDC not allowed to start. Is gadget driver bound ?\n");
-> +		return -EIO;
->  	}
+include/drm/drm_print.h:456:39: error: format '%ld' expects argument of type 'long int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Werror=format=]
+include/linux/usb/typec_mux.h:77:1: error: expected identifier or '(' before '{' token
 
-This isn't the right test or the right place.  We want to prevent the 
-UDC from connecting to the host, not prevent it from starting.
+Error/Warning ids grouped by kconfigs:
 
->  
->  	ret = udc->gadget->ops->udc_start(udc->gadget, udc->driver);
-> @@ -1590,6 +1596,7 @@ static int gadget_bind_driver(struct device *dev)
->  		goto err_bind;
->  
->  	mutex_lock(&udc->connect_lock);
-> +	udc->allow_start = true;
->  	ret = usb_gadget_udc_start_locked(udc);
->  	if (ret) {
->  		mutex_unlock(&udc->connect_lock);
-> @@ -1630,6 +1637,7 @@ static void gadget_unbind_driver(struct device *dev)
->  
->  	cancel_work_sync(&udc->vbus_work);
->  	mutex_lock(&udc->connect_lock);
-> +	udc->allow_start = false;
->  	usb_gadget_disconnect_locked(gadget);
->  	usb_gadget_disable_async_callbacks(udc);
->  	if (gadget->irq)
+gcc_recent_errors
+|-- i386-allyesconfig
+|   `-- include-drm-drm_print.h:error:format-ld-expects-argument-of-type-long-int-but-argument-has-type-size_t-aka-unsigned-int
+`-- parisc-randconfig-r025-20230531
+    `-- include-linux-usb-typec_mux.h:error:expected-identifier-or-(-before-token
 
-Here is where the problem about the vbus work item getting requeued can 
-be fixed.  Clear the allow_connect flag before the call to 
-cancel_work_sync().  That way, even if the vbus work item gets queued 
-again after it is cancelled, when it does run it won't do anything.
+elapsed time: 724m
 
-Although, come to think of it, there is still the problem of making sure 
-that the work item doesn't run after the udc has been deallocated.  It 
-looks like you will also need to cancel the work item at the end of 
-usb_del_gadget().  At that point the UDC has already been stopped, so it 
-won't call usb_hcd_vbus_handler() again.
+configs tested: 149
+configs skipped: 5
 
-Alan Stern
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r006-20230531   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r001-20230531   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r011-20230531   gcc  
+arc                  randconfig-r043-20230531   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                           h3600_defconfig   gcc  
+arm                  randconfig-r004-20230531   clang
+arm                  randconfig-r013-20230531   gcc  
+arm                  randconfig-r046-20230531   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r012-20230531   clang
+arm64                randconfig-r034-20230531   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r033-20230531   gcc  
+hexagon              randconfig-r002-20230531   clang
+hexagon              randconfig-r041-20230531   clang
+hexagon              randconfig-r045-20230531   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230531   gcc  
+i386                 randconfig-i002-20230531   gcc  
+i386                 randconfig-i003-20230531   gcc  
+i386                 randconfig-i004-20230531   gcc  
+i386                 randconfig-i005-20230531   gcc  
+i386                 randconfig-i006-20230531   gcc  
+i386                 randconfig-i011-20230531   clang
+i386                 randconfig-i012-20230531   clang
+i386                 randconfig-i013-20230531   clang
+i386                 randconfig-i014-20230531   clang
+i386                 randconfig-i015-20230531   clang
+i386                 randconfig-i016-20230531   clang
+i386                 randconfig-i051-20230531   gcc  
+i386                 randconfig-i052-20230531   gcc  
+i386                 randconfig-i053-20230531   gcc  
+i386                 randconfig-i054-20230531   gcc  
+i386                 randconfig-i055-20230531   gcc  
+i386                 randconfig-i056-20230531   gcc  
+i386                 randconfig-i061-20230531   gcc  
+i386                 randconfig-i062-20230531   gcc  
+i386                 randconfig-i063-20230531   gcc  
+i386                 randconfig-i064-20230531   gcc  
+i386                 randconfig-i065-20230531   gcc  
+i386                 randconfig-i066-20230531   gcc  
+i386                 randconfig-i071-20230531   clang
+i386                 randconfig-i072-20230531   clang
+i386                 randconfig-i073-20230531   clang
+i386                 randconfig-i074-20230531   clang
+i386                 randconfig-i075-20230531   clang
+i386                 randconfig-i076-20230531   clang
+i386                 randconfig-i081-20230531   clang
+i386                 randconfig-i082-20230531   clang
+i386                 randconfig-i083-20230531   clang
+i386                 randconfig-i084-20230531   clang
+i386                 randconfig-i085-20230531   clang
+i386                 randconfig-i086-20230531   clang
+i386                 randconfig-i091-20230531   gcc  
+i386                 randconfig-i092-20230531   gcc  
+i386                 randconfig-i093-20230531   gcc  
+i386                 randconfig-i094-20230531   gcc  
+i386                 randconfig-i095-20230531   gcc  
+i386                 randconfig-i096-20230531   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        mvme147_defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                     decstation_defconfig   gcc  
+nios2                               defconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r016-20230531   gcc  
+parisc               randconfig-r025-20230531   gcc  
+parisc               randconfig-r026-20230531   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r015-20230531   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r031-20230531   gcc  
+riscv                randconfig-r042-20230531   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r003-20230531   gcc  
+s390                 randconfig-r044-20230531   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r022-20230531   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r006-20230531   gcc  
+sparc64      buildonly-randconfig-r004-20230531   gcc  
+sparc64      buildonly-randconfig-r005-20230531   gcc  
+sparc64              randconfig-r032-20230531   gcc  
+sparc64              randconfig-r035-20230531   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230531   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230531   gcc  
+x86_64               randconfig-a002-20230531   gcc  
+x86_64               randconfig-a003-20230531   gcc  
+x86_64               randconfig-a004-20230531   gcc  
+x86_64               randconfig-a005-20230531   gcc  
+x86_64               randconfig-a006-20230531   gcc  
+x86_64               randconfig-a011-20230531   clang
+x86_64               randconfig-a012-20230531   clang
+x86_64               randconfig-a013-20230531   clang
+x86_64               randconfig-a014-20230531   clang
+x86_64               randconfig-k001-20230531   clang
+x86_64               randconfig-r021-20230531   clang
+x86_64               randconfig-r036-20230531   gcc  
+x86_64               randconfig-x056-20230531   clang
+x86_64               randconfig-x061-20230531   clang
+x86_64               randconfig-x062-20230531   clang
+x86_64               randconfig-x063-20230531   clang
+x86_64               randconfig-x064-20230531   clang
+x86_64               randconfig-x065-20230531   clang
+x86_64               randconfig-x066-20230531   clang
+x86_64               randconfig-x081-20230531   gcc  
+x86_64               randconfig-x082-20230531   gcc  
+x86_64               randconfig-x083-20230531   gcc  
+x86_64               randconfig-x084-20230531   gcc  
+x86_64               randconfig-x085-20230531   gcc  
+x86_64               randconfig-x086-20230531   gcc  
+x86_64               randconfig-x091-20230531   clang
+x86_64               randconfig-x092-20230531   clang
+x86_64               randconfig-x093-20230531   clang
+x86_64               randconfig-x094-20230531   clang
+x86_64               randconfig-x095-20230531   clang
+x86_64               randconfig-x096-20230531   clang
+x86_64                               rhel-8.3   gcc  
+xtensa       buildonly-randconfig-r003-20230531   gcc  
+xtensa               randconfig-r005-20230531   gcc  
+xtensa               randconfig-r024-20230531   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
