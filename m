@@ -2,72 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E340A7172CD
-	for <lists+linux-usb@lfdr.de>; Wed, 31 May 2023 03:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A277173F7
+	for <lists+linux-usb@lfdr.de>; Wed, 31 May 2023 04:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233818AbjEaBBm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 May 2023 21:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
+        id S231640AbjEaC6A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 May 2023 22:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbjEaBBl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 May 2023 21:01:41 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26393F3
-        for <linux-usb@vger.kernel.org>; Tue, 30 May 2023 18:01:40 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565a33c35f6so61076397b3.1
-        for <linux-usb@vger.kernel.org>; Tue, 30 May 2023 18:01:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685494899; x=1688086899;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=pOgNjtx+eE8z0HyLOOopMR/pNC+bNEk+zPpSK0J4n9k=;
-        b=JDIdmMFsxDbYH6UZ9pYMKLDLvGLA5btWn6PqhTajCP5mnUhuO3F+lv4s5hCoMd2/3Z
-         DUD+ZoPZO6bEAuCz0W/OeJhnAV3lCws6xYfcRh/0rRajy71dwvtAbGdYtRN9C1Ir4G8z
-         fwzoLE+HSupHZtTO3N7zk1j4zcHxtru9w5yTDJ0D3NsH8OkWefghpKdSBF+QgeIodr8h
-         /dsnLh45Wtdx3l1SvfXxFViGEsRb7jaIgAUgSTCPMXKB99zCb30pjizGyDYmBwrCyKNW
-         j/uhgmlCdM8YoumNo6NH7Em5GvkI1yuUms3mpDvHMPY+wLr2WirvSfCSI3zGWjh4GPRL
-         N+AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685494899; x=1688086899;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pOgNjtx+eE8z0HyLOOopMR/pNC+bNEk+zPpSK0J4n9k=;
-        b=E6WtAdp/tEEknQBUFolvyNa8XGQmr0MihHCJwBX7rgv2K0lJeWHswSi2Hd0pAeReVQ
-         vKM72fjqvxTzpRHdSiq2nF+GD63a9Hi8MiVveyXrYdUIZiATAEaxDvBZPDEmzG95ShjQ
-         cC3p71LyDFnbrAWM9bexS3ybrXjwWAxZ50rceuJZbHpSQBTOsLCHZgdXbwDopVbjw9SR
-         2bNpWWIVwC8wvYqpkUMRVfpc1YOe2X5xvrx34pOykgykg/EgdS2oSFO0RJq2P4mp+SL4
-         xuBAoHn1cr6YnJsVZO5DruTWvcXrC9mSpxcCe8MUNg5iPvMnFQUA0exdNTF2I870ZMdU
-         eBmA==
-X-Gm-Message-State: AC+VfDz5F1sYQul5cVoWd/qnmh2EjpwS8JTHKy6hbpfkppXrmQ3JMzV/
-        2WJ+aGXDWGs6yTzmhtoj5EEhG/IKoEg=
-X-Google-Smtp-Source: ACHHUZ4o5VA1clccik8M9xqoVeJUOnvjLsXlRfBScsiPy6ow2aPvBMVI0IPGrcP5YsqNLGD2jTZimodU1wY=
-X-Received: from royluo-cloudtop0.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:bb8])
- (user=royluo job=sendgmr) by 2002:a81:ae45:0:b0:566:861:e451 with SMTP id
- g5-20020a81ae45000000b005660861e451mr2351315ywk.7.1685494899412; Tue, 30 May
- 2023 18:01:39 -0700 (PDT)
-Date:   Wed, 31 May 2023 01:01:34 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230531010134.1092942-1-royluo@google.com>
-Subject: [RFC PATCH v2] usb: core: add sysfs entry for usb device state
-From:   Roy Luo <royluo@google.com>
-To:     raychi@google.com, badhri@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bastien Nocera <hadess@hadess.net>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Douglas Anderson <dianders@chromium.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Roy Luo <royluo@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        with ESMTP id S231396AbjEaC57 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 May 2023 22:57:59 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5624EF9
+        for <linux-usb@vger.kernel.org>; Tue, 30 May 2023 19:57:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685501878; x=1717037878;
+  h=date:from:to:cc:subject:message-id;
+  bh=FlCMkWUilEGUnDSEIW4RKFAC6XT3nei0j0DyBV/hF6M=;
+  b=n4BxNtMasdddvFH6dCsJ5hYIgff6jRcpkF7jZUc6VJnCgjCenaIZl56/
+   65AlYEZB7oCRlRysu7OswolAIBlRP/+IIMBRv5lSqLLQcJLJ4IWU9Yyyh
+   3hjzCFPA4OlwEKoLBo/kxqWaPFT5peE1wes9kmJtYnbTfJ71AG5bpenxF
+   LYBJp6vVZydYCAZZLo2yx6U/sjSGGOWbezGtEbs1vuMDbLVS8ZxYroLLe
+   GUKvIh94qjZkIWA/wWuZgiXTrNKJ36NJoOj/xuR51YLxF/N6XZW6joh8R
+   Ju6AzAEo6HvrNH2njfD/Ja6n9r7nyyY9x6/j9ThiAGsKFNSwVt6d12Opl
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="418608873"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="418608873"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 19:57:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="776599409"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="776599409"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 30 May 2023 19:57:55 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q4C27-00011H-09;
+        Wed, 31 May 2023 02:57:55 +0000
+Date:   Wed, 31 May 2023 10:57:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS WITH WARNING
+ 922c0cb578ac9104a22c11a093cc1e0575c35a39
+Message-ID: <20230531025718.PEagR%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,154 +59,90 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Expose usb device state to userland as the information is useful in
-detecting non-compliant setups and diagnosing enumeration failures.
-For example:
-- End-to-end signal integrity issues: the device would fail port reset
-  repeatedly and thus be stuck in POWERED state.
-- Charge-only cables (missing D+/D- lines): the device would never enter
-  POWERED state as the HC would not see any pullup.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 922c0cb578ac9104a22c11a093cc1e0575c35a39  usb: typec: qcom-pmic-typec: Convert to platform remove callback returning void
 
-What's the status quo?
-We do have error logs such as "Cannot enable. Maybe the USB cable is bad?"
-to flag potential setup issues, but there's no good way to expose them to
-userspace.
+Warning reports:
 
-Why add a sysfs entry in struct usb_port instead of struct usb_device?
-The struct usb_device is not device_add() to the system until it's in
-ADDRESS state hence we would miss the first two states. The struct
-usb_port is a better place to keep the information because its life
-cycle is longer than the struct usb_device that is attached to the port.
+https://lore.kernel.org/oe-kbuild-all/202305300608.8CuLyqAL-lkp@intel.com
 
-Signed-off-by: Roy Luo <royluo@google.com>
----
-Changes since v1:
-* Address Greg Kroah-Hartman's comment: replace sysfs_notify with
-  sysfs_notify_dirent and remove the workqueue.
-* Address Alan Stern's comment: replicate port_dev->child->state
-  in port_dev->state instead of using a pointer to link them.
----
- Documentation/ABI/testing/sysfs-bus-usb |  9 +++++++++
- drivers/usb/core/hub.c                  | 19 +++++++++++++++++++
- drivers/usb/core/hub.h                  |  2 ++
- drivers/usb/core/port.c                 | 11 +++++++++++
- 4 files changed, 41 insertions(+)
+Warning: (recently discovered and may have been fixed)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
-index cb172db41b34..155770f18f9c 100644
---- a/Documentation/ABI/testing/sysfs-bus-usb
-+++ b/Documentation/ABI/testing/sysfs-bus-usb
-@@ -292,6 +292,15 @@ Description:
- 		which is marked with early_stop has failed to initialize, it will ignore
- 		all future connections until this attribute is clear.
- 
-+What:		/sys/bus/usb/devices/.../<hub_interface>/port<X>/state
-+Date:		May 2023
-+Contact:	Roy Luo <royluo@google.com>
-+Description:
-+		Indicates current state of the USB device attached to the port. Valid
-+		states are: 'not-attached', 'attached', 'powered',
-+		'reconnecting', 'unauthenticated', 'default', 'addressed',
-+		'configured', and 'suspended'.
-+
- What:		/sys/bus/usb/devices/.../power/usb2_lpm_l1_timeout
- Date:		May 2013
- Contact:	Mathias Nyman <mathias.nyman@linux.intel.com>
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 97a0f8faea6e..35d94288726b 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -2018,6 +2018,23 @@ bool usb_device_is_owned(struct usb_device *udev)
- 	return !!hub->ports[udev->portnum - 1]->port_owner;
- }
- 
-+static void update_port_device_state(struct usb_device *udev)
-+{
-+	struct usb_port *port_dev = NULL;
-+	struct usb_hub *hub = NULL;
-+	struct kernfs_node *state_node = NULL;
-+
-+	if (udev->parent) {
-+		hub = usb_hub_to_struct_hub(udev->parent);
-+		port_dev = hub->ports[udev->portnum - 1];
-+		WRITE_ONCE(port_dev->state, udev->state);
-+		state_node = sysfs_get_dirent(port_dev->dev.kobj.sd, "state");
-+		if (state_node) {
-+			sysfs_notify_dirent(state_node);
-+		}
-+	}
-+}
-+
- static void recursively_mark_NOTATTACHED(struct usb_device *udev)
- {
- 	struct usb_hub *hub = usb_hub_to_struct_hub(udev);
-@@ -2030,6 +2047,7 @@ static void recursively_mark_NOTATTACHED(struct usb_device *udev)
- 	if (udev->state == USB_STATE_SUSPENDED)
- 		udev->active_duration -= jiffies;
- 	udev->state = USB_STATE_NOTATTACHED;
-+	update_port_device_state(udev);
- }
- 
- /**
-@@ -2086,6 +2104,7 @@ void usb_set_device_state(struct usb_device *udev,
- 				udev->state != USB_STATE_SUSPENDED)
- 			udev->active_duration += jiffies;
- 		udev->state = new_state;
-+		update_port_device_state(udev);
- 	} else
- 		recursively_mark_NOTATTACHED(udev);
- 	spin_unlock_irqrestore(&device_state_lock, flags);
-diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
-index e23833562e4f..cd13fe189726 100644
---- a/drivers/usb/core/hub.h
-+++ b/drivers/usb/core/hub.h
-@@ -84,6 +84,7 @@ struct usb_hub {
-  * @peer: related usb2 and usb3 ports (share the same connector)
-  * @req: default pm qos request for hubs without port power control
-  * @connect_type: port's connect type
-+ * @state: device state of the usb device attached to the port
-  * @location: opaque representation of platform connector location
-  * @status_lock: synchronize port_event() vs usb_port_{suspend|resume}
-  * @portnum: port index num based one
-@@ -100,6 +101,7 @@ struct usb_port {
- 	struct usb_port *peer;
- 	struct dev_pm_qos_request *req;
- 	enum usb_port_connect_type connect_type;
-+	enum usb_device_state state;
- 	usb_port_location_t location;
- 	struct mutex status_lock;
- 	u32 over_current_count;
-diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-index 06a8f1f84f6f..42b75ac09ccb 100644
---- a/drivers/usb/core/port.c
-+++ b/drivers/usb/core/port.c
-@@ -160,6 +160,16 @@ static ssize_t connect_type_show(struct device *dev,
- }
- static DEVICE_ATTR_RO(connect_type);
- 
-+static ssize_t state_show(struct device *dev,
-+			  struct device_attribute *attr, char *buf)
-+{
-+	struct usb_port *port_dev = to_usb_port(dev);
-+	enum usb_device_state state = READ_ONCE(port_dev->state);
-+
-+	return sprintf(buf, "%s\n",  usb_state_string(state));
-+}
-+static DEVICE_ATTR_RO(state);
-+
- static ssize_t over_current_count_show(struct device *dev,
- 				       struct device_attribute *attr, char *buf)
- {
-@@ -259,6 +269,7 @@ static DEVICE_ATTR_RW(usb3_lpm_permit);
- 
- static struct attribute *port_dev_attrs[] = {
- 	&dev_attr_connect_type.attr,
-+	&dev_attr_state.attr,
- 	&dev_attr_location.attr,
- 	&dev_attr_quirks.attr,
- 	&dev_attr_over_current_count.attr,
+drivers/usb/cdns3/cdns3-starfive.c:23: warning: expecting prototype for cdns3(). Prototype was for USB_STRAP_HOST() instead
 
-base-commit: 933174ae28ba72ab8de5b35cb7c98fc211235096
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+|-- arc-allyesconfig
+|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+|-- arm-allmodconfig
+|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+|-- arm-allyesconfig
+|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+|-- arm64-allyesconfig
+|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+|-- m68k-allmodconfig
+|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+|-- mips-allmodconfig
+|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+|-- mips-allyesconfig
+|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+|-- powerpc-allmodconfig
+|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+|-- riscv-allmodconfig
+|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+`-- s390-allyesconfig
+    `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+
+elapsed time: 725m
+
+configs tested: 40
+configs skipped: 2
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sparc                               defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                               rhel-8.3   gcc  
+
 -- 
-2.41.0.rc0.172.g3f132b7071-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
