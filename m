@@ -2,132 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07480718540
-	for <lists+linux-usb@lfdr.de>; Wed, 31 May 2023 16:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73077185F5
+	for <lists+linux-usb@lfdr.de>; Wed, 31 May 2023 17:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236543AbjEaOrg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 May 2023 10:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54402 "EHLO
+        id S234097AbjEaPSR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 May 2023 11:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236451AbjEaOrf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 May 2023 10:47:35 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05D5107;
-        Wed, 31 May 2023 07:47:32 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VDwDbK001363;
-        Wed, 31 May 2023 14:47:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=GupFFUipno/RdhRM6hgOLwBA79D1V8GXFuS0Nmuzq2k=;
- b=R9Fqb5qwz1DORBtXnWmRj9ogV0+CJG85BmDLzDm4xTAlFDvSKUbzc+Z10KZ8K8yUoHJQ
- iDOe8okRWktmaEHG63ZhCUIJfcx8GTAgHUgIK2tXmKl6mGj79StXBgyrq5CDcLF3OuwP
- 2QOMcXHbqejiOF7iw3MBkMbPRg383EhI9vrIKmhDQB3geV6lu6Wy4yTecVkdOLbjE+bT
- Sk9th+yvR9p0bTNAqfAj+kB6w7XdGPTDFpabkt2xjxmeE4MVveD5gRmT+5jI5CYuOHLV
- AwgTUAAmcvoMQLzzvrhHB1gRBl/bWL3Y5xAB3C9Rb7eg/U891bd8JIfO/VOySnLfCp/d Uw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qwryesxr8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 14:47:28 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34VElRIA024397
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 14:47:27 GMT
-Received: from [10.217.219.52] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 31 May
- 2023 07:47:26 -0700
-Message-ID: <665be8f7-0892-3446-72ca-4c45457c9153@quicinc.com>
-Date:   Wed, 31 May 2023 20:17:23 +0530
+        with ESMTP id S234534AbjEaPSN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 May 2023 11:18:13 -0400
+X-Greylist: delayed 479 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 May 2023 08:18:06 PDT
+Received: from ci74p00im-qukt09082502.me.com (ci74p00im-qukt09082502.me.com [17.57.156.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978C9180
+        for <linux-usb@vger.kernel.org>; Wed, 31 May 2023 08:18:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pen.gy; s=sig1;
+        t=1685545807; bh=JUj4mjEaKZ9F8+bIZI/ye5Fq3ZjW6y4YvwpnDxx5GRg=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=WIJ6mXVTARqEMk7U1j6Y4flyZ2y/EjUPUQ8OtqpR1cnc+q/OcI9E5AcaB4UEXuk4d
+         9nieyn9WTPc6vYnP6EbEK+UNotRQtwT/9jQDV5Shc4Zelc8a3CyOY/UuYQPufVInLU
+         jktz8W6G4xoKrQ6t84Gv8A34MtXHnBkkp22Nq6ryvljwWqRuoeOzqrWWD6sMwKCDDu
+         ZEg1fKu4tKosHXxIbI6pUzfIilLALhPodVAvF7Hl9HazuJmLvZYIV1PMIb2J5/bfmn
+         IbsauQmMxUQ0bBneNXimu5ufHB5sdAkFW3ROAn7xEqYiqe1pzOuhQmijmt0Qe2yhTN
+         B4Sy9eDMP88GQ==
+Received: from [192.168.40.3] (ci77p00im-dlb-asmtp-mailmevip.me.com [17.57.156.26])
+        by ci74p00im-qukt09082502.me.com (Postfix) with ESMTPSA id A373111C05A4;
+        Wed, 31 May 2023 15:10:04 +0000 (UTC)
+Message-ID: <581e4f2e-c6e3-026b-7a51-968afb616a7e@pen.gy>
+Date:   Wed, 31 May 2023 17:10:01 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
-From:   Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v3 2/2] usbnet: ipheth: add CDC NCM support
+Content-Language: en-GB
+To:     Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Georgi Valkov <gvalkov@gmail.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230527130309.34090-1-forst@pen.gy>
+ <20230527130309.34090-2-forst@pen.gy>
+ <Hpg7Nwtv7aepWNQuwyGiCoXT2ScF0xBHsfvNBP7ytjXH6O-UIgpz_V7NoHsO00bS5bzlq_W5LUeEOhRO4eZd6w==@protonmail.internalid>
+ <e7159f2e39e79e51da123d09cfbcc21411dad544.camel@redhat.com>
+From:   Foster Snowhill <forst@pen.gy>
+Autocrypt: addr=forst@pen.gy; keydata=
+ xjMEYB86GRYJKwYBBAHaRw8BAQdAx9dMHkOUP+X9nop8IPJ1RNiEzf20Tw4HQCV4bFSITB7N
+ G2ZvcnN0QHBlbi5neSA8Zm9yc3RAcGVuLmd5PsKPBBAWCgAgBQJgHzoZBgsJBwgDAgQVCAoC
+ BBYCAQACGQECGwMCHgEAIQkQfZTG0T8MQtgWIQTYzKaDAhzR7WvpGD59lMbRPwxC2EQWAP9M
+ XyO82yS1VO/DWKLlwOH4I87JE1wyUoNuYSLdATuWvwD8DRbeVIaCiSPZtnwDKmqMLC5sAddw
+ 1kDc4FtMJ5R88w7OOARgHzoZEgorBgEEAZdVAQUBAQdARX7DpC/YwQVQLTUGBaN0QuMwx9/W
+ 0WFYWmLGrrm6CioDAQgHwngEGBYIAAkFAmAfOhkCGwwAIQkQfZTG0T8MQtgWIQTYzKaDAhzR
+ 7WvpGD59lMbRPwxC2BqxAQDWMSnhYyJTji9Twic7n+vnady9mQIy3hdB8Dy1yDj0MgEA0DZf
+ OsjaMQ1hmGPmss4e3lOGsmfmJ49io6ornUzJTQ0=
+In-Reply-To: <e7159f2e39e79e51da123d09cfbcc21411dad544.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 47lg3rVRswuxgb32oWpKhIMpe0ukouQ2
-X-Proofpoint-ORIG-GUID: 47lg3rVRswuxgb32oWpKhIMpe0ukouQ2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-31_10,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- lowpriorityscore=0 clxscore=1015 spamscore=0 bulkscore=0 mlxscore=0
- impostorscore=0 priorityscore=1501 phishscore=0 malwarescore=0
- mlxlogscore=924 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305310126
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-GUID: JEwYAIrrxLlPk3B3LZ5SKVe_lE7UtcU7
+X-Proofpoint-ORIG-GUID: JEwYAIrrxLlPk3B3LZ5SKVe_lE7UtcU7
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.790,17.11.62.513.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-01-12=5F03:2020-02-14=5F02,2022-01-12=5F03,2021-12-02?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=243 spamscore=0 bulkscore=0
+ phishscore=0 malwarescore=0 adultscore=0 mlxscore=0 clxscore=1030
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2305310129
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello Paolo,
 
+Thank you for the review!
 
-On 31-05-23 08:11 pm, Prashanth K wrote:
->   
-> diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
-> index 5aabdd7..6d880c4 100644
-> --- a/drivers/usb/musb/jz4740.c
-> +++ b/drivers/usb/musb/jz4740.c
-> @@ -95,6 +95,8 @@ static int jz4740_musb_role_switch_set(struct usb_role_switch *sw,
->   	case USB_ROLE_HOST:
->   		atomic_notifier_call_chain(&phy->notifier, USB_EVENT_ID, phy);
->   		break;
-> +	default:
-> +		break;
->   	}
->   
->   	return 0;
-> diff --git a/drivers/usb/roles/intel-xhci-usb-role-switch.c b/drivers/usb/roles/intel-xhci-usb-role-switch.c
-> index 5c96e92..4d6a3dd 100644
-> --- a/drivers/usb/roles/intel-xhci-usb-role-switch.c
-> +++ b/drivers/usb/roles/intel-xhci-usb-role-switch.c
-> @@ -97,6 +97,8 @@ static int intel_xhci_usb_set_role(struct usb_role_switch *sw,
->   		val |= SW_VBUS_VALID;
->   		drd_config = DRD_CONFIG_STATIC_DEVICE;
->   		break;
-> +	default:
-> +		break;
->   	}
->   	val |= SW_IDPIN_EN;
->   	if (data->enable_sw_switch) {
-> diff --git a/include/linux/usb/role.h b/include/linux/usb/role.h
-> index b5deafd..65e790a 100644
-> --- a/include/linux/usb/role.h
-> +++ b/include/linux/usb/role.h
-> @@ -11,6 +11,7 @@ enum usb_role {
->   	USB_ROLE_NONE,
->   	USB_ROLE_HOST,
->   	USB_ROLE_DEVICE,
-> +	USB_ROLE_UNKNOWN,
->   };
->   
->   typedef int (*usb_role_switch_set_t)(struct usb_role_switch *sw,
+>> -	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN,
+>> +	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_RX_BUF_SIZE,
+> 
+> Here the driver already knows if the device is in NCM or legacy mode,
+> so perhaps we could select the buffer size accordingly? You would
+> probably need to store the actual buffer size somewhere to keep the
+> buffer handling consistent and simple in later code.
 
-Hi Greg, I have fixed the drivers that doesn't have default case while 
-using usb_role enum. Added the same on intel-xhci-usb-role-switch.c & 
-musb/jz4740.c files. I was able to compile successfully. Please check 
-once if this fixed the build issue.
+Agreed, I will make the buffer size dynamic in the next revision.
 
-Thanks in advance,
-Prashanth K
+The RX buffer size is 1516 bytes for legacy mode (2 bytes padding +
+1514 bytes Ethernet frame), and 65536 bytes for NCM mode.
+
+>>  	memcpy(dev->tx_buf, skb->data, skb->len);
+>> -	if (skb->len < IPHETH_BUF_SIZE)
+>> -		memset(dev->tx_buf + skb->len, 0, IPHETH_BUF_SIZE - skb->len);
+>>
+>>  	usb_fill_bulk_urb(dev->tx_urb, udev,
+>>  			  usb_sndbulkpipe(udev, dev->bulk_out),
+>> -			  dev->tx_buf, IPHETH_BUF_SIZE,
+>> +			  dev->tx_buf, skb->len,
+>>  			  ipheth_sndbulk_callback,
+>>  			  dev);
+>>  	dev->tx_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+> 
+> This chunk looks unrelated from NCM support, and unconditionally
+> changes the established behaviour even with legacy mode, why?
+> 
+> Does that works even with old(er) devices?
+
+I see Georgi Valkov said he tested v3 of the patch on older iOS devices
+and confirmed it working. I'll chat with him to get some USB traffic
+captures, to check what is macOS' behaviour with such devices (to make
+sure we behave the same way as the official driver). I also wanted to
+investigate a bit, when was NCM support even added to iOS.
+
+Personally I remember testing this in legacy mode a while ago, before
+I implemented NCM. I will re-test it again in legacy mode in addition
+to Georgi's efforts.
+
+From my side, I think it's reasonable to split this out into a separate
+patch, since it technically applies to the legacy mode as well, and
+doesn't (directly) relate to NCM support, as you pointed out.
+
+There's no reason to send the full buffer every time including padding,
+but I'll check out traffic captures on macOS + older devices, maybe
+that's what they're doing.
