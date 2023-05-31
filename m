@@ -2,48 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2E9717B1C
-	for <lists+linux-usb@lfdr.de>; Wed, 31 May 2023 11:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 166BD717B3B
+	for <lists+linux-usb@lfdr.de>; Wed, 31 May 2023 11:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234606AbjEaJFG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 May 2023 05:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45492 "EHLO
+        id S235295AbjEaJHj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 May 2023 05:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235328AbjEaJEd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 May 2023 05:04:33 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EADB192
-        for <linux-usb@vger.kernel.org>; Wed, 31 May 2023 02:03:59 -0700 (PDT)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DFD65FB;
-        Wed, 31 May 2023 11:03:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1685523816;
-        bh=nbh+rlbxY2VZ78ScbmZ/brzmU0RVTOKXwbQaVA0bS08=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=fPlBNMUoiLGtrgxQctbD5H4/Y1XYjTyCCWUJ5BDqPyjdDgb46QDPB38rjwJQ2VFoJ
-         aron/hJZSF8KM8PpH4dfY1HdGnKIwJydc/RS7IJr7O4P5JUv4JQ3smUjBhFp1dFXC0
-         emm+0Mj4QFW/Isxs+xYggEX59UhSCTcqnkElcQEU=
-Message-ID: <69135fc1-5ebb-ff95-4c7b-17cf8e30c924@ideasonboard.com>
-Date:   Wed, 31 May 2023 10:03:54 +0100
+        with ESMTP id S235266AbjEaJHV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 May 2023 05:07:21 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F46A1B9
+        for <linux-usb@vger.kernel.org>; Wed, 31 May 2023 02:07:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685524031; x=1717060031;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kygC6MdyDA00/GNP1csNFrWPt63I4QUNs53CWr5ACIs=;
+  b=V/coQma1u1mbqi9CinYAEStvi2XizBLnP3ftA+kjUMdldm77Xq7F3IKy
+   Eoa4FR9t9qkePe/UQwLjUSmXj4vi0UZ53va9Br41cb+X/P7XwIi+Jnn4E
+   yOINimIeqjj3jY0doJBG6L005eI3usqgw3W7BFrbLu+s0Qt4if7T4Eygx
+   vcXjjJMzoYusJtngTh/LOWmkvjiQ7ZirjJ79iMHENwmfQkjig1S0XIDHB
+   0fUfCEHcBJbxHErdXGR2pZA0z9X59vqsiecyeOUh5e4BOuqawu2ORU0Eb
+   hpUzmGpuIkD3+fUB+gjk0u17IdHKH5mC+pnb8SeKbdpGgNmQBvPR/SBOa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="354027628"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="354027628"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 02:06:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="657247212"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="657247212"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 31 May 2023 02:06:40 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id EADE953A; Wed, 31 May 2023 12:06:45 +0300 (EEST)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Gil Fine <gil.fine@linux.intel.com>,
+        Christian Kellner <ckellner@redhat.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 00/20] thunderbolt: Initial USB4 v2 support
+Date:   Wed, 31 May 2023 12:06:25 +0300
+Message-Id: <20230531090645.5573-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     torleiv@huddly.com
-References: <20230531085544.253363-1-dan.scally@ideasonboard.com>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-Subject: Re: [PATCH] usb: dwc3: gadget: Clear DWC3_EP_PENDING_REQUEST from
- non-0 endpoints
-In-Reply-To: <20230531085544.253363-1-dan.scally@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,72 +65,69 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thinh
+Hi all,
 
-On 31/05/2023 09:55, Daniel Scally wrote:
-> The DWC3_EP_PENDING_REQUEST flag is set against an endpoint when
-> there are no pending or started requests available. This flag is
-> cleared on queuing to the endpoint for endpoint 0, but not for any
-> other endpoints. This can exacerbate timing problems by allowing a
-> queue to go ahead for an isochronous endpoint that should not be
-> started, so clear the flag upon a successful dwc3_gadget_ep_queue().
->
-> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
-> ---
+This series adds initial support for the next USB4 version (USB4 v2) and
+the Intel Barlow Ridge discrete controller. This includes support for
+the 80G symmetric link, the necessary configuration needed to bring up
+the router in v2 mode, adaptive TMU, PCIe extended encapsulation, and
+CL2 low power link state. We will be sending the rest of the USB4 v2
+support, including asymmetric 128/80G link support later on once this
+one has settled.
 
+The series is based on the "CLx and TMU rework" series I sent out
+earlier this week:
 
-Just wanted to give some background on the timing issues that this is helping to relieve; we spotted 
-this issue as a result of a "No resource for ep1in" error being thrown occasionally during repeated 
-stream on/off tests for the UVC gadget on a platform using the DWC3; following the error stream 
-won't restart unless you reboot. That error occurs when the gadget's workqueue function runs 
-usb_ep_queue() whilst usb_ep_disable() is running during stream off. The DWC3 gadget code's locking 
-plus the nulling of the endpoint descriptor during __dwc3_gadget_ep_disable() [1] and the check for 
-that situation in __dwc3_gadget_ep_queue() [2] should make that harmless, but what occasionally 
-happens is the dwc3_gadget_ep_queue() call sometimes manages to grab the lock when it's briefly 
-unlocked during dwc3_gadget_giveback() [3]. That happens after the Stop Transfer command has been 
-sent, so __dwc3_gadget_ep_queue() running through triggers a Start Transfer command, the 
-dwc3_gadget_ep_disable() then finishes and stream shuts down, but when it's started back up again 
-another Start Transfer command is sent and triggers the error. This patch ameliorates the impact of 
-that race in my case, because clearing the flag prevents __dwc3_gadget_ep_queue() from running 
-either __dwc3_gadget_start_isoc() or __dwc3_gadget_kick_transfer() for a non started isoc endpoint - 
-but the race is still there. I think the potential for races is probably unavoidable given the 
-unlock, but I thought it was worth explaining what lead to the patch in case it raises some issue 
-that I'm missing.
+  https://lore.kernel.org/linux-usb/20230529100425.6125-1-mika.westerberg@linux.intel.com/
 
+Gil Fine (9):
+  thunderbolt: Identify USB4 v2 routers
+  thunderbolt: Add support for USB4 v2 80 Gb/s link
+  thunderbolt: Announce USB4 v2 connection manager support
+  thunderbolt: Enable USB4 v2 PCIe TLP/DLLP extended encapsulation
+  thunderbolt: Add two additional double words for adapters TMU for USB4 v2 routers
+  thunderbolt: Fix DisplayPort IN adapter capability length for USB4 v2 routers
+  thunderbolt: Fix PCIe adapter capability length for USB4 v2 routers
+  thunderbolt: Move constants related to NVM into nvm.c
+  thunderbolt: Increase NVM_MAX_SIZE to support Intel Barlow Ridge controller
 
-Thanks
+Mika Westerberg (11):
+  thunderbolt: Ignore data CRC mismatch for USB4 routers
+  thunderbolt: Do not touch lane 1 adapter path config space
+  thunderbolt: Add the new USB4 v2 notification types
+  thunderbolt: Reset USB4 v2 host router
+  thunderbolt: Add Intel Barlow Ridge PCI ID
+  thunderbolt: Limit Intel Barlow Ridge USB3 bandwidth
+  thunderbolt: Add support for enhanced uni-directional TMU mode
+  thunderbolt: Enable CL2 low power state
+  thunderbolt: Make bandwidth allocation mode function names consistent
+  thunderbolt: Add DisplayPort 2.x tunneling support
+  thunderbolt: Add test case for 3 DisplayPort tunnels
 
-Dan
+ drivers/thunderbolt/clx.c      |  31 +-
+ drivers/thunderbolt/ctl.c      |  28 ++
+ drivers/thunderbolt/debugfs.c  |  29 +-
+ drivers/thunderbolt/dma_test.c |  10 +-
+ drivers/thunderbolt/eeprom.c   |   3 +-
+ drivers/thunderbolt/icm.c      |   6 +-
+ drivers/thunderbolt/nhi.c      |  41 ++-
+ drivers/thunderbolt/nhi.h      |   4 +
+ drivers/thunderbolt/nhi_regs.h |  19 +-
+ drivers/thunderbolt/nvm.c      |   4 +
+ drivers/thunderbolt/quirks.c   |   8 +
+ drivers/thunderbolt/switch.c   | 216 ++++++++----
+ drivers/thunderbolt/tb.c       | 132 ++++++--
+ drivers/thunderbolt/tb.h       | 125 ++++---
+ drivers/thunderbolt/tb_msgs.h  |   7 +
+ drivers/thunderbolt/tb_regs.h  |  25 +-
+ drivers/thunderbolt/test.c     |  83 +++++
+ drivers/thunderbolt/tmu.c      | 591 ++++++++++++++++++++++++++-------
+ drivers/thunderbolt/tunnel.c   | 178 +++++++---
+ drivers/thunderbolt/usb4.c     | 108 ++++--
+ drivers/thunderbolt/xdomain.c  |  82 ++++-
+ include/linux/thunderbolt.h    |  18 +-
+ 22 files changed, 1367 insertions(+), 381 deletions(-)
 
+-- 
+2.39.2
 
-[1] https://elixir.bootlin.com/linux/latest/source/drivers/usb/dwc3/gadget.c#L1044
-[2] https://elixir.bootlin.com/linux/latest/source/drivers/usb/dwc3/gadget.c#L1923
-[3] https://elixir.bootlin.com/linux/latest/source/drivers/usb/dwc3/gadget.c#L216
-
->   drivers/usb/dwc3/gadget.c | 8 ++++++--
->   1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 578804dc29ca..bc1d93c56d82 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -1988,13 +1988,17 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
->   	 */
->   	if (usb_endpoint_xfer_isoc(dep->endpoint.desc)) {
->   		if (!(dep->flags & DWC3_EP_TRANSFER_STARTED)) {
-> +			int ret = 0;
-> +
->   			if ((dep->flags & DWC3_EP_PENDING_REQUEST))
-> -				return __dwc3_gadget_start_isoc(dep);
-> +				ret = __dwc3_gadget_start_isoc(dep);
->   
-> -			return 0;
-> +			dep->flags &= ~DWC3_EP_PENDING_REQUEST;
-> +			return ret;
->   		}
->   	}
->   
-> +	dep->flags &= ~DWC3_EP_PENDING_REQUEST;
->   	__dwc3_gadget_kick_transfer(dep);
->   
->   	return 0;
