@@ -2,99 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2706171800D
-	for <lists+linux-usb@lfdr.de>; Wed, 31 May 2023 14:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6E0718019
+	for <lists+linux-usb@lfdr.de>; Wed, 31 May 2023 14:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235241AbjEaMi4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 May 2023 08:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
+        id S235866AbjEaMku (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 May 2023 08:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbjEaMiz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 May 2023 08:38:55 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2F811F
-        for <linux-usb@vger.kernel.org>; Wed, 31 May 2023 05:38:54 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7749b49ce95so342015539f.2
-        for <linux-usb@vger.kernel.org>; Wed, 31 May 2023 05:38:54 -0700 (PDT)
+        with ESMTP id S235779AbjEaMkt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 May 2023 08:40:49 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826A2E42
+        for <linux-usb@vger.kernel.org>; Wed, 31 May 2023 05:40:31 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f4f3ac389eso5247730e87.1
+        for <linux-usb@vger.kernel.org>; Wed, 31 May 2023 05:40:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685536829; x=1688128829;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Drw4vNL26e11s4ylGTZbprOZ2Zv1Gl249oIHxh4ALM=;
+        b=F5zLkMcWHok2hdrPzqlru3sCe+ZGSukQ1VL0vdhE1d0mY53j74VPtA2CJBraRh0ZO3
+         LpgyGYTewEjJFhxT0BCBFaVtLmnHSiWO7rEd6EuMDB+QmN29IyyHRp7JNmJYZjHPzR0q
+         9vvWcswWzLiSjuJXMDiU9zlllCZQvy8KYMNpo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685536733; x=1688128733;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M56dqXczIU6urpVTidNU/2Z71eUaU2aQUWl7WsKSTRA=;
-        b=Dw0Y5/WlokuztPq3eFQnQ5t5T0TRuV1awP3rcPPKmhloAw15yYprk+3rOkaq52kfmb
-         7XeEBve1C4LqxL6q62fIOWZxGyuZ5UIdtHZ3ZzhNCrA4IAzdzbUdesrgyBX8gUBYovTR
-         jwZ4hi47x4prbeJBsmArMF76P18AYit/G6QrTeRD0lAJmih9Teqvnom94fL63pJd0h4O
-         c3k4oWMdFSvIwJK/aJWSzFhTW1KP176+T+NLmFej5T6OqpzBpDz/Ewg45fwZaKHn4Hjs
-         sQ8f3WRU08PPpfGpxASihkPyT5l7tpUjuKw/L3qA5aCReINzlNJJLA9UN4C7rEx/Rmi1
-         kkEA==
-X-Gm-Message-State: AC+VfDxUHgd+FW4lFoCi4frfJE4SAwXq+j4w1KzwSMHNT/3ULphlEGxk
-        RPO9f0BRG8bCohrN+y4SwFz40rj7ukIIXi1H294as/eb6qaK
-X-Google-Smtp-Source: ACHHUZ74o2Cy7S+5TJut5f94vXmrF3Gr56M4P1NQwSf2gyDkdwYCHmqVaYYRYNCp366WKh4TDLkJKz8QZGSf4S6yOKYmyE3A1De+
+        d=1e100.net; s=20221208; t=1685536829; x=1688128829;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3Drw4vNL26e11s4ylGTZbprOZ2Zv1Gl249oIHxh4ALM=;
+        b=S8xFTtaUBeDBwc7wnV9CUK/Na1rl5SOZHMdlYBnF0VWQVqB5wPm9S4dHNgMqK8BLsk
+         fFiNolYpfZ78uvDvtl9jmisitbRKXt4dLhJpdmGl2nuXUjU2R6yH7rH0rUEqiOldV2Qq
+         omEMqwVoYOWUOLahKbA6YPHRb/G4wLcrdjp52Adxhmm0JO1yE/3OHZ7IQcbPELv19hUn
+         GG6euWYiCnUxvFsarqVMy48bVtlr9lPOAeqc7yWa3KugIgHaarOx0qSZ7WC6BmAnXc+g
+         BevwOkLPSdfPeyPc+2S5wruzIRYNu9wQb/s1GgE18tAPUPWgb73Et4JvJ+4/a+dsVZoZ
+         8CLQ==
+X-Gm-Message-State: AC+VfDx8Ex5afUOX5sdVEOWQfWfSJeRvaccAhG5FeftbanXof78ue54E
+        uWaO1zOAVwWmrd7bvYtcE7WBNw==
+X-Google-Smtp-Source: ACHHUZ7rW3ic9Nm2E01LMvkpflmEoGqghIHGnRnNSs0cCIPALrEJZm6RA4JTp5liW1MRbAdiohMoWQ==
+X-Received: by 2002:a19:750c:0:b0:4f2:455d:18bd with SMTP id y12-20020a19750c000000b004f2455d18bdmr2574670lfe.16.1685536829603;
+        Wed, 31 May 2023 05:40:29 -0700 (PDT)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:f61c:2660:1f5f:4519])
+        by smtp.gmail.com with ESMTPSA id f21-20020a19ae15000000b004f37b88eacfsm704263lfc.187.2023.05.31.05.40.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 05:40:29 -0700 (PDT)
+From:   Ricardo Ribalda Delgado <ribalda@chromium.org>
+Date:   Wed, 31 May 2023 14:40:02 +0200
+Subject: [PATCH] xhci: Do not create endpoint debugfs while holding the
+ bandwidth mutex
 MIME-Version: 1.0
-X-Received: by 2002:a5e:8a4d:0:b0:776:fd59:f980 with SMTP id
- o13-20020a5e8a4d000000b00776fd59f980mr2056443iom.4.1685536733644; Wed, 31 May
- 2023 05:38:53 -0700 (PDT)
-Date:   Wed, 31 May 2023 05:38:53 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000043ce4705fcfc9a3f@google.com>
-Subject: [syzbot] Monthly usb report (May 2023)
-From:   syzbot <syzbot+list5ddc103e11539454fe04@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230531-xhci-deadlock-v1-1-57780bff5124@chromium.org>
+X-B4-Tracking: v=1; b=H4sIACFAd2QC/x2NQQrDIBBFryKzrqCGLNqrlCzGcVKHihYlJRBy9
+ wzZ/ffh8Q4Y3IUHvMwBnf8ypFUF/zBAGeuHrSRlCC5Mbp683TOJTYypNPrqCBiDp6eLBOpEHGx
+ jx0pZrbqVouev8yr7HXkv53kBi64eGnQAAAA=
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ricardo Ribalda Delgado <ribalda@chromium.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2802; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=UQKGCiJA+KdR3RLJnA2tjVxT/UayTXJli+zLmQfrUEo=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkd0Arw8YxmyplnKTmqj9XF1FWk5KtM1tEXuCHT
+ zeDErIrA52JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZHdAKwAKCRDRN9E+zzrE
+ iH1eD/9OFdkkUrhA5UTJTjNXlK/J5tiYnqBc7obMtJpFlV+q2qWZUkl6eCoV0sh2g7GbD5gm32F
+ AFh6IpfE+pC2Wbc0sAfJklrHTU4N5stAmnqkkTeQjqB3Qkk9J3sT9Tb5P70cnxwlql1XshRP9MU
+ 6arPEmy739c9ma2VsCbH6cwelGYPmp1mdRLZVip/X1Fyq8qRZ4vqCrAkaCGOwtNuYnuJMlOLgFY
+ X+QcMXjqXZlEyLgnMdREpxrXXrjpO+uSk4c9h3bH6ivlUywXCTJB+82t00gFx3CpwVdDAQqb9CJ
+ +i2RkxnM6q7VouEhXXFyzvy2vjgO+eo2cOOgrFFLdpO/6e2kkmBTn+b/3bvMLEhC3ufYa3VCPDh
+ reGMDA8WakMb7NW2u6r3Tcmc9l+PlByb9muQf59Ad1aGLdZmHz+dWgXHgYwPO4pMsEFGnSTzVrr
+ zbNtKO1sNTVnol9eoZQZi1496JWKKnVqhu7GJL5hTL89cXw/PwA1emDyfBmm+S12gpmpQSMHNTv
+ vnY8ZDJTcPCqGX6ep6/GDmxjFv4r/3O+25AcMGNWrQYBW1WlpvnfM9aBZUSrph232z2/QrdncD9
+ 7FtkTp6EhOcWGY4wnJmeIEzOAIaBFUnAgud4+Y/c5B9SpXldpOk8FPeflHFyvbZSZVdykgCm1Hj
+ HqKhBDbRyBjX9dQ==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello usb maintainers/developers,
+xhci_debugfs_create_endpoint needs to take the mm->mmap_sem, which is
+not serialized with the hcd->bandwidth_mutex across the codebase.
 
-This is a 31-day syzbot report for the usb subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/usb
+Without this patch a deadlock has been observed with the uvc driver at
+the functions v4l2_mmap() and usb_set_interface().
 
-During the period, 4 new issues were detected and 4 were fixed.
-In total, 64 issues are still open and 319 have been fixed so far.
+Cc: Stephen Boyd <swboyd@chromium.org
+Fixes: 167657a1bb5f ("xhci: don't create endpoint debugfs entry before ring buffer is set.")
+Signed-off-by: Ricardo Ribalda Delgado <ribalda@chromium.org>
+---
+I do not have a proper reproducer for this and I am not used to this
+subsystem, so please take a careful look at this patch :).
 
-Some of the still happening issues:
+Thanks!
+---
+ drivers/usb/host/xhci-debugfs.c | 4 ++++
+ drivers/usb/host/xhci.c         | 4 ++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-Ref  Crashes Repro Title
-<1>  2373    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
-                   https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
-<2>  1818    Yes   WARNING in firmware_fallback_sysfs
-                   https://syzkaller.appspot.com/bug?extid=95f2e2439b97575ec3c0
-<3>  1751    Yes   KMSAN: uninit-value in mii_nway_restart
-                   https://syzkaller.appspot.com/bug?extid=1f53a30781af65d2c955
-<4>  778     Yes   INFO: task hung in usb_get_descriptor (2)
-                   https://syzkaller.appspot.com/bug?extid=e8db9d9e65feff8fa471
-<5>  653     Yes   WARNING in smsusb_term_device
-                   https://syzkaller.appspot.com/bug?extid=40ac6e73326e79ee8ecb
-<6>  293     Yes   INFO: task hung in r871xu_dev_remove
-                   https://syzkaller.appspot.com/bug?extid=f39c1dad0b7db49ca4a8
-<7>  273     Yes   INFO: task hung in usbdev_open (2)
-                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-<8>  237     Yes   INFO: task hung in netdev_run_todo (2)
-                   https://syzkaller.appspot.com/bug?extid=9d77543f47951a63d5c1
-<9>  180     No    INFO: task hung in hub_event (3)
-                   https://syzkaller.appspot.com/bug?extid=a7edecbf389d11a369d4
-<10> 174     No    INFO: task hung in hub_port_init (3)
-                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
+diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debugfs.c
+index 99baa60ef50f..2acce2af2ca9 100644
+--- a/drivers/usb/host/xhci-debugfs.c
++++ b/drivers/usb/host/xhci-debugfs.c
+@@ -238,6 +238,10 @@ static int xhci_ring_open(struct inode *inode, struct file *file)
+ 	int			i;
+ 	struct xhci_file_map	*f_map;
+ 	const char		*file_name = file_dentry(file)->d_iname;
++	struct xhci_ring	*ring = *(struct xhci_ring **)inode->i_private;
++
++	if (!ring)
++		return -EAGAIN;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(ring_files); i++) {
+ 		f_map = &ring_files[i];
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 78790dc13c5f..2715900b2540 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1930,6 +1930,8 @@ int xhci_add_endpoint(struct usb_hcd *hcd, struct usb_device *udev,
+ 	ep_ctx = xhci_get_ep_ctx(xhci, virt_dev->in_ctx, ep_index);
+ 	trace_xhci_add_endpoint(ep_ctx);
+ 
++	xhci_debugfs_create_endpoint(xhci, virt_dev, ep_index);
++
+ 	xhci_dbg(xhci, "add ep 0x%x, slot id %d, new drop flags = %#x, new add flags = %#x\n",
+ 			(unsigned int) ep->desc.bEndpointAddress,
+ 			udev->slot_id,
+@@ -2963,7 +2965,6 @@ int xhci_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
+ 		xhci_check_bw_drop_ep_streams(xhci, virt_dev, i);
+ 		virt_dev->eps[i].ring = virt_dev->eps[i].new_ring;
+ 		virt_dev->eps[i].new_ring = NULL;
+-		xhci_debugfs_create_endpoint(xhci, virt_dev, i);
+ 	}
+ command_cleanup:
+ 	kfree(command->completion);
+@@ -2989,7 +2990,6 @@ void xhci_reset_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
+ 	/* Free any rings allocated for added endpoints */
+ 	for (i = 0; i < 31; i++) {
+ 		if (virt_dev->eps[i].new_ring) {
+-			xhci_debugfs_remove_endpoint(xhci, virt_dev, i);
+ 			xhci_ring_free(xhci, virt_dev->eps[i].new_ring);
+ 			virt_dev->eps[i].new_ring = NULL;
+ 		}
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+base-commit: 48b1320a674e1ff5de2fad8606bee38f724594dc
+change-id: 20230531-xhci-deadlock-de2ab21c90bc
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
+Best regards,
+-- 
+Ricardo Ribalda Delgado <ribalda@chromium.org>
 
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
