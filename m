@@ -2,73 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FF671F379
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Jun 2023 22:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7650371F3C8
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Jun 2023 22:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbjFAUNn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Jun 2023 16:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45530 "EHLO
+        id S231985AbjFAUXm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Jun 2023 16:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjFAUNm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jun 2023 16:13:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A251A1;
-        Thu,  1 Jun 2023 13:13:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 828FB646C7;
-        Thu,  1 Jun 2023 20:13:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51289C43443;
-        Thu,  1 Jun 2023 20:13:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685650420;
-        bh=DCSJXIhqlYYsF0jNkPfKzV5MfwJ9SAulhFSDDwt8Qu0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UVty/LniZ4Eoxr0CcFWpQoP2bAkQ1mhsCOQqj4ha1ew5zBwoHHjDYmCdN/Ak2d/dJ
-         cjMdf+VqC2k8mlHM97czldDGclv4vyblevvuCSZdMiF5oBc0G0ehqJArE/0N6gl6Hb
-         H7EeaAkIY1SDGnH5Qh8VLw8i3mj2MRMIGw41D2HAuIciKuMBHWBKcvYi+ctUaO7Mpx
-         d3fsqN8NZ0H+z4Ruz7X9YhWYVS4qKEX5/SqVNxi4lSO+Cgb3/XpdwvKZ+KHGctcOqV
-         l4+uHUlRWAHFh2fLi7C7p2XCoAh1kyI2Birw2cGQu/wwzivUTcIpJwAg9rSVgnSzxN
-         8tFGadTrIX/DA==
-Date:   Thu, 1 Jun 2023 21:13:33 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Stanley =?utf-8?B?Q2hhbmdb5piM6IKy5b63XQ==?= 
-        <stanley_chang@realtek.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ray Chi <raychi@google.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v2 3/3] dt-bindings: phy: realtek: Add the doc about the
- Realtek SoC USB 2.0/3.0 PHY
-Message-ID: <20230601-starry-nurture-5aecf1f332ac@spud>
-References: <20230525022617.30537-1-stanley_chang@realtek.com>
- <20230525022617.30537-3-stanley_chang@realtek.com>
- <20230529-impurity-dismount-bca5c9100c9b@spud>
- <44015844858c42a79e0e7f9207d01496@realtek.com>
- <202305310146.34V1kevI7026106@rtits1.realtek.com.tw>
- <96a7905208c148debe3791636034a038@realtek.com>
+        with ESMTP id S231926AbjFAUXl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jun 2023 16:23:41 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3399AE79;
+        Thu,  1 Jun 2023 13:23:14 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351JeNJH015302;
+        Thu, 1 Jun 2023 20:23:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=W+jeNyPb1+d2e3DhT9PLjOuuWFn2hh9XeemreQjMQG8=;
+ b=DOCEkTgW1Zg8E3jan8UeaLT4XFcpLTluhT7jzinR3yeKnNu+LTzKmY9HZM8hvCnNR2ll
+ ph5XI3jvhZhqA8hjgX9hXWAq4vrZ7XypiEmal3ps72U7NsjCX8h+wmFBqmdQ+SDBFab6
+ XD4KBYek/G9BbhURcX+1jGeuuPm5LM/Mz4Q2huDRpNF4CLNQd7GhyOv0LUSKyn2sEWHy
+ gsWfL+C9jxJnJkvzeSpN3IZhwmfV/WQLPgTR+j9ZJxrfG3AsoJEqRSf6Qg7J2yn4Qhr5
+ fl6MLXT4cA8iMVFbE2IV5B8hIEwEltZJMAo/xiJhWAPLb6wipqbNNRDbaBz87fN8aOo5 Hw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qy1bcg3g1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 20:23:07 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 351KN67u031675
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Jun 2023 20:23:06 GMT
+Received: from [10.71.113.210] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 1 Jun 2023
+ 13:23:06 -0700
+Message-ID: <cb090bfb-6ff5-7200-076d-b99dc13a6b71@quicinc.com>
+Date:   Thu, 1 Jun 2023 13:23:05 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="oafWaJor0Kq+VBSZ"
-Content-Disposition: inline
-In-Reply-To: <96a7905208c148debe3791636034a038@realtek.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: dwc3: Skip TRBs while removing requests in
+ disconnect path
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <1685562871-17024-1-git-send-email-quic_eserrao@quicinc.com>
+ <20230531231951.vg7x2w7gnnm77alq@synopsys.com>
+ <38255534-f242-dc06-9216-1568da9b0285@quicinc.com>
+ <20230601012953.47xh7meyr2woowpc@synopsys.com>
+From:   Elson Serrao <quic_eserrao@quicinc.com>
+In-Reply-To: <20230601012953.47xh7meyr2woowpc@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: uP_S7e7dcVMFuaE97Hvf1fIGSCoDkGWC
+X-Proofpoint-GUID: uP_S7e7dcVMFuaE97Hvf1fIGSCoDkGWC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ malwarescore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ mlxlogscore=807 adultscore=0 clxscore=1011 priorityscore=1501 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2306010175
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,94 +86,86 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---oafWaJor0Kq+VBSZ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 01, 2023 at 02:24:28AM +0000, Stanley Chang[=E6=98=8C=E8=82=B2=
-=E5=BE=B7] wrote:
-> Hi Conor,
->=20
-> > > > You have device-specific compatibles, which is great, but you also =
-allow
-> > > > only those two generic ones. I had a _brief_ look at the driver, an=
-d it
-> > > > seems like there is no decision making done based on the compatible=
-s,
-> > > > only on the properties. Is that correct?
-> > > > If it is, I would understand having "realtek,usb3phy" as a fallback
-> > > > compatible for "realtek,rtd1619-usb3phy", but I do not get the curr=
-ent
-> > > > setup.
-> > >
-> > > This driver is compatible with all Realtek RTD SoCs without specifyin=
-g different settings.
-> > > So use "realtek,usb3phy" as fallback compatible for all SoCs.
-> > > This is the compatible name we use.
-> > > Other compatible names simply indicate that the driver supports the S=
-oCs.
-> >=20
-> > Then you should write the binding such that having fallback compatibles
-> > is permitted. Try plugging
-> > compatible =3D "realtek,rtd1295-usb2phy", "realtek,rtd-usb2phy", "realt=
-ek,usb2phy";
-> > into your example below and see what happens.
-> >=20
-> > > The name "usbNphy" and "rtd-usbNphy" seem to be more generic for all =
-RTD SoCs,
-> > > but they are not device-specific compatible.
-> > > Do you have a better suggestion?
-> >=20
-> > Write the binding so that having fallback compatibles in the DT actually
-> > works, don't add the SoC-specific ones merely as indicators that those
-> > SoCs are supported and don't permit "realtek,usbNphy" or
-> > "realtek,rtd-usbNphy" in isolation ;)
-> >
->=20
-> As far as I understand what you mean.
-> I should follow other docs to define compatible.
-> Reference:
->   Documentation/devicetree/bindings/phy/mediatek,xsphy.yaml
->   drivers/phy/mediatek/phy-mtk-xsphy.c
->=20
-> For example:
->=20
->   compatible:
->     items:
->       - enum:
->           - realtek,rtd1295-usb2phy
->           - realtek,rtd1395-usb2phy
->           - realtek,rtd1619-usb2phy
->           - realtek,rtd1319-usb2phy
->           - realtek,rtd1619b-usb2phy
->           - realtek,rtd1312c-usb2phy
->           - realtek,rtd1319d-usb2phy
->           - realtek,rtd1315e-usb2phy
->       - const: realtek,usb2phy
->=20
-> examples:
->   -
->     dwc3_u3drd_usb2phy: dwc3_u3drd_usb2phy@98013e14 {
->         compatible =3D "realtek,rtd1319-usb2phy", "realtek,usb2phy";
->  =20
-> And use only "Realtek, usb2phy" in the driver.
-> static const struct of_device_id usbphy_rtk_dt_match[] =3D {
->         { .compatible =3D "realtek,usb2phy", },
->         {},
-> };
+On 5/31/2023 6:30 PM, Thinh Nguyen wrote:
+> On Wed, May 31, 2023, Elson Serrao wrote:
+>>
+>>
+>> On 5/31/2023 4:20 PM, Thinh Nguyen wrote:
+>>> On Wed, May 31, 2023, Elson Roy Serrao wrote:
+>>>> Consider a scenario where cable disconnect happens when there is an active
+>>>> usb reqest queued to the UDC. As part of the disconnect we would issue an
+>>>> end transfer with no interrupt-on-completion before giving back this
+>>>> request. Since we are giving back the request without skipping TRBs the
+>>>> num_trbs field of dwc3_request still holds the stale value previously used.
+>>>> Function drivers re-use same request for a given bind-unbind session and
+>>>> hence their dwc3_request context gets preserved across cable
+>>>> disconnect/connect. When such a request gets re-queued after cable connect,
+>>>
+>>> Why would we preserve the request after a disconnect? The request is
+>>> associated with an endpoint, and after disconnect, the endpoint is no
+>>> longer valid. Shouldn't the request be freed then?
+>>>
+>>
+>>
+>> Function drivers generally allocate usb requests during bind when an
+>> endpoint is allocated to it (through usb_ep_autoconfig). These requests are
+>> freed when an unbind is called as the function is no longer associated with
+>> any end point. The function driver is free to re-use these requests
+>> throughout this bind-unbind session. The only restriction is that the
+>> function drivers wont be able to queue any requests as long as the endpoint
+> 
+>> is disabled. But that doesn't enforce function drivers to free the requests
+>> with ep_disable(). Even though the endpoint is disabled with cable
+>> disconnect, that endpoint is still associated with that particular function
+>> driver until that function is unbound.
+>>
+>> As an example below is how f_ncm driver allocates and frees the requests
+>> during bind/unbind
+>>
+>> Bind()
+>> ...
+>> ep = usb_ep_autoconfig(cdev->gadget, &fs_ncm_notify_desc);
+>> if (!ep)
+>> 	goto fail;
+>> ncm->notify = ep;
+>>
+>> status = -ENOMEM;
+>>
+>> /* allocate notification request and buffer */
+>> ncm->notify_req = usb_ep_alloc_request(ep, GFP_KERNEL);
+>> ...
+>>
+>> The endpoint is enabled later when set_alt is received and disabled in
+>> ncm_disable when the connection goes down (cable disconnect scenario)
+>>
+>>
+>> Unbind()
+>> ....
+>> kfree(ncm->notify_req->buf);
+>> usb_ep_free_request(ncm->notify, ncm->notify_req);
+>>
+>> I see similar implementation in other function drivers as well. That is,
+>> keep the usb requests allocated throughout the bind-unbind session and
+>> independent of ep_enable/ep_disable .
+>>
+>> Thanks
+>> Elson
+>>
+> 
+> Thanks for the clarification. Then you just need to reset the num_trbs
+> count when giving back the request. Can we do that in
+> dwc3_gadget_del_and_unmap_request()?
+> 
+> Please add a fix tag.
 
-Yes, this would be a vast improvement, thanks.
 
---oafWaJor0Kq+VBSZ
-Content-Type: application/pgp-signature; name="signature.asc"
+Yes we can just reset num_trbs in dwc3_gadget_del_and_unmap_request. I 
+had used skip trb function so that the trb_dequeue pointer and HWO field 
+also gets modified accordingly. But we dont really care about it in the 
+disconnect path as we reset that in the subsequent ep enable.
+Thanks for this suggestion!
+I will add a fix tag and re-upload the patch with above modification.
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHj77QAKCRB4tDGHoIJi
-0rr9AQCJvO7utcVmJn6jLUWkmuB24q/OS1WxIkdUIU9nFqMwCAEAjyvUtBKHzjkE
-0gbFxWfaaRIrhWYzxPppdQHgaYpl2QU=
-=mWjQ
------END PGP SIGNATURE-----
-
---oafWaJor0Kq+VBSZ--
+Thanks
+Elson
