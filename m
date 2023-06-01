@@ -2,56 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585CB71F1FD
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Jun 2023 20:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12FF671F379
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Jun 2023 22:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232817AbjFASau (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Jun 2023 14:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35846 "EHLO
+        id S231259AbjFAUNn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Jun 2023 16:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232537AbjFASam (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jun 2023 14:30:42 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4043E48
-        for <linux-usb@vger.kernel.org>; Thu,  1 Jun 2023 11:30:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685644224; x=1717180224;
-  h=date:from:to:cc:subject:message-id;
-  bh=3D+01ZRHq4saWUvD7zawvGL26GZB7tb9r5Bu6lIYmjk=;
-  b=mEg9BJYyW0HvFV1Qo3/EMPbfDj1qrftLsJROmDT16LD7w4tb9Zn7lM7B
-   VY+uEupzL+nd7shKFjwnZkW1f4HeSEMeCxBkZRTaM1C5Z5wid097E9f4o
-   k4h+T4SckuiL2zU4cb3EyRyY7fIP9FuvzHi+X0GFffzvrb+IDjmiukeQr
-   WgFXM6b4oKIji521E7NAoqSSyW7SCF/wII3GLBihFqTDFKRFK5/5DhOmv
-   te9YXmWguqvPWSaTkO9PP8gLJnKsAiZbNCsMbmOvIaU9TSBC7O38tK2jg
-   3aqy4wZ0lmtmrk7GujD11Exgma0cN4wx3DUTW/26bZzUk+mU4PioaWLZB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="336005557"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="336005557"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 11:29:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="740455643"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="740455643"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 01 Jun 2023 11:29:37 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q4n3I-0002ay-15;
-        Thu, 01 Jun 2023 18:29:36 +0000
-Date:   Fri, 02 Jun 2023 02:28:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS WITH WARNING
- 243ff7e6a03533fd5f34036b4a2c297d844ffdc0
-Message-ID: <20230601182837.9ptcq%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S230268AbjFAUNm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jun 2023 16:13:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A251A1;
+        Thu,  1 Jun 2023 13:13:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 828FB646C7;
+        Thu,  1 Jun 2023 20:13:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51289C43443;
+        Thu,  1 Jun 2023 20:13:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685650420;
+        bh=DCSJXIhqlYYsF0jNkPfKzV5MfwJ9SAulhFSDDwt8Qu0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UVty/LniZ4Eoxr0CcFWpQoP2bAkQ1mhsCOQqj4ha1ew5zBwoHHjDYmCdN/Ak2d/dJ
+         cjMdf+VqC2k8mlHM97czldDGclv4vyblevvuCSZdMiF5oBc0G0ehqJArE/0N6gl6Hb
+         H7EeaAkIY1SDGnH5Qh8VLw8i3mj2MRMIGw41D2HAuIciKuMBHWBKcvYi+ctUaO7Mpx
+         d3fsqN8NZ0H+z4Ruz7X9YhWYVS4qKEX5/SqVNxi4lSO+Cgb3/XpdwvKZ+KHGctcOqV
+         l4+uHUlRWAHFh2fLi7C7p2XCoAh1kyI2Birw2cGQu/wwzivUTcIpJwAg9rSVgnSzxN
+         8tFGadTrIX/DA==
+Date:   Thu, 1 Jun 2023 21:13:33 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Stanley =?utf-8?B?Q2hhbmdb5piM6IKy5b63XQ==?= 
+        <stanley_chang@realtek.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ray Chi <raychi@google.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] dt-bindings: phy: realtek: Add the doc about the
+ Realtek SoC USB 2.0/3.0 PHY
+Message-ID: <20230601-starry-nurture-5aecf1f332ac@spud>
+References: <20230525022617.30537-1-stanley_chang@realtek.com>
+ <20230525022617.30537-3-stanley_chang@realtek.com>
+ <20230529-impurity-dismount-bca5c9100c9b@spud>
+ <44015844858c42a79e0e7f9207d01496@realtek.com>
+ <202305310146.34V1kevI7026106@rtits1.realtek.com.tw>
+ <96a7905208c148debe3791636034a038@realtek.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="oafWaJor0Kq+VBSZ"
+Content-Disposition: inline
+In-Reply-To: <96a7905208c148debe3791636034a038@realtek.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,182 +77,95 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 243ff7e6a03533fd5f34036b4a2c297d844ffdc0  usb: typec: mux: fix static inline syntax error
 
-Warning reports:
+--oafWaJor0Kq+VBSZ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-https://lore.kernel.org/oe-kbuild-all/202305300608.8CuLyqAL-lkp@intel.com
+On Thu, Jun 01, 2023 at 02:24:28AM +0000, Stanley Chang[=E6=98=8C=E8=82=B2=
+=E5=BE=B7] wrote:
+> Hi Conor,
+>=20
+> > > > You have device-specific compatibles, which is great, but you also =
+allow
+> > > > only those two generic ones. I had a _brief_ look at the driver, an=
+d it
+> > > > seems like there is no decision making done based on the compatible=
+s,
+> > > > only on the properties. Is that correct?
+> > > > If it is, I would understand having "realtek,usb3phy" as a fallback
+> > > > compatible for "realtek,rtd1619-usb3phy", but I do not get the curr=
+ent
+> > > > setup.
+> > >
+> > > This driver is compatible with all Realtek RTD SoCs without specifyin=
+g different settings.
+> > > So use "realtek,usb3phy" as fallback compatible for all SoCs.
+> > > This is the compatible name we use.
+> > > Other compatible names simply indicate that the driver supports the S=
+oCs.
+> >=20
+> > Then you should write the binding such that having fallback compatibles
+> > is permitted. Try plugging
+> > compatible =3D "realtek,rtd1295-usb2phy", "realtek,rtd-usb2phy", "realt=
+ek,usb2phy";
+> > into your example below and see what happens.
+> >=20
+> > > The name "usbNphy" and "rtd-usbNphy" seem to be more generic for all =
+RTD SoCs,
+> > > but they are not device-specific compatible.
+> > > Do you have a better suggestion?
+> >=20
+> > Write the binding so that having fallback compatibles in the DT actually
+> > works, don't add the SoC-specific ones merely as indicators that those
+> > SoCs are supported and don't permit "realtek,usbNphy" or
+> > "realtek,rtd-usbNphy" in isolation ;)
+> >
+>=20
+> As far as I understand what you mean.
+> I should follow other docs to define compatible.
+> Reference:
+>   Documentation/devicetree/bindings/phy/mediatek,xsphy.yaml
+>   drivers/phy/mediatek/phy-mtk-xsphy.c
+>=20
+> For example:
+>=20
+>   compatible:
+>     items:
+>       - enum:
+>           - realtek,rtd1295-usb2phy
+>           - realtek,rtd1395-usb2phy
+>           - realtek,rtd1619-usb2phy
+>           - realtek,rtd1319-usb2phy
+>           - realtek,rtd1619b-usb2phy
+>           - realtek,rtd1312c-usb2phy
+>           - realtek,rtd1319d-usb2phy
+>           - realtek,rtd1315e-usb2phy
+>       - const: realtek,usb2phy
+>=20
+> examples:
+>   -
+>     dwc3_u3drd_usb2phy: dwc3_u3drd_usb2phy@98013e14 {
+>         compatible =3D "realtek,rtd1319-usb2phy", "realtek,usb2phy";
+>  =20
+> And use only "Realtek, usb2phy" in the driver.
+> static const struct of_device_id usbphy_rtk_dt_match[] =3D {
+>         { .compatible =3D "realtek,usb2phy", },
+>         {},
+> };
 
-Warning: (recently discovered and may have been fixed)
+Yes, this would be a vast improvement, thanks.
 
-Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
-drivers/usb/cdns3/cdns3-starfive.c:23: warning: expecting prototype for cdns3(). Prototype was for USB_STRAP_HOST() instead
+--oafWaJor0Kq+VBSZ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Warning ids grouped by kconfigs:
+-----BEGIN PGP SIGNATURE-----
 
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arc-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm64-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- m68k-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- mips-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- mips-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- powerpc-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- riscv-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- s390-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- sparc-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-`-- x86_64-allnoconfig
-    `-- Warning:MAINTAINERS-references-a-file-that-doesn-t-exist:Documentation-devicetree-bindings-usb-starfive-jh7110-usb.yaml
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHj77QAKCRB4tDGHoIJi
+0rr9AQCJvO7utcVmJn6jLUWkmuB24q/OS1WxIkdUIU9nFqMwCAEAjyvUtBKHzjkE
+0gbFxWfaaRIrhWYzxPppdQHgaYpl2QU=
+=mWjQ
+-----END PGP SIGNATURE-----
 
-elapsed time: 722m
-
-configs tested: 127
-configs skipped: 11
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r004-20230601   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r006-20230531   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r003-20230601   gcc  
-arc                  randconfig-r043-20230531   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r046-20230531   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r001-20230531   gcc  
-arm64                randconfig-r023-20230531   clang
-csky         buildonly-randconfig-r001-20230531   gcc  
-csky         buildonly-randconfig-r005-20230531   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r014-20230531   gcc  
-csky                 randconfig-r036-20230531   gcc  
-hexagon              randconfig-r031-20230531   clang
-hexagon              randconfig-r035-20230531   clang
-hexagon              randconfig-r041-20230531   clang
-hexagon              randconfig-r045-20230531   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230531   gcc  
-i386                 randconfig-i002-20230531   gcc  
-i386                 randconfig-i003-20230531   gcc  
-i386                 randconfig-i004-20230531   gcc  
-i386                 randconfig-i005-20230531   gcc  
-i386                 randconfig-i006-20230531   gcc  
-i386                 randconfig-i051-20230531   gcc  
-i386                 randconfig-i052-20230531   gcc  
-i386                 randconfig-i053-20230531   gcc  
-i386                 randconfig-i054-20230531   gcc  
-i386                 randconfig-i055-20230531   gcc  
-i386                 randconfig-i056-20230531   gcc  
-i386                 randconfig-i061-20230531   gcc  
-i386                 randconfig-i062-20230531   gcc  
-i386                 randconfig-i063-20230531   gcc  
-i386                 randconfig-i064-20230531   gcc  
-i386                 randconfig-i065-20230531   gcc  
-i386                 randconfig-i066-20230531   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r016-20230531   gcc  
-loongarch            randconfig-r025-20230531   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r004-20230531   gcc  
-m68k                                defconfig   gcc  
-microblaze           randconfig-r011-20230531   gcc  
-microblaze           randconfig-r024-20230531   gcc  
-microblaze           randconfig-r035-20230531   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r003-20230531   clang
-mips                 randconfig-r013-20230531   gcc  
-mips                 randconfig-r031-20230531   clang
-nios2        buildonly-randconfig-r006-20230531   gcc  
-nios2                               defconfig   gcc  
-openrisc     buildonly-randconfig-r004-20230531   gcc  
-openrisc             randconfig-r033-20230531   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r011-20230531   gcc  
-parisc               randconfig-r015-20230531   gcc  
-parisc               randconfig-r024-20230531   gcc  
-parisc               randconfig-r032-20230531   gcc  
-parisc               randconfig-r034-20230531   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r015-20230531   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r002-20230531   clang
-riscv                               defconfig   gcc  
-riscv                randconfig-r005-20230531   gcc  
-riscv                randconfig-r021-20230531   clang
-riscv                randconfig-r042-20230531   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r003-20230531   gcc  
-s390                 randconfig-r033-20230531   gcc  
-s390                 randconfig-r044-20230531   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r012-20230531   gcc  
-sh                   randconfig-r022-20230531   gcc  
-sparc        buildonly-randconfig-r003-20230531   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r021-20230531   gcc  
-sparc64              randconfig-r001-20230601   gcc  
-sparc64              randconfig-r014-20230531   gcc  
-sparc64              randconfig-r023-20230531   gcc  
-sparc64              randconfig-r032-20230531   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r002-20230531   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230531   gcc  
-x86_64               randconfig-a002-20230531   gcc  
-x86_64               randconfig-a003-20230531   gcc  
-x86_64               randconfig-a004-20230531   gcc  
-x86_64               randconfig-a005-20230531   gcc  
-x86_64               randconfig-a006-20230531   gcc  
-x86_64               randconfig-a013-20230531   clang
-x86_64               randconfig-a016-20230531   clang
-x86_64               randconfig-r026-20230531   clang
-x86_64               randconfig-r036-20230531   gcc  
-x86_64               randconfig-x061-20230601   gcc  
-x86_64               randconfig-x062-20230601   gcc  
-x86_64               randconfig-x063-20230601   gcc  
-x86_64               randconfig-x064-20230601   gcc  
-x86_64               randconfig-x065-20230601   gcc  
-x86_64               randconfig-x066-20230601   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r005-20230531   gcc  
-xtensa               randconfig-r004-20230531   gcc  
-xtensa               randconfig-r026-20230531   gcc  
-xtensa               randconfig-r034-20230531   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--oafWaJor0Kq+VBSZ--
