@@ -2,73 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E67471A3B3
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Jun 2023 18:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D8771F0B6
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Jun 2023 19:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234747AbjFAQFm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Jun 2023 12:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33356 "EHLO
+        id S231741AbjFAR1Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Jun 2023 13:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234619AbjFAQFl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jun 2023 12:05:41 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267A2186
-        for <linux-usb@vger.kernel.org>; Thu,  1 Jun 2023 09:05:33 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-62606e67c0dso9710766d6.2
-        for <linux-usb@vger.kernel.org>; Thu, 01 Jun 2023 09:05:33 -0700 (PDT)
+        with ESMTP id S231556AbjFAR1X (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jun 2023 13:27:23 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E5A19B
+        for <linux-usb@vger.kernel.org>; Thu,  1 Jun 2023 10:27:22 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-96f7bf3cf9eso170337766b.0
+        for <linux-usb@vger.kernel.org>; Thu, 01 Jun 2023 10:27:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685635532; x=1688227532;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WpSLy8MPIf+Dviq+rHrcXwl6jU6/m0OleOhPeH+wFGw=;
-        b=OnSPTXA0Vt60IcaLHX3dMQN87EUTqlBi3IqWloklJzBp6NVioqi9xaitoY6bGzurEO
-         hsWNDHTDUhmldXCGmd+6GRVwBuTKyZYJlbUkYpOGI+swJz4YDqOvx9OIsqgIccsBXQ7u
-         I1c+YXyBmx8GQgKRlJMjEu9UqUdiDzgf0OGwU=
+        d=linaro.org; s=google; t=1685640441; x=1688232441;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ywHAd7umX8c1mvBvuckFfVUydEsgHA+GJNFS0AltCkY=;
+        b=BgGNoDLofuERQiTZN/lQ0c7R8WrONxNiD/F9UORGVlGQ/z0mw+rldKvQjq8D/q7V86
+         qkWwITW330snlXH76bz7qIY4w/OEW/xj8R25shaX5GcmhgGi75ZvWSdO9icgK/GNu70f
+         ccEIkX7g9y80DYcHIWIvpAhoQ3o0besVhoTD4o3D6Zk+JIP0C06YJ/bAe4qqbZslnFtO
+         KPO1nbInLw29zJZgTCYQObWX1RPwQBuaVvFtn9Sqm2bkXOg/vM3dtZDSR1JTPNS6qSnl
+         rVa6nhocKOHe+Xo4nib4MUyxPaO5PYVOBWxLd7TMb1pEmt/cogsGaPZxO35Ow2lxrALe
+         O/iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685635532; x=1688227532;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WpSLy8MPIf+Dviq+rHrcXwl6jU6/m0OleOhPeH+wFGw=;
-        b=E6L7J+8NcB/pk1etDhZoJsqi603AZx4UxtDee07H/3ghv3e+Jr2XSG5yjsi6hcWTf9
-         PufmRx0brLZaVhthXmAyC6B3BgdyoPtsGNsBFS0ht6JkUUSwyolK+8DmkjkOmOuccKqk
-         9tqLTyj52DtnT3OF+TCuv8wKrHZuHln1si9B3KPFVJMBCM2IytNuwVwP484m7HpXJhBZ
-         GGMv/RS3lJQ9gwtst76FVILsHIdQYZparh5rpLpVYKulkudeWR2J651jX1TC2PPZ6TE2
-         GX7HQgIRM56QnXRw5W2OeSbH1veZ4rZgye/6Fjv5Eog5dkwH6DXHaCCHJzjme3nM/AsB
-         daIg==
-X-Gm-Message-State: AC+VfDzpEjnR0AFRkh1FdVUDj7STY2H/XAsyWjz41NrYkH2QKsfmgZni
-        tH+yjV546I8QGRXLqOexTdu5W/1hBpcDWHMopbBG8A==
-X-Google-Smtp-Source: ACHHUZ5Te4imeexJfl9iQZBs88ffhGMiKgfo4/3lW3ddfBr6VdsWj2W6cqsl7V3Dq/JTL6QYn3YJeA==
-X-Received: by 2002:a05:6214:1255:b0:5e8:c098:2493 with SMTP id r21-20020a056214125500b005e8c0982493mr13290980qvv.50.1685635531640;
-        Thu, 01 Jun 2023 09:05:31 -0700 (PDT)
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com. [209.85.219.49])
-        by smtp.gmail.com with ESMTPSA id o15-20020ae9f50f000000b0075b0c1f4ad6sm6798892qkg.0.2023.06.01.09.05.30
-        for <linux-usb@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1685640441; x=1688232441;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ywHAd7umX8c1mvBvuckFfVUydEsgHA+GJNFS0AltCkY=;
+        b=JBIRwgPQP8/lgR7mri/oFvHPO/1axmfCDLYRfyOfTN9WZOKXsV11D6edQTzxe6C7dG
+         7uMSEm0jSEFg/aHIYZn2XDYqv/5u8B6LDtD9E2foOo8XJqpSZiDLi6PoVYHmDooONZao
+         81fnlSQHkeYW5Mcq3yPDxGVTEa/GhYgwvYEuvnkg6URaKPzkPQe1vT8jJnpea8835u/B
+         gOfwAfB4+w4laAHNLphwAPpTEVXXyXqIaLI2T7zFdRepNJOoRSjyTKQ0b0Au5EDVETxR
+         Cmc+dfAVL0ryAsbrIQ7FQFRRKpAR0PFaAAlRiwBxPpF/y/adkyS0zJiSKxX2+aVb7fV3
+         j0aA==
+X-Gm-Message-State: AC+VfDzANBIwAlOVtCj4Qq6dNwvo48Fd0jWuufL9MDelGybHqjDJkUwy
+        0aHfdcffX0Ih5xBMiV2XaPfZlA==
+X-Google-Smtp-Source: ACHHUZ6VsFFYuiOtcvmekbYesmy2WkkSPy+SmgogYFK66VXaWe3UBLyCCmqvWDQLlcaV3532Bqv9Kw==
+X-Received: by 2002:a17:906:4fc7:b0:96f:c988:941 with SMTP id i7-20020a1709064fc700b0096fc9880941mr8516840ejw.15.1685640441032;
+        Thu, 01 Jun 2023 10:27:21 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id gt5-20020a170906f20500b0094ee700d8e4sm10846983ejb.44.2023.06.01.10.27.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 09:05:31 -0700 (PDT)
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6261890b4d7so9725516d6.1
-        for <linux-usb@vger.kernel.org>; Thu, 01 Jun 2023 09:05:30 -0700 (PDT)
-X-Received: by 2002:a05:6214:2487:b0:621:83d:3a47 with SMTP id
- gi7-20020a056214248700b00621083d3a47mr11839100qvb.39.1685635530343; Thu, 01
- Jun 2023 09:05:30 -0700 (PDT)
+        Thu, 01 Jun 2023 10:27:20 -0700 (PDT)
+Message-ID: <21819d30-1df4-15a9-f458-32162f2a82b9@linaro.org>
+Date:   Thu, 1 Jun 2023 19:27:18 +0200
 MIME-Version: 1.0
-References: <20230531-xhci-deadlock-v1-1-57780bff5124@chromium.org> <14d94fa1-1499-de1f-c924-9b823a606580@linux.intel.com>
-In-Reply-To: <14d94fa1-1499-de1f-c924-9b823a606580@linux.intel.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Thu, 1 Jun 2023 18:05:19 +0200
-X-Gmail-Original-Message-ID: <CANiDSCuTYRUfW8tLbPDq3dE+F7Wno5oc4C9qESMmTpaNyW-54Q@mail.gmail.com>
-Message-ID: <CANiDSCuTYRUfW8tLbPDq3dE+F7Wno5oc4C9qESMmTpaNyW-54Q@mail.gmail.com>
-Subject: Re: [PATCH] xhci: Do not create endpoint debugfs while holding the
- bandwidth mutex
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephen Boyd <swboyd@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] dt-bindings: phy: mxs-usb-phy: convert to DT schema
+ format
+Content-Language: en-US
+To:     Xu Yang <xu.yang_2@nxp.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        jun.li@nxp.com
+References: <20230601080723.1556461-1-xu.yang_2@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230601080723.1556461-1-xu.yang_2@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,201 +79,136 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias
-
-On Thu, 1 Jun 2023 at 16:13, Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
->
-> On 31.5.2023 15.40, Ricardo Ribalda Delgado wrote:
-> > xhci_debugfs_create_endpoint needs to take the mm->mmap_sem, which is
-> > not serialized with the hcd->bandwidth_mutex across the codebase.
-> >
-> > Without this patch a deadlock has been observed with the uvc driver at
-> > the functions v4l2_mmap() and usb_set_interface().
-> >
-> > Cc: Stephen Boyd <swboyd@chromium.org
-> > Fixes: 167657a1bb5f ("xhci: don't create endpoint debugfs entry before ring buffer is set.")
-> > Signed-off-by: Ricardo Ribalda Delgado <ribalda@chromium.org>
-> > ---
-> > I do not have a proper reproducer for this and I am not used to this
-> > subsystem, so please take a careful look at this patch :).
-> >
-> > Thanks!
->
-> Do you still have the lockdep output showing the deadlock?
-
-[  459.731142] ======================================================
-[  459.731150] WARNING: possible circular locking dependency detected
-[  459.731161] 5.4.169-lockdep-17434-g505c8a10e6fe #1 Not tainted
-[  459.731168] ------------------------------------------------------
-[  459.731176] syz-executor.3/15308 is trying to acquire lock:
-[  459.731184] ffffff80c63e0ee0 (&queue->mutex){+.+.}, at:
-uvc_queue_mmap+0x30/0xa0 [uvcvideo]
-[  459.731226]
-               but task is already holding lock:
-[  459.731232] ffffff80a748eea8 (&mm->mmap_sem){++++}, at:
-vm_mmap_pgoff+0x10c/0x1f4
-[  459.731255]
-               which lock already depends on the new lock.
-
-[  459.731262]
-               the existing dependency chain (in reverse order) is:
-[  459.731269]
-               -> #3 (&mm->mmap_sem){++++}:
-[  459.731286]        __might_fault+0xec/0x150
-[  459.731298]        filldir64+0x2e0/0x15dc
-[  459.731310]        dcache_readdir+0x134/0x660
-[  459.731320]        iterate_dir+0x200/0x40c
-[  459.731331]        ksys_getdents64+0x218/0x78c
-[  459.731342]        __arm64_sys_getdents64+0x7c/0x90
-[  459.731353]        el0_svc_common+0x1c0/0x3dc
-[  459.731363]        el0_svc_compat_handler+0x88/0xd4
-[  459.731373]        el0_svc_compat+0x8/0x2c
-[  459.731379]
-               -> #2 (&sb->s_type->i_mutex_key#4){++++}:
-[  459.731398]        down_write+0x60/0x118
-[  459.731409]        start_creating+0xf8/0x260
-[  459.731419]        debugfs_create_dir+0x30/0x290
-[  459.731430]        xhci_debugfs_create_endpoint+0x118/0x1c8
-[  459.731442]        xhci_check_bandwidth+0x520/0x6c0
-[  459.731453]        usb_hcd_alloc_bandwidth+0x800/0x900
-[  459.731464]        usb_set_configuration+0x4c4/0x1258
-[  459.731475]        usb_generic_driver_probe+0x80/0x140
-[  459.731486]        usb_probe_device+0xc8/0x240
-[  459.731497]        really_probe+0x2f0/0x9e4
-[  459.731507]        driver_probe_device+0xf0/0x2e4
-[  459.731517]        __device_attach_driver+0x180/0x254
-[  459.731528]        bus_for_each_drv+0x114/0x184
-[  459.731537]        __device_attach+0x224/0x398
-[  459.731547]        device_initial_probe+0x24/0x30
-[  459.731557]        bus_probe_device+0xa8/0x1b8
-[  459.731567]        device_add+0x63c/0x940
-[  459.731577]        usb_new_device+0x810/0xe68
-[  459.731587]        hub_port_connect+0xaf0/0x16bc
-[  459.731597]        hub_port_connect_change+0x32c/0x5c0
-[  459.731606]        port_event+0x9e8/0xe4c
-[  459.731616]        hub_event+0x3fc/0xaec
-[  459.731628]        process_one_work+0x604/0xa2c
-[  459.731638]        worker_thread+0x930/0xea8
-[  459.731648]        kthread+0x2dc/0x350
-[  459.731658]        ret_from_fork+0x10/0x18
-[  459.731664]
-               -> #1 (hcd->bandwidth_mutex){+.+.}:
-[  459.731680]        __mutex_lock_common+0x140/0x18c8
-[  459.731690]        mutex_lock_nested+0x48/0x58
-[  459.731701]        usb_set_interface+0x108/0x778
-[  459.731724]        uvc_video_start_transfer+0x824/0x12a4 [uvcvideo]
-[  459.731746]        uvc_video_start_streaming+0x148/0x2c8 [uvcvideo]
-[  459.731767]        uvc_start_streaming+0x108/0x214 [uvcvideo]
-[  459.731779]        vb2_start_streaming+0x110/0x3f0
-[  459.731789]        vb2_core_streamon+0x234/0x340
-[  459.731799]        vb2_streamon+0x80/0xac
-[  459.731819]        uvc_queue_streamon+0x3c/0x5c [uvcvideo]
-[  459.731840]        uvc_ioctl_streamon+0xd0/0x118 [uvcvideo]
-[  459.731850]        v4l_streamon+0x6c/0x9c
-[  459.731860]        __video_do_ioctl+0x940/0xaa8
-[  459.731870]        video_usercopy+0x528/0x920
-[  459.731880]        video_ioctl2+0x3c/0x4c
-[  459.731889]        v4l2_ioctl+0x120/0x158
-[  459.731900]        do_video_ioctl+0xdec/0x1784
-[  459.731910]        v4l2_compat_ioctl32+0xc0/0x198
-[  459.731921]        __arm64_compat_sys_ioctl+0x314/0x778
-[  459.731931]        el0_svc_common+0x1c0/0x3dc
-[  459.731941]        el0_svc_compat_handler+0x88/0xd4
-[  459.731950]        el0_svc_compat+0x8/0x2c
-[  459.731957]
-               -> #0 (&queue->mutex){+.+.}:
-[  459.731974]        __lock_acquire+0x1b74/0x4f04
-[  459.731985]        lock_acquire+0xd0/0x168
-[  459.731995]        __mutex_lock_common+0x140/0x18c8
-[  459.732004]        mutex_lock_nested+0x48/0x58
-[  459.732024]        uvc_queue_mmap+0x30/0xa0 [uvcvideo]
-[  459.732045]        uvc_v4l2_mmap+0xa4/0x138 [uvcvideo]
-[  459.732054]        v4l2_mmap+0x114/0x1f8
-[  459.732065]        mmap_region+0x8b8/0xc90
-[  459.732075]        do_mmap+0x654/0xaec
-[  459.732084]        vm_mmap_pgoff+0x15c/0x1f4
-[  459.732094]        ksys_mmap_pgoff+0x124/0x194
-[  459.732105]        __arm64_compat_sys_aarch32_mmap2+0xd8/0xf0
-[  459.732114]        el0_svc_common+0x1c0/0x3dc
-[  459.732124]        el0_svc_compat_handler+0x88/0xd4
-[  459.732134]        el0_svc_compat+0x8/0x2c
-[  459.732141]
-               other info that might help us debug this:
-
-[  459.732148] Chain exists of:
-                 &queue->mutex --> &sb->s_type->i_mutex_key#4 --> &mm->mmap_sem
-
-[  459.732165]  Possible unsafe locking scenario:
-
-[  459.732172]        CPU0                    CPU1
-[  459.732178]        ----                    ----
-[  459.732184]   lock(&mm->mmap_sem);
-[  459.732193]                                lock(&sb->s_type->i_mutex_key#4);
-[  459.732204]                                lock(&mm->mmap_sem);
-[  459.732212]   lock(&queue->mutex);
-[  459.732221]
-                *** DEADLOCK ***
-
-[  459.732230] 1 lock held by syz-executor.3/15308:
-[  459.732237]  #0: ffffff80a748eea8 (&mm->mmap_sem){++++}, at:
-vm_mmap_pgoff+0x10c/0x1f4
-[  459.732256]
-               stack backtrace:
-[  459.732269] CPU: 6 PID: 15308 Comm: syz-executor.3 Not tainted
-5.4.169-lockdep-17434-g505c8a10e6fe #1
-[  459.732277] Hardware name: Google Pazquel (TI,LTE) (DT)
-[  459.732284] Call trace:
-[  459.732294]  dump_backtrace+0x0/0x2ec
-[  459.732304]  show_stack+0x24/0x30
-[  459.732315]  dump_stack+0x148/0x21c
-[  459.732324]  print_circular_bug+0x18c/0x1b8
-[  459.732334]  check_noncircular+0x2e4/0x3c4
-[  459.732344]  __lock_acquire+0x1b74/0x4f04
-[  459.732355]  lock_acquire+0xd0/0x168
-[  459.732364]  __mutex_lock_common+0x140/0x18c8
-[  459.732374]  mutex_lock_nested+0x48/0x58
-[  459.732395]  uvc_queue_mmap+0x30/0xa0 [uvcvideo]
-[  459.732415]  uvc_v4l2_mmap+0xa4/0x138 [uvcvideo]
-[  459.732425]  v4l2_mmap+0x114/0x1f8
-[  459.732435]  mmap_region+0x8b8/0xc90
-[  459.732444]  do_mmap+0x654/0xaec
-[  459.732454]  vm_mmap_pgoff+0x15c/0x1f4
-[  459.732463]  ksys_mmap_pgoff+0x124/0x194
-[  459.732474]  __arm64_compat_sys_aarch32_mmap2+0xd8/0xf0
-[  459.732483]  el0_svc_common+0x1c0/0x3dc
-[  459.732493]  el0_svc_compat_handler+0x88/0xd4
-[  459.732502]  el0_svc_compat+0x8/0x2c
+On 01/06/2023 10:07, Xu Yang wrote:
+> Convert the binding to DT schema format.
+> 
 
 
->
-> I'm not sure how calling xhci_debugfs_create_endpoint() from
-> xhci_add_endpoint() instead of xhci_check_bandwidth() helps.
->
-> Both are called with hcd->bandwidth_mutex held:
->
-> usb_set_interface()
->         mutex_lock(hcd->bandwidth_mutex);
->         usb_hcd_alloc_bandwidth()
->                 hcd->driver->add_endpoint()    -> xhci_add_endpoint()
->                 hcd->driver->check_bandwidth() -> xhci_check_bandwidth()
->         mutex_unlock(hcd->bandwidth_mutex);
-
-Yep, I guess I was lucky not to be able to repro again :)
-
-The locks involved are:
-
-hcd->bandwidth_mutex
-mm->mmap_sem
-[uvc] queue->mutex
+Thank you for your patch. There is something to discuss/improve.
 
 
+e/bindings/phy/mxs-usb-phy.yaml
+b/Documentation/devicetree/bindings/phy/mxs-usb-phy.yaml
+> new file mode 100644
+> index 000000000000..48b0e654e52c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/mxs-usb-phy.yaml
 
->
-> Thanks
-> Mathias
->
+Filename matching compatibles, so for exmaple fsl,mxs-usbphy.yaml.
 
+> @@ -0,0 +1,97 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/mxs-usb-phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Freescale MXS USB Phy Device
+> +
+> +maintainers:
+> +  - Xu Yang <xu.yang_2@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - fsl,imx23-usbphy
+> +          - fsl,vf610-usbphy
+> +      - items:
+> +          - enum:
+> +              - fsl,imx28-usbphy
+> +              - fsl,imx6ul-usbphy
+> +              - fsl,imx6sl-usbphy
+> +              - fsl,imx6sx-usbphy
+> +              - fsl,imx6q-usbphy
+> +          - const: fsl,imx23-usbphy
+> +      - items:
+> +          - enum:
+> +              - fsl,imx7ulp-usbphy
+> +              - fsl,imx6sll-usbphy
+> +          - const: fsl,imx6ul-usbphy
+> +          - const: fsl,imx23-usbphy
+> +      - items:
+> +          - const: fsl,imx8dxl-usbphy
+> +          - const: fsl,imx7ulp-usbphy
+> +          - const: fsl,imx6ul-usbphy
+> +          - const: fsl,imx23-usbphy
 
--- 
-Ricardo Ribalda
+I cannot find these in the old bindings. Please explain changes to
+conversion in commit msg. So far you wrote that it is pure conversion.
+
+> +
+> +  reg:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  fsl,anatop:
+> +    description:
+> +      phandle for anatop register, it is only for imx6 SoC series
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    maxItems: 1
+> +
+> +  fsl,tx-cal-45-dn-ohms:
+> +    description:
+> +      Resistance (in ohms) of switchable high-speed trimming resistor
+> +      connected in parallel with the 45 ohm resistor that terminates
+> +      the DN output signal.
+> +    minimum: 35
+> +    maximum: 54
+> +    default: 45
+> +
+> +  fsl,tx-cal-45-dp-ohms:
+> +    description:
+> +      Resistance (in ohms) of switchable high-speed trimming resistor
+> +      connected in parallel with the 45 ohm resistor that terminates
+> +      the DP output signal.
+> +    minimum: 35
+> +    maximum: 54
+> +    default: 45
+> +
+> +  fsl,tx-d-cal:
+> +    description:
+> +      Current trimming value (as a percentage) of the 17.78 mA TX
+> +      reference current.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 79
+> +    maximum: 119
+> +    default: 100
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+
+missing allOf narrowing anatop to imx6. Also interrupts and reg should
+be narrowed to respective variants.
+
+> +unevaluatedProperties: false
+
+Instead additionalProperties: false.
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    usbphy1: usb-phy@20c9000 {
+> +        compatible = "fsl,imx6q-usbphy", "fsl,imx23-usbphy";
+> +        reg = <0x020c9000 0x1000>;
+> +        interrupts = <0 44 IRQ_TYPE_LEVEL_HIGH>;
+
+Is 0 known flag? Use defines for it.
+
+> +        fsl,anatop = <&anatop>;
+> +    };
+> +
+> +...
+
+Best regards,
+Krzysztof
+
