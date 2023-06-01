@@ -2,47 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2370171920F
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Jun 2023 07:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BAD719474
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Jun 2023 09:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbjFAFDb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Jun 2023 01:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
+        id S232046AbjFAHii (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Jun 2023 03:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231298AbjFAFD3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jun 2023 01:03:29 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B96912F;
-        Wed, 31 May 2023 22:03:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=V8kaecF6y4TaR0T6wLxAFyrl6r7hQF77k4cBDuWtj4o=; b=jLXR+1KrPVb+JRj3t14srJCkdV
-        L1y1gVn7wztz/VXvhcrAmleYxiP/JEfPUIK+fxWeUtgANBCByShUv5kMS9bGKpKkuzfYHdWTmNc2b
-        vOd1yv18xRkjVWBe9nJICrL0xi4Chlk9YEU1H/clwZJHCDi5qWeqx2kmgj/8csS/B/Zx8xZve+iPY
-        tc8Oig0TN722dkWGmpTiQmQ4Jimw2H9P2dJykFD1+2/yUcFCnvRKmnoq/PrfOeiAjQGJl2Sy5/bhq
-        eP4Iz6WW8vgLBMbMw+pelRspHBsmnBvN7wvh1DzYfxJaPwj7lnAsD7Y24p+c+pVzrT+UWLdlmP65+
-        DHmLVIyA==;
-Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q4aT8-001z4C-2g;
-        Thu, 01 Jun 2023 05:03:26 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] usb: typec: mux: fix static inline syntax error
-Date:   Wed, 31 May 2023 22:03:25 -0700
-Message-Id: <20230601050325.26883-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S232048AbjFAHgg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jun 2023 03:36:36 -0400
+Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE311199
+        for <linux-usb@vger.kernel.org>; Thu,  1 Jun 2023 00:33:13 -0700 (PDT)
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id D91C883D1E; Thu,  1 Jun 2023 08:33:11 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1685604791; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=RXyEWMFE3ezHQVfAnkqZYr4OTT1nRRNwCpmW4S9/daCb2fgMO3HlHhFw0qvSGopGb
+         R7qhUPMFO0ieEK/LsRHNfkIOTB62qIDA1Uknf2h69whicG8eJeExq9mbI0wxktZtn7
+         ADCBpjjgmzG7u2lz7AtDLb0J3E67OBW0QH5dG1Les9PEwnXhYAj9ubsfts+OOygeD6
+         IjHjZej/GSmXgNv/OnTxKRQ8QR94Fqyu8M0ui2ZftUrCd9J+g/xXPT8FS0MAEQFsRC
+         OK4VGpQD1shNUivJNNfR3E1FQEI9LSut/+LxCZ7V4Uj45FjJe1wULsGbO6TsV1VfDQ
+         N59alr0mHzg9Q==
+Received: by mail.lokoho.com for <linux-usb@vger.kernel.org>; Thu,  1 Jun 2023 07:30:57 GMT
+Message-ID: <20230601074503-0.1.6c.2g5fg.0.2wbdocb4rf@lokoho.com>
+Date:   Thu,  1 Jun 2023 07:30:57 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-usb@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,35 +45,19 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix build error when USB_SUPPORT is not set or TYPEC is not set
-by dropping an extraneous semi-colon:
+Dzie=C5=84 dobry,
 
-In file included from ../drivers/phy/qualcomm/phy-qcom-qmp-combo.c:23:
-../include/linux/usb/typec_mux.h:77:1: error: expected identifier or '(' before '{' token
-   77 | {
-      | ^
-../include/linux/usb/typec_mux.h:76:33: warning: 'fwnode_typec_mux_get' used but never defined
-   76 | static inline struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode);
-      |                                 ^~~~~~~~~~~~~~~~~~~~
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-Fixes: 3524fe31538c ("usb: typec: mux: Remove alt mode parameters from the API")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
----
- include/linux/usb/typec_mux.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-diff -- a/include/linux/usb/typec_mux.h b/include/linux/usb/typec_mux.h
---- a/include/linux/usb/typec_mux.h
-+++ b/include/linux/usb/typec_mux.h
-@@ -73,7 +73,7 @@ void *typec_mux_get_drvdata(struct typec
- 
- #else
- 
--static inline struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode);
-+static inline struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode)
- {
- 	return NULL;
- }
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+
+
+Pozdrawiam
+Adam Charachuta
