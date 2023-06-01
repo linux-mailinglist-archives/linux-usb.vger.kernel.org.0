@@ -2,143 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C567719501
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Jun 2023 10:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B726719514
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Jun 2023 10:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbjFAIE1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Jun 2023 04:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59006 "EHLO
+        id S232006AbjFAIK2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Jun 2023 04:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231374AbjFAIEZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jun 2023 04:04:25 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2065.outbound.protection.outlook.com [40.107.104.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F38C97;
-        Thu,  1 Jun 2023 01:04:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b53V1vIczP1oKVlSQwGIbtmVsPiBx9QkcPVUvuIHo5etpbnENUkRwxgCoCaEVffROAW8W7qkqv37ZGcoMg6XlwCnc3EIjQ95DsviyP7wGxp0lBcOx/Tf/yWYM5PvBachDKIgl1Aa55O5MdhHn9o6vfSyXdDY+o3Y/MPsGxp04yr7lZYlmwR04yuKfeKElsJsDYoByFeHbdbrtBczYMKKlB/BcajP8r4WGQMHXYOXFXLh0H0sxRFpx1kAdURApytihnaV9gNy/Bu0o4LTb5r8oPmCafgN0GIn7KL+x4TbtKctz71PvBcLilSrnrrEBVSt+BD7TGrSgX6+iU0k9OdpzA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qWR/0ocFg02BRREUJzsFgovXDOhKeD8Ik088kBeQIRQ=;
- b=Vb9iVob1+8f3H+6sL/RagDncgt07x6sm0+p4NjVFo8CbT1QYdZTSk61PPozXHLKw/GY0e4MI066gYyYCN2XatIbDSe9nnXeicaYG+FO2MQREN478wXWAYm5bogFsNJvU3Q0Ds3R456+EFmo5WQUaWveGCcX4GSjMIlD584wpZcrxz2W4yZq3xe34jPyT2BYAWqTJdFlFBscY+6y9k0Q1TYkWU176krHDgjvNdKkC/lLcu/Q3NrZ0FeiQVZGkMXC/3KTKbYSFe6+Vlo+My8aUq3H/I/hoSLV5BGH436mtkSl7WoST67Fw/VzgfpSanDMp8ja91ZodcWnIoNhinf1xWA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qWR/0ocFg02BRREUJzsFgovXDOhKeD8Ik088kBeQIRQ=;
- b=WyCkM/Cx5DaT+bcuXi4FJ9fRmfhDeiguooBNdgbP8utpimUHA7SDaDBjujQwpXVltAtYiIK7cN19o8REIRE/5GNFsQAwuMzIM5GxpX8VxuF4t1W0wZ2vGhM8hwszLaOEcyVij9sENrb+Ag5Z955lbOfq8T3THNMbY7qqr+m7eic=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DB7PR04MB4505.eurprd04.prod.outlook.com (2603:10a6:5:39::26) by
- DBBPR04MB8027.eurprd04.prod.outlook.com (2603:10a6:10:1e6::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6433.24; Thu, 1 Jun 2023 08:04:22 +0000
-Received: from DB7PR04MB4505.eurprd04.prod.outlook.com
- ([fe80::f9b0:8c34:e57:92a4]) by DB7PR04MB4505.eurprd04.prod.outlook.com
- ([fe80::f9b0:8c34:e57:92a4%7]) with mapi id 15.20.6433.024; Thu, 1 Jun 2023
- 08:04:22 +0000
-From:   Xu Yang <xu.yang_2@nxp.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        jun.li@nxp.com, xu.yang_2@nxp.com
-Subject: [PATCH 2/2] dt-bindings: phy: mxs-usb-phy: add imx8ulp and imx8qm compatible
-Date:   Thu,  1 Jun 2023 16:07:23 +0800
-Message-Id: <20230601080723.1556461-2-xu.yang_2@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230601080723.1556461-1-xu.yang_2@nxp.com>
-References: <20230601080723.1556461-1-xu.yang_2@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0013.apcprd01.prod.exchangelabs.com
- (2603:1096:4:191::9) To DB7PR04MB4505.eurprd04.prod.outlook.com
- (2603:10a6:5:39::26)
+        with ESMTP id S231513AbjFAIK1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jun 2023 04:10:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1B3C0
+        for <linux-usb@vger.kernel.org>; Thu,  1 Jun 2023 01:09:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685606981;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pDVmBRHQleLMTi+Z7D0Zv8qBsfmNlFbYk+Fn+QOciuw=;
+        b=IiZnc8l8nOXzpB/9iNLa+RE2IM5odJf4CJSVf4o+ahz4w08Dys+QQJVpyucaHQXvCVa8pA
+        TUDY6SkFzjxl4+PhFf8yD6DGzj6sd6io2O9E8ZRGPxaM7xdu9ioXK1w4LHvjEWNwCU0LJZ
+        lf81hglpmizbWMRW3RKVzmAGPJqcTLE=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-584-8N12GIZ5OMmscBJrBrDvYA-1; Thu, 01 Jun 2023 04:09:33 -0400
+X-MC-Unique: 8N12GIZ5OMmscBJrBrDvYA-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f08900caadso918525e9.0
+        for <linux-usb@vger.kernel.org>; Thu, 01 Jun 2023 01:09:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685606972; x=1688198972;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pDVmBRHQleLMTi+Z7D0Zv8qBsfmNlFbYk+Fn+QOciuw=;
+        b=l5/6nPLOHnVlUkTBIS3lVOBJVlSKPZ3OPA4LgGfCRiidOLRj5aF3LZt8aGAOLx0Z+E
+         mW4NvpUqRYA2A1KzaRL4L7N/2S8OEqJm/gKpuNhSb2r2jjgsFsMDgZXB7t2UnM+3vAfg
+         I/z9zoZ75mD1cxJc/eSBtZxyHhKrhbRkcblg3rqA9jNcKV7nWkjs+ejzsXI6+aQwDGwO
+         yy03eP1w1P9Y/P+kwzBZUZKTszK58/d1Hfz12nkfJ2kaZWgOPzIo+8KkdzHuaT4EjQJe
+         cn+MqIEep0XwLab8qKkJzNV8uOEqNm9oBR4eQ3k4jrL4HrUPXWjZdBPlEYzzXOsIzTEH
+         oovA==
+X-Gm-Message-State: AC+VfDz3qNiAMn8B9KHmjj2XLii0KdG+jz6He051Re3puZEpYFMYv5gS
+        jToxr31PCTgo1th2QEfGKwgL6y71b8HgWYa5N9Y7mbnTU2Vo83tiEf8CWXjpQ+uvdohn5XH+b2w
+        B6GOTFWS74rVLu6UVFanM
+X-Received: by 2002:adf:f34d:0:b0:2fa:b265:a010 with SMTP id e13-20020adff34d000000b002fab265a010mr5589752wrp.7.1685606972183;
+        Thu, 01 Jun 2023 01:09:32 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7btuoTXIuS7dg9++Dm3sJtRubRCgOMM0uvp8Ej1HQa7dk1CnCAUxdL2fUJIdPo3clHT5D+vg==
+X-Received: by 2002:adf:f34d:0:b0:2fa:b265:a010 with SMTP id e13-20020adff34d000000b002fab265a010mr5589733wrp.7.1685606971861;
+        Thu, 01 Jun 2023 01:09:31 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-242-89.dyn.eolo.it. [146.241.242.89])
+        by smtp.gmail.com with ESMTPSA id u6-20020adfeb46000000b0030ae53550f5sm9259931wrn.51.2023.06.01.01.09.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 01:09:31 -0700 (PDT)
+Message-ID: <d7820e8eb82ca1cca93678c88da002e6bee0ca7f.camel@redhat.com>
+Subject: Re: [PATCH net-next v3 2/2] usbnet: ipheth: add CDC NCM support
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Foster Snowhill <forst@pen.gy>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Georgi Valkov <gvalkov@gmail.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Date:   Thu, 01 Jun 2023 10:09:30 +0200
+In-Reply-To: <581e4f2e-c6e3-026b-7a51-968afb616a7e@pen.gy>
+References: <20230527130309.34090-1-forst@pen.gy>
+         <20230527130309.34090-2-forst@pen.gy>
+         <Hpg7Nwtv7aepWNQuwyGiCoXT2ScF0xBHsfvNBP7ytjXH6O-UIgpz_V7NoHsO00bS5bzlq_W5LUeEOhRO4eZd6w==@protonmail.internalid>
+         <e7159f2e39e79e51da123d09cfbcc21411dad544.camel@redhat.com>
+         <581e4f2e-c6e3-026b-7a51-968afb616a7e@pen.gy>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB7PR04MB4505:EE_|DBBPR04MB8027:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2e4507c8-22fa-426c-c143-08db6276ceb1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AnrqqsJ4mHtmGbQrghC8mxjv1gFJjkgIg0E2SS49OmQ3gl9dYkHk6ZQJJs75bjVjxJLCIXNc5uGXzkpvxMnRC0N5rAxtvytdlLa8h1PadoHuY95l1C/Wx02YsQuVYT90xy0Qq+rJ730Z5lnGdUSKnL9zIpMYv9MLT4FAdoFvqaPIwxoTA0AsXiArljJ/OAlvQhP3LJd42MRRb5glNbLhzMf6hRpyQ2QOoeoaNpRNg106wm8n8zS8a25NozFphwGpT2wP+KkUc12gZnmnxXArRLkzUTJSMxvnIKsov0vwnLCG1Txa/Jxak1BcbV3KyPRLoBYTngEfOlisYa8vvyzj/MFiIjQmmGCPmdu+e/1XQG6M2Acs1Tq6X7thugX3AYMaC2ayZQlm5SP75xN9+N09HCEc9jfkVdfzytpcJsNjz9Oife1je0PNRkQSQRZlEF0o2tFfdveepsVPV21aEcJgFiFRF8EcrnvBgoC1QJTB/4QRbQhK+AAovpNc780ssK1XL8YX0NGeh35j1u/YMFPLK/AdCK2zfFpDxGt1wkefSw+qGptsaKB1I54eNQcrm0SrFkBFz/qon+g7NR691x6geGMF5sZCgFpSYyYpZ16qY829xKxS0dqfRIrDIXk3YElX9MPSGjJLm0QETvlF49gpPg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4505.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(346002)(366004)(136003)(39860400002)(451199021)(6486002)(52116002)(478600001)(83380400001)(2616005)(36756003)(1076003)(6512007)(26005)(186003)(6506007)(86362001)(38350700002)(38100700002)(316002)(4326008)(41300700001)(7416002)(66946007)(66556008)(66476007)(8936002)(5660300002)(2906002)(4744005)(8676002)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Yj2iOhb83LJoFAyLPOxsiAQf7XMZN6xyFxvYa1ci79lPhRuePj5AFZ+20EJL?=
- =?us-ascii?Q?N9M3m7QDROHSRSkhFJOM100HdC6jmhIhL6pk0z1xjwd2Pbf2WM5VjlvyejhM?=
- =?us-ascii?Q?7wMSrZjUIRXoqW/ytXGnU3fWuk/OBzu02X9bF8JVD7hXFFMMd9pFtiFS/Yrh?=
- =?us-ascii?Q?O0G1RLMG+mV9VIINgjbE6F9B+EWkihFUCihTZzSVuNSubh+gcYSWWEQK5TN/?=
- =?us-ascii?Q?QYQcUjvAmmorzOnMmXvgzJDKlg8afyj9be50dFQobApHXpnyeyUv/VKrRq+H?=
- =?us-ascii?Q?M5OFcGKtgRUPom2omWIjIbtsNHjDbCn9xllxj9k008+vZFhjY277jsi55WvT?=
- =?us-ascii?Q?lfwgmFhmi9E+J4ZVk0iesfS7/XKy/6wdK+mKosAdi6+xqjm9m8tJD5iSrhxN?=
- =?us-ascii?Q?9pk94+jeOPRivVDwyJLY8mcR9/9ga2I3x9wAdQLTXL5MKta6HZLR0wF9HPrI?=
- =?us-ascii?Q?vTlCVcPAVD3Awr9DsOGv9s8vj9E/oHsh7XnboQR7Cz1f3gKL0RnckNpEIw5V?=
- =?us-ascii?Q?nDnT3fiaxNv1nOePslr1CSddLCh2O/VPnSDK2SM5SkMZUN0hjGayBaQluFxC?=
- =?us-ascii?Q?wOQ2o5rZ7aIcTMguisb5UssvKkju4DDix988N/jlEdGFeUdY9hXhJAGNNvhw?=
- =?us-ascii?Q?OTs4D+oAoke3pC4wIZGFAMVhFUvueZGDTcYBIsCwVhXJbD4S9MzFCl0BnGJz?=
- =?us-ascii?Q?T+WO3vFEaECXQIRTUMc/ODpmTZboEOnTv73g8FxjL1R+MdiEG3vVbT1NbVGD?=
- =?us-ascii?Q?TMg5Idz6SLZIOU2tEKUxPtSiLExAWdu5a54dq7LifFUCF/1N9h9Qdhu+AlKK?=
- =?us-ascii?Q?7xxVunD3SCXmZ7+7OVm1YXfHSn/VhtMlZLGNUgaWIxPvleRSXAne7Z95Sx1j?=
- =?us-ascii?Q?UuHG2mTCUYV50a5VaR0kMgMXn/wTl1MXHKR3j+z9ytz1kCejkehnENxX7XaL?=
- =?us-ascii?Q?8lgptNoKX0W9m2evgnDFBcnuClzO/UZH0CJ/KWvAAq4W6wSgEO0QyNsNhUET?=
- =?us-ascii?Q?3BSs0UQaCr++luM/p2kJy6oY9QonVjMN8egSEHW0JT3EEtVJ4e3xhHba0ZwU?=
- =?us-ascii?Q?wKMEsk8mYkRT+N/bNBb1xAHmSOLzBh3a/6jX80FIJR1NdnLpxLwlxaf6NfNv?=
- =?us-ascii?Q?nrbsOs6VGoEdma23XOmz7oYdiRobVeeTCIKJ00XVxKuZTEITyL3o5HRY7OXL?=
- =?us-ascii?Q?iWqv4MCrlG5Y2BRWK1knjgf8cnmhyboW48F0iWQ1o6eRIIDHQb80puhFQBX7?=
- =?us-ascii?Q?6lAstztCHJU4h7Bal3VF0AQsdW/mL1iWcOZIcI9qzKy+Z/IkzHwbiHwauUZ6?=
- =?us-ascii?Q?WrD5C3sgnISaADSa3PC/8gUG/+P8njvtPvWIbGMri7t0Aa3JX5nTjq7lruTP?=
- =?us-ascii?Q?+2QnT8VpeXEyBCkF7BOU2LTgdjCP7jT58sYZSYcBViHiF+6qsvYnNVB7P+H7?=
- =?us-ascii?Q?4nN1xh6+fe8bKy5Pj25YS3kd8ePNI+LWvJYnN8umT7Cz7cPoVz2l0/zkks5S?=
- =?us-ascii?Q?4xtjt0Ms1+fDEHTtfvXKRYJgH2loudhrNcrX35Whs2M6qjz4jN6abEBMxc8o?=
- =?us-ascii?Q?vB82N0lOu5q4DJYJWDx9Ud90gNJSoM7GNRgn6RL5?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e4507c8-22fa-426c-c143-08db6276ceb1
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB4505.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 08:04:21.9903
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DtYBUq4sOv6VUuOYlsTlI+hpyIlOn/7lgkz8OHrW8QlzXJl/7CQ/zqCvbjWBj1RN3fcndDmOBYN+kpqcAZJmUw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB8027
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The imx8ulp and imx8qm are compatible with imx8dxl. This will add such
-compatible.
+On Wed, 2023-05-31 at 17:10 +0200, Foster Snowhill wrote:
+> >=20
+> > > 	memcpy(dev->tx_buf, skb->data, skb->len);
+> > > -	if (skb->len < IPHETH_BUF_SIZE)
+> > > -		memset(dev->tx_buf + skb->len, 0, IPHETH_BUF_SIZE - skb->len);
+> > >=20
+> > >  	usb_fill_bulk_urb(dev->tx_urb, udev,
+> > >  			  usb_sndbulkpipe(udev, dev->bulk_out),
+> > > -			  dev->tx_buf, IPHETH_BUF_SIZE,
+> > > +			  dev->tx_buf, skb->len,
+> > >  			  ipheth_sndbulk_callback,
+> > >  			  dev);
+> > >  	dev->tx_urb->transfer_flags |=3D URB_NO_TRANSFER_DMA_MAP;
+> >=20
+> > This chunk looks unrelated from NCM support, and unconditionally
+> > changes the established behaviour even with legacy mode, why?
+> >=20
+> > Does that works even with old(er) devices?
+>=20
+> I see Georgi Valkov said he tested v3 of the patch on older iOS devices
+> and confirmed it working. I'll chat with him to get some USB traffic
+> captures, to check what is macOS' behaviour with such devices (to make
+> sure we behave the same way as the official driver). I also wanted to
+> investigate a bit, when was NCM support even added to iOS.
+>=20
+> Personally I remember testing this in legacy mode a while ago, before
+> I implemented NCM. I will re-test it again in legacy mode in addition
+> to Georgi's efforts.
+>=20
+> From my side, I think it's reasonable to split this out into a separate
+> patch, since it technically applies to the legacy mode as well, and
+> doesn't (directly) relate to NCM support, as you pointed out.
 
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
----
- Documentation/devicetree/bindings/phy/mxs-usb-phy.yaml | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+I think that would be the best option, so we have a clear separation
+between what is needed for NCM support and other improvements.
 
-diff --git a/Documentation/devicetree/bindings/phy/mxs-usb-phy.yaml b/Documentation/devicetree/bindings/phy/mxs-usb-phy.yaml
-index 48b0e654e52c..642491d7fcbc 100644
---- a/Documentation/devicetree/bindings/phy/mxs-usb-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/mxs-usb-phy.yaml
-@@ -30,7 +30,10 @@ properties:
-           - const: fsl,imx6ul-usbphy
-           - const: fsl,imx23-usbphy
-       - items:
--          - const: fsl,imx8dxl-usbphy
-+          - enum:
-+              - fsl,imx8ulp-usbphy
-+              - fsl,imx8dxl-usbphy
-+              - fsl,imx8qm-usbphy
-           - const: fsl,imx7ulp-usbphy
-           - const: fsl,imx6ul-usbphy
-           - const: fsl,imx23-usbphy
--- 
-2.34.1
+Thanks!
+
+Paolo
 
