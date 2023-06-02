@@ -2,109 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 307B371FA73
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Jun 2023 09:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1526071FABD
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Jun 2023 09:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234076AbjFBHAb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Jun 2023 03:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
+        id S234187AbjFBHLB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Jun 2023 03:11:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233852AbjFBHA2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jun 2023 03:00:28 -0400
-Received: from mail-lf1-x149.google.com (mail-lf1-x149.google.com [IPv6:2a00:1450:4864:20::149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F16D18C
-        for <linux-usb@vger.kernel.org>; Fri,  2 Jun 2023 00:00:26 -0700 (PDT)
-Received: by mail-lf1-x149.google.com with SMTP id 2adb3069b0e04-4f256ddef3aso1404889e87.2
-        for <linux-usb@vger.kernel.org>; Fri, 02 Jun 2023 00:00:26 -0700 (PDT)
+        with ESMTP id S233999AbjFBHKq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jun 2023 03:10:46 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFB1E41
+        for <linux-usb@vger.kernel.org>; Fri,  2 Jun 2023 00:10:44 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51475e981f0so2446623a12.1
+        for <linux-usb@vger.kernel.org>; Fri, 02 Jun 2023 00:10:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685689224; x=1688281224;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=O9ZIKWjkpmVJpjBcwd1faCmsxJuo8++sV8GGVf8Hz50=;
-        b=CvlI6erYkRfyV842uoAgZvj+msGjwKVDshzzaQ/XoCkfmEG/Aujr56RmHcSWipfChb
-         uZfkYOdLwMNig6SgfUt0QW0Kq2NJtMdM7WaV5HJb3XRyqezLV+LgyFmsRhBiS+mpnXUg
-         cID5wJjqaqWMpy+4OvkMTi+vbETSCwnbrF8hw+olZDogSPMnesmbfN/x/IxuaQ1Qgb11
-         STXldN/ZwMW743+lSAKDhNR5u0mTYVFuPZlt7etI6jrwJN22+KtQ4byJMIrUlt77aqRP
-         Jg3ZsbvXydzaJKmaY7DpMVtxdMp00L5VQwDBsAIWhUjpfmJ/zlHU/djLHCR/ZmxFFb3C
-         ViKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685689224; x=1688281224;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+        d=linaro.org; s=google; t=1685689843; x=1688281843;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=O9ZIKWjkpmVJpjBcwd1faCmsxJuo8++sV8GGVf8Hz50=;
-        b=QB02PRRguM5UkfY5AQMsi+2L4tvtWsj+95l68szNaztGReytcHYuG55ECm3Hh8/544
-         IQfSshS+SyP0hayjaRX+63Znp2l2yBdQKiQm16ZYCPNVjWK7q81GtLok1HzQQ2bKwFF6
-         iQqb5wr6+VXFlaNU9j9n3bacRX8uRsIz39dEGSm2tjnvXgPWlCFwvIYNq7DDsm+pdg+v
-         wsmmliA3UZTRX8xPIhjNSHqRp0D57FtEYsy+ezyNmmcLbbw3sQlKKam0Vk7xEj+1mvmA
-         XrEXmlJNwDj2StXtw22tGzueLBG/Rtd/MlqMaCXHWBeWpsdr0zuGrBDPloJxI1gCUps1
-         jMLQ==
-X-Gm-Message-State: AC+VfDzdDM1JmYjSviqv21VZu47rrc+g0loHyRl+6N+lQGRZHahWGY/I
-        25mcTuLeUOP5vJtHOEMGBGGS3iHyE/U=
-X-Google-Smtp-Source: ACHHUZ6oBlvLdJULcpGlUGRE+UmAIvUjgyqxTa110SwNR4R2uKlXcaEHp+qVShmBy6Uh5ox0yKQZI8Vy6vM=
-X-Received: from khtsai-large-gcloudtop.c.googlers.com ([fda3:e722:ac3:cc00:68:949d:c0a8:289])
- (user=khtsai job=sendgmr) by 2002:a19:ee13:0:b0:4ed:b87e:2fce with SMTP id
- g19-20020a19ee13000000b004edb87e2fcemr504185lfb.5.1685689224623; Fri, 02 Jun
- 2023 00:00:24 -0700 (PDT)
-Date:   Fri,  2 Jun 2023 15:00:06 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230602070009.1353946-1-khtsai@google.com>
-Subject: [PATCH] usb: gadget: u_serial: Add null pointer check in gs_start_io
-From:   Kuen-Han Tsai <khtsai@google.com>
-To:     gregkh@linuxfoundation.org, quic_prashk@quicinc.com,
-        christophe.jaillet@wanadoo.fr, xiujianfeng@huawei.com
-Cc:     raychi@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kuen-Han Tsai <khtsai@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        bh=8f3HJQTnCmjNY3p++5r9NXNAQ1Re77SZgdbIWC5A2p4=;
+        b=WF8dJlKWQyxC4tUHPqx00vEqVcYtu5ZRNlFw5VOhFHInD+2VBqgrtSDDegsQg1Vt5E
+         V0dP8EYq+w1W4z3I1sBBYfExvvwm/7msAjIIXAjHgHGIUBGAYralufJXHD0kFP23Bj+F
+         J4ZFiuNNmwFoBsE+UYSQOeS0otI9DQGIFYSL038d5v2nFGij4zIL8mE6VLYqksweqZLf
+         rjXK8ksj+a1it5a6w1PjovnB762pirs40w0SU68jEOTUg1JQln7VmwvxCXO3A/oMLQHh
+         W4me5oi61broBX6VcYJaM4A7h6Vq8Ijh85Nvp7RcZ2d+hrqakslSggSMchFmauhcwZr4
+         Viig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685689843; x=1688281843;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8f3HJQTnCmjNY3p++5r9NXNAQ1Re77SZgdbIWC5A2p4=;
+        b=U+3KjNW0CTGsU6/QW7uNQ/8wETCtwn8nmQl4xYEPYH3UvvzNcicVAOTNGoH483HzWs
+         1SgMqzirBqnipJAxEzWvAClnMpFX6l4A44taiZjK0N5BYAmusNhn2sdgBoQr2LjO/Evj
+         SJAh1fOIZXpayasx7/1F5PhkRwwKPPKelZxFrglRV8s/M2jsJcl7EZEPikJgItT74FVv
+         R9dh/gb26zI/LzO6UMt9TRirhN/khMu+HuI0/QBSMkfALIvX0Mz0OltHLUcMT4sezseu
+         7FaGeQDg0MyKVxVKNlBrBhnUIIni1IjZCTA+R5dcRpPHfFQLcceCVQ55B3TTiKFexMk3
+         cx0A==
+X-Gm-Message-State: AC+VfDyNb4uq4oAyjXU1N0zAnsrFmBTjWiAV41eNSipATRKm1FtAGEhu
+        B3EhzDzn305pk/zHhKhQ0AIpVA==
+X-Google-Smtp-Source: ACHHUZ6weBhF68GHRDPMx6/m15dbrAbwpzeRkwnl1KxpydCVmwT1Wrf6pWbqD4lI51oCIG2+uIUuqg==
+X-Received: by 2002:aa7:c495:0:b0:514:56b4:35a7 with SMTP id m21-20020aa7c495000000b0051456b435a7mr1747204edq.36.1685689843340;
+        Fri, 02 Jun 2023 00:10:43 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id s10-20020a056402014a00b0051422f31b1bsm323226edu.63.2023.06.02.00.10.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 00:10:42 -0700 (PDT)
+Message-ID: <1231d116-ca4b-fb73-d000-d531297343e7@linaro.org>
+Date:   Fri, 2 Jun 2023 09:10:40 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 3/3] dt-bindings: phy: realtek: Add the doc about the
+ Realtek SoC USB 2.0/3.0 PHY
+Content-Language: en-US
+To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ray Chi <raychi@google.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <20230525022617.30537-1-stanley_chang@realtek.com>
+ <20230525022617.30537-3-stanley_chang@realtek.com>
+ <0b2143ca-ead7-c8fa-2e80-a94222af51ca@linaro.org>
+ <ee65a9d6d40d4099987db5ff1ad1753f@realtek.com>
+ <c49f5619-286c-fbb7-0f18-5869527081c8@linaro.org>
+ <f53b5c21247c49db8be7071de36c773b@realtek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <f53b5c21247c49db8be7071de36c773b@realtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If gs_close has cleared port->port.tty and gs_start_io is called
-afterwards, then the function tty_wakeup will attempt to access the value
-of the pointer port->port.tty which will cause a null pointer
-dereference error.
+On 02/06/2023 05:20, Stanley Chang[昌育德] wrote:
+> Hi Krzysztof,
+> 
+>>>
+>>> Most of the properties are about the phy parameters.
+>>> Is the phy parameter data suitable to be placed in DTS?
+>>> I referenced other phy drivers.
+>>> These parameters should not be defined in dts.
+>>> I would move the parameters to the driver.
+>>
+>> If these can be in the driver, why would ever they be in DTS in the first place?
+>>
+> Our platforms have 3 xhci controllers which map to 3 different phy ports.
 
-To avoid this, add a null pointer check to gs_start_io before attempting
-to access the value of the pointer port->port.tty.
+You mean on the same SoC?
 
-Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
----
- drivers/usb/gadget/function/u_serial.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+> And the three phy ports use the same driver, but the parameters are different.
+> So I put the parameter settings in DTS, we have 3 usb-phy nodes representing 3 phy ports.
+> Also, some parameters have to be adjusted for different boards.
+> Therefore, it is more applicable in DTS than in driver.
 
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index 97f07757d19e..1115396b46a0 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -539,16 +539,20 @@ static int gs_alloc_requests(struct usb_ep *ep, struct list_head *head,
- static int gs_start_io(struct gs_port *port)
- {
- 	struct list_head	*head = &port->read_pool;
--	struct usb_ep		*ep = port->port_usb->out;
-+	struct usb_ep		*ep;
- 	int			status;
- 	unsigned		started;
- 
-+	if (!port->port_usb || !port->port.tty)
-+		return -EIO;
-+
- 	/* Allocate RX and TX I/O buffers.  We can't easily do this much
- 	 * earlier (with GFP_KERNEL) because the requests are coupled to
- 	 * endpoints, as are the packet sizes we'll be using.  Different
- 	 * configurations may use different endpoints with a given port;
- 	 * and high speed vs full speed changes packet sizes too.
- 	 */
-+	ep = port->port_usb->out;
- 	status = gs_alloc_requests(ep, head, gs_read_complete,
- 		&port->read_allocated);
- 	if (status)
--- 
-2.41.0.rc0.172.g3f132b7071-goog
+Then it looks justified in DT, so please write proper descriptions for
+proper properties. Underscores are not allowed in node names. No fake
+nodes. Properties should usually describe physical/hardware effect not
+the register value.
+
+qcom,usb-snps-femto-v2.yaml is nice example. Few Mediatek bindings also
+would work.
+'
+
+Best regards,
+Krzysztof
 
