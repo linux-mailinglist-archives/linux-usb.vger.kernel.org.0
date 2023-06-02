@@ -2,155 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D1B720984
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Jun 2023 21:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF011720A63
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Jun 2023 22:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237133AbjFBTJz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Jun 2023 15:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
+        id S235449AbjFBUiP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Jun 2023 16:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237161AbjFBTJy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jun 2023 15:09:54 -0400
-Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF37B133
-        for <linux-usb@vger.kernel.org>; Fri,  2 Jun 2023 12:09:52 -0700 (PDT)
-Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-769036b47a7so119079139f.0
-        for <linux-usb@vger.kernel.org>; Fri, 02 Jun 2023 12:09:52 -0700 (PDT)
+        with ESMTP id S233079AbjFBUiO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jun 2023 16:38:14 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05A0E43
+        for <linux-usb@vger.kernel.org>; Fri,  2 Jun 2023 13:38:11 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5651d8acfe2so38038467b3.2
+        for <linux-usb@vger.kernel.org>; Fri, 02 Jun 2023 13:38:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685738291; x=1688330291;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=P1pGj2/POBDsIUQ4CnUPDeqZPOZuE4Ae3wEUEXuNv7U=;
+        b=DzFg14PSTYeDYU4F6M2g9LQRKsV9gHH6XLwHWybS8R895s0B8l+3EJBVcsJjijZp7+
+         co51fWzpePtbnqGumiwMU/JssUSD2E8rqA3nJ4FbGs+ao+xlAy92iykBzwEA9vdUpSnn
+         DgpMOqC8QWArpw6Ekdd/hNyIw1qFeEajzxtXcj9CUeX2c1flBw0Uv2FyPdWaRduCvZW7
+         sLIEaVAHbSSmqTNCcid975vW+tNmX/C+cuX00BR9fEKzH0fHBC01RrnP/+dLXjAUnJVt
+         vzvNeJWCBDVoNzyI2Iu8syBCIiDOlMdyIaKaOvhCUt9EiN9RhPEp3D0umdCHtscPwdbq
+         R5/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685732992; x=1688324992;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TfD67AHbNNO26mbSHwE6PpGn0aFEL+Rtn0yhkkG5vWA=;
-        b=dGtwMBhLVDh6zGTwRSjWnyRH+Q3Y5ifT3DDBfasQgDZUA/HEQePKfTdQ6Bu4LsN10G
-         +GACZFo0GiqARWgMzEUMujzTadRTs34gNucM2XJqqq/UzzhfsSF+DFmlXRLVZA/Ta7sC
-         r4+j4zOcveIOTEg74d6ww1xvSaLAc3w6oxvfvPq6+NHSL02dBg2xrpqv3YVnHUmSRLmU
-         CPJFZac0ZtHCKYelv0yvM/8ofu64VbNj8MsvBRjcEzMootVTZcvIyFmtnCkVOSZahdJE
-         VRVdo62gwcqIxaCKttRk/nvRgNbEzBuR5wEU/P8tFy0x2281o1B+PuD7PuJAyy6Hv9tg
-         p85A==
-X-Gm-Message-State: AC+VfDywIbhmNUaOFDplIp//LHOydhzX72yeiJR5pllIzh9041+73iLN
-        FFef0+fTDOirL2bnZ6tJyixqDBHQ0ou2veZ9tS9eE9HXpdbZ
-X-Google-Smtp-Source: ACHHUZ54Fo5E3lzJWH2y0mAX2bvbIdLc8dwrXN+GZzp2f8Vy4gizoRHIN7UYFLNDsKmhI4vAId24e3c2PnHrfVBS1wGPNOUXGmGz
-MIME-Version: 1.0
-X-Received: by 2002:a02:2383:0:b0:41a:c455:f4c8 with SMTP id
- u125-20020a022383000000b0041ac455f4c8mr5432177jau.3.1685732992346; Fri, 02
- Jun 2023 12:09:52 -0700 (PDT)
-Date:   Fri, 02 Jun 2023 12:09:52 -0700
-In-Reply-To: <0000000000002c404a05fd29e1f1@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000031f16805fd2a4cca@google.com>
-Subject: Re: [syzbot] [usb?] kernel BUG in cdc_ncm_fill_tx_frame
-From:   syzbot <syzbot+1994e2ecf323ed90f255@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        d=1e100.net; s=20221208; t=1685738291; x=1688330291;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P1pGj2/POBDsIUQ4CnUPDeqZPOZuE4Ae3wEUEXuNv7U=;
+        b=XvPtuh1Zcy8MFrFwlebc9mbo7FJ0EEUk4LlYA0DV2N0qp2heMsElH0djXM3yImFiAE
+         4qgMYJ+Gnv297Ui5KWR8F2wTno18ed+1MJf5EaQ8cphyV3k+mQcAZMVif8VcPuf3W92w
+         oIw1OtyGYknS7wOe/PRcJuLizH8b/9wm2wjkIQlCUn97WlJlzLkAG+eTNkW6rLXdwEwJ
+         UilAFHmtawz96lIMHTdb8AhDt/t94yHt9T2xNIHvlBr37OZBzW9lfwIAxYfVTuT+pKTb
+         ZiiC+VRei4nqXW+Y15tAokjZz7JvM8WOGpt9XtfqJXRCkqjrOOr9jsum6+odrXitO3lz
+         0JZA==
+X-Gm-Message-State: AC+VfDzCPkS1O67un/mSSuTWMOgrEsD2XlrwZiWrgTMm06t5jAaxOdIA
+        B+W/hWOdDWNd0wcoKqCsoh8rx5k6HCg5
+X-Google-Smtp-Source: ACHHUZ46G/eM2Nh8J29QCWhu+a85YACKHWOlw2lV8g79lNZuulXVwgrYSrT7rhGlA+MCFkqwCFyPEkmFB79n
+X-Received: from hi-h2o-specialist.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3cef])
+ (user=arakesh job=sendgmr) by 2002:a25:404f:0:b0:ba8:373e:acf1 with SMTP id
+ n76-20020a25404f000000b00ba8373eacf1mr2541157yba.12.1685738291115; Fri, 02
+ Jun 2023 13:38:11 -0700 (PDT)
+Date:   Fri,  2 Jun 2023 13:37:46 -0700
+In-Reply-To: <20230602151916.GH26944@pendragon.ideasonboard.com>
+Mime-Version: 1.0
+References: <20230602151916.GH26944@pendragon.ideasonboard.com>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <20230602203746.288881-1-arakesh@google.com>
+Subject: [PATCH v2] usb: gadget: uvc: queue empty isoc requests if no video
+ buffer is available
+From:   Avichal Rakesh <arakesh@google.com>
+To:     laurent.pinchart@ideasonboard.com
+Cc:     Thinh.Nguyen@synopsys.com, arakesh@google.com,
+        dan.scally@ideasonboard.com, etalvala@google.com,
+        gregkh@linuxfoundation.org, jchowdhary@google.com,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, oliver@neukum.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
+        stern@rowland.harvard.edu
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+ISOC transfers expect a certain cadence of requests being queued. Not
+keeping up with the expected rate of requests results in missed ISOC
+transfers (EXDEV). The application layer is not required to produce video
+frames to match this expectation, so uvc gadget driver must not rely
+on data from application layer to maintain the ISOC cadence.
 
-HEAD commit:    243ff7e6a035 usb: typec: mux: fix static inline syntax error
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=157524c9280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8f4cf51e432f1270
-dashboard link: https://syzkaller.appspot.com/bug?extid=1994e2ecf323ed90f255
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16e8f82d280000
+Currently, uvc gadget driver waits for new video buffer to become available
+before queuing up usb requests. With this patch the gadget driver queues up
+0 length usb requests whenever there are no video buffers available. The
+USB controller's complete callback is used as the limiter for how quickly
+the 0 length packets will be queued. Video buffers are still queued as
+soon as they become available.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/10340f2fbad7/disk-243ff7e6.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/b167d8c15ccb/vmlinux-243ff7e6.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3cad21c537c2/bzImage-243ff7e6.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1994e2ecf323ed90f255@syzkaller.appspotmail.com
-
-skbuff: skb_over_panic: text:ffffffff83e701ab len:428 put:172 head:ffff88810fbb7600 data:ffff88810fbb7600 tail:0x1ac end:0x140 dev:<NULL>
-------------[ cut here ]------------
-kernel BUG at net/core/skbuff.c:200!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 2989 Comm: dhcpcd Not tainted 6.4.0-rc4-syzkaller-00151-g243ff7e6a035 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-RIP: 0010:skb_panic+0x152/0x1d0 net/core/skbuff.c:200
-Code: 0f b6 04 01 84 c0 74 04 3c 03 7e 20 8b 4b 70 41 56 45 89 e8 48 c7 c7 c0 28 16 87 41 57 56 48 89 ee 52 4c 89 e2 e8 3e db 00 fc <0f> 0b 4c 89 4c 24 10 48 89 54 24 08 48 89 34 24 e8 39 43 66 fc 4c
-RSP: 0018:ffffc9000292f288 EFLAGS: 00010282
-RAX: 0000000000000089 RBX: ffff888113ff4640 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff812fd52c RDI: 0000000000000005
-RBP: ffffffff87163720 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000403 R11: 0000000000000001 R12: ffffffff83e701ab
-R13: 00000000000000ac R14: ffffffff87162880 R15: 0000000000000140
-FS:  00007f85588ea740(0000) GS:ffff8881f6700000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffe9be70bc8 CR3: 000000011ad10000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- skb_over_panic net/core/skbuff.c:205 [inline]
- skb_put+0x16f/0x1a0 net/core/skbuff.c:2390
- skb_put_zero include/linux/skbuff.h:2605 [inline]
- cdc_ncm_ndp16 drivers/net/usb/cdc_ncm.c:1135 [inline]
- cdc_ncm_fill_tx_frame+0x20fb/0x38d0 drivers/net/usb/cdc_ncm.c:1310
- cdc_ncm_tx_fixup+0xde/0x120 drivers/net/usb/cdc_ncm.c:1537
- usbnet_start_xmit+0x156/0x2180 drivers/net/usb/usbnet.c:1365
- __netdev_start_xmit include/linux/netdevice.h:4915 [inline]
- netdev_start_xmit include/linux/netdevice.h:4929 [inline]
- xmit_one net/core/dev.c:3578 [inline]
- dev_hard_start_xmit+0x187/0x700 net/core/dev.c:3594
- sch_direct_xmit+0x25f/0x7f0 net/sched/sch_generic.c:342
- __dev_xmit_skb net/core/dev.c:3805 [inline]
- __dev_queue_xmit+0x14c3/0x3ae0 net/core/dev.c:4210
- dev_queue_xmit include/linux/netdevice.h:3085 [inline]
- packet_xmit+0x268/0x390 net/packet/af_packet.c:276
- packet_snd net/packet/af_packet.c:3081 [inline]
- packet_sendmsg+0x348c/0x5040 net/packet/af_packet.c:3113
- sock_sendmsg_nosec net/socket.c:724 [inline]
- sock_sendmsg+0xde/0x190 net/socket.c:747
- sock_write_iter+0x295/0x3d0 net/socket.c:1140
- call_write_iter include/linux/fs.h:1868 [inline]
- do_iter_readv_writev+0x20b/0x3b0 fs/read_write.c:735
- do_iter_write+0x185/0x7e0 fs/read_write.c:860
- vfs_writev+0x1aa/0x670 fs/read_write.c:933
- do_writev+0x279/0x2f0 fs/read_write.c:976
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f85589b8e03
-Code: 89 c7 48 89 44 24 08 e8 6a f2 f9 ff 48 8b 44 24 08 48 83 c4 28 c3 c3 64 8b 04 25 18 00 00 00 85 c0 75 20 b8 14 00 00 00 0f 05 <48> 3d 00 f0 ff ff 76 6d 48 8b 15 f6 5f 0d 00 f7 d8 64 89 02 48 83
-RSP: 002b:00007ffe9be70b68 EFLAGS: 00000246 ORIG_RAX: 0000000000000014
-RAX: ffffffffffffffda RBX: 00007ffe9be80e18 RCX: 00007f85589b8e03
-RDX: 0000000000000002 RSI: 00007ffe9be70b80 RDI: 0000000000000005
-RBP: 000055e28be2d9c7 R08: 0000000042424242 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 000055e28d0a7960 R14: 00007ffe9be70c18 R15: 00007ffe9be70bc8
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:skb_panic+0x152/0x1d0 net/core/skbuff.c:200
-Code: 0f b6 04 01 84 c0 74 04 3c 03 7e 20 8b 4b 70 41 56 45 89 e8 48 c7 c7 c0 28 16 87 41 57 56 48 89 ee 52 4c 89 e2 e8 3e db 00 fc <0f> 0b 4c 89 4c 24 10 48 89 54 24 08 48 89 34 24 e8 39 43 66 fc 4c
-RSP: 0018:ffffc9000292f288 EFLAGS: 00010282
-RAX: 0000000000000089 RBX: ffff888113ff4640 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff812fd52c RDI: 0000000000000005
-RBP: ffffffff87163720 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000403 R11: 0000000000000001 R12: ffffffff83e701ab
-R13: 00000000000000ac R14: ffffffff87162880 R15: 0000000000000140
-FS:  00007f85588ea740(0000) GS:ffff8881f6700000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffe9be70bc8 CR3: 000000011ad10000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
+Link: https://lore.kernel.org/CAMHf4WKbi6KBPQztj9FA4kPvESc1fVKrC8G73-cs6tTeQby9=w@mail.gmail.com/
+Signed-off-by: Avichal Rakesh <arakesh@google.com>
 ---
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+Changelog:
+v2:
+  - Updated commit message to make it clear that userspace application is not
+    required to match the ISOC rate.
+  - Styling and comment revision based on review
+
+
+ drivers/usb/gadget/function/uvc_video.c | 50 +++++++++++++++++++------
+ 1 file changed, 39 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index dd1c6b2ca7c6..91af3b1ef0d4 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -382,9 +382,12 @@ static void uvcg_video_pump(struct work_struct *work)
+ {
+ 	struct uvc_video *video = container_of(work, struct uvc_video, pump);
+ 	struct uvc_video_queue *queue = &video->queue;
++	/* video->max_payload_size is only set when using bulk transfer */
++	bool is_bulk = video->max_payload_size;
+ 	struct usb_request *req = NULL;
+ 	struct uvc_buffer *buf;
+ 	unsigned long flags;
++	bool buf_done;
+ 	int ret;
+
+ 	while (video->ep->enabled) {
+@@ -408,20 +411,47 @@ static void uvcg_video_pump(struct work_struct *work)
+ 		 */
+ 		spin_lock_irqsave(&queue->irqlock, flags);
+ 		buf = uvcg_queue_head(queue);
+-		if (buf == NULL) {
++
++		if (buf != NULL) {
++			video->encode(req, video, buf);
++			buf_done = buf->state == UVC_BUF_STATE_DONE;
++		} else if (!(queue->flags & UVC_QUEUE_DISCONNECTED) && !is_bulk) {
++			/*
++			 * No video buffer available; the queue is still connected and
++			 * we're transferring over ISOC. Queue a 0 length request to
++			 * prevent missed ISOC transfers.
++			 */
++			req->length = 0;
++			buf_done = false;
++		} else {
++			/*
++			 * Either the queue has been disconnected or no video buffer
++			 * available for bulk transfer. Either way, stop processing
++			 * further.
++			 */
+ 			spin_unlock_irqrestore(&queue->irqlock, flags);
+ 			break;
+ 		}
+
+-		video->encode(req, video, buf);
+-
+ 		/*
+-		 * With usb3 we have more requests. This will decrease the
+-		 * interrupt load to a quarter but also catches the corner
+-		 * cases, which needs to be handled.
++		 * With USB3 handling more requests at a higher speed, we can't
++		 * afford to generate an interrupt for every request. Decide to
++		 * interrupt:
++		 *
++		 * - When no more requests are available in the free queue, as
++		 *   this may be our last chance to refill the endpoint's
++		 *   request queue.
++		 *
++		 * - When this is request is the last request for the video
++		 *   buffer, as we want to start sending the next video buffer
++		 *   ASAP in case it doesn't get started already in the next
++		 *   iteration of this loop.
++		 *
++		 * - Four times over the length of the requests queue (as
++		 *   indicated by video->uvc_num_requests), as a trade-off
++		 *   between latency and interrupt load.
+ 		 */
+-		if (list_empty(&video->req_free) ||
+-		    buf->state == UVC_BUF_STATE_DONE ||
++		if (list_empty(&video->req_free) || buf_done ||
+ 		    !(video->req_int_count %
+ 		       DIV_ROUND_UP(video->uvc_num_requests, 4))) {
+ 			video->req_int_count = 0;
+@@ -441,8 +471,7 @@ static void uvcg_video_pump(struct work_struct *work)
+
+ 		/* Endpoint now owns the request */
+ 		req = NULL;
+-		if (buf->state != UVC_BUF_STATE_DONE)
+-			video->req_int_count++;
++		video->req_int_count++;
+ 	}
+
+ 	if (!req)
+@@ -527,4 +556,3 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
+ 			V4L2_BUF_TYPE_VIDEO_OUTPUT, &video->mutex);
+ 	return 0;
+ }
+-
+--
+2.41.0.rc0.172.g3f132b7071-goog
+
