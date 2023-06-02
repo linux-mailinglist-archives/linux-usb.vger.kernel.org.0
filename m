@@ -2,49 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE6C7205C5
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Jun 2023 17:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8BF7207E4
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Jun 2023 18:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236413AbjFBPTW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Jun 2023 11:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
+        id S236820AbjFBQrD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Jun 2023 12:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235527AbjFBPTU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jun 2023 11:19:20 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4C2123;
-        Fri,  2 Jun 2023 08:19:19 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126156168104.26.openmobile.ne.jp [126.156.168.104])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 922C8844;
-        Fri,  2 Jun 2023 17:18:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1685719135;
-        bh=gU0yaWBrgT7+tqOEJsiMT+dgAGI/2MMNm6uujQuRWaM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dyTV53YCp7cwa+xVr2/JFr+AuaIhX4a8FLalc6In6FACC+qbglEXNdaVEyCMfBczd
-         dc1AMUepnNHxC2mcCXdzY092MdbtV56uKxaf25smciq4Finb4fPXCrG6KL2euoMKDD
-         QUzx4fKgif4ZO1OFlzoM3IGDrAvprUq/KdmZA8II=
-Date:   Fri, 2 Jun 2023 18:19:16 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Avichal Rakesh <arakesh@google.com>
-Cc:     Daniel Scally <dan.scally@ideasonboard.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Eino-Ville Talvala (Eddy)" <etalvala@google.com>,
-        Jayant Chowdhary <jchowdhary@google.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: uvc: queue empty isoc requests if no video
- buffer is available
-Message-ID: <20230602151916.GH26944@pendragon.ideasonboard.com>
-References: <20230508231103.1621375-1-arakesh@google.com>
+        with ESMTP id S236840AbjFBQrB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jun 2023 12:47:01 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18D91B3;
+        Fri,  2 Jun 2023 09:47:00 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-3f8008cb772so20788301cf.3;
+        Fri, 02 Jun 2023 09:47:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685724420; x=1688316420;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2eoN2DyKs5X+s+DyCZK8A4ivF3BEc52nu/fFwt4W6Js=;
+        b=qjGHtXZxoBBdS2HT2JkrKSST/yA4++3X0V+xwfmvFh9WP4br4vOwfY/p02/dOh/Hti
+         /d1coxNhXhmoHYQzGJIHccxZqRwqCIPpKsul96SdosuIgxQxByyWX8RWqLk1fVYlKLkw
+         uZlLU0Q1KKvaa0Gy0W5plYTHm9Upu2tHq5ovT8rmmRUfcw4mOiMZp9QicqJZIVNo7hhA
+         0KBsx/tOCH9SwmmSQMSOPaKlrLXBDoYRAzV3jw8crDS8C9KgKPaAs+AQ4GcQqX97+m0B
+         Q+UaZ76XrVuuVQLkp0VYh5OIQxYEtEupMTxHK2atoSEFgywcvAMTB47ukoaYqEApW+MG
+         3VnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685724420; x=1688316420;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=2eoN2DyKs5X+s+DyCZK8A4ivF3BEc52nu/fFwt4W6Js=;
+        b=lGsFds7RLC3O5bjTuafItI0k/JvXmDTwYfaDXwIRJqF4QRbgkZRcD/XrxkLjx3KxUt
+         vmcg+2BMnhCiR/wYSj0sS9DJKGwiTcfknIteTKzrpBLvOCWi/j5usksj+ty3WyYNgVmT
+         8mVYNBR3RRkjVvd5YDEoXjUDRChvTymGFPpeKETkYfAsnCan+Opx9GwWfCipfRcBX65x
+         L2w2NDWYmqh0JmY+bHeESMkJmLHkB12OpFTDrI5HVrkRyEglCXvUBhixCQCaxbUfDxyF
+         s1C/vjNuaqVbltG/nvtmVhZOP+o5aM65KtvInhscibmuVLugxxv4r1y0xPMTwfI/DraL
+         lp6A==
+X-Gm-Message-State: AC+VfDyTm/v1e15LMjSWEFu4f8CXlOj0rsLGUwhEn4Ieq9FzFqfyhxNO
+        vLrXEZ5ISprrlYVd8pH4qQ==
+X-Google-Smtp-Source: ACHHUZ7EOoJZ6L7R1UJCRQzjWBBZWjNY4vgxY0heC6yYd/8OioyvT8szOiU6EybWHfv5vJbwiyYBEg==
+X-Received: by 2002:a05:622a:181b:b0:3e4:e430:94e with SMTP id t27-20020a05622a181b00b003e4e430094emr16704854qtc.64.1685724419595;
+        Fri, 02 Jun 2023 09:46:59 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id y28-20020ac87c9c000000b003e89e2b3c23sm963638qtv.58.2023.06.02.09.46.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 09:46:58 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from mail.minyard.net (unknown [IPv6:2001:470:b8f6:1b:27c2:60bf:3f0f:e3a1])
+        by serve.minyard.net (Postfix) with ESMTPSA id B29E41800C3;
+        Fri,  2 Jun 2023 16:46:57 +0000 (UTC)
+Date:   Fri, 2 Jun 2023 11:46:56 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Craig Shelley <craig@microtron.org.uk>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: Break doesn't work on a CP2105
+Message-ID: <ZHodALMLTWk72Vvm@mail.minyard.net>
+Reply-To: minyard@acm.org
+References: <ZEmDs0ASdnEAnpsL@minyard.net>
+ <ZGtZKCvo71woGf9T@hovoldconsulting.com>
+ <ZGtlnWGSc31Wdhxa@mail.minyard.net>
+ <ZHnmSwGyOaSMbPBB@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230508231103.1621375-1-arakesh@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+In-Reply-To: <ZHnmSwGyOaSMbPBB@hovoldconsulting.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,167 +81,56 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Avichal,
-
-Thank you for the patch.
-
-On Mon, May 08, 2023 at 04:11:03PM -0700, Avichal Rakesh wrote:
-> ISOC transfers expect a certain cadence of requests being queued. Not
-> keeping up with the expected rate of requests results in missed ISOC
-> transfers (EXDEV). The application layer may or may not produce video
-> frames to match this expectation, so uvc gadget driver must handle cases
-> where the application is not queuing up buffers fast enough to fulfill
-> ISOC requirements.
-
-I think the application *must* not produce video frames to match the
-expectations. If it did, it would mean that it would either have to use
-more than the available ISOC bandwidth (which is obviously bad), or use
-*exactly* the ISOC bandwidth. Unless the application performs rate
-matching (which would require information about the USB timings that
-isn't available to userspace as far as I can tell), that's not possible.
-
-> Currently, uvc gadget driver waits for new video buffer to become available
-> before queuing up usb requests. With this patch the gadget driver queues up
-> 0 length usb requests whenever there are no video buffers available. The
-> USB controller's complete callback is used as the limiter for how quickly
-> the 0 length packets will be queued. Video buffers are still queued as
-> soon as they become available.
+On Fri, Jun 02, 2023 at 02:53:31PM +0200, Johan Hovold wrote:
+> On Mon, May 22, 2023 at 07:52:45AM -0500, Corey Minyard wrote:
+> > On Mon, May 22, 2023 at 01:59:36PM +0200, Johan Hovold wrote:
 > 
-> Link: https://lore.kernel.org/CAMHf4WKbi6KBPQztj9FA4kPvESc1fVKrC8G73-cs6tTeQby9=w@mail.gmail.com/
-> Signed-off-by: Avichal Rakesh <arakesh@google.com>
-> ---
->  drivers/usb/gadget/function/uvc_video.c | 32 ++++++++++++++++++-------
->  1 file changed, 24 insertions(+), 8 deletions(-)
+> > > I just verified that break works on the first port of my cp2105 but not
+> > > on the second one (I seem to receive the last characters sent instead).
+> > > 
+> > > Apparently this is expected as the datasheet (AN571) says the following
+> > > about the SET_BREAK command:
+> > > 
+> > > 	This command is not supported on the second CP2105 interface.
+> > > 
+> > > Which port are you seeing this behaviour with?
+> > 
+> > I'm guessing this is it.  From the schematic I think this is the
+> > TXD_ECI pin, though I'm not 100% sure.  I'd have to dig through the
+> > device tree and SOC manual to be sure which port is which.
 > 
-> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-> index dd1c6b2ca7c6..e81865978299 100644
-> --- a/drivers/usb/gadget/function/uvc_video.c
-> +++ b/drivers/usb/gadget/function/uvc_video.c
-> @@ -386,6 +386,9 @@ static void uvcg_video_pump(struct work_struct *work)
->  	struct uvc_buffer *buf;
->  	unsigned long flags;
->  	int ret;
-> +	bool buf_int;
-> +	/* video->max_payload_size is only set when using bulk transfer */
-> +	bool is_bulk = video->max_payload_size;
+> It should be the second SCI interface which do not support break.
+> 
+> > Would it be possible to return an error in this situation instead of it
+> > silently not working?  Just to avoid others having the same issue.
+> 
+> I just posted a patch series which does that. The USB serial drivers do
+> not currently return any errors related to break signalling even though
+> this has been possible since 2008.
+> 
+> The same mechanism can be used to report that break signalling is not
+> supported by a device or driver, but the USB serial drivers would be the
+> first tty drivers that actually do this. If it turns out to cause any
+> trouble we can still use this series to avoid the unnecessary wait.
+> 
+> Care to give the series a try?
+> 
+> 	https://lore.kernel.org/lkml/20230602124642.19076-1-johan@kernel.org
 
-Let's rename buf_int to buf_done, that matches the intent of the code
-better.
+I have tested this series.  I can verify that one of the CP2105 ports
+(ttyUSB0) does not return an error on sending the break, and the other
+(ttyUSB1) does.  This is the only USB serial device on the system.
 
-Could you reorder the fields by line length ?
+However, the device hooked to the remote console (ttyUSB0), the one not
+returning an error on sending a break, still doesn't send a break.  So
+my problem isn't fixed :-(.
 
-	struct uvc_video *video = container_of(work, struct uvc_video, pump);
-	struct uvc_video_queue *queue = &video->queue;
-	/* video->max_payload_size is only set when using bulk transfer */
-	bool is_bulk = video->max_payload_size;
-	struct usb_request *req = NULL;
-	struct uvc_buffer *buf;
-	unsigned long flags;
-	bool buf_done;
-	int ret;
+# ls -l /dev/serial/by-path
+total 0
+lrwxrwxrwx 1 root root 13 Jun  2 15:28 pci-0000:00:1d.0-usb-0:1.1:1.0-port0 -> ../../ttyUSB0
+lrwxrwxrwx 1 root root 13 Jun  2 15:28 pci-0000:00:1d.0-usb-0:1.1:1.1-port0 -> ../../ttyUSB1
 
->  
->  	while (video->ep->enabled) {
->  		/*
-> @@ -408,20 +411,35 @@ static void uvcg_video_pump(struct work_struct *work)
->  		 */
->  		spin_lock_irqsave(&queue->irqlock, flags);
->  		buf = uvcg_queue_head(queue);
-> -		if (buf == NULL) {
-> +
-> +		if (buf != NULL) {
-> +			video->encode(req, video, buf);
-> +			/* Always interrupt for the last request of a video buffer */
+-corey
 
-I would drop this comment, and ... (see below)
-
-> +			buf_int = buf->state == UVC_BUF_STATE_DONE;
-> +		} else if (!(queue->flags & UVC_QUEUE_DISCONNECTED) && !is_bulk) {
-> +			/*
-> +			 * No video buffer available; the queue is still connected and
-> +			 * we're traferring over ISOC. Queue a 0 length request to
-
-s/traferring/transferring/
-
-> +			 * prevent missed ISOC transfers.
-> +			 */
-> +			req->length = 0;
-> +			buf_int = false;
-> +		} else {
-> +			/*
-> +			 * Either queue has been disconnected or no video buffer
-
-s/Either queue/Either the queue/
-
-> +			 * available to bulk transfer. Either way, stop processing
-
-s/to bulk/for bulk/
-
-> +			 * further.
-> +			 */
->  			spin_unlock_irqrestore(&queue->irqlock, flags);
->  			break;
->  		}
->  
-> -		video->encode(req, video, buf);
-> -
->  		/*
->  		 * With usb3 we have more requests. This will decrease the
->  		 * interrupt load to a quarter but also catches the corner
->  		 * cases, which needs to be handled.
->  		 */
-
-... and expand this:
-
-  		/*
-		 * With USB3 handling more requests at a higher speed, we can't
-		 * afford to generate an interrupt for every request. Decide to
-		 * interrupt:
-		 *
-		 * - When no more requests are available in the free queue, as
-		 *   this may be our last chance to refill the endpoint's
-		 *   request queue.
-		 *
-		 * - When this is request is the last request for the video
-		 *   buffer, as we want to start sending the next video buffer
-		 *   ASAP in case it doesn't get started already in the next
-		 *   iteration of this loop.
-		 *
-		 * - Four times over the length of the requests queue (as
-		 *   indicated by video->uvc_num_requests), as a trade-off
-		 *   between latency and interrupt load.
-		 */
-
-And now that I've written this, I wonder if we could drop the second
-case. Now that we have a guarantee we will queue 0-length requests after
-the current buffer if no other buffer is available, I don't think we
-need to make the last request of a buffer a special case. It even seems
-to me that we could drop the first case too, and just interrupt 4 times
-over the length of the requests queue. What do you think ?
-
-> -		if (list_empty(&video->req_free) ||
-> -		    buf->state == UVC_BUF_STATE_DONE ||
-> +		if (list_empty(&video->req_free) || buf_int ||
->  		    !(video->req_int_count %
->  		       DIV_ROUND_UP(video->uvc_num_requests, 4))) {
->  			video->req_int_count = 0;
-> @@ -441,8 +459,7 @@ static void uvcg_video_pump(struct work_struct *work)
->  
->  		/* Endpoint now owns the request */
->  		req = NULL;
-> -		if (buf->state != UVC_BUF_STATE_DONE)
-> -			video->req_int_count++;
-> +		video->req_int_count++;
->  	}
->  
->  	if (!req)
-> @@ -527,4 +544,3 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
->  			V4L2_BUF_TYPE_VIDEO_OUTPUT, &video->mutex);
->  	return 0;
->  }
-> -
-
--- 
-Regards,
-
-Laurent Pinchart
+> 
+> Johan
