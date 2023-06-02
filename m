@@ -2,43 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B22D972093F
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Jun 2023 20:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D1B720984
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Jun 2023 21:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237012AbjFBSkA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Jun 2023 14:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
+        id S237133AbjFBTJz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Jun 2023 15:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234602AbjFBSj7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jun 2023 14:39:59 -0400
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C990196
-        for <linux-usb@vger.kernel.org>; Fri,  2 Jun 2023 11:39:57 -0700 (PDT)
-Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-33abbf7e1a6so19581195ab.0
-        for <linux-usb@vger.kernel.org>; Fri, 02 Jun 2023 11:39:57 -0700 (PDT)
+        with ESMTP id S237161AbjFBTJy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jun 2023 15:09:54 -0400
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF37B133
+        for <linux-usb@vger.kernel.org>; Fri,  2 Jun 2023 12:09:52 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-769036b47a7so119079139f.0
+        for <linux-usb@vger.kernel.org>; Fri, 02 Jun 2023 12:09:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685731197; x=1688323197;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZhEwu3+y0st7jw3xMi6bjpgiy8dYyoE2vdnCTkWkN+Y=;
-        b=j7Ajy8I2YTvLBXrH+MXC9Pr15w7smv5WTmVZYVrZYvwo/06oIygfnHFg3aB6K1wSag
-         NtAWDWaBF9O2l4kZg3rmafaHux8Z9XRj6QtHE/Zwh84YyUKxToZJFQHZAxWeNPAJ9l7A
-         3GV5oQ1Uwgjdv8F81L6gbrcewOX8r8XUvryTtQJDga3zRGNugGDmr7IJGImrIFipm5np
-         J/5gxqvGhV4kD7/LR2Ri/aKqcwhAVptL1MQxHNr78RKvULRFidOWZKXJ7Hze878a+KeW
-         KSzEtzsrk+ZuY0G38hlv2MAVmQfTAuhJriX7yNK9zJnLui5cJgq4yZ992uAu4lmcK4ZX
-         MnNA==
-X-Gm-Message-State: AC+VfDx/DzxOVcyIATiuLZXcb3VUW4DmXxfR+vUsWG5YWqBbpa7uMc0l
-        FVW0Uto00BfASqf34+971uIXb2LumFOORLnYxB9Ny7+XDzi/
-X-Google-Smtp-Source: ACHHUZ6d4Kue8ZUkkRlr1ArwdxoOK5Ojy0C6PgsGvUDLwDDzB0sX6xQDFBByIwAKYJesPxnSkTtnHajoHjib+4qpka1cSWX16fUM
+        d=1e100.net; s=20221208; t=1685732992; x=1688324992;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TfD67AHbNNO26mbSHwE6PpGn0aFEL+Rtn0yhkkG5vWA=;
+        b=dGtwMBhLVDh6zGTwRSjWnyRH+Q3Y5ifT3DDBfasQgDZUA/HEQePKfTdQ6Bu4LsN10G
+         +GACZFo0GiqARWgMzEUMujzTadRTs34gNucM2XJqqq/UzzhfsSF+DFmlXRLVZA/Ta7sC
+         r4+j4zOcveIOTEg74d6ww1xvSaLAc3w6oxvfvPq6+NHSL02dBg2xrpqv3YVnHUmSRLmU
+         CPJFZac0ZtHCKYelv0yvM/8ofu64VbNj8MsvBRjcEzMootVTZcvIyFmtnCkVOSZahdJE
+         VRVdo62gwcqIxaCKttRk/nvRgNbEzBuR5wEU/P8tFy0x2281o1B+PuD7PuJAyy6Hv9tg
+         p85A==
+X-Gm-Message-State: AC+VfDywIbhmNUaOFDplIp//LHOydhzX72yeiJR5pllIzh9041+73iLN
+        FFef0+fTDOirL2bnZ6tJyixqDBHQ0ou2veZ9tS9eE9HXpdbZ
+X-Google-Smtp-Source: ACHHUZ54Fo5E3lzJWH2y0mAX2bvbIdLc8dwrXN+GZzp2f8Vy4gizoRHIN7UYFLNDsKmhI4vAId24e3c2PnHrfVBS1wGPNOUXGmGz
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:4c4:b0:331:1997:f88c with SMTP id
- f4-20020a056e0204c400b003311997f88cmr4506325ils.0.1685731196811; Fri, 02 Jun
- 2023 11:39:56 -0700 (PDT)
-Date:   Fri, 02 Jun 2023 11:39:56 -0700
+X-Received: by 2002:a02:2383:0:b0:41a:c455:f4c8 with SMTP id
+ u125-20020a022383000000b0041ac455f4c8mr5432177jau.3.1685732992346; Fri, 02
+ Jun 2023 12:09:52 -0700 (PDT)
+Date:   Fri, 02 Jun 2023 12:09:52 -0700
+In-Reply-To: <0000000000002c404a05fd29e1f1@google.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002c404a05fd29e1f1@google.com>
-Subject: [syzbot] [net?] [usb?] kernel BUG in cdc_ncm_fill_tx_frame
+Message-ID: <00000000000031f16805fd2a4cca@google.com>
+Subject: Re: [syzbot] [usb?] kernel BUG in cdc_ncm_fill_tx_frame
 From:   syzbot <syzbot+1994e2ecf323ed90f255@syzkaller.appspotmail.com>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
@@ -55,18 +56,15 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
+syzbot has found a reproducer for the following issue on:
 
 HEAD commit:    243ff7e6a035 usb: typec: mux: fix static inline syntax error
 git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1566d371280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=157524c9280000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=8f4cf51e432f1270
 dashboard link: https://syzkaller.appspot.com/bug?extid=1994e2ecf323ed90f255
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16e8f82d280000
 
 Downloadable assets:
 disk image: https://storage.googleapis.com/syzbot-assets/10340f2fbad7/disk-243ff7e6.raw.xz
@@ -76,23 +74,23 @@ kernel image: https://storage.googleapis.com/syzbot-assets/3cad21c537c2/bzImage-
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
 Reported-by: syzbot+1994e2ecf323ed90f255@syzkaller.appspotmail.com
 
-skbuff: skb_over_panic: text:ffffffff83e701ab len:428 put:172 head:ffff88810db35500 data:ffff88810db35500 tail:0x1ac end:0x140 dev:<NULL>
+skbuff: skb_over_panic: text:ffffffff83e701ab len:428 put:172 head:ffff88810fbb7600 data:ffff88810fbb7600 tail:0x1ac end:0x140 dev:<NULL>
 ------------[ cut here ]------------
 kernel BUG at net/core/skbuff.c:200!
 invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 3631 Comm: dhcpcd Not tainted 6.4.0-rc4-syzkaller-00151-g243ff7e6a035 #0
+CPU: 1 PID: 2989 Comm: dhcpcd Not tainted 6.4.0-rc4-syzkaller-00151-g243ff7e6a035 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
 RIP: 0010:skb_panic+0x152/0x1d0 net/core/skbuff.c:200
 Code: 0f b6 04 01 84 c0 74 04 3c 03 7e 20 8b 4b 70 41 56 45 89 e8 48 c7 c7 c0 28 16 87 41 57 56 48 89 ee 52 4c 89 e2 e8 3e db 00 fc <0f> 0b 4c 89 4c 24 10 48 89 54 24 08 48 89 34 24 e8 39 43 66 fc 4c
-RSP: 0018:ffffc90006caf288 EFLAGS: 00010282
-RAX: 0000000000000089 RBX: ffff888139b6ddc0 RCX: 0000000000000000
+RSP: 0018:ffffc9000292f288 EFLAGS: 00010282
+RAX: 0000000000000089 RBX: ffff888113ff4640 RCX: 0000000000000000
 RDX: 0000000000000000 RSI: ffffffff812fd52c RDI: 0000000000000005
 RBP: ffffffff87163720 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000403 R11: 00000000000000ae R12: ffffffff83e701ab
+R10: 0000000080000403 R11: 0000000000000001 R12: ffffffff83e701ab
 R13: 00000000000000ac R14: ffffffff87162880 R15: 0000000000000140
-FS:  00007f9bfdee2740(0000) GS:ffff8881f6700000(0000) knlGS:0000000000000000
+FS:  00007f85588ea740(0000) GS:ffff8881f6700000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fff20c4f8d8 CR3: 000000011a135000 CR4: 00000000003506e0
+CR2: 00007ffe9be70bc8 CR3: 000000011ad10000 CR4: 00000000003506e0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
@@ -126,49 +124,33 @@ Call Trace:
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f9bfdfb0e03
+RIP: 0033:0x7f85589b8e03
 Code: 89 c7 48 89 44 24 08 e8 6a f2 f9 ff 48 8b 44 24 08 48 83 c4 28 c3 c3 64 8b 04 25 18 00 00 00 85 c0 75 20 b8 14 00 00 00 0f 05 <48> 3d 00 f0 ff ff 76 6d 48 8b 15 f6 5f 0d 00 f7 d8 64 89 02 48 83
-RSP: 002b:00007fff20c4f878 EFLAGS: 00000246 ORIG_RAX: 0000000000000014
-RAX: ffffffffffffffda RBX: 00007fff20c5fb28 RCX: 00007f9bfdfb0e03
-RDX: 0000000000000002 RSI: 00007fff20c4f890 RDI: 0000000000000005
-RBP: 000056249631e9c7 R08: 0000000042424242 R09: 0000000000000000
+RSP: 002b:00007ffe9be70b68 EFLAGS: 00000246 ORIG_RAX: 0000000000000014
+RAX: ffffffffffffffda RBX: 00007ffe9be80e18 RCX: 00007f85589b8e03
+RDX: 0000000000000002 RSI: 00007ffe9be70b80 RDI: 0000000000000005
+RBP: 000055e28be2d9c7 R08: 0000000042424242 R09: 0000000000000000
 R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 0000562496d9b7b0 R14: 00007fff20c4f928 R15: 00007fff20c4f8d8
+R13: 000055e28d0a7960 R14: 00007ffe9be70c18 R15: 00007ffe9be70bc8
  </TASK>
 Modules linked in:
 ---[ end trace 0000000000000000 ]---
 RIP: 0010:skb_panic+0x152/0x1d0 net/core/skbuff.c:200
 Code: 0f b6 04 01 84 c0 74 04 3c 03 7e 20 8b 4b 70 41 56 45 89 e8 48 c7 c7 c0 28 16 87 41 57 56 48 89 ee 52 4c 89 e2 e8 3e db 00 fc <0f> 0b 4c 89 4c 24 10 48 89 54 24 08 48 89 34 24 e8 39 43 66 fc 4c
-RSP: 0018:ffffc90006caf288 EFLAGS: 00010282
-RAX: 0000000000000089 RBX: ffff888139b6ddc0 RCX: 0000000000000000
+RSP: 0018:ffffc9000292f288 EFLAGS: 00010282
+RAX: 0000000000000089 RBX: ffff888113ff4640 RCX: 0000000000000000
 RDX: 0000000000000000 RSI: ffffffff812fd52c RDI: 0000000000000005
 RBP: ffffffff87163720 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000403 R11: 00000000000000ae R12: ffffffff83e701ab
+R10: 0000000080000403 R11: 0000000000000001 R12: ffffffff83e701ab
 R13: 00000000000000ac R14: ffffffff87162880 R15: 0000000000000140
-FS:  00007f9bfdee2740(0000) GS:ffff8881f6700000(0000) knlGS:0000000000000000
+FS:  00007f85588ea740(0000) GS:ffff8881f6700000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fff20c4f8d8 CR3: 000000011a135000 CR4: 00000000003506e0
+CR2: 00007ffe9be70bc8 CR3: 000000011ad10000 CR4: 00000000003506e0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
