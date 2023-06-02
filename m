@@ -2,135 +2,228 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8BF7207E4
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Jun 2023 18:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF675720850
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Jun 2023 19:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236820AbjFBQrD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Jun 2023 12:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
+        id S236879AbjFBRYA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Jun 2023 13:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236840AbjFBQrB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jun 2023 12:47:01 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18D91B3;
-        Fri,  2 Jun 2023 09:47:00 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-3f8008cb772so20788301cf.3;
-        Fri, 02 Jun 2023 09:47:00 -0700 (PDT)
+        with ESMTP id S235088AbjFBRX7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jun 2023 13:23:59 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57471AB
+        for <linux-usb@vger.kernel.org>; Fri,  2 Jun 2023 10:23:57 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b04949e4e9so12264535ad.3
+        for <linux-usb@vger.kernel.org>; Fri, 02 Jun 2023 10:23:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685724420; x=1688316420;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1685726637; x=1688318637;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2eoN2DyKs5X+s+DyCZK8A4ivF3BEc52nu/fFwt4W6Js=;
-        b=qjGHtXZxoBBdS2HT2JkrKSST/yA4++3X0V+xwfmvFh9WP4br4vOwfY/p02/dOh/Hti
-         /d1coxNhXhmoHYQzGJIHccxZqRwqCIPpKsul96SdosuIgxQxByyWX8RWqLk1fVYlKLkw
-         uZlLU0Q1KKvaa0Gy0W5plYTHm9Upu2tHq5ovT8rmmRUfcw4mOiMZp9QicqJZIVNo7hhA
-         0KBsx/tOCH9SwmmSQMSOPaKlrLXBDoYRAzV3jw8crDS8C9KgKPaAs+AQ4GcQqX97+m0B
-         Q+UaZ76XrVuuVQLkp0VYh5OIQxYEtEupMTxHK2atoSEFgywcvAMTB47ukoaYqEApW+MG
-         3VnA==
+        bh=qwbDkzUy6Qk5difaDNXua1bNRo0UZZqSnu/ErFEprlc=;
+        b=d8jByJ1PZJmeuk8EagYsF/DqAjxrBWU4gad8vpYvXne/vNgX/IDf4GWwHXV6NiU/hu
+         kkl8cuQ5vsvBNhHEsnJFV267CUwy0EBs/SFk1CKiKB53AIdaP+WFl94gixrDvxoyJWxu
+         nwndksvlaDuULMjSRkPvUccpmrKiSOGoP2gw47O+pTKx515bSSgUjtlUMorLrQTD81nk
+         w5gz6ow21AE4zZ+/oyFgcJyf6zafnE+3lmdTYTjg5L85jjRhHKQ1KdM3lbktGK2rycW/
+         o38TUh2fJL13aUVnb/BWDEP7AhkiqGchaHjNnq4Psf1o5AQeadf43KXgJWWy2b4VuKoF
+         X9cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685724420; x=1688316420;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=2eoN2DyKs5X+s+DyCZK8A4ivF3BEc52nu/fFwt4W6Js=;
-        b=lGsFds7RLC3O5bjTuafItI0k/JvXmDTwYfaDXwIRJqF4QRbgkZRcD/XrxkLjx3KxUt
-         vmcg+2BMnhCiR/wYSj0sS9DJKGwiTcfknIteTKzrpBLvOCWi/j5usksj+ty3WyYNgVmT
-         8mVYNBR3RRkjVvd5YDEoXjUDRChvTymGFPpeKETkYfAsnCan+Opx9GwWfCipfRcBX65x
-         L2w2NDWYmqh0JmY+bHeESMkJmLHkB12OpFTDrI5HVrkRyEglCXvUBhixCQCaxbUfDxyF
-         s1C/vjNuaqVbltG/nvtmVhZOP+o5aM65KtvInhscibmuVLugxxv4r1y0xPMTwfI/DraL
-         lp6A==
-X-Gm-Message-State: AC+VfDyTm/v1e15LMjSWEFu4f8CXlOj0rsLGUwhEn4Ieq9FzFqfyhxNO
-        vLrXEZ5ISprrlYVd8pH4qQ==
-X-Google-Smtp-Source: ACHHUZ7EOoJZ6L7R1UJCRQzjWBBZWjNY4vgxY0heC6yYd/8OioyvT8szOiU6EybWHfv5vJbwiyYBEg==
-X-Received: by 2002:a05:622a:181b:b0:3e4:e430:94e with SMTP id t27-20020a05622a181b00b003e4e430094emr16704854qtc.64.1685724419595;
-        Fri, 02 Jun 2023 09:46:59 -0700 (PDT)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id y28-20020ac87c9c000000b003e89e2b3c23sm963638qtv.58.2023.06.02.09.46.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 09:46:58 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from mail.minyard.net (unknown [IPv6:2001:470:b8f6:1b:27c2:60bf:3f0f:e3a1])
-        by serve.minyard.net (Postfix) with ESMTPSA id B29E41800C3;
-        Fri,  2 Jun 2023 16:46:57 +0000 (UTC)
-Date:   Fri, 2 Jun 2023 11:46:56 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Craig Shelley <craig@microtron.org.uk>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: Break doesn't work on a CP2105
-Message-ID: <ZHodALMLTWk72Vvm@mail.minyard.net>
-Reply-To: minyard@acm.org
-References: <ZEmDs0ASdnEAnpsL@minyard.net>
- <ZGtZKCvo71woGf9T@hovoldconsulting.com>
- <ZGtlnWGSc31Wdhxa@mail.minyard.net>
- <ZHnmSwGyOaSMbPBB@hovoldconsulting.com>
+        d=1e100.net; s=20221208; t=1685726637; x=1688318637;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qwbDkzUy6Qk5difaDNXua1bNRo0UZZqSnu/ErFEprlc=;
+        b=N5SdFZiO6QqOFGQOcPDk9r2LC1gioqEbhrvlzEDiQIHyCt/06P62xmi00qffxmygvL
+         SgbIHGyMnZA+P5K2ez1n25WZ/gmPN1NzaX22GMCnA/Lo3PMY02AsrirgiKq5erXxTrlR
+         BGPMoA308F+MLXxQouLoKzyFRc2V9fc5wgXgZ+YS7MbQhdPp/1HTYMkJfhZAPTwb3N4j
+         Uq27iWLVU/9fSELx+tvDPwDC0WJzUn6NrHbwmUycPnuXg8uzN7NArAFOP3ZOYDRaZAgO
+         iM/pYBgy1x853DhI2abHC1eOOEFB0xfy2OApNzuiEQM1aKw2a0sWlLEvt78Fj0Tq7JiT
+         vMPQ==
+X-Gm-Message-State: AC+VfDwBr+z4NGmNel7FJfAnmNg9L3831nvG7bWzVu8g2WLoA5kEk3d1
+        5QByBaCMI3HkiJARVCr7D+XwwpyTtQnYenkJm4R3QQ==
+X-Google-Smtp-Source: ACHHUZ762nQgYgkGSGWGzTCG2EpeYIDrgmi0VEHYv1zz0QMPuLPlSiCuR3LC8MK9kEu0VQD18Frfb4iLdUYdkTlXw5U=
+X-Received: by 2002:a17:902:f7cc:b0:1b1:a4e2:a2ce with SMTP id
+ h12-20020a170902f7cc00b001b1a4e2a2cemr571077plw.20.1685726636958; Fri, 02 Jun
+ 2023 10:23:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHnmSwGyOaSMbPBB@hovoldconsulting.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230531040203.19295-1-badhri@google.com> <65dd300b-b967-41ab-b174-a7dc13ec2e19@rowland.harvard.edu>
+In-Reply-To: <65dd300b-b967-41ab-b174-a7dc13ec2e19@rowland.harvard.edu>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Fri, 2 Jun 2023 10:23:20 -0700
+Message-ID: <CAPTae5LV0jhLq10zj+dmg_d2oJmwx+Xe7gJGk-w27woEgz+c4A@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] usb: gadget: udc: core: Offload
+ usb_udc_vbus_handler processing
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
+        xuetao09@huawei.com, quic_eserrao@quicinc.com,
+        water.zhangjiantao@huawei.com, francesco@dolcini.it,
+        alistair@alistair23.me, stephan@gerhold.net, bagasdotme@gmail.com,
+        luca@z3ntu.xyz, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 02:53:31PM +0200, Johan Hovold wrote:
-> On Mon, May 22, 2023 at 07:52:45AM -0500, Corey Minyard wrote:
-> > On Mon, May 22, 2023 at 01:59:36PM +0200, Johan Hovold wrote:
-> 
-> > > I just verified that break works on the first port of my cp2105 but not
-> > > on the second one (I seem to receive the last characters sent instead).
-> > > 
-> > > Apparently this is expected as the datasheet (AN571) says the following
-> > > about the SET_BREAK command:
-> > > 
-> > > 	This command is not supported on the second CP2105 interface.
-> > > 
-> > > Which port are you seeing this behaviour with?
-> > 
-> > I'm guessing this is it.  From the schematic I think this is the
-> > TXD_ECI pin, though I'm not 100% sure.  I'd have to dig through the
-> > device tree and SOC manual to be sure which port is which.
-> 
-> It should be the second SCI interface which do not support break.
-> 
-> > Would it be possible to return an error in this situation instead of it
-> > silently not working?  Just to avoid others having the same issue.
-> 
-> I just posted a patch series which does that. The USB serial drivers do
-> not currently return any errors related to break signalling even though
-> this has been possible since 2008.
-> 
-> The same mechanism can be used to report that break signalling is not
-> supported by a device or driver, but the USB serial drivers would be the
-> first tty drivers that actually do this. If it turns out to cause any
-> trouble we can still use this series to avoid the unnecessary wait.
-> 
-> Care to give the series a try?
-> 
-> 	https://lore.kernel.org/lkml/20230602124642.19076-1-johan@kernel.org
+On Wed, May 31, 2023 at 10:29=E2=80=AFAM Alan Stern <stern@rowland.harvard.=
+edu> wrote:
+>
+> On Wed, May 31, 2023 at 04:02:01AM +0000, Badhri Jagan Sridharan wrote:
+> > usb_udc_vbus_handler() can be invoked from interrupt context by irq
+> > handlers of the gadget drivers, however, usb_udc_connect_control() has
+> > to run in non-atomic context due to the following:
+> > a. Some of the gadget driver implementations expect the ->pullup
+> >    callback to be invoked in non-atomic context.
+> > b. usb_gadget_disconnect() acquires udc_lock which is a mutex.
+> >
+> > Hence offload invocation of usb_udc_connect_control()
+> > to workqueue.
+> >
+> > Cc: stable@vger.kernel.org
+> > Fixes: 1016fc0c096c ("USB: gadget: Fix obscure lockdep violation for ud=
+c_mutex")
+> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> > ---
+> > Changes since v1:
+> > - Address Alan Stern's comment on usb_udc_vbus_handler invocation from
+> >   atomic context:
+> > * vbus_events_lock is now a spinlock and allocations in
+> > * usb_udc_vbus_handler are atomic now.
+> >
+> > Changes since v2:
+> > - Addressing Alan Stern's comments:
+> > ** connect_lock is now held by callers of
+> > * usb_gadget_pullup_update_locked() and gadget_(un)bind_driver() does
+> > * notdirectly hold the lock.
+> >
+> > ** Both usb_gadget_(dis)connect() and usb_udc_vbus_handler() would
+> > * set/clear udc->vbus and invoke usb_gadget_pullup_update_locked.
+> >
+> > ** Add "unbinding" to prevent new connections after the gadget is being
+> > * unbound.
+> >
+> > Changes since v3:
+> > ** Made a minor cleanup which I missed to do in v3 in
+> > * usb_udc_vbus_handler().
+> >
+> > Changes since v4:
+> > - Addressing Alan Stern's comments:
+> > ** usb_udc_vbus_handler() now offloads invocation of usb_udc_connect_co=
+ntrol()
+> > * from workqueue.
+> >
+> > ** Dropped vbus_events list as this was redundant. Updating to the
+> > * latest value is suffice
+> > ---
+> >  drivers/usb/gadget/udc/core.c | 19 ++++++++++++++++++-
+> >  1 file changed, 18 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/cor=
+e.c
+> > index 52e6d2e84e35..44a9f32679b5 100644
+> > --- a/drivers/usb/gadget/udc/core.c
+> > +++ b/drivers/usb/gadget/udc/core.c
+> > @@ -48,6 +48,7 @@ struct usb_udc {
+> >       struct list_head                list;
+> >       bool                            vbus;
+> >       bool                            started;
+> > +     struct work_struct              vbus_work;
+> >  };
+> >
+> >  static struct class *udc_class;
+> > @@ -1086,6 +1087,13 @@ static void usb_udc_connect_control(struct usb_u=
+dc *udc)
+> >               usb_gadget_disconnect(udc->gadget);
+> >  }
+> >
+> > +static void vbus_event_work(struct work_struct *work)
+> > +{
+> > +     struct usb_udc *udc =3D container_of(work, struct usb_udc, vbus_w=
+ork);
+> > +
+> > +     usb_udc_connect_control(udc);
+> > +}
+> > +
+> >  /**
+> >   * usb_udc_vbus_handler - updates the udc core vbus status, and try to
+> >   * connect or disconnect gadget
+> > @@ -1094,6 +1102,13 @@ static void usb_udc_connect_control(struct usb_u=
+dc *udc)
+> >   *
+> >   * The udc driver calls it when it wants to connect or disconnect gadg=
+et
+> >   * according to vbus status.
+> > + *
+> > + * This function can be invoked from interrupt context by irq handlers=
+ of the gadget drivers,
+> > + * however, usb_udc_connect_control() has to run in non-atomic context=
+ due to the following:
+> > + * a. Some of the gadget driver implementations expect the ->pullup ca=
+llback to be invoked in
+> > + * non-atomic context.
+> > + * b. usb_gadget_disconnect() acquires udc_lock which is a mutex.
+> > + * Hence offload invocation of usb_udc_connect_control() to workqueue.
+>
+> Comments should be wrapped after about 76 columns (unless there is some
+> very good reason not to).
 
-I have tested this series.  I can verify that one of the CP2105 ports
-(ttyUSB0) does not return an error on sending the break, and the other
-(ttyUSB1) does.  This is the only USB serial device on the system.
+Sounds good ! Have addressed this in v6. Wrapping comments at 76.
 
-However, the device hooked to the remote console (ttyUSB0), the one not
-returning an error on sending a break, still doesn't send a break.  So
-my problem isn't fixed :-(.
+>
+> >   */
+> >  void usb_udc_vbus_handler(struct usb_gadget *gadget, bool status)
+> >  {
+> > @@ -1101,7 +1116,7 @@ void usb_udc_vbus_handler(struct usb_gadget *gadg=
+et, bool status)
+> >
+> >       if (udc) {
+> >               udc->vbus =3D status;
+> > -             usb_udc_connect_control(udc);
+> > +             schedule_work(&udc->vbus_work);
+> >       }
+> >  }
+> >  EXPORT_SYMBOL_GPL(usb_udc_vbus_handler);
+> > @@ -1328,6 +1343,7 @@ int usb_add_gadget(struct usb_gadget *gadget)
+> >       mutex_lock(&udc_lock);
+> >       list_add_tail(&udc->list, &udc_list);
+> >       mutex_unlock(&udc_lock);
+> > +     INIT_WORK(&udc->vbus_work, vbus_event_work);
+> >
+> >       ret =3D device_add(&udc->dev);
+> >       if (ret)
+> > @@ -1558,6 +1574,7 @@ static void gadget_unbind_driver(struct device *d=
+ev)
+> >
+> >       kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+> >
+> > +     cancel_work_sync(&udc->vbus_work);
+> >       usb_gadget_disconnect(gadget);
+> >       usb_gadget_disable_async_callbacks(udc);
+> >       if (gadget->irq)
+>
+> I'm not in love with this, because there's nothing here to prevent the
+> work item from being queued again right after it is cancelled.  Patch
+> 3/3 in the series will fix this, but in the meantime this window will
+> exist.
+>
+> Maybe it would be better to merge the 3/3 patch with this one.  They are
+> very closely related, after all, since the other patch addresses the
+> matter of not allowing the work item to do anything bad at the wrong
+> time.
 
-# ls -l /dev/serial/by-path
-total 0
-lrwxrwxrwx 1 root root 13 Jun  2 15:28 pci-0000:00:1d.0-usb-0:1.1:1.0-port0 -> ../../ttyUSB0
-lrwxrwxrwx 1 root root 13 Jun  2 15:28 pci-0000:00:1d.0-usb-0:1.1:1.1-port0 -> ../../ttyUSB1
+Done ! v6. now squashes 1/3 with 3/3.
 
--corey
+Thanks a lot,
+Badhri
 
-> 
-> Johan
+>
+> Alan Stern
