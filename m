@@ -2,109 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE5871FB0E
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Jun 2023 09:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 877E271FB51
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Jun 2023 09:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234304AbjFBHfC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Jun 2023 03:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42362 "EHLO
+        id S233856AbjFBHq2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Jun 2023 03:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234303AbjFBHfB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jun 2023 03:35:01 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8909C0;
-        Fri,  2 Jun 2023 00:34:58 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3527XgK72027076, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3527XgK72027076
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Fri, 2 Jun 2023 15:33:42 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Fri, 2 Jun 2023 15:33:56 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 2 Jun 2023 15:33:56 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Fri, 2 Jun 2023 15:33:56 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ray Chi <raychi@google.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v2 3/3] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 2.0/3.0 PHY
-Thread-Topic: [PATCH v2 3/3] dt-bindings: phy: realtek: Add the doc about the
- Realtek SoC USB 2.0/3.0 PHY
-Thread-Index: AQHZjrBYcJlLsVj/HkuHUZRifSysgq90OEaAgAGJYxD//9d+gIABRKMg///BZQCAAIkxgA==
-Date:   Fri, 2 Jun 2023 07:33:55 +0000
-Message-ID: <9cf3f726120846fabfcca269155d948c@realtek.com>
-References: <20230525022617.30537-1-stanley_chang@realtek.com>
- <20230525022617.30537-3-stanley_chang@realtek.com>
- <0b2143ca-ead7-c8fa-2e80-a94222af51ca@linaro.org>
- <ee65a9d6d40d4099987db5ff1ad1753f@realtek.com>
- <c49f5619-286c-fbb7-0f18-5869527081c8@linaro.org>
- <f53b5c21247c49db8be7071de36c773b@realtek.com>
- <1231d116-ca4b-fb73-d000-d531297343e7@linaro.org>
-In-Reply-To: <1231d116-ca4b-fb73-d000-d531297343e7@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S234215AbjFBHqJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jun 2023 03:46:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E1919A;
+        Fri,  2 Jun 2023 00:45:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A085864D0D;
+        Fri,  2 Jun 2023 07:45:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4623C433EF;
+        Fri,  2 Jun 2023 07:45:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685691929;
+        bh=os/KAnDFQ4pvdo7apKPtfWWjGJ3xGGoRFKdJzbIPCZo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TZSxTw8TYua8wkZJHIX7ioCkIlJR0EfYeNlSQJCzYO8BbGaKfgNJk8V7vlZtnehs/
+         HSUdoKy5glYrWXdMUNGcDlK6xlpFBIZt2xfkxWdM/57ksP3QthoCQntHS5UVMVyur5
+         CWZgiJMsgTBvxhXrjHogdTIkTZ6C3XFFYc/rAUVc=
+Date:   Fri, 2 Jun 2023 08:45:26 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: mux: Fix extraneous semicolon
+Message-ID: <2023060210-foam-flip-6f2d@gregkh>
+References: <20230601213342.3334659-1-arnd@kernel.org>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601213342.3334659-1-arnd@kernel.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgS3J6eXN6dG9mLA0KDQo+ID4+IElmIHRoZXNlIGNhbiBiZSBpbiB0aGUgZHJpdmVyLCB3aHkg
-d291bGQgZXZlciB0aGV5IGJlIGluIERUUyBpbiB0aGUgZmlyc3QNCj4gcGxhY2U/DQo+ID4+DQo+
-ID4gT3VyIHBsYXRmb3JtcyBoYXZlIDMgeGhjaSBjb250cm9sbGVycyB3aGljaCBtYXAgdG8gMyBk
-aWZmZXJlbnQgcGh5IHBvcnRzLg0KPiANCj4gWW91IG1lYW4gb24gdGhlIHNhbWUgU29DPw0KDQpZ
-ZXMsIG9uZSBTb0MgaGFzIHRocmVlIHhoY2kgY29udHJvbGxlcnMuDQoNCj4gPiBBbmQgdGhlIHRo
-cmVlIHBoeSBwb3J0cyB1c2UgdGhlIHNhbWUgZHJpdmVyLCBidXQgdGhlIHBhcmFtZXRlcnMgYXJl
-DQo+IGRpZmZlcmVudC4NCj4gPiBTbyBJIHB1dCB0aGUgcGFyYW1ldGVyIHNldHRpbmdzIGluIERU
-Uywgd2UgaGF2ZSAzIHVzYi1waHkgbm9kZXMgcmVwcmVzZW50aW5nDQo+IDMgcGh5IHBvcnRzLg0K
-PiA+IEFsc28sIHNvbWUgcGFyYW1ldGVycyBoYXZlIHRvIGJlIGFkanVzdGVkIGZvciBkaWZmZXJl
-bnQgYm9hcmRzLg0KPiA+IFRoZXJlZm9yZSwgaXQgaXMgbW9yZSBhcHBsaWNhYmxlIGluIERUUyB0
-aGFuIGluIGRyaXZlci4NCj4gDQo+IFRoZW4gaXQgbG9va3MganVzdGlmaWVkIGluIERULCBzbyBw
-bGVhc2Ugd3JpdGUgcHJvcGVyIGRlc2NyaXB0aW9ucyBmb3IgcHJvcGVyDQo+IHByb3BlcnRpZXMu
-IFVuZGVyc2NvcmVzIGFyZSBub3QgYWxsb3dlZCBpbiBub2RlIG5hbWVzLiBObyBmYWtlIG5vZGVz
-Lg0KPiBQcm9wZXJ0aWVzIHNob3VsZCB1c3VhbGx5IGRlc2NyaWJlIHBoeXNpY2FsL2hhcmR3YXJl
-IGVmZmVjdCBub3QgdGhlIHJlZ2lzdGVyDQo+IHZhbHVlLg0KDQpJIHdpbGwgd3JpdGUgbW9yZSBk
-ZXRhaWwgZm9yIHByb3BlcnRpZXMuIA0KDQo+IHFjb20sdXNiLXNucHMtZmVtdG8tdjIueWFtbCBp
-cyBuaWNlIGV4YW1wbGUuIEZldyBNZWRpYXRlayBiaW5kaW5ncyBhbHNvDQo+IHdvdWxkIHdvcmsu
-DQo+ICcNCg0KVGhhbmtzLA0KU3RhbmxleQ0K
+On Thu, Jun 01, 2023 at 11:33:37PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> A recent patch introduced a typo in the fwnode_typec_mux_get()
+> stub function that causes a build failure in some configurations:
+> 
+> In file included from drivers/phy/qualcomm/phy-qcom-qmp-combo.c:23:
+> include/linux/usb/typec_mux.h:77:1: error: expected identifier or '(' before '{' token
+> include/linux/usb/typec_mux.h:76:33: error: 'fwnode_typec_mux_get' used but never defined [-Werror]
+> 
+> Fixes: 3524fe31538c1 ("usb: typec: mux: Remove alt mode parameters from the API")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  include/linux/usb/typec_mux.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/usb/typec_mux.h b/include/linux/usb/typec_mux.h
+> index 11bfa314529fd..2489a7857d8e1 100644
+> --- a/include/linux/usb/typec_mux.h
+> +++ b/include/linux/usb/typec_mux.h
+> @@ -73,7 +73,7 @@ void *typec_mux_get_drvdata(struct typec_mux_dev *mux);
+>  
+>  #else
+>  
+> -static inline struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode);
+> +static inline struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode)
+>  {
+>  	return NULL;
+>  }
+> -- 
+> 2.39.2
+> 
+
+Should already be fixed in my tree, and in the next linux-next, sorry.
+
+greg k-h
