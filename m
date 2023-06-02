@@ -2,124 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA0271F87C
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Jun 2023 04:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC9371F8E6
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Jun 2023 05:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233108AbjFBChQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Jun 2023 22:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
+        id S233522AbjFBDVj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Jun 2023 23:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjFBChP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jun 2023 22:37:15 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7AA0194;
-        Thu,  1 Jun 2023 19:37:13 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-6af8127031cso1339888a34.2;
-        Thu, 01 Jun 2023 19:37:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685673433; x=1688265433;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DLZcQ99Ho3580mjuJ5CWs1tHY6kZa+CsdXChVbXnF4A=;
-        b=psulVz7zBKNYrfCozba0IEsN4CJOuZmf3U6tMgv1pbOfQ+pmdFKo5Xdcwf5EI29L6t
-         yX99q7m5obkC7tD1XdZ6oyYiUZXJSJOG7bAnvAcJU8G0UA/WQd6a1wyNIUnpfA88W9Gu
-         BF8IjT7ZT6HMmX0DZFVhke6FuAYvx3DFQzCmWtl2vZGo46RdKaXX2vGZ+PMy8RIKB9ej
-         knHTzmwq5QGoF7ZcaR9Tq6CRoQfYNa8J47CyxMi3un8L355mGxSH2TgSY3MMhbp6qM3/
-         WPJhv3etRYs3mSY9knv5jNFQQaJbAlyCMG6RPti/MHK+4YvF990tlUAcRAY7IRdnoghZ
-         BzTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685673433; x=1688265433;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DLZcQ99Ho3580mjuJ5CWs1tHY6kZa+CsdXChVbXnF4A=;
-        b=dD3zQk3sMr5/VB6r2pFXD7dJIEQ+bFhIfwLPmsVIiL80AhA9+h1qeI7J/NtbmPhhLR
-         JGOFVUl4x1ouhCrWEBL6wXtIhEDN2dYfrmOdNLyVz6bBHxMi7qbHnQU6FY2Abk8UD78f
-         Wle3Z1InJLa+/hCyFoJG/q68O/gBr3zLmqHTSCnEAYL37zqfXrGJ6IrTY3RaaA/x96p1
-         4DMse4ezMzkmz/o8vMjJeVH1l85UlzUzKgHLOgUIppF3A2qwtBXRTfO2f88ZtMEnbip3
-         poyc8DpLKFn+IOag5FR0A6Y3F8Ke5O79ZvmxxtR0a5SqjRMasNpktYtJBhqyLpvv9sUs
-         aTgw==
-X-Gm-Message-State: AC+VfDwlXbZppDFwx9N8MrqxNesx7x0i4QUJsItLkPoOpbujFq2sQw8N
-        A0SZT0OGLm/mSVQtyN2YrusLAw6kmyk=
-X-Google-Smtp-Source: ACHHUZ7TSvI3mc6wX5hxklZq7lCO/C8L/tczNUi88qS6bTKxGKNstpBAbJC93GUNgnAltBTwqqiNcw==
-X-Received: by 2002:a9d:7a98:0:b0:697:ef66:e7f4 with SMTP id l24-20020a9d7a98000000b00697ef66e7f4mr1140605otn.24.1685673432965;
-        Thu, 01 Jun 2023 19:37:12 -0700 (PDT)
-Received: from [192.168.43.80] (subs28-116-206-12-49.three.co.id. [116.206.12.49])
-        by smtp.gmail.com with ESMTPSA id m7-20020aa78a07000000b0064f39c6474fsm808203pfa.56.2023.06.01.19.37.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 19:37:12 -0700 (PDT)
-Message-ID: <e6124947-bc60-660b-a41f-e09256bc5232@gmail.com>
-Date:   Fri, 2 Jun 2023 09:37:08 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux USB <linux-usb@vger.kernel.org>,
-        Linux Stable <stable@vger.kernel.org>
-Cc:     =?UTF-8?Q?Samuel_=c4=8cavoj?= <samuel@cavoj.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        with ESMTP id S233485AbjFBDVh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jun 2023 23:21:37 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06CC136;
+        Thu,  1 Jun 2023 20:21:33 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3523JoxsE028351, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3523JoxsE028351
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Fri, 2 Jun 2023 11:19:50 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Fri, 2 Jun 2023 11:20:04 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 2 Jun 2023 11:20:04 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Fri, 2 Jun 2023 11:20:04 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: Null pointer dereference regression introduced by
- 326e1c208f3f24d14b93f910b8ae32c94923d22c
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+CC:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ray Chi <raychi@google.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v2 3/3] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 2.0/3.0 PHY
+Thread-Topic: [PATCH v2 3/3] dt-bindings: phy: realtek: Add the doc about the
+ Realtek SoC USB 2.0/3.0 PHY
+Thread-Index: AQHZjrBYcJlLsVj/HkuHUZRifSysgq90OEaAgAGJYxD//9d+gIABRKMg
+Date:   Fri, 2 Jun 2023 03:20:04 +0000
+Message-ID: <f53b5c21247c49db8be7071de36c773b@realtek.com>
+References: <20230525022617.30537-1-stanley_chang@realtek.com>
+ <20230525022617.30537-3-stanley_chang@realtek.com>
+ <0b2143ca-ead7-c8fa-2e80-a94222af51ca@linaro.org>
+ <ee65a9d6d40d4099987db5ff1ad1753f@realtek.com>
+ <c49f5619-286c-fbb7-0f18-5869527081c8@linaro.org>
+In-Reply-To: <c49f5619-286c-fbb7-0f18-5869527081c8@linaro.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-I notice a regression report on Bugzilla [1]. Quoting from it:
-
-> Null pointer deref
-> 
-> after reverting 326e1c208f3f24d14b93f910b8ae32c94923d22c the problem is gone and the kernel does not crash anymore
-> 
-> See this discussion for details:
-> 
-> https://bbs.archlinux.org/viewtopic.php?pid=2102715#p2102715
-> 
-
-See Bugzilla for the full thread and attached journal log.
-
-On the other hand, from linked Archlinux forum link:
-
-> Hi,
-> 
-> I am running arch successfully since a couple of years on my Acer ConceptD 7 laptop. Since a kernel update on 24th of May I am having strange issues (never seen this before):
-> 
-> - sometimes I cannot even login (using gdm) - after entering password just a blank screen
-> - if I can login I can start working - after a while commands I enter in the console are accepted but do nothing (i.e. grub-mkconfig -o ..... can enter the command but just no output - it does nothing - happens with most other command then as well....)
-> - Reboot does not work - stuck somewhere - have to switch the machine off the hard way
-> - this happens even when entering runlevel 3 (so no window manager)
-> - same happens on the laptop of a friend (exact same model) - unfortunately I have no other piece of hardware which I could use for testing to potentially reproduce the problem
-> 
-> Managed to trace this down to all kernels after 6.3.3.arch1-1 - so 6.3.3.arch1-1 it the last one which works without any problems
-> Same applies for the LTS kernels - not 100% sure but think 6.1.29 ist the last one which works
-> 
-> Currently I have marked linux linux-headers and nvidia to not upgrade. LTS kernels are upgraded but the latest two kernels (latest from today) up until 6.1.31-1 do NOT work
-> 
-> Problem: Since most of the command fail when using one of the latest kernel - it is almost impossible to debug - at least I am not knowledgable enough to know where to look.
-
-Anyway, I'm adding it to regzbot:
-
-#regzbot introduced: 326e1c208f3f24 https://bugzilla.kernel.org/show_bug.cgi?id=217517
-#regzbot title: USB typec quirk for Asus Zenbook UM325 triggers system freeze on Acer ConceptD 7
-#regzbot link: https://bbs.archlinux.org/viewtopic.php?pid=2102715
-
-Thanks.
-
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217517
-
--- 
-An old man doll... just what I always wanted! - Clara
+SGkgS3J6eXN6dG9mLA0KDQo+ID4NCj4gPiBNb3N0IG9mIHRoZSBwcm9wZXJ0aWVzIGFyZSBhYm91
+dCB0aGUgcGh5IHBhcmFtZXRlcnMuDQo+ID4gSXMgdGhlIHBoeSBwYXJhbWV0ZXIgZGF0YSBzdWl0
+YWJsZSB0byBiZSBwbGFjZWQgaW4gRFRTPw0KPiA+IEkgcmVmZXJlbmNlZCBvdGhlciBwaHkgZHJp
+dmVycy4NCj4gPiBUaGVzZSBwYXJhbWV0ZXJzIHNob3VsZCBub3QgYmUgZGVmaW5lZCBpbiBkdHMu
+DQo+ID4gSSB3b3VsZCBtb3ZlIHRoZSBwYXJhbWV0ZXJzIHRvIHRoZSBkcml2ZXIuDQo+IA0KPiBJ
+ZiB0aGVzZSBjYW4gYmUgaW4gdGhlIGRyaXZlciwgd2h5IHdvdWxkIGV2ZXIgdGhleSBiZSBpbiBE
+VFMgaW4gdGhlIGZpcnN0IHBsYWNlPw0KPiANCk91ciBwbGF0Zm9ybXMgaGF2ZSAzIHhoY2kgY29u
+dHJvbGxlcnMgd2hpY2ggbWFwIHRvIDMgZGlmZmVyZW50IHBoeSBwb3J0cy4NCkFuZCB0aGUgdGhy
+ZWUgcGh5IHBvcnRzIHVzZSB0aGUgc2FtZSBkcml2ZXIsIGJ1dCB0aGUgcGFyYW1ldGVycyBhcmUg
+ZGlmZmVyZW50Lg0KU28gSSBwdXQgdGhlIHBhcmFtZXRlciBzZXR0aW5ncyBpbiBEVFMsIHdlIGhh
+dmUgMyB1c2ItcGh5IG5vZGVzIHJlcHJlc2VudGluZyAzIHBoeSBwb3J0cy4NCkFsc28sIHNvbWUg
+cGFyYW1ldGVycyBoYXZlIHRvIGJlIGFkanVzdGVkIGZvciBkaWZmZXJlbnQgYm9hcmRzLg0KVGhl
+cmVmb3JlLCBpdCBpcyBtb3JlIGFwcGxpY2FibGUgaW4gRFRTIHRoYW4gaW4gZHJpdmVyLg0KDQo+
+ID4+PiArICByZWFsdGVrLHVzYjoNCj4gPj4+ICsgICAgZGVzY3JpcHRpb246IFRoZSBwaGFuZGxl
+ciBvZiByZWFsdGVrIGR3YzMgbm9kZQ0KPiA+Pg0KPiA+PiAicGhhbmRsZXIiPyBFeGNlcHQgb2J2
+aW91cyB0eXBvLCBkcm9wICJUaGUgcGhhbmRsZXIgb2YiIGFuZCBkZXNjcmliZQ0KPiA+PiB3aGF0
+IGlzIGl0IGZvci4NCj4gPg0KPiA+IHJlYWx0ZWssdXNiIGlzIGEgcGhhbmRsZSBvZiBzeXNjb24g
+dXNlZCB0byBjb250cm9sIHJlYWx0ZWsgZHdjMyByZWdpc3Rlci4NCj4gDQo+IFRoZW4gbm8sIHBo
+eSBzaG91bGQgbm90IGNvbnRyb2wgZHdjMy4NCg0KT0sgSSBrbm93IGl0IGRvZXNuJ3QgbWFrZSBz
+ZW5zZS4NCldlIHdhbnQgdG8gZGlzYWJsZSBwaHkgc3VzcGVuZCBmcm9tIG1hYyBsYXllci4NCkkg
+d2lsbCB0cnkgb3RoZXIgbWV0aG9kLg0KDQo+ID4NCj4gPj4+ICsgICAgJHJlZjogL3NjaGVtYXMv
+dHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvcGhhbmRsZQ0KPiA+Pg0KPiA+PiBBbnl3YXksIGl0IHNo
+b3VsZG4ndCBiZSBoZXJlLiBObywgbm8uDQo+ID4NCj4gPiBDYW4gSSB1c2UgaXQgZm9yIHBoYW5k
+bGUgb2Ygc3lzY29uPw0KPiANCj4gUEhZIGdldHRpbmcgcGhhbmRsZSB0byBibG9jayB1c2luZyB0
+aGlzIFBIWT8gTG9va3Mgd3JvbmcuIFdoeSB3b3VsZCBQSFkNCj4gbmVlZCB0byBwb2tlIElQIGJs
+b2NrIHJlZ2lzdGVyPw0KPiANCg0KT0suIEkga25vdyBpdCBkb2Vzbid0IG1ha2Ugc2Vuc2UuDQo=
