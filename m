@@ -2,115 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC9371F8E6
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Jun 2023 05:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25CDB71F9B6
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Jun 2023 07:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbjFBDVj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Jun 2023 23:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
+        id S233613AbjFBFl7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Jun 2023 01:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233485AbjFBDVh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jun 2023 23:21:37 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06CC136;
-        Thu,  1 Jun 2023 20:21:33 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3523JoxsE028351, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3523JoxsE028351
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Fri, 2 Jun 2023 11:19:50 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Fri, 2 Jun 2023 11:20:04 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 2 Jun 2023 11:20:04 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Fri, 2 Jun 2023 11:20:04 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ray Chi <raychi@google.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v2 3/3] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 2.0/3.0 PHY
-Thread-Topic: [PATCH v2 3/3] dt-bindings: phy: realtek: Add the doc about the
- Realtek SoC USB 2.0/3.0 PHY
-Thread-Index: AQHZjrBYcJlLsVj/HkuHUZRifSysgq90OEaAgAGJYxD//9d+gIABRKMg
-Date:   Fri, 2 Jun 2023 03:20:04 +0000
-Message-ID: <f53b5c21247c49db8be7071de36c773b@realtek.com>
-References: <20230525022617.30537-1-stanley_chang@realtek.com>
- <20230525022617.30537-3-stanley_chang@realtek.com>
- <0b2143ca-ead7-c8fa-2e80-a94222af51ca@linaro.org>
- <ee65a9d6d40d4099987db5ff1ad1753f@realtek.com>
- <c49f5619-286c-fbb7-0f18-5869527081c8@linaro.org>
-In-Reply-To: <c49f5619-286c-fbb7-0f18-5869527081c8@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S233346AbjFBFl5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jun 2023 01:41:57 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9898F197;
+        Thu,  1 Jun 2023 22:41:54 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b026657a6fso14866685ad.0;
+        Thu, 01 Jun 2023 22:41:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685684514; x=1688276514;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3CaEroasOn4UO6sL5Z/L/5g3HrtiTz/xAX7Vnu4/IiE=;
+        b=UJo7bgnZf7QCmkXkiRYgmyEH+4UfbK+dZc1XJ/OymlprZcuFiEf99txwV8oF/s022Y
+         7JlGc3naOs5KG5Zs7UwtF8umAHRZ9IHgM5cOi8wcvBsJJ0Ymg8WW0A+78Sr0WMXq2OQ7
+         CCTlgm4r4edRN8ZdNuDDoiWJ7qqKGz5fmatJUr1vRFDOhVYOdnAbMX51jPmrTyShQ8u3
+         nYjf1Bd4jXxwRWZZqIUUMRA7rCKGH8ZOaNZI2ug+DupoAKsw3R/ZmJ46MeT8daZnFZ9e
+         iwZo/w4ScG/GnYlteww/JSYz+kRK4Dqd+hAZld1wsRLFVB1RMPu1N6rCLU/ntCnJkMew
+         IO2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685684514; x=1688276514;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3CaEroasOn4UO6sL5Z/L/5g3HrtiTz/xAX7Vnu4/IiE=;
+        b=i99ItJYSIf8G9Ns0mO8KkTLyqro95+BPYeaQjHVTwFYmDL9meMZjoFS5y5cV4vGa8y
+         5l589N9kal8tLddvWZ1Trbi8nLgFtcuBA9qu9W9+AoQaxyxG0wiIJnC109vTgBZXEb4S
+         uZa/VK1DkYu2dMGWuaJsP7t1W7X6Y2apr4AymMW6LQf9QZIytYgirKJSg3JpCUo41UQi
+         ikJM45rK4Qj9a121PtzugLc/V5P/ASqTU4s6NTCsvytEK6gwedhpOUzZCwyk13PW/wrI
+         fVNc3FrtPcC6qTNHrSU1TM2oTow4rwu97YcSvpRyimA8l07Qx5RQckdY5yMfcQUP6M4w
+         AMDQ==
+X-Gm-Message-State: AC+VfDzmhsRG75lH7/Qb1ADJuqKTxFGLoKD4Q1wjzjevxNtBWM94tnJx
+        SZ+8e4D+RvfnI4lUn7lxuu4=
+X-Google-Smtp-Source: ACHHUZ5qal2e2kKGi2AeosoAprqOmUv7hTHuG2bhDNbMjh0QT+z7D6gV9a/wkkXA+/VNBe8nPt1Rbg==
+X-Received: by 2002:a17:902:8506:b0:1ad:1c29:80ef with SMTP id bj6-20020a170902850600b001ad1c2980efmr1351861plb.18.1685684513926;
+        Thu, 01 Jun 2023 22:41:53 -0700 (PDT)
+Received: from weshuang.weshuang (123-51-235-192.moxa.com. [123.51.235.192])
+        by smtp.googlemail.com with ESMTPSA id w3-20020a170902d70300b001ab0d815dbbsm390501ply.23.2023.06.01.22.41.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 22:41:53 -0700 (PDT)
+From:   Wes Huang <wes155076@gmail.com>
+X-Google-Original-From: Wes Huang <wes.huang@moxa.com>
+To:     bjorn@mork.no
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wes Huang <wes.huang@moxa.com>, stable@vger.kernel.org
+Subject: [PATCH 1/1] net: usb: qmi_wwan: add support for Compal RXM-G1
+Date:   Fri,  2 Jun 2023 13:41:12 +0800
+Message-Id: <20230602054112.2299565-1-wes.huang@moxa.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgS3J6eXN6dG9mLA0KDQo+ID4NCj4gPiBNb3N0IG9mIHRoZSBwcm9wZXJ0aWVzIGFyZSBhYm91
-dCB0aGUgcGh5IHBhcmFtZXRlcnMuDQo+ID4gSXMgdGhlIHBoeSBwYXJhbWV0ZXIgZGF0YSBzdWl0
-YWJsZSB0byBiZSBwbGFjZWQgaW4gRFRTPw0KPiA+IEkgcmVmZXJlbmNlZCBvdGhlciBwaHkgZHJp
-dmVycy4NCj4gPiBUaGVzZSBwYXJhbWV0ZXJzIHNob3VsZCBub3QgYmUgZGVmaW5lZCBpbiBkdHMu
-DQo+ID4gSSB3b3VsZCBtb3ZlIHRoZSBwYXJhbWV0ZXJzIHRvIHRoZSBkcml2ZXIuDQo+IA0KPiBJ
-ZiB0aGVzZSBjYW4gYmUgaW4gdGhlIGRyaXZlciwgd2h5IHdvdWxkIGV2ZXIgdGhleSBiZSBpbiBE
-VFMgaW4gdGhlIGZpcnN0IHBsYWNlPw0KPiANCk91ciBwbGF0Zm9ybXMgaGF2ZSAzIHhoY2kgY29u
-dHJvbGxlcnMgd2hpY2ggbWFwIHRvIDMgZGlmZmVyZW50IHBoeSBwb3J0cy4NCkFuZCB0aGUgdGhy
-ZWUgcGh5IHBvcnRzIHVzZSB0aGUgc2FtZSBkcml2ZXIsIGJ1dCB0aGUgcGFyYW1ldGVycyBhcmUg
-ZGlmZmVyZW50Lg0KU28gSSBwdXQgdGhlIHBhcmFtZXRlciBzZXR0aW5ncyBpbiBEVFMsIHdlIGhh
-dmUgMyB1c2ItcGh5IG5vZGVzIHJlcHJlc2VudGluZyAzIHBoeSBwb3J0cy4NCkFsc28sIHNvbWUg
-cGFyYW1ldGVycyBoYXZlIHRvIGJlIGFkanVzdGVkIGZvciBkaWZmZXJlbnQgYm9hcmRzLg0KVGhl
-cmVmb3JlLCBpdCBpcyBtb3JlIGFwcGxpY2FibGUgaW4gRFRTIHRoYW4gaW4gZHJpdmVyLg0KDQo+
-ID4+PiArICByZWFsdGVrLHVzYjoNCj4gPj4+ICsgICAgZGVzY3JpcHRpb246IFRoZSBwaGFuZGxl
-ciBvZiByZWFsdGVrIGR3YzMgbm9kZQ0KPiA+Pg0KPiA+PiAicGhhbmRsZXIiPyBFeGNlcHQgb2J2
-aW91cyB0eXBvLCBkcm9wICJUaGUgcGhhbmRsZXIgb2YiIGFuZCBkZXNjcmliZQ0KPiA+PiB3aGF0
-IGlzIGl0IGZvci4NCj4gPg0KPiA+IHJlYWx0ZWssdXNiIGlzIGEgcGhhbmRsZSBvZiBzeXNjb24g
-dXNlZCB0byBjb250cm9sIHJlYWx0ZWsgZHdjMyByZWdpc3Rlci4NCj4gDQo+IFRoZW4gbm8sIHBo
-eSBzaG91bGQgbm90IGNvbnRyb2wgZHdjMy4NCg0KT0sgSSBrbm93IGl0IGRvZXNuJ3QgbWFrZSBz
-ZW5zZS4NCldlIHdhbnQgdG8gZGlzYWJsZSBwaHkgc3VzcGVuZCBmcm9tIG1hYyBsYXllci4NCkkg
-d2lsbCB0cnkgb3RoZXIgbWV0aG9kLg0KDQo+ID4NCj4gPj4+ICsgICAgJHJlZjogL3NjaGVtYXMv
-dHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvcGhhbmRsZQ0KPiA+Pg0KPiA+PiBBbnl3YXksIGl0IHNo
-b3VsZG4ndCBiZSBoZXJlLiBObywgbm8uDQo+ID4NCj4gPiBDYW4gSSB1c2UgaXQgZm9yIHBoYW5k
-bGUgb2Ygc3lzY29uPw0KPiANCj4gUEhZIGdldHRpbmcgcGhhbmRsZSB0byBibG9jayB1c2luZyB0
-aGlzIFBIWT8gTG9va3Mgd3JvbmcuIFdoeSB3b3VsZCBQSFkNCj4gbmVlZCB0byBwb2tlIElQIGJs
-b2NrIHJlZ2lzdGVyPw0KPiANCg0KT0suIEkga25vdyBpdCBkb2Vzbid0IG1ha2Ugc2Vuc2UuDQo=
+Add support for Compal RXM-G1 which is based on Qualcomm SDX55 chip.
+This patch adds support for two compositions:
+
+0x9091: DIAG + MODEM + QMI_RMNET + ADB
+0x90db: DIAG + DUN + RMNET + DPL + QDSS(Trace) + ADB
+
+T:  Bus=03 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
+D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+P:  Vendor=05c6 ProdID=9091 Rev= 4.14
+S:  Manufacturer=QCOM
+S:  Product=SDXPRAIRIE-MTP _SN:719AB680
+S:  SerialNumber=719ab680
+C:* #Ifs= 4 Cfg#= 1 Atr=80 MxPwr=896mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
+E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+E:  Ad=84(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+
+T:  Bus=03 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
+D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+P:  Vendor=05c6 ProdID=90db Rev= 4.14
+S:  Manufacturer=QCOM
+S:  Product=SDXPRAIRIE-MTP _SN:719AB680
+S:  SerialNumber=719ab680
+C:* #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=896mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
+E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+E:  Ad=84(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+E:  Ad=8f(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+E:  Ad=85(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Wes Huang <wes.huang@moxa.com>
+---
+ drivers/net/usb/qmi_wwan.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 571e37e67f9c..90f4655a671d 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1220,7 +1220,9 @@ static const struct usb_device_id products[] = {
+ 	{QMI_FIXED_INTF(0x05c6, 0x9080, 8)},
+ 	{QMI_FIXED_INTF(0x05c6, 0x9083, 3)},
+ 	{QMI_FIXED_INTF(0x05c6, 0x9084, 4)},
++	{QMI_QUIRK_SET_DTR(0x05c6, 0x9091, 2)},	/* Compal RXM-G1 */
+ 	{QMI_FIXED_INTF(0x05c6, 0x90b2, 3)},    /* ublox R410M */
++	{QMI_QUIRK_SET_DTR(0x05c6, 0x90db, 2)},	/* Compal RXM-G1 */
+ 	{QMI_FIXED_INTF(0x05c6, 0x920d, 0)},
+ 	{QMI_FIXED_INTF(0x05c6, 0x920d, 5)},
+ 	{QMI_QUIRK_SET_DTR(0x05c6, 0x9625, 4)},	/* YUGA CLM920-NC5 */
+-- 
+2.30.2
+
