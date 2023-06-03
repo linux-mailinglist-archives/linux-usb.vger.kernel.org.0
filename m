@@ -2,266 +2,254 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0D2721337
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Jun 2023 23:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502D87213D7
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Jun 2023 01:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjFCVgM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 3 Jun 2023 17:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50206 "EHLO
+        id S229557AbjFCX7Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 3 Jun 2023 19:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjFCVgL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Jun 2023 17:36:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D5EE1;
-        Sat,  3 Jun 2023 14:36:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3B7E61557;
-        Sat,  3 Jun 2023 21:36:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30E18C433EF;
-        Sat,  3 Jun 2023 21:36:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685828169;
-        bh=yIeiVTnh/Ift8tK1dxozK/NMJ5hgTSuFRUDlnSNC+iw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pOy4jZdpnPUzdeDQ7IaQ5f5zeZo9Lf3IzXSm+kxfh/WmFkrYRIazkCNWIfC1ZWTSN
-         O4DjJZl2rVtl4fCfs3yheut6STzxMMxbmP1a56eOaAcxxciiImZfKqKxsaEe38vqqf
-         7KHKQufS5oLsIz6YMp6iuTVTdCUYCl0iJldho5jQ20QqaUHQVlyu7GsgjIVs4DGSc3
-         1eIVjb4QikDkT8bbaGkcLu+QjTd50ICfsjW2CFAYhEU+CXckf39hyll2iSLHCotZLI
-         jWjfSZQyXcgTFSbrR0pxKiiTlc26TkcZ/XmuISCS16f4592A9QdTt/+CcSvYD9efHf
-         tdIVaE5ezoD1g==
-Date:   Sat, 3 Jun 2023 22:35:59 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Varshini Rajendran <varshini.rajendran@microchip.com>
-Cc:     tglx@linutronix.de, maz@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        gregkh@linuxfoundation.org, linux@armlinux.org.uk,
-        mturquette@baylibre.com, sboyd@kernel.org, sre@kernel.org,
-        broonie@kernel.org, arnd@arndb.de, gregory.clement@bootlin.com,
-        sudeep.holla@arm.com, balamanikandan.gunasundar@microchip.com,
-        mihai.sain@microchip.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
-        durai.manickamkr@microchip.com, manikandan.m@microchip.com,
-        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
-        balakrishnan.s@microchip.com
-Subject: Re: [PATCH 04/21] ARM: dts: at91: sam9x7: add device tree for soc
-Message-ID: <20230603-resource-decode-47167e7e199a@spud>
-References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
- <20230603200243.243878-5-varshini.rajendran@microchip.com>
+        with ESMTP id S229457AbjFCX7X (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Jun 2023 19:59:23 -0400
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A24FED
+        for <linux-usb@vger.kernel.org>; Sat,  3 Jun 2023 16:59:22 -0700 (PDT)
+Received: by mail-oo1-xc2c.google.com with SMTP id 006d021491bc7-541f4ee6f89so2400266eaf.2
+        for <linux-usb@vger.kernel.org>; Sat, 03 Jun 2023 16:59:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685836761; x=1688428761;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jXiTnrgUYthUygSNS2TnF+eHarQQsueuQuGFlf+WVR0=;
+        b=ovUNFInoMFIfOFdKS26IXhwU+7ouTMnvLTw5lNah97kPV+bNVa5gVVCR/wykIM+yQB
+         rATK61ZfA10xcW8jkJZCK7u9NwTyY3VpkHilFibUXeCIb6jE8AxtCWhIzQcKSA0hvRG8
+         ANqcogfmod8J13QfCqgpzhML4dDojxqrkBjwbhHQGGEbY+IeEX0L0wM7woWteUO8TVKR
+         /nJTolQIPin5W/AV2K15S2v0Iz2Z6I6mvJ7DG5goe2jugjhALvdddOSekFeTlHMSE2FW
+         ufiUKjFdg561A4dF4Ztu094t/C06s5BndE31UIRAaPne7UdZUpJv4W7MeWlFeV2zFQ7m
+         Iapg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685836761; x=1688428761;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jXiTnrgUYthUygSNS2TnF+eHarQQsueuQuGFlf+WVR0=;
+        b=UmtqreYQjtVYLHW4G6aSD4kyZDHiTDwxVLIzSBUCVw4mEBUOZ31j3pMJNDrfbkxOOl
+         rf7kI7JGrzWRFe/BJFArByaRfJqVGzukSIj/IhEiJcBpQHBEttp65qEsFle7+XjjZRKo
+         8sO50S0gxdl2CB1H2Zq5sphewS8CqM6S7rBXTPy67Ty5DiAUw0ZdCuoKQmeo4yN+GjpB
+         o3tuALoc0UhvCLhyrbf8t1Erb+/N/VZO+OwzpNztFzcZ1XsIQvXRZwgMVA7jbvGp/3F4
+         e48rnvC2WK8anp002FKRkRtHOAgsrDuo00j7EkoaJPuBSleQBh9yR6Z57QpA1OcY1E46
+         FSfw==
+X-Gm-Message-State: AC+VfDyyO7C+sl/igvdegprMpuAKQLku12lJFEuFV/JP+ybMlkDMAgKV
+        USjurH8bYZNHJzc85VIy84SmePwLvUDq1Q==
+X-Google-Smtp-Source: ACHHUZ410/+iuIVbwlajjs7X6G0DyjP9IK76zvGwBC3vE7JDEJDiobWdbbbHCVNoTJMCNAxRqQtxXw==
+X-Received: by 2002:a4a:e04a:0:b0:558:b224:ce9f with SMTP id v10-20020a4ae04a000000b00558b224ce9fmr929138oos.7.1685836761118;
+        Sat, 03 Jun 2023 16:59:21 -0700 (PDT)
+Received: from ?IPV6:2605:a601:ab5d:b200:ac6f:a0c:68ed:e64? ([2605:a601:ab5d:b200:ac6f:a0c:68ed:e64])
+        by smtp.gmail.com with ESMTPSA id g9-20020a4ae889000000b005586008cd5dsm1890683ooe.6.2023.06.03.16.59.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 03 Jun 2023 16:59:20 -0700 (PDT)
+Message-ID: <b748359d-b116-6354-036c-94679bc7b306@gmail.com>
+Date:   Sat, 3 Jun 2023 18:59:20 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="DOAMUR2naNx1jPwl"
-Content-Disposition: inline
-In-Reply-To: <20230603200243.243878-5-varshini.rajendran@microchip.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: Cypress CDC ACM serial port not working correctly with
+ autosuspend
+Content-Language: en-US
+To:     Oliver Neukum <oneukum@suse.com>,
+        =?UTF-8?Q?Michael_La=c3=9f?= <bevan@bi-co.net>,
+        linux-usb@vger.kernel.org
+References: <8be9b56c6becd0981d1cd9c13742df6ba2975b56.camel@bi-co.net>
+ <0db2a0a4-6ed4-fe06-217a-cb564f1d4a8c@suse.com>
+ <bde43a1913cf55e580e77ac0e059fff3c26dc093.camel@bi-co.net>
+ <2f98290f-995b-89ff-8ba2-1463fcf78297@suse.com>
+ <9a1381abe0e2b605786bc9c3b2daa3f7bdc3b64c.camel@bi-co.net>
+ <e977c0e1-4604-47cc-9c53-619bc897d418@suse.com>
+ <646eb1bb5218b9ce5df21e89081b09b84dbd46fd.camel@bi-co.net>
+ <46e50745-63e4-7e97-739c-338f9a6445d2@suse.com>
+ <c93512db198b14ff8892102cfecec3bea8688aaf.camel@bi-co.net>
+ <9f8df0d2-f2af-8e62-fe34-7d826678ac7e@suse.com>
+From:   Warren Togami <wtogami@gmail.com>
+In-Reply-To: <9f8df0d2-f2af-8e62-fe34-7d826678ac7e@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 3/27/23 03:05, Oliver Neukum wrote:
 
---DOAMUR2naNx1jPwl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On 23.03.23 22:32, Michael Laß wrote:
+>>> I am asking because the device says that it is bus powered.
+>>> That is, are we putting the device into some sleep state?
+>>
+>> This got me thinking. I am observing the behavior on a ZedBoard, a
+>> development board that contains a Xilinx Zynq SoC and the Cypress UART
+>> chip connected to that SoC. I now looked into the schematic of that
+>> board.
+>
+> Are those devices out in the wild? That is can one buy them or did
+> you get it through development channels?
 
-Hey Varshini,
+https://blockstream.com/jade/
+We have a mass produced device Blockstream Jade with USB serial chip 
+CH9102F 1a86:55d4 misbehaving in the same manner. Tens of thousands of 
+this device were manufactured and sold worldwide. This board fails to 
+communicate with Linux cdc-acm unless autosuspend is turned off 
+(power/control set to 'on'). lsusb -v similarly reports "Bus Powered" 
+and "Remote Wakeup". [1]
 
-On Sun, Jun 04, 2023 at 01:32:26AM +0530, Varshini Rajendran wrote:
-> Add device tree file for SAM9X7 SoC family
->=20
-> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-> [nicolas.ferre@microchip.com: add support for gmac to sam9x7]
+Either of these workarounds allow this device to work by disabling 
+autosuspend:
 
-Please just replace these [] things with a Co-developed-by.
+* udev rule: ATTRS{idProduct}=="55d4", ATTRS{idVendor}=="1a86", 
+SUBSYSTEM=="usb", TEST=="power/control" ATTR{power/control}="on"
+* usbcore.quirks=1a86:55d4:b
 
-> Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-> [balamanikandan.gunasundar@microchip.com: Add device node csi2host and is=
-c]
-> Signed-off-by: Balamanikandan Gunasundar <balamanikandan.gunasundar@micro=
-chip.com>
-> ---
->  arch/arm/boot/dts/sam9x7.dtsi | 1333 +++++++++++++++++++++++++++++++++
->  1 file changed, 1333 insertions(+)
->  create mode 100644 arch/arm/boot/dts/sam9x7.dtsi
->=20
-> diff --git a/arch/arm/boot/dts/sam9x7.dtsi b/arch/arm/boot/dts/sam9x7.dtsi
-> new file mode 100644
-> index 000000000000..f98160182fe6
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/sam9x7.dtsi
-> @@ -0,0 +1,1333 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * sam9x7.dtsi - Device Tree Include file for Microchip SAM9X7 SoC family
-> + *
-> + * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries
-> + *
-> + * Author: Varshini Rajendran <varshini.rajendran@microchip.com>
-> + */
-> +
-> +#include <dt-bindings/clock/at91.h>
-> +#include <dt-bindings/dma/at91.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +#include <dt-bindings/mfd/atmel-flexcom.h>
-> +#include <dt-bindings/pinctrl/at91.h>
-> +
-> +/ {
-> +	#address-cells =3D <1>;
-> +	#size-cells =3D <1>;
-> +	model =3D "Microchip SAM9X7 SoC";
-> +	compatible =3D "microchip,sam9x7";
+>> The chip is a CY7C64225-28PVXC and the datasheet has a section on USB
+>> suspend and resume: When suspended, a separate WAKE input pin has to be
+>> set high to issue a remote wake-up. The designers of the ZedBoard have
+>> tied this pin to ground...
+>
+> That is technically allowed, though disappointing, but then you cannot 
+> advertise
+> "remote wakeup" in the device descriptor.
+>> So the chip behaves as documented. If any, this is an issue with the
+>> board design. Nothing the kernel could work around. Sorry, I hope I
+>> haven't stolen too much of your time.
+>
+> The kernel could work around it. We could quirk the device to ignore
+> the remote wakeup bit from this particular device based on ID.
+> RESET_RESUME would do that, albeit with side effects.
+>
+> If such devices are found on sale we need to do something.
+>
+>     Regards
+>         Oliver
 
-Unless I am mistaken, sam9x7 is a family, not an soc. I'll have to
-defer to Nicolas or someone that actually properly understands the
-naming scheme here though! It's certainly odd to use sam9x7 here, when
-the file is filled with references to sam9x60, which is a soc-specific
-compatible.
 
-Either way, the compatible is undocumented as far as I can tell and I
-assume that this was not actually tested, since there doesn't appear
-to be any dts including this file and therefore no way to build it?
+https://datasheet.lcsc.com/lcsc/2108181630_WCH-Jiangsu-Qin-Heng-CH9102F_C2858418.pdf
+The board contains the CH9102F USB to serial chip which appears in Linux 
+as /dev/ttyACM#. Prior to 2021 an earlier variant had the CP210x USB to 
+serial chip.
 
-> +	interrupt-parent =3D <&aic>;
-> +
-> +	aliases {
-> +		serial0 =3D &dbgu;
-> +		gpio0 =3D &pioA;
-> +		gpio1 =3D &pioB;
-> +		gpio2 =3D &pioC;
-> +		gpio3 =3D &pioD;
-> +	};
-> +
-> +	cpus {
-> +		#address-cells =3D <1>;
-> +		#size-cells =3D <0>;
-> +
-> +		cpu@0 {
-> +			compatible =3D "arm,arm926ej-s";
-> +			device_type =3D "cpu";
-> +			reg =3D <0>;
-> +		};
-> +	};
-> +
-> +	clocks {
-> +		slow_xtal: slow_xtal {
-> +			compatible =3D "fixed-clock";
-> +			#clock-cells =3D <0>;
-> +		};
-> +
-> +		main_xtal: main_xtal {
-> +			compatible =3D "fixed-clock";
-> +			#clock-cells =3D <0>;
-> +		};
-> +	};
-> +
-> +	sram: sram@300000 {
-> +		compatible =3D "mmio-sram";
-> +		reg =3D <0x300000 0x10000>;
-> +		#address-cells =3D <1>;
-> +		#size-cells =3D <1>;
-> +		ranges =3D <0 0x300000 0x10000>;
-> +	};
-> +
-> +	ahb {
-> +		compatible =3D "simple-bus";
-> +		#address-cells =3D <1>;
-> +		#size-cells =3D <1>;
-> +		ranges;
-> +
-> +		usb0: gadget@500000 {
-> +			compatible =3D "microchip,sam9x60-udc";
+https://www.cnx-software.com/2021/09/14/ch9102f-a-replacement-for-cp2104-usb-to-uart-bridge/
 
-This is not a sam9x60, so it should not only have that SoC's compatible
-here. Ideally, "microchip,sam9x7{0,2,5}" with the sam9x60 one as a
-fallback.
+During the pandemic supply chain constraints led to some switching to 
+the CH9102F which is described here as *almost* a drop-in replacement. 
+Unfortunately the pinout differences might have mattered. I am uncertain 
+if the board design could have been better but that is now in the past. 
+Too many were mass produced so I am hoping for a USB quirk to stabilize 
+this going forward.
 
-> +			reg =3D <0x500000 0x100000>,
-> +			      <0xf803c000 0x400>;
-> +			#address-cells =3D <1>;
-> +			#size-cells =3D <0>;
-> +			interrupts =3D <23 IRQ_TYPE_LEVEL_HIGH 2>;
-> +			clocks =3D <&pmc PMC_TYPE_PERIPHERAL 23>, <&pmc PMC_TYPE_CORE PMC_UTM=
-I>;
-> +			clock-names =3D "pclk", "hclk";
-> +			assigned-clocks =3D <&pmc PMC_TYPE_CORE PMC_UTMI>;
-> +			assigned-clock-rates =3D <480000000>;
-> +			status =3D "disabled";
-> +		};
-> +
-> +		ohci0: usb@600000 {
-> +			compatible =3D "atmel,at91rm9200-ohci", "usb-ohci";
+I have confirmed USB_QUIRK_RESET_RESUME allows this device to function 
+for the same reason it works for the Cypress. I am uncertain if a 
+narrower new quirk "ignore the remote wakeup bit" would work here. How 
+can I test that?
 
-Ditto here.
+We'd like to send a product sample to a linux-usb maintainer if they 
+would like to try it. Please e-mail me directly in that case.
 
-> +			reg =3D <0x600000 0x100000>;
-> +			interrupts =3D <22 IRQ_TYPE_LEVEL_HIGH 2>;
-> +			clocks =3D <&pmc PMC_TYPE_PERIPHERAL 22>, <&pmc PMC_TYPE_PERIPHERAL 2=
-2>, <&pmc PMC_TYPE_SYSTEM 6>;
-> +			clock-names =3D "ohci_clk", "hclk", "uhpck";
-> +			status =3D "disabled";
-> +		};
-> +
-> +		ehci0: usb@700000 {
-> +			compatible =3D "atmel,at91sam9g45-ehci", "usb-ehci";
+Best Regards,
+Warren Togami
 
-And here.
+[1] lsusb -v -d 1a86:55d4
 
-> +			reg =3D <0x700000 0x100000>;
-> +			interrupts =3D <22 IRQ_TYPE_LEVEL_HIGH 2>;
-> +			clocks =3D <&pmc PMC_TYPE_CORE PMC_UTMI>, <&pmc PMC_TYPE_PERIPHERAL 2=
-2>;
-> +			clock-names =3D "usb_clk", "ehci_clk";
-> +			assigned-clocks =3D <&pmc PMC_TYPE_CORE PMC_UTMI>;
-> +			assigned-clock-rates =3D <480000000>;
-> +			status =3D "disabled";
-> +		};
-> +
-> +		sdmmc0: sdio-host@80000000 {
-> +			compatible =3D "microchip,sam9x60-sdhci";
+Bus 005 Device 002: ID 1a86:55d4 QinHeng Electronics USB Single Serial
+Device Descriptor:
+   bLength                18
+   bDescriptorType         1
+   bcdUSB               1.10
+   bDeviceClass            2 Communications
+   bDeviceSubClass         0
+   bDeviceProtocol         0
+   bMaxPacketSize0         8
+   idVendor           0x1a86 QinHeng Electronics
+   idProduct          0x55d4
+   bcdDevice            4.43
+   iManufacturer           0
+   iProduct                2 USB Single Serial
+   iSerial                 3 537A009111
+   bNumConfigurations      1
+   Configuration Descriptor:
+     bLength                 9
+     bDescriptorType         2
+     wTotalLength       0x0043
+     bNumInterfaces          2
+     bConfigurationValue     1
+     iConfiguration          0
+     bmAttributes         0xa0
+       (Bus Powered)
+       Remote Wakeup
+     MaxPower              134mA
+     Interface Descriptor:
+       bLength                 9
+       bDescriptorType         4
+       bInterfaceNumber        0
+       bAlternateSetting       0
+       bNumEndpoints           1
+       bInterfaceClass         2 Communications
+       bInterfaceSubClass      2 Abstract (modem)
+       bInterfaceProtocol      1 AT-commands (v.25ter)
+       iInterface              0
+       CDC Header:
+         bcdCDC               1.10
+       CDC Call Management:
+         bmCapabilities       0x00
+         bDataInterface          1
+       CDC ACM:
+         bmCapabilities       0x02
+           line coding and serial state
+       CDC Union:
+         bMasterInterface        0
+         bSlaveInterface         1
+       Endpoint Descriptor:
+         bLength                 7
+         bDescriptorType         5
+         bEndpointAddress     0x83  EP 3 IN
+         bmAttributes            3
+           Transfer Type            Interrupt
+           Synch Type               None
+           Usage Type               Data
+         wMaxPacketSize     0x0010  1x 16 bytes
+         bInterval               1
+     Interface Descriptor:
+       bLength                 9
+       bDescriptorType         4
+       bInterfaceNumber        1
+       bAlternateSetting       0
+       bNumEndpoints           2
+       bInterfaceClass        10 CDC Data
+       bInterfaceSubClass      0
+       bInterfaceProtocol      0
+       iInterface              0
+       Endpoint Descriptor:
+         bLength                 7
+         bDescriptorType         5
+         bEndpointAddress     0x02  EP 2 OUT
+         bmAttributes            2
+           Transfer Type            Bulk
+           Synch Type               None
+           Usage Type               Data
+         wMaxPacketSize     0x0020  1x 32 bytes
+         bInterval               0
+       Endpoint Descriptor:
+         bLength                 7
+         bDescriptorType         5
+         bEndpointAddress     0x82  EP 2 IN
+         bmAttributes            2
+           Transfer Type            Bulk
+           Synch Type               None
+           Usage Type               Data
+         wMaxPacketSize     0x0040  1x 64 bytes
+         bInterval               0
+Device Status:     0x0000
+   (Bus Powered)
 
-And here.
-
-> +			reg =3D <0x80000000 0x300>;
-> +			interrupts =3D <12 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			clocks =3D <&pmc PMC_TYPE_PERIPHERAL 12>, <&pmc PMC_TYPE_GCK 12>;
-> +			clock-names =3D "hclock", "multclk";
-> +			assigned-clocks =3D <&pmc PMC_TYPE_GCK 12>;
-> +			assigned-clock-rates =3D <100000000>;
-> +			status =3D "disabled";
-> +		};
-> +
-> +		sdmmc1: sdio-host@90000000 {
-> +			compatible =3D "microchip,sam9x60-sdhci";
-
-There's no point me typing it every time, but ditto the whole way
-through this file ;)
-
-Cheers,
-Conor.
-
---DOAMUR2naNx1jPwl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHuyPwAKCRB4tDGHoIJi
-0hSgAP9MoJHwyaSHta2fqHpzmQVjWJYXHIJ8IYUrjnHVS9xzdwD/SDyZtvGEuEbB
-aul/eSJSrczxyawcSZXHv/xvMzCmVws=
-=60V/
------END PGP SIGNATURE-----
-
---DOAMUR2naNx1jPwl--
