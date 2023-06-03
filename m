@@ -2,68 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6545A7211DD
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Jun 2023 21:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 633D17211FD
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Jun 2023 22:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjFCTY6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 3 Jun 2023 15:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
+        id S229671AbjFCUDN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 3 Jun 2023 16:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbjFCTY5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Jun 2023 15:24:57 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C03A9
-        for <linux-usb@vger.kernel.org>; Sat,  3 Jun 2023 12:24:56 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b1a86cdec6so33576791fa.3
-        for <linux-usb@vger.kernel.org>; Sat, 03 Jun 2023 12:24:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685820294; x=1688412294;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RPBP7cFM65VK4d7cGXRs2PFYxb1iGHlHiPDJNyNspqs=;
-        b=qjDVhSbRudndFN94sgFtzcXRAF0RLN2NenNNISxg/WESffzwKEQiXG2H6Nm185sFX/
-         +StmS923OMStCEjigtgVh7jaWKyDOWO/KTG7pMm0LvaKJDxY0jhe1RnGW+P2Fvo7wUD9
-         KnagPZoQSOcvs/1CnajzhVF3xhWt4Q3+b5Kp3c6/FvKj58NFk5f5yE3j9SZ1tjsqpYCj
-         sczMiommne8Kp0JqnbrX/KA6MyTuCZ6FUjn1StddpTm5J1pWGrXjL3O28ghrzAijyajd
-         xmpzHvYzvD7mITfoGIAAQOtGFsvBRQFzcOdXZ02jnyl+QV4f3RQAmTmzlFkvjK26Iv9N
-         /LIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685820294; x=1688412294;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RPBP7cFM65VK4d7cGXRs2PFYxb1iGHlHiPDJNyNspqs=;
-        b=XzUWKPntl0b598xx1+MIznjxWrDt2RhCIwE2A8xgb8ThDY8XuYX+xEngkUl0h1NVQm
-         9/cJX7uYVKnd03AAPed/l/bvZr9fyoL3Xb4oGco8i5rPFP+2MFV65T2QAaH/6cX7gtn7
-         G0iQNUGHMG757RLu+b2z+4imddH4Navz/7g+fVdE32y6I03kJSe6q7U9wB7wP2M3cRkx
-         yxEwwDe/JGZnMr7ayA8Y9p+/lnjfTRdBgIf5KebZW8gcBs0zOhAb5g86a7NZp/tL0NJT
-         tKid1asRhmWC75rLW9VcOSsMl3Ank9Ph5TwfAtGrqibMrFesfjHwde8JDNGN06BB6Pwg
-         8xpw==
-X-Gm-Message-State: AC+VfDzLg4txM1JjIxfJtEPoQ1NVXajcdO4oWVqQsNrUoVHeEg08lGfT
-        eamjY8clHRq8MY+BFdCUSRQtMG5VRU3bz+4huOQ=
-X-Google-Smtp-Source: ACHHUZ5FJc3453i6H7Lqo9H/Gcoh+uKvdawJ7aJJkzfTj04Fvl3J2S+9+sd8IiB2pGr7Y3IBXqkhlon+eHXGIeqogyo=
-X-Received: by 2002:a2e:b16b:0:b0:2af:1817:26e1 with SMTP id
- a11-20020a2eb16b000000b002af181726e1mr2022620ljm.30.1685820293995; Sat, 03
- Jun 2023 12:24:53 -0700 (PDT)
+        with ESMTP id S229451AbjFCUDM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Jun 2023 16:03:12 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD9418D;
+        Sat,  3 Jun 2023 13:03:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685822591; x=1717358591;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=d01tRDxvZ5T+IIbhLGGRzLix+V9DNdmXlY+ubhvrJgA=;
+  b=m2LwGDPl1RQ4G2TgvLKCRod321ZEh9jqV6HWCZfH0ashx9gyPUqhbb2v
+   7hlYRGH2gtWhS0jAgvo6S2Nz/WyQCLCc0KbGYzlmAdVNgw2zZgOZmlDib
+   GKmdlY0tnphPmaJv12XDpCvMSF8uiGUsGpi38fYrRnfgjkhFelPlR8FPj
+   jBDYmAkafWNKw/ZYzatJgg7zrAWn8kcpXoxDYfuomJ7vjbSRDLG/343wV
+   SBuElDQyebhhkpqEcpsPpI/FaENqc73yiyXeHWoA4qM7Ypn0ps994uWho
+   uytp8uDFNxeLfxX+rB9ffTvu75Yc5jqso4dm/ztqAnJiG24qmCzXaZAGq
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,216,1681196400"; 
+   d="scan'208";a="155388154"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Jun 2023 13:03:09 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Sat, 3 Jun 2023 13:03:07 -0700
+Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Sat, 3 Jun 2023 13:02:55 -0700
+From:   Varshini Rajendran <varshini.rajendran@microchip.com>
+To:     <tglx@linutronix.de>, <maz@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <claudiu.beznea@microchip.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <gregkh@linuxfoundation.org>, <linux@armlinux.org.uk>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>, <sre@kernel.org>,
+        <broonie@kernel.org>, <varshini.rajendran@microchip.com>,
+        <arnd@arndb.de>, <gregory.clement@bootlin.com>,
+        <sudeep.holla@arm.com>, <balamanikandan.gunasundar@microchip.com>,
+        <mihai.sain@microchip.com>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+CC:     <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
+        <durai.manickamkr@microchip.com>, <manikandan.m@microchip.com>,
+        <dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
+        <balakrishnan.s@microchip.com>
+Subject: [PATCH 00/21] Add support for sam9x7 SoC family
+Date:   Sun, 4 Jun 2023 01:32:22 +0530
+Message-ID: <20230603200243.243878-1-varshini.rajendran@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230602091055.65049-1-mika.westerberg@linux.intel.com> <20230602091055.65049-4-mika.westerberg@linux.intel.com>
-In-Reply-To: <20230602091055.65049-4-mika.westerberg@linux.intel.com>
-From:   Yehezkel Bernat <yehezkelshb@gmail.com>
-Date:   Sat, 3 Jun 2023 22:24:38 +0300
-Message-ID: <CA+CmpXs2K8Bi2xHk_hhWC3x6rVeTQ=SbtjuxLSBV+3rjHRwxVQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] thunderbolt: Enable/disable sideband depending on
- USB4 port offline mode
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Utkarsh H Patel <utkarsh.h.patel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,22 +76,70 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 12:11=E2=80=AFPM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> When USB4 port is in offline mode (this mean there is no device
-> attached) we want to keep the sideband up to make it possible to
-> communicate with the retimers. In the same way there is no need to
-> enable sideband transactions when the USB4 port is not offline as they
-> are already up.
->
-> For this reason make the enabling/disabling depend on the USB4 port
-> offline status.
+This patch series adds support for the new SoC family - sam9x7.
+ - The device tree, configs and drivers are added
+ - Clock driver for sam9x7 is added
+ - Support for basic peripherals is added
 
-I'm probably missing something here, but if we don't allow disabling it whe=
-n the
-port is offline, and when the port is online the sideband is enabled, when =
-can
-it be disabled? If we can manually disable it when the port is online, on
-enablement we can't assume that it's already enabled just because the port
-is online, as we might have manually disabled it earlier.
+Balamanikandan Gunasundar (1):
+  ARM: configs: at91: Enable csi and isc support
+
+Hari Prasath (1):
+  irqchip/atmel-aic5: Add support for sam9x7 aic
+
+Nicolas Ferre (1):
+  net: macb: add support for gmac to sam9x7
+
+Varshini Rajendran (18):
+  dt-bindings: microchip: atmel,at91rm9200-tcb: add sam9x60 compatible
+  dt-bindings: usb: ehci: Add atmel at91sam9g45-ehci compatible
+  dt-bindings: usb: generic-ehci: Document clock-names property
+  ARM: dts: at91: sam9x7: add device tree for soc
+  ARM: configs: at91: enable config flags for sam9x7 SoC
+  ARM: configs: at91: add mcan support
+  ARM: at91: pm: add support for sam9x7 soc family
+  ARM: at91: pm: add sam9x7 soc init config
+  ARM: at91: Kconfig: add config flag for SAM9X7 SoC
+  ARM: at91: add support in soc driver for new sam9x7
+  clk: at91: clk-sam9x60-pll: re-factor to support individual core freq
+    outputs
+  clk: at91: sam9x7: add support for HW PLL freq dividers
+  clk: at91: sam9x7: add sam9x7 pmc driver
+  dt-bindings: irqchip/atmel-aic5: Add support for sam9x7 aic
+  power: reset: at91-poweroff: lookup for proper pmc dt node for sam9x7
+  power: reset: at91-reset: add reset support for sam9x7 soc
+  power: reset: at91-reset: add sdhwc support for sam9x7 soc
+  dt-bindings: net: cdns,macb: add documentation for sam9x7 ethernet
+    interface
+
+ .../interrupt-controller/atmel,aic.txt        |    2 +-
+ .../devicetree/bindings/net/cdns,macb.yaml    |    1 +
+ .../soc/microchip/atmel,at91rm9200-tcb.yaml   |    1 +
+ .../devicetree/bindings/usb/generic-ehci.yaml |    5 +
+ arch/arm/boot/dts/sam9x7.dtsi                 | 1333 +++++++++++++++++
+ arch/arm/configs/at91_dt_defconfig            |    8 +
+ arch/arm/mach-at91/Kconfig                    |   21 +-
+ arch/arm/mach-at91/Makefile                   |    1 +
+ arch/arm/mach-at91/generic.h                  |    2 +
+ arch/arm/mach-at91/pm.c                       |   35 +
+ arch/arm/mach-at91/sam9x7.c                   |   34 +
+ drivers/clk/at91/Makefile                     |    1 +
+ drivers/clk/at91/clk-sam9x60-pll.c            |   50 +-
+ drivers/clk/at91/pmc.h                        |    2 +
+ drivers/clk/at91/sam9x60.c                    |    7 +
+ drivers/clk/at91/sam9x7.c                     |  947 ++++++++++++
+ drivers/clk/at91/sama7g5.c                    |    7 +
+ drivers/irqchip/irq-atmel-aic5.c              |   10 +
+ drivers/net/ethernet/cadence/macb_main.c      |    1 +
+ drivers/power/reset/Kconfig                   |    4 +-
+ drivers/power/reset/at91-sama5d2_shdwc.c      |    1 +
+ drivers/soc/atmel/soc.c                       |   23 +
+ drivers/soc/atmel/soc.h                       |    9 +
+ 23 files changed, 2489 insertions(+), 16 deletions(-)
+ create mode 100644 arch/arm/boot/dts/sam9x7.dtsi
+ create mode 100644 arch/arm/mach-at91/sam9x7.c
+ create mode 100644 drivers/clk/at91/sam9x7.c
+
+-- 
+2.25.1
+
