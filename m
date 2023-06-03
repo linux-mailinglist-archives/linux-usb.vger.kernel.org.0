@@ -2,126 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F917212A4
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Jun 2023 22:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3456272131D
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Jun 2023 23:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbjFCUWg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 3 Jun 2023 16:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
+        id S229566AbjFCVQL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 3 Jun 2023 17:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjFCUWf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Jun 2023 16:22:35 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1116318D
-        for <linux-usb@vger.kernel.org>; Sat,  3 Jun 2023 13:22:33 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f4b80bf93aso4306114e87.0
-        for <linux-usb@vger.kernel.org>; Sat, 03 Jun 2023 13:22:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685823751; x=1688415751;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MSyBUVrj1zvCL/sUTHseoVK711z0KXIwGLcvgpyUHHk=;
-        b=RLvVfI7AzvC36Q7HcKvYNjDgJyKOKL/r8Igprjwc4Y+DDzZyF2A9Bup8j7kTzdEBYE
-         s7NgX1EeCWcoq79UGTrbkJ+ZXzXh7CWZwpJsd0YUPU53CRH34+kBgA92n+Q5Z3QO+IPz
-         ZWgdy3lKRsk5SXNZcguZpUunA5UbvEBQlKJ+QakhdHO4iUex0/qr8u+6RFMymR+0W9Bs
-         pHh5xfwHq9+KA4qfQcn/LCP5YiGTsxG5abNyVB8egX0GDXYo1hv2CjHi4AcbXVgbVv7R
-         gZ9vOslzvCSYTee/aLddUdljENf6IbrbzO+Df5+OdCEz3aYwpM/pFMnZhso3QFAUmr9b
-         gHmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685823751; x=1688415751;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MSyBUVrj1zvCL/sUTHseoVK711z0KXIwGLcvgpyUHHk=;
-        b=KqvAQJzXZS18mB7qXZBX7AtX0v6g7NvWth0XOUE1JRBtIo+8zJsw2IPgHFBOup62va
-         HYKJho9/b4B+/S212RlSAtGEzcCZQGtKo7fj9PhSOfVeJ/GZSZ4KY1beWK8fSRS3nVNs
-         7SqL+j8cX/ay6RT6Q1OPjSuiaxCjB4AvRdB56/eflyjB0COgNZy07BIF1vFkuqMnAD/1
-         BEy8DKcKUR3Um8J2q/1cRoDt2TIwBu21+2KGz5ptQl2nOhdmIAqJQVVSvQ7Qo+REJHOB
-         5O3+bGpgP5PsRqAbcpyjOSLhZZqg+GTOFtAwOoxbV75rHBsZ6UOPekPbUj/vpa8LAJX7
-         y6Tg==
-X-Gm-Message-State: AC+VfDzUST2NkGlwfdBQohuva4FoqlQXNPS6YKV6NA989ePeuYAIxSGL
-        A4z/0P38/sbzKRlA90r2sNZI8w==
-X-Google-Smtp-Source: ACHHUZ7o8uDyjf9QyROk53P4mlHpRWaY/zwcS5y5ujLt+ILwxG0RXWzBbbqXNIiyshOpW4+WUXAPCw==
-X-Received: by 2002:ac2:5a4c:0:b0:4f4:c972:981f with SMTP id r12-20020ac25a4c000000b004f4c972981fmr3421650lfn.54.1685823751161;
-        Sat, 03 Jun 2023 13:22:31 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id w1-20020ac24421000000b004f392625952sm572461lfl.26.2023.06.03.13.22.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Jun 2023 13:22:30 -0700 (PDT)
-Message-ID: <0fbf55e7-2140-751d-5347-f907a46ef78c@linaro.org>
-Date:   Sat, 3 Jun 2023 23:22:29 +0300
+        with ESMTP id S229452AbjFCVQK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Jun 2023 17:16:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF9097;
+        Sat,  3 Jun 2023 14:16:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6013760B61;
+        Sat,  3 Jun 2023 21:16:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9503C433EF;
+        Sat,  3 Jun 2023 21:15:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685826963;
+        bh=LJM8vKQSQ2RdRTp9RFziQNMxva4VRFMhJsh8lrUlmRk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EO0knllIEbHgMKF9bb/HSLeEyrNl2gcHYO2cqrr9UA3PsTXJnenHYAu7K+VbJFIwD
+         /RZU4zUCB9del9munixsYO0lqFugBAPh8B/HVIOstiqgvxT2MxYCkWZued6iiRDo5T
+         TicTu0H+y5VyOZ1R2mFWS4yPBozVSEnS0swMQDPRRxmiEPpsDoPVbY8Gsv6TKNwi2F
+         g5xp88gpKILBB5VyNZNZlSKa0G/txR0MYTC17ZrrCMRN7CyXARTMkqG227wm3T0GoO
+         XJI42e1GoB3IlVA+Kk+Sl34DruJbEIG6YAw6Id3Cbzqo1okisfHBVXK2bw3wO+vMey
+         cdrkXhcxZPQOA==
+Date:   Sat, 3 Jun 2023 22:15:54 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Varshini Rajendran <varshini.rajendran@microchip.com>
+Cc:     tglx@linutronix.de, maz@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        gregkh@linuxfoundation.org, linux@armlinux.org.uk,
+        mturquette@baylibre.com, sboyd@kernel.org, sre@kernel.org,
+        broonie@kernel.org, arnd@arndb.de, gregory.clement@bootlin.com,
+        sudeep.holla@arm.com, balamanikandan.gunasundar@microchip.com,
+        mihai.sain@microchip.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
+        durai.manickamkr@microchip.com, manikandan.m@microchip.com,
+        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
+        balakrishnan.s@microchip.com
+Subject: Re: [PATCH 03/21] dt-bindings: usb: generic-ehci: Document
+ clock-names property
+Message-ID: <20230603-skincare-ideology-bfbc3fd384c5@spud>
+References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
+ <20230603200243.243878-4-varshini.rajendran@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH RFC 1/7] dt-bindings: connector: usb-connector: add a gpio
- used to determine the Type-C port plug orientation
-Content-Language: en-GB
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20230601-topic-sm8550-upstream-type-c-v1-0-d4d97b4d8bab@linaro.org>
- <20230601-topic-sm8550-upstream-type-c-v1-1-d4d97b4d8bab@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230601-topic-sm8550-upstream-type-c-v1-1-d4d97b4d8bab@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="nAMUQ1Zej8t05qRN"
+Content-Disposition: inline
+In-Reply-To: <20230603200243.243878-4-varshini.rajendran@microchip.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 01/06/2023 17:07, Neil Armstrong wrote:
-> On some platforms, the Type-C plug orientation is given on a GPIO line.
-> 
-> Document this optional Type-C connector property, and take the
-> assumption an active level represents an inverted/flipped orientation.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+
+--nAMUQ1Zej8t05qRN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hey Varshini,
+
+On Sun, Jun 04, 2023 at 01:32:25AM +0530, Varshini Rajendran wrote:
+> Document the property clock-names in the schema.
+>=20
+> It fixes the dtbs_warning,
+
+s/dtbs_warning/dtbs_check warning/?
+
+> 'clock-names' does not match any of the regexes: 'pinctrl-[0-9]+'
+
+Does this fix a warning currently in the tree, or fix a warning
+introduced by some patches in this series? (Or both?)
+
+Cheers,
+Conor.
+
+>=20
+> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 > ---
->   Documentation/devicetree/bindings/connector/usb-connector.yaml | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> index ae515651fc6b..c3884eed6ba4 100644
-> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> @@ -114,6 +114,11 @@ properties:
->       description: Set this property if the Type-C connector has no power delivery support.
->       type: boolean
->   
-> +  orientation-gpios:
-> +    description: An input gpio for Type-C connector orientation, used to detect orientation
-> +      of the Type-C connector. GPIO active level means "CC2" or Reversed/Flipped orientation.
-> +    maxItems: 1
-
-Should this be a property of the connector or of the parent device node? 
-I mean, unlike usb-b-connector (where ID and Vbus can be simple GPIOs 
-nearly directly connected to the pins of the connector) for the USB-C 
-the orientation is not a connector's GPIO, but rather some additional 
-not elementary logic.
-
+>  Documentation/devicetree/bindings/usb/generic-ehci.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Do=
+cumentation/devicetree/bindings/usb/generic-ehci.yaml
+> index 7e486cc6cfb8..542ac26960fc 100644
+> --- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> @@ -102,6 +102,10 @@ properties:
+>          - if a USB DRD channel: first clock should be host and second
+>            one should be peripheral
+> =20
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 4
 > +
->     # The following are optional properties for "usb-c-connector" with power
->     # delivery support.
->     source-pdos:
-> 
+>    power-domains:
+>      maxItems: 1
+> =20
+> --=20
+> 2.25.1
+>
 
--- 
-With best wishes
-Dmitry
+--nAMUQ1Zej8t05qRN
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHutdAAKCRB4tDGHoIJi
+0qo0AP492GWxNAZm5/JMwehSB/wjebZYTgg7CggXNDp4e+9ZmAEAqBHDVLVYKYXY
+7h8c0U3NLQA8eGWDBjGhhXJ+h5Ab0gc=
+=sdYv
+-----END PGP SIGNATURE-----
+
+--nAMUQ1Zej8t05qRN--
