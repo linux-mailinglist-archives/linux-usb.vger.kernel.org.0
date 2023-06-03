@@ -2,65 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93320720BB6
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Jun 2023 00:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A853721193
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Jun 2023 20:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236752AbjFBWFT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Jun 2023 18:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56682 "EHLO
+        id S229481AbjFCSqK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 3 Jun 2023 14:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236680AbjFBWFS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jun 2023 18:05:18 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFA81BB
-        for <linux-usb@vger.kernel.org>; Fri,  2 Jun 2023 15:05:16 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1b0116fefffso10715895ad.2
-        for <linux-usb@vger.kernel.org>; Fri, 02 Jun 2023 15:05:16 -0700 (PDT)
+        with ESMTP id S229548AbjFCSqJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Jun 2023 14:46:09 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D6D132
+        for <linux-usb@vger.kernel.org>; Sat,  3 Jun 2023 11:46:07 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-97000a039b2so507852666b.2
+        for <linux-usb@vger.kernel.org>; Sat, 03 Jun 2023 11:46:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685743516; x=1688335516;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZYT9g7A1uxTfGjyFEugvL3AXvNQ8WAq4xs51FmroEpE=;
-        b=nK5w7yjJ2ZDaNLlhATxkXjSYyCzCpBlP7Li/vw+GEdE+1O8kttnNhGvAitz1dsxL2e
-         865HJ4Ofuj3avvkyWxHFU9N/3ukIPwdalbB6t9DtYbOJScO4boFzGOXCyP7z2N56xH2c
-         HzazY77/WnP7pB5qq8ZsrocG/jLpsWLuTRIGkMBfQzF8q/RjrsGXhCi9ug+NaxUcdKN3
-         EfDIz98qYmocoB2F+ulyBHSoa2eX9MYl4XmxH0HdzTvp+VbAWVu3A37GKUeuyOiUNc+B
-         rVL3asJXfPs6yE/VArZ/1K1jazWTHXlBK2jtshKyQEUKnedvcwVvypDkQ3MTFFjXhxqd
-         wTcA==
+        d=linaro.org; s=google; t=1685817966; x=1688409966;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ffGnCR1AWRVuPbEtVqod9VhAoeRndwMhCaIUDGcL49s=;
+        b=oB65jSg2cZ/+UIohZAO5DQQBSSbEkl7WMyUssM0+mCNxkrI7/Z4K/iAYiTTrGPNuFW
+         s1jFeQQlbIuJn5+cAULlRNcfH1ZJ56kvHCGYRYnlinClcdI1dOpNqAmKIsO21F9U4nQ2
+         97n3lDQWRz2LhnWSRggMH7LgQ0XnTBe+uT4p8rd+8738YqjQ8QeHvFEig/aoNmvKv5t/
+         Wtqsf8ru2HLeMMqyMulQ0hEPSmvHFDONVY0YAHQvaLIuDlQr5l8Zy8qUjr/GVg0L2sQb
+         h/Ti3S98QroZ8wB61PMH9WY5NNZf6UuBXZmABC0P9pTCWvqaSPcmW6vuSh0Ef/rTN3si
+         wePw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685743516; x=1688335516;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZYT9g7A1uxTfGjyFEugvL3AXvNQ8WAq4xs51FmroEpE=;
-        b=DsB2NK9HNHPRlWrALW3xSQOLKDfrZrY0tkR0ur1WxGC8kqFMstFCD6qjnNZV9VaWh6
-         qg+yx50Mh26uJE97TbKdepGQyVjs29ujH3tE6slASwNDD7UYHNPyLky0laN3TXqEz9Yp
-         v/Mgis+MJHaPIJL6wlk7HExArpDcxT4TXMgUD+/K1TdpbmE2and/NrTrgpmyx3Mg1Gf8
-         7+dXB7L85IixFtGBYCz+uYDd3F/X4V56g6fSvI8BXO9edz/yUTam9ele0daxB3YHw92q
-         07wrAfZgB+LVdUxe+moxx+eBhcpy5NjRtxK1qReOlbI71U0jcjXu4017feqccUM7LgEq
-         yGkg==
-X-Gm-Message-State: AC+VfDxxGuqi65tUESFgS86l/SLWco2LntT1hiWJolejkaHMQAa/LlZW
-        /deEuKmmpn53pbNsIQriFY77DWI2ZsXy
-X-Google-Smtp-Source: ACHHUZ7pEdWJ7NvgBXRWYlvDIkhcQsS0dYnnyQn3NYEOuxUBBGxCliENNbka3sB447MQvu4T/MSHiByJMH86
-X-Received: from hi-h2o-specialist.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3cef])
- (user=arakesh job=sendgmr) by 2002:a17:902:da8d:b0:1b1:a4e2:a2e3 with SMTP id
- j13-20020a170902da8d00b001b1a4e2a2e3mr315044plx.5.1685743516273; Fri, 02 Jun
- 2023 15:05:16 -0700 (PDT)
-Date:   Fri,  2 Jun 2023 15:04:55 -0700
-In-Reply-To: <20230602211602.3b7rfa252wliiszp@synopsys.com>
-Mime-Version: 1.0
-References: <20230602211602.3b7rfa252wliiszp@synopsys.com>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230602220455.313801-1-arakesh@google.com>
-Subject: [PATCH v3] usb: gadget: uvc: clean up comments and styling in video_pump
-From:   Avichal Rakesh <arakesh@google.com>
-To:     dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com
-Cc:     thinh.nguyen@synopsys.com, arakesh@google.com, etalvala@google.com,
-        gregkh@linuxfoundation.org, jchowdhary@google.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        d=1e100.net; s=20221208; t=1685817966; x=1688409966;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ffGnCR1AWRVuPbEtVqod9VhAoeRndwMhCaIUDGcL49s=;
+        b=EAio/3w0+UR4Mw0AnQd2KufNadmlrRXtEaa6yX/bN0ukdXNV+35N5Q5duGklJhMCIi
+         ykaKgjT4RbAbNyhamBOI7v81hjxinKunbInoIFAASigQ7Hs07xLXDgW/osNjLoMnFqDL
+         ELP9LLdyEwVo+pjZ2iBvTfcgfZd9FsS99Ujvk0RCk9NQ//JbCGDecNnXvuyVaM84Ttbw
+         dHi31zwTGcpOlKfnHQJnkrEvcUhkbLrS3lN4KqJbzIc/r34HZQlruPaw18dmKmBbMo26
+         Xc+ERXb/tha+ENRFYD7OEMjdaag5JHNxOlBi8scWq2XpkkRa/iKC5Qu5KuOq5zZ4LCp/
+         Y7vQ==
+X-Gm-Message-State: AC+VfDzeM5tGHa9+IAu0Qgd+/NP77Ipr0fCqmNphFBV064OS5PbmFIFA
+        SPq0eZ+PteSkiNJSIfzcGZaPig==
+X-Google-Smtp-Source: ACHHUZ5TeVnEF5E7EKTR0piomCgLM0TUkYQnJujj6vPOILoSM4N+GykILYjYN2EhtNp++/83scPe/A==
+X-Received: by 2002:a17:907:7f8c:b0:94e:116:8581 with SMTP id qk12-20020a1709077f8c00b0094e01168581mr2767917ejc.5.1685817965751;
+        Sat, 03 Jun 2023 11:46:05 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id a24-20020a170906245800b009745ecf5438sm2208699ejb.193.2023.06.03.11.46.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 03 Jun 2023 11:46:04 -0700 (PDT)
+Message-ID: <651f8f0d-bfba-18df-b266-e2f95e6f7c6e@linaro.org>
+Date:   Sat, 3 Jun 2023 20:46:02 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH RFC 1/7] dt-bindings: connector: usb-connector: add a gpio
+ used to determine the Type-C port plug orientation
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20230601-topic-sm8550-upstream-type-c-v1-0-d4d97b4d8bab@linaro.org>
+ <20230601-topic-sm8550-upstream-type-c-v1-1-d4d97b4d8bab@linaro.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230601-topic-sm8550-upstream-type-c-v1-1-d4d97b4d8bab@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,102 +85,13 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch elaborates on some of the edge cases handled by
-video_pump around setting no_interrupt flag, and brings the
-code style in line with rest of the file.
-
-Link: https://lore.kernel.org/20230602151916.GH26944@pendragon.ideasonboard.com/
-Signed-off-by: Avichal Rakesh <arakesh@google.com>
----
-Changelog:
-v2:
-  - Updated commit message to make it clear that userspace application is not
-    required to match the ISOC rate.
-  - Styling and comment revision based on review
-v3:
-  - Rebased on to Greg's usb-next where v1 had already merged
-  - Updated commit message to match the actual changes after rebase.
+On 01/06/2023 16:07, Neil Armstrong wrote:
+> On some platforms, the Type-C plug orientation is given on a GPIO line.
+> 
 
 
- drivers/usb/gadget/function/uvc_video.c | 38 ++++++++++++++++---------
- 1 file changed, 25 insertions(+), 13 deletions(-)
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index e81865978299..91af3b1ef0d4 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -382,13 +382,13 @@ static void uvcg_video_pump(struct work_struct *work)
- {
- 	struct uvc_video *video = container_of(work, struct uvc_video, pump);
- 	struct uvc_video_queue *queue = &video->queue;
-+	/* video->max_payload_size is only set when using bulk transfer */
-+	bool is_bulk = video->max_payload_size;
- 	struct usb_request *req = NULL;
- 	struct uvc_buffer *buf;
- 	unsigned long flags;
-+	bool buf_done;
- 	int ret;
--	bool buf_int;
--	/* video->max_payload_size is only set when using bulk transfer */
--	bool is_bulk = video->max_payload_size;
-
- 	while (video->ep->enabled) {
- 		/*
-@@ -414,20 +414,19 @@ static void uvcg_video_pump(struct work_struct *work)
-
- 		if (buf != NULL) {
- 			video->encode(req, video, buf);
--			/* Always interrupt for the last request of a video buffer */
--			buf_int = buf->state == UVC_BUF_STATE_DONE;
-+			buf_done = buf->state == UVC_BUF_STATE_DONE;
- 		} else if (!(queue->flags & UVC_QUEUE_DISCONNECTED) && !is_bulk) {
- 			/*
- 			 * No video buffer available; the queue is still connected and
--			 * we're traferring over ISOC. Queue a 0 length request to
-+			 * we're transferring over ISOC. Queue a 0 length request to
- 			 * prevent missed ISOC transfers.
- 			 */
- 			req->length = 0;
--			buf_int = false;
-+			buf_done = false;
- 		} else {
- 			/*
--			 * Either queue has been disconnected or no video buffer
--			 * available to bulk transfer. Either way, stop processing
-+			 * Either the queue has been disconnected or no video buffer
-+			 * available for bulk transfer. Either way, stop processing
- 			 * further.
- 			 */
- 			spin_unlock_irqrestore(&queue->irqlock, flags);
-@@ -435,11 +434,24 @@ static void uvcg_video_pump(struct work_struct *work)
- 		}
-
- 		/*
--		 * With usb3 we have more requests. This will decrease the
--		 * interrupt load to a quarter but also catches the corner
--		 * cases, which needs to be handled.
-+		 * With USB3 handling more requests at a higher speed, we can't
-+		 * afford to generate an interrupt for every request. Decide to
-+		 * interrupt:
-+		 *
-+		 * - When no more requests are available in the free queue, as
-+		 *   this may be our last chance to refill the endpoint's
-+		 *   request queue.
-+		 *
-+		 * - When this is request is the last request for the video
-+		 *   buffer, as we want to start sending the next video buffer
-+		 *   ASAP in case it doesn't get started already in the next
-+		 *   iteration of this loop.
-+		 *
-+		 * - Four times over the length of the requests queue (as
-+		 *   indicated by video->uvc_num_requests), as a trade-off
-+		 *   between latency and interrupt load.
- 		 */
--		if (list_empty(&video->req_free) || buf_int ||
-+		if (list_empty(&video->req_free) || buf_done ||
- 		    !(video->req_int_count %
- 		       DIV_ROUND_UP(video->uvc_num_requests, 4))) {
- 			video->req_int_count = 0;
---
-2.41.0.rc0.172.g3f132b7071-goog
+Best regards,
+Krzysztof
 
