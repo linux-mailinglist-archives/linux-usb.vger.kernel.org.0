@@ -2,81 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CDD7721563
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Jun 2023 09:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE50272157A
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Jun 2023 10:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbjFDHzJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 4 Jun 2023 03:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
+        id S230365AbjFDIDh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Jun 2023 04:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjFDHzI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jun 2023 03:55:08 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA8EB3;
-        Sun,  4 Jun 2023 00:55:06 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126166129043.28.openmobile.ne.jp [126.166.129.43])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 141802CF;
-        Sun,  4 Jun 2023 09:54:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1685865281;
-        bh=xt00KtUczUl17VBnLWNqDHDGohytnuLgvkDs6o9FWZc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oTwhp6mltUxHP5iYLLeizrhqjSSw04iJWEdVBK91ol8Tn6jaWPxzfVFBZ/WcDDEnt
-         fvcckOeZsp/t94pwWOpJk7/0bkewPzKANXGMIWVcy59hezc52SmR/l95H2ONomOVH6
-         USDTBxzAji7IafCKhbHB265FUdWXjLUoc8fHh7es=
-Date:   Sun, 4 Jun 2023 10:55:04 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Avichal Rakesh <arakesh@google.com>, dan.scally@ideasonboard.com,
-        thinh.nguyen@synopsys.com, etalvala@google.com,
-        jchowdhary@google.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3] usb: gadget: uvc: clean up comments and styling in
- video_pump
-Message-ID: <20230604075504.GQ26944@pendragon.ideasonboard.com>
-References: <20230602211602.3b7rfa252wliiszp@synopsys.com>
- <20230602220455.313801-1-arakesh@google.com>
- <2023060434-reveler-twice-d92e@gregkh>
+        with ESMTP id S229490AbjFDIDg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jun 2023 04:03:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AD3C1;
+        Sun,  4 Jun 2023 01:03:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D1086023A;
+        Sun,  4 Jun 2023 08:03:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94CEFC433EF;
+        Sun,  4 Jun 2023 08:03:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685865813;
+        bh=ifrmax7iPS0ThsC2vJ+kbR2JhaMl9gOFtky/NmZGJis=;
+        h=Date:From:To:Cc:Subject:From;
+        b=QQfvC5a9uZbPV0QhzWp7ywGOLQxbLxBrCHDSowsGgTXOwXaTe7JBuPAFeT8Bhqvh9
+         8hsrAku0KPZIcL0Guz2/XorzBMDAPErT321Fr4Ent6uxkADX2AwckZl8Qb5fJx+efh
+         vbfT6WNqVLPc8XHTSf8Pjv4FTDOBiKHa2fjIKGX0=
+Date:   Sun, 4 Jun 2023 10:03:31 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 6.4-rc5
+Message-ID: <ZHxFU2gVcgqYpx6m@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2023060434-reveler-twice-d92e@gregkh>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+The following changes since commit 7877cb91f1081754a1487c144d85dc0d2e2e7fc4:
 
-On Sun, Jun 04, 2023 at 09:43:40AM +0200, Greg KH wrote:
-> On Fri, Jun 02, 2023 at 03:04:55PM -0700, Avichal Rakesh wrote:
-> > This patch elaborates on some of the edge cases handled by
-> > video_pump around setting no_interrupt flag, and brings the
-> > code style in line with rest of the file.
-> 
-> When you say "and" that usually means it should be a separate patch.
-> 
-> But I really don't see what coding style changes you made here, what was
-> it?
-> 
-> I can't see any logical changes made here, am I missing them?  Or is
-> this all just a style-cleanup patch?
+  Linux 6.4-rc4 (2023-05-28 07:49:00 -0400)
 
-It's all style cleanup (variable declaration ordering), typo fixes, and
-naming and documentation improvement, yes. I reviewed Avichal's original
-patch when coming back from holidays, neither of us realizing that you
-had merged it already. He sent a v2 and got told to rebase it on top of
-your tree.  That's what v3 is, just handling the review comments.
+are available in the Git repository at:
 
-I generally ask for patches to be split with one change per patch, but
-given the small changes bundled here, and the fact that all of this just
-incorporates the review comments, I think it would be a bit overkill.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.4-rc5
 
--- 
-Regards,
+for you to fetch changes up to fcfe84236ec0974fe92f0578d1d58ed805c4b70f:
 
-Laurent Pinchart
+  usb: typec: tps6598x: Fix broken polling mode after system suspend/resume (2023-05-30 15:29:41 +0100)
+
+----------------------------------------------------------------
+USB fixes for 6.4-rc5
+
+Here are some USB driver and core fixes for 6.4-rc5.  Most of these are
+tiny driver fixes, including:
+  - udc driver bugfix
+  - f_fs gadget driver bugfix
+  - cdns3 driver bugfix
+  - typec bugfixes
+
+But the "big" thing in here is a fix yet-again for how the USB buffers
+are handled from userspace when dealing with DMA issues.  The changes
+were discussed a lot, and tested a lot, on the list, and acked by the
+relevant mm maintainers and have been in linux-next all this past week
+with no reported problems.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      usb: gadget: udc: fix NULL dereference in remove()
+
+Frank Li (1):
+      usb: cdns3: fix NCM gadget RX speed 20x slow than expection at iMX8QM
+
+Marek Vasut (1):
+      dt-bindings: usb: snps,dwc3: Fix "snps,hsphy_interface" type
+
+Roger Quadros (1):
+      usb: typec: tps6598x: Fix broken polling mode after system suspend/resume
+
+Ruihan Li (4):
+      usb: usbfs: Enforce page requirements for mmap
+      usb: usbfs: Use consistent mmap functions
+      mm: page_table_check: Make it dependent on EXCLUSIVE_SYSTEM_RAM
+      mm: page_table_check: Ensure user pages are not slab pages
+
+Uttkarsh Aggarwal (1):
+      usb: gadget: f_fs: Add unbind event before functionfs_unbind
+
+ .../devicetree/bindings/usb/snps,dwc3.yaml         |  2 +-
+ Documentation/mm/page_table_check.rst              | 19 ++++++++++
+ drivers/usb/cdns3/cdns3-gadget.c                   | 13 +++++++
+ drivers/usb/core/buffer.c                          | 41 ++++++++++++++++++++++
+ drivers/usb/core/devio.c                           | 20 +++++++----
+ drivers/usb/gadget/function/f_fs.c                 |  2 +-
+ drivers/usb/gadget/udc/amd5536udc_pci.c            |  3 ++
+ drivers/usb/typec/tipd/core.c                      |  2 +-
+ include/linux/page-flags.h                         |  6 ++++
+ include/linux/usb/hcd.h                            |  5 +++
+ mm/Kconfig.debug                                   |  1 +
+ mm/page_table_check.c                              |  6 ++++
+ 12 files changed, 111 insertions(+), 9 deletions(-)
