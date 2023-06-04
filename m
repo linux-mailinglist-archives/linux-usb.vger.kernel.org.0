@@ -2,51 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0D87215CE
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Jun 2023 11:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 340A27215E2
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Jun 2023 11:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjFDJVJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 4 Jun 2023 05:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39564 "EHLO
+        id S230337AbjFDJuM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Jun 2023 05:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjFDJVJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jun 2023 05:21:09 -0400
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E26E0
-        for <linux-usb@vger.kernel.org>; Sun,  4 Jun 2023 02:21:05 -0700 (PDT)
-Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-33b4cbdd21aso35533865ab.2
-        for <linux-usb@vger.kernel.org>; Sun, 04 Jun 2023 02:21:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685870465; x=1688462465;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HDWJxnfDqOBuqzDH4am0m3hkIcc+wkoVRF7GoEFg+98=;
-        b=D54zbH7xbj5nOcEnFBTifv2213c/9gk1f186mb6RgitutcgU90xc1JA5kQiSVDrEwT
-         MyMxHsw7TQQJU1UCUluADniPRoX1jlX+i8yGnCEZpFTkRcrhw28NiGCyvK/5y5JsHXYa
-         0tcDBD4pXXqoFcEcd8pu6GO3mxmBfE/hU3jVQE00sk2sas3lTZ3UfO7ZmBnpUktDZ0Sl
-         k/Sy6q9IHNdGRnDjGz/Zfwpz6I7xTgJlbchMUHfPlRK3QWccEEWwEn8UpKwC0CkkCWoM
-         S9VE02ZDPlgIk//yAA3khvbX6ZYwIKCBnhX6kMJrD7enZe8znrTpTpIz+vBrvCLfML4z
-         XsQQ==
-X-Gm-Message-State: AC+VfDy4iRHgSbWvzOq3REpO4crvzwXSD1JZA/fnqU+uw6JRSAeFCX1d
-        qXADzeAyzARJQLPH4TLccLgVmHhRUaDbCo7oBm4q7rnTbT1j
-X-Google-Smtp-Source: ACHHUZ7UUj40CODCUxL6gfgZP2Yfq8WP1+h5uQ18BeZrXn8vi3A4fnLrhlan4hXIdDDpF3Q7KHg7mwRoZrq+0QBpct7ZADEjHGUc
-MIME-Version: 1.0
-X-Received: by 2002:a92:db52:0:b0:335:908b:8f9 with SMTP id
- w18-20020a92db52000000b00335908b08f9mr5987486ilq.1.1685870465142; Sun, 04 Jun
- 2023 02:21:05 -0700 (PDT)
-Date:   Sun, 04 Jun 2023 02:21:05 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000365bc405fd4a4ee3@google.com>
-Subject: [syzbot] [mm?] [usb?] memory leak in new_inode (2)
-From:   syzbot <syzbot+ea01ee90cdba474c187b@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, hughd@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        with ESMTP id S229635AbjFDJuK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jun 2023 05:50:10 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60A7D3;
+        Sun,  4 Jun 2023 02:50:09 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 40D975C00D1;
+        Sun,  4 Jun 2023 05:50:09 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sun, 04 Jun 2023 05:50:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1685872209; x=1685958609; bh=jB
+        pSfKUu6g0tTh7kun5Pd9yKmiW3zyzac/8DZ01kT8g=; b=oJbdWX55eMSWq+02KI
+        fRuMpx1qCk5Z6EmEHNTxJ/9fY1O9EwSkMTJ0U621i8SO5m8hNbXBly2ZdmkI9oBw
+        MrW+rXFBtPKWQsh+eubuTktF8EiAmSymTwSedENUv5rb59onYz30bOXY9y8bbNcx
+        CNCFb5C7bONp4HBlsCF15ahCMTtBrvzger2KL7zbzi0/P4dVidtvdZNnXDMeve38
+        iha011cuAYIbyFmEzRV0l5GU562mvKRa4u8+ANyRiruCM4SZmDaYfgeNcsKUoZBw
+        wPjSvwinNQm0nLFygzOIAykjVgQ3QwDEV9LLMhqb6lmTyP8AGVr26cF0h3MaGEUE
+        pQ+A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685872209; x=1685958609; bh=jBpSfKUu6g0tT
+        h7kun5Pd9yKmiW3zyzac/8DZ01kT8g=; b=ZJ7ZqSZvdfTNq4EwCH4RGXcIV6jHU
+        YaAlsG9hRyLfDhtcj1IJZ7irMJmASH/Gp6NrcZWAGwaRDgeZOWWJXEmzurL6YNC6
+        rSvoHQTxBv+UoQeWX00gR8CoGjM8F/MYP2FS+6m3DkzfTl+3ngVQKecAnedQgxJG
+        qWUQFvcjO/0pwY773+89etlzQweH0IHZ+oIh14pBeg/keoKvGCp4Kx7tpW1HguHK
+        aFHkoGuIka5CUnmTjLJH/nxm2wPH6DUb3sxydGo0TDobkxNZQAMpyQ2P/JMp/KDn
+        ofGvXOUeeV5detfqylU6uuIMpiYWEYi+iwqA4IB0uuMP/s6pBChaMMcww==
+X-ME-Sender: <xms:UF58ZFDkXvUfT_kpYfCql7e_tG7AIFp6eOT2Mpn6h3_rzq_qGK-9Ig>
+    <xme:UF58ZDgyPdwZtSZr0A8wGMMAQen99qWzOZcQ0HIfm3IqrxBnS_XU4IG1lomrhIqPQ
+    ACoktosoZJBnBBtpiI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeljedgvddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:UF58ZAkKLZTntqZL03bWn0CngTJJhscpwa1yGJ2ulsVNzq2m5LuPuA>
+    <xmx:UF58ZPzHYOHAr8cyqxDbK8D65-kYtraE7NvYfVxaeq_NsD7AYn-kCA>
+    <xmx:UF58ZKRSdQooc9lvDs9hQksGNU0Z_hi0UWdWdFpMGYU1DZENuFlpww>
+    <xmx:UV58ZD2G9wXgl_EejQe5nWqgbsh89fAMALZCeXwz8EQ3_O_rpVB7Kw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id AC67BB60086; Sun,  4 Jun 2023 05:50:08 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
+Mime-Version: 1.0
+Message-Id: <4d3694b3-8728-42c1-8497-ae38134db37c@app.fastmail.com>
+In-Reply-To: <20230603-sanded-blunderer-73cdd7c290c1@spud>
+References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
+ <20230603200243.243878-16-varshini.rajendran@microchip.com>
+ <20230603-fervor-kilowatt-662c84b94853@spud>
+ <20230603-sanded-blunderer-73cdd7c290c1@spud>
+Date:   Sun, 04 Jun 2023 11:49:48 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Conor Dooley" <conor@kernel.org>,
+        "Varshini Rajendran" <varshini.rajendran@microchip.com>
+Cc:     "Thomas Gleixner" <tglx@linutronix.de>,
+        "Marc Zyngier" <maz@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        "Claudiu Beznea" <claudiu.beznea@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Gregory Clement" <gregory.clement@bootlin.com>,
+        "Sudeep Holla" <sudeep.holla@arm.com>,
+        "Balamanikandan Gunasundar" <balamanikandan.gunasundar@microchip.com>,
+        mihai.sain@microchip.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
+        durai.manickamkr@microchip.com, manikandan.m@microchip.com,
+        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
+        balakrishnan.s@microchip.com
+Subject: Re: [PATCH 15/21] dt-bindings: irqchip/atmel-aic5: Add support for sam9x7 aic
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,163 +114,45 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Sat, Jun 3, 2023, at 23:23, Conor Dooley wrote:
+> On Sat, Jun 03, 2023 at 10:19:50PM +0100, Conor Dooley wrote:
+>> Hey Varshini,
+>> 
+>> On Sun, Jun 04, 2023 at 01:32:37AM +0530, Varshini Rajendran wrote:
+>> > Document the support added for the Advanced interrupt controller(AIC)
+>> > chip in the sam9x7 soc family
+>> 
+>> Please do not add new family based compatibles, but rather use per-soc
+>> compatibles instead.
+>
+> These things leave me penally confused. Afaiu, sam9x60 is a particular
+> SoC. sam9x7 is actually a family, containing sam9x70, sam9x72 and
+> sam9x75. It would appear to me that each should have its own compatible,
+> no?
 
-syzbot found the following issue on:
+I think the usual way this works is that the sam9x7 refers to the
+SoC design as in what is actually part of the chip, whereas the 70,
+72 and 75 models are variants that have a certain subset of the
+features enabled.
 
-HEAD commit:    afead42fdfca Merge tag 'perf-tools-fixes-for-v6.4-2-2023-0..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13acfcd1280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=21fde9f7601f218f
-dashboard link: https://syzkaller.appspot.com/bug?extid=ea01ee90cdba474c187b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15160fb9280000
+If that is the case here, then referring to the on-chip parts by
+the sam9x7 name makes sense, and this is similar to what we do
+on TI AM-series chips.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/b5acaa3b8518/disk-afead42f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/041db64527a2/vmlinux-afead42f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/cd4f6f1744e4/bzImage-afead42f.xz
+There is a remaining risk that a there would be a future
+sam9x71/73/74/76/... product based on a new chip that uses
+incompatible devices, but at that point we can still use the
+more specific model number to identify those without being
+ambiguous. The same thing can of course happen when a SoC
+vendor reuses a specific name of a prior product with an update
+chip that has software visible changes.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ea01ee90cdba474c187b@syzkaller.appspotmail.com
+I'd just leave this up to Varshini and the other at91 maintainers
+here, provided they understand the exact risks.
 
-BUG: memory leak
-unreferenced object 0xffff88810a5cd958 (size 776):
-  comm "syslogd", pid 4424, jiffies 4294938531 (age 1177.910s)
-  hex dump (first 32 bytes):
-    00 00 00 00 01 00 00 00 00 00 20 00 00 00 00 00  .......... .....
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8152a817>] alloc_inode_sb include/linux/fs.h:2705 [inline]
-    [<ffffffff8152a817>] shmem_alloc_inode+0x27/0x50 mm/shmem.c:3907
-    [<ffffffff8168f979>] alloc_inode+0x29/0x110 fs/inode.c:260
-    [<ffffffff8168fa87>] new_inode_pseudo fs/inode.c:1018 [inline]
-    [<ffffffff8168fa87>] new_inode+0x27/0xf0 fs/inode.c:1046
-    [<ffffffff8152b944>] shmem_get_inode+0xd4/0x560 mm/shmem.c:2370
-    [<ffffffff8152bf12>] shmem_mknod+0x42/0x150 mm/shmem.c:2942
-    [<ffffffff81676fd5>] lookup_open fs/namei.c:3492 [inline]
-    [<ffffffff81676fd5>] open_last_lookups fs/namei.c:3560 [inline]
-    [<ffffffff81676fd5>] path_openat+0x1725/0x1b10 fs/namei.c:3788
-    [<ffffffff81679175>] do_filp_open+0xc5/0x1b0 fs/namei.c:3818
-    [<ffffffff81653dbd>] do_sys_openat2+0xed/0x260 fs/open.c:1356
-    [<ffffffff81654863>] do_sys_open fs/open.c:1372 [inline]
-    [<ffffffff81654863>] __do_sys_openat fs/open.c:1388 [inline]
-    [<ffffffff81654863>] __se_sys_openat fs/open.c:1383 [inline]
-    [<ffffffff81654863>] __x64_sys_openat+0x83/0xe0 fs/open.c:1383
-    [<ffffffff84a15749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a15749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+It's different for the parts that are listed as just sam9x60
+compatible in the DT, I think those clearly need to have sam9x7
+in the compatible list, but could have the sam9x60 identifier
+as a fallback if the hardware is compatible.
 
-BUG: memory leak
-unreferenced object 0xffff888109473080 (size 32):
-  comm "syslogd", pid 4424, jiffies 4294938531 (age 1177.910s)
-  hex dump (first 32 bytes):
-    18 db 5c 0a 81 88 ff ff b0 65 2d 82 ff ff ff ff  ..\......e-.....
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff822d7cae>] kmem_cache_zalloc include/linux/slab.h:670 [inline]
-    [<ffffffff822d7cae>] lsm_inode_alloc security/security.c:632 [inline]
-    [<ffffffff822d7cae>] security_inode_alloc+0x2e/0xb0 security/security.c:1479
-    [<ffffffff8168cfa8>] inode_init_always+0x1f8/0x240 fs/inode.c:231
-    [<ffffffff8168f996>] alloc_inode+0x46/0x110 fs/inode.c:267
-    [<ffffffff8168fa87>] new_inode_pseudo fs/inode.c:1018 [inline]
-    [<ffffffff8168fa87>] new_inode+0x27/0xf0 fs/inode.c:1046
-    [<ffffffff8152b944>] shmem_get_inode+0xd4/0x560 mm/shmem.c:2370
-    [<ffffffff8152bf12>] shmem_mknod+0x42/0x150 mm/shmem.c:2942
-    [<ffffffff81676fd5>] lookup_open fs/namei.c:3492 [inline]
-    [<ffffffff81676fd5>] open_last_lookups fs/namei.c:3560 [inline]
-    [<ffffffff81676fd5>] path_openat+0x1725/0x1b10 fs/namei.c:3788
-    [<ffffffff81679175>] do_filp_open+0xc5/0x1b0 fs/namei.c:3818
-    [<ffffffff81653dbd>] do_sys_openat2+0xed/0x260 fs/open.c:1356
-    [<ffffffff81654863>] do_sys_open fs/open.c:1372 [inline]
-    [<ffffffff81654863>] __do_sys_openat fs/open.c:1388 [inline]
-    [<ffffffff81654863>] __se_sys_openat fs/open.c:1383 [inline]
-    [<ffffffff81654863>] __x64_sys_openat+0x83/0xe0 fs/open.c:1383
-    [<ffffffff84a15749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a15749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff88810e027d80 (size 576):
-  comm "syslogd", pid 4424, jiffies 4294939014 (age 1173.100s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    01 00 00 00 00 00 00 00 80 30 47 09 81 88 ff ff  .........0G.....
-  backtrace:
-    [<ffffffff84a0a6d6>] xas_alloc+0xf6/0x120 lib/xarray.c:377
-    [<ffffffff84a0d10d>] xas_expand lib/xarray.c:584 [inline]
-    [<ffffffff84a0d10d>] xas_create+0x13d/0x800 lib/xarray.c:655
-    [<ffffffff84a0dbcb>] xas_store+0x7b/0xbd0 lib/xarray.c:789
-    [<ffffffff8152ce89>] shmem_add_to_page_cache+0x2c9/0x500 mm/shmem.c:735
-    [<ffffffff81530785>] shmem_get_folio_gfp+0x3a5/0xcf0 mm/shmem.c:1978
-    [<ffffffff81531ba8>] shmem_get_folio mm/shmem.c:2079 [inline]
-    [<ffffffff81531ba8>] shmem_write_begin+0x88/0x1a0 mm/shmem.c:2573
-    [<ffffffff814eefb3>] generic_perform_write+0x103/0x2b0 mm/filemap.c:3923
-    [<ffffffff814f3bd3>] __generic_file_write_iter+0x173/0x290 mm/filemap.c:4051
-    [<ffffffff814f3d72>] generic_file_write_iter+0x82/0x160 mm/filemap.c:4083
-    [<ffffffff81658e33>] call_write_iter include/linux/fs.h:1868 [inline]
-    [<ffffffff81658e33>] new_sync_write fs/read_write.c:491 [inline]
-    [<ffffffff81658e33>] vfs_write+0x413/0x530 fs/read_write.c:584
-    [<ffffffff81659191>] ksys_write+0xa1/0x160 fs/read_write.c:637
-    [<ffffffff84a15749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a15749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff888103efe280 (size 128):
-  comm "syz-execprog", pid 5049, jiffies 4295044860 (age 114.650s)
-  hex dump (first 32 bytes):
-    f0 7b 88 0d 81 88 ff ff 70 7d 6e 81 ff ff ff ff  .{......p}n.....
-    00 eb 6d 0a 81 88 ff ff 98 e2 ef 03 81 88 ff ff  ..m.............
-  backtrace:
-    [<ffffffff816ea897>] kmem_cache_zalloc include/linux/slab.h:670 [inline]
-    [<ffffffff816ea897>] ep_insert fs/eventpoll.c:1504 [inline]
-    [<ffffffff816ea897>] do_epoll_ctl+0x5c7/0x1220 fs/eventpoll.c:2223
-    [<ffffffff816eb57a>] __do_sys_epoll_ctl fs/eventpoll.c:2280 [inline]
-    [<ffffffff816eb57a>] __se_sys_epoll_ctl fs/eventpoll.c:2271 [inline]
-    [<ffffffff816eb57a>] __x64_sys_epoll_ctl+0x8a/0xd0 fs/eventpoll.c:2271
-    [<ffffffff84a15749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a15749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff8881052da600 (size 128):
-  comm "syz-execprog", pid 5049, jiffies 4295044862 (age 114.630s)
-  hex dump (first 32 bytes):
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff812b4e5a>] alloc_pid+0x6a/0x550 kernel/pid.c:180
-    [<ffffffff81277c3b>] copy_process+0x18fb/0x26c0 kernel/fork.c:2526
-    [<ffffffff81278b87>] kernel_clone+0xf7/0x610 kernel/fork.c:2918
-    [<ffffffff8127911c>] __do_sys_clone+0x7c/0xb0 kernel/fork.c:3061
-    [<ffffffff84a15749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a15749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+     Arnd
