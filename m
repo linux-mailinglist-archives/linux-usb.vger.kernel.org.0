@@ -2,52 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF9F721B01
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 01:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1A8721B09
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 01:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbjFDXM6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 4 Jun 2023 19:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
+        id S232474AbjFDXR0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Jun 2023 19:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFDXM5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jun 2023 19:12:57 -0400
+        with ESMTP id S230378AbjFDXRZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jun 2023 19:17:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5DCA9;
-        Sun,  4 Jun 2023 16:12:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B0BA9
+        for <linux-usb@vger.kernel.org>; Sun,  4 Jun 2023 16:17:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBC0060C48;
-        Sun,  4 Jun 2023 23:12:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7808C433D2;
-        Sun,  4 Jun 2023 23:12:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52E2F60C7A
+        for <linux-usb@vger.kernel.org>; Sun,  4 Jun 2023 23:17:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E34EC433EF;
+        Sun,  4 Jun 2023 23:17:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685920375;
-        bh=YKeJsb9nhFq0Uyt46AONGemv5Y80lD367AfKzlLfI+k=;
+        s=k20201202; t=1685920643;
+        bh=lLXxhmHuTpdEgjdhdN6kOgGjwZKnjXgDZ9PMqOVOxGI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DKcHXR2L+n8UzDDc0dJ9C1Luj+sFU7bcRa/wSWm6MQbxd+aYx+FwynwOBJ5F/lQHY
-         54B61fEKa5SpXd+uaGt9v9Qvh5vmP0SFBzShzBtkfUZkFFj1yL0jeX4lPmKl4UD/Qe
-         3lsFrBju/C/OPfHte1Vo+wT+BInPZL9/ECgkomDMo0dO08AkV6FOg2JAO1nN+POkj7
-         9Hk0JlqkOa1RyHpEyaeJxsD89b5AgZJjx5XW3+3Cv34H6s78dlCCrPikWBHHpJZuLm
-         I5QtC/tEp6Tba6NgghbVX7d9X5zJXyrOriB7HgZALwApDYi1kyt26o1bnaxWvGnbdp
-         NF4DegSRq+s2A==
-Date:   Mon, 5 Jun 2023 07:12:44 +0800
+        b=TlMd9+z3vTNafqIAYi30n98Uk81wQ3uVB68YECbeKRR4n72dR1smtw/VKusB7BpZp
+         awaVyL2szpCSklWDSh6QaqDxxzkwQZE5M6QfZNv7hFIWHnejwo4nUfll0HqHSg7YRo
+         K9hqVFIBmUh2qGOl7SPgLz5bPaPgou4x5miyGXunBPPh3KebkaYDvDjZw4353aDnO7
+         F84M39eTtj0CTe5YaFjfSy2sF4RVSccz/KPtd+BZ4bc2qv5ER1nJMJW7zbgnjGSJx9
+         BZKPxk6osau9bO7Kpbh3fzvuTq57dybRU0swqSdMLglTqNKsaK4pgtTLLU8nkIlXcm
+         Tb5WtITAk5ssA==
+Date:   Mon, 5 Jun 2023 07:17:11 +0800
 From:   Peter Chen <peter.chen@kernel.org>
-To:     Frank Li <Frank.Li@nxp.com>
+To:     Shenwei Wang <shenwei.wang@nxp.com>
 Cc:     Pawel Laszczak <pawell@cadence.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
         Roger Quadros <rogerq@kernel.org>,
         Aswath Govindraju <a-govindraju@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:CADENCE USB3 DRD IP DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
-Subject: Re: [PATCH 1/2] usb: cdns3: improve handling of unaligned address
- case
-Message-ID: <20230604231244.GC258497@nchen-desktop>
-References: <20230518204947.3770236-1-Frank.Li@nxp.com>
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        imx@lists.linux.dev, Frank Li <frank.li@nxp.com>
+Subject: Re: [PATCH] usb: cdns3: imx: Rework system PM to avoid duplicated
+ operations
+Message-ID: <20230604231711.GD258497@nchen-desktop>
+References: <20230523184412.204582-1-shenwei.wang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230518204947.3770236-1-Frank.Li@nxp.com>
+In-Reply-To: <20230523184412.204582-1-shenwei.wang@nxp.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,66 +63,63 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23-05-18 16:49:45, Frank Li wrote:
-> When the address of a request was not aligned with an 8-byte boundary, the
-> USB DMA was unable to process it, necessitating the use of an internal
-> bounce buffer.
+On 23-05-23 13:44:12, Shenwei Wang wrote:
+> The current implementation uses the same callbacks for system PM and
+> runtime PM suspend/resume without any state checking. This can cause the
+> clocks to be prepared/unprepared twice, leading to kernel warning issues.
 > 
-> In these cases, the request->buf had to be copied to/from this bounce
-> buffer. However, if this unaligned address scenario arises, it is
-> unnecessary to perform heavy cache maintenance operations like
-> usb_gadget_map(unmap)_request_by_dev() on the request->buf, as the DMA
-> does not utilize it at all. it can be skipped at this case.
+> This patch resolves the double prepare/unprepare issues by separating the
+> runtime PM and system PM handling.
 > 
-> iperf3 tests on the rndis case:
-> 
-> Transmit speed (TX): Improved from 299Mbps to 440Mbps
-> Receive speed (RX): Improved from 290Mbps to 500Mbps
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
+> Reviewed-by: Frank Li <frank.li@nxp.com>
 > ---
->  drivers/usb/cdns3/cdns3-gadget.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
+>  drivers/usb/cdns3/cdns3-imx.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> index 1dcadef933e3..09a0882a4e97 100644
-> --- a/drivers/usb/cdns3/cdns3-gadget.c
-> +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> @@ -800,7 +800,8 @@ void cdns3_gadget_giveback(struct cdns3_endpoint *priv_ep,
->  	if (request->status == -EINPROGRESS)
->  		request->status = status;
+> diff --git a/drivers/usb/cdns3/cdns3-imx.c b/drivers/usb/cdns3/cdns3-imx.c
+> index 59860d1753fd..1c6bc6036c15 100644
+> --- a/drivers/usb/cdns3/cdns3-imx.c
+> +++ b/drivers/usb/cdns3/cdns3-imx.c
+> @@ -375,14 +375,22 @@ static inline bool cdns_imx_is_power_lost(struct cdns_imx *data)
+>  		return false;
+>  }
 >  
-> -	usb_gadget_unmap_request_by_dev(priv_dev->sysdev, request,
-> +	if (likely(!(priv_req->flags & REQUEST_UNALIGNED)))
-> +		usb_gadget_unmap_request_by_dev(priv_dev->sysdev, request,
->  					priv_ep->dir);
+> +static int __maybe_unused cdns_imx_system_suspend(struct device *dev)
+> +{
+> +	pm_runtime_put_sync(dev);
+> +	return 0;
+> +}
+> +
+>  static int __maybe_unused cdns_imx_system_resume(struct device *dev)
+>  {
+>  	struct cdns_imx *data = dev_get_drvdata(dev);
+>  	int ret;
 >  
->  	if ((priv_req->flags & REQUEST_UNALIGNED) &&
-> @@ -2543,10 +2544,12 @@ static int __cdns3_gadget_ep_queue(struct usb_ep *ep,
->  	if (ret < 0)
->  		return ret;
->  
-> -	ret = usb_gadget_map_request_by_dev(priv_dev->sysdev, request,
-> +	if (likely(!(priv_req->flags & REQUEST_UNALIGNED))) {
-> +		ret = usb_gadget_map_request_by_dev(priv_dev->sysdev, request,
->  					    usb_endpoint_dir_in(ep->desc));
-
-So, the possible reason for performance drop is	do cache coherency
-operation twice for unaligned buffers?
-
-Peter
-
+> -	ret = cdns_imx_resume(dev);
 > -	if (ret)
-> -		return ret;
-> +		if (ret)
-> +			return ret;
+> +	ret = pm_runtime_resume_and_get(dev);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Could not get runtime PM.\n");
+>  		return ret;
 > +	}
 >  
->  	list_add_tail(&request->list, &priv_ep->deferred_req_list);
+>  	if (cdns_imx_is_power_lost(data)) {
+>  		dev_dbg(dev, "resume from power lost\n");
+> @@ -405,7 +413,7 @@ static int cdns_imx_platform_suspend(struct device *dev,
 >  
+>  static const struct dev_pm_ops cdns_imx_pm_ops = {
+>  	SET_RUNTIME_PM_OPS(cdns_imx_suspend, cdns_imx_resume, NULL)
+> -	SET_SYSTEM_SLEEP_PM_OPS(cdns_imx_suspend, cdns_imx_system_resume)
+> +	SET_SYSTEM_SLEEP_PM_OPS(cdns_imx_system_suspend, cdns_imx_system_resume)
+>  };
+>  
+>  static const struct of_device_id cdns_imx_of_match[] = {
 > -- 
 > 2.34.1
 > 
+
+Acked-by: Peter Chen <peter.chen@kernel.org>
 
 -- 
 
