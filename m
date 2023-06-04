@@ -2,54 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 137BF721B10
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 01:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F17721B12
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 01:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232486AbjFDXX6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 4 Jun 2023 19:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
+        id S231843AbjFDXZ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Jun 2023 19:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjFDXX5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jun 2023 19:23:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D55EA8;
-        Sun,  4 Jun 2023 16:23:56 -0700 (PDT)
+        with ESMTP id S229904AbjFDXZ2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jun 2023 19:25:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE07A8
+        for <linux-usb@vger.kernel.org>; Sun,  4 Jun 2023 16:25:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDCED60A6F;
-        Sun,  4 Jun 2023 23:23:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8DC7C433D2;
-        Sun,  4 Jun 2023 23:23:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 184B960A38
+        for <linux-usb@vger.kernel.org>; Sun,  4 Jun 2023 23:25:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0327FC433EF;
+        Sun,  4 Jun 2023 23:25:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685921035;
-        bh=V9LESKCHeGbMcnFP0vVt52k0cpabNqrKbgbb3i99zuc=;
+        s=k20201202; t=1685921126;
+        bh=cJuv8OK4exxC7lhKRaKG4/dNqEiTgdIZYHbTTqrYr3o=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E0cNWYjdgd1ZX3ItgsVQ6VbQ9A8uONmnH4pGdW1YBmhWL+c3QfZHhy4vrpcLEgwTz
-         WqJ0wBBClaIrPq68VdtqiCbmaaWdeR0/YqnVrkQ94LdDKEGc+9quPspMH/pljOI+D9
-         cfLfVQWlC8EVqTKqd1NvKFNVwvMBYYxB2+uiOFf7nMIgKga3TUqkZG1lIJ2D0XWUkc
-         SnZkGp6qh3GgNFE0NCsECg27Y/yuh3Eut5DtkkcLzALqxiiLXhrhXZYCIhEw1m7LYz
-         E3AU00bBMv3FgvuCtcEFf80D14XwJgEalt8MxVFinXtAWVnchl4LqNNWYKvSgZgJql
-         A3Oq39Kk7wXEA==
-Date:   Mon, 5 Jun 2023 07:23:42 +0800
+        b=hY8N6P2oltf8E7GuO6fGlRfk9LgBXyG9YQoezmzrQszWofwE/lLw3A9VEzyfwEhzL
+         Y+LLJb0S2cZCw/Ky95ZywwSaM/WzQvImcIiswsB3tEe0szKY3up+xUpgDMy6o2IUY/
+         gh+7OJ3pMwAw5qydQD18EO9S2gJ0yHi7acIURkjarTqLB22cpoAUPElDfu09yQiomW
+         iN/s74+NyBRlUVRro/cvd5vNnpmyiAKhENo73kaUX/gtvCd8ZELH8gB/JWYYENANGW
+         wGC0PWr0Nob7MRJQRoZCJhyQWMqHwFcKG8QQHSz63mmzfJhWGtL+V2uveSlqO0WV3g
+         HS11ClPqeNlWg==
+Date:   Mon, 5 Jun 2023 07:25:16 +0800
 From:   Peter Chen <peter.chen@kernel.org>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, pawell@cadence.com,
-        rogerq@kernel.org, a-govindraju@ti.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, imx@lists.linux.dev
-Subject: Re: [PATCH 1/2] usb: cdns3: imx: simplify clock name usage
-Message-ID: <20230604232342.GF258497@nchen-desktop>
-References: <20230517152545.3404508-1-Frank.Li@nxp.com>
+To:     Xu Yang <xu.yang_2@nxp.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-imx@nxp.com, jun.li@nxp.com
+Subject: Re: [PATCH 1/3] usb: chipidea: imx: remove one duplicated reg define
+Message-ID: <20230604232516.GG258497@nchen-desktop>
+References: <20230517081907.3410465-1-xu.yang_2@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230517152545.3404508-1-Frank.Li@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230517081907.3410465-1-xu.yang_2@nxp.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,46 +53,32 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23-05-17 11:25:44, Frank Li wrote:
-> Simplifies the clock names in imx_cdns3_core_clks[]. Such as, renaming
-> "usb3_lpm_clk" to "lpm". The "usb3" prefix and "clk" suffix were
-> redundant.
+On 23-05-17 16:19:05, Xu Yang wrote:
+> Remove one duplicated definition of MX7D_USB_OTG_PHY_CFG1.
 > 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-
-Acked-by: Peter Chen <peter.chen@kernel.org>
+> Signed-off-by: Li Jun <jun.li@nxp.com>
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 > ---
+>  drivers/usb/chipidea/usbmisc_imx.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> This patch was missed at
-> https://lore.kernel.org/imx/20230327145523.3121810-1-Frank.Li@nxp.com/
-> 
->  drivers/usb/cdns3/cdns3-imx.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdns3-imx.c b/drivers/usb/cdns3/cdns3-imx.c
-> index 59860d1753fd..5d9ca3c3c71d 100644
-> --- a/drivers/usb/cdns3/cdns3-imx.c
-> +++ b/drivers/usb/cdns3/cdns3-imx.c
-> @@ -105,11 +105,11 @@ static inline void cdns_imx_writel(struct cdns_imx *data, u32 offset, u32 value)
->  }
+> diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
+> index c57c1a71a513..be939e77719d 100644
+> --- a/drivers/usb/chipidea/usbmisc_imx.c
+> +++ b/drivers/usb/chipidea/usbmisc_imx.c
+> @@ -113,7 +113,6 @@
+>  #define MX7D_USBNC_USB_CTRL2_DP_DM_MASK			(BIT(12) | BIT(13) | \
+>  							BIT(14) | BIT(15))
 >  
->  static const struct clk_bulk_data imx_cdns3_core_clks[] = {
-> -	{ .id = "usb3_lpm_clk" },
-> -	{ .id = "usb3_bus_clk" },
-> -	{ .id = "usb3_aclk" },
-> -	{ .id = "usb3_ipg_clk" },
-> -	{ .id = "usb3_core_pclk" },
-> +	{ .id = "lpm" },
-> +	{ .id = "bus" },
-> +	{ .id = "aclk" },
-> +	{ .id = "ipg" },
-> +	{ .id = "core" },
->  };
->  
->  static int cdns_imx_noncore_init(struct cdns_imx *data)
+> -#define MX7D_USB_OTG_PHY_CFG1		0x30
+>  #define MX7D_USB_OTG_PHY_CFG2_CHRG_CHRGSEL	BIT(0)
+>  #define MX7D_USB_OTG_PHY_CFG2_CHRG_VDATDETENB0	BIT(1)
+>  #define MX7D_USB_OTG_PHY_CFG2_CHRG_VDATSRCENB0	BIT(2)
 > -- 
 > 2.34.1
 > 
+
+Acked-by: Peter Chen <peter.chen@kenrel.org>
 
 -- 
 
