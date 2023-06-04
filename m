@@ -2,97 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151FF72164A
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Jun 2023 13:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D289C7216CE
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Jun 2023 14:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbjFDLL3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 4 Jun 2023 07:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
+        id S230451AbjFDMRJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Jun 2023 08:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjFDLL2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jun 2023 07:11:28 -0400
-Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093A2D2
-        for <linux-usb@vger.kernel.org>; Sun,  4 Jun 2023 04:11:26 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 5ldsqSy1Rxbtx5ldsqUd84; Sun, 04 Jun 2023 13:11:25 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1685877085;
-        bh=UutA+4HoQTrFvBUHKvF3cps73mebreJXZd7+xMeN1VI=;
-        h=From:To:Cc:Subject:Date;
-        b=UsygrdGW7TEBua2m9lk+P1GEARd5eoHSENJLiRV7uHBr/96ImlKJnfFampPX9oA8i
-         9BqlrZmF/G6WbxRg6mVW6ys29WSBPsvOHYj+xDOJNoeboRk97thIDWLKbFUcSiytfU
-         mKDdOe4/AiH/H1HIr0vD4pez4GUJ49X4boTQDQm9IgBTkKGuvER/Mc1SXlc/ykUs14
-         YVTmxnD0mB4pR6hntAKl09H5XBdYGKH0NOMORkUDG0wNovDJft+8h2NCVEJHucy1WM
-         KcoeBu/uBhJokHg0eAUb5nMmjt1q2y1R+/Sn1xqbXK/4yZu3yqxEajXyZnk7K4d1Kz
-         XWkTCFBz+8Whg==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 04 Jun 2023 13:11:25 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Richard Leitner <richard.leitner@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        with ESMTP id S230237AbjFDMRI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jun 2023 08:17:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8432DA;
+        Sun,  4 Jun 2023 05:17:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7904561C54;
+        Sun,  4 Jun 2023 12:17:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5645C433D2;
+        Sun,  4 Jun 2023 12:17:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685881021;
+        bh=/1HqXi4TSfWej43agQT+61s1sRoWQcpHBT+TRBBJJwE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gQS7nn5bpR6TCVKUjWsJyJRYDOQN9n2zuN0jpExVeP22UmfXhVyhVx45fc8YAkS8n
+         QQeKJkXe+nQ+vcVQPE6/fjuHkUDDUOtU8YDzX3vYI8JR5rupssU/w008zzU7GEYkLM
+         AKdQmcGbupKccfqEGF9PhKhSPxtG7u3Odqra69Gma71MfErM/iva1pkYgtGMuhHA68
+         KSkapGRJ5q4Qjv8+40XRC+oOqFR20GOv6Zs8kSnYGgcXekRWJiLu3hhVHo0XOBQs4r
+         83KpT1WE1TFzT7xc0wqRFtL5kAtyr0B1Qx+Ero01vXIFph2doaBD3g+g9iX9Iyl+7i
+         OKgQaCKZ/J6nw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1q5mfc-00008R-30; Sun, 04 Jun 2023 14:17:16 +0200
+Date:   Sun, 4 Jun 2023 14:17:16 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Corey Minyard <minyard@acm.org>
+Cc:     Craig Shelley <craig@microtron.org.uk>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
         linux-usb@vger.kernel.org
-Subject: [PATCH] usb: usb251xb: Use of_property_read_u16()
-Date:   Sun,  4 Jun 2023 13:11:18 +0200
-Message-Id: <97478908a814d4fa694e0ca44212c3776cf3e6e9.1685877052.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+Subject: Re: Break doesn't work on a CP2105
+Message-ID: <ZHyAzHVAu3DVgJG_@hovoldconsulting.com>
+References: <ZEmDs0ASdnEAnpsL@minyard.net>
+ <ZGtZKCvo71woGf9T@hovoldconsulting.com>
+ <ZGtlnWGSc31Wdhxa@mail.minyard.net>
+ <ZHnmSwGyOaSMbPBB@hovoldconsulting.com>
+ <ZHodALMLTWk72Vvm@mail.minyard.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHodALMLTWk72Vvm@mail.minyard.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use of_property_read_u16() instead of of_property_read_u16_array() when
-only 1 element is read.
-This slightly simplifies the code.
+On Fri, Jun 02, 2023 at 11:46:56AM -0500, Corey Minyard wrote:
+> On Fri, Jun 02, 2023 at 02:53:31PM +0200, Johan Hovold wrote:
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/usb/misc/usb251xb.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+> > I just posted a patch series which does that. The USB serial drivers do
+> > not currently return any errors related to break signalling even though
+> > this has been possible since 2008.
+> > 
+> > The same mechanism can be used to report that break signalling is not
+> > supported by a device or driver, but the USB serial drivers would be the
+> > first tty drivers that actually do this. If it turns out to cause any
+> > trouble we can still use this series to avoid the unnecessary wait.
+> > 
+> > Care to give the series a try?
+> > 
+> > 	https://lore.kernel.org/lkml/20230602124642.19076-1-johan@kernel.org
+> 
+> I have tested this series.  I can verify that one of the CP2105 ports
+> (ttyUSB0) does not return an error on sending the break, and the other
+> (ttyUSB1) does.  This is the only USB serial device on the system.
 
-diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
-index 1f3329ef5c7a..e4edb486b69e 100644
---- a/drivers/usb/misc/usb251xb.c
-+++ b/drivers/usb/misc/usb251xb.c
-@@ -416,14 +416,13 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
- 		return dev_err_probe(dev, PTR_ERR(hub->gpio_reset),
- 				     "unable to request GPIO reset pin\n");
- 
--	if (of_property_read_u16_array(np, "vendor-id", &hub->vendor_id, 1))
-+	if (of_property_read_u16(np, "vendor-id", &hub->vendor_id))
- 		hub->vendor_id = USB251XB_DEF_VENDOR_ID;
- 
--	if (of_property_read_u16_array(np, "product-id",
--				       &hub->product_id, 1))
-+	if (of_property_read_u16(np, "product-id", &hub->product_id))
- 		hub->product_id = data->product_id;
- 
--	if (of_property_read_u16_array(np, "device-id", &hub->device_id, 1))
-+	if (of_property_read_u16(np, "device-id", &hub->device_id))
- 		hub->device_id = USB251XB_DEF_DEVICE_ID;
- 
- 	hub->conf_data1 = USB251XB_DEF_CONFIG_DATA_1;
-@@ -532,7 +531,7 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
- 	if (!of_property_read_u32(np, "power-on-time-ms", &property_u32))
- 		hub->power_on_time = min_t(u8, property_u32 / 2, 255);
- 
--	if (of_property_read_u16_array(np, "language-id", &hub->lang_id, 1))
-+	if (of_property_read_u16(np, "language-id", &hub->lang_id))
- 		hub->lang_id = USB251XB_DEF_LANGUAGE_ID;
- 
- 	if (of_property_read_u8(np, "boost-up", &hub->boost_up))
--- 
-2.34.1
+Thanks for testing.
 
+> However, the device hooked to the remote console (ttyUSB0), the one not
+> returning an error on sending a break, still doesn't send a break.  So
+> my problem isn't fixed :-(.
+> 
+> # ls -l /dev/serial/by-path
+> total 0
+> lrwxrwxrwx 1 root root 13 Jun  2 15:28 pci-0000:00:1d.0-usb-0:1.1:1.0-port0 -> ../../ttyUSB0
+> lrwxrwxrwx 1 root root 13 Jun  2 15:28 pci-0000:00:1d.0-usb-0:1.1:1.1-port0 -> ../../ttyUSB1
+
+Ok, at least that matches what you found in schematics about this being
+the ECI (and thus first) port.
+
+I just verified break signalling on the first port of my CP2105 using a
+logic analyser and everything seems to work as expected.
+
+There's also no mention of any issue with break in the errata.
+
+Could you check which firmware revision you have by enabling debugging
+and reconnecting the device?
+
+For example:
+
+	echo func cp210x_get_fw_version +p > /sys/kernel/debug/dynamic_debug/control
+
+Johan
