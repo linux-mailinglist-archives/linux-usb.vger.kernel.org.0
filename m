@@ -2,114 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE50272157A
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Jun 2023 10:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68CA47215C6
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Jun 2023 11:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbjFDIDh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 4 Jun 2023 04:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
+        id S229507AbjFDJQi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Jun 2023 05:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjFDIDg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jun 2023 04:03:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AD3C1;
-        Sun,  4 Jun 2023 01:03:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D1086023A;
-        Sun,  4 Jun 2023 08:03:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94CEFC433EF;
-        Sun,  4 Jun 2023 08:03:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685865813;
-        bh=ifrmax7iPS0ThsC2vJ+kbR2JhaMl9gOFtky/NmZGJis=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QQfvC5a9uZbPV0QhzWp7ywGOLQxbLxBrCHDSowsGgTXOwXaTe7JBuPAFeT8Bhqvh9
-         8hsrAku0KPZIcL0Guz2/XorzBMDAPErT321Fr4Ent6uxkADX2AwckZl8Qb5fJx+efh
-         vbfT6WNqVLPc8XHTSf8Pjv4FTDOBiKHa2fjIKGX0=
-Date:   Sun, 4 Jun 2023 10:03:31 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 6.4-rc5
-Message-ID: <ZHxFU2gVcgqYpx6m@kroah.com>
+        with ESMTP id S229462AbjFDJQh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jun 2023 05:16:37 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6246CB1
+        for <linux-usb@vger.kernel.org>; Sun,  4 Jun 2023 02:16:36 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b1b8593263so14066951fa.2
+        for <linux-usb@vger.kernel.org>; Sun, 04 Jun 2023 02:16:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685870194; x=1688462194;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1FfuSgGldzIkIC93DcQvqf5rwRqiaE7YMm6Zt8k3kic=;
+        b=nrdq2n42nzqDoJYw0k73axQicNWo7rLYlGyJlKdPP47Gip1sv9E3OvQM9Km9Ft7wOo
+         oTcmHcgzQ/Y1uV9G4Gk2bKU0h/PsA+TSrqzDhYS7/dI4kEKD+/BTMQAga5ETSDQM62Yf
+         faM0ydacAno0Mwaf6joMRFt9uJdCW7NBcOJNEzOYicrXIcPeGcudI5naTvI3KHWA6BB+
+         15Q91ocwCoeKhbC5RjLSB5wNoTfCfmAMlU6W8tdUxb0Zz3rDnNm3EDiJ+XbKggGNcvVl
+         BGuNvnrFAl25sp4wTZgeBkD7uZgDRaYwPzvvAAcsOkwJ3fXXDV16iLdGN3Wuoca2LiZi
+         wIBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685870194; x=1688462194;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1FfuSgGldzIkIC93DcQvqf5rwRqiaE7YMm6Zt8k3kic=;
+        b=cIpHXIYSHrlbgkP47Vi7dYSQQpn7XUN/PRu4Ps3SMdjSkTzskba3ufDgCFOdGiOq+F
+         liSo0trMNXsPMgSDt1MyrVqovmWIxzTpF3uI5fwXCanUbSEEJ2tWJUYoK9kDfqExP7TH
+         CcAdlgIDqy5aLWWwkbi7mPVaAzNxxQR3ZvjGaIK/Eg7FhJI2qJUhRI6p4BWpUbLOw/mC
+         prQIx/LIVsBZhPaMtYhujiEvDAOX5AyfuEk4CFZbj4VlX37nsZG6QcPi2Sp4OgAdQKhe
+         0GyHOjy8VZbUJbNugaqt2PlWhvQkAer+EinKNz/yp1/A0WTpNQ5nwMrheFzRD7o0vmqq
+         vvag==
+X-Gm-Message-State: AC+VfDzPOg3iDUmZvB7kApuHaLNQ1e/3oRw3/Frdtvji6Pp8Ecd/XxEP
+        oSNiC3uxJ9bfudGPu7GxpGh3J1KSUv4Wc/dIFMU=
+X-Google-Smtp-Source: ACHHUZ5N+xqlMV3UG5HOdSg3HJ0zMsKiqldy+ciYWfecqtNMNs9Yqj9P8omhws6Lk18x4VyLq2s2i4SuJZCNweCGPe4=
+X-Received: by 2002:a2e:96c2:0:b0:2b1:c1ac:6f56 with SMTP id
+ d2-20020a2e96c2000000b002b1c1ac6f56mr979215ljj.7.1685870194319; Sun, 04 Jun
+ 2023 02:16:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230602091055.65049-1-mika.westerberg@linux.intel.com>
+ <20230602091055.65049-4-mika.westerberg@linux.intel.com> <CA+CmpXs2K8Bi2xHk_hhWC3x6rVeTQ=SbtjuxLSBV+3rjHRwxVQ@mail.gmail.com>
+ <20230604051136.GQ45886@black.fi.intel.com>
+In-Reply-To: <20230604051136.GQ45886@black.fi.intel.com>
+From:   Yehezkel Bernat <yehezkelshb@gmail.com>
+Date:   Sun, 4 Jun 2023 12:16:18 +0300
+Message-ID: <CA+CmpXtNgVRrOdJyTvcyPSxa9jxkNjQvPbGtmbSickL7QFwYPA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] thunderbolt: Enable/disable sideband depending on
+ USB4 port offline mode
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Utkarsh H Patel <utkarsh.h.patel@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 7877cb91f1081754a1487c144d85dc0d2e2e7fc4:
+On Sun, Jun 4, 2023 at 8:11=E2=80=AFAM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> Hi,
+>
+> On Sat, Jun 03, 2023 at 10:24:38PM +0300, Yehezkel Bernat wrote:
+> > On Fri, Jun 2, 2023 at 12:11=E2=80=AFPM Mika Westerberg
+> > <mika.westerberg@linux.intel.com> wrote:
+> > >
+> > > When USB4 port is in offline mode (this mean there is no device
+> > > attached) we want to keep the sideband up to make it possible to
+> > > communicate with the retimers. In the same way there is no need to
+> > > enable sideband transactions when the USB4 port is not offline as the=
+y
+> > > are already up.
+> > >
+> > > For this reason make the enabling/disabling depend on the USB4 port
+> > > offline status.
+> >
+> > I'm probably missing something here, but if we don't allow disabling it=
+ when the
+> > port is offline, and when the port is online the sideband is enabled, w=
+hen can
+> > it be disabled? If we can manually disable it when the port is online, =
+on
+> > enablement we can't assume that it's already enabled just because the p=
+ort
+> > is online, as we might have manually disabled it earlier.
+>
+> We allow disabling them when the port is online. This all basically
+> separates how the device attached and non-device attached handle the
+> sideband communications.
 
-  Linux 6.4-rc4 (2023-05-28 07:49:00 -0400)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.4-rc5
-
-for you to fetch changes up to fcfe84236ec0974fe92f0578d1d58ed805c4b70f:
-
-  usb: typec: tps6598x: Fix broken polling mode after system suspend/resume (2023-05-30 15:29:41 +0100)
-
-----------------------------------------------------------------
-USB fixes for 6.4-rc5
-
-Here are some USB driver and core fixes for 6.4-rc5.  Most of these are
-tiny driver fixes, including:
-  - udc driver bugfix
-  - f_fs gadget driver bugfix
-  - cdns3 driver bugfix
-  - typec bugfixes
-
-But the "big" thing in here is a fix yet-again for how the USB buffers
-are handled from userspace when dealing with DMA issues.  The changes
-were discussed a lot, and tested a lot, on the list, and acked by the
-relevant mm maintainers and have been in linux-next all this past week
-with no reported problems.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Dan Carpenter (1):
-      usb: gadget: udc: fix NULL dereference in remove()
-
-Frank Li (1):
-      usb: cdns3: fix NCM gadget RX speed 20x slow than expection at iMX8QM
-
-Marek Vasut (1):
-      dt-bindings: usb: snps,dwc3: Fix "snps,hsphy_interface" type
-
-Roger Quadros (1):
-      usb: typec: tps6598x: Fix broken polling mode after system suspend/resume
-
-Ruihan Li (4):
-      usb: usbfs: Enforce page requirements for mmap
-      usb: usbfs: Use consistent mmap functions
-      mm: page_table_check: Make it dependent on EXCLUSIVE_SYSTEM_RAM
-      mm: page_table_check: Ensure user pages are not slab pages
-
-Uttkarsh Aggarwal (1):
-      usb: gadget: f_fs: Add unbind event before functionfs_unbind
-
- .../devicetree/bindings/usb/snps,dwc3.yaml         |  2 +-
- Documentation/mm/page_table_check.rst              | 19 ++++++++++
- drivers/usb/cdns3/cdns3-gadget.c                   | 13 +++++++
- drivers/usb/core/buffer.c                          | 41 ++++++++++++++++++++++
- drivers/usb/core/devio.c                           | 20 +++++++----
- drivers/usb/gadget/function/f_fs.c                 |  2 +-
- drivers/usb/gadget/udc/amd5536udc_pci.c            |  3 ++
- drivers/usb/typec/tipd/core.c                      |  2 +-
- include/linux/page-flags.h                         |  6 ++++
- include/linux/usb/hcd.h                            |  5 +++
- mm/Kconfig.debug                                   |  1 +
- mm/page_table_check.c                              |  6 ++++
- 12 files changed, 111 insertions(+), 9 deletions(-)
+OK, but then we don't enable it back, as we assume it's enabled because the
+port is online, even while the user might have disabled it earlier?
