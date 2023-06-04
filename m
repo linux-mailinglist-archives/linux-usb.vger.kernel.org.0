@@ -2,93 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4AD67214C8
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Jun 2023 07:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 695F672155A
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Jun 2023 09:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjFDFL5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 4 Jun 2023 01:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59256 "EHLO
+        id S229803AbjFDHnq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Jun 2023 03:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjFDFLe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jun 2023 01:11:34 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB9CDD
-        for <linux-usb@vger.kernel.org>; Sat,  3 Jun 2023 22:11:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685855493; x=1717391493;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ZCYV03TEOIP4KUwhZsf0gG/hpF2Fu2YUnimRLNvXrRY=;
-  b=SAl7CkDmEfemPfiAeMouu5s4kdIlrsqDJ485FnWjMjfDsq+U40Y5uxB/
-   JDTIqGzEZDl1bJcDIuw+EmJ50xy5Va/MQGr2I9FTUYl+kBefaay1MgcM1
-   4pHFy6paR3af68cx+va8/oiPTy5awXMpemPCoJq3gwi94gmaBzH9rc4zK
-   Tx+pPjsZ+I4RxflkEG/bz9Nd7ikkkOGXe8Ex819st1tPhiepUAHpT3zhp
-   z3R6+D8BujiA/1KVXEF8H4sduX72sl5yDPR5OHq4st3qtFOG3Tia+XqQu
-   NO+3c38GYh50r6U+GWIvjKSjMvrRgHPil3g09uKUvfttiLM8uTFXWNK25
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10730"; a="421976872"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="421976872"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2023 22:11:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10730"; a="711410499"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="711410499"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 03 Jun 2023 22:11:30 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 9A641204; Sun,  4 Jun 2023 08:11:36 +0300 (EEST)
-Date:   Sun, 4 Jun 2023 08:11:36 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Yehezkel Bernat <yehezkelshb@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Utkarsh H Patel <utkarsh.h.patel@intel.com>
-Subject: Re: [PATCH 3/3] thunderbolt: Enable/disable sideband depending on
- USB4 port offline mode
-Message-ID: <20230604051136.GQ45886@black.fi.intel.com>
-References: <20230602091055.65049-1-mika.westerberg@linux.intel.com>
- <20230602091055.65049-4-mika.westerberg@linux.intel.com>
- <CA+CmpXs2K8Bi2xHk_hhWC3x6rVeTQ=SbtjuxLSBV+3rjHRwxVQ@mail.gmail.com>
+        with ESMTP id S229715AbjFDHnp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jun 2023 03:43:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF49B3;
+        Sun,  4 Jun 2023 00:43:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0090660AE3;
+        Sun,  4 Jun 2023 07:43:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7AFBC433D2;
+        Sun,  4 Jun 2023 07:43:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685864623;
+        bh=nIKvPGvj3JKyqmVRDqzwgCrRbQJXgFGqXqW31E0bgMM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AJfNzePihv3KR4lAgZLvP67gWAOcih7tMTSKWq5JOQp1VfTIcZ64+eod8ZGntao58
+         ZYWzgJVHtJYo2uvCjBOc5LzX/1MPVYaDH+wZLngLWPAcXw466KPqhUDa2mWmJ9emXe
+         cK9vCWC7UqY7KtXLIIMxdNnGLdsTXlcG4wjalYl0=
+Date:   Sun, 4 Jun 2023 09:43:40 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Avichal Rakesh <arakesh@google.com>
+Cc:     dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com,
+        thinh.nguyen@synopsys.com, etalvala@google.com,
+        jchowdhary@google.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3] usb: gadget: uvc: clean up comments and styling in
+ video_pump
+Message-ID: <2023060434-reveler-twice-d92e@gregkh>
+References: <20230602211602.3b7rfa252wliiszp@synopsys.com>
+ <20230602220455.313801-1-arakesh@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+CmpXs2K8Bi2xHk_hhWC3x6rVeTQ=SbtjuxLSBV+3rjHRwxVQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230602220455.313801-1-arakesh@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Fri, Jun 02, 2023 at 03:04:55PM -0700, Avichal Rakesh wrote:
+> This patch elaborates on some of the edge cases handled by
+> video_pump around setting no_interrupt flag, and brings the
+> code style in line with rest of the file.
 
-On Sat, Jun 03, 2023 at 10:24:38PM +0300, Yehezkel Bernat wrote:
-> On Fri, Jun 2, 2023 at 12:11 PM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > When USB4 port is in offline mode (this mean there is no device
-> > attached) we want to keep the sideband up to make it possible to
-> > communicate with the retimers. In the same way there is no need to
-> > enable sideband transactions when the USB4 port is not offline as they
-> > are already up.
-> >
-> > For this reason make the enabling/disabling depend on the USB4 port
-> > offline status.
-> 
-> I'm probably missing something here, but if we don't allow disabling it when the
-> port is offline, and when the port is online the sideband is enabled, when can
-> it be disabled? If we can manually disable it when the port is online, on
-> enablement we can't assume that it's already enabled just because the port
-> is online, as we might have manually disabled it earlier.
+When you say "and" that usually means it should be a separate patch.
 
-We allow disabling them when the port is online. This all basically
-separates how the device attached and non-device attached handle the
-sideband communications.
+But I really don't see what coding style changes you made here, what was
+it?
+
+I can't see any logical changes made here, am I missing them?  Or is
+this all just a style-cleanup patch?
+
+thanks,
+
+greg k-h
