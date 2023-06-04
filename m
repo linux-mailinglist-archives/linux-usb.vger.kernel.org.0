@@ -2,109 +2,215 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68CA47215C6
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Jun 2023 11:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0D87215CE
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Jun 2023 11:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbjFDJQi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 4 Jun 2023 05:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
+        id S229944AbjFDJVJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Jun 2023 05:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjFDJQh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jun 2023 05:16:37 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6246CB1
-        for <linux-usb@vger.kernel.org>; Sun,  4 Jun 2023 02:16:36 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b1b8593263so14066951fa.2
-        for <linux-usb@vger.kernel.org>; Sun, 04 Jun 2023 02:16:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685870194; x=1688462194;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1FfuSgGldzIkIC93DcQvqf5rwRqiaE7YMm6Zt8k3kic=;
-        b=nrdq2n42nzqDoJYw0k73axQicNWo7rLYlGyJlKdPP47Gip1sv9E3OvQM9Km9Ft7wOo
-         oTcmHcgzQ/Y1uV9G4Gk2bKU0h/PsA+TSrqzDhYS7/dI4kEKD+/BTMQAga5ETSDQM62Yf
-         faM0ydacAno0Mwaf6joMRFt9uJdCW7NBcOJNEzOYicrXIcPeGcudI5naTvI3KHWA6BB+
-         15Q91ocwCoeKhbC5RjLSB5wNoTfCfmAMlU6W8tdUxb0Zz3rDnNm3EDiJ+XbKggGNcvVl
-         BGuNvnrFAl25sp4wTZgeBkD7uZgDRaYwPzvvAAcsOkwJ3fXXDV16iLdGN3Wuoca2LiZi
-         wIBA==
+        with ESMTP id S229462AbjFDJVJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jun 2023 05:21:09 -0400
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E26E0
+        for <linux-usb@vger.kernel.org>; Sun,  4 Jun 2023 02:21:05 -0700 (PDT)
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-33b4cbdd21aso35533865ab.2
+        for <linux-usb@vger.kernel.org>; Sun, 04 Jun 2023 02:21:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685870194; x=1688462194;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1FfuSgGldzIkIC93DcQvqf5rwRqiaE7YMm6Zt8k3kic=;
-        b=cIpHXIYSHrlbgkP47Vi7dYSQQpn7XUN/PRu4Ps3SMdjSkTzskba3ufDgCFOdGiOq+F
-         liSo0trMNXsPMgSDt1MyrVqovmWIxzTpF3uI5fwXCanUbSEEJ2tWJUYoK9kDfqExP7TH
-         CcAdlgIDqy5aLWWwkbi7mPVaAzNxxQR3ZvjGaIK/Eg7FhJI2qJUhRI6p4BWpUbLOw/mC
-         prQIx/LIVsBZhPaMtYhujiEvDAOX5AyfuEk4CFZbj4VlX37nsZG6QcPi2Sp4OgAdQKhe
-         0GyHOjy8VZbUJbNugaqt2PlWhvQkAer+EinKNz/yp1/A0WTpNQ5nwMrheFzRD7o0vmqq
-         vvag==
-X-Gm-Message-State: AC+VfDzPOg3iDUmZvB7kApuHaLNQ1e/3oRw3/Frdtvji6Pp8Ecd/XxEP
-        oSNiC3uxJ9bfudGPu7GxpGh3J1KSUv4Wc/dIFMU=
-X-Google-Smtp-Source: ACHHUZ5N+xqlMV3UG5HOdSg3HJ0zMsKiqldy+ciYWfecqtNMNs9Yqj9P8omhws6Lk18x4VyLq2s2i4SuJZCNweCGPe4=
-X-Received: by 2002:a2e:96c2:0:b0:2b1:c1ac:6f56 with SMTP id
- d2-20020a2e96c2000000b002b1c1ac6f56mr979215ljj.7.1685870194319; Sun, 04 Jun
- 2023 02:16:34 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685870465; x=1688462465;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HDWJxnfDqOBuqzDH4am0m3hkIcc+wkoVRF7GoEFg+98=;
+        b=D54zbH7xbj5nOcEnFBTifv2213c/9gk1f186mb6RgitutcgU90xc1JA5kQiSVDrEwT
+         MyMxHsw7TQQJU1UCUluADniPRoX1jlX+i8yGnCEZpFTkRcrhw28NiGCyvK/5y5JsHXYa
+         0tcDBD4pXXqoFcEcd8pu6GO3mxmBfE/hU3jVQE00sk2sas3lTZ3UfO7ZmBnpUktDZ0Sl
+         k/Sy6q9IHNdGRnDjGz/Zfwpz6I7xTgJlbchMUHfPlRK3QWccEEWwEn8UpKwC0CkkCWoM
+         S9VE02ZDPlgIk//yAA3khvbX6ZYwIKCBnhX6kMJrD7enZe8znrTpTpIz+vBrvCLfML4z
+         XsQQ==
+X-Gm-Message-State: AC+VfDy4iRHgSbWvzOq3REpO4crvzwXSD1JZA/fnqU+uw6JRSAeFCX1d
+        qXADzeAyzARJQLPH4TLccLgVmHhRUaDbCo7oBm4q7rnTbT1j
+X-Google-Smtp-Source: ACHHUZ7UUj40CODCUxL6gfgZP2Yfq8WP1+h5uQ18BeZrXn8vi3A4fnLrhlan4hXIdDDpF3Q7KHg7mwRoZrq+0QBpct7ZADEjHGUc
 MIME-Version: 1.0
-References: <20230602091055.65049-1-mika.westerberg@linux.intel.com>
- <20230602091055.65049-4-mika.westerberg@linux.intel.com> <CA+CmpXs2K8Bi2xHk_hhWC3x6rVeTQ=SbtjuxLSBV+3rjHRwxVQ@mail.gmail.com>
- <20230604051136.GQ45886@black.fi.intel.com>
-In-Reply-To: <20230604051136.GQ45886@black.fi.intel.com>
-From:   Yehezkel Bernat <yehezkelshb@gmail.com>
-Date:   Sun, 4 Jun 2023 12:16:18 +0300
-Message-ID: <CA+CmpXtNgVRrOdJyTvcyPSxa9jxkNjQvPbGtmbSickL7QFwYPA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] thunderbolt: Enable/disable sideband depending on
- USB4 port offline mode
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Utkarsh H Patel <utkarsh.h.patel@intel.com>
+X-Received: by 2002:a92:db52:0:b0:335:908b:8f9 with SMTP id
+ w18-20020a92db52000000b00335908b08f9mr5987486ilq.1.1685870465142; Sun, 04 Jun
+ 2023 02:21:05 -0700 (PDT)
+Date:   Sun, 04 Jun 2023 02:21:05 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000365bc405fd4a4ee3@google.com>
+Subject: [syzbot] [mm?] [usb?] memory leak in new_inode (2)
+From:   syzbot <syzbot+ea01ee90cdba474c187b@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, hughd@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 4, 2023 at 8:11=E2=80=AFAM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> Hi,
->
-> On Sat, Jun 03, 2023 at 10:24:38PM +0300, Yehezkel Bernat wrote:
-> > On Fri, Jun 2, 2023 at 12:11=E2=80=AFPM Mika Westerberg
-> > <mika.westerberg@linux.intel.com> wrote:
-> > >
-> > > When USB4 port is in offline mode (this mean there is no device
-> > > attached) we want to keep the sideband up to make it possible to
-> > > communicate with the retimers. In the same way there is no need to
-> > > enable sideband transactions when the USB4 port is not offline as the=
-y
-> > > are already up.
-> > >
-> > > For this reason make the enabling/disabling depend on the USB4 port
-> > > offline status.
-> >
-> > I'm probably missing something here, but if we don't allow disabling it=
- when the
-> > port is offline, and when the port is online the sideband is enabled, w=
-hen can
-> > it be disabled? If we can manually disable it when the port is online, =
-on
-> > enablement we can't assume that it's already enabled just because the p=
-ort
-> > is online, as we might have manually disabled it earlier.
->
-> We allow disabling them when the port is online. This all basically
-> separates how the device attached and non-device attached handle the
-> sideband communications.
+Hello,
 
-OK, but then we don't enable it back, as we assume it's enabled because the
-port is online, even while the user might have disabled it earlier?
+syzbot found the following issue on:
+
+HEAD commit:    afead42fdfca Merge tag 'perf-tools-fixes-for-v6.4-2-2023-0..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13acfcd1280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=21fde9f7601f218f
+dashboard link: https://syzkaller.appspot.com/bug?extid=ea01ee90cdba474c187b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15160fb9280000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/b5acaa3b8518/disk-afead42f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/041db64527a2/vmlinux-afead42f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/cd4f6f1744e4/bzImage-afead42f.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ea01ee90cdba474c187b@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff88810a5cd958 (size 776):
+  comm "syslogd", pid 4424, jiffies 4294938531 (age 1177.910s)
+  hex dump (first 32 bytes):
+    00 00 00 00 01 00 00 00 00 00 20 00 00 00 00 00  .......... .....
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff8152a817>] alloc_inode_sb include/linux/fs.h:2705 [inline]
+    [<ffffffff8152a817>] shmem_alloc_inode+0x27/0x50 mm/shmem.c:3907
+    [<ffffffff8168f979>] alloc_inode+0x29/0x110 fs/inode.c:260
+    [<ffffffff8168fa87>] new_inode_pseudo fs/inode.c:1018 [inline]
+    [<ffffffff8168fa87>] new_inode+0x27/0xf0 fs/inode.c:1046
+    [<ffffffff8152b944>] shmem_get_inode+0xd4/0x560 mm/shmem.c:2370
+    [<ffffffff8152bf12>] shmem_mknod+0x42/0x150 mm/shmem.c:2942
+    [<ffffffff81676fd5>] lookup_open fs/namei.c:3492 [inline]
+    [<ffffffff81676fd5>] open_last_lookups fs/namei.c:3560 [inline]
+    [<ffffffff81676fd5>] path_openat+0x1725/0x1b10 fs/namei.c:3788
+    [<ffffffff81679175>] do_filp_open+0xc5/0x1b0 fs/namei.c:3818
+    [<ffffffff81653dbd>] do_sys_openat2+0xed/0x260 fs/open.c:1356
+    [<ffffffff81654863>] do_sys_open fs/open.c:1372 [inline]
+    [<ffffffff81654863>] __do_sys_openat fs/open.c:1388 [inline]
+    [<ffffffff81654863>] __se_sys_openat fs/open.c:1383 [inline]
+    [<ffffffff81654863>] __x64_sys_openat+0x83/0xe0 fs/open.c:1383
+    [<ffffffff84a15749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff84a15749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+BUG: memory leak
+unreferenced object 0xffff888109473080 (size 32):
+  comm "syslogd", pid 4424, jiffies 4294938531 (age 1177.910s)
+  hex dump (first 32 bytes):
+    18 db 5c 0a 81 88 ff ff b0 65 2d 82 ff ff ff ff  ..\......e-.....
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff822d7cae>] kmem_cache_zalloc include/linux/slab.h:670 [inline]
+    [<ffffffff822d7cae>] lsm_inode_alloc security/security.c:632 [inline]
+    [<ffffffff822d7cae>] security_inode_alloc+0x2e/0xb0 security/security.c:1479
+    [<ffffffff8168cfa8>] inode_init_always+0x1f8/0x240 fs/inode.c:231
+    [<ffffffff8168f996>] alloc_inode+0x46/0x110 fs/inode.c:267
+    [<ffffffff8168fa87>] new_inode_pseudo fs/inode.c:1018 [inline]
+    [<ffffffff8168fa87>] new_inode+0x27/0xf0 fs/inode.c:1046
+    [<ffffffff8152b944>] shmem_get_inode+0xd4/0x560 mm/shmem.c:2370
+    [<ffffffff8152bf12>] shmem_mknod+0x42/0x150 mm/shmem.c:2942
+    [<ffffffff81676fd5>] lookup_open fs/namei.c:3492 [inline]
+    [<ffffffff81676fd5>] open_last_lookups fs/namei.c:3560 [inline]
+    [<ffffffff81676fd5>] path_openat+0x1725/0x1b10 fs/namei.c:3788
+    [<ffffffff81679175>] do_filp_open+0xc5/0x1b0 fs/namei.c:3818
+    [<ffffffff81653dbd>] do_sys_openat2+0xed/0x260 fs/open.c:1356
+    [<ffffffff81654863>] do_sys_open fs/open.c:1372 [inline]
+    [<ffffffff81654863>] __do_sys_openat fs/open.c:1388 [inline]
+    [<ffffffff81654863>] __se_sys_openat fs/open.c:1383 [inline]
+    [<ffffffff81654863>] __x64_sys_openat+0x83/0xe0 fs/open.c:1383
+    [<ffffffff84a15749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff84a15749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+BUG: memory leak
+unreferenced object 0xffff88810e027d80 (size 576):
+  comm "syslogd", pid 4424, jiffies 4294939014 (age 1173.100s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    01 00 00 00 00 00 00 00 80 30 47 09 81 88 ff ff  .........0G.....
+  backtrace:
+    [<ffffffff84a0a6d6>] xas_alloc+0xf6/0x120 lib/xarray.c:377
+    [<ffffffff84a0d10d>] xas_expand lib/xarray.c:584 [inline]
+    [<ffffffff84a0d10d>] xas_create+0x13d/0x800 lib/xarray.c:655
+    [<ffffffff84a0dbcb>] xas_store+0x7b/0xbd0 lib/xarray.c:789
+    [<ffffffff8152ce89>] shmem_add_to_page_cache+0x2c9/0x500 mm/shmem.c:735
+    [<ffffffff81530785>] shmem_get_folio_gfp+0x3a5/0xcf0 mm/shmem.c:1978
+    [<ffffffff81531ba8>] shmem_get_folio mm/shmem.c:2079 [inline]
+    [<ffffffff81531ba8>] shmem_write_begin+0x88/0x1a0 mm/shmem.c:2573
+    [<ffffffff814eefb3>] generic_perform_write+0x103/0x2b0 mm/filemap.c:3923
+    [<ffffffff814f3bd3>] __generic_file_write_iter+0x173/0x290 mm/filemap.c:4051
+    [<ffffffff814f3d72>] generic_file_write_iter+0x82/0x160 mm/filemap.c:4083
+    [<ffffffff81658e33>] call_write_iter include/linux/fs.h:1868 [inline]
+    [<ffffffff81658e33>] new_sync_write fs/read_write.c:491 [inline]
+    [<ffffffff81658e33>] vfs_write+0x413/0x530 fs/read_write.c:584
+    [<ffffffff81659191>] ksys_write+0xa1/0x160 fs/read_write.c:637
+    [<ffffffff84a15749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff84a15749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+BUG: memory leak
+unreferenced object 0xffff888103efe280 (size 128):
+  comm "syz-execprog", pid 5049, jiffies 4295044860 (age 114.650s)
+  hex dump (first 32 bytes):
+    f0 7b 88 0d 81 88 ff ff 70 7d 6e 81 ff ff ff ff  .{......p}n.....
+    00 eb 6d 0a 81 88 ff ff 98 e2 ef 03 81 88 ff ff  ..m.............
+  backtrace:
+    [<ffffffff816ea897>] kmem_cache_zalloc include/linux/slab.h:670 [inline]
+    [<ffffffff816ea897>] ep_insert fs/eventpoll.c:1504 [inline]
+    [<ffffffff816ea897>] do_epoll_ctl+0x5c7/0x1220 fs/eventpoll.c:2223
+    [<ffffffff816eb57a>] __do_sys_epoll_ctl fs/eventpoll.c:2280 [inline]
+    [<ffffffff816eb57a>] __se_sys_epoll_ctl fs/eventpoll.c:2271 [inline]
+    [<ffffffff816eb57a>] __x64_sys_epoll_ctl+0x8a/0xd0 fs/eventpoll.c:2271
+    [<ffffffff84a15749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff84a15749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+BUG: memory leak
+unreferenced object 0xffff8881052da600 (size 128):
+  comm "syz-execprog", pid 5049, jiffies 4295044862 (age 114.630s)
+  hex dump (first 32 bytes):
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff812b4e5a>] alloc_pid+0x6a/0x550 kernel/pid.c:180
+    [<ffffffff81277c3b>] copy_process+0x18fb/0x26c0 kernel/fork.c:2526
+    [<ffffffff81278b87>] kernel_clone+0xf7/0x610 kernel/fork.c:2918
+    [<ffffffff8127911c>] __do_sys_clone+0x7c/0xb0 kernel/fork.c:3061
+    [<ffffffff84a15749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff84a15749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
