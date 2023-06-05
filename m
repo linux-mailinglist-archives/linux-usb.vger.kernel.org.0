@@ -2,123 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0799672253A
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 14:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3BFF722572
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 14:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232859AbjFEMIW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Jun 2023 08:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43958 "EHLO
+        id S233319AbjFEMU4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Jun 2023 08:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjFEMIW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jun 2023 08:08:22 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E6B92;
-        Mon,  5 Jun 2023 05:08:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685966901; x=1717502901;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dQT6oVcoi6OibIBbA3hTG2i3vMqElgYwkRHP4oreT70=;
-  b=Jy9z2fXDE2qtQ1lqdFjdSSv3OFFyUsvnrDAtls8Lz7O+vre+hby6wRkb
-   2eg8yY1nJdM3WDrNHMwdbYK7oxxIMCYD4ihvxIyOHM2tS441oGoXrHVcu
-   SS4dQs2a3WOapQ+NrPC61tcGW9gNEHhnvA20BLNl3fqcjBe9U6rTJUPKS
-   lHQu1lNA2pkYLeXve66pfzLyGvUxaurrkQDe6HUL9nDb5SsTa8bxx6wli
-   0bAALD/ykGl0iENyxunBdInRUkaZr7Oti9OIQ1MESnCMTUEmcsbPquKaL
-   hKFt/9c7QZZXEyBPYPWhX+sMJm/HASBa3v7x8mMl9K0V211OR5bow1g/a
-   w==;
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="214645686"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Jun 2023 05:08:19 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 5 Jun 2023 05:07:46 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Mon, 5 Jun 2023 05:07:39 -0700
-Message-ID: <3e262485-bf5f-1a98-e399-e02add3eaa89@microchip.com>
-Date:   Mon, 5 Jun 2023 14:07:32 +0200
+        with ESMTP id S232243AbjFEMUx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jun 2023 08:20:53 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386DDA7
+        for <linux-usb@vger.kernel.org>; Mon,  5 Jun 2023 05:20:51 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f62d93f38aso720168e87.0
+        for <linux-usb@vger.kernel.org>; Mon, 05 Jun 2023 05:20:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685967649; x=1688559649;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lbl7dx8l9YmbHJ5kHWnYk1dJ4k0yBLjSJf/VNttuMvo=;
+        b=qB6t9b1zMODSkPgj93HJ+1qpn/5Njw0ZMJ6QOwhdg0CjkMnqPr8IUMacGbD65Kg9Y/
+         uCeroIcgSr62duk2j0g3uiasj80JsPJbuwjOZIza8U4Zb2Z40YR5Q1LdBrsKznu7kgoc
+         F1nCxbPukgalowULPOiJBrkWam/CbP+8Tci1bq3a3BSytfQSsADn3lFlDlsxBuUhX9iT
+         S1bvRO+BE0gM/jjmhcc1Kx1DfhltgSUEZbniKwpE0aILlGfh7wpX3+ESXJE0drGlF9PS
+         Xckw+2aVAqIUK6ne6TV246giE/MCz7Q5Qm49NdtW2f4NB7XwgJM0OaIWHEhAjVTBd/cf
+         hQhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685967649; x=1688559649;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lbl7dx8l9YmbHJ5kHWnYk1dJ4k0yBLjSJf/VNttuMvo=;
+        b=CNDRcYtiUoj8OcMU2SyTyTt9JfL5xRz55Dbj5gHyhrBzAAICJ1ChVTg8eM5fHHzyHE
+         IRq4aA7WzaGx72cFVuT/5r5xX10pR4+wDX0H/Q5Ba14N68CfF+1ozPENfLHtfDsD0ANf
+         mKyGrpBSr6SJn6SfYmw7PCiQbMMJA/m57+MsQ2YmY+9U5a4f27Kh16bGnFqrXvcc4BOw
+         xxTL3DKQk3CFoj/vGBzKn8rc9ksjStAAo2+q7m8+jBBzQ5x+490m+roQaNcV0Z/nPj3u
+         zHRFlQBd7bO/HX7Bxm2HAmICLK+5J/4bFEoIwIh6VVCaiWIjuKQNevhe/Sgu4WeJ2NXd
+         kTVg==
+X-Gm-Message-State: AC+VfDxjCeYynQ1UsZ6TeibInMBd1zpcdo1fJN6mQrZi4xqMcNHD9rYv
+        gEVhHcKS7I1vVLuGv53z5FYBAg==
+X-Google-Smtp-Source: ACHHUZ6N5k0djmx0ZfMuJGMvzQkir9WRvp2pnTg/RcKLeEMaPrnEc5hfzHG/EQg4F38pklY++MaDDQ==
+X-Received: by 2002:ac2:5314:0:b0:4f6:217a:5615 with SMTP id c20-20020ac25314000000b004f6217a5615mr1935202lfh.38.1685967649425;
+        Mon, 05 Jun 2023 05:20:49 -0700 (PDT)
+Received: from ta1.c.googlers.com.com (61.215.228.35.bc.googleusercontent.com. [35.228.215.61])
+        by smtp.gmail.com with ESMTPSA id e8-20020a056512090800b004f20d0ebe50sm1106952lft.94.2023.06.05.05.20.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 05:20:48 -0700 (PDT)
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+To:     gregkh@linuxfoundation.org, stable@vger.kernel.org
+Cc:     kuba@kernel.org, simon.horman@corigine.com, joneslee@google.com,
+        oliver@neukum.org, davem@davemloft.net, bay@hackerdom.ru,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.or,
+        linux-kernel@vger.kernel.org,
+        Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: [PATCH][stable-4.{14,19}.y 0/3] net: cdc_ncm: Backport fixes
+Date:   Mon,  5 Jun 2023 12:20:42 +0000
+Message-ID: <20230605122045.2455888-1-tudor.ambarus@linaro.org>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 21/21] net: macb: add support for gmac to sam9x7
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Varshini Rajendran <varshini.rajendran@microchip.com>,
-        <tglx@linutronix.de>, <maz@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <gregkh@linuxfoundation.org>,
-        <linux@armlinux.org.uk>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <sre@kernel.org>, <broonie@kernel.org>,
-        <arnd@arndb.de>, <gregory.clement@bootlin.com>,
-        <sudeep.holla@arm.com>, <balamanikandan.gunasundar@microchip.com>,
-        <mihai.sain@microchip.com>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-CC:     <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
-        <durai.manickamkr@microchip.com>, <manikandan.m@microchip.com>,
-        <dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
-        <balakrishnan.s@microchip.com>
-References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
- <20230603200243.243878-22-varshini.rajendran@microchip.com>
- <be3716e0-383f-e79a-b441-c606c0e049df@linaro.org>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <be3716e0-383f-e79a-b441-c606c0e049df@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 05/06/2023 at 08:42, Krzysztof Kozlowski wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> On 03/06/2023 22:02, Varshini Rajendran wrote:
->> From: Nicolas Ferre <nicolas.ferre@microchip.com>
->>
->> Add support for GMAC in sam9x7 SoC family
->>
->> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
->> Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
->> ---
->>   drivers/net/ethernet/cadence/macb_main.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
->> index 29a1199dad14..609c8e9305ba 100644
->> --- a/drivers/net/ethernet/cadence/macb_main.c
->> +++ b/drivers/net/ethernet/cadence/macb_main.c
->> @@ -4913,6 +4913,7 @@ static const struct of_device_id macb_dt_ids[] = {
->>        { .compatible = "microchip,mpfs-macb", .data = &mpfs_config },
->>        { .compatible = "microchip,sama7g5-gem", .data = &sama7g5_gem_config },
->>        { .compatible = "microchip,sama7g5-emac", .data = &sama7g5_emac_config },
->> +     { .compatible = "microchip,sam9x7-gem", .data = &sama7g5_gem_config },
-> 
-> These are compatible, aren't they? Why do you need new entry?
+Backport patches in order to fix the kernel bug reported at:
+Link: https://syzkaller.appspot.com/bug?extid=b982f1059506db48409d
 
-The hardware itself is different, even if the new features are not 
-supported yet in the macb driver.
-The macb driver will certainly evolve in order to add these features so 
-we decided to match a new compatible string all the way to the driver.
+Alexander's patches are prerequisites for the last. I made sure there
+are no other fixes in torvalds/master for the prerequisite patches.
+Compile tested. Intended for stable/linux-4.{14,19}.y.
 
-Best regards,
-   Nicolas
+Alexander Bersenev (2):
+  cdc_ncm: Implement the 32-bit version of NCM Transfer Block
+  cdc_ncm: Fix the build warning
 
+Tudor Ambarus (1):
+  net: cdc_ncm: Deal with too low values of dwNtbOutMaxSize
+
+ drivers/net/usb/cdc_ncm.c        | 435 ++++++++++++++++++++++++-------
+ drivers/net/usb/huawei_cdc_ncm.c |   8 +-
+ include/linux/usb/cdc_ncm.h      |  15 +-
+ 3 files changed, 355 insertions(+), 103 deletions(-)
 
 -- 
-Nicolas Ferre
+2.41.0.rc0.172.g3f132b7071-goog
 
