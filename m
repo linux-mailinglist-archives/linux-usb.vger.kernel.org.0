@@ -2,111 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD40C722470
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 13:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0799672253A
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 14:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232193AbjFELTs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Jun 2023 07:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
+        id S232859AbjFEMIW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Jun 2023 08:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232129AbjFELTq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jun 2023 07:19:46 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE416DF
-        for <linux-usb@vger.kernel.org>; Mon,  5 Jun 2023 04:19:44 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f6e13940daso47793685e9.0
-        for <linux-usb@vger.kernel.org>; Mon, 05 Jun 2023 04:19:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20221208.gappssmtp.com; s=20221208; t=1685963983; x=1688555983;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/2GeFZgT1WnJNC/NfN0WVTSVRdYPWxbrrbu9DBaBK6U=;
-        b=kjW0C+MgFAKdQgVjJ2kuxLTkFdjuMI93nt+89oMUVU4sEkzaImU4Ao1UB2XYA++Li2
-         owjEqGJthIzUrTfr5f0Tf3Rm/iQJxly/E5p+zI/sKwfQ8Z1zpWa8pcUJzoti8akxAKpr
-         P/c+ooVhOeVXTmQ/fD1h3WaB6bL7E3AAgk1V9gNBdYNJO2Kj9sqpRc6qE2hudvi+FYCn
-         RmVD6i0xiInGI2GZyPudWSuRZ5Sv+RUGwEbH7Ob5/Dxfw/UgLZ1USa91nKKppX8lGYOx
-         wLwW61JrWzEuv1DF6oQn1O7WgLsKsYTyhlM6iHX6os2mrChpHddLKx5xe1tErP2qWYwE
-         ZrDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685963983; x=1688555983;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/2GeFZgT1WnJNC/NfN0WVTSVRdYPWxbrrbu9DBaBK6U=;
-        b=gW9r4WZdTJcgLSsyoOi2I3sqLOFUd28GWQkV8Y+3jl+rUxd+Wk9AoiOMjL2nLcpks5
-         cA3nEImGRloO/QDhxyTI6Fn61HP+Z6KJ1EWVBNlxQAIjeKld3zQKhX/rute714BO83eo
-         47l0dfKsrm9NpEgPIip2brTUGGisrI5aSeIz6Gs4HT7vyttKv5zGOxgaCDDq+LAF088W
-         Ts4BNWiy0XWy3NsM6PPavnymVO0pXQ2eVtP6K5UDLZHxV4TVGp2UN6/A3h08drr+EpwW
-         1imEVVta3u+q63qJclLN5NgOlXF1tbOyNZweDEIeE+kPq5oWL4kOLqgAUBAoGbCdw2gC
-         QGfg==
-X-Gm-Message-State: AC+VfDzwQ6EcWFC4QC46et99XRzgvtxit3xuRadFLItWuOc0nARi4Slj
-        V6mbpE3ZrMA+BZc6OaoU+pIv3w==
-X-Google-Smtp-Source: ACHHUZ6mGNEpvRyPdwOomBqN4k3CM+jb0DWupcVuQVVUi4/vhJIrU2g7E8GK/nmWc2Q2KOGB8Trk/w==
-X-Received: by 2002:a05:600c:b43:b0:3f5:ffe2:91c0 with SMTP id k3-20020a05600c0b4300b003f5ffe291c0mr8173985wmr.0.1685963983279;
-        Mon, 05 Jun 2023 04:19:43 -0700 (PDT)
-Received: from [192.168.0.105] (nat-35.starnet.cz. [178.255.168.35])
-        by smtp.gmail.com with ESMTPSA id y24-20020a7bcd98000000b003f42314832fsm10406288wmj.18.2023.06.05.04.19.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 04:19:42 -0700 (PDT)
-Message-ID: <18921e62-e7f9-f6ff-7657-e755335a81ba@monstr.eu>
-Date:   Mon, 5 Jun 2023 13:19:41 +0200
+        with ESMTP id S229815AbjFEMIW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jun 2023 08:08:22 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E6B92;
+        Mon,  5 Jun 2023 05:08:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685966901; x=1717502901;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dQT6oVcoi6OibIBbA3hTG2i3vMqElgYwkRHP4oreT70=;
+  b=Jy9z2fXDE2qtQ1lqdFjdSSv3OFFyUsvnrDAtls8Lz7O+vre+hby6wRkb
+   2eg8yY1nJdM3WDrNHMwdbYK7oxxIMCYD4ihvxIyOHM2tS441oGoXrHVcu
+   SS4dQs2a3WOapQ+NrPC61tcGW9gNEHhnvA20BLNl3fqcjBe9U6rTJUPKS
+   lHQu1lNA2pkYLeXve66pfzLyGvUxaurrkQDe6HUL9nDb5SsTa8bxx6wli
+   0bAALD/ykGl0iENyxunBdInRUkaZr7Oti9OIQ1MESnCMTUEmcsbPquKaL
+   hKFt/9c7QZZXEyBPYPWhX+sMJm/HASBa3v7x8mMl9K0V211OR5bow1g/a
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="214645686"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Jun 2023 05:08:19 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 5 Jun 2023 05:07:46 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Mon, 5 Jun 2023 05:07:39 -0700
+Message-ID: <3e262485-bf5f-1a98-e399-e02add3eaa89@microchip.com>
+Date:   Mon, 5 Jun 2023 14:07:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] dt-bindings: usb: xilinx: Replace Manish by Piyush
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 21/21] net: macb: add support for gmac to sam9x7
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com, piyush.mehta@amd.com
-Cc:     Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
-References: <504444f5c2f4e725ac39cba1d72032d5a00c7cda.1684828805.git.michal.simek@amd.com>
- <34a95a76-97f9-517f-e09b-a74a06d8da34@linaro.org>
-From:   Michal Simek <monstr@monstr.eu>
-In-Reply-To: <34a95a76-97f9-517f-e09b-a74a06d8da34@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Varshini Rajendran <varshini.rajendran@microchip.com>,
+        <tglx@linutronix.de>, <maz@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <gregkh@linuxfoundation.org>,
+        <linux@armlinux.org.uk>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <sre@kernel.org>, <broonie@kernel.org>,
+        <arnd@arndb.de>, <gregory.clement@bootlin.com>,
+        <sudeep.holla@arm.com>, <balamanikandan.gunasundar@microchip.com>,
+        <mihai.sain@microchip.com>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+CC:     <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
+        <durai.manickamkr@microchip.com>, <manikandan.m@microchip.com>,
+        <dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
+        <balakrishnan.s@microchip.com>
+References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
+ <20230603200243.243878-22-varshini.rajendran@microchip.com>
+ <be3716e0-383f-e79a-b441-c606c0e049df@linaro.org>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <be3716e0-383f-e79a-b441-c606c0e049df@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 6/2/23 15:16, Krzysztof Kozlowski wrote:
-> Resending as my previous email probably got lost. If you got it twice,
-> apologies.
-
-I got also the first one.
-
+On 05/06/2023 at 08:42, Krzysztof Kozlowski wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 > 
-> On 23/05/2023 10:00, Michal Simek wrote:
->> Manish no longer works for AMD/Xilinx and there is also no activity from
->> him. That's why proposing Piyush as the best candidate instead.
+> On 03/06/2023 22:02, Varshini Rajendran wrote:
+>> From: Nicolas Ferre <nicolas.ferre@microchip.com>
 >>
->> Signed-off-by: Michal Simek <michal.simek@amd.com>
+>> Add support for GMAC in sam9x7 SoC family
+>>
+>> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+>> Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 >> ---
+>>   drivers/net/ethernet/cadence/macb_main.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
+>> index 29a1199dad14..609c8e9305ba 100644
+>> --- a/drivers/net/ethernet/cadence/macb_main.c
+>> +++ b/drivers/net/ethernet/cadence/macb_main.c
+>> @@ -4913,6 +4913,7 @@ static const struct of_device_id macb_dt_ids[] = {
+>>        { .compatible = "microchip,mpfs-macb", .data = &mpfs_config },
+>>        { .compatible = "microchip,sama7g5-gem", .data = &sama7g5_gem_config },
+>>        { .compatible = "microchip,sama7g5-emac", .data = &sama7g5_emac_config },
+>> +     { .compatible = "microchip,sam9x7-gem", .data = &sama7g5_gem_config },
 > 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> These are compatible, aren't they? Why do you need new entry?
 
-Anyway I will take it via my tree and soc tree.
+The hardware itself is different, even if the new features are not 
+supported yet in the macb driver.
+The macb driver will certainly evolve in order to add these features so 
+we decided to match a new compatible string all the way to the driver.
 
-Applied.
-M
+Best regards,
+   Nicolas
+
 
 -- 
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP/Versal ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal/Versal NET SoCs
-TF-A maintainer - Xilinx ZynqMP/Versal/Versal NET SoCs
+Nicolas Ferre
+
