@@ -2,201 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B118F722574
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 14:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA19722586
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 14:22:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233354AbjFEMU5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Jun 2023 08:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
+        id S233398AbjFEMWu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Jun 2023 08:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233055AbjFEMUz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jun 2023 08:20:55 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84174EA
-        for <linux-usb@vger.kernel.org>; Mon,  5 Jun 2023 05:20:53 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f6255ad8aeso1562098e87.2
-        for <linux-usb@vger.kernel.org>; Mon, 05 Jun 2023 05:20:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685967652; x=1688559652;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qNB7ncYWiGhaeYkWNPW5gYba3J8tGI2ndLv0p6rgqUk=;
-        b=T3TnB1RNh23mLRxO58rz94xagXk7eZ2jcz28ZbqINKkDKESW8OKH+cd90fbVi7Msxl
-         VsPNS60PyC66G/uxayQf2rrQBA7ktGSqBLxvEBuSqKNIsLXCZBMp2NVGMBi46amGQ5Pw
-         96jK7iPNTJ/Vj5Qard1kJFqppNPhJ7Vd64QdUd3UgEPGTWZwuRFZlH79nBlSks1BxhFX
-         QgU5lO6KtAcWAZMGjsJowWNLFQtdz1CfgBhFZ+S8KshbaHDCLr0aHm8EJP4cSOHeau75
-         wQR8pRYthfF7vgdgIBx6XxMc0Vcc4WK7cT5EvlGZ7krClhEL/irJRxEP11aVcmm+ZwSF
-         igAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685967652; x=1688559652;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qNB7ncYWiGhaeYkWNPW5gYba3J8tGI2ndLv0p6rgqUk=;
-        b=kGhXgH66yU0RUDpBxuENm24/xqfqLZAEL0MAyV2gCLnEd+q4njnnSExw9t4sTBH1IA
-         NVhz7FK8rdBX0zd/5ooWWtsHK5cLIuC6uueSZX3EYLEC97/WD4KhY2iSW7i0+aYfhmPM
-         R5ExjFlUwoMzn/DAyuQwbm0P/EBK9Tp44BsyiIxXkr1j6zU6F4XYARMoG/eZESWAwQuk
-         cMEfUOiXHAb6tQ8leVwd6ydIRohZKwbNegy6o9Zw5/3ZJf1MuJWyzbKavz32VsGzB994
-         v6YFHG/5dTz874EBDO0IXvZJJl5asfz4Jo1biJwyLcSC7IDsQXhR5xjhzL9i019Ci9/O
-         qK5Q==
-X-Gm-Message-State: AC+VfDyQopgsFKiGnl/pXdj2z81IJmB8n+3CSfsNeAssrB0p3Nvf368e
-        M7r/xo0phgzleYgJLLlqwFG1tw==
-X-Google-Smtp-Source: ACHHUZ7BkMF5vEQkJaZDDBGNUcejtqjF8Q51kKE1TNN2IlITaOodjqLy4sBDph1ag74QNghiwzuuUA==
-X-Received: by 2002:ac2:51a2:0:b0:4f6:2c98:3957 with SMTP id f2-20020ac251a2000000b004f62c983957mr981309lfk.32.1685967651783;
-        Mon, 05 Jun 2023 05:20:51 -0700 (PDT)
-Received: from ta1.c.googlers.com.com (61.215.228.35.bc.googleusercontent.com. [35.228.215.61])
-        by smtp.gmail.com with ESMTPSA id e8-20020a056512090800b004f20d0ebe50sm1106952lft.94.2023.06.05.05.20.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 05:20:51 -0700 (PDT)
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-To:     gregkh@linuxfoundation.org, stable@vger.kernel.org
-Cc:     kuba@kernel.org, simon.horman@corigine.com, joneslee@google.com,
-        oliver@neukum.org, davem@davemloft.net, bay@hackerdom.ru,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.or,
-        linux-kernel@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        syzbot+9f575a1f15fc0c01ed69@syzkaller.appspotmail.com
-Subject: [PATCH][stable-4.{14,19}.y 3/3] net: cdc_ncm: Deal with too low values of dwNtbOutMaxSize
-Date:   Mon,  5 Jun 2023 12:20:45 +0000
-Message-ID: <20230605122045.2455888-4-tudor.ambarus@linaro.org>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-In-Reply-To: <20230605122045.2455888-1-tudor.ambarus@linaro.org>
-References: <20230605122045.2455888-1-tudor.ambarus@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S233008AbjFEMWk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jun 2023 08:22:40 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1FAE68;
+        Mon,  5 Jun 2023 05:22:15 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 9A3D53200913;
+        Mon,  5 Jun 2023 08:22:11 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 05 Jun 2023 08:22:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1685967731; x=1686054131; bh=7W
+        iLrLsF5xVxXNcAy4Mh7e7hxHBVb5egJsZ8LOLNRvo=; b=2o1kwlV3Do2loqfo88
+        8E8nDDB5CavhahXYo6NRabED24JsbSPlA/28nBdwLSv8pPi6tdbInnX6ZLfYGJIm
+        d/ZZHp7m3paDvnOH0noWl7Ko/QtboQpabiwAApHaYpbnOwCG8p32w6UHX3sH2Ryu
+        +1MCyFRdDI/RN6Vs811t++D4ZDUd9Q086Ay7fCnXsIeNNYynG3hZ+0AZcg8R/dGf
+        /pCFJ5fYIIzQeWOQ9TU+7r18p7N0MpyKzCac44ZpElncC9G/hZJVnXyo8ZaNm+H5
+        Xu64ngLXypJBb9h19upA8yk8tu8iWMkH+/NUkndFMdFatP/V6RtvpzMYJ0L+1GlG
+        BYjw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685967731; x=1686054131; bh=7WiLrLsF5xVxX
+        NcAy4Mh7e7hxHBVb5egJsZ8LOLNRvo=; b=bMOmsPyCvbE5xOYlrfbDXKiyTdvl0
+        h1VBo3CiJg9/m3T4yfz7v6rr4FNGm/olLi+ic+M4vg1lnfrcUE5OFFK2K9z+7YPV
+        1uLrhqglfmTMp0PhHZ40d1x813XFyKNPtEhylYRwrnhGTJrWr6J4kNdDxDPFe7HG
+        Bq3psbyd1ZbIVb5pPBWyAH2s78xfNogW1DvNWuncHMbTSH7xFkyBLGVqKRpaEK1Q
+        u+SEAeHhjPQPRh6JCOdsylGdjmsMme9LyKKeqNNtfyhSVnrf2ka0IyRtrUXjnn/C
+        A8jkfIUvqaljFkLxBRaemIN76g3qGznuTBwEZYlOUJEyOl1SkhQw2DpNA==
+X-ME-Sender: <xms:ctN9ZDmD-tSymJN54hej2KEc-SLnn0p6xZC_NVsNaNZlh6NPqUqI2g>
+    <xme:ctN9ZG0xEW8krpuXFulA_rknWNdgRDA6LQIUcgWN1ZWQM7VKvzUCWUu-a9tdf802u
+    avA_EX3MyQOR_4oRfo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeelledgheduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:ctN9ZJpRlsoxA7UiHkqptL34w_v_IjkGD8QhakerALnfohbmRYGSYQ>
+    <xmx:ctN9ZLmGLFrIAbb-zW7rxXN7J0076toHehHcVydIzI9Z0PlSSDgacg>
+    <xmx:ctN9ZB1Xz0IQNNTMSL3_dcw1XG4Q85C4_eI4tBnm94D3uLNNSd1GFQ>
+    <xmx:c9N9ZOLlaiJV7ZDVd7olUsSd-GhbZoNUddglv_9XL9y0u-TTf6ke2w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 96776B60086; Mon,  5 Jun 2023 08:22:10 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
+Mime-Version: 1.0
+Message-Id: <d98d050a-29dd-4ee7-86cd-bad4e6a04584@app.fastmail.com>
+In-Reply-To: <3e262485-bf5f-1a98-e399-e02add3eaa89@microchip.com>
+References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
+ <20230603200243.243878-22-varshini.rajendran@microchip.com>
+ <be3716e0-383f-e79a-b441-c606c0e049df@linaro.org>
+ <3e262485-bf5f-1a98-e399-e02add3eaa89@microchip.com>
+Date:   Mon, 05 Jun 2023 14:21:50 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Nicolas Ferre" <nicolas.ferre@microchip.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Varshini Rajendran" <varshini.rajendran@microchip.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Marc Zyngier" <maz@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        "Claudiu Beznea" <claudiu.beznea@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Gregory Clement" <gregory.clement@bootlin.com>,
+        "Sudeep Holla" <sudeep.holla@arm.com>,
+        "Balamanikandan Gunasundar" <balamanikandan.gunasundar@microchip.com>,
+        "Mihai.Sain" <mihai.sain@microchip.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
+        durai.manickamkr@microchip.com, manikandan.m@microchip.com,
+        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
+        balakrishnan.s@microchip.com
+Subject: Re: [PATCH 21/21] net: macb: add support for gmac to sam9x7
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[ Upstream commit 7e01c7f7046efc2c7c192c3619db43292b98e997 ]
+On Mon, Jun 5, 2023, at 14:07, Nicolas Ferre wrote:
+> On 05/06/2023 at 08:42, Krzysztof Kozlowski wrote:
+>>>
+>>> diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
+>>> index 29a1199dad14..609c8e9305ba 100644
+>>> --- a/drivers/net/ethernet/cadence/macb_main.c
+>>> +++ b/drivers/net/ethernet/cadence/macb_main.c
+>>> @@ -4913,6 +4913,7 @@ static const struct of_device_id macb_dt_ids[] = {
+>>>        { .compatible = "microchip,mpfs-macb", .data = &mpfs_config },
+>>>        { .compatible = "microchip,sama7g5-gem", .data = &sama7g5_gem_config },
+>>>        { .compatible = "microchip,sama7g5-emac", .data = &sama7g5_emac_config },
+>>> +     { .compatible = "microchip,sam9x7-gem", .data = &sama7g5_gem_config },
+>> 
+>> These are compatible, aren't they? Why do you need new entry?
+>
+> The hardware itself is different, even if the new features are not 
+> supported yet in the macb driver.
+> The macb driver will certainly evolve in order to add these features so 
+> we decided to match a new compatible string all the way to the driver.
 
-Currently in cdc_ncm_check_tx_max(), if dwNtbOutMaxSize is lower than
-the calculated "min" value, but greater than zero, the logic sets
-tx_max to dwNtbOutMaxSize. This is then used to allocate a new SKB in
-cdc_ncm_fill_tx_frame() where all the data is handled.
+It sounds like you can still drop this patch though, and only add a
+specific entry here after the .data field is actually different
+when those features get added.
 
-For small values of dwNtbOutMaxSize the memory allocated during
-alloc_skb(dwNtbOutMaxSize, GFP_ATOMIC) will have the same size, due to
-how size is aligned at alloc time:
-	size = SKB_DATA_ALIGN(size);
-        size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-Thus we hit the same bug that we tried to squash with
-commit 2be6d4d16a084 ("net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset or zero")
+The important bit for now is to have the specific string in the binding
+and in the dtb, along with the fallback for I assume "microchip,sama7g5-gem".
 
-Low values of dwNtbOutMaxSize do not cause an issue presently because at
-alloc_skb() time more memory (512b) is allocated than required for the
-SKB headers alone (320b), leaving some space (512b - 320b = 192b)
-for CDC data (172b).
-
-However, if more elements (for example 3 x u64 = [24b]) were added to
-one of the SKB header structs, say 'struct skb_shared_info',
-increasing its original size (320b [320b aligned]) to something larger
-(344b [384b aligned]), then suddenly the CDC data (172b) no longer
-fits in the spare SKB data area (512b - 384b = 128b).
-
-Consequently the SKB bounds checking semantics fails and panics:
-
-skbuff: skb_over_panic: text:ffffffff831f755b len:184 put:172 head:ffff88811f1c6c00 data:ffff88811f1c6c00 tail:0xb8 end:0x80 dev:<NULL>
-------------[ cut here ]------------
-kernel BUG at net/core/skbuff.c:113!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 57 Comm: kworker/0:2 Not tainted 5.15.106-syzkaller-00249-g19c0ed55a470 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-Workqueue: mld mld_ifc_work
-RIP: 0010:skb_panic net/core/skbuff.c:113 [inline]
-RIP: 0010:skb_over_panic+0x14c/0x150 net/core/skbuff.c:118
-[snip]
-Call Trace:
- <TASK>
- skb_put+0x151/0x210 net/core/skbuff.c:2047
- skb_put_zero include/linux/skbuff.h:2422 [inline]
- cdc_ncm_ndp16 drivers/net/usb/cdc_ncm.c:1131 [inline]
- cdc_ncm_fill_tx_frame+0x11ab/0x3da0 drivers/net/usb/cdc_ncm.c:1308
- cdc_ncm_tx_fixup+0xa3/0x100
-
-Deal with too low values of dwNtbOutMaxSize, clamp it in the range
-[USB_CDC_NCM_NTB_MIN_OUT_SIZE, CDC_NCM_NTB_MAX_SIZE_TX]. We ensure
-enough data space is allocated to handle CDC data by making sure
-dwNtbOutMaxSize is not smaller than USB_CDC_NCM_NTB_MIN_OUT_SIZE.
-
-Fixes: 289507d3364f ("net: cdc_ncm: use sysfs for rx/tx aggregation tuning")
-Cc: stable@vger.kernel.org
-Reported-by: syzbot+9f575a1f15fc0c01ed69@syzkaller.appspotmail.com
-Link: https://syzkaller.appspot.com/bug?extid=b982f1059506db48409d
-Link: https://lore.kernel.org/all/20211202143437.1411410-1-lee.jones@linaro.org/
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Link: https://lore.kernel.org/r/20230517133808.1873695-2-tudor.ambarus@linaro.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
----
- drivers/net/usb/cdc_ncm.c | 24 +++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-index ae2a44ceb23d..65dac36d8d4f 100644
---- a/drivers/net/usb/cdc_ncm.c
-+++ b/drivers/net/usb/cdc_ncm.c
-@@ -180,9 +180,12 @@ static u32 cdc_ncm_check_tx_max(struct usbnet *dev, u32 new_tx)
- 	else
- 		min = ctx->max_datagram_size + ctx->max_ndp_size + sizeof(struct usb_cdc_ncm_nth32);
- 
--	max = min_t(u32, CDC_NCM_NTB_MAX_SIZE_TX, le32_to_cpu(ctx->ncm_parm.dwNtbOutMaxSize));
--	if (max == 0)
-+	if (le32_to_cpu(ctx->ncm_parm.dwNtbOutMaxSize) == 0)
- 		max = CDC_NCM_NTB_MAX_SIZE_TX; /* dwNtbOutMaxSize not set */
-+	else
-+		max = clamp_t(u32, le32_to_cpu(ctx->ncm_parm.dwNtbOutMaxSize),
-+			      USB_CDC_NCM_NTB_MIN_OUT_SIZE,
-+			      CDC_NCM_NTB_MAX_SIZE_TX);
- 
- 	/* some devices set dwNtbOutMaxSize too low for the above default */
- 	min = min(min, max);
-@@ -1230,6 +1233,9 @@ cdc_ncm_fill_tx_frame(struct usbnet *dev, struct sk_buff *skb, __le32 sign)
- 			 * further.
- 			 */
- 			if (skb_out == NULL) {
-+				/* If even the smallest allocation fails, abort. */
-+				if (ctx->tx_curr_size == USB_CDC_NCM_NTB_MIN_OUT_SIZE)
-+					goto alloc_failed;
- 				ctx->tx_low_mem_max_cnt = min(ctx->tx_low_mem_max_cnt + 1,
- 							      (unsigned)CDC_NCM_LOW_MEM_MAX_CNT);
- 				ctx->tx_low_mem_val = ctx->tx_low_mem_max_cnt;
-@@ -1248,13 +1254,8 @@ cdc_ncm_fill_tx_frame(struct usbnet *dev, struct sk_buff *skb, __le32 sign)
- 			skb_out = alloc_skb(ctx->tx_curr_size, GFP_ATOMIC);
- 
- 			/* No allocation possible so we will abort */
--			if (skb_out == NULL) {
--				if (skb != NULL) {
--					dev_kfree_skb_any(skb);
--					dev->net->stats.tx_dropped++;
--				}
--				goto exit_no_skb;
--			}
-+			if (!skb_out)
-+				goto alloc_failed;
- 			ctx->tx_low_mem_val--;
- 		}
- 		if (ctx->is_ndp16) {
-@@ -1447,6 +1448,11 @@ cdc_ncm_fill_tx_frame(struct usbnet *dev, struct sk_buff *skb, __le32 sign)
- 
- 	return skb_out;
- 
-+alloc_failed:
-+	if (skb) {
-+		dev_kfree_skb_any(skb);
-+		dev->net->stats.tx_dropped++;
-+	}
- exit_no_skb:
- 	/* Start timer, if there is a remaining non-empty skb */
- 	if (ctx->tx_curr_skb != NULL && n > 0)
--- 
-2.41.0.rc0.172.g3f132b7071-goog
-
+     Arnd
