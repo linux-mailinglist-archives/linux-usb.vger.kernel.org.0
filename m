@@ -2,106 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B668721F64
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 09:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB3C721F8B
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 09:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbjFEHTW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Jun 2023 03:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51128 "EHLO
+        id S231175AbjFEHbA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Jun 2023 03:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjFEHTV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jun 2023 03:19:21 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F1898
-        for <linux-usb@vger.kernel.org>; Mon,  5 Jun 2023 00:19:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685949560; x=1717485560;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=f+z2Z3/d+mt4Pw9CPEiferzzoVNMdEUh2Fj8tNxKODs=;
-  b=W1r7iBCQVHcx6CwwKm9QcXeW/KJX9kDsWLG7U8kEoaWWOHzqthjdSgPI
-   C101o9u4XgRggfdYxo+cZIc4Edw+mtRg471zpWn8jESNBWjcQ8XOFHBSn
-   dEX4OK0axUpwtc4n4nfAYkj92VvHyTMBUY5mXXQ1NqxTkWlbzARQDYFPn
-   NRe13SAyovO024sEGG+IOja97uYnsEb/Es14gPL6KfTQ33/noCKXRGlkC
-   fB7VCDOmkUhLRUM5JeZ4P/nqzdfcbdmFRCuXcs8sdaguToMAGSXcB/37k
-   gxdFKj+/7JMRlPVstDKTkFOvFXlyncpfmQTwq2mpLxiHBT8TPdU3L/4YJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="353793913"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="353793913"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 00:19:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="686018282"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="686018282"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 05 Jun 2023 00:19:17 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 13479204; Mon,  5 Jun 2023 10:19:23 +0300 (EEST)
-Date:   Mon, 5 Jun 2023 10:19:23 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Subject: [GIT PULL] Thunderbolt/USB4 fixes for v6.4-rc6
-Message-ID: <20230605071923.GS45886@black.fi.intel.com>
+        with ESMTP id S230444AbjFEHap (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jun 2023 03:30:45 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0218CCD
+        for <linux-usb@vger.kernel.org>; Mon,  5 Jun 2023 00:30:43 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-3094910b150so4618684f8f.0
+        for <linux-usb@vger.kernel.org>; Mon, 05 Jun 2023 00:30:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685950241; x=1688542241;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=NFReZyZu2iufJZ3PDykLvhpXb6SdQ7mEv/WAkqm0RQ4=;
+        b=G02f0WmoAeY4+9XZg+1cZOAQP3nXivmQNupC0n58RdCR20l7Cklw6KwEqnY+0sZY+3
+         nX0bl1m8bjeHTwSdTKgZhuat7x8KOrzfwmPMVwFqjhNlxis5GGXB+Ew6yLMKJaRAbmBV
+         k0Ipxom2LnOuYjGjDcLAS9xREEsh+hk1vgOY6N4ogJeNyUDEj//4oicRgj2houMThQbS
+         C8Vws74jZta+oyDEO2XPoHlF1ltIEPou/MIgHVSYLkDtG9COJEetZkGSIbbYwyjq5w9d
+         w40Cq/ILqZa/JNT9qlM7h5zfy5eHKf947k7+TIUwnnZfYOyKsfXmK9bCdZMerLNnrQm9
+         cJIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685950241; x=1688542241;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NFReZyZu2iufJZ3PDykLvhpXb6SdQ7mEv/WAkqm0RQ4=;
+        b=CR9Y1dtaOQnl+MymTCk4RfmE7ttXbnBFWnNqeysG7CftN66495WddeQ6xXB/thejI7
+         vTpadBI1afV8U4JCrWk0Ruvq3LSEqpLeA4syD8iFaNLQmESFKSFbE7EUDecCVCHWCA7n
+         iafci7W4qPLexw6D+Kxp47qf4QgnZ2wE8VGzveyUQYkaH8jNaAcXdWA4AdlFSHepVE8L
+         zVl8NFOgVjDBY6qK+fiPXDza77sjNNvuREi9MbnqDavYKA8Xvim/7T7Mb0BCGDiJpxTv
+         wu8PEGlpRPisiNSLmuFC1I2zSNHqESrAhTm16mmlLfEjbXdReD1hny/pkuA6B3xBz/cv
+         /Hig==
+X-Gm-Message-State: AC+VfDw33g3b1ldk4+/bMmtQMr4EYAPATSRQSwbssBC1l/BPcx8NWyhT
+        a2aFf0cfolg6QQNLpETAvsRR5g==
+X-Google-Smtp-Source: ACHHUZ6DpZpxjDccEpr6NoOK08qI/JWn6PS5N8QU7mRlJwWTPUm7Jom2HtRWIntgSYG9nDc9HaANvg==
+X-Received: by 2002:a05:6000:10c4:b0:30e:1fc4:d0c9 with SMTP id b4-20020a05600010c400b0030e1fc4d0c9mr3668177wrx.9.1685950241092;
+        Mon, 05 Jun 2023 00:30:41 -0700 (PDT)
+Received: from [192.168.7.188] (679773502.box.freepro.com. [212.114.21.58])
+        by smtp.gmail.com with ESMTPSA id k16-20020a056000005000b003079986fd71sm8921578wrx.88.2023.06.05.00.30.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 00:30:40 -0700 (PDT)
+Message-ID: <d7da64a8-8d49-595f-f519-9cdc2092d9e7@linaro.org>
+Date:   Mon, 5 Jun 2023 09:30:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH RFC 1/7] dt-bindings: connector: usb-connector: add a gpio
+ used to determine the Type-C port plug orientation
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20230601-topic-sm8550-upstream-type-c-v1-0-d4d97b4d8bab@linaro.org>
+ <20230601-topic-sm8550-upstream-type-c-v1-1-d4d97b4d8bab@linaro.org>
+ <0fbf55e7-2140-751d-5347-f907a46ef78c@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <0fbf55e7-2140-751d-5347-f907a46ef78c@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+On 03/06/2023 22:22, Dmitry Baryshkov wrote:
+> On 01/06/2023 17:07, Neil Armstrong wrote:
+>> On some platforms, the Type-C plug orientation is given on a GPIO line.
+>>
+>> Document this optional Type-C connector property, and take the
+>> assumption an active level represents an inverted/flipped orientation.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   Documentation/devicetree/bindings/connector/usb-connector.yaml | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>> index ae515651fc6b..c3884eed6ba4 100644
+>> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>> @@ -114,6 +114,11 @@ properties:
+>>       description: Set this property if the Type-C connector has no power delivery support.
+>>       type: boolean
+>> +  orientation-gpios:
+>> +    description: An input gpio for Type-C connector orientation, used to detect orientation
+>> +      of the Type-C connector. GPIO active level means "CC2" or Reversed/Flipped orientation.
+>> +    maxItems: 1
+> 
+> Should this be a property of the connector or of the parent device node? I mean, unlike usb-b-connector (where ID and Vbus can be simple GPIOs nearly directly connected to the pins of the connector) for the USB-C the orientation is not a connector's GPIO, but rather some additional not elementary logic.
 
-The following changes since commit 44c026a73be8038f03dbdeef028b642880cf1511:
+I don't see the issue, orientation is a property of the connector itself,
+even if it's provided by another ic.
 
-  Linux 6.4-rc3 (2023-05-21 14:05:48 -0700)
+Neil
 
-are available in the Git repository at:
+> 
+>> +
+>>     # The following are optional properties for "usb-c-connector" with power
+>>     # delivery support.
+>>     source-pdos:
+>>
+> 
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.4-rc6
-
-for you to fetch changes up to 9f9666e65359d5047089aef97ac87c50f624ecb0:
-
-  thunderbolt: Mask ring interrupt on Intel hardware as well (2023-05-31 10:37:21 +0300)
-
-----------------------------------------------------------------
-thunderbolt: Fixes for v6.4-rc6
-
-This includes following fixes for v6.4-rc6:
-
-  - Fix DMA test driver to pass correct values when only RX or TX ring
-    is used
-  - Increase timeout when DisplayPort tunnel is established to cope with
-    a VGA/DVI dongle connected to a dock
-  - Do not enable CL states when BIOS connnection manager already
-    created the tunnels
-  - Correct the ring interrupt masking to work again in Intel hardware
-    on resume from system sleep states.
-
-All these have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Mika Westerberg (4):
-      thunderbolt: dma_test: Use correct value for absent rings when creating paths
-      thunderbolt: Increase DisplayPort Connection Manager handshake timeout
-      thunderbolt: Do not touch CL state configuration during discovery
-      thunderbolt: Mask ring interrupt on Intel hardware as well
-
- drivers/thunderbolt/dma_test.c |  8 ++++----
- drivers/thunderbolt/nhi.c      | 11 ++++++++---
- drivers/thunderbolt/tb.c       | 17 ++++++++++++-----
- drivers/thunderbolt/tunnel.c   |  2 +-
- 4 files changed, 25 insertions(+), 13 deletions(-)
