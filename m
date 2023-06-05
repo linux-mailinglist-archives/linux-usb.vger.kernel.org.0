@@ -2,86 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB3C721F8B
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 09:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CA0721F9A
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 09:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbjFEHbA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Jun 2023 03:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
+        id S231179AbjFEHc6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Jun 2023 03:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbjFEHap (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jun 2023 03:30:45 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0218CCD
-        for <linux-usb@vger.kernel.org>; Mon,  5 Jun 2023 00:30:43 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-3094910b150so4618684f8f.0
-        for <linux-usb@vger.kernel.org>; Mon, 05 Jun 2023 00:30:42 -0700 (PDT)
+        with ESMTP id S231142AbjFEHcv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jun 2023 03:32:51 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DCE11B
+        for <linux-usb@vger.kernel.org>; Mon,  5 Jun 2023 00:32:26 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f6ffc2b314so39825455e9.0
+        for <linux-usb@vger.kernel.org>; Mon, 05 Jun 2023 00:32:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685950241; x=1688542241;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=NFReZyZu2iufJZ3PDykLvhpXb6SdQ7mEv/WAkqm0RQ4=;
-        b=G02f0WmoAeY4+9XZg+1cZOAQP3nXivmQNupC0n58RdCR20l7Cklw6KwEqnY+0sZY+3
-         nX0bl1m8bjeHTwSdTKgZhuat7x8KOrzfwmPMVwFqjhNlxis5GGXB+Ew6yLMKJaRAbmBV
-         k0Ipxom2LnOuYjGjDcLAS9xREEsh+hk1vgOY6N4ogJeNyUDEj//4oicRgj2houMThQbS
-         C8Vws74jZta+oyDEO2XPoHlF1ltIEPou/MIgHVSYLkDtG9COJEetZkGSIbbYwyjq5w9d
-         w40Cq/ILqZa/JNT9qlM7h5zfy5eHKf947k7+TIUwnnZfYOyKsfXmK9bCdZMerLNnrQm9
-         cJIw==
+        d=linaro.org; s=google; t=1685950344; x=1688542344;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZWebPmkkXZwMfaAQP1En4s9/tKIJUkHKAcCHX0b4nT0=;
+        b=yNe89sJMqjCvRZY8KEh8e9m6zed+dTP2I41xn3eYc6SuXCRiwwga/7uKmAV3YR+MsY
+         iKPh9hPLUeJHndeZPKyYunIHQJxrFAs9VBmanypZwTHINNxFsA9dKnDfIrBEt742CRcv
+         6rjBog+j2Uq6jBQzkVuhxPaOEvaKZdrtixGeKM3IQVXM1gS2YxJDj/Fz842+a6vakY39
+         riKH/WUMV1ccD6Od5Vx9jtcUt2Hny8fW9U5ftKERRXESa+Clzd1BxbHZFxDyXpXO3xU5
+         wPA9guClNV55pi6ueL/ghMtmxdcSqDSIZjpv5UL0sXHzqFFgn5t+BFAfk8vBF8UIL8g/
+         k9PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685950241; x=1688542241;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1685950344; x=1688542344;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NFReZyZu2iufJZ3PDykLvhpXb6SdQ7mEv/WAkqm0RQ4=;
-        b=CR9Y1dtaOQnl+MymTCk4RfmE7ttXbnBFWnNqeysG7CftN66495WddeQ6xXB/thejI7
-         vTpadBI1afV8U4JCrWk0Ruvq3LSEqpLeA4syD8iFaNLQmESFKSFbE7EUDecCVCHWCA7n
-         iafci7W4qPLexw6D+Kxp47qf4QgnZ2wE8VGzveyUQYkaH8jNaAcXdWA4AdlFSHepVE8L
-         zVl8NFOgVjDBY6qK+fiPXDza77sjNNvuREi9MbnqDavYKA8Xvim/7T7Mb0BCGDiJpxTv
-         wu8PEGlpRPisiNSLmuFC1I2zSNHqESrAhTm16mmlLfEjbXdReD1hny/pkuA6B3xBz/cv
-         /Hig==
-X-Gm-Message-State: AC+VfDw33g3b1ldk4+/bMmtQMr4EYAPATSRQSwbssBC1l/BPcx8NWyhT
-        a2aFf0cfolg6QQNLpETAvsRR5g==
-X-Google-Smtp-Source: ACHHUZ6DpZpxjDccEpr6NoOK08qI/JWn6PS5N8QU7mRlJwWTPUm7Jom2HtRWIntgSYG9nDc9HaANvg==
-X-Received: by 2002:a05:6000:10c4:b0:30e:1fc4:d0c9 with SMTP id b4-20020a05600010c400b0030e1fc4d0c9mr3668177wrx.9.1685950241092;
-        Mon, 05 Jun 2023 00:30:41 -0700 (PDT)
-Received: from [192.168.7.188] (679773502.box.freepro.com. [212.114.21.58])
-        by smtp.gmail.com with ESMTPSA id k16-20020a056000005000b003079986fd71sm8921578wrx.88.2023.06.05.00.30.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 00:30:40 -0700 (PDT)
-Message-ID: <d7da64a8-8d49-595f-f519-9cdc2092d9e7@linaro.org>
-Date:   Mon, 5 Jun 2023 09:30:40 +0200
+        bh=ZWebPmkkXZwMfaAQP1En4s9/tKIJUkHKAcCHX0b4nT0=;
+        b=bX7IZ8MpNXuG3VsVJ2cyOtguuv2zdRULkrWrV2crvVxQWToUYrdM6458cSrRjFeWz8
+         od9YGU4gpM1qHb/BkB7MMkN/t8XDQrMwQ+1d59lfj4Klc1H5FXT7hjdlyinEo+TVChP5
+         sLxeZujLM51WP41qGpykB69WfNRL8G5iQ4YYLndF9syyeUi9Do/GCnWpnjh/9Fz30Ham
+         wxN0J7AZFOiHXLGcjEWkHtLYDaVkBWvDfJbVWX7RS16c84Zf9mMbt8d4Mv+oclEUMyOz
+         yoGBTYZh218qJdEC4F/1Lz8eltvVFkUZCTF68JwyODFYIpoDAjYoBJZ5vziRb0jfvgkJ
+         RUZg==
+X-Gm-Message-State: AC+VfDwUxWHm7G6MGKvLJ9Puf60kmvJUWofMx3iW7W+lf8nQwG8seKii
+        2k7/SLi58wOhT0lY+ZSkwxsobQ==
+X-Google-Smtp-Source: ACHHUZ6ETpTzw7MhCVETQT2q+Tvi7uvnSQJojKyiNat+/Nd4fj04M9SLAwejgKN8ZOdR8ZdTnTYXiw==
+X-Received: by 2002:a1c:ed03:0:b0:3f4:1ce0:a606 with SMTP id l3-20020a1ced03000000b003f41ce0a606mr7175893wmh.1.1685950344248;
+        Mon, 05 Jun 2023 00:32:24 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id o10-20020a1c750a000000b003f60482024fsm9877459wmc.30.2023.06.05.00.32.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 00:32:22 -0700 (PDT)
+Date:   Mon, 5 Jun 2023 10:32:17 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     oe-kbuild@lists.linux.dev, Johan Hovold <johan@kernel.org>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Corey Minyard <minyard@acm.org>
+Subject: Re: [PATCH 1/3] USB: serial: return errors from break handling
+Message-ID: <3ab35d0b-b5b6-4361-acac-59a4a9fbc970@kadam.mountain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH RFC 1/7] dt-bindings: connector: usb-connector: add a gpio
- used to determine the Type-C port plug orientation
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20230601-topic-sm8550-upstream-type-c-v1-0-d4d97b4d8bab@linaro.org>
- <20230601-topic-sm8550-upstream-type-c-v1-1-d4d97b4d8bab@linaro.org>
- <0fbf55e7-2140-751d-5347-f907a46ef78c@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <0fbf55e7-2140-751d-5347-f907a46ef78c@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230602124642.19076-2-johan@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,42 +71,74 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 03/06/2023 22:22, Dmitry Baryshkov wrote:
-> On 01/06/2023 17:07, Neil Armstrong wrote:
->> On some platforms, the Type-C plug orientation is given on a GPIO line.
->>
->> Document this optional Type-C connector property, and take the
->> assumption an active level represents an inverted/flipped orientation.
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   Documentation/devicetree/bindings/connector/usb-connector.yaml | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> index ae515651fc6b..c3884eed6ba4 100644
->> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> @@ -114,6 +114,11 @@ properties:
->>       description: Set this property if the Type-C connector has no power delivery support.
->>       type: boolean
->> +  orientation-gpios:
->> +    description: An input gpio for Type-C connector orientation, used to detect orientation
->> +      of the Type-C connector. GPIO active level means "CC2" or Reversed/Flipped orientation.
->> +    maxItems: 1
-> 
-> Should this be a property of the connector or of the parent device node? I mean, unlike usb-b-connector (where ID and Vbus can be simple GPIOs nearly directly connected to the pins of the connector) for the USB-C the orientation is not a connector's GPIO, but rather some additional not elementary logic.
+Hi Johan,
 
-I don't see the issue, orientation is a property of the connector itself,
-even if it's provided by another ic.
+kernel test robot noticed the following build warnings:
 
-Neil
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> 
->> +
->>     # The following are optional properties for "usb-c-connector" with power
->>     # delivery support.
->>     source-pdos:
->>
-> 
+url:    https://github.com/intel-lab-lkp/linux/commits/Johan-Hovold/USB-serial-return-errors-from-break-handling/20230602-204856
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git usb-next
+patch link:    https://lore.kernel.org/r/20230602124642.19076-2-johan%40kernel.org
+patch subject: [PATCH 1/3] USB: serial: return errors from break handling
+config: i386-randconfig-m021-20230531 (https://download.01.org/0day-ci/archive/20230603/202306031014.qzAY3uQ6-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Closes: https://lore.kernel.org/r/202306031014.qzAY3uQ6-lkp@intel.com/
+
+New smatch warnings:
+drivers/usb/serial/io_edgeport.c:1601 edge_break() error: uninitialized symbol 'status'.
+
+vim +/status +1601 drivers/usb/serial/io_edgeport.c
+
+12992379710489 Johan Hovold       2023-06-02  1563  static int edge_break(struct tty_struct *tty, int break_state)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  1564  {
+95da310e66ee80 Alan Cox           2008-07-22  1565  	struct usb_serial_port *port = tty->driver_data;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  1566  	struct edgeport_port *edge_port = usb_get_serial_port_data(port);
+6e8cf7751f9fb9 Greg Kroah-Hartman 2007-01-18  1567  	struct edgeport_serial *edge_serial = usb_get_serial_data(port->serial);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  1568  	int status;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  1569  
+232dce89b5b000 Geyslan G. Bem     2015-12-11  1570  	if (!edge_serial->is_epic ||
+232dce89b5b000 Geyslan G. Bem     2015-12-11  1571  	    edge_serial->epic_descriptor.Supports.IOSPChase) {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  1572  		/* flush and chase */
+cb8eaa8b2b9133 Richard Knutsson   2007-03-17  1573  		edge_port->chaseResponsePending = true;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  1574  
+984f68683298ba Greg Kroah-Hartman 2012-09-18  1575  		dev_dbg(&port->dev, "%s - Sending IOSP_CMD_CHASE_PORT\n", __func__);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  1576  		status = send_iosp_ext_cmd(edge_port, IOSP_CMD_CHASE_PORT, 0);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  1577  		if (status == 0) {
+03f0dbf74c7a11 Alan Cox           2008-07-22  1578  			/* block until chase finished */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  1579  			block_until_chase_response(edge_port);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  1580  		} else {
+cb8eaa8b2b9133 Richard Knutsson   2007-03-17  1581  			edge_port->chaseResponsePending = false;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  1582  		}
+6e8cf7751f9fb9 Greg Kroah-Hartman 2007-01-18  1583  	}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  1584  
+232dce89b5b000 Geyslan G. Bem     2015-12-11  1585  	if (!edge_serial->is_epic ||
+232dce89b5b000 Geyslan G. Bem     2015-12-11  1586  	    edge_serial->epic_descriptor.Supports.IOSPSetClrBreak) {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  1587  		if (break_state == -1) {
+984f68683298ba Greg Kroah-Hartman 2012-09-18  1588  			dev_dbg(&port->dev, "%s - Sending IOSP_CMD_SET_BREAK\n", __func__);
+03f0dbf74c7a11 Alan Cox           2008-07-22  1589  			status = send_iosp_ext_cmd(edge_port,
+03f0dbf74c7a11 Alan Cox           2008-07-22  1590  						IOSP_CMD_SET_BREAK, 0);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  1591  		} else {
+984f68683298ba Greg Kroah-Hartman 2012-09-18  1592  			dev_dbg(&port->dev, "%s - Sending IOSP_CMD_CLEAR_BREAK\n", __func__);
+03f0dbf74c7a11 Alan Cox           2008-07-22  1593  			status = send_iosp_ext_cmd(edge_port,
+03f0dbf74c7a11 Alan Cox           2008-07-22  1594  						IOSP_CMD_CLEAR_BREAK, 0);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  1595  		}
+
+"status" uninitialized on else path.
+
+03f0dbf74c7a11 Alan Cox           2008-07-22  1596  		if (status)
+984f68683298ba Greg Kroah-Hartman 2012-09-18  1597  			dev_dbg(&port->dev, "%s - error sending break set/clear command.\n",
+03f0dbf74c7a11 Alan Cox           2008-07-22  1598  				__func__);
+6e8cf7751f9fb9 Greg Kroah-Hartman 2007-01-18  1599  	}
+12992379710489 Johan Hovold       2023-06-02  1600  
+12992379710489 Johan Hovold       2023-06-02 @1601  	return status;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  1602  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
