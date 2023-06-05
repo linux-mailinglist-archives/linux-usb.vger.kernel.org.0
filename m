@@ -2,67 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CA0721F9A
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 09:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 876D7721FA3
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 09:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbjFEHc6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Jun 2023 03:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
+        id S229710AbjFEHem (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Jun 2023 03:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbjFEHcv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jun 2023 03:32:51 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DCE11B
-        for <linux-usb@vger.kernel.org>; Mon,  5 Jun 2023 00:32:26 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f6ffc2b314so39825455e9.0
-        for <linux-usb@vger.kernel.org>; Mon, 05 Jun 2023 00:32:26 -0700 (PDT)
+        with ESMTP id S229521AbjFEHek (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jun 2023 03:34:40 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841E4DA
+        for <linux-usb@vger.kernel.org>; Mon,  5 Jun 2023 00:34:38 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-514ab6cb529so11717090a12.1
+        for <linux-usb@vger.kernel.org>; Mon, 05 Jun 2023 00:34:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685950344; x=1688542344;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZWebPmkkXZwMfaAQP1En4s9/tKIJUkHKAcCHX0b4nT0=;
-        b=yNe89sJMqjCvRZY8KEh8e9m6zed+dTP2I41xn3eYc6SuXCRiwwga/7uKmAV3YR+MsY
-         iKPh9hPLUeJHndeZPKyYunIHQJxrFAs9VBmanypZwTHINNxFsA9dKnDfIrBEt742CRcv
-         6rjBog+j2Uq6jBQzkVuhxPaOEvaKZdrtixGeKM3IQVXM1gS2YxJDj/Fz842+a6vakY39
-         riKH/WUMV1ccD6Od5Vx9jtcUt2Hny8fW9U5ftKERRXESa+Clzd1BxbHZFxDyXpXO3xU5
-         wPA9guClNV55pi6ueL/ghMtmxdcSqDSIZjpv5UL0sXHzqFFgn5t+BFAfk8vBF8UIL8g/
-         k9PQ==
+        d=linaro.org; s=google; t=1685950477; x=1688542477;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8g/uCudoNru8NUO2fRncIkM8apZtWaRSA3Sr+dRP0vE=;
+        b=EZqnx3qFRzHckRGwu64NGFgrgksidmNU1uyIQBt8oEIuivVfPmQQm2nf+4hU2lw/iP
+         1RnUU91boWEi92AIWXrVDRMKsf80YofR1suYBsd/Fh7jgN3vq3oi+e0GOve1rJlCOnYD
+         ikUKL7snfLrifOPTbfuyEMtcWzU4tpJqOpLlIuxSzwxo7gDnZjAy4tgm1ZhSXoEoJhfi
+         O/L42N6w2VrH4KG42Ck/GUYtS3ru2VgfcC0u37bz9U2vS0y2zCHEyOSH+zkOWwMTMO3C
+         pgDe8kPdWaMNjqVxVX4vD5cDv3zKdgiTnURbLu7hBWruQBn1ChoKt4prNtdvXB33umNT
+         0ORg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685950344; x=1688542344;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZWebPmkkXZwMfaAQP1En4s9/tKIJUkHKAcCHX0b4nT0=;
-        b=bX7IZ8MpNXuG3VsVJ2cyOtguuv2zdRULkrWrV2crvVxQWToUYrdM6458cSrRjFeWz8
-         od9YGU4gpM1qHb/BkB7MMkN/t8XDQrMwQ+1d59lfj4Klc1H5FXT7hjdlyinEo+TVChP5
-         sLxeZujLM51WP41qGpykB69WfNRL8G5iQ4YYLndF9syyeUi9Do/GCnWpnjh/9Fz30Ham
-         wxN0J7AZFOiHXLGcjEWkHtLYDaVkBWvDfJbVWX7RS16c84Zf9mMbt8d4Mv+oclEUMyOz
-         yoGBTYZh218qJdEC4F/1Lz8eltvVFkUZCTF68JwyODFYIpoDAjYoBJZ5vziRb0jfvgkJ
-         RUZg==
-X-Gm-Message-State: AC+VfDwUxWHm7G6MGKvLJ9Puf60kmvJUWofMx3iW7W+lf8nQwG8seKii
-        2k7/SLi58wOhT0lY+ZSkwxsobQ==
-X-Google-Smtp-Source: ACHHUZ6ETpTzw7MhCVETQT2q+Tvi7uvnSQJojKyiNat+/Nd4fj04M9SLAwejgKN8ZOdR8ZdTnTYXiw==
-X-Received: by 2002:a1c:ed03:0:b0:3f4:1ce0:a606 with SMTP id l3-20020a1ced03000000b003f41ce0a606mr7175893wmh.1.1685950344248;
-        Mon, 05 Jun 2023 00:32:24 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id o10-20020a1c750a000000b003f60482024fsm9877459wmc.30.2023.06.05.00.32.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 00:32:22 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 10:32:17 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     oe-kbuild@lists.linux.dev, Johan Hovold <johan@kernel.org>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Corey Minyard <minyard@acm.org>
-Subject: Re: [PATCH 1/3] USB: serial: return errors from break handling
-Message-ID: <3ab35d0b-b5b6-4361-acac-59a4a9fbc970@kadam.mountain>
+        d=1e100.net; s=20221208; t=1685950477; x=1688542477;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8g/uCudoNru8NUO2fRncIkM8apZtWaRSA3Sr+dRP0vE=;
+        b=XReSo4Ox5nSULeBw+11i//Zf5XwidUHhMkfijwEeBqyD/CuAfgzhSnuZAZTVO95auw
+         S2NrEGEwnVCYQPszeYumPNn6LYe0Izvbg7VWzNcWKSSubNyzDffdC889vOF3vBCaKVwh
+         d3V6zcq7iC4wYgCELSO1XfeeCAwPVGuFY2V3R79Bkp5LK3Cyrl0H8nCrdRvNHjn/7obD
+         Ccwifzsy9sncytEkYUOB7zCLYm7gOmHw716K3K9vGTvUOvMgGERDATjaNwW+5XwMfFm0
+         hhsIfn7t/eeOMF5CDmjf6HETKi7eojLK4BRiYBdtlyECLjQX/oPoxD21wa8ITMOtShjv
+         z+VQ==
+X-Gm-Message-State: AC+VfDx03rl43wOhUtPVfd/KmSM1B7MjtDzteXh4v/NttbjIsv7iw3b9
+        vbpXnTdcwVSDRs/pZTAfPfoEGA==
+X-Google-Smtp-Source: ACHHUZ6O0Ax8DYnAnWLCNsurzFRYdg0Bla791PJzJB/LCSFqUBdwOYwfakFHXzUGj5RgB1RVZModzA==
+X-Received: by 2002:a17:907:16a6:b0:977:c405:6c76 with SMTP id hc38-20020a17090716a600b00977c4056c76mr5497706ejc.14.1685950476974;
+        Mon, 05 Jun 2023 00:34:36 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id j21-20020a170906431500b00966265be7adsm3910219ejm.22.2023.06.05.00.34.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 00:34:36 -0700 (PDT)
+Message-ID: <d4509ee4-3eb7-0499-36f8-7d7848ab4928@linaro.org>
+Date:   Mon, 5 Jun 2023 09:34:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230602124642.19076-2-johan@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 01/21] dt-bindings: microchip: atmel,at91rm9200-tcb: add
+ sam9x60 compatible
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Varshini Rajendran <varshini.rajendran@microchip.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Conor Dooley <conor+dt@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Balamanikandan Gunasundar 
+        <balamanikandan.gunasundar@microchip.com>,
+        "Mihai.Sain" <mihai.sain@microchip.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
+        durai.manickamkr@microchip.com, manikandan.m@microchip.com,
+        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
+        balakrishnan.s@microchip.com
+References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
+ <20230603200243.243878-2-varshini.rajendran@microchip.com>
+ <c72f45ec-c185-8676-b31c-ec48cd46278c@linaro.org>
+ <d95d37f5-5bef-43a9-b319-0bbe0ac366b4@app.fastmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <d95d37f5-5bef-43a9-b319-0bbe0ac366b4@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,74 +108,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Johan,
+On 05/06/2023 09:04, Arnd Bergmann wrote:
+> On Mon, Jun 5, 2023, at 08:35, Krzysztof Kozlowski wrote:
+>> On 03/06/2023 22:02, Varshini Rajendran wrote:
+>>> Add sam9x60 compatible string support in the schema file
+>>>
+>>> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+>>> ---
+>>>  .../devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml  | 1 +
+>>>  1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml b/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
+>>> index a46411149571..c70c77a5e8e5 100644
+>>> --- a/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
+>>> +++ b/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
+>>> @@ -20,6 +20,7 @@ properties:
+>>>            - atmel,at91rm9200-tcb
+>>>            - atmel,at91sam9x5-tcb
+>>>            - atmel,sama5d2-tcb
+>>> +          - microchip,sam9x60-tcb
+>>
+>> No wildcards.
+> 
+> sam9x60 is the actual name of the chip, it's no wildcard. For sam9x70,
+> sam9x72 and sam9x75, I think using sam9x7 as the compatible string
+> is probably fine, as long as they are actually the same chip. Again,
+> the 'x' in there is not a wildcard but part of the name.
 
-kernel test robot noticed the following build warnings:
+OK, if that's the case.
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Johan-Hovold/USB-serial-return-errors-from-break-handling/20230602-204856
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git usb-next
-patch link:    https://lore.kernel.org/r/20230602124642.19076-2-johan%40kernel.org
-patch subject: [PATCH 1/3] USB: serial: return errors from break handling
-config: i386-randconfig-m021-20230531 (https://download.01.org/0day-ci/archive/20230603/202306031014.qzAY3uQ6-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Closes: https://lore.kernel.org/r/202306031014.qzAY3uQ6-lkp@intel.com/
-
-New smatch warnings:
-drivers/usb/serial/io_edgeport.c:1601 edge_break() error: uninitialized symbol 'status'.
-
-vim +/status +1601 drivers/usb/serial/io_edgeport.c
-
-12992379710489 Johan Hovold       2023-06-02  1563  static int edge_break(struct tty_struct *tty, int break_state)
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1564  {
-95da310e66ee80 Alan Cox           2008-07-22  1565  	struct usb_serial_port *port = tty->driver_data;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1566  	struct edgeport_port *edge_port = usb_get_serial_port_data(port);
-6e8cf7751f9fb9 Greg Kroah-Hartman 2007-01-18  1567  	struct edgeport_serial *edge_serial = usb_get_serial_data(port->serial);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1568  	int status;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1569  
-232dce89b5b000 Geyslan G. Bem     2015-12-11  1570  	if (!edge_serial->is_epic ||
-232dce89b5b000 Geyslan G. Bem     2015-12-11  1571  	    edge_serial->epic_descriptor.Supports.IOSPChase) {
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1572  		/* flush and chase */
-cb8eaa8b2b9133 Richard Knutsson   2007-03-17  1573  		edge_port->chaseResponsePending = true;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1574  
-984f68683298ba Greg Kroah-Hartman 2012-09-18  1575  		dev_dbg(&port->dev, "%s - Sending IOSP_CMD_CHASE_PORT\n", __func__);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1576  		status = send_iosp_ext_cmd(edge_port, IOSP_CMD_CHASE_PORT, 0);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1577  		if (status == 0) {
-03f0dbf74c7a11 Alan Cox           2008-07-22  1578  			/* block until chase finished */
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1579  			block_until_chase_response(edge_port);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1580  		} else {
-cb8eaa8b2b9133 Richard Knutsson   2007-03-17  1581  			edge_port->chaseResponsePending = false;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1582  		}
-6e8cf7751f9fb9 Greg Kroah-Hartman 2007-01-18  1583  	}
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1584  
-232dce89b5b000 Geyslan G. Bem     2015-12-11  1585  	if (!edge_serial->is_epic ||
-232dce89b5b000 Geyslan G. Bem     2015-12-11  1586  	    edge_serial->epic_descriptor.Supports.IOSPSetClrBreak) {
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1587  		if (break_state == -1) {
-984f68683298ba Greg Kroah-Hartman 2012-09-18  1588  			dev_dbg(&port->dev, "%s - Sending IOSP_CMD_SET_BREAK\n", __func__);
-03f0dbf74c7a11 Alan Cox           2008-07-22  1589  			status = send_iosp_ext_cmd(edge_port,
-03f0dbf74c7a11 Alan Cox           2008-07-22  1590  						IOSP_CMD_SET_BREAK, 0);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1591  		} else {
-984f68683298ba Greg Kroah-Hartman 2012-09-18  1592  			dev_dbg(&port->dev, "%s - Sending IOSP_CMD_CLEAR_BREAK\n", __func__);
-03f0dbf74c7a11 Alan Cox           2008-07-22  1593  			status = send_iosp_ext_cmd(edge_port,
-03f0dbf74c7a11 Alan Cox           2008-07-22  1594  						IOSP_CMD_CLEAR_BREAK, 0);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1595  		}
-
-"status" uninitialized on else path.
-
-03f0dbf74c7a11 Alan Cox           2008-07-22  1596  		if (status)
-984f68683298ba Greg Kroah-Hartman 2012-09-18  1597  			dev_dbg(&port->dev, "%s - error sending break set/clear command.\n",
-03f0dbf74c7a11 Alan Cox           2008-07-22  1598  				__func__);
-6e8cf7751f9fb9 Greg Kroah-Hartman 2007-01-18  1599  	}
-12992379710489 Johan Hovold       2023-06-02  1600  
-12992379710489 Johan Hovold       2023-06-02 @1601  	return status;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1602  }
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+Krzysztof
 
