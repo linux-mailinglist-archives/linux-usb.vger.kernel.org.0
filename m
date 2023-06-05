@@ -2,123 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E93AF721DF8
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 08:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10EB8721E2D
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 08:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjFEGTk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Jun 2023 02:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
+        id S229838AbjFEGfQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Jun 2023 02:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjFEGTj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jun 2023 02:19:39 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F769DA
-        for <linux-usb@vger.kernel.org>; Sun,  4 Jun 2023 23:19:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685945978; x=1717481978;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=oiIBAdEM2IK2w6PdLkL3TtIlZfqaE92lEBQS+imifLI=;
-  b=TmfO0QEo8b9+JAzaKUvdCp8YjyhZn/UpCXerKviofiahhFng8GUK4RJS
-   uvdZE0xr05W3o5DF/iJUGQtyZpRBAAT787M1N6iHHoBOTgLS9hdTvoYCk
-   nt2+zH0SijbbFgboF27wpFay2gRHFGfau9EhixYFQmTnUx5Ydy8UP+z+G
-   C2ff1/2pj8AgWYxpXIz8QN9UWeb+cesH/nNwYEdRbIat94q9cXYZa9+iq
-   +0t+yEMxGM576/EGA+GZGfyLS6rmgd33v9JgrpqFr9fHrjlRA++AFBrmM
-   T/PYROlooIsV/ZxlurchRuMrYOJEhb/zSmgcr8X6arXnBD/uw9Z2Yeyy3
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="336647234"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="336647234"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2023 23:19:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="708538558"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="708538558"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 04 Jun 2023 23:19:35 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 32571204; Mon,  5 Jun 2023 09:19:41 +0300 (EEST)
-Date:   Mon, 5 Jun 2023 09:19:41 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Yehezkel Bernat <yehezkelshb@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Utkarsh H Patel <utkarsh.h.patel@intel.com>
-Subject: Re: [PATCH 3/3] thunderbolt: Enable/disable sideband depending on
- USB4 port offline mode
-Message-ID: <20230605061941.GR45886@black.fi.intel.com>
-References: <20230602091055.65049-1-mika.westerberg@linux.intel.com>
- <20230602091055.65049-4-mika.westerberg@linux.intel.com>
- <CA+CmpXs2K8Bi2xHk_hhWC3x6rVeTQ=SbtjuxLSBV+3rjHRwxVQ@mail.gmail.com>
- <20230604051136.GQ45886@black.fi.intel.com>
- <CA+CmpXtNgVRrOdJyTvcyPSxa9jxkNjQvPbGtmbSickL7QFwYPA@mail.gmail.com>
+        with ESMTP id S229806AbjFEGfP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jun 2023 02:35:15 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68222DC
+        for <linux-usb@vger.kernel.org>; Sun,  4 Jun 2023 23:35:13 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-5147dce372eso6574740a12.0
+        for <linux-usb@vger.kernel.org>; Sun, 04 Jun 2023 23:35:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685946912; x=1688538912;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HAkCrvHOWXDqwj1iMGZRedd16rhqvqKQgu07G0b3u+w=;
+        b=e7E3JztSPDwCFOVrzxyEbVKg2EBeBOYgZaTU4BRpwJs1h7uHWXDo+l4Zk5OwWH3gxO
+         EqYoWrI2nluRnjKjwdlqLEnBcCpOkMVsq/NL07i8ATGoappT2Y7Iu+bHCO+sxDx/d6PF
+         m1yW2VgipEcnRLFaW68NCN+FFcFIJPbw/eYHR3Y07vtSoQ9V57ZsG/OrkuBfp0zcE7uO
+         mUMJdZb3Ktm56WuGjYfV4znaUsZVjWccpeON3w72rzjU7HO+wQmcEKdi3vZPb9spMHEO
+         MAxQO8sclY35BjwjlYS1iRkx51Kv62cQ0tFvY3zdkd4n9Jlo0VDzxWWtcb/m129XFaB6
+         19jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685946912; x=1688538912;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HAkCrvHOWXDqwj1iMGZRedd16rhqvqKQgu07G0b3u+w=;
+        b=ca0JcPBftEuvmyjIAyxqyYfHB07aN0JiLbxxc7V6fyJiIE9pGojM7S9RVHseAiw0Ym
+         qfYUGyOBUuTDTNPox1tDE1DK6nqMDvkjPrqemYOOYde9bc/TgiD8OdOuw2fZIG7ta9nT
+         vNvl+bMKyuHjqwgZ3VzeRtio80FzCiIFwJatYXgtlMJJqPJRbXSBNLcL7w3MkTgjL2lO
+         t2toxe9EiHl2XVDzaBv8pMEpLAOs2P3cu1u5MY/aEnjsx34YCA7VLXCWZhr+RFeXdLeS
+         /prP+YLqnnYvsfaAx2AAFy+zAtstsfadik3Qu6HlEtHmhv5s32qssDCrYOtUrQgKWu6r
+         zsSg==
+X-Gm-Message-State: AC+VfDzfZrPkv6aU3bC7cqMjUxIp1TDHW8OlBPiUjiMV0jx3MLTFqe9e
+        wEyakB6llIneFsw5yVZl8fLB1w==
+X-Google-Smtp-Source: ACHHUZ4BgooRJqWw2thRF8QqkzdRcCJ+hGa1VmZ7YEgpaG6Ikj580m9cbKbqSO9oirFRyquUlSnLew==
+X-Received: by 2002:aa7:cd10:0:b0:513:53f7:8ca2 with SMTP id b16-20020aa7cd10000000b0051353f78ca2mr6734317edw.9.1685946911857;
+        Sun, 04 Jun 2023 23:35:11 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id v1-20020aa7dbc1000000b005163a0f84a1sm3636951edt.48.2023.06.04.23.35.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 04 Jun 2023 23:35:11 -0700 (PDT)
+Message-ID: <c72f45ec-c185-8676-b31c-ec48cd46278c@linaro.org>
+Date:   Mon, 5 Jun 2023 08:35:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+CmpXtNgVRrOdJyTvcyPSxa9jxkNjQvPbGtmbSickL7QFwYPA@mail.gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 01/21] dt-bindings: microchip: atmel,at91rm9200-tcb: add
+ sam9x60 compatible
+Content-Language: en-US
+To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
+        tglx@linutronix.de, maz@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        gregkh@linuxfoundation.org, linux@armlinux.org.uk,
+        mturquette@baylibre.com, sboyd@kernel.org, sre@kernel.org,
+        broonie@kernel.org, arnd@arndb.de, gregory.clement@bootlin.com,
+        sudeep.holla@arm.com, balamanikandan.gunasundar@microchip.com,
+        mihai.sain@microchip.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
+        durai.manickamkr@microchip.com, manikandan.m@microchip.com,
+        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
+        balakrishnan.s@microchip.com
+References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
+ <20230603200243.243878-2-varshini.rajendran@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230603200243.243878-2-varshini.rajendran@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On Sun, Jun 04, 2023 at 12:16:18PM +0300, Yehezkel Bernat wrote:
-> On Sun, Jun 4, 2023 at 8:11 AM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > Hi,
-> >
-> > On Sat, Jun 03, 2023 at 10:24:38PM +0300, Yehezkel Bernat wrote:
-> > > On Fri, Jun 2, 2023 at 12:11 PM Mika Westerberg
-> > > <mika.westerberg@linux.intel.com> wrote:
-> > > >
-> > > > When USB4 port is in offline mode (this mean there is no device
-> > > > attached) we want to keep the sideband up to make it possible to
-> > > > communicate with the retimers. In the same way there is no need to
-> > > > enable sideband transactions when the USB4 port is not offline as they
-> > > > are already up.
-> > > >
-> > > > For this reason make the enabling/disabling depend on the USB4 port
-> > > > offline status.
-> > >
-> > > I'm probably missing something here, but if we don't allow disabling it when the
-> > > port is offline, and when the port is online the sideband is enabled, when can
-> > > it be disabled? If we can manually disable it when the port is online, on
-> > > enablement we can't assume that it's already enabled just because the port
-> > > is online, as we might have manually disabled it earlier.
-> >
-> > We allow disabling them when the port is online. This all basically
-> > separates how the device attached and non-device attached handle the
-> > sideband communications.
+On 03/06/2023 22:02, Varshini Rajendran wrote:
+> Add sam9x60 compatible string support in the schema file
 > 
-> OK, but then we don't enable it back, as we assume it's enabled because the
-> port is online, even while the user might have disabled it earlier?
+> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+> ---
+>  .../devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml  | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml b/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
+> index a46411149571..c70c77a5e8e5 100644
+> --- a/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
+> +++ b/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
+> @@ -20,6 +20,7 @@ properties:
+>            - atmel,at91rm9200-tcb
+>            - atmel,at91sam9x5-tcb
+>            - atmel,sama5d2-tcb
+> +          - microchip,sam9x60-tcb
 
-Well there are two "modes" how they are accessed. Normal cases user
-cannot offline the port so the sideband comes up when the link comes up
-(e.g device is connected). In this case after the retimer enumeration
-put them back to "passthrough" mode by sending the UNSET_INBOUND_SBTX.
-This is needed to make the link come up after hot-reboot etc and was
-recommended by our hardware folks.
+No wildcards.
 
-The second case is when there is no device attached. This requires
-special firmare too. In ChromeOS there is an ACPI _DSM method that does
-this and if present we allow user to offline the port but only when
-there is no device attached. In this mode we need to bring up the
-sideband so we must send the SET_INBOUND_SBTX during enumeration but we
-also need to keep them communicating so we cannot send
-UNSET_INBOUND_SBTX. This mode is only used to upgrade the retimer NVM
-firmware.
+Best regards,
+Krzysztof
 
-This is the idea behind these patches but let me know if I misssed
-something.
