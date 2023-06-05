@@ -2,287 +2,282 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D6472328F
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jun 2023 23:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F6BF7233A4
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Jun 2023 01:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbjFEVzh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Jun 2023 17:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53934 "EHLO
+        id S231575AbjFEXZo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Jun 2023 19:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjFEVzf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jun 2023 17:55:35 -0400
-Received: from mail-vs1-xe49.google.com (mail-vs1-xe49.google.com [IPv6:2607:f8b0:4864:20::e49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662A2100
-        for <linux-usb@vger.kernel.org>; Mon,  5 Jun 2023 14:55:33 -0700 (PDT)
-Received: by mail-vs1-xe49.google.com with SMTP id ada2fe7eead31-43b3e44c1d8so267173137.1
-        for <linux-usb@vger.kernel.org>; Mon, 05 Jun 2023 14:55:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686002132; x=1688594132;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hYQuGPh6MWx4TKIybC1sfuSbzmExcI9Rq3XqSW+WB34=;
-        b=OWr9O+hDja1w2sHtP8jyUvLQmyz0G5Vp+Dbfh2KrCM5SPhMo+R4T9XmV4xPZLmaKkb
-         gtjL1QgxgNGegLW5WgOBbw+9oJho7P9PDglDqo4jBeGnky+/j0VnhYs+0LnYL3vhBX+r
-         cUWGvQGddIBt2MJxX7CzqiHChMtVVyo/zOsgsVtpHk3XEVFgCUXoE/C9ZinANYjuvpsj
-         5BhVHJ5KxDOU/GCygz+jUVshJ+VAHq2WIRqERDlsNElqMX2EboPT8eLBSB2ZYaKvBmyI
-         F549Y5F29S+HqZXqh6KV1gwL+WgYnJG1QJQJYEZnevz5SjzP8QHPeja90T6I+xWzA4VQ
-         BGOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686002132; x=1688594132;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hYQuGPh6MWx4TKIybC1sfuSbzmExcI9Rq3XqSW+WB34=;
-        b=Y/oFHNjDfq64jAMvLVCQaYIGt/gJnF9IpzyLZM01J5H+TCRMlHlTvVUibMe2wJCGi3
-         CW6+kFnrV63npSTNn8sEirdEN9eDTftnV/RtWQuBhAwxb3ZJXH2pIliExfQpjJGjl01p
-         yzwBQG/ykA6XVJe1YpADeGE4WlZBkWN92akMp+4wZ+27i5rUdofSDVouyiR5oLSKsYE1
-         TykFjnRfTxpq6axRGCwub6s7uCq0HeQJ7FiDWfUhNU8ctTRyxD5+NLKhanE44Smy7kfo
-         RxSrGSZQsR+RS8VZLHhSIAF1na1uxUQleZ9x/O8A0BpJ1K/JGPwWUpe2pcTNWiQdH0wk
-         yCjQ==
-X-Gm-Message-State: AC+VfDy9cUva+ZSXP9jj6r9kyWnwEyhGSTlJ6w0q4VA0yMNXbK4kCJrg
-        wtMNzuHtLRZz4SjxgGFLlYHcUbQIPVM=
-X-Google-Smtp-Source: ACHHUZ4Ku5zpLqIcM5QLnW8SY+fLX/cJpsaUtqzg9pPg5pnw/jk1QR2T/2fYhCpn1GN0iHVU2hRPqRlNNtw=
-X-Received: from royluo-cloudtop0.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:bb8])
- (user=royluo job=sendgmr) by 2002:a67:d814:0:b0:43b:36d1:f0a3 with SMTP id
- e20-20020a67d814000000b0043b36d1f0a3mr329577vsj.3.1686002132548; Mon, 05 Jun
- 2023 14:55:32 -0700 (PDT)
-Date:   Mon,  5 Jun 2023 21:55:28 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230605215529.195045-1-royluo@google.com>
-Subject: [PATCH v3] usb: core: add sysfs entry for usb device state
-From:   Roy Luo <royluo@google.com>
-To:     raychi@google.com, badhri@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bastien Nocera <hadess@hadess.net>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Douglas Anderson <dianders@chromium.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Roy Luo <royluo@google.com>,
-        kernel test robot <oliver.sang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231764AbjFEXZm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jun 2023 19:25:42 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D27D131
+        for <linux-usb@vger.kernel.org>; Mon,  5 Jun 2023 16:25:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686007532; x=1717543532;
+  h=date:from:to:cc:subject:message-id;
+  bh=FbYlU2ZNjyUisRdAsoYIOeaiNY9t23xuH0G1aO6NHeM=;
+  b=SDFtuiJRnfflANqtWpdtgjXMqmZBZYeqGdTi8d7Tg8fwxC0W6ZFOvgoj
+   cX0DR8/xGIi4hZgTU+vLkLP2KKN6sXu/yT41ASQqx87amIpxsNoCcj2YU
+   DIHM0E8Nc7vlqofX4FYm8vI4TVN5zJu1BUvHV56OJNr9VSJ8+aRfNClY3
+   WlZQvztZwYEXGzlnNE/M/Q7sh1RO8DRt0k5D2IYO2pED0tIKhbzqqDV0U
+   SwFif4jmjbgGuQc7NvLDGO/M+U7S+aQh6LKAiXf6ioktmYmmzpafnjtec
+   hHi1LL1kwZHrfjzHzRi31J7NYqXBBfYqqwrkjj/sDXEWildC8uUyBTI7E
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="341148372"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="341148372"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 16:25:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="778753340"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="778753340"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Jun 2023 16:25:30 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q6JZq-0004XW-0o;
+        Mon, 05 Jun 2023 23:25:30 +0000
+Date:   Tue, 06 Jun 2023 07:24:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 592295e61b5c51ea89fd1959932fd0f121f08c46
+Message-ID: <20230605232443.qOuj_%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Expose usb device state to userland as the information is useful in
-detecting non-compliant setups and diagnosing enumeration failures.
-For example:
-- End-to-end signal integrity issues: the device would fail port reset
-  repeatedly and thus be stuck in POWERED state.
-- Charge-only cables (missing D+/D- lines): the device would never enter
-  POWERED state as the HC would not see any pullup.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 592295e61b5c51ea89fd1959932fd0f121f08c46  Merge tag 'thunderbolt-for-v6.4-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
 
-What's the status quo?
-We do have error logs such as "Cannot enable. Maybe the USB cable is bad?"
-to flag potential setup issues, but there's no good way to expose them to
-userspace.
+elapsed time: 724m
 
-Why add a sysfs entry in struct usb_port instead of struct usb_device?
-The struct usb_device is not device_add() to the system until it's in
-ADDRESS state hence we would miss the first two states. The struct
-usb_port is a better place to keep the information because its life
-cycle is longer than the struct usb_device that is attached to the port.
+configs tested: 206
+configs skipped: 14
 
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202306042228.e532af6e-oliver.sang@intel.com
-Signed-off-by: Roy Luo <royluo@google.com>
----
-This patch comes directly from RFC v2 after being reviewed by Alan Stern
-Link: https://lore.kernel.org/all/20230531010134.1092942-1-royluo@google.com/
-More discussion about implementation options is in RFC v1
-Link: https://lore.kernel.org/all/20230525173818.219633-1-royluo@google.com/
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Changes since v1:
-* Address Alan Stern's comment: remove redundant NULL initializers in
-  update_port_device_state().
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r004-20230605   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r002-20230605   gcc  
+arc          buildonly-randconfig-r004-20230605   gcc  
+arc          buildonly-randconfig-r005-20230605   gcc  
+arc          buildonly-randconfig-r006-20230605   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r003-20230605   gcc  
+arc                  randconfig-r026-20230605   gcc  
+arc                  randconfig-r043-20230605   gcc  
+arc                           tb10x_defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                           imxrt_defconfig   gcc  
+arm                       netwinder_defconfig   clang
+arm                  randconfig-r031-20230605   gcc  
+arm                  randconfig-r032-20230605   gcc  
+arm                  randconfig-r046-20230605   clang
+arm                        realview_defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r006-20230605   clang
+arm64                randconfig-r012-20230605   gcc  
+arm64                randconfig-r013-20230605   gcc  
+arm64                randconfig-r016-20230605   gcc  
+arm64                randconfig-r034-20230605   clang
+csky         buildonly-randconfig-r001-20230605   gcc  
+csky         buildonly-randconfig-r005-20230605   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r001-20230605   gcc  
+csky                 randconfig-r031-20230605   gcc  
+csky                 randconfig-r034-20230605   gcc  
+hexagon              randconfig-r004-20230605   clang
+hexagon              randconfig-r025-20230605   clang
+hexagon              randconfig-r041-20230605   clang
+hexagon              randconfig-r045-20230605   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230605   clang
+i386                 randconfig-i002-20230605   clang
+i386                 randconfig-i003-20230605   clang
+i386                 randconfig-i004-20230605   clang
+i386                 randconfig-i005-20230605   clang
+i386                 randconfig-i006-20230605   clang
+i386                 randconfig-i011-20230605   gcc  
+i386                 randconfig-i012-20230605   gcc  
+i386                 randconfig-i013-20230605   gcc  
+i386                 randconfig-i014-20230605   gcc  
+i386                 randconfig-i015-20230605   gcc  
+i386                 randconfig-i016-20230605   gcc  
+i386                 randconfig-i051-20230605   clang
+i386                 randconfig-i052-20230605   clang
+i386                 randconfig-i053-20230605   clang
+i386                 randconfig-i054-20230605   clang
+i386                 randconfig-i055-20230605   clang
+i386                 randconfig-i056-20230605   clang
+i386                 randconfig-i061-20230605   clang
+i386                 randconfig-i062-20230605   clang
+i386                 randconfig-i063-20230605   clang
+i386                 randconfig-i064-20230605   clang
+i386                 randconfig-i065-20230605   clang
+i386                 randconfig-i066-20230605   clang
+i386                 randconfig-r011-20230605   gcc  
+i386                 randconfig-r021-20230605   gcc  
+i386                 randconfig-r022-20230605   gcc  
+i386                 randconfig-r025-20230605   gcc  
+i386                 randconfig-r026-20230605   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r006-20230606   gcc  
+loongarch            randconfig-r012-20230605   gcc  
+loongarch            randconfig-r016-20230605   gcc  
+loongarch            randconfig-r025-20230605   gcc  
+loongarch            randconfig-r031-20230605   gcc  
+m68k                             allmodconfig   gcc  
+m68k         buildonly-randconfig-r001-20230605   gcc  
+m68k         buildonly-randconfig-r006-20230605   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r002-20230606   gcc  
+m68k                 randconfig-r004-20230605   gcc  
+m68k                 randconfig-r021-20230605   gcc  
+m68k                 randconfig-r023-20230605   gcc  
+microblaze           randconfig-r002-20230605   gcc  
+microblaze           randconfig-r003-20230606   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips         buildonly-randconfig-r002-20230605   gcc  
+mips         buildonly-randconfig-r003-20230605   gcc  
+mips                        omega2p_defconfig   clang
+mips                        qi_lb60_defconfig   clang
+mips                 randconfig-r003-20230605   gcc  
+mips                 randconfig-r035-20230605   gcc  
+nios2        buildonly-randconfig-r005-20230605   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r001-20230605   gcc  
+nios2                randconfig-r011-20230605   gcc  
+nios2                randconfig-r016-20230605   gcc  
+nios2                randconfig-r021-20230605   gcc  
+nios2                randconfig-r024-20230605   gcc  
+nios2                randconfig-r032-20230605   gcc  
+nios2                randconfig-r035-20230605   gcc  
+openrisc     buildonly-randconfig-r001-20230605   gcc  
+openrisc     buildonly-randconfig-r003-20230605   gcc  
+openrisc     buildonly-randconfig-r004-20230605   gcc  
+openrisc             randconfig-r006-20230605   gcc  
+openrisc             randconfig-r023-20230605   gcc  
+openrisc             randconfig-r036-20230605   gcc  
+parisc       buildonly-randconfig-r003-20230605   gcc  
+parisc       buildonly-randconfig-r004-20230605   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r002-20230605   gcc  
+parisc               randconfig-r012-20230605   gcc  
+parisc               randconfig-r015-20230605   gcc  
+parisc               randconfig-r022-20230605   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc      buildonly-randconfig-r002-20230605   gcc  
+powerpc                   motionpro_defconfig   gcc  
+powerpc                     ppa8548_defconfig   clang
+powerpc              randconfig-r005-20230606   gcc  
+powerpc              randconfig-r013-20230605   gcc  
+powerpc              randconfig-r014-20230605   gcc  
+powerpc              randconfig-r015-20230605   gcc  
+powerpc              randconfig-r035-20230605   clang
+powerpc              randconfig-r036-20230605   clang
+powerpc                     redwood_defconfig   gcc  
+powerpc                 xes_mpc85xx_defconfig   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv        buildonly-randconfig-r006-20230605   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r002-20230605   clang
+riscv                randconfig-r005-20230605   clang
+riscv                randconfig-r006-20230605   clang
+riscv                randconfig-r015-20230605   gcc  
+riscv                randconfig-r042-20230605   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r001-20230606   gcc  
+s390                 randconfig-r016-20230605   gcc  
+s390                 randconfig-r035-20230605   clang
+s390                 randconfig-r044-20230605   gcc  
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r005-20230605   gcc  
+sh                   randconfig-r013-20230605   gcc  
+sh                   randconfig-r026-20230605   gcc  
+sh                   randconfig-r032-20230605   gcc  
+sh                   randconfig-r033-20230605   gcc  
+sh                   rts7751r2dplus_defconfig   gcc  
+sparc        buildonly-randconfig-r002-20230605   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r004-20230605   gcc  
+sparc                randconfig-r022-20230605   gcc  
+sparc                randconfig-r025-20230605   gcc  
+sparc                randconfig-r033-20230605   gcc  
+sparc                randconfig-r035-20230605   gcc  
+sparc64      buildonly-randconfig-r001-20230605   gcc  
+sparc64      buildonly-randconfig-r002-20230605   gcc  
+sparc64      buildonly-randconfig-r003-20230605   gcc  
+sparc64      buildonly-randconfig-r006-20230605   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230605   clang
+x86_64               randconfig-a002-20230605   clang
+x86_64               randconfig-a003-20230605   clang
+x86_64               randconfig-a004-20230605   clang
+x86_64               randconfig-a005-20230605   clang
+x86_64               randconfig-a006-20230605   clang
+x86_64               randconfig-a011-20230605   gcc  
+x86_64               randconfig-a012-20230605   gcc  
+x86_64               randconfig-a013-20230605   gcc  
+x86_64               randconfig-a014-20230605   gcc  
+x86_64               randconfig-a015-20230605   gcc  
+x86_64               randconfig-a016-20230605   gcc  
+x86_64               randconfig-r005-20230605   clang
+x86_64               randconfig-r024-20230605   gcc  
+x86_64               randconfig-r031-20230605   clang
+x86_64               randconfig-x051-20230605   gcc  
+x86_64               randconfig-x052-20230605   gcc  
+x86_64               randconfig-x053-20230605   gcc  
+x86_64               randconfig-x054-20230605   gcc  
+x86_64               randconfig-x055-20230605   gcc  
+x86_64               randconfig-x056-20230605   gcc  
+x86_64               randconfig-x061-20230605   gcc  
+x86_64               randconfig-x062-20230605   gcc  
+x86_64               randconfig-x063-20230605   gcc  
+x86_64               randconfig-x064-20230605   gcc  
+x86_64               randconfig-x065-20230605   gcc  
+x86_64               randconfig-x066-20230605   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa       buildonly-randconfig-r005-20230605   gcc  
+xtensa               randconfig-r011-20230605   gcc  
+xtensa               randconfig-r013-20230605   gcc  
+xtensa               randconfig-r015-20230605   gcc  
+xtensa               randconfig-r023-20230605   gcc  
 
-Changes since v2:
-* Fix "BUG: sleeping function called from invalid context" caught by
-  kernel test robot. Move sleeping function sysfs_get_dirent to port
-  initiailzation and keep the kernfs_node for future reference.
-  (Reviewed-by tag is reset as this patch involves more code changes)
----
- Documentation/ABI/testing/sysfs-bus-usb |  9 +++++++
- drivers/usb/core/hub.c                  | 15 ++++++++++++
- drivers/usb/core/hub.h                  |  4 ++++
- drivers/usb/core/port.c                 | 32 +++++++++++++++++++++----
- 4 files changed, 56 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
-index cb172db41b34..155770f18f9c 100644
---- a/Documentation/ABI/testing/sysfs-bus-usb
-+++ b/Documentation/ABI/testing/sysfs-bus-usb
-@@ -292,6 +292,15 @@ Description:
- 		which is marked with early_stop has failed to initialize, it will ignore
- 		all future connections until this attribute is clear.
- 
-+What:		/sys/bus/usb/devices/.../<hub_interface>/port<X>/state
-+Date:		May 2023
-+Contact:	Roy Luo <royluo@google.com>
-+Description:
-+		Indicates current state of the USB device attached to the port. Valid
-+		states are: 'not-attached', 'attached', 'powered',
-+		'reconnecting', 'unauthenticated', 'default', 'addressed',
-+		'configured', and 'suspended'.
-+
- What:		/sys/bus/usb/devices/.../power/usb2_lpm_l1_timeout
- Date:		May 2013
- Contact:	Mathias Nyman <mathias.nyman@linux.intel.com>
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 97a0f8faea6e..a739403a9e45 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -2018,6 +2018,19 @@ bool usb_device_is_owned(struct usb_device *udev)
- 	return !!hub->ports[udev->portnum - 1]->port_owner;
- }
- 
-+static void update_port_device_state(struct usb_device *udev)
-+{
-+	struct usb_hub *hub;
-+	struct usb_port *port_dev;
-+
-+	if (udev->parent) {
-+		hub = usb_hub_to_struct_hub(udev->parent);
-+		port_dev = hub->ports[udev->portnum - 1];
-+		WRITE_ONCE(port_dev->state, udev->state);
-+		sysfs_notify_dirent(port_dev->state_kn);
-+	}
-+}
-+
- static void recursively_mark_NOTATTACHED(struct usb_device *udev)
- {
- 	struct usb_hub *hub = usb_hub_to_struct_hub(udev);
-@@ -2030,6 +2043,7 @@ static void recursively_mark_NOTATTACHED(struct usb_device *udev)
- 	if (udev->state == USB_STATE_SUSPENDED)
- 		udev->active_duration -= jiffies;
- 	udev->state = USB_STATE_NOTATTACHED;
-+	update_port_device_state(udev);
- }
- 
- /**
-@@ -2086,6 +2100,7 @@ void usb_set_device_state(struct usb_device *udev,
- 				udev->state != USB_STATE_SUSPENDED)
- 			udev->active_duration += jiffies;
- 		udev->state = new_state;
-+		update_port_device_state(udev);
- 	} else
- 		recursively_mark_NOTATTACHED(udev);
- 	spin_unlock_irqrestore(&device_state_lock, flags);
-diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
-index e23833562e4f..37897afd1b64 100644
---- a/drivers/usb/core/hub.h
-+++ b/drivers/usb/core/hub.h
-@@ -84,6 +84,8 @@ struct usb_hub {
-  * @peer: related usb2 and usb3 ports (share the same connector)
-  * @req: default pm qos request for hubs without port power control
-  * @connect_type: port's connect type
-+ * @state: device state of the usb device attached to the port
-+ * @state_kn: kernfs_node of the sysfs attribute that accesses @state
-  * @location: opaque representation of platform connector location
-  * @status_lock: synchronize port_event() vs usb_port_{suspend|resume}
-  * @portnum: port index num based one
-@@ -100,6 +102,8 @@ struct usb_port {
- 	struct usb_port *peer;
- 	struct dev_pm_qos_request *req;
- 	enum usb_port_connect_type connect_type;
-+	enum usb_device_state state;
-+	struct kernfs_node *state_kn;
- 	usb_port_location_t location;
- 	struct mutex status_lock;
- 	u32 over_current_count;
-diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-index 06a8f1f84f6f..2f906e89054e 100644
---- a/drivers/usb/core/port.c
-+++ b/drivers/usb/core/port.c
-@@ -160,6 +160,16 @@ static ssize_t connect_type_show(struct device *dev,
- }
- static DEVICE_ATTR_RO(connect_type);
- 
-+static ssize_t state_show(struct device *dev,
-+			  struct device_attribute *attr, char *buf)
-+{
-+	struct usb_port *port_dev = to_usb_port(dev);
-+	enum usb_device_state state = READ_ONCE(port_dev->state);
-+
-+	return sprintf(buf, "%s\n", usb_state_string(state));
-+}
-+static DEVICE_ATTR_RO(state);
-+
- static ssize_t over_current_count_show(struct device *dev,
- 				       struct device_attribute *attr, char *buf)
- {
-@@ -259,6 +269,7 @@ static DEVICE_ATTR_RW(usb3_lpm_permit);
- 
- static struct attribute *port_dev_attrs[] = {
- 	&dev_attr_connect_type.attr,
-+	&dev_attr_state.attr,
- 	&dev_attr_location.attr,
- 	&dev_attr_quirks.attr,
- 	&dev_attr_over_current_count.attr,
-@@ -705,19 +716,24 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
- 		return retval;
- 	}
- 
-+	port_dev->state_kn = sysfs_get_dirent(port_dev->dev.kobj.sd, "state");
-+	if (!port_dev->state_kn) {
-+		dev_err(&port_dev->dev, "failed to sysfs_get_dirent 'state'\n");
-+		retval = -ENODEV;
-+		goto err_unregister;
-+	}
-+
- 	/* Set default policy of port-poweroff disabled. */
- 	retval = dev_pm_qos_add_request(&port_dev->dev, port_dev->req,
- 			DEV_PM_QOS_FLAGS, PM_QOS_FLAG_NO_POWER_OFF);
- 	if (retval < 0) {
--		device_unregister(&port_dev->dev);
--		return retval;
-+		goto err_put_kn;
- 	}
- 
- 	retval = component_add(&port_dev->dev, &connector_ops);
- 	if (retval) {
- 		dev_warn(&port_dev->dev, "failed to add component\n");
--		device_unregister(&port_dev->dev);
--		return retval;
-+		goto err_put_kn;
- 	}
- 
- 	find_and_link_peer(hub, port1);
-@@ -754,6 +770,13 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
- 		port_dev->req = NULL;
- 	}
- 	return 0;
-+
-+err_put_kn:
-+	sysfs_put(port_dev->state_kn);
-+err_unregister:
-+	device_unregister(&port_dev->dev);
-+
-+	return retval;
- }
- 
- void usb_hub_remove_port_device(struct usb_hub *hub, int port1)
-@@ -765,5 +788,6 @@ void usb_hub_remove_port_device(struct usb_hub *hub, int port1)
- 	if (peer)
- 		unlink_peers(port_dev, peer);
- 	component_del(&port_dev->dev, &connector_ops);
-+	sysfs_put(port_dev->state_kn);
- 	device_unregister(&port_dev->dev);
- }
-
-base-commit: 933174ae28ba72ab8de5b35cb7c98fc211235096
 -- 
-2.41.0.rc0.172.g3f132b7071-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
