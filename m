@@ -2,69 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F75723E04
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Jun 2023 11:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A09FB723ECF
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Jun 2023 12:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236609AbjFFJme (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Jun 2023 05:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
+        id S231368AbjFFKCV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Jun 2023 06:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236621AbjFFJmP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Jun 2023 05:42:15 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F87A10D5
-        for <linux-usb@vger.kernel.org>; Tue,  6 Jun 2023 02:41:54 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f736e0c9a8so21261605e9.2
-        for <linux-usb@vger.kernel.org>; Tue, 06 Jun 2023 02:41:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686044513; x=1688636513;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mw1OtvOTs4pqnPQwqkGs6h9kUAoFI81KHh1ZGaOg3OM=;
-        b=xM8SOEUNXYgI2yKBIXfmL1zvOScv2PHece9Ks5ICvbTDZy8mXmukMW7svRDcCOZV8F
-         EdaG+eQILS3cJZmaLrKpvHCJTbFd4KHRnOThflr9zMXG7dgBoWiaK0bjaP03FkEpEEG7
-         U4CMpVSVhHILfdMiJDx3Kne0HR+SsBF6ClugcJrL8l8nwuxVoDA2aadZm6QZAFD7OnnB
-         UHQJJBmLoRFohJLSPKfWCGlobj6N3XshBfbF0yiKRKgHJjB/BpXjyXyLEe+dyGMuJlBi
-         nSdB/OgiaC3WkxGXtK3WkCIBKpYQ+LaBNyAhgLZoOadCOOiw1SQZC9991M7Xuri4SXTQ
-         4Egg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686044513; x=1688636513;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mw1OtvOTs4pqnPQwqkGs6h9kUAoFI81KHh1ZGaOg3OM=;
-        b=Z+BXwSPZHY3idU49QYBuap5ddONVr21KVXehZ26Q+3/2uEqJUgX+ZO+rtN5TWVha9y
-         MDNZ2vxvbjakqC1+DY8MZTe3bdzy59z5VUEwRlWbhJG0phu2t9aNgjXtkRbqKqHBGCdh
-         smrlXiC8J1R8pVjjQI4eyPVkJTrRHRKKQCOxGpkN8r40h+hjLpTfW5ydy+H7yfV+zR/2
-         VVv3g0Zdf2ybJ5dh9QY71I7FwQXhyYqU+iDvYL+x88XlRC8h0wkdZtXylhJTo4qPZ5Q8
-         GTb6NBo4TRmY8Ofr0Xn0b0pf1DmjW3TYaJ90M6AAVaAcFdqeg8KApeeVCRHtoAYpG4XE
-         342A==
-X-Gm-Message-State: AC+VfDwqKUQEW/r9IsNphBst6Mw1/qV+SncEqDa305PKzW/Z0HWf6o1Y
-        TA57+0fI9kDbzdVXeLR/vTZODw==
-X-Google-Smtp-Source: ACHHUZ79oYF1EX46QtpLLI7AAjVK4DSEivHLKCQuiAKUhGKLWhpCNXspc4d8JmOr1K4nKnwXlfi4eg==
-X-Received: by 2002:a7b:c30c:0:b0:3f7:310a:3ffc with SMTP id k12-20020a7bc30c000000b003f7310a3ffcmr1628911wmj.5.1686044513160;
-        Tue, 06 Jun 2023 02:41:53 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id g11-20020a7bc4cb000000b003f735ba7736sm8748460wmk.46.2023.06.06.02.41.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 02:41:51 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 12:41:49 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Rob Herring <robh@kernel.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Raviteja Garimella <raviteja.garimella@broadcom.com>,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget/snps_udc_plat: Fix a signedness bug in probe
-Message-ID: <2b40b7b9-af84-4165-9115-c006c707bd79@kadam.mountain>
-References: <ZH7sIkbSZg1rAJpJ@moroto>
+        with ESMTP id S235716AbjFFKCO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Jun 2023 06:02:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C7CE78;
+        Tue,  6 Jun 2023 03:02:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC2EB62598;
+        Tue,  6 Jun 2023 10:02:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BA03C433EF;
+        Tue,  6 Jun 2023 10:02:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686045729;
+        bh=1IoFuwmoNSSKAwyxIlVTyvXm8uDl4GdCtAIidncLBB0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ye+qgjyDzSkgkebwek9jswghyGjYlglS9wXkb33X7e7Ie/Uv2rWxBZrqIFA8/5Q44
+         Qt0FxrJOYXfkdLJoMtiDhUHRvRdzxz6ZLxYeCw37b6LB/jQMGOb3jCer3xDknF4xfX
+         aeT8jODlrzBENDSIk9nb0283Ga10Q7tD2ugaLP7M=
+Date:   Tue, 6 Jun 2023 12:02:06 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Neel Chakraborty <neelchakrabortykernelwork@gmail.com>
+Cc:     b-liu@ti.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers: usb: musb: musb_gadget: fixed coding style
+ issues and removed unneeded code
+Message-ID: <2023060644-countdown-employer-2af9@gregkh>
+References: <20230606065921.997102-1-neelchakrabortykernelwork@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZH7sIkbSZg1rAJpJ@moroto>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20230606065921.997102-1-neelchakrabortykernelwork@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,42 +51,44 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 11:19:46AM +0300, Dan Carpenter wrote:
-> The irq_of_parse_and_map() function returns negative error codes
-> but "udc->irq" is an unsigned int so the error handling doesn't work.
+On Tue, Jun 06, 2023 at 12:29:21PM +0530, Neel Chakraborty wrote:
+> Fixed a few coding style issues
+> Removed the static int musb_gadget_vbus_session function as it was
+> doing nothing.
 > 
-> Fixes: 1b9f35adb0ff ("usb: gadget: udc: Add Synopsys UDC Platform driver")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Signed-off-by: Neel Chakraborty <neelchakrabortykernelwork@gmail.com>
 > ---
->  drivers/usb/gadget/udc/snps_udc_plat.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+>  drivers/usb/musb/musb_gadget.c | 38 +++++++++++-----------------------
+>  1 file changed, 12 insertions(+), 26 deletions(-)
 > 
-> diff --git a/drivers/usb/gadget/udc/snps_udc_plat.c b/drivers/usb/gadget/udc/snps_udc_plat.c
-> index 0ed685db149d..37edd6c35077 100644
-> --- a/drivers/usb/gadget/udc/snps_udc_plat.c
-> +++ b/drivers/usb/gadget/udc/snps_udc_plat.c
-> @@ -103,7 +103,7 @@ static int udc_plat_probe(struct platform_device *pdev)
->  	struct device *dev = &pdev->dev;
->  	struct resource *res;
->  	struct udc *udc;
-> -	int ret;
-> +	int irq, ret;
->  
->  	udc = devm_kzalloc(dev, sizeof(*udc), GFP_KERNEL);
->  	if (!udc)
-> @@ -132,11 +132,12 @@ static int udc_plat_probe(struct platform_device *pdev)
->  
->  	udc->phys_addr = (unsigned long)res->start;
->  
-> -	udc->irq = irq_of_parse_and_map(dev->of_node, 0);
-> -	if (udc->irq <= 0) {
-> +	irq = irq_of_parse_and_map(dev->of_node, 0);
-> +	if (irq <= 0) {
 
-Oops.  It turns out that irq_of_parse_and_map() returns zero on error,
-not negatives so this patch isn't needed and probably the correct thing
-is to change the error check to if (!irq) { instead.
 
-regards,
-dan carpenter
+Hi,
 
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch did many different things all at once, making it difficult
+  to review.  All Linux kernel patches need to only do one thing at a
+  time.  If you need to do multiple things (such as clean up all coding
+  style issues in a file/driver), do it in a sequence of patches, each
+  one doing only one thing.  This will make it easier to review the
+  patches to ensure that they are correct, and to help alleviate any
+  merge issues that larger patches can cause.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
