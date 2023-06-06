@@ -2,121 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD464723422
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Jun 2023 02:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 576AF72361D
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Jun 2023 06:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232411AbjFFAsQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Jun 2023 20:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43780 "EHLO
+        id S231836AbjFFEQp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Jun 2023 00:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232013AbjFFAsP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jun 2023 20:48:15 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249DCEA
-        for <linux-usb@vger.kernel.org>; Mon,  5 Jun 2023 17:48:14 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-513ea2990b8so4068a12.0
-        for <linux-usb@vger.kernel.org>; Mon, 05 Jun 2023 17:48:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686012492; x=1688604492;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/mQ9eLij8YgncwHX2mMe28rSprJZicmC7rEXFuA4odw=;
-        b=Pqya30+r1Ph+oAXKvQDmIJ0WyE6AP38UeyMyzP6hSMaHIaZ3jHKp0LKE+/i1Wfl/Mi
-         slriLOuvoWSE532zAlq+X0iofWuop+TokHHpHqUfEaCzb7pVBJQwA0dwJ8tHRegdEscU
-         fLAfwZEfG259O7JI98lMeCjR4Hem8RwLILSPI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686012492; x=1688604492;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/mQ9eLij8YgncwHX2mMe28rSprJZicmC7rEXFuA4odw=;
-        b=l+xI0fkACT3DZcPtAJrc++izhQLAjLcF2m/sB+8MTQ6EOyNycuSuuV5lo2WYmyS1jC
-         P8xvF8xiliaJMrEJz+8s3JdCJ8BA7PoqVmfxcczYQ/4u/j+lASN3gMqoBumvaPiPQ/Q9
-         OReiLgdCWUNkt2tQrtACs6b/3vNHNmpRyOJJwedlxm3Y5b2N227H4bg4bkiZdiCi7JbY
-         QMDMM+UHxl2hMheEwlfNXzDuuULdHxkByIJDfw8ocjS8tE7YI7zZwvS5RWdGnHdGaFux
-         lLiWHBJcrtE8PMzb62XEHFyy0XERB1C1Kq4yKMWPGh0GuEApqxA0OyQ5rDS3qKMaZELA
-         KD0A==
-X-Gm-Message-State: AC+VfDxFioHF6lwvUbJJZ+mIPpaq2ljVnv5akyLswDGRvM1tQOZ++By7
-        GuSPxebjG2/BnBmgatjpY284RQp7Tadlkr46n6R9Bg==
-X-Google-Smtp-Source: ACHHUZ6MtFnpvJIN1r2+0uK2xkNqoIrPwOpO+DuD+4llUCtwZMjmfWWzssehMhr/XRwXTmzfmG1wV1njH3v9vIunRhw=
-X-Received: by 2002:a50:d65d:0:b0:516:6453:1b76 with SMTP id
- c29-20020a50d65d000000b0051664531b76mr20551edj.5.1686012492347; Mon, 05 Jun
- 2023 17:48:12 -0700 (PDT)
+        with ESMTP id S229882AbjFFEQn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Jun 2023 00:16:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5CC187;
+        Mon,  5 Jun 2023 21:16:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 277FE62CDE;
+        Tue,  6 Jun 2023 04:16:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 888B1C4339E;
+        Tue,  6 Jun 2023 04:16:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686025001;
+        bh=MAE1ythoLNBeB1ORLNtzTYQQ0a3o9L1jKtxPLPiEWmU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Jl4vVm5svBlUMPsgHxndQpZVMWaMB6+4JhuIYcov7MW0R6GYSEql+3cfpRvC6DZJI
+         S1DLuzTdBdJDOFiPraR1MXhn25/nL046JgrODvmZUPkENOAgBVpEOSyMMy/3k1A2d/
+         nnHxis0P85OJn0bJQbyN7E9hfl7oodjTegS47golMW9K8rgxWz6NefvPJioSDyR1vw
+         vZk8KSZwkFhYVO5zccQpstwapn8NhJ8bcfvmoLn1w8fomYiHvXlAVDQcSXdv+3v6FP
+         2bh11G9zFqaovMio/hkLi1V/7WK3SvBnvYnUSZYUhN7f6QAT1FuMA7/5FnoLc/BNbI
+         wCsOVRvunVXEA==
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-55b069a7cf4so162331eaf.3;
+        Mon, 05 Jun 2023 21:16:41 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxaVMNonZRH+zNe+96pDZeQtXDpX9zsUlENGos1pGvf1qOQNw8M
+        4CkusCatghjQkZX27g4cv6GhDIFU8YoPOAOzPlE=
+X-Google-Smtp-Source: ACHHUZ6G60KlPawm1PRr84CTkNAX3J2skcs6tNEdohnBPRKzMwC7Ux6v297e5B1nE34u8Sw1UgXSXDYO5EuX+YFldDU=
+X-Received: by 2002:a4a:dec2:0:b0:558:b7e5:1dd0 with SMTP id
+ w2-20020a4adec2000000b00558b7e51dd0mr730630oou.3.1686025000793; Mon, 05 Jun
+ 2023 21:16:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230605204010.2239676-1-pholla@chromium.org>
-In-Reply-To: <20230605204010.2239676-1-pholla@chromium.org>
-From:   Benson Leung <bleung@chromium.org>
-Date:   Mon, 5 Jun 2023 17:48:00 -0700
-Message-ID: <CANLzEkuvM27MKTBFBVFcbZLZhxC27RUPpJp18jyxdQCG-BdzdQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: Fix fast_role_swap_current show function
-To:     Pavan Holla <pholla@chromium.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        pmalani@chromium.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <4cb758c7-f4f5-820c-c7e7-5b900ccc2534@kernel.org>
+In-Reply-To: <4cb758c7-f4f5-820c-c7e7-5b900ccc2534@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 6 Jun 2023 13:16:04 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATn=8a0F=4Rq2q3vz6-eupkVy6LvYUBLSiGeshujEu0zw@mail.gmail.com>
+Message-ID: <CAK7LNATn=8a0F=4Rq2q3vz6-eupkVy6LvYUBLSiGeshujEu0zw@mail.gmail.com>
+Subject: Re: make localmodconfig doesn't work for thunderbolt
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        andreas.noever@gmail.com, michael.jamet@intel.com,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        YehezkelShB@gmail.com, USB list <linux-usb@vger.kernel.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Pavan,
+Hi Jiri,
 
 
-On Mon, Jun 5, 2023 at 1:40=E2=80=AFPM Pavan Holla <pholla@chromium.org> wr=
-ote:
+On Wed, May 10, 2023 at 8:01=E2=80=AFPM Jiri Slaby <jirislaby@kernel.org> w=
+rote:
 >
-> The current implementation mistakenly performs a & operation on
-> the output of sysfs_emit. This patch performs the & operation before
-> calling sysfs_emit.
+> Hi,
 >
-> Series-to: LKML <linux-kernel@vger.kernel.org>
-> Signed-off-by: Pavan Holla <pholla@chromium.org>
-
-Reviewed-by: Benson Leung <bleung@chromium.org>
-
-Thanks!
-Benson
-
-> ---
->  drivers/usb/typec/pd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> if I use localmodconfig for example like this:
+> mkdir /tmp/tb/
+> echo thunderbolt >/tmp/tb/lsmod
+> make O=3D/tmp/tb LSMOD=3D/tmp/tb/lsmod localmodconfig
 >
-> diff --git a/drivers/usb/typec/pd.c b/drivers/usb/typec/pd.c
-> index 0bcde1ff4d39..8cc66e4467c4 100644
-> --- a/drivers/usb/typec/pd.c
-> +++ b/drivers/usb/typec/pd.c
-> @@ -95,7 +95,7 @@ peak_current_show(struct device *dev, struct device_att=
-ribute *attr, char *buf)
->  static ssize_t
->  fast_role_swap_current_show(struct device *dev, struct device_attribute =
-*attr, char *buf)
->  {
-> -       return sysfs_emit(buf, "%u\n", to_pdo(dev)->pdo >> PDO_FIXED_FRS_=
-CURR_SHIFT) & 3;
-> +       return sysfs_emit(buf, "%u\n", (to_pdo(dev)->pdo >> PDO_FIXED_FRS=
-_CURR_SHIFT) & 3);
->  }
->  static DEVICE_ATTR_RO(fast_role_swap_current);
+> I get:
+> using config: '.config'
+> thunderbolt config not found!!
 >
+> $ grep 'USB4\>' /tmp/tb/.config
+> # CONFIG_USB4 is not set
+>
+> I believe it's due to:
+>    obj-${CONFIG_USB4} :=3D thunderbolt.o
+> in drivers/thunderbolt/Makefile. I.e. ${} used instead of more common $()=
+.
+>
+> But even if I change the parser:
+>
+> --- a/scripts/kconfig/streamline_config.pl
+> +++ b/scripts/kconfig/streamline_config.pl
+> @@ -317,7 +317,7 @@ foreach my $makefile (@makefiles) {
+>          $_ =3D convert_vars($_, %make_vars);
+>
+>          # collect objects after obj-$(CONFIG_FOO_BAR)
+> -       if (/obj-\$\((CONFIG_[^\)]*)\)\s*[+:]?=3D\s*(.*)/) {
+> +       if (/obj-\$[({](CONFIG_[^})]*)[)}]\s*[+:]?=3D\s*(.*)/) {
+>              $var =3D $1;
+>              $objs =3D $2;
+>
+
+
+Will you send this fix as a patch?
+
+
+
+
+
+
+> I see:
+> module thunderbolt did not have configs CONFIG_USB4
+>
+> and:
+> $ grep 'USB4\>' /tmp/tb/.config
+> # CONFIG_USB4 is not set
+>
+> So two questions:
+> 1) is ${} supported and should be the above change sent as a patch? Or
+> should be drivers/thunderbolt/Makefile fixed to use $(). (And maybe
+> other Makefiles too.)
+>
+> 2) how to fix that 'thunderbolt did not have configs'?
+>
+> thanks,
 > --
-> 2.41.0.rc0.172.g3f132b7071-goog
->
+> js
+> suse labs
+
 
 
 --=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
+Best Regards
+Masahiro Yamada
