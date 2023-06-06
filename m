@@ -2,115 +2,202 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1822723836
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Jun 2023 08:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA68723848
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Jun 2023 08:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235596AbjFFGwx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Jun 2023 02:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53128 "EHLO
+        id S235675AbjFFG7i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Jun 2023 02:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233072AbjFFGww (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Jun 2023 02:52:52 -0400
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638A593;
-        Mon,  5 Jun 2023 23:52:50 -0700 (PDT)
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-514924b4f8cso8694117a12.3;
-        Mon, 05 Jun 2023 23:52:50 -0700 (PDT)
+        with ESMTP id S231273AbjFFG7h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Jun 2023 02:59:37 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB953B2;
+        Mon,  5 Jun 2023 23:59:36 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-565e6beb7aaso72403317b3.2;
+        Mon, 05 Jun 2023 23:59:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686034776; x=1688626776;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vd6K83zCBIqUJb+/7JQBPZMdIFhiBUSwrG2VrCB9t8o=;
+        b=Ti5tJ/GQM2WjplhKZWFOlrvFDfGPaixk5c+KGFkRoZXWh4cVBdNYI2kA/zVq41Hk8+
+         XW3+BIrHuDDD+i2A8nXGL/MDmjislrVFJZnb3bpauxDN9oBRal67CTGtbIxYaaM5sEEF
+         yF1XXdjFOY0hTQm64MGWo5rgsR8CwXhj+DmhwJk0hIel5c6OwTi76GShhlpmbYvduF6X
+         6VQDy77yAkNchHPBFZZcwOILvQfd6c2AF5P+o3kgLMbZFuwE30A2+rMwjAaJB++CqsLx
+         FU/4yHjQdoNpbSZ+M8ThpvOhfCT0DFSMyHB3W9WzmzRQ3qzWR/nQ9ZVdxVasmcagQd4D
+         /Wdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686034368; x=1688626368;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bD/cv+4u6UA/Mv15jOTb6k3jF8vZk7ftMwVtzeYdAis=;
-        b=ROTKMik8z7C1QW8FTbKAi1oTN2IbgD1yohijen+8QaadjAOyDxn0UP8m/KzF8V8De9
-         ft7/GeDFd/7NtVZZb9bntWIFzhrAEVvwerEXPlMxBUyqnPVMS4JUbnmzRDucqsGKQEpg
-         TYcTTxJO4cqr+zlJDBBsuSxrP60imNjsK27seFBELKmMLrxCya+2z8e+K9gzNqy95/ip
-         3P2/E9LW3E3hGl6ugWpAFJtALzpmoIWn8Kg/dSXErL6oq4MNa6mKOFA32c7EO8N5oQCL
-         dvlH8Po6PSYK2p3Y2sRK6CjXfESfTdw/VUKiUZ2xgpT3sq5RFJTogf2FKaWbHy+rKTne
-         Al5w==
-X-Gm-Message-State: AC+VfDz0ZVBe4H70cvbyPgZrB742rmdzkfp23utC/GTityNE5wGRlrZm
-        cFq0RNUmYqKG+hgLWyprsH3+Q+AD0b4=
-X-Google-Smtp-Source: ACHHUZ4zlhaaKdX8FkvMXNim5I5Tr/rXOWlHL3uiBgWRPNY4LecEkmb7vD4JvXi9pdp3SjAVL8qgJQ==
-X-Received: by 2002:aa7:c515:0:b0:515:4043:476f with SMTP id o21-20020aa7c515000000b005154043476fmr1158843edq.36.1686034368469;
-        Mon, 05 Jun 2023 23:52:48 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:59? ([2a0b:e7c0:0:107::aaaa:59])
-        by smtp.gmail.com with ESMTPSA id d13-20020a05640208cd00b0051643d71ce9sm4175064edz.26.2023.06.05.23.52.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 23:52:47 -0700 (PDT)
-Message-ID: <0d2a3964-8011-d8d6-8017-1f64bb117ac7@kernel.org>
-Date:   Tue, 6 Jun 2023 08:52:47 +0200
+        d=1e100.net; s=20221208; t=1686034776; x=1688626776;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vd6K83zCBIqUJb+/7JQBPZMdIFhiBUSwrG2VrCB9t8o=;
+        b=Yhypvr5Cel+XSUP0PGz0m7pLgwhQwDX8PMbESJ+E6UMrVxxWoJuEtasjZdMJkKPFjr
+         KteVH6aQO+25HsTwYMkepeHKviFmaMf97VRTQ9WbTUrMcfuoCcCP9AJvrfa1viYastIr
+         3n2iKKB97M4QjkIEuz0+RBz4cunba9zQD72C9rXYdXuhvpPplIwUw8H+Kf5Cj0ZnK1Da
+         wLuWcWSCTqU3ExKMJwmNvGvT7U/XGds0wjTMGCOtAiMlRnFfvtlMfkViTzI3xb2xq6Bp
+         kiIXUbKLpCE63wSOFwNssOQff5UusdZJRm92SVNoZzyNyuWnVKI+RDqkeKFKnn4LAQtP
+         UqPw==
+X-Gm-Message-State: AC+VfDwq2cZVDuTcz83eMy9UsNOIREq0K1zPpozK5EEzm9Evs6o3FMUp
+        6V8OCSyAH1tUEhEPQS7qiII=
+X-Google-Smtp-Source: ACHHUZ4Iw8Nyeow3An48f79JbOHWmw7akeCKFpL6ByRMj7NqUoSExInscafI+EziWfMyJtd5VRySUA==
+X-Received: by 2002:a81:74c2:0:b0:565:eacf:a58d with SMTP id p185-20020a8174c2000000b00565eacfa58dmr1233399ywc.38.1686034776030;
+        Mon, 05 Jun 2023 23:59:36 -0700 (PDT)
+Received: from devbox.. ([103.165.115.136])
+        by smtp.gmail.com with ESMTPSA id e24-20020a62aa18000000b0065da94fe921sm2007664pff.50.2023.06.05.23.59.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 23:59:35 -0700 (PDT)
+From:   Neel Chakraborty <neelchakrabortykernelwork@gmail.com>
+To:     b-liu@ti.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Neel Chakraborty <neelchakrabortykernelwork@gmail.com>
+Subject: [PATCH] drivers: usb: musb: musb_gadget: fixed coding style issues and removed unneeded code
+Date:   Tue,  6 Jun 2023 12:29:21 +0530
+Message-Id: <20230606065921.997102-1-neelchakrabortykernelwork@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: make localmodconfig doesn't work for thunderbolt
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        YehezkelShB@gmail.com, USB list <linux-usb@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
-References: <4cb758c7-f4f5-820c-c7e7-5b900ccc2534@kernel.org>
- <CAK7LNATn=8a0F=4Rq2q3vz6-eupkVy6LvYUBLSiGeshujEu0zw@mail.gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <CAK7LNATn=8a0F=4Rq2q3vz6-eupkVy6LvYUBLSiGeshujEu0zw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 06. 06. 23, 6:16, Masahiro Yamada wrote:
-> On Wed, May 10, 2023 at 8:01 PM Jiri Slaby <jirislaby@kernel.org> wrote:
->>
->> Hi,
->>
->> if I use localmodconfig for example like this:
->> mkdir /tmp/tb/
->> echo thunderbolt >/tmp/tb/lsmod
->> make O=/tmp/tb LSMOD=/tmp/tb/lsmod localmodconfig
->>
->> I get:
->> using config: '.config'
->> thunderbolt config not found!!
->>
->> $ grep 'USB4\>' /tmp/tb/.config
->> # CONFIG_USB4 is not set
->>
->> I believe it's due to:
->>     obj-${CONFIG_USB4} := thunderbolt.o
->> in drivers/thunderbolt/Makefile. I.e. ${} used instead of more common $().
->>
->> But even if I change the parser:
->>
->> --- a/scripts/kconfig/streamline_config.pl
->> +++ b/scripts/kconfig/streamline_config.pl
->> @@ -317,7 +317,7 @@ foreach my $makefile (@makefiles) {
->>           $_ = convert_vars($_, %make_vars);
->>
->>           # collect objects after obj-$(CONFIG_FOO_BAR)
->> -       if (/obj-\$\((CONFIG_[^\)]*)\)\s*[+:]?=\s*(.*)/) {
->> +       if (/obj-\$[({](CONFIG_[^})]*)[)}]\s*[+:]?=\s*(.*)/) {
->>               $var = $1;
->>               $objs = $2;
->>
-> 
-> 
-> Will you send this fix as a patch?
+Fixed a few coding style issues
+Removed the static int musb_gadget_vbus_session function as it was
+doing nothing.
 
-Hi,
+Signed-off-by: Neel Chakraborty <neelchakrabortykernelwork@gmail.com>
+---
+ drivers/usb/musb/musb_gadget.c | 38 +++++++++++-----------------------
+ 1 file changed, 12 insertions(+), 26 deletions(-)
 
-ah, yes, sorry, I forgot. Today or tomorrow.
-
-thanks for pinging me,
+diff --git a/drivers/usb/musb/musb_gadget.c b/drivers/usb/musb/musb_gadget.c
+index 31c44325e828..ac5f9d325f71 100644
+--- a/drivers/usb/musb/musb_gadget.c
++++ b/drivers/usb/musb/musb_gadget.c
+@@ -521,7 +521,7 @@ static void rxstate(struct musb *musb, struct musb_request *req)
+ 	struct usb_request	*request = &req->request;
+ 	struct musb_ep		*musb_ep;
+ 	void __iomem		*epio = musb->endpoints[epnum].regs;
+-	unsigned		len = 0;
++	unsigned int		len = 0;
+ 	u16			fifo_count;
+ 	u16			csr = musb_readw(epio, MUSB_RXCSR);
+ 	struct musb_hw_ep	*hw_ep = &musb->endpoints[epnum];
+@@ -657,7 +657,7 @@ static void rxstate(struct musb *musb, struct musb_request *req)
+ 					musb_writew(epio, MUSB_RXCSR, csr);
+ 
+ 					transfer_size = min(request->length - request->actual,
+-							(unsigned)fifo_count);
++							(unsigned int)fifo_count);
+ 					musb_ep->dma->desired_mode = 0;
+ 				}
+ 
+@@ -695,7 +695,7 @@ static void rxstate(struct musb *musb, struct musb_request *req)
+ 					transfer_size = min_t(unsigned int,
+ 							request->length -
+ 							request->actual,
+-							(unsigned)fifo_count);
++							(unsigned int)fifo_count);
+ 
+ 				csr &= ~MUSB_RXCSR_DMAMODE;
+ 				csr |= (MUSB_RXCSR_DMAENAB |
+@@ -728,7 +728,7 @@ static void rxstate(struct musb *musb, struct musb_request *req)
+ 					fifo_count, len,
+ 					musb_ep->packet_sz);
+ 
+-			fifo_count = min_t(unsigned, len, fifo_count);
++			fifo_count = min_t(unsigned int, len, fifo_count);
+ 
+ 			if (tusb_dma_omap(musb)) {
+ 				struct dma_controller *c = musb->dma_controller;
+@@ -870,9 +870,8 @@ void musb_g_rx(struct musb *musb, u8 epnum)
+ 		if ((request->actual < request->length)
+ 				&& (musb_ep->dma->actual_len
+ 					== musb_ep->packet_sz)) {
+-			/* In double buffer case, continue to unload fifo if
+- 			 * there is Rx packet in FIFO.
+- 			 **/
++			// In double buffer case, continue to unload fifo if
++			// there is Rx packet in FIFO.
+ 			csr = musb_readw(epio, MUSB_RXCSR);
+ 			if ((csr & MUSB_RXCSR_RXPKTRDY) &&
+ 				hw_ep->rx_double_buffered)
+@@ -916,7 +915,7 @@ static int musb_gadget_enable(struct usb_ep *ep,
+ 	void __iomem	*mbase;
+ 	u8		epnum;
+ 	u16		csr;
+-	unsigned	tmp;
++	unsigned int	tmp;
+ 	int		status = -EINVAL;
+ 
+ 	if (!ep || !desc)
+@@ -1132,7 +1131,7 @@ struct usb_request *musb_alloc_request(struct usb_ep *ep, gfp_t gfp_flags)
+ 	struct musb_ep		*musb_ep = to_musb_ep(ep);
+ 	struct musb_request	*request = NULL;
+ 
+-	request = kzalloc(sizeof *request, gfp_flags);
++	request = kzalloc(sizeof(*request), gfp_flags);
+ 	if (!request)
+ 		return NULL;
+ 
+@@ -1161,7 +1160,7 @@ static LIST_HEAD(buffers);
+ struct free_record {
+ 	struct list_head	list;
+ 	struct device		*dev;
+-	unsigned		bytes;
++	unsigned int		bytes;
+ 	dma_addr_t		dma;
+ };
+ 
+@@ -1343,7 +1342,7 @@ static int musb_gadget_set_halt(struct usb_ep *ep, int value)
+ 
+ 	spin_lock_irqsave(&musb->lock, flags);
+ 
+-	if ((USB_ENDPOINT_XFER_ISOC == musb_ep->type)) {
++	if (USB_ENDPOINT_XFER_ISOC == musb_ep->type) {
+ 		status = -EINVAL;
+ 		goto done;
+ 	}
+@@ -1612,21 +1611,8 @@ static void musb_pullup(struct musb *musb, int is_on)
+ 	musb_writeb(musb->mregs, MUSB_POWER, power);
+ }
+ 
+-#if 0
+-static int musb_gadget_vbus_session(struct usb_gadget *gadget, int is_active)
+-{
+-	musb_dbg(musb, "<= %s =>\n", __func__);
+-
+-	/*
+-	 * FIXME iff driver's softconnect flag is set (as it is during probe,
+-	 * though that can clear it), just musb_pullup().
+-	 */
+-
+-	return -EINVAL;
+-}
+-#endif
+ 
+-static int musb_gadget_vbus_draw(struct usb_gadget *gadget, unsigned mA)
++static int musb_gadget_vbus_draw(struct usb_gadget *gadget, unsigned int mA)
+ {
+ 	struct musb	*musb = gadget_to_musb(gadget);
+ 
+@@ -1744,7 +1730,7 @@ static inline void musb_g_init_endpoints(struct musb *musb)
+ {
+ 	u8			epnum;
+ 	struct musb_hw_ep	*hw_ep;
+-	unsigned		count = 0;
++	unsigned int		count = 0;
+ 
+ 	/* initialize endpoint list just once */
+ 	INIT_LIST_HEAD(&(musb->g.ep_list));
 -- 
-js
-suse labs
+2.40.1
 
