@@ -2,133 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08CDF7242EE
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Jun 2023 14:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E913672477D
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Jun 2023 17:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233726AbjFFMsL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Jun 2023 08:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
+        id S233084AbjFFPUC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Jun 2023 11:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbjFFMsK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Jun 2023 08:48:10 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2921E10D9;
-        Tue,  6 Jun 2023 05:47:45 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3f9a6c18e45so15530691cf.3;
-        Tue, 06 Jun 2023 05:47:45 -0700 (PDT)
+        with ESMTP id S238661AbjFFPUA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Jun 2023 11:20:00 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E2FE67
+        for <linux-usb@vger.kernel.org>; Tue,  6 Jun 2023 08:19:58 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f6170b1486so5029418e87.0
+        for <linux-usb@vger.kernel.org>; Tue, 06 Jun 2023 08:19:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686055599; x=1688647599;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cKiZBq4N2uzyc1uP6K/gn6kRYmbs2MnPBrOh0qNFFjQ=;
-        b=k/3CYpTYDMXNGlJOl6Vm9Siv7kMMxDjZlTRcNkC2QhX+jqbIUlq3IOMsj2Gm9A1mzc
-         1dYq4Re0QPPi3GaghqNM5WaUCBHiu6jq76O0VoKd/IYxcZPXxT2Z4OKVR9b8WkkF+giQ
-         jKYV63OJOzqTaGTYSrNrTQLBooeIQQgSERqIpmX8FFG0qAMTCSgsojNChDdxd5qj4dqF
-         9GK9LctSx5UKPqV/E/ssgNqEmo9sp28Bo9AHbxV1iHXrpTIIVkxVGPc1jaKuzyflH86w
-         ubo+Y7RhC7zmpeFfhjOgy/XgmvUHi6i4vNUnWpVh0me0mL4bR+Ex9WuS5Wu+Q5LTXMR3
-         J0jw==
+        d=gmail.com; s=20221208; t=1686064797; x=1688656797;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PXSnykSl2m8GUoGHPGyHMUT1Oob4xT3ddV97ZlLQSfo=;
+        b=gFhgmpMY05DjQ8KsKO/uybTiJ9yKPK2xD+mrm86hZm3kxTo0gvsPmO0dg1Zk44zvV4
+         exLmOivLJFGJMFyRwmA43Vo1gbtXtDiPD80eITDxvuEtrcRP0H4ybDXbek9y6dGBIAdk
+         nX4bsHQpZyoX4QV1tsGw5ZX7qvNuQmW2EOdfi02Kw08k1NnUcSiobTiO9cCh70ovT1Ia
+         VnrlZxy5SHVU28JlRHN2jpSpAFL9fPDbHKEgpfnRVSf/nMGp+GszSWrtUkt63qZI/w0D
+         VEaR91u11dtZBtb/EsevqMkevj7oRgMFyMHOnbrr2rfXiwqQca1rhc2nJDUuQfwN5h5X
+         psGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686055599; x=1688647599;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=cKiZBq4N2uzyc1uP6K/gn6kRYmbs2MnPBrOh0qNFFjQ=;
-        b=TYP4j4IRdSDQvAXRf3M/mzmTKZluBhCWTb4fr9BoABaUGA2OBJMW3JEYkoFCbk4fUE
-         vOCuRienwmT/N4RWZZcKjqqzU4oUBem7n05vQ6qHD/PU8jyJqEIl219Zk2a1gROMzxxU
-         Nd9tgn1G9n+xDaS70o5wIX/4WXpigHIxj4Ns7v37ejUWQn9NTzNg22mk2AxeBR4UZ9ym
-         UcOhJCVWkR8epRYj6Ln3f1SDFt+j9uTVZdzhraO6M5+yOZSICAJ4M9V5BpZ150htYOeI
-         p8Vdw18NIDX5n7eidsMITIoUgSO2rP+U2EA5Jjlag6KcMnHL3Gg+Ct7keVMuVZH2lzuR
-         kN3w==
-X-Gm-Message-State: AC+VfDzdGq7ir+f6pIOsiX6xnZkV+fpCLlevxrkqwiYb2R6sOGJakrff
-        HNqeiNxoOgvQ3qdESIQ5KA==
-X-Google-Smtp-Source: ACHHUZ7MMeHe7IIxBi59pp1HzL7wP2kz34CP+OK4jBeZLb+ItXcgXkd8wFtMZv+gD+NNBPr5K8lLeg==
-X-Received: by 2002:ac8:7d8e:0:b0:3f5:3d3d:d1b5 with SMTP id c14-20020ac87d8e000000b003f53d3dd1b5mr1553621qtd.27.1686055599534;
-        Tue, 06 Jun 2023 05:46:39 -0700 (PDT)
-Received: from serve.minyard.net ([47.189.94.26])
-        by smtp.gmail.com with ESMTPSA id g22-20020ac84696000000b003ef189ffa82sm2605273qto.90.2023.06.06.05.46.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 05:46:38 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from mail.minyard.net (unknown [IPv6:2001:470:b8f6:1b:6303:b09c:2f6b:4f53])
-        by serve.minyard.net (Postfix) with ESMTPSA id 4F393180044;
-        Tue,  6 Jun 2023 12:46:37 +0000 (UTC)
-Date:   Tue, 6 Jun 2023 07:46:36 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] USB: serial: return errors from break handling
-Message-ID: <ZH8qrBBwcXH0eP8/@mail.minyard.net>
-Reply-To: minyard@acm.org
-References: <20230604123505.4661-1-johan@kernel.org>
- <726a6f5f-5338-50a9-3081-7c02194dd7af@suse.com>
- <ZH8a12ZYtA2RzEK_@hovoldconsulting.com>
+        d=1e100.net; s=20221208; t=1686064797; x=1688656797;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PXSnykSl2m8GUoGHPGyHMUT1Oob4xT3ddV97ZlLQSfo=;
+        b=bjKMpnEEMX7isYoOZlfcROazt9EJgjvLDqyHUdU7D16GnDGDApVP8pTXk+PzKo2rcb
+         2tM/Ff+nisKdBkK2kNU2Ur3s4a+i8YFoldy5wWlommB03uvFhEOiHYAabiDjAwPPKVzQ
+         oWGCkLPAk9ORne1unBxNnGK+ySiRIefDkQaAGU48StK+R8Jnqq+Qc/a+5S1F38CW3xMn
+         nOs6+SVt5qtt5xJh2K7obOzqU+WBmDq84nARrPJYJ1JJ/JTbqQgJ1/jDKZi/lSEEyFlg
+         YIm0IJ3zIxVShKbrjgbwIkroscLJWncKjfuaoG4wNDRx6PWexyUsWadAyNFO7u39auYC
+         Cv7w==
+X-Gm-Message-State: AC+VfDzIpxG0Tzdc8g6WB2hEUCK2Q8SYSIQExwE9kRjHE4SudZE9M45Q
+        Gj5YM6HPf3e8cNn6PssWFsSAjR9owwGpUume+FI=
+X-Google-Smtp-Source: ACHHUZ5Bnc8SwAKxEjMAjEKFmdYjpebbkLljMTFnQAv85r7Hx5hcuzvq30JLw7RoxUyeqYz79wwD4jxUqh3vYW3vLHs=
+X-Received: by 2002:a05:6512:33c5:b0:4f4:f38a:4423 with SMTP id
+ d5-20020a05651233c500b004f4f38a4423mr5677644lfg.27.1686064796697; Tue, 06 Jun
+ 2023 08:19:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZH8a12ZYtA2RzEK_@hovoldconsulting.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Sender: traoreseriba174@gmail.com
+Received: by 2002:a2e:8506:0:b0:2b1:b972:80e1 with HTTP; Tue, 6 Jun 2023
+ 08:19:55 -0700 (PDT)
+From:   Maya olivier <madamoliviermaya@gmail.com>
+Date:   Tue, 6 Jun 2023 08:19:55 -0700
+X-Google-Sender-Auth: mW5_BVm4uCr6nQhKewon7buTT3o
+Message-ID: <CAKViA0XbyYvDnKXdMQjxVoM++uvCRnbWwaUhNbbL0FNXqy1rww@mail.gmail.com>
+Subject: Have a nice weekend,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.1 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:12e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [traoreseriba174[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [traoreseriba174[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  1.0 FREEMAIL_REPLY From and body contain different freemails
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 01:39:03PM +0200, Johan Hovold wrote:
-> On Tue, Jun 06, 2023 at 01:18:19PM +0200, Oliver Neukum wrote:
-> > On 04.06.23 14:35, Johan Hovold wrote:
-> > > This series starts returning errors from break handling and also uses
-> > > that mechanism to report to user space when break signalling is not
-> > > supported (e.g. when device or driver support is missing).
-> 
-> > do you eventually want this to be done for all serial devices?
-> > That is does cdc-acm need something like this patch?
-> 
-> Looks good to me. If this turns out to confuse userspace we may have to
-> turn that -ENOTTY into 0 in the tty layer, but we can still use it to
-> avoid the unnecessary wait to "disable" the break state.
-> 
-> > From 16430d9f109f904b2bfbac6e43a939209b6c4bc7 Mon Sep 17 00:00:00 2001
-> > From: Oliver Neukum <oneukum@suse.com>
-> > Date: Tue, 6 Jun 2023 12:57:00 +0200
-> > Subject: [PATCH] usb: cdc-acm: return correct error code on unsupported break
-> > 
-> > Return -ENOTTY if the device says that it doesn't support break
-> > so that the upper layers get error reporting right.
-
-Yeah, when I asked for this, I didn't realize that no devices did this,
-I thought it was a one-off with this device.  There is a distinct
-possibility that this will break userland.  This sounds like a good
-plan.
-
--corey
-
-> > 
-> > Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> 
-> Acked-by: Johan Hovold <johan@kernel.org>
-> 
-> > ---
-> >  drivers/usb/class/cdc-acm.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-> > index 11da5fb284d0..7751f5728716 100644
-> > --- a/drivers/usb/class/cdc-acm.c
-> > +++ b/drivers/usb/class/cdc-acm.c
-> > @@ -892,6 +892,9 @@ static int acm_tty_break_ctl(struct tty_struct *tty, int state)
-> >  	struct acm *acm = tty->driver_data;
-> >  	int retval;
-> >  
-> > +	if (!(acm->ctrl_caps & USB_CDC_CAP_BRK))
-> > +		return -ENOTTY;
-> > +
-> >  	retval = acm_send_break(acm, state ? 0xffff : 0);
-> >  	if (retval < 0)
-> >  		dev_dbg(&acm->control->dev,
+I am Mrs. Maya Oliver,
+From the United Kingdom. Firstly, I am married to Mr. Patrick Oliver,
+A diamond and gold merchant who owns a small gold Mine in Thailand
+Bangkok; He died of Cardiovascular Disease in mid-March 2011. During
+his lifetime he deposited the sum of =E2=82=AC 12.7 Euros in a bank in Bang=
+kok
+the capital city of Thailand. The deposited money was from the sale of
+the shares, death benefits payment and entitlements of my deceased
+husband by his company. Since his death I decided not to remarry, when
+my late husband was Alive he deposited the sum of =E2=82=AC 12.7 Million Eu=
+ro)
+Twelve million, Seven hundred Thousand Euro) in a bank in Thailand,
+Presently this money is Still in the bank. And My Doctor told me that
+I don't have much time to leave because of the cancer problem, having
+known my condition I decided to hand you over this fund to take Care
+of the less-privileged people
+Meanwhile i have concluded with the bank to transfer the funds to you,
+through the listed options below 1, Money gram 2, ATM card,3 RIA 4,
+Online Transfer
+ Please i will be glad to hear from you before i can send you the
+contact details of the bank.
+You can contact the bank for the transaction with the email below:
+transferriamoney0@gmail.com
+Mrs. Maya Oliver
