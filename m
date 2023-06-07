@@ -2,105 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3EAB7254E7
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 08:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 526917255DC
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 09:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238472AbjFGG5o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Jun 2023 02:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
+        id S238168AbjFGHgt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Jun 2023 03:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235326AbjFGG5n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 02:57:43 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0BB11A
-        for <linux-usb@vger.kernel.org>; Tue,  6 Jun 2023 23:57:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.at;
- s=s31663417; t=1686121056; x=1686725856;
- i=christian.schaubschlaeger@gmx.at;
- bh=d4Y5Ez+sSz8LK7/ua1/lEIvGIGzE8AMrUHID8kG5sME=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=XMUiDh5HgAROQkFU/I5C1dE9cVbqAqOHrkdIL80wH56y5OvCNFNTsYQjsgNyDlfaMgsJLng
- YvLPWcVu1IkzsH5O40HLHVBwXPT3lC1qhkP8c5AfSEc0EbfBwyr0h7fgebNhLeL96cGhRMHOr
- y2X+HNwcpQNr9UN2PIMtzRx4yA7Zlg2Y2AAlIVg7ACD7zKrwYHYYAy5Uyn2wZGx1RdgYsJf6M
- UU6PWva3yOSo4jc96tF0Qw7T2OVhqVzK55ZAo7+mT4+Q7yEMlAOCLg6fWuLv1A7Jx92KTGk0S
- cdwd+jacPFQtMqPhcvKGQEUHsyTTZw72hOkNVqPqWDUZupwUPhTQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.70] ([88.116.17.66]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MC30P-1qJ7yX0hlV-00CQsX; Wed, 07
- Jun 2023 08:57:36 +0200
-Message-ID: <9dfe0a6b-a6d6-d21a-d23c-6f53fd535ccb@gmx.at>
-Date:   Wed, 7 Jun 2023 08:57:33 +0200
+        with ESMTP id S239159AbjFGHet (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 03:34:49 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2057.outbound.protection.outlook.com [40.107.96.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAC91FFB;
+        Wed,  7 Jun 2023 00:30:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eIAhoCVtyGcKPkUKz5Hw8bIwrBnRqNi4TtmrDbYUKICMS5NbpekFUnxzpITAEwdSOq8+mPjg/9ehdbHKUi0XCW0eJzWmDknoCxPZGOff0nJU+Z+Xwx/G1dKc4zm5BS0pWd841n6htOy554Y2xE8AXajAZU56bClm22Kt/cZZ1R27JrUecilnM79NlVJ/qpp2gFMUo6Wixd5zxowmlehG6B3SA/DlKGwUVfY04vRxrCVb5LtoWa5yrcE94P1PtSvYG34XaLZVaz4nzehHHJ/9dqPdOdso710SJd0NyqqYF60D61MNCH4yLlMzXRDqoZeekwNWm8cUsFTbykgcBwoA3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SaVA7oT6nA8jGaAAuqZjypl5bmUtM+ge/q2crgX09oM=;
+ b=FQyAQLWRFOzLTcaMk/9FicobDfqGFPB7o17MffBj05dveErjVbvPzLfAF/6+9R6sF6KNcOxCldTrUTSNZPTZJS/SyekoOrhxZyJKUsSXjceNuIqk+t/9pzXj821uWKEOP1sIgQ6r73JmeJEenonwA/hA1lOhbkZe5oBqh2vFd63oBS8bG1zEVNQtGo94RsQ7VwRj72+CVMmrPBg3YqbPuJm6tI1NUYRupTDggJhnyzA7FCMTS3KI115KWPDS4fsbKb/NVhvk2IIXhMRKbJuLd9QvpYkrQDwRadQd9ErUG1paAJC2tatbtyQMVgEjfDzcbesX719mrAXGo6VydxvWvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SaVA7oT6nA8jGaAAuqZjypl5bmUtM+ge/q2crgX09oM=;
+ b=WGEW5AlwuF5pyLEybJP8DRqD+RzL9QvGmqMicBJNzSg7+tA3VBl59okXFKH+PbVvP/b1dX6U4AnJtBmDp3Y1EphURspQ8/XVApf4HabDJdkv+09YBxtW4C8i21D8dii8eSjBcdaDxCyKdtxPWxd9vv8r1mXGWT6CT3bcvJVk40o=
+Received: from CY5PR15CA0080.namprd15.prod.outlook.com (2603:10b6:930:18::32)
+ by CH2PR12MB5513.namprd12.prod.outlook.com (2603:10b6:610:68::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Wed, 7 Jun
+ 2023 07:30:30 +0000
+Received: from CY4PEPF0000E9D2.namprd03.prod.outlook.com
+ (2603:10b6:930:18:cafe::36) by CY5PR15CA0080.outlook.office365.com
+ (2603:10b6:930:18::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36 via Frontend
+ Transport; Wed, 7 Jun 2023 07:30:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CY4PEPF0000E9D2.mail.protection.outlook.com (10.167.241.145) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6477.13 via Frontend Transport; Wed, 7 Jun 2023 07:30:29 +0000
+Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 7 Jun
+ 2023 02:30:29 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB07.amd.com
+ (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 7 Jun
+ 2023 00:30:28 -0700
+Received: from xhdnavam40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Wed, 7 Jun 2023 02:30:26 -0500
+From:   Piyush Mehta <piyush.mehta@amd.com>
+To:     <gregkh@linuxfoundation.org>, <michal.simek@amd.com>,
+        <linus.walleij@linaro.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <git@amd.com>, Piyush Mehta <piyush.mehta@amd.com>
+Subject: [PATCH] usb: gadget: udc: udc-xilinx: Add identifier to read_fn function arg
+Date:   Wed, 7 Jun 2023 12:59:59 +0530
+Message-ID: <20230607072959.2334046-1-piyush.mehta@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: USB issue on a TB4 controller?
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-References: <a45b9989-c9da-bf4e-94c8-3e1341777b4d@gmx.at>
- <20230526123655.GW45886@black.fi.intel.com>
- <0bbb844d-3348-dc28-311a-d4111f8a7f81@linux.intel.com>
- <2d12af30-4a7c-5fb3-fab8-5759296c68ac@gmx.at>
- <20230530105039.GF45886@black.fi.intel.com>
- <d6e7e0d5-0b30-d66c-2ee8-4f0c0caef0b9@gmx.at>
- <20230530121756.GG45886@black.fi.intel.com>
- <a22f8874-c2b3-92a5-e858-b877872e5284@gmx.at>
- <894ba559-9233-4428-69e7-7c0bf5c7556e@gmx.at>
- <b45b5e8a-756e-fd76-64af-d3e376997a31@linux.intel.com>
- <618d9789-fc5a-10b3-6dc9-27be5bbff666@gmx.at>
- <dd62787f-a04c-01ce-6a16-6a116f0f9c3b@linux.intel.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?Christian_Schaubschl=c3=a4ger?= 
-        <christian.schaubschlaeger@gmx.at>
-In-Reply-To: <dd62787f-a04c-01ce-6a16-6a116f0f9c3b@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:xpT9onmoGZEOgz1S5ABBgh+0dtxT3ZtlEuAM3A5o2yq1qwhjAPf
- h+4zaQl6jp3Fl02a141CZMi/hvg5GRTGMnv83yIs9I5mclTPvDadVQtXYUeoT8I4ZKl+N1W
- 3E25nmevsZVim4HEP2WBaoAqQWlWr5y2NiR+a/kuVF+Uk5u0cqcKdonuMsl9n10uguTkyUw
- ZgN8VouGEzxboYxdeo1PQ==
-UI-OutboundReport: notjunk:1;M01:P0:xio+LChGI2w=;u76ZYAzkRqZwpBOJqp0mXN4u+xT
- cv5A/PBk1FuBGF70r2wyUfMFFEhnfS88N9fFM8gUnVZJq7Z4KuiSEntFAg9JdAdQYiQQ0zEKN
- EpA/ninVWvklXMKuuKk0jfpGHuyiW1M0QiU/3WhBbkzgCzDt8DX0aDGTzQ1wmyfJs/2qvfh4v
- 791OETHo/Mh0aU8FXxFtYLvFGuFDrKN+iKmBsoN2CY23FJUnfByohytZbix36cLq8iE5X35mi
- vZGgzC+aId/Vm4MXnSqbKlJuGDm/8ScoMzaCpfANiwq664XSyLE4ucBng18G5mFCTBVBEuvc7
- hdRccBaUyVAMTABtVFCLBM3HnoctBTmmO4LHGUVW2ATQsz3lPaxM/v3jEc0ti+uCo1bLsS4y/
- D7z/yUN603vdCUUyNIRiDuU5XxkNAOqFcuizT7w/EyvwBZoddZCff6YEQO/pBvDZcXT8Jv0hZ
- Rr1q4xA+yCTctZFjTjOnp85SCS9+a7TmnBTBH0Q8MqfgWx3hvAQnTSuS+ZAdQqb/2B5XfAr5B
- LMjAB4ljEE4QdUoKwb8HVX0V5RcN0j4Vh6Gkp2Oc2QNlKTjwfefd3pG9D0AgDODRZttIza/96
- TCdETCfCoWLmNwf9S83XFiqma8FQ2qessQ2o7GRVLKvECF758O43YxBWXcei7/PACXtMx0YxE
- orcIvQGyhqwAQELYAlvMTI1vOXg5aCPnChoMBvEBTy9NDor6T8ecbgYuK0mP7OjW3MOp8VnsG
- /OuSWk5H8seNJTuJfFe/IWeoAas7BUzjvVWTsrJOel65I/FRJ+pDxYnbcq4vkxeZThH0jA7un
- qIWh7pAQDJa+TdWOjt8QhoWqL4HbaOgbwmnaFPhn9CeCDUdH6ucvZUWagxlshBslu+SzHAQ/r
- gISwChVucDM5BzqSFzMwy3U95svJw9cK100UQQwnYXjZW6MqEj3KWjp50euaWqO2MdesExtym
- 08cOPE2R/aw/5lM8ffLJaHxcgOw=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D2:EE_|CH2PR12MB5513:EE_
+X-MS-Office365-Filtering-Correlation-Id: aa88ff5b-8f3b-4160-f577-08db67291243
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Db9GQnDsjzFJpX7ti4XjNiRGOtKNJw748hvhLS4xXyPZwosuAzHrF3TBfN/VMcz2z5nEE9d99ZqJkNLDQh4akGWVIJXxmkIkKCsBJ4MKhEH+AGGKi430zCngqI71pARwixYCpJLq07lUsvL+/Ot8N2xwyUBVz8uSxdvf6P9nORLZpSltYj7egLjiWaRack9UPSgpqO2mePbaQOeegmUTFlYwTTW8Q12WI8vWBHsJ4vciRECR50KudoZ5vi3frSZY79e5qUTRMoht3hafL0qRn91fyEs7Sm4kxsP/aTIbPOl8pkTZpX6/iFoBW3d30BEv4LXB5ztKDF0CwYBJgb61hDxwDYAtVlDsfh2SgSLvy/6RY0x6FG9cBPR8fK27anzuvCvKH2v1oODjJAnV0Adw58r5cpEVLqGKtO/Sy+P1eA/I6xhJTMF/AOv1NOZHYdWtlY9zj57t14b+GeooXzcqVU0dumMIHO8R/nR2c7f03S0RJMhFgaW2Dp6OFjktIcfvtT1f9SQw3I4VGf3XDdSeibJ4LMqZS+Q61IKH5r6AbN1Nicrb9kHGRfY6DVKHYHGGnW1VKI5I7ymPZhBDBEI/9cNtS63IfWc1NBszPBVdBkTaEYJI+hrIUkb5hcE88gqJlA1CxOw6L3i9yDdNEj93eA0mWY9Ag/hbE4I0U1DXSDopwZ4AEj+3S4ynyaJUJIJyqt8dZ61qh6CLHblPcwx+HR2yN9XW+kineiRl2v3HUo/ig6XKBF0txcKd/GO5cFfyHS8kKoPFgpdzJd/CbtskWw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39860400002)(396003)(376002)(451199021)(46966006)(36840700001)(40470700004)(478600001)(6666004)(36860700001)(82310400005)(36756003)(2616005)(186003)(47076005)(336012)(426003)(83380400001)(86362001)(40480700001)(356005)(81166007)(82740400003)(26005)(1076003)(40460700003)(8936002)(8676002)(5660300002)(41300700001)(44832011)(4744005)(2906002)(110136005)(54906003)(4326008)(316002)(70206006)(70586007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 07:30:29.9727
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa88ff5b-8f3b-4160-f577-08db67291243
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9D2.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB5513
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-> Thanks,
->
-> In the failed case the hub in the dock doesn't show any activity
-> on port4 where the NIC is connected. No changes, link isn't in any
-> error state. It looks just like any empty port.
->
-> I don't have any idea what's going on.
->
-> I guess it's not possible to connect a protocol analyzer between the
-> hub in the dock and the NIC?
+Add an identifier in the read_fn function declaration because based on
+commit ca0d8929e75a ("checkpatch: add warning for unnamed function
+definition arguments") it is the preferred coding style even C standard
+allows both formats.
 
-No, I'm afraid I don't have a protocol analyzer...
-Any other logs, etc. I could provide?
+Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+---
+ drivers/usb/gadget/udc/udc-xilinx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks and best regards,
-Christian
-
+diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
+index 4827e3cd3834..609f7e30cf2c 100644
+--- a/drivers/usb/gadget/udc/udc-xilinx.c
++++ b/drivers/usb/gadget/udc/udc-xilinx.c
+@@ -192,7 +192,7 @@ struct xusb_udc {
+ 	bool dma_enabled;
+ 	struct clk *clk;
+ 
+-	unsigned int (*read_fn)(void __iomem *);
++	unsigned int (*read_fn)(void __iomem *reg);
+ 	void (*write_fn)(void __iomem *, u32, u32);
+ };
+ 
+-- 
+2.25.1
 
