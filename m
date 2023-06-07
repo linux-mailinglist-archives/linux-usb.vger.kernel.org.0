@@ -2,83 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FAA2725CF8
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 13:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8858725D12
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 13:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240159AbjFGLX1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Jun 2023 07:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
+        id S240107AbjFGL2x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Jun 2023 07:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235568AbjFGLXZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 07:23:25 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3201720
-        for <linux-usb@vger.kernel.org>; Wed,  7 Jun 2023 04:23:24 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f3b9755961so8875860e87.0
-        for <linux-usb@vger.kernel.org>; Wed, 07 Jun 2023 04:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686137002; x=1688729002;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zYWjVSSUNQy2OIvRzT+DCkE2WygimSZ/7ktVYRvNicw=;
-        b=ut1l0xhdvA0jDNgaIFbJL6WY0litUWHGkN3/F7y+kRqLwEKWv1DEhaQBr4U6mVlK/+
-         BGgF6RQIMKuHXnZnPgCLP66k45lwaHR9sK5ZdZT2yogZoSZ/PrgcWuBo5z2C0ySNOtmR
-         3bogr32wDzzLCqrjcOjMaZnayYP71zrKMRypXK/a+ES13Esh6mEC5TNEztHTzawv0OGJ
-         3+9BvEJPMj1M9imHdq5CHtRNHoazHEjRVTOY9qE2X+JRK9RaJpWYyvjAt5qY7hiPfCjx
-         lLyHyEuoatjWEVkJhvTPk+nE6aH0uxNFMzdfBbThIZbiM7C8nGHZ+AoNYa1mxbVQpPGp
-         A7iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686137002; x=1688729002;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zYWjVSSUNQy2OIvRzT+DCkE2WygimSZ/7ktVYRvNicw=;
-        b=fw0EVtu2ZmXRAFi6yh1RZUm+aY25jfiBXEXTNQPeGjvUr08G57lq+uTqSbGgQZyux3
-         sr9/QB8bcRJ27OzLqXNNMqZ06Ojw5uqN3QaU3wqzRlp+0ByOgJ36qnzQfNtIQ9SvXE5f
-         p+92Jgn2jNajuU4hNvkhm+ZMMd4CKqu+lTlN7orrO81tJcBus6cuYHvLCxUHRgV7rwVu
-         5ZUutJa7+RKVgRv/ES8JHGnxrg3/O+hyNWh/e/Sf+Wn9BTG6K5Hs/hWi5ehWQoISz6Se
-         v2Uj9A9igsZ8UMsD9KngZWed5rAUY6IeHWojqbg+J9kbZTawu7Wj5skojimjt23qsuFZ
-         4ejQ==
-X-Gm-Message-State: AC+VfDyOvJzEyfxJcqeSZ1fucStTEWZWgorggRbRt3uQdMuBfj3jMIrC
-        dqCMjeLEDJOWCCnQKSnA5XJl9Q==
-X-Google-Smtp-Source: ACHHUZ4aydeqTRm2woMwjuX3xGYPzWA8qO84H3tMVn0lkLC1A1gjqkq20mduf4N1CkRL+Px2KE7u7g==
-X-Received: by 2002:ac2:4a7a:0:b0:4f2:6bc3:5e33 with SMTP id q26-20020ac24a7a000000b004f26bc35e33mr1969465lfp.9.1686137002414;
-        Wed, 07 Jun 2023 04:23:22 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id q11-20020ac2514b000000b004f63739e2f1sm552855lfd.255.2023.06.07.04.23.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 04:23:21 -0700 (PDT)
-Message-ID: <8e21fef3-5ae4-673a-dce2-4ebf1dd0eb66@linaro.org>
-Date:   Wed, 7 Jun 2023 14:23:20 +0300
+        with ESMTP id S235232AbjFGL2u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 07:28:50 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D590110DE;
+        Wed,  7 Jun 2023 04:28:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686137328; x=1717673328;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e7TMZ16KljFDcwznRpSLNhv1XRuSoLTaPVtloCJ3DK4=;
+  b=QJ+fe8LblpBaulRLijdKVDLvuUsyLyFZcsbowmpyUAjjSBkYMuo+hZdd
+   E41o2/hgOOc2OaR0D/hVu1z0nAYJP8uwtoZ5wKFrPNGyG6CnSNV1USqPn
+   Cl8KsoIn96CLrYYPsSQBGp351KFFKOHJS8X+7irnfdEo/1YGA7mA6r6uv
+   maha4kjOpuaeAv3gFBT/Py7068qEf/nmOjNQRMP8m+Iqt17z5cnfxFoNk
+   uipZHyd2cSrbKgpGaGUWbhpvJ2KuhM5sjWG6I4afz9QgzTxmUNwv27rZY
+   jKvAxavNzE5iHeQBmf3u2pnyZ1pTfqnoIoxZq7jS9uWE6z9UY/3MRp90y
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="337319816"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="337319816"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 04:27:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="739193982"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="739193982"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 07 Jun 2023 04:26:59 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q6rJa-0006VX-0m;
+        Wed, 07 Jun 2023 11:26:58 +0000
+Date:   Wed, 7 Jun 2023 19:26:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stanley Chang <stanley_chang@realtek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Stanley Chang <stanley_chang@realtek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ray Chi <raychi@google.com>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 2/5] phy: realtek: usb: Add driver for the Realtek SoC
+ USB 2.0 PHY
+Message-ID: <202306071901.mhcH1Kcc-lkp@intel.com>
+References: <20230607062500.24669-2-stanley_chang@realtek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 7/9] arm64: dts: qcom: ipq5332: Add USB related nodes
-Content-Language: en-GB
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
-        kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
-        will@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, arnd@arndb.de, geert+renesas@glider.be,
-        neil.armstrong@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, rafal@milecki.pl, quic_srichara@quicinc.com,
-        quic_varada@quicinc.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org
-References: <cover.1686126439.git.quic_varada@quicinc.com>
- <1b48e737aa14f5b5539cbf04d473182121d5b1ad.1686126439.git.quic_varada@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1b48e737aa14f5b5539cbf04d473182121d5b1ad.1686126439.git.quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607062500.24669-2-stanley_chang@realtek.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,91 +80,160 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 07/06/2023 13:56, Varadarajan Narayanan wrote:
-> Add USB phy and controller nodes
-> 
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
->   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 55 +++++++++++++++++++++++++++++++++++
->   1 file changed, 55 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> index c2d6cc65..3183357 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> @@ -383,6 +383,61 @@
->   				status = "disabled";
->   			};
->   		};
-> +
-> +		usb_0_m31phy: hs_m31phy@7b000 {
-> +			compatible = "qcom,ipq5332-m31-usb-hsphy";
-> +			reg = <0x0007b000 0x12C>,
-> +			      <0x08af8800 0x400>;
-> +			reg-names = "m31usb_phy_base",
-> +				    "qscratch_base";
-> +			phy_type= "utmi";
-> +
-> +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-> +			reset-names = "usb2_phy_reset";
-> +
-> +			status = "okay";
-> +		};
-> +
-> +		usb2: usb2@8a00000 {
-> +			compatible = "qcom,ipq5332-dwc3", "qcom,dwc3";
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges;
-> +
-> +			reg = <0x08af8800 0x100>;
-> +
-> +			clocks = <&gcc GCC_USB0_MASTER_CLK>,
-> +				<&gcc GCC_SNOC_USB_CLK>,
-> +				<&gcc GCC_USB0_SLEEP_CLK>,
-> +				<&gcc GCC_USB0_MOCK_UTMI_CLK>;
+Hi Stanley,
 
-Please indent these values.
+kernel test robot noticed the following build errors:
 
-> +
-> +			clock-names = "core",
-> +				"iface",
-> +				"sleep",
-> +				"mock_utmi";
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus robh/for-next linus/master v6.4-rc5 next-20230607]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Please indent these values.
+url:    https://github.com/intel-lab-lkp/linux/commits/Stanley-Chang/phy-realtek-usb-Add-driver-for-the-Realtek-SoC-USB-2-0-PHY/20230607-142704
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230607062500.24669-2-stanley_chang%40realtek.com
+patch subject: [PATCH v3 2/5] phy: realtek: usb: Add driver for the Realtek SoC USB 2.0 PHY
+config: sh-randconfig-r033-20230607 (https://download.01.org/0day-ci/archive/20230607/202306071901.mhcH1Kcc-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+        git fetch usb usb-testing
+        git checkout usb/usb-testing
+        b4 shazam https://lore.kernel.org/r/20230607062500.24669-2-stanley_chang@realtek.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir --shuffle=2827500481 ARCH=sh olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir --shuffle=2827500481 ARCH=sh SHELL=/bin/bash
 
-> +
-> +			interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306071901.mhcH1Kcc-lkp@intel.com/
 
-No PHY IRQs?
+All errors (new ones prefixed by >>):
 
-> +			interrupt-names = "pwr_event";
-> +
-> +			resets = <&gcc GCC_USB_BCR>;
-> +
-> +			qcom,select-utmi-as-pipe-clk;
-> +
-> +			usb2_0_dwc: usb@8a00000 {
-> +				compatible = "snps,dwc3";
-> +				reg = <0x08a00000 0xe000>;
-> +				clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> +				clock-names = "ref";
-> +				interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
-> +				usb-phy = <&usb_0_m31phy>;
-> +				tx-fifo-resize;
-> +				snps,is-utmi-l1-suspend;
-> +				snps,hird-threshold = /bits/ 8 <0x0>;
-> +				snps,dis_u2_susphy_quirk;
-> +				snps,dis_u3_susphy_quirk;
-> +				snps,ref-clock-period-ns = <21>;
-> +			};
-> +		};
->   	};
->   
->   	timer {
+   sh4-linux-ld: drivers/phy/realtek/phy-rtk-usb2.o: in function `rtk_usb2phy_remove':
+>> drivers/phy/realtek/phy-rtk-usb2.c:1891: undefined reference to `usb_remove_phy'
+   sh4-linux-ld: drivers/phy/realtek/phy-rtk-usb2.o: in function `create_debug_files':
+>> drivers/phy/realtek/phy-rtk-usb2.c:1378: undefined reference to `usb_debug_root'
+   sh4-linux-ld: drivers/phy/realtek/phy-rtk-usb2.o: in function `rtk_usb2phy_probe':
+>> drivers/phy/realtek/phy-rtk-usb2.c:1882: undefined reference to `usb_add_phy_dev'
+   sh4-linux-ld: drivers/power/supply/wm831x_power.o: in function `wm831x_power_probe':
+>> drivers/power/supply/wm831x_power.c:695: undefined reference to `devm_usb_get_phy_by_phandle'
+   sh4-linux-ld: drivers/power/supply/rt9455_charger.o: in function `rt9455_probe':
+>> drivers/power/supply/rt9455_charger.c:1682: undefined reference to `devm_usb_get_phy'
+   sh4-linux-ld: drivers/power/supply/isp1704_charger.o: in function `isp1704_charger_probe':
+>> drivers/power/supply/isp1704_charger.c:73: undefined reference to `devm_usb_get_phy_by_phandle'
+>> sh4-linux-ld: drivers/power/supply/isp1704_charger.c:73: undefined reference to `devm_usb_get_phy'
+   sh4-linux-ld: drivers/power/supply/bq25890_charger.o: in function `bq25890_probe':
+>> drivers/power/supply/bq25890_charger.c:1511: undefined reference to `devm_usb_get_phy'
+   sh4-linux-ld: drivers/power/supply/bq256xx_charger.o: in function `bq256xx_probe':
+>> drivers/power/supply/bq256xx_charger.c:1743: undefined reference to `devm_usb_get_phy'
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for USB_PHY
+   Depends on [n]: USB_SUPPORT [=n]
+   Selected by [y]:
+   - PHY_RTK_RTD_USB2PHY [=y]
+
+
+vim +1891 drivers/phy/realtek/phy-rtk-usb2.c
+
+  1802	
+  1803	static int rtk_usb2phy_probe(struct platform_device *pdev)
+  1804	{
+  1805		struct rtk_usb_phy *rtk_phy;
+  1806		struct device *dev = &pdev->dev;
+  1807		struct device_node *node;
+  1808		struct device_node *sub_node;
+  1809		struct phy *generic_phy;
+  1810		struct phy_provider *phy_provider;
+  1811		int phyN, ret = 0;
+  1812	
+  1813		rtk_phy = devm_kzalloc(dev, sizeof(*rtk_phy), GFP_KERNEL);
+  1814		if (!rtk_phy)
+  1815			return -ENOMEM;
+  1816	
+  1817		rtk_phy->dev			= &pdev->dev;
+  1818		rtk_phy->phy.dev		= rtk_phy->dev;
+  1819		rtk_phy->phy.label		= "rtk-usb2phy";
+  1820		rtk_phy->phy.notify_port_status = rtk_usb_phy_notify_port_status;
+  1821	
+  1822		if (!dev->of_node) {
+  1823			dev_err(dev, "%s %d No device node\n", __func__, __LINE__);
+  1824			goto err;
+  1825		}
+  1826	
+  1827		node = dev->of_node;
+  1828	
+  1829		rtk_phy->usb_ctrl_regs = syscon_regmap_lookup_by_phandle(node, "realtek,usb-ctrl");
+  1830		if (IS_ERR(rtk_phy->usb_ctrl_regs)) {
+  1831			dev_info(dev, "%s: DTS no support usb_ctrl regs syscon\n", __func__);
+  1832			rtk_phy->usb_ctrl_regs = NULL;
+  1833		}
+  1834	
+  1835		phyN = of_get_child_count(node);
+  1836		rtk_phy->phyN = phyN;
+  1837		dev_dbg(dev, "%s phyN=%d\n", __func__, rtk_phy->phyN);
+  1838	
+  1839		rtk_phy->reg_addr = devm_kzalloc(dev,
+  1840			    sizeof(struct reg_addr) * phyN, GFP_KERNEL);
+  1841		if (!rtk_phy->reg_addr)
+  1842			return -ENOMEM;
+  1843	
+  1844		rtk_phy->phy_data = devm_kzalloc(dev,
+  1845			    sizeof(struct phy_data) * phyN, GFP_KERNEL);
+  1846		if (!rtk_phy->phy_data)
+  1847			return -ENOMEM;
+  1848	
+  1849		for (sub_node = of_get_next_child(node, NULL); sub_node != NULL;
+  1850			    sub_node = of_get_next_child(node, sub_node)) {
+  1851			ret = get_phy_parameter(rtk_phy, sub_node);
+  1852			if (ret) {
+  1853				dev_err(dev, "%s: get_phy_parameter fail ret=%d\n",
+  1854					    __func__, ret);
+  1855				goto err;
+  1856			}
+  1857		}
+  1858	
+  1859		platform_set_drvdata(pdev, rtk_phy);
+  1860	
+  1861		generic_phy = devm_phy_create(rtk_phy->dev, NULL, &ops);
+  1862		if (IS_ERR(generic_phy))
+  1863			return PTR_ERR(generic_phy);
+  1864	
+  1865		phy_set_drvdata(generic_phy, rtk_phy);
+  1866	
+  1867		phy_provider = devm_of_phy_provider_register(rtk_phy->dev,
+  1868					    of_phy_simple_xlate);
+  1869		if (IS_ERR(phy_provider))
+  1870			return PTR_ERR(phy_provider);
+  1871	
+  1872		ret = usb_add_phy_dev(&rtk_phy->phy);
+  1873		if (ret)
+  1874			goto err;
+  1875	
+  1876		create_debug_files(rtk_phy);
+  1877	
+  1878	err:
+  1879		dev_dbg(dev, "Probe RTK USB 2.0 PHY (ret=%d)\n", ret);
+  1880	
+  1881		return ret;
+> 1882	}
+  1883	
+  1884	static void rtk_usb2phy_remove(struct platform_device *pdev)
+  1885	{
+  1886		struct rtk_usb_phy *rtk_phy = platform_get_drvdata(pdev);
+  1887	
+  1888		remove_debug_files(rtk_phy);
+  1889	
+  1890		usb_remove_phy(&rtk_phy->phy);
+> 1891	}
+  1892	
 
 -- 
-With best wishes
-Dmitry
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
