@@ -2,61 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99063725DF0
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 14:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE3A725E04
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 14:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239049AbjFGMEg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Jun 2023 08:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
+        id S240466AbjFGMI5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Jun 2023 08:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234710AbjFGMEe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 08:04:34 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0AB19BF
-        for <linux-usb@vger.kernel.org>; Wed,  7 Jun 2023 05:04:32 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f6148f9679so6723590e87.3
-        for <linux-usb@vger.kernel.org>; Wed, 07 Jun 2023 05:04:32 -0700 (PDT)
+        with ESMTP id S240534AbjFGMIa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 08:08:30 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5855D1BD5
+        for <linux-usb@vger.kernel.org>; Wed,  7 Jun 2023 05:08:28 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-977ed383b8aso451903666b.3
+        for <linux-usb@vger.kernel.org>; Wed, 07 Jun 2023 05:08:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686139470; x=1688731470;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KZ6mcI1bKJ1Kz+T1ZnrarK0a6kbd0xZgbwjVj3l23gQ=;
-        b=QyNIyfZNjvs9IoORoZOHIWYIzs/i5XmcHk9EYJVDXS+JzHFp2tltW8FHlmN3Sg9g8y
-         hmIaMvv6uFlwRmY5iv+w7QkRqDzSkn5JYRvFvqcBd4loOW1d8Q14l2plZfWcAUO+n4IW
-         FkuCdTvX+r2gydNGGHI7Im42L/LicBYZK1BKAH1+e3dk8MP1+iJBYYLSjj8JQbVYZwbP
-         zpKeR6gtE7iXZlvDqnhUdc3Uf7R54JkbemoUv7uCyRe4x8Pj0u5HLqhKV5RKZjRr1xNv
-         q7PZPuZnPszQw1pRNO//YWeWi2lHZCx0AQ/bfQWmd9bu+928uyzC3GJbllU2hKdybS7E
-         oRCw==
+        d=linaro.org; s=google; t=1686139707; x=1688731707;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bbaSkFKmaWWmmIo4d8BONfqm4x6XM3okcFS76p+73tg=;
+        b=FEG1BYoo8Gc5j9aQwAjfWG9KitjRYTgwv1Kfs37ouE2LD1ua/BNeojlIoCjZW/xsr7
+         f/h1myCX7DcDNAhxluIFyAsI2QYCc14LIqJR2czEQ4+EmbGLk3PtU7Vw2bvkQPmXIqQa
+         CM3AKS6NtBrI7l6FaxKKYclKc31pgppf9+rjh891gPb9pVXqSZdS7d1XQxGfPwOkTqjm
+         1BFJ52JM87NCorGvZhtEZpXF07YvGjTDmLYfdFICFE/DatCZGQ1Z6wAAOve0aCzvE1oO
+         Q92l+GKSjXp3+sLGgFzEOfdGIyXcW/zZRHFAW45kN7bXm+TWiTeNlPwh0nFlLC1E1mCl
+         t26w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686139470; x=1688731470;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686139707; x=1688731707;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KZ6mcI1bKJ1Kz+T1ZnrarK0a6kbd0xZgbwjVj3l23gQ=;
-        b=eNeAZN0rcZRFHHJ2z2X7FG2nGco8g121+uvGzqIBZs9/UH5uQIkT/C7hyoHfSYbJ+y
-         YrvSV4C2av0VpXOhWAe8ci/+hANOIY8tVer3DzwdF2vLzKcfWZlrpH5ZCi+BpksP+KoP
-         JoYiobFrEDdAdppUPTfeE8yNLhEi3KKFQkRUzNVCUnkSJKU4DxJavJxeJ/yU/MBj0Z2u
-         R4mOWkhdMzyLVhT0xf81mrIX7X1jfSVJ54ajzx3RrlDopjH4IVUGu02TadD1bK2dqCV9
-         VNd0ZBdYrgUaqywcP/ykpi2lUG6cNaRQEj3dzPT0RdCZjwi3BBiVyM2+XqUyZGi+MmSw
-         t4rw==
-X-Gm-Message-State: AC+VfDxBLkMjn0AUp2D+2oobDGFOPLefMGp11+6iBUgXxTTqNrBNwLK9
-        /5dskV9JVn1omMKf6qYfJRBd/Q==
-X-Google-Smtp-Source: ACHHUZ65yqG1QTublwh1Yaw6Z8SsrNVJqtjy+wO7w5acN3E/o/a6FRCaVjvVnek45VpoZHg3PnLUmQ==
-X-Received: by 2002:ac2:5d2b:0:b0:4ec:8615:303e with SMTP id i11-20020ac25d2b000000b004ec8615303emr1855791lfb.33.1686139470262;
-        Wed, 07 Jun 2023 05:04:30 -0700 (PDT)
+        bh=bbaSkFKmaWWmmIo4d8BONfqm4x6XM3okcFS76p+73tg=;
+        b=RSyYSOdgJ+3K/WHNhBzJScUcbm29ws1Kpp4RbKi3yVErkbhYm4t9HWan5GrPDFB9NU
+         8QdOQ2aTohh7O+KIXfYhJ8LTrDd1COL4OrFZqiMpcgC5NACarOKUaAFoCoIz4PEFVsXN
+         hjNZT5mBeVTlzaX8N6GBCDjljrFxPIEMaH1hX9W2lCVldfEBszGf/3xM+gkD9LDDg8QC
+         +zRyhTeFebzIcbPqmNvVBDqVAmenowS7KYVWiZNj1Q8OrKBUnyeIHPSDQVs3oBi3GT3z
+         b+54fIF23p4fypUG1YaLsQo/qtxR76QeBLOtFyvQ6nGNgxhSWVmCPFZxYI3Bb9QE+wqd
+         H+yg==
+X-Gm-Message-State: AC+VfDxona3+7pxBnlbyMsFRz/LH2QB+re4Ly2XXRGzYg0NRVzra4/Bl
+        4YjQEVgUUQzEuJVo2gfY9IITqQ==
+X-Google-Smtp-Source: ACHHUZ5vKpxtUxSkt4XRhTjs7/kmyFaEHLXlF0ZmCITH6qGYltllIooFFN4Apbf+De6gz2h6l5NazQ==
+X-Received: by 2002:a17:907:7252:b0:976:509a:2b57 with SMTP id ds18-20020a170907725200b00976509a2b57mr5038137ejc.47.1686139706726;
+        Wed, 07 Jun 2023 05:08:26 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id q22-20020aa7d456000000b0051631518aabsm6057200edr.93.2023.06.07.05.04.27
+        by smtp.gmail.com with ESMTPSA id r21-20020aa7c155000000b0051421010690sm6019611edp.21.2023.06.07.05.08.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 05:04:29 -0700 (PDT)
-Message-ID: <7cce1d72-6b4d-9fff-32bc-942193388134@linaro.org>
-Date:   Wed, 7 Jun 2023 14:04:26 +0200
+        Wed, 07 Jun 2023 05:08:26 -0700 (PDT)
+Message-ID: <58aea31d-8f47-a558-6e17-17b55059bb23@linaro.org>
+Date:   Wed, 7 Jun 2023 14:08:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 4/5] dt-bindings: phy: realtek: Add the doc about the
- Realtek SoC USB 2.0 PHY
+Subject: Re: [PATCH v3 5/5] dt-bindings: phy: realtek: Add the doc about the
+ Realtek SoC USB 3.0 PHY
+Content-Language: en-US
 To:     Stanley Chang <stanley_chang@realtek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Vinod Koul <vkoul@kernel.org>,
@@ -66,17 +66,16 @@ Cc:     Vinod Koul <vkoul@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         Ray Chi <raychi@google.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
         Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
         Flavio Suligoi <f.suligoi@asem.it>,
         linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 References: <20230607062500.24669-1-stanley_chang@realtek.com>
- <20230607062500.24669-4-stanley_chang@realtek.com>
-Content-Language: en-US
-In-Reply-To: <20230607062500.24669-4-stanley_chang@realtek.com>
+ <20230607062500.24669-5-stanley_chang@realtek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230607062500.24669-5-stanley_chang@realtek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -93,7 +92,7 @@ On 07/06/2023 08:24, Stanley Chang wrote:
 > Add the documentation explain the property about Realtek USB PHY driver.
 > 
 > Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
-> controller. Added the driver to drive the USB 2.0 PHY transceivers.
+> controller. Added the driver to drive the  USB 3.0 PHY transceivers.
 > 
 > Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
 > ---
@@ -106,31 +105,31 @@ On 07/06/2023 08:24, Stanley Chang wrote:
 > v1 to v2 change:
 >     Add phy-cells for generic phy driver
 > ---
->  .../bindings/phy/realtek,usb2phy.yaml         | 213 ++++++++++++++++++
->  1 file changed, 213 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
+>  .../bindings/phy/realtek,usb3phy.yaml         | 156 ++++++++++++++++++
+>  1 file changed, 156 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml b/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
+> diff --git a/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
 > new file mode 100644
-> index 000000000000..69911e20a561
+> index 000000000000..b45c398bba5f
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
-> @@ -0,0 +1,213 @@
+> +++ b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
+> @@ -0,0 +1,156 @@
 > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 > +# Copyright 2023 Realtek Semiconductor Corporation
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/phy/realtek,usb2phy.yaml#
+> +$id: http://devicetree.org/schemas/phy/realtek,usb3phy.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Realtek DHC SoCs USB 2.0 PHY
+> +title: Realtek DHC SoCs USB 3.0 PHY
 > +
 > +maintainers:
 > +  - Stanley Chang <stanley_chang@realtek.com>
 > +
 > +description:
-> +  Realtek USB 2.0 PHY support the digital home center (DHC) RTD series SoCs.
-> +  The USB 2.0 PHY driver is designed to support the XHCI controller. The SoCs
+> +  Realtek USB 3.0 PHY support the digital home center (DHC) RTD series SoCs.
+> +  The USB 3.0 PHY driver is designed to support the XHCI controller. The SoCs
 > +  support multiple XHCI controllers. One PHY device node maps to one XHCI
 > +  controller.
 > +
@@ -151,6 +150,9 @@ On 07/06/2023 08:24, Stanley Chang wrote:
 > +  XHCI controller#0 -- usb2phy -- phy#0
 > +  XHCI controller#1 -- usb2phy -- phy#0
 > +                               |- phy#1
+
+Skip unrelated devices.
+
 > +
 > +  RTD1319/RTD1619b SoCs USB
 > +  The USB architecture includes three XHCI controllers.
@@ -179,23 +181,19 @@ On 07/06/2023 08:24, Stanley Chang wrote:
 > +  compatible:
 > +    items:
 > +      - enum:
-> +          - realtek,rtd1295-usb2phy
-> +          - realtek,rtd1395-usb2phy
-> +          - realtek,rtd1619-usb2phy
-> +          - realtek,rtd1319-usb2phy
-> +          - realtek,rtd1619b-usb2phy
-> +          - realtek,rtd1312c-usb2phy
-> +          - realtek,rtd1319d-usb2phy
-> +          - realtek,rtd1315e-usb2phy
+> +          - realtek,rtd1295-usb3phy
+> +          - realtek,rtd1619-usb3phy
+> +          - realtek,rtd1319-usb3phy
+> +          - realtek,rtd1619b-usb3phy
+> +          - realtek,rtd1319d-usb3phy
 
-Keep entries ordered alphabetically.
+Same comments as for previous patch.
 
-> +      - const: realtek,usb2phy
+> +      - const: realtek,usb3phy
 > +
 > +  reg:
-> +    items:
-> +      - description: PHY data registers
-> +      - description: PHY control registers
+> +    description: PHY data registers
+> +    maxItems: 1
 > +
 > +  "#address-cells":
 > +    const: 1
@@ -205,107 +203,73 @@ Keep entries ordered alphabetically.
 > +
 > +  "#phy-cells":
 > +    const: 0
-> +
-> +  realtek,usb-ctrl:
-> +    description: The phandle of syscon used to control USB PHY power domain.
-> +    $ref: /schemas/types.yaml#/definitions/phandle
 
-No, we have power-domains for this.
+1 phy or 4? Decide.
 
 > +
 > +patternProperties:
 > +  "^phy@[0-3]+$":
+> +    description: Each sub-node is a PHY device for one XHCI controller.
 > +    type: object
-> +    description:
-> +      Each sub-node is a PHY device for one XHCI controller.
-
-I don't think it is true. You claim above that you have 0 as phy-cells,
-means you have one phy. Here you say you can have up to 4 phys.
-
-> +      For most Relatek SoCs, one XHCI controller only support one the USB 2.0
-> +      phy. For RTD1395 SoC, the one XHCI controller has two USB 2.0 PHYs.
 > +    properties:
-> +      realtek,page0-param:
-> +        description: PHY parameter at page 0. The data are the pair of the
+> +      realtek,param:
+> +        description: The data of PHY parameter are the pair of the
 > +          offset and value.
+> +        $ref: /schemas/types.yaml#/definitions/uint8-array
 
-This needs to be specific. What the heck is "PHY parameter"?
+Your choice of types is surprising. If this is array, than maxItems (and
+please don't tell me it is maxItems: 1). Anyway, why 8 bits long?
 
-> +        $ref: /schemas/types.yaml#/definitions/uint32-array
-
-Array? Then maxItems.
-
-> +
-> +      realtek,page1-param:
-> +        description: PHY parameter at page 1. The data are the pair of the
-> +          offset and value.
-> +        $ref: /schemas/types.yaml#/definitions/uint32-array
-> +
-> +      realtek,page2-param:
-> +        description: PHY parameter at page 2. The data are the pair of the
-> +          offset and value. If the PHY support the page 2 parameter.
-> +        $ref: /schemas/types.yaml#/definitions/uint32-array
-> +
-> +      realtek,support-page2-param:
-> +        description: Set this flag if PHY support page 2 parameter.
-
-Why this cannot be deducted from compatible?
-
-> +        type: boolean
 > +
 > +      realtek,do-toggle:
-> +        description: Set this flag to enable PHY parameter toggle when port
-> +          status change.
-
-Do not instruct OS what to do. Explain why this is a hardware
-characteristic.
-
+> +        description: Set this flag to enable the PHY parameter toggle
+> +          when port status change.
 > +        type: boolean
 > +
-> +      realtek,do-toggle-driving:
-> +        description: Set this flag to enable PHY parameter toggle for adjust
-> +          the driving when port status change.
-
-Do not instruct OS what to do. Explain why this is a hardware
-characteristic.
-
-
+> +      realtek,do-toggle-once:
+> +        description: Set this flag to do PHY parameter toggle only on
+> +          PHY init.
 > +        type: boolean
 > +
 > +      realtek,check-efuse:
 > +        description: Enable to update PHY parameter from reading otp table.
-
-Do not instruct OS what to do. Explain why this is a hardware
-characteristic.
-
 > +        type: boolean
 > +
 > +      realtek,use-default-parameter:
 > +        description: Don't set parameter and use default value in hardware.
-
-NAK, you are just making things up.
-
 > +        type: boolean
 > +
-> +      realtek,is-double-sensitivity-mode:
-> +        description: Set this flag to enable double sensitivity mode.
-
-All your descriptions copy the name of property. You basically say
-nothing more. I already mentioned this before. Don't ignore the
-feedback, but address it.
-
+> +      realtek,check-rx-front-end-offset:
+> +        description: Enable to check rx front end offset.
 > +        type: boolean
 > +
-> +      realtek,ldo-force-enable:
-> +        description: Set this flag to force enable ldo mode.
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - "#phy-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    usb_port2_usb3phy: usb-phy@13e10 {
+> +        compatible = "realtek,rtd1319d-usb3phy", "realtek,usb3phy";
+> +        reg = <0x13e10 0x4>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        #phy-cells = <0>;
+> +
+> +        phy@0 {
+> +            reg = <0>;
+> +            realtek,param =
+> +                    <0x01 0xac8c>,
+> +                    <0x06 0x0017>,
 
-Drop everywhere "Set this flag to", because it is redundant. Now compare
-what is left with property name.
-
-Property name: realtek,ldo-force-enable
-Your description: "force enable ldo mode"
-
-How is this helpful to anybody?
+First, this is matrix, not uint8 array. Second, 0xac8c is past 16 bits
+long, not 8. Third, you put some magic register programming to DT.
+Please don't. Drop all this from DT.
 
 
 Best regards,
