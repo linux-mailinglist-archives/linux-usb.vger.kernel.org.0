@@ -2,140 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7280E725DB9
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 13:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B17D7725DC1
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 13:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240451AbjFGLzU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Jun 2023 07:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
+        id S236481AbjFGL4Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Jun 2023 07:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240495AbjFGLyw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 07:54:52 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1643B1BEA
-        for <linux-usb@vger.kernel.org>; Wed,  7 Jun 2023 04:54:46 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9788554a8c9so80975766b.2
-        for <linux-usb@vger.kernel.org>; Wed, 07 Jun 2023 04:54:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686138884; x=1688730884;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cMpYnd8K0KUjk943ETGb3pgLuWnp+NjqkKVfYBnfUjc=;
-        b=TvREFw8JmP7lNGG8Jt6YNMWuPvV8RkGsW/J3WtZVYPljX9xDYCUe1KvYqrloXDZ5+J
-         rsISilWx+sBnTrlQQI7B3UyBlAwoNC0AljGFxfFqge5LFrrLhoqKZlWTvylcV/HJoqZy
-         1AtYnLkmzL1jEPoMHO7GNxWepy7jWb+1ChIQPxo0CfxWGavPiD9SsJGgawHgPqsSKFdE
-         s+wxuEo5vqLIbBpiVEAfxtsUlsXlcsUqKJG871Jl5HOfZ6Whb/3o9dKKZ/fhrTDce4gZ
-         GLQxUtPXsDfC0SgOnEKr7SEs9nigRj5vV6g2xXbxY14S8icYwYvSuoptjzI7E7Vu32B+
-         WDVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686138884; x=1688730884;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cMpYnd8K0KUjk943ETGb3pgLuWnp+NjqkKVfYBnfUjc=;
-        b=eT4oLOmM2AHRKFxshkpAjJ9adZvCWX6L6lV89gw0BX4242LrwjlcHVIrgfDboSeC5m
-         MDvNAQl6GxkLDd18zSJLsU51SwBJ0NID5ZgsSkeD6FqY5pn5crZkenBW/WXa/63cFkiz
-         9n2KBsdCPCsomubjmT/vfoOBmeMfL9swjO2zNp4MtS4ATDYsQmqlAyR9D+/qQjncN7Ad
-         nOJI0Sb8V2+s7Si1h4aS7NocU+aRRKwM9FIECWdqv0ROE/VbA+fKVReBN1pNbEjszrqM
-         ghqNPCugJEtTtZsmGlSYzcWsI+o79mBG+SvTJpySAreczNT38mz82Xg9kzsM85mt0dgy
-         Y13A==
-X-Gm-Message-State: AC+VfDwHNT2WcKtLEVVbzmrvwJK7dq1/ln40bfckd5v0T/K69XmErtZr
-        9vtWI5nmqfSpjCNg77foPc3Ukw==
-X-Google-Smtp-Source: ACHHUZ4lsNW7UB/AdIJhmQsRv/ujZHWy36LNehPBHbmBvk72viOS7FuDtFy6IDKDYzT1blLCXBb+VA==
-X-Received: by 2002:a17:906:6a1c:b0:96f:88a3:3a0e with SMTP id qw28-20020a1709066a1c00b0096f88a33a0emr6274061ejc.0.1686138884458;
-        Wed, 07 Jun 2023 04:54:44 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id oz17-20020a170906cd1100b009745edfb7cbsm6802817ejb.45.2023.06.07.04.54.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 04:54:44 -0700 (PDT)
-Message-ID: <79201bd6-6048-7013-aeb7-34d218139844@linaro.org>
-Date:   Wed, 7 Jun 2023 13:54:42 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 2/5] phy: realtek: usb: Add driver for the Realtek SoC
- USB 2.0 PHY
-Content-Language: en-US
-To:     Stanley Chang <stanley_chang@realtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
+        with ESMTP id S233152AbjFGL4W (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 07:56:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23A719BF;
+        Wed,  7 Jun 2023 04:56:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5714B634FD;
+        Wed,  7 Jun 2023 11:56:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A1DC433EF;
+        Wed,  7 Jun 2023 11:56:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686138979;
+        bh=odgATFUQ91mIunsnMGn0REHzM/M5+jkX/A+8ocFml6A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gWs4PtBO/cVAPQj2rPHQ3RFo+LU/PJP49yeOTDKKxyrrrU5B2MqeGcc1XbVeaupff
+         Zk7gS1/VyBmJmBPnuK/FX8YLi8Br+2DspDYWmbRKMCRocGRZS5FbCdvo66t9/YpEer
+         jK6mqKLHPe5DEkViCsB6b4TvesWKoizZwzF0tyrtyybk3/qTGHUp6UtKpN62VwjyrX
+         6atIZp5lfLjPn3PVRkflLoMyACOFwLkLPaF/q2CN+hhvwg6cs53z04gX+FgqL3SKn+
+         SUm8quSZ1tiN4dIePq6F/R47FgwJ2xcWgctoeklGIolbcRfnktNNvtEMHzdVLFDrqo
+         PNqQhCvaaQs9Q==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1q6rmL-00007I-Ql; Wed, 07 Jun 2023 13:56:42 +0200
+Date:   Wed, 7 Jun 2023 13:56:41 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ray Chi <raychi@google.com>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20230607062500.24669-1-stanley_chang@realtek.com>
- <20230607062500.24669-2-stanley_chang@realtek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230607062500.24669-2-stanley_chang@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
+        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
+        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>,
+        "ahalaney@redhat.com" <ahalaney@redhat.com>
+Subject: Re: [PATCH v8 3/9] usb: dwc3: core: Access XHCI address space
+ temporarily to read port info
+Message-ID: <ZIBweVb8lUzehRXp@hovoldconsulting.com>
+References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
+ <20230514054917.21318-4-quic_kriskura@quicinc.com>
+ <ZGNy6FvVrBjYmorz@hovoldconsulting.com>
+ <b2954b92-8b12-700a-af50-b914af7b0ace@quicinc.com>
+ <cacc5813-404a-c2ef-e768-20f2acd696d9@quicinc.com>
+ <20230517032124.rdh7ehnair3wjuvm@synopsys.com>
+ <ZGSGc-X5Oir8wddK@hovoldconsulting.com>
+ <20230517232147.4ds4rvvexwzqbzdx@synopsys.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230517232147.4ds4rvvexwzqbzdx@synopsys.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 07/06/2023 08:24, Stanley Chang wrote:
-> Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
-> controller. Added the driver to drive the USB 2.0 PHY transceivers.
+On Wed, May 17, 2023 at 11:21:50PM +0000, Thinh Nguyen wrote:
+> On Wed, May 17, 2023, Johan Hovold wrote:
+> > On Wed, May 17, 2023 at 03:21:24AM +0000, Thinh Nguyen wrote:
+> > > On Wed, May 17, 2023, Krishna Kurapati PSSNV wrote:
+> > > > On 5/16/2023 8:32 PM, Krishna Kurapati PSSNV wrote:
+> > > > > On 5/16/2023 5:41 PM, Johan Hovold wrote:
+> > 
+> > > > > > You should not make another copy of xhci_find_next_ext_cap(), but rather
+> > > > > > use it directly.
+> > > > > > 
+> > > > > > We already have drivers outside of usb/host using this function so it
+> > > > > > should be fine to do the same for now:
+> > > > > > 
+> > > > > >     #include "../host/xhci-ext-caps.h"
+> > 
+> > > > >    This was the approach which we followed when we first introduced the
+> > > > > patch [1]. But Thinh suggested to duplicate code so that we can avoid
+> > > > > any dependency on xhci (which seems to be right). So since its just one
+> > > > > function, I duplicated it here.
+> > 
+> > > >   Would like to know your opinion here on how to proceed further.
+> > 
+> > > Please keep them separated. The xhci-ext-caps.h is for xhci driver only.
+> > > It's not meant to be exposed to other drivers. Same with other *.h files
+> > > under drivers/usb/host.
+> > 
+> > As I mentioned earlier, it is already used by the xdbc earlyprintk
+> > driver which lives outside of drivers/usb/host, even if such a debug
+> > driver could be considered a special case.
+> > 
+> > If it turns out that there's no way to avoid mapping those registers
+> > from the qcom glue driver, then I think at least the register defines
+> > need to be provided in a global header rather than being copied
+> > verbatim.
 > 
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-> ---
-> v2 to v3 change:
->     1. Broken down into two patches, one for each of USB 2 & 3 PHY.
->     2. Removed parameter v1 support for simplification.
->     3. Use remove_new for driver remove callback.
+> It would be good to properly define the global header with common
+> offset/interface that can be public for other drivers.
 
+Yes, either drivers outside of xhci should be allowed to access this
+registers and then the defines should go in a public header or we need
+to find another way for drivers to get their hands on the corresponding
+information.
 
-...
+I agree that accessing the header from inside the host directory is not
+very nice, but it looked we already had drivers violating this.
 
-> +	platform_set_drvdata(pdev, rtk_phy);
-> +
-> +	generic_phy = devm_phy_create(rtk_phy->dev, NULL, &ops);
-> +	if (IS_ERR(generic_phy))
-> +		return PTR_ERR(generic_phy);
-> +
-> +	phy_set_drvdata(generic_phy, rtk_phy);
-> +
-> +	phy_provider = devm_of_phy_provider_register(rtk_phy->dev,
-> +				    of_phy_simple_xlate);
-> +	if (IS_ERR(phy_provider))
-> +		return PTR_ERR(phy_provider);
-> +
-> +	ret = usb_add_phy_dev(&rtk_phy->phy);
-> +	if (ret)
-> +		goto err;
-> +
-> +	create_debug_files(rtk_phy);
-> +
-> +err:
-> +	dev_dbg(dev, "Probe RTK USB 2.0 PHY (ret=%d)\n", ret);
+If this turns out to be at all needed, it should even be possible to
+share the implementation even if that means adding an explicit
+dependency on xhci for host mode. The current inline function really is
+just a hack.
 
-I commented on your second patch, but everything is applicable here as
-well. You have many useless debug messages. Many incorrect or useless
-"if() return" which point to broken driver design (e.g. concurrent
-access to half initialized structures where you substitute lack of
-synchronization with incorrect "if() return"). Undocumented user
-interface is one more big trouble.
-
-I doubt you run checkpatch on this (be sure to run it with --strict and
-fix almost everything).
-
-
-Best regards,
-Krzysztof
-
+Johan
