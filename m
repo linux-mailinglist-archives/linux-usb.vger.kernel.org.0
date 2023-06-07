@@ -2,667 +2,522 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA5B725DAD
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 13:52:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCA9725DB1
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 13:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239982AbjFGLwo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Jun 2023 07:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
+        id S240391AbjFGLyc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Jun 2023 07:54:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235074AbjFGLwm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 07:52:42 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3091BC0
-        for <linux-usb@vger.kernel.org>; Wed,  7 Jun 2023 04:52:40 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-5149aafef44so1132875a12.0
-        for <linux-usb@vger.kernel.org>; Wed, 07 Jun 2023 04:52:39 -0700 (PDT)
+        with ESMTP id S239831AbjFGLyb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 07:54:31 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6647E1BC7
+        for <linux-usb@vger.kernel.org>; Wed,  7 Jun 2023 04:54:28 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f62cf9755eso3719033e87.1
+        for <linux-usb@vger.kernel.org>; Wed, 07 Jun 2023 04:54:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686138758; x=1688730758;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D24yblh8M2wbDLcZhpK9nT1oK0h4QFEUd0Odb6kt/DI=;
-        b=a4DDOHjY61G9Z4sac9Z0dzfj94q0De5RzBh/fz9CDTP8mewT9DANFb1b190UlB5U/u
-         g40LnQu/QL+gx1y4L82z6kkqA6WdM+4e6nJcOIpDbS5Tp5gRfB/Tg5gvx832zY08WJIv
-         i5a+Etqtd4wx2SxWw1Wr5SZqFvgIqwkpRutVDVEm/NzH6rpOKemG2beYEneZHWIdxp99
-         3X5BPL/KnrJq0i7zdVGb7gBq0XGZaKyF1kbOh1wCN+2NT+NR7dlHDlCYNzTAaYg1VaGH
-         jp+KILME0G8ei3X8tTNnS1WnxrDloZzDDmReWtbDEzo8YEvDHFNulf9TW8Bx81WHOu1T
-         AIDQ==
+        d=linaro.org; s=google; t=1686138866; x=1688730866;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Asydfjq2eEpPjZfiuqiYvdF3KnjIA6edxD3BnnQbcZk=;
+        b=bZXmpBWBfzLPQUA3isPl3V0mH5R5g9ZGiQY8ndhVQhFhlov/il+slplRLf7nlWSfaY
+         5DfgOF8p37EddqumMJu14G76mkIdpCp0R9MaAfSKF7fDjrKo7frp/nChERcoMLXY03xQ
+         Dih2F5mE94+ULzJuIH2xIrwR2BThaDg27zWxl0LuDXHmYNFf6Q6ay6opYlY91j//xJ7e
+         qvIpl+6e6jjtCcGf5khLERdziL3H01zM1BLN/IrRN5QPdhXPAiWJghdAx4MCBcjkx4zi
+         0T4jiZGXe+EGbbubXiXjOOUFAbGPoyfUwJZE+xh7hNLnG6hnVK1oIpSfoEaU7heZfCKX
+         hNSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686138758; x=1688730758;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686138866; x=1688730866;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D24yblh8M2wbDLcZhpK9nT1oK0h4QFEUd0Odb6kt/DI=;
-        b=bUsG5l1tbn/cjHVBsbmQlCSoJs2zd8UfGhLqii1z8viURE43oa9rbOe1HCFhB12ABP
-         xFXks436ioYVVwoU9xQI3QjaBMOfqRGIIq2mC87UVSREZ7eyNeHl3WWtuwAQmyYa4JWx
-         IOd/iD7fXyxYWILXzGiLRqgodcImgBH1/LnizC7czbCdSpMpPLo9rf/QauH87dTG9S4r
-         nnrYqmj0aCOnHTxesA2HxqT5Jg0X96d6r8eS2oYFz2ACY92+xSQv2QojjBYjs/XDn4lj
-         maW1ekk/Wgv4P+VIw4g+ajEGQJ03TYZ1tvq5he6W3kDct1J30a99deTJbMiICDKOpi7d
-         mQWg==
-X-Gm-Message-State: AC+VfDwajpalFNC4Wrm5IsLiYabHxN+PopZs2Aur5/y4HDuH06b7Wvhy
-        0RRmmsXyRboGm7uAGoPUtgAGyQ==
-X-Google-Smtp-Source: ACHHUZ7+a9+a6QmaEB7QGUtAAB1+s3uUqlYNvSB4b/wGPQPPz4VtqYN6n6u4am6a89nRgPKkgHwWSA==
-X-Received: by 2002:a17:907:a424:b0:960:ce5:20c0 with SMTP id sg36-20020a170907a42400b009600ce520c0mr5542571ejc.20.1686138758421;
-        Wed, 07 Jun 2023 04:52:38 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id a23-20020a170906671700b009787b13d1ddsm966631ejp.51.2023.06.07.04.52.36
+        bh=Asydfjq2eEpPjZfiuqiYvdF3KnjIA6edxD3BnnQbcZk=;
+        b=eBzrVqiy1FBaS/Nw7lDVwLPVew7zf3x/EuqpBLon/RCygkd51D8JYSReI1IB6r3w3s
+         eP7L1HT7qjsK25oLXQyHsbsEMG6DYnWRot++cYkWCcoZomUjPYh04D5D/OBBlMvyYYOu
+         YXuRBjCymIh0ZhEYrlDGawdpFcpxxDEHEW0VIzHWFomEj/YgNGdT/Ju2aLO2k0vrFHF9
+         4s6GlaEXSGMrnoWcvY5lx7WExeoo+oJta9mX4OT97bncV5CIqobqHbWj14XLimJGYW7f
+         KS948cyCNcqANocmWUmTgrP+XAc79IA97w0ky7eKmF5KjaFm0dvB9WkvNFrOhnFvO/DZ
+         tc2A==
+X-Gm-Message-State: AC+VfDxejp7TS26AW0VtS9zYWlC7HGLECtaYt0IyUW3612KoYR9rdhYW
+        ZJy5C+ems4m8wVSJ6k9/cljGGw==
+X-Google-Smtp-Source: ACHHUZ6mLA0d3GRI9wFD9pLuo09FV/letvWT+DUmis6LFdbkVK6s5fIbjvjkb8M850Fag7uw4ZtP2Q==
+X-Received: by 2002:ac2:5e8a:0:b0:4f6:1779:b1c1 with SMTP id b10-20020ac25e8a000000b004f61779b1c1mr1829447lfq.48.1686138866482;
+        Wed, 07 Jun 2023 04:54:26 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id p19-20020a19f013000000b004f4589808ddsm1774395lfc.305.2023.06.07.04.54.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 04:52:37 -0700 (PDT)
-Message-ID: <a9a2f3d0-9580-f027-8ec3-ac6e6bed5ed6@linaro.org>
-Date:   Wed, 7 Jun 2023 13:52:36 +0200
+        Wed, 07 Jun 2023 04:54:26 -0700 (PDT)
+Message-ID: <416bef68-6df3-d5c4-2aed-ef1ae7c78d7b@linaro.org>
+Date:   Wed, 7 Jun 2023 13:54:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH v3 3/5] phy: realtek: usb: Add driver for the Realtek SoC
- USB 3.0 PHY
 Content-Language: en-US
-To:     Stanley Chang <stanley_chang@realtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ray Chi <raychi@google.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, vkoul@kernel.org, kishon@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, gregkh@linuxfoundation.org,
+        catalin.marinas@arm.com, will@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, p.zabel@pengutronix.de, arnd@arndb.de,
+        geert+renesas@glider.be, neil.armstrong@linaro.org,
+        nfraprado@collabora.com, broonie@kernel.org, rafal@milecki.pl,
+        quic_srichara@quicinc.com, quic_varada@quicinc.org,
+        quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org,
         linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20230607062500.24669-1-stanley_chang@realtek.com>
- <20230607062500.24669-3-stanley_chang@realtek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230607062500.24669-3-stanley_chang@realtek.com>
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
+References: <cover.1686126439.git.quic_varada@quicinc.com>
+ <6bb345c6a57ee27516764f36ba7d34fd1a719b87.1686126439.git.quic_varada@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH 3/9] phy: qcom-m31: Introduce qcom,m31 USB phy driver
+In-Reply-To: <6bb345c6a57ee27516764f36ba7d34fd1a719b87.1686126439.git.quic_varada@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 07/06/2023 08:24, Stanley Chang wrote:
-> Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
-> controller. Added the driver to drive the USB 3.0 PHY transceivers.
+
+
+On 7.06.2023 12:56, Varadarajan Narayanan wrote:
+> Add the M31 USB2 phy driver
 > 
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 > ---
+>  drivers/phy/qualcomm/phy-qcom-m31.c | 360 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 360 insertions(+)
+>  create mode 100644 drivers/phy/qualcomm/phy-qcom-m31.c
+> 
+> diff --git a/drivers/phy/qualcomm/phy-qcom-m31.c b/drivers/phy/qualcomm/phy-qcom-m31.c
+> new file mode 100644
+> index 0000000..d29a91e
+> --- /dev/null
+> +++ b/drivers/phy/qualcomm/phy-qcom-m31.c
+> @@ -0,0 +1,360 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Copyright (c) 2014-2016, 2020, The Linux Foundation. All rights reserved.
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/kernel.h>
+> +#include <linux/err.h>
+> +#include <linux/slab.h>
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/io.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/usb/phy.h>
+> +#include <linux/reset.h>
+> +#include <linux/of_device.h>
+Please sort these
 
+> +
+> +enum clk_reset_action {
+> +	CLK_RESET_DEASSERT	= 0,
+> +	CLK_RESET_ASSERT	= 1
+> +};
+> +
+> +#define USB2PHY_PORT_POWERDOWN		0xA4
+> +#define POWER_UP			BIT(0)
+> +#define POWER_DOWN			0
+> +
+> +#define USB2PHY_PORT_UTMI_CTRL1	0x40
+> +
+> +#define USB2PHY_PORT_UTMI_CTRL2	0x44
+> +#define UTMI_ULPI_SEL			BIT(7)
+> +#define UTMI_TEST_MUX_SEL		BIT(6)
+> +
+> +#define HS_PHY_CTRL_REG			0x10
+> +#define UTMI_OTG_VBUS_VALID             BIT(20)
+> +#define SW_SESSVLD_SEL                  BIT(28)
+> +
+> +#define USB_PHY_CFG0			0x94
+> +#define USB_PHY_UTMI_CTRL5		0x50
+> +#define USB_PHY_FSEL_SEL		0xB8
+> +#define USB_PHY_HS_PHY_CTRL_COMMON0	0x54
+> +#define USB_PHY_REFCLK_CTRL		0xA0
+> +#define USB_PHY_HS_PHY_CTRL2		0x64
+> +#define USB_PHY_UTMI_CTRL0		0x3c
+> +#define USB2PHY_USB_PHY_M31_XCFGI_1	0xBC
+> +#define USB2PHY_USB_PHY_M31_XCFGI_4	0xC8
+> +#define USB2PHY_USB_PHY_M31_XCFGI_5	0xCC
+> +#define USB2PHY_USB_PHY_M31_XCFGI_11	0xE4
+Could you sort them address-wise?
 
-> +static inline int utmi_wait_register(void __iomem *reg, u32 mask, u32 result)
+> +
+> +#define USB2_0_TX_ENABLE		BIT(2)
+> +#define HSTX_SLEW_RATE_565PS		3
+> +#define PLL_CHARGING_PUMP_CURRENT_35UA	(3 << 3)
+> +#define ODT_VALUE_38_02_OHM		(3 << 6)
+> +#define ODT_VALUE_45_02_OHM		BIT(2)
+> +#define HSTX_PRE_EMPHASIS_LEVEL_0_55MA	(1)
+Weird mix of values, bits, bitfields.. perhaps BIT(n) and
+GENMASK() (+ FIELD_PREP) would be more suitable?
+
+> +
+> +#define UTMI_PHY_OVERRIDE_EN		BIT(1)
+> +#define POR_EN				BIT(1)
+Please associate these with their registers, like
+
+#define FOO_REG		0xf00
+ #define POR_EN		BIT(1)
+
+> +#define FREQ_SEL			BIT(0)
+> +#define COMMONONN			BIT(7)
+> +#define FSEL				BIT(4)
+> +#define RETENABLEN			BIT(3)
+> +#define USB2_SUSPEND_N_SEL		BIT(3)
+> +#define USB2_SUSPEND_N			BIT(2)
+> +#define USB2_UTMI_CLK_EN		BIT(1)
+> +#define CLKCORE				BIT(1)
+> +#define ATERESET			~BIT(0)
+> +#define FREQ_24MHZ			(5 << 4)
+> +#define XCFG_COARSE_TUNE_NUM		(2 << 0)
+> +#define XCFG_FINE_TUNE_NUM		(1 << 3)
+same comment
+
+> +
+> +static void m31usb_write_readback(void *base, u32 offset,
+> +					const u32 mask, u32 val);
+We don't need this forward-definition, just move the function up.
+
+> +
+> +struct m31usb_phy {
+> +	struct usb_phy		phy;
+> +	void __iomem		*base;
+> +	void __iomem		*qscratch_base;
+> +
+> +	struct reset_control	*phy_reset;
+> +
+> +	bool			cable_connected;
+> +	bool			suspended;
+> +	bool			ulpi_mode;
+> +};
+> +
+> +static void m31usb_reset(struct m31usb_phy *qphy, u32 action)
 > +{
-> +	int ret;
-> +	unsigned int val;
-> +
-> +	ret = read_poll_timeout(readl, val, ((val & mask) == result),
-> +		    PHY_IO_DELAY_US, PHY_IO_TIMEOUT_USEC, false, reg);
-> +	if (ret) {
-> +		pr_err("%s can't program USB phy\n", __func__);
-> +		return -ETIMEDOUT;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int rtk_usb_phy3_wait_vbusy(struct reg_addr *regAddr)
-> +{
-> +	return utmi_wait_register(regAddr->reg_mdio_ctl, USB_MDIO_CTRL_PHY_BUSY, 0);
-> +}
-> +
-> +static u16 rtk_usb_phy_read(struct reg_addr *regAddr, char addr)
-> +{
-> +	unsigned int regVal;
-> +	u32 value;
-> +
-> +	regVal = (addr << USB_MDIO_CTRL_PHY_ADDR_SHIFT);
-> +
-> +	writel(regVal, regAddr->reg_mdio_ctl);
-> +
-> +	rtk_usb_phy3_wait_vbusy(regAddr);
-> +
-> +	value = readl(regAddr->reg_mdio_ctl);
-> +	value = value >> USB_MDIO_CTRL_PHY_DATA_SHIFT;
-> +
-> +	return (u16)value;
-> +}
-> +
-> +static int rtk_usb_phy_write(struct reg_addr *regAddr, char addr, u16 data)
-> +{
-> +	unsigned int regVal;
-> +
-> +	regVal = USB_MDIO_CTRL_PHY_WRITE |
-> +		    (addr << USB_MDIO_CTRL_PHY_ADDR_SHIFT) |
-> +		    (data << USB_MDIO_CTRL_PHY_DATA_SHIFT);
-> +
-> +	writel(regVal, regAddr->reg_mdio_ctl);
-> +
-> +	rtk_usb_phy3_wait_vbusy(regAddr);
-> +
-> +	return 0;
-> +}
-> +
-> +static void do_rtk_usb3_phy_toggle(struct rtk_usb_phy *rtk_phy, int i,
-> +	    bool isConnect)
-> +{
-> +	struct reg_addr *regAddr;
-> +	struct phy_data *phy_data;
-> +	struct phy_parameter *phy_parameter;
-> +	size_t index;
-> +
-> +	regAddr = &((struct reg_addr *)rtk_phy->reg_addr)[i];
-> +	phy_data = &((struct phy_data *)rtk_phy->phy_data)[i];
-> +
-> +	if (!phy_data) {
-> +		dev_err(rtk_phy->dev, "%s phy_data is NULL!\n", __func__);
-
-???
-
-> +		return;
-> +	}
-> +
-> +	if (!phy_data->do_toggle)
-> +		return;
-> +
-> +	phy_parameter = phy_data->parameter;
-> +
-> +	index = PHY_ADDR_MAP_ARRAY_INDEX(PHY_ADDR_0x09);
-> +
-> +	if (index < phy_data->size) {
-> +		u8 addr = (phy_parameter + index)->addr;
-> +		u16 data = (phy_parameter + index)->data;
-> +
-> +		if (addr == 0xFF) {
-> +			addr = ARRAY_INDEX_MAP_PHY_ADDR(index);
-> +			data = rtk_usb_phy_read(regAddr, addr);
-> +			(phy_parameter + index)->addr = addr;
-> +			(phy_parameter + index)->data = data;
-> +		}
-> +		mdelay(1);
-> +		dev_info(rtk_phy->dev,
-> +			    "%s ########## to toggle PHY addr 0x09 BIT(9)\n",
-> +			    __func__);
-> +		rtk_usb_phy_write(regAddr, addr, data&(~BIT(9)));
-> +		mdelay(1);
-> +		rtk_usb_phy_write(regAddr, addr, data);
-> +	}
-> +	dev_info(rtk_phy->dev, "%s ########## PHY addr 0x1f = 0x%04x\n",
-> +		    __func__, rtk_usb_phy_read(regAddr, PHY_ADDR_0x1F));
-
-Please drop all simple debug success messages. Linux has already
-infrastructure for this.
-
-
-...
-
-> +	return 0;
-> +}
-> +
-> +static int rtk_usb_phy_init(struct phy *phy)
-> +{
-> +	struct rtk_usb_phy *rtk_phy = phy_get_drvdata(phy);
-> +	int ret = 0;
-> +	int i;
-> +	unsigned long phy_init_time = jiffies;
-> +
-> +	if (!rtk_phy) {
-> +		pr_err("%s rtk_phy is NULL!\n", __func__);
-
-What? How is this possible?
-
-> +		return -ENODEV;
-> +	}
-> +
-> +	dev_dbg(rtk_phy->dev, "Init RTK USB 3.0 PHY\n");
-> +	for (i = 0; i < rtk_phy->phyN; i++)
-> +		ret = do_rtk_usb_phy_init(rtk_phy, i);
-> +
-> +	dev_info(rtk_phy->dev, "Initialized RTK USB 3.0 PHY (take %dms)\n",
-> +		    jiffies_to_msecs(jiffies - phy_init_time));
-
-Please drop all simple debug success messages. Linux has already
-infrastructure for this.
-
-> +	return ret;
-> +}
-> +
-> +static int rtk_usb_phy_exit(struct phy *phy)
-> +{
-> +	struct rtk_usb_phy *rtk_phy = phy_get_drvdata(phy);
-> +
-> +	if (!rtk_phy) {
-> +		pr_err("%s rtk_phy is NULL!\n", __func__);
-> +		return -ENODEV;
-> +	}
-> +
-> +	dev_dbg(rtk_phy->dev, "Exit RTK USB 3.0 PHY\n");
-
-Please drop all simple debug success messages. Linux has already
-infrastructure for this.
-
-> +static void rtk_usb_phy_toggle(struct usb_phy *usb3_phy, bool isConnect, int port)
-> +{
-> +	int index = port;
-> +	struct rtk_usb_phy *rtk_phy = NULL;
-> +
-> +	if (usb3_phy != NULL && usb3_phy->dev != NULL)
-> +		rtk_phy = dev_get_drvdata(usb3_phy->dev);
-> +
-> +	if (rtk_phy == NULL) {
-> +		pr_err("%s ERROR! NO this device\n", __func__);
-
-Your error messages are not helping. No need to shout, no need to handle
-some non-existing cases. If this is real case, you have broken driver. I
-actually suspect that.
-
-How can you interface with a driver where there is no device?
-
-> +		return;
-> +	}
-> +
-> +	if (index > rtk_phy->phyN) {
-> +		pr_err("%s %d ERROR! port=%d > phyN=%d\n",
-> +			    __func__, __LINE__, index, rtk_phy->phyN);
-> +		return;
-> +	}
-> +
-> +	do_rtk_usb3_phy_toggle(rtk_phy, index, isConnect);
-> +}
-> +
-> +static int rtk_usb_phy_notify_port_status(struct usb_phy *x, int port,
-> +	    u16 portstatus, u16 portchange)
-> +{
-> +	bool isConnect = false;
-
-This is not C++. Don't use camelcase. See Coding style document.
-
-> +
-> +	pr_debug("%s port=%d portstatus=0x%x portchange=0x%x\n",
-> +		    __func__, port, (int)portstatus, (int)portchange);
-> +	if (portstatus & USB_PORT_STAT_CONNECTION)
-> +		isConnect = true;
-> +
-
-...
-
-> +
-> +static int rtk_usb3_set_parameter_show(struct seq_file *s, void *unused)
-> +{
-> +	struct rtk_usb_phy *rtk_phy = s->private;
-> +	const struct file *file = s->file;
-> +	const char *file_name = file_dentry(file)->d_iname;
-> +	struct dentry *p_dentry = file_dentry(file)->d_parent;
-> +	const char *phy_dir_name = p_dentry->d_iname;
-> +	int ret, index;
-> +	struct phy_data *phy_data = NULL;
-> +
-> +	for (index = 0; index < rtk_phy->phyN; index++) {
-> +		size_t sz = 30;
-> +		char name[30] = {0};
-> +
-> +		snprintf(name, sz, "phy%d", index);
-> +		if (strncmp(name, phy_dir_name, strlen(name)) == 0) {
-> +			phy_data = &((struct phy_data *)rtk_phy->phy_data)[index];
-> +			break;
-> +		}
-> +	}
-> +	if (!phy_data) {
-> +		dev_err(rtk_phy->dev,
-> +				    "%s: No phy_data for %s/%s\n",
-> +				    __func__, phy_dir_name, file_name);
-
-Mess wrapping/indentation. Actually everywhere in the file...
-
-> +		return -EINVAL;
-> +	}
-> +
-> +	ret = __get_parameter_at_page(s, rtk_phy, phy_data->parameter, file_name);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	seq_puts(s, "Set phy parameter by following command\n");
-> +	seq_printf(s, "echo \"value\" > %s/%s\n",
-> +		    phy_dir_name, file_name);
-> +
-> +	return 0;
-> +}
-> +
-> +static int rtk_usb3_set_parameter_open(struct inode *inode, struct file *file)
-> +{
-> +	return single_open(file, rtk_usb3_set_parameter_show, inode->i_private);
-> +}
-> +
-> +static ssize_t rtk_usb3_set_parameter_write(struct file *file,
-> +		const char __user *ubuf, size_t count, loff_t *ppos)
-> +{
-> +	const char *file_name = file_dentry(file)->d_iname;
-> +	struct dentry *p_dentry = file_dentry(file)->d_parent;
-> +	const char *phy_dir_name = p_dentry->d_iname;
-> +	struct seq_file		*s = file->private_data;
-> +	struct rtk_usb_phy		*rtk_phy = s->private;
-> +	struct reg_addr *regAddr = NULL;
-> +	struct phy_data *phy_data = NULL;
-> +	int ret = 0;
-> +	char buffer[40] = {0};
-> +	int index;
-> +
-> +	if (copy_from_user(&buffer, ubuf,
-> +		    min_t(size_t, sizeof(buffer) - 1, count)))
-> +		return -EFAULT;
-> +
-> +	for (index = 0; index < rtk_phy->phyN; index++) {
-> +		size_t sz = 30;
-> +		char name[30] = {0};
-> +
-> +		snprintf(name, sz, "phy%d", index);
-> +		if (strncmp(name, phy_dir_name, strlen(name)) == 0) {
-> +			regAddr = &((struct reg_addr *)rtk_phy->reg_addr)[index];
-> +			phy_data = &((struct phy_data *)rtk_phy->phy_data)[index];
-> +			break;
-
-
-Where is the ABI documentation for user interface?
-
-
-> +
-> +static inline void create_debug_files(struct rtk_usb_phy *rtk_phy)
-> +{
-> +	struct dentry *phy_debug_root = NULL;
-> +	struct dentry *set_parameter_dir = NULL;
-> +
-> +	phy_debug_root = create_phy_debug_root();
-> +
-> +	if (!phy_debug_root) {
-> +		dev_err(rtk_phy->dev, "%s Error phy_debug_root is NULL",
-> +			    __func__);
-> +		return;
-> +	}
-> +	rtk_phy->debug_dir = debugfs_create_dir(dev_name(rtk_phy->dev),
-> +		    phy_debug_root);
-> +	if (!rtk_phy->debug_dir) {
-> +		dev_err(rtk_phy->dev, "%s Error debug_dir is NULL", __func__);
-
-Are you sure you run checkpatch on this? Error messages on debugfs are
-almost always incorrect.
-
-> +		return;
-> +	}
-> +
-> +	if (!debugfs_create_file("parameter", 0444,
-> +		    rtk_phy->debug_dir, rtk_phy,
-> +		    &rtk_usb3_parameter_fops))
-> +		goto file_error;
-> +
-> +	set_parameter_dir = debugfs_create_dir("set_parameter",
-> +		    rtk_phy->debug_dir);
-> +	if (set_parameter_dir) {
-> +		int index, ret;
-> +
-> +		for (index = 0; index < rtk_phy->phyN; index++) {
-> +			struct dentry *phy_dir;
-> +			struct phy_data *phy_data;
-> +			size_t sz = 30;
-> +			char name[30] = {0};
-> +
-> +			snprintf(name, sz, "phy%d", index);
-> +
-> +			phy_data = &((struct phy_data *)rtk_phy->phy_data)[index];
-> +
-> +			phy_dir = debugfs_create_dir(name, set_parameter_dir);
-> +			if (!phy_dir) {
-> +				dev_err(rtk_phy->dev,
-> +					    "%s Error create folder %s fail\n",
-> +					    name, __func__);
-> +				goto file_error;
-> +			}
-> +
-> +			ret = create_debug_set_parameter_files(rtk_phy, phy_dir,
-> +				    phy_data->size);
-> +			if (ret < 0) {
-> +				dev_err(rtk_phy->dev,
-> +					    "%s Error create files fail\n",
-> +					    __func__);
-> +				goto file_error;
-> +			}
-> +		}
-> +	}
-> +
-> +	if (!debugfs_create_file("toggle", 0644, rtk_phy->debug_dir, rtk_phy,
-> +		    &rtk_usb3_toggle_fops))
-> +		goto file_error;
-> +
-> +	return;
-> +
-> +file_error:
-> +	debugfs_remove_recursive(rtk_phy->debug_dir);
-> +}
-> +
-> +static inline void remove_debug_files(struct rtk_usb_phy *rtk_phy)
-> +{
-> +	debugfs_remove_recursive(rtk_phy->debug_dir);
-> +}
-> +#else
-> +static inline void create_debug_files(struct rtk_usb_phy *rtk_phy) { }
-> +static inline void remove_debug_files(struct rtk_usb_phy *rtk_phy) { }
-> +#endif /* CONFIG_DEBUG_FS */
-> +
-> +static int __get_phy_parameter_by_efuse(struct rtk_usb_phy *rtk_phy,
-> +	    struct phy_data *phy_data, int index)
-> +{
-> +	u8 value = 0;
-> +	struct nvmem_cell *cell;
-> +
-> +	if (!phy_data->check_efuse)
-> +		goto out;
-> +
-> +	cell = nvmem_cell_get(rtk_phy->dev, "usb_u3_tx_lfps_swing_trim");
-> +	if (IS_ERR(cell)) {
-> +		dev_warn(rtk_phy->dev,
-> +			    "%s failed to get usb_u3_tx_lfps_swing_trim: %ld\n",
-> +			    __func__, PTR_ERR(cell));
-> +	} else {
-> +		unsigned char *buf;
-> +		size_t buf_size;
-> +
-> +		buf = nvmem_cell_read(cell, &buf_size);
-> +
-> +		value = buf[0] & USB_U3_TX_LFPS_SWING_TRIM_MASK;
-> +
-> +		dev_dbg(rtk_phy->dev,
-> +			    "phy index=%d buf=0x%x buf_size=%d value=0x%x\n",
-> +			    index, buf[0], (int)buf_size, value);
-> +		kfree(buf);
-> +		nvmem_cell_put(cell);
-> +	}
-> +
-> +	if ((value > 0) && (value < 0x8))
-> +		phy_data->efuse_usb_u3_tx_lfps_swing_trim = 0x8;
+> +	if (action == CLK_RESET_ASSERT)
+> +		reset_control_assert(qphy->phy_reset);
 > +	else
-> +		phy_data->efuse_usb_u3_tx_lfps_swing_trim = (u8)value;
+> +		reset_control_deassert(qphy->phy_reset);
+> +	wmb(); /* ensure data is written to hw register */
+Please move the comment above the call.
+
+> +}
 > +
-> +	dev_dbg(rtk_phy->dev, "Get Efuse usb_u3_tx_lfps_swing_trim=0x%x (value=0x%x)\n",
-> +		    phy_data->efuse_usb_u3_tx_lfps_swing_trim, value);
+> +static void m31usb_phy_enable_clock(struct m31usb_phy *qphy)
+> +{
+> +	/* Enable override ctrl */
+> +	writel(UTMI_PHY_OVERRIDE_EN, qphy->base + USB_PHY_CFG0);
+Some of the comments are missing a space before '*/'
+
+Also, please consider adding some newlines to logically split the
+actions.
+
+> +	/* Enable POR*/
+> +	writel(POR_EN, qphy->base + USB_PHY_UTMI_CTRL5);
+> +	udelay(15);
+> +	/* Configure frequency select value*/
+> +	writel(FREQ_SEL, qphy->base + USB_PHY_FSEL_SEL);
+> +	/* Configure refclk frequency */
+> +	writel(COMMONONN | FSEL | RETENABLEN,
+> +		qphy->base + USB_PHY_HS_PHY_CTRL_COMMON0);
+> +	/* select refclk source */
+> +	writel(CLKCORE, qphy->base + USB_PHY_REFCLK_CTRL);
+> +	/* select ATERESET*/
+> +	writel(POR_EN & ATERESET, qphy->base + USB_PHY_UTMI_CTRL5);
+> +	writel(USB2_SUSPEND_N_SEL | USB2_SUSPEND_N | USB2_UTMI_CLK_EN,
+> +		qphy->base + USB_PHY_HS_PHY_CTRL2);
+> +	writel(0x0, qphy->base + USB_PHY_UTMI_CTRL5);
+> +	writel(USB2_SUSPEND_N | USB2_UTMI_CLK_EN,
+> +		qphy->base + USB_PHY_HS_PHY_CTRL2);
+> +	/* Disable override ctrl */
+> +	writel(0x0, qphy->base + USB_PHY_CFG0);
+> +}
 > +
-> +out:
+> +static void ipq5332_m31usb_phy_enable_clock(struct m31usb_phy *qphy)
+> +{
+> +	/* Enable override ctrl */
+> +	writel(UTMI_PHY_OVERRIDE_EN, qphy->base + USB_PHY_CFG0);
+> +	/* Enable POR*/
+ditto
+
+> +	writel(POR_EN, qphy->base + USB_PHY_UTMI_CTRL5);
+> +	udelay(15);
+> +	/* Configure frequency select value*/
+> +	writel(FREQ_SEL, qphy->base + USB_PHY_FSEL_SEL);
+> +	/* Configure refclk frequency */
+> +	writel(COMMONONN | FREQ_24MHZ | RETENABLEN,
+> +		qphy->base + USB_PHY_HS_PHY_CTRL_COMMON0);
+> +	/* select ATERESET*/
+> +	writel(POR_EN & ATERESET, qphy->base + USB_PHY_UTMI_CTRL5);
+> +	writel(USB2_SUSPEND_N_SEL | USB2_SUSPEND_N | USB2_UTMI_CLK_EN,
+> +		qphy->base + USB_PHY_HS_PHY_CTRL2);
+> +	writel(XCFG_COARSE_TUNE_NUM  | XCFG_FINE_TUNE_NUM,
+> +				qphy->base + USB2PHY_USB_PHY_M31_XCFGI_11);
+> +	/* Adjust HSTX slew rate to 565 ps*/
+> +	/* Adjust PLL lock Time counter for release clock to 35uA */
+> +	/* Adjust Manual control ODT value to 38.02 Ohm */
+> +	writel(HSTX_SLEW_RATE_565PS | PLL_CHARGING_PUMP_CURRENT_35UA |
+> +		ODT_VALUE_38_02_OHM, qphy->base + USB2PHY_USB_PHY_M31_XCFGI_4);
+These functions seem very similar, with the main difference being that
+IPQ5332 adds some more writes at the end. Perhaps some commonizing could
+be done?
+
+> +	/*
+> +	 * Enable to always turn on USB 2.0 TX driver
+> +	 * when system is in USB 2.0 HS mode
+> +	 */
+> +	writel(USB2_0_TX_ENABLE, qphy->base + USB2PHY_USB_PHY_M31_XCFGI_1);
+> +	/* Adjust Manual control ODT value to 45.02 Ohm */
+> +	/* Adjust HSTX Pre-emphasis level to 0.55mA */
+> +	writel(ODT_VALUE_45_02_OHM | HSTX_PRE_EMPHASIS_LEVEL_0_55MA,
+> +		qphy->base + USB2PHY_USB_PHY_M31_XCFGI_5);
+> +	udelay(4);
+> +	writel(0x0, qphy->base + USB_PHY_UTMI_CTRL5);
+> +	writel(USB2_SUSPEND_N | USB2_UTMI_CLK_EN,
+> +		qphy->base + USB_PHY_HS_PHY_CTRL2);
+> +}
+> +
+> +static int m31usb_phy_init(struct usb_phy *phy)
+> +{
+> +	struct m31usb_phy *qphy = container_of(phy, struct m31usb_phy, phy);
+> +
+> +	/* Perform phy reset */
+> +	m31usb_reset(qphy, CLK_RESET_ASSERT);
+> +	usleep_range(1, 5);
+https://www.kernel.org/doc/Documentation/timers/timers-howto.txt
+
+this may not work as intended
+
+> +	m31usb_reset(qphy, CLK_RESET_DEASSERT);
+> +
+> +	/* configure for ULPI mode if requested */
+> +	if (qphy->ulpi_mode)
+> +		writel_relaxed(0x0, qphy->base + USB2PHY_PORT_UTMI_CTRL2);
+> +
+> +	/* Enable the PHY */
+> +	writel_relaxed(POWER_UP, qphy->base + USB2PHY_PORT_POWERDOWN);
+> +
+> +	/* Make sure above write completed */
+> +	wmb();
+As you're calling wmb in the reset func, dropping _relaxed from the
+ULPI and PORT_POWERDOWN writes should work the same
+
+> +
+> +	/* Turn on phy ref clock*/
+> +	if (of_device_is_compatible(phy->dev->of_node,
+> +					"qcom,ipq5332-m31-usb-hsphy"))
+> +		ipq5332_m31usb_phy_enable_clock(qphy);
+> +	else
+> +		m31usb_phy_enable_clock(qphy);
+This should be done using OF match data.
+
+> +
+> +	/* Set OTG VBUS Valid from HSPHY to controller */
+> +	m31usb_write_readback(qphy->qscratch_base, HS_PHY_CTRL_REG,
+> +				UTMI_OTG_VBUS_VALID, UTMI_OTG_VBUS_VALID);
+> +	/* Indicate value is driven by UTMI_OTG_VBUS_VALID bit */
+> +	m31usb_write_readback(qphy->qscratch_base, HS_PHY_CTRL_REG,
+> +				SW_SESSVLD_SEL, SW_SESSVLD_SEL);
+> +
 > +	return 0;
 > +}
 > +
-> +static int __get_phy_parameter(struct device *dev, struct phy_data *phy_data,
-> +	    struct device_node *sub_node)
+> +static void m31usb_phy_shutdown(struct usb_phy *phy)
 > +{
-> +	struct phy_parameter *phy_parameter;
-> +	int i, ret = 0;
-> +	int data_size, num_cells = 2;
+> +	struct m31usb_phy *qphy = container_of(phy, struct m31usb_phy, phy);
 > +
-> +	phy_data->size = MAX_USB_PHY_DATA_SIZE;
-> +	phy_data->parameter = devm_kzalloc(dev,
-> +		    sizeof(struct phy_parameter) * phy_data->size, GFP_KERNEL);
-> +	if (!phy_data->parameter)
+> +	/* Disable the PHY */
+> +	writel_relaxed(POWER_DOWN, qphy->base + USB2PHY_PORT_POWERDOWN);
+> +	/* Make sure above write completed */
+> +	wmb();
+> +}
+> +
+> +static void m31usb_write_readback(void *base, u32 offset,
+> +					const u32 mask, u32 val)
+The indentation here makes `const u32..` misaligned.
+
+> +{
+> +	u32 write_val, tmp = readl_relaxed(base + offset);
+> +
+> +	tmp &= ~mask; /* retain other bits */
+> +	write_val = tmp | val;
+> +
+> +	writel_relaxed(write_val, base + offset);
+> +	/* Make sure above write completed */
+> +	wmb();
+> +
+> +	/* Read back to see if val was written */
+> +	tmp = readl_relaxed(base + offset);
+> +	tmp &= mask; /* clear other bits */
+> +
+> +	if (tmp != val)
+> +		pr_err("%s: write: %x to QSCRATCH: %x FAILED\n",
+> +			__func__, val, offset);
+> +}
+> +
+> +static int m31usb_phy_notify_connect(struct usb_phy *phy,
+> +					enum usb_device_speed speed)
+> +{
+> +	struct m31usb_phy *qphy = container_of(phy, struct m31usb_phy, phy);
+> +
+> +	qphy->cable_connected = true;
+> +
+> +	dev_dbg(phy->dev, " cable_connected=%d\n", qphy->cable_connected);
+spurious space at the beginning of the string
+
+> +
+> +	/* Set OTG VBUS Valid from HSPHY to controller */
+> +	m31usb_write_readback(qphy->qscratch_base, HS_PHY_CTRL_REG,
+> +				UTMI_OTG_VBUS_VALID,
+> +				UTMI_OTG_VBUS_VALID);
+Please align the lines with the previous opening bracket
+
+> +
+> +	/* Indicate value is driven by UTMI_OTG_VBUS_VALID bit */
+> +	m31usb_write_readback(qphy->qscratch_base, HS_PHY_CTRL_REG,
+> +				SW_SESSVLD_SEL, SW_SESSVLD_SEL);
+> +
+> +	dev_dbg(phy->dev, "M31USB2 phy connect notification\n");
+> +	return 0;
+> +}
+> +
+> +static int m31usb_phy_notify_disconnect(struct usb_phy *phy,
+> +					enum usb_device_speed speed)
+> +{
+> +	struct m31usb_phy *qphy = container_of(phy, struct m31usb_phy, phy);
+> +
+> +	qphy->cable_connected = false;
+> +
+> +	dev_dbg(phy->dev, " cable_connected=%d\n", qphy->cable_connected);
+> +
+> +	/* Set OTG VBUS Valid from HSPHY to controller */
+> +	m31usb_write_readback(qphy->qscratch_base, HS_PHY_CTRL_REG,
+> +				UTMI_OTG_VBUS_VALID, 0);
+> +
+> +	/* Indicate value is driven by UTMI_OTG_VBUS_VALID bit */
+> +	m31usb_write_readback(qphy->qscratch_base, HS_PHY_CTRL_REG,
+> +				SW_SESSVLD_SEL, 0);
+> +
+> +	dev_dbg(phy->dev, "M31USB2 phy disconnect notification\n");
+> +	return 0;
+> +}
+> +
+> +static int m31usb_phy_probe(struct platform_device *pdev)
+> +{
+> +	struct m31usb_phy *qphy;
+> +	struct device *dev = &pdev->dev;
+> +	struct resource *res;
+> +	int ret;
+> +	const char *phy_type;
+Please sort these in a reverse-Christmas-tree order.
+
+> +
+> +	qphy = devm_kzalloc(dev, sizeof(*qphy), GFP_KERNEL);
+> +	if (!qphy)
 > +		return -ENOMEM;
 > +
-> +	if (!of_get_property(sub_node, "realtek,param", &data_size)) {
-> +		dev_dbg(dev, "%s No parameter (data_size=%d)\n",
-> +			    __func__, data_size);
-> +		data_size = 0;
+> +	qphy->phy.dev = dev;
+> +
+> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+> +							"m31usb_phy_base");
+> +	qphy->base = devm_ioremap_resource(dev, res);
+devm_platform_get_and_ioremap_resource?
+
+> +	if (IS_ERR(qphy->base))
+> +		return PTR_ERR(qphy->base);
+> +
+> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+> +							"qscratch_base");
+> +	if (res) {
+Do we expect platforms without this register space?
+
+> +		qphy->qscratch_base = devm_ioremap(dev, res->start,
+> +							resource_size(res));
+> +		if (IS_ERR(qphy->qscratch_base)) {
+> +			dev_dbg(dev, "couldn't ioremap qscratch_base\n");
+> +			qphy->qscratch_base = NULL;
+> +		}
 > +	}
 > +
-> +	if (!data_size)
-> +		goto out;
+> +	qphy->phy_reset = devm_reset_control_get(dev, "usb2_phy_reset");
+not _exclusive?
+
+> +	if (IS_ERR(qphy->phy_reset))
+> +		return PTR_ERR(qphy->phy_reset);
 > +
-> +	phy_parameter = phy_data->parameter;
-> +	/* Set default addr to 0xff for no data case */
-> +	for (i = 0; i < phy_data->size; i++)
-> +		(phy_parameter + i)->addr = 0xFF;
+> +	qphy->ulpi_mode = false;
+> +	ret = of_property_read_string(dev->of_node, "phy_type", &phy_type);
+of_usb_get_phy_mode?
+
 > +
-> +	data_size = data_size / (sizeof(u32) * num_cells);
-> +	for (i = 0; i < data_size; i++) {
-> +		struct phy_parameter *parameter;
-> +		u32 addr, data;
-> +		int offset, index;
-> +
-> +		offset = i * num_cells;
-> +
-> +		ret = of_property_read_u32_index(sub_node, "realtek,param",
-> +			    offset, &addr);
-> +		if (ret) {
-> +			dev_err(dev, "ERROR: To get param i=%d addr=0x%x\n",
-> +				    i, addr);
-> +			break;
-> +		}
-> +
-> +		ret = of_property_read_u32_index(sub_node, "realtek,param",
-> +			    offset + 1, &data);
-> +		if (ret) {
-> +			dev_err(dev, "ERROR: To get param i=%d addr=0x%x\n",
-> +				    i, data);
-> +			break;
-> +		}
-> +
-> +		index = PHY_ADDR_MAP_ARRAY_INDEX(addr);
-> +		parameter = (phy_parameter + index);
-> +		parameter->addr = (u8)addr;
-> +		parameter->data = (u16)data;
-> +
-> +		dev_dbg(dev, "param index=%d addr=0x%x data=0x%x\n", index,
-> +			    parameter->addr, parameter->data);
+> +	if (!ret) {
+> +		if (!strcasecmp(phy_type, "ulpi"))
+> +			qphy->ulpi_mode = true;
+> +	} else {
+> +		dev_err(dev, "error reading phy_type property\n");
+> +		return ret;
 > +	}
 > +
-> +out:
+> +	platform_set_drvdata(pdev, qphy);
+> +
+> +	qphy->phy.label			= "qcom-m31usb-phy";
+> +	qphy->phy.init			= m31usb_phy_init;
+> +	qphy->phy.shutdown		= m31usb_phy_shutdown;
+> +	qphy->phy.type			= USB_PHY_TYPE_USB2;
+> +
+> +	if (qphy->qscratch_base) {
+> +		qphy->phy.notify_connect        = m31usb_phy_notify_connect;
+> +		qphy->phy.notify_disconnect     = m31usb_phy_notify_disconnect;
+> +	}
+> +
+> +	ret = usb_add_phy_dev(&qphy->phy);
+> +
 > +	return ret;
 > +}
 > +
-> +static int get_phy_parameter(struct rtk_usb_phy *rtk_phy,
-> +	    struct device_node *sub_node)
+> +static int m31usb_phy_remove(struct platform_device *pdev)
+Please make this return void and pass it to .remove_new
+
 > +{
-> +	struct device *dev = rtk_phy->dev;
-> +	struct reg_addr *addr;
-> +	struct phy_data *phy_data;
-> +	int ret = 0;
-> +	int index;
+> +	struct m31usb_phy *qphy = platform_get_drvdata(pdev);
 > +
-> +	if (of_property_read_u32(sub_node, "reg", &index)) {
-> +		dev_err(dev, "sub_node without reg\n");
-> +		return -EINVAL;
-> +	}
+> +	usb_remove_phy(&qphy->phy);
 > +
-> +	dev_dbg(dev, "sub_node index=%d\n", index);
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id m31usb_phy_id_table[] = {
+> +	{ .compatible = "qcom,m31-usb-hsphy",},
+> +	{ .compatible = "qcom,ipq5332-m31-usb-hsphy",},
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, m31usb_phy_id_table);
+> +
+> +static struct platform_driver m31usb_phy_driver = {
+> +	.probe		= m31usb_phy_probe,
+> +	.remove		= m31usb_phy_remove,
+> +	.driver = {
+> +		.name	= "qcom-m31usb-phy",
+> +		.of_match_table = of_match_ptr(m31usb_phy_id_table),
+of_match_ptr is unnecessary, this driver depends on OF.
 
-Please drop all simple debug success messages. Linux has already
-infrastructure for this.
-
-...
-
+Konrad
+> +	},
+> +};
 > +
-> +static int rtk_usb3phy_probe(struct platform_device *pdev)
-> +{
-> +	struct rtk_usb_phy *rtk_phy;
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *node;
-> +	struct device_node *sub_node;
-> +	struct phy *generic_phy;
-> +	struct phy_provider *phy_provider;
-> +	int ret, phyN;
+> +module_platform_driver(m31usb_phy_driver);
 > +
-> +	rtk_phy = devm_kzalloc(dev, sizeof(*rtk_phy), GFP_KERNEL);
-> +	if (!rtk_phy)
-> +		return -ENOMEM;
-> +
-> +	rtk_phy->dev			= &pdev->dev;
-> +	rtk_phy->phy.dev		= rtk_phy->dev;
-> +	rtk_phy->phy.label		= "rtk-usb3phy";
-> +	rtk_phy->phy.notify_port_status = rtk_usb_phy_notify_port_status;
-> +
-> +	if (!dev->of_node) {
-> +		dev_err(dev, "%s %d No device node\n", __func__, __LINE__);
-
-How is it even possible? If you do not have device node here, how did it
-probe?
-
-> +		ret = -ENODEV;
-> +		goto err;
-> +	}
-> +
-> +	node = dev->of_node;
-> +
-> +	phyN = of_get_child_count(node);
-> +	rtk_phy->phyN = phyN;
-> +	dev_dbg(dev, "%s phyN=%d\n", __func__, rtk_phy->phyN);
-
-Please drop all simple debug success messages. Linux has already
-infrastructure for this.
-
-> +
-> +	rtk_phy->reg_addr = devm_kzalloc(dev,
-> +		    sizeof(struct reg_addr) * phyN, GFP_KERNEL);
-> +	if (!rtk_phy->reg_addr)
-> +		return -ENOMEM;
-> +
-> +	rtk_phy->phy_data = devm_kzalloc(dev,
-> +		    sizeof(struct phy_data) * phyN, GFP_KERNEL);
-> +	if (!rtk_phy->phy_data)
-> +		return -ENOMEM;
-> +
-> +	for (sub_node = of_get_next_child(node, NULL); sub_node != NULL;
-> +		    sub_node = of_get_next_child(node, sub_node)) {
-> +		ret = get_phy_parameter(rtk_phy, sub_node);
-> +		if (ret) {
-> +			dev_err(dev, "%s: get_phy_parameter fail ret=%d\n",
-> +				    __func__, ret);
-> +			goto err;
-> +		}
-> +	}
-> +
-> +	platform_set_drvdata(pdev, rtk_phy);
-> +
-> +	generic_phy = devm_phy_create(rtk_phy->dev, NULL, &ops);
-> +	if (IS_ERR(generic_phy))
-> +		return PTR_ERR(generic_phy);
-> +
-> +	phy_set_drvdata(generic_phy, rtk_phy);
-> +
-> +	phy_provider = devm_of_phy_provider_register(rtk_phy->dev,
-> +				    of_phy_simple_xlate);
-> +	if (IS_ERR(phy_provider))
-> +		return PTR_ERR(phy_provider);
-> +
-> +	ret = usb_add_phy_dev(&rtk_phy->phy);
-> +	if (ret)
-> +		goto err;
-> +
-> +	create_debug_files(rtk_phy);
-> +
-> +err:
-> +	dev_dbg(&pdev->dev, "Probe RTK USB 3.0 PHY (ret=%d)\n", ret);
-
-Please drop all simple debug success messages. Linux has already
-infrastructure for this.
-
-Best regards,
-Krzysztof
-
+> +MODULE_DESCRIPTION("USB2 Qualcomm M31 HSPHY driver");
+> +MODULE_LICENSE("GPL");
