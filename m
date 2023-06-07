@@ -2,135 +2,312 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17D7725DC1
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 13:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99063725DF0
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 14:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236481AbjFGL4Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Jun 2023 07:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46442 "EHLO
+        id S239049AbjFGMEg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Jun 2023 08:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233152AbjFGL4W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 07:56:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23A719BF;
-        Wed,  7 Jun 2023 04:56:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5714B634FD;
-        Wed,  7 Jun 2023 11:56:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A1DC433EF;
-        Wed,  7 Jun 2023 11:56:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686138979;
-        bh=odgATFUQ91mIunsnMGn0REHzM/M5+jkX/A+8ocFml6A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gWs4PtBO/cVAPQj2rPHQ3RFo+LU/PJP49yeOTDKKxyrrrU5B2MqeGcc1XbVeaupff
-         Zk7gS1/VyBmJmBPnuK/FX8YLi8Br+2DspDYWmbRKMCRocGRZS5FbCdvo66t9/YpEer
-         jK6mqKLHPe5DEkViCsB6b4TvesWKoizZwzF0tyrtyybk3/qTGHUp6UtKpN62VwjyrX
-         6atIZp5lfLjPn3PVRkflLoMyACOFwLkLPaF/q2CN+hhvwg6cs53z04gX+FgqL3SKn+
-         SUm8quSZ1tiN4dIePq6F/R47FgwJ2xcWgctoeklGIolbcRfnktNNvtEMHzdVLFDrqo
-         PNqQhCvaaQs9Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1q6rmL-00007I-Ql; Wed, 07 Jun 2023 13:56:42 +0200
-Date:   Wed, 7 Jun 2023 13:56:41 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        with ESMTP id S234710AbjFGMEe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 08:04:34 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0AB19BF
+        for <linux-usb@vger.kernel.org>; Wed,  7 Jun 2023 05:04:32 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f6148f9679so6723590e87.3
+        for <linux-usb@vger.kernel.org>; Wed, 07 Jun 2023 05:04:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686139470; x=1688731470;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KZ6mcI1bKJ1Kz+T1ZnrarK0a6kbd0xZgbwjVj3l23gQ=;
+        b=QyNIyfZNjvs9IoORoZOHIWYIzs/i5XmcHk9EYJVDXS+JzHFp2tltW8FHlmN3Sg9g8y
+         hmIaMvv6uFlwRmY5iv+w7QkRqDzSkn5JYRvFvqcBd4loOW1d8Q14l2plZfWcAUO+n4IW
+         FkuCdTvX+r2gydNGGHI7Im42L/LicBYZK1BKAH1+e3dk8MP1+iJBYYLSjj8JQbVYZwbP
+         zpKeR6gtE7iXZlvDqnhUdc3Uf7R54JkbemoUv7uCyRe4x8Pj0u5HLqhKV5RKZjRr1xNv
+         q7PZPuZnPszQw1pRNO//YWeWi2lHZCx0AQ/bfQWmd9bu+928uyzC3GJbllU2hKdybS7E
+         oRCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686139470; x=1688731470;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KZ6mcI1bKJ1Kz+T1ZnrarK0a6kbd0xZgbwjVj3l23gQ=;
+        b=eNeAZN0rcZRFHHJ2z2X7FG2nGco8g121+uvGzqIBZs9/UH5uQIkT/C7hyoHfSYbJ+y
+         YrvSV4C2av0VpXOhWAe8ci/+hANOIY8tVer3DzwdF2vLzKcfWZlrpH5ZCi+BpksP+KoP
+         JoYiobFrEDdAdppUPTfeE8yNLhEi3KKFQkRUzNVCUnkSJKU4DxJavJxeJ/yU/MBj0Z2u
+         R4mOWkhdMzyLVhT0xf81mrIX7X1jfSVJ54ajzx3RrlDopjH4IVUGu02TadD1bK2dqCV9
+         VNd0ZBdYrgUaqywcP/ykpi2lUG6cNaRQEj3dzPT0RdCZjwi3BBiVyM2+XqUyZGi+MmSw
+         t4rw==
+X-Gm-Message-State: AC+VfDxBLkMjn0AUp2D+2oobDGFOPLefMGp11+6iBUgXxTTqNrBNwLK9
+        /5dskV9JVn1omMKf6qYfJRBd/Q==
+X-Google-Smtp-Source: ACHHUZ65yqG1QTublwh1Yaw6Z8SsrNVJqtjy+wO7w5acN3E/o/a6FRCaVjvVnek45VpoZHg3PnLUmQ==
+X-Received: by 2002:ac2:5d2b:0:b0:4ec:8615:303e with SMTP id i11-20020ac25d2b000000b004ec8615303emr1855791lfb.33.1686139470262;
+        Wed, 07 Jun 2023 05:04:30 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id q22-20020aa7d456000000b0051631518aabsm6057200edr.93.2023.06.07.05.04.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 05:04:29 -0700 (PDT)
+Message-ID: <7cce1d72-6b4d-9fff-32bc-942193388134@linaro.org>
+Date:   Wed, 7 Jun 2023 14:04:26 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 4/5] dt-bindings: phy: realtek: Add the doc about the
+ Realtek SoC USB 2.0 PHY
+To:     Stanley Chang <stanley_chang@realtek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>,
-        "ahalaney@redhat.com" <ahalaney@redhat.com>
-Subject: Re: [PATCH v8 3/9] usb: dwc3: core: Access XHCI address space
- temporarily to read port info
-Message-ID: <ZIBweVb8lUzehRXp@hovoldconsulting.com>
-References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
- <20230514054917.21318-4-quic_kriskura@quicinc.com>
- <ZGNy6FvVrBjYmorz@hovoldconsulting.com>
- <b2954b92-8b12-700a-af50-b914af7b0ace@quicinc.com>
- <cacc5813-404a-c2ef-e768-20f2acd696d9@quicinc.com>
- <20230517032124.rdh7ehnair3wjuvm@synopsys.com>
- <ZGSGc-X5Oir8wddK@hovoldconsulting.com>
- <20230517232147.4ds4rvvexwzqbzdx@synopsys.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230517232147.4ds4rvvexwzqbzdx@synopsys.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ray Chi <raychi@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20230607062500.24669-1-stanley_chang@realtek.com>
+ <20230607062500.24669-4-stanley_chang@realtek.com>
+Content-Language: en-US
+In-Reply-To: <20230607062500.24669-4-stanley_chang@realtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 17, 2023 at 11:21:50PM +0000, Thinh Nguyen wrote:
-> On Wed, May 17, 2023, Johan Hovold wrote:
-> > On Wed, May 17, 2023 at 03:21:24AM +0000, Thinh Nguyen wrote:
-> > > On Wed, May 17, 2023, Krishna Kurapati PSSNV wrote:
-> > > > On 5/16/2023 8:32 PM, Krishna Kurapati PSSNV wrote:
-> > > > > On 5/16/2023 5:41 PM, Johan Hovold wrote:
-> > 
-> > > > > > You should not make another copy of xhci_find_next_ext_cap(), but rather
-> > > > > > use it directly.
-> > > > > > 
-> > > > > > We already have drivers outside of usb/host using this function so it
-> > > > > > should be fine to do the same for now:
-> > > > > > 
-> > > > > >     #include "../host/xhci-ext-caps.h"
-> > 
-> > > > >    This was the approach which we followed when we first introduced the
-> > > > > patch [1]. But Thinh suggested to duplicate code so that we can avoid
-> > > > > any dependency on xhci (which seems to be right). So since its just one
-> > > > > function, I duplicated it here.
-> > 
-> > > >   Would like to know your opinion here on how to proceed further.
-> > 
-> > > Please keep them separated. The xhci-ext-caps.h is for xhci driver only.
-> > > It's not meant to be exposed to other drivers. Same with other *.h files
-> > > under drivers/usb/host.
-> > 
-> > As I mentioned earlier, it is already used by the xdbc earlyprintk
-> > driver which lives outside of drivers/usb/host, even if such a debug
-> > driver could be considered a special case.
-> > 
-> > If it turns out that there's no way to avoid mapping those registers
-> > from the qcom glue driver, then I think at least the register defines
-> > need to be provided in a global header rather than being copied
-> > verbatim.
+On 07/06/2023 08:24, Stanley Chang wrote:
+> Add the documentation explain the property about Realtek USB PHY driver.
 > 
-> It would be good to properly define the global header with common
-> offset/interface that can be public for other drivers.
+> Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
+> controller. Added the driver to drive the USB 2.0 PHY transceivers.
+> 
+> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+> ---
+> v2 to v3 change:
+>     1. Broken down into two patches, one for each of USB 2 & 3.
+>     2. Add more description about Realtek RTD SoCs architecture.
+>     3. Removed parameter v1 support for simplification.
+>     4. Revised the compatible name for fallback compatible.
+>     5. Remove some properties that can be set in the driver.
+> v1 to v2 change:
+>     Add phy-cells for generic phy driver
+> ---
+>  .../bindings/phy/realtek,usb2phy.yaml         | 213 ++++++++++++++++++
+>  1 file changed, 213 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml b/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
+> new file mode 100644
+> index 000000000000..69911e20a561
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
+> @@ -0,0 +1,213 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2023 Realtek Semiconductor Corporation
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/realtek,usb2phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Realtek DHC SoCs USB 2.0 PHY
+> +
+> +maintainers:
+> +  - Stanley Chang <stanley_chang@realtek.com>
+> +
+> +description:
+> +  Realtek USB 2.0 PHY support the digital home center (DHC) RTD series SoCs.
+> +  The USB 2.0 PHY driver is designed to support the XHCI controller. The SoCs
+> +  support multiple XHCI controllers. One PHY device node maps to one XHCI
+> +  controller.
+> +
+> +  RTD1295/RTD1619 SoCs USB
+> +  The USB architecture includes three XHCI controllers.
+> +  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on some
+> +  controllers.
+> +  XHCI controller#0 -- usb2phy -- phy#0
+> +                    |- usb3phy -- phy#0
+> +  XHCI controller#1 -- usb2phy -- phy#0
+> +  XHCI controller#2 -- usb2phy -- phy#0
+> +                    |- usb3phy -- phy#0
+> +
+> +  RTD1395 SoCs USB
+> +  The USB architecture includes two XHCI controllers.
+> +  The controller#0 has one USB 2.0 PHY. The controller#1 includes two USB 2.0
+> +  PHY.
+> +  XHCI controller#0 -- usb2phy -- phy#0
+> +  XHCI controller#1 -- usb2phy -- phy#0
+> +                               |- phy#1
+> +
+> +  RTD1319/RTD1619b SoCs USB
+> +  The USB architecture includes three XHCI controllers.
+> +  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#2.
+> +  XHCI controller#0 -- usb2phy -- phy#0
+> +  XHCI controller#1 -- usb2phy -- phy#0
+> +  XHCI controller#2 -- usb2phy -- phy#0
+> +                    |- usb3phy -- phy#0
+> +
+> +  RTD1319d SoCs USB
+> +  The USB architecture includes three XHCI controllers.
+> +  Each xhci maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#0.
+> +  XHCI controller#0 -- usb2phy -- phy#0
+> +                    |- usb3phy -- phy#0
+> +  XHCI controller#1 -- usb2phy -- phy#0
+> +  XHCI controller#2 -- usb2phy -- phy#0
+> +
+> +  RTD1312c/RTD1315e SoCs USB
+> +  The USB architecture includes three XHCI controllers.
+> +  Each XHCI maps to one USB 2.0 PHY.
+> +  XHCI controller#0 -- usb2phy -- phy#0
+> +  XHCI controller#1 -- usb2phy -- phy#0
+> +  XHCI controller#2 -- usb2phy -- phy#0
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - realtek,rtd1295-usb2phy
+> +          - realtek,rtd1395-usb2phy
+> +          - realtek,rtd1619-usb2phy
+> +          - realtek,rtd1319-usb2phy
+> +          - realtek,rtd1619b-usb2phy
+> +          - realtek,rtd1312c-usb2phy
+> +          - realtek,rtd1319d-usb2phy
+> +          - realtek,rtd1315e-usb2phy
 
-Yes, either drivers outside of xhci should be allowed to access this
-registers and then the defines should go in a public header or we need
-to find another way for drivers to get their hands on the corresponding
-information.
+Keep entries ordered alphabetically.
 
-I agree that accessing the header from inside the host directory is not
-very nice, but it looked we already had drivers violating this.
+> +      - const: realtek,usb2phy
+> +
+> +  reg:
+> +    items:
+> +      - description: PHY data registers
+> +      - description: PHY control registers
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  "#phy-cells":
+> +    const: 0
+> +
+> +  realtek,usb-ctrl:
+> +    description: The phandle of syscon used to control USB PHY power domain.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
 
-If this turns out to be at all needed, it should even be possible to
-share the implementation even if that means adding an explicit
-dependency on xhci for host mode. The current inline function really is
-just a hack.
+No, we have power-domains for this.
 
-Johan
+> +
+> +patternProperties:
+> +  "^phy@[0-3]+$":
+> +    type: object
+> +    description:
+> +      Each sub-node is a PHY device for one XHCI controller.
+
+I don't think it is true. You claim above that you have 0 as phy-cells,
+means you have one phy. Here you say you can have up to 4 phys.
+
+> +      For most Relatek SoCs, one XHCI controller only support one the USB 2.0
+> +      phy. For RTD1395 SoC, the one XHCI controller has two USB 2.0 PHYs.
+> +    properties:
+> +      realtek,page0-param:
+> +        description: PHY parameter at page 0. The data are the pair of the
+> +          offset and value.
+
+This needs to be specific. What the heck is "PHY parameter"?
+
+> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+
+Array? Then maxItems.
+
+> +
+> +      realtek,page1-param:
+> +        description: PHY parameter at page 1. The data are the pair of the
+> +          offset and value.
+> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+> +
+> +      realtek,page2-param:
+> +        description: PHY parameter at page 2. The data are the pair of the
+> +          offset and value. If the PHY support the page 2 parameter.
+> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+> +
+> +      realtek,support-page2-param:
+> +        description: Set this flag if PHY support page 2 parameter.
+
+Why this cannot be deducted from compatible?
+
+> +        type: boolean
+> +
+> +      realtek,do-toggle:
+> +        description: Set this flag to enable PHY parameter toggle when port
+> +          status change.
+
+Do not instruct OS what to do. Explain why this is a hardware
+characteristic.
+
+> +        type: boolean
+> +
+> +      realtek,do-toggle-driving:
+> +        description: Set this flag to enable PHY parameter toggle for adjust
+> +          the driving when port status change.
+
+Do not instruct OS what to do. Explain why this is a hardware
+characteristic.
+
+
+> +        type: boolean
+> +
+> +      realtek,check-efuse:
+> +        description: Enable to update PHY parameter from reading otp table.
+
+Do not instruct OS what to do. Explain why this is a hardware
+characteristic.
+
+> +        type: boolean
+> +
+> +      realtek,use-default-parameter:
+> +        description: Don't set parameter and use default value in hardware.
+
+NAK, you are just making things up.
+
+> +        type: boolean
+> +
+> +      realtek,is-double-sensitivity-mode:
+> +        description: Set this flag to enable double sensitivity mode.
+
+All your descriptions copy the name of property. You basically say
+nothing more. I already mentioned this before. Don't ignore the
+feedback, but address it.
+
+> +        type: boolean
+> +
+> +      realtek,ldo-force-enable:
+> +        description: Set this flag to force enable ldo mode.
+
+Drop everywhere "Set this flag to", because it is redundant. Now compare
+what is left with property name.
+
+Property name: realtek,ldo-force-enable
+Your description: "force enable ldo mode"
+
+How is this helpful to anybody?
+
+
+Best regards,
+Krzysztof
+
