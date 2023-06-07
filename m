@@ -2,151 +2,244 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C44725E75
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 14:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BEE3725F6D
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 14:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240466AbjFGMQd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Jun 2023 08:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
+        id S240770AbjFGM3g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Jun 2023 08:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240043AbjFGMQb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 08:16:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72531FD8;
-        Wed,  7 Jun 2023 05:16:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CCA163E61;
-        Wed,  7 Jun 2023 12:16:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96B98C433D2;
-        Wed,  7 Jun 2023 12:16:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686140174;
-        bh=HlNz6Ado0d6eQj5JSweTVMGGnPL01vC2DAZcoI7FHFI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DEIITjoGO3GkItGqBWXi+9iVYCuWUzGrd4MGMROGP2tHYbHZGHCSNDYh3F7Ur5iOr
-         arxxLbdZK8FSXny3cFjY4tAuQcRzQ0kLuOVYOaEs5r/QA7KExTtdncgHrK8Vr1EFNv
-         X15TgSZWo7QAXQbzfJe4Hk8fGM/C4clgNTAFswMcURbqYXpupEG1cRYCIS1SfseOkn
-         f92TBG5umrejEA3df+L6E4ADb3a+PEfVauW1bpZnGsDaaPhzCF8NKDW3Ddky9EUDKN
-         /GxBUdefrvvI/c80fzza8se405I51Cjo27cCjqQUY+v0aU6jZ6wm+us7Ol/sB4gddV
-         2C+AvRBC+FLtg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1q6s5c-0001DA-JW; Wed, 07 Jun 2023 14:16:37 +0200
-Date:   Wed, 7 Jun 2023 14:16:36 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com
-Subject: Re: [PATCH v8 6/9] usb: dwc3: qcom: Add multiport controller support
- for qcom wrapper
-Message-ID: <ZIB1JEmLCw41v_4e@hovoldconsulting.com>
-References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
- <20230514054917.21318-7-quic_kriskura@quicinc.com>
+        with ESMTP id S240921AbjFGM30 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 08:29:26 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50731BD4
+        for <linux-usb@vger.kernel.org>; Wed,  7 Jun 2023 05:29:21 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f505aace48so9179363e87.0
+        for <linux-usb@vger.kernel.org>; Wed, 07 Jun 2023 05:29:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686140960; x=1688732960;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Vvv5K2Fa6/qw28wNbL34OYbssjD8GFHlsFB1b17V23M=;
+        b=KV9fpP2jx6guTOKgEAlO6GhkKJpM1TSY2zJSafASqc7HPVMhRuJY8j8GDFnHslXoXd
+         tsQmZ4Ybww03zHKPSbSH7K0bX/W/4m6cefd8Ete87G9T723V5io/oaflGpqX6BmhMTuj
+         r6dnnncuVDGRCrJDxHt5dxeB6bhDplAltZqEodABoowDtqyLRmdILjXwpojH9A0BGOPl
+         dyMydx8sDJM4tCFZ4EFkKpdKlWbKCEEC8CVYMANtLM/vSx11Nhju3RDTRkTCpSMXVErj
+         AfPMqMS8hQE1YvwrwM5WbZuZJ6KppZuQIKCY2hzogJ5NT/V0Q5B/0h62P0I7fLhET1dv
+         l64Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686140960; x=1688732960;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vvv5K2Fa6/qw28wNbL34OYbssjD8GFHlsFB1b17V23M=;
+        b=WeEdRfK9hUhxj8guIl5LMayJcboOtML7Ldvy5TGoWFQrdT2PIpP/zPaFNvRFr0yaS2
+         kwdvomBnaSht4Yix0jk8PtTve56IsQPlnrpPJuEb5t81HpzoZzDNaVqnYcSWMw8slq9F
+         VVhR4oi5mqz5IMH2BDkXfuPWoYRDLH7obfwZTp2Trb4Zusi0U1UK2KFcxrZ9phd2d8m4
+         5BVCDlIHEmanVoIe7bU+nAm0jHoQHfpP8v9rhAVSvzMPxBjDYRYM4dbtFsCFYcs9+ris
+         5hW307iCcvXextJJJ6gJgx2Fj++nanexeiDDTM7L6l5TeRVX3+Wl4ZG9KV/2ld4vmAUu
+         kpEA==
+X-Gm-Message-State: AC+VfDyiH5uKKRDjICfApYINve606KlN2bqdmIn1Na6ePM3pf5kcwfcb
+        SbCJs33jkqr727lYpV3MqcMSsg==
+X-Google-Smtp-Source: ACHHUZ44ZMWKvFqzo9F7XcBtsUXfQ+FLzrGKodpTdTU2l21B1LHoRvSCpL1whhvOLHLsLTnYvfreGQ==
+X-Received: by 2002:a05:6512:40a:b0:4f6:19e0:8ab6 with SMTP id u10-20020a056512040a00b004f619e08ab6mr2021712lfk.30.1686140959818;
+        Wed, 07 Jun 2023 05:29:19 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id u4-20020a056512040400b004f262997496sm1798376lfk.76.2023.06.07.05.29.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 05:29:19 -0700 (PDT)
+Message-ID: <cf3c98c1-e283-3fac-3144-5a7354378a6b@linaro.org>
+Date:   Wed, 7 Jun 2023 15:29:18 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230514054917.21318-7-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 3/9] phy: qcom-m31: Introduce qcom,m31 USB phy driver
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Varadarajan Narayanan <quic_varada@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
+        will@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de, arnd@arndb.de, geert+renesas@glider.be,
+        neil.armstrong@linaro.org, nfraprado@collabora.com,
+        broonie@kernel.org, rafal@milecki.pl, quic_srichara@quicinc.com,
+        quic_varada@quicinc.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org
+References: <cover.1686126439.git.quic_varada@quicinc.com>
+ <6bb345c6a57ee27516764f36ba7d34fd1a719b87.1686126439.git.quic_varada@quicinc.com>
+ <416bef68-6df3-d5c4-2aed-ef1ae7c78d7b@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <416bef68-6df3-d5c4-2aed-ef1ae7c78d7b@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, May 14, 2023 at 11:19:14AM +0530, Krishna Kurapati wrote:
-> QCOM SoC SA8295P's tertiary quad port controller supports 2 HS+SS
-> ports and 2 HS only ports. Add support for configuring PWR_EVENT_IRQ's
-> for all the ports during suspend/resume.
+Two minor nits on top of the review:
+
+On 07/06/2023 14:54, Konrad Dybcio wrote:
+> On 7.06.2023 12:56, Varadarajan Narayanan wrote:
+>> Add the M31 USB2 phy driver
+>>
+>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>> ---
+>>   drivers/phy/qualcomm/phy-qcom-m31.c | 360 ++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 360 insertions(+)
+>>   create mode 100644 drivers/phy/qualcomm/phy-qcom-m31.c
+>>
+>> diff --git a/drivers/phy/qualcomm/phy-qcom-m31.c b/drivers/phy/qualcomm/phy-qcom-m31.c
+>> new file mode 100644
+>> index 0000000..d29a91e
+>> --- /dev/null
+>> +++ b/drivers/phy/qualcomm/phy-qcom-m31.c
+>> @@ -0,0 +1,360 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * Copyright (c) 2014-2016, 2020, The Linux Foundation. All rights reserved.
+>> + */
+>> +
+>> +#include <linux/module.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/err.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/clk.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/io.h>
+>> +#include <linux/of.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/usb/phy.h>
+>> +#include <linux/reset.h>
+>> +#include <linux/of_device.h>
+> Please sort these
 > 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 28 ++++++++++++++++++++++------
->  1 file changed, 22 insertions(+), 6 deletions(-)
+>> +
+>> +enum clk_reset_action {
+>> +	CLK_RESET_DEASSERT	= 0,
+>> +	CLK_RESET_ASSERT	= 1
+>> +};
+>> +
+>> +#define USB2PHY_PORT_POWERDOWN		0xA4
+>> +#define POWER_UP			BIT(0)
+>> +#define POWER_DOWN			0
+>> +
+>> +#define USB2PHY_PORT_UTMI_CTRL1	0x40
+>> +
+>> +#define USB2PHY_PORT_UTMI_CTRL2	0x44
+>> +#define UTMI_ULPI_SEL			BIT(7)
+>> +#define UTMI_TEST_MUX_SEL		BIT(6)
+>> +
+>> +#define HS_PHY_CTRL_REG			0x10
+>> +#define UTMI_OTG_VBUS_VALID             BIT(20)
+>> +#define SW_SESSVLD_SEL                  BIT(28)
+>> +
+>> +#define USB_PHY_CFG0			0x94
+>> +#define USB_PHY_UTMI_CTRL5		0x50
+>> +#define USB_PHY_FSEL_SEL		0xB8
+>> +#define USB_PHY_HS_PHY_CTRL_COMMON0	0x54
+>> +#define USB_PHY_REFCLK_CTRL		0xA0
+>> +#define USB_PHY_HS_PHY_CTRL2		0x64
+>> +#define USB_PHY_UTMI_CTRL0		0x3c
+>> +#define USB2PHY_USB_PHY_M31_XCFGI_1	0xBC
+>> +#define USB2PHY_USB_PHY_M31_XCFGI_4	0xC8
+>> +#define USB2PHY_USB_PHY_M31_XCFGI_5	0xCC
+>> +#define USB2PHY_USB_PHY_M31_XCFGI_11	0xE4
+> Could you sort them address-wise?
+
+... and lowercase the hex values, please.
+
 > 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 959fc925ca7c..7a9bce66295d 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -37,7 +37,10 @@
->  #define PIPE3_PHYSTATUS_SW			BIT(3)
->  #define PIPE_UTMI_CLK_DIS			BIT(8)
->  
-> -#define PWR_EVNT_IRQ_STAT_REG			0x58
-> +#define PWR_EVNT_IRQ1_STAT_REG			0x58
-> +#define PWR_EVNT_IRQ2_STAT_REG			0x1dc
-> +#define PWR_EVNT_IRQ3_STAT_REG			0x228
-> +#define PWR_EVNT_IRQ4_STAT_REG			0x238
->  #define PWR_EVNT_LPM_IN_L2_MASK			BIT(4)
->  #define PWR_EVNT_LPM_OUT_L2_MASK		BIT(5)
->  
-> @@ -93,6 +96,13 @@ struct dwc3_qcom {
->  	struct icc_path		*icc_path_apps;
->  };
->  
-> +static u32 pwr_evnt_irq_stat_reg_offset[4] = {
-> +			PWR_EVNT_IRQ1_STAT_REG,
-> +			PWR_EVNT_IRQ2_STAT_REG,
-> +			PWR_EVNT_IRQ3_STAT_REG,
-> +			PWR_EVNT_IRQ4_STAT_REG,
-> +};
+>> +
+>> +#define USB2_0_TX_ENABLE		BIT(2)
+>> +#define HSTX_SLEW_RATE_565PS		3
+>> +#define PLL_CHARGING_PUMP_CURRENT_35UA	(3 << 3)
+>> +#define ODT_VALUE_38_02_OHM		(3 << 6)
+>> +#define ODT_VALUE_45_02_OHM		BIT(2)
+>> +#define HSTX_PRE_EMPHASIS_LEVEL_0_55MA	(1)
+> Weird mix of values, bits, bitfields.. perhaps BIT(n) and
+> GENMASK() (+ FIELD_PREP) would be more suitable?
+> 
+>> +
+>> +#define UTMI_PHY_OVERRIDE_EN		BIT(1)
+>> +#define POR_EN				BIT(1)
+> Please associate these with their registers, like
+> 
+> #define FOO_REG		0xf00
+>   #define POR_EN		BIT(1)
+> 
+>> +#define FREQ_SEL			BIT(0)
+>> +#define COMMONONN			BIT(7)
+>> +#define FSEL				BIT(4)
+>> +#define RETENABLEN			BIT(3)
+>> +#define USB2_SUSPEND_N_SEL		BIT(3)
+>> +#define USB2_SUSPEND_N			BIT(2)
+>> +#define USB2_UTMI_CLK_EN		BIT(1)
+>> +#define CLKCORE				BIT(1)
+>> +#define ATERESET			~BIT(0)
+>> +#define FREQ_24MHZ			(5 << 4)
+>> +#define XCFG_COARSE_TUNE_NUM		(2 << 0)
+>> +#define XCFG_FINE_TUNE_NUM		(1 << 3)
+> same comment
+> 
+>> +
+>> +static void m31usb_write_readback(void *base, u32 offset,
+>> +					const u32 mask, u32 val);
+> We don't need this forward-definition, just move the function up.
+> 
+>> +
+>> +struct m31usb_phy {
+>> +	struct usb_phy		phy;
+>> +	void __iomem		*base;
+>> +	void __iomem		*qscratch_base;
+>> +
+>> +	struct reset_control	*phy_reset;
+>> +
+>> +	bool			cable_connected;
+>> +	bool			suspended;
+>> +	bool			ulpi_mode;
+>> +};
+>> +
+>> +static void m31usb_reset(struct m31usb_phy *qphy, u32 action)
+>> +{
+>> +	if (action == CLK_RESET_ASSERT)
+>> +		reset_control_assert(qphy->phy_reset);
+>> +	else
+>> +		reset_control_deassert(qphy->phy_reset);
+>> +	wmb(); /* ensure data is written to hw register */
+> Please move the comment above the call.
+> 
+>> +}
 
-Indentation is off, as I believe Bjorn pointed out.
+Or even better just inline the function. I was never a fan of such 
+multiplexers.
 
->  static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
->  {
->  	u32 reg;
-> @@ -413,13 +423,16 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
->  {
->  	u32 val;
->  	int i, ret;
-> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
->  
->  	if (qcom->is_suspended)
->  		return 0;
->  
-> -	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
-> -	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
-> -		dev_err(qcom->dev, "HS-PHY not in L2\n");
-> +	for (i = 0; i < dwc->num_usb2_ports; i++) {
-> +		val = readl(qcom->qscratch_base + pwr_evnt_irq_stat_reg_offset[i]);
-> +		if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
-> +			dev_err(qcom->dev, "HS-PHY%d not in L2\n", i);
-> +	}
+Also does wmb() make sense here? Doesn't regmap (which is used by reset 
+controller) remove the need for it?
 
-You need check for NULL dwc as we just discussed and skip the above
-check if core has not probed yet.
+>> +
+>> +static void m31usb_phy_enable_clock(struct m31usb_phy *qphy)
+>> +{
+>> +	/* Enable override ctrl */
+>> +	writel(UTMI_PHY_OVERRIDE_EN, qphy->base + USB_PHY_CFG0);
+> Some of the comments are missing a space before '*/'
+> 
+> Also, please consider adding some newlines to logically split the
+> actions.
 
-When testing this on the X13s I get:
 
-	dwc3-qcom a4f8800.usb: HS-PHY2 not in L2
+-- 
+With best wishes
+Dmitry
 
-for the third port, whose status registers always seems to return zero
-(e.g. as if we're checking the wrong register?):
-
-dwc3-qcom a4f8800.usb: dwc3_qcom_suspend - phy 0, pwr_event_stat = 38103c
-dwc3-qcom a4f8800.usb: dwc3_qcom_suspend - phy 1, pwr_event_stat = 38103c
-dwc3-qcom a4f8800.usb: dwc3_qcom_suspend - phy 2, pwr_event_stat = 00
-dwc3-qcom a4f8800.usb: dwc3_qcom_suspend - phy 3, pwr_event_stat = 140030
-
-I verified that everything appears to work as expected on sa8295p-adp.
-
-Do you have any idea of what may be causing this?
-
-Johan
