@@ -2,106 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8CE3724FF0
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 00:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9938E725414
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 08:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239962AbjFFWeq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Jun 2023 18:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
+        id S235056AbjFGG0c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Jun 2023 02:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240014AbjFFWeN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Jun 2023 18:34:13 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5C10A1730
-        for <linux-usb@vger.kernel.org>; Tue,  6 Jun 2023 15:33:24 -0700 (PDT)
-Received: (qmail 206158 invoked by uid 1000); 6 Jun 2023 18:33:22 -0400
-Date:   Tue, 6 Jun 2023 18:33:22 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     David Disseldorp <ddiss@suse.de>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] usb: gadget: f_mass_storage: remove unnecessary open
- check
-Message-ID: <cc56d8bf-a634-46bb-b874-5847bd4b3bf3@rowland.harvard.edu>
-References: <20230606221518.7054-1-ddiss@suse.de>
+        with ESMTP id S232580AbjFGG03 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 02:26:29 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E891723;
+        Tue,  6 Jun 2023 23:26:25 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3576OkheE023930, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3576OkheE023930
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Wed, 7 Jun 2023 14:24:46 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Wed, 7 Jun 2023 14:25:02 +0800
+Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 7 Jun 2023 14:25:00 +0800
+Received: from localhost.localdomain (172.21.252.101) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
+ 15.1.2375.32 via Frontend Transport; Wed, 7 Jun 2023 14:25:00 +0800
+From:   Stanley Chang <stanley_chang@realtek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Stanley Chang <stanley_chang@realtek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Ray Chi <raychi@google.com>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        "Michael Grzeschik" <m.grzeschik@pengutronix.de>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: [PATCH v3 1/5] usb: phy: add usb phy notify port status API
+Date:   Wed, 7 Jun 2023 14:24:37 +0800
+Message-ID: <20230607062500.24669-1-stanley_chang@realtek.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606221518.7054-1-ddiss@suse.de>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-KSE-ServerInfo: RTEXMBS05.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 12:15:18AM +0200, David Disseldorp wrote:
-> fsg_lun_is_open() will always and only be true after a successful
-> fsg_lun_open() call, so drop the unnecessary conditional.
+In Realtek SoC, the parameter of usb phy is designed to can dynamic
+tuning base on port status. Therefore, add a notify callback of phy
+driver when usb port status change.
 
-I don't follow the reasoning.  The relevant code is:
+The Realtek phy driver is designed to dynamically adjust disconnection
+level and calibrate phy parameters. When the device connected bit changes
+and when the disconnected bit changes, do port status change notification:
 
-	if (cfg->filename) {
-		rc = fsg_lun_open(lun, cfg->filename);
-		if (rc)
-			goto error_lun;
-	}
-	...
-	if (fsg_lun_is_open(lun)) {
+Check if portstatus is USB_PORT_STAT_CONNECTION and portchange is
+USB_PORT_STAT_C_CONNECTION.
+1. The device is connected, the driver lowers the disconnection level and
+   calibrates the phy parameters.
+2. The device disconnects, the driver increases the disconnect level and
+   calibrates the phy parameters.
 
-So at this point, the fsg_lun_is_open() condition is true iff 
-cfg->filename was set upon entry.  What makes this test unnecessary?
+When controller to notify connect that device is already ready. If we
+adjust the disconnection level in notify_connect, the disconnect may have
+been triggered at this stage. So we need to change that as early as
+possible. Therefore, we add an api to notify phy the port status changes.
 
->  Similarly,
-> the error_lun label will never be reached with an open lun (non-null
-> filp) so remove the unnecessary fsg_lun_close() call.
+Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+---
+v2 to v3 change:
+    Add more comments about the reason for adding this api
+v1 to v2 change:
+    No change
+---
+ drivers/usb/core/hub.c  | 13 +++++++++++++
+ include/linux/usb/phy.h | 14 ++++++++++++++
+ 2 files changed, 27 insertions(+)
 
-That makes more sense.
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 97a0f8faea6e..b4fbbeae1927 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -614,6 +614,19 @@ static int hub_ext_port_status(struct usb_hub *hub, int port1, int type,
+ 		ret = 0;
+ 	}
+ 	mutex_unlock(&hub->status_mutex);
++
++	if (!ret) {
++		struct usb_device *hdev = hub->hdev;
++
++		if (hdev && !hdev->parent) {
++			struct usb_hcd *hcd = bus_to_hcd(hdev->bus);
++
++			if (hcd->usb_phy)
++				usb_phy_notify_port_status(hcd->usb_phy,
++					    port1 - 1, *status, *change);
++		}
++	}
++
+ 	return ret;
+ }
+ 
+diff --git a/include/linux/usb/phy.h b/include/linux/usb/phy.h
+index e4de6bc1f69b..53bf3540098f 100644
+--- a/include/linux/usb/phy.h
++++ b/include/linux/usb/phy.h
+@@ -144,6 +144,10 @@ struct usb_phy {
+ 	 */
+ 	int	(*set_wakeup)(struct usb_phy *x, bool enabled);
+ 
++	/* notify phy port status change */
++	int	(*notify_port_status)(struct usb_phy *x,
++		int port, u16 portstatus, u16 portchange);
++
+ 	/* notify phy connect status change */
+ 	int	(*notify_connect)(struct usb_phy *x,
+ 			enum usb_device_speed speed);
+@@ -316,6 +320,16 @@ usb_phy_set_wakeup(struct usb_phy *x, bool enabled)
+ 		return 0;
+ }
+ 
++static inline int
++usb_phy_notify_port_status(struct usb_phy *x, int port, u16 portstatus,
++	    u16 portchange)
++{
++	if (x && x->notify_port_status)
++		return x->notify_port_status(x, port, portstatus, portchange);
++	else
++		return 0;
++}
++
+ static inline int
+ usb_phy_notify_connect(struct usb_phy *x, enum usb_device_speed speed)
+ {
+-- 
+2.34.1
 
-Alan Stern
-
-> Signed-off-by: David Disseldorp <ddiss@suse.de>
-> ---
->  drivers/usb/gadget/function/f_mass_storage.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-> index 3a30feb47073f..da07e45ae6df5 100644
-> --- a/drivers/usb/gadget/function/f_mass_storage.c
-> +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> @@ -2857,7 +2857,7 @@ int fsg_common_create_lun(struct fsg_common *common, struct fsg_lun_config *cfg,
->  			  const char **name_pfx)
->  {
->  	struct fsg_lun *lun;
-> -	char *pathbuf, *p;
-> +	char *pathbuf = NULL, *p = "(no medium)";
->  	int rc = -ENOMEM;
->  
->  	if (id >= ARRAY_SIZE(common->luns))
-> @@ -2907,12 +2907,9 @@ int fsg_common_create_lun(struct fsg_common *common, struct fsg_lun_config *cfg,
->  		rc = fsg_lun_open(lun, cfg->filename);
->  		if (rc)
->  			goto error_lun;
-> -	}
->  
-> -	pathbuf = kmalloc(PATH_MAX, GFP_KERNEL);
-> -	p = "(no medium)";
-> -	if (fsg_lun_is_open(lun)) {
->  		p = "(error)";
-> +		pathbuf = kmalloc(PATH_MAX, GFP_KERNEL);
->  		if (pathbuf) {
->  			p = file_path(lun->filp, pathbuf, PATH_MAX);
->  			if (IS_ERR(p))
-> @@ -2931,7 +2928,6 @@ int fsg_common_create_lun(struct fsg_common *common, struct fsg_lun_config *cfg,
->  error_lun:
->  	if (device_is_registered(&lun->dev))
->  		device_unregister(&lun->dev);
-> -	fsg_lun_close(lun);
->  	common->luns[id] = NULL;
->  error_sysfs:
->  	kfree(lun);
-> -- 
-> 2.35.3
-> 
