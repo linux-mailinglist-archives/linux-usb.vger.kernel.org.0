@@ -2,59 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9FC0725CF0
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 13:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FAA2725CF8
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 13:23:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240389AbjFGLUP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Jun 2023 07:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
+        id S240159AbjFGLX1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Jun 2023 07:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240284AbjFGLUN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 07:20:13 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1654F19BB
-        for <linux-usb@vger.kernel.org>; Wed,  7 Jun 2023 04:20:08 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b1a6a8e851so79047391fa.2
-        for <linux-usb@vger.kernel.org>; Wed, 07 Jun 2023 04:20:07 -0700 (PDT)
+        with ESMTP id S235568AbjFGLXZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 07:23:25 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3201720
+        for <linux-usb@vger.kernel.org>; Wed,  7 Jun 2023 04:23:24 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f3b9755961so8875860e87.0
+        for <linux-usb@vger.kernel.org>; Wed, 07 Jun 2023 04:23:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686136806; x=1688728806;
+        d=linaro.org; s=google; t=1686137002; x=1688729002;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BTBg9MyG6jhsl+u10WSeM0LsmdB54Dp+FeeVDwf+P1E=;
-        b=GqGvhfCD5CfG/i9PdEtiYtDORlS2hSYj/XdMUA6gwOK8QYt2DOpbQVjlH403owaCe1
-         lt2U1vB/X6Q7w6wsrTq+cvIdnX26i/HZvKpE5YJoX+GTLQcdhI8JXBPwryb7qPQMyEMU
-         XipEAQqFjEkejFo7Nr4oTddfOWdKj0frkMfRavbwap9iA+85xQEXxQjlNigBkP5nr/dP
-         0ywDsqvbzc0MGbhC37pE6yc3JUO0S6eAkpMYkhavE0Vbsz54D8dNOaWTbMlKHV2dLEv/
-         CrZNM3bNoMVLKZSfpx85+uyuxt4osLX51Td9LTfFkLvgjisW/b36SNH7JkiB89JbhNDM
-         IdZQ==
+        bh=zYWjVSSUNQy2OIvRzT+DCkE2WygimSZ/7ktVYRvNicw=;
+        b=ut1l0xhdvA0jDNgaIFbJL6WY0litUWHGkN3/F7y+kRqLwEKWv1DEhaQBr4U6mVlK/+
+         BGgF6RQIMKuHXnZnPgCLP66k45lwaHR9sK5ZdZT2yogZoSZ/PrgcWuBo5z2C0ySNOtmR
+         3bogr32wDzzLCqrjcOjMaZnayYP71zrKMRypXK/a+ES13Esh6mEC5TNEztHTzawv0OGJ
+         3+9BvEJPMj1M9imHdq5CHtRNHoazHEjRVTOY9qE2X+JRK9RaJpWYyvjAt5qY7hiPfCjx
+         lLyHyEuoatjWEVkJhvTPk+nE6aH0uxNFMzdfBbThIZbiM7C8nGHZ+AoNYa1mxbVQpPGp
+         A7iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686136806; x=1688728806;
+        d=1e100.net; s=20221208; t=1686137002; x=1688729002;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BTBg9MyG6jhsl+u10WSeM0LsmdB54Dp+FeeVDwf+P1E=;
-        b=doVTfIh0OfFW98aSm+Jyi2uup2xsH3Qxt43Vm3Bk6JtaQt94kuC741CJ/BOab35IzX
-         +YoYrj9srE0FX7OZduCIiT0g04UeJQ+bu9t1VYBHitoSwshRil8iiaARoY2ajZWxwzlN
-         fDl5adtmgl+mq3FCQvkh8HbZDRhACCUHLIKNZk07h4z9bvY4Vx5vmns13Q8l5qfuv/17
-         XhQQP3EvjwgL/xZhuNUzS0PLh+YjCc9hH3Lu03QzLSbK0jPMsA50nanI3kiy0DPu3KLc
-         oVqL578+Dn+hnmCajOa5Imn1c402z1k03JCdc/WiYsNijk2z5EVWhCiqncldoiA4hyG0
-         9tXQ==
-X-Gm-Message-State: AC+VfDwAUjW9LzgGYEJwwBUz/8+AK2U6M4Hs22D8z1sOJ4O7uv7GKBjL
-        glrsPHP+M+FRU1GP6Ua5QoUVrw==
-X-Google-Smtp-Source: ACHHUZ4dGJnb/Q4jQtanIF6np0lUFYJ9Kec/sjx85wUK5bWSOr8484OmnpVW6Ub4tegvaeUknGYZyQ==
-X-Received: by 2002:a2e:320c:0:b0:2b1:e966:b349 with SMTP id y12-20020a2e320c000000b002b1e966b349mr1944701ljy.31.1686136806130;
-        Wed, 07 Jun 2023 04:20:06 -0700 (PDT)
+        bh=zYWjVSSUNQy2OIvRzT+DCkE2WygimSZ/7ktVYRvNicw=;
+        b=fw0EVtu2ZmXRAFi6yh1RZUm+aY25jfiBXEXTNQPeGjvUr08G57lq+uTqSbGgQZyux3
+         sr9/QB8bcRJ27OzLqXNNMqZ06Ojw5uqN3QaU3wqzRlp+0ByOgJ36qnzQfNtIQ9SvXE5f
+         p+92Jgn2jNajuU4hNvkhm+ZMMd4CKqu+lTlN7orrO81tJcBus6cuYHvLCxUHRgV7rwVu
+         5ZUutJa7+RKVgRv/ES8JHGnxrg3/O+hyNWh/e/Sf+Wn9BTG6K5Hs/hWi5ehWQoISz6Se
+         v2Uj9A9igsZ8UMsD9KngZWed5rAUY6IeHWojqbg+J9kbZTawu7Wj5skojimjt23qsuFZ
+         4ejQ==
+X-Gm-Message-State: AC+VfDyOvJzEyfxJcqeSZ1fucStTEWZWgorggRbRt3uQdMuBfj3jMIrC
+        dqCMjeLEDJOWCCnQKSnA5XJl9Q==
+X-Google-Smtp-Source: ACHHUZ4aydeqTRm2woMwjuX3xGYPzWA8qO84H3tMVn0lkLC1A1gjqkq20mduf4N1CkRL+Px2KE7u7g==
+X-Received: by 2002:ac2:4a7a:0:b0:4f2:6bc3:5e33 with SMTP id q26-20020ac24a7a000000b004f26bc35e33mr1969465lfp.9.1686137002414;
+        Wed, 07 Jun 2023 04:23:22 -0700 (PDT)
 Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id y19-20020a2e3213000000b002b1e6a78d3esm1096403ljy.82.2023.06.07.04.20.05
+        by smtp.gmail.com with ESMTPSA id q11-20020ac2514b000000b004f63739e2f1sm552855lfd.255.2023.06.07.04.23.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 04:20:05 -0700 (PDT)
-Message-ID: <f007fbf0-b1a7-cb44-d662-c30bf114365e@linaro.org>
-Date:   Wed, 7 Jun 2023 14:20:04 +0300
+        Wed, 07 Jun 2023 04:23:21 -0700 (PDT)
+Message-ID: <8e21fef3-5ae4-673a-dce2-4ebf1dd0eb66@linaro.org>
+Date:   Wed, 7 Jun 2023 14:23:20 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 5/9] phy: qcom-m31: Introduce qcom,m31 USB phy
+Subject: Re: [PATCH 7/9] arm64: dts: qcom: ipq5332: Add USB related nodes
 Content-Language: en-GB
 To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
         andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
@@ -71,15 +71,15 @@ To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
         linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-clk@vger.kernel.org
 References: <cover.1686126439.git.quic_varada@quicinc.com>
- <636308462efb579734de829fb6e9cbda81b982f7.1686126439.git.quic_varada@quicinc.com>
+ <1b48e737aa14f5b5539cbf04d473182121d5b1ad.1686126439.git.quic_varada@quicinc.com>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <636308462efb579734de829fb6e9cbda81b982f7.1686126439.git.quic_varada@quicinc.com>
+In-Reply-To: <1b48e737aa14f5b5539cbf04d473182121d5b1ad.1686126439.git.quic_varada@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,36 +87,88 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On 07/06/2023 13:56, Varadarajan Narayanan wrote:
-> Introduce CONFIG_PHY_QCOM_M31_USB for including the M31 phy driver
+> Add USB phy and controller nodes
 > 
 > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-
-Is there any reason to keep Kconfig, Makefile and driver in different 
-commits?
-
 > ---
->   drivers/phy/qualcomm/Kconfig | 11 +++++++++++
->   1 file changed, 11 insertions(+)
+>   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 55 +++++++++++++++++++++++++++++++++++
+>   1 file changed, 55 insertions(+)
 > 
-> diff --git a/drivers/phy/qualcomm/Kconfig b/drivers/phy/qualcomm/Kconfig
-> index 67a45d9..8a363dd 100644
-> --- a/drivers/phy/qualcomm/Kconfig
-> +++ b/drivers/phy/qualcomm/Kconfig
-> @@ -188,3 +188,14 @@ config PHY_QCOM_IPQ806X_USB
->   	  This option enables support for the Synopsis PHYs present inside the
->   	  Qualcomm USB3.0 DWC3 controller on ipq806x SoC. This driver supports
->   	  both HS and SS PHY controllers.
+> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> index c2d6cc65..3183357 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> @@ -383,6 +383,61 @@
+>   				status = "disabled";
+>   			};
+>   		};
 > +
-> +config PHY_QCOM_M31_USB
-> +	tristate "Qualcomm M31 HS PHY driver support"
-> +	depends on (USB || USB_GADGET) && ARCH_QCOM
-> +	select USB_PHY
-> +	help
-> +	  Enable this to support M31 HS PHY transceivers on Qualcomm chips
-> +	  with DWC3 USB core. It handles PHY initialization, clock
-> +	  management required after resetting the hardware and power
-> +	  management. This driver is required even for peripheral only or
-> +	  host only mode configurations.
+> +		usb_0_m31phy: hs_m31phy@7b000 {
+> +			compatible = "qcom,ipq5332-m31-usb-hsphy";
+> +			reg = <0x0007b000 0x12C>,
+> +			      <0x08af8800 0x400>;
+> +			reg-names = "m31usb_phy_base",
+> +				    "qscratch_base";
+> +			phy_type= "utmi";
+> +
+> +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> +			reset-names = "usb2_phy_reset";
+> +
+> +			status = "okay";
+> +		};
+> +
+> +		usb2: usb2@8a00000 {
+> +			compatible = "qcom,ipq5332-dwc3", "qcom,dwc3";
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+> +
+> +			reg = <0x08af8800 0x100>;
+> +
+> +			clocks = <&gcc GCC_USB0_MASTER_CLK>,
+> +				<&gcc GCC_SNOC_USB_CLK>,
+> +				<&gcc GCC_USB0_SLEEP_CLK>,
+> +				<&gcc GCC_USB0_MOCK_UTMI_CLK>;
+
+Please indent these values.
+
+> +
+> +			clock-names = "core",
+> +				"iface",
+> +				"sleep",
+> +				"mock_utmi";
+
+Please indent these values.
+
+> +
+> +			interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
+
+No PHY IRQs?
+
+> +			interrupt-names = "pwr_event";
+> +
+> +			resets = <&gcc GCC_USB_BCR>;
+> +
+> +			qcom,select-utmi-as-pipe-clk;
+> +
+> +			usb2_0_dwc: usb@8a00000 {
+> +				compatible = "snps,dwc3";
+> +				reg = <0x08a00000 0xe000>;
+> +				clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> +				clock-names = "ref";
+> +				interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
+> +				usb-phy = <&usb_0_m31phy>;
+> +				tx-fifo-resize;
+> +				snps,is-utmi-l1-suspend;
+> +				snps,hird-threshold = /bits/ 8 <0x0>;
+> +				snps,dis_u2_susphy_quirk;
+> +				snps,dis_u3_susphy_quirk;
+> +				snps,ref-clock-period-ns = <21>;
+> +			};
+> +		};
+>   	};
+>   
+>   	timer {
 
 -- 
 With best wishes
