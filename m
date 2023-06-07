@@ -2,60 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E3E726365
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 16:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D17907263A6
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jun 2023 17:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240702AbjFGOyi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Jun 2023 10:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43454 "EHLO
+        id S235874AbjFGPEZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Jun 2023 11:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240678AbjFGOyh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 10:54:37 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id B180619BB
-        for <linux-usb@vger.kernel.org>; Wed,  7 Jun 2023 07:54:35 -0700 (PDT)
-Received: (qmail 228244 invoked by uid 1000); 7 Jun 2023 10:54:34 -0400
-Date:   Wed, 7 Jun 2023 10:54:34 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Colin Williams <colin.williams.seattle@gmail.com>
-Cc:     Linux USB <linux-usb@vger.kernel.org>
-Subject: Re: Cannot access device / WD Portable Game Drive 5.0 TB USB Inbox
-Message-ID: <14dba6aa-91f6-46c3-834f-be5d35e616e3@rowland.harvard.edu>
-References: <CAPXXXSCjjJ5=+zigZyfX65uNOQYYJun1pQspq4jgJpC+TFJRPg@mail.gmail.com>
+        with ESMTP id S235320AbjFGPEY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 11:04:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA9F10CE;
+        Wed,  7 Jun 2023 08:04:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E6D2E636BD;
+        Wed,  7 Jun 2023 15:04:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BF46C433D2;
+        Wed,  7 Jun 2023 15:04:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686150260;
+        bh=JAqckUXm4rcXg68qaoKJu3AXrPyZeSW+IQr1YsqGdBQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JiRkO4dvBv17/oKzfVQaGMSxXHt8tb53roZ/Kvzw9B/rzLMouU8hhs/R1N8tVltAt
+         04DpwmAsoG384ryyAX4r3rBcd+QXQNQkqDvg10pegrW/nEzXFTeD6IOjX9QP8dB9WO
+         Iwnhdnpl99o84KSLTbbPP3zf9hqfNxFmsUIJVL/6yY8/BfOy8keZYjmmPgJNqUkVCO
+         dT2SYutQH4qDrZ8JMMdWH5BXs64ZEHCUuaOB16/7GfErnxW31atZeXf0fiJQsBO9IO
+         qNp+9WaTwzoVieUO5tDguNDdFvUXu6R3bSaBtUdGND4m5nkvXHFyCRxHbRhohqr8TE
+         lv7D/VkcSAIeA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1q6uiJ-0005EK-N0; Wed, 07 Jun 2023 17:04:43 +0200
+Date:   Wed, 7 Jun 2023 17:04:43 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB-serial device ids for 6.4-rc6
+Message-ID: <ZICci0PIId0FlVuV@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPXXXSCjjJ5=+zigZyfX65uNOQYYJun1pQspq4jgJpC+TFJRPg@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 04:00:56PM -0700, Colin Williams wrote:
-> I've tried two cables and using two different computers to access my
-> WD Portable 5.0 TB portable game drive that has a USB interface. Dmesg
-> seems ok with line
-> 
-> `[ 4586.948425] sd 6:0:0:0: [sdb] Assuming drive cache: write through`
-> 
-> However when I try to access the device via smartctl / cfdisk / etc to
-> get more information, I get something like no such device and then
-> dmesg is populated with errors.
+The following changes since commit 7877cb91f1081754a1487c144d85dc0d2e2e7fc4:
 
-What if you don't try to use smartctl or cfdisk?  What happens if you 
-just try to mount the disk normally?
+  Linux 6.4-rc4 (2023-05-28 07:49:00 -0400)
 
-> Does anyone have experience with these scenarios?
-> 
-> Are there any suggestions to recover my data or does it appear the
-> device has given up the ghost?
+are available in the Git repository at:
 
-If you want to get more information about what's going on, you should 
-collect a usbmon or Wireshark trace showing what happens when the drive 
-is plugged in and accessed.
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.4-rc6
 
-Alan Stern
+for you to fetch changes up to f1832e2b5e498e258b090af3b065b85cf8cc5161:
+
+  USB: serial: option: add Quectel EM061KGL series (2023-06-02 11:06:50 +0200)
+
+----------------------------------------------------------------
+USB-serial device ids for 6.4-rc6
+
+Here are some new modem device ids.
+
+Everything has been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Jerry Meng (1):
+      USB: serial: option: add Quectel EM061KGL series
+
+ drivers/usb/serial/option.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
