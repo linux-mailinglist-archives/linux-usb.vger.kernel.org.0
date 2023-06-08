@@ -2,134 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9828728600
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 19:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E8172861F
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 19:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236191AbjFHRK5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jun 2023 13:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39166 "EHLO
+        id S236631AbjFHRSP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jun 2023 13:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbjFHRKz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 13:10:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307492D41
-        for <linux-usb@vger.kernel.org>; Thu,  8 Jun 2023 10:09:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686244198;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9z7T6Wkk/SdazHdjYQuKgRjHWVMoXTStQH+SQPSaOwc=;
-        b=LllZoeeJs8Y/b/K10tUZkZv3lqwDE/CbjBDwVO/Q0xGHMMMHd2rcrYwU4+MOvMTy5D13zl
-        CrKT3NuJK9MLuEoj/r6/PEdl3IeYAmxEhGMID06Om+h80YpX0cONp3aNz+05NYsH03MQsd
-        xHCAzRgP1r55Omihg1ucW8UguTY4uiM=
-Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
- [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-272-0BdvcqLNPU2BWMWmp7X07A-1; Thu, 08 Jun 2023 13:09:57 -0400
-X-MC-Unique: 0BdvcqLNPU2BWMWmp7X07A-1
-Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-56991d8e2b0so9974997b3.2
-        for <linux-usb@vger.kernel.org>; Thu, 08 Jun 2023 10:09:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686244196; x=1688836196;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        with ESMTP id S231589AbjFHRSM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 13:18:12 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B00269A
+        for <linux-usb@vger.kernel.org>; Thu,  8 Jun 2023 10:18:11 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-514ad92d1e3so8483a12.1
+        for <linux-usb@vger.kernel.org>; Thu, 08 Jun 2023 10:18:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686244690; x=1688836690;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9z7T6Wkk/SdazHdjYQuKgRjHWVMoXTStQH+SQPSaOwc=;
-        b=TU7SpEjLVzOw1CPn/EuebvfSVdAgPPhzI11f1Bk07jgTxO1rW3dpwAz+neiREiFRMw
-         tiGv5JtiGn6/SZ9bqAcTcjlFbRiQMrjL0857ptrsSs6U8CnXiozDSqMi0OVixjuUIpTR
-         Zh6Ih7xBdAQszPR5KsCAXjAX78ukOiPjlzuydnyb7J+mJYj7rZiQeNKcCjIcWwmdr0fb
-         V2WiaJfqQJ5ooBfsw6L0a1KAAli//ZOxLXG/ErI0dDAo1CfQzEke1QW3LoIgK5n8BZ2S
-         y3AAJ+zD2JMpMZkwR3DAdJ44oXUIfe2D6LrvfM3rusnYNif8CHBpXBnYM+X9C9TcKtpY
-         RiIg==
-X-Gm-Message-State: AC+VfDwNkC136QaWg1bNtsh1kVUNkDfXcSu/D8A7s7CUE73mikrXFORP
-        e0Nq/U1su77v8EkIgFq2iDn3H1B6hywKcZSMUo6shEGiHFwTG4WiMsG3jA8g7fUo6QdFaERZW1d
-        DKepYSBTlKg6Zi7+5QRsEGCrnwNEn
-X-Received: by 2002:a0d:cf84:0:b0:565:9a3d:a3f9 with SMTP id r126-20020a0dcf84000000b005659a3da3f9mr410773ywd.9.1686244196440;
-        Thu, 08 Jun 2023 10:09:56 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4wmKzTc3/7wkPTGewfNcd0v7EPf3urCf81xQmG/YbMBi+ovkuVi0bLM1/xnxOeu7n6SLkXsw==
-X-Received: by 2002:a0d:cf84:0:b0:565:9a3d:a3f9 with SMTP id r126-20020a0dcf84000000b005659a3da3f9mr410744ywd.9.1686244196191;
-        Thu, 08 Jun 2023 10:09:56 -0700 (PDT)
-Received: from halaney-x13s ([2600:1700:1ff0:d0e0::22])
-        by smtp.gmail.com with ESMTPSA id k1-20020a819301000000b00555c30ec361sm21993ywg.143.2023.06.08.10.09.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 10:09:55 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 12:09:53 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: qcom: Release the correct resources in
- dwc3_qcom_remove()
-Message-ID: <20230608170953.nbemo4cuipq5ui7h@halaney-x13s>
-References: <c0215a84cdf18fb3514c81842783ec53cf149deb.1685891059.git.christophe.jaillet@wanadoo.fr>
+        bh=vDGJ99Zbvrff4LqU/6lh95oEzEn3622rMSfjHzCbu0g=;
+        b=f6Cb11oZJsfaVoKrAOCwpY4luQNk4WtzcsJD3NpK4HcjuzLGFv8Qn0nVVkYcAt3YQO
+         /GguEHG5/6Ciw6V0sxvsE+xgu9U78oX4n/R7zouR/ZfWxrDorLYLQbNjNQlxJYB/YEIo
+         zsDx/2CpZdJS1RBKIuoNNv/v4y+7T2pTUOyiI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686244690; x=1688836690;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vDGJ99Zbvrff4LqU/6lh95oEzEn3622rMSfjHzCbu0g=;
+        b=P8ZVq7hSSXn0v/4zY87jNhsu+3kj6p4tEwzN1QWjqy9iojiXGOTU54nKohifJaI2rj
+         Xn6CF7edEdjYy2MrV4ogdtLE5ZMiHLtBUERB9V4LvJ33ieDwfsA7kkfhLPzY8Mh9nxaP
+         iOg0pfk2cGOEfzZ+zYr416cqQwsC1QkICwUI7GuhTyyxxSiQJ4oakEffQP8scTeg0G0t
+         QEKMiX4kO2ltQJxjc553YL2r9Y7R47HyHMy0DMZBDwriDGaEUQBzMLbNKGaKiPMnQ8GR
+         BobQIG3IICJqMITbcGgn5EXIQHVq4dGPe8AyISdJWFAqhf70K8mqNSjZqyKcQ5AqliWN
+         Ljdw==
+X-Gm-Message-State: AC+VfDz2Hd/n4u6ELYH9qLwSyRunbmb7LVlpdGAhZsnxSm3u5Q4d3ix+
+        ZJAQ6cHewDxBcD+nrQj0Q3vXJvFdU0tbbCYA0HJpLg==
+X-Google-Smtp-Source: ACHHUZ7LnAAPd+n2rpNyF896j1yJ47ZJuGHoeoyJVboMWkxLuA+OFTUpuzR/cGSdfJ12VJS5hHRMpYRIf6VVVm6pAD8=
+X-Received: by 2002:a50:8e5e:0:b0:506:90c4:b63b with SMTP id
+ 30-20020a508e5e000000b0050690c4b63bmr168316edx.4.1686244689955; Thu, 08 Jun
+ 2023 10:18:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c0215a84cdf18fb3514c81842783ec53cf149deb.1685891059.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <2023060611-coach-entitle-d4e4@gregkh> <20230607193328.3359487-1-pholla@chromium.org>
+In-Reply-To: <20230607193328.3359487-1-pholla@chromium.org>
+From:   Benson Leung <bleung@chromium.org>
+Date:   Thu, 8 Jun 2023 10:17:58 -0700
+Message-ID: <CANLzEksUYyzNsBfRiFjeqC482evg+TLt1S5Y4_83Dag0Ktx-Fw@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: typec: Fix fast_role_swap_current show function
+To:     Pavan Holla <pholla@chromium.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        pmalani@chromium.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 05:04:37PM +0200, Christophe JAILLET wrote:
-> In the probe, some resources are allocated with
-> dwc3_qcom_of_register_core() or dwc3_qcom_acpi_register_core(). The
-> corresponding resources are already coorectly freed in the error handling
+Hi Pavan,
 
-nit not worthy of holding this up: s/coorectly/correctly/
+On Wed, Jun 7, 2023 at 12:33=E2=80=AFPM Pavan Holla <pholla@chromium.org> w=
+rote:
+>
+> The current implementation mistakenly performs a & operation on
+> the output of sysfs_emit. This patch performs the & operation before
+> calling sysfs_emit.
+>
+> Fixes: 662a60102c12 ("usb: typec: Separate USB Power Delivery from USB Ty=
+pe-C")
+> Reported-by: Benson Leung <bleung@chromium.org>
+> Signed-off-by: Pavan Holla <pholla@chromium.org>
 
-> path of the probe, but not in the remove function.
-> 
-> Fix it.
-> 
-> Fixes: 2bc02355f8ba ("usb: dwc3: qcom: Add support for booting with ACPI")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-
-Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
-
-Thanks,
-Andrew
+Reviewed-by: Benson Leung <bleung@chromium.org>
 
 > ---
->  drivers/usb/dwc3/dwc3-qcom.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index aa96c473f839..9c95f1d909ba 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -942,11 +942,15 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  static void dwc3_qcom_remove(struct platform_device *pdev)
+>  drivers/usb/typec/pd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/typec/pd.c b/drivers/usb/typec/pd.c
+> index 0bcde1ff4d39..8cc66e4467c4 100644
+> --- a/drivers/usb/typec/pd.c
+> +++ b/drivers/usb/typec/pd.c
+> @@ -95,7 +95,7 @@ peak_current_show(struct device *dev, struct device_att=
+ribute *attr, char *buf)
+>  static ssize_t
+>  fast_role_swap_current_show(struct device *dev, struct device_attribute =
+*attr, char *buf)
 >  {
->  	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
-> +	struct device_node *np = pdev->dev.of_node;
->  	struct device *dev = &pdev->dev;
->  	int i;
->  
->  	device_remove_software_node(&qcom->dwc3->dev);
-> -	of_platform_depopulate(dev);
-> +	if (np)
-> +		of_platform_depopulate(&pdev->dev);
-> +	else
-> +		platform_device_put(pdev);
->  
->  	for (i = qcom->num_clocks - 1; i >= 0; i--) {
->  		clk_disable_unprepare(qcom->clks[i]);
-> -- 
-> 2.34.1
-> 
+> -       return sysfs_emit(buf, "%u\n", to_pdo(dev)->pdo >> PDO_FIXED_FRS_=
+CURR_SHIFT) & 3;
+> +       return sysfs_emit(buf, "%u\n", (to_pdo(dev)->pdo >> PDO_FIXED_FRS=
+_CURR_SHIFT) & 3);
+>  }
+>  static DEVICE_ATTR_RO(fast_role_swap_current);
+>
+> --
+> 2.41.0.rc0.172.g3f132b7071-goog
+>
 
+
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
