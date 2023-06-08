@@ -2,202 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27063727EFA
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 13:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 956EF728068
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 14:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235887AbjFHLkZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jun 2023 07:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
+        id S236010AbjFHMtO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jun 2023 08:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236272AbjFHLji (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 07:39:38 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED250272A
-        for <linux-usb@vger.kernel.org>; Thu,  8 Jun 2023 04:39:33 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5147e8972a1so863455a12.0
-        for <linux-usb@vger.kernel.org>; Thu, 08 Jun 2023 04:39:33 -0700 (PDT)
+        with ESMTP id S234375AbjFHMtN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 08:49:13 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1B426B0
+        for <linux-usb@vger.kernel.org>; Thu,  8 Jun 2023 05:49:12 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-65299178ac5so495664b3a.1
+        for <linux-usb@vger.kernel.org>; Thu, 08 Jun 2023 05:49:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686224372; x=1688816372;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xqR4Cl4Oo+rFOH+Sj3ml0n4meYZgvylOhYiYI8g6ow8=;
-        b=fNh6Fmwm2YHAPIHwAdlcjDwjrjjCabjXApKTw4f1jhc/TcUV5nXOqWN8HjWJwlcOJf
-         vTTbIKlNpb5meuz04hanIifHDPLQAeyxuQQHCLhBrfhnFKslc0m+Dfu6l/7CDaLBenGV
-         zjiwKAmFc5zAyr5KJlTXWgnM+vmZ/WmH+PMlZ4Tzus6X5Sy6HrJXYUVjUk/pP4q2zUh8
-         As06JTdEVZ2Fr2RLIwDoxnMeycQhPt9HLj/bhZMRuq58sdYfixTFIkDJdSL/xHjC1/NX
-         9AxRxI2zvgxLRb9huFms2x335RT69oTKOO8vbGd2ArYwWpsWqqMnJiuOhiGn7b3o3jH7
-         dMhA==
+        d=linaro.org; s=google; t=1686228552; x=1688820552;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=YkIAhLvLnVwhb1623YqvVKWgPZype03kjxLPtMN1rsU=;
+        b=n+U+30vobooxgtQnaHc1KysZzSn6jdERYhOotJVB4hboAx6NrJumODxFOdJmZ5DVtc
+         Rs6M5zIv+HTi015uuZJEVVUq6FifOjoHeBYLNh115+x3CLbJAxjVGM5lEd6NUp4M4OTG
+         R/sKlueRfruZvQzLiy/iol6Zx7OEbiOPZldEwyV9m0NqWdJV766peMNlT+bGgfwz34QU
+         1kKBi7/kL9N65y6V/mYW3u2V21U4Db51tGnIpBboUWvuqoj+MyyPPDWVJ12GNzQbjxZ/
+         hbFfY4OG9tddUCgGs41XycnC9gSMTaES7Ipd74smgKrbqrPykhVjLjOf78R2AdPFTTbr
+         tNNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686224372; x=1688816372;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686228552; x=1688820552;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xqR4Cl4Oo+rFOH+Sj3ml0n4meYZgvylOhYiYI8g6ow8=;
-        b=LRwXBHQ4kn4RP6mF49J4KWH0RRQfT7GQarHZ34AN/VBCYmXj0XZkyz25sAVJCuJLDe
-         28tFAt/sae6L3QNdmIKmoYc7/bZaeXuoYqCQ/UFp38ai6IfeAgIQsEqZp0GjE7HlfEq4
-         DkrQ9ZL2KoGK7xBdf6bNSfO/4c7G9Jk9yNoyUSlseV+2rhs4jtyI/HMiB049cOiUCeEY
-         8KYTxCg2goF5tqKYt7t5nDaeZEfpyGfMC3oea7JPhwqxFMftEYDHApRiLfkQEQFnOji/
-         RAfjk3I4my7agHl1OivW22sEjMsHxJA+xFl51LrqhIe1uqFXVxGL2Smnm/ZT2lSXKuPa
-         Us/g==
-X-Gm-Message-State: AC+VfDwxxRIzUcNvfc5cJ26w66MrL7u2tXNY0iM6bqJYmJTVLsv4ibIr
-        j2XaCDlWSKAaHezirQ9F1t7LbA==
-X-Google-Smtp-Source: ACHHUZ7Th7ms72bKEB7ZtHp2Yh/u7BnpHPOwK6btJqOe7BpFZDp6faRJ02BvsNxVIHPLbCYoCQTLjQ==
-X-Received: by 2002:a17:907:94d6:b0:96f:905e:6117 with SMTP id dn22-20020a17090794d600b0096f905e6117mr9214973ejc.56.1686224372459;
-        Thu, 08 Jun 2023 04:39:32 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id bv15-20020a170906b1cf00b009596e7e0dbasm577799ejb.162.2023.06.08.04.39.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 04:39:32 -0700 (PDT)
-Message-ID: <9435791f-98cb-19f0-f959-8624990959ba@linaro.org>
-Date:   Thu, 8 Jun 2023 13:39:30 +0200
+        bh=YkIAhLvLnVwhb1623YqvVKWgPZype03kjxLPtMN1rsU=;
+        b=VyQarX3dDrr15U/AmLsxLsSTjTlmgrbPVNlhglodhnca9YKULFPDbQK3Tjjr1IJYjj
+         S8Y3/SiaeBKzwnywC1a3Qhwn85DuAuxoiAsOAny1Gvblr8d7HuI7FAAv/aRaMRjqt+cb
+         j6HxyeKAFJAA4bC9/QwKBDzvXD+Nr/XhyY8A/erjK4Wbjlm16YI3M5borIV89N839luQ
+         DPh3FXE5ukfaZabDzz5UmzJmYlt4FskJexYqOeN8SRwNnhNXOXT7+/bQAidldLNY1tUC
+         jEj3pTw2df6gARQx7cj7RmwRTdTuTh2kbNJBuJQkULKE3uenJjbkmOGAibZwGxafaXIT
+         3HPg==
+X-Gm-Message-State: AC+VfDyUgydFMq5iL8G1FgKXZTIdNDu20U8BFGt8KwcvUTGY3AE92EEz
+        UJyhH4PtipdK9y38fdBhtbER
+X-Google-Smtp-Source: ACHHUZ4iAqD/Jz411eyAzEsPuFH5BlY0kU8cHNTBiM1PkXwV+u8COwWL6C4wUXsw6nqiPx/Cjqj20w==
+X-Received: by 2002:a05:6a20:549d:b0:10c:3cf3:ef7e with SMTP id i29-20020a056a20549d00b0010c3cf3ef7emr7532523pzk.42.1686228551815;
+        Thu, 08 Jun 2023 05:49:11 -0700 (PDT)
+Received: from thinkpad ([117.202.186.138])
+        by smtp.gmail.com with ESMTPSA id s12-20020a63450c000000b0051b0e564963sm1185367pga.49.2023.06.08.05.49.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 05:49:11 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 18:19:00 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: Re: [PATCH 1/2] USB: dwc3: qcom: fix NULL-deref on suspend
+Message-ID: <20230608124900.GE5672@thinkpad>
+References: <20230607100540.31045-1-johan+linaro@kernel.org>
+ <20230607100540.31045-2-johan+linaro@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/2] dt-bindings: reset: convert the xlnx,zynqmp-reset.txt
- to yaml
-Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>,
-        "Mehta, Piyush" <piyush.mehta@amd.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "Paladugu, Siva Durga Prasad" <siva.durga.prasad.paladugu@amd.com>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "nava.manne@xilinx.com" <nava.manne@xilinx.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "git (AMD-Xilinx)" <git@amd.com>
-References: <20230607065121.2265076-1-piyush.mehta@amd.com>
- <20230607065121.2265076-2-piyush.mehta@amd.com>
- <168612336438.2153757.6000360498539992409.robh@kernel.org>
- <MN2PR12MB4333E0628E2E67652E80067A8850A@MN2PR12MB4333.namprd12.prod.outlook.com>
- <55b59833-d070-f576-9d85-047175d9722c@linaro.org>
- <b1c80077-7509-883d-cfd1-fb3c0b0449d6@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <b1c80077-7509-883d-cfd1-fb3c0b0449d6@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230607100540.31045-2-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 08/06/2023 13:34, Michal Simek wrote:
+On Wed, Jun 07, 2023 at 12:05:39PM +0200, Johan Hovold wrote:
+> The Qualcomm dwc3 glue driver is currently accessing the driver data of
+> the child core device during suspend and on wakeup interrupts. This is
+> clearly a bad idea as the child may not have probed yet or could have
+> been unbound from its driver.
 > 
+> The first such layering violation was part of the initial version of the
+> driver, but this was later made worse when the hack that accesses the
+> driver data of the grand child xhci device to configure the wakeup
+> interrupts was added.
 > 
-> On 6/8/23 13:29, Krzysztof Kozlowski wrote:
->> On 08/06/2023 12:55, Mehta, Piyush wrote:
->>> Hello,
->>>
->>>> -----Original Message-----
->>>> From: Rob Herring <robh@kernel.org>
->>>> Sent: Wednesday, June 7, 2023 1:06 PM
->>>> To: Mehta, Piyush <piyush.mehta@amd.com>
->>>> Cc: p.zabel@pengutronix.de; Paladugu, Siva Durga Prasad
->>>> <siva.durga.prasad.paladugu@amd.com>; michal.simek@xilinx.com;
->>>> nava.manne@xilinx.com; devicetree@vger.kernel.org; linux-
->>>> kernel@vger.kernel.org; linux-usb@vger.kernel.org; conor+dt@kernel.org;
->>>> krzysztof.kozlowski+dt@linaro.org; robh+dt@kernel.org; Simek, Michal
->>>> <michal.simek@amd.com>; git (AMD-Xilinx) <git@amd.com>
->>>> Subject: Re: [PATCH 1/2] dt-bindings: reset: convert the xlnx,zynqmp-reset.txt
->>>> to yaml
->>>>
->>>>
->>>> On Wed, 07 Jun 2023 12:21:20 +0530, Piyush Mehta wrote:
->>>>> Convert the binding to DT schema format. It also updates the
->>>>> reset-controller description.
->>>>>
->>>>> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
->>>>> ---
->>>>> Note:
->>>>> The 1/2 patch introduced a warning related to the dt binding check,
->>>>> which was subsequently fixed in the 2/2 patch. This warning is a
->>>>> conversion warning due to a dependency on firmware dt binding.
->>>>>
->>>>> Warning:
->>>>>    DTC_CHK
->>>>> Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.example.dtb
->>>>>
->>>> /scratch/piyushm/torvalds/linux/Documentation/devicetree/bindings/reset/xln
->>>> x,zynqmp-reset.example.dtb: zynqmp-firmware: 'reset-controller' does not
->>>> match any of the regexes: 'pinctrl-[0-9]+'
->>>>> 	From schema:
->>>>> /scratch/piyushm/torvalds/linux/Documentation/devicetree/bindings/firm
->>>>> ware/xilinx/xlnx,zynqmp-firmware.yaml
->>>>>
->>>>> Please suggest to me, if it's fine to make a single patch instead of
->>>>> the separate patch 1/2 and 2/2.
->>>>> ---
->>>>>   .../bindings/reset/xlnx,zynqmp-reset.txt      | 55 ---------------
->>>>>   .../bindings/reset/xlnx,zynqmp-reset.yaml     | 67 +++++++++++++++++++
->>>>>   2 files changed, 67 insertions(+), 55 deletions(-)  delete mode
->>>>> 100644 Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt
->>>>>   create mode 100644
->>>>> Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
->>>>>
->>>>
->>>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->>>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>>>
->>>> yamllint warnings/errors:
->>>>
->>>> dtschema/dtc warnings/errors:
->>>> /builds/robherring/dt-review-
->>>> ci/linux/Documentation/devicetree/bindings/reset/xlnx,zynqmp-
->>>> reset.example.dtb: zynqmp-firmware: 'reset-controller' does not match any of
->>>> the regexes: 'pinctrl-[0-9]+'
->>>> 	From schema: /builds/robherring/dt-review-
->>>> ci/linux/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-
->>>> firmware.yaml
->>>>
->>>> doc reference errors (make refcheckdocs):
->>>>
->>>> See https://patchwork.ozlabs.org/project/devicetree-
->>>> bindings/patch/20230607065121.2265076-2-piyush.mehta@amd.com
->>>>
->>>> The base for the series is generally the latest rc1. A different dependency
->>>> should be noted in *this* patch.
->>>>
->>>> If you already ran 'make dt_binding_check' and didn't see the above error(s),
->>>> then make sure 'yamllint' is installed and dt-schema is up to
->>>> date:
->>>>
->>>> pip3 install dtschema --upgrade
->>>>
->>>> Please check and re-submit after running the above command yourself. Note
->>>> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
->>>> your schema. However, it must be unset to test all examples with your schema.
->>>
->>> This dt_binding warning is known to us and is captured in commit description notes and to resolve it, we need to apply 2/2.
->>
->> So your patchset has broken bisectability. You need to fix it. If the
->> warning was known, then I am surprised that you sent broken patchset.
+> Fixing this properly is not that easily done, so add a sanity check to
+> make sure that the child driver data is non-NULL before dereferencing it
+> for now.
 > 
-> The first patch is conversion from txt yaml without any additional changes 
-> because in past we heart that we shouldn't really do other things in it. That's 
-> why 2 patches where made. No really issue to squashed them together.
+> Note that this relies on subtleties like the fact that driver core is
+> making sure that the parent is not suspended while the child is probing.
+> 
+> Reported-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Link: https://lore.kernel.org/all/20230325165217.31069-4-manivannan.sadhasivam@linaro.org/
+> Fixes: d9152161b4bf ("usb: dwc3: Add Qualcomm DWC3 glue layer driver")
+> Fixes: 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
+> Cc: stable@vger.kernel.org	# 3.18: a872ab303d5d: "usb: dwc3: qcom: fix use-after-free on runtime-PM wakeup"
+> Cc: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Cc: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-We always shared feedback that conversion should do only conversion, but
-a correct one. Conversion cannot introduce errors or warnings in the
-bindings. It can introduce warnings in DTS, but not in the bindings.
-This was also communicated several times.
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-If pure-conversion results in non-bisectable patchset then:
-1. either conversion should come with changes,
-2. or conversion is done a bit wrong or could be done differently like
-here. You really do not need unrelated pieces of DTS in reset controller
-code. Drop them.
+- Mani
 
-Best regards,
-Krzysztof
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 959fc925ca7c..79b22abf9727 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -308,7 +308,16 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
+>  /* Only usable in contexts where the role can not change. */
+>  static bool dwc3_qcom_is_host(struct dwc3_qcom *qcom)
+>  {
+> -	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+> +	struct dwc3 *dwc;
+> +
+> +	/*
+> +	 * FIXME: Fix this layering violation.
+> +	 */
+> +	dwc = platform_get_drvdata(qcom->dwc3);
+> +
+> +	/* Core driver may not have probed yet. */
+> +	if (!dwc)
+> +		return false;
+>  
+>  	return dwc->xhci;
+>  }
+> -- 
+> 2.39.3
+> 
 
+-- 
+மணிவண்ணன் சதாசிவம்
