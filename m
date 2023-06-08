@@ -2,40 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C701727925
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 09:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 457BE727928
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 09:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232891AbjFHHsT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jun 2023 03:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
+        id S233143AbjFHHtK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jun 2023 03:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233653AbjFHHsC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 03:48:02 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D0382126;
-        Thu,  8 Jun 2023 00:47:58 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3587l5knD008024, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3587l5knD008024
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 8 Jun 2023 15:47:05 +0800
-Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 8 Jun 2023 15:47:22 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 8 Jun 2023 15:47:21 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Thu, 8 Jun 2023 15:47:21 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        with ESMTP id S232908AbjFHHtI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 03:49:08 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415D9210D
+        for <linux-usb@vger.kernel.org>; Thu,  8 Jun 2023 00:49:06 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5147f7d045bso400446a12.2
+        for <linux-usb@vger.kernel.org>; Thu, 08 Jun 2023 00:49:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686210545; x=1688802545;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wKXuqqogfGtV6X2iudgEbDe3qPnP59JxR6B3QZM/6Dc=;
+        b=bhf+RuA4cxddlwxZKvK2wGkOnl/9IsTFmePcG64J8c5+dhVU8H5Ar6PU7SXUoD134P
+         X94MJk/g8AZRGzJdI3PPL2V1bHwEfi5J7Qg825NZjE8x82rCjKx1cQS/z6JUXTXDApM+
+         PBucjFaVmiMgyg3Vp9mAk8oy9p+Q+rUsKwjnWIPQms3F9ZxG9ZVPU5a/ru/vldHfmfSn
+         +sMw8fBv1FELUTlQcjlkKmHwwski8uJk6bBsfw7qrBeHrOYiaOlqpSyxWqTy3bYMn+Jb
+         0njLxhFKb4sFdZLjlURFzZcQ+OPrQSLBjV4dErXv1gcMV54WuJzf9HVlv/4Q8wMzsIM1
+         9gjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686210545; x=1688802545;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wKXuqqogfGtV6X2iudgEbDe3qPnP59JxR6B3QZM/6Dc=;
+        b=KYXuC40ULhojmXEpZvxM/V4ysBlFbv6x2sE7kNekB6fv+uj3DFrefdWR4jvFzK+o9H
+         wZy/+78o9JTizmJnJenvicky7CvNf4woHPMg/zob0BOoeAfFAmyj9mDu1IhhOywhVym6
+         9Z5yddVWLGCW8LmEkgEd4s+W8hUIEkqXFlIvIn2qyj1kVdPCcuk5kaLB/fHOL+g6x50W
+         ITFmJuMppHp15XHvTH32IvLu+UCvV/tC6QNUudCuPj3RDY5yZVgqDGzj3Zy64PYHmfeu
+         Vi8vko+RxRQmUf+dDF3NBWUXI9B//Qhzcf1zSlnPQlu2YVP9uUpQuvPkLI5UQ5Dqsepm
+         cukg==
+X-Gm-Message-State: AC+VfDxJodP0CnPotB4MJFuZJtEORrIUm0x4oON/ctykvYUd3il9gruc
+        vMbpUaclVGixIMQQfM5z/7ugyA==
+X-Google-Smtp-Source: ACHHUZ6yjUk/Bupi3XuBm3zPQr5L3cn8gW6giSpWJdT5x1Wi4H/8UZ3u8kE/ol+rO20wF6MKqMUrxA==
+X-Received: by 2002:a05:6402:6c6:b0:50b:d75d:3155 with SMTP id n6-20020a05640206c600b0050bd75d3155mr7195595edy.37.1686210544721;
+        Thu, 08 Jun 2023 00:49:04 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id u11-20020aa7db8b000000b00514b3a2008esm238999edt.2.2023.06.08.00.49.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 00:49:04 -0700 (PDT)
+Message-ID: <7df8ffb6-a544-d10e-5273-fd6c4b368b20@linaro.org>
+Date:   Thu, 8 Jun 2023 09:49:01 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 4/5] dt-bindings: phy: realtek: Add the doc about the
+ Realtek SoC USB 2.0 PHY
+Content-Language: en-US
+To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
         <stanley_chang@realtek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Vinod Koul <vkoul@kernel.org>,
+Cc:     Vinod Koul <vkoul@kernel.org>,
         Kishon Vijay Abraham I <kishon@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -51,51 +75,143 @@ CC:     Vinod Koul <vkoul@kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v3 4/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 2.0 PHY
-Thread-Topic: [PATCH v3 4/5] dt-bindings: phy: realtek: Add the doc about the
- Realtek SoC USB 2.0 PHY
-Thread-Index: AQHZmQjdazkCXQ0o50uX71FuvNBNuK9+uDoAgAHOxvA=
-Date:   Thu, 8 Jun 2023 07:47:21 +0000
-Message-ID: <0c405afedbcf4e468add480399775ebd@realtek.com>
 References: <20230607062500.24669-1-stanley_chang@realtek.com>
  <20230607062500.24669-4-stanley_chang@realtek.com>
  <7cce1d72-6b4d-9fff-32bc-942193388134@linaro.org>
-In-Reply-To: <7cce1d72-6b4d-9fff-32bc-942193388134@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+ <8a88cbee5c6245f2941c700b2bb30697@realtek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <8a88cbee5c6245f2941c700b2bb30697@realtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgS3J6eXN6dG9mLA0KDQoNCj4gPiArICAgICAgRm9yIG1vc3QgUmVsYXRlayBTb0NzLCBvbmUg
-WEhDSSBjb250cm9sbGVyIG9ubHkgc3VwcG9ydCBvbmUgdGhlIFVTQg0KPiAyLjANCj4gPiArICAg
-ICAgcGh5LiBGb3IgUlREMTM5NSBTb0MsIHRoZSBvbmUgWEhDSSBjb250cm9sbGVyIGhhcyB0d28g
-VVNCIDIuMA0KPiBQSFlzLg0KPiA+ICsgICAgcHJvcGVydGllczoNCj4gPiArICAgICAgcmVhbHRl
-ayxwYWdlMC1wYXJhbToNCj4gPiArICAgICAgICBkZXNjcmlwdGlvbjogUEhZIHBhcmFtZXRlciBh
-dCBwYWdlIDAuIFRoZSBkYXRhIGFyZSB0aGUgcGFpciBvZg0KPiB0aGUNCj4gPiArICAgICAgICAg
-IG9mZnNldCBhbmQgdmFsdWUuDQo+IA0KPiBUaGlzIG5lZWRzIHRvIGJlIHNwZWNpZmljLiBXaGF0
-IHRoZSBoZWNrIGlzICJQSFkgcGFyYW1ldGVyIj8NCj4gDQpJdCBjb250YWlucyBtb3JlIHBhcmFt
-ZXRlcnMNCnBhZ2UwIGhhcyAxNiBwYXJhbWV0ZXJzDQpwYWdlMSBoYXMgOCBwYXJhbWV0ZXJzDQpw
-YWdlMiBoYXMgOCBwYXJhbWV0ZXJzDQpJdCdzIHRlZGlvdXMgaWYgd2UgbGlzdCB0aGVtIGFsbC4N
-CkFuZCB3ZSBvbmx5IHNldCB0aGUgcGFydCB0aGF0IGRpZmZlcnMgZnJvbSB0aGUgZGVmYXVsdC4N
-Ckl0J3MgaGFyZCB0byBleHBsYWluIHdoaWNoIHBhcmFtZXRlcnMgd2VyZSBjaGFuZ2VkIGJlY2F1
-c2UgZWFjaCBwbGF0Zm9ybSBpcyBkaWZmZXJlbnQuDQoNClRoYW5rcywNClN0YW5sZXkNCg==
+On 08/06/2023 09:24, Stanley Chang[昌育德] wrote:
+>>> +  realtek,usb-ctrl:
+>>> +    description: The phandle of syscon used to control USB PHY power
+>> domain.
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>
+>> No, we have power-domains for this.
+> 
+> Maybe I use the word "control power domain" is not well, I just want to control the ldo of usb phy.
+> Revised:
+> The phandle of syscon used to control the ldo of USB PHY.
+
+Isn't this still a power domain?
+
+> 
+>>> +
+>>> +patternProperties:
+>>> +  "^phy@[0-3]+$":
+>>> +    type: object
+>>> +    description:
+>>> +      Each sub-node is a PHY device for one XHCI controller.
+>>
+>> I don't think it is true. You claim above that you have 0 as phy-cells, means you
+>> have one phy. Here you say you can have up to 4 phys.
+> 
+> I mean the driver can support up to 4 phys.
+
+What driver can or cannot do, does not matter. This is about hardware.
+
+> For RTD1295 has only one phy.
+> For RTD1395 has two phys.
+
+Two phys? So how do you reference them when cells=0?
+
+> 
+>>> +      For most Relatek SoCs, one XHCI controller only support one the USB
+>> 2.0
+>>> +      phy. For RTD1395 SoC, the one XHCI controller has two USB 2.0
+>> PHYs.
+>>> +    properties:
+>>> +      realtek,page0-param:
+>>> +        description: PHY parameter at page 0. The data are the pair of
+>> the
+>>> +          offset and value.
+>>
+>> This needs to be specific. What the heck is "PHY parameter"?
+>>
+>>> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+>>
+>> Array? Then maxItems.
+> I have found other document.
+> It should be a uint32-matrix.
+> I will add the maxItems.
+
+Entire property should be dropped.
+
+> 
+>>> +
+>>> +      realtek,page1-param:
+>>> +        description: PHY parameter at page 1. The data are the pair of
+>> the
+>>> +          offset and value.
+>>> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+>>> +
+>>> +      realtek,page2-param:
+>>> +        description: PHY parameter at page 2. The data are the pair of
+>> the
+>>> +          offset and value. If the PHY support the page 2 parameter.
+>>> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+>>> +
+>>> +      realtek,support-page2-param:
+>>> +        description: Set this flag if PHY support page 2 parameter.
+>>
+>> Why this cannot be deducted from compatible?
+> It can identify by compatible.
+
+So drop it.
+
+> 
+>>
+>>> +        type: boolean
+>>> +
+>>> +      realtek,do-toggle:
+>>> +        description: Set this flag to enable PHY parameter toggle when
+>> port
+>>> +          status change.
+>>
+>> Do not instruct OS what to do. Explain why this is a hardware characteristic.
+> 
+> In my original intention, we hope that this property can be used to control the phy driver do parameter toggle.
+> Is it a hardware characteristic? I don't think it's exactly a hardware feature.
+> Maybe it can be specified by the compatible.
+
+Drop it.
+
+> 
+>>> +        type: boolean
+>>> +
+>>> +      realtek,do-toggle-driving:
+>>> +        description: Set this flag to enable PHY parameter toggle for
+>> adjust
+>>> +          the driving when port status change.
+>>
+>> Do not instruct OS what to do. Explain why this is a hardware characteristic.
+>>
+>>
+>>> +        type: boolean
+>>> +
+>>> +      realtek,check-efuse:
+>>> +        description: Enable to update PHY parameter from reading otp
+>> table.
+>>
+>> Do not instruct OS what to do. Explain why this is a hardware characteristic.
+> 
+> Same above.
+
+So drop all of these.
+
+
+Best regards,
+Krzysztof
+
