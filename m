@@ -2,177 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBBC87274F1
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 04:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A7B7274F8
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 04:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233272AbjFHCUi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Jun 2023 22:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
+        id S233071AbjFHCXK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Jun 2023 22:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233257AbjFHCUf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 22:20:35 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1113526AF
-        for <linux-usb@vger.kernel.org>; Wed,  7 Jun 2023 19:20:34 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id af79cd13be357-75d44cb20a2so7030685a.3
-        for <linux-usb@vger.kernel.org>; Wed, 07 Jun 2023 19:20:34 -0700 (PDT)
+        with ESMTP id S231956AbjFHCXJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 22:23:09 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC2D26A9;
+        Wed,  7 Jun 2023 19:23:08 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id 5614622812f47-39aa8a055ecso108740b6e.1;
+        Wed, 07 Jun 2023 19:23:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=draconx-ca.20221208.gappssmtp.com; s=20221208; t=1686190833; x=1688782833;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=wgAKWYRphfE40AO6G5Ox5YqR+/zOjxjNsnTDKSarlqc=;
-        b=M8Dv0hu600i7YmJ/+yfxrIDNMx+FvIKheWRycoqzaPCH61QBb8+4jOS1DDZYmnNGqz
-         HmK61sD5P3DIp1mUGYTbYeXGxVLl4HCwj4WmUo9F3dKWlR5djfL6lVOJRajt1eHN00tD
-         V+mbu6TIgnq406ET2ZuTyePS42DCUj8Siy1dLS6dKC7wUTps2kAxkOCuol4LugK/E9zW
-         4VxFKMwU+UKsAngkVKpXRZZXPDNEGdq1K92AEnJJ4PBmSxNSx4vAyFoPON3vXqpNTvpT
-         jwibI2uLhWKohEmrM2OkRqvMdIVY9hTxWCgP1w0GmmGcbeZSNbD5hFf6gDKYlaP3BjB3
-         /BVA==
+        d=gmail.com; s=20221208; t=1686190988; x=1688782988;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rGkkSk0/C4/bnQbcrMfm2tdEZYME20m/Bpb2UhtM8LM=;
+        b=kO58IsSUgv7SxdqON7BQ46Mli60Pvg5kOD7zIwFnl6uM4cdbqwwZ7i3QFkOTSNX0Xd
+         Q3tlA/EspBc8nb9U7J+jDzy4Q8ZIAYghNiSYXIDz4p1kgkhMP7Au/C2VTQZFTRWOg3Ly
+         q/MoHvnu4HiPSDc59SYgnu5q2XI+1579WnyFhbQXrzRwUfWBUAEmY7Ec93qiSFCKSFdA
+         rp2H/rS/382h3CRSaqy3H9JkBzSjEapnRU3+9TZgkAGiZBg0eOgTrTymQR1G9T2z9sNF
+         AMgeNnybekX6wJ3rSHjPCcRkwvNtrPP/6gdaAdQpwifXXeUe+AG6PH+hoLBm/XmcHypJ
+         zQlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686190833; x=1688782833;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wgAKWYRphfE40AO6G5Ox5YqR+/zOjxjNsnTDKSarlqc=;
-        b=VnJoxN+El2mwVyLNnM3rMQkvkffU1xdKD+wERRJ094H5Zowexes2Ex6vFZNFiWDYYW
-         dSEMqWsIerxhxlS2PofqKbRDU26xQqp0+FNnmXV9qNrkUMs3IVKKQfKuFo/F/boZfeXD
-         qSxTyUxF1Yx9z9Kvs+dceJoTnHDxYLUvcE5sZ6S02dIAr4Hi6zFRK6sWco7JWpLNlX2u
-         fq5vhYZolDAhueV0Ge4QNcVIJZRF5E21PKgonxBwDWJSqBMauGNqSnJLjGbiMPhBRS5G
-         rEuSE5JdOahfi7emhxV6PW0qqCwv0B1HoKqIqs+urgWs+wrtbqxjaCeymWWoAdtQJps1
-         3EvQ==
-X-Gm-Message-State: AC+VfDxmCJ6trawHPEONFfQAY4wM2/HwAo2gTicQA0+cZud2Vn7i3HHi
-        a466vDTCvlk1ZOCnASBej9vzKOfFeWxxWnfJZyyx+wA/Sb/QPjmZ
-X-Google-Smtp-Source: ACHHUZ454YIZroJ0rU7Nb/ERr7hoNtv0f64Cg0/vJlKQt3UNvWQJmm6mhk1B7CsKw7TaV4US2tTU1i5aao96an+CEs4=
-X-Received: by 2002:a05:620a:4484:b0:75e:c23f:82ef with SMTP id
- x4-20020a05620a448400b0075ec23f82efmr5006642qkp.67.1686190832685; Wed, 07 Jun
- 2023 19:20:32 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686190988; x=1688782988;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rGkkSk0/C4/bnQbcrMfm2tdEZYME20m/Bpb2UhtM8LM=;
+        b=NnCTJ3OyS62tGwXKEbKWwfVEuqSrwZUif5V+jvlaGMYLNySCZ752OFt7wubtlXt2T7
+         GmKxa3SBjOFWSjHBeIovjursEg3aIcArfPwwQnsV03YBjQBqkaLmnB49ckHqL1uyxlZU
+         NnAHavKrht2z3fEoDee1y6GtBojll4RIHcUdYS0PKBAx9Tn4OI9uN0l531epllfdn6oi
+         wo+aPhVNFAIRGU9W0FKBcSJhU5xP4/qBQHFcyXr0JeFBTxJsO+/6Y3dM3hVK1q1ztLmZ
+         gcoPlLewLV7rAZEKxfvtdkjoA0zQU0LeGKFqpmsCrNFMV4uAMdFXzcC5FeXZXU8+sE/p
+         TTeA==
+X-Gm-Message-State: AC+VfDwxRW6sEdl2ptE5QGdN+LkSDPwAsTd8YEbKZ8quVHpNbLy7HeeH
+        LdzvtkaWF5v/WssM/g/G7psIXCPjML0QSZdPvck=
+X-Google-Smtp-Source: ACHHUZ5u2kIvMA9SzdMee8mj5Xc/KyNzZBta5YguCmcEUqLwQ7OVJ/waKJh8OOV7pJKSj/1A/1fLBH15qLn37Gz/WS8=
+X-Received: by 2002:aca:b941:0:b0:39c:7f78:ba6d with SMTP id
+ j62-20020acab941000000b0039c7f78ba6dmr62541oif.19.1686190987911; Wed, 07 Jun
+ 2023 19:23:07 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6a06:240c:b0:5b5:2ae6:3385 with HTTP; Wed, 7 Jun 2023
- 19:20:31 -0700 (PDT)
-X-Originating-IP: [24.53.241.2]
-From:   Nick Bowler <nbowler@draconx.ca>
-Date:   Wed, 7 Jun 2023 22:20:31 -0400
-Message-ID: <CADyTPExB2kYOOwkO0JqGhKaYVDqO9uS9WCw0J=MCTdVhcGOogA@mail.gmail.com>
-Subject: PROBLEM: kernel NULL pointer dereference when yanking ftdi usb-serial
- during BREAK
-To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230602054112.2299565-1-wes.huang@moxa.com> <87y1l2m7u5.fsf@miraculix.mork.no>
+In-Reply-To: <87y1l2m7u5.fsf@miraculix.mork.no>
+From:   Wes Huang <wes155076@gmail.com>
+Date:   Thu, 8 Jun 2023 10:22:56 +0800
+Message-ID: <CAD_g2C3ng83vwbH83ntLgz7z=iDJoBFe5Dj5evJ0gSk5XSq2vw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] net: usb: qmi_wwan: add support for Compal RXM-G1
+To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wes Huang <wes.huang@moxa.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Fri, Jun 2, 2023 at 7:18=E2=80=AFPM Bj=C3=B8rn Mork <bjorn@mork.no> wrot=
+e:
+>
+> Wes Huang <wes155076@gmail.com> writes:
+>
+> > Add support for Compal RXM-G1 which is based on Qualcomm SDX55 chip.
+>
+> Patch looks good to me, but checkpatch warns about mismatch between From
+> (which ends up as Author) and your SoB:
+>
+>  WARNING: From:/Signed-off-by: email address mismatch: 'From: Wes Huang <=
+wes155076@gmail.com>' !=3D 'Signed-off-by: Wes Huang <wes.huang@moxa.com>'
+>
+> If you have to send this from a different account, then you can work
+> around that issue by adding "From: Wes Huang <wes.huang@moxa.com>" as
+> the first line of the email body, followed by a single blank line.
+>
+> git will then use the second From as Author, and it will match the SoB.
+>
+> Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+>
+>
+> Bj=C3=B8rn
 
-I just hit an oops when unplugging my usb serial adapter.  So naturally,
-I tried it again, and found if I use minicom to send BREAK and then
-quickly yank the cable, I can reliably cause this oops every single
-time.
-
-Originally I noticed the problem on 6.1.7, but tried again on 6.4-rc5
-and the exact same problem occurs.
-
-Let me know if you need any more info!
-
-Thanks,
-  Nick
-
-[   41.834144] ftdi_sio 1-1:1.0: FTDI USB Serial Device converter detected
-[   41.834178] usb 1-1: Detected FT232R
-[   41.834307] usb 1-1: FTDI USB Serial Device converter now attached to ttyUSB0
-[   49.238361] usb 1-1: USB disconnect, device number 6
-[   49.238592] ftdi_sio ttyUSB0: error from flowcontrol urb
-[   49.238734] ftdi_sio ttyUSB0: FTDI USB Serial Device converter now
-disconnected from ttyUSB0
-[   49.238760] ftdi_sio 1-1:1.0: device disconnected
-[   49.274543] BUG: kernel NULL pointer dereference, address: 000000000000000c
-[   49.274550] #PF: supervisor read access in kernel mode
-[   49.274553] #PF: error_code(0x0000) - not-present page
-[   49.274555] PGD 0 P4D 0
-[   49.274560] Oops: 0000 [#1] PREEMPT SMP
-[   49.274564] CPU: 3 PID: 3247 Comm: minicom Not tainted 6.4.0-rc5 #20
-[   49.274568] Hardware name: LENOVO 20CMCTO1WW/20CMCTO1WW, BIOS
-N10ET42W (1.21 ) 02/26/2016
-[   49.274572] RIP: 0010:ftdi_break_ctl+0x14/0x7b [ftdi_sio]
-[   49.274584] Code: c0 e8 64 63 6a d3 ba 06 00 00 00 31 f6 48 89 df
-5b e9 5c fd ff ff 55 85 f6 89 f5 53 48 8b 9f 58 02 00 00 48 8b 83 48
-03 00 00 <44> 8b 40 0c 74 06 66 41 81 c8 00 40 48 8b 13 45 0f b7 c0 b9
-40 00
-[   49.274588] RSP: 0018:ffffb016009b3e28 EFLAGS: 00010246
-[   49.274591] RAX: 0000000000000000 RBX: ffffa3f944575800 RCX: 0000000000000000
-[   49.274593] RDX: 0000000000000001 RSI: 0000000000000000 RDI: ffffa3f940d8c400
-[   49.274595] RBP: 0000000000000000 R08: ffffa3fa65d9b840 R09: 0000000000000001
-[   49.274597] R10: 0000000000000000 R11: 0000000000000000 R12: 00000000000000fa
-[   49.274599] R13: ffffa3f940d8c400 R14: 0000000000000000 R15: 0000000000000000
-[   49.274602] FS:  00007f0ffcedc740(0000) GS:ffffa3fa65d80000(0000)
-knlGS:0000000000000000
-[   49.274605] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   49.274607] CR2: 000000000000000c CR3: 000000010c981004 CR4: 00000000003706e0
-[   49.274610] Call Trace:
-[   49.274613]  <TASK>
-[   49.274614]  ? __die_body+0x15/0x53
-[   49.274620]  ? page_fault_oops+0x2e8/0x31c
-[   49.274625]  ? psi_group_change+0x237/0x298
-[   49.274631]  ? get_sd_balance_interval+0xf/0x39
-[   49.274637]  ? newidle_balance+0x25f/0x2c6
-[   49.274641]  ? exc_page_fault+0x14b/0x4b8
-[   49.274647]  ? asm_exc_page_fault+0x22/0x30
-[   49.274653]  ? ftdi_break_ctl+0x14/0x7b [ftdi_sio]
-[   49.274661]  serial_break+0x1c/0x1f [usbserial]
-[   49.274672]  send_break+0x7f/0xa6
-[   49.274678]  tty_ioctl+0x46e/0x6b3
-[   49.274683]  ? vfs_write+0x15d/0x188
-[   49.274688]  vfs_ioctl+0x16/0x23
-[   49.274692]  __do_sys_ioctl+0x52/0x74
-[   49.274698]  do_syscall_64+0x7f/0x9f
-[   49.274702]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-[   49.274708] RIP: 0033:0x7f0ffcfdec7b
-[   49.274711] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24
-10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00
-00 0f 05 <89> c2 3d 00 f0 ff ff 77 1c 48 8b 44 24 18 64 48 2b 04 25 28
-00 00
-[   49.274713] RSP: 002b:00007ffc18ab3a00 EFLAGS: 00000246 ORIG_RAX:
-0000000000000010
-[   49.274717] RAX: ffffffffffffffda RBX: 00005562830d74bc RCX: 00007f0ffcfdec7b
-[   49.274719] RDX: 0000000000000000 RSI: 0000000000005409 RDI: 0000000000000003
-[   49.274721] RBP: 0000556284ef1d60 R08: 00007f0ffd076440 R09: 0000000000000064
-[   49.274723] R10: 00007f0ffcee7450 R11: 0000000000000246 R12: 00005562830e9130
-[   49.274726] R13: 00007ffc18ab3ad0 R14: 00005562830d6ee8 R15: 0000000000000004
-[   49.274728]  </TASK>
-[   49.274730] Modules linked in: ftdi_sio usbserial ccm nfs lockd
-grace bridge stp llc xt_state iptable_filter iptable_mangle
-xt_MASQUERADE xt_mark iptable_nat nf_nat nf_conntrack nf_defrag_ipv6
-nf_defrag_ipv4 ip_tables x_tables snd_hda_codec_hdmi squashfs loop
-nls_iso8859_1 nls_cp437 vfat fat ext4 crc16 mbcache jbd2 iwlmvm i915
-mac80211 snd_ctl_led libarc4 snd_hda_codec_realtek
-snd_hda_codec_generic i2c_algo_bit drm_buddy drm_display_helper
-uvcvideo iwlwifi drivetemp videobuf2_vmalloc drm_kms_helper
-snd_hda_intel coretemp videobuf2_memops uvc snd_intel_dspcfg
-videobuf2_v4l2 syscopyarea x86_pkg_temp_thermal sysfillrect
-snd_hda_codec thinkpad_acpi sysimgblt cec videodev nvram snd_hda_core
-cfg80211 kvm_intel ttm ledtrig_audio snd_pcm videobuf2_common
-platform_profile jc42 regmap_i2c kvm irqbypass mc rfkill hwmon thermal
-drm intel_gtt ac snd_timer agpgart battery snd video soundcore wmi
-evdev efivarfs rtsx_pci_sdmmc mmc_core sha512_ssse3 e1000e rtsx_pci
-ptp mfd_core pps_core ipv6 sunrpc
-[   49.274823] CR2: 000000000000000c
-[   49.274825] ---[ end trace 0000000000000000 ]---
-[   49.274827] RIP: 0010:ftdi_break_ctl+0x14/0x7b [ftdi_sio]
-[   49.274835] Code: c0 e8 64 63 6a d3 ba 06 00 00 00 31 f6 48 89 df
-5b e9 5c fd ff ff 55 85 f6 89 f5 53 48 8b 9f 58 02 00 00 48 8b 83 48
-03 00 00 <44> 8b 40 0c 74 06 66 41 81 c8 00 40 48 8b 13 45 0f b7 c0 b9
-40 00
-[   49.274838] RSP: 0018:ffffb016009b3e28 EFLAGS: 00010246
-[   49.274841] RAX: 0000000000000000 RBX: ffffa3f944575800 RCX: 0000000000000000
-[   49.274843] RDX: 0000000000000001 RSI: 0000000000000000 RDI: ffffa3f940d8c400
-[   49.274845] RBP: 0000000000000000 R08: ffffa3fa65d9b840 R09: 0000000000000001
-[   49.274847] R10: 0000000000000000 R11: 0000000000000000 R12: 00000000000000fa
-[   49.274849] R13: ffffa3f940d8c400 R14: 0000000000000000 R15: 0000000000000000
-[   49.274851] FS:  00007f0ffcedc740(0000) GS:ffffa3fa65d80000(0000)
-knlGS:0000000000000000
-[   49.274853] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   49.274855] CR2: 000000000000000c CR3: 000000010c981004 CR4: 00000000003706e0
-[   49.274858] note: minicom[3247] exited with irqs disabled
+I'll resend the patch and add the "From" information to the first line
+of the email body. Thank you!
