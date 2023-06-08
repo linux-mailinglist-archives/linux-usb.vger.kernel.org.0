@@ -2,92 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5709E7279EF
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 10:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A85A1727AA2
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 10:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234434AbjFHI2x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jun 2023 04:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
+        id S235693AbjFHI5f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jun 2023 04:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231408AbjFHI2v (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 04:28:51 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76702709
-        for <linux-usb@vger.kernel.org>; Thu,  8 Jun 2023 01:28:49 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5147f7d045bso455571a12.2
-        for <linux-usb@vger.kernel.org>; Thu, 08 Jun 2023 01:28:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686212928; x=1688804928;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mecQ34dk2V9y6dj5rR+/RnPx6Aef7iQYAh5UFotv1xo=;
-        b=YOuXdQwTL0HiqsuDJ2OMmCSusM9E5OEW/ovbK+fy8/Ndz8cb5RyF1n1QlhilBzqeuW
-         3gh1zTvG7WUB5wCr1NkVXEkhHxJz0Trn77gbdHJJognIYkXNmesScC2h0fmtNIqjfXbx
-         x49RK2FCpm0zpnOYjCZCX+484Cl6Pci7GslevrHsQaDcqjg1AlluAsffRhUhYsAlPvKx
-         bDSg5N7ErAgUIy61k/pu9d1PUZmuyRcsvKmYRiTlCcht9U3ykifmVK67IUhQx8dMq/uC
-         fhw8bo73cYfBu2SDg/LVekXM9dRtn6e+a2whScQPYNpfoMrma0HY+C21DJONkNdMlhb1
-         iy1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686212928; x=1688804928;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mecQ34dk2V9y6dj5rR+/RnPx6Aef7iQYAh5UFotv1xo=;
-        b=OMYL5ankpLUkYjpr2ChBDFsejdbQTd4ZZpCG5UAVK085o2lLjHHKHMrO3B96U6m2Ik
-         EdrtMeNbhCk5On7pxmCdNAaDNWzI2SM2xjd8QvqUT90m2VCwk3UkDFCOkW2iOKHQxDVI
-         SGpiYbUqt2FVftFgahKLxVd3sMfNxvWevCELDlF+lWw5SlxpvfmqiQmOErOW/RifjUPI
-         Haj0EaC4iWAN6MQ2mWM0nwBLaToS/QbG7LIoNEpJ/SSJ0MfKT7RTgk46TeeeMC0p7YxK
-         c8LM4KiBXkONrWO/BhYp5U2Zot5PnOKEx+Ax2QsARIN0UNgNuziWDRtdvOF+bb0TiSK/
-         2+kw==
-X-Gm-Message-State: AC+VfDymqM6n7jXujizlbzUVtloWgHmTC1bM69uKSsB64GAfy7gqHG0L
-        YfW6/26dnDhDESS1gjDUakBmfQ==
-X-Google-Smtp-Source: ACHHUZ5QenQx/QeD/48u6FI2zqKtnWEaRxUQn7l0QY2Xhr1/LIy4nn8DwP/ooeoVFbjEmpIbtoTK5Q==
-X-Received: by 2002:a17:907:3f9a:b0:96f:8666:5fc4 with SMTP id hr26-20020a1709073f9a00b0096f86665fc4mr10730952ejc.50.1686212928223;
-        Thu, 08 Jun 2023 01:28:48 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id h20-20020a170906855400b009787062d21csm386574ejy.77.2023.06.08.01.28.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 01:28:47 -0700 (PDT)
-Message-ID: <b941c06f-7f7d-1364-a7f5-be5905112cac@linaro.org>
-Date:   Thu, 8 Jun 2023 10:28:44 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 4/5] dt-bindings: phy: realtek: Add the doc about the
- Realtek SoC USB 2.0 PHY
-To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+        with ESMTP id S235697AbjFHI5N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 04:57:13 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 464A3E61;
+        Thu,  8 Jun 2023 01:57:06 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxzOrgl4Fk3ngAAA--.1869S3;
+        Thu, 08 Jun 2023 16:57:04 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxGOXgl4FkEhMHAA--.22955S3;
+        Thu, 08 Jun 2023 16:57:04 +0800 (CST)
+Subject: Re: [PATCH v1] usb: dwc2: add pci_device_id driver_data parse support
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         Alan Stern <stern@rowland.harvard.edu>,
-        Ray Chi <raychi@google.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <20230607062500.24669-1-stanley_chang@realtek.com>
- <20230607062500.24669-4-stanley_chang@realtek.com>
- <7cce1d72-6b4d-9fff-32bc-942193388134@linaro.org>
- <8a88cbee5c6245f2941c700b2bb30697@realtek.com>
- <7df8ffb6-a544-d10e-5273-fd6c4b368b20@linaro.org>
- <7d503e3028a7487a9a087cfa061fff9d@realtek.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230518092240.8023-1-zhuyinbo@loongson.cn>
+ <2023051843-scruffy-gush-cdec@gregkh>
+ <aeaebb8c-e077-4678-62df-d80baff16347@loongson.cn>
+ <ad9bfa94-1372-4810-734e-0bbaace37553@loongson.cn>
+ <2023060827-overlaid-displace-b3a1@gregkh>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <f086572b-d7c3-43f2-073e-ec35392bdc55@loongson.cn>
+Date:   Thu, 8 Jun 2023 16:57:04 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <2023060827-overlaid-displace-b3a1@gregkh>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <7d503e3028a7487a9a087cfa061fff9d@realtek.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-CM-TRANSID: AQAAf8DxGOXgl4FkEhMHAA--.22955S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,102 +58,21 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 08/06/2023 10:21, Stanley Chang[æ˜Œè‚²å¾·] wrote:
-> 
->>> Maybe I use the word "control power domain" is not well, I just want to
->> control the ldo of usb phy.
->>> Revised:
->>> The phandle of syscon used to control the ldo of USB PHY.
+
+
+ÔÚ 2023/6/8 ÏÂÎç4:01, Greg Kroah-Hartman Ð´µÀ:
+> On Thu, Jun 08, 2023 at 03:54:36PM +0800, zhuyinbo wrote:
 >>
->> Isn't this still a power domain?
+>> Friendly ping ?
 > 
-> I only control a register, it is not needed a driver of power domain.
+> For what?  I thought a new series was going to be submitted, I don't
+> have anything in my queue to review for this at the moment.
 
-Aren't many power domains just a registers? What about other drivers?
-Don't you want in other driver control LDO of something else? And in
-other something else?
 
-> 
-> 
->>>
->>>>> +
->>>>> +patternProperties:
->>>>> +  "^phy@[0-3]+$":
->>>>> +    type: object
->>>>> +    description:
->>>>> +      Each sub-node is a PHY device for one XHCI controller.
->>>>
->>>> I don't think it is true. You claim above that you have 0 as
->>>> phy-cells, means you have one phy. Here you say you can have up to 4 phys.
->>>
->>> I mean the driver can support up to 4 phys.
->>
->> What driver can or cannot do, does not matter. This is about hardware.
->>
->>> For RTD1295 has only one phy.
->>> For RTD1395 has two phys.
->>
->> Two phys? So how do you reference them when cells=0?
-> 
-> 
-> About RTD1395 SoCs USB
->   XHCI controller#1 -- usb2phy -- phy#0
->                           |- phy#1
-> One xhci controller map to one phy driver.
-> And one phy driver have two phys (phy@0 and phy@1).
-> 
-> Maybe the "phy" name is confusing.
-> This "phy" not mean a phy driver.
+I have some comments that need your consent or opinion.
+such as, I have a explanation why I using pci_match_id() in
+dwc2/params.c.  Do you agree with my explanation ?
 
-We do not talk about drivers, but DTS and hardware.
-
-> Would "port" be more appropriate? 
-> 
-> For example,
-> Using phy@0 and phy@1:
->     usb_port1_usb2phy: usb-phy@13c14 {
->         compatible = "realtek,rtd1395-usb2phy", "realtek,usb2phy";
->         reg = <0x132c4 0x4>, <0x31280 0x8>;
->         #address-cells = <1>;
->         #size-cells = <0>;
->         #phy-cells = <0>;
->         realtek,usb-ctrl = <&usb_ctrl>;
-> 
->         phy@0 {
->             reg = <0>;
-
-So such child is a NAK... you have nothing here. But it's unrelated topic.
-
->         };
->         phy@1 {
->             reg = <1>;
->         };
->     };
-> 
-> Change: port@0 and port@1
->     usb_port1_usb2phy: usb-phy@13c14 {
->         compatible = "realtek,rtd1395-usb2phy", "realtek,usb2phy";
->         reg = <0x132c4 0x4>, <0x31280 0x8>;
->         #address-cells = <1>;
->         #size-cells = <0>;
->         #phy-cells = <0>;
->         realtek,usb-ctrl = <&usb_ctrl>;
-> 
->         prot@0 {
->             reg = <0>;
->         };
->         port@1 {
->             reg = <1>;
->         };
->     };
-
-This is not the answer. This is the provider. How do you reference it
-from the consumer.
-
-Upstream your entire DTS. It's frustrating to try to understand your DTS
-from pieces of information you are sharing. Also very time consuming and
-you are not the only one sending patches for review...
-
-Best regards,
-Krzysztof
+Thanks,
+Yinbo
 
