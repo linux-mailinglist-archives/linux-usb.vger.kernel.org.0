@@ -2,242 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 268EE727B28
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 11:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 674FF727B44
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 11:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235419AbjFHJZN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jun 2023 05:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33544 "EHLO
+        id S235821AbjFHJ2o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jun 2023 05:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234107AbjFHJZL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 05:25:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FF71FCC;
-        Thu,  8 Jun 2023 02:25:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 11B3E64B4B;
-        Thu,  8 Jun 2023 09:25:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66CFDC433D2;
-        Thu,  8 Jun 2023 09:25:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686216309;
-        bh=96pyaT392lWLRv2jhrQ7OqU9kNa5PjVzAfVKuIvhzwQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CT7/WJFuC521sAaVjPZmzV7eb/VVqM4NKYHTKp2nSTsABVXpwve/3J2fuvzmvxdl1
-         ZvfsiwiiyiPIUYyeQ6xtEzcyeSEKOUW+YaAAOy87QFz4V37XEUK6XxF2uXJI0XzU2S
-         AsBd8rVl1QKvSaXgqNHo1JI3LZEmbpb4eEox5CbfWuHB/lriw61LPGQJhXBGojAgTQ
-         P8TOrboS7A+8GhiZr2gR++gp5E/Xsp25KqXO2/u3vawZO3LtMRKfdQBRgAger8Re3i
-         lEHXQBjlzBzW4wQUcyiOjrQvf170tOUX8dslCQf6/q37ObGOQ43XNZOfCGgcslvd5y
-         Ke1K3VAKTIcqw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1q7Bte-00043e-1e; Thu, 08 Jun 2023 11:25:34 +0200
-Date:   Thu, 8 Jun 2023 11:25:34 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Nick Bowler <nbowler@draconx.ca>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: PROBLEM: kernel NULL pointer dereference when yanking ftdi
- usb-serial during BREAK
-Message-ID: <ZIGejjOfsWkwjB2s@hovoldconsulting.com>
-References: <CADyTPExB2kYOOwkO0JqGhKaYVDqO9uS9WCw0J=MCTdVhcGOogA@mail.gmail.com>
+        with ESMTP id S233840AbjFHJ2n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 05:28:43 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF89213C;
+        Thu,  8 Jun 2023 02:28:25 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3589R9aZ4011935, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3589R9aZ4011935
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 8 Jun 2023 17:27:09 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Thu, 8 Jun 2023 17:27:25 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 8 Jun 2023 17:27:25 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Thu, 8 Jun 2023 17:27:25 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ray Chi <raychi@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v3 4/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 2.0 PHY
+Thread-Topic: [PATCH v3 4/5] dt-bindings: phy: realtek: Add the doc about the
+ Realtek SoC USB 2.0 PHY
+Thread-Index: AQHZmQjdazkCXQ0o50uX71FuvNBNuK9+uDoAgAGs3VD//54bgIAAiZyw//+BfQCAAI4H4A==
+Date:   Thu, 8 Jun 2023 09:27:25 +0000
+Message-ID: <d515bfed030d4499b16050d492e1ec23@realtek.com>
+References: <20230607062500.24669-1-stanley_chang@realtek.com>
+ <20230607062500.24669-4-stanley_chang@realtek.com>
+ <7cce1d72-6b4d-9fff-32bc-942193388134@linaro.org>
+ <8a88cbee5c6245f2941c700b2bb30697@realtek.com>
+ <7df8ffb6-a544-d10e-5273-fd6c4b368b20@linaro.org>
+ <7d503e3028a7487a9a087cfa061fff9d@realtek.com>
+ <b941c06f-7f7d-1364-a7f5-be5905112cac@linaro.org>
+In-Reply-To: <b941c06f-7f7d-1364-a7f5-be5905112cac@linaro.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADyTPExB2kYOOwkO0JqGhKaYVDqO9uS9WCw0J=MCTdVhcGOogA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 10:20:31PM -0400, Nick Bowler wrote:
-
-> I just hit an oops when unplugging my usb serial adapter.  So naturally,
-> I tried it again, and found if I use minicom to send BREAK and then
-> quickly yank the cable, I can reliably cause this oops every single
-> time.
-
-Well, don't do that then. ;)
-
-I ran into this a couple of years ago myself but ended up preempted
-before I could finish the fix I was working on.
-
-The problem is that the tty layer happily calls back into the driver to
-disable the break state after the device is gone.
-
-Something like the below fixes it. I'll revisit this in a couple of
-weeks.
-
-Johan
-
-
-From 14d3b01c02760979ede01d064fb1700d48c3ee68 Mon Sep 17 00:00:00 2001
-From: Johan Hovold <johan@kernel.org>
-Date: Mon, 18 Oct 2021 09:43:38 +0200
-Subject: [PATCH] tty: fix break race
-
-TCSBRK and TCSBRKP can race with hangup and end up calling into a tty
-driver for a device that is already gone.
-
-FIXME: expand
-
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/tty/tty_io.c | 68 ++++++++++++++++++++++++++++++--------------
- include/linux/tty.h  |  1 +
- 2 files changed, 47 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
-index c84be40fb8df..85fe52135f4b 100644
---- a/drivers/tty/tty_io.c
-+++ b/drivers/tty/tty_io.c
-@@ -630,6 +630,8 @@ static void __tty_hangup(struct tty_struct *tty, int exit_session)
- 
- 	tty_ldisc_hangup(tty, cons_filp != NULL);
- 
-+	wake_up_interruptible(&tty->break_wait);
-+
- 	spin_lock_irq(&tty->ctrl.lock);
- 	clear_bit(TTY_THROTTLED, &tty->flags);
- 	clear_bit(TTY_DO_WRITE_WAKEUP, &tty->flags);
-@@ -1757,10 +1759,10 @@ int tty_release(struct inode *inode, struct file *filp)
- 
- 	/*
- 	 * Sanity check: if tty->count is going to zero, there shouldn't be
--	 * any waiters on tty->read_wait or tty->write_wait.  We test the
--	 * wait queues and kick everyone out _before_ actually starting to
--	 * close.  This ensures that we won't block while releasing the tty
--	 * structure.
-+	 * any waiters on tty->read_wait, tty->write_wait or tty->break_wait.
-+	 * We test the wait queues and kick everyone out _before_ actually
-+	 * starting to close.  This ensures that we won't block while
-+	 * releasing the tty structure.
- 	 *
- 	 * The test for the o_tty closing is necessary, since the master and
- 	 * slave sides may close in any order.  If the slave side closes out
-@@ -1780,6 +1782,10 @@ int tty_release(struct inode *inode, struct file *filp)
- 				wake_up_poll(&tty->write_wait, EPOLLOUT);
- 				do_sleep++;
- 			}
-+			if (waitqueue_active(&tty->break_wait)) {
-+				wake_up(&tty->break_wait);
-+				do_sleep++;
-+			}
- 		}
- 		if (o_tty && o_tty->count <= 1) {
- 			if (waitqueue_active(&o_tty->read_wait)) {
-@@ -2461,6 +2467,7 @@ static int tiocgetd(struct tty_struct *tty, int __user *p)
-  * send_break	-	performed time break
-  * @tty: device to break on
-  * @duration: timeout in mS
-+ * @file: file object
-  *
-  * Perform a timed break on hardware that lacks its own driver level timed
-  * break functionality.
-@@ -2468,30 +2475,46 @@ static int tiocgetd(struct tty_struct *tty, int __user *p)
-  * Locking:
-  *	@tty->atomic_write_lock serializes
-  */
--static int send_break(struct tty_struct *tty, unsigned int duration)
-+static int send_break(struct file *file, struct tty_struct *tty, unsigned int duration)
- {
-+	DEFINE_WAIT_FUNC(wait, woken_wake_function);
- 	int retval;
- 
- 	if (tty->ops->break_ctl == NULL)
- 		return 0;
- 
- 	if (tty->driver->flags & TTY_DRIVER_HARDWARE_BREAK)
--		retval = tty->ops->break_ctl(tty, duration);
--	else {
--		/* Do the work ourselves */
--		if (tty_write_lock(tty, 0) < 0)
--			return -EINTR;
--		retval = tty->ops->break_ctl(tty, -1);
--		if (retval)
--			goto out;
--		if (!signal_pending(current))
--			msleep_interruptible(duration);
--		retval = tty->ops->break_ctl(tty, 0);
--out:
--		tty_write_unlock(tty);
--		if (signal_pending(current))
--			retval = -EINTR;
-+		return tty->ops->break_ctl(tty, duration);
-+
-+	if (tty_write_lock(tty, 0) < 0)
-+		return -EINTR;
-+
-+	add_wait_queue(&tty->break_wait, &wait);
-+
-+	if (signal_pending(current)) {
-+		retval = -EINTR;
-+		goto out;
-+	}
-+
-+	if (tty_hung_up_p(file)) {
-+		retval = -EIO;
-+		goto out;
- 	}
-+
-+	retval = tty->ops->break_ctl(tty, -1);
-+	if (retval)
-+		goto out;
-+
-+	wait_woken(&wait, TASK_INTERRUPTIBLE, msecs_to_jiffies(duration) + 1);
-+
-+	retval = tty->ops->break_ctl(tty, 0);
-+out:
-+	remove_wait_queue(&tty->break_wait, &wait);
-+	tty_write_unlock(tty);
-+
-+	if (signal_pending(current))
-+		retval = -EINTR;
-+
- 	return retval;
- }
- 
-@@ -2739,10 +2762,10 @@ long tty_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- 		 * This is used by the tcdrain() termios function.
- 		 */
- 		if (!arg)
--			return send_break(tty, 250);
-+			return send_break(file, tty, 250);
- 		return 0;
- 	case TCSBRKP:	/* support for POSIX tcsendbreak() */
--		return send_break(tty, arg ? arg*100 : 250);
-+		return send_break(file, tty, arg ? arg * 100 : 250);
- 
- 	case TIOCMGET:
- 		return tty_tiocmget(tty, p);
-@@ -3105,6 +3128,7 @@ struct tty_struct *alloc_tty_struct(struct tty_driver *driver, int idx)
- 	init_ldsem(&tty->ldisc_sem);
- 	init_waitqueue_head(&tty->write_wait);
- 	init_waitqueue_head(&tty->read_wait);
-+	init_waitqueue_head(&tty->break_wait);
- 	INIT_WORK(&tty->hangup_work, do_tty_hangup);
- 	mutex_init(&tty->atomic_write_lock);
- 	spin_lock_init(&tty->ctrl.lock);
-diff --git a/include/linux/tty.h b/include/linux/tty.h
-index e8d5d9997aca..49b0e3b82901 100644
---- a/include/linux/tty.h
-+++ b/include/linux/tty.h
-@@ -235,6 +235,7 @@ struct tty_struct {
- 	struct fasync_struct *fasync;
- 	wait_queue_head_t write_wait;
- 	wait_queue_head_t read_wait;
-+	wait_queue_head_t break_wait;
- 	struct work_struct hangup_work;
- 	void *disc_data;
- 	void *driver_data;
--- 
-2.39.3
-
+PiA+IEkgb25seSBjb250cm9sIGEgcmVnaXN0ZXIsIGl0IGlzIG5vdCBuZWVkZWQgYSBkcml2ZXIg
+b2YgcG93ZXIgZG9tYWluLg0KPiANCj4gQXJlbid0IG1hbnkgcG93ZXIgZG9tYWlucyBqdXN0IGEg
+cmVnaXN0ZXJzPyBXaGF0IGFib3V0IG90aGVyIGRyaXZlcnM/DQo+IERvbid0IHlvdSB3YW50IGlu
+IG90aGVyIGRyaXZlciBjb250cm9sIExETyBvZiBzb21ldGhpbmcgZWxzZT8gQW5kIGluIG90aGVy
+DQo+IHNvbWV0aGluZyBlbHNlPw0KDQpJIHdpbGwgdXNlIHBvd2VyIGRvbWFpbiB0byBpbnN0ZWFk
+IHRoaXMuDQoNCj4gPiBXb3VsZCAicG9ydCIgYmUgbW9yZSBhcHByb3ByaWF0ZT8NCj4gPg0KPiA+
+IEZvciBleGFtcGxlLA0KPiA+IFVzaW5nIHBoeUAwIGFuZCBwaHlAMToNCj4gPiAgICAgdXNiX3Bv
+cnQxX3VzYjJwaHk6IHVzYi1waHlAMTNjMTQgew0KPiA+ICAgICAgICAgY29tcGF0aWJsZSA9ICJy
+ZWFsdGVrLHJ0ZDEzOTUtdXNiMnBoeSIsICJyZWFsdGVrLHVzYjJwaHkiOw0KPiA+ICAgICAgICAg
+cmVnID0gPDB4MTMyYzQgMHg0PiwgPDB4MzEyODAgMHg4PjsNCj4gPiAgICAgICAgICNhZGRyZXNz
+LWNlbGxzID0gPDE+Ow0KPiA+ICAgICAgICAgI3NpemUtY2VsbHMgPSA8MD47DQo+ID4gICAgICAg
+ICAjcGh5LWNlbGxzID0gPDA+Ow0KPiA+ICAgICAgICAgcmVhbHRlayx1c2ItY3RybCA9IDwmdXNi
+X2N0cmw+Ow0KPiA+DQo+ID4gICAgICAgICBwaHlAMCB7DQo+ID4gICAgICAgICAgICAgcmVnID0g
+PDA+Ow0KPiANCj4gU28gc3VjaCBjaGlsZCBpcyBhIE5BSy4uLiB5b3UgaGF2ZSBub3RoaW5nIGhl
+cmUuIEJ1dCBpdCdzIHVucmVsYXRlZCB0b3BpYy4NCkhlcmUgaXMgZm9yIHNpbXBsZSwgc28gc29t
+ZSBpdGVtcyBpZ25vcmUuDQoNCj4gPiAgICAgICAgIH07DQo+ID4gICAgICAgICBwaHlAMSB7DQo+
+ID4gICAgICAgICAgICAgcmVnID0gPDE+Ow0KPiA+ICAgICAgICAgfTsNCj4gPiAgICAgfTsNCj4g
+Pg0KPiA+IENoYW5nZTogcG9ydEAwIGFuZCBwb3J0QDENCj4gPiAgICAgdXNiX3BvcnQxX3VzYjJw
+aHk6IHVzYi1waHlAMTNjMTQgew0KPiA+ICAgICAgICAgY29tcGF0aWJsZSA9ICJyZWFsdGVrLHJ0
+ZDEzOTUtdXNiMnBoeSIsICJyZWFsdGVrLHVzYjJwaHkiOw0KPiA+ICAgICAgICAgcmVnID0gPDB4
+MTMyYzQgMHg0PiwgPDB4MzEyODAgMHg4PjsNCj4gPiAgICAgICAgICNhZGRyZXNzLWNlbGxzID0g
+PDE+Ow0KPiA+ICAgICAgICAgI3NpemUtY2VsbHMgPSA8MD47DQo+ID4gICAgICAgICAjcGh5LWNl
+bGxzID0gPDA+Ow0KPiA+ICAgICAgICAgcmVhbHRlayx1c2ItY3RybCA9IDwmdXNiX2N0cmw+Ow0K
+PiA+DQo+ID4gICAgICAgICBwcm90QDAgew0KPiA+ICAgICAgICAgICAgIHJlZyA9IDwwPjsNCj4g
+PiAgICAgICAgIH07DQo+ID4gICAgICAgICBwb3J0QDEgew0KPiA+ICAgICAgICAgICAgIHJlZyA9
+IDwxPjsNCj4gPiAgICAgICAgIH07DQo+ID4gICAgIH07DQo+IA0KPiBUaGlzIGlzIG5vdCB0aGUg
+YW5zd2VyLiBUaGlzIGlzIHRoZSBwcm92aWRlci4gSG93IGRvIHlvdSByZWZlcmVuY2UgaXQgZnJv
+bSB0aGUNCj4gY29uc3VtZXIuDQoNCg0KPiBVcHN0cmVhbSB5b3VyIGVudGlyZSBEVFMuIEl0J3Mg
+ZnJ1c3RyYXRpbmcgdG8gdHJ5IHRvIHVuZGVyc3RhbmQgeW91ciBEVFMgZnJvbQ0KPiBwaWVjZXMg
+b2YgaW5mb3JtYXRpb24geW91IGFyZSBzaGFyaW5nLiBBbHNvIHZlcnkgdGltZSBjb25zdW1pbmcg
+YW5kIHlvdSBhcmUNCj4gbm90IHRoZSBvbmx5IG9uZSBzZW5kaW5nIHBhdGNoZXMgZm9yIHJldmll
+dy4uLg0KDQpTb3JyeSB0byB0YWtlIHVwIGEgbG90IG9mIHlvdXIgdGltZS4NCkFwcGFyZW50bHkg
+SSBkb24ndCBrbm93IGVub3VnaCBhYm91dCBkdHMuDQpJIHdpbGwgcmVmZXJlbmNlIG1vcmUgZGV2
+aWNlIHRyZWUgZG9jdW1lbnQgdG8gdW5kZXJzdGFuZCB0aGUgcmVsYXRpbmcgYmV0d2VlbiBEVFMg
+YW5kIGhhcmR3YXJlLg0KDQpUaGFua3MsDQpTdGFubGV5DQo=
