@@ -2,138 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A4672745E
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 03:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64BD67274A9
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 03:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232793AbjFHBgZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Jun 2023 21:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51552 "EHLO
+        id S232798AbjFHB6s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Jun 2023 21:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjFHBgX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 21:36:23 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7868726AF;
-        Wed,  7 Jun 2023 18:36:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686188176; x=1717724176;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=B0VSdm1hETZ89zwsJ2li+Uinhg7LbDBnxsYq254PuxU=;
-  b=chsKfG7mG5c8jrJhQsjY7kysK9LSGkZnYaLnM4cIZPbuIurhm21O+fLv
-   yvoVMjguuHLtM0r/gnYJFpSG8gkyikocx20tDhJ4gknzR5IuJW9JrjUA/
-   wQDEzgA6bYIaLU0dUs2e63Xbnlkx7F00W0Ht6PAcVneJxsYr8HHpWauX/
-   uD2fs6SxJ9YUFTqgOih7J6BGiL4lKEgzxGspphDAsMpRT/nHIut4845Hh
-   yRBiLslOs7wp2fT+3vaHAQXvxx08Bi6IY4qW6te6pBTx9rXzTMjJevwUv
-   mE38Ywh1D7SkjZyYWmIPv6lscqA+3p4SM/QcsTWpE3jeaz+NJa1TS8c3j
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="341822939"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="341822939"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 18:36:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="687205165"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="687205165"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 07 Jun 2023 18:36:10 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q74ZO-00076D-0Q;
-        Thu, 08 Jun 2023 01:36:10 +0000
-Date:   Thu, 8 Jun 2023 09:35:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Stanley Chang <stanley_chang@realtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Stanley Chang <stanley_chang@realtek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ray Chi <raychi@google.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 3/5] phy: realtek: usb: Add driver for the Realtek SoC
- USB 3.0 PHY
-Message-ID: <202306080940.5Lcjwfck-lkp@intel.com>
-References: <20230607062500.24669-3-stanley_chang@realtek.com>
+        with ESMTP id S231423AbjFHB6r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 21:58:47 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA742685
+        for <linux-usb@vger.kernel.org>; Wed,  7 Jun 2023 18:58:46 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-30af0aa4812so49568f8f.1
+        for <linux-usb@vger.kernel.org>; Wed, 07 Jun 2023 18:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686189524; x=1688781524;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cRJnMgKD4iqcv9KJAujGpltfqotgoZBdf/3JPdpJjwU=;
+        b=j9wFPduXwqtAZk7dIwOA0oUkTsdh1KLHpJ3YrpfEyJLGFmFNLgTZV8MnKPY77dbhmq
+         kRwRmMDRtdZHEE8Oaj4oirAhHdXK3+6KY1qfkCS5TM9bjrgJSYUJgow96mZRcFaMQowv
+         DYiyYeJFA5etk7MpYzln+T2qMiLpDiIJy85TZP02JOHKtXaRbzxURRogz3kJQj1eOBOR
+         qx1h4luZax5lczwn1P6BtqvtsS0EPIPANy/jo/vvnDzJ4z/1ckI08yvO8twrHm8GmNGo
+         XAUt78kJq32TXg+VoAAKzkLrF9EZuOFHqxhMXOrBaYIS4ZaTgyhDRmSqB3wKqZ1ESDLm
+         Wcjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686189524; x=1688781524;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cRJnMgKD4iqcv9KJAujGpltfqotgoZBdf/3JPdpJjwU=;
+        b=drR1tRH7+EJ7WDQWmxV+L3VeYevfk7/gG+8hNl7WrKg2p00Fr2TyiRH0pdkHpuJk6a
+         TlaOwceoanWmjzMWMQwYAFQqiN5mVbWWJMchK3a83FXWK3F0k+sZ2Lnab7XPoXba7t+z
+         WPVIOXvidz77szLDH8NUH2FNZ32m28G+59yts4NrFrz3cfbWA/Cqqc8nuOm74tNiQ9yD
+         /XB79zdgflvqH862k45i6gMLAv/6rcFRr3Pnuf6SWSgrKxsXM0XmlIq17dlQQxGWm7mR
+         ao8JHHD7smoVH3M4TnEB6Ig0hZZ6TMw+gUpYHGGUQtPPn8LPSoe7byTOh8SwKChTiLDe
+         a5/g==
+X-Gm-Message-State: AC+VfDxz+o09YS0AHfeM0JVHeE79ix5wlnOTLNq9X1wBp8DFTI3mcBLb
+        ASR0FHeVGv6Nl276eYh5Qa/9IF0Vq29kid5Qx4N64w==
+X-Google-Smtp-Source: ACHHUZ6TM1tVXOCRbk4cTkvrLmHevWLYSdpPmPm/z5Yja7R4xC/Xos7kpM9PZY03EE20Zu5OarVHcueXep6VbJuzRSI=
+X-Received: by 2002:a5d:53cd:0:b0:307:86fb:dae2 with SMTP id
+ a13-20020a5d53cd000000b0030786fbdae2mr5395027wrw.67.1686189524528; Wed, 07
+ Jun 2023 18:58:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607062500.24669-3-stanley_chang@realtek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230605215529.195045-1-royluo@google.com> <2023060734-survey-shady-f025@gregkh>
+ <CA+zupgy1WCh8Z6cKo1No5k4PcsFFpEDBXW-rTZVih7bfASAZDA@mail.gmail.com>
+In-Reply-To: <CA+zupgy1WCh8Z6cKo1No5k4PcsFFpEDBXW-rTZVih7bfASAZDA@mail.gmail.com>
+From:   Roy Luo <royluo@google.com>
+Date:   Wed, 7 Jun 2023 18:58:08 -0700
+Message-ID: <CA+zupgymZusMgecUyD8f2-AnoT3OR_O_wjy6uTxjZgSv9BLHLw@mail.gmail.com>
+Subject: Re: [PATCH v3] usb: core: add sysfs entry for usb device state
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     raychi@google.com, badhri@google.com,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Bastien Nocera <hadess@hadess.net>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Douglas Anderson <dianders@chromium.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        kernel test robot <oliver.sang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Stanley,
+> > @@ -160,6 +160,16 @@ static ssize_t connect_type_show(struct device *dev,
+> >  }
+> >  static DEVICE_ATTR_RO(connect_type);
+> >
+> > +static ssize_t state_show(struct device *dev,
+> > +                       struct device_attribute *attr, char *buf)
+> > +{
+> > +     struct usb_port *port_dev = to_usb_port(dev);
+> > +     enum usb_device_state state = READ_ONCE(port_dev->state);
+> > +
+> > +     return sprintf(buf, "%s\n", usb_state_string(state));
+>
+> I thought checkpatch would warn you that you should be using
+> sysfs_emit() here, wonder why it didn't.
+>
+> thanks,
+>
+> greg k-h
 
-kernel test robot noticed the following build errors:
+I was using sprintf() instead of sysfs_emit() because I randomly referred
+to one of the nearby attributes. Looks like there are still many attributes in
+port.c that uses sprintf(), any reason why we didn't replace them?
+If not, I'm happy to do a clean-up so that others don't make the same mistake
+as I did :D
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus robh/for-next linus/master v6.4-rc5 next-20230607]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Stanley-Chang/phy-realtek-usb-Add-driver-for-the-Realtek-SoC-USB-2-0-PHY/20230607-142704
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230607062500.24669-3-stanley_chang%40realtek.com
-patch subject: [PATCH v3 3/5] phy: realtek: usb: Add driver for the Realtek SoC USB 3.0 PHY
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20230608/202306080940.5Lcjwfck-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-        git fetch usb usb-testing
-        git checkout usb/usb-testing
-        b4 shazam https://lore.kernel.org/r/20230607062500.24669-3-stanley_chang@realtek.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306080940.5Lcjwfck-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
-ERROR: modpost: "usb_remove_phy" [drivers/phy/realtek/phy-rtk-usb2.ko] undefined!
-ERROR: modpost: "usb_debug_root" [drivers/phy/realtek/phy-rtk-usb2.ko] undefined!
-ERROR: modpost: "of_iomap" [drivers/phy/realtek/phy-rtk-usb2.ko] undefined!
-ERROR: modpost: "usb_add_phy_dev" [drivers/phy/realtek/phy-rtk-usb2.ko] undefined!
->> ERROR: modpost: "usb_remove_phy" [drivers/phy/realtek/phy-rtk-usb3.ko] undefined!
->> ERROR: modpost: "usb_debug_root" [drivers/phy/realtek/phy-rtk-usb3.ko] undefined!
->> ERROR: modpost: "of_iomap" [drivers/phy/realtek/phy-rtk-usb3.ko] undefined!
->> ERROR: modpost: "usb_add_phy_dev" [drivers/phy/realtek/phy-rtk-usb3.ko] undefined!
-ERROR: modpost: "devm_ioremap_resource" [drivers/dma/qcom/hdma.ko] undefined!
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
-WARNING: modpost: suppressed 26 unresolved symbol warnings because there were too many)
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for USB_PHY
-   Depends on [n]: USB_SUPPORT [=n]
-   Selected by [m]:
-   - PHY_RTK_RTD_USB2PHY [=m]
-   - PHY_RTK_RTD_USB3PHY [=m]
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Roy
