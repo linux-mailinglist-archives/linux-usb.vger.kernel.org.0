@@ -2,138 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 331A8728149
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 15:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A467281BA
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 15:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236110AbjFHNYF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jun 2023 09:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52046 "EHLO
+        id S236598AbjFHNth (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jun 2023 09:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234860AbjFHNYE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 09:24:04 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DF02738
-        for <linux-usb@vger.kernel.org>; Thu,  8 Jun 2023 06:24:02 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b0236ee816so4652785ad.1
-        for <linux-usb@vger.kernel.org>; Thu, 08 Jun 2023 06:24:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686230641; x=1688822641;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Ec4GKe0wj+39kSSKtRyyNRXczGRfgI/XMt3CuBNzGk=;
-        b=UzdwalVlIfCQRAUn/DdKNko3d0Y6P/+qh/XqUD9g3CejanV5YKuQyo5hLAxoRq74oh
-         bu0lKVL7VXIuyahl7K+1B561AKV8y4hmwp7sVlWyjbYxjlnPONAP+l4288+Fzq5Dlv0d
-         W2bQs+V0jHMuAO+s2Ply99HRurS8zPPF1L7l7DY7BXy/7hJwjBxgAwyfkylJ03NWAteb
-         n7H3ZehVuBmF4Zyyo8gvgcV73RD+zKZdrCy+lcfZIbxnJyLPE6cqu19Q5VJlPjZ2WX3h
-         vnU8578N9ZFrUQh5yGmjiG+rMTrFF7pP2tPmVdIpOKKXOj6tTrU0YB4mjdD35mfbXzl3
-         bXBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686230641; x=1688822641;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3Ec4GKe0wj+39kSSKtRyyNRXczGRfgI/XMt3CuBNzGk=;
-        b=KLoWGDkJW0CZhmKl/Vs+yZIX6PjVE82E7WM7WOOYXlRZREvX8kPbtWOPGS7BSBQaGf
-         rj5lo0u5gFnKRVSD3EMrqx1ACgKjIfqTqT8JJOX1LZ1AbQPSHlA7s+pyCPO9VkyzoB8v
-         tec15KW9Oaikjdo8Fou2spDMCBPRsOWnLlrLx/PcGn1WcNwma4Nu8sQIlxvKwOjOH/KP
-         6pOATs441CrduS0N4wWAdDOftG0IP91muM5Yd2A5ClT5CSAJcdo2cDWG/V3KrhCHpbk+
-         vtBA+Z7DBWk/ygUk0fgHXZwLZbF338tybf5/MDKKczLKxzmXgsoPwAZQwJnPzgvHkfd5
-         2s9A==
-X-Gm-Message-State: AC+VfDyVrxec4dgoBkQQsOA9J89RnYZIwY89WhaZryoHwb9os4I1xLxL
-        1IM0DCNYV7FSYq/D7EneVvE=
-X-Google-Smtp-Source: ACHHUZ4r0Ny77o+2Xe2t3NLkwFyfTgHmmrK0at6az1q+TQqq1WXLFNfc8K9V0XVfvTmngGAXrJC5HQ==
-X-Received: by 2002:a17:902:dac6:b0:1b0:62e2:1f84 with SMTP id q6-20020a170902dac600b001b062e21f84mr2923759plx.5.1686230641308;
-        Thu, 08 Jun 2023 06:24:01 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z10-20020a170903018a00b001b1f991a4d0sm1429961plg.108.2023.06.08.06.24.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 06:24:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0330ffea-d258-8fb8-ff89-5ebb0388f1ff@roeck-us.net>
-Date:   Thu, 8 Jun 2023 06:23:59 -0700
+        with ESMTP id S236531AbjFHNtg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 09:49:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0491726AB;
+        Thu,  8 Jun 2023 06:49:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E35364DC7;
+        Thu,  8 Jun 2023 13:49:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A369EC433A1;
+        Thu,  8 Jun 2023 13:49:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686232173;
+        bh=Sa9nZsCxkXD9FQ5kXqqWNAwoYbU5YK9mi/D75HIteHg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VSb9bu4GA6/8gt/eIjkIakHh/kPuBohC729d4Zdzb7MdeFx0pnKEHWKW/iPHMIC2j
+         7ahFbG4Hox64nxj1XbVLLr4TbyKKgXcwk+KWc5AAUGpcp2TbHX4b38Ce/IdlVoMzOx
+         HsdHyGKBBYsxnk9BNvjmj+IkAGd6L96+Kps2cvQLIOtbDR0B9MoLTk9GiClGFoEdGq
+         vZBZ0XuacaNRCwSwoTXefyJvJUTEjOQRcFTplMkePgRN5iDPN52bUZH5B1ETv7PSLj
+         8i9K5aH4ujLfNAEiSVuCKoJt04YbjTvEfttiUWbLCUGfUmt0wYQiNSX22IpDWTWkPS
+         blwaVMP24omnw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1q7G1W-0001f5-Up; Thu, 08 Jun 2023 15:49:59 +0200
+Date:   Thu, 8 Jun 2023 15:49:58 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Li Jun <jun.li@nxp.com>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: Re: [PATCH 2/2] USB: dwc3: fix use-after-free on core driver unbind
+Message-ID: <ZIHchsMdf2nPv3wh@hovoldconsulting.com>
+References: <20230607100540.31045-1-johan+linaro@kernel.org>
+ <20230607100540.31045-3-johan+linaro@kernel.org>
+ <20230608130246.GF5672@thinkpad>
+ <ZIHTBw3pMNjieVyj@hovoldconsulting.com>
+ <20230608132313.GG5672@thinkpad>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] usb: typec: tcpci: allow drp toggling for non-drp port
-Content-Language: en-US
-To:     Xu Yang <xu.yang_2@nxp.com>, heikki.krogerus@linux.intel.com
-Cc:     gregkh@linuxfoundation.org, linux-imx@nxp.com,
-        linux-usb@vger.kernel.org, jun.li@nxp.com, zhipeng.wang_1@nxp.com,
-        faqiang.zhu@nxp.com
-References: <20230608112858.4405-1-xu.yang_2@nxp.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230608112858.4405-1-xu.yang_2@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608132313.GG5672@thinkpad>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/8/23 04:28, Xu Yang wrote:
-> Some single power role Type-C port with dual data role, this kind of
-> port connects non Type-C port for usb data will need tcpm to work to
-> get polarity for orientation change and let Type-C port keep at fake
-> power role to provide another non-default data role, so remove the drp
-> port condition for now.
+On Thu, Jun 08, 2023 at 06:53:13PM +0530, Manivannan Sadhasivam wrote:
+> On Thu, Jun 08, 2023 at 03:09:27PM +0200, Johan Hovold wrote:
+> > On Thu, Jun 08, 2023 at 06:32:46PM +0530, Manivannan Sadhasivam wrote:
+> > > On Wed, Jun 07, 2023 at 12:05:40PM +0200, Johan Hovold wrote:
+> > > > Some dwc3 glue drivers are currently accessing the driver data of the
+> > > > child core device directly, which is clearly a bad idea as the child may
+> > > > not have probed yet or may have been unbound from its driver.
+> > > > 
+> > > > As a workaround until the glue drivers have been fixed, clear the driver
+> > > > data pointer before allowing the glue parent device to runtime suspend
+> > > > to prevent its driver from accessing data that has been freed during
+> > > > unbind.
+> > 
+> > > > @@ -1929,6 +1929,11 @@ static int dwc3_remove(struct platform_device *pdev)
+> > > >  	pm_runtime_disable(&pdev->dev);
+> > > >  	pm_runtime_dont_use_autosuspend(&pdev->dev);
+> > > >  	pm_runtime_put_noidle(&pdev->dev);
+> > > > +	/*
+> > > > +	 * HACK: Clear the driver data, which is currently accessed by parent
+> > > > +	 * glue drivers, before allowing the parent to suspend.
+> > > > +	 */
+> > > > +	platform_set_drvdata(pdev, NULL);
+> > > 
+> > > This is required because you have seen the glue driver going to runtime suspend
+> > > once the below pm_runtime_set_suspended() is completed?
+> > 
+> > This is based on analysis of the code. The parent (glue) can not suspend
+> > while the child (core) is in the active state, but once we set the
+> > suspended state that could happen.
 > 
-> Has anyone encountered this use case? How do you handle this limitation
-> in current tcpm with a better way? Please kindly share your thoughts.
-> 
+> I could see that the driver core is setting drvdata to NULL during
+> device_unbind_cleanup(), so not sure if this scenario could be met otherwise it
+> will be redundant.
 
-Have you ? This is an odd comment to make in the patch description.
+If this was redundant I wouldn't have added it. ;)
 
-Either case, I don't understand why one would need to enable toggling
-under any circumstances if the port is not DRP. The description does
-not explain how "need tcpm to work" correlates to enabling toggling on
-non-DRP ports.
+The parent driver has no business accessing the driver data of the child
+in the first place, but it must absolutely not do so after the child has
+been unbound from its driver and the driver data is getting freed.
 
-Guenter
+Relying on the clean up in driver core that resets this pointer does not
+work as that would still leave a window where the parent could access
+this stale data.
 
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> Signed-off-by: Li Jun <jun.li@nxp.com>
-> ---
->   drivers/usb/typec/tcpm/tcpci.c | 3 ---
->   drivers/usb/typec/tcpm/tcpm.c  | 6 +++++-
->   2 files changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index fc708c289a73..88559e749120 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -175,9 +175,6 @@ static int tcpci_start_toggling(struct tcpc_dev *tcpc,
->   	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
->   	unsigned int reg = TCPC_ROLE_CTRL_DRP;
->   
-> -	if (port_type != TYPEC_PORT_DRP)
-> -		return -EOPNOTSUPP;
-> -
->   	/* Handle vendor drp toggling */
->   	if (tcpci->data->start_drp_toggling) {
->   		ret = tcpci->data->start_drp_toggling(tcpci, tcpci->data, cc);
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 3c6b0c8e2d3a..6aa62132e69a 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4274,7 +4274,11 @@ static void run_state_machine(struct tcpm_port *port)
->   		ret = tcpm_snk_attach(port);
->   		if (ret < 0)
->   			tcpm_set_state(port, SNK_UNATTACHED, 0);
-> -		else
-> +		else if (port->port_type == TYPEC_PORT_SRC &&
-> +			 port->typec_caps.data == TYPEC_PORT_DRD) {
-> +			tcpm_typec_connect(port);
-> +			tcpm_log(port, "Keep at SNK_ATTACHED for USB data.");
-> +		} else
->   			tcpm_set_state(port, SNK_STARTUP, 0);
->   		break;
->   	case SNK_STARTUP:
-
+Johan
