@@ -2,60 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8BDE7278BD
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 09:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A435A7278DD
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 09:32:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235219AbjFHHZ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jun 2023 03:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
+        id S235113AbjFHHcp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jun 2023 03:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234439AbjFHHZ5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 03:25:57 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C43D9E;
-        Thu,  8 Jun 2023 00:25:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686209156; x=1717745156;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sfNmgmPMVanuLL+3q2wGUF5ZoGfwANQwAmBIQBrBi1s=;
-  b=WqB4QfEOUxS6+3zlu+Z6G4VyxvFCk53CkfoU/XFeIn4LNxYe2dTeN5yx
-   w0u0W2f8nhB38lw3Rho64XJrGmhFIjpvWHEeFb+ysPo9dYxhsOQenprXg
-   OyfkyGXLTPGGUWbwaUKci5jPPQmg53ehQwnFbUIC1FAAj2rvzs0qff4j3
-   +mdGEG7TjpF1fzs6s+Eaf/bHFFCKuxKdgO1Yq8Q4walOQswCoigeImbPy
-   On5KddHbNq7zkzdHRzSib4bxU8P7PZwID5lQzNA0zipxyl0iDiGiBkr/+
-   W5h1LSk0pip2rY7qQrDNqvKK2ZXi2vhTo05iB5bQQ65oznvQZFSxZpiNU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="420799361"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="420799361"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 00:25:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="854237340"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="854237340"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 08 Jun 2023 00:25:53 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 08 Jun 2023 10:25:52 +0300
-Date:   Thu, 8 Jun 2023 10:25:52 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Pavan Holla <pholla@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        bleung@chromium.org, pmalani@chromium.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: typec: Fix fast_role_swap_current show function
-Message-ID: <ZIGCgBfb3UUfvhrc@kuha.fi.intel.com>
-References: <2023060611-coach-entitle-d4e4@gregkh>
- <20230607193328.3359487-1-pholla@chromium.org>
+        with ESMTP id S234391AbjFHHcn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 03:32:43 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86209E;
+        Thu,  8 Jun 2023 00:32:42 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3587VjrS6005923, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3587VjrS6005923
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 8 Jun 2023 15:31:45 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Thu, 8 Jun 2023 15:32:01 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 8 Jun 2023 15:32:01 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Thu, 8 Jun 2023 15:32:01 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ray Chi <raychi@google.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Flavio Suligoi" <f.suligoi@asem.it>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v3 5/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 3.0 PHY
+Thread-Topic: [PATCH v3 5/5] dt-bindings: phy: realtek: Add the doc about the
+ Realtek SoC USB 3.0 PHY
+Thread-Index: AQHZmQjklnRAOra5tUWspHWKA9A7xK9+uVYAgAG7/iA=
+Date:   Thu, 8 Jun 2023 07:32:01 +0000
+Message-ID: <1f13680401e449a3b9384710206cc2b0@realtek.com>
+References: <20230607062500.24669-1-stanley_chang@realtek.com>
+ <20230607062500.24669-5-stanley_chang@realtek.com>
+ <58aea31d-8f47-a558-6e17-17b55059bb23@linaro.org>
+In-Reply-To: <58aea31d-8f47-a558-6e17-17b55059bb23@linaro.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607193328.3359487-1-pholla@chromium.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,36 +81,47 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 07:33:26PM +0000, Pavan Holla wrote:
-> The current implementation mistakenly performs a & operation on
-> the output of sysfs_emit. This patch performs the & operation before
-> calling sysfs_emit.
-> 
-> Fixes: 662a60102c12 ("usb: typec: Separate USB Power Delivery from USB Type-C")
-> Reported-by: Benson Leung <bleung@chromium.org>
-> Signed-off-by: Pavan Holla <pholla@chromium.org>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  drivers/usb/typec/pd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/pd.c b/drivers/usb/typec/pd.c
-> index 0bcde1ff4d39..8cc66e4467c4 100644
-> --- a/drivers/usb/typec/pd.c
-> +++ b/drivers/usb/typec/pd.c
-> @@ -95,7 +95,7 @@ peak_current_show(struct device *dev, struct device_attribute *attr, char *buf)
->  static ssize_t
->  fast_role_swap_current_show(struct device *dev, struct device_attribute *attr, char *buf)
->  {
-> -	return sysfs_emit(buf, "%u\n", to_pdo(dev)->pdo >> PDO_FIXED_FRS_CURR_SHIFT) & 3;
-> +	return sysfs_emit(buf, "%u\n", (to_pdo(dev)->pdo >> PDO_FIXED_FRS_CURR_SHIFT) & 3);
->  }
->  static DEVICE_ATTR_RO(fast_role_swap_current);
->  
-> -- 
-> 2.41.0.rc0.172.g3f132b7071-goog
-
--- 
-heikki
+SGkgS3J6eXN6dG9mLA0KDQo+IA0KPiAxIHBoeSBvciA0PyBEZWNpZGUuDQoNCkluIGFjdHVhbGx5
+LCB3ZSBoYXZlIG9uZSBwaHkgZm9yIG9uZSBjb250cm9sbGVyLg0KSSBtZWFuIHRoZSBkcml2ZXIg
+Y2FuIHN1cHBvcnQgdXAgdG8gNCBwaHlzLg0KSSBjYW4gcmV2aXNlZCBhcw0KIl5waHlAWzBdKyQi
+DQpPciBvbmx5ICJwaHkiDQoNCj4gPiArDQo+ID4gK3BhdHRlcm5Qcm9wZXJ0aWVzOg0KPiA+ICsg
+ICJecGh5QFswLTNdKyQiOg0KPiA+ICsgICAgZGVzY3JpcHRpb246IEVhY2ggc3ViLW5vZGUgaXMg
+YSBQSFkgZGV2aWNlIGZvciBvbmUgWEhDSSBjb250cm9sbGVyLg0KPiA+ICsgICAgdHlwZTogb2Jq
+ZWN0DQo+ID4gKyAgICBwcm9wZXJ0aWVzOg0KPiA+ICsgICAgICByZWFsdGVrLHBhcmFtOg0KPiA+
+ICsgICAgICAgIGRlc2NyaXB0aW9uOiBUaGUgZGF0YSBvZiBQSFkgcGFyYW1ldGVyIGFyZSB0aGUg
+cGFpciBvZiB0aGUNCj4gPiArICAgICAgICAgIG9mZnNldCBhbmQgdmFsdWUuDQo+ID4gKyAgICAg
+ICAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDgtYXJyYXkNCj4g
+DQo+IFlvdXIgY2hvaWNlIG9mIHR5cGVzIGlzIHN1cnByaXNpbmcuIElmIHRoaXMgaXMgYXJyYXks
+IHRoYW4gbWF4SXRlbXMgKGFuZCBwbGVhc2UNCj4gZG9uJ3QgdGVsbCBtZSBpdCBpcyBtYXhJdGVt
+czogMSkuIEFueXdheSwgd2h5IDggYml0cyBsb25nPw0KDQpJdCBzaG91bGQgYmUgYSB1aW50MzIt
+bWF0cml4Lg0KDQo+ID4gKw0KPiA+ICsgICAgICByZWFsdGVrLGRvLXRvZ2dsZToNCj4gPiArICAg
+ICAgICBkZXNjcmlwdGlvbjogU2V0IHRoaXMgZmxhZyB0byBlbmFibGUgdGhlIFBIWSBwYXJhbWV0
+ZXIgdG9nZ2xlDQo+ID4gKyAgICAgICAgICB3aGVuIHBvcnQgc3RhdHVzIGNoYW5nZS4NCj4gPiAr
+ICAgICAgICB0eXBlOiBib29sZWFuDQo+ID4gKw0KPiA+ICsgICAgICByZWFsdGVrLGRvLXRvZ2ds
+ZS1vbmNlOg0KPiA+ICsgICAgICAgIGRlc2NyaXB0aW9uOiBTZXQgdGhpcyBmbGFnIHRvIGRvIFBI
+WSBwYXJhbWV0ZXIgdG9nZ2xlIG9ubHkgb24NCj4gPiArICAgICAgICAgIFBIWSBpbml0Lg0KPiA+
+ICsgICAgICAgIHR5cGU6IGJvb2xlYW4NCj4gPiArDQo+ID4gKyAgICAgIHJlYWx0ZWssY2hlY2st
+ZWZ1c2U6DQo+ID4gKyAgICAgICAgZGVzY3JpcHRpb246IEVuYWJsZSB0byB1cGRhdGUgUEhZIHBh
+cmFtZXRlciBmcm9tIHJlYWRpbmcgb3RwDQo+IHRhYmxlLg0KPiA+ICsgICAgICAgIHR5cGU6IGJv
+b2xlYW4NCj4gPiArDQo+ID4gKyAgICAgIHJlYWx0ZWssdXNlLWRlZmF1bHQtcGFyYW1ldGVyOg0K
+PiA+ICsgICAgICAgIGRlc2NyaXB0aW9uOiBEb24ndCBzZXQgcGFyYW1ldGVyIGFuZCB1c2UgZGVm
+YXVsdCB2YWx1ZSBpbg0KPiBoYXJkd2FyZS4NCj4gPiArICAgICAgICB0eXBlOiBib29sZWFuDQo+
+ID4gKw0KPiA+ICsgICAgICByZWFsdGVrLGNoZWNrLXJ4LWZyb250LWVuZC1vZmZzZXQ6DQo+ID4g
+KyAgICAgICAgZGVzY3JpcHRpb246IEVuYWJsZSB0byBjaGVjayByeCBmcm9udCBlbmQgb2Zmc2V0
+Lg0KPiA+ICsgICAgICAgIHR5cGU6IGJvb2xlYW4NCj4gPiArDQo+ID4gK3JlcXVpcmVkOg0KPiA+
+ICsgIC0gY29tcGF0aWJsZQ0KPiA+ICsgIC0gcmVnDQo+ID4gKyAgLSAiI2FkZHJlc3MtY2VsbHMi
+DQo+ID4gKyAgLSAiI3NpemUtY2VsbHMiDQo+ID4gKyAgLSAiI3BoeS1jZWxscyINCj4gPiArDQo+
+ID4gK2FkZGl0aW9uYWxQcm9wZXJ0aWVzOiBmYWxzZQ0KPiA+ICsNCj4gPiArZXhhbXBsZXM6DQo+
+ID4gKyAgLSB8DQo+ID4gKyAgICB1c2JfcG9ydDJfdXNiM3BoeTogdXNiLXBoeUAxM2UxMCB7DQo+
+ID4gKyAgICAgICAgY29tcGF0aWJsZSA9ICJyZWFsdGVrLHJ0ZDEzMTlkLXVzYjNwaHkiLCAicmVh
+bHRlayx1c2IzcGh5IjsNCj4gPiArICAgICAgICByZWcgPSA8MHgxM2UxMCAweDQ+Ow0KPiA+ICsg
+ICAgICAgICNhZGRyZXNzLWNlbGxzID0gPDE+Ow0KPiA+ICsgICAgICAgICNzaXplLWNlbGxzID0g
+PDA+Ow0KPiA+ICsgICAgICAgICNwaHktY2VsbHMgPSA8MD47DQo+ID4gKw0KPiA+ICsgICAgICAg
+IHBoeUAwIHsNCj4gPiArICAgICAgICAgICAgcmVnID0gPDA+Ow0KPiA+ICsgICAgICAgICAgICBy
+ZWFsdGVrLHBhcmFtID0NCj4gPiArICAgICAgICAgICAgICAgICAgICA8MHgwMSAweGFjOGM+LA0K
+PiA+ICsgICAgICAgICAgICAgICAgICAgIDwweDA2IDB4MDAxNz4sDQo+IA0KPiBGaXJzdCwgdGhp
+cyBpcyBtYXRyaXgsIG5vdCB1aW50OCBhcnJheS4gU2Vjb25kLCAweGFjOGMgaXMgcGFzdCAxNiBi
+aXRzIGxvbmcsIG5vdCA4Lg0KPiBUaGlyZCwgeW91IHB1dCBzb21lIG1hZ2ljIHJlZ2lzdGVyIHBy
+b2dyYW1taW5nIHRvIERULg0KPiBQbGVhc2UgZG9uJ3QuIERyb3AgYWxsIHRoaXMgZnJvbSBEVC4N
+Cg0KcmVhbHRlayxwYXJhbSBpcyBhbiB1aW50MzItbWF0cnguDQpJIHdpbGwgcmV2aXNlZCB0aGUg
+dHlwZS4NCg0KVGhhbmtzLA0KU3RhbmxleQ0KDQo=
