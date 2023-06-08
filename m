@@ -2,147 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 234A2727C44
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 12:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A40CA727CCE
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 12:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235426AbjFHKFM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jun 2023 06:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58210 "EHLO
+        id S235670AbjFHK2v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jun 2023 06:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236095AbjFHKEl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 06:04:41 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43ACD30C1;
-        Thu,  8 Jun 2023 03:04:29 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3588Juh3014011;
-        Thu, 8 Jun 2023 10:04:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=gGcxZvgA1XpXd/QMvwihachA1YvYAHMc3ntdl8NT2gM=;
- b=eIY9oaiTs3FDVK7rHx3Kz1oOw8UE4OJQ5Y5WzR4rZPcUE5RTC6U0iHwTJ7yOKAmgM/WX
- ox0soq/s1vVjxjOgLNjEnc7Opoq1L6vis2OAYWA0EvIbVW97qGwRGwRIaK6RzZoqw/BN
- DXubdVoZ4lFoOqi9gMGzVoGkY87K5Eh9CkXBUdcgib8ZR8UxNoMXPoWAiAyOs7PQijyF
- 4wINccCmAjOAAgGQQtQEVRht9fd1RGIboTrkhOR3OhSYQKqkhxn8zGA1fshLlG3PFpql
- wE9D4v1DfbVhZ2ePkarD6UX2cIEjmmtxjVijvKigFFUVvdFh9HdH/jkUTf5uFkChDvsX /w== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r33bvrxyb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jun 2023 10:04:24 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 358A4NFq003084
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 8 Jun 2023 10:04:23 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 8 Jun 2023 03:04:18 -0700
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <gregkh@linuxfoundation.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v14 5/5] arm64: dts: qcom: ipq9574: Enable USB
-Date:   Thu, 8 Jun 2023 15:33:31 +0530
-Message-ID: <d78b00b6f5f316f16a9ae49dd743d01fca64d3ff.1686217906.git.quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1686217906.git.quic_varada@quicinc.com>
-References: <cover.1686217906.git.quic_varada@quicinc.com>
+        with ESMTP id S234052AbjFHK2r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 06:28:47 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA461FFA
+        for <linux-usb@vger.kernel.org>; Thu,  8 Jun 2023 03:28:45 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-970056276acso71410266b.2
+        for <linux-usb@vger.kernel.org>; Thu, 08 Jun 2023 03:28:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686220124; x=1688812124;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=c258s4U6/uB0fFK+kkkJP9/66TeoJi5GTHBuhzJ9DxY=;
+        b=yeRMjPSCx+M6+/CSSeYgG+go+Ky6s/WcThZk+Y1bvAxa6PqlRTO96VCVBODsSnb75m
+         5k95xXAZesqYogf8oNWeXAQwda61sbAicCouSGzKQqQLFg46ConF1t/Dm3IfNzy7vG4p
+         ItwBBKt3t55BoXztH8W82fAzInjnII47/XT2yqzTx4jkSiJGFVGtEDHKqu98BMfKG4RQ
+         lRVMyFquEH9/DysH7Zt5A/poaNx3jcRggJVrhgx50HhUXrG/2Hdju7nUFj96/F2cyzLQ
+         R71m6etEvgsyKATt4bWBs58/an6B/OYqNSgSEnHK5z3vZBlQi/8Jle6dOk5dk5QLlvl1
+         jkbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686220124; x=1688812124;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c258s4U6/uB0fFK+kkkJP9/66TeoJi5GTHBuhzJ9DxY=;
+        b=jgi/ODZmEIdKzh/TIFKQ9EkITRVKWsFV1bdyLMu/OCNXNUypdv+1TXnyN9f+sA2/qM
+         y3yhpDapmn/fw+DYEoKTFCMxq7P1vxPQNzpVks1hqLVynsQMFx2UJSl8TlYTB4akZIaI
+         U0rAcc08KT735bWoflhEG3Kt7+Oyl/34aV/jodYHFw83PxEF73jwc+nsN2Zf3UOHQofz
+         x+37OxTT2u2Ut+wh0AQ/Jb/wdOAkCbXV46w4r8sTanPenCri1ueTRZufjV2J5MH/bIc/
+         wKAcwVpGeXq2dG38hHvwX5FflaezYY1/5KXcn8XSvJrX/9KFWCeKCXqcmZwTXRQ6h2nC
+         BENA==
+X-Gm-Message-State: AC+VfDyOJ5FXiWAfKh7wzqgXfkTg/Dmu682BTFFiYUQ2CVy3Mi4hGtoI
+        POJ8SgrijMnfkV00Dcajw2iq/g==
+X-Google-Smtp-Source: ACHHUZ51+U11KfrRo1rVILyQaHwbMYnjIsvOkpRmLtsDLsGzzIqtz06R/q88jdLafKTc3hf6zh0cUg==
+X-Received: by 2002:a17:906:6a0e:b0:973:91a5:bff1 with SMTP id qw14-20020a1709066a0e00b0097391a5bff1mr10514963ejc.68.1686220124396;
+        Thu, 08 Jun 2023 03:28:44 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id b12-20020a170906660c00b00968242f8c37sm507852ejp.50.2023.06.08.03.28.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 03:28:43 -0700 (PDT)
+Message-ID: <a34a7c5e-577b-5d20-c23f-8007b3988bc8@linaro.org>
+Date:   Thu, 8 Jun 2023 12:28:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: wf6suDPnk8eBbBuDezl9HvnU2QWEDr_n
-X-Proofpoint-ORIG-GUID: wf6suDPnk8eBbBuDezl9HvnU2QWEDr_n
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-08_06,2023-06-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- mlxscore=0 clxscore=1015 spamscore=0 phishscore=0 mlxlogscore=692
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306080085
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 8/8] arm64: dts: qcom: sm8550-qrd: add pmic glink
+ port/endpoints
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20230601-topic-sm8550-upstream-type-c-v2-0-3bbdf37575c3@linaro.org>
+ <20230601-topic-sm8550-upstream-type-c-v2-8-3bbdf37575c3@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230601-topic-sm8550-upstream-type-c-v2-8-3bbdf37575c3@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Turn on USB related nodes
-Provide vdd info
+On 07/06/2023 10:05, Neil Armstrong wrote:
+> Add nodes to support Type-C USB/DP functionality.
+> 
+> On this platform, a Type-C redriver is added to the
+> SuperSpeed graph.
+> 
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
- Changes in v13:
-	- s/fixed_/regulator_fixed_/
+...
 
- Changes in v11:
-	- Rename dwc_0 -> usb_0_dwc3
-	- Maintain sorted order for the usb nodes
+> +			port@1 {
+> +				reg = <1>;
+> +
+> +				redriver_ss_in: endpoint {
+> +					data-lanes = <3 2 1 0>;
+> +					remote-endpoint = <&usb_dp_qmpphy_out>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	fsa4480@42 {
 
- Changes in v10:
-	- Provide vdd info
+typec-switch? typec-mux?
 
- Changes in v5:
-	- Move "host" mode specification to board dts
-	- Due to dependency with earlier patches board dts
-	  filename changed ipq9574-al02-c7.dts -> ipq9574-rdp433.dts
+> +		compatible = "fcs,fsa4480";
+> +		reg = <0x42>;
+> +
+> +		vcc-supply = <&vreg_bob1>;
+> +
+> +		mode-switch;
+> +		orientation-switch;
+> +
 
- Changes in v2:
-	- Fix node placement and coding style
-	- "ok" -> "okay"
----
- arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-index 50ba1d2..877026c 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-@@ -123,6 +123,29 @@
- 	};
- };
- 
-+&usb_0_dwc3 {
-+	dr_mode = "host";
-+};
-+
-+&usb_0_qmpphy {
-+	vdda-pll-supply = <&mp5496_l2>;
-+	vdda-phy-supply = <&regulator_fixed_0p925>;
-+
-+	status = "okay";
-+};
-+
-+&usb_0_qusbphy {
-+	vdd-supply = <&regulator_fixed_0p925>;
-+	vdda-pll-supply = <&mp5496_l2>;
-+	vdda-phy-dpdm-supply = <&regulator_fixed_3p3>;
-+
-+	status = "okay";
-+};
-+
-+&usb3 {
-+	status = "okay";
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <24000000>;
- };
--- 
-2.7.4
+
+
+Best regards,
+Krzysztof
 
