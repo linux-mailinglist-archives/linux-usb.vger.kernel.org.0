@@ -2,392 +2,242 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5EE47278D0
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 09:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0D87278B8
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 09:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235465AbjFHH3F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jun 2023 03:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33750 "EHLO
+        id S235164AbjFHHZC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jun 2023 03:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235423AbjFHH3A (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 03:29:00 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C532729
-        for <linux-usb@vger.kernel.org>; Thu,  8 Jun 2023 00:28:51 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-516a008e495so703708a12.1
-        for <linux-usb@vger.kernel.org>; Thu, 08 Jun 2023 00:28:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686209330; x=1688801330;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a7LBmVzSou3ooRsgmzhSqng8ngpcUaRrdsS89j8WENo=;
-        b=GtGFldxUCthgX3jRXnVJcTogkQqEJcRxNABLf1N0CGL79y0nYBgYSrhNE4P88rnKpU
-         qIwlrb03DIfqz2xqwgjasNhqh7o680z217jJUP886X2PVqqFldfXFxkSs1AdKD5DDpu7
-         Shvd4OvEExp2h7Bv1ca32McNwiW8Qj8eepb+ODvryz3+XV1gGhLcPmiHth+8VLKOUL9G
-         owTRfgsLfnHwqo/aS/pLeVlDDMYGI3jnW2Q4Wf2bDGTWcQgrReDGqtqrgUuTrInoT6gI
-         hXe8LSm2UybqzijGsgIZhVnc0tGrOl1c4hsXQnrf2FYtiVuj+M8QtF8IyN+ZroLA8ZL5
-         SMVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686209330; x=1688801330;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a7LBmVzSou3ooRsgmzhSqng8ngpcUaRrdsS89j8WENo=;
-        b=dIk94HaYaH4urRppxqpiPB9subRsNes9O/X+0HoO+67wQ4qmiz0EWZauVQORsZdL37
-         1j8VPaR0YThNz8ms8oni53SOnin+WbZDa6NRFI6uy6tXtZvnX5qfk6IZZDUO/2dhqjCx
-         HjM0YCKRk05fl1mpp9ECvLxQBNWmYQjjFqoGgajYzNFvHf/jDjwx0576E9D/ibZLD8az
-         QLEe9KC1JmDfibNp8F7+uDlHk5pwQNYsD9CHhrFxg0CLXFk8LZzocAc8hQEVUzWsDeLu
-         UWD+7JvmUlmi+LqWhJ1Q3BQv0ZXzPLRnik2j2Gz5269o3GqYsdkoKiXp7yRx2TMVub13
-         pyug==
-X-Gm-Message-State: AC+VfDyZ6YXvqpEQSPqfiCigObjN+8aBv6pxqFb9553hJjPxIZUe/F6M
-        a9WJF7dolW3w1RXW++xUfkmYc6pUkLXJ5otFV48=
-X-Google-Smtp-Source: ACHHUZ4qzF2hO3OUr64rhyQl8jgmhTqXqnpgiyjt490poBQ+0k99ZOG2KGY0ITN0WSIgqC1lSHfBrA==
-X-Received: by 2002:a17:907:1c14:b0:96f:94f1:b0a5 with SMTP id nc20-20020a1709071c1400b0096f94f1b0a5mr1519974ejc.8.1686208896004;
-        Thu, 08 Jun 2023 00:21:36 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id z16-20020a170906241000b00978886c7cdbsm305528eja.183.2023.06.08.00.21.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 00:21:35 -0700 (PDT)
-Message-ID: <b343df1a-dbd8-919d-5bea-36d532ec4103@linaro.org>
-Date:   Thu, 8 Jun 2023 09:21:33 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 3/5] phy: realtek: usb: Add driver for the Realtek SoC
- USB 3.0 PHY
-Content-Language: en-US
-To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
+        with ESMTP id S235417AbjFHHY5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 03:24:57 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5FA1B9;
+        Thu,  8 Jun 2023 00:24:55 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3587NlFU2026901, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3587NlFU2026901
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 8 Jun 2023 15:23:48 +0800
+Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Thu, 8 Jun 2023 15:24:04 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 8 Jun 2023 15:24:03 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Thu, 8 Jun 2023 15:24:03 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Vinod Koul <vkoul@kernel.org>,
         Kishon Vijay Abraham I <kishon@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         Ray Chi <raychi@google.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Flavio Suligoi <f.suligoi@asem.it>,
         Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
         Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Flavio Suligoi <f.suligoi@asem.it>,
         "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v3 4/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 2.0 PHY
+Thread-Topic: [PATCH v3 4/5] dt-bindings: phy: realtek: Add the doc about the
+ Realtek SoC USB 2.0 PHY
+Thread-Index: AQHZmQjdazkCXQ0o50uX71FuvNBNuK9+uDoAgAGs3VA=
+Date:   Thu, 8 Jun 2023 07:24:03 +0000
+Message-ID: <8a88cbee5c6245f2941c700b2bb30697@realtek.com>
 References: <20230607062500.24669-1-stanley_chang@realtek.com>
- <20230607062500.24669-3-stanley_chang@realtek.com>
- <a9a2f3d0-9580-f027-8ec3-ac6e6bed5ed6@linaro.org>
- <0ac12a13a91d41f0ab3a58b435ccb17a@realtek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0ac12a13a91d41f0ab3a58b435ccb17a@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+ <20230607062500.24669-4-stanley_chang@realtek.com>
+ <7cce1d72-6b4d-9fff-32bc-942193388134@linaro.org>
+In-Reply-To: <7cce1d72-6b4d-9fff-32bc-942193388134@linaro.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 08/06/2023 08:59, Stanley Chang[昌育德] wrote:
-> Hi Krzysztof,
-> 
->>> +static void do_rtk_usb3_phy_toggle(struct rtk_usb_phy *rtk_phy, int i,
->>> +         bool isConnect)
->>> +{
->>> +     struct reg_addr *regAddr;
->>> +     struct phy_data *phy_data;
->>> +     struct phy_parameter *phy_parameter;
->>> +     size_t index;
->>> +
->>> +     regAddr = &((struct reg_addr *)rtk_phy->reg_addr)[i];
->>> +     phy_data = &((struct phy_data *)rtk_phy->phy_data)[i];
->>> +
->>> +     if (!phy_data) {
->>> +             dev_err(rtk_phy->dev, "%s phy_data is NULL!\n",
->>> + __func__);
->>
->> ???
-> Sorry, this check is redundant.
-> 
->>
->>> +             return;
->>> +     }
->>> +
->>> +     if (!phy_data->do_toggle)
->>> +             return;
->>> +
->>> +     phy_parameter = phy_data->parameter;
->>> +
->>> +     index = PHY_ADDR_MAP_ARRAY_INDEX(PHY_ADDR_0x09);
->>> +
->>> +     if (index < phy_data->size) {
->>> +             u8 addr = (phy_parameter + index)->addr;
->>> +             u16 data = (phy_parameter + index)->data;
->>> +
->>> +             if (addr == 0xFF) {
->>> +                     addr = ARRAY_INDEX_MAP_PHY_ADDR(index);
->>> +                     data = rtk_usb_phy_read(regAddr, addr);
->>> +                     (phy_parameter + index)->addr = addr;
->>> +                     (phy_parameter + index)->data = data;
->>> +             }
->>> +             mdelay(1);
->>> +             dev_info(rtk_phy->dev,
->>> +                         "%s ########## to toggle PHY addr 0x09
->> BIT(9)\n",
->>> +                         __func__);
->>> +             rtk_usb_phy_write(regAddr, addr, data&(~BIT(9)));
->>> +             mdelay(1);
->>> +             rtk_usb_phy_write(regAddr, addr, data);
->>> +     }
->>> +     dev_info(rtk_phy->dev, "%s ########## PHY addr 0x1f = 0x%04x\n",
->>> +                 __func__, rtk_usb_phy_read(regAddr,
->> PHY_ADDR_0x1F));
->>
->> Please drop all simple debug success messages. Linux has already
->> infrastructure for this.
->>
-> Okay. I will change the print dev_info to dev_dbg about debug message.
-
-No, drop them. This piece of code had already 2 printks for register
-contents! Your driver is overloaded with printks and they are mostly
-useless for the user.
-
-> 
->> ...
->>
->>> +     return 0;
->>> +}
->>> +
->>> +static int rtk_usb_phy_init(struct phy *phy) {
->>> +     struct rtk_usb_phy *rtk_phy = phy_get_drvdata(phy);
->>> +     int ret = 0;
->>> +     int i;
->>> +     unsigned long phy_init_time = jiffies;
->>> +
->>> +     if (!rtk_phy) {
->>> +             pr_err("%s rtk_phy is NULL!\n", __func__);
->>
->> What? How is this possible?
-> It should be not necessary. I will remove it.
-> 
->>> +             return -ENODEV;
->>> +     }
->>> +
->>> +     dev_dbg(rtk_phy->dev, "Init RTK USB 3.0 PHY\n");
->>> +     for (i = 0; i < rtk_phy->phyN; i++)
->>> +             ret = do_rtk_usb_phy_init(rtk_phy, i);
->>> +
->>> +     dev_info(rtk_phy->dev, "Initialized RTK USB 3.0 PHY (take %dms)\n",
->>> +                 jiffies_to_msecs(jiffies - phy_init_time));
->>
->> Please drop all simple debug success messages. Linux has already
->> infrastructure for this.
-> 
-> Ok, Thanks.
-> 
->>> +     return ret;
->>> +}
->>> +
->>> +static int rtk_usb_phy_exit(struct phy *phy) {
->>> +     struct rtk_usb_phy *rtk_phy = phy_get_drvdata(phy);
->>> +
->>> +     if (!rtk_phy) {
->>> +             pr_err("%s rtk_phy is NULL!\n", __func__);
->>> +             return -ENODEV;
->>> +     }
->>> +
->>> +     dev_dbg(rtk_phy->dev, "Exit RTK USB 3.0 PHY\n");
->>
->> Please drop all simple debug success messages. Linux has already
->> infrastructure for this.
-> 
-> Can I keep log for dev_dbg?
-
-Of course not. This was dev_dbg and I commented on this. This is not a
-good debug, we do not print anything on function entrance and exit.
-ftrace() is for this.
-
-> 
->>> +static void rtk_usb_phy_toggle(struct usb_phy *usb3_phy, bool
->>> +isConnect, int port) {
->>> +     int index = port;
->>> +     struct rtk_usb_phy *rtk_phy = NULL;
->>> +
->>> +     if (usb3_phy != NULL && usb3_phy->dev != NULL)
->>> +             rtk_phy = dev_get_drvdata(usb3_phy->dev);
->>> +
->>> +     if (rtk_phy == NULL) {
->>> +             pr_err("%s ERROR! NO this device\n", __func__);
->>
->> Your error messages are not helping. No need to shout, no need to handle
->> some non-existing cases. If this is real case, you have broken driver. I actually
->> suspect that.
->>
->> How can you interface with a driver where there is no device?
-> 
-> OK, I know this is not good programming practice, I will improve this question.
-> 
->>> +             return;
->>> +     }
->>> +
->>> +     if (index > rtk_phy->phyN) {
->>> +             pr_err("%s %d ERROR! port=%d > phyN=%d\n",
->>> +                         __func__, __LINE__, index, rtk_phy->phyN);
->>> +             return;
->>> +     }
->>> +
->>> +     do_rtk_usb3_phy_toggle(rtk_phy, index, isConnect); }
->>> +
->>> +static int rtk_usb_phy_notify_port_status(struct usb_phy *x, int port,
->>> +         u16 portstatus, u16 portchange) {
->>> +     bool isConnect = false;
->>
->> This is not C++. Don't use camelcase. See Coding style document.
-> 
-> I will revised for this style.
-> 
->>> +
->>> +     pr_debug("%s port=%d portstatus=0x%x portchange=0x%x\n",
->>> +                 __func__, port, (int)portstatus, (int)portchange);
->>> +     if (portstatus & USB_PORT_STAT_CONNECTION)
->>> +             isConnect = true;
->>> +
->>
->> ...
->>
->>> +
->>> +static int rtk_usb3_set_parameter_show(struct seq_file *s, void
->>> +*unused) {
->>> +     struct rtk_usb_phy *rtk_phy = s->private;
->>> +     const struct file *file = s->file;
->>> +     const char *file_name = file_dentry(file)->d_iname;
->>> +     struct dentry *p_dentry = file_dentry(file)->d_parent;
->>> +     const char *phy_dir_name = p_dentry->d_iname;
->>> +     int ret, index;
->>> +     struct phy_data *phy_data = NULL;
->>> +
->>> +     for (index = 0; index < rtk_phy->phyN; index++) {
->>> +             size_t sz = 30;
->>> +             char name[30] = {0};
->>> +
->>> +             snprintf(name, sz, "phy%d", index);
->>> +             if (strncmp(name, phy_dir_name, strlen(name)) == 0) {
->>> +                     phy_data = &((struct phy_data
->> *)rtk_phy->phy_data)[index];
->>> +                     break;
->>> +             }
->>> +     }
->>> +     if (!phy_data) {
->>> +             dev_err(rtk_phy->dev,
->>> +                                 "%s: No phy_data for %s/%s\n",
->>> +                                 __func__, phy_dir_name,
->> file_name);
->>
->> Mess wrapping/indentation. Actually everywhere in the file...
-> 
-> I will improve this.
-> 
->>> +static int rtk_usb3_set_parameter_open(struct inode *inode, struct
->>> +file *file) {
->>> +     return single_open(file, rtk_usb3_set_parameter_show,
->>> +inode->i_private); }
->>> +
->>> +static ssize_t rtk_usb3_set_parameter_write(struct file *file,
->>> +             const char __user *ubuf, size_t count, loff_t *ppos) {
->>> +     const char *file_name = file_dentry(file)->d_iname;
->>> +     struct dentry *p_dentry = file_dentry(file)->d_parent;
->>> +     const char *phy_dir_name = p_dentry->d_iname;
->>> +     struct seq_file         *s = file->private_data;
->>> +     struct rtk_usb_phy              *rtk_phy = s->private;
->>> +     struct reg_addr *regAddr = NULL;
->>> +     struct phy_data *phy_data = NULL;
->>> +     int ret = 0;
->>> +     char buffer[40] = {0};
->>> +     int index;
->>> +
->>> +     if (copy_from_user(&buffer, ubuf,
->>> +                 min_t(size_t, sizeof(buffer) - 1, count)))
->>> +             return -EFAULT;
->>> +
->>> +     for (index = 0; index < rtk_phy->phyN; index++) {
->>> +             size_t sz = 30;
->>> +             char name[30] = {0};
->>> +
->>> +             snprintf(name, sz, "phy%d", index);
->>> +             if (strncmp(name, phy_dir_name, strlen(name)) == 0) {
->>> +                     regAddr = &((struct reg_addr
->> *)rtk_phy->reg_addr)[index];
->>> +                     phy_data = &((struct phy_data
->> *)rtk_phy->phy_data)[index];
->>> +                     break;
->>
->>
->> Where is the ABI documentation for user interface?
-> 
-> Do debugfs nodes need ABI documentation?
-> Is there a reference?
->>
->>> +
->>> +static inline void create_debug_files(struct rtk_usb_phy *rtk_phy) {
->>> +     struct dentry *phy_debug_root = NULL;
->>> +     struct dentry *set_parameter_dir = NULL;
->>> +
->>> +     phy_debug_root = create_phy_debug_root();
->>> +
->>> +     if (!phy_debug_root) {
->>> +             dev_err(rtk_phy->dev, "%s Error phy_debug_root is NULL",
->>> +                         __func__);
->>> +             return;
->>> +     }
->>> +     rtk_phy->debug_dir = debugfs_create_dir(dev_name(rtk_phy->dev),
->>> +                 phy_debug_root);
->>> +     if (!rtk_phy->debug_dir) {
->>> +             dev_err(rtk_phy->dev, "%s Error debug_dir is NULL",
->>> + __func__);
->>
->> Are you sure you run checkpatch on this? Error messages on debugfs are
->> almost always incorrect.
-> 
-> Yes, I have run checkpatch for patches. 
-> Why the message is incorrect?
-
-Because debugfs failures should not cause any error prints. It's debug,
-not important.
-
-Do you see anywhere error messages?
-
-Entire debugfs handling code should be silent and even skip all error
-checking, as most API is ready for handling previous errors, I think.
-
-> 
->>> +static int get_phy_parameter(struct rtk_usb_phy *rtk_phy,
->>> +         struct device_node *sub_node) {
->>> +     struct device *dev = rtk_phy->dev;
->>> +     struct reg_addr *addr;
->>> +     struct phy_data *phy_data;
->>> +     int ret = 0;
->>> +     int index;
->>> +
->>> +     if (of_property_read_u32(sub_node, "reg", &index)) {
->>> +             dev_err(dev, "sub_node without reg\n");
->>> +             return -EINVAL;
->>> +     }
->>> +
->>> +     dev_dbg(dev, "sub_node index=%d\n", index);
->>
->> Please drop all simple debug success messages. Linux has already
->> infrastructure for this.
-> 
-> Can I keep log for dev_dbg?
-
-No, this was dev_dbg and I commented on this to remove it. Keep only
-useful debug messages, not hundreds of them in every place.
-
-Best regards,
-Krzysztof
-
+SGkgS3J6eXN6dG9mLA0KDQo+IA0KPiBPbiAwNy8wNi8yMDIzIDA4OjI0LCBTdGFubGV5IENoYW5n
+IHdyb3RlOg0KPiA+IEFkZCB0aGUgZG9jdW1lbnRhdGlvbiBleHBsYWluIHRoZSBwcm9wZXJ0eSBh
+Ym91dCBSZWFsdGVrIFVTQiBQSFkgZHJpdmVyLg0KPiA+DQo+ID4gUmVhbHRlayBESEMgKGRpZ2l0
+YWwgaG9tZSBjZW50ZXIpIFJURCBTb0NzIHN1cHBvcnQgRFdDMyBYSENJIFVTQg0KPiA+IGNvbnRy
+b2xsZXIuIEFkZGVkIHRoZSBkcml2ZXIgdG8gZHJpdmUgdGhlIFVTQiAyLjAgUEhZIHRyYW5zY2Vp
+dmVycy4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IFN0YW5sZXkgQ2hhbmcgPHN0YW5sZXlfY2hh
+bmdAcmVhbHRlay5jb20+DQo+ID4gLS0tDQo+ID4gdjIgdG8gdjMgY2hhbmdlOg0KPiA+ICAgICAx
+LiBCcm9rZW4gZG93biBpbnRvIHR3byBwYXRjaGVzLCBvbmUgZm9yIGVhY2ggb2YgVVNCIDIgJiAz
+Lg0KPiA+ICAgICAyLiBBZGQgbW9yZSBkZXNjcmlwdGlvbiBhYm91dCBSZWFsdGVrIFJURCBTb0Nz
+IGFyY2hpdGVjdHVyZS4NCj4gPiAgICAgMy4gUmVtb3ZlZCBwYXJhbWV0ZXIgdjEgc3VwcG9ydCBm
+b3Igc2ltcGxpZmljYXRpb24uDQo+ID4gICAgIDQuIFJldmlzZWQgdGhlIGNvbXBhdGlibGUgbmFt
+ZSBmb3IgZmFsbGJhY2sgY29tcGF0aWJsZS4NCj4gPiAgICAgNS4gUmVtb3ZlIHNvbWUgcHJvcGVy
+dGllcyB0aGF0IGNhbiBiZSBzZXQgaW4gdGhlIGRyaXZlci4NCj4gPiB2MSB0byB2MiBjaGFuZ2U6
+DQo+ID4gICAgIEFkZCBwaHktY2VsbHMgZm9yIGdlbmVyaWMgcGh5IGRyaXZlcg0KPiA+IC0tLQ0K
+PiA+ICAuLi4vYmluZGluZ3MvcGh5L3JlYWx0ZWssdXNiMnBoeS55YW1sICAgICAgICAgfCAyMTMN
+Cj4gKysrKysrKysrKysrKysrKysrDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAyMTMgaW5zZXJ0aW9u
+cygrKQ0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQNCj4gPiBEb2N1bWVudGF0aW9uL2RldmljZXRy
+ZWUvYmluZGluZ3MvcGh5L3JlYWx0ZWssdXNiMnBoeS55YW1sDQo+ID4NCj4gPiBkaWZmIC0tZ2l0
+DQo+ID4gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcGh5L3JlYWx0ZWssdXNi
+MnBoeS55YW1sDQo+ID4gYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcGh5L3Jl
+YWx0ZWssdXNiMnBoeS55YW1sDQo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gPiBpbmRleCAw
+MDAwMDAwMDAwMDAuLjY5OTExZTIwYTU2MQ0KPiA+IC0tLSAvZGV2L251bGwNCj4gPiArKysgYi9E
+b2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcGh5L3JlYWx0ZWssdXNiMnBoeS55YW1s
+DQo+ID4gQEAgLTAsMCArMSwyMTMgQEANCj4gPiArIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjog
+KEdQTC0yLjAgT1IgQlNELTItQ2xhdXNlKSAjIENvcHlyaWdodCAyMDIzDQo+ID4gK1JlYWx0ZWsg
+U2VtaWNvbmR1Y3RvciBDb3Jwb3JhdGlvbiAlWUFNTCAxLjINCj4gPiArLS0tDQo+ID4gKyRpZDog
+aHR0cDovL2RldmljZXRyZWUub3JnL3NjaGVtYXMvcGh5L3JlYWx0ZWssdXNiMnBoeS55YW1sIw0K
+PiA+ICskc2NoZW1hOiBodHRwOi8vZGV2aWNldHJlZS5vcmcvbWV0YS1zY2hlbWFzL2NvcmUueWFt
+bCMNCj4gPiArDQo+ID4gK3RpdGxlOiBSZWFsdGVrIERIQyBTb0NzIFVTQiAyLjAgUEhZDQo+ID4g
+Kw0KPiA+ICttYWludGFpbmVyczoNCj4gPiArICAtIFN0YW5sZXkgQ2hhbmcgPHN0YW5sZXlfY2hh
+bmdAcmVhbHRlay5jb20+DQo+ID4gKw0KPiA+ICtkZXNjcmlwdGlvbjoNCj4gPiArICBSZWFsdGVr
+IFVTQiAyLjAgUEhZIHN1cHBvcnQgdGhlIGRpZ2l0YWwgaG9tZSBjZW50ZXIgKERIQykgUlREIHNl
+cmllcw0KPiBTb0NzLg0KPiA+ICsgIFRoZSBVU0IgMi4wIFBIWSBkcml2ZXIgaXMgZGVzaWduZWQg
+dG8gc3VwcG9ydCB0aGUgWEhDSSBjb250cm9sbGVyLg0KPiA+ICtUaGUgU29Dcw0KPiA+ICsgIHN1
+cHBvcnQgbXVsdGlwbGUgWEhDSSBjb250cm9sbGVycy4gT25lIFBIWSBkZXZpY2Ugbm9kZSBtYXBz
+IHRvIG9uZQ0KPiA+ICtYSENJDQo+ID4gKyAgY29udHJvbGxlci4NCj4gPiArDQo+ID4gKyAgUlRE
+MTI5NS9SVEQxNjE5IFNvQ3MgVVNCDQo+ID4gKyAgVGhlIFVTQiBhcmNoaXRlY3R1cmUgaW5jbHVk
+ZXMgdGhyZWUgWEhDSSBjb250cm9sbGVycy4NCj4gPiArICBFYWNoIFhIQ0kgbWFwcyB0byBvbmUg
+VVNCIDIuMCBQSFkgYW5kIG1hcCBvbmUgVVNCIDMuMCBQSFkgb24gc29tZQ0KPiA+ICsgY29udHJv
+bGxlcnMuDQo+ID4gKyAgWEhDSSBjb250cm9sbGVyIzAgLS0gdXNiMnBoeSAtLSBwaHkjMA0KPiA+
+ICsgICAgICAgICAgICAgICAgICAgIHwtIHVzYjNwaHkgLS0gcGh5IzAgIFhIQ0kgY29udHJvbGxl
+ciMxIC0tIHVzYjJwaHkNCj4gPiArIC0tIHBoeSMwICBYSENJIGNvbnRyb2xsZXIjMiAtLSB1c2Iy
+cGh5IC0tIHBoeSMwDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgfC0gdXNiM3BoeSAtLSBwaHkj
+MA0KPiA+ICsNCj4gPiArICBSVEQxMzk1IFNvQ3MgVVNCDQo+ID4gKyAgVGhlIFVTQiBhcmNoaXRl
+Y3R1cmUgaW5jbHVkZXMgdHdvIFhIQ0kgY29udHJvbGxlcnMuDQo+ID4gKyAgVGhlIGNvbnRyb2xs
+ZXIjMCBoYXMgb25lIFVTQiAyLjAgUEhZLiBUaGUgY29udHJvbGxlciMxIGluY2x1ZGVzIHR3bw0K
+PiA+ICsgVVNCIDIuMCAgUEhZLg0KPiA+ICsgIFhIQ0kgY29udHJvbGxlciMwIC0tIHVzYjJwaHkg
+LS0gcGh5IzAgIFhIQ0kgY29udHJvbGxlciMxIC0tIHVzYjJwaHkNCj4gPiArIC0tIHBoeSMwDQo+
+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8LSBwaHkjMQ0KPiA+ICsNCj4gPiAr
+ICBSVEQxMzE5L1JURDE2MTliIFNvQ3MgVVNCDQo+ID4gKyAgVGhlIFVTQiBhcmNoaXRlY3R1cmUg
+aW5jbHVkZXMgdGhyZWUgWEhDSSBjb250cm9sbGVycy4NCj4gPiArICBFYWNoIFhIQ0kgbWFwcyB0
+byBvbmUgVVNCIDIuMCBQSFkgYW5kIG1hcCBvbmUgVVNCIDMuMCBQSFkgb24NCj4gY29udHJvbGxl
+cnMjMi4NCj4gPiArICBYSENJIGNvbnRyb2xsZXIjMCAtLSB1c2IycGh5IC0tIHBoeSMwICBYSENJ
+IGNvbnRyb2xsZXIjMSAtLSB1c2IycGh5DQo+ID4gKyAtLSBwaHkjMCAgWEhDSSBjb250cm9sbGVy
+IzIgLS0gdXNiMnBoeSAtLSBwaHkjMA0KPiA+ICsgICAgICAgICAgICAgICAgICAgIHwtIHVzYjNw
+aHkgLS0gcGh5IzANCj4gPiArDQo+ID4gKyAgUlREMTMxOWQgU29DcyBVU0INCj4gPiArICBUaGUg
+VVNCIGFyY2hpdGVjdHVyZSBpbmNsdWRlcyB0aHJlZSBYSENJIGNvbnRyb2xsZXJzLg0KPiA+ICsg
+IEVhY2ggeGhjaSBtYXBzIHRvIG9uZSBVU0IgMi4wIFBIWSBhbmQgbWFwIG9uZSBVU0IgMy4wIFBI
+WSBvbg0KPiBjb250cm9sbGVycyMwLg0KPiA+ICsgIFhIQ0kgY29udHJvbGxlciMwIC0tIHVzYjJw
+aHkgLS0gcGh5IzANCj4gPiArICAgICAgICAgICAgICAgICAgICB8LSB1c2IzcGh5IC0tIHBoeSMw
+ICBYSENJIGNvbnRyb2xsZXIjMSAtLSB1c2IycGh5DQo+ID4gKyAtLSBwaHkjMCAgWEhDSSBjb250
+cm9sbGVyIzIgLS0gdXNiMnBoeSAtLSBwaHkjMA0KPiA+ICsNCj4gPiArICBSVEQxMzEyYy9SVEQx
+MzE1ZSBTb0NzIFVTQg0KPiA+ICsgIFRoZSBVU0IgYXJjaGl0ZWN0dXJlIGluY2x1ZGVzIHRocmVl
+IFhIQ0kgY29udHJvbGxlcnMuDQo+ID4gKyAgRWFjaCBYSENJIG1hcHMgdG8gb25lIFVTQiAyLjAg
+UEhZLg0KPiA+ICsgIFhIQ0kgY29udHJvbGxlciMwIC0tIHVzYjJwaHkgLS0gcGh5IzAgIFhIQ0kg
+Y29udHJvbGxlciMxIC0tIHVzYjJwaHkNCj4gPiArIC0tIHBoeSMwICBYSENJIGNvbnRyb2xsZXIj
+MiAtLSB1c2IycGh5IC0tIHBoeSMwDQo+ID4gKw0KPiA+ICtwcm9wZXJ0aWVzOg0KPiA+ICsgIGNv
+bXBhdGlibGU6DQo+ID4gKyAgICBpdGVtczoNCj4gPiArICAgICAgLSBlbnVtOg0KPiA+ICsgICAg
+ICAgICAgLSByZWFsdGVrLHJ0ZDEyOTUtdXNiMnBoeQ0KPiA+ICsgICAgICAgICAgLSByZWFsdGVr
+LHJ0ZDEzOTUtdXNiMnBoeQ0KPiA+ICsgICAgICAgICAgLSByZWFsdGVrLHJ0ZDE2MTktdXNiMnBo
+eQ0KPiA+ICsgICAgICAgICAgLSByZWFsdGVrLHJ0ZDEzMTktdXNiMnBoeQ0KPiA+ICsgICAgICAg
+ICAgLSByZWFsdGVrLHJ0ZDE2MTliLXVzYjJwaHkNCj4gPiArICAgICAgICAgIC0gcmVhbHRlayxy
+dGQxMzEyYy11c2IycGh5DQo+ID4gKyAgICAgICAgICAtIHJlYWx0ZWsscnRkMTMxOWQtdXNiMnBo
+eQ0KPiA+ICsgICAgICAgICAgLSByZWFsdGVrLHJ0ZDEzMTVlLXVzYjJwaHkNCj4gDQo+IEtlZXAg
+ZW50cmllcyBvcmRlcmVkIGFscGhhYmV0aWNhbGx5Lg0KDQpPa2F5Lg0KDQo+ID4gKyAgICAgIC0g
+Y29uc3Q6IHJlYWx0ZWssdXNiMnBoeQ0KPiA+ICsNCj4gPiArICByZWc6DQo+ID4gKyAgICBpdGVt
+czoNCj4gPiArICAgICAgLSBkZXNjcmlwdGlvbjogUEhZIGRhdGEgcmVnaXN0ZXJzDQo+ID4gKyAg
+ICAgIC0gZGVzY3JpcHRpb246IFBIWSBjb250cm9sIHJlZ2lzdGVycw0KPiA+ICsNCj4gPiArICAi
+I2FkZHJlc3MtY2VsbHMiOg0KPiA+ICsgICAgY29uc3Q6IDENCj4gPiArDQo+ID4gKyAgIiNzaXpl
+LWNlbGxzIjoNCj4gPiArICAgIGNvbnN0OiAwDQo+ID4gKw0KPiA+ICsgICIjcGh5LWNlbGxzIjoN
+Cj4gPiArICAgIGNvbnN0OiAwDQo+ID4gKw0KPiA+ICsgIHJlYWx0ZWssdXNiLWN0cmw6DQo+ID4g
+KyAgICBkZXNjcmlwdGlvbjogVGhlIHBoYW5kbGUgb2Ygc3lzY29uIHVzZWQgdG8gY29udHJvbCBV
+U0IgUEhZIHBvd2VyDQo+IGRvbWFpbi4NCj4gPiArICAgICRyZWY6IC9zY2hlbWFzL3R5cGVzLnlh
+bWwjL2RlZmluaXRpb25zL3BoYW5kbGUNCj4gDQo+IE5vLCB3ZSBoYXZlIHBvd2VyLWRvbWFpbnMg
+Zm9yIHRoaXMuDQoNCk1heWJlIEkgdXNlIHRoZSB3b3JkICJjb250cm9sIHBvd2VyIGRvbWFpbiIg
+aXMgbm90IHdlbGwsIEkganVzdCB3YW50IHRvIGNvbnRyb2wgdGhlIGxkbyBvZiB1c2IgcGh5Lg0K
+UmV2aXNlZDoNClRoZSBwaGFuZGxlIG9mIHN5c2NvbiB1c2VkIHRvIGNvbnRyb2wgdGhlIGxkbyBv
+ZiBVU0IgUEhZLg0KDQo+ID4gKw0KPiA+ICtwYXR0ZXJuUHJvcGVydGllczoNCj4gPiArICAiXnBo
+eUBbMC0zXSskIjoNCj4gPiArICAgIHR5cGU6IG9iamVjdA0KPiA+ICsgICAgZGVzY3JpcHRpb246
+DQo+ID4gKyAgICAgIEVhY2ggc3ViLW5vZGUgaXMgYSBQSFkgZGV2aWNlIGZvciBvbmUgWEhDSSBj
+b250cm9sbGVyLg0KPiANCj4gSSBkb24ndCB0aGluayBpdCBpcyB0cnVlLiBZb3UgY2xhaW0gYWJv
+dmUgdGhhdCB5b3UgaGF2ZSAwIGFzIHBoeS1jZWxscywgbWVhbnMgeW91DQo+IGhhdmUgb25lIHBo
+eS4gSGVyZSB5b3Ugc2F5IHlvdSBjYW4gaGF2ZSB1cCB0byA0IHBoeXMuDQoNCkkgbWVhbiB0aGUg
+ZHJpdmVyIGNhbiBzdXBwb3J0IHVwIHRvIDQgcGh5cy4NCkZvciBSVEQxMjk1IGhhcyBvbmx5IG9u
+ZSBwaHkuDQpGb3IgUlREMTM5NSBoYXMgdHdvIHBoeXMuDQoNCj4gPiArICAgICAgRm9yIG1vc3Qg
+UmVsYXRlayBTb0NzLCBvbmUgWEhDSSBjb250cm9sbGVyIG9ubHkgc3VwcG9ydCBvbmUgdGhlIFVT
+Qg0KPiAyLjANCj4gPiArICAgICAgcGh5LiBGb3IgUlREMTM5NSBTb0MsIHRoZSBvbmUgWEhDSSBj
+b250cm9sbGVyIGhhcyB0d28gVVNCIDIuMA0KPiBQSFlzLg0KPiA+ICsgICAgcHJvcGVydGllczoN
+Cj4gPiArICAgICAgcmVhbHRlayxwYWdlMC1wYXJhbToNCj4gPiArICAgICAgICBkZXNjcmlwdGlv
+bjogUEhZIHBhcmFtZXRlciBhdCBwYWdlIDAuIFRoZSBkYXRhIGFyZSB0aGUgcGFpciBvZg0KPiB0
+aGUNCj4gPiArICAgICAgICAgIG9mZnNldCBhbmQgdmFsdWUuDQo+IA0KPiBUaGlzIG5lZWRzIHRv
+IGJlIHNwZWNpZmljLiBXaGF0IHRoZSBoZWNrIGlzICJQSFkgcGFyYW1ldGVyIj8NCj4gDQo+ID4g
+KyAgICAgICAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDMyLWFy
+cmF5DQo+IA0KPiBBcnJheT8gVGhlbiBtYXhJdGVtcy4NCkkgaGF2ZSBmb3VuZCBvdGhlciBkb2N1
+bWVudC4NCkl0IHNob3VsZCBiZSBhIHVpbnQzMi1tYXRyaXguDQpJIHdpbGwgYWRkIHRoZSBtYXhJ
+dGVtcy4NCg0KPiA+ICsNCj4gPiArICAgICAgcmVhbHRlayxwYWdlMS1wYXJhbToNCj4gPiArICAg
+ICAgICBkZXNjcmlwdGlvbjogUEhZIHBhcmFtZXRlciBhdCBwYWdlIDEuIFRoZSBkYXRhIGFyZSB0
+aGUgcGFpciBvZg0KPiB0aGUNCj4gPiArICAgICAgICAgIG9mZnNldCBhbmQgdmFsdWUuDQo+ID4g
+KyAgICAgICAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDMyLWFy
+cmF5DQo+ID4gKw0KPiA+ICsgICAgICByZWFsdGVrLHBhZ2UyLXBhcmFtOg0KPiA+ICsgICAgICAg
+IGRlc2NyaXB0aW9uOiBQSFkgcGFyYW1ldGVyIGF0IHBhZ2UgMi4gVGhlIGRhdGEgYXJlIHRoZSBw
+YWlyIG9mDQo+IHRoZQ0KPiA+ICsgICAgICAgICAgb2Zmc2V0IGFuZCB2YWx1ZS4gSWYgdGhlIFBI
+WSBzdXBwb3J0IHRoZSBwYWdlIDIgcGFyYW1ldGVyLg0KPiA+ICsgICAgICAgICRyZWY6IC9zY2hl
+bWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL3VpbnQzMi1hcnJheQ0KPiA+ICsNCj4gPiArICAg
+ICAgcmVhbHRlayxzdXBwb3J0LXBhZ2UyLXBhcmFtOg0KPiA+ICsgICAgICAgIGRlc2NyaXB0aW9u
+OiBTZXQgdGhpcyBmbGFnIGlmIFBIWSBzdXBwb3J0IHBhZ2UgMiBwYXJhbWV0ZXIuDQo+IA0KPiBX
+aHkgdGhpcyBjYW5ub3QgYmUgZGVkdWN0ZWQgZnJvbSBjb21wYXRpYmxlPw0KSXQgY2FuIGlkZW50
+aWZ5IGJ5IGNvbXBhdGlibGUuDQoNCj4gDQo+ID4gKyAgICAgICAgdHlwZTogYm9vbGVhbg0KPiA+
+ICsNCj4gPiArICAgICAgcmVhbHRlayxkby10b2dnbGU6DQo+ID4gKyAgICAgICAgZGVzY3JpcHRp
+b246IFNldCB0aGlzIGZsYWcgdG8gZW5hYmxlIFBIWSBwYXJhbWV0ZXIgdG9nZ2xlIHdoZW4NCj4g
+cG9ydA0KPiA+ICsgICAgICAgICAgc3RhdHVzIGNoYW5nZS4NCj4gDQo+IERvIG5vdCBpbnN0cnVj
+dCBPUyB3aGF0IHRvIGRvLiBFeHBsYWluIHdoeSB0aGlzIGlzIGEgaGFyZHdhcmUgY2hhcmFjdGVy
+aXN0aWMuDQoNCkluIG15IG9yaWdpbmFsIGludGVudGlvbiwgd2UgaG9wZSB0aGF0IHRoaXMgcHJv
+cGVydHkgY2FuIGJlIHVzZWQgdG8gY29udHJvbCB0aGUgcGh5IGRyaXZlciBkbyBwYXJhbWV0ZXIg
+dG9nZ2xlLg0KSXMgaXQgYSBoYXJkd2FyZSBjaGFyYWN0ZXJpc3RpYz8gSSBkb24ndCB0aGluayBp
+dCdzIGV4YWN0bHkgYSBoYXJkd2FyZSBmZWF0dXJlLg0KTWF5YmUgaXQgY2FuIGJlIHNwZWNpZmll
+ZCBieSB0aGUgY29tcGF0aWJsZS4NCg0KPiA+ICsgICAgICAgIHR5cGU6IGJvb2xlYW4NCj4gPiAr
+DQo+ID4gKyAgICAgIHJlYWx0ZWssZG8tdG9nZ2xlLWRyaXZpbmc6DQo+ID4gKyAgICAgICAgZGVz
+Y3JpcHRpb246IFNldCB0aGlzIGZsYWcgdG8gZW5hYmxlIFBIWSBwYXJhbWV0ZXIgdG9nZ2xlIGZv
+cg0KPiBhZGp1c3QNCj4gPiArICAgICAgICAgIHRoZSBkcml2aW5nIHdoZW4gcG9ydCBzdGF0dXMg
+Y2hhbmdlLg0KPiANCj4gRG8gbm90IGluc3RydWN0IE9TIHdoYXQgdG8gZG8uIEV4cGxhaW4gd2h5
+IHRoaXMgaXMgYSBoYXJkd2FyZSBjaGFyYWN0ZXJpc3RpYy4NCj4gDQo+IA0KPiA+ICsgICAgICAg
+IHR5cGU6IGJvb2xlYW4NCj4gPiArDQo+ID4gKyAgICAgIHJlYWx0ZWssY2hlY2stZWZ1c2U6DQo+
+ID4gKyAgICAgICAgZGVzY3JpcHRpb246IEVuYWJsZSB0byB1cGRhdGUgUEhZIHBhcmFtZXRlciBm
+cm9tIHJlYWRpbmcgb3RwDQo+IHRhYmxlLg0KPiANCj4gRG8gbm90IGluc3RydWN0IE9TIHdoYXQg
+dG8gZG8uIEV4cGxhaW4gd2h5IHRoaXMgaXMgYSBoYXJkd2FyZSBjaGFyYWN0ZXJpc3RpYy4NCg0K
+U2FtZSBhYm92ZS4NCg0KPiA+ICsgICAgICAgIHR5cGU6IGJvb2xlYW4NCj4gPiArDQo+ID4gKyAg
+ICAgIHJlYWx0ZWssdXNlLWRlZmF1bHQtcGFyYW1ldGVyOg0KPiA+ICsgICAgICAgIGRlc2NyaXB0
+aW9uOiBEb24ndCBzZXQgcGFyYW1ldGVyIGFuZCB1c2UgZGVmYXVsdCB2YWx1ZSBpbg0KPiBoYXJk
+d2FyZS4NCj4gDQo+IE5BSywgeW91IGFyZSBqdXN0IG1ha2luZyB0aGluZ3MgdXAuDQpUaGlzIGlz
+IGEgc29mdHdhcmUgZmxvdyBjb250cm9sLg0KSSB3aWxsIHJlbW92ZSBpdC4NCg0KPiANCj4gPiAr
+ICAgICAgICB0eXBlOiBib29sZWFuDQo+ID4gKw0KPiA+ICsgICAgICByZWFsdGVrLGlzLWRvdWJs
+ZS1zZW5zaXRpdml0eS1tb2RlOg0KPiA+ICsgICAgICAgIGRlc2NyaXB0aW9uOiBTZXQgdGhpcyBm
+bGFnIHRvIGVuYWJsZSBkb3VibGUgc2Vuc2l0aXZpdHkgbW9kZS4NCj4gDQo+IEFsbCB5b3VyIGRl
+c2NyaXB0aW9ucyBjb3B5IHRoZSBuYW1lIG9mIHByb3BlcnR5LiBZb3UgYmFzaWNhbGx5IHNheSBu
+b3RoaW5nIG1vcmUuDQo+IEkgYWxyZWFkeSBtZW50aW9uZWQgdGhpcyBiZWZvcmUuIERvbid0IGln
+bm9yZSB0aGUgZmVlZGJhY2ssIGJ1dCBhZGRyZXNzIGl0Lg0KDQpJIHdpbGwgaW1wcm92ZSB0aGlz
+Lg0KDQo+ID4gKyAgICAgICAgdHlwZTogYm9vbGVhbg0KPiA+ICsNCj4gPiArICAgICAgcmVhbHRl
+ayxsZG8tZm9yY2UtZW5hYmxlOg0KPiA+ICsgICAgICAgIGRlc2NyaXB0aW9uOiBTZXQgdGhpcyBm
+bGFnIHRvIGZvcmNlIGVuYWJsZSBsZG8gbW9kZS4NCj4gDQo+IERyb3AgZXZlcnl3aGVyZSAiU2V0
+IHRoaXMgZmxhZyB0byIsIGJlY2F1c2UgaXQgaXMgcmVkdW5kYW50LiBOb3cgY29tcGFyZSB3aGF0
+DQo+IGlzIGxlZnQgd2l0aCBwcm9wZXJ0eSBuYW1lLg0KPiANCj4gUHJvcGVydHkgbmFtZTogcmVh
+bHRlayxsZG8tZm9yY2UtZW5hYmxlDQo+IFlvdXIgZGVzY3JpcHRpb246ICJmb3JjZSBlbmFibGUg
+bGRvIG1vZGUiDQo+IA0KPiBIb3cgaXMgdGhpcyBoZWxwZnVsIHRvIGFueWJvZHk/DQoNClRoaXMg
+aXMgYSBzb2Z0d2FyZSBmbG93IGNvbnRyb2wuDQpJIHdpbGwgcmVtb3ZlIGl0Lg0KDQpUaGFua3Ms
+DQpTdGFubGV5DQouDQo=
