@@ -2,57 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27DF97280D6
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 15:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A7E7280E4
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 15:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236656AbjFHNC6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jun 2023 09:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
+        id S236512AbjFHNJE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jun 2023 09:09:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236617AbjFHNCy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 09:02:54 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767C226B3
-        for <linux-usb@vger.kernel.org>; Thu,  8 Jun 2023 06:02:52 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-65131e85be4so491269b3a.1
-        for <linux-usb@vger.kernel.org>; Thu, 08 Jun 2023 06:02:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686229372; x=1688821372;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=kW5FnoKH7KmkpYlZqwEQzZ4Llthi1qtTvmtw7Q6w08w=;
-        b=cn4MYvLNxKBjLwr4MoPYNSbR33ipLaeNSe1gXAqV8Zp4oJnJKSCIJlkFad0n848TI9
-         Erqj1vrIZT00tlp215b8GpzUO4keUAe+BKUjsBcbJp1Oebx8XEwYHOrEUKLqmg0Og3pA
-         ufsCUJnqlm2WbYx1gCAcYb5CBGZp3u3oIPV3q7DGkxS9JxiTK1L6UwAqzVFqTwk2sP7J
-         CuPL6XcsU6/2ujXb4UJKlCZ5hswNDI2D11LidTg3RMxtwbS5cazDn2uFV6rnndsG+ZYV
-         oa1diprkux7d8iOR+ar7WkPMQeAVMaSGP46xrmcdP4EuIqDkBelwgbRzF9ONz3jcu6I0
-         /hMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686229372; x=1688821372;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kW5FnoKH7KmkpYlZqwEQzZ4Llthi1qtTvmtw7Q6w08w=;
-        b=ASwCDuRrW2buby96CeVCN/soqeF8qS2ZhubbGpd+OiojDLM/niB+SaQ7rvTKhRQKBd
-         uVmpj5xbtb1OZ6yHAS1e1VVfrPFaZFFYQQxtcV8uIH6Bx+lgc44mB67zEiIoinqe+BCp
-         q59D1sgS6vMBimBYt6eiF3sz3kazbOTzMAf9EM+FDL6sx69C3vph7VOYDOSrGIvNJei2
-         xGTRuYhLe61X4cDh6m+MdtOP0UTj3QqVdUMtihqaEXuIo4aHOBtlNZHhjsAmmhZ1Vd/g
-         6jwu3KiFOtaUyxFYKZw8BfPKp0HjeuvbRFcnxpBhdzGxf/c/acg06rFZOZoZ4hQBmNlK
-         mGlQ==
-X-Gm-Message-State: AC+VfDyx2YQ3fHbsCIH3gH031Lri6bogKkm1TC8FCjdVA15Yjy8QyF+a
-        oV0cSZrct0mc36nwAcbOJ5uZ
-X-Google-Smtp-Source: ACHHUZ6/y7oKCY50CIIGwomUoDVxX5cSvlwoKVjD7S+7FZD+2ikjnGdNKQLV4ee6jPPR6diEJfGZ0A==
-X-Received: by 2002:a17:902:f684:b0:1a6:6fe3:df8d with SMTP id l4-20020a170902f68400b001a66fe3df8dmr10831013plg.8.1686229371840;
-        Thu, 08 Jun 2023 06:02:51 -0700 (PDT)
-Received: from thinkpad ([117.202.186.138])
-        by smtp.gmail.com with ESMTPSA id jh11-20020a170903328b00b001b077301a58sm1407428plb.79.2023.06.08.06.02.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 06:02:51 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 18:32:46 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        with ESMTP id S232139AbjFHNJD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 09:09:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D94F1988;
+        Thu,  8 Jun 2023 06:09:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2FCC64D67;
+        Thu,  8 Jun 2023 13:09:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF4E8C433EF;
+        Thu,  8 Jun 2023 13:09:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686229742;
+        bh=XJFyzxyzQog03Y2H8SeTcQtE79dhC9sQakEAuil2jm0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cX5KA6wERDqpAZubEQUCvUoHTzVVo13JHxluW9SV1bfTnbnEFXQ//RyyxhOojGYze
+         ADVkS7ItlgonD3M9nO2F8Rl5Okj88hKxtzT8pAADaF8+sAene36qINELweca3Jnrw7
+         fpmOuc8PDUGxjbl8+9+a2JwOSOfyo8mxx6wcPyYwa+AIFSMiHUvRsbxU9HVDAsCxRY
+         VJlDfZXplN+wz4mBfzBdbKPGDfQgHVXV0zTCjcXL5DIr5sq/MSvWog7pF1uIVCS1nJ
+         Lr7O9++v+MngJQ6FT79yG/kQyuYVc4VDZbpY422NhRpHl/bG1Q14dLYJxjd/cI03J+
+         eQPAzEolN9kvg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1q7FOJ-0007xj-JZ; Thu, 08 Jun 2023 15:09:27 +0200
+Date:   Thu, 8 Jun 2023 15:09:27 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -63,70 +49,53 @@ Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Li Jun <jun.li@nxp.com>,
         Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 Subject: Re: [PATCH 2/2] USB: dwc3: fix use-after-free on core driver unbind
-Message-ID: <20230608130246.GF5672@thinkpad>
+Message-ID: <ZIHTBw3pMNjieVyj@hovoldconsulting.com>
 References: <20230607100540.31045-1-johan+linaro@kernel.org>
  <20230607100540.31045-3-johan+linaro@kernel.org>
+ <20230608130246.GF5672@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230607100540.31045-3-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230608130246.GF5672@thinkpad>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 12:05:40PM +0200, Johan Hovold wrote:
-> Some dwc3 glue drivers are currently accessing the driver data of the
-> child core device directly, which is clearly a bad idea as the child may
-> not have probed yet or may have been unbound from its driver.
-> 
-> As a workaround until the glue drivers have been fixed, clear the driver
-> data pointer before allowing the glue parent device to runtime suspend
-> to prevent its driver from accessing data that has been freed during
-> unbind.
-> 
-> Fixes: 6dd2565989b4 ("usb: dwc3: add imx8mp dwc3 glue layer driver")
-> Fixes: 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
-> Cc: stable@vger.kernel.org      # 5.12
-> Cc: Li Jun <jun.li@nxp.com>
-> Cc: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> Cc: Krishna Kurapati <quic_kriskura@quicinc.com>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  drivers/usb/dwc3/core.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 7b2ce013cc5b..d68958e151a7 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1929,6 +1929,11 @@ static int dwc3_remove(struct platform_device *pdev)
->  	pm_runtime_disable(&pdev->dev);
->  	pm_runtime_dont_use_autosuspend(&pdev->dev);
->  	pm_runtime_put_noidle(&pdev->dev);
-> +	/*
-> +	 * HACK: Clear the driver data, which is currently accessed by parent
-> +	 * glue drivers, before allowing the parent to suspend.
-> +	 */
-> +	platform_set_drvdata(pdev, NULL);
+On Thu, Jun 08, 2023 at 06:32:46PM +0530, Manivannan Sadhasivam wrote:
+> On Wed, Jun 07, 2023 at 12:05:40PM +0200, Johan Hovold wrote:
+> > Some dwc3 glue drivers are currently accessing the driver data of the
+> > child core device directly, which is clearly a bad idea as the child may
+> > not have probed yet or may have been unbound from its driver.
+> > 
+> > As a workaround until the glue drivers have been fixed, clear the driver
+> > data pointer before allowing the glue parent device to runtime suspend
+> > to prevent its driver from accessing data that has been freed during
+> > unbind.
 
-This is required because you have seen the glue driver going to runtime suspend
-once the below pm_runtime_set_suspended() is completed?
-
-- Mani
-
->  	pm_runtime_set_suspended(&pdev->dev);
->  
->  	dwc3_free_event_buffers(dwc);
-> -- 
-> 2.39.3
+> > @@ -1929,6 +1929,11 @@ static int dwc3_remove(struct platform_device *pdev)
+> >  	pm_runtime_disable(&pdev->dev);
+> >  	pm_runtime_dont_use_autosuspend(&pdev->dev);
+> >  	pm_runtime_put_noidle(&pdev->dev);
+> > +	/*
+> > +	 * HACK: Clear the driver data, which is currently accessed by parent
+> > +	 * glue drivers, before allowing the parent to suspend.
+> > +	 */
+> > +	platform_set_drvdata(pdev, NULL);
 > 
+> This is required because you have seen the glue driver going to runtime suspend
+> once the below pm_runtime_set_suspended() is completed?
 
--- 
-மணிவண்ணன் சதாசிவம்
+This is based on analysis of the code. The parent (glue) can not suspend
+while the child (core) is in the active state, but once we set the
+suspended state that could happen.
+
+> >  
+> >  	dwc3_free_event_buffers(dwc);
+
+Johan
