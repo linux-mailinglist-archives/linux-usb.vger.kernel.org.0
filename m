@@ -2,64 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A7B7274F8
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 04:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A5A727564
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 05:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233071AbjFHCXK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Jun 2023 22:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S233381AbjFHDDg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Jun 2023 23:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbjFHCXJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 22:23:09 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC2D26A9;
-        Wed,  7 Jun 2023 19:23:08 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id 5614622812f47-39aa8a055ecso108740b6e.1;
-        Wed, 07 Jun 2023 19:23:08 -0700 (PDT)
+        with ESMTP id S231302AbjFHDDe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 23:03:34 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8BB2115;
+        Wed,  7 Jun 2023 20:03:32 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id 46e09a7af769-6b291d55f52so60782a34.2;
+        Wed, 07 Jun 2023 20:03:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686190988; x=1688782988;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rGkkSk0/C4/bnQbcrMfm2tdEZYME20m/Bpb2UhtM8LM=;
-        b=kO58IsSUgv7SxdqON7BQ46Mli60Pvg5kOD7zIwFnl6uM4cdbqwwZ7i3QFkOTSNX0Xd
-         Q3tlA/EspBc8nb9U7J+jDzy4Q8ZIAYghNiSYXIDz4p1kgkhMP7Au/C2VTQZFTRWOg3Ly
-         q/MoHvnu4HiPSDc59SYgnu5q2XI+1579WnyFhbQXrzRwUfWBUAEmY7Ec93qiSFCKSFdA
-         rp2H/rS/382h3CRSaqy3H9JkBzSjEapnRU3+9TZgkAGiZBg0eOgTrTymQR1G9T2z9sNF
-         AMgeNnybekX6wJ3rSHjPCcRkwvNtrPP/6gdaAdQpwifXXeUe+AG6PH+hoLBm/XmcHypJ
-         zQlw==
+        d=gmail.com; s=20221208; t=1686193412; x=1688785412;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZIJSy3f8mfMTvVk+C/jv8xuqI307FWWCGcIcKPcWwQA=;
+        b=A3Se/JedcbFPQpz/OS95VPY+fztk8F3cGTFsYO+ezyPvH7JQ7xM+jwL12g6rYNpPAq
+         bl+IP1LwNB3c2YUfOCBRPTJmRusoynQoCOHuU3vR0IkJO8lEm46Uw452w8xunCn3cbTi
+         WB1W3/1FTYz5ynctELrcwTWeQ2qXQH1Rf1wm0Qtack1exdIDczkuz/sBG7/bxBLvhZPt
+         yoZZZiKez4pfVZ7WKNSKMArsZ5LmlxU9iZn5Ab1nu9fltKiA0gLP+HHCCrwKhlcFSJVG
+         Nw3cuMK7L4n2S98YVS+2LIrFoqMA2pMsM+4KbKRTtx5+K+TJYm3AC4yUxWRuvMQReiLS
+         /7Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686190988; x=1688782988;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rGkkSk0/C4/bnQbcrMfm2tdEZYME20m/Bpb2UhtM8LM=;
-        b=NnCTJ3OyS62tGwXKEbKWwfVEuqSrwZUif5V+jvlaGMYLNySCZ752OFt7wubtlXt2T7
-         GmKxa3SBjOFWSjHBeIovjursEg3aIcArfPwwQnsV03YBjQBqkaLmnB49ckHqL1uyxlZU
-         NnAHavKrht2z3fEoDee1y6GtBojll4RIHcUdYS0PKBAx9Tn4OI9uN0l531epllfdn6oi
-         wo+aPhVNFAIRGU9W0FKBcSJhU5xP4/qBQHFcyXr0JeFBTxJsO+/6Y3dM3hVK1q1ztLmZ
-         gcoPlLewLV7rAZEKxfvtdkjoA0zQU0LeGKFqpmsCrNFMV4uAMdFXzcC5FeXZXU8+sE/p
-         TTeA==
-X-Gm-Message-State: AC+VfDwxRW6sEdl2ptE5QGdN+LkSDPwAsTd8YEbKZ8quVHpNbLy7HeeH
-        LdzvtkaWF5v/WssM/g/G7psIXCPjML0QSZdPvck=
-X-Google-Smtp-Source: ACHHUZ5u2kIvMA9SzdMee8mj5Xc/KyNzZBta5YguCmcEUqLwQ7OVJ/waKJh8OOV7pJKSj/1A/1fLBH15qLn37Gz/WS8=
-X-Received: by 2002:aca:b941:0:b0:39c:7f78:ba6d with SMTP id
- j62-20020acab941000000b0039c7f78ba6dmr62541oif.19.1686190987911; Wed, 07 Jun
- 2023 19:23:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230602054112.2299565-1-wes.huang@moxa.com> <87y1l2m7u5.fsf@miraculix.mork.no>
-In-Reply-To: <87y1l2m7u5.fsf@miraculix.mork.no>
+        d=1e100.net; s=20221208; t=1686193412; x=1688785412;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZIJSy3f8mfMTvVk+C/jv8xuqI307FWWCGcIcKPcWwQA=;
+        b=GXXWnmdvijTWV0kXXld5Amz9xfUfmFJ/wissHHCl+c6H4wf8pISxejRHRqolD8TcEK
+         hIRBmKhwpiR5nqOu0yOE1ebHkYLzvaKDxg6cN1GFYpFUvGMJFk6M+VbmHvsktjq/HBSY
+         LV4kFq0O3Ykid18wouRDWydJdE63zQVDYFo2l8xB3GNFwdXitRHI2WJ6bG1VPwTDYY08
+         7TGbKhXNYiHwhkNQ0G7Mr3a8Z9SwFnwcJEOTj42mjzmTVHo3mlpBNPyAx11+fiDxyKbb
+         fod8O7ZsPQsOv5R/uwdbuzGRgytRj3vgBi0YGRQmB3XjfJ1ssc7hT+sHbwzCMfPVU8Ok
+         W8XQ==
+X-Gm-Message-State: AC+VfDwUwfJTg56XJdzNe4K8ObCIBegK5NCxWfJkFlfgc7mrKuLx8myo
+        T0PRqzqd0AadFMgHH/jRSOI=
+X-Google-Smtp-Source: ACHHUZ4R+6s7cg2wRZfDGQyockcpDWi9JMFyEToT/pb/qLH2yA0XBOVCSZ5aNSuT/0F7/sIvqJhtLQ==
+X-Received: by 2002:a9d:4b09:0:b0:6af:a47b:28b4 with SMTP id q9-20020a9d4b09000000b006afa47b28b4mr5177613otf.2.1686193412148;
+        Wed, 07 Jun 2023 20:03:32 -0700 (PDT)
+Received: from weshuang.weshuang (123-51-235-192.moxa.com. [123.51.235.192])
+        by smtp.googlemail.com with ESMTPSA id a15-20020aa7864f000000b0064fe332209esm56378pfo.98.2023.06.07.20.03.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 20:03:31 -0700 (PDT)
 From:   Wes Huang <wes155076@gmail.com>
-Date:   Thu, 8 Jun 2023 10:22:56 +0800
-Message-ID: <CAD_g2C3ng83vwbH83ntLgz7z=iDJoBFe5Dj5evJ0gSk5XSq2vw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] net: usb: qmi_wwan: add support for Compal RXM-G1
-To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+X-Google-Original-From: Wes Huang <wes.huang@moxa.com>
+To:     bjorn@mork.no
 Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com, netdev@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Wes Huang <wes.huang@moxa.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: [PATCH V2 1/1] net: usb: qmi_wwan: add support for Compal RXM-G1
+Date:   Thu,  8 Jun 2023 11:01:42 +0800
+Message-Id: <20230608030141.3546-1-wes.huang@moxa.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -70,29 +71,85 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 7:18=E2=80=AFPM Bj=C3=B8rn Mork <bjorn@mork.no> wrot=
-e:
->
-> Wes Huang <wes155076@gmail.com> writes:
->
-> > Add support for Compal RXM-G1 which is based on Qualcomm SDX55 chip.
->
-> Patch looks good to me, but checkpatch warns about mismatch between From
-> (which ends up as Author) and your SoB:
->
->  WARNING: From:/Signed-off-by: email address mismatch: 'From: Wes Huang <=
-wes155076@gmail.com>' !=3D 'Signed-off-by: Wes Huang <wes.huang@moxa.com>'
->
-> If you have to send this from a different account, then you can work
-> around that issue by adding "From: Wes Huang <wes.huang@moxa.com>" as
-> the first line of the email body, followed by a single blank line.
->
-> git will then use the second From as Author, and it will match the SoB.
->
-> Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
->
->
-> Bj=C3=B8rn
+From: Wes Huang <wes.huang@moxa.com>
 
-I'll resend the patch and add the "From" information to the first line
-of the email body. Thank you!
+Add support for Compal RXM-G1 which is based on Qualcomm SDX55 chip.
+This patch adds support for two compositions:
+
+0x9091: DIAG + MODEM + QMI_RMNET + ADB
+0x90db: DIAG + DUN + RMNET + DPL + QDSS(Trace) + ADB
+
+T:  Bus=03 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
+D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+P:  Vendor=05c6 ProdID=9091 Rev= 4.14
+S:  Manufacturer=QCOM
+S:  Product=SDXPRAIRIE-MTP _SN:719AB680
+S:  SerialNumber=719ab680
+C:* #Ifs= 4 Cfg#= 1 Atr=80 MxPwr=896mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
+E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+E:  Ad=84(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+
+T:  Bus=03 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
+D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+P:  Vendor=05c6 ProdID=90db Rev= 4.14
+S:  Manufacturer=QCOM
+S:  Product=SDXPRAIRIE-MTP _SN:719AB680
+S:  SerialNumber=719ab680
+C:* #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=896mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
+E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+E:  Ad=84(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+E:  Ad=8f(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+E:  Ad=85(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Wes Huang <wes.huang@moxa.com>
+---
+V1 -> V2: No code change, just add "From" to the email body to let
+author information is correct.
+
+ drivers/net/usb/qmi_wwan.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 571e37e67f9c..90f4655a671d 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1220,7 +1220,9 @@ static const struct usb_device_id products[] = {
+ 	{QMI_FIXED_INTF(0x05c6, 0x9080, 8)},
+ 	{QMI_FIXED_INTF(0x05c6, 0x9083, 3)},
+ 	{QMI_FIXED_INTF(0x05c6, 0x9084, 4)},
++	{QMI_QUIRK_SET_DTR(0x05c6, 0x9091, 2)},	/* Compal RXM-G1 */
+ 	{QMI_FIXED_INTF(0x05c6, 0x90b2, 3)},    /* ublox R410M */
++	{QMI_QUIRK_SET_DTR(0x05c6, 0x90db, 2)},	/* Compal RXM-G1 */
+ 	{QMI_FIXED_INTF(0x05c6, 0x920d, 0)},
+ 	{QMI_FIXED_INTF(0x05c6, 0x920d, 5)},
+ 	{QMI_QUIRK_SET_DTR(0x05c6, 0x9625, 4)},	/* YUGA CLM920-NC5 */
+-- 
+2.30.2
+
