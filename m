@@ -2,59 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CECF5728582
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 18:41:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B4E7285D7
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 18:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236831AbjFHQl3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jun 2023 12:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
+        id S232033AbjFHQzO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jun 2023 12:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236873AbjFHQkq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 12:40:46 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46EF2D44;
-        Thu,  8 Jun 2023 09:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686242408; x=1717778408;
-  h=date:from:to:cc:subject:message-id;
-  bh=F7UVQxLgpyB+XxwUND8Ji+HgcMvfRX9thOkFLT6lrY8=;
-  b=Y+xTad3f0gqPwLxRGp9hKo2Vw1EmYPibCrkkmcDls1WY2gLCOE0ckBB8
-   hDanNhILoya7is4IXkx66Faae0B+92WVwQjz1E5xiIPz34ZOpEbTb+1Ne
-   9C7GyrWqDBPQSfXkQ1xbV/A/pvNhbHrJxa9HOmjS+ilKQ/X77ozbkaAzS
-   YvOJxAJUfZ+kcR+NH/xdC8gxnoQ9OyRCsOE9D7vJeeAcZWzhzRTeOj2B6
-   jyRw9OF3AFXpM1If/7MU79SvqOV4AQdYAexZnoKm0gmjfMtDPUFkRjak5
-   RRWsbLyliXtwnQrp607xnBbnzuSsEW3QK8EMhk1jhYrmHgWIXoW2axju/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="354852421"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="354852421"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 09:39:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="822672133"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="822672133"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Jun 2023 09:39:29 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q7IfY-00083P-1a;
-        Thu, 08 Jun 2023 16:39:28 +0000
-Date:   Fri, 09 Jun 2023 00:38:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Memory Management List <linux-mm@kvack.org>,
-        dri-devel@lists.freedesktop.org, linux-cifs@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-usb@vger.kernel.org, samba-technical@lists.samba.org
-Subject: [linux-next:master] BUILD REGRESSION
- db10f126048021b86e43a5d6a335ec49dec10155
-Message-ID: <202306090001.ng1n5qxC-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S233787AbjFHQzN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 12:55:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A59D1725
+        for <linux-usb@vger.kernel.org>; Thu,  8 Jun 2023 09:54:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686243270;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=C7Gzsm4c5VDydfTjmb7wRGtHYG5sGvTAth2UOQdT5as=;
+        b=FAWhPdGU8KB0hnGdLt7RjZT7zQlzW6fuvUWbRD4lhHdWJkRPFMKnmsE8F4STpBiYQLYjKn
+        EzEPXTlAjru0pTuTJ5a0FMKTqFCtMWlW6sLvp3XUta6wxD3LUx8pqktH/qj4fiRC/HJCQG
+        QM4agK7cFbI8NBHCEmrCDezPqHQxSew=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-313-SaQN-UswOq-dnUsu78t3Mw-1; Thu, 08 Jun 2023 12:54:27 -0400
+X-MC-Unique: SaQN-UswOq-dnUsu78t3Mw-1
+Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-55b15c956e2so693509eaf.0
+        for <linux-usb@vger.kernel.org>; Thu, 08 Jun 2023 09:54:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686243267; x=1688835267;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C7Gzsm4c5VDydfTjmb7wRGtHYG5sGvTAth2UOQdT5as=;
+        b=U6IICYT55XwiZ/h8rkObvLSruTMv7EW9ZJx35RZfkyG+lkRzv+ddjuUtKFuZxzYjNc
+         SHQNEbhCMwOd/v00QZwrejFCqvmmg4XWB9QBe3zF9slAPTdRqe29Upd4cJg8SDkqoIH4
+         /Q25iPviaZKfn7T+1hXnFRSy8kWOfSNI9yEDlNbPoxEyuN0fQGa99NLenKyU/K1h9Wwz
+         FS2yq9E2rh4e7JeBZKkyLLFqUKI7dilfFj1/xGRB5t82T5Xssti6yXSSwAufmT3NJ886
+         4TRxwJdxCDt6AqyvBnBY2Wrmr2E1oQQ8JDTxQTI/P4XfYoWk1TYMgkph/mK6833Xh5sE
+         pdmw==
+X-Gm-Message-State: AC+VfDw4K/bHAXdYTBuZxkhLwjO91do9rc8N9DQkapjH6FWjz0L6eS7F
+        48dm1JQSI5ruCL2LGGEft9xrkbUi9rtDJ6IZFS3VXqyORQaPy04dIAuJTfoxQp8NMm1Numzu4kw
+        oeyFvntphlN1rfPKOxwMQ
+X-Received: by 2002:a4a:d8c2:0:b0:558:fd2b:8232 with SMTP id c2-20020a4ad8c2000000b00558fd2b8232mr177812oov.9.1686243266856;
+        Thu, 08 Jun 2023 09:54:26 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6JTBAHmdb92kjvDywymq4EZWiP3V+16ZVHXuhLLjDlkHPWSSDhtIhwSdfuR/7p2MS+ahpNvw==
+X-Received: by 2002:a4a:d8c2:0:b0:558:fd2b:8232 with SMTP id c2-20020a4ad8c2000000b00558fd2b8232mr177798oov.9.1686243266617;
+        Thu, 08 Jun 2023 09:54:26 -0700 (PDT)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::22])
+        by smtp.gmail.com with ESMTPSA id z2-20020aca3302000000b0038ee0c3b38esm599397oiz.44.2023.06.08.09.54.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 09:54:25 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 11:54:23 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawn.guo@linaro.org>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: qcom: Fix an error handling path in
+ dwc3_qcom_probe()
+Message-ID: <20230608165423.gvcwvmgiojuvjahv@halaney-x13s>
+References: <b69fa8dd68d816e7d24c88d3eda776ceb28c5dc5.1685890571.git.christophe.jaillet@wanadoo.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b69fa8dd68d816e7d24c88d3eda776ceb28c5dc5.1685890571.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,233 +83,38 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: db10f126048021b86e43a5d6a335ec49dec10155  Add linux-next specific files for 20230608
+On Sun, Jun 04, 2023 at 04:56:34PM +0200, Christophe JAILLET wrote:
+> If dwc3_qcom_create_urs_usb_platdev() fails, some resources still need to
+> be released, as already done in the other error handling path of the
+> probe.
+> 
+> Fixes: c25c210f590e ("usb: dwc3: qcom: add URS Host support for sdm845 ACPI boot")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Error/Warning reports:
+Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
 
-https://lore.kernel.org/oe-kbuild-all/202306081708.gtVAcXsh-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202306082325.7vvIeVZo-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202306082341.UQtCM8PO-lkp@intel.com
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 822735814050..aa96c473f839 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -856,9 +856,10 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  			if (IS_ERR_OR_NULL(qcom->urs_usb)) {
+>  				dev_err(dev, "failed to create URS USB platdev\n");
+>  				if (!qcom->urs_usb)
+> -					return -ENODEV;
+> +					ret = -ENODEV;
+>  				else
+> -					return PTR_ERR(qcom->urs_usb);
+> +					ret = PTR_ERR(qcom->urs_usb);
+> +				goto clk_disable;
+>  			}
+>  		}
+>  	}
+> -- 
+> 2.34.1
+> 
 
-Error/Warning: (recently discovered and may have been fixed)
-
-ERROR: modpost: "uv_info" [drivers/s390/char/uvdevice.ko] undefined!
-drivers/leds/leds-cht-wcove.c:142:21: warning: no previous prototype for 'cht_wc_leds_brightness_get' [-Wmissing-prototypes]
-include/drm/drm_print.h:456:39: error: format '%ld' expects argument of type 'long int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Werror=format=]
-include/drm/drm_print.h:456:39: warning: format '%ld' expects argument of type 'long int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-
-Unverified Error/Warning (likely false positive, please contact us if interested):
-
-drivers/usb/cdns3/cdns3-starfive.c:23: warning: expecting prototype for cdns3(). Prototype was for USB_STRAP_HOST() instead
-fs/smb/client/cifsfs.c:982 cifs_smb3_do_mount() warn: possible memory leak of 'cifs_sb'
-fs/smb/client/cifssmb.c:4089 CIFSFindFirst() warn: missing error code? 'rc'
-fs/smb/client/cifssmb.c:4216 CIFSFindNext() warn: missing error code? 'rc'
-fs/smb/client/connect.c:2725 cifs_match_super() error: 'tlink' dereferencing possible ERR_PTR()
-fs/smb/client/connect.c:2924 generic_ip_connect() error: we previously assumed 'socket' could be null (see line 2912)
-fs/smb/server/oplock.c:1013 find_same_lease_key() warn: missing error code 'err'
-kernel/events/uprobes.c:478 uprobe_write_opcode() warn: passing zero to 'PTR_ERR'
-{standard input}:1118: Error: unrecognized symbol type ""
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- i386-allyesconfig
-|   `-- include-drm-drm_print.h:error:format-ld-expects-argument-of-type-long-int-but-argument-has-type-size_t-aka-unsigned-int
-|-- i386-buildonly-randconfig-r004-20230608
-|   `-- include-drm-drm_print.h:warning:format-ld-expects-argument-of-type-long-int-but-argument-has-type-size_t-aka-unsigned-int
-|-- i386-randconfig-i004-20230608
-|   `-- include-drm-drm_print.h:error:format-ld-expects-argument-of-type-long-int-but-argument-has-type-size_t-aka-unsigned-int
-|-- i386-randconfig-m021-20230608
-|   |-- fs-smb-client-cifsfs.c-cifs_smb3_do_mount()-warn:possible-memory-leak-of-cifs_sb
-|   |-- fs-smb-client-cifssmb.c-CIFSFindFirst()-warn:missing-error-code-rc
-|   |-- fs-smb-client-cifssmb.c-CIFSFindNext()-warn:missing-error-code-rc
-|   |-- fs-smb-client-connect.c-cifs_match_super()-error:tlink-dereferencing-possible-ERR_PTR()
-|   |-- fs-smb-client-connect.c-generic_ip_connect()-error:we-previously-assumed-socket-could-be-null-(see-line-)
-|   `-- kernel-events-uprobes.c-uprobe_write_opcode()-warn:passing-zero-to-PTR_ERR
-|-- i386-randconfig-m031-20230608
-|   |-- fs-smb-client-cifsfs.c-cifs_smb3_do_mount()-warn:possible-memory-leak-of-cifs_sb
-|   |-- fs-smb-client-cifssmb.c-CIFSFindFirst()-warn:missing-error-code-rc
-|   |-- fs-smb-client-cifssmb.c-CIFSFindNext()-warn:missing-error-code-rc
-|   |-- fs-smb-client-connect.c-cifs_match_super()-error:tlink-dereferencing-possible-ERR_PTR()
-|   |-- fs-smb-client-connect.c-generic_ip_connect()-error:we-previously-assumed-socket-could-be-null-(see-line-)
-|   `-- fs-smb-server-oplock.c-find_same_lease_key()-warn:missing-error-code-err
-|-- riscv-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- riscv-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- s390-randconfig-s041-20230608
-|   `-- ERROR:uv_info-drivers-s390-char-uvdevice.ko-undefined
-|-- sh-allmodconfig
-|   `-- standard-input:Error:unrecognized-symbol-type
-|-- sh-allyesconfig
-|   `-- standard-input:Error:unrecognized-symbol-type
-`-- x86_64-allyesconfig
-    `-- drivers-leds-leds-cht-wcove.c:warning:no-previous-prototype-for-cht_wc_leds_brightness_get
-
-elapsed time: 733m
-
-configs tested: 155
-configs skipped: 8
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r015-20230608   gcc  
-alpha                randconfig-r022-20230608   gcc  
-alpha                randconfig-r025-20230608   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r024-20230608   gcc  
-arc                  randconfig-r043-20230608   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm          buildonly-randconfig-r005-20230608   gcc  
-arm                                 defconfig   clang
-arm                                 defconfig   gcc  
-arm                      footbridge_defconfig   gcc  
-arm                  randconfig-r006-20230608   clang
-arm                  randconfig-r016-20230608   gcc  
-arm                  randconfig-r046-20230608   gcc  
-arm                         socfpga_defconfig   clang
-arm                        spear3xx_defconfig   clang
-arm                           u8500_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky         buildonly-randconfig-r004-20230608   gcc  
-csky                                defconfig   gcc  
-hexagon      buildonly-randconfig-r003-20230608   clang
-hexagon              randconfig-r041-20230608   clang
-hexagon              randconfig-r045-20230608   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230608   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230608   gcc  
-i386                 randconfig-i002-20230608   gcc  
-i386                 randconfig-i003-20230608   gcc  
-i386                 randconfig-i004-20230608   gcc  
-i386                 randconfig-i005-20230608   gcc  
-i386                 randconfig-i006-20230608   gcc  
-i386                 randconfig-i011-20230608   clang
-i386                 randconfig-i012-20230608   clang
-i386                 randconfig-i013-20230608   clang
-i386                 randconfig-i015-20230608   clang
-i386                 randconfig-i051-20230608   gcc  
-i386                 randconfig-i052-20230608   gcc  
-i386                 randconfig-i053-20230608   gcc  
-i386                 randconfig-i054-20230608   gcc  
-i386                 randconfig-i055-20230608   gcc  
-i386                 randconfig-i056-20230608   gcc  
-i386                 randconfig-i061-20230608   gcc  
-i386                 randconfig-i062-20230608   gcc  
-i386                 randconfig-i063-20230608   gcc  
-i386                 randconfig-i064-20230608   gcc  
-i386                 randconfig-i065-20230608   gcc  
-i386                 randconfig-i066-20230608   gcc  
-i386                 randconfig-r026-20230608   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r001-20230608   gcc  
-loongarch    buildonly-randconfig-r002-20230608   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r036-20230608   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                          atari_defconfig   gcc  
-m68k         buildonly-randconfig-r005-20230608   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r003-20230608   gcc  
-m68k                           virt_defconfig   gcc  
-microblaze           randconfig-r015-20230608   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                     cu1830-neo_defconfig   clang
-mips                      maltasmvp_defconfig   gcc  
-mips                  maltasmvp_eva_defconfig   gcc  
-mips                 randconfig-r004-20230608   clang
-mips                       rbtx49xx_defconfig   clang
-nios2        buildonly-randconfig-r002-20230608   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r012-20230608   gcc  
-nios2                randconfig-r032-20230608   gcc  
-openrisc             randconfig-r011-20230608   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r005-20230608   gcc  
-parisc               randconfig-r021-20230608   gcc  
-parisc64                            defconfig   gcc  
-powerpc                     akebono_defconfig   clang
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                 canyonlands_defconfig   gcc  
-powerpc                    ge_imp3a_defconfig   clang
-powerpc               mpc834x_itxgp_defconfig   clang
-powerpc                      ppc64e_defconfig   clang
-powerpc              randconfig-r013-20230608   clang
-powerpc                    socrates_defconfig   clang
-powerpc                     tqm8540_defconfig   clang
-powerpc                     tqm8541_defconfig   gcc  
-powerpc                     tqm8560_defconfig   clang
-powerpc                 xes_mpc85xx_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv        buildonly-randconfig-r006-20230608   clang
-riscv                               defconfig   gcc  
-riscv                randconfig-r014-20230608   clang
-riscv                randconfig-r023-20230608   clang
-riscv                randconfig-r042-20230608   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230608   clang
-sh                               allmodconfig   gcc  
-sh                               j2_defconfig   gcc  
-sparc                            alldefconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc        buildonly-randconfig-r003-20230608   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r016-20230608   gcc  
-sparc                randconfig-r035-20230608   gcc  
-sparc                       sparc64_defconfig   gcc  
-sparc64              randconfig-r013-20230608   gcc  
-sparc64              randconfig-r031-20230608   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230608   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230608   gcc  
-x86_64               randconfig-a002-20230608   gcc  
-x86_64               randconfig-a003-20230608   gcc  
-x86_64               randconfig-a004-20230608   gcc  
-x86_64               randconfig-a005-20230608   gcc  
-x86_64               randconfig-a006-20230608   gcc  
-x86_64               randconfig-a011-20230608   clang
-x86_64               randconfig-a012-20230608   clang
-x86_64               randconfig-a013-20230608   clang
-x86_64               randconfig-a014-20230608   clang
-x86_64               randconfig-a015-20230608   clang
-x86_64               randconfig-a016-20230608   clang
-x86_64               randconfig-r034-20230608   gcc  
-x86_64               randconfig-x051-20230608   clang
-x86_64               randconfig-x052-20230608   clang
-x86_64               randconfig-x053-20230608   clang
-x86_64               randconfig-x054-20230608   clang
-x86_64               randconfig-x055-20230608   clang
-x86_64               randconfig-x056-20230608   clang
-x86_64               randconfig-x061-20230608   clang
-x86_64               randconfig-x062-20230608   clang
-x86_64               randconfig-x063-20230608   clang
-x86_64               randconfig-x064-20230608   clang
-x86_64               randconfig-x065-20230608   clang
-x86_64               randconfig-x066-20230608   clang
-x86_64                          rhel-8.3-rust   clang
-xtensa               randconfig-r033-20230608   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
