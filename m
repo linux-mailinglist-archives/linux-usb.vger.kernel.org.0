@@ -2,125 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 674FF727B44
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 11:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB1D727B49
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 11:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235821AbjFHJ2o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jun 2023 05:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
+        id S235855AbjFHJ2x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jun 2023 05:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233840AbjFHJ2n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 05:28:43 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF89213C;
-        Thu,  8 Jun 2023 02:28:25 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3589R9aZ4011935, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3589R9aZ4011935
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 8 Jun 2023 17:27:09 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 8 Jun 2023 17:27:25 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 8 Jun 2023 17:27:25 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Thu, 8 Jun 2023 17:27:25 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ray Chi <raychi@google.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v3 4/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 2.0 PHY
-Thread-Topic: [PATCH v3 4/5] dt-bindings: phy: realtek: Add the doc about the
- Realtek SoC USB 2.0 PHY
-Thread-Index: AQHZmQjdazkCXQ0o50uX71FuvNBNuK9+uDoAgAGs3VD//54bgIAAiZyw//+BfQCAAI4H4A==
-Date:   Thu, 8 Jun 2023 09:27:25 +0000
-Message-ID: <d515bfed030d4499b16050d492e1ec23@realtek.com>
-References: <20230607062500.24669-1-stanley_chang@realtek.com>
- <20230607062500.24669-4-stanley_chang@realtek.com>
- <7cce1d72-6b4d-9fff-32bc-942193388134@linaro.org>
- <8a88cbee5c6245f2941c700b2bb30697@realtek.com>
- <7df8ffb6-a544-d10e-5273-fd6c4b368b20@linaro.org>
- <7d503e3028a7487a9a087cfa061fff9d@realtek.com>
- <b941c06f-7f7d-1364-a7f5-be5905112cac@linaro.org>
-In-Reply-To: <b941c06f-7f7d-1364-a7f5-be5905112cac@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S235857AbjFHJ2v (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 05:28:51 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6817213C;
+        Thu,  8 Jun 2023 02:28:45 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3588QUwG024541;
+        Thu, 8 Jun 2023 09:28:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=A93tllnqdpd1P7mdoUsxMlSaMMTdYZnUoeb8k3ffiwU=;
+ b=XhvoWajNJ19DSdCBl6zE1q+5cGnS1/oR8EYG06A5zrCxJ6CBMI4wahKjG2ERzx59oPLA
+ GaZ0FNbY/ArywlTMBlxCPxqDvdZClOGkhSwjS/9PmiEgTWjM6FUhNf1+QE+uCaFZvzZ/
+ XXQGkqCPMLQvrFw3e/g2umvG6TQ8gU7wdDCRlI4YdfxitTXqQVSm148AhAx+dEIW9GZx
+ KazH5f39kK3Y3VHcxfeiyliCkCTbxnUMeKP9bmMHVO6/pPzHsn19m0kDCjKRuO3B+YhS
+ t4zhGnHGH+J3fx7y4PzbG0GoUhyLlMHlgDSi/JKxudT7G+o+D66Fbj62yn6iRO84EL54 eQ== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2w551nks-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jun 2023 09:28:40 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3589SdKX023774
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 8 Jun 2023 09:28:39 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 8 Jun 2023 02:28:34 -0700
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <gregkh@linuxfoundation.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v13 0/5] Enable IPQ9754 USB
+Date:   Thu, 8 Jun 2023 14:57:59 +0530
+Message-ID: <cover.1686215358.git.quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 6_2-Lhlshen1k-WMwJ7H1XCZWofrJfpl
+X-Proofpoint-ORIG-GUID: 6_2-Lhlshen1k-WMwJ7H1XCZWofrJfpl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-08_06,2023-06-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 adultscore=0 spamscore=0 phishscore=0 malwarescore=0
+ mlxscore=0 suspectscore=0 impostorscore=0 clxscore=1015 bulkscore=0
+ mlxlogscore=684 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306080080
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PiA+IEkgb25seSBjb250cm9sIGEgcmVnaXN0ZXIsIGl0IGlzIG5vdCBuZWVkZWQgYSBkcml2ZXIg
-b2YgcG93ZXIgZG9tYWluLg0KPiANCj4gQXJlbid0IG1hbnkgcG93ZXIgZG9tYWlucyBqdXN0IGEg
-cmVnaXN0ZXJzPyBXaGF0IGFib3V0IG90aGVyIGRyaXZlcnM/DQo+IERvbid0IHlvdSB3YW50IGlu
-IG90aGVyIGRyaXZlciBjb250cm9sIExETyBvZiBzb21ldGhpbmcgZWxzZT8gQW5kIGluIG90aGVy
-DQo+IHNvbWV0aGluZyBlbHNlPw0KDQpJIHdpbGwgdXNlIHBvd2VyIGRvbWFpbiB0byBpbnN0ZWFk
-IHRoaXMuDQoNCj4gPiBXb3VsZCAicG9ydCIgYmUgbW9yZSBhcHByb3ByaWF0ZT8NCj4gPg0KPiA+
-IEZvciBleGFtcGxlLA0KPiA+IFVzaW5nIHBoeUAwIGFuZCBwaHlAMToNCj4gPiAgICAgdXNiX3Bv
-cnQxX3VzYjJwaHk6IHVzYi1waHlAMTNjMTQgew0KPiA+ICAgICAgICAgY29tcGF0aWJsZSA9ICJy
-ZWFsdGVrLHJ0ZDEzOTUtdXNiMnBoeSIsICJyZWFsdGVrLHVzYjJwaHkiOw0KPiA+ICAgICAgICAg
-cmVnID0gPDB4MTMyYzQgMHg0PiwgPDB4MzEyODAgMHg4PjsNCj4gPiAgICAgICAgICNhZGRyZXNz
-LWNlbGxzID0gPDE+Ow0KPiA+ICAgICAgICAgI3NpemUtY2VsbHMgPSA8MD47DQo+ID4gICAgICAg
-ICAjcGh5LWNlbGxzID0gPDA+Ow0KPiA+ICAgICAgICAgcmVhbHRlayx1c2ItY3RybCA9IDwmdXNi
-X2N0cmw+Ow0KPiA+DQo+ID4gICAgICAgICBwaHlAMCB7DQo+ID4gICAgICAgICAgICAgcmVnID0g
-PDA+Ow0KPiANCj4gU28gc3VjaCBjaGlsZCBpcyBhIE5BSy4uLiB5b3UgaGF2ZSBub3RoaW5nIGhl
-cmUuIEJ1dCBpdCdzIHVucmVsYXRlZCB0b3BpYy4NCkhlcmUgaXMgZm9yIHNpbXBsZSwgc28gc29t
-ZSBpdGVtcyBpZ25vcmUuDQoNCj4gPiAgICAgICAgIH07DQo+ID4gICAgICAgICBwaHlAMSB7DQo+
-ID4gICAgICAgICAgICAgcmVnID0gPDE+Ow0KPiA+ICAgICAgICAgfTsNCj4gPiAgICAgfTsNCj4g
-Pg0KPiA+IENoYW5nZTogcG9ydEAwIGFuZCBwb3J0QDENCj4gPiAgICAgdXNiX3BvcnQxX3VzYjJw
-aHk6IHVzYi1waHlAMTNjMTQgew0KPiA+ICAgICAgICAgY29tcGF0aWJsZSA9ICJyZWFsdGVrLHJ0
-ZDEzOTUtdXNiMnBoeSIsICJyZWFsdGVrLHVzYjJwaHkiOw0KPiA+ICAgICAgICAgcmVnID0gPDB4
-MTMyYzQgMHg0PiwgPDB4MzEyODAgMHg4PjsNCj4gPiAgICAgICAgICNhZGRyZXNzLWNlbGxzID0g
-PDE+Ow0KPiA+ICAgICAgICAgI3NpemUtY2VsbHMgPSA8MD47DQo+ID4gICAgICAgICAjcGh5LWNl
-bGxzID0gPDA+Ow0KPiA+ICAgICAgICAgcmVhbHRlayx1c2ItY3RybCA9IDwmdXNiX2N0cmw+Ow0K
-PiA+DQo+ID4gICAgICAgICBwcm90QDAgew0KPiA+ICAgICAgICAgICAgIHJlZyA9IDwwPjsNCj4g
-PiAgICAgICAgIH07DQo+ID4gICAgICAgICBwb3J0QDEgew0KPiA+ICAgICAgICAgICAgIHJlZyA9
-IDwxPjsNCj4gPiAgICAgICAgIH07DQo+ID4gICAgIH07DQo+IA0KPiBUaGlzIGlzIG5vdCB0aGUg
-YW5zd2VyLiBUaGlzIGlzIHRoZSBwcm92aWRlci4gSG93IGRvIHlvdSByZWZlcmVuY2UgaXQgZnJv
-bSB0aGUNCj4gY29uc3VtZXIuDQoNCg0KPiBVcHN0cmVhbSB5b3VyIGVudGlyZSBEVFMuIEl0J3Mg
-ZnJ1c3RyYXRpbmcgdG8gdHJ5IHRvIHVuZGVyc3RhbmQgeW91ciBEVFMgZnJvbQ0KPiBwaWVjZXMg
-b2YgaW5mb3JtYXRpb24geW91IGFyZSBzaGFyaW5nLiBBbHNvIHZlcnkgdGltZSBjb25zdW1pbmcg
-YW5kIHlvdSBhcmUNCj4gbm90IHRoZSBvbmx5IG9uZSBzZW5kaW5nIHBhdGNoZXMgZm9yIHJldmll
-dy4uLg0KDQpTb3JyeSB0byB0YWtlIHVwIGEgbG90IG9mIHlvdXIgdGltZS4NCkFwcGFyZW50bHkg
-SSBkb24ndCBrbm93IGVub3VnaCBhYm91dCBkdHMuDQpJIHdpbGwgcmVmZXJlbmNlIG1vcmUgZGV2
-aWNlIHRyZWUgZG9jdW1lbnQgdG8gdW5kZXJzdGFuZCB0aGUgcmVsYXRpbmcgYmV0d2VlbiBEVFMg
-YW5kIGhhcmR3YXJlLg0KDQpUaGFua3MsDQpTdGFubGV5DQo=
+This patch series adds the relevant phy and controller
+configurations for enabling USB on IPQ9754
+
+Portions of the patchset have been merged. Please see
+	https://lore.kernel.org/lkml/ZGN9gchu7dRb6QwC@matsya/
+
+[v13]:
+	- Move fixed regulator definitions from SoC dtsi to board dts
+	- Remove 'dr_mode' from SoC dtsi
+	- Move 'status' property to the end
+
+[v12]:
+	- In dtsi usb@8a00000 -> usb@8af8800
+
+[v11]:
+	- Rename dwc_0 -> usb_0_dwc3
+	- Minor change in qcom,sc8280xp-qmp-usb3-uni-phy.yaml to factor in
+	  latest updates to the file
+
+[v10]:
+	- Fix regulator definitions
+	- Address couple of other comments
+
+[v9]:
+	- Update bindings to make power-domains as optional since
+	  IPQ9574 doesn't have GDSCs
+
+[v8]:
+	- Update bindings for the clock name change
+[v7]:
+	- com_aux -> cfg_ahb in patch 7
+
+[v6]:
+        - Incorporated review comments
+	- Resolve make dtbs_check messages
+	- Fixed pcs_usb offset
+	- Board dts file name changed
+
+[v5]:
+        - Incorporated review comments
+	- 'make dtbs_check' giving the following messages since
+	  ipq9574 doesn't have power domains. Hope this is ok
+
+		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
+        	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
+        	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+
+	- Move qmp phy DT node to newer specification
+
+[v4]:
+        - Incorporated review comments
+	- Address all 'make dtbs_check' errors
+
+[v3]:
+        - Incorporated review comments regarding coding style
+
+[v2]:
+        - Incorporated review comments regarding coding style,
+          maintaining sorted order of entries and unused phy register
+          offsets
+        - Removed NOC clock entries from DT node (will be implemented
+          later with interconnect support)
+        - Fixed 'make dtbs_check' errors/warnings
+
+[v1]:
+        https://lore.kernel.org/linux-arm-msm/5dac3aa4-8dc7-f9eb-5cf3-b361efdc9494@linaro.org/T/
+
+Varadarajan Narayanan (5):
+  dt-bindings: usb: dwc3: Add IPQ9574 compatible
+  clk: qcom: gcc-ipq9574: Add USB related clocks
+  arm64: dts: qcom: ipq9574: Add USB related nodes
+  arm64: dts: qcom: ipq9574: Add LDO regulator node
+  arm64: dts: qcom: ipq9574: Enable USB
+
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         |  3 +-
+ arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts        | 48 ++++++++++++
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi              | 85 ++++++++++++++++++++++
+ drivers/clk/qcom/gcc-ipq9574.c                     | 37 ++++++++++
+ include/dt-bindings/clock/qcom,ipq9574-gcc.h       |  2 +
+ 5 files changed, 174 insertions(+), 1 deletion(-)
+
+-- 
+2.7.4
+
