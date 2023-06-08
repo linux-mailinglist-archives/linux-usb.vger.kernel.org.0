@@ -2,40 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C67A7727800
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 09:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017B07277FA
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 09:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235143AbjFHHAa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jun 2023 03:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
+        id S234656AbjFHHA0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jun 2023 03:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235118AbjFHHAZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 03:00:25 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDE5268F;
-        Thu,  8 Jun 2023 00:00:21 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3586wvonF021044, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3586wvonF021044
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 8 Jun 2023 14:58:57 +0800
-Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 8 Jun 2023 14:59:14 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 8 Jun 2023 14:59:13 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Thu, 8 Jun 2023 14:59:13 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        with ESMTP id S235116AbjFHHAU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 03:00:20 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9E026BA
+        for <linux-usb@vger.kernel.org>; Thu,  8 Jun 2023 00:00:18 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9786c67ec32so54452466b.1
+        for <linux-usb@vger.kernel.org>; Thu, 08 Jun 2023 00:00:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686207617; x=1688799617;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+VCYQ0Vq8Rf6ius+6VmSoJHA+8MpI2G4Z5DYwrvA2w0=;
+        b=gT5J/WnKL6bPKZtMDM0WF70NGnKhfxOX30KwqIV0lfYTwjVng5Ke0xgwxOEJULD6MK
+         Lgf0teDYptJs0TaXdNmSJN+dKsZoFd8JUcfWVBob+KeGJ7oQeqMJ9WcfSmq7oGFsGLxr
+         4irYaNprpTOLvFtGPVOkL14vE0pPVRE0QMW2JdRjVAQ29zp7L7dNg3eIULwYODZoqPoo
+         GTrW7VMuyM9kV67sLILcPNqzlyqWQmbWdHhNuSE2U4474CmVf+2yYbzzXQb0Oma/7OhB
+         wwGcFkw8+ZnXmyw9fA8WmDxJP4UHC5lLEdRR64KaXXqLuv1FVBugpbu7zcHPEAspxzN4
+         c3iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686207617; x=1688799617;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+VCYQ0Vq8Rf6ius+6VmSoJHA+8MpI2G4Z5DYwrvA2w0=;
+        b=NRrk9lX8vn4yMq2PCndKMuu8csKudMwqYrFbCRyI1yTS6DGNKuFogPzAwWCOUJzlLe
+         o9JV+vOVEOy2/yOg9qrO2m6/v+Zf4d2y3Enq+IHC08vRgnEzuyW7CyXxcwP6oFa9PIoX
+         q+cSq50xil7vYXP/LcHpAu512lfbeD2uJn0DKHM6fHwvhHqdbuBiFCN5FiB8j9cZYOa9
+         lPx7NNKk1UHwrgnTiLJNh36XRu7k9CWESxESsWQvF5JgTZVgmAh5+b4fSejxqx9q1T7m
+         e9Q6X10PdnJwlOFEtIPNm+XUfRQ28Vm4N+5NigMmM/7aUznyYN/Of+BBSov7z8qi+9/L
+         M+sg==
+X-Gm-Message-State: AC+VfDwaP4cS9/V68S7qsbF70mIfd1KxqXJSvJb//MGOnYKcba0jl1HO
+        NILllq+uHYJvGIdDfcFQ9XKjEA==
+X-Google-Smtp-Source: ACHHUZ493r0raQo9iLcIeZCRDNBkBWvXhgo1i70ZDsHouZkiTOZ1xbXiIw0DC6QAuKQHWQwMhf2A7Q==
+X-Received: by 2002:a17:906:9753:b0:968:1e8:a754 with SMTP id o19-20020a170906975300b0096801e8a754mr7610497ejy.72.1686207617176;
+        Thu, 08 Jun 2023 00:00:17 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id w8-20020a170906b18800b00965a56f82absm281860ejy.212.2023.06.08.00.00.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 00:00:16 -0700 (PDT)
+Message-ID: <0d4d77db-3d09-a5ab-b3e6-93da771b4b2d@linaro.org>
+Date:   Thu, 8 Jun 2023 09:00:14 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 2/5] phy: realtek: usb: Add driver for the Realtek SoC
+ USB 2.0 PHY
+Content-Language: en-US
+To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Vinod Koul <vkoul@kernel.org>,
+Cc:     Vinod Koul <vkoul@kernel.org>,
         Kishon Vijay Abraham I <kishon@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -51,48 +76,46 @@ CC:     Vinod Koul <vkoul@kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v3 2/5] phy: realtek: usb: Add driver for the Realtek SoC USB 2.0 PHY
-Thread-Topic: [PATCH v3 2/5] phy: realtek: usb: Add driver for the Realtek SoC
- USB 2.0 PHY
-Thread-Index: AQHZmQjR4Z6nmQOlk0qvgFcnmBMR/a9+tYIAgAGmBLA=
-Date:   Thu, 8 Jun 2023 06:59:13 +0000
-Message-ID: <8cb2d82c3b484262aa866c5e989fc8cd@realtek.com>
 References: <20230607062500.24669-1-stanley_chang@realtek.com>
  <20230607062500.24669-2-stanley_chang@realtek.com>
  <79201bd6-6048-7013-aeb7-34d218139844@linaro.org>
-In-Reply-To: <79201bd6-6048-7013-aeb7-34d218139844@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+ <8cb2d82c3b484262aa866c5e989fc8cd@realtek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <8cb2d82c3b484262aa866c5e989fc8cd@realtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgS3J6eXN6dG9mLA0KDQoNCj4gSSBjb21tZW50ZWQgb24geW91ciBzZWNvbmQgcGF0Y2gsIGJ1
-dCBldmVyeXRoaW5nIGlzIGFwcGxpY2FibGUgaGVyZSBhcyB3ZWxsLg0KPiBZb3UgaGF2ZSBtYW55
-IHVzZWxlc3MgZGVidWcgbWVzc2FnZXMuIE1hbnkgaW5jb3JyZWN0IG9yIHVzZWxlc3MNCj4gImlm
-KCkgcmV0dXJuIiB3aGljaCBwb2ludCB0byBicm9rZW4gZHJpdmVyIGRlc2lnbiAoZS5nLiBjb25j
-dXJyZW50IGFjY2VzcyB0byBoYWxmDQo+IGluaXRpYWxpemVkIHN0cnVjdHVyZXMgd2hlcmUgeW91
-IHN1YnN0aXR1dGUgbGFjayBvZiBzeW5jaHJvbml6YXRpb24gd2l0aA0KPiBpbmNvcnJlY3QgImlm
-KCkgcmV0dXJuIikuIFVuZG9jdW1lbnRlZCB1c2VyIGludGVyZmFjZSBpcyBvbmUgbW9yZSBiaWcg
-dHJvdWJsZS4NCj4gDQo+IEkgZG91YnQgeW91IHJ1biBjaGVja3BhdGNoIG9uIHRoaXMgKGJlIHN1
-cmUgdG8gcnVuIGl0IHdpdGggLS1zdHJpY3QgYW5kIGZpeCBhbG1vc3QNCj4gZXZlcnl0aGluZyku
-DQo+IA0KPiANCjEuIEkgdXNlIGNoZWNrcGF0Y2ggYnV0IHdpdGhvdXQgLS1zdHJpY3QuIEkgd2ls
-bCBhZGQgaXQgYWRkIGFuZCBjaGVjayBhZ2Fpbi4NCjIuIERvIHRoZSBkZWJ1Z2ZzIGludGVyZmFj
-ZXMgbmVlZCB0byBwcm92aWRlIGEgZG9jdW1lbnQ/DQpJIGRvbid0IGZpbmQgYW55IHJlZmVyZW5j
-ZSBhYm91dCB0aGlzLg0KMy4gSSB3aWxsIGZvbGxvdyB0aGUgY29tbWVudCBvZiBzZWNvbmQgcGF0
-Y2ggdG8gZml4IHRoaXMgcGF0Y2gNCg0KVGhhbmtzLA0KU3RhbmxleQ0K
+On 08/06/2023 08:59, Stanley Chang[昌育德] wrote:
+> Hi Krzysztof,
+> 
+> 
+>> I commented on your second patch, but everything is applicable here as well.
+>> You have many useless debug messages. Many incorrect or useless
+>> "if() return" which point to broken driver design (e.g. concurrent access to half
+>> initialized structures where you substitute lack of synchronization with
+>> incorrect "if() return"). Undocumented user interface is one more big trouble.
+>>
+>> I doubt you run checkpatch on this (be sure to run it with --strict and fix almost
+>> everything).
+>>
+>>
+> 1. I use checkpatch but without --strict. I will add it add and check again.
+> 2. Do the debugfs interfaces need to provide a document?
+> I don't find any reference about this.
+
+debugfs interface is for debug but in your case you don't use it that way.
+
+
+
+Best regards,
+Krzysztof
+
