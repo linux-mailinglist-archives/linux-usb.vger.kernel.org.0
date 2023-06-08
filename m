@@ -2,333 +2,202 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF67727EEE
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 13:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27063727EFA
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 13:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235670AbjFHLjS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jun 2023 07:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
+        id S235887AbjFHLkZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jun 2023 07:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233679AbjFHLjS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 07:39:18 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F450E6C;
-        Thu,  8 Jun 2023 04:39:09 -0700 (PDT)
-Received: from [192.168.1.141] ([37.4.248.58]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MDQRy-1qHdZz01wM-00AVpQ; Thu, 08 Jun 2023 13:38:53 +0200
-Message-ID: <6901b02a-fbf5-d4c5-69d5-174298ad8ff5@i2se.com>
-Date:   Thu, 8 Jun 2023 13:38:52 +0200
+        with ESMTP id S236272AbjFHLji (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jun 2023 07:39:38 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED250272A
+        for <linux-usb@vger.kernel.org>; Thu,  8 Jun 2023 04:39:33 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5147e8972a1so863455a12.0
+        for <linux-usb@vger.kernel.org>; Thu, 08 Jun 2023 04:39:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686224372; x=1688816372;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xqR4Cl4Oo+rFOH+Sj3ml0n4meYZgvylOhYiYI8g6ow8=;
+        b=fNh6Fmwm2YHAPIHwAdlcjDwjrjjCabjXApKTw4f1jhc/TcUV5nXOqWN8HjWJwlcOJf
+         vTTbIKlNpb5meuz04hanIifHDPLQAeyxuQQHCLhBrfhnFKslc0m+Dfu6l/7CDaLBenGV
+         zjiwKAmFc5zAyr5KJlTXWgnM+vmZ/WmH+PMlZ4Tzus6X5Sy6HrJXYUVjUk/pP4q2zUh8
+         As06JTdEVZ2Fr2RLIwDoxnMeycQhPt9HLj/bhZMRuq58sdYfixTFIkDJdSL/xHjC1/NX
+         9AxRxI2zvgxLRb9huFms2x335RT69oTKOO8vbGd2ArYwWpsWqqMnJiuOhiGn7b3o3jH7
+         dMhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686224372; x=1688816372;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xqR4Cl4Oo+rFOH+Sj3ml0n4meYZgvylOhYiYI8g6ow8=;
+        b=LRwXBHQ4kn4RP6mF49J4KWH0RRQfT7GQarHZ34AN/VBCYmXj0XZkyz25sAVJCuJLDe
+         28tFAt/sae6L3QNdmIKmoYc7/bZaeXuoYqCQ/UFp38ai6IfeAgIQsEqZp0GjE7HlfEq4
+         DkrQ9ZL2KoGK7xBdf6bNSfO/4c7G9Jk9yNoyUSlseV+2rhs4jtyI/HMiB049cOiUCeEY
+         8KYTxCg2goF5tqKYt7t5nDaeZEfpyGfMC3oea7JPhwqxFMftEYDHApRiLfkQEQFnOji/
+         RAfjk3I4my7agHl1OivW22sEjMsHxJA+xFl51LrqhIe1uqFXVxGL2Smnm/ZT2lSXKuPa
+         Us/g==
+X-Gm-Message-State: AC+VfDwxxRIzUcNvfc5cJ26w66MrL7u2tXNY0iM6bqJYmJTVLsv4ibIr
+        j2XaCDlWSKAaHezirQ9F1t7LbA==
+X-Google-Smtp-Source: ACHHUZ7Th7ms72bKEB7ZtHp2Yh/u7BnpHPOwK6btJqOe7BpFZDp6faRJ02BvsNxVIHPLbCYoCQTLjQ==
+X-Received: by 2002:a17:907:94d6:b0:96f:905e:6117 with SMTP id dn22-20020a17090794d600b0096f905e6117mr9214973ejc.56.1686224372459;
+        Thu, 08 Jun 2023 04:39:32 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id bv15-20020a170906b1cf00b009596e7e0dbasm577799ejb.162.2023.06.08.04.39.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 04:39:32 -0700 (PDT)
+Message-ID: <9435791f-98cb-19f0-f959-8624990959ba@linaro.org>
+Date:   Thu, 8 Jun 2023 13:39:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [EXT] Re: [PATCH v2 1/2] dt-bindings: phy: mxs-usb-phy: convert
- to DT schema format
-To:     Xu Yang <xu.yang_2@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 1/2] dt-bindings: reset: convert the xlnx,zynqmp-reset.txt
+ to yaml
+Content-Language: en-US
+To:     Michal Simek <michal.simek@amd.com>,
+        "Mehta, Piyush" <piyush.mehta@amd.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "Paladugu, Siva Durga Prasad" <siva.durga.prasad.paladugu@amd.com>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "nava.manne@xilinx.com" <nava.manne@xilinx.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
         "krzysztof.kozlowski+dt@linaro.org" 
         <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>
-Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Jun Li <jun.li@nxp.com>
-References: <20230608033642.4097956-1-xu.yang_2@nxp.com>
- <0530fbbb-e345-8f8a-5332-526ddcd55eb2@i2se.com>
- <DB7PR04MB450531C695BF4326220A8ADE8C50A@DB7PR04MB4505.eurprd04.prod.outlook.com>
-Content-Language: en-US
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <DB7PR04MB450531C695BF4326220A8ADE8C50A@DB7PR04MB4505.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "git (AMD-Xilinx)" <git@amd.com>
+References: <20230607065121.2265076-1-piyush.mehta@amd.com>
+ <20230607065121.2265076-2-piyush.mehta@amd.com>
+ <168612336438.2153757.6000360498539992409.robh@kernel.org>
+ <MN2PR12MB4333E0628E2E67652E80067A8850A@MN2PR12MB4333.namprd12.prod.outlook.com>
+ <55b59833-d070-f576-9d85-047175d9722c@linaro.org>
+ <b1c80077-7509-883d-cfd1-fb3c0b0449d6@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b1c80077-7509-883d-cfd1-fb3c0b0449d6@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:WemzV1Ls2lVnz43mzWba/xzakp7lccit0lGaDQSyllX558oKiCS
- 4HmAqD3ERVuvCtSO9/YkYfI48IDT/C3lFPJrxACvP9FC1bxBDQYMec14jnsBrLtDW1z19E2
- 27nhsnY6ojQSNvGGHY8UJPwG6gUDHRP+VpqQjHSyqy7z8QNts8rzF0xCeuFTwDbAblKE4i2
- YDP1aCxBXGgeTujZZLelQ==
-UI-OutboundReport: notjunk:1;M01:P0:yFvJcOyGQPs=;k71yeynlfstm4//ZkW1Q6+uoYxY
- BQyxhPHRrylaWqEgdnzfgbT1DcApq19NcfC3Df1RpDGK0z7dnlq/Iqms3catY6BtulREBObbN
- /V3YE6ClNbQPF+ZShkUMwbF4Mz/UCx7pVm24zPYKK4R+FNTTpnfEDaxA6FzUxWLMwSwyFWW7w
- hV4i9BKeOEmvGK5t5MSGWGdpObGf1zb/5CxnNg9Ibxr95RXCNkMWMQMCmpPZ9wXULSdle8WIa
- S//8d94qKTX8lFEobIwiJwQeJ1odajHzcAyTNxOiGIjdA9AAf18Wtky4Ebow31GAZi98xNFoL
- axVfjYrf1zsUji69NIPD3lLHl1Y//qhHkraqCYDjjO02hN6ezyHrB9wvTRG7G2Dyw0CgDAij+
- Eyiq80zTDlM/UHVTz9Vp10po5Dll1JiYbETOWi1JcXAGQf2r8uB8kFqJ2LGjwjb6rXq8pZNGt
- UzZTDlTalNRlcmg0ffih5as6Nae13GNHBPvfFQ+absUgsLiXaf+GtA+i+X0lF0gh+402KWysi
- Vf3KAJegqjDYZseiBS3Lw3PjNrkiu+feZZDl0/Dxwws5aL6qMjvp3kfo4IL+aAXY74LbQiV57
- eVRa6axM9+dNR82r0a+MEjNFx6ebBJqMyg5WFx6KODKaMUikMxntheGxk+HSa2KBS7/b9x8De
- 1clEcejZHhXlz1pwG6FXI3UnCQQxatJM8qJ/CaO3Sg==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Xu,
-
-Am 08.06.23 um 12:30 schrieb Xu Yang:
-> Hi Stefan,
+On 08/06/2023 13:34, Michal Simek wrote:
 > 
->> -----Original Message-----
->> From: Stefan Wahren <stefan.wahren@i2se.com>
->> Sent: Thursday, June 8, 2023 3:56 PM
->> To: Xu Yang <xu.yang_2@nxp.com>; robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org; conor+dt@kernel.org
->> Cc: shawnguo@kernel.org; s.hauer@pengutronix.de; kernel@pengutronix.de; festevam@gmail.com; dl-linux-imx <linux-
->> imx@nxp.com>; linux-phy@lists.infradead.org; devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
->> usb@vger.kernel.org; Jun Li <jun.li@nxp.com>
->> Subject: [EXT] Re: [PATCH v2 1/2] dt-bindings: phy: mxs-usb-phy: convert to DT schema format
->>
->> Caution: This is an external email. Please take care when clicking links or opening attachments. When in doubt, report the
->> message using the 'Report this email' button
->>
->>
->> Hi Xu,
->>
->> Am 08.06.23 um 05:36 schrieb Xu Yang:
->>> Convert the binding to DT schema format. Besides, this also add other
->>> optional properties not contained in txt file.
+> 
+> On 6/8/23 13:29, Krzysztof Kozlowski wrote:
+>> On 08/06/2023 12:55, Mehta, Piyush wrote:
+>>> Hello,
 >>>
->>> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+>>>> -----Original Message-----
+>>>> From: Rob Herring <robh@kernel.org>
+>>>> Sent: Wednesday, June 7, 2023 1:06 PM
+>>>> To: Mehta, Piyush <piyush.mehta@amd.com>
+>>>> Cc: p.zabel@pengutronix.de; Paladugu, Siva Durga Prasad
+>>>> <siva.durga.prasad.paladugu@amd.com>; michal.simek@xilinx.com;
+>>>> nava.manne@xilinx.com; devicetree@vger.kernel.org; linux-
+>>>> kernel@vger.kernel.org; linux-usb@vger.kernel.org; conor+dt@kernel.org;
+>>>> krzysztof.kozlowski+dt@linaro.org; robh+dt@kernel.org; Simek, Michal
+>>>> <michal.simek@amd.com>; git (AMD-Xilinx) <git@amd.com>
+>>>> Subject: Re: [PATCH 1/2] dt-bindings: reset: convert the xlnx,zynqmp-reset.txt
+>>>> to yaml
+>>>>
+>>>>
+>>>> On Wed, 07 Jun 2023 12:21:20 +0530, Piyush Mehta wrote:
+>>>>> Convert the binding to DT schema format. It also updates the
+>>>>> reset-controller description.
+>>>>>
+>>>>> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+>>>>> ---
+>>>>> Note:
+>>>>> The 1/2 patch introduced a warning related to the dt binding check,
+>>>>> which was subsequently fixed in the 2/2 patch. This warning is a
+>>>>> conversion warning due to a dependency on firmware dt binding.
+>>>>>
+>>>>> Warning:
+>>>>>    DTC_CHK
+>>>>> Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.example.dtb
+>>>>>
+>>>> /scratch/piyushm/torvalds/linux/Documentation/devicetree/bindings/reset/xln
+>>>> x,zynqmp-reset.example.dtb: zynqmp-firmware: 'reset-controller' does not
+>>>> match any of the regexes: 'pinctrl-[0-9]+'
+>>>>> 	From schema:
+>>>>> /scratch/piyushm/torvalds/linux/Documentation/devicetree/bindings/firm
+>>>>> ware/xilinx/xlnx,zynqmp-firmware.yaml
+>>>>>
+>>>>> Please suggest to me, if it's fine to make a single patch instead of
+>>>>> the separate patch 1/2 and 2/2.
+>>>>> ---
+>>>>>   .../bindings/reset/xlnx,zynqmp-reset.txt      | 55 ---------------
+>>>>>   .../bindings/reset/xlnx,zynqmp-reset.yaml     | 67 +++++++++++++++++++
+>>>>>   2 files changed, 67 insertions(+), 55 deletions(-)  delete mode
+>>>>> 100644 Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt
+>>>>>   create mode 100644
+>>>>> Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
+>>>>>
+>>>>
+>>>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>>>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>>>
+>>>> yamllint warnings/errors:
+>>>>
+>>>> dtschema/dtc warnings/errors:
+>>>> /builds/robherring/dt-review-
+>>>> ci/linux/Documentation/devicetree/bindings/reset/xlnx,zynqmp-
+>>>> reset.example.dtb: zynqmp-firmware: 'reset-controller' does not match any of
+>>>> the regexes: 'pinctrl-[0-9]+'
+>>>> 	From schema: /builds/robherring/dt-review-
+>>>> ci/linux/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-
+>>>> firmware.yaml
+>>>>
+>>>> doc reference errors (make refcheckdocs):
+>>>>
+>>>> See https://patchwork.ozlabs.org/project/devicetree-
+>>>> bindings/patch/20230607065121.2265076-2-piyush.mehta@amd.com
+>>>>
+>>>> The base for the series is generally the latest rc1. A different dependency
+>>>> should be noted in *this* patch.
+>>>>
+>>>> If you already ran 'make dt_binding_check' and didn't see the above error(s),
+>>>> then make sure 'yamllint' is installed and dt-schema is up to
+>>>> date:
+>>>>
+>>>> pip3 install dtschema --upgrade
+>>>>
+>>>> Please check and re-submit after running the above command yourself. Note
+>>>> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+>>>> your schema. However, it must be unset to test all examples with your schema.
 >>>
->>> ---
->>> Changes in v2:
->>>    - change filename to fsl,mxs-usbphy.yaml
->>>    - add other optional properties
->>>    - narrow fsl,anatop to imx6
->>>    - use additionalProperties
->>> ---
->>>    .../bindings/phy/fsl,mxs-usbphy.yaml          | 128 ++++++++++++++++++
->>>    .../devicetree/bindings/phy/mxs-usb-phy.txt   |  33 -----
->>>    2 files changed, 128 insertions(+), 33 deletions(-)
->>>    create mode 100644 Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
->>>    delete mode 100644 Documentation/devicetree/bindings/phy/mxs-usb-phy.txt
->>>
->>> diff --git a/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
->> b/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
->>> new file mode 100644
->>> index 000000000000..1b6b19fdf491
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
->>> @@ -0,0 +1,128 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id:
->> http://devicetree.org/schemas/phy/fsl,mxs-
->> usbphy.yaml%23&data=05%7C01%7Cxu.yang_2%40nxp.com%7C5df4d949f975469013b408db67f5d46c%7C686ea1d3bc2b4c
->> 6fa92cd99c5c301635%7C0%7C0%7C638218077754788407%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjo
->> iV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=8Sz8tK9GVQqE6ywVLpxPB8YDFQvygZvj6s1NjZk
->> hbzU%3D&reserved=0
->>> +$schema: http://devicetree.org/meta-
->> schemas%2Fcore.yaml%23&data=05%7C01%7Cxu.yang_2%40nxp.com%7C5df4d949f975469013b408db67f5d46c%7C686ea1
->> d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638218077754788407%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMD
->> AiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=iaX16VnSJnvU%2F0tcnRgsdnTxMsD89
->> 5r4WquGsCFt9Qo%3D&reserved=0
->>> +
->>> +title: Freescale MXS USB Phy Device
->>> +
->>> +maintainers:
->>> +  - Xu Yang <xu.yang_2@nxp.com>
->>> +
->>> +properties:
->>> +  compatible:
->>> +    oneOf:
->>> +      - enum:
->>> +          - fsl,imx23-usbphy
->>> +          - fsl,vf610-usbphy
->>> +          - fsl,imx7ulp-usbphy
+>>> This dt_binding warning is known to us and is captured in commit description notes and to resolve it, we need to apply 2/2.
 >>
->> on the one side the fsl,imx7ulp-usbphy has an individual compatible
->>
->>> +      - items:
->>> +          - enum:
->>> +              - fsl,imx28-usbphy
->>> +              - fsl,imx6ul-usbphy
->>> +              - fsl,imx6sl-usbphy
->>> +              - fsl,imx6sx-usbphy
->>> +              - fsl,imx6q-usbphy
->>> +          - const: fsl,imx23-usbphy
->>> +      - items:
->>> +          - const: fsl,imx6sll-usbphy
->>> +          - const: fsl,imx6ul-usbphy
->>> +          - const: fsl,imx23-usbphy
->>> +      - items:
->>> +          - const: fsl,imx7ulp-usbphy
->>> +          - const: fsl,imx6ul-usbphy
->>
->> on the other side this should be compatible to imx6ul. So at least one
->> definition seems to be unnecessary.
->>
->> Looking at usb/phy/phy-mxs-usb.c suggests me that fsl,imx7ulp-usbphy is
->> not directly compatible to fsl,imx6ul-usbphy, because the platform data
->> is different. So maybe the using dts* files should be fixed instead?
+>> So your patchset has broken bisectability. You need to fix it. If the
+>> warning was known, then I am surprised that you sent broken patchset.
 > 
-> The imx7ulp and imx6ul only has minor difference. In general, imx7ulp
-> is compatilbe with imx6ul. We don't need to modify both dts file and
-> this doc here. So the validation of existing dtb would not fail.
+> The first patch is conversion from txt yaml without any additional changes 
+> because in past we heart that we shouldn't really do other things in it. That's 
+> why 2 patches where made. No really issue to squashed them together.
 
-The fact that according to the schema imx6ul needs fsl,anatop and 
-imx7ulp doesn't need it, let me think that the difference is not really 
-minor.
+We always shared feedback that conversion should do only conversion, but
+a correct one. Conversion cannot introduce errors or warnings in the
+bindings. It can introduce warnings in DTS, but not in the bindings.
+This was also communicated several times.
 
-Nevertheless the compatibles for imx7ulp-usbphy looks fishy to me, 
-because there are two ways to describe imx7ulp-usbphy ( with and without 
-fsl,imx6ul-usbphy ). From my understanding there should be only one way.
+If pure-conversion results in non-bisectable patchset then:
+1. either conversion should come with changes,
+2. or conversion is done a bit wrong or could be done differently like
+here. You really do not need unrelated pieces of DTS in reset controller
+code. Drop them.
 
-In case you are just concerned about validation issues in this series: 
-it's acceptable to convert txt file to YAML and fix outstanding 
-validation issues within the series via separate patch. In my opinion 
-the goal is to get a proper DT schema and not just to avoid DT 
-validation warnings.
+Best regards,
+Krzysztof
 
-Best regards
-
-> 
-> Thanks,
-> Xu  Yang
-> 
->>
->>> +      - items:
->>> +          - const: fsl,imx8dxl-usbphy
->>> +          - const: fsl,imx7ulp-usbphy
->>> +
->>> +  reg:
->>> +    minItems: 1
->>> +    maxItems: 2
->>> +
->>> +  interrupts:
->>> +    minItems: 1
->>> +    maxItems: 2
->>> +
->>> +  clocks:
->>> +    maxItems: 1
->>> +
->>> +  '#phy-cells':
->>> +    const: 0
->>> +
->>> +  power-domains:
->>> +    maxItems: 1
->>> +
->>> +  fsl,anatop:
->>> +    description:
->>> +      phandle for anatop register, it is only for imx6 SoC series.
->>> +    $ref: /schemas/types.yaml#/definitions/phandle
->>> +
->>> +  phy-3p0-supply:
->>> +    description:
->>> +      One of USB PHY's power supply. Can be used to keep a good signal
->>> +      quality.
->>> +
->>> +  fsl,tx-cal-45-dn-ohms:
->>> +    description:
->>> +      Resistance (in ohms) of switchable high-speed trimming resistor
->>> +      connected in parallel with the 45 ohm resistor that terminates
->>> +      the DN output signal.
->>> +    minimum: 35
->>> +    maximum: 54
->>> +    default: 45
->>> +
->>> +  fsl,tx-cal-45-dp-ohms:
->>> +    description:
->>> +      Resistance (in ohms) of switchable high-speed trimming resistor
->>> +      connected in parallel with the 45 ohm resistor that terminates
->>> +      the DP output signal.
->>> +    minimum: 35
->>> +    maximum: 54
->>> +    default: 45
->>> +
->>> +  fsl,tx-d-cal:
->>> +    description:
->>> +      Current trimming value (as a percentage) of the 17.78 mA TX
->>> +      reference current.
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    minimum: 79
->>> +    maximum: 119
->>> +    default: 100
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - clocks
->>> +
->>> +allOf:
->>> +  - if:
->>> +      properties:
->>> +        compatible:
->>> +          oneOf:
->>> +            - enum:
->>> +              - fsl,imx6sl-usbphy
->>> +              - fsl,imx6sx-usbphy
->>> +              - fsl,imx6sll-usbphy
->>> +              - fsl,imx6q-usbphy
->>> +              - fsl,vf610-usbphy
->>> +            - items:
->>> +              - const: fsl,imx6ul-usbphy
->>> +              - const: fsl,imx23-usbphy
->>> +    then:
->>> +      required:
->>> +        - fsl,anatop
->>> +
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->>> +
->>> +    usbphy1: usb-phy@20c9000 {
->>> +        compatible = "fsl,imx6q-usbphy", "fsl,imx23-usbphy";
->>> +        reg = <0x020c9000 0x1000>;
->>> +        interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
->>> +        fsl,anatop = <&anatop>;
->>> +    };
->>> +
->>> +...
->>> diff --git a/Documentation/devicetree/bindings/phy/mxs-usb-phy.txt b/Documentation/devicetree/bindings/phy/mxs-
->> usb-phy.txt
->>> deleted file mode 100644
->>> index 70c813b0755f..000000000000
->>> --- a/Documentation/devicetree/bindings/phy/mxs-usb-phy.txt
->>> +++ /dev/null
->>> @@ -1,33 +0,0 @@
->>> -* Freescale MXS USB Phy Device
->>> -
->>> -Required properties:
->>> -- compatible: should contain:
->>> -     * "fsl,imx23-usbphy" for imx23 and imx28
->>> -     * "fsl,imx6q-usbphy" for imx6dq and imx6dl
->>> -     * "fsl,imx6sl-usbphy" for imx6sl
->>> -     * "fsl,vf610-usbphy" for Vybrid vf610
->>> -     * "fsl,imx6sx-usbphy" for imx6sx
->>> -     * "fsl,imx7ulp-usbphy" for imx7ulp
->>> -     * "fsl,imx8dxl-usbphy" for imx8dxl
->>> -  "fsl,imx23-usbphy" is still a fallback for other strings
->>> -- reg: Should contain registers location and length
->>> -- interrupts: Should contain phy interrupt
->>> -- fsl,anatop: phandle for anatop register, it is only for imx6 SoC series
->>> -
->>> -Optional properties:
->>> -- fsl,tx-cal-45-dn-ohms: Integer [35-54]. Resistance (in ohms) of switchable
->>> -  high-speed trimming resistor connected in parallel with the 45 ohm resistor
->>> -  that terminates the DN output signal. Default: 45
->>> -- fsl,tx-cal-45-dp-ohms: Integer [35-54]. Resistance (in ohms) of switchable
->>> -  high-speed trimming resistor connected in parallel with the 45 ohm resistor
->>> -  that terminates the DP output signal. Default: 45
->>> -- fsl,tx-d-cal: Integer [79-119]. Current trimming value (as a percentage) of
->>> -  the 17.78mA TX reference current. Default: 100
->>> -
->>> -Example:
->>> -usbphy1: usb-phy@20c9000 {
->>> -     compatible = "fsl,imx6q-usbphy", "fsl,imx23-usbphy";
->>> -     reg = <0x020c9000 0x1000>;
->>> -     interrupts = <0 44 0x04>;
->>> -     fsl,anatop = <&anatop>;
->>> -};
