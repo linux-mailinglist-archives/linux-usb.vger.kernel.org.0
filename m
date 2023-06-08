@@ -2,113 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E1F7275C6
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 05:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 991A67275E2
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jun 2023 05:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233655AbjFHDeO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Jun 2023 23:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
+        id S233839AbjFHDsW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Jun 2023 23:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233621AbjFHDeL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 23:34:11 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2062.outbound.protection.outlook.com [40.107.6.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002F326A1;
-        Wed,  7 Jun 2023 20:34:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S6eKLrRzV17qtg+YXzMZCNAlLzUxoprQCbReyKdn4m0L0Vw8h3WXebinM3gvWtLep0EoWx8vbnKHZb5+UqsfZFm1ocZA3tjCSthd6ou6VsbqKiuMKVoQcocpi+vJSByLn8SYuULNm4XsEx3RBq7+6RezIT99uiMpSHiThiVGSEQz0SODzFtoseb1gUbc8RqNWUr4sUiEAV74rm9chamXV2iyZrJrpYifpcYnSGBZzcxtGcPMkASp30rmQ0gp3OInm3RIlfi9u/9Ks0iwadQN4z7HyuODzvCOYEgOwTTj6Y1cK/QDHk+1/0dLiHf+tXiomdDyZyiMQ2cACVYJI0xp0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KF/yjzMVaLiZ4K9MO8MZQVYenyag3rx/mif5K43S7QU=;
- b=JepCvCfkD1Jw6+ZHCKBDsdVLiEWqQ7SWUFJG5Gg1YOyApyay/vJuB1Ajn1UHWirD4NXZOCeDzwd24BTCyrRoenqSot4y5q4+J2sfXmZ0BykIrrl628JyARxkK/eMWrHRusdwjTJj9H27nY0HyAqS8iTbXF65Cy7fHILnBldv+M3teR5tvp0M3HgMxCXx1Rt8Z1w5NmWht8q/W9Uq94OkAVujbFo080imMtEhwi9UzE9MKVMi+fMvBfTxm0sXkJG6wWnP2iaYWecWHFRXLdTOrBfVP0VK6Gv7Ht2iUJtS2bXASfSrFakezLWiRb3ob8ga0OptayvDr4p64LiklHjSvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KF/yjzMVaLiZ4K9MO8MZQVYenyag3rx/mif5K43S7QU=;
- b=VQlFbgYQVNpQs/aOPzXqcmzcC701tIkuoq0jpMGItZcvsumwYw7e90n8k3BTUAhhUiuQE1PKJehjGLOrmSvIlxlLdr8jwl11QShPP/+yQX4isTf/gABdAppzX+q3J60O0aO5kyUzvPNjUbKw9KWe8aQqnQNjtocYf8D/rRRlbhU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DB7PR04MB4505.eurprd04.prod.outlook.com (2603:10a6:5:39::26) by
- AS8PR04MB8344.eurprd04.prod.outlook.com (2603:10a6:20b:3b3::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19; Thu, 8 Jun
- 2023 03:34:07 +0000
-Received: from DB7PR04MB4505.eurprd04.prod.outlook.com
- ([fe80::f9b0:8c34:e57:92a4]) by DB7PR04MB4505.eurprd04.prod.outlook.com
- ([fe80::f9b0:8c34:e57:92a4%7]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
- 03:34:07 +0000
-From:   Xu Yang <xu.yang_2@nxp.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        jun.li@nxp.com, xu.yang_2@nxp.com
-Subject: [PATCH v2 2/2] dt-bindings: phy: mxs-usb-phy: add imx8ulp and imx8qm compatible
-Date:   Thu,  8 Jun 2023 11:36:42 +0800
-Message-Id: <20230608033642.4097956-2-xu.yang_2@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230608033642.4097956-1-xu.yang_2@nxp.com>
-References: <20230608033642.4097956-1-xu.yang_2@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0018.apcprd02.prod.outlook.com
- (2603:1096:4:1f4::7) To DB7PR04MB4505.eurprd04.prod.outlook.com
- (2603:10a6:5:39::26)
+        with ESMTP id S233153AbjFHDsU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jun 2023 23:48:20 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3966826AC;
+        Wed,  7 Jun 2023 20:48:19 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-52cb8e5e9f5so155570a12.0;
+        Wed, 07 Jun 2023 20:48:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686196098; x=1688788098;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c13J+e7y4VjSMeGnm4BAl91ocFqLWuZW1dyWfZYv21s=;
+        b=Ea+mOp53kC0KctYjGNP9kfy3VAP/85DNAybmd9ngQSftL1fU9yTIpPaKddTzKr4GK7
+         ryvGbMhQNiUZt/75ES/vK7ycTNvYunVVp5kRSqycDbbVaG09n26J/b1Xe+59OWCXwPw2
+         NKWAZwwAV5yVyEvUgSPCbRB+jviTlkI7anlvJVCDOsdBBB6pA8h4VS9rXGSCKuHnjqDh
+         c8tYPb6n9VY4cmf2gazlE10Gm0eadWj4JuScQLGm2n3yWtOFFjv22bwO+2yMvKxZc+21
+         aNBZwUac3zl7V0noFR6Fq4EVUNBdX5FundTV0DqYUhqAyVX/T2+Sf6vZRzwcYlX3XJAi
+         CN7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686196098; x=1688788098;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c13J+e7y4VjSMeGnm4BAl91ocFqLWuZW1dyWfZYv21s=;
+        b=Tpe+RZQLcsQRsrnHqRXuzACyRlM79fKPVAGN/ViD55Hk3G3Zq16e/qpSuUva6zDGVJ
+         bD86pusRsSBXvbkrnbw10FD2QwwEQoAtoYyHjgY8LKV82u3P9dL7JX9fvaht4Cd7iS7N
+         yGwhEEvEQNf/rK+kCml6DWRwuDQqLBIZ66FcRpsCjhvgpCYWSmq9GHLQ/fzE8x8tv5Jq
+         KYWOWSDt2fq0paqQdKBhzJ+wbtd56WTA4C2HQqeNL1Ik7kbmddF5PPO4138kLNbwoXqV
+         5apYXDiZ5YsGtRcWGLj+tIUnANHGuh8OUtMquk7bOUsiVsrdY9LIm3ZMX3P3nz5uh6ue
+         lzgg==
+X-Gm-Message-State: AC+VfDzxrgeJi8Z2cDtiHnrygvkxKAde+55KVM+Rxt3S1nATZi0ftllG
+        0yE0h/ebW0vdMiA1nyFb98J3pz661JZ9XAcPb+EPJYGYdMo=
+X-Google-Smtp-Source: ACHHUZ7TvrGUUSvhkDTx2RaEgu/lRpRvKxB9T61Kx/oVzrNJ0OKiDZoxMK8a6JuGWYGMV5LIfaYwlW2P3Kp7H/uiSt8=
+X-Received: by 2002:a17:90a:f297:b0:253:3975:7a37 with SMTP id
+ fs23-20020a17090af29700b0025339757a37mr1195400pjb.9.1686196098262; Wed, 07
+ Jun 2023 20:48:18 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB7PR04MB4505:EE_|AS8PR04MB8344:EE_
-X-MS-Office365-Filtering-Correlation-Id: cc06941f-e5d8-44be-bd4f-08db67d13729
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NiSxKMHpDE2Jn3XCOC7A5fV0e7qls/4OKvBc+PMxd1X+zC1bDIfiP83n4Sz83PV5/nyeeRGB9zNF/bSWOhCa+4NctFz3NHpt0MLBCPqjhl4skn/4Hs+evyvZ/8yAJnAfOMvK/nKEhHzsVSuuvdaJyfJyctQmzlpR12sq11UckY6HPe4wqztPW7pgBr0MwLw+Iim/wvrg5KXoIVQGwG1OLxcxvJfWE6vE6BGLAnLJVEoIS3LtZRkKE4iA5U8rXyFsoZ9Gz/r7Zd9rqEIJCR/rtV3ipACMDkCq04PhfavrNz7bAQJC/5oCoCfQN9PD1RUo77qVUQm2dsrrbQfIAnRo2vExgQpaCQ2+ISvFfKk44B/afw2GKai62g+eriAj1UU5FKuFlQmIIetdbz25N6cqnMADsSdrXt1laFe+2SRvyRCyGKzdtfgCQznM8YUtPtz54RHNwgyc5R1CzBDXoDnwr3miBWdmshBXT4j/1lLIcry/oP2RhKlnLYb9p9hyOgPYrj4G/DUDs7KfuRJPb7C93FaWPfYqMKU2Bs5SvCj7DDcyQVgsb7XwMKHlq+pgZDvL1ZEjyI6kbKHbk6ziTvPZzDyePD9kHEooaQCflbhSjJ53RIrnD+wFRcWvI3TukAZ5a1R4o1IZ22ucFBOlbMoEUg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4505.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(376002)(366004)(346002)(39860400002)(451199021)(36756003)(1076003)(26005)(41300700001)(186003)(6512007)(5660300002)(6506007)(2616005)(83380400001)(8676002)(8936002)(478600001)(66556008)(4326008)(66946007)(6666004)(66476007)(6486002)(316002)(52116002)(38350700002)(38100700002)(2906002)(86362001)(4744005)(7416002)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BO2jzlmG9xxPXZk6SYK29pq502UuYxSOfmeldivSb51PaxWclIYKS9ysiBmj?=
- =?us-ascii?Q?8jb3K1QEijGwxzS3BmtXzI8wxDitQOveOqM9xPSOnSiHLokInHNcl/uhu1WN?=
- =?us-ascii?Q?CTmXOIg+9iDAfQ4Eo9YiqZgLcGjCxpIRqM799cqfdj1sIy+nuaakwiALq12W?=
- =?us-ascii?Q?nElZ/k45WmtAJ50DNQfpPWY/PsbEAFHgUXxWVv1KC32Q6wIZzRXx3WwFlstu?=
- =?us-ascii?Q?4OE0F4I8z2iwHbkU826yZnwAq5mtVPGj5GL3rADES063KLzTwiV0l07yD7/Z?=
- =?us-ascii?Q?m7Cghz5EJaxQMwL31MtQzezx3FooFttcUj6sM8nCo14MiJnf5tyiLdQqdue9?=
- =?us-ascii?Q?RTaOfjs5BzN8wKKh7YYmxVq94MlSfQKf15+837C42jaWE/TIhL095wns8pHM?=
- =?us-ascii?Q?Shk127F/NjlWOkY+lxulmNPXonm2kPLBkWQsiPnRXOgrJK+MZqQYy0+sfylj?=
- =?us-ascii?Q?Xx3b8EyshPEwXCJNqGa+cmEyufC92XEZ1Ykvh/DTXubV5ze+ru4I1ac5lfXj?=
- =?us-ascii?Q?rauNOnprk+onaPJ8efMs1nPUAys3LEonPYkp1xSdW92hv1mtH56I7l73Nvia?=
- =?us-ascii?Q?myAj3PlG7qA6+y8HPdVnX77U5qbJCZHqG+YhlGPlQcwehvBTqOhkJig9DVj4?=
- =?us-ascii?Q?Sk+yGvXpXybnO8aTKDbrkvTg5D4SHPNNtVOpdnR+oPCs9/oIHFG7QrvrqFS9?=
- =?us-ascii?Q?5SNPv8PNdVwzHM0BbhwT4X1RR2+GPWumEFfaXmlmhyYKRh5kRHn16HjeyxIK?=
- =?us-ascii?Q?Szmt0EqYRipMHm9sfl0jlC0F33i+68JoeQlPqxNXMbehm9T9OcIW4dpvxpg7?=
- =?us-ascii?Q?5iLVzrrg7MQhDaTezI5h02XDX5aDLGwBP50roo3RFcH6xa+Xf8wFXhJJQrZF?=
- =?us-ascii?Q?2TRD2LbRk+71T0d1FrJwYohjJ7U8iilzZa3fIvAM2MecSxnFiG40Kwl5A29E?=
- =?us-ascii?Q?zmezBMpFQDwr8dlweWsFnZffmk+yRQCtUAWytXKttwQOHiCl9PaCVxZbmtEy?=
- =?us-ascii?Q?Zhq4MnJ5Aygx5gHiVGixzASnvXwDxt/pV/gGWusThNcClU9GVVp6f05YPGwT?=
- =?us-ascii?Q?8Ea3I9dg9P5BVZepp5Rpggmpw+CdTmECTlmZUgaHJ/x93VMfD8d/0dzEi09V?=
- =?us-ascii?Q?mS3nLqPsKr5XZmNwUwK+HLJ2pa/ZehJsP6KklR1I9itbfARbulIhA4pcvphI?=
- =?us-ascii?Q?Xuff0aJOxnQaX3qZTMvwLVNwMjB15cv27Okf7w3DdgY/Bo9p8oeG+X1EuHgw?=
- =?us-ascii?Q?zcLaLI9vSkx09BQDHrIqHyXh5Le4SDVBSMpD95kaiCbWSWWWTsBUFjszKMfX?=
- =?us-ascii?Q?sfVMY2neNvX7D1OvT3KwCqgUU2NvsoSMcOMfU/WNhR2AKq9A5IrZyJ0CIPA6?=
- =?us-ascii?Q?AwZkvywjYx0HmRe+5MVOgI45diEn0yjIGVicG8qr0iQSOH69i6mN33KRSr2t?=
- =?us-ascii?Q?GWUoKfVq12VVt1cxompyp5AC886Hrls4od80Xcl+mxoCYwUcBo2l/ORbS/4+?=
- =?us-ascii?Q?zU1H6n9e1NKwLDW2fqKeZU8sndTLPP985JzN/inG6IHWPS+xC+3N9o9nzZIX?=
- =?us-ascii?Q?DTVCO+IpCBSDV1huvQxga8uO2dZtt9VUkkDISBwu?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc06941f-e5d8-44be-bd4f-08db67d13729
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB4505.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 03:34:07.7447
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9Dc7Yi2C4CPRdXTgdkAJuQDtMkuX2qGQoRtpUUegMG6JRNwIEyV+dYbrRQgTlxGLWTCvp3dbeCB+xTDwJOH3mQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8344
+References: <CADyTPExB2kYOOwkO0JqGhKaYVDqO9uS9WCw0J=MCTdVhcGOogA@mail.gmail.com>
+In-Reply-To: <CADyTPExB2kYOOwkO0JqGhKaYVDqO9uS9WCw0J=MCTdVhcGOogA@mail.gmail.com>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Thu, 8 Jun 2023 11:44:36 +0800
+Message-ID: <CAD-N9QVPA_5-TJzpB0C2FTyOP9wN=d1zoPREr6kAgf4ZxJk7Jw@mail.gmail.com>
+Subject: Re: PROBLEM: kernel NULL pointer dereference when yanking ftdi
+ usb-serial during BREAK
+To:     Nick Bowler <nbowler@draconx.ca>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        HUST OS Kernel Contribution 
+        <hust-os-kernel-patches@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,34 +70,155 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The imx8ulp and imx8qm are compatible with imx8dxl. This will add such
-compatible.
+On Thu, Jun 8, 2023 at 10:37=E2=80=AFAM Nick Bowler <nbowler@draconx.ca> wr=
+ote:
+>
+> Hi,
+>
+> I just hit an oops when unplugging my usb serial adapter.  So naturally,
+> I tried it again, and found if I use minicom to send BREAK and then
+> quickly yank the cable, I can reliably cause this oops every single
+> time.
+>
+> Originally I noticed the problem on 6.1.7, but tried again on 6.4-rc5
+> and the exact same problem occurs.
+>
+> Let me know if you need any more info!
+>
+> Thanks,
+>   Nick
+>
+> [   41.834144] ftdi_sio 1-1:1.0: FTDI USB Serial Device converter detecte=
+d
+> [   41.834178] usb 1-1: Detected FT232R
+> [   41.834307] usb 1-1: FTDI USB Serial Device converter now attached to =
+ttyUSB0
+> [   49.238361] usb 1-1: USB disconnect, device number 6
+> [   49.238592] ftdi_sio ttyUSB0: error from flowcontrol urb
+> [   49.238734] ftdi_sio ttyUSB0: FTDI USB Serial Device converter now
+> disconnected from ttyUSB0
+> [   49.238760] ftdi_sio 1-1:1.0: device disconnected
 
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+According to the log, if I understand correctly, this driver first
+disconnects, and then ftdi_break_ctl (operations about sending BREAK)
+executes.
+Clearly, it could lead to an UAF since priv is freed in the ftdi_port_remov=
+e.
 
----
-Changes in v2:
- - no change
----
- Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+I am not sure why there is a NULL pointer dereference since I did not
+observe any explicit usb_set_serial_port_data(port, NULL);
 
-diff --git a/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml b/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
-index 1b6b19fdf491..1395a982c387 100644
---- a/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
-+++ b/Documentation/devicetree/bindings/phy/fsl,mxs-usbphy.yaml
-@@ -32,7 +32,10 @@ properties:
-           - const: fsl,imx7ulp-usbphy
-           - const: fsl,imx6ul-usbphy
-       - items:
--          - const: fsl,imx8dxl-usbphy
-+          - enum:
-+              - fsl,imx8ulp-usbphy
-+              - fsl,imx8dxl-usbphy
-+              - fsl,imx8qm-usbphy
-           - const: fsl,imx7ulp-usbphy
- 
-   reg:
--- 
-2.34.1
+The root cause may be due to the race between ftdi_port_remove and
+ftdi_break_ctl. The fix can be a flag indicating if the device is
+still presented.
 
+Please correct me if you find any problem.
+
+Dongliang Mu
+
+> [   49.274543] BUG: kernel NULL pointer dereference, address: 00000000000=
+0000c
+> [   49.274550] #PF: supervisor read access in kernel mode
+> [   49.274553] #PF: error_code(0x0000) - not-present page
+> [   49.274555] PGD 0 P4D 0
+> [   49.274560] Oops: 0000 [#1] PREEMPT SMP
+> [   49.274564] CPU: 3 PID: 3247 Comm: minicom Not tainted 6.4.0-rc5 #20
+> [   49.274568] Hardware name: LENOVO 20CMCTO1WW/20CMCTO1WW, BIOS
+> N10ET42W (1.21 ) 02/26/2016
+> [   49.274572] RIP: 0010:ftdi_break_ctl+0x14/0x7b [ftdi_sio]
+> [   49.274584] Code: c0 e8 64 63 6a d3 ba 06 00 00 00 31 f6 48 89 df
+> 5b e9 5c fd ff ff 55 85 f6 89 f5 53 48 8b 9f 58 02 00 00 48 8b 83 48
+> 03 00 00 <44> 8b 40 0c 74 06 66 41 81 c8 00 40 48 8b 13 45 0f b7 c0 b9
+> 40 00
+> [   49.274588] RSP: 0018:ffffb016009b3e28 EFLAGS: 00010246
+> [   49.274591] RAX: 0000000000000000 RBX: ffffa3f944575800 RCX: 000000000=
+0000000
+> [   49.274593] RDX: 0000000000000001 RSI: 0000000000000000 RDI: ffffa3f94=
+0d8c400
+> [   49.274595] RBP: 0000000000000000 R08: ffffa3fa65d9b840 R09: 000000000=
+0000001
+> [   49.274597] R10: 0000000000000000 R11: 0000000000000000 R12: 000000000=
+00000fa
+> [   49.274599] R13: ffffa3f940d8c400 R14: 0000000000000000 R15: 000000000=
+0000000
+> [   49.274602] FS:  00007f0ffcedc740(0000) GS:ffffa3fa65d80000(0000)
+> knlGS:0000000000000000
+> [   49.274605] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   49.274607] CR2: 000000000000000c CR3: 000000010c981004 CR4: 000000000=
+03706e0
+> [   49.274610] Call Trace:
+> [   49.274613]  <TASK>
+> [   49.274614]  ? __die_body+0x15/0x53
+> [   49.274620]  ? page_fault_oops+0x2e8/0x31c
+> [   49.274625]  ? psi_group_change+0x237/0x298
+> [   49.274631]  ? get_sd_balance_interval+0xf/0x39
+> [   49.274637]  ? newidle_balance+0x25f/0x2c6
+> [   49.274641]  ? exc_page_fault+0x14b/0x4b8
+> [   49.274647]  ? asm_exc_page_fault+0x22/0x30
+> [   49.274653]  ? ftdi_break_ctl+0x14/0x7b [ftdi_sio]
+> [   49.274661]  serial_break+0x1c/0x1f [usbserial]
+> [   49.274672]  send_break+0x7f/0xa6
+> [   49.274678]  tty_ioctl+0x46e/0x6b3
+> [   49.274683]  ? vfs_write+0x15d/0x188
+> [   49.274688]  vfs_ioctl+0x16/0x23
+> [   49.274692]  __do_sys_ioctl+0x52/0x74
+> [   49.274698]  do_syscall_64+0x7f/0x9f
+> [   49.274702]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> [   49.274708] RIP: 0033:0x7f0ffcfdec7b
+> [   49.274711] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24
+> 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00
+> 00 0f 05 <89> c2 3d 00 f0 ff ff 77 1c 48 8b 44 24 18 64 48 2b 04 25 28
+> 00 00
+> [   49.274713] RSP: 002b:00007ffc18ab3a00 EFLAGS: 00000246 ORIG_RAX:
+> 0000000000000010
+> [   49.274717] RAX: ffffffffffffffda RBX: 00005562830d74bc RCX: 00007f0ff=
+cfdec7b
+> [   49.274719] RDX: 0000000000000000 RSI: 0000000000005409 RDI: 000000000=
+0000003
+> [   49.274721] RBP: 0000556284ef1d60 R08: 00007f0ffd076440 R09: 000000000=
+0000064
+> [   49.274723] R10: 00007f0ffcee7450 R11: 0000000000000246 R12: 000055628=
+30e9130
+> [   49.274726] R13: 00007ffc18ab3ad0 R14: 00005562830d6ee8 R15: 000000000=
+0000004
+> [   49.274728]  </TASK>
+> [   49.274730] Modules linked in: ftdi_sio usbserial ccm nfs lockd
+> grace bridge stp llc xt_state iptable_filter iptable_mangle
+> xt_MASQUERADE xt_mark iptable_nat nf_nat nf_conntrack nf_defrag_ipv6
+> nf_defrag_ipv4 ip_tables x_tables snd_hda_codec_hdmi squashfs loop
+> nls_iso8859_1 nls_cp437 vfat fat ext4 crc16 mbcache jbd2 iwlmvm i915
+> mac80211 snd_ctl_led libarc4 snd_hda_codec_realtek
+> snd_hda_codec_generic i2c_algo_bit drm_buddy drm_display_helper
+> uvcvideo iwlwifi drivetemp videobuf2_vmalloc drm_kms_helper
+> snd_hda_intel coretemp videobuf2_memops uvc snd_intel_dspcfg
+> videobuf2_v4l2 syscopyarea x86_pkg_temp_thermal sysfillrect
+> snd_hda_codec thinkpad_acpi sysimgblt cec videodev nvram snd_hda_core
+> cfg80211 kvm_intel ttm ledtrig_audio snd_pcm videobuf2_common
+> platform_profile jc42 regmap_i2c kvm irqbypass mc rfkill hwmon thermal
+> drm intel_gtt ac snd_timer agpgart battery snd video soundcore wmi
+> evdev efivarfs rtsx_pci_sdmmc mmc_core sha512_ssse3 e1000e rtsx_pci
+> ptp mfd_core pps_core ipv6 sunrpc
+> [   49.274823] CR2: 000000000000000c
+> [   49.274825] ---[ end trace 0000000000000000 ]---
+> [   49.274827] RIP: 0010:ftdi_break_ctl+0x14/0x7b [ftdi_sio]
+> [   49.274835] Code: c0 e8 64 63 6a d3 ba 06 00 00 00 31 f6 48 89 df
+> 5b e9 5c fd ff ff 55 85 f6 89 f5 53 48 8b 9f 58 02 00 00 48 8b 83 48
+> 03 00 00 <44> 8b 40 0c 74 06 66 41 81 c8 00 40 48 8b 13 45 0f b7 c0 b9
+> 40 00
+> [   49.274838] RSP: 0018:ffffb016009b3e28 EFLAGS: 00010246
+> [   49.274841] RAX: 0000000000000000 RBX: ffffa3f944575800 RCX: 000000000=
+0000000
+> [   49.274843] RDX: 0000000000000001 RSI: 0000000000000000 RDI: ffffa3f94=
+0d8c400
+> [   49.274845] RBP: 0000000000000000 R08: ffffa3fa65d9b840 R09: 000000000=
+0000001
+> [   49.274847] R10: 0000000000000000 R11: 0000000000000000 R12: 000000000=
+00000fa
+> [   49.274849] R13: ffffa3f940d8c400 R14: 0000000000000000 R15: 000000000=
+0000000
+> [   49.274851] FS:  00007f0ffcedc740(0000) GS:ffffa3fa65d80000(0000)
+> knlGS:0000000000000000
+> [   49.274853] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   49.274855] CR2: 000000000000000c CR3: 000000010c981004 CR4: 000000000=
+03706e0
+> [   49.274858] note: minicom[3247] exited with irqs disabled
