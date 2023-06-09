@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0445729EBC
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Jun 2023 17:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369C2729ECD
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Jun 2023 17:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241562AbjFIPiu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Jun 2023 11:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
+        id S241797AbjFIPkb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Jun 2023 11:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237997AbjFIPit (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Jun 2023 11:38:49 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D642E35A7
-        for <linux-usb@vger.kernel.org>; Fri,  9 Jun 2023 08:38:45 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-977cf86aae5so293425766b.0
-        for <linux-usb@vger.kernel.org>; Fri, 09 Jun 2023 08:38:45 -0700 (PDT)
+        with ESMTP id S241817AbjFIPk2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Jun 2023 11:40:28 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADA630F7
+        for <linux-usb@vger.kernel.org>; Fri,  9 Jun 2023 08:40:24 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b219ed9915so21291441fa.3
+        for <linux-usb@vger.kernel.org>; Fri, 09 Jun 2023 08:40:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686325124; x=1688917124;
+        d=linaro.org; s=google; t=1686325223; x=1688917223;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=jorRTe9x5lJeJhWfN/tUaEbK9cETxBDWnzXXAk2nPIU=;
-        b=LoTlSmKD8bjtAmd0AQnZrlssa8ZiOjN5pw90ZA+Nx4ze9+O4IXxvyRQJ12U+HCekvG
-         NuIpZEEqfYz/lIwanx4zEDhAHu4nRAWAfVElS61M04uvzM++LbvDq9CNl4vf91hJIdPZ
-         MaFmTMRgJbekFuzszLbGkriejLMK+WHquwo77er2yzrUuwirMAGYeoGnjKyLklLnr4j8
-         MsBfXGpFcgOKxtiD2bZv6fsDPuEprwkIUp4SrOaC5qDQVh0TgfDLkud021KMQ7xJARKo
-         J19bBo9p+IC9iSIoZLKFeccwg3VYNyZ3soF5xuFLrvJorMgcf1+Ee2n1ci0GD64UfQJL
-         vu7g==
+        bh=AQRG02G+Dbe1B0+6KJo9SLXQ+0hXudANBMUpTqfI594=;
+        b=I/MnDNi6hc7i16YsigbS2TngJdyE6/1hQ9/2Kwd477U/yZweXOzxXY481vZ/DbVURy
+         I0faW+RY9qo5oPK6dzHE5uYjqgp+TLN1vqsGR7C5YYqsVUq+PnGAz9Y+z97NZtS9U0Bh
+         lU56mGvfG04d1zMvMRLVL4lE65AGddoyPmbx9qu2HJNu87SyrAslfMB/t2q+NlDj3k2C
+         wW3XmAK/ivP2qj0+uVNEoNwrNiboNZiHfMxOPxxeoktyrLRBZKQdShF/PfVD16N3fuI0
+         CIMkwnfQ3DSH0QKnj7MR/H9qFzDoVJu2Go5TTnX3B6DX47C1shIZcDFjh1Q+fLVYwVf6
+         gvpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686325124; x=1688917124;
+        d=1e100.net; s=20221208; t=1686325223; x=1688917223;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jorRTe9x5lJeJhWfN/tUaEbK9cETxBDWnzXXAk2nPIU=;
-        b=XQboozOa9A+LAa5mPN33WefCGshxNl1QXSxgqHaibNogf1hZ0tBdKgfl7cGCHEmWYB
-         3d393Ys4kdx+uaQqJ+lq1Pwy07pAP6Y7eVh8n4fttUT086GYMoybEfnPB5Rc/yL+BQ+e
-         ij0h/DOBzbJEsSO4JyeN6A7+IAcxld7WK2qiEMH0d5HSYacluBQaqqoBoXdvLucjGYHY
-         rE7PFixnx5/TH37hgEppGRbqSdBTqwhyHI7MRU9me+6l4SKQmbEcaL8YAtIraS0xMRYk
-         /yK/GHdPKLH6VEZDmWo/kx0cR7jiHIymbL4GptJ1dxvDv3rPytp0XAzBHPE4rn8MvJEO
-         rzFQ==
-X-Gm-Message-State: AC+VfDyo3ZWvZmyjJVuZY0n6V8J8Cdwdx7nKlTMVgNspMEIDP5fH6pKG
-        E4rrXr60Cgs2Lku7wEEi+seaJg==
-X-Google-Smtp-Source: ACHHUZ7Wu5jmfQjkYkox8N1dR5VIsH+RE9uA5DNord0lEbqHRXmFw/c2UNSs/zPBWk9kJ5cszg9boQ==
-X-Received: by 2002:a17:906:fd85:b0:969:f54c:dee2 with SMTP id xa5-20020a170906fd8500b00969f54cdee2mr1905215ejb.26.1686325124285;
-        Fri, 09 Jun 2023 08:38:44 -0700 (PDT)
+        bh=AQRG02G+Dbe1B0+6KJo9SLXQ+0hXudANBMUpTqfI594=;
+        b=cuf59GROBMagoR3kSz6pMOz/lkKc+XN7qHOB7wts738jJ7R5cfl88cPQaPGirpiHIV
+         qPgYmFK0lerAxzjolzHPjIEoji7eB0+d36KdumPOTo+x5/tpvNfp8kTR5BOeJiDs+pw+
+         8gK3DIWVnXQCwzlYewNapdCyDyxqvvgKQylAq79kv5OnUobhnOlwhWJXCn5T0dvSAs1a
+         HjFG57BmJzLx5oSanYAKIlltweODKASMXh2Agq+icVq2Wuv2B91E4KYt6XeUDSykX8q8
+         ltSQ8Ou4uVP6kJmKldq0nc0EMQBs8HAq0xyoWqX81lXvffsgoUdSqm3tEuwlV588ODLw
+         90OQ==
+X-Gm-Message-State: AC+VfDyawKbY6Dpg90x7kVNhXdxuRAF+Dy6ESOqquz9FN/I5PhEr/wbs
+        MtWrE0gmrPc3Dgusm6Fv10uFHw==
+X-Google-Smtp-Source: ACHHUZ6UuT10SINr+AclWPtzmR8uSUSk8xgIMXeY2yatS06wlFryDLE9BlVdvfnBdFjUr2wBphKw4Q==
+X-Received: by 2002:a2e:964b:0:b0:2b1:edfe:8171 with SMTP id z11-20020a2e964b000000b002b1edfe8171mr1125092ljh.36.1686325223004;
+        Fri, 09 Jun 2023 08:40:23 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id a12-20020a17090680cc00b0096f7105b3a6sm1418119ejx.189.2023.06.09.08.38.42
+        by smtp.gmail.com with ESMTPSA id s13-20020aa7cb0d000000b005163a6c9f18sm1868430edt.53.2023.06.09.08.40.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 08:38:43 -0700 (PDT)
-Message-ID: <22e3c25e-487b-c02f-46f3-6d2ab2be8813@linaro.org>
-Date:   Fri, 9 Jun 2023 17:38:42 +0200
+        Fri, 09 Jun 2023 08:40:22 -0700 (PDT)
+Message-ID: <37f17a76-4568-f780-1397-ebc767cd2973@linaro.org>
+Date:   Fri, 9 Jun 2023 17:40:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
@@ -72,7 +72,7 @@ Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,93 +88,13 @@ On 09/06/2023 13:04, Piyush Mehta wrote:
 > - Addressed the Krzysztof review comment:
 >  - Update DT binding to fix the dt_binding_check warning.
 > 
+> Link: https://lore.kernel.org/lkml/168612336438.2153757.6000360498539992409.robh@kernel.org/T/#m4abfe6287177d5fd09f781d298dd19d56aae5e27 
+> ---
+>  .../bindings/reset/xlnx,zynqmp-reset.txt      | 55 ----------------
+>  .../bindings/reset/xlnx,zynqmp-reset.yaml     | 64 +++++++++++++++++++
 
-...
-
-> diff --git a/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml b/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
-> new file mode 100644
-> index 000000000000..a39b17599e05
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
-> @@ -0,0 +1,64 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/reset/xlnx,zynqmp-reset.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Zynq UltraScale+ MPSoC and Versal reset binding
-
-Drop "binding"
-
-> +
-> +maintainers:
-> +  - Piyush Mehta <piyush.mehta@amd.com>
-> +
-> +description: |
-> +  The Zynq UltraScale+ MPSoC and Versal has several different resets.
-> +
-> +  The PS reset subsystem is responsible for handling the external reset
-> +  input to the device and that all internal reset requirements are met
-> +  for the system (as a whole) and for the functional units.
-> +
-> +  Please also refer to reset.txt in this directory for common reset
-> +  controller binding usage. Device nodes that need access to reset
-> +  lines should specify them as a reset phandle in their corresponding
-> +  node as specified in reset.txt.
-> +
-> +  For list of all valid reset indices for Zynq UltraScale+ MPSoC
-> +  <dt-bindings/reset/xlnx-zynqmp-resets.h>
-> +
-> +  For list of all valid reset indices for Versal
-> +  <dt-bindings/reset/xlnx-versal-resets.h>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - xlnx,zynqmp-reset
-> +      - xlnx,versal-reset
-> +
-> +  "#reset-cells":
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - "#reset-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/reset/xlnx-zynqmp-resets.h>
-
-Drop, won't be needed after removing unrelated parts.
-
-> +
-> +    firmware {
-
-Drop
-
-> +        zynqmp_firmware: zynqmp-firmware {
-
-Drop, three level of indentations for that simple reset-controller...
-
-> +            zynqmp_reset: reset-controller {
-> +                compatible = "xlnx,zynqmp-reset";
-> +                #reset-cells = <1>;
-> +            };
-> +        };
-> +    };
-> +
-> +    /* Specifying sata reset control of devices */
-> +    sata {
-> +        resets = <&zynqmp_reset ZYNQMP_RESET_SATA>;
-> +        reset-names = "sata_rst";
-> +    };
-
-Drop this - not related.
-> +
-> +...
+You forgot to update xlnx,zynqmp-firmware.yaml. It was wrong from the
+beginning, but now you can fix it in this commit.
 
 Best regards,
 Krzysztof
