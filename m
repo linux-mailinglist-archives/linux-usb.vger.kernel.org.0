@@ -2,132 +2,257 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E51729749
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Jun 2023 12:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 780E57297C3
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Jun 2023 13:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233975AbjFIKp3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Jun 2023 06:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
+        id S238680AbjFILFV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Jun 2023 07:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238770AbjFIKoR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Jun 2023 06:44:17 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBAE3C3A;
-        Fri,  9 Jun 2023 03:42:23 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f778c50d64so2793275e9.0;
-        Fri, 09 Jun 2023 03:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686307342; x=1688899342;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lot98Cc3sqdz25vnOABojTEsU9LUeVox91mS0u9ZYdQ=;
-        b=m8J+bZiVHFkf0uCmdy9hvThTxphkI0Utu2Gwb79FA9vfCPwtSp7xp/jYmp23ycksh2
-         da14NVPgg953VOoiiTggmrltxW4zR3dcr/JyOeS0m5/IvTvcWZTWC6YQ/LVXDJzTdHB6
-         XjbB/ieRtHJcNSwCb2NgpizCwzKPvFXELb/wBqdWZFc8VIfkwVedWOybEzd5P3Rk+xBJ
-         JFjfwwmzwRxXFWIRa6pO+F5bzfIGCjLFFC6c1P/xTjoeIMaRSCPZ4WvlvaM2jCqw0SPf
-         FqUQpiae+Hd1tLctwuUSklkXm7E3sTjX34NTm91nmndhIesLLeXkDOe8wAoi8ZasQi/1
-         Ckyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686307342; x=1688899342;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Lot98Cc3sqdz25vnOABojTEsU9LUeVox91mS0u9ZYdQ=;
-        b=W6ksPGs8hyeqInGcDiQ/ek2875utVFLh8JDwUKA0qQ+zZeT4iA1TEIpARW3JFP8qGR
-         FAeJcxuPAqfW5JXUNKAUliFNKcvS7P3Piffnj5nb4BM7V+QMDEb8yzvb7Kp5lSSXW+lo
-         OXB0ybLxsZvBLI7qPlY0PBw/t/l9QNI1U+EbdY9U4/FsKWwQExa7/XSQgzhXTsSoioIF
-         j6f+DB215byjSPspfIC7m7K4mbD3gGjf92/Q1trpap29d4eBZGSFBNdazpAwaX6us6cH
-         116JpnQ7YMOjPynfvhzU2FdvguzesVmw1qyTFDwt2PTlcwmNQxLCYR/WX2LTxZnI/hLp
-         Y0kQ==
-X-Gm-Message-State: AC+VfDw/MbIRZHCrWBs4ojHTlakcNSaOGfQ9FUM7zeGNmFVqi1GWNpF4
-        GYpFfugh+7MCrMUMZpfrbP4=
-X-Google-Smtp-Source: ACHHUZ7DEmMn1nNDmk7+VbQTLCC+jnRbbP6ngZV4cZ8cK06LpaTU5URQ3+KVeVIJcP6od7OFQu4nLQ==
-X-Received: by 2002:a05:600c:5191:b0:3f6:487:f058 with SMTP id fa17-20020a05600c519100b003f60487f058mr975912wmb.1.1686307341828;
-        Fri, 09 Jun 2023 03:42:21 -0700 (PDT)
-Received: from smtpclient.apple (212-39-89-143.ip.btc-net.bg. [212.39.89.143])
-        by smtp.gmail.com with ESMTPSA id c12-20020a05600c0acc00b003f195d540d9sm2277985wmr.14.2023.06.09.03.42.20
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 09 Jun 2023 03:42:21 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
-Subject: Re: [PATCH net-next v4 1/4] usbnet: ipheth: fix risk of NULL pointer
- deallocation
-From:   George Valkov <gvalkov@gmail.com>
-In-Reply-To: <168630302068.8448.16788889957368567496.git-patchwork-notify@kernel.org>
-Date:   Fri, 9 Jun 2023 13:42:09 +0300
-Cc:     Foster Snowhill <forst@pen.gy>, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        patchwork-bot+netdevbpf@kernel.org,
-        Simon Horman <simon.horman@corigine.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Linux Netdev List <netdev@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <07CBE5ED-2569-450D-975A-64B5670D6928@gmail.com>
-References: <20230607135702.32679-1-forst@pen.gy>
- <168630302068.8448.16788889957368567496.git-patchwork-notify@kernel.org>
-To:     "David S. Miller" <davem@davemloft.net>
-X-Mailer: Apple Mail (2.3731.600.7)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230460AbjFILFF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Jun 2023 07:05:05 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D721FF3;
+        Fri,  9 Jun 2023 04:05:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BNP7mgO04PRZYzhPnnSijA8UuWy7FNFrQnuG4ajYbmuYiZxFI6jB5/w3olLGGJBiJdT4h05IQH/Hl4sEYH41kb4ObR7p7c66WOJKnZLTKVBPzgCHq4xyNovyz5fhhSoCxTKJCoc1EDfWez5HZXEZz40ktXMehrq+e3UM1H+j5RyH7O4SpXH6lx1H8k2n0J5/l9eRBLhtV4KBuhRoOWuUQgfaVtan2RVc8Lwh52mjqEcwvHqsBYc7/XGorB5sErW1TLGFdcPk3SA+1FNifq3wuAXv78gr9kKkAFcAqUBwtrwKp3ejdnbrHYo8OpAy9Ai2+R01xWbBEwonqjiosPOHgw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XBYcypZ7x/Zc8rPi9guivh4nYH5Rcoo0xwSwUfPkjbI=;
+ b=hWmk2SihkVVf7xXDA6cDZ0gqN6WYLPlEYyXu5KZiEZBU2LrYPVRSXsY4cev5dRu9ktBAgOnueg+TyYMa/wyW1i4ciTO9OJU7WoeKN8Kh46Vu3j4Z9dFPg5tIZd94mCaqnTT/zbcTox/GF0xqXVmxIIeidss63xuLD3zmtbk7clRew/7gzKs/4hxxLvuXwGQH4zsHgbs3tMJo72co0mhVz59KI777YgLJnUNajXKZPhkRkd6NBxicJR84c6vTXE0W3RuhJitQ9dw9D51581ZKm0gsgpQB2vL/yTzODD81vuJP3N6BXLeyrtgj/tuQjGtG/iwGtKuF+7BVP7tz4vIQLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=pengutronix.de smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XBYcypZ7x/Zc8rPi9guivh4nYH5Rcoo0xwSwUfPkjbI=;
+ b=TTJXQrN2hA2TutzEa8BfG2z0gBHzs7q33J8C8bg2FtUQaSoHp3x0ArJd2+Utyn7yr822BHKKZL8b5f5uPk4MaN0WuFsz7B36Tk3fy9KFzWYkwfVmuco9p6JoE6kg9Nog2afr7kN7A3vJUHy9bob8o7d9RySk/W4d3ze+RR+KwSc=
+Received: from CY8PR02CA0010.namprd02.prod.outlook.com (2603:10b6:930:4d::13)
+ by BN9PR12MB5244.namprd12.prod.outlook.com (2603:10b6:408:101::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Fri, 9 Jun
+ 2023 11:05:01 +0000
+Received: from CY4PEPF0000E9CF.namprd03.prod.outlook.com
+ (2603:10b6:930:4d:cafe::b) by CY8PR02CA0010.outlook.office365.com
+ (2603:10b6:930:4d::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.27 via Frontend
+ Transport; Fri, 9 Jun 2023 11:05:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000E9CF.mail.protection.outlook.com (10.167.241.142) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6477.13 via Frontend Transport; Fri, 9 Jun 2023 11:04:59 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 9 Jun
+ 2023 06:04:59 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 9 Jun
+ 2023 06:04:58 -0500
+Received: from xhdnavam40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Fri, 9 Jun 2023 06:04:55 -0500
+From:   Piyush Mehta <piyush.mehta@amd.com>
+To:     <p.zabel@pengutronix.de>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <michal.simek@amd.com>, <michal.simek@xilinx.com>,
+        <nava.manne@xilinx.com>
+CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <siva.durga.prasad.paladugu@amd.com>, <git@amd.com>,
+        Piyush Mehta <piyush.mehta@amd.com>
+Subject: [PATCH V2] dt-bindings: reset: convert the xlnx,zynqmp-reset.txt to yaml
+Date:   Fri, 9 Jun 2023 16:34:47 +0530
+Message-ID: <20230609110447.151235-1-piyush.mehta@amd.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9CF:EE_|BN9PR12MB5244:EE_
+X-MS-Office365-Filtering-Correlation-Id: 48dc40a0-26ec-4640-b457-08db68d95e28
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: s4QyqiCUNJS/1a3USYsH9fmeT8erBrmxSmjLHCfEnUWE0/SQV4te1lhx/vEAV3QvI1Wvz7uO62ZRaDA8NN0UbdZQif6CHukS8J2od+OuHNR0Bs0bo+WtPKYCxrs/nMq3fZmLo9FgIPhSl/5SwWaw6moDNgZBJrQN8zwk2TScYF51VCQ1mtwtvmlldWfSFncly7IMNpBpyW+Srxk1Obzwpjm+egir5KBTKSLphfXXyFkK8LH6PXrfLfCgql3Hk5zVB2juvJDgw1YHAR3FiPWEoFmqC+s2c4FkuJ5mfw0dWvbPNesiB7L8ydnQN1pRTKHG6vews7DisgwnTLXGx80YM131OVlOz6ijvbVTVLFqzsPdVHICks9Cy9fx7YRju0wvBiR9AYDPJTVYs6gGdqDk1wOCiLUGyy4c4MJeAHwSVNpI0DVD2jss7BCDPO72Zw7LL3/dDeZNxMigrOZ05KcXjru9urzukiP8dv6XueRGe6mghw4REJY3mqw9neUPimAa828b0RFx0lpZFlWNBhaQF77ZAD6glFR6L2uCue9Lj5nsskX1K+0S7e2a/SRWH4tZ9r3TjIq9uXl93Akmgsht5cWA41PuL1ykKbg4oxLYM6RuciTIQ2CTM1V59wqXvNyzOIp1lqZRVWX8zgcQhK8lU9QMQoqxxqdlrH8q4EITIGHzJ1AOSgo7jqiwfQcdeIOKN7HMN9QcEsNFoJLQPyTTvFQBYcDWeg+74IuT9jC9Au2CBoJmDzQZNlJqMljlw6lPMKrdSI+nN+VEmNVbWc7T0ltY8QcMe/2caLQOiY+3mGVTeR8FxOc6g7x0NW3toPYa
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(346002)(376002)(39860400002)(451199021)(36840700001)(46966006)(40470700004)(86362001)(81166007)(83380400001)(82740400003)(54906003)(336012)(70206006)(966005)(4326008)(110136005)(47076005)(356005)(426003)(82310400005)(6666004)(478600001)(70586007)(186003)(36756003)(40460700003)(36860700001)(8676002)(5660300002)(8936002)(41300700001)(2616005)(40480700001)(2906002)(316002)(44832011)(1076003)(26005)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 11:04:59.9037
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 48dc40a0-26ec-4640-b457-08db68d95e28
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9CF.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5244
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thank you David!
+Convert the binding to DT schema format. It also updates the
+reset-controller description.
 
-Can you please also backport the patch-series to Linux kernel 5.15, =
-which is in use by the OpenWRT project! The patches apply cleanly.
+Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+---
+- Addressed the Krzysztof review comment:
+ - Update DT binding to fix the dt_binding_check warning.
 
-Cheers!
+Link: https://lore.kernel.org/lkml/168612336438.2153757.6000360498539992409.robh@kernel.org/T/#m4abfe6287177d5fd09f781d298dd19d56aae5e27 
+---
+ .../bindings/reset/xlnx,zynqmp-reset.txt      | 55 ----------------
+ .../bindings/reset/xlnx,zynqmp-reset.yaml     | 64 +++++++++++++++++++
+ 2 files changed, 64 insertions(+), 55 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt
+ create mode 100644 Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
 
-Georgi Valkov
-httpstorm.com
-nano RTOS
-
-
-
-> On 9 Jun 2023, at 12:30 PM, patchwork-bot+netdevbpf@kernel.org wrote:
->=20
-> Hello:
->=20
-> This series was applied to netdev/net-next.git (main)
-> by David S. Miller <davem@davemloft.net>:
->=20
-> On Wed,  7 Jun 2023 15:56:59 +0200 you wrote:
->> From: Georgi Valkov <gvalkov@gmail.com>
->>=20
->> The cleanup precedure in ipheth_probe will attempt to free a
->> NULL pointer in dev->ctrl_buf if the memory allocation for
->> this buffer is not successful. While kfree ignores NULL pointers,
->> and the existing code is safe, it is a better design to rearrange
->> the goto labels and avoid this.
->>=20
->> [...]
->=20
-> Here is the summary with links:
->  - [net-next,v4,1/4] usbnet: ipheth: fix risk of NULL pointer =
-deallocation
->    https://git.kernel.org/netdev/net-next/c/2203718c2f59
->  - [net-next,v4,2/4] usbnet: ipheth: transmit URBs without trailing =
-padding
->    https://git.kernel.org/netdev/net-next/c/3e65efcca87a
->  - [net-next,v4,3/4] usbnet: ipheth: add CDC NCM support
->    https://git.kernel.org/netdev/net-next/c/a2d274c62e44
->  - [net-next,v4,4/4] usbnet: ipheth: update Kconfig description
->    https://git.kernel.org/netdev/net-next/c/0c6e9d32ef0c
->=20
-> You are awesome, thank you!
-> --=20
-> Deet-doot-dot, I am a bot.
-> https://korg.docs.kernel.org/patchwork/pwbot.html
->=20
->=20
+diff --git a/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt b/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt
+deleted file mode 100644
+index ed836868dbf1..000000000000
+--- a/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt
++++ /dev/null
+@@ -1,55 +0,0 @@
+---------------------------------------------------------------------------
+- =  Zynq UltraScale+ MPSoC and Versal reset driver binding =
+---------------------------------------------------------------------------
+-The Zynq UltraScale+ MPSoC and Versal has several different resets.
+-
+-See Chapter 36 of the Zynq UltraScale+ MPSoC TRM (UG) for more information
+-about zynqmp resets.
+-
+-Please also refer to reset.txt in this directory for common reset
+-controller binding usage.
+-
+-Required Properties:
+-- compatible:	"xlnx,zynqmp-reset" for Zynq UltraScale+ MPSoC platform
+-		"xlnx,versal-reset" for Versal platform
+-- #reset-cells:	Specifies the number of cells needed to encode reset
+-		line, should be 1
+-
+--------
+-Example
+--------
+-
+-firmware {
+-	zynqmp_firmware: zynqmp-firmware {
+-		compatible = "xlnx,zynqmp-firmware";
+-		method = "smc";
+-
+-		zynqmp_reset: reset-controller {
+-			compatible = "xlnx,zynqmp-reset";
+-			#reset-cells = <1>;
+-		};
+-	};
+-};
+-
+-Specifying reset lines connected to IP modules
+-==============================================
+-
+-Device nodes that need access to reset lines should
+-specify them as a reset phandle in their corresponding node as
+-specified in reset.txt.
+-
+-For list of all valid reset indices for Zynq UltraScale+ MPSoC see
+-<dt-bindings/reset/xlnx-zynqmp-resets.h>
+-For list of all valid reset indices for Versal see
+-<dt-bindings/reset/xlnx-versal-resets.h>
+-
+-Example:
+-
+-serdes: zynqmp_phy@fd400000 {
+-	...
+-
+-	resets = <&zynqmp_reset ZYNQMP_RESET_SATA>;
+-	reset-names = "sata_rst";
+-
+-	...
+-};
+diff --git a/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml b/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
+new file mode 100644
+index 000000000000..a39b17599e05
+--- /dev/null
++++ b/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
+@@ -0,0 +1,64 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/reset/xlnx,zynqmp-reset.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Zynq UltraScale+ MPSoC and Versal reset binding
++
++maintainers:
++  - Piyush Mehta <piyush.mehta@amd.com>
++
++description: |
++  The Zynq UltraScale+ MPSoC and Versal has several different resets.
++
++  The PS reset subsystem is responsible for handling the external reset
++  input to the device and that all internal reset requirements are met
++  for the system (as a whole) and for the functional units.
++
++  Please also refer to reset.txt in this directory for common reset
++  controller binding usage. Device nodes that need access to reset
++  lines should specify them as a reset phandle in their corresponding
++  node as specified in reset.txt.
++
++  For list of all valid reset indices for Zynq UltraScale+ MPSoC
++  <dt-bindings/reset/xlnx-zynqmp-resets.h>
++
++  For list of all valid reset indices for Versal
++  <dt-bindings/reset/xlnx-versal-resets.h>
++
++properties:
++  compatible:
++    enum:
++      - xlnx,zynqmp-reset
++      - xlnx,versal-reset
++
++  "#reset-cells":
++    const: 1
++
++required:
++  - compatible
++  - "#reset-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/reset/xlnx-zynqmp-resets.h>
++
++    firmware {
++        zynqmp_firmware: zynqmp-firmware {
++            zynqmp_reset: reset-controller {
++                compatible = "xlnx,zynqmp-reset";
++                #reset-cells = <1>;
++            };
++        };
++    };
++
++    /* Specifying sata reset control of devices */
++    sata {
++        resets = <&zynqmp_reset ZYNQMP_RESET_SATA>;
++        reset-names = "sata_rst";
++    };
++
++...
+-- 
+2.25.1
 
