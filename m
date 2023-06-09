@@ -2,133 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBDC729B92
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Jun 2023 15:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0445729EBC
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Jun 2023 17:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239258AbjFIN1o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Jun 2023 09:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
+        id S241562AbjFIPiu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Jun 2023 11:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjFIN1m (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Jun 2023 09:27:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6876C270B;
-        Fri,  9 Jun 2023 06:27:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0577A60E8D;
-        Fri,  9 Jun 2023 13:27:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A7BCC433EF;
-        Fri,  9 Jun 2023 13:27:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686317260;
-        bh=oSuiJiclTzvMA00+ishDDZSJ5F4CCgIPlxz3qberOkU=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ctTfeKacHWo5l9K9DxzQOrtlTLoG85/EKA7MvHQ/F1/2q0zByBrbmyXzsM5xu9ZiB
-         z9wHdsdfD4pFeRxFcqVecbJ+Otm388ULgG+bsoled+ga5itRm8LLiC22OcTX19F+j+
-         6yIPcNN1B7m9Ur7wYkJS4IGiKr+2aBq5+dqDL6XT4Raq7b5xw0RxxqP1BRnkC/teoQ
-         1BBAFxOID86v/atOu3NX+L9wnqyt+99xF7OTaMcfAz05y5B3IH3bJDB665QOEe/kU6
-         AzdHw7nXRvFkJ5TMlrv7YVHd1aILHvSrpMhR/sNk7+XbKVcwqz4pHqjL+n9s6tGy8X
-         915cASV+pKXDw==
-Message-ID: <671ceeb2e019c11617a481739c2e17604456c48c.camel@kernel.org>
-Subject: Re: [PATCH 0/9] fs: add some missing ctime updates
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Brad Warrum <bwarrum@linux.ibm.com>,
-        Ritu Agarwal <rituagar@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Ian Kent <raven@themaw.net>,
-        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-        Jeremy Kerr <jk@ozlabs.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Ruihan Li <lrh2000@pku.edu.cn>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        autofs@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org
-Date:   Fri, 09 Jun 2023 09:27:36 -0400
-In-Reply-To: <2023060931-magazine-nickname-f386@gregkh>
-References: <20230609125023.399942-1-jlayton@kernel.org>
-         <2023060931-magazine-nickname-f386@gregkh>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        with ESMTP id S237997AbjFIPit (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Jun 2023 11:38:49 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D642E35A7
+        for <linux-usb@vger.kernel.org>; Fri,  9 Jun 2023 08:38:45 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-977cf86aae5so293425766b.0
+        for <linux-usb@vger.kernel.org>; Fri, 09 Jun 2023 08:38:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686325124; x=1688917124;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jorRTe9x5lJeJhWfN/tUaEbK9cETxBDWnzXXAk2nPIU=;
+        b=LoTlSmKD8bjtAmd0AQnZrlssa8ZiOjN5pw90ZA+Nx4ze9+O4IXxvyRQJ12U+HCekvG
+         NuIpZEEqfYz/lIwanx4zEDhAHu4nRAWAfVElS61M04uvzM++LbvDq9CNl4vf91hJIdPZ
+         MaFmTMRgJbekFuzszLbGkriejLMK+WHquwo77er2yzrUuwirMAGYeoGnjKyLklLnr4j8
+         MsBfXGpFcgOKxtiD2bZv6fsDPuEprwkIUp4SrOaC5qDQVh0TgfDLkud021KMQ7xJARKo
+         J19bBo9p+IC9iSIoZLKFeccwg3VYNyZ3soF5xuFLrvJorMgcf1+Ee2n1ci0GD64UfQJL
+         vu7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686325124; x=1688917124;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jorRTe9x5lJeJhWfN/tUaEbK9cETxBDWnzXXAk2nPIU=;
+        b=XQboozOa9A+LAa5mPN33WefCGshxNl1QXSxgqHaibNogf1hZ0tBdKgfl7cGCHEmWYB
+         3d393Ys4kdx+uaQqJ+lq1Pwy07pAP6Y7eVh8n4fttUT086GYMoybEfnPB5Rc/yL+BQ+e
+         ij0h/DOBzbJEsSO4JyeN6A7+IAcxld7WK2qiEMH0d5HSYacluBQaqqoBoXdvLucjGYHY
+         rE7PFixnx5/TH37hgEppGRbqSdBTqwhyHI7MRU9me+6l4SKQmbEcaL8YAtIraS0xMRYk
+         /yK/GHdPKLH6VEZDmWo/kx0cR7jiHIymbL4GptJ1dxvDv3rPytp0XAzBHPE4rn8MvJEO
+         rzFQ==
+X-Gm-Message-State: AC+VfDyo3ZWvZmyjJVuZY0n6V8J8Cdwdx7nKlTMVgNspMEIDP5fH6pKG
+        E4rrXr60Cgs2Lku7wEEi+seaJg==
+X-Google-Smtp-Source: ACHHUZ7Wu5jmfQjkYkox8N1dR5VIsH+RE9uA5DNord0lEbqHRXmFw/c2UNSs/zPBWk9kJ5cszg9boQ==
+X-Received: by 2002:a17:906:fd85:b0:969:f54c:dee2 with SMTP id xa5-20020a170906fd8500b00969f54cdee2mr1905215ejb.26.1686325124285;
+        Fri, 09 Jun 2023 08:38:44 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id a12-20020a17090680cc00b0096f7105b3a6sm1418119ejx.189.2023.06.09.08.38.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 08:38:43 -0700 (PDT)
+Message-ID: <22e3c25e-487b-c02f-46f3-6d2ab2be8813@linaro.org>
+Date:   Fri, 9 Jun 2023 17:38:42 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH V2] dt-bindings: reset: convert the xlnx,zynqmp-reset.txt
+ to yaml
+Content-Language: en-US
+To:     Piyush Mehta <piyush.mehta@amd.com>, p.zabel@pengutronix.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, michal.simek@amd.com, michal.simek@xilinx.com,
+        nava.manne@xilinx.com
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, siva.durga.prasad.paladugu@amd.com,
+        git@amd.com
+References: <20230609110447.151235-1-piyush.mehta@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230609110447.151235-1-piyush.mehta@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 2023-06-09 at 15:10 +0200, Greg Kroah-Hartman wrote:
-> On Fri, Jun 09, 2023 at 08:50:14AM -0400, Jeff Layton wrote:
-> > While working on a patch series to change how we handle the ctime, I
-> > found a number of places that update the mtime without a corresponding
-> > ctime update. POSIX requires that when the mtime is updated that the
-> > ctime also be updated.
-> >=20
-> > Note that these are largely untested other than for compilation, so
-> > please review carefully. These are a preliminary set for the upcoming
-> > rework of how we handle the ctime.
-> >=20
-> > None of these seem to be very crucial, but it would be nice if
-> > various maintainers could pick these up for v6.5. Please let me know if
-> > you do.
-> >=20
-> > Jeff Layton (9):
-> >   ibmvmc: update ctime in conjunction with mtime on write
-> >   usb: update the ctime as well when updating mtime after an ioctl
-> >   autofs: set ctime as well when mtime changes on a dir
-> >   bfs: update ctime in addition to mtime when adding entries
-> >   efivarfs: update ctime when mtime changes on a write
-> >   exfat: ensure that ctime is updated whenever the mtime is
-> >   gfs2: update ctime when quota is updated
-> >   apparmor: update ctime whenever the mtime changes on an inode
-> >   cifs: update the ctime on a partial page write
-> >=20
-> >  drivers/misc/ibmvmc.c             |  2 +-
-> >  drivers/usb/core/devio.c          | 16 ++++++++--------
-> >  fs/autofs/root.c                  |  6 +++---
-> >  fs/bfs/dir.c                      |  2 +-
-> >  fs/efivarfs/file.c                |  2 +-
-> >  fs/exfat/namei.c                  |  8 ++++----
-> >  fs/gfs2/quota.c                   |  2 +-
-> >  fs/smb/client/file.c              |  2 +-
-> >  security/apparmor/apparmorfs.c    |  7 +++++--
-> >  security/apparmor/policy_unpack.c | 11 +++++++----
-> >  10 files changed, 32 insertions(+), 26 deletions(-)
-> >=20
-> > --=20
-> > 2.40.1
-> >=20
->=20
-> All of these need commit log messages, didn't checkpatch warn you about
-> that?
+On 09/06/2023 13:04, Piyush Mehta wrote:
+> Convert the binding to DT schema format. It also updates the
+> reset-controller description.
+> 
+> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+> ---
+> - Addressed the Krzysztof review comment:
+>  - Update DT binding to fix the dt_binding_check warning.
+> 
 
-It did, once I ran it. ;)
+...
 
-I'll repost the set with more elaborate changelogs.
---=20
-Jeff Layton <jlayton@kernel.org>
+> diff --git a/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml b/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
+> new file mode 100644
+> index 000000000000..a39b17599e05
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/reset/xlnx,zynqmp-reset.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Zynq UltraScale+ MPSoC and Versal reset binding
+
+Drop "binding"
+
+> +
+> +maintainers:
+> +  - Piyush Mehta <piyush.mehta@amd.com>
+> +
+> +description: |
+> +  The Zynq UltraScale+ MPSoC and Versal has several different resets.
+> +
+> +  The PS reset subsystem is responsible for handling the external reset
+> +  input to the device and that all internal reset requirements are met
+> +  for the system (as a whole) and for the functional units.
+> +
+> +  Please also refer to reset.txt in this directory for common reset
+> +  controller binding usage. Device nodes that need access to reset
+> +  lines should specify them as a reset phandle in their corresponding
+> +  node as specified in reset.txt.
+> +
+> +  For list of all valid reset indices for Zynq UltraScale+ MPSoC
+> +  <dt-bindings/reset/xlnx-zynqmp-resets.h>
+> +
+> +  For list of all valid reset indices for Versal
+> +  <dt-bindings/reset/xlnx-versal-resets.h>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - xlnx,zynqmp-reset
+> +      - xlnx,versal-reset
+> +
+> +  "#reset-cells":
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - "#reset-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/reset/xlnx-zynqmp-resets.h>
+
+Drop, won't be needed after removing unrelated parts.
+
+> +
+> +    firmware {
+
+Drop
+
+> +        zynqmp_firmware: zynqmp-firmware {
+
+Drop, three level of indentations for that simple reset-controller...
+
+> +            zynqmp_reset: reset-controller {
+> +                compatible = "xlnx,zynqmp-reset";
+> +                #reset-cells = <1>;
+> +            };
+> +        };
+> +    };
+> +
+> +    /* Specifying sata reset control of devices */
+> +    sata {
+> +        resets = <&zynqmp_reset ZYNQMP_RESET_SATA>;
+> +        reset-names = "sata_rst";
+> +    };
+
+Drop this - not related.
+> +
+> +...
+
+Best regards,
+Krzysztof
+
