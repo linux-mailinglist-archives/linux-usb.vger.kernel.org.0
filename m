@@ -2,284 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3A9728F9C
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Jun 2023 08:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 122D7728FAE
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Jun 2023 08:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjFIGCX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Jun 2023 02:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35230 "EHLO
+        id S237095AbjFIGNw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Jun 2023 02:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjFIGCV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Jun 2023 02:02:21 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7B313D;
-        Thu,  8 Jun 2023 23:02:19 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3594bSEJ006123;
-        Fri, 9 Jun 2023 06:02:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=Iu45rQ6XWEUxo/b1XJF4iBz3QcaMOpCLGop0Ai9kUw0=;
- b=H+o3ej3VkIk125LeJ9Z4gDWbSSBtMFSRBaOfE4azdSGp6oOayMB//hbqx7KgiYwnKVqA
- d4Zs/Y5iyA/500tUbq6UaEKzKBQB1Hxvp1mKbRobxzzKo4xwnaAaw7zF0+/nD/KIURTA
- Pln9dcmwwPSEkGtEJZ+cKbZZuEXNeIokxhfbqS/mncssnsx5olSAn9+gAKm0w5ht9gdK
- +2zZ/iGOqEiiApmLdgSZt9MogDEI5lCk8mb8keSm8GppQMISR5VdeDIHCLVXgJNAjZGl
- Zy5m7VGBu8YyMiiaNqxrp1oB+46qLVRx+nZFpscrjJu1QiXFuB+dtvIDsfkY48ZkMgVc DQ== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3nwerstm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 06:02:14 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35962DAH017167
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 9 Jun 2023 06:02:13 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 8 Jun 2023 23:02:08 -0700
-Date:   Fri, 9 Jun 2023 11:32:04 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <gregkh@linuxfoundation.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v14 3/5] arm64: dts: qcom: ipq9574: Add USB related nodes
-Message-ID: <20230609060203.GA22023@varda-linux.qualcomm.com>
-References: <cover.1686217906.git.quic_varada@quicinc.com>
- <2f91eb879daaf9955dc56135d60a4be5e191a44d.1686217906.git.quic_varada@quicinc.com>
- <71960b11-5686-9af5-423b-bfdaec56f3f9@linaro.org>
+        with ESMTP id S237158AbjFIGNu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Jun 2023 02:13:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFA630ED;
+        Thu,  8 Jun 2023 23:13:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A8D3B65196;
+        Fri,  9 Jun 2023 06:13:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF0E6C433D2;
+        Fri,  9 Jun 2023 06:13:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686291227;
+        bh=yY9hTK/cuq2f08obatgOVWQ0Mp7sBziSbHwFLrvbNik=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zg19Z9YJ8utLxALeZX673OusuJjX+I+eEHw8Hw+KKmqCDJmxLC2sL4lDhPTQB+f76
+         ApPsA9mizoYM6MszTMWwGS8Q9Ao2MDxs+SWP3qTAFwOZPn3aL2zxGiIVgJBpQ1SNUF
+         Lt+qhiehgfhgqOyQB6VSB04/Yj86+ItNwnOnVXMY=
+Date:   Fri, 9 Jun 2023 08:13:44 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v2] usb: dwc2: add pci_device_id driver_data parse support
+Message-ID: <2023060915-uneasy-pedicure-35f4@gregkh>
+References: <20230609025047.691-1-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <71960b11-5686-9af5-423b-bfdaec56f3f9@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: K9thgWhAYYyu8mtu1-NM4SZjEHDrgngj
-X-Proofpoint-ORIG-GUID: K9thgWhAYYyu8mtu1-NM4SZjEHDrgngj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-09_03,2023-06-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 mlxlogscore=999 phishscore=0 priorityscore=1501
- suspectscore=0 clxscore=1015 spamscore=0 adultscore=0 mlxscore=0
- lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306090052
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230609025047.691-1-zhuyinbo@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 02:06:49PM +0300, Dmitry Baryshkov wrote:
-> On 08/06/2023 13:03, Varadarajan Narayanan wrote:
-> >Add USB phy and controller related nodes
-> >
-> >SS PHY need two supplies and HS PHY needs three supplies. 0.925V
-> >and 3.3V are from fixed regulators and 1.8V is generated from
-> >PMIC's LDO
-> >
-> >Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> >Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> >---
-> >  Changes in v13:
-> >	- Move fixed regulator definitions from SoC dtsi to board dts
-> >	- Remove 'dr_mode' from SoC dtsi
-> >	- Move 'status' property to the end
-> >  Changes in v12:
-> >	- Rebase
-> >  Changes in v11:
-> >	- Rename dwc_0 -> usb_0_dwc3
-> >  Changes in v10:
-> >	- Fix regulator definitions
-> >  Changes in v8:
-> >	- Change clocks order to match the bindings
-> >  Changes in v7:
-> >	- Change com_aux -> cfg_ahb
-> >  Changes in v6:
-> >	- Introduce fixed regulators for the phy
-> >	- Resolved all 'make dtbs_check' messages
-> >
-> >  Changes in v5:
-> >	- Fix additional comments
-> >	- Edit nodes to match with qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-> >	- 'make dtbs_check' giving the following messages since
-> >	  ipq9574 doesn't have power domains. Hope this is ok
-> >
-> >		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
-> >         	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-> >		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
-> >         	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> >
-> >  Changes in v4:
-> >	- Use newer bindings without subnodes
-> >	- Fix coding style issues
-> >
-> >  Changes in v3:
-> >	- Insert the nodes at proper location
-> >
-> >  Changes in v2:
-> >	- Fixed issues flagged by Krzysztof
-> >	- Fix issues reported by make dtbs_check
-> >	- Remove NOC related clocks (to be added with proper
-> >	  interconnect support)
-> >---
-> >  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 18 ++++++
-> >  arch/arm64/boot/dts/qcom/ipq9574.dtsi       | 85 +++++++++++++++++++++++++++++
-> >  2 files changed, 103 insertions(+)
-> >
-> >diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> >index 2b3ed8d..8261a2b 100644
-> >--- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> >+++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> >@@ -21,6 +21,24 @@
-> >  	chosen {
-> >  		stdout-path = "serial0:115200n8";
-> >  	};
-> >+
-> >+	regulator_fixed_3p3: s3300 {
-> >+		compatible = "regulator-fixed";
-> >+		regulator-min-microvolt = <3300000>;
-> >+		regulator-max-microvolt = <3300000>;
-> >+		regulator-boot-on;
-> >+		regulator-always-on;
-> >+		regulator-name = "fixed_3p3";
-> >+	};
-> >+
-> >+	regulator_fixed_0p925: s0925 {
-> >+		compatible = "regulator-fixed";
-> >+		regulator-min-microvolt = <925000>;
-> >+		regulator-max-microvolt = <925000>;
-> >+		regulator-boot-on;
-> >+		regulator-always-on;
-> >+		regulator-name = "fixed_0p925";
-> >+	};
-> >  };
->
-> Let me repeat from v13, so that it is not lost (please excuse me for the
-> spam):
->
-> Nit: these two regulators are not references from SoC dtsi. So they don't
-> have to be a part of this commit and can be moved to one of the next commits
-> (I'd prefer the last one).
+On Fri, Jun 09, 2023 at 10:50:47AM +0800, Yinbo Zhu wrote:
+> The dwc2 driver has everything we need to run in PCI mode except
+> for pci_device_id driver_data parse.  With that to set Loongson
+> dwc2 element and added identified as PCI_VENDOR_ID_LOONGSON
+> and PCI_DEVICE_ID_LOONGSON_DWC2 in dwc2_pci_ids, the Loongson
+> dwc2 controller will work.
+> 
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+> Change in v2:
+> 		1. Move the dwc2 pci ID from pci_ids.h to params.c.
+> 		2. Add some code logic to ensure that the current device is
+> 		   a PCI device.
+> 		3. Fix the compile issue when dwc2 pci driver as module.
+> 
+>  drivers/usb/dwc2/core.h   |  1 +
+>  drivers/usb/dwc2/params.c | 39 ++++++++++++++++++++++++++++++++++++++-
+>  drivers/usb/dwc2/pci.c    | 14 +-------------
+>  3 files changed, 40 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+> index 0bb4c0c845bf..c92a1da46a01 100644
+> --- a/drivers/usb/dwc2/core.h
+> +++ b/drivers/usb/dwc2/core.h
+> @@ -1330,6 +1330,7 @@ irqreturn_t dwc2_handle_common_intr(int irq, void *dev);
+>  /* The device ID match table */
+>  extern const struct of_device_id dwc2_of_match_table[];
+>  extern const struct acpi_device_id dwc2_acpi_match[];
+> +extern const struct pci_device_id dwc2_pci_ids[];
+>  
+>  int dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg);
+>  int dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg);
+> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+> index 21d16533bd2f..6b68a8830781 100644
+> --- a/drivers/usb/dwc2/params.c
+> +++ b/drivers/usb/dwc2/params.c
+> @@ -7,9 +7,14 @@
+>  #include <linux/module.h>
+>  #include <linux/of_device.h>
+>  #include <linux/usb/of.h>
+> +#include <linux/pci_ids.h>
+> +#include <linux/pci.h>
+>  
+>  #include "core.h"
+>  
+> +#define PCI_PRODUCT_ID_HAPS_HSOTG	0xabc0
+> +#define PCI_DEVICE_ID_LOONGSON_DWC2	0x7a04
+> +
+>  static void dwc2_set_bcm_params(struct dwc2_hsotg *hsotg)
+>  {
+>  	struct dwc2_core_params *p = &hsotg->params;
+> @@ -55,6 +60,14 @@ static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
+>  		!device_property_read_bool(hsotg->dev, "disable-over-current");
+>  }
+>  
+> +static void dwc2_set_loongson_params(struct dwc2_hsotg *hsotg)
+> +{
+> +	struct dwc2_core_params *p = &hsotg->params;
+> +
+> +	p->phy_utmi_width = 8;
+> +	p->power_down = DWC2_POWER_DOWN_PARAM_PARTIAL;
+> +}
+> +
+>  static void dwc2_set_x1600_params(struct dwc2_hsotg *hsotg)
+>  {
+>  	struct dwc2_core_params *p = &hsotg->params;
+> @@ -281,6 +294,23 @@ const struct acpi_device_id dwc2_acpi_match[] = {
+>  };
+>  MODULE_DEVICE_TABLE(acpi, dwc2_acpi_match);
+>  
+> +const struct pci_device_id dwc2_pci_ids[] = {
+> +	{
+> +		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
+> +	},
+> +	{
+> +		PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
+> +			   PCI_DEVICE_ID_STMICRO_USB_OTG),
+> +	},
+> +	{
+> +		PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, PCI_DEVICE_ID_LOONGSON_DWC2),
+> +		.driver_data = (unsigned long)dwc2_set_loongson_params,
+> +	},
+> +	{ /* end: all zeroes */ }
+> +};
+> +MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
+> +EXPORT_SYMBOL_GPL(dwc2_pci_ids);
+> +
+>  static void dwc2_set_param_otg_cap(struct dwc2_hsotg *hsotg)
+>  {
+>  	switch (hsotg->hw_params.op_mode) {
+> @@ -927,13 +957,20 @@ int dwc2_init_params(struct dwc2_hsotg *hsotg)
+>  	if (match && match->data) {
+>  		set_params = match->data;
+>  		set_params(hsotg);
+> -	} else {
+> +	} else if (!match) {
+>  		const struct acpi_device_id *amatch;
+> +		const struct pci_device_id *pmatch = NULL;
+>  
+>  		amatch = acpi_match_device(dwc2_acpi_match, hsotg->dev);
+>  		if (amatch && amatch->driver_data) {
+>  			set_params = (set_params_cb)amatch->driver_data;
+>  			set_params(hsotg);
+> +		} else if (!amatch)
+> +			pmatch = pci_match_id(dwc2_pci_ids, to_pci_dev(hsotg->dev->parent));
 
-Sure. Have posted v15 with the suggested changes.
-Please review.
+At this point in time, how can you guarantee that the parent device
+really is a PCI one?  This function is being called from a platform
+device callback, and platform devices should NEVER be a child of a PCI
+device, as that's not how PCI or platform devices work.
 
-Thanks
-Varada
+So how is this even possible?
 
->
-> >  &blsp1_uart2 {
-> >diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> >index 0baeb10..feabc19 100644
-> >--- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> >+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> >@@ -465,6 +465,91 @@
-> >  			status = "disabled";
-> >  		};
-> >+		usb_0_qusbphy: phy@7b000 {
-> >+			compatible = "qcom,ipq9574-qusb2-phy";
-> >+			reg = <0x0007b000 0x180>;
-> >+			#phy-cells = <0>;
-> >+
-> >+			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-> >+				 <&xo_board_clk>;
-> >+			clock-names = "cfg_ahb",
-> >+				      "ref";
-> >+
-> >+			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-> >+			status = "disabled";
-> >+		};
-> >+
-> >+		usb_0_qmpphy: phy@7d000 {
-> >+			compatible = "qcom,ipq9574-qmp-usb3-phy";
-> >+			reg = <0x0007d000 0xa00>;
-> >+			#phy-cells = <0>;
-> >+
-> >+			clocks = <&gcc GCC_USB0_AUX_CLK>,
-> >+				 <&xo_board_clk>,
-> >+				 <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-> >+				 <&gcc GCC_USB0_PIPE_CLK>;
-> >+			clock-names = "aux",
-> >+				      "ref",
-> >+				      "cfg_ahb",
-> >+				      "pipe";
-> >+
-> >+			resets = <&gcc GCC_USB0_PHY_BCR>,
-> >+				 <&gcc GCC_USB3PHY_0_PHY_BCR>;
-> >+			reset-names = "phy",
-> >+				      "phy_phy";
-> >+
-> >+			#clock-cells = <0>;
-> >+			clock-output-names = "usb0_pipe_clk";
-> >+
-> >+			status = "disabled";
-> >+		};
-> >+
-> >+		usb3: usb@8af8800 {
-> >+			compatible = "qcom,ipq9574-dwc3", "qcom,dwc3";
-> >+			reg = <0x08af8800 0x400>;
-> >+			#address-cells = <1>;
-> >+			#size-cells = <1>;
-> >+			ranges;
-> >+
-> >+			clocks = <&gcc GCC_SNOC_USB_CLK>,
-> >+				 <&gcc GCC_USB0_MASTER_CLK>,
-> >+				 <&gcc GCC_ANOC_USB_AXI_CLK>,
-> >+				 <&gcc GCC_USB0_SLEEP_CLK>,
-> >+				 <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> >+
-> >+			clock-names = "cfg_noc",
-> >+				      "core",
-> >+				      "iface",
-> >+				      "sleep",
-> >+				      "mock_utmi";
-> >+
-> >+			assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
-> >+					  <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> >+			assigned-clock-rates = <200000000>,
-> >+					       <24000000>;
-> >+
-> >+			interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
-> >+			interrupt-names = "pwr_event";
-> >+
-> >+			resets = <&gcc GCC_USB_BCR>;
-> >+			status = "disabled";
-> >+
-> >+			usb_0_dwc3: usb@8a00000 {
-> >+				compatible = "snps,dwc3";
-> >+				reg = <0x8a00000 0xcd00>;
-> >+				clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> >+				clock-names = "ref";
-> >+				interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-> >+				phys = <&usb_0_qusbphy>, <&usb_0_qmpphy>;
-> >+				phy-names = "usb2-phy", "usb3-phy";
-> >+				tx-fifo-resize;
-> >+				snps,is-utmi-l1-suspend;
-> >+				snps,hird-threshold = /bits/ 8 <0x0>;
-> >+				snps,dis_u2_susphy_quirk;
-> >+				snps,dis_u3_susphy_quirk;
-> >+			};
-> >+		};
-> >+
-> >  		intc: interrupt-controller@b000000 {
-> >  			compatible = "qcom,msm-qgic2";
-> >  			reg = <0x0b000000 0x1000>,  /* GICD */
->
-> --
-> With best wishes
-> Dmitry
->
+confused,
+
+greg k-h
