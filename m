@@ -2,243 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 112BC72B993
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jun 2023 10:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD8172BB41
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jun 2023 10:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233305AbjFLIB4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Jun 2023 04:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
+        id S234031AbjFLIxZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Jun 2023 04:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232812AbjFLIA7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Jun 2023 04:00:59 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8ED55AD;
-        Mon, 12 Jun 2023 01:00:25 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8DxTutawIZkBoIDAA--.7689S3;
-        Mon, 12 Jun 2023 14:51:06 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxC8pZwIZk9ioVAA--.52063S3;
-        Mon, 12 Jun 2023 14:51:05 +0800 (CST)
-Subject: Re: [PATCH v2] usb: dwc2: add pci_device_id driver_data parse support
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Minas Harutyunyan <hminas@synopsys.com>,
-        Alan Stern <stern@rowland.harvard.edu>, zhuyinbo@loongson.cn,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230609025047.691-1-zhuyinbo@loongson.cn>
- <2023060915-uneasy-pedicure-35f4@gregkh>
- <1e2a07a4-f81f-3672-f29c-144d1a12ea21@loongson.cn>
- <2023060958-unvocal-flattery-256a@gregkh> <2023060912-shun-work-a667@gregkh>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <d260aae0-2ce2-ed72-e680-8ec2d50335cc@loongson.cn>
-Date:   Mon, 12 Jun 2023 14:51:05 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S233883AbjFLIw6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Jun 2023 04:52:58 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4518B1BE8
+        for <linux-usb@vger.kernel.org>; Mon, 12 Jun 2023 01:52:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686559940; x=1718095940;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zm1kKw2Zxiixz8nt7I7tApvyKW9ysxzZqTKxG4i1QqI=;
+  b=nIQt32tirxbYtYeLA1d5BcZf18FIfIHW9pfwbZsEfI1WxdoIBVuwcRr9
+   H7uVnhMGyPfAT65gtY6V07rr/F1M2R+Y5nOkA4jedZK4YuVT+sRuTrq8w
+   wjLhYwcqo0Z0MQnmzo0AVrTeopUMqom9BD+JgjBmx2igpQXPqUmJo22pc
+   E6XzpBqnYqzSBb/gq2ez15DW2bmic6RnW+6LzpO6RxbFZQx3G9s1g2u3f
+   EYfdG66QPIUZqhZhHixOYjQLNFKMjpnFMkBnHxF3dFS65DMQWo/FBwOPC
+   Ab42rNVths9Z8vTCvSe7e30PU+IJ5+8/4nkhGvqe3cKgVq5bMieJSzP+Y
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="347627237"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="347627237"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 01:21:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="744247713"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="744247713"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 12 Jun 2023 01:21:37 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 43945357; Mon, 12 Jun 2023 11:21:45 +0300 (EEST)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Gil Fine <gil.fine@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v2 00/20] thunderbolt: Initial USB4 v2 support
+Date:   Mon, 12 Jun 2023 11:21:25 +0300
+Message-Id: <20230612082145.62218-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-In-Reply-To: <2023060912-shun-work-a667@gregkh>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxC8pZwIZk9ioVAA--.52063S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi all,
 
+This series adds initial support for the next USB4 version (USB4 v2) and
+the Intel Barlow Ridge discrete controller. This includes support for
+the 80G symmetric link, the necessary configuration needed to bring up
+the router in v2 mode, adaptive TMU, PCIe extended encapsulation, and
+CL2 low power link state. We will be sending the rest of the USB4 v2
+support, including asymmetric 128/80G link support later on once this
+one has settled.
 
-在 2023/6/9 下午5:31, Greg Kroah-Hartman 写道:
-> On Fri, Jun 09, 2023 at 11:25:15AM +0200, Greg Kroah-Hartman wrote:
->> On Fri, Jun 09, 2023 at 05:07:03PM +0800, zhuyinbo wrote:
->>>
->>>
->>> 在 2023/6/9 下午2:13, Greg Kroah-Hartman 写道:
->>>> On Fri, Jun 09, 2023 at 10:50:47AM +0800, Yinbo Zhu wrote:
->>>>> The dwc2 driver has everything we need to run in PCI mode except
->>>>> for pci_device_id driver_data parse.  With that to set Loongson
->>>>> dwc2 element and added identified as PCI_VENDOR_ID_LOONGSON
->>>>> and PCI_DEVICE_ID_LOONGSON_DWC2 in dwc2_pci_ids, the Loongson
->>>>> dwc2 controller will work.
->>>>>
->>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>>> ---
->>>>> Change in v2:
->>>>> 		1. Move the dwc2 pci ID from pci_ids.h to params.c.
->>>>> 		2. Add some code logic to ensure that the current device is
->>>>> 		   a PCI device.
->>>>> 		3. Fix the compile issue when dwc2 pci driver as module.
->>>>>
->>>>>    drivers/usb/dwc2/core.h   |  1 +
->>>>>    drivers/usb/dwc2/params.c | 39 ++++++++++++++++++++++++++++++++++++++-
->>>>>    drivers/usb/dwc2/pci.c    | 14 +-------------
->>>>>    3 files changed, 40 insertions(+), 14 deletions(-)
->>>>>
->>>>> diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
->>>>> index 0bb4c0c845bf..c92a1da46a01 100644
->>>>> --- a/drivers/usb/dwc2/core.h
->>>>> +++ b/drivers/usb/dwc2/core.h
->>>>> @@ -1330,6 +1330,7 @@ irqreturn_t dwc2_handle_common_intr(int irq, void *dev);
->>>>>    /* The device ID match table */
->>>>>    extern const struct of_device_id dwc2_of_match_table[];
->>>>>    extern const struct acpi_device_id dwc2_acpi_match[];
->>>>> +extern const struct pci_device_id dwc2_pci_ids[];
->>>>>    int dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg);
->>>>>    int dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg);
->>>>> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
->>>>> index 21d16533bd2f..6b68a8830781 100644
->>>>> --- a/drivers/usb/dwc2/params.c
->>>>> +++ b/drivers/usb/dwc2/params.c
->>>>> @@ -7,9 +7,14 @@
->>>>>    #include <linux/module.h>
->>>>>    #include <linux/of_device.h>
->>>>>    #include <linux/usb/of.h>
->>>>> +#include <linux/pci_ids.h>
->>>>> +#include <linux/pci.h>
->>>>>    #include "core.h"
->>>>> +#define PCI_PRODUCT_ID_HAPS_HSOTG	0xabc0
->>>>> +#define PCI_DEVICE_ID_LOONGSON_DWC2	0x7a04
->>>>> +
->>>>>    static void dwc2_set_bcm_params(struct dwc2_hsotg *hsotg)
->>>>>    {
->>>>>    	struct dwc2_core_params *p = &hsotg->params;
->>>>> @@ -55,6 +60,14 @@ static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
->>>>>    		!device_property_read_bool(hsotg->dev, "disable-over-current");
->>>>>    }
->>>>> +static void dwc2_set_loongson_params(struct dwc2_hsotg *hsotg)
->>>>> +{
->>>>> +	struct dwc2_core_params *p = &hsotg->params;
->>>>> +
->>>>> +	p->phy_utmi_width = 8;
->>>>> +	p->power_down = DWC2_POWER_DOWN_PARAM_PARTIAL;
->>>>> +}
->>>>> +
->>>>>    static void dwc2_set_x1600_params(struct dwc2_hsotg *hsotg)
->>>>>    {
->>>>>    	struct dwc2_core_params *p = &hsotg->params;
->>>>> @@ -281,6 +294,23 @@ const struct acpi_device_id dwc2_acpi_match[] = {
->>>>>    };
->>>>>    MODULE_DEVICE_TABLE(acpi, dwc2_acpi_match);
->>>>> +const struct pci_device_id dwc2_pci_ids[] = {
->>>>> +	{
->>>>> +		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
->>>>> +	},
->>>>> +	{
->>>>> +		PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
->>>>> +			   PCI_DEVICE_ID_STMICRO_USB_OTG),
->>>>> +	},
->>>>> +	{
->>>>> +		PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, PCI_DEVICE_ID_LOONGSON_DWC2),
->>>>> +		.driver_data = (unsigned long)dwc2_set_loongson_params,
->>>>> +	},
->>>>> +	{ /* end: all zeroes */ }
->>>>> +};
->>>>> +MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
->>>>> +EXPORT_SYMBOL_GPL(dwc2_pci_ids);
->>>>> +
->>>>>    static void dwc2_set_param_otg_cap(struct dwc2_hsotg *hsotg)
->>>>>    {
->>>>>    	switch (hsotg->hw_params.op_mode) {
->>>>> @@ -927,13 +957,20 @@ int dwc2_init_params(struct dwc2_hsotg *hsotg)
->>>>>    	if (match && match->data) {
->>>>>    		set_params = match->data;
->>>>>    		set_params(hsotg);
->>>>> -	} else {
->>>>> +	} else if (!match) {
->>>>>    		const struct acpi_device_id *amatch;
->>>>> +		const struct pci_device_id *pmatch = NULL;
->>>>>    		amatch = acpi_match_device(dwc2_acpi_match, hsotg->dev);
->>>>>    		if (amatch && amatch->driver_data) {
->>>>>    			set_params = (set_params_cb)amatch->driver_data;
->>>>>    			set_params(hsotg);
->>>>> +		} else if (!amatch)
->>>>> +			pmatch = pci_match_id(dwc2_pci_ids, to_pci_dev(hsotg->dev->parent));
->>>>
->>>> At this point in time, how can you guarantee that the parent device
->>>> really is a PCI one?  This function is being called from a platform
->>>> device callback, and platform devices should NEVER be a child of a PCI
->>>> device, as that's not how PCI or platform devices work.
->>>>
->>>> So how is this even possible?
->>>>
->>>> confused,
->>>>
->>>
->>>
->>> Hi greg k-h,
->>>
->>> My current considerations are based on that the dwc2 drivers support
->>> three types of devices, they are Platform device / ACPI device / PCI
->>> device, and The dwc2/platform.c can all cover the three type dwc2
->>> device, no matter how it is registered.
->>>
->>> So, when a dwc2 device wasn't platform device and acpi device and It
->>> will be a PCI device, and the the dwc2/pci.c will register a dwc2
->>> platform device that dwc2 device is a device that in dwc2/platform.c's
->>> dwc2_driver_probe.  the "&dwc2->dev->parent" is the "hsotg->dev->parent"
->>> and it was also the &pci->dev.
->>
->> That's wrong, a PCI device should NEVER register a platform device under
->> it, as obviously it's not a platform device at all.
->>
->> So please work to fix that layering violation here, as that's not
->> correct and will cause problems as you are showing here.
->>
->>> So, We can use "to_pci_dev(hsotg->dev->parent)" to gain a dwc2 pci
->>> device.
->>
->> No, not if the parent is something else as you have no way of knowing
->> this at this point in time.
->>
->>>
->>> 1)  DWC2 PCI device driver (drivers/usb/dwc2/pci.c) :
->>>
->>> static int dwc2_pci_probe(struct pci_dev *pci,
->>>                            const struct pci_device_id *id)
->>> {
->>> ...
->>>          struct platform_device  *dwc2;
->>> ...
->>>          struct device           *dev = &pci->dev;
->>> ...
->>> 	dwc2 = platform_device_alloc("dwc2", PLATFORM_DEVID_AUTO);
->>> 	              //"dwc2" was used to match dwc2 platform driver
->>
->> This needs to be fixed, it's not ok at all.  Just use the real PCI
->> device here please.
-> 
-> Also, to be fair, you didn't cause this problem, I missed it previously.
-> But fixing it is essential, and will be required in order to get your
-> changes to work properly.  Sorry about that.
-> 
+These are based on thunderbolt.git/next.
 
+The previous version of the series can be found:
 
-Hi greg k-h,
+https://lore.kernel.org/linux-usb/20230531090645.5573-1-mika.westerberg@linux.intel.com/
 
-Actually,  the dwc2/pci.c's  platform_device_add(dwc2) was create a
-platform device called "dwc2"  ensure dwc2/platform's dwc2_driver_probe
-function can be called. After all, the dwc2/platform's dwc2_driver_probe
-is the one that truly initializes the dwc2 controller. In addition, the
-same applies to dwc3 code.
+Changes from v1:
 
-So, Do we need to refactor all the dwc (dwc2/dwc3) code ?  For dwc2, It
-seems need to rework dwc2/pci.c, dwc2/platform.c and dwc2/params.c.
-And it is necessary to decouple dwc2/platform.c and dwc2/params.c and
-this is to ensure that dwc2/pci. c and dwc2/platform. c are two
-relatively independent drivers, but, from my personal perspective, this
-doesn't seem like a good choice.  Do you think so ?  Or did I
-misunderstand your meaning?
+  * Make tb_switch_is_usb4() use usb4_switch_version() as well
+  * Set TMU mode off by default in tmu_mode_init()
+  * Log TMU mode change only if it is actually changed in
+    tb_switch_tmu_configure().
 
-Thanks,
-Yinbo
+Gil Fine (9):
+  thunderbolt: Identify USB4 v2 routers
+  thunderbolt: Add support for USB4 v2 80 Gb/s link
+  thunderbolt: Announce USB4 v2 connection manager support
+  thunderbolt: Enable USB4 v2 PCIe TLP/DLLP extended encapsulation
+  thunderbolt: Add two additional double words for adapters TMU for USB4 v2 routers
+  thunderbolt: Fix DisplayPort IN adapter capability length for USB4 v2 routers
+  thunderbolt: Fix PCIe adapter capability length for USB4 v2 routers
+  thunderbolt: Move constants related to NVM into nvm.c
+  thunderbolt: Increase NVM_MAX_SIZE to support Intel Barlow Ridge controller
+
+Mika Westerberg (11):
+  thunderbolt: Ignore data CRC mismatch for USB4 routers
+  thunderbolt: Do not touch lane 1 adapter path config space
+  thunderbolt: Add the new USB4 v2 notification types
+  thunderbolt: Reset USB4 v2 host router
+  thunderbolt: Add Intel Barlow Ridge PCI ID
+  thunderbolt: Limit Intel Barlow Ridge USB3 bandwidth
+  thunderbolt: Add support for enhanced uni-directional TMU mode
+  thunderbolt: Enable CL2 low power state
+  thunderbolt: Make bandwidth allocation mode function names consistent
+  thunderbolt: Add DisplayPort 2.x tunneling support
+  thunderbolt: Add test case for 3 DisplayPort tunnels
+
+ drivers/thunderbolt/clx.c      |  31 +-
+ drivers/thunderbolt/ctl.c      |  28 ++
+ drivers/thunderbolt/debugfs.c  |  29 +-
+ drivers/thunderbolt/dma_test.c |  10 +-
+ drivers/thunderbolt/eeprom.c   |   3 +-
+ drivers/thunderbolt/icm.c      |   6 +-
+ drivers/thunderbolt/nhi.c      |  41 ++-
+ drivers/thunderbolt/nhi.h      |   4 +
+ drivers/thunderbolt/nhi_regs.h |  19 +-
+ drivers/thunderbolt/nvm.c      |   4 +
+ drivers/thunderbolt/quirks.c   |   8 +
+ drivers/thunderbolt/switch.c   | 216 ++++++++----
+ drivers/thunderbolt/tb.c       | 132 ++++++--
+ drivers/thunderbolt/tb.h       | 144 ++++----
+ drivers/thunderbolt/tb_msgs.h  |   7 +
+ drivers/thunderbolt/tb_regs.h  |  25 +-
+ drivers/thunderbolt/test.c     |  83 +++++
+ drivers/thunderbolt/tmu.c      | 595 ++++++++++++++++++++++++++-------
+ drivers/thunderbolt/tunnel.c   | 178 +++++++---
+ drivers/thunderbolt/usb4.c     | 108 ++++--
+ drivers/thunderbolt/xdomain.c  |  82 ++++-
+ include/linux/thunderbolt.h    |  18 +-
+ 22 files changed, 1380 insertions(+), 391 deletions(-)
+
+-- 
+2.39.2
 
