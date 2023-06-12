@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF68972BB44
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jun 2023 10:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7A772BB42
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jun 2023 10:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233651AbjFLIxb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Jun 2023 04:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
+        id S233053AbjFLIx3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Jun 2023 04:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233345AbjFLIxA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Jun 2023 04:53:00 -0400
+        with ESMTP id S233889AbjFLIw6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Jun 2023 04:52:58 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34361FDB
-        for <linux-usb@vger.kernel.org>; Mon, 12 Jun 2023 01:52:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5BA1BF0
+        for <linux-usb@vger.kernel.org>; Mon, 12 Jun 2023 01:52:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686559942; x=1718095942;
+  t=1686559940; x=1718095940;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=nvTw/GZuY+NyXCnGB2Z1yYs3/CsVd3QAeUEWzLQSEEQ=;
-  b=PqDRgbCUr8DdxoTVDMZasx1oJjg1933AEwmZfahvmZVqBHnDLF92WftZ
-   Ni5qpa7uVTWez69E0e6l/2JoC23ntAviE/TC8FYKY03p7Bmgxdxm/SzTW
-   UT9tbkrN+Ae5pdHfiH/8k0NI/O/RxDizOtKMsmhlW3PU0DmvWzlB4QT0l
-   v6+5fI7h3DHmGshnDfSG8p6IK12CGpDAS2UlN8c6jfYZecgbMYba+3nKk
-   ccn1GuLlGL0PGtS1Mo0rXRWUDkezhd67aN8GonQtIVyFtDNpp2n5eDdbW
-   xPi9JiBF3q1/JXOoE6epVq94h+rMxHIY8f++jyHcJq46e6ziMY8nte1VX
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="347627245"
+  bh=2spGKKJuYNiuA8qKZX/i0/6rIr2eqb7O4rNsuJf0POc=;
+  b=dEwD7MVsVOvLgRO5TV/l9j1Md7mJLmbGlokHADY+Xb1Powm2oksxGk9E
+   D/u35hwr/rEr26CBjNKH60ela8v6y0FTdy6H6/qhiuBPE4Q7cauJAHskK
+   vY5ED9ZJrB/aEhfo8glljr4v3iXFDXrjQkiCbgi2Q64y5NE+VTpnz3P5w
+   1NtQqLuj3TW6/qx5ydTHLb0CqQnxx6QItlC2+WWw6tqusHklzQ/WKdawP
+   K41A0ni6CsfPDIQUc0fioJ9+myn5iq7kY4TjwBWT8Bm/gbW7BFy8tRaFz
+   Uawh90aiDGTwfC0ZlzsCC75cRBYcCkiWQ64VAHt4h7/oAibG7iSUpekwQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="347627242"
 X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="347627245"
+   d="scan'208";a="347627242"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 01:21:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="744247723"
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="744247721"
 X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="744247723"
+   d="scan'208";a="744247721"
 Received: from black.fi.intel.com ([10.237.72.28])
   by orsmga001.jf.intel.com with ESMTP; 12 Jun 2023 01:21:37 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 52FD434C; Mon, 12 Jun 2023 11:21:45 +0300 (EEST)
+        id 58129358; Mon, 12 Jun 2023 11:21:45 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Gil Fine <gil.fine@linux.intel.com>,
@@ -48,9 +48,9 @@ Cc:     Gil Fine <gil.fine@linux.intel.com>,
         Lukas Wunner <lukas@wunner.de>,
         Andreas Noever <andreas.noever@gmail.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v2 01/20] thunderbolt: Ignore data CRC mismatch for USB4 routers
-Date:   Mon, 12 Jun 2023 11:21:26 +0300
-Message-Id: <20230612082145.62218-2-mika.westerberg@linux.intel.com>
+Subject: [PATCH v2 02/20] thunderbolt: Do not touch lane 1 adapter path config space
+Date:   Mon, 12 Jun 2023 11:21:27 +0300
+Message-Id: <20230612082145.62218-3-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230612082145.62218-1-mika.westerberg@linux.intel.com>
 References: <20230612082145.62218-1-mika.westerberg@linux.intel.com>
@@ -66,30 +66,28 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is also something not always updated after the DROM contents itself
-so issue warning but continue parsing it as we do for pre-USB4 DROMs
-too.
+It is not required to be implemented at all because USB4 does not use
+lane 1 for tunneling except when aggregated with lane 0. For this reason
+do not try to read the path config space of USB4 lane 1 adapters.
 
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/eeprom.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/thunderbolt/switch.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
-index 0f6099c18a94..eb241b270f79 100644
---- a/drivers/thunderbolt/eeprom.c
-+++ b/drivers/thunderbolt/eeprom.c
-@@ -605,9 +605,8 @@ static int usb4_drom_parse(struct tb_switch *sw)
- 	crc = tb_crc32(sw->drom + TB_DROM_DATA_START, header->data_len);
- 	if (crc != header->data_crc32) {
- 		tb_sw_warn(sw,
--			   "DROM data CRC32 mismatch (expected: %#x, got: %#x), aborting\n",
-+			   "DROM data CRC32 mismatch (expected: %#x, got: %#x), continuing\n",
- 			   header->data_crc32, crc);
--		return -EINVAL;
- 	}
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index 0c11caec7e8e..47961afdcc73 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -723,7 +723,7 @@ static int tb_init_port(struct tb_port *port)
+ 		 * can be read from the path config space. Legacy
+ 		 * devices we use hard-coded value.
+ 		 */
+-		if (tb_switch_is_usb4(port->sw)) {
++		if (port->cap_usb4) {
+ 			struct tb_regs_hop hop;
  
- 	return tb_drom_parse_entries(sw, USB4_DROM_HEADER_SIZE);
+ 			if (!tb_port_read(port, &hop, TB_CFG_HOPS, 0, 2))
 -- 
 2.39.2
 
