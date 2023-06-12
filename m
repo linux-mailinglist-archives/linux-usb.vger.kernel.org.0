@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC80E72BB47
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jun 2023 10:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E950D72BB4A
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jun 2023 10:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbjFLIxf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Jun 2023 04:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S234153AbjFLIxi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Jun 2023 04:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233896AbjFLIxC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Jun 2023 04:53:02 -0400
+        with ESMTP id S233714AbjFLIxF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Jun 2023 04:53:05 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6924F2106
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056F6210E
         for <linux-usb@vger.kernel.org>; Mon, 12 Jun 2023 01:52:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1686559943; x=1718095943;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mdpNIpe3M7LORulbwwf0paeY7CFPssSM7JAbZWYPNts=;
-  b=FDTciUPolHNcjfbpw0+zteGIZWWS+YmtwmkZFZFQLF2HzejpIX+7gXbc
-   s851CGt1/w3r+aeqaBXbopp580w55AgxHndhUXtGqC5HpdpsyQ+1zpoKV
-   MGb12wah2z5kL1reYqlcBy4Gn9Ze3F9h7turOLF9hSR5Lzy4yGK5lFcbv
-   49LMDAAJyYeUVHV2bCkmmkThfhrt8H4rCKeXT3iwU3QjB+Lj8T22a84t3
-   Zdy3LAn55mdGySN+GU0I21C+sskGIzmxzlEVx96QFv0CKMR0g8mRBhJ27
-   QP1VEBovYBEXfiojCHCJ9oMQPQMcb1SHUSLO9RGcr+ZnSILU22oy2ltpK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="347627273"
+  bh=kFKuMVtbq4L6IbR5gbsn6IxsrUNY/j9eEUFY1+5pP/0=;
+  b=Mqh13gaYPGEgb6sZ9wq0v2eElI6oEh8JdAxGqf3H+m3qmxfrMAqdzckT
+   h0IcTy+UKy752WThw73W+rvRFcEVclViXWgtzgKZWNYRWx6yXMf64WvUg
+   04fXu1Qs91M9S4fJPNFcB6cm83DI4J+D86qeo/Zitm66rs2pPpXadNNbC
+   V+bBY5Gakn+QYtWnYc+JpIyouHubWTjna+LFyT19G8aUxL9dMexXJfhsJ
+   rB3c+B7ScisD2vps47r5J6UWTC2Cq6xlzHl5MvFb9WbZtYhuuP7OnKY9x
+   e0/ou8RPOvBL2LiZBMUQv+XhyfehgvtuMYPHd5VU5xUPOZ3vEpfxZBneZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="347627285"
 X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="347627273"
+   d="scan'208";a="347627285"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 01:21:42 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="744247752"
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="744247760"
 X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="744247752"
+   d="scan'208";a="744247760"
 Received: from black.fi.intel.com ([10.237.72.28])
   by orsmga001.jf.intel.com with ESMTP; 12 Jun 2023 01:21:40 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id CB60A929; Mon, 12 Jun 2023 11:21:45 +0300 (EEST)
+        id D4733991; Mon, 12 Jun 2023 11:21:45 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Gil Fine <gil.fine@linux.intel.com>,
@@ -48,9 +48,9 @@ Cc:     Gil Fine <gil.fine@linux.intel.com>,
         Lukas Wunner <lukas@wunner.de>,
         Andreas Noever <andreas.noever@gmail.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v2 12/20] thunderbolt: Add Intel Barlow Ridge PCI ID
-Date:   Mon, 12 Jun 2023 11:21:37 +0300
-Message-Id: <20230612082145.62218-13-mika.westerberg@linux.intel.com>
+Subject: [PATCH v2 13/20] thunderbolt: Limit Intel Barlow Ridge USB3 bandwidth
+Date:   Mon, 12 Jun 2023 11:21:38 +0300
+Message-Id: <20230612082145.62218-14-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230612082145.62218-1-mika.westerberg@linux.intel.com>
 References: <20230612082145.62218-1-mika.westerberg@linux.intel.com>
@@ -66,46 +66,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Intel Barlow Ridge is the first USB4 v2 controller from Intel. The
-controller exposes standard USB4 PCI class ID in typical configurations,
-however there is a way to configure it so that it uses a special class
-ID to allow using s different driver than the Windows inbox one. For
-this reason add the Barlow Ridge PCI ID to the Linux driver too so that
-the driver can attach regardless of the class ID.
+Intel Barlow Ridge discrete USB4 host router has the same limitation as
+the previous generations so make sure the USB3 bandwidth limitation
+quirk is applied to Barlow Ridge too.
 
-Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/nhi.c | 2 ++
- drivers/thunderbolt/nhi.h | 2 ++
- 2 files changed, 4 insertions(+)
+ drivers/thunderbolt/nhi.h    | 2 ++
+ drivers/thunderbolt/quirks.c | 8 ++++++++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-index 116016695a6a..4b7bec74e89f 100644
---- a/drivers/thunderbolt/nhi.c
-+++ b/drivers/thunderbolt/nhi.c
-@@ -1517,6 +1517,8 @@ static struct pci_device_id nhi_ids[] = {
- 	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_MTL_P_NHI1),
- 	  .driver_data = (kernel_ulong_t)&icl_nhi_ops },
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_BARLOW_RIDGE_HOST_80G_NHI) },
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_BARLOW_RIDGE_HOST_40G_NHI) },
- 
- 	/* Any USB4 compliant host */
- 	{ PCI_DEVICE_CLASS(PCI_CLASS_SERIAL_USB_USB4, ~0) },
 diff --git a/drivers/thunderbolt/nhi.h b/drivers/thunderbolt/nhi.h
-index b0718020c6f5..c15a0c46c9cf 100644
+index c15a0c46c9cf..0f029ce75882 100644
 --- a/drivers/thunderbolt/nhi.h
 +++ b/drivers/thunderbolt/nhi.h
-@@ -75,6 +75,8 @@ extern const struct tb_nhi_ops icl_nhi_ops;
- #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_BRIDGE	0x15ef
- #define PCI_DEVICE_ID_INTEL_ADL_NHI0			0x463e
+@@ -77,6 +77,8 @@ extern const struct tb_nhi_ops icl_nhi_ops;
  #define PCI_DEVICE_ID_INTEL_ADL_NHI1			0x466d
-+#define PCI_DEVICE_ID_INTEL_BARLOW_RIDGE_HOST_80G_NHI	0x5781
-+#define PCI_DEVICE_ID_INTEL_BARLOW_RIDGE_HOST_40G_NHI	0x5784
+ #define PCI_DEVICE_ID_INTEL_BARLOW_RIDGE_HOST_80G_NHI	0x5781
+ #define PCI_DEVICE_ID_INTEL_BARLOW_RIDGE_HOST_40G_NHI	0x5784
++#define PCI_DEVICE_ID_INTEL_BARLOW_RIDGE_HUB_80G_BRIDGE 0x5786
++#define PCI_DEVICE_ID_INTEL_BARLOW_RIDGE_HUB_40G_BRIDGE 0x57a4
  #define PCI_DEVICE_ID_INTEL_MTL_M_NHI0			0x7eb2
  #define PCI_DEVICE_ID_INTEL_MTL_P_NHI0			0x7ec2
  #define PCI_DEVICE_ID_INTEL_MTL_P_NHI1			0x7ec3
+diff --git a/drivers/thunderbolt/quirks.c b/drivers/thunderbolt/quirks.c
+index 854d84148850..488138a28ae1 100644
+--- a/drivers/thunderbolt/quirks.c
++++ b/drivers/thunderbolt/quirks.c
+@@ -75,6 +75,14 @@ static const struct tb_quirk tb_quirks[] = {
+ 		  quirk_usb3_maximum_bandwidth },
+ 	{ 0x8087, PCI_DEVICE_ID_INTEL_MTL_P_NHI1, 0x0000, 0x0000,
+ 		  quirk_usb3_maximum_bandwidth },
++	{ 0x8087, PCI_DEVICE_ID_INTEL_BARLOW_RIDGE_HOST_80G_NHI, 0x0000, 0x0000,
++		  quirk_usb3_maximum_bandwidth },
++	{ 0x8087, PCI_DEVICE_ID_INTEL_BARLOW_RIDGE_HOST_40G_NHI, 0x0000, 0x0000,
++		  quirk_usb3_maximum_bandwidth },
++	{ 0x8087, PCI_DEVICE_ID_INTEL_BARLOW_RIDGE_HUB_80G_BRIDGE, 0x0000, 0x0000,
++		  quirk_usb3_maximum_bandwidth },
++	{ 0x8087, PCI_DEVICE_ID_INTEL_BARLOW_RIDGE_HUB_40G_BRIDGE, 0x0000, 0x0000,
++		  quirk_usb3_maximum_bandwidth },
+ 	/*
+ 	 * CLx is not supported on AMD USB4 Yellow Carp and Pink Sardine platforms.
+ 	 */
 -- 
 2.39.2
 
