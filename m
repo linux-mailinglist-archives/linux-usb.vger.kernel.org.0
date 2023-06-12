@@ -2,80 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE6772C66F
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jun 2023 15:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A99A872C898
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jun 2023 16:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232637AbjFLNwE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Jun 2023 09:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
+        id S237383AbjFLOcS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Jun 2023 10:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236666AbjFLNwA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Jun 2023 09:52:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A64E6F;
-        Mon, 12 Jun 2023 06:51:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E84C62976;
-        Mon, 12 Jun 2023 13:51:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92EC5C433A1;
-        Mon, 12 Jun 2023 13:51:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686577915;
-        bh=N35u9HNcA2GE6O0RLNmO/H/bI7DFCPIb/J9WbCfp+7I=;
-        h=Subject:From:To:Date:In-Reply-To:References:From;
-        b=ObL7C8SEHs/LzGPrSxC74RrT9T2yAr7+1XglnX3EW1FZM90y7O6ormobkdpAWuZ0e
-         RdLzx900Hqpy9HE3EfCtu+74BEGhE/aZtEqml+3NJgQSzQx53YAlTOFBgpsZKSbcTh
-         +zXor8GIZ20+va1qDjHAfR3RyRUEaBOMhmjJ7l5g2lpz8/OpJX+h5I3T6nxDG8Q0Ct
-         vPS6mDUmgWbpb1+t3cmEUqFflpPCwKrf9+eWZ+e4rjAuOfKobUeruOpGBYBZ90Wbpa
-         C9ELvqhW19k3IAANYXAYjz0pZ8SMZZaeiSfoRUPDrDPMlZiF0tSo1r2eVMBMPNiBkq
-         +CwHQ9soLqvPA==
-Message-ID: <a6ca6c14a6b3727b7416198824b37bd7bd386180.camel@kernel.org>
-Subject: Re: [PATCH v2 8/8] cifs: update the ctime on a partial page write
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Tom Talpey <tom@talpey.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Brad Warrum <bwarrum@linux.ibm.com>,
-        Ritu Agarwal <rituagar@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ian Kent <raven@themaw.net>,
-        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-        Jeremy Kerr <jk@ozlabs.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Ruihan Li <lrh2000@pku.edu.cn>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        autofs@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, apparmor@lists.ubuntu.com,
-        linux-security-module@vger.kernel.org
-Date:   Mon, 12 Jun 2023 09:51:50 -0400
-In-Reply-To: <a34b598a-374b-5dbf-dd36-4b62e52fe36c@talpey.com>
-References: <20230612104524.17058-1-jlayton@kernel.org>
-         <20230612104524.17058-9-jlayton@kernel.org>
-         <a34b598a-374b-5dbf-dd36-4b62e52fe36c@talpey.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        with ESMTP id S238148AbjFLOb6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Jun 2023 10:31:58 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED5230EC;
+        Mon, 12 Jun 2023 07:30:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686580234; x=1718116234;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=nu9cHDCGnhrdFWKyoctaWO51j3F00a8wP/G/yi0Zavs=;
+  b=E5GfZJ721Bm1TmaoxOpyNjzbK0irk3SBVvtDIobwSdUNHdKutK6KJxPF
+   8VmVLiZvhC8Jh2tg5yjrEJk0Qp2DKIu29BcFRPkiXREQOXo9O5zxOnw/k
+   hhLgViTeS02iKL3gDsV1VgFMbUkpPIZH3v4YI70losAX0IcBYBggOjjzF
+   7OVPoIiYbqfDviEubjgAq7AofteNt64z7JGrB9Wxbz72Y5W3u0kPzkXps
+   XHzI0JqoudBJCBReappqPAS3IlV/UxqhRz4QTm1Xbm8LdRSqfTG9c68xv
+   V85N6PBchLZ3nwgiMT/IoEgLGZO6NSfr6FfmJH5rHMIW/l+F4QD6kgpRE
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="444430919"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="444430919"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 07:28:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="1041350402"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="1041350402"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga005.fm.intel.com with ESMTP; 12 Jun 2023 07:28:41 -0700
+Message-ID: <e153b3e8-6c0a-a142-c357-eb295eecdece@linux.intel.com>
+Date:   Mon, 12 Jun 2023 17:30:05 +0300
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Content-Language: en-US
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>
+References: <20230531-xhci-deadlock-v1-1-57780bff5124@chromium.org>
+ <14d94fa1-1499-de1f-c924-9b823a606580@linux.intel.com>
+ <CANiDSCuTYRUfW8tLbPDq3dE+F7Wno5oc4C9qESMmTpaNyW-54Q@mail.gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH] xhci: Do not create endpoint debugfs while holding the
+ bandwidth mutex
+In-Reply-To: <CANiDSCuTYRUfW8tLbPDq3dE+F7Wno5oc4C9qESMmTpaNyW-54Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,54 +68,95 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 2023-06-12 at 09:41 -0400, Tom Talpey wrote:
-> On 6/12/2023 6:45 AM, Jeff Layton wrote:
-> > POSIX says:
-> >=20
-> >      "Upon successful completion, where nbyte is greater than 0, write(=
-)
-> >       shall mark for update the last data modification and last file st=
-atus
-> >       change timestamps of the file..."
-> >=20
-> > Add the missing ctime update.
-> >=20
-> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > ---
-> >   fs/smb/client/file.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/fs/smb/client/file.c b/fs/smb/client/file.c
-> > index df88b8c04d03..a00038a326cf 100644
-> > --- a/fs/smb/client/file.c
-> > +++ b/fs/smb/client/file.c
-> > @@ -2596,7 +2596,7 @@ static int cifs_partialpagewrite(struct page *pag=
-e, unsigned from, unsigned to)
-> >   					   write_data, to - from, &offset);
-> >   		cifsFileInfo_put(open_file);
-> >   		/* Does mm or vfs already set times? */
-> > -		inode->i_atime =3D inode->i_mtime =3D current_time(inode);
-> > +		inode->i_atime =3D inode->i_mtime =3D inode->i_ctime =3D current_tim=
-e(inode);
->=20
-> Question. It appears that roughly half the filesystems in this series
-> don't touch the i_atime in this case. And the other half do. Which is
-> correct? Did they incorrectly set i_atime instead of i_ctime?
->=20
+On 1.6.2023 19.05, Ricardo Ribalda wrote:
+> Hi Mathias
+> 
+> On Thu, 1 Jun 2023 at 16:13, Mathias Nyman
+> <mathias.nyman@linux.intel.com> wrote:
+>>
+>> Do you still have the lockdep output showing the deadlock?
+> 
+> [  459.731142] ======================================================
+> [  459.731150] WARNING: possible circular locking dependency detected
+> [  459.731161] 5.4.169-lockdep-17434-g505c8a10e6fe #1 Not tainted
+> [  459.731168] ------------------------------------------------------
+> [  459.731176] syz-executor.3/15308 is trying to acquire lock:
+> [  459.731184] ffffff80c63e0ee0 (&queue->mutex){+.+.}, at:
+> uvc_queue_mmap+0x30/0xa0 [uvcvideo]
+> [  459.731226]
+>                 but task is already holding lock:
+> [  459.731232] ffffff80a748eea8 (&mm->mmap_sem){++++}, at:
+> vm_mmap_pgoff+0x10c/0x1f4
+> [  459.731255]
+>                 which lock already depends on the new lock.
+> 
+...
+> [  459.732148] Chain exists of:
+>                   &queue->mutex --> &sb->s_type->i_mutex_key#4 --> &mm->mmap_sem
+> 
+> [  459.732165]  Possible unsafe locking scenario:
+> 
+> [  459.732172]        CPU0                    CPU1
+> [  459.732178]        ----                    ----
+> [  459.732184]   lock(&mm->mmap_sem);
+> [  459.732193]                                lock(&sb->s_type->i_mutex_key#4);
+> [  459.732204]                                lock(&mm->mmap_sem);
+> [  459.732212]   lock(&queue->mutex);
+> [  459.732221]
+>                  *** DEADLOCK ***
+> 
+>>
+>> I'm not sure how calling xhci_debugfs_create_endpoint() from
+>> xhci_add_endpoint() instead of xhci_check_bandwidth() helps.
+>>
+>> Both are called with hcd->bandwidth_mutex held:
+>>
+>> usb_set_interface()
+>>          mutex_lock(hcd->bandwidth_mutex);
+>>          usb_hcd_alloc_bandwidth()
+>>                  hcd->driver->add_endpoint()    -> xhci_add_endpoint()
+>>                  hcd->driver->check_bandwidth() -> xhci_check_bandwidth()
+>>          mutex_unlock(hcd->bandwidth_mutex);
+> 
+> Yep, I guess I was lucky not to be able to repro again :)
+> 
+> The locks involved are:
+> 
+> hcd->bandwidth_mutex
+> mm->mmap_sem
+> [uvc] queue->mutex
+> 
 
-I noticed that too, and with this set, I decided to not make any atime
-changes since I wasn't sure.
+Ok, took a look at this.
+I don't think the bandwidth mutex matters that much.
 
-I think the answer to your question is "it depends". atime is supposed
-to be updated on reads, not writes, but sometimes a write requires a RMW
-cycle of some flavor so one can imagine that in some cases we'd need to
-update all three.
+To my understanding this is caused by the following lock chains:
 
-In this case, I'm not sure that updating any of these times is the right
-thing to do. This is called from ->launder_folio, so the syscall that
-issued the write is long gone and we're in writeback here.
+ucv_queue_mmap()
+   mmap_sem --> queue->mutex
 
-With NFS, we generally leave timestamp updates to the server. Should any
-of these timestamps be updated by the (SMB1) client here?
---=20
-Jeff Layton <jlayton@kernel.org>
+uvc_ioctl_streamon() calling usb_set_interface() calling debugfs_create_dir()
+   queue->mutex --> i_mutex_key
+
+Some debugfs error case:
+   i_mutex_key --> mmap_sem
+
+So we could end up with this deadlock:
+CPU0		CPU1		CPU2
+mmap_sem	queue->mutex	i_mutex_key
+  
+waiting for	waiting for	waiting for
+queue->mutex	i_mutex_key	mmap_sem	
+
+I have no idea if this can be triggered in real life.
+
+Looks like that requires a some specific debugfs error
+to trigger at the same time we are creating a debugfs directory
+
+Thanks
+Mathias
+
+
+
+  
+
