@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 522B572BB4F
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jun 2023 10:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A5D72BB55
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jun 2023 10:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbjFLIxv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Jun 2023 04:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
+        id S233964AbjFLIxs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Jun 2023 04:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233810AbjFLIxM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Jun 2023 04:53:12 -0400
+        with ESMTP id S233682AbjFLIxK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Jun 2023 04:53:10 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9BB30D0
-        for <linux-usb@vger.kernel.org>; Mon, 12 Jun 2023 01:52:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A6B30C0
+        for <linux-usb@vger.kernel.org>; Mon, 12 Jun 2023 01:52:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686559947; x=1718095947;
+  t=1686559946; x=1718095946;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=agf7D+0Fk89X2jfHNyHyeMpu6LLQmvXRXE3Gy1/1dqs=;
-  b=NRbgVZAhHbpkfBUWkfD50F1k2WQoz6g6c3S0oSVP92vTA+yCc1+yibMe
-   u9CSxTZ9lR56ddBON3VLZcHjzeoaC57EXsygZhUxMU7UVvAIxqsmgnTbi
-   kxjTF64nRst0EJc/LOlLz6w/kJZ9wGD4KNQZg0CDD31LykDp+LL+p/4ZR
-   gk+ztaR1byr1P4jdo2FvN3DZGGA2DWj4eoqNbLSeJDkjQ0LsPubpJ7OLo
-   VuTqOCfTYEBBP/TEHjgweJR/72tgP/N5Nq879kCF0jifXzXe90M731jxV
-   pZwuQ2lb0/STb9Zxqp7Qf+lpli8T34iJpK66uZ1QiQ5L3iGyVFjdEQ1Tp
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="347627319"
+  bh=PpeVzZcGbyUvYegS7OXn5u6Us4JA//RLFBzAfz0nby0=;
+  b=XeliRabREH6LCfFxVbfqu0Ks8SP1/MeJhMLYVurAkVP5TK4/2Wb/Kt3A
+   lk6myr1CJSyIhb8uSgMkaVYqoAf+RfoirJXtfeH0HHNZW5+cArkOJKKJc
+   ppVwjnytr9sKKbYQWB0fg+mTKXdjXImVUzRf/Yd22SxIIPRTYtwMWX8ah
+   WZJzhNI1S/Uf976Sr8jgO1Bce9H3Eqd6xxyCA2nVzOdh1fGoTMh2YwVi2
+   43i1ZSUj1847r+MhRdBfsdbUY+zH0iTcvtKyCyEUszD0zQHm92NRJYazs
+   hTeIrBUkV99K1PKxs4iEyNbfSuq9YYcoApDuHB5ej8Bwz6FONTl/f13j4
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="347627309"
 X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="347627319"
+   d="scan'208";a="347627309"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 01:21:45 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="744247783"
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="744247777"
 X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="744247783"
+   d="scan'208";a="744247777"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 12 Jun 2023 01:21:42 -0700
+  by orsmga001.jf.intel.com with ESMTP; 12 Jun 2023 01:21:43 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 182C7ACC; Mon, 12 Jun 2023 11:21:46 +0300 (EEST)
+        id 1F4C0BCF; Mon, 12 Jun 2023 11:21:46 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Gil Fine <gil.fine@linux.intel.com>,
@@ -48,9 +48,9 @@ Cc:     Gil Fine <gil.fine@linux.intel.com>,
         Lukas Wunner <lukas@wunner.de>,
         Andreas Noever <andreas.noever@gmail.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v2 18/20] thunderbolt: Make bandwidth allocation mode function names consistent
-Date:   Mon, 12 Jun 2023 11:21:43 +0300
-Message-Id: <20230612082145.62218-19-mika.westerberg@linux.intel.com>
+Subject: [PATCH v2 19/20] thunderbolt: Add DisplayPort 2.x tunneling support
+Date:   Mon, 12 Jun 2023 11:21:44 +0300
+Message-Id: <20230612082145.62218-20-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230612082145.62218-1-mika.westerberg@linux.intel.com>
 References: <20230612082145.62218-1-mika.westerberg@linux.intel.com>
@@ -66,371 +66,221 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Make sure the DisplayPort bandwidth allocation mode function names are
-consistent with the existing ones, such as USB3.
+This adds support for the UHBR (Ultra High Bit Rate) bandwidths
+introduced with DisplayPort 2.0 (and refined in 2.1). These can go up to
+80 Gbit/s and their support is represent in additional bits in the DP IN
+capability.
 
-No functional changes.
+This updates the DisplayPort tunneling to support these new rates too.
 
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/tb.c     | 10 ++++-----
- drivers/thunderbolt/tb.h     | 15 +++++++------
- drivers/thunderbolt/tunnel.c | 41 ++++++++++++++++++------------------
- drivers/thunderbolt/usb4.c   | 32 ++++++++++++++++------------
- 4 files changed, 52 insertions(+), 46 deletions(-)
+ drivers/thunderbolt/tb_regs.h |   3 +
+ drivers/thunderbolt/tunnel.c  | 100 ++++++++++++++++++++++++++++------
+ 2 files changed, 87 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 79efc85db38b..62b26b7998fd 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -131,7 +131,7 @@ tb_attach_bandwidth_group(struct tb_cm *tcm, struct tb_port *in,
- static void tb_discover_bandwidth_group(struct tb_cm *tcm, struct tb_port *in,
- 					struct tb_port *out)
- {
--	if (usb4_dp_port_bw_mode_enabled(in)) {
-+	if (usb4_dp_port_bandwidth_mode_enabled(in)) {
- 		int index, i;
- 
- 		index = usb4_dp_port_group_id(in);
-@@ -1169,7 +1169,7 @@ tb_recalc_estimated_bandwidth_for_group(struct tb_bandwidth_group *group)
- 		struct tb_tunnel *tunnel;
- 		struct tb_port *out;
- 
--		if (!usb4_dp_port_bw_mode_enabled(in))
-+		if (!usb4_dp_port_bandwidth_mode_enabled(in))
- 			continue;
- 
- 		tunnel = tb_find_tunnel(tb, TB_TUNNEL_DP, in, NULL);
-@@ -1217,7 +1217,7 @@ tb_recalc_estimated_bandwidth_for_group(struct tb_bandwidth_group *group)
- 		else
- 			estimated_bw = estimated_up;
- 
--		if (usb4_dp_port_set_estimated_bw(in, estimated_bw))
-+		if (usb4_dp_port_set_estimated_bandwidth(in, estimated_bw))
- 			tb_port_warn(in, "failed to update estimated bandwidth\n");
- 	}
- 
-@@ -1912,12 +1912,12 @@ static void tb_handle_dp_bandwidth_request(struct work_struct *work)
- 
- 	tb_port_dbg(in, "handling bandwidth allocation request\n");
- 
--	if (!usb4_dp_port_bw_mode_enabled(in)) {
-+	if (!usb4_dp_port_bandwidth_mode_enabled(in)) {
- 		tb_port_warn(in, "bandwidth allocation mode not enabled\n");
- 		goto unlock;
- 	}
- 
--	ret = usb4_dp_port_requested_bw(in);
-+	ret = usb4_dp_port_requested_bandwidth(in);
- 	if (ret < 0) {
- 		if (ret == -ENODATA)
- 			tb_port_dbg(in, "no bandwidth request active\n");
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index 68ab9b3c9580..57a9b272cb94 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -1292,19 +1292,20 @@ int usb4_usb3_port_release_bandwidth(struct tb_port *port, int *upstream_bw,
- 				     int *downstream_bw);
- 
- int usb4_dp_port_set_cm_id(struct tb_port *port, int cm_id);
--bool usb4_dp_port_bw_mode_supported(struct tb_port *port);
--bool usb4_dp_port_bw_mode_enabled(struct tb_port *port);
--int usb4_dp_port_set_cm_bw_mode_supported(struct tb_port *port, bool supported);
-+bool usb4_dp_port_bandwidth_mode_supported(struct tb_port *port);
-+bool usb4_dp_port_bandwidth_mode_enabled(struct tb_port *port);
-+int usb4_dp_port_set_cm_bandwidth_mode_supported(struct tb_port *port,
-+						 bool supported);
- int usb4_dp_port_group_id(struct tb_port *port);
- int usb4_dp_port_set_group_id(struct tb_port *port, int group_id);
- int usb4_dp_port_nrd(struct tb_port *port, int *rate, int *lanes);
- int usb4_dp_port_set_nrd(struct tb_port *port, int rate, int lanes);
- int usb4_dp_port_granularity(struct tb_port *port);
- int usb4_dp_port_set_granularity(struct tb_port *port, int granularity);
--int usb4_dp_port_set_estimated_bw(struct tb_port *port, int bw);
--int usb4_dp_port_allocated_bw(struct tb_port *port);
--int usb4_dp_port_allocate_bw(struct tb_port *port, int bw);
--int usb4_dp_port_requested_bw(struct tb_port *port);
-+int usb4_dp_port_set_estimated_bandwidth(struct tb_port *port, int bw);
-+int usb4_dp_port_allocated_bandwidth(struct tb_port *port);
-+int usb4_dp_port_allocate_bandwidth(struct tb_port *port, int bw);
-+int usb4_dp_port_requested_bandwidth(struct tb_port *port);
- 
- int usb4_pci_port_set_ext_encapsulation(struct tb_port *port, bool enable);
- 
+diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
+index c95fc7fe7adf..cf9f2370878a 100644
+--- a/drivers/thunderbolt/tb_regs.h
++++ b/drivers/thunderbolt/tb_regs.h
+@@ -450,6 +450,9 @@ struct tb_regs_port_header {
+ #define DP_COMMON_CAP_1_LANE			0x0
+ #define DP_COMMON_CAP_2_LANES			0x1
+ #define DP_COMMON_CAP_4_LANES			0x2
++#define DP_COMMON_CAP_UHBR10			BIT(17)
++#define DP_COMMON_CAP_UHBR20			BIT(18)
++#define DP_COMMON_CAP_UHBR13_5			BIT(19)
+ #define DP_COMMON_CAP_LTTPR_NS			BIT(27)
+ #define DP_COMMON_CAP_BW_MODE			BIT(28)
+ #define DP_COMMON_CAP_DPRX_DONE			BIT(31)
 diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
-index f1d0ab2b39a2..64ec0cccc0df 100644
+index 64ec0cccc0df..620dc9d240f0 100644
 --- a/drivers/thunderbolt/tunnel.c
 +++ b/drivers/thunderbolt/tunnel.c
-@@ -640,7 +640,7 @@ static int tb_dp_xchg_caps(struct tb_tunnel *tunnel)
- 			     in->cap_adap + DP_REMOTE_CAP, 1);
+@@ -417,6 +417,10 @@ static int tb_dp_cm_handshake(struct tb_port *in, struct tb_port *out,
+ 	return -ETIMEDOUT;
  }
  
--static int tb_dp_bw_alloc_mode_enable(struct tb_tunnel *tunnel)
-+static int tb_dp_bandwidth_alloc_mode_enable(struct tb_tunnel *tunnel)
++/*
++ * Returns maximum possible rate from capability supporting only DP 2.0
++ * and below. Used when DP BW allocation mode is not enabled.
++ */
+ static inline u32 tb_dp_cap_get_rate(u32 val)
  {
- 	int ret, estimated_bw, granularity, tmp;
- 	struct tb_port *out = tunnel->dst_port;
-@@ -652,7 +652,7 @@ static int tb_dp_bw_alloc_mode_enable(struct tb_tunnel *tunnel)
- 	if (!bw_alloc_mode)
- 		return 0;
- 
--	ret = usb4_dp_port_set_cm_bw_mode_supported(in, true);
-+	ret = usb4_dp_port_set_cm_bandwidth_mode_supported(in, true);
- 	if (ret)
- 		return ret;
- 
-@@ -716,12 +716,12 @@ static int tb_dp_bw_alloc_mode_enable(struct tb_tunnel *tunnel)
- 
- 	tb_port_dbg(in, "estimated bandwidth %d Mb/s\n", estimated_bw);
- 
--	ret = usb4_dp_port_set_estimated_bw(in, estimated_bw);
-+	ret = usb4_dp_port_set_estimated_bandwidth(in, estimated_bw);
- 	if (ret)
- 		return ret;
- 
- 	/* Initial allocation should be 0 according the spec */
--	ret = usb4_dp_port_allocate_bw(in, 0);
-+	ret = usb4_dp_port_allocate_bandwidth(in, 0);
- 	if (ret)
- 		return ret;
- 
-@@ -743,7 +743,7 @@ static int tb_dp_init(struct tb_tunnel *tunnel)
- 	if (!tb_switch_is_usb4(sw))
- 		return 0;
- 
--	if (!usb4_dp_port_bw_mode_supported(in))
-+	if (!usb4_dp_port_bandwidth_mode_supported(in))
- 		return 0;
- 
- 	tb_port_dbg(in, "bandwidth allocation mode supported\n");
-@@ -752,17 +752,17 @@ static int tb_dp_init(struct tb_tunnel *tunnel)
- 	if (ret)
- 		return ret;
- 
--	return tb_dp_bw_alloc_mode_enable(tunnel);
-+	return tb_dp_bandwidth_alloc_mode_enable(tunnel);
- }
- 
- static void tb_dp_deinit(struct tb_tunnel *tunnel)
- {
- 	struct tb_port *in = tunnel->src_port;
- 
--	if (!usb4_dp_port_bw_mode_supported(in))
-+	if (!usb4_dp_port_bandwidth_mode_supported(in))
- 		return;
--	if (usb4_dp_port_bw_mode_enabled(in)) {
--		usb4_dp_port_set_cm_bw_mode_supported(in, false);
-+	if (usb4_dp_port_bandwidth_mode_enabled(in)) {
-+		usb4_dp_port_set_cm_bandwidth_mode_supported(in, false);
- 		tb_port_dbg(in, "bandwidth allocation mode disabled\n");
+ 	u32 rate = (val & DP_COMMON_CAP_RATE_MASK) >> DP_COMMON_CAP_RATE_SHIFT;
+@@ -435,6 +439,28 @@ static inline u32 tb_dp_cap_get_rate(u32 val)
  	}
  }
-@@ -826,21 +826,22 @@ static int tb_dp_nrd_bandwidth(struct tb_tunnel *tunnel, int *max_bw)
- 	return nrd_bw;
+ 
++/*
++ * Returns maximum possible rate from capability supporting DP 2.1
++ * UHBR20, 13.5 and 10 rates as well. Use only when DP BW allocation
++ * mode is enabled.
++ */
++static inline u32 tb_dp_cap_get_rate_ext(u32 val)
++{
++	if (val & DP_COMMON_CAP_UHBR20)
++		return 20000;
++	else if (val & DP_COMMON_CAP_UHBR13_5)
++		return 13500;
++	else if (val & DP_COMMON_CAP_UHBR10)
++		return 10000;
++
++	return tb_dp_cap_get_rate(val);
++}
++
++static inline bool tb_dp_is_uhbr_rate(unsigned int rate)
++{
++	return rate >= 10000;
++}
++
+ static inline u32 tb_dp_cap_set_rate(u32 val, u32 rate)
+ {
+ 	val &= ~DP_COMMON_CAP_RATE_MASK;
+@@ -497,7 +523,9 @@ static inline u32 tb_dp_cap_set_lanes(u32 val, u32 lanes)
+ 
+ static unsigned int tb_dp_bandwidth(unsigned int rate, unsigned int lanes)
+ {
+-	/* Tunneling removes the DP 8b/10b encoding */
++	/* Tunneling removes the DP 8b/10b 128/132b encoding */
++	if (tb_dp_is_uhbr_rate(rate))
++		return rate * lanes * 128 / 132;
+ 	return rate * lanes * 8 / 10;
  }
  
--static int tb_dp_bw_mode_consumed_bandwidth(struct tb_tunnel *tunnel,
--					    int *consumed_up, int *consumed_down)
-+static int tb_dp_bandwidth_mode_consumed_bandwidth(struct tb_tunnel *tunnel,
-+						   int *consumed_up,
-+						   int *consumed_down)
+@@ -690,6 +718,19 @@ static int tb_dp_bandwidth_alloc_mode_enable(struct tb_tunnel *tunnel)
+ 	if (ret)
+ 		return ret;
+ 
++	/*
++	 * Pick up granularity that supports maximum possible bandwidth.
++	 * For that we use the UHBR rates too.
++	 */
++	in_rate = tb_dp_cap_get_rate_ext(in_dp_cap);
++	out_rate = tb_dp_cap_get_rate_ext(out_dp_cap);
++	rate = min(in_rate, out_rate);
++	tmp = tb_dp_bandwidth(rate, lanes);
++
++	tb_port_dbg(in,
++		    "maximum bandwidth through allocation mode %u Mb/s x%u = %u Mb/s\n",
++		    rate, lanes, tmp);
++
+ 	for (granularity = 250; tmp / granularity > 255 && granularity <= 1000;
+ 	     granularity *= 2)
+ 		;
+@@ -805,15 +846,42 @@ static int tb_dp_activate(struct tb_tunnel *tunnel, bool active)
+ }
+ 
+ /* max_bw is rounded up to next granularity */
+-static int tb_dp_nrd_bandwidth(struct tb_tunnel *tunnel, int *max_bw)
++static int tb_dp_bandwidth_mode_maximum_bandwidth(struct tb_tunnel *tunnel,
++						  int *max_bw)
  {
- 	struct tb_port *out = tunnel->dst_port;
  	struct tb_port *in = tunnel->src_port;
- 	int ret, allocated_bw, max_bw;
+ 	int ret, rate, lanes, nrd_bw;
++	u32 cap;
  
--	if (!usb4_dp_port_bw_mode_enabled(in))
-+	if (!usb4_dp_port_bandwidth_mode_enabled(in))
- 		return -EOPNOTSUPP;
+-	ret = usb4_dp_port_nrd(in, &rate, &lanes);
++	/*
++	 * DP IN adapter DP_LOCAL_CAP gets updated to the lowest AUX
++	 * read parameter values so this so we can use this to determine
++	 * the maximum possible bandwidth over this link.
++	 *
++	 * See USB4 v2 spec 1.0 10.4.4.5.
++	 */
++	ret = tb_port_read(in, &cap, TB_CFG_PORT,
++			   in->cap_adap + DP_LOCAL_CAP, 1);
+ 	if (ret)
+ 		return ret;
  
- 	if (!tunnel->bw_mode)
- 		return -EOPNOTSUPP;
++	rate = tb_dp_cap_get_rate_ext(cap);
++	if (tb_dp_is_uhbr_rate(rate)) {
++		/*
++		 * When UHBR is used there is no reduction in lanes so
++		 * we can use this directly.
++		 */
++		lanes = tb_dp_cap_get_lanes(cap);
++	} else {
++		/*
++		 * If there is no UHBR supported then check the
++		 * non-reduced rate and lanes.
++		 */
++		ret = usb4_dp_port_nrd(in, &rate, &lanes);
++		if (ret)
++			return ret;
++	}
++
+ 	nrd_bw = tb_dp_bandwidth(rate, lanes);
  
- 	/* Read what was allocated previously if any */
--	ret = usb4_dp_port_allocated_bw(in);
-+	ret = usb4_dp_port_allocated_bandwidth(in);
- 	if (ret < 0)
+ 	if (max_bw) {
+@@ -846,7 +914,7 @@ static int tb_dp_bandwidth_mode_consumed_bandwidth(struct tb_tunnel *tunnel,
  		return ret;
  	allocated_bw = ret;
-@@ -875,10 +876,10 @@ static int tb_dp_allocated_bandwidth(struct tb_tunnel *tunnel, int *allocated_up
- 	 * If we have already set the allocated bandwidth then use that.
- 	 * Otherwise we read it from the DPRX.
- 	 */
--	if (usb4_dp_port_bw_mode_enabled(in) && tunnel->bw_mode) {
-+	if (usb4_dp_port_bandwidth_mode_enabled(in) && tunnel->bw_mode) {
- 		int ret, allocated_bw, max_bw;
  
--		ret = usb4_dp_port_allocated_bw(in);
-+		ret = usb4_dp_port_allocated_bandwidth(in);
- 		if (ret < 0)
+-	ret = tb_dp_nrd_bandwidth(tunnel, &max_bw);
++	ret = tb_dp_bandwidth_mode_maximum_bandwidth(tunnel, &max_bw);
+ 	if (ret < 0)
+ 		return ret;
+ 	if (allocated_bw == max_bw)
+@@ -884,7 +952,7 @@ static int tb_dp_allocated_bandwidth(struct tb_tunnel *tunnel, int *allocated_up
  			return ret;
  		allocated_bw = ret;
-@@ -910,7 +911,7 @@ static int tb_dp_alloc_bandwidth(struct tb_tunnel *tunnel, int *alloc_up,
- 	struct tb_port *in = tunnel->src_port;
- 	int max_bw, ret, tmp;
  
--	if (!usb4_dp_port_bw_mode_enabled(in))
-+	if (!usb4_dp_port_bandwidth_mode_enabled(in))
+-		ret = tb_dp_nrd_bandwidth(tunnel, &max_bw);
++		ret = tb_dp_bandwidth_mode_maximum_bandwidth(tunnel, &max_bw);
+ 		if (ret < 0)
+ 			return ret;
+ 		if (allocated_bw == max_bw)
+@@ -914,7 +982,7 @@ static int tb_dp_alloc_bandwidth(struct tb_tunnel *tunnel, int *alloc_up,
+ 	if (!usb4_dp_port_bandwidth_mode_enabled(in))
  		return -EOPNOTSUPP;
  
- 	ret = tb_dp_nrd_bandwidth(tunnel, &max_bw);
-@@ -919,14 +920,14 @@ static int tb_dp_alloc_bandwidth(struct tb_tunnel *tunnel, int *alloc_up,
+-	ret = tb_dp_nrd_bandwidth(tunnel, &max_bw);
++	ret = tb_dp_bandwidth_mode_maximum_bandwidth(tunnel, &max_bw);
+ 	if (ret < 0)
+ 		return ret;
  
- 	if (in->sw->config.depth < out->sw->config.depth) {
- 		tmp = min(*alloc_down, max_bw);
--		ret = usb4_dp_port_allocate_bw(in, tmp);
-+		ret = usb4_dp_port_allocate_bandwidth(in, tmp);
- 		if (ret)
- 			return ret;
- 		*alloc_down = tmp;
- 		*alloc_up = 0;
+@@ -937,6 +1005,9 @@ static int tb_dp_alloc_bandwidth(struct tb_tunnel *tunnel, int *alloc_up,
+ 	/* Now we can use BW mode registers to figure out the bandwidth */
+ 	/* TODO: need to handle discovery too */
+ 	tunnel->bw_mode = true;
++
++	tb_port_dbg(in, "allocated bandwidth through allocation mode %d Mb/s\n",
++		    tmp);
+ 	return 0;
+ }
+ 
+@@ -1011,23 +1082,20 @@ static int tb_dp_maximum_bandwidth(struct tb_tunnel *tunnel, int *max_up,
+ 				   int *max_down)
+ {
+ 	struct tb_port *in = tunnel->src_port;
+-	u32 rate, lanes;
+ 	int ret;
+ 
+-	/*
+-	 * DP IN adapter DP_LOCAL_CAP gets updated to the lowest AUX read
+-	 * parameter values so this so we can use this to determine the
+-	 * maximum possible bandwidth over this link.
+-	 */
+-	ret = tb_dp_read_cap(tunnel, DP_LOCAL_CAP, &rate, &lanes);
+-	if (ret)
++	if (!usb4_dp_port_bandwidth_mode_enabled(in))
++		return -EOPNOTSUPP;
++
++	ret = tb_dp_bandwidth_mode_maximum_bandwidth(tunnel, NULL);
++	if (ret < 0)
+ 		return ret;
+ 
+ 	if (in->sw->config.depth < tunnel->dst_port->sw->config.depth) {
+ 		*max_up = 0;
+-		*max_down = tb_dp_bandwidth(rate, lanes);
++		*max_down = ret;
  	} else {
- 		tmp = min(*alloc_up, max_bw);
--		ret = usb4_dp_port_allocate_bw(in, tmp);
-+		ret = usb4_dp_port_allocate_bandwidth(in, tmp);
- 		if (ret)
- 			return ret;
- 		*alloc_down = 0;
-@@ -1047,8 +1048,8 @@ static int tb_dp_consumed_bandwidth(struct tb_tunnel *tunnel, int *consumed_up,
- 		 * mode is enabled first and then read the bandwidth
- 		 * through those registers.
- 		 */
--		ret = tb_dp_bw_mode_consumed_bandwidth(tunnel, consumed_up,
--						       consumed_down);
-+		ret = tb_dp_bandwidth_mode_consumed_bandwidth(tunnel, consumed_up,
-+							      consumed_down);
- 		if (ret < 0) {
- 			if (ret != -EOPNOTSUPP)
- 				return ret;
-diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-index 2d84a53996fa..5c414a60935d 100644
---- a/drivers/thunderbolt/usb4.c
-+++ b/drivers/thunderbolt/usb4.c
-@@ -2294,13 +2294,14 @@ int usb4_dp_port_set_cm_id(struct tb_port *port, int cm_id)
- }
+-		*max_up = tb_dp_bandwidth(rate, lanes);
++		*max_up = ret;
+ 		*max_down = 0;
+ 	}
  
- /**
-- * usb4_dp_port_bw_mode_supported() - Is the bandwidth allocation mode supported
-+ * usb4_dp_port_bandwidth_mode_supported() - Is the bandwidth allocation mode
-+ *					     supported
-  * @port: DP IN adapter to check
-  *
-  * Can be called to any DP IN adapter. Returns true if the adapter
-  * supports USB4 bandwidth allocation mode, false otherwise.
-  */
--bool usb4_dp_port_bw_mode_supported(struct tb_port *port)
-+bool usb4_dp_port_bandwidth_mode_supported(struct tb_port *port)
- {
- 	int ret;
- 	u32 val;
-@@ -2317,13 +2318,14 @@ bool usb4_dp_port_bw_mode_supported(struct tb_port *port)
- }
- 
- /**
-- * usb4_dp_port_bw_mode_enabled() - Is the bandwidth allocation mode enabled
-+ * usb4_dp_port_bandwidth_mode_enabled() - Is the bandwidth allocation mode
-+ *					   enabled
-  * @port: DP IN adapter to check
-  *
-  * Can be called to any DP IN adapter. Returns true if the bandwidth
-  * allocation mode has been enabled, false otherwise.
-  */
--bool usb4_dp_port_bw_mode_enabled(struct tb_port *port)
-+bool usb4_dp_port_bandwidth_mode_enabled(struct tb_port *port)
- {
- 	int ret;
- 	u32 val;
-@@ -2340,7 +2342,8 @@ bool usb4_dp_port_bw_mode_enabled(struct tb_port *port)
- }
- 
- /**
-- * usb4_dp_port_set_cm_bw_mode_supported() - Set/clear CM support for bandwidth allocation mode
-+ * usb4_dp_port_set_cm_bandwidth_mode_supported() - Set/clear CM support for
-+ *						    bandwidth allocation mode
-  * @port: DP IN adapter
-  * @supported: Does the CM support bandwidth allocation mode
-  *
-@@ -2349,7 +2352,8 @@ bool usb4_dp_port_bw_mode_enabled(struct tb_port *port)
-  * otherwise. Specifically returns %-OPNOTSUPP if the passed in adapter
-  * does not support this.
-  */
--int usb4_dp_port_set_cm_bw_mode_supported(struct tb_port *port, bool supported)
-+int usb4_dp_port_set_cm_bandwidth_mode_supported(struct tb_port *port,
-+						 bool supported)
- {
- 	u32 val;
- 	int ret;
-@@ -2623,7 +2627,7 @@ int usb4_dp_port_set_granularity(struct tb_port *port, int granularity)
- }
- 
- /**
-- * usb4_dp_port_set_estimated_bw() - Set estimated bandwidth
-+ * usb4_dp_port_set_estimated_bandwidth() - Set estimated bandwidth
-  * @port: DP IN adapter
-  * @bw: Estimated bandwidth in Mb/s.
-  *
-@@ -2633,7 +2637,7 @@ int usb4_dp_port_set_granularity(struct tb_port *port, int granularity)
-  * and negative errno otherwise. Specifically returns %-EOPNOTSUPP if
-  * the adapter does not support this.
-  */
--int usb4_dp_port_set_estimated_bw(struct tb_port *port, int bw)
-+int usb4_dp_port_set_estimated_bandwidth(struct tb_port *port, int bw)
- {
- 	u32 val, granularity;
- 	int ret;
-@@ -2659,14 +2663,14 @@ int usb4_dp_port_set_estimated_bw(struct tb_port *port, int bw)
- }
- 
- /**
-- * usb4_dp_port_allocated_bw() - Return allocated bandwidth
-+ * usb4_dp_port_allocated_bandwidth() - Return allocated bandwidth
-  * @port: DP IN adapter
-  *
-  * Reads and returns allocated bandwidth for @port in Mb/s (taking into
-  * account the programmed granularity). Returns negative errno in case
-  * of error.
-  */
--int usb4_dp_port_allocated_bw(struct tb_port *port)
-+int usb4_dp_port_allocated_bandwidth(struct tb_port *port)
- {
- 	u32 val, granularity;
- 	int ret;
-@@ -2752,7 +2756,7 @@ static int usb4_dp_port_wait_and_clear_cm_ack(struct tb_port *port,
- }
- 
- /**
-- * usb4_dp_port_allocate_bw() - Set allocated bandwidth
-+ * usb4_dp_port_allocate_bandwidth() - Set allocated bandwidth
-  * @port: DP IN adapter
-  * @bw: New allocated bandwidth in Mb/s
-  *
-@@ -2760,7 +2764,7 @@ static int usb4_dp_port_wait_and_clear_cm_ack(struct tb_port *port,
-  * driver). Takes into account the programmed granularity. Returns %0 in
-  * success and negative errno in case of error.
-  */
--int usb4_dp_port_allocate_bw(struct tb_port *port, int bw)
-+int usb4_dp_port_allocate_bandwidth(struct tb_port *port, int bw)
- {
- 	u32 val, granularity;
- 	int ret;
-@@ -2794,7 +2798,7 @@ int usb4_dp_port_allocate_bw(struct tb_port *port, int bw)
- }
- 
- /**
-- * usb4_dp_port_requested_bw() - Read requested bandwidth
-+ * usb4_dp_port_requested_bandwidth() - Read requested bandwidth
-  * @port: DP IN adapter
-  *
-  * Reads the DPCD (graphics driver) requested bandwidth and returns it
-@@ -2803,7 +2807,7 @@ int usb4_dp_port_allocate_bw(struct tb_port *port, int bw)
-  * the adapter does not support bandwidth allocation mode, and %ENODATA
-  * if there is no active bandwidth request from the graphics driver.
-  */
--int usb4_dp_port_requested_bw(struct tb_port *port)
-+int usb4_dp_port_requested_bandwidth(struct tb_port *port)
- {
- 	u32 val, granularity;
- 	int ret;
 -- 
 2.39.2
 
