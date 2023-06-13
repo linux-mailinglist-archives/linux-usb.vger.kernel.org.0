@@ -2,111 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C7472D689
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 02:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABDC72DA98
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 09:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238712AbjFMAoO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Jun 2023 20:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40918 "EHLO
+        id S239929AbjFMHQb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Jun 2023 03:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237991AbjFMAoN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Jun 2023 20:44:13 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9C9197;
-        Mon, 12 Jun 2023 17:44:06 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-77a62a84855so204583539f.1;
-        Mon, 12 Jun 2023 17:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686617045; x=1689209045;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EfdpRgK82uIcWY9DiF8XW3rM3gbbM8fuRAOQCRLpNoU=;
-        b=At4Y9fekSW8Lzq4Bl+jd33oBq3U9HO0KTPWDEr03dg4Y27nisUQ+upPdxCl7LSo8Ob
-         1Tfi4pKLmKVy1TyuzAFqDMFiMG5S6/nakUHt3IBU6TXT49LitBoLG4wJspnsDHjbw4tp
-         1XNYkchZ8s+m5VZLLpSGMl70BJrBWS7LIH49mA6XzcY9YFhPlQ2zS292TLVOlkDf4aWe
-         oLSVCnjurllZzQz3ErjurwELXZHv75oBrDrq1tJY8yVlg6dhw/hOb6Si3nwyDverNbMo
-         IpfQWSWow1ZL5cAxnvIurkOGDvYuln8MUyx6FqCW6tnVXf0S9sOWm5OmimPm/Nahrxx8
-         LUjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686617045; x=1689209045;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EfdpRgK82uIcWY9DiF8XW3rM3gbbM8fuRAOQCRLpNoU=;
-        b=Ndea5XJYYoXj+UEipbPijTPsgnfHt2lH41f8N9LHsTAf5pTfuWMQxttGQOMpP+l1E0
-         V9Hk0lr2yCclorHW1OxAqXuTQpHK2KmB21hmUrlAeH5c69+hS1Lyb/HpEhaN9HYBooPN
-         2WjYS8WCB0Mzv4CrhGkJ5JajPTfTmgaqlf5m1GG6f5KIgqvk13y4QtIC/uuaOeXFZlOj
-         +SY4NMS8qCMYRDdrhDnomRKfYsgCreSOwtXp6uFGU4QuGdxLagnGhG4OVbiFkmLpHrq0
-         JL29JVQE9OrjU0XyJ2422SIxafe6AhKetqwuGqM5wg2jnPaMudBCm8w7yylc3uFaQ971
-         QERQ==
-X-Gm-Message-State: AC+VfDzwJjS4pw5QJxpWGsacBZ2Ztd/tam1On4S3fk2n6i3VMI+Fk8YO
-        vWteih4T/n2aAw5H3RoNx00=
-X-Google-Smtp-Source: ACHHUZ6w+Eq9N8dZexuZSv2xrTC5UmzN3S2cmTdQVxCP1TEaGj+JmzvZ55Yhdiy+y+a4XZVkItsGjg==
-X-Received: by 2002:a6b:f915:0:b0:776:fc02:184e with SMTP id j21-20020a6bf915000000b00776fc02184emr8602127iog.14.1686617045259;
-        Mon, 12 Jun 2023 17:44:05 -0700 (PDT)
-Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id cu13-20020a05663848cd00b0040bb600eb81sm3117118jab.149.2023.06.12.17.44.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 17:44:04 -0700 (PDT)
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     linux-hardening@vger.kernel.org,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        Hongren Zheng <i@zenithal.me>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usbip: usbip_host: Replace strlcpy with strscpy
-Date:   Tue, 13 Jun 2023 00:44:02 +0000
-Message-ID: <20230613004402.3540432-1-azeemshaikh38@gmail.com>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+        with ESMTP id S235104AbjFMHQ3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 03:16:29 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50723C9;
+        Tue, 13 Jun 2023 00:16:28 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4775F5C0135;
+        Tue, 13 Jun 2023 03:16:24 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 13 Jun 2023 03:16:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=cc
+        :content-transfer-encoding:content-type:content-type:date:date
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1686640584; x=1686726984; bh=Xbb7CLBvZ6siXm88yNIRYyGzYbHYnhDGDiI
+        37u5+Umo=; b=RlDU6F7+WrhdYoA3gxHLlCuZ31yYmxwJnu7MTKItIZWB19HB6JQ
+        WzbTK8EKa8nXC7sBc8FJQG74GYdIUBZcb8Yf1NNt7SAEeSyJDPqy4SWzdTbKxM4G
+        exq2+ZwVu8U+oCiQz4D9dg2BMdvNtuCi2D1XLx4o/JTcVAZ7rWat7k1Q2gWJ9fuN
+        7hiu3W6CCFgw0BiR95DK5tMK1UcFOcoAJLPJoUF3/ZV4s/SziWcjjUmGtG8EDMlF
+        ISxQpckAXm/g8m1g4WvTa8Ri08MzbdMIbBsr008U0B7c/f/BsmPwIA/0hzxjCk1Q
+        HqZMJ90M55Ez5D3mEfZdbs4r/8dcoQV5rXg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1686640584; x=
+        1686726984; bh=Xbb7CLBvZ6siXm88yNIRYyGzYbHYnhDGDiI37u5+Umo=; b=c
+        mIin3900ja0o0CtgLBQj5Cib36Z+3F9x1jce9eo1ESy/sMIIckCIitDYZZ+Fwyy7
+        v1gHy2Aw3ygRkw9YJD+9EGkiEx+lwr8JpV9FgSCqQgJbP7vLT8UIggJyHhO+AAyF
+        noBiWxEXUV52IdpSUzaLuFNvcXvVe5q/Yw+MgvHmwq1vyBkRNMIG0XQ3XaLmYYZW
+        b3Ixm40jiWw5EbOYRbvlViCzu4wI1DF25hMmxisoQNfTX3Rb2If7GnPTW41XZ7cF
+        s8+AIRa9ybodH82hUbWoaPjCfpuTFiwpLl1TgSspH6MtvfND64gWe1OjlkCPgcCW
+        1oAku0Ebc/KGiiC21iaXA==
+X-ME-Sender: <xms:xheIZFiASBjgY5T_FcBZQIfLm21S0oV8ogxDgNOinPVPa3xu0DYrTA>
+    <xme:xheIZKDRQ2OVQG8rrApi0o-lHbOpNPPjcepEty5gvdakYAulrq3gz_J1sx0KIwWaP
+    o0L5McJNFNS>
+X-ME-Received: <xmr:xheIZFFZFik2fNGf1anmMQhYBkq6QvsmuhJa1d6AIUGZeOiBAO1MHEl9E9HKNrAKpKtRrMyB3_4oK7LdIAVKaN5IaWlp4FdfLegjVyug8rQWDqenuas>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeduiedguddvudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefkffggfgfuvfhfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpefkrghn
+    ucfmvghnthcuoehrrghvvghnsehthhgvmhgrfidrnhgvtheqnecuggftrfgrthhtvghrnh
+    epgfegkedtvddtgeeilefhteffffeukeeggeehvdduleegvdeiieeihfetudehjeelnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprhgrvhgvnh
+    esthhhvghmrgifrdhnvght
+X-ME-Proxy: <xmx:xheIZKQ5UmzKP-60hg5BNqniVrO_VLASRzgKop3PzyNEH89vvPjQcQ>
+    <xmx:xheIZCynP5awa7k9st6eGP_1lZ8TeFJxtAP8UmojP-NOODCOEfcu0A>
+    <xmx:xheIZA5Swu7xBajj0x8mBkN04LtGBap39euCg-q2Ms6cidoeHczYtQ>
+    <xmx:yBeIZFIQ19quJM_9_o4ZdNDXIQGOQkNWf2KvJ9YrUPYoEm71M3y4Qw>
+Feedback-ID: i31e841b0:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 13 Jun 2023 03:16:08 -0400 (EDT)
+Message-ID: <39c762dd-37a9-8ef8-9002-c1eb367946d3@themaw.net>
+Date:   Tue, 13 Jun 2023 15:16:04 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 3/8] autofs: set ctime as well when mtime changes on a
+ dir
+To:     Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Brad Warrum <bwarrum@linux.ibm.com>,
+        Ritu Agarwal <rituagar@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
+        Jeremy Kerr <jk@ozlabs.org>, Ard Biesheuvel <ardb@kernel.org>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        Steve French <sfrench@samba.org>,
+        Paulo Alcantara <pc@manguebit.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Ruihan Li <lrh2000@pku.edu.cn>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        autofs@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, apparmor@lists.ubuntu.com,
+        linux-security-module@vger.kernel.org
+References: <20230612104524.17058-1-jlayton@kernel.org>
+ <20230612104524.17058-4-jlayton@kernel.org>
+Content-Language: en-US
+From:   Ian Kent <raven@themaw.net>
+In-Reply-To: <20230612104524.17058-4-jlayton@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-strlcpy() reads the entire source buffer first.
-This read may exceed the destination size limit.
-This is both inefficient and can lead to linear read
-overflows if a source string is not NUL-terminated [1].
-In an effort to remove strlcpy() completely [2], replace
-strlcpy() here with strscpy().
+On 12/6/23 18:45, Jeff Layton wrote:
+> When adding entries to a directory, POSIX generally requires that the
+> ctime also be updated alongside the mtime.
+>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-Direct replacement is safe here since return value of -E2BIG
-is used to check for truncation instead of sizeof(dest).
-
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-[2] https://github.com/KSPP/linux/issues/89
-
-Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
----
- drivers/usb/usbip/stub_main.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/usbip/stub_main.c b/drivers/usb/usbip/stub_main.c
-index e8c3131a8543..a92a284f5abb 100644
---- a/drivers/usb/usbip/stub_main.c
-+++ b/drivers/usb/usbip/stub_main.c
-@@ -174,8 +174,8 @@ static ssize_t match_busid_store(struct device_driver *dev, const char *buf,
- 		return -EINVAL;
- 
- 	/* busid needs to include \0 termination */
--	len = strlcpy(busid, buf + 4, BUSID_SIZE);
--	if (sizeof(busid) <= len)
-+	len = strscpy(busid, buf + 4, BUSID_SIZE);
-+	if (len == -E2BIG)
- 		return -EINVAL;
- 
- 	if (!strncmp(buf, "add ", 4)) {
--- 
-2.41.0.162.gfafddb0af9-goog
+Acked-by: Ian Kent <raven@themaw.net>
 
 
+> ---
+>   fs/autofs/root.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/fs/autofs/root.c b/fs/autofs/root.c
+> index 6baf90b08e0e..93046c9dc461 100644
+> --- a/fs/autofs/root.c
+> +++ b/fs/autofs/root.c
+> @@ -600,7 +600,7 @@ static int autofs_dir_symlink(struct mnt_idmap *idmap,
+>   	p_ino = autofs_dentry_ino(dentry->d_parent);
+>   	p_ino->count++;
+>   
+> -	dir->i_mtime = current_time(dir);
+> +	dir->i_mtime = dir->i_ctime = current_time(dir);
+>   
+>   	return 0;
+>   }
+> @@ -633,7 +633,7 @@ static int autofs_dir_unlink(struct inode *dir, struct dentry *dentry)
+>   	d_inode(dentry)->i_size = 0;
+>   	clear_nlink(d_inode(dentry));
+>   
+> -	dir->i_mtime = current_time(dir);
+> +	dir->i_mtime = dir->i_ctime = current_time(dir);
+>   
+>   	spin_lock(&sbi->lookup_lock);
+>   	__autofs_add_expiring(dentry);
+> @@ -749,7 +749,7 @@ static int autofs_dir_mkdir(struct mnt_idmap *idmap,
+>   	p_ino = autofs_dentry_ino(dentry->d_parent);
+>   	p_ino->count++;
+>   	inc_nlink(dir);
+> -	dir->i_mtime = current_time(dir);
+> +	dir->i_mtime = dir->i_ctime = current_time(dir);
+>   
+>   	return 0;
+>   }
