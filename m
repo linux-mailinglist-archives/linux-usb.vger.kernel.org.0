@@ -2,48 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B14872DE9B
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 11:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC4E72DF22
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 12:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241699AbjFMJ7P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Jun 2023 05:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
+        id S240730AbjFMKUd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Jun 2023 06:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241969AbjFMJ6p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 05:58:45 -0400
+        with ESMTP id S239797AbjFMKUP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 06:20:15 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A8710EC;
-        Tue, 13 Jun 2023 02:58:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A2119A5;
+        Tue, 13 Jun 2023 03:20:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EFB4362C31;
-        Tue, 13 Jun 2023 09:58:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01512C433EF;
-        Tue, 13 Jun 2023 09:58:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A2CE61FD4;
+        Tue, 13 Jun 2023 10:20:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78C5DC433D2;
+        Tue, 13 Jun 2023 10:20:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686650296;
-        bh=alSRdSKi4iSyz9lNBhWcs+tLeICDCUhEkolKyAoeKRM=;
+        s=korg; t=1686651600;
+        bh=AylGOATF1LVVg/sKw8VgAR2CSRs7TZewth5ZQwB0RCQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nCgQsFIifHIMOYFuwGlMe0g6FWyA+5YwJtvnUv8kHw/TG+b6IKruRAsWjbqGvPT+x
-         svJrRGAvzR4v5+g183fbAz+ZFHIHZtIXMqOy/fAzP0LfbwW0UOTu2zVGxxBtRI7SsI
-         87IkS6sb5V5CkCyDpZPcog9hhLzhmocPSmEFmiWg=
-Date:   Tue, 13 Jun 2023 11:58:14 +0200
+        b=acRjVlccpr4ssoI9bbyErBEa9BkcpDwhigiXMp4OPWd8uV6xQKyEMhdvqH5DNoXE+
+         0fEUBz2TOR1lMg0lUgXIifh7DPnLvVmBXfZ0CuzUJjXpnooN+aPxkw7Tn0/dzb0Soe
+         uRo+RBCOegClLZTEZN/Wfp6H2AfSHST4fI0lZ+VY=
+Date:   Tue, 13 Jun 2023 12:19:58 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Message-ID: <2023061307-unguided-headboard-8ad7@gregkh>
-References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
- <665be8f7-0892-3446-72ca-4c45457c9153@quicinc.com>
+To:     zhuyinbo <zhuyinbo@loongson.cn>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v2] usb: dwc2: add pci_device_id driver_data parse support
+Message-ID: <2023061354-rectify-delta-5dd2@gregkh>
+References: <20230609025047.691-1-zhuyinbo@loongson.cn>
+ <2023060915-uneasy-pedicure-35f4@gregkh>
+ <1e2a07a4-f81f-3672-f29c-144d1a12ea21@loongson.cn>
+ <2023060958-unvocal-flattery-256a@gregkh>
+ <2023060912-shun-work-a667@gregkh>
+ <d260aae0-2ce2-ed72-e680-8ec2d50335cc@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <665be8f7-0892-3446-72ca-4c45457c9153@quicinc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d260aae0-2ce2-ed72-e680-8ec2d50335cc@loongson.cn>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -54,52 +60,197 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 31, 2023 at 08:17:23PM +0530, Prashanth K wrote:
+On Mon, Jun 12, 2023 at 02:51:05PM +0800, zhuyinbo wrote:
 > 
 > 
-> On 31-05-23 08:11 pm, Prashanth K wrote:
-> > diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
-> > index 5aabdd7..6d880c4 100644
-> > --- a/drivers/usb/musb/jz4740.c
-> > +++ b/drivers/usb/musb/jz4740.c
-> > @@ -95,6 +95,8 @@ static int jz4740_musb_role_switch_set(struct usb_role_switch *sw,
-> >   	case USB_ROLE_HOST:
-> >   		atomic_notifier_call_chain(&phy->notifier, USB_EVENT_ID, phy);
-> >   		break;
-> > +	default:
-> > +		break;
-> >   	}
-> >   	return 0;
-> > diff --git a/drivers/usb/roles/intel-xhci-usb-role-switch.c b/drivers/usb/roles/intel-xhci-usb-role-switch.c
-> > index 5c96e92..4d6a3dd 100644
-> > --- a/drivers/usb/roles/intel-xhci-usb-role-switch.c
-> > +++ b/drivers/usb/roles/intel-xhci-usb-role-switch.c
-> > @@ -97,6 +97,8 @@ static int intel_xhci_usb_set_role(struct usb_role_switch *sw,
-> >   		val |= SW_VBUS_VALID;
-> >   		drd_config = DRD_CONFIG_STATIC_DEVICE;
-> >   		break;
-> > +	default:
-> > +		break;
-> >   	}
-> >   	val |= SW_IDPIN_EN;
-> >   	if (data->enable_sw_switch) {
-> > diff --git a/include/linux/usb/role.h b/include/linux/usb/role.h
-> > index b5deafd..65e790a 100644
-> > --- a/include/linux/usb/role.h
-> > +++ b/include/linux/usb/role.h
-> > @@ -11,6 +11,7 @@ enum usb_role {
-> >   	USB_ROLE_NONE,
-> >   	USB_ROLE_HOST,
-> >   	USB_ROLE_DEVICE,
-> > +	USB_ROLE_UNKNOWN,
-> >   };
-> >   typedef int (*usb_role_switch_set_t)(struct usb_role_switch *sw,
+> 在 2023/6/9 下午5:31, Greg Kroah-Hartman 写道:
+> > On Fri, Jun 09, 2023 at 11:25:15AM +0200, Greg Kroah-Hartman wrote:
+> > > On Fri, Jun 09, 2023 at 05:07:03PM +0800, zhuyinbo wrote:
+> > > > 
+> > > > 
+> > > > 在 2023/6/9 下午2:13, Greg Kroah-Hartman 写道:
+> > > > > On Fri, Jun 09, 2023 at 10:50:47AM +0800, Yinbo Zhu wrote:
+> > > > > > The dwc2 driver has everything we need to run in PCI mode except
+> > > > > > for pci_device_id driver_data parse.  With that to set Loongson
+> > > > > > dwc2 element and added identified as PCI_VENDOR_ID_LOONGSON
+> > > > > > and PCI_DEVICE_ID_LOONGSON_DWC2 in dwc2_pci_ids, the Loongson
+> > > > > > dwc2 controller will work.
+> > > > > > 
+> > > > > > Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> > > > > > ---
+> > > > > > Change in v2:
+> > > > > > 		1. Move the dwc2 pci ID from pci_ids.h to params.c.
+> > > > > > 		2. Add some code logic to ensure that the current device is
+> > > > > > 		   a PCI device.
+> > > > > > 		3. Fix the compile issue when dwc2 pci driver as module.
+> > > > > > 
+> > > > > >    drivers/usb/dwc2/core.h   |  1 +
+> > > > > >    drivers/usb/dwc2/params.c | 39 ++++++++++++++++++++++++++++++++++++++-
+> > > > > >    drivers/usb/dwc2/pci.c    | 14 +-------------
+> > > > > >    3 files changed, 40 insertions(+), 14 deletions(-)
+> > > > > > 
+> > > > > > diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+> > > > > > index 0bb4c0c845bf..c92a1da46a01 100644
+> > > > > > --- a/drivers/usb/dwc2/core.h
+> > > > > > +++ b/drivers/usb/dwc2/core.h
+> > > > > > @@ -1330,6 +1330,7 @@ irqreturn_t dwc2_handle_common_intr(int irq, void *dev);
+> > > > > >    /* The device ID match table */
+> > > > > >    extern const struct of_device_id dwc2_of_match_table[];
+> > > > > >    extern const struct acpi_device_id dwc2_acpi_match[];
+> > > > > > +extern const struct pci_device_id dwc2_pci_ids[];
+> > > > > >    int dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg);
+> > > > > >    int dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg);
+> > > > > > diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+> > > > > > index 21d16533bd2f..6b68a8830781 100644
+> > > > > > --- a/drivers/usb/dwc2/params.c
+> > > > > > +++ b/drivers/usb/dwc2/params.c
+> > > > > > @@ -7,9 +7,14 @@
+> > > > > >    #include <linux/module.h>
+> > > > > >    #include <linux/of_device.h>
+> > > > > >    #include <linux/usb/of.h>
+> > > > > > +#include <linux/pci_ids.h>
+> > > > > > +#include <linux/pci.h>
+> > > > > >    #include "core.h"
+> > > > > > +#define PCI_PRODUCT_ID_HAPS_HSOTG	0xabc0
+> > > > > > +#define PCI_DEVICE_ID_LOONGSON_DWC2	0x7a04
+> > > > > > +
+> > > > > >    static void dwc2_set_bcm_params(struct dwc2_hsotg *hsotg)
+> > > > > >    {
+> > > > > >    	struct dwc2_core_params *p = &hsotg->params;
+> > > > > > @@ -55,6 +60,14 @@ static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
+> > > > > >    		!device_property_read_bool(hsotg->dev, "disable-over-current");
+> > > > > >    }
+> > > > > > +static void dwc2_set_loongson_params(struct dwc2_hsotg *hsotg)
+> > > > > > +{
+> > > > > > +	struct dwc2_core_params *p = &hsotg->params;
+> > > > > > +
+> > > > > > +	p->phy_utmi_width = 8;
+> > > > > > +	p->power_down = DWC2_POWER_DOWN_PARAM_PARTIAL;
+> > > > > > +}
+> > > > > > +
+> > > > > >    static void dwc2_set_x1600_params(struct dwc2_hsotg *hsotg)
+> > > > > >    {
+> > > > > >    	struct dwc2_core_params *p = &hsotg->params;
+> > > > > > @@ -281,6 +294,23 @@ const struct acpi_device_id dwc2_acpi_match[] = {
+> > > > > >    };
+> > > > > >    MODULE_DEVICE_TABLE(acpi, dwc2_acpi_match);
+> > > > > > +const struct pci_device_id dwc2_pci_ids[] = {
+> > > > > > +	{
+> > > > > > +		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
+> > > > > > +	},
+> > > > > > +	{
+> > > > > > +		PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
+> > > > > > +			   PCI_DEVICE_ID_STMICRO_USB_OTG),
+> > > > > > +	},
+> > > > > > +	{
+> > > > > > +		PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, PCI_DEVICE_ID_LOONGSON_DWC2),
+> > > > > > +		.driver_data = (unsigned long)dwc2_set_loongson_params,
+> > > > > > +	},
+> > > > > > +	{ /* end: all zeroes */ }
+> > > > > > +};
+> > > > > > +MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
+> > > > > > +EXPORT_SYMBOL_GPL(dwc2_pci_ids);
+> > > > > > +
+> > > > > >    static void dwc2_set_param_otg_cap(struct dwc2_hsotg *hsotg)
+> > > > > >    {
+> > > > > >    	switch (hsotg->hw_params.op_mode) {
+> > > > > > @@ -927,13 +957,20 @@ int dwc2_init_params(struct dwc2_hsotg *hsotg)
+> > > > > >    	if (match && match->data) {
+> > > > > >    		set_params = match->data;
+> > > > > >    		set_params(hsotg);
+> > > > > > -	} else {
+> > > > > > +	} else if (!match) {
+> > > > > >    		const struct acpi_device_id *amatch;
+> > > > > > +		const struct pci_device_id *pmatch = NULL;
+> > > > > >    		amatch = acpi_match_device(dwc2_acpi_match, hsotg->dev);
+> > > > > >    		if (amatch && amatch->driver_data) {
+> > > > > >    			set_params = (set_params_cb)amatch->driver_data;
+> > > > > >    			set_params(hsotg);
+> > > > > > +		} else if (!amatch)
+> > > > > > +			pmatch = pci_match_id(dwc2_pci_ids, to_pci_dev(hsotg->dev->parent));
+> > > > > 
+> > > > > At this point in time, how can you guarantee that the parent device
+> > > > > really is a PCI one?  This function is being called from a platform
+> > > > > device callback, and platform devices should NEVER be a child of a PCI
+> > > > > device, as that's not how PCI or platform devices work.
+> > > > > 
+> > > > > So how is this even possible?
+> > > > > 
+> > > > > confused,
+> > > > > 
+> > > > 
+> > > > 
+> > > > Hi greg k-h,
+> > > > 
+> > > > My current considerations are based on that the dwc2 drivers support
+> > > > three types of devices, they are Platform device / ACPI device / PCI
+> > > > device, and The dwc2/platform.c can all cover the three type dwc2
+> > > > device, no matter how it is registered.
+> > > > 
+> > > > So, when a dwc2 device wasn't platform device and acpi device and It
+> > > > will be a PCI device, and the the dwc2/pci.c will register a dwc2
+> > > > platform device that dwc2 device is a device that in dwc2/platform.c's
+> > > > dwc2_driver_probe.  the "&dwc2->dev->parent" is the "hsotg->dev->parent"
+> > > > and it was also the &pci->dev.
+> > > 
+> > > That's wrong, a PCI device should NEVER register a platform device under
+> > > it, as obviously it's not a platform device at all.
+> > > 
+> > > So please work to fix that layering violation here, as that's not
+> > > correct and will cause problems as you are showing here.
+> > > 
+> > > > So, We can use "to_pci_dev(hsotg->dev->parent)" to gain a dwc2 pci
+> > > > device.
+> > > 
+> > > No, not if the parent is something else as you have no way of knowing
+> > > this at this point in time.
+> > > 
+> > > > 
+> > > > 1)  DWC2 PCI device driver (drivers/usb/dwc2/pci.c) :
+> > > > 
+> > > > static int dwc2_pci_probe(struct pci_dev *pci,
+> > > >                            const struct pci_device_id *id)
+> > > > {
+> > > > ...
+> > > >          struct platform_device  *dwc2;
+> > > > ...
+> > > >          struct device           *dev = &pci->dev;
+> > > > ...
+> > > > 	dwc2 = platform_device_alloc("dwc2", PLATFORM_DEVID_AUTO);
+> > > > 	              //"dwc2" was used to match dwc2 platform driver
+> > > 
+> > > This needs to be fixed, it's not ok at all.  Just use the real PCI
+> > > device here please.
+> > 
+> > Also, to be fair, you didn't cause this problem, I missed it previously.
+> > But fixing it is essential, and will be required in order to get your
+> > changes to work properly.  Sorry about that.
+> > 
 > 
-> Hi Greg, I have fixed the drivers that doesn't have default case while using
-> usb_role enum. Added the same on intel-xhci-usb-role-switch.c &
-> musb/jz4740.c files. I was able to compile successfully. Please check once
-> if this fixed the build issue.
+> 
+> Hi greg k-h,
+> 
+> Actually,  the dwc2/pci.c's  platform_device_add(dwc2) was create a
+> platform device called "dwc2"  ensure dwc2/platform's dwc2_driver_probe
+> function can be called. After all, the dwc2/platform's dwc2_driver_probe
+> is the one that truly initializes the dwc2 controller. In addition, the
+> same applies to dwc3 code.
 
-Looks good, thanks!
+Yes, it does create a platform device, but ALSO a real platform device
+could be present in the system for the driver, one that is NOT a child
+of a PCI device, right?
+
+It's not this way with your system, but it could be that way for many
+others, right?  And if so, the assumption that you can just poke around
+in the parent device and assume that you know what bus it is on is just
+wrong and will break things.
+
+You should NEVER be poking around in the information for the parent
+device, UNLESS you have just created the child device yourself and the
+ONLY code path is one that you have full control over.
+
+Does that make more sense?
+
+thanks,
 
 greg k-h
