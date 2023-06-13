@@ -2,131 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B8572E4B8
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 15:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 598F772E564
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 16:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240471AbjFMN6m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Jun 2023 09:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
+        id S240541AbjFMOPn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Jun 2023 10:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240192AbjFMN6l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 09:58:41 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B24D1
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 06:58:39 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b1af9ef7a9so68123131fa.1
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 06:58:39 -0700 (PDT)
+        with ESMTP id S242553AbjFMOPl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 10:15:41 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97003183
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 07:15:39 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f8d5262dc8so3617825e9.0
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 07:15:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686664718; x=1689256718;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eYEjJGS1UUCjJyusiKu9spXvZVC2LuJOiUk5VQb5qBg=;
-        b=uNjYiaaXwGbisnriVGiyDPW7ZI45SzlN8FOVeTNbbxQb4PXZ+AuM66H4Yerp0ztmPX
-         01S78XYRrc7zNj88Pxcc1yV1tTzr3QBXuGBkzGMuS5uOyENuRaUoUFwpH+pm9eLJ7JcF
-         nWUUkS/MhD+1NGnKuogt5np26PCxhwF8tUjQehy+RMFNIpeT8xZ7TNB5Yyfs31jl2spX
-         eQ4xds7UIgd9KNJZNU/vGmbBV0mM0Uo+h6hq5N6tBa+uN2xA+BUbCVCu9DHBrde3BGKR
-         tUWBvko6KywEIxeFVBGndQm556lwHleld9lw81gVJE6FplEQBzWSvAPE/dAPBGTeHwL2
-         sc6Q==
+        d=gmail.com; s=20221208; t=1686665738; x=1689257738;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MWaS+CJma4v2PEuYwDJCWobBb+tqXF9A/d4+Thba9TA=;
+        b=oRnTLydP/Q8f0OKPdNtZq1x2lcT34DGTbAM1Wzf8g8ofrBtq7hjt8q2SzMgoXb1mSE
+         dA//wdDkNETs5PKvv4hgAKptaYChURorpHZcbx5/TyDz0xC/fhKNyyMQTgCp1HlGfWx8
+         1u5pAd4+vnfMdkZiq3Y4MB2mLbeoJ6kdp9xX2FYXjm1lDCllbJs/TUSu8cokqWrgNjVS
+         PgcztTvLmEzjLJWHQ7ICx8pjAunmiwomZfjuw5G6W6VTE0SjLz21sAtcGy2HpZGuRd2V
+         Hq6w95bP/qRmgKXx2F+5QW/GIDKdjZf27hiEc2qQPVs8mO/vvW+VtAiSlv1UkW+MwuIt
+         MrLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686664718; x=1689256718;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eYEjJGS1UUCjJyusiKu9spXvZVC2LuJOiUk5VQb5qBg=;
-        b=F+Brbi89RYGdukSdvH9HAXrfQ05rArhSEuPVN304/a6hDrgMIVItd8Ljft525VmvhZ
-         9NYoEUCMVZFHnNdANz8aP2Il/o3puwgFsZgeqrVe6EeTLNsuXstOP9utfo4jdSro98qX
-         dsvCea2xlUqteDW1H/P07e+T80MiERfEbl8C347HvqRznsIjMTfcslm9BeOtg8rMoZsZ
-         1hUn30/ItVuK/uFVz1lavSj/ERaiztxaTbwtpx6cfMdWJnmzM5r+iYUReYKiWKzCIZbW
-         9xZLOa192TG8FOgVfCM0iML9OZwFC4GMq2qz70azJ8DkrfKQbhaV4bHbUoi4mCXJgTop
-         MNbQ==
-X-Gm-Message-State: AC+VfDzbQd03H5sAPHsKLGAdRRS6Ws33ZtZ7OjAjtjcjXGEghnn5Rfez
-        kaHLLOZr5J+/vAnGdPJD6eUm+A==
-X-Google-Smtp-Source: ACHHUZ4SeTgZwVp9xbt9r8WkNO8LW+MR7fA9doV9DSkOr/bC5m6r+nBHbjgHbz+tZM+MSk/aawBhBw==
-X-Received: by 2002:a2e:88d8:0:b0:2af:c9d8:87b4 with SMTP id a24-20020a2e88d8000000b002afc9d887b4mr4444624ljk.29.1686664717906;
-        Tue, 13 Jun 2023 06:58:37 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id z6-20020a2e3506000000b002adb98fdf81sm2162821ljz.7.2023.06.13.06.58.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 06:58:37 -0700 (PDT)
-Message-ID: <9c3db237-9bec-36e0-8b0c-28062c631068@linaro.org>
-Date:   Tue, 13 Jun 2023 15:58:35 +0200
+        d=1e100.net; s=20221208; t=1686665738; x=1689257738;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MWaS+CJma4v2PEuYwDJCWobBb+tqXF9A/d4+Thba9TA=;
+        b=cjV0ddkWe5ZStF/MDc3fJAg1ckZAFPYCDAD1G7b0LX1OAxGVSguhJlEiOy/s6G0iwC
+         PS38SOLCNuAf7wa2JL7CxPnPlkyhn49wuhHq3IKQAF+2+tZnCVrNoEw9BkHaAMJjh7la
+         D/DJjUgPzpVuABoByGOTJzAZcQ8iiFFFc6rFSId8Bkcx2QXnfm+E5PUf1onUusUTKgTf
+         ubtuugUrrdrRMmMPCpCkSQ1UslRT6Kf6+m9s6FANiIbRCaNVhEBt7c/Zx0IoWONSflsM
+         ubQzvbCs89G0giJVNBGq4v8FC9sBJzBN32xuznY2z5Mb9sf/Nk7YkjPh72322+s9NkAU
+         KI5w==
+X-Gm-Message-State: AC+VfDxg+tFi85+MIBcVKXjPw5rX8Uc+1WehmZhSjHwmVLZuu+fRxgMH
+        gpa5PRJr3L1+TSS0mdKveJ8=
+X-Google-Smtp-Source: ACHHUZ6Pc6QHSTD3WsEEG+qzLJxIkmMeTenEPiEVnVWFkDzHX+InKzKOkz6uhJlllk8dRpDa2vvtMg==
+X-Received: by 2002:a7b:c44d:0:b0:3f6:774:fdc with SMTP id l13-20020a7bc44d000000b003f607740fdcmr10864509wmi.18.1686665737834;
+        Tue, 13 Jun 2023 07:15:37 -0700 (PDT)
+Received: from testvm.ubxad.u-blox.com ([176.201.28.4])
+        by smtp.googlemail.com with ESMTPSA id k17-20020a5d4291000000b003047ea78b42sm15548072wrq.43.2023.06.13.07.15.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 07:15:37 -0700 (PDT)
+From:   Davide Tronchin <davide.tronchin.94@gmail.com>
+To:     johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        marco.demarco@posteo.net,
+        Davide Tronchin <davide.tronchin.94@gmail.com>
+Subject: [PATCH] USB: serial: option: add u-blox LARA-R6 01B modem
+Date:   Tue, 13 Jun 2023 16:14:41 +0200
+Message-Id: <20230613141441.35866-1-davide.tronchin.94@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 5/8] qcom: pmic_glink: enable altmode for SM8550
-Content-Language: en-US
-To:     neil.armstrong@linaro.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20230601-topic-sm8550-upstream-type-c-v3-0-22c9973012b6@linaro.org>
- <20230601-topic-sm8550-upstream-type-c-v3-5-22c9973012b6@linaro.org>
- <5851627e-2972-f860-e965-dc8e73b01225@linaro.org>
- <8f9c549a-e37b-2877-be74-f25304a476fd@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <8f9c549a-e37b-2877-be74-f25304a476fd@linaro.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The new LARA-R6 product variant identified by the "01B" string can be
+configured (by AT interface) in three different USB modes:
+* Default mode (Vendor ID: 0x1546 Product ID: 0x1311) with 4 serial
+interfaces
+* RmNet mode (Vendor ID: 0x1546 Product ID: 0x1312) with 4 serial
+interfaces and 1 RmNet virtual network interface
+* CDC-ECM mode (Vendor ID: 0x1546 Product ID: 0x1313) with 4 serial
+interface and 1 CDC-ECM virtual network interface
 
+In default mode LARA-R6 01B exposes the following interfaces:
+If 0: Diagnostic
+If 1: AT parser
+If 2: AT parser
+If 3: AT parser/alternative functions
 
-On 13.06.2023 15:43, Neil Armstrong wrote:
-> On 13/06/2023 13:54, Krzysztof Kozlowski wrote:
->> On 13/06/2023 09:55, Neil Armstrong wrote:
->>> Altmode is also supported for SM8550, allow it.
->>>
->>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->>> ---
->>>   drivers/soc/qcom/pmic_glink.c | 6 +-----
->>>   1 file changed, 1 insertion(+), 5 deletions(-)
->>>
->>> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
->>> index c87056769ebd..8af06bdc6f5a 100644
->>> --- a/drivers/soc/qcom/pmic_glink.c
->>> +++ b/drivers/soc/qcom/pmic_glink.c
->>> @@ -342,13 +342,9 @@ static const unsigned long pmic_glink_sm8450_client_mask = BIT(PMIC_GLINK_CLIENT
->>>                                  BIT(PMIC_GLINK_CLIENT_ALTMODE) |
->>>                                  BIT(PMIC_GLINK_CLIENT_UCSI);
->>>   -/* Do not handle altmode for now on those platforms */
->>> -static const unsigned long pmic_glink_sm8550_client_mask = BIT(PMIC_GLINK_CLIENT_BATT) |
->>> -                               BIT(PMIC_GLINK_CLIENT_UCSI);
->>> -
->>>   static const struct of_device_id pmic_glink_of_match[] = {
->>>       { .compatible = "qcom,sm8450-pmic-glink", .data = &pmic_glink_sm8450_client_mask },
->>
->> Orientation and maybe all of the USB-related properties do not look like
->> sm8450 specific, but PM8350B. That's where CC_OUT pin is. I don't think
->> we represented this correctly, but rather copy-pasted downstream solution...
-> 
-> We do not interact directly with PM8350B or PM8550B but with pmic_glink who
-> does the work work for use, and this is platform specific.
-Yep, pmic_glink is totally a firmware construct and not all platforms with
-pm8350b or so implement it.
+In RmNet mode LARA-R6 01B exposes the following interfaces:
+If 0: Diagnostic
+If 1: AT parser
+If 2: AT parser
+If 3: AT parser/alternative functions
+If 4: RMNET interface
 
-Konrad
-> 
-> Neil
-> 
->>
->> Best regards,
->> Krzysztof
->>
-> 
+In CDC-ECM mode LARA-R6 01B exposes the following interfaces:
+If 0: Diagnostic
+If 1: AT parser
+If 2: AT parser
+If 3: AT parser/alternative functions
+If 4: CDC-ECM interface
+
+Signed-off-by: Davide Tronchin <davide.tronchin.94@gmail.com>
+
+---
+ drivers/usb/serial/option.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 644a55447fd7..5b684b6f5969 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1152,6 +1152,11 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = RSVD(4) },
+ 	{ USB_DEVICE(UBLOX_VENDOR_ID, 0x1343),		/* u-blox LARA-L6 (ECM) */
+ 	  .driver_info = RSVD(4) },
++	{ USB_DEVICE(UBLOX_VENDOR_ID, 0x1311) },	/* u-blox LARA-R6 01B */
++	{ USB_DEVICE(UBLOX_VENDOR_ID, 0x1312),		/* u-blox LARA-R6 01B (RMNET) */
++	  .driver_info = RSVD(4) },
++	{ USB_DEVICE(UBLOX_VENDOR_ID, 0x1313),		/* u-blox LARA-R6 01B (ECM) */
++	  .driver_info = RSVD(4) },
+ 	/* Quectel products using Quectel vendor ID */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC21, 0xff, 0xff, 0xff),
+ 	  .driver_info = NUMEP2 },
+-- 
+2.34.1
+
