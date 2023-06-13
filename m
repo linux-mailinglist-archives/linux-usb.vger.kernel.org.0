@@ -2,66 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657AF72EBFB
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 21:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6039972EC04
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 21:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbjFMTam (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Jun 2023 15:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
+        id S232376AbjFMTcA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Jun 2023 15:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjFMTae (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 15:30:34 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BCD1BC
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 12:30:32 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-66615629689so303504b3a.2
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 12:30:32 -0700 (PDT)
+        with ESMTP id S233762AbjFMTb6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 15:31:58 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB06EA
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 12:31:57 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b3c1730fc9so18118215ad.0
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 12:31:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686684632; x=1689276632;
+        d=chromium.org; s=google; t=1686684717; x=1689276717;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=p9zTL6WkhKlD8rEo4R4d64UgNtBnLNYoZuMTJCOlN+o=;
-        b=lAMvXmQMui7zMEyr/DPCNp/XJdds6GKxaPeycgssCkQOE9zzABt+B60heDpSUwgub0
-         T6bl3aZRtjyB2UGO/F2+mtawwBoFCu/22qjqzmBMJ9z9SsfbQZQbgXgl2OD8h6SxyF2f
-         qS0QoHEZtRplgwwONhm390XaklAvofry7DfpM=
+        bh=f5euzgeiZ5qWr3Kx1p765UIGm0BpE7qlZD/8jcIprGc=;
+        b=g4Xdj6IL66L7V4ix9KjnbpfTLfianXbn3R6cC3gdbzRXuEzA4dU+l9DbgpeacZXjBO
+         J1mDR4cFc/g8fb58ztIUGKiiLuED3wp9ics2T9egKaEnSCTM4JqXSnaor+C2Xa5a/Tg/
+         zBlKNm484JI940uwwzy5upXCEjwV/lfZ97ufE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686684632; x=1689276632;
+        d=1e100.net; s=20221208; t=1686684717; x=1689276717;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p9zTL6WkhKlD8rEo4R4d64UgNtBnLNYoZuMTJCOlN+o=;
-        b=FTRRm1+2czme0nOwn3xxjvUZezjaEN3304Fmpg74bg97jVo3M38Ik3HHoPg0OzrAGP
-         ujPZJu/lrBDZLJnBYoNWiixAT3W5y66psJ2i7Wq8ApV+GqGYkd7nvulQLkpBcDmEGuji
-         rjgiQfsEYd9I+cJz0MLuWZZxRoPRXDLmOiumLUd9ax4n8YtLNJxOmTSOKZhbp/u129h/
-         zDj5+7gVr4/7llx9uo3fUujyjRilw0ZkVUBXowJrAc6pe+jcKXgEbp1PAP5NMkMVj4Bi
-         866Qfk8JPPgTm9UJACfJRcDKE7KAT81Kk8kVREJRZ6BpPuVdGPLDnzsQEbZgJCjQgx1S
-         zyIA==
-X-Gm-Message-State: AC+VfDybZSnKWFrlyZ3QHj17emA5RJWmvvEQt4/nkec7IoIpaxYoxhSE
-        QIA52MnPtV7lotxsUn+Mq08Ngw==
-X-Google-Smtp-Source: ACHHUZ6N9gkZEMIB3vFpJ9HaIYshp93Z/o2OR28UTSw5/MCUvWPAgeLhGW714sGpBVb0mutFqUP4Mw==
-X-Received: by 2002:a05:6a20:7491:b0:118:c4c1:e0ed with SMTP id p17-20020a056a20749100b00118c4c1e0edmr16540792pzd.30.1686684632312;
-        Tue, 13 Jun 2023 12:30:32 -0700 (PDT)
+        bh=f5euzgeiZ5qWr3Kx1p765UIGm0BpE7qlZD/8jcIprGc=;
+        b=IXYhZOim0HW3X9vOIWu5JYYlkKWqxN0EFNt7Rp/nvLfRX7kY9f8bVhNA4Nbwl6aOmp
+         2WLFIbh0y1IKXFYSlr+xMupZiCv2l3GGnBsitkZCC/V6pF9gmFPNHodptacvIgHKj7Pk
+         lO6QXhrPG36j9EIjPwZ8KiwKiwN1fKmdXVR/vCr4ZJu78JEPWEmRUtrA+j1hGZ9s2y1k
+         FzFk8vYF7S2hvuMftV2r0okPB69qJqMZeY0DWmUshL1eGrbqFkXOgpttIFRWmMR3IeP8
+         AXOKp2rumvJ6Z0ihcUp3gfGWMottzDlOYUGK9LcB5TBOEdtetT3jxV7+QdZY11S3rpRh
+         pk+g==
+X-Gm-Message-State: AC+VfDweCHi6P+LsTP/B50hRMvlaWq9qss5YeD7ecoCa8pLZcrOccVPQ
+        toUo+QrnGro90YVX7waQJTklBg==
+X-Google-Smtp-Source: ACHHUZ48VUIKnVIubqBg9OkadgWv/RDkrdFOjNUm/zcfs1CQ34NnLMg6nLwOgDF8RhZ91vxZlxsydw==
+X-Received: by 2002:a17:902:d887:b0:1b0:6541:91c2 with SMTP id b7-20020a170902d88700b001b0654191c2mr9679573plz.63.1686684717178;
+        Tue, 13 Jun 2023 12:31:57 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id 31-20020a630a1f000000b005348af1b84csm9761797pgk.74.2023.06.13.12.30.31
+        by smtp.gmail.com with ESMTPSA id p7-20020a1709026b8700b001b04b1fae4dsm239374plk.35.2023.06.13.12.31.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 12:30:31 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 12:30:31 -0700
+        Tue, 13 Jun 2023 12:31:56 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 12:31:56 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Azeem Shaikh <azeemshaikh38@gmail.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-hardening@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Albert Briscoe <albertsbriscoe@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Subject: Re: [PATCH] usb: gadget: function: printer: Replace strlcpy with
- strscpy
-Message-ID: <202306131229.B5F2D9F@keescook>
-References: <20230613004341.3540325-1-azeemshaikh38@gmail.com>
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-hardening@vger.kernel.org, Hongren Zheng <i@zenithal.me>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usbip: usbip_host: Replace strlcpy with strscpy
+Message-ID: <202306131231.88243CB@keescook>
+References: <20230613004402.3540432-1-azeemshaikh38@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230613004341.3540325-1-azeemshaikh38@gmail.com>
+In-Reply-To: <20230613004402.3540432-1-azeemshaikh38@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -72,7 +71,7 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 12:43:41AM +0000, Azeem Shaikh wrote:
+On Tue, Jun 13, 2023 at 12:44:02AM +0000, Azeem Shaikh wrote:
 > strlcpy() reads the entire source buffer first.
 > This read may exceed the destination size limit.
 > This is both inefficient and can lead to linear read
@@ -82,42 +81,42 @@ On Tue, Jun 13, 2023 at 12:43:41AM +0000, Azeem Shaikh wrote:
 > 
 > Direct replacement is safe here since return value of -E2BIG
 > is used to check for truncation instead of sizeof(dest).
-
-Perhaps say "PAGE_SIZE" here instead of sizeof(dest)?
-
 > 
 > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
 > [2] https://github.com/KSPP/linux/issues/89
 > 
 > Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
 > ---
->  drivers/usb/gadget/function/f_printer.c |    4 ++--
+>  drivers/usb/usbip/stub_main.c |    4 ++--
 >  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-> index 28db3e336e7d..10dc7c55c25f 100644
-> --- a/drivers/usb/gadget/function/f_printer.c
-> +++ b/drivers/usb/gadget/function/f_printer.c
-> @@ -1211,8 +1211,8 @@ static ssize_t f_printer_opts_pnp_string_show(struct config_item *item,
->  	if (!opts->pnp_string)
->  		goto unlock;
+> diff --git a/drivers/usb/usbip/stub_main.c b/drivers/usb/usbip/stub_main.c
+> index e8c3131a8543..a92a284f5abb 100644
+> --- a/drivers/usb/usbip/stub_main.c
+> +++ b/drivers/usb/usbip/stub_main.c
+> @@ -174,8 +174,8 @@ static ssize_t match_busid_store(struct device_driver *dev, const char *buf,
+>  		return -EINVAL;
 >  
-> -	result = strlcpy(page, opts->pnp_string, PAGE_SIZE);
-> -	if (result >= PAGE_SIZE) {
-> +	result = strscpy(page, opts->pnp_string, PAGE_SIZE);
-> +	if (result == -E2BIG) {
+>  	/* busid needs to include \0 termination */
+> -	len = strlcpy(busid, buf + 4, BUSID_SIZE);
+> -	if (sizeof(busid) <= len)
+> +	len = strscpy(busid, buf + 4, BUSID_SIZE);
+> +	if (len == -E2BIG)
+>  		return -EINVAL;
 
-I think "< 1" might be a better test here.
+"len" is never used again, so maybe:
 
->  		result = PAGE_SIZE;
->  	} else if (page[result - 1] != '\n' && result + 1 < PAGE_SIZE) {
->  		page[result++] = '\n';
+	if (strscpy(...) < 0)
+		return -EINVAL;
+
+-Kees
+
+>  
+>  	if (!strncmp(buf, "add ", 4)) {
 > -- 
 > 2.41.0.162.gfafddb0af9-goog
 > 
 > 
-
--Kees
 
 -- 
 Kees Cook
