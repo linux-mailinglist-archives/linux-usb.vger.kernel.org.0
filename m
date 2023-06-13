@@ -2,124 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598F772E564
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 16:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B741F72E638
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 16:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240541AbjFMOPn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Jun 2023 10:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
+        id S242743AbjFMOuh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Jun 2023 10:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242553AbjFMOPl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 10:15:41 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97003183
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 07:15:39 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f8d5262dc8so3617825e9.0
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 07:15:39 -0700 (PDT)
+        with ESMTP id S242809AbjFMOuR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 10:50:17 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078B81BE8
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 07:50:12 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-30c2bd52f82so5559820f8f.3
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 07:50:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686665738; x=1689257738;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MWaS+CJma4v2PEuYwDJCWobBb+tqXF9A/d4+Thba9TA=;
-        b=oRnTLydP/Q8f0OKPdNtZq1x2lcT34DGTbAM1Wzf8g8ofrBtq7hjt8q2SzMgoXb1mSE
-         dA//wdDkNETs5PKvv4hgAKptaYChURorpHZcbx5/TyDz0xC/fhKNyyMQTgCp1HlGfWx8
-         1u5pAd4+vnfMdkZiq3Y4MB2mLbeoJ6kdp9xX2FYXjm1lDCllbJs/TUSu8cokqWrgNjVS
-         PgcztTvLmEzjLJWHQ7ICx8pjAunmiwomZfjuw5G6W6VTE0SjLz21sAtcGy2HpZGuRd2V
-         Hq6w95bP/qRmgKXx2F+5QW/GIDKdjZf27hiEc2qQPVs8mO/vvW+VtAiSlv1UkW+MwuIt
-         MrLA==
+        d=linaro.org; s=google; t=1686667811; x=1689259811;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=H2LLCez9aorcxAr6mSzBcwQNd+MPuO36BbwLgK2xh80=;
+        b=GNp8m+qsxqEl+uS7Tj6/6ghamE63p/fkyDZ4FlqympcOKezI09QyLFWw6gsaaWaeRP
+         6T4/9HF5oCvqhyDDUONSs+bmprePA197Xp6i2YKkYNBf8ucQ7TX2o7yDp24OezhysMwJ
+         j0dSGYthm1DrdwA0vK64qtjtE0RaStH4MxIu+KXZdv95hJYpmMOFzdObAYShcGSdAIyR
+         Cw2PdTZiifXZw6I6wm/NoYyeqioLCVY1mQOTpO8TAIGou/K0ghfylKeSqJ5TmtT2CoZl
+         /j8l3uYOldh+7wCe6dCPTHwFShMCLdsdm4EgwtO8xs3E3K2zEbVnQSH7uLfNtqXRIO0P
+         yMZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686665738; x=1689257738;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1686667811; x=1689259811;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MWaS+CJma4v2PEuYwDJCWobBb+tqXF9A/d4+Thba9TA=;
-        b=cjV0ddkWe5ZStF/MDc3fJAg1ckZAFPYCDAD1G7b0LX1OAxGVSguhJlEiOy/s6G0iwC
-         PS38SOLCNuAf7wa2JL7CxPnPlkyhn49wuhHq3IKQAF+2+tZnCVrNoEw9BkHaAMJjh7la
-         D/DJjUgPzpVuABoByGOTJzAZcQ8iiFFFc6rFSId8Bkcx2QXnfm+E5PUf1onUusUTKgTf
-         ubtuugUrrdrRMmMPCpCkSQ1UslRT6Kf6+m9s6FANiIbRCaNVhEBt7c/Zx0IoWONSflsM
-         ubQzvbCs89G0giJVNBGq4v8FC9sBJzBN32xuznY2z5Mb9sf/Nk7YkjPh72322+s9NkAU
-         KI5w==
-X-Gm-Message-State: AC+VfDxg+tFi85+MIBcVKXjPw5rX8Uc+1WehmZhSjHwmVLZuu+fRxgMH
-        gpa5PRJr3L1+TSS0mdKveJ8=
-X-Google-Smtp-Source: ACHHUZ6Pc6QHSTD3WsEEG+qzLJxIkmMeTenEPiEVnVWFkDzHX+InKzKOkz6uhJlllk8dRpDa2vvtMg==
-X-Received: by 2002:a7b:c44d:0:b0:3f6:774:fdc with SMTP id l13-20020a7bc44d000000b003f607740fdcmr10864509wmi.18.1686665737834;
-        Tue, 13 Jun 2023 07:15:37 -0700 (PDT)
-Received: from testvm.ubxad.u-blox.com ([176.201.28.4])
-        by smtp.googlemail.com with ESMTPSA id k17-20020a5d4291000000b003047ea78b42sm15548072wrq.43.2023.06.13.07.15.36
+        bh=H2LLCez9aorcxAr6mSzBcwQNd+MPuO36BbwLgK2xh80=;
+        b=Hlgn6NAz3yI4BMbLh0wJ7DiAhVEl+/t5AFEwsN18oqHpX+pCicQnOwgqYAS2LODUfz
+         uKPlNko+I1EIsIqsVImeeNCrBXCqYLl2+qAg3QCbCmLnjkAW6drgYkLAnnQoSm0wWvWd
+         PyGZHSG/VF1Z24uke0rZj7ZpoPYmuxypOb9TmH4hdkKt8sPKiKYtm1+4UmGKQYF0LuiJ
+         xmPkeVNs6WlkNFzjGMmRnHbmXjigpWxjq7mNcVAZeR4iMMhDgbA9wKvVwPkHQyojqNnH
+         mychU0xSF5AfTTjYjHulW5CsdtytCWea74UZsz3Je+i5Tu9dx9ML6hXFfsShi+xfuhxs
+         3XjQ==
+X-Gm-Message-State: AC+VfDzem6SKrILeGTTq/5a9E4gUBMSCG2h4SJBiHTYHPNLg5JNUM6+d
+        wvmoxCVm1XStkm1ZsYny+W1KFQ==
+X-Google-Smtp-Source: ACHHUZ7eGVSDoeg1Bfhp4x5ZFfL5I2seRfwd15tZuEAp+bh9gjMZRf3wcAUjugSkGVsqFF7c2iXLNA==
+X-Received: by 2002:a5d:678e:0:b0:30f:c2a3:6281 with SMTP id v14-20020a5d678e000000b0030fc2a36281mr4373158wru.64.1686667810982;
+        Tue, 13 Jun 2023 07:50:10 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id l15-20020adff48f000000b003078cd719ffsm15623356wro.95.2023.06.13.07.50.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 07:15:37 -0700 (PDT)
-From:   Davide Tronchin <davide.tronchin.94@gmail.com>
-To:     johan@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        marco.demarco@posteo.net,
-        Davide Tronchin <davide.tronchin.94@gmail.com>
-Subject: [PATCH] USB: serial: option: add u-blox LARA-R6 01B modem
-Date:   Tue, 13 Jun 2023 16:14:41 +0200
-Message-Id: <20230613141441.35866-1-davide.tronchin.94@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 13 Jun 2023 07:50:10 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v3 0/2] typec: add support for the ON Semiconductor
+ nb7vpq904m Type-C Linear Redriver
+Date:   Tue, 13 Jun 2023 16:50:06 +0200
+Message-Id: <20230601-topic-sm8x50-upstream-redriver-v3-0-988c560e2195@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAB6CiGQC/5XOOw7CMBAE0Ksg1yyyDbECFfdAFP5skpWCHa2DB
+ UK5OyYdHZQzxZt5iYxMmMVp8xKMhTKlWMN+uxF+sLFHoFCz0FLvpZEK5jSRh3xrH42E+5RnRns
+ DxsBUkMGgNgpDaLw7iIo4mxEc2+iHysT7ONZyYuzosa5erjUPlOfEz/VEUZ/2572iQIKxQSt5P
+ HSd6c4jRctpl7gXH7vo/zxdvRBse3RaO+Xll7csyxsAR5hOMgEAAA==
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2276;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=xXZb2OsyboZyYfVP+VKtPE7/v/WGx8/ToNBGnKZ/IT8=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkiIIgLITaA7eP/fNWa/QjYWht2TUsg0D8FucwHCcg
+ 6Le2PVOJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIiCIAAKCRB33NvayMhJ0St0D/
+ 9imOc47cGQcR65ep/fNb56nj985Ex5H5OMEliEALAkiw8AgOGErgZD0RNfWCklE1R9OjW1Zm4/VnNm
+ usZnQgG71t2Ge9hFWfGOQkjDsbMULtpgQRqzexauMVtEFkVe+nq4wcCetjEtyjd9bEf/t+n0Lmtu+2
+ BRTmgbhy2/OpY0qJ+kxfV6vuOaNxf2/WgMZ73DKJAWkFZFAmh45FR2FSPG+jk64Sojtxw0Bfr5mH3m
+ afc71i0Q/50rp/tzMxzSq2IazinUlx1I5yPCvINH3Sp7aJIlvUCa9Gon7BNpCd3lyprzmx9EhtC80T
+ OTC7R0t1gCr9/vbWlzTEdXhzq5caHDmY3NACHRcnTYy1gu8m82hnvpT39RxtDF3ntCrANgh/QQMm8P
+ t2n/xNVIp74eMgI11XH5UgXsV9SgsyXKYtOvYiuLEe+lBn2N50AV1QO8HmSDIL9NwZub5UG9mxmDwY
+ tGNls+xgVp0FjJ+Zn0aurj4R8/3zyBye5PyYpHG1KzZ/eUR6S3f2/gmmo6YTZc1AD0w0AMP01t5jEg
+ c6F5E/ur/ZJl+MKvzw95PtZ7OP/ERcB2qA/rhrMR/V5c9kPzZ81/awmMxwYMYceYFqlkc1Yb3tKk5P
+ OR/otrEM+lJYK5DmlBOUHaK61Ddz9W3cEOFh0Ql2T3d21xgn7RvugWb46LzA==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The new LARA-R6 product variant identified by the "01B" string can be
-configured (by AT interface) in three different USB modes:
-* Default mode (Vendor ID: 0x1546 Product ID: 0x1311) with 4 serial
-interfaces
-* RmNet mode (Vendor ID: 0x1546 Product ID: 0x1312) with 4 serial
-interfaces and 1 RmNet virtual network interface
-* CDC-ECM mode (Vendor ID: 0x1546 Product ID: 0x1313) with 4 serial
-interface and 1 CDC-ECM virtual network interface
+Add support for the ON Semiconductor NB7VPQ904M Type-C USB SuperSpeed
+and DisplayPort ALT Mode Linear Redriver chip found on some devices
+with a Type-C port.
 
-In default mode LARA-R6 01B exposes the following interfaces:
-If 0: Diagnostic
-If 1: AT parser
-If 2: AT parser
-If 3: AT parser/alternative functions
+The redriver compensates ultra High-Speeed DisplayPort and USB
+Super Speed signal integrity losses mainly due to PCB & transmission
+cables.
 
-In RmNet mode LARA-R6 01B exposes the following interfaces:
-If 0: Diagnostic
-If 1: AT parser
-If 2: AT parser
-If 3: AT parser/alternative functions
-If 4: RMNET interface
+The redriver doesn't support SuperSpeed lines swapping, but
+can support Type-C SBU lines swapping.
 
-In CDC-ECM mode LARA-R6 01B exposes the following interfaces:
-If 0: Diagnostic
-If 1: AT parser
-If 2: AT parser
-If 3: AT parser/alternative functions
-If 4: CDC-ECM interface
+Support is designed as a Type-C Switch and Retimer, and can propagate
+orientation settings to the source endpoint, which is usually
+a Super Speed PHY which does the data lanes swapping.
 
-Signed-off-by: Davide Tronchin <davide.tronchin.94@gmail.com>
+Bindings are added first and can handle the fact data lanes pairs
+can be swapped on the PCB.
+
+Compile-time dependencies:
+- svid removal at [1]
+
+[1] https://lore.kernel.org/all/20230526131434.46920-1-heikki.krogerus@linux.intel.com/
+
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v3:
+- Include bitfield.h
+- Use correct -EOPNOTSUPP
+- Correct nb7vpq904m_sw_set line wrapping
+- Link to v2: https://lore.kernel.org/r/20230601-topic-sm8x50-upstream-redriver-v2-0-dda89b22b1c0@linaro.org
+
+Changes in v2:
+- Switch to "retimer" infrastructure
+- Slight style fixups after switch to retimer
+- Bindings updates (did not keep Reviewed-by tag for those reasons)
+ - Update maintainer, was using Bjorn with invalid email
+ - Fixed swapped lanes mapping
+ - Switched to retimer-switch
+ - Fixed i2c top node in example
+- Link to v1: https://lore.kernel.org/r/20230601-topic-sm8x50-upstream-redriver-v1-0-6ad21094ff6f@linaro.org
 
 ---
- drivers/usb/serial/option.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Dmitry Baryshkov (1):
+      usb: typec: add support for the nb7vpq904m Type-C Linear Redriver
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 644a55447fd7..5b684b6f5969 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1152,6 +1152,11 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(4) },
- 	{ USB_DEVICE(UBLOX_VENDOR_ID, 0x1343),		/* u-blox LARA-L6 (ECM) */
- 	  .driver_info = RSVD(4) },
-+	{ USB_DEVICE(UBLOX_VENDOR_ID, 0x1311) },	/* u-blox LARA-R6 01B */
-+	{ USB_DEVICE(UBLOX_VENDOR_ID, 0x1312),		/* u-blox LARA-R6 01B (RMNET) */
-+	  .driver_info = RSVD(4) },
-+	{ USB_DEVICE(UBLOX_VENDOR_ID, 0x1313),		/* u-blox LARA-R6 01B (ECM) */
-+	  .driver_info = RSVD(4) },
- 	/* Quectel products using Quectel vendor ID */
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC21, 0xff, 0xff, 0xff),
- 	  .driver_info = NUMEP2 },
+Neil Armstrong (1):
+      dt-bindings: usb: add ON Semiconductor nb7vpq904m Type-C Linear Redriver bindings
+
+ .../devicetree/bindings/usb/onnn,nb7vpq904m.yaml   | 141 ++++++
+ drivers/usb/typec/mux/Kconfig                      |   8 +
+ drivers/usb/typec/mux/Makefile                     |   1 +
+ drivers/usb/typec/mux/nb7vpq904m.c                 | 529 +++++++++++++++++++++
+ 4 files changed, 679 insertions(+)
+---
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+change-id: 20230601-topic-sm8x50-upstream-redriver-6e261edd5cb4
+
+Best regards,
 -- 
-2.34.1
+Neil Armstrong <neil.armstrong@linaro.org>
 
