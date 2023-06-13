@@ -2,64 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C476D72DBBA
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 09:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C1772DC1D
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 10:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240748AbjFMH4r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Jun 2023 03:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
+        id S239466AbjFMINw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Jun 2023 04:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240724AbjFMH4d (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 03:56:33 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B659C19B5
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 00:56:16 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f644dffd71so6385793e87.1
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 00:56:16 -0700 (PDT)
+        with ESMTP id S239336AbjFMINu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 04:13:50 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E64910C2
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 01:13:48 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51873d9a75dso821514a12.1
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 01:13:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686642975; x=1689234975;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z4K7kTQtIrV7AYfghnPwr2i8OE9ZNp1mkYN+KZLG/2w=;
-        b=H8sFXW/omLrIB54UrajgwFhbp5yT17lWzycM2YgbHyOIwSWQV+eYk3JJ8jqEpI5YPu
-         k6w3xAnUzhw7zgWYr3y/SVNf5tJx+HgpCE8OflWa+/RXHNk6QeW6JpoF5oWI+AeoDDtG
-         Z+O4LASpaN/puMf0lKwexhrW8xGRmP2IcBaa8LD1BeniSHNMurUivdEcc9UK2PKpeULt
-         WwJ0UjLXmbjzKoXAz7e5p7je/QKqbsPNwoblIo34gcNEbJtIfcJgoKhckV6S9a27P+cR
-         8q+txzA/bWHeJUrjTDM27pc/4ArVJgknBcFfaR4ZK8O9sMftF1pIs2N4Dq/0HhmjskCs
-         3MtQ==
+        d=linaro.org; s=google; t=1686644027; x=1689236027;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D3OpJMeBVyPepT6y+19D62Yik2MazC7XQyqeriZ2hjI=;
+        b=r8Y8fjt5fMiHz0pISTvJKANp2ZgWGUj3gwCQO9RiTQ/TSc3u81Cz4Ekt1bsA3Ykyaq
+         qDqe2Sf2ngfh/66GS+6ERaOT5UghxXPlrRXlHXAHrx7TDrKG/YHB8aKlkyU9t82HBNXy
+         8WK4ydHiUV/ox6uAteG+4U6EJLgi4+enxOhzTiMlk2NAqM3z7kIHZYbcNKaFrJwum/xs
+         kOThqg3Hk4OnrqNEy73i84g5Pc9x10011n7RUUJxxroRMM839rv2sA/Mnig8qtT6jEZl
+         UZcdKLmtxB+M8F8nltlbwIuBEOL64SRPiK+a/LsMi+wiX5A25LjIuj9h0llzctdYIE0X
+         RhUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686642975; x=1689234975;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z4K7kTQtIrV7AYfghnPwr2i8OE9ZNp1mkYN+KZLG/2w=;
-        b=I/C6kFWu1Dqw7Z0MSpd2TtdmgCPaVH+UcL5BSfVGMOKzegldn8CnsiHLlLTDe7PGUW
-         N7wlewY8/04q+ELCyfWOv4V4DQitSNmKeIhxh68sKtZfgWWi6gowGZoweCK6NOk1mqAU
-         ZtSydbIUr21edJS0jvoruC/gBvte5BtMQWtCLYQV6DSXICc7iIUi92gFQ94Je0jLXuTP
-         IJTWitHREBAl+rLLO1WXQJDU8VmEyc9up0wMQ9s20/nUdJn/JGAJY5M57VLh43YP8GtC
-         obfa7BQTMjEuaZCeZ5Pnyd3KM67iYndBJOrI+P2ZVGba/G+UztBVZsEGP1BFlotmKR5f
-         JMhQ==
-X-Gm-Message-State: AC+VfDz6VfTkYs3Bu/ttX7GFotsYcy2C9cVtUfkJwg2p+jBqbGY56xo7
-        JGgA28PAeCCUBznK79Te1Nl/pQ==
-X-Google-Smtp-Source: ACHHUZ7JcmHHsjJMULJFqqIndYRZ9QQrs/gP6T/OMYRCt3kuS5Fxn1f1cn/WtVWKqyPZVEirEtVcnA==
-X-Received: by 2002:a05:6512:458:b0:4f3:a0f5:92e5 with SMTP id y24-20020a056512045800b004f3a0f592e5mr5575630lfk.31.1686642974793;
-        Tue, 13 Jun 2023 00:56:14 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id k20-20020a05600c0b5400b003f4266965fbsm13662316wmr.5.2023.06.13.00.56.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 00:56:14 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Tue, 13 Jun 2023 09:56:01 +0200
-Subject: [PATCH v3 8/8] arm64: dts: qcom: sm8550-qrd: add pmic glink
- port/endpoints
+        d=1e100.net; s=20221208; t=1686644027; x=1689236027;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=D3OpJMeBVyPepT6y+19D62Yik2MazC7XQyqeriZ2hjI=;
+        b=LOqvu1L7U4HQbTu/yECnzMUXMwBEqkNzSrHr5Dv89aw4h9HNcwh/ujxpXTzV6yP2hx
+         up3lg/KAUTOODGdOXpP4sg892DnfjO5h9Yp/ZXuueVfzV1lshrDsEVy3LhltFK2L11WD
+         sYFgB60TR/DAOKfutuu5ky3luI4PvDPVDqCO9UnQJUyXKasrJRQheMBADOJezNcW+O2T
+         Pn15Bc20FUQ3CGP6G8kVE6lJq5naQWjWHLWoDwyNUONn0VCvyRYQWDCJTMz312USSTkN
+         RIUcCbgrZB4tn7vSbI9Dyw3Z45K9EV4GgYZfnbwnZQtsQbo8wUeFIVptgiHKzX5sYCEj
+         P53Q==
+X-Gm-Message-State: AC+VfDxMRBbQUzXHbq1q8OmrlKfqF/hEl32AhZ6DLm75TJA8cnH8ts5a
+        v4KhpECefMy+WmaMwDwFG6WfpQ==
+X-Google-Smtp-Source: ACHHUZ5Zn9o91CfqxYX0+GVqhAXFnI/K40JMaG31uTxV1T+b4dB4r9CiuDfNCCG6VyFuo99I52jvyg==
+X-Received: by 2002:aa7:d6d5:0:b0:516:2dcf:d027 with SMTP id x21-20020aa7d6d5000000b005162dcfd027mr8192013edr.10.1686644027155;
+        Tue, 13 Jun 2023 01:13:47 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id z4-20020aa7cf84000000b005187a57fba1sm146765edx.77.2023.06.13.01.13.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 01:13:46 -0700 (PDT)
+Message-ID: <e26878e5-fedc-b2fb-2213-5afd8479de4f@linaro.org>
+Date:   Tue, 13 Jun 2023 10:13:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230601-topic-sm8550-upstream-type-c-v3-8-22c9973012b6@linaro.org>
-References: <20230601-topic-sm8550-upstream-type-c-v3-0-22c9973012b6@linaro.org>
-In-Reply-To: <20230601-topic-sm8550-upstream-type-c-v3-0-22c9973012b6@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 1/8] dt-bindings: connector: usb-connector: add a gpio
+ used to determine the Type-C port plug orientation
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Andy Gross <agross@kernel.org>,
@@ -69,27 +68,15 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3113;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=Dpn5WYby65WZz8xrANOxqTxyRCrlf2lM9h7YQb2/kkk=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkiCEUdxo6zuTG5Nc48HP5ltUAmD9dDvDZC4r6LqFH
- u/p5+H+JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIghFAAKCRB33NvayMhJ0QFkEA
- CY/gWxK3m56EazyLvgsQsPf9vJK7NduAyaudylzkInM6AHffKJuSVegL+q+oQlUr3jvLHuS1N3hLwT
- Pb03yFcGDKdlDE3+vaSYEx9sjeVtAlODhx5LY6Q5eXkr6HR4dTkmWp7OXATdC8akWU7o/hXiHKkM2K
- OVeVPSoLO5FC3uvhHZmCnq4zA4z3vb/xo1wiQoRrcsXw777wyoC7OFWQEc0ypW1LolVfx1IHbKBNvk
- Bj0OK3JusXGORirS4So8NEbQbWHm3Q1toN8D6AjoEhLw0K39tPDnqTxAjkEKfH83IObaYWcpZ9I+wt
- NyvLIO1CMnSbys31/LnSIOe7gbLmvAJNuEbJXlSMCTA2xAZc/mEq5oeGY1bflYWmG1T4xBZGQG4Ky3
- WqARJdgObo8JbOMhQ0lO/2SjLsBQJ2llmtOhA62Soxw9s8EoWiM6bOC5g7ZR8tfszG0nUTnHlhWbrC
- aBxTqy0ESFvZ5MrkHaxli/oKF+1XeWsLziJGQIq4AvPXMASAJzawNlFzNE9qDE5y+lp5RIq9i57DdG
- HHcP1TkxSAqOZ1UrdbHSlICBvS4lNqQRLObbx0uuDOfpsxt6fnqmNLGfVGRWVHbrVtUgn5Cn1DgNPs
- ADA3uSH8CzRBdtGqoFgDV3+mlegmfYVL6uP6QdTBAKjGaMuTbG1wbpWfdZ6A==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        linux-usb@vger.kernel.org
+References: <20230601-topic-sm8550-upstream-type-c-v3-0-22c9973012b6@linaro.org>
+ <20230601-topic-sm8550-upstream-type-c-v3-1-22c9973012b6@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230601-topic-sm8550-upstream-type-c-v3-1-22c9973012b6@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -98,165 +85,25 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add nodes to support Type-C USB/DP functionality.
+On 13/06/2023 09:55, Neil Armstrong wrote:
+> On some platforms, the Type-C plug orientation is given on a GPIO line.
+> 
+> Document this optional Type-C connector property, and take the
+> assumption an active level represents an inverted/flipped orientation.
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-On this platform, a Type-C redriver is added to the
-SuperSpeed graph.
+Rob had here objections as these are bindings for the connector, not
+PMIC glink/altmode. I still doubt that Qualcomm USB Type-C connectors
+have such pin exposed. If you open the schematics, the GPIO is actually
+coming out from PMIC and is nowhere around the connector. Please drop my
+Ack.
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8550-qrd.dts | 99 ++++++++++++++++++++++++++++++++-
- 1 file changed, 97 insertions(+), 2 deletions(-)
+This however could be a pin of the PMIC because it clearly is on the
+schematics.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
-index 8669d29144bb..792351c44b46 100644
---- a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
-@@ -64,6 +64,7 @@ connector@0 {
- 			reg = <0>;
- 			power-role = "dual";
- 			data-role = "dual";
-+			orientation-gpios = <&tlmm 11 GPIO_ACTIVE_HIGH>;
- 
- 			ports {
- 				#address-cells = <1>;
-@@ -81,7 +82,15 @@ port@1 {
- 					reg = <1>;
- 
- 					pmic_glink_ss_in: endpoint {
--						remote-endpoint = <&usb_1_dwc3_ss>;
-+						remote-endpoint = <&redriver_ss_out>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+
-+					pmic_glink_sbu: endpoint {
-+						remote-endpoint = <&fsa4480_sbu_mux>;
- 					};
- 				};
- 			};
-@@ -420,6 +429,69 @@ vreg_l3g_1p2: ldo3 {
- 	};
- };
- 
-+&i2c_master_hub_0 {
-+	status = "okay";
-+};
-+
-+&i2c_hub_2 {
-+	status = "okay";
-+
-+	typec-retimer@1c {
-+		compatible = "onnn,nb7vpq904m";
-+		reg = <0x1c>;
-+
-+		vcc-supply = <&vreg_l15b_1p8>;
-+
-+		retimer-switch;
-+		orientation-switch;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				reg = <0>;
-+
-+				redriver_ss_out: endpoint {
-+					remote-endpoint = <&pmic_glink_ss_in>;
-+				};
-+			};
-+
-+			port@1 {
-+				reg = <1>;
-+
-+				redriver_ss_in: endpoint {
-+					data-lanes = <3 2 1 0>;
-+					remote-endpoint = <&usb_dp_qmpphy_out>;
-+				};
-+			};
-+		};
-+	};
-+
-+	typec-mux@42 {
-+		compatible = "fcs,fsa4480";
-+		reg = <0x42>;
-+
-+		vcc-supply = <&vreg_bob1>;
-+
-+		mode-switch;
-+		orientation-switch;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				reg = <0>;
-+
-+				fsa4480_sbu_mux: endpoint {
-+					remote-endpoint = <&pmic_glink_sbu>;
-+				};
-+			};
-+		};
-+	};
-+};
-+
- &gcc {
- 	clocks = <&bi_tcxo_div2>, <&sleep_clk>,
- 		 <&pcie0_phy>,
-@@ -471,6 +543,15 @@ &mdss_dsi0_phy {
- 	status = "okay";
- };
- 
-+&mdss_dp0 {
-+	status = "okay";
-+};
-+
-+&mdss_dp0_out {
-+	data-lanes = <0 1>;
-+	remote-endpoint = <&usb_dp_qmpphy_dp_in>;
-+};
-+
- &pcie_1_phy_aux_clk {
- 	status = "disabled";
- };
-@@ -650,7 +731,7 @@ &usb_1_dwc3_hs {
- };
- 
- &usb_1_dwc3_ss {
--	remote-endpoint = <&pmic_glink_ss_in>;
-+	remote-endpoint = <&usb_dp_qmpphy_usb_ss_in>;
- };
- 
- &usb_1_hsphy {
-@@ -666,9 +747,23 @@ &usb_dp_qmpphy {
- 	vdda-phy-supply = <&vreg_l3e_1p2>;
- 	vdda-pll-supply = <&vreg_l3f_0p88>;
- 
-+	orientation-switch;
-+
- 	status = "okay";
- };
- 
-+&usb_dp_qmpphy_dp_in {
-+	remote-endpoint = <&mdss_dp0_out>;
-+};
-+
-+&usb_dp_qmpphy_out {
-+	remote-endpoint = <&redriver_ss_in>;
-+};
-+
-+&usb_dp_qmpphy_usb_ss_in {
-+	remote-endpoint = <&usb_1_dwc3_ss>;
-+};
-+
- &xo_board {
- 	clock-frequency = <76800000>;
- };
 
--- 
-2.34.1
+
+Best regards,
+Krzysztof
 
