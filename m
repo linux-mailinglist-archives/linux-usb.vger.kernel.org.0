@@ -2,115 +2,260 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2043472E24C
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 13:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6987972E309
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 14:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242107AbjFMLyP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Jun 2023 07:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
+        id S234660AbjFMMbW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Jun 2023 08:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239731AbjFMLyN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 07:54:13 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5002C5
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 04:54:11 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-977c89c47bdso974111766b.2
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 04:54:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686657250; x=1689249250;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xU6yN1IIA+6UwdBgt828/NiFur95ZAvJWWZKM66bpZA=;
-        b=pbNPJPLJzd+VW9/5QjUJGqDTvRKCjzZjGlpDvWh9kA/5ldR0qhtDppy957c7QfPFqE
-         uBJow20o8qkFP8bUAIaVD5H3iGMX1W1KNiGk08O1IhlrCL+FmXH9tWGniu141rDlrVJT
-         sFpwIkkX3ubwdg8PiVzxPQU3ovJf/xfG/bpwxl24LNBLETWhqNDOwefRM/YON3hLm3lu
-         cnWeadglU0yeqe6KaHluGHj7VUyG/wFsKjXv3sZ2unrbZJn5sUKbhoZO3Dt9lI1BT2Xw
-         ZJlkX0fCXg0eWc+Bt4CheMP0s0zEzzLdVBI53Z6YJskfzO/xxiXCEuDnzuX4rbmulWAu
-         AGFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686657250; x=1689249250;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xU6yN1IIA+6UwdBgt828/NiFur95ZAvJWWZKM66bpZA=;
-        b=Imwwm6W2p2Piqj1kGVMeM+OGomiNaYrx04EFhLybk0/1sVFrMfhPZ+mX8ArgjRNf8e
-         /EI2e2pmo6yJupF0FDkz7rU1GvvG/dMBQPfAfcwmb8cQRnGXkUIvIWGeC54i3g20R84Z
-         UG+7VQhwH1CNU9OVpbZsXsNIMHQvXnGez11V4jmAp7Zh4jtgSizC6BRANSzRBlQOk2vq
-         fNI+2FAdQKyI8CnYKBBnIaOa2IWX0QCLdBuCpf+Icc/Xv0QwFtuwesQocLvu/WnU6Ysq
-         3eFPHmHjne+VDyX7Osw2Q4RT/FqoH37wmY+U9VEZSg+dR38AXqQnDaUhyTpT6qnHc46w
-         chRw==
-X-Gm-Message-State: AC+VfDyVbNioEH1vGUghCL/9CFb5crhjDaZTPcPUtX7EymsYpN3TuizT
-        MaxFNNkvAMNqw6mbQkUoyXStBw==
-X-Google-Smtp-Source: ACHHUZ4Z7G/vVQ715ReLAU2YsEmtH2Yw//I0SbDXHKPqLXwGL9N3doGeITkVAw65IJS9dH2OXCvTTA==
-X-Received: by 2002:a17:907:e8a:b0:977:c5b1:974b with SMTP id ho10-20020a1709070e8a00b00977c5b1974bmr13452293ejc.34.1686657250305;
-        Tue, 13 Jun 2023 04:54:10 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id rv14-20020a17090710ce00b00977c88d70c6sm6499105ejb.192.2023.06.13.04.54.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 04:54:09 -0700 (PDT)
-Message-ID: <5851627e-2972-f860-e965-dc8e73b01225@linaro.org>
-Date:   Tue, 13 Jun 2023 13:54:08 +0200
+        with ESMTP id S237979AbjFMMbV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 08:31:21 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2044.outbound.protection.outlook.com [40.107.223.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A06F10EC;
+        Tue, 13 Jun 2023 05:31:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Xv+oQ0tT8oETNjrf86dEBbcKhKLIEDhUznZLgLYaIrMfDC2pW7BOXsiSb9wdFkAzodpocSVAxCp4IXTg3SGex3BCnogNQMO+K0zNvi6hGywvCEZXqmYt1xLibgk4vBmhezNxqCg9kKd0SAdwXvfazJR69hzB6PZyV1WKbY9YxS8qDb8FhA0QSJYSm6J5mw/ytxAVBn7HJcE0PXrsk7FsQlLqwQTB2vZrU3GowYyaW/KAvKlY3+LiJ3HKLrQX0VcnZFW/Fa2g0kh7IjXaxPrsLvU2FZQagbvb+COwU1CioHj5pVg9uNRn07hZZOOf5eAsp0jhcFFVoO7lrsnflFu0Kw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=m6+FEnYT9R3Kd3dIQY4VkZ4ax/9Y87C0gNCnVdq1mqI=;
+ b=MDXv3ueN8tboIJqN4KtNxzaO4/AHL1NhC/kiTfQ3Dlv9eysxf0M0yp1b4r3woB9y3GidJjY5Bhw/+ve52SNDpj/b9APRD5qE9w3DlUtwk4C6dIcQItvDrguy8EJzhG2vnujGD+ltHTMHFfRrQ5hQ33LnJIOoHymNYUEOg7tBsvQVvJwn8Ww94Y2eLjOIQNooPabKbID4NOesHk1ZxrTH2TLvvN/i1zITCJryq8TqyBdn51QNnNbs3w+hETtQq8gtRfR+fjlvla9YBI1MF1H+rJLrq8BoX+bKHd8OiwHYRAkwxQljTc4W5zfHjoO7kmbGIcRRvNkFawrIr6hmK7VWEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=pengutronix.de smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=m6+FEnYT9R3Kd3dIQY4VkZ4ax/9Y87C0gNCnVdq1mqI=;
+ b=asohAJ8KYpmOcNpYqSlJBkOi6pt4GCrF6qNLa0oXpYDrmh4p0vK4pWcEMWE/mTTlTqD3pa+ensDkGsw6eyzKJK2m45fafb1/hfcg/oJIPVGY8LqJrxxh227ALQgDpmdHUnQLZXrcvpkUADW9Hl29zNk22ZKKmdPQwCtCELiIaqY=
+Received: from MW4PR04CA0164.namprd04.prod.outlook.com (2603:10b6:303:85::19)
+ by DS0PR12MB6629.namprd12.prod.outlook.com (2603:10b6:8:d3::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.39; Tue, 13 Jun
+ 2023 12:31:13 +0000
+Received: from CO1NAM11FT041.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:85:cafe::ce) by MW4PR04CA0164.outlook.office365.com
+ (2603:10b6:303:85::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.34 via Frontend
+ Transport; Tue, 13 Jun 2023 12:31:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CO1NAM11FT041.mail.protection.outlook.com (10.13.174.217) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6500.23 via Frontend Transport; Tue, 13 Jun 2023 12:31:11 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 13 Jun
+ 2023 07:31:08 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 13 Jun
+ 2023 07:31:07 -0500
+Received: from xhdnavam40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.23 via Frontend
+ Transport; Tue, 13 Jun 2023 07:31:04 -0500
+From:   Piyush Mehta <piyush.mehta@amd.com>
+To:     <p.zabel@pengutronix.de>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <michal.simek@amd.com>, <michal.simek@xilinx.com>,
+        <nava.manne@xilinx.com>
+CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <siva.durga.prasad.paladugu@amd.com>, <git@amd.com>,
+        Piyush Mehta <piyush.mehta@amd.com>
+Subject: [PATCH V3] dt-bindings: reset: convert the xlnx,zynqmp-reset.txt to yaml
+Date:   Tue, 13 Jun 2023 18:00:48 +0530
+Message-ID: <20230613123048.2935502-1-piyush.mehta@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 5/8] qcom: pmic_glink: enable altmode for SM8550
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20230601-topic-sm8550-upstream-type-c-v3-0-22c9973012b6@linaro.org>
- <20230601-topic-sm8550-upstream-type-c-v3-5-22c9973012b6@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230601-topic-sm8550-upstream-type-c-v3-5-22c9973012b6@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT041:EE_|DS0PR12MB6629:EE_
+X-MS-Office365-Filtering-Correlation-Id: 00d07c36-a6ee-4267-8dc5-08db6c0a1295
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Jj2TOEiPiDz+YbdXKZPm7+/mhXKXciaegtrHSyg0L15fGr0DXpfTWrKSEh90NYdRDsldMN1gZ7goyu7KOBnrfFA309HJgk9WFaDY2koqt9Mh1HHZsIQskSgBi2Pin2e85KQdytH69H/wvDt+5adYAvaWSgoSj9751kTY48P1M/cC9P0GEvH/3+koAl1WgBsaTt8ibVrxPVrJaP5w5PWh49Kw0AOMRld5D1SC3US1AD3cHIbAFeJLJFAfqAYVCIfiCwsYcKGCuJoRd+kGL8BFwBqVUfIbHIgX/60uD1pLRTHdQeXi1iuZBM3K2Mm+l2fb7myQeCBjsQSWNsM/NbsDFtFZTHyVugZ1r/V21hs6n5jnx+A8X9Knl/13Axpd2qj4MppQDwTw+JBfyFPJwulfPOkyb1NgshTGbhlD6wPDfHQ7mWmCOYsnxwAJN5vr4ll4sj5pIMtpyF5xJ6JLgVIaFaKxcEwi6lFFk6hZK1eoQBWrxaZ3NJuETy9taw3bxlu7RmgS8ZomLlsyouQr8Dd0krJplY5Ny+NyJXblfPpUDylZeyPAm7Xzi6rawpcQxvLL/cxSkTeAoLYY9zzUB/2mIJwZ27qo9csNvf60Kpps5ebDmu7/3Fcws7vV5Nn5zy7VRC3LrBkMkew4wPQC+fqDQwhl3R1P1uDzKc1mGh51xGgRoCrcC4LkRZ+Om2jKdw9/1c1bScVlLMIgs9O8bkD7AuzdDBtVqAn2RVpck3KnqxkZ8Z9uap20ny1hEdyTt7lGGPRQoNdMm2HOO7FZV/WsSu39uXaf2lUbQle2Sc4XFoheQTWfsfVoZTO0mt0YKCkd
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(346002)(39860400002)(396003)(451199021)(36840700001)(46966006)(40470700004)(70206006)(70586007)(478600001)(54906003)(110136005)(8676002)(8936002)(36756003)(5660300002)(4326008)(6666004)(41300700001)(316002)(40460700003)(966005)(81166007)(356005)(82740400003)(426003)(336012)(47076005)(36860700001)(44832011)(86362001)(40480700001)(2616005)(82310400005)(186003)(26005)(1076003)(2906002)(83380400001)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 12:31:11.8758
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 00d07c36-a6ee-4267-8dc5-08db6c0a1295
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT041.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6629
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 13/06/2023 09:55, Neil Armstrong wrote:
-> Altmode is also supported for SM8550, allow it.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  drivers/soc/qcom/pmic_glink.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
-> index c87056769ebd..8af06bdc6f5a 100644
-> --- a/drivers/soc/qcom/pmic_glink.c
-> +++ b/drivers/soc/qcom/pmic_glink.c
-> @@ -342,13 +342,9 @@ static const unsigned long pmic_glink_sm8450_client_mask = BIT(PMIC_GLINK_CLIENT
->  							   BIT(PMIC_GLINK_CLIENT_ALTMODE) |
->  							   BIT(PMIC_GLINK_CLIENT_UCSI);
->  
-> -/* Do not handle altmode for now on those platforms */
-> -static const unsigned long pmic_glink_sm8550_client_mask = BIT(PMIC_GLINK_CLIENT_BATT) |
-> -							   BIT(PMIC_GLINK_CLIENT_UCSI);
-> -
->  static const struct of_device_id pmic_glink_of_match[] = {
->  	{ .compatible = "qcom,sm8450-pmic-glink", .data = &pmic_glink_sm8450_client_mask },
+Convert the binding to DT schema format. It also updates the
+reset-controller description.
 
-Orientation and maybe all of the USB-related properties do not look like
-sm8450 specific, but PM8350B. That's where CC_OUT pin is. I don't think
-we represented this correctly, but rather copy-pasted downstream solution...
+Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+---
+Changes in V2:
+- Addressed the Krzysztof review comment:
+ - Update DT binding to fix the dt_binding_check warning.
+ - Removed 2/2 - xlnx,zynqmp-firmware.yaml binding patch: Will send after
+   xlnx,zynqmp-reset.yaml binding merge.
 
-Best regards,
-Krzysztof
+Link: https://lore.kernel.org/lkml/168612336438.2153757.6000360498539992409.robh@kernel.org/T/#m4abfe6287177d5fd09f781d298dd19d56aae5e27
+
+Changes in V3:
+- Addressed the Krzysztof review comment:
+ - Removed 2/2 - xlnx,zynqmp-firmware.yaml binding patch: Will send after
+   xlnx,zynqmp-reset.yaml binding merge.
+ - Update title: Removed "binding".
+ - Update Example:
+  - Removed header file.
+  - Dropped three levels of indentations: firmware and zynqmp_firmware.
+  - Removed the sata example.
+
+Link: https://lore.kernel.org/all/22e3c25e-487b-c02f-46f3-6d2ab2be8813@linaro.org/
+---
+ .../bindings/reset/xlnx,zynqmp-reset.txt      | 55 -------------------
+ .../bindings/reset/xlnx,zynqmp-reset.yaml     | 52 ++++++++++++++++++
+ 2 files changed, 52 insertions(+), 55 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt
+ create mode 100644 Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
+
+diff --git a/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt b/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt
+deleted file mode 100644
+index ed836868dbf1..000000000000
+--- a/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt
++++ /dev/null
+@@ -1,55 +0,0 @@
+---------------------------------------------------------------------------
+- =  Zynq UltraScale+ MPSoC and Versal reset driver binding =
+---------------------------------------------------------------------------
+-The Zynq UltraScale+ MPSoC and Versal has several different resets.
+-
+-See Chapter 36 of the Zynq UltraScale+ MPSoC TRM (UG) for more information
+-about zynqmp resets.
+-
+-Please also refer to reset.txt in this directory for common reset
+-controller binding usage.
+-
+-Required Properties:
+-- compatible:	"xlnx,zynqmp-reset" for Zynq UltraScale+ MPSoC platform
+-		"xlnx,versal-reset" for Versal platform
+-- #reset-cells:	Specifies the number of cells needed to encode reset
+-		line, should be 1
+-
+--------
+-Example
+--------
+-
+-firmware {
+-	zynqmp_firmware: zynqmp-firmware {
+-		compatible = "xlnx,zynqmp-firmware";
+-		method = "smc";
+-
+-		zynqmp_reset: reset-controller {
+-			compatible = "xlnx,zynqmp-reset";
+-			#reset-cells = <1>;
+-		};
+-	};
+-};
+-
+-Specifying reset lines connected to IP modules
+-==============================================
+-
+-Device nodes that need access to reset lines should
+-specify them as a reset phandle in their corresponding node as
+-specified in reset.txt.
+-
+-For list of all valid reset indices for Zynq UltraScale+ MPSoC see
+-<dt-bindings/reset/xlnx-zynqmp-resets.h>
+-For list of all valid reset indices for Versal see
+-<dt-bindings/reset/xlnx-versal-resets.h>
+-
+-Example:
+-
+-serdes: zynqmp_phy@fd400000 {
+-	...
+-
+-	resets = <&zynqmp_reset ZYNQMP_RESET_SATA>;
+-	reset-names = "sata_rst";
+-
+-	...
+-};
+diff --git a/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml b/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
+new file mode 100644
+index 000000000000..0d50f6a54af3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
+@@ -0,0 +1,52 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/reset/xlnx,zynqmp-reset.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Zynq UltraScale+ MPSoC and Versal reset
++
++maintainers:
++  - Piyush Mehta <piyush.mehta@amd.com>
++
++description: |
++  The Zynq UltraScale+ MPSoC and Versal has several different resets.
++
++  The PS reset subsystem is responsible for handling the external reset
++  input to the device and that all internal reset requirements are met
++  for the system (as a whole) and for the functional units.
++
++  Please also refer to reset.txt in this directory for common reset
++  controller binding usage. Device nodes that need access to reset
++  lines should specify them as a reset phandle in their corresponding
++  node as specified in reset.txt.
++
++  For list of all valid reset indices for Zynq UltraScale+ MPSoC
++  <dt-bindings/reset/xlnx-zynqmp-resets.h>
++
++  For list of all valid reset indices for Versal
++  <dt-bindings/reset/xlnx-versal-resets.h>
++
++properties:
++  compatible:
++    enum:
++      - xlnx,zynqmp-reset
++      - xlnx,versal-reset
++
++  "#reset-cells":
++    const: 1
++
++required:
++  - compatible
++  - "#reset-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    zynqmp_reset: reset-controller {
++        compatible = "xlnx,zynqmp-reset";
++        #reset-cells = <1>;
++    };
++
++...
+-- 
+2.25.1
 
