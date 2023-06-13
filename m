@@ -2,115 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D3372E479
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 15:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B8572E4B8
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 15:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242590AbjFMNn6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Jun 2023 09:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
+        id S240471AbjFMN6m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Jun 2023 09:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242557AbjFMNn5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 09:43:57 -0400
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF84E6;
-        Tue, 13 Jun 2023 06:43:39 -0700 (PDT)
-Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-33e75ca0a8bso24590845ab.0;
-        Tue, 13 Jun 2023 06:43:39 -0700 (PDT)
+        with ESMTP id S240192AbjFMN6l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 09:58:41 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B24D1
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 06:58:39 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b1af9ef7a9so68123131fa.1
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 06:58:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686664718; x=1689256718;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eYEjJGS1UUCjJyusiKu9spXvZVC2LuJOiUk5VQb5qBg=;
+        b=uNjYiaaXwGbisnriVGiyDPW7ZI45SzlN8FOVeTNbbxQb4PXZ+AuM66H4Yerp0ztmPX
+         01S78XYRrc7zNj88Pxcc1yV1tTzr3QBXuGBkzGMuS5uOyENuRaUoUFwpH+pm9eLJ7JcF
+         nWUUkS/MhD+1NGnKuogt5np26PCxhwF8tUjQehy+RMFNIpeT8xZ7TNB5Yyfs31jl2spX
+         eQ4xds7UIgd9KNJZNU/vGmbBV0mM0Uo+h6hq5N6tBa+uN2xA+BUbCVCu9DHBrde3BGKR
+         tUWBvko6KywEIxeFVBGndQm556lwHleld9lw81gVJE6FplEQBzWSvAPE/dAPBGTeHwL2
+         sc6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686663819; x=1689255819;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Nmua7iGyrNHd+POWyUwRwRVOKzPbU1axH5KsFnA/6xU=;
-        b=hitn1Jb3ubnKZgMDIzLdQzZe+2gfnfnJ7Qf5+7KmnOiw/vYodxeyHUmBrbTTKit/z9
-         O2kN8YXi4l7FRgyJVovPE3g8Ge7Tup2A/IjpY+c8qrMT1km+iEgKkUki33x7yD7UEjtV
-         eaH1Ppq7yZfwZXvgcQioDzJbT9MHRqQeemxjd6+fBl/ZbTEWW2aIdpAmfFRnigBUrT/e
-         TKfJ7XU/NLAgc2pxvIlvWmpzf/sOGshqLcYVIYiT3NaMDaolhbUeck0Ix+CNIMlhgTbw
-         /GUNtFlfX44i8fAahEuABxL4QIaXsYoI7xJHeqBIF0W7s92Gk8Sf7wdax10/2/BxSjGB
-         cwbg==
-X-Gm-Message-State: AC+VfDw5dzTfmSQZ/yiZzkGbmatN0P3uDJCuViL62Ggqoa8o0srW1Xrs
-        qBIik2hMAQw9wGqWLQif3w==
-X-Google-Smtp-Source: ACHHUZ4N5LxEwQghbyZ0mVuAkfOFHBheqmu8DGwgun+YnzbyznQW+Hrq6vho8Zw5x6oO0ynuI43ghA==
-X-Received: by 2002:a92:d692:0:b0:33b:16e9:bba5 with SMTP id p18-20020a92d692000000b0033b16e9bba5mr10434067iln.28.1686663818733;
-        Tue, 13 Jun 2023 06:43:38 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id j18-20020a926e12000000b00326bd11f5d1sm2190658ilc.11.2023.06.13.06.43.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 06:43:38 -0700 (PDT)
-Received: (nullmailer pid 1780603 invoked by uid 1000);
-        Tue, 13 Jun 2023 13:43:36 -0000
-Date:   Tue, 13 Jun 2023 07:43:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Piyush Mehta <piyush.mehta@amd.com>
-Cc:     michal.simek@xilinx.com, git@amd.com, nava.manne@xilinx.com,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-usb@vger.kernel.org, michal.simek@amd.com,
-        conor+dt@kernel.org, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, siva.durga.prasad.paladugu@amd.com
-Subject: Re: [PATCH V3] dt-bindings: reset: convert the xlnx,zynqmp-reset.txt
- to yaml
-Message-ID: <20230613134336.GA1780229-robh@kernel.org>
-References: <20230613123048.2935502-1-piyush.mehta@amd.com>
- <168666237486.1671584.5832429615873674500.robh@kernel.org>
+        d=1e100.net; s=20221208; t=1686664718; x=1689256718;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eYEjJGS1UUCjJyusiKu9spXvZVC2LuJOiUk5VQb5qBg=;
+        b=F+Brbi89RYGdukSdvH9HAXrfQ05rArhSEuPVN304/a6hDrgMIVItd8Ljft525VmvhZ
+         9NYoEUCMVZFHnNdANz8aP2Il/o3puwgFsZgeqrVe6EeTLNsuXstOP9utfo4jdSro98qX
+         dsvCea2xlUqteDW1H/P07e+T80MiERfEbl8C347HvqRznsIjMTfcslm9BeOtg8rMoZsZ
+         1hUn30/ItVuK/uFVz1lavSj/ERaiztxaTbwtpx6cfMdWJnmzM5r+iYUReYKiWKzCIZbW
+         9xZLOa192TG8FOgVfCM0iML9OZwFC4GMq2qz70azJ8DkrfKQbhaV4bHbUoi4mCXJgTop
+         MNbQ==
+X-Gm-Message-State: AC+VfDzbQd03H5sAPHsKLGAdRRS6Ws33ZtZ7OjAjtjcjXGEghnn5Rfez
+        kaHLLOZr5J+/vAnGdPJD6eUm+A==
+X-Google-Smtp-Source: ACHHUZ4SeTgZwVp9xbt9r8WkNO8LW+MR7fA9doV9DSkOr/bC5m6r+nBHbjgHbz+tZM+MSk/aawBhBw==
+X-Received: by 2002:a2e:88d8:0:b0:2af:c9d8:87b4 with SMTP id a24-20020a2e88d8000000b002afc9d887b4mr4444624ljk.29.1686664717906;
+        Tue, 13 Jun 2023 06:58:37 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id z6-20020a2e3506000000b002adb98fdf81sm2162821ljz.7.2023.06.13.06.58.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 06:58:37 -0700 (PDT)
+Message-ID: <9c3db237-9bec-36e0-8b0c-28062c631068@linaro.org>
+Date:   Tue, 13 Jun 2023 15:58:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <168666237486.1671584.5832429615873674500.robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 5/8] qcom: pmic_glink: enable altmode for SM8550
+Content-Language: en-US
+To:     neil.armstrong@linaro.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20230601-topic-sm8550-upstream-type-c-v3-0-22c9973012b6@linaro.org>
+ <20230601-topic-sm8550-upstream-type-c-v3-5-22c9973012b6@linaro.org>
+ <5851627e-2972-f860-e965-dc8e73b01225@linaro.org>
+ <8f9c549a-e37b-2877-be74-f25304a476fd@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <8f9c549a-e37b-2877-be74-f25304a476fd@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 07:19:34AM -0600, Rob Herring wrote:
-> 
-> On Tue, 13 Jun 2023 18:00:48 +0530, Piyush Mehta wrote:
-> > Convert the binding to DT schema format. It also updates the
-> > reset-controller description.
-> > 
-> > Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
-> > ---
-> > Changes in V2:
-> > - Addressed the Krzysztof review comment:
-> >  - Update DT binding to fix the dt_binding_check warning.
-> >  - Removed 2/2 - xlnx,zynqmp-firmware.yaml binding patch: Will send after
-> >    xlnx,zynqmp-reset.yaml binding merge.
-> > 
-> > Link: https://lore.kernel.org/lkml/168612336438.2153757.6000360498539992409.robh@kernel.org/T/#m4abfe6287177d5fd09f781d298dd19d56aae5e27
-> > 
-> > Changes in V3:
-> > - Addressed the Krzysztof review comment:
-> >  - Removed 2/2 - xlnx,zynqmp-firmware.yaml binding patch: Will send after
-> >    xlnx,zynqmp-reset.yaml binding merge.
-> >  - Update title: Removed "binding".
-> >  - Update Example:
-> >   - Removed header file.
-> >   - Dropped three levels of indentations: firmware and zynqmp_firmware.
-> >   - Removed the sata example.
-> > 
-> > Link: https://lore.kernel.org/all/22e3c25e-487b-c02f-46f3-6d2ab2be8813@linaro.org/
-> > ---
-> >  .../bindings/reset/xlnx,zynqmp-reset.txt      | 55 -------------------
-> >  .../bindings/reset/xlnx,zynqmp-reset.yaml     | 52 ++++++++++++++++++
-> >  2 files changed, 52 insertions(+), 55 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt
-> >  create mode 100644 Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
-> > 
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml: $defs:qcom-pmic-mpp-state:properties:qcom,paired: [{'description': 'Indicates that the pin should be operating in paired mode.'}] is not of type 'object', 'boolean'
-> 	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
 
-Unrelated. This can be ignored.
 
-Rob
+On 13.06.2023 15:43, Neil Armstrong wrote:
+> On 13/06/2023 13:54, Krzysztof Kozlowski wrote:
+>> On 13/06/2023 09:55, Neil Armstrong wrote:
+>>> Altmode is also supported for SM8550, allow it.
+>>>
+>>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>> ---
+>>>   drivers/soc/qcom/pmic_glink.c | 6 +-----
+>>>   1 file changed, 1 insertion(+), 5 deletions(-)
+>>>
+>>> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
+>>> index c87056769ebd..8af06bdc6f5a 100644
+>>> --- a/drivers/soc/qcom/pmic_glink.c
+>>> +++ b/drivers/soc/qcom/pmic_glink.c
+>>> @@ -342,13 +342,9 @@ static const unsigned long pmic_glink_sm8450_client_mask = BIT(PMIC_GLINK_CLIENT
+>>>                                  BIT(PMIC_GLINK_CLIENT_ALTMODE) |
+>>>                                  BIT(PMIC_GLINK_CLIENT_UCSI);
+>>>   -/* Do not handle altmode for now on those platforms */
+>>> -static const unsigned long pmic_glink_sm8550_client_mask = BIT(PMIC_GLINK_CLIENT_BATT) |
+>>> -                               BIT(PMIC_GLINK_CLIENT_UCSI);
+>>> -
+>>>   static const struct of_device_id pmic_glink_of_match[] = {
+>>>       { .compatible = "qcom,sm8450-pmic-glink", .data = &pmic_glink_sm8450_client_mask },
+>>
+>> Orientation and maybe all of the USB-related properties do not look like
+>> sm8450 specific, but PM8350B. That's where CC_OUT pin is. I don't think
+>> we represented this correctly, but rather copy-pasted downstream solution...
+> 
+> We do not interact directly with PM8350B or PM8550B but with pmic_glink who
+> does the work work for use, and this is platform specific.
+Yep, pmic_glink is totally a firmware construct and not all platforms with
+pm8350b or so implement it.
+
+Konrad
+> 
+> Neil
+> 
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> 
