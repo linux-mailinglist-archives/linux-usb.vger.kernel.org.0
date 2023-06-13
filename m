@@ -2,103 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556B472DDBE
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 11:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C376372DE32
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 11:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241008AbjFMJeC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Jun 2023 05:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
+        id S241950AbjFMJrf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Jun 2023 05:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240587AbjFMJd5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 05:33:57 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B55E52;
-        Tue, 13 Jun 2023 02:33:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S241588AbjFMJrD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 05:47:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FF310D9;
+        Tue, 13 Jun 2023 02:46:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 90E612264B;
-        Tue, 13 Jun 2023 09:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686648834; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=GlzmACPyawv8OfZT530jlUOfpp9OFVAgjTCdvZxd+ug=;
-        b=SYEdpOwNTCvN0WaXD9vrLSYBwQgdbY3nFnARYGHjNflpu2/8EaA66fXdSo5h3NBxvvAaN+
-        /LBbbrVPbdcFzlwy8q4IbNLGpaFN5iyokRywFFLCPpG/qVydiOBv3x/Rl25PbXBbMg7Pv5
-        +nCUCb/dev6RmWDFytVZnqdjTbo5ClE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4C27413345;
-        Tue, 13 Jun 2023 09:33:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7ZPHDwI4iGSjVgAAMHmgww
-        (envelope-from <oneukum@suse.com>); Tue, 13 Jun 2023 09:33:54 +0000
-From:   Oliver Neukum <oneukum@suse.com>
-To:     johan@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Kaufmann Automotive GmbH <info@kaufmann-automotive.ch>
-Subject: [PATCH] USB: serial-simple: adding Kaufmann RKS+CAN VCP
-Date:   Tue, 13 Jun 2023 11:33:51 +0200
-Message-Id: <20230613093351.3383-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.40.1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B15FE633A9;
+        Tue, 13 Jun 2023 09:46:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A021DC433D2;
+        Tue, 13 Jun 2023 09:46:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686649607;
+        bh=8eG9BXn9SgJZO8Q9TEHnAKVexAZ+M+5pTf3R8w8Jqc4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S7JOsAKqj74Eryl5wpQA3K3CAScfgu0jgQ0mXN7RYcEViX5fckMQ88B2657QnsMFE
+         +WO98orfB3CZy4c2VaMDmTHaMU1S4wcjmM+3THw+QMpZnyJjuIn8NVc6shEww1loq/
+         Ev5UD4w4FlVxXDPRouOTf3rF6R40pY7lW+PQCGtc=
+Date:   Tue, 13 Jun 2023 11:46:44 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Daisy.Barrera@siriusxm.com, Cliff.Holden@siriusxm.com,
+        tony@atomide.com, jdelvare@suse.de, neal_liu@aspeedtech.com,
+        linus.walleij@linaro.org, egtvedt@samfundet.no,
+        biju.das.jz@bp.renesas.com, herve.codina@bootlin.com
+Subject: Re: [PATCH v4 4/4] MAINTAINERS: add Cadence USBHS driver entry
+Message-ID: <2023061350-calcium-follow-8649@gregkh>
+References: <20230602102644.77470-1-pawell@cadence.com>
+ <20230602102644.77470-5-pawell@cadence.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230602102644.77470-5-pawell@cadence.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Adding the device and product ID
+On Fri, Jun 02, 2023 at 06:26:44AM -0400, Pawel Laszczak wrote:
+> Patch adds entry for USBHS (CDNS2) driver into MAINTARNERS file
+> 
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> ---
+>  MAINTAINERS | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c269a15609e2..8b289d52d983 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4523,6 +4523,12 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git
+>  F:	drivers/usb/cdns3/
+>  X:	drivers/usb/cdns3/cdns3*
+>  
+> +CADENCE USBHS DRIVER
+> +M:	Pawel Laszczak <pawell@cadence.com>
+> +L:	linux-usb@vger.kernel.org
+> +S:	Maintained
 
-Reported-by: Kaufmann Automotive GmbH <info@kaufmann-automotive.ch>
-Tested-by: Kaufmann Automotive GmbH <info@kaufmann-automotive.ch>
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/usb/serial/usb-serial-simple.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+This isn't part of your job description?  Why doesn't Cadence allow you
+to do that?  That's not good on a bunch of levels, have you seen the
+Documentation/process/contribution-maturity-model.rst file yet?
 
-diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
-index 4c6747889a19..3612031030bb 100644
---- a/drivers/usb/serial/usb-serial-simple.c
-+++ b/drivers/usb/serial/usb-serial-simple.c
-@@ -117,6 +117,11 @@ DEVICE(suunto, SUUNTO_IDS);
- 	{ USB_DEVICE(0x908, 0x0004) }
- DEVICE(siemens_mpi, SIEMENS_IDS);
- 
-+/* KAUFMANN RKS+CAN VCP */
-+#define KAUFMANN_IDS()			\
-+	{ USB_DEVICE(0x16d0, 0x0870) }
-+DEVICE(kaufmann, KAUFMANN_IDS);
-+
- /* All of the above structures mushed into two lists */
- static struct usb_serial_driver * const serial_drivers[] = {
- 	&carelink_device,
-@@ -133,6 +138,7 @@ static struct usb_serial_driver * const serial_drivers[] = {
- 	&hp4x_device,
- 	&suunto_device,
- 	&siemens_mpi_device,
-+	&kaufmann_device,
- 	NULL
- };
- 
-@@ -151,6 +157,7 @@ static const struct usb_device_id id_table[] = {
- 	HP4X_IDS(),
- 	SUUNTO_IDS(),
- 	SIEMENS_IDS(),
-+	KAUFMANN_IDS(),
- 	{ },
- };
- MODULE_DEVICE_TABLE(usb, id_table);
--- 
-2.40.1
+thanks,
 
+greg k-h
