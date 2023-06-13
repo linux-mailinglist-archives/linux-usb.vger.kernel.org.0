@@ -2,76 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A95172DE01
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 11:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556B472DDBE
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jun 2023 11:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239987AbjFMJog (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Jun 2023 05:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
+        id S241008AbjFMJeC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Jun 2023 05:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233071AbjFMJof (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 05:44:35 -0400
-X-Greylist: delayed 902 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 13 Jun 2023 02:44:32 PDT
-Received: from mail.actia.se (mail.actia.se [212.181.117.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103FA10DC;
-        Tue, 13 Jun 2023 02:44:31 -0700 (PDT)
-Received: from W388ANL.actianordic.se (10.12.12.26) by S035ANL.actianordic.se
- (10.12.31.116) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 13 Jun
- 2023 11:29:27 +0200
-From:   Jonas Blixt <jonas.blixt@actia.se>
-To:     <shuah@kernel.org>, <valentina.manea.m@gmail.com>
-CC:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jonas Blixt <jonas.blixt@actia.se>
-Subject: [PATCH] USB: usbip: fix stub_dev hub disconnect
-Date:   Tue, 13 Jun 2023 11:29:18 +0200
-Message-ID: <20230613092918.4191895-1-jonas.blixt@actia.se>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S240587AbjFMJd5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 05:33:57 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B55E52;
+        Tue, 13 Jun 2023 02:33:55 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 90E612264B;
+        Tue, 13 Jun 2023 09:33:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1686648834; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=GlzmACPyawv8OfZT530jlUOfpp9OFVAgjTCdvZxd+ug=;
+        b=SYEdpOwNTCvN0WaXD9vrLSYBwQgdbY3nFnARYGHjNflpu2/8EaA66fXdSo5h3NBxvvAaN+
+        /LBbbrVPbdcFzlwy8q4IbNLGpaFN5iyokRywFFLCPpG/qVydiOBv3x/Rl25PbXBbMg7Pv5
+        +nCUCb/dev6RmWDFytVZnqdjTbo5ClE=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4C27413345;
+        Tue, 13 Jun 2023 09:33:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7ZPHDwI4iGSjVgAAMHmgww
+        (envelope-from <oneukum@suse.com>); Tue, 13 Jun 2023 09:33:54 +0000
+From:   Oliver Neukum <oneukum@suse.com>
+To:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Kaufmann Automotive GmbH <info@kaufmann-automotive.ch>
+Subject: [PATCH] USB: serial-simple: adding Kaufmann RKS+CAN VCP
+Date:   Tue, 13 Jun 2023 11:33:51 +0200
+Message-Id: <20230613093351.3383-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.12.12.26]
-X-EsetResult: clean, is OK
-X-EsetId: 37303A294A191A536D766B
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If a hub is disconnected that has device(s) that's attached to the usbip layer
-the disconnect function might fail because it tries to release the port
-on an already disconnected hub.
+Adding the device and product ID
 
-Fixes: 6080cd0e9239 ("staging: usbip: claim ports used by shared devices")
-Signed-off-by: Jonas Blixt <jonas.blixt@actia.se>
+Reported-by: Kaufmann Automotive GmbH <info@kaufmann-automotive.ch>
+Tested-by: Kaufmann Automotive GmbH <info@kaufmann-automotive.ch>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
 ---
- drivers/usb/usbip/stub_dev.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/usb/serial/usb-serial-simple.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
-index 2305d425e6c9..257861787cdf 100644
---- a/drivers/usb/usbip/stub_dev.c
-+++ b/drivers/usb/usbip/stub_dev.c
-@@ -427,8 +427,12 @@ static void stub_disconnect(struct usb_device *udev)
- 	/* release port */
- 	rc = usb_hub_release_port(udev->parent, udev->portnum,
- 				  (struct usb_dev_state *) udev);
--	if (rc) {
--		dev_dbg(&udev->dev, "unable to release port\n");
-+	/*
-+	 * NOTE: If a HUB disconnect triggered disconnect of the down stream
-+	 * device usb_hub_release_port will return -ENODEV.
-+	 */
-+	if (rc && (rc != -ENODEV)) {
-+		dev_dbg(&udev->dev, "unable to release port (%i)\n", rc);
- 		return;
- 	}
+diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
+index 4c6747889a19..3612031030bb 100644
+--- a/drivers/usb/serial/usb-serial-simple.c
++++ b/drivers/usb/serial/usb-serial-simple.c
+@@ -117,6 +117,11 @@ DEVICE(suunto, SUUNTO_IDS);
+ 	{ USB_DEVICE(0x908, 0x0004) }
+ DEVICE(siemens_mpi, SIEMENS_IDS);
  
++/* KAUFMANN RKS+CAN VCP */
++#define KAUFMANN_IDS()			\
++	{ USB_DEVICE(0x16d0, 0x0870) }
++DEVICE(kaufmann, KAUFMANN_IDS);
++
+ /* All of the above structures mushed into two lists */
+ static struct usb_serial_driver * const serial_drivers[] = {
+ 	&carelink_device,
+@@ -133,6 +138,7 @@ static struct usb_serial_driver * const serial_drivers[] = {
+ 	&hp4x_device,
+ 	&suunto_device,
+ 	&siemens_mpi_device,
++	&kaufmann_device,
+ 	NULL
+ };
+ 
+@@ -151,6 +157,7 @@ static const struct usb_device_id id_table[] = {
+ 	HP4X_IDS(),
+ 	SUUNTO_IDS(),
+ 	SIEMENS_IDS(),
++	KAUFMANN_IDS(),
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(usb, id_table);
 -- 
-2.25.1
+2.40.1
 
