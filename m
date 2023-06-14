@@ -2,92 +2,313 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 509CA73089D
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jun 2023 21:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F05730927
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jun 2023 22:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236568AbjFNTmj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Jun 2023 15:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
+        id S236396AbjFNU13 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Jun 2023 16:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239454AbjFNTm0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jun 2023 15:42:26 -0400
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C77D2;
-        Wed, 14 Jun 2023 12:42:25 -0700 (PDT)
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-777a4926555so1446739f.0;
-        Wed, 14 Jun 2023 12:42:25 -0700 (PDT)
+        with ESMTP id S229889AbjFNU11 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jun 2023 16:27:27 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29CA2110
+        for <linux-usb@vger.kernel.org>; Wed, 14 Jun 2023 13:27:25 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id 5614622812f47-39ca0c2970aso4276342b6e.3
+        for <linux-usb@vger.kernel.org>; Wed, 14 Jun 2023 13:27:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686774445; x=1689366445;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wCUDP5YpW2e47GeuQaojWbzYMA9cKbBIXgknngPRz+M=;
+        b=6TvYLq+MZFyIhiwidHr3ul6zMdvaLauy1lVpTmwa5uYot76Sz975rwx8g+Xxx/Q+aB
+         S0qBekTbbBWmeN40efbYRu5g78kbN1XvGOM6T1ZWNRBYXG1UW8MwfQPRI4MZebY6hw8c
+         1dhmf4xNhw0ecjTDldGdyY4E0uc0pIRFEHPT/+HUItE4ZtfyH6lP/VmIFzj8a3NGNt0D
+         SoooUhU3fMJfaElBMe747VqYSISX1NCLeYTQViqu62BwC17B5MpTweIxBR0Zm2pJvvIW
+         gdpN2ajs2rFs7HPAdcyg58IobJnaXES8DjguA5TfvDUb77kLMa7+gNsMNXEchaJcFRDl
+         0gxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686771745; x=1689363745;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CK1lIeMRpP5NX2IUbidGPA9x3NrhjZEIeLvXrWDUjZM=;
-        b=DtsPxFW43+Tl2Tlyviss72c5Ok3gtaCpwjcDICpKN4QPQOdYj1rqqhcU/+S00RFYZ2
-         2oXfft/Oj5JzpormVmY0LEZGm1WONRWK04isU1oDT5u3RUKzppAC6uqQV6J0a0F+MSRe
-         9xjyd1uHJWm13bqcHxBtj5ORUUEN4ZiFDZRCeKYcinw8KMzbEUhOHhuSfEPmYwN0/b59
-         HDamI2c5d3yj//d/HBUfuDBWZlQ9V4titky8xnHSTVn2gSMf0WvH+ZEUwSODWo3pjzYq
-         R4PAvz6iY6ytec3se5mVySqVDwHkjEFeXvmZ4sE8BFwLrjIwELiCW2ZOJC33UnF0JP26
-         /cYA==
-X-Gm-Message-State: AC+VfDwrROiR3jPhFy80sxTm8C5OAbYOlkhIWXSOCMIltuU+eKPAnm5d
-        vF13SRUjKjkO5QOQ2ahyOw==
-X-Google-Smtp-Source: ACHHUZ521hIVcunxwMoTkCfDDcToYbL+0uuF815H+XwWvyB0+8/6FRb/VUUMTFteDscyxqdDVUq05g==
-X-Received: by 2002:a05:6602:2110:b0:760:effd:c899 with SMTP id x16-20020a056602211000b00760effdc899mr2257746iox.5.1686771744976;
-        Wed, 14 Jun 2023 12:42:24 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id e22-20020a6b7316000000b00777b835f2bdsm5634110ioh.27.2023.06.14.12.42.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 12:42:24 -0700 (PDT)
-Received: (nullmailer pid 2620040 invoked by uid 1000);
-        Wed, 14 Jun 2023 19:42:21 -0000
-Date:   Wed, 14 Jun 2023 13:42:21 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Varshini Rajendran <varshini.rajendran@microchip.com>
-Cc:     broonie@kernel.org, alexandre.belloni@bootlin.com,
-        robh+dt@kernel.org, tglx@linutronix.de, devicetree@vger.kernel.org,
-        Hari.PrasathGE@microchip.com, arnd@arndb.de, davem@davemloft.net,
-        gregory.clement@bootlin.com, netdev@vger.kernel.org,
-        edumazet@google.com, linux-arm-kernel@lists.infradead.org,
-        balakrishnan.s@microchip.com, manikandan.m@microchip.com,
-        nayabbasha.sayed@microchip.com, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sre@kernel.org,
-        claudiu.beznea@microchip.com, kuba@kernel.org,
-        linux-usb@vger.kernel.org, cristian.birsan@microchip.com,
-        pabeni@redhat.com, mihai.sain@microchip.com,
-        linux-kernel@vger.kernel.org, sboyd@kernel.org,
-        sudeep.holla@arm.com, durai.manickamkr@microchip.com,
-        dharma.b@microchip.com, maz@kernel.org, linux@armlinux.org.uk,
-        conor+dt@kernel.org, balamanikandan.gunasundar@microchip.com,
-        nicolas.ferre@microchip.com, krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH 20/21] dt-bindings: net: cdns,macb: add documentation for
- sam9x7 ethernet interface
-Message-ID: <168677174053.2619982.8000584271971799835.robh@kernel.org>
-References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
- <20230603200243.243878-21-varshini.rajendran@microchip.com>
+        d=1e100.net; s=20221208; t=1686774445; x=1689366445;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wCUDP5YpW2e47GeuQaojWbzYMA9cKbBIXgknngPRz+M=;
+        b=JjzG8GDjt9JGXT4B0vagaVJDhB1aKeVH7cfqDCVEe0PPXnasL0Qrc4CZUDbvxfF1/F
+         xvUahRiWQ0w+IGq87/KIVDmbqhx+M6I9IwzV8wzixVGyQMeRPsYMSJkmSl+WpojxBf3i
+         RrvrgAm24gMTmuG8c91zWXOsmysMyM8/mzP4wa/9bzg8fCC1m+BIRNio0N2vSr1FabCq
+         mdQODrir+ebktTRDmjusRJyyjhYZs2D+l/W0OcDoauioQU2moN1bS6WKYwjjOiUgMJMh
+         R7G8L55TX8YAGR445+CMzXsSHAlNJwKuV0YL98yCPSrXWQmhsGxIxw/tCzRpRC+WONNC
+         dbCQ==
+X-Gm-Message-State: AC+VfDz9i4UKVp/c2vEWb+QA9t34yWJjACqcCMq6tsnLfGFHjjEDbBz4
+        38tYGL2ASBK1/8Rsm/ltOyqIyedSuKMVQo+t/hGUBYhtxmSVJ19yyCA=
+X-Google-Smtp-Source: ACHHUZ48OyKCkJsPbov9rpzIzbgfbI8O7LPtxIwwZFc8jHKzgjRrUxUGEtrkeOHV/mHxmJM/pOWjgST/Esg07ywERzw=
+X-Received: by 2002:a05:6808:aa6:b0:398:5d57:3d08 with SMTP id
+ r6-20020a0568080aa600b003985d573d08mr11477349oij.37.1686774444974; Wed, 14
+ Jun 2023 13:27:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230603200243.243878-21-varshini.rajendran@microchip.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+From:   Brian Geffon <bgeffon@google.com>
+Date:   Wed, 14 Jun 2023 16:26:49 -0400
+Message-ID: <CADyq12w_c=pq5sph9Ne+nshz2haeYK-kGYVwQTUqSb3W_kzrdA@mail.gmail.com>
+Subject: thunderbolt: resume from hibernation CPUs racing in tb_ring_start
+To:     Takashi Iwai <tiwai@suse.de>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Matthias Kaehlcke <mka@google.com>, linux-usb@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
+On ChromeOS we're running a 5.15 kernel patched up to 6.4-rc6 w.r.t to
+drivers/thunderbolt code and we're seeing a similar issue to the one
+discussed in https://lore.kernel.org/lkml/20230421140725.495-1-mario.limonciello@amd.com/T/#
+/ https://bugzilla.kernel.org/show_bug.cgi?id=217343 where when
+resuming from hibernation you'll see warnings along the lines of
 
-On Sun, 04 Jun 2023 01:32:42 +0530, Varshini Rajendran wrote:
-> Add documentation for sam9x7 ethernet interface
-> 
-> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-> ---
->  Documentation/devicetree/bindings/net/cdns,macb.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+[  126.292769] thunderbolt 0000:00:0d.3: interrupt for RX ring 0 is
+already enabled
 
-Acked-by: Rob Herring <robh@kernel.org>
+The thing that's odd is it appears three CPUs are racing through this code path:
 
+[  126.292076] ------------[ cut here ]------------
+[  126.292077] thunderbolt 0000:00:0d.2: interrupt for TX ring 0 is
+already enabled
+[  126.292080] proc_thermal_pci 0000:00:04.0: PM:
+pci_pm_thaw_noirq+0x0/0x7c returned 0 after 606 usecs
+[  126.292086] ------------[ cut here ]------------
+[  126.292087] thunderbolt 0000:00:0d.3: interrupt for TX ring 0 is
+already enabled
+[  126.292089] WARNING: CPU: 6 PID: 7879 at
+drivers/thunderbolt/nhi.c:138 ring_interrupt_active+0x1cd/0x225
+[  126.292092] Modules linked in:
+[  126.292091] WARNING: CPU: 0 PID: 175 at
+drivers/thunderbolt/nhi.c:138 ring_interrupt_active+0x1cd/0x225
+[  126.292157] CPU: 0 PID: 175 Comm: kworker/u24:2 Tainted: G     U
+        5.15.116-19568-g766d8095041b #24
+fdadcb2517d1d37363ad385ffddbc1ad5dc72550
+[  126.292158]  lzo_rle zram joydev
+[  126.292159] Hardware name: Google Anahera/Anahera, BIOS
+Google_Anahera.14505.143.0 06/22/2022
+[  126.292159]
+[  126.292160] Workqueue: events_unbound async_run_entry_fn
+[  126.292160] CPU: 6 PID: 7879 Comm: kworker/u24:13 Tainted: G     U
+          5.15.116-19568-g766d8095041b #24
+fdadcb2517d1d37363ad385ffddbc1ad5dc72550
+[  126.292162]
+[  126.292162] RIP: 0010:ring_interrupt_active+0x1cd/0x225
+[  126.292163] Hardware name: Google Anahera/Anahera, BIOS
+Google_Anahera.14505.143.0 06/22/2022
+[  126.292163] Code: 0f 44 ce 45 8b 46 14 48 c7 c6 98 a9 75 82 49 c7
+c1 9f ee 72 82 84 db 4c 0f 45 ce 48 c7 c7 3e d8 6f 82 48 89 c6 e8 96
+cb 53 ff <0f> 0b 49 8c
+[  126.292164] Workqueue: events_unbound async_run_entry_fn
+[  126.292164] RSP: 0000:ffffc90000777d18 EFLAGS: 00010046
+[  126.292166]
+[  126.292166] RAX: c7428cb6704ffd00 RBX: 0000000000000001 RCX: ffffffff82a5eff8
+[  126.292166] RIP: 0010:ring_interrupt_active+0x1cd/0x225
+[  126.292167] RDX: c7428cb6704ffd00 RSI: 0000000000000086 RDI: 0000000000000001
+[  126.292168] RBP: ffffc90000777d48 R08: 000000000000070c R09: ffffffff83167704
+[  126.292169] R10: 0000000200000000 R11: ffffffffffffffff R12: 0000000000038200
+[  126.292168] Code: 0f 44 ce 45 8b 46 14 48 c7 c6 98 a9 75 82 49 c7
+c1 9f ee 72 82 84 db 4c 0f 45 ce 48 c7 c7 3e d8 6f 82 48 89 c6 e8 96
+cb 53 ff <0f> 0b 49 8c
+[  126.292169] R13: 0000000000001001 R14: ffff888103348600 R15: 0000000000000001
+[  126.292170] RSP: 0000:ffffc9000ca17d18 EFLAGS: 00010046
+[  126.292170] FS:  0000000000000000(0000) GS:ffff88846f800000(0000)
+knlGS:0000000000000000
+[  126.292171]
+[  126.292171] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  126.292171] RAX: d9637f716c437500 RBX: 0000000000000001 RCX: ffffffff82a5eff8
+[  126.292172] CR2: 00005b6c529532b8 CR3: 0000000286340000 CR4: 0000000000752ef0
+[  126.292172] RDX: d9637f716c437500 RSI: 0000000000000086 RDI: 0000000000000001
+[  126.292173] PKRU: 55555554
+[  126.292173] Call Trace:
+[  126.292174] RBP: ffffc9000ca17d48 R08: 0000000000000709 R09: ffffffff8316761c
+[  126.292175]  <TASK>
+[  126.292175] R10: 0000000200000000 R11: ffffffffffffffff R12: 0000000000038200
+[  126.292176] R13: 0000000000001001 R14: ffff8881016a4840 R15: 0000000000000001
+[  126.292176] FS:  0000000000000000(0000) GS:ffff88846f980000(0000)
+knlGS:0000000000000000
+[  126.292176]  ? __warn+0xa3/0x131
+[  126.292178] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  126.292178]  ? ring_interrupt_active+0x1cd/0x225
+[  126.292179] CR2: 0000000000000000 CR3: 0000000002a0c000 CR4: 0000000000752ee0
+[  126.292180] PKRU: 55555554
+[  126.292179]  ? report_bug+0x97/0xfa
+[  126.292180] Call Trace:
+[  126.292182]  <TASK>
+[  126.292181]  ? handle_bug+0x41/0x66
+[  126.292183]  ? exc_invalid_op+0x1b/0x4b
+[  126.292183]  ? asm_exc_invalid_op+0x16/0x20
+[  126.292183]  ? __warn+0xa3/0x131
+[  126.292185]  ? ring_interrupt_active+0x1cd/0x225
+[  126.292186]  ? ring_interrupt_active+0x1cd/0x225
+[  126.292186]  ? ring_interrupt_active+0x1cd/0x225
+[  126.292187]  tb_ring_start+0x1ba/0x1d7
+[  126.292187]  ? report_bug+0x97/0xfa
+[  126.292188]  tb_ctl_start+0x18/0x49
+[  126.292189]  tb_domain_thaw_noirq+0x2a/0x5e
+[  126.292189]  ? handle_bug+0x41/0x66
+[  126.292190]  ? pci_pm_freeze_noirq+0xb8/0xb8
+[  126.292191]  ? exc_invalid_op+0x1b/0x4b
+[  126.292192]  dpm_run_callback+0x3c/0x12d
+[  126.292192]  ? asm_exc_invalid_op+0x16/0x20
+[  126.292193]  device_resume_noirq+0x10e/0x1dc
+[  126.292194]  ? ring_interrupt_active+0x1cd/0x225
+[  126.292194]  async_resume_noirq+0x1f/0x5b
+[  126.292195]  ? ring_interrupt_active+0x1cd/0x225
+[  126.292195]  async_run_entry_fn+0x2b/0xc4
+[  126.292196]  tb_ring_start+0x1ba/0x1d7
+[  126.292197]  process_one_work+0x1b7/0x469
+[  126.292198]  worker_thread+0x11a/0x288
+[  126.292198]  tb_ctl_start+0x18/0x49
+[  126.292199]  kthread+0x13a/0x152
+[  126.292200]  tb_domain_thaw_noirq+0x2a/0x5e
+[  126.292201]  ? process_one_work+0x469/0x469
+[  126.292202]  ? kthread_blkcg+0x31/0x31
+[  126.292201]  ? pci_pm_freeze_noirq+0xb8/0xb8
+[  126.292202]  ret_from_fork+0x1f/0x30
+[  126.292203]  dpm_run_callback+0x3c/0x12d
+[  126.292205]  </TASK>
+[  126.292205]  device_resume_noirq+0x10e/0x1dc
+[  126.292206] ---[ end trace 349544d25453a0c7 ]---
+[  126.292206]  async_resume_noirq+0x1f/0x5b
+[  126.292208]  async_run_entry_fn+0x2b/0xc4
+[  126.292209]  process_one_work+0x1b7/0x469
+[  126.292210]  worker_thread+0x11a/0x288
+[  126.292212]  kthread+0x13a/0x152
+[  126.292213]  ? process_one_work+0x469/0x469
+[  126.292214]  ? kthread_blkcg+0x31/0x31
+[  126.292215]  ret_from_fork+0x1f/0x30
+[  126.292218]  </TASK>
+[  126.292218] ---[ end trace 349544d25453a0c8 ]---
+[  126.292225] ------------[ cut here ]------------
+[  126.292226] thunderbolt 0000:00:0d.2: interrupt for RX ring 0 is
+already enabled
+[  126.292231] WARNING: CPU: 2 PID: 7879 at
+drivers/thunderbolt/nhi.c:138 ring_interrupt_active+0x1cd/0x225
+[  126.292233] Modules linked in: snd_seq_dummy snd_seq snd_seq_device
+bridge stp llc tun vhost_vsock vhost vhost_iotlb
+vmw_vsock_virtio_transport_common vsockg
+[  126.292253]  videobuf2_memops btintel cdc_ether usbnet btmtk
+videobuf2_common btbcm snd_intel_sdw_acpi kfifo_buf mei_hdcp
+cros_ec_typec industrialio snd_socv
+[  126.292261] CPU: 2 PID: 7879 Comm: kworker/u24:13 Tainted: G     U
+W         5.15.116-19568-g766d8095041b #24
+fdadcb2517d1d37363ad385ffddbc1ad5dc72550
+[  126.292263] Hardware name: Google Anahera/Anahera, BIOS
+Google_Anahera.14505.143.0 06/22/2022
+[  126.292264] Workqueue: events_unbound async_run_entry_fn
+[  126.292266] RIP: 0010:ring_interrupt_active+0x1cd/0x225
+[  126.292267] Code: 0f 44 ce 45 8b 46 14 48 c7 c6 98 a9 75 82 49 c7
+c1 9f ee 72 82 84 db 4c 0f 45 ce 48 c7 c7 3e d8 6f 82 48 89 c6 e8 96
+cb 53 ff <0f> 0b 49 8c
+[  126.292268] RSP: 0000:ffffc9000ca17d18 EFLAGS: 00010046
+[  126.292269] RAX: d9637f716c437500 RBX: 0000000000000001 RCX: ffffffff82a5eff8
+[  126.292270] RDX: d9637f716c437500 RSI: 0000000000000086 RDI: 0000000000000001
+[  126.292270] RBP: ffffc9000ca17d48 R08: 000000000000081a R09: ffffffff8316a02c
+[  126.292271] R10: 0000000200000000 R11: ffffffffffffffff R12: 0000000000038200
+[  126.292272] R13: 0000000000001001 R14: ffff8881016a4780 R15: 0000000000001000
+[  126.292272] FS:  0000000000000000(0000) GS:ffff88846f880000(0000)
+knlGS:0000000000000000
+[  126.292273] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  126.292274] CR2: 0000000000000000 CR3: 0000000002a0c000 CR4: 0000000000752ee0
+[  126.292274] PKRU: 55555554
+[  126.292275] Call Trace:
+[  126.292275]  <TASK>
+[  126.292276]  ? __warn+0xa3/0x131
+[  126.292278]  ? ring_interrupt_active+0x1cd/0x225
+[  126.292279]  ? report_bug+0x97/0xfa
+[  126.292281]  ? handle_bug+0x41/0x66
+[  126.292281]  ? exc_invalid_op+0x1b/0x4b
+[  126.292282]  ? asm_exc_invalid_op+0x16/0x20
+[  126.292284]  ? ring_interrupt_active+0x1cd/0x225
+[  126.292284]  ? ring_interrupt_active+0x1cd/0x225
+[  126.292285]  tb_ring_start+0x1ba/0x1d7
+[  126.292286]  tb_ctl_start+0x21/0x49
+[  126.292287]  tb_domain_thaw_noirq+0x2a/0x5e
+[  126.292288]  ? pci_pm_freeze_noirq+0xb8/0xb8
+[  126.292289]  dpm_run_callback+0x3c/0x12d
+[  126.292290]  device_resume_noirq+0x10e/0x1dc
+[  126.292291]  async_resume_noirq+0x1f/0x5b
+[  126.292292]  async_run_entry_fn+0x2b/0xc4
+[  126.292293]  process_one_work+0x1b7/0x469
+[  126.292295]  worker_thread+0x11a/0x288
+[  126.292295]  kthread+0x13a/0x152
+[  126.292296]  ? process_one_work+0x469/0x469
+[  126.292297]  ? kthread_blkcg+0x31/0x31
+[  126.292298]  ret_from_fork+0x1f/0x30
+[  126.292301]  </TASK>
+[  126.292302] ---[ end trace 349544d25453a0c9 ]---
+[  126.292306] thunderbolt 0000:00:0d.2: PM:
+pci_pm_thaw_noirq+0x0/0x7c returned 0 after 825 usecs
+[  126.292311] pcieport 0000:00:07.0: PM: calling
+pci_pm_thaw_noirq+0x0/0x7c @ 9, parent: pci0000:00
+[  126.292320] i915 0000:00:02.0: PM: calling
+pci_pm_thaw_noirq+0x0/0x7c @ 7909, parent: pci0000:00
+[  126.292768] ------------[ cut here ]------------
+[  126.292769] thunderbolt 0000:00:0d.3: interrupt for RX ring 0 is
+already enabled
+[  126.292777] WARNING: CPU: 6 PID: 175 at
+drivers/thunderbolt/nhi.c:138 ring_interrupt_active+0x1cd/0x225
+[  126.292779] Modules linked in: snd_seq_dummy snd_seq snd_seq_device
+bridge stp llc tun vhost_vsock vhost vhost_iotlb
+vmw_vsock_virtio_transport_common vsockg
+[  126.292798]  videobuf2_memops btintel cdc_ether usbnet btmtk
+videobuf2_common btbcm snd_intel_sdw_acpi kfifo_buf mei_hdcp
+cros_ec_typec industrialio snd_socv
+[  126.292807] CPU: 6 PID: 175 Comm: kworker/u24:2 Tainted: G     U  W
+        5.15.116-19568-g766d8095041b #24
+fdadcb2517d1d37363ad385ffddbc1ad5dc72550
+[  126.292809] Hardware name: Google Anahera/Anahera, BIOS
+Google_Anahera.14505.143.0 06/22/2022
+[  126.292810] Workqueue: events_unbound async_run_entry_fn
+[  126.292811] RIP: 0010:ring_interrupt_active+0x1cd/0x225
+[  126.292812] Code: 0f 44 ce 45 8b 46 14 48 c7 c6 98 a9 75 82 49 c7
+c1 9f ee 72 82 84 db 4c 0f 45 ce 48 c7 c7 3e d8 6f 82 48 89 c6 e8 96
+cb 53 ff <0f> 0b 49 8c
+[  126.292814] RSP: 0000:ffffc90000777d18 EFLAGS: 00010046
+[  126.292815] RAX: c7428cb6704ffd00 RBX: 0000000000000001 RCX: ffffffff82a5eff8
+[  126.292815] RDX: c7428cb6704ffd00 RSI: 0000000000000086 RDI: 0000000000000001
+[  126.292816] RBP: ffffc90000777d48 R08: 000000000000084b R09: ffffffff8316b08c
+[  126.292817] R10: 0000000200000000 R11: ffffffffffffffff R12: 0000000000038200
+[  126.292818] R13: 0000000000001001 R14: ffff888103348e40 R15: 0000000000001000
+[  126.292818] FS:  0000000000000000(0000) GS:ffff88846f980000(0000)
+knlGS:0000000000000000
+[  126.292819] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  126.292820] CR2: 0000000000000000 CR3: 0000000002a0c000 CR4: 0000000000752ee0
+[  126.292821] PKRU: 55555554
+[  126.292822] Call Trace:
+[  126.292822]  <TASK>
+[  126.292823]  ? __warn+0xa3/0x131
+[  126.292825]  ? ring_interrupt_active+0x1cd/0x225
+[  126.292826]  ? report_bug+0x97/0xfa
+[  126.292828]  ? handle_bug+0x41/0x66
+[  126.292829]  ? exc_invalid_op+0x1b/0x4b
+[  126.292830]  ? asm_exc_invalid_op+0x16/0x20
+[  126.292831]  ? ring_interrupt_active+0x1cd/0x225
+[  126.292832]  ? ring_interrupt_active+0x1cd/0x225
+[  126.292833]  tb_ring_start+0x1ba/0x1d7
+[  126.292834]  tb_ctl_start+0x21/0x49
+[  126.292836]  tb_domain_thaw_noirq+0x2a/0x5e
+[  126.292837]  ? pci_pm_freeze_noirq+0xb8/0xb8
+[  126.292838]  dpm_run_callback+0x3c/0x12d
+[  126.292840]  device_resume_noirq+0x10e/0x1dc
+[  126.292841]  async_resume_noirq+0x1f/0x5b
+[  126.292842]  async_run_entry_fn+0x2b/0xc4
+[  126.292843]  process_one_work+0x1b7/0x469
+[  126.292844]  worker_thread+0x11a/0x288
+[  126.292845]  kthread+0x13a/0x152
+[  126.292847]  ? process_one_work+0x469/0x469
+[  126.292847]  ? kthread_blkcg+0x31/0x31
+[  126.292849]  ret_from_fork+0x1f/0x30
+[  126.292851]  </TASK>
+[  126.292851] ---[ end trace 349544d25453a0ca ]---
