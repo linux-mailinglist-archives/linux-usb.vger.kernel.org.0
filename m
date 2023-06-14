@@ -2,128 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5C272F834
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jun 2023 10:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADCA72F8C9
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jun 2023 11:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235240AbjFNIrl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Jun 2023 04:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
+        id S243114AbjFNJOQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Jun 2023 05:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjFNIrk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jun 2023 04:47:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254211BE3;
-        Wed, 14 Jun 2023 01:47:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AEC0B634FF;
-        Wed, 14 Jun 2023 08:47:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A82FC433C0;
-        Wed, 14 Jun 2023 08:47:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686732459;
-        bh=EonwKTfvGBWUrWdkjSl/Hvyv/pxtwYTpGoA5Jhcqmcc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eV6KXAXup4egROqTSse9iEDQHwGF5LWq65xhk3wTj+kP6IQShwIVOraRODAoPhZlS
-         /1j/Nh3IO7MA/VFbJeYYHdaBoOJarRzRy1WifxlCw5V/CjAAW2i7KC10fZJWeq5z4R
-         ehITcxS9mh9oS1vWRUmEDX4y+6lp10gAR83ybtedyH5D7rfReCaBPf8Zrt14LUUMLN
-         Z+fUJ0k4qg2g+6MO0UucnDtYJoPOrl6vykqjDm8BBW6PRzUf5r7ThdRS3ZKdNL/GWo
-         Zmtwfzvrmc3Ms7xJKa/Hg2oIV991LAd/mS14+WPJ0057ctvSwpIsnP9lx3qYpyrrSP
-         bkyYJsFPcVPDQ==
-Date:   Wed, 14 Jun 2023 10:47:35 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        heikki.krogerus@linux.intel.com, ajayg@nvidia.com,
-        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Evan.Quan@amd.com, Lijo.Lazar@amd.com,
-        Sanket.Goswami@amd.com
-Subject: Re: [PATCH v2] usb: typec: ucsi: Mark dGPUs as DEVICE scope
-Message-ID: <ZIl+pyKgFdQuYCKm@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        heikki.krogerus@linux.intel.com, ajayg@nvidia.com,
-        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Evan.Quan@amd.com, Lijo.Lazar@amd.com,
-        Sanket.Goswami@amd.com
-References: <20230518161150.92959-1-mario.limonciello@amd.com>
- <20230614001621.iyxi2khz4hmcbl3x@intel.intel>
+        with ESMTP id S242689AbjFNJOO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jun 2023 05:14:14 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9FD19A;
+        Wed, 14 Jun 2023 02:14:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686734053; x=1718270053;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vWNmYjv0AVEHtHoQ50oVHbX2PauCeZ/QhwOzxPZqGhw=;
+  b=KjPNSHbFvTEcSKJnbOuN6NwUmL56xjWWKyMsCsHpWOftQvEHnnOPbnCD
+   rCFkdCRlCoLYhBlaHfqZNgL6tI28NNBYcqR8U8F6K5cZDHGOAl3eA6kjK
+   eyhGcNM2g+pVrWdsVooofEMkPW3IT+ewaRrBsNbBDX9Mjn+B5GSg0BA/u
+   cjiFtrEYmH2ZBcd9tNQ1+2hZwMXiJy8VzVRgJeVlKVvQzALhnWzXwCzGg
+   9mVBnVA6B/KQ2AWiOAa0lTMcw4+vNu8F+0JdpBzNkQounqPqyTWLIaIvr
+   MfhZyjkYusoBlmKMJh19bwn2V5hPgvF7Iv2D3q0tWsICz7iG7Gyjp2pOL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="422165960"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="422165960"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 02:14:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="856440693"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="856440693"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 14 Jun 2023 02:14:09 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 14 Jun 2023 12:14:08 +0300
+Date:   Wed, 14 Jun 2023 12:14:08 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashanth K <quic_prashk@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
+Message-ID: <ZImE4L3YgABnCIsP@kuha.fi.intel.com>
+References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="N3hmTNEv+0p6gy+q"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230614001621.iyxi2khz4hmcbl3x@intel.intel>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, May 31, 2023 at 08:11:14PM +0530, Prashanth K wrote:
+> Currently if we bootup a device without cable connected, then
+> usb-conn-gpio won't call set_role() since last_role is same as
+> current role. This happens because during probe last_role gets
+> initialised to zero.
+> 
+> To avoid this, added a new constant in enum usb_role, last_role
+> is set to USB_ROLE_UNKNOWN before performing initial detection.
+> 
+> While at it, also handle default case for the usb_role switch
+> in cdns3, intel-xhci-usb-role-switch & musb/jz4740 to avoid
+> build warnings.
+> 
+> Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
+> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+> v7: Added default case in musb/jz4740.c & intel-xhci-usb-role-switch.c to
+>     avoid build warnings.
+> v6: Moved USB_ROLE_UNKNOWN towards the end of enum usb_role.
+> v5: Update commit text to mention the changes made in cdns3 driver.
+> v4: Added Reviewed-by tag.
+> v3: Added a default case in drivers/usb/cdns3/core.c as pointed out by
+>     the test robot.
+> v2: Added USB_ROLE_UNKNWON to enum usb_role.
+> 
+>  drivers/usb/cdns3/core.c                       | 2 ++
+>  drivers/usb/common/usb-conn-gpio.c             | 3 +++
+>  drivers/usb/musb/jz4740.c                      | 2 ++
+>  drivers/usb/roles/intel-xhci-usb-role-switch.c | 2 ++
+>  include/linux/usb/role.h                       | 1 +
+>  5 files changed, 10 insertions(+)
 
---N3hmTNEv+0p6gy+q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Just to be clear to everybody, that USB_ROLE_UNKNOWN is not handled in
+drivers/usb/roles/class.c, so this patch is broken.
 
-On Wed, Jun 14, 2023 at 02:16:21AM +0200, Andi Shyti wrote:
-> Hi Mario,
->=20
-> On Thu, May 18, 2023 at 11:11:50AM -0500, Mario Limonciello wrote:
-> > power_supply_is_system_supplied() checks whether any power
-> > supplies are present that aren't batteries to decide whether
-> > the system is running on DC or AC.  Downstream drivers use
-> > this to make performance decisions.
-> >=20
-> > Navi dGPUs include an UCSI function that has been exported
-> > since commit 17631e8ca2d3 ("i2c: designware: Add driver
-> > support for AMD NAVI GPU").
-> >=20
-> > This UCSI function registers a power supply since commit
-> > 992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
-> > but this is not a system power supply.
-> >=20
-> > As the power supply for a dGPU is only for powering devices connected
-> > to dGPU, create a device property to indicate that the UCSI endpoint
-> > is only for the scope of `POWER_SUPPLY_SCOPE_DEVICE`.
-> >=20
-> > Link: https://lore.kernel.org/lkml/20230516182541.5836-2-mario.limoncie=
-llo@amd.com/
-> > Reviewed-by: Evan Quan <evan.quan@amd.com>
-> > Tested-by: Evan Quan <evan.quan@amd.com>
-> > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->=20
-> Acked-by: Andi Shyti <andi.shyti@kernel.org>=20
+But the whole approach is wrong. That USB_ROLE_UNKNOWN is clearly a
+flag where the other values in enum usb_role are actual switch states.
+So it does not belong there.
 
-Applied to for-next, thanks!
+In general, adding globals states like that just in order to work
+around issues in single drivers is never a good idea IMO.
 
+thanks,
 
---N3hmTNEv+0p6gy+q
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSJfqcACgkQFA3kzBSg
-KbYnohAArgvNkEGbXn5NtNA8ohC3nHYuc6qKRmlC8yFTsp0TaIQhjD6lhJwkisLD
-KE3tIXJI00g8S5lpM85jo9SlsZCOWdaWZ6bhGRu0alVxt7KLhFp+ot6fe+W/W5S3
-vYgamUpjQakE6tX61qmUlrD/YJq6kzz3990W/rfrMwexK3AfPQcli01MO2ugK9oq
-sxHK68s7GoaQ7oAPCE0HlKBl7wx3JlF0lTHyyiQSPTjkznbZOHcFi0Bt0Fm3fzHR
-MqJEDDNpGYFXxozK2th0lskKIHXtag9W/nnJef7tgF7Sx2BjQv0J2VfQj2eUOWcY
-jh1+NQeik95us167/EhmOmSna+wi58VyM1DblI1TOKFbkQOk1kgtezQg3kX29Mcl
-TzLhsXZ0Dh33+ggQl1xVDRYGDnuRGlU7Rm18YOPOZ9/FBlk/EKOdDhmUV7dCo1K8
-jeLruBAMXdMlOrMBJkHimRrXnjSA7ldplLfmzgVxnm0jK3Ma/uF8aSHleKqaHwiZ
-izKOJzt7SKvdzjnsbfKpZn42eX8qnhWa/MidSPbA/cI5zjPmN2ht2Xe4pIG5wcEs
-PMO9T5ZHr20QF7u9QpODvnHbSp+pY5og6NxUwPCt80n8IDIl8RlySSbUmsfoZF3h
-Ewamf98QQf0OUEQHzuyacGhUBNdRWiQFAC1XQsMJTBJCd8tBJJ4=
-=w58G
------END PGP SIGNATURE-----
-
---N3hmTNEv+0p6gy+q--
+-- 
+heikki
