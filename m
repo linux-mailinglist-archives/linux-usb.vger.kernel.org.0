@@ -2,82 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7810C72F7E0
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jun 2023 10:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B833D72F7F8
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jun 2023 10:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243601AbjFNIak (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Jun 2023 04:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
+        id S243650AbjFNIhD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Jun 2023 04:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235121AbjFNIai (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jun 2023 04:30:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E1811F;
-        Wed, 14 Jun 2023 01:30:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 489D163EEB;
-        Wed, 14 Jun 2023 08:30:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C3A5C433C8;
-        Wed, 14 Jun 2023 08:30:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686731436;
-        bh=5sOkTNkkHBdbRw2JX2dJi2tKIH7ENjxXYhVFqEgiEpg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IRZqPUqU0BwUN9jHEoglWuy0xEgoYyag/Ebn+rb0Vkv1pU4YIEbzbp79ipCyUrtxh
-         uu5SSmyKUoI1KIaFNYpCGmYHIXb2asmRHSE1NzBkLRpCt3Lk6SOguRjQnw2e7R7/RE
-         3jA20kzbdthCOfDkyHAr2RIu4FsSLyLI6XH8DA2HcU29jUMoC2mD9jrm9rg2mkUfCC
-         fiHIUATN1wcmkhYcliwSeMfAeYVI8hK2mr8m3NIMM3pMKtWaDqvzxe5VRX3IwZIRDp
-         k6p3K+ytT5NuIM6/QXPL9ncD1YxYtMcfr5ZIYEUleDDbnRtoLwM75vc9NwENqU3Y1d
-         e+ig0BIIgMwMg==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Brad Warrum <bwarrum@linux.ibm.com>,
-        Ritu Agarwal <rituagar@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ian Kent <raven@themaw.net>,
-        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-        Jeremy Kerr <jk@ozlabs.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Ruihan Li <lrh2000@pku.edu.cn>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        autofs@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, apparmor@lists.ubuntu.com,
-        linux-security-module@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 3/8] autofs: set ctime as well when mtime changes on a dir
-Date:   Wed, 14 Jun 2023 10:30:13 +0200
-Message-Id: <20230614-marmeladen-blechnapf-873c26e176cb@brauner>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230612104524.17058-4-jlayton@kernel.org>
-References: <20230612104524.17058-1-jlayton@kernel.org> <20230612104524.17058-4-jlayton@kernel.org>
+        with ESMTP id S243640AbjFNIhC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jun 2023 04:37:02 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874DD19AC;
+        Wed, 14 Jun 2023 01:37:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686731821; x=1718267821;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UMum+gjal/9wA31JowjRQ84WyffkULU6yDKWFn84QpM=;
+  b=DvOrxpXWkuBZTKZvUZrfXcx0BpI9wDyjGyPs97k72AfhMhNXUXSySKgy
+   RVXYvUAtMWOECt5XnQ22lyyqKri6pu3+qcMnaDWwSDfSs6WC17z4gwwNg
+   Ohx4NQc1fgfQ3hCST8pwq//0k0eX/54JTdk+slas3/onRY4n9irmhl2jX
+   mxpwnGmjGankEBs3SSYFD7dNqefpovu08x/bIIAC5zby1VceH4fQPVTFo
+   /qRao4w7hrtY/XA6/wKmcG5W0Ww0NtiKiUqkGD/INQUGZv4x0M8UPXaEy
+   dl0INr+/GYT/sBU/HUc0WXhXjbtBSYANtUkEBauZiOvpMSaB2K3mWXlVF
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="338909360"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="338909360"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 01:37:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="856423301"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="856423301"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 14 Jun 2023 01:36:58 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 14 Jun 2023 11:36:57 +0300
+Date:   Wed, 14 Jun 2023 11:36:57 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashanth K <quic_prashk@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
+Message-ID: <ZIl8KeaePdKHCnVY@kuha.fi.intel.com>
+References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
+ <ZIhOm5LKwn+YVGzT@kuha.fi.intel.com>
+ <73854744-03ef-2c5c-a5d6-284f004a5497@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=890; i=brauner@kernel.org; h=from:subject:message-id; bh=5sOkTNkkHBdbRw2JX2dJi2tKIH7ENjxXYhVFqEgiEpg=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaR0VvWrXuWb1qASt//kd4FHqU18By+ppS/RFud89ejpqjjT Z+/1O0pZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACby5Bgjw7qZ1+/qxD5ZFinJah7vuf 6TQM5RjfV3nHf+b3iWcMttHxfDb9bHk9/X5L+18DmgM//eoU3cO9eIMDluPBbqbjtNMHa/Fg8A
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <73854744-03ef-2c5c-a5d6-284f004a5497@quicinc.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,27 +67,47 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 12 Jun 2023 06:45:19 -0400, Jeff Layton wrote:
-> When adding entries to a directory, POSIX generally requires that the
-> ctime also be updated alongside the mtime.
+On Wed, Jun 14, 2023 at 09:55:10AM +0530, Prashanth K wrote:
 > 
 > 
+> On 13-06-23 04:40 pm, Heikki Krogerus wrote:
+> > Hi,
+> > 
+> > On Wed, May 31, 2023 at 08:11:14PM +0530, Prashanth K wrote:
+> > > Currently if we bootup a device without cable connected, then
+> > > usb-conn-gpio won't call set_role() since last_role is same as
+> > > current role. This happens because during probe last_role gets
+> > > initialised to zero.
+> > > 
+> > > To avoid this, added a new constant in enum usb_role, last_role
+> > > is set to USB_ROLE_UNKNOWN before performing initial detection.
+> > 
+> > So why can't you fix this by just always setting the role
+> > unconditionally to USB_ROLE_NONE in your probe function before the
+> > initial detection?
+> > 
+> Hi Heikki, thats exactly what we are doing here.
+> 
+> +	/* Set last role to unknown before performing the initial detection */
+> +	info->last_role = USB_ROLE_UNKNOWN;
 
-Can't find a tree for this patch, so picking this patch up unless told otherwise.
+No, I'm asking why can't you just call set_role(USB_ROLE_NONE)
+(together with any other steps that you need to take in order to fix
+you issue) directly from your probe function?
 
----
+That USB_ROLE_UNKNOWN as a global is not acceptable - there is no
+difference between USB_ROLE_UNKNOWN and USB_ROLE_NONE from the role
+switch PoW. So if you want to use something like that, you have to
+confine it to your driver.
 
-Applied to the vfs.misc branch of the vfs/vfs.git tree.
-Patches in the vfs.misc branch should appear in linux-next soon.
+But I honestly don't think you need it at all. You should be able to
+refactor your driver in order to solve the issue described in the
+commit message without any need for it.
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+Note! I just realised that you are not modifying
+drivers/usb/roles/class.c, so this patch is actually broken.
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+thanks,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.misc
-
-[3/8] autofs: set ctime as well when mtime changes on a dir
-      https://git.kernel.org/vfs/vfs/c/9b37b3342a98
+-- 
+heikki
