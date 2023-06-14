@@ -2,97 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D370A72FFAE
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jun 2023 15:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F13730089
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jun 2023 15:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244799AbjFNNNM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Jun 2023 09:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
+        id S245105AbjFNNtz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Jun 2023 09:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238387AbjFNNNK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jun 2023 09:13:10 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773102120
-        for <linux-usb@vger.kernel.org>; Wed, 14 Jun 2023 06:12:41 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51493ec65d8so11534482a12.2
-        for <linux-usb@vger.kernel.org>; Wed, 14 Jun 2023 06:12:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686748360; x=1689340360;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S08ZeNXqQP5v9xLbtyoi47QEn3XexDdtBrQiOR2aUNA=;
-        b=ygCBTdm74mYQDFjGHmbNGWaXGRjkqN/cbCWdPpx4X4Iyx5ncVTd7OAfdRM48U3lzam
-         SsJtPLYc5grKSevCx1PV9R/x5EN7c6mJYKSz1ZddrjppC358eO5NWaHYhqvWNTWrStGj
-         49MiVylg8OoetBcwOMIHrhqJa29f7qpIaLh5RoS/blIzxXtWJnFrxdbPQ86VU6O81+ig
-         ZMDHISX4z96IIYxnEQ4iTr3tLFoCEmV6kMJdba0FJ7dyY7EUNq0mw8YzZNbbzDvLsJyw
-         qV83hH6m5h+ooxdSkg4UzP7t8YpaAYWhU+TpNJbpLJOaGFedvyXxHqVkwKkVbQ7InpWj
-         qXMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686748360; x=1689340360;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S08ZeNXqQP5v9xLbtyoi47QEn3XexDdtBrQiOR2aUNA=;
-        b=RBPnsvzqrR9BsQ9yks1ooaLgPuIxznZhZDllrO6z02yYB4sYVUuXZu4Fi4XiVgPquX
-         kCFMpX60TNlpjQfNHmg7I0ZVmsdgeLWAXJWwiNC7LKXxILd/jmAiOmNcUBVwIU0ZbOri
-         203vUvXJLbnh2yYZMyVF0+GCFD9Bfvv/M/dNre+Joc2wF1vwUYI51XUdA60Di8PUw6Ka
-         Zz4+UuSGTwVogCSiDfVqz7ZstaS+czkarcdmQsKB1ZW1VAapWtUqXWgNEe4NEKMp3jBF
-         fCq+7Ljm7Sdn3gek72IqyVlkQgfWBExB3Cxe37vBT2OshDCVi8v/vud64LYf1ysjLkJM
-         wJLg==
-X-Gm-Message-State: AC+VfDycR3vm25jFEtf6L01n77GAgzqlnqc8KRoq9zrzIZDw4mZXQ3ar
-        UHb4OIzMpWLdJHU9oJgjBpmSgg==
-X-Google-Smtp-Source: ACHHUZ6GOuDAoa4gpksMPRaoojmdo3dq1uAiUbBSCfD19wFN0HT5b/iWp+S+vfOecTCo3rv7erOUMQ==
-X-Received: by 2002:a05:6402:1202:b0:518:9174:9b5f with SMTP id c2-20020a056402120200b0051891749b5fmr1685330edw.1.1686748359872;
-        Wed, 14 Jun 2023 06:12:39 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id m7-20020aa7d347000000b005149461b1e0sm7682925edr.25.2023.06.14.06.12.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 06:12:39 -0700 (PDT)
-Message-ID: <ed54c63d-3342-a566-e12c-2b0672e89200@linaro.org>
-Date:   Wed, 14 Jun 2023 15:12:37 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 3/3] usb: typec: fsa4480: add support for Audio Accessory
- Mode
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        with ESMTP id S245172AbjFNNti (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jun 2023 09:49:38 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA90ED;
+        Wed, 14 Jun 2023 06:49:37 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35EDOIDW030344;
+        Wed, 14 Jun 2023 13:49:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=KGFhcp6wG4mFGI3AUHmeh1MZz+Qi6kEdPGQgIQYhlxs=;
+ b=eGPTyCSTlyzGFjdDnS/wYbBvGAmFtd3C1kbqj8MIyobhjZNHUI6bfkXv2PY8b7b9yAem
+ DyzN/qRYZeD8E6eUgptuZVTsuDHet0fJ5VFhdJ8T9SjUlsiYyxCadZXZKmB6+V3om5rU
+ CCIV7jwz19SdNBHdNey/YhBKoQJzM+sx15Y5V9T8C6+QZGBsdNa8RQGwAFAl+O84KSDp
+ D0H6b5WnKLepJJLdKxJACPn9aE1zCQIjAQXkQyShPRZ3v855T1UeUQTuIet+6+/xlyGS
+ tPRaja3I2v9ifl1gy4Of+i915X1P/AbEYqNnB8WSScCgT6T0afcnjNro8gS3+wvXEk2G Qw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7eceg1ju-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 13:49:35 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35EDnYVJ014953
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 13:49:34 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 14 Jun 2023 06:49:31 -0700
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230614-topic-sm8550-upstream-type-c-audio-v1-0-15a92565146b@linaro.org>
- <20230614-topic-sm8550-upstream-type-c-audio-v1-3-15a92565146b@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230614-topic-sm8550-upstream-type-c-audio-v1-3-15a92565146b@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [PATCH] usb: dwc3: gadget: Propagate core init errors to UDC during pullup
+Date:   Wed, 14 Jun 2023 19:19:22 +0530
+Message-ID: <20230614134922.23516-1-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.40.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: xBZvHOp9U7IIdNspoBrFJzRga9y1SgvU
+X-Proofpoint-ORIG-GUID: xBZvHOp9U7IIdNspoBrFJzRga9y1SgvU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-14_10,2023-06-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ impostorscore=0 suspectscore=0 spamscore=0 mlxlogscore=999
+ lowpriorityscore=0 phishscore=0 priorityscore=1501 bulkscore=0
+ malwarescore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306140120
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 14/06/2023 15:10, Neil Armstrong wrote:
-> The FSA4480 Type-C switch supports switching the Audio R/L,
-> AGND and MIC signals to the USB-C DP/DM and SBU1/2 to support
-> the Audio Accessory Mode.
-> 
-> The FSA4480 has an integrated Audio jack detection mechanism
-> to automatically mux the AGND, MIX and Sense to the correct
-> SBU lines to support 3 pole and both 4 pole TRRS pinouts.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
+In scenarios where pullup relies on resume (get sync) to initialize
+the controller and set the run stop bit, then core_init is followed by
+gadget_resume which will eventually set run stop bit.
 
+But in cases where the core_init fails, the return value is not sent
+back to udc appropriately. So according to UDC the controller has
+started but in reality we never set the run stop bit.
 
-Tested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On systems like Android, there are uevents sent to HAL depending on
+whether the configfs_bind / configfs_disconnect were invoked. In the
+above mentioned scnenario, if the core init fails, the run stop won't
+be set and the cable plug-out won't result in generation of any
+disconnect event and userspace would never get any uevent regarding
+cable plug out and we never call pullup(0) again. Furthermore none of
+the next Plug-In/Plug-Out's would be known to configfs.
 
-Best regards,
-Krzysztof
+Return back the appropriate result to UDC to let the userspace/
+configfs know that the pullup failed so they can take appropriate
+action.
+
+Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+---
+ drivers/usb/dwc3/gadget.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 578804dc29ca..27cb671e18e3 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2747,7 +2747,9 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 	ret = pm_runtime_get_sync(dwc->dev);
+ 	if (!ret || ret < 0) {
+ 		pm_runtime_put(dwc->dev);
+-		return 0;
++		if (ret < 0)
++			pm_runtime_set_suspended(dwc->dev);
++		return ret;
+ 	}
+ 
+ 	if (dwc->pullups_connected == is_on) {
+-- 
+2.40.0
 
