@@ -2,47 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EAD773032B
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jun 2023 17:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B8E7304C2
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jun 2023 18:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343613AbjFNPOA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Jun 2023 11:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
+        id S232638AbjFNQRG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Jun 2023 12:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343599AbjFNPN7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jun 2023 11:13:59 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B241FE3;
-        Wed, 14 Jun 2023 08:13:57 -0700 (PDT)
+        with ESMTP id S233011AbjFNQQo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jun 2023 12:16:44 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74945ED;
+        Wed, 14 Jun 2023 09:16:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686755637; x=1718291637;
+  t=1686759402; x=1718295402;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=YX4y7lBqNFFJ0PedIid4kUnTJJmVgsFKsE3ZJAbPjMQ=;
-  b=BryI6iYUlmpIaRG/PcPx/MlPS/APd8R/Gusli0ar1jTNgsQ4zPPq+U8e
-   F274GKm93y69qgnFdGhfsHPq6OBbCmXuciPqbd/MhfqKcMcwXSoQtZY13
-   n4iuvKibJn5sX+7F+02S/jJ2ttImLuJXx9UydB5v+Hi9LcRy1jpWhHY/P
-   VO/6PPtUIWbA0nhabynZImS8tqZhdGJ7+f3YNCuAA6KJb8HwZQJBQQVJc
-   9XyiKd9JYqX71OwlT/XVla8SBz9BQq0MWV7lGRMVRP6z754azAW3Vtf07
-   /Z1fvfgXWhhlP2r4rSHMvwyzrON36Zq6PdPWguIrDTat0L5pWC76lFhq7
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="361117398"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="361117398"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 08:13:57 -0700
+  bh=hNRyqUyJwPRgDx83ggrfVP33lL+susjiOlT7HtsU1sA=;
+  b=WwXr4o3Hz1i2SnMajN0ScyfGNVrgQMKypOWre+O+McnM1KHzxeo3/DDi
+   C5o2GPH69fZYeKMHDcnIqvITgZfttyGQhKTEkoYCWyoRujt5s5buGvaPw
+   W6Bn8Ru1m1UrTcOVoffbvcFQ8DTZiBISWdviJZJNlvhEnb3JRIPvIkkd+
+   OnPo1/givaIiuUDKAuFNQ4eEupLg/MdHNQiv77mx/4pwdhgEqpupSmlYr
+   gVY6Fc352RIBgZPEcSSGL7/f4m9OztpwcnacJm7q36EAohk7C8GlrDchi
+   +ejDDxNWxlpmt9BgN6faXl52pY8T3xjjDzn4c6Eq2DBWe4AiNQ0RLcREJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="424546801"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="424546801"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 09:14:40 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="745115832"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="745115832"
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="824872060"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="824872060"
 Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 14 Jun 2023 08:13:52 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 14 Jun 2023 09:14:36 -0700
 Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1q9SBz-0000n5-2J;
-        Wed, 14 Jun 2023 15:13:51 +0000
-Date:   Wed, 14 Jun 2023 23:10:51 +0800
+        id 1q9T8l-0000qX-10;
+        Wed, 14 Jun 2023 16:14:35 +0000
+Date:   Thu, 15 Jun 2023 00:13:21 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Stanley Chang <stanley_chang@realtek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -54,26 +54,25 @@ Cc:     oe-kbuild-all@lists.linux.dev,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Douglas Anderson <dianders@chromium.org>,
         Bagas Sanjaya <bagasdotme@gmail.com>,
         Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Flavio Suligoi <f.suligoi@asem.it>,
         Ray Chi <raychi@google.com>, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 2/5] phy: realtek: usb: Add driver for the Realtek SoC
- USB 2.0 PHY
-Message-ID: <202306142352.e4eBd3HX-lkp@intel.com>
-References: <20230614092850.21460-2-stanley_chang@realtek.com>
+Subject: Re: [PATCH v4 3/5] phy: realtek: usb: Add driver for the Realtek SoC
+ USB 3.0 PHY
+Message-ID: <202306142340.nvui81i4-lkp@intel.com>
+References: <20230614092850.21460-3-stanley_chang@realtek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230614092850.21460-2-stanley_chang@realtek.com>
+In-Reply-To: <20230614092850.21460-3-stanley_chang@realtek.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -92,9 +91,9 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Stanley-Chang/phy-realtek-usb-Add-driver-for-the-Realtek-SoC-USB-2-0-PHY/20230614-173349
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230614092850.21460-2-stanley_chang%40realtek.com
-patch subject: [PATCH v4 2/5] phy: realtek: usb: Add driver for the Realtek SoC USB 2.0 PHY
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230614/202306142352.e4eBd3HX-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20230614092850.21460-3-stanley_chang%40realtek.com
+patch subject: [PATCH v4 3/5] phy: realtek: usb: Add driver for the Realtek SoC USB 3.0 PHY
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230614/202306142340.nvui81i4-lkp@intel.com/config)
 compiler: sparc64-linux-gcc (GCC) 12.3.0
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
@@ -103,7 +102,7 @@ reproduce (this is a W=1 build):
         git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
         git fetch usb usb-testing
         git checkout usb/usb-testing
-        b4 shazam https://lore.kernel.org/r/20230614092850.21460-2-stanley_chang@realtek.com
+        b4 shazam https://lore.kernel.org/r/20230614092850.21460-3-stanley_chang@realtek.com
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=sparc olddefconfig
@@ -112,70 +111,78 @@ reproduce (this is a W=1 build):
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306142352.e4eBd3HX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306142340.nvui81i4-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   drivers/phy/realtek/phy-rtk-usb2.c: In function 'parse_phy_data':
->> drivers/phy/realtek/phy-rtk-usb2.c:1229:25: warning: variable 'phy_cfg' set but not used [-Wunused-but-set-variable]
-    1229 |         struct phy_cfg *phy_cfg;
-         |                         ^~~~~~~
+   drivers/phy/realtek/phy-rtk-usb3.c: In function 'rtk_usb3phy_probe':
+>> drivers/phy/realtek/phy-rtk-usb3.c:779:29: warning: variable 'node' set but not used [-Wunused-but-set-variable]
+     779 |         struct device_node *node;
+         |                             ^~~~
 
 
-vim +/phy_cfg +1229 drivers/phy/realtek/phy-rtk-usb2.c
+vim +/node +779 drivers/phy/realtek/phy-rtk-usb3.c
 
-  1224	
-  1225	static int parse_phy_data(struct rtk_phy *rtk_phy)
-  1226	{
-  1227		struct device *dev = rtk_phy->dev;
-  1228		struct device_node *node;
-> 1229		struct phy_cfg *phy_cfg;
-  1230		struct phy_parameter *phy_parameter;
-  1231		int ret = 0;
-  1232		int index;
-  1233	
-  1234		node = dev->of_node;
-  1235		phy_cfg = rtk_phy->phy_cfg;
-  1236	
-  1237		rtk_phy->phy_parameter = devm_kzalloc(dev, sizeof(struct phy_parameter) *
-  1238							rtk_phy->num_phy, GFP_KERNEL);
-  1239		if (!rtk_phy->phy_parameter)
-  1240			return -ENOMEM;
-  1241	
-  1242		for (index = 0; index < rtk_phy->num_phy; index++) {
-  1243			phy_parameter = &((struct phy_parameter *)rtk_phy->phy_parameter)[index];
-  1244	
-  1245			phy_parameter->phy_reg.reg_wrap_vstatus = of_iomap(dev->of_node, 0);
-  1246			phy_parameter->phy_reg.reg_gusb2phyacc0 = of_iomap(dev->of_node, 1) + index;
-  1247			phy_parameter->phy_reg.vstatus_index = index;
-  1248	
-  1249			if (of_property_read_bool(node, "realtek,inverse-hstx-sync-clock"))
-  1250				phy_parameter->inverse_hstx_sync_clock = true;
-  1251			else
-  1252				phy_parameter->inverse_hstx_sync_clock = false;
-  1253	
-  1254			if (of_property_read_u32_index(node, "realtek,driving-level",
-  1255						       index, &phy_parameter->driving_level))
-  1256				phy_parameter->driving_level = DEFAULT_DC_DRIVING_VALUE;
-  1257	
-  1258			if (of_property_read_u32_index(node, "realtek,driving-compensate",
-  1259						       index, &phy_parameter->driving_compensate))
-  1260				phy_parameter->driving_compensate = 0;
-  1261	
-  1262			if (of_property_read_u32_index(node, "realtek,disconnection-compensate",
-  1263						       index, &phy_parameter->disconnection_compensate))
-  1264				phy_parameter->disconnection_compensate = 0;
-  1265	
-  1266			get_phy_data_by_efuse(rtk_phy, phy_parameter, index);
-  1267	
-  1268			update_dc_driving_level(rtk_phy, phy_parameter);
-  1269	
-  1270			update_hs_clk_select(rtk_phy, phy_parameter);
-  1271		}
-  1272	
-  1273		return ret;
-  1274	}
-  1275	
+   774	
+   775	static int rtk_usb3phy_probe(struct platform_device *pdev)
+   776	{
+   777		struct rtk_phy *rtk_phy;
+   778		struct device *dev = &pdev->dev;
+ > 779		struct device_node *node;
+   780		struct phy *generic_phy;
+   781		struct phy_provider *phy_provider;
+   782		const struct phy_cfg *phy_cfg;
+   783		int ret;
+   784	
+   785		phy_cfg = of_device_get_match_data(dev);
+   786		if (!phy_cfg) {
+   787			dev_err(dev, "phy config are not assigned!\n");
+   788			return -EINVAL;
+   789		}
+   790	
+   791		rtk_phy = devm_kzalloc(dev, sizeof(*rtk_phy), GFP_KERNEL);
+   792		if (!rtk_phy)
+   793			return -ENOMEM;
+   794	
+   795		rtk_phy->dev			= &pdev->dev;
+   796		rtk_phy->phy.dev		= rtk_phy->dev;
+   797		rtk_phy->phy.label		= "rtk-usb3phy";
+   798		rtk_phy->phy.notify_port_status = rtk_phy_notify_port_status;
+   799	
+   800		rtk_phy->phy_cfg = devm_kzalloc(dev, sizeof(*phy_cfg), GFP_KERNEL);
+   801	
+   802		memcpy(rtk_phy->phy_cfg, phy_cfg, sizeof(*phy_cfg));
+   803	
+   804		node = dev->of_node;
+   805	
+   806		rtk_phy->num_phy = 1;
+   807	
+   808		ret = parse_phy_data(rtk_phy);
+   809		if (ret)
+   810			goto err;
+   811	
+   812		platform_set_drvdata(pdev, rtk_phy);
+   813	
+   814		generic_phy = devm_phy_create(rtk_phy->dev, NULL, &ops);
+   815		if (IS_ERR(generic_phy))
+   816			return PTR_ERR(generic_phy);
+   817	
+   818		phy_set_drvdata(generic_phy, rtk_phy);
+   819	
+   820		phy_provider = devm_of_phy_provider_register(rtk_phy->dev, of_phy_simple_xlate);
+   821		if (IS_ERR(phy_provider))
+   822			return PTR_ERR(phy_provider);
+   823	
+   824		ret = usb_add_phy_dev(&rtk_phy->phy);
+   825		if (ret)
+   826			goto err;
+   827	
+   828		create_debug_files(rtk_phy);
+   829	
+   830	err:
+   831		return ret;
+   832	}
+   833	
 
 -- 
 0-DAY CI Kernel Test Service
