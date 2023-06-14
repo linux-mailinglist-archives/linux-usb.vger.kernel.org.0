@@ -2,63 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F05730927
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jun 2023 22:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F5D730BDC
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 02:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236396AbjFNU13 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Jun 2023 16:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
+        id S234236AbjFOABe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Jun 2023 20:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjFNU11 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jun 2023 16:27:27 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29CA2110
-        for <linux-usb@vger.kernel.org>; Wed, 14 Jun 2023 13:27:25 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id 5614622812f47-39ca0c2970aso4276342b6e.3
-        for <linux-usb@vger.kernel.org>; Wed, 14 Jun 2023 13:27:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686774445; x=1689366445;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=wCUDP5YpW2e47GeuQaojWbzYMA9cKbBIXgknngPRz+M=;
-        b=6TvYLq+MZFyIhiwidHr3ul6zMdvaLauy1lVpTmwa5uYot76Sz975rwx8g+Xxx/Q+aB
-         S0qBekTbbBWmeN40efbYRu5g78kbN1XvGOM6T1ZWNRBYXG1UW8MwfQPRI4MZebY6hw8c
-         1dhmf4xNhw0ecjTDldGdyY4E0uc0pIRFEHPT/+HUItE4ZtfyH6lP/VmIFzj8a3NGNt0D
-         SoooUhU3fMJfaElBMe747VqYSISX1NCLeYTQViqu62BwC17B5MpTweIxBR0Zm2pJvvIW
-         gdpN2ajs2rFs7HPAdcyg58IobJnaXES8DjguA5TfvDUb77kLMa7+gNsMNXEchaJcFRDl
-         0gxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686774445; x=1689366445;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wCUDP5YpW2e47GeuQaojWbzYMA9cKbBIXgknngPRz+M=;
-        b=JjzG8GDjt9JGXT4B0vagaVJDhB1aKeVH7cfqDCVEe0PPXnasL0Qrc4CZUDbvxfF1/F
-         xvUahRiWQ0w+IGq87/KIVDmbqhx+M6I9IwzV8wzixVGyQMeRPsYMSJkmSl+WpojxBf3i
-         RrvrgAm24gMTmuG8c91zWXOsmysMyM8/mzP4wa/9bzg8fCC1m+BIRNio0N2vSr1FabCq
-         mdQODrir+ebktTRDmjusRJyyjhYZs2D+l/W0OcDoauioQU2moN1bS6WKYwjjOiUgMJMh
-         R7G8L55TX8YAGR445+CMzXsSHAlNJwKuV0YL98yCPSrXWQmhsGxIxw/tCzRpRC+WONNC
-         dbCQ==
-X-Gm-Message-State: AC+VfDz9i4UKVp/c2vEWb+QA9t34yWJjACqcCMq6tsnLfGFHjjEDbBz4
-        38tYGL2ASBK1/8Rsm/ltOyqIyedSuKMVQo+t/hGUBYhtxmSVJ19yyCA=
-X-Google-Smtp-Source: ACHHUZ48OyKCkJsPbov9rpzIzbgfbI8O7LPtxIwwZFc8jHKzgjRrUxUGEtrkeOHV/mHxmJM/pOWjgST/Esg07ywERzw=
-X-Received: by 2002:a05:6808:aa6:b0:398:5d57:3d08 with SMTP id
- r6-20020a0568080aa600b003985d573d08mr11477349oij.37.1686774444974; Wed, 14
- Jun 2023 13:27:24 -0700 (PDT)
+        with ESMTP id S230017AbjFOABc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jun 2023 20:01:32 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469181BF8;
+        Wed, 14 Jun 2023 17:01:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686787291; x=1718323291;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vlOy6sNgAGOk3m1Tw2KlI83PWTTLu4KM+zfhCO79zT0=;
+  b=SEffVFP0qRkZO/g+PYR+X68Coz40848nKC/oLkJjGC6WpJGvxX/d3LdY
+   nOnfklE0UUCRZzUGx32nebyOhL/wQOqLMTLBCjXO+7Qj67XWgOO9kVmRF
+   SeMZv4XuzOhf8yIfOSwerzRQRjJLOMG7mVNm+TW72vS/VZqvbcWE9tjC5
+   Q67kPRHfE7rhikmRz0lsPRwUM/Hg5ViwCvCJjpMJhAKvFTIaTZkPeiqJY
+   Uj0t649yeRbLbszofd3rCO/9DULw3fKB54Vzs+jwfd6f5fOXUqg6YUcaj
+   RhmUbuuz7wU8f1+4X6R0mHThJpsPX1QLK8fN0aHtnnT4Ahh0dLgjqKWCu
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="356259699"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="356259699"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 17:01:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="742021292"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="742021292"
+Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 14 Jun 2023 17:01:25 -0700
+Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q9aQ0-0001BJ-1e;
+        Thu, 15 Jun 2023 00:00:57 +0000
+Date:   Thu, 15 Jun 2023 07:59:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Azeem Shaikh <azeemshaikh38@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        Hongren Zheng <i@zenithal.me>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usbip: usbip_host: Replace strlcpy with strscpy
+Message-ID: <202306150753.vOUEonLq-lkp@intel.com>
+References: <20230614141026.2113749-1-azeemshaikh38@gmail.com>
 MIME-Version: 1.0
-From:   Brian Geffon <bgeffon@google.com>
-Date:   Wed, 14 Jun 2023 16:26:49 -0400
-Message-ID: <CADyq12w_c=pq5sph9Ne+nshz2haeYK-kGYVwQTUqSb3W_kzrdA@mail.gmail.com>
-Subject: thunderbolt: resume from hibernation CPUs racing in tb_ring_start
-To:     Takashi Iwai <tiwai@suse.de>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Matthias Kaehlcke <mka@google.com>, linux-usb@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614141026.2113749-1-azeemshaikh38@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,249 +70,82 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-On ChromeOS we're running a 5.15 kernel patched up to 6.4-rc6 w.r.t to
-drivers/thunderbolt code and we're seeing a similar issue to the one
-discussed in https://lore.kernel.org/lkml/20230421140725.495-1-mario.limonciello@amd.com/T/#
-/ https://bugzilla.kernel.org/show_bug.cgi?id=217343 where when
-resuming from hibernation you'll see warnings along the lines of
+Hi Azeem,
 
-[  126.292769] thunderbolt 0000:00:0d.3: interrupt for RX ring 0 is
-already enabled
+kernel test robot noticed the following build warnings:
 
-The thing that's odd is it appears three CPUs are racing through this code path:
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.4-rc6 next-20230614]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-[  126.292076] ------------[ cut here ]------------
-[  126.292077] thunderbolt 0000:00:0d.2: interrupt for TX ring 0 is
-already enabled
-[  126.292080] proc_thermal_pci 0000:00:04.0: PM:
-pci_pm_thaw_noirq+0x0/0x7c returned 0 after 606 usecs
-[  126.292086] ------------[ cut here ]------------
-[  126.292087] thunderbolt 0000:00:0d.3: interrupt for TX ring 0 is
-already enabled
-[  126.292089] WARNING: CPU: 6 PID: 7879 at
-drivers/thunderbolt/nhi.c:138 ring_interrupt_active+0x1cd/0x225
-[  126.292092] Modules linked in:
-[  126.292091] WARNING: CPU: 0 PID: 175 at
-drivers/thunderbolt/nhi.c:138 ring_interrupt_active+0x1cd/0x225
-[  126.292157] CPU: 0 PID: 175 Comm: kworker/u24:2 Tainted: G     U
-        5.15.116-19568-g766d8095041b #24
-fdadcb2517d1d37363ad385ffddbc1ad5dc72550
-[  126.292158]  lzo_rle zram joydev
-[  126.292159] Hardware name: Google Anahera/Anahera, BIOS
-Google_Anahera.14505.143.0 06/22/2022
-[  126.292159]
-[  126.292160] Workqueue: events_unbound async_run_entry_fn
-[  126.292160] CPU: 6 PID: 7879 Comm: kworker/u24:13 Tainted: G     U
-          5.15.116-19568-g766d8095041b #24
-fdadcb2517d1d37363ad385ffddbc1ad5dc72550
-[  126.292162]
-[  126.292162] RIP: 0010:ring_interrupt_active+0x1cd/0x225
-[  126.292163] Hardware name: Google Anahera/Anahera, BIOS
-Google_Anahera.14505.143.0 06/22/2022
-[  126.292163] Code: 0f 44 ce 45 8b 46 14 48 c7 c6 98 a9 75 82 49 c7
-c1 9f ee 72 82 84 db 4c 0f 45 ce 48 c7 c7 3e d8 6f 82 48 89 c6 e8 96
-cb 53 ff <0f> 0b 49 8c
-[  126.292164] Workqueue: events_unbound async_run_entry_fn
-[  126.292164] RSP: 0000:ffffc90000777d18 EFLAGS: 00010046
-[  126.292166]
-[  126.292166] RAX: c7428cb6704ffd00 RBX: 0000000000000001 RCX: ffffffff82a5eff8
-[  126.292166] RIP: 0010:ring_interrupt_active+0x1cd/0x225
-[  126.292167] RDX: c7428cb6704ffd00 RSI: 0000000000000086 RDI: 0000000000000001
-[  126.292168] RBP: ffffc90000777d48 R08: 000000000000070c R09: ffffffff83167704
-[  126.292169] R10: 0000000200000000 R11: ffffffffffffffff R12: 0000000000038200
-[  126.292168] Code: 0f 44 ce 45 8b 46 14 48 c7 c6 98 a9 75 82 49 c7
-c1 9f ee 72 82 84 db 4c 0f 45 ce 48 c7 c7 3e d8 6f 82 48 89 c6 e8 96
-cb 53 ff <0f> 0b 49 8c
-[  126.292169] R13: 0000000000001001 R14: ffff888103348600 R15: 0000000000000001
-[  126.292170] RSP: 0000:ffffc9000ca17d18 EFLAGS: 00010046
-[  126.292170] FS:  0000000000000000(0000) GS:ffff88846f800000(0000)
-knlGS:0000000000000000
-[  126.292171]
-[  126.292171] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  126.292171] RAX: d9637f716c437500 RBX: 0000000000000001 RCX: ffffffff82a5eff8
-[  126.292172] CR2: 00005b6c529532b8 CR3: 0000000286340000 CR4: 0000000000752ef0
-[  126.292172] RDX: d9637f716c437500 RSI: 0000000000000086 RDI: 0000000000000001
-[  126.292173] PKRU: 55555554
-[  126.292173] Call Trace:
-[  126.292174] RBP: ffffc9000ca17d48 R08: 0000000000000709 R09: ffffffff8316761c
-[  126.292175]  <TASK>
-[  126.292175] R10: 0000000200000000 R11: ffffffffffffffff R12: 0000000000038200
-[  126.292176] R13: 0000000000001001 R14: ffff8881016a4840 R15: 0000000000000001
-[  126.292176] FS:  0000000000000000(0000) GS:ffff88846f980000(0000)
-knlGS:0000000000000000
-[  126.292176]  ? __warn+0xa3/0x131
-[  126.292178] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  126.292178]  ? ring_interrupt_active+0x1cd/0x225
-[  126.292179] CR2: 0000000000000000 CR3: 0000000002a0c000 CR4: 0000000000752ee0
-[  126.292180] PKRU: 55555554
-[  126.292179]  ? report_bug+0x97/0xfa
-[  126.292180] Call Trace:
-[  126.292182]  <TASK>
-[  126.292181]  ? handle_bug+0x41/0x66
-[  126.292183]  ? exc_invalid_op+0x1b/0x4b
-[  126.292183]  ? asm_exc_invalid_op+0x16/0x20
-[  126.292183]  ? __warn+0xa3/0x131
-[  126.292185]  ? ring_interrupt_active+0x1cd/0x225
-[  126.292186]  ? ring_interrupt_active+0x1cd/0x225
-[  126.292186]  ? ring_interrupt_active+0x1cd/0x225
-[  126.292187]  tb_ring_start+0x1ba/0x1d7
-[  126.292187]  ? report_bug+0x97/0xfa
-[  126.292188]  tb_ctl_start+0x18/0x49
-[  126.292189]  tb_domain_thaw_noirq+0x2a/0x5e
-[  126.292189]  ? handle_bug+0x41/0x66
-[  126.292190]  ? pci_pm_freeze_noirq+0xb8/0xb8
-[  126.292191]  ? exc_invalid_op+0x1b/0x4b
-[  126.292192]  dpm_run_callback+0x3c/0x12d
-[  126.292192]  ? asm_exc_invalid_op+0x16/0x20
-[  126.292193]  device_resume_noirq+0x10e/0x1dc
-[  126.292194]  ? ring_interrupt_active+0x1cd/0x225
-[  126.292194]  async_resume_noirq+0x1f/0x5b
-[  126.292195]  ? ring_interrupt_active+0x1cd/0x225
-[  126.292195]  async_run_entry_fn+0x2b/0xc4
-[  126.292196]  tb_ring_start+0x1ba/0x1d7
-[  126.292197]  process_one_work+0x1b7/0x469
-[  126.292198]  worker_thread+0x11a/0x288
-[  126.292198]  tb_ctl_start+0x18/0x49
-[  126.292199]  kthread+0x13a/0x152
-[  126.292200]  tb_domain_thaw_noirq+0x2a/0x5e
-[  126.292201]  ? process_one_work+0x469/0x469
-[  126.292202]  ? kthread_blkcg+0x31/0x31
-[  126.292201]  ? pci_pm_freeze_noirq+0xb8/0xb8
-[  126.292202]  ret_from_fork+0x1f/0x30
-[  126.292203]  dpm_run_callback+0x3c/0x12d
-[  126.292205]  </TASK>
-[  126.292205]  device_resume_noirq+0x10e/0x1dc
-[  126.292206] ---[ end trace 349544d25453a0c7 ]---
-[  126.292206]  async_resume_noirq+0x1f/0x5b
-[  126.292208]  async_run_entry_fn+0x2b/0xc4
-[  126.292209]  process_one_work+0x1b7/0x469
-[  126.292210]  worker_thread+0x11a/0x288
-[  126.292212]  kthread+0x13a/0x152
-[  126.292213]  ? process_one_work+0x469/0x469
-[  126.292214]  ? kthread_blkcg+0x31/0x31
-[  126.292215]  ret_from_fork+0x1f/0x30
-[  126.292218]  </TASK>
-[  126.292218] ---[ end trace 349544d25453a0c8 ]---
-[  126.292225] ------------[ cut here ]------------
-[  126.292226] thunderbolt 0000:00:0d.2: interrupt for RX ring 0 is
-already enabled
-[  126.292231] WARNING: CPU: 2 PID: 7879 at
-drivers/thunderbolt/nhi.c:138 ring_interrupt_active+0x1cd/0x225
-[  126.292233] Modules linked in: snd_seq_dummy snd_seq snd_seq_device
-bridge stp llc tun vhost_vsock vhost vhost_iotlb
-vmw_vsock_virtio_transport_common vsockg
-[  126.292253]  videobuf2_memops btintel cdc_ether usbnet btmtk
-videobuf2_common btbcm snd_intel_sdw_acpi kfifo_buf mei_hdcp
-cros_ec_typec industrialio snd_socv
-[  126.292261] CPU: 2 PID: 7879 Comm: kworker/u24:13 Tainted: G     U
-W         5.15.116-19568-g766d8095041b #24
-fdadcb2517d1d37363ad385ffddbc1ad5dc72550
-[  126.292263] Hardware name: Google Anahera/Anahera, BIOS
-Google_Anahera.14505.143.0 06/22/2022
-[  126.292264] Workqueue: events_unbound async_run_entry_fn
-[  126.292266] RIP: 0010:ring_interrupt_active+0x1cd/0x225
-[  126.292267] Code: 0f 44 ce 45 8b 46 14 48 c7 c6 98 a9 75 82 49 c7
-c1 9f ee 72 82 84 db 4c 0f 45 ce 48 c7 c7 3e d8 6f 82 48 89 c6 e8 96
-cb 53 ff <0f> 0b 49 8c
-[  126.292268] RSP: 0000:ffffc9000ca17d18 EFLAGS: 00010046
-[  126.292269] RAX: d9637f716c437500 RBX: 0000000000000001 RCX: ffffffff82a5eff8
-[  126.292270] RDX: d9637f716c437500 RSI: 0000000000000086 RDI: 0000000000000001
-[  126.292270] RBP: ffffc9000ca17d48 R08: 000000000000081a R09: ffffffff8316a02c
-[  126.292271] R10: 0000000200000000 R11: ffffffffffffffff R12: 0000000000038200
-[  126.292272] R13: 0000000000001001 R14: ffff8881016a4780 R15: 0000000000001000
-[  126.292272] FS:  0000000000000000(0000) GS:ffff88846f880000(0000)
-knlGS:0000000000000000
-[  126.292273] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  126.292274] CR2: 0000000000000000 CR3: 0000000002a0c000 CR4: 0000000000752ee0
-[  126.292274] PKRU: 55555554
-[  126.292275] Call Trace:
-[  126.292275]  <TASK>
-[  126.292276]  ? __warn+0xa3/0x131
-[  126.292278]  ? ring_interrupt_active+0x1cd/0x225
-[  126.292279]  ? report_bug+0x97/0xfa
-[  126.292281]  ? handle_bug+0x41/0x66
-[  126.292281]  ? exc_invalid_op+0x1b/0x4b
-[  126.292282]  ? asm_exc_invalid_op+0x16/0x20
-[  126.292284]  ? ring_interrupt_active+0x1cd/0x225
-[  126.292284]  ? ring_interrupt_active+0x1cd/0x225
-[  126.292285]  tb_ring_start+0x1ba/0x1d7
-[  126.292286]  tb_ctl_start+0x21/0x49
-[  126.292287]  tb_domain_thaw_noirq+0x2a/0x5e
-[  126.292288]  ? pci_pm_freeze_noirq+0xb8/0xb8
-[  126.292289]  dpm_run_callback+0x3c/0x12d
-[  126.292290]  device_resume_noirq+0x10e/0x1dc
-[  126.292291]  async_resume_noirq+0x1f/0x5b
-[  126.292292]  async_run_entry_fn+0x2b/0xc4
-[  126.292293]  process_one_work+0x1b7/0x469
-[  126.292295]  worker_thread+0x11a/0x288
-[  126.292295]  kthread+0x13a/0x152
-[  126.292296]  ? process_one_work+0x469/0x469
-[  126.292297]  ? kthread_blkcg+0x31/0x31
-[  126.292298]  ret_from_fork+0x1f/0x30
-[  126.292301]  </TASK>
-[  126.292302] ---[ end trace 349544d25453a0c9 ]---
-[  126.292306] thunderbolt 0000:00:0d.2: PM:
-pci_pm_thaw_noirq+0x0/0x7c returned 0 after 825 usecs
-[  126.292311] pcieport 0000:00:07.0: PM: calling
-pci_pm_thaw_noirq+0x0/0x7c @ 9, parent: pci0000:00
-[  126.292320] i915 0000:00:02.0: PM: calling
-pci_pm_thaw_noirq+0x0/0x7c @ 7909, parent: pci0000:00
-[  126.292768] ------------[ cut here ]------------
-[  126.292769] thunderbolt 0000:00:0d.3: interrupt for RX ring 0 is
-already enabled
-[  126.292777] WARNING: CPU: 6 PID: 175 at
-drivers/thunderbolt/nhi.c:138 ring_interrupt_active+0x1cd/0x225
-[  126.292779] Modules linked in: snd_seq_dummy snd_seq snd_seq_device
-bridge stp llc tun vhost_vsock vhost vhost_iotlb
-vmw_vsock_virtio_transport_common vsockg
-[  126.292798]  videobuf2_memops btintel cdc_ether usbnet btmtk
-videobuf2_common btbcm snd_intel_sdw_acpi kfifo_buf mei_hdcp
-cros_ec_typec industrialio snd_socv
-[  126.292807] CPU: 6 PID: 175 Comm: kworker/u24:2 Tainted: G     U  W
-        5.15.116-19568-g766d8095041b #24
-fdadcb2517d1d37363ad385ffddbc1ad5dc72550
-[  126.292809] Hardware name: Google Anahera/Anahera, BIOS
-Google_Anahera.14505.143.0 06/22/2022
-[  126.292810] Workqueue: events_unbound async_run_entry_fn
-[  126.292811] RIP: 0010:ring_interrupt_active+0x1cd/0x225
-[  126.292812] Code: 0f 44 ce 45 8b 46 14 48 c7 c6 98 a9 75 82 49 c7
-c1 9f ee 72 82 84 db 4c 0f 45 ce 48 c7 c7 3e d8 6f 82 48 89 c6 e8 96
-cb 53 ff <0f> 0b 49 8c
-[  126.292814] RSP: 0000:ffffc90000777d18 EFLAGS: 00010046
-[  126.292815] RAX: c7428cb6704ffd00 RBX: 0000000000000001 RCX: ffffffff82a5eff8
-[  126.292815] RDX: c7428cb6704ffd00 RSI: 0000000000000086 RDI: 0000000000000001
-[  126.292816] RBP: ffffc90000777d48 R08: 000000000000084b R09: ffffffff8316b08c
-[  126.292817] R10: 0000000200000000 R11: ffffffffffffffff R12: 0000000000038200
-[  126.292818] R13: 0000000000001001 R14: ffff888103348e40 R15: 0000000000001000
-[  126.292818] FS:  0000000000000000(0000) GS:ffff88846f980000(0000)
-knlGS:0000000000000000
-[  126.292819] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  126.292820] CR2: 0000000000000000 CR3: 0000000002a0c000 CR4: 0000000000752ee0
-[  126.292821] PKRU: 55555554
-[  126.292822] Call Trace:
-[  126.292822]  <TASK>
-[  126.292823]  ? __warn+0xa3/0x131
-[  126.292825]  ? ring_interrupt_active+0x1cd/0x225
-[  126.292826]  ? report_bug+0x97/0xfa
-[  126.292828]  ? handle_bug+0x41/0x66
-[  126.292829]  ? exc_invalid_op+0x1b/0x4b
-[  126.292830]  ? asm_exc_invalid_op+0x16/0x20
-[  126.292831]  ? ring_interrupt_active+0x1cd/0x225
-[  126.292832]  ? ring_interrupt_active+0x1cd/0x225
-[  126.292833]  tb_ring_start+0x1ba/0x1d7
-[  126.292834]  tb_ctl_start+0x21/0x49
-[  126.292836]  tb_domain_thaw_noirq+0x2a/0x5e
-[  126.292837]  ? pci_pm_freeze_noirq+0xb8/0xb8
-[  126.292838]  dpm_run_callback+0x3c/0x12d
-[  126.292840]  device_resume_noirq+0x10e/0x1dc
-[  126.292841]  async_resume_noirq+0x1f/0x5b
-[  126.292842]  async_run_entry_fn+0x2b/0xc4
-[  126.292843]  process_one_work+0x1b7/0x469
-[  126.292844]  worker_thread+0x11a/0x288
-[  126.292845]  kthread+0x13a/0x152
-[  126.292847]  ? process_one_work+0x469/0x469
-[  126.292847]  ? kthread_blkcg+0x31/0x31
-[  126.292849]  ret_from_fork+0x1f/0x30
-[  126.292851]  </TASK>
-[  126.292851] ---[ end trace 349544d25453a0ca ]---
+url:    https://github.com/intel-lab-lkp/linux/commits/Azeem-Shaikh/usbip-usbip_host-Replace-strlcpy-with-strscpy/20230614-221217
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230614141026.2113749-1-azeemshaikh38%40gmail.com
+patch subject: [PATCH v2] usbip: usbip_host: Replace strlcpy with strscpy
+config: i386-randconfig-i012-20230614 (https://download.01.org/0day-ci/archive/20230615/202306150753.vOUEonLq-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build):
+        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+        git fetch usb usb-testing
+        git checkout usb/usb-testing
+        b4 shazam https://lore.kernel.org/r/20230614141026.2113749-1-azeemshaikh38@gmail.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/usbip/
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306150753.vOUEonLq-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/usb/usbip/stub_main.c: In function 'match_busid_store':
+>> drivers/usb/usbip/stub_main.c:170:13: warning: unused variable 'len' [-Wunused-variable]
+     170 |         int len;
+         |             ^~~
+
+
+vim +/len +170 drivers/usb/usbip/stub_main.c
+
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  166  
+cc3d53def83a99 drivers/usb/usbip/stub_main.c     Greg Kroah-Hartman 2017-06-09  167  static ssize_t match_busid_store(struct device_driver *dev, const char *buf,
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  168  				 size_t count)
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  169  {
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09 @170  	int len;
+e913397202b755 drivers/staging/usbip/stub_main.c Kay Sievers        2008-10-30  171  	char busid[BUSID_SIZE];
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  172  
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  173  	if (count < 5)
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  174  		return -EINVAL;
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  175  
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  176  	/* busid needs to include \0 termination */
+7e5b2b663aa01a drivers/usb/usbip/stub_main.c     Azeem Shaikh       2023-06-14  177  	if (strscpy(busid, buf + 4, BUSID_SIZE) < 0)
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  178  		return -EINVAL;
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  179  
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  180  	if (!strncmp(buf, "add ", 4)) {
+2183b77ece517f drivers/staging/usbip/stub_main.c Kurt Kanzenbach    2013-04-04  181  		if (add_match_busid(busid) < 0)
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  182  			return -ENOMEM;
+2183b77ece517f drivers/staging/usbip/stub_main.c Kurt Kanzenbach    2013-04-04  183  
+1a4b6f66285785 drivers/staging/usbip/stub_main.c matt mooney        2011-05-19  184  		pr_debug("add busid %s\n", busid);
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  185  		return count;
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  186  	}
+2183b77ece517f drivers/staging/usbip/stub_main.c Kurt Kanzenbach    2013-04-04  187  
+2183b77ece517f drivers/staging/usbip/stub_main.c Kurt Kanzenbach    2013-04-04  188  	if (!strncmp(buf, "del ", 4)) {
+2183b77ece517f drivers/staging/usbip/stub_main.c Kurt Kanzenbach    2013-04-04  189  		if (del_match_busid(busid) < 0)
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  190  			return -ENODEV;
+2183b77ece517f drivers/staging/usbip/stub_main.c Kurt Kanzenbach    2013-04-04  191  
+1a4b6f66285785 drivers/staging/usbip/stub_main.c matt mooney        2011-05-19  192  		pr_debug("del busid %s\n", busid);
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  193  		return count;
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  194  	}
+2183b77ece517f drivers/staging/usbip/stub_main.c Kurt Kanzenbach    2013-04-04  195  
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  196  	return -EINVAL;
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  197  }
+cc3d53def83a99 drivers/usb/usbip/stub_main.c     Greg Kroah-Hartman 2017-06-09  198  static DRIVER_ATTR_RW(match_busid);
+4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  199  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
