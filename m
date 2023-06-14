@@ -2,187 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA11672EF8E
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jun 2023 00:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BB072F0DD
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jun 2023 02:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240963AbjFMWhb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Jun 2023 18:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
+        id S241230AbjFNAQt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Jun 2023 20:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbjFMWha (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 18:37:30 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2BD127
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jun 2023 15:37:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686695848; x=1718231848;
-  h=date:from:to:cc:subject:message-id;
-  bh=CJPpljZ1cjpRzgF5P20sMXmPLCNIPvg7X+rN98RBv0U=;
-  b=RWy0Vj6jFUJDiOd0xVIhrL3kOGhOA48ZpJJCBd75EJzniICK5oXQbRsE
-   i2jUx41yGJ6X1LGsvvvyr99jCGuK8a40od3m+A5dyqDB2v1QafydmUQ0H
-   b/Mdhjs11CXG8dRKtiUBaQ4HcMTrihCpG4EiJxgEM8+M6l7FnXqaXWGRs
-   19jmz9i7u/dKe9uhZPv5mftoRrgLCI22l5NSLgVZFUbeS3AdsiBtJh7Bp
-   OdTfl+mz7Cztz8yUP6NjZ99FAg/kThR5ZeQmyfGrQWFv1zKZBLUrn5AE3
-   oJcR2vcrFMmtB9NFW4tSHYnKsDXe/CTLT7Pk0TJCGpcQOu/VIVIGQy1M2
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="361836765"
-X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
-   d="scan'208";a="361836765"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 15:37:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="711816314"
-X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
-   d="scan'208";a="711816314"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 13 Jun 2023 15:37:27 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9Cdi-0001se-2a;
-        Tue, 13 Jun 2023 22:37:26 +0000
-Date:   Wed, 14 Jun 2023 06:36:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 286d9975a838d0a54da049765fa1d1fb96b89682
-Message-ID: <202306140649.xy061fWo-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232518AbjFNAQl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jun 2023 20:16:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7561739;
+        Tue, 13 Jun 2023 17:16:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54DCA63BEF;
+        Wed, 14 Jun 2023 00:16:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C11D8C433C8;
+        Wed, 14 Jun 2023 00:16:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686701789;
+        bh=kj9Ya7IV2GrY8S1ZmVY2sjyy1iwtpsSoYAouFrgDpLw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BUqgYQRYma4PsE5pRtQr/DfNgQmVbQwUn/N1SkJ6TNEuJE9girQHlOuLbAifF3lA7
+         Xn4JCt/UTJX2ThcxOnZUrs3jMotcUhYZ1XNitI4tg4e4r/65P4wny11o9pyHJw2yz/
+         A/KnfqscJXCVkogfi6WiI6xeooXq4MMEdId2iLG5QDJZgz6ybBVtYF3ZW6rikLUunr
+         4ndYgZnqGQmpApXdoi8MeyhxK2+k8AoDIN1lGWlcKr76SfnoVoxC7/ZHl87oZqvn1L
+         SUSfvZ3TtSamzsBuZXAxioGNqk+TZH7+HfblfrNTqp6GQb22WgG6gneZAXVtHmGZI7
+         uNyw+bRqNrb1g==
+Date:   Wed, 14 Jun 2023 02:16:21 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     heikki.krogerus@linux.intel.com, ajayg@nvidia.com,
+        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Evan.Quan@amd.com, Lijo.Lazar@amd.com,
+        Sanket.Goswami@amd.com
+Subject: Re: [PATCH v2] usb: typec: ucsi: Mark dGPUs as DEVICE scope
+Message-ID: <20230614001621.iyxi2khz4hmcbl3x@intel.intel>
+References: <20230518161150.92959-1-mario.limonciello@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230518161150.92959-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 286d9975a838d0a54da049765fa1d1fb96b89682  usb: gadget: udc: core: Prevent soft_connect_store() race
+Hi Mario,
 
-elapsed time: 720m
+On Thu, May 18, 2023 at 11:11:50AM -0500, Mario Limonciello wrote:
+> power_supply_is_system_supplied() checks whether any power
+> supplies are present that aren't batteries to decide whether
+> the system is running on DC or AC.  Downstream drivers use
+> this to make performance decisions.
+> 
+> Navi dGPUs include an UCSI function that has been exported
+> since commit 17631e8ca2d3 ("i2c: designware: Add driver
+> support for AMD NAVI GPU").
+> 
+> This UCSI function registers a power supply since commit
+> 992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
+> but this is not a system power supply.
+> 
+> As the power supply for a dGPU is only for powering devices connected
+> to dGPU, create a device property to indicate that the UCSI endpoint
+> is only for the scope of `POWER_SUPPLY_SCOPE_DEVICE`.
+> 
+> Link: https://lore.kernel.org/lkml/20230516182541.5836-2-mario.limonciello@amd.com/
+> Reviewed-by: Evan Quan <evan.quan@amd.com>
+> Tested-by: Evan Quan <evan.quan@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-configs tested: 111
-configs skipped: 7
+Acked-by: Andi Shyti <andi.shyti@kernel.org> 
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r004-20230612   gcc  
-alpha                randconfig-r015-20230612   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r001-20230612   gcc  
-arc                  randconfig-r023-20230612   gcc  
-arc                  randconfig-r026-20230612   gcc  
-arc                  randconfig-r043-20230612   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r021-20230612   clang
-arm                  randconfig-r036-20230612   gcc  
-arm                  randconfig-r046-20230612   clang
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r001-20230612   clang
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r023-20230612   gcc  
-csky                 randconfig-r031-20230612   gcc  
-hexagon              randconfig-r041-20230612   clang
-hexagon              randconfig-r045-20230612   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230612   clang
-i386                 randconfig-i002-20230612   clang
-i386                 randconfig-i003-20230612   clang
-i386                 randconfig-i004-20230612   clang
-i386                 randconfig-i005-20230612   clang
-i386                 randconfig-i006-20230612   clang
-i386                 randconfig-i011-20230612   gcc  
-i386                 randconfig-i012-20230612   gcc  
-i386                 randconfig-i013-20230612   gcc  
-i386                 randconfig-i014-20230612   gcc  
-i386                 randconfig-i015-20230612   gcc  
-i386                 randconfig-i016-20230612   gcc  
-i386                 randconfig-r024-20230612   gcc  
-i386                 randconfig-r035-20230612   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r002-20230612   gcc  
-loongarch            randconfig-r005-20230612   gcc  
-loongarch            randconfig-r022-20230612   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r025-20230612   gcc  
-m68k                 randconfig-r033-20230612   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r002-20230612   gcc  
-nios2        buildonly-randconfig-r001-20230612   gcc  
-nios2        buildonly-randconfig-r005-20230612   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r006-20230612   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r022-20230612   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r005-20230612   gcc  
-powerpc              randconfig-r024-20230612   gcc  
-powerpc              randconfig-r032-20230612   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv        buildonly-randconfig-r006-20230612   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r006-20230612   clang
-riscv                randconfig-r011-20230612   gcc  
-riscv                randconfig-r042-20230612   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r003-20230612   clang
-s390                 randconfig-r044-20230612   gcc  
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r003-20230612   gcc  
-sparc                            allyesconfig   gcc  
-sparc        buildonly-randconfig-r004-20230612   gcc  
-sparc                               defconfig   gcc  
-sparc64      buildonly-randconfig-r006-20230612   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230612   clang
-x86_64               randconfig-a002-20230612   clang
-x86_64               randconfig-a003-20230612   clang
-x86_64               randconfig-a004-20230612   clang
-x86_64               randconfig-a005-20230612   clang
-x86_64               randconfig-a006-20230612   clang
-x86_64               randconfig-a011-20230612   gcc  
-x86_64               randconfig-a012-20230612   gcc  
-x86_64               randconfig-a013-20230612   gcc  
-x86_64               randconfig-a014-20230612   gcc  
-x86_64               randconfig-a015-20230612   gcc  
-x86_64               randconfig-a016-20230612   gcc  
-x86_64               randconfig-r005-20230612   clang
-x86_64               randconfig-r034-20230612   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r013-20230612   gcc  
-xtensa               randconfig-r014-20230612   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Andi
