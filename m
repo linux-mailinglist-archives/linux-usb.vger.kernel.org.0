@@ -2,113 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ADCA72F8C9
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jun 2023 11:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9690E72F930
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jun 2023 11:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243114AbjFNJOQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Jun 2023 05:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
+        id S244081AbjFNJah (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Jun 2023 05:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242689AbjFNJOO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jun 2023 05:14:14 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9FD19A;
-        Wed, 14 Jun 2023 02:14:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686734053; x=1718270053;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vWNmYjv0AVEHtHoQ50oVHbX2PauCeZ/QhwOzxPZqGhw=;
-  b=KjPNSHbFvTEcSKJnbOuN6NwUmL56xjWWKyMsCsHpWOftQvEHnnOPbnCD
-   rCFkdCRlCoLYhBlaHfqZNgL6tI28NNBYcqR8U8F6K5cZDHGOAl3eA6kjK
-   eyhGcNM2g+pVrWdsVooofEMkPW3IT+ewaRrBsNbBDX9Mjn+B5GSg0BA/u
-   cjiFtrEYmH2ZBcd9tNQ1+2hZwMXiJy8VzVRgJeVlKVvQzALhnWzXwCzGg
-   9mVBnVA6B/KQ2AWiOAa0lTMcw4+vNu8F+0JdpBzNkQounqPqyTWLIaIvr
-   MfhZyjkYusoBlmKMJh19bwn2V5hPgvF7Iv2D3q0tWsICz7iG7Gyjp2pOL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="422165960"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="422165960"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 02:14:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="856440693"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="856440693"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 14 Jun 2023 02:14:09 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 14 Jun 2023 12:14:08 +0300
-Date:   Wed, 14 Jun 2023 12:14:08 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Message-ID: <ZImE4L3YgABnCIsP@kuha.fi.intel.com>
-References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
+        with ESMTP id S244151AbjFNJ35 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jun 2023 05:29:57 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9781713;
+        Wed, 14 Jun 2023 02:29:54 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 35E9SXBU0024329, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 35E9SXBU0024329
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Wed, 14 Jun 2023 17:28:33 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Wed, 14 Jun 2023 17:28:52 +0800
+Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 14 Jun 2023 17:28:50 +0800
+Received: from localhost.localdomain (172.21.252.101) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
+ 15.1.2507.17 via Frontend Transport; Wed, 14 Jun 2023 17:28:50 +0800
+From:   Stanley Chang <stanley_chang@realtek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Stanley Chang <stanley_chang@realtek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ray Chi <raychi@google.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: [PATCH v4 1/5] usb: phy: add usb phy notify port status API
+Date:   Wed, 14 Jun 2023 17:28:31 +0800
+Message-ID: <20230614092850.21460-1-stanley_chang@realtek.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-KSE-ServerInfo: RTEXMBS03.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 31, 2023 at 08:11:14PM +0530, Prashanth K wrote:
-> Currently if we bootup a device without cable connected, then
-> usb-conn-gpio won't call set_role() since last_role is same as
-> current role. This happens because during probe last_role gets
-> initialised to zero.
-> 
-> To avoid this, added a new constant in enum usb_role, last_role
-> is set to USB_ROLE_UNKNOWN before performing initial detection.
-> 
-> While at it, also handle default case for the usb_role switch
-> in cdns3, intel-xhci-usb-role-switch & musb/jz4740 to avoid
-> build warnings.
-> 
-> Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
-> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
-> v7: Added default case in musb/jz4740.c & intel-xhci-usb-role-switch.c to
->     avoid build warnings.
-> v6: Moved USB_ROLE_UNKNOWN towards the end of enum usb_role.
-> v5: Update commit text to mention the changes made in cdns3 driver.
-> v4: Added Reviewed-by tag.
-> v3: Added a default case in drivers/usb/cdns3/core.c as pointed out by
->     the test robot.
-> v2: Added USB_ROLE_UNKNWON to enum usb_role.
-> 
->  drivers/usb/cdns3/core.c                       | 2 ++
->  drivers/usb/common/usb-conn-gpio.c             | 3 +++
->  drivers/usb/musb/jz4740.c                      | 2 ++
->  drivers/usb/roles/intel-xhci-usb-role-switch.c | 2 ++
->  include/linux/usb/role.h                       | 1 +
->  5 files changed, 10 insertions(+)
+In Realtek SoC, the parameter of usb phy is designed to can dynamic
+tuning base on port status. Therefore, add a notify callback of phy
+driver when usb port status change.
 
-Just to be clear to everybody, that USB_ROLE_UNKNOWN is not handled in
-drivers/usb/roles/class.c, so this patch is broken.
+The Realtek phy driver is designed to dynamically adjust disconnection
+level and calibrate phy parameters. When the device connected bit changes
+and when the disconnected bit changes, do port status change notification:
 
-But the whole approach is wrong. That USB_ROLE_UNKNOWN is clearly a
-flag where the other values in enum usb_role are actual switch states.
-So it does not belong there.
+Check if portstatus is USB_PORT_STAT_CONNECTION and portchange is
+USB_PORT_STAT_C_CONNECTION.
+1. The device is connected, the driver lowers the disconnection level and
+   calibrates the phy parameters.
+2. The device disconnects, the driver increases the disconnect level and
+   calibrates the phy parameters.
 
-In general, adding globals states like that just in order to work
-around issues in single drivers is never a good idea IMO.
+When controller to notify connect that device is already ready. If we
+adjust the disconnection level in notify_connect, the disconnect may have
+been triggered at this stage. So we need to change that as early as
+possible. Therefore, we add an api to notify phy the port status changes.
 
-thanks,
+Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+---
+v3 to v4 change:
+    Fix the warning for checkpatch with strict.
+v2 to v3 change:
+    Add more comments about the reason for adding this api
+v1 to v2 change:
+    No change
+---
+ drivers/usb/core/hub.c  | 13 +++++++++++++
+ include/linux/usb/phy.h | 13 +++++++++++++
+ 2 files changed, 26 insertions(+)
 
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 97a0f8faea6e..10f3364c3fc2 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -614,6 +614,19 @@ static int hub_ext_port_status(struct usb_hub *hub, int port1, int type,
+ 		ret = 0;
+ 	}
+ 	mutex_unlock(&hub->status_mutex);
++
++	if (!ret) {
++		struct usb_device *hdev = hub->hdev;
++
++		if (hdev && !hdev->parent) {
++			struct usb_hcd *hcd = bus_to_hcd(hdev->bus);
++
++			if (hcd->usb_phy)
++				usb_phy_notify_port_status(hcd->usb_phy,
++							   port1 - 1, *status, *change);
++		}
++	}
++
+ 	return ret;
+ }
+ 
+diff --git a/include/linux/usb/phy.h b/include/linux/usb/phy.h
+index e4de6bc1f69b..b513749582d7 100644
+--- a/include/linux/usb/phy.h
++++ b/include/linux/usb/phy.h
+@@ -144,6 +144,10 @@ struct usb_phy {
+ 	 */
+ 	int	(*set_wakeup)(struct usb_phy *x, bool enabled);
+ 
++	/* notify phy port status change */
++	int	(*notify_port_status)(struct usb_phy *x, int port,
++				      u16 portstatus, u16 portchange);
++
+ 	/* notify phy connect status change */
+ 	int	(*notify_connect)(struct usb_phy *x,
+ 			enum usb_device_speed speed);
+@@ -316,6 +320,15 @@ usb_phy_set_wakeup(struct usb_phy *x, bool enabled)
+ 		return 0;
+ }
+ 
++static inline int
++usb_phy_notify_port_status(struct usb_phy *x, int port, u16 portstatus, u16 portchange)
++{
++	if (x && x->notify_port_status)
++		return x->notify_port_status(x, port, portstatus, portchange);
++	else
++		return 0;
++}
++
+ static inline int
+ usb_phy_notify_connect(struct usb_phy *x, enum usb_device_speed speed)
+ {
 -- 
-heikki
+2.34.1
+
