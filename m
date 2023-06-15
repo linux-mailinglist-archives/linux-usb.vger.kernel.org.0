@@ -2,128 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD4E731B6F
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 16:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12ED6731B95
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 16:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344228AbjFOOgZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Jun 2023 10:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54860 "EHLO
+        id S1345139AbjFOOlS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Jun 2023 10:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241156AbjFOOgY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 10:36:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC10A194;
-        Thu, 15 Jun 2023 07:36:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68E2961298;
-        Thu, 15 Jun 2023 14:36:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B10CC433C8;
-        Thu, 15 Jun 2023 14:36:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686839781;
-        bh=j7fswNF00+3EsBKE9l3ZGPQpN/5xxxUoZx34TL5CkLw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wJUePUXSGwFyZeIXTc/MCaXOpmi+1fQwp9quAdxPgCGFMgaGIGyuHot/RM4V9eUSg
-         bRRuajr0ywJxzZyTWi2eh94EmsUitXvQ9RpBJaxUWdHeJWwkm0GryLE5dqXgxMFtnn
-         kkFShesR42R6MG9PPdyUMHbNJJR5HLfYk9Kmbeeo=
-Date:   Thu, 15 Jun 2023 16:36:19 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Message-ID: <2023061512-vowed-panther-38ed@gregkh>
-References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
- <ZImE4L3YgABnCIsP@kuha.fi.intel.com>
- <2023061547-staleness-camper-ae8a@gregkh>
- <d5561151-08bb-9f5f-aa51-44c5ad31976b@quicinc.com>
+        with ESMTP id S1345101AbjFOOlC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 10:41:02 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7932952;
+        Thu, 15 Jun 2023 07:40:56 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f8d5262dc8so7039385e9.0;
+        Thu, 15 Jun 2023 07:40:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686840055; x=1689432055;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Usc6x/BqXUwuzZHQ2o4g2n/2VrbmycWMBR5m/TRW5nE=;
+        b=V7nisqTclY6JQNhLF0D6wWbOY4hdbKdpYasOoeefJ+2Ve5775k+I6S6TZQIbYtmjdC
+         m1KiVz4IfuBQ53VkJiYo1NDJoEY9oOcLxMghcwvU89ucFxk57AhJy9+Q8EfjFKBPFl1P
+         xJA5aL/wM6ah+KZ/RLTyhuF/5NP6I3NYXSEiquH4oNFAuv6lgto202fe9oVdm1VI8PXU
+         r718meptj3IfkJk07IJvfJ2nRS1QlNmECMsRCr513PI4p7q0wt5oggslRjAlUuJDuy0O
+         LcAcwBb5On/cRotKINO1i2pQuqqN17z8N3fjLCRJJRzEmKAqaYDIh3yb54G610yDGs9+
+         AJ5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686840055; x=1689432055;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Usc6x/BqXUwuzZHQ2o4g2n/2VrbmycWMBR5m/TRW5nE=;
+        b=ec4zAYCbkOeo1ivVvlxGn2gOLsDXS2i+zsFB65id6WnckCzwPUYw8Dedztle97YqJG
+         xLrrABYV6Zrn7zsL+s235x0yM+1Je6QgevFKeP32nY4JqngjCgwp83GxTJWQD7hPBADw
+         /VtJGX4nnBwhboGAY+0zGjUk9VSjWhHnirXwZXHeMFHBs27Gy1ictYpyyD0ALM0MOM+p
+         w7RXPjZHvCeQXz3/+sFZimBj+ORDg/snPWubqU6+pSym+v957Fs1ic+JMkdDrwvPBAdi
+         CThMaA9yEFg7aqiweBX7b0CKEuzn8oOn+14l41qjjI50YWtxEHBxk+34mnCLfuCv6EIs
+         UGOw==
+X-Gm-Message-State: AC+VfDxxw4w6AwKtehpCJPHoYtg+m39IcYsKjg/K/3XJVIkP3ow35yXO
+        lxzdihl6EUiUF8Q6P8j6B9I=
+X-Google-Smtp-Source: ACHHUZ66E+Hx47+uO19xLpQ6m4shXXkkbZs1ZEIZ+3orsfrg2y2nhbnULL/HeCrMbqRpdDaT7xweow==
+X-Received: by 2002:a05:600c:4e87:b0:3f7:ec1d:21b3 with SMTP id f7-20020a05600c4e8700b003f7ec1d21b3mr4620285wmq.5.1686840054425;
+        Thu, 15 Jun 2023 07:40:54 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id t25-20020a1c7719000000b003f7eeec829asm20709865wmi.10.2023.06.15.07.40.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 07:40:53 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] usb: cdns2: Fix spelling mistake in a trace message "Wakupe" -> "Wakeup"
+Date:   Thu, 15 Jun 2023 15:40:52 +0100
+Message-Id: <20230615144052.2254528-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d5561151-08bb-9f5f-aa51-44c5ad31976b@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 07:52:32PM +0530, Prashanth K wrote:
-> 
-> 
-> On 15-06-23 03:00 pm, Greg Kroah-Hartman wrote:
-> > On Wed, Jun 14, 2023 at 12:14:08PM +0300, Heikki Krogerus wrote:
-> > > On Wed, May 31, 2023 at 08:11:14PM +0530, Prashanth K wrote:
-> > > > Currently if we bootup a device without cable connected, then
-> > > > usb-conn-gpio won't call set_role() since last_role is same as
-> > > > current role. This happens because during probe last_role gets
-> > > > initialised to zero.
-> > > > 
-> > > > To avoid this, added a new constant in enum usb_role, last_role
-> > > > is set to USB_ROLE_UNKNOWN before performing initial detection.
-> > > > 
-> > > > While at it, also handle default case for the usb_role switch
-> > > > in cdns3, intel-xhci-usb-role-switch & musb/jz4740 to avoid
-> > > > build warnings.
-> > > > 
-> > > > Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
-> > > > Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-> > > > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> > > > ---
-> > > > v7: Added default case in musb/jz4740.c & intel-xhci-usb-role-switch.c to
-> > > >      avoid build warnings.
-> > > > v6: Moved USB_ROLE_UNKNOWN towards the end of enum usb_role.
-> > > > v5: Update commit text to mention the changes made in cdns3 driver.
-> > > > v4: Added Reviewed-by tag.
-> > > > v3: Added a default case in drivers/usb/cdns3/core.c as pointed out by
-> > > >      the test robot.
-> > > > v2: Added USB_ROLE_UNKNWON to enum usb_role.
-> > > > 
-> > > >   drivers/usb/cdns3/core.c                       | 2 ++
-> > > >   drivers/usb/common/usb-conn-gpio.c             | 3 +++
-> > > >   drivers/usb/musb/jz4740.c                      | 2 ++
-> > > >   drivers/usb/roles/intel-xhci-usb-role-switch.c | 2 ++
-> > > >   include/linux/usb/role.h                       | 1 +
-> > > >   5 files changed, 10 insertions(+)
-> > > 
-> > > Just to be clear to everybody, that USB_ROLE_UNKNOWN is not handled in
-> > > drivers/usb/roles/class.c, so this patch is broken.
-> > > 
-> > > But the whole approach is wrong. That USB_ROLE_UNKNOWN is clearly a
-> > > flag where the other values in enum usb_role are actual switch states.
-> > > So it does not belong there.
-> > > 
-> > > In general, adding globals states like that just in order to work
-> > > around issues in single drivers is never a good idea IMO.
-> > 
-> > Ok, let me go revert this from my tree, thanks for the review.
-> > 
-> > greg k-h
-> 
-> In that case, can I resubmit v1 of this patch again, where I have used a
-> macro in usb-conn-gpio driver ? something like this.
-> 
-> @@ -27,6 +27,8 @@
->  #define USB_CONN_IRQF	\
->  	(IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT)
-> 
-> +#define USB_ROLE_UNKNOWN (USB_ROLE_NONE -1)
+There is a spelling mistake in a trace message. Fix it.
 
-Are you referencing an existing enum here and assuming it is a specific
-value?
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/usb/gadget/udc/cdns2/cdns2-debug.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-For obvious reasons, that can never work :)
+diff --git a/drivers/usb/gadget/udc/cdns2/cdns2-debug.h b/drivers/usb/gadget/udc/cdns2/cdns2-debug.h
+index fd22ae949008..be9ae0d28a40 100644
+--- a/drivers/usb/gadget/udc/cdns2/cdns2-debug.h
++++ b/drivers/usb/gadget/udc/cdns2/cdns2-debug.h
+@@ -36,7 +36,7 @@ static inline const char *cdns2_decode_usb_irq(char *str, size_t size,
+ 	ret += snprintf(str + ret, size - ret, ", EXT: 0x%02x - ", ext_irq);
+ 
+ 	if (ext_irq & EXTIRQ_WAKEUP)
+-		ret += snprintf(str + ret, size - ret, "Wakupe ");
++		ret += snprintf(str + ret, size - ret, "Wakeup ");
+ 	if (ext_irq & EXTIRQ_VBUSFAULT_FALL)
+ 		ret += snprintf(str + ret, size - ret, "VBUS_FALL ");
+ 	if (ext_irq & EXTIRQ_VBUSFAULT_RISE)
+-- 
+2.39.2
 
-thanks,
-
-greg k-h
