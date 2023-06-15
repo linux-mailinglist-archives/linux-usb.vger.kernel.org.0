@@ -2,105 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85378731FBE
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 20:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A38731FC9
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 20:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237928AbjFOSJe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Jun 2023 14:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60496 "EHLO
+        id S238762AbjFOSLe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Jun 2023 14:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237565AbjFOSJa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 14:09:30 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D532D4E;
-        Thu, 15 Jun 2023 11:09:27 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30af56f5f52so6041351f8f.1;
-        Thu, 15 Jun 2023 11:09:26 -0700 (PDT)
+        with ESMTP id S235704AbjFOSLd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 14:11:33 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7298E2964
+        for <linux-usb@vger.kernel.org>; Thu, 15 Jun 2023 11:11:30 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-25c101bf7deso2607800a91.1
+        for <linux-usb@vger.kernel.org>; Thu, 15 Jun 2023 11:11:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686852565; x=1689444565;
+        d=google.com; s=20221208; t=1686852690; x=1689444690;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BPImEVscMojs9n7lKMKdyofc4xjY1xoflsUxQYw/6Tc=;
-        b=QmRYT/l2vvGvs1/ND8lpYm14BMAW04Gz/Qh7LvvvDDIuttOKOdERGtbvpZvDCsF6la
-         s9EoxJ/DCBiGh/c2u0b0eTxzM56kO+Ye53Hsbutz4BrZyfjeLhpxPPKjxNV6LQH04m6w
-         uijrUDf0dbj+0O9KYIDYp1LvOf8M3/kdPT/kLakZtE2hLwKUzdZD61HbeYELetDhu7iZ
-         hMwPBy7c94PT3pNyjnqopMW6MqczzYcgW+XrHq+sXWpqZdv9GluD6O9DYyCmSwTZvw4X
-         KGNmd0uVZsjDb+08dhe8QtQCiUFQHvqktKkM5OfXPh+ucZEWA69OuRKGU1dgYqcFxrq7
-         3mNg==
+        bh=DJi3cCnc2qA6VU+gHOwF45LozWJ4WxOCugFiLIt6KK0=;
+        b=7edQvGXJpXGAfxPgc1jNQFe7QPN0YXhx1L5+4xX9bOk38QV/xd3JIVc3YdwnxBnguX
+         qCcK6VDiEyl6HgOruxjXZgKChfrH0MABQ3xeaKHfvwY4Jg1OEdu/snrxtho/ENIplk5E
+         vZoMUnWWZXXfw6QGJFs5JP8jiPhWNZOxU9OUDTw4PJIxoWbxp04eTrdo7PQ7anDqCybU
+         jZYhmoNzJ5ZdHSPtP62IcDyxwVuVhEUvRb4fB0yTqGW48/nYD78h01fYXApcRWre41x8
+         xBIQoZv1DDsu1su4VSCj6IzZMT95/5JJE6+PdFEC2v6fFt92jY2se8QSO2IMrJ8Z4vgt
+         TUvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686852565; x=1689444565;
+        d=1e100.net; s=20221208; t=1686852690; x=1689444690;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BPImEVscMojs9n7lKMKdyofc4xjY1xoflsUxQYw/6Tc=;
-        b=JoAjVYYxVpC9Xak7281AmCoB2+I2Het1Aj/76FCUuUdCCTyYEDmum0a0JiqCN6x+xs
-         ZjcHSD7u+FC2c4eXteg8P1iY/Vtbwy37AsqHmJH6xOUggYmM222CmhKVVcF7NNsEwb+B
-         YSY9w1BBGqrl/tTIhKhyz4jvqpJMwF6Kimq3oyBm6kQOaXQruoGfNx/Jl/GngF/2NP+O
-         pq4BElEe983IiJazry9SwJXU1/kxy0xgWeG/R1yoK/4VPINKqmWAuBlRZc4F0zM14Xx6
-         btqLiTJw3aq+rwMEPlwBxMxVPaboY1vpWx4ZZQliDxAwYFTtv0Vt39Qpa7dmR/68j+vk
-         xRSQ==
-X-Gm-Message-State: AC+VfDyOs7LAWX/h6sfQppLDx+SRZK83xX4S0+gbVUf/7GQx3Zi4S/Eq
-        uedoxtaXahLajcLDeyVCjlBff6yjIfPQvOwgs6kT+Dt6fMT1AA==
-X-Google-Smtp-Source: ACHHUZ5ScKEXxs3N3riRpameibKwfQ5AgWGdRhPuq7vZ0BK5oQPEW/IWP2DdZoP9Jva/DF0QJH9x2fyXk/gMJei1FDU=
-X-Received: by 2002:a5d:4743:0:b0:30e:19a8:4b15 with SMTP id
- o3-20020a5d4743000000b0030e19a84b15mr11748710wrs.30.1686852565052; Thu, 15
- Jun 2023 11:09:25 -0700 (PDT)
+        bh=DJi3cCnc2qA6VU+gHOwF45LozWJ4WxOCugFiLIt6KK0=;
+        b=U0zWJMtbEoEQ29wFv6wdrkj/USgv9HGIP8uiA/pVcdm8/BPrX28h23EnZK53CPvrvD
+         GGJUE+UHdsR//hTiWXbFWyr/LMxix1g8iwzk/gKXhjTARNvV1OUhz5UtaBT+G11Yw9VH
+         hDo6y/Gz37I5hK62vsFuxQD0VrK08AOMUITuApB8O65VcUKiyRSs3XwpS6XtBSkwhSLp
+         4usjObW7TjEQCg3G+L9VpVPXr/Y8qvUdrHu9r4O5kGvj02NmHUxpGJPdhAMaye8Z8c5r
+         zfTtTyj3HxumbXcdaXmzXD/66HG2aDkMsT7o5oDewZnHX5JZ+oxufaPGqULnHhdBv7dA
+         TqCA==
+X-Gm-Message-State: AC+VfDz8b5RY0FopBLb/8L+W4/lXnnEjYXO2gzBQd+a8do2Hq0yW6Djs
+        ItOVCjvLgW2ub2GS/5EPAZBmUBldIZZYGY7D3dXf4OxRlt34AtI/NhmIwA==
+X-Google-Smtp-Source: ACHHUZ7TdJMcV7jKggkCi2cBsbe/G/xosY3BmPuZPnQO1p22CBqpygxGJ/8KZn+ho/nF5S+ofziY6O9lshA4erx07+c=
+X-Received: by 2002:a17:90b:1b0f:b0:253:3e9d:f925 with SMTP id
+ nu15-20020a17090b1b0f00b002533e9df925mr5004732pjb.31.1686852689775; Thu, 15
+ Jun 2023 11:11:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230613004341.3540325-1-azeemshaikh38@gmail.com>
- <202306131229.B5F2D9F@keescook> <CADmuW3VEiseKt2UM9o9jzzR8nEawh1jxANyxdZcxk89U65pXEQ@mail.gmail.com>
- <202306141049.BF86FA8F1F@keescook>
-In-Reply-To: <202306141049.BF86FA8F1F@keescook>
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-Date:   Thu, 15 Jun 2023 14:09:13 -0400
-Message-ID: <CADmuW3UZ9+9DmXPEyitgn_8Rg7U-iGvV-wJ-ug7eW84JSti47g@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: function: printer: Replace strlcpy with strscpy
-To:     Kees Cook <keescook@chromium.org>
+References: <32e22952-8574-4120-979b-ebb6af5f54b4@moroto.mountain>
+In-Reply-To: <32e22952-8574-4120-979b-ebb6af5f54b4@moroto.mountain>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Thu, 15 Jun 2023 11:10:53 -0700
+Message-ID: <CAPTae5LVtQryd=yHJo0NksRnxxP7kykw3SgKNx72MqPSyooTnA@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: udc: core: Fix double unlock in usb_gadget_activate()
+To:     Dan Carpenter <dan.carpenter@linaro.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-hardening@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Albert Briscoe <albertsbriscoe@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+        Alan Stern <stern@rowland.harvard.edu>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>,
+        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 1:51=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
-rote:
->
-> On Wed, Jun 14, 2023 at 10:12:14AM -0400, Azeem Shaikh wrote:
-> > On Tue, Jun 13, 2023 at 3:30=E2=80=AFPM Kees Cook <keescook@chromium.or=
-g> wrote:
-> > >
-> > > On Tue, Jun 13, 2023 at 12:43:41AM +0000, Azeem Shaikh wrote:
-> > [...]
-> > > > -     result =3D strlcpy(page, opts->pnp_string, PAGE_SIZE);
-> > > > -     if (result >=3D PAGE_SIZE) {
-> > > > +     result =3D strscpy(page, opts->pnp_string, PAGE_SIZE);
-> > > > +     if (result =3D=3D -E2BIG) {
-> > >
-> > > I think "< 1" might be a better test here.
-> >
-> > Curious, why "< 1" instead of "< 0"?
-> >
-> > > >               result =3D PAGE_SIZE;
-> > > >       } else if (page[result - 1] !=3D '\n' && result + 1 < PAGE_SI=
-ZE) {
->
-> It's for this case above where "result" may be used in an array index,
-> and if it's 0 or less, there will be a negative array index (due to the "=
--
-> 1"). So, here, it needs to be "< 1" instead of the more traditional "< 0"=
-.
->
+Thanks Dan for posting this !
 
-Makes sense. Sent out a v2.
+Regards,
+Badhri
+
+On Thu, Jun 15, 2023 at 8:43=E2=80=AFAM Dan Carpenter <dan.carpenter@linaro=
+.org> wrote:
+>
+> Do not call mutex_unlock(&gadget->udc->connect_lock) twice in a row.
+>
+> Fixes: 286d9975a838 ("usb: gadget: udc: core: Prevent soft_connect_store(=
+) race")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+
+Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
+
+> ---
+>  drivers/usb/gadget/udc/core.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.=
+c
+> index 83fd1de14784..d58640a9d0ca 100644
+> --- a/drivers/usb/gadget/udc/core.c
+> +++ b/drivers/usb/gadget/udc/core.c
+> @@ -878,8 +878,6 @@ int usb_gadget_activate(struct usb_gadget *gadget)
+>          */
+>         if (gadget->connected)
+>                 ret =3D usb_gadget_connect_locked(gadget);
+> -       mutex_unlock(&gadget->udc->connect_lock);
+> -
+>  unlock:
+>         mutex_unlock(&gadget->udc->connect_lock);
+>         trace_usb_gadget_activate(gadget, ret);
+> --
+> 2.39.2
+>
