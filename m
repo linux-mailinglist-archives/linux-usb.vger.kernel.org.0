@@ -2,686 +2,260 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AEF73156A
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 12:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 628CF73160E
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 13:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240190AbjFOKdH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Jun 2023 06:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
+        id S244420AbjFOLF0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Jun 2023 07:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238942AbjFOKdF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 06:33:05 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587FB2738
-        for <linux-usb@vger.kernel.org>; Thu, 15 Jun 2023 03:33:02 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f736e0c9a8so14653215e9.2
-        for <linux-usb@vger.kernel.org>; Thu, 15 Jun 2023 03:33:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686825181; x=1689417181;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m1HsVsrfhvETgBAemCLuPxBtPh8WFHYrP12bN6GFyYY=;
-        b=uMaNCLV11UTwxykENLei2iLrFhvTG8P03O8DJr5lwf8mgNUZQxml1spGRQdw/rjJdi
-         vDvDYpdwi+NF8na7ZYC3bqbYBa/U57zA36ok+Sin792TG9mBlvYFLiscpBq4LN8v4tw6
-         JBisVOC3J0GK3GJOmY+AIFlIr9VRAMR/bCooKP9bX7HyLhBzAsevIU3DRqh5FMWnm1Ua
-         KQ0VHuwlGq6h4aV6I5a326Mflh6A69Rk8daxbDveItUtCJS73fgSU0faXxvBn8gfShWv
-         C4VOdWTTP46nfRzWxYgiiUiuIPGlBDsmHhTX7oouTAv29gc9TFdtnuCmLik99H5eDGqs
-         7dGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686825181; x=1689417181;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m1HsVsrfhvETgBAemCLuPxBtPh8WFHYrP12bN6GFyYY=;
-        b=kaiJrPn7nzSEjI51g05GkROrMuV9b/HVdGHBps+LCh5dH1+RAWNqOfJsZHUdOxd1mB
-         usbiBk00btn0pWCIIoAjpRDH6VOoFc2BsN/lHucngmy5IomQIjUtG8h0sPTaRCBAuJ2m
-         ygbxrOtpLgQ1N1wkR2YYsvqssKeEvgrW/Ozoogw1yr3QviY/Hx0XuCTvwLMIlIdF1IY2
-         yormBghp66oyObEnSVn87G24xAwHJCvGDWXM0TS2CVjxg2pHUmegcH+F7pF/BJIzuYSf
-         fAUlPNgzzYx6ZKrTBexe6TbYke6Wi9mb06vZ+o3Yt2h3FD/wZHB2n6wKbaPE8Wssiwgg
-         5HNg==
-X-Gm-Message-State: AC+VfDydLyLuD6GGNF2CNDIgWaOQzaRQ78WpWlQ4JqD7rcDgr7tb+2+I
-        nqXxiCZTtgGRCaUXgURxO5vaqIDJkOoquPAJTQMrnw==
-X-Google-Smtp-Source: ACHHUZ70BObKAY22u1Fm4yaR0KyM4UzETrTl/M6QqK47BQrTdSWFzs536GwqnDbmm+6UXeAx93scJA==
-X-Received: by 2002:a1c:f70a:0:b0:3f5:1728:bde9 with SMTP id v10-20020a1cf70a000000b003f51728bde9mr11621935wmh.2.1686825180711;
-        Thu, 15 Jun 2023 03:33:00 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id q25-20020a7bce99000000b003f17848673fsm20072088wmj.27.2023.06.15.03.32.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 03:33:00 -0700 (PDT)
-From:   neil.armstrong@linaro.org
-Date:   Thu, 15 Jun 2023 12:32:55 +0200
-Subject: [PATCH v4 2/2] usb: typec: add support for the nb7vpq904m Type-C
- Linear Redriver
+        with ESMTP id S1343845AbjFOLFN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 07:05:13 -0400
+Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3F2271F;
+        Thu, 15 Jun 2023 04:05:11 -0700 (PDT)
+Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35FApR5X025669;
+        Thu, 15 Jun 2023 11:04:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=PPS06212021;
+ bh=HoI+Dvy6v4YxLp2OUbzRCPeyrIu9JBw3CtfaI3S894A=;
+ b=j+jKmZb1wPthwdQD6Ygwnyrdf3r+yOAHuFOD4p/BMHXRU2pl5tS87CP4d1z//irowqQv
+ XLRqmXLRffZn5bKcHPtkmu3AvjGiC7HfpAQP4wgmufsx0cXgVUxzn+uloQ35FOsMe00O
+ YccE5AZiOnrzdW/VKas/83vA9EtpyaYSQsgJKPtb/p/ZlQEuxSxocI62AOF43yGiVJdm
+ /ELMiL26eHVf71rAJExqXuHbULFL21jgPy86BQI0Cvui11XN+7ObSmbPJuSmHVvQTtTI
+ MlsFBFJRc03guvq8VJ4vNGdA5wfJajpkUq1sCCGPN6M9/MDXm3pUfmR/hJaBNfBdJaji hA== 
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2041.outbound.protection.outlook.com [104.47.66.41])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3r4ed04vmq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 11:04:57 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UzGM93Osuuk2jK1fzWHJejA1dRffA3NLGTZgHpEbsPcMgYLPWYQNYnOLPUTp3jDm/ZqOGXPQvOhTqEbpKXAtwAJJ52SXb/P5h2TpxZXBbFJ7Y9D/SRV1oJEJSpFo99u74nguZnGyO5YZ462fGlLd5lni5g0QkgK+eCQoi73GK3VeBJ9QRXtwDeQc+H8jzMg6DiAfAlsCwarMDAn0IMirJ/6M47RkTX7oJsGqXO/VXA90FmjtAtS1QTMOld2p0JsMm1iHBeUfVE+o4ZtLUFrmmYbG7VhZrpwYj2ym6pOXIEJbz4mZmhnUSpKQ7DM9NuA0VkL2JhM5kViu9zzDpYY7PA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HoI+Dvy6v4YxLp2OUbzRCPeyrIu9JBw3CtfaI3S894A=;
+ b=f6BdTsW9tW9oo4AfKfL5hAGHw+sX4Ab8VTCzKP0tQ1v7SonNhzrJ6pJQBwTKZl2SY9KDn9GEZpz6ZbVrNGx/ejHplmRwLB3IIBBtUKj9iRvCITuC8amNNScCt31l5E1P9qzdZu5X30XKk5tSk5GD9CUtc5gefjbtjRCdh7UiIxf6ZKrsX9WbHsZalghimpxzZ+RM/4RIFd6KNHz4QLOnsNQTcoYZZuZ/AJLCS5oglQHp0yVgWGh55BoECw8hnxT33hX7tvbZdvD8sX8GaV17TNPC0Z/OjMPdQnX9LaNbM1r4I0x8DVSGwppKvh7NqbIJK2JLfL9zVugpmUpWdPcoEw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from MW5PR11MB5764.namprd11.prod.outlook.com (2603:10b6:303:197::8)
+ by MN0PR11MB6279.namprd11.prod.outlook.com (2603:10b6:208:3c1::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.27; Thu, 15 Jun
+ 2023 11:04:52 +0000
+Received: from MW5PR11MB5764.namprd11.prod.outlook.com
+ ([fe80::7024:8e67:fd05:3242]) by MW5PR11MB5764.namprd11.prod.outlook.com
+ ([fe80::7024:8e67:fd05:3242%5]) with mapi id 15.20.6455.030; Thu, 15 Jun 2023
+ 11:04:52 +0000
+From:   Xiaolei Wang <xiaolei.wang@windriver.com>
+To:     peter.chen@kernel.org, pawell@cadence.com, rogerq@kernel.org,
+        a-govindraju@ti.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: cdns3: Put the cdns set active part outside the spin lock
+Date:   Thu, 15 Jun 2023 19:04:24 +0800
+Message-Id: <20230615110424.4007675-1-xiaolei.wang@windriver.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYCPR01CA0074.jpnprd01.prod.outlook.com
+ (2603:1096:405:3::14) To MW5PR11MB5764.namprd11.prod.outlook.com
+ (2603:10b6:303:197::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230601-topic-sm8x50-upstream-redriver-v4-2-91d5820f3a03@linaro.org>
-References: <20230601-topic-sm8x50-upstream-redriver-v4-0-91d5820f3a03@linaro.org>
-In-Reply-To: <20230601-topic-sm8x50-upstream-redriver-v4-0-91d5820f3a03@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=16659;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=hr5eCT9CJLtsQRZLTzA99fzaKFuLxziSE8cMNrtnvik=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkiujZvv9oTg7igQl/2yN84pFrqgw04CTj4Rx6M8qB
- soDBmJ+JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIro2QAKCRB33NvayMhJ0bBHEA
- Cd/AXVTJMUPx/3P3XmoOMK0Qs12R0tA7kRwa7oAKeAsXmJU2gIPnb40qEfnwMZyUVOcM/jRyVj5VlN
- DGy7TpITijY0Voo+TAx9DLfd5t0L7ca4FovqRRyX71VLKhAGT2/eQvMb6eUIkvftSUljslevlpKn8M
- R3ouDTcMzgbpl3TP+ot+Nom4HBHwi4O/GsZglZWnJGxiOUyXaXNvETtZqUqfd3+BTGyTs0f1Up3kWy
- hxiw1+qfAxij5EH6OtylSXE9E6lpIY1ECFWXB0esPdZia0HckWtLjqzY5E54GYbv3FgcN1JGspBi1x
- gDZkAt21PqpqAZwkaacwZUCNl5+/7+7XhWHyBSQ8N7D5kBA4Iqqt/+hqXhnjZHi8xulpPiKUzAfdU3
- HRxH7QLWyaNRxbbdU2ik0Eq6+l6fj6oo81DLzUk6QhiAEHbjvcTfFPrSAiYWOUkAFysheUhHW1A2dK
- Dsft4CRT4AdnXcXmMTmNbd1beKLpjbenIY3DvMu2c9FDaCIqj8RtHjANYevZ3ocGH9s7uVfCDFyBNj
- zd34GN9dQTMj22mFY7H3pq9YL1b+CjeF5jUAFh9IFiEl3SgAZs8/dy2Cpp2jzeqlx9Ys3xbjRTYg+Y
- oZqh+ymopMoRh5SoNGYkRpJbfNsFf5DSDWknpsyuJJanBgH8AGcXSIKY3R9w==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW5PR11MB5764:EE_|MN0PR11MB6279:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5738b820-a62b-4e3b-77a4-08db6d905832
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tgYiae+qLNJXMaFOEVk1zRaqpOkuoXP38IoktEtqf3iXFAHX1wD4NFOgbt6VORFuL6RgGysHt4mX3TOaDDm0gfzvJHon4fJVcecJdfeMlq1WAKHHjuZSkCqLLBXhF99jmf6+1qmi12oJ26QOPr79h2vWcSzX2zQddB/4I0d/3IxxIcZLAheUjhAcI05fIX7t1vZsyd7reWdh4BriqyO9WvadRrioi87uIgsECh9+gT9RhabFlk78yfxXYc4u7PsVQUaITA2uC7NgvRwELzCgVBEmPBE8otuTrpSAqgRpPIThscunVZfroFRwmqoKcu3XA7NYCVTToeQQMEKmCmVKoL9mPhbWlEsaZjUPfFpVqgKH2qhHeDOHBBPk3p09KSGMM8Q4cofp9BaLl7Piqi+ekdTi9Jp/0fp64ZwKSDeA1+5DW7wz/I7xj3pmNfIGLx1K7KhT7/9A3KU67C8dDacAOc0AV6VratimkamC5eG1PcukwhR4dqKqdM/w/sqAKuKUJFfgD7p6YN7y//XMbHTkoccX6sPtvp9Ggo8hDC+YGZ05HNv8dwwSfXFMO38SWxx0dh+rkQez22Eok40JqMinDAGD7D+hTwcoEDMf2aA1Wbici1AGhF5AnTCBuzZJGSAY
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5764.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(346002)(136003)(39850400004)(366004)(451199021)(83380400001)(2906002)(2616005)(36756003)(86362001)(38350700002)(38100700002)(8936002)(8676002)(6486002)(52116002)(316002)(41300700001)(5660300002)(478600001)(66946007)(66556008)(66476007)(6666004)(4326008)(26005)(6512007)(1076003)(6506007)(186003)(44832011);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ic3nWLXcEdTLHeEXI994kLUdCGogcukkGkuxr0/DkRL9yNyzL5MEvMpUN3Z6?=
+ =?us-ascii?Q?GiazNkz9v7xnz9bDKThLaHdf0n51Pz9gf/8xcpBCR6ZLv+DC64QHAmwqV/Kh?=
+ =?us-ascii?Q?djhkMOkttagWzyY77OJUNBzrVCXKID4ffXFqH1ZxycXnZW2E5kH346u1/Hjr?=
+ =?us-ascii?Q?j5Tw8gA0WQk30rb+D+YG4h8nFp15+tVmELznn2TY+PznjqqHhMM1waNiDISx?=
+ =?us-ascii?Q?/wkjTFAoXb+kwTj+lfxXsvIxDmK+zQ8A0WqmtasWTB1l3r+wJGucdPkuzIJK?=
+ =?us-ascii?Q?S2oxd3xPSZtudM2prVKzOSIaaLdHMxevTfAD0WMZLXEmCbv7jen+fGwPR/yE?=
+ =?us-ascii?Q?m6oCBJEbcW01z9VUblrFNG3IWUJpyHoaEnQiybpwLHmpymxA0nPiGu4tvtvd?=
+ =?us-ascii?Q?0gd0HL5XXUFkwY5S/Cs2V/dJO3wOa/YJa//a8acGiINRw81NE2YRldyb1G9I?=
+ =?us-ascii?Q?grc3xuk7EciAWvyNo+uPrWg8gX/BvgDkoJoYZwvfzyxdh75RXSpH9Ze+AZz9?=
+ =?us-ascii?Q?kPiFD0RlLDIpx+FA1L9Lvkkxk2Ep65NBypG9Nrr1Nbf5ZcWMT76QlQz5IK8m?=
+ =?us-ascii?Q?TN081RWiL5YKrl8IE6Aqk4a5JUUlmotI1vGRT4GSOE1zATAmXBHb3mv+yiIE?=
+ =?us-ascii?Q?vkWtsnwwRbu/Z1FpPTL4UckGA8oCK1XJb8zak6BDSmqipbLMXluDVrOHR92d?=
+ =?us-ascii?Q?dq00wwblJzjRrN3hIh7uvgddk1wVHnMrKrnv4qL+fpGzRzmth9FykogsEmOp?=
+ =?us-ascii?Q?TVkLnLENTEvnsvq9lp0eJJzmGPsU60C9QDS7XaB4QD8hdYv57AIwYi+sD3qi?=
+ =?us-ascii?Q?TrEIdKwlbjuy0ei+CbDH+B4anItFncUxzVXnezB+FvSYEJvMBxVCqebyOXlT?=
+ =?us-ascii?Q?SL+wSo610yIVIu/lV/s+5uvs9vBpbkq1nbeLYwABuo9SMiK5UebXIngCkf4U?=
+ =?us-ascii?Q?xecjaDgz62G6Y4BQAvOJs6hTpbxIDGIuqR3WMhbdKNzYxSpyGMV3g77y+j6w?=
+ =?us-ascii?Q?a9y/GJvJE6Ixw2igRibY4SWDfzYXteeNlyinbpVSZy1q2R1e7P3h4Zotxfnb?=
+ =?us-ascii?Q?mddy5dIxCYMwpYm+3Go5odPXtGnew9tWxyYceZR7UorMtSW481KfvGp0eOTh?=
+ =?us-ascii?Q?hsxUZJt/PiaG6xpqnXLIReiZJdeaFyGlAwXMkvWmMW844t3B+Y3eipHaMR43?=
+ =?us-ascii?Q?vAuwccrG/6kZPCufnriCHgkzn+sWjmXyOVUjQ/p444/aeeEktqbtbZCthd+9?=
+ =?us-ascii?Q?XblwCGquVN9p1OIJwo/rZ6M0ev8P4XmJXZYssnA+9X6ycedjj6HmWMbk4wMB?=
+ =?us-ascii?Q?F/pCrq0grpv2lrZfwEJ+yEdHYrNQlF1OJVHfNVRifRobh52Cj7M+Y1yPpzIe?=
+ =?us-ascii?Q?wYjYK/RETaU1PGJYxQ+rqgifXgeXKvjlJIU0AQsGG0tfy27OFYOQNWCnShA1?=
+ =?us-ascii?Q?2k4+e65CzN0hoTR6yJmAd3SNJL2VBsIG+vmnVNDEuwPSvMc/ZLxGkKILZ+a3?=
+ =?us-ascii?Q?i5h1I0sINIGYs0gagiw7n2+rM7KEu5V1l2OFOa/CwNPbSWna3/A5Xm9hugWJ?=
+ =?us-ascii?Q?3WOhM6pqhyZVYBcoWbCTauv2B9Q/8YkS06oaQF1bLSBKYYC8x8xYphXNMGEo?=
+ =?us-ascii?Q?Cw=3D=3D?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5738b820-a62b-4e3b-77a4-08db6d905832
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5764.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 11:04:52.7079
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: w2HvKBG1x+CcC81pimMDAAEnKvyAV25Mvc5zIT1bzgG67xYK0/ytHQ4lqO0SB58B+jS8CQdGWu0IPjwyI79PbLH0ROgMJzd5KRnE89nzqAs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB6279
+X-Proofpoint-GUID: EfKSgwK8MtpnNmZlJ6EDrjN2DRgLWpEK
+X-Proofpoint-ORIG-GUID: EfKSgwK8MtpnNmZlJ6EDrjN2DRgLWpEK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-15_06,2023-06-14_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+ adultscore=0 spamscore=0 malwarescore=0 phishscore=0 suspectscore=0
+ lowpriorityscore=0 impostorscore=0 bulkscore=0 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306150096
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+The device may be scheduled during the resume process,
+so this cannot appear in atomic operations. Since
+pm_runtime_set_active will resume suppliers, put set
+active outside the spin lock, which is only used to
+protect the struct cdns data structure, otherwise the
+kernel will report the following warning:
 
-Add support for the ON Semiconductor NB7VPQ904M Type-C USB SuperSpeed
-and DisplayPort ALT Mode Linear Redriver chip found on some devices
-with a Type-C port.
+  BUG: sleeping function called from invalid context at drivers/base/power/runtime.c:1163
+  in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 651, name: sh
+  preempt_count: 1, expected: 0
+  RCU nest depth: 0, expected: 0
+  CPU: 0 PID: 651 Comm: sh Tainted: G        WC         6.1.20 #1
+  Hardware name: Freescale i.MX8QM MEK (DT)
+  Call trace:
+    dump_backtrace.part.0+0xe0/0xf0
+    show_stack+0x18/0x30
+    dump_stack_lvl+0x64/0x80
+    dump_stack+0x1c/0x38
+    __might_resched+0x1fc/0x240
+    __might_sleep+0x68/0xc0
+    __pm_runtime_resume+0x9c/0xe0
+    rpm_get_suppliers+0x68/0x1b0
+    __pm_runtime_set_status+0x298/0x560
+    cdns_resume+0xb0/0x1c0
+    cdns3_controller_resume.isra.0+0x1e0/0x250
+    cdns3_plat_resume+0x28/0x40
 
-The redriver compensates ultra High-Speeed DisplayPort and USB
-Super Speed signal integrity losses mainly due to PCB & transmission
-cables.
-
-The redriver doesn't support SuperSpeed lines swapping, but
-can support Type-C SBU lines swapping.
-
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
 ---
- drivers/usb/typec/mux/Kconfig      |   8 +
- drivers/usb/typec/mux/Makefile     |   1 +
- drivers/usb/typec/mux/nb7vpq904m.c | 529 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 538 insertions(+)
+Changes since  v1:
+ - Fix build error: unused variable 'dev'
 
-diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-index c46fa4f9d3df..8c4d6b8fb75c 100644
---- a/drivers/usb/typec/mux/Kconfig
-+++ b/drivers/usb/typec/mux/Kconfig
-@@ -35,4 +35,12 @@ config TYPEC_MUX_INTEL_PMC
- 	  control the USB role switch and also the multiplexer/demultiplexer
- 	  switches used with USB Type-C Alternate Modes.
+ drivers/usb/cdns3/cdns3-plat.c |  3 ++-
+ drivers/usb/cdns3/cdnsp-pci.c  |  3 ++-
+ drivers/usb/cdns3/core.c       | 15 +++++++++++----
+ drivers/usb/cdns3/core.h       |  3 ++-
+ 4 files changed, 17 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
+index 2bc5d094548b..726b2e4f67e4 100644
+--- a/drivers/usb/cdns3/cdns3-plat.c
++++ b/drivers/usb/cdns3/cdns3-plat.c
+@@ -256,9 +256,10 @@ static int cdns3_controller_resume(struct device *dev, pm_message_t msg)
+ 	cdns3_set_platform_suspend(cdns->dev, false, false);
  
-+config TYPEC_MUX_NB7VPQ904M
-+	tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  Say Y or M if your system has a On Semiconductor NB7VPQ904M Type-C
-+	  redriver chip found on some devices with a Type-C port.
-+
- endmenu
-diff --git a/drivers/usb/typec/mux/Makefile b/drivers/usb/typec/mux/Makefile
-index dda67e19b58b..76196096ef41 100644
---- a/drivers/usb/typec/mux/Makefile
-+++ b/drivers/usb/typec/mux/Makefile
-@@ -4,3 +4,4 @@ obj-$(CONFIG_TYPEC_MUX_FSA4480)		+= fsa4480.o
- obj-$(CONFIG_TYPEC_MUX_GPIO_SBU)	+= gpio-sbu-mux.o
- obj-$(CONFIG_TYPEC_MUX_PI3USB30532)	+= pi3usb30532.o
- obj-$(CONFIG_TYPEC_MUX_INTEL_PMC)	+= intel_pmc_mux.o
-+obj-$(CONFIG_TYPEC_MUX_NB7VPQ904M)	+= nb7vpq904m.o
-diff --git a/drivers/usb/typec/mux/nb7vpq904m.c b/drivers/usb/typec/mux/nb7vpq904m.c
-new file mode 100644
-index 000000000000..80e580d50129
---- /dev/null
-+++ b/drivers/usb/typec/mux/nb7vpq904m.c
-@@ -0,0 +1,529 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * OnSemi NB7VPQ904M Type-C driver
-+ *
-+ * Copyright (C) 2023 Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-+ */
-+#include <linux/i2c.h>
-+#include <linux/mutex.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+#include <linux/bitfield.h>
-+#include <linux/of_graph.h>
-+#include <drm/drm_bridge.h>
-+#include <linux/usb/typec_dp.h>
-+#include <linux/usb/typec_mux.h>
-+#include <linux/usb/typec_retimer.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/regulator/consumer.h>
-+
-+#define NB7_CHNA		0
-+#define NB7_CHNB		1
-+#define NB7_CHNC		2
-+#define NB7_CHND		3
-+#define NB7_IS_CHAN_AD(channel) (channel == NB7_CHNA || channel == NB7_CHND)
-+
-+#define GEN_DEV_SET_REG			0x00
-+
-+#define GEN_DEV_SET_CHIP_EN		BIT(0)
-+#define GEN_DEV_SET_CHNA_EN		BIT(4)
-+#define GEN_DEV_SET_CHNB_EN		BIT(5)
-+#define GEN_DEV_SET_CHNC_EN		BIT(6)
-+#define GEN_DEV_SET_CHND_EN		BIT(7)
-+
-+#define GEN_DEV_SET_OP_MODE_MASK	GENMASK(3, 1)
-+
-+#define GEN_DEV_SET_OP_MODE_DP_CC2	0
-+#define GEN_DEV_SET_OP_MODE_DP_CC1	1
-+#define GEN_DEV_SET_OP_MODE_DP_4LANE	2
-+#define GEN_DEV_SET_OP_MODE_USB		5
-+
-+#define EQ_SETTING_REG_BASE		0x01
-+#define EQ_SETTING_REG(n)		(EQ_SETTING_REG_BASE + (n) * 2)
-+#define EQ_SETTING_MASK			GENMASK(3, 1)
-+
-+#define OUTPUT_COMPRESSION_AND_POL_REG_BASE	0x02
-+#define OUTPUT_COMPRESSION_AND_POL_REG(n)	(OUTPUT_COMPRESSION_AND_POL_REG_BASE + (n) * 2)
-+#define OUTPUT_COMPRESSION_MASK		GENMASK(2, 1)
-+
-+#define FLAT_GAIN_REG_BASE		0x18
-+#define FLAT_GAIN_REG(n)		(FLAT_GAIN_REG_BASE + (n) * 2)
-+#define FLAT_GAIN_MASK			GENMASK(1, 0)
-+
-+#define LOSS_MATCH_REG_BASE		0x19
-+#define LOSS_MATCH_REG(n)		(LOSS_MATCH_REG_BASE + (n) * 2)
-+#define LOSS_MATCH_MASK			GENMASK(1, 0)
-+
-+#define AUX_CC_REG			0x09
-+
-+#define CHIP_VERSION_REG		0x17
-+
-+struct nb7vpq904m {
-+	struct i2c_client *client;
-+	struct gpio_desc *enable_gpio;
-+	struct regulator *vcc_supply;
-+	struct regmap *regmap;
-+	struct typec_switch_dev *sw;
-+	struct typec_retimer *retimer;
-+
-+	bool swap_data_lanes;
-+	struct typec_switch *typec_switch;
-+
-+	struct drm_bridge bridge;
-+
-+	struct mutex lock; /* protect non-concurrent retimer & switch */
-+
-+	enum typec_orientation orientation;
-+	unsigned long mode;
-+	unsigned int svid;
-+};
-+
-+static void nb7vpq904m_set_channel(struct nb7vpq904m *nb7, unsigned int channel, bool dp)
-+{
-+	u8 eq, out_comp, flat_gain, loss_match;
-+
-+	if (dp) {
-+		eq = NB7_IS_CHAN_AD(channel) ? 0x6 : 0x4;
-+		out_comp = 0x3;
-+		flat_gain = NB7_IS_CHAN_AD(channel) ? 0x2 : 0x1;
-+		loss_match = 0x3;
-+	} else {
-+		eq = 0x4;
-+		out_comp = 0x3;
-+		flat_gain = NB7_IS_CHAN_AD(channel) ? 0x3 : 0x1;
-+		loss_match = NB7_IS_CHAN_AD(channel) ? 0x1 : 0x3;
-+	}
-+
-+	regmap_update_bits(nb7->regmap, EQ_SETTING_REG(channel),
-+			   EQ_SETTING_MASK, FIELD_PREP(EQ_SETTING_MASK, eq));
-+	regmap_update_bits(nb7->regmap, OUTPUT_COMPRESSION_AND_POL_REG(channel),
-+			   OUTPUT_COMPRESSION_MASK, FIELD_PREP(OUTPUT_COMPRESSION_MASK, out_comp));
-+	regmap_update_bits(nb7->regmap, FLAT_GAIN_REG(channel),
-+			   FLAT_GAIN_MASK, FIELD_PREP(FLAT_GAIN_MASK, flat_gain));
-+	regmap_update_bits(nb7->regmap, LOSS_MATCH_REG(channel),
-+			   LOSS_MATCH_MASK, FIELD_PREP(LOSS_MATCH_MASK, loss_match));
-+}
-+
-+static int nb7vpq904m_set(struct nb7vpq904m *nb7)
-+{
-+	bool reverse = (nb7->orientation == TYPEC_ORIENTATION_REVERSE);
-+
-+	switch (nb7->mode) {
-+	case TYPEC_STATE_SAFE:
-+		regmap_write(nb7->regmap, GEN_DEV_SET_REG,
-+			     GEN_DEV_SET_CHIP_EN |
-+			     GEN_DEV_SET_CHNA_EN |
-+			     GEN_DEV_SET_CHNB_EN |
-+			     GEN_DEV_SET_CHNC_EN |
-+			     GEN_DEV_SET_CHND_EN |
-+			     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
-+					GEN_DEV_SET_OP_MODE_USB));
-+		nb7vpq904m_set_channel(nb7, NB7_CHNA, false);
-+		nb7vpq904m_set_channel(nb7, NB7_CHNB, false);
-+		nb7vpq904m_set_channel(nb7, NB7_CHNC, false);
-+		nb7vpq904m_set_channel(nb7, NB7_CHND, false);
-+		regmap_write(nb7->regmap, AUX_CC_REG, 0x2);
-+
-+		return 0;
-+
-+	case TYPEC_STATE_USB:
-+		/*
-+		 * Normal Orientation (CC1)
-+		 * A -> USB RX
-+		 * B -> USB TX
-+		 * C -> X
-+		 * D -> X
-+		 * Flipped Orientation (CC2)
-+		 * A -> X
-+		 * B -> X
-+		 * C -> USB TX
-+		 * D -> USB RX
-+		 *
-+		 * Reversed if data lanes are swapped
-+		 */
-+		if (reverse ^ nb7->swap_data_lanes) {
-+			regmap_write(nb7->regmap, GEN_DEV_SET_REG,
-+				     GEN_DEV_SET_CHIP_EN |
-+				     GEN_DEV_SET_CHNA_EN |
-+				     GEN_DEV_SET_CHNB_EN |
-+				     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
-+						GEN_DEV_SET_OP_MODE_USB));
-+			nb7vpq904m_set_channel(nb7, NB7_CHNA, false);
-+			nb7vpq904m_set_channel(nb7, NB7_CHNB, false);
-+		} else {
-+			regmap_write(nb7->regmap, GEN_DEV_SET_REG,
-+				     GEN_DEV_SET_CHIP_EN |
-+				     GEN_DEV_SET_CHNC_EN |
-+				     GEN_DEV_SET_CHND_EN |
-+				     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
-+						GEN_DEV_SET_OP_MODE_USB));
-+			nb7vpq904m_set_channel(nb7, NB7_CHNC, false);
-+			nb7vpq904m_set_channel(nb7, NB7_CHND, false);
-+		}
-+		regmap_write(nb7->regmap, AUX_CC_REG, 0x2);
-+
-+		return 0;
-+
-+	default:
-+		if (nb7->svid != USB_TYPEC_DP_SID)
-+			return -EINVAL;
-+
-+		break;
-+	}
-+
-+	/* DP Altmode Setup */
-+
-+	regmap_write(nb7->regmap, AUX_CC_REG, reverse ? 0x1 : 0x0);
-+
-+	switch (nb7->mode) {
-+	case TYPEC_DP_STATE_C:
-+	case TYPEC_DP_STATE_E:
-+		/*
-+		 * Normal Orientation (CC1)
-+		 * A -> DP3
-+		 * B -> DP2
-+		 * C -> DP1
-+		 * D -> DP0
-+		 * Flipped Orientation (CC2)
-+		 * A -> DP0
-+		 * B -> DP1
-+		 * C -> DP2
-+		 * D -> DP3
-+		 */
-+		regmap_write(nb7->regmap, GEN_DEV_SET_REG,
-+			     GEN_DEV_SET_CHIP_EN |
-+			     GEN_DEV_SET_CHNA_EN |
-+			     GEN_DEV_SET_CHNB_EN |
-+			     GEN_DEV_SET_CHNC_EN |
-+			     GEN_DEV_SET_CHND_EN |
-+			     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
-+					GEN_DEV_SET_OP_MODE_DP_4LANE));
-+		nb7vpq904m_set_channel(nb7, NB7_CHNA, true);
-+		nb7vpq904m_set_channel(nb7, NB7_CHNB, true);
-+		nb7vpq904m_set_channel(nb7, NB7_CHNC, true);
-+		nb7vpq904m_set_channel(nb7, NB7_CHND, true);
-+		break;
-+
-+	case TYPEC_DP_STATE_D:
-+	case TYPEC_DP_STATE_F:
-+		regmap_write(nb7->regmap, GEN_DEV_SET_REG,
-+			     GEN_DEV_SET_CHIP_EN |
-+			     GEN_DEV_SET_CHNA_EN |
-+			     GEN_DEV_SET_CHNB_EN |
-+			     GEN_DEV_SET_CHNC_EN |
-+			     GEN_DEV_SET_CHND_EN |
-+			     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
-+					reverse ^ nb7->swap_data_lanes ?
-+						GEN_DEV_SET_OP_MODE_DP_CC2
-+						: GEN_DEV_SET_OP_MODE_DP_CC1));
-+
-+		/*
-+		 * Normal Orientation (CC1)
-+		 * A -> USB RX
-+		 * B -> USB TX
-+		 * C -> DP1
-+		 * D -> DP0
-+		 * Flipped Orientation (CC2)
-+		 * A -> DP0
-+		 * B -> DP1
-+		 * C -> USB TX
-+		 * D -> USB RX
-+		 *
-+		 * Reversed if data lanes are swapped
-+		 */
-+		if (nb7->swap_data_lanes) {
-+			nb7vpq904m_set_channel(nb7, NB7_CHNA, !reverse);
-+			nb7vpq904m_set_channel(nb7, NB7_CHNB, !reverse);
-+			nb7vpq904m_set_channel(nb7, NB7_CHNC, reverse);
-+			nb7vpq904m_set_channel(nb7, NB7_CHND, reverse);
-+		} else {
-+			nb7vpq904m_set_channel(nb7, NB7_CHNA, reverse);
-+			nb7vpq904m_set_channel(nb7, NB7_CHNB, reverse);
-+			nb7vpq904m_set_channel(nb7, NB7_CHNC, !reverse);
-+			nb7vpq904m_set_channel(nb7, NB7_CHND, !reverse);
-+		}
-+		break;
-+
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
+ 	spin_lock_irqsave(&cdns->lock, flags);
+-	cdns_resume(cdns, !PMSG_IS_AUTO(msg));
++	cdns_resume(cdns);
+ 	cdns->in_lpm = false;
+ 	spin_unlock_irqrestore(&cdns->lock, flags);
++	cdns_set_active(cdns, !PMSG_IS_AUTO(msg));
+ 	if (cdns->wakeup_pending) {
+ 		cdns->wakeup_pending = false;
+ 		enable_irq(cdns->wakeup_irq);
+diff --git a/drivers/usb/cdns3/cdnsp-pci.c b/drivers/usb/cdns3/cdnsp-pci.c
+index 7b151f5af3cc..0725668ffea4 100644
+--- a/drivers/usb/cdns3/cdnsp-pci.c
++++ b/drivers/usb/cdns3/cdnsp-pci.c
+@@ -208,8 +208,9 @@ static int __maybe_unused cdnsp_pci_resume(struct device *dev)
+ 	int ret;
+ 
+ 	spin_lock_irqsave(&cdns->lock, flags);
+-	ret = cdns_resume(cdns, 1);
++	ret = cdns_resume(cdns);
+ 	spin_unlock_irqrestore(&cdns->lock, flags);
++	cdns_set_active(cdns, 1);
+ 
+ 	return ret;
+ }
+diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+index dbcdf3b24b47..7b20d2d5c262 100644
+--- a/drivers/usb/cdns3/core.c
++++ b/drivers/usb/cdns3/core.c
+@@ -522,9 +522,8 @@ int cdns_suspend(struct cdns *cdns)
+ }
+ EXPORT_SYMBOL_GPL(cdns_suspend);
+ 
+-int cdns_resume(struct cdns *cdns, u8 set_active)
++int cdns_resume(struct cdns *cdns)
+ {
+-	struct device *dev = cdns->dev;
+ 	enum usb_role real_role;
+ 	bool role_changed = false;
+ 	int ret = 0;
+@@ -556,15 +555,23 @@ int cdns_resume(struct cdns *cdns, u8 set_active)
+ 	if (cdns->roles[cdns->role]->resume)
+ 		cdns->roles[cdns->role]->resume(cdns, cdns_power_is_lost(cdns));
+ 
 +	return 0;
 +}
++EXPORT_SYMBOL_GPL(cdns_resume);
 +
-+static int nb7vpq904m_sw_set(struct typec_switch_dev *sw, enum typec_orientation orientation)
++void cdns_set_active(struct cdns *cdns, u8 set_active)
 +{
-+	struct nb7vpq904m *nb7 = typec_switch_get_drvdata(sw);
-+	int ret;
++	struct device *dev = cdns->dev;
 +
-+	ret = typec_switch_set(nb7->typec_switch, orientation);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&nb7->lock);
-+
-+	if (nb7->orientation != orientation) {
-+		nb7->orientation = orientation;
-+
-+		ret = nb7vpq904m_set(nb7);
-+	}
-+
-+	mutex_unlock(&nb7->lock);
-+
-+	return ret;
-+}
-+
-+static int nb7vpq904m_retimer_set(struct typec_retimer *retimer, struct typec_retimer_state *state)
-+{
-+	struct nb7vpq904m *nb7 = typec_retimer_get_drvdata(retimer);
-+	int ret = 0;
-+
-+	mutex_lock(&nb7->lock);
-+
-+	if (nb7->mode != state->mode) {
-+		nb7->mode = state->mode;
-+
-+		if (state->alt)
-+			nb7->svid = state->alt->svid;
-+		else
-+			nb7->svid = 0; // No SVID
-+
-+		ret = nb7vpq904m_set(nb7);
-+	}
-+
-+	mutex_unlock(&nb7->lock);
-+
-+	return ret;
-+}
-+
-+#if IS_ENABLED(CONFIG_OF) && IS_ENABLED(CONFIG_DRM_PANEL_BRIDGE)
-+static int nb7vpq904m_bridge_attach(struct drm_bridge *bridge,
-+				    enum drm_bridge_attach_flags flags)
-+{
-+	struct nb7vpq904m *nb7 = container_of(bridge, struct nb7vpq904m, bridge);
-+	struct drm_bridge *next_bridge;
-+
-+	if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR))
-+		return -EINVAL;
-+
-+	next_bridge = devm_drm_of_get_bridge(&nb7->client->dev, nb7->client->dev.of_node, 0, 0);
-+	if (IS_ERR(next_bridge)) {
-+		dev_err(&nb7->client->dev, "failed to acquire drm_bridge: %pe\n", next_bridge);
-+		return PTR_ERR(next_bridge);
-+	}
-+
-+	return drm_bridge_attach(bridge->encoder, next_bridge, bridge,
-+				 DRM_BRIDGE_ATTACH_NO_CONNECTOR);
-+}
-+
-+static const struct drm_bridge_funcs nb7vpq904m_bridge_funcs = {
-+	.attach	= nb7vpq904m_bridge_attach,
-+};
-+
-+static int nb7vpq904m_register_bridge(struct nb7vpq904m *nb7)
-+{
-+	nb7->bridge.funcs = &nb7vpq904m_bridge_funcs;
-+	nb7->bridge.of_node = nb7->client->dev.of_node;
-+
-+	return devm_drm_bridge_add(&nb7->client->dev, &nb7->bridge);
-+}
-+#else
-+static int nb7vpq904m_register_bridge(struct nb7vpq904m *nb7)
-+{
-+	return 0;
-+}
-+#endif
-+
-+static const struct regmap_config nb7_regmap = {
-+	.max_register = 0x1f,
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+};
-+
-+enum {
-+	NORMAL_LANE_MAPPING,
-+	INVERT_LANE_MAPPING,
-+};
-+
-+#define DATA_LANES_COUNT	4
-+
-+static const int supported_data_lane_mapping[][DATA_LANES_COUNT] = {
-+	[NORMAL_LANE_MAPPING] = { 0, 1, 2, 3 },
-+	[INVERT_LANE_MAPPING] = { 3, 2, 1, 0 },
-+};
-+
-+static int nb7vpq904m_parse_data_lanes_mapping(struct nb7vpq904m *nb7)
-+{
-+	struct device_node *ep;
-+	u32 data_lanes[4];
-+	int ret, i, j;
-+
-+	ep = of_graph_get_endpoint_by_regs(nb7->client->dev.of_node, 1, 0);
-+
-+	if (ep) {
-+		ret = of_property_count_u32_elems(ep, "data-lanes");
-+		if (ret == -EINVAL)
-+			/* Property isn't here, consider default mapping */
-+			goto out_done;
-+		if (ret < 0)
-+			goto out_error;
-+
-+		if (ret != DATA_LANES_COUNT) {
-+			dev_err(&nb7->client->dev, "expected 4 data lanes\n");
-+			ret = -EINVAL;
-+			goto out_error;
-+		}
-+
-+		ret = of_property_read_u32_array(ep, "data-lanes", data_lanes, DATA_LANES_COUNT);
-+		if (ret)
-+			goto out_error;
-+
-+		for (i = 0; i < ARRAY_SIZE(supported_data_lane_mapping); i++) {
-+			for (j = 0; j < DATA_LANES_COUNT; j++) {
-+				if (data_lanes[j] != supported_data_lane_mapping[i][j])
-+					break;
-+			}
-+
-+			if (j == DATA_LANES_COUNT)
-+				break;
-+		}
-+
-+		switch (i) {
-+		case NORMAL_LANE_MAPPING:
-+			break;
-+		case INVERT_LANE_MAPPING:
-+			nb7->swap_data_lanes = true;
-+			dev_info(&nb7->client->dev, "using inverted data lanes mapping\n");
-+			break;
-+		default:
-+			dev_err(&nb7->client->dev, "invalid data lanes mapping\n");
-+			ret = -EINVAL;
-+			goto out_error;
-+		}
-+	}
-+
-+out_done:
-+	ret = 0;
-+
-+out_error:
-+	of_node_put(ep);
-+
-+	return ret;
-+}
-+
-+static int nb7vpq904m_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	struct typec_switch_desc sw_desc = { };
-+	struct typec_retimer_desc retimer_desc = { };
-+	struct nb7vpq904m *nb7;
-+	int ret;
-+
-+	nb7 = devm_kzalloc(dev, sizeof(*nb7), GFP_KERNEL);
-+	if (!nb7)
-+		return -ENOMEM;
-+
-+	nb7->client = client;
-+
-+	nb7->regmap = devm_regmap_init_i2c(client, &nb7_regmap);
-+	if (IS_ERR(nb7->regmap)) {
-+		dev_err(&client->dev, "Failed to allocate register map\n");
-+		return PTR_ERR(nb7->regmap);
-+	}
-+
-+	nb7->mode = TYPEC_STATE_SAFE;
-+	nb7->orientation = TYPEC_ORIENTATION_NONE;
-+
-+	mutex_init(&nb7->lock);
-+
-+	nb7->enable_gpio = devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_LOW);
-+	if (IS_ERR(nb7->enable_gpio))
-+		return dev_err_probe(dev, PTR_ERR(nb7->enable_gpio),
-+				     "unable to acquire enable gpio\n");
-+
-+	nb7->vcc_supply = devm_regulator_get_optional(dev, "vcc");
-+	if (IS_ERR(nb7->vcc_supply))
-+		return PTR_ERR(nb7->vcc_supply);
-+
-+	nb7->typec_switch = fwnode_typec_switch_get(dev->fwnode);
-+	if (IS_ERR(nb7->typec_switch))
-+		return dev_err_probe(dev, PTR_ERR(nb7->typec_switch),
-+				     "failed to acquire orientation-switch\n");
-+
-+	ret = nb7vpq904m_parse_data_lanes_mapping(nb7);
-+	if (ret)
-+		return ret;
-+
-+	ret = regulator_enable(nb7->vcc_supply);
-+	if (ret)
-+		dev_warn(dev, "Failed to enable vcc: %d\n", ret);
-+
-+	gpiod_set_value(nb7->enable_gpio, 1);
-+
-+	ret = nb7vpq904m_register_bridge(nb7);
-+	if (ret)
-+		return ret;
-+
-+	sw_desc.drvdata = nb7;
-+	sw_desc.fwnode = dev->fwnode;
-+	sw_desc.set = nb7vpq904m_sw_set;
-+
-+	nb7->sw = typec_switch_register(dev, &sw_desc);
-+	if (IS_ERR(nb7->sw))
-+		return dev_err_probe(dev, PTR_ERR(nb7->sw),
-+				     "Error registering typec switch\n");
-+
-+	retimer_desc.drvdata = nb7;
-+	retimer_desc.fwnode = dev->fwnode;
-+	retimer_desc.set = nb7vpq904m_retimer_set;
-+
-+	nb7->retimer = typec_retimer_register(dev, &retimer_desc);
-+	if (IS_ERR(nb7->retimer)) {
-+		typec_switch_unregister(nb7->sw);
-+		return dev_err_probe(dev, PTR_ERR(nb7->retimer),
-+				     "Error registering typec retimer\n");
-+	}
-+
-+	return 0;
-+}
-+
-+static void nb7vpq904m_remove(struct i2c_client *client)
-+{
-+	struct nb7vpq904m *nb7 = i2c_get_clientdata(client);
-+
-+	typec_retimer_unregister(nb7->retimer);
-+	typec_switch_unregister(nb7->sw);
-+
-+	gpiod_set_value(nb7->enable_gpio, 0);
-+
-+	regulator_disable(nb7->vcc_supply);
-+}
-+
-+static const struct i2c_device_id nb7vpq904m_table[] = {
-+	{ "nb7vpq904m" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, nb7vpq904m_table);
-+
-+static const struct of_device_id nb7vpq904m_of_table[] = {
-+	{ .compatible = "onnn,nb7vpq904m" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, nb7vpq904m_of_table);
-+
-+static struct i2c_driver nb7vpq904m_driver = {
-+	.driver = {
-+		.name = "nb7vpq904m",
-+		.of_match_table = nb7vpq904m_of_table,
-+	},
-+	.probe_new	= nb7vpq904m_probe,
-+	.remove		= nb7vpq904m_remove,
-+	.id_table	= nb7vpq904m_table,
-+};
-+
-+module_i2c_driver(nb7vpq904m_driver);
-+
-+MODULE_AUTHOR("Dmitry Baryshkov <dmitry.baryshkov@linaro.org>");
-+MODULE_DESCRIPTION("OnSemi NB7VPQ904M Type-C driver");
-+MODULE_LICENSE("GPL");
-
+ 	if (set_active) {
+ 		pm_runtime_disable(dev);
+ 		pm_runtime_set_active(dev);
+ 		pm_runtime_enable(dev);
+ 	}
+ 
+-	return 0;
++	return;
+ }
+-EXPORT_SYMBOL_GPL(cdns_resume);
++EXPORT_SYMBOL_GPL(cdns_set_active);
+ #endif /* CONFIG_PM_SLEEP */
+ 
+ MODULE_AUTHOR("Peter Chen <peter.chen@nxp.com>");
+diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
+index 2d332a788871..0f429042f997 100644
+--- a/drivers/usb/cdns3/core.h
++++ b/drivers/usb/cdns3/core.h
+@@ -125,8 +125,9 @@ int cdns_init(struct cdns *cdns);
+ int cdns_remove(struct cdns *cdns);
+ 
+ #ifdef CONFIG_PM_SLEEP
+-int cdns_resume(struct cdns *cdns, u8 set_active);
++int cdns_resume(struct cdns *cdns);
+ int cdns_suspend(struct cdns *cdns);
++void cdns_set_active(struct cdns *cdns, u8 set_active);
+ #else /* CONFIG_PM_SLEEP */
+ static inline int cdns_resume(struct cdns *cdns, u8 set_active)
+ { return 0; }
 -- 
-2.34.1
+2.25.1
 
