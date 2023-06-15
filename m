@@ -2,111 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A38731FC9
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 20:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB44A731FCA
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 20:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238762AbjFOSLe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Jun 2023 14:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
+        id S238105AbjFOSMD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Jun 2023 14:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235704AbjFOSLd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 14:11:33 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7298E2964
-        for <linux-usb@vger.kernel.org>; Thu, 15 Jun 2023 11:11:30 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-25c101bf7deso2607800a91.1
-        for <linux-usb@vger.kernel.org>; Thu, 15 Jun 2023 11:11:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686852690; x=1689444690;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DJi3cCnc2qA6VU+gHOwF45LozWJ4WxOCugFiLIt6KK0=;
-        b=7edQvGXJpXGAfxPgc1jNQFe7QPN0YXhx1L5+4xX9bOk38QV/xd3JIVc3YdwnxBnguX
-         qCcK6VDiEyl6HgOruxjXZgKChfrH0MABQ3xeaKHfvwY4Jg1OEdu/snrxtho/ENIplk5E
-         vZoMUnWWZXXfw6QGJFs5JP8jiPhWNZOxU9OUDTw4PJIxoWbxp04eTrdo7PQ7anDqCybU
-         jZYhmoNzJ5ZdHSPtP62IcDyxwVuVhEUvRb4fB0yTqGW48/nYD78h01fYXApcRWre41x8
-         xBIQoZv1DDsu1su4VSCj6IzZMT95/5JJE6+PdFEC2v6fFt92jY2se8QSO2IMrJ8Z4vgt
-         TUvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686852690; x=1689444690;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DJi3cCnc2qA6VU+gHOwF45LozWJ4WxOCugFiLIt6KK0=;
-        b=U0zWJMtbEoEQ29wFv6wdrkj/USgv9HGIP8uiA/pVcdm8/BPrX28h23EnZK53CPvrvD
-         GGJUE+UHdsR//hTiWXbFWyr/LMxix1g8iwzk/gKXhjTARNvV1OUhz5UtaBT+G11Yw9VH
-         hDo6y/Gz37I5hK62vsFuxQD0VrK08AOMUITuApB8O65VcUKiyRSs3XwpS6XtBSkwhSLp
-         4usjObW7TjEQCg3G+L9VpVPXr/Y8qvUdrHu9r4O5kGvj02NmHUxpGJPdhAMaye8Z8c5r
-         zfTtTyj3HxumbXcdaXmzXD/66HG2aDkMsT7o5oDewZnHX5JZ+oxufaPGqULnHhdBv7dA
-         TqCA==
-X-Gm-Message-State: AC+VfDz8b5RY0FopBLb/8L+W4/lXnnEjYXO2gzBQd+a8do2Hq0yW6Djs
-        ItOVCjvLgW2ub2GS/5EPAZBmUBldIZZYGY7D3dXf4OxRlt34AtI/NhmIwA==
-X-Google-Smtp-Source: ACHHUZ7TdJMcV7jKggkCi2cBsbe/G/xosY3BmPuZPnQO1p22CBqpygxGJ/8KZn+ho/nF5S+ofziY6O9lshA4erx07+c=
-X-Received: by 2002:a17:90b:1b0f:b0:253:3e9d:f925 with SMTP id
- nu15-20020a17090b1b0f00b002533e9df925mr5004732pjb.31.1686852689775; Thu, 15
- Jun 2023 11:11:29 -0700 (PDT)
+        with ESMTP id S229574AbjFOSMC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 14:12:02 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F4210FE;
+        Thu, 15 Jun 2023 11:12:01 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35FHsPqd010983;
+        Thu, 15 Jun 2023 18:11:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=UT+6ukVIACEfrUc3MDgMmLIqUVBcBw86i9B0z8bwa98=;
+ b=cTb4vkYMdiSTySAq0ta+KZkU4zXuuFcvJG0v9yGlk5a1vrLTu/AZ+G9S/Y/BaI2uzay6
+ inb65zr7YVFvIFBv7P9PHVLNUA3lh0+AvD124EspImq6PQ3ELb+DWBx+mGsxuCYIB8kG
+ 0C5uisaQLN4DOdFcs3BRhsggEc4sT85TjCMB9NwQP9cXTL2MJQ31+7ZNjjch5YQiLKD+
+ baWNHJM7L+EtYl8MYaB5oH1lz9iVWSDPBgGXqegxLjL7NRQwemXI3Ue6JSDSdtQuINbe
+ uIsRDRBlEM1WxKuwz9qI94VzoC++xqway2cmZvv8brUishaYvU9VD3tQthtEV064UvOd YQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7p4qabqy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 18:11:55 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35FIBsdu001753
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 18:11:54 GMT
+Received: from [10.216.11.0] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 15 Jun
+ 2023 11:11:51 -0700
+Message-ID: <3a90900f-bf60-0b9e-43ab-451264785cba@quicinc.com>
+Date:   Thu, 15 Jun 2023 23:41:47 +0530
 MIME-Version: 1.0
-References: <32e22952-8574-4120-979b-ebb6af5f54b4@moroto.mountain>
-In-Reply-To: <32e22952-8574-4120-979b-ebb6af5f54b4@moroto.mountain>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Thu, 15 Jun 2023 11:10:53 -0700
-Message-ID: <CAPTae5LVtQryd=yHJo0NksRnxxP7kykw3SgKNx72MqPSyooTnA@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: udc: core: Fix double unlock in usb_gadget_activate()
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
+ <ZImE4L3YgABnCIsP@kuha.fi.intel.com>
+ <2023061547-staleness-camper-ae8a@gregkh>
+ <d5561151-08bb-9f5f-aa51-44c5ad31976b@quicinc.com>
+ <2023061512-vowed-panther-38ed@gregkh>
+ <551145bb-18f7-45af-b75e-7caccca113bc@quicinc.com>
+ <2023061556-hypnoses-quartet-766a@gregkh>
+From:   Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <2023061556-hypnoses-quartet-766a@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: egXcXtm7eoR35bAh6vZdFax_7cZbg45J
+X-Proofpoint-ORIG-GUID: egXcXtm7eoR35bAh6vZdFax_7cZbg45J
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-15_14,2023-06-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 adultscore=0 lowpriorityscore=0 impostorscore=0
+ bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 phishscore=0
+ mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306150156
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thanks Dan for posting this !
+
+
+On 15-06-23 08:35 pm, Greg Kroah-Hartman wrote:
+> On Thu, Jun 15, 2023 at 08:28:13PM +0530, Prashanth K wrote:
+>>
+>>
+>> On 15-06-23 08:06 pm, Greg Kroah-Hartman wrote:
+>>> On Thu, Jun 15, 2023 at 07:52:32PM +0530, Prashanth K wrote:
+>>>>
+>>>> In that case, can I resubmit v1 of this patch again, where I have used a
+>>>> macro in usb-conn-gpio driver ? something like this.
+>>>>
+>>>> @@ -27,6 +27,8 @@
+>>>>    #define USB_CONN_IRQF	\
+>>>>    	(IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT)
+>>>>
+>>>> +#define USB_ROLE_UNKNOWN (USB_ROLE_NONE -1)
+>>>
+>>> Are you referencing an existing enum here and assuming it is a specific
+>>> value?
+>>
+>> I' not assuming UBS_ROLE_NONE to be a specific value, but I want an integer
+>> (for macro) which is not equal to USB_ROLE_NONE/DEVICE/HOST, that's why I'm
+>> using (USB_ROLE_NONE - 1), assuming enumerators NONE, DEVICE & HOST will be
+>> having adjacent integer values. Wouldn't that help?
+> 
+> You can't do "math" on an enumerated type and expect the result to be
+> anything constant over time.
+> 
+> And yes, you can hope that enumerated types are sequential, and the spec
+> says so, but please never rely on that as what happens if someone adds a
+> new one in the list without you ever noticing it.
+> 
+> Pleasae treat enumerated types as an opaque thing that you never know
+> the real value of, it's a symbol only.
+> 
+> thanks,
+> 
+> greg k-h
+
+Then we can go ahead a different approach using a flag. But that would 
+require us to add a new member to usb_conn_info struct. What do you suggest?
+
+@@ -42,6 +42,7 @@ struct usb_conn_info {
+
+         struct power_supply_desc desc;
+         struct power_supply *charger;
++       bool initial_det;
+  };
+
+  /*
+@@ -86,11 +87,13 @@ static void usb_conn_detect_cable(struct work_struct 
+*work)
+         dev_dbg(info->dev, "role %s -> %s, gpios: id %d, vbus %d\n",
+                 usb_role_string(info->last_role), 
+usb_role_string(role), id, vbus);
+
+-       if (info->last_role == role) {
++       if (!info->initial_det && (info->last_role == role)) {
+                 dev_warn(info->dev, "repeated role: %s\n", 
+usb_role_string(role));
+                 return;
+         }
+
++       info->initial_det = false;
++
+         if (info->last_role == USB_ROLE_HOST && info->vbus)
+                 regulator_disable(info->vbus);
+
+@@ -258,6 +261,7 @@ static int usb_conn_probe(struct platform_device *pdev)
+         device_set_wakeup_capable(&pdev->dev, true);
+
+         /* Perform initial detection */
++       info->initial_det = true;
+         usb_conn_queue_dwork(info, 0);
 
 Regards,
-Badhri
+Prashanth K
 
-On Thu, Jun 15, 2023 at 8:43=E2=80=AFAM Dan Carpenter <dan.carpenter@linaro=
-.org> wrote:
->
-> Do not call mutex_unlock(&gadget->udc->connect_lock) twice in a row.
->
-> Fixes: 286d9975a838 ("usb: gadget: udc: core: Prevent soft_connect_store(=
-) race")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-
-Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
-
-> ---
->  drivers/usb/gadget/udc/core.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.=
-c
-> index 83fd1de14784..d58640a9d0ca 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -878,8 +878,6 @@ int usb_gadget_activate(struct usb_gadget *gadget)
->          */
->         if (gadget->connected)
->                 ret =3D usb_gadget_connect_locked(gadget);
-> -       mutex_unlock(&gadget->udc->connect_lock);
-> -
->  unlock:
->         mutex_unlock(&gadget->udc->connect_lock);
->         trace_usb_gadget_activate(gadget, ret);
-> --
-> 2.39.2
->
