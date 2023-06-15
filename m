@@ -2,107 +2,283 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F7D730E64
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 06:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E91730EAB
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 07:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234019AbjFOEuB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Jun 2023 00:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
+        id S243234AbjFOF2m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Jun 2023 01:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243198AbjFOEtf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 00:49:35 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF99212C;
-        Wed, 14 Jun 2023 21:49:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686804553; x=1718340553;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ztdfkkx6Ws3Eq21dPslOfdeBjbIJO8QQvfbeNKntcXQ=;
-  b=Qo8Mpru5oVenHRRPYvPdblfkGM3LTSx8kFO5V322ipuI0xn8+umNdGk5
-   C8O52ZnDWM9lTtc3Ry/CQHKuH9Lh+6AMOp2RKmYzle8oXzbVbqBHVrsnF
-   QUFevUhZWw4N2Awo7wTc2ECgK7KMBkTK5sSUEPZ92pHR/b8DWfGIKSM81
-   d7fVTlxEaVwdT+pXKIXDAzGjSWI0zLhzwKdHjgIIogGnFPbvcR0YGLttZ
-   HlNTGmpgb9q8lTMic39+LKIEAZsCXCcaPqlwyLsRkptnmRkusy+1FMhbE
-   bPyLpeGhjsuFYrj6EwOR/8ohAaVrzEPLHiPW4nwBhwgcVEW4wjbqxsBXH
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="422418022"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="422418022"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 21:48:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="712323585"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="712323585"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 14 Jun 2023 21:48:56 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 7542D30C; Thu, 15 Jun 2023 07:49:05 +0300 (EEST)
-Date:   Thu, 15 Jun 2023 07:49:05 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Brian Geffon <bgeffon@google.com>
-Cc:     Takashi Iwai <tiwai@suse.de>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Matthias Kaehlcke <mka@google.com>, linux-usb@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: thunderbolt: resume from hibernation CPUs racing in tb_ring_start
-Message-ID: <20230615044905.GU45886@black.fi.intel.com>
-References: <CADyq12w_c=pq5sph9Ne+nshz2haeYK-kGYVwQTUqSb3W_kzrdA@mail.gmail.com>
+        with ESMTP id S242904AbjFOF2l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 01:28:41 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC9326B8;
+        Wed, 14 Jun 2023 22:28:35 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F5RMsw013905;
+        Thu, 15 Jun 2023 05:28:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=JzYgkcS+xjpO5zjTAPM30RHvptVH8EP1NWTFiI7sVfk=;
+ b=mfs0hXPiSmbJ7E1CROAhuafdu7rIUX5xAzIZlbkKvM4+YmmtQ9YDqMGDMp7jcKeRMAYZ
+ gXcyGleQl0tXoAdHQ8DnkmBzu55LePuoPRM03vrgnXU7Lr/JwhR1+P6NrIVw7bIYWhbq
+ jmwgCSr+/4NGNPRDWJHrD9AhTZxPeDJ9vEXLkWpDorDuTR/amdT5nDf2WTvmpqw98gw8
+ a4NhKgVJrOQzr1pyo50ceBnAgDWl5os8ZGjChSGghsy3JsAOfRDo6sX20qZfA0wYKCqi
+ /iKGEEX89/VOmsqlyhhKa/tuqJskHRflY46iW8zcmgI4xJj28PSJ2uuvMyq+bFbYS2z8 Lw== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7fae9g7d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 05:28:02 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35F5S1YQ013748
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 05:28:01 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 14 Jun 2023 22:27:51 -0700
+Date:   Thu, 15 Jun 2023 10:57:47 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <p.zabel@pengutronix.de>, <arnd@arndb.de>,
+        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <rafal@milecki.pl>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH 2/9] dt-bindings: phy: qcom,m31: Document qcom,m31 USB phy
+Message-ID: <20230615052746.GB22186@varda-linux.qualcomm.com>
+References: <cover.1686126439.git.quic_varada@quicinc.com>
+ <14f60578e2935c0844537eab162af3afa52ffe39.1686126439.git.quic_varada@quicinc.com>
+ <98960024-7dbc-91a3-75de-90b529637916@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <CADyq12w_c=pq5sph9Ne+nshz2haeYK-kGYVwQTUqSb3W_kzrdA@mail.gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <98960024-7dbc-91a3-75de-90b529637916@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: HQxXuzhjPPT6BMwONL5mJFqqsvTWLvxK
+X-Proofpoint-GUID: HQxXuzhjPPT6BMwONL5mJFqqsvTWLvxK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-15_02,2023-06-14_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ spamscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0 adultscore=0
+ impostorscore=0 suspectscore=0 phishscore=0 mlxscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306150046
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Wed, Jun 07, 2023 at 08:31:50PM +0200, Krzysztof Kozlowski wrote:
+> On 07/06/2023 12:56, Varadarajan Narayanan wrote:
+> > Document the M31 USB2 phy present in IPQ5332
+>
+> Full stop.
 
-On Wed, Jun 14, 2023 at 04:26:49PM -0400, Brian Geffon wrote:
-> Hi,
-> On ChromeOS we're running a 5.15 kernel patched up to 6.4-rc6 w.r.t to
-> drivers/thunderbolt code and we're seeing a similar issue to the one
-> discussed in https://lore.kernel.org/lkml/20230421140725.495-1-mario.limonciello@amd.com/T/#
-> / https://bugzilla.kernel.org/show_bug.cgi?id=217343 where when
-> resuming from hibernation you'll see warnings along the lines of
-> 
-> [  126.292769] thunderbolt 0000:00:0d.3: interrupt for RX ring 0 is
-> already enabled
-> 
-> The thing that's odd is it appears three CPUs are racing through this code path:
-> 
-> [  126.292076] ------------[ cut here ]------------
-> [  126.292077] thunderbolt 0000:00:0d.2: interrupt for TX ring 0 is
-> already enabled
-> [  126.292080] proc_thermal_pci 0000:00:04.0: PM:
-> pci_pm_thaw_noirq+0x0/0x7c returned 0 after 606 usecs
-> [  126.292086] ------------[ cut here ]------------
-> [  126.292087] thunderbolt 0000:00:0d.3: interrupt for TX ring 0 is
-> already enabled
-> [  126.292089] WARNING: CPU: 6 PID: 7879 at
-> drivers/thunderbolt/nhi.c:138 ring_interrupt_active+0x1cd/0x225
-> [  126.292092] Modules linked in:
-> [  126.292091] WARNING: CPU: 0 PID: 175 at
-> drivers/thunderbolt/nhi.c:138 ring_interrupt_active+0x1cd/0x225
-> [  126.292157] CPU: 0 PID: 175 Comm: kworker/u24:2 Tainted: G     U
->         5.15.116-19568-g766d8095041b #24
-> fdadcb2517d1d37363ad385ffddbc1ad5dc72550
-> [  126.292158]  lzo_rle zram joydev
-> [  126.292159] Hardware name: Google Anahera/Anahera, BIOS
-> Google_Anahera.14505.143.0 06/22/2022
-> [  126.292159]
-> [  126.292160] Workqueue: events_unbound async_run_entry_fn
-> [  126.292160] CPU: 6 PID: 7879 Comm: kworker/u24:13 Tainted: G     U
->           5.15.116-19568-g766d8095041b #24
+Ok.
 
-Do you have this one?
+> > Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> >  .../devicetree/bindings/phy/qcom,m31.yaml          | 69 ++++++++++++++++++++++
+> >  1 file changed, 69 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/phy/qcom,m31.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/phy/qcom,m31.yaml b/Documentation/devicetree/bindings/phy/qcom,m31.yaml
+> > new file mode 100644
+> > index 0000000..8ad4ba4
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/phy/qcom,m31.yaml
+> > @@ -0,0 +1,69 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +
+>
+> Drop stray blank lines.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git/commit/?h=fixes&id=9f9666e65359d5047089aef97ac87c50f624ecb0
+Ok.
+
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/phy/qcom,m31.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Qualcomm M31 USB PHY
+>
+> What is M31?
+
+M31 is an external IP integrated into IPQ5332 SoC.
+
+> > +
+> > +maintainers:
+> > +  - Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> > +  - Varadarajan Narayanan <quic_varada@quicinc.org>
+> > +
+> > +description:
+> > +  This file contains documentation for the USB M31 PHY found in Qualcomm
+>
+> Drop redundant parts ("This file contains documentation for the").
+
+Ok.
+
+> > +  IPQ5018, IPQ5332 SoCs.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+>
+> That's not oneOf.
+
+Ok.
+
+> > +      - items:
+>
+> No items.
+
+Ok.
+
+> > +          - enum:
+> > +              - qcom,m31-usb-hsphy
+>
+> I am confused what's this. If m31 is coming from some IP block provider,
+> then you are using wrong vendor prefix.
+> https://www.m31tech.com/download_file/M31_USB.pdf
+>
+>
+> > +              - qcom,ipq5332-m31-usb-hsphy
+>
+> This confuses me even more. IPQ m31?
+
+Will change this to m31,usb-hsphy and m31,ipq5332-usb-hsphy respectively.
+Will that be acceptable?
+
+> > +
+> > +  reg:
+> > +    description:
+> > +      Offset and length of the M31 PHY register set
+>
+> Drop description, obvious.
+
+Ok.
+
+> > +    maxItems: 2
+> > +
+> > +  reg-names:
+> > +    items:
+> > +      - const: m31usb_phy_base
+> > +      - const: qscratch_base
+>
+> Drop "_base" from both.
+
+Ok. Will drop qscratch_base. This is in the controller space.
+Should not come here.
+
+> > +
+> > +  phy_type:
+> > +    oneOf:
+> > +      - items:
+> > +          - enum:
+> > +              - utmi
+> > +              - ulpi
+>
+> This does not belong to phy, but to USB node.
+
+This is used by the driver to set a bit during phy init. Hence
+have it as a replication of the USB node's entry. If this is not
+permissible, is there some way to get this from the USB node,
+or any other alternative mechanism?
+
+> > +
+> > +  resets:
+> > +    maxItems: 1
+> > +    description:
+> > +      List of phandles and reset pairs, one for each entry in reset-names.
+>
+> Drop useless description.
+
+Ok.
+
+> > +
+> > +  reset-names:
+> > +    items:
+> > +      - const:
+> > +          usb2_phy_reset
+>
+> Drop entire reset-names.
+
+Ok.
+
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/qcom,ipq5332-gcc.h>
+> > +    hs_m31phy_0: hs_m31phy@5b00 {
+>
+> Node names should be generic. See also explanation and list of examples
+> in DT specification:
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+>
+> Also, no underscores in node names.
+
+Will change this as usbphy0:hs_m31phy@7b000
+
+> > +        compatible = "qcom,m31-usb-hsphy";
+> > +        reg = <0x5b000 0x3000>,
+>
+> This is not what your unit address is saying.
+
+Will change to 0x0007b000.
+
+> > +            <0x08af8800 0x400>;
+>
+> Align it.
+
+Will drop this. This is in the controller space.
+
+> > +        reg-names = "m31usb_phy_base",
+> > +                "qscratch_base";
+>
+> Align it.
+
+Ok.
+
+> > +        phy_type = "utmi";
+> > +        resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> > +        reset-names = "usb2_phy_reset";
+> > +
+> > +        status = "ok";
+>
+> Drop.
+
+Ok. Hopefully will get an alternative for the phy_type.
+
+Thanks
+Varada
+
+> > +    };
+>
+> Best regards,
+> Krzysztof
+>
