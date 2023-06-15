@@ -2,56 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE93731C25
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 17:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB9E731CDF
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 17:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344075AbjFOPF5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Jun 2023 11:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
+        id S240942AbjFOPnP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Jun 2023 11:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343765AbjFOPF4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 11:05:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60918273D;
-        Thu, 15 Jun 2023 08:05:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F009160C36;
-        Thu, 15 Jun 2023 15:05:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C229C433C0;
-        Thu, 15 Jun 2023 15:05:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686841554;
-        bh=4wkotvA1EgdVqwtRibR0PvE40CcTrbovkSp7EW/Frug=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vEBoqfVoj7mhPuR6aCuMRHuXIpDWxK66fSBsmnokeudE7zxizcDxAqN3Xj9koXRYg
-         NLagRHCPnNHPrNabNg11/nVLVCOKDO6Nf4RTL91Wy8nySr3SK/1X7iRaJJutI23vFC
-         sLU44UAMao68eSvpdwrAtbRsyWL5V34FdC9Wnwh0=
-Date:   Thu, 15 Jun 2023 17:05:52 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Message-ID: <2023061556-hypnoses-quartet-766a@gregkh>
-References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
- <ZImE4L3YgABnCIsP@kuha.fi.intel.com>
- <2023061547-staleness-camper-ae8a@gregkh>
- <d5561151-08bb-9f5f-aa51-44c5ad31976b@quicinc.com>
- <2023061512-vowed-panther-38ed@gregkh>
- <551145bb-18f7-45af-b75e-7caccca113bc@quicinc.com>
+        with ESMTP id S237737AbjFOPnN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 11:43:13 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6929C2728
+        for <linux-usb@vger.kernel.org>; Thu, 15 Jun 2023 08:43:12 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f7378a75c0so19719885e9.3
+        for <linux-usb@vger.kernel.org>; Thu, 15 Jun 2023 08:43:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686843791; x=1689435791;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qydN/5Q/zK0+0NsOM7BsOFTds0yN1FMGooMMlcPLCTY=;
+        b=DA7zhKLvj7aLHjSQVhWTKpNciU00a3Pe8BTbDvJ/dan9qCrR5GV5ayjkiONsQB5HBt
+         HyuVzkHhEGVzBO+M00r499NnIK3SJmSm5Zyyj2uDiM5B3rQvdPRbC1WKhH7zF6oaYHV3
+         zF1tyK/ylFckcfzPX+KIBo6XTV98s0RlhgEMNStWgmGTl3UlRM1WjSoMao8sffEK25nd
+         dD3WrF9OwAwUXPfLorxN/gC7MB0BXinU6NXLz4JEt0+1PdazFUQIKNBo5HWEhqWGb2Ur
+         J6n+wQZFXkXUAsEdhrxko3RZLvVuVBQG2CZdTYvQZxU96k3lsATdd9w9dm3Xg2JAVYhx
+         wHog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686843791; x=1689435791;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qydN/5Q/zK0+0NsOM7BsOFTds0yN1FMGooMMlcPLCTY=;
+        b=V3D/1tya9ZQSx/R0L+w+S2D9WONbGDJftQ9tadSC5KmfO/QIiOWqj0GHoA4AXDoX9c
+         q/WUhdGbhTrmXFLdjpKBMUM2MaEQ1n6ieEV24+B/OG0lc6Mv0zP/b4pj583VvlLkhZvc
+         JBXJJjOWkQY18kJNLlijmbOptBnpNtv6z9lt2tqefYskEnMQDNJNQERoqGj5J9BlHQml
+         xI+6W0BPBh96o2fiaZYlA595seMm23o18LB1iktacaZiFmxHT6FR8abvHp1mQ3W+rwov
+         A10LzDFsNPJEotvAnaz5oKGtpNBPa5q74C8FMYifamKVKmg+RcLx0x/FW18sJ6S1r/IL
+         hgoA==
+X-Gm-Message-State: AC+VfDzVaYTUq/QOmLz/dBJGbTqGFAv7YxQomMrwFIu/4EwsgvkW9MTf
+        H/LqACWdJzK/KdReMI44YUEKXA==
+X-Google-Smtp-Source: ACHHUZ48pVMcF75tZ+Y6sJSjcXHGMpBKWAYqBUgg4bJrNoFHto/x0TIdqxuuepgsT8iR/QnPTpd3dg==
+X-Received: by 2002:a1c:7414:0:b0:3f6:d2f:27f7 with SMTP id p20-20020a1c7414000000b003f60d2f27f7mr13437656wmc.17.1686843790721;
+        Thu, 15 Jun 2023 08:43:10 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id o6-20020a05600c378600b003f42d8dd7d1sm21125474wmr.7.2023.06.15.08.43.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 08:43:08 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 18:43:03 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>,
+        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] usb: gadget: udc: core: Fix double unlock in
+ usb_gadget_activate()
+Message-ID: <32e22952-8574-4120-979b-ebb6af5f54b4@moroto.mountain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <551145bb-18f7-45af-b75e-7caccca113bc@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Mailer: git-send-email haha only kidding
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,39 +73,27 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 08:28:13PM +0530, Prashanth K wrote:
-> 
-> 
-> On 15-06-23 08:06 pm, Greg Kroah-Hartman wrote:
-> > On Thu, Jun 15, 2023 at 07:52:32PM +0530, Prashanth K wrote:
-> > > 
-> > > In that case, can I resubmit v1 of this patch again, where I have used a
-> > > macro in usb-conn-gpio driver ? something like this.
-> > > 
-> > > @@ -27,6 +27,8 @@
-> > >   #define USB_CONN_IRQF	\
-> > >   	(IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT)
-> > > 
-> > > +#define USB_ROLE_UNKNOWN (USB_ROLE_NONE -1)
-> > 
-> > Are you referencing an existing enum here and assuming it is a specific
-> > value?
-> 
-> I' not assuming UBS_ROLE_NONE to be a specific value, but I want an integer
-> (for macro) which is not equal to USB_ROLE_NONE/DEVICE/HOST, that's why I'm
-> using (USB_ROLE_NONE - 1), assuming enumerators NONE, DEVICE & HOST will be
-> having adjacent integer values. Wouldn't that help?
+Do not call mutex_unlock(&gadget->udc->connect_lock) twice in a row.
 
-You can't do "math" on an enumerated type and expect the result to be
-anything constant over time.
+Fixes: 286d9975a838 ("usb: gadget: udc: core: Prevent soft_connect_store() race")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+ drivers/usb/gadget/udc/core.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-And yes, you can hope that enumerated types are sequential, and the spec
-says so, but please never rely on that as what happens if someone adds a
-new one in the list without you ever noticing it.
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 83fd1de14784..d58640a9d0ca 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -878,8 +878,6 @@ int usb_gadget_activate(struct usb_gadget *gadget)
+ 	 */
+ 	if (gadget->connected)
+ 		ret = usb_gadget_connect_locked(gadget);
+-	mutex_unlock(&gadget->udc->connect_lock);
+-
+ unlock:
+ 	mutex_unlock(&gadget->udc->connect_lock);
+ 	trace_usb_gadget_activate(gadget, ret);
+-- 
+2.39.2
 
-Pleasae treat enumerated types as an opaque thing that you never know
-the real value of, it's a symbol only.
-
-thanks,
-
-greg k-h
