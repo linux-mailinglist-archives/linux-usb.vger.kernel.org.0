@@ -2,150 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F5D730BDC
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 02:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2835730DF8
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 06:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234236AbjFOABe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Jun 2023 20:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
+        id S238331AbjFOEQP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Jun 2023 00:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjFOABc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jun 2023 20:01:32 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469181BF8;
-        Wed, 14 Jun 2023 17:01:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686787291; x=1718323291;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vlOy6sNgAGOk3m1Tw2KlI83PWTTLu4KM+zfhCO79zT0=;
-  b=SEffVFP0qRkZO/g+PYR+X68Coz40848nKC/oLkJjGC6WpJGvxX/d3LdY
-   nOnfklE0UUCRZzUGx32nebyOhL/wQOqLMTLBCjXO+7Qj67XWgOO9kVmRF
-   SeMZv4XuzOhf8yIfOSwerzRQRjJLOMG7mVNm+TW72vS/VZqvbcWE9tjC5
-   Q67kPRHfE7rhikmRz0lsPRwUM/Hg5ViwCvCJjpMJhAKvFTIaTZkPeiqJY
-   Uj0t649yeRbLbszofd3rCO/9DULw3fKB54Vzs+jwfd6f5fOXUqg6YUcaj
-   RhmUbuuz7wU8f1+4X6R0mHThJpsPX1QLK8fN0aHtnnT4Ahh0dLgjqKWCu
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="356259699"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="356259699"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 17:01:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="742021292"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="742021292"
-Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 14 Jun 2023 17:01:25 -0700
-Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9aQ0-0001BJ-1e;
-        Thu, 15 Jun 2023 00:00:57 +0000
-Date:   Thu, 15 Jun 2023 07:59:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Azeem Shaikh <azeemshaikh38@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-hardening@vger.kernel.org,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        Hongren Zheng <i@zenithal.me>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usbip: usbip_host: Replace strlcpy with strscpy
-Message-ID: <202306150753.vOUEonLq-lkp@intel.com>
-References: <20230614141026.2113749-1-azeemshaikh38@gmail.com>
+        with ESMTP id S234019AbjFOEQM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 00:16:12 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054AB212A;
+        Wed, 14 Jun 2023 21:16:11 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F41PAN010558;
+        Thu, 15 Jun 2023 04:15:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=+Z0nhqBAyEln1rQXqXvG8yP5Loe3eBpMLTiQInpJfK4=;
+ b=TdOB1emnadtAzeFGv745tQzYSXHWmwMlUu70OIDB9LrZiU/YacCsQseW4h6RbJRpNbFv
+ 4VDSCLxDfrC9NxxR+UZQkq6NnFS789cnw6O7q8jyuOdNl3AFYqqV171w1m/HS7McPaIP
+ oHwRjLTbxYCcMZsvZrBzyUzbZ13WNOMcwTKBhChYF3zuHtzG2BxLopJPvL7ippxo6+G/
+ B3CIFgI+4wsNZ0/UtVgZbPql8s2/o3CHxRfOLFHd6wVB43xqHxwMhrEnIA4i/iwFSxZp
+ woA605ZEfA/OC/ip07NS6yEKzvb0LmLzqToFcz81TdFs7pN0uypo+1oSIsDyWyRwCZAC Dw== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7u8c80ja-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 04:15:37 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35F4FaFa017126
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 04:15:36 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 14 Jun 2023 21:15:27 -0700
+Date:   Thu, 15 Jun 2023 09:45:23 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <p.zabel@pengutronix.de>, <arnd@arndb.de>,
+        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <rafal@milecki.pl>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH 1/9] dt-bindings: usb: dwc3: Add IPQ5332 compatible
+Message-ID: <20230615041522.GA22186@varda-linux.qualcomm.com>
+References: <cover.1686126439.git.quic_varada@quicinc.com>
+ <d07f804802f0678746aeba55910a83209ecbe054.1686126439.git.quic_varada@quicinc.com>
+ <8fdd584e-988f-8542-f635-c0f6b5e63580@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230614141026.2113749-1-azeemshaikh38@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <8fdd584e-988f-8542-f635-c0f6b5e63580@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: uobfYjFoiKBivPOIJ3P6if7bRUruzbMz
+X-Proofpoint-GUID: uobfYjFoiKBivPOIJ3P6if7bRUruzbMz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-15_01,2023-06-14_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=556 malwarescore=0
+ phishscore=0 bulkscore=0 impostorscore=0 priorityscore=1501 spamscore=0
+ mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306150035
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Azeem,
+On Wed, Jun 07, 2023 at 08:33:26PM +0200, Krzysztof Kozlowski wrote:
+> On 07/06/2023 12:56, Varadarajan Narayanan wrote:
+> > Document the IPQ5332 dwc3 compatible
+>
+> Full stop.
 
-kernel test robot noticed the following build warnings:
+Ok.
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.4-rc6 next-20230614]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> >  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > index ae24dac..9c3d6f4 100644
+> > --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > @@ -14,6 +14,7 @@ properties:
+> >      items:
+> >        - enum:
+> >            - qcom,ipq4019-dwc3
+> > +          - qcom,ipq5332-dwc3
+> >            - qcom,ipq6018-dwc3
+> >            - qcom,ipq8064-dwc3
+> >            - qcom,ipq8074-dwc3
+> > @@ -246,6 +247,7 @@ allOf:
+> >          compatible:
+> >            contains:
+> >              enum:
+> > +              - qcom,ipq5332-dwc3
+> >                - qcom,msm8994-dwc3
+> >                - qcom,qcs404-dwc3
+>
+> What about interrupts?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Azeem-Shaikh/usbip-usbip_host-Replace-strlcpy-with-strscpy/20230614-221217
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230614141026.2113749-1-azeemshaikh38%40gmail.com
-patch subject: [PATCH v2] usbip: usbip_host: Replace strlcpy with strscpy
-config: i386-randconfig-i012-20230614 (https://download.01.org/0day-ci/archive/20230615/202306150753.vOUEonLq-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build):
-        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-        git fetch usb usb-testing
-        git checkout usb/usb-testing
-        b4 shazam https://lore.kernel.org/r/20230614141026.2113749-1-azeemshaikh38@gmail.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/usbip/
+Will fix and post next version.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306150753.vOUEonLq-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/usb/usbip/stub_main.c: In function 'match_busid_store':
->> drivers/usb/usbip/stub_main.c:170:13: warning: unused variable 'len' [-Wunused-variable]
-     170 |         int len;
-         |             ^~~
-
-
-vim +/len +170 drivers/usb/usbip/stub_main.c
-
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  166  
-cc3d53def83a99 drivers/usb/usbip/stub_main.c     Greg Kroah-Hartman 2017-06-09  167  static ssize_t match_busid_store(struct device_driver *dev, const char *buf,
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  168  				 size_t count)
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  169  {
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09 @170  	int len;
-e913397202b755 drivers/staging/usbip/stub_main.c Kay Sievers        2008-10-30  171  	char busid[BUSID_SIZE];
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  172  
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  173  	if (count < 5)
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  174  		return -EINVAL;
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  175  
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  176  	/* busid needs to include \0 termination */
-7e5b2b663aa01a drivers/usb/usbip/stub_main.c     Azeem Shaikh       2023-06-14  177  	if (strscpy(busid, buf + 4, BUSID_SIZE) < 0)
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  178  		return -EINVAL;
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  179  
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  180  	if (!strncmp(buf, "add ", 4)) {
-2183b77ece517f drivers/staging/usbip/stub_main.c Kurt Kanzenbach    2013-04-04  181  		if (add_match_busid(busid) < 0)
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  182  			return -ENOMEM;
-2183b77ece517f drivers/staging/usbip/stub_main.c Kurt Kanzenbach    2013-04-04  183  
-1a4b6f66285785 drivers/staging/usbip/stub_main.c matt mooney        2011-05-19  184  		pr_debug("add busid %s\n", busid);
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  185  		return count;
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  186  	}
-2183b77ece517f drivers/staging/usbip/stub_main.c Kurt Kanzenbach    2013-04-04  187  
-2183b77ece517f drivers/staging/usbip/stub_main.c Kurt Kanzenbach    2013-04-04  188  	if (!strncmp(buf, "del ", 4)) {
-2183b77ece517f drivers/staging/usbip/stub_main.c Kurt Kanzenbach    2013-04-04  189  		if (del_match_busid(busid) < 0)
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  190  			return -ENODEV;
-2183b77ece517f drivers/staging/usbip/stub_main.c Kurt Kanzenbach    2013-04-04  191  
-1a4b6f66285785 drivers/staging/usbip/stub_main.c matt mooney        2011-05-19  192  		pr_debug("del busid %s\n", busid);
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  193  		return count;
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  194  	}
-2183b77ece517f drivers/staging/usbip/stub_main.c Kurt Kanzenbach    2013-04-04  195  
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  196  	return -EINVAL;
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  197  }
-cc3d53def83a99 drivers/usb/usbip/stub_main.c     Greg Kroah-Hartman 2017-06-09  198  static DRIVER_ATTR_RW(match_busid);
-4d7b5c7f8ad49b drivers/staging/usbip/stub_main.c Takahiro Hirofuchi 2008-07-09  199  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks
+Varada
