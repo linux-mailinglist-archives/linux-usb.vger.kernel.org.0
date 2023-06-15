@@ -2,64 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE86731FB4
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 20:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85378731FBE
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 20:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235704AbjFOSIb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Jun 2023 14:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
+        id S237928AbjFOSJe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Jun 2023 14:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235904AbjFOSI1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 14:08:27 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22ED72D4D;
-        Thu, 15 Jun 2023 11:08:22 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-307d58b3efbso6039752f8f.0;
-        Thu, 15 Jun 2023 11:08:22 -0700 (PDT)
+        with ESMTP id S237565AbjFOSJa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 14:09:30 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D532D4E;
+        Thu, 15 Jun 2023 11:09:27 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30af56f5f52so6041351f8f.1;
+        Thu, 15 Jun 2023 11:09:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686852500; x=1689444500;
+        d=gmail.com; s=20221208; t=1686852565; x=1689444565;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rdicQRGnfDc93YkcMQQA6yonmb0LHEd8ZOrWHxoA7C4=;
-        b=Sro7cBRw5EdbOyM1EX0k/Q5uwZz7qLRLM8KmmHhU6IRGVW+aZy24XNkivh5ZBnm4sH
-         xrm/Bd7wNbvti8DTf2fcdxPO+SZfEWsLYjCfoHsJZZcHuRH3ma2ExnASNzdf0Nd6/N+Y
-         5ZUmxHveifOkxOu4YVd2+Snt9Rc8to61AxoOMvHGb1qmB6dYLEvLfTpPhlpVz4IZbtqj
-         aozOYM3pgavAhiyfeF/hrlbsl5SOX8d+9JLnfy30J605CrV5vn6S8A8zUZ/ToWIhdsUg
-         icAf6mvZQJgfbQY06DBU7FzFcBcaxVJYO2sFkLlJpR22H6aVbJ9n1zz6oBncxrmVOcnJ
-         +Jqw==
+        bh=BPImEVscMojs9n7lKMKdyofc4xjY1xoflsUxQYw/6Tc=;
+        b=QmRYT/l2vvGvs1/ND8lpYm14BMAW04Gz/Qh7LvvvDDIuttOKOdERGtbvpZvDCsF6la
+         s9EoxJ/DCBiGh/c2u0b0eTxzM56kO+Ye53Hsbutz4BrZyfjeLhpxPPKjxNV6LQH04m6w
+         uijrUDf0dbj+0O9KYIDYp1LvOf8M3/kdPT/kLakZtE2hLwKUzdZD61HbeYELetDhu7iZ
+         hMwPBy7c94PT3pNyjnqopMW6MqczzYcgW+XrHq+sXWpqZdv9GluD6O9DYyCmSwTZvw4X
+         KGNmd0uVZsjDb+08dhe8QtQCiUFQHvqktKkM5OfXPh+ucZEWA69OuRKGU1dgYqcFxrq7
+         3mNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686852500; x=1689444500;
+        d=1e100.net; s=20221208; t=1686852565; x=1689444565;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rdicQRGnfDc93YkcMQQA6yonmb0LHEd8ZOrWHxoA7C4=;
-        b=DX9WpTMFL+KMnUQ2NWaLVo8NfUOpgsN5+ucN8HWuKI05tcJxAIUfwdDe7skm3v1QCX
-         LMmmoNGQuj5tzP5XhKxou4knXW8PYSJmn4AGehRpwmSQCj1KX2qxtZuB7MvXmr+JX+Ax
-         CFp3l6az+7Eex8bB1fbOLE4U4oEeSTrwxgpjorAqLKrpd5Kii3nP3dwrKIHrUMbNpnt/
-         BWSpi3oceIm5iR4MeG/kWHBhcXH5xtNvIqHzpuDCfDp3A/6Y080uMwM9snFdSP5XVTN9
-         JUg1vmHGH4VN29lDQXYVfkkLxVCO4HWGSA74AA85NvPI/nuo3zjCmcmpHMIMXaLq7RjJ
-         Yo6w==
-X-Gm-Message-State: AC+VfDzyRuNNvLVd46nl0z2i35CMuHY89cD5GiVEJWakS8xhi+jiBLH7
-        m2EQBjuwSGE60FCEE/skUYJ5ICWetm6HVcxG0U8=
-X-Google-Smtp-Source: ACHHUZ7086AepGoCpJ+cTM6732XnEwVHN7ojtkdMcNT5yZRXOQccyazBUX7ASE1FSz7bblVmj/O2Gz3tkIbz1fGqQRU=
-X-Received: by 2002:a5d:5491:0:b0:30f:bb97:37e8 with SMTP id
- h17-20020a5d5491000000b0030fbb9737e8mr9091871wrv.47.1686852500181; Thu, 15
- Jun 2023 11:08:20 -0700 (PDT)
+        bh=BPImEVscMojs9n7lKMKdyofc4xjY1xoflsUxQYw/6Tc=;
+        b=JoAjVYYxVpC9Xak7281AmCoB2+I2Het1Aj/76FCUuUdCCTyYEDmum0a0JiqCN6x+xs
+         ZjcHSD7u+FC2c4eXteg8P1iY/Vtbwy37AsqHmJH6xOUggYmM222CmhKVVcF7NNsEwb+B
+         YSY9w1BBGqrl/tTIhKhyz4jvqpJMwF6Kimq3oyBm6kQOaXQruoGfNx/Jl/GngF/2NP+O
+         pq4BElEe983IiJazry9SwJXU1/kxy0xgWeG/R1yoK/4VPINKqmWAuBlRZc4F0zM14Xx6
+         btqLiTJw3aq+rwMEPlwBxMxVPaboY1vpWx4ZZQliDxAwYFTtv0Vt39Qpa7dmR/68j+vk
+         xRSQ==
+X-Gm-Message-State: AC+VfDyOs7LAWX/h6sfQppLDx+SRZK83xX4S0+gbVUf/7GQx3Zi4S/Eq
+        uedoxtaXahLajcLDeyVCjlBff6yjIfPQvOwgs6kT+Dt6fMT1AA==
+X-Google-Smtp-Source: ACHHUZ5ScKEXxs3N3riRpameibKwfQ5AgWGdRhPuq7vZ0BK5oQPEW/IWP2DdZoP9Jva/DF0QJH9x2fyXk/gMJei1FDU=
+X-Received: by 2002:a5d:4743:0:b0:30e:19a8:4b15 with SMTP id
+ o3-20020a5d4743000000b0030e19a84b15mr11748710wrs.30.1686852565052; Thu, 15
+ Jun 2023 11:09:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230614141026.2113749-1-azeemshaikh38@gmail.com> <2023061516-stricken-prior-8057@gregkh>
-In-Reply-To: <2023061516-stricken-prior-8057@gregkh>
+References: <20230613004341.3540325-1-azeemshaikh38@gmail.com>
+ <202306131229.B5F2D9F@keescook> <CADmuW3VEiseKt2UM9o9jzzR8nEawh1jxANyxdZcxk89U65pXEQ@mail.gmail.com>
+ <202306141049.BF86FA8F1F@keescook>
+In-Reply-To: <202306141049.BF86FA8F1F@keescook>
 From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-Date:   Thu, 15 Jun 2023 14:08:08 -0400
-Message-ID: <CADmuW3UsVA-MCMkNcYvCTCX6F2iUTg48cUSGrg_u0py5P9oiEA@mail.gmail.com>
-Subject: Re: [PATCH v2] usbip: usbip_host: Replace strlcpy with strscpy
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org, Hongren Zheng <i@zenithal.me>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 15 Jun 2023 14:09:13 -0400
+Message-ID: <CADmuW3UZ9+9DmXPEyitgn_8Rg7U-iGvV-wJ-ug7eW84JSti47g@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: function: printer: Replace strlcpy with strscpy
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-hardening@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Albert Briscoe <albertsbriscoe@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,33 +74,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 5:33=E2=80=AFAM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Wed, Jun 14, 2023 at 1:51=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
+rote:
 >
-> On Wed, Jun 14, 2023 at 02:10:26PM +0000, Azeem Shaikh wrote:
-> > strlcpy() reads the entire source buffer first.
-> > This read may exceed the destination size limit.
-> > This is both inefficient and can lead to linear read
-> > overflows if a source string is not NUL-terminated [1].
-> > In an effort to remove strlcpy() completely [2], replace
-> > strlcpy() here with strscpy().
+> On Wed, Jun 14, 2023 at 10:12:14AM -0400, Azeem Shaikh wrote:
+> > On Tue, Jun 13, 2023 at 3:30=E2=80=AFPM Kees Cook <keescook@chromium.or=
+g> wrote:
+> > >
+> > > On Tue, Jun 13, 2023 at 12:43:41AM +0000, Azeem Shaikh wrote:
+> > [...]
+> > > > -     result =3D strlcpy(page, opts->pnp_string, PAGE_SIZE);
+> > > > -     if (result >=3D PAGE_SIZE) {
+> > > > +     result =3D strscpy(page, opts->pnp_string, PAGE_SIZE);
+> > > > +     if (result =3D=3D -E2BIG) {
+> > >
+> > > I think "< 1" might be a better test here.
 > >
-> > Direct replacement is safe here since return value of -errno
-> > is used to check for truncation instead of sizeof(dest).
+> > Curious, why "< 1" instead of "< 0"?
 > >
-> > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strl=
-cpy
-> > [2] https://github.com/KSPP/linux/issues/89
-> >
-> > Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
-> > ---
-> > v1: https://lore.kernel.org/all/20230613004402.3540432-1-azeemshaikh38@=
-gmail.com/
-> >
-> > Changes from v1 - uses "< 0" instead of "=3D=3D -E2BIG".
+> > > >               result =3D PAGE_SIZE;
+> > > >       } else if (page[result - 1] !=3D '\n' && result + 1 < PAGE_SI=
+ZE) {
 >
-> Please fix the reported errors from the build bot.
+> It's for this case above where "result" may be used in an array index,
+> and if it's 0 or less, there will be a negative array index (due to the "=
+-
+> 1"). So, here, it needs to be "< 1" instead of the more traditional "< 0"=
+.
 >
 
-Sorry about that, I was hasty with sending out v2. Sent out a build tested =
-v3.
+Makes sense. Sent out a v2.
