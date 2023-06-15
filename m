@@ -2,94 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12ED6731B95
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 16:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F53731BFB
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 16:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345139AbjFOOlS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Jun 2023 10:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57786 "EHLO
+        id S1344389AbjFOO6p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Jun 2023 10:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345101AbjFOOlC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 10:41:02 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7932952;
-        Thu, 15 Jun 2023 07:40:56 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f8d5262dc8so7039385e9.0;
-        Thu, 15 Jun 2023 07:40:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686840055; x=1689432055;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Usc6x/BqXUwuzZHQ2o4g2n/2VrbmycWMBR5m/TRW5nE=;
-        b=V7nisqTclY6JQNhLF0D6wWbOY4hdbKdpYasOoeefJ+2Ve5775k+I6S6TZQIbYtmjdC
-         m1KiVz4IfuBQ53VkJiYo1NDJoEY9oOcLxMghcwvU89ucFxk57AhJy9+Q8EfjFKBPFl1P
-         xJA5aL/wM6ah+KZ/RLTyhuF/5NP6I3NYXSEiquH4oNFAuv6lgto202fe9oVdm1VI8PXU
-         r718meptj3IfkJk07IJvfJ2nRS1QlNmECMsRCr513PI4p7q0wt5oggslRjAlUuJDuy0O
-         LcAcwBb5On/cRotKINO1i2pQuqqN17z8N3fjLCRJJRzEmKAqaYDIh3yb54G610yDGs9+
-         AJ5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686840055; x=1689432055;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Usc6x/BqXUwuzZHQ2o4g2n/2VrbmycWMBR5m/TRW5nE=;
-        b=ec4zAYCbkOeo1ivVvlxGn2gOLsDXS2i+zsFB65id6WnckCzwPUYw8Dedztle97YqJG
-         xLrrABYV6Zrn7zsL+s235x0yM+1Je6QgevFKeP32nY4JqngjCgwp83GxTJWQD7hPBADw
-         /VtJGX4nnBwhboGAY+0zGjUk9VSjWhHnirXwZXHeMFHBs27Gy1ictYpyyD0ALM0MOM+p
-         w7RXPjZHvCeQXz3/+sFZimBj+ORDg/snPWubqU6+pSym+v957Fs1ic+JMkdDrwvPBAdi
-         CThMaA9yEFg7aqiweBX7b0CKEuzn8oOn+14l41qjjI50YWtxEHBxk+34mnCLfuCv6EIs
-         UGOw==
-X-Gm-Message-State: AC+VfDxxw4w6AwKtehpCJPHoYtg+m39IcYsKjg/K/3XJVIkP3ow35yXO
-        lxzdihl6EUiUF8Q6P8j6B9I=
-X-Google-Smtp-Source: ACHHUZ66E+Hx47+uO19xLpQ6m4shXXkkbZs1ZEIZ+3orsfrg2y2nhbnULL/HeCrMbqRpdDaT7xweow==
-X-Received: by 2002:a05:600c:4e87:b0:3f7:ec1d:21b3 with SMTP id f7-20020a05600c4e8700b003f7ec1d21b3mr4620285wmq.5.1686840054425;
-        Thu, 15 Jun 2023 07:40:54 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id t25-20020a1c7719000000b003f7eeec829asm20709865wmi.10.2023.06.15.07.40.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 07:40:53 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] usb: cdns2: Fix spelling mistake in a trace message "Wakupe" -> "Wakeup"
-Date:   Thu, 15 Jun 2023 15:40:52 +0100
-Message-Id: <20230615144052.2254528-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S1344998AbjFOO6k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 10:58:40 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49865297C;
+        Thu, 15 Jun 2023 07:58:34 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35FBsMwv017189;
+        Thu, 15 Jun 2023 14:58:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=8jddhpXQANB8fdbQa1qqaRX5nkctEsZwQvmCoXwnM84=;
+ b=TKoBFFOUE9CW32tnMAuXkyLbaapC3s/jCZ0ZUiAWb+5AuydF1xhG7IwYaOeMYo/k42Qf
+ zqu0E3JW5AZUi2WLrNzBbZXDkMA64FbYReYB1mpPhw5ZEh/C+1cVZjcR6MiQohqHAsBG
+ SqCWDAVeRFte2+q6+zblpkxpdkWQlLxpn3cPfbY6IGqvXvNdntfzT8omfbq49X8q4zCy
+ gbLxfCUMAsLPWcVU/Tmk+WdrzzIp630CptbAZD0bxQwE2u9eRnU2Uxz+Okt2ACOUHSYQ
+ EwpdcuTpQOh5Iv3hIPdvb+/2IAvEjrozB9e2x1ODErlzVL1RyOlNV/P8CPY8Mt4sp+px vQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7cka36yb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 14:58:29 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35FEwPDo030284
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 14:58:25 GMT
+Received: from [10.216.11.0] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 15 Jun
+ 2023 07:58:21 -0700
+Message-ID: <551145bb-18f7-45af-b75e-7caccca113bc@quicinc.com>
+Date:   Thu, 15 Jun 2023 20:28:13 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
+ <ZImE4L3YgABnCIsP@kuha.fi.intel.com>
+ <2023061547-staleness-camper-ae8a@gregkh>
+ <d5561151-08bb-9f5f-aa51-44c5ad31976b@quicinc.com>
+ <2023061512-vowed-panther-38ed@gregkh>
+From:   Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <2023061512-vowed-panther-38ed@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: NVx99CLevn-3KPC-wAGXUdEQwaDg9DZH
+X-Proofpoint-ORIG-GUID: NVx99CLevn-3KPC-wAGXUdEQwaDg9DZH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-15_11,2023-06-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ malwarescore=0 suspectscore=0 priorityscore=1501 lowpriorityscore=0
+ mlxlogscore=668 adultscore=0 impostorscore=0 bulkscore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306150130
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There is a spelling mistake in a trace message. Fix it.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/usb/gadget/udc/cdns2/cdns2-debug.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/udc/cdns2/cdns2-debug.h b/drivers/usb/gadget/udc/cdns2/cdns2-debug.h
-index fd22ae949008..be9ae0d28a40 100644
---- a/drivers/usb/gadget/udc/cdns2/cdns2-debug.h
-+++ b/drivers/usb/gadget/udc/cdns2/cdns2-debug.h
-@@ -36,7 +36,7 @@ static inline const char *cdns2_decode_usb_irq(char *str, size_t size,
- 	ret += snprintf(str + ret, size - ret, ", EXT: 0x%02x - ", ext_irq);
- 
- 	if (ext_irq & EXTIRQ_WAKEUP)
--		ret += snprintf(str + ret, size - ret, "Wakupe ");
-+		ret += snprintf(str + ret, size - ret, "Wakeup ");
- 	if (ext_irq & EXTIRQ_VBUSFAULT_FALL)
- 		ret += snprintf(str + ret, size - ret, "VBUS_FALL ");
- 	if (ext_irq & EXTIRQ_VBUSFAULT_RISE)
--- 
-2.39.2
+On 15-06-23 08:06 pm, Greg Kroah-Hartman wrote:
+> On Thu, Jun 15, 2023 at 07:52:32PM +0530, Prashanth K wrote:
+>>
+>> In that case, can I resubmit v1 of this patch again, where I have used a
+>> macro in usb-conn-gpio driver ? something like this.
+>>
+>> @@ -27,6 +27,8 @@
+>>   #define USB_CONN_IRQF	\
+>>   	(IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT)
+>>
+>> +#define USB_ROLE_UNKNOWN (USB_ROLE_NONE -1)
+> 
+> Are you referencing an existing enum here and assuming it is a specific
+> value?
+
+I' not assuming UBS_ROLE_NONE to be a specific value, but I want an 
+integer (for macro) which is not equal to USB_ROLE_NONE/DEVICE/HOST, 
+that's why I'm using (USB_ROLE_NONE - 1), assuming enumerators NONE, 
+DEVICE & HOST will be having adjacent integer values. Wouldn't that help?
+
+Thanks,
+Prashanth K
+
 
