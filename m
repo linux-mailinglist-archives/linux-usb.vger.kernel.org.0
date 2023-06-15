@@ -2,94 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FD873140E
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 11:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF0C73143A
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 11:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245564AbjFOJfi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Jun 2023 05:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36468 "EHLO
+        id S245741AbjFOJko (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Jun 2023 05:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343677AbjFOJfQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 05:35:16 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6A6296C
-        for <linux-usb@vger.kernel.org>; Thu, 15 Jun 2023 02:34:42 -0700 (PDT)
-Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A389D891;
-        Thu, 15 Jun 2023 11:33:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1686821638;
-        bh=EMVHHDNjTFDWVR5Sel489tDhF3Mz9rJupABwul5BqXI=;
-        h=From:To:Subject:Date:From;
-        b=oI0pqCJu1qM6mpUrBcmPGSvqSs43LTyR0cH14+xgcSfjqJsKbs5sKe6g6J+xi0mEE
-         EB8XM5vymASJdlnyI9oLS546yUaGgFPcsMN/EM7iRKFOC7r5ai+IMaXtjRvlqTqDLq
-         meMnaChJaJe4IgKkbjHg5QWb+hl8M8jhgVjBVmKE=
-From:   Daniel Scally <dan.scally@ideasonboard.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Daniel Scally <dan.scally@ideasonboard.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] usb: gadget: uvc: Move usb_ep_disable() to uvcg_video_enable()
-Date:   Thu, 15 Jun 2023 10:34:06 +0100
-Message-Id: <20230615093406.80195-1-dan.scally@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S1343697AbjFOJkH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 05:40:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06FC30E6;
+        Thu, 15 Jun 2023 02:39:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27A9F621E2;
+        Thu, 15 Jun 2023 09:39:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08AE3C433C9;
+        Thu, 15 Jun 2023 09:39:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686821951;
+        bh=r6Tojsa+J6QEpbUTFlxJtR4e9II0ZoBS4MhS04CM0c8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ENhHmjQYvwCXAItnRbPoVGU2HfxOUEX8DOwQwlizbljXLQdyYtvtCyfvdNSbFPNe6
+         BlsvG0koqV90GuFdC1PBzI3BFQDPhP9frmFX3qKKw4ESS2F5FAZ59wFiOUIQDmefcL
+         +eUTn0E5sIkLK8qwQ6zCSgtEMeMwyb74I9bQcAZY=
+Date:   Thu, 15 Jun 2023 11:39:09 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Frank Wang <frank.wang@rock-chips.com>
+Cc:     sebastian.reichel@collabora.com, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, heiko@sntech.de,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
+        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
+        yubing.zhang@rock-chips.com, wmc@rock-chips.com
+Subject: Re: [PATCH v3] usb: typec: tcpm: add get max power support
+Message-ID: <2023061551-gumminess-clasp-6285@gregkh>
+References: <20230322093120.8686-1-frank.wang@rock-chips.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230322093120.8686-1-frank.wang@rock-chips.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently the UVC Gadget's .set_alt() callback disables the USB
-endpoint, following which a V4L2 event is queued that closes
-down the workqueue. This ordering results in repeated calls to
-usb_ep_queue() from the workqueue whilst usb_ep_disable() is
-running - behaviour that the documentation for usb_ep_disable()
-specifically prohibits.
+On Wed, Mar 22, 2023 at 05:31:20PM +0800, Frank Wang wrote:
+> Traverse fixed pdos to calculate the maximum power that the charger
+> can provide, and it can be get by POWER_SUPPLY_PROP_INPUT_POWER_LIMIT
+> property.
+> 
+> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
 
-Move the call to usb_ep_disable() until after cancel_work_sync(),
-which will guarantee the endpoint is no longer in use when
-usb_ep_disable() is called.
+What ever happened to this patch?
 
-Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
----
- drivers/usb/gadget/function/f_uvc.c     | 3 ---
- drivers/usb/gadget/function/uvc_video.c | 4 ++++
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Frank, can you rebase it and resubmit?
 
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 5e919fb65833..4b91bd572a83 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -337,9 +337,6 @@ uvc_function_set_alt(struct usb_function *f, unsigned interface, unsigned alt)
- 		if (uvc->state != UVC_STATE_STREAMING)
- 			return 0;
- 
--		if (uvc->video.ep)
--			usb_ep_disable(uvc->video.ep);
--
- 		memset(&v4l2_event, 0, sizeof(v4l2_event));
- 		v4l2_event.type = UVC_EVENT_STREAMOFF;
- 		v4l2_event_queue(&uvc->vdev, &v4l2_event);
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index 91af3b1ef0d4..c7e38fa26492 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -499,6 +499,10 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
- 
- 	if (!enable) {
- 		cancel_work_sync(&video->pump);
-+
-+		if (video->ep)
-+			usb_ep_disable(video->ep);
-+
- 		uvcg_queue_cancel(&video->queue, 0);
- 
- 		for (i = 0; i < video->uvc_num_requests; ++i)
--- 
-2.34.1
+thanks,
 
+greg k-h
