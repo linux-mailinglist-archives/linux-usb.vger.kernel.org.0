@@ -2,49 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF0C73143A
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 11:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F41A273144A
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jun 2023 11:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245741AbjFOJko (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Jun 2023 05:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
+        id S238768AbjFOJnX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Jun 2023 05:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343697AbjFOJkH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 05:40:07 -0400
+        with ESMTP id S1343599AbjFOJnT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jun 2023 05:43:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06FC30E6;
-        Thu, 15 Jun 2023 02:39:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CA71BF9
+        for <linux-usb@vger.kernel.org>; Thu, 15 Jun 2023 02:43:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27A9F621E2;
-        Thu, 15 Jun 2023 09:39:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08AE3C433C9;
-        Thu, 15 Jun 2023 09:39:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8046A621C3
+        for <linux-usb@vger.kernel.org>; Thu, 15 Jun 2023 09:43:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94241C433C8;
+        Thu, 15 Jun 2023 09:43:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686821951;
-        bh=r6Tojsa+J6QEpbUTFlxJtR4e9II0ZoBS4MhS04CM0c8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ENhHmjQYvwCXAItnRbPoVGU2HfxOUEX8DOwQwlizbljXLQdyYtvtCyfvdNSbFPNe6
-         BlsvG0koqV90GuFdC1PBzI3BFQDPhP9frmFX3qKKw4ESS2F5FAZ59wFiOUIQDmefcL
-         +eUTn0E5sIkLK8qwQ6zCSgtEMeMwyb74I9bQcAZY=
-Date:   Thu, 15 Jun 2023 11:39:09 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Frank Wang <frank.wang@rock-chips.com>
-Cc:     sebastian.reichel@collabora.com, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, heiko@sntech.de,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com
-Subject: Re: [PATCH v3] usb: typec: tcpm: add get max power support
-Message-ID: <2023061551-gumminess-clasp-6285@gregkh>
-References: <20230322093120.8686-1-frank.wang@rock-chips.com>
+        s=korg; t=1686822197;
+        bh=zU/1mS7GcPXAIffTrMqQYyVexLDqT+wokiE9fBsFeUY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=siDJW/0ZbMe/J6PGXavByLhK1AWNi1UXEBIdJPjtoLr7Lo+LrQj4YwBVRVvpxBLZr
+         /oSsLXz2itaFyZn7aauT3TgUB245jr7wf99U2f8kDkQkJ2apYBNBhc9xy1vBsnCoFK
+         ALL+aMPzk/jlIP+ouYKsi8bSJq9obpLs9oExxVpY=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] MAINTAINERS: USB: add uapi header files to USB SUBSYSTEM entry
+Date:   Thu, 15 Jun 2023 11:43:07 +0200
+Message-ID: <20230615094306.2072827-2-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322093120.8686-1-frank.wang@rock-chips.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=714; i=gregkh@linuxfoundation.org; h=from:subject; bh=zU/1mS7GcPXAIffTrMqQYyVexLDqT+wokiE9fBsFeUY=; b=owGbwMvMwCRo6H6F97bub03G02pJDCldd7W6zaMP/dvukDFhzvXppqxHWC4HLmEVW9TF4fV5r tniT26xHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCRX+UM86vUjWbyr19w1/17 7uyiBS1vt36YIsAwV/Sufsflx6oH5iRv4DtafXuve+37rwA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,20 +50,27 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 05:31:20PM +0800, Frank Wang wrote:
-> Traverse fixed pdos to calculate the maximum power that the charger
-> can provide, and it can be get by POWER_SUPPLY_PROP_INPUT_POWER_LIMIT
-> property.
-> 
-> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
+For some reason the include/uapi/linux/usb/ directory is missing in the
+USB SUBSYSTEM entry, so get_maintainer will not know to cc: the proper
+mailing lists.  Fix this up by adding an entry for this directory.
 
-What ever happened to this patch?
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Frank, can you rebase it and resubmit?
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a8c8bd0b845f..8d8cb2067451 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -21941,6 +21941,7 @@ F:	drivers/usb/
+ F:	include/dt-bindings/usb/
+ F:	include/linux/usb.h
+ F:	include/linux/usb/
++F:	include/uapi/linux/usb/
+ 
+ USB TYPEC BUS FOR ALTERNATE MODES
+ M:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+-- 
+2.41.0
 
-thanks,
-
-greg k-h
