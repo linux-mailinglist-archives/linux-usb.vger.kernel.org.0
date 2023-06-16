@@ -2,119 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F16732949
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jun 2023 09:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F95732970
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jun 2023 10:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239840AbjFPHw5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Jun 2023 03:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S244891AbjFPID6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Jun 2023 04:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231332AbjFPHwx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jun 2023 03:52:53 -0400
-Received: from mail-m11879.qiye.163.com (mail-m11879.qiye.163.com [115.236.118.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E47272A;
-        Fri, 16 Jun 2023 00:52:51 -0700 (PDT)
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by mail-m11879.qiye.163.com (Hmail) with ESMTPA id 850126804B5;
-        Fri, 16 Jun 2023 15:52:44 +0800 (CST)
-From:   Frank Wang <frank.wang@rock-chips.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, sebastian.reichel@collabora.com,
-        heiko@sntech.de
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com,
-        Frank Wang <frank.wang@rock-chips.com>
-Subject: [v4,2/2] usb: typec: tcpm: add get max power support
-Date:   Fri, 16 Jun 2023 15:52:41 +0800
-Message-Id: <20230616075241.27690-2-frank.wang@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230616075241.27690-1-frank.wang@rock-chips.com>
-References: <20230616075241.27690-1-frank.wang@rock-chips.com>
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQ0wdTlYYHUodHklKQxlDGUJVEwETFh
-        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSkpLT0tDVUpLS1VLWQ
-        Y+
-X-HM-Tid: 0a88c33140312eb5kusn850126804b5
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MBg6LQw6ET1DIhceSy4tCwJJ
-        LRpPCk9VSlVKTUNNQktKQk1OTklPVTMWGhIXVR0JGhUQVQwaFRw7CRQYEFYYExILCFUYFBZFWVdZ
-        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFISExDNwY+
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        with ESMTP id S244932AbjFPIDx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jun 2023 04:03:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755FC2D7E;
+        Fri, 16 Jun 2023 01:03:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EE2662D29;
+        Fri, 16 Jun 2023 08:03:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AD9EC433C9;
+        Fri, 16 Jun 2023 08:03:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686902626;
+        bh=SFhszW6Q8Og3ckltusGDv4yzQJqbNaNtVYyqIvkr9Qo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T9E7o3CxcEeyXtiKotFqZp6iIiKLaeX8j12zFkjvecOIDxAhb+p5zEoboxSfYCVFn
+         wuWcX2NIRLx9JjqZ0IVlblm1lst/lwOg6RTaNbqKQtItOwTSpZZFGaVjg35nZgWHFw
+         Kl830DpuEB2+EUg+nO4xhUynoLJc+2yb2ZhGq1iU=
+Date:   Fri, 16 Jun 2023 10:03:44 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+        quic_jackp@quicinc.com, quic_ugoswami@quicinc.com
+Subject: Re: [PATCH v2] usb: dwc3: gadget: Propagate core init errors to UDC
+ during pullup
+Message-ID: <2023061633-scarcity-pristine-4205@gregkh>
+References: <20230616071715.20960-1-quic_kriskura@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230616071715.20960-1-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Traverse fixed pdos to calculate the maximum power that the charger
-can provide, and it can be get by POWER_SUPPLY_PROP_INPUT_POWER_LIMIT
-property.
+On Fri, Jun 16, 2023 at 12:47:15PM +0530, Krishna Kurapati wrote:
+> In scenarios where pullup relies on resume (get sync) to initialize
+> the controller and set the run stop bit, then core_init is followed by
+> gadget_resume which will eventually set run stop bit.
+> 
+> But in cases where the core_init fails, the return value is not sent
+> back to udc appropriately. So according to UDC the controller has
+> started but in reality we never set the run stop bit.
+> 
+> On systems like Android, there are uevents sent to HAL depending on
+> whether the configfs_bind / configfs_disconnect were invoked. In the
+> above mentioned scnenario, if the core init fails, the run stop won't
+> be set and the cable plug-out won't result in generation of any
+> disconnect event and userspace would never get any uevent regarding
+> cable plug out and we never call pullup(0) again. Furthermore none of
+> the next Plug-In/Plug-Out's would be known to configfs.
+> 
+> Return back the appropriate result to UDC to let the userspace/
+> configfs know that the pullup failed so they can take appropriate
+> action.
+> 
+> Fixes: 77adb8bdf422 ("usb: dwc3: gadget: Allow runtime suspend if UDC unbinded")
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> ---
+>  drivers/usb/dwc3/gadget.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 578804dc29ca..27cb671e18e3 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -2747,7 +2747,9 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>  	ret = pm_runtime_get_sync(dwc->dev);
+>  	if (!ret || ret < 0) {
+>  		pm_runtime_put(dwc->dev);
+> -		return 0;
+> +		if (ret < 0)
+> +			pm_runtime_set_suspended(dwc->dev);
+> +		return ret;
+>  	}
+>  
+>  	if (dwc->pullups_connected == is_on) {
+> -- 
+> 2.40.0
+> 
 
-Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
----
-Changelog:
-v4:
- - No change
+Hi,
 
-v3:
- - Use Microwatts instead of Milliwatts to follow the ABI, commented by Sebastian Reichel.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-v2:
- - No change
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-v1:
- - https://patchwork.kernel.org/project/linux-usb/patch/20230313025843.17162-4-frank.wang@rock-chips.com/
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
 
- drivers/usb/typec/tcpm/tcpm.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 9f6aaa3e70ca8..829d75ebab422 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -6340,6 +6340,27 @@ static int tcpm_psy_get_current_now(struct tcpm_port *port,
- 	return 0;
- }
- 
-+static int tcpm_psy_get_input_power_limit(struct tcpm_port *port,
-+					  union power_supply_propval *val)
-+{
-+	unsigned int src_mv, src_ma, max_src_uw = 0;
-+	unsigned int i, tmp;
-+
-+	for (i = 0; i < port->nr_source_caps; i++) {
-+		u32 pdo = port->source_caps[i];
-+
-+		if (pdo_type(pdo) == PDO_TYPE_FIXED) {
-+			src_mv = pdo_fixed_voltage(pdo);
-+			src_ma = pdo_max_current(pdo);
-+			tmp = src_mv * src_ma;
-+			max_src_uw = tmp > max_src_uw ? tmp : max_src_uw;
-+		}
-+	}
-+
-+	val->intval = max_src_uw;
-+	return 0;
-+}
-+
- static int tcpm_psy_get_prop(struct power_supply *psy,
- 			     enum power_supply_property psp,
- 			     union power_supply_propval *val)
-@@ -6369,6 +6390,9 @@ static int tcpm_psy_get_prop(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_CURRENT_NOW:
- 		ret = tcpm_psy_get_current_now(port, val);
- 		break;
-+	case POWER_SUPPLY_PROP_INPUT_POWER_LIMIT:
-+		tcpm_psy_get_input_power_limit(port, val);
-+		break;
- 	default:
- 		ret = -EINVAL;
- 		break;
--- 
-2.17.1
+thanks,
 
+greg k-h's patch email bot
