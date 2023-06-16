@@ -2,121 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B403732937
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jun 2023 09:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A3F73294A
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jun 2023 09:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243117AbjFPHtr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Jun 2023 03:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43330 "EHLO
+        id S233175AbjFPHw4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Jun 2023 03:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241866AbjFPHtj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jun 2023 03:49:39 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5372719
-        for <linux-usb@vger.kernel.org>; Fri, 16 Jun 2023 00:49:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686901777; x=1718437777;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tbn1hDfuch/QEL8abacpVpyigS9u1Y8P+maCW+uU0Gg=;
-  b=jg7eaQHRAahiHE8X+FSl0m+0CTSMfDZKQZlEQ8zqH9TAa9oC0zTJmVWx
-   K7J2eVlaj1OtBRmFH9RkjQtn57oWlvMyPpEnHalC7sX1u1xjv8gRRCUsP
-   TUZYYMi4UZPj1NAHNTrTaMkN9BJY1/U29kbMVHuQpItEo1Qmc3RldosuH
-   mKEInwQxoAR/CoH8miZNXsGBLYrB5LwNS/H1TkGmw+8XrNYeVmg2T3Tkn
-   cB9tP396xeh2Dtqed0ZfK8yZKGxIk6ETA9Wrm9jLfPoaF0EANUgHcUKoz
-   jTF8a44OR29zsHyu5wmI/9FOecpjht9Zk1JkB4T7Qu7z99itDImyQsL1v
-   w==;
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="asc'?scan'208";a="218841717"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jun 2023 00:49:36 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 16 Jun 2023 00:49:36 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 16 Jun 2023 00:49:35 -0700
-Date:   Fri, 16 Jun 2023 08:49:09 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     kernel test robot <lkp@intel.com>, <linux-usb@vger.kernel.org>,
-        <palmer@dabbelt.com>
-Subject: Re: [usb:usb-next] BUILD SUCCESS WITH WARNING
- df49f2a0ac4a34c0cb4b5c233fcfa0add644c43c
-Message-ID: <20230616-unnerving-surface-a78ff2c38a18@wendy>
-References: <202306160658.E79gCwiR-lkp@intel.com>
- <2023061617-unnoticed-snugly-a110@gregkh>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="OmqeLEK+5VEdJLVR"
-Content-Disposition: inline
-In-Reply-To: <2023061617-unnoticed-snugly-a110@gregkh>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230120AbjFPHwx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jun 2023 03:52:53 -0400
+Received: from mail-m11879.qiye.163.com (mail-m11879.qiye.163.com [115.236.118.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FE02945;
+        Fri, 16 Jun 2023 00:52:52 -0700 (PDT)
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by mail-m11879.qiye.163.com (Hmail) with ESMTPA id 8AB9768093F;
+        Fri, 16 Jun 2023 15:52:43 +0800 (CST)
+From:   Frank Wang <frank.wang@rock-chips.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, sebastian.reichel@collabora.com,
+        heiko@sntech.de
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
+        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
+        yubing.zhang@rock-chips.com, wmc@rock-chips.com,
+        Frank Wang <frank.wang@rock-chips.com>
+Subject: [v4,1/2] usb: typec: tcpm: fix cc role at port reset
+Date:   Fri, 16 Jun 2023 15:52:40 +0800
+Message-Id: <20230616075241.27690-1-frank.wang@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQh1OGFYYTRhMQktJT01PSU1VEwETFh
+        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSklLQ05NVUpLS1VLWQ
+        Y+
+X-HM-Tid: 0a88c3313cb42eb5kusn8ab9768093f
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nhg6GBw4Lz1COhc9LC1MC0sI
+        PT0aCjNVSlVKTUNNQktKQk1PT0xCVTMWGhIXVR0JGhUQVQwaFRw7CRQYEFYYExILCFUYFBZFWVdZ
+        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFJT09DNwY+
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---OmqeLEK+5VEdJLVR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In the current implementation, the tcpm set CC1/CC2 role to open when
+it do port reset would cause the VBUS removed by the Type-C partner.
 
-On Fri, Jun 16, 2023 at 08:14:05AM +0200, Greg Kroah-Hartman wrote:
-> On Fri, Jun 16, 2023 at 06:12:01AM +0800, kernel test robot wrote:
-> > tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb=
-=2Egit usb-next
-> > branch HEAD: df49f2a0ac4a34c0cb4b5c233fcfa0add644c43c  Revert "usb: com=
-mon: usb-conn-gpio: Set last role to unknown before initial detection"
-> >=20
-> > Warning: (recently discovered and may have been fixed)
-> >=20
-> > drivers/usb/cdns3/cdns3-starfive.c:23: warning: expecting prototype for=
- cdns3(). Prototype was for USB_STRAP_HOST() instead
->=20
-> I keep seeing this "warning" by the test robot for a while, but I do not
-> understand it at all, and can not duplicate it here locally.  Are you
-> sure your riscv toolchain is correct as :
->=20
-> > Warning ids grouped by kconfigs:
-> >=20
-> > gcc_recent_errors
-> > |-- riscv-allmodconfig
-> > |   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-=
-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-> > `-- riscv-allyesconfig
-> >     `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-=
-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
->=20
-> It only seems to trigger there.
+This sets CC1/CC2 according to the default state of port to fix it.
 
-I dunno if it has anything to do with the LKP folks, my copes of gcc-11.3,
-gcc-12.2 & gcc-13.1 complain in a similar way on riscv.
+Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
+---
+Changelog:
+(no changes since v3)
 
-Palmer, any clue?
+v2:
+ - Make some tweaking based on the default state of port, commented by Guenter Roeck.
 
-USB_STRAP_HOST is `#define USB_STRAP_HOST BIT(17)` and cdn3s() doesn't
-seem to even exist?
+v1:
+ - https://patchwork.kernel.org/project/linux-usb/patch/20230313025843.17162-2-frank.wang@rock-chips.com/
 
+ drivers/usb/typec/tcpm/tcpm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---OmqeLEK+5VEdJLVR
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 3c6b0c8e2d3ae..9f6aaa3e70ca8 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -4885,7 +4885,8 @@ static void run_state_machine(struct tcpm_port *port)
+ 		break;
+ 	case PORT_RESET:
+ 		tcpm_reset_port(port);
+-		tcpm_set_cc(port, TYPEC_CC_OPEN);
++		tcpm_set_cc(port, tcpm_default_state(port) == SNK_UNATTACHED ?
++			    TYPEC_CC_RD : tcpm_rp_cc(port));
+ 		tcpm_set_state(port, PORT_RESET_WAIT_OFF,
+ 			       PD_T_ERROR_RECOVERY);
+ 		break;
+-- 
+2.17.1
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIwT9QAKCRB4tDGHoIJi
-0qJNAQClfIrNS8ayOHTgLciGhPv5cseoHesGPLWgK+T9q5FvUwD6A3GOe+d3qgtZ
-Wqx8iF+FTgmGd6coIF39mWG8Bp1aLAg=
-=CLWV
------END PGP SIGNATURE-----
-
---OmqeLEK+5VEdJLVR--
