@@ -2,95 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A37732B79
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jun 2023 11:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B92D732F22
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jun 2023 12:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344177AbjFPJ1s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Jun 2023 05:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42556 "EHLO
+        id S1345540AbjFPKwp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Jun 2023 06:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344193AbjFPJ1b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jun 2023 05:27:31 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944F044AC
-        for <linux-usb@vger.kernel.org>; Fri, 16 Jun 2023 02:26:28 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-982af24987fso73342966b.0
-        for <linux-usb@vger.kernel.org>; Fri, 16 Jun 2023 02:26:28 -0700 (PDT)
+        with ESMTP id S1345318AbjFPKw1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jun 2023 06:52:27 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F00749DA;
+        Fri, 16 Jun 2023 03:44:18 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-518ff822360so693938a12.1;
+        Fri, 16 Jun 2023 03:44:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686907587; x=1689499587;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JzbnGZhrNyWzHO+pd630be+eVcaUV9U4dzUTx4TgLb8=;
-        b=jvj4ImB41EBwWhl8l+G9DcltqOLh99FsTfocVojQ52wQZGmO8ykxxwnscLMkESPIlu
-         XDVaLe8hPlsRvpEatl0lo/NJHsx/St35jmciLyQk45ZLAZaufKkV1mtPgcBPsvplksmZ
-         AGnNqKCcPRoiu1NtqoSlY40ckt9S+BtB0RFL3YG52Sj7/0qn+grUgjWlNbjb7tn7SH2u
-         a5EjHhbX64xgTn2PVR5w/rX9Ts2Ff/rbWIw6JyunEcE6YqaRz5xtrYU3G7jPCBkxSD50
-         dCQRpyP0QJWVCROwWgMTznZJjmv1PcBGN1wpjabRMwyhbCZXaRIdjMwpKvT1hQfwi0pl
-         950Q==
+        d=gmail.com; s=20221208; t=1686912256; x=1689504256;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xSVktpHbB6u39pGveB2DCDLtiuQTPMQ40315tih9Wp0=;
+        b=pA/9jYbhoBFrt8Y6CsEMxZ+Ey1HKLYXpp/lZ6QdCXPxLhOrFg1ZlsfnTRoNnWuhv6y
+         qtcm3YsUeKnAv32llmNSbtmzqJDTjOiSs2yaNciMU/awpH3/phg5ZLRBDn2dKi5UWVNP
+         oCmxqmzh6SFXY8bkqTXR+Bs4x39lQbB1e/lRkjBLtLDtryL9v5K8Bvnc1KVPIHQNOxi3
+         o1utDjC3B6ZYAHaYgnT20ZTmd/JUt44Z3eVi14BHzzgSA/skp/s7/at1cZApUhcbbVBe
+         gynSqAQew8Ci4/qxrjCYBoBlvhgVvn+mUt3yxCkG9u/nBknDQ0pwyNLXidTndL1Prv1r
+         A8XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686907587; x=1689499587;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JzbnGZhrNyWzHO+pd630be+eVcaUV9U4dzUTx4TgLb8=;
-        b=FIeCJ31sIqk8XKwo/JYDwftauOT+xsJe71VuF98R2xluSd4JcvhMqZMoQfK7k9h1uF
-         Z+5pbVoaLOj0HLtwPB5ReVRUA300N1po3OXDxW/oXrkrU5EPmtslLIWawK597KVOGZAE
-         /W/Cs23hCVpjWs5pyG3ds6KRbdaXxd+99aJKNCSUl8Zp5BIeH1UCzLVzJyLtmvgj+d6m
-         XnD+IuXphatuLB3BTBJ9JiCSUWxdv+PmFh1wvS+GhyctmDFkd5MCrlnN4cpaMOF9O54V
-         p/lOFU3NN9SucJLTN6NcyJuAJt2z2ELPJBKchFvETQmu3c149s8HncNcPgNw+nnCutdx
-         Da6g==
-X-Gm-Message-State: AC+VfDz9pOOMdcO86VeqHR0yQ3rLLAnJEvhaxOMkEPo0DfAzxZPRSMqQ
-        9sTLYddITZir4BI4g/cRzwyzqw==
-X-Google-Smtp-Source: ACHHUZ5pd4rYYjbrDm3AKYGAfFChi1yrldfZLnzVvqtnbubhK4z37yBpU/rAmMOrHeoRs7ur2/SYYw==
-X-Received: by 2002:a17:906:af65:b0:974:1eeb:1ab7 with SMTP id os5-20020a170906af6500b009741eeb1ab7mr961547ejb.24.1686907586845;
-        Fri, 16 Jun 2023 02:26:26 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id i24-20020a17090671d800b00967004187b8sm10428226ejk.36.2023.06.16.02.26.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 02:26:26 -0700 (PDT)
-Message-ID: <0c28b53e-a6c6-908a-0b3f-107b22231a4b@linaro.org>
-Date:   Fri, 16 Jun 2023 11:26:24 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
+        d=1e100.net; s=20221208; t=1686912256; x=1689504256;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xSVktpHbB6u39pGveB2DCDLtiuQTPMQ40315tih9Wp0=;
+        b=FfsiLDzomF1mK8ZrLAkDvkYvOk//fa/qCfKaBbZl4lpvaGeWeeFOmRobiu325AzCRM
+         pT1myshTgPJR9F1GGp83fxKnTeo6h3TqC6r9+x0Q1Imx0BTH2pGdb+pQRJ++bebyhi86
+         5eL1GwfzOLOGH6XPjyK+kGHu8gOJf4N4nIWx1ttJq8wxJ076mToFkr/bfIMkRoYjgVDA
+         plt7xhUonredjLb9CWigmF90kvuXkcYA0+coGmllgixnktifbqPFtmp2N3Cw7aRNwUSz
+         Ke/GBUdEGmVWCln3Z5J6yYasK4nj2dAd6vxEeYdMw9UZkBHuTdkXbGfT9sJECoyoA7vF
+         bZ1Q==
+X-Gm-Message-State: AC+VfDwTVGSwYZoul0HgJdv1+eTROwFPt1NhxVAoN02wtR8MyNXIzzQ0
+        olrorMmFxu7lIOPsvuTVxeU=
+X-Google-Smtp-Source: ACHHUZ72qZT5HrfbksdWGP8O1yIdwqbhBciwabu3teTrwhC8QfH3HSQkZXHBJmA1ZpI3Ck/Vmx8Z1g==
+X-Received: by 2002:a05:6402:1649:b0:51a:3f7c:af1a with SMTP id s9-20020a056402164900b0051a3f7caf1amr505930edx.40.1686912255849;
+        Fri, 16 Jun 2023 03:44:15 -0700 (PDT)
+Received: from [10.0.0.102] (snat-11.cgn.sat-an.net. [176.222.226.11])
+        by smtp.gmail.com with ESMTPSA id d13-20020aa7d5cd000000b00510d110db58sm9764934eds.80.2023.06.16.03.44.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 03:44:15 -0700 (PDT)
+Message-ID: <d04179d15137f4852acef3c677c57844806b0f49.camel@gmail.com>
 Subject: Re: usb: dwc3: HC dies under high I/O load on Exynos5422
-To:     =?UTF-8?Q?Jakub_Van=c4=9bk?= <linuxtardis@gmail.com>,
+From:   Jakub =?iso-8859-2?Q?Van=ECk?= <linuxtardis@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Thinh.Nguyen@synopsys.com, mauro.ribeiro@hardkernel.com
 Cc:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Date:   Fri, 16 Jun 2023 12:44:11 +0200
+In-Reply-To: <0c28b53e-a6c6-908a-0b3f-107b22231a4b@linaro.org>
 References: <a21f34c04632d250cd0a78c7c6f4a1c9c7a43142.camel@gmail.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a21f34c04632d250cd0a78c7c6f4a1c9c7a43142.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+         <0c28b53e-a6c6-908a-0b3f-107b22231a4b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 16/06/2023 05:11, Jakub Vaněk wrote:
-> Hi all,
-> 
-> I've discovered that on recent kernels the xHCI controller on Odroid
-> HC2 dies when a USB-attached disk is put under a heavy I/O load.
-> 
-> The hardware in question is using a DWC3 2.00a IP within the Exynos5422
-> to provide two internal USB3 ports. One of them is connected to a
-> JMS578 USB-to-SATA bridge (Odroid firmware v173.01.00.02). The bridge
-> is then connected to a Intel SSDSC2KG240G8 (firmware XCV10132).
-> 
-> The crash can be triggered by running a read-heavy workload. This
-> triggers it for me within tens of seconds:
+Hi Krzysztof,
 
-multi_v7 has devfreq enabled. Does disabling ARM_EXYNOS_BUS_DEVFREQ
-change anything here?
+thank you for your quick reply!
+
+On Fri, 2023-06-16 at 11:26 +0200, Krzysztof Kozlowski wrote:
+> On 16/06/2023 05:11, Jakub Van=C4=9Bk wrote:
+> > Hi all,
+> >=20
+> > I've discovered that on recent kernels the xHCI controller on
+> > Odroid
+> > HC2 dies when a USB-attached disk is put under a heavy I/O load.
+> >=20
+> > The hardware in question is using a DWC3 2.00a IP within the
+> > Exynos5422
+> > to provide two internal USB3 ports. One of them is connected to a
+> > JMS578 USB-to-SATA bridge (Odroid firmware v173.01.00.02). The
+> > bridge
+> > is then connected to a Intel SSDSC2KG240G8 (firmware XCV10132).
+> >=20
+> > The crash can be triggered by running a read-heavy workload. This
+> > triggers it for me within tens of seconds:
+>=20
+> multi_v7 has devfreq enabled. Does disabling ARM_EXYNOS_BUS_DEVFREQ
+> change anything here?
+
+Only slightly. The FIO test still makes the xHCI controller crash.
+However, the timing seems to be slightly different -- I either get the
+crash in ~10 seconds (most of the time) or only after a minute. Before
+disabling ARM_EXYNOS_BUS_DEVFREQ it seemed to take about 20-40 seconds.
+On the other hand, I have tried it only two or three times before, so
+this data may not be conclusive.
+
+Full kernel config: https://pastebin.com/iLSsYfBF
+Full fio output: https://pastebin.com/9NehLhQr
+Full-ish dmesg here: https://pastebin.com/1Zgd1gVg
+All of the bus-* devfreq sysfs nodes disappeared in this configuration:
+$ ls /sys/class/devfreq
+10c20000.memory-controller  11800000.gpu
+
+The memory controller driver prints some errors in this configuration.
+Disabling it with CONFIG_EXYNOS5422_DMC=3Dn doesn't seem to affect the
+crash. I also tried to set the cpufreq governor to performance instead
+of ondemand and that too didn't help.
+
+
+> Best regards,
+> Krzysztof
 
 Best regards,
-Krzysztof
-
+Jakub
