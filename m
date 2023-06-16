@@ -2,124 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B92D732F22
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jun 2023 12:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 492BC73373C
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jun 2023 19:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345540AbjFPKwp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Jun 2023 06:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48136 "EHLO
+        id S1346094AbjFPRN4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Jun 2023 13:13:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345318AbjFPKw1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jun 2023 06:52:27 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F00749DA;
-        Fri, 16 Jun 2023 03:44:18 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-518ff822360so693938a12.1;
-        Fri, 16 Jun 2023 03:44:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686912256; x=1689504256;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xSVktpHbB6u39pGveB2DCDLtiuQTPMQ40315tih9Wp0=;
-        b=pA/9jYbhoBFrt8Y6CsEMxZ+Ey1HKLYXpp/lZ6QdCXPxLhOrFg1ZlsfnTRoNnWuhv6y
-         qtcm3YsUeKnAv32llmNSbtmzqJDTjOiSs2yaNciMU/awpH3/phg5ZLRBDn2dKi5UWVNP
-         oCmxqmzh6SFXY8bkqTXR+Bs4x39lQbB1e/lRkjBLtLDtryL9v5K8Bvnc1KVPIHQNOxi3
-         o1utDjC3B6ZYAHaYgnT20ZTmd/JUt44Z3eVi14BHzzgSA/skp/s7/at1cZApUhcbbVBe
-         gynSqAQew8Ci4/qxrjCYBoBlvhgVvn+mUt3yxCkG9u/nBknDQ0pwyNLXidTndL1Prv1r
-         A8XA==
+        with ESMTP id S1346074AbjFPRNy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jun 2023 13:13:54 -0400
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B455F1BE5
+        for <linux-usb@vger.kernel.org>; Fri, 16 Jun 2023 10:13:52 -0700 (PDT)
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-3418f0c7ef2so7598135ab.0
+        for <linux-usb@vger.kernel.org>; Fri, 16 Jun 2023 10:13:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686912256; x=1689504256;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+        d=1e100.net; s=20221208; t=1686935632; x=1689527632;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xSVktpHbB6u39pGveB2DCDLtiuQTPMQ40315tih9Wp0=;
-        b=FfsiLDzomF1mK8ZrLAkDvkYvOk//fa/qCfKaBbZl4lpvaGeWeeFOmRobiu325AzCRM
-         pT1myshTgPJR9F1GGp83fxKnTeo6h3TqC6r9+x0Q1Imx0BTH2pGdb+pQRJ++bebyhi86
-         5eL1GwfzOLOGH6XPjyK+kGHu8gOJf4N4nIWx1ttJq8wxJ076mToFkr/bfIMkRoYjgVDA
-         plt7xhUonredjLb9CWigmF90kvuXkcYA0+coGmllgixnktifbqPFtmp2N3Cw7aRNwUSz
-         Ke/GBUdEGmVWCln3Z5J6yYasK4nj2dAd6vxEeYdMw9UZkBHuTdkXbGfT9sJECoyoA7vF
-         bZ1Q==
-X-Gm-Message-State: AC+VfDwTVGSwYZoul0HgJdv1+eTROwFPt1NhxVAoN02wtR8MyNXIzzQ0
-        olrorMmFxu7lIOPsvuTVxeU=
-X-Google-Smtp-Source: ACHHUZ72qZT5HrfbksdWGP8O1yIdwqbhBciwabu3teTrwhC8QfH3HSQkZXHBJmA1ZpI3Ck/Vmx8Z1g==
-X-Received: by 2002:a05:6402:1649:b0:51a:3f7c:af1a with SMTP id s9-20020a056402164900b0051a3f7caf1amr505930edx.40.1686912255849;
-        Fri, 16 Jun 2023 03:44:15 -0700 (PDT)
-Received: from [10.0.0.102] (snat-11.cgn.sat-an.net. [176.222.226.11])
-        by smtp.gmail.com with ESMTPSA id d13-20020aa7d5cd000000b00510d110db58sm9764934eds.80.2023.06.16.03.44.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 03:44:15 -0700 (PDT)
-Message-ID: <d04179d15137f4852acef3c677c57844806b0f49.camel@gmail.com>
-Subject: Re: usb: dwc3: HC dies under high I/O load on Exynos5422
-From:   Jakub =?iso-8859-2?Q?Van=ECk?= <linuxtardis@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Thinh.Nguyen@synopsys.com, mauro.ribeiro@hardkernel.com
-Cc:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Date:   Fri, 16 Jun 2023 12:44:11 +0200
-In-Reply-To: <0c28b53e-a6c6-908a-0b3f-107b22231a4b@linaro.org>
-References: <a21f34c04632d250cd0a78c7c6f4a1c9c7a43142.camel@gmail.com>
-         <0c28b53e-a6c6-908a-0b3f-107b22231a4b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        bh=IE+IFgH6pBWU74MLE12W2IiGw5dTrwTIG9FskakYaH8=;
+        b=S2J07NKFZZI0tnll8cFIBUNfZyHFXhmMHxSl+l3lwZU99T/I9xRuvMgbf6XOZv3p2Q
+         viZ5+l9biJxUkpHkXZ9HZY3MaWzq9ZkzVB2SY8/SQJ8c+RoN4wCLj9TsFABPrVatH08Q
+         9LuOhoFs4i4RlBwbqxyXzHM4qpYCKn6pE7Kk0iNNLGb2iDHcBYMzcg9OnFdVq7/86fHq
+         PvldCRazhQA5n27j6UF+VifE+CvDnn2HAENdlDaLSQlyydEMckbbZkLM0owjTKU5HlUq
+         ytplklxqro8COj9/srd0wK919RWwk/vDIs9AFgo9Q9TELa8p43S2hI+Gh9MrDW6u1Hbv
+         Xz6g==
+X-Gm-Message-State: AC+VfDxwyGnxeopjwjf/dKi3DVbseRiy5wjGoR71MbY+ka8txqWkrs+m
+        W2VhlVrhTEnWLYy2rWF1tVl1+GL6fNwLLE+E8FtUqXZJ3EsE
+X-Google-Smtp-Source: ACHHUZ4UhvkP4/LPnHJkjajtZ1DyrJAzMgklZjd7Mve6Qb3UssRUhPjwh+TohoE83+mT/KsicAAY4E4CPZ/D4RxtPzuZlb9Cd6aJ
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c60a:0:b0:33e:5ea2:bd07 with SMTP id
+ p10-20020a92c60a000000b0033e5ea2bd07mr1112842ilm.6.1686935631932; Fri, 16 Jun
+ 2023 10:13:51 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 10:13:51 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000019b2b105fe424f00@google.com>
+Subject: [syzbot] [media?] [usb?] WARNING in imon_probe
+From:   syzbot <syzbot+1c41b2e045dc086f58be@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org, sean@mess.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Krzysztof,
+Hello,
 
-thank you for your quick reply!
+syzbot found the following issue on:
 
-On Fri, 2023-06-16 at 11:26 +0200, Krzysztof Kozlowski wrote:
-> On 16/06/2023 05:11, Jakub Van=C4=9Bk wrote:
-> > Hi all,
-> >=20
-> > I've discovered that on recent kernels the xHCI controller on
-> > Odroid
-> > HC2 dies when a USB-attached disk is put under a heavy I/O load.
-> >=20
-> > The hardware in question is using a DWC3 2.00a IP within the
-> > Exynos5422
-> > to provide two internal USB3 ports. One of them is connected to a
-> > JMS578 USB-to-SATA bridge (Odroid firmware v173.01.00.02). The
-> > bridge
-> > is then connected to a Intel SSDSC2KG240G8 (firmware XCV10132).
-> >=20
-> > The crash can be triggered by running a read-heavy workload. This
-> > triggers it for me within tens of seconds:
->=20
-> multi_v7 has devfreq enabled. Does disabling ARM_EXYNOS_BUS_DEVFREQ
-> change anything here?
+HEAD commit:    fd37b884003c io_uring/io-wq: don't clear PF_IO_WORKER on e..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=13f67407280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5bcee04c3b2a8237
+dashboard link: https://syzkaller.appspot.com/bug?extid=1c41b2e045dc086f58be
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1339b027280000
 
-Only slightly. The FIO test still makes the xHCI controller crash.
-However, the timing seems to be slightly different -- I either get the
-crash in ~10 seconds (most of the time) or only after a minute. Before
-disabling ARM_EXYNOS_BUS_DEVFREQ it seemed to take about 20-40 seconds.
-On the other hand, I have tried it only two or three times before, so
-this data may not be conclusive.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/7108f22d99d8/disk-fd37b884.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/83e4f595c21b/vmlinux-fd37b884.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/16c5c6a2de66/bzImage-fd37b884.xz
 
-Full kernel config: https://pastebin.com/iLSsYfBF
-Full fio output: https://pastebin.com/9NehLhQr
-Full-ish dmesg here: https://pastebin.com/1Zgd1gVg
-All of the bus-* devfreq sysfs nodes disappeared in this configuration:
-$ ls /sys/class/devfreq
-10c20000.memory-controller  11800000.gpu
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1c41b2e045dc086f58be@syzkaller.appspotmail.com
 
-The memory controller driver prints some errors in this configuration.
-Disabling it with CONFIG_EXYNOS5422_DMC=3Dn doesn't seem to affect the
-crash. I also tried to set the cpufreq governor to performance instead
-of ondemand and that too didn't help.
+usb 1-1: 2:1 : UAC_AS_GENERAL descriptor not found
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+WARNING: CPU: 1 PID: 4606 at kernel/locking/mutex.c:582 __mutex_lock_common kernel/locking/mutex.c:582 [inline]
+WARNING: CPU: 1 PID: 4606 at kernel/locking/mutex.c:582 __mutex_lock+0x9f8/0x1350 kernel/locking/mutex.c:747
+Modules linked in:
+CPU: 1 PID: 4606 Comm: kworker/1:3 Not tainted 6.4.0-rc6-syzkaller-00006-gfd37b884003c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:__mutex_lock_common kernel/locking/mutex.c:582 [inline]
+RIP: 0010:__mutex_lock+0x9f8/0x1350 kernel/locking/mutex.c:747
+Code: 08 84 d2 0f 85 7e 08 00 00 8b 05 5f a8 67 04 85 c0 0f 85 1b f7 ff ff 48 c7 c6 80 59 4c 8a 48 c7 c7 40 57 4c 8a e8 08 ee 38 f7 <0f> 0b e9 01 f7 ff ff 48 8b 7c 24 30 be 08 00 00 00 e8 e2 02 c4 f7
+RSP: 0018:ffffc9000346efb0 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888025839dc0 RSI: ffffffff814c03b7 RDI: 0000000000000001
+RBP: ffff88807bc74ea8 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: dffffc0000000000 R14: ffff888020037000 R15: ffff88807bc750d1
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffc66ff2f38 CR3: 0000000023c93000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ imon_init_intf1 drivers/media/rc/imon.c:2321 [inline]
+ imon_probe+0x1e5/0x3630 drivers/media/rc/imon.c:2449
+ usb_probe_interface+0x30f/0x960 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x240/0xca0 drivers/base/dd.c:658
+ __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
+ __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:958
+ bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+ device_add+0x112d/0x1a40 drivers/base/core.c:3625
+ usb_set_configuration+0x1196/0x1bc0 drivers/usb/core/message.c:2211
+ usb_generic_driver_probe+0xcf/0x130 drivers/usb/core/generic.c:238
+ usb_probe_device+0xd8/0x2c0 drivers/usb/core/driver.c:293
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x240/0xca0 drivers/base/dd.c:658
+ __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
+ __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:958
+ bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+ device_add+0x112d/0x1a40 drivers/base/core.c:3625
+ usb_new_device+0xcb2/0x19d0 drivers/usb/core/hub.c:2575
+ hub_port_connect drivers/usb/core/hub.c:5407 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
+ port_event drivers/usb/core/hub.c:5711 [inline]
+ hub_event+0x2d9e/0x4e40 drivers/usb/core/hub.c:5793
+ process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+ worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
 
-> Best regards,
-> Krzysztof
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Best regards,
-Jakub
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
