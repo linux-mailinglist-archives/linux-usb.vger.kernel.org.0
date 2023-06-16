@@ -2,61 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A23B7329E7
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jun 2023 10:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A005C7329F9
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jun 2023 10:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244540AbjFPIeG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Jun 2023 04:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
+        id S244540AbjFPIhB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Jun 2023 04:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245581AbjFPId4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jun 2023 04:33:56 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A16D30E4;
-        Fri, 16 Jun 2023 01:33:52 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b3be39e666so4165345ad.0;
-        Fri, 16 Jun 2023 01:33:52 -0700 (PDT)
+        with ESMTP id S242697AbjFPIg6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jun 2023 04:36:58 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EE8ED;
+        Fri, 16 Jun 2023 01:36:57 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-666729f9093so564329b3a.1;
+        Fri, 16 Jun 2023 01:36:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686904432; x=1689496432;
+        d=gmail.com; s=20221208; t=1686904617; x=1689496617;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=r7W2YpiCgw7oCQ3PCXW/fc0lvN+XnDETz4eXDeHajPk=;
-        b=QBJDcX12ahEDU3oiRXfENkwYtpK2H41lfLNbf5z4n8fAx0GbHhTHQeTMOPmQJOQ5o/
-         v7o8KTdwIZ338wTpTtNspXxI7Ss1m/w80pcuy0nI1emMF4RN/YQ/3AQNM4C+bQoTYZky
-         5ubuEv2PBXdndvb69o5a6WfmhMuKVkadAe77zVFmf3oblwNI92wqXrugLR1nM2wC8UNm
-         mVYorbvsubd+cbyhToHv6sXz8z1Mk5Ifw7RfxGSEEk1AouVZ4Ir3byN87dZIwsd472O4
-         qU6LcivUTWvUqKZfvuq00wCs8kNpsjOvPeGR8DwEO2sfwNN5fQUQzDN3+dEl/M0eWTpB
-         2v1w==
+        bh=nUlEB85EedtTo7OUJk0cAfjzVwwMnBPTvHZqfkQyPPQ=;
+        b=VDDnrIpw3pzhevob8HGkFgTUouneIhx+sEiJKDzhrJ02OIZnMMBuWDmwfeUh9M0z3Z
+         JfcMSiUuJW/htSld08DMgr1rZ+oL/rA/miIF6T3cZYs0Ut4TnEpOJbW+xmm9eMDam9bm
+         Ba8rS/Q7IBwFFWjwXmCKgpAqJyLQcKuW2qwDDbLmM5EGhRhtkFwbO+X+W5cYjhWrZFA1
+         jvBC6tuTv5JBnApGykloAtYOi++oajLeLIgdfYUs92GI11FNhNkbd444Zc+iSMB7K0Bs
+         +ORiQEdCGZ+n2XfO7J0qCu5xaBjKtXB5f3+5OuUg1zKU8DG3+b5s2rIMEgrsIIozP7fZ
+         GV5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686904432; x=1689496432;
+        d=1e100.net; s=20221208; t=1686904617; x=1689496617;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=r7W2YpiCgw7oCQ3PCXW/fc0lvN+XnDETz4eXDeHajPk=;
-        b=LLDOWXOnBix/qbH5U3HXXk+dBgs50Tnz988nxOiNfz9aGVXEUZXecuepUkm6CwvIu0
-         HT3uQYoJfkwA/MQy8ZNpmORpjrxnjcNeSdIUPuOib9hws7NcBmOjQjcD8CbcqTQK7Ec6
-         k5Z/DEjcUxwi2P67h++AoJOaCvhfUcn6FaeDc8JydrRa8xlbtOoiElWCMWbxwGtM7rUp
-         d/I2z2REru0dxqAkOG876182gG+8Qu4gMLmmDR4zro7qjwCoRQUWtajdMSRYpocnq23q
-         02lsHwHXfsEZjktl/Soy/WRBD6zOrD7PfDKXr4rAdB/srC46QGfotDJHlFuRP+2oqskQ
-         G7JA==
-X-Gm-Message-State: AC+VfDxNu8vpkVTgQA+gcQo7N0zPSDWO/yD2g6qt+fbLjQqNGVEbWrfd
-        UpExoXTFuzcxxtSiruHC37o=
-X-Google-Smtp-Source: ACHHUZ6yofeCZMkq0H9Y2b1OS2wkY+A5CbNG2Lnz4QU7gP9mrnYimT8A3DEGmtJef4zs1Tm4UTLRdg==
-X-Received: by 2002:a17:902:f90d:b0:1b5:b28:2ff1 with SMTP id kw13-20020a170902f90d00b001b50b282ff1mr7130875plb.10.1686904431733;
-        Fri, 16 Jun 2023 01:33:51 -0700 (PDT)
+        bh=nUlEB85EedtTo7OUJk0cAfjzVwwMnBPTvHZqfkQyPPQ=;
+        b=PIg20hdIxd/7NNDmDVbSNwvYiIorVmOrM5K/0tJ//Y7DqmOMnS7iE1UUJzRBxxhLsH
+         t4+OBQxMJ2dRsT5NXM9jvBKVVZKFKVY5MyeEeuufhaqXPPACdxKSPVEsc7bvwy2InmNo
+         65MRHLl3GFXhcF8EH2RcLv0eeyS23TssKq6RZoRiyTWQgtYyTQI9btFkUagDOQbu123F
+         UFH87SmB3hY56plnMXOPNfkN+vKEpON8A/KWeZb4LxlRXAp9cMg66k8olEO6Par+0GPB
+         rKIRQ5CvxFGxEh1cxHZ+qxIk5foLtQ+zLUX+vQR563rlkO6dmLiJr/dmVQz+q9LXD/QB
+         YFqA==
+X-Gm-Message-State: AC+VfDyczOh3VN7+dCU01yEa4SHGvlGm24HBNUsRJieOIUg5DdouxeP3
+        9rvgLl2SdH/4xEDlinW8nKc=
+X-Google-Smtp-Source: ACHHUZ6nqK4iJUI8WPqvd41ASoWrx39rLHYtAhosJEBQ+9LNfrs4NjOhNzdcaUXV5CkIH3x0fpgH6Q==
+X-Received: by 2002:a05:6a00:1515:b0:658:8eae:a8de with SMTP id q21-20020a056a00151500b006588eaea8demr2130852pfu.4.1686904616766;
+        Fri, 16 Jun 2023 01:36:56 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h3-20020a170902680300b001ab12ccc2a7sm15411335plk.98.2023.06.16.01.33.49
+        by smtp.gmail.com with ESMTPSA id 26-20020a63175a000000b0053f3797fc4asm13966589pgx.0.2023.06.16.01.36.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 01:33:50 -0700 (PDT)
+        Fri, 16 Jun 2023 01:36:56 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b11a278d-8098-a1f0-7aae-9dc882ab48c4@roeck-us.net>
-Date:   Fri, 16 Jun 2023 01:33:48 -0700
+Message-ID: <df28b348-28c4-a1ef-1d7e-46a60911ebc4@roeck-us.net>
+Date:   Fri, 16 Jun 2023 01:36:54 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [v4,1/2] usb: typec: tcpm: fix cc role at port reset
+Subject: Re: [v4,2/2] usb: typec: tcpm: add get max power support
 Content-Language: en-US
 To:     Frank Wang <frank.wang@rock-chips.com>,
         heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
@@ -66,8 +66,9 @@ Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
         yubing.zhang@rock-chips.com, wmc@rock-chips.com
 References: <20230616075241.27690-1-frank.wang@rock-chips.com>
+ <20230616075241.27690-2-frank.wang@rock-chips.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230616075241.27690-1-frank.wang@rock-chips.com>
+In-Reply-To: <20230616075241.27690-2-frank.wang@rock-chips.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,10 +83,9 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On 6/16/23 00:52, Frank Wang wrote:
-> In the current implementation, the tcpm set CC1/CC2 role to open when
-> it do port reset would cause the VBUS removed by the Type-C partner.
-> 
-> This sets CC1/CC2 according to the default state of port to fix it.
+> Traverse fixed pdos to calculate the maximum power that the charger
+> can provide, and it can be get by POWER_SUPPLY_PROP_INPUT_POWER_LIMIT
+> property.
 > 
 > Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
 
@@ -93,34 +93,61 @@ Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
 > Changelog:
-> (no changes since v3)
+> v4:
+>   - No change
+> 
+> v3:
+>   - Use Microwatts instead of Milliwatts to follow the ABI, commented by Sebastian Reichel.
 > 
 > v2:
->   - Make some tweaking based on the default state of port, commented by Guenter Roeck.
+>   - No change
 > 
-Specifically: Do not set the state to TYPEC_CC_RD unconditionally
-but make it dependent on the port's default state.
-
-Guenter
-
 > v1:
->   - https://patchwork.kernel.org/project/linux-usb/patch/20230313025843.17162-2-frank.wang@rock-chips.com/
+>   - https://patchwork.kernel.org/project/linux-usb/patch/20230313025843.17162-4-frank.wang@rock-chips.com/
 > 
->   drivers/usb/typec/tcpm/tcpm.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+>   drivers/usb/typec/tcpm/tcpm.c | 24 ++++++++++++++++++++++++
+>   1 file changed, 24 insertions(+)
 > 
 > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 3c6b0c8e2d3ae..9f6aaa3e70ca8 100644
+> index 9f6aaa3e70ca8..829d75ebab422 100644
 > --- a/drivers/usb/typec/tcpm/tcpm.c
 > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4885,7 +4885,8 @@ static void run_state_machine(struct tcpm_port *port)
+> @@ -6340,6 +6340,27 @@ static int tcpm_psy_get_current_now(struct tcpm_port *port,
+>   	return 0;
+>   }
+>   
+> +static int tcpm_psy_get_input_power_limit(struct tcpm_port *port,
+> +					  union power_supply_propval *val)
+> +{
+> +	unsigned int src_mv, src_ma, max_src_uw = 0;
+> +	unsigned int i, tmp;
+> +
+> +	for (i = 0; i < port->nr_source_caps; i++) {
+> +		u32 pdo = port->source_caps[i];
+> +
+> +		if (pdo_type(pdo) == PDO_TYPE_FIXED) {
+> +			src_mv = pdo_fixed_voltage(pdo);
+> +			src_ma = pdo_max_current(pdo);
+> +			tmp = src_mv * src_ma;
+> +			max_src_uw = tmp > max_src_uw ? tmp : max_src_uw;
+> +		}
+> +	}
+> +
+> +	val->intval = max_src_uw;
+> +	return 0;
+> +}
+> +
+>   static int tcpm_psy_get_prop(struct power_supply *psy,
+>   			     enum power_supply_property psp,
+>   			     union power_supply_propval *val)
+> @@ -6369,6 +6390,9 @@ static int tcpm_psy_get_prop(struct power_supply *psy,
+>   	case POWER_SUPPLY_PROP_CURRENT_NOW:
+>   		ret = tcpm_psy_get_current_now(port, val);
 >   		break;
->   	case PORT_RESET:
->   		tcpm_reset_port(port);
-> -		tcpm_set_cc(port, TYPEC_CC_OPEN);
-> +		tcpm_set_cc(port, tcpm_default_state(port) == SNK_UNATTACHED ?
-> +			    TYPEC_CC_RD : tcpm_rp_cc(port));
->   		tcpm_set_state(port, PORT_RESET_WAIT_OFF,
->   			       PD_T_ERROR_RECOVERY);
+> +	case POWER_SUPPLY_PROP_INPUT_POWER_LIMIT:
+> +		tcpm_psy_get_input_power_limit(port, val);
+> +		break;
+>   	default:
+>   		ret = -EINVAL;
 >   		break;
 
