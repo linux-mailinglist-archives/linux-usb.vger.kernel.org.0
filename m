@@ -2,123 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1557328A0
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jun 2023 09:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B403732937
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jun 2023 09:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244429AbjFPHRm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Jun 2023 03:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56720 "EHLO
+        id S243117AbjFPHtr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Jun 2023 03:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244222AbjFPHRk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jun 2023 03:17:40 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20EF1FF5;
-        Fri, 16 Jun 2023 00:17:38 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35G66Y8C012151;
-        Fri, 16 Jun 2023 07:17:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=64XPUhJY9k+HP/wrVo4rgb68Xlk7MRxMuk91+9PlTYM=;
- b=atvlWIWkTYptnS4fK/ptXEYHVeft3IYbLhFzJ0CkNYEbjNYYj70IFsMJFoWIVq20OJ1z
- K3BrmyUKwGAxoGSgjajokJx3WCtRw21WOvgiKsAByI1minMnZavNNbp0MyffGjFszMwO
- VQPcYvEsj2pzbpq8z3SI3HA6zpEc9G7FfKUr30rO0fVlUP/j6nKOXZ98e3hbpVmYMAET
- 0AIKYLS1nroKpoW7r1pZIng4M4jelaWL4eIIVLZDL6GUTg1DHe3dVKxpGC6nyi0HawQx
- YuK5Klf1FXG/kvyW+18Co5XlZ5lcMbKTOaymR9nHaVnyr2TnOQTN/vyKyNfahGsa9Qvo Ww== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r83p99ss7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Jun 2023 07:17:36 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35G7Hac2005866
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Jun 2023 07:17:36 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 16 Jun 2023 00:17:25 -0700
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH v2] usb: dwc3: gadget: Propagate core init errors to UDC during pullup
-Date:   Fri, 16 Jun 2023 12:47:15 +0530
-Message-ID: <20230616071715.20960-1-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.40.0
+        with ESMTP id S241866AbjFPHtj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jun 2023 03:49:39 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5372719
+        for <linux-usb@vger.kernel.org>; Fri, 16 Jun 2023 00:49:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686901777; x=1718437777;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tbn1hDfuch/QEL8abacpVpyigS9u1Y8P+maCW+uU0Gg=;
+  b=jg7eaQHRAahiHE8X+FSl0m+0CTSMfDZKQZlEQ8zqH9TAa9oC0zTJmVWx
+   K7J2eVlaj1OtBRmFH9RkjQtn57oWlvMyPpEnHalC7sX1u1xjv8gRRCUsP
+   TUZYYMi4UZPj1NAHNTrTaMkN9BJY1/U29kbMVHuQpItEo1Qmc3RldosuH
+   mKEInwQxoAR/CoH8miZNXsGBLYrB5LwNS/H1TkGmw+8XrNYeVmg2T3Tkn
+   cB9tP396xeh2Dtqed0ZfK8yZKGxIk6ETA9Wrm9jLfPoaF0EANUgHcUKoz
+   jTF8a44OR29zsHyu5wmI/9FOecpjht9Zk1JkB4T7Qu7z99itDImyQsL1v
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="asc'?scan'208";a="218841717"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jun 2023 00:49:36 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 16 Jun 2023 00:49:36 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 16 Jun 2023 00:49:35 -0700
+Date:   Fri, 16 Jun 2023 08:49:09 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     kernel test robot <lkp@intel.com>, <linux-usb@vger.kernel.org>,
+        <palmer@dabbelt.com>
+Subject: Re: [usb:usb-next] BUILD SUCCESS WITH WARNING
+ df49f2a0ac4a34c0cb4b5c233fcfa0add644c43c
+Message-ID: <20230616-unnerving-surface-a78ff2c38a18@wendy>
+References: <202306160658.E79gCwiR-lkp@intel.com>
+ <2023061617-unnoticed-snugly-a110@gregkh>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: FtyA6XxC-9VAaw3-8HwTKR7bWoQ17IR9
-X-Proofpoint-GUID: FtyA6XxC-9VAaw3-8HwTKR7bWoQ17IR9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-16_04,2023-06-15_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 phishscore=0 bulkscore=0 mlxlogscore=994 mlxscore=0
- suspectscore=0 adultscore=0 clxscore=1015 spamscore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306160064
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="OmqeLEK+5VEdJLVR"
+Content-Disposition: inline
+In-Reply-To: <2023061617-unnoticed-snugly-a110@gregkh>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In scenarios where pullup relies on resume (get sync) to initialize
-the controller and set the run stop bit, then core_init is followed by
-gadget_resume which will eventually set run stop bit.
+--OmqeLEK+5VEdJLVR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-But in cases where the core_init fails, the return value is not sent
-back to udc appropriately. So according to UDC the controller has
-started but in reality we never set the run stop bit.
+On Fri, Jun 16, 2023 at 08:14:05AM +0200, Greg Kroah-Hartman wrote:
+> On Fri, Jun 16, 2023 at 06:12:01AM +0800, kernel test robot wrote:
+> > tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb=
+=2Egit usb-next
+> > branch HEAD: df49f2a0ac4a34c0cb4b5c233fcfa0add644c43c  Revert "usb: com=
+mon: usb-conn-gpio: Set last role to unknown before initial detection"
+> >=20
+> > Warning: (recently discovered and may have been fixed)
+> >=20
+> > drivers/usb/cdns3/cdns3-starfive.c:23: warning: expecting prototype for=
+ cdns3(). Prototype was for USB_STRAP_HOST() instead
+>=20
+> I keep seeing this "warning" by the test robot for a while, but I do not
+> understand it at all, and can not duplicate it here locally.  Are you
+> sure your riscv toolchain is correct as :
+>=20
+> > Warning ids grouped by kconfigs:
+> >=20
+> > gcc_recent_errors
+> > |-- riscv-allmodconfig
+> > |   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-=
+for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+> > `-- riscv-allyesconfig
+> >     `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-=
+for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+>=20
+> It only seems to trigger there.
 
-On systems like Android, there are uevents sent to HAL depending on
-whether the configfs_bind / configfs_disconnect were invoked. In the
-above mentioned scnenario, if the core init fails, the run stop won't
-be set and the cable plug-out won't result in generation of any
-disconnect event and userspace would never get any uevent regarding
-cable plug out and we never call pullup(0) again. Furthermore none of
-the next Plug-In/Plug-Out's would be known to configfs.
+I dunno if it has anything to do with the LKP folks, my copes of gcc-11.3,
+gcc-12.2 & gcc-13.1 complain in a similar way on riscv.
 
-Return back the appropriate result to UDC to let the userspace/
-configfs know that the pullup failed so they can take appropriate
-action.
+Palmer, any clue?
 
-Fixes: 77adb8bdf422 ("usb: dwc3: gadget: Allow runtime suspend if UDC unbinded")
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
----
- drivers/usb/dwc3/gadget.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+USB_STRAP_HOST is `#define USB_STRAP_HOST BIT(17)` and cdn3s() doesn't
+seem to even exist?
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 578804dc29ca..27cb671e18e3 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2747,7 +2747,9 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- 	ret = pm_runtime_get_sync(dwc->dev);
- 	if (!ret || ret < 0) {
- 		pm_runtime_put(dwc->dev);
--		return 0;
-+		if (ret < 0)
-+			pm_runtime_set_suspended(dwc->dev);
-+		return ret;
- 	}
- 
- 	if (dwc->pullups_connected == is_on) {
--- 
-2.40.0
 
+--OmqeLEK+5VEdJLVR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIwT9QAKCRB4tDGHoIJi
+0qJNAQClfIrNS8ayOHTgLciGhPv5cseoHesGPLWgK+T9q5FvUwD6A3GOe+d3qgtZ
+Wqx8iF+FTgmGd6coIF39mWG8Bp1aLAg=
+=CLWV
+-----END PGP SIGNATURE-----
+
+--OmqeLEK+5VEdJLVR--
