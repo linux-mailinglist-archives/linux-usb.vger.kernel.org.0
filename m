@@ -2,224 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3B2733FB1
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Jun 2023 10:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3397733FBE
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Jun 2023 10:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346207AbjFQIg0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 17 Jun 2023 04:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
+        id S233722AbjFQIsw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 17 Jun 2023 04:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233736AbjFQIgZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 17 Jun 2023 04:36:25 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0206026BA
-        for <linux-usb@vger.kernel.org>; Sat, 17 Jun 2023 01:36:23 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-982a88ca610so209943166b.2
-        for <linux-usb@vger.kernel.org>; Sat, 17 Jun 2023 01:36:22 -0700 (PDT)
+        with ESMTP id S233330AbjFQIsv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 17 Jun 2023 04:48:51 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55D81BD1
+        for <linux-usb@vger.kernel.org>; Sat, 17 Jun 2023 01:48:46 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5196a728d90so2223735a12.0
+        for <linux-usb@vger.kernel.org>; Sat, 17 Jun 2023 01:48:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686990981; x=1689582981;
+        d=linaro.org; s=google; t=1686991725; x=1689583725;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=FHSYSNvoBVsWeKTwLcfed1isjXKsHWPqmDjZM1uywnc=;
-        b=ELCUwlv7eHCsjHT2e/KCHBZHeJXgNNz5OUDq7/rGvV4alwVrtL10H6hqhknOVkR8zP
-         1RhI5VQlC47kohbjZrAMH2Wu6hAPxpsIeyNBKrQF+paldtTvMWxBeJFJ2xgQL0nGDn6h
-         Bh7bpMM9cTOKw2XlWLxT3RJGddNpdbYoIqdeEEhvCKN/Aa5Bo17/88rqvzwKllGvECIi
-         JiptROrS31G4y2TY/f7EYREizkJ4X3BXbNa8B0p2WV++Dt56LfmcVacn31xFrjBa4fdi
-         ksA8JFMUh+1mcbFJ8rMww5wD5jOM/ZMsCLWygMEqgTmxO8QlT6ZFeQJKvlJ2K580UqQ3
-         iV4A==
+        bh=9v9IMhMYANhGUwezLEP1LlL4XT7NdaZ2AILcbGscvfs=;
+        b=f7b42c9PMsOBSkpJ9BbkAwiJsfDUkyVlZ+S2LGTmtnk6tvWWjubyHvGU8ecZu3PFT1
+         ApXo/v+Fl6S3V+ooOvBsn256Cv49dnEKkb072m4AuIavr8BWkheII2u6lx0s3ccSFAma
+         zM5k3myH9oM9k2luWy//WuZQZZ+ai5bpgGC6GYyVwqIXPX8Ypsz6WkCufOVTeFtbq3UI
+         HHLwW8EAk7R/hkqnNgtXIz+vLMqVyTVy9KfjexhVtTG5bDAwh5D1be3NqMRRfFS6JMgJ
+         Ffx5Hyb6uVS4Mzojv2NrMbt83IzXNmdbgXErrtsI7Gd2E3cmaux63uScJlPRY0tLcYVj
+         jUgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686990981; x=1689582981;
+        d=1e100.net; s=20221208; t=1686991725; x=1689583725;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FHSYSNvoBVsWeKTwLcfed1isjXKsHWPqmDjZM1uywnc=;
-        b=TflsQRiiTZp1H1Ufjg1egVKUPcs0f1app8sDT3kznUN3rn3JEmxRYZzfZ6e95snnRM
-         4lgelgqVssEuOs6fGgWx4Rt9CYQDSim+FaGM9p7/2LihZXSukgjZI0tvhfW1t9Q0Wbpm
-         6vDYb8m7CBjnMAOqU/jEfX0fG8B+jBf3xXlobzab3P9WA/qNqVXi2ElvapmrZtoeAAEb
-         cVlLFnd5H6Jj9f0W7cFUUfuKW3+G6LWYlTHZkUP9rWymTQv+v+zgWW72q6y/buMsLky9
-         25E1LEwqIfJ2w6hKNqUiiAksan0YhIwBBI9xuifplkt/JZ9nH/eCZiKiUXosKlYYv2d8
-         8RfQ==
-X-Gm-Message-State: AC+VfDxvP9bIFu7IUQFYClYKXCoTdnVdrbbewEEgY1XhdSaTCyXNWasM
-        uJg8zLuhzkSoH5Qnd3LmX+UyDg==
-X-Google-Smtp-Source: ACHHUZ5LBmphkId8rgr4BiqRLQLQW4t4MG9F7heylFznAVSq8CDhg+7sf8XXFBKu+MR1wcEriZnBpA==
-X-Received: by 2002:a17:907:36c7:b0:978:ac42:5ef5 with SMTP id bj7-20020a17090736c700b00978ac425ef5mr3807707ejc.65.1686990981162;
-        Sat, 17 Jun 2023 01:36:21 -0700 (PDT)
+        bh=9v9IMhMYANhGUwezLEP1LlL4XT7NdaZ2AILcbGscvfs=;
+        b=HakLpAg38Mi6W2j2rUG4AR2hRVC6P82gHFEKdpdk+2LuxpW6aOurRNY9kU4h5bn6/X
+         Y87+3uFrdtyXM/NN12aCzaBV35Ech4p5TQOjGIt2m8drQDY0tXWb+nTKl7jl81DqR1Ph
+         K8bfjBavzPnUmo0L5R6trQqkAf//QLAykOIyCK1sXiiqkRUnIw+TY9mi42nT4kAvKqP3
+         rw1FfLn9AS8EHv7KL+jjEt6WsW20NlbuA1VMMdwHHPGeo4ewZGGUTtuIogj+83A9VpVp
+         sQv+96yYZDYogjeZWM8mJi9WHfobZ1jtOwFQliK4EbityTReZrIO2yc+t0Wdk0h00Kxu
+         iYBw==
+X-Gm-Message-State: AC+VfDzKM1p6Xo1bQpLyVy/nMjWOLWAYBjKswmjTioeUSurkO3Sz0Mnf
+        VYbqCNki/F8KrvNAJBTCEYyoLA==
+X-Google-Smtp-Source: ACHHUZ7Kpo4IrOBQWBZ6pUx87P+qfVIKZIR9we2zLQmk/Rued5SQQmn3eIdab16cMTZ1bsaToXLkLw==
+X-Received: by 2002:a17:906:da87:b0:982:870f:9e8f with SMTP id xh7-20020a170906da8700b00982870f9e8fmr3843576ejb.62.1686991725276;
+        Sat, 17 Jun 2023 01:48:45 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id gt7-20020a170906f20700b00988168ed20asm33146ejb.185.2023.06.17.01.36.18
+        by smtp.gmail.com with ESMTPSA id c21-20020a170906341500b00985bdb7dd5fsm1965918ejb.201.2023.06.17.01.48.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Jun 2023 01:36:20 -0700 (PDT)
-Message-ID: <90f802db-79cc-010a-9a83-c7bdbf0d0c00@linaro.org>
-Date:   Sat, 17 Jun 2023 10:36:18 +0200
+        Sat, 17 Jun 2023 01:48:44 -0700 (PDT)
+Message-ID: <aca54f67-cc09-ff4f-93ca-6973d153db2c@linaro.org>
+Date:   Sat, 17 Jun 2023 10:48:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v4 5/5] dt-bindings: phy: realtek: Add the doc about the
- Realtek SoC USB 3.0 PHY
+Subject: Re: [PATCH 2/9] dt-bindings: phy: qcom,m31: Document qcom,m31 USB phy
 Content-Language: en-US
-To:     Stanley Chang <stanley_chang@realtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ray Chi <raychi@google.com>, linux-phy@lists.infradead.org,
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
+        will@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de, arnd@arndb.de, geert+renesas@glider.be,
+        neil.armstrong@linaro.org, nfraprado@collabora.com,
+        broonie@kernel.org, rafal@milecki.pl, quic_srichara@quicinc.com,
+        quic_varada@quicinc.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20230614092850.21460-1-stanley_chang@realtek.com>
- <20230614092850.21460-5-stanley_chang@realtek.com>
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org
+References: <cover.1686126439.git.quic_varada@quicinc.com>
+ <14f60578e2935c0844537eab162af3afa52ffe39.1686126439.git.quic_varada@quicinc.com>
+ <98960024-7dbc-91a3-75de-90b529637916@linaro.org>
+ <20230615052746.GB22186@varda-linux.qualcomm.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230614092850.21460-5-stanley_chang@realtek.com>
+In-Reply-To: <20230615052746.GB22186@varda-linux.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 14/06/2023 11:28, Stanley Chang wrote:
-> Add the documentation explain the property about Realtek USB PHY driver.
+On 15/06/2023 07:27, Varadarajan Narayanan wrote:
+>>> +          - enum:
+>>> +              - qcom,m31-usb-hsphy
+>>
+>> I am confused what's this. If m31 is coming from some IP block provider,
+>> then you are using wrong vendor prefix.
+>> https://www.m31tech.com/download_file/M31_USB.pdf
+>>
+>>
+>>> +              - qcom,ipq5332-m31-usb-hsphy
+>>
+>> This confuses me even more. IPQ m31?
 > 
-> Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
-> controller. Added the driver to drive the  USB 3.0 PHY transceivers.
+> Will change this to m31,usb-hsphy and m31,ipq5332-usb-hsphy respectively.
+> Will that be acceptable?
+
+m31,ipq5332 seems wrong, as m31 did not create ipq5332. Does the m31
+device have some name/version/model? If it is not really known, then I
+would just propose to go with qcom,ipq5332-usb-hsphy.
+
+Skip generic compatible ("usb-hsphy") entirely.
+
+And then we have... existing bindings qcom,usb-hs-phy.yaml. Don't create
+something similar with difference in the hyphen. Just use device
+specific compatible thus device specific filename.
+
 > 
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-> ---
-> v3 to v4 change:
->     1. Remove the parameter and non hardware properties from dts.
->     2. Using the compatible data included the config and parameter
->        in driver.
-> v2 to v3 change:
->     1. Broken down into two patches, one for each of USB 2 & 3.
->     2. Add more description about Realtek RTD SoCs architecture.
->     3. Removed parameter v1 support for simplification.
->     4. Revised the compatible name for fallback compatible.
->     5. Remove some properties that can be set in the driver.
-> v1 to v2 change:
->     Add phy-cells for generic phy driver
-> ---
->  .../bindings/phy/realtek,usb3phy.yaml         | 105 ++++++++++++++++++
->  1 file changed, 105 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
+>>> +
+>>> +  reg:
+>>> +    description:
+>>> +      Offset and length of the M31 PHY register set
+>>
+>> Drop description, obvious.
 > 
-> diff --git a/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-> new file mode 100644
-> index 000000000000..0f849cf942e8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-> @@ -0,0 +1,105 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright 2023 Realtek Semiconductor Corporation
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/realtek,usb3phy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Realtek DHC SoCs USB 3.0 PHY
-> +
-> +maintainers:
-> +  - Stanley Chang <stanley_chang@realtek.com>
-> +
-> +description:
-> +  Realtek USB 3.0 PHY support the digital home center (DHC) RTD series SoCs.
-> +  The USB 3.0 PHY driver is designed to support the XHCI controller. The SoCs
-> +  support multiple XHCI controllers. One PHY device node maps to one XHCI
-> +  controller.
-> +
-> +  RTD1295/RTD1619 SoCs USB
-> +  The USB architecture includes three XHCI controllers.
-> +  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on some
-> +  controllers.
-> +  XHCI controller#0 -- usb2phy -- phy#0
-> +                    |- usb3phy -- phy#0
-> +  XHCI controller#1 -- usb2phy -- phy#0
-> +  XHCI controller#2 -- usb2phy -- phy#0
-> +                    |- usb3phy -- phy#0
-> +
-> +  RTD1319/RTD1619b SoCs USB
-> +  The USB architecture includes three XHCI controllers.
-> +  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#2.
-> +  XHCI controller#0 -- usb2phy -- phy#0
-> +  XHCI controller#1 -- usb2phy -- phy#0
-> +  XHCI controller#2 -- usb2phy -- phy#0
-> +                    |- usb3phy -- phy#0
-> +
-> +  RTD1319d SoCs USB
-> +  The USB architecture includes three XHCI controllers.
-> +  Each xhci maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#0.
-> +  XHCI controller#0 -- usb2phy -- phy#0
-> +                    |- usb3phy -- phy#0
-> +  XHCI controller#1 -- usb2phy -- phy#0
-> +  XHCI controller#2 -- usb2phy -- phy#0
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - realtek,rtd1295-usb3phy
-> +          - realtek,rtd1319-usb3phy
-> +          - realtek,rtd1319d-usb3phy
-> +          - realtek,rtd1619-usb3phy
-> +          - realtek,rtd1619b-usb3phy
-> +      - const: realtek,usb3phy
+> Ok.
+> 
+>>> +    maxItems: 2
+>>> +
+>>> +  reg-names:
+>>> +    items:
+>>> +      - const: m31usb_phy_base
+>>> +      - const: qscratch_base
+>>
+>> Drop "_base" from both.
+> 
+> Ok. Will drop qscratch_base. This is in the controller space.
+> Should not come here.
 
-Drop last compatible, it is not used now. Does not make sense.
+Then drop reg-names entirely.
 
-> +
-> +  reg:
-> +    description: PHY data registers
+> 
+>>> +
+>>> +  phy_type:
+>>> +    oneOf:
+>>> +      - items:
+>>> +          - enum:
+>>> +              - utmi
+>>> +              - ulpi
+>>
+>> This does not belong to phy, but to USB node.
+> 
+> This is used by the driver to set a bit during phy init. Hence
+> have it as a replication of the USB node's entry. If this is not
+> permissible, is there some way to get this from the USB node,
+> or any other alternative mechanism?
 
-Drop description, it's obvious.
+Shouldn't USB controller choose what type of PHY type it wants?
 
-> +    maxItems: 1
-> +
-> +  "#phy-cells":
-> +    const: 0
-> +
-> +  nvmem-cells:
-> +    maxItems: 1
-> +    description: A phandle to the tx lfps swing trim data provided by
-> +      a nvmem device, if unspecified, default values shall be used.
-> +
-> +  nvmem-cell-names:
-> +    items:
-> +      - const: usb_u3_tx_lfps_swing_trim
-> +
-> +  realtek,amplitude-control-coarse-tuning:
-> +    description:
-> +      This adjusts the signal amplitude for normal operation and beacon LFPS.
-> +      This value is a parameter for coarse tuning.
-> +      For different boards, if the default value is inappropriate, this
-> +      property can be assigned to adjust.
+> 
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    #include <dt-bindings/clock/qcom,ipq5332-gcc.h>
+>>> +    hs_m31phy_0: hs_m31phy@5b00 {
+>>
+>> Node names should be generic. See also explanation and list of examples
+>> in DT specification:
+>> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+>>
+>> Also, no underscores in node names.
+> 
+> Will change this as usbphy0:hs_m31phy@7b000
 
-default:
-
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 0
-> +    maximum: 255
-> +
-> +  realtek,amplitude-control-fine-tuning:
-> +    description:
-> +      This adjusts the signal amplitude for normal operation and beacon LFPS.
-> +      This value is used for fine-tuning parameters.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-
-default:
-
-> +    minimum: 0
-> +    maximum: 65535
-> +
-
+This does not solve my comments. I did not write "label" but "node name".
 
 Best regards,
 Krzysztof
