@@ -2,209 +2,266 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC31734685
-	for <lists+linux-usb@lfdr.de>; Sun, 18 Jun 2023 16:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDCE073492F
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Jun 2023 00:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbjFROOh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 18 Jun 2023 10:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
+        id S229596AbjFRWsS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 18 Jun 2023 18:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjFROOg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 18 Jun 2023 10:14:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6FAE5D;
-        Sun, 18 Jun 2023 07:14:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04F0E61272;
-        Sun, 18 Jun 2023 14:14:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CC87C433C0;
-        Sun, 18 Jun 2023 14:14:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687097674;
-        bh=p8gKT/yMYSRrguGgxKLyFlg91r2qcybVafBHuY1rckE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ML9VIt8G8WDKV9idRBSL+KHsshpncRDH6QAi728pxiTjlhfWK027td+1J7xeXUbV9
-         xmwBY+o1YbiSUKyuJc/JPMw1y6neAKWEjjRcwJLzOmObNDYeeB0xXhexZVwqFnA510
-         I/o234mv405IR5asPUSb2vYAgs5nVm1MnBwluB0XwBBD8QyYWrxxAQD1I7gvnJVWkx
-         jrqkWk7ok2+eWNoP2z6u5T2kFxvAXZpNfXHVVVp6gvQAqu1neyZkPKzjNEvB9fn15g
-         wKjeQh9GlFKGvtuSTFFwQ+JjKWt/+z/81+ISOW4TvJvda+FhZRAtgcJoVzejfPRrke
-         IyGfjWSbjKzVA==
-Date:   Sun, 18 Jun 2023 22:14:25 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Xiaolei Wang <xiaolei.wang@windriver.com>
-Cc:     pawell@cadence.com, rogerq@kernel.org, a-govindraju@ti.com,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: cdns3: Put the cdns set active part outside the
- spin lock
-Message-ID: <20230618141425.GA1588566@nchen-desktop>
-References: <20230616021952.1025854-1-xiaolei.wang@windriver.com>
+        with ESMTP id S229456AbjFRWsR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 18 Jun 2023 18:48:17 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90051BB
+        for <linux-usb@vger.kernel.org>; Sun, 18 Jun 2023 15:48:15 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 370EA240101
+        for <linux-usb@vger.kernel.org>; Mon, 19 Jun 2023 00:48:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1687128493; bh=wB4xfJwsOqxiO5M4BIDiST16DjuP1Z+4Ob8EgcCvync=;
+        h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:
+         Content-Transfer-Encoding:From;
+        b=rqC1/Zt4XQa83aEqZ3J+HJP2rND3fkxHVLi7PeWpsrSY05u2Q1sG/zyWkkjfceqak
+         7z0J0s4fEPxFNTWAVgvcExj9QyuuCSeP7UgTP6SilO4iifAmbBBS8IHsGUpgAi2HqM
+         6en2E5C/SBp0tK3m4YekILJzY9FiHOk/hoCKPrIOGmGyMoReVx+mMXmQ9YMbcNeyUM
+         WvEI1+ScWK/PZ0M9kEPGLPyahoUtgoaVE0EJTopLr5T4Vh+1aoSaPmhBYpXLv+IgVF
+         tAvNdbEVKQpFLvPfSrZJVZ3THSuSHzMLDN/Ggp1Od1s+TxRmTEI7DW96p/yRVXulPA
+         PFsUGWpUVRGtg==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4Qkp2d4Pg1z9rxK;
+        Mon, 19 Jun 2023 00:48:09 +0200 (CEST)
+From:   Anne Macedo <retpolanne@posteo.net>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        retpolanne@posteo.net
+Subject: [PATCH] usb: host: xhci: parameterize Renesas delay/retry
+Date:   Sun, 18 Jun 2023 22:46:57 +0000
+Message-ID: <20230618224656.2476-2-retpolanne@posteo.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616021952.1025854-1-xiaolei.wang@windriver.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23-06-16 10:19:51, Xiaolei Wang wrote:
-> The device may be scheduled during the resume process,
-> so this cannot appear in atomic operations. Since
-> pm_runtime_set_active will resume suppliers, put set
-> active outside the spin lock, which is only used to
-> protect the struct cdns data structure, otherwise the
-> kernel will report the following warning:
-> 
->   BUG: sleeping function called from invalid context at drivers/base/power/runtime.c:1163
->   in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 651, name: sh
->   preempt_count: 1, expected: 0
->   RCU nest depth: 0, expected: 0
->   CPU: 0 PID: 651 Comm: sh Tainted: G        WC         6.1.20 #1
->   Hardware name: Freescale i.MX8QM MEK (DT)
->   Call trace:
->     dump_backtrace.part.0+0xe0/0xf0
->     show_stack+0x18/0x30
->     dump_stack_lvl+0x64/0x80
->     dump_stack+0x1c/0x38
->     __might_resched+0x1fc/0x240
->     __might_sleep+0x68/0xc0
->     __pm_runtime_resume+0x9c/0xe0
->     rpm_get_suppliers+0x68/0x1b0
->     __pm_runtime_set_status+0x298/0x560
->     cdns_resume+0xb0/0x1c0
->     cdns3_controller_resume.isra.0+0x1e0/0x250
->     cdns3_plat_resume+0x28/0x40
-> 
-> Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
+Cards based on Renesas uPD720202 have their firmware downloaded during
+boot by xhci-pci. At this step, the status of the firmware is read and
+it takes a while for this read to happen (up to a few seconds). The
+macros RENESAS_RETRY and RENESAS_DELAY are used to retry reading this
+status byte from PCI a few times. If it can't read the status byte in
+RENESAS_RETRY tries, it times out.
 
-Acked-by: Peter Chen <peter.chen@kernel.org>
+However, since this may vary from card to card, these retry and delay
+values need to be tweaked. In order to avoid having to patch the code to
+change these values, CONFIG_USB_XHCI_PCI_RENESAS_RETRY and
+CONFIG_USB_XHCI_PCI_RENESAS_DELAY are introduced.
 
-Peter
-> ---
->  v3:
->   * Fix build error:
->     cdns3-plat.c:258:18: error: too few arguments to function call, expected 2, have 1
->      258 |         cdns_resume(cdns);
->   * use 'cdns_resume(struct cdns *cdns) { return 0; }' instead of 
->     'cdns_resume(struct cdns *cdns, u8 set_active) { return 0; }'
->     and add 'static inline int cdns_set_active(struct cdns *cdns, u8 set_active)
->  		{ return 0; }'
->  v2:
->   * Fix build error: unused variable 'dev'
->   * delete unused 'struct device *dev = cdns->dev;' in cdns_resume()
-> 
->  drivers/usb/cdns3/cdns3-plat.c |  3 ++-
->  drivers/usb/cdns3/cdnsp-pci.c  |  3 ++-
->  drivers/usb/cdns3/core.c       | 15 +++++++++++----
->  drivers/usb/cdns3/core.h       |  7 +++++--
->  4 files changed, 20 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
-> index 884e2301237f..1168dbeed2ce 100644
-> --- a/drivers/usb/cdns3/cdns3-plat.c
-> +++ b/drivers/usb/cdns3/cdns3-plat.c
-> @@ -255,9 +255,10 @@ static int cdns3_controller_resume(struct device *dev, pm_message_t msg)
->  	cdns3_set_platform_suspend(cdns->dev, false, false);
->  
->  	spin_lock_irqsave(&cdns->lock, flags);
-> -	cdns_resume(cdns, !PMSG_IS_AUTO(msg));
-> +	cdns_resume(cdns);
->  	cdns->in_lpm = false;
->  	spin_unlock_irqrestore(&cdns->lock, flags);
-> +	cdns_set_active(cdns, !PMSG_IS_AUTO(msg));
->  	if (cdns->wakeup_pending) {
->  		cdns->wakeup_pending = false;
->  		enable_irq(cdns->wakeup_irq);
-> diff --git a/drivers/usb/cdns3/cdnsp-pci.c b/drivers/usb/cdns3/cdnsp-pci.c
-> index 7b151f5af3cc..0725668ffea4 100644
-> --- a/drivers/usb/cdns3/cdnsp-pci.c
-> +++ b/drivers/usb/cdns3/cdnsp-pci.c
-> @@ -208,8 +208,9 @@ static int __maybe_unused cdnsp_pci_resume(struct device *dev)
->  	int ret;
->  
->  	spin_lock_irqsave(&cdns->lock, flags);
-> -	ret = cdns_resume(cdns, 1);
-> +	ret = cdns_resume(cdns);
->  	spin_unlock_irqrestore(&cdns->lock, flags);
-> +	cdns_set_active(cdns, 1);
->  
->  	return ret;
->  }
-> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> index dbcdf3b24b47..7b20d2d5c262 100644
-> --- a/drivers/usb/cdns3/core.c
-> +++ b/drivers/usb/cdns3/core.c
-> @@ -522,9 +522,8 @@ int cdns_suspend(struct cdns *cdns)
->  }
->  EXPORT_SYMBOL_GPL(cdns_suspend);
->  
-> -int cdns_resume(struct cdns *cdns, u8 set_active)
-> +int cdns_resume(struct cdns *cdns)
->  {
-> -	struct device *dev = cdns->dev;
->  	enum usb_role real_role;
->  	bool role_changed = false;
->  	int ret = 0;
-> @@ -556,15 +555,23 @@ int cdns_resume(struct cdns *cdns, u8 set_active)
->  	if (cdns->roles[cdns->role]->resume)
->  		cdns->roles[cdns->role]->resume(cdns, cdns_power_is_lost(cdns));
->  
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(cdns_resume);
-> +
-> +void cdns_set_active(struct cdns *cdns, u8 set_active)
-> +{
-> +	struct device *dev = cdns->dev;
-> +
->  	if (set_active) {
->  		pm_runtime_disable(dev);
->  		pm_runtime_set_active(dev);
->  		pm_runtime_enable(dev);
->  	}
->  
-> -	return 0;
-> +	return;
->  }
-> -EXPORT_SYMBOL_GPL(cdns_resume);
-> +EXPORT_SYMBOL_GPL(cdns_set_active);
->  #endif /* CONFIG_PM_SLEEP */
->  
->  MODULE_AUTHOR("Peter Chen <peter.chen@nxp.com>");
-> diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
-> index 2d332a788871..4a4dbc2c1561 100644
-> --- a/drivers/usb/cdns3/core.h
-> +++ b/drivers/usb/cdns3/core.h
-> @@ -125,10 +125,13 @@ int cdns_init(struct cdns *cdns);
->  int cdns_remove(struct cdns *cdns);
->  
->  #ifdef CONFIG_PM_SLEEP
-> -int cdns_resume(struct cdns *cdns, u8 set_active);
-> +int cdns_resume(struct cdns *cdns);
->  int cdns_suspend(struct cdns *cdns);
-> +void cdns_set_active(struct cdns *cdns, u8 set_active);
->  #else /* CONFIG_PM_SLEEP */
-> -static inline int cdns_resume(struct cdns *cdns, u8 set_active)
-> +static inline int cdns_resume(struct cdns *cdns)
-> +{ return 0; }
-> +static inline int cdns_set_active(struct cdns *cdns, u8 set_active)
->  { return 0; }
->  static inline int cdns_suspend(struct cdns *cdns)
->  { return 0; }
-> -- 
-> 2.25.1
-> 
+If applied, this patch helps to fix errors such as:
 
+ROM Download Step 34 failed at position 136 bytes
+Firmware Download Step 2 failed at position 8 bytes with (-110)
+
+while loading xhci-pci when using these cards.
+
+This error in particular has been noticed by this e-mail [1].
+
+[1] https://lore.kernel.org/lkml/20190626070658.GP2962@vkoul-mobl/
+
+Signed-off-by: Anne Macedo <retpolanne@posteo.net>
+---
+ drivers/usb/host/Kconfig            | 10 +++++++
+ drivers/usb/host/xhci-pci-renesas.c | 45 ++++++++++++++---------------
+ 2 files changed, 31 insertions(+), 24 deletions(-)
+
+diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+index c170672f847e..8a255e3b0f03 100644
+--- a/drivers/usb/host/Kconfig
++++ b/drivers/usb/host/Kconfig
+@@ -51,6 +51,16 @@ config USB_XHCI_PCI_RENESAS
+ 	  installed on your system for this device to work.
+ 	  If unsure, say 'N'.
+ 
++config USB_XHCI_PCI_RENESAS_DELAY
++	int "Renesas firmware download delay for setting DATAX"
++	depends on USB_XHCI_PCI_RENESAS
++	default 10
++
++config USB_XHCI_PCI_RENESAS_RETRY
++	int "Renesas firmware download number of retries for setting DATAX"
++	depends on USB_XHCI_PCI_RENESAS
++	default 1000
++
+ config USB_XHCI_PLATFORM
+ 	tristate "Generic xHCI driver for a platform device"
+ 	help
+diff --git a/drivers/usb/host/xhci-pci-renesas.c b/drivers/usb/host/xhci-pci-renesas.c
+index 93f8b355bc70..009f5878fe6f 100644
+--- a/drivers/usb/host/xhci-pci-renesas.c
++++ b/drivers/usb/host/xhci-pci-renesas.c
+@@ -47,9 +47,6 @@
+ #define RENESAS_ROM_ERASE_MAGIC				0x5A65726F
+ #define RENESAS_ROM_WRITE_MAGIC				0x53524F4D
+ 
+-#define RENESAS_RETRY	10000
+-#define RENESAS_DELAY	10
+-
+ static int renesas_fw_download_image(struct pci_dev *dev,
+ 				     const u32 *fw, size_t step, bool rom)
+ {
+@@ -73,7 +70,7 @@ static int renesas_fw_download_image(struct pci_dev *dev,
+ 	data0_or_data1 = (step & 1) == 1;
+ 
+ 	/* step+1. Read "Set DATAX" and confirm it is cleared. */
+-	for (i = 0; i < RENESAS_RETRY; i++) {
++	for (i = 0; i < CONFIG_USB_XHCI_PCI_RENESAS_RETRY; i++) {
+ 		err = pci_read_config_byte(dev, status_reg, &fw_status);
+ 		if (err) {
+ 			dev_err(&dev->dev, "Read Status failed: %d\n",
+@@ -83,9 +80,9 @@ static int renesas_fw_download_image(struct pci_dev *dev,
+ 		if (!(fw_status & BIT(data0_or_data1)))
+ 			break;
+ 
+-		udelay(RENESAS_DELAY);
++		udelay(CONFIG_USB_XHCI_PCI_RENESAS_DELAY);
+ 	}
+-	if (i == RENESAS_RETRY) {
++	if (i == CONFIG_USB_XHCI_PCI_RENESAS_RETRY) {
+ 		dev_err(&dev->dev, "Timeout for Set DATAX step: %zd\n", step);
+ 		return -ETIMEDOUT;
+ 	}
+@@ -321,7 +318,7 @@ static int renesas_fw_download(struct pci_dev *pdev,
+ 	 * "DATA0" or "DATA1". Naturally, we wait until "SET DATA0/1"
+ 	 * is cleared by the hardware beforehand.
+ 	 */
+-	for (i = 0; i < RENESAS_RETRY; i++) {
++	for (i = 0; i < CONFIG_USB_XHCI_PCI_RENESAS_RETRY; i++) {
+ 		err = pci_read_config_byte(pdev, RENESAS_FW_STATUS_MSB,
+ 					   &fw_status);
+ 		if (err)
+@@ -329,9 +326,9 @@ static int renesas_fw_download(struct pci_dev *pdev,
+ 		if (!(fw_status & (BIT(0) | BIT(1))))
+ 			break;
+ 
+-		udelay(RENESAS_DELAY);
++		udelay(CONFIG_USB_XHCI_PCI_RENESAS_DELAY);
+ 	}
+-	if (i == RENESAS_RETRY)
++	if (i == CONFIG_USB_XHCI_PCI_RENESAS_RETRY)
+ 		dev_warn(&pdev->dev, "Final Firmware Download step timed out.");
+ 
+ 	/*
+@@ -343,16 +340,16 @@ static int renesas_fw_download(struct pci_dev *pdev,
+ 		return pcibios_err_to_errno(err);
+ 
+ 	/* 12. Read "Result Code" and confirm it is good. */
+-	for (i = 0; i < RENESAS_RETRY; i++) {
++	for (i = 0; i < CONFIG_USB_XHCI_PCI_RENESAS_RETRY; i++) {
+ 		err = pci_read_config_byte(pdev, RENESAS_FW_STATUS, &fw_status);
+ 		if (err)
+ 			return pcibios_err_to_errno(err);
+ 		if (fw_status & RENESAS_FW_STATUS_SUCCESS)
+ 			break;
+ 
+-		udelay(RENESAS_DELAY);
++		udelay(CONFIG_USB_XHCI_PCI_RENESAS_DELAY);
+ 	}
+-	if (i == RENESAS_RETRY) {
++	if (i == CONFIG_USB_XHCI_PCI_RENESAS_RETRY) {
+ 		/* Timed out / Error - let's see if we can fix this */
+ 		err = renesas_fw_check_running(pdev);
+ 		switch (err) {
+@@ -405,17 +402,17 @@ static void renesas_rom_erase(struct pci_dev *pdev)
+ 	/* sleep a bit while ROM is erased */
+ 	msleep(20);
+ 
+-	for (i = 0; i < RENESAS_RETRY; i++) {
++	for (i = 0; i < CONFIG_USB_XHCI_PCI_RENESAS_RETRY; i++) {
+ 		retval = pci_read_config_byte(pdev, RENESAS_ROM_STATUS,
+ 					      &status);
+ 		status &= RENESAS_ROM_STATUS_ERASE;
+ 		if (!status)
+ 			break;
+ 
+-		mdelay(RENESAS_DELAY);
++		mdelay(CONFIG_USB_XHCI_PCI_RENESAS_DELAY);
+ 	}
+ 
+-	if (i == RENESAS_RETRY)
++	if (i == CONFIG_USB_XHCI_PCI_RENESAS_RETRY)
+ 		dev_dbg(&pdev->dev, "Chip erase timedout: %x\n", status);
+ 
+ 	dev_dbg(&pdev->dev, "ROM Erase... Done success\n");
+@@ -464,7 +461,7 @@ static bool renesas_setup_rom(struct pci_dev *pdev, const struct firmware *fw)
+ 	/*
+ 	 * wait till DATA0/1 is cleared
+ 	 */
+-	for (i = 0; i < RENESAS_RETRY; i++) {
++	for (i = 0; i < CONFIG_USB_XHCI_PCI_RENESAS_RETRY; i++) {
+ 		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS_MSB,
+ 					   &status);
+ 		if (err)
+@@ -472,9 +469,9 @@ static bool renesas_setup_rom(struct pci_dev *pdev, const struct firmware *fw)
+ 		if (!(status & (BIT(0) | BIT(1))))
+ 			break;
+ 
+-		udelay(RENESAS_DELAY);
++		udelay(CONFIG_USB_XHCI_PCI_RENESAS_DELAY);
+ 	}
+-	if (i == RENESAS_RETRY) {
++	if (i == CONFIG_USB_XHCI_PCI_RENESAS_RETRY) {
+ 		dev_err(&pdev->dev, "Final Firmware ROM Download step timed out\n");
+ 		goto remove_bypass;
+ 	}
+@@ -487,7 +484,7 @@ static bool renesas_setup_rom(struct pci_dev *pdev, const struct firmware *fw)
+ 	udelay(10);
+ 
+ 	/* 18. check result */
+-	for (i = 0; i < RENESAS_RETRY; i++) {
++	for (i = 0; i < CONFIG_USB_XHCI_PCI_RENESAS_RETRY; i++) {
+ 		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+ 		if (err) {
+ 			dev_err(&pdev->dev, "Read ROM status failed:%d\n",
+@@ -499,9 +496,9 @@ static bool renesas_setup_rom(struct pci_dev *pdev, const struct firmware *fw)
+ 			dev_dbg(&pdev->dev, "Download ROM success\n");
+ 			break;
+ 		}
+-		udelay(RENESAS_DELAY);
++		udelay(CONFIG_USB_XHCI_PCI_RENESAS_DELAY);
+ 	}
+-	if (i == RENESAS_RETRY) { /* Timed out */
++	if (i == CONFIG_USB_XHCI_PCI_RENESAS_RETRY) { /* Timed out */
+ 		dev_err(&pdev->dev,
+ 			"Download to external ROM TO: %x\n", status);
+ 		return false;
+@@ -521,16 +518,16 @@ static bool renesas_setup_rom(struct pci_dev *pdev, const struct firmware *fw)
+ 	/*
+ 	 * wait till Reload is cleared
+ 	 */
+-	for (i = 0; i < RENESAS_RETRY; i++) {
++	for (i = 0; i < CONFIG_USB_XHCI_PCI_RENESAS_RETRY; i++) {
+ 		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+ 		if (err)
+ 			return false;
+ 		if (!(status & RENESAS_ROM_STATUS_RELOAD))
+ 			break;
+ 
+-		udelay(RENESAS_DELAY);
++		udelay(CONFIG_USB_XHCI_PCI_RENESAS_DELAY);
+ 	}
+-	if (i == RENESAS_RETRY) {
++	if (i == CONFIG_USB_XHCI_PCI_RENESAS_RETRY) {
+ 		dev_err(&pdev->dev, "ROM Exec timed out: %x\n", status);
+ 		return false;
+ 	}
 -- 
+2.41.0
 
-Thanks,
-Peter Chen
