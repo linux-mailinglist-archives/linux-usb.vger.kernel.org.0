@@ -2,81 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 875807344CE
-	for <lists+linux-usb@lfdr.de>; Sun, 18 Jun 2023 05:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 972ED734611
+	for <lists+linux-usb@lfdr.de>; Sun, 18 Jun 2023 14:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjFRDeL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 17 Jun 2023 23:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42360 "EHLO
+        id S229817AbjFRMKk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 18 Jun 2023 08:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjFRDeI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 17 Jun 2023 23:34:08 -0400
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EEBA9
-        for <linux-usb@vger.kernel.org>; Sat, 17 Jun 2023 20:34:07 -0700 (PDT)
-Received: by mail-oo1-xc2c.google.com with SMTP id 006d021491bc7-55af44f442dso1548632eaf.1
-        for <linux-usb@vger.kernel.org>; Sat, 17 Jun 2023 20:34:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687059246; x=1689651246;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wWTmMQSsiLodfdKu7C8lcuyX7WesZia949PML8BXbEI=;
-        b=KW0kMtD2liIU/cJHUPe9aUXPpQx+mJjvgQCaoptoVV8rmVKzVsSzqHqqg1wnsyL13K
-         0SQSiBqZ2arx/4RXBoOA6GtDc3GJwRuydd9RW9QGWXOrLpcovnFPcT5HLAqhfQ9OrMp9
-         NrtDMxqgL2w3BujjgDM4s3bk588VITGylAdNoHDvN281j6w9tL5cO0Dyr2tKQvulLSVv
-         DujUdEGi0OmKHTR0lfrcLXK17SZ6hA55op20/9yfvPm7wjoyybNMR2EK8dFfqhd/4SqW
-         bGTsLMeI3gWp9GeBqudZLQJntK/UW/0GK9M6zPyQtDkNfaSTOwnwyTT4Tk/PQCo1f0Sq
-         h+jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687059246; x=1689651246;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wWTmMQSsiLodfdKu7C8lcuyX7WesZia949PML8BXbEI=;
-        b=XDgPVZiJKZiQm8ofmfAKDXJMilvvDZMJTRS42sgvnHHYe46QAhBenOvCzbkg0toHjP
-         ncQ3ndVQcdWtqVfVKMwPKcBpHL6/KcAUVYLmlTxpaamk20zOBRZuvICzyDIZTE20sxTe
-         oiQ3XMmNrSy9vdP8nCOsfVG7ouIz0RHmkI+iUAXQ2GDrufa/3Y1NqwS/Yj4jqaT8KyJB
-         LYtXuMm9KVOdMMuNLmsCFwYS95rVP8FXWMsBGJ8gqxnfNTqAyfwNhWSwAv+2l236jZV1
-         /AJQb3Pnk4L0NAz7urCX0K8Ci6AKyQUyLtPeim0OTmqEnzLpve7yJ2QGESuiGD5gxqOx
-         /6cw==
-X-Gm-Message-State: AC+VfDxhCVy4xceZ9c6BUDpNXxHexwsimfQTTFwgYPV7Cm9BzsgJGbJY
-        JDJyeDUuFb00h5uNBzbH1teXkxyuzULzggAR2gA=
-X-Google-Smtp-Source: ACHHUZ5DBs3XXTqQKk+CeBZexfJG9aplfcRhSLvqGwNxioo61wS+qmDAdYRlUtTQlvpdzYplhcdg5olHblx7gckfITE=
-X-Received: by 2002:a4a:dd18:0:b0:55d:be61:c9c5 with SMTP id
- m24-20020a4add18000000b0055dbe61c9c5mr2047256oou.3.1687059246282; Sat, 17 Jun
- 2023 20:34:06 -0700 (PDT)
+        with ESMTP id S229809AbjFRMKj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 18 Jun 2023 08:10:39 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34531B3;
+        Sun, 18 Jun 2023 05:10:34 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35IC1xHl029496;
+        Sun, 18 Jun 2023 12:10:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=zNHDB4mne5Mh07dWM3OfrbNBeOyhODIhoAblqGKDb0E=;
+ b=QdJPq/owm3viMRfJdyIn3P6KPn9nX71LX32XJmMEvoPo6e849SCR2hTPAwuxZeXrp8dZ
+ yZZtiLOM1RrHGrPMOnLg0mkaKr0MCRd1+igCznmbopJA0SFmknWb9Myh9MNhkbuNsQpS
+ SXnoLp3O88cE99pbCG+relchrXmsQ9gb3RM1K0p9AIESlH/WjKQYWryXN+DOnl6Zv8q3
+ RjlK3Ay9/XOFTsCWEDjkQnewMDUgH9ZfQ4dEyw1CtLCqHnkFMjQEU14z4vEUsS+ubvIf
+ cljzagffzd65UnQKUAIGbTompqUF3Xp+sE8j2t7pDm8Jtpm4EvNNfSDlkwT23H4g4f9G lw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r94e4sm8p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 18 Jun 2023 12:10:31 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35ICA4q1011716
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 18 Jun 2023 12:10:04 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Sun, 18 Jun 2023 05:10:01 -0700
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [PATCH v3] usb: dwc3: gadget: Propagate core init errors to UDC during pullup
+Date:   Sun, 18 Jun 2023 17:39:49 +0530
+Message-ID: <20230618120949.14868-1-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Sender: hubertinecoul@gmail.com
-Received: by 2002:ac9:5b55:0:b0:4d9:6a76:96b3 with HTTP; Sat, 17 Jun 2023
- 20:34:05 -0700 (PDT)
-From:   "Mrs. Ruth Roberto" <robertoruth48@gmail.com>
-Date:   Sat, 17 Jun 2023 19:34:05 -0800
-X-Google-Sender-Auth: MArP0QmGXixMB3kKPmHcfAirw2c
-Message-ID: <CAAEzwM=Y8=t50hrRCTJeigheEav4Zsuj_xrhm0mquKi6ofVGPg@mail.gmail.com>
-Subject: I trust in God
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
-        MONEY_FRAUD_3,NA_DOLLARS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: q-hHFiyDjrZ2C_VnAoTHxgKKMCfFMxXr
+X-Proofpoint-GUID: q-hHFiyDjrZ2C_VnAoTHxgKKMCfFMxXr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-18_08,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ impostorscore=0 malwarescore=0 bulkscore=0 adultscore=0 mlxscore=0
+ phishscore=0 lowpriorityscore=0 mlxlogscore=999 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306180116
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear,
-It is true we do not know each other before but please bear with me,
-I=E2=80=99m writing you this mail from a Hospital bed. My name is Mrs.
-Ruth Roberto. I am a widow and very sick now. I am suffering from
-Endometrial Cancer which my doctor has confirmed that I will not
-survive it because of some damages. Now because of the condition of my
-health I have decided to donate out my late husband hard earn money
-the sum of ($3, 500,000.00) Three Million, Five Hundred Thousand Us
-Dollars on Charity Purpose through your help.if you are interested get
-back for more details.
-Mrs. Ruth Roberto
+In scenarios where pullup relies on resume (get sync) to initialize
+the controller and set the run stop bit, then core_init is followed by
+gadget_resume which will eventually set run stop bit.
+
+But in cases where the core_init fails, the return value is not sent
+back to udc appropriately. So according to UDC the controller has
+started but in reality we never set the run stop bit.
+
+On systems like Android, there are uevents sent to HAL depending on
+whether the configfs_bind / configfs_disconnect were invoked. In the
+above mentioned scnenario, if the core init fails, the run stop won't
+be set and the cable plug-out won't result in generation of any
+disconnect event and userspace would never get any uevent regarding
+cable plug out and we never call pullup(0) again. Furthermore none of
+the next Plug-In/Plug-Out's would be known to configfs.
+
+Return back the appropriate result to UDC to let the userspace/
+configfs know that the pullup failed so they can take appropriate
+action.
+
+Fixes: 77adb8bdf422 ("usb: dwc3: gadget: Allow runtime suspend if UDC unbinded")
+Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+---
+Changes in v3: Added changelog mising in v2
+Changes in v2: Added Fixes tag
+
+ drivers/usb/dwc3/gadget.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 578804dc29ca..27cb671e18e3 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2747,7 +2747,9 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 	ret = pm_runtime_get_sync(dwc->dev);
+ 	if (!ret || ret < 0) {
+ 		pm_runtime_put(dwc->dev);
+-		return 0;
++		if (ret < 0)
++			pm_runtime_set_suspended(dwc->dev);
++		return ret;
+ 	}
+ 
+ 	if (dwc->pullups_connected == is_on) {
+-- 
+2.40.0
+
