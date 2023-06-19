@@ -2,100 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCEBF735E4B
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Jun 2023 22:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C91B735E8F
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Jun 2023 22:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbjFSUQ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Jun 2023 16:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60326 "EHLO
+        id S229737AbjFSUed (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Jun 2023 16:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjFSUQZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Jun 2023 16:16:25 -0400
-Received: from h2.cmg2.smtp.forpsi.com (h2.cmg2.smtp.forpsi.com [81.2.195.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9B5D3
-        for <linux-usb@vger.kernel.org>; Mon, 19 Jun 2023 13:16:24 -0700 (PDT)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id BLITqArwFv5uIBLIUqiBcT; Mon, 19 Jun 2023 22:16:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1687205783; bh=K9MvvSB44/NAwPzUv3A6w1ipANWPhZ+J7Fw+3w/YxmQ=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=Yds0iDJ00rtqBvolFxDm5ZgtaEJAm9dg0cmkkc5d+lbDmFSvTMpq8mzbbFKErYbo2
-         VHbYYi874uV/dvXjn/MhjN5X4mjOVm103PtJZlx4L1u/a0kce6BXXhNld+NLUYY0l9
-         QnelYh4Q84k4d8lVdBzLMQBg2YjZb4S2Dmnb+v/bZEDDdS/UWt3jTRIuQ7tZ1XLxck
-         4+xtbuz2OYq2a0XCDHjhnp1c0Eg2Pi1pvNPNeGXqNekMmQlAck2FPwjrIFPREWudr5
-         1D933UCPJQPTGzOeCRakXZlmAHkb0gu+aex7gRYHe/OIOktuTi9ZGic4EaTRWj5Vls
-         6jDofvnGORPAw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1687205783; bh=K9MvvSB44/NAwPzUv3A6w1ipANWPhZ+J7Fw+3w/YxmQ=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=Yds0iDJ00rtqBvolFxDm5ZgtaEJAm9dg0cmkkc5d+lbDmFSvTMpq8mzbbFKErYbo2
-         VHbYYi874uV/dvXjn/MhjN5X4mjOVm103PtJZlx4L1u/a0kce6BXXhNld+NLUYY0l9
-         QnelYh4Q84k4d8lVdBzLMQBg2YjZb4S2Dmnb+v/bZEDDdS/UWt3jTRIuQ7tZ1XLxck
-         4+xtbuz2OYq2a0XCDHjhnp1c0Eg2Pi1pvNPNeGXqNekMmQlAck2FPwjrIFPREWudr5
-         1D933UCPJQPTGzOeCRakXZlmAHkb0gu+aex7gRYHe/OIOktuTi9ZGic4EaTRWj5Vls
-         6jDofvnGORPAw==
-Date:   Mon, 19 Jun 2023 22:16:21 +0200
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     linux-usb@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH 11/11] usb: dwc3: Add SPDX header and copyright
-Message-ID: <ZJC3lfCKcr4QkMJh@lenoch>
-References: <ZJC165p0Mj4jHcBh@lenoch>
+        with ESMTP id S229710AbjFSUe0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Jun 2023 16:34:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60157134;
+        Mon, 19 Jun 2023 13:34:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDBFB60EFB;
+        Mon, 19 Jun 2023 20:34:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1621CC433C0;
+        Mon, 19 Jun 2023 20:34:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687206864;
+        bh=Uhd7KPqHAJ7fEPJLZBi9kE4eOGvyVREjjKmzJs4FuHs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WcNaq+QFyE54xFJotQ1yFGnsEnEXw13WvSSoopGIfDOavqy8aGAyzvslKZlqsPzaf
+         w+hcSgEh9NTrcmRbBcORRAMW9dsKqdI299yyPwsR/P/BwKbx7XZQn1Dlyvj6ZmdjE9
+         vTCWXiaaXJwIPRdeKcYT2fBRZhQYTk3ev8ToT949+3HPeA2LkJkFYl+agSL82CY0ll
+         qjCH0VnkZjU8UB2ZNlNpQbf1sUMgHskeA3oQP9B/it+O+D/tt29IDsWgAXAcoBLek9
+         2h4DmiDYY83sGfRBd+m9p5H/GtFnodiNCR74bWMFEKkKyLhzdUiEtMtngjW/WgXxU+
+         tyb9uka5Nyg5w==
+Date:   Mon, 19 Jun 2023 21:34:19 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Piyush Mehta <piyush.mehta@amd.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        balbi@kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        michal.simek@amd.com, git@amd.com
+Subject: Re: [PATCH V4] dt-bindings: usb: dwc3: Add interrupt-names property
+ support for wakeup interrupt
+Message-ID: <20230619-sanitizer-cheese-7bff29bbb000@spud>
+References: <20230619105032.2888128-1-piyush.mehta@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="y6zibzw02VJH1wyI"
 Content-Disposition: inline
-In-Reply-To: <ZJC165p0Mj4jHcBh@lenoch>
-X-CMAE-Envelope: MS4wfKT14AIUFGIofVKyXtsTGI8XNvGTl/IpaMKz8UMtyAjwgqfKS4Ll2tsH7X8iJFLOzv0LhOvUBDwDp1gt32zIWI4kOWMEmUe4oj5hUpmHj/0Gtccj7S8I
- 3v/09Nve7DZFXSZ2SiijodI9L79YjHOi4p64o0XPjhQ0mDdWoPhF2LyYhfExhuRIP2owghzOEiezjCuu8GjeMbdtkj5OQp1Vh51YtPLF1scGV5N/dB98qQ/5
- 5rXFfyZN+Nk+wSwFxuEQ7Q==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230619105032.2888128-1-piyush.mehta@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Ladislav Michl <ladis@linux-mips.org>
 
-As driver is rewritten and David no longer works for Marvell (Cavium),
-I'm to blame for breakage.
+--y6zibzw02VJH1wyI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
----
- drivers/usb/dwc3/dwc3-octeon.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+On Mon, Jun 19, 2023 at 04:20:32PM +0530, Piyush Mehta wrote:
+> The hibernation feature enabled for Xilinx Versal NET SoC in DWC3 IP.
+> As the DWC3 IP supports the hibernation feature, to handle the wakeup
+> or hibernation interrupt, add host mode "wakeup" interrupt-names
+> optional property in the binding schema to capture remote-wakeup and
+> connect/ disconnect event in the hibernation state and increased maxItems
+> to 4 for the interrupts and interrupt-names property.
+>=20
+> We have a dedicated IRQ line specifically for the hibernation feature.
+> When the "wakeup" IRQ line is triggered, it initiates a hibernation
+> interrupt, causing the system to wake up from the hibernation state.
+>=20
+> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
 
-diff --git a/drivers/usb/dwc3/dwc3-octeon.c b/drivers/usb/dwc3/dwc3-octeon.c
-index 4ad2d8887cf0..1776bbaf28c0 100644
---- a/drivers/usb/dwc3/dwc3-octeon.c
-+++ b/drivers/usb/dwc3/dwc3-octeon.c
-@@ -1,11 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0
- /*
-- * XHCI HCD glue for Cavium Octeon III SOCs.
-+ * DWC3 glue for Cavium Octeon III SOCs.
-  *
-  * Copyright (C) 2010-2017 Cavium Networks
-- *
-- * This file is subject to the terms and conditions of the GNU General Public
-- * License.  See the file "COPYING" in the main directory of this archive
-- * for more details.
-+ * Copyright (C) 2023 Ladislav Michl <ladis@linux-mips.org>
-  */
- 
- #include <linux/bitfield.h>
-@@ -542,6 +540,6 @@ static struct platform_driver dwc3_octeon_driver = {
- module_platform_driver(dwc3_octeon_driver);
- 
- MODULE_ALIAS("platform:dwc3-octeon");
--MODULE_AUTHOR("David Daney <david.daney@cavium.com>");
-+MODULE_AUTHOR("Ladislav Michl <ladis@linux-mips.org>");
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("DesignWare USB3 OCTEON III Glue Layer");
--- 
-2.39.2
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
+Cheers,
+Conor.
+
+--y6zibzw02VJH1wyI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJC7ywAKCRB4tDGHoIJi
+0o92AQCsZ7cA3TX6rbiOT3ib8RG57qMA4Y8RmT2KSVRKHceKuAEA+fBcmjNBOd8Z
+h3RmatmWw+xBZjQxV5/t14rcqluaDQ0=
+=w6F2
+-----END PGP SIGNATURE-----
+
+--y6zibzw02VJH1wyI--
