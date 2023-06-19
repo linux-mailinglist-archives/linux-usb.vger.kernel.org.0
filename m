@@ -2,73 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8C5735A03
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Jun 2023 16:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 359BD735AC8
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Jun 2023 17:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232200AbjFSOq4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Jun 2023 10:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44630 "EHLO
+        id S229806AbjFSPH1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Jun 2023 11:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232207AbjFSOqy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Jun 2023 10:46:54 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2EFF130
-        for <linux-usb@vger.kernel.org>; Mon, 19 Jun 2023 07:46:35 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f9189228bcso11895305e9.3
-        for <linux-usb@vger.kernel.org>; Mon, 19 Jun 2023 07:46:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687185994; x=1689777994;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pq3ijGGevKpfNr/5SD0w36pchztjWgIz0cOroK2sblA=;
-        b=Cpuvy21GWkdpaF7vZYLoXkopw9/vKm/M9clcr+Ac9769fFWzLT1KJSPnCpEce99TAQ
-         32xgGaPQUXhIrkmuudV2Z7a8/Jhn/bzntgWp9dWzwfwbEUz3jkAbdz6SW5zw5PJBJ7H7
-         oeE9pMFgkxPJNMnW6LEE2f4MoqzsM7DQQK5NUXyEt0oPMrU3Qiqh4xPkD1kqqbzYLCrB
-         xWsrKohTaOpjoJeXCpm1xXEdP4xjOYyW/dpwT78J9+7UE/lbqMakdNuThadiLdsCbzGM
-         rLXcE9++3QtQSgMFzbF5BxUcrEpOjqtbLxfWzSJIso6C/MlaXulYCptxX1rpXQiMmbYa
-         v6Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687185994; x=1689777994;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pq3ijGGevKpfNr/5SD0w36pchztjWgIz0cOroK2sblA=;
-        b=Uvx7t1Z346TiJO70WdeqMxvop7yaKm6Ju7WVUK0SBD6rAQQzsJ8y+ina5ctZmLN86S
-         36W4WgsipWtjnnirTlVgY+Rm5WQz1mJFD+96tu14+VtSnpVWxpLcXWXu2QvVVjtR0WSe
-         +apr8v8H/zFij9q1dJ635LkE0ULEU939pnMeajQvWfIObtS9q8tW4LiCFpPDr99mIlF5
-         AhMQAXr1Buf6dh7NCRbGPgjfTMo6fKlQPmFRyYlq9YBCL6kJGb+1m8wEDhNwvdMJt8GR
-         jvMJL/pYlrqnXdrq+GPh8iKsgA4cxOw9+S0GZQ5dM/5vAnci+4Y8rN8aJMxPXz/5lwPA
-         vzdA==
-X-Gm-Message-State: AC+VfDxU93EdcM5+DdZz90TD6n+fUyWXVjF6mnUPrN/OTeiNOQbhnoTQ
-        zMi0tqtpaIfxpP6u7qGKoLUgsQ==
-X-Google-Smtp-Source: ACHHUZ7+7tAskdGyrcV0m/FSTeYwQRmUj3rxMONbJo6MKeazOAKB6sTNRRY8pEf7zh+BKMRiHsD8oQ==
-X-Received: by 2002:a7b:cd14:0:b0:3f9:b445:903b with SMTP id f20-20020a7bcd14000000b003f9b445903bmr758673wmj.9.1687185994086;
-        Mon, 19 Jun 2023 07:46:34 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id c25-20020a05600c0ad900b003f604793989sm10981893wmr.18.2023.06.19.07.46.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 07:46:31 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 17:46:28 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Badhri Jagan Sridharan <badhri@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: udc: core: Fix double unlock in
- usb_gadget_activate()
-Message-ID: <031bd76e-7955-4a71-94fa-276d08d5ada5@kadam.mountain>
-References: <32e22952-8574-4120-979b-ebb6af5f54b4@moroto.mountain>
- <2023061959-volley-badland-81a2@gregkh>
+        with ESMTP id S229658AbjFSPHR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Jun 2023 11:07:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0773610FE;
+        Mon, 19 Jun 2023 08:06:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCD2360CA0;
+        Mon, 19 Jun 2023 15:06:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 219B1C433C8;
+        Mon, 19 Jun 2023 15:06:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687187207;
+        bh=68pHvNEjGgMDZeKdqaK5OhjSf82d8Kjku7zDW9PYkYw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SImQxy688z/P6cKz+8EDhzhPPkamlzmTFEfskk0yD6TwyTkX5JPVltFh13aPGaXKr
+         X1BLNeMGMsh6Q6C85ZZ6rVDW5orAS27eyvkp+ezoZuho1aAb3tZZeo7yAwGpzrw8s6
+         3cTgPf3245a3OlrXMEynIqwKKa9sS78dblHlaPQQNfrpSKNtBFCoZLIU/To8L/jF95
+         Dn9BhKmlfThsYnpYRHThoCEaaCDC5b6DHqVelzEIRZ3sY9mS4iruOHIozcYqc+aGMM
+         98fgaelS/YDCKcqlu8fOvPEdmeCJIKVNBlDDs2xXv5tPax40DV9rXAUJFA20ctLSle
+         2YZ6wYbKGz5Gg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1qBGSq-0003ZO-Ul; Mon, 19 Jun 2023 17:06:45 +0200
+Date:   Mon, 19 Jun 2023 17:06:44 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+        quic_jackp@quicinc.com, quic_ugoswami@quicinc.com
+Subject: Re: [PATCH v3] usb: dwc3: gadget: Propagate core init errors to UDC
+ during pullup
+Message-ID: <ZJBvBE-xy2X_wWO0@hovoldconsulting.com>
+References: <20230618120949.14868-1-quic_kriskura@quicinc.com>
+ <ZI_-c5g20DSJOSu2@hovoldconsulting.com>
+ <fca531e0-88ec-ba19-2c11-e8965ac653b2@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2023061959-volley-badland-81a2@gregkh>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <fca531e0-88ec-ba19-2c11-e8965ac653b2@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,36 +63,80 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 03:39:05PM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Jun 15, 2023 at 06:43:03PM +0300, Dan Carpenter wrote:
-> > Do not call mutex_unlock(&gadget->udc->connect_lock) twice in a row.
+On Mon, Jun 19, 2023 at 06:20:43PM +0530, Krishna Kurapati PSSNV wrote:
+> On 6/19/2023 12:36 PM, Johan Hovold wrote:
+> > On Sun, Jun 18, 2023 at 05:39:49PM +0530, Krishna Kurapati wrote:
+
+> >> @@ -2747,7 +2747,9 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+> >>   	ret = pm_runtime_get_sync(dwc->dev);
+> >>   	if (!ret || ret < 0) {
+> >>   		pm_runtime_put(dwc->dev);
+> >> -		return 0;
+> >> +		if (ret < 0)
+> >> +			pm_runtime_set_suspended(dwc->dev);
 > > 
-> > Fixes: 286d9975a838 ("usb: gadget: udc: core: Prevent soft_connect_store() race")
-> > Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> > ---
-> >  drivers/usb/gadget/udc/core.c | 2 --
-> >  1 file changed, 2 deletions(-)
+> > This bit is broken and is also not mentioned or explained in the commit
+> > message. What are you trying to achieve here?
 > > 
-> > diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> > index 83fd1de14784..d58640a9d0ca 100644
-> > --- a/drivers/usb/gadget/udc/core.c
-> > +++ b/drivers/usb/gadget/udc/core.c
-> > @@ -878,8 +878,6 @@ int usb_gadget_activate(struct usb_gadget *gadget)
-> >  	 */
-> >  	if (gadget->connected)
-> >  		ret = usb_gadget_connect_locked(gadget);
-> > -	mutex_unlock(&gadget->udc->connect_lock);
-> > -
-> >  unlock:
-> >  	mutex_unlock(&gadget->udc->connect_lock);
-> >  	trace_usb_gadget_activate(gadget, ret);
-> > -- 
-> > 2.39.2
-> > 
+> > You cannot set the state like this after runtime PM is enabled and the
+> > above call will always fail.
+
+> The reason why I an returning ret is because, when the first get_sync 
+> fails because of core_init failure and we return 0 instead of ret, the 
+> UDC thinks that controller has started successfully but we never set the 
+> run stop bit.
+
+That bit is clear.
+
+> So when we plug out the cable,  the disconnect event won't 
+> be generated and we never send on systems like android the user space 
+> will never clear the UDC upon disconnect. Its a sort of mismatch between 
+> controller and udc.
+
+Ok, but the controller is an error state after the resume failure. And
+here you rely on user space to retry gadget activation in order to
+eventually detect the disconnect event?
+ 
+> Also once the first get_sync fails, the dwc->dev->power.runtime_error 
+> flag is set and successive calls to get_sync always return -EINVAL. In 
+> this situation even if UDC/configfs retry pullup, resume_common will 
+> never be called and we never actually start the controller or resume 
+> dwc->dev.
 > 
-> Does not apply to my tree :(
+> By calling set_suspended, I am trying to clear the runtime_error flag so 
+> that the next retry to pullup will call resume_common and retry 
+> core_init and set run_stop.
 
-No longer required.  The patch was reverted.
+Ok, thanks, that's the bit I was missing in the commit message.
 
-regards,
-dan carpenter
+First, I perhaps mistakingly thought pm_runtime_set_suspended() may only
+be called with PM runtime disabled, but it appears it may indeed be
+valid to call also after an error but with the caveat that the device
+must then actually be in the suspended state.
+
+The documentation and implementation is inconsistent here as the kernel
+doc for pm_runtime_set_suspended() clearly states:
+
+	It is not valid to call this function for devices with runtime
+	PM enabled.
+
+and it also looks like we'd end up with an active-child counter
+imbalance if anyone actually tries to do so.
+
+But either way, it also seems like the controller is not guaranteed to
+be suspended here as pm_runtime_get_sync() may also fail after a
+previous errors that have left the controller in the active state?
+
+Also, what kind of errors would cause core_init and resume to fail here?
+
+If this is something that you see during normal operation then this
+seems to suggest that something is wrong with the runtime pm
+implementation.
+
+Note that virtually all drivers treat resume failures as fatal errors
+and do not implement any recovery from that.
+
+In fact, the only other example of this kind of usage that I could find
+is also for a Qualcomm driver...
+
+Johan
