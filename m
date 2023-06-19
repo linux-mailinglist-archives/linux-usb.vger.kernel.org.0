@@ -2,117 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5F0734C14
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Jun 2023 09:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A9E734D6B
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Jun 2023 10:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbjFSHGf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Jun 2023 03:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55080 "EHLO
+        id S229674AbjFSIUG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Jun 2023 04:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbjFSHGd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Jun 2023 03:06:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B851A4;
-        Mon, 19 Jun 2023 00:06:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BDA760B02;
-        Mon, 19 Jun 2023 07:06:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3BD0C433C0;
-        Mon, 19 Jun 2023 07:06:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687158390;
-        bh=Qi0kxRUlKWF50DOfOELr34P/YasyzebyEfFENZXe5PI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LC2fwE5UOFLGFIFz3QATqffcxTny+pB+QL+NnjWe+Md3Udt4QvYA4JOjx/Q2IroL2
-         OA/Gh0nrQpfD8UxAidI4Og71Hmz4OY8ll3WqpSnMJa/bnsfSPWu4D281FYvfRrcbZl
-         12jtlFWNeeg6phI5RJpmqaJO+2z/6XahpiUUD0nOKokHkRqqWpW/HM4S0XR4uv9FEu
-         x9h1thnc+ykE3WX/c7JgUBPMuZZacM1E9/FfQcneLrJ7XZuOtcG+KA8ubA8reEB542
-         NtLxdOTKk5d9a2fbQp0EGc7Y2e7EhvXJ6AVJhY0xVe6iZ/w55uwPuXP+eXoEnxkHj4
-         Kk1LzURS+2YEw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1qB8y3-0000mg-O5; Mon, 19 Jun 2023 09:06:27 +0200
-Date:   Mon, 19 Jun 2023 09:06:27 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com, quic_ugoswami@quicinc.com
-Subject: Re: [PATCH v3] usb: dwc3: gadget: Propagate core init errors to UDC
- during pullup
-Message-ID: <ZI_-c5g20DSJOSu2@hovoldconsulting.com>
-References: <20230618120949.14868-1-quic_kriskura@quicinc.com>
+        with ESMTP id S230237AbjFSITy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Jun 2023 04:19:54 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7B6FA;
+        Mon, 19 Jun 2023 01:19:53 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-988e6fc41ccso20201766b.3;
+        Mon, 19 Jun 2023 01:19:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687162791; x=1689754791;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jFHkTes8DrKw9cwR8pyZFdUyDvr03PKoP5YKGbpmVFI=;
+        b=FIMM1NNke8QgY6YTZDycoAXTOmacd/2jr/2eNabYgpy+NtqQdsIJHLESxKKION5YXR
+         fkrHoKlXZuLl6VI3414HGaWYxtYEakGNgGelXznIdkCMN8JOBvwgx0pWA9y3iFNW7DNh
+         gnzDCGOdsdfGlNGZHBVyBFGqqu4BbRMamzp/1t0tnh82BxD8DnrHtGnTnOtN5MDR2zHx
+         aWZmsKZeUzSQphSu1tHYIsHZcsA6oNWo3V5hwpQukI6azw7lW7Zmj2DaSPj+S+UnIK1z
+         OCWqtn/7BY1/+i9on+uOwt7R2ccDAEkTnmzZSifmy40n6CztG2Ss7CzMAvV/qJeJgd9K
+         zO2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687162791; x=1689754791;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jFHkTes8DrKw9cwR8pyZFdUyDvr03PKoP5YKGbpmVFI=;
+        b=FR617PURaeTG0pywsWwIUC1cctZJWzvl2D4nTOXF+VcU51lQPcaNjVPEKfeJE8uUoQ
+         NnL67kaE+V1losbK0SUdvgAVa7GTSKlzO2HuDu8E8K9tJY9dgaigcCa3lSm6FwIL5KdG
+         RJmrWTyfgeaM9X+uP+Pn+XNJ7zDIrjqbA35vQ+uzFlfM2mrvzk35TSYUXPDVOFL2Sstq
+         dSwHxOzAe0GEdaOJWptLHk1zyT77DgQ2VfOYe5OG+eUFkICGVnGloce09T8384PglbCA
+         o0BBoqTJG8KIyoSRaE63FgJsGhtfygSTUJWFNt51XDOFs4hd0HAqrTUpd+p0tBXA6hhg
+         V9yA==
+X-Gm-Message-State: AC+VfDxdHwBGoZZAR33oT9/FIa+axoD3MRXdtDQTWLYK0nPiSMQcNLdP
+        KCyBW4LhtvM69cOs9i3v5fc=
+X-Google-Smtp-Source: ACHHUZ63Dj5hadfhxWMjs8TUCRxjMwPLmhmAnA27KrmdZvk7i5867WtemrAERVQ44S3AdvyT1/NGBQ==
+X-Received: by 2002:a17:907:3e97:b0:973:344:6a39 with SMTP id hs23-20020a1709073e9700b0097303446a39mr7486763ejc.76.1687162791299;
+        Mon, 19 Jun 2023 01:19:51 -0700 (PDT)
+Received: from shift.daheim (p200300d5ff26fa00aaa159fffeeb01f1.dip0.t-ipconnect.de. [2003:d5:ff26:fa00:aaa1:59ff:feeb:1f1])
+        by smtp.gmail.com with ESMTPSA id w9-20020a170906480900b00986211f35bdsm4479490ejq.80.2023.06.19.01.19.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 01:19:50 -0700 (PDT)
+Received: from localhost ([127.0.0.1])
+        by shift.daheim with esmtp (Exim 4.96)
+        (envelope-from <chunkeey@gmail.com>)
+        id 1qBA74-0003da-1F;
+        Mon, 19 Jun 2023 10:19:50 +0200
+Message-ID: <f4b0f337-c530-8c4f-dc22-cfaf834dd5f0@gmail.com>
+Date:   Mon, 19 Jun 2023 10:19:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230618120949.14868-1-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] usb: host: xhci: parameterize Renesas delay/retry
+Content-Language: de-DE
+To:     Anne Macedo <retpolanne@posteo.net>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230618224656.2476-2-retpolanne@posteo.net>
+From:   Christian Lamparter <chunkeey@gmail.com>
+In-Reply-To: <20230618224656.2476-2-retpolanne@posteo.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 18, 2023 at 05:39:49PM +0530, Krishna Kurapati wrote:
-> In scenarios where pullup relies on resume (get sync) to initialize
-> the controller and set the run stop bit, then core_init is followed by
-> gadget_resume which will eventually set run stop bit.
+On 6/19/23 00:46, Anne Macedo wrote:
+> Cards based on Renesas uPD720202 have their firmware downloaded during
+> boot by xhci-pci. At this step, the status of the firmware is read and
+> it takes a while for this read to happen (up to a few seconds). The
+> macros RENESAS_RETRY and RENESAS_DELAY are used to retry reading this
+> status byte from PCI a few times. If it can't read the status byte in
+> RENESAS_RETRY tries, it times out.
 > 
-> But in cases where the core_init fails, the return value is not sent
-> back to udc appropriately. So according to UDC the controller has
-> started but in reality we never set the run stop bit.
+> However, since this may vary from card to card, these retry and delay
+> values need to be tweaked. In order to avoid having to patch the code to
+> change these values, CONFIG_USB_XHCI_PCI_RENESAS_RETRY and
+> CONFIG_USB_XHCI_PCI_RENESAS_DELAY are introduced.
 > 
-> On systems like Android, there are uevents sent to HAL depending on
-> whether the configfs_bind / configfs_disconnect were invoked. In the
-> above mentioned scnenario, if the core init fails, the run stop won't
-> be set and the cable plug-out won't result in generation of any
-> disconnect event and userspace would never get any uevent regarding
-> cable plug out and we never call pullup(0) again. Furthermore none of
-> the next Plug-In/Plug-Out's would be known to configfs.
+> If applied, this patch helps to fix errors such as:
 > 
-> Return back the appropriate result to UDC to let the userspace/
-> configfs know that the pullup failed so they can take appropriate
-> action.
+> ROM Download Step 34 failed at position 136 bytes
+> Firmware Download Step 2 failed at position 8 bytes with (-110)
 > 
-> Fixes: 77adb8bdf422 ("usb: dwc3: gadget: Allow runtime suspend if UDC unbinded")
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> ---
-> Changes in v3: Added changelog mising in v2
-> Changes in v2: Added Fixes tag
+> while loading xhci-pci when using these cards.
 > 
->  drivers/usb/dwc3/gadget.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> This error in particular has been noticed by this e-mail [1].
 > 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 578804dc29ca..27cb671e18e3 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -2747,7 +2747,9 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->  	ret = pm_runtime_get_sync(dwc->dev);
->  	if (!ret || ret < 0) {
->  		pm_runtime_put(dwc->dev);
-> -		return 0;
-> +		if (ret < 0)
-> +			pm_runtime_set_suspended(dwc->dev);
+> [1] https://lore.kernel.org/lkml/20190626070658.GP2962@vkoul-mobl/
 
-This bit is broken and is also not mentioned or explained in the commit
-message. What are you trying to achieve here?
+Can you tell me on what hardware (is it something older, with maybe
+a Synopsys/Designware PCIe host controller?) do you experience these
+errors and what delay+retry values are you configuring in order to
+get your DUT up an running?
 
-You cannot set the state like this after runtime PM is enabled and the
-above call will always fail. 
+ From what I can tell, the quoted [1] link to Vinod's mail was just
+an update during development. This was v3 of the patch series back
+then (and it went on to v10 I think, so this wasn't an issue with
+what's in the kernel right now).
 
-> +		return ret;
->  	}
->  
->  	if (dwc->pullups_connected == is_on) {
+Note: If you are interested I still got the "uPD720201/uPD720202 User's
+Manual" back then from Renesas site. (Nowadays they want you to
+register or something.). This document was the base for the code and
+maybe there's something in there you can quote to extend the
+retries/delays.
 
-Johan
+(From what I vaguely remember. Most of the transfer was fast and
+no retries where necessary, but some register write took so long.
+Vinod  also posted hints about a newer firmware for the
+uPD720201/uPD720202. Have you tried that as well?)
+
+Regards,
+Christian
+
