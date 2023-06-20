@@ -2,75 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE446736B24
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Jun 2023 13:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10901736BA8
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jun 2023 14:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232700AbjFTLjV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Jun 2023 07:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        id S231785AbjFTMMC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Jun 2023 08:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231429AbjFTLjU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Jun 2023 07:39:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50207A1;
-        Tue, 20 Jun 2023 04:39:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA9B96101B;
-        Tue, 20 Jun 2023 11:39:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77360C433C8;
-        Tue, 20 Jun 2023 11:39:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687261158;
-        bh=9UVOE8Cz1DsWBg3eucEFy8b5dI8qWQk4N+oAeWZJiHI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CGQaYXeFqY0uyDWCnOxfZEn/Vem4fSxgIjT6iEQGEB76XzdHtm8SMgPyVTiGclCrd
-         OJHgBi07UogJDHYETygVTciE0ZwhTbtvq4KSV6GfYIZ6AhMFiZCIfN5yVEQODaY2Q+
-         rfZXJNYZWzyN1EYtORWyvXeXyUhM74sOlvryMpVaqJ0HT0kYi0JPCaJ6jScplEi0yT
-         KMfTOlOEs2Mim76X3Ozkk4ws8rIvmFRqe0aBWe0Dzhbjq7vrOE3FiZpZe0oWMRCOYs
-         aLMTE8EVwFnp1oB+rqVBW6ZtEFuCfMGfbpAL+wsWj0ZPHUcVNsbrEAGmBQMXUTu4RS
-         RryAMhDp8allw==
-Date:   Tue, 20 Jun 2023 12:39:09 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Wu, Wentong" <wentong.wu@intel.com>
-Cc:     "Ye, Xiang" <xiang.ye@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
-        "Zhang, Lixu" <lixu.zhang@intel.com>
-Subject: Re: [PATCH v8 6/6] spi: Add support for Intel LJCA USB SPI driver
-Message-ID: <7b9192d1-6b63-4ab7-a41d-1a122fa69480@sirena.org.uk>
-References: <20230511175844.185070-1-xiang.ye@intel.com>
- <20230511175844.185070-7-xiang.ye@intel.com>
- <ZF2+C0CqaBff2hl+@finisterre.sirena.org.uk>
- <DM6PR11MB4316E9530309ACCEF55AD0D18D5CA@DM6PR11MB4316.namprd11.prod.outlook.com>
+        with ESMTP id S229966AbjFTMMB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Jun 2023 08:12:01 -0400
+X-Greylist: delayed 579 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 20 Jun 2023 05:11:58 PDT
+Received: from mail.dieselschrauber.org (mail.dieselschrauber.org [178.209.53.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C08B7;
+        Tue, 20 Jun 2023 05:11:58 -0700 (PDT)
+Received: from dummy.faircode.eu (unknown [194.209.24.240])
+        by mail.dieselschrauber.org (Postfix) with ESMTPSA id A6737376014D;
+        Tue, 20 Jun 2023 14:02:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=dieselschrauber.org;
+        s=dkim; t=1687262536;
+        bh=x8K3MMaszO5Uf0nnxeIGXclTqclkKBKc3JBT5oBivsE=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=ddcnxai8reizsJ+YPex5eUb1BjbhDhZ8TPgHF8NQIUuV7fQrGMv1kaW+zoaJiKADk
+         cBmGYi23WDb5o71fu1EqUnGzoT7d1Z2AtVJsujvQWOw3cV6u51bDYd8E2fm1UAkicY
+         AAsM8xYW/of92LyFClMkZMdWILWWTLAvd8ixcCfk=
+Date:   Tue, 20 Jun 2023 14:02:15 +0200 (GMT+02:00)
+From:   Rainer Kaufmann <shop@dieselschrauber.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kaufmann Automotive GmbH <info@kaufmann-automotive.ch>
+Message-ID: <4a7e6dde-f45f-4bb5-9f81-d0ec17ce32e9@dieselschrauber.org>
+In-Reply-To: <ZJFDvJh6TRJhyKFe@hovoldconsulting.com>
+References: <20230613093351.3383-1-oneukum@suse.com> <ZJFDvJh6TRJhyKFe@hovoldconsulting.com>
+Subject: Re: [PATCH] USB: serial-simple: adding Kaufmann RKS+CAN VCP
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6vhFdTOxhYEajwKy"
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB4316E9530309ACCEF55AD0D18D5CA@DM6PR11MB4316.namprd11.prod.outlook.com>
-X-Cookie: Chocolate chip.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Correlation-ID: <4a7e6dde-f45f-4bb5-9f81-d0ec17ce32e9@dieselschrauber.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,40 +49,75 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Good morning,
 
---6vhFdTOxhYEajwKy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+it is a CAN bus interface / license dongle with a custom firmware.
 
-On Tue, Jun 20, 2023 at 06:47:11AM +0000, Wu, Wentong wrote:
+Details about the interface hardware:
+https[https://shop.dieselschrauber.org/en/can-usb-interface-kit-p-313.php]:=
+//[https://shop.dieselschrauber.org/en/can-usb-interface-kit-p-313.php]shop=
+.dieselschrauber.org[https://shop.dieselschrauber.org/en/can-usb-interface-=
+kit-p-313.php]/en/[https://shop.dieselschrauber.org/en/can-usb-interface-ki=
+t-p-313.php]can-usb-interface-kit-p-313.php[https://shop.dieselschrauber.or=
+g/en/can-usb-interface-kit-p-313.php]
 
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * Intel La Jolla Cove Adapter USB-SPI driver
+Best regards, Rainer
 
-> > Please make the entire comment a C++ one so things look more intentiona=
-l.
+20.06.2023 08:14:25 Johan Hovold <johan@kernel.org>:
 
-> I see lots of drivers are commenting like current one.=20
-> But sorry, you mean the entire comment start with /* and end with */ ? Th=
-anks
-
-Other way around, use // for all the lines in this comment block please.
-
---6vhFdTOxhYEajwKy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSRj9wACgkQJNaLcl1U
-h9C0kwf+P5WR5e8HGsaUTr3bxMcjGPrWXvavqs+q5qEvE0tyVRo+SAqub9c74fyW
-vScdJYyrO4Ah8v0IsOIkyW+UDIWK/wgZ125S3aVKkgtzVXpI0gTCqC9xGXR8GVEZ
-4+5o293GihaPW4kGy/8zqzqszu9A3y2lvjEaARFgMwN+pC5mFXPIJ+wDTtftcyNG
-Mi12BYb5wgTlrtPLO0/qY+agcsbOI3puA48GhNxOSme8EWpAlOxlJxdNdivdVIQW
-mDRZ6h15xm06jTDEtOFFqk4bqZU8Ethw0SQLPzo/FcZw9CBXaK7qXDURXMvCo80G
-G27kz7xr6LmWBJhAxuFL3sE6NrHEbg==
-=4nOU
------END PGP SIGNATURE-----
-
---6vhFdTOxhYEajwKy--
+> On Tue, Jun 13, 2023 at 11:33:51AM +0200, Oliver Neukum wrote:
+>> Adding the device and product ID
+>=20
+> Can you say something more about the product here (e.g. to indicate that
+> this is indeed a custom firmware that requires a simple driver)?
+>=20
+>> Reported-by: Kaufmann Automotive GmbH <info@kaufmann-automotive.ch>
+>> Tested-by: Kaufmann Automotive GmbH <info@kaufmann-automotive.ch>
+>> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+>> ---
+>> drivers/usb/serial/usb-serial-simple.c | 7 +++++++
+>> 1 file changed, 7 insertions(+)
+>>=20
+>> diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial=
+/usb-serial-simple.c
+>> index 4c6747889a19..3612031030bb 100644
+>> --- a/drivers/usb/serial/usb-serial-simple.c
+>> +++ b/drivers/usb/serial/usb-serial-simple.c
+>> @@ -117,6 +117,11 @@ DEVICE(suunto, SUUNTO_IDS);
+>> =C2=A0=C2=A0=C2=A0 { USB_DEVICE(0x908, 0x0004) }
+>> DEVICE(siemens_mpi, SIEMENS_IDS);
+>>=20
+>> +/* KAUFMANN RKS+CAN VCP */
+>> +#define KAUFMANN_IDS()=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+\
+>> +=C2=A0=C2=A0 { USB_DEVICE(0x16d0, 0x0870) }
+>> +DEVICE(kaufmann, KAUFMANN_IDS);
+>=20
+> Can you add this one after GOOGLE_IDS() to approximate some ordering?
+>=20
+> I'll try to move the rest in place later.
+>=20
+>> +
+>> /* All of the above structures mushed into two lists */
+>> static struct usb_serial_driver * const serial_drivers[] =3D {
+>> =C2=A0=C2=A0=C2=A0 &carelink_device,
+>> @@ -133,6 +138,7 @@ static struct usb_serial_driver * const serial_drive=
+rs[] =3D {
+>> =C2=A0=C2=A0=C2=A0 &hp4x_device,
+>> =C2=A0=C2=A0=C2=A0 &suunto_device,
+>> =C2=A0=C2=A0=C2=A0 &siemens_mpi_device,
+>> +=C2=A0=C2=A0 &kaufmann_device,
+>> =C2=A0=C2=A0=C2=A0 NULL
+>> };
+>>=20
+>> @@ -151,6 +157,7 @@ static const struct usb_device_id id_table[] =3D {
+>> =C2=A0=C2=A0=C2=A0 HP4X_IDS(),
+>> =C2=A0=C2=A0=C2=A0 SUUNTO_IDS(),
+>> =C2=A0=C2=A0=C2=A0 SIEMENS_IDS(),
+>> +=C2=A0=C2=A0 KAUFMANN_IDS(),
+>> =C2=A0=C2=A0=C2=A0 { },
+>> };
+>=20
+> Similar in these two arrays.
+>=20
+> Johan
