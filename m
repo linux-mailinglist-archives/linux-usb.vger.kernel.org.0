@@ -2,91 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CDEC736E79
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Jun 2023 16:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51BEA736E90
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jun 2023 16:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbjFTOQY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Jun 2023 10:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
+        id S233251AbjFTOXH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Jun 2023 10:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbjFTOQX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Jun 2023 10:16:23 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D61E68;
-        Tue, 20 Jun 2023 07:16:22 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qBc9c-0006w4-Hj; Tue, 20 Jun 2023 16:16:20 +0200
-Message-ID: <19199830-33b6-2a4c-e08b-d1a76ce4c59b@leemhuis.info>
-Date:   Tue, 20 Jun 2023 16:16:20 +0200
+        with ESMTP id S233280AbjFTOWw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Jun 2023 10:22:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502A51985
+        for <linux-usb@vger.kernel.org>; Tue, 20 Jun 2023 07:22:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C528461283
+        for <linux-usb@vger.kernel.org>; Tue, 20 Jun 2023 14:22:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE337C433C0;
+        Tue, 20 Jun 2023 14:22:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687270970;
+        bh=mgFHllUtoUwkvQIg0KOGIl3PHGgls+Dl5rOEhBTEcog=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1AWqPnB9RQDlZBRt7Ab1YjNgmQjop5lO0IIR9747eNVpdlnsl7WSOUBXoHbB/jxRz
+         MTZgRVmai2C/GE4J7w1jn3rzw4IbMEKnLr1F2MDHk//sxuRQHkqplKDZqJP8Q5GPhK
+         bxYKsin9lEbcEkqhNlmxpLqmdv4ewBintLy9ksBU=
+Date:   Tue, 20 Jun 2023 16:22:47 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>
+Subject: Re: [PATCH 6/6] USB: file.c: make usb class a static const structure
+Message-ID: <2023062000-consuming-crusher-8a92@gregkh>
+References: <20230620094412.508580-7-gregkh@linuxfoundation.org>
+ <20230620094412.508580-12-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: issues with cdc ncm host class driver
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Oliver Neukum <oneukum@suse.com>,
-        "Purohit, Kaushal" <kaushal.purohit@ti.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
-          Linux regressions mailing list 
-          <regressions@lists.linux.dev>
-References: <da37bb0d43de465185c10aad9924f265@ti.com>
- <28ec4e65-647f-2567-fb7d-f656940d4e43@suse.com>
- <da479ebf-b3fb-0a58-16be-07fe55d36621@leemhuis.info>
-In-Reply-To: <da479ebf-b3fb-0a58-16be-07fe55d36621@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687270582;bd39fb3c;
-X-HE-SMSGID: 1qBc9c-0006w4-Hj
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620094412.508580-12-gregkh@linuxfoundation.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 04.04.23 12:33, Linux regression tracking (Thorsten Leemhuis) wrote:
-> Side note: there is now a bug tracking ticket for this issue, too:
-> https://bugzilla.kernel.org/show_bug.cgi?id=217290
+On Tue, Jun 20, 2023 at 11:44:18AM +0200, Greg Kroah-Hartman wrote:
+> From: Ivan Orlov <ivan.orlov0322@gmail.com>
 > 
-> On 03.04.23 12:09, Oliver Neukum wrote:
->> On 03.04.23 08:14, Purohit, Kaushal wrote:
+> Now that the driver core allows for struct class to be in read-only
+> memory, remove the class field of the usb_class structure and
+> create the usbmisc_class static class structure declared at build time
+> which places it into read-only memory, instead of having it to be
+> dynamically allocated at load time.
 > 
->>> Referring to patch with commit ID
->>> (*e10dcb1b6ba714243ad5a35a11b91cc14103a9a9*).
->>>
->>> This is a spec violation for CDC NCM class driver. Driver clearly says
->>> the significance of network capabilities. (snapshot below)
->>>
->>> However, with the mentioned patch these values are disrespected and
->>> commands specific to these capabilities are sent from the host
->>> regardless of device' capabilities to handle them.
->>
->> Right. So for your device, the correct behavior would be to do
->> nothing, wouldn't it? The packets would be delivered and the host
->> needs to filter and discard unrequested packets.
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  drivers/usb/core/file.c | 19 ++++++++++---------
+>  1 file changed, 10 insertions(+), 9 deletions(-)
 > 
-> #regzbot ^introduced e10dcb1b6ba714243ad
-> https://bugzilla.kernel.org/show_bug.cgi?id=217290
-> #regzbot from: Purohit, Kaushal
-> #regzbot title net: cdc_ncm: spec violation for CDC NCM
-> #regzbot ignore-activity
+> diff --git a/drivers/usb/core/file.c b/drivers/usb/core/file.c
+> index c4ed3310e069..0e16a9c048dd 100644
+> --- a/drivers/usb/core/file.c
+> +++ b/drivers/usb/core/file.c
+> @@ -59,7 +59,6 @@ static const struct file_operations usb_fops = {
+>  
+>  static struct usb_class {
+>  	struct kref kref;
+> -	struct class *class;
+>  } *usb_class;
 
-Not sure what happen to this, my last inquiries were not answered, so it
-seems nobody cares anymore
+Is this structure needed anymore at all now that the thing the kref was
+"protecting" is gone?  I think it can be dropped entirely, right?
 
-#regzbot inconclusive: radio silence, ignoring
-#regzbot ignore-activity
+thanks,
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
+greg k-h
