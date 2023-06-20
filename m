@@ -2,116 +2,193 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 817537366E0
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Jun 2023 11:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F957367C9
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jun 2023 11:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbjFTJCN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Jun 2023 05:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58724 "EHLO
+        id S232343AbjFTJd2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Jun 2023 05:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbjFTJCG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Jun 2023 05:02:06 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D0110DB;
-        Tue, 20 Jun 2023 02:01:31 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 35K90aPyA001800, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 35K90aPyA001800
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Tue, 20 Jun 2023 17:00:36 +0800
-Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 20 Jun 2023 17:00:56 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 20 Jun 2023 17:00:56 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Tue, 20 Jun 2023 17:00:56 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ray Chi <raychi@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v4 5/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 3.0 PHY
-Thread-Topic: [PATCH v4 5/5] dt-bindings: phy: realtek: Add the doc about the
- Realtek SoC USB 3.0 PHY
-Thread-Index: AQHZnqK7bNeHfuoIkUaXuk63ITG3c6+OKjAAgAUwpXA=
-Date:   Tue, 20 Jun 2023 09:00:56 +0000
-Message-ID: <79731b2216f24df9b2db0bc8795b26bb@realtek.com>
-References: <20230614092850.21460-1-stanley_chang@realtek.com>
- <20230614092850.21460-5-stanley_chang@realtek.com>
- <90f802db-79cc-010a-9a83-c7bdbf0d0c00@linaro.org>
-In-Reply-To: <90f802db-79cc-010a-9a83-c7bdbf0d0c00@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S231246AbjFTJd0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Jun 2023 05:33:26 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF42A3;
+        Tue, 20 Jun 2023 02:33:24 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35K7qkfO030100;
+        Tue, 20 Jun 2023 09:32:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=ky61XlTFvnA7lVh5OyfvaMQHiiNipeR+9XCFDt37Dwk=;
+ b=WJJudu5ihbSzoI/GwMqVJJs6kk+CC9UMvWpbMMTS6FL7ccnm0bl1q635GOd6dEug4d1n
+ uqP6+503Oawhj8muKEIWZmukfDBV2x+8CQlGrlHSkImP+4mhuj0v32GQTAXXT50CuxD2
+ f3/T030jYt4PtLfFo+JQXYy800Nx1YB+H2GdFZHcuIiPqpzSjpD+h7eWrrP4OfPYEHt5
+ Ftw6lW4YbXGFHsGvJrYEsBcWXnKYqNxcrosY/rE9NgThETpcA02MDqQkDRnCMzPSqZq3
+ yzrh6L+XrN+Vo46Q7VRFvurCYIVANXa4SYdAJ261EuKqqeQkoBSBSb5XzpR+oDbj0rC3 cA== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rb1dtgykj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jun 2023 09:32:53 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35K9WqXi010487
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jun 2023 09:32:52 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 20 Jun 2023 02:32:43 -0700
+Date:   Tue, 20 Jun 2023 15:02:33 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <p.zabel@pengutronix.de>, <arnd@arndb.de>,
+        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <rafal@milecki.pl>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH 2/9] dt-bindings: phy: qcom,m31: Document qcom,m31 USB phy
+Message-ID: <20230620093225.GA9966@varda-linux.qualcomm.com>
+References: <cover.1686126439.git.quic_varada@quicinc.com>
+ <14f60578e2935c0844537eab162af3afa52ffe39.1686126439.git.quic_varada@quicinc.com>
+ <98960024-7dbc-91a3-75de-90b529637916@linaro.org>
+ <20230615052746.GB22186@varda-linux.qualcomm.com>
+ <aca54f67-cc09-ff4f-93ca-6973d153db2c@linaro.org>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <aca54f67-cc09-ff4f-93ca-6973d153db2c@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: aP3VCaexHP-8vPhMErFKpkN7DtlWrrC8
+X-Proofpoint-GUID: aP3VCaexHP-8vPhMErFKpkN7DtlWrrC8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-20_06,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ bulkscore=0 impostorscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
+ suspectscore=0 mlxscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306200084
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgS3J6eXN6dG9mLA0KDQo+ID4gK3Byb3BlcnRpZXM6DQo+ID4gK8KgIGNvbXBhdGlibGU6DQo+
-ID4gK8KgwqDCoCBpdGVtczoNCj4gPiArwqDCoMKgwqDCoCAtIGVudW06DQo+ID4gK8KgwqDCoMKg
-wqDCoMKgwqDCoCAtIHJlYWx0ZWsscnRkMTI5NS11c2IzcGh5DQo+ID4gK8KgwqDCoMKgwqDCoMKg
-wqDCoCAtIHJlYWx0ZWsscnRkMTMxOS11c2IzcGh5DQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoCAt
-IHJlYWx0ZWsscnRkMTMxOWQtdXNiM3BoeQ0KPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqAgLSByZWFs
-dGVrLHJ0ZDE2MTktdXNiM3BoeQ0KPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqAgLSByZWFsdGVrLHJ0
-ZDE2MTliLXVzYjNwaHkNCj4gPiArwqDCoMKgwqDCoCAtIGNvbnN0OiByZWFsdGVrLHVzYjNwaHkN
-Cj4gDQo+IERyb3AgbGFzdCBjb21wYXRpYmxlLCBpdCBpcyBub3QgdXNlZCBub3cuIERvZXMgbm90
-IG1ha2Ugc2Vuc2UuDQoNCk9rYXkuIEkgd2lsbCByZW1vdmUgaXQuDQoNCj4gPiArDQo+ID4gK8Kg
-IHJlZzoNCj4gPiArwqDCoMKgIGRlc2NyaXB0aW9uOiBQSFkgZGF0YSByZWdpc3RlcnMNCj4gDQo+
-IERyb3AgZGVzY3JpcHRpb24sIGl0J3Mgb2J2aW91cy4NCg0KT2theS4NCg0KPiA+ICvCoMKgwqAg
-bWF4SXRlbXM6IDENCj4gPiArDQo+ID4gK8KgICIjcGh5LWNlbGxzIjoNCj4gPiArwqDCoMKgIGNv
-bnN0OiAwDQo+ID4gKw0KPiA+ICvCoCBudm1lbS1jZWxsczoNCj4gPiArwqDCoMKgIG1heEl0ZW1z
-OiAxDQo+ID4gK8KgwqDCoCBkZXNjcmlwdGlvbjogQSBwaGFuZGxlIHRvIHRoZSB0eCBsZnBzIHN3
-aW5nIHRyaW0gZGF0YSBwcm92aWRlZCBieQ0KPiA+ICvCoMKgwqDCoMKgIGEgbnZtZW0gZGV2aWNl
-LCBpZiB1bnNwZWNpZmllZCwgZGVmYXVsdCB2YWx1ZXMgc2hhbGwgYmUgdXNlZC4NCj4gPiArDQo+
-ID4gK8KgIG52bWVtLWNlbGwtbmFtZXM6DQo+ID4gK8KgwqDCoCBpdGVtczoNCj4gPiArwqDCoMKg
-wqDCoCAtIGNvbnN0OiB1c2JfdTNfdHhfbGZwc19zd2luZ190cmltDQo+ID4gKw0KPiA+ICvCoCBy
-ZWFsdGVrLGFtcGxpdHVkZS1jb250cm9sLWNvYXJzZS10dW5pbmc6DQo+ID4gK8KgwqDCoCBkZXNj
-cmlwdGlvbjoNCj4gPiArwqDCoMKgwqDCoCBUaGlzIGFkanVzdHMgdGhlIHNpZ25hbCBhbXBsaXR1
-ZGUgZm9yIG5vcm1hbCBvcGVyYXRpb24gYW5kIGJlYWNvbg0KPiBMRlBTLg0KPiA+ICvCoMKgwqDC
-oMKgIFRoaXMgdmFsdWUgaXMgYSBwYXJhbWV0ZXIgZm9yIGNvYXJzZSB0dW5pbmcuDQo+ID4gK8Kg
-wqDCoMKgwqAgRm9yIGRpZmZlcmVudCBib2FyZHMsIGlmIHRoZSBkZWZhdWx0IHZhbHVlIGlzIGlu
-YXBwcm9wcmlhdGUsIHRoaXMNCj4gPiArwqDCoMKgwqDCoCBwcm9wZXJ0eSBjYW4gYmUgYXNzaWdu
-ZWQgdG8gYWRqdXN0Lg0KPiANCj4gZGVmYXVsdDoNCg0KSSB3aWxsIGFkZCBpdC4NCg0KPiA+ICvC
-oMKgwqAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDMyDQo+ID4g
-K8KgwqDCoCBtaW5pbXVtOiAwDQo+ID4gK8KgwqDCoCBtYXhpbXVtOiAyNTUNCj4gPiArDQo+ID4g
-K8KgIHJlYWx0ZWssYW1wbGl0dWRlLWNvbnRyb2wtZmluZS10dW5pbmc6DQo+ID4gK8KgwqDCoCBk
-ZXNjcmlwdGlvbjoNCj4gPiArwqDCoMKgwqDCoCBUaGlzIGFkanVzdHMgdGhlIHNpZ25hbCBhbXBs
-aXR1ZGUgZm9yIG5vcm1hbCBvcGVyYXRpb24gYW5kIGJlYWNvbg0KPiBMRlBTLg0KPiA+ICvCoMKg
-wqDCoMKgIFRoaXMgdmFsdWUgaXMgdXNlZCBmb3IgZmluZS10dW5pbmcgcGFyYW1ldGVycy4NCj4g
-PiArwqDCoMKgICRyZWY6IC9zY2hlbWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL3VpbnQzMg0K
-PiANCj4gZGVmYXVsdDoNCg0KSSB3aWxsIGFkZCBpdC4NCg0KPiA+ICvCoMKgwqAgbWluaW11bTog
-MA0KPiA+ICvCoMKgwqAgbWF4aW11bTogNjU1MzUNCj4gPiArDQo+IA0KDQpUaGFua3MsDQpTdGFu
-bGV5DQo=
+On Sat, Jun 17, 2023 at 10:48:41AM +0200, Krzysztof Kozlowski wrote:
+> On 15/06/2023 07:27, Varadarajan Narayanan wrote:
+> >>> +          - enum:
+> >>> +              - qcom,m31-usb-hsphy
+> >>
+> >> I am confused what's this. If m31 is coming from some IP block provider,
+> >> then you are using wrong vendor prefix.
+> >> https://www.m31tech.com/download_file/M31_USB.pdf
+> >>
+> >>
+> >>> +              - qcom,ipq5332-m31-usb-hsphy
+> >>
+> >> This confuses me even more. IPQ m31?
+> >
+> > Will change this to m31,usb-hsphy and m31,ipq5332-usb-hsphy respectively.
+> > Will that be acceptable?
+>
+> m31,ipq5332 seems wrong, as m31 did not create ipq5332. Does the m31
+> device have some name/version/model? If it is not really known, then I
+> would just propose to go with qcom,ipq5332-usb-hsphy.
+>
+> Skip generic compatible ("usb-hsphy") entirely.
+
+Ok.
+
+> And then we have... existing bindings qcom,usb-hs-phy.yaml. Don't create
+> something similar with difference in the hyphen. Just use device
+> specific compatible thus device specific filename.
+
+qcom,usb-hs-phy.yaml seems to be for ULPI mode phy and the
+driver we are introducing is for UTMI. We would have to
+modify phy-qcom-usb-hs.c to accomodate M31. Will that be
+acceptable to phy-qcom-usb-hs.c owners/maintainers?
+
+> >>> +
+> >>> +  reg:
+> >>> +    description:
+> >>> +      Offset and length of the M31 PHY register set
+> >>
+> >> Drop description, obvious.
+> >
+> > Ok.
+> >
+> >>> +    maxItems: 2
+> >>> +
+> >>> +  reg-names:
+> >>> +    items:
+> >>> +      - const: m31usb_phy_base
+> >>> +      - const: qscratch_base
+> >>
+> >> Drop "_base" from both.
+> >
+> > Ok. Will drop qscratch_base. This is in the controller space.
+> > Should not come here.
+>
+> Then drop reg-names entirely.
+
+Ok.
+
+> >>> +
+> >>> +  phy_type:
+> >>> +    oneOf:
+> >>> +      - items:
+> >>> +          - enum:
+> >>> +              - utmi
+> >>> +              - ulpi
+> >>
+> >> This does not belong to phy, but to USB node.
+> >
+> > This is used by the driver to set a bit during phy init. Hence
+> > have it as a replication of the USB node's entry. If this is not
+> > permissible, is there some way to get this from the USB node,
+> > or any other alternative mechanism?
+>
+> Shouldn't USB controller choose what type of PHY type it wants?
+
+Will remove this. IPQ5332 uses it in UTMI mode only.
+
+> >>> +
+> >>> +additionalProperties: false
+> >>> +
+> >>> +examples:
+> >>> +  - |
+> >>> +    #include <dt-bindings/clock/qcom,ipq5332-gcc.h>
+> >>> +    hs_m31phy_0: hs_m31phy@5b00 {
+> >>
+> >> Node names should be generic. See also explanation and list of examples
+> >> in DT specification:
+> >> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+> >>
+> >> Also, no underscores in node names.
+> >
+> > Will change this as usbphy0:hs_m31phy@7b000
+>
+> This does not solve my comments. I did not write "label" but "node name".
+
+Sorry. will fix it.
+
+Thanks
+Varada
