@@ -2,221 +2,204 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00577362A6
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Jun 2023 06:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFBC57362D8
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jun 2023 06:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbjFTEY6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Jun 2023 00:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43626 "EHLO
+        id S230237AbjFTEyL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Jun 2023 00:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjFTEY4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Jun 2023 00:24:56 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B91710D2
-        for <linux-usb@vger.kernel.org>; Mon, 19 Jun 2023 21:24:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687235095; x=1718771095;
-  h=date:from:to:cc:subject:message-id;
-  bh=g6Gb/tb1ZnkdETVGATOB0cx1i+3eoqbIPUEGcytxbdw=;
-  b=eprn/AhVF/hmp2ZCAkon5Ut+ZpXB8C7d+a3ayK/YGZmoB9h8A6u/pH5F
-   0a56PMLEt6KQG8wm0mNdaIxDmioJXVeTt+w8+4rhg9N6TB5dTeK3F0967
-   71TXYFa7PviBg25/27anu4jSeb/KHgcqtc5dljOtpyLLinDmQlLG717Q5
-   xsKHfvxuHZBUUca5C04hint8RR4jkxfsoXEqbCqXfvfO5dqU5wKavyC5h
-   YX1Yj1mZijsNnzeUvnCPkBcFVJaQFDSOJNnaeYqqeWAZsxOVj1pLYgUjM
-   pgsN/nXu8sq/84O2OJgg0GBnVHywL9IZNZDYtRbOqwNMp/MSAhktmevIm
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="359764108"
-X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="359764108"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 21:24:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="838065650"
-X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="838065650"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 19 Jun 2023 21:24:52 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qBSvE-0005Tj-0g;
-        Tue, 20 Jun 2023 04:24:52 +0000
-Date:   Tue, 20 Jun 2023 12:24:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS WITH WARNING
- 5aa735a4742c5ffff2fe34f764cbcbd917e100ae
-Message-ID: <202306201213.iB3Wan5u-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230131AbjFTEyK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Jun 2023 00:54:10 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE0DF1;
+        Mon, 19 Jun 2023 21:54:07 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35K4nSdv000605;
+        Tue, 20 Jun 2023 04:54:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=tMbOqLbkGaSzt59019hzF7GgEpt3cvTf1DsQRZdhl58=;
+ b=WTFWHT+SX89wLj93dj1a7Tq0DjFWuLG+1BsOY7n6Xvn69wvK0r+7jhaQxC5YQbmO/J4I
+ 7wkgQLqi/WDzbnscwdaQEepKY3qjW7CEUAFAfnXmAm/qh+0ydw2V4Um6h0+3Jrp5D0bl
+ d708MBtZHJlBYHOHZqVNG3hdOu9aMRubZmTSyq2tuUQeeCI9pfaXKVKPZ30jYaWMPB/A
+ 5ni2QRz7KcddlNoXtMj6eBfCBeH76MqnPkbgkUpIXcsJeOplxBpbAqLKqNmCkLsquXJ0
+ jlng8i68l4SVUYUFUtYCpqVwcQo2ejGcZxYO4jWaRo+FPdVF8x9n7nSkQOtAegyzJ/go hg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rarwes2ar-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jun 2023 04:54:02 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35K4s1NL009854
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jun 2023 04:54:01 GMT
+Received: from [10.217.219.188] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 19 Jun
+ 2023 21:53:58 -0700
+Message-ID: <7efa451e-2601-f448-af33-b844091db264@quicinc.com>
+Date:   Tue, 20 Jun 2023 10:23:55 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.1
+Subject: Re: [PATCH v3] usb: dwc3: gadget: Propagate core init errors to UDC
+ during pullup
+To:     Johan Hovold <johan@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>
+References: <20230618120949.14868-1-quic_kriskura@quicinc.com>
+ <ZI_-c5g20DSJOSu2@hovoldconsulting.com>
+ <fca531e0-88ec-ba19-2c11-e8965ac653b2@quicinc.com>
+ <ZJBvBE-xy2X_wWO0@hovoldconsulting.com>
+Content-Language: en-US
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <ZJBvBE-xy2X_wWO0@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 5xlJuWBHArZYLgWMTiUDCdVmtxD5AaUm
+X-Proofpoint-ORIG-GUID: 5xlJuWBHArZYLgWMTiUDCdVmtxD5AaUm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-20_02,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=999 spamscore=0 mlxscore=0 malwarescore=0 bulkscore=0
+ phishscore=0 impostorscore=0 adultscore=0 suspectscore=0 clxscore=1015
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306200043
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 5aa735a4742c5ffff2fe34f764cbcbd917e100ae  dt-bindings: usb: Add StarFive JH7110 USB controller
 
-Warning reports:
 
-https://lore.kernel.org/oe-kbuild-all/202305300608.8CuLyqAL-lkp@intel.com
+On 6/19/2023 8:36 PM, Johan Hovold wrote:
+> On Mon, Jun 19, 2023 at 06:20:43PM +0530, Krishna Kurapati PSSNV wrote:
+>> On 6/19/2023 12:36 PM, Johan Hovold wrote:
+>>> On Sun, Jun 18, 2023 at 05:39:49PM +0530, Krishna Kurapati wrote:
+> 
+>>>> @@ -2747,7 +2747,9 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>>>    	ret = pm_runtime_get_sync(dwc->dev);
+>>>>    	if (!ret || ret < 0) {
+>>>>    		pm_runtime_put(dwc->dev);
+>>>> -		return 0;
+>>>> +		if (ret < 0)
+>>>> +			pm_runtime_set_suspended(dwc->dev);
+>>>
+>>> This bit is broken and is also not mentioned or explained in the commit
+>>> message. What are you trying to achieve here?
+>>>
+>>> You cannot set the state like this after runtime PM is enabled and the
+>>> above call will always fail.
+> 
+>> The reason why I an returning ret is because, when the first get_sync
+>> fails because of core_init failure and we return 0 instead of ret, the
+>> UDC thinks that controller has started successfully but we never set the
+>> run stop bit.
+> 
+> That bit is clear.
+> 
+>> So when we plug out the cable,  the disconnect event won't
+>> be generated and we never send on systems like android the user space
+>> will never clear the UDC upon disconnect. Its a sort of mismatch between
+>> controller and udc.
+> 
+> Ok, but the controller is an error state after the resume failure. And
+> here you rely on user space to retry gadget activation in order to
+> eventually detect the disconnect event?
+>   
+>> Also once the first get_sync fails, the dwc->dev->power.runtime_error
+>> flag is set and successive calls to get_sync always return -EINVAL. In
+>> this situation even if UDC/configfs retry pullup, resume_common will
+>> never be called and we never actually start the controller or resume
+>> dwc->dev.
+>>
+>> By calling set_suspended, I am trying to clear the runtime_error flag so
+>> that the next retry to pullup will call resume_common and retry
+>> core_init and set run_stop.
+> 
+> Ok, thanks, that's the bit I was missing in the commit message.
+> 
+> First, I perhaps mistakingly thought pm_runtime_set_suspended() may only
+> be called with PM runtime disabled, but it appears it may indeed be
+> valid to call also after an error but with the caveat that the device
+> must then actually be in the suspended state.
+> 
+> The documentation and implementation is inconsistent here as the kernel
+> doc for pm_runtime_set_suspended() clearly states:
+> 
+> 	It is not valid to call this function for devices with runtime
+> 	PM enabled.
+> 
+> and it also looks like we'd end up with an active-child counter
+> imbalance if anyone actually tries to do so.
+> 
+> But either way, it also seems like the controller is not guaranteed to
+> be suspended here as pm_runtime_get_sync() may also fail after a
+> previous errors that have left the controller in the active state?
+>  > Also, what kind of errors would cause core_init and resume to fail here?
+> 
+Hi Johan,
 
-Warning: (recently discovered and may have been fixed)
+   As per the comment just above the get_sync during pullup, the 
+resume_common path is used to resume the controller and start peripheral 
+mode incase the dwc3 was in suspended state. So if we are entering 
+gadget_resume we are in suspended state the first time it is called.
 
-drivers/usb/cdns3/cdns3-starfive.c:23: warning: expecting prototype for cdns3(). Prototype was for USB_STRAP_HOST() instead
+Regarding the errors that might leave controller in active state, I have 
+faced issue in core init, and in that function there is a cleanup 
+happening in case something fails. So controller was actually not in 
+active state after cleanup was done. In resume common, if 
+core_init_for_resume is failing, we cleanup everything initialized up 
+until that point.
 
-Warning ids grouped by kconfigs:
+The scenario you mentioned would be applicable in case gadget_resume 
+fails. We are not having a return value check and I am not sure what 
+would be the side effect of not having that check there. Either ways, 
+since it was failing for core init, I went ahead and made this patch.
 
-gcc_recent_errors
-|-- riscv-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-`-- riscv-allyesconfig
-    `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+As per the reason for failure in core init, the following is what was 
+happening at customer's end:
 
-elapsed time: 728m
+1. Cable plug-in
+2. get_sync calls resume common which inturn calls core_init
+3. core soft reset fails in core init, we cleanup and return -110
+4. After applying this patch, the -110 was propagated to UDC properly
+5. We got a second call to pullup via connect_control and this time 
+reset was successful.
 
-configs tested: 132
-configs skipped: 12
+The behavior was similar to [1]. There as well, on all Gen-2 targets, 
+after the retry happens I see soft reset is passing but failing for 
+first attempt.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r015-20230619   gcc  
-alpha                randconfig-r031-20230619   gcc  
-alpha                randconfig-r034-20230619   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r043-20230619   gcc  
-arc                  randconfig-r043-20230620   gcc  
-arc                    vdk_hs38_smp_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                          gemini_defconfig   gcc  
-arm                           imxrt_defconfig   gcc  
-arm                  randconfig-r003-20230619   clang
-arm                  randconfig-r014-20230619   gcc  
-arm                  randconfig-r036-20230619   clang
-arm                  randconfig-r046-20230619   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r011-20230619   clang
-csky                                defconfig   gcc  
-hexagon              randconfig-r006-20230619   clang
-hexagon              randconfig-r032-20230619   clang
-hexagon              randconfig-r041-20230619   clang
-hexagon              randconfig-r045-20230619   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230619   gcc  
-i386         buildonly-randconfig-r005-20230619   gcc  
-i386         buildonly-randconfig-r006-20230619   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230619   gcc  
-i386                 randconfig-i002-20230619   gcc  
-i386                 randconfig-i003-20230619   gcc  
-i386                 randconfig-i004-20230619   gcc  
-i386                 randconfig-i005-20230619   gcc  
-i386                 randconfig-i006-20230619   gcc  
-i386                 randconfig-i011-20230619   clang
-i386                 randconfig-i012-20230619   clang
-i386                 randconfig-i013-20230619   clang
-i386                 randconfig-i014-20230619   clang
-i386                 randconfig-i015-20230619   clang
-i386                 randconfig-i016-20230619   clang
-i386                 randconfig-r032-20230619   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r013-20230619   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r021-20230619   gcc  
-m68k                 randconfig-r034-20230619   gcc  
-microblaze           randconfig-r006-20230619   gcc  
-microblaze           randconfig-r011-20230619   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                  cavium_octeon_defconfig   clang
-mips                            gpr_defconfig   gcc  
-mips                        maltaup_defconfig   clang
-mips                 randconfig-r013-20230619   gcc  
-mips                 randconfig-r015-20230619   gcc  
-mips                           rs90_defconfig   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r033-20230619   gcc  
-openrisc             randconfig-r033-20230619   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r012-20230619   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                      bamboo_defconfig   gcc  
-powerpc                       eiger_defconfig   gcc  
-powerpc              randconfig-r004-20230619   gcc  
-powerpc                     taishan_defconfig   gcc  
-powerpc                      tqm8xx_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230619   clang
-riscv                randconfig-r042-20230620   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230619   clang
-s390                 randconfig-r044-20230620   gcc  
-sh                               allmodconfig   gcc  
-sh                        dreamcast_defconfig   gcc  
-sh                         ecovec24_defconfig   gcc  
-sh                         microdev_defconfig   gcc  
-sh                          r7785rp_defconfig   gcc  
-sh                   randconfig-r021-20230619   gcc  
-sh                   randconfig-r025-20230619   gcc  
-sh                   randconfig-r026-20230619   gcc  
-sh                          rsk7264_defconfig   gcc  
-sh                   secureedge5410_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r035-20230619   gcc  
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r005-20230619   clang
-um                   randconfig-r016-20230619   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230619   gcc  
-x86_64       buildonly-randconfig-r002-20230619   gcc  
-x86_64       buildonly-randconfig-r003-20230619   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230619   gcc  
-x86_64               randconfig-a002-20230619   gcc  
-x86_64               randconfig-a003-20230619   gcc  
-x86_64               randconfig-a004-20230619   gcc  
-x86_64               randconfig-a005-20230619   gcc  
-x86_64               randconfig-a006-20230619   gcc  
-x86_64               randconfig-a011-20230619   clang
-x86_64               randconfig-a012-20230619   clang
-x86_64               randconfig-a013-20230619   clang
-x86_64               randconfig-a014-20230619   clang
-x86_64               randconfig-a015-20230619   clang
-x86_64               randconfig-a016-20230619   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r012-20230619   gcc  
-xtensa               randconfig-r024-20230619   gcc  
-xtensa               randconfig-r025-20230619   gcc  
+[1]: 
+https://lore.kernel.org/all/20230510075252.31023-2-quic_kriskura@quicinc.com/
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Krishna,
+
+> If this is something that you see during normal operation then this
+> seems to suggest that something is wrong with the runtime pm
+> implementation.
+> 
+> Note that virtually all drivers treat resume failures as fatal errors
+> and do not implement any recovery from that.
+> 
+> In fact, the only other example of this kind of usage that I could find
+> is also for a Qualcomm driver...
+> 
+> Johan
