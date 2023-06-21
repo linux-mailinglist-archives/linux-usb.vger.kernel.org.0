@@ -2,133 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4270738421
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 14:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BABA738463
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 15:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbjFUMyK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jun 2023 08:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
+        id S232210AbjFUNGk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jun 2023 09:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjFUMyJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 08:54:09 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FD310C2
-        for <linux-usb@vger.kernel.org>; Wed, 21 Jun 2023 05:54:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687352048; x=1718888048;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i8OYmO3Z+4/dzpZBjTi8xdPXLMy1NfzQjMoQFOP53Uc=;
-  b=gslPaFx+6lqCwqzv6kKiTwCnTzXoNuSD6EP6WRd+4WupcW4rkUCM7TFs
-   3zZ8nuHmm4IEoNL8kxhQHa+jVX6n3kZmvCKfiG72DdYR83tRvSm2BMsLf
-   UnZguq5YSdwuxWBh79oSRcA7EavdOPN/+P1VUvpzr9GA6NXhGN/alHBM3
-   bw8EMmgEEqbHKRazas6imKlRf3zFA8w7IYDNg6hQPIBWHHbPqYTXoL119
-   xt9IHexGI2PaI0KvxPsOHWJIsdgjqd6GZGzTteLoLcOcFWCsO9jPfACCw
-   jvzLjHZIl26Cz/xPaNAZ7bDxXRkhsnRZST2g9v+VZK0Thaq5Uu4MB0ZBo
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="426113343"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="426113343"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 05:53:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="784475328"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="784475328"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Jun 2023 05:53:56 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 486A5241; Wed, 21 Jun 2023 15:54:06 +0300 (EEST)
-Date:   Wed, 21 Jun 2023 15:54:06 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Sanjay R Mehta <sanmehta@amd.com>
-Cc:     Sanjay R Mehta <Sanju.Mehta@amd.com>, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com,
-        linux-usb@vger.kernel.org, Sanath S <Sanath.S@amd.com>
-Subject: Re: [PATCH Internal] thunderbolt: Remove enabling/disabling TMU
- based on CLx
-Message-ID: <20230621125406.GM45886@black.fi.intel.com>
-References: <1687343842-17881-1-git-send-email-Sanju.Mehta@amd.com>
- <20230621111525.GL45886@black.fi.intel.com>
- <5fe10a65-4538-cdbd-a0a6-827f9445cee4@amd.com>
+        with ESMTP id S232202AbjFUNGj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 09:06:39 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875DE199C
+        for <linux-usb@vger.kernel.org>; Wed, 21 Jun 2023 06:06:38 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-31114d47414so1316084f8f.1
+        for <linux-usb@vger.kernel.org>; Wed, 21 Jun 2023 06:06:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687352797; x=1689944797;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gTAxdFNz+1n6CVVb5l/ny1f2Lu2U7XtXZ6eLpgY62Uc=;
+        b=FLHt89m0wrH7LFz477HzO4Dd+s6zYU53Eov0gCIhvZdXVjOMXNuN/0x9gdHpqOGEhq
+         ApAI09bf4c2lfrTEzUS6/7bnveJMSHGPQn4hs3NhUeB2P07Vc6TPOnOd2JfOXpozicfs
+         40IMfa9nRmeHZmB21olElU66KkdVLAbUtjz4IIxPq4oD9XH9C78Axaecpfh3XLNy78Yo
+         ZNu2VsxOucQP5Ru/kosAuayudorHaksHBGhvCoqF8gfycYnCtdgwnU8VmdWl2lmU1c5M
+         /z0HovPcccZTH3l9NY5eos3tA7xP6grxRBlA73pGXkzB6/K+se267zvS1yewTy4CqLnu
+         Hq1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687352797; x=1689944797;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gTAxdFNz+1n6CVVb5l/ny1f2Lu2U7XtXZ6eLpgY62Uc=;
+        b=CoU/9uhZkDQsAvkM+++faTW7tXLyTd8bPI6Dwr2rok1mSpdvJY4TCrt09Q4282I2h3
+         oiMKg8GqIqb7pxqWvZpyzjyjDCmoE2oYWcM35hw2Q2RzEWEKuz2VinC8+GtjiXzOoPj7
+         dUaT5Gw7hV1SWMpGQLkWVkhLhOvgmRUzIYrDmGOdkLU+FCZ30sck5MrvdpRXaQp7qdES
+         yoSH3r6wUP+OA44do4J59ZoP1pRngEgCWNsPpwTjtuX0pzIcZm1gA5Kw67WjwLnbw8EW
+         LjBW3G/RTjbF9uQ6t+AVFzCWaHPHUNVghRhinfeWqGa0giTErX7D3KWh+wHKmrwR6PEk
+         s2sg==
+X-Gm-Message-State: AC+VfDwx5ZTIaWCWrAP7ZAFVKjWwUViJSf0D5Qf85qVPMZl8fnEdsYQn
+        hqF3U0RNrHZwaqRmABl9I/a1/MEAzS3H7DRW
+X-Google-Smtp-Source: ACHHUZ5kulW/Dh8HYP2GWtndH6SU+hjKg/LUhgXc/N1LGVypp2zTgnnSm0FV96OR2sxlifeoSRy7oA==
+X-Received: by 2002:adf:ec45:0:b0:2c7:1c72:699f with SMTP id w5-20020adfec45000000b002c71c72699fmr12867435wrn.4.1687352796632;
+        Wed, 21 Jun 2023 06:06:36 -0700 (PDT)
+Received: from [192.168.10.191] ([141.136.95.75])
+        by smtp.gmail.com with ESMTPSA id w2-20020a5d5442000000b0030789698eebsm4463876wrv.89.2023.06.21.06.06.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 06:06:36 -0700 (PDT)
+Message-ID: <abc79c1b-f12e-50fc-5351-b62462125c57@gmail.com>
+Date:   Wed, 21 Jun 2023 17:06:34 +0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <5fe10a65-4538-cdbd-a0a6-827f9445cee4@amd.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 6/6] USB: file.c: make usb class a static const structure
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+References: <20230620094412.508580-7-gregkh@linuxfoundation.org>
+ <20230620094412.508580-12-gregkh@linuxfoundation.org>
+ <2023062000-consuming-crusher-8a92@gregkh>
+ <33236558-8987-0b84-bef0-613fec01f965@gmail.com>
+ <2023062111-uptown-unpack-0fb1@gregkh>
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <2023062111-uptown-unpack-0fb1@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 05:48:21PM +0530, Sanjay R Mehta wrote:
+On 6/21/23 16:48, Greg Kroah-Hartman wrote:
+> I think we should make it simpler, allocate the class when we start up,
+> and free it when we shut down, which guarantees that all users of the
+> class are removed at that time as this is part of the usb core code.
 > 
+> No need to be fancy anymore with the dynamic creation/removal of the
+> class, it's just not worth it :)
 > 
-> On 6/21/2023 4:45 PM, Mika Westerberg wrote:
-> > On Wed, Jun 21, 2023 at 05:37:22AM -0500, Sanjay R Mehta wrote:
-> >> From: Sanath S <Sanath.S@amd.com>
-> >>
-> >> Since TMU is enabled by default on Intel SOCs for USB4 before Alpine
-> >> Ridge, explicit enabling or disabling of TMU is not required.
-> >>
-> >> However, the current implementation of enabling or disabling TMU based
-> >> on CLx state is inadequate as not all SOCs with CLx disabled have TMU
-> >> enabled by default, such as AMD Yellow Carp and Pink Sardine.
-> >>
-> >> To address this, a quirk named "QUIRK_TMU_DEFAULT_ENABLED" is
-> >> implemented to skip the enabling or disabling of TMU for SOCs where it
-> >> is already enabled by default, such as Intel SOCs prior to Alpine Ridge.
-> > 
-> > If it is enabled by default "enabling" it again should not be a problem.
-> > Can you elaborate this more?
+> thanks,
 > 
-> Although that is correct, Mika, we are facing an issue of display
-> flickering on Alpine Ridge and older device routers, from the second
-> hotplug onwards. This issue arises as the TMU is enabled and disabled
-> for each plug and unplug.
+> greg k-h
 
-Okay thanks for clarifying.
+Alright, it sounds really reasonable, let's do it in this way :)
 
-> Upon reviewing the old code, it appears that this issue was already
-> addressed with the following code block:
-> 
-> /*
->  * No need to enable TMU on devices that don't support CLx since on
->  * these devices e.g. Alpine Ridge and earlier, the TMU mode HiFi
->  * bi-directional is enabled by default.
->  */
-> if (!tb_switch_is_clx_supported(sw))
->         return 0;
-> 
-> 
-> However, it seems that this code has been removed in recent changes, as
-> the CLX-related code has been moved to a different file.
+I'll add init_usb_class call to the 'usb_init' function and the 
+corresponding releasing function call to the 'usb_exit' function in the 
+'drivers/usb/core/usb.c' file. So we would register class at startup and 
+unregister it when shutting down.
 
-Yes, I removed it because TMU code should not really be calling CLx
-functions.
-
-However, we have in tb_enable_tmu() this:
-
-	/* If it is already enabled in correct mode, don't touch it */
-	if (tb_switch_tmu_is_enabled(sw))
-		return 0;
-
-and tb_switch_tmu_init() reads the hardware state so this code should
-basically leave TMU enabling untouched on Alpine Ridge for instance. I
-wonder if you can try with the latest "next" branch and see if it works
-there or you are already doing so?
-
-> Canonical has also reported this issue and has tested this patch that
-> appears to resolve the issue..
-
-Right, however let's figure out if the problem is already solved with
-the recent code as above or if not why it does not work as expected. I
-don't really think we want to add any quirks for this because even in
-the USB4 spec the TMU of TBT3 devices is expected to be enabled already
-so this is expected functionality and the driver should be doing the
-right thing here.
