@@ -2,89 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86269738A6B
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 18:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F6E6738A72
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 18:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjFUQF5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jun 2023 12:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
+        id S232022AbjFUQHo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jun 2023 12:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbjFUQFz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 12:05:55 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266C8F1;
-        Wed, 21 Jun 2023 09:05:54 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9889952ed18so564524766b.3;
-        Wed, 21 Jun 2023 09:05:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687363552; x=1689955552;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kk1BnNVlzELodZUgAlHBrILAdmGoba/tHKb54nkrU0Y=;
-        b=ZT7wQmwkKHcyXm5r53h2mKMlJalLvOwBS8thd4bw7+CD+40xH5yiW6yJ50BnU0RDK5
-         CnURfQ1rjLJwyiy4/iwk0jU4w5w2Jwrj0UiieuKiEJDFPGtELpVkORP2AA7sDtAxKf/H
-         dGi3nKBkDPzL+Uk7MHi+o1aLiFY58+ArJF7P+N88z/OJ/UlBXve2yhvAAf0L3iwY8Nir
-         zXk8pAE8C9+iP744rpPRX4V+Lqbz8TBtKJ7xluDkUUIKCRKZygmzIRw9MZbs5zsukFo7
-         foG9ohwOwUYIQA/CtiEoI73tItd+UiIunoTAr/UPilPitY617/ThXx3ahvwIeyR8/m3H
-         /Mvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687363552; x=1689955552;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kk1BnNVlzELodZUgAlHBrILAdmGoba/tHKb54nkrU0Y=;
-        b=OGa8Q+44E/5WtZ2+Nm6XY9D/7KFFHpvKRPjTCP9QvsKWrQHn0XmAMjhj+nkt9bDbNB
-         tlztUGKD0kxWcpoIPl6/bdqSxahdUskb5p0Bn/0Vjc3Ug5+fhB4KfAJUWoIyQ53rmUTC
-         Z7XHimgSDHP3sha05agsVvUlW/Tndj9efeN6yEBhrmD/bu4tM6fWqSl2oxId5WTnKKD5
-         sOfWxiMLpDNxW1arByFU7CwbSeByjQTvTF/wZcG0F8vDbdf0eW5KrLSPlYGurbxVpvCT
-         esjuaSs5p3o+lKWIZyWAWRg5adN3t18XxfvWtCe47WpXM3wtzVTdvluihZFUQ153TNbr
-         0FNQ==
-X-Gm-Message-State: AC+VfDwGKmHGvZSKQTPJoXQulMm2b02Ywbb87ET86j93fc9cv/NVir7t
-        ENxRI5qdVukvPmevVu6JbXk=
-X-Google-Smtp-Source: ACHHUZ7+dillI7PPdXk5/JfbaJxtmwtPKD3w2HLMqM7BP+d9XjsgD8q0lpGMeA79Xbrq0UxB6iWunA==
-X-Received: by 2002:a17:907:720c:b0:987:5ade:12a5 with SMTP id dr12-20020a170907720c00b009875ade12a5mr11581864ejc.26.1687363552231;
-        Wed, 21 Jun 2023 09:05:52 -0700 (PDT)
-Received: from PCBABN.skidata.net ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id y12-20020a17090614cc00b0098951bb4dc3sm2345530ejc.184.2023.06.21.09.05.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 09:05:51 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     bbara93@gmail.com, benjamin.bara@skidata.com, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mka@chromium.org, robh+dt@kernel.org
-Subject: Re: [PATCH 1/4] usb: misc: onboard-hub: resort by VID and PID
-Date:   Wed, 21 Jun 2023 18:05:43 +0200
-Message-Id: <20230621160543.2231508-1-bbara93@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <2023062136-subgroup-aground-01e2@gregkh>
-References: <2023062136-subgroup-aground-01e2@gregkh>
+        with ESMTP id S230097AbjFUQHn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 12:07:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5818419B;
+        Wed, 21 Jun 2023 09:07:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E15FA615D8;
+        Wed, 21 Jun 2023 16:07:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B970CC433C8;
+        Wed, 21 Jun 2023 16:07:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687363661;
+        bh=kHkwj8+VKWeZek1KqV5byWtG03YfCvl+MT6bpPneKUw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=z/FRk07HtpZIEXt8FOhzXDe3nRItPMQhFw9qo9ausXJJSDFyQo3J0sRFgNhop0hj6
+         /8gMKeUnz3VtiBYM3dpLeSuiFg3Z4Ya1/ukjfOzqSpRhbiNyUm1LDkCfvyEHZaUBNd
+         1j3HFDw8S8hw3kjtC/474Zqu4lFWQL7BYUw1ST4U=
+Date:   Wed, 21 Jun 2023 18:06:42 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Benjamin Bara <bbara93@gmail.com>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] usb: misc: onboard-hub: support multiple power
+ supplies
+Message-ID: <2023062102-booth-glorify-2b09@gregkh>
+References: <20230620-hx3-v3-0-2acbc03ca949@skidata.com>
+ <20230620-hx3-v3-1-2acbc03ca949@skidata.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620-hx3-v3-1-2acbc03ca949@skidata.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Wed, Jun 21, 2023 at 05:58:30PM +0200, Benjamin Bara wrote:
+> From: Benjamin Bara <benjamin.bara@skidata.com>
+> 
+> As some of the onboard hubs require multiple power supplies, provide the
+> environment to support them.
+> 
+> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+> ---
+> v3:
+> - fix nits mentioned in v2
+> 
+> v2:
+> - replace (err != 0) with (err)
+> ---
+>  drivers/usb/misc/onboard_usb_hub.c | 39 ++++++++++++++++++++++++++++++--------
+>  drivers/usb/misc/onboard_usb_hub.h |  1 +
+>  2 files changed, 32 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+> index 12fc6eb67c3b..a56e712d3a45 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.c
+> +++ b/drivers/usb/misc/onboard_usb_hub.c
+> @@ -27,6 +27,13 @@
+>  
+>  #include "onboard_usb_hub.h"
+>  
+> +#define MAX_SUPPLIES 2
 
-On Wed, 21 Jun 2023 at 17:59, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This does nothing except make backports harder over time :(
->
-> And this also does nothing to help really, so it's not needed, sorry.
+Why 2?
 
-thanks for the feedback, I already dropped it and sent out v3[1].
+> +
+> +static const char * const supply_names[] = {
+> +	"vdd",
+> +	"vdd2",
+> +};
 
-Sorry for the inconvenience.
+Do those names have anything to do with the number above?  If so, please
+document it!
 
-br,
-Benjamin
+>  struct onboard_hub_pdata {
+>  	unsigned long reset_us;		/* reset pulse width in us */
+> +	unsigned int num_supplies;	/* number of supplies: 0 considered as 1 */
 
-[1] https://lore.kernel.org/lkml/20230620-hx3-v3-0-2acbc03ca949@skidata.com/
+I can not understand that comment at all :(
+
