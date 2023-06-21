@@ -2,146 +2,209 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88AA738B4E
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 18:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14572738B85
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 18:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232601AbjFUQcr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jun 2023 12:32:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
+        id S231615AbjFUQha (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jun 2023 12:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232503AbjFUQcl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 12:32:41 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DAD1FC9
-        for <linux-usb@vger.kernel.org>; Wed, 21 Jun 2023 09:32:12 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-77e43ec5e0eso121847939f.3
-        for <linux-usb@vger.kernel.org>; Wed, 21 Jun 2023 09:32:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687365131; x=1689957131;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=C7pFl36cnLq4fFT5cdeGMvVdtf+qKMYcr21cnnh8m+Q=;
-        b=TyG9oIfW7IowrwGtJwtyFqIpihC6xEfN+bZafKvwPBDjH56sxuBPjtmrALTXUFSTmZ
-         +Q3Cz+AxcPCSzurTncGwWC0WReIwES0yfNbiUwIt+7Ek12IATNaEYVaUykVfPBSrqkGl
-         iSyW6GRyRNadsSeNHyvDKhdWtmoyG3bxKBERo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687365131; x=1689957131;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C7pFl36cnLq4fFT5cdeGMvVdtf+qKMYcr21cnnh8m+Q=;
-        b=bbZn6ivPEI8fEkaTfMf9Zmxco6jYDI14lMntED2fuwmhKYssWNVSBHXAzmtojnC91l
-         VH8OtR9RcCMyEvlsRZ0z8ddqUf0I29IfBvP/wJE6zVjxaCXO6Kdyjl6eltYImz1KcIhV
-         bPp0S4qEG9TUTs2cIoS2xtt5NVzDwA0dKC+cL3+Pq7sYE3g3eGGOsL1pSAC7vN74Mhrf
-         T+QaAy9EDIQtIFGGgBMd9f+Rirl4gjBpapU5LDblmbEAsftU3zuKFVZM9QcbJv6bwa5h
-         r3YAZOe8tf0RrbnXgZsD/idSlIGve1Op1iQwE8YYBJrXZ6z8SOv5O+UN1YbbjYGyzetH
-         /m3g==
-X-Gm-Message-State: AC+VfDzeDeO36Pu+QvgFJsvk/UBEkhJ5mnVzi5kvF1XvvUvDK6gCiBq+
-        oemfIuMPi/SpVWo24AcS/DEziA==
-X-Google-Smtp-Source: ACHHUZ6vAbdVHdaVsHMCYz48nxDtgsSVMt46K8W12QUi/Yzyo17zqkMtUwhasa5qPqJ9ZXfIRXIkpg==
-X-Received: by 2002:a05:6602:38e:b0:77e:3267:ca96 with SMTP id f14-20020a056602038e00b0077e3267ca96mr10533653iov.4.1687365131158;
-        Wed, 21 Jun 2023 09:32:11 -0700 (PDT)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id n3-20020a02a903000000b0040f91a65669sm1465572jam.21.2023.06.21.09.32.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 09:32:10 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 16:32:10 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Benjamin Bara <bbara93@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Benjamin Bara <benjamin.bara@skidata.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] usb: misc: onboard-hub: support multiple power
- supplies
-Message-ID: <ZJMmCrrEkz4E9Dog@google.com>
-References: <20230620-hx3-v3-0-2acbc03ca949@skidata.com>
- <20230620-hx3-v3-1-2acbc03ca949@skidata.com>
- <2023062102-booth-glorify-2b09@gregkh>
- <CAJpcXm6fRsonH+ZsA7YTpJGBW348r4ZCVSc1XGyhwajqTnn-Dw@mail.gmail.com>
+        with ESMTP id S231642AbjFUQhL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 12:37:11 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF6E268B;
+        Wed, 21 Jun 2023 09:36:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 993121FF3A;
+        Wed, 21 Jun 2023 16:36:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1687365402; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/d4ziQZw6N7mHZLzmgH+OAesVEUu7JrV0F1FpHCOj/Y=;
+        b=rU19K/Y2/QE9QgbbEIeMWU9TBzjpZek0f4a0CG5e7wLxJwECVBKoPN64Q/245PInLsROTe
+        JHnVDP5mIRCFbt0N0rb39KBA125VrnyNgDvK/Apyq4ecbwZectVy6ipwXhawxQxRo5mp13
+        vR3bSpRx4wz8NUydR8/0lnmD7umJ4hg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1687365402;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/d4ziQZw6N7mHZLzmgH+OAesVEUu7JrV0F1FpHCOj/Y=;
+        b=Jzpmvodf0LrZ4TExuIW84tMI1D8erJv2Pv/8wD1TwCXFtDmtUpgJzA/OGBUdOLRRz+Gg/P
+        nrVl9xqEp7IP0IAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8BB5B133E6;
+        Wed, 21 Jun 2023 16:36:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ud0TIhonk2T5QwAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 21 Jun 2023 16:36:42 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 2BEEDA075D; Wed, 21 Jun 2023 18:36:42 +0200 (CEST)
+Date:   Wed, 21 Jun 2023 18:36:42 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/79] usb: switch to new ctime accessors
+Message-ID: <20230621163642.j6blmqfu7oqelzri@quack3>
+References: <20230621144507.55591-1-jlayton@kernel.org>
+ <20230621144735.55953-1-jlayton@kernel.org>
+ <20230621144735.55953-6-jlayton@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJpcXm6fRsonH+ZsA7YTpJGBW348r4ZCVSc1XGyhwajqTnn-Dw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230621144735.55953-6-jlayton@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 06:22:41PM +0200, Benjamin Bara wrote:
-> On Wed, 21 Jun 2023 at 18:07, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> > On Wed, Jun 21, 2023 at 05:58:30PM +0200, Benjamin Bara wrote:
-> > > From: Benjamin Bara <benjamin.bara@skidata.com>
-> > >
-> > > As some of the onboard hubs require multiple power supplies, provide the
-> > > environment to support them.
-> > >
-> > > Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
-> > > ---
-> > > v3:
-> > > - fix nits mentioned in v2
-> > >
-> > > v2:
-> > > - replace (err != 0) with (err)
-> > > ---
-> > >  drivers/usb/misc/onboard_usb_hub.c | 39 ++++++++++++++++++++++++++++++--------
-> > >  drivers/usb/misc/onboard_usb_hub.h |  1 +
-> > >  2 files changed, 32 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-> > > index 12fc6eb67c3b..a56e712d3a45 100644
-> > > --- a/drivers/usb/misc/onboard_usb_hub.c
-> > > +++ b/drivers/usb/misc/onboard_usb_hub.c
-> > > @@ -27,6 +27,13 @@
-> > >
-> > >  #include "onboard_usb_hub.h"
-> > >
-> > > +#define MAX_SUPPLIES 2
-> >
-> > Why 2?
+On Wed 21-06-23 10:45:20, Jeff Layton wrote:
+> In later patches, we're going to change how the ctime.tv_nsec field is
+> utilized. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
 > 
-> I picked 2 because with 3/3, this is the maximum of "required" supplies. The
-> currently implemented ones require only one (up to now just named "vdd"). The
-> new one added in 3/3 requires 2, therefore I tried to be generic if some future
-> hub might require 3 or more.
-> 
-> > > +
-> > > +static const char * const supply_names[] = {
-> > > +     "vdd",
-> > > +     "vdd2",
-> > > +};
-> >
-> > Do those names have anything to do with the number above?  If so, please
-> > document it!
-> 
-> I picked "vdd" for the first to be compatible with the existing device-trees. As
-> the actual names differ between hubs, I thought it might be generic to just use
-> "vdd2" here. If I should add some comment like "if you increase MAX_SUPPLIES,
-> please also add a supply_name below", I can do that. I could also implement
-> "vdd${i+1}" for i>0 instead.
-> 
-> >
-> > >  struct onboard_hub_pdata {
-> > >       unsigned long reset_us;         /* reset pulse width in us */
-> > > +     unsigned int num_supplies;      /* number of supplies: 0 considered as 1 */
-> >
-> > I can not understand that comment at all :(
-> 
-> This should just indicate that leaving the field empty means one supply is
-> required. Maybe "defaults to 1" is better?
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-Whatever the comment, I suggest to put it in parentheses, rather than after a
-colon. If you keep the current style maybe s/considered/is interpreted/.
+Looks good to me. Feel free to add:
 
-Another option would be to initialize all existing hubs to num_supplies = 1,
-then there is no need for a comment and the check in _probe(). That might
-be the clearest thing to do, even though it adds a few extra lines.
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  drivers/usb/core/devio.c           | 16 ++++++++--------
+>  drivers/usb/gadget/function/f_fs.c |  6 +-----
+>  drivers/usb/gadget/legacy/inode.c  |  3 +--
+>  3 files changed, 10 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+> index 1a16a8bdea60..02f718e0deaf 100644
+> --- a/drivers/usb/core/devio.c
+> +++ b/drivers/usb/core/devio.c
+> @@ -2642,21 +2642,21 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+>  		snoop(&dev->dev, "%s: CONTROL\n", __func__);
+>  		ret = proc_control(ps, p);
+>  		if (ret >= 0)
+> -			inode->i_mtime = inode->i_ctime = current_time(inode);
+> +			inode->i_mtime = inode_ctime_set_current(inode);
+>  		break;
+>  
+>  	case USBDEVFS_BULK:
+>  		snoop(&dev->dev, "%s: BULK\n", __func__);
+>  		ret = proc_bulk(ps, p);
+>  		if (ret >= 0)
+> -			inode->i_mtime = inode->i_ctime = current_time(inode);
+> +			inode->i_mtime = inode_ctime_set_current(inode);
+>  		break;
+>  
+>  	case USBDEVFS_RESETEP:
+>  		snoop(&dev->dev, "%s: RESETEP\n", __func__);
+>  		ret = proc_resetep(ps, p);
+>  		if (ret >= 0)
+> -			inode->i_mtime = inode->i_ctime = current_time(inode);
+> +			inode->i_mtime = inode_ctime_set_current(inode);
+>  		break;
+>  
+>  	case USBDEVFS_RESET:
+> @@ -2668,7 +2668,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+>  		snoop(&dev->dev, "%s: CLEAR_HALT\n", __func__);
+>  		ret = proc_clearhalt(ps, p);
+>  		if (ret >= 0)
+> -			inode->i_mtime = inode->i_ctime = current_time(inode);
+> +			inode->i_mtime = inode_ctime_set_current(inode);
+>  		break;
+>  
+>  	case USBDEVFS_GETDRIVER:
+> @@ -2695,7 +2695,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+>  		snoop(&dev->dev, "%s: SUBMITURB\n", __func__);
+>  		ret = proc_submiturb(ps, p);
+>  		if (ret >= 0)
+> -			inode->i_mtime = inode->i_ctime = current_time(inode);
+> +			inode->i_mtime = inode_ctime_set_current(inode);
+>  		break;
+>  
+>  #ifdef CONFIG_COMPAT
+> @@ -2703,14 +2703,14 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+>  		snoop(&dev->dev, "%s: CONTROL32\n", __func__);
+>  		ret = proc_control_compat(ps, p);
+>  		if (ret >= 0)
+> -			inode->i_mtime = inode->i_ctime = current_time(inode);
+> +			inode->i_mtime = inode_ctime_set_current(inode);
+>  		break;
+>  
+>  	case USBDEVFS_BULK32:
+>  		snoop(&dev->dev, "%s: BULK32\n", __func__);
+>  		ret = proc_bulk_compat(ps, p);
+>  		if (ret >= 0)
+> -			inode->i_mtime = inode->i_ctime = current_time(inode);
+> +			inode->i_mtime = inode_ctime_set_current(inode);
+>  		break;
+>  
+>  	case USBDEVFS_DISCSIGNAL32:
+> @@ -2722,7 +2722,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+>  		snoop(&dev->dev, "%s: SUBMITURB32\n", __func__);
+>  		ret = proc_submiturb_compat(ps, p);
+>  		if (ret >= 0)
+> -			inode->i_mtime = inode->i_ctime = current_time(inode);
+> +			inode->i_mtime = inode_ctime_set_current(inode);
+>  		break;
+>  
+>  	case USBDEVFS_IOCTL32:
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index f41a385a5c42..756c78043a04 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -1377,16 +1377,12 @@ ffs_sb_make_inode(struct super_block *sb, void *data,
+>  	inode = new_inode(sb);
+>  
+>  	if (inode) {
+> -		struct timespec64 ts = current_time(inode);
+> -
+>  		inode->i_ino	 = get_next_ino();
+>  		inode->i_mode    = perms->mode;
+>  		inode->i_uid     = perms->uid;
+>  		inode->i_gid     = perms->gid;
+> -		inode->i_atime   = ts;
+> -		inode->i_mtime   = ts;
+> -		inode->i_ctime   = ts;
+>  		inode->i_private = data;
+> +		inode->i_atime   = inode->i_mtime = inode_ctime_set_current(inode);
+>  		if (fops)
+>  			inode->i_fop = fops;
+>  		if (iops)
+> diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
+> index 28249d0bf062..b83a68feb316 100644
+> --- a/drivers/usb/gadget/legacy/inode.c
+> +++ b/drivers/usb/gadget/legacy/inode.c
+> @@ -1969,8 +1969,7 @@ gadgetfs_make_inode (struct super_block *sb,
+>  		inode->i_mode = mode;
+>  		inode->i_uid = make_kuid(&init_user_ns, default_uid);
+>  		inode->i_gid = make_kgid(&init_user_ns, default_gid);
+> -		inode->i_atime = inode->i_mtime = inode->i_ctime
+> -				= current_time(inode);
+> +		inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
+>  		inode->i_private = data;
+>  		inode->i_fop = fops;
+>  	}
+> -- 
+> 2.41.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
