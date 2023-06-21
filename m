@@ -2,53 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8A4738A54
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 18:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C51B738A56
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 18:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233796AbjFUQAY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jun 2023 12:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32928 "EHLO
+        id S230199AbjFUQBB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jun 2023 12:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233832AbjFUQAJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 12:00:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331F41BD0;
-        Wed, 21 Jun 2023 08:59:43 -0700 (PDT)
+        with ESMTP id S231777AbjFUQAy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 12:00:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E70119BE;
+        Wed, 21 Jun 2023 09:00:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB684615D1;
-        Wed, 21 Jun 2023 15:59:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 021D6C433C8;
-        Wed, 21 Jun 2023 15:59:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 963BC615BA;
+        Wed, 21 Jun 2023 15:59:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 776A8C433C0;
+        Wed, 21 Jun 2023 15:59:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687363161;
-        bh=2Ze8HUxaIR1pjHExyMgnxzUkH8NIRpvWbQ5QDE3U2DA=;
+        s=korg; t=1687363198;
+        bh=mHRta9tIJV2JDA/5J295h4GbkMjyOk5qKzU56OUj/sk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dpql9chfrRr0qLA0W1y38ZTzwuOPlt1pVkiwfymxOZO24UyxVEPbs9L2ChpZdnF9H
-         V+6u+lcdJs3gpNb3cWtAltPszahuzY0QExG6NF3+pSf3RxDCyMzZP/jBZNYyPaqrRQ
-         Ufe7490JYMe1iff993VCRu+UV2266OhUibm08M4k=
-Date:   Wed, 21 Jun 2023 17:59:18 +0200
+        b=Ef8MjNepoOxKJfpbzY04NICf1OgzrJvYyTtjCFUEJSUHj/8qey/p4CbAUNyZveqZT
+         bm0jdMdQZE5OhNXnmpkUqw2ePKIN0f94/wJs/74eGqz+r8aY1S6ybaRKn99jshcW92
+         W1RJzagbkPcofo+4RCi0w14pEGsgJ2JKLubbpXd0=
+Date:   Wed, 21 Jun 2023 17:59:55 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Benjamin Bara <bbara93@gmail.com>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Benjamin Bara <benjamin.bara@skidata.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/4] usb: misc: onboard-hub: resort by VID and PID
-Message-ID: <2023062136-subgroup-aground-01e2@gregkh>
-References: <20230620-hx3-v1-0-3a649b34c85b@skidata.com>
- <20230620-hx3-v1-1-3a649b34c85b@skidata.com>
+To:     Lei Yu <yulei.sh@bytedance.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Henry Tian <tianxiaofeng@bytedance.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ryan Chen <ryan_chen@aspeedtech.com>,
+        Neal Liu <neal_liu@aspeedtech.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Subject: Re: [PATCH] usb: gadget: aspeed: fix buffer overflow
+Message-ID: <2023062146-stony-lair-b6a3@gregkh>
+References: <HK0PR06MB32022348EA65805C7109B7D080329@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <CAGm54UExHOBw61DJNqxvW67OSr60fQ+Q247t63RzymiMOmHmFg@mail.gmail.com>
+ <HK0PR06MB320203EF8E3AD14C34359B0580329@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <Y1ueEYJk2epT/g4J@kroah.com>
+ <HK0PR06MB32024F58191E17DC5ABC99F380329@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <Y1uyssu84kl1INSR@kroah.com>
+ <CAGm54UGmp=kTKGLhEfENF4SqkvRt_GcpuGH_g5PjtQiBkwtOsA@mail.gmail.com>
+ <TY2PR06MB321303972156248AB08CAB2480EB9@TY2PR06MB3213.apcprd06.prod.outlook.com>
+ <CAGm54UHWhRQsvaBQM7mgfP2A5os=mYDTfKS9qfS0C5_9XkcrSA@mail.gmail.com>
+ <CAGm54UG2uD2jruRc33Xm4izepYpuFNBBcGe594as8_fx1uEWQg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230620-hx3-v1-1-3a649b34c85b@skidata.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGm54UG2uD2jruRc33Xm4izepYpuFNBBcGe594as8_fx1uEWQg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,88 +71,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 12:38:00PM +0200, Benjamin Bara wrote:
-> From: Benjamin Bara <benjamin.bara@skidata.com>
+On Wed, Jun 21, 2023 at 08:02:14PM +0800, Lei Yu wrote:
+> On Wed, Dec 21, 2022 at 10:26 AM Lei Yu <yulei.sh@bytedance.com> wrote:
+> >
+> > On Wed, Dec 21, 2022 at 10:17 AM Neal Liu <neal_liu@aspeedtech.com> wrote:
+> > > > > > > > Using rndis is able to set MTU to 2000, and the issue can be
+> > > > reproduced.
+> > > >
+> > > > USB ecm is also tested and it is possible to set MTU to 2000, and could
+> > > > reproduce the issue.
+> > > > So I think this patch is needed anyway.
+> > > >
+> > > > @Neal Liu Could you kindly help to verify the USB ECM case?
+> > >
+> > > How to set MTU to 2000 on USB ECM case? I remember last time I cannot set by using "ifconfig ..."
+> > > Regardless ECM or RNDIS, I agree this patch is still needed.
+> >
+> > You were able to set MTU to 2000 for RNDIS but not for NCM.
+> > @Greg Kroah-Hartman indicated that RNDIS should not be used anymore.
+> > So I tested ECM and verified it could set MTU 2000 and the issue could
+> > be reproduced.
 > 
-> Resort the existing entries by VID and then by PID to be able to find
-> entries easier.
+> This patch fixes the kernel oops in the aspeed-vhub driver for both
+> USB ECM and RNDIS.
+> It now has an Acked-by from benh and Reviewed-by from neal_liu
 > 
-> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
-> ---
->  drivers/usb/misc/onboard_usb_hub.c | 12 ++++++------
->  drivers/usb/misc/onboard_usb_hub.h |  8 ++++----
->  2 files changed, 10 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-> index 12fc6eb67c3b..94006714c273 100644
-> --- a/drivers/usb/misc/onboard_usb_hub.c
-> +++ b/drivers/usb/misc/onboard_usb_hub.c
-> @@ -329,10 +329,10 @@ static struct platform_driver onboard_hub_driver = {
->  
->  /************************** USB driver **************************/
->  
-> -#define VENDOR_ID_GENESYS	0x05e3
->  #define VENDOR_ID_MICROCHIP	0x0424
-> -#define VENDOR_ID_REALTEK	0x0bda
->  #define VENDOR_ID_TI		0x0451
-> +#define VENDOR_ID_GENESYS	0x05e3
-> +#define VENDOR_ID_REALTEK	0x0bda
->  #define VENDOR_ID_VIA		0x2109
+> Should we merge this patch?
 
-This is fine, but:
-
->  
->  /*
-> @@ -407,16 +407,16 @@ static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
->  }
->  
->  static const struct usb_device_id onboard_hub_id_table[] = {
-> -	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
-> -	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852G USB 2.0 */
->  	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2514) }, /* USB2514B USB 2.0 */
->  	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2517) }, /* USB2517 USB 2.0 */
-> +	{ USB_DEVICE(VENDOR_ID_TI, 0x8140) }, /* TI USB8041 3.0 */
-> +	{ USB_DEVICE(VENDOR_ID_TI, 0x8142) }, /* TI USB8041 2.0 */
-> +	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
-> +	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852G USB 2.0 */
->  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0411) }, /* RTS5411 USB 3.1 */
->  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.1 */
->  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0414) }, /* RTS5414 USB 3.2 */
->  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5414) }, /* RTS5414 USB 2.1 */
-> -	{ USB_DEVICE(VENDOR_ID_TI, 0x8140) }, /* TI USB8041 3.0 */
-> -	{ USB_DEVICE(VENDOR_ID_TI, 0x8142) }, /* TI USB8041 2.0 */
->  	{ USB_DEVICE(VENDOR_ID_VIA, 0x0817) }, /* VIA VL817 3.1 */
->  	{ USB_DEVICE(VENDOR_ID_VIA, 0x2817) }, /* VIA VL817 2.0 */
->  	{}
-
-This does nothing except make backports harder over time :(
-
-
-
-> diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
-> index aca5f50eb0da..ff8925aa6d3a 100644
-> --- a/drivers/usb/misc/onboard_usb_hub.h
-> +++ b/drivers/usb/misc/onboard_usb_hub.h
-> @@ -14,10 +14,6 @@ static const struct onboard_hub_pdata microchip_usb424_data = {
->  	.reset_us = 1,
->  };
->  
-> -static const struct onboard_hub_pdata realtek_rts5411_data = {
-> -	.reset_us = 0,
-> -};
-> -
->  static const struct onboard_hub_pdata ti_tusb8041_data = {
->  	.reset_us = 3000,
->  };
-> @@ -30,6 +26,10 @@ static const struct onboard_hub_pdata genesys_gl852g_data = {
->  	.reset_us = 50,
->  };
->  
-> +static const struct onboard_hub_pdata realtek_rts5411_data = {
-> +	.reset_us = 0,
-> +};
-
-And this also does nothing to help really, so it's not needed, sorry.
+Can you please resend it?
 
 thanks,
 
