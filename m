@@ -2,68 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040A2738920
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 17:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DFB738A09
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 17:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233363AbjFUPaS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jun 2023 11:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
+        id S232208AbjFUPpe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jun 2023 11:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233252AbjFUPaQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 11:30:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3254EC2;
-        Wed, 21 Jun 2023 08:30:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCBE3615C4;
-        Wed, 21 Jun 2023 15:30:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C93B1C433C9;
-        Wed, 21 Jun 2023 15:30:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687361402;
-        bh=aMJzfBDU6pwSgjC5jUNixMcZvbFUCFKs8Fm5whaA8bU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FTgpr7H7SqkJnQYlR8GOEQ5tQLg6zv7YuxOyaJoARmFSJTIYnzpOrAInbs/pYd+DT
-         vNG1kVyaRYQftC8JAvXJFaP1UILYmH3kBqLCOhlI4GKL/bNqrFdwc6Uc4kOyYv26yg
-         b2gBxUhrnydVr+CIH81qf3PCywS9StA8di2Rn80Y=
-Date:   Wed, 21 Jun 2023 17:29:59 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 07/79] usb: switch to new ctime accessors
-Message-ID: <2023062147-unbraided-cassette-64a7@gregkh>
-References: <20230621144507.55591-1-jlayton@kernel.org>
- <20230621144735.55953-1-jlayton@kernel.org>
- <20230621144735.55953-6-jlayton@kernel.org>
+        with ESMTP id S233907AbjFUPpP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 11:45:15 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2429B;
+        Wed, 21 Jun 2023 08:45:14 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-977e0fbd742so810977966b.2;
+        Wed, 21 Jun 2023 08:45:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687362313; x=1689954313;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cw7AjrQzIb0yz93itV9IidgEBv70/EYhS5N/v3j4hcA=;
+        b=pFtKdMbslc5zH4eMpfjeX+zjhO1eJhy7szeX+llYddNhsIkLLJeuHyRG2cFy+mqRTF
+         fhJKz3Z49CABwixub3hH4TGc8LYBEAJcG22GfkyA9jnu/uZOClSnTFONBRC5vUYz933r
+         zdTnyiBBugPOwFd3KGQ+x9oYrAFmnUn/agPLPtLZ07wAgHw6KzqS2TqqoN2k41w3nyyj
+         vB2qiiBjJ0DImTQmZmWHpj+x3FUEtK7ns6bIA1TaIVhlOPkWUIwOqHosc8qAQhTe7pzA
+         FzKfdNRZzY78klnetu8/zqvjXlMHnh8rfTm/PF9qZmwHknRygPea4XpLKMHchR9+TA5J
+         Z3xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687362313; x=1689954313;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cw7AjrQzIb0yz93itV9IidgEBv70/EYhS5N/v3j4hcA=;
+        b=g1JjZXFFCsi49YWJxmol75qqeyfl9ScU3/sUTXYNF9prkPS2LBn8H5Q63UjJ2xst7a
+         7JkPRv27mLg6c3DoP2RQbR0L0HW9kFQkBwK/OypfjDT9LGFWDJ7osIquLGYDVZ9yKplB
+         ccYOUG3G2LqOq58rXd0VEznX5vZYOXGA5Z1QU9Dj6Rrp4Yc/yMYMXj7ZwmNYOC7kO19u
+         c7VaMQRrCzHbRHFSnYLpZydMBJFkn+EnvJglfcQARWD+WhtS/NxH8wjnrfgSnbs5X3ex
+         zhZMAIaEsx1DYorxtOaRVPipar55vLD7BVyj3bCJlW8NQhAQK7JPRlwGzb2xR4QeZyHQ
+         ejTQ==
+X-Gm-Message-State: AC+VfDxPe3THIRA0IdwWKe4BzXUdTcMUFq+bTFJ4o91HSlUF7P4aekPO
+        X3HhzNg9i8KNp+uRdGwiPEw=
+X-Google-Smtp-Source: ACHHUZ7W/uMgae1mGa5B1RkGawdjByjhC0dPkdc5N6T8/ihfppc7NB0lAt2bwVJXQModqCq4P97Ahg==
+X-Received: by 2002:a17:907:a45:b0:96f:678:d2fc with SMTP id be5-20020a1709070a4500b0096f0678d2fcmr11739593ejc.22.1687362312835;
+        Wed, 21 Jun 2023 08:45:12 -0700 (PDT)
+Received: from PCBABN.skidata.net ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id p9-20020a170906498900b00986ad2e34f4sm3250381eju.205.2023.06.21.08.45.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 08:45:12 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+To:     mka@chromium.org
+Cc:     bbara93@gmail.com, benjamin.bara@skidata.com, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH v2 1/3] usb: misc: onboard-hub: support multiple power supplies
+Date:   Wed, 21 Jun 2023 17:45:05 +0200
+Message-Id: <20230621154505.2229794-1-bbara93@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <ZJMPv6Fm3On0ITFi@google.com>
+References: <ZJMPv6Fm3On0ITFi@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621144735.55953-6-jlayton@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 10:45:20AM -0400, Jeff Layton wrote:
-> In later patches, we're going to change how the ctime.tv_nsec field is
-> utilized. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
-> 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  drivers/usb/core/devio.c           | 16 ++++++++--------
->  drivers/usb/gadget/function/f_fs.c |  6 +-----
->  drivers/usb/gadget/legacy/inode.c  |  3 +--
->  3 files changed, 10 insertions(+), 15 deletions(-)
+Hi,
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+thanks for the feedback!
+
+On Wed, 21 Jun 2023 at 16:57, Matthias Kaehlcke <mka@chromium.org> wrote:
+> On Wed, Jun 21, 2023 at 04:26:27PM +0200, Benjamin Bara wrote:
+> > +     hub->supplies_num = 1;
+> > +     if (hub->pdata->supplies_num > 1)
+> > +             hub->supplies_num = hub->pdata->supplies_num;
+>
+> Please change the above to:
+>
+>         if (hub->pdata->supplies_num != 0)
+>                 hub->supplies_num = hub->pdata->supplies_num;
+>         else
+>                 hub->supplies_num = 1;
+>
+
+I would even prefer:
+if (hub->pdata->supplies_num)
+
+if it's fine for you?
