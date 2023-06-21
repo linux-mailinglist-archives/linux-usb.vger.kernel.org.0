@@ -2,209 +2,272 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14572738B85
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 18:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C363738DD6
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 19:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbjFUQha (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jun 2023 12:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
+        id S230515AbjFURzW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jun 2023 13:55:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231642AbjFUQhL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 12:37:11 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF6E268B;
-        Wed, 21 Jun 2023 09:36:43 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 993121FF3A;
-        Wed, 21 Jun 2023 16:36:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1687365402; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/d4ziQZw6N7mHZLzmgH+OAesVEUu7JrV0F1FpHCOj/Y=;
-        b=rU19K/Y2/QE9QgbbEIeMWU9TBzjpZek0f4a0CG5e7wLxJwECVBKoPN64Q/245PInLsROTe
-        JHnVDP5mIRCFbt0N0rb39KBA125VrnyNgDvK/Apyq4ecbwZectVy6ipwXhawxQxRo5mp13
-        vR3bSpRx4wz8NUydR8/0lnmD7umJ4hg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1687365402;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/d4ziQZw6N7mHZLzmgH+OAesVEUu7JrV0F1FpHCOj/Y=;
-        b=Jzpmvodf0LrZ4TExuIW84tMI1D8erJv2Pv/8wD1TwCXFtDmtUpgJzA/OGBUdOLRRz+Gg/P
-        nrVl9xqEp7IP0IAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8BB5B133E6;
-        Wed, 21 Jun 2023 16:36:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ud0TIhonk2T5QwAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 21 Jun 2023 16:36:42 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 2BEEDA075D; Wed, 21 Jun 2023 18:36:42 +0200 (CEST)
-Date:   Wed, 21 Jun 2023 18:36:42 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 07/79] usb: switch to new ctime accessors
-Message-ID: <20230621163642.j6blmqfu7oqelzri@quack3>
-References: <20230621144507.55591-1-jlayton@kernel.org>
- <20230621144735.55953-1-jlayton@kernel.org>
- <20230621144735.55953-6-jlayton@kernel.org>
+        with ESMTP id S231994AbjFURzH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 13:55:07 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01862723
+        for <linux-usb@vger.kernel.org>; Wed, 21 Jun 2023 10:54:08 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f9085f97a4so12314535e9.1
+        for <linux-usb@vger.kernel.org>; Wed, 21 Jun 2023 10:54:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687369988; x=1689961988;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aHSu7HzG78jZSjS+/2PQndOYJUKXILQcjLsg3p1YpyY=;
+        b=lLgneEIAOvJ3EQga5h/bcdpeUtOmxm/ou89ISYuJjSDgnQkWhm0I/WD1YuAWYysMbb
+         w8WFQ0U7uTSbP4Us9wcppk6J5hM1FrE9Z2X6/n8cmYwifvbdWb07IJwDuUcjsuzLW0Tk
+         +HRrYW78L4jU3fmNZpv7i2X+wj2jePu2R8SfF6Fc2jSePL9GbW6dHUSC4BV8gaYi28mG
+         mGbKZ3u0FHPdjYTNOfZ2ylus3+ALiTBJ0pYNB1AVk7UgRPR2zgAVGvJqbD/anHuCsqSg
+         IFCiHhLcfLKA0m12CmsoDMg2K49u3YFN+QeXOtK4N/i4PIH1Xg7/oAeR2eGtnKU4XB68
+         wdag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687369988; x=1689961988;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aHSu7HzG78jZSjS+/2PQndOYJUKXILQcjLsg3p1YpyY=;
+        b=B1hW0caaHfW6m9OMUzYrGpVv/TdUoGt94LXBjwZphBX9S6BYL6H94YvCyzhrsqzyf4
+         rqKYHAd9KITnIO3XVRg0iMrQ8umZ+P2KWLcBY2Bjyxd7RG2IvQgpIhllNHzkA0+SCrEU
+         jUlZ2i87wMZm2lmmnQdUhkPpAqrOk68nxqgs2xE3L9r2PFFEAHTxK+s+Oq+MKMnAinZI
+         i1YjmUG9AOTM29silpAArnZUMRB1w9xfgVgpETLDs3vuRjO4KBQRqlW9V47eJ7akMGqw
+         ObRCehQ4IIArAQvpos4SHHW3mCrMxrzX4i9OcV/XXp6U178P9xXB5LpMujZBMZcN5Uey
+         G3cQ==
+X-Gm-Message-State: AC+VfDy1LmMORtCNL8gEJ3jIRInTkqV73iIeA3RqUkVxXZfxnMSth/oR
+        /49n0IK1TPuuRvo9NNqDeY4=
+X-Google-Smtp-Source: ACHHUZ4GlX+JEBgUKY+BHjThieEPVOetxymlfV+nN6q9KwFsFUVUNrvCKWFIxPSKFWIJ+PgPcA+peA==
+X-Received: by 2002:a05:600c:1e12:b0:3f9:92e:4d99 with SMTP id ay18-20020a05600c1e1200b003f9092e4d99mr9923395wmb.0.1687369987515;
+        Wed, 21 Jun 2023 10:53:07 -0700 (PDT)
+Received: from ivan-B550MH.. ([141.136.95.75])
+        by smtp.gmail.com with ESMTPSA id l20-20020a7bc354000000b003f4248dcfcbsm16808553wmj.30.2023.06.21.10.53.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 10:53:07 -0700 (PDT)
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>, linux-usb@vger.kernel.org
+Subject: [PATCH v3] USB: make usb class a const structure
+Date:   Wed, 21 Jun 2023 21:52:59 +0400
+Message-Id: <20230621175259.1221852-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621144735.55953-6-jlayton@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed 21-06-23 10:45:20, Jeff Layton wrote:
-> In later patches, we're going to change how the ctime.tv_nsec field is
-> utilized. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
-> 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+Now that the driver core allows for struct class to be in read-only
+memory, remove the usb_class structure and create the usbmisc_class
+const class structure declared at build time which places it into
+read-only memory, instead of having it to be dynamically allocated
+at load time.
 
-Looks good to me. Feel free to add:
+Additionally, now we register usb class at startup and unregister it
+when shutting down, so we don't have to count uses of the class.
+Therefore we don't need the 'usb_class' structure anymore. Due to this
+fact, remove all static functions related to class initialization and
+deinitialization. We can't use them in 'usb.c' since they are static
+and we don't really need them anymore.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+Since we have to register the class in usb_init function in 'usb.c'
+and use it in 'file.c' as well, declare the usbmisc_class structure
+as 'export' in the 'usb.h' file.
 
-								Honza
+Debatable moment: the class registration and unregistration functions
+could be extracted to the 'file.c'. I think we don't want to do this
+since it would be one-line functions. They would make the code paths
+more confusing and add calling overhead.
 
-> ---
->  drivers/usb/core/devio.c           | 16 ++++++++--------
->  drivers/usb/gadget/function/f_fs.c |  6 +-----
->  drivers/usb/gadget/legacy/inode.c  |  3 +--
->  3 files changed, 10 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-> index 1a16a8bdea60..02f718e0deaf 100644
-> --- a/drivers/usb/core/devio.c
-> +++ b/drivers/usb/core/devio.c
-> @@ -2642,21 +2642,21 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
->  		snoop(&dev->dev, "%s: CONTROL\n", __func__);
->  		ret = proc_control(ps, p);
->  		if (ret >= 0)
-> -			inode->i_mtime = inode->i_ctime = current_time(inode);
-> +			inode->i_mtime = inode_ctime_set_current(inode);
->  		break;
->  
->  	case USBDEVFS_BULK:
->  		snoop(&dev->dev, "%s: BULK\n", __func__);
->  		ret = proc_bulk(ps, p);
->  		if (ret >= 0)
-> -			inode->i_mtime = inode->i_ctime = current_time(inode);
-> +			inode->i_mtime = inode_ctime_set_current(inode);
->  		break;
->  
->  	case USBDEVFS_RESETEP:
->  		snoop(&dev->dev, "%s: RESETEP\n", __func__);
->  		ret = proc_resetep(ps, p);
->  		if (ret >= 0)
-> -			inode->i_mtime = inode->i_ctime = current_time(inode);
-> +			inode->i_mtime = inode_ctime_set_current(inode);
->  		break;
->  
->  	case USBDEVFS_RESET:
-> @@ -2668,7 +2668,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
->  		snoop(&dev->dev, "%s: CLEAR_HALT\n", __func__);
->  		ret = proc_clearhalt(ps, p);
->  		if (ret >= 0)
-> -			inode->i_mtime = inode->i_ctime = current_time(inode);
-> +			inode->i_mtime = inode_ctime_set_current(inode);
->  		break;
->  
->  	case USBDEVFS_GETDRIVER:
-> @@ -2695,7 +2695,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
->  		snoop(&dev->dev, "%s: SUBMITURB\n", __func__);
->  		ret = proc_submiturb(ps, p);
->  		if (ret >= 0)
-> -			inode->i_mtime = inode->i_ctime = current_time(inode);
-> +			inode->i_mtime = inode_ctime_set_current(inode);
->  		break;
->  
->  #ifdef CONFIG_COMPAT
-> @@ -2703,14 +2703,14 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
->  		snoop(&dev->dev, "%s: CONTROL32\n", __func__);
->  		ret = proc_control_compat(ps, p);
->  		if (ret >= 0)
-> -			inode->i_mtime = inode->i_ctime = current_time(inode);
-> +			inode->i_mtime = inode_ctime_set_current(inode);
->  		break;
->  
->  	case USBDEVFS_BULK32:
->  		snoop(&dev->dev, "%s: BULK32\n", __func__);
->  		ret = proc_bulk_compat(ps, p);
->  		if (ret >= 0)
-> -			inode->i_mtime = inode->i_ctime = current_time(inode);
-> +			inode->i_mtime = inode_ctime_set_current(inode);
->  		break;
->  
->  	case USBDEVFS_DISCSIGNAL32:
-> @@ -2722,7 +2722,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
->  		snoop(&dev->dev, "%s: SUBMITURB32\n", __func__);
->  		ret = proc_submiturb_compat(ps, p);
->  		if (ret >= 0)
-> -			inode->i_mtime = inode->i_ctime = current_time(inode);
-> +			inode->i_mtime = inode_ctime_set_current(inode);
->  		break;
->  
->  	case USBDEVFS_IOCTL32:
-> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> index f41a385a5c42..756c78043a04 100644
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -1377,16 +1377,12 @@ ffs_sb_make_inode(struct super_block *sb, void *data,
->  	inode = new_inode(sb);
->  
->  	if (inode) {
-> -		struct timespec64 ts = current_time(inode);
-> -
->  		inode->i_ino	 = get_next_ino();
->  		inode->i_mode    = perms->mode;
->  		inode->i_uid     = perms->uid;
->  		inode->i_gid     = perms->gid;
-> -		inode->i_atime   = ts;
-> -		inode->i_mtime   = ts;
-> -		inode->i_ctime   = ts;
->  		inode->i_private = data;
-> +		inode->i_atime   = inode->i_mtime = inode_ctime_set_current(inode);
->  		if (fops)
->  			inode->i_fop = fops;
->  		if (iops)
-> diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-> index 28249d0bf062..b83a68feb316 100644
-> --- a/drivers/usb/gadget/legacy/inode.c
-> +++ b/drivers/usb/gadget/legacy/inode.c
-> @@ -1969,8 +1969,7 @@ gadgetfs_make_inode (struct super_block *sb,
->  		inode->i_mode = mode;
->  		inode->i_uid = make_kuid(&init_user_ns, default_uid);
->  		inode->i_gid = make_kgid(&init_user_ns, default_gid);
-> -		inode->i_atime = inode->i_mtime = inode->i_ctime
-> -				= current_time(inode);
-> +		inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
->  		inode->i_private = data;
->  		inode->i_fop = fops;
->  	}
-> -- 
-> 2.41.0
-> 
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+---
+V1 -> V2:
+- Remove kref field of usb_class structure
+- Remove usb_class structure
+- Remove class initialization and cleaning functions
+- Add usbmisc_class declaration to usb.h file
+- Move class registration to usb init function
+- Move class unregistration to usb exit function
+V2 -> V3:
+- Remove redundant retval comparison found by 0-day bot
+
+ drivers/usb/core/file.c | 66 ++++-------------------------------------
+ drivers/usb/core/usb.c  |  6 ++++
+ drivers/usb/core/usb.h  |  1 +
+ 3 files changed, 13 insertions(+), 60 deletions(-)
+
+diff --git a/drivers/usb/core/file.c b/drivers/usb/core/file.c
+index c4ed3310e069..f7627cd3f647 100644
+--- a/drivers/usb/core/file.c
++++ b/drivers/usb/core/file.c
+@@ -29,7 +29,6 @@
+ #define MAX_USB_MINORS	256
+ static const struct file_operations *usb_minors[MAX_USB_MINORS];
+ static DECLARE_RWSEM(minor_rwsem);
+-static DEFINE_MUTEX(init_usb_class_mutex);
+ 
+ static int usb_open(struct inode *inode, struct file *file)
+ {
+@@ -57,11 +56,6 @@ static const struct file_operations usb_fops = {
+ 	.llseek =	noop_llseek,
+ };
+ 
+-static struct usb_class {
+-	struct kref kref;
+-	struct class *class;
+-} *usb_class;
+-
+ static char *usb_devnode(const struct device *dev, umode_t *mode)
+ {
+ 	struct usb_class_driver *drv;
+@@ -72,50 +66,10 @@ static char *usb_devnode(const struct device *dev, umode_t *mode)
+ 	return drv->devnode(dev, mode);
+ }
+ 
+-static int init_usb_class(void)
+-{
+-	int result = 0;
+-
+-	if (usb_class != NULL) {
+-		kref_get(&usb_class->kref);
+-		goto exit;
+-	}
+-
+-	usb_class = kmalloc(sizeof(*usb_class), GFP_KERNEL);
+-	if (!usb_class) {
+-		result = -ENOMEM;
+-		goto exit;
+-	}
+-
+-	kref_init(&usb_class->kref);
+-	usb_class->class = class_create("usbmisc");
+-	if (IS_ERR(usb_class->class)) {
+-		result = PTR_ERR(usb_class->class);
+-		printk(KERN_ERR "class_create failed for usb devices\n");
+-		kfree(usb_class);
+-		usb_class = NULL;
+-		goto exit;
+-	}
+-	usb_class->class->devnode = usb_devnode;
+-
+-exit:
+-	return result;
+-}
+-
+-static void release_usb_class(struct kref *kref)
+-{
+-	/* Ok, we cheat as we know we only have one usb_class */
+-	class_destroy(usb_class->class);
+-	kfree(usb_class);
+-	usb_class = NULL;
+-}
+-
+-static void destroy_usb_class(void)
+-{
+-	mutex_lock(&init_usb_class_mutex);
+-	kref_put(&usb_class->kref, release_usb_class);
+-	mutex_unlock(&init_usb_class_mutex);
+-}
++const struct class usbmisc_class = {
++	.name		= "usbmisc",
++	.devnode	= usb_devnode,
++};
+ 
+ int usb_major_init(void)
+ {
+@@ -175,13 +129,6 @@ int usb_register_dev(struct usb_interface *intf,
+ 	if (intf->minor >= 0)
+ 		return -EADDRINUSE;
+ 
+-	mutex_lock(&init_usb_class_mutex);
+-	retval = init_usb_class();
+-	mutex_unlock(&init_usb_class_mutex);
+-
+-	if (retval)
+-		return retval;
+-
+ 	dev_dbg(&intf->dev, "looking for a minor, starting at %d\n", minor_base);
+ 
+ 	down_write(&minor_rwsem);
+@@ -200,7 +147,7 @@ int usb_register_dev(struct usb_interface *intf,
+ 
+ 	/* create a usb class device for this usb interface */
+ 	snprintf(name, sizeof(name), class_driver->name, minor - minor_base);
+-	intf->usb_dev = device_create(usb_class->class, &intf->dev,
++	intf->usb_dev = device_create(&usbmisc_class, &intf->dev,
+ 				      MKDEV(USB_MAJOR, minor), class_driver,
+ 				      "%s", kbasename(name));
+ 	if (IS_ERR(intf->usb_dev)) {
+@@ -234,7 +181,7 @@ void usb_deregister_dev(struct usb_interface *intf,
+ 		return;
+ 
+ 	dev_dbg(&intf->dev, "removing %d minor\n", intf->minor);
+-	device_destroy(usb_class->class, MKDEV(USB_MAJOR, intf->minor));
++	device_destroy(&usbmisc_class, MKDEV(USB_MAJOR, intf->minor));
+ 
+ 	down_write(&minor_rwsem);
+ 	usb_minors[intf->minor] = NULL;
+@@ -242,6 +189,5 @@ void usb_deregister_dev(struct usb_interface *intf,
+ 
+ 	intf->usb_dev = NULL;
+ 	intf->minor = -1;
+-	destroy_usb_class();
+ }
+ EXPORT_SYMBOL_GPL(usb_deregister_dev);
+diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+index 901ec732321c..39bdf9589b06 100644
+--- a/drivers/usb/core/usb.c
++++ b/drivers/usb/core/usb.c
+@@ -1101,6 +1101,9 @@ static int __init usb_init(void)
+ 	retval = usb_major_init();
+ 	if (retval)
+ 		goto major_init_failed;
++	retval = class_register(&usbmisc_class);
++	if (retval)
++		goto class_register_failed;
+ 	retval = usb_register(&usbfs_driver);
+ 	if (retval)
+ 		goto driver_register_failed;
+@@ -1120,6 +1123,8 @@ static int __init usb_init(void)
+ usb_devio_init_failed:
+ 	usb_deregister(&usbfs_driver);
+ driver_register_failed:
++	class_unregister(&usbmisc_class);
++class_register_failed:
+ 	usb_major_cleanup();
+ major_init_failed:
+ 	bus_unregister_notifier(&usb_bus_type, &usb_bus_nb);
+@@ -1147,6 +1152,7 @@ static void __exit usb_exit(void)
+ 	usb_deregister(&usbfs_driver);
+ 	usb_devio_cleanup();
+ 	usb_hub_cleanup();
++	class_unregister(&usbmisc_class);
+ 	bus_unregister_notifier(&usb_bus_type, &usb_bus_nb);
+ 	bus_unregister(&usb_bus_type);
+ 	usb_acpi_unregister();
+diff --git a/drivers/usb/core/usb.h b/drivers/usb/core/usb.h
+index ffe3f6818e9c..69ca59841083 100644
+--- a/drivers/usb/core/usb.h
++++ b/drivers/usb/core/usb.h
+@@ -141,6 +141,7 @@ static inline int usb_disable_usb2_hardware_lpm(struct usb_device *udev)
+ 
+ #endif
+ 
++extern const struct class usbmisc_class;
+ extern const struct bus_type usb_bus_type;
+ extern struct mutex usb_port_peer_mutex;
+ extern struct device_type usb_device_type;
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.34.1
+
