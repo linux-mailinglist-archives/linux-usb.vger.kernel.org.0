@@ -2,92 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D677381CC
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 13:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A867382B4
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 14:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjFULIL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jun 2023 07:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
+        id S231939AbjFULPd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jun 2023 07:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbjFULIK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 07:08:10 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023E1BC
-        for <linux-usb@vger.kernel.org>; Wed, 21 Jun 2023 04:08:10 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-98502b12fd4so168598866b.1
-        for <linux-usb@vger.kernel.org>; Wed, 21 Jun 2023 04:08:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687345688; x=1689937688;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qgwJh3nP4bBkQph3UskAxTkcRpVZYBo0dWwZIgtM8KY=;
-        b=bYedRmc3kiDytbUcIgLIyAdsHC68pAlRf7ZSYoNNQfGadScxw0VkqO9+VDXcCIvRru
-         0SmTsQvsVpeZEXAJUGTmblq+5LRPTOZnoeboPf5H1g3HKJHGi05lgC0u1LFaSM7IWLmA
-         ANlGjrgPpjsvY9nsJ4MPJo8uB1Tur5Sjx+Qq73V3E3W9e+7OYDONXOb+XN11CuKlN0+Z
-         qebknnwrO/WnAcZQGVg5gQFMQtjyM9RvigPiG0I/+/go4+2c4haHeNyspbA6APSczeNE
-         DupHBqTZi2VSSHEnSZQ+0NblzifIhuvLq+aXnX8KfHQA2odo+RakQRcaklMLGCMQM3iO
-         Jmig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687345688; x=1689937688;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qgwJh3nP4bBkQph3UskAxTkcRpVZYBo0dWwZIgtM8KY=;
-        b=LbvSzY6FjYE0fVdHJt+SHWEhK1ins0b+R6zV2B28czKcnGcltxl6cHNpuQzY76Rt9V
-         vk3O3iPvugZvUcmg430baKOE0SZWyJeuYjchHnmehm+r53wJnXnH0qV25epl1k9aP1p/
-         ESIF3KxFvPShLfwFAgD6lieQudgF0L3vNQMUocom8AIcjgD/Hcua5a4n2p9u8dvy7g+s
-         znM7MuP6UrRb3ZDFf4xfWmRpsY7oG/RMSFGsSFCH1Ulg/qr3NE8Kx+w00cboyEeepyQC
-         8C+23fMJtwhe9E7MW74MBJQHmDNjKnjJIe8VyYIgupuJjOFPcj0+3PS8QeIimqM3sN+H
-         x5rA==
-X-Gm-Message-State: AC+VfDypFZaJ/P1+u01NLMXj+xfyRvwhp81sMdaHhy1x4JTdSGnZ/2kA
-        QMc5U7/4dwWXEOhX3AXPTM4Rb4Mnin5acZhH
-X-Google-Smtp-Source: ACHHUZ7qpfTFBuvx55onb2km4TM2Ie3uE3Rnom8YXeuzcAGGpGHnoQWxDf62pWPk2B8QbGUjw+oUXg==
-X-Received: by 2002:a17:906:7793:b0:974:5de8:b5ce with SMTP id s19-20020a170906779300b009745de8b5cemr10665977ejm.2.1687345688197;
-        Wed, 21 Jun 2023 04:08:08 -0700 (PDT)
-Received: from [10.10.19.80] ([178.160.196.94])
-        by smtp.gmail.com with ESMTPSA id fy25-20020a170906b7d900b00969f25b96basm2861156ejb.204.2023.06.21.04.08.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 04:08:07 -0700 (PDT)
-Message-ID: <33236558-8987-0b84-bef0-613fec01f965@gmail.com>
-Date:   Wed, 21 Jun 2023 15:08:07 +0400
+        with ESMTP id S230426AbjFULPT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 07:15:19 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE1B184
+        for <linux-usb@vger.kernel.org>; Wed, 21 Jun 2023 04:15:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687346118; x=1718882118;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QRtL9JTm+0l06zN4o+QiG4BHA4UzZhP3BKPPB9L5thM=;
+  b=Z0i7p1Br8LK4FWU7Cwa7hx9vzIevl2dZktzWnTW1niAYbPcHMV/bTIOT
+   +2f7MH2vuV3jLZG+9LBG049sJLijmLidD47XA3Qq3tOHIYwRSm+3n3yX7
+   rK8R0En5ektRsa3rG0WM9imQrij9FgjvbmrpI1EBhMfaFzgrP4fPmQu2A
+   gw2QS3WAnfmtyZMYA+yB4StFs0cLBbG/+BvgEluiIwRCxSJYngssq3X1D
+   DHe4seEcjySMB373Wnr4TqGfEZSJLDnEzTzEGd1ksZyGQFgotsd2uskKM
+   mGuY3CLxGM+dfb7PR+lm6EMH7Nmur6lk4r3qWiqmE1Ifw/Np8UGPl5Re0
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="340484069"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="340484069"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 04:15:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="779819305"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="779819305"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Jun 2023 04:15:15 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 503FC1FD; Wed, 21 Jun 2023 14:15:25 +0300 (EEST)
+Date:   Wed, 21 Jun 2023 14:15:25 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Sanjay R Mehta <Sanju.Mehta@amd.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        Sanath S <Sanath.S@amd.com>
+Subject: Re: [PATCH Internal] thunderbolt: Remove enabling/disabling TMU
+ based on CLx
+Message-ID: <20230621111525.GL45886@black.fi.intel.com>
+References: <1687343842-17881-1-git-send-email-Sanju.Mehta@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 6/6] USB: file.c: make usb class a static const structure
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-References: <20230620094412.508580-7-gregkh@linuxfoundation.org>
- <20230620094412.508580-12-gregkh@linuxfoundation.org>
- <2023062000-consuming-crusher-8a92@gregkh>
-From:   Ivan Orlov <ivan.orlov0322@gmail.com>
-In-Reply-To: <2023062000-consuming-crusher-8a92@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1687343842-17881-1-git-send-email-Sanju.Mehta@amd.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20.06.2023 18:22, Greg Kroah-Hartman wrote:
-> Is this structure needed anymore at all now that the thing the kref was
-> "protecting" is gone?  I think it can be dropped entirely, right?
+On Wed, Jun 21, 2023 at 05:37:22AM -0500, Sanjay R Mehta wrote:
+> From: Sanath S <Sanath.S@amd.com>
 > 
-> thanks,
+> Since TMU is enabled by default on Intel SOCs for USB4 before Alpine
+> Ridge, explicit enabling or disabling of TMU is not required.
 > 
-> greg k-h
+> However, the current implementation of enabling or disabling TMU based
+> on CLx state is inadequate as not all SOCs with CLx disabled have TMU
+> enabled by default, such as AMD Yellow Carp and Pink Sardine.
+> 
+> To address this, a quirk named "QUIRK_TMU_DEFAULT_ENABLED" is
+> implemented to skip the enabling or disabling of TMU for SOCs where it
+> is already enabled by default, such as Intel SOCs prior to Alpine Ridge.
 
-As I understood after reading the code, this kref is used for checking 
-how many devices uses our class and testing when we can unregister it.
-
-As we register our class only when the first device is registered, I 
-think the best solution is to move this kref structure out of the 
-usb_class structure as we still need it for detecting when we could 
-finally unregister our class. What do you think about it?
-
+If it is enabled by default "enabling" it again should not be a problem.
+Can you elaborate this more?
