@@ -2,66 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC43E7380C4
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 13:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C75737FE5
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 13:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232600AbjFUKyI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jun 2023 06:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
+        id S231918AbjFUKyL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jun 2023 06:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbjFUKxh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 06:53:37 -0400
+        with ESMTP id S232441AbjFUKxj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 06:53:39 -0400
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B24E6E
-        for <linux-usb@vger.kernel.org>; Wed, 21 Jun 2023 03:52:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E93710E6
+        for <linux-usb@vger.kernel.org>; Wed, 21 Jun 2023 03:52:48 -0700 (PDT)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 498445C00D2;
-        Wed, 21 Jun 2023 06:52:37 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Wed, 21 Jun 2023 06:52:37 -0400
+        by mailout.nyi.internal (Postfix) with ESMTP id 8A3CA5C00F0;
+        Wed, 21 Jun 2023 06:52:47 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 21 Jun 2023 06:52:47 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
         :cc:content-type:content-type:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1687344757; x=1687431157; bh=Yk
-        dpW/yKT2RmoIKvlf9fUhI16MHnBi8dpMb0H6etl7Y=; b=PzVci6P5BATITpHzrj
-        4nUJull61G+D/8FbNt3z6CeQkBPxTv27JAwG4qZJbeOx5x0wg/tbmt7kQ9MOBWs6
-        PP8G46Ryu9vgmhNbDQ86VoEyB1mIocUlqkl0RVJZlGVkhTHjWHRBM119zqLJWgJn
-        Bx8+23iFq84zRYAxKUWNpAeWjeKSXqmAXj1rTH490lzynjH7mmxxDfNC6yXOhjny
-        cIcmlT/KHfZjRlQJf515VU30dwFZ1bH5D85np2Nu+TyJfYjyaCWcrsKDAdf9z5oc
-        TrpmQu0bdge3jQa+OqrOa/pq37MQKsW4Um7tt/tEj7myHLusxp1Speiam4sh7rbc
-        owwA==
+        :subject:subject:to:to; s=fm2; t=1687344767; x=1687431167; bh=LQ
+        kfcbULRLO9kKNDbi6ElBetwP1j4XZkDoINXw3fudw=; b=A0psC3DMeYJ0qgVvDj
+        Nvs0TyYWghKA5Q/H6lVRzRjL00nnvKV/DJN+g82aUd7+JSJvPsZmvvgf4isveSRp
+        zUAUh80NVH7TnMC8DSCxoIN5XgkUtO4ch66ueP+qLMOfqhFnBLHvm4Bmmu/bziJM
+        0Vs+CgpeuzZkR52TguxOxkiXY1BXYp8eAY7zVihXrCqz9yMo1riEayGySBm9Q7OC
+        LK1/4DvC22bHR0kJLEyiawTswATA614zdzpswFAd0nyuxeFY41O+pAayrR+3X+RU
+        czgQ4pz0zola8zyUKwpwPML0owUZbWvN87J4GqMJAXDQXC5Pxgw5p9ksFSjcXBhF
+        x8NA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:content-type:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687344757; x=1687431157; bh=YkdpW/yKT2Rmo
-        IKvlf9fUhI16MHnBi8dpMb0H6etl7Y=; b=SszXg48kbZamuIKiLlvY4G+OVOWvO
-        89p9CjHWH79UBZrcgh0PR328jyZUwH8SCKtcv2zzLWhEdbOQOsjYJmf2dSTEL1jR
-        wrsHK1Lx8o0yCn2DFoAJ130ry1mul9tDtP36+AadVl9GMP4iuxsi6KdKWkUuaGld
-        hd5PBp2yp971eZl4iCK1C7syUSgc9Ngj5ebIuMSwS91o3I3Lqb+q95jHAKvlLJ45
-        xVR81BsFEr205dXsRAy/6QO0Fsh1wjanbhcLnWuJMUBFGNKrBFUeWjmYHdsQ1ZjY
-        WqerbFoyaf0gIGExatYpkxSSfdIZp+x6lUd7GHPiXr78pFtSANFW6DuDA==
-X-ME-Sender: <xms:dNaSZAWgAqr-uh_7xPYpvyNEJ3tHZeEIC_hx833PRSk_UdWy5hK76g>
-    <xme:dNaSZEm8dOGQhli56OP4eE9Im8D6CIZ-SZf_1ZTn8T1NK4mZ8y6XhvJi4umVNcvLq
-    w8A7TlK2DPJ3w>
-X-ME-Received: <xmr:dNaSZEYZirg_9SqU659-V2N86vCKimRJD2Ey4YxeRw4WoewcjQqegftVIxnvFtKFKGY76t9J1hdK6VqDDP1HTfN1lrf8OsT44Qv9xQ>
+        :x-sasl-enc; s=fm2; t=1687344767; x=1687431167; bh=LQkfcbULRLO9k
+        KNDbi6ElBetwP1j4XZkDoINXw3fudw=; b=gQRXiRJagY9WJyOplx7zWFlRz1r9e
+        C8AFOA3R8nVTX3jDviwiki3mTTwrS2YiCToFhgo35HKgjjbIJpwp/trmLIk4mZRh
+        oheiKq3shBwNzzb4TCI7od3sahv1LaJ8cYNOJ7J47M+9pk+RxMuJkc/vCI3GZStn
+        RFdukh4OHP2NZwqlaiPvTU3Oy+YD5fJ4KlAWx298am/ZKYnE1NeZWr471bj1K00a
+        NoQGoWQhlekGtmiJee5xGhtc/0qovwhTI46yM1c1vAFXso0KUdK0HEQ1JaGMK2Q2
+        q80aCZspt8W9MevmpLP5a89pF6lAwOIUdIOUryJEcGp5ZfrE0WDF1v9yg==
+X-ME-Sender: <xms:f9aSZGlHcKJkrVvcURFfiMnI4WrrzM3BhQHYXI58La8UVYSALdCfmA>
+    <xme:f9aSZN3ZuDTCj9G0GYRtoYhDtF7A5hiQ7e3xMHeNHJkS3OqxmoJwh207PzPxOnYwg
+    alN39scUFFybQ>
+X-ME-Received: <xmr:f9aSZEqpjfvDeSHJ4tHW_8GM5-3TXosTuYQedOZHqdb7Goztc0vNGz8Bu3Dww5_VTh0T9O5liLFLc1yzxgQb_oNm7q8Ogc_3MiFRkg>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefkedgtdejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
     ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
     evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    thgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
     hhrdgtohhm
-X-ME-Proxy: <xmx:ddaSZPUS7erhQcGFp6Kh_Xwa7z8Vlf_QT2Wssp497kgGY9y2wwYBtg>
-    <xmx:ddaSZKn0GDIWsVORxITHwPoxTSb6ozQoBzHVLmx-bw3d1LmOZgDj2A>
-    <xmx:ddaSZEeeIlszAvLCYhm6m_wgT6pXFcQxDjelwXgTrJAVVoHdn6mvJA>
-    <xmx:ddaSZF8yUkbMh9n0BZ-Ll46zwkSeGlSjXr_cSMR4-plsG81Mhdu1Gg>
+X-ME-Proxy: <xmx:f9aSZKn8hOJKDb3xTHtHrzc_mQSkBQ8K1UBhDnV_wn6fNgWcSIGGVg>
+    <xmx:f9aSZE0ur6PSADLgqt3iNxF5EhZeHOqUDRqahvK-rm9N8nlwrg6fzQ>
+    <xmx:f9aSZBuBEgsUNkeoPcm4zy-H9hPowD-GvZsYKzxiKdmafD-HxJ-4EA>
+    <xmx:f9aSZKPXGwuqz5qybiajtuPk5Fqgi4wi2s-x41TxRSAVKUW1aKdOKQ>
 Feedback-ID: i787e41f1:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 21 Jun 2023 06:52:36 -0400 (EDT)
-Date:   Wed, 21 Jun 2023 12:52:32 +0200
+ 21 Jun 2023 06:52:47 -0400 (EDT)
+Date:   Wed, 21 Jun 2023 12:52:43 +0200
 From:   Greg KH <greg@kroah.com>
 To:     Sanjay R Mehta <Sanju.Mehta@amd.com>
 Cc:     mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
@@ -69,7 +69,7 @@ Cc:     mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
         linux-usb@vger.kernel.org, Sanath S <Sanath.S@amd.com>
 Subject: Re: [PATCH Internal] thunderbolt: Remove enabling/disabling TMU
  based on CLx
-Message-ID: <2023062153-barterer-condiment-c209@gregkh>
+Message-ID: <2023062136-canine-editor-e9fd@gregkh>
 References: <1687343842-17881-1-git-send-email-Sanju.Mehta@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -88,6 +88,20 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 On Wed, Jun 21, 2023 at 05:37:22AM -0500, Sanjay R Mehta wrote:
 > From: Sanath S <Sanath.S@amd.com>
+> 
+> Since TMU is enabled by default on Intel SOCs for USB4 before Alpine
+> Ridge, explicit enabling or disabling of TMU is not required.
+> 
+> However, the current implementation of enabling or disabling TMU based
+> on CLx state is inadequate as not all SOCs with CLx disabled have TMU
+> enabled by default, such as AMD Yellow Carp and Pink Sardine.
+> 
+> To address this, a quirk named "QUIRK_TMU_DEFAULT_ENABLED" is
+> implemented to skip the enabling or disabling of TMU for SOCs where it
+> is already enabled by default, such as Intel SOCs prior to Alpine Ridge.
+> 
+> Fixes: 7af9da8ce8f9 ("thunderbolt: Add quirk to disable CLx")
+> Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
+> Signed-off-by: Sanath S <Sanath.S@amd.com>
 
-Why "Internal"?
-
+Wrong ordering :(
