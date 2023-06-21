@@ -2,181 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633427386F6
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 16:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA96573879E
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 16:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232321AbjFUO1i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jun 2023 10:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
+        id S232256AbjFUOsG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jun 2023 10:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbjFUO1P (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 10:27:15 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0716610D5;
-        Wed, 21 Jun 2023 07:26:44 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b4745834f3so54991031fa.2;
-        Wed, 21 Jun 2023 07:26:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687357602; x=1689949602;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cXp+vDAywJj5cJVg/DGBbIIG0LrSwQcuzIbyxZXKO/k=;
-        b=UP3OyWN+5ecr1xlIb7pHYBadTYZQly/kIMPmuS9kujYlNimputz+zZOzKhPlZmJBuF
-         aG1lwHGq6a2UZc4oRSj0chrcqOv2F5UzWHFfOhfLEdOHa5Knynk5rKni1va7viwNhzkP
-         tdlNVksai/R6T1u9cUsT7fyRR2Rg/ebjSzJTAq68how2dfz+PipYdYaNWIZ/6ZGcmtqS
-         /GZOhk5sQ58FhqzmeDOd8GomVZNTt0ZYjhXhfnEyADpJD8U05nXZjYqGjbEdYMbjQ+kA
-         SGJveeESLeQJ7ACg/4N6bHWXDxbdMOhq0V/fUtpBc267r6SH3T04VRmCNUPCk1EJoiy4
-         W0rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687357602; x=1689949602;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cXp+vDAywJj5cJVg/DGBbIIG0LrSwQcuzIbyxZXKO/k=;
-        b=lpTmzDglVJhIVgPGyPUwcIZ+vcwZNmBnhk3F+5Ig/MgjspKu5OGmxE4kR4h0wRWOS9
-         5siO3wwVfgG1JvDgWJWMUZzckKGYobgwdL9/mPOiChrJTc5L4G3KRYbZwZHwXy4Oh7K7
-         vqoTlE2/sWP8XWvmG5xBM9m9eatdoLFm/ZddZDjXQb7DaL6EKdSAmjlTB3qT88q4C3C1
-         2rslhtXe/cDAG1T0ruEeTzvmoBf0JgF5c5mosrPBddZHwkQS+K83dP5JAYj29GefJDAl
-         TI1+U2/5ILUo1NTFMVjP9AhQMGB+YQgl683+6nFL5vOMwUx96xktUFg+7W7RSCfbrm9L
-         RqFA==
-X-Gm-Message-State: AC+VfDwApdcYKv+BzzHCWbYCH6DkL2q9Wl3Um7o/+TiRgMpvSWNlJQ7D
-        M1Jg4y/oZKobm9mZxUFYLto=
-X-Google-Smtp-Source: ACHHUZ41bK7GbPj4Q4/ms1CfUJQsjI2LU88qpxC0XJoGOKFGgJiDpf8tUoe6KWqbHNCdOEkRJxqEKA==
-X-Received: by 2002:a2e:6e07:0:b0:2b4:4a68:a95 with SMTP id j7-20020a2e6e07000000b002b44a680a95mr10759042ljc.8.1687357601846;
-        Wed, 21 Jun 2023 07:26:41 -0700 (PDT)
-Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id l11-20020a170906644b00b00988956f244csm3266156ejn.6.2023.06.21.07.26.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 07:26:41 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Wed, 21 Jun 2023 16:26:29 +0200
-Subject: [PATCH v2 3/3] dt-bindings: usb: Add binding for Cypress HX3 USB
- 3.0 family
+        with ESMTP id S232065AbjFUOr5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 10:47:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DA41997;
+        Wed, 21 Jun 2023 07:47:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E21AC6157E;
+        Wed, 21 Jun 2023 14:47:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B79CBC433C0;
+        Wed, 21 Jun 2023 14:47:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687358866;
+        bh=F3dY/2KLU5GOMIGa42l18TYXTzOkj60bdKGA2MB7kkg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mioKTqZYyXJZavUYjcubhAf8oDBomkt74YuPWSA09CAcJuHtjWYu58SB4Z3985pYl
+         9rU5LxQy2mip8BeoycVEc8K0Y2pmMxS0Tlq+9SwjwKNf1UsqVYl9jhv4FcDRPADbKI
+         491CPsalfGoUC3xZ2srE9Ot53iuzMqb4CpFDRwKPoQQlYaruIT9GF+q2EJamLI8KTB
+         xBGNVi1fOZ7dtG39nR+YmVdEtg0IiQ/DBo1cOK89vpa3Jr0WXQn1fokdnQLmxlz3Is
+         YyRaE/xiud5UkfOYTmAqwP8rnqRnxkH4w9BLQmRmqc2ICOWr/8PRBzs37A0SOQKudr
+         H6GYBb/gkUn9g==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 07/79] usb: switch to new ctime accessors
+Date:   Wed, 21 Jun 2023 10:45:20 -0400
+Message-ID: <20230621144735.55953-6-jlayton@kernel.org>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230621144735.55953-1-jlayton@kernel.org>
+References: <20230621144507.55591-1-jlayton@kernel.org>
+ <20230621144735.55953-1-jlayton@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230620-hx3-v2-3-76a53434c713@skidata.com>
-References: <20230620-hx3-v2-0-76a53434c713@skidata.com>
-In-Reply-To: <20230620-hx3-v2-0-76a53434c713@skidata.com>
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Benjamin Bara <benjamin.bara@skidata.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Benjamin Bara <benjamin.bara@skidata.com>
+In later patches, we're going to change how the ctime.tv_nsec field is
+utilized. Switch to using accessor functions instead of raw accesses of
+inode->i_ctime.
 
-The HX3 family comes in different variants (up to 4 USB 3.0 ports;
-multi-TT), e.g. CYUSB330x/CYUSB331x/CYUSB332x/CYUSB230x.
-
-This initial version of the binding only describes USB related aspects
-of the HX3 family, it does not cover the option of connecting the
-controller as an i2c slave.
-
-Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- .../devicetree/bindings/usb/cypress,hx3.yaml       | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+ drivers/usb/core/devio.c           | 16 ++++++++--------
+ drivers/usb/gadget/function/f_fs.c |  6 +-----
+ drivers/usb/gadget/legacy/inode.c  |  3 +--
+ 3 files changed, 10 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-new file mode 100644
-index 000000000000..47add0d85fb8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-@@ -0,0 +1,77 @@
-+# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/cypress,hx3.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cypress HX3 USB 3.0 hub controller family
-+
-+maintainers:
-+  - Benjamin Bara <benjamin.bara@skidata.com>
-+
-+allOf:
-+  - $ref: usb-device.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - usb4b4,6504
-+      - usb4b4,6506
-+
-+  reg: true
-+
-+  reset-gpios:
-+    items:
-+      - description: GPIO specifier for RESETN pin.
-+
-+  vdd-supply:
-+    description:
-+      1V2 power supply (VDD_EFUSE, AVDD12, DVDD12).
-+
-+  vdd2-supply:
-+    description:
-+      3V3 power supply (AVDD33, VDD_IO).
-+
-+  peer-hub:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      phandle to the peer hub on the controller.
-+
-+required:
-+  - compatible
-+  - reg
-+  - peer-hub
-+  - vdd-supply
-+  - vdd2-supply
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    usb {
-+        dr_mode = "host";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        /* 2.0 hub on port 1 */
-+        hub_2_0: hub@1 {
-+          compatible = "usb4b4,6504";
-+          reg = <1>;
-+          peer-hub = <&hub_3_0>;
-+          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+          vdd-supply = <&reg_1v2_usb>;
-+          vdd2-supply = <&reg_3v3_usb>;
-+        };
-+
-+        /* 3.0 hub on port 2 */
-+        hub_3_0: hub@2 {
-+          compatible = "usb4b4,6506";
-+          reg = <2>;
-+          peer-hub = <&hub_2_0>;
-+          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+          vdd-supply = <&reg_1v2_usb>;
-+          vdd2-supply = <&reg_3v3_usb>;
-+        };
-+    };
-
+diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+index 1a16a8bdea60..02f718e0deaf 100644
+--- a/drivers/usb/core/devio.c
++++ b/drivers/usb/core/devio.c
+@@ -2642,21 +2642,21 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+ 		snoop(&dev->dev, "%s: CONTROL\n", __func__);
+ 		ret = proc_control(ps, p);
+ 		if (ret >= 0)
+-			inode->i_mtime = inode->i_ctime = current_time(inode);
++			inode->i_mtime = inode_ctime_set_current(inode);
+ 		break;
+ 
+ 	case USBDEVFS_BULK:
+ 		snoop(&dev->dev, "%s: BULK\n", __func__);
+ 		ret = proc_bulk(ps, p);
+ 		if (ret >= 0)
+-			inode->i_mtime = inode->i_ctime = current_time(inode);
++			inode->i_mtime = inode_ctime_set_current(inode);
+ 		break;
+ 
+ 	case USBDEVFS_RESETEP:
+ 		snoop(&dev->dev, "%s: RESETEP\n", __func__);
+ 		ret = proc_resetep(ps, p);
+ 		if (ret >= 0)
+-			inode->i_mtime = inode->i_ctime = current_time(inode);
++			inode->i_mtime = inode_ctime_set_current(inode);
+ 		break;
+ 
+ 	case USBDEVFS_RESET:
+@@ -2668,7 +2668,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+ 		snoop(&dev->dev, "%s: CLEAR_HALT\n", __func__);
+ 		ret = proc_clearhalt(ps, p);
+ 		if (ret >= 0)
+-			inode->i_mtime = inode->i_ctime = current_time(inode);
++			inode->i_mtime = inode_ctime_set_current(inode);
+ 		break;
+ 
+ 	case USBDEVFS_GETDRIVER:
+@@ -2695,7 +2695,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+ 		snoop(&dev->dev, "%s: SUBMITURB\n", __func__);
+ 		ret = proc_submiturb(ps, p);
+ 		if (ret >= 0)
+-			inode->i_mtime = inode->i_ctime = current_time(inode);
++			inode->i_mtime = inode_ctime_set_current(inode);
+ 		break;
+ 
+ #ifdef CONFIG_COMPAT
+@@ -2703,14 +2703,14 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+ 		snoop(&dev->dev, "%s: CONTROL32\n", __func__);
+ 		ret = proc_control_compat(ps, p);
+ 		if (ret >= 0)
+-			inode->i_mtime = inode->i_ctime = current_time(inode);
++			inode->i_mtime = inode_ctime_set_current(inode);
+ 		break;
+ 
+ 	case USBDEVFS_BULK32:
+ 		snoop(&dev->dev, "%s: BULK32\n", __func__);
+ 		ret = proc_bulk_compat(ps, p);
+ 		if (ret >= 0)
+-			inode->i_mtime = inode->i_ctime = current_time(inode);
++			inode->i_mtime = inode_ctime_set_current(inode);
+ 		break;
+ 
+ 	case USBDEVFS_DISCSIGNAL32:
+@@ -2722,7 +2722,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+ 		snoop(&dev->dev, "%s: SUBMITURB32\n", __func__);
+ 		ret = proc_submiturb_compat(ps, p);
+ 		if (ret >= 0)
+-			inode->i_mtime = inode->i_ctime = current_time(inode);
++			inode->i_mtime = inode_ctime_set_current(inode);
+ 		break;
+ 
+ 	case USBDEVFS_IOCTL32:
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index f41a385a5c42..756c78043a04 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1377,16 +1377,12 @@ ffs_sb_make_inode(struct super_block *sb, void *data,
+ 	inode = new_inode(sb);
+ 
+ 	if (inode) {
+-		struct timespec64 ts = current_time(inode);
+-
+ 		inode->i_ino	 = get_next_ino();
+ 		inode->i_mode    = perms->mode;
+ 		inode->i_uid     = perms->uid;
+ 		inode->i_gid     = perms->gid;
+-		inode->i_atime   = ts;
+-		inode->i_mtime   = ts;
+-		inode->i_ctime   = ts;
+ 		inode->i_private = data;
++		inode->i_atime   = inode->i_mtime = inode_ctime_set_current(inode);
+ 		if (fops)
+ 			inode->i_fop = fops;
+ 		if (iops)
+diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
+index 28249d0bf062..b83a68feb316 100644
+--- a/drivers/usb/gadget/legacy/inode.c
++++ b/drivers/usb/gadget/legacy/inode.c
+@@ -1969,8 +1969,7 @@ gadgetfs_make_inode (struct super_block *sb,
+ 		inode->i_mode = mode;
+ 		inode->i_uid = make_kuid(&init_user_ns, default_uid);
+ 		inode->i_gid = make_kgid(&init_user_ns, default_gid);
+-		inode->i_atime = inode->i_mtime = inode->i_ctime
+-				= current_time(inode);
++		inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
+ 		inode->i_private = data;
+ 		inode->i_fop = fops;
+ 	}
 -- 
-2.34.1
+2.41.0
 
