@@ -2,75 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E12C738E18
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 20:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A069C738FA3
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 21:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbjFUSEO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jun 2023 14:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
+        id S230324AbjFUTIM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jun 2023 15:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbjFUSEL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 14:04:11 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F229D;
-        Wed, 21 Jun 2023 11:04:10 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9741caaf9d4so752752966b.0;
-        Wed, 21 Jun 2023 11:04:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687370648; x=1689962648;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cXp+vDAywJj5cJVg/DGBbIIG0LrSwQcuzIbyxZXKO/k=;
-        b=K+EW8lbSK4PoxTVYtjeTj96jP+KYrKG5oRucUsuNByForLRmUwBToTz81XEdfT8oUi
-         /CgExf+MCc1EDN7tAV2qM16x1K4QV75+zqoAnvp6T887K6wZMLJVhSVODjjdOMUPkDgp
-         gnFbbqI+jihCIzg0ALDgkj4ZpbZMNBSRDFB/IKiktdIJAOvjuUCFKJPykE7t45HJ0qZL
-         HXS3QMlWg2AAXtbiMcEnt/mwu3ZTyPEMOrlJuI0JDUHOWwEYJWT3KaYA7IrozTr9B6KL
-         GD1SuSyZ6Nj6ZN0fJYQE5GIAQlMm6IixP/XfIZAzMfbzJme2si21bvfiBToxtfYLhR83
-         Q6SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687370648; x=1689962648;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cXp+vDAywJj5cJVg/DGBbIIG0LrSwQcuzIbyxZXKO/k=;
-        b=DEQXuqhOSqxHa49doQSyb3hBI2ucOuKKUHD0kzJXkrkjT2Qk4iRb6m7+FUpqiMGrqY
-         56yTfbbygf75KZds2CtAHhIWpzEKNJzEJKtntiIAKYJQyfdoIN3kxr34yBoO+sZTzQKi
-         KB3UtAlKUM/pAVhptV0TpDzmgQ+GR2Pb9CeDjkw8sFijtHgVAQ0m5XR+3ecMjaRTxeSf
-         TXzKDvxP+3e4dRuGOCTtBYj047Cwy5WDbqZnJ8bjepVCFWez9sanJhsxeXrsBSp2h5HI
-         ErCKQNl7KaJUoeX+r6Sp3gB+QuTpIK6iGao+NPOEUrByL54o937xBgXfEf+mQVBbgr2f
-         h04w==
-X-Gm-Message-State: AC+VfDxsT5ImILUCYlphmmJvGmvcFoWxSu5op00EwaYm5qzY7QDyPbYl
-        kfdPwDmvqz01CKcPBt7v/k6DOz0NPccBQg==
-X-Google-Smtp-Source: ACHHUZ7N4+YBBScMKZUCmuIVV+hNuxz6uOzk1+2+tW4XnlQSDMEifoQ6vD4j5DdLJJ0ml5uElrxyVg==
-X-Received: by 2002:a17:907:16a9:b0:98c:e3a1:dbb4 with SMTP id hc41-20020a17090716a900b0098ce3a1dbb4mr1667292ejc.68.1687370648353;
-        Wed, 21 Jun 2023 11:04:08 -0700 (PDT)
-Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id u13-20020a170906b10d00b00988955f7b5esm3460779ejy.157.2023.06.21.11.04.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 11:04:08 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Wed, 21 Jun 2023 20:04:05 +0200
-Subject: [PATCH v4 3/3] dt-bindings: usb: Add binding for Cypress HX3 USB
- 3.0 family
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230620-hx3-v4-3-e56b3c6db60b@skidata.com>
-References: <20230620-hx3-v4-0-e56b3c6db60b@skidata.com>
-In-Reply-To: <20230620-hx3-v4-0-e56b3c6db60b@skidata.com>
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Benjamin Bara <benjamin.bara@skidata.com>
+        with ESMTP id S230128AbjFUTIK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 15:08:10 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25E31710;
+        Wed, 21 Jun 2023 12:08:09 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 11AEA5C0187;
+        Wed, 21 Jun 2023 15:08:09 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 21 Jun 2023 15:08:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1687374489; x=1687460889; bh=ch
+        mOE6vBFL8CMY1hzXv0AGJnH+8VUeMDekwIg7ee+4U=; b=Gd7fpONP332eqV0Njl
+        TiefCPaXR48QellkpmpZRGT7KyKg49m7/18IRHl+6m6JbfihB0nuOTu29fpVVY1c
+        5jUZ/F6/TEKuGbZKZU2B3ASYhEH0Q8Fhc3or16uYde+FE7eqyXEQXYyoWEm/TYv5
+        gSdnzUTp0+ozolzjQuvAEJQBx7eHgYkcU09ALbsCtfaDOTZoAjl8/pw9OTHNqFuh
+        wF1FtGWG/N5Jj6DDk1Bo/oPmKggIquTmGcj6lY07bnoKMbl8cwxXgPKOThX92Cb5
+        Jq7pQ3m8z2/LChX5e8/R+22v7bVBgHvyVXQ2Dl7S3EQ9ZqE9AavunekAHjEDB44P
+        FmjA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687374489; x=1687460889; bh=chmOE6vBFL8CM
+        Y1hzXv0AGJnH+8VUeMDekwIg7ee+4U=; b=RhreD2aAjdWrjkVtD1JiMdGXQjMgl
+        ZdCIMMzW9BCb0tI29MenrttrXU9v6ASflt5hLJomtzGzl9P4+Ny5HvEPyaa02mvA
+        V3rfg0tcSrUeKWrBMbcv7VDayT/PCFm3wlNlMPgBelemmcJmoWJW0ZgpUgAeCYQU
+        kYnM8wET3W1UUWqva7M6jXt/MSJ8uI0gJYMii6peLMdp33KBuep40keAgYCmiWGq
+        IuIUdlpfY8HIzySgYXbTxqSsm5a8uq4W3nmD6aaNuoBYGxiDQunkFpO89doqaoTa
+        DkYN0m8qFGfxdz99m9y6imOKe+x00HMkJZBKEguQhqzaRbyEU77vhhVfQ==
+X-ME-Sender: <xms:mEqTZC850_50SJS-KkjrUYqmTReEuTGbIpbUruKSpzo1prQJJKAE3w>
+    <xme:mEqTZCuvmQbDYiKraxatlJjTXDIeoQAnYy4ZT5gOUF0No3f2pRQSCz91dGGXhv9pN
+    1sdsCQn27LdFA>
+X-ME-Received: <xmr:mEqTZICP1J9KjunV89RxU_KWLDgYtMHLo00lFiURUd_s41gXkx-72V6pwlpXO0rk2dJ6ZPIS3wJCtuRByTfw4rDaylwd8Huk_PtVXfN9z54>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefledgfeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:mEqTZKeFUZWiTbmheX32UNcYZ5PIu_N8ASF6-dpTM_7JmIXC6GDDnQ>
+    <xmx:mEqTZHO2ARa3i3ponMhBxeKxQBUEHotaPP5dLmjbg3ETyjkcL7nquw>
+    <xmx:mEqTZEmdkFX70u3fgvedHBiWB1k1KjHb1nEnNcD_FZ_xAJuvXXjDBw>
+    <xmx:mUqTZDBIzY68YL-Y6mIHMinCXba692yvEFekhUd8WE4trrmyx2O-5A>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 21 Jun 2023 15:08:08 -0400 (EDT)
+Date:   Wed, 21 Jun 2023 21:08:06 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] usb: ulpi: Make container_of() no-op in
+ to_ulpi_dev()
+Message-ID: <2023062144-impose-wrecking-2315@gregkh>
+References: <20230621163122.5693-1-andriy.shevchenko@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621163122.5693-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,104 +85,29 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Benjamin Bara <benjamin.bara@skidata.com>
+On Wed, Jun 21, 2023 at 07:31:22PM +0300, Andy Shevchenko wrote:
+> Move embedded struct device member to make container_of() noop
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  include/linux/ulpi/driver.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/ulpi/driver.h b/include/linux/ulpi/driver.h
+> index c7a1810373e3..a8cb617a3028 100644
+> --- a/include/linux/ulpi/driver.h
+> +++ b/include/linux/ulpi/driver.h
+> @@ -15,9 +15,9 @@ struct ulpi_ops;
+>   * @dev: device interface
+>   */
+>  struct ulpi {
+> +	struct device dev;
+>  	struct ulpi_device_id id;
+>  	const struct ulpi_ops *ops;
+> -	struct device dev;
 
-The HX3 family comes in different variants (up to 4 USB 3.0 ports;
-multi-TT), e.g. CYUSB330x/CYUSB331x/CYUSB332x/CYUSB230x.
+CPUs don't like doing pointer math anymore?  :)
 
-This initial version of the binding only describes USB related aspects
-of the HX3 family, it does not cover the option of connecting the
-controller as an i2c slave.
+I'll go queue this up, thanks for the micro-optimization.
 
-Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
----
- .../devicetree/bindings/usb/cypress,hx3.yaml       | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-new file mode 100644
-index 000000000000..47add0d85fb8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-@@ -0,0 +1,77 @@
-+# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/cypress,hx3.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cypress HX3 USB 3.0 hub controller family
-+
-+maintainers:
-+  - Benjamin Bara <benjamin.bara@skidata.com>
-+
-+allOf:
-+  - $ref: usb-device.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - usb4b4,6504
-+      - usb4b4,6506
-+
-+  reg: true
-+
-+  reset-gpios:
-+    items:
-+      - description: GPIO specifier for RESETN pin.
-+
-+  vdd-supply:
-+    description:
-+      1V2 power supply (VDD_EFUSE, AVDD12, DVDD12).
-+
-+  vdd2-supply:
-+    description:
-+      3V3 power supply (AVDD33, VDD_IO).
-+
-+  peer-hub:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      phandle to the peer hub on the controller.
-+
-+required:
-+  - compatible
-+  - reg
-+  - peer-hub
-+  - vdd-supply
-+  - vdd2-supply
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    usb {
-+        dr_mode = "host";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        /* 2.0 hub on port 1 */
-+        hub_2_0: hub@1 {
-+          compatible = "usb4b4,6504";
-+          reg = <1>;
-+          peer-hub = <&hub_3_0>;
-+          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+          vdd-supply = <&reg_1v2_usb>;
-+          vdd2-supply = <&reg_3v3_usb>;
-+        };
-+
-+        /* 3.0 hub on port 2 */
-+        hub_3_0: hub@2 {
-+          compatible = "usb4b4,6506";
-+          reg = <2>;
-+          peer-hub = <&hub_2_0>;
-+          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+          vdd-supply = <&reg_1v2_usb>;
-+          vdd2-supply = <&reg_3v3_usb>;
-+        };
-+    };
-
--- 
-2.34.1
-
+greg k-h
