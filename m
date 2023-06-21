@@ -2,112 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A069C738FA3
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 21:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEFAD739061
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jun 2023 21:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjFUTIM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jun 2023 15:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49408 "EHLO
+        id S230354AbjFUTrt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jun 2023 15:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbjFUTIK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 15:08:10 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25E31710;
-        Wed, 21 Jun 2023 12:08:09 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 11AEA5C0187;
-        Wed, 21 Jun 2023 15:08:09 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 21 Jun 2023 15:08:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1687374489; x=1687460889; bh=ch
-        mOE6vBFL8CMY1hzXv0AGJnH+8VUeMDekwIg7ee+4U=; b=Gd7fpONP332eqV0Njl
-        TiefCPaXR48QellkpmpZRGT7KyKg49m7/18IRHl+6m6JbfihB0nuOTu29fpVVY1c
-        5jUZ/F6/TEKuGbZKZU2B3ASYhEH0Q8Fhc3or16uYde+FE7eqyXEQXYyoWEm/TYv5
-        gSdnzUTp0+ozolzjQuvAEJQBx7eHgYkcU09ALbsCtfaDOTZoAjl8/pw9OTHNqFuh
-        wF1FtGWG/N5Jj6DDk1Bo/oPmKggIquTmGcj6lY07bnoKMbl8cwxXgPKOThX92Cb5
-        Jq7pQ3m8z2/LChX5e8/R+22v7bVBgHvyVXQ2Dl7S3EQ9ZqE9AavunekAHjEDB44P
-        FmjA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687374489; x=1687460889; bh=chmOE6vBFL8CM
-        Y1hzXv0AGJnH+8VUeMDekwIg7ee+4U=; b=RhreD2aAjdWrjkVtD1JiMdGXQjMgl
-        ZdCIMMzW9BCb0tI29MenrttrXU9v6ASflt5hLJomtzGzl9P4+Ny5HvEPyaa02mvA
-        V3rfg0tcSrUeKWrBMbcv7VDayT/PCFm3wlNlMPgBelemmcJmoWJW0ZgpUgAeCYQU
-        kYnM8wET3W1UUWqva7M6jXt/MSJ8uI0gJYMii6peLMdp33KBuep40keAgYCmiWGq
-        IuIUdlpfY8HIzySgYXbTxqSsm5a8uq4W3nmD6aaNuoBYGxiDQunkFpO89doqaoTa
-        DkYN0m8qFGfxdz99m9y6imOKe+x00HMkJZBKEguQhqzaRbyEU77vhhVfQ==
-X-ME-Sender: <xms:mEqTZC850_50SJS-KkjrUYqmTReEuTGbIpbUruKSpzo1prQJJKAE3w>
-    <xme:mEqTZCuvmQbDYiKraxatlJjTXDIeoQAnYy4ZT5gOUF0No3f2pRQSCz91dGGXhv9pN
-    1sdsCQn27LdFA>
-X-ME-Received: <xmr:mEqTZICP1J9KjunV89RxU_KWLDgYtMHLo00lFiURUd_s41gXkx-72V6pwlpXO0rk2dJ6ZPIS3wJCtuRByTfw4rDaylwd8Huk_PtVXfN9z54>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefledgfeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:mEqTZKeFUZWiTbmheX32UNcYZ5PIu_N8ASF6-dpTM_7JmIXC6GDDnQ>
-    <xmx:mEqTZHO2ARa3i3ponMhBxeKxQBUEHotaPP5dLmjbg3ETyjkcL7nquw>
-    <xmx:mEqTZEmdkFX70u3fgvedHBiWB1k1KjHb1nEnNcD_FZ_xAJuvXXjDBw>
-    <xmx:mUqTZDBIzY68YL-Y6mIHMinCXba692yvEFekhUd8WE4trrmyx2O-5A>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 21 Jun 2023 15:08:08 -0400 (EDT)
-Date:   Wed, 21 Jun 2023 21:08:06 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] usb: ulpi: Make container_of() no-op in
- to_ulpi_dev()
-Message-ID: <2023062144-impose-wrecking-2315@gregkh>
-References: <20230621163122.5693-1-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S230148AbjFUTrs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 15:47:48 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD92E65;
+        Wed, 21 Jun 2023 12:47:45 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LHtOGe012790;
+        Wed, 21 Jun 2023 19:46:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=OFGD4SZxrzEluRY8oJdSUhAqbDTKEdcNke7nRn5nSmM=;
+ b=CQKQCHvP0yh0jMdce7Y2prxmRwTjqIpq9njQxr4ZhYTiWYQzTCOcNJhRSq8eod4b0XIo
+ Uou6CnhbVw5oWMKvxYfhka3A4nWze6AgZ/osf9xZ7l7XI3gVaIiyZ/6IhvYp6RptLZQ2
+ 1lrhycfERp/fMEseN9nqPjrh9/4v65OgZUXoTT94/UT9rFOZSHU4nHAQfs8Ni3xBPKlY
+ zILuviqVKFwCS2F05wwAXIhIY1ZA4KUCQIQgUaiMfARFkbDq5ps5IecByw0u8RmfMgO7
+ YgJWgu4mZdepNl8jAls5GTCpz1hIMMjaMz0LH2lPa6xkxRsDRIPXKYV53uTXIc0zVVmT Ow== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rc0sk12yp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 19:46:14 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35LJk8oa013311
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 19:46:08 GMT
+Received: from [10.110.82.3] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 21 Jun
+ 2023 12:46:08 -0700
+Message-ID: <ae1a7788-acdd-8964-1450-61a741386fbd@quicinc.com>
+Date:   Wed, 21 Jun 2023 12:46:03 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621163122.5693-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 0/2] Avoid re-initializing XHCI HC during removal
+Content-Language: en-US
+To:     <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20230531222719.14143-1-quic_wcheng@quicinc.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <20230531222719.14143-1-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: daCzUhdQs493v4UjSuO9XsIRn9i2CHR5
+X-Proofpoint-ORIG-GUID: daCzUhdQs493v4UjSuO9XsIRn9i2CHR5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-21_12,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ phishscore=0 impostorscore=0 mlxlogscore=398 priorityscore=1501
+ malwarescore=0 adultscore=0 spamscore=0 clxscore=1015 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306210164
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 07:31:22PM +0300, Andy Shevchenko wrote:
-> Move embedded struct device member to make container_of() noop
+Friendly ping to see if there are any review feedback/concerns with this 
+series?
+
+Thanks
+Wesley Cheng
+
+On 5/31/2023 3:27 PM, Wesley Cheng wrote:
+> There is an extra amount of overhead being adding to XHCI HCD removal
+> cases when the HCD needs to undergo a runtime resume.  The xhc_reinit
+> logic will attempt to restart the HC if there is a HCE observed during
+> resume.  However, in the removal case, this is not required as the
+> XHCI stop/halt will execute the same operations.  In addition, it isn't
+> needed that the HC be placed back into the running state if it is being
+> removed.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  include/linux/ulpi/driver.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Changes in v3:
+> - Update xhci-plat to set the removal flag before issuing the runtime PM
+> get
 > 
-> diff --git a/include/linux/ulpi/driver.h b/include/linux/ulpi/driver.h
-> index c7a1810373e3..a8cb617a3028 100644
-> --- a/include/linux/ulpi/driver.h
-> +++ b/include/linux/ulpi/driver.h
-> @@ -15,9 +15,9 @@ struct ulpi_ops;
->   * @dev: device interface
->   */
->  struct ulpi {
-> +	struct device dev;
->  	struct ulpi_device_id id;
->  	const struct ulpi_ops *ops;
-> -	struct device dev;
-
-CPUs don't like doing pointer math anymore?  :)
-
-I'll go queue this up, thanks for the micro-optimization.
-
-greg k-h
+> Changes in v2:
+> - Fixed spacing issue
+> 
+> Wesley Cheng (2):
+>    usb: host: xhci: Do not re-initialize the XHCI HC if being removed
+>    usb: host: xhci-plat: Set XHCI_STATE_REMOVING before resuming XHCI HC
+> 
+>   drivers/usb/host/xhci-plat.c | 2 +-
+>   drivers/usb/host/xhci.c      | 3 ++-
+>   2 files changed, 3 insertions(+), 2 deletions(-)
+> 
