@@ -2,89 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30BB273953D
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Jun 2023 04:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 283CB7395A5
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Jun 2023 04:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjFVCHy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jun 2023 22:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
+        id S229887AbjFVC5v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jun 2023 22:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbjFVCHw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 22:07:52 -0400
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5361BD8;
-        Wed, 21 Jun 2023 19:07:42 -0700 (PDT)
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-341c362a851so25841685ab.2;
-        Wed, 21 Jun 2023 19:07:42 -0700 (PDT)
+        with ESMTP id S229784AbjFVC5u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jun 2023 22:57:50 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B172C171C;
+        Wed, 21 Jun 2023 19:57:48 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-54f75f85a17so3608421a12.0;
+        Wed, 21 Jun 2023 19:57:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687402668; x=1689994668;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=baRINIxlSWtAcWNB0GnBkwJVhbIeRDHzK+M6uQUBCxY=;
+        b=UiHan2d1ePk+GkYMfi1riVe8TWvV+IgmOiBYEV+MdEsZRGhtYq2xL3blysO644ApQb
+         8sgv7LM2MzIRD9tu9zok8gypjqlwkaTtx4cg4r2cjrmUcwuPeos5IIpMYU2K2M5sd3Tu
+         7/4wuBrUr47rVeE6FJtglmeIx+ZbX2HEd4JRWGe1GMEYnJPuoHfgTfkmvDgb9tBlx+2j
+         4aIobbKx5Xa1vnBaQb5C+SXxzdxkQ7Bc1zisrRQ7gXInIamZSIhcFL25pU7iy3ym2z6k
+         D51wqdh4F6C6yFYvFyrwRuq5kG2t4v8MDzV6gwCpm0R9t1gj0YH1F8lgZPapEOLCsnUN
+         7aKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687399662; x=1689991662;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nX4L8ejzBqvRUr9f62UT6M7EQgUf9/KqzPDQhJBYawU=;
-        b=aXePOFL9OvqiG6cIDeGr6SQANqkqilMshy02oVeNj5BNVDfsbpHBwCp0nUU+8YkKVV
-         ZpmbkhWdFrpRx4D/VxaMSfz+XvVHesuCg1umbatMEukePHwtEcJNLi1+NKki6U69cb9D
-         POjOvdlqtMp836OulpNgM5bXGqGnOo6lYZRGrbU9DJslwPw+33L0w7cJ6eCr3GfZ8M/U
-         GekRiRLrmEQmfzZublqCO5gsXYJ++Bp3ZGBdg5XKpBLKnHdCYPuvghQrHrziUDIoAFV2
-         Qi1MfcwapE+mqH4OTg960AJPbmz198vRPeAPwDdBUJzuNgyFwKbOheE0+7/9lQVekNoj
-         M6PQ==
-X-Gm-Message-State: AC+VfDz5Z98yPOGQWhkqBJQjf2q0iA5kVvBrnu2/93oS3UrpqnL5olYU
-        miJTYIveJblHLpQqbMSriQ==
-X-Google-Smtp-Source: ACHHUZ7tPd0zVOkisTOC6GV02QUpZy9KMeMbVVC0nbsj9YGKPDZv+3VOVws/Inlptwbj9LyRxwCEWg==
-X-Received: by 2002:a05:6e02:610:b0:331:9c03:dada with SMTP id t16-20020a056e02061000b003319c03dadamr13558953ils.13.1687399662203;
-        Wed, 21 Jun 2023 19:07:42 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id s14-20020a92cb0e000000b0034267d3fcc5sm1680494ilo.55.2023.06.21.19.07.40
+        d=1e100.net; s=20221208; t=1687402668; x=1689994668;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=baRINIxlSWtAcWNB0GnBkwJVhbIeRDHzK+M6uQUBCxY=;
+        b=BfOuVSAOxbIjzu2KFt2aQjAv8zjyz3tqlrTuPRU/Al4n70hKpjM8XIW15udzQCDDqj
+         HqPMo+Uz9EF2OBa9QKUxLiWWnsy8ZbTm4/MkMKj6A7wQuC37QFybwVNON3HzCA3TCeRO
+         N5Mvr4WAea+ISWmalJ1VklZGcZiBg3NWHMp1TNkiVDKxL9FWFlLqXtzKhF62Es7N3BlU
+         qQzKlxaXFYHpufdZwiVEIwDoGJoAFlaXnWxgRggMf9q9TJuhQaO7OzIXjVZ4ISZcBB6e
+         0BDbeu1fi1+k6GOxpsH77waH7uF5P6tx6oR5b6XiKTNbMPYPHVeopi5sXjUPttq/LMie
+         tFvw==
+X-Gm-Message-State: AC+VfDx1+pN5q2wnw6R2jIvMwnIgkLwzkvUf/c+F/fUfMgYNirhlgyJw
+        q0mnC5cAP+xI7nM0PU+msKWMUuLwo9t6UpfVdAk=
+X-Google-Smtp-Source: ACHHUZ5WmLGa0KabM5PrJGqArh26LKaN/KvGk3iNwbGJKvW2iChEEaIElSh9lOhtptkWEdlzaNwpaA==
+X-Received: by 2002:a05:6a20:394a:b0:121:b1fc:1a48 with SMTP id r10-20020a056a20394a00b00121b1fc1a48mr9291508pzg.3.1687402668160;
+        Wed, 21 Jun 2023 19:57:48 -0700 (PDT)
+Received: from localhost.localdomain ([113.66.180.22])
+        by smtp.gmail.com with ESMTPSA id h8-20020a170902b94800b001ac444fd07fsm4154020pls.100.2023.06.21.19.57.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 19:07:41 -0700 (PDT)
-Received: (nullmailer pid 67903 invoked by uid 1000);
-        Thu, 22 Jun 2023 02:07:39 -0000
-Date:   Wed, 21 Jun 2023 20:07:39 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Benjamin Bara <bbara93@gmail.com>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benjamin Bara <benjamin.bara@skidata.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH v4 3/3] dt-bindings: usb: Add binding for Cypress HX3 USB
- 3.0 family
-Message-ID: <168739965923.67844.7517249183491573877.robh@kernel.org>
-References: <20230620-hx3-v4-0-e56b3c6db60b@skidata.com>
- <20230620-hx3-v4-3-e56b3c6db60b@skidata.com>
+        Wed, 21 Jun 2023 19:57:47 -0700 (PDT)
+From:   Guiting Shen <aarongt.shen@gmail.com>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Guiting Shen <aarongt.shen@gmail.com>
+Subject: [PATCH] usb: ohci-at91: Fix the unhandle interrupt when resume
+Date:   Thu, 22 Jun 2023 10:57:39 +0800
+Message-Id: <20230622025739.13934-1-aarongt.shen@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620-hx3-v4-3-e56b3c6db60b@skidata.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The ohci_hcd_at91_drv_suspend() sets ohci->rh_state to OHCI_RH_HALTED when
+suspend which will let the ohci_irq() skip the interrupt after resume. And
+nobody to handle this interrupt.
 
-On Wed, 21 Jun 2023 20:04:05 +0200, Benjamin Bara wrote:
-> From: Benjamin Bara <benjamin.bara@skidata.com>
-> 
-> The HX3 family comes in different variants (up to 4 USB 3.0 ports;
-> multi-TT), e.g. CYUSB330x/CYUSB331x/CYUSB332x/CYUSB230x.
-> 
-> This initial version of the binding only describes USB related aspects
-> of the HX3 family, it does not cover the option of connecting the
-> controller as an i2c slave.
-> 
-> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
-> ---
->  .../devicetree/bindings/usb/cypress,hx3.yaml       | 77 ++++++++++++++++++++++
->  1 file changed, 77 insertions(+)
-> 
+Set the ohci->rh_state to OHCI_RH_SUSPEND instead of OHCI_RH_HALTED when
+suspend to fix it.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Guiting Shen <aarongt.shen@gmail.com>
+---
+ drivers/usb/host/ohci-at91.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
+index b9ce8d80f20b..7a970e573668 100644
+--- a/drivers/usb/host/ohci-at91.c
++++ b/drivers/usb/host/ohci-at91.c
+@@ -645,7 +645,7 @@ ohci_hcd_at91_drv_suspend(struct device *dev)
+ 	 * REVISIT: some boards will be able to turn VBUS off...
+ 	 */
+ 	if (!ohci_at91->wakeup) {
+-		ohci->rh_state = OHCI_RH_HALTED;
++		ohci->rh_state = OHCI_RH_SUSPENDED;
+ 
+ 		/* flush the writes */
+ 		(void) ohci_readl (ohci, &ohci->regs->control);
+-- 
+2.25.1
 
