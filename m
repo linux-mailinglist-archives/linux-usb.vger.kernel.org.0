@@ -2,69 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C5473A50D
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Jun 2023 17:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F5D73A533
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Jun 2023 17:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbjFVPcL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Jun 2023 11:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
+        id S231925AbjFVPjM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Jun 2023 11:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbjFVPbx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Jun 2023 11:31:53 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DBC2D62
-        for <linux-usb@vger.kernel.org>; Thu, 22 Jun 2023 08:30:38 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-7747cc8bea0so66934239f.1
-        for <linux-usb@vger.kernel.org>; Thu, 22 Jun 2023 08:30:38 -0700 (PDT)
+        with ESMTP id S231254AbjFVPjL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Jun 2023 11:39:11 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3B419F
+        for <linux-usb@vger.kernel.org>; Thu, 22 Jun 2023 08:39:07 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f8fe9dc27aso58922635e9.3
+        for <linux-usb@vger.kernel.org>; Thu, 22 Jun 2023 08:39:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1687447834; x=1690039834;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=it9RfQZoHvlt4i7NjPP7j9e/je2l7GBneNbO1SZ/LaE=;
-        b=U5QSUgYjwQQ92kt5FvG2tHnBkSv+41vonZTo2+NgsxvSzPMREYwFv0DYVpKWYIpaL8
-         hQ/HAFNBnaXvk6X/CyCoiUHw5gjsRRxY50FmAlTKZ/emXYrpEVf7uLYBROR566vmxy+A
-         QgidH1OlYIsWAkj+9lIjD34UBJASmPJGNLLwE=
+        d=linaro.org; s=google; t=1687448346; x=1690040346;
+        h=content-transfer-encoding:in-reply-to:subject:organization
+         :references:cc:to:content-language:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/TTIQo7RQLmeRtc0cFEhWudyxQbqgwfYT0QcYRBzTlw=;
+        b=qwIwMaIGrZdH8DISKNqxbDajZkozvwFC/cGwPz/KQq72/zst4rPaPTAe+vNrDDmul9
+         f5dH1H7LqvoYWSokLHuVVpy87m4qo+UndpOfoOsC1DcZd0FVxlcO+cWryXMzFEIzq1tq
+         /L41YUcuwemLWhJJJ/4I+KxWBJRjr9ro0UmRgl1PaDBZS137tcQvzul4xEqyRYWh7yvF
+         DN9ZM/H4do8QvaluIdeaTbpuXxmN4oxms2yPAs4JwrKN0R8pC73VADjpnPi2dmdBNeFx
+         bFfRp9IAnRsFBmY39uzsnadmr5XNaWAvHMBbzJF7TXJDs3GgAejU0O61FGJ8T2lfouEe
+         8UsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687447834; x=1690039834;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=it9RfQZoHvlt4i7NjPP7j9e/je2l7GBneNbO1SZ/LaE=;
-        b=c/aZfEZtnHBp4efSeOLkNkcw3YEwnXvx1YSBRS1mcV6GnQFbp8Slhyq7Q3Lxj5Tf3w
-         pg7n5RTGmhPEWPGGDPQB0SDFMBqY73Ssi2PhCZIvKUccBXX/V0lR4jnHVdYgqu3gM0DD
-         LCtGcKdYYsaxvpHvqDa8VNtxQHSx4RDQNgJGnvAeITCFGC+R+6Tgn/05hxaZ9+t+8ajY
-         f8uFseJqwKWLTUlEGLaaQeDEp9uXtJ8V2z5GBv1qagJk2U+rcGqF3f6uuRtrdNjHlltO
-         oLoDZ7TF6GmTp/c0W8+39Qn4aFVbiBCRVqJpJDXmByMYwfqiCXE5MatqbgRbWRM4eaMF
-         BX5g==
-X-Gm-Message-State: AC+VfDwXW46yGAyFDnqAj2uFEWwdNp+jsvKJSSiotVFaGMRKk6z11YGe
-        W20NwUpKh0oWJ6JKd65vAr9taQ==
-X-Google-Smtp-Source: ACHHUZ6WQHNu9IShb1qUDx2kQeEQ8/k/YbNklzp5Wi6heL7ES6u5LaL8TuaW9FctaeBl1FnOkIDpvA==
-X-Received: by 2002:a05:6602:3f04:b0:780:d557:1984 with SMTP id em4-20020a0566023f0400b00780d5571984mr655337iob.2.1687447834010;
-        Thu, 22 Jun 2023 08:30:34 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id x4-20020a02ac84000000b0042690648930sm1746926jan.106.2023.06.22.08.30.33
+        d=1e100.net; s=20221208; t=1687448346; x=1690040346;
+        h=content-transfer-encoding:in-reply-to:subject:organization
+         :references:cc:to:content-language:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/TTIQo7RQLmeRtc0cFEhWudyxQbqgwfYT0QcYRBzTlw=;
+        b=LS1N1YM+Y/Li4DhQy7kJ8TW/QrNQPOo7Hf61kRPcvkFuhXegs5jo/fwtRAOhJXxxoe
+         vVz8wT6BiDZjHLjjFhxl3Ny3rDJya51+5YmQ0iXQ5NQ5Dns1hxqgPGvXLlsIqZ6ne0Pn
+         AlbeflanC2xU2sog05vy+1L51t1nH96AMofytI/1Zu5iQ/UiU9GFF1hGqC7rMOYh7Md6
+         jB+8enVmSXt9P7KJsRqTCXpziD6D705yjwXVmbIuL3tbQYKxiEPxQLqlGHE5S4bumtDA
+         cd+OG8C9LSMTEqyY8hvCuosnAvA95ILiFAil/39snV3z+EQhqaB1akoIiIEA7EYjJIUB
+         tF9g==
+X-Gm-Message-State: AC+VfDzlX/Q1fzpGrTIc4Jynx29rRfiDnk3nrzg0YluMAfTMNh+ZkJdJ
+        eiiMeG3PLkaOwSlWfQWVjah/Lw==
+X-Google-Smtp-Source: ACHHUZ5IVlN9nvimZC0AgCo+wvYzCtbd2bGkr5HIzv4AYqE7G3whHBT7GsXhqGbXiGaB7E7/o2IACw==
+X-Received: by 2002:a7b:c3d2:0:b0:3f7:a552:2ec7 with SMTP id t18-20020a7bc3d2000000b003f7a5522ec7mr13495816wmj.33.1687448346301;
+        Thu, 22 Jun 2023 08:39:06 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:f692:a800:4794:385? ([2a01:e0a:982:cbb0:f692:a800:4794:385])
+        by smtp.gmail.com with ESMTPSA id l16-20020a1c7910000000b003f9bdf60b34sm4743793wme.11.2023.06.22.08.39.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 08:30:33 -0700 (PDT)
-Message-ID: <d206311e-4fe6-54b6-f591-e2c11194aed2@linuxfoundation.org>
-Date:   Thu, 22 Jun 2023 09:30:33 -0600
+        Thu, 22 Jun 2023 08:39:05 -0700 (PDT)
+Message-ID: <9c52ce87-f69c-e69c-ec43-6b2cc3b37c4a@linaro.org>
+Date:   Thu, 22 Jun 2023 17:39:05 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3] usbip: usbip_host: Replace strlcpy with strscpy
+ Thunderbird/102.12.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
 Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        Azeem Shaikh <azeemshaikh38@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-hardening@vger.kernel.org,
-        Hongren Zheng <i@zenithal.me>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230615180504.401169-1-azeemshaikh38@gmail.com>
- <202306212010.E6CBCE23E@keescook>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <202306212010.E6CBCE23E@keescook>
+To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230622101813.3453772-1-arnd@kernel.org>
+ <286cf2d8-2da8-7203-ee53-bf08332fa519@linaro.org>
+ <f28f78fc-84ce-4990-9126-4075f3d88e01@app.fastmail.com>
+Organization: Linaro Developer Services
+Subject: Re: [PATCH] usb: typec: nb7vpq904m: add CONFIG_DRM dependency
+In-Reply-To: <f28f78fc-84ce-4990-9126-4075f3d88e01@app.fastmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,27 +83,64 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/21/23 21:10, Kees Cook wrote:
-> On Thu, Jun 15, 2023 at 06:05:04PM +0000, Azeem Shaikh wrote:
->> strlcpy() reads the entire source buffer first.
->> This read may exceed the destination size limit.
->> This is both inefficient and can lead to linear read
->> overflows if a source string is not NUL-terminated [1].
->> In an effort to remove strlcpy() completely [2], replace
->> strlcpy() here with strscpy().
->>
->> Direct replacement is safe here since return value of -errno
->> is used to check for truncation instead of sizeof(dest).
->>
->> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
->> [2] https://github.com/KSPP/linux/issues/89
->>
->> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> 
+Hi,
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+On 22/06/2023 13:24, Arnd Bergmann wrote:
+> On Thu, Jun 22, 2023, at 12:39, Neil Armstrong wrote:
+>> Hi,
+>>
+>> On 22/06/2023 12:18, Arnd Bergmann wrote:
+>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>
+>>> This driver calls directly into DRM functions and fails to link if
+>>> that is disabled:
+>>>
+>>> ld.lld: error: undefined symbol: devm_drm_bridge_add
+>>> ld.lld: error: undefined symbol: devm_drm_of_get_bridge
+>>>>>> referenced by nb7vpq904m.c
+>>>>>>                 drivers/usb/typec/mux/nb7vpq904m.o:(nb7vpq904m_probe) in archive vmlinux.a
+>>>
+>>> Fixes: 88d8f3ac9c67e ("usb: typec: add support for the nb7vpq904m Type-C Linear Redriver")
+>>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>>> ---
+>>>    drivers/usb/typec/mux/Kconfig | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
+>>> index 8c4d6b8fb75c3..f53ae24b6c048 100644
+>>> --- a/drivers/usb/typec/mux/Kconfig
+>>> +++ b/drivers/usb/typec/mux/Kconfig
+>>> @@ -37,7 +37,7 @@ config TYPEC_MUX_INTEL_PMC
+>>>    
+>>>    config TYPEC_MUX_NB7VPQ904M
+>>>    	tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
+>>> -	depends on I2C
+>>> +	depends on I2C && DRM
+>>>    	select REGMAP_I2C
+>>>    	help
+>>>    	  Say Y or M if your system has a On Semiconductor NB7VPQ904M Type-C
+>>
+>> I think it could be :
+>>
+>> +	depends on DRM || DRM=n
+>> +	select DRM_PANEL_BRIDGE if DRM
+> 
+> As far as I can tell, this would only avoid the link error
+> against devm_drm_of_get_bridge(), but not the one against
+> devm_drm_bridge_add(), which is defined in drm.ko through
+> drivers/gpu/drm/drm_bridge.c.
 
-thanks,
--- Shuah
+I'm trying to reproduce such situation, but so fail I fail.
+
+In the driver there's a guard to avoid calling into DRM functions
+when disabled:
+#if IS_ENABLED(CONFIG_OF) && IS_ENABLED(CONFIG_DRM_PANEL_BRIDGE)
+
+so I wonder which kind on config leaded to that since
+CONFIG_DRM_PANEL_BRIDGE is only enabled when DRM_PANEL and DRM are.
+
+Neil
+
+> 
+>      Arnd
+
