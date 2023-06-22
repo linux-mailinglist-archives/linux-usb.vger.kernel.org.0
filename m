@@ -2,145 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4782873A5D3
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Jun 2023 18:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B1173A73F
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Jun 2023 19:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbjFVQQf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Jun 2023 12:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
+        id S231135AbjFVRbB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 22 Jun 2023 13:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjFVQQe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Jun 2023 12:16:34 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6AF1BCA
-        for <linux-usb@vger.kernel.org>; Thu, 22 Jun 2023 09:16:32 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-3110ab7110aso7581136f8f.3
-        for <linux-usb@vger.kernel.org>; Thu, 22 Jun 2023 09:16:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687450591; x=1690042591;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XmGI8fpO4hj8qhrgOMp2k1vrFf/BptTZ76S4/582UxE=;
-        b=AsO0sqHiUpVRbNCT1c2nhW0kfmo7RcXuuL/ulmARat46Qi9ri8lDonoAewT+oqwVtd
-         VLEESoRpresbHCI5FVVVQlSmDT0LbODq0dVGwt+4uMmFiw0B8E2kwjv7sL3lJ+HN2LCq
-         HCwR9m0ZxB3SmWOMR51B9hll1xo5nKyjyNMFI1K6t8WKpXPeHh07NemgIi7zKdbt9x0k
-         1U4Q593FN51WVyg4xjjOlO6nO1bZplJMYVyaJ756K5bQjUmEh8AM9HZVdUrZz2xTWVfM
-         d9oIkP/lsha62GNVsH8o1Gq7jpJpOKCqsYSWzjcQB7y8S/JJbHHDmqNLLpw4qkLnL51Z
-         9Ycg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687450591; x=1690042591;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XmGI8fpO4hj8qhrgOMp2k1vrFf/BptTZ76S4/582UxE=;
-        b=hOULM/DLrsnfCs9fhHw/jKN3MJTVRFvWDC9EF7HSUN4u//zhlc64j3aBNl6vfv3XsN
-         AT0cJ4HnbuHSXy/5QCFVhsEM+eMBr7kiwzou8uWMys2qhCmdcFKV5TLtxNlt9geZcXps
-         Kz270lyo/dtyQ0XVdjoN3Zo7R7R+ylaxnqWNUx/AzVinAC6Vwk/kanpbjpJDhO9oB5uM
-         mHje8T40gPatw5N7h91z7quiixKVip41OlruTzGvY9ajk8BBUwO/TzFfo2k5oTqAcA3R
-         5pwJIn8WcMPbgbtdpj6bCgkFGUlblxRTpkx9gKHLg7mo3ARM5eYcCxJGftL/oPXMj+sr
-         uWbQ==
-X-Gm-Message-State: AC+VfDxc84QaLhOrdXUvMUHiUsOKczJRlSqZi2kIrzxyIkDgHy/VnILL
-        5opJKpTNJa0Pj82P9rjNtGFoVQ==
-X-Google-Smtp-Source: ACHHUZ7x0V8vbmVljF4pDKsRKU1+avu539J/OBX21LHkRZCTSHLCdZo37JtP2kcBGGTnHArXTMOzcw==
-X-Received: by 2002:adf:f488:0:b0:311:1b0b:2ec8 with SMTP id l8-20020adff488000000b003111b0b2ec8mr16901097wro.52.1687450591319;
-        Thu, 22 Jun 2023 09:16:31 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id v15-20020a1cf70f000000b003f8d770e935sm19467755wmh.0.2023.06.22.09.16.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 09:16:30 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 22 Jun 2023 18:16:26 +0200
-Subject: [PATCH] usb: typec: nb7vpq904m: fix CONFIG_DRM dependency
+        with ESMTP id S230201AbjFVRa6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Jun 2023 13:30:58 -0400
+Received: from mail-gw.fondkr24.ru (mail-gw.fondkr24.ru [109.195.69.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AFA210E
+        for <linux-usb@vger.kernel.org>; Thu, 22 Jun 2023 10:30:54 -0700 (PDT)
+Received: from mail-gw.fondkr24.ru (localhost.localdomain [127.0.0.1])
+        by mail-gw.fondkr24.ru (Proxmox) with ESMTP id 765E2F1FC9;
+        Thu, 22 Jun 2023 23:37:24 +0700 (+07)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230622-topic-sm8x50-upstream-redriver-config-fix-v1-1-005ab6f4d1f5@linaro.org>
-X-B4-Tracking: v=1; b=H4sIANlzlGQC/x2O0QqDMAxFf0XyvECtbLj9ythDrakGtJVERRD/3
- bDHc7gc7glKwqTwqU4Q2lm5ZIP6UUEcQx4IuTcG73zjXt7jWhaOqHN7PB1ui65CYUahXngnwVh
- y4gETH9gmFyg15Gv/But1QQk7CTmOVszbNJlchGz7P/D9XdcNCUhZMJAAAAA=
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1731;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=YWuwhuhkh0Fmn1XOEG+D982lsVlbMVXfL+uI6GDRnW0=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBklHPewjaRA11780sbOr5fywRw8Mgw3aMI9KonBbh6
- 4xGNvG6JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZJRz3gAKCRB33NvayMhJ0QdvEA
- C6iiVHnaEIUDRzT1TFCOeTvewbi9X+Im4pq/qql/rJNXR7O4YbZwK96wuFaqziN9WRdUzJfOcMC+nZ
- tQy3/gBjwK7XKA1e3KfvmqQJFCk/qLd8Hdq2Zv7TAmJb6QU8h7LlPahF2+s8v8sl+BDD+71xrYwFhV
- AmMq53yR9EScS9UPX3ClCdJPPhzFFVrEzccf5xIuXzhbSkEksDUEsNXveJn7VX3R9+iAmFpvX7ft+B
- ieRYDtJt+sOx5q+9G7uPA7kdL68HXEe/9MKhwZxbSsYdwmdwVQ8btFIr9D0sLG2c2qhdpJwudxwPZh
- yq3TAU029++Ex22kK77+PZLUiQuQ/mxWFF4sQuGni19Gb8kBWHffjTH+xKh6SHifBdfo7CpJDCd4Es
- wk3XRC7Ff0Xbt24x9oN+XEkXYBGk+NOrIcbOHaGLyoHUDKINNy94f+GAEJa2g8PX7fpOwOgWglVhRY
- bpto6WIsnKBwcoXF+GxjHMQNg6tpMpP86MRUCUfuZMyzLHROqHGqd9WMGB2EMgDcySlJJukr64L1vt
- 3YZxyC4yk+/eaOTp4aPLCWsIdu7cs0o4ge6Vrv1n9wSJPyLPRx2OBNCgAjXkcKblbWzVOgmIEJakRD
- ZqziJmfDUa5pVNbI5VpDIsd6+tLLzn06DsWhXYeEBu2S0fEqmk0AjozQnoYg==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: 
+To:     Recipients <Mariaisabeth01@outlook.com>
+From:   Mariaisabeth01@outlook.com
+Date:   Thu, 22 Jun 2023 09:32:11 -0700
+Reply-To: mariaelisschae42@gmail.com
+Message-Id: <20230622163214.28C141075E9@mail.fondkr24.ru>
+X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_50,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
+        SPF_HELO_NONE,SPF_SOFTFAIL,SPOOFED_FREEMAIL,SPOOFED_FREEM_REPTO,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-With the following config set:
-CONFIG_DRM=m
-CONFIG_DRM_PANEL=y
-CONFIG_DRM_BRIDGE=y
-CONFIG_DRM_PANEL_BRIDGE=y
-CONFIG_TYPEC_MUX_NB7VPQ904M=y
-
-vmlinux fails on the following symbols:
-  ld.lld: error: undefined symbol: devm_drm_bridge_add
-  ld.lld: error: undefined symbol: devm_drm_of_get_bridge
-
-Add dependendy on DRM || DRM=no since CONFIG_DRM dependency is optional
-and guarded by:
-IS_ENABLED(CONFIG_OF) && IS_ENABLED(CONFIG_DRM_PANEL_BRIDGE)
-in the drive.
-
-Also add "select DRM_PANEL_BRIDGE if DRM" to clarify DRM_PANEL_BRIDGE
-is required if CONFIG_DRM is enabled.
-
-Fixes: 88d8f3ac9c67 ("usb: typec: add support for the nb7vpq904m Type-C Linear Redriver")
-Reported-by: Arnd Bergmann <arnd@kernel.org>
-Suggested-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
-This is re-spin of [1]
-
-[1] https://lore.kernel.org/all/20230622101813.3453772-1-arnd@kernel.org/
----
- drivers/usb/typec/mux/Kconfig | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-index 8c4d6b8fb75c..784b9d8107e9 100644
---- a/drivers/usb/typec/mux/Kconfig
-+++ b/drivers/usb/typec/mux/Kconfig
-@@ -38,6 +38,8 @@ config TYPEC_MUX_INTEL_PMC
- config TYPEC_MUX_NB7VPQ904M
- 	tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
- 	depends on I2C
-+	depends on DRM || DRM=n
-+	select DRM_PANEL_BRIDGE if DRM
- 	select REGMAP_I2C
- 	help
- 	  Say Y or M if your system has a On Semiconductor NB7VPQ904M Type-C
-
----
-base-commit: c87d46a9e8ebd2f2c3960927b1d21687096d1109
-change-id: 20230622-topic-sm8x50-upstream-redriver-config-fix-8f0aef3e2129
-
-Best regards,
--- 
-Neil Armstrong <neil.armstrong@linaro.org>
+Herzlichen Glückwunsch, Free Will Donation hat Sie für Ihren Anspruch auf 1,7 Millionen Euro ausgewählt. Senden Sie uns eine E-Mail, um weitere Informationen darüber zu erhalten, wie Sie Ihren Spendenfonds beanspruchen können
+Frau Maria Elisabeth Schaeffler.
+CEO Schaeffler
 
