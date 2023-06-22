@@ -2,76 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5025739934
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Jun 2023 10:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10305739D88
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Jun 2023 11:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbjFVIRn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Jun 2023 04:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
+        id S232003AbjFVJhC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Jun 2023 05:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjFVIRf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Jun 2023 04:17:35 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B4E1BCB;
-        Thu, 22 Jun 2023 01:17:34 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-988b75d8b28so525904966b.3;
-        Thu, 22 Jun 2023 01:17:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687421852; x=1690013852;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vQAW8yZCFSnADhBud7nfo4RU3cNf5kaZDT6uTQ+OwQc=;
-        b=kARsZqFr4PYS5kVV4NlRTkCQZQl1+2YkJcJ/wMB+wnuZKnPkxd8DmIFYtmv41dRfJy
-         4az3ItTyb1ExtxPqmb+QgMl856FuoyOfjrdDUA9Bnp6zzLiHLI4Z8yyYN3fjZRVBwHAr
-         DHcKX+Lo5xxBIoVCwd/P5jZlvVIjhuOHzXOnZo7N+9dxTn/wDjthVh86RFWrxuQyJWgw
-         ohGqKrC0EUByoaYrhKlJ+wG0eOgEilhQNGzpZ8upuHp40Cvi2MX6MqHi8ln1NR6q4NGd
-         F50cPuK/drDFlvCb9TtbvJ3cIxoUlaElPDG6dv9P7f3bwtu2ggBiwhJiSS9hi2IibY+r
-         hAoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687421852; x=1690013852;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vQAW8yZCFSnADhBud7nfo4RU3cNf5kaZDT6uTQ+OwQc=;
-        b=lLRfRQha3rWLC/D5+7SmBGLLJBskL81N1gNjWoDp9rYCH68N/WvahYKluTWgwA1eIb
-         mRTp4zDkFEbse4uiwZ8g2zc0/r44YdxeN3phhgBo8cAtkEkfyeoieZAZEBpB1fGEgMnw
-         He0gWP1hinTukourYOiOJQcXV5u26JlnerliwTpJVjZi71BmaAjr9xvChIoEcmnPmYhM
-         QYRePtdeq0Gx+pvnV88CTqBSeyI1WZq7mszmf2nbON7Lpd2X0VuQi6rVsQBwPPquqco6
-         vLqsFwiysFLUdkpgdGWhH6+jlsIs8oUx3Us/H+1anCljtYj/EmHy2p45x71xxwjeCYGW
-         6nQg==
-X-Gm-Message-State: AC+VfDw2zaIw/jrPnOYYvPCsufvcMjDQP5SSJp0w6TW4xpwXv4yjm9Wy
-        9/mr7hJHw9/KdKuoYbLLyyo=
-X-Google-Smtp-Source: ACHHUZ76Q3bXBfAZvU8u8NWc41WchzEkD1d48/cXmceYw0WhwFthHHtW16u20G5hpJ4oaZev3mlmXQ==
-X-Received: by 2002:a17:907:c0a:b0:96f:d345:d0f7 with SMTP id ga10-20020a1709070c0a00b0096fd345d0f7mr15611192ejc.62.1687421852485;
-        Thu, 22 Jun 2023 01:17:32 -0700 (PDT)
-Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id k22-20020a056402049600b0051bc58b8dbcsm3577886edv.59.2023.06.22.01.17.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 01:17:32 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Thu, 22 Jun 2023 10:17:24 +0200
-Subject: [PATCH v5 3/3] dt-bindings: usb: Add binding for Cypress HX3 USB
- 3.0 family
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230620-hx3-v5-3-319c9c4c846f@skidata.com>
-References: <20230620-hx3-v5-0-319c9c4c846f@skidata.com>
-In-Reply-To: <20230620-hx3-v5-0-319c9c4c846f@skidata.com>
-To:     Matthias Kaehlcke <mka@chromium.org>,
+        with ESMTP id S231777AbjFVJgN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Jun 2023 05:36:13 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683501995;
+        Thu, 22 Jun 2023 02:29:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687426180; x=1718962180;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mVEis/WqWWY+Y0u9TfS2GzXtVSmOeIPHMKAdIbtLulg=;
+  b=RHom6d0pcOuEqSpltwSzCoOXRUjGVXwj0bWfTw3klfut408xA09pZHfn
+   xTiD4plq3jKd1I+eJdEta7k/k3kuLNWyx0pMi7ZVB7h514hRNGMZkjM4P
+   HAcVnpKCRjKvrZXvzDtYNDBMeYiFIp7ziiFtSMd9HVC9/pfZSiCuM6JkT
+   pGw3Ztib8I1ShubXkNceIRBJ9SQ/z2P7rl0gO+UWFKUO6jhbsnlBCP0q+
+   qO6/FEvhbfbRNEL6Frb5sNdJlUyXqD6/oVy3Xh340xZxiijiSAb+OwoBJ
+   DYN1JOok21/nTAEC/c4Gnv6Xrnb8JqT8fWzgUXHJbpTUbbRD8Eu3GvRgf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="390124941"
+X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
+   d="scan'208";a="390124941"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 02:29:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="718010339"
+X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
+   d="scan'208";a="718010339"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Jun 2023 02:29:35 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qCGdC-0007Tz-2q;
+        Thu, 22 Jun 2023 09:29:34 +0000
+Date:   Thu, 22 Jun 2023 17:29:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Benjamin Bara <bbara93@gmail.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Benjamin Bara <benjamin.bara@skidata.com>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 1/3] usb: misc: onboard-hub: support multiple power
+ supplies
+Message-ID: <202306221742.xnLvAlnW-lkp@intel.com>
+References: <20230620-hx3-v5-1-319c9c4c846f@skidata.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620-hx3-v5-1-319c9c4c846f@skidata.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,105 +73,101 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Benjamin Bara <benjamin.bara@skidata.com>
+Hi Benjamin,
 
-The HX3 family comes in different variants (up to 4 USB 3.0 ports;
-multi-TT), e.g. CYUSB330x/CYUSB331x/CYUSB332x/CYUSB230x.
+kernel test robot noticed the following build warnings:
 
-This initial version of the binding only describes USB related aspects
-of the HX3 family, it does not cover the option of connecting the
-controller as an i2c slave.
+[auto build test WARNING on 45a3e24f65e90a047bef86f927ebdc4c710edaa1]
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
----
- .../devicetree/bindings/usb/cypress,hx3.yaml       | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Bara/usb-misc-onboard-hub-support-multiple-power-supplies/20230622-161859
+base:   45a3e24f65e90a047bef86f927ebdc4c710edaa1
+patch link:    https://lore.kernel.org/r/20230620-hx3-v5-1-319c9c4c846f%40skidata.com
+patch subject: [PATCH v5 1/3] usb: misc: onboard-hub: support multiple power supplies
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20230622/202306221742.xnLvAlnW-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230622/202306221742.xnLvAlnW-lkp@intel.com/reproduce)
 
-diff --git a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-new file mode 100644
-index 000000000000..47add0d85fb8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-@@ -0,0 +1,77 @@
-+# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/cypress,hx3.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cypress HX3 USB 3.0 hub controller family
-+
-+maintainers:
-+  - Benjamin Bara <benjamin.bara@skidata.com>
-+
-+allOf:
-+  - $ref: usb-device.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - usb4b4,6504
-+      - usb4b4,6506
-+
-+  reg: true
-+
-+  reset-gpios:
-+    items:
-+      - description: GPIO specifier for RESETN pin.
-+
-+  vdd-supply:
-+    description:
-+      1V2 power supply (VDD_EFUSE, AVDD12, DVDD12).
-+
-+  vdd2-supply:
-+    description:
-+      3V3 power supply (AVDD33, VDD_IO).
-+
-+  peer-hub:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      phandle to the peer hub on the controller.
-+
-+required:
-+  - compatible
-+  - reg
-+  - peer-hub
-+  - vdd-supply
-+  - vdd2-supply
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    usb {
-+        dr_mode = "host";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        /* 2.0 hub on port 1 */
-+        hub_2_0: hub@1 {
-+          compatible = "usb4b4,6504";
-+          reg = <1>;
-+          peer-hub = <&hub_3_0>;
-+          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+          vdd-supply = <&reg_1v2_usb>;
-+          vdd2-supply = <&reg_3v3_usb>;
-+        };
-+
-+        /* 3.0 hub on port 2 */
-+        hub_3_0: hub@2 {
-+          compatible = "usb4b4,6506";
-+          reg = <2>;
-+          peer-hub = <&hub_2_0>;
-+          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+          vdd-supply = <&reg_1v2_usb>;
-+          vdd2-supply = <&reg_3v3_usb>;
-+        };
-+    };
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306221742.xnLvAlnW-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/usb/misc/onboard_usb_hub.c: In function 'onboard_hub_probe':
+>> drivers/usb/misc/onboard_usb_hub.c:262:58: warning: format '%d' expects argument of type 'int', but argument 4 has type 'long unsigned int' [-Wformat=]
+     262 |                 return dev_err_probe(dev, -EINVAL, "max %d supplies supported!\n",
+         |                                                         ~^
+         |                                                          |
+         |                                                          int
+         |                                                         %ld
+
+
+vim +262 drivers/usb/misc/onboard_usb_hub.c
+
+   240	
+   241	static int onboard_hub_probe(struct platform_device *pdev)
+   242	{
+   243		const struct of_device_id *of_id;
+   244		struct device *dev = &pdev->dev;
+   245		struct onboard_hub *hub;
+   246		unsigned int i;
+   247		int err;
+   248	
+   249		hub = devm_kzalloc(dev, sizeof(*hub), GFP_KERNEL);
+   250		if (!hub)
+   251			return -ENOMEM;
+   252	
+   253		of_id = of_match_device(onboard_hub_match, &pdev->dev);
+   254		if (!of_id)
+   255			return -ENODEV;
+   256	
+   257		hub->pdata = of_id->data;
+   258		if (!hub->pdata)
+   259			return -EINVAL;
+   260	
+   261		if (hub->pdata->num_supplies > MAX_SUPPLIES)
+ > 262			return dev_err_probe(dev, -EINVAL, "max %d supplies supported!\n",
+   263					     MAX_SUPPLIES);
+   264	
+   265		for (i = 0; i < hub->pdata->num_supplies; i++)
+   266			hub->supplies[i].supply = supply_names[i];
+   267	
+   268		err = devm_regulator_bulk_get(dev, hub->pdata->num_supplies, hub->supplies);
+   269		if (err) {
+   270			dev_err(dev, "Failed to get regulator supplies: %d\n", err);
+   271			return err;
+   272		}
+   273	
+   274		hub->reset_gpio = devm_gpiod_get_optional(dev, "reset",
+   275							  GPIOD_OUT_HIGH);
+   276		if (IS_ERR(hub->reset_gpio))
+   277			return dev_err_probe(dev, PTR_ERR(hub->reset_gpio), "failed to get reset GPIO\n");
+   278	
+   279		hub->dev = dev;
+   280		mutex_init(&hub->lock);
+   281		INIT_LIST_HEAD(&hub->udev_list);
+   282	
+   283		dev_set_drvdata(dev, hub);
+   284	
+   285		err = onboard_hub_power_on(hub);
+   286		if (err)
+   287			return err;
+   288	
+   289		/*
+   290		 * The USB driver might have been detached from the USB devices by
+   291		 * onboard_hub_remove() (e.g. through an 'unbind' by userspace),
+   292		 * make sure to re-attach it if needed.
+   293		 *
+   294		 * This needs to be done deferred to avoid self-deadlocks on systems
+   295		 * with nested onboard hubs.
+   296		 */
+   297		schedule_work(&attach_usb_driver_work);
+   298	
+   299		return 0;
+   300	}
+   301	
 
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
