@@ -2,70 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DF173A593
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Jun 2023 18:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4782873A5D3
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Jun 2023 18:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbjFVQJC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Jun 2023 12:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
+        id S230189AbjFVQQf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Jun 2023 12:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbjFVQI7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Jun 2023 12:08:59 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA311BD3
-        for <linux-usb@vger.kernel.org>; Thu, 22 Jun 2023 09:08:57 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-3422161e53bso2004625ab.1
-        for <linux-usb@vger.kernel.org>; Thu, 22 Jun 2023 09:08:56 -0700 (PDT)
+        with ESMTP id S230096AbjFVQQe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Jun 2023 12:16:34 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6AF1BCA
+        for <linux-usb@vger.kernel.org>; Thu, 22 Jun 2023 09:16:32 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-3110ab7110aso7581136f8f.3
+        for <linux-usb@vger.kernel.org>; Thu, 22 Jun 2023 09:16:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687450136; x=1690042136;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FHqSAo1JZFanbNc68ZGVvrcnODGDqqndEldpZ02Ty/Y=;
-        b=i0Y2Zkfbv3qyClhoc71j511MNGlWNG6Ms6VywWhZKnX8KP3hFdweVFzOjNZLh2P7Sz
-         wy8UdWbBE5pBMTOPwh1On/bpDaAotEB4KiKb87PWnwVelUk/dcwmop4eUjYILm+iTTTa
-         3smUhRvuPi+b80MWbipjILYZJ4xNEtU6KfET8=
+        d=linaro.org; s=google; t=1687450591; x=1690042591;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XmGI8fpO4hj8qhrgOMp2k1vrFf/BptTZ76S4/582UxE=;
+        b=AsO0sqHiUpVRbNCT1c2nhW0kfmo7RcXuuL/ulmARat46Qi9ri8lDonoAewT+oqwVtd
+         VLEESoRpresbHCI5FVVVQlSmDT0LbODq0dVGwt+4uMmFiw0B8E2kwjv7sL3lJ+HN2LCq
+         HCwR9m0ZxB3SmWOMR51B9hll1xo5nKyjyNMFI1K6t8WKpXPeHh07NemgIi7zKdbt9x0k
+         1U4Q593FN51WVyg4xjjOlO6nO1bZplJMYVyaJ756K5bQjUmEh8AM9HZVdUrZz2xTWVfM
+         d9oIkP/lsha62GNVsH8o1Gq7jpJpOKCqsYSWzjcQB7y8S/JJbHHDmqNLLpw4qkLnL51Z
+         9Ycg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687450136; x=1690042136;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FHqSAo1JZFanbNc68ZGVvrcnODGDqqndEldpZ02Ty/Y=;
-        b=loXrAIkBJtdsYRZg9vO8CiNOEWnSKi4yxTbuO86UR6NJmHFPs5cE9XYyp+QKbcyFLv
-         FiHhSqMhMuU5ZSN2V+uerMJMP+cN8kicbgbKIWlWc2bLJTjhDbWQX+GxdXxl55Y9kOC7
-         TaneRAhvue7oj3fhn/Y70+TS0N+Dd0ooIlBq3lvmZMYDkt/BLB/hXggAwh+tuUwJj4vU
-         r/lCRWx3WFsm681uXfsMcqq5zJcOEwGEAXRFBwIVhmhvt/gXDUW9qOn7a4cjInvIZbY9
-         xMt7mlehi6O9LlmvASDXlAwCwT6U40xGjvAXjM/ZdGDJsCCrTQmn5i4GEry8fLhYyeK9
-         zL/g==
-X-Gm-Message-State: AC+VfDyZExAfLe4NgLVW4O1tLij4MLFM3pMG1he/VDJyqZWw815KKS+P
-        EFLyAUUeUbybdla1lSWnBpyLOQM/uORejllqJxM=
-X-Google-Smtp-Source: ACHHUZ4MQeQVPmH/HSaMbKwgi7GQaFA9OfMedxFR7y2OD1NdAPYzYZwI6KCk8FlOsRCworIhRHHBdQ==
-X-Received: by 2002:a92:dc45:0:b0:33e:c0b:9ff2 with SMTP id x5-20020a92dc45000000b0033e0c0b9ff2mr13218599ilq.1.1687450136255;
-        Thu, 22 Jun 2023 09:08:56 -0700 (PDT)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id j18-20020a926e12000000b00341c0710169sm2068424ilc.46.2023.06.22.09.08.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 09:08:55 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 16:08:55 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Benjamin Bara <bbara93@gmail.com>
-Cc:     lkp@intel.com, alexander.stein@ew.tq-group.com,
-        benjamin.bara@skidata.com, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
-        krzk@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
-        robh+dt@kernel.org
-Subject: Re: [PATCH v5 1/3] usb: misc: onboard-hub: support multiple power
- supplies
-Message-ID: <ZJRyF45Ui5U4FraP@google.com>
-References: <202306221742.xnLvAlnW-lkp@intel.com>
- <20230622102601.2244054-1-bbara93@gmail.com>
+        d=1e100.net; s=20221208; t=1687450591; x=1690042591;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XmGI8fpO4hj8qhrgOMp2k1vrFf/BptTZ76S4/582UxE=;
+        b=hOULM/DLrsnfCs9fhHw/jKN3MJTVRFvWDC9EF7HSUN4u//zhlc64j3aBNl6vfv3XsN
+         AT0cJ4HnbuHSXy/5QCFVhsEM+eMBr7kiwzou8uWMys2qhCmdcFKV5TLtxNlt9geZcXps
+         Kz270lyo/dtyQ0XVdjoN3Zo7R7R+ylaxnqWNUx/AzVinAC6Vwk/kanpbjpJDhO9oB5uM
+         mHje8T40gPatw5N7h91z7quiixKVip41OlruTzGvY9ajk8BBUwO/TzFfo2k5oTqAcA3R
+         5pwJIn8WcMPbgbtdpj6bCgkFGUlblxRTpkx9gKHLg7mo3ARM5eYcCxJGftL/oPXMj+sr
+         uWbQ==
+X-Gm-Message-State: AC+VfDxc84QaLhOrdXUvMUHiUsOKczJRlSqZi2kIrzxyIkDgHy/VnILL
+        5opJKpTNJa0Pj82P9rjNtGFoVQ==
+X-Google-Smtp-Source: ACHHUZ7x0V8vbmVljF4pDKsRKU1+avu539J/OBX21LHkRZCTSHLCdZo37JtP2kcBGGTnHArXTMOzcw==
+X-Received: by 2002:adf:f488:0:b0:311:1b0b:2ec8 with SMTP id l8-20020adff488000000b003111b0b2ec8mr16901097wro.52.1687450591319;
+        Thu, 22 Jun 2023 09:16:31 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id v15-20020a1cf70f000000b003f8d770e935sm19467755wmh.0.2023.06.22.09.16.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 09:16:30 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Thu, 22 Jun 2023 18:16:26 +0200
+Subject: [PATCH] usb: typec: nb7vpq904m: fix CONFIG_DRM dependency
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230622102601.2244054-1-bbara93@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230622-topic-sm8x50-upstream-redriver-config-fix-v1-1-005ab6f4d1f5@linaro.org>
+X-B4-Tracking: v=1; b=H4sIANlzlGQC/x2O0QqDMAxFf0XyvECtbLj9ythDrakGtJVERRD/3
+ bDHc7gc7glKwqTwqU4Q2lm5ZIP6UUEcQx4IuTcG73zjXt7jWhaOqHN7PB1ui65CYUahXngnwVh
+ y4gETH9gmFyg15Gv/But1QQk7CTmOVszbNJlchGz7P/D9XdcNCUhZMJAAAAA=
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1731;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=YWuwhuhkh0Fmn1XOEG+D982lsVlbMVXfL+uI6GDRnW0=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBklHPewjaRA11780sbOr5fywRw8Mgw3aMI9KonBbh6
+ 4xGNvG6JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZJRz3gAKCRB33NvayMhJ0QdvEA
+ C6iiVHnaEIUDRzT1TFCOeTvewbi9X+Im4pq/qql/rJNXR7O4YbZwK96wuFaqziN9WRdUzJfOcMC+nZ
+ tQy3/gBjwK7XKA1e3KfvmqQJFCk/qLd8Hdq2Zv7TAmJb6QU8h7LlPahF2+s8v8sl+BDD+71xrYwFhV
+ AmMq53yR9EScS9UPX3ClCdJPPhzFFVrEzccf5xIuXzhbSkEksDUEsNXveJn7VX3R9+iAmFpvX7ft+B
+ ieRYDtJt+sOx5q+9G7uPA7kdL68HXEe/9MKhwZxbSsYdwmdwVQ8btFIr9D0sLG2c2qhdpJwudxwPZh
+ yq3TAU029++Ex22kK77+PZLUiQuQ/mxWFF4sQuGni19Gb8kBWHffjTH+xKh6SHifBdfo7CpJDCd4Es
+ wk3XRC7Ff0Xbt24x9oN+XEkXYBGk+NOrIcbOHaGLyoHUDKINNy94f+GAEJa2g8PX7fpOwOgWglVhRY
+ bpto6WIsnKBwcoXF+GxjHMQNg6tpMpP86MRUCUfuZMyzLHROqHGqd9WMGB2EMgDcySlJJukr64L1vt
+ 3YZxyC4yk+/eaOTp4aPLCWsIdu7cs0o4ge6Vrv1n9wSJPyLPRx2OBNCgAjXkcKblbWzVOgmIEJakRD
+ ZqziJmfDUa5pVNbI5VpDIsd6+tLLzn06DsWhXYeEBu2S0fEqmk0AjozQnoYg==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,39 +91,56 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 12:26:01PM +0200, Benjamin Bara wrote:
-> On Thu, 22 Jun 2023 at 11:29, kernel test robot <lkp@intel.com> wrote:
-> >
-> > Hi Benjamin,
-> >
-> > kernel test robot noticed the following build warnings:
-> >
-> > [auto build test WARNING on 45a3e24f65e90a047bef86f927ebdc4c710edaa1]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Bara/usb-misc-onboard-hub-support-multiple-power-supplies/20230622-161859
-> > base:   45a3e24f65e90a047bef86f927ebdc4c710edaa1
-> > patch link:    https://lore.kernel.org/r/20230620-hx3-v5-1-319c9c4c846f%40skidata.com
-> > patch subject: [PATCH v5 1/3] usb: misc: onboard-hub: support multiple power supplies
-> > config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20230622/202306221742.xnLvAlnW-lkp@intel.com/config)
-> > compiler: alpha-linux-gcc (GCC) 12.3.0
-> > reproduce: (https://download.01.org/0day-ci/archive/20230622/202306221742.xnLvAlnW-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202306221742.xnLvAlnW-lkp@intel.com/
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> >    drivers/usb/misc/onboard_usb_hub.c: In function 'onboard_hub_probe':
-> > >> drivers/usb/misc/onboard_usb_hub.c:262:58: warning: format '%d' expects argument of type 'int', but argument 4 has type 'long unsigned int' [-Wformat=]
-> >      262 |                 return dev_err_probe(dev, -EINVAL, "max %d supplies supported!\n",
-> >          |                                                         ~^
-> >          |                                                          |
-> >          |                                                          int
-> >          |                                                         %ld
-> 
-> Thanks Mr. Robot, seems like I forgot to compile with Werr :/
-> I will wait for other feedback and fix this in the next round.
+With the following config set:
+CONFIG_DRM=m
+CONFIG_DRM_PANEL=y
+CONFIG_DRM_BRIDGE=y
+CONFIG_DRM_PANEL_BRIDGE=y
+CONFIG_TYPEC_MUX_NB7VPQ904M=y
 
-The patch looks good to me with the above fixed.
+vmlinux fails on the following symbols:
+  ld.lld: error: undefined symbol: devm_drm_bridge_add
+  ld.lld: error: undefined symbol: devm_drm_of_get_bridge
+
+Add dependendy on DRM || DRM=no since CONFIG_DRM dependency is optional
+and guarded by:
+IS_ENABLED(CONFIG_OF) && IS_ENABLED(CONFIG_DRM_PANEL_BRIDGE)
+in the drive.
+
+Also add "select DRM_PANEL_BRIDGE if DRM" to clarify DRM_PANEL_BRIDGE
+is required if CONFIG_DRM is enabled.
+
+Fixes: 88d8f3ac9c67 ("usb: typec: add support for the nb7vpq904m Type-C Linear Redriver")
+Reported-by: Arnd Bergmann <arnd@kernel.org>
+Suggested-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+This is re-spin of [1]
+
+[1] https://lore.kernel.org/all/20230622101813.3453772-1-arnd@kernel.org/
+---
+ drivers/usb/typec/mux/Kconfig | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
+index 8c4d6b8fb75c..784b9d8107e9 100644
+--- a/drivers/usb/typec/mux/Kconfig
++++ b/drivers/usb/typec/mux/Kconfig
+@@ -38,6 +38,8 @@ config TYPEC_MUX_INTEL_PMC
+ config TYPEC_MUX_NB7VPQ904M
+ 	tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
+ 	depends on I2C
++	depends on DRM || DRM=n
++	select DRM_PANEL_BRIDGE if DRM
+ 	select REGMAP_I2C
+ 	help
+ 	  Say Y or M if your system has a On Semiconductor NB7VPQ904M Type-C
+
+---
+base-commit: c87d46a9e8ebd2f2c3960927b1d21687096d1109
+change-id: 20230622-topic-sm8x50-upstream-redriver-config-fix-8f0aef3e2129
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
+
