@@ -2,89 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83C1739E41
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Jun 2023 12:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC710739E86
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Jun 2023 12:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjFVKSV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Jun 2023 06:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        id S230059AbjFVK0M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Jun 2023 06:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjFVKSU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Jun 2023 06:18:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9107FDD;
-        Thu, 22 Jun 2023 03:18:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D8B5617C8;
-        Thu, 22 Jun 2023 10:18:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCD4DC433C8;
-        Thu, 22 Jun 2023 10:18:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687429098;
-        bh=ON66HbfJ1HJ3YKs4MkYfePaKxVL3lLiSW463cMoqJN4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=igRdryfErkXMOmpAXCPL6+iCdcz1mTZRIYVlWMjPI8b0SqJC69hTsbH+P/YSsAHai
-         XP7sqjUe/IKYNNB+3suFT2wCKtmI25VVLv5GPH/pbDbdY3W6RKGBu4AHgH3mDUB1L4
-         TSlqXiW2Gbzk0kUakH7H1bF4MPnIV017QO2Mtf2ZIqJwRgu6QRYbua6Y6zNC/802uD
-         Bcrlt3rKaoeT1toTidzbR8C6lSKx7br+blH7glaHq1bGY9DEd5Vzmvd1uaazGqDPJy
-         otbwxq/Gs5Hg6u5WmoO+aOhtm781Nux25vjrlV9h0lfFe/GluICxaHSHrXHmfGlV+J
-         geWn76zimRrxg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: typec: nb7vpq904m: add CONFIG_DRM dependency
-Date:   Thu, 22 Jun 2023 12:18:09 +0200
-Message-Id: <20230622101813.3453772-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S229549AbjFVK0L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Jun 2023 06:26:11 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A096107;
+        Thu, 22 Jun 2023 03:26:10 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-987c932883bso848763266b.0;
+        Thu, 22 Jun 2023 03:26:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687429568; x=1690021568;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5akIJbyUW4zT8U4Rlaz6Os1Xyv6VeF2w/hYIIjFJCRQ=;
+        b=WcG4sojjRL/I7b4d0UOTcz8bFofYvlIhpg4/JJLacgbhtGF7PjFll3wFdTHvl6m163
+         yoe5nO0s2XtK/zkcszsD4upJvjPjurJ+bSeijiKnIFXzabjoAN5CargsyvB8EdjSSpkL
+         ePQlwfP6Bzb1v6E48+kNlhbVsyVtS5+w4V54wBz7nyL0yPqlBoMRh3BIoaD2QsIR+6vM
+         PppoIhNgES+RErrY96S2vfENusNtlrki45uApsapqAQ7LV5PegXjC/Q29rHpVksqEbPO
+         9JDh0KCk63XC5DpIcecymEtD5L4erioGLJfM4pPDzJrorcoWWN64MvKc7edneoyQIt7k
+         Mklw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687429568; x=1690021568;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5akIJbyUW4zT8U4Rlaz6Os1Xyv6VeF2w/hYIIjFJCRQ=;
+        b=KR4EUV7rmaYJtAHjuLLtx1UfckTTlQ96RWzlO+V8ycYJizhjzVksh3nm0iNzFwo2Y6
+         qHdU7Z3LYRSQCD4hLT7Zc4ikWONBM676QzRl+iiBlgYVrPmz1Eb9qehKtj4DkSZnBtEG
+         ayddF94xe0uXrikFibbanTWBxYUQePXQ1/F4bzM9dNSEh5SESegE751CHSHJK0cVYqf8
+         EBe4KGadCT6KC1ZQx18iuqzmpc3K6wXMeyAL5LyIuUG3znBmec2atEsRmQNpXT8UENFC
+         SeMoYrwhDVmB7rob8bo/f1zk0jjo2/EStigrb+Cur3OFBRDgSVMa5pwb7vSuP5H1Sdh4
+         N80Q==
+X-Gm-Message-State: AC+VfDyh8zTeGva+jvWdCAgw3aQsDLsmoJPHpHbTilOpXrH31MTX2q02
+        GJPqTWhDdC/5T6AlM2O4ByU=
+X-Google-Smtp-Source: ACHHUZ7gdj3MTdlhw6Kh64TMH4jIz5OyIr1Z8j7MvYu956Njq0HYYQKJnc/9pxZlkUwjWi70EP0xpA==
+X-Received: by 2002:a17:906:ef0b:b0:97a:e0c0:2f91 with SMTP id f11-20020a170906ef0b00b0097ae0c02f91mr17256008ejs.8.1687429568283;
+        Thu, 22 Jun 2023 03:26:08 -0700 (PDT)
+Received: from PCBABN.skidata.net ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id f4-20020a170906c08400b009788d51e4b9sm4484359ejz.130.2023.06.22.03.26.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 03:26:08 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+To:     lkp@intel.com
+Cc:     alexander.stein@ew.tq-group.com, bbara93@gmail.com,
+        benjamin.bara@skidata.com, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
+        krzk@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, mka@chromium.org,
+        oe-kbuild-all@lists.linux.dev, robh+dt@kernel.org
+Subject: Re: [PATCH v5 1/3] usb: misc: onboard-hub: support multiple power supplies
+Date:   Thu, 22 Jun 2023 12:26:01 +0200
+Message-Id: <20230622102601.2244054-1-bbara93@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <202306221742.xnLvAlnW-lkp@intel.com>
+References: <202306221742.xnLvAlnW-lkp@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Thu, 22 Jun 2023 at 11:29, kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Benjamin,
+>
+> kernel test robot noticed the following build warnings:
+>
+> [auto build test WARNING on 45a3e24f65e90a047bef86f927ebdc4c710edaa1]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Bara/usb-misc-onboard-hub-support-multiple-power-supplies/20230622-161859
+> base:   45a3e24f65e90a047bef86f927ebdc4c710edaa1
+> patch link:    https://lore.kernel.org/r/20230620-hx3-v5-1-319c9c4c846f%40skidata.com
+> patch subject: [PATCH v5 1/3] usb: misc: onboard-hub: support multiple power supplies
+> config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20230622/202306221742.xnLvAlnW-lkp@intel.com/config)
+> compiler: alpha-linux-gcc (GCC) 12.3.0
+> reproduce: (https://download.01.org/0day-ci/archive/20230622/202306221742.xnLvAlnW-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202306221742.xnLvAlnW-lkp@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+>    drivers/usb/misc/onboard_usb_hub.c: In function 'onboard_hub_probe':
+> >> drivers/usb/misc/onboard_usb_hub.c:262:58: warning: format '%d' expects argument of type 'int', but argument 4 has type 'long unsigned int' [-Wformat=]
+>      262 |                 return dev_err_probe(dev, -EINVAL, "max %d supplies supported!\n",
+>          |                                                         ~^
+>          |                                                          |
+>          |                                                          int
+>          |                                                         %ld
 
-This driver calls directly into DRM functions and fails to link if
-that is disabled:
+Thanks Mr. Robot, seems like I forgot to compile with Werr :/
+I will wait for other feedback and fix this in the next round.
 
-ld.lld: error: undefined symbol: devm_drm_bridge_add
-ld.lld: error: undefined symbol: devm_drm_of_get_bridge
->>> referenced by nb7vpq904m.c
->>>               drivers/usb/typec/mux/nb7vpq904m.o:(nb7vpq904m_probe) in archive vmlinux.a
+Sorry for that...
 
-Fixes: 88d8f3ac9c67e ("usb: typec: add support for the nb7vpq904m Type-C Linear Redriver")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/usb/typec/mux/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-index 8c4d6b8fb75c3..f53ae24b6c048 100644
---- a/drivers/usb/typec/mux/Kconfig
-+++ b/drivers/usb/typec/mux/Kconfig
-@@ -37,7 +37,7 @@ config TYPEC_MUX_INTEL_PMC
- 
- config TYPEC_MUX_NB7VPQ904M
- 	tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
--	depends on I2C
-+	depends on I2C && DRM
- 	select REGMAP_I2C
- 	help
- 	  Say Y or M if your system has a On Semiconductor NB7VPQ904M Type-C
--- 
-2.39.2
-
+best regards,
+Benjamin
