@@ -2,149 +2,275 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADFF739679
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Jun 2023 06:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D687396BE
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Jun 2023 07:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjFVEo7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Jun 2023 00:44:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
+        id S230191AbjFVFQv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Jun 2023 01:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjFVEo5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Jun 2023 00:44:57 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01831721
-        for <linux-usb@vger.kernel.org>; Wed, 21 Jun 2023 21:44:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687409096; x=1718945096;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rfTBdPTcMLzo6fgto9m6qhDVZzQtZAHOeg2L/bZ1L/U=;
-  b=XhGvpFJgwMX/FXRFHSk91QWSkL6iu/S8qCmQd339AHm4hbMMzPJlcp8J
-   kRSaD71A1A03M1cOvL44CzQn1lN1mrnZb4lPSVdb4sRZSQLZdCQRlfIq2
-   LF5eBTfUR+YuTC/N50IyeWy+ceDGoVW8Vdq1+mF34jCxZZJT4eJWjrdcH
-   WgVBupmgWJZjhW3OLT4BgAFxN/LhNj+eZ1+9sowC7TSVYjHJLI/lTC4uk
-   6Oo/wvqwPOSyzvbwzRKu2g8lYalNziRyHM4i1QdmdO9HXSUZpcq7RbNfQ
-   Uj29BZOPnGgUpJXDQMDKagwKnXifJeL0lOboQQywmGEMvTki649QKMPZ5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="345123592"
-X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
-   d="scan'208";a="345123592"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 21:44:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="838890179"
-X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
-   d="scan'208";a="838890179"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 21 Jun 2023 21:44:54 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 72CDF24F; Thu, 22 Jun 2023 07:45:04 +0300 (EEST)
-Date:   Thu, 22 Jun 2023 07:45:04 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Sanjay R Mehta <sanmehta@amd.com>
-Cc:     Sanjay R Mehta <Sanju.Mehta@amd.com>, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com,
-        linux-usb@vger.kernel.org, Sanath S <Sanath.S@amd.com>
-Subject: Re: [PATCH Internal] thunderbolt: Remove enabling/disabling TMU
- based on CLx
-Message-ID: <20230622044504.GN45886@black.fi.intel.com>
-References: <1687343842-17881-1-git-send-email-Sanju.Mehta@amd.com>
- <20230621111525.GL45886@black.fi.intel.com>
- <5fe10a65-4538-cdbd-a0a6-827f9445cee4@amd.com>
- <20230621125406.GM45886@black.fi.intel.com>
- <a1959444-9f9d-5a3e-65cf-abb681d8bc74@amd.com>
+        with ESMTP id S230125AbjFVFQu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Jun 2023 01:16:50 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A96CE9;
+        Wed, 21 Jun 2023 22:16:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1687411008; x=1718947008;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=IXSa4QLaPeHRSIGngAkBe0zIJ6RCzTLgtQw4tPfpGj4=;
+  b=e7IBghg0fb1mWZ4RAs3wFC7yAc6gVailOafPGo+tKmkHMRJn9tXybbkw
+   gbtPmk5k3qlgu8o2XLd1+NASOcc9klO2G1rtI/Em9HLsu5Qa4YRw00lYh
+   6mtOQvPA9WsA0z/O4X5rYKZHA3OcDapWag0v42C9NeWXq2LO0tv0TpT62
+   DF0gjeN/BxyJ1aLRdKvPiggJpCx+HOA6Hp2G+0iGxTUZAE25WQBy5YxNC
+   kyB51SRGqsMcI/eozLRvcy/K/9HQXBVsHNtEthIOf7YNPFgPxaJ7M2yN1
+   e+V1w2eKjq/tOxJtJzws9I8JnvpkUIkiQ9xHmIFj8a3LXRGJzU4JoZO5c
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,262,1681164000"; 
+   d="scan'208";a="31548948"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 22 Jun 2023 07:16:46 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 3052528007C;
+        Thu, 22 Jun 2023 07:16:46 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Benjamin Bara <bbara93@gmail.com>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] usb: misc: onboard-hub: support multiple power supplies
+Date:   Thu, 22 Jun 2023 07:16:45 +0200
+Message-ID: <8701196.DvuYhMxLoT@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <ZJMPv6Fm3On0ITFi@google.com>
+References: <20230620-hx3-v2-0-76a53434c713@skidata.com> <20230620-hx3-v2-1-76a53434c713@skidata.com> <ZJMPv6Fm3On0ITFi@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a1959444-9f9d-5a3e-65cf-abb681d8bc74@amd.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 09:37:32PM +0530, Sanjay R Mehta wrote:
-> 
-> 
-> On 6/21/2023 6:24 PM, Mika Westerberg wrote:
-> > On Wed, Jun 21, 2023 at 05:48:21PM +0530, Sanjay R Mehta wrote:
-> >>
-> >>
-> >> On 6/21/2023 4:45 PM, Mika Westerberg wrote:
-> >>> On Wed, Jun 21, 2023 at 05:37:22AM -0500, Sanjay R Mehta wrote:
-> >>>> From: Sanath S <Sanath.S@amd.com>
-> >>>>
-> >>>> Since TMU is enabled by default on Intel SOCs for USB4 before Alpine
-> >>>> Ridge, explicit enabling or disabling of TMU is not required.
-> >>>>
-> >>>> However, the current implementation of enabling or disabling TMU based
-> >>>> on CLx state is inadequate as not all SOCs with CLx disabled have TMU
-> >>>> enabled by default, such as AMD Yellow Carp and Pink Sardine.
-> >>>>
-> >>>> To address this, a quirk named "QUIRK_TMU_DEFAULT_ENABLED" is
-> >>>> implemented to skip the enabling or disabling of TMU for SOCs where it
-> >>>> is already enabled by default, such as Intel SOCs prior to Alpine Ridge.
-> >>>
-> >>> If it is enabled by default "enabling" it again should not be a problem.
-> >>> Can you elaborate this more?
-> >>
-> >> Although that is correct, Mika, we are facing an issue of display
-> >> flickering on Alpine Ridge and older device routers, from the second
-> >> hotplug onwards. This issue arises as the TMU is enabled and disabled
-> >> for each plug and unplug.
-> > 
-> > Okay thanks for clarifying.
-> > 
-> >> Upon reviewing the old code, it appears that this issue was already
-> >> addressed with the following code block:
-> >>
-> >> /*
-> >>  * No need to enable TMU on devices that don't support CLx since on
-> >>  * these devices e.g. Alpine Ridge and earlier, the TMU mode HiFi
-> >>  * bi-directional is enabled by default.
-> >>  */
-> >> if (!tb_switch_is_clx_supported(sw))
-> >>         return 0;
-> >>
-> >>
-> >> However, it seems that this code has been removed in recent changes, as
-> >> the CLX-related code has been moved to a different file.
-> > 
-> > Yes, I removed it because TMU code should not really be calling CLx
-> > functions.
-> > 
-> > However, we have in tb_enable_tmu() this:
-> > 
-> > 	/* If it is already enabled in correct mode, don't touch it */
-> > 	if (tb_switch_tmu_is_enabled(sw))
-> > 		return 0;
-> > 
-> > and tb_switch_tmu_init() reads the hardware state so this code should
-> > basically leave TMU enabling untouched on Alpine Ridge for instance. I
-> > wonder if you can try with the latest "next" branch and see if it works
-> > there or you are already doing so?
-> > 
-> Yes Mika, we have already verified with the latest thunderbolt/next
-> branch. This patch is built on top of next branch.
+Hi,
 
-Okay.
+Am Mittwoch, 21. Juni 2023, 16:57:03 CEST schrieb Matthias Kaehlcke:
+> ********************
+> Achtung externe E-Mail: =D6ffnen Sie Anh=E4nge und Links nur, wenn Sie wi=
+ssen,
+> dass diese aus einer sicheren Quelle stammen und sicher sind. Leiten Sie
+> die E-Mail im Zweifelsfall zur Pr=FCfung an den IT-Helpdesk weiter.
+> Attention external email: Open attachments and links only if you know that
+> they are from a secure source and are safe. In doubt forward the email to
+> the IT-Helpdesk to check it. ********************
+>=20
+> Hi,
+>=20
+> On Wed, Jun 21, 2023 at 04:26:27PM +0200, Benjamin Bara wrote:
+> > From: Benjamin Bara <benjamin.bara@skidata.com>
+> >=20
+> > As some of the onboard hubs require multiple power supplies, provide the
+> > environment to support them.
+> >=20
+> > Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+>=20
+> Overall this looks good to me, a few nits inside.
+>=20
+> > ---
+> > v2:
+> > - replace (err !=3D 0) with (err)
+> > ---
+> >=20
+> >  drivers/usb/misc/onboard_usb_hub.c | 36
+> >  ++++++++++++++++++++++++++++-------- drivers/usb/misc/onboard_usb_hub.h
+> >  |  1 +
+> >  2 files changed, 29 insertions(+), 8 deletions(-)
+> >=20
+> > diff --git a/drivers/usb/misc/onboard_usb_hub.c
+> > b/drivers/usb/misc/onboard_usb_hub.c index 12fc6eb67c3b..3de30356a684
+> > 100644
+> > --- a/drivers/usb/misc/onboard_usb_hub.c
+> > +++ b/drivers/usb/misc/onboard_usb_hub.c
+> > @@ -27,6 +27,12 @@
+> >=20
+> >  #include "onboard_usb_hub.h"
+> >=20
+> > +#define SUPPLIES_NUM_MAX 2
+>=20
+> MAX_SUPPLIES?
 
-> >> Canonical has also reported this issue and has tested this patch that
-> >> appears to resolve the issue..
-> > 
-> > Right, however let's figure out if the problem is already solved with
-> > the recent code as above or if not why it does not work as expected. I
-> > don't really think we want to add any quirks for this because even in
-> > the USB4 spec the TMU of TBT3 devices is expected to be enabled already
-> > so this is expected functionality and the driver should be doing the
-> > right thing here.
-> 
-> Agree. we will have to see what is going wrong in this case.
+Do we need this MAX_SUPPLIES macro at all? This essentially is=20
+ARRAY_SIZE(supply_names), no? At least it should be
+> #define MAX_SUPPLIES ARRAY_SIZE(supply_names)
 
-You should be able to see in the dmesg (once thunderbolt.dyndbg=+p is
-passed in command line) what the initial state of TMU is and how the
-driver programs it or does it skip the enabling as expected.
+>=20
+> add empty line
+>=20
+> > +static const char * const supply_names[] =3D {
+> > +	"vdd",
+> > +	"vdd2",
+> > +};
+> > +
+> >=20
+> >  static void onboard_hub_attach_usb_driver(struct work_struct *work);
+> > =20
+> >  static struct usb_device_driver onboard_hub_usbdev_driver;
+> >=20
+> > @@ -40,7 +46,8 @@ struct usbdev_node {
+> >=20
+> >  };
+> > =20
+> >  struct onboard_hub {
+> >=20
+> > -	struct regulator *vdd;
+> > +	struct regulator_bulk_data supplies[SUPPLIES_NUM_MAX];
+> > +	unsigned int supplies_num;
+>=20
+> num_supplies?
+>=20
+> >  	struct device *dev;
+> >  	const struct onboard_hub_pdata *pdata;
+> >  	struct gpio_desc *reset_gpio;
+> >=20
+> > @@ -55,9 +62,9 @@ static int onboard_hub_power_on(struct onboard_hub *h=
+ub)
+> >=20
+> >  {
+> > =20
+> >  	int err;
+> >=20
+> > -	err =3D regulator_enable(hub->vdd);
+> > +	err =3D regulator_bulk_enable(hub->supplies_num, hub->supplies);
+> >=20
+> >  	if (err) {
+> >=20
+> > -		dev_err(hub->dev, "failed to enable regulator: %d\n",=20
+err);
+> > +		dev_err(hub->dev, "failed to enable supplies: %d\n", err);
+> >=20
+> >  		return err;
+> >  =09
+> >  	}
+> >=20
+> > @@ -75,9 +82,9 @@ static int onboard_hub_power_off(struct onboard_hub
+> > *hub)
+> >=20
+> >  	gpiod_set_value_cansleep(hub->reset_gpio, 1);
+> >=20
+> > -	err =3D regulator_disable(hub->vdd);
+> > +	err =3D regulator_bulk_disable(hub->supplies_num, hub->supplies);
+> >=20
+> >  	if (err) {
+> >=20
+> > -		dev_err(hub->dev, "failed to disable regulator: %d\n",=20
+err);
+> > +		dev_err(hub->dev, "failed to disable supplies: %d\n",=20
+err);
+> >=20
+> >  		return err;
+> >  =09
+> >  	}
+> >=20
+> > @@ -232,6 +239,7 @@ static int onboard_hub_probe(struct platform_device
+> > *pdev)>=20
+> >  	const struct of_device_id *of_id;
+> >  	struct device *dev =3D &pdev->dev;
+> >  	struct onboard_hub *hub;
+> >=20
+> > +	unsigned int i;
+> >=20
+> >  	int err;
+> >  =09
+> >  	hub =3D devm_kzalloc(dev, sizeof(*hub), GFP_KERNEL);
+> >=20
+> > @@ -246,9 +254,21 @@ static int onboard_hub_probe(struct platform_device
+> > *pdev)>=20
+> >  	if (!hub->pdata)
+> >  =09
+> >  		return -EINVAL;
+> >=20
+> > -	hub->vdd =3D devm_regulator_get(dev, "vdd");
+> > -	if (IS_ERR(hub->vdd))
+> > -		return PTR_ERR(hub->vdd);
+> > +	if (hub->pdata->supplies_num > SUPPLIES_NUM_MAX)
+> > +		return dev_err_probe(dev, -EINVAL, "max %d supplies=20
+supported!\n",
+> > +				     SUPPLIES_NUM_MAX);
+> > +	hub->supplies_num =3D 1;
+> > +	if (hub->pdata->supplies_num > 1)
+> > +		hub->supplies_num =3D hub->pdata->supplies_num;
+>=20
+> Please change the above to:
+>=20
+> 	if (hub->pdata->supplies_num !=3D 0)
+> 		hub->supplies_num =3D hub->pdata->supplies_num;
+> 	else
+> 		hub->supplies_num =3D 1;
+>=20
+
+In the kernel there is also this style:
+> hub->supplies_num =3D hub->pdata->supplies_num? : 1;
+
+But it's up to you which one you prefer.
+
+Best regards,
+Alexander
+
+> > +
+> > +	for (i =3D 0; i < SUPPLIES_NUM_MAX; i++)
+> > +		hub->supplies[i].supply =3D supply_names[i];
+> > +
+> > +	err =3D devm_regulator_bulk_get(dev, hub->supplies_num, hub-
+>supplies);
+> > +	if (err) {
+> > +		dev_err(dev, "Failed to get regulator supplies: %d\n",=20
+err);
+> > +		return err;
+> > +	}
+> >=20
+> >  	hub->reset_gpio =3D devm_gpiod_get_optional(dev, "reset",
+> >  =09
+> >  						  GPIOD_OUT_HIGH);
+> >=20
+> > diff --git a/drivers/usb/misc/onboard_usb_hub.h
+> > b/drivers/usb/misc/onboard_usb_hub.h index aca5f50eb0da..657190bf1799
+> > 100644
+> > --- a/drivers/usb/misc/onboard_usb_hub.h
+> > +++ b/drivers/usb/misc/onboard_usb_hub.h
+> > @@ -8,6 +8,7 @@
+> >=20
+> >  struct onboard_hub_pdata {
+> > =20
+> >  	unsigned long reset_us;		/* reset pulse width in us=20
+*/
+> >=20
+> > +	unsigned int supplies_num;	/* num of supplies: 0 considered as 1=20
+*/
+>=20
+> num_supplies?
+>=20
+> s/num of/number of/
+>=20
+> >  };
+
+
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
+
+
