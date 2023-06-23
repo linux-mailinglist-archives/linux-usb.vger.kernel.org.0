@@ -2,115 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD5B73B119
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jun 2023 09:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D61473B128
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jun 2023 09:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbjFWHMv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Jun 2023 03:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
+        id S231137AbjFWHSI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Jun 2023 03:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjFWHMt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jun 2023 03:12:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9501B4;
-        Fri, 23 Jun 2023 00:12:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFC4461978;
-        Fri, 23 Jun 2023 07:12:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11169C433C8;
-        Fri, 23 Jun 2023 07:12:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687504368;
-        bh=ihIA8f5KiyTCWpwL5yCkgQRnJ0CjQZnK5aKls249KtU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=RL/KxnqU+9m0OQ50CvJIIj8qEkKMQRqkAkM2vZiodPCJ0gUuSKTJD0iF+V0knWnie
-         4bSC6fSWZhmbaHzVzXSA5VGum+EreFcbO9q/enEMbfqPHSKr5bARhqBVV126mNy+dM
-         SKaR0XixzrPPURiAVQcVLbPbUVCt1IhoLa0ybGxFWyJWGU8Lr1SEh9uq3iObY7v332
-         d6yxQv1DMCqVQZdk3ANGeLD2z6e/dNPd8sxFjey4fqr4OOh5ukvs+y7aCXRNWjuKBf
-         Xca1P53hPAB9jE4FMtY8Ute0NMKQV7iOIcFnPCFoLybGykGNRL15CgqaIItl2ct9l6
-         YbEexnEgpJUlw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1qCayW-0002Xj-0C; Fri, 23 Jun 2023 09:12:56 +0200
-Date:   Fri, 23 Jun 2023 09:12:56 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB-serial updates for 6.5-rc1
-Message-ID: <ZJVF-Gq2HCkv49sH@hovoldconsulting.com>
+        with ESMTP id S230503AbjFWHSG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jun 2023 03:18:06 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BAA10C2;
+        Fri, 23 Jun 2023 00:18:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687504685; x=1719040685;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=X0oSPt8MKPSCdlW2qvnEeXQx55EsL81HO4NU7W+GvPE=;
+  b=chRqgEWRsnT1iFUMC8bkt8r3TBC/l2eji47cPeQpMtdZ/W2mrXNM3KxU
+   wrHhkzPjeRoR6Dx4IMv2sH74/iyqYB9FGk7yLDSP0A24rE9vmoD2eH+L+
+   s7ZtyuKRWwXKkhzTby0Q8w/HF/cbPOMVUyULNyUz69VMnQ5pUrEwFtY+f
+   GMoUxz5JJXg5dCM5OQ1V2GeDemLI8IBoJRj/z6Ro6rqveQKSooptE8nMn
+   XfgwQmhRW39E7zc0dmGpQThktzA55EkJENYgnw2Husd7QvC4G5tIJkPqK
+   5xw5VH/DfCP/huAFapXeFgIOHc4Lr3/1EAUMKs+x4BoN+RBq6mpo/dyeI
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="358197912"
+X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
+   d="scan'208";a="358197912"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 00:18:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="889382382"
+X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
+   d="scan'208";a="889382382"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 23 Jun 2023 00:18:01 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qCb3Q-00084f-1K;
+        Fri, 23 Jun 2023 07:18:00 +0000
+Date:   Fri, 23 Jun 2023 15:17:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Benjamin Bara <bbara93@gmail.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Benjamin Bara <benjamin.bara@skidata.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 1/3] usb: misc: onboard-hub: support multiple power
+ supplies
+Message-ID: <202306231557.18uGlgSW-lkp@intel.com>
+References: <20230620-hx3-v6-1-6a1d6f8ce689@skidata.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230620-hx3-v6-1-6a1d6f8ce689@skidata.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 9561de3a55bed6bdd44a12820ba81ec416e705a7:
+Hi Benjamin,
 
-  Linux 6.4-rc5 (2023-06-04 14:04:27 -0400)
+kernel test robot noticed the following build warnings:
 
-are available in the Git repository at:
+[auto build test WARNING on 45a3e24f65e90a047bef86f927ebdc4c710edaa1]
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.5-rc1
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Bara/usb-misc-onboard-hub-support-multiple-power-supplies/20230623-142256
+base:   45a3e24f65e90a047bef86f927ebdc4c710edaa1
+patch link:    https://lore.kernel.org/r/20230620-hx3-v6-1-6a1d6f8ce689%40skidata.com
+patch subject: [PATCH v6 1/3] usb: misc: onboard-hub: support multiple power supplies
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230623/202306231557.18uGlgSW-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230623/202306231557.18uGlgSW-lkp@intel.com/reproduce)
 
-for you to fetch changes up to ffa5f7a3bf28c1306eef85d4056539c2d4b8eb09:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306231557.18uGlgSW-lkp@intel.com/
 
-  USB: serial: option: add LARA-R6 01B PIDs (2023-06-22 13:45:09 +0200)
+All warnings (new ones prefixed by >>):
 
-----------------------------------------------------------------
-USB-serial updates for 6.5-rc1
+   drivers/usb/misc/onboard_usb_hub.c: In function 'onboard_hub_probe':
+>> drivers/usb/misc/onboard_usb_hub.c:262:59: warning: format '%ld' expects argument of type 'long int', but argument 4 has type 'unsigned int' [-Wformat=]
+     262 |                 return dev_err_probe(dev, -EINVAL, "max %ld supplies supported!\n",
+         |                                                         ~~^
+         |                                                           |
+         |                                                           long int
+         |                                                         %d
 
-Here are the USB-serial updates for 6.5-rc1, including:
 
- - improved error handling for break signalling
- - report to user space when a device does not support break signalling
+vim +262 drivers/usb/misc/onboard_usb_hub.c
 
-Included are also some new modem device ids.
+   240	
+   241	static int onboard_hub_probe(struct platform_device *pdev)
+   242	{
+   243		const struct of_device_id *of_id;
+   244		struct device *dev = &pdev->dev;
+   245		struct onboard_hub *hub;
+   246		unsigned int i;
+   247		int err;
+   248	
+   249		hub = devm_kzalloc(dev, sizeof(*hub), GFP_KERNEL);
+   250		if (!hub)
+   251			return -ENOMEM;
+   252	
+   253		of_id = of_match_device(onboard_hub_match, &pdev->dev);
+   254		if (!of_id)
+   255			return -ENODEV;
+   256	
+   257		hub->pdata = of_id->data;
+   258		if (!hub->pdata)
+   259			return -EINVAL;
+   260	
+   261		if (hub->pdata->num_supplies > MAX_SUPPLIES)
+ > 262			return dev_err_probe(dev, -EINVAL, "max %ld supplies supported!\n",
+   263					     MAX_SUPPLIES);
+   264	
+   265		for (i = 0; i < hub->pdata->num_supplies; i++)
+   266			hub->supplies[i].supply = supply_names[i];
+   267	
+   268		err = devm_regulator_bulk_get(dev, hub->pdata->num_supplies, hub->supplies);
+   269		if (err) {
+   270			dev_err(dev, "Failed to get regulator supplies: %d\n", err);
+   271			return err;
+   272		}
+   273	
+   274		hub->reset_gpio = devm_gpiod_get_optional(dev, "reset",
+   275							  GPIOD_OUT_HIGH);
+   276		if (IS_ERR(hub->reset_gpio))
+   277			return dev_err_probe(dev, PTR_ERR(hub->reset_gpio), "failed to get reset GPIO\n");
+   278	
+   279		hub->dev = dev;
+   280		mutex_init(&hub->lock);
+   281		INIT_LIST_HEAD(&hub->udev_list);
+   282	
+   283		dev_set_drvdata(dev, hub);
+   284	
+   285		err = onboard_hub_power_on(hub);
+   286		if (err)
+   287			return err;
+   288	
+   289		/*
+   290		 * The USB driver might have been detached from the USB devices by
+   291		 * onboard_hub_remove() (e.g. through an 'unbind' by userspace),
+   292		 * make sure to re-attach it if needed.
+   293		 *
+   294		 * This needs to be done deferred to avoid self-deadlocks on systems
+   295		 * with nested onboard hubs.
+   296		 */
+   297		schedule_work(&attach_usb_driver_work);
+   298	
+   299		return 0;
+   300	}
+   301	
 
-All have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Davide Tronchin (1):
-      USB: serial: option: add LARA-R6 01B PIDs
-
-Johan Hovold (3):
-      USB: serial: return errors from break handling
-      USB: serial: cp210x: disable break signalling on CP2105 SCI
-      USB: serial: report unsupported break signalling
-
- drivers/usb/serial/ark3116.c          |  7 +++++--
- drivers/usb/serial/belkin_sa.c        | 12 +++++++++---
- drivers/usb/serial/ch341.c            | 37 ++++++++++++++++++++++-------------
- drivers/usb/serial/cp210x.c           | 14 ++++++++++---
- drivers/usb/serial/digi_acceleport.c  |  7 ++++---
- drivers/usb/serial/f81232.c           |  4 +++-
- drivers/usb/serial/f81534.c           |  4 +++-
- drivers/usb/serial/ftdi_sio.c         | 10 +++++++---
- drivers/usb/serial/io_edgeport.c      |  6 ++++--
- drivers/usb/serial/io_ti.c            |  9 +++++++--
- drivers/usb/serial/keyspan.c          |  5 ++++-
- drivers/usb/serial/keyspan_pda.c      |  8 ++++++--
- drivers/usb/serial/mct_u232.c         |  6 +++---
- drivers/usb/serial/mos7720.c          |  9 +++++----
- drivers/usb/serial/mos7840.c          |  7 ++++---
- drivers/usb/serial/mxuport.c          |  6 +++---
- drivers/usb/serial/option.c           |  4 ++++
- drivers/usb/serial/pl2303.c           | 14 ++++++++-----
- drivers/usb/serial/quatech2.c         |  8 ++++++--
- drivers/usb/serial/ti_usb_3410_5052.c | 10 +++++++---
- drivers/usb/serial/upd78f0730.c       |  7 +++++--
- drivers/usb/serial/usb-serial.c       |  4 ++--
- drivers/usb/serial/usb_debug.c        | 13 +++++++++---
- drivers/usb/serial/whiteheat.c        |  7 ++++---
- drivers/usb/serial/xr_serial.c        |  4 ++--
- include/linux/usb/serial.h            |  2 +-
- 26 files changed, 151 insertions(+), 73 deletions(-)
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
