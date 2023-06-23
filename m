@@ -2,462 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8E573C2C2
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jun 2023 23:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C4C73C0C1
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jun 2023 22:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232944AbjFWVY1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Jun 2023 17:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
+        id S232512AbjFWUnY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Jun 2023 16:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232975AbjFWVX6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jun 2023 17:23:58 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174BB2727;
-        Fri, 23 Jun 2023 14:23:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687555414; x=1719091414;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xGfpaAWl8R4dQq8aTwhQbc9JaUMdQXtgHMiT4gghfgE=;
-  b=i1hCY247AvSFVemOpLofOpT8imf4xbubZbe0f6QMjbSQ7xcqXM8ws11G
-   P9CQHmPXB3Pzk6PbBogpz+wEVjJ06wVegOviBRDzNbcinpeNipXCztdzU
-   2duRwC7BoZRrwIDwORGr5qLQXNUW6IqTyhEYCTVGbjZB0GfnHdgndmbr5
-   Bii8xeYJtF4g5Whmiyvjl5NtbX8T73yhhs5g6RdUOzERsdxTOMepLN2V9
-   h4tKODnAgrchtiTpMsEdaHossr3cwmcdNcP7ThHpLSLbqzDUxZFHXiZZr
-   PF9spGBWscuBs51fpXpWLvXZkjBf1XZ8cMCI4YWyZagl9+hZ41XWtXi1Q
-   g==;
-X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="219557463"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 14:23:32 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 23 Jun 2023 13:53:26 -0700
-Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:52:57 -0700
-From:   Varshini Rajendran <varshini.rajendran@microchip.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <vkoul@kernel.org>, <tglx@linutronix.de>, <maz@kernel.org>,
-        <lee@kernel.org>, <ulf.hansson@linaro.org>,
-        <tudor.ambarus@linaro.org>, <miquel.raynal@bootlin.com>,
-        <richard@nod.at>, <vigneshr@ti.com>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>, <linus.walleij@linaro.org>,
-        <p.zabel@pengutronix.de>, <olivia@selenic.com>,
-        <a.zummo@towertech.it>, <radu_nicolae.pirea@upb.ro>,
-        <richard.genoud@gmail.com>, <gregkh@linuxfoundation.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>,
-        <wim@linux-watchdog.org>, <linux@roeck-us.net>, <arnd@arndb.de>,
-        <olof@lixom.net>, <soc@kernel.org>, <linux@armlinux.org.uk>,
-        <sre@kernel.org>, <jerry.ray@microchip.com>,
-        <horatiu.vultur@microchip.com>, <durai.manickamkr@microchip.com>,
-        <varshini.rajendran@microchip.com>, <andrew@lunn.ch>,
-        <alain.volmat@foss.st.com>, <neil.armstrong@linaro.org>,
-        <mihai.sain@microchip.com>, <eugen.hristev@collabora.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-usb@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>, <linux-pm@vger.kernel.org>
-CC:     <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
-        <balamanikandan.gunasundar@microchip.com>,
-        <manikandan.m@microchip.com>, <dharma.b@microchip.com>,
-        <nayabbasha.sayed@microchip.com>, <balakrishnan.s@microchip.com>
-Subject: [PATCH v2 45/45] ARM: dts: at91: sam9x75_curiosity: add device tree for sam9x75 curiosity board
-Date:   Sat, 24 Jun 2023 02:00:56 +0530
-Message-ID: <20230623203056.689705-46-varshini.rajendran@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230623203056.689705-1-varshini.rajendran@microchip.com>
-References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
+        with ESMTP id S232369AbjFWUm5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jun 2023 16:42:57 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5584B30D8;
+        Fri, 23 Jun 2023 13:42:16 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-78333585d28so27860739f.1;
+        Fri, 23 Jun 2023 13:42:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687552873; x=1690144873;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kg94xVxU+KBk6JV80YmvR4uIRCIi8Yio8OJz8y0ssbk=;
+        b=J1XjXY1MEHAwAXZnoWli13HnNOgJyV+YHTDPE1gmC/2XzFMYFe/jAkyK86jmu8WfkN
+         wWOTXXj8F6f+1qsqFqAYVPLQBSIbB2bN5GI7mwZLtkjuz1RfwStmOHqLk9XnsplN/LHh
+         em7JQbSjUQMhCGuwPUBHP8VGzyAuix94hQCLlZGV96a+TqjSbHUFK6H70IiGGXwYbpjd
+         4cHSzpLJkhlJ04SGO+Wk9xLeBslzT/zo/4UUIT4oqA6FZEzkebV6zhwRgkUPLn1mkwaC
+         wslITwOEMdZM4UY4lIesG8coF4JILNyrMHPL6Gh1/gvEmkmDMUGv5sRpo/w4Ki7jLpA9
+         OjlA==
+X-Gm-Message-State: AC+VfDwhkCVbBhb5Etxr66kGuvMcfpwxgeupCeqK5IEMzFeUh53PNFhJ
+        MGY302EOHbiImG5jXpxIrg==
+X-Google-Smtp-Source: ACHHUZ4LUHt4NfXfv/satE+F1gFdH3T1avoQDVlD2XXbG2ZJJT/R6HUWYFMBKKHGXAU0Cl+v8ZbCqg==
+X-Received: by 2002:a05:6602:2995:b0:760:f795:ccdf with SMTP id o21-20020a056602299500b00760f795ccdfmr20481712ior.8.1687552873011;
+        Fri, 23 Jun 2023 13:41:13 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id a15-20020a056602208f00b0077e3acd5ea1sm38156ioa.53.2023.06.23.13.41.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 13:41:11 -0700 (PDT)
+Received: (nullmailer pid 1083781 invoked by uid 1000);
+        Fri, 23 Jun 2023 20:41:09 -0000
+Date:   Fri, 23 Jun 2023 14:41:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, ahalaney@redhat.com,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        quic_ppratap@quicinc.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        quic_harshq@quicinc.com, linux-usb@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        devicetree@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
+        quic_shazhuss@quicinc.com, Johan Hovold <johan@kernel.org>,
+        quic_jackp@quicinc.com, linux-kernel@vger.kernel.org,
+        quic_pkondeti@quicinc.com, linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH v9 01/10] dt-bindings: usb: qcom,dwc3: Add bindings for
+ SC8280 Multiport
+Message-ID: <168755286916.1083702.6661052967683571256.robh@kernel.org>
+References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
+ <20230621043628.21485-2-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621043628.21485-2-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add device tree file for sam9x75 curiosity board.
 
-Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
----
- arch/arm/boot/dts/Makefile                   |   2 +
- arch/arm/boot/dts/at91-sam9x75_curiosity.dts | 336 +++++++++++++++++++
- 2 files changed, 338 insertions(+)
- create mode 100644 arch/arm/boot/dts/at91-sam9x75_curiosity.dts
+On Wed, 21 Jun 2023 10:06:19 +0530, Krishna Kurapati wrote:
+> Add the compatible string for SC8280 Multiport USB controller from
+> Qualcomm.
+> 
+> There are 4 power event irq interrupts supported by this controller
+> (one for each port of multiport). Added all the 4 as non-optional
+> interrupts for SC8280XP-MP
+> 
+> Also each port of multiport has one DP and oen DM IRQ. Add all DP/DM
+> IRQ's related to 4 ports of SC8280XP Teritiary controller.
+> 
+> Also added ss phy irq for both SS Ports.
+> 
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  .../devicetree/bindings/usb/qcom,dwc3.yaml    | 29 +++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+> 
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 59829fc90315..31f357f8e947 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -53,6 +53,8 @@ dtb-$(CONFIG_SOC_AT91SAM9) += \
- dtb-$(CONFIG_SOC_SAM9X60) += \
- 	at91-sam9x60_curiosity.dtb \
- 	at91-sam9x60ek.dtb
-+dtb-$(CONFIG_SOC_SAM9X7) += \
-+	at91-sam9x75_curiosity.dtb
- dtb-$(CONFIG_SOC_SAM_V7) += \
- 	at91-kizbox2-2.dtb \
- 	at91-kizbox3-hs.dtb \
-diff --git a/arch/arm/boot/dts/at91-sam9x75_curiosity.dts b/arch/arm/boot/dts/at91-sam9x75_curiosity.dts
-new file mode 100644
-index 000000000000..56d3af549201
---- /dev/null
-+++ b/arch/arm/boot/dts/at91-sam9x75_curiosity.dts
-@@ -0,0 +1,336 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * at91-sam9x75_curiosity.dts - Device Tree file for Microchip SAM9X75 Curiosity board
-+ *
-+ * Copyright (C) 2023 Microchip Technology Inc. and its subsidiaries
-+ *
-+ * Author: Varshini Rajendran <varshini.rajendran@microchip.com>
-+ */
-+/dts-v1/;
-+#include "sam9x7.dtsi"
-+#include <dt-bindings/input/input.h>
-+
-+/ {
-+	model = "Microchip SAM9X75 Curiosity";
-+	compatible = "microchip,sam9x75-curiosity", "microchip,sam9x7", "atmel,at91sam9";
-+
-+	aliases {
-+		i2c0 = &i2c6;
-+		i2c1 = &i2c7;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	clocks {
-+		clock-slowxtal {
-+			clock-frequency = <32768>;
-+		};
-+
-+		clock-mainxtal {
-+			clock-frequency = <24000000>;
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_key_gpio_default>;
-+		status = "okay";
-+
-+		button-user {
-+			label = "USER";
-+			gpios = <&pioC 9 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_PROG1>;
-+			wakeup-source;
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_led_gpio_default>;
-+		status = "okay";
-+
-+		led-0 {
-+			label = "red";
-+			gpios = <&pioC 19 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-1 {
-+			label = "green";
-+			gpios = <&pioC 21 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-2 {
-+			label = "blue";
-+			gpios = <&pioC 20 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};
-+
-+	memory@20000000 {
-+		device_type = "memory";
-+		reg = <0x20000000 0x10000000>;
-+	};
-+};
-+
-+&dbgu {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_dbgu>;
-+	status = "okay";
-+};
-+
-+&dma0 {
-+	status = "okay";
-+};
-+
-+&ehci0 {
-+	status = "okay";
-+};
-+
-+&flx6 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
-+	status = "okay";
-+
-+	i2c6: i2c@600 {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_flx6_default>;
-+		i2c-analog-filter;
-+		i2c-digital-filter;
-+		i2c-digital-filter-width-ns = <35>;
-+		status = "okay";
-+
-+		mcp16502@5b {
-+			compatible = "microchip,mcp16502";
-+			reg = <0x5b>;
-+			status = "okay";
-+
-+			regulators {
-+				vdd_3v3: VDD_IO {
-+					regulator-name = "VDD_IO";
-+					regulator-min-microvolt = <3000000>;
-+					regulator-max-microvolt = <3600000>;
-+					regulator-initial-mode = <2>;
-+					regulator-allowed-modes = <2>, <4>;
-+					regulator-always-on;
-+
-+					regulator-state-standby {
-+						regulator-on-in-suspend;
-+						regulator-mode = <4>;
-+					};
-+
-+					regulator-state-mem {
-+						regulator-mode = <4>;
-+					};
-+				};
-+
-+				vddioddr: VDD_DDR {
-+					regulator-name = "VDD_DDR";
-+					regulator-min-microvolt = <1283000>;
-+					regulator-max-microvolt = <1450000>;
-+					regulator-initial-mode = <2>;
-+					regulator-allowed-modes = <2>, <4>;
-+					regulator-always-on;
-+
-+					regulator-state-standby {
-+						regulator-on-in-suspend;
-+						regulator-mode = <4>;
-+					};
-+
-+					regulator-state-mem {
-+						regulator-on-in-suspend;
-+						regulator-mode = <4>;
-+					};
-+				};
-+
-+				vddcore: VDD_CORE {
-+					regulator-name = "VDD_CORE";
-+					regulator-min-microvolt = <500000>;
-+					regulator-max-microvolt = <1210000>;
-+					regulator-initial-mode = <2>;
-+					regulator-allowed-modes = <2>, <4>;
-+					regulator-always-on;
-+
-+					regulator-state-standby {
-+						regulator-on-in-suspend;
-+						regulator-mode = <4>;
-+					};
-+
-+					regulator-state-mem {
-+						regulator-mode = <4>;
-+					};
-+				};
-+
-+				vddcpu: VDD_OTHER {
-+					regulator-name = "VDD_OTHER";
-+					regulator-min-microvolt = <1700000>;
-+					regulator-max-microvolt = <3600000>;
-+					regulator-initial-mode = <2>;
-+					regulator-allowed-modes = <2>, <4>;
-+					regulator-ramp-delay = <3125>;
-+					regulator-always-on;
-+
-+					regulator-state-standby {
-+						regulator-on-in-suspend;
-+						regulator-mode = <4>;
-+					};
-+
-+					regulator-state-mem {
-+						regulator-mode = <4>;
-+					};
-+				};
-+
-+				vldo1: LDO1 {
-+					regulator-name = "LDO1";
-+					regulator-min-microvolt = <1200000>;
-+					regulator-max-microvolt = <3700000>;
-+					regulator-always-on;
-+
-+					regulator-state-standby {
-+						regulator-on-in-suspend;
-+					};
-+				};
-+
-+				vldo2: LDO2 {
-+					regulator-name = "LDO2";
-+					regulator-min-microvolt = <1200000>;
-+					regulator-max-microvolt = <3700000>;
-+
-+					regulator-state-standby {
-+						regulator-on-in-suspend;
-+					};
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&flx7 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
-+	status = "okay";
-+
-+	i2c7: i2c@600 {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_flx7_default>;
-+		i2c-analog-filter;
-+		i2c-digital-filter;
-+		i2c-digital-filter-width-ns = <35>;
-+		status = "okay";
-+	};
-+};
-+
-+&ohci0 {
-+	num-ports = <3>;
-+	atmel,vbus-gpio = <0
-+			   &pioC 27 GPIO_ACTIVE_HIGH
-+			   &pioB 18 GPIO_ACTIVE_HIGH>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usb_default>;
-+	status = "okay";
-+};
-+
-+&pinctrl {
-+
-+	dbgu {
-+		pinctrl_dbgu: dbgu-0 {
-+			atmel,pins = <AT91_PIOA 26 AT91_PERIPH_A AT91_PINCTRL_PULL_UP
-+				      AT91_PIOA 27 AT91_PERIPH_A AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	flexcom {
-+		pinctrl_flx6_default: flx6_twi {
-+			atmel,pins =
-+				<AT91_PIOA 24 AT91_PERIPH_A AT91_PINCTRL_PULL_UP
-+				 AT91_PIOA 25 AT91_PERIPH_A AT91_PINCTRL_PULL_UP>;
-+		};
-+
-+		pinctrl_flx7_default: flx7_twi {
-+			atmel,pins =
-+				<AT91_PIOC 0 AT91_PERIPH_C AT91_PINCTRL_PULL_UP
-+				 AT91_PIOC 1 AT91_PERIPH_C AT91_PINCTRL_PULL_UP>;
-+		};
-+	};
-+
-+	gpio_keys {
-+		pinctrl_key_gpio_default: pinctrl_key_gpio {
-+			atmel,pins = <AT91_PIOC 9 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	leds {
-+		pinctrl_led_gpio_default: pinctrl_led_gpio {
-+			atmel,pins = <AT91_PIOC 19 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
-+				      AT91_PIOC 21 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
-+				      AT91_PIOC 20 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	ohci0 {
-+		pinctrl_usb_default: usb_default {
-+			atmel,pins = <AT91_PIOC 27 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
-+				      AT91_PIOB 18 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	sdmmc0 {
-+		pinctrl_sdmmc0_default: sdmmc0 {
-+			atmel,pins =
-+				<AT91_PIOA 2 AT91_PERIPH_A (AT91_PINCTRL_DRIVE_STRENGTH_HI | AT91_PINCTRL_SLEWRATE_DIS)					/* PA2 CK  periph A with pullup */
-+				 AT91_PIOA 1 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI | AT91_PINCTRL_SLEWRATE_DIS)		/* PA1 CMD periph A with pullup */
-+				 AT91_PIOA 0 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI | AT91_PINCTRL_SLEWRATE_DIS)		/* PA0 DAT0 periph A */
-+				 AT91_PIOA 3 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI | AT91_PINCTRL_SLEWRATE_DIS)		/* PA3 DAT1 periph A with pullup */
-+				 AT91_PIOA 4 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI | AT91_PINCTRL_SLEWRATE_DIS)		/* PA4 DAT2 periph A with pullup */
-+				 AT91_PIOA 5 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI | AT91_PINCTRL_SLEWRATE_DIS)>;	/* PA5 DAT3 periph A with pullup */
-+		};
-+	};
-+
-+	usb0 {
-+		pinctrl_usba_vbus: usba_vbus {
-+			atmel,pins = <AT91_PIOC 8 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+}; /* pinctrl */
-+
-+&rtt {
-+	atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
-+};
-+
-+&sdmmc0 {
-+	bus-width = <4>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_sdmmc0_default>;
-+	cd-gpios = <&pioA 23 GPIO_ACTIVE_LOW>;
-+	disable-wp;
-+	status = "okay";
-+};
-+
-+&shutdown_controller {
-+	atmel,shdwc-debouncer = <976>;
-+	status = "okay";
-+
-+	input@0 {
-+		reg = <0>;
-+	};
-+};
-+
-+&trng {
-+	status = "okay";
-+};
-+
-+&usb0 {
-+	atmel,vbus-gpio = <&pioC 8 GPIO_ACTIVE_HIGH>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usba_vbus>;
-+	status = "okay";
-+};
-+
-+&watchdog {
-+	status = "okay";
-+};
--- 
-2.25.1
+Reviewed-by: Rob Herring <robh@kernel.org>
 
