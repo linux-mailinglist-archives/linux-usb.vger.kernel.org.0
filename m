@@ -2,130 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C4C73BA04
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jun 2023 16:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CA073BB35
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jun 2023 17:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbjFWOXr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Jun 2023 10:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54508 "EHLO
+        id S232583AbjFWPLl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Jun 2023 11:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231933AbjFWOXq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jun 2023 10:23:46 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7EC2129
-        for <linux-usb@vger.kernel.org>; Fri, 23 Jun 2023 07:23:44 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-40079620a83so248501cf.0
-        for <linux-usb@vger.kernel.org>; Fri, 23 Jun 2023 07:23:44 -0700 (PDT)
+        with ESMTP id S232569AbjFWPLQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jun 2023 11:11:16 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE572D4A
+        for <linux-usb@vger.kernel.org>; Fri, 23 Jun 2023 08:10:44 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bff1f2780ebso1041925276.1
+        for <linux-usb@vger.kernel.org>; Fri, 23 Jun 2023 08:10:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687530224; x=1690122224;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kyw5NvaHNf0s6qb2NNjcFKinlUQFcCOImuYYWVyo7VM=;
-        b=UkyAHbsGxDfbFHlDDivnokWxXQJPR+iWsSCpbBf1DrEP4jG7s9/XtfzjFmBVrNFpTB
-         l/ILwL+RDA7HJzQ+5cX1yOCZ/1uusJPYaQI7sqkfoIdBFhHBAwo3XkpMPvcC69HmpLsU
-         AAgwT6ZInsmyZvnnkbqCobaYeGRMsxNUtpQLMbx7qFBaINMAs5W4trlpDrkFJh3PSgIj
-         vT8YDU/RoEOImUKys1WQ9ehD/JVZw4vMyib2ANuNbGibVuBEkTRsuO+HbHM/9CXivThS
-         ORbPkQBq1+aABI01/MchIPL7WC/jRr50ujpkUL1GkdpHQ6HmZ6xkOoXrSdabNfiNxLHb
-         omMw==
+        d=google.com; s=20221208; t=1687533042; x=1690125042;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xDW512AMWN2/l8Gl/XnRAjtww3e9CB3zNKNI+7nHZzU=;
+        b=2XRCyitvwHsFaseO2qHq/bXJOkP4xrmj5rEBBjiRGnqTp1l+mA57nY3tu5XumWk4QZ
+         mPN5wN2mTl2S+TRIuHPmM1nZm8jwfZGdifN5ah2itJnX0ehHHdh4fD2NRfTUXKDcOQdB
+         E22KFdK5y7Q3PweNqkeEWv//t3Y2eslsPp6Z+LQceN0RPTdo7a/5J/DtYCVFukS2lTEN
+         PCu+XcV2FNF/8Wkkvr/aqtJfqRmSLM2oBJi0FZaywwvTcf3j5jg9fRLkh2MwSC3aCcSJ
+         6TMpzkwpjn9bK1rLCBhnQUYK8W0LI0Mh8huoa5EllWkTsjSY3geq6Ennn+4OAEea/Suy
+         /BTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687530224; x=1690122224;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kyw5NvaHNf0s6qb2NNjcFKinlUQFcCOImuYYWVyo7VM=;
-        b=VBi+ytZvb/wsFIJ5zoM3dq0ahGMPFl6VIgLAdU/dJNcuo9uAaLOtLvynXLBNZhqFNV
-         atjuo8vFUfPASvWG6Zf7IdcI1wJReZBlIWMY20qjBWxUIG5vJbKZkeZM/hABYwKToujt
-         hNRJYF5hH1VhsL1saK5WkEGs3ftPduuhHoI1lpQLygdmGH3hx9PmgUe7eo0MjMe0RYUu
-         sTV2+nZUX7Dk+aHXGrGTuznRUCzI9xUnbx97OG5Y4Jdfo/Mck68k5v00B9q8v+KlQCi5
-         DACxLecNApiGhDIG8wNDZUYiIfJLlhb84K0PVDowqCqrCkRSNB+ceq4BQ7nwmORgirVU
-         Ktng==
-X-Gm-Message-State: AC+VfDwrnbgqRa3JgzoNre5cuL0IpCIQUQcQ7NFXUD1EcLgQfKJ/koah
-        yo9EWLvknk5YCnAsCq5Z0v5DuuMVGtpOwVZJx+GuRw==
-X-Google-Smtp-Source: ACHHUZ7g0esSl94tqGqLlnRWrtRoFE76g7PFbvPY7sgQtz5qBSQF8CltOxcB2kFwGJk1xerdcWF862WEfhcco/VqOZU=
-X-Received: by 2002:a05:622a:1991:b0:3f4:f841:df89 with SMTP id
- u17-20020a05622a199100b003f4f841df89mr139576qtc.1.1687530223788; Fri, 23 Jun
- 2023 07:23:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230622150423.3726894-1-kyletso@google.com> <20230622150423.3726894-4-kyletso@google.com>
- <2023062345-hassle-septic-b8b4@gregkh> <CAGZ6i=3BP4ssx31roJoGL_VT=o3mq9Lj_VfZ_HSywzPOEt3v7g@mail.gmail.com>
- <CAGZ6i=1uD-baR+Tht4+D1oC7O04K4L-RDBdDLSo6gZhNqN=2rg@mail.gmail.com> <2023062327-bucked-backrest-c20d@gregkh>
-In-Reply-To: <2023062327-bucked-backrest-c20d@gregkh>
+        d=1e100.net; s=20221208; t=1687533042; x=1690125042;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xDW512AMWN2/l8Gl/XnRAjtww3e9CB3zNKNI+7nHZzU=;
+        b=IedmudTInNMnuV8HflWy6pEmp8hLgVu0LFzDegUrxyfCF+h0K+jXCdTBPR6+5Yf5kF
+         +rKG5dwyClSTflKTDhjnBZJ5wqZXDeQkORllT3Nzk1jcB6q6St1A0fhP7lqJZ90WLAju
+         g9411FW0NOJH9wlGPfwLID5c+YVk4XtQo0vsTre2pbTZtCFsE1yUtoo+GEpdoNSbhEoN
+         ia5JdCkQKoeaFGbmowdPLIKj88X32Gg9ybbSD0FSymLtvwMh2ajXLVzKTx+55AvHCPjS
+         WTmEkxtGDhp/X8eiZJ6UAsbwkTskmBVUzmU+K3CsLMbaNZiMwjbQ1cg6XLC/lH1wiRpZ
+         wxYA==
+X-Gm-Message-State: AC+VfDx2QZoy5T3gbyOJRAoa1V1LXcZ+1UzPWb/T8+7IPwwVJ5tgbZ+D
+        hq2GLwTwhLZyh98UsE3fCqF8wTtrq3z+
+X-Google-Smtp-Source: ACHHUZ5duT0Q2E0Bc88n4bLv6s1lkYEBuH2PD0kd/fBAJAijrWkmtz0YR1Rc4REacVm35/dVvpMG24QtfW80
+X-Received: from kyletso-p620lin01.ntc.corp.google.com ([2401:fa00:fc:202:5d47:84a:2819:bba4])
+ (user=kyletso job=sendgmr) by 2002:a5b:ccd:0:b0:bd1:7934:b4fe with SMTP id
+ e13-20020a5b0ccd000000b00bd17934b4femr9439305ybr.13.1687533042671; Fri, 23
+ Jun 2023 08:10:42 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 23:10:33 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230623151036.3955013-1-kyletso@google.com>
+Subject: [PATCH v2 0/3] Some fixes for select_usb_power_delivery
 From:   Kyle Tso <kyletso@google.com>
-Date:   Fri, 23 Jun 2023 22:23:27 +0800
-Message-ID: <CAGZ6i=2gzw59EPKQNPodt2aiNv2djyej-CV20tt+=PYc_1nLKw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] usb: typec: Use sysfs_emit_at when concatenating the string
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     heikki.krogerus@linux.intel.com, badhri@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 7:14=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
->
-> On Fri, Jun 23, 2023 at 06:11:00PM +0800, Kyle Tso wrote:
-> > On Fri, Jun 23, 2023 at 6:06=E2=80=AFPM Kyle Tso <kyletso@google.com> w=
-rote:
-> > >
-> > > On Fri, Jun 23, 2023 at 3:51=E2=80=AFPM Greg KH <gregkh@linuxfoundati=
-on.org> wrote:
-> > > >
-> > > > On Thu, Jun 22, 2023 at 11:04:23PM +0800, Kyle Tso wrote:
-> > > > > The buffer address used in sysfs_emit should be aligned to PAGE_S=
-IZE.
-> > > >
-> > > > Why?  Are you getting warnings about this?
-> > > >
-> > > > thanks,
-> > > >
-> > > > greg k-h
-> > >
-> > > Yes, here is the warning.
-> > >
-> > > [  223.243123] invalid sysfs_emit: buf:00000000eda2d647
-> > > [  223.243197] WARNING: CPU: 4 PID: 8860 at fs/sysfs/file.c:735
-> > > sysfs_emit+0xb0/0xc0
-> > > [  223.244335] CPU: 4 PID: 8860 Comm: cat
-> > > [  223.244363] pstate: 62400005 (nZCv daif +PAN -UAO +TCO -DIT -SSBS =
-BTYPE=3D--)
-> > > [  223.244378] pc : sysfs_emit+0xb0/0xc0
-> > > [  223.244394] lr : sysfs_emit+0xac/0xc0
-> > > ...
-> > > [  223.244560] Call trace:
-> > > [  223.244568] sysfs_emit+0xb0/0xc0
-> > > [  223.244582] select_usb_power_delivery_show+0x134/0x18c
-> > > [  223.244626] dev_attr_show+0x38/0x74
-> > > [  223.244654] sysfs_kf_seq_show+0xb4/0x130
-> > > [  223.244668] kernfs_seq_show+0x44/0x54
-> > > [  223.244683] seq_read_iter+0x158/0x4ec
-> > > [  223.244727] kernfs_fop_read_iter+0x68/0x1b0
-> > > [  223.244739] vfs_read+0x1d8/0x2b0
-> > > [  223.244775] ksys_read+0x78/0xe8
-> > >
-> > > The warning comes from
-> > > https://elixir.bootlin.com/linux/v6.3.9/source/fs/sysfs/file.c#L734
-> > >
-> > > if (WARN(!buf || offset_in_page(buf), "invalid sysfs_emit: buf:%p\n",=
- buf))
-> > >         return 0;
-> > >
-> > > Kyle
-> >
-> > BTW, to print the buf address, it should use %pK ...
->
-> Patches accepted :)
+Update v2
 
-The patch (sysfs) has been sent to the mailing list.
+- Add "Cc: stable@vger.kernel.org" to each patch
 
-Kyle
+== original cover letter ==
+
+Hi, here are some fixes about the attribute "select_usb_power_delivery"
+in typec/class.c
+
+===
+
+usb: typec: Set port->pd before adding device for typec_port
+
+This one is about the visibility of the attribute. port->pd should be
+set before device_add otherwise the visibility will be false because
+port->pd is NULL.
+
+===
+
+usb: typec: Iterate pds array when showing the pd list
+
+This patch fixes a problem about the incorrect fetching of the pointers
+to each usb_power_delivery handle.
+
+===
+
+usb: typec: Use sysfs_emit_at when concatenating the string
+
+This patch changes the use of the API from sysfs_emit to sysfs_emit_at
+because the buffer address is not aligned to PAGE_SIZE.
+
+===
+
+Kyle Tso (3):
+  usb: typec: Set port->pd before adding device for typec_port
+  usb: typec: Iterate pds array when showing the pd list
+  usb: typec: Use sysfs_emit_at when concatenating the string
+
+ drivers/usb/typec/class.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+-- 
+2.41.0.162.gfafddb0af9-goog
+
