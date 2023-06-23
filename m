@@ -2,90 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068E473BCAE
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jun 2023 18:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D953173BDA7
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jun 2023 19:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232268AbjFWQhI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Jun 2023 12:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46526 "EHLO
+        id S229712AbjFWRRH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Jun 2023 13:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjFWQhG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jun 2023 12:37:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253341A1;
-        Fri, 23 Jun 2023 09:37:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A992E61AAC;
-        Fri, 23 Jun 2023 16:37:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26187C433C0;
-        Fri, 23 Jun 2023 16:36:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687538223;
-        bh=NW9XvLakpQogH6mvEUZjIPGlSUTnzBNwrUFynYh3o/A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GJzPAhwkm+AcemuxlWYzYNhEY915FCp6SvIYJjbYPN1rAXPDA4LxUOYjcGfmADv72
-         Ip7oTc4Nm7ZcDzUUAnQ5jQ+4NgpoQ0T+wHJyznAea88z3EYDPP0UNxqRqQIql3BylG
-         ZoAo+dlUtwTOaPJZ5auJas4OxHG2fZKc6MPbEQBFIteaCweVul8tvWDwWK34GzpVYh
-         DoRIY77wyvDTJ7r7IiyuLd9yK4YPmD2SpxkS8T197DwwFY/hRYCxit0KolM2z1DkzY
-         J7BfSOYe56FBkpXYsrX5MAgIPnyDXEjcdoswG67kyFSLNGI3rfcL8KDzDEOp5BgxAz
-         ZQH/52Zw6xVPQ==
-Date:   Fri, 23 Jun 2023 17:36:57 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        mka@chromium.org, linux.amoon@gmail.com,
-        alexander.stein@ew.tq-group.com, ravisadineni@chromium.org,
-        uwu@icenowy.me, fabrice.gasnier@foss.st.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 1/2] dt-bindings: usb: Add binding for Genesys Logic
- GL3523 hub
-Message-ID: <20230623-lumber-purveyor-e917c1f046eb@spud>
-References: <20230623142228.4069084-1-m.felsch@pengutronix.de>
+        with ESMTP id S232230AbjFWRRF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jun 2023 13:17:05 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id A2A812129
+        for <linux-usb@vger.kernel.org>; Fri, 23 Jun 2023 10:16:57 -0700 (PDT)
+Received: (qmail 756795 invoked by uid 1000); 23 Jun 2023 13:16:56 -0400
+Date:   Fri, 23 Jun 2023 13:16:56 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: [syzbot] [usb?] WARNING in usbnet_start_xmit/usb_submit_urb
+Message-ID: <7330e6c0-eb73-499e-8699-dc1754d90cad@rowland.harvard.edu>
+References: <000000000000a56e9105d0cec021@google.com>
+ <000000000000e298cd05fecc07d4@google.com>
+ <0f685f2f-06df-4cf2-9387-34f5e3c8b7b7@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="jquN0jxas2Nk8JSE"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230623142228.4069084-1-m.felsch@pengutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <0f685f2f-06df-4cf2-9387-34f5e3c8b7b7@rowland.harvard.edu>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Oliver:
 
---jquN0jxas2Nk8JSE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I just noticed you had posted a patch to fix this same problem:
+https://lore.kernel.org/linux-usb/291da1b9-9f71-0f99-45f4-a25a259c8d6d@suse.com/
 
-On Fri, Jun 23, 2023 at 04:22:27PM +0200, Marco Felsch wrote:
-> Add the binding for the USB3.1 Genesys Logic GL3523 hub.
->=20
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Do you want to submit your patch or would you prefer that I submit the 
+patch below?
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Alan Stern
 
-Cheers,
-Conor.
-
---jquN0jxas2Nk8JSE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJXKKQAKCRB4tDGHoIJi
-0riUAP43FcDTxm7H2W0bF9q3amiwwvGtNT9O2cZpJD+fBgX+5QEA3nSbli5gRG3N
-FjUebV2KZ7TbVrIKFWWwYFsMrUkYZgU=
-=hmiE
------END PGP SIGNATURE-----
-
---jquN0jxas2Nk8JSE--
+On Fri, Jun 23, 2023 at 11:23:53AM -0400, Alan Stern wrote:
+> On Fri, Jun 23, 2023 at 06:32:22AM -0700, syzbot wrote:
+> > syzbot has bisected this issue to:
+> > 
+> > commit 45bf39f8df7f05efb83b302c65ae3b9bc92b7065
+> > Author: Alan Stern <stern@rowland.harvard.edu>
+> > Date:   Tue Jan 31 20:49:04 2023 +0000
+> > 
+> >     USB: core: Don't hold device lock while reading the "descriptors" sysfs file
+> > 
+> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=124b5877280000
+> > start commit:   692b7dc87ca6 Merge tag 'hyperv-fixes-signed-20230619' of g..
+> > git tree:       upstream
+> > final oops:     https://syzkaller.appspot.com/x/report.txt?x=114b5877280000
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=164b5877280000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=2cbd298d0aff1140
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=63ee658b9a100ffadbe2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1760094b280000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1359cdf3280000
+> > 
+> > Reported-by: syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com
+> > Fixes: 45bf39f8df7f ("USB: core: Don't hold device lock while reading the "descriptors" sysfs file")
+> > 
+> > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> 
+> The bisection result is wrong, but the issue still needs to be fixed.
+> 
+> Alan Stern
+> 
+> #syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.4-rc7
+> 
+> Index: usb-devel/drivers/net/usb/usbnet.c
+> ===================================================================
+> --- usb-devel.orig/drivers/net/usb/usbnet.c
+> +++ usb-devel/drivers/net/usb/usbnet.c
+> @@ -1775,6 +1775,9 @@ usbnet_probe (struct usb_interface *udev
+>  	} else if (!info->in || !info->out)
+>  		status = usbnet_get_endpoints (dev, udev);
+>  	else {
+> +		u8		ep_addrs[3] = {
+> +			info->in + USB_DIR_IN, info->out + USB_DIR_OUT, 0};
+> +
+>  		dev->in = usb_rcvbulkpipe (xdev, info->in);
+>  		dev->out = usb_sndbulkpipe (xdev, info->out);
+>  		if (!(info->flags & FLAG_NO_SETINT))
+> @@ -1784,6 +1787,8 @@ usbnet_probe (struct usb_interface *udev
+>  		else
+>  			status = 0;
+>  
+> +		if (status == 0 && !usb_check_bulk_endpoints(udev, ep_addrs))
+> +			status = -EINVAL;
+>  	}
+>  	if (status >= 0 && dev->status)
+>  		status = init_status (dev, udev);
