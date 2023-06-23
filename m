@@ -2,101 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF4473BB48
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jun 2023 17:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F180E73BB8E
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jun 2023 17:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232449AbjFWPMl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Jun 2023 11:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57180 "EHLO
+        id S232331AbjFWPX6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Jun 2023 11:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232446AbjFWPL2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jun 2023 11:11:28 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D986E30D5
-        for <linux-usb@vger.kernel.org>; Fri, 23 Jun 2023 08:11:03 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-56fffdea2d0so10663697b3.1
-        for <linux-usb@vger.kernel.org>; Fri, 23 Jun 2023 08:11:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687533055; x=1690125055;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z6FSiQisg0W7MOfyBIAiPdkeELt112zv/p4uKtG83Y0=;
-        b=uLzCMJTw7jDxS6vNull8bIpFUWN/rBWTBCpL4cvA+4bgV96XBXkEvusTIVrUSsTbE/
-         6QZb64qW2UIzBrT10hhQbkhpCO0MdVvuJn1UIUklgJYZOBpX/RRgP6cvbZsti/Q0pV9T
-         lSuGOa6+dLJZq8Ih5W7yX+a26+/n+Js77Cgrr7TOaKfktmdBkQvKGRlLRgCd+RIMsXpa
-         bwHrHYdfMMbHhZ3EODuiAbpfX4gW8gJ5w3+4JlNPz7dCwySWpxcB1P3sM0Dp1y1oJ4Ib
-         UsCx9khVhwwPqXsEHrsaRx385tz6R5Vr1rc1mKdoaDeXckjssRzo4gi88skKkFdc6hFG
-         N/iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687533055; x=1690125055;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z6FSiQisg0W7MOfyBIAiPdkeELt112zv/p4uKtG83Y0=;
-        b=iD8FOG8sxqdh8A2U1HZ/Wv+Vhvb48mM1W60Ud8964J5rlriJ8nxF+YopKRMpRxKvg5
-         aBJUllgzJf4Y62FurmLomZKH3AIch2oO459hmlKoOMQZ3h3R2k2biabVCX3NRgrf3+Et
-         mSSD8NU8kwRKr2PEjcGvIkfL/X30EPcV79jkzsSZbkkp63xsJnO2Zv/bszVzVjrxZmP2
-         ku4Hpgy1rKACWC8rT1+BkzD0q2CkC+IZBLu68O6WRnrGIGyn9cAZLPrihApPaTtwzsjZ
-         1ecZBGtTtG5VirXy2l6srXeCFTKBeilNrxPq/ZE+lwi5r1hf9JnfX6ap8h6FMp/aKRI1
-         T5AQ==
-X-Gm-Message-State: AC+VfDzHmsa/u/J0zEMVnR670/dS8QXos4NGGzzHuezwWStTug+qcefM
-        ELcFNbvcnRKAvEaIaWSmNPHBy2qLkdtz
-X-Google-Smtp-Source: ACHHUZ5Hc+kLLEtZILQ4Wma4p08PO6/FbwCQ/44hQJQvk3dSaS/TSPaISlSEc+0hqXQbINbYXQj+bHrZ0eR3
-X-Received: from kyletso-p620lin01.ntc.corp.google.com ([2401:fa00:fc:202:5d47:84a:2819:bba4])
- (user=kyletso job=sendgmr) by 2002:a81:af11:0:b0:573:87b9:7ee9 with SMTP id
- n17-20020a81af11000000b0057387b97ee9mr5097095ywh.4.1687533055500; Fri, 23 Jun
- 2023 08:10:55 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 23:10:36 +0800
-In-Reply-To: <20230623151036.3955013-1-kyletso@google.com>
-Mime-Version: 1.0
-References: <20230623151036.3955013-1-kyletso@google.com>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230623151036.3955013-4-kyletso@google.com>
-Subject: [PATCH v2 3/3] usb: typec: Use sysfs_emit_at when concatenating the string
-From:   Kyle Tso <kyletso@google.com>
-To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232267AbjFWPX5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jun 2023 11:23:57 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id DE3CA10D2
+        for <linux-usb@vger.kernel.org>; Fri, 23 Jun 2023 08:23:54 -0700 (PDT)
+Received: (qmail 753372 invoked by uid 1000); 23 Jun 2023 11:23:53 -0400
+Date:   Fri, 23 Jun 2023 11:23:53 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, davem@davemloft.net, dvyukov@google.com,
+        edumazet@google.com, gregkh@linuxfoundation.org,
+        kbuild-all@lists.01.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        lkp@intel.com, netdev@vger.kernel.org, nogikh@google.com,
+        oneukum@suse.com, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, troels@connectedcars.dk
+Subject: Re: [syzbot] [usb?] WARNING in usbnet_start_xmit/usb_submit_urb
+Message-ID: <0f685f2f-06df-4cf2-9387-34f5e3c8b7b7@rowland.harvard.edu>
+References: <000000000000a56e9105d0cec021@google.com>
+ <000000000000e298cd05fecc07d4@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000e298cd05fecc07d4@google.com>
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The buffer address used in sysfs_emit should be aligned to PAGE_SIZE.
-Use sysfs_emit_at instead to offset the buffer.
+On Fri, Jun 23, 2023 at 06:32:22AM -0700, syzbot wrote:
+> syzbot has bisected this issue to:
+> 
+> commit 45bf39f8df7f05efb83b302c65ae3b9bc92b7065
+> Author: Alan Stern <stern@rowland.harvard.edu>
+> Date:   Tue Jan 31 20:49:04 2023 +0000
+> 
+>     USB: core: Don't hold device lock while reading the "descriptors" sysfs file
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=124b5877280000
+> start commit:   692b7dc87ca6 Merge tag 'hyperv-fixes-signed-20230619' of g..
+> git tree:       upstream
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=114b5877280000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=164b5877280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=2cbd298d0aff1140
+> dashboard link: https://syzkaller.appspot.com/bug?extid=63ee658b9a100ffadbe2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1760094b280000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1359cdf3280000
+> 
+> Reported-by: syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com
+> Fixes: 45bf39f8df7f ("USB: core: Don't hold device lock while reading the "descriptors" sysfs file")
+> 
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-Fixes: a7cff92f0635 ("usb: typec: USB Power Delivery helpers for ports and partners")
-Cc: stable@vger.kernel.org
-Signed-off-by: Kyle Tso <kyletso@google.com>
----
-Update v2:
-- Add "Cc: stable@vger.kernel.org"
+The bisection result is wrong, but the issue still needs to be fixed.
 
-drivers/usb/typec/class.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Alan Stern
 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index e7312295f8c9..9c1dbf3c00e0 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -1288,9 +1288,9 @@ static ssize_t select_usb_power_delivery_show(struct device *dev,
- 
- 	for (i = 0; pds[i]; i++) {
- 		if (pds[i] == port->pd)
--			ret += sysfs_emit(buf + ret, "[%s] ", dev_name(&pds[i]->dev));
-+			ret += sysfs_emit_at(buf, ret, "[%s] ", dev_name(&pds[i]->dev));
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.4-rc7
+
+Index: usb-devel/drivers/net/usb/usbnet.c
+===================================================================
+--- usb-devel.orig/drivers/net/usb/usbnet.c
++++ usb-devel/drivers/net/usb/usbnet.c
+@@ -1775,6 +1775,9 @@ usbnet_probe (struct usb_interface *udev
+ 	} else if (!info->in || !info->out)
+ 		status = usbnet_get_endpoints (dev, udev);
+ 	else {
++		u8		ep_addrs[3] = {
++			info->in + USB_DIR_IN, info->out + USB_DIR_OUT, 0};
++
+ 		dev->in = usb_rcvbulkpipe (xdev, info->in);
+ 		dev->out = usb_sndbulkpipe (xdev, info->out);
+ 		if (!(info->flags & FLAG_NO_SETINT))
+@@ -1784,6 +1787,8 @@ usbnet_probe (struct usb_interface *udev
  		else
--			ret += sysfs_emit(buf + ret, "%s ", dev_name(&pds[i]->dev));
-+			ret += sysfs_emit_at(buf, ret, "%s ", dev_name(&pds[i]->dev));
- 	}
+ 			status = 0;
  
- 	buf[ret - 1] = '\n';
--- 
-2.41.0.162.gfafddb0af9-goog
-
++		if (status == 0 && !usb_check_bulk_endpoints(udev, ep_addrs))
++			status = -EINVAL;
+ 	}
+ 	if (status >= 0 && dev->status)
+ 		status = init_status (dev, udev);
