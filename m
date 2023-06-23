@@ -2,111 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF98573BC11
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jun 2023 17:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A34D73BC5A
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jun 2023 18:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbjFWPw4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Jun 2023 11:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56226 "EHLO
+        id S232208AbjFWQHd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Jun 2023 12:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231960AbjFWPwz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jun 2023 11:52:55 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id DDB691992
-        for <linux-usb@vger.kernel.org>; Fri, 23 Jun 2023 08:52:53 -0700 (PDT)
-Received: (qmail 754247 invoked by uid 1000); 23 Jun 2023 11:52:53 -0400
-Date:   Fri, 23 Jun 2023 11:52:53 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Guiting Shen <aarongt.shen@gmail.com>
-Cc:     gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: ohci-at91: Fix the unhandle interrupt when resume
-Message-ID: <9c702495-a839-43ea-85b7-1c0a0c54ec73@rowland.harvard.edu>
-References: <20230622025739.13934-1-aarongt.shen@gmail.com>
- <4cf867a9-3c78-403a-aaeb-91f6cf099a3d@rowland.harvard.edu>
- <c2d0b37a-3ee1-e07e-e265-c71895474ba8@gmail.com>
+        with ESMTP id S232226AbjFWQHb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jun 2023 12:07:31 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFB82709
+        for <linux-usb@vger.kernel.org>; Fri, 23 Jun 2023 09:07:31 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3428f3c0921so5168585ab.0
+        for <linux-usb@vger.kernel.org>; Fri, 23 Jun 2023 09:07:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687536450; x=1690128450;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rj1HcKKNnldMdeD2XNSySckZRvgWRLe0ofFpk2T+xdg=;
+        b=i0gWLlDPR4tTcj0aK9jTt0b3uqxoMuVQ6Ve00F/5JUekBHMD0MaWJFX+II+QGIM6kz
+         pMJ3XqaPGud3aTtT+WXLRrAk420f5ppYJwnb9vfGAwNOjikT0JzIBdNXUj9PbFWFxJi8
+         QSoOcIMWaCvd5pjuU4gb9P+p28KgL6l84MeYmbYxMGEWYnYIY/ZpTqOoyD/bWcvDic2N
+         W3D17GLO1Ub7M7Axhd5Da8Pw14sdbSnxjQ0ZUZWuDod/iJRHCwHTA1ZOJFcS/vzS2glJ
+         FYsBQBi4gyDChZM8z90/goVn94ORpJWWjv+9nukbQ6LMoy29sjv68B7aUCN5jhoLC2Kb
+         128w==
+X-Gm-Message-State: AC+VfDwRqDgI29DfDjG63mbj/jBBlgeNtX8oFOwuDnCvdN6crRnpKH6t
+        AFvWjy5WrHAEdE3yJMCD/8rTtyyVw8aK+kSSu7auRoXM0JTS
+X-Google-Smtp-Source: ACHHUZ4+tDqI4FxVxVx9esMJCzQ872Ye0OjJJfbBVuvc0Mj1O61IdyXl+Stk7c+KRlN0TpqpR4ZQBAw5Cl29h3MS6l18DgdS1ZxM
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c2d0b37a-3ee1-e07e-e265-c71895474ba8@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d44b:0:b0:340:ba08:3c45 with SMTP id
+ r11-20020a92d44b000000b00340ba083c45mr8076102ilm.4.1687536450338; Fri, 23 Jun
+ 2023 09:07:30 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 09:07:30 -0700
+In-Reply-To: <0f685f2f-06df-4cf2-9387-34f5e3c8b7b7@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ab076105fece32e3@google.com>
+Subject: Re: [syzbot] [usb?] WARNING in usbnet_start_xmit/usb_submit_urb
+From:   syzbot <syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, davem@davemloft.net, dvyukov@google.com,
+        edumazet@google.com, gregkh@linuxfoundation.org,
+        kbuild-all@lists.01.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        lkp@intel.com, netdev@vger.kernel.org, nogikh@google.com,
+        oneukum@suse.com, pabeni@redhat.com, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com, troels@connectedcars.dk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 11:44:04AM +0800, Guiting Shen wrote:
-> 
-> 
-> On Thu,Jun 22,2023 at 22:29:43PM GMT+8, Alan Stern wrote:
-> > On Thu, Jun 22, 2023 at 10:57:39AM +0800, Guiting Shen wrote:
-> > > The ohci_hcd_at91_drv_suspend() sets ohci->rh_state to OHCI_RH_HALTED when
-> > > suspend which will let the ohci_irq() skip the interrupt after resume. And
-> > > nobody to handle this interrupt.
-> > > 
-> > > Set the ohci->rh_state to OHCI_RH_SUSPEND instead of OHCI_RH_HALTED when
-> > > suspend to fix it.
-> > > 
-> > > Signed-off-by: Guiting Shen <aarongt.shen@gmail.com>
-> > > ---
-> > >   drivers/usb/host/ohci-at91.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
-> > > index b9ce8d80f20b..7a970e573668 100644
-> > > --- a/drivers/usb/host/ohci-at91.c
-> > > +++ b/drivers/usb/host/ohci-at91.c
-> > > @@ -645,7 +645,7 @@ ohci_hcd_at91_drv_suspend(struct device *dev)
-> > >   	 * REVISIT: some boards will be able to turn VBUS off...
-> > >   	 */
-> > >   	if (!ohci_at91->wakeup) {
-> > > -		ohci->rh_state = OHCI_RH_HALTED;
-> > > +		ohci->rh_state = OHCI_RH_SUSPENDED;
-> > 
-> > It looks like this change ignores the comment immediately above it
-> > (just before the start of this hunk).
-> > 
-> > If you want to find a way to handle IRQs better after the controller
-> > resumes, maybe you should change the resume routine instead of the
-> > suspend routine.
-> > 
-> > Alan Stern
-> 
-> The comment which was added with commit-id 0365ee0a8f745 may be outdated
-> because ohci_suspend() and ohci_at91_port_suspend() is used to suspend
-> instead of setting ohci->rh_state to OHCI_RH_HALTED.
+Hello,
 
-The comment says nothing about ohci->rh_state; it talks about the 
-integrated transceivers and the 48 MHz clock.  I don't see why you would 
-think the comment is outdated.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> What's more, I found that only ohci-at91 driver to set the ohci->rh_state
-> which may be unnessory because the ohci_suspend() disable irq emission and
-> mark HW unaccessible and ohci_at91_port_suspend() suspend the controller.
-> 
-> Is it really need to set ohci->rh_state in ohci_hcd_at91_drv_suspend()?
-> 
-> It maybe confused to set ohci->rh_state to OHCI_RH_SUSPEND in resume
-> routine.
+Reported-and-tested-by: syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com
 
-I'm not really sure what that assignment was intended to accomplish, but 
-maybe it was meant to force a reset when the controller resumes.
+Tested on:
 
-You could get the same result by leaving ohci->rh_state set to 
-OHCI_RH_SUSPENDED but changing ohci_hcd_at91_drv_resume().  Instead of 
-calling ohci_resume(hcd, false), have it call:
+commit:         45a3e24f Linux 6.4-rc7
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.4-rc7
+console output: https://syzkaller.appspot.com/x/log.txt?x=1210e557280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2cbd298d0aff1140
+dashboard link: https://syzkaller.appspot.com/bug?extid=63ee658b9a100ffadbe2
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14e0e557280000
 
-	ohci_resume(hcd, !ohci_at91->wakeup);
-
-That way, if the wakeup flag is clear and the clock was stopped, 
-ohci_resume() will call ohci_usb_reset().  You should also add a comment 
-explaining the reason.
-
-I can't test this because I don't have the AT91 hardware.
-
-Alan Stern
+Note: testing is done by a robot and is best-effort only.
