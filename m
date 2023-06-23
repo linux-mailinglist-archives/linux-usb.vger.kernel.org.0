@@ -2,172 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D61473B128
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jun 2023 09:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C43E73B17B
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jun 2023 09:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbjFWHSI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Jun 2023 03:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
+        id S231163AbjFWH2T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Jun 2023 03:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbjFWHSG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jun 2023 03:18:06 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BAA10C2;
-        Fri, 23 Jun 2023 00:18:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687504685; x=1719040685;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=X0oSPt8MKPSCdlW2qvnEeXQx55EsL81HO4NU7W+GvPE=;
-  b=chRqgEWRsnT1iFUMC8bkt8r3TBC/l2eji47cPeQpMtdZ/W2mrXNM3KxU
-   wrHhkzPjeRoR6Dx4IMv2sH74/iyqYB9FGk7yLDSP0A24rE9vmoD2eH+L+
-   s7ZtyuKRWwXKkhzTby0Q8w/HF/cbPOMVUyULNyUz69VMnQ5pUrEwFtY+f
-   GMoUxz5JJXg5dCM5OQ1V2GeDemLI8IBoJRj/z6Ro6rqveQKSooptE8nMn
-   XfgwQmhRW39E7zc0dmGpQThktzA55EkJENYgnw2Husd7QvC4G5tIJkPqK
-   5xw5VH/DfCP/huAFapXeFgIOHc4Lr3/1EAUMKs+x4BoN+RBq6mpo/dyeI
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="358197912"
-X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
-   d="scan'208";a="358197912"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 00:18:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="889382382"
-X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
-   d="scan'208";a="889382382"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 23 Jun 2023 00:18:01 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qCb3Q-00084f-1K;
-        Fri, 23 Jun 2023 07:18:00 +0000
-Date:   Fri, 23 Jun 2023 15:17:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Benjamin Bara <bbara93@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
+        with ESMTP id S229726AbjFWH2S (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jun 2023 03:28:18 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32120212F;
+        Fri, 23 Jun 2023 00:28:17 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-98d2fb1bb23so33189766b.3;
+        Fri, 23 Jun 2023 00:28:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687505295; x=1690097295;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hif18NmNHcCf8pS1rdbTF8MbepiaDUYPJ+s4jFcyoN0=;
+        b=hNuBXbi3JdXGgHgVofB5O2U8MRc1O7hie9o+1x3yCqjp+fbjBr6z01Ht8yLKdo6y3q
+         YjyJ8SsyKgHgdbkiO2zB+MD+077hlpEVc5TOXFPK4f1c5J+NcWHR02Z5WrxIfupI+vgs
+         yIpaMHmJCvjYCoTDl/x51Uumcs9XIwOKjRMVNmP8lTvOVrOsHaYgdBUO9bdR6zN2zJpc
+         EoBaetZyzFfQ6fL3DJ8OVUKMNt/GkW7H1IFCDgUip+loEL0l1AqCj+4rNbCtMvwuSvhT
+         VabsuDD7e7yn8WTdFLhiiWSE9GAJGLfa4nWASEilyyuw2j9/rfm4cm8s0qS4P4RiCouI
+         af2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687505295; x=1690097295;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hif18NmNHcCf8pS1rdbTF8MbepiaDUYPJ+s4jFcyoN0=;
+        b=eWfQW8FDKL2IxqRDqZdfFXVXsQaf6W0jGm8WWZtF4w+VG8r9Z/stHlHfqstQOxWUlS
+         Ofrhc/1AF8SNaVTK3TdpfvJD6d88p9XsgLuySMIaveiGs22KqEjdOb7FSEF8wDsyEgX/
+         rGEpO6afiVdQG2BZ3OnXSFw7rIvW29mAjaZCf/l3X9FhMFW0rnf+gv0EUbjwLaZCsalJ
+         nbRqYxNxLhSgNFWAvQWyOFYnkRJoSz/fjN7TTrZmKgyTskdM8LQak7T9myDJIYM1JvF2
+         PNredcfa3Iu6QFEM8qHTlt30vuyy0u8reQVUxzgaHvVHMNEUCvEMzlmR1YGrDnO1sGz+
+         KJiA==
+X-Gm-Message-State: AC+VfDw1ULeT4YBWAQB+fCVF7gtwcJDGdOCo/MEboluc0GLDEC33NEeV
+        rEr7ZENV9ZogbUZzutCdre8=
+X-Google-Smtp-Source: ACHHUZ6aF5UaOG3/gTIurANlToukglyACwUFramAMhX6Bn64f5qT3YbeyYqan6MEvat6RN04CXnG4Q==
+X-Received: by 2002:a17:907:2688:b0:988:4a48:6ff3 with SMTP id bn8-20020a170907268800b009884a486ff3mr15514086ejc.30.1687505295388;
+        Fri, 23 Jun 2023 00:28:15 -0700 (PDT)
+Received: from [127.0.1.1] ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id y19-20020a17090614d300b00982d0563b11sm5637811ejc.197.2023.06.23.00.28.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 00:28:15 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+Subject: [PATCH v7 0/3] usb: misc: onboard_usb_hub: add support for Cypress
+ HX3 USB 3.0 family
+Date:   Fri, 23 Jun 2023 09:28:11 +0200
+Message-Id: <20230620-hx3-v7-0-f79b4b22a1bf@skidata.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIxJlWQC/23PwW7DIAwG4FepOI+JYHBCT3uPaQcwZEHrkgm6q
+ FOVd5/T2xaOtvz9tu+ippJTFefTXZS05pqXmYv+6SRo8vN7kjlyLbTSoFArOd1AUnBggxlj7FH
+ wZPA1yVD8TBPPzt+XCze/Shrz7RH9+sb1lOt1KT+PTWu3d/+Grp1UEjwaF8DQYMNL/cjRX/0zL
+ Z9iT1h1Q2lWPXoLhlXfwVFBQwEr7SmQAvLOuKMyDWVYJYsBCGNA1bjQNpTd/+ocOeK3DI5HhQ2
+ FrNB3EceBEg7/Lty27RdryMTkuwEAAA==
+To:     Matthias Kaehlcke <mka@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Benjamin Bara <benjamin.bara@skidata.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 1/3] usb: misc: onboard-hub: support multiple power
- supplies
-Message-ID: <202306231557.18uGlgSW-lkp@intel.com>
-References: <20230620-hx3-v6-1-6a1d6f8ce689@skidata.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620-hx3-v6-1-6a1d6f8ce689@skidata.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Benjamin,
+Hi!
 
-kernel test robot noticed the following build warnings:
+This series adds support for the Cypress HX3 USB 3.0 family (2/3). For
+now, it just contains the USB-related aspects and ignores the option to
+connect it via i2c (3/3).
 
-[auto build test WARNING on 45a3e24f65e90a047bef86f927ebdc4c710edaa1]
+As the HX3 family operates with two power supplies, multiple power
+supply support is implemented (1/3).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Bara/usb-misc-onboard-hub-support-multiple-power-supplies/20230623-142256
-base:   45a3e24f65e90a047bef86f927ebdc4c710edaa1
-patch link:    https://lore.kernel.org/r/20230620-hx3-v6-1-6a1d6f8ce689%40skidata.com
-patch subject: [PATCH v6 1/3] usb: misc: onboard-hub: support multiple power supplies
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230623/202306231557.18uGlgSW-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230623/202306231557.18uGlgSW-lkp@intel.com/reproduce)
+Thanks & best regards,
+Benjamin
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306231557.18uGlgSW-lkp@intel.com/
+---
+Changes in v7:
+- 1/3: %ld -> %zu (thanks to lkp)
+- Link to v6: https://lore.kernel.org/r/20230620-hx3-v6-0-6a1d6f8ce689@skidata.com
 
-All warnings (new ones prefixed by >>):
+Changes in v6:
+- 1/3: %d -> %ld (thanks to lkp) 
+- Link to v5: https://lore.kernel.org/r/20230620-hx3-v5-0-319c9c4c846f@skidata.com
 
-   drivers/usb/misc/onboard_usb_hub.c: In function 'onboard_hub_probe':
->> drivers/usb/misc/onboard_usb_hub.c:262:59: warning: format '%ld' expects argument of type 'long int', but argument 4 has type 'unsigned int' [-Wformat=]
-     262 |                 return dev_err_probe(dev, -EINVAL, "max %ld supplies supported!\n",
-         |                                                         ~~^
-         |                                                           |
-         |                                                           long int
-         |                                                         %d
+Changes in v5:
+- 1/3: use ARRAY_SIZE(supply_names) for MAX_SUPPLIES (thanks to Alex)
+- Link to v4: https://lore.kernel.org/r/20230620-hx3-v4-0-e56b3c6db60b@skidata.com
 
+Changes in v4:
+- 1/3: set num_supplies=1 for the existing hubs
+- 1/3: drop duplicate num_supplies in onboard_hub struct
+- 1/3: clarify connection between supply_names and MAX_SUPPLIES
+- Link to v3: https://lore.kernel.org/r/20230620-hx3-v3-0-2acbc03ca949@skidata.com
 
-vim +262 drivers/usb/misc/onboard_usb_hub.c
+Changes in v3:
+- 1/3: fix nits mentioned by Matthias
+- Link to v2: https://lore.kernel.org/r/20230620-hx3-v2-0-76a53434c713@skidata.com
 
-   240	
-   241	static int onboard_hub_probe(struct platform_device *pdev)
-   242	{
-   243		const struct of_device_id *of_id;
-   244		struct device *dev = &pdev->dev;
-   245		struct onboard_hub *hub;
-   246		unsigned int i;
-   247		int err;
-   248	
-   249		hub = devm_kzalloc(dev, sizeof(*hub), GFP_KERNEL);
-   250		if (!hub)
-   251			return -ENOMEM;
-   252	
-   253		of_id = of_match_device(onboard_hub_match, &pdev->dev);
-   254		if (!of_id)
-   255			return -ENODEV;
-   256	
-   257		hub->pdata = of_id->data;
-   258		if (!hub->pdata)
-   259			return -EINVAL;
-   260	
-   261		if (hub->pdata->num_supplies > MAX_SUPPLIES)
- > 262			return dev_err_probe(dev, -EINVAL, "max %ld supplies supported!\n",
-   263					     MAX_SUPPLIES);
-   264	
-   265		for (i = 0; i < hub->pdata->num_supplies; i++)
-   266			hub->supplies[i].supply = supply_names[i];
-   267	
-   268		err = devm_regulator_bulk_get(dev, hub->pdata->num_supplies, hub->supplies);
-   269		if (err) {
-   270			dev_err(dev, "Failed to get regulator supplies: %d\n", err);
-   271			return err;
-   272		}
-   273	
-   274		hub->reset_gpio = devm_gpiod_get_optional(dev, "reset",
-   275							  GPIOD_OUT_HIGH);
-   276		if (IS_ERR(hub->reset_gpio))
-   277			return dev_err_probe(dev, PTR_ERR(hub->reset_gpio), "failed to get reset GPIO\n");
-   278	
-   279		hub->dev = dev;
-   280		mutex_init(&hub->lock);
-   281		INIT_LIST_HEAD(&hub->udev_list);
-   282	
-   283		dev_set_drvdata(dev, hub);
-   284	
-   285		err = onboard_hub_power_on(hub);
-   286		if (err)
-   287			return err;
-   288	
-   289		/*
-   290		 * The USB driver might have been detached from the USB devices by
-   291		 * onboard_hub_remove() (e.g. through an 'unbind' by userspace),
-   292		 * make sure to re-attach it if needed.
-   293		 *
-   294		 * This needs to be done deferred to avoid self-deadlocks on systems
-   295		 * with nested onboard hubs.
-   296		 */
-   297		schedule_work(&attach_usb_driver_work);
-   298	
-   299		return 0;
-   300	}
-   301	
+Changes in v2:
+- don't re-order by VID/PID (thanks to Matthias)
+- 1/3: replace (err != 0) with (err)
+- Link to v1: https://lore.kernel.org/r/20230620-hx3-v1-0-3a649b34c85b@skidata.com
 
+---
+Benjamin Bara (3):
+      usb: misc: onboard-hub: support multiple power supplies
+      usb: misc: onboard-hub: add support for Cypress HX3 USB 3.0 family
+      dt-bindings: usb: Add binding for Cypress HX3 USB 3.0 family
+
+ .../devicetree/bindings/usb/cypress,hx3.yaml       | 77 ++++++++++++++++++++++
+ drivers/usb/misc/onboard_usb_hub.c                 | 40 ++++++++---
+ drivers/usb/misc/onboard_usb_hub.h                 | 14 ++++
+ 3 files changed, 123 insertions(+), 8 deletions(-)
+---
+base-commit: 45a3e24f65e90a047bef86f927ebdc4c710edaa1
+change-id: 20230620-hx3-cb935b4fdd76
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Benjamin Bara <benjamin.bara@skidata.com>
+
