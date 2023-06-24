@@ -2,179 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E156073C755
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jun 2023 09:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B9F73C78A
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jun 2023 09:53:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231770AbjFXHUm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Jun 2023 03:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42992 "EHLO
+        id S231817AbjFXHxU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Jun 2023 03:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjFXHUl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Jun 2023 03:20:41 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8CC2729;
-        Sat, 24 Jun 2023 00:20:39 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35O7CO9N015475;
-        Sat, 24 Jun 2023 07:20:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=fBvo2ccUrGR3qAgIdPxY/V+yLAyvLv/NxPqfmD9xYn4=;
- b=VUdomRtjHo76mY3e8W5FJpc3YRiVYQYtOK/LiDkZZFl6qwtfu1OmL89NGRXdhDHiFsEP
- GZK02Ask8zSDU4M7AgT1nfnKD1gcCOCtFsN7THyE/UpETr87dgzjXdgXupSDGxT+Y2BA
- kbPGmWqqgmVH64/ALGwu/HGWhgsOUDRjPgtzx8qR32ye+76ShV4LobREq1f531SB2qf7
- 7PjLceTXnGh9LNO0hLHO8fo/u6CqJ4EBNnYbvrlK++4nAFMo6kXHb/VArH/pSpH4W/ee
- cB0ArEMnhNFWs5W9RTyKJAUX/K/liR09RCAKAVfrq1kqxAPY4OkbpC9c6DO+EIhg50t4 qg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rdssdg4pk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 24 Jun 2023 07:20:24 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35O7KNPr001607
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 24 Jun 2023 07:20:23 GMT
-Received: from [10.216.12.107] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sat, 24 Jun
- 2023 00:20:16 -0700
-Message-ID: <19932a93-4fc8-f177-8cd6-b6ecd5e163c2@quicinc.com>
-Date:   Sat, 24 Jun 2023 12:50:12 +0530
+        with ESMTP id S230052AbjFXHxR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Jun 2023 03:53:17 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F847273E
+        for <linux-usb@vger.kernel.org>; Sat, 24 Jun 2023 00:53:14 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51a3e6a952aso1500801a12.3
+        for <linux-usb@vger.kernel.org>; Sat, 24 Jun 2023 00:53:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687593192; x=1690185192;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hr9nrGlYrxN00jEwRxs6PYBUQxgnGyvMLv6d+S+IyFk=;
+        b=LQEc0yoJm0GslpUZYCjcHtwoTCvu+59CHRYP/sGpmh7IIEWYyKbcmwOTWkHIAk5amo
+         GW/7Gpe870PqzwscCvwhvS2tRdD4lIO92N5a+9t0YvyTUExmCh3G/ey+cNZCCGzcBTPJ
+         6yPMwkjqsKsodsXDqWTZBNezjTKe+7X8fdEpM8mYCN9NPvWn/peXOWQ5kyvKsBiKcO44
+         1nn5gapVl7Ro8gQLfw1L+9piaUTX+p6FPVZZ1/ijnscvD92eH3mJCbstLfuZt0gY2UUX
+         +QldvphwJQ8glfg3JyKVOgSk3y2EQry5UIdVnMeV03t88wxPGoe0khhNc6S3VhqB4zja
+         Bt8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687593192; x=1690185192;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hr9nrGlYrxN00jEwRxs6PYBUQxgnGyvMLv6d+S+IyFk=;
+        b=NMzP5tJAZAGtF6s6A32Q0zgLgH6VP4n720DVrbIopz8BrlMYvhUqi9AwcH3JBwuyR8
+         2yztf5D6Ae4GuF6mD7dUHhuapmhey67ZJOABK9YXICUxFKdZHmTTJZGLLovY6GHZr1WW
+         w0F+uepz1ZzUU0jPjMX0UzXPIPvRJweF4Do9s9Aue9BdfKj7j0367lrM5xs/3RqJ13Zb
+         zd76Yqf6ZThryPV01xABoc6O/Ic2JrPzdoFnqOMWgGxd5RhU+ek03y+LTewZcvJHocpN
+         TrUHvaK4zCLpdU7fMseO8wPoG73ECdIP/WELHQ4wSRdHJGzbDtGOqku/4m1ZgalPdwCI
+         5h6g==
+X-Gm-Message-State: AC+VfDxRFqDETjquYbeqVNzOkhpXrGb63l64QBDBSShNbWJfQjTtf8Fv
+        uNyEchqtklhKKNkbsTNtIkFWZQ==
+X-Google-Smtp-Source: ACHHUZ522CJYVOfO8kVotsUuEt+wtHkNFHrIi0PS6ACNcKvYFOPHzOCYWLySAcxpXgHfsNodLNJqrA==
+X-Received: by 2002:a50:ef12:0:b0:51a:f6de:bb81 with SMTP id m18-20020a50ef12000000b0051af6debb81mr10804337eds.28.1687593192613;
+        Sat, 24 Jun 2023 00:53:12 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id m5-20020aa7d345000000b0051495ce23absm404938edr.10.2023.06.24.00.53.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Jun 2023 00:53:12 -0700 (PDT)
+Message-ID: <074048a2-5153-e013-3562-b5cad2ba0954@linaro.org>
+Date:   Sat, 24 Jun 2023 09:53:05 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.1
-Subject: Re: [PATCH v9 04/10] usb: dwc3: core: Skip setting event buffers for
- host only controllers
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 01/45] dt-bindings: microchip: atmel,at91rm9200-tcb:
+ add sam9x60, sam9x7 compatible
 Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "Wesley Cheng" <quic_wcheng@quicinc.com>,
-        Johan Hovold <johan@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>,
-        "ahalaney@redhat.com" <ahalaney@redhat.com>,
-        "quic_shazhuss@quicinc.com" <quic_shazhuss@quicinc.com>
-References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
- <20230621043628.21485-5-quic_kriskura@quicinc.com>
- <20230623222754.auuce7y6c2e7ymvw@synopsys.com>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20230623222754.auuce7y6c2e7ymvw@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
+        tglx@linutronix.de, maz@kernel.org, lee@kernel.org,
+        ulf.hansson@linaro.org, tudor.ambarus@linaro.org,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linus.walleij@linaro.org, p.zabel@pengutronix.de,
+        olivia@selenic.com, a.zummo@towertech.it,
+        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com,
+        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
+        arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        linux@armlinux.org.uk, sre@kernel.org, jerry.ray@microchip.com,
+        horatiu.vultur@microchip.com, durai.manickamkr@microchip.com,
+        andrew@lunn.ch, alain.volmat@foss.st.com,
+        neil.armstrong@linaro.org, mihai.sain@microchip.com,
+        eugen.hristev@collabora.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
+        balamanikandan.gunasundar@microchip.com,
+        manikandan.m@microchip.com, dharma.b@microchip.com,
+        nayabbasha.sayed@microchip.com, balakrishnan.s@microchip.com
+References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
+ <20230623203056.689705-2-varshini.rajendran@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230623203056.689705-2-varshini.rajendran@microchip.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Fqh_jYxzg15j_BQXRX4k7doVGqAVys-x
-X-Proofpoint-ORIG-GUID: Fqh_jYxzg15j_BQXRX4k7doVGqAVys-x
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-24_04,2023-06-22_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- phishscore=0 suspectscore=0 clxscore=1015 malwarescore=0 bulkscore=0
- priorityscore=1501 lowpriorityscore=0 impostorscore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306240067
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 6/24/2023 3:57 AM, Thinh Nguyen wrote:
-> On Wed, Jun 21, 2023, Krishna Kurapati wrote:
->> On some SoC's like SA8295P where the tertiary controller is host-only
->> capable, GEVTADDRHI/LO, GEVTSIZ, GEVTCOUNT registers are not accessible.
->> Trying to access them leads to a crash.
->>
->> For DRD/Peripheral supported controllers, event buffer setup is done
->> again in gadget_pullup. Skip setup or cleanup of event buffers if
->> controller is host-only capable.
->>
->> Suggested-by: Johan Hovold <johan@kernel.org>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->>   drivers/usb/dwc3/core.c | 11 +++++++++++
->>   1 file changed, 11 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index 32ec05fc242b..e1ebae54454f 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -486,6 +486,11 @@ static void dwc3_free_event_buffers(struct dwc3 *dwc)
->>   static int dwc3_alloc_event_buffers(struct dwc3 *dwc, unsigned int length)
->>   {
->>   	struct dwc3_event_buffer *evt;
->> +	unsigned int hw_mode;
->> +
->> +	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
->> +	if (hw_mode == DWC3_GHWPARAMS0_MODE_HOST)
->> +		return 0;
+On 23/06/2023 22:30, Varshini Rajendran wrote:
+> Add sam9x60, sam9x7 compatible string support in the schema file.
 > 
-> This is a little awkward. Returning 0 here indicates that this function
-> was successful, and the event buffers were allocated based on the
-> function name. Do this check outside of dwc3_alloc_one_event_buffer()
-> and specifically set dwc->ev_buf = NULL if that's the case.
-> 
-Hi Thinh,
+> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+> ---
+>  .../devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml | 
 
-   Apologies, I didn't understand the comment properly.
 
-   I thought we were supposed to return 0 here if we fulfill the goal of 
-this function (allocate if we are drd/gadget and don't allocate if we 
-are host mode only).
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-   If we return a non zero error here, probe would fail as this call 
-will be done only for host only controllers during probe and nowhere else.
+Best regards,
+Krzysztof
 
-   Are you suggesting we move this check to dwc3_alloc_one_event_buffer 
-call ?
-
-Regards,
-Krishna,
-
->>   
->>   	evt = dwc3_alloc_one_event_buffer(dwc, length);
->>   	if (IS_ERR(evt)) {
->> @@ -507,6 +512,9 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc)
->>   {
->>   	struct dwc3_event_buffer	*evt;
->>   
->> +	if (!dwc->ev_buf)
->> +		return 0;
->> +
->>   	evt = dwc->ev_buf;
->>   	evt->lpos = 0;
->>   	dwc3_writel(dwc->regs, DWC3_GEVNTADRLO(0),
->> @@ -524,6 +532,9 @@ void dwc3_event_buffers_cleanup(struct dwc3 *dwc)
->>   {
->>   	struct dwc3_event_buffer	*evt;
->>   
->> +	if (!dwc->ev_buf)
->> +		return;
->> +
->>   	evt = dwc->ev_buf;
->>   
->>   	evt->lpos = 0;
->> -- 
->> 2.40.0
