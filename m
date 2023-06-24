@@ -2,138 +2,277 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8EC73CAF5
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jun 2023 15:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7985E73CBBF
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jun 2023 17:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjFXNE0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Jun 2023 09:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
+        id S233147AbjFXP6J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Jun 2023 11:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjFXNEY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Jun 2023 09:04:24 -0400
-Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015AC10D8
-        for <linux-usb@vger.kernel.org>; Sat, 24 Jun 2023 06:04:20 -0700 (PDT)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id D2w4qsQhCv5uID2w6quZLq; Sat, 24 Jun 2023 15:04:18 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1687611858; bh=A8Qf65Rob09U35oGENSWDKjvcQjFxw6Jr7EPtXZ0RBs=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=ddhgenzM9l5OX3VPJHJHnjXam1iTTPHItMmcnb1nzdS49b+PiY9FUzxmQ7qqSsPRv
-         8twLuDnQgujybwJQ7j9EmTNgm71tIg1O7K+voRaNLx4pkPGHcnUnyFbPZtomGLI4R4
-         7GB0lDmrln18PC2Ql7RZ+RzzramRbjxDStmf85zhsrSJDtRba/wV1tmeUerLMovaly
-         WaHEkao40VDR9pymw/FKcNiGX7+v47uHh2UpAliOjdtTC9F/IiMyO8kFwM5C3PcuWY
-         a3AXXSzfuiKRRfxvzJXEDVf8gvIleG6gJy4m41s1sm8qY9khc9+KUDc147ez8/b5Gq
-         WVwc9aPoiE3Og==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1687611858; bh=A8Qf65Rob09U35oGENSWDKjvcQjFxw6Jr7EPtXZ0RBs=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=ddhgenzM9l5OX3VPJHJHnjXam1iTTPHItMmcnb1nzdS49b+PiY9FUzxmQ7qqSsPRv
-         8twLuDnQgujybwJQ7j9EmTNgm71tIg1O7K+voRaNLx4pkPGHcnUnyFbPZtomGLI4R4
-         7GB0lDmrln18PC2Ql7RZ+RzzramRbjxDStmf85zhsrSJDtRba/wV1tmeUerLMovaly
-         WaHEkao40VDR9pymw/FKcNiGX7+v47uHh2UpAliOjdtTC9F/IiMyO8kFwM5C3PcuWY
-         a3AXXSzfuiKRRfxvzJXEDVf8gvIleG6gJy4m41s1sm8qY9khc9+KUDc147ez8/b5Gq
-         WVwc9aPoiE3Og==
-Date:   Sat, 24 Jun 2023 15:04:16 +0200
-From:   Ladislav Michl <oss-lists@triops.cz>
+        with ESMTP id S230092AbjFXP6H (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Jun 2023 11:58:07 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304CF1BC;
+        Sat, 24 Jun 2023 08:58:06 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51a3e6a952aso1828843a12.3;
+        Sat, 24 Jun 2023 08:58:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687622284; x=1690214284;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=af5sNaEfT2WsVEbo8gNhqs1xjknzebzp7aYfsrzZz+s=;
+        b=NhevF0x1ISN8V5b+I21bdtjLvKwalfaP20saNfX2BjXpob/IRaEul5CdIZ3OC4tMmm
+         79a0m5qwY+6219cpt9bVXhg+Mdnk/lVAtu9wVPjOa31OAm4/B5NWvernKfyO3CCPYWqQ
+         Z91vNKcrlFQJLLEsihr86F5P9c7KLaYnyYGupC307xRohxhWkmGQiLBvKt9looicRiKk
+         m3brPDeD0VgbQsGvHlqh5dyVXlSTE/5Uf1YDd0AwXUXrikNDdN3ZGN9urBuIauiNvZKd
+         cavXe1MoyrO7XQddYSZeBMyufNoDXVqjI6dgOnNePxrUGSL+xBtTYsApArUrYieKHvdu
+         s3xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687622284; x=1690214284;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=af5sNaEfT2WsVEbo8gNhqs1xjknzebzp7aYfsrzZz+s=;
+        b=InXBlZYU3fU59NUoecJ5DE7aWY5kSexHLELTEQCPosTggqca3nB+uzPr1rneiL79y9
+         SGjTDQxCgzD7uwsv0Sm7LUojBwDs3tC8InbShUWDlTgb8kfefhn4++WEM7Cr6Gs5Z61/
+         xwPk2fxCjGymyUAo0skkM4EpKODDYsW59OUf7eaIGKWOThde3cAx0ckLMZzyNvGiO2l7
+         wLTFmG+AsVDdGMAbcsxJV4Coz0CacP6Tzs07TzOU5jmtpNeX7q1fFHKa6dR1mPJ49LH4
+         NW872Pk3XUF5fL+dNpkbkDpwZdoBdzoZCHgvfJUjOdgrgkzZAKbefB/8ie5n9SmFzZi4
+         L4Og==
+X-Gm-Message-State: AC+VfDwQT1/Y0ncLz/SLSmHQiMQieLmQtbMPNCv0+kHADGhxddgPqBsV
+        /7eDPUwtbBwwbDtbKczAhrk=
+X-Google-Smtp-Source: ACHHUZ4swIuWK1/dOKJBy9BRtNkSir0aqDEeM2+GP/T80XkI4ubaY5f5gUaP32Y8wuMOYwOl9fzbUg==
+X-Received: by 2002:a17:907:9306:b0:97f:3d6f:93b8 with SMTP id bu6-20020a170907930600b0097f3d6f93b8mr21385036ejc.43.1687622283944;
+        Sat, 24 Jun 2023 08:58:03 -0700 (PDT)
+Received: from [10.0.0.102] (snat-11.cgn.sat-an.net. [176.222.226.11])
+        by smtp.gmail.com with ESMTPSA id qo5-20020a170907212500b00988c93c85a5sm998215ejb.183.2023.06.24.08.58.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Jun 2023 08:58:03 -0700 (PDT)
+Message-ID: <f76fe9831beb9dce2f4f0d5f5055dfd4f67b5000.camel@gmail.com>
+Subject: Re: usb: dwc3: HC dies under high I/O load on Exynos5422
+From:   Jakub =?iso-8859-2?Q?Van=ECk?= <linuxtardis@gmail.com>
 To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH 00/11] Cleanup Octeon DWC3 glue code
-Message-ID: <ZJbp0P5fYkvTLN5g@lenoch>
-References: <ZJC165p0Mj4jHcBh@lenoch>
- <20230622230149.4wpvtlpsu7473txr@synopsys.com>
- <ZJVQUzVW+NzCgH7i@lenoch>
- <20230623232420.vfvkqkcee5jrrkmo@synopsys.com>
+Cc:     "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+        "mauro.ribeiro@hardkernel.com" <mauro.ribeiro@hardkernel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>
+Date:   Sat, 24 Jun 2023 17:58:02 +0200
+In-Reply-To: <20230622223255.xawjfenb2tsjdmmg@synopsys.com>
+References: <a21f34c04632d250cd0a78c7c6f4a1c9c7a43142.camel@gmail.com>
+         <20230622223255.xawjfenb2tsjdmmg@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230623232420.vfvkqkcee5jrrkmo@synopsys.com>
-X-CMAE-Envelope: MS4wfOY9Vg2wt24jzn69gegLtgwCyOhJpUAcjTsDrgSrenZBywKfuBRP9r8Citz+FhztjMyh2WYzeSQAyaOLWN2TpFn7nY6DtpnIp+tGw84MGRlGvGWxS5qp
- gi2i8ALgyVzdiDxeKt8vVl1Cpb/Sl1s4BENivLS7x9YmL7U200Etyj+Z7YtU4T/VcQwq07SjLEHFECx0g9fHObTfO0mQuMAII7tTNvJuRnaNVffJAwc8lVmQ
- lJk/SAOIXs3qocBd/etP0w==
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi Thinh,
 
-On Fri, Jun 23, 2023 at 11:24:24PM +0000, Thinh Nguyen wrote:
-> On Fri, Jun 23, 2023, Ladislav Michl wrote:
-> > Hi,
-> > 
-> > On Thu, Jun 22, 2023 at 11:01:54PM +0000, Thinh Nguyen wrote:
-> > > Hi,
-> > [snip]
-> > > Please use get_maintainer.pl to get all the proper maintainers to review
-> > > the changes.
-> > 
-> > That's what I did. Thomas, MIPS maintainer is reading linux-mips list,
-> > Greg is reading linux-usb list, you were the one who receives changes,
-> > hence all patcheset was sent to you in a hope you provide some comments
-> > about actual code changes.
-> 
-> I can take a look at the changes. However, the patches were sent
-> directly To: me for patches related MIPS and no one else except the
-> linux-usb linux-mips (without Thomas), which doesn't look right.
-> 
-> I'm not familiar with the MIPS subsystem, but typically for the USB
-> mailing list, we capture all the emails generated from get_maintainer.pl
-> and include them To: and Cc: should they need attention to the changes.
-> Often we filter our emails based on whether it's directed toward us, at
-> least I do that. Also, we can't be sure if everyone still subscribes to
-> the corresponding mailing list.
+thank you for your reply!
 
-Did you run get_maintainer.pl yourself? Because here (for v6.3) I get:
-$ ./scripts/get_maintainer.pl -f arch/mips/cavium-octeon/octeon-usb.c 
-Thomas Bogendoerfer <tsbogend@alpha.franken.de> (maintainer:MIPS,commit_signer:1/1=100%)
-Ladislav Michl <ladis@linux-mips.org> (commit_signer:1/1=100%,authored:1/1=100%,added_lines:20/20=100%,removed_lines:22/22=100%)
-linux-mips@vger.kernel.org (open list:MIPS)
-linux-kernel@vger.kernel.org (open list)
-$ ./scripts/get_maintainer.pl -f drivers/usb/dwc3
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> (maintainer:DESIGNWARE USB3 DRD IP DRIVER)
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM)
-linux-usb@vger.kernel.org (open list:DESIGNWARE USB3 DRD IP DRIVER)
-linux-kernel@vger.kernel.org (open list)
+On Thu, 2023-06-22 at 22:33 +0000, Thinh Nguyen wrote:
+> Sorry for the delay in response. I was away.
+>=20
+> On Fri, Jun 16, 2023, Jakub Van=C4=9Bk wrote:
+> > Hi all,
+> >=20
+> > I've discovered that on recent kernels the xHCI controller on Odroid
+> > HC2 dies when a USB-attached disk is put under a heavy I/O load.
+> >=20
+> > The hardware in question is using a DWC3 2.00a IP within the Exynos5422
+>=20
+> Just want to clarify, this is dwc_usb3 v2.00a and not dwc_usb31.
 
-So I have no clue who else should I add to Cc list...
+Indeed, I forgot to add this.
 
-> > 
-> > > Since this is a large change involving different subsystems, if
-> > > possible, please split the changes related to MIPS and try to upstream
-> > > those first as they will affect how dwc3 glue driver will look.
-> > 
-> > That's pretty straightforward as patchset is arranged exactly this way,
-> > so MIPS maintainer is free to apply patches till driver move.
-> > However, any actual feedback would be still usefull. In case it gets
-> > some acks I'll add them and rebase patches to the latest -next.
-> > 
-> 
-> Then that's good. If the MIPS maintainer approves all the MIPS related
-> changes and already pick them up, there should be no problem.
+> > to provide two internal USB3 ports. One of them is connected to a
+> > JMS578 USB-to-SATA bridge (Odroid firmware v173.01.00.02). The bridge
+> > is then connected to a Intel SSDSC2KG240G8 (firmware XCV10132).
+> >=20
+> > The crash can be triggered by running a read-heavy workload. This
+> > triggers it for me within tens of seconds:
+> >=20
+> > $ fio --filename=3D/dev/sda --direct=3D1 --rw=3Dread --bs=3D4k \
+> > =C2=A0--ioengine=3Dlibaio --iodepth=3D256 --runtime=3D120 --numjobs=3D4=
+ \
+> > =C2=A0--time_based --group_reporting --name=3Diops-test-job \
+> > =C2=A0--eta-newline=3D1 --readonly
+> >=20
+> > FIO output then follows this pattern:
+> >=20
+> > iops-test-job: (g=3D0): rw=3Dread, bs=3D(R) 4096B-4096B, (W) 4096B-4096=
+B, (T)
+> > 4096B-4096B, ioengine=3Dlibaio, iodepth=3D256
+> > ...
+> > fio-3.16
+> > Starting 4 processes
+> > Jobs: 4 (f=3D4): [R(4)][2.5%][r=3D341MiB/s][r=3D87.2k IOPS][eta 01m:57s=
+]
+> > Jobs: 4 (f=3D4): [R(4)][4.2%][r=3D340MiB/s][r=3D87.1k IOPS][eta 01m:55s=
+]
+> > Jobs: 4 (f=3D4): [R(4)][5.8%][r=3D337MiB/s][r=3D86.2k IOPS][eta 01m:53s=
+]
+> > Jobs: 4 (f=3D4): [R(4)][7.5%][r=3D369MiB/s][r=3D94.5k IOPS][eta 01m:51s=
+]
+> > Jobs: 4 (f=3D4): [R(4)][9.2%][r=3D364MiB/s][r=3D93.2k IOPS][eta 01m:49s=
+]
+> > Jobs: 4 (f=3D4): [R(4)][10.8%][r=3D363MiB/s][r=3D92.9k IOPS][eta 01m:47=
+s]
+> > Jobs: 4 (f=3D4): [R(4)][12.5%][r=3D348MiB/s][r=3D88.0k IOPS][eta 01m:45=
+s]
+> > Jobs: 4 (f=3D4): [R(4)][14.2%][r=3D348MiB/s][r=3D88.0k IOPS][eta 01m:43=
+s]
+> > Jobs: 4 (f=3D4): [R(4)][15.8%][r=3D377MiB/s][r=3D96.4k IOPS][eta 01m:41=
+s]
+> > Jobs: 4 (f=3D4): [R(4)][17.5%][r=3D372MiB/s][r=3D95.2k IOPS][eta 01m:39=
+s]
+> > Jobs: 4 (f=3D4): [R(4)][18.3%][r=3D77.0MiB/s][r=3D19.0k IOPS][eta 01m:3=
+8s]
+> > Jobs: 4 (f=3D4): [R(4)][20.0%][eta 01m:36s]
+> > < line without progress repeated many times; xHC is now unresponsive >
+> > Jobs: 4 (f=3D4): [R(4)][45.8%][eta 01m:05s]
+> > fio: io_u error on file /dev/sda: No such device: read
+> > offset=3D1820839936, buflen=3D4096
+> > fio: pid=3D1863, err=3D19/file:io_u.c:1787, func=3Dio_u error, error=3D=
+No such
+> > device
+> > < and so on >
+> >=20
+> > Dmesg contains the following output:
+> >=20
+> > [ 266.310767] xhci-hcd xhci-hcd.8.auto: xHCI host controller not
+> > responding, assume dead
+> > [ 266.317388] xhci-hcd xhci-hcd.8.auto: HC died; cleaning up
+> > [ 266.322710] usb 4-1: cmd cmplt err -108
+> > [ 266.326497] usb 4-1: cmd cmplt err -108
+> > [ 266.330313] usb 4-1: cmd cmplt err -108
+> > [ 266.334096] usb 4-1: cmd cmplt err -108
+> > [ 266.337942] usb 4-1: cmd cmplt err -108
+> > [ 266.341746] usb 4-1: cmd cmplt err -108
+> > [ 266.345561] usb 4-1: cmd cmplt err -108
+> > [ 266.349372] usb 4-1: cmd cmplt err -108
+> > [ 266.353187] usb 4-1: cmd cmplt err -108
+> > [ 266.357000] usb 4-1: cmd cmplt err -108
+> > [ 266.360809] usb 4-1: cmd cmplt err -108
+> > [ 266.364626] usb 4-1: cmd cmplt err -108
+> > [ 266.368439] usb 4-1: cmd cmplt err -108
+> > [ 266.372248] usb 4-1: cmd cmplt err -108
+> > [ 266.376063] usb 4-1: cmd cmplt err -108
+> > [ 266.379876] usb 4-1: cmd cmplt err -108
+> > [ 266.383688] usb 4-1: cmd cmplt err -108
+> > [ 266.387500] usb 4-1: cmd cmplt err -108
+> > [ 266.391314] usb 4-1: cmd cmplt err -108
+> > [ 266.395127] usb 4-1: cmd cmplt err -108
+> > [ 266.398943] usb 4-1: cmd cmplt err -108
+> > [ 266.402753] usb 4-1: cmd cmplt err -108
+> > [ 266.406565] usb 4-1: cmd cmplt err -108
+> > [ 266.410379] usb 4-1: cmd cmplt err -108
+> > [ 266.414165] usb 4-1: cmd cmplt err -108
+> > [ 266.418003] usb 4-1: cmd cmplt err -108
+> > [ 266.448629] BTRFS error (device sda2): bdev /dev/sda2 errs: wr 0, rd
+> > 1, flush 0, corrupt 0, gen 0
+> > < more FS errors follow >
+> >=20
+> > The OS is then unable to recover (I have rootfs on that SSD too) and
+> > the board must be manually restarted.
+> >=20
+> > I can reproduce the problem on mainline 6.4-rc6 with multi_v7_defconfig
+> > (+ CONFIG_BTRFS=3Dy for the rootfs). I've bisected the problem a while
+> > back and the first broken commit is b138e23d3dff ("usb: dwc3: core:
+> > Enable AutoRetry feature in the controller"). Reverting this commit
+> > locally makes my board stable again (FIO test above can run
+> > for >10 minutes without any issues).
+>=20
+> This info helps a lot.
+>=20
+> >=20
+> > The crash is happening when the USB-SATA bridge is controlled by the
+> > uas driver. I have not tested the usb-storage driver yet.
+> >=20
+> > What do you think would be an appropriate fix here? One idea I had is
+> > to add a Odroid-specific quirk to DWC3 to not enable AutoRetry here.
+> > However, I'm not entirely sure this is isolated to Odroid boards.
+> >=20
+> > Please let me know if you need me to do some more experiments.
+> >=20
+>=20
+> This failure indicates that whichever device you're testing against
+> could not retry with burst (NumP !=3D 0) after a CRC error. After a perio=
+d
+> of time, the host timed out and attempted to restore its operations by
+> stoping the active transfers with a Stop-ep command. However, for some
+> reason, the host doesn't respond to this command. The crash you observed
+> is probably a separate issue. The main issue is why the host doesn't
+> receive a command completion event. If you're our direct customer, you
+> can submit a STAR request for our support. I'm not aware of this type of
+> failure related to AutoRetry. However, given how old this controller
+> version is (over a decade ago), I can't be sure.
 
-Well, remaining question is how to make it comfortable for you to take
-changes. Patches 1-7 are in mips-next already, so I propose to wait until
-they propagate upstream then I rebase remaining patches to whatever is
-in linux-next.
+Thank you, this explanations makes sense to me.
 
-Please note I added glue driver into Makefile and Kconfig at random
-locations as I failed to find any logic here. If you have any preference
-or want to sort those files alphabetically first for example, just let
-me know and I'll add some cleanup patches before sending v2.
+> I think if you try to test against a different device, you may not
+> observe this same failure.
 
-Also coleagues of mine meanwhile found that PLL indeed ocassionally
-fails to lock, so workaround attached to cover letter is really needed.
-Naturally it cannot sneak in as it is, so unless you have better idea
-I'll just port it to recent driver state and we can start discussion
-from there in a separate thread.
+I can partially confirm this. There is a USB3 to 1Gbit Ethernet bridge
+onboard too and this peripheral appears to work reliably. I am unable
+to test a different USB-to-SATA bridge though - there are no physical
+USB3 ports on Odroid HC2. It would be possible to verify this on Odroid
+XU4 which uses the same chip and does have physical USB ports. However,
+I don't have one at hand now.
+
+> To resolve this, please look into our support team to investigate
+> further to see whether it's a setup issue. Otherwise, we can disable
+> this feature for dwc_usb3 v2.00a. Depending on how bad the CRC error
+> rate is (which should be low), this should not affect performance
+> much.
+
+I unfortunately have no relationship with either Synopsys, Samsung or
+Hardkernel. Would you be OK with me submitting the proposed patch even
+without further investigation? Also, can I submit this for backporting
+to -stable?
+
+> I don't think this neccessarily needs a new DT property.
+>=20
+> Something like this:
+>=20
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 0beaab932e7d..1bfd8b127240 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1209,8 +1209,9 @@ static int dwc3_core_init(struct dwc3 *dwc)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0dwc3_writel(dwc->regs, DWC3_GUCTL1, reg);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> =C2=A0
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (dwc->dr_mode =3D=3D USB_DR=
+_MODE_HOST ||
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dwc->dr_mod=
+e =3D=3D USB_DR_MODE_OTG) {
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!DWC3_VER_IS(DWC3, 200A) &=
+&
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 (dwc->dr_mo=
+de =3D=3D USB_DR_MODE_HOST ||
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dwc->=
+dr_mode =3D=3D USB_DR_MODE_OTG)) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0reg =3D dwc3_readl(dwc->regs, DWC3_GUCTL);
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0/*
+>=20
+
+> Thanks,
+> Thinh
 
 Thank you,
-	ladis
+Jakub
