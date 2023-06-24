@@ -2,94 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30B473C4E2
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jun 2023 01:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CEA973C742
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jun 2023 09:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbjFWXnW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Jun 2023 19:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
+        id S231591AbjFXHML (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Jun 2023 03:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbjFWXnS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jun 2023 19:43:18 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EF02703;
-        Fri, 23 Jun 2023 16:43:17 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-78333585d28so32790139f.1;
-        Fri, 23 Jun 2023 16:43:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687563796; x=1690155796;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fTiyezCl+ncjMsIOOS0sUB9bYyrGCDjIJOvndxohyZs=;
-        b=JsAIoLHPQR83cIFWCg7WWq9dOFpHwbGPHK2yoY125gC8xVqx2+ttlxJX+sxoETmQlV
-         0nzPjnhz39qU6o87QsXUo3XE8rc8xVe1tCFq0v/HUv/SqKNKfCrP1E1R7lgXcGuOx6y2
-         Ye3G6ypunxQdjQzz2ukdGGZuVQNU006TpPpL8MAHc+uIiGpnV85+2gp/WvADNQ/2sRCU
-         AoLsbcQUu6qTlfBlobD2G6x4CJs0P6/7LAU5AFlr+R6jVOZVLv1PoQKKkeOqS1a/I5G5
-         iHh6o5EBG3JC2u0sVTRVWCc72uLnf7/POT8WGjwChV0ytJvnTeM9K3NQ4zI7JypbiFa8
-         xFfg==
-X-Gm-Message-State: AC+VfDw5DExrdMCkSqQcgXx602OXDOFT2Gsg8bbCY0m4jzAMeRS+bMz2
-        HjkFdCKixSxi9ODyQ8CMJA==
-X-Google-Smtp-Source: ACHHUZ704nUo/Qe+1L5BBq/vh9K03eeZluxsw6d51akGW3mbLVGxB1UGHdSEiXEdc5xMZV7l5fDOHg==
-X-Received: by 2002:a5d:9483:0:b0:760:e308:107e with SMTP id v3-20020a5d9483000000b00760e308107emr15001057ioj.0.1687563796356;
-        Fri, 23 Jun 2023 16:43:16 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id r27-20020a02c85b000000b0041407c67451sm72416jao.165.2023.06.23.16.43.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 16:43:15 -0700 (PDT)
-Received: (nullmailer pid 1606691 invoked by uid 1000);
-        Fri, 23 Jun 2023 23:43:09 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S231467AbjFXHMI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Jun 2023 03:12:08 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445542720;
+        Sat, 24 Jun 2023 00:12:07 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35O6wKZU011250;
+        Sat, 24 Jun 2023 07:11:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=9slJZrGRD94l5YVeMjlqxxdCSHlkyyjTep/49ZplkdY=;
+ b=miIuSJcd1ljpInlOZ2FLue5kk4+L36FpwgGXR6s5Nw4IgzgUZTHfenzCzEsHMZ2CK8CO
+ yGhglU6MGdworPCQAgU4PZ73PAZ7ZFWGGeWdZ3LzSBFQnV0O1i+3RNitTPUNKmEPoBTx
+ Lu/+qonIwGBUqMLJ1/0hdvZ7rBAudkepKSIUdOSULv3ZzvKXSOgoG9Fq2R/vp6gwTRzV
+ cBU9EWJ+h94Qr/GV+Dam94fT30Zkbe+loyq6BekcbIf4RluOJZeD7lT37k6VFUl7HfjX
+ w5ZhIgBE8wZomA44nlUKGiHQjHBBVA+rJR44PG5UcMCnGuVZHWy2XvNXw6/kxG4txVMp Mw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rdqew09bg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 24 Jun 2023 07:11:45 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35O7BiAt019783
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 24 Jun 2023 07:11:44 GMT
+Received: from [10.216.12.107] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sat, 24 Jun
+ 2023 00:11:38 -0700
+Message-ID: <5ee7579c-7190-fb0f-0202-297aa0f7fc08@quicinc.com>
+Date:   Sat, 24 Jun 2023 12:41:34 +0530
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Varshini Rajendran <varshini.rajendran@microchip.com>
-Cc:     ulf.hansson@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        edumazet@google.com, broonie@kernel.org, arnd@arndb.de,
-        maz@kernel.org, lgirdwood@gmail.com, alexandre.belloni@bootlin.com,
-        alain.volmat@foss.st.com, p.zabel@pengutronix.de,
-        mihai.sain@microchip.com, soc@kernel.org,
-        linux-mtd@lists.infradead.org, cristian.birsan@microchip.com,
-        jerry.ray@microchip.com, tudor.ambarus@linaro.org,
-        miquel.raynal@bootlin.com, richard@nod.at,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        balamanikandan.gunasundar@microchip.com, lee@kernel.org,
-        olivia@selenic.com, sboyd@kernel.org, mturquette@baylibre.com,
-        kuba@kernel.org, Hari.PrasathGE@microchip.com,
-        linux-kernel@vger.kernel.org, balakrishnan.s@microchip.com,
-        alsa-devel@alsa-project.org, durai.manickamkr@microchip.com,
-        sre@kernel.org, vkoul@kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, andrew@lunn.ch,
-        devicetree@vger.kernel.org, nayabbasha.sayed@microchip.com,
-        linux-gpio@vger.kernel.org, nicolas.ferre@microchip.com,
-        davem@davemloft.net, pabeni@redhat.com,
-        linux-arm-kernel@lists.infradead.org, linux@roeck-us.net,
-        wim@linux-watchdog.org, tglx@linutronix.de,
-        horatiu.vultur@microchip.com, radu_nicolae.pirea@upb.ro,
-        dharma.b@microchip.com, a.zummo@towertech.it,
-        linux-mmc@vger.kernel.org, richard.genoud@gmail.com,
-        claudiu.beznea@microchip.com, linus.walleij@linaro.org,
-        conor+dt@kernel.org, herbert@gondor.apana.org.au,
-        eugen.hristev@collabora.com, dmaengine@vger.kernel.org,
-        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux@armlinux.org.uk, linux-watchdog@vger.kernel.org,
-        linux-pm@vger.kernel.org, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-crypto@vger.kernel.org,
-        neil.armstrong@linaro.org, vigneshr@ti.com,
-        manikandan.m@microchip.com, linux-clk@vger.kernel.org,
-        olof@lixom.net
-In-Reply-To: <20230623203056.689705-32-varshini.rajendran@microchip.com>
-References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
- <20230623203056.689705-32-varshini.rajendran@microchip.com>
-Message-Id: <168756378936.1606652.14221929175769628362.robh@kernel.org>
-Subject: Re: [PATCH v2 31/45] dt-bindings: atmel-classd: add sam9x7
- compatible
-Date:   Fri, 23 Jun 2023 17:43:09 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.1
+Subject: Re: [PATCH v9 10/10] arm64: dts: qcom: sa8540-ride: Enable first port
+ of tertiary usb controller
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Johan Hovold <johan@kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>,
+        <ahalaney@redhat.com>, <quic_shazhuss@quicinc.com>
+References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
+ <20230621043628.21485-11-quic_kriskura@quicinc.com>
+ <144c5bff-6d81-b681-57ac-b1e51993c9b3@linaro.org>
+Content-Language: en-US
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <144c5bff-6d81-b681-57ac-b1e51993c9b3@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: MwjbgO1r-IzDCIaUfuX2TKemUuu7qQ1k
+X-Proofpoint-GUID: MwjbgO1r-IzDCIaUfuX2TKemUuu7qQ1k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-24_04,2023-06-22_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ malwarescore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0
+ spamscore=0 mlxlogscore=999 adultscore=0 phishscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306240066
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -97,39 +95,73 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
-On Sat, 24 Jun 2023 02:00:42 +0530, Varshini Rajendran wrote:
-> Add sam9x7 compatible to DT bindings documentation.
+
+On 6/24/2023 4:12 AM, Konrad Dybcio wrote:
+> On 21.06.2023 06:36, Krishna Kurapati wrote:
+>> There is now support for the multiport USB controller this uses so
+>> enable it.
+>>
+>> The board only has a single port hooked up (despite it being wired up to
+>> the multiport IP on the SoC). There's also a USB 2.0 mux hooked up,
+>> which by default on boot is selected to mux properly. Grab the gpio
+>> controlling that and ensure it stays in the right position so USB 2.0
+>> continues to be routed from the external port to the SoC.
+>>
+>> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+>> [Krishna: Rebased on top of usb-next]
+> If that's your only change to this patch, you should have kept the
+> Author: field unchanged.
 > 
-> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-> ---
->  .../devicetree/bindings/sound/atmel,sama5d2-classd.yaml      | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+Sure, will do reset-author and resubmit the patch next version.
+
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+> Same comments as patch 9
 > 
+> Konrad
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Thanks for the review.
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/atmel,sama5d2-classd.example.dtb: sound@fc048000: compatible: 'oneOf' conditional failed, one must be fixed:
-	['atmel,sama5d2-classd'] is too short
-	from schema $id: http://devicetree.org/schemas/sound/atmel,sama5d2-classd.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230623203056.689705-32-varshini.rajendran@microchip.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Regards,
+Krishna,
+>>   arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 22 ++++++++++++++++++++++
+>>   1 file changed, 22 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+>> index 24fa449d48a6..53d47593306e 100644
+>> --- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+>> @@ -309,6 +309,19 @@ &usb_2_qmpphy0 {
+>>   	status = "okay";
+>>   };
+>>   
+>> +&usb_2 {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&usb2_en_state>;
+>> +
+>> +	status = "okay";
+>> +};
+>> +
+>> +&usb_2_dwc3 {
+>> +	dr_mode = "host";
+>> +	phy-names = "usb2-port0", "usb3-port0";
+>> +	phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>;
+>> +};
+>> +
+>>   &xo_board_clk {
+>>   	clock-frequency = <38400000>;
+>>   };
+>> @@ -401,4 +414,13 @@ wake-pins {
+>>   			bias-pull-up;
+>>   		};
+>>   	};
+>> +
+>> +	usb2_en_state: usb2-en-state {
+>> +		/* TS3USB221A USB2.0 mux select */
+>> +		pins = "gpio24";
+>> +		function = "gpio";
+>> +		drive-strength = <2>;
+>> +		bias-disable;
+>> +		output-low;
+>> +	};
+>>   };
