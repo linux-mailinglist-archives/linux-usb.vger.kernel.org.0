@@ -2,112 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB0473CA4E
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jun 2023 11:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8EC73CAF5
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jun 2023 15:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232867AbjFXJyP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Jun 2023 05:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
+        id S229820AbjFXNE0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Jun 2023 09:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbjFXJyN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Jun 2023 05:54:13 -0400
-Received: from mail1.bemta37.messagelabs.com (mail1.bemta37.messagelabs.com [85.158.142.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA53B0;
-        Sat, 24 Jun 2023 02:54:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=boaniger.com;
-        s=selector3; t=1687600449; i=@boaniger.com;
-        bh=Wuj+h4mwV9Tm7duhBINktIbLhIzOXSNpyo9CJUmQGJM=;
-        h=Content-Type:MIME-Version:Content-Transfer-Encoding:
-         Content-Description:Subject:To:From:Date:Reply-To:Message-ID;
-        b=AolmaF45iYTnAzMAu22cDxB6PzLt3FWGr+zfvWZZayYY8g4wPv6aH2yO5nXdssTAO
-         jB0e+XsqHrI7hG/3tn+q5dKZuNJah4EMbwg7aegokGQcnmGOUlWadySwG4k8IGyCO6
-         q67h81drbRzrYjYefJ5xOBIMqhtapROEmULA0PiA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOKsWRWlGSWpSXmKPExsUyy+mus6793mk
-  pBi9fC1u0dR5isfjxYw6bxeOP95gttr5Zx2ixaFkrswOrx77v3xk9ds66y+7x89g8Vo/Pm+QC
-  WKJYM/OS8isSWDN+tLczFSRXfP31k6WBMaCLkYtDSOAbo8SX5sNMcE7vxAmsEM5BRom3b/4xd
-  zFycjAL6EncmDqFDcTmFRCUODnzCQtEXFti2cLXQDUcQLaaxNeuEpCwsAC3xJdX6xlBbBEBZY
-  kX1/YwgdhsQPbnxy/BRrIIqEpc3LoXzBYSkJNY9mA+M8R4f4lf3T/YIeLyEt9uPmSewMg3C8k
-  Vs5BcMQvJFbMQrljAyLKK0aw4tagstUjXSC+pKDM9oyQ3MTNHL7FKN1EvtVQ3L7+oJEPXUC+x
-  vFgvtbhYr7gyNzknRS8vtWQTIzDEU4pTA3YwHu36p3eIUZKDSUmUN8VkSooQX1J+SmVGYnFGf
-  FFpTmrxIUY9Dg6BC2cffmIUuPLhUxOTFEtefl6qkgSv065pKUKCRanpqRVpmTnAmIRpkODgUR
-  Lh/b8bKM1bXJCYW5yZDpE6xRjLsXnh3r3MHMcWgcjVO/cDye1g8n3TRSD56eMVIPngwDWQ+AU
-  Q+XVb1wFmIZb0osRKKXHewD1AQwVAhmaU5sGthKWfS4yyUsK8jAwMDEI8BalFuZklqPKvGMU5
-  GJWEeSeBTOHJzCuBu+wV0NFMQEena00GObokESEl1cDkJ/pKWm1Zxyr+p1eYPp9b8uA8l/iaN
-  QyTFGYmF8fkGT/epKE1MaDhdoTU047Yr0/tfh7LZbmrLxHXrT11reyck6U7UifwR3ZrRDwV0o
-  1MXOXw8+p6t6/rO2aZL1TnzFswLfUlb5+jKd/bYx/abbZO5c5i6+sJ6l56OU7NSu1JbmP8dja
-  7tArjGSW7RXPiQtIurHz6yex17ruZC20nfl2SXdVh5jjZ0fjV1rojbomFLMvjZ4odFuLyu1d9
-  5u7hO1JCz4Nvdp9Nf/a+876OwYTTxrF9VVEuP+Qz5lzjC0yyjl/x7uev2ud6N8St5uaKc2SF/
-  jB5MvmMTmhg55O2Hxw9HNEG65n/nRdaMzkqp06JpTgj0VCLuag4EQBE2XTMugMAAA==
-X-Env-Sender: olena@boaniger.com
-X-Msg-Ref: server-8.tower-725.messagelabs.com!1687600438!65740!11
-X-Originating-IP: [154.66.221.67]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.105.4; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 6733 invoked from network); 24 Jun 2023 09:54:07 -0000
-Received: from unknown (HELO mail.boaniger.com) (154.66.221.67)
-  by server-8.tower-725.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 24 Jun 2023 09:54:07 -0000
-Received: from WINSRVNE-ARCH.boaniger.local (10.107.72.27) by
- WINSRVNE-EXCH.boaniger.local (10.107.72.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Sat, 24 Jun 2023 10:54:37 +0100
-Received: from WINSRVNE-EXCH.boaniger.local (10.107.72.8) by
- WINSRVNE-ARCH.boaniger.local (10.107.72.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Sat, 24 Jun 2023 10:54:36 +0100
-Received: from [85.217.144.32] (85.217.144.32) by WINSRVNE-EXCH.boaniger.local
- (10.107.72.8) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Sat, 24 Jun 2023 10:54:35 +0100
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S229659AbjFXNEY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Jun 2023 09:04:24 -0400
+Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015AC10D8
+        for <linux-usb@vger.kernel.org>; Sat, 24 Jun 2023 06:04:20 -0700 (PDT)
+Received: from lenoch ([91.218.190.200])
+        by cmgsmtp with ESMTPSA
+        id D2w4qsQhCv5uID2w6quZLq; Sat, 24 Jun 2023 15:04:18 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1687611858; bh=A8Qf65Rob09U35oGENSWDKjvcQjFxw6Jr7EPtXZ0RBs=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=ddhgenzM9l5OX3VPJHJHnjXam1iTTPHItMmcnb1nzdS49b+PiY9FUzxmQ7qqSsPRv
+         8twLuDnQgujybwJQ7j9EmTNgm71tIg1O7K+voRaNLx4pkPGHcnUnyFbPZtomGLI4R4
+         7GB0lDmrln18PC2Ql7RZ+RzzramRbjxDStmf85zhsrSJDtRba/wV1tmeUerLMovaly
+         WaHEkao40VDR9pymw/FKcNiGX7+v47uHh2UpAliOjdtTC9F/IiMyO8kFwM5C3PcuWY
+         a3AXXSzfuiKRRfxvzJXEDVf8gvIleG6gJy4m41s1sm8qY9khc9+KUDc147ez8/b5Gq
+         WVwc9aPoiE3Og==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1687611858; bh=A8Qf65Rob09U35oGENSWDKjvcQjFxw6Jr7EPtXZ0RBs=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=ddhgenzM9l5OX3VPJHJHnjXam1iTTPHItMmcnb1nzdS49b+PiY9FUzxmQ7qqSsPRv
+         8twLuDnQgujybwJQ7j9EmTNgm71tIg1O7K+voRaNLx4pkPGHcnUnyFbPZtomGLI4R4
+         7GB0lDmrln18PC2Ql7RZ+RzzramRbjxDStmf85zhsrSJDtRba/wV1tmeUerLMovaly
+         WaHEkao40VDR9pymw/FKcNiGX7+v47uHh2UpAliOjdtTC9F/IiMyO8kFwM5C3PcuWY
+         a3AXXSzfuiKRRfxvzJXEDVf8gvIleG6gJy4m41s1sm8qY9khc9+KUDc147ez8/b5Gq
+         WVwc9aPoiE3Og==
+Date:   Sat, 24 Jun 2023 15:04:16 +0200
+From:   Ladislav Michl <oss-lists@triops.cz>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH 00/11] Cleanup Octeon DWC3 glue code
+Message-ID: <ZJbp0P5fYkvTLN5g@lenoch>
+References: <ZJC165p0Mj4jHcBh@lenoch>
+ <20230622230149.4wpvtlpsu7473txr@synopsys.com>
+ <ZJVQUzVW+NzCgH7i@lenoch>
+ <20230623232420.vfvkqkcee5jrrkmo@synopsys.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: hi
-To:     Recipients <olena@boaniger.com>
-From:   Ms Olena <olena@boaniger.com>
-Date:   Sat, 24 Jun 2023 11:53:13 +0200
-Reply-To: <os904425@gmail.com>
-Message-ID: <76c6ea03-0c8f-416b-80c1-34d488dc6627@WINSRVNE-EXCH.boaniger.local>
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: boaniger.com]
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [85.158.142.113 listed in list.dnswl.org]
-        *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
-        *      bl.spamcop.net
-        *      [Blocked - see <https://www.spamcop.net/bl.shtml?85.217.144.32>]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [85.217.144.32 listed in zen.spamhaus.org]
-        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4999]
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [85.158.142.113 listed in wl.mailspike.net]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [os904425[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230623232420.vfvkqkcee5jrrkmo@synopsys.com>
+X-CMAE-Envelope: MS4wfOY9Vg2wt24jzn69gegLtgwCyOhJpUAcjTsDrgSrenZBywKfuBRP9r8Citz+FhztjMyh2WYzeSQAyaOLWN2TpFn7nY6DtpnIp+tGw84MGRlGvGWxS5qp
+ gi2i8ALgyVzdiDxeKt8vVl1Cpb/Sl1s4BENivLS7x9YmL7U200Etyj+Z7YtU4T/VcQwq07SjLEHFECx0g9fHObTfO0mQuMAII7tTNvJuRnaNVffJAwc8lVmQ
+ lJk/SAOIXs3qocBd/etP0w==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -115,6 +64,76 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,
-I have funds for investment. Can we partner if you have a good business ide=
-a?
-Thanks, Olena.
+
+On Fri, Jun 23, 2023 at 11:24:24PM +0000, Thinh Nguyen wrote:
+> On Fri, Jun 23, 2023, Ladislav Michl wrote:
+> > Hi,
+> > 
+> > On Thu, Jun 22, 2023 at 11:01:54PM +0000, Thinh Nguyen wrote:
+> > > Hi,
+> > [snip]
+> > > Please use get_maintainer.pl to get all the proper maintainers to review
+> > > the changes.
+> > 
+> > That's what I did. Thomas, MIPS maintainer is reading linux-mips list,
+> > Greg is reading linux-usb list, you were the one who receives changes,
+> > hence all patcheset was sent to you in a hope you provide some comments
+> > about actual code changes.
+> 
+> I can take a look at the changes. However, the patches were sent
+> directly To: me for patches related MIPS and no one else except the
+> linux-usb linux-mips (without Thomas), which doesn't look right.
+> 
+> I'm not familiar with the MIPS subsystem, but typically for the USB
+> mailing list, we capture all the emails generated from get_maintainer.pl
+> and include them To: and Cc: should they need attention to the changes.
+> Often we filter our emails based on whether it's directed toward us, at
+> least I do that. Also, we can't be sure if everyone still subscribes to
+> the corresponding mailing list.
+
+Did you run get_maintainer.pl yourself? Because here (for v6.3) I get:
+$ ./scripts/get_maintainer.pl -f arch/mips/cavium-octeon/octeon-usb.c 
+Thomas Bogendoerfer <tsbogend@alpha.franken.de> (maintainer:MIPS,commit_signer:1/1=100%)
+Ladislav Michl <ladis@linux-mips.org> (commit_signer:1/1=100%,authored:1/1=100%,added_lines:20/20=100%,removed_lines:22/22=100%)
+linux-mips@vger.kernel.org (open list:MIPS)
+linux-kernel@vger.kernel.org (open list)
+$ ./scripts/get_maintainer.pl -f drivers/usb/dwc3
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> (maintainer:DESIGNWARE USB3 DRD IP DRIVER)
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM)
+linux-usb@vger.kernel.org (open list:DESIGNWARE USB3 DRD IP DRIVER)
+linux-kernel@vger.kernel.org (open list)
+
+So I have no clue who else should I add to Cc list...
+
+> > 
+> > > Since this is a large change involving different subsystems, if
+> > > possible, please split the changes related to MIPS and try to upstream
+> > > those first as they will affect how dwc3 glue driver will look.
+> > 
+> > That's pretty straightforward as patchset is arranged exactly this way,
+> > so MIPS maintainer is free to apply patches till driver move.
+> > However, any actual feedback would be still usefull. In case it gets
+> > some acks I'll add them and rebase patches to the latest -next.
+> > 
+> 
+> Then that's good. If the MIPS maintainer approves all the MIPS related
+> changes and already pick them up, there should be no problem.
+
+Well, remaining question is how to make it comfortable for you to take
+changes. Patches 1-7 are in mips-next already, so I propose to wait until
+they propagate upstream then I rebase remaining patches to whatever is
+in linux-next.
+
+Please note I added glue driver into Makefile and Kconfig at random
+locations as I failed to find any logic here. If you have any preference
+or want to sort those files alphabetically first for example, just let
+me know and I'll add some cleanup patches before sending v2.
+
+Also coleagues of mine meanwhile found that PLL indeed ocassionally
+fails to lock, so workaround attached to cover letter is really needed.
+Naturally it cannot sneak in as it is, so unless you have better idea
+I'll just port it to recent driver state and we can start discussion
+from there in a separate thread.
+
+Thank you,
+	ladis
