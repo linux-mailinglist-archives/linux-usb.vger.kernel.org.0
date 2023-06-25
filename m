@@ -2,53 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62BC973D28F
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Jun 2023 18:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA5573D2A8
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Jun 2023 19:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjFYQvC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 25 Jun 2023 12:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S229662AbjFYRM0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 25 Jun 2023 13:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjFYQvA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Jun 2023 12:51:00 -0400
-Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C4AB7;
-        Sun, 25 Jun 2023 09:50:57 -0700 (PDT)
+        with ESMTP id S229446AbjFYRMZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Jun 2023 13:12:25 -0400
+X-Greylist: delayed 1422 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 25 Jun 2023 10:12:23 PDT
+Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7159D197;
+        Sun, 25 Jun 2023 10:12:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1687711854;
-        bh=ULx3wX+XMVeigercXBoqPiB3jqlbn7oDvMIMzYZ5TSs=;
+        s=s201512; t=1687713140;
+        bh=tTjSzPD0ZS2M9E/b1QdCa1lslVGibpuk+ySp3PiCsPY=;
         h=From:To:Cc:Subject:Date;
-        b=CfMvs3gT3j+jBSrb5D+jtbtPtE0EwU1kx3p/zd/OlN3Q4VGKNVTqbRo0QYtM8waIJ
-         QJigxzIlDOKS9bUFOJe8H1O7PHQ1kaoCvd4EVeIV4FRlb1ZMMUwcQm5UOJpbKnmyOw
-         TxUkmyDRUjtCcMa+DfJ+iMDdFCwtHpdKV0xi4GbE=
+        b=uXQuhdD1RXCyqIMRuAC6RNawiGWrScmqgmWjJno5ItAyE+Dnw7y1noRGvvG+MxpcL
+         abjSR6EqHuSDIbNOeTTMAU6om7JWft0pOFA1UhWcSvH2ieY8cjWoCrOkKcBe+s+NPf
+         aPeKZIfikzf44ooCLha8oqnyv6+nsm/bPA8P0/oY=
 Received: from localhost.localdomain ([122.14.229.236])
         by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
-        id A9A2A055; Mon, 26 Jun 2023 00:42:26 +0800
-X-QQ-mid: xmsmtpt1687711346tg34imyg9
-Message-ID: <tencent_15DD79B42AD8A0D64A7CDC24D4FE6C85800A@qq.com>
-X-QQ-XMAILINFO: NUoqT9CRNGLktLe03EA26suTrp/6WoKbh3uyq6gI6Laf3iYIlrsVt+j5hNNtSs
-         fLYRD/A6zL8h6i2kOPpD0flQHcJ3x4+RjEmPTOqeGMR4MF7djfr9nTzfyy16d5sITFmOouzOuVdT
-         m5BeNGvLZrTqLTl1rVfMjZQlIJ3YhzNLm/hDWbzLWirEJAIveTRSQy0tMVEDJV4hRdlT/KmZELnc
-         jUGvGqyEN4+q8UUX3pGzFn35Atc+U/I2rFqq1D7h3sPX22e/BXi2FYQCanbwor0ESnL1dDs3s2fU
-         ayeNk4h7cM2xEeeIC95x7cF+S7JX1+IF17gfEFDU+vBEvPi+IouiHT2jqI7rIhS5WNWohdVaqRzf
-         MpyzRW11ay4nC6JvrHAr8p8YlaeeZGr+GxU8RtR2IwwneFejF/EtjnkmTjHTw3Ha/zUge7JnEgWd
-         dPmrzqEBLjNti4CJsm0q2gxmupNN3jNSNJGzrok9k58vjttdeLLSZPkdeALLuvHauydujeeFI7Q6
-         QhIGoB/ZXKfkUBWLy9qfbbKelYm8DIVG/ZtS5iPZfMdbtXjEwIZZ744A9oC4nU2O9og2NxB97cqp
-         addINjibYwepbHwcBsJu/xT1yGXlxb1MEoOtxlLIxVa9MkROjFySkhD3TJSesjfkXdImPOFTWJEr
-         Fq4QJz5x3o11fsbccWPVBqijqjm15K3u7APd5YcvarTD+DMyTBkJ5k7J4qchCQW/OYr1XQinnMPQ
-         wmL/NBImn52FIkeFzE5jtoa43dOOqo80IGAsSAEqRqpyNW2jEADsdWGMvJXy2ORocIIir2Qs9HxE
-         GUeSacyIb7QdAgxh5DZHN18GsO9bId+GnsUEhQcARu5kinI8H7VsbAZlWuuOC3wi6njBJySUlnlM
-         SpN8QltQpHNAa6hHOexNgHacdalcJE2prZkyN0TqE1e58hB+yfbT8i/daQdtA91xsSpSElfpE83g
-         l9ZYvyMQ0swsLePKVdDDJpjZZeKG2o/NzG0mrGAD8nfy/HJsMUFx+lfwfomt+h8HgPQ4WT+I4=
+        id 31025411; Mon, 26 Jun 2023 01:12:16 +0800
+X-QQ-mid: xmsmtpt1687713136torclcipj
+Message-ID: <tencent_D1B05B6060451EA10A64A88E122E37EDB508@qq.com>
+X-QQ-XMAILINFO: NMGzQWUSIfvTCXLSPHqXFkOFtDq5l5WMN7KQPSK3Qla6k4fZpvTjFwGb4uPpC5
+         L1Iy0qFC/oiONC0AmcaVWvRi2dYw7WMLJPmNgk+7Tk+5cKrn0aTrTNk3nN9Xr6Uynd/g1QXTt8WG
+         yU4/IDQr+rex9eoP6IJx2T/wJ0/yoSNDvXNEnjcQ3q4Fj3AEAjxEZRYQFz8kNN65GlxaUhH5AWoy
+         jnimiFAbQrB4JGW54GeeNyxyt4xrfi/zvr+AyPJ894sb/un+hCVKyD5cIZOGc22PxzTr3D+j/c6H
+         /Li57Ui0RNzASHuya+tAJhcSaT/dBXp6f+Nyz5lfa2X8qBZmc7AVSmE1DUl2ndzEAzUqGYtoKQRC
+         I7XiopOoXJ5apnoyVAyXiHtUEdXzfIiEh6nEPHWTmb8ezbPu/a4fGhz1hcyjO8mGcYHdH2iVl77S
+         Sp2gzSOJHQOxMYp8ble/U+aPdx8R1kDP4klTRxzyrR9LAWv/88J+03iazIWtHr+rBMFzqaik9kjh
+         tIcaIZ5CgrWChofpU404RTwGRsSyGTLkBU55G8TyKea4Nwn+ZrLFeU2v0swyY/UQwHk+2CWDCPsa
+         WvPSw5BuGlhAlpT8XK6C7DimzTUnsoBrg3rriLR3Tq9LvZtPjj9ZKpnp8vPaWhqYP7iNfvF52qdG
+         2LViA68tR/188qJfgUlPnlspSpFV9HpEWzK4CE9QoSdRrG/n0BjWA5pUidNYvpUa8k+acK+Bx3nH
+         zlUOPp2WGwUA8lrno3IWK+lNyAVQL7gKKxsXnpkr5vJHiVVdFJAcqkH+dtx40ecgISbbWYmlt+82
+         utcJ3JGeEMrEDRyJ7qEJeMBQsYx83wyR9qEboP4xq7dkuoK18hzXBZf1gox3yo2VBWGGKdlnM0Bf
+         aKjzyU97UN/h+bWU8tYs1Y91trgRsUr+HX1tav8CjAlrvjbsqi/h2+nnH61HYzFzrHxG8PLbluWI
+         4cvm0XCmQVkhnoLx2ItGOQ7BGjIQMS7J2WJ0wudmgFUeg/oxgIlYSI4wpvEB9w/5w1/m4GSGduIs
+         uCAiIXhR7zhqRCC5HlFerBZbvauxsj2y969HFFOxrdC3sdHcSZeuiZh27H+swoPveFWJ3xZQ==
 X-QQ-XMRINFO: M0RWTeBkoNRBR1Uh12iQNRvA1CSLhD8+1Q==
 From:   Zhang Shurong <zhang_shurong@foxmail.com>
-To:     jgross@suse.com
-Cc:     gregkh@linuxfoundation.org, xen-devel@lists.xenproject.org,
+To:     gregkh@linuxfoundation.org
+Cc:     mark.tomlinson@alliedtelesis.co.nz, krzysztof.kozlowski@linaro.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Zhang Shurong <zhang_shurong@foxmail.com>
-Subject: [PATCH] xen: fix potential shift out-of-bounds in xenhcd_hub_control()
-Date:   Mon, 26 Jun 2023 00:42:18 +0800
-X-OQ-MSGID: <20230625164218.7134-1-zhang_shurong@foxmail.com>
+Subject: [PATCH] usb: max-3421: fix potential shift out-of-bounds in max3421_hub_control()
+Date:   Mon, 26 Jun 2023 01:12:13 +0800
+X-OQ-MSGID: <20230625171213.24014-1-zhang_shurong@foxmail.com>
 X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -63,7 +65,7 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix potential shift out-of-bounds in xenhcd_hub_control()
+Fix potential shift out-of-bounds in max3421_hub_control()
 ClearPortFeature handling and SetPortFeature handling.
 
 wValue may be greater than 32 which can not be used for shifting.
@@ -73,31 +75,31 @@ https://patchwork.kernel.org/patch/12162547
 
 Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
 ---
- drivers/usb/host/xen-hcd.c | 4 ++++
+ drivers/usb/host/max3421-hcd.c | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/drivers/usb/host/xen-hcd.c b/drivers/usb/host/xen-hcd.c
-index 46fdab940092..c0e7207d3857 100644
---- a/drivers/usb/host/xen-hcd.c
-+++ b/drivers/usb/host/xen-hcd.c
-@@ -456,6 +456,8 @@ static int xenhcd_hub_control(struct usb_hcd *hcd, __u16 typeReq, __u16 wValue,
- 			info->ports[wIndex - 1].c_connection = false;
+diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-hcd.c
+index d152d72de126..035cd6abc2f6 100644
+--- a/drivers/usb/host/max3421-hcd.c
++++ b/drivers/usb/host/max3421-hcd.c
+@@ -1688,6 +1688,8 @@ max3421_hub_control(struct usb_hcd *hcd, u16 type_req, u16 value, u16 index,
+ 						!pdata->vbus_active_level);
  			fallthrough;
  		default:
-+			if (wValue >= 32)
++			if (value >= 32)
 +				goto error;
- 			info->ports[wIndex - 1].status &= ~(1 << wValue);
- 			break;
+ 			max3421_hcd->port_status &= ~(1 << value);
  		}
-@@ -527,6 +529,8 @@ static int xenhcd_hub_control(struct usb_hcd *hcd, __u16 typeReq, __u16 wValue,
- 			xenhcd_rhport_suspend(info, wIndex);
- 			break;
+ 		break;
+@@ -1741,6 +1743,8 @@ max3421_hub_control(struct usb_hcd *hcd, u16 type_req, u16 value, u16 index,
+ 			max3421_reset_port(hcd);
+ 			fallthrough;
  		default:
-+			if (wValue >= 32)
++			if (value >= 32)
 +				goto error;
- 			if (info->ports[wIndex-1].status & USB_PORT_STAT_POWER)
- 				info->ports[wIndex-1].status |= (1 << wValue);
- 		}
+ 			if ((max3421_hcd->port_status & USB_PORT_STAT_POWER)
+ 			    != 0)
+ 				max3421_hcd->port_status |= (1 << value);
 -- 
 2.41.0
 
