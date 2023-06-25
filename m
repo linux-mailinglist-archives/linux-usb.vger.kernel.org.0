@@ -2,102 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DD073D13B
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Jun 2023 15:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E9D73D208
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Jun 2023 18:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjFYN5s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 25 Jun 2023 09:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43574 "EHLO
+        id S230507AbjFYQQN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 25 Jun 2023 12:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjFYN5r (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Jun 2023 09:57:47 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 461AEE43
-        for <linux-usb@vger.kernel.org>; Sun, 25 Jun 2023 06:57:45 -0700 (PDT)
-Received: (qmail 804932 invoked by uid 1000); 25 Jun 2023 09:57:43 -0400
-Date:   Sun, 25 Jun 2023 09:57:43 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Guiting Shen <aarongt.shen@gmail.com>
-Cc:     gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: ohci-at91: Fix the unhandle interrupt when resume
-Message-ID: <e3d29c44-a471-4ca2-b996-1648ba8f3d77@rowland.harvard.edu>
-References: <20230622025739.13934-1-aarongt.shen@gmail.com>
- <4cf867a9-3c78-403a-aaeb-91f6cf099a3d@rowland.harvard.edu>
- <c2d0b37a-3ee1-e07e-e265-c71895474ba8@gmail.com>
- <9c702495-a839-43ea-85b7-1c0a0c54ec73@rowland.harvard.edu>
- <8569ced1-ed6d-18b3-5223-a8bd923f864b@gmail.com>
+        with ESMTP id S230482AbjFYQQN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Jun 2023 12:16:13 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505D918E;
+        Sun, 25 Jun 2023 09:16:11 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-66872d4a141so945316b3a.1;
+        Sun, 25 Jun 2023 09:16:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687709771; x=1690301771;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=D0lDnChJx3uU6azmWebeFvx41PSoyDt49evO4AFiEPA=;
+        b=K2X3Y0Cg4GQfrBLsBV6d6vgTckaV/4LGU2izcIcoWNarMLF3GUmw3I7fv7Xbmwb6U6
+         2M7AcMU7WIQWTw0j9DOZJK7QklX8eCSDZC/bvbDUIYuWw8jyfFrXm6Ua/qOWPxAUL3yv
+         ev0ys45Dzt4dMuR9waRg+Mp/wW2E5xLL+UJY8qgPnjZVy6x1EAz+opbgqE02rtx8TLkn
+         CN3D1F5KResE4VeeHZq1AnAgGwl5hxTW5whwy9eZWncijMm6Ai9/ZkMUy7lm7YExHh12
+         tsrQX9p8DqF9O7TAgQZwcIK+fRoMFLqEE6P327ouojy0Jdq2/oW5tOKXgor03AWZeLxl
+         cIYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687709771; x=1690301771;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D0lDnChJx3uU6azmWebeFvx41PSoyDt49evO4AFiEPA=;
+        b=guk0NSx9UeSeu29RPVSKdIsRHZDZXzkUJe8s7B/aZuV0PCXw79zBnQjPekqwMYaOsQ
+         RL+lZJFhB5sJ8twmp7jHS8Lmi+qU81sMLdl/UWgk/R1MW9DMhewA9rz5MtNyH1Fg8LOu
+         hnl0x8DrfZQvdJTag4HoDdoJ+fxqL5VU9+IkFvEop1AJQfMtzAjqpGO+bQit6m/antSm
+         AGBBugTPfcq5plIVsXtxB/UJu4I/wMRzXpithZkHnsv42bLpFd9QBPbe9I5bNCnOMwpQ
+         X+w//OYUrlwW8rb2zdQpat3FEhj65FnS4dIcLV8TQJ/10wrjua9XPt1cxj14J7KkPjxU
+         YPMA==
+X-Gm-Message-State: AC+VfDwp585VgbIOqD8kWCA+3TsbILUiMZFFO8fqHS2RQMeDccdaS/Ze
+        3TV17vDPFWB3ioAnPGY8UfE=
+X-Google-Smtp-Source: ACHHUZ4luRJDbj8rI4UE0s4bWy2sMzO7YLRMyd97jHiUFaJNmmO3JDskfrKHHbwg3caI3kHgRocLYg==
+X-Received: by 2002:a05:6a00:2282:b0:66a:3eb5:92bf with SMTP id f2-20020a056a00228200b0066a3eb592bfmr11483551pfe.16.1687709770632;
+        Sun, 25 Jun 2023 09:16:10 -0700 (PDT)
+Received: from localhost.localdomain ([240e:3b4:d0:6750:b853:cf8f:2208:c89a])
+        by smtp.gmail.com with ESMTPSA id g6-20020aa78746000000b006749c22d079sm948312pfo.167.2023.06.25.09.16.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jun 2023 09:16:10 -0700 (PDT)
+From:   Guiting Shen <aarongt.shen@gmail.com>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Guiting Shen <aarongt.shen@gmail.com>
+Subject: [PATCH v2] usb: ohci-at91: Fix the unhandle interrupt when resume
+Date:   Mon, 26 Jun 2023 00:15:53 +0800
+Message-Id: <20230625161553.11073-1-aarongt.shen@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8569ced1-ed6d-18b3-5223-a8bd923f864b@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 25, 2023 at 12:01:12PM +0800, Guiting Shen wrote:
-> On Fri, Jun 23, 2023 at 23:52:53PM GMT+8, Alan Stern wrote:
-> >> The comment which was added with commit-id 0365ee0a8f745 may be outdated
-> >> because ohci_suspend() and ohci_at91_port_suspend() is used to suspend
-> >> instead of setting ohci->rh_state to OHCI_RH_HALTED.
-> > 
-> > The comment says nothing about ohci->rh_state; it talks about the 
-> > integrated transceivers and the 48 MHz clock.  I don't see why you would 
-> > think the comment is outdated.
-> > 
-> 
-> The comment says the reason to discard connection state by reset, but I
-> don't see any reset operation at ohci-at91 suspend/resume routine in
-> source code.And ohci_suspend() disable irq emission and mark HW
-> unaccessible  maybe do the same effect as set ohci->rh_state to
-> OHCI_RH_HALTED to discard connection state which I think the comment is
-> outdated.
+The ohci_hcd_at91_drv_suspend() sets ohci->rh_state to OHCI_RH_HALTED when
+suspend which will let the ohci_irq() skip the interrupt after resume. And
+nobody to handle this interrupt.
 
-No, it doesn't do the same.  An actual reset is needed.
+According to the comment in ohci_hcd_at91_drv_suspend(), it need to reset
+when resume from suspend(MEM) to fix.
 
-> >> What's more, I found that only ohci-at91 driver to set the ohci->rh_state
-> >> which may be unnessory because the ohci_suspend() disable irq emission and
-> >> mark HW unaccessible and ohci_at91_port_suspend() suspend the controller.
-> >>
-> >> Is it really need to set ohci->rh_state in ohci_hcd_at91_drv_suspend()?
-> >>
-> >> It maybe confused to set ohci->rh_state to OHCI_RH_SUSPEND in resume
-> >> routine.
-> > 
-> > I'm not really sure what that assignment was intended to accomplish, but 
-> > maybe it was meant to force a reset when the controller resumes.
-> > 
-> > You could get the same result by leaving ohci->rh_state set to 
-> > OHCI_RH_SUSPENDED but changing ohci_hcd_at91_drv_resume().  Instead of 
-> > calling ohci_resume(hcd, false), have it call:
-> > 
-> > 	ohci_resume(hcd, !ohci_at91->wakeup);
-> > 
-> > That way, if the wakeup flag is clear and the clock was stopped, 
-> > ohci_resume() will call ohci_usb_reset().  You should also add a comment 
-> > explaining the reason.
-> > 
-> > I can't test this because I don't have the AT91 hardware.
-> > 
-> 
-> It works by your methods to force a reset in my sama5d3 soc hardware.
-> And I found that the ohci->rh_state was already OHCI_RH_SUSPEND before
-> set it OHCI_RH_HALTED in suspend.So the question is whether to set it
-> OHCI_RH_HALETED in ohci-at91 suspend routine.
-> 
-> It also works by comment the ohci->rh_state = OHCI_RH_HALTED in suspend
-> routine.But I think it is safer to use your methods.
-> 
-> Do you have any suggestion on it before I send v2 patch latter.
+Signed-off-by: Guiting Shen <aarongt.shen@gmail.com>
+---
+ drivers/usb/host/ohci-at91.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-No suggestions now.  Submit your v2 patch and then maybe I'll have 
-something more to say.
+diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
+index b9ce8d80f20b..1a0356d9ea15 100644
+--- a/drivers/usb/host/ohci-at91.c
++++ b/drivers/usb/host/ohci-at91.c
+@@ -672,7 +672,12 @@ ohci_hcd_at91_drv_resume(struct device *dev)
+ 	else
+ 		at91_start_clock(ohci_at91);
+ 
+-	ohci_resume(hcd, false);
++	/*
++	 * need to reset according to the comment of suspend routine,
++	 * otherwise the ohci_irq would skip the interrupt if ohci_state
++	 * was OHCI_RH_HALTED.
++	 */
++	ohci_resume(hcd, !ohci_at91->wakeup);
+ 
+ 	return 0;
+ }
+-- 
+2.25.1
 
-Alan Stern
