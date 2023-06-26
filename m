@@ -2,79 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF6773E08A
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jun 2023 15:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7EB73E120
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jun 2023 15:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjFZNXR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Jun 2023 09:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
+        id S229768AbjFZNy2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Jun 2023 09:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjFZNXQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Jun 2023 09:23:16 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FC61AC
-        for <linux-usb@vger.kernel.org>; Mon, 26 Jun 2023 06:23:14 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4fb7589b187so1300267e87.1
-        for <linux-usb@vger.kernel.org>; Mon, 26 Jun 2023 06:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687785793; x=1690377793;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=FX52cR42UjsCJaM68RlRM+9U+7DEs1rV1cvkX/J08Rg=;
-        b=lW8CiMt8OoOEdsnfIH/829zvDo9LhMmt9uwOZByFaoqoTSTnFf1/9zLumViORWwvzL
-         V+1Asd9cQXswC4xk+NAzUMZQiqZBw9xxPWy3dFScUSqc+GPfaknQ6QJ6JXSR3HfvTB7r
-         HN5lwHmSOBD8R8bsl8QD4WwByW4BsSigr0/IG2ffOHmBvtFkZN8wB6MhvSvNijEi45PX
-         tUZc7ttHb1GIHkWbV8u+yHJxW5Jtc8U2IXT5nmtMJegkI/KkUNVzlALNJNCORigIwAiU
-         Yq2c/9LSoe4DsSThii8uc///p3NjJB77dk2bUVnPMvwxUP1EkFXAiYnBgWy2zsJykFV+
-         5SpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687785793; x=1690377793;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FX52cR42UjsCJaM68RlRM+9U+7DEs1rV1cvkX/J08Rg=;
-        b=LWLLDkrneK05jd7VcZMLn/5/0sIW22MEFdNNC5I8Xm59AfXgI0EQiX9DX2Q3WYxBns
-         +KqYXB9VVTGCwxetIVh2ZRr3hdnMTQ4Lz2F1VVtaBAv8VmUWr0ZsDiB/faTPpiZ4vE7t
-         voOW67muwODElQrsDiLPlIJZWV8UQQJBjMzvknF9y/z5bJzmE/8SqeZNxFperYY21Rhu
-         u7Q6U15xJa9ohan7ua+lpkIZQ/zlknHA8MdOPbbFvue13+HF4YUNZfuV1fo7EZzT9uZB
-         Utv/y1F62KQ2nJk42N67uhAG2bjIfIDUk3B8YmbPyDx92uYHQmmAl8Wt0NClsFHEjWGU
-         v2PA==
-X-Gm-Message-State: AC+VfDyhDW5izFnbAP3xYDxgBByB0Sa+iQqpeo3nb67WOF8kDb8UKmkT
-        J2wKVPMe89GLXsGyTbE0Cb4goQ==
-X-Google-Smtp-Source: ACHHUZ6ThfhatPMJ0vxDsoclNGj83u9LNnGVVi4gVS3IPbj6ktLOHHmeDqsmxik2zI19UoDqnGGvWg==
-X-Received: by 2002:a19:ca02:0:b0:4f9:586b:dba1 with SMTP id a2-20020a19ca02000000b004f9586bdba1mr7763330lfg.4.1687785792656;
-        Mon, 26 Jun 2023 06:23:12 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:b25a:b26e:71f3:870c? ([2a01:e0a:982:cbb0:b25a:b26e:71f3:870c])
-        by smtp.gmail.com with ESMTPSA id h11-20020a1ccc0b000000b003fa8158135esm8427591wmb.11.2023.06.26.06.23.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 06:23:12 -0700 (PDT)
-Message-ID: <c0bb8255-db4f-e93b-5593-0faa32e44410@linaro.org>
-Date:   Mon, 26 Jun 2023 15:23:11 +0200
+        with ESMTP id S229471AbjFZNy1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Jun 2023 09:54:27 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE222BB;
+        Mon, 26 Jun 2023 06:54:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687787665; x=1719323665;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=UIOhw/+18cUbQ6mrRiXB9WS5HrjLqAxhhP6EGQM4t/0=;
+  b=B1h1kmJM7mtQsUoPrVIWe3JlwjJtj5TWQjXTbG0LM3nxB/bSQr2jxlmc
+   nLK8pO1TJTG/VhFOHKgbdhhC/PM0tmRRcs+KC7e2j6a51tMHfZcxKgrOo
+   2RKM3LVpJrf8ALEVMT9DGy6HCjvHtLNwlyrGB4nRt51Gp9ajezeab9wnG
+   C7GdCpxrqywkd0NyjnjVWdE6YG+Qo9BNDi1HpZjNZ4U65jiH395pEqcch
+   OiDE4tVczNfLR0fRoW9p47rS41roSgzWw8kzh/O6Oyr6Jt2Qt5kl6QhmV
+   U4Xk8BKnzOROSvaW4bLcDnod3msEOTgjsdtplcXRIC6c/FgZrxaXyBdFu
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="424942329"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="424942329"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 06:54:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="962761705"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="962761705"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga006.fm.intel.com with ESMTP; 26 Jun 2023 06:54:19 -0700
+Message-ID: <da468fe6-709c-b6e6-159d-10f76d296307@linux.intel.com>
+Date:   Mon, 26 Jun 2023 16:55:46 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 1/3] usb: typec: ucsi: call typec_set_mode on non-altmode
- partner change
+ Firefox/102.0 Thunderbird/102.10.0
 Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230614-topic-sm8550-upstream-type-c-audio-v1-0-15a92565146b@linaro.org>
- <20230614-topic-sm8550-upstream-type-c-audio-v1-1-15a92565146b@linaro.org>
- <ZJlIViwb9sfNrgjH@kuha.fi.intel.com>
-Organization: Linaro Developer Services
-In-Reply-To: <ZJlIViwb9sfNrgjH@kuha.fi.intel.com>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
+        andersson@kernel.org, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org, tiwai@suse.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <20230308235751.495-2-quic_wcheng@quicinc.com>
+ <a45ff335-0563-85c7-3b31-d6ca23a54a3f@linux.intel.com>
+ <ed0397eb-da17-fbee-647e-f3a2a57577fe@quicinc.com>
+ <9f30e9f9-280e-b381-fecc-2a032c1117af@quicinc.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v3 01/28] xhci: Add support to allocate several
+ interrupters
+In-Reply-To: <9f30e9f9-280e-b381-fecc-2a032c1117af@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,66 +76,76 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 26/06/2023 10:12, Heikki Krogerus wrote:
-> Hi Neil,
+On 24.6.2023 1.37, Wesley Cheng wrote:
+> Hi Mathias,
 > 
-> Sorry to keep you waiting.
-
-No problem, thanks for reviewing my patches!
-
-> 
-> On Wed, Jun 14, 2023 at 03:10:39PM +0200, Neil Armstrong wrote:
->> Add support for calling typec_set_mode() for the DEBUG, AUDIO
->> accessory modes.
+> On 3/13/2023 1:32 PM, Wesley Cheng wrote:
+>> Hi Mathias,
 >>
->> Let's also call typec_set_mode() for USB as default and SAFE
->> when partner is disconnected.
+>> On 3/10/2023 7:07 AM, Mathias Nyman wrote:
+>>> On 9.3.2023 1.57, Wesley Cheng wrote:
+>>>> From: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>>>
+>>>> Introduce xHCI APIs to allow for clients to allocate and free
+>>>> interrupters.  This allocates an array of interrupters, which is based on
+>>>> the max_interrupters parameter.  The primary interrupter is set as the
+>>>> first entry in the array, and secondary interrupters following after.
+>>>>
+>>>
+>>> I'm thinking about changing this offloading xHCI API
+>>> xhci should be aware and keep track of which devices and endpoints that
+>>> are offloaded to avoid device getting offloaded twice, avoid xhci driver
+>>> from queuing anything itself for these, and act properly if the offloaded
+>>> device or entire host is removed.
+>>>
+>>> So first thing audio side would need to do do is register/create an
+>>> offload entry for the device using the API:
+>>>
+>>> struct xhci_sideband *xhci_sideband_register(struct usb_device *udev)
+>>>
+>>> (xHCI specs calls offload sideband)
+>>> Then endpoints and interrupters can be added and removed from this
+>>> offload entry
+>>>
+>>> I have some early thoughts written as non-compiling code in:
+>>>
+>>> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git feature_interrupters
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters
+>>>
+>>> Let me know what you think about this.
+>>>
+>>>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>>>
+>>> My Signed-off-by tag is being misused here.
+>>>
+>>> I wrote a chunk of the code in this patch as PoC that I shared in a separate topic branch.
+>>> It was incomplete and not intended for upstream yet. (lacked locking, several fixme parts, etc..)
+>>> The rest of the code in this patch is completely new to me.
+>>>
 >>
->> The USB state is only called when ALT mode is specifically
->> not specified by the partner status flags in order
->> to leave the altmode handlers setup the proper mode to
->> switches, muxes and retimers.
+>> Sorry about this.  I cherry picked the change directly from your branch, so it carried your signed off tag with it.  Will make to include them properly next time.
 >>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   drivers/usb/typec/ucsi/ucsi.c | 17 +++++++++++++++++
->>   1 file changed, 17 insertions(+)
->>
->> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
->> index 2b472ec01dc4..44f43cdea5c1 100644
->> --- a/drivers/usb/typec/ucsi/ucsi.c
->> +++ b/drivers/usb/typec/ucsi/ucsi.c
->> @@ -809,6 +809,23 @@ static void ucsi_partner_change(struct ucsi_connector *con)
->>   		break;
->>   	}
->>   
->> +	if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
->> +		switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
->> +		case UCSI_CONSTAT_PARTNER_TYPE_DEBUG:
->> +			typec_set_mode(con->port, TYPEC_MODE_DEBUG);
->> +			break;
->> +		case UCSI_CONSTAT_PARTNER_TYPE_AUDIO:
->> +			typec_set_mode(con->port, TYPEC_MODE_AUDIO);
->> +			break;
->> +		default:
->> +			if (UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) ==
->> +					UCSI_CONSTAT_PARTNER_FLAG_USB)
->> +				typec_set_mode(con->port, TYPEC_STATE_USB);
->> +		}
->> +	} else {
->> +		typec_set_mode(con->port, TYPEC_STATE_SAFE);
->> +	}
 > 
-> Can you do that (set safe mode) in ucsi_unregister_partner() instead?
-
-It seems greg already landed the patch into usb-next, but I can send a fix to
-move it to unregister
-
-Neil
-
+> I'm about ready to submit the next revision for this set of changes, and I was wondering how we should handle the changes you made on:
+> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters
 > 
-> thanks,
+> I did make some modifications to some of the interrupter fixme tags you had, and also updated the xhci-sideband APIs with the proper logic.  I don't believe it is correct for me to submit a set of patches authored by you without your signed off tag. (checkpatch throws an error saying the author did not sign off on the change)
 > 
+
+Note that the first patch "xhci: split allocate interrupter into separate alloacte and add parts"
+is already in usb-next on its way to 6.5
+
+Maybe Co-developed-by would work in this case, with a small explanation at the end of the commit message.
+Something like:
+
+Locking, DMA something and feataure x added by Wesley Cheng to
+complete original concept code by Mathias
+
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Co-developed-by: Wesley Cheng <quic_wcheng@quicinc.com>
+Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+
+Thanks
+-Mathias
 
