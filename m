@@ -2,82 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9D573DB0E
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jun 2023 11:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9400273DB35
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jun 2023 11:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjFZJOx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Jun 2023 05:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
+        id S229946AbjFZJVP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Jun 2023 05:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjFZJN4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Jun 2023 05:13:56 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAE2173E
-        for <linux-usb@vger.kernel.org>; Mon, 26 Jun 2023 02:13:21 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qDiHd-0000fV-My; Mon, 26 Jun 2023 11:13:17 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qDiHc-00AAZh-Ci; Mon, 26 Jun 2023 11:13:16 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qDiHb-00HVI1-ON; Mon, 26 Jun 2023 11:13:15 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        with ESMTP id S229933AbjFZJUw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Jun 2023 05:20:52 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B7919F;
+        Mon, 26 Jun 2023 02:18:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687771118; x=1719307118;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=K9kEmxtQVecdL2apry1t1vkOJkQ2rr9zsviDcNY121c=;
+  b=fffX4gxED4Mu1p3qR5PyImG0dDJHzpPBVISLvL17i+ZjoqsY9rVCtrc4
+   NqX/ApiNooRshC4NtXwZ7jDuYIyZbUBcr+jOmlxZ2yPWe5zzI17PJK4rT
+   qQ9+QWgZ5bCDM6Yc1nUR9MzpHbYD+YQxZ298KWgtp3Fuwwe42PzziAAHM
+   PgwrPVQHSaCg2AFL5j+0VkDIzTZF9DasbpuBK8JCmbuT8vV2PdW5AB3Bn
+   Z9OYlCiToF2CHz/iVgPAlNCiVfdHvVXlw3CrsE2gW4RKbf/rwopHU09SB
+   BOAzcJVoT1o0/plLbSYwwG/PnfLtvCUqUHl22gRGsfY6Xy3NUOlnbEg5K
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="447605177"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="447605177"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 02:18:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="860618456"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="860618456"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 26 Jun 2023 02:18:33 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 26 Jun 2023 12:18:32 +0300
+Date:   Mon, 26 Jun 2023 12:18:32 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-usb@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH] usb: typec: nb7vpq904m: Switch back to use struct i2c_driver::probe
-Date:   Mon, 26 Jun 2023 11:13:14 +0200
-Message-Id: <20230626091314.557122-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 2/8] soc: qcom: pmic_glink_altmode: handle safe mode
+ when disconnect
+Message-ID: <ZJlX6CsCI1EJXLKF@kuha.fi.intel.com>
+References: <20230601-topic-sm8550-upstream-type-c-v3-0-22c9973012b6@linaro.org>
+ <20230601-topic-sm8550-upstream-type-c-v3-2-22c9973012b6@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=849; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=j+Q4mHezGnTcL2gMKbfV3ytEnmzIMYEP5gKka71YWRk=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkmVapFfRwQBOkzTjZyAMnDuHtye1ygYHGfN2qL n6x0POabseJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZJlWqQAKCRCPgPtYfRL+ ToaaB/9bedeSjxXapKTgBbtYW1O/6PXOuhmfUcH6J4yKKFZb2LqQ5klSK15YpCeu/ZKXEYZy8C4 6flHYSvA+sgxY7vvd4hxhHlEE6iSQ+GJeJphofrTd8LhTDBrtUWBjJDvk4xAfAGtYcxnhVf1tKG LDmyABilXCBYa9nudSqMJ/Hgl47iva8X3yeO1UD8DPe9NdQ7AHnLe03eCubiz61cLXW7OxFZCYR N9Sy5KsNeIjDHB/njbHAoH7ydLWBJmAqRNgIWSH+nVDVftjM6M+EyLUrpGR8dm1DqSHa4pbHs37 DfR4J0vv9B8NMl3VG2HvIsJ2yyWbjqGnlLyi2ykiLn3vhwec
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601-topic-sm8550-upstream-type-c-v3-2-22c9973012b6@linaro.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-struct i2c_driver::probe_new is about to go away. Switch the driver to
-use the probe callback with the same prototype.
+On Tue, Jun 13, 2023 at 09:55:55AM +0200, Neil Armstrong wrote:
+> On some Qcom SoCs, the Altmode event mode is set to 0xff when
+> the Type-C port is disconnected.
+> 
+> Handle this specific mode and translate it as the SAFE mode.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/usb/typec/mux/nb7vpq904m.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+FWIW:
 
-diff --git a/drivers/usb/typec/mux/nb7vpq904m.c b/drivers/usb/typec/mux/nb7vpq904m.c
-index 80e580d50129..9360b65e8b06 100644
---- a/drivers/usb/typec/mux/nb7vpq904m.c
-+++ b/drivers/usb/typec/mux/nb7vpq904m.c
-@@ -517,7 +517,7 @@ static struct i2c_driver nb7vpq904m_driver = {
- 		.name = "nb7vpq904m",
- 		.of_match_table = nb7vpq904m_of_table,
- 	},
--	.probe_new	= nb7vpq904m_probe,
-+	.probe		= nb7vpq904m_probe,
- 	.remove		= nb7vpq904m_remove,
- 	.id_table	= nb7vpq904m_table,
- };
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-base-commit: 88d8f3ac9c67e2d00db671dbb0af50efb7c358cb
+> ---
+>  drivers/soc/qcom/pmic_glink_altmode.c | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/soc/qcom/pmic_glink_altmode.c b/drivers/soc/qcom/pmic_glink_altmode.c
+> index df48fbea4b68..007d308e2f15 100644
+> --- a/drivers/soc/qcom/pmic_glink_altmode.c
+> +++ b/drivers/soc/qcom/pmic_glink_altmode.c
+> @@ -173,6 +173,20 @@ static void pmic_glink_altmode_enable_usb(struct pmic_glink_altmode *altmode,
+>  		dev_err(altmode->dev, "failed to switch mux to USB\n");
+>  }
+>  
+> +static void pmic_glink_altmode_safe(struct pmic_glink_altmode *altmode,
+> +				    struct pmic_glink_altmode_port *port)
+> +{
+> +	int ret;
+> +
+> +	port->state.alt = NULL;
+> +	port->state.data = NULL;
+> +	port->state.mode = TYPEC_STATE_SAFE;
+> +
+> +	ret = typec_mux_set(port->typec_mux, &port->state);
+> +	if (ret)
+> +		dev_err(altmode->dev, "failed to switch mux to safe mode\n");
+> +}
+> +
+>  static void pmic_glink_altmode_worker(struct work_struct *work)
+>  {
+>  	struct pmic_glink_altmode_port *alt_port = work_to_altmode_port(work);
+> @@ -180,7 +194,9 @@ static void pmic_glink_altmode_worker(struct work_struct *work)
+>  
+>  	typec_switch_set(alt_port->typec_switch, alt_port->orientation);
+>  
+> -	if (alt_port->svid == USB_TYPEC_DP_SID)
+> +	if (alt_port->svid == USB_TYPEC_DP_SID && alt_port->mode == 0xff)
+> +		pmic_glink_altmode_safe(altmode, alt_port);
+> +	else if (alt_port->svid == USB_TYPEC_DP_SID)
+>  		pmic_glink_altmode_enable_dp(altmode, alt_port, alt_port->mode,
+>  					     alt_port->hpd_state, alt_port->hpd_irq);
+>  	else
+> 
+> -- 
+> 2.34.1
+
 -- 
-2.39.2
-
+heikki
