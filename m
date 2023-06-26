@@ -2,57 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FF873D90E
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jun 2023 10:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0ED73D942
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jun 2023 10:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjFZICb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Jun 2023 04:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
+        id S229529AbjFZIMY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Jun 2023 04:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjFZICa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Jun 2023 04:02:30 -0400
+        with ESMTP id S229487AbjFZIMV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Jun 2023 04:12:21 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D530B83;
-        Mon, 26 Jun 2023 01:02:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50B795;
+        Mon, 26 Jun 2023 01:12:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687766549; x=1719302549;
+  t=1687767130; x=1719303130;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=33R3Tx+sLALtrskmrs2zu7v/fiTCIeLJSoVnhjKIrwU=;
-  b=ZhCbPCt/g1IF00B4Fq+MdF75MwxRtMqiGl/YHRZBmpQPPd0CP0M3V7KO
-   FOhs4h+f8kTylaBv06YPh1hjJ5ete37V/1j1SkSdnL6NTb6P8fpjX9FYh
-   Qdn+p1m6+vs5MX3+RNKnCjEoQclnn51LWW+vs5h7VB1XJZIiEjGT9a7qP
-   CC5yQ/nlooPlxmJD1CKiGVuPKALxrRFPshoQkqEONfHUK24wMLtfkpPIV
-   fgLBhS3hNsBTI03WPQOO6MhwQi5NiEcfwKtURLHG6gVZFtsJ8T5guN8Kj
-   4z2helMGMd9aLIBl3RCKFicMN8HHQDxew9dffgtyEReSGOahrfFtAmw6D
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="447587397"
+  bh=0ns/4/u3WBXGnVF2I2EuAZvqrfT4RbnnVjzxvtkNfXE=;
+  b=bAEgZlNGIe3x8MLt1kA/DiofLJl2o6JTuGqcPq7XVdfWGXoCf+QnJFSW
+   r84z2y8yJ9Fzjx6fpTEqlBOubc3EWZfwuAwr78KK8x3AHN67oceiYExto
+   0aVBziB3ISlAou9r9RxCQcOo3TwEoRy22X8e537ECWmgmQpwMP+DYj/6C
+   xvm6AwNPOMZUII+x3tmUFQSoVLxpKdGfqVGQpoU4NU5JVk/DCDRoeNMf3
+   ynaX2hUqjRiOYq6/pkDM/WTpCVQh5OkrmXSeFn8RoCb+N3PM4nLfGQRPP
+   mBgC+i875hztWWOSsxWyz8s8kkX47rPXiV1GzObkYOl+aMnlPxU55V1gp
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="447589501"
 X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="447587397"
+   d="scan'208";a="447589501"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 01:02:29 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 01:12:10 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="860594379"
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="860597303"
 X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="860594379"
+   d="scan'208";a="860597303"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 26 Jun 2023 01:02:26 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 26 Jun 2023 11:02:26 +0300
-Date:   Mon, 26 Jun 2023 11:02:26 +0300
+  by fmsmga001.fm.intel.com with SMTP; 26 Jun 2023 01:12:07 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 26 Jun 2023 11:12:06 +0300
+Date:   Mon, 26 Jun 2023 11:12:06 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Neil Armstrong <neil.armstrong@linaro.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Arnd Bergmann <arnd@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: nb7vpq904m: fix CONFIG_DRM dependency
-Message-ID: <ZJlGEiE64A2qQHD7@kuha.fi.intel.com>
-References: <20230622-topic-sm8x50-upstream-redriver-config-fix-v1-1-005ab6f4d1f5@linaro.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 1/3] usb: typec: ucsi: call typec_set_mode on non-altmode
+ partner change
+Message-ID: <ZJlIViwb9sfNrgjH@kuha.fi.intel.com>
+References: <20230614-topic-sm8550-upstream-type-c-audio-v1-0-15a92565146b@linaro.org>
+ <20230614-topic-sm8550-upstream-type-c-audio-v1-1-15a92565146b@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230622-topic-sm8x50-upstream-redriver-config-fix-v1-1-005ab6f4d1f5@linaro.org>
+In-Reply-To: <20230614-topic-sm8550-upstream-type-c-audio-v1-1-15a92565146b@linaro.org>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -63,62 +65,55 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 06:16:26PM +0200, Neil Armstrong wrote:
-> With the following config set:
-> CONFIG_DRM=m
-> CONFIG_DRM_PANEL=y
-> CONFIG_DRM_BRIDGE=y
-> CONFIG_DRM_PANEL_BRIDGE=y
-> CONFIG_TYPEC_MUX_NB7VPQ904M=y
+Hi Neil,
+
+Sorry to keep you waiting.
+
+On Wed, Jun 14, 2023 at 03:10:39PM +0200, Neil Armstrong wrote:
+> Add support for calling typec_set_mode() for the DEBUG, AUDIO
+> accessory modes.
 > 
-> vmlinux fails on the following symbols:
->   ld.lld: error: undefined symbol: devm_drm_bridge_add
->   ld.lld: error: undefined symbol: devm_drm_of_get_bridge
+> Let's also call typec_set_mode() for USB as default and SAFE
+> when partner is disconnected.
 > 
-> Add dependendy on DRM || DRM=no since CONFIG_DRM dependency is optional
-> and guarded by:
-> IS_ENABLED(CONFIG_OF) && IS_ENABLED(CONFIG_DRM_PANEL_BRIDGE)
-> in the drive.
+> The USB state is only called when ALT mode is specifically
+> not specified by the partner status flags in order
+> to leave the altmode handlers setup the proper mode to
+> switches, muxes and retimers.
 > 
-> Also add "select DRM_PANEL_BRIDGE if DRM" to clarify DRM_PANEL_BRIDGE
-> is required if CONFIG_DRM is enabled.
-> 
-> Fixes: 88d8f3ac9c67 ("usb: typec: add support for the nb7vpq904m Type-C Linear Redriver")
-> Reported-by: Arnd Bergmann <arnd@kernel.org>
-> Suggested-by: Arnd Bergmann <arnd@kernel.org>
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 2b472ec01dc4..44f43cdea5c1 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -809,6 +809,23 @@ static void ucsi_partner_change(struct ucsi_connector *con)
+>  		break;
+>  	}
+>  
+> +	if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
+> +		switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
+> +		case UCSI_CONSTAT_PARTNER_TYPE_DEBUG:
+> +			typec_set_mode(con->port, TYPEC_MODE_DEBUG);
+> +			break;
+> +		case UCSI_CONSTAT_PARTNER_TYPE_AUDIO:
+> +			typec_set_mode(con->port, TYPEC_MODE_AUDIO);
+> +			break;
+> +		default:
+> +			if (UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) ==
+> +					UCSI_CONSTAT_PARTNER_FLAG_USB)
+> +				typec_set_mode(con->port, TYPEC_STATE_USB);
+> +		}
+> +	} else {
+> +		typec_set_mode(con->port, TYPEC_STATE_SAFE);
+> +	}
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Can you do that (set safe mode) in ucsi_unregister_partner() instead?
 
-> ---
-> This is re-spin of [1]
-> 
-> [1] https://lore.kernel.org/all/20230622101813.3453772-1-arnd@kernel.org/
-> ---
->  drivers/usb/typec/mux/Kconfig | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-> index 8c4d6b8fb75c..784b9d8107e9 100644
-> --- a/drivers/usb/typec/mux/Kconfig
-> +++ b/drivers/usb/typec/mux/Kconfig
-> @@ -38,6 +38,8 @@ config TYPEC_MUX_INTEL_PMC
->  config TYPEC_MUX_NB7VPQ904M
->  	tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
->  	depends on I2C
-> +	depends on DRM || DRM=n
-> +	select DRM_PANEL_BRIDGE if DRM
->  	select REGMAP_I2C
->  	help
->  	  Say Y or M if your system has a On Semiconductor NB7VPQ904M Type-C
-> 
-> ---
-> base-commit: c87d46a9e8ebd2f2c3960927b1d21687096d1109
-> change-id: 20230622-topic-sm8x50-upstream-redriver-config-fix-8f0aef3e2129
-> 
-> Best regards,
-> -- 
-> Neil Armstrong <neil.armstrong@linaro.org>
+thanks,
 
 -- 
 heikki
