@@ -2,133 +2,296 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E147673E5D3
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jun 2023 18:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69CF573EC1A
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jun 2023 22:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjFZQwS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Jun 2023 12:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
+        id S230296AbjFZUvU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Jun 2023 16:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjFZQwR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Jun 2023 12:52:17 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F053D10FF
-        for <linux-usb@vger.kernel.org>; Mon, 26 Jun 2023 09:52:04 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fb4146e8fcso4158785e9.0
-        for <linux-usb@vger.kernel.org>; Mon, 26 Jun 2023 09:52:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687798323; x=1690390323;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RX0ATF4iG7zLA/0c1ahQHVsWmNJPp+QupJeJmJf7dDE=;
-        b=LRivViNYhyXQKvIXtY1RcKyaR98NQE7CCWmyFRcYeNmvYYMD4GYxeeseYaEjTG9CLg
-         uj1XD0+TsYWivhQJT/V72O1E4P7UrFL0nfLlGvlUPjZ0JKMnsJBOsNnfUW0FNIOiUK3k
-         h9qfpSDbaU5GULx1Bcb84gXYAryaMMK1LyZQG4KwTeFtgHPme3aNlvPUUV9EKzDZZz6I
-         9pLtOTAAbgfDL3DavCaY4OYKBhE9TIkz+pU2ssydLvI343Rd0p+kS/ENNAYNhzvdWJXl
-         smyJ1z7SeC9aokbLFvkl5CEkXedPIkorGZyDQOaicEMvtWQ6Ya8VSnkZ4HOWRI2TUE+L
-         aUVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687798323; x=1690390323;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RX0ATF4iG7zLA/0c1ahQHVsWmNJPp+QupJeJmJf7dDE=;
-        b=KZ25uv017F7I2cGbkkaFBaL29sBXnI7FtLcTMvLncgyzcrwNW6yctqw6chi41nuYEx
-         Y0J5aeVsd/6pkhcmyQpKDu6QgUaudtG7szzGCdNPnhn2QAtSxpoWgJFpZ51xRw03zEH7
-         OCFpd+//VhM62t0Z1f3rre/W2cj1hHR+jNtGb0n6eYtumau6pxP90maEHPQC04wwn0KU
-         Bkww9Z6F7loUUV2l4ShsQajFOoUld797Ohf6AXf1A1VOSKSp6Ar8b+kRADUrGah/NSMr
-         p7G42FPcuPmIyek9LLFsUW7hXOyrBbrWwZlKqeEWh2YSf6xL5Kh9d6/zu3OhdTHSt1AD
-         6lVw==
-X-Gm-Message-State: AC+VfDy5n6Xe4RGRUAs/E0ZDUXC0NioRGDcEKxN8eQPogfkfnQHkCPC8
-        DC3lNeSyor2yO71vAbHXWW0XaA==
-X-Google-Smtp-Source: ACHHUZ63zj3b+dVwT0JjioR3qHTymArG6YfHoXuoyldjQkwvgiZGKNrCMHPDNHIx3qfp+28vCe6Azg==
-X-Received: by 2002:a1c:4c0f:0:b0:3fa:8c8b:716 with SMTP id z15-20020a1c4c0f000000b003fa8c8b0716mr4135902wmf.1.1687798323252;
-        Mon, 26 Jun 2023 09:52:03 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id n23-20020a7bcbd7000000b003f9b19caabesm8205108wmi.37.2023.06.26.09.52.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 09:52:02 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Mon, 26 Jun 2023 18:52:00 +0200
-Subject: [PATCH] usb: typec: ucsi: move typec_set_mode(TYPEC_STATE_SAFE) to
- ucsi_unregister_partner()
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230626-topic-sm8550-usb-c-audio-fixup-v1-1-bc72fddf3f42@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAC/CmWQC/x2N0QrCMAxFf2Xk2UDt6FB/RXxos8wFZlsaK8LYv
- xt8PIfLuTsoN2GF27BD44+olGxwPg1Aa8xPRpmNwTs/uslP+C5VCPV1CcFh14SEsc9ScJFvr3h
- lHilSYOcWsEiKyphazLRaJvdtM1kb2/r/en8cxw/7287hhQAAAA==
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        with ESMTP id S230073AbjFZUvU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Jun 2023 16:51:20 -0400
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538FF10CB
+        for <linux-usb@vger.kernel.org>; Mon, 26 Jun 2023 13:51:11 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id 5C1EE24002A
+        for <linux-usb@vger.kernel.org>; Mon, 26 Jun 2023 22:51:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1687812669; bh=tNIMKCKftTirXMggzoPi3H2tlA7Th71YKmucyD7m0pc=;
+        h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:
+         Content-Transfer-Encoding:From;
+        b=lyEDE9TkJ/RrF7TULqNbc/e465txk7WVij0EUPzDXrtmV12qhAEbwp6oBDQmOUc4W
+         Ix/mC9ruP5KYXKD64s3txiJ7FJsSbZykqRKRA6fgCvlNp2WxjiQQ8mx+WgPXBTMLiH
+         ScHibYQzj5OyoAzPEL2jVvoLTQQ54k2Fl8hn/geWqO5LXCN/P4DWbANII+VuZdP771
+         50aqd9uJEdYnMftL9NDLcKr2zMzBm0lruK/TSK9yUTTNTWkj8L3Jmoeyzgs98rqdF8
+         GY3MHG7ZhbGQ3c39TSbxvOEid4qkOvzP74G4pN0zWheoyY12HRiKtrpniwhvOfaJNU
+         VHazwfUa3JkqA==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4Qqg3s3ckFz9rxH;
+        Mon, 26 Jun 2023 22:51:05 +0200 (CEST)
+From:   Anne Macedo <retpolanne@posteo.net>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1493;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=mr86JHI41H3kynpprp69RFpyVVHDbDm53qvzMVnH8b8=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkmcIxFmDjqabxx+bKet4LRxvH27IFF3TP7o3XEshe
- 9+o9CSmJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZJnCMQAKCRB33NvayMhJ0WiXD/
- 9XzM2XmCirIqZXyAaRhb2OaAhJDfuIZo0Y6Q7vHlbTyXDHOaDfY4KHXjh0Zfc6Q28q4H8LaEhR6rkr
- NBQ2Vs2KYOx7f8OB5xCVLZ/gos0gBrETZU2U6Jy+gIUExf66QoMiHXC/uPdeeZrgrkJygbS9UaHGwo
- Te7F7QYMFCH3eKiCUE6kO2tpi1VdXl44dTjfSd7FzkW4yGZ3F3CVJMTY8Cp0kuPpU0+XQ14+RHLO4q
- KDEBV0q5eI6g+43xpGUoaVa4nrpp0Gmb64Xra/gHF8NNUJX8ONm4wwAxyDfJ1fljhLoGdLrD5UQtUm
- jDhsQHo+JscADIKRGDTnQu/qi2WSF4yq2KS2F9UlUN77I0QwLbvP1OWdCJ0VsHU0RrdfprHmIjzE91
- K3NiEwqtTCvBs9Ze+bwN8DEAfXvYpVwYbjM5Pkdaub3+9irJthJzgaJM/+QVh3bQ+9wVmjGb8vd/bV
- WIaziuIsXNuVzYh2gNbSSvGYrHA1Dt47cAaLEYV1B5uTuhHQPCfzRapT47MOoM56OzfXKG2lYcjYmv
- etMLG2uvbSehYfnkXEvLY1LsPDI90CmVLKr5/xNLVbg8feTxnVETJRKbckn39N+G0pg1p4hDvmaLdI
- wKkatn9Bd2s0+thGC4N85zl48tSEs+VN+9kjWIPwxiVRDXfTK00hTBlD5Teg==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Anne Macedo <retpolanne@posteo.net>,
+        Vinod Koul <vkoul@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Rene Treffer <treffer@measite.de>
+Subject: [PATCH] usb: host: xhci: remove renesas rom wiping
+Date:   Mon, 26 Jun 2023 20:49:12 +0000
+Message-ID: <20230626204910.728-3-retpolanne@posteo.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It's better to set TYPEC_STATE_SAFE mode from ucsi_unregister_partner()
-instead of ucsi_partner_change(), ucsi_unregister_partner() is always
-when the partner disconnects.
+Cards based on Renesas uPD72020x currently have their ROM wiped on
+module start if they have an external ROM. This means that every time
+you start up the module, the ROM gets cleaned up and the firmware
+redownloaded.
 
-Fixes: 25a2bc21c863 ("usb: typec: ucsi: call typec_set_mode on non-altmode partner change")
-Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Wiping the ROM all the time is not necessary and can lead to situations
+where, for example, people with stable firmwares might have their card fail
+due to incomplete flashes (due to timeouts, for example).
+
+Another case is when PCI configs are set up after the ROM is flashed
+(e.g. disabling hotplugging). The ROM wipe and reflash process will
+overwrite these configs.
+
+Also, the current ROM setup can't work: the flash layout contains more
+than the firmware – for uploading, it needs to be prefixed with ~40
+bytes that differ by card vendor. This config is documented on the
+"uPD720201/uPD720202 User's Manual", section 6.3 (Data Format).
+
+This patch, if applied, removes the cleanup and the setup of the Renesas
+ROM as to not make it wipe and reset the ROM.
+
+It also reduces load time, especially during boot, as problems with the
+EEPROM chip or CRC checks might take some time during reflashing and
+possibly lead to timeouts. Since the ROM is already flashed (either
+manually by a tool such as uPD72020x-load or by the kernel module) it
+just needs to be loaded during module startup.
+
+Suggested-by: Rene Treffer <treffer@measite.de>
+Signed-off-by: Anne Macedo <retpolanne@posteo.net>
 ---
- drivers/usb/typec/ucsi/ucsi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/host/xhci-pci-renesas.c | 188 ----------------------------
+ 1 file changed, 188 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 9b6d6b14431f..f6901319639d 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -785,6 +785,8 @@ static void ucsi_unregister_partner(struct ucsi_connector *con)
- 	if (!con->partner)
- 		return;
+diff --git a/drivers/usb/host/xhci-pci-renesas.c b/drivers/usb/host/xhci-pci-renesas.c
+index 93f8b355bc70..28656beb808d 100644
+--- a/drivers/usb/host/xhci-pci-renesas.c
++++ b/drivers/usb/host/xhci-pci-renesas.c
+@@ -375,199 +375,11 @@ static int renesas_fw_download(struct pci_dev *pdev,
+ 	return 0;
+ }
  
-+	typec_set_mode(con->port, TYPEC_STATE_SAFE);
-+
- 	ucsi_unregister_partner_pdos(con);
- 	ucsi_unregister_altmodes(con, UCSI_RECIPIENT_SOP);
- 	typec_unregister_partner(con->partner);
-@@ -825,8 +827,6 @@ static void ucsi_partner_change(struct ucsi_connector *con)
- 					UCSI_CONSTAT_PARTNER_FLAG_USB)
- 				typec_set_mode(con->port, TYPEC_STATE_USB);
- 		}
--	} else {
--		typec_set_mode(con->port, TYPEC_STATE_SAFE);
- 	}
+-static void renesas_rom_erase(struct pci_dev *pdev)
+-{
+-	int retval, i;
+-	u8 status;
+-
+-	dev_dbg(&pdev->dev, "Performing ROM Erase...\n");
+-	retval = pci_write_config_dword(pdev, RENESAS_DATA0,
+-					RENESAS_ROM_ERASE_MAGIC);
+-	if (retval) {
+-		dev_err(&pdev->dev, "ROM erase, magic word write failed: %d\n",
+-			pcibios_err_to_errno(retval));
+-		return;
+-	}
+-
+-	retval = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+-	if (retval) {
+-		dev_err(&pdev->dev, "ROM status read failed: %d\n",
+-			pcibios_err_to_errno(retval));
+-		return;
+-	}
+-	status |= RENESAS_ROM_STATUS_ERASE;
+-	retval = pci_write_config_byte(pdev, RENESAS_ROM_STATUS, status);
+-	if (retval) {
+-		dev_err(&pdev->dev, "ROM erase set word write failed\n");
+-		return;
+-	}
+-
+-	/* sleep a bit while ROM is erased */
+-	msleep(20);
+-
+-	for (i = 0; i < RENESAS_RETRY; i++) {
+-		retval = pci_read_config_byte(pdev, RENESAS_ROM_STATUS,
+-					      &status);
+-		status &= RENESAS_ROM_STATUS_ERASE;
+-		if (!status)
+-			break;
+-
+-		mdelay(RENESAS_DELAY);
+-	}
+-
+-	if (i == RENESAS_RETRY)
+-		dev_dbg(&pdev->dev, "Chip erase timedout: %x\n", status);
+-
+-	dev_dbg(&pdev->dev, "ROM Erase... Done success\n");
+-}
+-
+-static bool renesas_setup_rom(struct pci_dev *pdev, const struct firmware *fw)
+-{
+-	const u32 *fw_data = (const u32 *)fw->data;
+-	int err, i;
+-	u8 status;
+-
+-	/* 2. Write magic word to Data0 */
+-	err = pci_write_config_dword(pdev, RENESAS_DATA0,
+-				     RENESAS_ROM_WRITE_MAGIC);
+-	if (err)
+-		return false;
+-
+-	/* 3. Set External ROM access */
+-	err = pci_write_config_byte(pdev, RENESAS_ROM_STATUS,
+-				    RENESAS_ROM_STATUS_ACCESS);
+-	if (err)
+-		goto remove_bypass;
+-
+-	/* 4. Check the result */
+-	err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+-	if (err)
+-		goto remove_bypass;
+-	status &= GENMASK(6, 4);
+-	if (status) {
+-		dev_err(&pdev->dev,
+-			"setting external rom failed: %x\n", status);
+-		goto remove_bypass;
+-	}
+-
+-	/* 5 to 16 Write FW to DATA0/1 while checking SetData0/1 */
+-	for (i = 0; i < fw->size / 4; i++) {
+-		err = renesas_fw_download_image(pdev, fw_data, i, true);
+-		if (err) {
+-			dev_err(&pdev->dev,
+-				"ROM Download Step %d failed at position %d bytes with (%d)\n",
+-				 i, i * 4, err);
+-			goto remove_bypass;
+-		}
+-	}
+-
+-	/*
+-	 * wait till DATA0/1 is cleared
+-	 */
+-	for (i = 0; i < RENESAS_RETRY; i++) {
+-		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS_MSB,
+-					   &status);
+-		if (err)
+-			goto remove_bypass;
+-		if (!(status & (BIT(0) | BIT(1))))
+-			break;
+-
+-		udelay(RENESAS_DELAY);
+-	}
+-	if (i == RENESAS_RETRY) {
+-		dev_err(&pdev->dev, "Final Firmware ROM Download step timed out\n");
+-		goto remove_bypass;
+-	}
+-
+-	/* 17. Remove bypass */
+-	err = pci_write_config_byte(pdev, RENESAS_ROM_STATUS, 0);
+-	if (err)
+-		return false;
+-
+-	udelay(10);
+-
+-	/* 18. check result */
+-	for (i = 0; i < RENESAS_RETRY; i++) {
+-		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+-		if (err) {
+-			dev_err(&pdev->dev, "Read ROM status failed:%d\n",
+-				pcibios_err_to_errno(err));
+-			return false;
+-		}
+-		status &= RENESAS_ROM_STATUS_RESULT;
+-		if (status ==  RENESAS_ROM_STATUS_SUCCESS) {
+-			dev_dbg(&pdev->dev, "Download ROM success\n");
+-			break;
+-		}
+-		udelay(RENESAS_DELAY);
+-	}
+-	if (i == RENESAS_RETRY) { /* Timed out */
+-		dev_err(&pdev->dev,
+-			"Download to external ROM TO: %x\n", status);
+-		return false;
+-	}
+-
+-	dev_dbg(&pdev->dev, "Download to external ROM succeeded\n");
+-
+-	/* Last step set Reload */
+-	err = pci_write_config_byte(pdev, RENESAS_ROM_STATUS,
+-				    RENESAS_ROM_STATUS_RELOAD);
+-	if (err) {
+-		dev_err(&pdev->dev, "Set ROM execute failed: %d\n",
+-			pcibios_err_to_errno(err));
+-		return false;
+-	}
+-
+-	/*
+-	 * wait till Reload is cleared
+-	 */
+-	for (i = 0; i < RENESAS_RETRY; i++) {
+-		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
+-		if (err)
+-			return false;
+-		if (!(status & RENESAS_ROM_STATUS_RELOAD))
+-			break;
+-
+-		udelay(RENESAS_DELAY);
+-	}
+-	if (i == RENESAS_RETRY) {
+-		dev_err(&pdev->dev, "ROM Exec timed out: %x\n", status);
+-		return false;
+-	}
+-
+-	return true;
+-
+-remove_bypass:
+-	pci_write_config_byte(pdev, RENESAS_ROM_STATUS, 0);
+-	return false;
+-}
+-
+ static int renesas_load_fw(struct pci_dev *pdev, const struct firmware *fw)
+ {
+ 	int err = 0;
+-	bool rom;
+-
+-	/* Check if the device has external ROM */
+-	rom = renesas_check_rom(pdev);
+-	if (rom) {
+-		/* perform chip erase first */
+-		renesas_rom_erase(pdev);
+-
+-		/* lets try loading fw on ROM first */
+-		rom = renesas_setup_rom(pdev, fw);
+-		if (!rom) {
+-			dev_dbg(&pdev->dev,
+-				"ROM load failed, falling back on FW load\n");
+-		} else {
+-			dev_dbg(&pdev->dev,
+-				"ROM load success\n");
+-			goto exit;
+-		}
+-	}
  
- 	/* Only notify USB controller if partner supports USB data */
-
----
-base-commit: 60e7c4a25da68cd826719b685babbd23e73b85b0
-change-id: 20230626-topic-sm8550-usb-c-audio-fixup-9ee3cac5e00f
-
-Best regards,
+ 	err = renesas_fw_download(pdev, fw);
+-
+-exit:
+ 	if (err)
+ 		dev_err(&pdev->dev, "firmware failed to download (%d).", err);
+ 	return err;
 -- 
-Neil Armstrong <neil.armstrong@linaro.org>
+2.41.0
 
