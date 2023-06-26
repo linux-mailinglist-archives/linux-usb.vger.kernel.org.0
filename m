@@ -2,61 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2389573E23F
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jun 2023 16:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB19973E25A
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jun 2023 16:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjFZOgs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Jun 2023 10:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
+        id S229704AbjFZOnp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Jun 2023 10:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjFZOgr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Jun 2023 10:36:47 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4CF109F
-        for <linux-usb@vger.kernel.org>; Mon, 26 Jun 2023 07:36:45 -0700 (PDT)
-Received: (qmail 834137 invoked by uid 1000); 26 Jun 2023 10:16:44 -0400
-Date:   Mon, 26 Jun 2023 10:16:44 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Guiting Shen <aarongt.shen@gmail.com>
-Cc:     gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: ohci-at91: Fix the unhandle interrupt when resume
-Message-ID: <1f33966d-3bc5-4ca3-bb6c-6e1d838c57f7@rowland.harvard.edu>
-References: <20230625161553.11073-1-aarongt.shen@gmail.com>
- <552b1ac6-2149-48fa-9432-49655bfbc366@rowland.harvard.edu>
- <ed353f12-7ba7-1831-2ac7-b6135b2a5abb@gmail.com>
+        with ESMTP id S229601AbjFZOnk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Jun 2023 10:43:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5149FE7E;
+        Mon, 26 Jun 2023 07:43:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C619760C34;
+        Mon, 26 Jun 2023 14:43:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF16DC433C8;
+        Mon, 26 Jun 2023 14:43:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687790618;
+        bh=SdT5dYqk63aXHMWbRS0vGySaZDKAUnxuNnhGJkSrdRU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CNZ/WZPR3/AThVgJYgL+P+vh7mL1idZHkrilcVKqSlAXPEMwVDJQ8WOYpRIzcl0Ez
+         7Hv2KnxATg+ts7PvYUrBs4dm0XHQo8VjbCnx8xi0pDz2/H3r1h0lplfaxc3DFDiZA5
+         SrrJJMK2B6VbiVFrbH0hfyfSPJCs2iYa/LEmKoIk=
+Date:   Mon, 26 Jun 2023 16:43:35 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 1/3] usb: typec: ucsi: call typec_set_mode on non-altmode
+ partner change
+Message-ID: <2023062628-pleading-hedging-2ceb@gregkh>
+References: <20230614-topic-sm8550-upstream-type-c-audio-v1-0-15a92565146b@linaro.org>
+ <20230614-topic-sm8550-upstream-type-c-audio-v1-1-15a92565146b@linaro.org>
+ <ZJlIViwb9sfNrgjH@kuha.fi.intel.com>
+ <c0bb8255-db4f-e93b-5593-0faa32e44410@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ed353f12-7ba7-1831-2ac7-b6135b2a5abb@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <c0bb8255-db4f-e93b-5593-0faa32e44410@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 10:28:26AM +0800, Guiting Shen wrote:
-> On Mon, Jun 26, 2023 at 04:04:29AM GMT+8, Alan Stern wrote:
-> > This comment doesn't say why the code uses !ohci_at91->wakeup.  It 
-> > should explain that.  For example:
-> > 
-> > 	/*
-> > 	 * According to the comment in ohci_hcd_at91_drv_suspend()
-> > 	 * we need to do a reset if the 48-MHz clock was stopped,
-> > 	 * that is, if ohci_at91->wakeup is clear.  Tell ohci_resume()
-> > 	 * to reset in this case by setting its "hibernated" flag.
-> > 	 */
-> > 
+On Mon, Jun 26, 2023 at 03:23:11PM +0200, Neil Armstrong wrote:
+> Hi,
 > 
-> Ok, Thank you!
-> Do I send the v3 patch after the merge window close?
+> On 26/06/2023 10:12, Heikki Krogerus wrote:
+> > Hi Neil,
+> > 
+> > Sorry to keep you waiting.
+> 
+> No problem, thanks for reviewing my patches!
+> 
+> > 
+> > On Wed, Jun 14, 2023 at 03:10:39PM +0200, Neil Armstrong wrote:
+> > > Add support for calling typec_set_mode() for the DEBUG, AUDIO
+> > > accessory modes.
+> > > 
+> > > Let's also call typec_set_mode() for USB as default and SAFE
+> > > when partner is disconnected.
+> > > 
+> > > The USB state is only called when ALT mode is specifically
+> > > not specified by the partner status flags in order
+> > > to leave the altmode handlers setup the proper mode to
+> > > switches, muxes and retimers.
+> > > 
+> > > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > > ---
+> > >   drivers/usb/typec/ucsi/ucsi.c | 17 +++++++++++++++++
+> > >   1 file changed, 17 insertions(+)
+> > > 
+> > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> > > index 2b472ec01dc4..44f43cdea5c1 100644
+> > > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > > @@ -809,6 +809,23 @@ static void ucsi_partner_change(struct ucsi_connector *con)
+> > >   		break;
+> > >   	}
+> > > +	if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
+> > > +		switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
+> > > +		case UCSI_CONSTAT_PARTNER_TYPE_DEBUG:
+> > > +			typec_set_mode(con->port, TYPEC_MODE_DEBUG);
+> > > +			break;
+> > > +		case UCSI_CONSTAT_PARTNER_TYPE_AUDIO:
+> > > +			typec_set_mode(con->port, TYPEC_MODE_AUDIO);
+> > > +			break;
+> > > +		default:
+> > > +			if (UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) ==
+> > > +					UCSI_CONSTAT_PARTNER_FLAG_USB)
+> > > +				typec_set_mode(con->port, TYPEC_STATE_USB);
+> > > +		}
+> > > +	} else {
+> > > +		typec_set_mode(con->port, TYPEC_STATE_SAFE);
+> > > +	}
+> > 
+> > Can you do that (set safe mode) in ucsi_unregister_partner() instead?
+> 
+> It seems greg already landed the patch into usb-next, but I can send a fix to
+> move it to unregister
 
-You can send the patch at any time.  It doesn't matter whether the merge 
-window is open or closed.
-
-Alan Stern
+Yes please.
