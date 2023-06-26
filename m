@@ -2,74 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DA773DF55
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jun 2023 14:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF6773E08A
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jun 2023 15:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjFZMfY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Jun 2023 08:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36324 "EHLO
+        id S229939AbjFZNXR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Jun 2023 09:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjFZMfX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Jun 2023 08:35:23 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE6510A;
-        Mon, 26 Jun 2023 05:35:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687782922; x=1719318922;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2X73gKfRraYZuAhGQlSUD3OziUlK09NRQyEmxmdiB0A=;
-  b=AV7X8L9RJ1RoeSbzxjXq+k64BUNDYb5KMhU+LqRZkD+LAPOKgPniz6gH
-   9JERp9qJCbcrVjizIkEeKUxcyS2QGjkN+Avn2VZAFsq7W9KOQavqZkOQb
-   C8Jv2CPcbEPc+aH4Vrpj/Z2aTqLsVnHMqKzYzM+kVVypcS1aQ4G/3v0VD
-   UBuruscQ+paxHwZn4DTtxkbLJLnmvPK+oRpM/Fs658C1M0ZzJaDpNCZAO
-   OHOQlSoXKIcpjNWNE+2XeAYnxq0L7SkG26lUqCDuZGCf9QT7RzLRmugPA
-   oWRbUwdurZf/CLVQqnVRuqiNDEx09IjSvV9KmzB+i5CVthVPaKdaVf4CU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="391552684"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="391552684"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 05:35:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="829220129"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="829220129"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga002.fm.intel.com with ESMTP; 26 Jun 2023 05:35:11 -0700
-Message-ID: <e387d3e1-c5b2-aeb0-b6f5-fb2763cf35e0@linux.intel.com>
-Date:   Mon, 26 Jun 2023 15:36:38 +0300
+        with ESMTP id S229623AbjFZNXQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Jun 2023 09:23:16 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FC61AC
+        for <linux-usb@vger.kernel.org>; Mon, 26 Jun 2023 06:23:14 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4fb7589b187so1300267e87.1
+        for <linux-usb@vger.kernel.org>; Mon, 26 Jun 2023 06:23:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687785793; x=1690377793;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=FX52cR42UjsCJaM68RlRM+9U+7DEs1rV1cvkX/J08Rg=;
+        b=lW8CiMt8OoOEdsnfIH/829zvDo9LhMmt9uwOZByFaoqoTSTnFf1/9zLumViORWwvzL
+         V+1Asd9cQXswC4xk+NAzUMZQiqZBw9xxPWy3dFScUSqc+GPfaknQ6QJ6JXSR3HfvTB7r
+         HN5lwHmSOBD8R8bsl8QD4WwByW4BsSigr0/IG2ffOHmBvtFkZN8wB6MhvSvNijEi45PX
+         tUZc7ttHb1GIHkWbV8u+yHJxW5Jtc8U2IXT5nmtMJegkI/KkUNVzlALNJNCORigIwAiU
+         Yq2c/9LSoe4DsSThii8uc///p3NjJB77dk2bUVnPMvwxUP1EkFXAiYnBgWy2zsJykFV+
+         5SpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687785793; x=1690377793;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FX52cR42UjsCJaM68RlRM+9U+7DEs1rV1cvkX/J08Rg=;
+        b=LWLLDkrneK05jd7VcZMLn/5/0sIW22MEFdNNC5I8Xm59AfXgI0EQiX9DX2Q3WYxBns
+         +KqYXB9VVTGCwxetIVh2ZRr3hdnMTQ4Lz2F1VVtaBAv8VmUWr0ZsDiB/faTPpiZ4vE7t
+         voOW67muwODElQrsDiLPlIJZWV8UQQJBjMzvknF9y/z5bJzmE/8SqeZNxFperYY21Rhu
+         u7Q6U15xJa9ohan7ua+lpkIZQ/zlknHA8MdOPbbFvue13+HF4YUNZfuV1fo7EZzT9uZB
+         Utv/y1F62KQ2nJk42N67uhAG2bjIfIDUk3B8YmbPyDx92uYHQmmAl8Wt0NClsFHEjWGU
+         v2PA==
+X-Gm-Message-State: AC+VfDyhDW5izFnbAP3xYDxgBByB0Sa+iQqpeo3nb67WOF8kDb8UKmkT
+        J2wKVPMe89GLXsGyTbE0Cb4goQ==
+X-Google-Smtp-Source: ACHHUZ6ThfhatPMJ0vxDsoclNGj83u9LNnGVVi4gVS3IPbj6ktLOHHmeDqsmxik2zI19UoDqnGGvWg==
+X-Received: by 2002:a19:ca02:0:b0:4f9:586b:dba1 with SMTP id a2-20020a19ca02000000b004f9586bdba1mr7763330lfg.4.1687785792656;
+        Mon, 26 Jun 2023 06:23:12 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:b25a:b26e:71f3:870c? ([2a01:e0a:982:cbb0:b25a:b26e:71f3:870c])
+        by smtp.gmail.com with ESMTPSA id h11-20020a1ccc0b000000b003fa8158135esm8427591wmb.11.2023.06.26.06.23.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 06:23:12 -0700 (PDT)
+Message-ID: <c0bb8255-db4f-e93b-5593-0faa32e44410@linaro.org>
+Date:   Mon, 26 Jun 2023 15:23:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH v3 0/2] Avoid re-initializing XHCI HC during removal
+ Thunderbird/102.12.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 1/3] usb: typec: ucsi: call typec_set_mode on non-altmode
+ partner change
 Content-Language: en-US
-To:     Wesley Cheng <quic_wcheng@quicinc.com>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20230531222719.14143-1-quic_wcheng@quicinc.com>
- <ae1a7788-acdd-8964-1450-61a741386fbd@quicinc.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <ae1a7788-acdd-8964-1450-61a741386fbd@quicinc.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20230614-topic-sm8550-upstream-type-c-audio-v1-0-15a92565146b@linaro.org>
+ <20230614-topic-sm8550-upstream-type-c-audio-v1-1-15a92565146b@linaro.org>
+ <ZJlIViwb9sfNrgjH@kuha.fi.intel.com>
+Organization: Linaro Developer Services
+In-Reply-To: <ZJlIViwb9sfNrgjH@kuha.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21.6.2023 22.46, Wesley Cheng wrote:
-> Friendly ping to see if there are any review feedback/concerns with this series?
+Hi,
+
+On 26/06/2023 10:12, Heikki Krogerus wrote:
+> Hi Neil,
 > 
+> Sorry to keep you waiting.
 
-Looks good to me.
-Seems that Greg already applied these
+No problem, thanks for reviewing my patches!
 
--Mathias
+> 
+> On Wed, Jun 14, 2023 at 03:10:39PM +0200, Neil Armstrong wrote:
+>> Add support for calling typec_set_mode() for the DEBUG, AUDIO
+>> accessory modes.
+>>
+>> Let's also call typec_set_mode() for USB as default and SAFE
+>> when partner is disconnected.
+>>
+>> The USB state is only called when ALT mode is specifically
+>> not specified by the partner status flags in order
+>> to leave the altmode handlers setup the proper mode to
+>> switches, muxes and retimers.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   drivers/usb/typec/ucsi/ucsi.c | 17 +++++++++++++++++
+>>   1 file changed, 17 insertions(+)
+>>
+>> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+>> index 2b472ec01dc4..44f43cdea5c1 100644
+>> --- a/drivers/usb/typec/ucsi/ucsi.c
+>> +++ b/drivers/usb/typec/ucsi/ucsi.c
+>> @@ -809,6 +809,23 @@ static void ucsi_partner_change(struct ucsi_connector *con)
+>>   		break;
+>>   	}
+>>   
+>> +	if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
+>> +		switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
+>> +		case UCSI_CONSTAT_PARTNER_TYPE_DEBUG:
+>> +			typec_set_mode(con->port, TYPEC_MODE_DEBUG);
+>> +			break;
+>> +		case UCSI_CONSTAT_PARTNER_TYPE_AUDIO:
+>> +			typec_set_mode(con->port, TYPEC_MODE_AUDIO);
+>> +			break;
+>> +		default:
+>> +			if (UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) ==
+>> +					UCSI_CONSTAT_PARTNER_FLAG_USB)
+>> +				typec_set_mode(con->port, TYPEC_STATE_USB);
+>> +		}
+>> +	} else {
+>> +		typec_set_mode(con->port, TYPEC_STATE_SAFE);
+>> +	}
+> 
+> Can you do that (set safe mode) in ucsi_unregister_partner() instead?
+
+It seems greg already landed the patch into usb-next, but I can send a fix to
+move it to unregister
+
+Neil
+
+> 
+> thanks,
+> 
 
