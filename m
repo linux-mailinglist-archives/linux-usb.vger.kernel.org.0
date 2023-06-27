@@ -2,85 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67ACA73F471
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 08:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A77E973F4C2
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 08:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbjF0GXx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jun 2023 02:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
+        id S230454AbjF0Goj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jun 2023 02:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbjF0GXv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 02:23:51 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E41E5A
-        for <linux-usb@vger.kernel.org>; Mon, 26 Jun 2023 23:23:50 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fa99b57a38so16160265e9.0
-        for <linux-usb@vger.kernel.org>; Mon, 26 Jun 2023 23:23:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687847029; x=1690439029;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OqR2Bde7fgFZFfqx9wKscXdAyIjVnqS4blsqmK6ypzU=;
-        b=AcmzkJ/g1c26P23mJhuAkBl86X58muZGFK71lAR26FHzUzu+VkpBqKZwJhlpzUlDH9
-         D0HdUXIyyfcfsQE7k4VMFz3inbbi8dXU0JSFSAU9n1q98JqM+mh5Q9Ib/aWJqGXYfcDL
-         x7a3rL26rkxUJfLx0dpU17Tusgsh1r8RQ/NB2/G850vxVOw7z+s7aj74tQpgQWbsHQGu
-         ikM6qeQ5rk8gS8XzQ6XjKJvHqcbr6b3J7bmUwYIYFjfF87Bq0kqpu6wnx3ZHzXgdxZ5L
-         lGJo2oLZqpAYSBRg8T+tB5UsJz10arEX2G+NYZVnBAW+kZZveqLjB6PUkDHTbbU7+jBi
-         IxZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687847029; x=1690439029;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OqR2Bde7fgFZFfqx9wKscXdAyIjVnqS4blsqmK6ypzU=;
-        b=cx0Pq/unHE/RZJwJIiR3q7RSrAOxSpGmsTUaDieH6LcFkNpc8uve9R5qg2vn/nSRMN
-         fpjmWOGWdDowzC5ZSyg1hHusS+Jh766dCdJTHUtMwCy7ET+eSt8GkaEO2EsbeLhgyAHe
-         OB88xugqezqhtaSrDFXfJP/vc93Gc4LgrVFaCM3Z/BaXinkOjLkvO8ZGsrbpuixGNCHN
-         yt6TTdsh4b/Mvw0KpxCoOkL6z8zPAg7w4+/J8+G8LpxHN9LlaBouZcHKdlsJYI3XrBzr
-         oGUWP+SXRLO2oXMLLUhib2G5ESINrKoRfkIvlAwDW6SZLAjghY00uzIdkL53RAWC9elI
-         zf2g==
-X-Gm-Message-State: AC+VfDz9eKchKEdNFZAD+y63rPIExIfjCsX1nYSW9T7Fp5NmEaFB/5OG
-        7nDIEUQUW/LihDqIA8Lc+OyLGw==
-X-Google-Smtp-Source: ACHHUZ6yzCvgzdX2Y/g3bD2+TrI4wajnQCV07TKGG2zgI7H/hQkuiyoX9o7t7FH4X5RDQ6Ulefrdvg==
-X-Received: by 2002:a05:6000:1cb:b0:313:efd5:f294 with SMTP id t11-20020a05600001cb00b00313efd5f294mr3766666wrx.10.1687847028573;
-        Mon, 26 Jun 2023 23:23:48 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id c15-20020adffb4f000000b00313e4d02be8sm8429048wrs.55.2023.06.26.23.23.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 23:23:48 -0700 (PDT)
-Message-ID: <10e356c6-81fa-f127-8263-0fdf8a512aa6@linaro.org>
-Date:   Tue, 27 Jun 2023 08:23:45 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [EXT] Re: [PATCH 2/3] dt-bindings: usb: ci-hdrc-usb2: add
- samsung,picophy-rise-fall-time-adjust property
+        with ESMTP id S230420AbjF0GoP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 02:44:15 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B93272D;
+        Mon, 26 Jun 2023 23:41:53 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35R6e77u023276;
+        Tue, 27 Jun 2023 01:40:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1687848007;
+        bh=dsiKsE91lKf5OvXMNGW1FlYQ10GaUD20ITfSwXJcI/I=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=wEY4p2oTCRdbS1631HmBQOYmClEwoLSu7m7WA1qf+e+Uf3tlZRbankbpGHyOc+cR/
+         vNJ1QaB14EKj12UiMhXTnnePXAkZXpgq/QG/tq8vKkwaiDbhOHcJHpWbHpocS1YVge
+         eTeRiM1MrEAXgbzeXJ3gZyLyoNSuxlDBYctn7umE=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35R6e7bp001016
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 27 Jun 2023 01:40:07 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 27
+ Jun 2023 01:40:07 -0500
+Received: from DLEE114.ent.ti.com ([fe80::bdc7:eccc:cd13:af84]) by
+ DLEE114.ent.ti.com ([fe80::bdc7:eccc:cd13:af84%17]) with mapi id
+ 15.01.2507.023; Tue, 27 Jun 2023 01:40:07 -0500
+From:   "Purohit, Kaushal" <kaushal.purohit@ti.com>
+To:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        "Oliver Neukum" <oneukum@suse.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [EXTERNAL] Re: issues with cdc ncm host class driver
+Thread-Topic: [EXTERNAL] Re: issues with cdc ncm host class driver
+Thread-Index: Adll85tYAc+Cq2MlRoaUYHp7CXh/XQASqSKAADMoCYAPKDRrAAFFkoXA
+Date:   Tue, 27 Jun 2023 06:40:07 +0000
+Message-ID: <2f71b6a5cc39445aa8c7f3c3558dfd50@ti.com>
+References: <da37bb0d43de465185c10aad9924f265@ti.com>
+ <28ec4e65-647f-2567-fb7d-f656940d4e43@suse.com>
+ <da479ebf-b3fb-0a58-16be-07fe55d36621@leemhuis.info>
+ <19199830-33b6-2a4c-e08b-d1a76ce4c59b@leemhuis.info>
+In-Reply-To: <19199830-33b6-2a4c-e08b-d1a76ce4c59b@leemhuis.info>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Xu Yang <xu.yang_2@nxp.com>,
-        "peter.chen@kernel.org" <peter.chen@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Jun Li <jun.li@nxp.com>
-References: <20230626092952.1115834-1-xu.yang_2@nxp.com>
- <20230626092952.1115834-2-xu.yang_2@nxp.com>
- <f7bca54b-9de1-be9a-ad46-3502df58289f@linaro.org>
- <DB7PR04MB4505F485E48DE667D62602748C27A@DB7PR04MB4505.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <DB7PR04MB4505F485E48DE667D62602748C27A@DB7PR04MB4505.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.24.145.23]
+x-exclaimer-md-config: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,63 +69,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 27/06/2023 05:10, Xu Yang wrote:
-> Hi Krzysztof,
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Monday, June 26, 2023 11:45 PM
->> To: Xu Yang <xu.yang_2@nxp.com>; peter.chen@kernel.org; robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
->> gregkh@linuxfoundation.org
->> Cc: conor+dt@kernel.org; shawnguo@kernel.org; s.hauer@pengutronix.de; dl-linux-imx <linux-imx@nxp.com>; Peng Fan
->> <peng.fan@nxp.com>; linux-usb@vger.kernel.org; devicetree@vger.kernel.org; Jun Li <jun.li@nxp.com>
->> Subject: [EXT] Re: [PATCH 2/3] dt-bindings: usb: ci-hdrc-usb2: add samsung,picophy-rise-fall-time-adjust property
->>
->> Caution: This is an external email. Please take care when clicking links or opening attachments. When in doubt, report the
->> message using the 'Report this email' button
->>
->>
->> On 26/06/2023 11:29, Xu Yang wrote:
->>> The samsung,picophy-rise-fall-time-adjust property can help to adjust the
->>> rise/fall times of the high-speed transmitter waveform. The value can be
->>> 0~3.
->>>
->>> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
->>> ---
->>>  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml          | 10 ++++++++++
->>>  1 file changed, 10 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-
->> hdrc-usb2.yaml
->>> index 782402800d4a..d84c66c342ac 100644
->>> --- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
->>> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
->>> @@ -292,6 +292,16 @@ properties:
->>>      minimum: 0x0
->>>      maximum: 0xf
->>>
->>> +  samsung,picophy-rise-fall-time-adjust:
->>> +    description:
->>> +      HS Transmitter Rise/Fall Time Adjustment. Adjust the rise/fall times
->>
->> Adjust with/by what? What are the units?
-> 
-> This property is used to adjust the rise/fall time of the high-speed
-> transmitter waveform. It has no unit. According to the description of
-> USBNC_n_PHY_CFG1 register, the rise/fall time will be increased or
-> decreased by a certain percentage relative to design default time if
-> a value is given to this property.
-> 
-> The actions as below:
->   - 0: -10%
->   - 1: design default 
->   - 2: +15%
->   - 3: +20%
-
-Include it then in the description or even make the property -percent:
-https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
-
-
-Best regards,
-Krzysztof
-
+QXBvbG9naWVzIGZvciBsYXRlIHJlcGx5LCBJIHdhcyBzdHVjayB3aXRoIHNvbWV0aGluZy4NCg0K
+WWVzIGF0dGFjaGVkIHBhdGNoIHdhcyB3b3JraW5nIHdlbGwuIEkgZGlkIG5vdCBzZWUgc2V0IGZp
+bHRlciBwYXJhbXMgcmVxdWVzdCBhZnRlciBhcHBseWluZyB0aGlzIHBhdGNoLg0KDQpUaGFua3Ms
+DQpLYXVzaGFsDQoNCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBMaW51eCByZWdy
+ZXNzaW9uIHRyYWNraW5nIChUaG9yc3RlbiBMZWVtaHVpcykgPHJlZ3Jlc3Npb25zQGxlZW1odWlz
+LmluZm8+IA0KU2VudDogVHVlc2RheSwgSnVuZSAyMCwgMjAyMyA3OjQ2IFBNDQpUbzogT2xpdmVy
+IE5ldWt1bSA8b25ldWt1bUBzdXNlLmNvbT47IFB1cm9oaXQsIEthdXNoYWwgPGthdXNoYWwucHVy
+b2hpdEB0aS5jb20+OyBzdGFibGVAdmdlci5rZXJuZWwub3JnDQpDYzogcmVncmVzc2lvbnNAbGlz
+dHMubGludXguZGV2OyBsaW51eC11c2JAdmdlci5rZXJuZWwub3JnDQpTdWJqZWN0OiBbRVhURVJO
+QUxdIFJlOiBpc3N1ZXMgd2l0aCBjZGMgbmNtIGhvc3QgY2xhc3MgZHJpdmVyDQoNCk9uIDA0LjA0
+LjIzIDEyOjMzLCBMaW51eCByZWdyZXNzaW9uIHRyYWNraW5nIChUaG9yc3RlbiBMZWVtaHVpcykg
+d3JvdGU6DQo+IFNpZGUgbm90ZTogdGhlcmUgaXMgbm93IGEgYnVnIHRyYWNraW5nIHRpY2tldCBm
+b3IgdGhpcyBpc3N1ZSwgdG9vOg0KPiBodHRwczovL2J1Z3ppbGxhLmtlcm5lbC5vcmcvc2hvd19i
+dWcuY2dpP2lkPTIxNzI5MA0KPiANCj4gT24gMDMuMDQuMjMgMTI6MDksIE9saXZlciBOZXVrdW0g
+d3JvdGU6DQo+PiBPbiAwMy4wNC4yMyAwODoxNCwgUHVyb2hpdCwgS2F1c2hhbCB3cm90ZToNCj4g
+DQo+Pj4gUmVmZXJyaW5nIHRvIHBhdGNoIHdpdGggY29tbWl0IElEDQo+Pj4gKCplMTBkY2IxYjZi
+YTcxNDI0M2FkNWEzNWExMWI5MWNjMTQxMDNhOWE5KikuDQo+Pj4NCj4+PiBUaGlzIGlzIGEgc3Bl
+YyB2aW9sYXRpb24gZm9ywqBDREMgTkNNIGNsYXNzIGRyaXZlci4gRHJpdmVyIGNsZWFybHkgDQo+
+Pj4gc2F5cyB0aGUgc2lnbmlmaWNhbmNlIG9mIG5ldHdvcmsgY2FwYWJpbGl0aWVzLiAoc25hcHNo
+b3QgYmVsb3cpDQo+Pj4NCj4+PiBIb3dldmVyLCB3aXRoIHRoZSBtZW50aW9uZWQgcGF0Y2ggdGhl
+c2UgdmFsdWVzIGFyZSBkaXNyZXNwZWN0ZWQgYW5kIA0KPj4+IGNvbW1hbmRzIHNwZWNpZmljIHRv
+IHRoZXNlIGNhcGFiaWxpdGllcyBhcmUgc2VudCBmcm9tIHRoZSBob3N0IA0KPj4+IHJlZ2FyZGxl
+c3Mgb2YgZGV2aWNlJyBjYXBhYmlsaXRpZXMgdG8gaGFuZGxlIHRoZW0uDQo+Pg0KPj4gUmlnaHQu
+IFNvIGZvciB5b3VyIGRldmljZSwgdGhlIGNvcnJlY3QgYmVoYXZpb3Igd291bGQgYmUgdG8gZG8g
+DQo+PiBub3RoaW5nLCB3b3VsZG4ndCBpdD8gVGhlIHBhY2tldHMgd291bGQgYmUgZGVsaXZlcmVk
+IGFuZCB0aGUgaG9zdCANCj4+IG5lZWRzIHRvIGZpbHRlciBhbmQgZGlzY2FyZCB1bnJlcXVlc3Rl
+ZCBwYWNrZXRzLg0KPiANCj4gI3JlZ3pib3QgXmludHJvZHVjZWQgZTEwZGNiMWI2YmE3MTQyNDNh
+ZA0KPiBodHRwczovL2J1Z3ppbGxhLmtlcm5lbC5vcmcvc2hvd19idWcuY2dpP2lkPTIxNzI5MA0K
+PiAjcmVnemJvdCBmcm9tOiBQdXJvaGl0LCBLYXVzaGFsDQo+ICNyZWd6Ym90IHRpdGxlIG5ldDog
+Y2RjX25jbTogc3BlYyB2aW9sYXRpb24gZm9yIENEQyBOQ00gI3JlZ3pib3QgDQo+IGlnbm9yZS1h
+Y3Rpdml0eQ0KDQpOb3Qgc3VyZSB3aGF0IGhhcHBlbiB0byB0aGlzLCBteSBsYXN0IGlucXVpcmll
+cyB3ZXJlIG5vdCBhbnN3ZXJlZCwgc28gaXQgc2VlbXMgbm9ib2R5IGNhcmVzIGFueW1vcmUNCg0K
+I3JlZ3pib3QgaW5jb25jbHVzaXZlOiByYWRpbyBzaWxlbmNlLCBpZ25vcmluZyAjcmVnemJvdCBp
+Z25vcmUtYWN0aXZpdHkNCg0KQ2lhbywgVGhvcnN0ZW4gKHdlYXJpbmcgaGlzICd0aGUgTGludXgg
+a2VybmVsJ3MgcmVncmVzc2lvbiB0cmFja2VyJyBoYXQpDQotLQ0KRXZlcnl0aGluZyB5b3Ugd2Fu
+bmEga25vdyBhYm91dCBMaW51eCBrZXJuZWwgcmVncmVzc2lvbiB0cmFja2luZzoNCmh0dHBzOi8v
+bGludXgtcmVndHJhY2tpbmcubGVlbWh1aXMuaW5mby9hYm91dC8jdGxkcg0KSWYgSSBkaWQgc29t
+ZXRoaW5nIHN0dXBpZCwgcGxlYXNlIHRlbGwgbWUsIGFzIGV4cGxhaW5lZCBvbiB0aGF0IHBhZ2Uu
+DQoNCg==
