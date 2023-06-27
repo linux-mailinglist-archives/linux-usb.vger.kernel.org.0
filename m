@@ -2,61 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E2E8740114
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 18:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14EAC740119
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 18:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbjF0Q0y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jun 2023 12:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
+        id S231878AbjF0Q06 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jun 2023 12:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232184AbjF0QYy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 12:24:54 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14A030FF
-        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 09:24:51 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f875b267d9so6781290e87.1
-        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 09:24:51 -0700 (PDT)
+        with ESMTP id S232224AbjF0QY4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 12:24:56 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5863E3590
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 09:24:54 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f86fbe5e4fso6364952e87.2
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 09:24:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687883090; x=1690475090;
+        d=linaro.org; s=google; t=1687883092; x=1690475092;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ctd6NThpx69jPylUbb4gptRsxME69SX4+Gzv2K70VRo=;
-        b=BOVVvXqNrZIAQGOBdv707QC8EQ5sHi6gmFvrnAlotB+9fchHS1X9Ykle6oSU66Ffij
-         DSlIk7VYigcKJbM6QpT5dUXTNWkCHdu2cVB4qYJqj415lMisiZAGIH107dOnSAxbkgV2
-         zhXOYVsgGQbU8adZTfxsZNOBEoHoYdeEjPB2uVNsWD5VVxDJMlpS31WXF66y2sYK5MYl
-         +HTIC46yh7dfpvVJblamv2+Pa8MoExmgFz4wXCsdLttegxqnWR+CKQVmFYqz/RgAaGtR
-         2E48YTCLonYoBdTMPq0+/K9pOKHuqf8wtsEHJNOjDmQX54Z5nbZ1xy/c4XItBeBLXWSP
-         Hseg==
+        bh=apFUalLZyQqWq0aQwYgxypM+yPAfzDeJRJiPTT9OzgQ=;
+        b=gPQ+01eM8GOGBERecL3B/NIxhQbrVmrrFXxYZiCCONOF7/F61cH5oZ4S7PViK0H9X3
+         yXr/dkivL6tpoBinlyPIzXzeVhamwTu8Oo4+oDsjDo9mxhFy9Kp7iTj9zqBShJlvW5Sr
+         3XZeOtU4fWRTMlxkBRNd1kkaaCf27QvN1bclNG3WoJmKIpIgQhZ03uKOPZvd7hIT0PGY
+         azP7RD8WQQxDUWPpOCyYB/heKlw/sQWav43VkZQQ4ykMqIbGoZPA/wnM17Ra7uPnIX5m
+         nrtp2FldB8AQvrSjYItV9pKqMHKA5lejbTU0yr8PwlU1APcwlIwpaSCeeMY7VuNPD0vN
+         kayw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687883090; x=1690475090;
+        d=1e100.net; s=20221208; t=1687883092; x=1690475092;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ctd6NThpx69jPylUbb4gptRsxME69SX4+Gzv2K70VRo=;
-        b=KbgyHLz5eObcQPvzOiKFrKHDa2doUsR0pg0MYk8KKIuztoZlQaTbjCWmNUz8rX6zL6
-         sb01yjGtio4yiXVtfxzIFw2GRu3bjiagQpA9nQjl2Qde8jSb0MwfGZBnYvT9CgCdPtmp
-         JXbyxJ/Q7LmYqy9ubY9SjHt0pxfBOchZv+PNdCKcY8srhb7B+jdmOAQClT4D9QvpAtmi
-         y91SnMzd6N6UklPz8rAPC3ejiA2UmUZDhgLILGaR3SOyYUe5P6u11Dw6ngZ8FaLwhDzj
-         hwQYqTO+YluW+Hgfd/UzeKHXyyzRdXnn4kg4OVP9MAva8o+srNRiKUp6vYiHp7c6hf9F
-         eKtw==
-X-Gm-Message-State: AC+VfDy8Xb47WP1GftA3H8rHKOGQuQ23L9Pwh1rdxWyyCmM4DcpkzPL7
-        xD48OK/ZaGSYk8G1+AzeVv6W5w==
-X-Google-Smtp-Source: ACHHUZ7/IsrAYYJ83qNIX85WmUB8XQr3Dyw8YmG60/Pgj6ZfFtoyl/nbnCy5K9y/GyUuCqUq4R2nlg==
-X-Received: by 2002:a05:6512:1584:b0:4f8:710c:e2c7 with SMTP id bp4-20020a056512158400b004f8710ce2c7mr13974676lfb.33.1687883090060;
-        Tue, 27 Jun 2023 09:24:50 -0700 (PDT)
+        bh=apFUalLZyQqWq0aQwYgxypM+yPAfzDeJRJiPTT9OzgQ=;
+        b=kf2PKIcuI8YNmN0h/qDDXt+j3vuPSOfHMKY83b4eAjpTHZk3QqkYrk795Y2int9uNG
+         I5dXKYUtQtccFj8DM4db/uvJZ3bh0Esbmp1A39MbV1fvZePW/6LAIP/B+nU+THMUHTV9
+         vJ8HbSzFJYu1fyRkQ72EthF/iVst9tmMU/XVnKmcWg+yGvDbaM1WaQXX2SUjxaDUVlB0
+         GmvXmOlDJ7tfYbrTD/RnGeb04SQ95rMjYstX7crxEfXa9NT86mykR3idxJ0SMBXQcLnD
+         ofu2oLOqdq0dcLk6aVfEJebqien9YN23wvZn+Jj0XBK1HIV3v9ozYv2nOUCSUICHFrF0
+         jRHQ==
+X-Gm-Message-State: AC+VfDzNE4OM7pxt3NKSxC/QIKEmEKLYzbilw5w7jokXUeikloCHGuC0
+        stTeD6KtUSJ88niyub32okQxzA==
+X-Google-Smtp-Source: ACHHUZ4atKHp3LY0BnQtuVG83sCZJ0bHCYAJTWN9stucrksa1utFdi1jhZ+5jdferRA74CWyuyxYjw==
+X-Received: by 2002:a05:6512:234a:b0:4f9:607a:6508 with SMTP id p10-20020a056512234a00b004f9607a6508mr11552003lfu.50.1687883092611;
+        Tue, 27 Jun 2023 09:24:52 -0700 (PDT)
 Received: from [192.168.1.101] (abxj103.neoplus.adsl.tpnet.pl. [83.9.3.103])
-        by smtp.gmail.com with ESMTPSA id g7-20020a19ac07000000b004fb259a5589sm1190508lfc.104.2023.06.27.09.24.47
+        by smtp.gmail.com with ESMTPSA id g7-20020a19ac07000000b004fb259a5589sm1190508lfc.104.2023.06.27.09.24.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 09:24:49 -0700 (PDT)
+        Tue, 27 Jun 2023 09:24:52 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 27 Jun 2023 18:24:21 +0200
-Subject: [PATCH 05/11] dt-bindings: sound: Convert pm8916-wcd-analog-codec
- to YAML
+Date:   Tue, 27 Jun 2023 18:24:22 +0200
+Subject: [PATCH 06/11] dt-bindings: mfd: qcom,spmi-pmic: Reference pm8916
+ wcd analog codec schema
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230627-topic-more_bindings-v1-5-6b4b6cd081e5@linaro.org>
+Message-Id: <20230627-topic-more_bindings-v1-6-6b4b6cd081e5@linaro.org>
 References: <20230627-topic-more_bindings-v1-0-6b4b6cd081e5@linaro.org>
 In-Reply-To: <20230627-topic-more_bindings-v1-0-6b4b6cd081e5@linaro.org>
 To:     cros-qcom-dts-watchers@chromium.org,
@@ -98,11 +98,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         Andy Gross <andy.gross@linaro.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687883074; l=9977;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687883074; l=878;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=uE+UU1PMQNBYsYkBYV409QKnIYIcTBQRlTvAYK5pYKY=;
- b=ylbQz6shMjx5lnxaRBjhrP3JWvzCQM5oZnlXR3bVaBTrtloCKKp5Ahu9D93lKetS3VtOSvBGd
- bnHc4HJs/T0C/ycfLYk2PP7QKWRsGStWE6uvvRwzgbDcFZbYWNRUi8Q
+ bh=lErWU6dobB0XeId/RGdHSYC+Fh+f5HQU6i/ZQfWoHV4=;
+ b=UL8UOKYocMxpJYoe0YJwzMhvxXtghVykIHjdlEGq50CZhtl1LLZ8LZLlN2lH90cJbYWcbYJLO
+ QV9/CGe0uXSAFNUnoT8wQU4pN1dR03bjwZsdsXFzKbUyEu8A3n7SbpX
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -115,287 +115,27 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Convert the PM8916 analog WCD codec bindings to YAML.
+Now that it's been converted to YAML, reference the PM8916 wcd codec
+schema.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- .../bindings/sound/qcom,msm8916-wcd-analog.txt     | 101 -------------
- .../sound/qcom,pm8916-wcd-analog-codec.yaml        | 160 +++++++++++++++++++++
- 2 files changed, 160 insertions(+), 101 deletions(-)
+ Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/sound/qcom,msm8916-wcd-analog.txt b/Documentation/devicetree/bindings/sound/qcom,msm8916-wcd-analog.txt
-deleted file mode 100644
-index e7d17dda55db..000000000000
---- a/Documentation/devicetree/bindings/sound/qcom,msm8916-wcd-analog.txt
-+++ /dev/null
-@@ -1,101 +0,0 @@
--msm8916 analog audio CODEC
--
--Bindings for codec Analog IP which is integrated in pmic pm8916,
--
--## Bindings for codec core on pmic:
--
--Required properties
-- - compatible = "qcom,pm8916-wcd-analog-codec";
-- - reg: represents the slave base address provided to the peripheral.
-- - interrupts: List of interrupts in given SPMI peripheral.
-- - interrupt-names: Names specified to above list of interrupts in same
--		    order. List of supported interrupt names are:
--  "cdc_spk_cnp_int" - Speaker click and pop interrupt.
--  "cdc_spk_clip_int" - Speaker clip interrupt.
--  "cdc_spk_ocp_int" - Speaker over current protect interrupt.
--  "mbhc_ins_rem_det1" - jack insert removal detect interrupt 1.
--  "mbhc_but_rel_det" - button release interrupt.
--  "mbhc_but_press_det" - button press event
--  "mbhc_ins_rem_det" - jack insert removal detect interrupt.
--  "mbhc_switch_int"	- multi button headset interrupt.
--  "cdc_ear_ocp_int" - Earphone over current protect interrupt.
--  "cdc_hphr_ocp_int" - Headphone R over current protect interrupt.
--  "cdc_hphl_ocp_det" - Headphone L over current protect interrupt.
--  "cdc_ear_cnp_int" - earphone cnp interrupt.
--  "cdc_hphr_cnp_int" - hphr click and pop interrupt.
--  "cdc_hphl_cnp_int" - hphl click and pop interrupt.
--
-- - clocks: Handle to mclk.
-- - clock-names: should be "mclk"
-- - vdd-cdc-io-supply: phandle to VDD_CDC_IO regulator DT node.
-- - vdd-cdc-tx-rx-cx-supply: phandle to VDD_CDC_TX/RX/CX regulator DT node.
-- - vdd-micbias-supply: phandle of VDD_MICBIAS supply's regulator DT node.
--
--Optional Properties:
-- - qcom,mbhc-vthreshold-low: Array of 5 threshold voltages in mV for 5 buttons
--			     detection on headset when the mbhc is powered up
--			     by internal current source, this is a low power.
-- - qcom,mbhc-vthreshold-high: Array of 5 thresold voltages in mV for 5 buttons
--			      detection on headset when mbhc is powered up
--			       from micbias.
--- qcom,micbias-lvl:  Voltage (mV) for Mic Bias
--- qcom,hphl-jack-type-normally-open: boolean, present if hphl pin on jack is a
--				     NO (Normally Open). If not specified, then
--				     its assumed that hphl pin on jack is NC
--				     (Normally Closed).
--- qcom,gnd-jack-type-normally-open: boolean, present if gnd pin on jack is
--				    NO (Normally Open). If not specified, then
--				    its assumed that gnd pin on jack is NC
--				    (Normally Closed).
--- qcom,micbias1-ext-cap: boolean, present if micbias1 has external capacitor
--			 connected.
--- qcom,micbias2-ext-cap: boolean, present if micbias2 has external capacitor
--			 connected.
--
--Example:
--
--spmi_bus {
--	...
--	audio-codec@f000{
--		compatible = "qcom,pm8916-wcd-analog-codec";
--		reg = <0xf000 0x200>;
--		reg-names = "pmic-codec-core";
--		clocks = <&gcc GCC_CODEC_DIGCODEC_CLK>;
--		clock-names = "mclk";
--		qcom,mbhc-vthreshold-low = <75 150 237 450 500>;
--		qcom,mbhc-vthreshold-high = <75 150 237 450 500>;
--		interrupt-parent = <&spmi_bus>;
--		interrupts = <0x1 0xf0 0x0 IRQ_TYPE_NONE>,
--			     <0x1 0xf0 0x1 IRQ_TYPE_NONE>,
--			     <0x1 0xf0 0x2 IRQ_TYPE_NONE>,
--			     <0x1 0xf0 0x3 IRQ_TYPE_NONE>,
--			     <0x1 0xf0 0x4 IRQ_TYPE_NONE>,
--			     <0x1 0xf0 0x5 IRQ_TYPE_NONE>,
--			     <0x1 0xf0 0x6 IRQ_TYPE_NONE>,
--			     <0x1 0xf0 0x7 IRQ_TYPE_NONE>,
--			     <0x1 0xf1 0x0 IRQ_TYPE_NONE>,
--			     <0x1 0xf1 0x1 IRQ_TYPE_NONE>,
--			     <0x1 0xf1 0x2 IRQ_TYPE_NONE>,
--			     <0x1 0xf1 0x3 IRQ_TYPE_NONE>,
--			     <0x1 0xf1 0x4 IRQ_TYPE_NONE>,
--			     <0x1 0xf1 0x5 IRQ_TYPE_NONE>;
--		interrupt-names = "cdc_spk_cnp_int",
--				  "cdc_spk_clip_int",
--				  "cdc_spk_ocp_int",
--				  "mbhc_ins_rem_det1",
--				  "mbhc_but_rel_det",
--				  "mbhc_but_press_det",
--				  "mbhc_ins_rem_det",
--				  "mbhc_switch_int",
--				  "cdc_ear_ocp_int",
--				  "cdc_hphr_ocp_int",
--				  "cdc_hphl_ocp_det",
--				  "cdc_ear_cnp_int",
--				  "cdc_hphr_cnp_int",
--				  "cdc_hphl_cnp_int";
--	               vdd-cdc-io-supply = <&pm8916_l5>;
--	               vdd-cdc-tx-rx-cx-supply = <&pm8916_l5>;
--	               vdd-micbias-supply = <&pm8916_l13>;
--	               #sound-dai-cells = <1>;
--	};
--};
-diff --git a/Documentation/devicetree/bindings/sound/qcom,pm8916-wcd-analog-codec.yaml b/Documentation/devicetree/bindings/sound/qcom,pm8916-wcd-analog-codec.yaml
-new file mode 100644
-index 000000000000..c385028c4296
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/qcom,pm8916-wcd-analog-codec.yaml
-@@ -0,0 +1,160 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/qcom,pm8916-wcd-analog-codec.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm PM8916 WCD Analog Audio Codec
-+
-+maintainers:
-+  - Konrad Dybcio <konradybcio@kernel.org>
-+
-+description:
-+  The analog WCD audio codec found on Qualcomm PM8916 PMIC.
-+
-+properties:
-+  compatible:
-+    const: qcom,pm8916-wcd-analog-codec
-+
-+  reg:
-+    maxItems: 1
-+
-+  reg-names:
-+    items:
-+      - const: pmic-codec-core
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: mclk
-+
-+  interrupts:
-+    maxItems: 14
-+
-+  interrupt-names:
-+    items:
-+      - const: cdc_spk_cnp_int
-+      - const: cdc_spk_clip_int
-+      - const: cdc_spk_ocp_int
-+      - const: mbhc_ins_rem_det1
-+      - const: mbhc_but_rel_det
-+      - const: mbhc_but_press_det
-+      - const: mbhc_ins_rem_det
-+      - const: mbhc_switch_int
-+      - const: cdc_ear_ocp_int
-+      - const: cdc_hphr_ocp_int
-+      - const: cdc_hphl_ocp_det
-+      - const: cdc_ear_cnp_int
-+      - const: cdc_hphr_cnp_int
-+      - const: cdc_hphl_cnp_int
-+
-+  vdd-cdc-io-supply:
-+    description: 1.8V buck supply
-+
-+  vdd-cdc-tx-rx-cx-supply:
-+    description: 1.8V SIDO buck supply
-+
-+  vdd-micbias-supply:
-+    description: micbias supply
-+
-+  qcom,mbhc-vthreshold-low:
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    description:
-+      Array of 5 threshold voltages in mV for 5-button detection on
-+      headset when MBHC is powered by an internal current source.
-+    minItems: 5
-+    maxItems: 5
-+
-+  qcom,mbhc-vthreshold-high:
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    description:
-+      Array of 5 threshold voltages in mV for 5-button detection on
-+      headset when MBHC is powered from micbias.
-+    minItems: 5
-+    maxItems: 5
-+
-+  qcom,micbias-lvl:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      Voltage (mV) for Mic Bias
-+
-+  qcom,hphl-jack-type-normally-open:
-+    type: boolean
-+    description:
-+      True if the HPHL pin on the jack is NO (Normally Open), false if it's
-+      NC (Normally Closed).
-+
-+  qcom,gnd-jack-type-normally-open:
-+    type: boolean
-+    description:
-+      True if the GND pin on the jack is NO (Normally Open), false if it's
-+      NC (Normally Closed).
-+
-+  qcom,micbias1-ext-cap:
-+    type: boolean
-+    description:
-+      True if micbias1 has an external capacitor.
-+
-+  qcom,micbias2-ext-cap:
-+    type: boolean
-+    description:
-+      True if micbias2 has an external capacitor.
-+
-+  "#sound-dai-cells":
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/qcom,gcc-msm8916.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    audio-codec@f000{
-+      compatible = "qcom,pm8916-wcd-analog-codec";
-+      reg = <0xf000 0x200>;
-+      reg-names = "pmic-codec-core";
-+      clocks = <&gcc GCC_CODEC_DIGCODEC_CLK>;
-+      clock-names = "mclk";
-+      qcom,mbhc-vthreshold-low = <75 150 237 450 500>;
-+      qcom,mbhc-vthreshold-high = <75 150 237 450 500>;
-+      interrupt-parent = <&spmi_bus>;
-+      interrupts = <0x1 0xf0 0x0 IRQ_TYPE_NONE>,
-+            <0x1 0xf0 0x1 IRQ_TYPE_NONE>,
-+            <0x1 0xf0 0x2 IRQ_TYPE_NONE>,
-+            <0x1 0xf0 0x3 IRQ_TYPE_NONE>,
-+            <0x1 0xf0 0x4 IRQ_TYPE_NONE>,
-+            <0x1 0xf0 0x5 IRQ_TYPE_NONE>,
-+            <0x1 0xf0 0x6 IRQ_TYPE_NONE>,
-+            <0x1 0xf0 0x7 IRQ_TYPE_NONE>,
-+            <0x1 0xf1 0x0 IRQ_TYPE_NONE>,
-+            <0x1 0xf1 0x1 IRQ_TYPE_NONE>,
-+            <0x1 0xf1 0x2 IRQ_TYPE_NONE>,
-+            <0x1 0xf1 0x3 IRQ_TYPE_NONE>,
-+            <0x1 0xf1 0x4 IRQ_TYPE_NONE>,
-+            <0x1 0xf1 0x5 IRQ_TYPE_NONE>;
-+      interrupt-names = "cdc_spk_cnp_int",
-+                        "cdc_spk_clip_int",
-+                        "cdc_spk_ocp_int",
-+                        "mbhc_ins_rem_det1",
-+                        "mbhc_but_rel_det",
-+                        "mbhc_but_press_det",
-+                        "mbhc_ins_rem_det",
-+                        "mbhc_switch_int",
-+                        "cdc_ear_ocp_int",
-+                        "cdc_hphr_ocp_int",
-+                        "cdc_hphl_ocp_det",
-+                        "cdc_ear_cnp_int",
-+                        "cdc_hphr_cnp_int",
-+                        "cdc_hphl_cnp_int";
-+      vdd-cdc-io-supply = <&pm8916_l5>;
-+      vdd-cdc-tx-rx-cx-supply = <&pm8916_l5>;
-+      vdd-micbias-supply = <&pm8916_l13>;
-+      #sound-dai-cells = <1>;
-+    };
+diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+index f473b2d820bc..b5ec8cecab6a 100644
+--- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
++++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+@@ -128,7 +128,7 @@ patternProperties:
+ 
+   "^audio-codec@[0-9a-f]+$":
+     type: object
+-    additionalProperties: true # FIXME qcom,pm8916-wcd-analog-codec binding not converted yet
++    $ref: /schemas/sound/qcom,pm8916-wcd-analog-codec.yaml#
+ 
+   "^charger@[0-9a-f]+$":
+     type: object
 
 -- 
 2.41.0
