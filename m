@@ -2,61 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14EAC740119
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 18:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB7A740104
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 18:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbjF0Q06 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jun 2023 12:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
+        id S232396AbjF0QZ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jun 2023 12:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232224AbjF0QY4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 12:24:56 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5863E3590
-        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 09:24:54 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f86fbe5e4fso6364952e87.2
-        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 09:24:54 -0700 (PDT)
+        with ESMTP id S232281AbjF0QY6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 12:24:58 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BAA30FF
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 09:24:56 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f122ff663eso6559696e87.2
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 09:24:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687883092; x=1690475092;
+        d=linaro.org; s=google; t=1687883095; x=1690475095;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=apFUalLZyQqWq0aQwYgxypM+yPAfzDeJRJiPTT9OzgQ=;
-        b=gPQ+01eM8GOGBERecL3B/NIxhQbrVmrrFXxYZiCCONOF7/F61cH5oZ4S7PViK0H9X3
-         yXr/dkivL6tpoBinlyPIzXzeVhamwTu8Oo4+oDsjDo9mxhFy9Kp7iTj9zqBShJlvW5Sr
-         3XZeOtU4fWRTMlxkBRNd1kkaaCf27QvN1bclNG3WoJmKIpIgQhZ03uKOPZvd7hIT0PGY
-         azP7RD8WQQxDUWPpOCyYB/heKlw/sQWav43VkZQQ4ykMqIbGoZPA/wnM17Ra7uPnIX5m
-         nrtp2FldB8AQvrSjYItV9pKqMHKA5lejbTU0yr8PwlU1APcwlIwpaSCeeMY7VuNPD0vN
-         kayw==
+        bh=xPNg5vny77tvK7IJAfh5JkOu6WowF9wjESyOAY+a1Tg=;
+        b=wT4UzEMp3D2z+CEciSOj2hOqJZY5IsO6ESwlLi6JpPKPVleeLPbEYQowD4j6ugDDWT
+         Xsekoq3dAMFIe2qSha7QD5qXwQK7uvTB6BiLhhzYloSKH2DUuxfYiK6ynHQf2ri1d2c1
+         Yia2iEKdlcVgPDQx2b9Z8S09tPtYnMMz4koijj0kOEogFOMnrkkPJthflCOJDrz34rZ5
+         VwnYMEmbL3YNE8ElBGdgiBCOyXavqYtRbS4Z6W3D5oGCPCTo//ykefDkMq0NfHPVL3Zs
+         /WmtNQzYvKoXfJ6zYDHEJ1lCyAJ49i1gWKSv1N2fqbVfHVreFhWFLTVqIFYR6dTTqWOv
+         B+hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687883092; x=1690475092;
+        d=1e100.net; s=20221208; t=1687883095; x=1690475095;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=apFUalLZyQqWq0aQwYgxypM+yPAfzDeJRJiPTT9OzgQ=;
-        b=kf2PKIcuI8YNmN0h/qDDXt+j3vuPSOfHMKY83b4eAjpTHZk3QqkYrk795Y2int9uNG
-         I5dXKYUtQtccFj8DM4db/uvJZ3bh0Esbmp1A39MbV1fvZePW/6LAIP/B+nU+THMUHTV9
-         vJ8HbSzFJYu1fyRkQ72EthF/iVst9tmMU/XVnKmcWg+yGvDbaM1WaQXX2SUjxaDUVlB0
-         GmvXmOlDJ7tfYbrTD/RnGeb04SQ95rMjYstX7crxEfXa9NT86mykR3idxJ0SMBXQcLnD
-         ofu2oLOqdq0dcLk6aVfEJebqien9YN23wvZn+Jj0XBK1HIV3v9ozYv2nOUCSUICHFrF0
-         jRHQ==
-X-Gm-Message-State: AC+VfDzNE4OM7pxt3NKSxC/QIKEmEKLYzbilw5w7jokXUeikloCHGuC0
-        stTeD6KtUSJ88niyub32okQxzA==
-X-Google-Smtp-Source: ACHHUZ4atKHp3LY0BnQtuVG83sCZJ0bHCYAJTWN9stucrksa1utFdi1jhZ+5jdferRA74CWyuyxYjw==
-X-Received: by 2002:a05:6512:234a:b0:4f9:607a:6508 with SMTP id p10-20020a056512234a00b004f9607a6508mr11552003lfu.50.1687883092611;
-        Tue, 27 Jun 2023 09:24:52 -0700 (PDT)
+        bh=xPNg5vny77tvK7IJAfh5JkOu6WowF9wjESyOAY+a1Tg=;
+        b=JrhjxFtsnCtrryx0TunJ9zjkyeJ/VfDC/0q4EWIMnOj87PuzgVkewbaAKUcyu9En4k
+         BrdTqrOYBpXNxSk7KEoosxq/PKY8301sjZlYH0zRbCJJ0pu1LNWAChOpfXWmPsuXc5Lx
+         V7NDR5p6/BoANzakh3sHsc96qEJ44N+QrHX6x7lp829kgI/Kybb47k5rBRHQzeeWtHQq
+         nLsWkHCYKxc2dsxDray0O94wDOXXMwSpi0iEqpJpv+WrU+hK9hufx22DrcHMlkn4ZVVd
+         sPK4ksEMS9HfKsqR8KSuoF9V0u443R4/lOstbCFUpdj95AH5uPlFZW1r//4A0WLDlAc1
+         8sQA==
+X-Gm-Message-State: AC+VfDxTLAWzAhlkvRLFnoHiCRriJi4AfqHvl2OIy0Ujbystx3Sica5k
+        tsvP+fTgKBDk2oNwsZQ+gvVo/g==
+X-Google-Smtp-Source: ACHHUZ5//rTUoalDl1QqK0Ki39B5TbO1+DYtkIbMhpfMKaAAAhwU2SHZDezjmb3zz2NxqSeNX+6TzQ==
+X-Received: by 2002:a05:6512:2824:b0:4fb:7888:7e6d with SMTP id cf36-20020a056512282400b004fb78887e6dmr4544050lfb.46.1687883095019;
+        Tue, 27 Jun 2023 09:24:55 -0700 (PDT)
 Received: from [192.168.1.101] (abxj103.neoplus.adsl.tpnet.pl. [83.9.3.103])
-        by smtp.gmail.com with ESMTPSA id g7-20020a19ac07000000b004fb259a5589sm1190508lfc.104.2023.06.27.09.24.50
+        by smtp.gmail.com with ESMTPSA id g7-20020a19ac07000000b004fb259a5589sm1190508lfc.104.2023.06.27.09.24.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 09:24:52 -0700 (PDT)
+        Tue, 27 Jun 2023 09:24:54 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 27 Jun 2023 18:24:22 +0200
-Subject: [PATCH 06/11] dt-bindings: mfd: qcom,spmi-pmic: Reference pm8916
- wcd analog codec schema
+Date:   Tue, 27 Jun 2023 18:24:23 +0200
+Subject: [PATCH 07/11] dt-bindings: iommu: qcom_iommu: Allow 'tbu' clock
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230627-topic-more_bindings-v1-6-6b4b6cd081e5@linaro.org>
+Message-Id: <20230627-topic-more_bindings-v1-7-6b4b6cd081e5@linaro.org>
 References: <20230627-topic-more_bindings-v1-0-6b4b6cd081e5@linaro.org>
 In-Reply-To: <20230627-topic-more_bindings-v1-0-6b4b6cd081e5@linaro.org>
 To:     cros-qcom-dts-watchers@chromium.org,
@@ -98,11 +97,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         Andy Gross <andy.gross@linaro.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687883074; l=878;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687883074; l=1161;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=lErWU6dobB0XeId/RGdHSYC+Fh+f5HQU6i/ZQfWoHV4=;
- b=UL8UOKYocMxpJYoe0YJwzMhvxXtghVykIHjdlEGq50CZhtl1LLZ8LZLlN2lH90cJbYWcbYJLO
- QV9/CGe0uXSAFNUnoT8wQU4pN1dR03bjwZsdsXFzKbUyEu8A3n7SbpX
+ bh=dxmGowAABZGGJvN38BvE9OivxrhsE/2mFCf47Qi+lvI=;
+ b=wzz2xUcbFtxUiSi4ThrPFbDIaElQBro5YtXx/lBo+PD1GGVfkejB8EYDpam4TZsF1HGcnDTRP
+ unvzC8nqkCDCKapltiz8/h5Mv3Va5gUnt0oPVF9FgChKOoZXy8L9VnG
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -115,27 +114,38 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Now that it's been converted to YAML, reference the PM8916 wcd codec
-schema.
+Some IOMMUs on some platforms (there doesn't seem to be a good denominator
+for this) require the presence of a third clock, specifically for
+accessing the IOMMU's Translation Buffer Unit (TBU). Allow it.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/iommu/qcom,iommu.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-index f473b2d820bc..b5ec8cecab6a 100644
---- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-+++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-@@ -128,7 +128,7 @@ patternProperties:
+diff --git a/Documentation/devicetree/bindings/iommu/qcom,iommu.yaml b/Documentation/devicetree/bindings/iommu/qcom,iommu.yaml
+index d9fabdf930d9..3b7acb459f8e 100644
+--- a/Documentation/devicetree/bindings/iommu/qcom,iommu.yaml
++++ b/Documentation/devicetree/bindings/iommu/qcom,iommu.yaml
+@@ -24,14 +24,18 @@ properties:
+       - const: qcom,msm-iommu-v1
  
-   "^audio-codec@[0-9a-f]+$":
-     type: object
--    additionalProperties: true # FIXME qcom,pm8916-wcd-analog-codec binding not converted yet
-+    $ref: /schemas/sound/qcom,pm8916-wcd-analog-codec.yaml#
+   clocks:
++    minItems: 2
+     items:
+       - description: Clock required for IOMMU register group access
+       - description: Clock required for underlying bus access
++      - description: Clock required for Translation Buffer Unit access
  
-   "^charger@[0-9a-f]+$":
-     type: object
+   clock-names:
++    minItems: 2
+     items:
+       - const: iface
+       - const: bus
++      - const: tbu
+ 
+   power-domains:
+     maxItems: 1
 
 -- 
 2.41.0
