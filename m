@@ -2,85 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9131E7405A8
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 23:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 910CB740688
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jun 2023 00:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjF0VeG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jun 2023 17:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38344 "EHLO
+        id S229924AbjF0WjC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 27 Jun 2023 18:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjF0VeE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 17:34:04 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A644210D
-        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 14:34:03 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-3422d37d316so21347395ab.3
-        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 14:34:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687901642; x=1690493642;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NZqYumP33fV5BVUZmpS7A28a1sWnVNycuG2BlU8AmM8=;
-        b=IpkCBsUmZFPGJXzJ1xZcAyhntxXHhDd/LJrQddo689e29JvNh+T8rCjTy7OE937xh8
-         VEEiIMNUIle8GoiLJw9as4dQXIf/KH7BrTRBZqPKwBpOVPrjrKvBvFvpeTMlXWPIf1KN
-         QlNbuFsRWM1QaulTv8eWXnRrJ5sH6ZBOg2SaM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687901642; x=1690493642;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NZqYumP33fV5BVUZmpS7A28a1sWnVNycuG2BlU8AmM8=;
-        b=FAPLA317V7InIR8G9qYLtPqEY+1IYom+iLIHVzqF6LKWm83xi2LW9ZwSHwR/jmkLiY
-         zrwmPPGqNv460OXsM1oS9Zex+3JJs0g52jZpL396vIU0mBR/05TMJh5h1qhkomZ3mbl4
-         uJ7eod0gYl+iUlyvmtY1xpfzYX0r4vZDdEFEP7zTBABusxIBpBuBv7RFBUrQhZpgCJ5n
-         TASNWQwTuxx717ZZxOHbbZEWISI2rJ1E157BxJIzAFNRplr8Pw54+RkEEFKRz5+B4t6w
-         tvBMkDwrcoPOljKsawSD+dlMVArXcLe7tyR4s/EI7f7XgkPW2j6NudzSEHYWO6umZoho
-         R/VQ==
-X-Gm-Message-State: AC+VfDxqV2CosrlAcQ8PClqwC2r/feLwdunmc74vv9MFFoPM1tsy33rl
-        aRK+gRA1Z+EMas6X4/smwRCxxw==
-X-Google-Smtp-Source: ACHHUZ7ItMgqKAmuFElauXWeEhfMACuB7n5OgXQznjB8sLC8WMB+/S8XZtmBgtnccaxreLuSg38DKQ==
-X-Received: by 2002:a92:cd06:0:b0:345:bc24:7c75 with SMTP id z6-20020a92cd06000000b00345bc247c75mr2301923iln.9.1687901642456;
-        Tue, 27 Jun 2023 14:34:02 -0700 (PDT)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id d8-20020a92d788000000b0034233fd80d3sm2907859iln.22.2023.06.27.14.34.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 14:34:01 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 21:33:54 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Benjamin Bara <bbara93@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Benjamin Bara <benjamin.bara@skidata.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 1/3] usb: misc: onboard-hub: support multiple power
- supplies
-Message-ID: <ZJtVwqJaXmSPY3TK@google.com>
-References: <20230620-hx3-v7-0-f79b4b22a1bf@skidata.com>
- <20230620-hx3-v7-1-f79b4b22a1bf@skidata.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230620-hx3-v7-1-f79b4b22a1bf@skidata.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229789AbjF0Wi7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 18:38:59 -0400
+X-Greylist: delayed 4007 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 27 Jun 2023 15:38:56 PDT
+Received: from mailgw.kefri.org (mail.kefri.org [197.139.36.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5892102;
+        Tue, 27 Jun 2023 15:38:56 -0700 (PDT)
+Received: by mailgw.kefri.org (Postfix, from userid 1001)
+        id A3378A7B397; Tue, 27 Jun 2023 22:37:59 +0300 (EAT)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: ***
+X-Spam-Status: No, score=3.3 required=5.0 tests=ADVANCE_FEE_3_NEW_MONEY,
+        BAYES_50,LOTS_OF_MONEY,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Received: from [45.81.39.165] (unknown [10.10.1.178])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mailgw.kefri.org (Postfix) with ESMTPS id 7B9D6A459C4;
+        Tue, 27 Jun 2023 21:48:52 +0300 (EAT)
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: I will send you more details once you reply
+To:     Recipients <poballa@kefri.org>
+From:   "Ms. Al-Hashimi" <poballa@kefri.org>
+Date:   Tue, 27 Jun 2023 20:48:47 +0200
+Reply-To: nationalbureau@kakao.com
+Message-Id: <20230627203820.A3378A7B397@mailgw.kefri.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 09:28:12AM +0200, Benjamin Bara wrote:
-> From: Benjamin Bara <benjamin.bara@skidata.com>
-> 
-> As some of the onboard hubs require multiple power supplies, provide the
-> environment to support them.
-> 
-> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+Hello Friday,
 
-Acked-by: Matthias Kaehlcke <mka@chromium.org>
+My name is Mrs. Reem E. Al-Hashimi, the Emirates Minister of State . I am writing to you to stand as my partner to receive Funds as my partner.
+
+I reached with the foreign companies to direct the gratifications to an open beneficiary account with a financial institution where it will be possible for me to instruct further transfer of the fund to a third party account through bank transfer or Cryptocurrency.
+
+The amount is valued at $ 47,745,533.00 with a financial institution waiting my instruction for further transfer to a destination account as soon as I have your information indicating interest and I will compensate you with 30% of the total amount and you will also benefit from the investment.
+
+Please take note that the details so explained is the condition I will work with you as a partner and also add  my  WhatsApp number: +971581890339 to enable chat more. 
+
+My details and profile is below my website. https://www.mofaic.gov.ae/en/the-ministry/the-ministers/uae-minister-of-state-for-international-cooperation/minister-of-the-state-for-international-cooperation
+
+Regards,
+Mrs. Reem
