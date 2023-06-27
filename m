@@ -2,215 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5974173F6E5
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 10:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FA273F704
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 10:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231669AbjF0IVy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jun 2023 04:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59340 "EHLO
+        id S231803AbjF0IZ1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jun 2023 04:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231635AbjF0IVv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 04:21:51 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5895219AE;
-        Tue, 27 Jun 2023 01:21:48 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 35R8LHosC003710, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 35R8LHosC003710
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Tue, 27 Jun 2023 16:21:17 +0800
-Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Tue, 27 Jun 2023 16:21:17 +0800
-Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
- RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 27 Jun 2023 16:21:16 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
- 15.1.2375.32 via Frontend Transport; Tue, 27 Jun 2023 16:21:16 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Stanley Chang <stanley_chang@realtek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Douglas Anderson" <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Ray Chi" <raychi@google.com>, Flavio Suligoi <f.suligoi@asem.it>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-Subject: [PATCH v5 5/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 3.0 PHY
-Date:   Tue, 27 Jun 2023 16:20:01 +0800
-Message-ID: <20230627082022.22902-5-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230627082022.22902-1-stanley_chang@realtek.com>
-References: <20230627082022.22902-1-stanley_chang@realtek.com>
+        with ESMTP id S232064AbjF0IZS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 04:25:18 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A3C2109
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 01:25:11 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4QqySX5G4KzBJBWv
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 16:25:00 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :subject:to:from:date:mime-version; s=dkim; t=1687854300; x=
+        1690446301; bh=i/70Ikne81aPCBqCqoBhw4LYaqe2ZHcwjQz4T1WMXXY=; b=k
+        ZCnUJWA2am1t3rIwlQlClMtXwt837Wlj444lYpITUsBXm6ErmyaRIZOHLfpaClOH
+        O9CXfleuqlbkYm63eQiyHpz9t8bB+Znhp6OwNpgiMAC+J0H+2DCAVntNczdzszzP
+        BxGrmTHOpFCdUYLSZ82rwVawkZ+AASQT02Uw+bowAs2uG8z7uw+CqK7ViCyKE5P9
+        x+BksIO1lEYJVEs2x1EJRuCtaFdqFgkoKto9r/Su9s9bI/2CQXlsckwq9xKoAp0D
+        r4pq2IrlpFkdqoGJBOo66o8sn/sPcVU5vahv6LfxAtRIVQpKaIWMOPmqThQr8bx7
+        sgc1Ywk22Y+uEfhUaVvfQ==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id j6lvhMj51OY4 for <linux-usb@vger.kernel.org>;
+        Tue, 27 Jun 2023 16:25:00 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4QqySX0VHszBJBHT;
+        Tue, 27 Jun 2023 16:25:00 +0800 (CST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXMBS05.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Tue, 27 Jun 2023 16:24:59 +0800
+From:   baomingtong001@208suo.com
+To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        neil.armstrong@linaro.org, minhuadotchen@gmail.com,
+        andersson@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: typec: ucsi: ucsi_glink: Remove unneeded semicolon
+User-Agent: Roundcube Webmail
+Message-ID: <1aeccd98845a7dac584c08578b43a6c0@208suo.com>
+X-Sender: baomingtong001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the documentation explain the property about Realtek USB PHY driver.
+./drivers/usb/typec/ucsi/ucsi_glink.c:258:2-3: Unneeded semicolon
 
-Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
-controller. Added the driver to drive the  USB 3.0 PHY transceivers.
-
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
 ---
-v4 to v5 change:
-    1. Remove the compatible realtek,usb3phy.
-    2. Add the default of the property.
-v3 to v4 change:
-    1. Remove the parameter and non hardware properties from dts.
-    2. Using the compatible data included the config and parameter
-       in driver.
-v2 to v3 change:
-    1. Broken down into two patches, one for each of USB 2 & 3.
-    2. Add more description about Realtek RTD SoCs architecture.
-    3. Removed parameter v1 support for simplification.
-    4. Revised the compatible name for fallback compatible.
-    5. Remove some properties that can be set in the driver.
-v1 to v2 change:
-    Add phy-cells for generic phy driver
----
- .../bindings/phy/realtek,usb3phy.yaml         | 107 ++++++++++++++++++
- 1 file changed, 107 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
+  drivers/usb/typec/ucsi/ucsi_glink.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-new file mode 100644
-index 000000000000..0a4721650b4d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-@@ -0,0 +1,107 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2023 Realtek Semiconductor Corporation
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/phy/realtek,usb3phy.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Realtek DHC SoCs USB 3.0 PHY
-+
-+maintainers:
-+  - Stanley Chang <stanley_chang@realtek.com>
-+
-+description:
-+  Realtek USB 3.0 PHY support the digital home center (DHC) RTD series SoCs.
-+  The USB 3.0 PHY driver is designed to support the XHCI controller. The SoCs
-+  support multiple XHCI controllers. One PHY device node maps to one XHCI
-+  controller.
-+
-+  RTD1295/RTD1619 SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on some
-+  controllers.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+
-+  RTD1319/RTD1619b SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#2.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+
-+  RTD1319d SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each xhci maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#0.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+
-+properties:
-+  compatible:
-+    enum:
-+      - realtek,rtd1295-usb3phy
-+      - realtek,rtd1319-usb3phy
-+      - realtek,rtd1319d-usb3phy
-+      - realtek,rtd1619-usb3phy
-+      - realtek,rtd1619b-usb3phy
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#phy-cells":
-+    const: 0
-+
-+  nvmem-cells:
-+    maxItems: 1
-+    description: A phandle to the tx lfps swing trim data provided by
-+      a nvmem device, if unspecified, default values shall be used.
-+
-+  nvmem-cell-names:
-+    items:
-+      - const: usb_u3_tx_lfps_swing_trim
-+
-+  realtek,amplitude-control-coarse-tuning:
-+    description:
-+      This adjusts the signal amplitude for normal operation and beacon LFPS.
-+      This value is a parameter for coarse tuning.
-+      For different boards, if the default value is inappropriate, this
-+      property can be assigned to adjust.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    default: 255
-+    minimum: 0
-+    maximum: 255
-+
-+  realtek,amplitude-control-fine-tuning:
-+    description:
-+      This adjusts the signal amplitude for normal operation and beacon LFPS.
-+      This value is used for fine-tuning parameters.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    default: 65535
-+    minimum: 0
-+    maximum: 65535
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#phy-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    usb_port2_usb3phy: usb-phy@13e10 {
-+        compatible = "realtek,rtd1319d-usb3phy";
-+        reg = <0x13e10 0x4>;
-+        #phy-cells = <0>;
-+
-+        nvmem-cells = <&otp_usb_u3_tx_lfps_swing_trim>;
-+        nvmem-cell-names = "usb_u3_tx_lfps_swing_trim";
-+
-+        realtek,amplitude-control-coarse-tuning = <0x77>;
-+    };
+diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c 
+b/drivers/usb/typec/ucsi/ucsi_glink.c
+index 1fe9cb5b6bd9..9b9685199d1a 100644
+--- a/drivers/usb/typec/ucsi/ucsi_glink.c
++++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+@@ -255,7 +255,7 @@ static void pmic_glink_ucsi_callback(const void 
+*data, size_t len, void *priv)
+  	case UC_UCSI_USBC_NOTIFY_IND:
+  		schedule_work(&ucsi->notify_work);
+  		break;
+-	};
++	}
+  }
+
+  static void pmic_glink_ucsi_pdr_notify(void *priv, int state)
 -- 
-2.34.1
+2.40.1
 
