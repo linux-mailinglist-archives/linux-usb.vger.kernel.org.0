@@ -2,60 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2380474019F
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 18:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9D57401A3
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 18:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbjF0Qv1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jun 2023 12:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
+        id S232035AbjF0QwK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jun 2023 12:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjF0QvZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 12:51:25 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DB9131
-        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 09:51:23 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fbac8b01b3so353415e9.1
-        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 09:51:23 -0700 (PDT)
+        with ESMTP id S231578AbjF0QwI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 12:52:08 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E9C97
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 09:52:06 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fb4146e8fcso617155e9.0
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 09:52:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687884682; x=1690476682;
+        d=linaro.org; s=google; t=1687884725; x=1690476725;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=U+ghELfAbO0R2iBEq1LRki0jyaslOJziYlRqk/abt60=;
-        b=YN8xqJyCcfIsFN5ItLxMYi7S50o/mbnKJLTAsU5g1qeod6zCgluQd/7dt6sYI9Iaj3
-         sZHXPNaZM+LiJPVTh/kam3Wutv9Se+HqE688ZfC421r7kBGkJSGQP0kvSZz3pDnY6v53
-         lwS9i6vb112cH/GyHfwIznBUFSj39UXa0racgSbxDqu2TXt1PM5Vfo80I+2VKS9s41Ly
-         WBp9mirzJ5sAXh+bOBxsp3zH2XwrTFg/mO/izcyBqnzuZuebZ72l9ff3on747H4U2SpW
-         1E7Kddd40pzYz248nakUcPwqrOczJ4QrwNTHe8XvcwLTOc0XYYsxF9/DjigUZZbt8wpc
-         /6qA==
+        bh=USpfAI1OKAg8OpDqtpnMJgq7elMP7uvf2P1RNsX/vYg=;
+        b=VCEcHabYJExfQZ7CA8MPuO3bSHxPfDkhJbqqsgoW90ItGkyxpjKJq3RwuR4QWaC8Rk
+         Ux6k0efVo6+a8hy349Y9sc0pksQnocG8ivXecX5sQld1JVwZn990ZlZS1m/RQhKW5cwF
+         uLXraEdi7OpiRo7ko9nYwtI2/LSZyixWKWMRMUsRLi9BidBYT9izlLb8GXJuue1A/05D
+         lOWyRvA/kPQ62xDISbHsTcf0pwi2cEIR7Kt0veehL4qotFA2kiqA2kST0PcSTh7Pgfgr
+         HSN7irvJhu6qI6ciVrLaq6Be653ViZQ4a3JxgLHxwZjyjGs5U1+Vlzh9j5A+EEMxojAi
+         5HmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687884682; x=1690476682;
+        d=1e100.net; s=20221208; t=1687884725; x=1690476725;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U+ghELfAbO0R2iBEq1LRki0jyaslOJziYlRqk/abt60=;
-        b=DJdoilmhN0I0fKRgDP71QGozneJ5tUwHC5QeylwASdsk0/DpLt2VvhUtVoGi8i9KTq
-         Af87+CchvwKnmAax+8EeHF97rh0jZxM4PcTJsV6ieU7IeI4+KDRHBBsfHB8SPyQp8hkZ
-         cARcIx+wIocUxKi0gJ0YJaPqaWcLo5pAt/GbkkVK3H/COnyG326BuBwFaEfDdV78r+6J
-         mLAe/6Rkmmp7WzII5u6VsC493A+L3t6v5BDdzqULMN3pZKysy7g+qMQb+QWB1dhwB5ng
-         PEw8zg92U+MSXlk762LUqKTqJsO8ghUlW3tqdNxvleBgmvLtmPVIwWTDNcL25P2f9v3Z
-         eOgQ==
-X-Gm-Message-State: AC+VfDzFZnMvSF+Lxk0bbHV3vsA0rNDVOeaSXwXBKOk9aq+q8rOPv1EE
-        7Of4C/mol2ifmM4+6ZNislBSPg==
-X-Google-Smtp-Source: ACHHUZ5TeYUj7/7HDBAlPldZyXIYBI7vmCrqF9hOAg0Jk1yTzlA3HVAZWU6tAaOodr2QXV3fBfGLFQ==
-X-Received: by 2002:a05:600c:511f:b0:3fa:9996:8e03 with SMTP id o31-20020a05600c511f00b003fa99968e03mr5802169wms.10.1687884682415;
-        Tue, 27 Jun 2023 09:51:22 -0700 (PDT)
+        bh=USpfAI1OKAg8OpDqtpnMJgq7elMP7uvf2P1RNsX/vYg=;
+        b=UYPrIDjnME5RHAyY+/TWgV5DMDtuChi52R16cVgS3B34GKybMXH56Psb4VjeqjdYgK
+         nex5KZGVzsqvv/Rj7A+8gZT86Rhp3YKiDdDV9sU2vgDz2olaiJZ/lMKEuBMU5WD7kUxC
+         YBbxTJHVIcdnWa6yexMBuJdhuB0Zpd9b6CU6qNEyfgokszZDJWDCn2rvIdxygrU6XdK0
+         G8vDsuQpFL01sfAa1K7LA9eqNvibAGfmpnnKNut8/ZMCSNfRmW549uNFeH+Qv/u1t6hO
+         tUC9Br+PdsauR2T9ZDkeD99JGzy+6Kb1wYZjiUNV44ptqUdevXoNcp9FhpNKUb3LhSbF
+         omdg==
+X-Gm-Message-State: AC+VfDyEiG00a6+hZ9ieEEO1WKbLflIIapLaparNpN7TmEwopVTlkS7E
+        gX2AoNDsNkvcbZCIPq8uEoI5aA==
+X-Google-Smtp-Source: ACHHUZ7LzkqGsxsFpbadxBUX52EaujfQ1jgOJSmKZ8dsh0QhDuIh6RbbYX2hBZyk83iG9EWVNZLyAg==
+X-Received: by 2002:a05:600c:2215:b0:3fb:416d:7324 with SMTP id z21-20020a05600c221500b003fb416d7324mr3786608wml.6.1687884725311;
+        Tue, 27 Jun 2023 09:52:05 -0700 (PDT)
 Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id 24-20020a05600c229800b003fa98908014sm5986545wmf.8.2023.06.27.09.51.20
+        by smtp.gmail.com with ESMTPSA id z20-20020a7bc7d4000000b003f90067880esm14251778wmk.47.2023.06.27.09.52.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 09:51:21 -0700 (PDT)
-Message-ID: <88cdfdec-b498-ad1d-6f87-a5595ffcdc5c@linaro.org>
-Date:   Tue, 27 Jun 2023 17:51:19 +0100
+        Tue, 27 Jun 2023 09:52:04 -0700 (PDT)
+Message-ID: <aee6e901-01b7-048a-ffe1-57a8895edda2@linaro.org>
+Date:   Tue, 27 Jun 2023 17:52:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 04/11] arm64: dts: qcom: apq8039-t2: Drop inexistent
- property
+Subject: Re: [PATCH 03/11] arm64: dts: qcom: msm8939: Add missing
+ 'cache-unified' to L2
 Content-Language: en-US
 To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         cros-qcom-dts-watchers@chromium.org,
@@ -95,15 +95,15 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         Leo Yan <leo.yan@linaro.org>, Rob Herring <robh@kernel.org>,
         Andy Gross <andy.gross@linaro.org>
 References: <20230627-topic-more_bindings-v1-0-6b4b6cd081e5@linaro.org>
- <20230627-topic-more_bindings-v1-4-6b4b6cd081e5@linaro.org>
+ <20230627-topic-more_bindings-v1-3-6b4b6cd081e5@linaro.org>
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230627-topic-more_bindings-v1-4-6b4b6cd081e5@linaro.org>
+In-Reply-To: <20230627-topic-more_bindings-v1-3-6b4b6cd081e5@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -111,10 +111,12 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On 27/06/2023 17:24, Konrad Dybcio wrote:
-> 'pin-switch-delay-us' is not used anywhere in the mainline kernel.
-> Drop it.
+> Add the missing property to fix the dt checker warning:
 > 
+> qcom/apq8039-t2.dtb: l2-cache: 'cache-unified' is a required property
+> 
+> Fixes: 61550c6c156c ("arm64: dts: qcom: Add msm8939 SoC")
 > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
 
 Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+
