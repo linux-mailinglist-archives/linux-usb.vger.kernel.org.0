@@ -2,85 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 227B773F9B1
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 12:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B1C73FA33
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 12:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232101AbjF0KJo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jun 2023 06:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
+        id S230285AbjF0K2D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jun 2023 06:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231889AbjF0KJM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 06:09:12 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4E63593;
-        Tue, 27 Jun 2023 03:07:07 -0700 (PDT)
-Received: from fsav116.sakura.ne.jp (fsav116.sakura.ne.jp [27.133.134.243])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 35RA65lu033475;
-        Tue, 27 Jun 2023 19:06:05 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav116.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav116.sakura.ne.jp);
- Tue, 27 Jun 2023 19:06:05 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav116.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 35RA65wO033472
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 27 Jun 2023 19:06:05 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <ecb32549-8b6f-4b8d-b832-4f86adb95183@I-love.SAKURA.ne.jp>
-Date:   Tue, 27 Jun 2023 19:06:04 +0900
+        with ESMTP id S230086AbjF0K1m (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 06:27:42 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CAC3A96
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 03:26:44 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35RAQbhG083408;
+        Tue, 27 Jun 2023 05:26:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1687861597;
+        bh=08JrkADEPdO4e40d0NqjhzMgktfkOsC9kQAPcMqWZvk=;
+        h=Date:From:To:CC:Subject;
+        b=XaE54NxxuPsJcq6WhstqP5S8nRpOxlpWrsNkzgHznvSME3YVSswT94h3heluSc4n7
+         cuvDRV6LyQXFahs839ND0+Q85j1lIFphIbXQzlHO1FLscYWpnUhSxBS0uV1O9UhVaZ
+         nNBfN51rbPsGXuJ5dLK930T4dRCRmqUgcsFlDJpY=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35RAQb9C010932
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 27 Jun 2023 05:26:37 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 27
+ Jun 2023 05:26:36 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 27 Jun 2023 05:26:36 -0500
+Received: from [10.24.69.79] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35RAQYpA003105;
+        Tue, 27 Jun 2023 05:26:35 -0500
+Message-ID: <aa5837a9-8dd6-f10f-fd58-ec43e027ef07@ti.com>
+Date:   Tue, 27 Jun 2023 15:56:34 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [syzbot] [tomoyo?] [bpf?] INFO: rcu detected stall in
- security_file_open (6)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
 Content-Language: en-US
-To:     Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-References: <0000000000001526c405ff196bc1@google.com>
-Cc:     syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+bb11ad7bb33b56ca4d4b@syzkaller.appspotmail.com>,
-        USB list <linux-usb@vger.kernel.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <0000000000001526c405ff196bc1@google.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
+To:     <Frank.Li@nxp.com>
+CC:     <linux-usb@vger.kernel.org>, <peter.chen@kernel.org>,
+        <pawell@cadence.com>, <rogerq@kernel.org>
+Subject: usb: cdns3: Onchip memory reservation for built-in gadgets
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Ping?
+Hi,
 
-How do you plan to avoid printk() flooding?
+Firstly, I'm not sure if it is alright to post queries this way. 
+If it is wrong, I apologize for it. Please let me know the right path/forum to ask the questions.
 
-#syz dup: INFO: rcu detected stall in newfstatat (3)
+This is regarding the commit
+dce49449e04f usb: cdns3: allocate TX FIFO size according to composite EP number
 
-On 2023/06/27 18:51, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    8a28a0b6f1a1 Merge tag 'net-6.4-rc8' of git://git.kernel.o..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1335a9db280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=2cbd298d0aff1140
-> dashboard link: https://syzkaller.appspot.com/bug?extid=bb11ad7bb33b56ca4d4b
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16841cc0a80000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16fc6e1f280000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/d02009a9822d/disk-8a28a0b6.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/f33ad4ef1182/vmlinux-8a28a0b6.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/f795a8ae7a8c/bzImage-8a28a0b6.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+bb11ad7bb33b56ca4d4b@syzkaller.appspotmail.com
+This commit introduced cdns3_gadget_check_config() which is invoked while binding gadget created via configfs and
+also a logic to calculate ep_buf_size (which was CDNS3_EP_BUF_SIZE = 4).
 
+But for gadgets such as g_ether, g_cdc, the checks are not performed. And also for these legacy gadget drivers,
+memory needs to be reserved for multiple IN end points and shared memory for OUT end points. So when ep_buf_size = 15,
+the memory reservation fails, as it exceeds total onchip memory.
+
+So I was wondering if additional checks need to done in the cadence gadget driver or am I doing something wrong while
+loading gadgets such as g_ether. 
+
+-- 
+Regards,
+Ravi
