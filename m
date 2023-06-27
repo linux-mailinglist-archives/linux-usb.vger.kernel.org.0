@@ -2,51 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B791873FAED
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 13:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9DC273FAEB
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 13:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjF0LSt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jun 2023 07:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
+        id S229652AbjF0LSs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jun 2023 07:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbjF0LSa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 07:18:30 -0400
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2045.outbound.protection.outlook.com [40.107.13.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4D826B1;
-        Tue, 27 Jun 2023 04:18:28 -0700 (PDT)
+        with ESMTP id S231588AbjF0LSe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 07:18:34 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2041.outbound.protection.outlook.com [40.107.6.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659A1213A;
+        Tue, 27 Jun 2023 04:18:33 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gqae/tcewuAul8ZXdQtobOLHssIgJwHAUWrtf3HBDvo0Pd9b6sAGsEg/iVbpuzoXxTXLxqXkI9NfjcKV1vkC1WoyQGzQapxnu5FH1TF3CM6s/C8c2mBvbZDYOATG+Sn4wTt04xq9ZsnBhluMuq+q/hkNbtuClQacz65O8CegPtRLaUA2jCuxTIHipOwzM4MRWpC83ykLvQIQY6GjvrnWra6nW81P/B5NU3RFeZBPpuWscifAzUYC7YTgXVvb4BaaKVG5T7F6odEMmNudRcoszNuvEmakdqGYcGXOs/zWkaBgpi6EVJZ3x9SUNLL2z+m9LCwDDXfP91Ic8PYrah5zhA==
+ b=lAy1ogB4jwLzPWmXcXaMjbcVnoFFm7C8d/VV2D5Yn4RJXSetDmeopwG0Faq7fBJB4oMFv3doyh7VbNRUV27Ap6O0JwMmydXlaA+9Krcd+O3w6dA7DOn3MAv2div+q1YXWj0C+g5UUNMv0PfVumNLzoCD1PH8jRh+w41ig+l1h/N1DDBW92s0IbTi7rQzorIzuQ9x4EOg/Bjd8ULGhtc9YASFgWp+J9MLWzqA92rl37zqF3QoTMrx6BY9IA6FNxeldhdhc0ucz4PIEKoqDA6asNgrt9WGv6DceSTR2J8AXxFu9hrLRYsuZ7qxX0EWr8ITxqyQ3bOiV0nVJZUMAm87Ow==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iVlqUdQ/f/vGG84cFDBWPwYd9G4exBnOFL9iIOCrBXU=;
- b=WNcf/itr5VhoseO6OvKKLc3UjJL7l8yB8oBCWql/gFfJ2DgIHwYfh0mjLA0/nwcMQhQQ5+9Po5XwytNA+h7+nKb7Umzfh6vJ/3ZmpU+b5jxDEnsqM7Ow4cAs5L6nJhEV+wjFcclUWKBy7CK9RdKj6xksP+u4l9neoNE1ruh/Xph1zLLAl5UTTs22dtOqAEDl5lng/FjwCxr979CaipYPy0s9L6Bm1tIIfUFSG0laMbFi7FP6NiAQKf5HxHKwlhIcTJbMpqjUSrCb4ldqct8j8B7wb4fSVPqqHwxQBFwbjO59gJXHHieQh/gv6UF1cPt8Pdna4kFDOSpN93It+g2/zw==
+ bh=JzS6psld5n3EiJMp/1gGHKnyCAQJ+jvDECKGVPsUSf8=;
+ b=mG58UhyVPu9JMjE8AftfHnkZgd+h/svS07KscDyqxEOc6BesLDhyGK1YLMBhsYitFMH8911v4Cz/CvnzmguZzLkjVnMGEi0MW27+FyC5r3Ac6Wtl0kpexEzzQk7P4PPQppbrRF440JjKbWLAz/WDpLi9cBo8pBs0NPTTPFF+rJHC3TWviBBQJYp814VXCGItJYPixfnXogJG/4KMO9cOPvVMFjg5kj2LWXzJVengXH1hhgzWEtLk6vdge62TiK2L7oNw1KYb7yiM3lY+Cn3fUWj/Xf4vT3iwqYRGDwuod7oFnje6QRmKDc4CZ4nU6nxS7VmtoQjxgIGRff6ASFRwMA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iVlqUdQ/f/vGG84cFDBWPwYd9G4exBnOFL9iIOCrBXU=;
- b=sV6DnPHyS56SZlLzrV56Q7w9BhZ39/Ik3XmbYX7L2DEaphIFUphvqS3CXxutMH91xU4u9SIradcen/Vf5N0ZAzoBPmAYGzcmE4Udv7LX0cNoUaDd/5pp+8GH3UV/XZaJzAtpWmJ9cCuVCZLfHfqaOexJvTmQ/0fvzsPjm3dDXTE=
+ bh=JzS6psld5n3EiJMp/1gGHKnyCAQJ+jvDECKGVPsUSf8=;
+ b=ZpZUX3M/ZSzPRK9tglwAPV11eaFW7jY6LiPYKyp5H4jLLlsKRXKU7WXkFrV6xt4jHbFfSoiE030YKrd1mel5zm9pTSBwibhpiz6GGHJQW1MbE0JI7gvmwsWy6kxFRn2fBNAeaXkc0Vrlid8HnF1NMoliugeokskdhYG5MmCr+NA=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DB7PR04MB4505.eurprd04.prod.outlook.com (2603:10a6:5:39::26) by
- DB9PR04MB9332.eurprd04.prod.outlook.com (2603:10a6:10:36c::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6521.26; Tue, 27 Jun 2023 11:18:26 +0000
+ VI1PR04MB10026.eurprd04.prod.outlook.com (2603:10a6:800:1df::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Tue, 27 Jun
+ 2023 11:18:30 +0000
 Received: from DB7PR04MB4505.eurprd04.prod.outlook.com
  ([fe80::f9b0:8c34:e57:92a4]) by DB7PR04MB4505.eurprd04.prod.outlook.com
  ([fe80::f9b0:8c34:e57:92a4%7]) with mapi id 15.20.6521.024; Tue, 27 Jun 2023
- 11:18:26 +0000
+ 11:18:30 +0000
 From:   Xu Yang <xu.yang_2@nxp.com>
 To:     peter.chen@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org
 Cc:     conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
         linux-imx@nxp.com, peng.fan@nxp.com, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, jun.li@nxp.com, xu.yang_2@nxp.com
-Subject: [PATCH v2 2/3] dt-bindings: usb: ci-hdrc-usb2: add fsl,picophy-rise-fall-time-adjust property
-Date:   Tue, 27 Jun 2023 19:21:25 +0800
-Message-Id: <20230627112126.1882666-2-xu.yang_2@nxp.com>
+Subject: [PATCH v2 3/3] usb: chipidea: imx: add one fsl picophy parameter tuning implementation
+Date:   Tue, 27 Jun 2023 19:21:26 +0800
+Message-Id: <20230627112126.1882666-3-xu.yang_2@nxp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230627112126.1882666-1-xu.yang_2@nxp.com>
 References: <20230627112126.1882666-1-xu.yang_2@nxp.com>
@@ -57,52 +58,52 @@ X-ClientProxiedBy: SI2PR02CA0002.apcprd02.prod.outlook.com
  (2603:10a6:5:39::26)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB7PR04MB4505:EE_|DB9PR04MB9332:EE_
-X-MS-Office365-Filtering-Correlation-Id: fe16b59e-7174-440d-5c1f-08db770039f7
+X-MS-TrafficTypeDiagnostic: DB7PR04MB4505:EE_|VI1PR04MB10026:EE_
+X-MS-Office365-Filtering-Correlation-Id: ecaafbaa-7c07-45bd-bd75-08db77003c6c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nuy7wUzVJSysyTAaqimn7mEw5rA+oGcb6Wp7aZuAo/3/xxLYRB6BBpe8XG9cV4nhR4wl9Gv1JDSvc7G8/8v+tB8mLIFNuu7kXQ7NTVHqkE4aRzP2zt5r7ARNtzI746mhklRwmiyfpAyHuBnErOu0Hztt4WZ06bCsb+MCadNltS51wFioUyJxiuWA+GYxxeqZLd6AHnmRdBB2nzPG8hmy2PUFD4qQqp6IpXao45N5/uDWJcMaimtBXKlaDS9ekp5npl5dREfy/AoqZYMnXbzl2Jc5y5gZMJw6/kdWo39qZiENERTb1jF9cWDA/VQOERWRR5aa6hB1hWhxQMpIAubTXjIJzX8Je/Y07yaOuo6wDMKJgowquvkTmmf70mvPPFEgqhTjM6cxbg8mOaZ0UxE0yp7d4QbLgtIo58CFZPjQxMVhn1v0ADiDFsu4SazEFGwW4HFOfZLOllUeY/BwrhhmuoHqG+eluYfV/7MaaGMtiUecqqT/9xH715ADfl2hCKJvR4Q4pX9n9w5TyZPiZOUjJv2+MKQgRXSDl2o48mjH+YyswGbJPgA7b5N4UlKLOiBZk83EnlM+uXrw/apHBud1mffOmtD3ERCZIqi+0KLp+cebPVA8dI2iVjwFu99DSBtw
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4505.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(376002)(396003)(346002)(39860400002)(451199021)(2906002)(186003)(38350700002)(52116002)(6486002)(38100700002)(2616005)(6506007)(6512007)(26005)(1076003)(41300700001)(86362001)(316002)(478600001)(36756003)(66556008)(4326008)(66946007)(66476007)(5660300002)(8676002)(8936002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: W2WhXfutDi8igfGaiB0HPg6nfhRxdMZhXnWBaZl6Fh1Bc+GnTRSb5xvE5P8StYLm+jWzTnAx0XD8Xh8mRweVGx3a8ipJPaeuGhgw6qAN2a6DbdeNKj6Shye0WviJj5AlUpEtmmcjwqDWEM8w6A64OHN1qWaXBFXry0U8Glzs8fiWFUHLZ0R64grvO3WAQICTenbdbXf0SZT21z5dkDoytjSDFq2/LYg2m3iInqQfLsIlUm2jux2mgodRgGKf0y831oQ4qIgNNmK8gLGLYA7eZMBixyumrbbbX1dGf3EvGFboCxHUA8FotLepsQPZSDJqkhu7fID1PReqKDl3n2zYPcM9xjmGlGboe8pnsi1HOu5QaxPfrCoM9xBKv8+HwjRn1g10REXwOaRcKvFHNUGZyzDt0A3S6BBwVmuiMHVauC7RDyKlQ4nyApNPAjfG3YtrqyKnjV8LNV5xHBQycHyX+iW1hhe4KYZjVfIz4Uzy/y42UxgcGij3BubREO6hAUw1w2Vaj2b0ttrnHx5k/csRZBQ4U+DnHDD94F8Bg40bXGL8uq4mWi8r7dJC44LVxx5r/6AWMZKcHxgYP8lF/mZQoYMKf/cJIP2EjoLM6w0A2hWGzTD2sIvU5f5LE9/tmfVi
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4505.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(346002)(39860400002)(366004)(396003)(451199021)(66556008)(66476007)(6506007)(478600001)(52116002)(6666004)(6486002)(2616005)(6512007)(26005)(186003)(1076003)(2906002)(5660300002)(316002)(66946007)(36756003)(8676002)(38100700002)(8936002)(41300700001)(86362001)(4326008)(38350700002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?O59iUdR6QqDls4SW5MiM/Pup6IehnYgPlfc0Mp25Ckq4+QdZ5sxqPu4uLirb?=
- =?us-ascii?Q?5XAJUXK4ruzZtZuJfarZpKNNQtl17kTTeVsHMhCm4VZnx12GJHdjYWPLRs6w?=
- =?us-ascii?Q?Q08lqO4sGTmUwTsnkxnsVP8tAD1W8kDBRnJPsZ0fV5xiQMhjvI4m3vCKdVde?=
- =?us-ascii?Q?nucpneqJ5OUAJbKSe1E8iiXbkRQZMPGnmT/Pr3VK/dL7XHh5Z3AXX6cbgxEm?=
- =?us-ascii?Q?IvafdU06D8gpT5YAbxDE4D4BlDs/Glx0yzhH9xGvpZgQ/H6ccig0alxL4/Ok?=
- =?us-ascii?Q?5FMZAxskNPZKZsfFxs5N3tnsPcUQ3OR73aGAV7KQ5+4BAbRCBZVPgfLKNFdW?=
- =?us-ascii?Q?hTScY4zbiF7mKA4JHKigWI/tdBTYMCp16ssOnZ8hIxwwDaLQ6LcLf8G/IkFi?=
- =?us-ascii?Q?PoqOJ/a9hLScWF4h5kkBYsxkH3RymW39e0AlbpqJG51McH54djyybrrMGQKT?=
- =?us-ascii?Q?wSxLFvSIMyRIFmvXyrSiuHH0OGXXR75YlXo2EFR4i6O13Q8kdV6nNLnp3e+J?=
- =?us-ascii?Q?6saQ5KivXsOk9BFnthvASzBSS/tI8EF8hMEHjWDylh4k8q7oT1qgLfJfdyTO?=
- =?us-ascii?Q?vzOzdl1XaEZ/GYr+ZHBgeITX8VbtJypik0KHrrAa+3a/eI2/bkPtygBjpXv9?=
- =?us-ascii?Q?StocaJNC8d5YJgnWJnxitJnLb6x/2yP/F9oxNcV1Ai855vV0/raewHwwNtc1?=
- =?us-ascii?Q?BA1AcLNieJLY5h+pkPL4hvZihhaDY5lMjRhv3CV3ARsucpr9QF9m2ieKVZ2V?=
- =?us-ascii?Q?CQMdsZ0th9Cf9gwOxSmvk1nj/kt0Cg2oBys7HUida5hkdwf5qtB3R1gIoJDa?=
- =?us-ascii?Q?zAWYyWSqHfPcbv9nmKF3o0bd+3Tvby1YlWnKa1+fMq63TcOTgNm/vT1Xf7T+?=
- =?us-ascii?Q?DNfn+xtE4l041zeOCTSRtRPyysFwtPh6JB9tYt3QyHUlD8l9QZmdppm3T7k6?=
- =?us-ascii?Q?V8Q1K8CwlYijpbtlwGQHWYkpsFlCfGoxbkypvA1w6xL3fBDVKqw4jzzvKUND?=
- =?us-ascii?Q?AYWR2/f3g6toJz8LfmaAgjTfMk+Xc1annLZYDoBQGic6dT8kQwKwMQ+nd9vd?=
- =?us-ascii?Q?+jd6DS6aMzf3FVepPy3JCjz//9HzBbms2aHW3a3sPc/0H8txo/RMU7JttISF?=
- =?us-ascii?Q?bk7oRnwppu/ym2ZnnQUw4NigmRwiytEqv3Untpi8D0M4dXKh2qw8F2ixOXkl?=
- =?us-ascii?Q?0PW8TQBp5vCS3QS9b4KiuLXgTn57XqOOC6DsKtji++CNb9ImSxex5Ci/kmZK?=
- =?us-ascii?Q?ZptgwXUhhscdJAS9nOTded3QddxtBH+LHIAzG19J4pczXOKTRQBOUemIScJE?=
- =?us-ascii?Q?tLw8u9RIgU45HSwe3MSABOyffOANh9/8GbiMeqrcQIxTbzBLr1J3S0IplXds?=
- =?us-ascii?Q?QigfM3fOkQp49e8ewffsD2KmjSL2iOTV1866vxc2UFehtJSW9xr9HijFW/FE?=
- =?us-ascii?Q?vNzCJLyfGA/u2tM2H6naQemilVEyYBOtOZzbz2sLJ4KvZp5A0iSg5TB9Eu/N?=
- =?us-ascii?Q?P/4J29D2/hdsvC/Bk1WBAmPj3R3F9s13Pogica0NJMTswGRtJ1N57nZnNeUJ?=
- =?us-ascii?Q?ngtyIEO70r/RjkFEhQ+B0EW+C27XYIiBZA1HBmDJ?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BhYoQb4ku4nk7FqMh5h55QuBeKTWDkYgQzW3TX5yV7sAK+EOEYIxBMN4CS8D?=
+ =?us-ascii?Q?HkWDTd7e3IGJLyrjRWnIBICeViB9BoTMNRK/ZbLycKNLwKCR4/PYS+JAyMrS?=
+ =?us-ascii?Q?Xto0PxYpArQv9U2P23BaemaALRg0lbkXB6N22qkqlZ5kUgZmWrVtoRUisTv8?=
+ =?us-ascii?Q?Vvjv4nQsL5edbZ5rpJgW3whmwBd+PJOeNKaa+tdywoTRhyfwxL8+oE2o4dGa?=
+ =?us-ascii?Q?IbtggX3RT2Rm9Q43whTkFz+n51zfz5CSI3LldhrLkneEOujJBQ+Tg9CZIrk1?=
+ =?us-ascii?Q?otkivsWlbQeda+/XzWwVFR6/NviP7Z1rLb7e6cNikJHAAg+D/DRebpekSs6e?=
+ =?us-ascii?Q?gRGLfK+0YThrR9EUdwWckCi/l2Dah3XgN2TFXZ01/S4vKx/igEFuBel2dpNS?=
+ =?us-ascii?Q?/YZS54HlbfFZ/NILGVDr5Cj+T3gxngD438/snR+KGQcoI564cwhH6IC4C291?=
+ =?us-ascii?Q?jBdC+wesIdWcQmw0kChkXrNb7IHs/7KyC3UMLybSSia5OhCSq5s/bk6prVgM?=
+ =?us-ascii?Q?VoY3f3xcnO7FwQvjyKlIqaf4hzTuIGnb70/WpC5QS0uFKko5UWB+w1g2pwq0?=
+ =?us-ascii?Q?I+5G8PtvrrjGp0iBYHgggtNrTcPnxPwAr413V5CyCHapemUZePl2olXJebs0?=
+ =?us-ascii?Q?zwoxgQjCsdXVqRfWKWLhR06fpndeIX1BhbokUv7voD1cqKqvosq24PUT/W13?=
+ =?us-ascii?Q?mf/oG6+yXmb5sc4w3kVR72cBYE1tPeFPDZ/XWQrG751ty2fHbF80rm81GjnH?=
+ =?us-ascii?Q?NT798VoASFl0BXTdaadE4c1pjcN6wLltW96DS8wLgmQ/Zo6KMtTbjk4dSaXA?=
+ =?us-ascii?Q?/O/6SoadNUQ5m6Xzi4IBfVRFKGMG8zkqek1GaM6snBMTtuU2D+1Rq0RJoSZu?=
+ =?us-ascii?Q?LL8wrcytcIpdPV3/X6iG3Llr+NaTPpR45TrGwxyVqkho1e4TB2oGB3ouGxBp?=
+ =?us-ascii?Q?eGCumUy2ejxDijflxS+B3VVGVnaqco7Dheq0pvOr+P+4T9cR+bRPnQiLMXey?=
+ =?us-ascii?Q?qjWR3CAUI/Lf6WmeQanf9urkPt1VkjPjnqp+XsxC364x6LnyO/FSceLDePYA?=
+ =?us-ascii?Q?u1eMULxWs+5R6YJVs/oF0kxVOHqpDjLelF5YegQhpvKS7ETdGeG5UXS1mqrw?=
+ =?us-ascii?Q?+UXxup8Y/m1Se51LDZRbU+K9vebIjwoojNq+xaYEWRYLCCeq5+cbDduNobQQ?=
+ =?us-ascii?Q?DvO9O5N0tFXcfUr3AJM0grdS6ThMH566k3xKgV3t9uwB5onWlzr9mqkkidce?=
+ =?us-ascii?Q?ZmMLKSHQpchzZw+c4tHlhB5DfigeOb75nhZr04RI9BpEUrDbfbS+xHWV9m8q?=
+ =?us-ascii?Q?r+/r2L4r/7sbxraAlVXHQD1PXZ4nN13RpWohroQjvfrPQ1ytSqfBhY7xCPdQ?=
+ =?us-ascii?Q?zJI+96PoyzO0R2ynLu0n0W68BatVkpPhT2H6Tbw4dqHZ4gfYHnW1KEdJ6In7?=
+ =?us-ascii?Q?t6AVpcpeSvMXhkpQVKelCgDF/pznEcKG6JOapqfTHGRIvYcIJWGQ3CeKNFnO?=
+ =?us-ascii?Q?cmE/sz/2s/oNIjqMSpft1j7av5I0/reYRpe0vsQRHGNm0bC75HxGcbXpSzlB?=
+ =?us-ascii?Q?n/g32yqusdPSbviLWxvqr+lqHhXq0Di9rLhXfapE?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe16b59e-7174-440d-5c1f-08db770039f7
+X-MS-Exchange-CrossTenant-Network-Message-Id: ecaafbaa-7c07-45bd-bd75-08db77003c6c
 X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB4505.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2023 11:18:26.1886
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2023 11:18:30.3322
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JukHCa+iOZTIbVx4Jcpy4X7/22BvcDKV4VuyZBf3lxJazf0HFCXNsMv0j0poxkYN/H/ZB4qh/6rCM9eRZ1Qpqw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9332
+X-MS-Exchange-CrossTenant-UserPrincipalName: uVJ7Gc5z8oDY0SRLvlQGRNn4K4gIwo0Je4yl8r6/aNmpcJLoUXbvJjDJ3sTqtHhWlN6ac0FdnHtiupX856kg0Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB10026
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
@@ -113,47 +114,75 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The fsl,picophy-rise-fall-time-adjust property can help to adjust the
-rise/fall times of the high-speed transmitter waveform. The value can be
-0~3. It has no unit. According to the description of USBNC_n_PHY_CFG1
-register, the rise/fall time will be increased or decreased by a certain
-percentage relative to design default time if a value is given to this
-property.
+In some cases, the user may need to tune the rise/fall time of the
+high-speed transmitter waveform for USB Certification. This will add
+a parameter for this purpose. The value will be fetched from dtb and
+finally written to the register.
 
 Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
 ---
 Changes in v2:
- - rename property to fsl,picophy-rise-fall-time-adjust
- - add default: 1
- - add some description in yaml and commit msg
+ - rename parameter name
 ---
- .../devicetree/bindings/usb/ci-hdrc-usb2.yaml        | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/usb/chipidea/ci_hdrc_imx.c | 3 +++
+ drivers/usb/chipidea/ci_hdrc_imx.h | 1 +
+ drivers/usb/chipidea/usbmisc_imx.c | 9 +++++++++
+ 3 files changed, 13 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-index 782402800d4a..532d6464c8b3 100644
---- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-+++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-@@ -292,6 +292,18 @@ properties:
-     minimum: 0x0
-     maximum: 0xf
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+index 873539f9a2c0..159509c5fe58 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.c
++++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+@@ -181,6 +181,9 @@ static struct imx_usbmisc_data *usbmisc_get_init_data(struct device *dev)
+ 	if (of_property_read_u32(np, "samsung,picophy-dc-vol-level-adjust",
+ 			&data->dc_vol_level_adjust))
+ 		data->dc_vol_level_adjust = -1;
++	if (of_property_read_u32(np, "fsl,picophy-rise-fall-time-adjust",
++			&data->rise_fall_time_adjust))
++		data->rise_fall_time_adjust = -1;
  
-+  fsl,picophy-rise-fall-time-adjust:
-+    description:
-+      HS Transmitter Rise/Fall Time Adjustment. Adjust the rise/fall times
-+      of the high-speed transmitter waveform. It has no unit. The rise/fall
-+      time will be increased or decreased by a certain percentage relative
-+      to design default time. (0:-10%; 1:design default; 2:+15%; 3:+20%)
-+      Details can refer to TXRISETUNE0 bit of USBNC_n_PHY_CFG1.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 0
-+    maximum: 3
-+    default: 1
+ 	return data;
+ }
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.h b/drivers/usb/chipidea/ci_hdrc_imx.h
+index 7135b9a5d913..88b8da79d518 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.h
++++ b/drivers/usb/chipidea/ci_hdrc_imx.h
+@@ -28,6 +28,7 @@ struct imx_usbmisc_data {
+ 	enum usb_dr_mode available_role; /* runtime usb dr mode */
+ 	int emp_curr_control;
+ 	int dc_vol_level_adjust;
++	int rise_fall_time_adjust;
+ };
+ 
+ int imx_usbmisc_init(struct imx_usbmisc_data *data);
+diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
+index 1c7932f22218..56570100ffb8 100644
+--- a/drivers/usb/chipidea/usbmisc_imx.c
++++ b/drivers/usb/chipidea/usbmisc_imx.c
+@@ -130,6 +130,8 @@
+ #define MX7D_USB_OTG_PHY_CFG1		0x30
+ #define TXPREEMPAMPTUNE0_BIT		28
+ #define TXPREEMPAMPTUNE0_MASK		(3 << 28)
++#define TXRISETUNE0_BIT			24
++#define TXRISETUNE0_MASK		(3 << 24)
+ #define TXVREFTUNE0_BIT			20
+ #define TXVREFTUNE0_MASK		(0xf << 20)
+ 
+@@ -673,6 +675,13 @@ static int usbmisc_imx7d_init(struct imx_usbmisc_data *data)
+ 			reg |= (data->dc_vol_level_adjust << TXVREFTUNE0_BIT);
+ 		}
+ 
++		if (data->rise_fall_time_adjust >= 0 &&
++			data->rise_fall_time_adjust <=
++			(TXRISETUNE0_MASK >> TXRISETUNE0_BIT)) {
++			reg &= ~TXRISETUNE0_MASK;
++			reg |= (data->rise_fall_time_adjust << TXRISETUNE0_BIT);
++		}
 +
-   usb-phy:
-     description: phandle for the PHY device. Use "phys" instead.
-     $ref: /schemas/types.yaml#/definitions/phandle
+ 		writel(reg, usbmisc->base + MX7D_USB_OTG_PHY_CFG1);
+ 	}
+ 
 -- 
 2.34.1
 
