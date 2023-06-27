@@ -2,40 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1938573FF8A
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 17:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B0073FFE2
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 17:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbjF0PT4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jun 2023 11:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
+        id S230477AbjF0Piq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jun 2023 11:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232342AbjF0PTt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 11:19:49 -0400
+        with ESMTP id S229562AbjF0Pio (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 11:38:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCBC1735;
-        Tue, 27 Jun 2023 08:19:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701D7113;
+        Tue, 27 Jun 2023 08:38:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F1D7F611B5;
-        Tue, 27 Jun 2023 15:19:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E2B3C433C0;
-        Tue, 27 Jun 2023 15:19:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE2F0611D7;
+        Tue, 27 Jun 2023 15:38:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40F2DC433C8;
+        Tue, 27 Jun 2023 15:38:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687879187;
-        bh=lVWplkh8U/rtw5laIs2YyXP5mG+eDZDGoYnqUxrwS4k=;
+        s=k20201202; t=1687880322;
+        bh=PmrK36dDdd2L2+DlUioVyo1zm8aKUBPdauoPttVDtZE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q5TmZ6xn2YYy+K9DIrVHxqng95klWdB7m7T0I7jI0pQvvfRJz5uMHDViWO7XvrlsF
-         Hj7sfUIBs5Akk20UnTLPHTioO+9ePGKg8NMROhhpEaWjfl+Ay52mbUj1ugXMozx4OL
-         pviPLrMhe6A+Rl4KN3mRU/qbs4JO+6Fhahewp7YYvsi3tQ19ThP8B6yTFjWMYKs2w+
-         ZCSz3khQctEd5g5mKNHHfhFV6AJaHz/3+m1VQfXt+PbmutlT5/6+OyzPGo0QNFhiqH
-         2hIUIThRVt0P87xykwgEY0Aj7nxEvBnZfUZr6W5vOHHcjNyxeyNt2e5v/5YIisoyEc
-         PN/YHbBaTbdug==
+        b=krDmM+So1ReT1wPk/1mMSMhMV+PkkUZQAWbaxZ8foAwJD+sGeDVjBLjfi5HLQ/+1n
+         6cOlsm3k5MkbM15rinhcKnb0e8flPgBV5bNeCUqpn6DFfSBgm+pNk7p6aUoDQQHxsz
+         uQWVgQqGyUPf64ypnqYTDabey/DKFu3LtGFujX47SrW5mK1OHCeZplfGr7pFwpskl6
+         HpSvVayKqhZiMcbjt6/kRQhJ+pW907iBBiuwCaC73tjol9rITB4AISrLwk/mRHAsSo
+         4E0sMGzaTFnhHcq12naZw51rGTTmN90Hd7zwNA4sOO1ppKgad3SSPyEZ5I4dA0P1BM
+         pvy62d28nw68A==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1qEATp-00046p-3i; Tue, 27 Jun 2023 17:19:45 +0200
-Date:   Tue, 27 Jun 2023 17:19:45 +0200
+        id 1qEAm7-0004DS-6N; Tue, 27 Jun 2023 17:38:39 +0200
+Date:   Tue, 27 Jun 2023 17:38:39 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Krishna Kurapati <quic_kriskura@quicinc.com>
 Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
@@ -53,13 +53,16 @@ Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
         quic_jackp@quicinc.com, quic_harshq@quicinc.com,
         ahalaney@redhat.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v9 00/10] Add multiport support for DWC3 controllers
-Message-ID: <ZJr-EbunGzNopVj0@hovoldconsulting.com>
+Subject: Re: [PATCH v9 01/10] dt-bindings: usb: qcom,dwc3: Add bindings for
+ SC8280 Multiport
+Message-ID: <ZJsCf3nYrikF7nZc@hovoldconsulting.com>
 References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
+ <20230621043628.21485-2-quic_kriskura@quicinc.com>
+ <ZJrGG6FXWLacRLbg@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230621043628.21485-1-quic_kriskura@quicinc.com>
+In-Reply-To: <ZJrGG6FXWLacRLbg@hovoldconsulting.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -70,25 +73,72 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 10:06:18AM +0530, Krishna Kurapati wrote:
-> Currently the DWC3 driver supports only single port controller which
-> requires at most two PHYs ie HS and SS PHYs. There are SoCs that has
-> DWC3 controller with multiple ports that can operate in host mode.
-> Some of the port supports both SS+HS and other port supports only HS
-> mode.
-> 
-> This change primarily refactors the Phy logic in core driver to allow
-> multiport support with Generic Phy's.
-> 
-> Chananges have been tested on  QCOM SoC SA8295P which has 4 ports (2
-> are HS+SS capable and 2 are HS only capable).
-> 
-> Changes in v9:
-> Added IRQ support for DP/DM/SS MP Irq's of SC8280
-> Refactored code to read port count by accessing xhci registers
-> 
+On Tue, Jun 27, 2023 at 01:20:59PM +0200, Johan Hovold wrote:
+> On Wed, Jun 21, 2023 at 10:06:19AM +0530, Krishna Kurapati wrote:
 
-You obviously did many more changes in v9. Please amend this list for v9
-and be more specific when submitting v10.
+> > +          items:
+> > +            - const: dp1_hs_phy_irq
+> > +            - const: dm1_hs_phy_irq
+> > +            - const: dp2_hs_phy_irq
+> > +            - const: dm2_hs_phy_irq
+> > +            - const: dp3_hs_phy_irq
+> > +            - const: dm4_hs_phy_irq
+> > +            - const: dp4_hs_phy_irq
+> > +            - const: dm4_hs_phy_irq
+> > +            - const: ss1_phy_irq
+> > +            - const: ss2_phy_irq
+> > +            - const: pwr_event_1
+> > +            - const: pwr_event_2
+> > +            - const: pwr_event_3
+> > +            - const: pwr_event_4
+> 
+> The naming here is inconsistent and interrupts should not have "_irq"
+> suffixes (even if some of the current ones do for historical reasons).
+> 
+> I believe these should be named
+> 
+> 	pwr_event_1
+> 	dp_hs_phy_1
+> 	dm_hs_phy_1
+> 	ss_phy_1
+> 
+> 	pwr_event_2
+> 	dp_hs_phy_2
+> 	dm_hs_phy_2
+> 	ss_phy_2
+> 
+> 	pwr_event_3
+> 	dp_hs_phy_3
+> 	dm_hs_phy_3
+> 
+> 	pwr_event_4
+> 	dp_hs_phy_4
+> 	dm_hs_phy_4
+> 
+> or similar and be grouped by port while using the the
+> qcom,sc8280xp-dwc ordering for the individual lines.
+
+Perhaps the ordering you suggested is fine too, but I'd probably move
+the pwr_event ones first to match qcom,sc8280xp-dwc then, that is:
+
+ 	pwr_event_1
+ 	pwr_event_2
+ 	pwr_event_3
+ 	pwr_event_4
+ 	dp_hs_phy_1
+ 	dm_hs_phy_1
+ 	dp_hs_phy_2
+ 	dm_hs_phy_2
+ 	dp_hs_phy_3
+ 	dm_hs_phy_3
+ 	dp_hs_phy_4
+ 	dm_hs_phy_4
+ 	ss_phy_1
+ 	ss_phy_2
+
+so we have them grouped as pwr_event followed by HS and with SS last.
+
+> Side note: Please note how the above interrupt properties can also be
+> used to infer the number of HS and SS ports.
 
 Johan
