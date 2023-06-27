@@ -2,61 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5567400FE
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 18:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 906CE7400EB
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 18:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbjF0QZc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jun 2023 12:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
+        id S232411AbjF0QZa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jun 2023 12:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232406AbjF0QZG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 12:25:06 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E3C3590
-        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 09:25:04 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fb73ba3b5dso3853533e87.1
-        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 09:25:04 -0700 (PDT)
+        with ESMTP id S232425AbjF0QZI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 12:25:08 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00EA3593
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 09:25:06 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f954d7309fso25371e87.1
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jun 2023 09:25:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687883102; x=1690475102;
+        d=linaro.org; s=google; t=1687883105; x=1690475105;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iQgv+M2yvcOQU4FeOLMklrteeN9rCIkhqHWc6b1bMlw=;
-        b=kDAt9Yy2OlLY6IWaIgh8Bk9OfVdK25RlsrNuwLLMtXXbG397TVa8a3J+BE2Rthx19v
-         ohLNC/e5SJMBYIIx9zS2sFd/JWPzMOHoJq33iJVFsCwitbawpcYQxHixGIODdZjNyoBa
-         ZzskP4FEFk2ilEFEAaixuyH1WQha+2ExAWd6CEgTK1Y9lQ77j2gYVGYys3ECidK9mrHk
-         nvJj+DSJ2Zxm3GEMajsX81wBQieJ1d4ahWo9QmqJRXHZlDJLhMcjLkakBY8kA8KmjYwC
-         VFI7sMK3I0eHGPSZYa3fQRAeFm0je1CrG0P0NoPv5kecifNBI9VjBaa7iVbD/OGDkCea
-         ax8A==
+        bh=d4mJfqzmvmApW4Rj1dXVWyxSwPO5WPkCbtZ4OGaD398=;
+        b=SZy5l5RUOGcrmQW/jdYxGFBe0gnmhxq4QnEAq3v3QfdHzvrew39CDPEdKUkyJjDTre
+         XvUlJVp8t0mEoqTyn9Pwf0qePjh+XLG0D8ZDl4ymxEss0hnXLzD8H132evKnb+dI7q6g
+         iIwcvLwnGCQ8Pa+uDypTqnm1E9xIg+FOVFuJ1VvdcvaWH0SCIxkJuGInbDX+FjGxchDS
+         UfcnzabUq5XzSz4XjJ46q802SSMdmCkrm4AGkTFX+xmI4E1Rzb9SltzEldkBp2H7Svua
+         YA73OoB/WAuT3vc362D8wIQrf8gMgNrnI6bS0CHL03TeC95uPtBmLQ5M3j1TLoOzzIWn
+         OFgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687883102; x=1690475102;
+        d=1e100.net; s=20221208; t=1687883105; x=1690475105;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iQgv+M2yvcOQU4FeOLMklrteeN9rCIkhqHWc6b1bMlw=;
-        b=IrNu8F/a/8O0StIErYYkWV/TdSw5IxHdC1P/QDQvX2qsgi3b4f50SRK+OXgHOXyY1i
-         ensvAa+1213QObI9xiumxU82I2Hbf495MddSPEnaE/3CF9ZkUdk13CoUOzeu51sAQ+GS
-         dpdYtBE8/VeN7mrk5MNA2ILUxrTznnz14W9Es+fFIA0coeUrhKsaA1FJkrxrNvY3V2sB
-         zaQNPY9u4vB70yoqspX/yUeZ3Ayu+XSw2CID0DkW0PxNjUqqc/4E2VXSYOPFZppRaeG7
-         q5Xty0S3yEG9g4w44bUdO/+sPo5IdO1c3S7zjBDJgvEk7VzZSFsgsuH77Jr7V+qJu9hD
-         jlmw==
-X-Gm-Message-State: AC+VfDwQoYKeCQXcT13U0pc9YmNq5fp8ZTOdFmNfUln4+rlJsG+3RdIO
-        Lk7NJrk0b+krdBfhe80tOgeQmQ==
-X-Google-Smtp-Source: ACHHUZ5yApBC4INNLgHvtxRRdunBBs9+0RduUnvVu4BrnfQlBcgFBMr/Gb/6J5qgvmBXvYAWuE6Fvw==
-X-Received: by 2002:a05:6512:3c9e:b0:4fb:7be5:46b3 with SMTP id h30-20020a0565123c9e00b004fb7be546b3mr3902801lfv.55.1687883102401;
-        Tue, 27 Jun 2023 09:25:02 -0700 (PDT)
+        bh=d4mJfqzmvmApW4Rj1dXVWyxSwPO5WPkCbtZ4OGaD398=;
+        b=ZzEwP0wMdywjjVgxdxowkjmia32bk/Jxp9YJJ2mJtswG1+YPyLC5GnapjOMtBsvICW
+         LDFGFuK0oXcSjtEdelDMQQx5SOWNqMSAZmIgM4xLKa+mcue/xnzwCduphITmcpZWYfoR
+         boyBcg9R/80eZ1phL46+W5YHzDu3+6BpPcbdLf3TVukhiq1Bqy1PvqZbQQ7X6gObziIh
+         DcwOOPkpU68DUavbb1lbw6GWfj/2BTXZKNHdsmvQ7IQYGdaCo+8tzcUFbIAgjCAFJ8uy
+         Yh3iJxDQA8/Y/kJOisHyyb0voz22dGPucWLIggc0GYSVj0NkOuN04lVDXP5v80577CmW
+         SuQg==
+X-Gm-Message-State: AC+VfDyiwllptmIn0SjdH6AtkxCg8rrlmEvCcuqRqM03CrN6hMM8SrF3
+        Kky8ZztvZPU7wqCHHTDvSOaMDA==
+X-Google-Smtp-Source: ACHHUZ6BlsiDYElcMxfXy6yWsewsR0fKcoCpVeJD1LLcD2BVrW44G37On0y3gt5ZzXkA8F3J/hmvxA==
+X-Received: by 2002:a19:5007:0:b0:4f8:52a8:d123 with SMTP id e7-20020a195007000000b004f852a8d123mr11226655lfb.12.1687883104785;
+        Tue, 27 Jun 2023 09:25:04 -0700 (PDT)
 Received: from [192.168.1.101] (abxj103.neoplus.adsl.tpnet.pl. [83.9.3.103])
-        by smtp.gmail.com with ESMTPSA id g7-20020a19ac07000000b004fb259a5589sm1190508lfc.104.2023.06.27.09.25.00
+        by smtp.gmail.com with ESMTPSA id g7-20020a19ac07000000b004fb259a5589sm1190508lfc.104.2023.06.27.09.25.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 09:25:02 -0700 (PDT)
+        Tue, 27 Jun 2023 09:25:04 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 27 Jun 2023 18:24:26 +0200
-Subject: [PATCH 10/11] dt-bindings: usb: dwc3: Allow just 1 interrupt for
- MSM8996
+Date:   Tue, 27 Jun 2023 18:24:27 +0200
+Subject: [PATCH 11/11] arm64: dts: qcom: msm8996: Add missing interrupt to
+ the USB2 controller
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230627-topic-more_bindings-v1-10-6b4b6cd081e5@linaro.org>
+Message-Id: <20230627-topic-more_bindings-v1-11-6b4b6cd081e5@linaro.org>
 References: <20230627-topic-more_bindings-v1-0-6b4b6cd081e5@linaro.org>
 In-Reply-To: <20230627-topic-more_bindings-v1-0-6b4b6cd081e5@linaro.org>
 To:     cros-qcom-dts-watchers@chromium.org,
@@ -98,11 +98,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         Andy Gross <andy.gross@linaro.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687883074; l=1056;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687883074; l=831;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=uv1qnNvLB8G/rnBdtPGJ5lEE8zxGk1cKOrp6LALI2o0=;
- b=CbB0RfIBkaHhb6P0sSoQoxoKLH0+Nroq3t9sxL+VfHWMFB3r3IxNmJNLNTbVFLUIegbeAFWQG
- oue2RQYT9w3Ch9MjHPlF80d7+kumlsNMxdRcFp2gCaZ4O5ae5p95yJx
+ bh=Quz7pP0P5pjmtegvrsM8rd2Kfjx4W/mMKGAUDarFvWQ=;
+ b=ZqlZW1EIjz9G94JII5XehUxnYwlV6O2ulqbfYf+vErKLQwa8/fgJxHsYBw7sTROnVJyMrEv0+
+ bXnzqhh0QtJAbJKp7VUNhfrqDtonJ3y69Bbkmt1g/AhS2C/32mzlFdb
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -115,35 +115,28 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-MSM8996, similarly to SDM660 has two DWC3 controllers: one for SS and
-another one for HS operation. Allow just specifying the HS interrupt
-in the latter case.
+The interrupt line was previously not described. Take care of that.
 
+Fixes: 1e39255ed29d ("arm64: dts: msm8996: Add device node for qcom,dwc3")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/msm8996.dtsi | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index aca20aa8f504..beaeba47a150 100644
---- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -394,7 +394,6 @@ allOf:
-           contains:
-             enum:
-               - qcom,msm8953-dwc3
--              - qcom,msm8996-dwc3
-               - qcom,msm8998-dwc3
-               - qcom,sm6115-dwc3
-     then:
-@@ -411,6 +410,7 @@ allOf:
-         compatible:
-           contains:
-             enum:
-+              - qcom,msm8996-dwc3
-               - qcom,sdm660-dwc3
-     then:
-       properties:
+diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+index 85d9d12f0c2c..7771d2909120 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+@@ -3386,6 +3386,9 @@ usb2: usb@76f8800 {
+ 			#size-cells = <1>;
+ 			ranges;
+ 
++			interrupts = <GIC_SPI 352 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "hs_phy_irq";
++
+ 			clocks = <&gcc GCC_PERIPH_NOC_USB20_AHB_CLK>,
+ 				<&gcc GCC_USB20_MASTER_CLK>,
+ 				<&gcc GCC_USB20_MOCK_UTMI_CLK>,
 
 -- 
 2.41.0
