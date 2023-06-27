@@ -2,71 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0832E73F89F
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 11:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227B773F9B1
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jun 2023 12:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbjF0JWL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jun 2023 05:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
+        id S232101AbjF0KJo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jun 2023 06:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbjF0JWK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 05:22:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24F6FD;
-        Tue, 27 Jun 2023 02:22:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41FD961089;
-        Tue, 27 Jun 2023 09:22:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23153C433C8;
-        Tue, 27 Jun 2023 09:22:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687857728;
-        bh=XrG4FmjkYdqbee2LOkEbKggy1wU0b6pIOpPabzWshTY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oqqnyuuunEp9xq1PQ+L2v+3pjjgP45bFgpSrnzgW1Ld6hL0xiIGHczKe5ZtqoNpht
-         5h6YgXXEfKaFiMN0nFAK2VVFi7Lq+cIu6bbl7xKzT7zjO2jMUVb5fDRCYZx5TXp3uC
-         dPZBVQyOhhB+MiYocdagxQ4CjB0iti6Ny3QPJtXs=
-Date:   Tue, 27 Jun 2023 11:22:05 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rene Treffer <treffer@measite.de>
-Cc:     Vinod Koul <vkoul@kernel.org>, Anne Macedo <retpolanne@posteo.net>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Christian Lamparter <chunkeey@googlemail.com>
-Subject: Re: [PATCH] usb: host: xhci: remove renesas rom wiping
-Message-ID: <2023062721-prevent-shallot-a292@gregkh>
-References: <20230626204910.728-3-retpolanne@posteo.net>
- <ZJqUMWv1jM2KQsYu@matsya>
- <CALD2-c+Zp4B_zAXO0qnZcQh+geyWhi+ycv=FpL9TKhr4ZfVHJg@mail.gmail.com>
+        with ESMTP id S231889AbjF0KJM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jun 2023 06:09:12 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4E63593;
+        Tue, 27 Jun 2023 03:07:07 -0700 (PDT)
+Received: from fsav116.sakura.ne.jp (fsav116.sakura.ne.jp [27.133.134.243])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 35RA65lu033475;
+        Tue, 27 Jun 2023 19:06:05 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav116.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav116.sakura.ne.jp);
+ Tue, 27 Jun 2023 19:06:05 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav116.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 35RA65wO033472
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 27 Jun 2023 19:06:05 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <ecb32549-8b6f-4b8d-b832-4f86adb95183@I-love.SAKURA.ne.jp>
+Date:   Tue, 27 Jun 2023 19:06:04 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALD2-c+Zp4B_zAXO0qnZcQh+geyWhi+ycv=FpL9TKhr4ZfVHJg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [syzbot] [tomoyo?] [bpf?] INFO: rcu detected stall in
+ security_file_open (6)
+Content-Language: en-US
+To:     Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+References: <0000000000001526c405ff196bc1@google.com>
+Cc:     syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+bb11ad7bb33b56ca4d4b@syzkaller.appspotmail.com>,
+        USB list <linux-usb@vger.kernel.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <0000000000001526c405ff196bc1@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 10:44:44AM +0200, Rene Treffer wrote:
-> Hi,
+Ping?
 
-<snip>
+How do you plan to avoid printk() flooding?
 
-Sorry, but you sent html email which is rejected by the mailing list,
-and you top-posted, which isn't all that good from a "getting stuff done
-in a technical way" point of view.
+#syz dup: INFO: rcu detected stall in newfstatat (3)
 
-Can you resend it so that the list does accept the response?
+On 2023/06/27 18:51, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    8a28a0b6f1a1 Merge tag 'net-6.4-rc8' of git://git.kernel.o..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1335a9db280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=2cbd298d0aff1140
+> dashboard link: https://syzkaller.appspot.com/bug?extid=bb11ad7bb33b56ca4d4b
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16841cc0a80000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16fc6e1f280000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/d02009a9822d/disk-8a28a0b6.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/f33ad4ef1182/vmlinux-8a28a0b6.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/f795a8ae7a8c/bzImage-8a28a0b6.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+bb11ad7bb33b56ca4d4b@syzkaller.appspotmail.com
 
-thanks,
-
-greg k-h
