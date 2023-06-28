@@ -2,53 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FD4740D5F
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jun 2023 11:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31ADA740BA9
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jun 2023 10:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjF1JnP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Jun 2023 05:43:15 -0400
-Received: from mail.lokoho.com ([217.61.105.98]:44512 "EHLO mail.lokoho.com"
+        id S235708AbjF1Ihv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Jun 2023 04:37:51 -0400
+Received: from m12.mail.163.com ([220.181.12.214]:51146 "EHLO m12.mail.163.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231540AbjF1Hz5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Jun 2023 03:55:57 -0400
-Received: by mail.lokoho.com (Postfix, from userid 1001)
-        id BACAD887F8; Wed, 28 Jun 2023 08:52:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
-        t=1687938773; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
-        h=Date:From:To:Subject:From;
-        b=Nw/tjMueoBtz4YBa2rTRrrcnxU4Et1eKp/AWsXVPZQljRDj4q18Z1NluviOv6jufo
-         G4X81jMqW3tBMdfGhxElCHdsQ+vLjAycl68sf5i4Cllq7vsGOZPc7htD+1//bN4U6n
-         bIgN+BmEKbzhzyIXggzH72Bu8Fj3lRT6YLjtahrqJS95HBkFVDJqyuGbV7IkaW84mB
-         PLo0fS35QNPDiITlzAR+muefV3NyigtGJF1p5n5baDoajkggkSDkUIHXpgmsZ1CsTu
-         Z9gfliuWS4eoAUd7+wPqa3VZpayiLTFuL0B98U7dICAhOdCwxaP81mj55q6UKX1C+r
-         2XZzWypYeUlyQ==
-Received: by mail.lokoho.com for <linux-usb@vger.kernel.org>; Wed, 28 Jun 2023 07:50:51 GMT
-Message-ID: <20230628074502-0.1.6x.2sik5.0.fjl4c30dnh@lokoho.com>
-Date:   Wed, 28 Jun 2023 07:50:51 GMT
-From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
-To:     <linux-usb@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.lokoho.com
+        id S235496AbjF1Ibv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 28 Jun 2023 04:31:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=TZ63D
+        hoeDCYyBIbyvSorhwvX2zStbpYvqashuoDCgeQ=; b=PCaFIRrNDL2QDhpv5cWAJ
+        by/lH8bxQpMCrCbUpNXBwCr66VEGPn4PoHvA3G+XOaQgpfjFDNIbzieBYPibZpl8
+        lMA+28ZcPCOvGFe7jhar7j3n+5KuMn5hHimQH3AkHCzIIUFtprEbKXprSphB5GR3
+        eMbYipNr3P8JlL2jNnUhqk=
+Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
+        by zwqz-smtp-mta-g3-2 (Coremail) with SMTP id _____wCntAEV7JtkwE1oBA--.64150S4;
+        Wed, 28 Jun 2023 16:15:27 +0800 (CST)
+From:   Ma Ke <make_ruc2021@163.com>
+To:     leoyang.li@nxp.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Ma Ke <make_ruc2021@163.com>
+Subject: [PATCH] usb: gadget: fsl_qe_udc: validate endpoint index for ch9 udc
+Date:   Wed, 28 Jun 2023 16:15:11 +0800
+Message-Id: <20230628081511.186850-1-make_ruc2021@163.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wCntAEV7JtkwE1oBA--.64150S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrur1rtFyrCw43Kw4DGryUKFg_yoWfJrb_u3
+        WUWrs7Wr17Ww129r17Za1Svr9293WkZ3Wkua4vqr9rAa45G3WfJryDXFs5Ca17uF43WFn5
+        A3yDJ3sIkw1SqjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU822MUUUUUU==
+X-Originating-IP: [183.174.60.14]
+X-CM-SenderInfo: 5pdnvshuxfjiisr6il2tof0z/xtbBFR+cC2B9nNSTkQAAsK
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dzie=C5=84 dobry,
+We should verify the bound of the array to assure that host
+may not manipulate the index to point past endpoint array.
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+Signed-off-by: Ma Ke <make_ruc2021@163.com>
+---
+ drivers/usb/gadget/udc/fsl_qe_udc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+diff --git a/drivers/usb/gadget/udc/fsl_qe_udc.c b/drivers/usb/gadget/udc/fsl_qe_udc.c
+index 3b1cc8fa30c8..f4e5cbd193b7 100644
+--- a/drivers/usb/gadget/udc/fsl_qe_udc.c
++++ b/drivers/usb/gadget/udc/fsl_qe_udc.c
+@@ -1959,6 +1959,8 @@ static void ch9getstatus(struct qe_udc *udc, u8 request_type, u16 value,
+ 	} else if ((request_type & USB_RECIP_MASK) == USB_RECIP_ENDPOINT) {
+ 		/* Get endpoint status */
+ 		int pipe = index & USB_ENDPOINT_NUMBER_MASK;
++		if (pipe >= USB_MAX_ENDPOINTS)
++			goto stall;
+ 		struct qe_ep *target_ep = &udc->eps[pipe];
+ 		u16 usep;
+ 
+-- 
+2.37.2
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
-
-
-Pozdrawiam
-Adam Charachuta
