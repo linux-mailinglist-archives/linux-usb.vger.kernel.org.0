@@ -2,82 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F57B740F0C
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jun 2023 12:43:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04EC7740F2E
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jun 2023 12:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbjF1Kmw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Jun 2023 06:42:52 -0400
-Received: from mga05.intel.com ([192.55.52.43]:57087 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230481AbjF1Kks (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Jun 2023 06:40:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687948848; x=1719484848;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2Zmhe10xKcWrQRM+knMSqhQmXAMpUf7kd2FjgsGcrkY=;
-  b=hshj4b30L4r6KWirqS/lPTh/EGPA9UtAGKed1hsR1GY4jCDK2lSumDOH
-   jBK89CLhX4/Sl3ax5RpkSr3EgJl9EikKUSXluMtxdG9EYv9FVRDqh4GSv
-   N5R/QVXpIwbjI8G81BZdbZJmVrsXej8uyGqVdQOtWbJBuEwJd17ain2Dc
-   X8+3KxRgbLz80yGbGumnC3pHOIIVVrVFMCDtAcVKfUonKvNFK07Rn8Uu3
-   LloEH5woG66vVMR3uyJJXcFpPUhcAbxphiMhhQ1QBud/i/DZ5+qA4037Y
-   Yft1E+JgAbB95TC7Ax3uZVTzz46jNJhyQA5i49hGW2rUiuWERrcYtEzbT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="448193894"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="448193894"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 03:40:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="667067110"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="667067110"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 28 Jun 2023 03:40:42 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qESbI-000Yvj-2P;
-        Wed, 28 Jun 2023 13:40:40 +0300
-Date:   Wed, 28 Jun 2023 13:40:40 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Luo Jiaxing <luojiaxing@huawei.com>,
-        Wojciech Ziemba <wojciech.ziemba@intel.com>
-Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
-        john.garry@huawei.com, himanshu.madhani@cavium.com,
-        gregkh@linuxfoundation.org, uma.shankar@intel.com,
-        anshuman.gupta@intel.com, animesh.manna@intel.com,
-        linux-usb@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linuxarm@huawei.com
-Subject: Re: [PATCH v4 0/5] Introduce a new helper macro
- DEFINE_SHOW_STORE_ATTRIBUTE at seq_file.c
-Message-ID: <ZJwOKJSgLg3Zhdxt@smile.fi.intel.com>
-References: <1605164864-58944-1-git-send-email-luojiaxing@huawei.com>
+        id S229651AbjF1KtA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Jun 2023 06:49:00 -0400
+Received: from dfw.source.kernel.org ([139.178.84.217]:49052 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230422AbjF1Kso (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Jun 2023 06:48:44 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A79B612A3
+        for <linux-usb@vger.kernel.org>; Wed, 28 Jun 2023 10:48:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FFDEC433C8;
+        Wed, 28 Jun 2023 10:48:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687949323;
+        bh=1ZYkjEWL6ESDHaqNq88bcsVLlbwNauwHhSw1jdqhUmE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qTKAQ2kf8Y2OPOtKQvgQNJ/mQnrIYUwdizGiZCuV3+quqoPdBLlqUGyPCRSHflez/
+         97s0NkeqmeAI1egYMcZ3yqkfCrsqzl4PZybIciffGUdqk8Y/5pSAmLOevGdILeVpYH
+         up6/47COEb0hSbO3daZqXs/F+uTXuoT+ujDUHgRQ=
+Date:   Wed, 28 Jun 2023 12:48:38 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jerry Meng <jerry-meng@foxmail.com>
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH]     USB: serial: option: support Quectel EM060K_128
+Message-ID: <2023062821-scarcity-calculate-6f35@gregkh>
+References: <tencent_05185A450C60A1EE8A651E34CC0F60304506@qq.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1605164864-58944-1-git-send-email-luojiaxing@huawei.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <tencent_05185A450C60A1EE8A651E34CC0F60304506@qq.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 12, 2020 at 03:07:38PM +0800, Luo Jiaxing wrote:
-> We already own DEFINE_SHOW_ATTRIBUTE() helper macro for defining attribute
-> for read-only file, but we found many of drivers also want a helper macro
-> for read-write file too.
+On Wed, Jun 28, 2023 at 05:55:02PM +0800, Jerry Meng wrote:
+>     EM060K_128 is EM060K's sub-model, having the same nmae "EM060K-GL"
 > 
-> So we add this macro to help decrease code duplication.
+>     MBIM + GNSS + DIAG + NMEA + AT + QDSS + DPL
+> 
+>     T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=02 Dev#=  8 Spd=480  MxCh= 0
+>     D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+>     P:  Vendor=2c7c ProdID=0128 Rev= 5.04
+>     S:  Manufacturer=Quectel
+>     S:  Product=Quectel EM060K-GL
+>     S:  SerialNumber=f6fa08b6
+>     C:* #Ifs= 8 Cfg#= 1 Atr=a0 MxPwr=500mA
+>     A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+>     I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+>     E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+>     I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+>     I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+>     E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>     E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>     I:* If#= 2 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+>     E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+>     I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+>     E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>     E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>     I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+>     E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+>     E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>     E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>     I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+>     E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+>     E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>     E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>     I:* If#= 6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=70 Driver=(none)
+>     E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>     I:* If#= 7 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=80 Driver=(none)
+>     E:  Ad=8f(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-Is it abandoned?
-Besides kbuildbot complains, can you simply reduce the scope to one subsystem
-and resend?
+Why is this, and the subject line, indented?
 
-Let's say USB is nice one and it has no issues according to kbuildbot.
+No need for that, right?
 
--- 
-With Best Regards,
-Andy Shevchenko
+thanks,
 
-
+greg k-h
