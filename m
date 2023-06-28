@@ -2,118 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D34EA740F06
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jun 2023 12:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F57B740F0C
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jun 2023 12:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbjF1Klh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Jun 2023 06:41:37 -0400
-Received: from xmbgsz7.mail.foxmail.com ([61.241.55.244]:38669 "EHLO
-        xmbgsz7.mail.foxmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbjF1Kjg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Jun 2023 06:39:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1687948771;
-        bh=3TUQlf//byhuDFGUIL1tvKMwl85gZnZllPo6X6NSy6o=;
-        h=From:To:Cc:Subject:Date;
-        b=FCNEfnTlIY2WAmWH9G1PHRQ/Y9RvRzLj4Q1/oIUmioihzk2SkUcJ/70646exQRBxo
-         LF7mKmIeW52F4UsJvQ1I5DX1T57O7RnPnKmcA2JxBD3nHgGgursEGvWMK65o9Ia0e6
-         Iq9Vv+kpe2cPsLkemkDLgO5fOrcNKxcOMGPWB3rE=
-Received: from quectel.localdomain ([112.31.208.23])
-        by newxmesmtplogicsvrsza7-0.qq.com (NewEsmtp) with SMTP
-        id DC6116FD; Wed, 28 Jun 2023 17:55:06 +0800
-X-QQ-mid: xmsmtpt1687946106tsp4zqd7n
-Message-ID: <tencent_05185A450C60A1EE8A651E34CC0F60304506@qq.com>
-X-QQ-XMAILINFO: Mm/8i8/T4yneh2BB2QpODM0td5pPCxIWbrMUjgZMcNMnf/Mztm55ZzCckecayR
-         B8eUsWFkS+oi4vL5e97yF5g5HX4Vq5adBiitPHvp3qiqEPtV010hCTPY+A9X4rGCjBXK6dc7Lgea
-         vjjnq2jJ3r1eVS9CueRB/o3ps09P/DLmRmUbu0Gq4iGMeqNuTY9qrSzwUMlzqyOsQC/ijk067Nfo
-         EX0B73aOkiQYv9IHM6/dZXZ1WpR18UBDlwScm8ZWP+MH1dXXzwy0AK/Ixeq0/1ciRmd4+lDsLn9J
-         C6ucfu3LnTjOkcIvLAiQPPoNqQYoglXASFcl+AxPBwn4aJX0TyD2Ay5q3JqJJDmKhAnBFerlphCB
-         Cw6/PNEPtCFGeZQawPtX9guuPzzOUX435c2INUxi+FGpzrvyhyAcPoV4fvty7xmyNLj0OItJT5/G
-         xNRCk52HPzVwoIsUtiRbvfMtucxJuCVt2eBjcDUPCBAdOPV67N1SCxBqliJ8XKiQwQu2RrlOtu2G
-         Jq3RVqgx2T9ioB5yu+Na+8JM5Gr8So582RafPxG3AJBiF/bDvFpx4PnsFC0lrka74QyV9wgRxwAl
-         j/CzF+rEaKi+dvG52lrTk0A5NrJ9l6QpLXZm+ZNs5TI/OCH1DdX0mtGqCWR4waWxkQFtmBF//1PL
-         TAabY8CwNCDX9kY++2iilqXq4tKYl7+LJ78heM/Nia883rDtGkWuPFvU01mpFR2yZi5HXacY6DSF
-         DC2O7JxO6kTXJwDLRKqa8ihASAEEHeyR1C7Per70XwXNJ/A+3XGBrfBlKRggMmr8HW9Pjldw+hbf
-         KiSIazRCCivIkn8718SMZZ+Gge/Xkx3lJQoPy6UCooUPNR9dVzSdy5Kl94pk3xGeGNY0Hc7DRJMD
-         sQl7qs4mxC+z2vWBO7Dw2jMmRD57M4+P4DpJOs/CMGdcSEXdRPHsyfjCBJyLkfmctSeWWntXZcyi
-         a2lA4XC3dTcqbTm2DHKXyf1AhvriUq
-X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
-From:   Jerry Meng <jerry-meng@foxmail.com>
-To:     johan@kernel.org
-Cc:     linux-usb@vger.kernel.org, Jerry Meng <jerry-meng@foxmail.com>
-Subject: [PATCH]     USB: serial: option: support Quectel EM060K_128
-Date:   Wed, 28 Jun 2023 17:55:02 +0800
-X-OQ-MSGID: <20230628095502.23886-1-jerry-meng@foxmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S231778AbjF1Kmw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Jun 2023 06:42:52 -0400
+Received: from mga05.intel.com ([192.55.52.43]:57087 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230481AbjF1Kks (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 28 Jun 2023 06:40:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687948848; x=1719484848;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2Zmhe10xKcWrQRM+knMSqhQmXAMpUf7kd2FjgsGcrkY=;
+  b=hshj4b30L4r6KWirqS/lPTh/EGPA9UtAGKed1hsR1GY4jCDK2lSumDOH
+   jBK89CLhX4/Sl3ax5RpkSr3EgJl9EikKUSXluMtxdG9EYv9FVRDqh4GSv
+   N5R/QVXpIwbjI8G81BZdbZJmVrsXej8uyGqVdQOtWbJBuEwJd17ain2Dc
+   X8+3KxRgbLz80yGbGumnC3pHOIIVVrVFMCDtAcVKfUonKvNFK07Rn8Uu3
+   LloEH5woG66vVMR3uyJJXcFpPUhcAbxphiMhhQ1QBud/i/DZ5+qA4037Y
+   Yft1E+JgAbB95TC7Ax3uZVTzz46jNJhyQA5i49hGW2rUiuWERrcYtEzbT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="448193894"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="448193894"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 03:40:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="667067110"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="667067110"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 28 Jun 2023 03:40:42 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qESbI-000Yvj-2P;
+        Wed, 28 Jun 2023 13:40:40 +0300
+Date:   Wed, 28 Jun 2023 13:40:40 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Luo Jiaxing <luojiaxing@huawei.com>,
+        Wojciech Ziemba <wojciech.ziemba@intel.com>
+Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
+        john.garry@huawei.com, himanshu.madhani@cavium.com,
+        gregkh@linuxfoundation.org, uma.shankar@intel.com,
+        anshuman.gupta@intel.com, animesh.manna@intel.com,
+        linux-usb@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linuxarm@huawei.com
+Subject: Re: [PATCH v4 0/5] Introduce a new helper macro
+ DEFINE_SHOW_STORE_ATTRIBUTE at seq_file.c
+Message-ID: <ZJwOKJSgLg3Zhdxt@smile.fi.intel.com>
+References: <1605164864-58944-1-git-send-email-luojiaxing@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1605164864-58944-1-git-send-email-luojiaxing@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-    EM060K_128 is EM060K's sub-model, having the same nmae "EM060K-GL"
+On Thu, Nov 12, 2020 at 03:07:38PM +0800, Luo Jiaxing wrote:
+> We already own DEFINE_SHOW_ATTRIBUTE() helper macro for defining attribute
+> for read-only file, but we found many of drivers also want a helper macro
+> for read-write file too.
+> 
+> So we add this macro to help decrease code duplication.
 
-    MBIM + GNSS + DIAG + NMEA + AT + QDSS + DPL
+Is it abandoned?
+Besides kbuildbot complains, can you simply reduce the scope to one subsystem
+and resend?
 
-    T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=02 Dev#=  8 Spd=480  MxCh= 0
-    D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-    P:  Vendor=2c7c ProdID=0128 Rev= 5.04
-    S:  Manufacturer=Quectel
-    S:  Product=Quectel EM060K-GL
-    S:  SerialNumber=f6fa08b6
-    C:* #Ifs= 8 Cfg#= 1 Atr=a0 MxPwr=500mA
-    A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-    I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-    E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-    I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-    I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-    E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-    E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-    I:* If#= 2 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-    E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-    I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-    E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-    E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-    I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
-    E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-    E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-    E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-    I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-    E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-    E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-    E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-    I:* If#= 6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=70 Driver=(none)
-    E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-    I:* If#= 7 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=80 Driver=(none)
-    E:  Ad=8f(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+Let's say USB is nice one and it has no issues according to kbuildbot.
 
-Signed-off-by: Jerry Meng <jerry-meng@foxmail.com>
----
- drivers/usb/serial/option.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 288a96a74266..a1600ec82f56 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -251,6 +251,7 @@ static void option_instat_callback(struct urb *urb);
- #define QUECTEL_PRODUCT_EM061K_LTA		0x0123
- #define QUECTEL_PRODUCT_EM061K_LMS		0x0124
- #define QUECTEL_PRODUCT_EC25			0x0125
-+#define QUECTEL_PRODUCT_EM060K_128		0x0128
- #define QUECTEL_PRODUCT_EG91			0x0191
- #define QUECTEL_PRODUCT_EG95			0x0195
- #define QUECTEL_PRODUCT_BG96			0x0296
-@@ -1197,6 +1198,9 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0x00, 0x40) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x30) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x40) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_128, 0xff, 0xff, 0x30) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_128, 0xff, 0x00, 0x40) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_128, 0xff, 0xff, 0x40) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM061K_LCN, 0xff, 0xff, 0x30) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM061K_LCN, 0xff, 0x00, 0x40) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM061K_LCN, 0xff, 0xff, 0x40) },
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
