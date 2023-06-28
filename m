@@ -2,22 +2,22 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08685740E13
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jun 2023 12:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335CD740FD3
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jun 2023 13:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjF1KGI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Jun 2023 06:06:08 -0400
-Received: from out203-205-251-59.mail.qq.com ([203.205.251.59]:40920 "EHLO
-        out203-205-251-59.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233924AbjF1JzT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Jun 2023 05:55:19 -0400
+        id S231512AbjF1LND (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Jun 2023 07:13:03 -0400
+Received: from xmbg8.mail.qq.com ([112.64.237.229]:43649 "EHLO
+        xmbg8.mail.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231304AbjF1LMo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Jun 2023 07:12:44 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1687946117;
+        s=s201512; t=1687950755;
         bh=3TUQlf//byhuDFGUIL1tvKMwl85gZnZllPo6X6NSy6o=;
         h=From:To:Cc:Subject:Date;
-        b=kZmlKEGR5SJNfwJKTolM9+PI1hHiiRC/UvdDYdQqWEV/9jkHTH7hJ8qwxIo8erREQ
-         +PNS6ZwD3+74M+5ZJH7ea7flyzhc5rhU4OYr8W6suw90cFiLWOqpvY1qJpUFaGpLsi
-         HM3Z0DByi4UoahgrKxt5sppsSr3YwLBy7tssRlHY=
+        b=RH14NhwgE4b9EPgC0l8qaqHeJ1Zl1oDGw+N4MIKhc1fRKMACk8AB8lcVqIO7Q3iLs
+         3OPMI2i6N1m3F+XeTNh+LMtfSsB+jwihYAGk3P+SdZjkWQVl7Alv1B3rTeAdNkIR6/
+         Mh1MpHBPB4662J//L/690o43r2nYXN/Kqm9dqyCI=
 Received: from quectel.localdomain ([112.31.208.23])
         by newxmesmtplogicsvrsza7-0.qq.com (NewEsmtp) with SMTP
         id DC6116FD; Wed, 28 Jun 2023 17:55:06 +0800
