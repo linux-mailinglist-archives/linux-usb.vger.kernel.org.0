@@ -2,15 +2,15 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31ADA740BA9
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jun 2023 10:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21FF740B25
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jun 2023 10:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235708AbjF1Ihv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Jun 2023 04:37:51 -0400
-Received: from m12.mail.163.com ([220.181.12.214]:51146 "EHLO m12.mail.163.com"
+        id S234367AbjF1IWl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Jun 2023 04:22:41 -0400
+Received: from m12.mail.163.com ([220.181.12.215]:38052 "EHLO m12.mail.163.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235496AbjF1Ibv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:31:51 -0400
+        id S234326AbjF1IPs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 28 Jun 2023 04:15:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
         s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=TZ63D
         hoeDCYyBIbyvSorhwvX2zStbpYvqashuoDCgeQ=; b=PCaFIRrNDL2QDhpv5cWAJ
