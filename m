@@ -2,22 +2,22 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 335CD740FD3
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jun 2023 13:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D34EA740F06
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jun 2023 12:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbjF1LND (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Jun 2023 07:13:03 -0400
-Received: from xmbg8.mail.qq.com ([112.64.237.229]:43649 "EHLO
-        xmbg8.mail.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbjF1LMo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Jun 2023 07:12:44 -0400
+        id S231439AbjF1Klh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Jun 2023 06:41:37 -0400
+Received: from xmbgsz7.mail.foxmail.com ([61.241.55.244]:38669 "EHLO
+        xmbgsz7.mail.foxmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231537AbjF1Kjg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Jun 2023 06:39:36 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1687950755;
+        s=s201512; t=1687948771;
         bh=3TUQlf//byhuDFGUIL1tvKMwl85gZnZllPo6X6NSy6o=;
         h=From:To:Cc:Subject:Date;
-        b=RH14NhwgE4b9EPgC0l8qaqHeJ1Zl1oDGw+N4MIKhc1fRKMACk8AB8lcVqIO7Q3iLs
-         3OPMI2i6N1m3F+XeTNh+LMtfSsB+jwihYAGk3P+SdZjkWQVl7Alv1B3rTeAdNkIR6/
-         Mh1MpHBPB4662J//L/690o43r2nYXN/Kqm9dqyCI=
+        b=FCNEfnTlIY2WAmWH9G1PHRQ/Y9RvRzLj4Q1/oIUmioihzk2SkUcJ/70646exQRBxo
+         LF7mKmIeW52F4UsJvQ1I5DX1T57O7RnPnKmcA2JxBD3nHgGgursEGvWMK65o9Ia0e6
+         Iq9Vv+kpe2cPsLkemkDLgO5fOrcNKxcOMGPWB3rE=
 Received: from quectel.localdomain ([112.31.208.23])
         by newxmesmtplogicsvrsza7-0.qq.com (NewEsmtp) with SMTP
         id DC6116FD; Wed, 28 Jun 2023 17:55:06 +0800
