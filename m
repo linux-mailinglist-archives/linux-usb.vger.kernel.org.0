@@ -2,98 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C58387412AA
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jun 2023 15:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C477412E2
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jun 2023 15:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjF1Nir (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Jun 2023 09:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
+        id S232257AbjF1NqS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Jun 2023 09:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbjF1Nim (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Jun 2023 09:38:42 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792281726
-        for <linux-usb@vger.kernel.org>; Wed, 28 Jun 2023 06:38:41 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fa9850bfebso33690775e9.1
-        for <linux-usb@vger.kernel.org>; Wed, 28 Jun 2023 06:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687959520; x=1690551520;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/vfQOuKGwQGjFlFPrXNZqTLKUFzS/2MyEVN12NS22zU=;
-        b=GH2JkageMSynd6IaD064W1MAY7DMIEUEBAWRUBgV8BMlsnbcOXzo5bNP0SLOOOzHN4
-         ugVM3PqqukZCP0axhC6abn64D+0b2vA3nBF3EkQb/KboMPLGhRkx3iIq5tnoAZ7j68sP
-         iI2Oa1+dvJmtuUBdFwcJn2AeyZ1sXrVTms1KB7CQHhjWWRxNgIlI0tuiewHvdjRmr5WP
-         I9GEbHae0oaPGSx9KguCV1Ub7QzP3Oh0b3qx+N344iuFpRwHXHHDemSsWgYY1E5nfAQ2
-         DVtJ+3StlwPYPJRzTnuMUHpcKw0w3OZC8XOy/qDw+yN+n05ByT4q+vPmbveNiOyVhsgG
-         zlqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687959520; x=1690551520;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/vfQOuKGwQGjFlFPrXNZqTLKUFzS/2MyEVN12NS22zU=;
-        b=aFFp3M+0jssCpjuP4f3d1RpYEj8miPNpVhJSqlbqlhw8uXbTikEeCyRZ2Vtxk9HFOI
-         PxcdrDlE7knNU4iI5VVI8mH6ZhwtSeiptySiCoGwdPQEqUaY1zJEau3unyqPYl6ZgF89
-         hR4wHZCVzh7PK+fkWatPvGU67RkcYdHLbGWGZHU8LyIi2AmPMzjFUNoGlV3IUQ9Wwb83
-         MwgmXUHwHTenOTr01vXK2cK+WSUiM3NwiDX1ruEPpO3Xp+YPN6KoTZxCvIlE5FSYGpAE
-         UgKUeKohE+rhVh3fy4OCyfBN4LEDSNGWoEGyuoTOioKkzXnSde8NB7Byfu8RHY7Ngo8w
-         /yGw==
-X-Gm-Message-State: AC+VfDw8dxqvBL7mLhvt664ukuz4z9Jm5y0DXPtYVoBkGgi1uhT3dNcH
-        ZgkXCjG9bSsTDubJa3V1Q4bx4g==
-X-Google-Smtp-Source: ACHHUZ4GDk+xDZ6anRxhPtEO4mbCDmFanNfZ/1ZcxYcY0VHiyvYzil51yqltVXbuWMtgTGsfSVJq3A==
-X-Received: by 2002:a05:600c:22d2:b0:3f9:b297:1804 with SMTP id 18-20020a05600c22d200b003f9b2971804mr19633307wmg.17.1687959520081;
-        Wed, 28 Jun 2023 06:38:40 -0700 (PDT)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id o23-20020a05600c379700b003fae92e7a8dsm7657539wmr.27.2023.06.28.06.38.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 06:38:39 -0700 (PDT)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     gregkh@linuxfoundation.org, johan@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        david@ixit.cz, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v6 2/2] usb: serial: add myself as maintainer of CH348
-Date:   Wed, 28 Jun 2023 13:38:34 +0000
-Message-Id: <20230628133834.1527941-3-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230628133834.1527941-1-clabbe@baylibre.com>
-References: <20230628133834.1527941-1-clabbe@baylibre.com>
+        with ESMTP id S231355AbjF1NqI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Jun 2023 09:46:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC2326AB
+        for <linux-usb@vger.kernel.org>; Wed, 28 Jun 2023 06:46:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E80D66124A
+        for <linux-usb@vger.kernel.org>; Wed, 28 Jun 2023 13:46:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E53EC433C8;
+        Wed, 28 Jun 2023 13:45:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687959962;
+        bh=mRudSuSuM9tYQlCkhVPjOgZuXv5wNiRv73wjtIbbMMA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DK6WZz4GIRdwsx/h1s2ZAOPskHGsJ5gJU+g0vexNzdoOfZJSspJkf32Z7kFuz9ytv
+         Yk1HvNDc5Xgw21ZlqVSol07rfpopeBS0lEVKBbeKoJhGJy7I9Bbn+VqMMxFALzcthj
+         FNRGz6BoKABftlQ2jJobD8ZTBC3UC+AAnugQ2GmTbtCaCNovaxe81RJb0z8IHpdDP8
+         LNyKwnoOuon9PbizgzpN4QnsgG3kJWjyBxza0OpwDI0G72HHZAxOw5z3xZ8JsLFaaI
+         bGiyC+DWyM6SH/4/lMhAu2any0eKHumXaTIHNzsDC9cDf6hif6ZpVVh8vYWgrAcT8Z
+         aepIoSYcyIr5A==
+Message-ID: <211053fb-eec0-6610-065e-4cc6655b288d@kernel.org>
+Date:   Wed, 28 Jun 2023 19:15:56 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [EXT] Re: usb: cdns3: Onchip memory reservation for built-in
+ gadgets
+Content-Language: en-US
+To:     Frank Li <frank.li@nxp.com>,
+        Ravi Gunasekaran <r-gunasekaran@ti.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "peter.chen@kernel.org" <peter.chen@kernel.org>,
+        "pawell@cadence.com" <pawell@cadence.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+References: <aa5837a9-8dd6-f10f-fd58-ec43e027ef07@ti.com>
+ <b0314296-0df7-efcd-b0cf-166cb09ab338@kernel.org>
+ <AM6PR04MB48382467AC7D6AF26C8CC4918827A@AM6PR04MB4838.eurprd04.prod.outlook.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <AM6PR04MB48382467AC7D6AF26C8CC4918827A@AM6PR04MB4838.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since I did the driver and have hardware to test, set myself as
-maintainer of it.
+On 27/06/2023 20:26, Frank Li wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Roger Quadros <rogerq@kernel.org>
+>> Sent: Tuesday, June 27, 2023 5:41 AM
+>> To: Ravi Gunasekaran <r-gunasekaran@ti.com>; Frank Li <frank.li@nxp.com>
+>> Cc: linux-usb@vger.kernel.org; peter.chen@kernel.org;
+>> pawell@cadence.com
+>> Subject: [EXT] Re: usb: cdns3: Onchip memory reservation for built-in
+>> gadgets
+>>
+>> Caution: This is an external email. Please take care when clicking links or
+>> opening attachments. When in doubt, report the message using the 'Report
+>> this email' button
+>>
+>>
+>> Hi,
+>>
+>> On 27/06/2023 15:56, Ravi Gunasekaran wrote:
+>>> Hi,
+>>>
+>>> Firstly, I'm not sure if it is alright to post queries this way.
+>>> If it is wrong, I apologize for it. Please let me know the right path/forum to
+>> ask the questions.
+>>>
+>>> This is regarding the commit
+>>> dce49449e04f usb: cdns3: allocate TX FIFO size according to composite EP
+>> number
+>>>
+>>> This commit introduced cdns3_gadget_check_config() which is invoked
+>> while binding gadget created via configfs and
+>>> also a logic to calculate ep_buf_size (which was CDNS3_EP_BUF_SIZE = 4).
+>>>
+>>> But for gadgets such as g_ether, g_cdc, the checks are not performed. And
+>> also for these legacy gadget drivers,
+>>> memory needs to be reserved for multiple IN end points and shared
+>> memory for OUT end points. So when ep_buf_size = 15,
+>>> the memory reservation fails, as it exceeds total onchip memory.
+>>>
+>>> So I was wondering if additional checks need to done in the cadence gadget
+>> driver or am I doing something wrong while
+>>> loading gadgets such as g_ether.
+>>>
+>>
+>> I think Ravi's concern is that.
+>>
+>> prior to commit dce49449e04f, priv_dev->ep_buf_size was fixed at 4.
+>> After commit dce49449e04f, it is at 0 if check_config() is not called e.g.
+>> in the legacy gadget cases (e.g. g_ether).
+>> So cdns3_ep_config() fails with dev_err(priv_dev->dev, "onchip mem is full,
+>> ep is invalid\n").
+>>
+>> A potential fix might be to start with priv_dev->ep_buf_size = 4
+>> instead of 0 so it works for legacy gadgets as well where check_config() is not
+>> invoked.
+> 
+> I think it should fix at legacy driver by call usb_gadget_check_config. 
+> Assume there are a UDC controller, which only 2 endpoint.  g_cdc should
+> get failure.
+> 
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
- MAINTAINERS | 5 +++++
- 1 file changed, 5 insertions(+)
+commit dce49449e04f has broken legacy gadget drivers for CDNS3 UDC
+and that should be fixed first.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 342cb79a9ac5..e95b51594bac 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22044,6 +22044,11 @@ F:	Documentation/usb/usb-serial.rst
- F:	drivers/usb/serial/
- F:	include/linux/usb/serial.h
- 
-+USB SERIAL DRIVER FOR CH348
-+M:	Corentin Labbe <clabbe@baylibre.com>
-+S:	Maintained
-+F:	drivers/usb/serial/ch348.c
-+
- USB SMSC75XX ETHERNET DRIVER
- M:	Steve Glendinning <steve.glendinning@shawell.net>
- L:	netdev@vger.kernel.org
+No other UDC drivers implement .check_config() yet.
+
+UDC driver should start with a default sane configuration and work even if
+usb_gadget_check_config() is not called by gadget driver.
+
 -- 
-2.39.3
-
+cheers,
+-roger
