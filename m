@@ -2,55 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC3C741607
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jun 2023 18:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73371741604
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jun 2023 18:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjF1QGN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 28 Jun 2023 12:06:13 -0400
-Received: from mail.krjc.kg ([212.112.113.131]:55783 "EHLO mail.krjc.kg"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230432AbjF1QGG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Jun 2023 12:06:06 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.krjc.kg (Postfix) with ESMTP id 20EFB146F635;
-        Mon, 26 Jun 2023 09:04:18 +0600 (+06)
-Received: from mail.krjc.kg ([127.0.0.1])
-        by localhost (mail.krjc.kg [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id eoBkgA8cAQH1; Mon, 26 Jun 2023 09:04:17 +0600 (+06)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.krjc.kg (Postfix) with ESMTP id 9C9577B4D1E;
-        Sun, 25 Jun 2023 09:11:25 +0600 (+06)
-X-Virus-Scanned: amavisd-new at krjc.kg
-Received: from mail.krjc.kg ([127.0.0.1])
-        by localhost (mail.krjc.kg [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 6HwTiBES5fms; Sun, 25 Jun 2023 09:11:25 +0600 (+06)
-Received: from [192.168.100.3] (unknown [102.217.124.1])
-        by mail.krjc.kg (Postfix) with ESMTPSA id 6E48764CDFF;
-        Sat, 24 Jun 2023 13:19:12 +0600 (+06)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S230401AbjF1QFE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Jun 2023 12:05:04 -0400
+Received: from dfw.source.kernel.org ([139.178.84.217]:42538 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232425AbjF1QE5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Jun 2023 12:04:57 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CCC16135B
+        for <linux-usb@vger.kernel.org>; Wed, 28 Jun 2023 16:04:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E4C8C433C8;
+        Wed, 28 Jun 2023 16:04:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687968296;
+        bh=371onyC+89R4E/cACuWXhtDn/JSRL4fki0fOv/vCX+M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m27IYMF2/nje7TEimgknKPlCGSlM5hgyD+2D2THhMNgCAPDAU5CgiAtBPcNXumHNq
+         eHsgBQTqyTg9qV6/jSR2G/Ypwg8woS4XtZLPoEF+nPQl3bEQbwjzty+Pxac/+C2uLE
+         Xgr0PJ8mKG8QABMqCsJWnAwiw7gsRfPQHWw4lf6I=
+Date:   Wed, 28 Jun 2023 18:04:54 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     jerry-meng <jerry-meng@foxmail.com>
+Cc:     johan <johan@kernel.org>, linux-usb <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH]     USB: serial: option: support Quectel EM060K_128
+Message-ID: <2023062812-junction-item-cfd3@gregkh>
+References: <tencent_05185A450C60A1EE8A651E34CC0F60304506@qq.com>
+ <2023062821-scarcity-calculate-6f35@gregkh>
+ <tencent_CABB744D2C39A0997F9683F3C2142A520109@qq.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: covid-19 funds relief
-To:     Recipients <test@mail.krjc.kg>
-From:   "Mr. X" <test@mail.krjc.kg>
-Date:   Sat, 24 Jun 2023 00:19:01 -0700
-Reply-To: sigridrausing57@gmail.com
-Message-Id: <20230624071913.6E48764CDFF@mail.krjc.kg>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <tencent_CABB744D2C39A0997F9683F3C2142A520109@qq.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hearty greetings,
+A: http://en.wikipedia.org/wiki/Top_post
+Q: Were do I find info about this thing called top-posting?
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+A: Top-posting.
+Q: What is the most annoying thing in e-mail?
 
-I am Sigrid Rausing, a Swedish investor and philanthropist. Your e-mail address was provided by Google Inc. randomly selected as an active user on the web. This year, I decided to donate 5 percent of my wealth to both charities and individuals due to the coronavirus pandemic that has paralyzed the whole world.
+A: No.
+Q: Should I include quotations after my reply?
 
-I am donating to you 1,000,000,00 Euros and I urge you to help someone around you with the little you can. '
+http://daringfireball.net/2007/07/on_top
 
-For more information about me here is my Wikipedia below: https://en.wikipedia.org/wiki/Sigrid_Rausing
+On Wed, Jun 28, 2023 at 08:14:41PM +0800, jerry-meng wrote:
+> Hi Greg:
+> 
+> Sorry, added the indentation by mistake.&nbsp;
+> Do I need to send&nbsp; patch v2 ？
 
-Contact me on this email address: sigridrausing540@gmail.com
-for more information.
+Please do, otherwise as-is, we couldn't take this, right?
 
-Regards.
-S.R.
+Also please fix your email client to not send html email, it's rejected
+by the mailing lists.
+
+thanks,
+
+greg k-h
