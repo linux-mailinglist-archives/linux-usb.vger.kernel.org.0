@@ -2,92 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2012C74250E
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jun 2023 13:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0319C742645
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jun 2023 14:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbjF2LkP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Jun 2023 07:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42992 "EHLO
+        id S232168AbjF2MW5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Jun 2023 08:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjF2LkO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Jun 2023 07:40:14 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDF0610F0;
-        Thu, 29 Jun 2023 04:40:12 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D592C14;
-        Thu, 29 Jun 2023 04:40:56 -0700 (PDT)
-Received: from [10.57.33.98] (unknown [10.57.33.98])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BD5BB3F64C;
-        Thu, 29 Jun 2023 04:40:10 -0700 (PDT)
-Message-ID: <11d40d12-bb6c-25b3-ef44-43f4ded0e628@arm.com>
-Date:   Thu, 29 Jun 2023 12:40:03 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] usb: xhci-mtk: set the dma max_seg_size
-Content-Language: en-GB
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Zubin Mithra <zsm@chromium.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230628-mtk-usb-v1-1-3c5b2ea3d6b9@chromium.org>
- <CANiDSCsAgD33gMk9-CTGHuUv_b4KfRnO02ETEt6jFtQvw+6cag@mail.gmail.com>
- <ZJystxdl0jVoe5b6@google.com>
- <CANiDSCu3WOqK9wdLDXmW+zbckq15gmxKjtFA4Aghv6uoidO_3Q@mail.gmail.com>
- <2023062942-thumb-giddily-f0e0@gregkh>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <2023062942-thumb-giddily-f0e0@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230487AbjF2MUy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Jun 2023 08:20:54 -0400
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DA63584;
+        Thu, 29 Jun 2023 05:20:17 -0700 (PDT)
+Received: by mail-oo1-xc2a.google.com with SMTP id 006d021491bc7-55b85b94bb0so306093eaf.0;
+        Thu, 29 Jun 2023 05:20:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688041217; x=1690633217;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m5mgpWar9cALG/3/0CBITIu5fDttWbH9ujCUUUdrauA=;
+        b=d43aXK0abIqFPuvp0NAGONopsVgICCVlIoMD+Cz2FuTMg2hTNcZ0xUyVby0te8gpfy
+         5tsoR9S8JxcCEY98uG2KHvTCRpPFY8IT+b3o7atTM5e3YHBzRdrLtWjTLIu8kvh76f+Z
+         GeLCjWCVLLyFDDDmGKHJjDhM2/5e1b41pzluEtJrBvaHRjCOp5CStzGLEg/WmxAn0n2m
+         xXh0RP12e9nzjnqZdBJbAzg8K/jfy23LekLs/Vsz0xdVBIhA6hrn0XRkZv5rCNJu5VXd
+         m0MxCmqDoIId3pHze71h0CGeb0R9ru9b/fUGyMR/MxxD2d3AXXLh1rJV0psS5qDRsYYY
+         aaPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688041217; x=1690633217;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m5mgpWar9cALG/3/0CBITIu5fDttWbH9ujCUUUdrauA=;
+        b=KBgidCLkzcFUt/EkAdNiWUFEw8S0M70eZB+h37nPQO8/oum3yIVb8idn0BKF1TWuo8
+         3sAvXOwapfTGwOkjRhLXnq+OpJD3z3qTzVP0e+5TV6HpMwE8kmVvplImhpW1orS7J1Cl
+         BCKBbTweFsveE1Mcz7nIvDsEFYZq4aPZuHubjPnTlCuDiQM6+/FTzz2ZmOKLyZ6xP+3C
+         PqJT778SMWTrrARoS3mHdRGmrag2v7S3W9OVz2nA5OVOr7CD3/yO0RCx7T1rVfYDsnX0
+         jLmBVEeIMHNEAhi0Nh5a/I3HixsE8EazZ/aRJYGApAYWE4oN9uU3MzHH/mtPRYUUvFsM
+         1Vrw==
+X-Gm-Message-State: AC+VfDzfb4x3WyZuF00EfN5egHTnt/AJzpxJV3HfwhiHTvs59/L9zgVE
+        F9Iyv4iP+QMIfxZrektyt543ZKdHDrLQ5w==
+X-Google-Smtp-Source: ACHHUZ614qq2WrpcublHjqnBhNIlQY7zf2QOG5Pc9ydMDnQSCbWbIOO7wMDoBz25FuFCamzLvFJydA==
+X-Received: by 2002:a4a:df09:0:b0:55a:9fc5:c12c with SMTP id i9-20020a4adf09000000b0055a9fc5c12cmr23414726oou.5.1688041216937;
+        Thu, 29 Jun 2023 05:20:16 -0700 (PDT)
+Received: from 377044c6c369.cse.ust.hk (191host097.mobilenet.cse.ust.hk. [143.89.191.97])
+        by smtp.gmail.com with ESMTPSA id v18-20020a4ade92000000b005630547db40sm2876756oou.41.2023.06.29.05.20.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 05:20:16 -0700 (PDT)
+From:   Chengfeng Ye <dg573847474@gmail.com>
+To:     gregkh@linuxfoundation.org, gustavoars@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chengfeng Ye <dg573847474@gmail.com>
+Subject: [PATCH] usb: host: oxu210hp-hcd: Fix potential deadlock on &oxu->mem_lock
+Date:   Thu, 29 Jun 2023 12:19:47 +0000
+Message-Id: <20230629121947.59315-1-dg573847474@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2023-06-29 09:40, Greg Kroah-Hartman wrote:
-> On Thu, Jun 29, 2023 at 09:13:23AM +0200, Ricardo Ribalda wrote:
->> Hi Zubin
->>
->> On Wed, 28 Jun 2023 at 23:57, Zubin Mithra <zsm@chromium.org> wrote:
->>>
->>> On Wed, Jun 28, 2023 at 11:04:20PM +0200, Ricardo Ribalda wrote:
->>>> On Wed, 28 Jun 2023 at 23:00, Ricardo Ribalda <ribalda@chromium.org> wrote:
->>>>>
->>>>> Allow devices to have dma operations beyond 64K, and avoid warnings such
->>>>> as:
->>>>>
->>>>> DMA-API: xhci-mtk 11200000.usb: mapping sg segment longer than device claims to support [len=98304] [max=65536]
->>>>>
->>>>> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
->>>> Reported-by: Zubin Mithra <zsm@chromium.org>
->>>
->>> Should this be cc'd to stable@ as well?
->>
->> Not sure, in most of the cases this is "just" a warning fix. Let the
->> maintainer decide:
-> 
-> Warnings can cause reboots as the majority of the linux systems in the
-> world run panic-on-warn, so yes, it should be backported.
+As &udc->lock is acquired by watchdog timer oxu_watchdog() under
+softirq context, other acquisition of the same lock under process
+context should disable irq, otherwise deadlock could happen if the
+irq preempt the execution while the lock is held in process context
+on the same CPU.
 
-Although in this particular case, running DMA_API_DEBUG=y on production 
-systems is a pretty inadvisable thing to do anyway ;)
+The .urb_enqueue callback oxu_urb_enqueue() acquires the lock without
+disabling irq inside the function.
 
-However I'm glad I looked, since I think this also points to a bug in 
-dma_alloc_noncontiguous() - it's one thing to blame a driver for trying 
-to map a malformed scatterlist of its own, but if the DMA API is 
-generating one internally without respecting the device's (claimed) 
-parameters, then that's on us. I'll have a look into it...
+Possible deadlock scenario
 
-Thanks,
-Robin.
+oxu_urb_enqueue()
+    -> oxu_murb_alloc()
+    -> spin_lock(&oxu->mem_lock)
+        <timer interrupt>
+        -> oxu_watchdog()
+        -> ehci_work()
+        -> scan_async()
+        -> qh_completions()
+        -> oxu_murb_free()
+        -> spin_lock(&oxu->mem_lock)
+
+This flaw was found by an experimental static analysis tool I am
+developing for irq-related deadlock, which reported the above
+warning when analyzing the linux kernel 6.4-rc7 release.
+
+The tentative patch fixes the potential deadlock by spin_lock_irqsave().
+x86_64 allyesconfig using GCC shows no new warning, the tool does not
+report the warnining after the fix. No runtime testing was performed since
+I don't have device with OXU210HP host controller.
+
+Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
+---
+ drivers/usb/host/oxu210hp-hcd.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/host/oxu210hp-hcd.c b/drivers/usb/host/oxu210hp-hcd.c
+index f998d3f1a78a..944011e059e5 100644
+--- a/drivers/usb/host/oxu210hp-hcd.c
++++ b/drivers/usb/host/oxu210hp-hcd.c
+@@ -1120,8 +1120,9 @@ static struct oxu_murb *oxu_murb_alloc(struct oxu_hcd *oxu)
+ {
+ 	int i;
+ 	struct oxu_murb *murb = NULL;
++	unsigned long flags;
+ 
+-	spin_lock(&oxu->mem_lock);
++	spin_lock_irqsave(&oxu->mem_lock, flags);
+ 
+ 	for (i = 0; i < MURB_NUM; i++)
+ 		if (!oxu->murb_used[i])
+@@ -1133,7 +1134,7 @@ static struct oxu_murb *oxu_murb_alloc(struct oxu_hcd *oxu)
+ 		oxu->murb_used[i] = 1;
+ 	}
+ 
+-	spin_unlock(&oxu->mem_lock);
++	spin_unlock_irqrestore(&oxu->mem_lock, flags);
+ 
+ 	return murb;
+ }
+-- 
+2.17.1
+
