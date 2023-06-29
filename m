@@ -2,130 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A0A742355
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jun 2023 11:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F22742413
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jun 2023 12:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjF2Jga (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Jun 2023 05:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
+        id S231865AbjF2KiR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Jun 2023 06:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbjF2Jg2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Jun 2023 05:36:28 -0400
-Received: from out203-205-221-190.mail.qq.com (out203-205-221-190.mail.qq.com [203.205.221.190])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9EBE57
-        for <linux-usb@vger.kernel.org>; Thu, 29 Jun 2023 02:36:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1688031383;
-        bh=wVTuCIxyvLDD/DcoCaqbJS7OLbR76cNPm8LoFO2zaRc=;
-        h=From:To:Cc:Subject:Date;
-        b=rRdiV/TEvowVOmcys+AeSTXn0xWKC+RpEPeEVefIsd+UEgKRZ/JnaA911/wUm4aSI
-         29psR/XlXAY2GHqQkOmcUHRewNhPkw/GPm1ITzB3Jz8P2SBfuEkMJJUorydcYXUDJm
-         TVg8LFm+xZHhlfVA0Mikwt1kBqNA6wqJVJjVcW88=
-Received: from quectel.localdomain ([112.31.70.25])
-        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
-        id 8D922ACB; Thu, 29 Jun 2023 17:35:25 +0800
-X-QQ-mid: xmsmtpt1688031325tdhngfwbn
-Message-ID: <tencent_4C0C961CD0213FB3C100615415168012BA08@qq.com>
-X-QQ-XMAILINFO: M1JY6XCfJolWCHd7atIypsTs8oTDXb0ee9tfkck23EPVG5bJ+rRZKjwzpEIbY5
-         iGNvQeqztiElv+j2HbmRRWdJ5LunaXN+fmbOdjj75WqIyr131uPRrPkwuT71zDrfSMKml2zxwvgk
-         i3nqHXjnSeRrB13XNKPMQ7PzvWolrtuUPp34nEIlox/ogMGh7V07S5wlkW9FoXJPJ/wUoXW2SDOz
-         8e8CaTECBKd1TwrViGcvrrc6TF/IBTwt2n09+C+nWVKvkWjLQ5trih6ezaQMYDe8GfrhIhsJ9RFT
-         N4019dECkEeb3SQi8Ai1Zz+sg6nHPT87vNwfWBP9J9rQ8tYyoBpXXcjQWPAfjAkAOc9JvtXEoN2H
-         1XWV1Ps1YiMc+492h/b6MBpgguBm7rZdqwAdU1P975N4+BT2Jyo++q7s38jFnvw4MktDvsIlZlxv
-         gvllp73JAHheEk06a+DYHlPMKHP/TQWKwMNWUXCUoX//v4qkWkwOd9DDrEVrhar2lpGyksPXbL0e
-         7cxSdG3Z4vSUcWaeB+pcnripp5MBOVrp7EfuunVbv7VKyiBobWyBS0g25f7R6XNEgqh4u3zV3AlC
-         DJgY2J+esugKz7qFeaIjKwVsdGq4dephMCqbxpHPyxfxf9nASrusJOse3grt7HHEoE9DFuudiGmD
-         kjpstK4dxzHzyu4rAsfxA5l+QzhdhUFTjSOZvUzX6wASzXHeKOy2WpPWqXJcwkQT4yStIT1ONVdv
-         O/YsmgP/OzFvP0ctR4oLze+vzAXMOCI1Wjjk3lg5YgmPDHSZOsx1hyZOWztgsn264FkYJ+rwLbSQ
-         b0iIh1DGxxyJHKvtfTNdaI5cw1ftV76M3Mwts1rkTNHwtwZTKWFdcWMrXK7Q+V87hF1KoqDriG+j
-         cFvkId3lw/8pd2VDARZxRST39l2PYJEjyGUDRqPu1pctX6GfYkl4VfTEEfRksuJYp3rnUyWB5764
-         phK0qee5EO1Q9nA3R/DvIU0MPl6g2jutlZbVvTOZfvieSffPWXZtPZuBCmkuv1
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
-From:   Jerry Meng <jerry-meng@foxmail.com>
-To:     gregkh@linuxfoundation.org, johan@kernel.org
-Cc:     linux-usb@vger.kernel.org, Jerry Meng <jerry-meng@foxmail.com>
-Subject: [PATCH V2] USB: serial: option: support Quectel EM060K_128
-Date:   Thu, 29 Jun 2023 17:35:22 +0800
-X-OQ-MSGID: <20230629093522.57014-1-jerry-meng@foxmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231737AbjF2Kh7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Jun 2023 06:37:59 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5561FD7;
+        Thu, 29 Jun 2023 03:37:57 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9920a6a6cb0so63932666b.3;
+        Thu, 29 Jun 2023 03:37:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688035076; x=1690627076;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XN5V8SfO8qHsuFFue4HRYt+RlC126GyX62QDFnswAVo=;
+        b=CCrVOrQgcuNioz35cjKkVM5ts8pq7891DKa5/606kAiPw/HLBPCdfVqLU7Z2KV9IqV
+         m369sLfQXQRQk8D/9I/Oa6b+TXU4HSk+kLVAgN74aAd/ZzrDdncbYteX6vTklLdRu3Md
+         m3qHY3ixEhl5pT63ByANDaoQlQIOfqRUF9p4cjYSnyhczQsWjf2uL15wo3YGVDqeMzlN
+         sgsrnMuxnxx1RqzRwyQmAGau+5/mqazw8MS2BDs9r1zzhvnz3cLN4xxd5wjs/RQwDZeZ
+         rtRr6U0MX/89dSrkY6IYMnC8KlagEA0ap2ICmCvEL6WAsq+FfAuH6lMgFknp/C5y5Jcj
+         dwiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688035076; x=1690627076;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XN5V8SfO8qHsuFFue4HRYt+RlC126GyX62QDFnswAVo=;
+        b=E8LYN0KXSqhUarwpRMKjQJkBw4MxGAIgrwYDPYCNFYg8fNzjtUY8rc4+1XCXIV2S8H
+         7aLt7y8XwouxY1RfFrUx7jg6N7/wNs8FMtb6othP4PLrCyLAGyY7VN3LmsyCfJJ4zJoW
+         09wRNEAM24cerIWoe7zTKCzqaNDncUMQ6EQYyg06EOPXE1FCjZZAuF14qG+8Z2vjzhZV
+         sK4QMjXlMFDphsIQNa3FiH2Qs/ICRrbOXVoHSZ6oUPiZVO46kPSTFxC2ppZ6YgSaMkFy
+         oxluSBEPEyJe4Xi8xkhWpIAfjgPzZlLXU5GiYUfkZJNoZhLKgZ9rmqjj0Q7zHz+N7svg
+         a8rg==
+X-Gm-Message-State: AC+VfDwfp7oFQ5xXTWzS4tT/KHfKc8BKVpyTg9B6zYtfYo87Y+yjcz/N
+        qWinWH9TQ+wAjDH/szeVW4o=
+X-Google-Smtp-Source: ACHHUZ5fnHrl/tJfcI54MYO46wn+FeLkyvXyZuNwRPHYdlChqA2eBR73HKVAr1uWlqPieYm89QM7LA==
+X-Received: by 2002:a17:907:2bc7:b0:98d:e696:de4f with SMTP id gv7-20020a1709072bc700b0098de696de4fmr11347296ejc.26.1688035075781;
+        Thu, 29 Jun 2023 03:37:55 -0700 (PDT)
+Received: from localhost.localdomain ([185.215.195.243])
+        by smtp.googlemail.com with ESMTPSA id m5-20020a170906258500b009928b4e3b9fsm1420728ejb.114.2023.06.29.03.37.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 03:37:55 -0700 (PDT)
+From:   Davide Tronchin <davide.tronchin.94@gmail.com>
+To:     oliver@neukum.org
+Cc:     netdev@vger.kernel.org, pabeni@redhat.com,
+        marco.demarco@posteo.net, linux-usb@vger.kernel.org,
+        kuba@kernel.org, Davide Tronchin <davide.tronchin.94@gmail.com>
+Subject: [PATCH] net: usb: cdc_ether: add u-blox 0x1313 composition.
+Date:   Thu, 29 Jun 2023 12:37:36 +0200
+Message-Id: <20230629103736.23861-1-davide.tronchin.94@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-EM060K_128 is EM060K's sub-model, having the same name "Quectel EM060K-GL"
+Add CDC-ECM support for LARA-R6 01B.
 
-MBIM + GNSS + DIAG + NMEA + AT + QDSS + DPL
+The new LARA-R6 product variant identified by the "01B" string can be
+configured (by AT interface) in three different USB modes:
+* Default mode (Vendor ID: 0x1546 Product ID: 0x1311) with 4 serial
+interfaces
+* RmNet mode (Vendor ID: 0x1546 Product ID: 0x1312) with 4 serial
+interfaces and 1 RmNet virtual network interface
+* CDC-ECM mode (Vendor ID: 0x1546 Product ID: 0x1313) with 4 serial
+interface and 1 CDC-ECM virtual network interface
+The first 4 interfaces of all the 3 configurations (default, RmNet, ECM)
+are the same.
 
-T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=02 Dev#=  8 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=0128 Rev= 5.04
-S:  Manufacturer=Quectel
-S:  Product=Quectel EM060K-GL
-S:  SerialNumber=f6fa08b6
-C:* #Ifs= 8 Cfg#= 1 Atr=a0 MxPwr=500mA
-A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=70 Driver=(none)
-E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 7 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=80 Driver=(none)
-E:  Ad=8f(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+In CDC-ECM mode LARA-R6 01B exposes the following interfaces:
+If 0: Diagnostic
+If 1: AT parser
+If 2: AT parser
+If 3: AT parset/alternative functions
+If 4: CDC-ECM interface
 
-Signed-off-by: Jerry Meng <jerry-meng@foxmail.com>
+Signed-off-by: Davide Tronchin <davide.tronchin.94@gmail.com>
 ---
-V1 -> V2: Remove indentaions and correct spelling for commit message
 
- drivers/usb/serial/option.c | 4 ++++
- 1 file changed, 4 insertions(+)
+usb/devices file of the LARA-R6 01B module in CDC-ECM USB mode:
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 288a96a74266..a1600ec82f56 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -251,6 +251,7 @@ static void option_instat_callback(struct urb *urb);
- #define QUECTEL_PRODUCT_EM061K_LTA		0x0123
- #define QUECTEL_PRODUCT_EM061K_LMS		0x0124
- #define QUECTEL_PRODUCT_EC25			0x0125
-+#define QUECTEL_PRODUCT_EM060K_128		0x0128
- #define QUECTEL_PRODUCT_EG91			0x0191
- #define QUECTEL_PRODUCT_EG95			0x0195
- #define QUECTEL_PRODUCT_BG96			0x0296
-@@ -1197,6 +1198,9 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0x00, 0x40) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x30) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x40) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_128, 0xff, 0xff, 0x30) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_128, 0xff, 0x00, 0x40) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_128, 0xff, 0xff, 0x40) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM061K_LCN, 0xff, 0xff, 0x30) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM061K_LCN, 0xff, 0x00, 0x40) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM061K_LCN, 0xff, 0xff, 0x40) },
+T:  Bus=01 Lev=02 Prnt=02 Port=02 Cnt=02 Dev#=  9 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1546 ProdID=1313 Rev= 0.00
+S:  Manufacturer=u-blox
+S:  Product=u-blox Modem
+S:  SerialNumber=1478200b
+C:* #Ifs= 6 Cfg#= 1 Atr=e0 MxPwr=500mA
+A:  FirstIf#= 4 IfCount= 2 Cls=02(comm.) Sub=00 Prot=00
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=84(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=86(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
+E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+I:  If#= 5 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+I:* If#= 5 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+---
+ drivers/net/usb/cdc_ether.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
+index 80849d115e5d..c00a89b24df9 100644
+--- a/drivers/net/usb/cdc_ether.c
++++ b/drivers/net/usb/cdc_ether.c
+@@ -875,6 +875,12 @@ static const struct usb_device_id	products[] = {
+ 				      USB_CDC_SUBCLASS_ETHERNET,
+ 				      USB_CDC_PROTO_NONE),
+ 	.driver_info = (unsigned long)&wwan_info,
++}, {
++	/* U-blox LARA-R6 01B */
++	USB_DEVICE_AND_INTERFACE_INFO(UBLOX_VENDOR_ID, 0x1313, USB_CLASS_COMM,
++				      USB_CDC_SUBCLASS_ETHERNET,
++				      USB_CDC_PROTO_NONE),
++	.driver_info = (unsigned long)&wwan_info,
+ }, {
+ 	/* U-blox LARA-L6 */
+ 	USB_DEVICE_AND_INTERFACE_INFO(UBLOX_VENDOR_ID, 0x1343, USB_CLASS_COMM,
 -- 
-2.25.1
+2.34.1
 
