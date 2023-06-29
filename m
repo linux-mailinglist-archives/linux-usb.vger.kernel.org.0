@@ -2,193 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD34E742E26
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jun 2023 22:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB357742F52
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jun 2023 23:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbjF2UFp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Jun 2023 16:05:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
+        id S230239AbjF2VLE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Jun 2023 17:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232589AbjF2UFC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Jun 2023 16:05:02 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DF2212C
-        for <linux-usb@vger.kernel.org>; Thu, 29 Jun 2023 13:05:01 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4fba03becc6so741565e87.0
-        for <linux-usb@vger.kernel.org>; Thu, 29 Jun 2023 13:05:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688069099; x=1690661099;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OF3SWHQBitllVPlaYnVLF/iiTBXMytWTZQU29N7FmDM=;
-        b=gxSfIjzJgF4o6hdReIGjdG8oDb8YMY+FvG9DOf48gJS/uXUgVgdRBxWOyIbIwZURQ6
-         qqlLtGy9beddY4617elmaPql81XYUQ8zxW7WylayUjuELQrLfAH6Ort+7wOGubNRvfjs
-         vPUnouklFBiwE0tQK5VjdKd6ndIr8to+h+Q9RDGQzK+DZDXTIUQ1jVsZKarH3Pku08RX
-         2QvOPHNXoyjvlv7ryV1D7SN/jNZctB6mPECftJZV3hBBGOiv7QrR0qAJLqP8YAr1Kln/
-         XVdozh/5IpjZyWV41qXtrBGwBcWg4aLtVJRCcZRZeIvobORm50LcEvt3gPIPCgI5UMbS
-         PLwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688069099; x=1690661099;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OF3SWHQBitllVPlaYnVLF/iiTBXMytWTZQU29N7FmDM=;
-        b=SB8mTWwOEE20ZooJZ1+bWIuAPl/NHpswYFiCtsS8NWn+csqetCFdrY/H+4onwUs/kX
-         OOlEkXfQDBXSpUXDRVK6OFq9HHRozi44Gyu7wpjY0m5livjUecp2y9cEFAkHkeX1LDVt
-         yVEtLeVarlqilBqOPWk/2LOyT1yv4d8ue/lysMd/ON0GW4Y2zAwV+nsaKh+JzL/1c3TC
-         CRHHY6nlbys1l4pY9A+nyNeEVicVBWQ/ZtIJQf7lf8TbTt4lwMQuhrPaEwG1znUvr9Sp
-         fwQIRrD9WH3zi4aoutD9JwmtQf96GL8j50dNvPQ+SLvaTKYN5tggKsMdDUrq1sjcBXDD
-         XKEQ==
-X-Gm-Message-State: ABy/qLbo1aBwZUtNRGEqG59XBDCE29nKMHUKiccm40Jzg3HjCNBBZOl2
-        /ddlq1jlUj0RopkisvKvtMWnGFF+LiTGJsbh1JM=
-X-Google-Smtp-Source: APBJJlHCImMszh08qroN+ScqTvW+Lm4kzbNBHCoakjGE3swSx6rZ5XyHj9KuN68oeeMW8B9bxhKuoQ==
-X-Received: by 2002:a05:6512:693:b0:4f8:6d9d:abe0 with SMTP id t19-20020a056512069300b004f86d9dabe0mr365281lfe.33.1688069099306;
-        Thu, 29 Jun 2023 13:04:59 -0700 (PDT)
-Received: from [192.168.1.101] (abyk82.neoplus.adsl.tpnet.pl. [83.9.30.82])
-        by smtp.gmail.com with ESMTPSA id k28-20020ac2457c000000b004fb9fbdd8fcsm207623lfm.252.2023.06.29.13.04.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 13:04:58 -0700 (PDT)
-Message-ID: <ef515514-43e8-e4c9-e013-09aa27bc2110@linaro.org>
-Date:   Thu, 29 Jun 2023 22:04:55 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 08/11] dt-bindings: usb: ci-hdrc-usb2: Fix handling
- pinctrl properties
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     cros-qcom-dts-watchers@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Benjamin Li <benl@squareup.com>,
-        James Willcox <jwillcox@squareup.com>,
-        Joseph Gates <jgates@squareup.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Zac Crosby <zac@squareup.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Lee Jones <lee@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
+        with ESMTP id S231681AbjF2VK6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Jun 2023 17:10:58 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71DA2D4C
+        for <linux-usb@vger.kernel.org>; Thu, 29 Jun 2023 14:10:55 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.87.199) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Fri, 30 Jun
+ 2023 00:10:46 +0300
+To:     Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Xu Yang <xu.yang_2@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Jun Nie <jun.nie@linaro.org>, Max Chen <mchen@squareup.com>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Vivek Gautam <vivek.gautam@codeaurora.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        alsa-devel@alsa-project.org, iommu@lists.linux.dev,
-        linux-usb@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Andy Gross <andy.gross@linaro.org>
-References: <20230627-topic-more_bindings-v1-0-6b4b6cd081e5@linaro.org>
- <20230627-topic-more_bindings-v1-8-6b4b6cd081e5@linaro.org>
- <20230629152335.GA3055525-robh@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230629152335.GA3055525-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+        <linux-usb@vger.kernel.org>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: [PATCH] usb: host: xhci-plat: fix possible kernel oops while resuming
+Organization: Open Mobile Platform
+Message-ID: <7eff75da-bdd5-8ccd-1ad1-676f29041545@omp.ru>
+Date:   Fri, 30 Jun 2023 00:10:46 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [31.173.87.199]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 06/29/2023 20:56:06
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 178343 [Jun 29 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.87.199 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.87.199
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 06/29/2023 21:02:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 6/29/2023 6:28:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 29.06.2023 17:23, Rob Herring wrote:
-> On Tue, Jun 27, 2023 at 06:24:24PM +0200, Konrad Dybcio wrote:
->> Untangle the bit messy oneOf trees and add the missing pinctrl-2 mention
->> to handle the different pinctrl combinations.
->>
->> Fixes: 4c8375d35f72 ("dt-bindings: usb: ci-hdrc-usb2: convert to DT schema format")
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml      | 27 ++++++----------------
->>  1 file changed, 7 insertions(+), 20 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
->> index 782402800d4a..24431a7adf3e 100644
->> --- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
->> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
->> @@ -199,17 +199,6 @@ properties:
->>        In case of HSIC-mode, "idle" and "active" pin modes are mandatory.
->>        In this case, the "idle" state needs to pull down the data and
->>        strobe pin and the "active" state needs to pull up the strobe pin.
->> -    oneOf:
->> -      - items:
->> -          - const: idle
->> -          - const: active
-> 
-> These are no longer valid values? The description still mentions them.
-I believe allOf: now covers them all?
+If this driver enables the xHC clocks while resuming from sleep, it calls
+clk_prepare_enable() without checking for errors and blithely goes on to
+read/write the xHC's registers -- which, with the xHC not being clocked,
+at least on ARM32 usually causes an imprecise external abort exceptions
+which cause kernel oops.  Currently, the chips for which the driver does
+the clock dance on suspend/resume seem to be the Broadcom STB SoCs, based
+on ARM32 CPUs, as it seems...
 
-> 
->> -      - items:
->> -          - const: default
->> -          - enum:
->> -              - host
->> -              - device
->> -      - items:
->> -          - const: default
->>  
->>    pinctrl-0:
->>      maxItems: 1
->> @@ -357,17 +346,15 @@ allOf:
->>              - const: active
->>      else:
->>        properties:
->> +        pinctrl-2:
-> 
-> This should be implicitly allowed. Is it not?
-No, it errored out for me.
+Found by Linux Verification Center (linuxtesting.org) with the Svace static
+analysis tool.
 
-> 
-> I'm reallly at a loss as to what problem this patch solves.
-Specifying all 3 pin states is impossible with the current state of
-this binding, even though it's a supported configuration (check
-qcom/apq8039-t2.dtb). I should have been more clear in the commit
-message.
+Fixes: 8bd954c56197 ("usb: host: xhci-plat: suspend and resume clocks")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-Konrad
+---
+This patch is against the 'usb-linus' branch of Greg KH's 'usb.git' repo...
 
-> 
->> +          maxItems: 1
->> +
->>          pinctrl-names:
->>            minItems: 1
->> -          maxItems: 2
->> -          oneOf:
->> -            - items:
->> -                - const: default
->> -                - enum:
->> -                    - host
->> -                    - device
->> -            - items:
->> -                - const: default
->> +          items:
->> +            - const: default
->> +            - const: host
->> +            - const: device
->>    - if:
->>        properties:
->>          compatible:
->>
->> -- 
->> 2.41.0
->>
+ drivers/usb/host/xhci-plat.c |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+Index: usb/drivers/usb/host/xhci-plat.c
+===================================================================
+--- usb.orig/drivers/usb/host/xhci-plat.c
++++ usb/drivers/usb/host/xhci-plat.c
+@@ -470,8 +470,14 @@ static int __maybe_unused xhci_plat_resu
+ 	int ret;
+ 
+ 	if (!device_may_wakeup(dev) && (xhci->quirks & XHCI_SUSPEND_RESUME_CLKS)) {
+-		clk_prepare_enable(xhci->clk);
+-		clk_prepare_enable(xhci->reg_clk);
++		ret = clk_prepare_enable(xhci->clk);
++		if (ret)
++			return ret;
++		ret = clk_prepare_enable(xhci->reg_clk);
++		if (ret) {
++			clk_disable_unprepare(xhci->clk);
++			return ret;
++		}
+ 	}
+ 
+ 	ret = xhci_priv_resume_quirk(hcd);
