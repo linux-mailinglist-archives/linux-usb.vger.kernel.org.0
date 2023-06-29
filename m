@@ -2,149 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F22742413
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jun 2023 12:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2012C74250E
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jun 2023 13:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231865AbjF2KiR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Jun 2023 06:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
+        id S231743AbjF2LkP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Jun 2023 07:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbjF2Kh7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Jun 2023 06:37:59 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5561FD7;
-        Thu, 29 Jun 2023 03:37:57 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9920a6a6cb0so63932666b.3;
-        Thu, 29 Jun 2023 03:37:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688035076; x=1690627076;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XN5V8SfO8qHsuFFue4HRYt+RlC126GyX62QDFnswAVo=;
-        b=CCrVOrQgcuNioz35cjKkVM5ts8pq7891DKa5/606kAiPw/HLBPCdfVqLU7Z2KV9IqV
-         m369sLfQXQRQk8D/9I/Oa6b+TXU4HSk+kLVAgN74aAd/ZzrDdncbYteX6vTklLdRu3Md
-         m3qHY3ixEhl5pT63ByANDaoQlQIOfqRUF9p4cjYSnyhczQsWjf2uL15wo3YGVDqeMzlN
-         sgsrnMuxnxx1RqzRwyQmAGau+5/mqazw8MS2BDs9r1zzhvnz3cLN4xxd5wjs/RQwDZeZ
-         rtRr6U0MX/89dSrkY6IYMnC8KlagEA0ap2ICmCvEL6WAsq+FfAuH6lMgFknp/C5y5Jcj
-         dwiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688035076; x=1690627076;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XN5V8SfO8qHsuFFue4HRYt+RlC126GyX62QDFnswAVo=;
-        b=E8LYN0KXSqhUarwpRMKjQJkBw4MxGAIgrwYDPYCNFYg8fNzjtUY8rc4+1XCXIV2S8H
-         7aLt7y8XwouxY1RfFrUx7jg6N7/wNs8FMtb6othP4PLrCyLAGyY7VN3LmsyCfJJ4zJoW
-         09wRNEAM24cerIWoe7zTKCzqaNDncUMQ6EQYyg06EOPXE1FCjZZAuF14qG+8Z2vjzhZV
-         sK4QMjXlMFDphsIQNa3FiH2Qs/ICRrbOXVoHSZ6oUPiZVO46kPSTFxC2ppZ6YgSaMkFy
-         oxluSBEPEyJe4Xi8xkhWpIAfjgPzZlLXU5GiYUfkZJNoZhLKgZ9rmqjj0Q7zHz+N7svg
-         a8rg==
-X-Gm-Message-State: AC+VfDwfp7oFQ5xXTWzS4tT/KHfKc8BKVpyTg9B6zYtfYo87Y+yjcz/N
-        qWinWH9TQ+wAjDH/szeVW4o=
-X-Google-Smtp-Source: ACHHUZ5fnHrl/tJfcI54MYO46wn+FeLkyvXyZuNwRPHYdlChqA2eBR73HKVAr1uWlqPieYm89QM7LA==
-X-Received: by 2002:a17:907:2bc7:b0:98d:e696:de4f with SMTP id gv7-20020a1709072bc700b0098de696de4fmr11347296ejc.26.1688035075781;
-        Thu, 29 Jun 2023 03:37:55 -0700 (PDT)
-Received: from localhost.localdomain ([185.215.195.243])
-        by smtp.googlemail.com with ESMTPSA id m5-20020a170906258500b009928b4e3b9fsm1420728ejb.114.2023.06.29.03.37.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 03:37:55 -0700 (PDT)
-From:   Davide Tronchin <davide.tronchin.94@gmail.com>
-To:     oliver@neukum.org
-Cc:     netdev@vger.kernel.org, pabeni@redhat.com,
-        marco.demarco@posteo.net, linux-usb@vger.kernel.org,
-        kuba@kernel.org, Davide Tronchin <davide.tronchin.94@gmail.com>
-Subject: [PATCH] net: usb: cdc_ether: add u-blox 0x1313 composition.
-Date:   Thu, 29 Jun 2023 12:37:36 +0200
-Message-Id: <20230629103736.23861-1-davide.tronchin.94@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229615AbjF2LkO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Jun 2023 07:40:14 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDF0610F0;
+        Thu, 29 Jun 2023 04:40:12 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D592C14;
+        Thu, 29 Jun 2023 04:40:56 -0700 (PDT)
+Received: from [10.57.33.98] (unknown [10.57.33.98])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BD5BB3F64C;
+        Thu, 29 Jun 2023 04:40:10 -0700 (PDT)
+Message-ID: <11d40d12-bb6c-25b3-ef44-43f4ded0e628@arm.com>
+Date:   Thu, 29 Jun 2023 12:40:03 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] usb: xhci-mtk: set the dma max_seg_size
+Content-Language: en-GB
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Zubin Mithra <zsm@chromium.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230628-mtk-usb-v1-1-3c5b2ea3d6b9@chromium.org>
+ <CANiDSCsAgD33gMk9-CTGHuUv_b4KfRnO02ETEt6jFtQvw+6cag@mail.gmail.com>
+ <ZJystxdl0jVoe5b6@google.com>
+ <CANiDSCu3WOqK9wdLDXmW+zbckq15gmxKjtFA4Aghv6uoidO_3Q@mail.gmail.com>
+ <2023062942-thumb-giddily-f0e0@gregkh>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <2023062942-thumb-giddily-f0e0@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add CDC-ECM support for LARA-R6 01B.
+On 2023-06-29 09:40, Greg Kroah-Hartman wrote:
+> On Thu, Jun 29, 2023 at 09:13:23AM +0200, Ricardo Ribalda wrote:
+>> Hi Zubin
+>>
+>> On Wed, 28 Jun 2023 at 23:57, Zubin Mithra <zsm@chromium.org> wrote:
+>>>
+>>> On Wed, Jun 28, 2023 at 11:04:20PM +0200, Ricardo Ribalda wrote:
+>>>> On Wed, 28 Jun 2023 at 23:00, Ricardo Ribalda <ribalda@chromium.org> wrote:
+>>>>>
+>>>>> Allow devices to have dma operations beyond 64K, and avoid warnings such
+>>>>> as:
+>>>>>
+>>>>> DMA-API: xhci-mtk 11200000.usb: mapping sg segment longer than device claims to support [len=98304] [max=65536]
+>>>>>
+>>>>> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+>>>> Reported-by: Zubin Mithra <zsm@chromium.org>
+>>>
+>>> Should this be cc'd to stable@ as well?
+>>
+>> Not sure, in most of the cases this is "just" a warning fix. Let the
+>> maintainer decide:
+> 
+> Warnings can cause reboots as the majority of the linux systems in the
+> world run panic-on-warn, so yes, it should be backported.
 
-The new LARA-R6 product variant identified by the "01B" string can be
-configured (by AT interface) in three different USB modes:
-* Default mode (Vendor ID: 0x1546 Product ID: 0x1311) with 4 serial
-interfaces
-* RmNet mode (Vendor ID: 0x1546 Product ID: 0x1312) with 4 serial
-interfaces and 1 RmNet virtual network interface
-* CDC-ECM mode (Vendor ID: 0x1546 Product ID: 0x1313) with 4 serial
-interface and 1 CDC-ECM virtual network interface
-The first 4 interfaces of all the 3 configurations (default, RmNet, ECM)
-are the same.
+Although in this particular case, running DMA_API_DEBUG=y on production 
+systems is a pretty inadvisable thing to do anyway ;)
 
-In CDC-ECM mode LARA-R6 01B exposes the following interfaces:
-If 0: Diagnostic
-If 1: AT parser
-If 2: AT parser
-If 3: AT parset/alternative functions
-If 4: CDC-ECM interface
+However I'm glad I looked, since I think this also points to a bug in 
+dma_alloc_noncontiguous() - it's one thing to blame a driver for trying 
+to map a malformed scatterlist of its own, but if the DMA API is 
+generating one internally without respecting the device's (claimed) 
+parameters, then that's on us. I'll have a look into it...
 
-Signed-off-by: Davide Tronchin <davide.tronchin.94@gmail.com>
----
-
-usb/devices file of the LARA-R6 01B module in CDC-ECM USB mode:
-
-T:  Bus=01 Lev=02 Prnt=02 Port=02 Cnt=02 Dev#=  9 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=1546 ProdID=1313 Rev= 0.00
-S:  Manufacturer=u-blox
-S:  Product=u-blox Modem
-S:  SerialNumber=1478200b
-C:* #Ifs= 6 Cfg#= 1 Atr=e0 MxPwr=500mA
-A:  FirstIf#= 4 IfCount= 2 Cls=02(comm.) Sub=00 Prot=00
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=84(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=86(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
-E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-I:  If#= 5 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-I:* If#= 5 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-
----
- drivers/net/usb/cdc_ether.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
-index 80849d115e5d..c00a89b24df9 100644
---- a/drivers/net/usb/cdc_ether.c
-+++ b/drivers/net/usb/cdc_ether.c
-@@ -875,6 +875,12 @@ static const struct usb_device_id	products[] = {
- 				      USB_CDC_SUBCLASS_ETHERNET,
- 				      USB_CDC_PROTO_NONE),
- 	.driver_info = (unsigned long)&wwan_info,
-+}, {
-+	/* U-blox LARA-R6 01B */
-+	USB_DEVICE_AND_INTERFACE_INFO(UBLOX_VENDOR_ID, 0x1313, USB_CLASS_COMM,
-+				      USB_CDC_SUBCLASS_ETHERNET,
-+				      USB_CDC_PROTO_NONE),
-+	.driver_info = (unsigned long)&wwan_info,
- }, {
- 	/* U-blox LARA-L6 */
- 	USB_DEVICE_AND_INTERFACE_INFO(UBLOX_VENDOR_ID, 0x1343, USB_CLASS_COMM,
--- 
-2.34.1
-
+Thanks,
+Robin.
