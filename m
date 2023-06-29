@@ -2,133 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E955741F90
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jun 2023 07:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A472074200C
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jun 2023 07:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjF2FMC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Jun 2023 01:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
+        id S231831AbjF2Fqo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Jun 2023 01:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbjF2FLt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Jun 2023 01:11:49 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49B626BB;
-        Wed, 28 Jun 2023 22:11:47 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35T5BNYA035959;
-        Thu, 29 Jun 2023 00:11:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1688015483;
-        bh=0Dc3Q6uzWDWdGY+a/wqboxsnIZAW1oc5tTp4JWmnnIU=;
-        h=Date:Subject:To:References:From:In-Reply-To;
-        b=xyib6HPCgAfk7Ch/fShnT/sU9+unxhiv0DE4YDU6EM670PkyTmOjNOC/nsXZrf3PA
-         q0KbqtZAGWuKzikOl/7AJ+kXkCsNqzebyZcv4t0wqonXXKkLPmSI7SQPR1T1/rimTC
-         lYG90FH7bdxVMJ/Hxe3aFwq5ohIxeKsY6a95bfTY=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35T5BN5q021469
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 29 Jun 2023 00:11:23 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 29
- Jun 2023 00:11:23 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 29 Jun 2023 00:11:23 -0500
-Received: from [10.24.69.79] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35T5BJHL058488;
-        Thu, 29 Jun 2023 00:11:19 -0500
-Message-ID: <0da8f837-de99-0673-4af1-06efe4ce0a99@ti.com>
-Date:   Thu, 29 Jun 2023 10:41:18 +0530
+        with ESMTP id S230119AbjF2Fqi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Jun 2023 01:46:38 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4EDB1FFA;
+        Wed, 28 Jun 2023 22:46:33 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 35T5jNc95016165, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 35T5jNc95016165
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Thu, 29 Jun 2023 13:45:23 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Thu, 29 Jun 2023 13:45:24 +0800
+Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 29 Jun 2023 13:45:23 +0800
+Received: from localhost.localdomain (172.21.252.101) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
+ 15.1.2507.17 via Frontend Transport; Thu, 29 Jun 2023 13:45:23 +0800
+From:   Stanley Chang <stanley_chang@realtek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Stanley Chang <stanley_chang@realtek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Ray Chi <raychi@google.com>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+Subject: [PATCH v6 1/5] usb: phy: add usb phy notify port status API
+Date:   Thu, 29 Jun 2023 13:45:09 +0800
+Message-ID: <20230629054523.7519-1-stanley_chang@realtek.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/1] usb: gadget: call usb_gadget_check_config() to verify
- UDC capability
-Content-Language: en-US
-To:     Frank Li <Frank.Li@nxp.com>, <rogerq@kernel.org>,
-        <imx@lists.linux.dev>, <jun.li@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?B?SsOzIMOBZ2lsYSBCaXRzY2g=?= <jgilab@gmail.com>,
-        Prashanth K <quic_prashk@quicinc.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230628222437.3188441-1-Frank.Li@nxp.com>
-From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
-In-Reply-To: <20230628222437.3188441-1-Frank.Li@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-KSE-ServerInfo: RTEXMBS05.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+In Realtek SoC, the parameter of usb phy is designed to can dynamic
+tuning base on port status. Therefore, add a notify callback of phy
+driver when usb port status change.
 
+The Realtek phy driver is designed to dynamically adjust disconnection
+level and calibrate phy parameters. When the device connected bit changes
+and when the disconnected bit changes, do port status change notification:
 
-On 6/29/23 3:54 AM, Frank Li wrote:
-> The legacy gadget driver omitted calling usb_gadget_check_config()
-> to ensure that the USB device controller (UDC) has adequate resources,
-> including sufficient endpoint numbers and types, to support the given
-> configuration.
-> 
-> Previously, usb_add_config() was solely invoked by the legacy gadget
-> driver. Adds the necessary usb_gadget_check_config() after the bind()
-> operation to fix the issue.
-> 
-> Fixes: dce49449e04f ("usb: cdns3: allocate TX FIFO size according to composite EP number")
-> Reported-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  drivers/usb/gadget/composite.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-> index 1b3489149e5e..dd9b90481b4c 100644
-> --- a/drivers/usb/gadget/composite.c
-> +++ b/drivers/usb/gadget/composite.c
-> @@ -1125,6 +1125,10 @@ int usb_add_config(struct usb_composite_dev *cdev,
->  		goto done;
->  
->  	status = bind(config);
-> +
-> +	if (status == 0)
-> +		status = usb_gadget_check_config(cdev->gadget);
+Check if portstatus is USB_PORT_STAT_CONNECTION and portchange is
+USB_PORT_STAT_C_CONNECTION.
+1. The device is connected, the driver lowers the disconnection level and
+   calibrates the phy parameters.
+2. The device disconnects, the driver increases the disconnect level and
+   calibrates the phy parameters.
 
-This will work for legacy gadgets that support only one configurations.
-Take for example g_ether. It has two configurations when RNDIS is enabled.
-And usb_add_config() is invoked for each configuration. 
+When controller to notify connect that device is already ready. If we
+adjust the disconnection level in notify_connect, the disconnect may have
+been triggered at this stage. So we need to change that as early as
+possible. Therefore, we add an api to notify phy the port status changes.
 
-cdns3_gadget_check_config() calculates the total IN end-points based on the
-ep->claimed flag. 
+Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+---
+v5 to v6 change:
+    No change
+v4 to v5 change:
+    No change
+v3 to v4 change:
+    Fix the warning for checkpatch with strict.
+v2 to v3 change:
+    Add more comments about the reason for adding this api
+v1 to v2 change:
+    No change
+---
+ drivers/usb/core/hub.c  | 13 +++++++++++++
+ include/linux/usb/phy.h | 13 +++++++++++++
+ 2 files changed, 26 insertions(+)
 
-        list_for_each_entry(ep, &gadget->ep_list, ep_list) {                
-                if (ep->claimed && (ep->address & USB_DIR_IN))              
-                        n_in++;                                             
-        }  
-
-This ep->claimed flag is later cleared by usb_ep_autoconfig_reset() which is
-invoked in usb_add_config(). So for multi-configurations, actual total in end points
-is not taken into consideration thus resulting in incorrect fifo size allocation/check.
-
-g_ffs is another gadget which has multiple configurations.
-
-
-> +
->  	if (status < 0) {
->  		while (!list_empty(&config->functions)) {
->  			struct usb_function		*f;
-
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 97a0f8faea6e..10f3364c3fc2 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -614,6 +614,19 @@ static int hub_ext_port_status(struct usb_hub *hub, int port1, int type,
+ 		ret = 0;
+ 	}
+ 	mutex_unlock(&hub->status_mutex);
++
++	if (!ret) {
++		struct usb_device *hdev = hub->hdev;
++
++		if (hdev && !hdev->parent) {
++			struct usb_hcd *hcd = bus_to_hcd(hdev->bus);
++
++			if (hcd->usb_phy)
++				usb_phy_notify_port_status(hcd->usb_phy,
++							   port1 - 1, *status, *change);
++		}
++	}
++
+ 	return ret;
+ }
+ 
+diff --git a/include/linux/usb/phy.h b/include/linux/usb/phy.h
+index e4de6bc1f69b..b513749582d7 100644
+--- a/include/linux/usb/phy.h
++++ b/include/linux/usb/phy.h
+@@ -144,6 +144,10 @@ struct usb_phy {
+ 	 */
+ 	int	(*set_wakeup)(struct usb_phy *x, bool enabled);
+ 
++	/* notify phy port status change */
++	int	(*notify_port_status)(struct usb_phy *x, int port,
++				      u16 portstatus, u16 portchange);
++
+ 	/* notify phy connect status change */
+ 	int	(*notify_connect)(struct usb_phy *x,
+ 			enum usb_device_speed speed);
+@@ -316,6 +320,15 @@ usb_phy_set_wakeup(struct usb_phy *x, bool enabled)
+ 		return 0;
+ }
+ 
++static inline int
++usb_phy_notify_port_status(struct usb_phy *x, int port, u16 portstatus, u16 portchange)
++{
++	if (x && x->notify_port_status)
++		return x->notify_port_status(x, port, portstatus, portchange);
++	else
++		return 0;
++}
++
+ static inline int
+ usb_phy_notify_connect(struct usb_phy *x, enum usb_device_speed speed)
+ {
 -- 
-Regards,
-Ravi
+2.34.1
+
