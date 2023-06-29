@@ -2,214 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66284742009
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jun 2023 07:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD14074201D
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jun 2023 07:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbjF2Fqm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Jun 2023 01:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231332AbjF2Fqj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Jun 2023 01:46:39 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE73B294E;
-        Wed, 28 Jun 2023 22:46:37 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 35T5k3Ey9016346, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 35T5k3Ey9016346
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Thu, 29 Jun 2023 13:46:03 +0800
-Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 29 Jun 2023 13:46:04 +0800
-Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
- RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 29 Jun 2023 13:46:04 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
- 15.1.2507.17 via Frontend Transport; Thu, 29 Jun 2023 13:46:04 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Stanley Chang <stanley_chang@realtek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Douglas Anderson" <dianders@chromium.org>,
-        Ray Chi <raychi@google.com>,
-        "Flavio Suligoi" <f.suligoi@asem.it>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-Subject: [PATCH v6 5/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 3.0 PHY
-Date:   Thu, 29 Jun 2023 13:45:13 +0800
-Message-ID: <20230629054523.7519-5-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230629054523.7519-1-stanley_chang@realtek.com>
-References: <20230629054523.7519-1-stanley_chang@realtek.com>
+        id S231653AbjF2F4f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Jun 2023 01:56:35 -0400
+Received: from mail-mr2fra01on2044.outbound.protection.outlook.com ([40.107.9.44]:48160
+        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231508AbjF2F4d (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 29 Jun 2023 01:56:33 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DtizVpcADhGDxOaqNln/IRSaCkJrDBUEaHKBXnL+/IpRxQBgKxyJg7dhdb7WGGXITd8FMIJtYmgyr442L2hMj3ZS0XCV9o4LEphIlq0KAyKFhPX0xURCt8WFN/Euy124FKJ67cSY+3ZzlGUkfE86b9QiFrjD4uaRlJNtxQTYYCKbuppc1kuo+PCJubCHk8CIBkkP2p0B6RfolRUKVu6FlmIrhm5oXyWmcmSCbVzCSu0VTsD/P/WrGOoQRLdP1vsiiQVl5oXmS4zeOsOeM5N084lZcaOyCosH0zQSgQfSkcFbEux7u0tjriqbrVcMLm1m7p4MMN8m+OK7u1+4osiSyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UlAe+p2ISUlHkjV0vd1/Hoz+MUJXB2eT1HGleWj8+cc=;
+ b=GSifEBxmarEGIcBno0Oyyi876uJGu9udiRdvJwA8Q5k9JsgC4ACR0QSViq1DWLs3kVfF+e8wBgp2yrN7Q5PiM8PjeDEp4NZ8nwfpiXYl7Ew/deU+FMxnGwkx0IxKhDI8Wto2L2Vjxk8YL3FW7euHTuH3MFZFzIBpdA0txKemNYlHwsGE9vJTqQiVVFbOXLnfrSajC7LRCZK77xm4N4T1YxfdQDUSMpRCM+J2JjZI8q2XtTDlffRIN6FrZgDcoZRqodb2M9SXO16Yiusk5tlbYHsLo3ev9KS3HKnE4xE7Kmi9u/3RPpKzlPRcFn53u1+dftLVqi8t/BTXcu/B2gjpNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UlAe+p2ISUlHkjV0vd1/Hoz+MUJXB2eT1HGleWj8+cc=;
+ b=OurHZQ8VyNLJv7yRx8cpWipnZBHUyRD/yqu4DCPV6cTUbGZg6Gyv+gon/fhGn+CMfKwNzlM/F97JH48lBIt8SbgJN9OVEIg/H0v0vYi8nvXXsLrTpZMWEjlLqO+jupyX7t7J/ch8CmztxUdEykI/PYtteGFtCsyhasWbZgfjdcncFXgh8h0h9qjwUM48hEQTvQ8EOWz2zuZhJDQpiDVzl99a6BlM4h6xpCKpUmsf1uH0Ii1IqkT0he5VRFY8zt/MoCS6JkmArYHUuWIJji2jQoE7jJeLPNjasoVi0U3sQgWXED168JrmJVLbudChl/UZY4wxGJpD7xA2K7JOyamUGQ==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR1P264MB1729.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:5::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Thu, 29 Jun
+ 2023 05:56:31 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::802b:33:561c:4217]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::802b:33:561c:4217%4]) with mapi id 15.20.6521.026; Thu, 29 Jun 2023
+ 05:56:30 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Leo Li <leoyang.li@nxp.com>, Ma Ke <make_ruc2021@163.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: fsl_qe_udc: validate endpoint index for ch9
+ udc
+Thread-Topic: [PATCH] usb: gadget: fsl_qe_udc: validate endpoint index for ch9
+ udc
+Thread-Index: AQHZqbkQaP4TFYaOrEeUc/nFP4wqCq+gcZ4AgAArl4CAABkmgIAAkxkA
+Date:   Thu, 29 Jun 2023 05:56:30 +0000
+Message-ID: <7975b5bf-c8e0-237e-d6f4-98e641d39959@csgroup.eu>
+References: <20230628081511.186850-1-make_ruc2021@163.com>
+ <AM0PR04MB62893E77D085030A6E2C37B28F24A@AM0PR04MB6289.eurprd04.prod.outlook.com>
+ <f321287d-8156-b805-26fd-58acfa26e324@csgroup.eu>
+ <AM0PR04MB628929736762F5DF46C55D708F24A@AM0PR04MB6289.eurprd04.prod.outlook.com>
+In-Reply-To: <AM0PR04MB628929736762F5DF46C55D708F24A@AM0PR04MB6289.eurprd04.prod.outlook.com>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MR1P264MB1729:EE_
+x-ms-office365-filtering-correlation-id: 3582451e-c0c0-4232-d0ab-08db78659628
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: XEgE/RtZ+mkn0KjxIQR55Jp+v0A8O9Re/nAJP5d5so3UiRrmbxzPjehl922pYEuQXOxMVSRuPGAFGy82e13EHQUpdWKi/a2OMAwjNuyc1vpOaYaWxfDefoMUH+9PXYGkvF4KCesZNx+1alIheuwoDc4pVpjw/7g3R4YwJZMsrMd4GrvmYvXNBK4+lRPO0tDxJl3X2Jd5kbFdXW44KhDpScpCicY8I+5cHsKp2zCSJUskxJktTwW216uwH9Ar6yvKc7e4XTHyfPJv0UI3OGyfeG5Ur0H0GzzZw0EH291S8ILedTkp+4UMkO0vARbTVP7EVPFyN092FA6KsCc4lDjFg5JIEteNA+7gDBqfDr/5Hb22qfeCT6Bi5dI4rqRqUzSmJYzdyWrHa06odZ0tI10jbh4vU20bJgODkywyovGTaF/q5EvEWxUmsWfgKbsWOnio7Pi5jOnzFjaYXegt1SKvL6cWrx0UVHH/xZXDe19NutlpqMo0sZYFP8IcqruywH8e3+LmDIqgltK90orKpctfF/T8hUVHLBkQRpaTXti8IjkAIxPQjCpG/B/N/i733zlIKdiB/kIIbZLiFLGNRib5Ow6AWlAtpl2j03mGRE2ddVHrRV7SKk7DMZX/ozFnTUTXkHBsktZ5dDl3wKY0DAMQ3pjoZIIYPq03HAddKQ3li+2yFTQsoVu8Iv+G7bkF6OjQ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(376002)(136003)(346002)(39850400004)(451199021)(6506007)(110136005)(6486002)(2616005)(83380400001)(122000001)(38100700002)(66574015)(186003)(71200400001)(53546011)(26005)(31696002)(41300700001)(86362001)(54906003)(2906002)(316002)(4326008)(8936002)(64756008)(66556008)(66946007)(66446008)(76116006)(66476007)(91956017)(36756003)(6512007)(5660300002)(31686004)(8676002)(44832011)(478600001)(38070700005)(15650500001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RzRxT0QyVSt1bTdKZFU1eTJpcU1mSUdWMFhkNnVGM1FEYUZZNktrUUlqanUx?=
+ =?utf-8?B?UFNma0ZLaFllTHBOL3phWEZOSWpHOEVQbVAxelJVZnV4MWFUTy9LbFp4S3JF?=
+ =?utf-8?B?WmJpOUJKS2pmMUYxSldFc3czaERxdWtYaUh1TzJNSFZ1bml1anpFQkFTNHpN?=
+ =?utf-8?B?QUQvOVE1OCtlRHJRYVBGN1VIMk1oRkg5Q2YyQlAwR1UxZzRtamRSaC9aUE8y?=
+ =?utf-8?B?c1kybkdpRGpTZzFVa2FHa1NaclV3Z0N2bmkycVl3cDFRRC93N2tOTzZHaE54?=
+ =?utf-8?B?eDNIVkhDVDQvUlJkQ3N1dEQzck54NjVzM3RPRFNTeUg2emZvNzRFYlhnNmFV?=
+ =?utf-8?B?M0xmZUlhUDZPSlM1RWsvVnUwUU5JMldRaWFZdldsZFhWM1VLMzNNVnJsQWYz?=
+ =?utf-8?B?RGxXYjRtSFNIeU0vRi9NOFFaNmZsa09tb0JIcVlTR2l6TnV1SkErM3QzTGI2?=
+ =?utf-8?B?bVc2R0NNNzVpUlZvQ1E3RFpnSTk3VGEzNUIyK2UxNEpaOHhTREZ0dFlLMHpp?=
+ =?utf-8?B?OEVtWlZ4djFWcnZCM1dmRDZxcUZiVGFMYmF0V2JFRjJzTUhmd0FIVVFLdjN2?=
+ =?utf-8?B?bmhGMkIybWtFVXJoYzRUNmQvaUFCTCtSc3BXZERTYWlPRmJCSWRDU1FhN3hF?=
+ =?utf-8?B?ci9uK090dDRsQmJJU2dpVnVUR25iZ0U3dm9vTTkrTkZlRjRxV2lXUFZhazhD?=
+ =?utf-8?B?Vkd1QWRhTkFFaGNwMXRkSkt0d2RPZHBvM21CMjNwNTk3QkZUSnc5UGhJeE1Z?=
+ =?utf-8?B?NDRkSkRiZmdiSzZvUE50VnR5RWNzazhZVzNkTkJWOFp5NDk0N1FBenlRRlBq?=
+ =?utf-8?B?eWpNQlE1d0ZtSGwzTFVhWGlvTzBFU2luL2kzT0dJUjRuRWZwR1lYSmJsbCsy?=
+ =?utf-8?B?b1VVT05TUytJQkUvbDk0K3JlMzA4cGlUemtnbk0zZDI0SG1iU0hxNGFkNU5D?=
+ =?utf-8?B?cXlaS2tldm5GbFhuVzVVQVlXYlZRQmhDRWRnK2FBc3ErSlcxSGlzazhNMi96?=
+ =?utf-8?B?M2hhTFZtcklXRTBSWm5iYktIOTlNdHFkV3ZLenNvQnNLMDdydVRya0VzMjV6?=
+ =?utf-8?B?eGV1REJqNm9PcGlHNmdXdHpxQkpTcXZyRU5NRVhDMk0xQytaaXNoYUsyT0Na?=
+ =?utf-8?B?TGdDWXZLclhsc2N4bGhOa0swUjhZeFpEbkRZZGFaQ0ZNdExWZGxNUzluWTR1?=
+ =?utf-8?B?OFRSaFBmeC9GcGRYR255ajJoWkhKcXV3OXE0ME4vTVhJekNRUVdhV084UTgx?=
+ =?utf-8?B?dGhsUnVFNzZDOGJjVDRIRzVqNlVmMW9IUEFvZkJlZVVkNXlnOTFzVWlJWUJn?=
+ =?utf-8?B?NjMvd0FGS3pXb3I1MTZBZm9BeGltQWE2d2diaW5XK3dtYVR5aHVPd2lOV2VL?=
+ =?utf-8?B?Y3drUUx0Y09veGprYVg1U3lBSXNIbXhLOFptZzNZM24xNTdPMTg5ZmdiMkta?=
+ =?utf-8?B?OXFLcjgwcTRaYnZLR1Fvd1AvaXgzREpyekd0MFhQTE1qTm5RUGJHUkoxZFVN?=
+ =?utf-8?B?d3hDc2JQN2t1R3lXc1NSZE1xYTJ3bEtYSEd0VVlFY21NZHB0aVQzUjFtZGMv?=
+ =?utf-8?B?SEQxREFnOXZMV2N0UnRCcWM0NDIvQkxjcUVlaVhHcVhJb3ZsZUhNOXNrM0xN?=
+ =?utf-8?B?VjJTWnh0VFNrSk9SQWNXQ2ZtUzl5N0xLRFkrNmJJbENiK1lNVGNBQ096Rm5Z?=
+ =?utf-8?B?R2drVGszaUxWY0FsQUwxaEJzNXpOU3RlcnkrTjZINEdpSzZqNkFSR2k2Z1RH?=
+ =?utf-8?B?T0Z1THNkblc4cWVQdDRJWmxaSkVaL3dFN083emIzcmphTkl2OUczQ0Y3b0dn?=
+ =?utf-8?B?K0hNcFVzZkpFR2Z5SkVBQ0cwZFd1ZTZYL0FSQmFIUWtsNFcrQTc5cnZ4bllZ?=
+ =?utf-8?B?SWFHRThHeDErVDduSlBjMWdmNVhMOVY1Sk0xZnpsa0tKK2RSK0pkZTFPaHli?=
+ =?utf-8?B?YnhBdktzVjIrWFVtd2s1bzZMTEUrUzRKWmt5d2JiaTA0Y1BYdnh2WkRTRmd3?=
+ =?utf-8?B?UE0xSmJKZ0pCdTVwYjVOTVByVm5FbmdnY2xHSGh0ajBMZE96SlI5QUtvL1NW?=
+ =?utf-8?B?NzMwYUdmRE5QUHZHN1VwQ3hobkFmUnZvcWl1R2Nyc0dSRkNVWFNzRzMyd0pp?=
+ =?utf-8?Q?oNMlW+v0jt/Zl+2KVCHj1bLvQ?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B6FC47F3014D7D48B85B7709312A371C@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXDAG01.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3582451e-c0c0-4232-d0ab-08db78659628
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2023 05:56:30.8817
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 90w/A23P5Umsi4rcOPsRPOp4IxpgK0cbgteIL2tU/wXUJXqPzTgMg3T8jkGIjKQL2uk/TX6QhKgVYfmVp3ZPgoHz9y4JnAHGxHomBI8gJ40=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB1729
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the documentation explain the property about Realtek USB PHY driver.
-
-Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
-controller. Added the driver to drive the  USB 3.0 PHY transceivers.
-
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
----
-v5 to v6 change:
-    Drop the labels of example.
-v4 to v5 change:
-    1. Remove the compatible realtek,usb3phy.
-    2. Add the default of the property.
-v3 to v4 change:
-    1. Remove the parameter and non hardware properties from dts.
-    2. Using the compatible data included the config and parameter
-       in driver.
-v2 to v3 change:
-    1. Broken down into two patches, one for each of USB 2 & 3.
-    2. Add more description about Realtek RTD SoCs architecture.
-    3. Removed parameter v1 support for simplification.
-    4. Revised the compatible name for fallback compatible.
-    5. Remove some properties that can be set in the driver.
-v1 to v2 change:
-    Add phy-cells for generic phy driver
----
- .../bindings/phy/realtek,usb3phy.yaml         | 107 ++++++++++++++++++
- 1 file changed, 107 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-
-diff --git a/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-new file mode 100644
-index 000000000000..1a6cdc1ee073
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-@@ -0,0 +1,107 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2023 Realtek Semiconductor Corporation
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/phy/realtek,usb3phy.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Realtek DHC SoCs USB 3.0 PHY
-+
-+maintainers:
-+  - Stanley Chang <stanley_chang@realtek.com>
-+
-+description:
-+  Realtek USB 3.0 PHY support the digital home center (DHC) RTD series SoCs.
-+  The USB 3.0 PHY driver is designed to support the XHCI controller. The SoCs
-+  support multiple XHCI controllers. One PHY device node maps to one XHCI
-+  controller.
-+
-+  RTD1295/RTD1619 SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on some
-+  controllers.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+
-+  RTD1319/RTD1619b SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#2.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+
-+  RTD1319d SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each xhci maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#0.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+
-+properties:
-+  compatible:
-+    enum:
-+      - realtek,rtd1295-usb3phy
-+      - realtek,rtd1319-usb3phy
-+      - realtek,rtd1319d-usb3phy
-+      - realtek,rtd1619-usb3phy
-+      - realtek,rtd1619b-usb3phy
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#phy-cells":
-+    const: 0
-+
-+  nvmem-cells:
-+    maxItems: 1
-+    description: A phandle to the tx lfps swing trim data provided by
-+      a nvmem device, if unspecified, default values shall be used.
-+
-+  nvmem-cell-names:
-+    items:
-+      - const: usb_u3_tx_lfps_swing_trim
-+
-+  realtek,amplitude-control-coarse-tuning:
-+    description:
-+      This adjusts the signal amplitude for normal operation and beacon LFPS.
-+      This value is a parameter for coarse tuning.
-+      For different boards, if the default value is inappropriate, this
-+      property can be assigned to adjust.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    default: 255
-+    minimum: 0
-+    maximum: 255
-+
-+  realtek,amplitude-control-fine-tuning:
-+    description:
-+      This adjusts the signal amplitude for normal operation and beacon LFPS.
-+      This value is used for fine-tuning parameters.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    default: 65535
-+    minimum: 0
-+    maximum: 65535
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#phy-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    usb-phy@13e10 {
-+        compatible = "realtek,rtd1319d-usb3phy";
-+        reg = <0x13e10 0x4>;
-+        #phy-cells = <0>;
-+
-+        nvmem-cells = <&otp_usb_u3_tx_lfps_swing_trim>;
-+        nvmem-cell-names = "usb_u3_tx_lfps_swing_trim";
-+
-+        realtek,amplitude-control-coarse-tuning = <0x77>;
-+    };
--- 
-2.34.1
-
+DQoNCkxlIDI4LzA2LzIwMjMgw6AgMjM6MTAsIExlbyBMaSBhIMOpY3JpdMKgOg0KPiANCj4gDQo+
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPj4gRnJvbTogQ2hyaXN0b3BoZSBMZXJveSA8
+Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Pg0KPj4gU2VudDogV2VkbmVzZGF5LCBKdW5lIDI4
+LCAyMDIzIDI6NDAgUE0NCj4+IFRvOiBMZW8gTGkgPGxlb3lhbmcubGlAbnhwLmNvbT47IE1hIEtl
+IDxtYWtlX3J1YzIwMjFAMTYzLmNvbT4NCj4+IENjOiBncmVna2hAbGludXhmb3VuZGF0aW9uLm9y
+ZzsgbGludXgtdXNiQHZnZXIua2VybmVsLm9yZzsgbGludXhwcGMtDQo+PiBkZXZAbGlzdHMub3ps
+YWJzLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPj4gU3ViamVjdDogUmU6IFtQ
+QVRDSF0gdXNiOiBnYWRnZXQ6IGZzbF9xZV91ZGM6IHZhbGlkYXRlIGVuZHBvaW50IGluZGV4IGZv
+cg0KPj4gY2g5IHVkYw0KPj4NCj4+DQo+Pg0KPj4gTGUgMjgvMDYvMjAyMyDDoCAxOTowNCwgTGVv
+IExpIGEgw6ljcml0wqA6DQo+Pj4NCj4+Pg0KPj4+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0t
+LQ0KPj4+PiBGcm9tOiBNYSBLZSA8bWFrZV9ydWMyMDIxQDE2My5jb20+DQo+Pj4+IFNlbnQ6IFdl
+ZG5lc2RheSwgSnVuZSAyOCwgMjAyMyAzOjE1IEFNDQo+Pj4+IFRvOiBMZW8gTGkgPGxlb3lhbmcu
+bGlAbnhwLmNvbT4NCj4+Pj4gQ2M6IGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnOyBsaW51eC11
+c2JAdmdlci5rZXJuZWwub3JnOyBsaW51eHBwYy0NCj4+Pj4gZGV2QGxpc3RzLm96bGFicy5vcmc7
+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IE1hIEtlDQo+Pj4+IDxtYWtlX3J1YzIwMjFA
+MTYzLmNvbT4NCj4+Pj4gU3ViamVjdDogW1BBVENIXSB1c2I6IGdhZGdldDogZnNsX3FlX3VkYzog
+dmFsaWRhdGUgZW5kcG9pbnQgaW5kZXggZm9yDQo+Pj4+IGNoOSB1ZGMNCj4+Pj4NCj4+Pj4gV2Ug
+c2hvdWxkIHZlcmlmeSB0aGUgYm91bmQgb2YgdGhlIGFycmF5IHRvIGFzc3VyZSB0aGF0IGhvc3Qg
+bWF5IG5vdA0KPj4+PiBtYW5pcHVsYXRlIHRoZSBpbmRleCB0byBwb2ludCBwYXN0IGVuZHBvaW50
+IGFycmF5Lg0KPj4+Pg0KPj4+PiBTaWduZWQtb2ZmLWJ5OiBNYSBLZSA8bWFrZV9ydWMyMDIxQDE2
+My5jb20+DQo+Pj4+IC0tLQ0KPj4+PiAgICBkcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2ZzbF9xZV91
+ZGMuYyB8IDIgKysNCj4+Pj4gICAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKQ0KPj4+
+Pg0KPj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9mc2xfcWVfdWRjLmMN
+Cj4+Pj4gYi9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2ZzbF9xZV91ZGMuYw0KPj4+PiBpbmRleCAz
+YjFjYzhmYTMwYzguLmY0ZTVjYmQxOTNiNyAxMDA2NDQNCj4+Pj4gLS0tIGEvZHJpdmVycy91c2Iv
+Z2FkZ2V0L3VkYy9mc2xfcWVfdWRjLmMNCj4+Pj4gKysrIGIvZHJpdmVycy91c2IvZ2FkZ2V0L3Vk
+Yy9mc2xfcWVfdWRjLmMNCj4+Pj4gQEAgLTE5NTksNiArMTk1OSw4IEBAIHN0YXRpYyB2b2lkIGNo
+OWdldHN0YXR1cyhzdHJ1Y3QgcWVfdWRjICp1ZGMsIHU4DQo+Pj4+IHJlcXVlc3RfdHlwZSwgdTE2
+IHZhbHVlLA0KPj4+PiAgICAJfSBlbHNlIGlmICgocmVxdWVzdF90eXBlICYgVVNCX1JFQ0lQX01B
+U0spID09DQo+Pj4+IFVTQl9SRUNJUF9FTkRQT0lOVCkgew0KPj4+PiAgICAJCS8qIEdldCBlbmRw
+b2ludCBzdGF0dXMgKi8NCj4+Pj4gICAgCQlpbnQgcGlwZSA9IGluZGV4ICYgVVNCX0VORFBPSU5U
+X05VTUJFUl9NQVNLOw0KPj4+PiArCQlpZiAocGlwZSA+PSBVU0JfTUFYX0VORFBPSU5UUykNCj4+
+Pj4gKwkJCWdvdG8gc3RhbGw7DQo+Pj4NCj4+PiBUaGFua3MuICBUaGlzIHNlZW1zIHRvIGJlIHRo
+ZSByaWdodCB0aGluZyB0byBkby4gIEJ1dCBub3JtYWxseSB3ZSBkb24ndCBtaXgNCj4+IGRlY2xh
+cmF0aW9ucyB3aXRoIGNvZGUgd2l0aGluIGEgY29kZSBibG9jay4gIENvdWxkIHdlIHJlLWFycmFu
+Z2UgdGhlIGNvZGUgYQ0KPj4gbGl0dGxlIGJpdCBzbyBkZWNsYXJhdGlvbnMgc3RheSBvbiB0b3A/
+DQo+Pg0KPj4gQnV0IHdlIGFyZSBhdCB0aGUgc3RhcnQgb2YgYSBjb2RlIGJsb2NrIGFyZW4ndCB3
+ZSA/DQo+IA0KPiBCdXQgdGhleSB3ZXJlIGF0IHRoZSBiZWdpbm5pbmcgb2YgYSB7IH0gYmxvY2sg
+d2hpY2ggaXMgY29tcGxpYW50IHdpdGggdGhlIEM4OSBzdGFuZGFyZC4gIEkga25vdyBnY2MgaXMg
+bW9yZSByZWxheGVkIGZyb20gdGhpcy4gIEJ1dCBpdCBpcyBwcm9iYWJseSBzdGlsbCBnb29kIHRv
+IHN0aWNrIHRvIHRoZSBzdGFuZGFyZD8NCg0KU29ycnkgSSBtaXNyZWFkIHRoZSBwYXRjaCBhbmQg
+ZmFpbGVkIHRvIHNlZSB0aGF0IHRoZSBkZWNsYXJhdGlvbiBibG9jayANCndhcyBjb250aW51aW5n
+IGFmdGVyIHRoZSBjaGFuZ2UuDQoNClNvIHllcyBkb24ndCBpbnRlcmxlYXZlIGNvZGUgd2l0aCBk
+ZWNsYXJhdGlvbnMuIExlYXZlIGRlY2xhcmF0aW9uIGF0IHRoZSANCnRvcCBvZiBhIGJsb2NrIHdp
+dGggYSBibGFuayBsaW5lIGJldHdlZW4gZGVjbGFyYXRpb25zIGFuZCBjb2RlLg0KDQo+IA0KPj4N
+Cj4+IFRoZSBvbmx5IG1pc3NpbmcgdGhpbmcgaXMgdGhlIGJsYW5rIGxpbmUgYmV0d2VlbiB0aGUg
+ZGVjbGFyYXRpb25zIGFuZCB0aGUNCj4+IGNvZGUsIHNvIHRoYXQgd2UgY2xlYXJseSBzZWUgd2hl
+cmUgZGVjbGFyYXRpb25zIGVuZCBhbmQgd2hlcmUgY29kZSBzdGFydC4NCj4+DQo+Pj4NCj4+Pj4g
+ICAgCQlzdHJ1Y3QgcWVfZXAgKnRhcmdldF9lcCA9ICZ1ZGMtPmVwc1twaXBlXTsNCj4+Pj4gICAg
+CQl1MTYgdXNlcDsNCj4+Pj4NCj4+Pj4gLS0NCj4+Pj4gMi4zNy4yDQo+Pj4NCg==
