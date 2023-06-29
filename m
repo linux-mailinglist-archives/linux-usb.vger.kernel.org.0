@@ -2,25 +2,25 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C553574235D
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jun 2023 11:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A0A742355
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jun 2023 11:36:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbjF2JkD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Jun 2023 05:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42650 "EHLO
+        id S230456AbjF2Jga (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Jun 2023 05:36:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbjF2Jjr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Jun 2023 05:39:47 -0400
-Received: from out203-205-221-191.mail.qq.com (out203-205-221-191.mail.qq.com [203.205.221.191])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6E81727
-        for <linux-usb@vger.kernel.org>; Thu, 29 Jun 2023 02:39:45 -0700 (PDT)
+        with ESMTP id S230314AbjF2Jg2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Jun 2023 05:36:28 -0400
+Received: from out203-205-221-190.mail.qq.com (out203-205-221-190.mail.qq.com [203.205.221.190])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9EBE57
+        for <linux-usb@vger.kernel.org>; Thu, 29 Jun 2023 02:36:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1688031583;
+        s=s201512; t=1688031383;
         bh=wVTuCIxyvLDD/DcoCaqbJS7OLbR76cNPm8LoFO2zaRc=;
         h=From:To:Cc:Subject:Date;
-        b=mCi4uDi5CeNwncfK/myJlGB0M+C/CObV4kB/5MHYYMEXMZLFxGY5CJ1XM5ViOzU83
-         kRfwq5okDTos1sap2OhQKMxjHzBw6wsbxdf+TVG70BZyeQzh1JRq4lLMJJjIlv8EJX
-         zlyisxleToVAVgFAnx0L9ozc4BmL4pk4XMBzYD4E=
+        b=rRdiV/TEvowVOmcys+AeSTXn0xWKC+RpEPeEVefIsd+UEgKRZ/JnaA911/wUm4aSI
+         29psR/XlXAY2GHqQkOmcUHRewNhPkw/GPm1ITzB3Jz8P2SBfuEkMJJUorydcYXUDJm
+         TVg8LFm+xZHhlfVA0Mikwt1kBqNA6wqJVJjVcW88=
 Received: from quectel.localdomain ([112.31.70.25])
         by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
         id 8D922ACB; Thu, 29 Jun 2023 17:35:25 +0800
@@ -52,9 +52,9 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
