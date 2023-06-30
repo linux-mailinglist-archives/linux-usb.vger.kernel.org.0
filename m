@@ -2,78 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E29F743C1C
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jun 2023 14:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6A9743C47
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jun 2023 14:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232346AbjF3Mt1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Jun 2023 08:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37782 "EHLO
+        id S231245AbjF3MwW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Jun 2023 08:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231950AbjF3Mt0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jun 2023 08:49:26 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1B8E77;
-        Fri, 30 Jun 2023 05:49:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688129365; x=1719665365;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EQgfTYNWWiEu5txig1mO+ZDX4Of6hl6CtWMXSGSxmQk=;
-  b=czbk0QO6yXdjNwi3xhEBDPft4vSsgonZtfH85yqPALLE+lOxTnrnRKqT
-   FR2chzEK/jq2DOM7Gg5oLMoJDKWY58E8JrqfsVk+M3hEnHRhwMr4+7GtF
-   mzYrXOAcfvAwnzMwdPuCexv+0Qk+ms7MLD6lKXzyz5ELeggjaTccsbDMy
-   DLAZ65dcjjRVOEm4DuZnz5U+6chP1XCv6o+lZwoXg1UIdQV/3g63EaLmb
-   AMtjPvzI37hc45rHeVhZB7NFQCZU6rO/t6a6bbh+Ji0JB2v23627y2BE8
-   tbsk887wGaqH+uqE4yA+foyctejNZyE9wdkSf/86cTw0/EH/63q2KUXI8
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="347166287"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="347166287"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 05:49:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="862281313"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="862281313"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 30 Jun 2023 05:49:23 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 30 Jun 2023 15:49:20 +0300
-Date:   Fri, 30 Jun 2023 15:49:20 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: move typec_set_mode(TYPEC_STATE_SAFE)
- to ucsi_unregister_partner()
-Message-ID: <ZJ7PUDd5152Tr1nD@kuha.fi.intel.com>
-References: <20230626-topic-sm8550-usb-c-audio-fixup-v1-1-bc72fddf3f42@linaro.org>
+        with ESMTP id S229508AbjF3MwT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jun 2023 08:52:19 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58892D4A
+        for <linux-usb@vger.kernel.org>; Fri, 30 Jun 2023 05:52:17 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id D39825C16EA;
+        Fri, 30 Jun 2023 08:52:13 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 30 Jun 2023 08:52:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1688129533; x=1688215933; bh=gL
+        Y6aS12Klissc4iSyunFOig24iLdlTneA+7thUQPr0=; b=y/9WqzhpxbxsS6hhKk
+        KRjiZzX6u/TY3NwQMZdo2IEJXjjsEAa9MBzFPrwWDF3MeQHJyaeaswVnz4DGoIbP
+        PBQeJsoHtFkW0ObJhFIznG+bAFXXD0s6mtYNbNEkj07J9BxNU/8qVA6meuiNxV3G
+        Awyd8G9Jbg2ZSai7qCKMA/ru0X+S7+rEV+aR+xqA6FWMhWM4ZOIkQgdo3+5ECrTS
+        rgv767SqOFhhoF8mg02K1+bBFDSwkVFtkbxmr5NAAGjaZ1qcklQruukxkWar6joW
+        PAqH/bLjVbj8TZlqgZxK9H+FoKpoHAOD4ISkmHlqA5lRQ0lwxxsSA7LPYW3k3aRG
+        mzMA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688129533; x=1688215933; bh=gLY6aS12Kliss
+        c4iSyunFOig24iLdlTneA+7thUQPr0=; b=Be/ExcapboA7zT4lyEgyVezrmyBa7
+        zge5F03mYld+Wmz+d3Cj3u/ZurmLuIrB7Lihr5alS8BVz766gw647HH7ivgaTq+k
+        fWi8FLZPYKAyNNUzrDFv37puzVT/CTY8457UxEDOn0QZqEuQYs0z3fhm6OCkV7fq
+        LikS7cVRGHmfhb8/l4i4sU9FTpG6IPgv/omcUQQFlciU6PgozcP9VREVHJQqRuNz
+        XmK4Qj1Zzxx+VCl1ayFLId8PLrSvAq2rBy8mAle66rQm3sNvUNABIyRs/4VciUtY
+        tPPdgIO3pHad6Fry1h8DWXrifUUuu4Ov4JuAq6VLZAMBcsqgo+NcYfmmg==
+X-ME-Sender: <xms:_c-eZFVKH2i7h-kQTdzl0JFMkVMU-Yq4ADS6ixzPEnGU8x4lf6Z6YQ>
+    <xme:_c-eZFkgbfZY3Biwnge7Y5-t_2iucDVyPBD4SV4OtumfrPdGP5tXAzvdQyF1mhHzo
+    caMXnHWMiU2hA>
+X-ME-Received: <xmr:_c-eZBYU8-5hvWa__w22JxGvojCNR2T7kANc03mc7O39g1Ia-JOK0hvWY4sVVJGT2tG6PO1wFkg5vSNZklDPdmdVcAO0om3VjsumEw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeigdehiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
+    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:_c-eZIW9tv7j0HpqMPL432wnkAjijojyQMZ3jsTUkV1yOCJMBjPvfw>
+    <xmx:_c-eZPnz8-qr_hZ90pLqpb1WoG1p0zovGZhk0zcFMJWihgc5rChG6g>
+    <xmx:_c-eZFczg4-n94T114WexNkha6AFufeCjB2iP9kxfPsXlf8eIuCfjg>
+    <xmx:_c-eZEwnwnQaBOxf1IlWfo-A6VGSEPXxClNXTFRW9XrEO05HrV9srA>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 30 Jun 2023 08:52:13 -0400 (EDT)
+Date:   Fri, 30 Jun 2023 14:52:10 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Thunderbolt/USB4 maintenance on vacation during July
+Message-ID: <2023063000-define-cardboard-ead6@gregkh>
+References: <20230630081350.GR14638@black.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230626-topic-sm8550-usb-c-audio-fixup-v1-1-bc72fddf3f42@linaro.org>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230630081350.GR14638@black.fi.intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 06:52:00PM +0200, Neil Armstrong wrote:
-> It's better to set TYPEC_STATE_SAFE mode from ucsi_unregister_partner()
-> instead of ucsi_partner_change(), ucsi_unregister_partner() is always
-> when the partner disconnects.
+On Fri, Jun 30, 2023 at 11:13:50AM +0300, Mika Westerberg wrote:
+> Dear all,
 > 
-> Fixes: 25a2bc21c863 ("usb: typec: ucsi: call typec_set_mode on non-altmode partner change")
-> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> It is that time of the year again :) Finland is pretty much closing up
+> as people are heading for a well deserved vacation during the July. This
+> puts the Thunderbolt/USB4 into "vacation mode" too but I will be back in
+> August gathering whatever was sent to me.
+> 
+> I wish everyone good summer, remember to relax! See you again in August :)
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Nice, have a great break!
 
-thanks,
-
--- 
-heikki
+greg k-h
