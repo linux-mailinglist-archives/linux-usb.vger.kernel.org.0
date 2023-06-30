@@ -2,67 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2337442D3
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jun 2023 21:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E2C7442EB
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jun 2023 21:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjF3TnW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Jun 2023 15:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
+        id S230180AbjF3TtR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Jun 2023 15:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjF3TnV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jun 2023 15:43:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE6BA7;
-        Fri, 30 Jun 2023 12:43:20 -0700 (PDT)
+        with ESMTP id S232235AbjF3TtP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jun 2023 15:49:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFF944BF
+        for <linux-usb@vger.kernel.org>; Fri, 30 Jun 2023 12:48:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6D43617F1;
-        Fri, 30 Jun 2023 19:43:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CE50C433C0;
-        Fri, 30 Jun 2023 19:43:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688154199;
-        bh=b0y+8nFzSPDkanVO/OW8i7+MJRn/8oHgRiArrnt1vpM=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=IOCxhD1wkEAF0rXK5hmAEIOkoxz7RysWGgwjQMXXdUaLQcWXHr2LhUXFkZr4peWvf
-         OgzrMi9Bq95swkvDc02K+CDXOl0wXx5MXAfSivD9C4/jIti7v8gGfKUucbQiNAr1AI
-         qGL4EUP9YBm4hM7/4wzzITtmfa4qXKcUfeuQrfuzr3lZ9dgpan2k56CvUvJsE5pyZh
-         rZEpH/Hgfdzagg7aJOXsfs30HyEoCtlMc4cwTlgtanEDLPJKcS3cj1CF/KOlQEmj1H
-         DZpWyCx3sMpyH7d3jSnEj+iyJBXIj4E/hpdS/Odtqhi5AX9eVyJK0akfUNJQk6c23G
-         V+e71QCdJqWtg==
-Message-ID: <158f9975-afff-25b8-130c-2a8381ce21ee@kernel.org>
-Date:   Fri, 30 Jun 2023 22:43:14 +0300
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45692617F1
+        for <linux-usb@vger.kernel.org>; Fri, 30 Jun 2023 19:48:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CA5CC433C0;
+        Fri, 30 Jun 2023 19:48:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688154507;
+        bh=KNtLQUhZ8mLZ8Siib8mxE4VruHHG2ODREpimMbzYfmc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jzuzds5+wIDLZpTBDB7v05fcswdra4GhLAKg9jsEiuqA0/OFVUWNjNTXh7ZngMueD
+         Dra/rGK0xedycKgfhvmsxSSCmCI3FNjDlwbefADs39MGSJcJamHxS7Y22A2GBtcTC7
+         IEwLo/oPkmBikroboHXk3uQgA8V6AENgUzNjTH58=
+Date:   Fri, 30 Jun 2023 21:48:20 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     yguoaz <yguoaz@gmail.com>
+Cc:     dan.scally@ideasonboard.com, andriy.shevchenko@linux.intel.com,
+        frank.li@nxp.com, christophe.jaillet@wanadoo.fr, jgilab@gmail.com,
+        chanh@os.amperecomputing.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: configfs: Prevent buffer overrun in
+ usb_string_copy
+Message-ID: <2023063027-repackage-partake-aa3e@gregkh>
+References: <20230630110401.2360746-1-yguoaz@gmail.com>
+ <2023063013-fanning-crafty-4502@gregkh>
+ <CAM7=BFoyE8XzS8g=U_wFH_AUE-W6C2tGKWzGP4+eCZTDVDgr_g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [EXT] Re: [PATCH 1/1] usb: gadget: call usb_gadget_check_config()
- to verify UDC capability
-Content-Language: en-US
-To:     Frank Li <frank.li@nxp.com>,
-        "r-gunasekaran@ti.com" <r-gunasekaran@ti.com>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        Jun Li <jun.li@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?B?SsOzIMOBZ2lsYSBCaXRzY2g=?= <jgilab@gmail.com>,
-        Prashanth K <quic_prashk@quicinc.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230628222437.3188441-1-Frank.Li@nxp.com>
- <42940cae-ce4f-577a-474b-f06b3b481e4e@kernel.org>
- <AM6PR04MB4838E7A9B41AB382DAAA35038825A@AM6PR04MB4838.eurprd04.prod.outlook.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <AM6PR04MB4838E7A9B41AB382DAAA35038825A@AM6PR04MB4838.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAM7=BFoyE8XzS8g=U_wFH_AUE-W6C2tGKWzGP4+eCZTDVDgr_g@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,99 +55,27 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, Jun 30, 2023 at 09:13:58PM +0800, yguoaz wrote:
+> This is an underrun issue found by a static analysis tool (under
+> research).
 
+Then you MUST follow our research rules in order to submit patches.
+Please read and follow them, otherwise we have to reject all of your
+submissions.
 
-On 29/06/2023 06:40, Frank Li wrote:
+> I suggest the patch because the code of usb_string_copy()
+> rejects strings with length greater than USB_MAX_STRING_LEN,
+> indicating a possibility for the input string `s` to contain unwanted
+> data (e.g., being empty). For the empty string case, the proposed
+> patch simply copies '\0' in `strcpy(str, s)` without touching index -1
+> of `str`.
 > 
-> 
->> -----Original Message-----
->> From: Roger Quadros <rogerq@kernel.org>
->> Sent: Wednesday, June 28, 2023 10:23 PM
->> To: Frank Li <frank.li@nxp.com>; r-gunasekaran@ti.com; imx@lists.linux.dev;
->> Jun Li <jun.li@nxp.com>; Greg Kroah-Hartman
->> <gregkh@linuxfoundation.org>; Elson Roy Serrao
->> <quic_eserrao@quicinc.com>; Thinh Nguyen
->> <Thinh.Nguyen@synopsys.com>; Andy Shevchenko
->> <andriy.shevchenko@linux.intel.com>; Jó Ágila Bitsch <jgilab@gmail.com>;
->> Prashanth K <quic_prashk@quicinc.com>; Peter Chen
->> <peter.chen@kernel.org>; open list:USB SUBSYSTEM <linux-
->> usb@vger.kernel.org>; open list <linux-kernel@vger.kernel.org>
->> Subject: [EXT] Re: [PATCH 1/1] usb: gadget: call usb_gadget_check_config()
->> to verify UDC capability
->>
->> Caution: This is an external email. Please take care when clicking links or
->> opening attachments. When in doubt, report the message using the 'Report
->> this email' button
->>
->>
->> On 29/06/2023 03:54, Frank Li wrote:
->>> The legacy gadget driver omitted calling usb_gadget_check_config()
->>> to ensure that the USB device controller (UDC) has adequate resources,
->>> including sufficient endpoint numbers and types, to support the given
->>> configuration.
->>>
->>> Previously, usb_add_config() was solely invoked by the legacy gadget
->>> driver. Adds the necessary usb_gadget_check_config() after the bind()
->>> operation to fix the issue.
->>
->> You have only fixed composite.c. Not all gadget drivers use composite.c
->> so it will be still broken for them.
->>
->> Please also add default sane configuration in CDNS3 so it works even
->> if usb_gadget_check_config() is not invoked.
-> 
-> Which one was not call usb_add_config()?
-> DWC3 also use
->  .check_config		= dwc3_gadget_check_config, 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/dwc3/gadget.c 
+> Whether `strlen(s)` could ever be zero in reality is up to the
+> maintainer's judgement, since I have not worked with the subsystem. So
+> please ignore the patch if it is ensured that `s` must be non-empty.
 
-I meant gadget drivers not UDC drivers.
+Test it and see!
 
-e.g.
+good luck,
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/gadget/legacy/dbgp.c
-
-> 
-> I think it is not correct by assume UDC can support specific config
-> at gadget function driver. 
-> Add default value of CDNS3 actually hidden potential problem. 
-> 
-> I don't suggest it before fixed hidden potential problem. 
-> 
-> Frank  
-> 
->>
->>>
->>> Fixes: dce49449e04f ("usb: cdns3: allocate TX FIFO size according to
->> composite EP number")
->>> Reported-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
->>> Signed-off-by: Frank Li <Frank.Li@nxp.com>
->>> ---
->>>  drivers/usb/gadget/composite.c | 4 ++++
->>>  1 file changed, 4 insertions(+)
->>>
->>> diff --git a/drivers/usb/gadget/composite.c
->> b/drivers/usb/gadget/composite.c
->>> index 1b3489149e5e..dd9b90481b4c 100644
->>> --- a/drivers/usb/gadget/composite.c
->>> +++ b/drivers/usb/gadget/composite.c
->>> @@ -1125,6 +1125,10 @@ int usb_add_config(struct usb_composite_dev
->> *cdev,
->>>               goto done;
->>>
->>>       status = bind(config);
->>> +
->>> +     if (status == 0)
->>> +             status = usb_gadget_check_config(cdev->gadget);
->>> +
->>>       if (status < 0) {
->>>               while (!list_empty(&config->functions)) {
->>>                       struct usb_function             *f;
->>
->> --
->> cheers,
->> -roger
-
--- 
-cheers,
--roger
+greg k-h
