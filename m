@@ -2,140 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621EC743D1E
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jun 2023 16:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D169A743D2E
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jun 2023 16:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbjF3OAI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Jun 2023 10:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
+        id S232097AbjF3OIW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Jun 2023 10:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbjF3OAG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jun 2023 10:00:06 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2125.outbound.protection.outlook.com [40.107.244.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6252118;
-        Fri, 30 Jun 2023 07:00:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AM4+XrdaAeDE/ucs6K2DCQ7RwOYX0dLPqf6Q0UdxcfpActH4YXG/n9ppfmsv7NG5i+SMsUgvmiyG6u527TKmNfowKhiuz2m2A+x829o2hXzszMrIH6eq9Dcq+woRXQgtx2mNA7FkrTM2bArx2EruLUg4YHAF6RGYqpJjI4pgoQ5SvDI8W0wt9WtvCrknj/QLHCGq3VNXlzfhYsjz3f+JGliREvuHadc1E6J4blTIamDxAomcP/dWppCyQ2avmjd1tNUkDOqpcYcncPiTrNgr3IQkg4xVR4iJcibhGxpyjRDblXwj9HA6kMFIDYbMsENNoIR4JQxscVKkslqO16peHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QAuWr/Xibrzo6rNgDJjIXpXi6wFVKNWM5h6Dwh08G14=;
- b=NUwct7kMULo1aDQJH32tiFKH8tnNYuWfMCubp7hPKPVWKeDU5eZBJFUszUOTCNpaFZHvg0Zmyk5uUQP4rXoEDqSTy4RIxHzlp7TkbcSu+o10YIuAeHNTN0hxT+225S5jcP2cDJRxMKa6/TEtR5sdpgGD1h6azx9gQY6PyZ8IuCo/8aZw24tvy+sL037S5WdXRjpTup1DoJllw8MfHaGa6lq8oc6NX6BQJWzPocTO/dht9U2oUIAsJAl/5Bp7uEDWHL8ZJ+1j7z+StGE0vuGEFH7TTbWwwQ2hGjRykh5sy8a4yJmPl1f9v5IxfgfwnYOyzQhWLqQl31ISuzBLdJYgSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QAuWr/Xibrzo6rNgDJjIXpXi6wFVKNWM5h6Dwh08G14=;
- b=Z/k+0aVmqgRu68Lr6J2z9Aat0gkOhUHSh3xwdPXrS4Qx0id/ZoQU+FmXWSf8DAji3Gj+TJ1IMP63voU56hWIC45ryJtLsnFJF/OCYeQzE0iyXwFEVhom9DYHzimX6XEFMKDAH6GFVrJ67IxaLhKqiJpqav16dr3EFyHU+bVXMM8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SJ0PR13MB5722.namprd13.prod.outlook.com (2603:10b6:a03:409::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Fri, 30 Jun
- 2023 13:58:58 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6544.019; Fri, 30 Jun 2023
- 13:58:58 +0000
-Date:   Fri, 30 Jun 2023 15:58:52 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Davide Tronchin <davide.tronchin.94@gmail.com>
-Cc:     oliver@neukum.org, netdev@vger.kernel.org, pabeni@redhat.com,
-        marco.demarco@posteo.net, linux-usb@vger.kernel.org,
-        kuba@kernel.org
-Subject: Re: [PATCH] net: usb: cdc_ether: add u-blox 0x1313 composition.
-Message-ID: <ZJ7fnIKQcD3C7jOT@corigine.com>
-References: <20230629103736.23861-1-davide.tronchin.94@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230629103736.23861-1-davide.tronchin.94@gmail.com>
-X-ClientProxiedBy: AM9P192CA0016.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:20b:21d::21) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        with ESMTP id S232071AbjF3OIV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jun 2023 10:08:21 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E9E3ABE
+        for <linux-usb@vger.kernel.org>; Fri, 30 Jun 2023 07:08:19 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.72.188) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Fri, 30 Jun
+ 2023 17:08:08 +0300
+Subject: Re: [PATCH] usb: host: xhci-plat: fix possible kernel oops while
+ resuming
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>
+References: <7eff75da-bdd5-8ccd-1ad1-676f29041545@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <323de112-8bd0-7206-f85e-ff931410ec87@omp.ru>
+Date:   Fri, 30 Jun 2023 17:08:08 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ0PR13MB5722:EE_
-X-MS-Office365-Filtering-Correlation-Id: 169ce541-2c86-4457-a4f1-08db79722674
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2i6AJ/lNkPr/XtJXlyixTHdenGLldNTH9E6TZw//bk0tHN/cKggyDJNBVGL9FqwR3BeCIhMauvUVkBB4ZLA/YefPW4Pg/B6vDCFwJ3ZicXwZjitZEvKL2SM6m5TOTEppWdSLZDE+mjlIkC9rr1kcahBCLe7kKomzx+OLaJwync7SQ6033/+i2fcBInNyEpEzHO8YN0rT4SbY3YN7kcS0JYApRptcAnMgO5tzQ2uXFP+U+CKKT4U+S2DikpPn3I95C6DdDSG0yg5Lf/oGD1crf0MQ+g8DkDwZZ7c2M1IqWe4vs7o/+wx/j4MJdDx/Et+fGPKhNHYAC72aDnl3F0ElkpqVlqugASy9m8M0PAsbCu38V8c5i32hjK6ybo5Xh1E95s8KEnDJRqg9kYlHhOht/zvai3WCxWWC8Lzl54VuUQKnFD8hm3I/LF8ny//hbJIbY6ui5Uvk5NFWGbJE76fKjcz7z4gllRe2WbKQLbED/iAINpjq2iO6/yjNQVlJ/abOCKU3DamVl6J20vTloSvJ3mPcy+HHL6UWdStOVYAEB5YgyA9wHvLhoe/Yp3W0q+i4zTZf413RgOGmN74QVkqfybkK+H6R/lVZH1mcQkb8s9M=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(366004)(396003)(39840400004)(451199021)(5660300002)(8676002)(6486002)(8936002)(44832011)(186003)(2616005)(38100700002)(2906002)(4744005)(478600001)(41300700001)(86362001)(36756003)(316002)(6916009)(6506007)(66476007)(66556008)(6666004)(6512007)(66946007)(4326008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4H5rm8f6LbVemDGRH3OIalNY3AIjJcdO6qEgvTWuls3UQoCIwk8WUwzzfOUm?=
- =?us-ascii?Q?zwyTulR1LveC2k2b8iaacamttAoc/zb0+iQtqsCawddAtoHwIapEH2y2HUt+?=
- =?us-ascii?Q?VbRBFoHy2fpCWJ9Som4ua4ul3xi6QtiN7iCDwSYr9x7JRWrCzHaM6u0HLzmF?=
- =?us-ascii?Q?5nF+3HxFu6QrZ4e8W8NyoJgIuIM7U1hHyh7aKRD2eisUqe2z1UyWemf9h+4F?=
- =?us-ascii?Q?qfGK5+Ldcj/l9HU3Tvm0fV3aShiCXfph91MkSx2jd5toXjuQ8P/I8NXvPnbn?=
- =?us-ascii?Q?J6fFHVnFNYDxUYusBdbg8YEifxIlUmCfAlNfVjelC6ofMcRCtExDm46W9iXg?=
- =?us-ascii?Q?erq6YSAZKlYT9SDo77i8XVickmvi9HdEP45FmgFSSL4WbeCmjdccuLOaAldF?=
- =?us-ascii?Q?ijEjS+T+H2vy2/H5NrcXMx+S5Gwr9rQsv39ImzWW2CUQC/wv7SbbUE6eFmpa?=
- =?us-ascii?Q?Aht2f1NOF3i1JTxQG6NWkA2eq2d88OTmaXZgzbw08cd0kIA9ukzkXqRXkwKx?=
- =?us-ascii?Q?Vzb0spvbVYBi+x9trNVrY6N4zOyl0lo5T6R17ZPcir8GMhLt4zReYvYLrhML?=
- =?us-ascii?Q?AWnAhjV/gzcWiAFJH7xjkF43ts7x4Dw5NiQeY/uM0ToC31Cby9OsJOnM6pIg?=
- =?us-ascii?Q?VX45hAD63A14m2OvFIr4nanxtvMJF9xSmJUfzKRrGPVTPBFggcK7TzAri79X?=
- =?us-ascii?Q?LAESOM0Kfk9kZnoUcu17Xhb4Pk5tGJq6e9TSypPNOCL6Ew3t4/Tp6rIhsJfw?=
- =?us-ascii?Q?tCimOxDSNsdSgbbNSLynphArzSkvV2Q+CUO66KVOyYEbDZJwNqdnAgK9kFzm?=
- =?us-ascii?Q?k/ko7TJE5Ck4rdXTVloAUomnDVhYJK7z6WnhGuswhQi7g1TZIxLjULVIxCLb?=
- =?us-ascii?Q?T6fpljMpboV0lToGlsgSdBAnWi+n2v+4geU4kqX0s/tJ/eno/nAshrorhjrT?=
- =?us-ascii?Q?qJqR83M0Gg0QJ+imwx+IIS8Vdw9wPGcUuEm9WtmW1y8GTJrc6Vb9lHmkoDF1?=
- =?us-ascii?Q?VMdK1nVbG/hL/SX/McMDZ8k/dj7rnCct7k70rY6zIw+aFjLM1BPS41kWzZkG?=
- =?us-ascii?Q?tTlT3bL1xXquPuFFxaZMAkukkK+5VTmbKkHsnzguvUWdbjriGIL7WP7UIRL5?=
- =?us-ascii?Q?2i5FdunMpnQo2wtVES+yFvzaQiT7LNUEcsP3V5us97bJ4foHhtRvRuosR5pC?=
- =?us-ascii?Q?zUAEcqtwdthp1ZXy6/jOsvIGUw9m26okJE/dtIYTGNiTKW1cIj3sJ9fOhxZC?=
- =?us-ascii?Q?wlyMbxwzFN54CHMY3Q09dE49sNJs3MTApzrRUS5w3e8gmcgwIF8sXwYcwT1k?=
- =?us-ascii?Q?x2Cf+XhKjGxpHVlf3fo4LXysyFB8Oe3MV2sVk380TFOkSeoHuzabqtZKox1x?=
- =?us-ascii?Q?gZzXdMes8PM+4qRi0V9Cvu6KOmGYnP9kib5F1dqeAdE8WlqsJ9VCuxMO3OeA?=
- =?us-ascii?Q?M/RFfMcgon9EHhwtReox3Z3DYku7lha7VcLwXl06rMgNvRKYBCWRHCDBqJ2x?=
- =?us-ascii?Q?6v+4EeFt/B6ma4V4+r5cClV1YGxdNDtf3gBB+bLeF51oDYIcdMUgPcd06QKV?=
- =?us-ascii?Q?KWPG3soc/uYw4WZhjpFcWUZUBlte4edxr0b0f1KURqAMFFZTu1wz5frGGFOM?=
- =?us-ascii?Q?vq8jGWptdu9YvVzRMaTPJysXj6luVf22qgWHU9Jlq5cg3LxF8yupOwH9V36w?=
- =?us-ascii?Q?qMVu2g=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 169ce541-2c86-4457-a4f1-08db79722674
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 13:58:58.3414
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ezn38opMLH2EoqZzqUqkwnQQGRr/zf5uPHjFhd25N0cvvdxOYt8CqoPIYfFbnScK2MEtp4HfR/Xz2DCQ6WTJkgas32ubYsCkVANML4T+2wQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR13MB5722
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7eff75da-bdd5-8ccd-1ad1-676f29041545@omp.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.72.188]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 06/30/2023 13:47:15
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 178375 [Jun 30 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.72.188 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;178.176.72.188:7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.72.188
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 06/30/2023 13:52:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 6/30/2023 10:55:00 AM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 12:37:36PM +0200, Davide Tronchin wrote:
-> Add CDC-ECM support for LARA-R6 01B.
-> 
-> The new LARA-R6 product variant identified by the "01B" string can be
-> configured (by AT interface) in three different USB modes:
-> * Default mode (Vendor ID: 0x1546 Product ID: 0x1311) with 4 serial
-> interfaces
-> * RmNet mode (Vendor ID: 0x1546 Product ID: 0x1312) with 4 serial
-> interfaces and 1 RmNet virtual network interface
-> * CDC-ECM mode (Vendor ID: 0x1546 Product ID: 0x1313) with 4 serial
-> interface and 1 CDC-ECM virtual network interface
-> The first 4 interfaces of all the 3 configurations (default, RmNet, ECM)
-> are the same.
-> 
-> In CDC-ECM mode LARA-R6 01B exposes the following interfaces:
-> If 0: Diagnostic
-> If 1: AT parser
-> If 2: AT parser
-> If 3: AT parset/alternative functions
-> If 4: CDC-ECM interface
-> 
-> Signed-off-by: Davide Tronchin <davide.tronchin.94@gmail.com>
+On 6/30/23 12:10 AM, Sergey Shtylyov wrote:
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+> If this driver enables the xHC clocks while resuming from sleep, it calls
+> clk_prepare_enable() without checking for errors and blithely goes on to
+> read/write the xHC's registers -- which, with the xHC not being clocked,
+> at least on ARM32 usually causes an imprecise external abort exceptions
+> which cause kernel oops.  Currently, the chips for which the driver does
+> the clock dance on suspend/resume seem to be the Broadcom STB SoCs, based
+> on ARM32 CPUs, as it seems...
+> 
+> Found by Linux Verification Center (linuxtesting.org) with the Svace static
+> analysis tool.
+> 
+> Fixes: 8bd954c56197 ("usb: host: xhci-plat: suspend and resume clocks")
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> 
+> ---
+> This patch is against the 'usb-linus' branch of Greg KH's 'usb.git' repo...
+> 
+>  drivers/usb/host/xhci-plat.c |   10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> Index: usb/drivers/usb/host/xhci-plat.c
+> ===================================================================
+> --- usb.orig/drivers/usb/host/xhci-plat.c
+> +++ usb/drivers/usb/host/xhci-plat.c
+> @@ -470,8 +470,14 @@ static int __maybe_unused xhci_plat_resu
+>  	int ret;
+>  
+>  	if (!device_may_wakeup(dev) && (xhci->quirks & XHCI_SUSPEND_RESUME_CLKS)) {
+> -		clk_prepare_enable(xhci->clk);
+> -		clk_prepare_enable(xhci->reg_clk);
+> +		ret = clk_prepare_enable(xhci->clk);
+> +		if (ret)
+> +			return ret;
+> +		ret = clk_prepare_enable(xhci->reg_clk);
+> +		if (ret) {
+> +			clk_disable_unprepare(xhci->clk);
+> +			return ret;
+> +		}
 
+   Scratch that, please! I didn't realize in time I have to disable/unprepare
+the clocks on the errors occuring below as well, not just return as before... :-/
+
+>  	}
+>  
+>  	ret = xhci_priv_resume_quirk(hcd);
+> 
+
+MBR, Sergey
