@@ -2,96 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D6A9743C47
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jun 2023 14:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21373743C75
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jun 2023 15:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbjF3MwW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Jun 2023 08:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
+        id S232421AbjF3NOO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Jun 2023 09:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjF3MwT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jun 2023 08:52:19 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58892D4A
-        for <linux-usb@vger.kernel.org>; Fri, 30 Jun 2023 05:52:17 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id D39825C16EA;
-        Fri, 30 Jun 2023 08:52:13 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Fri, 30 Jun 2023 08:52:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1688129533; x=1688215933; bh=gL
-        Y6aS12Klissc4iSyunFOig24iLdlTneA+7thUQPr0=; b=y/9WqzhpxbxsS6hhKk
-        KRjiZzX6u/TY3NwQMZdo2IEJXjjsEAa9MBzFPrwWDF3MeQHJyaeaswVnz4DGoIbP
-        PBQeJsoHtFkW0ObJhFIznG+bAFXXD0s6mtYNbNEkj07J9BxNU/8qVA6meuiNxV3G
-        Awyd8G9Jbg2ZSai7qCKMA/ru0X+S7+rEV+aR+xqA6FWMhWM4ZOIkQgdo3+5ECrTS
-        rgv767SqOFhhoF8mg02K1+bBFDSwkVFtkbxmr5NAAGjaZ1qcklQruukxkWar6joW
-        PAqH/bLjVbj8TZlqgZxK9H+FoKpoHAOD4ISkmHlqA5lRQ0lwxxsSA7LPYW3k3aRG
-        mzMA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688129533; x=1688215933; bh=gLY6aS12Kliss
-        c4iSyunFOig24iLdlTneA+7thUQPr0=; b=Be/ExcapboA7zT4lyEgyVezrmyBa7
-        zge5F03mYld+Wmz+d3Cj3u/ZurmLuIrB7Lihr5alS8BVz766gw647HH7ivgaTq+k
-        fWi8FLZPYKAyNNUzrDFv37puzVT/CTY8457UxEDOn0QZqEuQYs0z3fhm6OCkV7fq
-        LikS7cVRGHmfhb8/l4i4sU9FTpG6IPgv/omcUQQFlciU6PgozcP9VREVHJQqRuNz
-        XmK4Qj1Zzxx+VCl1ayFLId8PLrSvAq2rBy8mAle66rQm3sNvUNABIyRs/4VciUtY
-        tPPdgIO3pHad6Fry1h8DWXrifUUuu4Ov4JuAq6VLZAMBcsqgo+NcYfmmg==
-X-ME-Sender: <xms:_c-eZFVKH2i7h-kQTdzl0JFMkVMU-Yq4ADS6ixzPEnGU8x4lf6Z6YQ>
-    <xme:_c-eZFkgbfZY3Biwnge7Y5-t_2iucDVyPBD4SV4OtumfrPdGP5tXAzvdQyF1mhHzo
-    caMXnHWMiU2hA>
-X-ME-Received: <xmr:_c-eZBYU8-5hvWa__w22JxGvojCNR2T7kANc03mc7O39g1Ia-JOK0hvWY4sVVJGT2tG6PO1wFkg5vSNZklDPdmdVcAO0om3VjsumEw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeigdehiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
-    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:_c-eZIW9tv7j0HpqMPL432wnkAjijojyQMZ3jsTUkV1yOCJMBjPvfw>
-    <xmx:_c-eZPnz8-qr_hZ90pLqpb1WoG1p0zovGZhk0zcFMJWihgc5rChG6g>
-    <xmx:_c-eZFczg4-n94T114WexNkha6AFufeCjB2iP9kxfPsXlf8eIuCfjg>
-    <xmx:_c-eZEwnwnQaBOxf1IlWfo-A6VGSEPXxClNXTFRW9XrEO05HrV9srA>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 30 Jun 2023 08:52:13 -0400 (EDT)
-Date:   Fri, 30 Jun 2023 14:52:10 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Thunderbolt/USB4 maintenance on vacation during July
-Message-ID: <2023063000-define-cardboard-ead6@gregkh>
-References: <20230630081350.GR14638@black.fi.intel.com>
+        with ESMTP id S232406AbjF3NON (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jun 2023 09:14:13 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE0D3A87
+        for <linux-usb@vger.kernel.org>; Fri, 30 Jun 2023 06:14:11 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-98e109525d6so327317766b.0
+        for <linux-usb@vger.kernel.org>; Fri, 30 Jun 2023 06:14:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688130850; x=1690722850;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HhlgWAgY4yVPcTPf7GfhSzotQ3oDSgaBPH+AEZF5VyQ=;
+        b=l1TGNcdmwUicsPDHlIMarhAC2JsuzKtjF3cxOiNU1Mix//w03yxN4DcPCpM/0XdNmQ
+         n9BJQ+h3SpcgTb0xSehhvyj178eL3LHY3gHfd60s6QaeQ0EiKouOj7axMQG5X3vyyXOq
+         dnD6FtTzjRi6riuQwVTWDI1DT2uapJQzfoAGLZgLJnMfbGjHm+dukOWZi9K8Ydn19YnT
+         Jg7OXRC+othYz84/vxHX3nacJ/eG/5T8PTGnZ0FTXHntQx+E9mXjF2i/nf8hSTBtBgbX
+         a9HBuaHKTP6mPB9dfFhi6T9RZP0PUOLy/95B+CNQqMiJO04NWghc+B0PbKCqXiN4JUJH
+         CaTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688130850; x=1690722850;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HhlgWAgY4yVPcTPf7GfhSzotQ3oDSgaBPH+AEZF5VyQ=;
+        b=fhcjf3lYdapw3nXC+lDrLB46n5VHlrSCwyL0OTYXiwGVKynHtFrN9Om6RJ9nzPUGK3
+         1ZUmuxkbcN+bIiOujtPEa0S/PtUdrtCypn2rwUFH+NACxQu7n6NyG/HkzTs3tWCO6Y+V
+         hzGAdGasT/CVj4qpPNDZr1c5nMHrSVopUH5Q8cXY+7pspTuRD3xdq7rt70yP+IY04trB
+         /Rpd63aqeu1QrJjnYMDbu9sTYNPW1vYIdsky8AkYaXLcwgOt8mqFgyMCe2nhHcC5QD94
+         v50B+3cX2qBN99QSxSvgKQzhZbx7b5D4nBEav2STPdRMqm84W+375pM/YToGsGhMR8MN
+         Wn1g==
+X-Gm-Message-State: AC+VfDwKjW6rCPcEw/aWsus/MaLy1A6CNHXRDZDkQux+rjxQmVulddTH
+        YEatwC0GhwItoN3Mmww49zqHqskyDPxXrHmV6zM=
+X-Google-Smtp-Source: ACHHUZ6uK2TLywDPoKITjBEXaTu65pYcqhr8WwPCzDDWD1Q0eIKtwOpV5KQK5h9e4fFtS9LwpVvzKa2bnbT8vlG6qss=
+X-Received: by 2002:a17:907:60d5:b0:98d:f2c9:a1eb with SMTP id
+ hv21-20020a17090760d500b0098df2c9a1ebmr7409008ejc.24.1688130849527; Fri, 30
+ Jun 2023 06:14:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230630081350.GR14638@black.fi.intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230630110401.2360746-1-yguoaz@gmail.com> <2023063013-fanning-crafty-4502@gregkh>
+In-Reply-To: <2023063013-fanning-crafty-4502@gregkh>
+From:   yguoaz <yguoaz@gmail.com>
+Date:   Fri, 30 Jun 2023 21:13:58 +0800
+Message-ID: <CAM7=BFoyE8XzS8g=U_wFH_AUE-W6C2tGKWzGP4+eCZTDVDgr_g@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: configfs: Prevent buffer overrun in usb_string_copy
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     dan.scally@ideasonboard.com, andriy.shevchenko@linux.intel.com,
+        frank.li@nxp.com, christophe.jaillet@wanadoo.fr, jgilab@gmail.com,
+        chanh@os.amperecomputing.com, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 11:13:50AM +0300, Mika Westerberg wrote:
-> Dear all,
-> 
-> It is that time of the year again :) Finland is pretty much closing up
-> as people are heading for a well deserved vacation during the July. This
-> puts the Thunderbolt/USB4 into "vacation mode" too but I will be back in
-> August gathering whatever was sent to me.
-> 
-> I wish everyone good summer, remember to relax! See you again in August :)
+This is an underrun issue found by a static analysis tool (under
+research). I suggest the patch because the code of usb_string_copy()
+rejects strings with length greater than USB_MAX_STRING_LEN,
+indicating a possibility for the input string `s` to contain unwanted
+data (e.g., being empty). For the empty string case, the proposed
+patch simply copies '\0' in `strcpy(str, s)` without touching index -1
+of `str`.
 
-Nice, have a great break!
+Whether `strlen(s)` could ever be zero in reality is up to the
+maintainer's judgement, since I have not worked with the subsystem. So
+please ignore the patch if it is ensured that `s` must be non-empty.
 
-greg k-h
+Thanks,
+Yiyuan
+
+On Fri, Jun 30, 2023 at 8:17=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> On Fri, Jun 30, 2023 at 07:04:01PM +0800, Yiyuan Guo wrote:
+> > In usb_string_copy(), when `strlen(s) =3D=3D 0`, `str[ret - 1]` accesse=
+s at
+> > index -1. Add a check to prevent buffer overrun when `s` is empty.
+>
+> It's an underrun, right?
+>
+> And how can strlen(s) ever be 0 here?
+>
+> How did you test this and how did you trigger it?
+>
+> And what commit id does this fix?
+>
+> And how was this found?
+>
+> thanks,
+>
+> greg k-h
