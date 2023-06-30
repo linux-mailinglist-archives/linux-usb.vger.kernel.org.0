@@ -2,109 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1C3743407
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jun 2023 07:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03226743567
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jun 2023 08:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbjF3FWZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Jun 2023 01:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
+        id S231956AbjF3G5W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Jun 2023 02:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjF3FWY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jun 2023 01:22:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B3F2D69
-        for <linux-usb@vger.kernel.org>; Thu, 29 Jun 2023 22:22:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3011B61583
-        for <linux-usb@vger.kernel.org>; Fri, 30 Jun 2023 05:22:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 98FD0C433C8
-        for <linux-usb@vger.kernel.org>; Fri, 30 Jun 2023 05:22:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688102542;
-        bh=leZMDDO7lH2UEn1VIjWxwdVRO1/Jlgsbb31E8oreQ0I=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=jaIOywR/Ue1a+84sQqGjtSM44a14gvHNXyjOQCU8aNaobPYKIdGsWgc7QPX9TD61l
-         xkAaH0PV2R5FJuvMfc4Sn8cCTb5sXN/ZgSYspcebhFxY/s1iT9amTwqavL1d8+6A+A
-         Xc5f0BFTfQu761b7pgizGiLl1faOZHT0kRhvbR94OvqTxlOKWfeNRMCwooQaXXY1Tk
-         oDPWbi7CMAKc6Kd5Bzub6HpNgHg/d6gjQ9X98weMPom4GN1bzaHY1sbLRD2PBLWh2Q
-         Ogb3kTuyaE8iPg+lMKu4gL5eoxWeFxGYixXa94HGPoCcmw7yiSqZo0HjaBzlpEHZXR
-         ulkJPgTzt0yeQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 84044C53BC6; Fri, 30 Jun 2023 05:22:22 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217613] [BUG] [media] dvb-usb: possible data-inconsistency due
- to data races in dib0700_rc_query_old_firmware()
-Date:   Fri, 30 Jun 2023 05:22:22 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: greg@kroah.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: DUPLICATE
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217613-208809-uO8Y1s7Sk8@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217613-208809@https.bugzilla.kernel.org/>
-References: <bug-217613-208809@https.bugzilla.kernel.org/>
+        with ESMTP id S231724AbjF3G5U (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jun 2023 02:57:20 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A1910F8
+        for <linux-usb@vger.kernel.org>; Thu, 29 Jun 2023 23:57:19 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-c118efd0c3cso1418242276.0
+        for <linux-usb@vger.kernel.org>; Thu, 29 Jun 2023 23:57:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688108238; x=1690700238;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hZ3wBkz2pxdTUS9/OQCSJauqcYuxtthvA5zABIfqeJs=;
+        b=IHjNBLE8spNRlxeSzalRRO2ui4YRHwmxXkc+ASamvdb9CHOxn8qwnSEiqN1+mF7C1I
+         65kVXy93Ko1Y/lEMFdRR+ZIxNX1TFNkeG34Xnis5jg9d0hoEGdOt9w0AQpFne6mShjAt
+         P9FoTr3D5bkGN6Uhsybdnl/wjbGlbKxkniTkommrQ3mcVrTVSFMiHagDwxm/jHimrFva
+         ckJ8+CSVgcLaA4zwAlsciWEVoIriv+4cFbHcrbQq93D0DOSMm103Hzoifcvl27VqzRiD
+         Be0R5gQEKHBb7geFzHl2ZWZAYHckPDF6oBtMfIumcSlc3pBItBFY2E7ChuQVw7A1CaTs
+         Puqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688108238; x=1690700238;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hZ3wBkz2pxdTUS9/OQCSJauqcYuxtthvA5zABIfqeJs=;
+        b=QfRm6DjEvKnB5gvH6dmYa1QebkLyY6KNc2osBkh1ABgMeJXse6b6Jya8poc0L4Yx3p
+         WBTUgv3prBfcNTLIq4kuqWX7aCc2VcG6B8F7zbDwGpoO2rPEnHOeM8U7zVEVrYSla0sZ
+         yu5T3Mfc1VgupdqURgeaIYxrxwRAixRssoNdJu7aO75K96wKqvFD//RbYNQsJrlV1VOH
+         IKdIRAm4csjuFWw6ymIc1nPBHlrEQecpU/K6hJLyCO3LtLmTxLRVGT2QqVrw+heTEJrT
+         modHJCw7YrCcy7SIpaB3e9VD1N9iknBu9pnCaGTvpQUQlumoZ0MrWMIASPTufTgNPXAA
+         LL7Q==
+X-Gm-Message-State: ABy/qLaa39kkfdOpu0IevDGOx6VPBZzm3JSadsfDfkd+S5H2ytZ6mXax
+        C/bgVotBMcKKM/N2FnaWtp8PQDuaVfQ=
+X-Google-Smtp-Source: APBJJlGQnXr8LdhGOtoxxO7nzmA+qzRWdfpj/MZ43yNUGq1KD/gmpUbEbaXsQjjANjBBl6atuvTUd8xkVKg=
+X-Received: from hhhuuu.c.googlers.com ([fda3:e722:ac3:cc00:3:22c1:c0a8:c80])
+ (user=hhhuuu job=sendgmr) by 2002:a25:d158:0:b0:c42:6459:c45a with SMTP id
+ i85-20020a25d158000000b00c426459c45amr2389ybg.12.1688108238655; Thu, 29 Jun
+ 2023 23:57:18 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 06:57:11 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230630065711.801569-1-hhhuuu@google.com>
+Subject: [PATCH] usb: typec: tcpm: Add IS_ERR_OR_NULL check for port->partner
+From:   Jimmy Hu <hhhuuu@google.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org
+Cc:     kyletso@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jimmy Hu <hhhuuu@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217613
+port->partner may be an error or NULL, so we must check it with
+IS_ERR_OR_NULL() before dereferencing it.
 
---- Comment #2 from Greg Kroah-Hartman (greg@kroah.com) ---
-On Fri, Jun 30, 2023 at 01:35:28AM +0000, bugzilla-daemon@kernel.org wrote:
-> https://bugzilla.kernel.org/show_bug.cgi?id=3D217613
->=20
->             Bug ID: 217613
->            Summary: [BUG] [media] dvb-usb: possible data-inconsistency due
->                     to data races in dib0700_rc_query_old_firmware()
->            Product: Drivers
->            Version: 2.5
->           Hardware: All
->                 OS: Linux
->             Status: NEW
->           Severity: normal
->           Priority: P3
->          Component: USB
->           Assignee: drivers_usb@kernel-bugs.kernel.org
->           Reporter: islituo@gmail.com
->         Regression: No
->=20
-> Our static analysis tool finds some possible data races in the
-> DVB USB driver in Linux 6.4.0.
+Fixes: 5e1d4c49fbc8 ("usb: typec: tcpm: Determine common SVDM Version")
+Signed-off-by: Jimmy Hu <hhhuuu@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Please report this to the mailing lists for these drivers, not in
-bugzilla.
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 829d75ebab42..cd2590eead04 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -1626,6 +1626,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
+ 				break;
+ 
+ 			if (PD_VDO_SVDM_VER(p[0]) < svdm_version) {
++				if (IS_ERR_OR_NULL(port->partner))
++					break;
+ 				typec_partner_set_svdm_version(port->partner,
+ 							       PD_VDO_SVDM_VER(p[0]));
+ 				svdm_version = PD_VDO_SVDM_VER(p[0]);
+-- 
+2.41.0.255.g8b1d071c50-goog
 
-thanks,
-
-greg k-h
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
