@@ -2,92 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03226743567
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jun 2023 08:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B97497435DA
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jun 2023 09:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbjF3G5W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Jun 2023 02:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41756 "EHLO
+        id S229787AbjF3HgC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Jun 2023 03:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231724AbjF3G5U (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jun 2023 02:57:20 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A1910F8
-        for <linux-usb@vger.kernel.org>; Thu, 29 Jun 2023 23:57:19 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-c118efd0c3cso1418242276.0
-        for <linux-usb@vger.kernel.org>; Thu, 29 Jun 2023 23:57:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688108238; x=1690700238;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hZ3wBkz2pxdTUS9/OQCSJauqcYuxtthvA5zABIfqeJs=;
-        b=IHjNBLE8spNRlxeSzalRRO2ui4YRHwmxXkc+ASamvdb9CHOxn8qwnSEiqN1+mF7C1I
-         65kVXy93Ko1Y/lEMFdRR+ZIxNX1TFNkeG34Xnis5jg9d0hoEGdOt9w0AQpFne6mShjAt
-         P9FoTr3D5bkGN6Uhsybdnl/wjbGlbKxkniTkommrQ3mcVrTVSFMiHagDwxm/jHimrFva
-         ckJ8+CSVgcLaA4zwAlsciWEVoIriv+4cFbHcrbQq93D0DOSMm103Hzoifcvl27VqzRiD
-         Be0R5gQEKHBb7geFzHl2ZWZAYHckPDF6oBtMfIumcSlc3pBItBFY2E7ChuQVw7A1CaTs
-         Puqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688108238; x=1690700238;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hZ3wBkz2pxdTUS9/OQCSJauqcYuxtthvA5zABIfqeJs=;
-        b=QfRm6DjEvKnB5gvH6dmYa1QebkLyY6KNc2osBkh1ABgMeJXse6b6Jya8poc0L4Yx3p
-         WBTUgv3prBfcNTLIq4kuqWX7aCc2VcG6B8F7zbDwGpoO2rPEnHOeM8U7zVEVrYSla0sZ
-         yu5T3Mfc1VgupdqURgeaIYxrxwRAixRssoNdJu7aO75K96wKqvFD//RbYNQsJrlV1VOH
-         IKdIRAm4csjuFWw6ymIc1nPBHlrEQecpU/K6hJLyCO3LtLmTxLRVGT2QqVrw+heTEJrT
-         modHJCw7YrCcy7SIpaB3e9VD1N9iknBu9pnCaGTvpQUQlumoZ0MrWMIASPTufTgNPXAA
-         LL7Q==
-X-Gm-Message-State: ABy/qLaa39kkfdOpu0IevDGOx6VPBZzm3JSadsfDfkd+S5H2ytZ6mXax
-        C/bgVotBMcKKM/N2FnaWtp8PQDuaVfQ=
-X-Google-Smtp-Source: APBJJlGQnXr8LdhGOtoxxO7nzmA+qzRWdfpj/MZ43yNUGq1KD/gmpUbEbaXsQjjANjBBl6atuvTUd8xkVKg=
-X-Received: from hhhuuu.c.googlers.com ([fda3:e722:ac3:cc00:3:22c1:c0a8:c80])
- (user=hhhuuu job=sendgmr) by 2002:a25:d158:0:b0:c42:6459:c45a with SMTP id
- i85-20020a25d158000000b00c426459c45amr2389ybg.12.1688108238655; Thu, 29 Jun
- 2023 23:57:18 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 06:57:11 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230630065711.801569-1-hhhuuu@google.com>
-Subject: [PATCH] usb: typec: tcpm: Add IS_ERR_OR_NULL check for port->partner
-From:   Jimmy Hu <hhhuuu@google.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org
-Cc:     kyletso@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jimmy Hu <hhhuuu@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S232415AbjF3HfP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jun 2023 03:35:15 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 686312694;
+        Fri, 30 Jun 2023 00:35:05 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 35U7XiBD2019875, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 35U7XiBD2019875
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Fri, 30 Jun 2023 15:33:44 +0800
+Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Fri, 30 Jun 2023 15:33:45 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 30 Jun 2023 15:33:45 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Fri, 30 Jun 2023 15:33:45 +0800
+From:   =?big5?B?U3RhbmxleSBDaGFuZ1up96h8vHdd?= <stanley_chang@realtek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Douglas Anderson" <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Ray Chi <raychi@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v6 4/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 2.0 PHY
+Thread-Topic: [PATCH v6 4/5] dt-bindings: phy: realtek: Add the doc about the
+ Realtek SoC USB 2.0 PHY
+Thread-Index: AQHZqkz4ea6k1ChKgUmQ1oGFAHMAzq+hdqEAgAFUL4A=
+Date:   Fri, 30 Jun 2023 07:33:45 +0000
+Message-ID: <f17378f003144f4ba50ec08e0ad38c0b@realtek.com>
+References: <20230629054523.7519-1-stanley_chang@realtek.com>
+ <20230629054523.7519-4-stanley_chang@realtek.com>
+ <20230629164220.GA3146341-robh@kernel.org>
+In-Reply-To: <20230629164220.GA3146341-robh@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-port->partner may be an error or NULL, so we must check it with
-IS_ERR_OR_NULL() before dereferencing it.
-
-Fixes: 5e1d4c49fbc8 ("usb: typec: tcpm: Determine common SVDM Version")
-Signed-off-by: Jimmy Hu <hhhuuu@google.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 829d75ebab42..cd2590eead04 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -1626,6 +1626,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
- 				break;
- 
- 			if (PD_VDO_SVDM_VER(p[0]) < svdm_version) {
-+				if (IS_ERR_OR_NULL(port->partner))
-+					break;
- 				typec_partner_set_svdm_version(port->partner,
- 							       PD_VDO_SVDM_VER(p[0]));
- 				svdm_version = PD_VDO_SVDM_VER(p[0]);
--- 
-2.41.0.255.g8b1d071c50-goog
-
+SGkgUm9iLA0KDQo+IE9uIFRodSwgSnVuIDI5LCAyMDIzIGF0IDAxOjQ1OjEyUE0gKzA4MDAsIFN0
+YW5sZXkgQ2hhbmcgd3JvdGU6DQo+ID4gQWRkIHRoZSBkb2N1bWVudGF0aW9uIGV4cGxhaW4gdGhl
+IHByb3BlcnR5IGFib3V0IFJlYWx0ZWsgVVNCIFBIWSBkcml2ZXIuDQo+IA0KPiBJbiB0aGUgc3Vi
+amVjdCwgZHJvcCAidGhlIGRvYyBhYm91dCB0aGUiLiBJdCdzIHJlZHVuZGFudC4gQW5kIHBlcmhh
+cHMgYWRkICdESEMNCj4gUlREIFNvQycgaWYgdGhpcyBpc24ndCBmb3IgKmFsbCogUmVhbHRlayBT
+b0NzLg0KPiANCj4gPiBSZWFsdGVrIERIQyAoZGlnaXRhbCBob21lIGNlbnRlcikgUlREIFNvQ3Mg
+c3VwcG9ydCBEV0MzIFhIQ0kgVVNCDQo+ID4gY29udHJvbGxlci4gQWRkZWQgdGhlIGRyaXZlciB0
+byBkcml2ZSB0aGUgVVNCIDIuMCBQSFkgdHJhbnNjZWl2ZXJzLg0KPiANCj4gZHJpdmVyPyBUaGlz
+IGlzIGEgYmluZGluZyBmb3IgdGhlIGgvdy4NCg0KSSBtZWFuLCB0aGUgZHJpdmVyIGlzIGRyaXZl
+cnMvcGh5L3JlYWx0ZWsvcGh5LXJ0ay11c2IyLmMNCkkgd2lsbCByZXZpc2UgYXMNCiAgICBkdC1i
+aW5kaW5nczogcGh5OiByZWFsdGVrOiBBZGQgdGhlIFJlYWx0ZWsgREhDIFJURCBTb0MgVVNCIDIu
+MCBQSFkNCg0KICAgIEFkZCB0aGUgZG9jdW1lbnRhdGlvbiBleHBsYWluIHRoZSBwcm9wZXJ0eSBh
+Ym91dCBSZWFsdGVrIFVTQiBQSFkgZHJpdmVyLg0KDQogICAgUmVhbHRlayBESEMgKGRpZ2l0YWwg
+aG9tZSBjZW50ZXIpIFJURCBTb0NzIHN1cHBvcnQgRFdDMyBYSENJIFVTQg0KICAgIGNvbnRyb2xs
+ZXIgYW5kIHVzZXMgcGh5LXJ0ay11c2IyIGFzIGRyaXZlciBmb3IgVVNCIDIuMCBQSFkgdHJhbnNj
+ZWl2ZXIuLg0KDQo+ID4gKyRpZDogaHR0cDovL2RldmljZXRyZWUub3JnL3NjaGVtYXMvcGh5L3Jl
+YWx0ZWssdXNiMnBoeS55YW1sIw0KPiA+ICskc2NoZW1hOiBodHRwOi8vZGV2aWNldHJlZS5vcmcv
+bWV0YS1zY2hlbWFzL2NvcmUueWFtbCMNCj4gPiArDQo+ID4gK3RpdGxlOiBSZWFsdGVrIERIQyBT
+b0NzIFVTQiAyLjAgUEhZDQo+ID4gKw0KPiA+ICttYWludGFpbmVyczoNCj4gPiArICAtIFN0YW5s
+ZXkgQ2hhbmcgPHN0YW5sZXlfY2hhbmdAcmVhbHRlay5jb20+DQo+ID4gKw0KPiA+ICtkZXNjcmlw
+dGlvbjoNCj4gDQo+IFlvdSBuZWVkICd8JyBpZiBmb3JtYXR0aW5nIChsaW5lIGJyZWFrcykgYXJl
+IGltcG9ydGFudC4NCg0KSSB0aGluayBJIG5lZWQgaXQuIEkgd2lsbCBhZGQgaXQuDQoNCj4gPiAr
+ICByZWFsdGVrLGludmVyc2UtaHN0eC1zeW5jLWNsb2NrOg0KPiA+ICsgICAgZGVzY3JpcHRpb246
+DQo+ID4gKyAgICAgIEZvciBvbmUgb2YgdGhlIHBoeXMgb2YgUlREMTYxOWIgU29DLCB0aGUgc3lu
+Y2hyb25vdXMgY2xvY2sgb2YgdGhlDQo+ID4gKyAgICAgIGhpZ2gtc3BlZWQgdHggbXVzdCBiZSBp
+bnZlcnRlZC4NCj4gDQo+ICJpbnZlcnQiIGFzc3VtZXMgSSBrbm93IHdoYXQgbm9uLWludmVydGVk
+IG1lYW5zLiBJIGRvIG5vdC4gQmV0dGVyIHRvIHN0YXRlIGluDQo+IHRlcm1zIG9mIGFjdGl2ZSBo
+aWdoLCBsb3csIGZhbGxpbmcgZWRnZSwgcmlzaW5nIGVkZ2UsIGV0Yy4NCg0KTWVhbmluZywgdGhl
+IGNsb2NrIG11c3QgYmUgcmV2ZXJzZWQuDQo+IA0KPiA+ICsgICAgdHlwZTogYm9vbGVhbg0KPiA+
+ICsNCj4gPiArICByZWFsdGVrLGRyaXZpbmctbGV2ZWw6DQo+ID4gKyAgICBkZXNjcmlwdGlvbjoN
+Cj4gPiArICAgICAgQ29udHJvbCB0aGUgbWFnbml0dWRlIG9mIEhpZ2ggc3BlZWQgRHAvRG0gb3V0
+cHV0IHN3aW5nLg0KPiA+ICsgICAgICBGb3IgYSBkaWZmZXJlbnQgYm9hcmQgb3IgcG9ydCwgdGhl
+IG9yaWdpbmFsIG1hZ25pdHVkZSBtYXliZSBub3QNCj4gbWVldA0KPiA+ICsgICAgICB0aGUgc3Bl
+Y2lmaWNhdGlvbi4gSW4gdGhpcyBzaXR1YXRpb24gd2UgY2FuIGFkanVzdCB0aGUgdmFsdWUgdG8g
+bWVldA0KPiA+ICsgICAgICB0aGUgc3BlY2lmaWNhdGlvbi4NCj4gDQo+IFdoYXQgYXJlIHRoZSB1
+bml0cz8NCg0KVGhlcmUgaXMgbm8gdW5pdC4gSXQgaXMgb25seSBhIGdhaW4gZm9yIGFkanVzdGlu
+ZyB0aGUgbWFnbml0dWRlLiANCg0KPiA+ICsgICAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMv
+ZGVmaW5pdGlvbnMvdWludDMyDQo+ID4gKyAgICBkZWZhdWx0OiA4DQo+ID4gKyAgICBtaW5pbXVt
+OiAwDQo+ID4gKyAgICBtYXhpbXVtOiAzMQ0KPiA+ICsNCj4gPiArICByZWFsdGVrLGRyaXZpbmct
+Y29tcGVuc2F0ZToNCj4gDQo+IGNvbXBlbnNhdGUgd2hhdD8NCg0KSXQgaXMgdG8gY29tcGVuc2F0
+ZSB0aGUgZHJpdmluZyBsZXZlbC4gSW4gb3RoZXIgd29yZCwgdG8gYWRqdXN0IHRoZSBkcml2aW5n
+IGxldmVsLg0KDQpUaGFua3MsDQpTdGFubGV5DQo=
