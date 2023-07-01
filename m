@@ -2,114 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B6B744AEE
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Jul 2023 21:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67FE7744B9A
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Jul 2023 00:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjGATXa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Jul 2023 15:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
+        id S229815AbjGAWTb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Jul 2023 18:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjGATX3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jul 2023 15:23:29 -0400
-X-Greylist: delayed 433 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 01 Jul 2023 12:23:27 PDT
-Received: from ixit.cz (ip-89-177-23-149.bb.vodafone.cz [89.177.23.149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED063171D
-        for <linux-usb@vger.kernel.org>; Sat,  1 Jul 2023 12:23:27 -0700 (PDT)
-Received: from [10.0.0.182] (unknown [10.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id DF2F9160365;
-        Sat,  1 Jul 2023 21:16:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1688238969;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nzN5M0Aj6HckyCdKJygWarn8tMUOVYCV7PJvrCf93Gs=;
-        b=dmSlowOWXMhjTtOpvn/TI43Uht6K3UcEJhis9/3hgjgV8oMX90x2Og8ezCDsKzv2cwBBqQ
-        OeNkUJbnFp6yliIibhsBSnkLW6gBq4X5W0q9eNMff1OqR4Kzf+lLi4CvT//6wpXTbcGePr
-        qwdVvGZRU84Mh/L8LRQ3fkE8IhqTpSI=
-Message-ID: <3a9041c0-6ae2-4231-2a72-32212ff12f16@ixit.cz>
-Date:   Sat, 1 Jul 2023 21:16:09 +0200
+        with ESMTP id S229712AbjGAWT2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jul 2023 18:19:28 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EC91AC
+        for <linux-usb@vger.kernel.org>; Sat,  1 Jul 2023 15:19:27 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qFiw5-0002Ti-T2; Sun, 02 Jul 2023 00:19:21 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qFiw2-00BRVp-5a; Sun, 02 Jul 2023 00:19:18 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qFiw1-001QHH-48; Sun, 02 Jul 2023 00:19:17 +0200
+Date:   Sun, 2 Jul 2023 00:19:11 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Zhang Shurong <zhang_shurong@foxmail.com>,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: r8a66597-hcd: host: fix port index underflow and
+ UBSAN complains
+Message-ID: <20230701221911.5mqh677uyhh2s67u@pengutronix.de>
+References: <tencent_AD4994DC28D60E6CF580E97BB028A0A1EA0A@qq.com>
+ <20230701171648.orex7hx6jpkkpub3@pengutronix.de>
+ <ad575ac5-fccb-4b1e-b6f4-26caa814414f@rowland.harvard.edu>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/2] usb: serial: add support for CH348
-Content-Language: en-US
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org, johan@kernel.org
-References: <20230628133834.1527941-1-clabbe@baylibre.com>
-From:   David Heidelberg <david@ixit.cz>
-In-Reply-To: <20230628133834.1527941-1-clabbe@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6wj7odentrecp6rj"
+Content-Disposition: inline
+In-Reply-To: <ad575ac5-fccb-4b1e-b6f4-26caa814414f@rowland.harvard.edu>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Tested-by: David Heidelberg <david@ixit.cz>
-Reviewed-by: David Heidelberg <david@ixit.cz>
 
-Thank you
+--6wj7odentrecp6rj
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 28/06/2023 15:38, Corentin Labbe wrote:
-> Hello
->
-> The CH348 is an octo serial to USB adapter.
-> The following patch adds a driver for supporting it.
-> Since there is no public datasheet, unfortunatly it remains some magic values.
->
-> It was tested with a large range of baud from 1200 to 1500000 and used with
-> success in one of our kernel CI testlab.
->
-> Regards
->
-> Changes since v1:
-> - use a data structure for encoding/decoding messages.
-> - check if needed endpoints exists
-> - fix URB leak in ch348_allocate_status_read error case
-> - test for maximum baud rate as stated by datasheet
->
-> Changes since v2:
-> - specify ch348_rxbuf data length
-> - Use correct speed_t dwDTERate instead of __le32
-> - test for maximum baud rate supported according to datasheet
-> - Use a define for CH348_TX_HDRSIZE
->
-> Changes since v3
-> - Fixed all reported problem from https://lore.kernel.org/lkml/Y5NDwEakGJbmB6+b@Red/T/#mb6234d0427cfdabf412190565e215995a41482dd
->    Mostly reworked the endpoint mux to be the same than mx_uport
->
-> Changes since v4:
-> - The V4 was sent against stable and next have ch348_set_termios ktermios
->    parameter const that I forgot to change
->
-> Changes since v5:
-> - Fixed all reported problem from https://lore.kernel.org/lkml/20230106135338.643951-1-clabbe@baylibre.com/T/#m044aab24dfb652ea34aa06f8ef704da9d6a2e036
-> - Major change is dropping of all status handling which was unused.
->    It will be probably necessary to bring it back when using GPIO.
->    This will be done when I will finish my next devboard.
->
-> Corentin Labbe (2):
->    usb: serial: add support for CH348
->    usb: serial: add myself as maintainer of CH348
->
->   MAINTAINERS                 |   5 +
->   drivers/usb/serial/Kconfig  |   9 +
->   drivers/usb/serial/Makefile |   1 +
->   drivers/usb/serial/ch348.c  | 491 ++++++++++++++++++++++++++++++++++++
->   4 files changed, 506 insertions(+)
->   create mode 100644 drivers/usb/serial/ch348.c
->
--- 
-David Heidelberg
-Consultant Software Engineer
+Hello Alan,
 
+On Sat, Jul 01, 2023 at 02:54:46PM -0400, Alan Stern wrote:
+> wIndex should never be =3D=3D 0 or > max_root_hub in the cases where rh g=
+ets=20
+> used; such values would be meaningless.  But we don't control the value=
+=20
+> of wIndex, because it can come from userspace.  So we can't simply=20
+> assume it will always be valid; it has to be checked.
+>=20
+> That being understood, the changes Zhang is making here are meant mostly=
+=20
+> to prevent UBSAN and the compiler from complaining or making false=20
+> assumptions.  The actual checks on wIndex occur later in the subroutine.
+
+I'm guilty of not having looked at all on that function, but it sounds
+wrong to me to calculate values from some untrusted input and only
+later validate the input. It should be the other way round, shouldn't
+it? This is calling for compiler optimisations stepping on your toes.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--6wj7odentrecp6rj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSgpl0ACgkQj4D7WH0S
+/k7s5Af/USnPiseAlWYYwvuQXAPt3ZkNc9kuJ9OKIJWQQ6oM7HQE+6rNhYJjqhCW
+LcUgbvbyNXTpg+2QjhrQ8KLCO809uzcA+EHHBjRTYBQMc953nZQrCb4co2+OJizd
+lQsk4EApYEa6d8+2rTs+f5VJGYe9aW9TvrF9cqFoUMwqkIvLiVAHkR3DiTWHu1MJ
+F6Qxc7OMf4GprqMR5yL/RRjA66XK2Fxz7po+Z/TBNDVevjt6uAZY5Iw6jCqvVcwz
+Guu88RcWdLRtQX99yTPmr8y9ZHdACxYU8JAqLkqrA31IT88ojaiq1s7MWF5m13pD
+b72qCAMrWbBix53Uqu5KzXlgakgzEA==
+=If88
+-----END PGP SIGNATURE-----
+
+--6wj7odentrecp6rj--
