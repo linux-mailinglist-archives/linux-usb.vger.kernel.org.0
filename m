@@ -2,56 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DD67449DC
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Jul 2023 16:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0AA744A60
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Jul 2023 17:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbjGAOgr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Jul 2023 10:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
+        id S230038AbjGAPvz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Jul 2023 11:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjGAOgq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jul 2023 10:36:46 -0400
-Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA5399;
-        Sat,  1 Jul 2023 07:36:43 -0700 (PDT)
+        with ESMTP id S230013AbjGAPvy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jul 2023 11:51:54 -0400
+X-Greylist: delayed 4891 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 01 Jul 2023 08:51:52 PDT
+Received: from out203-205-251-59.mail.qq.com (out203-205-251-59.mail.qq.com [203.205.251.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253B82683;
+        Sat,  1 Jul 2023 08:51:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1688222201;
-        bh=bTXXrh3I7Ct13OK63PeVaHtQA/9y4IkNy2DPolC2mMg=;
-        h=From:To:Cc:Subject:Date;
-        b=nNq0b0YtjEFDSP53Hj+bpcR3o5rq0NlWKZDZZcV5e5tTsJhnB2TEitXvOTJkQSaVJ
-         57tAfVn7tcMmSdEkDC8uByNfFPAKC9OnIzDKTJvQf0gNoqP0jmGA25gUZ5XJ+/iblL
-         VUh1Bste6mrQvt3F97FDAXNU/esesUpznBSKRlmA=
-Received: from localhost.localdomain ([116.132.239.198])
-        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
-        id 7902A2CB; Sat, 01 Jul 2023 22:30:16 +0800
-X-QQ-mid: xmsmtpt1688221816tcmhwbai2
-Message-ID: <tencent_71A3B792C0AA3D9E148E517B24BC6E006A09@qq.com>
-X-QQ-XMAILINFO: NMGzQWUSIfvTdjorrBObRnaBbbmHnXwCW6Hdeb+OBv/ZDseonaZ15xWGfRdj5u
-         OnKCTkJfWMmoXIvyy8b8UA7TD4AwyyOqz1bdXmfi9g4gg90zH/Ok//SJsyASCl62HYFCHtEM8aFf
-         L6EfP+u+xBfo4DRM/cJuqKBrdGZdcsaXK7JsGXDlLsjwrZH8H7m6Gu5b5VeEjmml3I+rncCaG63H
-         u2+Uxtq+xl2ylXPmdAIop8f21ktj1/HL9PafTwwsKz3ZHB/JXWmLxaw8OA+fAG+X7I24DekClufs
-         oGsRPwErEGI1ENx9PYhrTo8dKSF3gsgivUMcWPD4T4sWuFvAZL8NMl3QwhTePxmWRtGoiYeUBTSr
-         AKhYL/jWArdLVQlE/bINXOn1POLHFMd5W48Xotfr0BBVb/nhPAW7tnJfcG2/4l2Jcz/z97Bg3u3Y
-         7JqDHI477WIruFBbAZ80beamqzfUud6hDHWztJ/cOHkgIQXDZEZYDQOVSDjwRNzX6cdQLDixM0XE
-         k9WL3HO8E5mFlByWV6bNM9gRM8PQzrlLE76Ob4kPbHuyCvRL4ANxcPChJ1MScFVRNXL9Krrb/1fv
-         8rrodbptK80hV+X6eD8qjJCa94tTuA9DBg3fo30IfpWOwvzEGAk0QNagDBY3SZIbBlw8r1zusW1z
-         P1BM3R5m8flfSpzJPzelwKFnhezhnZ6JdIR2AaXFlamYmONpeUW4qKV3wa4w1XD/gqG7kZfLmxTs
-         OmXoSkPcNHieFiiUS5cxKjhPB8V/9d/SZezqAQvF4R64rbBdd+h0JD0zeWnvGiakq/MaZs0h+XTL
-         tx2m9MLLJWlsaBJ6vKBAafSiMbwbkumu0nTYiXHunBIfYk+C+7346Eo6ST+m5XLXr4tv+CdyKIq3
-         byF7cV/U3WO1fUFnY36YOjOgf5FKWlXYpgY0BSnY+7j33wAa8k3CwJNeS/M3umrH0JpYSmKV8mfg
-         m5qTk2bm/d5rU0J8BvDJYeHkTJV2Mix9evsXY09Usv3WDoHjJ/UZhRP8JABJ8r
-X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+        s=s201512; t=1688226707;
+        bh=Ou1vBhUK87QUl5Q7dSsJPlf9T8VgS2NFf1k7CSQDkDY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=InzfP/PjalXsy1+062ZbHDH7LNSpAlZb/OGrkFlT6ZDcVxJ4s6E21Y0Jh5QIZW12E
+         8Q6ikCFwk6a7xFshJF2ClUrLspmGWaAzCwUa7DR26CeBpg0R82CYdvizzsxYzyHwiD
+         EroHbCc8jD++VaWGfM/AMg/i+2aX4+bzXi2cjbQE=
+Received: from localhost.localdomain ([116.132.239.178])
+        by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
+        id CEC3EC5C; Sat, 01 Jul 2023 23:51:44 +0800
+X-QQ-mid: xmsmtpt1688226704te5jbpodh
+Message-ID: <tencent_62EE5604188B87B14220EA91C4CD8D4C2D06@qq.com>
+X-QQ-XMAILINFO: MBf0q8AysQnB9O7sZj5jgSNUnizJ7WyO6idPxUw5LGBRfADxCatimjS8frcO53
+         OYG4ZoWqWzofoy5ziRmfTupTo+9SoOjDeAa2XX9YKT/v6+RqbSpF9nfPC/dGXC4N5shyi5gUCwOT
+         onoHlWGeP9TLE3B6807xVCxkhTgd3gCIDZMm2wgDX5qq7cBSJjjDTJD+DhgAIWj3ijzYA8OazRjZ
+         hCcsv3ngIQWuWZ0JSLmHwZ0UTSQCQ+9gatNz0ByQexx5wiifL6/U5IQ7aBk3ePXUrbKuGItZ/hth
+         J0HU4mV5UX8OkRfpsjypjuHOye9svDBiMghR4ItEpq2kZmcX/kuf80ic6deCMBP6ElKiIBP9ff1M
+         4lOyjJfPUA9x/gXw+ENR6TGd92i29BwXM/DgZkKAqY8DUCD/yZ3yW2123KA9L3yVAbe94o2uKMzD
+         OMRE+Re8ojaYsncs3JXQn+bYECgh2lMahvq6+QCkbEuT7Xp8xqlQ5jQgmTO2RvZWIJaOSknu1Jnr
+         9zgUDCBhqd0kM0AVy2PG2RsWQYFXmpk/nTTyhbSMz0mcugnZurXaV+Zalva/b+Z1rWGRSlmaHFG5
+         Nt4yPNg2xE5TQM5F0EOzRFkYY3z/EX45mBDeOQOayUqoRYNAr1XMUUeLW/1K4uMQ5vyErjZktHTT
+         W5/dU7km1Hhw9eV1NMOvr6ebUdby4tj5Cre0paw+bqbVT+FxVEZ10nqTEPGgnPFF7CU7dg6ldQ+N
+         BSVtP0u4M1PgcSaSx9O3vGFeCPowRXKZFUVilSO/Kg+reSKEHWpHGSvM931iETynrTcFIgaMb5sV
+         uNWHwK/TtGkrB72YjZYAaZ4s/r91k4vXQb4o3gxi1hfa9DP4mGcVtTTZHXL2ujyaM38vMmB8EbF9
+         Ys7lowKPVSCv27wAE8K5uFPml5MLKQ+1/R2VHsVSEI06yNT6ndWmX2YHu27XEtRV/qRxg7QRs8mF
+         29XvdMS3b9UjAGJ9Pz/mO2TCWkoQvKZvrnJAhicjk1Ja1cW6BfCg==
+X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
 From:   Zhang Shurong <zhang_shurong@foxmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     u.kleine-koenig@pengutronix.de, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Zhang Shurong <zhang_shurong@foxmail.com>
-Subject: [PATCH] usb: r8a66597-hcd: host: fix port index underflow and UBSAN complains
-Date:   Sat,  1 Jul 2023 22:29:57 +0800
-X-OQ-MSGID: <20230701142957.3352-1-zhang_shurong@foxmail.com>
-X-Mailer: git-send-email 2.41.0
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     jgross@suse.com, xen-devel@lists.xenproject.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] xen: fix potential shift out-of-bounds in xenhcd_hub_control()
+Date:   Sat, 01 Jul 2023 23:51:43 +0800
+X-OQ-MSGID: <4825193.GXAFRqVoOG@localhost.localdomain>
+In-Reply-To: <2023062628-shame-ebook-56f2@gregkh>
+References: <tencent_15DD79B42AD8A0D64A7CDC24D4FE6C85800A@qq.com>
+ <1c8ff405-2bfe-37ff-42ba-aa4f81853475@suse.com>
+ <2023062628-shame-ebook-56f2@gregkh>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
@@ -63,36 +67,68 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If wIndex is 0 (and it often is), these calculations underflow and
-UBSAN complains, here resolve this by not decrementing the index when
-it is equal to 0.
+=E5=9C=A8 2023=E5=B9=B46=E6=9C=8826=E6=97=A5=E6=98=9F=E6=9C=9F=E4=B8=80 CST=
+ =E4=B8=8B=E5=8D=881:52:02=EF=BC=8C=E6=82=A8=E5=86=99=E9=81=93=EF=BC=9A
+> On Mon, Jun 26, 2023 at 07:48:05AM +0200, Jan Beulich wrote:
+> > On 25.06.2023 18:42, Zhang Shurong wrote:
+> > > --- a/drivers/usb/host/xen-hcd.c
+> > > +++ b/drivers/usb/host/xen-hcd.c
+> > > @@ -456,6 +456,8 @@ static int xenhcd_hub_control(struct usb_hcd *hcd,
+> > > __u16 typeReq, __u16 wValue,> >=20
+> > >  			info->ports[wIndex - 1].c_connection =3D=20
+false;
+> > >  			fallthrough;
+> > >  	=09
+> > >  		default:
+> > > +			if (wValue >=3D 32)
+> > > +				goto error;
+> > >=20
+> > >  			info->ports[wIndex - 1].status &=3D ~(1=20
+<< wValue);
+> >=20
+> > Even 31 is out of bounds (as in: UB) as long as it's 1 here rather
+> > than 1u.
+>=20
+> Why isn't the caller fixed so this type of value could never be passed
+> to the hub_control callback?
+>=20
+> thanks,
+>=20
+> greg k-h
+Although I'm not knowledgeable about the USB subsystem, I've observed that =
+not=20
+all driver code that implements hub_control callback performs a shift=20
+operation on wValue, and not all shift operations among them cause problems=
+=2E=20
+Therefore, I've decided to fix this issue within each driver itself.
 
-Similar commit 85e3990bea49 ("USB: EHCI: avoid undefined pointer
-arithmetic and placate UBSAN")
+=46or example, in r8a66597_hub_control, it will first check whether wValue =
+is=20
+valid (always < 31) before the shift operation. In case of an invalid numbe=
+r,=20
+the code would execute the error branch instead of the shift operation.
 
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
----
- drivers/usb/host/r8a66597-hcd.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+switch (wValue) {
+case USB_PORT_FEAT_ENABLE:
+	rh->port &=3D ~USB_PORT_STAT_POWER;
+	break;
+case USB_PORT_FEAT_SUSPEND:
+	break;
+case USB_PORT_FEAT_POWER:
+	r8a66597_port_power(r8a66597, port, 0);
+	break;
+case USB_PORT_FEAT_C_ENABLE:
+case USB_PORT_FEAT_C_SUSPEND:
+case USB_PORT_FEAT_C_CONNECTION:
+case USB_PORT_FEAT_C_OVER_CURRENT:
+case USB_PORT_FEAT_C_RESET:
+	break;
+default:
+	goto error;
+}
+rh->port &=3D ~(1 << wValue);
 
-diff --git a/drivers/usb/host/r8a66597-hcd.c b/drivers/usb/host/r8a66597-hcd.c
-index 9f4bf8c5f8a5..a65e0d995a4b 100644
---- a/drivers/usb/host/r8a66597-hcd.c
-+++ b/drivers/usb/host/r8a66597-hcd.c
-@@ -2141,9 +2141,11 @@ static int r8a66597_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- {
- 	struct r8a66597 *r8a66597 = hcd_to_r8a66597(hcd);
- 	int ret;
--	int port = (wIndex & 0x00FF) - 1;
--	struct r8a66597_root_hub *rh = &r8a66597->root_hub[port];
- 	unsigned long flags;
-+	u32 port_index = wIndex & 0xFF;
-+
-+	int port -= (port_index > 0);
-+	struct r8a66597_root_hub *rh = &r8a66597->root_hub[port];
- 
- 	ret = 0;
- 
--- 
-2.41.0
+
+
+
 
