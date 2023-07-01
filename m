@@ -2,132 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5149744AB2
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Jul 2023 19:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8D6744AE5
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Jul 2023 20:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjGARRC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Jul 2023 13:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
+        id S229811AbjGASyu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Jul 2023 14:54:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjGARRB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jul 2023 13:17:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80189E
-        for <linux-usb@vger.kernel.org>; Sat,  1 Jul 2023 10:16:59 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qFeDP-0001af-VU; Sat, 01 Jul 2023 19:16:56 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qFeDL-00BOjc-EM; Sat, 01 Jul 2023 19:16:51 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qFeDK-001NDS-PY; Sat, 01 Jul 2023 19:16:50 +0200
-Date:   Sat, 1 Jul 2023 19:16:48 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Zhang Shurong <zhang_shurong@foxmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        with ESMTP id S229530AbjGASyu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jul 2023 14:54:50 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 23B0D171B
+        for <linux-usb@vger.kernel.org>; Sat,  1 Jul 2023 11:54:48 -0700 (PDT)
+Received: (qmail 1021177 invoked by uid 1000); 1 Jul 2023 14:54:46 -0400
+Date:   Sat, 1 Jul 2023 14:54:46 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Zhang Shurong <zhang_shurong@foxmail.com>,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2] usb: r8a66597-hcd: host: fix port index underflow and
  UBSAN complains
-Message-ID: <20230701171648.orex7hx6jpkkpub3@pengutronix.de>
+Message-ID: <ad575ac5-fccb-4b1e-b6f4-26caa814414f@rowland.harvard.edu>
 References: <tencent_AD4994DC28D60E6CF580E97BB028A0A1EA0A@qq.com>
+ <20230701171648.orex7hx6jpkkpub3@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gywfdzj6mlm4tas5"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <tencent_AD4994DC28D60E6CF580E97BB028A0A1EA0A@qq.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230701171648.orex7hx6jpkkpub3@pengutronix.de>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Sat, Jul 01, 2023 at 07:16:48PM +0200, Uwe Kleine-König wrote:
+> On Sun, Jul 02, 2023 at 12:39:20AM +0800, Zhang Shurong wrote:
+> > If wIndex is 0 (and it often is), these calculations underflow and
+> > UBSAN complains, here resolve this by not decrementing the index when
+> > it is equal to 0.
+> > 
+> > Similar commit 85e3990bea49 ("USB: EHCI: avoid undefined pointer
+> > arithmetic and placate UBSAN")
+> > 
+> > The changes in this version:
+> > - fix some compile error
+> > 
+> > Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
+> > ---
+> >  drivers/usb/host/r8a66597-hcd.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/usb/host/r8a66597-hcd.c b/drivers/usb/host/r8a66597-hcd.c
+> > index 9f4bf8c5f8a5..6c597c668364 100644
+> > --- a/drivers/usb/host/r8a66597-hcd.c
+> > +++ b/drivers/usb/host/r8a66597-hcd.c
+> > @@ -2141,10 +2141,12 @@ static int r8a66597_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+> >  {
+> >  	struct r8a66597 *r8a66597 = hcd_to_r8a66597(hcd);
+> >  	int ret;
+> > -	int port = (wIndex & 0x00FF) - 1;
+> > -	struct r8a66597_root_hub *rh = &r8a66597->root_hub[port];
+> >  	unsigned long flags;
+> > +	struct r8a66597_root_hub *rh;
+> > +	u32 port = wIndex & 0xFF;
+> >  
+> > +	port -= (port > 0);
+> 
+> I have no idea about this hardware, but it seems strange to me that
+> calling r8a66597_hub_control with wIndex = 1 should have the same effect
+> as with wIndex = 0. Is you changed backed by knowledge about the
+> hardware, or is that just the most obvious way to get rid of the UB
+> warning?
+> 
+> Having said that, I think
+> 
+> 	port -= (port > 0);
+> 
+> is hard to read compared to:
+> 
+> 	if (port > 0)
+> 		port--;
 
---gywfdzj6mlm4tas5
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Zhang:
 
-On Sun, Jul 02, 2023 at 12:39:20AM +0800, Zhang Shurong wrote:
-> If wIndex is 0 (and it often is), these calculations underflow and
-> UBSAN complains, here resolve this by not decrementing the index when
-> it is equal to 0.
->=20
-> Similar commit 85e3990bea49 ("USB: EHCI: avoid undefined pointer
-> arithmetic and placate UBSAN")
->=20
-> The changes in this version:
-> - fix some compile error
->=20
-> Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
-> ---
->  drivers/usb/host/r8a66597-hcd.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/usb/host/r8a66597-hcd.c b/drivers/usb/host/r8a66597-=
-hcd.c
-> index 9f4bf8c5f8a5..6c597c668364 100644
-> --- a/drivers/usb/host/r8a66597-hcd.c
-> +++ b/drivers/usb/host/r8a66597-hcd.c
-> @@ -2141,10 +2141,12 @@ static int r8a66597_hub_control(struct usb_hcd *h=
-cd, u16 typeReq, u16 wValue,
->  {
->  	struct r8a66597 *r8a66597 =3D hcd_to_r8a66597(hcd);
->  	int ret;
-> -	int port =3D (wIndex & 0x00FF) - 1;
-> -	struct r8a66597_root_hub *rh =3D &r8a66597->root_hub[port];
->  	unsigned long flags;
-> +	struct r8a66597_root_hub *rh;
-> +	u32 port =3D wIndex & 0xFF;
-> =20
-> +	port -=3D (port > 0);
+Why not just copy the code that's already in ehci-hub.c?
 
-I have no idea about this hardware, but it seems strange to me that
-calling r8a66597_hub_control with wIndex =3D 1 should have the same effect
-as with wIndex =3D 0. Is you changed backed by knowledge about the
-hardware, or is that just the most obvious way to get rid of the UB
-warning?
+	/*
+	 * Avoid out-of-bounds values while calculating the port index
+	 * from wIndex.  The compiler doesn't like pointers to invalid
+	 * addresses, even if they are never used.
+	 */
+	port = (wIndex - 1) & 0xff;
+	if (port >= r8a66597->max_root_hub)
+		port = 0;
+	rh = &r8a66597->root_hub[port];
 
-Having said that, I think
+Also, I see that in the ClearPortFeature, SetPortStatus, and 
+SetPortFeature cases in this routine, the code doesn't check for wIndex 
+== 0.  That's a bug -- a real one, not just a UBSAN issue.
 
-	port -=3D (port > 0);
 
-is hard to read compared to:
+Uwe:
 
-	if (port > 0)
-		port--;
+wIndex should never be == 0 or > max_root_hub in the cases where rh gets 
+used; such values would be meaningless.  But we don't control the value 
+of wIndex, because it can come from userspace.  So we can't simply 
+assume it will always be valid; it has to be checked.
 
-Best regards
-Uwe
+That being understood, the changes Zhang is making here are meant mostly 
+to prevent UBSAN and the compiler from complaining or making false 
+assumptions.  The actual checks on wIndex occur later in the subroutine.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---gywfdzj6mlm4tas5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSgX38ACgkQj4D7WH0S
-/k4tNgf/ep/95gzw5jQArTC3FtjO3zc3UYOBKcYpvKleZqJ4/YZnaQN9RPNFTx2Z
-ZrhMB4vqbRuvBoCYn/JwXpPsj7GdQ9VvhFTy//FUmtfBMu7gcHDcMV3m9xZt0Gdx
-F/aiPQU1swb+wDVoVxZUR5MB29gdmaFMw0ZX9WuX0TNiA+ZO4dV4kUnhL3f3ExaJ
-xgHtvBwdLJfXZPRZCjx9IhKNAMXiqp0KsouDI73DVdpcaJzveVp8EnbWc1UeVTfc
-0MwCjbcjmLDWJGfTExZWHKtp+GItQ/hZRjj35FNDiQ3bQ9N9ygn/8RoIFsbRaBdI
-LYJM5m9YyBZpV+G6mSuHy7/kvSlgzw==
-=ma5m
------END PGP SIGNATURE-----
-
---gywfdzj6mlm4tas5--
+Alan Stern
