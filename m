@@ -2,77 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66258744857
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Jul 2023 11:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 587327448DF
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Jul 2023 14:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjGAJ7U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Jul 2023 05:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
+        id S229802AbjGAMUn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Jul 2023 08:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjGAJ7T (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jul 2023 05:59:19 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918F2271F
-        for <linux-usb@vger.kernel.org>; Sat,  1 Jul 2023 02:59:17 -0700 (PDT)
-Received: from [192.168.1.103] (31.173.83.80) by msexch01.omp.ru (10.188.4.12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 1 Jul 2023
- 12:59:08 +0300
-Subject: Re: [PATCH v2] usb: host: xhci-plat: fix possible kernel oops while
- resuming
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>
-CC:     Florian Fainelli <f.fainelli@gmail.com>
-References: <7c560c92-40a7-944a-f46d-28503ce8583c@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <eb9bc089-d51d-e127-54a9-1173bf2ebccd@omp.ru>
-Date:   Sat, 1 Jul 2023 12:58:58 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <7c560c92-40a7-944a-f46d-28503ce8583c@omp.ru>
+        with ESMTP id S229480AbjGAMUn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jul 2023 08:20:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D650F4232
+        for <linux-usb@vger.kernel.org>; Sat,  1 Jul 2023 05:20:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53CF360B73
+        for <linux-usb@vger.kernel.org>; Sat,  1 Jul 2023 12:20:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A983DC433CA;
+        Sat,  1 Jul 2023 12:20:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688214022;
+        bh=80qZ2OoLhTkgmsH8csyzGV5MLoKizYyCcM53np1bR1Q=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=fewzkHW2pSC11zrKRLJVHuvAnyykZ8OQv4VtTpMiQiy1AP4fAdat9HWQ/T3l4i2Rg
+         IfoPebxT8OC5SJN6M1w+Ux3ztYi1bRqL0OZS858SCE2Z4A7AL568rb9YwHTgl8eiyv
+         xVBy4sCSrO17ni+bz0JhrQv2q/YHZKMUhVcOJnXKYigl3F2uUnc9P6snlv53HtDCx1
+         GtXZJw2Rtk52sc6ks0scG7w9KuhpO7hvMowSnLMXP38/R6SlZlBjvhQQogA3vJ+G4S
+         tvruGLGLTM1WX90/dnsQLlBjbjFOsWxZAlXh4On0uU3ImA1Dcg3/hBQmGO9Svvv2Nx
+         C2enkverHXXfg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8BC64C691F0;
+        Sat,  1 Jul 2023 12:20:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.83.80]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 07/01/2023 09:40:12
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 178380 [Jun 30 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.83.80 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.83.80
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 07/01/2023 09:45:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 7/1/2023 6:20:00 AM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: usb: cdc_ether: add u-blox 0x1313 composition.
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168821402256.27463.17009519930792690898.git-patchwork-notify@kernel.org>
+Date:   Sat, 01 Jul 2023 12:20:22 +0000
+References: <20230629103736.23861-1-davide.tronchin.94@gmail.com>
+In-Reply-To: <20230629103736.23861-1-davide.tronchin.94@gmail.com>
+To:     Davide Tronchin <davide.tronchin.94@gmail.com>
+Cc:     oliver@neukum.org, netdev@vger.kernel.org, pabeni@redhat.com,
+        marco.demarco@posteo.net, linux-usb@vger.kernel.org,
+        kuba@kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,79 +58,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/30/23 11:48 PM, Sergey Shtylyov wrote:
+Hello:
 
-> If this driver enables the xHC clocks while resuming from sleep, it calls
-> clk_prepare_enable() without checking for errors and blithely goes on to
-> read/write the xHC's registers -- which, with the xHC not being clocked,
-> at least on ARM32 usually causes an imprecise external abort exceptions
-> which cause kernel oops.  Currently, the chips for which the driver does
-> the clock dance on suspend/resume seem to be the Broadcom STB SoCs, based
-> on ARM32 CPUs, as it seems...
-> 
-> Found by Linux Verification Center (linuxtesting.org) with the Svace static
-> analysis tool.
-> 
-> Fixes: 8bd954c56197 ("usb: host: xhci-plat: suspend and resume clocks")
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-> 
-> ---
-> This patch is against the 'usb-linus' branch of Greg KH's 'usb.git' repo...
-> 
-> Changes in version 2:
-> - fixed up the error path for clk_prepare_enable() calls in xhci_plat_resume().
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-   Scratch that, still not correct enough...
- 
->  drivers/usb/host/xhci-plat.c |   21 +++++++++++++++++----
->  1 file changed, 17 insertions(+), 4 deletions(-)
+On Thu, 29 Jun 2023 12:37:36 +0200 you wrote:
+> Add CDC-ECM support for LARA-R6 01B.
 > 
-> Index: usb/drivers/usb/host/xhci-plat.c
-> ===================================================================
-> --- usb.orig/drivers/usb/host/xhci-plat.c
-> +++ usb/drivers/usb/host/xhci-plat.c
-> @@ -470,23 +470,36 @@ static int __maybe_unused xhci_plat_resu
->  	int ret;
->  
->  	if (!device_may_wakeup(dev) && (xhci->quirks & XHCI_SUSPEND_RESUME_CLKS)) {
-> -		clk_prepare_enable(xhci->clk);
-> -		clk_prepare_enable(xhci->reg_clk);
-> +		ret = clk_prepare_enable(xhci->clk);
-> +		if (ret)
-> +			return ret;
-> +
-> +		ret = clk_prepare_enable(xhci->reg_clk);
-> +		if (ret)
-> +			goto disable_clk;
->  	}
->  
->  	ret = xhci_priv_resume_quirk(hcd);
->  	if (ret)
-> -		return ret;
-> +		goto disable_reg_clk;
->  
->  	ret = xhci_resume(xhci, 0);
->  	if (ret)
-> -		return ret;
-> +		goto disable_reg_clk;
->  
->  	pm_runtime_disable(dev);
->  	pm_runtime_set_active(dev);
->  	pm_runtime_enable(dev);
->  
->  	return 0;
-> +
-> +disable_reg_clk:
-> +	clk_disable_unprepare(xhci->reg_clk);
-> +
-> +disable_clk:
-> +	clk_disable_unprepare(xhci->clk);
-> +
-> +	return ret;
->  }
-[...]
+> The new LARA-R6 product variant identified by the "01B" string can be
+> configured (by AT interface) in three different USB modes:
+> * Default mode (Vendor ID: 0x1546 Product ID: 0x1311) with 4 serial
+> interfaces
+> * RmNet mode (Vendor ID: 0x1546 Product ID: 0x1312) with 4 serial
+> interfaces and 1 RmNet virtual network interface
+> * CDC-ECM mode (Vendor ID: 0x1546 Product ID: 0x1313) with 4 serial
+> interface and 1 CDC-ECM virtual network interface
+> The first 4 interfaces of all the 3 configurations (default, RmNet, ECM)
+> are the same.
+> 
+> [...]
 
-   Grr, the error path is still incorrect here -- it should've checked
-xhci->quirks/etc. before calling the clock disable/unprepare... :-(
+Here is the summary with links:
+  - net: usb: cdc_ether: add u-blox 0x1313 composition.
+    https://git.kernel.org/netdev/net/c/1b0fce8c8e69
 
-MBR, Sergey
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
