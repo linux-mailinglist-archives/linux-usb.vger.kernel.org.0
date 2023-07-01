@@ -2,67 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DAEB74466C
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Jul 2023 05:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C177446D3
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Jul 2023 07:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjGADvt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Jun 2023 23:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
+        id S229575AbjGAFuE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Jul 2023 01:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbjGADuR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jun 2023 23:50:17 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CA92D62
-        for <linux-usb@vger.kernel.org>; Fri, 30 Jun 2023 20:48:33 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-98dfb3f9af6so307571566b.2
-        for <linux-usb@vger.kernel.org>; Fri, 30 Jun 2023 20:48:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688183312; x=1690775312;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vTlSFnTSPWWpEyKJeqe0kZE+GXDl+QVUEIZoWHP0yK4=;
-        b=ff1VZIkeMsptr0J2umV7Uk/Eq+54JuPAUaU5R0VlbAxrNuRKZzfJcDeZoIrHFxuZtI
-         ckKH6+HbEyPZXRCkcAXWqxw6YQFW5ZCPQ9mku2m4jPdXrs7K3+VNuwEBAtinA0Bhs+8c
-         ff/k06P5MPMwabuk07KC8jvK/mzLUEao9H4/m7jp4hmdWW006C1IBVgzRjsM+tZGCHeO
-         5C34XDCQAzRc6pw6Y/O3pipz28XO2aaCEfKEzaBp7AE1g7/1cYjzk8wHjZlSE8Irfu99
-         RukWboJCeD0QmYE76D78PGg6huHJKi6sRfgQok0MfBUs1oyrBxyCczGVbTywE0QYwdHq
-         AMmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688183312; x=1690775312;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vTlSFnTSPWWpEyKJeqe0kZE+GXDl+QVUEIZoWHP0yK4=;
-        b=Pvv+tISGwcGi4EGWGkXLHDDmKouJ3pFHyXR16RCSTAtvl30P5hf0NV9YPA2wIIHVYs
-         LPOtZjOtYUFzmW3mDAEldcXJFjvdQIQJxgaAvug/2xd+tm4BT4u1Wzrz972xu3nJni05
-         CSgfdPlHrGEFrnpFDcGNBNUB2ZNpt4xKZVAPJgJEcRx8JdGG/4vLfr0IG43gCYz9r4Pz
-         2sYZmJpy4IPHp4kOiGvEMYWoOHZo9vRTyrWPd1GCGfZicDJbzcf3S22PF9Fn9v7V3Uvz
-         nAv6wDZYPATfclM1LzU9dueZcao8V888CTCk5VN3k7k5j51D9BsWxpmNBTa5aqRJbIAO
-         RVYA==
-X-Gm-Message-State: ABy/qLbRRi7zGmNCQDghGOqNnqH6Y/ffRfOdEiYzUPmA9RhYe9588vAK
-        UHYz3yMkU1eFMZuPyoldE1qep1Osuy3AaNHjuYO/t1OhQMAZJSaF
-X-Google-Smtp-Source: APBJJlEHynAm8CDTMe20agdxQjPYKB5cThIPe3BvWVZLNx6MH1Sbuz+Ow8H+fl3JYaelEjsDV7kXAFrJy/NP+sO0lc0=
-X-Received: by 2002:a17:906:eb15:b0:991:e3c4:c135 with SMTP id
- mb21-20020a170906eb1500b00991e3c4c135mr3192837ejb.9.1688183312066; Fri, 30
- Jun 2023 20:48:32 -0700 (PDT)
+        with ESMTP id S229486AbjGAFuD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jul 2023 01:50:03 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04F41FE8;
+        Fri, 30 Jun 2023 22:50:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688190601; x=1719726601;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=11wr5dJpoS1GpZs2TiT4A2d3ST6KbLKlccMr4/HVdFo=;
+  b=cpz7eu7+m552CJFlsCcyo1zea6Yj8hcCqyGQdi9AkmWmFJ2GvrXpw7eS
+   YCm1XwtxelKBvFvzz7Yl6Q8+/UmaYpzzYMwTMje9mWTH99gEuhUeJGq0V
+   06ZfQrLWn4ANVmcYGSJ/57yEwRdZutH8x++xbjueFr+TqgaIWGn/6yIUG
+   oiO9wpQ1GGmEqFGmR0N8O4Or/XG4nZgwrezrrpcGND/vv1vF03kwndVu+
+   XuRD/bp2A9m0AfXOT+6MmJdwex/IhcNY/pNlImsiU+dooBRPY7Nl1WN2X
+   6YJqs1PkcT8E/8Jg1m069xkWyU4HEN0TWnbVDMCHjvg86YIIeKfgkyf2Z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="366040225"
+X-IronPort-AV: E=Sophos;i="6.01,172,1684825200"; 
+   d="scan'208";a="366040225"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 22:50:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="747629734"
+X-IronPort-AV: E=Sophos;i="6.01,172,1684825200"; 
+   d="scan'208";a="747629734"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 30 Jun 2023 22:49:59 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qFTUc-000FkP-1L;
+        Sat, 01 Jul 2023 05:49:58 +0000
+Date:   Sat, 1 Jul 2023 13:49:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ladislav Michl <oss-lists@triops.cz>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH 10/11] usb: dwc3: dwc3-octeon: Move node parsing into
+ driver probe
+Message-ID: <202307011354.M9asTVJw-lkp@intel.com>
+References: <ZJC3eK8QMxShyZDt@lenoch>
 MIME-Version: 1.0
-References: <20230630110401.2360746-1-yguoaz@gmail.com> <2023063013-fanning-crafty-4502@gregkh>
- <CAM7=BFoyE8XzS8g=U_wFH_AUE-W6C2tGKWzGP4+eCZTDVDgr_g@mail.gmail.com> <2023063027-repackage-partake-aa3e@gregkh>
-In-Reply-To: <2023063027-repackage-partake-aa3e@gregkh>
-From:   yguoaz <yguoaz@gmail.com>
-Date:   Sat, 1 Jul 2023 11:48:20 +0800
-Message-ID: <CAM7=BFo1ytynUBi2Eb2pxXcz-zbNoKPefkh6EfGBJPU+g65BCA@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: configfs: Prevent buffer overrun in usb_string_copy
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     dan.scally@ideasonboard.com, andriy.shevchenko@linux.intel.com,
-        frank.li@nxp.com, christophe.jaillet@wanadoo.fr, jgilab@gmail.com,
-        chanh@os.amperecomputing.com, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJC3eK8QMxShyZDt@lenoch>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,40 +66,79 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Have done some testing. This issue cannot happen due to the protection
-in `configfs_write_iter()`:
+Hi Ladislav,
 
-len =3D fill_write_buffer(buffer, from);
-if (len > 0)
-  len =3D flush_write_buffer(file, buffer, len);
+kernel test robot noticed the following build warnings:
 
-Thanks for your patience,
-Yiyuan
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus westeri-thunderbolt/next v6.4]
+[cannot apply to linus/master next-20230630]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-On Sat, Jul 1, 2023 at 3:48=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org>=
- wrote:
->
-> On Fri, Jun 30, 2023 at 09:13:58PM +0800, yguoaz wrote:
-> > This is an underrun issue found by a static analysis tool (under
-> > research).
->
-> Then you MUST follow our research rules in order to submit patches.
-> Please read and follow them, otherwise we have to reject all of your
-> submissions.
->
-> > I suggest the patch because the code of usb_string_copy()
-> > rejects strings with length greater than USB_MAX_STRING_LEN,
-> > indicating a possibility for the input string `s` to contain unwanted
-> > data (e.g., being empty). For the empty string case, the proposed
-> > patch simply copies '\0' in `strcpy(str, s)` without touching index -1
-> > of `str`.
-> >
-> > Whether `strlen(s)` could ever be zero in reality is up to the
-> > maintainer's judgement, since I have not worked with the subsystem. So
-> > please ignore the patch if it is ensured that `s` must be non-empty.
->
-> Test it and see!
->
-> good luck,
->
-> greg k-h
+url:    https://github.com/intel-lab-lkp/linux/commits/Ladislav-Michl/MIPS-OCTEON-octeon-usb-add-all-register-offsets/20230620-041822
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/ZJC3eK8QMxShyZDt%40lenoch
+patch subject: [PATCH 10/11] usb: dwc3: dwc3-octeon: Move node parsing into driver probe
+config: mips-randconfig-r083-20230701 (https://download.01.org/0day-ci/archive/20230701/202307011354.M9asTVJw-lkp@intel.com/config)
+compiler: mips64-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230701/202307011354.M9asTVJw-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307011354.M9asTVJw-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/usb/dwc3/dwc3-octeon.c:277:43: sparse: sparse: cast removes address space '__iomem' of expression
+
+vim +/__iomem +277 drivers/usb/dwc3/dwc3-octeon.c
+
+d83bf20c53410d arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  255  
+3c47bbb8f554f8 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  256  static int dwc3_octeon_config_power(struct device *dev, void __iomem *base)
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  257  {
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  258  	uint32_t gpio_pwr[3];
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  259  	int gpio, len, power_active_low;
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  260  	struct device_node *node = dev->of_node;
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  261  	u64 val;
+3c47bbb8f554f8 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  262  	void __iomem *uctl_host_cfg_reg = base + USBDRD_UCTL_HOST_CFG;
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  263  
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  264  	if (of_find_property(node, "power", &len) != NULL) {
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  265  		if (len == 12) {
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  266  			of_property_read_u32_array(node, "power", gpio_pwr, 3);
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  267  			power_active_low = gpio_pwr[2] & 0x01;
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  268  			gpio = gpio_pwr[1];
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  269  		} else if (len == 8) {
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  270  			of_property_read_u32_array(node, "power", gpio_pwr, 2);
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  271  			power_active_low = 0;
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  272  			gpio = gpio_pwr[1];
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  273  		} else {
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  274  			dev_err(dev, "invalid power configuration\n");
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  275  			return -EINVAL;
+06df6469e3e1a1 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  276  		}
+3c47bbb8f554f8 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19 @277  		dwc3_octeon_config_gpio(((u64)base >> 24) & 1, gpio);
+93e502b3c2d44d arch/mips/cavium-octeon/octeon-usb.c Steven J. Hill 2017-01-25  278  
+93e502b3c2d44d arch/mips/cavium-octeon/octeon-usb.c Steven J. Hill 2017-01-25  279  		/* Enable XHCI power control and set if active high or low. */
+3c47bbb8f554f8 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  280  		val = dwc3_octeon_readq(uctl_host_cfg_reg);
+52245e391fcf6c arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  281  		val |= USBDRD_UCTL_HOST_PPC_EN;
+52245e391fcf6c arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  282  		if (power_active_low)
+52245e391fcf6c arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  283  			val &= ~USBDRD_UCTL_HOST_PPC_ACTIVE_HIGH_EN;
+52245e391fcf6c arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  284  		else
+52245e391fcf6c arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  285  			val |= USBDRD_UCTL_HOST_PPC_ACTIVE_HIGH_EN;
+3c47bbb8f554f8 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  286  		dwc3_octeon_writeq(uctl_host_cfg_reg, val);
+93e502b3c2d44d arch/mips/cavium-octeon/octeon-usb.c Steven J. Hill 2017-01-25  287  	} else {
+93e502b3c2d44d arch/mips/cavium-octeon/octeon-usb.c Steven J. Hill 2017-01-25  288  		/* Disable XHCI power control and set if active high. */
+3c47bbb8f554f8 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  289  		val = dwc3_octeon_readq(uctl_host_cfg_reg);
+52245e391fcf6c arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  290  		val &= ~USBDRD_UCTL_HOST_PPC_EN;
+52245e391fcf6c arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  291  		val &= ~USBDRD_UCTL_HOST_PPC_ACTIVE_HIGH_EN;
+3c47bbb8f554f8 arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2023-06-19  292  		dwc3_octeon_writeq(uctl_host_cfg_reg, val);
+4a24f6e0cc17ba arch/mips/cavium-octeon/octeon-usb.c Ladislav Michl 2022-12-21  293  		dev_info(dev, "power control disabled\n");
+93e502b3c2d44d arch/mips/cavium-octeon/octeon-usb.c Steven J. Hill 2017-01-25  294  	}
+93e502b3c2d44d arch/mips/cavium-octeon/octeon-usb.c Steven J. Hill 2017-01-25  295  	return 0;
+93e502b3c2d44d arch/mips/cavium-octeon/octeon-usb.c Steven J. Hill 2017-01-25  296  }
+93e502b3c2d44d arch/mips/cavium-octeon/octeon-usb.c Steven J. Hill 2017-01-25  297  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
