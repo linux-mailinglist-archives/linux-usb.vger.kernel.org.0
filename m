@@ -2,127 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E727F7447E6
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Jul 2023 10:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66258744857
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Jul 2023 11:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbjGAIGl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Jul 2023 04:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35512 "EHLO
+        id S229691AbjGAJ7U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Jul 2023 05:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjGAIGk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jul 2023 04:06:40 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA94E49
-        for <linux-usb@vger.kernel.org>; Sat,  1 Jul 2023 01:06:37 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51d9a925e9aso3024304a12.0
-        for <linux-usb@vger.kernel.org>; Sat, 01 Jul 2023 01:06:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688198796; x=1690790796;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F2AOA85WPLNeq59zZIQIWUFQQzF6b4WaPXnHpsoj/pM=;
-        b=uTt9U+aYLjgWdXce3eySEIwUYyScwz33iTbz8S7vol+S7QzIP9b1Fio3ugyjMzlTEM
-         H35JObt6DdDe+ZAcrodw8uN/VW+NQ0CqZ3BQL4MYQyK/VG/jqB9fXAiem+0ABDpT8SMD
-         jtIdYLOMBEssloGgEwn0cZsSLT3+MKV5fWePDdwy5GOGUNilj/gsbg/gPIl5znH0T4Wu
-         vzEsOA4OW+uHY00syfFg4Kk7fezNivoQaQSTeCBtNOfjXPeHitfb0gcotxrQzmejiOg3
-         Ym29/2O6Y8KtJR8Z70kir6HCS6nh0pKIyzJxpXQqPSeCQaqa/GXYh7L3Bhc+EOvvhCfl
-         rA7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688198796; x=1690790796;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F2AOA85WPLNeq59zZIQIWUFQQzF6b4WaPXnHpsoj/pM=;
-        b=V+xxE6sLS7T/Fv2l7pjBggeiGIjGt1y/n7iT6v9vpWOeFmkwilb4PEDqYHkByVc7Ye
-         +54EdTwjhri2jYiTwX0orNxlTIYYwO/eo17aXjh+c+JLzPYwnHl1HySHj50ZGggHxE0k
-         tIOkvE6+mNB8iTs4viS+x5Md7Bn01zTc1DpkOKaoFLpydrfHqzvhte9FG5exTrABdqAG
-         argzaIYC7VGihZhIXRK9+5eTNMLvjIHT7MVl8ytj70olvaXC2R09VJ+xcizB+a1R5+Bb
-         jW19FFtuurwjDDNNUKCrtJgTzAbbfcHiaZn7E7GCX+TSYOQ6QpqVm83D+2cn7B1p9Vo1
-         sqOw==
-X-Gm-Message-State: ABy/qLYefyg7lbZi11KvLO9h6p3W16ez+JuKWACSpcmqxbTrCtzmBpMx
-        D5EnR0t7CvEOkPe6AQtt41pCJQ==
-X-Google-Smtp-Source: APBJJlEAcfboaxVqaehIP+kbquc2c7WH/RTZTv63cSm62Jc7muAl9JsCRYIb9E82IwV3w1SZdW4oEA==
-X-Received: by 2002:a05:6402:64d:b0:51d:9605:28fd with SMTP id u13-20020a056402064d00b0051d960528fdmr2861016edx.26.1688198796353;
-        Sat, 01 Jul 2023 01:06:36 -0700 (PDT)
-Received: from [192.168.10.214] ([217.169.179.6])
-        by smtp.gmail.com with ESMTPSA id i12-20020a170906850c00b00992f81122e1sm1268309ejx.21.2023.07.01.01.06.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Jul 2023 01:06:35 -0700 (PDT)
-Message-ID: <05d97994-49a4-1618-890f-9f5c70c201fa@linaro.org>
-Date:   Sat, 1 Jul 2023 10:06:34 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 03/11] arm64: dts: qcom: msm8939: Add missing
- 'cache-unified' to L2
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        cros-qcom-dts-watchers@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Benjamin Li <benl@squareup.com>,
-        James Willcox <jwillcox@squareup.com>,
-        Joseph Gates <jgates@squareup.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Zac Crosby <zac@squareup.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Lee Jones <lee@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
+        with ESMTP id S229501AbjGAJ7T (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jul 2023 05:59:19 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918F2271F
+        for <linux-usb@vger.kernel.org>; Sat,  1 Jul 2023 02:59:17 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.83.80) by msexch01.omp.ru (10.188.4.12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 1 Jul 2023
+ 12:59:08 +0300
+Subject: Re: [PATCH v2] usb: host: xhci-plat: fix possible kernel oops while
+ resuming
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Xu Yang <xu.yang_2@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Jun Nie <jun.nie@linaro.org>, Max Chen <mchen@squareup.com>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Vivek Gautam <vivek.gautam@codeaurora.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        alsa-devel@alsa-project.org, iommu@lists.linux.dev,
-        linux-usb@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Andy Gross <andy.gross@linaro.org>
-References: <20230627-topic-more_bindings-v1-0-6b4b6cd081e5@linaro.org>
- <20230627-topic-more_bindings-v1-3-6b4b6cd081e5@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230627-topic-more_bindings-v1-3-6b4b6cd081e5@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+        <linux-usb@vger.kernel.org>
+CC:     Florian Fainelli <f.fainelli@gmail.com>
+References: <7c560c92-40a7-944a-f46d-28503ce8583c@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <eb9bc089-d51d-e127-54a9-1173bf2ebccd@omp.ru>
+Date:   Sat, 1 Jul 2023 12:58:58 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <7c560c92-40a7-944a-f46d-28503ce8583c@omp.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Originating-IP: [31.173.83.80]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 07/01/2023 09:40:12
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 178380 [Jun 30 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.83.80 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.83.80
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 07/01/2023 09:45:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 7/1/2023 6:20:00 AM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 27/06/2023 18:24, Konrad Dybcio wrote:
-> Add the missing property to fix the dt checker warning:
+On 6/30/23 11:48 PM, Sergey Shtylyov wrote:
+
+> If this driver enables the xHC clocks while resuming from sleep, it calls
+> clk_prepare_enable() without checking for errors and blithely goes on to
+> read/write the xHC's registers -- which, with the xHC not being clocked,
+> at least on ARM32 usually causes an imprecise external abort exceptions
+> which cause kernel oops.  Currently, the chips for which the driver does
+> the clock dance on suspend/resume seem to be the Broadcom STB SoCs, based
+> on ARM32 CPUs, as it seems...
 > 
-> qcom/apq8039-t2.dtb: l2-cache: 'cache-unified' is a required property
+> Found by Linux Verification Center (linuxtesting.org) with the Svace static
+> analysis tool.
 > 
-> Fixes: 61550c6c156c ("arm64: dts: qcom: Add msm8939 SoC")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Fixes: 8bd954c56197 ("usb: host: xhci-plat: suspend and resume clocks")
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> 
 > ---
->  arch/arm64/boot/dts/qcom/msm8939.dtsi | 2 ++
+> This patch is against the 'usb-linus' branch of Greg KH's 'usb.git' repo...
+> 
+> Changes in version 2:
+> - fixed up the error path for clk_prepare_enable() calls in xhci_plat_resume().
 
+   Scratch that, still not correct enough...
+ 
+>  drivers/usb/host/xhci-plat.c |   21 +++++++++++++++++----
+>  1 file changed, 17 insertions(+), 4 deletions(-)
+> 
+> Index: usb/drivers/usb/host/xhci-plat.c
+> ===================================================================
+> --- usb.orig/drivers/usb/host/xhci-plat.c
+> +++ usb/drivers/usb/host/xhci-plat.c
+> @@ -470,23 +470,36 @@ static int __maybe_unused xhci_plat_resu
+>  	int ret;
+>  
+>  	if (!device_may_wakeup(dev) && (xhci->quirks & XHCI_SUSPEND_RESUME_CLKS)) {
+> -		clk_prepare_enable(xhci->clk);
+> -		clk_prepare_enable(xhci->reg_clk);
+> +		ret = clk_prepare_enable(xhci->clk);
+> +		if (ret)
+> +			return ret;
+> +
+> +		ret = clk_prepare_enable(xhci->reg_clk);
+> +		if (ret)
+> +			goto disable_clk;
+>  	}
+>  
+>  	ret = xhci_priv_resume_quirk(hcd);
+>  	if (ret)
+> -		return ret;
+> +		goto disable_reg_clk;
+>  
+>  	ret = xhci_resume(xhci, 0);
+>  	if (ret)
+> -		return ret;
+> +		goto disable_reg_clk;
+>  
+>  	pm_runtime_disable(dev);
+>  	pm_runtime_set_active(dev);
+>  	pm_runtime_enable(dev);
+>  
+>  	return 0;
+> +
+> +disable_reg_clk:
+> +	clk_disable_unprepare(xhci->reg_clk);
+> +
+> +disable_clk:
+> +	clk_disable_unprepare(xhci->clk);
+> +
+> +	return ret;
+>  }
+[...]
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+   Grr, the error path is still incorrect here -- it should've checked
+xhci->quirks/etc. before calling the clock disable/unprepare... :-(
 
-Best regards,
-Krzysztof
-
+MBR, Sergey
