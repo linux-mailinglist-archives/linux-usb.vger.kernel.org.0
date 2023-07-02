@@ -2,106 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67FE7744B9A
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Jul 2023 00:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA2F744BE2
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Jul 2023 02:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjGAWTb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Jul 2023 18:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55184 "EHLO
+        id S229796AbjGBAOB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Jul 2023 20:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjGAWT2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jul 2023 18:19:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EC91AC
-        for <linux-usb@vger.kernel.org>; Sat,  1 Jul 2023 15:19:27 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qFiw5-0002Ti-T2; Sun, 02 Jul 2023 00:19:21 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qFiw2-00BRVp-5a; Sun, 02 Jul 2023 00:19:18 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qFiw1-001QHH-48; Sun, 02 Jul 2023 00:19:17 +0200
-Date:   Sun, 2 Jul 2023 00:19:11 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Zhang Shurong <zhang_shurong@foxmail.com>,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: r8a66597-hcd: host: fix port index underflow and
- UBSAN complains
-Message-ID: <20230701221911.5mqh677uyhh2s67u@pengutronix.de>
-References: <tencent_AD4994DC28D60E6CF580E97BB028A0A1EA0A@qq.com>
- <20230701171648.orex7hx6jpkkpub3@pengutronix.de>
- <ad575ac5-fccb-4b1e-b6f4-26caa814414f@rowland.harvard.edu>
+        with ESMTP id S229533AbjGBAOA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jul 2023 20:14:00 -0400
+Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD71310D0
+        for <linux-usb@vger.kernel.org>; Sat,  1 Jul 2023 17:13:54 -0700 (PDT)
+Received: from lenoch ([91.218.190.200])
+        by cmgsmtp with ESMTPSA
+        id FkitqyFctv5uIFkiuqC7jz; Sun, 02 Jul 2023 02:13:52 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1688256832; bh=r+bN89+Ej+OGVe/79zQUtZNTrjIgHnWp2eL6JIFwyQI=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=K+JyHFoeW6rGRrPpLfplvzFP5h00yqNjQeNe3MzneiR1Wi4qL/gMMrWeupbULSRFF
+         jxQVXvE0ghUHfWJs2pTF28+I3v03IscV+lMjTMrm0nSi9p0mMeamMfRM/vukZWYpf8
+         FT9fPuoWMvzvLfgiMPUy3tD+4pBBMHYT1WhP5VNkXF2Op6mBxfeNtawDcVaQqSBnTV
+         iDveIDE60+oKZCVBtgDpBwCw2WFL9sI/3N+W5NrdKZXV7kAB+nhH7vwCfJ0CuB5iqb
+         OxKP6IEqUqpXA0fKuJ503miAU7MvV8KcoLQBvwTVBtdLXq/gocObQvM8qYU67NJlEO
+         g7ZFHc1bSR1KQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1688256832; bh=r+bN89+Ej+OGVe/79zQUtZNTrjIgHnWp2eL6JIFwyQI=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=K+JyHFoeW6rGRrPpLfplvzFP5h00yqNjQeNe3MzneiR1Wi4qL/gMMrWeupbULSRFF
+         jxQVXvE0ghUHfWJs2pTF28+I3v03IscV+lMjTMrm0nSi9p0mMeamMfRM/vukZWYpf8
+         FT9fPuoWMvzvLfgiMPUy3tD+4pBBMHYT1WhP5VNkXF2Op6mBxfeNtawDcVaQqSBnTV
+         iDveIDE60+oKZCVBtgDpBwCw2WFL9sI/3N+W5NrdKZXV7kAB+nhH7vwCfJ0CuB5iqb
+         OxKP6IEqUqpXA0fKuJ503miAU7MvV8KcoLQBvwTVBtdLXq/gocObQvM8qYU67NJlEO
+         g7ZFHc1bSR1KQ==
+Date:   Sun, 2 Jul 2023 02:13:50 +0200
+From:   Ladislav Michl <oss-lists@triops.cz>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH 10/11] usb: dwc3: dwc3-octeon: Move node parsing into
+ driver probe
+Message-ID: <ZKDBPijPY5hbv9E4@lenoch>
+References: <ZJC165p0Mj4jHcBh@lenoch>
+ <ZJC3eK8QMxShyZDt@lenoch>
+ <20230630232733.rvibxvrcqkkj7dpw@synopsys.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6wj7odentrecp6rj"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ad575ac5-fccb-4b1e-b6f4-26caa814414f@rowland.harvard.edu>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230630232733.rvibxvrcqkkj7dpw@synopsys.com>
+X-CMAE-Envelope: MS4wfHwXn/EVlo7Bknvbrd9vcu9qtXanZpMdY4AEfkaDCp5/Lrk02KPy53P+plzOqnWQS3iBdQqfXDOF11R6KT814kXrpM4fHFlQsvceqJM+4/DApMnXIEhE
+ Md3iqfvNCGduS4GNosPgU34Vu6oj53eNTZSj2Z5j7wRnQFVwG4LRY84FABXJrey8L4qAGqnCv5T9XBmkc3TUcDjlw646ECcaZTygqmZtKfKafVgTtozxSJ0M
+ QzxJMSxnRa0SzeS7FntYOQ==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
 
---6wj7odentrecp6rj
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+thank you for review, v2 is about to be sent, here just let
+me anwer issue I didn't address there.
 
-Hello Alan,
+On Fri, Jun 30, 2023 at 11:27:37PM +0000, Thinh Nguyen wrote:
+> On Mon, Jun 19, 2023, Ladislav Michl wrote:
+[snip]
+> > +	ref_clk_sel = 2;
+> 
+> Can we use macro instead of magic numbers?
 
-On Sat, Jul 01, 2023 at 02:54:46PM -0400, Alan Stern wrote:
-> wIndex should never be =3D=3D 0 or > max_root_hub in the cases where rh g=
-ets=20
-> used; such values would be meaningless.  But we don't control the value=
-=20
-> of wIndex, because it can come from userspace.  So we can't simply=20
-> assume it will always be valid; it has to be checked.
->=20
-> That being understood, the changes Zhang is making here are meant mostly=
-=20
-> to prevent UBSAN and the compiler from complaining or making false=20
-> assumptions.  The actual checks on wIndex occur later in the subroutine.
+This is a bit problematic, comment above USBDRD_UCTL_CTL_REF_CLK_SEL
+says:
+/* Reference clock select for SuperSpeed and HighSpeed PLLs:
+ *      0x0 = Both PLLs use DLMC_REF_CLK0 for reference clock
+ *      0x1 = Both PLLs use DLMC_REF_CLK1 for reference clock
+ *      0x2 = SuperSpeed PLL uses DLMC_REF_CLK0 for reference clock &
+ *            HighSpeed PLL uses PLL_REF_CLK for reference clck
+ *      0x3 = SuperSpeed PLL uses DLMC_REF_CLK1 for reference clock &
+ *            HighSpeed PLL uses PLL_REF_CLK for reference clck
+ */
+So I really cannot imagine sane name. Also please note, that field
+and register names were created to match documentation. Values,
+however, have no defined names, so I would need to invent them.
+That is something I'd like to avoid as it might be confusing.
 
-I'm guilty of not having looked at all on that function, but it sounds
-wrong to me to calculate values from some untrusted input and only
-later validate the input. It should be the other way round, shouldn't
-it? This is calling for compiler optimisations stepping on your toes.
+And last, but to least: Octeon would deserve proper clock api
+(clk driver to be implemented). So hopefully that code get
+replaced with more sane one. For now, I just kept compatibility
+with current DT.
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---6wj7odentrecp6rj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSgpl0ACgkQj4D7WH0S
-/k7s5Af/USnPiseAlWYYwvuQXAPt3ZkNc9kuJ9OKIJWQQ6oM7HQE+6rNhYJjqhCW
-LcUgbvbyNXTpg+2QjhrQ8KLCO809uzcA+EHHBjRTYBQMc953nZQrCb4co2+OJizd
-lQsk4EApYEa6d8+2rTs+f5VJGYe9aW9TvrF9cqFoUMwqkIvLiVAHkR3DiTWHu1MJ
-F6Qxc7OMf4GprqMR5yL/RRjA66XK2Fxz7po+Z/TBNDVevjt6uAZY5Iw6jCqvVcwz
-Guu88RcWdLRtQX99yTPmr8y9ZHdACxYU8JAqLkqrA31IT88ojaiq1s7MWF5m13pD
-b72qCAMrWbBix53Uqu5KzXlgakgzEA==
-=If88
------END PGP SIGNATURE-----
-
---6wj7odentrecp6rj--
+Thanks,
+	ladis
