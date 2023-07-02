@@ -2,104 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1C5745033
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Jul 2023 21:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6D774503B
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Jul 2023 21:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjGBTHA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 2 Jul 2023 15:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42974 "EHLO
+        id S230225AbjGBTKn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 2 Jul 2023 15:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbjGBTG7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Jul 2023 15:06:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5FDC7
-        for <linux-usb@vger.kernel.org>; Sun,  2 Jul 2023 12:06:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688324773;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=xsRDdmtq5Our5WATjThYRnHQTqs5zu3TQW1oubRlwjw=;
-        b=BFgOTOlRPdo89VfpxsGKUlPrnc/IbgRhDU08abK+OVzcjidM27mBMVOXANEOotZoY1Xqow
-        vVsXe7Cwc9LDJrC8wJKtWBE0rP1vFTQh7RtMe29K7rS6kK36FbMwP4jx/XUGWA422BzasG
-        tVpSH8FHy3H3NIuKlQSL/OjFMwN+DfQ=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-604-YSPWCZjqNi-Sr5yzg7cNiw-1; Sun, 02 Jul 2023 15:06:12 -0400
-X-MC-Unique: YSPWCZjqNi-Sr5yzg7cNiw-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-635ddb30491so41352296d6.1
-        for <linux-usb@vger.kernel.org>; Sun, 02 Jul 2023 12:06:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688324771; x=1690916771;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xsRDdmtq5Our5WATjThYRnHQTqs5zu3TQW1oubRlwjw=;
-        b=S/CT4FxYOD1JSQoZxiZez0QkARUjNOHUen2s+THr9PE+FlefpAYyawTNHKIh3Xm2sC
-         PTSL6U8+N9Kry16SOrjEUsyTmk3aCzMNvCBV2qCMo0xM7j/ln2aPl6K3RYZC7CWV1nCg
-         qX2ER/nFUnD/mwmAq9OMwsX0CdgK+AR92pOyp3J0aw5+yHD7knQCkjb3MwXRA8xnzotx
-         oVjvAD2/O4U6NzYwQoMGr/sspOxwASYlJM5Y5aAk+ti9Qd9PdGU/nnZ9PbEITWF2dyvu
-         mU30jmfUkmQ0SdwHPB0cxqS4rErApWskfIAKJwNsLsUNjbay7KD2RTaF7EqZ3+xTFKMm
-         Sfbw==
-X-Gm-Message-State: ABy/qLZvxxOO+rdm/JhUfu+gGzco8hJAy5j5u8vOfGU5gvA4Ogcvagbn
-        n4zyMs9EIhwg/W1MaBo4T897XNiJhs1Vh0lgVRaQeJfr41ojHOV8o1YnifWCMxCsmaXdF9bfvUP
-        7EJ116n3syD9m52rSN0yL
-X-Received: by 2002:ad4:5fcd:0:b0:636:39ed:4dce with SMTP id jq13-20020ad45fcd000000b0063639ed4dcemr12491743qvb.20.1688324771652;
-        Sun, 02 Jul 2023 12:06:11 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHHwkDf+q0k6HfatFZaR5G1pfLmXHURWAiK2OHvHS8ulozJIkbfjTuy/u9kGBcgR9l7lGiJBg==
-X-Received: by 2002:ad4:5fcd:0:b0:636:39ed:4dce with SMTP id jq13-20020ad45fcd000000b0063639ed4dcemr12491729qvb.20.1688324771450;
-        Sun, 02 Jul 2023 12:06:11 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id c5-20020a05620a11a500b00765aa9e3499sm7592804qkk.135.2023.07.02.12.06.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 12:06:11 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] thunderbolt: set variable tmu_params storage class specifier to static
-Date:   Sun,  2 Jul 2023 15:06:08 -0400
-Message-Id: <20230702190608.3441704-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        with ESMTP id S229513AbjGBTKm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Jul 2023 15:10:42 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740C1C2;
+        Sun,  2 Jul 2023 12:10:41 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 362ImAF5021294;
+        Sun, 2 Jul 2023 19:10:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=U2mjDAvqkkSpk+J8eReI+feCEnW7cKR95W2c86RrKNc=;
+ b=PEnW+PWeJC3ydBSJmJutF9NKDORiGx0egKdGFIDHaJsLOoMuRyIqZbrbScVBRAl32dfm
+ jj6aTB0iP8+8HIKHeHod84ORh4XERtPTjqe73FPRjrcJ/guvUwyw6ibyDqAnx3VPKA5V
+ OgFiGokoyIzVgPxiRIF17k1ZW54MFy07ZtIGuqvxqQwoQUJCg1AdkAVMd6wiSUUVoZIG
+ kMTFPNdk8JOi93v+gnOIifUqkUhAZRueiN55oP+4FlEI6l/BArnU9ES/c6R7AuyIG2X1
+ wDDxetj1cCt/L/B7ECtEC2SaWtgWQn8q0DC3E+dbhHmc7tjI4nhYhqoeChl5K2J3DpJZ QQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rjdedtbby-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 02 Jul 2023 19:10:29 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 362JASls029828
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 2 Jul 2023 19:10:28 GMT
+Received: from [10.216.46.140] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Sun, 2 Jul 2023
+ 12:10:22 -0700
+Message-ID: <622288dd-cb3c-b673-5544-46ff10106dbc@quicinc.com>
+Date:   Mon, 3 Jul 2023 00:40:19 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.1
+Subject: Re: [PATCH v9 08/10] arm64: dts: qcom: sc8280xp: Add multiport
+ controller node for SC8280
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+CC:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
+        <quic_harshq@quicinc.com>, <ahalaney@redhat.com>,
+        <quic_shazhuss@quicinc.com>
+References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
+ <20230621043628.21485-9-quic_kriskura@quicinc.com>
+ <2eab503f-fa0d-990e-bed2-2445c5496798@linaro.org>
+ <b183a130-6237-7d15-5d5a-b56582b92b35@quicinc.com>
+ <ZJr9Xiv6_0nG0Pui@hovoldconsulting.com>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <ZJr9Xiv6_0nG0Pui@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Toaz9_Daqu55fAPPAuWZ0VbLZd6PQ4xh
+X-Proofpoint-ORIG-GUID: Toaz9_Daqu55fAPPAuWZ0VbLZd6PQ4xh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-02_15,2023-06-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 clxscore=1015
+ mlxscore=0 mlxlogscore=766 impostorscore=0 bulkscore=0 phishscore=0
+ spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307020182
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-smatch reports
-drivers/thunderbolt/tmu.c:30:3: warning: symbol
-  'tmu_params' was not declared. Should it be static?
 
-This variable is only used in its defining file so should be static.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/thunderbolt/tmu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 6/27/2023 8:46 PM, Johan Hovold wrote:
+> On Sat, Jun 24, 2023 at 12:43:23PM +0530, Krishna Kurapati PSSNV wrote:
+>>> On 21.06.2023 06:36, Krishna Kurapati wrote:
+>>>> Add USB and DWC3 node for tertiary port of SC8280 along with multiport
+>>>> IRQ's and phy's. This will be used as a base for SA8295P and SA8295-Ride
+>>>> platforms.
+>>>>
+>>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> 
+>>> Not a comment to the patch, but very nice that Qcom ensured every
+>>> endpoint is wakeup-capable, this used not to be the case before :D
+> 
+>> Yes wakeup is supported by all ports now, but I didn't make those
+>> changes now as I wanted to keep driver code diff minimal and don't need
+>> wakeup support for the product currently. But for sure, will update
+>> driver code to handle wakeup on all ports in near future.
+> 
+> Why didn't you include it in v9? I thought you had a working
+> implementation for this?
+> 
+> Since wakeup will be another case where glue and core need to interact,
+> it's good to have the wakeup implementation from the start to be able to
+> evaluate your multiport implementation properly.
+> 
+> Right now it looks like you only added wakeup interrupt lookup and
+> request, but then you never actually enable them which is not very nice.
+> 
+> Johan
 
-diff --git a/drivers/thunderbolt/tmu.c b/drivers/thunderbolt/tmu.c
-index 1269f417515b..c789024d7ffe 100644
---- a/drivers/thunderbolt/tmu.c
-+++ b/drivers/thunderbolt/tmu.c
-@@ -19,7 +19,7 @@ static const unsigned int tmu_rates[] = {
- 	[TB_SWITCH_TMU_MODE_MEDRES_ENHANCED_UNI] = 16,
- };
- 
--const struct {
-+static const struct {
- 	unsigned int freq_meas_window;
- 	unsigned int avg_const;
- 	unsigned int delta_avg_const;
--- 
-2.27.0
+Hi Johan,
 
+  As mentioned in one of my comments on earlier patches, wakeup is not a 
+requirement I currently need to work on for the product. I added 
+multiport IRQ support only because my pathces need to modify IRQ names. 
+If there is a customer requirement I get in the future, I will 
+definitely implement the wakeup part. But for now, I would like to stick 
+to what is necessary for getting Multiport to work.
+
+Regards,
+Krishna,
