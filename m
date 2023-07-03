@@ -2,118 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0FC745C1A
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Jul 2023 14:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C812745C3E
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Jul 2023 14:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbjGCMUI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Jul 2023 08:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43124 "EHLO
+        id S229648AbjGCMbC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Jul 2023 08:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjGCMUH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Jul 2023 08:20:07 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86D5E5A;
-        Mon,  3 Jul 2023 05:19:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688386795; x=1719922795;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=k5UnOxzsmzHX8rVBq8egykKqk8gYOP5eLQBAC6d8nKg=;
-  b=ci0LhAvfgk5AwN64rQLMqzfTDV39xDDgA27khQDT/+vYTQJmt1xJgjsF
-   1OwWXB90AwveZprS+PLfUUrTvD4yad1uGbUq8oMo0KXpaINbTJ8jWDqef
-   hTXfgEpmiXUA02dNloVDYf9zwDu9tl+77pqxQ9whWC9sBlTB7FnundAoV
-   20lbSuRhHpz1QsDgrL6xBcOCPG1iZr34HrFF09iBxmnZCtnhPy6EoJ55U
-   ZKN+pd0PPHS2SSBOzSlezRl0GVpmkXzWBylYoCcmwUlJzKonzOx04ee+4
-   oYVysgsxgd3OakAbvjmO/rnNnPjDqU6zCsf/Q1ZudZRh9XnnLNIso4CZv
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="365438266"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="365438266"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 05:19:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="1049062932"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="1049062932"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 03 Jul 2023 05:19:36 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 6FC62170; Mon,  3 Jul 2023 15:19:39 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Bin Liu <b-liu@ti.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] usb: musb: Use read_poll_timeout()
-Date:   Mon,  3 Jul 2023 15:19:36 +0300
-Message-Id: <20230703121936.71623-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+        with ESMTP id S229436AbjGCMbB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Jul 2023 08:31:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A8C109;
+        Mon,  3 Jul 2023 05:31:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFF1E60F11;
+        Mon,  3 Jul 2023 12:30:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73A52C433C8;
+        Mon,  3 Jul 2023 12:30:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688387459;
+        bh=1sPgnQytqXvJBTAK60yFSx/ZPuPS0KgjBMPm7QnUKU4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DokGZ0UVTk2qrGDH6x0dFs0utSx1dI9dPfYIFYlqMiq9wQ0v04VplU1xRkx1IaKiJ
+         +en5RWpr6Y3ZGmiVzuI71f8/H4MMrqSw2shS3BnBawra+vNWrA8t/Yd5jYWav7Wzr0
+         AXs76PS7Y7tzqe+d8JbS2uT+R61NmccuXy9v6ohnyw0mOSD3J4CwWLzOlJ4hzvB4Mv
+         Rcq3k9hOc3DGufhvC5a7F2fdSsEv1xEvN8fDASrlBdb4h0ZdstGb1FPVs4d/JbM9k7
+         PERTQi4jBjLTUNUEELAZdwQKl9nUSJt4LZc9VQvYkH3fW3n0mzfTrufaEy9muOZSyq
+         P9wryL2uqxP4w==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        John Keeping <john@keeping.me.uk>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>,
+        Dan Carpenter <error27@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: functionfs: avoid memcpy() field overflow warning
+Date:   Mon,  3 Jul 2023 14:30:32 +0200
+Message-Id: <20230703123053.3117488-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use read_poll_timeout() instead of open coding it.
-In the same time, fix the typo in the error message.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+__ffs_func_bind_do_os_desc() copies both the CompatibleID and SubCompatibleID
+fields of the usb_ext_compat_desc structure into an array, which triggers
+a warning in the fortified memcpy():
+
+In file included from drivers/usb/gadget/function/f_fs.c:17:
+In file included from include/linux/string.h:254:
+include/linux/fortify-string.h:592:4: error: call to '__read_overflow2_field' declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+                        __read_overflow2_field(q_size_field, size);
+
+Usually we can avoid this by using a struct_group() inside of the structure
+definition, but this might cause problems in userspace since it is in a uapi
+header.
+
+Just copy the two members individually.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/usb/musb/tusb6010.c | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+ drivers/usb/gadget/function/f_fs.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/musb/tusb6010.c b/drivers/usb/musb/tusb6010.c
-index cbc707fe570f..2ae82e049f88 100644
---- a/drivers/usb/musb/tusb6010.c
-+++ b/drivers/usb/musb/tusb6010.c
-@@ -21,6 +21,7 @@
- #include <linux/usb.h>
- #include <linux/irq.h>
- #include <linux/io.h>
-+#include <linux/iopoll.h>
- #include <linux/device.h>
- #include <linux/platform_device.h>
- #include <linux/dma-mapping.h>
-@@ -1029,7 +1030,7 @@ static int tusb_musb_start(struct musb *musb)
- 	void __iomem	*tbase = musb->ctrl_base;
- 	unsigned long	flags;
- 	u32		reg;
--	int		i;
-+	int		ret;
- 
- 	/*
- 	 * Enable or disable power to TUSB6010. When enabling, turn on 3.3 V and
-@@ -1037,17 +1038,13 @@ static int tusb_musb_start(struct musb *musb)
- 	 * provide then PGOOD signal to TUSB6010 which will release it from reset.
- 	 */
- 	gpiod_set_value(glue->enable, 1);
--	msleep(1);
- 
- 	/* Wait for 100ms until TUSB6010 pulls INT pin down */
--	i = 100;
--	while (i && gpiod_get_value(glue->intpin)) {
--		msleep(1);
--		i--;
--	}
--	if (!i) {
--		pr_err("tusb: Powerup respones failed\n");
--		return -ENODEV;
-+	ret = read_poll_timeout(gpiod_get_value, reg, !reg, 1000, 100000, true,
-+				glue->intpin);
-+	if (ret) {
-+		pr_err("tusb: Powerup response failed\n");
-+		return ret;
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index f41a385a5c421..b8f9e52e6db6b 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -2933,8 +2933,9 @@ static int __ffs_func_bind_do_os_desc(enum ffs_os_desc_type type,
+ 		t = &func->function.os_desc_table[desc->bFirstInterfaceNumber];
+ 		t->if_id = func->interfaces_nums[desc->bFirstInterfaceNumber];
+ 		memcpy(t->os_desc->ext_compat_id, &desc->CompatibleID,
+-		       ARRAY_SIZE(desc->CompatibleID) +
+-		       ARRAY_SIZE(desc->SubCompatibleID));
++		       sizeof(desc->CompatibleID));
++		memcpy(t->os_desc->ext_compat_id + sizeof(desc->CompatibleID),
++			&desc->SubCompatibleID, sizeof(desc->SubCompatibleID));
+ 		length = sizeof(*desc);
  	}
- 
- 	spin_lock_irqsave(&musb->lock, flags);
+ 		break;
 -- 
-2.40.0.1.gaa8946217a0b
+2.39.2
 
