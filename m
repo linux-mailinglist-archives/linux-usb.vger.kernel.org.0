@@ -2,83 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95C17469F5
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jul 2023 08:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB16746A62
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jul 2023 09:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbjGDGsM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jul 2023 02:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
+        id S231244AbjGDHPd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jul 2023 03:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjGDGsC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jul 2023 02:48:02 -0400
+        with ESMTP id S229647AbjGDHPc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jul 2023 03:15:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B52410CA;
-        Mon,  3 Jul 2023 23:47:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229FA130;
+        Tue,  4 Jul 2023 00:15:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B81416116D;
-        Tue,  4 Jul 2023 06:47:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D424C433C8;
-        Tue,  4 Jul 2023 06:47:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688453254;
-        bh=NKrgqMucYEDaZ3CZ4vWlOu9Bpv3mE+2DG7gfJNFcPwY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CiF0+pTUEjiABNYtUnUCtbcuLin2yOxkmmIszTzS6elUqzFrs2i1PkNechNBDjFov
-         KQk640h3FVDpDJZ4wIKqSd/vRyJnvTluls3jYVb1/rDGlC/KYjRJm04xemR0vaxuuG
-         qT4pbWxAM57tdXt6/gqrnGsVfN7GBGBdQh+ybd0A=
-Date:   Tue, 4 Jul 2023 07:47:31 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Enrico Mioso <mrkiko.rs@gmail.com>
-Cc:     Jan Engelhardt <jengelh@inai.de>, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        Ilja Van Sprundel <ivansprundel@ioactive.com>,
-        Joseph Tartaro <joseph.tartaro@ioactive.com>
-Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
-Message-ID: <2023070430-fragment-remember-2fdd@gregkh>
-References: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
- <n9108s34-9rn0-3n8q-r3s5-51r9647331ns@vanv.qr>
- <ZKM5nbDnKnFZLOlY@rivendell>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DFA96116A;
+        Tue,  4 Jul 2023 07:15:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D1D3C433C7;
+        Tue,  4 Jul 2023 07:15:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688454927;
+        bh=Qx6SPa/FXBtKHsuhqwtcpwkMWYF76dpQTGSInwUFiQo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fimT/YP/AwhUtgGvGKQgdcx3SzNIvCNt5RUuS9ji1RvM5vdWAfDmfhixbrbnTaj9p
+         Tk8ZV65fRATwJUd6IdHdAoqcns/a5N6xzLUlm4O/Tkj1HvnjwH4jaVpPJB1cwJ6lD3
+         lOX5CVIewQ7zemoDIRdUeyU5nmoLMFgq2q71zWD8hj56TNCZ/hqkLoObBMQ2lUrPSF
+         fNBR1YcW0VIUCrZmojkUIU99BpEZtJgGzx7Mop3MyaM9AiAUyDnuCZNBA2l4stl5D2
+         utvmVnQ3jYCiZiMu6XYBkbwnYdqOn5nwk3N5OH96xX1Uqx/6RnXygRzEXNCe7yeOi+
+         Ija1G9VDGSOjw==
+Received: from disco-boy.misterjones.org ([217.182.43.188] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qGaFw-00ALG1-JE;
+        Tue, 04 Jul 2023 08:15:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZKM5nbDnKnFZLOlY@rivendell>
+Date:   Tue, 04 Jul 2023 08:15:24 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        kunit-dev@googlegroups.com, kvmarm@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [linux-next:master] BUILD REGRESSION
+ 296d53d8f84ce50ffaee7d575487058c8d437335
+In-Reply-To: <202307032309.v4K1IBoR-lkp@intel.com>
+References: <202307032309.v4K1IBoR-lkp@intel.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <7d3d61c694c0e57b096ff7af6277ed6b@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 217.182.43.188
+X-SA-Exim-Rcpt-To: lkp@intel.com, akpm@linux-foundation.org, linux-mm@kvack.org, kunit-dev@googlegroups.com, kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-parisc@vger.kernel.org, linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 11:11:57PM +0200, Enrico Mioso wrote:
-> Hi all!!
+On 2023-07-03 16:11, kernel test robot wrote:
+> tree/branch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> master
+> branch HEAD: 296d53d8f84ce50ffaee7d575487058c8d437335  Add linux-next
+> specific files for 20230703
 > 
-> I think the rndis_host USB driver might emit a warning in the dmesg, but disabling the driver wouldn't be a good idea.
-> The TP-Link MR6400 V1 LTE modem and also some ZTE modems integrated in routers do use this protocol.
+
+[...]
+
+> Unverified Error/Warning (likely false positive, please contact us if
+> interested):
 > 
-> We may also distinguish between these cases and devices you might plug in - as they pose different risk levels.
+> arch/arm64/kvm/mmu.c:147:3-9: preceding lock on line 140
 
-Again, you have to fully trust the other side of an RNDIS connection,
-any hints on how to have the kernel determine that?
+This *is* a false positive. The function is entered with a lock
+held, it will exit with the lock held as well. Inside the body
+of the function, we release and reacquire the lock.
 
-thanks,
-
-greg k-h
+         M.
+-- 
+Jazz is not dead. It just smells funny...
