@@ -2,189 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F07974790F
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jul 2023 22:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1F7747A49
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jul 2023 01:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjGDUgm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jul 2023 16:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49756 "EHLO
+        id S230129AbjGDXNe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jul 2023 19:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjGDUgl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jul 2023 16:36:41 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFBEE7B
-        for <linux-usb@vger.kernel.org>; Tue,  4 Jul 2023 13:36:38 -0700 (PDT)
-Received: from [192.168.1.103] (31.173.85.51) by msexch01.omp.ru (10.188.4.12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 4 Jul 2023
- 23:36:28 +0300
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: [PATCH v3] usb: host: xhci-plat: fix possible kernel oops while
- resuming
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>
-CC:     Florian Fainelli <f.fainelli@gmail.com>
-Organization: Open Mobile Platform
-Message-ID: <bf6ed43b-4c1b-47fd-e775-dc66d8e38e6f@omp.ru>
-Date:   Tue, 4 Jul 2023 23:36:27 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S229603AbjGDXNe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jul 2023 19:13:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F7AE72
+        for <linux-usb@vger.kernel.org>; Tue,  4 Jul 2023 16:13:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7FAB6123F
+        for <linux-usb@vger.kernel.org>; Tue,  4 Jul 2023 23:13:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2EFBAC433C8
+        for <linux-usb@vger.kernel.org>; Tue,  4 Jul 2023 23:13:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688512412;
+        bh=ADv9uP/BhdHHiC/rWB2vPOFJZ0TycJQ/aW0enAjL7Uo=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=E7aKPeLGZd7p5Zb1xmRy5QjxsnFlb9vTRk93jgEzZKxkmWD+0tjg8W1ge3qsihD6/
+         L7iGcQ/88YxSBQ8dvlJC0vixJS6+PoFtAvoRSF+ZgNx/ri2FT2j9ZNMGcKpw0NCPZ+
+         EKHC1gIT3LcCgMmfUtoGU2nYCMW4QcH7Wz6+l2zR834RbqEwPXYEmPXbCi8fvRV0Vd
+         ttjso2Zp801joWBGRo4qsIodssWQxOwdLUtFmIcFGFSzZolUefsb6cjU9KQhtUefT+
+         wDq6UZKO7WhC28yYosPyL4bkcvL8TOxOSrqS6c4WsJiphaIeIw56E0dldQh4Qm9hiP
+         +0xOOhzVeai/g==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 17F13C53BCD; Tue,  4 Jul 2023 23:13:32 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217632] 3 more broken Zaurii - SL-5600, A300, C700
+Date:   Tue, 04 Jul 2023 23:13:31 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bids.7405@bigpond.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217632-208809-dyfCz3LYJW@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217632-208809@https.bugzilla.kernel.org/>
+References: <bug-217632-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.85.51]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 07/04/2023 20:17:24
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 178432 [Jul 04 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.85.51 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;omp.ru:7.1.1;31.173.85.51:7.7.3;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.85.51
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 07/04/2023 20:22:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 7/4/2023 5:02:00 PM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If this driver enables the xHC clocks while resuming from sleep, it calls
-clk_prepare_enable() without checking for errors and blithely goes on to
-read/write the xHC's registers -- which, with the xHC not being clocked,
-at least on ARM32 usually causes an imprecise external abort exceptions
-which cause kernel oops.  Currently, the chips for which the driver does
-the clock dance on suspend/resume seem to be the Broadcom STB SoCs, based
-on ARM32 CPUs, as it seems...
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217632
 
-In order to fix this issue, add the result checks for clk_prepare_enable()
-calls in xhci_plat_resume(), add conditional clk_disable_unprepare() calls
-on the error path of xhci_plat_resume(); then factor out the common clock
-disabling code from the suspend() and resume() driver PM methods into a
-separate function to avoid code duplication.
+--- Comment #2 from Ross Maynard (bids.7405@bigpond.com) ---
+The problem is that networking to SL-5600 / A300 / C700 devices does not=20
+work. I cannot ping the devices.
 
-Found by Linux Verification Center (linuxtesting.org) with the Svace static
-analysis tool.
+The error is occurring in zaurus.c. dmesg is missing the following line:
 
-Fixes: 8bd954c56197 ("usb: host: xhci-plat: suspend and resume clocks")
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+zaurus 2-2:1.0 usb0: register 'zaurus' at usb-0000:00:1d.0-2,=20
+pseudo-MDLM (BLAN) device, 2a:01:39:93:bc:1a
 
+A patch was created in 2022 to fix the same problem with the SL-6000:
+
+USB: zaurus: support another broken Zaurus -=20
+[6605cc67ca18b9d583eb96e18a20f5f4e726103c]
+
+Could you please create another patch for the 3 devices: SL-5600 / A300=20
+/ C700?
+
+Thank you.
+
+
+On 4/7/23 7:28 pm, bugzilla-daemon@kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=3D217632
+>
+> Bagas Sanjaya (bagasdotme@gmail.com) changed:
+>
+>             What    |Removed                     |Added
+> -------------------------------------------------------------------------=
 ---
-This patch is against the 'usb-linus' branch of Greg KH's 'usb.git' repo...
+>                   CC|                            |bagasdotme@gmail.com
+>
+> --- Comment #1 from Bagas Sanjaya (bagasdotme@gmail.com) ---
+> (In reply to Ross Maynard from comment #0)
+>> Created attachment 304541 [details]
+>> dmesg and lsusb output
+>>
+>> The following patch broke support of 3 more Zaurus models: SL-5600, A300=
+ and
+>> C700
+>>
+>> [16adf5d07987d93675945f3cecf0e33706566005] usbnet: Remove over-broad mod=
+ule
+>> alias from zaurus
+>>
+>> dmesg and lsusb output attached.
+> What problem do you have on your Zaurus devices?
+>
 
-Changes in version 3:
-- sanitized the clock enabling error paths in xhci_plat_resume() WRT the
-  applicability checks;
-- factored out the common clock disabling code from the suspend() and resume()
-  driver PM methods;
-- added to the patch sescriptiun a passage describing the change being done.
+--=20
+You may reply to this email to add a comment.
 
-Changes in version 2:
-- fixed up the error path for clk_prepare_enable() calls in xhci_plat_resume().
-
- drivers/usb/host/xhci-plat.c |   35 +++++++++++++++++++++++++++--------
- 1 file changed, 27 insertions(+), 8 deletions(-)
-
-Index: usb/drivers/usb/host/xhci-plat.c
-===================================================================
---- usb.orig/drivers/usb/host/xhci-plat.c
-+++ usb/drivers/usb/host/xhci-plat.c
-@@ -435,6 +435,14 @@ int xhci_plat_remove(struct platform_dev
- }
- EXPORT_SYMBOL_GPL(xhci_plat_remove);
- 
-+static void xhci_plat_disable_clocks(struct xhci_hcd *xhci)
-+{
-+	if (xhci->quirks & XHCI_SUSPEND_RESUME_CLKS) {
-+		clk_disable_unprepare(xhci->clk);
-+		clk_disable_unprepare(xhci->reg_clk);
-+	}
-+}
-+
- static int __maybe_unused xhci_plat_suspend(struct device *dev)
- {
- 	struct usb_hcd	*hcd = dev_get_drvdata(dev);
-@@ -455,10 +463,8 @@ static int __maybe_unused xhci_plat_susp
- 	if (ret)
- 		return ret;
- 
--	if (!device_may_wakeup(dev) && (xhci->quirks & XHCI_SUSPEND_RESUME_CLKS)) {
--		clk_disable_unprepare(xhci->clk);
--		clk_disable_unprepare(xhci->reg_clk);
--	}
-+	if (!device_may_wakeup(dev))
-+		xhci_plat_disable_clocks(xhci);
- 
- 	return 0;
- }
-@@ -470,23 +476,36 @@ static int __maybe_unused xhci_plat_resu
- 	int ret;
- 
- 	if (!device_may_wakeup(dev) && (xhci->quirks & XHCI_SUSPEND_RESUME_CLKS)) {
--		clk_prepare_enable(xhci->clk);
--		clk_prepare_enable(xhci->reg_clk);
-+		ret = clk_prepare_enable(xhci->clk);
-+		if (ret)
-+			return ret;
-+
-+		ret = clk_prepare_enable(xhci->reg_clk);
-+		if (ret) {
-+			clk_disable_unprepare(xhci->clk);
-+			return ret;
-+		}
- 	}
- 
- 	ret = xhci_priv_resume_quirk(hcd);
- 	if (ret)
--		return ret;
-+		goto disable_clks;
- 
- 	ret = xhci_resume(xhci, 0);
- 	if (ret)
--		return ret;
-+		goto disable_clks;
- 
- 	pm_runtime_disable(dev);
- 	pm_runtime_set_active(dev);
- 	pm_runtime_enable(dev);
- 
- 	return 0;
-+
-+disable_clks:
-+	if (!device_may_wakeup(dev))
-+		xhci_plat_disable_clocks(xhci);
-+
-+	return ret;
- }
- 
- static int __maybe_unused xhci_plat_runtime_suspend(struct device *dev)
+You are receiving this mail because:
+You are watching the assignee of the bug.=
