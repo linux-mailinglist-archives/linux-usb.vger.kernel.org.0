@@ -2,145 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9419746B33
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jul 2023 09:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30354746CE6
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jul 2023 11:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbjGDHyc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jul 2023 03:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
+        id S230493AbjGDJIy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jul 2023 05:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbjGDHyZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jul 2023 03:54:25 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C3D1706
-        for <linux-usb@vger.kernel.org>; Tue,  4 Jul 2023 00:53:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688457237; x=1719993237;
-  h=from:to:cc:subject:date:message-id;
-  bh=9EOWlc/AH5fuUntGfkNSQKzbcO8Aw7axTIH7B6GsJt4=;
-  b=hGmH866DB/wTQIgbZ2eVthW9DBF8NvvVZFxvR1XsTzA7TweOg3KomDJs
-   d1oyrdMXRHLOllsU2tguc91fvbfSJzQ7VBAcOkF4HpOEH5S9TD/E1P7eq
-   IQT01F/AEyqTZxlaxyxQw3kS2e4RhBhUFB6kt9KuNWkJXis3stBZkjrNi
-   PGTiZtMBEE8JL1Tt32ecp/zUZCUTdy9hvCutcZf5sTvvAtptzPm8IaTxe
-   QPNRqhi31ePil0jaX6VvfbAOEAmMY5K2dn5qZnFU7/xZWQFean3LT1bls
-   W4W34CIHysgFdNSILikSpH6Fth5NK6rgSEE14i6vSf7x4XUc+5WTb9hrv
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="426746894"
-X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="426746894"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 00:52:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="712807447"
-X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="712807447"
-Received: from unknown (HELO localhost.localdomain) ([10.223.165.44])
-  by orsmga007.jf.intel.com with ESMTP; 04 Jul 2023 00:52:19 -0700
-From:   madhu.m@intel.com
-To:     gregkh@linuxfoundation.org
-Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, madhu.m@intel.com
-Subject: [PATCH usb-next] usb: typec: intel_pmc_mux: Add new ACPI ID for Lunar Lake IOM device
-Date:   Tue,  4 Jul 2023 13:35:09 +0530
-Message-Id: <20230704080509.14251-1-madhu.m@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230161AbjGDJIy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jul 2023 05:08:54 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C304B6
+        for <linux-usb@vger.kernel.org>; Tue,  4 Jul 2023 02:08:53 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-c581c758ad8so1552082276.1
+        for <linux-usb@vger.kernel.org>; Tue, 04 Jul 2023 02:08:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688461732; x=1691053732;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6GdaHmnlsV8S6Cig719VwA16gJQYVyJKz/YSsgg7mS0=;
+        b=q4uA38keofPHO2TUVFek3LJkw2yMGrDyEfrbrAiLFLSARwYr6g6ZFsvWZkWNrL7rYZ
+         p4MR/teWbictMYdRW2MNHqaSvEndKH7//CF27YKVWrbDgrgbHuENYlG37EHzRXU7MUj8
+         CNJn08RAGoXKutpYp7T5MVaMwgQdZUCZztm4SPRvAPtlF7zU4ZMvPycd+2FljeAU9ARn
+         B51AlnuT+f6Op0P24zbC7K6PxFr2kgCKSXnrztegwXu0xaygRGM9owxLNMH/UVS2yCjg
+         ljPC25M4HGHxo9Yo6cwoXKqj0SVG3CIAZbigTJwGICRyzVAWDEmbwGtMvr6y/7l08ctd
+         9PKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688461732; x=1691053732;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6GdaHmnlsV8S6Cig719VwA16gJQYVyJKz/YSsgg7mS0=;
+        b=RlLh5Qnsq/S8ehzWqBkCc8HZMB8d/IsWvyQfrTYNHg2rvDz1HndXNrlOReCmi4lw+W
+         H5mTb/Tzi9L2J1B/nNK38c8YxjCCnPvmMjV+f3bVPTnAKeRIuqg3hg92azq2mi4Y9bOb
+         5Tmm1NcI4qH0mgc7UeqEhB2ijG46G1N036jcuodm7olSJCBwpmmLZAAtITaXOXBCWPd6
+         aXmUaQ/wG76tx1x/KoTxgul+UgydN5STVjYYXDwozfUP7lrQ8tHXp0qIGod3dNxK6C41
+         Sc9V6sARu/5AIJAn5BbxmR6ttAjIqusCajZtiVMh5g0t7hqUZj+VyTARQ+B+VUw1bS7+
+         xKBw==
+X-Gm-Message-State: ABy/qLY6J/FAR1SJzxYqkhprp3aVry3Cqf/fVm8sdG9gfhftwzetv6dD
+        wjV8Hx6tHpFqU0POXk6G4hjqLablFDFC9/RpXNP1EQ==
+X-Google-Smtp-Source: APBJJlEYeHaQF+mTMHQltwbXWZ0etgHbEPYw7SB4rbAC1Fsm/EntK2zNDR/B5ka7AH25VOtwQkIlURWWnXQaAR0ZADc=
+X-Received: by 2002:a25:cf55:0:b0:c5c:66db:56c4 with SMTP id
+ f82-20020a25cf55000000b00c5c66db56c4mr1499236ybg.21.1688461732510; Tue, 04
+ Jul 2023 02:08:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230703121936.71623-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230703121936.71623-1-andriy.shevchenko@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 4 Jul 2023 11:08:41 +0200
+Message-ID: <CACRpkdbySh+XFUDnFWUQHULYag0hukJ_ogfSREPLvs1iV=YmwQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] usb: musb: Use read_poll_timeout()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bin Liu <b-liu@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Madhu M <madhu.m@intel.com>
+On Mon, Jul 3, 2023 at 2:19=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-Intel Lunar Lake IOM has a different IOM port status offset and size
-than Intel MTL.
+> Use read_poll_timeout() instead of open coding it.
+> In the same time, fix the typo in the error message.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+(...)
+> +       ret =3D read_poll_timeout(gpiod_get_value, reg, !reg, 1000, 10000=
+0, true,
+> +                               glue->intpin);
 
-Intel Lunar Lake is the first platform to extend IOM port status
-from 32bit to 64bit by adding DDI port number into IOM port status.
+Wow that's really cool. I had no idea that you could use read_poll_timeout(=
+)
+together with gpiod_get_value() like this!
 
-Added IOM_PORT_STATUS_REGS macro for using platform specific IOM port
-status offset and size.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Madhu M <madhu.m@intel.com>
----
- drivers/usb/typec/mux/intel_pmc_mux.c | 25 ++++++++++++++++++++-----
- 1 file changed, 20 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-index 5e8edf3881c0..61a88f68b458 100644
---- a/drivers/usb/typec/mux/intel_pmc_mux.c
-+++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-@@ -117,6 +117,16 @@ enum {
- 	  IOM_PORT_STATUS_DHPD_HPD_STATUS_SHIFT) &			\
- 	 IOM_PORT_STATUS_DHPD_HPD_STATUS_ASSERT)
- 
-+/* IOM port status register */
-+#define IOM_PORT_STATUS_REGS(_offset_, _size_)	((_offset_) | (_size_))
-+#define IOM_PORT_STATUS_REGS_SZ_MASK		BIT(0)
-+#define IOM_PORT_STATUS_REGS_SZ_4		0
-+#define IOM_PORT_STATUS_REGS_SZ_8		1
-+#define IOM_PORT_STATUS_REGS_OFFSET(_d_)				\
-+	((_d_) & ~IOM_PORT_STATUS_REGS_SZ_MASK)
-+#define IOM_PORT_STATUS_REGS_SIZE(_d_)					\
-+	(4 << ((_d_) & IOM_PORT_STATUS_REGS_SZ_MASK))
-+
- struct pmc_usb;
- 
- struct pmc_usb_port {
-@@ -145,6 +155,7 @@ struct pmc_usb {
- 	struct acpi_device *iom_adev;
- 	void __iomem *iom_base;
- 	u32 iom_port_status_offset;
-+	u8 iom_port_status_size;
- 
- 	struct dentry *dentry;
- };
-@@ -160,7 +171,7 @@ static void update_port_status(struct pmc_usb_port *port)
- 
- 	port->iom_status = readl(port->pmc->iom_base +
- 				 port->pmc->iom_port_status_offset +
--				 port_num * sizeof(u32));
-+				 port_num * port->pmc->iom_port_status_size);
- }
- 
- static int sbu_orientation(struct pmc_usb_port *port)
-@@ -589,13 +600,16 @@ static int pmc_usb_register_port(struct pmc_usb *pmc, int index,
- /* IOM ACPI IDs and IOM_PORT_STATUS_OFFSET */
- static const struct acpi_device_id iom_acpi_ids[] = {
- 	/* TigerLake */
--	{ "INTC1072", 0x560, },
-+	{ "INTC1072", IOM_PORT_STATUS_REGS(0x560, IOM_PORT_STATUS_REGS_SZ_4) },
- 
- 	/* AlderLake */
--	{ "INTC1079", 0x160, },
-+	{ "INTC1079", IOM_PORT_STATUS_REGS(0x160, IOM_PORT_STATUS_REGS_SZ_4) },
- 
- 	/* Meteor Lake */
--	{ "INTC107A", 0x160, },
-+	{ "INTC107A", IOM_PORT_STATUS_REGS(0x160, IOM_PORT_STATUS_REGS_SZ_4) },
-+
-+	/* Lunar Lake */
-+	{ "INTC10EA", IOM_PORT_STATUS_REGS(0x150, IOM_PORT_STATUS_REGS_SZ_8) },
- 	{}
- };
- 
-@@ -615,7 +629,8 @@ static int pmc_usb_probe_iom(struct pmc_usb *pmc)
- 	if (!adev)
- 		return -ENODEV;
- 
--	pmc->iom_port_status_offset = (u32)dev_id->driver_data;
-+	pmc->iom_port_status_offset = IOM_PORT_STATUS_REGS_OFFSET(dev_id->driver_data);
-+	pmc->iom_port_status_size = IOM_PORT_STATUS_REGS_SIZE(dev_id->driver_data);
- 
- 	INIT_LIST_HEAD(&resource_list);
- 	ret = acpi_dev_get_memory_resources(adev, &resource_list);
--- 
-2.17.1
-
+Yours,
+Linus Walleij
