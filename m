@@ -2,54 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C02748CE3
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jul 2023 21:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A5C748E1B
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jul 2023 21:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbjGETEo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jul 2023 15:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43210 "EHLO
+        id S234338AbjGETkB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jul 2023 15:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233508AbjGETD6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jul 2023 15:03:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA211FDC;
-        Wed,  5 Jul 2023 12:03:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DACE7616F9;
-        Wed,  5 Jul 2023 19:03:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BE0CC433CA;
-        Wed,  5 Jul 2023 19:03:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688583818;
-        bh=IFjY2ZG1/G67P/89fD6mRVOfDYWsWXSwb+QK0dFqNJ4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kyPlfPUq+2nOnWMrdZof8wN2AB7vG7VWbFXzPh3rce7JWRwzaQLXNUwnECAgz3Gu2
-         LM3FOB/jGtRhMqyLhHiCieTjP9F16SQTqdWmJReFJGWpn4CgQFKbJbhJm1MB9T+il6
-         XMs3Qmdg93yJiavrPH9nySnCk9SB4gh4SS3o1sJOcwWJJldu+0MLoegHErmfNjtH7n
-         wOf2f3Lm1wFJ+hfjji3JxmGPmOR5Fty+NLh2V1Zae6s8u3dbCBzJ2e5q4ADXwAsiWA
-         kZqgcLlgB3MeVC+MPpJw6pvEEiAD3hPyBMbEsHlFfsbHVL9a/ETvT3ehQLhEnWTmiA
-         SzodEM1TJAHCg==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v2 20/92] usb: convert to ctime accessor functions
-Date:   Wed,  5 Jul 2023 15:00:45 -0400
-Message-ID: <20230705190309.579783-18-jlayton@kernel.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230705190309.579783-1-jlayton@kernel.org>
-References: <20230705185755.579053-1-jlayton@kernel.org>
- <20230705190309.579783-1-jlayton@kernel.org>
-MIME-Version: 1.0
+        with ESMTP id S234279AbjGETjx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jul 2023 15:39:53 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29740199E;
+        Wed,  5 Jul 2023 12:39:49 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-78666f06691so164440839f.0;
+        Wed, 05 Jul 2023 12:39:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688585988; x=1691177988;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EmigWppDMAwntmLPkpHMViFD3zfbB0BalUBHyRmY93I=;
+        b=O0Hx0DJjaXwYP+yvm0yoGbkrJfx9adX747Wx8eccbhjCijufql33tPIigemLgwYP07
+         WmdleyqbK2jthxf4WIbHBCB/D45wsSToLzMHer0D4wQ3OM1rYd8vrW8Ejea/XkxYgVlD
+         RdIFih6oJUvcTOUP3n/POr5sMXlTGRF7TtW1Tkl8Ut7J7TVlZ4vP/mLY/hcZ/Xn4MScL
+         ZZK7qu35f7CDOzEvY96oyGpv64sHtOlR9wGOmjmad/61EXZCEU7QZDfsG60G5zj9dc8N
+         KUgZujUdI+o3GqdLwoddvC7B+1M0qnJ2Ew7YJ8Uo2Ql45DJM4Yzke7qJ4wLnY+VHA4FV
+         G9jg==
+X-Gm-Message-State: ABy/qLZFlIKvxvKGqXQZTz0o/LFFOCdFQkrKPqlxpFh6gP4Gif3nQnv6
+        4sC4xEaxllPtYm8C2qF7FA==
+X-Google-Smtp-Source: APBJJlE1T+SG//kQOjsdrxPqC6WYFy+jVqYd/9wV9AIbQOA/LFJUSpnFw6o7MHDprdjfMYp8ihzVDA==
+X-Received: by 2002:a6b:3c02:0:b0:786:45f7:fb7e with SMTP id k2-20020a6b3c02000000b0078645f7fb7emr58527iob.13.1688585988126;
+        Wed, 05 Jul 2023 12:39:48 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id d21-20020a02a495000000b0042ad887f705sm6314042jam.143.2023.07.05.12.39.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 12:39:47 -0700 (PDT)
+Received: (nullmailer pid 1714652 invoked by uid 1000);
+        Wed, 05 Jul 2023 19:39:32 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Gatien Chevallier <gatien.chevallier@foss.st.com>
+Cc:     fabrice.gasnier@foss.st.com, jic23@kernel.org, conor+dt@kernel.org,
+        hugues.fruchet@foss.st.com, richardcochran@gmail.com,
+        will@kernel.org, davem@davemloft.net, vkoul@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-phy@lists.infradead.org,
+        arnd@kernel.org, gregkh@linuxfoundation.org,
+        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
+        arnaud.pouliquen@foss.st.com, mchehab@kernel.org,
+        olivier.moysan@foss.st.com, andi.shyti@kernel.org,
+        alexandre.torgue@foss.st.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, pabeni@redhat.com,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Oleksii_Moisieiev@epam.com, lee@kernel.org,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
+        robh+dt@kernel.org, ulf.hansson@linaro.org,
+        catalin.marinas@arm.com, edumazet@google.com,
+        linux-spi@vger.kernel.org, herbert@gondor.apana.org.au,
+        linux-iio@vger.kernel.org, linux-crypto@vger.kernel.org
+In-Reply-To: <20230705172759.1610753-4-gatien.chevallier@foss.st.com>
+References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
+ <20230705172759.1610753-4-gatien.chevallier@foss.st.com>
+Message-Id: <168858597253.1714602.9996873148476929300.robh@kernel.org>
+Subject: Re: [PATCH 03/10] dt-bindings: bus: add device tree bindings for
+ ETZPC
+Date:   Wed, 05 Jul 2023 13:39:32 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,127 +82,43 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In later patches, we're going to change how the inode's ctime field is
-used. Switch to using accessor functions instead of raw accesses of
-inode->i_ctime.
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- drivers/usb/core/devio.c           | 16 ++++++++--------
- drivers/usb/gadget/function/f_fs.c |  3 +--
- drivers/usb/gadget/legacy/inode.c  |  3 +--
- 3 files changed, 10 insertions(+), 12 deletions(-)
+On Wed, 05 Jul 2023 19:27:52 +0200, Gatien Chevallier wrote:
+> Document ETZPC (Extended TrustZone protection controller). ETZPC is a
+> firewall controller.
+> 
+> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+> ---
+>  .../bindings/bus/st,stm32-etzpc.yaml          | 90 +++++++++++++++++++
+>  1 file changed, 90 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml
+> 
 
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index 1a16a8bdea60..4f68f6ef3cc1 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -2642,21 +2642,21 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
- 		snoop(&dev->dev, "%s: CONTROL\n", __func__);
- 		ret = proc_control(ps, p);
- 		if (ret >= 0)
--			inode->i_mtime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode_set_ctime_current(inode);
- 		break;
- 
- 	case USBDEVFS_BULK:
- 		snoop(&dev->dev, "%s: BULK\n", __func__);
- 		ret = proc_bulk(ps, p);
- 		if (ret >= 0)
--			inode->i_mtime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode_set_ctime_current(inode);
- 		break;
- 
- 	case USBDEVFS_RESETEP:
- 		snoop(&dev->dev, "%s: RESETEP\n", __func__);
- 		ret = proc_resetep(ps, p);
- 		if (ret >= 0)
--			inode->i_mtime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode_set_ctime_current(inode);
- 		break;
- 
- 	case USBDEVFS_RESET:
-@@ -2668,7 +2668,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
- 		snoop(&dev->dev, "%s: CLEAR_HALT\n", __func__);
- 		ret = proc_clearhalt(ps, p);
- 		if (ret >= 0)
--			inode->i_mtime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode_set_ctime_current(inode);
- 		break;
- 
- 	case USBDEVFS_GETDRIVER:
-@@ -2695,7 +2695,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
- 		snoop(&dev->dev, "%s: SUBMITURB\n", __func__);
- 		ret = proc_submiturb(ps, p);
- 		if (ret >= 0)
--			inode->i_mtime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode_set_ctime_current(inode);
- 		break;
- 
- #ifdef CONFIG_COMPAT
-@@ -2703,14 +2703,14 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
- 		snoop(&dev->dev, "%s: CONTROL32\n", __func__);
- 		ret = proc_control_compat(ps, p);
- 		if (ret >= 0)
--			inode->i_mtime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode_set_ctime_current(inode);
- 		break;
- 
- 	case USBDEVFS_BULK32:
- 		snoop(&dev->dev, "%s: BULK32\n", __func__);
- 		ret = proc_bulk_compat(ps, p);
- 		if (ret >= 0)
--			inode->i_mtime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode_set_ctime_current(inode);
- 		break;
- 
- 	case USBDEVFS_DISCSIGNAL32:
-@@ -2722,7 +2722,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
- 		snoop(&dev->dev, "%s: SUBMITURB32\n", __func__);
- 		ret = proc_submiturb_compat(ps, p);
- 		if (ret >= 0)
--			inode->i_mtime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode_set_ctime_current(inode);
- 		break;
- 
- 	case USBDEVFS_IOCTL32:
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index f41a385a5c42..6e9ef35a43a7 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -1377,7 +1377,7 @@ ffs_sb_make_inode(struct super_block *sb, void *data,
- 	inode = new_inode(sb);
- 
- 	if (inode) {
--		struct timespec64 ts = current_time(inode);
-+		struct timespec64 ts = inode_set_ctime_current(inode);
- 
- 		inode->i_ino	 = get_next_ino();
- 		inode->i_mode    = perms->mode;
-@@ -1385,7 +1385,6 @@ ffs_sb_make_inode(struct super_block *sb, void *data,
- 		inode->i_gid     = perms->gid;
- 		inode->i_atime   = ts;
- 		inode->i_mtime   = ts;
--		inode->i_ctime   = ts;
- 		inode->i_private = data;
- 		if (fops)
- 			inode->i_fop = fops;
-diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-index 28249d0bf062..ce9e31f3d26b 100644
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -1969,8 +1969,7 @@ gadgetfs_make_inode (struct super_block *sb,
- 		inode->i_mode = mode;
- 		inode->i_uid = make_kuid(&init_user_ns, default_uid);
- 		inode->i_gid = make_kgid(&init_user_ns, default_gid);
--		inode->i_atime = inode->i_mtime = inode->i_ctime
--				= current_time(inode);
-+		inode->i_atime = inode->i_mtime = inode_set_ctime_current(inode);
- 		inode->i_private = data;
- 		inode->i_fop = fops;
- 	}
--- 
-2.41.0
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml: title: 'STM32 Extended TrustZone protection controller bindings' should not be valid under {'pattern': '([Bb]inding| [Ss]chema)'}
+	hint: Everything is a binding/schema, no need to say it. Describe what hardware the binding is for.
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+Documentation/devicetree/bindings/bus/st,stm32-etzpc.example.dtb: /example-0/etzpc@5c007000: failed to match any schema with compatible: ['st,stm32mp13-sys-bus']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230705172759.1610753-4-gatien.chevallier@foss.st.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
