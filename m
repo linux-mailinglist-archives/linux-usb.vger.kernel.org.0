@@ -2,115 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3F9747CCA
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jul 2023 08:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D9E747CDF
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jul 2023 08:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbjGEGGj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jul 2023 02:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
+        id S231248AbjGEGP1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jul 2023 02:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbjGEGGh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jul 2023 02:06:37 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4921700;
-        Tue,  4 Jul 2023 23:06:27 -0700 (PDT)
+        with ESMTP id S229610AbjGEGPY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jul 2023 02:15:24 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950C410EA;
+        Tue,  4 Jul 2023 23:15:19 -0700 (PDT)
 X-GND-Sasl: herve.codina@bootlin.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1688537186;
+        t=1688537718;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=O0C66mVI1nkOIpn+KxsHOUvDqjbprbMxbnSqsj7WItk=;
-        b=HMzIJ0wIJQCx++SRoTVQ8bottUooWGrkC8U7ZbdBDWg4B+tUqyPdud6JH9otkTYx2SY5fR
-        t1NQSyOEzJPRQQZvqLzSHQMzV+R/uoM4OOVbiiKYOkZ/nGpqrrmZVCcj4fbt4TjJ1AnkvT
-        IrqpE/3YkiwUoF1JTiKaeXmwNTXWWbT0bIbEihf02ULF0r0KLhbj264ppLD/bndnr2ZLTR
-        M4k/4p2K+3qLySn9vZ8R2zqGUElPkVybtLGVxq6YpF1ppekDo8CePFROKUoz5/SgrN3VnL
-        pCnV4fnpHLFG4+CF5XYs+C8FMJdP4mepqUQJL1K5TwJf8dW+aTf7pPrk9vPIyw==
+        bh=FmOxAXQHkYLKF9gR92m1Yb4f5iEOyGKpTqWF2Mnxsow=;
+        b=o/GO2j7TXqz0LLpqHY7sjQqSXdSYbWBe8gE+bnCU572ADqIc1ADXgFXlqq/m+GRrXzIyZ2
+        fZ3DZ6vRArHlyWddk+QrtUqOQQTbcdGgJT11jiIhpru3UjH4yTQYNcW+94HflugMjWTXT7
+        my0V6M/jxCDc6410NpoKrZ+sHwB1pHXvQGE81P/9aGCp2FfqX+yPouGy8BVX32m789kICM
+        36tOGd25iRmjS+NBPzlO11byVOYTAOqz4mLUg/HTwlquidUUA+8sjM3MBMOMm1zViLlrQB
+        y5TNnQmMb/rsCedqswiMBbxcZ+uJ2Z7GOV8r07Pp99N+eDQIf0xWAcYm3Ua9/w==
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C88C824000A;
-        Wed,  5 Jul 2023 06:06:25 +0000 (UTC)
-Date:   Wed, 5 Jul 2023 08:06:25 +0200
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 11C681C0005;
+        Wed,  5 Jul 2023 06:15:16 +0000 (UTC)
+Date:   Wed, 5 Jul 2023 08:15:16 +0200
 From:   Herve Codina <herve.codina@bootlin.com>
 To:     Yu Hao <yhao016@ucr.edu>
-Cc:     chunfeng.yun@mediatek.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
+Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
         linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: mtu3: Fix possible use-before-initialization bug
-Message-ID: <20230705080625.02b2bac5@bootlin.com>
-In-Reply-To: <CA+UBctDxfb6+70+hzuXJ-gwb65E0uoNzXYEhpJT92sXr2CE7OA@mail.gmail.com>
-References: <CA+UBctDxfb6+70+hzuXJ-gwb65E0uoNzXYEhpJT92sXr2CE7OA@mail.gmail.com>
+Subject: Re: [PATCH] net: lan78xx: Fix possible uninit bug
+Message-ID: <20230705081516.67d0e26e@bootlin.com>
+In-Reply-To: <CA+UBctD1E5ZLnBxkrXh3uxiKiKXphnLKiB=5whYtH73SCTESWw@mail.gmail.com>
+References: <CA+UBctD1E5ZLnBxkrXh3uxiKiKXphnLKiB=5whYtH73SCTESWw@mail.gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Yu,
-
-On Tue, 4 Jul 2023 16:25:50 -0700
+On Tue, 4 Jul 2023 18:15:09 -0700
 Yu Hao <yhao016@ucr.edu> wrote:
 
-> The struct usb_ctrlrequest setup should be initialized in the function
-> ep0_read_setup(mtu, &setup). However, inside that function,
-> the variable count could be 0 and the struct usb_ctrlrequest setup
-> is not initialized. But there is a read for setup.bRequestType.
+> The variable buf should be initialized in the function lan78xx_read_reg.
+> However, there is no return value check, which means the variable buf
+> could still be uninit. But there is a read later.
 > 
 > Signed-off-by: Yu Hao <yhao016@ucr.edu>
 > ---
->  drivers/usb/mtu3/mtu3_gadget_ep0.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/net/usb/lan78xx.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/mtu3/mtu3_gadget_ep0.c
-> b/drivers/usb/mtu3/mtu3_gadget_ep0.c
-> index e4fd1bb14a55..67034fa515d0 100644
-> --- a/drivers/usb/mtu3/mtu3_gadget_ep0.c
-> +++ b/drivers/usb/mtu3/mtu3_gadget_ep0.c
-> @@ -638,7 +638,7 @@ static int ep0_handle_setup(struct mtu3 *mtu)
->  __releases(mtu->lock)
->  __acquires(mtu->lock)
->  {
-> -   struct usb_ctrlrequest setup;
-> +   struct usb_ctrlrequest setup = {};
->     struct mtu3_request *mreq;
->     int handled = 0;
+> diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+> index c458c030fadf..4c9318c92fe6 100644
+> --- a/drivers/net/usb/lan78xx.c
+> +++ b/drivers/net/usb/lan78xx.c
+> @@ -1091,8 +1091,11 @@ static int lan78xx_write_raw_otp(struct
+> lan78xx_net *dev, u32 offset,
+>     int i;
+>     u32 buf;
+>     unsigned long timeout;
+> +   int ret;
 > 
+> -   lan78xx_read_reg(dev, OTP_PWR_DN, &buf);
+> +   ret = lan78xx_read_reg(dev, OTP_PWR_DN, &buf);
+> +   if (ret < 0)
+> +       return ret;
+> 
+>     if (buf & OTP_PWR_DN_PWRDN_N_) {
+>         /* clear it and wait to be cleared */
 
-Looks strange to me because, if ep0_read_setup() cannot read the setup data
-why don't we simply abort the operation ?
-
-With setup = {}, the following test is true:
-  if ((setup.bRequestType & USB_TYPE_MASK) == USB_TYPE_STANDARD)
-	handled = handle_standard_request(mtu, &setup);
-
-handle_standard_request() is called and supposes an USB_REQ_GET_STATUS
-(0x00) request:
-   case USB_REQ_GET_STATUS:
-	handled = ep0_get_status(mtu, setup);
-	break;
-
-Then ep0_get_status() supposes USB_RECIP_DEVICE (0x00) and performs some
-operation sending the data related to the GET_STATUS.
-
-All of these are not correct as the setup data that triggered this sequence
-was never received.
-Aborting the operation if ep0_read_setup() cannot read the setup data seems
-better to me.
+Reviewed-by: Herve Codina <herve.codina@bootlin.com>
 
 Best regards,
 Hervé
