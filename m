@@ -2,123 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A49748E13
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jul 2023 21:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B4B748EEC
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jul 2023 22:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233677AbjGETjy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jul 2023 15:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
+        id S233746AbjGEU0x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jul 2023 16:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233841AbjGETjr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jul 2023 15:39:47 -0400
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3A71732;
-        Wed,  5 Jul 2023 12:39:43 -0700 (PDT)
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-77acb04309dso353633939f.2;
-        Wed, 05 Jul 2023 12:39:43 -0700 (PDT)
+        with ESMTP id S233721AbjGEU0w (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jul 2023 16:26:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81EB198D
+        for <linux-usb@vger.kernel.org>; Wed,  5 Jul 2023 13:26:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688588765;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=t45r9A2YvfoSJv2GZo8UC8AtO/lxGa/2A2TsFaxOzFQ=;
+        b=emWGxfyrkx50WcIpqLScygToO5DkWvh+JUB/5h5F7AOqQu8xOLYxxUHhshrQ6cltN3TYpK
+        csrse0jVgdtDKhzp7PafgjCce61eL+KeIrAi+gjvzbg2uqBUFILYLrWXJTM5uVlzKS5u9b
+        mxIE3+FDDbTQvHNSrPOSRXyde7skQsQ=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-556--BVnwIp_MQm56sFFytgcGA-1; Wed, 05 Jul 2023 16:26:04 -0400
+X-MC-Unique: -BVnwIp_MQm56sFFytgcGA-1
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-262e7132c74so111824a91.0
+        for <linux-usb@vger.kernel.org>; Wed, 05 Jul 2023 13:26:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688585983; x=1691177983;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=OR44xsl8dcDDRHket6JLRoRPh10jvQanfxZD4Qq5o5A=;
-        b=a0CEu5mqjWGo8IGRyJ6e667dY3I/m6XXzpZ51tZxpu8RysCYjJU+tN6Pmka10t+tNL
-         oooNFqm83WP8oryCBd8YKBj9BGnVaA9OJp1YeceXV9c20ivZJK6m0jULeeECNW/v4GG9
-         x8dCy734zSFeG39mJzXskDlPq5eZtaJ+lGTdENV6NPvjk6UoBywYPERS2lDOF5BJFYp3
-         kJ+DjiwGB/OgmAVLJvysrHDOJSw+JkZTes4lHWGKWo/RqD2xbITtUJZHuTLoO01u2VQB
-         IzhWhU7AKfZVJpNIPEp9FzfucL57i3weprBCaPDmCMWC9t7laGKYAoKamyGJQhOZlKRp
-         nh+Q==
-X-Gm-Message-State: ABy/qLbAA2KurpshNzjgaeeDFzqBEK03cTCXm7X3AdjyVDtdNsxFYJrP
-        9baxSsRd22kpom7bJP+cPg==
-X-Google-Smtp-Source: APBJJlFTsATQZZbeDYi05vWkxMhLO+2kIHQFYrmGtwqcASMsu98qNuBpLmP0dT/ZyPLVLU0YF4GwxA==
-X-Received: by 2002:a6b:f208:0:b0:77e:3598:e511 with SMTP id q8-20020a6bf208000000b0077e3598e511mr177308ioh.2.1688585983078;
-        Wed, 05 Jul 2023 12:39:43 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056638220a00b0042b1cd4c096sm3797893jas.74.2023.07.05.12.39.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 12:39:42 -0700 (PDT)
-Received: (nullmailer pid 1714650 invoked by uid 1000);
-        Wed, 05 Jul 2023 19:39:32 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20221208; t=1688588764; x=1691180764;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t45r9A2YvfoSJv2GZo8UC8AtO/lxGa/2A2TsFaxOzFQ=;
+        b=hixdpyUIMuYXqibU0mjQT4peetBD6L0b9eKFsIogp90nQb03fTewyRlG14fH0EW39H
+         wHOrZRzqvaojgVqWPwuEXVc/3TWAvZqMeH24Zf/NZwubaXck0C0gGf67NwGZXsbguYJr
+         F/dmLHi1Vuz1Xb9aTCvso681drqwjQfK13DmeS14hmAdJMw6OSYpUaoia3Na/pKbr/CA
+         8bA6YMfHzr/XBcOhLHUoXqE44tyifUGAP79ZjJas8n1oqCiQBHVjFG36MeNCx6f4siyM
+         o/pejxmrfORn5MKReauhL+70vPW0Ci78vH6y3RT3Rd2/nMY8hwP1s3r31SYTdjGQySfZ
+         +kPA==
+X-Gm-Message-State: AC+VfDwIFUr/+cZbC4cjaihA1Ze0XomhgcNLORh1aDLYhfUACNuZgiRj
+        du4M+PVtQEg2MUwh7M+RsDfF4xgxXaQzwl36u9bEq0G2Qmtt1DIMiZUqISs6FC1ftHDqDK8rc4+
+        BYi3gMeRJBNZuGBZPjmawGtTTUsjNiVIi+LWT
+X-Received: by 2002:a05:6a21:6d88:b0:122:e4f:25c7 with SMTP id wl8-20020a056a216d8800b001220e4f25c7mr15659574pzb.31.1688588763769;
+        Wed, 05 Jul 2023 13:26:03 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6ds4xvbUG+ZYaDvJ2apGx91OQ4qB0akGNWWFL3LaWKhMz96IxFpmQ2sEuPoCI3p2ih7fuYhkf9fNjQ5oeaAq0=
+X-Received: by 2002:a05:6a21:6d88:b0:122:e4f:25c7 with SMTP id
+ wl8-20020a056a216d8800b001220e4f25c7mr15659535pzb.31.1688588763446; Wed, 05
+ Jul 2023 13:26:03 -0700 (PDT)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Gatien Chevallier <gatien.chevallier@foss.st.com>
-Cc:     hugues.fruchet@foss.st.com, vkoul@kernel.org,
-        linux-media@vger.kernel.org, gregkh@linuxfoundation.org,
-        linux-phy@lists.infradead.org, lee@kernel.org,
-        linux-kernel@vger.kernel.org, arnd@kernel.org,
-        linux-serial@vger.kernel.org, mchehab@kernel.org,
-        edumazet@google.com, arnaud.pouliquen@foss.st.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, jic23@kernel.org, pabeni@redhat.com,
-        linux-usb@vger.kernel.org, alsa-devel@alsa-project.org,
-        olivier.moysan@foss.st.com, fabrice.gasnier@foss.st.com,
-        kuba@kernel.org, andi.shyti@kernel.org,
-        alexandre.torgue@foss.st.com, conor+dt@kernel.org,
-        richardcochran@gmail.com, will@kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mmc@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Oleksii_Moisieiev@epam.com, linux-spi@vger.kernel.org,
-        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
-        ulf.hansson@linaro.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org
-In-Reply-To: <20230705172759.1610753-3-gatien.chevallier@foss.st.com>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-3-gatien.chevallier@foss.st.com>
-Message-Id: <168858597155.1714560.12250834903693245143.robh@kernel.org>
-Subject: Re: [PATCH 02/10] dt-bindings: bus: add device tree bindings for
- RIFSC
-Date:   Wed, 05 Jul 2023 13:39:32 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230609125023.399942-1-jlayton@kernel.org> <20230609125023.399942-8-jlayton@kernel.org>
+ <CAHc6FU4wyfQT7T75j2Sd9WNp=ag7hpDZGYkR=m73h2nOaH+AqQ@mail.gmail.com> <a1f7a725186082d933aff702d1d50c6456da6f20.camel@kernel.org>
+In-Reply-To: <a1f7a725186082d933aff702d1d50c6456da6f20.camel@kernel.org>
+From:   Andreas Gruenbacher <agruenba@redhat.com>
+Date:   Wed, 5 Jul 2023 22:25:51 +0200
+Message-ID: <CAHc6FU54Gh+5hovqXZZSADqym=VCMis-EH9sKhAjgjXD6MUtqw@mail.gmail.com>
+Subject: Re: [PATCH 7/9] gfs2: update ctime when quota is updated
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Brad Warrum <bwarrum@linux.ibm.com>,
+        Ritu Agarwal <rituagar@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ian Kent <raven@themaw.net>,
+        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
+        Jeremy Kerr <jk@ozlabs.org>, Ard Biesheuvel <ardb@kernel.org>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        Bob Peterson <rpeterso@redhat.com>,
+        Steve French <sfrench@samba.org>,
+        Paulo Alcantara <pc@manguebit.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Ruihan Li <lrh2000@pku.edu.cn>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        autofs@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, Jun 12, 2023 at 12:36=E2=80=AFPM Jeff Layton <jlayton@kernel.org> w=
+rote:
+> On Fri, 2023-06-09 at 18:44 +0200, Andreas Gruenbacher wrote:
+> > Jeff,
+> >
+> > On Fri, Jun 9, 2023 at 2:50=E2=80=AFPM Jeff Layton <jlayton@kernel.org>=
+ wrote:
+> > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > > ---
+> > >  fs/gfs2/quota.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/fs/gfs2/quota.c b/fs/gfs2/quota.c
+> > > index 1ed17226d9ed..6d283e071b90 100644
+> > > --- a/fs/gfs2/quota.c
+> > > +++ b/fs/gfs2/quota.c
+> > > @@ -869,7 +869,7 @@ static int gfs2_adjust_quota(struct gfs2_inode *i=
+p, loff_t loc,
+> > >                 size =3D loc + sizeof(struct gfs2_quota);
+> > >                 if (size > inode->i_size)
+> > >                         i_size_write(inode, size);
+> > > -               inode->i_mtime =3D inode->i_atime =3D current_time(in=
+ode);
+> > > +               inode->i_mtime =3D inode->i_atime =3D inode->i_ctime =
+=3D current_time(inode);
+> >
+> > I don't think we need to worry about the ctime of the quota inode as
+> > that inode is internal to the filesystem only.
+> >
+>
+> Thanks Andreas.  I'll plan to drop this patch from the series for now.
+>
+> Does updating the mtime and atime here serve any purpose, or should
+> those also be removed? If you plan to keep the a/mtime updates then I'd
+> still suggest updating the ctime for consistency's sake. It shouldn't
+> cost anything extra to do so since you're dirtying the inode below
+> anyway.
 
-On Wed, 05 Jul 2023 19:27:51 +0200, Gatien Chevallier wrote:
-> Document RIFSC (RIF security controller). RIFSC is a firewall controller
-> composed of different kinds of hardware resources.
-> 
-> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-> ---
->  .../bindings/bus/st,stm32-rifsc.yaml          | 101 ++++++++++++++++++
->  1 file changed, 101 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
-> 
+Yes, good point actually, we should keep things consistent for simplicity.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Would you add this back in if you do another posting?
 
-yamllint warnings/errors:
+Thanks,
+Andreas
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml: title: 'STM32 Resource isolation framework security controller bindings' should not be valid under {'pattern': '([Bb]inding| [Ss]chema)'}
-	hint: Everything is a binding/schema, no need to say it. Describe what hardware the binding is for.
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230705172759.1610753-3-gatien.chevallier@foss.st.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+> Thanks!
+>
+> > >                 mark_inode_dirty(inode);
+> > >                 set_bit(QDF_REFRESH, &qd->qd_flags);
+> > >         }
+> > > --
+> > > 2.40.1
+> > >
+> >
+> > Thanks,
+> > Andreas
+> >
+>
+> --
+> Jeff Layton <jlayton@kernel.org>
+>
 
