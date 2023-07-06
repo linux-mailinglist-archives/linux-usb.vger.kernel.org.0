@@ -2,151 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27AA374A3D1
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jul 2023 20:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE0174A453
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jul 2023 21:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231935AbjGFSb5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jul 2023 14:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
+        id S232022AbjGFTSc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jul 2023 15:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbjGFSb4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jul 2023 14:31:56 -0400
-X-Greylist: delayed 84 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Jul 2023 11:31:02 PDT
-Received: from us-smtp-delivery-162.mimecast.com (us-smtp-delivery-162.mimecast.com [170.10.129.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662891BF8
-        for <linux-usb@vger.kernel.org>; Thu,  6 Jul 2023 11:31:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hp.com; s=mimecast20180716;
-        t=1688668261;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=i6byuPgD0BdV+edMY+7xoBI+stlHVgHroGrstvZaliE=;
-        b=NYNIXWBKf74CNt9iQqkDQygusfeSVV6ed3w9/9TJQQU32OvJ6Oxa77utJQD8LTNDTbe1uK
-        bgnRq4q4OloFLYdGWbV9Wv3iggYnh9JsWkSW3VZbPcRpyLg1Dw33OvcGSDD2CqDST5oizA
-        kcZF5WOwsQu8WtP9RJd4rlDphYLYhqY=
-Received: from g1t6220.austin.hp.com (g1t6220.austin.hp.com [15.73.96.84])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-543-YG3C5vQoPEWLGQiUhrdSxA-1; Thu, 06 Jul 2023 14:29:35 -0400
-X-MC-Unique: YG3C5vQoPEWLGQiUhrdSxA-1
-Received: from g1t6217.austin.hpicorp.net (g1t6217.austin.hpicorp.net [15.67.1.144])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by g1t6220.austin.hp.com (Postfix) with ESMTPS id C072C23B;
-        Thu,  6 Jul 2023 18:29:33 +0000 (UTC)
-Received: from jam-buntu.lan (unknown [15.74.50.248])
-        by g1t6217.austin.hpicorp.net (Postfix) with ESMTP id 516B189;
-        Thu,  6 Jul 2023 18:29:32 +0000 (UTC)
-From:   Alexandru Gagniuc <alexandru.gagniuc@hp.com>
-To:     linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, hayeswang@realtek.com, jflf_kernel@gmx.com,
-        bjorn@mork.no, svenva@chromium.org, linux-kernel@vger.kernel.org,
-        eniac-xw.zhang@hp.com,
-        Alexandru Gagniuc <alexandru.gagniuc@hp.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] r8152: Suspend USB device before shutdown when WoL is enabled
-Date:   Thu,  6 Jul 2023 18:28:58 +0000
-Message-Id: <20230706182858.761311-1-alexandru.gagniuc@hp.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229802AbjGFTSb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jul 2023 15:18:31 -0400
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D471B1FC6;
+        Thu,  6 Jul 2023 12:18:28 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-785ccf19489so38183339f.3;
+        Thu, 06 Jul 2023 12:18:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688671108; x=1691263108;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=faxYBbkQkNObmdMc/UQbbUm/hK3wFyofz1gvqfG1ZAI=;
+        b=bnvp8zghDroiu7Zhx8wtj3jO926IoH43utxYHD4CtVtavupTyH/thCan9LM1zjFChK
+         q1lpo8Ch3d7jg8plrBY+3SwarTEYjGSh5IWsHPyzCySLwOepXXQseZ97uQ202dKABZgV
+         J+xOiVYNPLl/dxVHkAcIvzOMjGQejRv0I/P4mREiA+NWNmsnMXx6yVR+C07sf6DNgpWb
+         f6SaYthSFMm4wVAEGilkhRwqAt7pVEocswECxr3RsNmzn/KZCHb5Xrw+91ts0Fu90nwK
+         dvdiX4mcNuHdR7+eupYNZWdUNvCP89biVfQezlwS7dKjeYbypaPj2wnAw/2KUzr2+adU
+         ulDw==
+X-Gm-Message-State: ABy/qLYidU4dyJbM5Mm2IZXp4DBM2UEI80RAovcAOaExtnon8+xO8w2d
+        D5PdsIjprYLoTjr7sXs3hg==
+X-Google-Smtp-Source: APBJJlHhDQu+XP5X/+eyrY1BNM6jiIubxCPBwZi3080/0+VQd6I0eOXPQnvqJbl0iykgztx+ippEaA==
+X-Received: by 2002:a6b:760f:0:b0:785:d28f:1526 with SMTP id g15-20020a6b760f000000b00785d28f1526mr2960814iom.3.1688671108093;
+        Thu, 06 Jul 2023 12:18:28 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id i13-20020a02ca4d000000b004267abdb240sm692774jal.38.2023.07.06.12.18.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 12:18:27 -0700 (PDT)
+Received: (nullmailer pid 177010 invoked by uid 1000);
+        Thu, 06 Jul 2023 19:18:25 -0000
+Date:   Thu, 6 Jul 2023 13:18:25 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Xu Yang <xu.yang_2@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/1] dt-bindings: usb: ci-hdrc-usb2: Fix number of clocks
+Message-ID: <20230706191825.GA170669-robh@kernel.org>
+References: <20230706093928.3580544-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: hp.com
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=WINDOWS-1252; x-default=true
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230706093928.3580544-1-alexander.stein@ew.tq-group.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-For Wake-on-LAN to work from S5 (shutdown), the USB link must be put
-in U3 state. If it is not, and the host "disappears", the chip will
-no longer respond to WoL triggers.
+On Thu, Jul 06, 2023 at 11:39:28AM +0200, Alexander Stein wrote:
+> Some (older) IP cores require 3 clocks, named 'ipg', 'ahb' and 'per' while
+> more recent IP cores just require one. Fix the number and explicitly
+> state the clock-names.
+> 
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+> >From I can tell, is that imx25, imx27, imx35 have specified 3 clocks in
+> their DT.
+> IMHO minItems for 'clock-names' can be removed as I presume that this
+> property is not set when only one clock is used.
 
-To resolve this, add a notifier block and register it as a reboot
-notifier. When WoL is enabled, work through the usb_device struct to
-get to the suspend function. Calling this function puts the link in
-the correct state for WoL to function.
+Rather than presume, did you test that? Well, I did[1] and can confirm.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Alexandru Gagniuc <alexandru.gagniuc@hp.com>
----
- drivers/net/usb/r8152.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 0999a58ca9d2..5623ca5c9142 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -20,6 +20,7 @@
- #include <net/ip6_checksum.h>
- #include <uapi/linux/mdio.h>
- #include <linux/mdio.h>
-+#include <linux/reboot.h>
- #include <linux/usb/cdc.h>
- #include <linux/suspend.h>
- #include <linux/atomic.h>
-@@ -875,6 +876,7 @@ struct r8152 {
- =09struct delayed_work schedule, hw_phy_work;
- =09struct mii_if_info mii;
- =09struct mutex control;=09/* use for hw setting */
-+=09struct notifier_block reboot_notifier;
- #ifdef CONFIG_PM_SLEEP
- =09struct notifier_block pm_notifier;
- #endif
-@@ -9609,6 +9611,25 @@ static bool rtl8152_supports_lenovo_macpassthru(stru=
-ct usb_device *udev)
- =09return 0;
- }
-=20
-+/* Suspend realtek chip before system shutdown
-+ *
-+ * For Wake-on-LAN to work from S5, the USB link must be put in U3 state. =
-If
-+ * the host otherwise "disappears", the chip will not respond to WoL trigg=
-ers.
-+ */
-+static int rtl8152_notify(struct notifier_block *nb, unsigned long code,
-+=09=09=09  void *unused)
-+{
-+=09struct r8152 *tp =3D container_of(nb, struct r8152, reboot_notifier);
-+=09struct device *dev =3D &tp->udev->dev;
-+
-+=09if (code =3D=3D SYS_POWER_OFF) {
-+=09=09if (tp->saved_wolopts && dev->type->pm->suspend)
-+=09=09=09dev->type->pm->suspend(dev);
-+=09}
-+
-+=09return NOTIFY_DONE;
-+}
-+
- static int rtl8152_probe(struct usb_interface *intf,
- =09=09=09 const struct usb_device_id *id)
- {
-@@ -9791,6 +9812,9 @@ static int rtl8152_probe(struct usb_interface *intf,
- =09else
- =09=09device_set_wakeup_enable(&udev->dev, false);
-=20
-+=09tp->reboot_notifier.notifier_call =3D rtl8152_notify;
-+=09register_reboot_notifier(&tp->reboot_notifier);
-+
- =09netif_info(tp, probe, netdev, "%s\n", DRIVER_VERSION);
-=20
- =09return 0;
-@@ -9811,6 +9835,7 @@ static void rtl8152_disconnect(struct usb_interface *=
-intf)
- =09if (tp) {
- =09=09rtl_set_unplug(tp);
-=20
-+=09=09unregister_reboot_notifier(&tp->reboot_notifier);
- =09=09unregister_netdev(tp->netdev);
- =09=09tasklet_kill(&tp->tx_tl);
- =09=09cancel_delayed_work_sync(&tp->hw_phy_work);
---=20
-2.39.1
-
+[1] https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230706093928.3580544-1-alexander.stein@ew.tq-group.com/
