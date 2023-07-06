@@ -2,74 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7078074A477
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jul 2023 21:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CB074A57D
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jul 2023 23:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbjGFTiG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jul 2023 15:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48950 "EHLO
+        id S232758AbjGFVDJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jul 2023 17:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjGFTiF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jul 2023 15:38:05 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8AF19B7;
-        Thu,  6 Jul 2023 12:38:03 -0700 (PDT)
-Received: from dungeon.fi (dungeon.fi [IPv6:2a00:d880:11::2cc])
+        with ESMTP id S229510AbjGFVC5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jul 2023 17:02:57 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A8619A7;
+        Thu,  6 Jul 2023 14:02:55 -0700 (PDT)
+Received: from localhost (2.general.sarnold.us.vpn [10.172.64.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: kasper)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 4Qxmyr208yzyTB;
-        Thu,  6 Jul 2023 22:37:55 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1688672277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gQlneAQMvJUO6eSppMGSwfIyIcJUiyBf4uAylUrlma0=;
-        b=PeWk86qGOjLjIsmdGLwga4ZgDo8+bVnFvODeRZnLEICNXTzDdphbJ4ZIb0aAq/4P7UsU4L
-        sEkBrY5QEmGAJ0JBTKxssayICX08K+0WA9w/s0u4JPDhehP4wOOaNFEsThSfQ/n3LfJokw
-        oQ/psx2gTh43cU3XZwbH2ICMHfBx6VE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1688672277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gQlneAQMvJUO6eSppMGSwfIyIcJUiyBf4uAylUrlma0=;
-        b=ggh98FEEwQukyFJxhuSZPBc5QjEyiZoBh66A73PoMi1PYqwf2J0gXaLGe/7aTK0fXgm1VO
-        fbr336wC009Ht4juy1q8glp8cep92GqyX9ZG7ryNwsrTDXJJ9YOTMIuDCh3Z4Wyfd54/Wj
-        oVf1IYDSDxZX1hI1bwmvtTp8LYlRfpk=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=kasper smtp.mailfrom=kasper@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1688672277; a=rsa-sha256; cv=none;
-        b=QI7pxDDs4v03+WI8g495xnxstqwnEi3kMSrmmzWSVbLLKAQ2lN0e6IGAKht3vi1epLcbqc
-        PnU9nwIss3HNbtURORdig7ZzCDss1XMVMsb9pa57EIEDTUKNVwx15Sk2NLYOoYv7ZWbf7X
-        WilPRQpMFpr6d/wke2nJswnRj0w7r0Q=
-Received: from [IPV6:2001:14ba:44e3:8200::2] (dkxv4fyyyyyyyyyyyyyby-3.rev.dnainternet.fi [IPv6:2001:14ba:44e3:8200::2])
-        by dungeon.fi (Postfix) with ESMTPSA id 49F793F4DA;
-        Thu,  6 Jul 2023 22:37:52 +0300 (EEST)
-Message-ID: <ae52e145-98b5-dd55-a4d8-5022c99b1129@iki.fi>
-Date:   Thu, 6 Jul 2023 22:37:51 +0300
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id EC65D3F31B;
+        Thu,  6 Jul 2023 21:02:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1688677359;
+        bh=wL7I+1AkkXlsdAXc0IgIVs00VMlkDlPzLoO7HtCH8Yo=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=UigHgg1tEN+F2JYmBK+lUOcRBpRtdrNgGbqup1NnaXOwyODWf/TTOdnjSM3EJKV2r
+         nSVjFudDceCGObMlTU+uma1muY2uaIkS7sazvVomlUh2z4Cx6T6ypWSOKoKTLr1e7n
+         Ld2z62ONf1z9dg8T10Z72Jl2h0B3vIxrVCycmYrM1jOwV4H0NyvFgu4GNfgDT4ln1d
+         cD6OBnHOJHdcMdNwqptcYXDLv4IErHsYENHamhLEH+hxLeB02yXRDCQTTC0JuBjK6l
+         ZNgX1V/W8Fy+2Orhx/aZTqqWjx/zv/bYCRboXEZa1I0V5mrDoaohFkaxDrb57pylVz
+         OTISOPjT4Hs9A==
+Date:   Thu, 6 Jul 2023 21:02:36 +0000
+From:   Seth Arnold <seth.arnold@canonical.com>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Damien Le Moal <dlemoal@kernel.org>, jk@ozlabs.org, arnd@arndb.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
+        maco@android.com, joel@joelfernandes.org, brauner@kernel.org,
+        cmllamas@google.com, surenb@google.com,
+        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
+        leon@kernel.org, bwarrum@linux.ibm.com, rituagar@linux.ibm.com,
+        ericvh@kernel.org, lucho@ionkov.net, asmadeus@codewreck.org,
+        linux_oss@crudebyte.com, dsterba@suse.com, dhowells@redhat.com,
+        marc.dionne@auristor.com, viro@zeniv.linux.org.uk,
+        raven@themaw.net, luisbg@kernel.org, salah.triki@gmail.com,
+        aivazian.tigran@gmail.com, ebiederm@xmission.com,
+        keescook@chromium.org, clm@fb.com, josef@toxicpanda.com,
+        xiubli@redhat.com, idryomov@gmail.com, jaharkes@cs.cmu.edu,
+        coda@cs.cmu.edu, jlbec@evilplan.org, hch@lst.de, nico@fluxnic.net,
+        rafael@kernel.org, code@tyhicks.com, ardb@kernel.org,
+        xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
+        jefflexu@linux.alibaba.com, linkinjeon@kernel.org,
+        sj1557.seo@samsung.com, jack@suse.com, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jaegeuk@kernel.org,
+        hirofumi@mail.parknet.co.jp, miklos@szeredi.hu,
+        rpeterso@redhat.com, agruenba@redhat.com, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        mikulas@artax.karlin.mff.cuni.cz, mike.kravetz@oracle.com,
+        muchun.song@linux.dev, dwmw2@infradead.org, shaggy@kernel.org,
+        tj@kernel.org, trond.myklebust@hammerspace.com, anna@kernel.org,
+        chuck.lever@oracle.com, neilb@suse.de, kolga@netapp.com,
+        Dai.Ngo@oracle.com, tom@talpey.com, konishi.ryusuke@gmail.com,
+        anton@tuxera.com, almaz.alexandrovich@paragon-software.com,
+        mark@fasheh.com, joseph.qi@linux.alibaba.com, me@bobcopeland.com,
+        hubcap@omnibond.com, martin@omnibond.com, amir73il@gmail.com,
+        mcgrof@kernel.org, yzaikin@google.com, tony.luck@intel.com,
+        gpiccoli@igalia.com, al@alarsen.net, sfrench@samba.org,
+        pc@manguebit.com, lsahlber@redhat.com, sprasad@microsoft.com,
+        senozhatsky@chromium.org, phillip@squashfs.org.uk,
+        rostedt@goodmis.org, mhiramat@kernel.org, dushistov@mail.ru,
+        hdegoede@redhat.com, djwong@kernel.org, naohiro.aota@wdc.com,
+        jth@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        hughd@google.com, akpm@linux-foundation.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        john.johansen@canonical.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        jgross@suse.com, stern@rowland.harvard.edu, lrh2000@pku.edu.cn,
+        sebastian.reichel@collabora.com, wsa+renesas@sang-engineering.com,
+        quic_ugoswami@quicinc.com, quic_linyyuan@quicinc.com,
+        john@keeping.me.uk, error27@gmail.com, quic_uaggarwa@quicinc.com,
+        hayama@lineo.co.jp, jomajm@gmail.com, axboe@kernel.dk,
+        dhavale@google.com, dchinner@redhat.com, hannes@cmpxchg.org,
+        zhangpeng362@huawei.com, slava@dubeyko.com, gargaditya08@live.com,
+        penguin-kernel@I-love.SAKURA.ne.jp, yifeliu@cs.stonybrook.edu,
+        madkar@cs.stonybrook.edu, ezk@cs.stonybrook.edu,
+        yuzhe@nfschina.com, willy@infradead.org, okanatov@gmail.com,
+        jeffxu@chromium.org, linux@treblig.org, mirimmad17@gmail.com,
+        yijiangshan@kylinos.cn, yang.yang29@zte.com.cn,
+        xu.xin16@zte.com.cn, chengzhihao1@huawei.com, shr@devkernel.io,
+        Liam.Howlett@Oracle.com, adobriyan@gmail.com,
+        chi.minghao@zte.com.cn, roberto.sassu@huawei.com,
+        linuszeng@tencent.com, bvanassche@acm.org, zohar@linux.ibm.com,
+        yi.zhang@huawei.com, trix@redhat.com, fmdefrancesco@gmail.com,
+        ebiggers@google.com, princekumarmaurya06@gmail.com,
+        chenzhongjin@huawei.com, riel@surriel.com,
+        shaozhengchao@huawei.com, jingyuwang_vip@163.com,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-usb@vger.kernel.org, v9fs@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
+        autofs@vger.kernel.org, linux-mm@kvack.org,
+        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        codalist@coda.cs.cmu.edu, ecryptfs@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        cluster-devel@redhat.com, linux-um@lists.infradead.org,
+        linux-mtd@lists.infradead.org,
+        jfs-discussion@lists.sourceforge.net, linux-nfs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        ntfs3@lists.linux.dev, ocfs2-devel@lists.linux.dev,
+        linux-karma-devel@lists.sourceforge.net, devel@lists.orangefs.org,
+        linux-unionfs@vger.kernel.org, linux-hardening@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org,
+        linux-trace-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org
+Subject: Re: [apparmor] [PATCH v2 08/92] fs: new helper:
+ simple_rename_timestamp
+Message-ID: <20230706210236.GB3244704@millbarge>
+References: <20230705185812.579118-1-jlayton@kernel.org>
+ <20230705185812.579118-3-jlayton@kernel.org>
+ <3b403ef1-22e6-0220-6c9c-435e3444b4d3@kernel.org>
+ <7c783969641b67d6ffdfb10e509f382d083c5291.camel@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <ZD1cy6omacYMRCLs@hovoldconsulting.com>
- <20230423185929.1595056-1-kasper@iki.fi>
- <ZJGduS4z5U65T7IL@hovoldconsulting.com>
-From:   Jarkko Sonninen <kasper@iki.fi>
-In-Reply-To: <ZJGduS4z5U65T7IL@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="E39vaYmALEf/7YXx"
+Content-Disposition: inline
+In-Reply-To: <7c783969641b67d6ffdfb10e509f382d083c5291.camel@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,223 +146,94 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/20/23 15:38, Johan Hovold wrote:
-> Hi Jarkko,
->
-> I've been waiting for you to send a v5 that addresses the issue that the
-> kernel test robot found, but I guess I can review the other changes in
-> v4 first.
 
-Thank you. Sorry for slow responses. My mind has been elsewhere.
+--E39vaYmALEf/7YXx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> On Sun, Apr 23, 2023 at 09:59:28PM +0300, Jarkko Sonninen wrote:
->> Exar devices like XR21B1411 can control an RS485 transceiver by
->> automatically asserting the RTS#/RS485 pin before sending data
->> and deasserting it when the last stop bit has been transmitted.
->> The polarity of the RST#/RS485 signal is configurable and the
->> hardware also supports half-duplex turn-around delay and
->> address matching mode.
->>
->> Add support for enabling and disabling RS-485 mode and
->> configuring the RST#/RS485 signal polarity using the TIOCGRS485
->> and TIOCSRS485 ioctls. Support for half-duplex turn-around delay
->> and address matching mode are left unimplemented for now.
->>
->> User enables RS-485 mode by setting SER_RS485_ENABLED flag in
->> struct serial_rs485 flags. User should also set either
->> SER_RS485_RTS_ON_SEND or SER_RS485_RTS_AFTER_SEND to select the
->> behaviour of the RTS#/RS485 pin. Setting SER_RS485_RTS_ON_SEND
->> will drive RTS#/RS485 high during transmission. As this is the
->> typical application described by Exar, it is selected when
->> user sets neither or both flags.
-> Thanks for updating the commit message here.
->
-> Since RTS# is active low, shouldn't SER_RS485_RTS_ON_SEND drive RTS# low
-> rather than high during transmission as I also pointed out earlier?
+On Wed, Jul 05, 2023 at 08:04:41PM -0400, Jeff Layton wrote:
+>=20
+> I don't believe it's an issue. I've seen nothing in the POSIX spec that
+> mandates that timestamp updates to different inodes involved in an
+> operation be set to the _same_ value. It just says they must be updated.
+>=20
+> It's also hard to believe that any software would depend on this either,
+> given that it's very inconsistent across filesystems today. AFAICT, this
+> was mostly done in the past just as a matter of convenience.
 
-I guess you are right. I'll change that.
+I've seen this assumption in several programs:
+
+mutt buffy.c
+https://sources.debian.org/src/mutt/2.2.9-1/buffy.c/?hl=3D625#L625
+
+  if (mailbox->newly_created &&
+      (sb->st_ctime !=3D sb->st_mtime || sb->st_ctime !=3D sb->st_atime))
+    mailbox->newly_created =3D 0;
 
 
-I use an exar usb adapter to control a solar charging controller. I 
-haven't found any other type of exar adapters in ebay.
+neomutt mbox/mbox.c
+https://sources.debian.org/src/neomutt/20220429+dfsg1-4.1/mbox/mbox.c/?hl=
+=3D1820#L1820
 
-This adapter uses high level (RTS off) on TX. So I really would like it 
-to work with the default configuration.
-
-I hope it is ok to use SER_RS485_RTS_AFTER_SEND as the default
-
-
->> Signed-off-by: Jarkko Sonninen <kasper@iki.fi>
->> ---
->> Changes in v3:
->>   - In this version only rs485.flags are stored to state.
->>   - There is no locking as only one bit of the flags is used.
->>   - ioctl returns -ENOIOCTLCMD as the actual error handling is in tty code.
->> Changes in v4:
->>   - Store struct rs485 to data
->>   - Add mutex to protect data->rs485.
->>   - Implement SER_RS485_RTS_ON_SEND or SER_RS485_RTS_AFTER_SEND flags
->>   - SER_RS485_RTS_ON_SEND is the default like in serial_core.c
->>
->>
->>   drivers/usb/serial/xr_serial.c | 93 +++++++++++++++++++++++++++++++++-
->>   1 file changed, 92 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/serial/xr_serial.c b/drivers/usb/serial/xr_serial.c
->> index fdb0aae546c3..a2157619b63c 100644
->> --- a/drivers/usb/serial/xr_serial.c
->> +++ b/drivers/usb/serial/xr_serial.c
->> @@ -19,6 +19,7 @@
->>   #include <linux/usb.h>
->>   #include <linux/usb/cdc.h>
->>   #include <linux/usb/serial.h>
->> +#include <linux/mutex.h>
-> Nit: keep the includes sorted alphabetically.
->
->>   struct xr_txrx_clk_mask {
->>   	u16 tx;
->> @@ -93,6 +94,7 @@ struct xr_txrx_clk_mask {
->>   #define XR_GPIO_MODE_SEL_DTR_DSR	0x2
->>   #define XR_GPIO_MODE_SEL_RS485		0x3
->>   #define XR_GPIO_MODE_SEL_RS485_ADDR	0x4
->> +#define XR_GPIO_MODE_RS485_TX_H		0x8
->>   #define XR_GPIO_MODE_TX_TOGGLE		0x100
->>   #define XR_GPIO_MODE_RX_TOGGLE		0x200
->>   
->> @@ -237,6 +239,8 @@ static const struct xr_type xr_types[] = {
->>   struct xr_data {
->>   	const struct xr_type *type;
->>   	u8 channel;			/* zero-based index or interface number */
->> +	struct serial_rs485 rs485;
->> +	struct mutex lock;
->>   };
->>   
->>   static int xr_set_reg(struct usb_serial_port *port, u8 channel, u16 reg, u16 val)
->> @@ -630,6 +634,7 @@ static void xr_set_flow_mode(struct tty_struct *tty,
->>   	const struct xr_type *type = data->type;
->>   	u16 flow, gpio_mode;
->>   	int ret;
->> +	bool rs485_enabled;
-> Nit: move above ret to maintain some approximation of reverse xmas style
-> declaration.
->
->>   
->>   	ret = xr_get_reg_uart(port, type->gpio_mode, &gpio_mode);
->>   	if (ret)
->> @@ -645,7 +650,17 @@ static void xr_set_flow_mode(struct tty_struct *tty,
->>   	/* Set GPIO mode for controlling the pins manually by default. */
->>   	gpio_mode &= ~XR_GPIO_MODE_SEL_MASK;
->>   
->> -	if (C_CRTSCTS(tty) && C_BAUD(tty) != B0) {
->> +	rs485_enabled = !!(data->rs485.flags & SER_RS485_ENABLED);
->> +	if (rs485_enabled) {
->> +		dev_dbg(&port->dev, "Enabling RS-485\n");
->> +		gpio_mode |= XR_GPIO_MODE_SEL_RS485;
->> +		if (data->rs485.flags & SER_RS485_RTS_ON_SEND)
->> +			gpio_mode |= XR_GPIO_MODE_RS485_TX_H;
->> +		else
->> +			gpio_mode &= ~XR_GPIO_MODE_RS485_TX_H;
-> As mentioned above, should this not be inverted?
->
->> +	}
->> +
->> +	if (C_CRTSCTS(tty) && C_BAUD(tty) != B0 && !rs485_enabled) {
->>   		dev_dbg(&port->dev, "Enabling hardware flow ctrl\n");
->>   		gpio_mode |= XR_GPIO_MODE_SEL_RTS_CTS;
->>   		flow = XR_UART_FLOW_MODE_HW;
->> @@ -809,6 +824,80 @@ static void xr_cdc_set_line_coding(struct tty_struct *tty,
->>   	kfree(lc);
->>   }
->>   
->> +static void xr_sanitize_serial_rs485(struct serial_rs485 *rs485)
->> +{
->> +	if (!(rs485->flags & SER_RS485_ENABLED)) {
->> +		memset(rs485, 0, sizeof(*rs485));
->> +		return;
->> +	}
-> This looks odd to me, but I see that this is what serial core is
-> currently doing...
->
->> +
->> +	/* Select RTS on send if the user hasn't selected the mode properly */
->> +	if (!!(rs485->flags & SER_RS485_RTS_ON_SEND) ==
->> +	    !!(rs485->flags & SER_RS485_RTS_AFTER_SEND)) {
->> +		rs485->flags |= SER_RS485_RTS_ON_SEND;
->> +		rs485->flags &= ~SER_RS485_RTS_AFTER_SEND;
->> +	}
->> +
->> +	/* Only the flags are implemented at the moment */
->> +	rs485->flags &= SER_RS485_ENABLED | SER_RS485_RTS_ON_SEND |
->> +			SER_RS485_RTS_AFTER_SEND;
->> +	rs485->delay_rts_before_send = 0;
->> +	rs485->delay_rts_after_send = 0;
->> +	memset(rs485->padding, 0, sizeof(rs485->padding));
->> +}
->> +
->> +static int xr_get_rs485_config(struct tty_struct *tty,
->> +			       struct serial_rs485 *argp)
-> You still need __user annotation here as the build robot reported.
->
->> +{
->> +	struct usb_serial_port *port = tty->driver_data;
->> +	struct xr_data *data = usb_get_serial_port_data(port);
->> +
->> +	mutex_lock(&data->lock);
-> This does not prevent the termios structure from changing underneath
-> you. You need to take a write lock on the termios rw sem here instead.
+  if (m->newly_created && ((st.st_ctime !=3D st.st_mtime) || (st.st_ctime !=
+=3D st.st_atime)))
+    m->newly_created =3D false;
 
 
-I'll change these to "down_read(&tty->termios_rwsem);" and 
-"up_read(&tty->termios_rwsem);"
+screen logfile.c
+https://sources.debian.org/src/screen/4.9.0-4/logfile.c/?hl=3D130#L130
 
-I would feel safer by using a local variable "struct serial_rs485" to 
-minimize the holding of the semaphore.
+  if ((!s->st_dev && !s->st_ino) ||             /* stat failed, that's new!=
+ */
+      !s->st_nlink ||                           /* red alert: file unlinked=
+ */
+      (s->st_size < o.st_size) ||               /*           file truncated=
+ */
+      (s->st_mtime !=3D o.st_mtime) ||            /*            file modifi=
+ed */
+      ((s->st_ctime !=3D o.st_ctime) &&           /*     file changed (move=
+d) */
+       !(s->st_mtime =3D=3D s->st_ctime &&          /*  and it was not a ch=
+ange */
+         o.st_ctime < s->st_ctime)))            /* due to delayed nfs write=
+ */
+  {
 
+nemo libnemo-private/nemo-vfs-file.c
+https://sources.debian.org/src/nemo/5.6.5-1/libnemo-private/nemo-vfs-file.c=
+/?hl=3D344#L344
 
->
->> +	if (copy_to_user(argp, &data->rs485, sizeof(data->rs485))) {
->> +		mutex_unlock(&data->lock);
->> +		return -EFAULT;
->> +	}
->> +	mutex_unlock(&data->lock);
->> +
->> +	return 0;
->> +}
->> +
->> +static int xr_set_rs485_config(struct tty_struct *tty,
->> +			       struct serial_rs485 *argp)
-> missing __user
->
->> +{
->> +	struct usb_serial_port *port = tty->driver_data;
->> +	struct xr_data *data = usb_get_serial_port_data(port);
->> +	struct serial_rs485 rs485;
->> +
->> +	if (copy_from_user(&rs485, argp, sizeof(rs485)))
->> +		return -EFAULT;
->> +	xr_sanitize_serial_rs485(&rs485);
->> +
->> +	mutex_lock(&data->lock);
-> Same here as set_termios() (and xr_set_flow_mode()) can otherwise be
-> called in parallel.
+		/* mtime is when the contents changed; ctime is when the
+		 * contents or the permissions (inc. owner/group) changed.
+		 * So we can only know when the permissions changed if mtime
+		 * and ctime are different.
+		 */
+		if (file->details->mtime =3D=3D file->details->ctime) {
+			return FALSE;
+		}
 
 
-I'll change these to "down_write(&tty->termios_rwsem);" and 
-"up_write(&tty->termios_rwsem);"
+While looking for more examples, I found a perl test that seems to suggest
+that at least Solaris, AFS, AmigaOS, DragonFly BSD do as you suggest:
+https://sources.debian.org/src/perl/5.36.0-7/t/op/stat.t/?hl=3D158#L140
 
 
->> +	data->rs485 = rs485;
->> +	xr_set_flow_mode(tty, port, NULL);
->> +	mutex_unlock(&data->lock);
->> +
->> +	if (copy_to_user(argp, &rs485, sizeof(rs485)))
->> +		return -EFAULT;
->> +
->> +	return 0;
->> +}
-> Looks good otherwise.
->
-> Johan
+Thanks
 
-      - Jarkko
+--E39vaYmALEf/7YXx
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEQVAQ8bojyMcg37H18yFyWZ2NLpcFAmSnK+gACgkQ8yFyWZ2N
+Lpd3gQf6AtE8sBL09BSTvT1P5I8tCXnJ4U7VbzQxWTcKAQHRpyZn8IRSdWuxiPEU
+soaBmSx6jov+kkZYX5uP1LSM1INMYpJTJELGas9A7wenNppBGS07LjwAL40wouPm
+UfcVWQqOgM8eoseMKBKePv5TkTJFn/M3cPK9Wy31E+qF1IPMNtxz9JKz109YlDOO
+FxVTwBGGxxKvx3SsUl6hdaqBCK3omZlbWCzqSyqBzzvjgZ01VC5ktw5FuuTABbu8
+TScNnT5GtO5AE8RV0T3TKISm19xD69JHQt/etFeU2yKwiBsn89pY4Xut3CrxbSQm
+prQ7ssP3/fi41WxFFDQzO/oQok/b+A==
+=/KNl
+-----END PGP SIGNATURE-----
+
+--E39vaYmALEf/7YXx--
