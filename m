@@ -2,126 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028C7749E1D
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jul 2023 15:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB32749E1E
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jul 2023 15:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjGFNtB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jul 2023 09:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
+        id S232007AbjGFNtH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jul 2023 09:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjGFNs6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jul 2023 09:48:58 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2054.outbound.protection.outlook.com [40.107.96.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F2E1990
-        for <linux-usb@vger.kernel.org>; Thu,  6 Jul 2023 06:48:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=apZe5dqNknjIpZH0gmmn0iT70TlyrO7Nh9JXcTNJ3S447rogHW+EgBuJymCIviDeginC36ut+VgmPIFYKedO2L4npo3CIoXOLvFQ4xZWSaGEVjbXUfBNnqOZQfcZtH9kKeXhkeF3UQG779SVjNrLGWMealmL+nXRt4LHNLhaVvLSMGIRNLuAccVwuRBp+kh6ypxtRB5a8VjiejUScfEwCC0pNaO4lze5C5GxwoQIuMoiL/hJdk9udg41J3GDFzT3BJNC0zSxe6VPlD0iOV+7CtssFW5MpSOUH1NNf4JlRNofCs0y/CQxOmcxIs98VJia13ukzV+E45QKi4ktuztFvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TKkuBiuiNMf+dAGWa5wjdh8InZyUXt5LHSYzu6kP7Dk=;
- b=GrSUAzg36TfwTHyFY2tRd+vaXFA2b/opF94kVh6ozzZqoNHDhaUHA9CLOeGQ+ZZlfS4YZrHKlNaNkjHJ1IzkAfXAwLSrtL8JtRkecejoj6P8nd36BCsUFHtcYNECCa2VBrctz0FUmmVYYnUfSXRVA1V+oC7tDDJvgLBrFK5TZXwSu1jURoOeW4RGDSxe/CoaaruJdqM7Cd6j90rcf1PMqDM8oj0WxwmxU0/26NA9J/CjwRlc4x4g6RRKuyPqA/k17GUvVuffTWP0k7NIFx4Emfa746/qp1nhS8vUeGSFDtsBf2nVRdc6bVeOiSqmBDxcjUptWgxjAGXEBsV/Php43w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TKkuBiuiNMf+dAGWa5wjdh8InZyUXt5LHSYzu6kP7Dk=;
- b=BHsgGSscv7t/A/QlX/lFXUfP6eNNugadLZRDH3tqEIzz/lF5gb9WMuempjA3Q+KElUs2U6s8qaH27ita4zNOvqivg2tdkMxJndDEPnx+JFZGsqGM3+8Ig6JDvKWNP58YIQABv52SZbCNwD753T+kmpbjY8erRBN7coiQoOTBoSY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6326.namprd12.prod.outlook.com (2603:10b6:8:a3::15) by
- CH2PR12MB4168.namprd12.prod.outlook.com (2603:10b6:610:a8::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6565.24; Thu, 6 Jul 2023 13:48:53 +0000
-Received: from DM4PR12MB6326.namprd12.prod.outlook.com
- ([fe80::9e88:305c:5d24:2f0]) by DM4PR12MB6326.namprd12.prod.outlook.com
- ([fe80::9e88:305c:5d24:2f0%6]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
- 13:48:53 +0000
-Message-ID: <c1be3001-0df6-68e8-a024-3f0d6d8c37dc@amd.com>
-Date:   Thu, 6 Jul 2023 19:18:38 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH Internal] thunderbolt: Remove enabling/disabling TMU based
- on CLx
-Content-Language: en-US
-From:   Sanjay R Mehta <sanmehta@amd.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Sanjay R Mehta <Sanju.Mehta@amd.com>, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com,
-        linux-usb@vger.kernel.org, Sanath S <Sanath.S@amd.com>
-References: <1687343842-17881-1-git-send-email-Sanju.Mehta@amd.com>
- <20230621111525.GL45886@black.fi.intel.com>
- <5fe10a65-4538-cdbd-a0a6-827f9445cee4@amd.com>
- <20230621125406.GM45886@black.fi.intel.com>
- <a1959444-9f9d-5a3e-65cf-abb681d8bc74@amd.com>
-In-Reply-To: <a1959444-9f9d-5a3e-65cf-abb681d8bc74@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN0PR01CA0025.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:4e::13) To DM4PR12MB6326.namprd12.prod.outlook.com
- (2603:10b6:8:a3::15)
+        with ESMTP id S229509AbjGFNtF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jul 2023 09:49:05 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F321990;
+        Thu,  6 Jul 2023 06:49:04 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366AsPaY018900;
+        Thu, 6 Jul 2023 13:49:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=7Cpj3QvckdCcnQmh8EzvGDtgP4bc9V7BUNFPKA7zVAc=;
+ b=GUvdzncr+OZa9sf36nOmclVLOESNju8e7TMD9KVXXXhyFBgjVcru8xly5UtYNAWfCF58
+ V4zaCXcAI9RlR+vFhBCJU5KwLW3LKyXlkwUv1JYXIfXfxzuVJ7Y1D2Yef8/abiFodj8O
+ ya220LaMdiOyjqzvjNUKTaCa/+mHLUHg3RuvNPtxLAvitxtcbuK0F2aoJxJEXXVjKlJP
+ c3VUJ1qvzjpxeHyjFhbjPVsWciTsVX/0M3ddCv6is7PHIeO15XAG/OwLLmYQukhC4wls
+ k+iRl+JJuFoIUE7UZJuScdH80auOtTFxi310TqKZp1DDJptFtnzPmmtjWLyeHnNrRATe EQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rn5ht393u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 13:49:01 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 366Dn0GK014191
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 6 Jul 2023 13:49:00 GMT
+Received: from [10.216.57.11] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Thu, 6 Jul
+ 2023 06:48:57 -0700
+Message-ID: <fb973659-c645-a4f2-e0fe-a40536e8b9fc@quicinc.com>
+Date:   Thu, 6 Jul 2023 19:18:53 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6326:EE_|CH2PR12MB4168:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9e600ce4-566f-4719-b887-08db7e27bc15
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mmpP+G1/txSJkrgZzRiunNOvf5Z1ooekGHVBKYECtlcg2thP2zyq+PH8Z5GTnNXJHB2WG3VE00Eh6WE5AQ/FPn1qOktk4+QOj3a/c5J4h1rt9vqgWmQ6IvS5PXbru3jf49v4wv/emtIISgN0lp1dFxVmLyihyiHhQPagnfqPc+nszvS/qMPrfHmmLXnuJQY6Ejl/7zBAwnavTW3KHHy8VFeGZgnWjVtD3rfLM4f3cWdeyK8nPLASD4V1RkMCHABrkEfD1pL/oQ0GEWbKS3a/D4y7s/sw/pDPLv9f7gfwI+mg5S2fRvesHtS2ueSXWJmlYfl5w2HEVekDYCgXg6yVx/F+GVhRXSEJwGhaUekKBy1gXWDVtbZZxufoKgamXFVXJSiTcxUfvleYfFsYGwG5htbW7+Eu/G8j5hDFnoWWKBwEpfi7mPQwH7AMbJYIVJJhAHEiym5CniaKIOWSahJcrziR4LDvyBvPO59hITBBXaGK5YoiIvNPzudn3894OwEchJXCVtE+nyoTWPrzBv5GSR7btBhkSTZ8UNXar4Q81lIcNdYw6yGPicoVWuZn8+0YSon8sVFvnqEg7C7i8fS5h7PoBYsuVE2EZq9ed/uZGXMA/v3rnD0KL0UaY9R3aBic32loieBxOW82LHanah+LPA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6326.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(136003)(376002)(39860400002)(366004)(451199021)(8936002)(5660300002)(8676002)(66476007)(66556008)(66946007)(316002)(6916009)(4326008)(41300700001)(2906002)(54906003)(6486002)(6666004)(6512007)(2616005)(26005)(6506007)(186003)(53546011)(31686004)(478600001)(83380400001)(36756003)(31696002)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aU9zM0lKQ1RaQ21zRWl4WW1sQ2svVFVSeUhYTEZpWVZPZDlGRlluRkkzVU40?=
- =?utf-8?B?eXpma1c4QXRVZmI0U1JiWmlUOFBLTjdrdDU5OHExZG45QXhPanB3TDdUaDAv?=
- =?utf-8?B?UUlrbS82Y25CcloraUJLbTRyZTBZbXBUTjBwanllMjF2YkRqN012L01jcFE1?=
- =?utf-8?B?YnF5eFJSSUlvMHg0MFA1cGtESUxnMW1QRnFCekY0TXJpODlTZkR2bEQxTEps?=
- =?utf-8?B?eVNxQklCT3NRZVhBSjc5QjNKYXNTakQzWXhHNkdpSXBBcTR3ZEgzbHlocHlY?=
- =?utf-8?B?UHc1SVFyRHY2VDVIckhkeVdmQ3NMOGRIVVBWNlk4MVpwTVRzYUFydXhsbTkr?=
- =?utf-8?B?V0NWR3ZPN3RkazNKWkloekRnN1hXVjZTTG1wUkVPRUxPb0lNZVFmT2Q2OEhx?=
- =?utf-8?B?eWhaRG1manRGV0d5bkxlN0dlbUZqeE54SFpncmtoZEo3bUNFSjRXZVZqdlRq?=
- =?utf-8?B?N0NGVWhBbUxIWERxbHFYQ2Y4VUFHZ0t4dm5RZ2RnRWtDZVFjcDdkU29vQ0d1?=
- =?utf-8?B?ZVVvZjFtaFNXRkx3OGdGZWZZNTM1SllraGJOTE50MHAzWHlMOFBYMTcrVUJz?=
- =?utf-8?B?RzlIVWlVSmJ4TVFNZnhSSitKR2lLOGo0L2tFeTdYNnhkK1VKMDFCNUQ2SU41?=
- =?utf-8?B?L0l1KzVwR1pTa3M2RlovNC96NEsxcFI1ZktJVnZsYlhxTlBOMTQySEZKZlhj?=
- =?utf-8?B?STlBZDFhN0Y2dEpqZEliT0RhTFBicWtrVFNWb3V1NHlqR1JhVzZYWkU2dWI5?=
- =?utf-8?B?N0lqY1Z2R3NrNFh0THdrcFNzdTQwWXdYRXhYTndCUVdNaU9zOTNyZkoyd0lY?=
- =?utf-8?B?aFpJeDU2ODZPNzgxOWtVYjJ6VGVnVFlWSithZ3FEK0Q3aEY3eVQvRzliWmw1?=
- =?utf-8?B?UW92TEFPNVFSUDBpVlhZM3Rxb2Z3d3gyUjZ2UkgwVTI5OXB6S0ZhMU9vU2Mv?=
- =?utf-8?B?em5UV0ZMcUI0TzJWWG9oRmlqR0VHeDl3QjVWaEpHNlpGNGJpQXZkK1pjSWo2?=
- =?utf-8?B?M0hrQytWZVNpYWRGTEpkbFM2ZFlYY1JPU3Y1QjB2aHZHMm9HZ2VwSG94TXE2?=
- =?utf-8?B?NTNUZ1VJRHZGL3VQQmMwMEYrZHkyNkY4S1RJeTNhelVhWjVxSW5ISFpUaWU2?=
- =?utf-8?B?WFBMdGRRcUkzWnNwdE1zeHY3UStzMXg4QUxrWDZORkVlWFlGL2JINXI2bUlF?=
- =?utf-8?B?c0dVUk1zQjByb0U1cTcyUWtWSEJKYVRsNTk1VUNyQ2pnS1JBN2E0b3c2eXl2?=
- =?utf-8?B?RXRySlZLY1NSUFJ6aFhicFpMSkFLWm1FM1pZT0tnWElKcjJEakw1NG5KZ3ZN?=
- =?utf-8?B?bmFYNUNaUS9namxVbHQrZkExYnRFRlFkRVdkanpERU5oR3FPSzNlREhrQTBv?=
- =?utf-8?B?dlpDcGx2a0ZFN2t2ekluemVFNnNIeG41ZjNvR2FSTTloWTRIeGZEMnBYc2ov?=
- =?utf-8?B?WFgwajNGOE1pYnhuaWJXeDFVbGFrMG1XYjRKa2ZjWXZvdkxKZEtZb05oaldQ?=
- =?utf-8?B?L3YwRG5aNzEzQ2hMamFmR0NCSGVlbG43aUtXTUYyeWFwR0ppakNLc1FaOTF1?=
- =?utf-8?B?RDlucXhhZVlEYjRKclluWnYvcW1na0xjeEFlbHUvMzduSEsvUTJXV0YySnMy?=
- =?utf-8?B?ekZjcmltOXA0OW1DUHd2dkY4SUtMQmc2YlRiL0Zrc09raTNUc2c0ZWtmcGxG?=
- =?utf-8?B?R3k0dDl3dkE2WXhQQ0FNc1R3bWUwdWR3R0VqbjBveU9uSjlHMHNhcHE5N2NK?=
- =?utf-8?B?aGgxK2tiQ2VaSHUrSU5mMjEyMjkxYnBZMysybnl1MWprdmt1akJ2L3RJd0Vl?=
- =?utf-8?B?R0xXWWp2eWtpRGtVNGs5clRkWmFuWkYzWGo2Myt3RllqVDN3U1ZQTUdQaFdT?=
- =?utf-8?B?Tnh3K3JyWU9sNXhjRVYyZ0hhVm4wcjRNSjZteDh1UjQ4cWVIYkptczB2MTNJ?=
- =?utf-8?B?bC9RZ2xJV0V1Z1pwU1kweFZuMlNhZVgxQm11YTJPK3F3Um42aUp1bGVQR1hU?=
- =?utf-8?B?ajl2UW5rQ3prYlhwdFRVVkFOaDJraXdJSXIzVFc5S3dZRVZCSVJwakZuSlpV?=
- =?utf-8?B?dDAwdEFrVzc3UzBCU0kxNUJRYjV2RVBWbndVMjA4Q0owWXhQWTdBeFhaRndu?=
- =?utf-8?Q?/RDJcNOMJIHSxoBX6iKiKQUC+?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e600ce4-566f-4719-b887-08db7e27bc15
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6326.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 13:48:53.1151
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jpIM6/s8bLnvXFTbik3kX9bGIprILloxEa05yiWxBdImWIvcSHeAbCl7IUqwQJ3M70CLfEAroZdKaflGROpe1A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4168
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.1
+Subject: Re: [PATCH v2] usb: dwc3: core: set force_gen1 bit in USB31 devices
+ if max speed is SS
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
+        "quic_ugoswami@quicinc.com" <quic_ugoswami@quicinc.com>
+References: <20230514145118.20973-1-quic_kriskura@quicinc.com>
+ <20230517001105.v74dyo6asqtcrpii@synopsys.com>
+Content-Language: en-US
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <20230517001105.v74dyo6asqtcrpii@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: aBITCC__nrX_cAoYpbSYUKDUwnHNMCyz
+X-Proofpoint-GUID: aBITCC__nrX_cAoYpbSYUKDUwnHNMCyz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-06_10,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 clxscore=1015 malwarescore=0 suspectscore=0 bulkscore=0
+ mlxscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307060123
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -130,117 +87,65 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On 6/21/2023 9:37 PM, Sanjay R Mehta wrote:
+On 5/17/2023 5:41 AM, Thinh Nguyen wrote:
+> On Sun, May 14, 2023, Krishna Kurapati wrote:
+>> Currently for dwc3_usb31 controller, if maximum_speed is limited to
+>> super-speed in DT, then device mode is limited to SS, but host mode
+>> still works in SSP.
+>>
+>> The documentation for max-speed property is as follows:
+>>
+>> "Tells USB controllers we want to work up to a certain speed.
+>> Incase  this isn't passed via DT, USB controllers should default to
+>> their maximum HW capability."
+>>
+>> It doesn't specify that the property is only for device mode.
+>> There are cases where we need to limit the host's maximum speed to
+>> SuperSpeed only. Use this property for host mode to contrain host's
+>> speed to SuperSpeed.
+>>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>> Link to v1: https://urldefense.com/v3/__https://lore.kernel.org/all/20230512170107.18821-1-quic_kriskura@quicinc.com/__;!!A4F2R9G_pg!dCg_3WK2oNXNb6d0a_VuyjkeeZJTU1aY4dik6g35XB7mtG7EJeR1uPMfxFja49OfXp7Yhsg1yqjnylCYYEg7YCAhqfAZ0Q$
+>>
+>> Discussion regarding the same at:
+>> https://urldefense.com/v3/__https://lore.kernel.org/all/e465c69c-3a9d-cbdb-d44e-96b99cfa1a92@quicinc.com/__;!!A4F2R9G_pg!dCg_3WK2oNXNb6d0a_VuyjkeeZJTU1aY4dik6g35XB7mtG7EJeR1uPMfxFja49OfXp7Yhsg1yqjnylCYYEg7YCDRLUrJWg$
+>>
+>>   drivers/usb/dwc3/core.c | 8 ++++++++
+>>   drivers/usb/dwc3/core.h | 5 +++++
+>>   2 files changed, 13 insertions(+)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index 278cd1c33841..33bc72595e74 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -1262,6 +1262,14 @@ static int dwc3_core_init(struct dwc3 *dwc)
+>>   		}
+>>   	}
+>>   
+>> +	if ((hw_mode != DWC3_GHWPARAMS0_MODE_GADGET) &&
+>> +	    (DWC3_IP_IS(DWC31)) &&
+>> +	    (dwc->maximum_speed == USB_SPEED_SUPER)) {
+>> +		reg = dwc3_readl(dwc->regs, DWC3_LLUCTL);
+>> +		reg |= DWC3_LLUCTL_FORCE_GEN1;
+>> +		dwc3_writel(dwc->regs, DWC3_LLUCTL, reg);
+>> +	}
+>> +
 > 
+> Perhaps this should be done for every usb3 port rather than just the
+> port_0. This patch can go after your multi-port series is added to
+> Greg's branch where you can check for number of usb3 ports.
 > 
-> On 6/21/2023 6:24 PM, Mika Westerberg wrote:
->> On Wed, Jun 21, 2023 at 05:48:21PM +0530, Sanjay R Mehta wrote:
->>>
->>>
->>> On 6/21/2023 4:45 PM, Mika Westerberg wrote:
->>>> On Wed, Jun 21, 2023 at 05:37:22AM -0500, Sanjay R Mehta wrote:
->>>>> From: Sanath S <Sanath.S@amd.com>
->>>>>
->>>>> Since TMU is enabled by default on Intel SOCs for USB4 before Alpine
->>>>> Ridge, explicit enabling or disabling of TMU is not required.
->>>>>
->>>>> However, the current implementation of enabling or disabling TMU based
->>>>> on CLx state is inadequate as not all SOCs with CLx disabled have TMU
->>>>> enabled by default, such as AMD Yellow Carp and Pink Sardine.
->>>>>
->>>>> To address this, a quirk named "QUIRK_TMU_DEFAULT_ENABLED" is
->>>>> implemented to skip the enabling or disabling of TMU for SOCs where it
->>>>> is already enabled by default, such as Intel SOCs prior to Alpine Ridge.
->>>>
->>>> If it is enabled by default "enabling" it again should not be a problem.
->>>> Can you elaborate this more?
->>>
->>> Although that is correct, Mika, we are facing an issue of display
->>> flickering on Alpine Ridge and older device routers, from the second
->>> hotplug onwards. This issue arises as the TMU is enabled and disabled
->>> for each plug and unplug.
->>
->> Okay thanks for clarifying.
->>
->>> Upon reviewing the old code, it appears that this issue was already
->>> addressed with the following code block:
->>>
->>> /*
->>>  * No need to enable TMU on devices that don't support CLx since on
->>>  * these devices e.g. Alpine Ridge and earlier, the TMU mode HiFi
->>>  * bi-directional is enabled by default.
->>>  */
->>> if (!tb_switch_is_clx_supported(sw))
->>>         return 0;
->>>
->>>
->>> However, it seems that this code has been removed in recent changes, as
->>> the CLX-related code has been moved to a different file.
->>
->> Yes, I removed it because TMU code should not really be calling CLx
->> functions.
->>
->> However, we have in tb_enable_tmu() this:
->>
->> 	/* If it is already enabled in correct mode, don't touch it */
->> 	if (tb_switch_tmu_is_enabled(sw))
->> 		return 0;
->>
->> and tb_switch_tmu_init() reads the hardware state so this code should
->> basically leave TMU enabling untouched on Alpine Ridge for instance. I
->> wonder if you can try with the latest "next" branch and see if it works
->> there or you are already doing so?
->>
-> Yes Mika, we have already verified with the latest thunderbolt/next
-> branch. This patch is built on top of next branch.
+> Thanks,
+> Thinh
 > 
->>> Canonical has also reported this issue and has tested this patch that
->>> appears to resolve the issue..
->>
->> Right, however let's figure out if the problem is already solved with
->> the recent code as above or if not why it does not work as expected. I
->> don't really think we want to add any quirks for this because even in
->> the USB4 spec the TMU of TBT3 devices is expected to be enabled already
->> so this is expected functionality and the driver should be doing the
->> right thing here.
-> 
-> Agree. we will have to see what is going wrong in this case.
 
-Hi Mika,
+Hi Thinh,
 
-When an unplug event occurs, the TMU is disabled by configuring the
-TSPacketInterval bits in TMU_RTR_CS_3 to 0 using the
-tb_switch_tmu_rate_write() API, followed by disabling the Time
-Synchronization Handshake using the DTS bit in TMU_ADP_CS_6. The code
-snippet for this functionality is present in the tb_switch_tmu_disable()
-function, as shown below:
+   Seems like multiport would take little more time and I need this 
+patch to be ported to ACK for fixing customer issue. Would it be 
+possible to take this patch as is ? Once multiport is done, I will send 
+another patch to include the changes for mutliport as well.
 
-```
-tb_switch_tmu_rate_write(sw, TB_SWITCH_TMU_RATE_OFF);
-tb_port_tmu_time_sync_disable(up);
-ret = tb_port_tmu_time_sync_disable(down);
-if (ret)
-    return ret;
-```
-
-However, we have observed that the tb_switch_tmu_rate_write() function
-fails to disable the TMU rate, and the code proceeds with disabling the
-Time Synchronization Handshake. To address this issue, we have modified
-the code to check the return value of the tb_switch_tmu_rate_write()
-function and only proceed with disabling the Time Synchronization
-Handshake if the TMU rate disabling succeeds. The updated code is as
-follows:
-
-```
-ret = tb_switch_tmu_rate_write(sw, tmu_rates[TB_SWITCH_TMU_MODE_OFF]);
-if (ret)
-    return ret;
-tb_port_tmu_time_sync_disable(up);
-ret = tb_port_tmu_time_sync_disable(down);
-if (ret)
-    return ret;
-```
-
-Please let us know your thoughts on this solution.
-
-- Sanjay
+Regards,
+Krishna,
