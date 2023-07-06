@@ -2,115 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2203F749B14
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jul 2023 13:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD04749DD3
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jul 2023 15:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232547AbjGFLqD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jul 2023 07:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46424 "EHLO
+        id S232070AbjGFNeW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jul 2023 09:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232442AbjGFLqC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jul 2023 07:46:02 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A14DB;
-        Thu,  6 Jul 2023 04:46:00 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qHNQr-0005yC-LV; Thu, 06 Jul 2023 13:45:57 +0200
-Message-ID: <e1fdc435-089c-8ce7-d536-ce3780a4ba95@leemhuis.info>
-Date:   Thu, 6 Jul 2023 13:45:57 +0200
+        with ESMTP id S232196AbjGFNeU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jul 2023 09:34:20 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FAF1BF2
+        for <linux-usb@vger.kernel.org>; Thu,  6 Jul 2023 06:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688650455; x=1720186455;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=Dz/QKbDIX6Z8PZHHtd6ZkXD88qD/q9Qa1sfZcK9W/4U=;
+  b=j2lkDrRREvyfAz35fsNYANz4M6pusGrpb39dBeO7XQjyJbxom7Tcvv5O
+   xosIVstY4aWqJuHwNazBYBY97zI4PXYCzeYuYkOnrCBcN6Jkp44ZNjEax
+   Jj4pJxNa03f/+a8b77Tx2GfukhhA5kqbGsjmutLRaXh6AWx1ASQtb3EBG
+   D5b+uSNdshABMyj8aPbfmAapjxxU/t1cy6OK0PU0rF5rNw4XF9/dna6w/
+   okwVDY1dLig+DGwO3iwONMgqzsZe/BwtJ7wlxB8ure/pr2yeyypiMvmFG
+   yrpivr/uMC3eyfy8/v1cvEAYAuLTYHN4OPskjviZhv1fFY+wsIsubdz+c
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="348391907"
+X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
+   d="scan'208";a="348391907"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 06:34:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="832946451"
+X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
+   d="scan'208";a="832946451"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Jul 2023 06:34:12 -0700
+Message-ID: <8b96cd69-324a-8f9e-fcd2-4681a43c2020@linux.intel.com>
+Date:   Thu, 6 Jul 2023 16:35:41 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: Fwd: 3 more broken Zaurii - SL-5600, A300, C700
-Content-Language: en-US, de-DE
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ross Maynard <bids.7405@bigpond.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux USB <linux-usb@vger.kernel.org>,
-        Dave Jones <davej@codemonkey.org.uk>,
-        Oliver Neukum <oneukum@suse.com>
-References: <7ea9abd8-c35d-d329-f0d4-c8bd220cf691@gmail.com>
- <50f4c10d-260c-cb98-e7d2-124f5519fa68@gmail.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <50f4c10d-260c-cb98-e7d2-124f5519fa68@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688643961;684324a0;
-X-HE-SMSGID: 1qHNQr-0005yC-LV
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ Firefox/102.0 Thunderbird/102.10.0
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_Schaubschl=c3=a4ger?= 
+        <christian.schaubschlaeger@gmx.at>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+References: <a45b9989-c9da-bf4e-94c8-3e1341777b4d@gmx.at>
+ <20230526123655.GW45886@black.fi.intel.com>
+ <0bbb844d-3348-dc28-311a-d4111f8a7f81@linux.intel.com>
+ <2d12af30-4a7c-5fb3-fab8-5759296c68ac@gmx.at>
+ <20230530105039.GF45886@black.fi.intel.com>
+ <d6e7e0d5-0b30-d66c-2ee8-4f0c0caef0b9@gmx.at>
+ <20230530121756.GG45886@black.fi.intel.com>
+ <a22f8874-c2b3-92a5-e858-b877872e5284@gmx.at>
+ <894ba559-9233-4428-69e7-7c0bf5c7556e@gmx.at>
+ <b45b5e8a-756e-fd76-64af-d3e376997a31@linux.intel.com>
+ <618d9789-fc5a-10b3-6dc9-27be5bbff666@gmx.at>
+ <dd62787f-a04c-01ce-6a16-6a116f0f9c3b@linux.intel.com>
+ <36d37597-c0fb-cbaa-dd7c-0f3d6b4050c1@gmx.at>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: USB issue on a TB4 controller?
+In-Reply-To: <36d37597-c0fb-cbaa-dd7c-0f3d6b4050c1@gmx.at>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 06.07.23 05:08, Bagas Sanjaya wrote:
-> On 7/5/23 09:09, Bagas Sanjaya wrote:
->>
->> I notice a regression report on Bugzilla [1]. Quoting from it:
->>
->>> The following patch broke support of 3 more Zaurus models: SL-5600, A300 and C700
->>>
->>> [16adf5d07987d93675945f3cecf0e33706566005] usbnet: Remove over-broad module alias from zaurus
+Hi
 
-Side note: I wonder if the time spend on tracking and fighting
-regressions from v3.0 would better be spend elsewhere. But whatever,
-let's at least try.
-
->>> dmesg and lsusb output attached.
->>
->> Because the description above was vague, I asked the clarification.
->> The reporter replied:
->>
->>> The problem is that networking to SL-5600 / A300 / C700 devices does not 
->>> work. I cannot ping the devices.
->>>
->>> The error is occurring in zaurus.c. dmesg is missing the following line:
->>>
->>> zaurus 2-2:1.0 usb0: register 'zaurus' at usb-0000:00:1d.0-2, 
->>> pseudo-MDLM (BLAN) device, 2a:01:39:93:bc:1a
->>>
->>> A patch was created in 2022 to fix the same problem with the SL-6000:
->>>
->>> USB: zaurus: support another broken Zaurus - 
->>> [6605cc67ca18b9d583eb96e18a20f5f4e726103c]
->>>
->>> Could you please create another patch for the 3 devices: SL-5600 / A300 
->>> / C700?
->>
->> See Bugzilla for the full thread and attached dmesg and lsusb.
->>
->> Dave: The reporter asked to write the quirk for affected devices.
->> Would you like to create it?
+On 4.7.2023 16.38, Christian Schaubschläger wrote:
+> Hi Mathias,
 > 
-> Thorsten: Email to the culprit author (Dave) bounced.
+> today I got access to another Dell Latitude model, which shows the exact same issue as the Latitude from before. This time it's a slightly older model with a 12th gen Intel CPU:
+> 
+>    [    0.000000] DMI: Dell Inc. Latitude 5430/0260KT, BIOS 1.12.0 03/20/2023
+>    [    0.092576] smpboot: CPU0: 12th Gen Intel(R) Core(TM) i5-1245U (family: 0x6, model: 0x9a, stepping: 0x4)
+> 
+> The issue is very easy to reproduce: just boot a recent Ubuntu 23.04 from an USB device, reboot, and the network interface on the dock is gone. Only re-plugging the dock's USB cable (or shutting down and restarting the system) helps to recover the net interface on the dock. I have three docks here (Dell WD19TB, Dell WD22TB4, Lenovo USB-C), all three show the same behaviour. Running the most recent linux kernel does not help.
+> 
+> If I can provide any useful logs I'd be happy to help, just let me know.
+> 
 
-He sometimes shows up on Linux kernel lists, but I doubt he cares about
-that change after all these years. And I would not blame him at all.
-Yes, we have the "no regressions" rule, but contributing a change to the
-kernel OTOH should not mean that you are responsible for all regressions
-it causes for your whole life. :-)
+I have to check if we have similar machines and docks laying around.
+I'm away until August so there will be some delay on my side
 
-> What can
-> I do in this case? Should I start adding get_maintainer.pl output?
+Thanks
+Mathias
 
-Yeah, that's not much helpful here afaics, as most of those that would
-care are CCed already.
 
-I'm CCing Oliver, he sent the fix mentioned above for the SL-6000. Maybe
-he cares.
+> Thanks and best regards,
+> Christian
+> 
+> 
+> Am 01.06.23 um 15:54 schrieb Mathias Nyman:
+>> On 31.5.2023 14.56, Christian Schaubschläger wrote:
+>>> Hi,
+>>>
+>>>> Attached is a patch that adds more debugging, adds a minimum
+>>>> "power on to power good" delay, (as hub reports 0ms), and checks port link
+>>>> states during hub initialization.
+>>>>
+>>>> Does it help? Could you take logs with that patch applied.
+>>>>
+>>>> Only dmesg with xhci and usbcore dynamic debug are needed.
+>>>> xhci traces won't help as issue seems to be between the hub inthe dock and the NIC
+>>> patch applied, see logs in the attachment. The behaviour is unchanged.
+>>>
+>>> Thanks,
+>>> Christian
+>> Thanks,
+>>
+>> In the failed case the hub in the dock doesn't show any activity
+>> on port4 where the NIC is connected. No changes, link isn't in any
+>> error state. It looks just like any empty port.
+>>
+>> I don't have any idea what's going on.
+>>
+>> I guess it's not possible to connect a protocol analyzer between the
+>> hub in the dock and the NIC?
+>>
+>> ok success case:
+>>
+>> [    1.712754] usb 6-2-port1: status 02a0 change 0000
+>> [    1.713070] usb 6-2-port2: status 02a0 change 0000
+>> [    1.713567] usb 6-2-port3: status 0203 change 0010  <- another hub
+>> [    1.714184] usb 6-2-port4: status 0203 change 0010  <- NIC
+>>
+>> nok failed case:
+>>
+>> [    1.716756] usb 6-2-port1: status 02a0 change 0000
+>> [    1.717036] usb 6-2-port2: status 02a0 change 0000
+>> [    1.717395] usb 6-2-port3: status 0203 change 0010  <- another hub
+>> [    1.717976] usb 6-2-port4: status 02a0 change 0000
+>>
+>> Thanks
+>> Mathias
+> 
 
-If not I guess this won't be fixed, unless we find somebody else to care
-enough to submit a patch.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
