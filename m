@@ -2,123 +2,235 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6106474940B
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jul 2023 05:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0978B749597
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jul 2023 08:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233201AbjGFDIq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jul 2023 23:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
+        id S233609AbjGFG2i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jul 2023 02:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjGFDI3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jul 2023 23:08:29 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247CF1BF7;
-        Wed,  5 Jul 2023 20:08:29 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so209948a12.1;
-        Wed, 05 Jul 2023 20:08:29 -0700 (PDT)
+        with ESMTP id S233269AbjGFG2g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jul 2023 02:28:36 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DF419B7
+        for <linux-usb@vger.kernel.org>; Wed,  5 Jul 2023 23:28:32 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-991f956fb5aso32703866b.0
+        for <linux-usb@vger.kernel.org>; Wed, 05 Jul 2023 23:28:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688612908; x=1691204908;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        d=linaro.org; s=google; t=1688624911; x=1691216911;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=qkswXhgVYLum5NAuYw9zYKn7kb93ZCamEnpThtSqHNc=;
-        b=S3is4OStCcuBp9VXOE2UDwGY1EdZNPtDBNIShgNjO2ImugFGUKpwVRwPpSRa0+C6ee
-         lvANFsMxW1CNYqXS0/WWuK7Y5+aiH4ZURb5ItUIinZOMeL4QgqyRlPCF9GuoIHmiIscu
-         XPKcSvn6XDiu98lirHCA1rWuWmpdA07TLqsXU9tTYjunKKR6ArzdVNy+zjB584hwsTt3
-         GUfD99svNOngxdn/SYf+WHgvY5io9RbYmwKo5RXDnZN3M+DHCx1+Y8mDPXQhVzqLBqmM
-         5Fat7gJD0npAwHt3alPSauqFApN6RqU86demE4lm2grNV1dI8amc9YXEBSMlxM1koPSN
-         PZjQ==
+        bh=Pqu4vTxoeW2yTwRCEetSQZvh47NKMtjn0RrXMB1JAGg=;
+        b=dRSL6aukgIkfv+NlQasUhI0WW8PrgXzou5v2QVss3xqfKaQ4M1Yt2cin2pOZmhQd17
+         mLGsmRk6KQ96V2gbe6flKfOcIDP8C6aJ94MYdy2hTnRpIigR7o/uS07D4CETNP/87UAG
+         Te3mFVnmowcotJ+p+kvuGY85+Df/k9sYz1L9gl3LDrpMcUkuBaCO8WTequflxZTiDoTT
+         JMZMZqgL5RQtdtgjCToseEau/xKW62TMq6KzpDrpxszgG+HHnYaK/7KRjWMGum9WC1ss
+         tpYb7Y62RIr5F4RyB4vq3Q8QtCd9PUd2GSuCjupyh7ZdQj3zgjJEZ/rUnmhwmkQP56L0
+         GcnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688612908; x=1691204908;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        d=1e100.net; s=20221208; t=1688624911; x=1691216911;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qkswXhgVYLum5NAuYw9zYKn7kb93ZCamEnpThtSqHNc=;
-        b=XKUdROJChHPnIxPHTUaM9ncCAdxqq6UHOTalGEWr7cUD5rzIkh9duLg7qio04fMLdV
-         rPG3NX3UGO7KrTbtJ1gsHr8csoHDKjl/jNbMZ6ta2JRytzeDd00NPzXfUJHVJE8aYhMV
-         B6GEMKdFzZFOiN7h/QydwL3h1/ZwW6+MuLviQz2x1UiiHwWKEwl1fbROtOJxaa/7ppr+
-         NURfWzJibkBYKvwN0I2bSTButCTm8z1zaZBlKtGPVKsgcFeGfL7M+1GkQGT3mVSe0eLu
-         MKPUy02vQy9wI/xpFcWNgTMryAxdrLHQdzgxLK2AY3xTVcwqzXMO/Gwy25BuUWwPypp8
-         TY8g==
-X-Gm-Message-State: ABy/qLaaSTBDDOERFBGU8rzs9Tmal8Rc8ZqtvSq89BUb4Dv3D5OUxOkb
-        f9y1Um/8QDNZGZNECs6rOAxsHUn6HPLMwho7
-X-Google-Smtp-Source: APBJJlGylu/y1J6UmD5L0LCkDB3980SfnVTwY5UUOgqM0SRWc727bzWb5tomce3Ltd6cmX+TmhrHew==
-X-Received: by 2002:a05:6a20:13d9:b0:12d:d379:6e6c with SMTP id ho25-20020a056a2013d900b0012dd3796e6cmr681861pzc.11.1688612908443;
-        Wed, 05 Jul 2023 20:08:28 -0700 (PDT)
-Received: from [192.168.0.103] ([103.131.18.64])
-        by smtp.gmail.com with ESMTPSA id x23-20020aa793b7000000b00673e652985esm220170pff.44.2023.07.05.20.08.25
+        bh=Pqu4vTxoeW2yTwRCEetSQZvh47NKMtjn0RrXMB1JAGg=;
+        b=V6Mkg0vSe3OvQvMFItwMtmSHlIpZMLqtt00XfPV6rAHppgdetn7mI0uCTAG+1sBe+k
+         GKAnzNjQ7c8EjFfHz2VjsUxDhcdtj526vuXyUBisWRoZumyzT2z5ojS9JO1iIEy87/Lv
+         C7Oz0k66Uvm6xyeiQPYEVDMXDAn1H1cA4X/AZs4JbLeLZuyY9BEHZ23QZqS1V2M8aPcr
+         Z5bt9Ou3MJ1Y9Efv7XGdVePKXR995RCx/KuiQxc16zNf+0nJRgjpYHNNJqvF8UELeLy3
+         z000y1ueVCDsV1eR6stUEqlvBh4zb74/ftARZ4/0klMlSuCcVVH0LthbET4iWIqoSRPV
+         E+Rw==
+X-Gm-Message-State: ABy/qLa08tPgIdoHdBpyuHAWUQAoH7NBY0nTGKg9VeYDtmtlF4IChpK4
+        YBQGVB9IdXXMgoxX+uvdKMneTw==
+X-Google-Smtp-Source: APBJJlEu2RGF4uBuUPfkX4wlSxPa3Cu2L5C0YRWwOysyPz8/vFYVscoSMwhTBIDQpkpak+dxq034Sw==
+X-Received: by 2002:a17:906:10cf:b0:991:8328:50e3 with SMTP id v15-20020a17090610cf00b00991832850e3mr696668ejv.9.1688624910680;
+        Wed, 05 Jul 2023 23:28:30 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id lf20-20020a170906ae5400b009920e9a3a73sm372590ejb.115.2023.07.05.23.28.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 20:08:27 -0700 (PDT)
-Message-ID: <50f4c10d-260c-cb98-e7d2-124f5519fa68@gmail.com>
-Date:   Thu, 6 Jul 2023 10:08:20 +0700
+        Wed, 05 Jul 2023 23:28:30 -0700 (PDT)
+Message-ID: <e871ad32-dfa4-067d-4f2c-207ffd42aafd@linaro.org>
+Date:   Thu, 6 Jul 2023 08:28:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: Fwd: 3 more broken Zaurii - SL-5600, A300, C700
+Subject: Re: [PATCH 02/10] dt-bindings: bus: add device tree bindings for
+ RIFSC
 Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Dave Jones <davej@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ross Maynard <bids.7405@bigpond.com>,
-        "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux USB <linux-usb@vger.kernel.org>
-References: <7ea9abd8-c35d-d329-f0d4-c8bd220cf691@gmail.com>
-In-Reply-To: <7ea9abd8-c35d-d329-f0d4-c8bd220cf691@gmail.com>
+To:     Gatien Chevallier <gatien.chevallier@foss.st.com>,
+        Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, alexandre.torgue@foss.st.com,
+        vkoul@kernel.org, jic23@kernel.org, olivier.moysan@foss.st.com,
+        arnaud.pouliquen@foss.st.com, mchehab@kernel.org,
+        fabrice.gasnier@foss.st.com, andi.shyti@kernel.org,
+        ulf.hansson@linaro.org, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, hugues.fruchet@foss.st.com, lee@kernel.org,
+        will@kernel.org, catalin.marinas@arm.com, arnd@kernel.org,
+        richardcochran@gmail.com
+Cc:     linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
+ <20230705172759.1610753-3-gatien.chevallier@foss.st.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230705172759.1610753-3-gatien.chevallier@foss.st.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/5/23 09:09, Bagas Sanjaya wrote:
-> Hi,
+On 05/07/2023 19:27, Gatien Chevallier wrote:
+> Document RIFSC (RIF security controller). RIFSC is a firewall controller
+> composed of different kinds of hardware resources.
 > 
-> I notice a regression report on Bugzilla [1]. Quoting from it:
-> 
->> The following patch broke support of 3 more Zaurus models: SL-5600, A300 and C700
->>
->> [16adf5d07987d93675945f3cecf0e33706566005] usbnet: Remove over-broad module alias from zaurus
->>
->> dmesg and lsusb output attached.
-> 
-> Because the description above was vague, I asked the clarification.
-> The reporter replied:
-> 
->> The problem is that networking to SL-5600 / A300 / C700 devices does not 
->> work. I cannot ping the devices.
->>
->> The error is occurring in zaurus.c. dmesg is missing the following line:
->>
->> zaurus 2-2:1.0 usb0: register 'zaurus' at usb-0000:00:1d.0-2, 
->> pseudo-MDLM (BLAN) device, 2a:01:39:93:bc:1a
->>
->> A patch was created in 2022 to fix the same problem with the SL-6000:
->>
->> USB: zaurus: support another broken Zaurus - 
->> [6605cc67ca18b9d583eb96e18a20f5f4e726103c]
->>
->> Could you please create another patch for the 3 devices: SL-5600 / A300 
->> / C700?
-> 
-> See Bugzilla for the full thread and attached dmesg and lsusb.
-> 
-> Dave: The reporter asked to write the quirk for affected devices.
-> Would you like to create it?
-> 
+> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
 
-Thorsten: Email to the culprit author (Dave) bounced. What can
-I do in this case? Should I start adding get_maintainer.pl output?
+A nit, subject: drop second/last, redundant "device tree bindings for".
+The "dt-bindings" prefix is already stating that these are bindings. 4
+words of your 6 word subject is meaningless...
 
--- 
-An old man doll... just what I always wanted! - Clara
+> ---
+>  .../bindings/bus/st,stm32-rifsc.yaml          | 101 ++++++++++++++++++
+>  1 file changed, 101 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml b/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
+> new file mode 100644
+> index 000000000000..68d585ed369c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
+
+Filename like compatible, unless you know list of compatibles will
+grow... but then add them.
+
+> @@ -0,0 +1,101 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/bus/st,stm32-rifsc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: STM32 Resource isolation framework security controller bindings
+
+Drop bindings
+
+> +
+> +maintainers:
+> +  - Gatien Chevallier <gatien.chevallier@foss.st.com>
+> +
+> +description: |
+> +  Resource isolation framework (RIF) is a comprehensive set of hardware blocks
+> +  designed to enforce and manage isolation of STM32 hardware resources like
+> +  memory and peripherals.
+> +
+> +  The RIFSC (RIF security controller) is composed of three sets of registers,
+> +  each managing a specific set of hardware resources:
+> +    - RISC registers associated with RISUP logic (resource isolation device unit
+> +      for peripherals), assign all non-RIF aware peripherals to zero, one or
+> +      any security domains (secure, privilege, compartment).
+> +    - RIMC registers: associated with RIMU logic (resource isolation master
+> +      unit), assign all non RIF-aware bus master to one security domain by
+> +      setting secure, privileged and compartment information on the system bus.
+> +      Alternatively, the RISUP logic controlling the device port access to a
+> +      peripheral can assign target bus attributes to this peripheral master port
+> +      (supported attribute: CID).
+> +    - RISC registers associated with RISAL logic (resource isolation device unit
+> +      for address space - Lite version), assign address space subregions to one
+> +      security domains (secure, privilege, compartment).
+> +
+> +properties:
+> +  compatible:
+> +    const: st,stm32mp25-rifsc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 1
+> +
+> +  "#feature-domain-cells":
+> +    const: 1
+> +
+> +  ranges: true
+> +
+> +  feature-domain-controller: true
+> +
+> +patternProperties:
+> +  "^.*@[0-9a-f]+$":
+> +    description: Peripherals
+> +    type: object
+> +    properties:
+> +      feature-domains:
+> +        minItems: 1
+> +        maxItems: 2
+> +        description:
+> +          The first argument must always be a phandle that references to the
+> +          firewall controller of the peripheral. The second can contain the
+> +          platform specific firewall ID of the peripheral.
+
+It does not make much sense to me to have hierarchy parent-child and via
+phandle at the same time. You express the similar relationship twice.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - feature-domain-controller
+> +  - "#feature-domain-cells"
+> +  - ranges
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    // In this example, the usart2 device refers to rifsc as its domain
+> +    // controller.
+> +    // Access rights are verified before creating devices.
+> +
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    rifsc: rifsc-bus@42080000 {
+> +        compatible = "st,stm32mp25-rifsc";
+> +        reg = <0x42080000 0x1000>;
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +        ranges;
+> +        feature-domain-controller;
+> +        #feature-domain-cells = <1>;
+> +
+> +        usart2: serial@400e0000 {
+> +            compatible = "st,stm32h7-uart";
+> +            reg = <0x400e0000 0x400>;
+> +            interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
+> +            clocks = <&ck_flexgen_08>;
+> +            feature-domains = <&rifsc 32>;
+> +            status = "disabled";
+
+No status in the examples.
+
+> +        };
+> +    };
+
+Best regards,
+Krzysztof
 
