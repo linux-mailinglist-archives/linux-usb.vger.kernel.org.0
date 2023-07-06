@@ -2,210 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3420874A435
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jul 2023 21:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27AA374A3D1
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jul 2023 20:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232347AbjGFTGT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jul 2023 15:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
+        id S231935AbjGFSb5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jul 2023 14:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjGFTGO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jul 2023 15:06:14 -0400
-X-Greylist: delayed 5284 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Jul 2023 12:06:12 PDT
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E491BDB;
-        Thu,  6 Jul 2023 12:06:12 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:40568)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1qHQio-00FMgf-7e; Thu, 06 Jul 2023 09:16:42 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:55228 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1qHQim-00AsXt-Fk; Thu, 06 Jul 2023 09:16:41 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     jk@ozlabs.org, arnd@arndb.de, mpe@ellerman.id.au,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
-        maco@android.com, joel@joelfernandes.org, brauner@kernel.org,
-        cmllamas@google.com, surenb@google.com,
-        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
-        leon@kernel.org, bwarrum@linux.ibm.com, rituagar@linux.ibm.com,
-        ericvh@kernel.org, lucho@ionkov.net, asmadeus@codewreck.org,
-        linux_oss@crudebyte.com, dsterba@suse.com, dhowells@redhat.com,
-        marc.dionne@auristor.com, viro@zeniv.linux.org.uk,
-        raven@themaw.net, luisbg@kernel.org, salah.triki@gmail.com,
-        aivazian.tigran@gmail.com, keescook@chromium.org, clm@fb.com,
-        josef@toxicpanda.com, xiubli@redhat.com, idryomov@gmail.com,
-        jaharkes@cs.cmu.edu, coda@cs.cmu.edu, jlbec@evilplan.org,
-        hch@lst.de, nico@fluxnic.net, rafael@kernel.org, code@tyhicks.com,
-        ardb@kernel.org, xiang@kernel.org, chao@kernel.org,
-        huyue2@coolpad.com, jefflexu@linux.alibaba.com,
-        linkinjeon@kernel.org, sj1557.seo@samsung.com, jack@suse.com,
-        tytso@mit.edu, adilger.kernel@dilger.ca, jaegeuk@kernel.org,
-        hirofumi@mail.parknet.co.jp, miklos@szeredi.hu,
-        rpeterso@redhat.com, agruenba@redhat.com, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        mikulas@artax.karlin.mff.cuni.cz, mike.kravetz@oracle.com,
-        muchun.song@linux.dev, dwmw2@infradead.org, shaggy@kernel.org,
-        tj@kernel.org, trond.myklebust@hammerspace.com, anna@kernel.org,
-        chuck.lever@oracle.com, neilb@suse.de, kolga@netapp.com,
-        Dai.Ngo@oracle.com, tom@talpey.com, konishi.ryusuke@gmail.com,
-        anton@tuxera.com, almaz.alexandrovich@paragon-software.com,
-        mark@fasheh.com, joseph.qi@linux.alibaba.com, me@bobcopeland.com,
-        hubcap@omnibond.com, martin@omnibond.com, amir73il@gmail.com,
-        mcgrof@kernel.org, yzaikin@google.com, tony.luck@intel.com,
-        gpiccoli@igalia.com, al@alarsen.net, sfrench@samba.org,
-        pc@manguebit.com, lsahlber@redhat.com, sprasad@microsoft.com,
-        senozhatsky@chromium.org, phillip@squashfs.org.uk,
-        rostedt@goodmis.org, mhiramat@kernel.org, dushistov@mail.ru,
-        hdegoede@redhat.com, djwong@kernel.org, dlemoal@kernel.org,
-        naohiro.aota@wdc.com, jth@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, hughd@google.com, akpm@linux-foundation.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, john.johansen@canonical.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        jgross@suse.com, stern@rowland.harvard.edu, lrh2000@pku.edu.cn,
-        sebastian.reichel@collabora.com, wsa+renesas@sang-engineering.com,
-        quic_ugoswami@quicinc.com, quic_linyyuan@quicinc.com,
-        john@keeping.me.uk, error27@gmail.com, quic_uaggarwa@quicinc.com,
-        hayama@lineo.co.jp, jomajm@gmail.com, axboe@kernel.dk,
-        dhavale@google.com, dchinner@redhat.com, hannes@cmpxchg.org,
-        zhangpeng362@huawei.com, slava@dubeyko.com, gargaditya08@live.com,
-        penguin-kernel@I-love.SAKURA.ne.jp, yifeliu@cs.stonybrook.edu,
-        madkar@cs.stonybrook.edu, ezk@cs.stonybrook.edu,
-        yuzhe@nfschina.com, willy@infradead.org, okanatov@gmail.com,
-        jeffxu@chromium.org, linux@treblig.org, mirimmad17@gmail.com,
-        yijiangshan@kylinos.cn, yang.yang29@zte.com.cn,
-        xu.xin16@zte.com.cn, chengzhihao1@huawei.com, shr@devkernel.io,
-        Liam.Howlett@Oracle.com, adobriyan@gmail.com,
-        chi.minghao@zte.com.cn, roberto.sassu@huawei.com,
-        linuszeng@tencent.com, bvanassche@acm.org, zohar@linux.ibm.com,
-        yi.zhang@huawei.com, trix@redhat.com, fmdefrancesco@gmail.com,
-        ebiggers@google.com, princekumarmaurya06@gmail.com,
-        chenzhongjin@huawei.com, riel@surriel.com,
-        shaozhengchao@huawei.com, jingyuwang_vip@163.com,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-usb@vger.kernel.org, v9fs@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
-        autofs@vger.kernel.org, linux-mm@kvack.org,
-        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        codalist@coda.cs.cmu.edu, ecryptfs@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        cluster-devel@redhat.com, linux-um@lists.infradead.org,
-        linux-mtd@lists.infradead.org,
-        jfs-discussion@lists.sourceforge.net, linux-nfs@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        ntfs3@lists.linux.dev, ocfs2-devel@lists.linux.dev,
-        linux-karma-devel@lists.sourceforge.net, devel@lists.orangefs.org,
-        linux-unionfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org,
-        linux-trace-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org
-References: <20230705185812.579118-1-jlayton@kernel.org>
-        <a4e6cfec345487fc9ac8ab814a817c79a61b123a.camel@kernel.org>
-Date:   Thu, 06 Jul 2023 10:16:19 -0500
-In-Reply-To: <a4e6cfec345487fc9ac8ab814a817c79a61b123a.camel@kernel.org> (Jeff
-        Layton's message of "Wed, 05 Jul 2023 17:57:46 -0400")
-Message-ID: <87ilaxgjek.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S229802AbjGFSb4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jul 2023 14:31:56 -0400
+X-Greylist: delayed 84 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Jul 2023 11:31:02 PDT
+Received: from us-smtp-delivery-162.mimecast.com (us-smtp-delivery-162.mimecast.com [170.10.129.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662891BF8
+        for <linux-usb@vger.kernel.org>; Thu,  6 Jul 2023 11:31:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hp.com; s=mimecast20180716;
+        t=1688668261;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=i6byuPgD0BdV+edMY+7xoBI+stlHVgHroGrstvZaliE=;
+        b=NYNIXWBKf74CNt9iQqkDQygusfeSVV6ed3w9/9TJQQU32OvJ6Oxa77utJQD8LTNDTbe1uK
+        bgnRq4q4OloFLYdGWbV9Wv3iggYnh9JsWkSW3VZbPcRpyLg1Dw33OvcGSDD2CqDST5oizA
+        kcZF5WOwsQu8WtP9RJd4rlDphYLYhqY=
+Received: from g1t6220.austin.hp.com (g1t6220.austin.hp.com [15.73.96.84])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-543-YG3C5vQoPEWLGQiUhrdSxA-1; Thu, 06 Jul 2023 14:29:35 -0400
+X-MC-Unique: YG3C5vQoPEWLGQiUhrdSxA-1
+Received: from g1t6217.austin.hpicorp.net (g1t6217.austin.hpicorp.net [15.67.1.144])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by g1t6220.austin.hp.com (Postfix) with ESMTPS id C072C23B;
+        Thu,  6 Jul 2023 18:29:33 +0000 (UTC)
+Received: from jam-buntu.lan (unknown [15.74.50.248])
+        by g1t6217.austin.hpicorp.net (Postfix) with ESMTP id 516B189;
+        Thu,  6 Jul 2023 18:29:32 +0000 (UTC)
+From:   Alexandru Gagniuc <alexandru.gagniuc@hp.com>
+To:     linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, hayeswang@realtek.com, jflf_kernel@gmx.com,
+        bjorn@mork.no, svenva@chromium.org, linux-kernel@vger.kernel.org,
+        eniac-xw.zhang@hp.com,
+        Alexandru Gagniuc <alexandru.gagniuc@hp.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] r8152: Suspend USB device before shutdown when WoL is enabled
+Date:   Thu,  6 Jul 2023 18:28:58 +0000
+Message-Id: <20230706182858.761311-1-alexandru.gagniuc@hp.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1qHQim-00AsXt-Fk;;;mid=<87ilaxgjek.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX19hfnilZzLMqG1RlF+DuMto1+nqSkCNAbk=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: hp.com
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=WINDOWS-1252; x-default=true
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Jeff Layton <jlayton@kernel.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 959 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 12 (1.2%), b_tie_ro: 10 (1.1%), parse: 1.62
-        (0.2%), extract_message_metadata: 4.3 (0.4%), get_uri_detail_list:
-        1.88 (0.2%), tests_pri_-2000: 2.4 (0.3%), tests_pri_-1000: 10 (1.1%),
-        tests_pri_-950: 1.27 (0.1%), tests_pri_-900: 1.56 (0.2%),
-        tests_pri_-200: 0.85 (0.1%), tests_pri_-100: 4.3 (0.4%),
-        tests_pri_-90: 283 (29.5%), check_bayes: 278 (29.0%), b_tokenize: 27
-        (2.9%), b_tok_get_all: 20 (2.1%), b_comp_prob: 4.6 (0.5%),
-        b_tok_touch_all: 220 (23.0%), b_finish: 0.94 (0.1%), tests_pri_0: 616
-        (64.3%), check_dkim_signature: 0.56 (0.1%), check_dkim_adsp: 2.8
-        (0.3%), poll_dns_idle: 0.55 (0.1%), tests_pri_10: 2.2 (0.2%),
-        tests_pri_500: 9 (0.9%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v2 00/89] fs: new accessors for inode->i_ctime
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Jeff Layton <jlayton@kernel.org> writes:
+For Wake-on-LAN to work from S5 (shutdown), the USB link must be put
+in U3 state. If it is not, and the host "disappears", the chip will
+no longer respond to WoL triggers.
 
-> On Wed, 2023-07-05 at 14:58 -0400, Jeff Layton wrote:
->> v2:
->> - prepend patches to add missing ctime updates
->> - add simple_rename_timestamp helper function
->> - rename ctime accessor functions as inode_get_ctime/inode_set_ctime_*
->> - drop individual inode_ctime_set_{sec,nsec} helpers
->> 
->> I've been working on a patchset to change how the inode->i_ctime is
->> accessed in order to give us conditional, high-res timestamps for the
->> ctime and mtime. struct timespec64 has unused bits in it that we can use
->> to implement this. In order to do that however, we need to wrap all
->> accesses of inode->i_ctime to ensure that bits used as flags are
->> appropriately handled.
->> 
->> The patchset starts with reposts of some missing ctime updates that I
->> spotted in the tree. It then adds a new helper function for updating the
->> timestamp after a successful rename, and new ctime accessor
->> infrastructure.
->> 
->> The bulk of the patchset is individual conversions of different
->> subsysteme to use the new infrastructure. Finally, the patchset renames
->> the i_ctime field to __i_ctime to help ensure that I didn't miss
->> anything.
->> 
->> This should apply cleanly to linux-next as of this morning.
->> 
->> Most of this conversion was done via 5 different coccinelle scripts, run
->> in succession, with a large swath of by-hand conversions to clean up the
->> remainder.
->> 
->
-> A couple of other things I should note:
->
-> If you sent me an Acked-by or Reviewed-by in the previous set, then I
-> tried to keep it on the patch here, since the respun patches are mostly
-> just renaming stuff from v1. Let me know if I've missed any.
->
-> I've also pushed the pile to my tree as this tag:
->
->     https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/tag/?h=ctime.20230705
->
-> In case that's easier to work with.
+To resolve this, add a notifier block and register it as a reboot
+notifier. When WoL is enabled, work through the usb_device struct to
+get to the suspend function. Calling this function puts the link in
+the correct state for WoL to function.
 
-Are there any preliminary patches showing what you want your introduced
-accessors to turn into?  It is hard to judge the sanity of the
-introduction of wrappers without seeing what the wrappers are ultimately
-going to do.
+Cc: stable@vger.kernel.org
+Signed-off-by: Alexandru Gagniuc <alexandru.gagniuc@hp.com>
+---
+ drivers/net/usb/r8152.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-Eric
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 0999a58ca9d2..5623ca5c9142 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -20,6 +20,7 @@
+ #include <net/ip6_checksum.h>
+ #include <uapi/linux/mdio.h>
+ #include <linux/mdio.h>
++#include <linux/reboot.h>
+ #include <linux/usb/cdc.h>
+ #include <linux/suspend.h>
+ #include <linux/atomic.h>
+@@ -875,6 +876,7 @@ struct r8152 {
+ =09struct delayed_work schedule, hw_phy_work;
+ =09struct mii_if_info mii;
+ =09struct mutex control;=09/* use for hw setting */
++=09struct notifier_block reboot_notifier;
+ #ifdef CONFIG_PM_SLEEP
+ =09struct notifier_block pm_notifier;
+ #endif
+@@ -9609,6 +9611,25 @@ static bool rtl8152_supports_lenovo_macpassthru(stru=
+ct usb_device *udev)
+ =09return 0;
+ }
+=20
++/* Suspend realtek chip before system shutdown
++ *
++ * For Wake-on-LAN to work from S5, the USB link must be put in U3 state. =
+If
++ * the host otherwise "disappears", the chip will not respond to WoL trigg=
+ers.
++ */
++static int rtl8152_notify(struct notifier_block *nb, unsigned long code,
++=09=09=09  void *unused)
++{
++=09struct r8152 *tp =3D container_of(nb, struct r8152, reboot_notifier);
++=09struct device *dev =3D &tp->udev->dev;
++
++=09if (code =3D=3D SYS_POWER_OFF) {
++=09=09if (tp->saved_wolopts && dev->type->pm->suspend)
++=09=09=09dev->type->pm->suspend(dev);
++=09}
++
++=09return NOTIFY_DONE;
++}
++
+ static int rtl8152_probe(struct usb_interface *intf,
+ =09=09=09 const struct usb_device_id *id)
+ {
+@@ -9791,6 +9812,9 @@ static int rtl8152_probe(struct usb_interface *intf,
+ =09else
+ =09=09device_set_wakeup_enable(&udev->dev, false);
+=20
++=09tp->reboot_notifier.notifier_call =3D rtl8152_notify;
++=09register_reboot_notifier(&tp->reboot_notifier);
++
+ =09netif_info(tp, probe, netdev, "%s\n", DRIVER_VERSION);
+=20
+ =09return 0;
+@@ -9811,6 +9835,7 @@ static void rtl8152_disconnect(struct usb_interface *=
+intf)
+ =09if (tp) {
+ =09=09rtl_set_unplug(tp);
+=20
++=09=09unregister_reboot_notifier(&tp->reboot_notifier);
+ =09=09unregister_netdev(tp->netdev);
+ =09=09tasklet_kill(&tp->tx_tl);
+ =09=09cancel_delayed_work_sync(&tp->hw_phy_work);
+--=20
+2.39.1
+
