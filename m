@@ -2,255 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 092EA74B7E4
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jul 2023 22:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F9BC74B9C2
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Jul 2023 01:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231849AbjGGUdZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jul 2023 16:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49174 "EHLO
+        id S231799AbjGGXAn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jul 2023 19:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjGGUdV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jul 2023 16:33:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B1B1986;
-        Fri,  7 Jul 2023 13:33:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05BCF61A71;
-        Fri,  7 Jul 2023 20:33:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B4ABC433C8;
-        Fri,  7 Jul 2023 20:33:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688761999;
-        bh=6QgMyrqXqeI6SEHa107HdWgEq35vmLXVAeALwcT+lDs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Gx9KJf9fL/mmok1L7S1JEw98F7rQhqcE0z1w8BHJD17srLItsZuymDl+Vh6LuOMqc
-         4alUEBZ5opvgHkrhgxf7bnhwEXvTA+lJ+2wjTvLnBj5RIOrUBEqvzoLMwkvr5kKOo5
-         yISOGrruanfS4vCw4yBo4KjJkpCqE5P53NTnagcHPGIOblr6h6cNsX8ys6OcsyQ0H4
-         qrXgMrqCQhWJISUHikJ+H6A9Rt5IkKe3q5S7a3IgZXRpoKmUEEfF3davdWD0SEJOLF
-         x6HLSMnKxFc6bNn9fzW5yjsdHLXCNjC5gVSA2oPohD58IIKPy37fpI2og6S7rvH4ES
-         9S5gMKOibrioQ==
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2b703a0453fso37141861fa.3;
-        Fri, 07 Jul 2023 13:33:19 -0700 (PDT)
-X-Gm-Message-State: ABy/qLZo43p2l+JUdXdAHHLr7x5By9lULZ0gvScQBahF8NzkZ7iGjFNj
-        nBPFbytml/9kUDxgrPNEkwvjdPZ6fJwFGxB1DQ==
-X-Google-Smtp-Source: APBJJlG4YuPBi7t5aJDihdeDntOW9LxmDKsR0D/L3YobFTVh86nYL2PgWf1QDLA9jOV+N7/XaSZs5aykFPftRmtwQjM=
-X-Received: by 2002:a2e:8706:0:b0:2b2:104d:8f89 with SMTP id
- m6-20020a2e8706000000b002b2104d8f89mr5474388lji.0.1688761997303; Fri, 07 Jul
- 2023 13:33:17 -0700 (PDT)
+        with ESMTP id S229725AbjGGXAl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jul 2023 19:00:41 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2051.outbound.protection.outlook.com [40.107.8.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2065C1992;
+        Fri,  7 Jul 2023 16:00:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qf9cSaJQuCKuPux+1GWO11PdEP5u+W0j5s3SvFTh2nRg9+5AZrwBO48SdcO1Jjk6Ii3OnjecYv/jzeEKdKhbqbbCyku4xMOnZ+UBw1xazYvOaqVEUJgGTz3C8IJokhCUSIM3antXAn2w66xpeMPoCc3lNbEuGxkJT+50C8VuRyGQdoyZfrbhlxqG0+3dSGEgKPfmm98+EVqP68850+42Mg5+g0q0BQiMXqVSd3D9x6AmC4oyyZMR5Jlo99Kz6+Mw1kz4utW9Cro7L03WUMrxpJCZUdmROcBBnrEndgX5nuHkgNdt983yDR/G5u65yG3MSSW/zR9aVW7B5VjsFxPS/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6m/JOX9UTRsXaVIVrUg+UGCjqv4DvrmI1oBO0DcwUig=;
+ b=JRaeg++hAo4iOpuakwdBAP9EubEgrohdEz0hH9Gey9RoId2rmJUv6FbAbd5xSUJtn7tzeEAYyImg3Sb3LJkhFE37Ump6eofDeAUUA96KweLN8vUZp6oun+GjwWExTa2AsWbtTiV8Dk9g6OZLZYp2B5WS7nJCUL19UbTACSETgkGn19c8l22Qqo4FYOkUMkPuEBdPuxPPJUiJItpPr5czgPWRh5SKWNWOtos1h9/C5iO6FUYQ4lxKx91dh9EFd80nuBEuua5fBJaaYrtE6+QiPqYopZvj4utx1lhm1GxjcRJSPcSeEgNEVcclIewdAFqpWd3R6iPgAp846pDPk2e0TQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6m/JOX9UTRsXaVIVrUg+UGCjqv4DvrmI1oBO0DcwUig=;
+ b=RDLVX12RF5lNX/bG1E54HVqig2Aj/dfYA+GKamohZov65c62FFkG8DrWgxMsW7Qq43DSZcqWaKndz7YMJ3Ww8aN+QUIlB7guA/k7rDPySPRE7/0F5mANHpXec87a5OdXAMQhS3uHLqyzFLzFLlCWqH32p7rAG8KGKMtqRdX25Yg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
+ by AM7PR04MB7173.eurprd04.prod.outlook.com (2603:10a6:20b:122::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.25; Fri, 7 Jul
+ 2023 23:00:35 +0000
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::4a2a:262e:415f:e41c]) by AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::4a2a:262e:415f:e41c%7]) with mapi id 15.20.6565.016; Fri, 7 Jul 2023
+ 23:00:35 +0000
+From:   Frank Li <Frank.Li@nxp.com>
+To:     frank.li@nxp.com
+Cc:     Thinh.Nguyen@synopsys.com, andriy.shevchenko@linux.intel.com,
+        gregkh@linuxfoundation.org, imx@lists.linux.dev, jgilab@gmail.com,
+        jun.li@nxp.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, peter.chen@kernel.org,
+        quic_eserrao@quicinc.com, quic_prashk@quicinc.com,
+        r-gunasekaran@ti.com, rogerq@kernel.org
+Subject: [PATCH v2 1/2] usb: gadget: call usb_gadget_check_config() to verify UDC capability
+Date:   Fri,  7 Jul 2023 19:00:14 -0400
+Message-Id: <20230707230015.494999-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BY3PR04CA0019.namprd04.prod.outlook.com
+ (2603:10b6:a03:217::24) To AM6PR04MB4838.eurprd04.prod.outlook.com
+ (2603:10a6:20b:4::16)
 MIME-Version: 1.0
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-5-gatien.chevallier@foss.st.com> <875y6vzuga.fsf@epam.com>
- <20230707152724.GA329615-robh@kernel.org> <87sf9zya79.fsf@epam.com>
-In-Reply-To: <87sf9zya79.fsf@epam.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 7 Jul 2023 14:33:04 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJkkT4SZcHj-RLPpDpX+t3Oe6RHyjeBNh4arWbMx-J0Og@mail.gmail.com>
-Message-ID: <CAL_JsqJkkT4SZcHj-RLPpDpX+t3Oe6RHyjeBNh4arWbMx-J0Og@mail.gmail.com>
-Subject: Re: [PATCH 04/10] dt-bindings: treewide: add feature-domains
- description in binding files
-To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
-        Peng Fan <peng.fan@nxp.com>
-Cc:     Gatien Chevallier <gatien.chevallier@foss.st.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "olivier.moysan@foss.st.com" <olivier.moysan@foss.st.com>,
-        "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "fabrice.gasnier@foss.st.com" <fabrice.gasnier@foss.st.com>,
-        "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "hugues.fruchet@foss.st.com" <hugues.fruchet@foss.st.com>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "arnd@kernel.org" <arnd@kernel.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|AM7PR04MB7173:EE_
+X-MS-Office365-Filtering-Correlation-Id: 79315378-7157-41de-f150-08db7f3df921
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aFG45xV3dSKzVSGvgpefeL6EmyS1eqNtDj7BhjUgsFbfDBNgi4QaSJWJrUp3fLQ2/0G0v1JDgko2dhBaZadqQNPrg7xTbUX/lSd/C7rTqg4eeT/YjhIGkpHa9hYPd2FhKSD6m1boqR8ODASqPev9y9OkL2VCnW87MJZoyJudVFmbX2pRAQpCIVDsVfT7m3OLvrx0EYa2i8P8m4l34+FZKzkxnYl/YOzBxoszL1S/kxjsx0mQeqF5+YKYqPx0iVD+h1szF4rXx7uDFmG9h3cTmzsa98LRdVmK1brBePugPpU/c2fGiHyLQppfTpGnvjnnf4VYApYITygdu0emP1Co3KxBcn0c02fvs4+ObBNj4wxcia8NfudNuvMQB/0Cq4mVhsPKVvGaoOkFTquxGZqr/zPW6wEtfSTjV8BG8pvG8EbwxQiEHCPgUuKiCHcNQUAB3FWPu1K//vjmIONCGEko7CfUgfHRZE9c+8zGN3DYYZtKxoCiS6QwWdRGux8MIDPUv2nZ9soURAR7qfrLcvuvNUJvnG6qiQfr0N1LHnYv5nN/mpLVQme5afO16Kt86Qm62x0UND/95DXT07cPW3+wIkWScn2ODBJalNsYZ59ycVOl1sW02eW8MXpDsbo7CtCQ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(136003)(346002)(396003)(366004)(451199021)(52116002)(6486002)(6666004)(478600001)(37006003)(36756003)(86362001)(2616005)(2906002)(1076003)(26005)(6506007)(186003)(6512007)(38350700002)(66946007)(38100700002)(4326008)(66556008)(41300700001)(316002)(8676002)(5660300002)(66476007)(34206002)(8936002)(7416002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?semQpYiZJG6JUP+wirbT3mqZsFEtCIlJVvmqaOD1MBTyFhtVdtRkF2iHiAs+?=
+ =?us-ascii?Q?+pCGjttSow76hiiarfhRDzD1XkwPqbzgqK6PGNtTAEhkGHYf0j6YE0cxpmps?=
+ =?us-ascii?Q?WRGnkUrTA4rqaUvkXAwqkVZp+LpGmQB+mt2GPAkuyT/QEKtOM+CDREKSOuwP?=
+ =?us-ascii?Q?AuvUj8h8cMfIkzOrZ2bG106zNBEEfyO1RlmxogU1sXPJwh3edUbw7DsKffqM?=
+ =?us-ascii?Q?DCNWrEQv1uSjPAwBUUxIqannaDKLdbNMK3DmrMGDU26O34yTjiaki4Gc0kSA?=
+ =?us-ascii?Q?EbqeKoky8RIiZC6GKkhFXZSkBt724TLRtcxgHf8QsCS0dbPr/GmPsOMJ8nE+?=
+ =?us-ascii?Q?LIYfMDiApJbDVF35TK1cvhhapsqAKCVi4bx434zj50aSW7t1B+74XF1Kn7pO?=
+ =?us-ascii?Q?gpJ4qeHPUmcyt7ai4QBT862iNuVSOzHU+zdheztc1gfyfIdLqN2aOkTqv1na?=
+ =?us-ascii?Q?RYdf1/dj/nfBUsywpambkVZEci0DZ3N6tQYPeJTRc1kCqwIglyvkZxHJwccG?=
+ =?us-ascii?Q?Djt3tBgueyEG35EqylcvVKQXB+I28gF/5ywJfVMlUfVBynD8uIpSsRCv3hQa?=
+ =?us-ascii?Q?wucxJjZ4karJWWHKYgogoAfpImO6NxCQ98GO69Lj4hMCaksLtVvrE56JL1UA?=
+ =?us-ascii?Q?Ceyl8ASFz1HyL/JUuvnqPIaq+/W6QSl82s+7yvUkqXvw9lZKlxQUMVC+bDqI?=
+ =?us-ascii?Q?+nBBT31LscnaHk/fPcMNM4qYIxKFgDbu47ouQPLzd3OiDGz6JfyfBsnfWkfa?=
+ =?us-ascii?Q?8Qgz5UgG458qXP2o2cPE8ICiNBetbPJq8lJdOBIev4Ac3GKsDMetP0j5NRJL?=
+ =?us-ascii?Q?O6B7HmwLM65QmA2PlwuB3ZENeuRxbvpkAJlBhGQQuM+qyyx2MspetbcP9P4U?=
+ =?us-ascii?Q?Xa5tK9jBPDV2IMM/xzQbL6u2mDvJQQHtfRAYEpSPx9/vvEGuKTz5unCuoG/K?=
+ =?us-ascii?Q?YYvVtywEHeGf+HSAAN520axAftaTUb1X4PPNd8blMTCUCjadxwDS1IdPn1Et?=
+ =?us-ascii?Q?J8tOisD/zw96m4yQlX03sXItphXP8e5pWraWJ3qtp8ohgSc68DgIm+E7keqD?=
+ =?us-ascii?Q?32lvSSBolDVvw6plQ4P+vDMbbHBdsJSWZCcyMEi+ph/JLPM5mtWRKGIz/5tq?=
+ =?us-ascii?Q?mU5fKrX9V1l5IoVX/m1RRkenwG42JEdpCnbqI7kajZYrr0JsdEclxw5iK4fQ?=
+ =?us-ascii?Q?oPNAFyQOWp1/The/yJlqhxL6z1hGshbDdUMMAt4ibXj3XNBw5QHSBP3eI8Sg?=
+ =?us-ascii?Q?58cbNLJDX1pOCemKEh5/JnqMM/rVijHH1hW92nxHKWCHTx+s828fO/Sjt4a+?=
+ =?us-ascii?Q?VDKdkYh8gCDDA1UmNGDt44X/zEhMBSrA1cDU4XxcyDpsVGO40sr7pHm5Jcsy?=
+ =?us-ascii?Q?QroWB9LVkq+ijWUstp6GpgAFho0BTGhIEnNNz2X3NhoHaRvtmNEyUnTDqtGY?=
+ =?us-ascii?Q?fbNQwmrMsjIxv/mLR96H17uSrP+C6avVdf+M2fgGs0E+CipOs/XQBlgfDdMB?=
+ =?us-ascii?Q?gz/vNjZ8SYW2mKatUj4SUbWoISnRQzoSlqiW8T8tnw/ZfHu1jrtD3Lt7RlUE?=
+ =?us-ascii?Q?rHEg2Sm2rCCUv/5GwtjpN7EwxTiItAmvEzEanUkB?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 79315378-7157-41de-f150-08db7f3df921
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2023 23:00:35.6129
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: V2wqiavprwfyVYSMgLG4iVXPoeLPdf0rV0DaaJyeNd+LJmekZkwOk6FilRBZ0MwPMhK13MqdigH3rlwsH7P6kA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7173
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 7, 2023 at 10:10=E2=80=AFAM Oleksii Moisieiev
-<Oleksii_Moisieiev@epam.com> wrote:
->
->
-> Hi Rob,
->
-> Rob Herring <robh@kernel.org> writes:
->
-> > On Fri, Jul 07, 2023 at 02:07:18PM +0000, Oleksii Moisieiev wrote:
-> >>
-> >> Gatien Chevallier <gatien.chevallier@foss.st.com> writes:
-> >>
-> >> > feature-domains is an optional property that allows a peripheral to
-> >> > refer to one or more feature domain controller(s).
-> >> >
-> >> > Description of this property is added to all peripheral binding file=
-s of
-> >> > the peripheral under the STM32 firewall controllers. It allows an ac=
-curate
-> >> > representation of the hardware, where various peripherals are connec=
-ted
-> >> > to this firewall bus. The firewall can then check the peripheral acc=
-esses
-> >> > before allowing it to probe.
-> >> >
-> >> > Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-> >> > ---
-> >> >
-> >> > Disclaimer: Some error with dtbs_check will be observed as I've
-> >> > considered the property to be generic, as Rob asked
-> >> >
-> >> >  Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml  | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/dma/st,stm32-dma.yaml      | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml   | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml      | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 4 ++=
-++
-> >> >  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml  | 4 ++=
-++
-> >> >  .../devicetree/bindings/media/cec/st,stm32-cec.yaml          | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml   | 4 ++=
-++
-> >> >  .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml       | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml  | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml   | 5 ++=
-+++
-> >> >  Documentation/devicetree/bindings/mmc/arm,pl18x.yaml         | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/net/stm32-dwmac.yaml       | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml | 4 ++=
-++
-> >> >  .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml      | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/rng/st,stm32-rng.yaml      | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/serial/st,stm32-uart.yaml  | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml    | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/sound/st,stm32-sai.yaml    | 4 ++=
-++
-> >> >  .../devicetree/bindings/sound/st,stm32-spdifrx.yaml          | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml     | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/spi/st,stm32-spi.yaml      | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/usb/dwc2.yaml              | 4 ++=
-++
-> >> >  24 files changed, 97 insertions(+)
-> >> >
-> >> > diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.=
-yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> >> > index b767ec72a999..daf8dcaef627 100644
-> >> > --- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> >> > +++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> >> > @@ -50,6 +50,10 @@ properties:
-> >> >    power-domains:
-> >> >      maxItems: 1
-> >> >
-> >> > +  feature-domains:
-> >> > +    minItems: 1
-> >> > +    maxItems: 3
-> >> > +
-> >>
-> >> I beliewe feature-domains is generic binding. This means that maxItems
-> >> can be implementation dependend. I would rather drop maxItems so the
-> >> following format will be possible:
-> >>
-> >>           feature-domains =3D <&etzpc 1>, <&etzpc 2>, <&some_other_dom=
-ain 1 2 3 4>
-> >>           feature-domain-names =3D "firewall 1", "firewall 2", "other_=
-domain"
-> >
-> > The above already allows this (not -names, but the number of entries).
-> >>
-> >> Also I beliewe driver will handle feature-domain-names property so it
-> >> will parse feature-domains only related to the firewall.
-> >
-> > Now I'm curious. What's an example that's not a firewall?
-> >
-> > (Note I'm still not happy with the naming of 'feature' as anything is a
-> > feature, but that's the least of the issues really.)
-> >
->
-> The alternative usages of feature-domains was originally proposed by me
-> here:
-> https://lore.kernel.org/lkml/c869d2751125181a55bc8a88c96e3a892b42f37a.166=
-8070216.git.oleksii_moisieiev@epam.com/
->
-> Also I remember Peng Fan also was interested in those bindings.
+The legacy gadget driver omitted calling usb_gadget_check_config()
+to ensure that the USB device controller (UDC) has adequate resources,
+including sufficient endpoint numbers and types, to support the given
+configuration.
 
-It helps to Cc people when you talk about them.
+Previously, usb_add_config() was solely invoked by the legacy gadget
+driver. Adds the necessary usb_gadget_check_config() after the bind()
+operation to fix the issue.
 
-If the parties interested in this want to see progress on this, you
-all must work together and show this is a solution for multiple
-platforms.
+Fixes: dce49449e04f ("usb: cdns3: allocate TX FIFO size according to composite EP number")
+Reported-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+change from v1 to v2
+- not change for this patch, just add new patch to fix multi-config case
 
-> I think the use-case when one node is protected by firewall and also is
-> controlled by scmi feature-domain-controller (As was proposed in my
-> patch series) may take place.
+ drivers/usb/gadget/composite.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-But isn't the SCMI device protection interface the same thing? Some
-interface to say "can I access this device?" and/or control access to
-it.
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index 403563c06477..cb0a4e2cdbb7 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -1029,6 +1029,10 @@ int usb_add_config(struct usb_composite_dev *cdev,
+ 		goto done;
+ 
+ 	status = bind(config);
++
++	if (status == 0)
++		status = usb_gadget_check_config(cdev->gadget);
++
+ 	if (status < 0) {
+ 		while (!list_empty(&config->functions)) {
+ 			struct usb_function		*f;
+-- 
+2.34.1
 
-The other possible use I'm aware of is system partitioning. OpenAMP or
-similar where an SoC is partitioned into multiple OS instances and
-peripherals are assigned to different partitions.
-
-> As for the naming maybe you have some thoughts about better name?
-
-If I did, I would have. Something with 'access' in it is as far as I've got=
-ten.
-
-Rob
