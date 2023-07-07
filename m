@@ -2,219 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C1474AB56
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jul 2023 08:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6954974AB61
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jul 2023 08:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbjGGGtO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jul 2023 02:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
+        id S229781AbjGGGv5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jul 2023 02:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231674AbjGGGtB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jul 2023 02:49:01 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BAE1F268C;
-        Thu,  6 Jul 2023 23:48:40 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3676m58S1008700, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3676m58S1008700
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Fri, 7 Jul 2023 14:48:06 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Fri, 7 Jul 2023 14:48:10 +0800
-Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 7 Jul 2023 14:48:09 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
- 15.1.2375.32 via Frontend Transport; Fri, 7 Jul 2023 14:48:09 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Stanley Chang <stanley_chang@realtek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Roy Luo <royluo@google.com>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Ray Chi <raychi@google.com>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-Subject: [PATCH v7 5/5] dt-bindings: phy: realtek: Add Realtek DHC RTD SoC USB 3.0 PHY
-Date:   Fri, 7 Jul 2023 14:47:04 +0800
-Message-ID: <20230707064725.25291-5-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230707064725.25291-1-stanley_chang@realtek.com>
-References: <20230707064725.25291-1-stanley_chang@realtek.com>
+        with ESMTP id S229684AbjGGGvz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jul 2023 02:51:55 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4252130;
+        Thu,  6 Jul 2023 23:51:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688712703; x=1720248703;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FNKNGsxGxJ19R+qhSLCXoaTwsh7nlW0+jkk3E1N4B5c=;
+  b=Gm+TLgs5qaLsCojkk9IOC37Y5oHsG7SRsElueNulusenk8BE4ZqlWHTL
+   4AirhKoQl560ncgZNJlJlZn8BMDBSSsTiu7gvnfHIBSvmv9M7dXp77Nh/
+   rTRN8UCnSl1vqmK2JiaGT9LMlRAoZC8DLKsvW7CcNjuSK+D4o8ySstcC/
+   JVXEt4t4iocZdMdlAYMCWQ9YuOlXNPpcdFNhwL2DlrzBwmEgYdXhJaPL+
+   6F0X1Kz8phsl03U8/udnd3URo6zShanLzxIFDYkkUkGSpE6wZx4xFZQS2
+   jbQHz0OxyauJDhiuFyrIWzhEWHyiUaUfm0p3YQNNKXNtwrMHFlHGKq2S/
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="394586940"
+X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
+   d="scan'208";a="394586940"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 23:51:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="749436225"
+X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
+   d="scan'208";a="749436225"
+Received: from uhpatel-desk4.jf.intel.com ([10.23.15.157])
+  by orsmga008.jf.intel.com with ESMTP; 06 Jul 2023 23:51:42 -0700
+From:   Utkarsh Patel <utkarsh.h.patel@intel.com>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        heikki.krogerus@linux.intel.com, pmalani@chromium.org,
+        bleung@chromium.org
+Cc:     Utkarsh Patel <utkarsh.h.patel@intel.com>
+Subject: [PATCH v3 0/2] Add support to configure active retimer cable
+Date:   Thu,  6 Jul 2023 23:53:16 -0700
+Message-Id: <20230707065318.18681-1-utkarsh.h.patel@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXMBS03.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Document the USB PHY bindings for Realtek SoCs.
-Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
-controller and using USB 3.0 PHY transceiver.
+This change adds support to configure retimer cable type
 
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
----
-v6 to v7 change:
-    Revise the commit message.
-v5 to v6 change:
-    Drop the labels of example.
-v4 to v5 change:
-    1. Remove the compatible realtek,usb3phy.
-    2. Add the default of the property.
-v3 to v4 change:
-    1. Remove the parameter and non hardware properties from dts.
-    2. Using the compatible data included the config and parameter
-       in driver.
-v2 to v3 change:
-    1. Broken down into two patches, one for each of USB 2 & 3.
-    2. Add more description about Realtek RTD SoCs architecture.
-    3. Removed parameter v1 support for simplification.
-    4. Revised the compatible name for fallback compatible.
-    5. Remove some properties that can be set in the driver.
-v1 to v2 change:
-    Add phy-cells for generic phy driver
----
- .../bindings/phy/realtek,usb3phy.yaml         | 107 ++++++++++++++++++
- 1 file changed, 107 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
+Changes in v2:
+- Implemented use of cable discover mode vdo.
+- Removed adittional changes to host command.
 
-diff --git a/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-new file mode 100644
-index 000000000000..dfe2bb4e59e7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-@@ -0,0 +1,107 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2023 Realtek Semiconductor Corporation
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/phy/realtek,usb3phy.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Realtek DHC SoCs USB 3.0 PHY
-+
-+maintainers:
-+  - Stanley Chang <stanley_chang@realtek.com>
-+
-+description: |
-+  Realtek USB 3.0 PHY support the digital home center (DHC) RTD series SoCs.
-+  The USB 3.0 PHY driver is designed to support the XHCI controller. The SoCs
-+  support multiple XHCI controllers. One PHY device node maps to one XHCI
-+  controller.
-+
-+  RTD1295/RTD1619 SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on some
-+  controllers.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+
-+  RTD1319/RTD1619b SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#2.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+
-+  RTD1319d SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each xhci maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#0.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+
-+properties:
-+  compatible:
-+    enum:
-+      - realtek,rtd1295-usb3phy
-+      - realtek,rtd1319-usb3phy
-+      - realtek,rtd1319d-usb3phy
-+      - realtek,rtd1619-usb3phy
-+      - realtek,rtd1619b-usb3phy
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#phy-cells":
-+    const: 0
-+
-+  nvmem-cells:
-+    maxItems: 1
-+    description: A phandle to the tx lfps swing trim data provided by
-+      a nvmem device, if unspecified, default values shall be used.
-+
-+  nvmem-cell-names:
-+    items:
-+      - const: usb_u3_tx_lfps_swing_trim
-+
-+  realtek,amplitude-control-coarse-tuning:
-+    description:
-+      This adjusts the signal amplitude for normal operation and beacon LFPS.
-+      This value is a parameter for coarse tuning.
-+      For different boards, if the default value is inappropriate, this
-+      property can be assigned to adjust.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    default: 255
-+    minimum: 0
-+    maximum: 255
-+
-+  realtek,amplitude-control-fine-tuning:
-+    description:
-+      This adjusts the signal amplitude for normal operation and beacon LFPS.
-+      This value is used for fine-tuning parameters.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    default: 65535
-+    minimum: 0
-+    maximum: 65535
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#phy-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    usb-phy@13e10 {
-+        compatible = "realtek,rtd1319d-usb3phy";
-+        reg = <0x13e10 0x4>;
-+        #phy-cells = <0>;
-+
-+        nvmem-cells = <&otp_usb_u3_tx_lfps_swing_trim>;
-+        nvmem-cell-names = "usb_u3_tx_lfps_swing_trim";
-+
-+        realtek,amplitude-control-coarse-tuning = <0x77>;
-+    };
+Changes in v3:
+- Changed the return method in cros_typec_get_cable_vdo.
+- Changed passed parameters in cros_typec_get_cable_vdo.
+- Corrected definition for unsigned integers as kerenl standard.
+- Assigning cable_vdo values directly in to cable_mode.
+- Removed unncessary checks for Retimer cable type.
+
+Utkarsh Patel (2):
+  platform/chrome: cros_ec_typec: Configure Retimer cable type
+  usb: typec: intel_pmc_mux: Configure Active and Retimer Cable type
+
+ drivers/platform/chrome/cros_ec_typec.c | 26 ++++++++++++++++++++++-
+ drivers/usb/typec/mux/intel_pmc_mux.c   | 28 +++++++++++++++++++++----
+ 2 files changed, 49 insertions(+), 5 deletions(-)
+
 -- 
-2.34.1
+2.25.1
 
