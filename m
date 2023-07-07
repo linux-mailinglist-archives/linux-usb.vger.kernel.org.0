@@ -2,142 +2,342 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6187A74AD2B
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jul 2023 10:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA7674AD2D
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jul 2023 10:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbjGGIfJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jul 2023 04:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
+        id S230521AbjGGIfm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jul 2023 04:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbjGGIfB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jul 2023 04:35:01 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF3C90;
-        Fri,  7 Jul 2023 01:34:58 -0700 (PDT)
+        with ESMTP id S232201AbjGGIfg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jul 2023 04:35:36 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D3F131
+        for <linux-usb@vger.kernel.org>; Fri,  7 Jul 2023 01:35:33 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51bece5d935so2212707a12.1
+        for <linux-usb@vger.kernel.org>; Fri, 07 Jul 2023 01:35:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1688718899; x=1720254899;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=tSUJGwxw4GKdbWDaAgS5DZYxSnm3gTsQl19EC2tErow=;
-  b=DDhQveShs7sBe7fRu1qt5qw6ruSJZ8FpU3+c0FlG9uYbRmwjhCTOy9Fp
-   GIGRPAo0XWA0n5XDmBrKj9ujiyuMKRipG70RXQdi+SoYrZsqNFln2fe6f
-   ROl15WHvzI1dLu5hlAbX9SebuYthJWEY19lepkvj460WfWX555D+oioY2
-   3XA0A+RFO4bDpeLrg9nDwrIoIc2WXjd3wmj6XLhXxHH0gL1fCOFOfsr0J
-   SgqnwgilU+2PWVpPpyjamNsoqA8NWH4YDD/PyJtnndis3dYEqBactuLEU
-   rdzUbt3xXz5o8ghXPcH4TBxCLkBCJMscXu0C01wTi+/hBSAH5av4HiWHD
-   w==;
-X-IronPort-AV: E=Sophos;i="6.01,187,1684792800"; 
-   d="scan'208";a="31808359"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 07 Jul 2023 10:34:57 +0200
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 5A586280084;
-        Fri,  7 Jul 2023 10:34:57 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Rob Herring <robh@kernel.org>, Xu Yang <xu.yang_2@nxp.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Peng Fan <peng.fan@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [EXT] Re: [PATCH 1/1] dt-bindings: usb: ci-hdrc-usb2: Fix number of clocks
-Date:   Fri, 07 Jul 2023 10:34:57 +0200
-Message-ID: <3547043.jE0xQCEvom@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <DB7PR04MB450585C112FA299FE46023828C2DA@DB7PR04MB4505.eurprd04.prod.outlook.com>
-References: <20230706093928.3580544-1-alexander.stein@ew.tq-group.com> <4814813.MHq7AAxBmi@steina-w> <DB7PR04MB450585C112FA299FE46023828C2DA@DB7PR04MB4505.eurprd04.prod.outlook.com>
+        d=linaro.org; s=google; t=1688718932; x=1691310932;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Gfp5YnplyNI7ZZxVR1nzYlh1znSHp2pyPlsqgetXBH0=;
+        b=a5YGKsob76RZKcNb3APPFN49ojM4izecoEniz8wRkWSvlHkYnoI9FH8/5bfNrJa8La
+         UUf77hiBedWBZQVl9PhNLmwYTYv+v8FVsf6/kVQhWx/HPpv1kuji9w509zUctM+BsX9u
+         NmnBF2AtaDMGfwPMBJiRsQ2aMstNsNT+4Bt5Svlcy+SMXTCp8Gd06F31D6mMtW3e5m00
+         kHNUssJoXqNtKY0J4xdrW9rFHVUseww9g8FSeZcRCZBXiflYa5aIm/8vBPTg0ZpTxq4g
+         HbHVh3fCjfjHzAZ3ZH5YN4cmzrG1rvqzi2nQMSmXrZcQ6FKw1UVzJr//r1nGcEOz6FlS
+         tIQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688718932; x=1691310932;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gfp5YnplyNI7ZZxVR1nzYlh1znSHp2pyPlsqgetXBH0=;
+        b=H50K+sDnXU71fYZWgHV1sOnyj4VVdhu7MPu5iVW1OHtnFmf75pn7hQ9Rx/qFliqdxR
+         WGbClxpn6bh57ijSr4dJ1lM98UAdX5V/5eRo0/dL4Su8SWnIYz7NyKZxGJTKYVWHVSIh
+         UKy9lV2mZNQrIsXU0vznvgyOFzNKW6GUIzcsQEt2fy1I/eL/55kERJxucyGdrxrg3YFJ
+         YjUbs9PLUAJHjlBGSkbKRJdsM5kS8tfnMjoX1fBsAg04aMphuphjg0LZ6jTxhOMePafS
+         PJLhsBx9CxRVzxGcNMnp5XRq/ZtFOQ/e9PkGWfqNePqznjORnUKJpdMFhc3vlsGgRXzP
+         b0lA==
+X-Gm-Message-State: ABy/qLZuKILy4SzlqRKCSLgMHJD2GHTsaJWmkU4Mr7Dha71Sz1EJjzOH
+        GhC2w7wd8EKyAdQO+aG2V+HOtw==
+X-Google-Smtp-Source: APBJJlHVIcrQOa49qCeTblKamg9Js3+YQHLGpbElKy5lgi88UbQJqiq2QghEYQEOIEcpcwgasbL4Yw==
+X-Received: by 2002:a17:906:338e:b0:992:3ac7:a2d8 with SMTP id v14-20020a170906338e00b009923ac7a2d8mr2931894eja.37.1688718931759;
+        Fri, 07 Jul 2023 01:35:31 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id r16-20020a170906c29000b00991d54db2acsm1869577ejz.44.2023.07.07.01.35.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jul 2023 01:35:31 -0700 (PDT)
+Message-ID: <a0387aa9-80b1-bd80-4316-82a0f95cd747@linaro.org>
+Date:   Fri, 7 Jul 2023 10:35:29 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v1 2/3] usb: gadget: udc: gxp-udc: add HPE GXP USB support
+Content-Language: en-US
+To:     richard.yu@hpe.com, verdun@hpe.com, nick.hawkins@hpe.com,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230706215910.78772-1-richard.yu@hpe.com>
+ <20230706215910.78772-3-richard.yu@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230706215910.78772-3-richard.yu@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Xu Yang,
+On 06/07/2023 23:59, richard.yu@hpe.com wrote:
+> From: Richard Yu <richard.yu@hpe.com>
+> 
+> The HPE GXP vEHCI controller presents a four port EHCI compatible PCI
+> function to host software. Each vEHCI port is logically connected to a
+> corresponding set of virtual device registers.
+> 
+> Signed-off-by: Richard Yu <richard.yu@hpe.com>
+> ---
+>  drivers/usb/gadget/udc/Kconfig   |    6 +
+>  drivers/usb/gadget/udc/Makefile  |    1 +
+>  drivers/usb/gadget/udc/gxp-udc.c | 1401 ++++++++++++++++++++++++++++++
+>  3 files changed, 1408 insertions(+)
+>  create mode 100644 drivers/usb/gadget/udc/gxp-udc.c
+> 
+> diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
+> index 83cae6bb12eb..c01eb2a2c7db 100644
+> --- a/drivers/usb/gadget/udc/Kconfig
+> +++ b/drivers/usb/gadget/udc/Kconfig
+> @@ -461,6 +461,12 @@ config USB_ASPEED_UDC
+>  	  dynamically linked module called "aspeed_udc" and force all
+>  	  gadget drivers to also be dynamically linked.
 
-thanks for your feedback.
+...
 
-Am Freitag, 7. Juli 2023, 09:06:09 CEST schrieb Xu Yang:
-> Hi Alexander,
->=20
-> > -----Original Message-----
-> >=20
-> > Hi,
-> >=20
-> > Am Donnerstag, 6. Juli 2023, 21:18:25 CEST schrieb Rob Herring:
-> > > On Thu, Jul 06, 2023 at 11:39:28AM +0200, Alexander Stein wrote:
-> > > > Some (older) IP cores require 3 clocks, named 'ipg', 'ahb' and 'per'
-> > > > while
-> > > > more recent IP cores just require one. Fix the number and explicitly
-> > > > state the clock-names.
-> > > >=20
-> > > > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > > > ---
-> > > >=20
-> > > > >From I can tell, is that imx25, imx27, imx35 have specified 3 cloc=
-ks
-> > > > >in
-> > > >=20
-> > > > their DT.
-> > > > IMHO minItems for 'clock-names' can be removed as I presume that th=
-is
-> > > > property is not set when only one clock is used.
-> > >=20
-> > > Rather than presume, did you test that? Well, I did[1] and can confir=
-m.
-> >=20
-> > Okay, probably my wording was bad. There are a lot of users (e.g. imx8m=
-m,
-> > imx8mn) which only have one clock but still provide some clock-names
-> > property. It works just because it is not called 'ipg', but some SoC
-> > specific clock name.
-> > So this patch should cause some warnings, but these users were incorrect
-> > in
-> > the first place. Following up this patch, they need to be fixed.
->=20
-> It means that all the usb nodes need to contain 'ipg', 'ahb', 'per' clock
-> names with your patch.
+> +
+> +static void gxp_udc_dev_release(struct device *dev)
+> +{
+> +	kfree(dev);
+> +}
+> +
+> +int gxp_udc_init_dev(struct gxp_udcg_drvdata *udcg, unsigned int idx)
+> +{
+> +	struct gxp_udc_drvdata *drvdata;
+> +	struct device *parent = &udcg->pdev->dev;
+> +	int rc;
+> +
+> +	drvdata = devm_kzalloc(parent, sizeof(struct gxp_udc_drvdata),
+> +			       GFP_KERNEL);
 
-That's not true. They only need these 3 clocks iff they specify clock-names=
-=2E=20
-If there is only one clock, there is no need to specify clock-names.
-TBH: If there is just one clock, which is not called 'ipg', the driver does=
-n't=20
-care about the name at all.
+sizeof(*...)
 
-> It's unexpected due to only imx25, imx27, imx35
-> need this. I think you need to narrow this property to specific SoCs.
+> +	if (!drvdata)
+> +		return -ENOMEM;
+> +
+> +	udcg->udc_drvdata[idx] = drvdata;
+> +	drvdata->pdev = udcg->pdev;
 
-That's a good idea, but I would consider adding property conditionals as a=
-=20
-follow up patch.
+Why do you store platform_device? It's usually useless because dev is used.
+
+> +	drvdata->vdevnum = idx;
+> +	drvdata->base = udcg->base + 0x1000 * idx;
+> +	drvdata->udcg_map = udcg->udcg_map;
+> +	drvdata->irq = udcg->irq;
+> +
+> +	/*
+> +	 * we setup USB device can have up to 4 endpoints besides control
+> +	 * endpoint 0.
+> +	 */
+> +	drvdata->fepnum = min_t(u32, udcg->max_fepnum, 4);
+> +
+> +	drvdata->vdevnum = idx;
+> +
+> +	/*
+> +	 * The UDC core really needs us to have separate and uniquely
+> +	 * named "parent" devices for each port so we create a sub device
+> +	 * here for that purpose
+> +	 */
+> +	drvdata->port_dev = kzalloc(sizeof(*drvdata->port_dev), GFP_KERNEL);
+> +	if (!drvdata->port_dev) {
+> +		rc = -ENOMEM;
+> +		goto fail_alloc;
+> +	}
+> +	device_initialize(drvdata->port_dev);
+> +	drvdata->port_dev->release = gxp_udc_dev_release;
+> +	drvdata->port_dev->parent = parent;
+> +	dev_set_name(drvdata->port_dev, "%s:p%d", dev_name(parent), idx + 1);
+> +
+> +	/* DMA setting */
+> +	drvdata->port_dev->dma_mask = parent->dma_mask;
+> +	drvdata->port_dev->coherent_dma_mask = parent->coherent_dma_mask;
+> +	drvdata->port_dev->bus_dma_limit = parent->bus_dma_limit;
+> +	drvdata->port_dev->dma_range_map = parent->dma_range_map;
+> +	drvdata->port_dev->dma_parms = parent->dma_parms;
+> +	drvdata->port_dev->dma_pools = parent->dma_pools;
+> +
+> +	rc = device_add(drvdata->port_dev);
+> +	if (rc)
+> +		goto fail_add;
+> +
+> +	/* Populate gadget */
+> +	gxp_udc_init(drvdata);
+> +
+> +	rc = usb_add_gadget_udc(drvdata->port_dev, &drvdata->gadget);
+> +	if (rc != 0) {
+> +		dev_err(drvdata->port_dev, "add gadget failed\n");
+
+return dev_err_probe
+
+> +		goto fail_udc;
+> +	}
+> +	rc = devm_request_irq(drvdata->port_dev,
+> +			      drvdata->irq,
+> +			      gxp_udc_irq,
+> +			      IRQF_SHARED,
+> +			      gxp_udc_name[drvdata->vdevnum],
+> +			      drvdata);
+
+Shared interrupt usually does not work with devm() and causes later
+issues. You need to triple check your unbind and error paths, because
+usually this just does not work. Usually we just don't allow devm for
+this case. If you are sure this is 100% correct, it could stay...
+
+> +
+> +	if (rc < 0) {
+> +		dev_err(drvdata->port_dev, "irq request failed\n");
+
+return dev_err_probe
+
+> +		goto fail_udc;
+> +	}
+> +
+> +	return 0;
+> +
+> +fail_udc:
+> +	device_del(drvdata->port_dev);
+> +fail_add:
+> +	put_device(drvdata->port_dev);
+> +fail_alloc:
+> +	kfree(drvdata);
+
+Are you sure you tested it? I see here double free.
+
+> +
+> +	return rc;
+> +}
+> +
+> +static int gxp_udcg_probe(struct platform_device *pdev)
+> +{
+> +	struct resource *res;
+> +	struct gxp_udcg_drvdata *drvdata;
+> +	int ret, rc, err;
+> +	u32 vdevnum;
+> +	u32 fepnum, i;
+> +
+> +	drvdata = devm_kzalloc(&pdev->dev, sizeof(struct gxp_udcg_drvdata),
+
+sizeof(*...)
+
+> +			       GFP_KERNEL);
+> +	platform_set_drvdata(pdev, drvdata);
+> +	drvdata->pdev = pdev;
+
+Why do you store platform_device? It's usually useless because dev is used.
+
+> +
+> +	spin_lock_init(&drvdata->lock);
+> +
+> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "udcg");
+> +	drvdata->udcg_base = devm_ioremap_resource(&pdev->dev, res);
+
+Use helper for these two.
+
+> +	if (IS_ERR(drvdata->udcg_base)) {
+> +		err = PTR_ERR(drvdata->udcg_base);
+
+Drop
+
+> +		return dev_err_probe(&pdev->dev, err, "failed to get udcg resource\n");
+> +	}
+> +
+> +	drvdata->udcg_map = devm_regmap_init_mmio(&pdev->dev, drvdata->udcg_base, &regmap_cfg);
+> +
+> +	if (IS_ERR(drvdata->udcg_map)) {
+> +		dev_err(&pdev->dev, "failed to map udcg regs");
+
+return dev_err_probe
+
+> +		return -ENODEV;
+
+Wrong error code
+
+> +	}
+> +
+> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "udc");
+> +	drvdata->base = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(drvdata->base)) {
+> +		err = PTR_ERR(drvdata->base);
+
+Drop
+
+> +		return dev_err_probe(&pdev->dev, err, "failed to get udc resource\n");
+> +	}
+> +
+> +	ret = platform_get_irq(pdev, 0);
+> +	if (ret < 0) {
+> +		dev_err(&pdev->dev, "unable to obtain IRQ number\n");
+
+return dev_err_probe
+
+> +		return ret;
+> +	}
+> +	drvdata->irq = ret;
+> +
+> +	if (of_property_read_u32(pdev->dev.of_node, "hpe,vehci-downstream-ports", &vdevnum)) {
+> +		dev_err(&pdev->dev, "property ports number is undefined\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (vdevnum > GXP_UDC_MAX_NUM_VDEVICE) {
+> +		dev_err(&pdev->dev, "property max port number(%d) is invalid\n", vdevnum);
+> +		return -EINVAL;
+> +	}
+> +	drvdata->max_vdevnum = vdevnum;
+> +
+> +	if (of_property_read_u32(pdev->dev.of_node, "hpe,vehci-generic-endpoints", &fepnum)) {
+> +		dev_err(&pdev->dev, "property generic endpoints is undefined\n");
+> +		return -EINVAL;
+
+Why? Bindings stated it has default, so should not be required.
+
+> +	}
+> +
+> +	if (fepnum > GXP_UDC_MAX_NUM_FLEX_EP) {
+> +		dev_err(&pdev->dev, "property fepnum(%d) is invalid\n", fepnum);
+> +		return -EINVAL;
+> +	}
+> +	drvdata->max_fepnum = fepnum;
+> +
+> +	gxp_udcg_init(drvdata);
+> +
+> +	/* Init child devices */
+> +	rc = 0;
+> +	for (i = 0; i < drvdata->max_vdevnum && rc == 0; i++)
+> +		rc = gxp_udc_init_dev(drvdata, i);
+> +
+> +	return rc;
+> +}
+> +
+> +static const struct of_device_id gxp_udc_of_match[] = {
+> +	{ .compatible = "hpe,gxp-udcg" },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, gxp_udc_of_match);
+> +
+> +static struct platform_driver gxp_udc_driver = {
+> +	.driver = {
+> +		.name = "gxp-udc",
+> +		.of_match_table = of_match_ptr(gxp_udc_of_match),
+
+Drop of_match_ptr(), you will have warnings here.
+
+> +	},
+> +	.probe = gxp_udcg_probe,
+> +};
+> +module_platform_driver(gxp_udc_driver);
+> +
+> +MODULE_AUTHOR("Richard Yu <richard.yu@hpe.com>");
+> +MODULE_DESCRIPTION("HPE GXP vEHCI UDC Driver");
+> +MODULE_LICENSE("GPL");
 
 Best regards,
-Alexander
-
-> Thanks,
-> Xu Yang
->=20
-> > Best regards,
-> > Alexander
-> >=20
-> > > Reviewed-by: Rob Herring <robh@kernel.org>
-
-
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
+Krzysztof
 
