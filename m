@@ -2,89 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36BF574A8D0
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jul 2023 04:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D2B74AAE4
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jul 2023 07:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232197AbjGGCQ5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jul 2023 22:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52864 "EHLO
+        id S232213AbjGGF7o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jul 2023 01:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbjGGCQ4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jul 2023 22:16:56 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7B8D61727
-        for <linux-usb@vger.kernel.org>; Thu,  6 Jul 2023 19:16:54 -0700 (PDT)
-Received: (qmail 1198458 invoked by uid 1000); 6 Jul 2023 22:16:52 -0400
-Date:   Thu, 6 Jul 2023 22:16:52 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     richard.yu@hpe.com
-Cc:     verdun@hpe.com, nick.hawkins@hpe.com, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] usb: gadget: udc: gxp-udc: add HPE GXP USB support
-Message-ID: <9171a00d-9ce5-4aca-8f81-2ad2b6961e17@rowland.harvard.edu>
-References: <20230706215910.78772-1-richard.yu@hpe.com>
- <20230706215910.78772-3-richard.yu@hpe.com>
+        with ESMTP id S231950AbjGGF7n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jul 2023 01:59:43 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2645D1FC6;
+        Thu,  6 Jul 2023 22:59:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1688709581; x=1720245581;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=QaDgGYCu1NMCRE7l/cADR02LMIS3aO/47KaPk9B2K1k=;
+  b=Tdy3vd7TuPWCFXqxTwpd0jTj2zrcoU9F+YXChr3VHN+vG5jbKNizh0rD
+   3u2rx0dnFy/+vriqoQx7KdV9rpmvglJ3TLAs8R0DMOINQpECT01Zd4d5P
+   +S81nXnZ5HqZni4qztR9K7sh3lJT4xeKw+wtsX0t/PgP9VEbNk2yAXv6X
+   NzyziwaAeBhrSyJS6/LSnolut65lEHqfMz9Bb90AXm/aih17iuKpqzu6/
+   F8ibexjs88xnXNfjLH9OI0FlTXMd2cGYxRMZU46mBVvJzH8pFEsMa9W22
+   2dmZIzFFyWe1nmALAXBP+zkwSY8YF6qgEVFMC2YkIon7A+2a1o7n+9+gY
+   A==;
+X-IronPort-AV: E=Sophos;i="6.01,187,1684792800"; 
+   d="scan'208";a="31803624"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 07 Jul 2023 07:59:39 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 12F59280084;
+        Fri,  7 Jul 2023 07:59:39 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Xu Yang <xu.yang_2@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/1] dt-bindings: usb: ci-hdrc-usb2: Fix number of clocks
+Date:   Fri, 07 Jul 2023 07:59:38 +0200
+Message-ID: <4814813.MHq7AAxBmi@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230706191825.GA170669-robh@kernel.org>
+References: <20230706093928.3580544-1-alexander.stein@ew.tq-group.com> <20230706191825.GA170669-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230706215910.78772-3-richard.yu@hpe.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 04:59:09PM -0500, richard.yu@hpe.com wrote:
-> From: Richard Yu <richard.yu@hpe.com>
-> 
-> The HPE GXP vEHCI controller presents a four port EHCI compatible PCI
-> function to host software. Each vEHCI port is logically connected to a
-> corresponding set of virtual device registers.
+Hi,
 
-What makes the vEHCI controller virtual?  Presenting a "PCI function"
-certainly seems to indicate it is a physical device, indeed, a PCI
-device.
+Am Donnerstag, 6. Juli 2023, 21:18:25 CEST schrieb Rob Herring:
+> On Thu, Jul 06, 2023 at 11:39:28AM +0200, Alexander Stein wrote:
+> > Some (older) IP cores require 3 clocks, named 'ipg', 'ahb' and 'per' wh=
+ile
+> > more recent IP cores just require one. Fix the number and explicitly
+> > state the clock-names.
+> >=20
+> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > ---
+> >=20
+> > >From I can tell, is that imx25, imx27, imx35 have specified 3 clocks in
+> >=20
+> > their DT.
+> > IMHO minItems for 'clock-names' can be removed as I presume that this
+> > property is not set when only one clock is used.
+>=20
+> Rather than presume, did you test that? Well, I did[1] and can confirm.
 
-> 
-> Signed-off-by: Richard Yu <richard.yu@hpe.com>
-> ---
->  drivers/usb/gadget/udc/Kconfig   |    6 +
->  drivers/usb/gadget/udc/Makefile  |    1 +
->  drivers/usb/gadget/udc/gxp-udc.c | 1401 ++++++++++++++++++++++++++++++
->  3 files changed, 1408 insertions(+)
->  create mode 100644 drivers/usb/gadget/udc/gxp-udc.c
-> 
-> diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
-> index 83cae6bb12eb..c01eb2a2c7db 100644
-> --- a/drivers/usb/gadget/udc/Kconfig
-> +++ b/drivers/usb/gadget/udc/Kconfig
-> @@ -461,6 +461,12 @@ config USB_ASPEED_UDC
->  	  dynamically linked module called "aspeed_udc" and force all
->  	  gadget drivers to also be dynamically linked.
->  
-> +config USB_GXP_UDC
-> +        bool "GXP UDC Driver"
-> +        depends on ARCH_HPE_GXP || COMPILE_TEST
-> +        help
-> +          Say "y" to add support for GXP UDC driver
+Okay, probably my wording was bad. There are a lot of users (e.g. imx8mm,=20
+imx8mn) which only have one clock but still provide some clock-names proper=
+ty.
+It works just because it is not called 'ipg', but some SoC specific clock=20
+name.
+So this patch should cause some warnings, but these users were incorrect in=
+=20
+the first place. Following up this patch, they need to be fixed.
 
-Now hang on a second.  What sort of driver is this patch adding support 
-for: a GXP vEHCI controller driver or a GXP UDC controller driver?  The 
-patch description says the first, but the code says the second.
+Best regards,
+Alexander
 
-It sounds like this thing actually is a PCI device that appears to the 
-OS as an actual EHCI controller, but with virtual (rather than physical) 
-downstream ports, and it includes a virtual UDC for each port.  As such, 
-it requires a driver for the virtual UDCs, which is what this patch 
-provides.  (No new driver is needed for the EHCI controller part, since 
-the kernel already has an EHCI driver.)
+> Reviewed-by: Rob Herring <robh@kernel.org>
+>=20
+> [1]
+> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/2023070609=
+39
+> 28.3580544-1-alexander.stein@ew.tq-group.com/
 
-Is that a correct description?  And if it is, what is the purpose of 
-this device?  To act as a testing ground for gadget drivers?
 
-Alan Stern
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
+
+
