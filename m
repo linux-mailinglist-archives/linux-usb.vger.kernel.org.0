@@ -2,147 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B827274C0C0
-	for <lists+linux-usb@lfdr.de>; Sun,  9 Jul 2023 05:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED8274C0F2
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Jul 2023 06:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbjGIDsQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 8 Jul 2023 23:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38046 "EHLO
+        id S230026AbjGIEgm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 9 Jul 2023 00:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjGIDsN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Jul 2023 23:48:13 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0771BE58
-        for <linux-usb@vger.kernel.org>; Sat,  8 Jul 2023 20:48:12 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b717e9d423so4671371fa.1
-        for <linux-usb@vger.kernel.org>; Sat, 08 Jul 2023 20:48:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688874490; x=1691466490;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9pYCYaD1I9NzXxuURGxzFdIQMsoW5k/5IxfRvjuLiHQ=;
-        b=ZyPoV8VuNEvccc+hchM2pV6o8vTlDW1fWllTLYlBPNPdfOWULamhpXnfM9RqU8+Rv8
-         Nh4VQ/qEJ31/7gfzz29xep2rxDobhZqI+YQLk3TXyylAyJLs2PqASFqiuTBQufvwfSc8
-         hi0ViseEb36NIaUgo40Q0kZUWsgojp/RZc9c5zOV+RSY4wq7cOd/LhybO1+qXPBonSfo
-         UGOqQsV8NKhAgJH091u85RjIZBSgAfcSHmfKoa3G2P1RQGn7pSpsvu4xwk9uFM24q9M4
-         g4euo0l0gzByhVXZF9YkYGMIcNI0Oij+lFnLVOASE08O5+zEQ9TGuEc2GP15VI07Hf9g
-         3Bkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688874490; x=1691466490;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9pYCYaD1I9NzXxuURGxzFdIQMsoW5k/5IxfRvjuLiHQ=;
-        b=UQ26IBnm7DBSnRl3I0PbOhbWo4IEBXASlNgyNyUz2u1HH+HAMyeGl6AvfD/UEoPpPB
-         SMF1NgSJkyVwfVLnu/d2QChZKXn/bzbJivKkOx3eES+XhAnpuhUimTCzD8y3nNzbNUEu
-         H9VWqh+aQOGpombTA9mNlHYGRJ9CT7BvuR4rPCjf1Um8t7H/K1oqT0A3uvw8xGOs85jO
-         ohGFnAO3CTJfhECZzcJcULexjgWEkKlrD3dF57NvAv86ALCCufSI+kTrjhigzWC1IofH
-         M7MtSUxp5x/qzxdtcCUhWLcRvl33vYQegnN7epaXGDFBtHBo3qDBZyETkt++6UITbo2W
-         r9Nw==
-X-Gm-Message-State: ABy/qLbRDengpUTr7DWEMHzbA0XWXZywvQ8uutaMrRyQ1ZHAAfVM56N+
-        oGpFQbdZu0fBOq/7/fb29jZzfA==
-X-Google-Smtp-Source: APBJJlGpQHNclYa9samGTpOPC2huFZCJkKbTh7Lxrme1df9/NO10/U3dJhp/jvqWu6VUBS7HAXXP8w==
-X-Received: by 2002:a2e:9086:0:b0:2b6:eceb:9b8 with SMTP id l6-20020a2e9086000000b002b6eceb09b8mr3593555ljg.10.1688874490407;
-        Sat, 08 Jul 2023 20:48:10 -0700 (PDT)
-Received: from lothlorien.lan (dzdqv0yyyyyyyyyyybm5y-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::ab2])
-        by smtp.gmail.com with ESMTPSA id u23-20020a2e9b17000000b002b70206cd45sm1398633lji.90.2023.07.08.20.48.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jul 2023 20:48:10 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH 2/2] usb: typec: qcom-pmic-typec: register drm_bridge
-Date:   Sun,  9 Jul 2023 06:48:08 +0300
-Message-Id: <20230709034808.4049383-3-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230709034808.4049383-1-dmitry.baryshkov@linaro.org>
-References: <20230709034808.4049383-1-dmitry.baryshkov@linaro.org>
+        with ESMTP id S229777AbjGIEgl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 9 Jul 2023 00:36:41 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EF61B1;
+        Sat,  8 Jul 2023 21:36:39 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qIM9x-0002mt-1c; Sun, 09 Jul 2023 06:36:33 +0200
+Message-ID: <ac957af4-f265-3ba0-0373-3a71d134a57e@leemhuis.info>
+Date:   Sun, 9 Jul 2023 06:36:32 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: Fwd: 3 more broken Zaurii - SL-5600, A300, C700
+Content-Language: en-US, de-DE
+To:     Andrew Lunn <andrew@lunn.ch>, Ross Maynard <bids.7405@bigpond.com>
+Cc:     Dave Jones <davej@codemonkey.org.uk>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux USB <linux-usb@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>
+References: <7ea9abd8-c35d-d329-f0d4-c8bd220cf691@gmail.com>
+ <50f4c10d-260c-cb98-e7d2-124f5519fa68@gmail.com>
+ <e1fdc435-089c-8ce7-d536-ce3780a4ba95@leemhuis.info>
+ <ZKbuoRBi50i8OZ9d@codemonkey.org.uk>
+ <62a9e058-c853-1fcd-5663-e2e001f881e9@bigpond.com>
+ <14fd48c8-3955-c933-ab6f-329e54da090f@bigpond.com>
+ <05a229e8-b0b6-4d29-8561-70d02f6dc31b@lunn.ch>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <05a229e8-b0b6-4d29-8561-70d02f6dc31b@lunn.ch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688877399;eabebbaa;
+X-HE-SMSGID: 1qIM9x-0002mt-1c
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The current approach to handling DP on bridge-enabled platforms requires
-a chain of DP bridges up to the USB-C connector. Register a last DRM
-bridge for such chain.
+On 08.07.23 22:49, Andrew Lunn wrote:
+>> Could someone please submit the patch for me?
+> 
+> You are not far from it yourself.
+> 
+> I've not followed the history here. Did it never work, or has it
+> worked in the past, and then at some point broke?
+> 
+> If it never worked, this would be classed as new development, and so
+> the patch should be for net-next. If it did work, but at some point in
+> time it stopped working, then it is for net.
+> [...]
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
+To chime in here: I most agree, but FWIW, it broke more than a decade
+ago in v3.0, so maybe this is better suited for net-next. But of course
+that up to the -net maintainers.
 
-diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-index a905160dd860..ca832a28176e 100644
---- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-+++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-@@ -17,6 +17,9 @@
- #include <linux/usb/role.h>
- #include <linux/usb/tcpm.h>
- #include <linux/usb/typec_mux.h>
-+
-+#include <drm/drm_bridge.h>
-+
- #include "qcom_pmic_typec_pdphy.h"
- #include "qcom_pmic_typec_port.h"
- 
-@@ -33,6 +36,7 @@ struct pmic_typec {
- 	struct pmic_typec_port	*pmic_typec_port;
- 	bool			vbus_enabled;
- 	struct mutex		lock;		/* VBUS state serialization */
-+	struct drm_bridge	bridge;
- };
- 
- #define tcpc_to_tcpm(_tcpc_) container_of(_tcpc_, struct pmic_typec, tcpc)
-@@ -146,6 +150,16 @@ static int qcom_pmic_typec_init(struct tcpc_dev *tcpc)
- 	return 0;
- }
- 
-+static int qcom_pmic_typec_attach(struct drm_bridge *bridge,
-+				     enum drm_bridge_attach_flags flags)
-+{
-+	return flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR ? 0 : -EINVAL;
-+}
-+
-+static const struct drm_bridge_funcs qcom_pmic_typec_bridge_funcs = {
-+	.attach = qcom_pmic_typec_attach,
-+};
-+
- static int qcom_pmic_typec_probe(struct platform_device *pdev)
- {
- 	struct pmic_typec *tcpm;
-@@ -208,6 +222,17 @@ static int qcom_pmic_typec_probe(struct platform_device *pdev)
- 	mutex_init(&tcpm->lock);
- 	platform_set_drvdata(pdev, tcpm);
- 
-+	tcpm->bridge.funcs = &qcom_pmic_typec_bridge_funcs;
-+#if CONFIG_OF
-+	tcpm->bridge.of_node = of_get_child_by_name(dev->of_node, "connector");
-+#endif
-+	tcpm->bridge.ops = DRM_BRIDGE_OP_HPD;
-+	tcpm->bridge.type = DRM_MODE_CONNECTOR_USB;
-+
-+	ret = devm_drm_bridge_add(dev, &tcpm->bridge);
-+	if (ret)
-+		return ret;
-+
- 	tcpm->tcpc.fwnode = device_get_named_child_node(tcpm->dev, "connector");
- 	if (IS_ERR(tcpm->tcpc.fwnode))
- 		return PTR_ERR(tcpm->tcpc.fwnode);
--- 
-2.39.2
-
+Ciao, Thorsten
