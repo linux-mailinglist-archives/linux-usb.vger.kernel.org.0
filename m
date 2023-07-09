@@ -2,52 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D9474C804
-	for <lists+linux-usb@lfdr.de>; Sun,  9 Jul 2023 22:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9EA974C80A
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Jul 2023 22:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbjGIUNO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 9 Jul 2023 16:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S229656AbjGIUNP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 9 Jul 2023 16:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjGIUNN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 9 Jul 2023 16:13:13 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1794011C
+        with ESMTP id S230004AbjGIUNO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 9 Jul 2023 16:13:14 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF6912E
         for <linux-usb@vger.kernel.org>; Sun,  9 Jul 2023 13:13:12 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fba74870abso5430209e87.0
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b5c231c23aso59119801fa.0
         for <linux-usb@vger.kernel.org>; Sun, 09 Jul 2023 13:13:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688933590; x=1691525590;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ron0+5y7QxRbvR5hTll373fKSIMPpb9IcaNbJK63G4c=;
-        b=R113KJI9snP7n6Og+ow7prywmY5iLHcKrcYml8JUsJXDYxtOWuiPvGcaMgaazTELAv
-         y4vbB/qt8GuzG42qqqWGOCOlb4YKwJaYmM+Vh9mMuW+RcUYAkyCaakDqk5LPwgmslEDt
-         y3ZiKmqiU8U+islaRA2VhE419R4EHurOER52Sgwetx0YQ1K959/3Ia3QBCQhYYE10BFS
-         4jI/R6Gp5v1cA+/XEKLK5uhVvqYBWlu0L5m8Ige2QfUlrS4jDVsl/Y0KnOqzuDKSCkcW
-         4lwh7Fja/wc38bdpxGQXF237vTOVC4i8A5uYOB2JhUJlf/tNYGMxF9BiO6tTVB2dlEf2
-         WtXQ==
+        d=linaro.org; s=google; t=1688933591; x=1691525591;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c7lSjPQNhr0BWjor5LdaN815hU/chfe4hoYUxqnTCAI=;
+        b=T5GzhtTyJjxGyLP24p+UvR8XLrB4NVRE7/XTXnHdYuT77xZjInL1SKJoXJXffjIa3e
+         hUxY+aw8lZWYqavxNLsCk072IIDUzC27HS4WGJjZhXR6GsfqE10BM1LBkwHterRl5vYD
+         ZZpRxt9ZEOzVu8OD6ELJrTwnL7hAce86y6Zu3nEHY41nQRqGO4d2lL6oczaA5sMUXdGZ
+         tTI72OzMVuaNd9VhQlcEkzCJSz3O24Yxw8ShDUL5aJ40jVI19BKcsNB816PUuO2Xrh+A
+         p5v5DPBxmn7jF+kjqdLcVz+cBYXAEdUdI6eg8XjNXCEM+dl+kHMyU/d/B8Rk+6zwPitS
+         WvVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688933590; x=1691525590;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ron0+5y7QxRbvR5hTll373fKSIMPpb9IcaNbJK63G4c=;
-        b=AlQ8qxQ6qMBdNlEK78uH8LHkhWEOAao2m4W4KNy8d9lpeGDB01oCdEqaw2G2vv72+M
-         sduN9I3NWGTPuzKs3lUJfQdxW8EgZYAd8hzvXekVv5WaogPo4u6vHFbAbygG+iB/vpVw
-         zs6BeHP3uDTcJD2GcBIqL2GGN7dMa44WkIWwXgnXHPqmSSZknNjdBM7qcuBudfsK/N9W
-         Nagz8hkEAAOek5/1cnnc19/BCYi249V+Fz0BVDAsK+VzfeUMrtb8qbHGr/FZiqHeFx5D
-         PB3GfootFnLrpHdKK0DgOTOCEf5PYFEKnyAr7oGUlTABTyacGg172pIEF9E9aH+dnvl2
-         8TaA==
-X-Gm-Message-State: ABy/qLYC4zDQs3KAL+Fwpts3TGmqnRkd5dzrEjjnKpF+Uf1UVyzaVDHs
-        bwdhxcOD3RxplBNJEIbA2ktjbA==
-X-Google-Smtp-Source: APBJJlFeHV2isi+RpDaha/5xS5MHSwNJ0wHrgUNiEoitevfRCrXoxLksC97ebnt0CFpeuom/8TIu2A==
-X-Received: by 2002:a05:6512:128a:b0:4f8:5ab0:68c4 with SMTP id u10-20020a056512128a00b004f85ab068c4mr9422974lfs.59.1688933590354;
-        Sun, 09 Jul 2023 13:13:10 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688933591; x=1691525591;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c7lSjPQNhr0BWjor5LdaN815hU/chfe4hoYUxqnTCAI=;
+        b=LSM2pq+jwDrqK6GRRD3oDE4HB1ntwaAlFo0B9+SCPJlHUrbgzXiV3wS/t0L6JkFHPx
+         aoRYpMXn8l2klCngh58kOV09+ItamNaB/85qca8G7P+2w0VmhT7VQa8Oe/tHshFJGs9z
+         rVreUnVhb6jzPBgALgFRN+Uuyw8Vnrq0ZGXdNo5l9OEWoOrW3bBxZ1PGKOFkslvT3McJ
+         sAcfErgfM5Zszc6cu+Re8Lz0E4SDiXO7qrfSqy87NebGjE+aKVAyTxu5uSO4ToBcOmNH
+         bYhhl/gCmfA6nUkPT56uh//umA58KMrQjOMtMXdB27+E6vt5VxHtnl7gphjM4JzTLqXI
+         FJVA==
+X-Gm-Message-State: ABy/qLbVdGj11uWaBELi5qNAUXJwr8hi0F8UmpazUuOLmk4hSCw9g/5Q
+        a26VzwkTWUZyV3KvZijO0jB60g==
+X-Google-Smtp-Source: APBJJlFZuEiOyJs+Wxo5yotGxmFY/kIczdsa1ko9Q5u26MRMkHnsWnGRIo9a62sNAbznJh5fjeHpqw==
+X-Received: by 2002:a05:6512:3295:b0:4f8:770f:1b0b with SMTP id p21-20020a056512329500b004f8770f1b0bmr7078397lfe.33.1688933591071;
+        Sun, 09 Jul 2023 13:13:11 -0700 (PDT)
 Received: from lothlorien.lan (dzdqv0yyyyyyyyyyybm5y-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::ab2])
-        by smtp.gmail.com with ESMTPSA id c12-20020ac2530c000000b004fb77d6cab3sm1420378lfh.261.2023.07.09.13.13.09
+        by smtp.gmail.com with ESMTPSA id c12-20020ac2530c000000b004fb77d6cab3sm1420378lfh.261.2023.07.09.13.13.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jul 2023 13:13:09 -0700 (PDT)
+        Sun, 09 Jul 2023 13:13:10 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -58,14 +59,16 @@ To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
-Subject: [PATCH v2 0/2] usb: typec: qcom-pmic-typec: enable DP support
-Date:   Sun,  9 Jul 2023 23:13:07 +0300
-Message-Id: <20230709201309.274306-1-dmitry.baryshkov@linaro.org>
+Subject: [PATCH v2 1/2] usb: typec: altmodes/displayport: add support for embedded DP cases
+Date:   Sun,  9 Jul 2023 23:13:08 +0300
+Message-Id: <20230709201309.274306-2-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230709201309.274306-1-dmitry.baryshkov@linaro.org>
+References: <20230709201309.274306-1-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,27 +77,31 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-To enable DisplayPort on the platforms supported by qcom-pmic-typec
-driver, we need to register a corresponding drm_bridge for this device
-and also be able to send the OOB hotplug event to the corresponding DRM
-connector. All this is implemented by [1], but there is no direct
-dependency on that patchset.
+In the embedded cases, the DisplayPort connector is handled by the TCPM
+itself. Fallback to the controller fwnode for HPD notifications to
+support such usecases without requiring additional DT properties.
 
-[1] https://patchwork.freedesktop.org/series/120393/
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+ drivers/usb/typec/altmodes/displayport.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Changes since v1:
-- Properly handle CONFIG_DRM dependency. Disallow building DRM as a
-  module if qcom-pmic-typec driver is built-in (Bryan).
-
-Dmitry Baryshkov (2):
-  usb: typec: altmodes/displayport: add support for embedded DP cases
-  usb: typec: qcom-pmic-typec: register drm_bridge
-
- drivers/usb/typec/altmodes/displayport.c      |  5 ++-
- drivers/usb/typec/tcpm/Kconfig                |  1 +
- drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 39 +++++++++++++++++++
- 3 files changed, 44 insertions(+), 1 deletion(-)
-
+diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+index 4e5aa17ce4c8..699438c7755e 100644
+--- a/drivers/usb/typec/altmodes/displayport.c
++++ b/drivers/usb/typec/altmodes/displayport.c
+@@ -578,7 +578,10 @@ int dp_altmode_probe(struct typec_altmode *alt)
+ 	alt->ops = &dp_altmode_ops;
+ 
+ 	fwnode = dev_fwnode(alt->dev.parent->parent); /* typec_port fwnode */
+-	dp->connector_fwnode = fwnode_find_reference(fwnode, "displayport", 0);
++	if (fwnode_property_present(fwnode, "displayport"))
++		dp->connector_fwnode = fwnode_find_reference(fwnode, "displayport", 0);
++	else
++		dp->connector_fwnode = fwnode_handle_get(fwnode); /* embedded DP */
+ 	if (IS_ERR(dp->connector_fwnode))
+ 		dp->connector_fwnode = NULL;
+ 
 -- 
 2.39.2
 
