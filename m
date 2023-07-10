@@ -2,144 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5BE74CA51
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jul 2023 05:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C66674CA52
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jul 2023 05:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbjGJDTd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 9 Jul 2023 23:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55006 "EHLO
+        id S229758AbjGJDUS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 9 Jul 2023 23:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjGJDTb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 9 Jul 2023 23:19:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698BCF9
-        for <linux-usb@vger.kernel.org>; Sun,  9 Jul 2023 20:19:30 -0700 (PDT)
+        with ESMTP id S229743AbjGJDUR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 9 Jul 2023 23:20:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94845EC
+        for <linux-usb@vger.kernel.org>; Sun,  9 Jul 2023 20:20:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7DC960DCE
-        for <linux-usb@vger.kernel.org>; Mon, 10 Jul 2023 03:19:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6749C433C8;
-        Mon, 10 Jul 2023 03:19:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32CF460B56
+        for <linux-usb@vger.kernel.org>; Mon, 10 Jul 2023 03:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D2EDC433C9;
+        Mon, 10 Jul 2023 03:20:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688959169;
-        bh=tLsaOWrynHHL4LhYdB/GLUGPi1qQypW+c8hrTq9vPN0=;
+        s=k20201202; t=1688959215;
+        bh=Z7HmmEKgux8vl0J4vWidS86aXPCHDCaU/isjhoLKX8g=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tJmUg4CaNXQ7SbeL1YVkWCHq5tzv2Y+gnjG9dVQhgmt9eJf9e12GPkmVafG4VxCh0
-         /rsQSxF85SFJkpEBXCeLKaV5GsU/bBX0+/ezyJQmmfTn6oehX+qjcW3nG56OnTBlCj
-         PoD/2FOkKG6qXPSZhVUcrY/zG3KuylipCe3l+LXEcrK0QVkdrZ0XjxCIeDCjCU04Xp
-         bUfOmHZRwokJO5Mca6pquMCpXLEer7r93rLEVGjdwiQc1Zbaya0oWJYlm6hY01QwJi
-         Z8GA+qlJ+SZn4MtACAGZ8qWVCd6HX95YyWHxK1UW9RhCrFIpHWvqWYPcdVEntYaFSW
-         pwaQC98Yp1wIA==
-Date:   Mon, 10 Jul 2023 11:19:18 +0800
+        b=fuv0i1T7kU36Lu/KfX5zn0eBK6htE0kQ43cZMJdfAEsCDnM0zzcVOjJKeP/AbuwEq
+         nxeR/YdnSC9hW3VR9KgfBRQ19iG1azr5brOC7+Bv5XU+wO32SFlDf0/RpMzmDrP58f
+         99IgL1vqlemSL/Qzd3plS+wD5WPWtE1aa/yzWlbMPx45XyKcfFViwHhY4b0XR4fOcn
+         nIjGACAmjn2c3fGI7KKBCCrBujc6bJBMG5Snru73dNZvudC64tFBSwNs54j7HzvNld
+         3b244gQK7oK1FBYtFtKpuxs3FpiWUAidp25S2ECDlDQH3ETUmewLH7FV8dHxroRNQl
+         voxoIqmeTZ/Bg==
+Date:   Mon, 10 Jul 2023 11:20:04 +0800
 From:   Peter Chen <peter.chen@kernel.org>
 To:     Xu Yang <xu.yang_2@nxp.com>
 Cc:     gregkh@linuxfoundation.org, shawnguo@kernel.org,
         s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
         linux-imx@nxp.com, balbi@ti.com, linux-usb@vger.kernel.org,
         jun.li@nxp.com
-Subject: Re: [PATCH 1/3] usb: chipidea: add USB PHY event
-Message-ID: <20230710031918.GD2418446@nchen-desktop>
+Subject: Re: [PATCH 2/3] usb: phy: mxs: fix getting wrong state with
+ mxs_phy_is_otg_host()
+Message-ID: <20230710032004.GE2418446@nchen-desktop>
 References: <20230627110353.1879477-1-xu.yang_2@nxp.com>
+ <20230627110353.1879477-2-xu.yang_2@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230627110353.1879477-1-xu.yang_2@nxp.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230627110353.1879477-2-xu.yang_2@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23-06-27 19:03:51, Xu Yang wrote:
-> Add USB PHY event for below situation:
-> - usb role changed
-> - vbus connect
-> - vbus disconnect
-> - gadget driver is enumerated
+On 23-06-27 19:03:52, Xu Yang wrote:
+> The function mxs_phy_is_otg_host() will return true if OTG_ID_VALUE is
+> 0 at USBPHY_CTRL register. However, OTG_ID_VALUE will not reflect the real
+> state if the ID pin is float, such as Host-only or Type-C cases. The value
+> of OTG_ID_VALUE is always 1 which means device mode.
+> This patch will fix the issue by judging the current mode based on
+> last_event. The controller will update last_event in time.
 > 
-> USB PHY driver can get the last event after above situation occurs
-> and deal with different situations.
-> 
+> Fixes: 7b09e67639d6 ("usb: phy: mxs: refine mxs_phy_disconnect_line")
 > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
 Acked-by: Peter Chen <peter.chen@kernel.org>
 
 Peter
 > ---
->  drivers/usb/chipidea/ci.h  | 18 ++++++++++++++++--
->  drivers/usb/chipidea/udc.c | 10 ++++++++++
->  2 files changed, 26 insertions(+), 2 deletions(-)
+>  drivers/usb/phy/phy-mxs-usb.c | 10 ++--------
+>  1 file changed, 2 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
-> index f210b7489fd5..d262b9df7b3d 100644
-> --- a/drivers/usb/chipidea/ci.h
-> +++ b/drivers/usb/chipidea/ci.h
-> @@ -281,8 +281,19 @@ static inline int ci_role_start(struct ci_hdrc *ci, enum ci_role role)
->  		return -ENXIO;
+> diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
+> index 036bb58a3a71..f484c79efa6c 100644
+> --- a/drivers/usb/phy/phy-mxs-usb.c
+> +++ b/drivers/usb/phy/phy-mxs-usb.c
+> @@ -388,14 +388,8 @@ static void __mxs_phy_disconnect_line(struct mxs_phy *mxs_phy, bool disconnect)
 >  
->  	ret = ci->roles[role]->start(ci);
-> -	if (!ret)
-> -		ci->role = role;
-> +	if (ret)
-> +		return ret;
-> +
-> +	ci->role = role;
-> +
-> +	if (ci->usb_phy) {
-> +		if (role == CI_ROLE_HOST)
-> +			usb_phy_set_event(ci->usb_phy, USB_EVENT_ID);
-> +		else
-> +			/* in device mode but vbus is invalid*/
-> +			usb_phy_set_event(ci->usb_phy, USB_EVENT_NONE);
-> +	}
-> +
->  	return ret;
+>  static bool mxs_phy_is_otg_host(struct mxs_phy *mxs_phy)
+>  {
+> -	void __iomem *base = mxs_phy->phy.io_priv;
+> -	u32 phyctrl = readl(base + HW_USBPHY_CTRL);
+> -
+> -	if (IS_ENABLED(CONFIG_USB_OTG) &&
+> -			!(phyctrl & BM_USBPHY_CTRL_OTG_ID_VALUE))
+> -		return true;
+> -
+> -	return false;
+> +	return IS_ENABLED(CONFIG_USB_OTG) &&
+> +		mxs_phy->phy.last_event == USB_EVENT_ID;
 >  }
 >  
-> @@ -296,6 +307,9 @@ static inline void ci_role_stop(struct ci_hdrc *ci)
->  	ci->role = CI_ROLE_END;
->  
->  	ci->roles[role]->stop(ci);
-> +
-> +	if (ci->usb_phy)
-> +		usb_phy_set_event(ci->usb_phy, USB_EVENT_NONE);
->  }
->  
->  static inline enum usb_role ci_role_to_usb_role(struct ci_hdrc *ci)
-> diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-> index 54c09245ad05..d58355427eeb 100644
-> --- a/drivers/usb/chipidea/udc.c
-> +++ b/drivers/usb/chipidea/udc.c
-> @@ -1718,6 +1718,13 @@ static int ci_udc_vbus_session(struct usb_gadget *_gadget, int is_active)
->  		ret = ci->platdata->notify_event(ci,
->  				CI_HDRC_CONTROLLER_VBUS_EVENT);
->  
-> +	if (ci->usb_phy) {
-> +		if (is_active)
-> +			usb_phy_set_event(ci->usb_phy, USB_EVENT_VBUS);
-> +		else
-> +			usb_phy_set_event(ci->usb_phy, USB_EVENT_NONE);
-> +	}
-> +
->  	if (ci->driver)
->  		ci_hdrc_gadget_connect(_gadget, is_active);
->  
-> @@ -2034,6 +2041,9 @@ static irqreturn_t udc_irq(struct ci_hdrc *ci)
->  		if (USBi_PCI & intr) {
->  			ci->gadget.speed = hw_port_is_high_speed(ci) ?
->  				USB_SPEED_HIGH : USB_SPEED_FULL;
-> +			if (ci->usb_phy)
-> +				usb_phy_set_event(ci->usb_phy,
-> +					USB_EVENT_ENUMERATED);
->  			if (ci->suspended) {
->  				if (ci->driver->resume) {
->  					spin_unlock(&ci->lock);
+>  static void mxs_phy_disconnect_line(struct mxs_phy *mxs_phy, bool on)
 > -- 
 > 2.34.1
 > 
