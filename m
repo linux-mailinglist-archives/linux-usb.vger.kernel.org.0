@@ -2,196 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29EBB74D938
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jul 2023 16:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8D674DB48
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jul 2023 18:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbjGJOmt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jul 2023 10:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
+        id S230212AbjGJQlT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jul 2023 12:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjGJOmm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jul 2023 10:42:42 -0400
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1906C3;
-        Mon, 10 Jul 2023 07:42:40 -0700 (PDT)
-Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-345ff33d286so24253225ab.3;
-        Mon, 10 Jul 2023 07:42:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689000160; x=1691592160;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9youPIImCCAcdEckdoxFQrNpLYrygdk7W9ZtiP8w15k=;
-        b=RNoulLSZHnHbR/2BYwKnhB6ZCVD59ktpzYmSlC+pFzHu5labOYQjxCMLjg4wmUaXA9
-         5vfXG/4I3tImqbWLvdIksMoDeccqRRvd95Z32GFS3nPDNTnlnPJSrEEj7eJXJ/lWUeVr
-         KE0J6gWiBOMpY2LkMZbDHluq+5lcDdGcHnLJ7RBFruBMlvha04KUuNUfZoQzW+chBW5k
-         tYpEHrU4YrdlJ4bvtl7C/W8gUJqi1OXND3pnVB8oYKf6q004qRo/Ok5OdvnmQ5Zmd0bZ
-         nJHvdsoQNiMnmosuh/Y9qGz6npMn4TZDJsXIpqcogTrhPKfeBcRGSvFNYBmn+el3NcTe
-         /V7w==
-X-Gm-Message-State: ABy/qLb0UTDG/EF+3cYvmQZXUUxjYHEQEXmHqRWXEJnqZ28alAfM/g8I
-        jLTwmVejLmJaAiz/gfQnPg==
-X-Google-Smtp-Source: APBJJlG3K/ro2oZtTnsZ7Banw1CdZJLy4OFKR61udj8GbrxlXMYjo+jeaSBEKYBDTKO2X9W4TkNn0w==
-X-Received: by 2002:a92:502:0:b0:345:c8ce:ff4e with SMTP id q2-20020a920502000000b00345c8ceff4emr11579387ile.3.1689000160019;
-        Mon, 10 Jul 2023 07:42:40 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id x7-20020a92d307000000b00342f537e3c3sm3560577ila.2.2023.07.10.07.42.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 07:42:39 -0700 (PDT)
-Received: (nullmailer pid 1938541 invoked by uid 1000);
-        Mon, 10 Jul 2023 14:42:35 -0000
-Date:   Mon, 10 Jul 2023 08:42:35 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-Cc:     Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        alexandre.torgue@foss.st.com, vkoul@kernel.org, jic23@kernel.org,
-        olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com,
-        mchehab@kernel.org, fabrice.gasnier@foss.st.com,
-        andi.shyti@kernel.org, ulf.hansson@linaro.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, hugues.fruchet@foss.st.com,
-        lee@kernel.org, will@kernel.org, catalin.marinas@arm.com,
-        arnd@kernel.org, richardcochran@gmail.com,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        with ESMTP id S229450AbjGJQlS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jul 2023 12:41:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AD793;
+        Mon, 10 Jul 2023 09:41:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C937B6112C;
+        Mon, 10 Jul 2023 16:41:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4932AC433C8;
+        Mon, 10 Jul 2023 16:41:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689007276;
+        bh=BklOa+pPKx6unr8IyAuyGhh7uFZFgnSkVkf6qlGHnAQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PInj/CefJW6G0t6ImrUTddulyxavfXgH5IsG3VLk4AWrOuJSoqOjdAzKXwYKmmO9+
+         TpH8uMhQ+NEHXZkBkP9/E/lPxdyKgDL+eyDXS+gqft4HVdmnjyjH6PbUnm6/NZs9Bu
+         r9ef3qEtXslV49T1zzzbJt5bp36OJ07JvRxmL8NERABHTTvvE/Ocj7BxwGAm9rr5e6
+         gmG+HRchwacb9T9ZJ7npTesYRYHZvpm+A3BArDifgwRYwgpkkf4Ro2tIx8zbmK3MHI
+         O18F7oZVF04V9d45m1+fc0aBurdqjBPaJYnNPNhPoDlRgG1WUDf42dslI1A3YaOt1Q
+         INgpXraznkmIw==
+Date:   Mon, 10 Jul 2023 17:41:10 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Piyush Mehta <piyush.mehta@amd.com>, nava.kishore.manne@amd.com,
+        linux-kernel@vger.kernel.org, git@amd.com, wsa@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        broonie@kernel.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, dlemoal@kernel.org,
+        michal.simek@amd.com, sebastian.reichel@collabora.com,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH 04/10] dt-bindings: treewide: add feature-domains
- description in binding files
-Message-ID: <20230710144235.GA1922048-robh@kernel.org>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-5-gatien.chevallier@foss.st.com>
- <20230706145108.GA3858320-robh@kernel.org>
- <0aaace47-1bb4-82c5-57a5-6f5d27eb4d45@foss.st.com>
- <20230707152056.GA317056-robh@kernel.org>
- <fb72b4e4-d5c6-d9be-269d-29aff996001c@foss.st.com>
+Subject: Re: [PATCH] dt-bindings: firmware: add reset-controller property
+Message-ID: <20230710-hatchery-pesky-6f837788e576@spud>
+References: <20230709172542.1393828-1-piyush.mehta@amd.com>
+ <168892849854.136160.7620779203584875736.robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="hXqBLkZYbGg49ffb"
 Content-Disposition: inline
-In-Reply-To: <fb72b4e4-d5c6-d9be-269d-29aff996001c@foss.st.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <168892849854.136160.7620779203584875736.robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 10:22:10AM +0200, Gatien CHEVALLIER wrote:
-> 
-> 
-> On 7/7/23 17:20, Rob Herring wrote:
-> > On Fri, Jul 07, 2023 at 02:28:28PM +0200, Gatien CHEVALLIER wrote:
-> > > Hello Rob,
-> > > 
-> > > On 7/6/23 16:51, Rob Herring wrote:
-> > > > On Wed, Jul 05, 2023 at 07:27:53PM +0200, Gatien Chevallier wrote:
-> > > > > feature-domains is an optional property that allows a peripheral to
-> > > > > refer to one or more feature domain controller(s).
-> > > > > 
-> > > > > Description of this property is added to all peripheral binding files of
-> > > > > the peripheral under the STM32 firewall controllers. It allows an accurate
-> > > > > representation of the hardware, where various peripherals are connected
-> > > > > to this firewall bus. The firewall can then check the peripheral accesses
-> > > > > before allowing it to probe.
-> > > > > 
-> > > > > Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-> > > > > ---
-> > > > > 
-> > > > > Disclaimer: Some error with dtbs_check will be observed as I've
-> > > > > considered the property to be generic, as Rob asked
-> > > > > 
-> > > > >    Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml  | 4 ++++
-> > > > >    Documentation/devicetree/bindings/dma/st,stm32-dma.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml   | 4 ++++
-> > > > >    Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 4 ++++
-> > > > >    .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml  | 4 ++++
-> > > > >    .../devicetree/bindings/media/cec/st,stm32-cec.yaml          | 4 ++++
-> > > > >    Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml   | 4 ++++
-> > > > >    .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml       | 4 ++++
-> > > > >    Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml  | 4 ++++
-> > > > >    Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml   | 5 +++++
-> > > > >    Documentation/devicetree/bindings/mmc/arm,pl18x.yaml         | 4 ++++
-> > > > >    Documentation/devicetree/bindings/net/stm32-dwmac.yaml       | 4 ++++
-> > > > >    Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml | 4 ++++
-> > > > >    .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/rng/st,stm32-rng.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/serial/st,stm32-uart.yaml  | 4 ++++
-> > > > >    Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml    | 4 ++++
-> > > > >    Documentation/devicetree/bindings/sound/st,stm32-sai.yaml    | 4 ++++
-> > > > >    .../devicetree/bindings/sound/st,stm32-spdifrx.yaml          | 4 ++++
-> > > > >    Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml     | 4 ++++
-> > > > >    Documentation/devicetree/bindings/spi/st,stm32-spi.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/usb/dwc2.yaml              | 4 ++++
-> > > > >    24 files changed, 97 insertions(+)
-> > > > > 
-> > > > > diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> > > > > index b767ec72a999..daf8dcaef627 100644
-> > > > > --- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> > > > > +++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> > > > > @@ -50,6 +50,10 @@ properties:
-> > > > >      power-domains:
-> > > > >        maxItems: 1
-> > > > > +  feature-domains:
-> > > > > +    minItems: 1
-> > > > > +    maxItems: 3
-> > > > 
-> > > > What are the 3 entries?
-> > > > 
-> > > > Rob
-> > > 
-> > > I thought I was benefiting from the description of the pattern-property in
-> > > the RIFSC YAML file. But yes anyway, it seems like it needs some description
-> > > here as the dependency does not appear in this file.
-> > 
-> > Humm, that should limit the maximum entries to 2, so 3 would never work
-> > (if RIFSC is the parent).
-> > 
-> > > I picked 3 as a maxItems for our ST needs, I'll give it some more thought
-> > > when coming back with something clearer.
-> > 
-> > I'd expect you have 1 entry for register bus and 1 entry for DMA bus if
-> > there is one. It's block specific for how many entries, so the RIFSC
-> > schema should not be setting that. You could possibly say that
-> > 'feature-domains' is required for all the child nodes though.
-> 
-> Ok, I will change to not specifying the number of entries in the
-> RIFSC YAML file for V2.
-> 
-> > 
-> > Rob
-> Some hardware blocks may have a firewall ID for their device part and
-> another ID for their master part as well. In the end, the number of
-> entries could very well vary between different platforms. And the YAML
-> files are common to these platforms.
 
-A given device has a fixed number of buses. Usually 1 or 2. That does 
-*not* vary by platform (unless the device is modified). You could have 
-the same firewall controller and id for multiple buses, but that 
-should not change the number of entries for the device. Now maybe a bus 
-has no firewall on some platforms. In that case, you should make the 
-optional firewall entry the last one, have a null phandle (0 or -1), or 
-use -names to distinguish the entries.
+--hXqBLkZYbGg49ffb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> This property could be used for "extra" arguments as well, that are not
-> firewall IDs.
+On Sun, Jul 09, 2023 at 12:48:18PM -0600, Rob Herring wrote:
+>=20
+> On Sun, 09 Jul 2023 22:55:42 +0530, Piyush Mehta wrote:
+> > The reset controller is responsible for managing both device-level rese=
+ts
+> > and individual PMC (Power Management Controller) block resets.
+> >=20
+> > To facilitate this functionality reset-controller property is added to =
+the
+> > firmware device tree binding.
+> >=20
+> > Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+> > ---
+> >  .../firmware/xilinx/xlnx,zynqmp-firmware.yaml         | 11 +++++++++++
+> >  1 file changed, 11 insertions(+)
+> >=20
+>=20
+> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>=20
+> yamllint warnings/errors:
+>=20
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/f=
+irmware/xilinx/xlnx,zynqmp-firmware.yaml:
+> Error in referenced schema matching $id: http://devicetree.org/schemas/re=
+set/xlnx,zynqmp-reset.yaml
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/f=
+irmware/xilinx/xlnx,zynqmp-firmware.example.dtb: versal-firmware: reset-con=
+troller: False schema does not allow {'compatible': ['xlnx,zynqmp-reset'], =
+'#reset-cells': [[1]]}
+> 	from schema $id: http://devicetree.org/schemas/firmware/xilinx/xlnx,zynq=
+mp-firmware.yaml#
+> Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.ex=
+ample.dtb: /example-0/versal-firmware/reset-controller: failed to match any=
+ schema with compatible: ['xlnx,zynqmp-reset']
+>=20
+> doc reference errors (make refcheckdocs):
+>=20
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/202307=
+09172542.1393828-1-piyush.mehta@amd.com
+>=20
+> The base for the series is generally the latest rc1. A different dependen=
+cy
+> should be noted in *this* patch.
+>=20
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+>=20
+> pip3 install dtschema --upgrade
+>=20
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your sch=
+ema.
+>=20
 
-The arg cells are dictated by the provider and opaque to the client.
+When you fix this error, please add an indication of the platform in
+question to $subject, "dt-bindings: firmware: add reset-controller property"
+sounds like it applies to all firmware bindings..
 
-> What do you suggest between picking a high maxItems value that would
-> (hopefully) cover all cases and not specifying maxItems at all? Or maybe
-> another property dedicated to such arguments?
+Cheers,
+Conor.
 
-You should not specify maxItems in the firewall controller binding.
+--hXqBLkZYbGg49ffb
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Rob
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKw0pgAKCRB4tDGHoIJi
+0rnMAP4vUl3fJNAP7YMUJwwBkLCd2p+d2m74MMytBGPmwWImRQD8DfhzqqPCDxxX
+PPaFDCUfBf0If2C2+cGKd2pO2kPGJAc=
+=gMVg
+-----END PGP SIGNATURE-----
+
+--hXqBLkZYbGg49ffb--
