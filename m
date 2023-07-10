@@ -2,87 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9F774CBF3
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jul 2023 07:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C918C74CC4C
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jul 2023 07:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232106AbjGJFHf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jul 2023 01:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
+        id S229942AbjGJFjx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jul 2023 01:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbjGJFGt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jul 2023 01:06:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5928CE75;
-        Sun,  9 Jul 2023 22:05:25 -0700 (PDT)
+        with ESMTP id S229458AbjGJFjw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jul 2023 01:39:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2DCA8;
+        Sun,  9 Jul 2023 22:39:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 77EF260E06;
-        Mon, 10 Jul 2023 05:05:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8411C433CD;
-        Mon, 10 Jul 2023 05:05:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AFF660DF2;
+        Mon, 10 Jul 2023 05:39:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id ED2A5C433C9;
+        Mon, 10 Jul 2023 05:39:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688965510;
-        bh=qEuuH2tAUT9JrwW7gS3dZ20Ub/g5ZBiDfoOlmDnHAQk=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=S73N0X4sfgyEJKS946ty0VQ6aaTDuV94uGIO3R7bwoT8gcbS9Uxpw0L3l8QZ0V0rZ
-         K7psvJxBdufrDZPueixTFj3o+MvaGPvkF8UtwIkLGtWCbUq1WtfGmeCruGUJT1XemN
-         KgVRg4X4CGns99r9GZakgH4ca5jMWXmqo+1mwfrin6xjBcOK9fejtNwtIFlJVkk+XZ
-         53ZwA4pg10UnLnFgroejdaYb1qiqCRABtHk7qV6cfGX/qlSYm2IbYQJ7p+Isb1N4gu
-         RxOEuHYN0IuUSMT203B+hXuV3o+w46MaP0X0LAzrT6+n8o+q9Kw53ns4L3monWWP9a
-         pFRBSzhg/WApA==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     agross@kernel.org, konrad.dybcio@linaro.org,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: Re: (subset) [PATCH v15 0/5] Enable IPQ9754 USB
-Date:   Sun,  9 Jul 2023 22:07:48 -0700
-Message-ID: <168896565947.1376307.7465231231196161276.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <cover.1686289721.git.quic_varada@quicinc.com>
-References: <cover.1686289721.git.quic_varada@quicinc.com>
-MIME-Version: 1.0
+        s=k20201202; t=1688967590;
+        bh=2uuv3SAKxaN3cTrhREKEPhCvyNumlhGiykmKg6Z5YeQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=qt/IuAS8XIQOvwtV0patii4VqC8G0JhCzu5QTNQ1mtmsYR6sMn0Uy3i0U+1WQLCJD
+         ntYJOpQfIEP3AwTAq5ySFBqDLzv8oDb+PQhanKvtPuuasw7PxFLU8IFRY3JFJGECwf
+         ZShCR8oVsUdfF5yMagAxqNAfchE1c9nixjwe+mujzEzRg64m9ETLuyxpXN0fKemHKz
+         F/r8QwnIYnZbKCO9Waw4lwAehrOP0LZI9y5oUcKzsxO6zAt4a1H1URFwUAa/evRbjv
+         nDh4SR0Z0RjrKWqLfAYHHXIynqu5ZQZasMZNUFtg2Yf7nTO0lxA/E5iz96hpm18Dp+
+         HfwtOAE+Luc2w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CE7F8C0C40E;
+        Mon, 10 Jul 2023 05:39:49 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 0/2] usb: typec: mux: Remove the "svid" device property
+ checks
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <168896758984.3413.103690253008672819.git-patchwork-notify@kernel.org>
+Date:   Mon, 10 Jul 2023 05:39:49 +0000
+References: <20230526131434.46920-1-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20230526131434.46920-1-heikki.krogerus@linux.intel.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     gregkh@linuxfoundation.org, andersson@kernel.org,
+        chrome-platform@lists.linux.dev, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello:
 
-On Fri, 09 Jun 2023 11:26:29 +0530, Varadarajan Narayanan wrote:
-> This patch series adds the relevant phy and controller
-> configurations for enabling USB on IPQ9754
+This series was applied to chrome-platform/linux.git (for-kernelci)
+by Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
+
+On Fri, 26 May 2023 16:14:32 +0300 you wrote:
+> Hi,
 > 
-> Portions of the patchset have been merged. Please see
-> 	https://lore.kernel.org/lkml/ZGN9gchu7dRb6QwC@matsya/
+> The comment in the first patch is now fixed as requested by Bjorn. No
+> other changes compared to v1.
 > 
-> [v15]:
-> 	- Introduce fixed regulator definitions in the last patch
-> 	  instead of earlier patch
+> Original message:
 > 
 > [...]
 
-Applied, thanks!
+Here is the summary with links:
+  - [v2,1/2] usb: typec: mux: Clean up mux_fwnode_match()
+    https://git.kernel.org/chrome-platform/c/4aebc4f89f00
+  - [v2,2/2] usb: typec: mux: Remove alt mode parameters from the API
+    https://git.kernel.org/chrome-platform/c/3524fe31538c
 
-[3/5] arm64: dts: qcom: ipq9574: Add USB related nodes
-      commit: a98bfb31f6766db26e0d4f39c909b7e8926cb0d8
-[4/5] arm64: dts: qcom: ipq9574: Add LDO regulator node
-      commit: d5506524d9d9f2be01cbff510b0b8eec0cc9d691
-[5/5] arm64: dts: qcom: ipq9574: Enable USB
-      commit: ec4f047679d59294c98095ae2470d34c2f2335a2
-
-Best regards,
+You are awesome, thank you!
 -- 
-Bjorn Andersson <andersson@kernel.org>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
