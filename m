@@ -2,114 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26EF274D151
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jul 2023 11:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3530874D22E
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jul 2023 11:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjGJJY5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jul 2023 05:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
+        id S231883AbjGJJus (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jul 2023 05:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjGJJY4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jul 2023 05:24:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288B492
-        for <linux-usb@vger.kernel.org>; Mon, 10 Jul 2023 02:24:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF85860F36
-        for <linux-usb@vger.kernel.org>; Mon, 10 Jul 2023 09:24:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F498C433C8;
-        Mon, 10 Jul 2023 09:24:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688981095;
-        bh=gDgDXrT4xu+oFlxoLyT5AijUEFQkMSQUcGHG6LfEkic=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ld7hoDalsbVCM8DI84dvv+pcpsXfZKexstGKRhORmWf8/xJnpFJUBTQZm411qzdGt
-         sDRMHVjJz12WY2LyM4dOmnzBN/doR/5OmNeVCVcb0PEuBNPXIcnZ9HDfHGORHW/RoN
-         tyv7Z2tNpdFr8s5ynynt6oc1Iu9i9+tMKLhcV+vzX8cbWpLKFDIsoGBRjkUtTi0O94
-         DwxetsNWTnIEZ3qbieuVOqzOFEfFWPp+xg3O9loHwbDbUtrvpwlzl5F/3tTk/kOLFj
-         V1uAEymafXpfI1wFQE/bRTbETBAPhc0m2FYPF33VknaUPV6JLiZDp7K1GES2DXDNTW
-         uL+oFPSiHOjXA==
-Message-ID: <1dcd6d8f-f15b-4f71-52a2-3ff48bff7575@kernel.org>
-Date:   Mon, 10 Jul 2023 11:24:49 +0200
+        with ESMTP id S231978AbjGJJt4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jul 2023 05:49:56 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22723AA5;
+        Mon, 10 Jul 2023 02:44:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688982279; x=1720518279;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=2khzmhKhnoS24cYl9j3/7m5Qz5fUfM6HHTw49kzdp3M=;
+  b=kR6BAjWjP5bdm/GB8zjep0dapC/bnLAgokeDpCuI1V9UZjoTsuruSEKs
+   QUkyJQTrOrcG84JvzcEgPIWoZgjnFoyV0OGl4haCduoYhEeQGHw8LngSq
+   hdZ2OBCRt+1OhoqnEg7KnSUY25FkGaj62wTrIil/ZP+hK64bzlYg6rcu0
+   GN0BU+qw6fG22LGFEBswU8sUjlu+OJf7PMiiK2Hqaq8wg9fs6TuHKzk43
+   IjB2tIi2TxpeaGiX9iudD2rJFJUNNe6ssVlVGAU5AOEItEVhCUBt47/j/
+   zUa/xi6ErDXBhYAMHjrmgw/MsqjlEU7yFIJEXT5Zy5GCDCWeAoCoD+QR2
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="363165733"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="363165733"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 02:44:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="894718881"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="894718881"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 10 Jul 2023 02:44:37 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qInRc-001W6x-0r;
+        Mon, 10 Jul 2023 12:44:36 +0300
+Date:   Mon, 10 Jul 2023 12:44:35 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bin Liu <b-liu@ti.com>
+Subject: Re: [PATCH v1 1/1] usb: musb: Use read_poll_timeout()
+Message-ID: <ZKvTA5fQxPqIdX1n@smile.fi.intel.com>
+References: <20230703121936.71623-1-andriy.shevchenko@linux.intel.com>
+ <CACRpkdbySh+XFUDnFWUQHULYag0hukJ_ogfSREPLvs1iV=YmwQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] Style error/warning fixes: replacing space with tabs
-Content-Language: en-US
-To:     Prince Kumar Maurya <princekumarmaurya06@gmail.com>,
-        gregkh@linuxfoundation.org, raychi@google.com,
-        skhan@linuxfoundation.org
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-usb@vger.kernel.org
-References: <20230709005133.2439465-1-princekumarmaurya06@gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230709005133.2439465-1-princekumarmaurya06@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACRpkdbySh+XFUDnFWUQHULYag0hukJ_ogfSREPLvs1iV=YmwQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 09/07/2023 02:51, Prince Kumar Maurya wrote:
-> Style fixes for warning found using checkpatch.pl script 
+On Tue, Jul 04, 2023 at 11:08:41AM +0200, Linus Walleij wrote:
+> On Mon, Jul 3, 2023 at 2:19 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
 > 
-> Signed-off-by: Prince Kumar Maurya <princekumarmaurya06@gmail.com>
-> ---
->  drivers/usb/core/hub.c | 58 +++++++++++++++++++++---------------------
->  1 file changed, 29 insertions(+), 29 deletions(-)
+> > Use read_poll_timeout() instead of open coding it.
+> > In the same time, fix the typo in the error message.
+> >
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> (...)
+> > +       ret = read_poll_timeout(gpiod_get_value, reg, !reg, 1000, 100000, true,
+> > +                               glue->intpin);
 > 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index a739403a9e45..82a7b127a340 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -1777,7 +1777,7 @@ static bool hub_descriptor_is_sane(struct usb_host_interface *desc)
->  	if (!usb_endpoint_is_int_in(&desc->endpoint[0].desc))
->  		return false;
->  
-> -        return true;
-> +		return true;
+> Wow that's really cool. I had no idea that you could use read_poll_timeout()
+> together with gpiod_get_value() like this!
 
-This does not look like correctly indented.
+Yep, after 5f5323a14cad ("iopoll: introduce read_poll_timeout macro").
+I just realized that we need to bump the sleep_us parameter as beneath
+it divides it by 4, so I would put 5000 there in v2.
 
->  }
->  
->  static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
-> @@ -5854,37 +5854,37 @@ static void hub_event(struct work_struct *work)
->  }
->  
->  static const struct usb_device_id hub_id_table[] = {
-> -    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
-> -                   | USB_DEVICE_ID_MATCH_PRODUCT
-> -                   | USB_DEVICE_ID_MATCH_INT_CLASS,
-> -      .idVendor = USB_VENDOR_SMSC,
-> -      .idProduct = USB_PRODUCT_USB5534B,
-> -      .bInterfaceClass = USB_CLASS_HUB,
-> -      .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
-> -    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
-> -                   | USB_DEVICE_ID_MATCH_PRODUCT,
-> -      .idVendor = USB_VENDOR_CYPRESS,
-> -      .idProduct = USB_PRODUCT_CY7C65632,
-> -      .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
-> -    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
-> +	{ .match_flags = USB_DEVICE_ID_MATCH_VENDOR
-> +			| USB_DEVICE_ID_MATCH_PRODUCT
-> +			| USB_DEVICE_ID_MATCH_INT_CLASS,
-> +	  .idVendor = USB_VENDOR_SMSC,
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Spaces after the tab. Are you sure this does not cause checkpatch
---strict errors?
+Thank you!
 
+-- 
+With Best Regards,
+Andy Shevchenko
 
-
-Best regards,
-Krzysztof
 
