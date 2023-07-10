@@ -2,142 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC5374D404
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jul 2023 12:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD2474D456
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jul 2023 13:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbjGJK5V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jul 2023 06:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
+        id S231164AbjGJLOl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jul 2023 07:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjGJK5U (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jul 2023 06:57:20 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED15BA
-        for <linux-usb@vger.kernel.org>; Mon, 10 Jul 2023 03:57:18 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-c4dfe2a95fbso5089127276.3
-        for <linux-usb@vger.kernel.org>; Mon, 10 Jul 2023 03:57:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688986638; x=1691578638;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hQ+EFWyqPVcfn5r85TOW215yYJLlf1C3/IC93ziXGxY=;
-        b=PzhQlBjaM4jeJGSImOyz1ZKexDQBVzCzztUYmrsaN8K16WDBb8fafy5vLGyNBlt6mf
-         YwpccViGjravk9wLkiCI5xn+RuLKdPAsmmKgGjN0lola57N+ovFkc9d7ML9ZycPz/ZXR
-         P/HMedJSWHo/bKlp7bC4Q1/4hVmVJkUiQoSHMGWfFl8lJcp7GyXCtCgwIS6fvv0Dx9ib
-         rtPBLZdkjbf69RbFhk+5P96bRPH4uTf0b0P/u9iBrsPiAuAxnEixR/q9fkcmRN5vSsqN
-         AALX1wIbFTHR2g1R2V9+N+pN5JYWUxN/7egH+CCmSEDE/jhi2fCEEu0fJJM+TXHzrHKc
-         E/LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688986638; x=1691578638;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hQ+EFWyqPVcfn5r85TOW215yYJLlf1C3/IC93ziXGxY=;
-        b=INm5jjiXYRlmYbebFgrc+lNvdvecmWqgaV7lw85ZmjFh/ohNB1RWintBpwqm2nIWe0
-         ffyiRVB4h717oMXbYtMdfcn8gkzE0XMUAkSBur1W9FkfygChwyHux71kvfyrlcFBiMbw
-         iMPcBwC+SwBnonejLGaFwMesC7JLiC6NBAMGe0EpHAqQhtcH/BQWyCAGMol3scsBT/3p
-         AMJzBKUDxt/g+2RTFT04aZoeh9otH7ZInNh72rDupuKXDB/fyjOHusJNhEegZK6mV/YF
-         /gI5j3Pdgyl1VE2Gp4eRcNpgYqhaMxnpNH2VqcelIfPx1eN8/NIxKTpIkveCQ2QSB9kv
-         hW2A==
-X-Gm-Message-State: ABy/qLZzMz8nT+VBXz9bn7G/mOH5XgQ9L1kiaZK+5o5QP/gZZLkbNtgF
-        9aD0MWh6CCWuTLDyS9uBeCUAjfpudSS+MdThD5GL/Q==
-X-Google-Smtp-Source: APBJJlFP31r0f+V4DbCx5wQyP+r7v8c+VPJ9DzC9fX2DwSE7AhcEXpNB8BSIrlMcH1EsJCOxstOmKdIeJSUGELnMiTg=
-X-Received: by 2002:a25:2d18:0:b0:c72:c9fc:79ff with SMTP id
- t24-20020a252d18000000b00c72c9fc79ffmr5108472ybt.54.1688986637931; Mon, 10
- Jul 2023 03:57:17 -0700 (PDT)
+        with ESMTP id S229627AbjGJLOj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jul 2023 07:14:39 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAE2DE;
+        Mon, 10 Jul 2023 04:14:37 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36ABEL7K017773;
+        Mon, 10 Jul 2023 06:14:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1688987661;
+        bh=lEG4EkiJoyjdNaLGVyxMsl1ogCUgIuEE4QUrYtNYdk0=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=CkqGTlT3bDjBbrBV/D5MdRgXwxvj0N2B8RB1xeYPX855NIOOr9GvSnTI7AqjPrtwc
+         fgueWR42oPr4DLxe3fle98IGtkztYxsZ3j85gX//dfc/5dmW0vmglCU2VJC25w704e
+         zb5xlGBY5MakSE25Zt3snqOl3nReFPMZrvwVop1Q=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36ABELtW023174
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 10 Jul 2023 06:14:21 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 10
+ Jul 2023 06:14:20 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 10 Jul 2023 06:14:20 -0500
+Received: from [172.24.227.83] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36ABEGYW089298;
+        Mon, 10 Jul 2023 06:14:17 -0500
+Message-ID: <dc2abecb-c3c6-0265-4352-89737b26de66@ti.com>
+Date:   Mon, 10 Jul 2023 16:44:16 +0530
 MIME-Version: 1.0
-References: <20230709201309.274306-1-dmitry.baryshkov@linaro.org>
- <20230709201309.274306-3-dmitry.baryshkov@linaro.org> <0408a6f6-356e-af6a-3e32-1781aec2854f@linaro.org>
- <74aa7196-e76c-a1c8-9b0f-1d5f236d3467@linaro.org>
-In-Reply-To: <74aa7196-e76c-a1c8-9b0f-1d5f236d3467@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 10 Jul 2023 13:57:06 +0300
-Message-ID: <CAA8EJpppsaKqKY0V9O1JMUGiE8USzg8b0ZPZwn-0bwg1wYD6Tw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] usb: typec: qcom-pmic-typec: register drm_bridge
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 2/2] usb: cdns3: fix incorrect calculation of
+ ep_buf_size when more than one config
+Content-Language: en-US
+To:     Frank Li <Frank.Li@nxp.com>
+CC:     <Thinh.Nguyen@synopsys.com>, <andriy.shevchenko@linux.intel.com>,
+        <gregkh@linuxfoundation.org>, <imx@lists.linux.dev>,
+        <jgilab@gmail.com>, <jun.li@nxp.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <peter.chen@kernel.org>, <quic_eserrao@quicinc.com>,
+        <quic_prashk@quicinc.com>, <rogerq@kernel.org>
+References: <20230707230015.494999-1-Frank.Li@nxp.com>
+ <20230707230015.494999-2-Frank.Li@nxp.com>
+From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
+In-Reply-To: <20230707230015.494999-2-Frank.Li@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 10 Jul 2023 at 13:04, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> On 10.07.2023 12:02, Bryan O'Donoghue wrote:
-> > On 09/07/2023 21:13, Dmitry Baryshkov wrote:
-> >> The current approach to handling DP on bridge-enabled platforms requires
-> >> a chain of DP bridges up to the USB-C connector. Register a last DRM
-> >> bridge for such chain.
-> >>
-> >> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> >> ---
-> >>   drivers/usb/typec/tcpm/Kconfig                |  1 +
-> >>   drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 39 +++++++++++++++++++
-> >>   2 files changed, 40 insertions(+)
-> >>
-> >> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-> >> index 5d393f520fc2..0b2993fef564 100644
-> >> --- a/drivers/usb/typec/tcpm/Kconfig
-> >> +++ b/drivers/usb/typec/tcpm/Kconfig
-> >> @@ -79,6 +79,7 @@ config TYPEC_WCOVE
-> >>   config TYPEC_QCOM_PMIC
-> >>       tristate "Qualcomm PMIC USB Type-C Port Controller Manager driver"
-> >>       depends on ARCH_QCOM || COMPILE_TEST
-> >> +    depends on DRM || DRM=n
-> >>       help
-> >>         A Type-C port and Power Delivery driver which aggregates two
-> >>         discrete pieces of silicon in the PM8150b PMIC block: the
-> >> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-> >> index a905160dd860..0722fb8d75c4 100644
-> >> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-> >> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-> >> @@ -17,6 +17,9 @@
-> >>   #include <linux/usb/role.h>
-> >>   #include <linux/usb/tcpm.h>
-> >>   #include <linux/usb/typec_mux.h>
-> >> +
-> >> +#include <drm/drm_bridge.h>
-> >> +
-> >>   #include "qcom_pmic_typec_pdphy.h"
-> >>   #include "qcom_pmic_typec_port.h"
-> >>   @@ -33,6 +36,9 @@ struct pmic_typec {
-> >>       struct pmic_typec_port    *pmic_typec_port;
-> >>       bool            vbus_enabled;
-> >>       struct mutex        lock;        /* VBUS state serialization */
-> >> +#ifdef CONFIG_DRM
-> >> +    struct drm_bridge    bridge;
-> >> +#endif
-> >
-> > IMO there's no reason to ifdef the structure. Its up to you if you want to change it nor not, I have no strong feelings about it.
-> +1, there's no ifdefs in the drm_bridge.h header that would make this not compile
-
-It is quite typical to idef unused structure fields. For example
-OF-related fields are frequently ifdef'ed.
-Let's see what the maintainers will say.
-
->
-> Konrad
-> >
-> > Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> >
-> > ---
-> > bod
 
 
+On 7/8/23 4:30 AM, Frank Li wrote:
+> Previously, the cdns3_gadget_check_config() function in the cdns3 driver
+> mistakenly calculated the ep_buf_size by considering only one
+> configuration's endpoint information because "claimed" will be clear after
+> call usb_gadget_check_config().
+> 
+> The fix involves checking the private flags EP_CLAIMED instead of relying
+> on the "claimed" flag.
+> 
+> Fixes: dce49449e04f ("usb: cdns3: allocate TX FIFO size according to composite EP number")
+> Reported-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  drivers/usb/cdns3/cdns3-gadget.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+> index ccfaebca6faa..3326955f6991 100644
+> --- a/drivers/usb/cdns3/cdns3-gadget.c
+> +++ b/drivers/usb/cdns3/cdns3-gadget.c
+> @@ -2999,12 +2999,14 @@ static int cdns3_gadget_udc_stop(struct usb_gadget *gadget)
+>  static int cdns3_gadget_check_config(struct usb_gadget *gadget)
+>  {
+>  	struct cdns3_device *priv_dev = gadget_to_cdns3_device(gadget);
+> +	struct cdns3_endpoint *priv_ep;
+>  	struct usb_ep *ep;
+>  	int n_in = 0;
+>  	int total;
+>  
+>  	list_for_each_entry(ep, &gadget->ep_list, ep_list) {
+> -		if (ep->claimed && (ep->address & USB_DIR_IN))
+> +		priv_ep = ep_to_cdns3_ep(ep);
+> +		if ((priv_ep->flags & EP_CLAIMED) && (ep->address & USB_DIR_IN))
+>  			n_in++;
+>  	}
+>  
+
+Tested-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
 
 -- 
-With best wishes
-Dmitry
+Regards,
+Ravi
