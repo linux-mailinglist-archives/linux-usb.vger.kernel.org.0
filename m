@@ -2,87 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BA274DBF3
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jul 2023 19:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB4374E3B0
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jul 2023 03:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbjGJRJZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jul 2023 13:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
+        id S230113AbjGKBrL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jul 2023 21:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbjGJRJX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jul 2023 13:09:23 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E8AC0;
-        Mon, 10 Jul 2023 10:09:21 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qIuNj-000676-Ls; Mon, 10 Jul 2023 19:09:03 +0200
-Message-ID: <c76eae67-b391-a39e-a907-988b8277a72b@leemhuis.info>
-Date:   Mon, 10 Jul 2023 19:09:02 +0200
+        with ESMTP id S229959AbjGKBrK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jul 2023 21:47:10 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027BBAB
+        for <linux-usb@vger.kernel.org>; Mon, 10 Jul 2023 18:47:10 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4R0Nyy5Kf4zBHXhk
+        for <linux-usb@vger.kernel.org>; Tue, 11 Jul 2023 09:47:06 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1689040026; x=1691632027; bh=LYFY2WDG0zIapsZ2YROEas0Ehkx
+        KV4EYA8XnurMch/Y=; b=vqadKmLAcmv0jUd9fNwZMg+jZXZ+dy32ehLGBQZvdBL
+        RzRIUXA2CxnlU6cpKMnWIkxdFUol2hZrvtSd4t4FlipEPEuTvh93/pBlfbZQraqj
+        3sItKBlB09iwomMEr8MGnBwvAz7NZu9iwI4wJDXaaRDqb+a9hVhBd/6Thlu34Yin
+        e/90rqnYm3hvzN8poQxA8Uc+0RKQsgVuIiMNDbnZdKgNgxFEVN3WcFXqKn6IOxMq
+        Ezx2Ce3UqN1QD6T7n81YsbrcFJUTlFzadSkwqDE76S/RZzrZal0NXGsry+MWBYyV
+        If4kRvDmxoOcNPvTacuMU/D/JnRCMQbTlEBsa5n55rg==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id oLGr4P_utLUJ for <linux-usb@vger.kernel.org>;
+        Tue, 11 Jul 2023 09:47:06 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4R0Nyy28tFzBHXh5;
+        Tue, 11 Jul 2023 09:47:06 +0800 (CST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: 3 more broken Zaurii - SL-5600, A300, C700
-Content-Language: en-US, de-DE
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Ross Maynard <bids.7405@bigpond.com>,
-        Dave Jones <davej@codemonkey.org.uk>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux USB <linux-usb@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>
-References: <7ea9abd8-c35d-d329-f0d4-c8bd220cf691@gmail.com>
- <50f4c10d-260c-cb98-e7d2-124f5519fa68@gmail.com>
- <e1fdc435-089c-8ce7-d536-ce3780a4ba95@leemhuis.info>
- <ZKbuoRBi50i8OZ9d@codemonkey.org.uk>
- <62a9e058-c853-1fcd-5663-e2e001f881e9@bigpond.com>
- <14fd48c8-3955-c933-ab6f-329e54da090f@bigpond.com>
- <05a229e8-b0b6-4d29-8561-70d02f6dc31b@lunn.ch>
- <ac957af4-f265-3ba0-0373-3a71d134a57e@leemhuis.info>
- <20230710095519.5056c98b@kernel.org>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <20230710095519.5056c98b@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 11 Jul 2023 09:47:06 +0800
+From:   wuyonggang001@208suo.com
+To:     jikos@kernel.org, benjamin.tissoires@redhat.com
+Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] HID: usbhid: Fix use assignment in if condition
+In-Reply-To: <20230711014359.11991-1-zhanglibing@cdjrlc.com>
+References: <20230711014359.11991-1-zhanglibing@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <a4ca3852846e220cf378a664cf1c6213@208suo.com>
+X-Sender: wuyonggang001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1689008961;6a1d2bdd;
-X-HE-SMSGID: 1qIuNj-000676-Ls
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10.07.23 18:55, Jakub Kicinski wrote:
-> On Sun, 9 Jul 2023 06:36:32 +0200 Linux regression tracking (Thorsten
-> Leemhuis) wrote:
->> To chime in here: I most agree, but FWIW, it broke more than a decade
->> ago in v3.0, so maybe this is better suited for net-next. But of course
->> that up to the -net maintainers.
-> 
-> I'm surprised to see you suggest -next for a fix to a user reported bug.
-> IMO it's very firmly net material.
+Fix the following checkpatch error(s):
 
-Yes, yes, normally it would argue the other way around. :-D
+drivers/hid/usbhid/usbkbd.c:238:240:242:246: ERROR: do not use 
+assignment in if condition
 
-But Linus a few times in one way or another argued that time is a factor
-when it comes to regressions. Here for example:
+Signed-off-by: Yonggang Wu <wuyonggang001@208suo.com>
+---
+  drivers/hid/usbhid/usbkbd.c | 24 +++++++++++++++++++-----
+  1 file changed, 19 insertions(+), 5 deletions(-)
 
-https://lore.kernel.org/all/CAHk-=wis_qQy4oDNynNKi5b7Qhosmxtoj1jxo5wmB6SRUwQUBQ@mail.gmail.com/
+diff --git a/drivers/hid/usbhid/usbkbd.c b/drivers/hid/usbhid/usbkbd.c
+index c439ed2f16db..cde7f82b7070 100644
+--- a/drivers/hid/usbhid/usbkbd.c
++++ b/drivers/hid/usbhid/usbkbd.c
+@@ -235,15 +235,29 @@ static void usb_kbd_close(struct input_dev *dev)
 
-But there are no "semantic changes that now mean that fixing the
-regression could cause a _new_ regression" here I guess. And what he was
-talking about there is quite different from this case as well (I vaguely
-remember a better example, but I can't find it; whatever).
+  static int usb_kbd_alloc_mem(struct usb_device *dev, struct usb_kbd 
+*kbd)
+  {
+-    if (!(kbd->irq = usb_alloc_urb(0, GFP_KERNEL)))
++    kbd->irq = usb_alloc_urb(0, GFP_KERNEL)
++
++    if (!kbd->irq)
+          return -1;
+-    if (!(kbd->led = usb_alloc_urb(0, GFP_KERNEL)))
++
++    kbd->led = usb_alloc_urb(0, GFP_KERNEL)
++
++    if (!kbd->led)
+          return -1;
+-    if (!(kbd->new = usb_alloc_coherent(dev, 8, GFP_KERNEL, 
+&kbd->new_dma)))
++
++    kbd->new = usb_alloc_coherent(dev, 8, GFP_KERNEL, &kbd->new_dma)
++
++    if (!kbd->new)
+          return -1;
+-    if (!(kbd->cr = kmalloc(sizeof(struct usb_ctrlrequest), 
+GFP_KERNEL)))
++
++    kbd->cr = kmalloc(sizeof(struct usb_ctrlrequest), GFP_KERNEL)
++
++    if (!kbd->cr)
+          return -1;
+-    if (!(kbd->leds = usb_alloc_coherent(dev, 1, GFP_KERNEL, 
+&kbd->leds_dma)))
++
++    kbd->leds = usb_alloc_coherent(dev, 1, GFP_KERNEL, &kbd->leds_dma)
++
++    if (!kbd->leds)
+          return -1;
 
-In the end this is one of issue where I don't care much. :-D
-
-Ciao, Thorsten
+      return 0;
