@@ -2,74 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3143774F56D
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jul 2023 18:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C35774F75C
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jul 2023 19:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbjGKQdZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jul 2023 12:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
+        id S231277AbjGKRiJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jul 2023 13:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233366AbjGKQdC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jul 2023 12:33:02 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F007CA
-        for <linux-usb@vger.kernel.org>; Tue, 11 Jul 2023 09:32:50 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b701e1ca63so94730221fa.1
-        for <linux-usb@vger.kernel.org>; Tue, 11 Jul 2023 09:32:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689093167; x=1691685167;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VWtpptzPuOCoLkyZBw7yYHV5FeI36rJVjotbONsdA94=;
-        b=WFibieZ2v0r4nWPy0J1wGTrFtOXxVksWo9Ycvtk6r1viqsBFsWV1+2Luw0tJWYEc2d
-         EybaDJGcl9KBnd0R2+PpSfAnadC6cUCuzXIeMjWw73PxDtrOeheXj3MKd/apxW9S3ScJ
-         Bl58mCaKB5LUAOIUynXr102zB7CYguU8HSAJLcDpZc+IWY8x5SiZcHZRkmcdW0/ue2oa
-         8aXF0EdL9nkFqQ8NQ6NYa+DFo+gCiYHKk0xm586Z7LI3nLfD/P1f+sXgZTNlbdV9CQLJ
-         zPkvhLIsOegU5GpzkADKnE1GLB+w6gcz5zA7aFFk4hLsPcOTQHM9yDbvmbKV8wZAXdVk
-         LFCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689093167; x=1691685167;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VWtpptzPuOCoLkyZBw7yYHV5FeI36rJVjotbONsdA94=;
-        b=dRC5tq0H5JRdNnj04xbWOcrZm7WreAAn99bGai6gqYhXWzu4LieRyTInqrL6fysYCE
-         sgpVDFvGcxsJQP/sN1OpFSron+8YF/VrJddso6qqHZnWYxP+Y1tpJis73ufYMsXXS3NL
-         wA8BLHSGsQztIh76EsLLJ8tGEdgxAIyM7iQPtn2gn2DPXHLthePBzNtEmLuW130a7Q1V
-         3xYoqTKieA7Ewj5T73oAXxZqx1w/NiXnL93ythVQBd2ht9zY/KUEUvoogo4o1KikMIUa
-         OHe7b1wlBnE40fdRU+sKLNxen4MPDd85CDfGY/7hSQnlf6evvy5QaTzefoXE99C32/b2
-         mWdA==
-X-Gm-Message-State: ABy/qLZwa3pqxicYsg9ldGIWWJIpXt0+RTS54oIAK3EOEFD0BvmNRuNq
-        UpmeANA6d6h/F9YcU8T+14U57ffZ7Aq5352VkCk=
-X-Google-Smtp-Source: APBJJlH1If/svLi3ZvVSK9N5XCgAEROHhzB3qlp5M8M0oO6v2qngfJe3MewXHmdWauY1GePpYxisCh5XUDIQqNBIkDk=
-X-Received: by 2002:a05:651c:120c:b0:2b6:fc80:c45f with SMTP id
- i12-20020a05651c120c00b002b6fc80c45fmr12883371lja.13.1689093167200; Tue, 11
- Jul 2023 09:32:47 -0700 (PDT)
+        with ESMTP id S230495AbjGKRiI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jul 2023 13:38:08 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id AD4BBE49
+        for <linux-usb@vger.kernel.org>; Tue, 11 Jul 2023 10:38:01 -0700 (PDT)
+Received: (qmail 1366713 invoked by uid 1000); 11 Jul 2023 13:38:00 -0400
+Date:   Tue, 11 Jul 2023 13:38:00 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "David S. Miller" <davem@davemloft.net>
+Cc:     Oliver Neukum <oneukum@suse.com>, netdev@vger.kernel.org,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: [PATCH] net: usbnet: Fix WARNING in usbnet_start_xmit/usb_submit_urb
+Message-ID: <38ff51d4-2734-4dd7-8638-ae2fc8572c0d@rowland.harvard.edu>
+References: <000000000000a56e9105d0cec021@google.com>
+ <000000000000e298cd05fecc07d4@google.com>
+ <0f685f2f-06df-4cf2-9387-34f5e3c8b7b7@rowland.harvard.edu>
+ <7330e6c0-eb73-499e-8699-dc1754d90cad@rowland.harvard.edu>
+ <413fb529-477c-7ac9-881e-550b4613d38c@suse.com>
 MIME-Version: 1.0
-Received: by 2002:a17:907:1c16:b0:986:7a95:9cc0 with HTTP; Tue, 11 Jul 2023
- 09:32:46 -0700 (PDT)
-Reply-To: mrsvl06@gmail.com
-From:   Veronica Lee <nd4846496@gmail.com>
-Date:   Tue, 11 Jul 2023 18:32:46 +0200
-Message-ID: <CAPadVRx=24t+dtCfxOJ-H_QTG0496dY-ZfFTyFRXoPSEnRePwA@mail.gmail.com>
-Subject: re
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <413fb529-477c-7ac9-881e-550b4613d38c@suse.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-16nXnNeV150g15nXp9eZ16jXqteZINep157Xl9eUINec15TXkteZ16Ig15DXnNeZ15og16nXldeR
-INeZ16kg15zXmSDXnteZ15nXnCDXkdei15HXqCDXnNec15Ag16rXkteV15HXlCDXkNeg15kg157X
-lteb15nXqA0K15zXkteR15kg15fXldeW15Qg16nXkNeg15kg16jXldem15Qg15zXqdeq16Mg15DX
-ldeq15og15fXlteV16gg15DXnNeZ15kg15zXpNeo15jXmdedINeg15XXodek15nXnSDXkNeg15kg
-157Xl9eb15QNCteQ16DXkA0K
+The syzbot fuzzer identified a problem in the usbnet driver:
+
+usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+WARNING: CPU: 0 PID: 754 at drivers/usb/core/urb.c:504 usb_submit_urb+0xed6/0x1880 drivers/usb/core/urb.c:504
+Modules linked in:
+CPU: 0 PID: 754 Comm: kworker/0:2 Not tainted 6.4.0-rc7-syzkaller-00014-g692b7dc87ca6 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Workqueue: mld mld_ifc_work
+RIP: 0010:usb_submit_urb+0xed6/0x1880 drivers/usb/core/urb.c:504
+Code: 7c 24 18 e8 2c b4 5b fb 48 8b 7c 24 18 e8 42 07 f0 fe 41 89 d8 44 89 e1 4c 89 ea 48 89 c6 48 c7 c7 a0 c9 fc 8a e8 5a 6f 23 fb <0f> 0b e9 58 f8 ff ff e8 fe b3 5b fb 48 81 c5 c0 05 00 00 e9 84 f7
+RSP: 0018:ffffc9000463f568 EFLAGS: 00010086
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff88801eb28000 RSI: ffffffff814c03b7 RDI: 0000000000000001
+RBP: ffff8881443b7190 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000003
+R13: ffff88802a77cb18 R14: 0000000000000003 R15: ffff888018262500
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000556a99c15a18 CR3: 0000000028c71000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ usbnet_start_xmit+0xfe5/0x2190 drivers/net/usb/usbnet.c:1453
+ __netdev_start_xmit include/linux/netdevice.h:4918 [inline]
+ netdev_start_xmit include/linux/netdevice.h:4932 [inline]
+ xmit_one net/core/dev.c:3578 [inline]
+ dev_hard_start_xmit+0x187/0x700 net/core/dev.c:3594
+...
+
+This bug is caused by the fact that usbnet trusts the bulk endpoint
+addresses its probe routine receives in the driver_info structure, and
+it does not check to see that these endpoints actually exist and have
+the expected type and directions.
+
+The fix is simply to add such a check.
+
+Reported-and-tested-by: syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/linux-usb/000000000000a56e9105d0cec021@google.com/
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+CC: Oliver Neukum <oneukum@suse.com>
+
+---
+
+ drivers/net/usb/usbnet.c |    5 +++++
+ 1 file changed, 5 insertions(+)
+
+Index: usb-devel/drivers/net/usb/usbnet.c
+===================================================================
+--- usb-devel.orig/drivers/net/usb/usbnet.c
++++ usb-devel/drivers/net/usb/usbnet.c
+@@ -1775,6 +1775,9 @@ usbnet_probe (struct usb_interface *udev
+ 	} else if (!info->in || !info->out)
+ 		status = usbnet_get_endpoints (dev, udev);
+ 	else {
++		u8		ep_addrs[3] = {
++			info->in + USB_DIR_IN, info->out + USB_DIR_OUT, 0};
++
+ 		dev->in = usb_rcvbulkpipe (xdev, info->in);
+ 		dev->out = usb_sndbulkpipe (xdev, info->out);
+ 		if (!(info->flags & FLAG_NO_SETINT))
+@@ -1784,6 +1787,8 @@ usbnet_probe (struct usb_interface *udev
+ 		else
+ 			status = 0;
+ 
++		if (status == 0 && !usb_check_bulk_endpoints(udev, ep_addrs))
++			status = -EINVAL;
+ 	}
+ 	if (status >= 0 && dev->status)
+ 		status = init_status (dev, udev);
+
