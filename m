@@ -2,175 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB0474EAF0
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jul 2023 11:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F71874EECA
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jul 2023 14:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbjGKJmC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jul 2023 05:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
+        id S232313AbjGKM3S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jul 2023 08:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbjGKJmA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jul 2023 05:42:00 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3E691;
-        Tue, 11 Jul 2023 02:41:59 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6C38D20008;
-        Tue, 11 Jul 2023 09:41:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1689068517;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1mQpjvbXTqSZMh2oqXJLwIPvBh65UpQSNz+TWmuX7pg=;
-        b=J0IPQRNMF4rW2vhHO+MYH6DbHjXzguu5d4CblnTphTAbz9ZHmZ8RKYVpLXShsypPVO7j6N
-        LYIc1MsuzN/0rKV95AwKrjMPziCl43osWurZYVBCqlwo2TdBB8aEX5PQTCS5AGn50ZwmVL
-        NTk/4ViLGUGU5qLaKuzX8Ib9PeofopHsvXevdHx5GDuHYF0bvSswTu9giUyFQtqS/YpbaK
-        FvIou48O/Tbv0p4Kuv01/RRyikSfEnqANaZHaheeak+lCFg1RslpA9s4A6rqxdFdALqKXN
-        FgIQbgkJJ+fVrlUVqyoL8iUiKDvvHr+9Xgt6QwIxvaipNaeSZgstvccv138LAg==
-Date:   Tue, 11 Jul 2023 11:41:55 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     "Chunfeng Yun (=?UTF-8?B?5LqR5pil5bOw?=)" <Chunfeng.Yun@mediatek.com>
-Cc:     "yhao016@ucr.edu" <yhao016@ucr.edu>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: mtu3: Fix possible use-before-initialization bug
-Message-ID: <20230711114155.4a000704@bootlin.com>
-In-Reply-To: <29a71cbb61148d2085cc08da681526c4e20d31b9.camel@mediatek.com>
-References: <CA+UBctDxfb6+70+hzuXJ-gwb65E0uoNzXYEhpJT92sXr2CE7OA@mail.gmail.com>
-        <20230705080625.02b2bac5@bootlin.com>
-        <CA+UBctBqtSvyBWf9ZwKbecTrh9_6sCDm_TyU-ncb+6h5y19K5g@mail.gmail.com>
-        <20230710082558.2f82d607@bootlin.com>
-        <29a71cbb61148d2085cc08da681526c4e20d31b9.camel@mediatek.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+        with ESMTP id S233074AbjGKM2T (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jul 2023 08:28:19 -0400
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57EAB0
+        for <linux-usb@vger.kernel.org>; Tue, 11 Jul 2023 05:27:52 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-3fbea14700bso57558475e9.3
+        for <linux-usb@vger.kernel.org>; Tue, 11 Jul 2023 05:27:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689078068; x=1691670068;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vlaWs/VoeKCWx+SmDLbjeED6rzJyyUDZEcL2R9O3D1A=;
+        b=p0YbH3ka199DRHd8bRbqZXxzWmsFF5DdJQpx4fjx3aTeXOezDvUdaWOu4IZ/8daNbT
+         6mSo0yUKSq10Vc4VMw6feovId06/LsTuKRDTOaaSfbxFjYiO5cbYPECwFtNnOkTg0Z+z
+         MA5+/lAqi8EoUVMOJivfKrEwImgpBw9GrUBPcWqQlUjrxlyY+SuuN4hMsavFieMp9eU0
+         1vvBMRbk7wz/VHtFt0vmjOlZMYwy7OiJUkLP3BKVDFYlAz2PEUfAasHav8Gp5ZBdk57C
+         RML8MBfrBKqkt0Fbe7fWsRQ8j9MgwoM3A7jRhwinSOjHQNrqzl+nPtzkDecfviKtzgiD
+         TJqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689078068; x=1691670068;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vlaWs/VoeKCWx+SmDLbjeED6rzJyyUDZEcL2R9O3D1A=;
+        b=AhGNhYHtGvqiX/oDQBmSV80MBKxcJ5mC1WmS80kQvPKU3AUbQ/27LQfAwNwqMoGFsu
+         CxGnHmzxnlBN9oBleRyEFcjukCV5wrQRRKywBQ+zS0cQwE2b3g1/GkykZT5+lxtfsrmj
+         lR+WU31Ln5jc0k27JkDO2Ncaf7x1HJbwoNGv4PxCF+8xQHtrWV1cL2+e7D5gtne816Dx
+         vO3clLmhE81jn8X8KKbnP8flLinU91+qmgiARYGxPuuw5IKGDYgS9h+Af/Os7N04Jy06
+         QOaiRbuMstlgQVcXbdr9hsSrp8OZjw1uM3w6zG7X/DNqfikLXPKGQRIOVmlHKV7FfdpC
+         UOFQ==
+X-Gm-Message-State: ABy/qLbbm/SuPo3AN34aeJ8pabPiUMWIoTbLOsb+rrg+UY3SSotoqR5Y
+        +F0ciJ4egPUdECEd1lTSonbywA==
+X-Google-Smtp-Source: APBJJlEGDbWcxO6jozCkMC+3E0q9tenuEF5tD7/MQuFcXLgThgae5F4/yAv+P29CubNLbhq+2XB7HA==
+X-Received: by 2002:a7b:cb97:0:b0:3fa:93b0:a69c with SMTP id m23-20020a7bcb97000000b003fa93b0a69cmr13115388wmi.24.1689078068555;
+        Tue, 11 Jul 2023 05:21:08 -0700 (PDT)
+Received: from [192.168.1.82] (host-92-17-99-126.as13285.net. [92.17.99.126])
+        by smtp.gmail.com with ESMTPSA id p6-20020a7bcc86000000b003fa95890484sm2397985wma.20.2023.07.11.05.21.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jul 2023 05:21:08 -0700 (PDT)
+Message-ID: <c926b135-80ad-fbac-d0d5-594e66dc5913@linaro.org>
+Date:   Tue, 11 Jul 2023 13:21:07 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2] usb: typec: qcom: properly detect Audio Accessory mode
+ peripherals
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20230709200235.265674-1-dmitry.baryshkov@linaro.org>
+Content-Language: en-US
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+In-Reply-To: <20230709200235.265674-1-dmitry.baryshkov@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: herve.codina@bootlin.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Chunfeng,
 
-On Tue, 11 Jul 2023 08:48:35 +0000
-Chunfeng Yun (云春峰) <Chunfeng.Yun@mediatek.com> wrote:
 
-> On Mon, 2023-07-10 at 08:25 +0200, Herve Codina wrote:
-> >  	 
-> > External email : Please do not click links or open attachments until
-> > you have verified the sender or the content.
-> >  Hi Yu,
-> > 
-> > On Sun, 9 Jul 2023 17:48:15 -0700
-> > Yu Hao <yhao016@ucr.edu> wrote:
-> >   
-> > > Hi Hervé,
-> > > 
-> > > Thanks for the comments. How about this patch?
-> > > ---
-> > >  drivers/usb/mtu3/mtu3_gadget_ep0.c | 11 ++++++++---
-> > >  1 file changed, 8 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/mtu3/mtu3_gadget_ep0.c
-> > > b/drivers/usb/mtu3/mtu3_gadget_ep0.c
-> > > index e4fd1bb14a55..af2884943c2a 100644
-> > > --- a/drivers/usb/mtu3/mtu3_gadget_ep0.c
-> > > +++ b/drivers/usb/mtu3/mtu3_gadget_ep0.c
-> > > @@ -600,7 +600,7 @@ static void ep0_tx_state(struct mtu3 *mtu)
-> > >         mtu3_readl(mtu->mac_base, U3D_EP0CSR));
-> > >  }
-> > > 
-> > > -static void ep0_read_setup(struct mtu3 *mtu, struct  
-> > usb_ctrlrequest *setup)  
-> > > +static int ep0_read_setup(struct mtu3 *mtu, struct usb_ctrlrequest  
-> > *setup)  
-> > >  {
-> > >     struct mtu3_request *mreq;
-> > >     u32 count;
-> > > @@ -608,6 +608,8 @@ static void ep0_read_setup(struct mtu3 *mtu,
-> > > struct usb_ctrlrequest *setup)
-> > > 
-> > >     csr = mtu3_readl(mtu->mac_base, U3D_EP0CSR) & EP0_W1C_BITS;
-> > >     count = mtu3_readl(mtu->mac_base, U3D_RXCOUNT0);
-> > > +   if (count == 0)
-> > > +       return -EINVAL;  
-> > 
-> > 'count' should be tested against sizeof(*setup). Indeed, we need to
-> > have a
-> > setup data packet in the fifo.
-> > 
-> > What do you think about:
-> > if (count < sizef(*setup))
-> > return -EINVAL;  
-> before call this function, already check the data length in fifo, it
-> should be 8 bytes.
-> see mtu3_ep0_isr(), about line 761.
-
-Indeed, I missed that point.
-Thanks for pointing it.
-
-Regards,
-Hervé
-
+On 09/07/2023 21:02, Dmitry Baryshkov wrote:
+> Detect and report if the Audio Accessory device has been attached to the
+> corresponding USB-C port.
 > 
-> I think no need this patch
-> 
-> Thanks a lot
-> 
-> >   
-> > > 
-> > >     ep0_read_fifo(mtu->ep0, (u8 *)setup, count);
-> > > 
-> > > @@ -642,7 +644,8 @@ __acquires(mtu->lock)
-> > >     struct mtu3_request *mreq;
-> > >     int handled = 0;
-> > > 
-> > > -   ep0_read_setup(mtu, &setup);
-> > > +   if (ep0_read_setup(mtu, &setup))
-> > > +       return -EINVAL;  
-> > 
-> > Forward the error code to the caller ?
-> > 
-> > ret = ep0_read_setup(mtu, &setup)
-> > if (ret < 0)
-> > return ret;
-> > 
-> >   
-> > >     trace_mtu3_handle_setup(&setup);
-> > > 
-> > >     if ((setup.bRequestType & USB_TYPE_MASK) == USB_TYPE_STANDARD)
-> > > @@ -764,7 +767,9 @@ irqreturn_t mtu3_ep0_isr(struct mtu3 *mtu)
-> > >             break;
-> > >         }
-> > > 
-> > > -       ep0_handle_setup(mtu);
-> > > +       if (ep0_handle_setup(mtu))
-> > > +           break;
-> > > +  
-> > 
-> > Ok
-> >   
-> > >         ret = IRQ_HANDLED;
-> > >         break;
-> > >     default:  
-> > 
-> > Be careful, your patch is wrongly indented.
-> > tabs replaced by 4 spaces. You need to keep tabs.
-> > 
-> > Regards,
-> > Hervé Codina
-> >   
+> Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
+Reviewed-by: Caleb Connolly <caleb.connolly@linaro.org>
+> ---
+> 
+> Changes since v1:
+> - Fixed typo in commit subject (Bjorn)
+> - Removed 'the' in the commit message (Sergei)
+> 
+> ---
+>  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
+> index 94285f64b67d..56df04af2d2b 100644
+> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
+> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
+> @@ -214,6 +214,11 @@ int qcom_pmic_typec_port_get_cc(struct pmic_typec_port *pmic_typec_port,
+>  		if (ret)
+>  			goto done;
+>  		switch (val & DETECTED_SRC_TYPE_MASK) {
+> +		case AUDIO_ACCESS_RA_RA:
+> +			val = TYPEC_CC_RA;
+> +			*cc1 = TYPEC_CC_RA;
+> +			*cc2 = TYPEC_CC_RA;
+> +			break;
+>  		case SRC_RD_OPEN:
+>  			val = TYPEC_CC_RD;
+>  			break;
+
+-- 
+// Caleb (they/them)
