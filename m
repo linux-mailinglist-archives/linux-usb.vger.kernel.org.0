@@ -2,47 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61494750AA8
+	by mail.lfdr.de (Postfix) with ESMTP id 19B13750AA7
 	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 16:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232145AbjGLORR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jul 2023 10:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
+        id S232077AbjGLORQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jul 2023 10:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbjGLORP (ORCPT
+        with ESMTP id S232014AbjGLORP (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 10:17:15 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4341993
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B711995
         for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 07:17:14 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BEE27200EB;
-        Wed, 12 Jul 2023 14:17:12 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2457C22539;
+        Wed, 12 Jul 2023 14:17:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1689171432; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=8jkszFgCbK12Foi+uim7G/Qd+D5sI9fdvV/0/Dl9GK4=;
-        b=U7/UX5RGzYdZlSdgx4Bifqxtp/k3uvIZWf94QF3SI/BK4yyOXlXrRHYizaOYlAXkxxXsfK
-        9zUlHHg3mGZMPxRrt0KIfyBjARFa/Nrestt+S42+WylsKhg8VHDRGmAkIpOi5y2VXEsdfr
-        Fnkkr+UunKpaGqccpL5MRwPVb2Ayl5U=
+        t=1689171433; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TKv7LwxI+QfLXPjc3wvjxSSOBzt/8MWk7sPJBohXj9c=;
+        b=DPLHR12nQ3Wr8muAgtrAVrbxSAPm+eiuol385iUznorVTJQQVgPVbEP99/oagzG7xrIvn4
+        3MkrV9xtcv2NWDsMQbOtfcD3VJHQWShO5cN6sxS4pHJPd07TumIIf8FyU1+ZQXBdGO+Pi8
+        xMB5gX5ofw4nbJWr+GV0IiggTRFbm34=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 79848133DD;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CAD70133DD;
         Wed, 12 Jul 2023 14:17:12 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id bC/FG+i1rmTfCQAAMHmgww
+        id QDmsL+i1rmTfCQAAMHmgww
         (envelope-from <oneukum@suse.com>); Wed, 12 Jul 2023 14:17:12 +0000
 From:   Oliver Neukum <oneukum@suse.com>
 To:     linux-usb@vger.kernel.org, johan@kernel.org
-Subject: 
-Date:   Wed, 12 Jul 2023 16:16:40 +0200
-Message-ID: <20230712141710.3116-1-oneukum@suse.com>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Kaufmann Automotive GmbH <info@kaufmann-automotive.ch>
+Subject: [PATCHv2] USB: serial-simple: adding Kaufmann RKS+CAN VCP
+Date:   Wed, 12 Jul 2023 16:16:41 +0200
+Message-ID: <20230712141710.3116-2-oneukum@suse.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230712141710.3116-1-oneukum@suse.com>
+References: <20230712141710.3116-1-oneukum@suse.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -55,5 +61,52 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Resend due to address error
+Adding the device and product ID
+The device is a is a CAN bus interface / license dongle
+The device thus is usable either directly from user space
+or can be attached to a kernel CAN interface with slcan_attach
+
+v2: improve change log
+
+Reported-by: Kaufmann Automotive GmbH <info@kaufmann-automotive.ch>
+Tested-by: Kaufmann Automotive GmbH <info@kaufmann-automotive.ch>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/usb/serial/usb-serial-simple.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
+index 4c6747889a19..3612031030bb 100644
+--- a/drivers/usb/serial/usb-serial-simple.c
++++ b/drivers/usb/serial/usb-serial-simple.c
+@@ -117,6 +117,11 @@ DEVICE(suunto, SUUNTO_IDS);
+ 	{ USB_DEVICE(0x908, 0x0004) }
+ DEVICE(siemens_mpi, SIEMENS_IDS);
+ 
++/* KAUFMANN RKS+CAN VCP */
++#define KAUFMANN_IDS()			\
++	{ USB_DEVICE(0x16d0, 0x0870) }
++DEVICE(kaufmann, KAUFMANN_IDS);
++
+ /* All of the above structures mushed into two lists */
+ static struct usb_serial_driver * const serial_drivers[] = {
+ 	&carelink_device,
+@@ -133,6 +138,7 @@ static struct usb_serial_driver * const serial_drivers[] = {
+ 	&hp4x_device,
+ 	&suunto_device,
+ 	&siemens_mpi_device,
++	&kaufmann_device,
+ 	NULL
+ };
+ 
+@@ -151,6 +157,7 @@ static const struct usb_device_id id_table[] = {
+ 	HP4X_IDS(),
+ 	SUUNTO_IDS(),
+ 	SIEMENS_IDS(),
++	KAUFMANN_IDS(),
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(usb, id_table);
+-- 
+2.41.0
 
