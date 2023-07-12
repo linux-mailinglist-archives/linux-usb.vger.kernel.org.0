@@ -2,160 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9078F75107D
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 20:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54556751176
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 21:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232759AbjGLS07 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jul 2023 14:26:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37852 "EHLO
+        id S232465AbjGLTnt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jul 2023 15:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232720AbjGLS04 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 14:26:56 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38651BEC;
-        Wed, 12 Jul 2023 11:26:54 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36C8e7FA025489;
-        Wed, 12 Jul 2023 18:26:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=mtKhEYS2K6X6LBtwPqDWhL1CJqJw4DS1omIajDx5ciM=;
- b=kdsNgjdUBhmwZnk+aZt4Ujk/GPBTCK1JSvcGs1qbfEfG0k0C5DFS5aahFTePkp85q7XF
- eM8DdXm1z5VYNHudXdnuG1qObW5tUHywSN61sDIx3uzwlwhfaagtq6237jDS9MnvkTU5
- dNaTjeqRJoWHDi+azMc2b9hQbhcOYpp0ukEt6oK0AJoqf+DuKhsbvBhgbBtUrT84/+Jp
- RgBm1OaYv+aOmnpZrP8wH3p2KBKqBINUJ/92aL7G6rbNNgdYgP0hsR4gA8QLj9Njf1KJ
- BXkt0SAS1hLgfJRfdwbZQiH5pgLishusnE1BFn9ZtD9EUS36cId4phJusmLDc1RBb5Dz oQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rser0tce9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 18:26:44 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36CIQhJt019354
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 18:26:43 GMT
-Received: from [10.216.46.65] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 12 Jul
- 2023 11:26:36 -0700
-Message-ID: <ef29e520-7b9c-f581-e70a-250df80d3821@quicinc.com>
-Date:   Wed, 12 Jul 2023 23:56:33 +0530
+        with ESMTP id S231679AbjGLTns (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 15:43:48 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07961FEB
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 12:43:46 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51dec0b6fecso9364068a12.1
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 12:43:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689191025; x=1691783025;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/8+vjNobIMWMrzf0FKkwYNB3OzBHSpvmANZBPCBUHmE=;
+        b=pdfCW/mCYx8e/bNU5tSwbVHysL9r7MaYQ3GWxA3ZjoM8HBsBPEdG8Uzb7WHqaB88dj
+         qx8zPsQWxHc2xee5MeLdt8GB//cj2+1XYL02hnXd0Sz9rp5sK5FQPClYFKQeHO0INPNC
+         JbdBeVRyvb7URnTv6hL12GYaYV3T5oPc5j4zf+SC65dr/M+o54ZZneX4ykFFiaUlopZG
+         dakQgMgQ3TOxYpOB/UuRUkYGa2hp+LVjgiDScZAV7izpHUn5tpGaQoPID9fFYauGpfGy
+         XXAQyHwZfc5haFPJj9kAGX1WIWZuBUrvAda2gLByE5bLyH94eaYAaocOIFtfl7g6huIT
+         keVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689191025; x=1691783025;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/8+vjNobIMWMrzf0FKkwYNB3OzBHSpvmANZBPCBUHmE=;
+        b=KuojFZ5vQgl38UpN84TtZ17CSaIOC/Cjq9EvOlvWhUQCuoOvb4zuvh2SVWk8FHgomo
+         Ig1vH9AtQXyEQ1xbb2RWiN+Dfa+Ld4oHfg7TbugstgQZhOxavD+3A+R8MzEi/hpljY2a
+         aT7nPwrjEC85cLL/eFDUt01NTYGVVkbVnvZVHH9K6TftuFQWEFR71hlrTBwkeddZx95h
+         5PbxuqoP8TVz+AB4rTXUa3X6pIBxrbdOKCIgC5s3eUQrIBOgQ2onQN57cWUudK8VaDiU
+         00okhAX3ZVcwAkS3eA2K8L3r3qnmI8LTOar4Zrf325oxZ227KtqIt/OUveCu2IVSva/L
+         eRrQ==
+X-Gm-Message-State: ABy/qLaFNtwbFatznkTvwGV6gqn2FuXaQcW7pN8I6DSdnWeTEsmIpRtb
+        2IHcKdHIMkY0wrSIlaLV+x0EXQ==
+X-Google-Smtp-Source: APBJJlGYvDj0/4R+xQD2mNLvCqsxd9qJdifuFvM8ZCbtFnkv2PeqjmsrKw+1CBv3KCAf73/r+NieFg==
+X-Received: by 2002:aa7:d302:0:b0:51d:d1af:df15 with SMTP id p2-20020aa7d302000000b0051dd1afdf15mr21184971edq.23.1689191025310;
+        Wed, 12 Jul 2023 12:43:45 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id v6-20020aa7cd46000000b0051e3385a395sm3237965edw.3.2023.07.12.12.43.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 12:43:44 -0700 (PDT)
+Message-ID: <673c5cc4-fc93-ccba-ac32-6e97db34718d@linaro.org>
+Date:   Wed, 12 Jul 2023 21:43:41 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.1
-Subject: Re: [PATCH v9 06/10] usb: dwc3: qcom: Add support to read IRQ's
- related to multiport
-To:     Johan Hovold <johan@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy Gross" <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "Wesley Cheng" <quic_wcheng@quicinc.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>,
-        <ahalaney@redhat.com>, <quic_shazhuss@quicinc.com>
-References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
- <20230621043628.21485-7-quic_kriskura@quicinc.com>
- <ZK6YrLMn9r39zEeB@hovoldconsulting.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v4 2/6] dt-bindings: phy: qcom,m31: Document qcom,m31 USB
+ phy
 Content-Language: en-US
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <ZK6YrLMn9r39zEeB@hovoldconsulting.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
+        will@kernel.org, p.zabel@pengutronix.de, arnd@arndb.de,
+        geert+renesas@glider.be, neil.armstrong@linaro.org,
+        nfraprado@collabora.com, rafal@milecki.pl,
+        quic_srichara@quicinc.com, quic_varada@quicinc.org,
+        quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <cover.1689160067.git.quic_varada@quicinc.com>
+ <e3a6e5cf68d67637fa541f6dc690dbcabd5e3fec.1689160067.git.quic_varada@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e3a6e5cf68d67637fa541f6dc690dbcabd5e3fec.1689160067.git.quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ZqQVfb4cm-Gui-6o8lMtobbyBRypXh4P
-X-Proofpoint-ORIG-GUID: ZqQVfb4cm-Gui-6o8lMtobbyBRypXh4P
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-12_13,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 malwarescore=0 adultscore=0 impostorscore=0 mlxscore=0
- suspectscore=0 phishscore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=618
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307120167
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 7/12/2023 5:42 PM, Johan Hovold wrote:
-> On Wed, Jun 21, 2023 at 10:06:24AM +0530, Krishna Kurapati wrote:
->> Add support to read Multiport IRQ's related to quad port controller
->> of SA8295 Device.
->>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->>   drivers/usb/dwc3/dwc3-qcom.c | 108 +++++++++++++++++++++++++++++------
->>   1 file changed, 91 insertions(+), 17 deletions(-)
+On 12/07/2023 13:38, Varadarajan Narayanan wrote:
+> Document the M31 USB2 phy present in IPQ5332.
 > 
->> +static int dwc3_qcom_setup_mp_irq(struct platform_device *pdev)
->> +{
->> +	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
->> +	char irq_name[15];
-> 
-> The interrupt device-name string can not be allocated on the stack or
-> reused as it is stored directly in each irqaction structure.
-> 
-> This can otherwise lead to random crashes when accessing
-> /proc/interrupts:
-> 
-> 	https://lore.kernel.org/lkml/ZK6IV_jJPICX5r53@hovoldconsulting.com/
-> 
-Hi Johan,
+> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
 
-   Sure, will create a static array of names if possible in global 
-section of file and use it to read interrupts.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-   Are you fine with seperating out setup_irq and setup_mp_irq functions 
-? Can you please review comments and suggestion on [1].
+Best regards,
+Krzysztof
 
-[1]: 
-https://lore.kernel.org/all/bf62bdf4-cc9e-ba7b-2078-cfd60f5dd237@quicinc.com/
-
-Regards,
-Krishna,
-
->> +	int irq;
->> +	int ret;
->> +	int i;
->> +
->> +	for (i = 0; i < 4; i++) {
->> +		if (qcom->dp_hs_phy_irq[i])
->> +			continue;
->> +
->> +		sprintf(irq_name, "dp%d_hs_phy_irq", i+1);
->> +		irq = dwc3_qcom_get_irq(pdev, irq_name, -1);
->> +		if (irq > 0) {
->> +			irq_set_status_flags(irq, IRQ_NOAUTOEN);
->> +			ret = devm_request_threaded_irq(qcom->dev, irq, NULL,
->> +					qcom_dwc3_resume_irq,
->> +					IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
->> +					irq_name, qcom);
->> +			if (ret) {
->> +				dev_err(qcom->dev, "%s failed: %d\n", irq_name, ret);
->> +				return ret;
->> +			}
->> +		}
->> +
->> +		qcom->dp_hs_phy_irq[i] = irq;
->> +	}
-> 
-> Johan
