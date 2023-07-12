@@ -2,144 +2,212 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7BC751067
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 20:17:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5438375106B
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 20:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbjGLSRz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jul 2023 14:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
+        id S231486AbjGLSXC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jul 2023 14:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjGLSRx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 14:17:53 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2043.outbound.protection.outlook.com [40.107.94.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8840E173C
-        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 11:17:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KLF3bN6ZIXYGjexbtqmMFcJ9ph0bxsUBlLjfAJq4dzLn5uIvqamJNEyOCRakE2wykvkjDFPOz25m/OFJEZu0dTlnOdbl1U6YnDE/KZnFjFYKlU4pzkHUEExaKr5wrJXPssWivPKnMoi4y58RfUWcYcrE6yApAyDCBDK7UbQIbs+dYeAFBkELt8gUt6ROcQVt+x4i+yE+1IvQUMhf7CdOh0bV8iTc9VXkPe97nA5FT7c54Fbn584kDrMYwyp/+h9o39KTDz6hgkahJA3q2quTIVjLb050tieoh55rxQfOAI7YJ8S7Uh8bzbP15CiDPG1ifDIu5w23FPZAL4MRpvEiBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EGHdyqW+cWPW1ti8QRF2UbH0TmnKuudHvJUu/GdJXGQ=;
- b=CU7dxTHYkJvMVJHAC0ThQr+uLIWtWBg/TlNufbOrvYoyV975UE0wqvF2ha8fQFJko2xLCC0ozR7ky34pffODXXOQYnC5UG7zSFdjujxMYUt3NCrpGcimggpyc1mdwSGrSkJwyy0O8PHGkzXsyU55gZeqLFM4Ua4ww2/b7WbBLdUZV2w/tPVPAWpPQqLW9iTGeOFNdkv2+H0MmB5QvykMPeRzMosuGHKpdVzpxre/H728JlES9x4A0ET5XrwLUobdVR2xM51wo9NpgsoPlNDV7QOGqYt/BQVp4mYrzhLEf3ljV8HQRO1N05kdXJDE2hPJYakfch0NTwrcZ3Cdmwcr1g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EGHdyqW+cWPW1ti8QRF2UbH0TmnKuudHvJUu/GdJXGQ=;
- b=Ym+yAcDyxoU+Btqg4da4M1tuxZ8Z05+Q1tLXeULtu4Lhb33pxLsAJ6cN10HV+MmMiLFm+ZgVFrpICqz85HH9KzqbjRK6arOqaC/cFT3ptc8rF4fX7QTppsNGLz1/iG3FOw0x2ZlCojSAf3+WByslhLmnFMzs5pvsxQoX2hbUkFs=
-Received: from MW4PR03CA0142.namprd03.prod.outlook.com (2603:10b6:303:8c::27)
- by DS7PR12MB8419.namprd12.prod.outlook.com (2603:10b6:8:e9::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.20; Wed, 12 Jul
- 2023 18:17:50 +0000
-Received: from CO1NAM11FT109.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8c:cafe::46) by MW4PR03CA0142.outlook.office365.com
- (2603:10b6:303:8c::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.20 via Frontend
- Transport; Wed, 12 Jul 2023 18:17:49 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT109.mail.protection.outlook.com (10.13.174.176) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6588.24 via Frontend Transport; Wed, 12 Jul 2023 18:17:49 +0000
-Received: from sanjuamdntb2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 12 Jul
- 2023 13:17:46 -0500
-From:   Sanjay R Mehta <sanju.mehta@amd.com>
-To:     <mika.westerberg@linux.intel.com>, <andreas.noever@gmail.com>,
-        <michael.jamet@intel.com>, <YehezkelShB@gmail.com>
-CC:     <linux-usb@vger.kernel.org>, Sanjay R Mehta <sanju.mehta@amd.com>,
-        "Sanath S" <Sanath.S@amd.com>
-Subject: [PATCH V2] thunderbolt: Fix Thunderbolt 3 display flickering issue on 2nd hot plug onwards
-Date:   Wed, 12 Jul 2023 13:16:19 -0500
-Message-ID: <1689185779-25648-1-git-send-email-sanju.mehta@amd.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S232096AbjGLSXB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 14:23:01 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2F91BF2
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 11:22:58 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-313f1085ac2so7158457f8f.1
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 11:22:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689186177; x=1691778177;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zEptLORFsPcNRSNWyiLt/qdXLZFMpFLB74XceY7kfJs=;
+        b=NESOhrM+60c9TaKgiaIunf+PqQPIiBLE3dQ9ohYJ10UGNBLpP71Pw63cm5FCYIQjg3
+         vSc2vV0+vin0J4kZHikU2XhxSSio4lTYEvE7XeY9L/9ItYK7ivFTsbK5Pj0hTkJ9tTB/
+         Gs6wNB5zXnFjWLNd7Ufb4RBx6gDD2Vxn0UIl5v/LvKGUOxH3+AOBGj+TZJlH+DD0kbaL
+         9D6MmYT5Ykym5O/lqMR7yo0pcdpbSAzVh0ESz3OyXUgikztzX9ojWLoCNPXXK5ALnJwl
+         t06OlCkmiXzr8v5veQMH/kDwu63CaY1xtE2+K7TTax0s7lRchOGCX3cK1VPlHl+d7+Nr
+         zfkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689186177; x=1691778177;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zEptLORFsPcNRSNWyiLt/qdXLZFMpFLB74XceY7kfJs=;
+        b=LoKdO/oQ2O6dv5/hjb3ZBbwvX4ThkFIRL3kt9tc+KN1WcZIx4FhRJL6J/R5kyyVpjC
+         BaGT2guBcWJBGjVcnWAiIdvFnl+6S9vetZv8LppfLvOGITnIRvxvQkUkW9z6sDvejR9z
+         D9PDyqiXYObFfmNo5kHj3GXJCKf2VRl0p+ME0ERvPvdOzUtydaxnG3HKu9ibiFavFITO
+         PS289Fd72FmxCLUkjKLy1LLasZ7LI3LOBUif5mjVCgNBQ++mYUAmpPGAZI/UcJSCCzDV
+         7zor9Pc8jbzioci982d/hvIWcsIbFTf8IRgIgUQp9Ki3D9qx12nJJYTF16QXTWXWDiYc
+         XCJQ==
+X-Gm-Message-State: ABy/qLY8A9iUQKVxpebZGKgwLTWktcT0FwYvp11i39DC0zGmvpebdfQu
+        xK5E9Dak38/4AIG+NCm2eUeaf+35oYZ6yUn0e6ZYHg==
+X-Google-Smtp-Source: APBJJlHMQns32yY3qDu99XriZAQm+PfgqTyCkmM5Rr4OFbIo1eXyU4SfgLsCdRIpUXiTRIT4A3OFVAGT/QWgUoAtj1k=
+X-Received: by 2002:a5d:51cc:0:b0:314:121d:8cbf with SMTP id
+ n12-20020a5d51cc000000b00314121d8cbfmr13778455wrv.25.1689186176882; Wed, 12
+ Jul 2023 11:22:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT109:EE_|DS7PR12MB8419:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0cb80ec4-ae40-4faa-ac9b-08db83044cdc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Kg91FD1BEMVj3kmRXGlP2/IkxH6Gfa/YtXNpBHnpnXpmRyfVXSc2ZVMZ3F55Q5OqT7d6GI/0H9XRe99KAZcwmPKDrumwx5TNrL7071fvXj2NsuVFIm9w/daVbwlVg7deqaYbIOft1PnkQrODEpU1difSHVC0JkmV5H5vOTmLwjo0wiWmfAE1Ru5dIWJArg5ovLICzEly2KleWjuFjt3f+0ZNoSynJTclLpNqvJC2bq92iWHwJfn4yOHfF1nXDgFGdOEU0Bje8LmdFJmbKD5x16wb8jkW8XcIdKnz7j037RUSTOYwwbTOjYORWbPw10LTIaNsKX4avWUxr/0sBdcf2ToZbU8rmdsLV8Fh0ZSjOiW8U9b/0jMuXGvtBP/yGgC/i+0PeBRylzjwdORH4QkPh1D+bp12AMAYYZKe/wkZpkc3Y5ODpkZlst2MDjC5PYOFNqrsehPgExT8E4bbg81chXaqJ3HoOXrrJ7CfZ9fZie6bVBXqLzSOOhPJu0iibErjFz0hEouiQ52k+o2HdwrzepqrARB2J8ViB+c2LEVfLu9tIXAzHyMi6eJaZAldZZEXiNdq1HrQSZfzsh9bz8GNAYiD9bzbcBlvyr8Jhn+j/hC+AIPW4YkWQKSkisZIVW3vmvOK/9FOrwoJ2myLqXyLnJtlz+snyqX5ad5j57+2zCfPLEQLg2O1/XtzrBnFbCN1FnZ11TJ3NlRNi9KCeiAYvojulEVCxrD9dNfYqDkUetbdf7l6wHeXGWHqrdDIF5z+h8LrlJQykuR5Rb86JIsI4A==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(39860400002)(346002)(396003)(451199021)(46966006)(36840700001)(40470700004)(8936002)(8676002)(36860700001)(5660300002)(186003)(16526019)(47076005)(2616005)(66574015)(83380400001)(26005)(86362001)(41300700001)(6666004)(7696005)(82310400005)(336012)(426003)(54906003)(316002)(356005)(36756003)(2906002)(40460700003)(82740400003)(70206006)(70586007)(40480700001)(81166007)(478600001)(110136005)(4326008)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 18:17:49.4289
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0cb80ec4-ae40-4faa-ac9b-08db83044cdc
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT109.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8419
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <cover.1689148711.git.quic_schowdhu@quicinc.com> <18212c7abbb8c833cc07f8500d4905b79c49ec59.1689148711.git.quic_schowdhu@quicinc.com>
+In-Reply-To: <18212c7abbb8c833cc07f8500d4905b79c49ec59.1689148711.git.quic_schowdhu@quicinc.com>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Wed, 12 Jul 2023 23:52:45 +0530
+Message-ID: <CAH=2Ntz8JEGp_Atsv3iToUG1WdLKvdt5GYu7a=LwgmgY7v0rvw@mail.gmail.com>
+Subject: Re: [PATCH V1 2/3] usb: misc: Add notifier call chain to Embedded USB
+ Debug(EUD) driver
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        gregkh@linuxfoundation.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Previously, on unplug events, the TMU mode was disabled first
-followed by the Time Synchronization Handshake, irrespective of
-whether the tb_switch_tmu_rate_write() API was successful or not.
+Hi Souradeep,
 
-However, this caused a problem with Thunderbolt 3 (TBT3)
-devices, as the TSPacketInterval bits were always enabled by default,
-leading the host router to assume that the device router's TMU was
-already enabled and preventing it from initiating the Time
-Synchronization Handshake. As a result, TBT3 monitors experienced
-display flickering from the second hot plug onwards.
+On Wed, 12 Jul 2023 at 13:58, Souradeep Chowdhury
+<quic_schowdhu@quicinc.com> wrote:
+>
+> Add the notifier call chain to EUD driver. The notifier call chain
+> is added to check the role-switch status of EUD. When multiple
+> modules are switching roles on the same port, they need to call this
+> notifier to check the role-switch status of EUD. If EUD is disabled,
+> then the modules can go for the role-switch, otherwise it needs to
+> be blocked. The notifier chain can be used to link multiple modules
+> switching roles on the same port and create a ordering, priority and
+> conflict resolution among them. The wrapper functions are defined here
+> which can be used to register a notifier block to the chain, deregister
+> it and also call the chain.
+>
+> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> ---
+>  drivers/usb/misc/qcom_eud.c | 52 +++++++++++++++++++++++++++++++++++--
+>  1 file changed, 50 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
+> index 7f371ea1248c..e6c97a2cf2df 100644
+> --- a/drivers/usb/misc/qcom_eud.c
+> +++ b/drivers/usb/misc/qcom_eud.c
+> @@ -11,10 +11,13 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_platform.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/slab.h>
+>  #include <linux/sysfs.h>
+>  #include <linux/usb/role.h>
+> +#include "qcom_eud_notifier.h"
+>
+>  #define EUD_REG_INT1_EN_MASK   0x0024
+>  #define EUD_REG_INT_STATUS_1   0x0044
+> @@ -22,14 +25,16 @@
+>  #define EUD_REG_VBUS_INT_CLR   0x0080
+>  #define EUD_REG_CSR_EUD_EN     0x1014
+>  #define EUD_REG_SW_ATTACH_DET  0x1018
+> -#define EUD_REG_EUD_EN2                0x0000
+> +#define EUD_REG_EUD_EN2        0x0000
+>
+>  #define EUD_ENABLE             BIT(0)
+> -#define EUD_INT_PET_EUD                BIT(0)
 
-To address this issue, we have modified the code to only disable the
-Time Synchronization Handshake during TMU disable if the
-tb_switch_tmu_rate_write() function is successful. This ensures that
-the TBT3 devices function correctly and eliminates the display
-flickering issue.
+These indentation issues are already addressed in my EUD patches.
+Please rebase your patches on the same to reuse those.
 
-Co-developed-by: Sanath S <Sanath.S@amd.com>
-Signed-off-by: Sanath S <Sanath.S@amd.com>
-Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
----
-V2:
-	Corrected the signed-off-by ordering as per Greg's comment.
----
- drivers/thunderbolt/tmu.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> +#define EUD_INT_PET_EUD        BIT(0)
+>  #define EUD_INT_VBUS           BIT(2)
+>  #define EUD_INT_SAFE_MODE      BIT(4)
+>  #define EUD_INT_ALL            (EUD_INT_VBUS | EUD_INT_SAFE_MODE)
+>
+> +static RAW_NOTIFIER_HEAD(eud_nh);
+> +
+>  struct eud_chip {
+>         struct device                   *dev;
+>         struct usb_role_switch          *role_sw;
+> @@ -41,6 +46,42 @@ struct eud_chip {
+>         bool                            usb_attached;
+>  };
+>
+> +int eud_register_notify(struct notifier_block *nb)
+> +{
+> +       return raw_notifier_chain_register(&eud_nh, nb);
+> +}
+> +EXPORT_SYMBOL_GPL(eud_register_notify);
+> +
+> +void eud_unregister_notify(struct notifier_block *nb)
+> +{
+> +       raw_notifier_chain_unregister(&eud_nh, nb);
+> +}
+> +EXPORT_SYMBOL_GPL(eud_unregister_notify);
+> +
+> +void eud_notifier_call_chain(unsigned long role_switch_state)
+> +{
+> +       raw_notifier_call_chain(&eud_nh, role_switch_state, NULL);
+> +}
+> +EXPORT_SYMBOL_GPL(eud_notifier_call_chain);
 
-diff --git a/drivers/thunderbolt/tmu.c b/drivers/thunderbolt/tmu.c
-index 626aca3..49146f9 100644
---- a/drivers/thunderbolt/tmu.c
-+++ b/drivers/thunderbolt/tmu.c
-@@ -415,7 +415,9 @@ int tb_switch_tmu_disable(struct tb_switch *sw)
- 		 * uni-directional mode and we don't want to change it's TMU
- 		 * mode.
- 		 */
--		tb_switch_tmu_rate_write(sw, TB_SWITCH_TMU_RATE_OFF);
-+		ret = tb_switch_tmu_rate_write(sw, TB_SWITCH_TMU_RATE_OFF);
-+		if (ret)
-+			return ret;
- 
- 		tb_port_tmu_time_sync_disable(up);
- 		ret = tb_port_tmu_time_sync_disable(down);
--- 
-2.7.4
+Probably I missed it, but you have not provided any example users of
+these APIs in the patchset or reference to another one which shows how
+these APIs are used.
 
+> +static int eud_vbus_spoof_attach_detach(struct notifier_block *nb, unsigned long event,
+> +                                       void *data)
+> +{
+> +       struct device_node *eud = of_find_compatible_node(NULL, NULL, "qcom,eud");
+> +       struct device *eud_device = bus_find_device_by_of_node(&platform_bus_type, eud);
+> +       struct eud_chip  *eud_data = dev_get_drvdata(eud_device);
+> +
+> +       if (eud_data->enabled  && event != USB_ROLE_DEVICE)
+> +               return NOTIFY_BAD;
+> +       else
+> +               return NOTIFY_OK;
+> +}
+> +
+> +static struct notifier_block eud_notifier = {
+> +       .notifier_call = eud_vbus_spoof_attach_detach,
+> +       .priority = 1,
+
+Why do you need a 'priority = 1' here, it can be 0 or even lower?
+
+Thanks,
+Bhupesh
+
+> +};
+> +
+>  static int enable_eud(struct eud_chip *priv)
+>  {
+>         writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
+> @@ -196,6 +237,10 @@ static int eud_probe(struct platform_device *pdev)
+>                 return dev_err_probe(chip->dev, ret,
+>                                 "failed to add role switch release action\n");
+>
+> +       ret = eud_register_notify(&eud_notifier);
+> +       if (ret)
+> +               return dev_err_probe(chip->dev, ret, "failed to register notifier\n");
+> +
+>         chip->base = devm_platform_ioremap_resource(pdev, 0);
+>         if (IS_ERR(chip->base))
+>                 return PTR_ERR(chip->base);
+> @@ -226,6 +271,9 @@ static void eud_remove(struct platform_device *pdev)
+>
+>         device_init_wakeup(&pdev->dev, false);
+>         disable_irq_wake(chip->irq);
+> +       eud_unregister_notify(&eud_notifier);
+> +
+> +       return 0;
+>  }
+>
+>  static const struct of_device_id eud_dt_match[] = {
+> --
+> 2.17.1
+>
