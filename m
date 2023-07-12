@@ -2,140 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE42750772
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 14:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DCD7507CF
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 14:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbjGLMEo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jul 2023 08:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
+        id S231856AbjGLMMf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jul 2023 08:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232269AbjGLMEm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 08:04:42 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8258198B
-        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 05:04:38 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-98df3dea907so836326466b.3
-        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 05:04:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689163477; x=1691755477;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Vd8MWhBmnS04Aiq7zVFQ14FEWv2Wo1c1C/C8yhC8Id0=;
-        b=le6F9keT9ljyZRT5LbljxlaxWV9KiNZrUSeA+19dTnDjTdmXMhX81547hhEgNeEDDF
-         VbcmPtnmrFSi79AfNcRSZbQoPngqE2SvJAHz6iKdJdoCm1FKq/9ktwvIfQg+n09vtIcP
-         hV4vqfPMWYvffaGUXXZG+/CSxcJaqZxE1eyEXsL2KA7gJyGqjFYeqEgtXJopeu5ln9UM
-         Nxu6R3QwA/89rDDHwoZa/FObzIDipuAVIaE1TCSKwaEmJ+aurE+Jq2r7W1ggN/HVqOJJ
-         1NQV+twNkAQrdsb73PMisqrTKmyiMIVh8/LEkQKOmkndnbnL27kHHsyDdYeYgcFvF6HN
-         uWug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689163477; x=1691755477;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vd8MWhBmnS04Aiq7zVFQ14FEWv2Wo1c1C/C8yhC8Id0=;
-        b=P9ZS8ot4Hxle4/Wi2TMsAspPlT2aI1i4mqKo0cY7XSMaUu7zn07u3vTakaO++f8Lky
-         e96Q4jsXYZp8rzrDbwFZPI8uDi6Knk1LSdliiPZ1e2UebYAyCyByYloQCaO0alM+sWBF
-         k54fUyBDB+Z8tJ2b+7OiZnksz9UJGiRc8IzECQEZ/W3VGlmJgBDuMvP22gWbM3XIpwMv
-         qgHmyEtVExNgCQMqFyDw34Nzbi7D4tgyY5MfjhnOJRY723kCEqcXBeewmK1FAcLkejPd
-         +S5WlchyIf6lsGMpjo17qYnCVy/sOVlP3fNibq6ymCpENlj6LxIRx+fVgfdAUhrdznfE
-         wlsw==
-X-Gm-Message-State: ABy/qLYw91KEas6AXCYVBuI0jt1ZXm3fqZFRyjpuYal2yS+jdZpCvp5i
-        fK3oDXClADtT3cRiCr8DRWSzUA==
-X-Google-Smtp-Source: APBJJlHnPryYP9w3uG+1r8eDpkL93+kzmPWH5LYuGcs+JVPilF1y9IKiQbU4pJxkZeGKp6ZOswvrYA==
-X-Received: by 2002:a17:906:2202:b0:993:fe68:569c with SMTP id s2-20020a170906220200b00993fe68569cmr10347515ejs.6.1689163477302;
-        Wed, 12 Jul 2023 05:04:37 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id z25-20020a170906271900b009786c8249d6sm2502172ejc.175.2023.07.12.05.04.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 05:04:36 -0700 (PDT)
-Message-ID: <13555184-1708-befd-1f2c-5e6f7e04a6ce@linaro.org>
-Date:   Wed, 12 Jul 2023 14:04:28 +0200
+        with ESMTP id S231488AbjGLMMe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 08:12:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5F7E65;
+        Wed, 12 Jul 2023 05:12:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C5A5617A4;
+        Wed, 12 Jul 2023 12:12:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAF63C433C8;
+        Wed, 12 Jul 2023 12:12:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689163952;
+        bh=9Vrfyl+qNlhjUuYQ+DzG4/zZwn6xt7e/Cc1IJTbESnE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oSvkq3tqbXDLMRHAppG6fxYvOgma2Nw98ZLx5gO+HrZQArhxjxHK/Xlq37JNxEzyx
+         tRA502ufSiNAfgUGKOOwAqi9D/hNkVOATfE6wsCmkJxQ32gR3+ejocFOcVqncpsFVY
+         TAibI8d/hNOZCz99pK+oVTZzrn8sVuc5lYo8tfoN6cb80MfWziZF8mm+S5YcFoDn0r
+         u3uOhy1zo7nsF1jdCoGE6qlfIuDCjfvUlZDGbKyqbs7em2nmxoa5/8qiqv5dVyoyA7
+         hxcb2ftuH1r04yO31m6lGwRULaElhMnhJFK+MEvwBqEkVf3+webOjYxU7Is1ShgxfO
+         Q44nnk8GlLs+w==
+Received: from johan by xi.lan with local (Exim 4.96)
+        (envelope-from <johan@kernel.org>)
+        id 1qJYho-0005to-1X;
+        Wed, 12 Jul 2023 14:12:29 +0200
+Date:   Wed, 12 Jul 2023 14:12:28 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com, quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v9 06/10] usb: dwc3: qcom: Add support to read IRQ's
+ related to multiport
+Message-ID: <ZK6YrLMn9r39zEeB@hovoldconsulting.com>
+References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
+ <20230621043628.21485-7-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v4 4/6] arm64: dts: qcom: ipq5332: Add USB related nodes
-Content-Language: en-US
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
-        kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
-        will@kernel.org, p.zabel@pengutronix.de, arnd@arndb.de,
-        geert+renesas@glider.be, neil.armstrong@linaro.org,
-        nfraprado@collabora.com, rafal@milecki.pl,
-        quic_srichara@quicinc.com, quic_varada@quicinc.org,
-        quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <cover.1689160067.git.quic_varada@quicinc.com>
- <1f99805b6437aa8d6eaa4663e8d27b98ee595f00.1689160067.git.quic_varada@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1f99805b6437aa8d6eaa4663e8d27b98ee595f00.1689160067.git.quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621043628.21485-7-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 12/07/2023 13:38, Varadarajan Narayanan wrote:
-> Add USB phy and controller nodes.
+On Wed, Jun 21, 2023 at 10:06:24AM +0530, Krishna Kurapati wrote:
+> Add support to read Multiport IRQ's related to quad port controller
+> of SA8295 Device.
 > 
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 > ---
-> v4:
-> 	Change node name
-> 	Remove blank line
-> 	'make CHECK_DTBS=y DT_SCHEMA_FILES=qcom qcom/ipq5332-rdp441.dtb' passed
-> v1:
-> 	Rename phy node
-> 	Change compatible from m31,ipq5332-usb-hsphy -> qcom,ipq5332-usb-hsphy
-> 	Remove 'qscratch' from phy node
-> 	Fix alignment and upper-case hex no.s
-> 	Add clock definition for the phy
-> 	Remove snps,ref-clock-period-ns as it is not used. dwc3_ref_clk_period()
-> 	in dwc3/core.c takes the frequency from ref clock and calculates fladj
-> 	as appropriate.
-> ---
->  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 53 +++++++++++++++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> index 8bfc2db..8118356 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> @@ -405,6 +405,59 @@
->  				status = "disabled";
->  			};
->  		};
-> +
-> +		usbphy0: usb-phy@7b000 {
-> +			compatible = "qcom,ipq5332-usb-hsphy";
-> +			reg = <0x0007b000 0x12c>;
-> +
-> +			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>;
-> +			clock-names = "cfg_ahb";
-> +
-> +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		usb2: usb2@8a00000 {
+>  drivers/usb/dwc3/dwc3-qcom.c | 108 +++++++++++++++++++++++++++++------
+>  1 file changed, 91 insertions(+), 17 deletions(-)
 
-So you responded to my comments, wait ten minutes and send v2? No need
-to wait for my feedback, right?
+> +static int dwc3_qcom_setup_mp_irq(struct platform_device *pdev)
+> +{
+> +	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
+> +	char irq_name[15];
 
-No, it's not ok. This is "usb", not "usb2". Are you saying you have
-second device with the same address?
+The interrupt device-name string can not be allocated on the stack or
+reused as it is stored directly in each irqaction structure.
 
-Best regards,
-Krzysztof
+This can otherwise lead to random crashes when accessing
+/proc/interrupts:
 
+	https://lore.kernel.org/lkml/ZK6IV_jJPICX5r53@hovoldconsulting.com/
+
+> +	int irq;
+> +	int ret;
+> +	int i;
+> +
+> +	for (i = 0; i < 4; i++) {
+> +		if (qcom->dp_hs_phy_irq[i])
+> +			continue;
+> +
+> +		sprintf(irq_name, "dp%d_hs_phy_irq", i+1);
+> +		irq = dwc3_qcom_get_irq(pdev, irq_name, -1);
+> +		if (irq > 0) {
+> +			irq_set_status_flags(irq, IRQ_NOAUTOEN);
+> +			ret = devm_request_threaded_irq(qcom->dev, irq, NULL,
+> +					qcom_dwc3_resume_irq,
+> +					IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
+> +					irq_name, qcom);
+> +			if (ret) {
+> +				dev_err(qcom->dev, "%s failed: %d\n", irq_name, ret);
+> +				return ret;
+> +			}
+> +		}
+> +
+> +		qcom->dp_hs_phy_irq[i] = irq;
+> +	}
+
+Johan
