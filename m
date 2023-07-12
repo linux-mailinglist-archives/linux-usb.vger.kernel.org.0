@@ -2,57 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5438375106B
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 20:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5674D751070
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 20:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbjGLSXC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jul 2023 14:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
+        id S232238AbjGLSZN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jul 2023 14:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232096AbjGLSXB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 14:23:01 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2F91BF2
-        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 11:22:58 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-313f1085ac2so7158457f8f.1
-        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 11:22:58 -0700 (PDT)
+        with ESMTP id S231819AbjGLSZN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 14:25:13 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5E71BF6
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 11:25:11 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-314417861b9so7398216f8f.0
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 11:25:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689186177; x=1691778177;
+        d=linaro.org; s=google; t=1689186310; x=1691778310;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zEptLORFsPcNRSNWyiLt/qdXLZFMpFLB74XceY7kfJs=;
-        b=NESOhrM+60c9TaKgiaIunf+PqQPIiBLE3dQ9ohYJ10UGNBLpP71Pw63cm5FCYIQjg3
-         vSc2vV0+vin0J4kZHikU2XhxSSio4lTYEvE7XeY9L/9ItYK7ivFTsbK5Pj0hTkJ9tTB/
-         Gs6wNB5zXnFjWLNd7Ufb4RBx6gDD2Vxn0UIl5v/LvKGUOxH3+AOBGj+TZJlH+DD0kbaL
-         9D6MmYT5Ykym5O/lqMR7yo0pcdpbSAzVh0ESz3OyXUgikztzX9ojWLoCNPXXK5ALnJwl
-         t06OlCkmiXzr8v5veQMH/kDwu63CaY1xtE2+K7TTax0s7lRchOGCX3cK1VPlHl+d7+Nr
-         zfkQ==
+        bh=3sbg1EWek1f7W/2sEFdDkon2yGXDKs3LeHwQc8htLNA=;
+        b=u8aDDgJFfGEOW7j1I1qdOkKlFoZchHnPUIS3J/GLni+iE4cR2YOajIuM2YRggaMC3h
+         6uA+XGjpRU7QP6aouW5YmWbpBuZCQF2ldrWfpqO9Ew1w/LIuKxq8F3GbV8Zhrxs8nXl4
+         giEnU1DfTzop+e0rFO03HZXrtvwLkWdAb2RuY4XOjw9vNqoIBdtxuEXU0BnULXqYmP4U
+         Oimb1G3d+Q5baKbh7pd9aifjI0pwed+KjiSigPr72D7tN9UKyMpziFYkT7jOYjjjDz1B
+         fOiCtrbqpGCNKsRFD3/fhrpcZT3vvQhLrW171/TOrO0takiyd7/CC5iHf5HZW5CSYtrf
+         PADg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689186177; x=1691778177;
+        d=1e100.net; s=20221208; t=1689186310; x=1691778310;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zEptLORFsPcNRSNWyiLt/qdXLZFMpFLB74XceY7kfJs=;
-        b=LoKdO/oQ2O6dv5/hjb3ZBbwvX4ThkFIRL3kt9tc+KN1WcZIx4FhRJL6J/R5kyyVpjC
-         BaGT2guBcWJBGjVcnWAiIdvFnl+6S9vetZv8LppfLvOGITnIRvxvQkUkW9z6sDvejR9z
-         D9PDyqiXYObFfmNo5kHj3GXJCKf2VRl0p+ME0ERvPvdOzUtydaxnG3HKu9ibiFavFITO
-         PS289Fd72FmxCLUkjKLy1LLasZ7LI3LOBUif5mjVCgNBQ++mYUAmpPGAZI/UcJSCCzDV
-         7zor9Pc8jbzioci982d/hvIWcsIbFTf8IRgIgUQp9Ki3D9qx12nJJYTF16QXTWXWDiYc
-         XCJQ==
-X-Gm-Message-State: ABy/qLY8A9iUQKVxpebZGKgwLTWktcT0FwYvp11i39DC0zGmvpebdfQu
-        xK5E9Dak38/4AIG+NCm2eUeaf+35oYZ6yUn0e6ZYHg==
-X-Google-Smtp-Source: APBJJlHMQns32yY3qDu99XriZAQm+PfgqTyCkmM5Rr4OFbIo1eXyU4SfgLsCdRIpUXiTRIT4A3OFVAGT/QWgUoAtj1k=
-X-Received: by 2002:a5d:51cc:0:b0:314:121d:8cbf with SMTP id
- n12-20020a5d51cc000000b00314121d8cbfmr13778455wrv.25.1689186176882; Wed, 12
- Jul 2023 11:22:56 -0700 (PDT)
+        bh=3sbg1EWek1f7W/2sEFdDkon2yGXDKs3LeHwQc8htLNA=;
+        b=gAK0ygNLgjeG1FbFIerXa/YBOcjOKdMUa5tVBHj1Xax5xRFNTlOUWesgQAFtWXbJqx
+         Pk6lSoIxlTZYPsO9jogklK1nJPxL+gyBW43bhDP/bu1hYbnQAYgMCtoWytpj315X07kZ
+         fCkb9qzKCU3+L8DdcFgJ9FVyakDV7fpvYeidxAWNyBKCXBh2z04Xrq5SbVwIKsKTq0A8
+         XKnS6nApUoO+bdjxTv4RE1WDlyrVX2StELv/CGzD+DJWq4W61M/dF/E1ATO9XmWD/yb7
+         Svd2PkNwH+YjW1gdbYqA950e5HSvaCshTboqc1lCBgxNkv5P4Tulfmr/jI4+O/iU5Lgf
+         v+LQ==
+X-Gm-Message-State: ABy/qLbN33EzrJnL1jGe4ghfuNRnhfMYCVxD4fDkg4ska8jejBL4N8au
+        mwhCdLtA/gzcTQo3ntpuwYn3BBKpt0qzP9QBmbxDlg==
+X-Google-Smtp-Source: APBJJlHn5AONiwSv5nuU8XvbEPnAsG7pZFEtpPxaReRewRtCSYUfxoBuL8tsflJhEhaBeE2wBZwKV+fpBuDDMvHrooQ=
+X-Received: by 2002:a5d:4603:0:b0:315:ad1a:5abc with SMTP id
+ t3-20020a5d4603000000b00315ad1a5abcmr2917667wrq.5.1689186310079; Wed, 12 Jul
+ 2023 11:25:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1689148711.git.quic_schowdhu@quicinc.com> <18212c7abbb8c833cc07f8500d4905b79c49ec59.1689148711.git.quic_schowdhu@quicinc.com>
-In-Reply-To: <18212c7abbb8c833cc07f8500d4905b79c49ec59.1689148711.git.quic_schowdhu@quicinc.com>
+References: <cover.1689148711.git.quic_schowdhu@quicinc.com> <f3ab03c1afadd72ad166d2e421844cfca072f90e.1689148711.git.quic_schowdhu@quicinc.com>
+In-Reply-To: <f3ab03c1afadd72ad166d2e421844cfca072f90e.1689148711.git.quic_schowdhu@quicinc.com>
 From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Wed, 12 Jul 2023 23:52:45 +0530
-Message-ID: <CAH=2Ntz8JEGp_Atsv3iToUG1WdLKvdt5GYu7a=LwgmgY7v0rvw@mail.gmail.com>
-Subject: Re: [PATCH V1 2/3] usb: misc: Add notifier call chain to Embedded USB
- Debug(EUD) driver
+Date:   Wed, 12 Jul 2023 23:54:58 +0530
+Message-ID: <CAH=2NtwYbhd6kS7dSYBXJsgW0pcMz8PxgX_BCmFcAiAVYNUzvg@mail.gmail.com>
+Subject: Re: [PATCH V1 3/3] MAINTAINERS: Add the header file entry for
+ Embedded USB debugger(EUD)
 To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
@@ -65,149 +65,37 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Souradeep,
-
 On Wed, 12 Jul 2023 at 13:58, Souradeep Chowdhury
 <quic_schowdhu@quicinc.com> wrote:
 >
-> Add the notifier call chain to EUD driver. The notifier call chain
-> is added to check the role-switch status of EUD. When multiple
-> modules are switching roles on the same port, they need to call this
-> notifier to check the role-switch status of EUD. If EUD is disabled,
-> then the modules can go for the role-switch, otherwise it needs to
-> be blocked. The notifier chain can be used to link multiple modules
-> switching roles on the same port and create a ordering, priority and
-> conflict resolution among them. The wrapper functions are defined here
-> which can be used to register a notifier block to the chain, deregister
-> it and also call the chain.
+> Add the entry for Embedded USB Debugger(EUD) header file which contains
+> interface definitions for the EUD notifier chain.
 >
 > Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 > ---
->  drivers/usb/misc/qcom_eud.c | 52 +++++++++++++++++++++++++++++++++++--
->  1 file changed, 50 insertions(+), 2 deletions(-)
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-> index 7f371ea1248c..e6c97a2cf2df 100644
-> --- a/drivers/usb/misc/qcom_eud.c
-> +++ b/drivers/usb/misc/qcom_eud.c
-> @@ -11,10 +11,13 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_platform.h>
->  #include <linux/platform_device.h>
->  #include <linux/slab.h>
->  #include <linux/sysfs.h>
->  #include <linux/usb/role.h>
-> +#include "qcom_eud_notifier.h"
->
->  #define EUD_REG_INT1_EN_MASK   0x0024
->  #define EUD_REG_INT_STATUS_1   0x0044
-> @@ -22,14 +25,16 @@
->  #define EUD_REG_VBUS_INT_CLR   0x0080
->  #define EUD_REG_CSR_EUD_EN     0x1014
->  #define EUD_REG_SW_ATTACH_DET  0x1018
-> -#define EUD_REG_EUD_EN2                0x0000
-> +#define EUD_REG_EUD_EN2        0x0000
->
->  #define EUD_ENABLE             BIT(0)
-> -#define EUD_INT_PET_EUD                BIT(0)
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 3be1bdfe8ecc..6d395cc6f45c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17288,6 +17288,7 @@ L:      linux-arm-msm@vger.kernel.org
+>  S:     Maintained
+>  F:     Documentation/ABI/testing/sysfs-driver-eud
+>  F:     Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+> +F:     drivers/usb/misc/qcom_eud_notifier.h
+>  F:     drivers/usb/misc/qcom_eud.c
 
-These indentation issues are already addressed in my EUD patches.
-Please rebase your patches on the same to reuse those.
-
-> +#define EUD_INT_PET_EUD        BIT(0)
->  #define EUD_INT_VBUS           BIT(2)
->  #define EUD_INT_SAFE_MODE      BIT(4)
->  #define EUD_INT_ALL            (EUD_INT_VBUS | EUD_INT_SAFE_MODE)
->
-> +static RAW_NOTIFIER_HEAD(eud_nh);
-> +
->  struct eud_chip {
->         struct device                   *dev;
->         struct usb_role_switch          *role_sw;
-> @@ -41,6 +46,42 @@ struct eud_chip {
->         bool                            usb_attached;
->  };
->
-> +int eud_register_notify(struct notifier_block *nb)
-> +{
-> +       return raw_notifier_chain_register(&eud_nh, nb);
-> +}
-> +EXPORT_SYMBOL_GPL(eud_register_notify);
-> +
-> +void eud_unregister_notify(struct notifier_block *nb)
-> +{
-> +       raw_notifier_chain_unregister(&eud_nh, nb);
-> +}
-> +EXPORT_SYMBOL_GPL(eud_unregister_notify);
-> +
-> +void eud_notifier_call_chain(unsigned long role_switch_state)
-> +{
-> +       raw_notifier_call_chain(&eud_nh, role_switch_state, NULL);
-> +}
-> +EXPORT_SYMBOL_GPL(eud_notifier_call_chain);
-
-Probably I missed it, but you have not provided any example users of
-these APIs in the patchset or reference to another one which shows how
-these APIs are used.
-
-> +static int eud_vbus_spoof_attach_detach(struct notifier_block *nb, unsigned long event,
-> +                                       void *data)
-> +{
-> +       struct device_node *eud = of_find_compatible_node(NULL, NULL, "qcom,eud");
-> +       struct device *eud_device = bus_find_device_by_of_node(&platform_bus_type, eud);
-> +       struct eud_chip  *eud_data = dev_get_drvdata(eud_device);
-> +
-> +       if (eud_data->enabled  && event != USB_ROLE_DEVICE)
-> +               return NOTIFY_BAD;
-> +       else
-> +               return NOTIFY_OK;
-> +}
-> +
-> +static struct notifier_block eud_notifier = {
-> +       .notifier_call = eud_vbus_spoof_attach_detach,
-> +       .priority = 1,
-
-Why do you need a 'priority = 1' here, it can be 0 or even lower?
+You can simplify it to 'drivers/usb/misc/qcom_eud*' instead, for
+avoiding repeatedly changing this when new files are added in future.
 
 Thanks,
 Bhupesh
-
-> +};
-> +
->  static int enable_eud(struct eud_chip *priv)
->  {
->         writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
-> @@ -196,6 +237,10 @@ static int eud_probe(struct platform_device *pdev)
->                 return dev_err_probe(chip->dev, ret,
->                                 "failed to add role switch release action\n");
->
-> +       ret = eud_register_notify(&eud_notifier);
-> +       if (ret)
-> +               return dev_err_probe(chip->dev, ret, "failed to register notifier\n");
-> +
->         chip->base = devm_platform_ioremap_resource(pdev, 0);
->         if (IS_ERR(chip->base))
->                 return PTR_ERR(chip->base);
-> @@ -226,6 +271,9 @@ static void eud_remove(struct platform_device *pdev)
->
->         device_init_wakeup(&pdev->dev, false);
->         disable_irq_wake(chip->irq);
-> +       eud_unregister_notify(&eud_notifier);
-> +
-> +       return 0;
->  }
->
->  static const struct of_device_id eud_dt_match[] = {
-> --
-> 2.17.1
->
