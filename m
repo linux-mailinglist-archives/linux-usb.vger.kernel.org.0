@@ -2,106 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF72750178
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 10:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86634750232
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 10:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232488AbjGLI2d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jul 2023 04:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55866 "EHLO
+        id S233050AbjGLI7B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jul 2023 04:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232879AbjGLI2H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 04:28:07 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B1A19B4;
-        Wed, 12 Jul 2023 01:23:27 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36C4dqva027194;
-        Wed, 12 Jul 2023 08:23:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=6EamwE1BRGAKf9o1e8li1V8LRV9RT7CZKpGuFkVLIGI=;
- b=akjsE7Ff0xh5gTsdoTBHhQPvaHbqD2+HVIXWwMQCa+31mHKttJnhWRJKMIe/XKnA28Cr
- U3rhWHwmZVdijT5BetujKbWIbiGTMd3iQczpedaiZnbPBqgIH/6+9zFC/W3uU6xgmZrW
- 8PFWz4SVfe7VWmtcdrGcTwo4+M+jWKK3/MAgyeA2F5ZOb9T7nSryPnh0PZw8Ogn7iHw5
- EsQcYyuKap2gP+kVdopyiaxnf8tikGVJuRJNR/tIiAdvcC2SNtjMj1prvoFVcuJsQpw0
- 5urh+Si9JWqGHQgCrxkkuDJtkaxDjGDEhlno+VdT3fdNbNKL1ajvoze559EAf+JEqFV7 wA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rshyu8qme-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 08:23:12 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36C8NBZp009460
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 08:23:11 GMT
-Received: from hu-schowdhu-blr.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 12 Jul 2023 01:23:07 -0700
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Subject: [PATCH V1 3/3] MAINTAINERS: Add the header file entry for Embedded USB debugger(EUD)
-Date:   Wed, 12 Jul 2023 13:52:40 +0530
-Message-ID: <f3ab03c1afadd72ad166d2e421844cfca072f90e.1689148711.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1689148711.git.quic_schowdhu@quicinc.com>
-References: <cover.1689148711.git.quic_schowdhu@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _yvdB73eKuYn8LPXLSgJzcoMtbz0e7-k
-X-Proofpoint-ORIG-GUID: _yvdB73eKuYn8LPXLSgJzcoMtbz0e7-k
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-12_04,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 bulkscore=0 spamscore=0 mlxlogscore=500 phishscore=0
- clxscore=1015 mlxscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307120073
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229907AbjGLI6l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 04:58:41 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC272135
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 01:57:27 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-55c19420827so5015400a12.0
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 01:57:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689152247; x=1691744247;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=o7IxMgsm10wM4UtHG5ILit3AGY4PCAIXBMJb8LPTjZE=;
+        b=5SdejOJp8VU3CbfzVdHrFiUZy9Sg2fjsaM+37a7NbRb4J1uX2H6b2OTG4pByTROd4n
+         spndSk5E/mTZ4GyVd7gmmxlztHqqrkvhK8pdSQaLHrmF5OjkH1Gb9fBZ0FuPpZw7xju6
+         zsdil8YofrGOKzU+l/Bcu9XbmzATqHHwdkqiggXgwUd9hPnMsM3cg5pLs88E9okRVwcv
+         U1Ml4d0AB4ZVhhKVe3ArL7v0tydYALwE5r9vaklttinSnPMQb/gsTCnw0jj+xGIpJvy8
+         2G+S+XvC89+gqJuVZRRF4GUjjtEjQt5JI+BHAC/uEb+DEMDIRp4vw9ttfXknF1G3wYSo
+         QohQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689152247; x=1691744247;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o7IxMgsm10wM4UtHG5ILit3AGY4PCAIXBMJb8LPTjZE=;
+        b=l0TC2Zl8NdK6VQNFz5Ub7ytROcftq3HtPjF9lOWGVA1W+ZRwouU65ZqTyxxts93ckI
+         LznJbo9STGRbpQQl/dZMWHi0ft9rLqEd5IxKcW9HvzbgUgARMGIBnaheE+5nDjVXSiIN
+         maPXxkg+N+K+QxhYXh09TRzFWZ16CxtiZWAMKxDlS5xchF+u+TJ7ylliRI274vnsKrMZ
+         1k6WYBJg61w6nKwNXVlcZv0QCX0VbFuCuMFbHsxdCAQxM62Ox+uiSwB1ImtwL3EKmH+9
+         DxJskpzgSy/tyHK3xJ5x1pE9RtIOxwiu9kOlqkayDlRXJVFF1eS88XKr7IA/o1j3dMqw
+         oyyg==
+X-Gm-Message-State: ABy/qLY4EGGlKisvPpeN7BMyfNekeKv8GA1mRQqg1S4PC4QNsirimSGn
+        AskMHucJgeKQW5r2+SBZkOzXKSxNpc8=
+X-Google-Smtp-Source: APBJJlFDBOcXKyheJrQ1mAmBe3SBY45tZsMMX1cuCQesKVTGIVmfD7ZeHEYqu96oAiKhRzN/JSkvy9DgqfI=
+X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
+ (user=badhri job=sendgmr) by 2002:a65:6a84:0:b0:55a:e746:31ef with SMTP id
+ q4-20020a656a84000000b0055ae74631efmr10155877pgu.1.1689152246932; Wed, 12 Jul
+ 2023 01:57:26 -0700 (PDT)
+Date:   Wed, 12 Jul 2023 08:57:22 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230712085722.1414743-1-badhri@google.com>
+Subject: [PATCH v1] usb: typec: tcpm: Fix response to vsafe0V event
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     gregkh@linuxfoundation.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, kyletso@google.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the entry for Embedded USB Debugger(EUD) header file which contains
-interface definitions for the EUD notifier chain.
+Do not transition to SNK_UNATTACHED state when receiving vsafe0v event
+while in SNK_HARD_RESET_WAIT_VBUS. Ignore VBUS off events as well as
+in some platforms VBUS off can be signalled more than once.
 
-Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+[143515.364753] Requesting mux state 1, usb-role 2, orientation 2
+[143515.365520] pending state change SNK_HARD_RESET_SINK_OFF -> SNK_HARD_RESET_SINK_ON @ 650 ms [rev3 HARD_RESET]
+[143515.632281] CC1: 0 -> 0, CC2: 3 -> 0 [state SNK_HARD_RESET_SINK_OFF, polarity 1, disconnected]
+[143515.637214] VBUS on
+[143515.664985] VBUS off
+[143515.664992] state change SNK_HARD_RESET_SINK_OFF -> SNK_HARD_RESET_WAIT_VBUS [rev3 HARD_RESET]
+[143515.665564] VBUS VSAFE0V
+[143515.665566] state change SNK_HARD_RESET_WAIT_VBUS -> SNK_UNATTACHED [rev3 HARD_RESET]
+
+Fixes: 28b43d3d746b ("usb: typec: tcpm: Introduce vsafe0v for vbus")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/typec/tcpm/tcpm.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3be1bdfe8ecc..6d395cc6f45c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17288,6 +17288,7 @@ L:	linux-arm-msm@vger.kernel.org
- S:	Maintained
- F:	Documentation/ABI/testing/sysfs-driver-eud
- F:	Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
-+F:	drivers/usb/misc/qcom_eud_notifier.h
- F:	drivers/usb/misc/qcom_eud.c
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 829d75ebab42..cc1d83926497 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -5349,6 +5349,10 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
+ 		/* Do nothing, vbus drop expected */
+ 		break;
  
- QCOM IPA DRIVER
++	case SNK_HARD_RESET_WAIT_VBUS:
++		/* Do nothing, its OK to receive vbus off events */
++		break;
++
+ 	default:
+ 		if (port->pwr_role == TYPEC_SINK && port->attached)
+ 			tcpm_set_state(port, SNK_UNATTACHED, tcpm_wait_for_discharge(port));
+@@ -5395,6 +5399,9 @@ static void _tcpm_pd_vbus_vsafe0v(struct tcpm_port *port)
+ 	case SNK_DEBOUNCED:
+ 		/*Do nothing, still waiting for VSAFE5V for connect */
+ 		break;
++	case SNK_HARD_RESET_WAIT_VBUS:
++		/* Do nothing, its OK to receive vbus off events */
++		break;
+ 	default:
+ 		if (port->pwr_role == TYPEC_SINK && port->auto_vbus_discharge_enabled)
+ 			tcpm_set_state(port, SNK_UNATTACHED, 0);
+
+base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
 -- 
-2.17.1
+2.41.0.255.g8b1d071c50-goog
 
