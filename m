@@ -2,58 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE76874FEDE
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 07:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 688EC74FEE3
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 07:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231816AbjGLFrV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jul 2023 01:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44622 "EHLO
+        id S231540AbjGLFyE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jul 2023 01:54:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbjGLFrT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 01:47:19 -0400
+        with ESMTP id S230233AbjGLFyD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 01:54:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A9D173B;
-        Tue, 11 Jul 2023 22:47:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509AF173A
+        for <linux-usb@vger.kernel.org>; Tue, 11 Jul 2023 22:54:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66ACE616DA;
-        Wed, 12 Jul 2023 05:47:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4571FC433C8;
-        Wed, 12 Jul 2023 05:47:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689140837;
-        bh=tv7+G1sTRAmpHP+NsXZWJZzIX4WDWhx4O5Js86b6Tf0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kW2fQoLIFzmvqPIsD8GMQCYXIhyPhMNN6wiMaGe121gszV1BR1ZsqBh75GjcYhXnl
-         rzvkKXDlP3cEs0ARrU0O+YhmNlmWP4La0Tj0zPAdyws5b6A/73YA/r2IrhOmJDJ1+2
-         j6vSXAxanaxt3RWfwLclGbPK4vmFZVxbK0dPn6jdWcIvOFdCabNDTgz2ZE4nE5W3Kd
-         9WLws7xHy4I81Orm6+rX/7nhmBBAmqnI8YxhnUA2tuz65PILopYY/Nmfz7WFskX07v
-         idPmnbmd8U+/WF2zgVG+lIrmsSnLylHOih8vBusxLm+lYzIjSdS9uB+9HilJhVgHkK
-         FlnV8l4vt+qww==
-Message-ID: <9425ee08-f714-2833-6c94-a0f15cb608b5@kernel.org>
-Date:   Wed, 12 Jul 2023 07:47:10 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA17660DCF
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 05:54:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6822C433C8;
+        Wed, 12 Jul 2023 05:54:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1689141241;
+        bh=UHTq0jeExWM9vWoefd4qe+mPZ6EWBmQpT9qDgEten4Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DwKdwp6k4RMusUCLiQdMdZovAQIKszmSKf5J69I/2BHUye7kUOeiunVjlZSa+2mIp
+         kLfvT8X6eI2vxC0SJOHKmvjoS4MCwBWzIbVh9F7eHrMjq/S0luCZPQz1wrlOlMJFcc
+         CuQ8U+8pR/iGSpHWEb6w9LlcyWoQc5KcFEWXf5Sw=
+Date:   Wed, 12 Jul 2023 07:53:57 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Sanjay R Mehta <Sanju.Mehta@amd.com>
+Cc:     mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org, Sanath S <Sanath.S@amd.com>
+Subject: Re: [PATCH RESEND] thunderbolt: Fix Thunderbolt 3 display flickering
+ issue on 2nd hot plug onwards
+Message-ID: <2023071229-deepness-radiated-e55c@gregkh>
+References: <1689139946-18667-1-git-send-email-Sanju.Mehta@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 2/3] dt-bindings: usb: snps,dwc3: Add
- allow-rtsusp-on-u3 property
-Content-Language: en-US
-To:     Elson Roy Serrao <quic_eserrao@quicinc.com>,
-        Thinh.Nguyen@synopsys.com, stern@rowland.harvard.edu
-Cc:     gregkh@linuxfoundation.org, rogerq@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_wcheng@quicinc.com, quic_jackp@quicinc.com
-References: <20230711174320.24058-1-quic_eserrao@quicinc.com>
- <20230711174320.24058-3-quic_eserrao@quicinc.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230711174320.24058-3-quic_eserrao@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1689139946-18667-1-git-send-email-Sanju.Mehta@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,32 +53,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11/07/2023 19:43, Elson Roy Serrao wrote:
-> This property allows dwc3 runtime suspend when bus suspend interrupt
-> is received even with cable connected. This would allow the dwc3
-> controller to enter low power mode during bus suspend scenario.
+On Wed, Jul 12, 2023 at 12:32:26AM -0500, Sanjay R Mehta wrote:
+> From: Sanjay R Mehta <sanju.mehta@amd.com>
 > 
-> This property would particularly benefit dwc3 IPs where hibernation is
-> not enabled and the dwc3 low power mode entry/exit is handled by the
-> glue driver. The assumption here is that the platform using this dt
-> property is capable of detecting resume events to bring the controller
-> out of suspend.
+> Previously, on unplug events, the TMU mode was disabled first
+> followed by the Time Synchronization Handshake, irrespective of
+> whether the tb_switch_tmu_rate_write() API was successful or not.
+> 
+> However, this caused a problem with Thunderbolt 3 (TBT3)
+> devices, as the TSPacketInterval bits were always enabled by default,
+> leading the host router to assume that the device router's TMU was
+> already enabled and preventing it from initiating the Time
+> Synchronization Handshake. As a result, TBT3 monitors experienced
+> display flickering from the second hot plug onwards.
+> 
+> To address this issue, we have modified the code to only disable the
+> Time Synchronization Handshake during TMU disable if the
+> tb_switch_tmu_rate_write() function is successful. This ensures that
+> the TBT3 devices function correctly and eliminates the display
+> flickering issue.
+> 
+> Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
+> Signed-off-by: Sanath S <Sanath.S@amd.com>
+> ---
+>  drivers/thunderbolt/tmu.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-v3 and still ignoring maintainers?
+Why is this a RESEND?  What changed?
 
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC. It might happen, that command when run on an older
-kernel, gives you outdated entries. Therefore please be sure you base
-your patches on recent Linux kernel.
+And the ordering of the signed-off-by is incorrect.
 
-You missed at least DT list (maybe more), so this won't be tested by
-automated tooling. Performing review on untested code might be a waste
-of time, thus I will skip this patch entirely till you follow the
-process allowing the patch to be tested.
+thanks,
 
-Please kindly resend and include all necessary To/Cc entries.
-
-
-Best regards,
-Krzysztof
-
+greg k-h
