@@ -2,140 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD917502F5
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 11:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B1675060E
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 13:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233020AbjGLJXs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jul 2023 05:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
+        id S231852AbjGLL27 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jul 2023 07:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233056AbjGLJXa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 05:23:30 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2085.outbound.protection.outlook.com [40.107.14.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6958A1FC0;
-        Wed, 12 Jul 2023 02:23:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a4N3QyM5zpD+kcd5xd5RIygTR7gJVMM7gptGbFweGorpwAu+ImyoGfBTKVJ7LsXpj8YVj/hp+LdQzb2J4DJIiaFldPmpj7k0BDzUL1/AdOkbvZ8yxBNX+0O+39tCQJyNjtM0XS8pV3wHxFo+Eifcdi6kzm0c7fPRw3hCnfyfhtqbCCL2qeqeqMMTCOhhQZLkz22IGUW9NZu3ITnmJ+nkYKfOuNlUvBbVH1mFz3JZ17RQY19iAFsDaDmynUcCV3VXQVBR3pLgUXZgFQrQmPXqc5ZbXbTklmLzK9L8yucAxfimjKtDOsTNcnvr4oyQFml1LD1dafuAM139Xmyv9OKDiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=r14JdlGq9wO7DZaId8kEv3tXjWCVTkO5GdaJxzSTIP8=;
- b=XUiCXR+wd9cYbxSfr94+cDT39BC+uvUEimVv6fAIYnUKWWWTD8w+7oVdB0Z/r419QTngysbGuedDb7ECMSLHJLu7p4tIeN3Yln+pN0AgTPbtFm5IKnKQLjJNH0kTeRIefGBwt4tXkU9s25kuwuHYvybB3uwz+k9wqMyfsn3atEGIRmhBbsAkQuaOQZTwmqW7LgelzM+s/2oHws1xcSeKmaaHzz1aM1ELi1ljzyNkggOpfO/3FTh3Bm6YkBOKWiDwyB/4RERehe3Tcu2ztON8Kzi5Kdvp692ow5Fo36+qu8tTpVPJxFizb5e5jDaSumnzZyjNlHMDGWvdAt1PWD6O1A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=r14JdlGq9wO7DZaId8kEv3tXjWCVTkO5GdaJxzSTIP8=;
- b=eUNeHFdTLcQojcaoeshV+Q8/lRKF/hjpfMzpQkNd7FP28Vdvm93GpceykaNupyfeLujlbFW7QtPGXv+L3pvOnFHyMcszQ3DJoqUw/yZV4LYLs1Ai9WAjiW563BBzpwvdmYqSJX7iuFwCkASL9ouEw733jC+ZO636nRjlry3cADepcmzlowTg8oC3cmgOccDBhb2GWs1SNEeBaLgVGKlL/UuvoYFghw5xNN/5wn7Nklla0PLNKQ3zhhKTpsokWTWvhRjFS1X1LHil+fDU5ulgSUdvG93eX15wAJXV/ITZCc5awlFF3DE1o6dUDJQYSJph0fyLx39uhlv1uHHikJXbuA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by PA4PR04MB9685.eurprd04.prod.outlook.com (2603:10a6:102:26e::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Wed, 12 Jul
- 2023 09:22:21 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::a31f:d35c:5ef8:a31b]) by VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::a31f:d35c:5ef8:a31b%7]) with mapi id 15.20.6588.017; Wed, 12 Jul 2023
- 09:22:21 +0000
-Message-ID: <e5a92f9c-2d56-00fc-5e01-56e7df8dc1c1@suse.com>
-Date:   Wed, 12 Jul 2023 11:22:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Enrico Mioso <mrkiko.rs@gmail.com>
-Cc:     Jan Engelhardt <jengelh@inai.de>, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        =?UTF-8?Q?Maciej_=c5=bbenczykowski?= <maze@google.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        Ilja Van Sprundel <ivansprundel@ioactive.com>,
-        Joseph Tartaro <joseph.tartaro@ioactive.com>
-References: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
- <n9108s34-9rn0-3n8q-r3s5-51r9647331ns@vanv.qr> <ZKM5nbDnKnFZLOlY@rivendell>
- <2023070430-fragment-remember-2fdd@gregkh>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <2023070430-fragment-remember-2fdd@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0036.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:14::23) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+        with ESMTP id S229802AbjGLL26 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 07:28:58 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664BD8F;
+        Wed, 12 Jul 2023 04:28:57 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36C8e4Ke000755;
+        Wed, 12 Jul 2023 11:28:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=1EcoW+wlGQ5CTc/t9tZEXNWbjBWaWne5QYIsFjlMLpo=;
+ b=V34iHIfmnl7JzMZdtGGkdxdZHa/X1qgtSBlvct8CATMRWyanZc8MkXmswnf78imRp5DE
+ /4KgkKheKv+tCFLqJcKAf4rhVj+B8BHuDBoiICP/aDX82wCfttgMg4ry69NZ073gph6A
+ U0Es/gMDpImy7KgIWvbUHTjB/gVhluHzqlPgpgj8Ro7WlIF4U6jlPCjrmV06rZTYgNxV
+ ch2nYEKL2Ke1w5YNMBHoo9LMXF+lc5RHH/SSLp5gzLIGoELlg4awURkcibvDRUtb8gjc
+ aIB12ibbTEaFk/pHNoa76pgP9kPyT3bzx4vEK5w69Iq9J0ipe52TF/uq76b+jYCPMmp/ bQ== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsf51ha5e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 11:28:30 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36CBSSxM014916
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 11:28:28 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Wed, 12 Jul 2023 04:28:20 -0700
+Date:   Wed, 12 Jul 2023 16:58:16 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <p.zabel@pengutronix.de>, <arnd@arndb.de>,
+        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <rafal@milecki.pl>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v3 4/6] arm64: dts: qcom: ipq5332: Add USB related nodes
+Message-ID: <20230712112815.GA21004@varda-linux.qualcomm.com>
+References: <cover.1689065318.git.quic_varada@quicinc.com>
+ <23b259b72c8f6faad99f09c37ac8b7b6b027cea1.1689065318.git.quic_varada@quicinc.com>
+ <ddd97ecd-bf4b-85c8-1f0b-8ca175799076@linaro.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|PA4PR04MB9685:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2cf5eb5d-29d3-41ff-854f-08db82b97ea1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: v02dXPbeNHRZtjV0E/0bhPTiDoynXFu0r9RYk7AFjsMgxpAtRJFreG6+9bkU7qC+kn/jZ4f2sRcGmbEiEfh2h+T6n6mH85YEp5ZOwsUrUwdul1ooLb6kkXAWyYa4D/r8MyKNhAEH9DvDEVOL8KvwbjXfFzvUvuwpRn7+2xRm6zlAPYP2WftJAT7pjEfC5F4azUhnWMRZcKdNgZS4unpL3pksGVt3egbdOD39WeggKYg4kXcigqsNxe6Opfvt7rvplo8kaoORWcBmZnEQ3iMLJyrK5dLwStLSq9J0R22eYJQE08x6lwk2V0oniBTyMQ477LPWGBHwe10Ds92R9+qiDOAKCxyW+KUmUlD44cAw9DG+yvkVCYaMQi+u+y3NPXdIYRC6POBmNxBh5g2xskdx6zO0ha71/PZbjPtQi8efZ0t5Ft4Mk1B3mbfwCaQ22DXqpmrpqA5pXmbAQc4sYW0OqyZXjDBMwkFeh/leENAE/wR4eeXNYd5bRZQmIYHhFtauOs7YJcUbLhIhnXQ++nWc6G+MKPyocgXT1mrck93epfCGPAGPknSHeljvmiqtKEjRqRHERlsGm8UxjI2gSfvqH5vpGcgS6EsZQd9CI0EbQxiW2akDaMJsqSpcb6z1LjetiQCY2yzgxmC/yhN/4SVBIw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(136003)(346002)(376002)(396003)(39860400002)(451199021)(6512007)(316002)(6666004)(6486002)(54906003)(4744005)(4326008)(478600001)(110136005)(38100700002)(36756003)(2906002)(66556008)(66476007)(66946007)(83380400001)(2616005)(5660300002)(8676002)(8936002)(31686004)(186003)(7416002)(41300700001)(86362001)(31696002)(53546011)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a0Rtei91ZnBBai9uRENkU1NWU09oSFZqS0dmMkMvSWdvMElibTVQNjhRL1RB?=
- =?utf-8?B?ZU5LbFBaWHlpRmNiWEkxZy9HVWw5dlR5RUhFOXFJcGVQdFlUeDRrRHc4ZVBX?=
- =?utf-8?B?bnN6MEdaWUdpUlh6YU55Zzh6Q3Z3TzFKUlEvVUpLc1V4dTNhTTU1OE1MdnAr?=
- =?utf-8?B?aTRySUlGMFRid1R5Mmh5elpPWkRBQStudXVHSkZXOHVpOUdnQWo1S05jV2VS?=
- =?utf-8?B?NkY3WUpsSWV1R01hcThGeTRVR1c2TUFxY04zcC9SRjVLclVXT2p5VjR4TG9G?=
- =?utf-8?B?TDRmS1BPakpHb09GZlg5K3RRR2lQTXoxNERTVCs3UGlqVlEzbmtzNlExQ3ln?=
- =?utf-8?B?cjIwaFVPS0g4WGtPK0dPVnNGOHVFaU9uczhpaFV5Q2U1b1ZhbWpKa3pzQWdq?=
- =?utf-8?B?bDNPbk53RVB3UlpMT21TYmh3Uk1TL1ErdW54cThvc1ptdEZ6N2thbkpIcGNR?=
- =?utf-8?B?T1dNUzlNNExtV1g5NmVXTmVFclpWZk1yV24vaENoZ245SXJXR0xnVG5RNzBK?=
- =?utf-8?B?UFBRYVVBMm1kSFB3RFVpMXB6N3djR25xcW8xb1hxWTdIOTF1SnEramhZejVy?=
- =?utf-8?B?bjBDNWhWTnk3T2kyZGZqcENBRllDZU85RWVGMGF2bUl3aDRLM0hHcEtidjhO?=
- =?utf-8?B?QWV4aXk5Zk9IVzVpYmh5S3F6bXE3bW1POE1vQUROZ2VDejRadlIvV0xHZ2lL?=
- =?utf-8?B?eldhQTlaR3VzV3pmMDNMNlVqMlJEVXZNa2dYcTVYbnhMZjhVbi9NaFhtbWpP?=
- =?utf-8?B?L1F0dHhxUkRiVzdQVE9kN2JneHRjN2pNTjJOa25nMzk1YVRacUtzRWRmUHVO?=
- =?utf-8?B?ZDlxRHJ4eU1WMlBxRlY0cnFQNERxOTJFZXBhM2ZtRVNIcEdjV3Nucm15cmlr?=
- =?utf-8?B?L3piRER2K0xUanpkQW1IaEpmVk9nTkVpeEdmZmpra0MwQ0RWRzNkcXA1VVVR?=
- =?utf-8?B?UFdzZllqMDUvcHhueDFuQnVmK0V6SnpIWEdhTU45elczdHk0VEhCWVpCZm44?=
- =?utf-8?B?U3NvMi9uNDRCd0FmelBLQjNSVnFpOTVCdk9xN25tdzRPdGpobTgzSitKNFA5?=
- =?utf-8?B?UFQ4RHNXdGQ3YkVNalE5NERWbVlUV3JlT2puNEdyUDU0NjRBUnNQQ1o4Vk1a?=
- =?utf-8?B?SFlMWVVLOXVlS0d4QUZBSWZmVk9GNzBQcGZSMDR1Sy9YQXJpTEpIMmdYQXRp?=
- =?utf-8?B?VTlvYnlNYi8zNExLMktJVFBWNVZ4SEhmZ1dmdklPNHFNSTFFWFRnZW1Pd3Fu?=
- =?utf-8?B?L0VyMnpEUGFjRDY1V0R2L01WdlZEWHRMeTdoOGh4SXdBY2tsa1pzcEtoVWFU?=
- =?utf-8?B?aVBUYVFkYkR5QytPdm1Qb0pwWFFCeXpxdE53Y2hLZU1LYysySU5VUXdJK3M5?=
- =?utf-8?B?VTByZDdKODJWaEZpd3E5b2NJRFh6MDlGaE8yMldCSkZQVzhhcXE1bUJGWHFX?=
- =?utf-8?B?ZFNuRlh5MVNIY2NVMHBjaWtjMkUyazdTbzJESDRwZ1FEVHptMkpUclZNS0Vo?=
- =?utf-8?B?L1A1TXFuQTVRRkZDQ2VqbDlOS09BOGVaMFpPbzVnNTNxU3dTS2djS1p2ZmUy?=
- =?utf-8?B?U3dUWGcyTkFjUC9KVWZEcXFnd1pTbVpneEcrOHBiVnd4eVRpaHV4a2lBdlQ1?=
- =?utf-8?B?L2VVanpEQXhXc29nWm1ubE04V01pRHBWQlYzMzg0RXU5MWtUaHIrZjVDSmdW?=
- =?utf-8?B?UTJUY1lOYnIzeVRFMFNESnlYVExvK2h6Rm5CRkwxUjh4OGM1ZC9UUHFENkJX?=
- =?utf-8?B?VndJeHAwTFJ1NlFPQkhUU1Rla1NTUDF2amFjeFRaOVF6aGdJb2ZlbHBFeUd0?=
- =?utf-8?B?M1VsdXMyMWEwMzh6TmE4alY1RmF2QWFSZSttblZ1OUtRVTFtbXlkRVZGUUI5?=
- =?utf-8?B?QThXUDhyNGYxcko1Zm1tLy9DNzY1ZDI1djJxa0R0WVBFSjhMQTRISUw3S0k1?=
- =?utf-8?B?enZ5QnVmd2p0bnluNE5sS0dkbGdQQ2NrOGZWSWFLblM4b04zZUV0UUJJczdM?=
- =?utf-8?B?Tjd3UG5JL1ljTGY0UFp1dlJZMVlPVkF5emViRGsrckc0VEJVbVgya2RFa2N2?=
- =?utf-8?B?ZmdyYVhwdzVhY3hRYnQ4T01qSEJCWHhLcFRwRUFhanNHeU55dHhaYmgzdzV0?=
- =?utf-8?B?RDhocnd3TGNUc2RESTY3aklaT1dSUkRGNkFMcWMrVlhrMFBXUE5TUlp0RVpT?=
- =?utf-8?Q?rMt/yYKjuMZmrvr3aDfTwAg=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2cf5eb5d-29d3-41ff-854f-08db82b97ea1
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 09:22:21.0105
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4MEwJvTtjwpcZmPiGRNGdM3yn0ER5nTboVJuEOTOX+4lWGC4uEa2sIEIA0lRpRbIZbrblzkvzIj7JZNbXv4xlw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9685
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ddd97ecd-bf4b-85c8-1f0b-8ca175799076@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 8r-Fn5dAZEVUVdaFlOX_oVsR2EH9pKM6
+X-Proofpoint-GUID: 8r-Fn5dAZEVUVdaFlOX_oVsR2EH9pKM6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-12_06,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ bulkscore=0 lowpriorityscore=0 clxscore=1015 phishscore=0 malwarescore=0
+ mlxlogscore=814 impostorscore=0 spamscore=0 suspectscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307120102
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -143,25 +88,89 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Jul 11, 2023 at 11:01:03AM +0200, Krzysztof Kozlowski wrote:
+> On 11/07/2023 10:51, Varadarajan Narayanan wrote:
+> > Add USB phy and controller nodes.
+> >
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> > v1:
+> > 	Rename phy node
+>
+> I don't see any improvements.
 
+Will fix and post a new patch
 
-On 04.07.23 08:47, Greg Kroah-Hartman wrote:
-> On Mon, Jul 03, 2023 at 11:11:57PM +0200, Enrico Mioso wrote:
->> Hi all!!
->>
->> I think the rndis_host USB driver might emit a warning in the dmesg, but disabling the driver wouldn't be a good idea.
->> The TP-Link MR6400 V1 LTE modem and also some ZTE modems integrated in routers do use this protocol.
->>
->> We may also distinguish between these cases and devices you might plug in - as they pose different risk levels.
-> 
-> Again, you have to fully trust the other side of an RNDIS connection,
-> any hints on how to have the kernel determine that?
+> > 	Change compatible from m31,ipq5332-usb-hsphy -> qcom,ipq5332-usb-hsphy
+> > 	Remove 'qscratch' from phy node
+> > 	Fix alignment and upper-case hex no.s
+> > 	Add clock definition for the phy
+> > 	Remove snps,ref-clock-period-ns as it is not used. dwc3_ref_clk_period()
+> > 	in dwc3/core.c takes the frequency from ref clock and calculates fladj
+> > 	as appropriate.
+> > ---
+> >  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 54 +++++++++++++++++++++++++++++++++++
+> >  1 file changed, 54 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> > index 8bfc2db..c945ff6 100644
+> > --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> > @@ -405,6 +405,60 @@
+> >  				status = "disabled";
+> >  			};
+> >  		};
+> > +
+> > +		usbphy0: ipq5332-hsphy@7b000 {
+>
+> Node names should be generic. See also an explanation and list of
+> examples (not exhaustive) in DT specification:
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+>
+> "phy"
 
-Greg,
+Will fix and post a new patch
 
-it is a network protocol. So this statement is kind of odd.
-Are you saying that there are RNDIS messages that cannot be verified
-for some reason, that still cannot be disclosed?
+> > +			compatible = "qcom,ipq5332-usb-hsphy";
+> > +			reg = <0x0007b000 0x12c>;
+> > +
+> > +			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>;
+> > +			clock-names = "cfg_ahb";
+> > +
+> > +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> > +
+> > +			status = "disabled";
+> > +		};
+> > +
+> > +		usb2: usb2@8a00000 {
+>
+> It does not look like you tested the DTS against bindings. Please run
+> `make dtbs_check` (see
+> Documentation/devicetree/bindings/writing-schema.rst or
+> https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
+> for instructions).
 
-	Regards
-		Oliver
+'make dtbs_check' passed. The '2' in 'usb2' is to indicate USB v2.
+There is one more USB v3 controller in this SoC. Hence, to
+differentiate between the two used 'usb2'.
+
+Hope that is ok.
+
+> > +			compatible = "qcom,ipq5332-dwc3", "qcom,dwc3";
+> > +
+>
+> No need for blank line.
+
+Will remove.
+
+Thanks
+Varada
+
+> > +			reg = <0x08af8800 0x400>;
+> > +
+> > +			interrupts = <GIC_SPI 62 IRQ_
+>
+>
+> Best regards,
+> Krzysztof
+>
