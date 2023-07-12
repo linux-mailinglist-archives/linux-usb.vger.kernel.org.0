@@ -2,76 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE14C75084B
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 14:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D90750849
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 14:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233624AbjGLM3A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jul 2023 08:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
+        id S233597AbjGLM2u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jul 2023 08:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233602AbjGLM2x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 08:28:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4848410F7
-        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 05:28:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1C69617A8
-        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 12:28:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B0D6C433D9;
-        Wed, 12 Jul 2023 12:28:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689164930;
-        bh=iIHbrwtqHvWqoKRj3jTkxwje3tYZEVMW0If744G8QVM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hZhhUZFRbC8W6L4kYwNF2hXg2A9mKYZ5s4JcYXOJOR9yMaifXBPW4khXEAuhE1k8K
-         YNFbxWTXMlTDtagtS3lxbGtz3tK6x4By/bwRNu3tYPGVI1MhSy54+CT9QyIF6peQvC
-         qEyfyeo8KX7/ozLYNjc5ZxIT9Cx+gCcZckx4kQYukRToWKzGWUS7lCf8N7zyqsxwsc
-         kq+5RnzQRhIZQI2HZt7MkWp55D3wlS1IWFVV//dTU0pH+wO++ECNIS7Ych3lxl1qK8
-         rIYLwdYuxwey+kyv0E8G1N6Be7SZIi0iItqEKFjZm80XYdu2uSM6sJiBzb0RTSqxWg
-         ZRaoqvrMMloXA==
-From:   Roger Quadros <rogerq@kernel.org>
-To:     peter.chen@kernel.org
-Cc:     pawell@cadence.com, srk@ti.com, vigneshr@ti.com,
-        linux-usb@vger.kernel.org, Roger Quadros <rogerq@kernel.org>
-Subject: [PATCH] MAINTAINERS: drop invalid usb/cdns3 Reviewer e-mail
-Date:   Wed, 12 Jul 2023 15:28:28 +0300
-Message-Id: <20230712122828.17793-1-rogerq@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S233325AbjGLM2s (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 08:28:48 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCA310C7
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 05:28:46 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b69f958ef3so110986731fa.1
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 05:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689164924; x=1691756924;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8tVaSPQ+w2G/CXnJTkiMl+cJCOUy3bqRCsdNi00/JW8=;
+        b=Pi/qBYjAwd4/ZfVUGFBdzDeaZwn0K0YWplH7i42dsFzyhqD20c17n8dWPBGUfptqnR
+         WtMDMj4me9MbQ2JKu/0gc3Bdd5vBnFnaOKeWIt1qfbmZ8zmLZmLOkh/f2CTvIk3GGWte
+         GtNtUxBvKALaXfZEY/d+7VtlvduQEonkAnvXZ46fHz1r9F0GB7AGRd/JmIjmh0vkQPt0
+         pvJM9wrXiYfzWDzsJY7v4ixYBEpbSWTYMQ+MnBh/Q62EtwgmhB+dna8T8ZIOukOPRQp0
+         VOVuWZIDAOD0ooouLsS5Zd/z7wQMdRlmCj0OmICRld73YIY11ZeLlIQzw/3kG4LJuvio
+         cT3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689164924; x=1691756924;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8tVaSPQ+w2G/CXnJTkiMl+cJCOUy3bqRCsdNi00/JW8=;
+        b=HqOJHpeUjtF5p9FLh9Q83vvyCIt61DAfsjjtofQ8bshaQGzQeYN1s2Ga1wMrE/kMwD
+         fxxxrYiQTvvgFSVyHnJjj/TiGdSjIFOG0EwDz+TuvFfmhSRQKQDCNBQR/P4kFTSWz6rw
+         6Fma1xoTLbjj0f1MpguUbUibq3VIDJOac9/Ops44I2B1XH2l+ZZQJ3ZN4Nipx1y18LY/
+         5IZPRp9+K2DpyHcZxigQECIlMGuYtFpzx+lBz1C+ltealtuFI8JuCUpsp7AeZ8/zsgTb
+         elKwaO/XFD/GEDSINJFJ6BGuY/NO5fgmO4QEy0Qrhrs7hoC30gGHrC3LQ9g5GSHXKlH5
+         OdqA==
+X-Gm-Message-State: ABy/qLYXw/1X/DSnHZUxj7JJWlDMdUb75UT3DVYbJOhAXW8b4c9jUhLO
+        KfcFJaWo7/UQkJJiKMMSs6KZXQ==
+X-Google-Smtp-Source: APBJJlG/LDGQeyoCiWq5ImaEz8bka+7iaet3wkQhYdvn6WDMMMOihWIpsZjkOjKq2phaTxUkfWPX/g==
+X-Received: by 2002:a2e:b04a:0:b0:2b6:d0fc:ee18 with SMTP id d10-20020a2eb04a000000b002b6d0fcee18mr13742589ljl.19.1689164924397;
+        Wed, 12 Jul 2023 05:28:44 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id r7-20020a2e94c7000000b002b6fe751b6esm948263ljh.124.2023.07.12.05.28.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 05:28:44 -0700 (PDT)
+Message-ID: <0f98360a-6d88-9a8b-5d60-3d6120e0640f@linaro.org>
+Date:   Wed, 12 Jul 2023 15:28:43 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4 4/6] arm64: dts: qcom: ipq5332: Add USB related nodes
+Content-Language: en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Varadarajan Narayanan <quic_varada@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
+        will@kernel.org, p.zabel@pengutronix.de, arnd@arndb.de,
+        geert+renesas@glider.be, neil.armstrong@linaro.org,
+        nfraprado@collabora.com, rafal@milecki.pl,
+        quic_srichara@quicinc.com, quic_varada@quicinc.org,
+        quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <cover.1689160067.git.quic_varada@quicinc.com>
+ <1f99805b6437aa8d6eaa4663e8d27b98ee595f00.1689160067.git.quic_varada@quicinc.com>
+ <13555184-1708-befd-1f2c-5e6f7e04a6ce@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <13555184-1708-befd-1f2c-5e6f7e04a6ce@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Alternate working e-mail of this Reviewer not available
-so drop it do prevent unnecessary bounce backs.
+On 12/07/2023 15:04, Krzysztof Kozlowski wrote:
+> On 12/07/2023 13:38, Varadarajan Narayanan wrote:
+>> Add USB phy and controller nodes.
+>>
+>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>> ---
+>> v4:
+>> 	Change node name
+>> 	Remove blank line
+>> 	'make CHECK_DTBS=y DT_SCHEMA_FILES=qcom qcom/ipq5332-rdp441.dtb' passed
+>> v1:
+>> 	Rename phy node
+>> 	Change compatible from m31,ipq5332-usb-hsphy -> qcom,ipq5332-usb-hsphy
+>> 	Remove 'qscratch' from phy node
+>> 	Fix alignment and upper-case hex no.s
+>> 	Add clock definition for the phy
+>> 	Remove snps,ref-clock-period-ns as it is not used. dwc3_ref_clk_period()
+>> 	in dwc3/core.c takes the frequency from ref clock and calculates fladj
+>> 	as appropriate.
+>> ---
+>>   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 53 +++++++++++++++++++++++++++++++++++
+>>   1 file changed, 53 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>> index 8bfc2db..8118356 100644
+>> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>> @@ -405,6 +405,59 @@
+>>   				status = "disabled";
+>>   			};
+>>   		};
+>> +
+>> +		usbphy0: usb-phy@7b000 {
+>> +			compatible = "qcom,ipq5332-usb-hsphy";
+>> +			reg = <0x0007b000 0x12c>;
+>> +
+>> +			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>;
+>> +			clock-names = "cfg_ahb";
+>> +
+>> +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+>> +
+>> +			status = "disabled";
+>> +		};
+>> +
+>> +		usb2: usb2@8a00000 {
+> 
+> So you responded to my comments, wait ten minutes and send v2? No need
+> to wait for my feedback, right?
+> 
+> No, it's not ok. This is "usb", not "usb2". Are you saying you have
+> second device with the same address?
 
-Signed-off-by: Roger Quadros <rogerq@kernel.org>
----
- MAINTAINERS | 1 -
- 1 file changed, 1 deletion(-)
+Just to emphasise, it's the node name `usb2', which is not fine. DT 
+label `usb2' is (hopefully) fine.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7e0b87d5aa2e..126e01ec3559 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4530,7 +4530,6 @@ CADENCE USB3 DRD IP DRIVER
- M:	Peter Chen <peter.chen@kernel.org>
- M:	Pawel Laszczak <pawell@cadence.com>
- R:	Roger Quadros <rogerq@kernel.org>
--R:	Aswath Govindraju <a-govindraju@ti.com>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git
 -- 
-2.34.1
+With best wishes
+Dmitry
 
