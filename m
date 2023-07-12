@@ -2,114 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B37C874FF7D
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 08:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7639E75000B
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jul 2023 09:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbjGLGjq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 12 Jul 2023 02:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
+        id S231558AbjGLH3L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jul 2023 03:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231641AbjGLGjX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 02:39:23 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0AC1BC2
-        for <linux-usb@vger.kernel.org>; Tue, 11 Jul 2023 23:38:26 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id E227481F6;
-        Wed, 12 Jul 2023 14:38:12 +0800 (CST)
-Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Jul
- 2023 14:38:12 +0800
-Received: from [192.168.125.127] (183.27.98.46) by EXMBX171.cuchost.com
- (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Jul
- 2023 14:38:11 +0800
-Message-ID: <b20b63ec-1106-36a5-494d-b9ea81ca5645@starfivetech.com>
-Date:   Wed, 12 Jul 2023 14:38:10 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] usb: cdns3: starfive: Convert to platform remove callback
- returning void
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Peter Chen" <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Roger Quadros <rogerq@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        <linux-usb@vger.kernel.org>, <kernel@pengutronix.de>
-References: <20230707073653.3396988-1-u.kleine-koenig@pengutronix.de>
-From:   Minda Chen <minda.chen@starfivetech.com>
-In-Reply-To: <20230707073653.3396988-1-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S230155AbjGLH3J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 03:29:09 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07178E49
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 00:29:00 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-c4f27858e4eso7028050276.1
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 00:28:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689146939; x=1691738939;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tsuXREvsrn1UmDo9EliDCD4RsbsJpLJ9JUGOT866VTo=;
+        b=TZv/WOugLJFK5patBFYf9CjbhkE3/o0leTZemNCM4fD/xamCi367TZsnRS22SaCFca
+         drSBGPe9Zq9aFs2Rb2vrwk+BvzJXmnyBRm8iBlw/pTQ0DxKDgZ7yTI+B5EtOqEjNtH/1
+         QxeCouZeLkEKEWlbpg07wEiieaxxrlPZhgSWAATEKEyf3oQyhw2elFdXREoFbivwDqhu
+         MRDTW1vFuLprx0qzWGN2Lm1qyfvzGHkU54UUQfL5j8AynofS9zZhPZu0OwrHZaC2yrM6
+         Akv26/t8fdKnyUq8EuBgtMSpSPM7Aa+iYFOiVX8xTBi0hVNRvU4v4CpMIgrBxVeVmueI
+         PhWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689146939; x=1691738939;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tsuXREvsrn1UmDo9EliDCD4RsbsJpLJ9JUGOT866VTo=;
+        b=YMda/PQ0wLi+aS8OT2dK7V1UldDJyrY7UhR/aESiWW8iM+josQmdonNPyrM5B1AJok
+         OR0ImsXs0rqcz2lxQv9Ive8JKcBWrKU52zs5mjQX0/ZeRPP/Vi5vIu5pAcQ1yeNH6ffK
+         a636wm2ok7VwFJ20xOWhtfu+zwjthhOPAVw6aDMw1/Gol51y+fcobifXY+FpYqppk5P4
+         HOxi9/CjENHn4eSRUMp4ea7RAOPo8OT+goen7KV/Bzef+MHai1BUXojOmjz5RCNVd/9w
+         T8Rgq1jr5y7NQ2RmUt2UJRnPE4IH7K/PMuSzpzXf38U2iM+pIBRS6VfB2SwJbpWidFDd
+         MRJA==
+X-Gm-Message-State: ABy/qLYDZv9KXkjKo/IRSQBg6UHzGrLwORg5t8YQfPEJQr2Bbi6N8xXk
+        rFdGp16onddRr8BcaTOc4mn7qauf5sCQ
+X-Google-Smtp-Source: APBJJlHpV/qV+o9RosV/Gz3jOlAFPqd3Jzlxy/qB2ZXYVY+rjW2+Gcs+LNXN2bUwGzlp+iUyS3Qnon98v2C2
+X-Received: from kyletso-p620lin01.ntc.corp.google.com ([2401:fa00:fc:202:a359:73aa:74d4:e205])
+ (user=kyletso job=sendgmr) by 2002:a25:da85:0:b0:c4d:9831:9712 with SMTP id
+ n127-20020a25da85000000b00c4d98319712mr154191ybf.0.1689146939261; Wed, 12 Jul
+ 2023 00:28:59 -0700 (PDT)
+Date:   Wed, 12 Jul 2023 15:28:51 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230712072853.1755559-1-kyletso@google.com>
+Subject: [PATCH 0/2] mutiple selectable capabilities in tcpm
+From:   Kyle Tso <kyletso@google.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc:     badhri@google.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [183.27.98.46]
-X-ClientProxiedBy: EXCAS063.cuchost.com (172.16.6.23) To EXMBX171.cuchost.com
- (172.16.6.91)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+In commit a7cff92f0635 ("usb: typec: USB Power Delivery helpers for
+ports and partners"), typec_operations has two new ops .pd_get and
+.pd_set providing selection of different PD capabilities. This commit
+implements these two ops in tcpm.
 
-Hi Uwe
-  Thanks！
+To support multiple capabilities, new dt-binding properties need to be
+defined to create a tree structure for the driver to get each set of
+capabilities one by one. The first tier of the child node under
+connector is called "capabilities". Under this child node lies several
+2nd tier of child nodes whose names are in the pattern of ^caps[0-9]+$.
+And the source and sink capabilities are placed in these nodes.
 
-On 2023/7/7 15:36, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart
-> from emitting a warning) and this typically results in resource leaks.
-> To improve here there is a quest to make the remove callback return
-> void. In the first step of this quest all drivers are converted to
-> .remove_new() which already returns void. Eventually after all drivers
-> are converted, .remove_new() is renamed to .remove().
-> 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/usb/cdns3/cdns3-starfive.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdns3-starfive.c b/drivers/usb/cdns3/cdns3-starfive.c
-> index fc1f003b145d..a7265b86e427 100644
-> --- a/drivers/usb/cdns3/cdns3-starfive.c
-> +++ b/drivers/usb/cdns3/cdns3-starfive.c
-> @@ -166,7 +166,7 @@ static int cdns_starfive_remove_core(struct device *dev, void *c)
->  	return 0;
->  }
->  
-> -static int cdns_starfive_remove(struct platform_device *pdev)
-> +static void cdns_starfive_remove(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct cdns_starfive *data = dev_get_drvdata(dev);
-> @@ -178,8 +178,6 @@ static int cdns_starfive_remove(struct platform_device *pdev)
->  	pm_runtime_put_noidle(dev);
->  	cdns_clk_rst_deinit(data);
->  	platform_set_drvdata(pdev, NULL);
-> -
-> -	return 0;
->  }
->  
->  #ifdef CONFIG_PM
-> @@ -232,7 +230,7 @@ MODULE_DEVICE_TABLE(of, cdns_starfive_of_match);
->  
->  static struct platform_driver cdns_starfive_driver = {
->  	.probe		= cdns_starfive_probe,
-> -	.remove		= cdns_starfive_remove,
-> +	.remove_new	= cdns_starfive_remove,
->  	.driver		= {
->  		.name	= "cdns3-starfive",
->  		.of_match_table	= cdns_starfive_of_match,
-> 
-> base-commit: 5133c9e51de41bfa902153888e11add3342ede18
+Kyle Tso (2):
+  dt-bindings: connector: Add child nodes for multiple PD capabilities
+  usb: typec: tcpm: Support multiple capabilities
+
+ .../bindings/connector/usb-connector.yaml     |  44 ++
+ drivers/usb/typec/tcpm/tcpm.c                 | 406 ++++++++++++++----
+ 2 files changed, 364 insertions(+), 86 deletions(-)
+
+-- 
+2.41.0.255.g8b1d071c50-goog
+
