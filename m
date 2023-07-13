@@ -2,129 +2,198 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CFB751F18
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jul 2023 12:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25970751FE5
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jul 2023 13:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234160AbjGMKjS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jul 2023 06:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
+        id S233780AbjGML2r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jul 2023 07:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234008AbjGMKjR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jul 2023 06:39:17 -0400
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2056.outbound.protection.outlook.com [40.107.247.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51DC1FC0
-        for <linux-usb@vger.kernel.org>; Thu, 13 Jul 2023 03:39:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iah6JTBSMlbMLHaQbe+IwFY1CR6BJi8UaFfTfa2NxXhosd7YXA0Op6qp0IB80J9sAbeTVUiW+wwYMDEUbZfPiAQa8uFEgpO5xov9XcD2B0Lw2HW7E/vnlcvgtR6sl+GaG3qI1Vr8RzhnV+9JW4hffsCfoGZSZCZSYKUoPBSihoyXZOTzhaatKscHHZRkY39TZNKWGf8LOYx5IX+LzezAnC4ySyqIUdsVOGy3Ea0K8WjUECgIkh9E7iJu7btTD5qThdKuEpKDu++kN6GrG5TIz83EpuUb8CBk8As+zNx5tjn5MSj1KjjmestSJ9vPZnpYC/bCHwrzrHWjOMD48YUHdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/ZZ6EQkNSlYvLriYXQxvxEoNqUQfCnyKiVfsQoiEGUo=;
- b=a1T3NMRLjNsTLA5DRTKb3quYQ6Xx1Ldl/Gp+Y/Tumr7nyPq0Pe3qWVr4MY/Kb7IDXm61LP2nDgEnkWMLmhADOf73tU0Jc2KC3AcwAOc6uh+CWaqVhNLiCdnwhtmoeX24H3ZJoyzMWc2h0wGd5vUzbDA8EcBH7moTjNAACJ1p3oQbKAWOklJt9RbB03v0mCVJs2VJNwMhLfvDEPRd+my+zDzPD/LZ+KtqEZWYi6BTRUwM+r90oO3lPNnvYkYw2DlupwBdYHTJQ65lLKfRUMZYZSdI7G8eGhXviC2kYjuXb4q4IrkC/a0SLRMy0mZEwmPvtAxTfe79BO+VwtuppZf4mA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/ZZ6EQkNSlYvLriYXQxvxEoNqUQfCnyKiVfsQoiEGUo=;
- b=dzLUiexZsBadeW1PPQFFH8wurQ/QBVaxQRzxoWTCHjM2ASSmDwea3zbhX2ejDr6GPYmLmrZMD5avTPur/UfPrK4I2eylEayKsaeu1e+R63QV6t/BKTwIzIhyu4RHQtE0k0CkFV90k2juaUvWY6WvcvHq3wTRQyhCJbKJC0U0pSN/+dJ/rDHJmxMLclpCWu9fHfMzZujNV2LfYcfPGFmgXItYvpFrqDeYcgH1bIeLIaGtHgQJLwxSyNlvpt8uRZU+qlY5PuAEFx5/YGX01UaCRSGKvUZpOQDqDsPmZAgI10+QkL40nbb9rknSL9XKpvPGC9og3BFZVmiIk2qyZLdPwA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by DB9PR04MB9843.eurprd04.prod.outlook.com (2603:10a6:10:4c1::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.24; Thu, 13 Jul
- 2023 10:39:11 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::a31f:d35c:5ef8:a31b]) by VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::a31f:d35c:5ef8:a31b%7]) with mapi id 15.20.6588.017; Thu, 13 Jul 2023
- 10:39:11 +0000
-Message-ID: <dfb234d2-9ee0-313f-d1a2-16c3767ccab6@suse.com>
-Date:   Thu, 13 Jul 2023 12:39:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US
-To:     USB list <linux-usb@vger.kernel.org>
+        with ESMTP id S233086AbjGML2p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jul 2023 07:28:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543B62715
+        for <linux-usb@vger.kernel.org>; Thu, 13 Jul 2023 04:28:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E02921FDA2;
+        Thu, 13 Jul 2023 11:28:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1689247712; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=8GYoZ1/AmjNU8Mc/vio8xbECgr+3KYTNDFUUGdI7ZpA=;
+        b=KuY2YdirMI8tjwhZMUTVIHzmqyzeVzAv8C+WnNeqPPaQyZiC3gpDDauqHpttRHZao+pxAr
+        4VGA23fjmcGvke16bUZGtZazAK+0x1TcDQ6fU+RtOga5tMN4tgqDGS6BdJE8D6xthAW/Wz
+        UJsJSVey+rUXGqsWFddWvlqBxj2QUDA=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 97BB113489;
+        Thu, 13 Jul 2023 11:28:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id T6HlIuDfr2S+CwAAMHmgww
+        (envelope-from <oneukum@suse.com>); Thu, 13 Jul 2023 11:28:32 +0000
 From:   Oliver Neukum <oneukum@suse.com>
-Subject: question on uapi
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0193.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a4::6) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+To:     jonathan@raspberrypi.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundatin.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] Revert "xhci: add quirk for host controllers that don't update endpoint DCS"
+Date:   Thu, 13 Jul 2023 13:28:10 +0200
+Message-ID: <20230713112830.21773-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|DB9PR04MB9843:EE_
-X-MS-Office365-Filtering-Correlation-Id: 253b5804-dca5-4d0b-99e5-08db838d6513
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sSYeNr7OILD8fZcFKgnv9TIlDKcADJIfec00VYsb7zBmUU5WCi035iTzuJ5XYp/332egXuP5MTqY/VwSivk5fDAxMRrS2nh3UC5UJcjIYv/6gMRZxELTpX5C3uaHQk65BJnrW55emajU6jTXin0tHIZZ/Buc0sOTfKccQ4T/aVi5fo44examtIwSg+sO07CVQhQbxqV3tcbEVNDOVFlEYKgxC2MS9HwrNTRFz//4MBWCU9u+D33XlGO1Bs9fiLscbH1nigJkYgHiCOIi+eRzKt+BsEydYwHHhcKf7pAsiM3fZWxj55T4EP9k0ShzyI2T6p6sv0V+YzPf9dPYU0WQCo+0hW0MTzNYW09ski3/iXb7VUFi6kUO5Ti0aD/o0KAepObumGhN1TJujoZSZsY9LBup6UKsQ15EEe36NC/rKkT+mgGZHxCV5Zo8I8E+INJ28ktrkbnbxOBxR1mT/lkT/l1WnEbpr6kBJqAbeUOavH1rrCGtK/3EB3JoDDhGE/MD1CvSVXuMoQbI/MSaupUE5BOIyFFSPQh/YrJpdqxKp1pKpS7ToriZaIn6FgftEUNI2OyJfp+EtCUa2N83D/re7xf9KZxL0+cESrc6ZdekDbp1oU70moTbfW8wG6GldSJXaeunTtMHo0uhkRWtyVinDw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(376002)(346002)(396003)(366004)(39860400002)(451199021)(6486002)(38100700002)(6512007)(186003)(2906002)(31686004)(6506007)(41300700001)(478600001)(36756003)(316002)(2616005)(86362001)(66556008)(66946007)(66476007)(558084003)(5660300002)(3480700007)(6916009)(8936002)(7116003)(31696002)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TmMwVjN0a1lPalNrdDEvTnRFRWR6WUFxKzRZR0NSeHpkMGhtRVNqN00rTmIw?=
- =?utf-8?B?eWFqdWZxbHNPLzBoeS9zeWl1Z1BFNk9pNzZxdURqby9kdVNZdTBsSHQwdng1?=
- =?utf-8?B?TFNsdnZlMHVWczNJRVVPM2lGcStFcmFTbnErWU1oaDlaL0VPcmFDUnFnaXEv?=
- =?utf-8?B?eStXZkEyS0dvV1hURFFxZVVjVVExVDBKa0daT0VtQmxVL2tXSGRheUN6NWxs?=
- =?utf-8?B?V0N1VGVNR2NhOXd2MGQ3T2M2Mkt1bFlZcVlmMnlnS2tCVCtvd09WQTRjckJa?=
- =?utf-8?B?ZTZ0aVRVSVRoYXZJRmhLSGE5RmgvM1dtdUxwbTFkVEZvUUdyQkJpdXZxd0sw?=
- =?utf-8?B?QmFYb3J4MWljajJISFIwbkd6MytRSXRGa05QbzU3N0ZjSFRCVmxXVnpPaXFM?=
- =?utf-8?B?ZGZzVVljSzZJRDBCQUFwTVcrbUNFTHVITEV6S05EQ2g0MENpL0NrRVZ4TGdt?=
- =?utf-8?B?UXc2ZjhaYmJyOTdlVFdRd3pRMDk5b2V6YlFXZFFlMlNHN0pVYTRjYURwd3Jx?=
- =?utf-8?B?bWdhR0x5eGpJUTRHSHNqWnN2enFrWG13N0VSRm5xdHZueGw3eWFiVm5HNnBq?=
- =?utf-8?B?SUhQMFhGQnBmSXZYcytHeldwOTZuVFBGVVV6emlKM3M4eHZoVXhzeTM5eTBG?=
- =?utf-8?B?ZEdCaHBXVkt0alQxK0FHVXpwRytFcDVwcUtVaHBseERoM3ZVR2NCM25jS3JG?=
- =?utf-8?B?eERPa0hLSUlTR2lRT1pUbFBDSXVlekhpckJPSnhLcVdxMUJHb0dnekxzMDAw?=
- =?utf-8?B?cVdlTE4xelEra3J1REswM3BNTThSMDN0S1FCdE53SUtROWdnb05EQldLUE41?=
- =?utf-8?B?UnQyQ1dSNEJjR2Y2aHY5Zmg3WEh6SDBBT0huaW5vQWpLOTYzQ0hwZjVLUkZh?=
- =?utf-8?B?ZWppaEJLcGVXcElhY0hQVFVYc0hTNk9VWnZvbU5udFhtSS9vTzNZUnVZaGty?=
- =?utf-8?B?Y0taQkFxQTlXUnRSbG1yWWhSTnJYYUdyWFJlai9SRGdzZEN1WEd1WDdmcWZ0?=
- =?utf-8?B?N2FGQzAxZnplenZMSHFFQlIvOGFiWFpTZkZuZE02Y05DK2RNbDBXYTFpd1hB?=
- =?utf-8?B?dnlqdEt5TDVVRHRENGtkeDRhZ0toTVFMUVF2OGVvMnJaaEEzZEtnZHJGbGdk?=
- =?utf-8?B?UWg5TVREUjhHQVRHSFY3enp0ZXBJQkZVaXk2Y1VMS2tmc0k1N2RHaDYxL0lZ?=
- =?utf-8?B?UlFLdDgxcHZuZXQvZnhkc0Z6b3phSnZoYzhzUEYxL1hGZjZ6WG5yRXIycFVS?=
- =?utf-8?B?amxUOFdOeDJ3VnRSRjF5alFRcEpPcXR4QzRsQ2tpTnFqT3RBZDZVWE9CZkdr?=
- =?utf-8?B?SW5RV2NJYVBicXpmbGZ4WFBQUTVySTBqKy9wZUtPYWtud09JdFlFN1Y2VnY5?=
- =?utf-8?B?Z1BmWFdsWE1XNGVXOXR6VVErc1RKcWR1dGJVU0ZseUV0ZFVCbm9TZmwrQlJp?=
- =?utf-8?B?TVVHcWlKQ3ZGVWlHS1FmTWNXdFBEU1JBSWFsOFZQMEM2SUtmWWZ6MXBORXBW?=
- =?utf-8?B?OWxtQ0hldGtFcWJHSm0vSW4vdWl5dHp0emFaQ2FWY0dXK3JCOUJkT0pKSHA3?=
- =?utf-8?B?b0dCdk1wdXV1ZTJsZUVEZDVGZFpOazRsaEZDTXpWNFhJdHhhZWEyaFhRd0ZC?=
- =?utf-8?B?K3FFS0w0VnVVVHpnWWV0UmxLWlJoT0dqU0hMbjZ6QS9RZ1NIbHF6ampKVThr?=
- =?utf-8?B?TEU5TkVUTGViTHEvNWljb2ZiVEpVZjRuZ2VTK1E2NmVQQVBHd1hWVkN0S0Zt?=
- =?utf-8?B?ZlRSL0hybThwNEx1QVVpR3JxaVRsalRlVTJuekdLQmtjcDVLL2VpRzgwem1z?=
- =?utf-8?B?MTRsdFFXNDlrZ0s5NGxzelozR09JMkJtWTQ3QTUwSllvOHZYS0pXSWFPZWRv?=
- =?utf-8?B?bWlnUDhyR2srTTR6UmtPZjlPSHJDVDN0QlBpTFlVQXJINTB0TytYWmh1Qm5r?=
- =?utf-8?B?WDVmdjIxUm1vWU05ckljRFZyR3VnWDZTb2p3SllrUGViYU9hQlBtVEFLck1Z?=
- =?utf-8?B?QlR2Tlhsb1NHYXowTm85R2l6YUQvbUhBOGFxejJERHFwZm54N1JYWUNoTlNF?=
- =?utf-8?B?TGxWdmVkYUs3WU92VE9hbGxDeENIbU05K21ib1BaNlhOOFJqMVBmLzAyd3J4?=
- =?utf-8?B?NVhBVHVBNTVKV28vZGtLYzg2SThKL1FmRzdHMytCQS9hMXpvNktVTzZ0ZnFU?=
- =?utf-8?Q?zjAqIY66u4lWvCgnM1XQHEo=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 253b5804-dca5-4d0b-99e5-08db838d6513
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2023 10:39:11.4724
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: J3V/AuW9E4PCvTN8upteAN4tpkofa1FtIqmOmvel/bmoywv3UdLEEYB4OFxt3w+9Sb4PiBQnFfC4oLNhdNb5PQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9843
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+This reverts commit 5255660b208aebfdb71d574f3952cf48392f4306.
 
-what is the policy on uapi. It being for user space means
-that it should be as complete as possible, even if the kernel does not need stuff,
-should it not?
+This quirk breaks at least the following hardware:
 
-	Regards
-		Oliver
+0b:00.0 0c03: 1106:3483 (rev 01) (prog-if 30 [XHCI])
+        Subsystem: 1106:3483
+        Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
+        Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
+        Latency: 0, Cache Line Size: 64 bytes
+        Interrupt: pin A routed to IRQ 66
+        Region 0: Memory at fb400000 (64-bit, non-prefetchable) [size=4K]
+        Capabilities: [80] Power Management version 3
+                Flags: PMEClk- DSI- D1- D2- AuxCurrent=375mA PME(D0+,D1+,D2+,D3hot+,D3cold+)
+                Status: D0 NoSoftRst- PME-Enable- DSel=0 DScale=0 PME-
+        Capabilities: [90] MSI: Enable+ Count=1/4 Maskable- 64bit+
+                Address: 00000000fee007b8  Data: 0000
+        Capabilities: [c4] Express (v2) Endpoint, MSI 00
+                DevCap: MaxPayload 256 bytes, PhantFunc 0, Latency L0s <64ns, L1 <1us
+                        ExtTag- AttnBtn- AttnInd- PwrInd- RBE+ FLReset- SlotPowerLimit 89W
+                DevCtl: CorrErr- NonFatalErr- FatalErr- UnsupReq-
+                        RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop+
+                        MaxPayload 128 bytes, MaxReadReq 512 bytes
+                DevSta: CorrErr- NonFatalErr- FatalErr- UnsupReq- AuxPwr+ TransPend-
+                LnkCap: Port #0, Speed 5GT/s, Width x1, ASPM L0s L1, Exit Latency L0s <2us, L1 <16us
+                        ClockPM+ Surprise- LLActRep- BwNot- ASPMOptComp-
+                LnkCtl: ASPM Disabled; RCB 64 bytes, Disabled- CommClk+
+                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+                LnkSta: Speed 5GT/s, Width x1
+                        TrErr- Train- SlotClk+ DLActive- BWMgmt- ABWMgmt-
+                DevCap2: Completion Timeout: Range B, TimeoutDis+ NROPrPrP- LTR-
+                         10BitTagComp- 10BitTagReq- OBFF Not Supported, ExtFmt- EETLPPrefix-
+                         EmergencyPowerReduction Not Supported, EmergencyPowerReductionInit-
+                         FRS- TPHComp- ExtTPHComp-
+                         AtomicOpsCap: 32bit- 64bit- 128bitCAS-
+                DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis- LTR- 10BitTagReq- OBFF Disabled,
+                         AtomicOpsCtl: ReqEn-
+                LnkCtl2: Target Link Speed: 5GT/s, EnterCompliance- SpeedDis-
+                         Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
+                         Compliance Preset/De-emphasis: -6dB de-emphasis, 0dB preshoot
+                LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete- EqualizationPhase1-
+                         EqualizationPhase2- EqualizationPhase3- LinkEqualizationRequest-
+                         Retimer- 2Retimers- CrosslinkRes: unsupported
+       Capabilities: [100 v1] Advanced Error Reporting
+                UESta:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+                UEMsk:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+                UESvrt: DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt- RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
+                CESta:  RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr-
+                CEMsk:  RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr+
+                AERCap: First Error Pointer: 00, ECRCGenCap- ECRCGenEn- ECRCChkCap- ECRCChkEn-
+                        MultHdrRecCap- MultHdrRecEn- TLPPfxPres- HdrLogCap-
+                HeaderLog: 00000000 00000000 00000000 00000000
+        Kernel driver in use: xhci_hcd
+        Kernel modules: xhci_pci
+
+with the quirk enabled it fails early with
+
+[    0.754373] pci 0000:0b:00.0: xHCI HW did not halt within 32000 usec status = 0x1000
+[    0.754419] pci 0000:0b:00.0: quirk_usb_early_handoff+0x0/0x7a0 took 31459 usecs
+[    2.228048] xhci_hcd 0000:0b:00.0: xHCI Host Controller
+[    2.228053] xhci_hcd 0000:0b:00.0: new USB bus registered, assigned bus number 7
+[    2.260073] xhci_hcd 0000:0b:00.0: Host halt failed, -110
+[    2.260079] xhci_hcd 0000:0b:00.0: can't setup: -110
+[    2.260551] xhci_hcd 0000:0b:00.0: USB bus 7 deregistered
+[    2.260624] xhci_hcd 0000:0b:00.0: init 0000:0b:00.0 fail, -110
+[    2.260639] xhci_hcd: probe of 0000:0b:00.0 failed with error -110
+
+The hardware in question is an external PCIe card. It looks to me like the quirk
+needs to be narrowed down. But this needs information about the hardware showing
+the issue this quirk is to fix. So for now a clean revert.
+
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/usb/host/xhci-pci.c  |  4 +---
+ drivers/usb/host/xhci-ring.c | 25 +------------------------
+ 2 files changed, 2 insertions(+), 27 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index c6742bae41c0..b9ae5c2a2527 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -479,10 +479,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 			pdev->device == 0x3432)
+ 		xhci->quirks |= XHCI_BROKEN_STREAMS;
+ 
+-	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483) {
++	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483)
+ 		xhci->quirks |= XHCI_LPM_SUPPORT;
+-		xhci->quirks |= XHCI_EP_CTX_BROKEN_DCS;
+-	}
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+ 		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI) {
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 646ff125def5..1dde53f6eb31 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -626,11 +626,8 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
+ 	struct xhci_ring *ep_ring;
+ 	struct xhci_command *cmd;
+ 	struct xhci_segment *new_seg;
+-	struct xhci_segment *halted_seg = NULL;
+ 	union xhci_trb *new_deq;
+ 	int new_cycle;
+-	union xhci_trb *halted_trb;
+-	int index = 0;
+ 	dma_addr_t addr;
+ 	u64 hw_dequeue;
+ 	bool cycle_found = false;
+@@ -668,27 +665,7 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
+ 	hw_dequeue = xhci_get_hw_deq(xhci, dev, ep_index, stream_id);
+ 	new_seg = ep_ring->deq_seg;
+ 	new_deq = ep_ring->dequeue;
+-
+-	/*
+-	 * Quirk: xHC write-back of the DCS field in the hardware dequeue
+-	 * pointer is wrong - use the cycle state of the TRB pointed to by
+-	 * the dequeue pointer.
+-	 */
+-	if (xhci->quirks & XHCI_EP_CTX_BROKEN_DCS &&
+-	    !(ep->ep_state & EP_HAS_STREAMS))
+-		halted_seg = trb_in_td(xhci, td->start_seg,
+-				       td->first_trb, td->last_trb,
+-				       hw_dequeue & ~0xf, false);
+-	if (halted_seg) {
+-		index = ((dma_addr_t)(hw_dequeue & ~0xf) - halted_seg->dma) /
+-			 sizeof(*halted_trb);
+-		halted_trb = &halted_seg->trbs[index];
+-		new_cycle = halted_trb->generic.field[3] & 0x1;
+-		xhci_dbg(xhci, "Endpoint DCS = %d TRB index = %d cycle = %d\n",
+-			 (u8)(hw_dequeue & 0x1), index, new_cycle);
+-	} else {
+-		new_cycle = hw_dequeue & 0x1;
+-	}
++	new_cycle = hw_dequeue & 0x1;
+ 
+ 	/*
+ 	 * We want to find the pointer, segment and cycle state of the new trb
+-- 
+2.41.0
+
